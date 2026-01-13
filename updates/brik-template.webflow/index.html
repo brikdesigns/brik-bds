@@ -1,15 +1,13 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Jan 13 2026 14:13:30 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="686fb7f3b5ed6e420dc5f79c" data-wf-site="686fb7f3b5ed6e420dc5f7b7" lang="en">
+<html data-wf-page="686fb7f3b5ed6e420dc5f799" data-wf-site="686fb7f3b5ed6e420dc5f7b7" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Pricing</title>
-  <meta content="Pricing" property="og:title">
-  <meta content="Pricing" property="twitter:title">
+  <title>Business template - Webflow HTML website template</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="css/brik-bds.css" rel="stylesheet" type="text/css">
+  <link href="css/brik-template.webflow.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -30,10 +28,41 @@
 </style>
 </head>
 <body class="body">
+  <div id="modal-wrapper-quote" class="modal-form-new">
+    <div class="w-layout-blockcontainer modal-container w-container">
+      <div class="w-layout-vflex button_wrapper right">
+        <a href="#" class="dismiss-icon w-inline-block"><img loading="lazy" src="images/close.svg" alt="" class="image-17"></a>
+      </div>
+      <div class="modal-form w-form">
+        <form id="wf-form-Quote" name="wf-form-Get-a-Quote" data-name="Get a Quote" method="get" na="" class="form" data-wf-page-id="686fb7f3b5ed6e420dc5f799" data-wf-element-id="aa169143-0a97-b2c0-2b06-f167003efdc2">
+          <div class="w-layout-vflex content-wrapper">
+            <div class="text_heading-md center">Get a Quote</div>
+            <div class="text_body-md">Interested in this product?</div>
+          </div>
+          <div class="w-layout-vflex form_field-wrapper"><label for="select-field-quote" class="text_label-md">Product</label><select id="select-field-quote" name="Product" data-name="Product" class="form_select-field w-select">
+              <option value="">Select one...</option>
+            </select></div>
+          <div class="w-layout-vflex form_field-wrapper"><label for="name-field-quote" class="text_label-md">Name</label><input class="form_text-field w-input" maxlength="256" name="Name" data-name="Name" placeholder="" type="text" id="name-field-quote" required=""></div>
+          <div class="w-layout-vflex form_field-wrapper"><label for="email-field-quote" class="text_label-md">Email</label><input class="form_text-field w-input" maxlength="256" name="Email" data-name="Email" placeholder="" type="email" id="email-field-quote" required=""></div>
+          <div class="w-layout-vflex form_field-wrapper"><label for="phone-field-quote" class="text_label-md">Phone</label><input class="form_text-field w-input" maxlength="256" name="Phone" data-name="Phone" placeholder="" type="tel" id="phone-field-quote" required=""></div>
+          <div class="w-layout-vflex form_field-wrapper">
+            <div class="w-layout-vflex form_label-wrapper"><label for="message-field-quote-2" class="text_label-md">Message</label><label for="message-field-quote" class="text_label-md muted">(Optional)</label></div><textarea id="message-field-quote" name="Message" maxlength="5000" data-name="Message" placeholder="Add a message..." class="form_text-area w-input"></textarea>
+          </div>
+          <div class="w-layout-vflex button-wrapper-lg center"><input type="submit" data-wait="Please wait..." class="button_secondary w-button" value="Submit"><input type="submit" data-wait="Please wait..." class="button_secondary is-cancel w-button" value="Cancel"></div>
+        </form>
+        <div class="w-form-done">
+          <div>Thank you! Your submission has been received!</div>
+        </div>
+        <div class="w-form-fail">
+          <div>Oops! Something went wrong while submitting the form.</div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease-out" data-easing2="ease-out" role="banner" class="navigation w-nav">
     <div class="w-layout-blockcontainer container-navbar w-container">
       <div class="layout_nav">
-        <a href="index.html" class="logo w-inline-block"><img src="images/logo-spoon-white.svg" alt=""></a>
+        <a href="index.html" aria-current="page" class="logo w-inline-block w--current"><img src="images/logo-spoon-white.svg" alt=""></a>
         <div class="w-layout-vflex col_nav">
           <div class="menu-button w-nav-button">
             <div class="icon w-icon-nav-menu"></div>
@@ -101,187 +130,238 @@
       </div>
     </div>
   </div>
-  <div class="hero_interior">
-    <div class="w-layout-blockcontainer container-lg w-container">
-      <div class="w-layout-grid layout-flex">
-        <div class="subtitle">
-          <h6 href="#" class="text_label-md">Pricing</h6>
-        </div>
-        <h1 class="text_display-sm inverse">A payment plan for every occasion.</h1>
-        <p class="text_body-lg inverse">At sint tollit veritus duo, ex tota inimicus dissentiunt usu. Dico tamquam perfecto usu id. Eu nec option perfecto vituperatoribus. Ea qui congue patrioque, quo ei recteque consequuntur.</p>
-      </div>
-    </div>
-  </div>
-  <div class="section_pricing">
-    <div class="w-layout-blockcontainer container-lg w-container">
+  <section class="section_hero">
+    <div class="w-layout-blockcontainer container-full w-container">
       <div class="w-layout-grid layout-flex">
         <div class="content-wrapper">
-          <h2 class="text_heading-md"><span class="text_heading-md">We offer multiple options.</span> Kid’s birthday party? Yup, we can cover that. A wedding? No problem, we got you. You get the idea.</h2>
+          <h1 class="text_display-lg inverse">This is the default text value</h1>
+          <p class="text_body-xl inverse">This is the default text value</p>
         </div>
-        <div class="w-layout-grid layout_3-col">
-          <div class="layout-item comfortable">
-            <div class="list-wrapper">
-              <h3 class="text_heading-tiny">Small Party</h3>
-              <div class="price-wrapper">
-                <div class="text_display-lg">150</div>
-                <div class="text_body-sm">USD</div>
-              </div>
-              <div class="text_body-sm">Et nominavi necessitatibus per. In eos libris inimicus, pri novum viris quaerendum at.</div>
-              <div class="divider"></div>
-              <div class="text_body-sm">0-50 Guests</div>
-              <div class="text_body-sm">Non-alcoholic beverages</div>
-              <div class="text_body-sm">Snacks</div>
-              <div class="text_body-sm">Lorem ipsum dolor</div>
-              <div class="text_body-sm">Lorem ipsum dolor</div>
-            </div>
-            <div class="w-layout-vflex button-wrapper">
-              <a href="#" class="button_primary w-inline-block">
-                <p class="text_label-md inverse">Get Started</p>
-              </a>
-            </div>
+        <div class="w-layout-vflex button-wrapper comfortable">
+          <a href="#" class="button_primary inverse w-inline-block">
+            <div class="text_label-md">Button Label</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section_tabbed">
+    <div class="w-layout-blockcontainer container-lg stacked w-container">
+      <div data-figma-id="I24981:5179;24965:10968" class="content-wrapper">
+        <div data-figma-id="I24981:5179;24965:10969" class="content-wrapper center comfortable">
+          <p class="text_heading-lg">This is the default text value</p>
+          <p class="text_body-xl center">This is the default text value</p>
+        </div>
+      </div>
+      <div data-current="Tab 3" data-easing="ease" data-duration-in="300" data-duration-out="100" class="tab-container w-tabs">
+        <div class="tab-wrapper center w-tab-menu">
+          <a data-w-tab="Tab 1" class="button_primary w-inline-block w-tab-link">
+            <div>This is the default text value</div>
+          </a>
+          <a data-w-tab="Tab 2" class="button_primary w-inline-block w-tab-link">
+            <div>This is the default text value</div>
+          </a>
+          <a data-w-tab="Tab 3" class="button_primary w-inline-block w-tab-link w--current">
+            <div>This is the default text value</div>
+          </a>
+        </div>
+        <div class="tab-content-wrapper w-tab-content">
+          <div data-w-tab="Tab 1" class="w-tab-pane">
+            <div class="w-layout-vflex img-frame-portrait"><img class="img _2-3-portrait" src="images/Rectangle-2_2.jpg" data-figma-image-id="682c7ee76f2d4e1585f3446f" alt="" sizes="100vw" data-figma-id="I24981:5179;24965:10986" data-figma-image-hash="5bc5f7be2cdf1c80418fbb72f6ab4886" loading="lazy" srcset="images/Rectangle-2_2-p-500.jpg 500w, images/Rectangle-2_2-p-800.jpg 800w, images/Rectangle-2_2-p-1080.jpg 1080w, images/Rectangle-2_2-p-1600.jpg 1600w, images/Rectangle-2_2.jpg 1706w"></div>
           </div>
-          <div class="layout-item comfortable">
-            <div class="list-wrapper">
-              <h3 class="text_heading-tiny">Medium Party</h3>
-              <div class="price-wrapper">
-                <div class="text_display-lg">350</div>
-                <div class="text_body-sm">USD</div>
-              </div>
-              <div class="text_body-sm">Cu sit case consequat complectitur. An putant dolorem ceteros quo. Modo omnesque constituto cu cum.</div>
-              <div class="divider"></div>
-              <div class="text_body-sm">50-100 Guests</div>
-              <div class="text_body-sm">Non-alcoholic beverages</div>
-              <div class="text_body-sm">Snacks</div>
-              <div class="text_body-sm">Lorem ipsum dolor</div>
-            </div>
-            <div class="w-layout-vflex button-wrapper">
-              <a href="#" class="button_primary w-inline-block">
-                <p class="text_label-md inverse">Get Started</p>
-              </a>
-            </div>
+          <div data-w-tab="Tab 2" class="w-tab-pane">
+            <div class="w-layout-vflex img-frame-portrait"><img class="img _2-3-portrait" src="images/Rectangle-2_2.jpg" data-figma-image-id="682c7ee76f2d4e1585f3446f" alt="" sizes="100vw" data-figma-id="I24981:5179;24965:10986" data-figma-image-hash="5bc5f7be2cdf1c80418fbb72f6ab4886" loading="lazy" srcset="images/Rectangle-2_2-p-500.jpg 500w, images/Rectangle-2_2-p-800.jpg 800w, images/Rectangle-2_2-p-1080.jpg 1080w, images/Rectangle-2_2-p-1600.jpg 1600w, images/Rectangle-2_2.jpg 1706w"></div>
           </div>
-          <div class="layout-item comfortable">
-            <div class="list-wrapper">
-              <h3 class="text_heading-sm">Large Party</h3>
-              <div class="price-wrapper">
-                <div class="text_display-lg">750</div>
-                <div class="text_body-sm">USD</div>
-              </div>
-              <div class="text_body-sm">Civibus sententiae ea sea, te ius tritani fuisset. Ei quas putant vel. Ad odio scripta pri.</div>
-              <div class="divider"></div>
-              <div class="text_body-sm">100-200 Guests</div>
-              <div class="text_body-sm">Non-alcoholic beverages</div>
-              <div class="text_body-sm">Snacks</div>
-              <div class="text_body-sm">Lorem ipsum dolor</div>
-              <div class="text_body-sm">Lorem ipsum dolor</div>
-              <div class="text_body-sm">Lorem ipsum dolor</div>
-            </div>
-            <div class="w-layout-vflex button-wrapper">
-              <a href="#" class="button_primary w-inline-block">
-                <p class="text_label-md inverse">Get Started</p>
-              </a>
-            </div>
+          <div data-w-tab="Tab 3" class="w-tab-pane w--tab-active">
+            <div class="w-layout-vflex img-frame-portrait"><img class="img _2-3-portrait" src="images/Rectangle-2_2.jpg" data-figma-image-id="682c7ee76f2d4e1585f3446f" alt="" data-figma-id="I24981:5179;24965:10986" data-figma-image-hash="5bc5f7be2cdf1c80418fbb72f6ab4886" loading="lazy"></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="section_cards">
+  </section>
+  <div class="section_about">
     <div class="w-layout-blockcontainer container-lg w-container">
-      <div class="w-layout-grid layout-4-col">
-        <div class="layout-item">
-          <div class="w-layout-vflex img-frame-1-1"><img src="images/icon-fact.svg" alt="" class="img"></div>
-          <div class="text-wrapper">
-            <h3 class="text_label-md">Pro ad constituto</h3>
-            <p class="text_body-md secondary">Ne usu illud albucius abhor reant, partiendo scriptorem mel ne.</p>
-          </div>
-        </div>
-        <div class="layout-item">
-          <div class="w-layout-vflex img-frame-1-1"><img src="images/icon-fact.svg" alt="" class="img"></div>
-          <div class="text-wrapper">
-            <h3 class="text_label-md">Reormidans eis</h3>
-            <p class="text_body-md secondary">Maluisset imperdiet ea vel. Justo doctus dissentiet in nec. </p>
-          </div>
-        </div>
-        <div class="layout-item">
-          <div class="w-layout-vflex img-frame-1-1"><img src="images/icon-fact.svg" alt="" class="img"></div>
-          <div class="text-wrapper">
-            <h3 class="text_label-md">Fabellas efficiendi</h3>
-            <p class="text_body-md secondary">Ut sea saperet expetendis, in virtute detraxit quo dipiscing efficiendi nam ea.</p>
-          </div>
-        </div>
-        <div class="layout-item">
-          <div class="w-layout-vflex img-frame-1-1"><img src="images/icon-fact.svg" alt="" class="img"></div>
-          <div class="text-wrapper">
-            <h3 class="text_label-md">Eam commodo</h3>
-            <p class="text_body-md secondary">Ne his fabellas efficiendi. Eum te rebum accusamus, et omnium option.</p>
+      <div class="w-layout-grid layout-flex center">
+        <div class="w-layout-vflex layout-item">
+          <div class="w-layout-vflex title-wrapper center">
+            <h2 class="text_heading-md center">This is the default text value</h2>
+            <a href="about.html" class="text_body-md link">More About Us</a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="section_faq">
+  <section data-figma-id="24990:8281" class="section_4-col">
     <div class="w-layout-blockcontainer container-lg w-container">
       <div class="w-layout-grid layout-flex comfortable">
-        <div class="content-wrapper">
-          <h2 class="text_heading-sm secondary">This is the default text value</h2>
+        <div class="w-layout-vflex content-wrapper center">
+          <div class="text_heading-lg">This is the default text value</div>
+          <div class="text_body-md">This is the default text value</div>
         </div>
-        <div class="w-layout-grid layout_2-col-faq">
-          <div class="w-layout-vflex layout-item">
-            <div class="content-wrapper">
-              <h3 class="text_label-md">This is the default text value</h3>
-              <p class="text_body-md secondary">This is the default text value</p>
-            </div>
-          </div>
-          <div class="w-layout-vflex layout-item">
-            <div class="content-wrapper">
-              <h3 class="text_label-md">This is the default text value</h3>
-              <p class="text_body-md secondary">This is the default text value</p>
-            </div>
-          </div>
-          <div class="w-layout-vflex layout-item">
-            <div class="content-wrapper">
-              <h3 class="text_label-md">This is the default text value</h3>
-              <p class="text_body-md secondary">This is the default text value</p>
-            </div>
-          </div>
-          <div class="w-layout-vflex layout-item">
-            <div class="content-wrapper">
-              <h3 class="text_label-md">This is the default text value</h3>
-              <p class="text_body-md secondary">This is the default text value</p>
-            </div>
-          </div>
-          <div class="w-layout-vflex layout-item">
-            <div class="content-wrapper">
-              <h3 class="text_label-md">Usu tractatos accommodare ei pri alii invidunt eu?</h3>
-              <p class="text_body-md secondary">Molestiae adolescens his cu, ius facete scripta ad, ea ferri fastidii iudicabit pri. Vim id soleat aliquip adipisci, at qui discere denique salutatus, no appareat abhorreant quo. </p>
-            </div>
-          </div>
-          <div class="w-layout-vflex layout-item">
-            <div class="content-wrapper">
-              <h3 class="text_label-md">Mel nostro fabellas tractatos in?</h3>
-              <p class="text_body-md secondary">Eam soluta noluisse lobortis no, eos in nibh patrioque. Decore populo detracto eu has. Viderer prodesset expetendis ei mel. Graeco invidunt vel et, vis postea feugiat splendide at, velit voluptaria has ex. Suas numquam te cum. Eam eius democritum adipiscing te, wisi facilisi et qui.</p>
-            </div>
-          </div>
-          <div class="w-layout-vflex layout-item">
-            <div class="content-wrapper">
-              <h3 class="text_label-md">Mei ne eirmod omittam adipisci?</h3>
-              <p class="text_body-md secondary">Id sed labores dolorum veritus, falli aeque id vis. Aliquip aperiri facilisis ei eam, an eos agam vivendo platonem. Quo volumus scaevola te. Mei invenire erroribus ne, at sit diam docendi. Vix cu aeque molestiae, sed no persius nusquam postulant.</p>
-            </div>
-          </div>
-          <div class="w-layout-vflex layout-item">
+        <div class="w-layout-grid layout-4-col">
+          <div class="layout-item">
             <div class="w-layout-vflex content-wrapper">
-              <h3 class="text_label-md">No facilis molestie mei. Alia malis dolor nam ea?</h3>
-              <p class="text_body-md secondary">Viderer molestiae vim id, equidem oportere consulatu eu nam. Et solum verterem eleifend nam. Doming latine scriptorem ex nec, alii equidem vis eu. </p>
+              <h4 class="text_heading-sm">This is some text inside of a div block.</h4>
+              <div class="text_body-md">This is some text inside of a div block.</div>
+            </div>
+            <div class="w-layout-vflex button-wrapper">
+              <a href="#" class="button_primary w-inline-block">
+                <div class="text_label-md inverse">Button Label</div>
+              </a>
+            </div>
+          </div>
+          <div class="layout-item">
+            <div class="w-layout-vflex content-wrapper">
+              <h4 class="text_heading-sm">This is some text inside of a div block.</h4>
+              <div class="text_body-md">This is some text inside of a div block.</div>
+            </div>
+            <div class="w-layout-vflex button-wrapper">
+              <a href="#" class="button_primary w-inline-block">
+                <div class="text_label-md inverse">Button Label</div>
+              </a>
+            </div>
+          </div>
+          <div class="layout-item">
+            <div class="w-layout-vflex content-wrapper">
+              <h4 class="text_heading-sm">This is some text inside of a div block.</h4>
+              <div class="text_body-md">This is some text inside of a div block.</div>
+            </div>
+            <div class="w-layout-vflex button-wrapper">
+              <a href="#" class="button_primary w-inline-block">
+                <div class="text_label-md inverse">Button Label</div>
+              </a>
+            </div>
+          </div>
+          <div class="layout-item">
+            <div class="w-layout-vflex content-wrapper">
+              <div class="text_heading-sm">This is some text inside of a div block.</div>
+              <div class="text_body-md">This is some text inside of a div block.</div>
+            </div>
+            <div class="w-layout-vflex button-wrapper">
+              <a href="#" class="button_primary w-inline-block">
+                <div class="text_label-md inverse">Button Label</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section_tabbed">
+    <div class="w-layout-blockcontainer container-lg stacked w-container">
+      <div data-figma-id="I24981:5179;24965:10968" class="content-wrapper">
+        <div data-figma-id="I24981:5179;24965:10969" class="content-wrapper center comfortable">
+          <p class="text_heading-lg">This is the default text value</p>
+          <p class="text_body-xl center">This is the default text value</p>
+        </div>
+      </div>
+      <div data-current="Tab 3" data-easing="ease" data-duration-in="300" data-duration-out="100" class="tab-container w-tabs">
+        <div class="tab-wrapper center w-tab-menu">
+          <a data-w-tab="Tab 1" class="button_primary w-inline-block w-tab-link">
+            <div>This is the default text value</div>
+          </a>
+          <a data-w-tab="Tab 2" class="button_primary w-inline-block w-tab-link">
+            <div>This is the default text value</div>
+          </a>
+          <a data-w-tab="Tab 3" class="button_primary w-inline-block w-tab-link w--current">
+            <div>This is the default text value</div>
+          </a>
+        </div>
+        <div class="tab-content-wrapper w-tab-content">
+          <div data-w-tab="Tab 1" class="w-tab-pane">
+            <div class="w-layout-vflex img-frame-portrait"><img class="img _2-3-portrait" src="images/Rectangle-2_2.jpg" data-figma-image-id="682c7ee76f2d4e1585f3446f" alt="" sizes="100vw" data-figma-id="I24981:5179;24965:10986" data-figma-image-hash="5bc5f7be2cdf1c80418fbb72f6ab4886" loading="lazy" srcset="images/Rectangle-2_2-p-500.jpg 500w, images/Rectangle-2_2-p-800.jpg 800w, images/Rectangle-2_2-p-1080.jpg 1080w, images/Rectangle-2_2-p-1600.jpg 1600w, images/Rectangle-2_2.jpg 1706w"></div>
+          </div>
+          <div data-w-tab="Tab 2" class="w-tab-pane">
+            <div class="w-layout-vflex img-frame-portrait"><img class="img _2-3-portrait" src="images/Rectangle-2_2.jpg" data-figma-image-id="682c7ee76f2d4e1585f3446f" alt="" sizes="100vw" data-figma-id="I24981:5179;24965:10986" data-figma-image-hash="5bc5f7be2cdf1c80418fbb72f6ab4886" loading="lazy" srcset="images/Rectangle-2_2-p-500.jpg 500w, images/Rectangle-2_2-p-800.jpg 800w, images/Rectangle-2_2-p-1080.jpg 1080w, images/Rectangle-2_2-p-1600.jpg 1600w, images/Rectangle-2_2.jpg 1706w"></div>
+          </div>
+          <div data-w-tab="Tab 3" class="w-tab-pane w--tab-active">
+            <div class="w-layout-vflex img-frame-portrait"><img class="img _2-3-portrait" src="images/Rectangle-2_2.jpg" data-figma-image-id="682c7ee76f2d4e1585f3446f" alt="" data-figma-id="I24981:5179;24965:10986" data-figma-image-hash="5bc5f7be2cdf1c80418fbb72f6ab4886" loading="lazy"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="section_about">
+    <div class="w-layout-blockcontainer container-lg w-container">
+      <div class="w-layout-blockcontainer layout-summary w-container">
+        <div class="w-layout-vflex img-frame-16-9-wide"><img src="images/image-row-01.jpg" alt="" class="img"></div>
+      </div>
+    </div>
+  </div>
+  <div class="section_features">
+    <div class="w-layout-blockcontainer container-lg stacked w-container">
+      <div class="w-layout-grid layout-flex comfortable">
+        <div class="w-layout-vflex layout-item">
+          <div class="content-wrapper">
+            <h2 class="text_heading-md">This is the default text value</h2>
+          </div>
+        </div>
+        <div class="w-layout-grid layout-3-col">
+          <div class="layout-item comfortable border">
+            <div class="icon-lg"><img alt="" src="images/icon-fact.svg" class="icon"></div>
+            <div class="w-layout-vflex content-wrapper">
+              <h3 class="text_heading-sm">This is the default text value</h3>
+              <p class="text_body-md secondary">This is the default text value</p>
+            </div>
+          </div>
+          <div class="layout-item comfortable border">
+            <div class="icon-lg"><img alt="" src="images/icon-fact.svg" class="icon"></div>
+            <div class="w-layout-vflex content-wrapper">
+              <h3 class="text_heading-sm">This is the default text value</h3>
+              <p class="text_body-md secondary">This is the default text value</p>
+            </div>
+          </div>
+          <div class="layout-item comfortable border">
+            <div class="icon-lg"><img alt="" src="images/icon-fact.svg" class="icon"></div>
+            <div class="w-layout-vflex content-wrapper">
+              <h3 class="text_heading-sm">This is the default text value</h3>
+              <p class="text_body-md secondary">This is the default text value</p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="divider_thin">
-    <div class="container-lg">
-      <div class="line-color"></div>
+  <div class="slider-section">
+    <div data-delay="6000" data-animation="fade" class="slider w-slider" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="true" data-autoplay-limit="0" data-nav-spacing="5" data-duration="500" data-infinite="true">
+      <div class="w-slider-mask">
+        <div class="slide w-slide"></div>
+        <div class="slide-2 w-slide"></div>
+        <div class="slide-3 w-slide"></div>
+      </div>
+      <div class="left-arrow w-slider-arrow-left">
+        <div class="icon w-icon-slider-left"></div>
+      </div>
+      <div class="right-arrow w-slider-arrow-right">
+        <div class="w-icon-slider-right"></div>
+      </div>
+      <div class="slide-nav w-slider-nav w-round"></div>
+    </div>
+  </div>
+  <div class="section-features">
+    <div class="w-layout-blockcontainer container-full w-container">
+      <div class="w-layout-grid layout-flex comfortable">
+        <div class="w-layout-vflex layout-item">
+          <div class="content-wrapper center">
+            <h3 class="text_heading-md center">This is the default text value</h3>
+            <p href="/premium" class="text_body-md">This is the default text value</p>
+          </div>
+          <div class="img-frame-landscape"><img src="images/image-row-01.jpg" alt="" class="image"></div>
+          <div class="content-wrapper">
+            <h2 class="text_heading-lg"><span class="text_heading-lg">Ex tempor euismod sapientem ouis lexor pro.</span> Ad vix dicta iudico singulis, ius ex mollis veritus.</h2>
+            <p class="text_body-md">Possit tritani consectetuer eu his, nusquam minimum ut per, eu eos ocurreret splendide hendrerit. Dicant placerat democritum eos id, sit mollis invidunt mediocritatem ei, ne fuisset dolores periculis sed.</p>
+          </div>
+        </div>
+        <div class="w-layout-vflex layout-flex">
+          <div class="layout_row">
+            <div class="img-frame-landscape"><img src="images/image-row-02.jpg" alt="" class="img"></div>
+            <div class="content-wrapper">
+              <h2 class="text_heading-lg"><span class="text_heading-lg">Te elit antiopam vix zril recusabo ut pri.</span> Quas suscipit ad mea verear vivendo tincidunt.</h2>
+              <p class="text_body-md">Pri cu dico labores officiis, odio principes complectitur ad sea. Sea id doctus forensibus, nec lorem vocent aliquam eu. Aliquid definitiones id cum, ad meliore perpetua referrentur sed. Quas suscipit ad mea verear vivendo tincidunt.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="section_cta">
@@ -305,19 +385,34 @@
       </div>
     </div>
   </div>
+  <section class="section_cta">
+    <div class="w-layout-blockcontainer container-sm w-container">
+      <div class="w-layout-grid layout-flex">
+        <div data-figma-id="I25153:1175;24968:11778" class="content-wrapper center">
+          <h1 class="text_heading-xxl">This is the default text value</h1>
+          <p class="text_body-md center">This is the default text value</p>
+        </div>
+        <div class="button-wrapper center">
+          <a href="#" class="button_primary w-inline-block">
+            <p class="text_label-md inverse">Button Label</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
   <div class="nav_footer">
     <div class="w-layout-blockcontainer container-lg w-container">
       <div class="w-layout-vflex layout-flex">
         <div class="w-layout-grid layout_3-col">
           <div class="layout-item">
-            <a href="index.html" class="logo w-inline-block"><img src="images/logo-spoon-white.svg" alt=""></a>
+            <a href="index.html" aria-current="page" class="logo w-inline-block w--current"><img src="images/logo-spoon-white.svg" alt=""></a>
             <div class="text_body-sm inverse">Pri cu dico labores officiis, odio principes complectitur ad sea. Sea id doctus forensibus, nec lorem vocent aliquam eu. Aliquid definitiones id cum, ad meliore perpetua referrentur sed. Quas suscipit ad mea verear vivendo tincidunt.</div>
           </div>
           <div class="layout-item">
             <div class="footer-list-wrapper">
               <a href="services.html" class="text_body-sm inverse">Features</a>
               <a href="/premium" class="text_body-sm inverse">Premium</a>
-              <a href="pricing.html" aria-current="page" class="text_body-sm inverse w--current">Pricing</a>
+              <a href="pricing.html" class="text_body-sm inverse">Pricing</a>
             </div>
             <div class="footer-list-wrapper">
               <a href="about.html" class="text_body-sm inverse">About</a>
