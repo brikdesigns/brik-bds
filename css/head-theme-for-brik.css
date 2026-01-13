@@ -1,0 +1,45 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('.toggle_component').on('click', function() {
+        $('body').toggleClass('dark-mode');
+        $('.toggle_component').toggleClass('is-on');
+    });
+});
+</script>
+
+<style>
+body.dark-mode {
+--_color---background--primary: var(--grayscale--white);
+--_color---background--secondary: var(--grayscale--lightest);
+--_color---background--inverse: var(--grayscale--white);
+--_color---background--input: var(--grayscale--white);
+--_color---background--image: #17171799;
+--_color---background--brand-primary: var(--_themes---blue-green--blue-light);
+--_color---background--brand-secondary: white;
+--_color---background--image-brand: var(--_themes---blue-green--blue-light);
+    
+    --_color---surface--primary: var(--grayscale--white);
+    --_color---surface--secondary: var(--grayscale--lightest);
+    --_color---surface--nav: var(--grayscale--white);
+    --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
+    
+    --_color---text--primary: var(--grayscale--darkest);
+    --_color---text--secondary: var(--grayscale--darker);
+    --_color---text--muted: var(--grayscale--dark);
+    --_color---text--inverse: var(--grayscale--white);
+    --_color---text--brand: var(--_themes---blue-green--blue-light);
+    
+    --_color---border--primary: var(--grayscale--dark);
+    --_color---border--secondary: var(--grayscale--light);
+    --_color---border--input: var(--grayscale--light);
+    --_color---border--brand: var(--grayscale--black);
+    --_color---border--inverse: var(--grayscale--white);
+    
+    --_color---page--primary: var(--grayscale--white);
+    --_color---page--secondary: var(--grayscale--lighter);
+    --_color---page--brand: var(--_themes---blue-green--blue-light);
+    --_color---page--accent: var(--_themes---blue-green--blue-light);
+    
+}

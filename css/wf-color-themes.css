@@ -1,0 +1,544 @@
+/* ============================================= */
+/*          WEBFLOW-ALIGNED COLOR THEMES        */
+/*      Updated to match brik-bds.css   */
+/* ============================================= */
+
+/* ==================================================== */
+/*                 BASE COLOR TOKENS                    */
+/* ==================================================== */
+
+/* Grayscale System (from Webflow) */
+:root {
+  --grayscale--white: #fff;
+  --grayscale--lightest: #f2f2f2;
+  --grayscale--lighter: #e0e0e0;
+  --grayscale--light: #bdbdbd;
+  --grayscale--dark: #828282;
+  --grayscale--darker: #4f4f4f;
+  --grayscale--darkest: #333;
+  --grayscale--black: #000;
+
+  /* System Colors */
+  --system--green: #27ae60;
+  --system--blue: #2f80ed;
+  --system--yellow: #f2c94c;
+  --system--orange: #f2994a;
+  --system--red: #eb5757;
+  --system--purple: #9b51e0;
+
+  /* Theme Color Palettes */
+  --_themes---blue-green--blue-light: #4665f5;
+  --_themes---blue-green--blue-dark: #0e212a;
+  --_themes---blue-green--blue-lighter: #79b0d9;
+  --_themes---blue-green--blue-lightest: #edf2f6;
+  --_themes---blue-green--green: #79d799;
+
+  --_themes---yellow-orange--yellow: #e8ea76;
+  --_themes---yellow-orange--yellow-dark: #d8d96a;
+  --_themes---yellow-orange--orange: #ef8f4b;
+  --_themes---yellow-orange--black: black;
+
+  --_themes---peach-brown--peach: #ed8059;
+  --_themes---peach-brown--peach-light: #efc7a2;
+  --_themes---peach-brown--peach-lightest: #f2eee5;
+  --_themes---peach-brown--peach-darkest: #443b2b;
+
+  --_themes---yellow-brown--yellow: #f3b94d;
+  --_themes---yellow-brown--green: #615f36;
+  --_themes---yellow-brown--brown: #372d2b;
+  --_themes---yellow-brown--tan: #fffaeb;
+
+  --_themes---green-orange--yellow: #ffa600;
+  --_themes---green-orange--yellow-light: #fdd595;
+  --_themes---green-orange--green-light: #9eb28d;
+  --_themes---green-orange--brown: #322b2f;
+  --_themes---green-orange--brown-light: #656153;
+
+  --_themes---neon--neon-green: #42ff00;
+  --_themes---neon--neon-blue: #00f6ff;
+  --_themes---neon--neon-purple: #ae00ff;
+  --_themes---neon--neon-orange: #ff5c00;
+  --_themes---neon--neon-yellow: #fffc00;
+  --_themes---neon--neon-pink: #f0c;
+
+  /* Base semantic tokens (default/fallback) */
+  --_color---text--primary: var(--grayscale--darkest);
+  --_color---text--secondary: var(--grayscale--darker);
+  --_color---text--muted: var(--grayscale--dark);
+  --_color---text--inverse: var(--grayscale--white);
+  --_color---text--brand: var(--_themes---blue-green--blue-light);
+  
+  --_color---background--primary: var(--grayscale--white);
+  --_color---background--secondary: var(--grayscale--lightest);
+  --_color---background--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---background--inverse: var(--grayscale--white);
+  --_color---background--input: var(--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--_themes---blue-green--blue-light);
+  
+  --_color---border--primary: var(--grayscale--dark);
+  --_color---border--secondary: var(--grayscale--light);
+  --_color---border--input: var(--grayscale--light);
+  --_color---border--brand: var(--grayscale--black);
+  --_color---border--inverse: var(--grayscale--white);
+  
+  --_color---page--primary: var(--grayscale--white);
+  --_color---page--secondary: var(--grayscale--lighter);
+  --_color---page--brand: var(--_themes---blue-green--blue-light);
+  
+  --_color---surface--primary: var(--grayscale--white);
+  --_color---surface--secondary: var(--grayscale--lightest);
+  --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---surface--nav: var(--grayscale--white);
+  
+  --_color---theme--primary: var(--_themes---blue-green--blue-light);
+  --_color---theme--secondary: var(--_themes---blue-green--blue-lighter);
+  --_color---theme--tertiary: var(--_themes---blue-green--blue-dark);
+  --_color---theme--fourth: white;
+  --_color---theme--accent: var(--_themes---blue-green--green);
+
+  /* Base typography */
+  --_typography---font-family--display: "Droid Sans", sans-serif;
+  --_typography---font-family--heading: "Droid Sans", sans-serif;
+  --_typography---font-family--body: "Open Sans", sans-serif;
+  --_typography---font-family--label: "Open Sans", sans-serif;
+  --_typography---font-family--icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+}
+
+/* ==================================================== */
+/*                 WEBFLOW THEME 1 (Base/Default)      */
+/*                   Modern Clean Blue                  */
+/* ==================================================== */
+.body.theme-1,
+.modern-theme-1,
+[data-theme="modern-theme-1"] {
+  /* Uses base tokens from :root - clean blue theme */
+  /* This theme primarily focuses on spacing tokens in Webflow */
+}
+
+/* ==================================================== */
+/*                 WEBFLOW THEME 2 (Modern Dark)       */
+/*                   Dark + Yellow Accent               */
+/* ==================================================== */
+.body.theme-2,
+.modern-theme-2,
+[data-theme="modern-theme-2"] {
+  /* Color tokens - Dark theme with yellow accent */
+  --_color---border--secondary: var(--grayscale--dark);
+  --_color---surface--nav: var(--grayscale--black);
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---text--inverse: var(--grayscale--darkest);
+  --_color---background--primary: var(--grayscale--darkest);
+  --_color---text--primary: var(--grayscale--lightest);
+  --_color---background--inverse: var(--grayscale--black);
+  --_color---surface--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--light);
+  --_color---page--primary: var(--grayscale--black);
+  --_color---text--muted: var(--grayscale--dark);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---border--input: var(--grayscale--dark);
+  --_color---text--secondary: var(--grayscale--light);
+  --_color---surface--secondary: var(--grayscale--darkest);
+  --_color---background--secondary: var(--grayscale--black);
+  --_color---theme--accent: var(--_themes---yellow-orange--orange);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---background--input: var(--grayscale--darkest);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--inverse: var(--grayscale--black);
+  --_color---page--secondary: var(--grayscale--darkest);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
+  --_color---theme--fourth: var(--grayscale--white);
+
+  /* Typography - Geist family */
+  --_typography---font-family--label: "Geist Mono", sans-serif;
+  --_typography---font-family--body: "Geist Mono", sans-serif;
+  --_typography---font-family--heading: Geist, sans-serif;
+  --_typography---font-family--display: Geist, sans-serif;
+}
+
+/* ==================================================== */
+/*                 WEBFLOW THEME 3 (Modern Blue)       */
+/*                   Clean Blue-Green                   */
+/* ==================================================== */
+.body.theme-3,
+.modern-theme-3,
+[data-theme="modern-theme-3"] {
+  /* Uses IBM Plex Sans + Source Sans 3 with blue-green theme */
+  --_color---surface--nav: var(--_themes---blue-green--blue-lightest);
+  
+  /* Typography - IBM Plex Sans family */
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--display: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+  --_typography---font-family--label: "Source Sans 3", sans-serif;
+}
+
+/* ==================================================== */
+/*                 WEBFLOW THEME 4 (Modern Yellow)     */
+/*                   Lato + Yellow Accent               */
+/* ==================================================== */
+.body.theme-4,
+.modern-theme-4,
+[data-theme="modern-theme-4"] {
+  /* Color tokens - Light theme with yellow accent */
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---text--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
+  --_color---theme--fourth: var(--grayscale--white);
+
+  /* Typography - Lato family */
+  --_typography---font-family--label: Hind, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--display: Lato, Arial, sans-serif;
+}
+
+/* ==================================================== */
+/*                 WEBFLOW THEME 5 (Expressive Peach)  */
+/*                   Newsreader + Peach Colors          */
+/* ==================================================== */
+.body.theme-5,
+.expressive-theme-1,
+[data-theme="expressive-theme-1"] {
+  /* Color tokens - Peach theme */
+  --_color---border--secondary: var(--grayscale--darker);
+  --_color---surface--nav: var(--_themes---peach-brown--peach-lightest);
+  --_color---background--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---background--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---text--primary: var(--grayscale--black);
+  --_color---surface--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---page--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---text--brand: var(--_themes---peach-brown--peach);
+  --_color---surface--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---border--input: var(--_themes---peach-brown--peach-darkest);
+  --_color---surface--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--accent: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--tertiary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--secondary: var(--_themes---peach-brown--peach-light);
+  --_color---theme--primary: var(--_themes---peach-brown--peach);
+  --_color---background--image-brand: var(--_themes---peach-brown--peach);
+  --_color---border--brand: var(--_themes---peach-brown--peach);
+  --_color---border--inverse: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--brand: var(--_themes---peach-brown--peach);
+  --_color---theme--fourth: white;
+
+  /* Typography - Newsreader serif */
+  --_typography---font-family--heading: Newsreader, sans-serif;
+  --_typography---font-family--display: Newsreader, sans-serif;
+  --_typography---font-family--body: "Open Sans", sans-serif;
+  --_typography---font-family--label: "Open Sans", sans-serif;
+}
+
+/* ==================================================== */
+/*                 WEBFLOW THEME 6 (Expressive Neon)   */
+/*                   IBM Plex + Green Colors            */
+/* ==================================================== */
+.body.theme-6,
+.expressive-theme-2,
+[data-theme="expressive-theme-2"] {
+  /* Green/orange theme colors */
+  --_color---surface--nav: var(--grayscale--white);
+  --_color---text--brand: var(--_themes---green-orange--green-light);
+  --_color---surface--brand-primary: var(--_themes---green-orange--yellow);
+  --_color---theme--accent: var(--_themes---green-orange--yellow);
+  --_color---theme--tertiary: var(--_themes---green-orange--brown);
+  --_color---theme--secondary: var(--_themes---green-orange--green-light);
+  --_color---theme--primary: var(--_themes---green-orange--brown);
+  --_color---background--image-brand: var(--_themes---green-orange--brown);
+  --_color---border--brand: var(--_themes---green-orange--brown);
+  --_color---page--brand: var(--_themes---green-orange--yellow);
+  --_color---theme--fourth: white;
+
+  /* Neon accent colors for special effects */
+  --_color---accent--neon-green: var(--_themes---neon--neon-green);
+  --_color---accent--neon-pink: var(--_themes---neon--neon-pink);
+  --_color---accent--neon-blue: var(--_themes---neon--neon-blue);
+
+  /* Typography - IBM Plex Sans */
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--display: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+  --_typography---font-family--label: "Source Sans 3", sans-serif;
+}
+
+/* ==================================================== */
+/*                 WEBFLOW THEME 7 (Expressive Yellow) */
+/*                   Lato + Yellow-Brown Colors         */
+/* ==================================================== */
+.body.theme-7,
+.expressive-theme-3,
+[data-theme="expressive-theme-3"] {
+  /* Color tokens - Yellow-brown theme */
+  --_color---surface--nav: var(--_themes---yellow-brown--tan);
+  --_color---background--brand-primary: var(--_themes---yellow-brown--brown);
+  --_color---background--primary: var(--_themes---yellow-brown--tan);
+  --_color---surface--primary: var(--_themes---yellow-brown--tan);
+  --_color---page--primary: var(--_themes---yellow-brown--tan);
+  --_color---text--brand: var(--_themes---yellow-brown--brown);
+  --_color---surface--brand-primary: var(--_themes---green-orange--yellow);
+  --_color---theme--accent: var(--_themes---yellow-brown--yellow);
+  --_color---theme--tertiary: var(--_themes---yellow-brown--tan);
+  --_color---theme--secondary: var(--_themes---yellow-brown--green);
+  --_color---theme--primary: var(--_themes---yellow-brown--brown);
+  --_color---background--image-brand: var(--_themes---green-orange--brown);
+  --_color---border--brand: var(--_themes---green-orange--brown);
+  --_color---page--brand: var(--_themes---green-orange--yellow);
+  --_color---theme--fourth: var(--_themes---yellow-brown--tan);
+
+  /* Typography - Lato */
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--display: Lato, Arial, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--label: Hind, sans-serif;
+}
+
+/* ==================================================== */
+/*                 WEBFLOW THEME 8 (Expressive Serif)  */
+/*                   Playfair Display Typography        */
+/* ==================================================== */
+.body.theme-8,
+.expressive-theme-4,
+[data-theme="expressive-theme-4"] {
+  /* Uses default colors with elegant serif typography */
+  /* Typography - Playfair Display serif */
+  --_typography---font-family--heading: "Playfair Display", sans-serif;
+  --_typography---font-family--display: "Playfair Display", sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--label: Hind, sans-serif;
+  
+  /* Green theme accent */
+  --_color---text--brand: var(--_themes---green-orange--brown);
+  --_color---theme--primary: var(--_themes---green-orange--brown);
+  --_color---theme--secondary: var(--_themes---yellow-brown--yellow);
+  --_color---theme--tertiary: var(--_themes---yellow-brown--tan);
+  --_color---theme--accent: var(--system--green);
+}
+
+/* ==================================================== */
+/*                 THEME COMPATIBILITY                  */
+/* ==================================================== */
+
+/* Ensure both old and new theme selectors work */
+/* Map custom theme names to Webflow theme classes */
+
+/* Modern Theme 1 = Webflow Theme 1 (Base Blue) */
+.modern-theme-1 {
+  /* Inherits from :root base theme */
+}
+
+/* Modern Theme 2 = Webflow Theme 2 (Dark + Yellow) */
+.modern-theme-2 {
+  /* Color tokens - Dark theme with yellow accent */
+  --_color---border--secondary: var(--grayscale--dark);
+  --_color---surface--nav: var(--grayscale--black);
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---text--inverse: var(--grayscale--darkest);
+  --_color---background--primary: var(--grayscale--darkest);
+  --_color---text--primary: var(--grayscale--lightest);
+  --_color---background--inverse: var(--grayscale--black);
+  --_color---surface--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--light);
+  --_color---page--primary: var(--grayscale--black);
+  --_color---text--muted: var(--grayscale--dark);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---border--input: var(--grayscale--dark);
+  --_color---text--secondary: var(--grayscale--light);
+  --_color---surface--secondary: var(--grayscale--darkest);
+  --_color---background--secondary: var(--grayscale--black);
+  --_color---theme--accent: var(--_themes---yellow-orange--orange);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---background--input: var(--grayscale--darkest);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--inverse: var(--grayscale--black);
+  --_color---page--secondary: var(--grayscale--darkest);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
+  --_color---theme--fourth: var(--grayscale--white);
+
+  /* Typography - Geist family */
+  --_typography---font-family--label: "Geist Mono", sans-serif;
+  --_typography---font-family--body: "Geist Mono", sans-serif;
+  --_typography---font-family--heading: Geist, sans-serif;
+  --_typography---font-family--display: Geist, sans-serif;
+}
+
+/* Modern Theme 3 = Webflow Theme 3 (IBM Plex Blue) */
+.modern-theme-3 {
+  --_color---surface--nav: var(--_themes---blue-green--blue-lightest);
+  
+  /* Typography - IBM Plex Sans family */
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--display: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+  --_typography---font-family--label: "Source Sans 3", sans-serif;
+}
+
+/* Modern Theme 4 = Webflow Theme 4 (Lato Yellow) */
+.modern-theme-4 {
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---text--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
+  --_color---theme--fourth: var(--grayscale--white);
+
+  /* Typography - Lato family */
+  --_typography---font-family--label: Hind, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--display: Lato, Arial, sans-serif;
+}
+
+/* Expressive Theme 1 = Webflow Theme 5 (Newsreader Peach) */
+.expressive-theme-1 {
+  /* Color tokens - Peach theme */
+  --_color---border--secondary: var(--grayscale--darker);
+  --_color---surface--nav: var(--_themes---peach-brown--peach-lightest);
+  --_color---background--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---background--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---text--primary: var(--grayscale--black);
+  --_color---surface--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---page--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---text--brand: var(--_themes---peach-brown--peach);
+  --_color---surface--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---border--input: var(--_themes---peach-brown--peach-darkest);
+  --_color---surface--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--accent: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--tertiary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--secondary: var(--_themes---peach-brown--peach-light);
+  --_color---theme--primary: var(--_themes---peach-brown--peach);
+  --_color---background--image-brand: var(--_themes---peach-brown--peach);
+  --_color---border--brand: var(--_themes---peach-brown--peach);
+  --_color---border--inverse: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--brand: var(--_themes---peach-brown--peach);
+  --_color---theme--fourth: white;
+
+  /* Typography - Newsreader serif */
+  --_typography---font-family--heading: Newsreader, sans-serif;
+  --_typography---font-family--display: Newsreader, sans-serif;
+  --_typography---font-family--body: "Open Sans", sans-serif;
+  --_typography---font-family--label: "Open Sans", sans-serif;
+}
+
+/* Expressive Theme 2 = Webflow Theme 6 (IBM Plex + Green/Neon) */
+.expressive-theme-2 {
+  /* Green/orange theme colors */
+  --_color---surface--nav: var(--grayscale--white);
+  --_color---text--brand: var(--_themes---green-orange--green-light);
+  --_color---surface--brand-primary: var(--_themes---green-orange--yellow);
+  --_color---theme--accent: var(--_themes---green-orange--yellow);
+  --_color---theme--tertiary: var(--_themes---green-orange--brown);
+  --_color---theme--secondary: var(--_themes---green-orange--green-light);
+  --_color---theme--primary: var(--_themes---green-orange--brown);
+  --_color---background--image-brand: var(--_themes---green-orange--brown);
+  --_color---border--brand: var(--_themes---green-orange--brown);
+  --_color---page--brand: var(--_themes---green-orange--yellow);
+  --_color---theme--fourth: white;
+
+  /* Neon accent colors for special effects */
+  --_color---accent--neon-green: var(--_themes---neon--neon-green);
+  --_color---accent--neon-pink: var(--_themes---neon--neon-pink);
+  --_color---accent--neon-blue: var(--_themes---neon--neon-blue);
+
+  /* Typography - IBM Plex Sans */
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--display: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+  --_typography---font-family--label: "Source Sans 3", sans-serif;
+}
+
+/* Expressive Theme 3 = Webflow Theme 7 (Lato + Yellow-Brown) */
+.expressive-theme-3 {
+  /* Color tokens - Yellow-brown theme */
+  --_color---surface--nav: var(--_themes---yellow-brown--tan);
+  --_color---background--brand-primary: var(--_themes---yellow-brown--brown);
+  --_color---background--primary: var(--_themes---yellow-brown--tan);
+  --_color---surface--primary: var(--_themes---yellow-brown--tan);
+  --_color---page--primary: var(--_themes---yellow-brown--tan);
+  --_color---text--brand: var(--_themes---yellow-brown--brown);
+  --_color---surface--brand-primary: var(--_themes---green-orange--yellow);
+  --_color---theme--accent: var(--_themes---yellow-brown--yellow);
+  --_color---theme--tertiary: var(--_themes---yellow-brown--tan);
+  --_color---theme--secondary: var(--_themes---yellow-brown--green);
+  --_color---theme--primary: var(--_themes---yellow-brown--brown);
+  --_color---background--image-brand: var(--_themes---green-orange--brown);
+  --_color---border--brand: var(--_themes---green-orange--brown);
+  --_color---page--brand: var(--_themes---green-orange--yellow);
+  --_color---theme--fourth: var(--_themes---yellow-brown--tan);
+
+  /* Typography - Lato */
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--display: Lato, Arial, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--label: Hind, sans-serif;
+}
+
+/* Expressive Theme 4 = Webflow Theme 8 (Playfair Serif) */
+.expressive-theme-4 {
+  /* Typography - Playfair Display serif */
+  --_typography---font-family--heading: "Playfair Display", sans-serif;
+  --_typography---font-family--display: "Playfair Display", sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--label: Hind, sans-serif;
+  
+  /* Green theme accent */
+  --_color---text--brand: var(--_themes---green-orange--brown);
+  --_color---theme--primary: var(--_themes---green-orange--brown);
+  --_color---theme--secondary: var(--_themes---yellow-brown--yellow);
+  --_color---theme--tertiary: var(--_themes---yellow-brown--tan);
+  --_color---theme--accent: var(--system--green);
+}
+
+/* ==================================================== */
+/*                 UTILITY CLASSES                      */
+/* ==================================================== */
+
+/* Quick theme preview classes for testing */
+.theme-preview {
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 8px;
+  background: var(--_color---background--primary);
+  color: var(--_color---text--primary);
+  border: 1px solid var(--_color---border--secondary);
+}
+
+.theme-preview .brand-text {
+  color: var(--_color---text--brand);
+  font-family: var(--_typography---font-family--heading);
+  font-weight: 600;
+}
+
+.theme-preview .accent-bg {
+  background: var(--_color---theme--primary);
+  color: var(--_color---text--inverse);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}

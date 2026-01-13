@@ -1,0 +1,1009 @@
+/* ============================================= */
+/*             BRIK BDS DESIGN SYSTEM          */
+/*          Webflow-Aligned CSS Variables      */
+/* ============================================= */
+/* 
+ * This file provides CSS custom properties for 
+ * seamless integration between local development  
+ * and Webflow deployment with 8 theme support.
+ */
+
+  /* ============================================= */
+/*                BASE TOKENS                   */
+  /* ============================================= */
+
+:root {
+  /* Grayscale Foundation */
+  --grayscale--white: white;
+  --grayscale--black: black;
+  --grayscale--lightest: #f2f2f2;
+  --grayscale--lighter: #e0e0e0;
+  --grayscale--light: #bdbdbd;
+  --grayscale--dark: #828282;
+  --grayscale--darker: #4f4f4f;
+  --grayscale--darkest: #333;
+
+  /* System Colors */
+  --system--blue: #2f80ed;
+  --system--green: #27ae60;
+  --system--red: #eb5757;
+  --system--yellow: #f2c94c;
+  --system--orange: #f2994a;
+  --system--purple: #9b51e0;
+  --system--lightbox: #000000a3;
+  --system--transparent: #0000;
+
+  /* Typography Scale */
+  --font-family--body: Poppins;
+  --font-family--label: Poppins;
+  --font-family--display: Poppins;
+  --font-family--heading: Poppins;
+  --font-family--icon: "Font Awesome 6 Pro";
+  --font-family--icon-brands: "Font Awesome 6 Brands";
+
+  /* Font Weights */
+  --font-weight--thin: 300;
+  --font-weight--light: 300;
+  --font-weight--regular: 400;
+  --font-weight--medium: 500;
+  --font-weight--semi-bold: 600;
+  --font-weight--bold: 700;
+  --font-weight--extra-bold: 800;
+  --font-weight--black: 900;
+
+  /* Font Size Scale */
+  --font-size--25: 10.26px;
+  --font-size--50: 11.54px;
+  --font-size--75: 14px;
+  --font-size--100: 16px;
+  --font-size--200: 18px;
+  --font-size--300: 20px;
+  --font-size--400: 22.5px;
+  --font-size--500: 25.3px;
+  --font-size--600: 28.5px;
+  --font-size--700: 32px;
+  --font-size--800: 36px;
+  --font-size--900: 40.5px;
+  --font-size--1000: 45.5px;
+  --font-size--1100: 51px;
+  --font-size--1200: 57.5px;
+  --font-size--1300: 64.7px;
+  --font-size--1400: 72.8px;
+  --font-size--1500: 81.9px;
+  --font-size--1600: 92.2px;
+  --font-size--1700: 103.9px;
+  --font-size--1800: 116.9px;
+  --font-size--1900: 143px;
+  --font-size--2000: 171px;
+  --font-size--2100: 205px;
+  --font-size--2200: 247px;
+  --font-size--2300: 296px;
+  --font-size--2400: 355px;
+  --font-size--2500: 426px;
+  --font-size--2600: 515px;
+
+  /* Line Heights */
+  --font-line-height--none: 0%;
+  --font-line-height--100: 100%;
+  --font-line-height--125: 125%;
+  --font-line-height--150: 150%;
+  --font-line-height--175: 175%;
+  --font-line-height--200: 200%;
+
+  /* Spacing System */
+  --space--0: 0px;
+  --space--25: 1px;
+  --space--50: 2px;
+  --space--100: 4px;
+  --space--150: 6px;
+  --space--200: 8px;
+  --space--250: 10px;
+  --space--300: 12px;
+  --space--350: 14px;
+  --space--400: 16px;
+  --space--450: 18px;
+  --space--500: 20px;
+  --space--600: 24px;
+  --space--700: 28px;
+  --space--800: 32px;
+  --space--900: 36px;
+  --space--1000: 40px;
+  --space--1100: 44px;
+  --space--1200: 48px;
+  --space--1300: 52px;
+  --space--1400: 56px;
+  --space--1500: 60px;
+  --space--1600: 64px;
+  --space--1700: 72px;
+  --space--1800: 80px;
+  --space--1900: 84px;
+  --space--2000: 88px;
+  --space--2100: 96px;
+  --space--2200: 104px;
+  --space--2300: 112px;
+  --space--2400: 128px;
+  --space--2500: 136px;
+  --space--2600: 144px;
+  --space--2700: 152px;
+  --space--2800: 160px;
+  --space--2900: 168px;
+  --space--3000: 176px;
+
+  /* Size System */
+  --size--0: 0px;
+  --size--25: 1px;
+  --size--50: 2px;
+  --size--100: 4px;
+  --size--150: 6px;
+  --size--200: 8px;
+  --size--300: 12px;
+  --size--400: 16px;
+  --size--500: 20px;
+  --size--600: 24px;
+  --size--700: 28px;
+  --size--800: 32px;
+  --size--900: 36px;
+  --size--1000: 40px;
+  --size--1100: 44px;
+  --size--1200: 48px;
+  --size--1300: 48px;
+  --size--1400: 52px;
+  --size--1500: 56px;
+  --size--1600: 60px;
+  --size--1700: 64px;
+  --size--1800: 72px;
+  --size--1900: 80px;
+  --size--2000: 84px;
+  --size--2100: 88px;
+  --size--2200: 96px;
+
+  /* Border System */
+  --border-radius--0: 0px;
+  --border-radius--50: 2px;
+  --border-radius--100: 4px;
+  --border-radius--200: 8px;
+  --border-radius--300: 10px;
+  --border-radius--400: 12px;
+  --border-radius--500: 14px;
+  --border-radius--600: 16px;
+  --border-radius--700: 20px;
+  --border-radius--800: 24px;
+  --border-radius--900: 28px;
+  --border-radius--1000: 32px;
+  --border-radius--1100: 36px;
+  --border-radius--1200: 40px;
+  --border-radius--1300: 44px;
+  --border-radius--1400: 48px;
+  --border-radius--1500: 999px;
+  --border-radius--1600: 9999px;
+  --border-radius--pill: 999px;
+  --border-radius--circle: 9999px;
+
+  --border-width--0: 0px;
+  --border-width--25: .25px;
+  --border-width--50: .5px;
+  --border-width--100: 1px;
+  --border-width--200: 2px;
+  --border-width--300: 3px;
+  --border-width--400: 4px;
+  --border-width--500: 5px;
+  --border-width--600: 6px;
+
+  /* Shadow System */
+  --shadow-spread--0: 0px;
+  --shadow-spread--100: 2px;
+  --shadow-spread--200: 4px;
+  --shadow-spread--300: 8px;
+  --shadow-spread--400: 10px;
+  --shadow-spread--500: 12px;
+  --shadow-spread--600: 14px;
+  --shadow-spread--700: 16px;
+  --shadow-spread--800: 16px;
+  --shadow-blur--0: 0px;
+  --shadow-blur--100: 2px;
+  --shadow-blur--200: 4px;
+  --shadow-blur--300: 6px;
+  --shadow-blur--400: 8px;
+  --shadow-blur--500: 10px;
+  --shadow-blur--600: 12px;
+  --shadow-blur--700: 14px;
+  --shadow-blur--800: 16px;
+  --shadow-offset--0: 0px;
+  --shadow-offset--25: -4px;
+  --shadow-offset--50: -2px;
+  --shadow-offset--75: -2px;
+  --shadow-offset--100: 2px;
+  --shadow-offset--200: 4px;
+  --shadow-offset--300: 8px;
+  --shadow-offset--400: 10px;
+  --shadow-offset--500: 12px;
+  --shadow-offset--600: 16px;
+  --shadow-offset--700: 14px;
+  --shadow-offset--800: 16px;
+
+  /* Container & Screen Sizes */
+  --_size---container-size--max-hero-height: 100vh;
+  --_size---container-size--max-hero-width: 100vw;
+  --_size---container-size--full-width: 100%;
+  --_size---container-size--half-width: 50%;
+  --_size---container-size--three-quarter-width: 75%;
+  --_size---container-size--quarter-width: 25%;
+  --_size---container-size--one-third-width: 33%;
+  --_size---container-size--two-third-width: 66%;
+
+  --_size---screen-size--wider: 1440px;
+  --_size---screen-size--wide: 1280px;
+  --_size---screen-size--desktop: 1080px;
+  --_size---screen-size--tablet: 768px;
+  --_size---screen-size--mobile: 320px;
+}
+
+  /* ============================================= */
+/*              THEME COLOR PALETTES            */
+  /* ============================================= */
+
+:root {
+  /* Blue-Green Theme */
+  --_themes---blue-green--blue-light: #4665f5;
+  --_themes---blue-green--blue-lighter: #79b0d9;
+  --_themes---blue-green--blue-lightest: #edf2f6;
+  --_themes---blue-green--blue-dark: #0e212a;
+  --_themes---blue-green--green: #79d799;
+
+  /* Yellow-Orange Theme */
+  --_themes---yellow-orange--yellow: #e8ea76;
+  --_themes---yellow-orange--yellow-dark: #d8d96a;
+  --_themes---yellow-orange--orange: #ef8f4b;
+  --_themes---yellow-orange--black: black;
+
+  /* Peach-Brown Theme */
+  --_themes---peach-brown--peach: #ed8059;
+  --_themes---peach-brown--peach-light: #efc7a2;
+  --_themes---peach-brown--peach-lightest: #f2eee5;
+  --_themes---peach-brown--peach-darkest: #443b2b;
+
+  /* Yellow-Brown Theme */
+  --_themes---yellow-brown--yellow: #f3b94d;
+  --_themes---yellow-brown--green: #615f36;
+  --_themes---yellow-brown--brown: #372d2b;
+  --_themes---yellow-brown--tan: #fffaeb;
+
+  /* Green-Orange Theme */
+  --_themes---green-orange--yellow-light: #fdd595;
+  --_themes---green-orange--brown-light: #656153;
+  --_themes---green-orange--yellow: #ffa600;
+  --_themes---green-orange--green-light: #9eb28d;
+  --_themes---green-orange--brown: #322b2f;
+  --_themes---green-orange--green: #1bb58c;
+  --_themes---green-orange--orange-light: #ffae26;
+  --_themes---green-orange--orange-lightest: #fef2cd;
+  --_themes---green-orange--red: #fd2253;
+  --_themes---green-orange--orange: #ff7828;
+
+  /* Neon Theme */
+  --_themes---neon--neon-green: #42ff00;
+  --_themes---neon--neon-blue: #00f6ff;
+  --_themes---neon--neon-purple: #ae00ff;
+  --_themes---neon--neon-orange: #ff5c00;
+  --_themes---neon--neon-yellow: #fffc00;
+  --_themes---neon--neon-pink: #f0c;
+
+   /* Pastel Theme */
+   --_themes---pastel--pastel-purple: #42ff00;
+   --_themes---pastel--pastel-green: #B9FD98;
+   --_themes---pastel--pastel-orange-light: #FDF2D5;
+   --_themes---pastel--pastel-blue: #ff5c00;
+   --_themes---pastel--pastel-black: #fff;
+   --_themes---pastel--pastel-white: #000;
+
+  /* Vibrant Theme */
+  --_themes---vibrant--blue: #5889f7;
+  --_themes---vibrant--green: #4aa35b;
+  --_themes---vibrant--orange: #ed7648;
+  --_themes---vibrant--yellow: #f6c647;
+  --_themes---vibrant--purple: #7a78f7;
+  --_themes---vibrant--tan: #fcf9f2;
+
+  /* Blue-Red Theme */
+  --_themes---blue-red--green: #74b4a8;
+  --_themes---blue-red--green-blue: #317d9e;
+  --_themes---blue-red--red: #fe1755;
+  --_themes---blue-red--blue-dark: #f5ffbe;
+  --_themes---blue-red--green-light: #b2dbc0;
+
+  /* Blue-Orange Theme */
+  --_themes---blue-orange--yellow: #f16b4d;
+  --_themes---blue-orange--blue-dark: #263343;
+  --_themes---blue-orange--blue-light: #98c0d9;
+  --_themes---blue-orange--blue-lightest: #ddfbfa;
+  --_themes---blue-orange--blue: #3d5b83;
+}
+
+/* ============================================= */
+/*              BASE SEMANTIC TOKENS            */
+/* ============================================= */
+
+:root {
+  /* Semantic Sizing */
+  --_size---huge: var(--size--1000);
+  --_size---none: var(--size--0);
+  --_size---tiny: var(--size--50);
+  --_size---sm: var(--size--100);
+  --_size---md: var(--size--200);
+  --_size---lg: var(--size--400);
+  --_size---xl: var(--size--600);
+  --_size---xxl: var(--size--800);
+
+  /* Semantic Spacing */
+  --_space---none: var(--space--0);
+  --_space---tiny: var(--space--100);
+  --_space---sm: var(--space--150);
+  --_space---md: var(--space--200);
+  --_space---lg: var(--space--400);
+  --_space---xl: var(--space--600);
+  --_space---xxl: var(--space--800);
+  --_space---huge: var(--space--1000);
+
+  /* Semantic Gaps */
+  --_space---gap--none: var(--space--0);
+  --_space---gap--tiny: var(--space--50);
+  --_space---gap--sm: var(--space--100);
+  --_space---gap--md: var(--space--200);
+  --_space---gap--lg: var(--space--400);
+  --_space---gap--xl: var(--space--500);
+
+  /* Semantic Borders */
+  --_border-width---none: var(--border-width--0);
+  --_border-width---sm: var(--border-width--25);
+  --_border-width---md: var(--border-width--50);
+  --_border-width---lg: var(--border-width--100);
+
+  --_border-radius---none: var(--border-radius--0);
+  --_border-radius---sm: var(--border-radius--50);
+  --_border-radius---md: var(--border-radius--100);
+  --_border-radius---lg: var(--border-radius--200);
+  --_border-radius---input: var(--border-radius--50);
+  --_border-radius---button: var(--border-radius--50);
+
+  /* Semantic Shadows */
+  --_box-shadow---none: var(--shadow-spread--0);
+  --_box-shadow---sm: var(--shadow-spread--0);
+  --_box-shadow---md: var(--shadow-spread--0);
+  --_box-shadow---lg: var(--shadow-spread--0);
+
+  --_blur-radius---none: var(--shadow-blur--0);
+  --_blur-radius---sm: var(--shadow-blur--0);
+  --_blur-radius---md: var(--shadow-blur--0);
+  --_blur-radius---lg: var(--shadow-blur--0);
+
+  /* Base Theme Colors (Theme 1) */
+  --_color---background--primary: var(--grayscale--white);
+  --_color---background--secondary: var(--grayscale--lightest);
+  --_color---background--inverse: var(--grayscale--white);
+  --_color---background--input: var(--grayscale--white);
+  --_color---background--image: #17171799;
+  --_color---background--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---background--brand-secondary: white;
+  --_color---background--image-brand: var(--_themes---blue-green--blue-light);
+
+  --_color---surface--primary: var(--grayscale--white);
+  --_color---surface--secondary: var(--grayscale--lightest);
+  --_color---surface--nav: var(--grayscale--white);
+  --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
+
+  --_color---text--primary: var(--grayscale--darkest);
+  --_color---text--secondary: var(--grayscale--darker);
+  --_color---text--muted: var(--grayscale--dark);
+  --_color---text--inverse: var(--grayscale--white);
+  --_color---text--brand: var(--_themes---blue-green--blue-light);
+
+  --_color---border--primary: var(--grayscale--dark);
+  --_color---border--secondary: var(--grayscale--light);
+  --_color---border--input: var(--grayscale--light);
+  --_color---border--brand: var(--grayscale--black);
+  --_color---border--inverse: var(--grayscale--white);
+
+  --_color---page--primary: var(--grayscale--white);
+  --_color---page--secondary: var(--grayscale--lighter);
+  --_color---page--brand: var(--_themes---blue-green--blue-light);
+
+  --_color---theme--primary: var(--_themes---blue-green--blue-light);
+  --_color---theme--secondary: var(--_themes---blue-green--blue-lighter);
+  --_color---theme--tertiary: var(--_themes---blue-green--blue-dark);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--fourth: white;
+
+  /* Typography Tokens */
+  --_typography---font-family--label: "Open Sans", sans-serif;
+  --_typography---font-family--body: "Open Sans", sans-serif;
+  --_typography---font-family--heading: "Droid Sans", sans-serif;
+  --_typography---font-family--display: "Droid Sans", sans-serif;
+  --_typography---font-family--icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+
+  --_typography---body--tiny: var(--font-size--25);
+  --_typography---body--x-small: var(--font-size--50);
+  --_typography---body--small: var(--font-size--75);
+  --_typography---body--medium-base: var(--font-size--100);
+  --_typography---body--large: var(--font-size--200);
+
+  --_typography---label--small: var(--font-size--75);
+  --_typography---label--medium-base: var(--font-size--100);
+  --_typography---label--large: var(--font-size--200);
+
+  --_typography---heading--tiny: var(--font-size--100);
+  --_typography---heading--small: var(--font-size--300);
+  --_typography---heading--medium: var(--font-size--500);
+  --_typography---heading--large: var(--font-size--700);
+  --_typography---heading--x-large: var(--font-size--900);
+  --_typography---heading--xx-large: var(--font-size--1000);
+  --_typography---heading--xxx-large: var(--font-size--1200);
+
+  --_typography---display--small: var(--font-size--1600);
+  --_typography---display--medium: var(--font-size--1500);
+  --_typography---display--large: var(--font-size--1400);
+
+  --_typography---icon--small: var(--font-size--75);
+  --_typography---icon--medium-base: var(--font-size--100);
+  --_typography---icon--large: var(--font-size--200);
+
+  /* Utility Tokens */
+  --_space---button: var(--space--200);
+  --_space---input: var(--space--200);
+}
+
+/* ============================================= */
+/*                 THEME CLASSES                */
+/* ============================================= */
+
+/* Theme 1 - Blue Theme (Default) */
+.body.theme-1 {
+  /* Inherits all base values from :root */
+}
+
+/* Theme 2 - Dark + Yellow */
+.body.theme-2 {
+  --_color---border--secondary: var(--grayscale--dark);
+  --_color---surface--nav: var(--grayscale--black);
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---text--inverse: var(--grayscale--darkest);
+  --_color---background--primary: var(--grayscale--darkest);
+  --_color---text--primary: var(--grayscale--lightest);
+  --_color---background--inverse: var(--grayscale--black);
+  --_color---surface--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--light);
+  --_color---page--primary: var(--grayscale--black);
+  --_color---text--muted: var(--grayscale--dark);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---border--input: var(--grayscale--dark);
+  --_color---text--secondary: var(--grayscale--light);
+  --_color---surface--secondary: var(--grayscale--darkest);
+  --_color---background--secondary: var(--grayscale--black);
+  --_color---theme--accent: var(--_themes---yellow-orange--orange);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---background--input: var(--grayscale--darkest);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--inverse: var(--grayscale--black);
+  --_color---page--secondary: var(--grayscale--darkest);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
+  --_color---theme--fourth: var(--grayscale--white);
+  --_typography---font-family--label: "Geist Mono", sans-serif;
+  --_typography---font-family--body: "Geist Mono", sans-serif;
+  --_typography---font-family--heading: Geist, sans-serif;
+  --_typography---font-family--display: Geist, sans-serif;
+}
+
+/* Theme 3 - IBM Plex + Blue */
+.body.theme-3 {
+  --_color---background--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---text--brand: var(--_themes---blue-green--blue-light);
+  --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--tertiary: var(--_themes---blue-green--blue-dark);
+  --_color---theme--secondary: var(--_themes---blue-green--blue-lighter);
+  --_color---theme--primary: var(--_themes---blue-green--blue-light);
+  --_color---background--image-brand: var(--_themes---blue-green--blue-light);
+  --_color---border--brand: var(--_themes---blue-green--blue-light);
+  --_color---page--brand: var(--_themes---blue-green--blue-light);
+  --_typography---font-family--label: "Source Sans 3", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--display: "IBM Plex Sans", sans-serif;
+}
+
+/* Theme 4 - Lato + Yellow */
+.body.theme-4 {
+  --_color---text--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
+  --_typography---font-family--label: Hind, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--display: Lato, Arial, sans-serif;
+}
+
+/* Theme 5 - Newsreader + Peach */
+.body.theme-5 {
+  --_color---border--secondary: var(--grayscale--darker);
+  --_color---surface--nav: var(--_themes---peach-brown--peach-lightest);
+  --_color---background--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---background--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---text--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---page--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---text--brand: var(--_themes---peach-brown--peach);
+  --_color---surface--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---border--input: var(--_themes---peach-brown--peach-darkest);
+  --_color---surface--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--accent: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--tertiary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--secondary: var(--_themes---peach-brown--peach-light);
+  --_color---theme--primary: var(--_themes---peach-brown--peach);
+  --_color---background--brand-secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---background--image-brand: var(--_themes---peach-brown--peach);
+  --_color---border--brand: var(--_themes---peach-brown--peach);
+  --_color---border--inverse: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--brand: var(--_themes---peach-brown--peach);
+  --_typography---font-family--heading: Newsreader, sans-serif;
+  --_typography---font-family--display: Newsreader, sans-serif;
+}
+
+/* Theme 6 - IBM Plex + Pastel */
+.body.theme-6 {
+  --_color---background--brand-primary: var(--_themes---pastel--pastel-purple);
+  --_color---surface--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---page--primary: var(--grayscale--black);
+  --_color---text--brand: var(--_themes---pastel--pastel-purple);
+  --_color---surface--brand-primary: var(--_themes---pastel--pastel-purple);
+  --_color---theme--accent: var(--_themes---pastel--pastel-purple);
+  --_color---theme--tertiary: var(--_themes---pastel--pastel-purple);
+  --_color---theme--secondary: var(--_themes---pastel--pastel-purple);
+  --_color---theme--primary: var(--_themes---pastel--pastel-purple);
+  --_color---background--image-brand: var(--_themes---pastel--pastel-purple);
+  --_color---border--brand: var(--_themes---pastel--pastel-purple);
+  --_color---page--brand: var(--_themes---pastel--pastel-purple);  
+  --_typography---font-family--label: "Source Sans 3", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--display: "IBM Plex Sans", sans-serif;
+}
+
+/* Theme 7 - Lato + Yellow-Brown */
+.body.theme-7 {
+  --_color---surface--nav: var(--_themes---yellow-brown--tan);
+  --_color---background--brand-primary: var(--_themes---yellow-brown--brown);
+  --_color---background--primary: var(--_themes---yellow-brown--tan);
+  --_color---surface--primary: var(--_themes---yellow-brown--tan);
+  --_color---page--primary: var(--_themes---yellow-brown--tan);
+  --_color---text--brand: var(--_themes---yellow-brown--brown);
+  --_color---surface--brand-primary: var(--_themes---green-orange--yellow);
+  --_color---theme--accent: var(--_themes---yellow-brown--yellow);
+  --_color---theme--tertiary: var(--_themes---yellow-brown--tan);
+  --_color---theme--secondary: var(--_themes---yellow-brown--green);
+  --_color---theme--primary: var(--_themes---yellow-brown--brown);
+  --_color---background--image-brand: var(--_themes---green-orange--brown);
+  --_color---border--brand: var(--_themes---green-orange--brown);
+  --_color---page--brand: var(--_themes---green-orange--yellow);
+  --_color---theme--fourth: var(--_themes---yellow-brown--tan);
+  --_typography---font-family--label: Hind, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--display: Lato, Arial, sans-serif;
+}
+
+/* Theme 8 - Playfair Display + Vibrant Green */
+.body.theme-8 {
+  --_color---surface--nav: var(--_themes---vibrant--tan);
+  --_color---background--brand-primary: var(--_themes---vibrant--green);
+  --_color---page--primary: var(--_themes---vibrant--tan);
+  --_color---text--brand: var(--_themes---vibrant--green);
+  --_color---surface--brand-primary: var(--_themes---vibrant--green);
+  --_color---theme--accent: var(--_themes---vibrant--purple);
+  --_color---theme--tertiary: var(--_themes---blue-red--green-blue);
+  --_color---theme--secondary: var(--_themes---vibrant--yellow);
+  --_color---theme--primary: var(--_themes---vibrant--green);
+  --_color---background--image-brand: var(--_themes---vibrant--green);
+  --_color---border--brand: var(--_themes---vibrant--green);
+  --_color---page--secondary: var(--_themes---yellow-brown--brown);
+  --_color---page--brand: var(--_themes---vibrant--green);
+  --_color---theme--fourth: var(--_themes---vibrant--tan);
+  --_typography---font-family--label: Hind, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--heading: "Playfair Display", sans-serif;
+  --_typography---font-family--display: "Playfair Display", sans-serif;
+  --_space---xxl: var(--space--800);
+  --_space---tiny: var(--space--100);
+  --_space---sm: var(--space--150);
+  --_size---huge: var(--size--0);
+  --_size---tiny: var(--size--0);
+  --_size---sm: var(--size--0);
+  --_size---md: var(--size--0);
+  --_size---lg: var(--size--0);
+  --_size---xl: var(--size--0);
+  --_size---xxl: var(--size--0);
+}
+
+/* ============================================= */
+/*            LAYOUT THEME SYSTEM               */
+/* ============================================= */
+
+/* Compact Layout */
+.layout-compact {
+  --_layout---space--space-tiny: var(--space--25);
+  --_layout---space--space-sm: var(--space--50);
+  --_layout---space--space-md: var(--space--200);
+  --_layout---space--space-lg: var(--space--600);
+  --_layout---space--space-xl: var(--space--600);
+  --_layout---space--space-xxl: var(--space--800);
+  --_layout---space--space-huge: var(--space--1000);
+  --_layout---gap--gap-tiny: var(--space--25);
+  --_layout---gap--gap-sm: var(--space--50);
+  --_layout---gap--gap-md: var(--space--100);
+  --_layout---gap--gap-lg: var(--space--200);
+  --_layout---gap--gap-xl: var(--space--400);
+}
+
+/* Comfortable Layout */
+.layout-comfortable {
+  --_layout---space--space-tiny: var(--space--100);
+  --_layout---space--space-sm: var(--space--200);
+  --_layout---space--space-md: var(--space--300);
+  --_layout---space--space-lg: var(--space--500);
+  --_layout---space--space-xl: var(--space--600);
+  --_layout---space--space-xxl: var(--space--800);
+  --_layout---space--space-huge: var(--space--1000);
+  --_layout---gap--gap-tiny: var(--space--50);
+  --_layout---gap--gap-sm: var(--space--100);
+  --_layout---gap--gap-md: var(--space--200);
+  --_layout---gap--gap-lg: var(--space--400);
+  --_layout---gap--gap-xl: var(--space--500);
+}
+
+/* Cozy Layout */
+.layout-cozy {
+  --_layout---space--space-tiny: var(--space--200);
+  --_layout---space--space-sm: var(--space--300);
+  --_layout---space--space-md: var(--space--400);
+  --_layout---space--space-lg: var(--space--500);
+  --_layout---space--space-xl: var(--space--600);
+  --_layout---space--space-xxl: var(--space--700);
+  --_layout---space--space-huge: var(--space--800);
+  --_layout---gap--gap-tiny: var(--space--50);
+  --_layout---gap--gap-sm: var(--space--100);
+  --_layout---gap--gap-md: var(--space--200);
+  --_layout---gap--gap-lg: var(--space--400);
+  --_layout---gap--gap-xl: var(--space--500);
+}
+
+/* ============================================= */
+/*            INDUSTRY FILTERING SYSTEM         */
+/* ============================================= */
+
+/* Content Visibility Rules */
+body.filter-dental .industry-content [data-industry]:not([data-industry="dental"]) { 
+  display: none !important; 
+}
+body.filter-finance .industry-content [data-industry]:not([data-industry="finance"]) { 
+  display: none !important; 
+}
+body.filter-real-estate .industry-content [data-industry]:not([data-industry="real-estate"]) { 
+  display: none !important; 
+}
+body.filter-small-business .industry-content [data-industry]:not([data-industry="small-business"]) { 
+  display: none !important; 
+}
+body.filter-all .industry-content [data-industry] { 
+  display: block !important; 
+}
+
+/* CMS Integration Rules */
+body.filter-dental [data-industry="dental"] { display: block !important; }
+body.filter-finance [data-industry="finance"] { display: block !important; }
+body.filter-real-estate [data-industry="real-estate"] { display: block !important; }
+body.filter-small-business [data-industry="small-business"] { display: block !important; }
+
+/* Fallback Rules */
+body.filter-dental .w-dyn-items > .w-dyn-item:first-child:not([data-industry="finance"]):not([data-industry="real-estate"]):not([data-industry="small-business"]) { 
+  display: block !important; 
+}
+body.filter-finance .w-dyn-items > .w-dyn-item:first-child:not([data-industry="dental"]):not([data-industry="real-estate"]):not([data-industry="small-business"]) { 
+  display: block !important; 
+}
+body.filter-real-estate .w-dyn-items > .w-dyn-item:first-child:not([data-industry="dental"]):not([data-industry="finance"]):not([data-industry="small-business"]) { 
+  display: block !important; 
+}
+body.filter-small-business .w-dyn-items > .w-dyn-item:first-child:not([data-industry="dental"]):not([data-industry="finance"]):not([data-industry="real-estate"]) { 
+  display: block !important; 
+}
+
+/* Empty State Management */
+body.filter-dental .w-dyn-empty,
+body.filter-finance .w-dyn-empty,
+body.filter-real-estate .w-dyn-empty,
+body.filter-small-business .w-dyn-empty {
+  display: none !important;
+}
+
+/* Industry Switcher Always Visible */
+body.filter-finance #industry-theme-switcher [data-industry],
+body.filter-dental #industry-theme-switcher [data-industry],
+body.filter-real-estate #industry-theme-switcher [data-industry],
+body.filter-small-business #industry-theme-switcher [data-industry] {
+  display: block !important;
+}
+
+/* ============================================= */
+/*              WEBFLOW FIXES                   */
+/* ============================================= */
+
+/* Dropdown Positioning Fix */
+.w-dropdown-list {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+.w-dropdown.w--open .w-dropdown-list {
+  z-index: 9999 !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+#smooth-wrapper,
+#smooth-content {
+  position: relative !important;
+  z-index: auto !important;
+}
+
+.navbar {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+.theme-switcher-component .w-dropdown-list,
+.button_primary-dropdown .w-dropdown-list {
+  z-index: 10000 !important;
+  position: absolute !important;
+  background: var(--_color---surface--primary) !important;
+  border: 1px solid var(--_color---border--secondary) !important;
+  border-radius: var(--_border-radius---sm) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  min-width: 200px !important;
+}
+
+/* ============================================= */
+/*       LOADING OVERLAY ENHANCEMENTS           */
+/* ============================================= */
+
+/* Ensure loading overlays completely cover content during transitions */
+[class*="loading-overlay"],
+[class*="loading"],
+[class*="page-overlay"],
+.w-lightbox-backdrop,
+[data-w-id*="loading"],
+.loading-overlay-backup {
+  z-index: 99999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: auto !important;
+}
+
+/* Specific styles for Webflow loading elements */
+[data-w-id] {
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Enhanced flash prevention for theme switching */
+body:not(.theme-applied) {
+  /* Hide main content areas until theme is applied */
+}
+
+body:not(.theme-applied) main,
+body:not(.theme-applied) .hero,
+body:not(.theme-applied) .hero-section,
+body:not(.theme-applied) [class*="hero"],
+body:not(.theme-applied) .section {
+  opacity: 0 !important;
+  transition: opacity 0.2s ease-in-out !important;
+}
+
+body.theme-applied main,
+body.theme-applied .hero,
+body.theme-applied .hero-section,
+body.theme-applied [class*="hero"],
+body.theme-applied .section {
+  opacity: 1 !important;
+}
+
+/* Always keep navigation visible */
+nav,
+.navbar,
+.navigation,
+.theme-switcher-component,
+#color-theme-switcher,
+#industry-theme-switcher {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Loading overlay should cover everything including Webflow smooth scroll */
+.loading-overlay-backup {
+  background: var(--_color---background--primary, white) !important;
+  backdrop-filter: blur(2px) !important;
+}
+
+/* ============================================= */
+/*            COMPONENT FIXES                   */
+/* ============================================= */
+
+/* Button Theme Inheritance */
+.navigation .button_outline_new.w-button,
+.button_outline_new.w-button {
+  color: var(--_color---text--brand) !important;
+  border: 1px solid var(--_color---border--brand) !important;
+  background-color: transparent !important;
+}
+
+.navigation .button_outline_new.w-button:hover,
+.button_outline_new.w-button:hover {
+  background-color: var(--_color---background--brand-primary) !important;
+  color: var(--grayscale--white) !important;
+  border-color: var(--_color---background--brand-primary) !important;
+}
+
+.button_primary {
+  background-color: var(--_color---background--brand-primary) !important;
+  color: var(--grayscale--white) !important;
+}
+
+.button_outline {
+  color: var(--_color---text--brand) !important;
+  border-color: var(--_color---border--brand) !important;
+  background-color: var(--_color---background--primary) !important;
+}
+
+.button_outline:hover {
+  background-color: var(--_color---background--brand-primary) !important;
+  color: var(--grayscale--white) !important;
+}
+
+.hero_interior {
+  background-color: var(--_color---surface--brand-primary) !important;
+}
+
+/* Navigation Menu Fixes */
+nav .theme-link {
+  font-family: var(--_typography---font-family--body);
+}
+
+/* ============================================= */
+/*            DROPDOWN STYLING                  */
+/* ============================================= */
+
+/* Theme Switcher Dropdown */
+.theme-switcher-component .w-dropdown-toggle {
+  font-family: var(--_typography---font-family--label) !important;
+}
+
+.theme-switcher-component .w-dropdown-toggle .text_label-sm {
+  font-family: var(--_typography---font-family--label) !important;
+}
+
+.theme-switcher-component .w-dropdown-list {
+  background-color: var(--_color---background--primary) !important;
+  border: 1px solid var(--_color---border--secondary) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  padding: 8px 0 !important;
+}
+
+.theme-switcher-component .w-dropdown-list .w-dropdown-link {
+  padding: 12px 16px !important;
+  display: block !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  font-family: inherit !important;
+  color: inherit !important;
+}
+
+/* Industry Switcher Dropdown */
+.industry-switcher-component .w-dropdown-list,
+.industry-switcher-component .w-dropdown-list .w-dropdown-link {
+  color: var(--_color---text--primary) !important;
+  font-size: var(--_typography---label--medium-base) !important;
+  line-height: 1.4 !important;
+  font-family: var(--_typography---font-family--label) !important;
+}
+
+.industry-switcher-component .w-dropdown-toggle {
+  color: var(--_color---text--primary) !important;
+  font-size: var(--_typography---label--medium-base) !important;
+  font-family: var(--_typography---font-family--label) !important;
+}
+
+.industry-switcher-component .w-dropdown-link:hover {
+  color: var(--_color---text--secondary) !important;
+  background-color: var(--_color---background--secondary) !important;
+}
+
+.industry-switcher-component .w-dropdown-link:focus {
+  color: var(--_color---text--brand) !important;
+  background-color: var(--_color---background--brand-primary) !important;
+  outline: 2px solid var(--_color---border--brand) !important;
+  outline-offset: -2px !important;
+}
+
+/* ============================================= */
+/*          LEGACY COMPATIBILITY                */
+/* ============================================= */
+
+/* Modern Theme Aliases */
+.modern-theme-1 {
+  /* Inherits from .body.theme-1 */
+}
+
+.modern-theme-2 {
+  --_color---text--primary: var(--grayscale--lightest);
+  --_color---background--primary: var(--grayscale--darkest);
+  --_color---surface--nav: var(--grayscale--black);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_typography---font-family--heading: Geist, sans-serif;
+  --_typography---font-family--body: "Geist Mono", sans-serif;
+}
+
+.modern-theme-3 {
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+}
+
+.modern-theme-4 {
+  --_color---text--primary: var(--grayscale--black);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+}
+
+/* Expressive Theme Aliases */
+.expressive-theme-1 {
+  --_color---text--brand: var(--_themes---peach-brown--peach);
+  --_color---background--primary: var(--_themes---peach-brown--peach-lightest);
+  --_typography---font-family--heading: Newsreader, sans-serif;
+}
+
+.expressive-theme-2 {
+  --_color---text--brand: var(--_themes---neon--neon-green);
+  --_color---page--primary: var(--grayscale--black);
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+}
+
+.expressive-theme-3 {
+  --_color---background--primary: var(--_themes---yellow-brown--tan);
+  --_color---text--brand: var(--_themes---yellow-brown--brown);
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+}
+
+.expressive-theme-4 {
+  --_color---background--primary: var(--_themes---vibrant--tan);
+  --_color---text--brand: var(--_themes---vibrant--green);
+  --_typography---font-family--heading: "Playfair Display", sans-serif;
+}
+

@@ -1,0 +1,9 @@
+{
+  "color": { ... },
+  "typography": { ... },
+  "spacing": { ... },
+  "size": { ... },
+  "border": { ... },
+  "shadow": { ... },
+  "theme": { ... }
+}

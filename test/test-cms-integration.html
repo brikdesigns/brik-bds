@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html data-wf-page="test-cms" data-wf-site="test-cms">
+<head>
+  <meta charset="utf-8">
+  <title>CMS Integration Test</title>
+  <meta content="Test page for CMS content integration" name="description">
+  <meta content="width=device-width, initial-scale=1" name="viewport"><style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+    .test-container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .section { margin: 30px 0; padding: 20px; border: 2px solid #e0e0e0; border-radius: 8px; }
+    .section_hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .section_about { background: #f8f9fa; }
+    .section_cta { background: #28a745; color: white; }
+    .text_display-xl { font-size: 2.5rem; font-weight: bold; margin: 0 0 10px 0; }
+    .text_body-xxl { font-size: 1.25rem; margin: 0 0 20px 0; }
+    .text_heading-lg { font-size: 1.75rem; font-weight: bold; margin: 0 0 10px 0; }
+    .text_body-md { font-size: 1rem; margin: 0 0 15px 0; }
+    .text_heading-md { font-size: 1.5rem; font-weight: bold; margin: 0 0 10px 0; }
+    .text_body-xl { font-size: 1.125rem; margin: 0; }
+    .text_heading-xxl { font-size: 2rem; font-weight: bold; margin: 0 0 10px 0; }
+    .center { text-align: center; }
+    .inverse { color: white; }
+    .img-hero img { width: 100%; max-width: 400px; height: 200px; object-fit: cover; border-radius: 8px; }
+    .industry-switcher { margin: 20px 0; padding: 15px; background: #007bff; color: white; border-radius: 8px; }
+    .industry-buttons { display: flex; gap: 10px; margin: 10px 0; }
+    .industry-btn { padding: 8px 16px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .industry-btn:hover { background: rgba(255,255,255,0.3); }
+    .debug-info { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; font-family: monospace; font-size: 14px; }
+    .status { margin: 10px 0; padding: 10px; border-radius: 4px; }
+    .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  
+/* Fix .button_outline_new to properly inherit from current theme */
+.navigation .button_outline_new.w-button,
+.button_outline_new.w-button {
+  color: var(--_color---text--brand) !important;
+  border: 1px solid var(--_color---border--brand) !important;
+  background-color: transparent !important;
+}
+
+.navigation .button_outline_new.w-button:hover,
+.button_outline_new.w-button:hover {
+  background-color: var(--_color---background--brand) !important;
+  color: var(--colors--grayscale--white) !important;
+  border-color: var(--_color---background--brand) !important;
+}
+
+/* Fix other button variants to use theme variables */
+.button_primary {
+  background-color: var(--_color---background--brand) !important;
+  color: var(--colors--grayscale--white) !important;
+}
+
+.button_outline {
+  color: var(--_color---text--brand) !important;
+  border-color: var(--_color---border--brand) !important;
+  background-color: transparent !important;
+}
+
+.button_outline:hover {
+  background-color: var(--_color---background--brand) !important;
+  color: var(--colors--grayscale--white) !important;
+}
+
+/* ============================================= */
+/*         CARD THEME INHERITANCE FIX           */
+/* ============================================= */
+
+/* Fix card elements to properly inherit from current theme */
+.card,
+.card_feature-item,
+.card-pricing,
+.card_checkmark,
+.card_cta,
+.card-lg {
+  background-color: var(--_color---surface--brand-primary) !important;
+  border-color: var(--_color---border--brand) !important;
+}
+
+.card .text_heading-sm.inverse,
+.card .text_label-md.inverse,
+.card .text_body-md.inverse {
+  color: var(--colors--grayscale--white) !important;
+}
+
+/* Fix hero interior section */
+.hero_interior {
+  background-color: var(--_color---surface--brand-primary) !important;
+}
+</style>
+</head>
+
+<body class="body theme-1">
+  <div class="test-container">
+    <h1>🧪 CMS Content Integration Test</h1>
+    <p>This page tests the dynamic content injection from your CSV data.</p>
+
+    <!-- Industry Switcher -->
+    <div class="industry-switcher">
+      <h3>🔄 Industry Switcher</h3>
+      <p>Current Industry: <span id="current-industry">Loading...</span></p>
+      <div class="industry-buttons">
+        <button class="industry-btn" onclick="switchToIndustry('dental')">🦷 Dental</button>
+        <button class="industry-btn" onclick="switchToIndustry('finance')">💰 Finance</button>
+        <button class="industry-btn" onclick="switchToIndustry('real-estate')">🏠 Real Estate</button>
+        <button class="industry-btn" onclick="switchToIndustry('small-business')">💼 Small Business</button>
+      </div>
+      <button class="industry-btn" onclick="testDebugSelectors()">🔍 Debug Selectors</button>
+    </div>
+
+    <!-- Status Display -->
+    <div id="status-display"></div>
+
+    <!-- Hero Section Test -->
+    <div class="section section_hero">
+      <h2>🎯 Hero Section</h2>
+      <div data-industry="" class="collection-hero-item">
+        <h1 class="text_display-xl inverse">Default Hero Title</h1>
+        <p class="text_body-xxl inverse">Default hero description text.</p>
+        <div class="img-hero">
+          <img src="https://via.placeholder.com/400x200/667eea/ffffff?text=Hero+Image" alt="Hero Image" class="img">
+        </div>
+      </div>
+    </div>
+
+    <!-- About Section Test -->
+    <div class="section section_about">
+      <h2>📋 About Section</h2>
+      <div data-industry="" class="cms_layout-wrapper">
+        <p class="text_heading-lg">Default About Title</p>
+        <p class="text_body-md center">Default about description text goes here.</p>
+      </div>
+    </div>
+
+    <!-- CTA Section Test -->
+    <div class="section section_cta">
+      <h2>🚀 CTA Section</h2>
+      <div data-industry="" class="collection-item-cta">
+        <h3 class="text_heading-md">Default CTA Title</h3>
+        <h2 class="text_body-xl">Default CTA description text.</h2>
+      </div>
+    </div>
+
+    <!-- Debug Information -->
+    <div class="debug-info">
+      <h3>🛠️ Debug Information</h3>
+      <div id="debug-output">
+        <p>Console commands available:</p>
+        <ul>
+          <li><code>window.debugSelectors()</code> - Test all CSS selectors</li>
+          <li><code>window.updateIndustryContent('dental')</code> - Update to specific industry</li>
+          <li><code>window.cmsData</code> - View all CMS data</li>
+          <li><code>switchToIndustry('finance')</code> - Switch industry via button</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/webflow.js" type="text/javascript"></script>
+  <script src="footer.js" type="text/javascript"></script>
+  <script src="js/cms-content-system.js" type="text/javascript"></script>
+
+  <script>
+    // Test helper functions
+    function switchToIndustry(industry) {
+      console.log(`🔄 Switching to industry: ${industry}`);
+      updateStatus(`Switching to ${industry}...`, 'info');
+      
+      if (window.switchToIndustry) {
+        window.switchToIndustry(industry);
+      } else if (window.updateIndustryContent) {
+        window.updateIndustryContent(industry);
+      }
+      
+      document.getElementById('current-industry').textContent = industry.replace('-', ' ').toUpperCase();
+      
+      setTimeout(() => {
+        updateStatus(`✅ Switched to ${industry}`, 'success');
+      }, 200);
+    }
+
+    function testDebugSelectors() {
+      updateStatus('🔍 Running selector debug...', 'info');
+      if (window.debugSelectors) {
+        window.debugSelectors();
+        updateStatus('✅ Debug complete - check console for results', 'success');
+      } else {
+        updateStatus('❌ Debug function not available', 'error');
+      }
+    }
+
+    function updateStatus(message, type = 'info') {
+      const statusDiv = document.getElementById('status-display');
+      const statusClass = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+      statusDiv.innerHTML = `<div class="status ${statusClass}">${message}</div>`;
+      
+      // Auto-clear after 3 seconds
+      setTimeout(() => {
+        statusDiv.innerHTML = '';
+      }, 3000);
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🧪 CMS Integration Test Page Loaded');
+      updateStatus('🚀 Test page initialized', 'success');
+      
+      // Set initial industry display
+      const currentIndustry = localStorage.getItem('brik-bds-industry') || 'dental';
+      document.getElementById('current-industry').textContent = currentIndustry.replace('-', ' ').toUpperCase();
+      
+      // Listen for CMS update events
+      document.addEventListener('cmsContentUpdated', function(event) {
+        const { industry, elementsUpdated } = event.detail;
+        updateStatus(`✅ CMS content updated for ${industry}: ${elementsUpdated} elements`, 'success');
+      });
+      
+      // Test data availability
+      setTimeout(() => {
+        if (window.cmsData) {
+          const industries = Object.keys(window.cmsData);
+          updateStatus(`📊 CMS data loaded: ${industries.length} industries (${industries.join(', ')})`, 'success');
+        } else {
+          updateStatus('⚠️ CMS data not loaded', 'error');
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,11 @@
+/* ===== CONTENT FILTERING ===== */
+body.filter-dental .industry-content [data-industry]:not([data-industry="dental"]) { display: none !important; }
+body.filter-finance .industry-content [data-industry]:not([data-industry="finance"]) { display: none !important; }
+body.filter-real-estate .industry-content [data-industry]:not([data-industry="real-estate"]) { display: none !important; }
+body.filter-small-business .industry-content [data-industry]:not([data-industry="small-business"]) { display: none !important; }
+body.filter-all .industry-content [data-industry] { display: block !important; }
+body.filter-finance #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-dental #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-finance #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-real-estate #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-small-business #industry-theme-switcher [data-industry] { display: block !important; }

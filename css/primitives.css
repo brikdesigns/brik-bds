@@ -1,0 +1,74 @@
+
+:root {
+  /* ============================================= */
+  /*               PRIMITIVE COLORS               */
+  /* ============================================= */
+
+  /* Grayscale */
+  --colors--grayscale--white: #ffffff;
+  --colors--grayscale--lightest: #f2f2f2;
+  --colors--grayscale--lighter: #e0e0e0;
+  --colors--grayscale--light: #bdbdbd;
+  --colors--grayscale--dark: #828282;
+  --colors--grayscale--darker: #4f4f4f;
+  --colors--grayscale--darkest: #333333;
+  --colors--grayscale--black: #000000;
+
+  /* System Colors */
+  --colors--system--blue: #2f80ed;
+  --colors--system--green: #27ae60;
+  --colors--system--red: #eb5757;
+  --colors--system--yellow: #f2c94c;
+  --colors--system--orange: #f2994a;
+  --colors--system--purple: #9b51e0;
+
+  /* Theme Colors */
+  --colors--themes--peach: #ed8059;
+  --colors--themes--peach-light: #facbbb;
+  --colors--themes--peach-lightest: #fef4e8;
+  --colors--themes--neon-green: #42ff00;
+  --colors--themes--neon-pink: #ff00cc;
+  --colors--themes--neon-yellow: #fffc00;
+  --colors--themes--neon-blue: #00f6ff;
+  --colors--themes--neon-orange: #ff5c00;
+  --colors--themes--neon-purple: #ae00ff;
+  --colors--themes--blue-light: #4665f5;
+  --colors--themes--blue-lighter: #79b0d9;
+  --colors--themes--blue-lightest: #edf2f6;
+  --colors--themes--blue-dark: #0e212a;
+  --colors--themes--green-theme: #1bb58c;
+  --colors--themes--yellow-theme: #e8ea76;
+  --colors--themes--yellow-dark: #d8d96a;
+  --colors--themes--orange-theme: #ff7828;
+  
+  /* ============================================= */
+  /*            PRIMITIVE TYPOGRAPHY               */
+  /* ============================================= */
+  --font-family--droid-sans: "Droid Sans", sans-serif;
+  --font-family--geist: "Geist", sans-serif;
+  --font-family--geist-mono: "Geist Mono", monospace;
+  --font-family--ibm-plex-sans: "IBM Plex Sans", sans-serif;
+  --font-family--source-sans-3: "Source Sans 3", sans-serif;
+  --font-family--lato: "Lato", sans-serif;
+  --font-family--hind: "Hind", sans-serif;
+  --font-family--newsreader: "Newsreader", serif;
+  --font-family--open-sans: "Open Sans", sans-serif;
+  --font-family--playfair-display: "Playfair Display", serif;
+  --font-family--font-awesome: "Font Awesome 6 Pro Solid", sans-serif;
+
+  /* ============================================= */
+  /*               PRIMITIVE LAYOUT                */
+  /* ============================================= */
+  --primitives--space--0: 0px;
+  --primitives--space--25: 25px;
+  --primitives--space--50: 50px;
+  --primitives--space--100: 100px;
+  --primitives--space--200: 200px;
+  --primitives--space--300: 300px;
+  --primitives--space--400: 400px;
+  --primitives--space--500: 500px;
+  --primitives--space--600: 600px;
+  --primitives--space--700: 700px;
+  --primitives--space--800: 800px;
+  --primitives--space--1000: 1000px;
+}

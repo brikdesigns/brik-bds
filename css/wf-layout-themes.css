@@ -1,0 +1,76 @@
+<style>
+/* ============================================= */
+  /*             DEFAULT SEMANTIC TOKENS           */
+  /* ============================================= */
+  
+  /* Base Layout (matches Webflow's "Base mode") */
+  --_layout---space--space-none: var(--primitives--space--0);
+  --_layout---space--space-tiny: var(--primitives--space--50);
+  --_layout---space--space-sm: var(--primitives--space--100);
+  --_layout---space--space-md: var(--primitives--space--200);
+  --_layout---space--space-lg: var(--primitives--space--400);
+  --_layout---space--space-xl: var(--primitives--space--600);
+  --_layout---space--space-xxl: var(--primitives--space--800);
+  --_layout---space--space-huge: var(--primitives--space--1000);
+  --_layout---gap--gap-none: var(--primitives--space--0);
+  --_layout---gap--gap-tiny: var(--primitives--space--50);
+  --_layout---gap--gap-sm: var(--primitives--space--100);
+  --_layout---gap--gap-md: var(--primitives--space--200);
+  --_layout---gap--gap-lg: var(--primitives--space--400);
+  --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+
+
+
+/* ============================================= */
+/*                 LAYOUT THEMES                 */
+/* ============================================= */
+
+/* Compact Layout */
+.layout-compact {
+    --_layout---space--space-tiny: var(--primitives--space--25);
+    --_layout---space--space-sm: var(--primitives--space--50);
+    --_layout---space--space-md: var(--primitives--space--200);
+    --_layout---space--space-lg: var(--primitives--space--600);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--800);
+    --_layout---space--space-huge: var(--primitives--space--1000);
+    --_layout---gap--gap-tiny: var(--primitives--space--25);
+    --_layout---gap--gap-sm: var(--primitives--space--50);
+    --_layout---gap--gap-md: var(--primitives--space--100);
+    --_layout---gap--gap-lg: var(--primitives--space--200);
+    --_layout---gap--gap-xl: var(--primitives--space--400);
+}
+
+/* Comfortable Layout */
+.layout-comfortable {
+    --_layout---space--space-tiny: var(--primitives--space--100);
+    --_layout---space--space-sm: var(--primitives--space--200);
+    --_layout---space--space-md: var(--primitives--space--300);
+    --_layout---space--space-lg: var(--primitives--space--500);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--800);
+    --_layout---space--space-huge: var(--primitives--space--1000);
+    --_layout---gap--gap-tiny: var(--primitives--space--50);
+    --_layout---gap--gap-sm: var(--primitives--space--100);
+    --_layout---gap--gap-md: var(--primitives--space--200);
+    --_layout---gap--gap-lg: var(--primitives--space--400);
+    --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+
+/* Cozy Layout */
+.layout-cozy {
+    --_layout---space--space-tiny: var(--primitives--space--200);
+    --_layout---space--space-sm: var(--primitives--space--300);
+    --_layout---space--space-md: var(--primitives--space--400);
+    --_layout---space--space-lg: var(--primitives--space--500);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--700);
+    --_layout---space--space-huge: var(--primitives--space--800);
+    --_layout---gap--gap-tiny: var(--primitives--space--50);
+    --_layout---gap--gap-sm: var(--primitives--space--100);
+    --_layout---gap--gap-md: var(--primitives--space--200);
+    --_layout---gap--gap-lg: var(--primitives--space--400);
+    --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+</style>
