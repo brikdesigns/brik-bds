@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Content System - All Pages Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        .test-result { margin: 10px 0; }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+        .page-link { display: inline-block; margin: 5px; padding: 10px; background: #f0f0f0; text-decoration: none; color: #333; }
+        .page-link:hover { background: #e0e0e0; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 CMS Content System - All Pages Test</h1>
+    
+    <div class="test-section">
+        <h2>📄 Available Pages</h2>
+        <p>Click on any page to test the CMS content system:</p>
+        <div id="page-links"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 Test Results</h2>
+        <div id="test-results"></div>
+        <button onclick="runAllTests()">🚀 Test All Pages</button>
+        <button onclick="clearResults()">🧹 Clear Results</button>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Industry Data</h2>
+        <pre id="industry-data"></pre>
+    </div>
+
+    <script>
+        // List of main HTML pages to test
+        const htmlPages = [
+            'index.html',
+            'about.html',
+            'audience.html',
+            'contact.html', 
+            'services.html',
+            'pricing.html',
+            'detail_about.html',
+            'detail_audience.html',
+            'detail_contact.html',
+            'detail_home.html',
+            'detail_services.html',
+            'detail_services-page.html',
+            'detail_post.html',
+            'detail_industry.html'
+        ];
+
+        // Industry data for testing
+        const testIndustries = ['dental', 'finance', 'real-estate', 'small-business'];
+
+        function initializePage() {
+            console.log('🧪 CMS Test System initialized');
+            
+            // Create page links
+            const pageLinksDiv = document.getElementById('page-links');
+            htmlPages.forEach(page => {
+                const link = document.createElement('a');
+                link.href = page;
+                link.className = 'page-link';
+                link.textContent = page;
+                link.target = '_blank';
+                pageLinksDiv.appendChild(link);
+            });
+
+            // Show industry data if available
+            if (typeof cmsData !== 'undefined') {
+                document.getElementById('industry-data').textContent = JSON.stringify(cmsData, null, 2);
+            } else {
+                document.getElementById('industry-data').textContent = 'CMS Data not available on this page';
+            }
+        }
+
+        function addTestResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '';
+        }
+
+        function testPageInIframe(pageName) {
+            return new Promise((resolve) => {
+                addTestResult(`Testing ${pageName}...`, 'info');
+                
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = pageName;
+                
+                const timeout = setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    addTestResult(`❌ ${pageName} - Timeout`, 'error');
+                    resolve(false);
+                }, 5000);
+
+                iframe.onload = () => {
+                    clearTimeout(timeout);
+                    
+                    try {
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        
+                        // Check if CMS script is loaded
+                        const hasCMSScript = !!iframe.contentWindow.enhancedCMS;
+                        
+                        // Check body classes
+                        const bodyClasses = Array.from(iframeDoc.body.classList);
+                        const hasFilterClass = bodyClasses.some(cls => cls.startsWith('filter-'));
+                        
+                        // Check for dynamic content
+                        const dynItems = iframeDoc.querySelectorAll('.w-dyn-item[data-industry]');
+                        const hasIndustryData = dynItems.length > 0;
+                        
+                        // Check for CMS content
+                        const hasContent = iframeDoc.querySelectorAll('.w-dyn-item').length > 0;
+                        
+                        let status = '✅';
+                        let type = 'success';
+                        
+                        if (!hasCMSScript || !hasFilterClass || !hasContent) {
+                            status = '⚠️';
+                            type = 'warning';
+                        }
+                        
+                        addTestResult(`${status} ${pageName} - CMS: ${hasCMSScript}, Filter: ${hasFilterClass}, Content: ${hasContent}, Industry: ${hasIndustryData}`, type);
+                        
+                        document.body.removeChild(iframe);
+                        resolve(true);
+                        
+                    } catch (error) {
+                        document.body.removeChild(iframe);
+                        addTestResult(`❌ ${pageName} - Error: ${error.message}`, 'error');
+                        resolve(false);
+                    }
+                };
+                
+                iframe.onerror = () => {
+                    clearTimeout(timeout);
+                    document.body.removeChild(iframe);
+                    addTestResult(`❌ ${pageName} - Load error`, 'error');
+                    resolve(false);
+                };
+                
+                document.body.appendChild(iframe);
+            });
+        }
+
+        async function runAllTests() {
+            clearResults();
+            addTestResult('🚀 Starting comprehensive CMS system test...', 'info');
+            
+            let totalTests = 0;
+            let passedTests = 0;
+            
+            for (const page of htmlPages) {
+                totalTests++;
+                const result = await testPageInIframe(page);
+                if (result) passedTests++;
+                
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            addTestResult(`📊 Test Summary: ${passedTests}/${totalTests} pages passed`, 
+                passedTests === totalTests ? 'success' : 'warning');
+        }
+
+        // Test local CMS functions if available
+        function testLocalCMS() {
+            if (typeof enhancedCMS !== 'undefined') {
+                addTestResult('✅ Enhanced CMS system detected on this page', 'success');
+                
+                // Test debug function
+                if (typeof cmsDebug === 'function') {
+                    addTestResult('✅ CMS debug function available', 'success');
+                }
+                
+                // Test update functions
+                if (typeof cmsUpdate === 'function' && typeof cmsRefresh === 'function') {
+                    addTestResult('✅ CMS update functions available', 'success');
+                }
+                
+                return true;
+            } else {
+                addTestResult('⚠️ Enhanced CMS system not detected on this page', 'warning');
+                return false;
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializePage);
+
+        // Test local CMS when page loads
+        window.addEventListener('load', () => {
+            setTimeout(testLocalCMS, 1000);
+        });
+
+        // Expose test functions
+        window.testPageInIframe = testPageInIframe;
+        window.runAllTests = runAllTests;
+        window.testLocalCMS = testLocalCMS;
+    </script>
+</body>
+</html> 

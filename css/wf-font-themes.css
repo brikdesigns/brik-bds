@@ -1,0 +1,14 @@
+/* ============================================= */
+/*                 FONT TOKENS                  */
+/* ============================================= */
+
+<style>
+
+/* Typography */
+  --_typography---font-family--display: var(--font-family--playfair-display);
+  --_typography---font-family--heading: var(--font-family--playfair-display);
+  --_typography---font-family--body: var(--font-family--hind);
+  --_typography---font-family--label: var(--font-family--hind);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+
+  </style>

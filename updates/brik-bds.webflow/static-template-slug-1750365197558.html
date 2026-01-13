@@ -1,0 +1,1103 @@
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Jul 20 2025 16:55:02 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="685474140271f56dc9e82c4c" data-wf-site="67c4e62250923072710d472c" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Terms of Service</title>
+  <meta content="Terms of Service" property="og:title">
+  <meta content="Terms of Service" property="twitter:title">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="css/brik-bds.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic","Droid Sans:400,700","Libre Franklin:200,300,regular,600,800,900","IBM Plex Mono:regular","Newsreader:regular,500,600,700","IBM Plex Sans:regular,500,600,700","Source Code Pro:regular,500,600,700","Hind:regular,500,600,700","Playfair Display:regular,500,600,700","Geist:regular,500,600,700","Geist Mono:regular,500,600,700","Source Sans 3:regular,500,600,700"]  }});</script>
+  <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+  <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="images/webclip.png" rel="apple-touch-icon">
+  <style>
+/* ============================================= */
+/*               DESIGN TOKENS                   */
+/* ============================================= */
+/* This file contains CSS custom properties for */
+/* the Brik BDS design system with multiple    */
+/* theme variations, aligned with Webflow      */
+/* variable naming conventions.                */
+/* ============================================= */
+:root {
+  /* ============================================= */
+  /*               PRIMITIVE COLORS               */
+  /* ============================================= */
+  /* Grayscale */
+  --colors--grayscale--white: #ffffff;
+  --colors--grayscale--lightest: #f2f2f2;
+  --colors--grayscale--lighter: #e0e0e0;
+  --colors--grayscale--light: #bdbdbd;
+  --colors--grayscale--dark: #828282;
+  --colors--grayscale--darker: #4f4f4f;
+  --colors--grayscale--darkest: #333333;
+  --colors--grayscale--black: #000000;
+  /* System Colors */
+  --colors--system--blue: #2f80ed;
+  --colors--system--green: #27ae60;
+  --colors--system--red: #eb5757;
+  --colors--system--yellow: #f2c94c;
+  --colors--system--orange: #f2994a;
+  --colors--system--purple: #9b51e0;
+  /* Theme Colors */
+  --colors--themes--peach: #ed8059;
+  --colors--themes--peach-light: #facbbb;
+  --colors--themes--peach-lightest: #fef4e8;
+  --colors--themes--neon-green: #42ff00;
+  --colors--themes--neon-pink: #ff00cc;
+  --colors--themes--neon-yellow: #fffc00;
+  --colors--themes--neon-blue: #00f6ff;
+  --colors--themes--neon-orange: #ff5c00;
+  --colors--themes--neon-purple: #ae00ff;
+  --colors--themes--blue-light: #4665f5;
+  --colors--themes--blue-lighter: #79b0d9;
+  --colors--themes--blue-lightest: #edf2f6;
+  --colors--themes--blue-dark: #0e212a;
+  --colors--themes--green-theme: #1bb58c;
+  --colors--themes--yellow-theme: #e8ea76;
+  --colors--themes--yellow-dark: #d8d96a;
+  --colors--themes--orange-theme: #ff7828;
+  /* ============================================= */
+  /*            PRIMITIVE TYPOGRAPHY               */
+  /* ============================================= */
+  --font-family--droid-sans: "Droid Sans", sans-serif;
+  --font-family--geist: "Geist", sans-serif;
+  --font-family--geist-mono: "Geist Mono", monospace;
+  --font-family--ibm-plex-sans: "IBM Plex Sans", sans-serif;
+  --font-family--source-sans-3: "Source Sans 3", sans-serif;
+  --font-family--lato: "Lato", sans-serif;
+  --font-family--hind: "Hind", sans-serif;
+  --font-family--newsreader: "Newsreader", serif;
+  --font-family--open-sans: "Open Sans", sans-serif;
+  --font-family--playfair-display: "Playfair Display", serif;
+  --font-family--font-awesome: "Font Awesome 6 Pro Solid", sans-serif;
+  /* ============================================= */
+  /*               PRIMITIVE LAYOUT                */
+  /* ============================================= */
+  --primitives--space--0: 0px;
+  --primitives--space--25: 25px;
+  --primitives--space--50: 50px;
+  --primitives--space--100: 100px;
+  --primitives--space--200: 200px;
+  --primitives--space--300: 300px;
+  --primitives--space--400: 400px;
+  --primitives--space--500: 500px;
+  --primitives--space--600: 600px;
+  --primitives--space--700: 700px;
+  --primitives--space--800: 800px;
+  --primitives--space--1000: 1000px;
+  /* ============================================= */
+  /*             DEFAULT SEMANTIC TOKENS           */
+  /* ============================================= */
+  /* Base Layout (matches Webflow's "Base mode") */
+  --_layout---space--space-none: var(--primitives--space--0);
+  --_layout---space--space-tiny: var(--primitives--space--50);
+  --_layout---space--space-sm: var(--primitives--space--100);
+  --_layout---space--space-md: var(--primitives--space--200);
+  --_layout---space--space-lg: var(--primitives--space--400);
+  --_layout---space--space-xl: var(--primitives--space--600);
+  --_layout---space--space-xxl: var(--primitives--space--800);
+  --_layout---space--space-huge: var(--primitives--space--1000);
+  --_layout---gap--gap-none: var(--primitives--space--0);
+  --_layout---gap--gap-tiny: var(--primitives--space--50);
+  --_layout---gap--gap-sm: var(--primitives--space--100);
+  --_layout---gap--gap-md: var(--primitives--space--200);
+  --_layout---gap--gap-lg: var(--primitives--space--400);
+  --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+/* ============================================= */
+/*                 THEME TOKENS                  */
+/* ============================================= */
+/* Modern Theme 1 (Base) */
+.modern-theme-1,
+[data-theme="modern-theme-1"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--white);
+  --_color---text--brand: var(--colors--themes--blue-light);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--blue-light);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--blue-light);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--blue-light);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--blue-light);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--blue-light);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--blue-light);
+  --_color---theme--secondary: var(--colors--themes--blue-lighter);
+  --_color---theme--tertiary: var(--colors--themes--blue-dark);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--droid-sans);
+  --_typography---font-family--heading: var(--font-family--droid-sans);
+  --_typography---font-family--body: var(--font-family--open-sans);
+  --_typography---font-family--label: var(--font-family--open-sans);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+/* Modern Theme 2 */
+.modern-theme-2,
+[data-theme="modern-theme-2"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--lightest);
+  --_color---text--secondary: var(--colors--grayscale--light);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--white);
+  --_color---text--brand: var(--colors--system--yellow);
+  --_color---background--primary: var(--colors--grayscale--darkest);
+  --_color---background--secondary: var(--colors--grayscale--black);
+  --_color---background--brand: var(--colors--system--yellow);
+  --_color---background--inverse: var(--colors--grayscale--black);
+  --_color---background--input: var(--colors--grayscale--darker);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--system--yellow);
+  --_color---border--primary: var(--colors--grayscale--light);
+  --_color---border--secondary: var(--colors--grayscale--dark);
+  --_color---border--input: var(--colors--grayscale--dark);
+  --_color---border--brand: var(--colors--system--yellow);
+  --_color---border--inverse: var(--colors--grayscale--white);
+  --_color---page--primary: var(--colors--grayscale--black);
+  --_color---page--secondary: var(--colors--grayscale--darkest);
+  --_color---page--brand: var(--colors--system--yellow);
+  --_color---surface--primary: var(--colors--grayscale--black);
+  --_color---surface--secondary: var(--colors--grayscale--darkest);
+  --_color---surface--brand-primary: var(--colors--system--yellow);
+  --_color---surface--nav: var(--colors--grayscale--black);
+  --_color---theme--primary: var(--colors--system--yellow);
+  --_color---theme--secondary: var(--colors--themes--yellow-dark);
+  --_color---theme--tertiary: var(--colors--system--orange);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--orange);
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--geist);
+  --_typography---font-family--heading: var(--font-family--geist);
+  --_typography---font-family--body: var(--font-family--geist-mono);
+  --_typography---font-family--label: var(--font-family--geist-mono);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+/* Modern Theme 3 */
+.modern-theme-3,
+[data-theme="modern-theme-3"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--blue-light);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--blue-light);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--blue-light);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--blue-light);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--blue-light);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--blue-light);
+  --_color---surface--nav: var(--colors--themes--blue-lighter);
+  --_color---theme--primary: var(--colors--themes--blue-light);
+  --_color---theme--secondary: var(--colors--themes--blue-dark);
+  --_color---theme--tertiary: var(--colors--themes--blue-lighter);
+  --_color---theme--fourth: var(--colors--system--yellow);
+  --_color---theme--accent: var(--colors--system--green);
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--ibm-plex-sans);
+  --_typography---font-family--heading: var(--font-family--ibm-plex-sans);
+  --_typography---font-family--body: var(--font-family--source-sans-3);
+  --_typography---font-family--label: var(--font-family--source-sans-3);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+/* Modern Theme 4 */
+.modern-theme-4,
+[data-theme="modern-theme-4"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--system--yellow);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--system--yellow);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--system--yellow);
+  --_color---border--primary: var(--colors--grayscale--black);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--system--yellow);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--system--yellow);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--system--yellow);
+  --_color---surface--nav: var(--colors--system--orange);
+  --_color---theme--primary: var(--colors--system--yellow);
+  --_color---theme--secondary: var(--colors--themes--yellow-dark);
+  --_color---theme--tertiary: var(--colors--system--orange);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--lato);
+  --_typography---font-family--heading: var(--font-family--lato);
+  --_typography---font-family--body: var(--font-family--hind);
+  --_typography---font-family--label: var(--font-family--hind);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+/* Expressive Theme 1 */
+.expressive-theme-1,
+[data-theme="expressive-theme-1"] {
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--peach);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--peach);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--peach);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--peach);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--peach);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--peach);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--peach);
+  --_color---theme--secondary: var(--colors--themes--peach-light);
+  --_color---theme--tertiary: var(--colors--themes--peach-lightest);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--newsreader);
+  --_typography---font-family--heading: var(--font-family--newsreader);
+  --_typography---font-family--body: var(--font-family--open-sans);
+  --_typography---font-family--label: var(--font-family--open-sans);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+/* Expressive Theme 2 */
+.expressive-theme-2,
+[data-theme="expressive-theme-2"] {
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--neon-green);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--neon-green);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--neon-green);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--neon-green);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--neon-green);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--neon-green);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--neon-green);
+  --_color---theme--secondary: var(--colors--themes--neon-pink);
+  --_color---theme--tertiary: var(--colors--themes--neon-yellow);
+  --_color---theme--fourth: var(--colors--themes--neon-blue);
+  --_color---theme--accent: var(--colors--themes--neon-orange);
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--ibm-plex-sans);
+  --_typography---font-family--heading: var(--font-family--ibm-plex-sans);
+  --_typography---font-family--body: var(--font-family--source-sans-3);
+  --_typography---font-family--label: var(--font-family--source-sans-3);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+/* Expressive Theme 3 */
+.expressive-theme-3,
+[data-theme="expressive-theme-3"] {
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--green-theme);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--green-theme);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--green-theme);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--green-theme);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--green-theme);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--green-theme);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--green-theme);
+  --_color---theme--secondary: var(--colors--themes--yellow-theme);
+  --_color---theme--tertiary: var(--colors--themes--yellow-dark);
+  --_color---theme--fourth: var(--colors--themes--orange-theme);
+  --_color---theme--accent: var(--colors--system--green);
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--lato);
+  --_typography---font-family--heading: var(--font-family--lato);
+  --_typography---font-family--body: var(--font-family--hind);
+  --_typography---font-family--label: var(--font-family--hind);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+/* Expressive Theme 4 */
+.expressive-theme-4,
+[data-theme="expressive-theme-4"] {
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--green-theme);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--green-theme);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--green-theme);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--green-theme);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--green-theme);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--green-theme);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--green-theme);
+  --_color---theme--secondary: var(--colors--themes--yellow-theme);
+  --_color---theme--tertiary: var(--colors--themes--yellow-dark);
+  --_color---theme--fourth: var(--colors--themes--orange-theme);
+  --_color---theme--accent: var(--colors--system--green);
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--playfair-display);
+  --_typography---font-family--heading: var(--font-family--playfair-display);
+  --_typography---font-family--body: var(--font-family--hind);
+  --_typography---font-family--label: var(--font-family--hind);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+/* ============================================= */
+/*                 LAYOUT THEMES                 */
+/* ============================================= */
+/* Compact Layout */
+.layout-compact {
+    --_layout---space--space-tiny: var(--primitives--space--25);
+    --_layout---space--space-sm: var(--primitives--space--50);
+    --_layout---space--space-md: var(--primitives--space--200);
+    --_layout---space--space-lg: var(--primitives--space--600);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--800);
+    --_layout---space--space-huge: var(--primitives--space--1000);
+    --_layout---gap--gap-tiny: var(--primitives--space--25);
+    --_layout---gap--gap-sm: var(--primitives--space--50);
+    --_layout---gap--gap-md: var(--primitives--space--100);
+    --_layout---gap--gap-lg: var(--primitives--space--200);
+    --_layout---gap--gap-xl: var(--primitives--space--400);
+}
+/* Comfortable Layout */
+.layout-comfortable {
+    --_layout---space--space-tiny: var(--primitives--space--100);
+    --_layout---space--space-sm: var(--primitives--space--200);
+    --_layout---space--space-md: var(--primitives--space--300);
+    --_layout---space--space-lg: var(--primitives--space--500);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--800);
+    --_layout---space--space-huge: var(--primitives--space--1000);
+    --_layout---gap--gap-tiny: var(--primitives--space--50);
+    --_layout---gap--gap-sm: var(--primitives--space--100);
+    --_layout---gap--gap-md: var(--primitives--space--200);
+    --_layout---gap--gap-lg: var(--primitives--space--400);
+    --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+/* Cozy Layout */
+.layout-cozy {
+    --_layout---space--space-tiny: var(--primitives--space--200);
+    --_layout---space--space-sm: var(--primitives--space--300);
+    --_layout---space--space-md: var(--primitives--space--400);
+    --_layout---space--space-lg: var(--primitives--space--500);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--700);
+    --_layout---space--space-huge: var(--primitives--space--800);
+    --_layout---gap--gap-tiny: var(--primitives--space--50);
+    --_layout---gap--gap-sm: var(--primitives--space--100);
+    --_layout---gap--gap-md: var(--primitives--space--200);
+    --_layout---gap--gap-lg: var(--primitives--space--400);
+    --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+/* ===== CONTENT FILTERING ===== */
+body.filter-dental .industry-content [data-industry]:not([data-industry="dental"]) { display: none !important; }
+body.filter-finance .industry-content [data-industry]:not([data-industry="finance"]) { display: none !important; }
+body.filter-real-estate .industry-content [data-industry]:not([data-industry="real-estate"]) { display: none !important; }
+body.filter-small-business .industry-content [data-industry]:not([data-industry="small-business"]) { display: none !important; }
+body.filter-all .industry-content [data-industry] { display: block !important; }
+body.filter-finance #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-dental #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-finance #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-real-estate #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-small-business #industry-theme-switcher [data-industry] { display: block !important; }
+</style>
+</head>
+<body>
+  <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease-out" data-easing2="ease-out" role="banner" class="navigation w-nav">
+    <div class="w-layout-blockcontainer container-nav-top w-container">
+      <div class="layout_nav">
+        <a href="index.html" class="logo w-inline-block"><img src="images/LOGO.svg" alt="" class="image-3"></a>
+        <div class="w-layout-vflex col_nav">
+          <div class="menu-button w-nav-button">
+            <div class="icon-2 w-icon-nav-menu"></div>
+          </div>
+          <nav role="navigation" class="nav_menu w-nav-menu">
+            <a href="index.html" class="text_label-sm w-nav-link">What We Do</a>
+            <a href="#" class="text_label-sm w-nav-link">Who We Are</a>
+            <a href="#" class="text_label-sm w-nav-link">Who We Serve</a>
+            <a href="#" class="text_label-sm w-nav-link">Contact Us</a>
+            <a href="#" class="button_outline_new w-button">Book Appointment</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="section-terms">
+    <div class="w-layout-blockcontainer container_lg stacked w-container">
+      <div class="spacer-large"></div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h2">Terms and Conditions</div>
+        <div class="spacer-medium"></div>
+        <div class="w-layout-vflex content-wrapper narrow">
+          <div class="text_body-md"><strong>Last Updated</strong>: Date Goes Here</div>
+          <div class="text_body-md"><strong>Effective Date</strong>: Date Goes Here</div>
+        </div>
+        <div class="text_body-md">By using this website, you agree to these terms. Please read them carefully.</div>
+      </div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h4">2. Intellectual Property</div>
+        <div class="text_body-md">All content, images, and logos are the property of Atlantic Aluminum Dock Products, LLC unless otherwise stated. You may not use them without permission.</div>
+      </div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h4">3. Third-Party Links</div>
+        <div class="text_body-md">We may link to other websites for your convenience. We are not responsible for their content or privacy practices.</div>
+      </div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h4">4. Disclaimer</div>
+        <div class="text_body-md">Information on this site is not legal, financial, or professional advice. Always consult a qualified professional before taking action based on our content.</div>
+      </div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h4">5. Limitation of Liability</div>
+        <div class="text_body-md">We do our best to provide accurate, up-to-date information, but we make no warranties and are not liable for any damages resulting from use of the site.</div>
+      </div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h4">6. Refund &amp; Return Policy</div>
+        <div class="text_body-md">We accept refund or return requests are subject to inspection and may have a 25% restocking fee. To request a refund, contact us at sales@atlanticaluminummarine.com with your order number and reason.</div>
+      </div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h4">7. Governing Law</div>
+        <div class="text_body-md">These terms are governed by the laws of the State of Florida, and any disputes shall be resolved in the courts of Palm Beach County, Florida.</div>
+      </div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h4">8. Accessibility</div>
+        <div class="text_body-md">We’re committed to providing a website that’s accessible to all users. If you encounter any issues, please contact us.</div>
+      </div>
+      <div class="w-layout-vflex title-wrapper">
+        <div class="text_heading-h4">9. Contact Information</div>
+        <div class="text_body-md">Questions about these terms? Contact us at: <strong>[email goes here]</strong> or <strong>[phone goes here]</strong>.</div>
+        <div class="spacer-large-2"></div>
+      </div>
+    </div>
+  </section>
+  <div class="nav_footer">
+    <div class="w-layout-blockcontainer container_lg w-container">
+      <div class="layout_2-column">
+        <div class="col_1">
+          <div class="w-layout-vflex content-wrapper narrow">
+            <a href="index.html" class="nav_logo_2 w-inline-block"><img src="images/Logo-White.svg" alt="" class="logo inverse"></a>
+            <div class="text_body-sm inverse">Pri cu dico labores officiis, odio principes complectitur ad sea. Sea id doctus forensibus, nec lorem vocent aliquam eu. Aliquid definitiones id cum, ad meliore perpetua referrentur sed. Quas suscipit ad mea verear vivendo tincidunt.</div>
+          </div>
+        </div>
+        <div class="col_footer right">
+          <div class="footer-link-list">
+            <a href="services.html" class="text_label-md inverse">Website</a>
+            <a href="services.html" class="text_body-sm inverse">Features</a>
+            <a href="/premium" class="text_body-sm inverse">Premium</a>
+            <a href="pricing.html" class="text_body-sm inverse">Pricing</a>
+          </div>
+          <div class="footer-link-list">
+            <a href="services.html" class="text_label-md inverse">Contact Us</a>
+            <a href="about.html" class="text_body-sm inverse">Call</a>
+            <a href="/blog" class="text_body-sm inverse">Email</a>
+            <a href="contact.html" class="text_body-sm inverse">Email</a>
+          </div>
+          <div class="footer-link-list">
+            <a href="services.html" class="text_label-md inverse">Website</a>
+            <a href="image-license-info.html" class="text_body-sm inverse">Image License Info</a>
+            <a href="https://webflow.com/" class="text_body-sm inverse">Powered by Webflow</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-layout-blockcontainer container_lg w-container">
+      <div class="w-layout-vflex layout_2-column">
+        <div class="col_footer">
+          <div class="text_body-xs inverse">© 2025 Brik Designs, All rights reserved.</div>
+        </div>
+        <div class="col_footer right">
+          <a href="#" class="icon_sm center w-inline-block"></a>
+          <a href="#" class="icon_sm center w-inline-block"></a>
+          <div class="icon-brand">facebook</div>
+          <div class="icon-brand">instagram</div>
+          <div class="icon-brand">linkedin</div>
+          <div class="icon-brand">twitter</div>
+          <div class="icon-brand">youtube</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=67c4e62250923072710d472c" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="js/webflow.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/gsap.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/Flip.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/ScrollTrigger.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/SplitText.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/Draggable.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/DrawSVGPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/TextPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/ScrollToPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/ScrollSmoother.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/ScrambleTextPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/PhysicsPropsPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/Physics2DPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/Observer.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/MotionPathPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/MotionPathHelper.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/MorphSVGPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.13.0/InertiaPlugin.min.js" type="text/javascript"></script>
+  <script type="text/javascript">gsap.registerPlugin(Flip,ScrollTrigger,SplitText,Draggable,DrawSVGPlugin,TextPlugin,ScrollToPlugin,ScrollSmoother,ScrambleTextPlugin,PhysicsPropsPlugin,Physics2DPlugin,Observer,MotionPathPlugin,MotionPathHelper,MorphSVGPlugin,InertiaPlugin);</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollSmoother.min.js"></script>
+  <script>
+// =========================== // 
+// ===== SCROLL SMOOTHER ===== //
+// =========================== //  
+// Only ONE ScrollSmoother initialization!
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if GSAP and ScrollSmoother are loaded
+  if (typeof gsap === 'undefined' || typeof ScrollSmoother === 'undefined') {
+    console.warn('GSAP or ScrollSmoother not loaded. Smooth scrolling disabled.');
+    return;
+  }
+  // Register ScrollSmoother plugin
+  gsap.registerPlugin(ScrollSmoother);
+  // Create ScrollSmoother instance
+  ScrollSmoother.create({
+    wrapper: "#smooth-wrapper",
+    content: "#smooth-content",
+    smooth: 5
+    effects: true,
+    normalizeScroll: true,
+    ignoreMobileResize: true
+  });
+});  
+// ===== GSAP PARALLAX EFFECTS =====
+// Works with ScrollSmoother for smooth parallax animations
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if GSAP and ScrollTrigger are loaded
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    console.warn('GSAP or ScrollTrigger not loaded. Parallax effects disabled.');
+    return;
+  }
+  // Register ScrollTrigger plugin
+  gsap.registerPlugin(ScrollTrigger);
+  // Get ScrollSmoother instance
+  const smoother = ScrollSmoother.get();
+  if (!smoother) {
+    console.warn('ScrollSmoother not found. Parallax effects disabled.');
+    return;
+  }
+  // ===== HERO SECTION PARALLAX ===== //
+  const heroSection = document.querySelector('.section_hero');
+  if (heroSection) {
+    // Parallax effect for hero background video
+    const heroVideo = heroSection.querySelector('.background-video');
+    if (heroVideo) {
+      gsap.to(heroVideo, {
+        yPercent: -20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: heroSection,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    }
+    // Parallax effect for hero content
+    const heroContent = heroSection.querySelector('.content-layout');
+    if (heroContent) {
+      gsap.to(heroContent, {
+        yPercent: 10,
+        ease: "none",
+        scrollTrigger: {
+          trigger: heroSection,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    }
+  }
+// ===================== // 
+// ===== PARALLAX ===== //
+// =================== //    
+  // Parallax for images in different sections
+  const parallaxImages = document.querySelectorAll('.img-frame-1-1 img, .img-frame-3-2-landscape img');
+  parallaxImages.forEach((img, index) => {
+    const speed = 0.3 + (index * 0.1); // Varying speeds for different images
+    gsap.to(img, {
+      yPercent: -15 * speed,
+      ease: "none",
+      scrollTrigger: {
+        trigger: img,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1
+      }
+    });
+  });
+  // ===== TEXT PARALLAX EFFECTS =====
+  // Subtle parallax for headings
+  const parallaxTexts = document.querySelectorAll('.text_heading-huge, .text_heading-lg, .text_display-sm');
+  parallaxTexts.forEach((text, index) => {
+    const speed = 0.1 + (index * 0.05); // Subtle speeds for text
+    gsap.to(text, {
+      yPercent: 5 * speed,
+      ease: "none",
+      scrollTrigger: {
+        trigger: text,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1
+      }
+    });
+  });
+  // ===== SECTION PARALLAX EFFECTS (FIXED) =====
+  // REMOVED parallax from problematic sections to prevent z-index conflicts
+  // These sections will now scroll normally without floating over portfolio
+  const safeParallaxSections = document.querySelectorAll('.section_why-freedom, .section_hero');
+  safeParallaxSections.forEach((section, index) => {
+    const speed = 0.2 + (index * 0.1);
+    gsap.to(section, {
+      yPercent: -10 * speed,
+      ease: "none",
+      scrollTrigger: {
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1
+      }
+    });
+  });
+  // ===== PORTFOLIO SECTION PARALLAX =====
+  const portfolioSection = document.querySelector('.section_portfolio');
+  if (portfolioSection) {
+    // Parallax for portfolio content
+    const portfolioContent = portfolioSection.querySelector('.content-wrapper');
+    if (portfolioContent) {
+      gsap.to(portfolioContent, {
+        yPercent: 8,
+        ease: "none",
+        scrollTrigger: {
+          trigger: portfolioSection,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    }
+    // Parallax for portfolio cards (subtle)
+    const portfolioCards = portfolioSection.querySelectorAll('.portfolio-card');
+    portfolioCards.forEach((card, index) => {
+      const speed = 0.05 + (index * 0.02);
+      gsap.to(card, {
+        yPercent: -5 * speed,
+        ease: "none",
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    });
+  }
+  // ===== FOOTER PARALLAX =====
+  const footerSection = document.querySelector('.nav_footer');
+  if (footerSection) {
+    gsap.to(footerSection, {
+      yPercent: -5,
+      ease: "none",
+      scrollTrigger: {
+        trigger: footerSection,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1
+      }
+    });
+  }
+  // ===== ADVANCED PARALLAX: LAYERED EFFECTS =====
+  // Create depth with multiple layers
+  const layeredSections = document.querySelectorAll('.section_why-freedom');
+  layeredSections.forEach((section) => {
+    const background = section.querySelector('.img-frame-3-2-landscape');
+    const content = section.querySelector('.content-wrapper');
+    if (background && content) {
+      // Background moves slower (creates depth)
+      gsap.to(background, {
+        yPercent: -25,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+      // Content moves faster (stays in foreground)
+      gsap.to(content, {
+        yPercent: 15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    }
+  });
+  console.log('Parallax effects initialized successfully!');
+}); 
+/**
+ * =============================================
+ *           THEME SWITCHER SCRIPT
+ * =============================================
+ * Handles theme switching for the Brik BDS
+ * design system with support for 8 themes.
+ * Integrates with Webflow dropdowns and
+ * provides localStorage persistence.
+ * =============================================
+ */
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎨 Simple Theme Switcher - Supporting All 8 Themes');
+  const THEME_STORAGE_KEY = 'brik-bds-theme';
+  const INDUSTRY_STORAGE_KEY = 'brik-bds-industry';
+  // All 8 supported themes
+  const ALL_THEMES = [
+    'modern-theme-1',
+    'modern-theme-2', 
+    'modern-theme-3',
+    'modern-theme-4',
+    'expressive-theme-1',
+    'expressive-theme-2',
+    'expressive-theme-3',
+    'expressive-theme-4'
+  ];
+  function applyTheme(theme) {
+    console.log(`🎨 Switching to theme: ${theme}`);
+    // Remove ALL theme classes and any conflicting classes
+    ALL_THEMES.forEach(t => document.body.classList.remove(t));
+    // Remove any existing theme-1, theme-2, etc. classes that might conflict
+    document.body.classList.remove('theme-1', 'theme-2', 'theme-3', 'theme-4');
+    // Add the new theme class
+    document.body.classList.add(theme);
+    // Force a reflow to ensure CSS custom properties are applied
+    document.body.offsetHeight;
+    // Save to localStorage
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch (error) {
+      console.warn('⚠️ Could not save theme to localStorage:', error);
+    }
+    // Update all switcher displays
+    updateAllSwitcherDisplays(theme);
+    console.log(`✅ Applied theme: ${theme}`);
+    console.log(`📋 Current body classes: ${document.body.className}`);
+    // Dispatch a custom event for other scripts to listen to
+    document.dispatchEvent(new CustomEvent('themeChanged', { 
+      detail: { theme: theme } 
+    }));
+    updateCurrentSelections();
+    updateThemeDropdownLabel(theme);
+    setTimeout(() => updateThemeDropdownLabel(theme), 50); // Force update after Webflow re-renders
+  }
+  function updateSwitcherDisplay(switcher, theme) {
+    // const display = switcher.querySelector('.theme-link');
+    // const selectedLink = switcher.querySelector(`[data-theme="${theme}"]`);
+    // if (display && selectedLink) {
+    //   display.textContent = selectedLink.textContent;
+    //   console.log(`📝 Updated display to: ${selectedLink.textContent}`);
+    // }
+  }
+  function updateAllSwitcherDisplays(theme) {
+    document.querySelectorAll('.theme-switcher-component').forEach(switcher => {
+      updateSwitcherDisplay(switcher, theme);
+    });
+  }
+  function initializeSwitcher(switcher) {
+    const links = switcher.querySelectorAll('.theme-link');
+    console.log(`🔗 Found ${links.length} theme links with class "theme-link"`);
+    links.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const theme = this.id;
+        console.log(`🖱️ Clicked: ${theme}`);
+        // Validate theme is supported
+        if (ALL_THEMES.includes(theme)) {
+          applyTheme(theme);
+          updateThemeDropdownLabel(theme);
+          setTimeout(() => updateThemeDropdownLabel(theme), 50); // Force update after Webflow re-renders
+        } else {
+          console.warn(`⚠️ Unsupported theme: ${theme}`);
+        }
+        // Close Webflow dropdown
+        const dropdown = this.closest('.w-dropdown');
+        if (dropdown) {
+          const toggle = dropdown.querySelector('.w-dropdown-toggle');
+          if (toggle && toggle.getAttribute('aria-expanded') === 'true') {
+            toggle.click();
+          }
+        }
+      });
+    });
+  }
+  // Initialize all theme switchers on the page
+  document.querySelectorAll('.theme-switcher-component').forEach(initializeSwitcher);
+  // ===============================
+  // URL PARAMETER SUPPORT FOR THEME & INDUSTRY
+  // ===============================
+  function getUrlParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+  // Check for ?theme=... and ?industry=... in URL
+  const urlTheme = getUrlParam('theme');
+  const urlIndustry = getUrlParam('industry');
+  // ===============================
+  // THEME SWITCHER (with URL param support)
+  // ===============================
+  // Load saved theme or default
+  let savedTheme = 'modern-theme-1';
+  try {
+    savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'modern-theme-1';
+  } catch (error) {
+    console.warn('⚠️ Could not load theme from localStorage:', error);
+  }
+  // If URL param is present and valid, use it
+  let initialTheme = savedTheme;
+  if (urlTheme && ALL_THEMES.includes(urlTheme)) {
+    initialTheme = urlTheme;
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, urlTheme);
+    } catch (error) {
+      console.warn('⚠️ Could not save theme from URL param:', error);
+    }
+  }
+  console.log(`💾 Loading theme: ${initialTheme}`);
+  // On page load, after applying the initial theme and industry, update dropdown labels
+  applyTheme(initialTheme);
+  updateThemeDropdownLabel(initialTheme);
+  // ===============================
+  // INDUSTRY SWITCHER (with URL param support)
+  // ===============================
+  // Scope to the industry switcher component
+  const industrySwitcher = document.getElementById('industry-theme-switcher');
+  if (industrySwitcher) {
+    const industryLinks = industrySwitcher.querySelectorAll('.theme-link');
+    // Only select content blocks that are NOT inside the dropdown
+    // Assumes your content blocks are inside a wrapper with class 'industry-content'
+    const contentWrappers = document.querySelectorAll('.industry-content');
+    // Helper: Remove all filter classes from body
+    function removeAllIndustryFilters() {
+      document.body.classList.forEach(cls => {
+        if (cls.startsWith('filter-')) document.body.classList.remove(cls);
+      });
+    }
+    // Helper: Show only the selected industry content
+    function showIndustry(industry) {
+      contentWrappers.forEach(wrapper => {
+        const items = wrapper.querySelectorAll('[data-industry]');
+        let found = false;
+        items.forEach(item => {
+          if (item.getAttribute('data-industry') === industry) {
+            item.style.display = '';
+            found = true;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+        // Fallback: if no item matched, show the first available
+        if (!found && items.length > 0) {
+          items[0].style.display = '';
+        }
+      });
+      removeAllIndustryFilters();
+      document.body.classList.add('filter-' + industry);
+    }
+    // Load saved industry or default to dental
+    let savedIndustry = 'dental';
+    try {
+      savedIndustry = localStorage.getItem(INDUSTRY_STORAGE_KEY) || 'dental';
+    } catch (error) {
+      console.warn('⚠️ Could not load industry from localStorage:', error);
+    }
+    // If URL param is present, use it
+    let initialIndustry = savedIndustry;
+    if (urlIndustry) {
+      initialIndustry = urlIndustry;
+      try {
+        localStorage.setItem(INDUSTRY_STORAGE_KEY, urlIndustry);
+      } catch (error) {
+        console.warn('⚠️ Could not save industry from URL param:', error);
+      }
+    }
+    showIndustry(initialIndustry);
+    updateIndustryDropdownLabel(initialIndustry);
+    // Add click handlers
+    industryLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const industry = this.id;
+        showIndustry(industry);
+        try {
+          localStorage.setItem(INDUSTRY_STORAGE_KEY, industry);
+        } catch (error) {
+          console.warn('⚠️ Could not save industry to localStorage:', error);
+        }
+        updateCurrentSelections();
+        updateIndustryDropdownLabel(industry); // <-- Ensure this is here
+      });
+    });
+    // Always show all menu options in the dropdown
+    industryLinks.forEach(link => {
+      link.style.display = '';
+    });
+    // Event delegation for dynamically rendered dropdowns
+    industrySwitcher.addEventListener('click', function(e) {
+      if (e.target.classList.contains('theme-link')) {
+        e.preventDefault();
+        const industry = e.target.id;
+        showIndustry(industry);
+        try {
+          localStorage.setItem(INDUSTRY_STORAGE_KEY, industry);
+        } catch (error) {
+          console.warn('⚠️ Could not save industry to localStorage:', error);
+        }
+        updateCurrentSelections();
+        updateIndustryDropdownLabel(industry);
+      }
+    });
+  }
+  console.log('🚀 Theme switcher ready!');
+  // Expose theme switching function globally for Webflow interactions
+  window.switchToTheme = function(theme) {
+    if (ALL_THEMES.includes(theme)) {
+      applyTheme(theme);
+    } else {
+      console.warn(`⚠️ Unsupported theme: ${theme}`);
+    }
+  };
+});
+function updateCurrentSelections() {
+  // Get current theme and industry from localStorage (or your state logic)
+  var theme = localStorage.getItem('brik-bds-theme') || 'modern-theme-1';
+  var industry = localStorage.getItem('brik-bds-industry') || 'dental';
+  // Make these more user-friendly
+  var themeLabel = theme.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  var industryLabel = industry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  // Update the display
+  var themeSpan = document.getElementById('selected-theme');
+  var industrySpan = document.getElementById('selected-industry');
+  if (themeSpan) themeSpan.textContent = 'Theme: ' + themeLabel;
+  if (industrySpan) industrySpan.textContent = 'Industry: ' + industryLabel;
+}
+function updateThemeDropdownLabel(theme) {
+  document.querySelectorAll('.theme-switcher-component').forEach(switcher => {
+    const display = switcher.querySelector('.text_label-sm');
+    const selectedLink = switcher.querySelector(`.theme-link#${theme}`);
+    if (display && selectedLink) {
+      display.textContent = selectedLink.textContent;
+    }
+  });
+}
+function updateIndustryDropdownLabel(industry) {
+  const industrySwitcher = document.getElementById('industry-theme-switcher');
+  if (industrySwitcher) {
+    const display = industrySwitcher.querySelector('.text_label-sm');
+    const selectedLink = industrySwitcher.querySelector(`.theme-link#${industry}`);
+    if (display && selectedLink) {
+      display.textContent = selectedLink.textContent;
+    } else if (display) {
+      // Fallback: show the industry name capitalized
+      display.textContent = industry.charAt(0).toUpperCase() + industry.slice(1);
+    }
+  }
+}
+// Call on page load
+updateCurrentSelections();
+</script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+{
+  "dental": {
+    "hero": {
+      "title": "Your Smile is Our Priority – Gentle, Expert Dental Care You Can Trust",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    },
+    "about": {
+      "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    },
+    "services": [
+      {
+        "title": "Service 1",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684c2e4a3b83bb1794cbaa74_img_lg_2x.webp"
+      },
+      {
+        "title": "Service 2",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684c2e4a3b83bb1794cbaa74_img_lg_2x.webp"
+      },
+      {
+        "title": "Service 3",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f04d26602a96b979e9578_frame_8_2x.webp"
+      }
+    ],
+    "cta": {
+      "title": "Get started with dental services today",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    "images": [
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684c2e4a3b83bb1794cbaa74_img_lg_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684c2e4a3b83bb1794cbaa74_img_lg_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f04d26602a96b979e9578_frame_8_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684c2e5bb76f5b253dc1fc31_image-wrapper.jpg",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f04d26602a96b979e9578_frame_8_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684c2e53a3554dd4189506b0_image_wrapper_2x.webp"
+    ]
+  },
+  "finance": {
+    "hero": {
+      "title": "Your Tech is Our Priority - Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    },
+    "about": {
+      "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    },
+    "services": [
+      {
+        "title": "Service 1",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed911ae65f3dbd1418fa_img_lg_location_1_2x.webp"
+      },
+      {
+        "title": "Service 2",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed97f1fe4d7f7a3ef76f_img_lg_location_2_2x.webp"
+      },
+      {
+        "title": "Service 3",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed9dadea4a1054e15053_img_lg_employee_4_2x.webp"
+      }
+    ],
+    "cta": {
+      "title": "Get started with finance services today",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    "images": [
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed911ae65f3dbd1418fa_img_lg_location_1_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed97f1fe4d7f7a3ef76f_img_lg_location_2_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed9dadea4a1054e15053_img_lg_employee_4_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852eda2438bece3a8ab778a_img_lg_employee_3_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852eda6d33aae46fd1dfb2d_img_lg_employee_2_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852edb69b241f407eea8412_img_lg_employee_1_2x.webp"
+    ]
+  },
+  "real-estate": {
+    "hero": {
+      "title": "Your Property is Our Priority - Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    },
+    "about": {
+      "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    },
+    "services": [
+      {
+        "title": "Service 1",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f1b9b25e45d423c85b7de_img_lg_location_2_2x.webp"
+      },
+      {
+        "title": "Service 2",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f1b9b25e45d423c85b7de_img_lg_location_2_2x.webp"
+      },
+      {
+        "title": "Service 3",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ecefb8c7d44eaf819f85_img_lg_vehicle_1_2x.webp"
+      }
+    ],
+    "cta": {
+      "title": "Get started with real-estate services today",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    "images": [
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f1b9b25e45d423c85b7de_img_lg_location_2_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f1b9b25e45d423c85b7de_img_lg_location_2_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ecefb8c7d44eaf819f85_img_lg_vehicle_1_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f2378133f5c2c8afd653d_img_lg_staff_1_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/684f23808f9f0aa60e8cb41c_img_lg_patient_2_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ecfa5745296ac4c4ac58_img_lg_patient_3_2x.webp"
+    ]
+  },
+  "small-business": {
+    "hero": {
+      "title": "Your Business is Our Priority - Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    },
+    "about": {
+      "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    },
+    "services": [
+      {
+        "title": "Service 1",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed5b339c8b012f350d33_img_lg_location_1_2x.webp"
+      },
+      {
+        "title": "Service 2",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed6085f6893a9dab0a3b_img_lg_location_2_2x.webp"
+      },
+      {
+        "title": "Service 3",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed65acbd8ec11521c47d_img_lg_customer_4_2x.webp"
+      }
+    ],
+    "cta": {
+      "title": "Get started with small-business services today",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    "images": [
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed5b339c8b012f350d33_img_lg_location_1_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed6085f6893a9dab0a3b_img_lg_location_2_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed65acbd8ec11521c47d_img_lg_customer_4_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed8124dfc2f07b3663ef_img_lg_customer_2_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed75b7d5705798856b0d_img_lg_employee_2_2x.webp",
+      "https://cdn.prod.website-files.com/67c4e62250923072710d478a/6852ed7b6aef670f608dc591_img_lg_employee_1_2x.webp"
+    ]
+  }
+}
