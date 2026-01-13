@@ -1,0 +1,63 @@
+# Enhanced Cursor Rules for Brik BDS Webflow Project
+
+## Project Overview
+This is a Webflow project with Figma design token integration, Visual Copilot, and Onlook support.
+
+## File Structure
+- `design-tokens/` - Contains Figma design tokens (JSON format)
+- `css/design-tokens.css` - Auto-generated CSS variables from Figma tokens
+- `scripts/` - Node.js scripts for Figma sync and token transformation
+- `.github/workflows/` - GitHub Actions for automated deployment and Figma sync
+- `.builderrules` - Visual Copilot configuration
+- `.builderignore` - Visual Copilot ignore patterns
+
+## Coding Standards
+- Use semantic HTML5 elements
+- Follow Webflow's CSS class naming conventions
+- Maintain responsive design principles
+- Use CSS custom properties (variables) from design tokens
+- Keep JavaScript minimal and focused on interactions
+
+## Design Token Usage
+- All colors, typography, and spacing should use CSS variables from `design-tokens.css`
+- Variables follow the pattern: `--color---[figma-node-name]`
+- Typography variables: `--typography---[figma-node-name]`
+- Spacing variables: `--spacing---[figma-node-name]`
+
+## Figma Integration
+- Design tokens are synced from Figma files via GitHub Actions
+- Multiple Figma files are supported (comma-separated in environment)
+- Tokens are automatically transformed to CSS variables
+- Changes in Figma trigger automatic updates via webhooks
+
+## Visual Copilot Integration
+- Use .builderrules for code generation configuration
+- Leverage existing design tokens for consistent styling
+- Generate Webflow-compatible HTML/CSS
+- Maintain responsive design patterns
+
+## Onlook Integration
+- Visual development with AI assistance
+- Real-time preview and editing
+- Component-based development
+- Export to Webflow-compatible code
+
+## Webflow Best Practices
+- Use Webflow's built-in responsive breakpoints
+- Leverage Webflow's CMS for dynamic content
+- Maintain clean, semantic HTML structure
+- Use Webflow's interaction system for animations
+
+## Git Workflow
+- Commit design token changes automatically
+- Use conventional commit messages
+- Maintain clean git history
+- Test locally before pushing to GitHub
+
+## AI Assistant Guidelines
+- Always reference existing design tokens when suggesting colors or typography
+- Suggest improvements that align with the established design system
+- Consider Webflow's limitations when proposing solutions
+- Prioritize maintainable and scalable code patterns
+- Leverage Visual Copilot for design-to-code conversion
+- Use Onlook for visual development and component creation

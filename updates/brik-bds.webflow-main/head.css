@@ -1,0 +1,516 @@
+<style>
+   
+/* ============================================= */
+/*               DESIGN TOKENS                   */
+/* ============================================= */
+/* This file contains CSS custom properties for */
+/* the Brik BDS design system with multiple    */
+/* theme variations, aligned with Webflow      */
+/* variable naming conventions.                */
+/* ============================================= */
+
+:root {
+  /* ============================================= */
+  /*               PRIMITIVE COLORS - heyo                */
+  /* ============================================= */
+
+  /* Grayscale */
+  --colors--grayscale--white: #ffffff;
+  --colors--grayscale--lightest: #f2f2f2;
+  --colors--grayscale--lighter: #e0e0e0;
+  --colors--grayscale--light: #bdbdbd;
+  --colors--grayscale--dark: #828282;
+  --colors--grayscale--darker: #4f4f4f;
+  --colors--grayscale--darkest: #333333;
+  --colors--grayscale--black: #000000;
+
+  /* System Colors */
+  --colors--system--blue: #2f80ed;
+  --colors--system--green: #27ae60;
+  --colors--system--red: #eb5757;
+  --colors--system--yellow: #f2c94c;
+  --colors--system--orange: #f2994a;
+  --colors--system--purple: #9b51e0;
+
+  /* Theme Colors */
+  --colors--themes--peach: #ed8059;
+  --colors--themes--peach-light: #facbbb;
+  --colors--themes--peach-lightest: #fef4e8;
+  --colors--themes--neon-green: #42ff00;
+  --colors--themes--neon-pink: #ff00cc;
+  --colors--themes--neon-yellow: #fffc00;
+  --colors--themes--neon-blue: #00f6ff;
+  --colors--themes--neon-orange: #ff5c00;
+  --colors--themes--neon-purple: #ae00ff;
+  --colors--themes--blue-light: #4665f5;
+  --colors--themes--blue-lighter: #79b0d9;
+  --colors--themes--blue-lightest: #edf2f6;
+  --colors--themes--blue-dark: #0e212a;
+  --colors--themes--green-theme: #1bb58c;
+  --colors--themes--yellow-theme: #e8ea76;
+  --colors--themes--yellow-dark: #d8d96a;
+  --colors--themes--orange-theme: #ff7828;
+  
+  /* ============================================= */
+  /*            PRIMITIVE TYPOGRAPHY               */
+  /* ============================================= */
+  --font-family--droid-sans: "Droid Sans", sans-serif;
+  --font-family--geist: "Geist", sans-serif;
+  --font-family--geist-mono: "Geist Mono", monospace;
+  --font-family--ibm-plex-sans: "IBM Plex Sans", sans-serif;
+  --font-family--source-sans-3: "Source Sans 3", sans-serif;
+  --font-family--lato: "Lato", sans-serif;
+  --font-family--hind: "Hind", sans-serif;
+  --font-family--newsreader: "Newsreader", serif;
+  --font-family--open-sans: "Open Sans", sans-serif;
+  --font-family--playfair-display: "Playfair Display", serif;
+  --font-family--font-awesome: "Font Awesome 6 Pro Solid", sans-serif;
+
+  /* ============================================= */
+  /*               PRIMITIVE LAYOUT                */
+  /* ============================================= */
+  --primitives--space--0: 0px;
+  --primitives--space--25: 25px;
+  --primitives--space--50: 50px;
+  --primitives--space--100: 100px;
+  --primitives--space--200: 200px;
+  --primitives--space--300: 300px;
+  --primitives--space--400: 400px;
+  --primitives--space--500: 500px;
+  --primitives--space--600: 600px;
+  --primitives--space--700: 700px;
+  --primitives--space--800: 800px;
+  --primitives--space--1000: 1000px;
+
+  /* ============================================= */
+  /*             DEFAULT SEMANTIC TOKENS           */
+  /* ============================================= */
+  
+  /* Base Layout (matches Webflow's "Base mode") */
+  --_layout---space--space-none: var(--primitives--space--0);
+  --_layout---space--space-tiny: var(--primitives--space--50);
+  --_layout---space--space-sm: var(--primitives--space--100);
+  --_layout---space--space-md: var(--primitives--space--200);
+  --_layout---space--space-lg: var(--primitives--space--400);
+  --_layout---space--space-xl: var(--primitives--space--600);
+  --_layout---space--space-xxl: var(--primitives--space--800);
+  --_layout---space--space-huge: var(--primitives--space--1000);
+  --_layout---gap--gap-none: var(--primitives--space--0);
+  --_layout---gap--gap-tiny: var(--primitives--space--50);
+  --_layout---gap--gap-sm: var(--primitives--space--100);
+  --_layout---gap--gap-md: var(--primitives--space--200);
+  --_layout---gap--gap-lg: var(--primitives--space--400);
+  --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+
+/* ============================================= */
+/*                 THEME TOKENS                  */
+/* ============================================= */
+
+/* Modern Theme 1 (Base) */
+.modern-theme-1,
+[data-theme="modern-theme-1"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--white);
+  --_color---text--brand: var(--colors--themes--blue-light);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--blue-light);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--blue-light);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--blue-light);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--blue-light);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--blue-light);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--blue-light);
+  --_color---theme--secondary: var(--colors--themes--blue-lighter);
+  --_color---theme--tertiary: var(--colors--themes--blue-dark);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+  
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--droid-sans);
+  --_typography---font-family--heading: var(--font-family--droid-sans);
+  --_typography---font-family--body: var(--font-family--open-sans);
+  --_typography---font-family--label: var(--font-family--open-sans);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+
+/* Modern Theme 2 */
+.modern-theme-2,
+[data-theme="modern-theme-2"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--lightest);
+  --_color---text--secondary: var(--colors--grayscale--light);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--white);
+  --_color---text--brand: var(--colors--system--yellow);
+  --_color---background--primary: var(--colors--grayscale--darkest);
+  --_color---background--secondary: var(--colors--grayscale--black);
+  --_color---background--brand: var(--colors--system--yellow);
+  --_color---background--inverse: var(--colors--grayscale--black);
+  --_color---background--input: var(--colors--grayscale--darker);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--system--yellow);
+  --_color---border--primary: var(--colors--grayscale--light);
+  --_color---border--secondary: var(--colors--grayscale--dark);
+  --_color---border--input: var(--colors--grayscale--dark);
+  --_color---border--brand: var(--colors--system--yellow);
+  --_color---border--inverse: var(--colors--grayscale--white);
+  --_color---page--primary: var(--colors--grayscale--black);
+  --_color---page--secondary: var(--colors--grayscale--darkest);
+  --_color---page--brand: var(--colors--system--yellow);
+  --_color---surface--primary: var(--colors--grayscale--black);
+  --_color---surface--secondary: var(--colors--grayscale--darkest);
+  --_color---surface--brand-primary: var(--colors--system--yellow);
+  --_color---surface--nav: var(--colors--grayscale--black);
+  --_color---theme--primary: var(--colors--system--yellow);
+  --_color---theme--secondary: var(--colors--themes--yellow-dark);
+  --_color---theme--tertiary: var(--colors--system--orange);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--orange);
+  
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--geist);
+  --_typography---font-family--heading: var(--font-family--geist);
+  --_typography---font-family--body: var(--font-family--geist-mono);
+  --_typography---font-family--label: var(--font-family--geist-mono);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+
+/* Modern Theme 3 */
+.modern-theme-3,
+[data-theme="modern-theme-3"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--blue-light);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--blue-light);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--blue-light);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--blue-light);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--blue-light);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--blue-light);
+  --_color---surface--nav: var(--colors--themes--blue-lighter);
+  --_color---theme--primary: var(--colors--themes--blue-light);
+  --_color---theme--secondary: var(--colors--themes--blue-dark);
+  --_color---theme--tertiary: var(--colors--themes--blue-lighter);
+  --_color---theme--fourth: var(--colors--system--yellow);
+  --_color---theme--accent: var(--colors--system--green);
+  
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--ibm-plex-sans);
+  --_typography---font-family--heading: var(--font-family--ibm-plex-sans);
+  --_typography---font-family--body: var(--font-family--source-sans-3);
+  --_typography---font-family--label: var(--font-family--source-sans-3);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+
+/* Modern Theme 4 */
+.modern-theme-4,
+[data-theme="modern-theme-4"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--system--yellow);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--system--yellow);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--system--yellow);
+  --_color---border--primary: var(--colors--grayscale--black);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--system--yellow);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--system--yellow);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--system--yellow);
+  --_color---surface--nav: var(--colors--system--orange);
+  --_color---theme--primary: var(--colors--system--yellow);
+  --_color---theme--secondary: var(--colors--themes--yellow-dark);
+  --_color---theme--tertiary: var(--colors--system--orange);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+  
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--lato);
+  --_typography---font-family--heading: var(--font-family--lato);
+  --_typography---font-family--body: var(--font-family--hind);
+  --_typography---font-family--label: var(--font-family--hind);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+
+/* Expressive Theme 1 */
+.expressive-theme-1,
+[data-theme="expressive-theme-1"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--peach);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--peach);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--peach);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--peach);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--peach);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--peach);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--blue-light);
+  --_color---theme--secondary: var(--colors--themes--blue-lighter);
+  --_color---theme--tertiary: var(--colors--themes--blue-dark);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+  
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--newsreader);
+  --_typography---font-family--heading: var(--font-family--newsreader);
+  --_typography---font-family--body: var(--font-family--open-sans);
+  --_typography---font-family--label: var(--font-family--open-sans);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+
+/* Expressive Theme 2 */
+.expressive-theme-2,
+[data-theme="expressive-theme-2"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--neon-green);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--neon-green);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--neon-green);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--neon-green);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--neon-green);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--neon-green);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--blue-light);
+  --_color---theme--secondary: var(--colors--themes--blue-lighter);
+  --_color---theme--tertiary: var(--colors--themes--blue-dark);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--ibm-plex-sans);
+  --_typography---font-family--heading: var(--font-family--ibm-plex-sans);
+  --_typography---font-family--body: var(--font-family--source-sans-3);
+  --_typography---font-family--label: var(--font-family--source-sans-3);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+
+/* Expressive Theme 3 */
+.expressive-theme-3,
+[data-theme="expressive-theme-3"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--green-theme);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--green-theme);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--green-theme);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--green-theme);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--green-theme);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--green-theme);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--blue-light);
+  --_color---theme--secondary: var(--colors--themes--blue-lighter);
+  --_color---theme--tertiary: var(--colors--themes--blue-dark);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--lato);
+  --_typography---font-family--heading: var(--font-family--lato);
+  --_typography---font-family--body: var(--font-family--hind);
+  --_typography---font-family--label: var(--font-family--hind);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+
+/* Expressive Theme 4 */
+.expressive-theme-4,
+[data-theme="expressive-theme-4"] {
+  /* Color */
+  --_color---text--primary: var(--colors--grayscale--darkest);
+  --_color---text--secondary: var(--colors--grayscale--darker);
+  --_color---text--muted: var(--colors--grayscale--dark);
+  --_color---text--inverse: var(--colors--grayscale--darkest);
+  --_color---text--brand: var(--colors--themes--blue-light);
+  --_color---background--primary: var(--colors--grayscale--white);
+  --_color---background--secondary: var(--colors--grayscale--lightest);
+  --_color---background--brand: var(--colors--themes--green-theme);
+  --_color---background--inverse: var(--colors--grayscale--white);
+  --_color---background--input: var(--colors--grayscale--white);
+  --_color---background--image: rgba(23, 23, 23, 0.6);
+  --_color---background--image-brand: var(--colors--themes--blue-light);
+  --_color---border--primary: var(--colors--grayscale--dark);
+  --_color---border--secondary: var(--colors--grayscale--light);
+  --_color---border--input: var(--colors--grayscale--light);
+  --_color---border--brand: var(--colors--themes--blue-light);
+  --_color---border--inverse: var(--colors--grayscale--darkest);
+  --_color---page--primary: var(--colors--grayscale--white);
+  --_color---page--secondary: var(--colors--grayscale--lighter);
+  --_color---page--brand: var(--colors--themes--blue-light);
+  --_color---surface--primary: var(--colors--grayscale--white);
+  --_color---surface--secondary: var(--colors--grayscale--lightest);
+  --_color---surface--brand-primary: var(--colors--themes--blue-light);
+  --_color---surface--nav: var(--colors--grayscale--white);
+  --_color---theme--primary: var(--colors--themes--blue-light);
+  --_color---theme--secondary: var(--colors--themes--blue-lighter);
+  --_color---theme--tertiary: var(--colors--themes--blue-dark);
+  --_color---theme--fourth: var(--colors--grayscale--white);
+  --_color---theme--accent: var(--colors--system--green);
+
+  /* Typography */
+  --_typography---font-family--display: var(--font-family--playfair-display);
+  --_typography---font-family--heading: var(--font-family--playfair-display);
+  --_typography---font-family--body: var(--font-family--hind);
+  --_typography---font-family--label: var(--font-family--hind);
+  --_typography---font-family--icon: var(--font-family--font-awesome);
+}
+
+/* ============================================= */
+/*                 LAYOUT THEMES                 */
+/* ============================================= */
+
+/* Compact Layout */
+.layout-compact {
+    --_layout---space--space-tiny: var(--primitives--space--25);
+    --_layout---space--space-sm: var(--primitives--space--50);
+    --_layout---space--space-md: var(--primitives--space--200);
+    --_layout---space--space-lg: var(--primitives--space--600);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--800);
+    --_layout---space--space-huge: var(--primitives--space--1000);
+    --_layout---gap--gap-tiny: var(--primitives--space--25);
+    --_layout---gap--gap-sm: var(--primitives--space--50);
+    --_layout---gap--gap-md: var(--primitives--space--100);
+    --_layout---gap--gap-lg: var(--primitives--space--200);
+    --_layout---gap--gap-xl: var(--primitives--space--400);
+}
+
+/* Comfortable Layout */
+.layout-comfortable {
+    --_layout---space--space-tiny: var(--primitives--space--100);
+    --_layout---space--space-sm: var(--primitives--space--200);
+    --_layout---space--space-md: var(--primitives--space--300);
+    --_layout---space--space-lg: var(--primitives--space--500);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--800);
+    --_layout---space--space-huge: var(--primitives--space--1000);
+    --_layout---gap--gap-tiny: var(--primitives--space--50);
+    --_layout---gap--gap-sm: var(--primitives--space--100);
+    --_layout---gap--gap-md: var(--primitives--space--200);
+    --_layout---gap--gap-lg: var(--primitives--space--400);
+    --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+
+/* Cozy Layout */
+.layout-cozy {
+    --_layout---space--space-tiny: var(--primitives--space--200);
+    --_layout---space--space-sm: var(--primitives--space--300);
+    --_layout---space--space-md: var(--primitives--space--400);
+    --_layout---space--space-lg: var(--primitives--space--500);
+    --_layout---space--space-xl: var(--primitives--space--600);
+    --_layout---space--space-xxl: var(--primitives--space--700);
+    --_layout---space--space-huge: var(--primitives--space--800);
+    --_layout---gap--gap-tiny: var(--primitives--space--50);
+    --_layout---gap--gap-sm: var(--primitives--space--100);
+    --_layout---gap--gap-md: var(--primitives--space--200);
+    --_layout---gap--gap-lg: var(--primitives--space--400);
+    --_layout---gap--gap-xl: var(--primitives--space--500);
+}
+
+/* ===== CONTENT FILTERING ===== */
+body.filter-dental .industry-content [data-industry]:not([data-industry="dental"]) { display: none !important; }
+body.filter-finance .industry-content [data-industry]:not([data-industry="finance"]) { display: none !important; }
+body.filter-real-estate .industry-content [data-industry]:not([data-industry="real-estate"]) { display: none !important; }
+body.filter-small-business .industry-content [data-industry]:not([data-industry="small-business"]) { display: none !important; }
+body.filter-all .industry-content [data-industry] { display: block !important; }
+body.filter-finance #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-dental #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-finance #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-real-estate #industry-theme-switcher [data-industry] { display: block !important; }
+body.filter-small-business #industry-theme-switcher [data-industry] { display: block !important; }
+
+/* ===== NAV MENU ===== */
+nav .theme-link {
+  font-family: var(--_typography---font-family--body);
+}
+
+
+</style>

@@ -1,0 +1,25 @@
+{
+  "sync": {
+    "github": {
+      "enabled": true,
+      "repository": "yourusername/brik-bds",
+      "branch": "main",
+      "path": "design-tokens",
+      "token": "figd_REajXU3piTuMf0iiVMujqwmOp93OLhCt6DXpTxmN"
+    }
+  },
+  "export": {
+    "formats": ["json", "css", "scss"],
+    "output": "design-tokens",
+    "transform": {
+      "colors": "hex",
+      "typography": "css",
+      "spacing": "px",
+      "borderRadius": "px"
+    }
+  },
+  "import": {
+    "formats": ["json"],
+    "path": "design-tokens"
+  }
+} 

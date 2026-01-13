@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Industry Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-area { border: 1px solid #ccc; padding: 20px; margin: 10px 0; }
+        button { padding: 10px 20px; margin: 5px; }
+    
+/* Fix .button_outline_new to properly inherit from current theme */
+.navigation .button_outline_new.w-button,
+.button_outline_new.w-button {
+  color: var(--_color---text--brand) !important;
+  border: 1px solid var(--_color---border--brand) !important;
+  background-color: transparent !important;
+}
+
+.navigation .button_outline_new.w-button:hover,
+.button_outline_new.w-button:hover {
+  background-color: var(--_color---background--brand) !important;
+  color: var(--colors--grayscale--white) !important;
+  border-color: var(--_color---background--brand) !important;
+}
+
+/* Fix other button variants to use theme variables */
+.button_primary {
+  background-color: var(--_color---background--brand) !important;
+  color: var(--colors--grayscale--white) !important;
+}
+
+.button_outline {
+  color: var(--_color---text--brand) !important;
+  border-color: var(--_color---border--brand) !important;
+  background-color: transparent !important;
+}
+
+.button_outline:hover {
+  background-color: var(--_color---background--brand) !important;
+  color: var(--colors--grayscale--white) !important;
+}
+
+/* ============================================= */
+/*         CARD THEME INHERITANCE FIX           */
+/* ============================================= */
+
+/* Fix card elements to properly inherit from current theme */
+.card,
+.card_feature-item,
+.card-pricing,
+.card_checkmark,
+.card_cta,
+.card-lg {
+  background-color: var(--_color---surface--brand-primary) !important;
+  border-color: var(--_color---border--brand) !important;
+}
+
+.card .text_heading-sm.inverse,
+.card .text_label-md.inverse,
+.card .text_body-md.inverse {
+  color: var(--colors--grayscale--white) !important;
+}
+
+/* Fix hero interior section */
+.hero_interior {
+  background-color: var(--_color---surface--brand-primary) !important;
+}
+</style>
+</head>
+<body>
+    <h1>Simple Industry Test</h1>
+    
+    <!-- Load scripts in order -->
+    <script src="js/industry-data.js"></script>
+    <script src="footer.js"></script>
+    
+    <div class="test-area">
+        <h2>Test Controls</h2>
+        <button onclick="testDental()">Test Dental</button>
+        <button onclick="testFinance()">Test Finance</button>
+        <button onclick="checkScripts()">Check Scripts</button>
+    </div>
+    
+    <div class="test-area">
+        <h2>Content</h2>
+        <p><strong>Hero Title:</strong> <span id="heroTitle">Default</span></p>
+        <p><strong>Hero Description:</strong> <span id="heroDescription">Default</span></p>
+        <p><strong>Service 1:</strong> <span id="service1Title">Default</span></p>
+        <p><strong>Service 2:</strong> <span id="service2Title">Default</span></p>
+        <p><strong>Service 3:</strong> <span id="service3Title">Default</span></p>
+        <p><strong>CTA Title:</strong> <span id="ctaTitle">Default</span></p>
+    </div>
+    
+    <div class="test-area">
+        <h2>Debug Info</h2>
+        <p><strong>Industry Data:</strong> <span id="dataStatus">Checking...</span></p>
+        <p><strong>Switch Function:</strong> <span id="functionStatus">Checking...</span></p>
+        <p><strong>Current Industry:</strong> <span id="currentIndustry">None</span></p>
+    </div>
+    
+    <script>
+        function testDental() {
+            console.log('Testing dental...');
+            if (window.switchToIndustry) {
+                window.switchToIndustry('dental');
+                updateStatus();
+            } else {
+                alert('switchToIndustry function not found!');
+            }
+        }
+        
+        function testFinance() {
+            console.log('Testing finance...');
+            if (window.switchToIndustry) {
+                window.switchToIndustry('finance');
+                updateStatus();
+            } else {
+                alert('switchToIndustry function not found!');
+            }
+        }
+        
+        function checkScripts() {
+            console.log('Checking scripts...');
+            updateStatus();
+        }
+        
+        function updateStatus() {
+            document.getElementById('dataStatus').textContent = 
+                window.industryData ? 'Loaded' : 'Missing';
+            document.getElementById('functionStatus').textContent = 
+                window.switchToIndustry ? 'Available' : 'Missing';
+            document.getElementById('currentIndustry').textContent = 
+                document.body.className.match(/filter-(\w+)/)?.[1] || 'None';
+        }
+        
+        // Listen for industry changes
+        document.addEventListener('industryChanged', function(event) {
+            console.log('Industry changed to:', event.detail.industry);
+            updateStatus();
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded');
+            updateStatus();
+            
+            // Test after a short delay
+            setTimeout(() => {
+                if (window.switchToIndustry) {
+                    console.log('Testing initial industry switch...');
+                    window.switchToIndustry('dental');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html> 
