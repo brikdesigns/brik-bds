@@ -43,10 +43,10 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/brik-bds.git"
+    "url": "https://github.com/brikdesigns/brik-bds.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/brik-bds/issues"
+    "url": "https://github.com/brikdesigns/brik-bds/issues"
   },
   "homepage": "https://brik-bds.io/"
 }
