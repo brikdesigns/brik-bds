@@ -1,0 +1,2310 @@
+Export Variables
+primitives.Value.tokens.json
+{
+  "color": {
+    "annotation": {
+      "annotation-pink": {
+        "$type": "color",
+        "$value": "#bb1eeb"
+      },
+      "annotation-light-pink": {
+        "$type": "color",
+        "$value": "#f8e8fd"
+      },
+      "annotation-purple": {
+        "$type": "color",
+        "$value": "#601ff9"
+      },
+      "annotation-light-purple": {
+        "$type": "color",
+        "$value": "#e6dbff"
+      },
+      "annotation-blue": {
+        "$type": "color",
+        "$value": "#2f80ed"
+      },
+      "annotation-light-blue": {
+        "$type": "color",
+        "$value": "#d1e5ff"
+      }
+    },
+    "grayscale": {
+      "white": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "lightest": {
+        "$type": "color",
+        "$value": "#f2f2f2"
+      },
+      "lighter": {
+        "$type": "color",
+        "$value": "#e0e0e0"
+      },
+      "light": {
+        "$type": "color",
+        "$value": "#bdbdbd"
+      },
+      "dark": {
+        "$type": "color",
+        "$value": "#828282"
+      },
+      "darker": {
+        "$type": "color",
+        "$value": "#4f4f4f"
+      },
+      "darkest": {
+        "$type": "color",
+        "$value": "#333333"
+      },
+      "black": {
+        "$type": "color",
+        "$value": "#000000"
+      }
+    },
+    "system": {
+      "blue": {
+        "$type": "color",
+        "$value": "#2f80ed"
+      },
+      "neutral": {
+        "$type": "color",
+        "$value": "#d4d4d4"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#27ae60"
+      },
+      "red": {
+        "$type": "color",
+        "$value": "#eb5757"
+      },
+      "yellow": {
+        "$type": "color",
+        "$value": "#f2c94c"
+      },
+      "orange": {
+        "$type": "color",
+        "$value": "#f2994a"
+      },
+      "purple": {
+        "$type": "color",
+        "$value": "#9b51e0"
+      }
+    }
+  },
+  "theme": {
+    "brik": {
+      "poppy-red": {
+        "$type": "color",
+        "$value": "#e35335"
+      },
+      "black": {
+        "$type": "color",
+        "$value": "#000000"
+      },
+      "tan": {
+        "$type": "color",
+        "$value": "#f1f0ec"
+      },
+      "yellow": {
+        "$type": "color",
+        "$value": "#f4d364"
+      },
+      "orange": {
+        "$type": "color",
+        "$value": "#e76134"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#bcff8c"
+      },
+      "blue": {
+        "$type": "color",
+        "$value": "#8ebbcc"
+      },
+      "purple": {
+        "$type": "color",
+        "$value": "#9e8bc2"
+      }
+    },
+    "peach": {
+      "peach": {
+        "$type": "color",
+        "$value": "#ed8059"
+      },
+      "peach-light": {
+        "$type": "color",
+        "$value": "#efc7a2"
+      },
+      "peach-lightest": {
+        "$type": "color",
+        "$value": "#fef4e8"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#443b2b"
+      },
+      "tan": {
+        "$type": "color",
+        "$value": "#fffaeb"
+      }
+    },
+    "orange-blue": {
+      "yellow": {
+        "$type": "color",
+        "$value": "#f16b4d"
+      },
+      "blue": {
+        "$type": "color",
+        "$value": "#3d5b83"
+      },
+      "blue-light": {
+        "$type": "color",
+        "$value": "#98c0d9"
+      },
+      "blue-dark": {
+        "$type": "color",
+        "$value": "#263343"
+      },
+      "blue-lightest": {
+        "$type": "color",
+        "$value": "#ddfbfa"
+      }
+    },
+    "blue-red": {
+      "green-blue": {
+        "$type": "color",
+        "$value": "#317d9e"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#74b4a8"
+      },
+      "green-light": {
+        "$type": "color",
+        "$value": "#b2dbc0"
+      },
+      "blue-dark": {
+        "$type": "color",
+        "$value": "#f5ffbe"
+      },
+      "red": {
+        "$type": "color",
+        "$value": "#fe1755"
+      }
+    },
+    "vibrant": {
+      "yellow": {
+        "$type": "color",
+        "$value": "#f6c647"
+      },
+      "blue": {
+        "$type": "color",
+        "$value": "#5889f7"
+      },
+      "orange": {
+        "$type": "color",
+        "$value": "#ed7648"
+      },
+      "purple": {
+        "$type": "color",
+        "$value": "#7a78f7"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#4aa35b"
+      },
+      "tan": {
+        "$type": "color",
+        "$value": "#fcf9f2"
+      }
+    },
+    "luxury": {
+      "yellow": {
+        "$type": "color",
+        "$value": "#f3b94d"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#615f36"
+      },
+      "brown": {
+        "$type": "color",
+        "$value": "#372d2b"
+      },
+      "tan": {
+        "$type": "color",
+        "$value": "#fffaeb"
+      },
+      "gray": {
+        "$type": "color",
+        "$value": "#070706"
+      }
+    },
+    "blue": {
+      "blue-dark": {
+        "$type": "color",
+        "$value": "#0e212a"
+      },
+      "blue-light": {
+        "$type": "color",
+        "$value": "#4665f5"
+      },
+      "blue-lighter": {
+        "$type": "color",
+        "$value": "#79b0d9"
+      },
+      "blue-lightest": {
+        "$type": "color",
+        "$value": "#edf2f6"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#79d799"
+      }
+    },
+    "yellow": {
+      "yellow": {
+        "$type": "color",
+        "$value": "#e8ea76"
+      },
+      "yellow-dark": {
+        "$type": "color",
+        "$value": "#d8d96a"
+      },
+      "orange": {
+        "$type": "color",
+        "$value": "#ef8f4b"
+      }
+    },
+    "neon": {
+      "neon-pink": {
+        "$type": "color",
+        "$value": "#ff00cc"
+      },
+      "neon-green": {
+        "$type": "color",
+        "$value": "#42ff00"
+      },
+      "neon-yellow": {
+        "$type": "color",
+        "$value": "#fffc00"
+      },
+      "neon-blue": {
+        "$type": "color",
+        "$value": "#00f6ff"
+      },
+      "neon-orange": {
+        "$type": "color",
+        "$value": "#ff5c00"
+      },
+      "neon-purple": {
+        "$type": "color",
+        "$value": "#ae00ff"
+      }
+    },
+    "orange-green": {
+      "red": {
+        "$type": "color",
+        "$value": "#fd2253"
+      },
+      "orange": {
+        "$type": "color",
+        "$value": "#ff7828"
+      },
+      "orange-light": {
+        "$type": "color",
+        "$value": "#ffae26"
+      },
+      "orange-lightest": {
+        "$type": "color",
+        "$value": "#fef2cd"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#1bb58c"
+      }
+    },
+    "brown-yellow": {
+      "brown": {
+        "$type": "color",
+        "$value": "#322b2f"
+      },
+      "brown-light": {
+        "$type": "color",
+        "$value": "#656153"
+      },
+      "yellow": {
+        "$type": "color",
+        "$value": "#ffa600"
+      },
+      "green-light": {
+        "$type": "color",
+        "$value": "#9eb28d"
+      },
+      "yellow-light": {
+        "$type": "color",
+        "$value": "#fdd595"
+      }
+    },
+    "pastel": {
+      "purple": {
+        "$type": "color",
+        "$value": "#c8aff4"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "#b9fd98"
+      },
+      "blue": {
+        "$type": "color",
+        "$value": "#384ce2"
+      },
+      "light-orange": {
+        "$type": "color",
+        "$value": "#fdf2d5"
+      },
+      "black": {
+        "$type": "color",
+        "$value": "#000000"
+      }
+    }
+  },
+  "font-size": {
+    "5": {
+      "$type": "number",
+      "$value": 5.690000057220459
+    },
+    "10": {
+      "$type": "number",
+      "$value": 6.409999847412109
+    },
+    "15": {
+      "$type": "number",
+      "$value": 8.109999656677246
+    },
+    "20": {
+      "$type": "number",
+      "$value": 9.119999885559082
+    },
+    "25": {
+      "$type": "number",
+      "$value": 10.260000228881836
+    },
+    "50": {
+      "$type": "number",
+      "$value": 11.539999961853027
+    },
+    "75": {
+      "$type": "number",
+      "$value": 14
+    },
+    "100": {
+      "$type": "number",
+      "$value": 16
+    },
+    "200": {
+      "$type": "number",
+      "$value": 18
+    },
+    "300": {
+      "$type": "number",
+      "$value": 20
+    },
+    "400": {
+      "$type": "number",
+      "$value": 22.5
+    },
+    "500": {
+      "$type": "number",
+      "$value": 25.299999237060547
+    },
+    "600": {
+      "$type": "number",
+      "$value": 28.5
+    },
+    "700": {
+      "$type": "number",
+      "$value": 32
+    },
+    "800": {
+      "$type": "number",
+      "$value": 36
+    },
+    "900": {
+      "$type": "number",
+      "$value": 40.5
+    },
+    "1000": {
+      "$type": "number",
+      "$value": 45.5
+    },
+    "1100": {
+      "$type": "number",
+      "$value": 51
+    },
+    "1200": {
+      "$type": "number",
+      "$value": 57.5
+    },
+    "1300": {
+      "$type": "number",
+      "$value": 64.69999694824219
+    },
+    "1400": {
+      "$type": "number",
+      "$value": 72.80000305175781
+    },
+    "1500": {
+      "$type": "number",
+      "$value": 81.9000015258789
+    },
+    "1600": {
+      "$type": "number",
+      "$value": 92.19999694824219
+    },
+    "1700": {
+      "$type": "number",
+      "$value": 103.9000015258789
+    },
+    "1800": {
+      "$type": "number",
+      "$value": 116.9000015258789
+    },
+    "1900": {
+      "$type": "number",
+      "$value": 143
+    },
+    "2000": {
+      "$type": "number",
+      "$value": 171
+    },
+    "2100": {
+      "$type": "number",
+      "$value": 205
+    },
+    "2200": {
+      "$type": "number",
+      "$value": 247
+    },
+    "2300": {
+      "$type": "number",
+      "$value": 296
+    },
+    "2400": {
+      "$type": "number",
+      "$value": 355
+    },
+    "2500": {
+      "$type": "number",
+      "$value": 426
+    },
+    "2600": {
+      "$type": "number",
+      "$value": 515
+    }
+  },
+  "font-line-height": {
+    "none": {
+      "$type": "number",
+      "$value": 0
+    },
+    "tight": {
+      "$type": "number",
+      "$value": 1.100000023841858
+    },
+    "snug": {
+      "$type": "number",
+      "$value": 1.25
+    },
+    "normal": {
+      "$type": "number",
+      "$value": 1.5
+    },
+    "relaxed": {
+      "$type": "number",
+      "$value": 1.75
+    },
+    "loose": {
+      "$type": "number",
+      "$value": 2
+    }
+  },
+  "space": {
+    "0": {
+      "$type": "number",
+      "$value": 0
+    },
+    "25": {
+      "$type": "number",
+      "$value": 1
+    },
+    "50": {
+      "$type": "number",
+      "$value": 2
+    },
+    "100": {
+      "$type": "number",
+      "$value": 4
+    },
+    "150": {
+      "$type": "number",
+      "$value": 6
+    },
+    "200": {
+      "$type": "number",
+      "$value": 8
+    },
+    "250": {
+      "$type": "number",
+      "$value": 10
+    },
+    "300": {
+      "$type": "number",
+      "$value": 12
+    },
+    "350": {
+      "$type": "number",
+      "$value": 14
+    },
+    "400": {
+      "$type": "number",
+      "$value": 16
+    },
+    "450": {
+      "$type": "number",
+      "$value": 18
+    },
+    "500": {
+      "$type": "number",
+      "$value": 20
+    },
+    "600": {
+      "$type": "number",
+      "$value": 24
+    },
+    "700": {
+      "$type": "number",
+      "$value": 28
+    },
+    "800": {
+      "$type": "number",
+      "$value": 32
+    },
+    "900": {
+      "$type": "number",
+      "$value": 36
+    },
+    "1000": {
+      "$type": "number",
+      "$value": 40
+    },
+    "1100": {
+      "$type": "number",
+      "$value": 44
+    },
+    "1200": {
+      "$type": "number",
+      "$value": 48
+    },
+    "1300": {
+      "$type": "number",
+      "$value": 52
+    },
+    "1400": {
+      "$type": "number",
+      "$value": 56
+    },
+    "1500": {
+      "$type": "number",
+      "$value": 60
+    },
+    "1600": {
+      "$type": "number",
+      "$value": 64
+    },
+    "1700": {
+      "$type": "number",
+      "$value": 72
+    },
+    "1800": {
+      "$type": "number",
+      "$value": 80
+    },
+    "1900": {
+      "$type": "number",
+      "$value": 84
+    },
+    "2000": {
+      "$type": "number",
+      "$value": 88
+    },
+    "2100": {
+      "$type": "number",
+      "$value": 96
+    },
+    "2200": {
+      "$type": "number",
+      "$value": 104
+    },
+    "2300": {
+      "$type": "number",
+      "$value": 112
+    },
+    "2400": {
+      "$type": "number",
+      "$value": 128
+    },
+    "2500": {
+      "$type": "number",
+      "$value": 136
+    },
+    "2600": {
+      "$type": "number",
+      "$value": 144
+    },
+    "2700": {
+      "$type": "number",
+      "$value": 152
+    },
+    "2800": {
+      "$type": "number",
+      "$value": 160
+    },
+    "2900": {
+      "$type": "number",
+      "$value": 168
+    },
+    "3000": {
+      "$type": "number",
+      "$value": 176
+    }
+  },
+  "size": {
+    "0": {
+      "$type": "number",
+      "$value": 0
+    },
+    "25": {
+      "$type": "number",
+      "$value": 1
+    },
+    "50": {
+      "$type": "number",
+      "$value": 2
+    },
+    "100": {
+      "$type": "number",
+      "$value": 4
+    },
+    "150": {
+      "$type": "number",
+      "$value": 6
+    },
+    "200": {
+      "$type": "number",
+      "$value": 8
+    },
+    "300": {
+      "$type": "number",
+      "$value": 12
+    },
+    "400": {
+      "$type": "number",
+      "$value": 16
+    },
+    "500": {
+      "$type": "number",
+      "$value": 20
+    },
+    "600": {
+      "$type": "number",
+      "$value": 24
+    },
+    "700": {
+      "$type": "number",
+      "$value": 28
+    },
+    "800": {
+      "$type": "number",
+      "$value": 32
+    },
+    "900": {
+      "$type": "number",
+      "$value": 36
+    },
+    "1000": {
+      "$type": "number",
+      "$value": 40
+    },
+    "1100": {
+      "$type": "number",
+      "$value": 44
+    },
+    "1200": {
+      "$type": "number",
+      "$value": 48
+    },
+    "1300": {
+      "$type": "number",
+      "$value": 48
+    },
+    "1400": {
+      "$type": "number",
+      "$value": 52
+    },
+    "1500": {
+      "$type": "number",
+      "$value": 56
+    },
+    "1600": {
+      "$type": "number",
+      "$value": 60
+    },
+    "1700": {
+      "$type": "number",
+      "$value": 64
+    },
+    "1800": {
+      "$type": "number",
+      "$value": 72
+    },
+    "1900": {
+      "$type": "number",
+      "$value": 80
+    },
+    "2000": {
+      "$type": "number",
+      "$value": 84
+    },
+    "2100": {
+      "$type": "number",
+      "$value": 88
+    },
+    "2200": {
+      "$type": "number",
+      "$value": 96
+    },
+    "pill": {
+      "$type": "number",
+      "$value": 9999
+    },
+    "circle": {
+      "$type": "number",
+      "$value": 99999
+    }
+  },
+  "border-width": {
+    "0": {
+      "$type": "number",
+      "$value": 0
+    },
+    "50": {
+      "$type": "number",
+      "$value": 1
+    },
+    "100": {
+      "$type": "number",
+      "$value": 2
+    },
+    "200": {
+      "$type": "number",
+      "$value": 3
+    },
+    "300": {
+      "$type": "number",
+      "$value": 4
+    },
+    "400": {
+      "$type": "number",
+      "$value": 5
+    },
+    "500": {
+      "$type": "number",
+      "$value": 6
+    }
+  },
+  "border-radius": {
+    "0": {
+      "$type": "number",
+      "$value": 0
+    },
+    "50": {
+      "$type": "number",
+      "$value": 2
+    },
+    "100": {
+      "$type": "number",
+      "$value": 4
+    },
+    "200": {
+      "$type": "number",
+      "$value": 8
+    },
+    "300": {
+      "$type": "number",
+      "$value": 10
+    },
+    "400": {
+      "$type": "number",
+      "$value": 12
+    },
+    "500": {
+      "$type": "number",
+      "$value": 14
+    },
+    "600": {
+      "$type": "number",
+      "$value": 16
+    },
+    "700": {
+      "$type": "number",
+      "$value": 20
+    },
+    "800": {
+      "$type": "number",
+      "$value": 24
+    },
+    "900": {
+      "$type": "number",
+      "$value": 28
+    },
+    "1000": {
+      "$type": "number",
+      "$value": 32
+    },
+    "1100": {
+      "$type": "number",
+      "$value": 36
+    },
+    "1200": {
+      "$type": "number",
+      "$value": 40
+    },
+    "1300": {
+      "$type": "number",
+      "$value": 44
+    },
+    "1400": {
+      "$type": "number",
+      "$value": 48
+    },
+    "pill": {
+      "$type": "number",
+      "$value": 999
+    },
+    "radius-circle": {
+      "$type": "number",
+      "$value": 9999
+    }
+  },
+  "shadow-blur": {
+    "0": {
+      "$type": "number",
+      "$value": 0
+    },
+    "100": {
+      "$type": "number",
+      "$value": 2
+    },
+    "200": {
+      "$type": "number",
+      "$value": 4
+    },
+    "300": {
+      "$type": "number",
+      "$value": 6
+    },
+    "400": {
+      "$type": "number",
+      "$value": 8
+    },
+    "500": {
+      "$type": "number",
+      "$value": 10
+    },
+    "600": {
+      "$type": "number",
+      "$value": 12
+    },
+    "700": {
+      "$type": "number",
+      "$value": 14
+    },
+    "800": {
+      "$type": "number",
+      "$value": 16
+    }
+  },
+  "shadow-offset": {
+    "0": {
+      "$type": "number",
+      "$value": 0
+    },
+    "25": {
+      "$type": "number",
+      "$value": -4
+    },
+    "50": {
+      "$type": "number",
+      "$value": -2
+    },
+    "100": {
+      "$type": "number",
+      "$value": 2
+    },
+    "200": {
+      "$type": "number",
+      "$value": 4
+    },
+    "300": {
+      "$type": "number",
+      "$value": 8
+    },
+    "400": {
+      "$type": "number",
+      "$value": 10
+    },
+    "500": {
+      "$type": "number",
+      "$value": 12
+    },
+    "600": {
+      "$type": "number",
+      "$value": 16
+    }
+  },
+  "shadow-spread": {
+    "0": {
+      "$type": "number",
+      "$value": 0
+    },
+    "100": {
+      "$type": "number",
+      "$value": 2
+    },
+    "200": {
+      "$type": "number",
+      "$value": 4
+    },
+    "300": {
+      "$type": "number",
+      "$value": 8
+    },
+    "400": {
+      "$type": "number",
+      "$value": 10
+    },
+    "500": {
+      "$type": "number",
+      "$value": 12
+    },
+    "600": {
+      "$type": "number",
+      "$value": 14
+    },
+    "700": {
+      "$type": "number",
+      "$value": 16
+    }
+  }
+}
+color.light.tokens.json
+{
+  "text": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.darkest}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.dark}"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "{color.grayscale.light}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "on-color": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "accent-yellow": {
+      "$type": "color",
+      "$value": "{color.system.yellow}"
+    },
+    "accent-blue": {
+      "$type": "color",
+      "$value": "{color.system.blue}"
+    },
+    "accent-green": {
+      "$type": "color",
+      "$value": "{color.system.green}"
+    },
+    "accent-purple": {
+      "$type": "color",
+      "$value": "{color.system.purple}"
+    },
+    "accent-red": {
+      "$type": "color",
+      "$value": "{color.system.red}"
+    }
+  },
+  "border": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.lighter}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.dark}"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "{color.grayscale.light}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    },
+    "on-color": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    }
+  },
+  "background": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.dark}"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "{color.grayscale.light}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "on-color": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "accent-yellow": {
+      "$type": "color",
+      "$value": "{color.system.yellow}"
+    },
+    "accent-blue": {
+      "$type": "color",
+      "$value": "{color.system.blue}"
+    },
+    "accent-green": {
+      "$type": "color",
+      "$value": "{color.system.green}"
+    },
+    "accent-purple": {
+      "$type": "color",
+      "$value": "{color.system.purple}"
+    },
+    "accent-red": {
+      "$type": "color",
+      "$value": "{color.system.red}"
+    },
+    "input": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    }
+  },
+  "surface": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.black}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.lighter}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    }
+  },
+  "page": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.lighter}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.black}"
+    }
+  }
+}
+color.dark.tokens.json
+{
+  "text": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.darkest}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.dark}"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "{color.grayscale.light}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "on-color": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "accent-yellow": {
+      "$type": "color",
+      "$value": "{color.system.yellow}"
+    },
+    "accent-blue": {
+      "$type": "color",
+      "$value": "{color.system.blue}"
+    },
+    "accent-green": {
+      "$type": "color",
+      "$value": "{color.system.green}"
+    },
+    "accent-purple": {
+      "$type": "color",
+      "$value": "{color.system.purple}"
+    },
+    "accent-red": {
+      "$type": "color",
+      "$value": "{color.system.red}"
+    }
+  },
+  "border": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.lighter}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.dark}"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "{color.grayscale.light}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    },
+    "on-color": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    }
+  },
+  "background": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.dark}"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "{color.grayscale.light}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "on-color": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "accent-yellow": {
+      "$type": "color",
+      "$value": "{color.system.yellow}"
+    },
+    "accent-blue": {
+      "$type": "color",
+      "$value": "{color.system.blue}"
+    },
+    "accent-green": {
+      "$type": "color",
+      "$value": "{color.system.green}"
+    },
+    "accent-purple": {
+      "$type": "color",
+      "$value": "{color.system.purple}"
+    },
+    "accent-red": {
+      "$type": "color",
+      "$value": "{color.system.red}"
+    },
+    "input": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    }
+  },
+  "surface": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.black}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.lighter}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    }
+  },
+  "page": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.grayscale.white}"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{color.grayscale.lighter}"
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{theme.blue.blue-light}"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{color.grayscale.black}"
+    }
+  }
+}
+border-radius.sharp.tokens.json
+{
+  "none": {
+    "$type": "number",
+    "$value": "{border-radius.0}"
+  },
+  "sm": {
+    "$type": "number",
+    "$value": "{border-radius.50}"
+  },
+  "md": {
+    "$type": "number",
+    "$value": "{border-radius.100}"
+  },
+  "lg": {
+    "$type": "number",
+    "$value": "{border-radius.200}"
+  }
+}
+border-radius.soft.tokens.json
+{
+  "none": {
+    "$type": "number",
+    "$value": "{border-radius.0}"
+  },
+  "sm": {
+    "$type": "number",
+    "$value": "{border-radius.200}"
+  },
+  "md": {
+    "$type": "number",
+    "$value": "{border-radius.400}"
+  },
+  "lg": {
+    "$type": "number",
+    "$value": "{border-radius.600}"
+  }
+}
+border-radius.softest.tokens.json
+{
+  "none": {
+    "$type": "number",
+    "$value": "{border-radius.0}"
+  },
+  "sm": {
+    "$type": "number",
+    "$value": "{border-radius.800}"
+  },
+  "md": {
+    "$type": "number",
+    "$value": "{border-radius.1200}"
+  },
+  "lg": {
+    "$type": "number",
+    "$value": "{border-radius.pill}"
+  }
+}
+spacing.default.tokens.json
+{
+  "gap": {
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.100}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.600}"
+    }
+  },
+  "padding": {
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.600}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.800}"
+    },
+    "huge": {
+      "$type": "number",
+      "$value": "{space.1200}"
+    }
+  },
+  "_gap": {
+    "auto": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.25}"
+    },
+    "xs": {
+      "$type": "number",
+      "$value": "{space.50}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.100}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.300}"
+    },
+    "xl": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "xxl": {
+      "$type": "number",
+      "$value": "{space.500}"
+    },
+    "huge": {
+      "$type": "number",
+      "$value": "{space.1100}"
+    }
+  }
+}
+spacing.compact.tokens.json
+{
+  "gap": {
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.50}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.100}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.400}"
+    }
+  },
+  "padding": {
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.100}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.600}"
+    },
+    "huge": {
+      "$type": "number",
+      "$value": "{space.1600}"
+    }
+  },
+  "_gap": {
+    "auto": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.25}"
+    },
+    "xs": {
+      "$type": "number",
+      "$value": "{space.50}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.100}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.300}"
+    },
+    "xl": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "xxl": {
+      "$type": "number",
+      "$value": "{space.500}"
+    },
+    "huge": {
+      "$type": "number",
+      "$value": "{space.1100}"
+    }
+  }
+}
+spacing.comfortable.tokens.json
+{
+  "gap": {
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.800}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.1000}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.1200}"
+    }
+  },
+  "padding": {
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.600}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.800}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.1000}"
+    },
+    "huge": {
+      "$type": "number",
+      "$value": "{space.1800}"
+    }
+  },
+  "_gap": {
+    "auto": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.25}"
+    },
+    "xs": {
+      "$type": "number",
+      "$value": "{space.50}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.100}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.300}"
+    },
+    "xl": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "xxl": {
+      "$type": "number",
+      "$value": "{space.500}"
+    },
+    "huge": {
+      "$type": "number",
+      "$value": "{space.1100}"
+    }
+  }
+}
+spacing.spacious.tokens.json
+{
+  "gap": {
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.1200}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.1400}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.1600}"
+    }
+  },
+  "padding": {
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.600}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.800}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.1000}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.1200}"
+    },
+    "huge": {
+      "$type": "number",
+      "$value": "{space.2000}"
+    }
+  },
+  "_gap": {
+    "auto": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "none": {
+      "$type": "number",
+      "$value": "{space.0}"
+    },
+    "tiny": {
+      "$type": "number",
+      "$value": "{space.25}"
+    },
+    "xs": {
+      "$type": "number",
+      "$value": "{space.50}"
+    },
+    "sm": {
+      "$type": "number",
+      "$value": "{space.100}"
+    },
+    "md": {
+      "$type": "number",
+      "$value": "{space.200}"
+    },
+    "lg": {
+      "$type": "number",
+      "$value": "{space.300}"
+    },
+    "xl": {
+      "$type": "number",
+      "$value": "{space.400}"
+    },
+    "xxl": {
+      "$type": "number",
+      "$value": "{space.500}"
+    },
+    "huge": {
+      "$type": "number",
+      "$value": "{space.1100}"
+    }
+  }
+}
+icon.solid.tokens.json
+{}
+icon.outline.tokens.json
+{}
+breakpoint.Mode 1.tokens.json
+{
+  "web": {
+    "$type": "number",
+    "$value": 1200
+  },
+  "tablet": {
+    "$type": "number",
+    "$value": 768
+  },
+  "mobile": {
+    "$type": "number",
+    "$value": 320
+  }
+}
+elevation.None.tokens.json
+{
+  "elevation-01": {
+    "$type": "number",
+    "$value": 0
+  },
+  "elevation-02": {
+    "$type": "number",
+    "$value": 0
+  },
+  "elevation-03": {
+    "$type": "number",
+    "$value": 0
+  },
+  "elevation-04": {
+    "$type": "number",
+    "$value": 0
+  },
+  "elevation-05": {
+    "$type": "number",
+    "$value": 0
+  },
+  "elevation-06": {
+    "$type": "number",
+    "$value": 0
+  },
+  "elevation-07": {
+    "$type": "number",
+    "$value": 0
+  },
+  "elevation-08": {
+    "$type": "number",
+    "$value": 0
+  },
+  "blur-radius": {
+    "xl": {
+      "$type": "number",
+      "$value": 16
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 14
+    },
+    "md": {
+      "$type": "number",
+      "$value": 12
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 8
+    }
+  },
+  "box-shadow": {
+    "xl": {
+      "$type": "number",
+      "$value": 12
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 8
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 2
+    },
+    "md": {
+      "$type": "number",
+      "$value": 8
+    },
+    "popover": {
+      "$type": "number",
+      "$value": 12
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 14
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 12
+    }
+  }
+}
+elevation.Low.tokens.json
+{
+  "elevation-01": {
+    "$type": "number",
+    "$value": 1
+  },
+  "elevation-02": {
+    "$type": "number",
+    "$value": 1
+  },
+  "elevation-03": {
+    "$type": "number",
+    "$value": 2
+  },
+  "elevation-04": {
+    "$type": "number",
+    "$value": 2
+  },
+  "elevation-05": {
+    "$type": "number",
+    "$value": 3
+  },
+  "elevation-06": {
+    "$type": "number",
+    "$value": 4
+  },
+  "elevation-07": {
+    "$type": "number",
+    "$value": 6
+  },
+  "elevation-08": {
+    "$type": "number",
+    "$value": 8
+  },
+  "blur-radius": {
+    "xl": {
+      "$type": "number",
+      "$value": 16
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 14
+    },
+    "md": {
+      "$type": "number",
+      "$value": 12
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 8
+    }
+  },
+  "box-shadow": {
+    "xl": {
+      "$type": "number",
+      "$value": 12
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 8
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 2
+    },
+    "md": {
+      "$type": "number",
+      "$value": 8
+    },
+    "popover": {
+      "$type": "number",
+      "$value": 12
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 14
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 12
+    }
+  }
+}
+elevation.Mid.tokens.json
+{
+  "elevation-01": {
+    "$type": "number",
+    "$value": 1
+  },
+  "elevation-02": {
+    "$type": "number",
+    "$value": 2
+  },
+  "elevation-03": {
+    "$type": "number",
+    "$value": 3
+  },
+  "elevation-04": {
+    "$type": "number",
+    "$value": 4
+  },
+  "elevation-05": {
+    "$type": "number",
+    "$value": 6
+  },
+  "elevation-06": {
+    "$type": "number",
+    "$value": 8
+  },
+  "elevation-07": {
+    "$type": "number",
+    "$value": 12
+  },
+  "elevation-08": {
+    "$type": "number",
+    "$value": 16
+  },
+  "blur-radius": {
+    "xl": {
+      "$type": "number",
+      "$value": 16
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 14
+    },
+    "md": {
+      "$type": "number",
+      "$value": 12
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 8
+    }
+  },
+  "box-shadow": {
+    "xl": {
+      "$type": "number",
+      "$value": 12
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 8
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 2
+    },
+    "md": {
+      "$type": "number",
+      "$value": 8
+    },
+    "popover": {
+      "$type": "number",
+      "$value": 12
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 14
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 12
+    }
+  }
+}
+elevation.High.tokens.json
+{
+  "elevation-01": {
+    "$type": "number",
+    "$value": 2
+  },
+  "elevation-02": {
+    "$type": "number",
+    "$value": 4
+  },
+  "elevation-03": {
+    "$type": "number",
+    "$value": 6
+  },
+  "elevation-04": {
+    "$type": "number",
+    "$value": 8
+  },
+  "elevation-05": {
+    "$type": "number",
+    "$value": 12
+  },
+  "elevation-06": {
+    "$type": "number",
+    "$value": 16
+  },
+  "elevation-07": {
+    "$type": "number",
+    "$value": 24
+  },
+  "elevation-08": {
+    "$type": "number",
+    "$value": 32
+  },
+  "blur-radius": {
+    "xl": {
+      "$type": "number",
+      "$value": 16
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 14
+    },
+    "md": {
+      "$type": "number",
+      "$value": 12
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 8
+    }
+  },
+  "box-shadow": {
+    "xl": {
+      "$type": "number",
+      "$value": 12
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 8
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 2
+    },
+    "md": {
+      "$type": "number",
+      "$value": 8
+    },
+    "popover": {
+      "$type": "number",
+      "$value": 12
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 14
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 12
+    }
+  }
+}
+typography.Value.tokens.json
+{
+  "huge": {
+    "$type": "number",
+    "$value": "{font-size.500}"
+  },
+  "xl": {
+    "$type": "number",
+    "$value": "{font-size.400}"
+  },
+  "lg": {
+    "$type": "number",
+    "$value": "{font-size.300}"
+  },
+  "md": {
+    "$type": "number",
+    "$value": "{font-size.200}"
+  },
+  "sm": {
+    "$type": "number",
+    "$value": "{font-size.100}"
+  },
+  "xs": {
+    "$type": "number",
+    "$value": "{font-size.75}"
+  },
+  "tiny": {
+    "$type": "number",
+    "$value": "{font-size.50}"
+  },
+  "_typography": {
+    "display": {
+      "xl": {
+        "$type": "number",
+        "$value": "{font-size.1800}"
+      },
+      "lg": {
+        "$type": "number",
+        "$value": "{font-size.1600}"
+      },
+      "md": {
+        "$type": "number",
+        "$value": "{font-size.1500}"
+      },
+      "sm": {
+        "$type": "number",
+        "$value": "{font-size.1400}"
+      }
+    },
+    "heading": {
+      "huge": {
+        "$type": "number",
+        "$value": "{font-size.1000}"
+      },
+      "xxl": {
+        "$type": "number",
+        "$value": "{font-size.900}"
+      },
+      "xl": {
+        "$type": "number",
+        "$value": "{font-size.800}"
+      },
+      "lg": {
+        "$type": "number",
+        "$value": "{font-size.700}"
+      },
+      "md": {
+        "$type": "number",
+        "$value": "{font-size.600}"
+      },
+      "sm": {
+        "$type": "number",
+        "$value": "{font-size.500}"
+      },
+      "tiny": {
+        "$type": "number",
+        "$value": "{font-size.400}"
+      }
+    },
+    "body": {
+      "huge": {
+        "$type": "number",
+        "$value": "{font-size.500}"
+      },
+      "xl": {
+        "$type": "number",
+        "$value": "{font-size.300}"
+      },
+      "lg": {
+        "$type": "number",
+        "$value": "{font-size.200}"
+      },
+      "md": {
+        "$type": "number",
+        "$value": "{font-size.100}"
+      },
+      "sm": {
+        "$type": "number",
+        "$value": "{font-size.75}"
+      },
+      "xs": {
+        "$type": "number",
+        "$value": "{font-size.50}"
+      },
+      "tiny": {
+        "$type": "number",
+        "$value": "{font-size.25}"
+      }
+    },
+    "label": {
+      "xl": {
+        "$type": "number",
+        "$value": "{font-size.300}"
+      },
+      "lg": {
+        "$type": "number",
+        "$value": "{font-size.200}"
+      },
+      "md": {
+        "$type": "number",
+        "$value": "{font-size.100}"
+      },
+      "sm": {
+        "$type": "number",
+        "$value": "{font-size.75}"
+      },
+      "xs": {
+        "$type": "number",
+        "$value": "{font-size.50}"
+      },
+      "tiny": {
+        "$type": "number",
+        "$value": "{font-size.25}"
+      }
+    },
+    "icon": {
+      "huge": {
+        "$type": "number",
+        "$value": "{font-size.500}"
+      },
+      "xl": {
+        "$type": "number",
+        "$value": "{font-size.400}"
+      },
+      "lg": {
+        "$type": "number",
+        "$value": "{font-size.300}"
+      },
+      "md": {
+        "$type": "number",
+        "$value": "{font-size.200}"
+      },
+      "sm": {
+        "$type": "number",
+        "$value": "{font-size.100}"
+      },
+      "xs": {
+        "$type": "number",
+        "$value": "{font-size.75}"
+      },
+      "tiny": {
+        "$type": "number",
+        "$value": "{font-size.50}"
+      }
+    }
+  }
+}
+border-width.Mode 1.tokens.json
+{
+  "none": {
+    "$type": "number",
+    "$value": 0
+  },
+  "normal": {
+    "$type": "number",
+    "$value": 1
+  },
+  "thick": {
+    "$type": "number",
+    "$value": 2
+  },
+  "thicker": {
+    "$type": "number",
+    "$value": 3
+  },
+  "thickest": {
+    "$type": "number",
+    "$value": 4
+  },
+  "thin": {
+    "$type": "number",
+    "$value": 0.5
+  }
+}
+motion.Mode 1.tokens.json
+{}
