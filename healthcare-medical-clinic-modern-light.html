@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harmony Family Medicine - Modern Light Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       HEALTHCARE TEMPLATE: MEDICAL CLINIC
+       Style: Modern Light
+       Industry: Medical / Healthcare
+       Tokens: Based on templates/shared/TOKENS.md
+       =========================================== */
+
+    :root {
+      /* Spacing - Standard scale (xs through 3xl) */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+
+      /* Colors - Healthcare Blue */
+      --color-primary: #0066cc;
+      --color-primary-dark: #004d99;
+      --color-primary-light: #e6f0fa;
+      --color-secondary: #00a3b4;
+      --color-accent: #2ecc71;
+      --color-text-primary: #1a1a2e;
+      --color-text-secondary: #4a4a68;
+      --color-text-muted: #8888a4;
+      --color-bg-primary: #ffffff;
+      --color-bg-secondary: #f8fafc;
+      --color-bg-subtle: #f1f5f9;
+      --color-border: #e2e8f0;
+      --color-border-light: #f1f5f9;
+      --color-white: #ffffff;
+
+      /* Typography - Standard scale (xs through 3xl) */
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-md: 1rem;
+      --font-size-lg: 1.25rem;
+      --font-size-xl: 1.75rem;
+      --font-size-2xl: 2.5rem;
+      --font-size-3xl: 3.5rem;
+
+      /* Border Radius - Standard scale */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-pill: 999px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.12);
+      --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
+
+      /* Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.25s ease;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-family);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      background: var(--color-bg-primary);
+    }
+
+    /* Layout */
+    [class^="section-"] { padding: var(--space-3xl) var(--space-lg); }
+    .container_sm { max-width: 640px; margin: 0 auto; padding: 0 var(--space-lg); }
+    .container_md { max-width: 960px; margin: 0 auto; padding: 0 var(--space-lg); }
+    .container_lg { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-lg); }
+
+    .layout { display: flex; gap: var(--space-2xl); align-items: center; }
+    .layout-reverse { flex-direction: row-reverse; }
+    .layout-grid { display: grid; gap: var(--space-xl); }
+    .layout-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .layout-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .layout-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .content-wrapper { flex: 1; }
+    .image-wrapper { flex: 1; }
+    .button-wrapper { display: flex; gap: var(--space-md); margin-top: var(--space-lg); flex-wrap: wrap; }
+
+    /* Typography */
+    .heading-xl { font-size: var(--font-size-3xl); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+    .heading-lg { font-size: var(--font-size-2xl); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+    .heading-md { font-size: var(--font-size-xl); font-weight: 600; line-height: 1.3; }
+    .heading-sm { font-size: var(--font-size-lg); font-weight: 600; line-height: 1.4; }
+    .body-lg { font-size: var(--font-size-lg); line-height: 1.7; color: var(--color-text-secondary); }
+    .body-md { font-size: var(--font-size-md); line-height: 1.6; color: var(--color-text-secondary); }
+    .body-sm { font-size: var(--font-size-sm); line-height: 1.5; color: var(--color-text-muted); }
+    .eyebrow { font-size: var(--font-size-sm); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-primary); margin-bottom: var(--space-md); display: block; }
+    .text-center { text-align: center; }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: var(--space-sm);
+      background: var(--color-primary); color: var(--color-white);
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-pill);
+      text-decoration: none; font-weight: 600; font-size: var(--font-size-md);
+      transition: all var(--transition-base);
+      border: none; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--color-primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: var(--space-sm);
+      background: transparent; color: var(--color-text-primary);
+      padding: var(--space-md) var(--space-xl);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      text-decoration: none; font-weight: 600; font-size: var(--font-size-md);
+      transition: all var(--transition-base); cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+    .btn-phone {
+      display: inline-flex; align-items: center; gap: var(--space-sm);
+      background: var(--color-accent); color: var(--color-white);
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-pill);
+      text-decoration: none; font-weight: 600; font-size: var(--font-size-md);
+      transition: all var(--transition-base);
+    }
+    .btn-phone:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+    /* Cards */
+    .card-wrapper {
+      background: var(--color-bg-primary);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      transition: all var(--transition-base);
+    }
+    .card-wrapper:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+
+    .card-service {
+      background: var(--color-bg-primary);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+    }
+    .card-service:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .card-service-image { width: 100%; height: 200px; object-fit: cover; }
+    .card-service-content { padding: var(--space-lg); }
+
+    /* Feature Icon */
+    .feature-icon {
+      width: 56px; height: 56px;
+      background: var(--color-primary-light);
+      border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: var(--space-lg);
+    }
+    .feature-icon svg { width: 28px; height: 28px; stroke: var(--color-primary); }
+
+    /* Nav */
+    .nav-wrapper { display: flex; align-items: center; justify-content: space-between; padding: var(--space-lg) 0; }
+    .nav-links { display: flex; gap: var(--space-xl); list-style: none; }
+    .nav-link { color: var(--color-text-secondary); text-decoration: none; font-weight: 500; font-size: var(--font-size-md); transition: color var(--transition-fast); }
+    .nav-link:hover { color: var(--color-primary); }
+    .logo { font-size: var(--font-size-xl); font-weight: 700; color: var(--color-primary); text-decoration: none; }
+
+    /* Section backgrounds */
+    .section-light { background: var(--color-bg-secondary); }
+    .section-gradient { background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%); }
+
+    /* Stats */
+    .stat-card { background: var(--color-bg-primary); border-radius: var(--radius-xl); padding: var(--space-xl); text-align: center; box-shadow: var(--shadow-sm); }
+    .stat-number { font-size: var(--font-size-2xl); font-weight: 700; color: var(--color-primary); display: block; margin-bottom: var(--space-xs); }
+
+    /* Testimonial */
+    .testimonial-card { background: var(--color-bg-primary); border-radius: var(--radius-xl); padding: var(--space-2xl); box-shadow: var(--shadow-lg); }
+    .testimonial-text { font-size: var(--font-size-xl); line-height: 1.6; color: var(--color-text-primary); margin-bottom: var(--space-xl); font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: var(--space-md); }
+    .author-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--color-primary-light); }
+
+    /* Process Steps */
+    .process-step { display: flex; gap: var(--space-lg); align-items: flex-start; }
+    .step-number { width: 48px; height: 48px; background: var(--color-primary); color: var(--color-white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: var(--font-size-lg); flex-shrink: 0; }
+    .step-content { flex: 1; }
+
+    /* Badge */
+    .badge { display: inline-flex; align-items: center; gap: var(--space-sm); padding: var(--space-xs) var(--space-md); background: var(--color-primary-light); border-radius: var(--radius-pill); font-size: var(--font-size-sm); font-weight: 500; color: var(--color-primary); margin-bottom: var(--space-lg); }
+
+    /* Contact Info */
+    .contact-bar { background: var(--color-primary); color: var(--color-white); padding: var(--space-sm) 0; }
+    .contact-bar-content { display: flex; justify-content: space-between; align-items: center; }
+    .contact-item { display: flex; align-items: center; gap: var(--space-sm); font-size: var(--font-size-sm); }
+
+    /* Footer */
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--space-2xl); }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); }
+    .footer-link { color: var(--color-text-secondary); text-decoration: none; font-size: var(--font-size-sm); transition: color var(--transition-fast); }
+    .footer-link:hover { color: var(--color-primary); }
+    .footer-heading { font-weight: 600; margin-bottom: var(--space-md); font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* Insurance logos */
+    .insurance-grid { display: flex; gap: var(--space-xl); align-items: center; justify-content: center; flex-wrap: wrap; opacity: 0.6; }
+    .insurance-logo { height: 32px; filter: grayscale(1); transition: all var(--transition-base); }
+    .insurance-logo:hover { filter: grayscale(0); opacity: 1; }
+
+    @media (max-width: 768px) {
+      .layout, .layout-reverse { flex-direction: column; }
+      .layout-grid-2, .layout-grid-3, .layout-grid-4 { grid-template-columns: 1fr; }
+      .heading-xl { font-size: var(--font-size-2xl); }
+      .footer-grid { grid-template-columns: 1fr; }
+      .contact-bar-content { flex-direction: column; gap: var(--space-sm); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CONTACT BAR -->
+  <div id="section-contact-bar" class="contact-bar">
+    <div id="container-contact-bar" class="container_lg">
+      <div class="contact-bar-content">
+        <div style="display: flex; gap: var(--space-xl);">
+          <span class="contact-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            (555) 123-4567
+          </span>
+          <span class="contact-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Mon-Fri: 8AM-6PM | Sat: 9AM-2PM
+          </span>
+        </div>
+        <span class="contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          123 Medical Center Drive, Suite 100
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header id="section-nav" class="section-nav" style="padding: var(--space-md) var(--space-lg); background: var(--color-bg-primary); border-bottom: 1px solid var(--color-border-light); position: sticky; top: 0; z-index: 100;">
+    <div id="container-nav" class="container_lg">
+      <nav id="nav-wrapper" class="nav-wrapper">
+        <a id="logo" class="logo" href="#">Harmony Family Medicine</a>
+        <ul id="nav-links" class="nav-links">
+          <li><a class="nav-link" href="#">Services</a></li>
+          <li><a class="nav-link" href="#">Our Team</a></li>
+          <li><a class="nav-link" href="#">Patient Portal</a></li>
+          <li><a class="nav-link" href="#">Insurance</a></li>
+          <li><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+        <a id="btn-primary-nav" class="btn-primary" href="#">Book Appointment</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="section-hero" class="section-hero">
+    <div id="container-hero" class="container_lg">
+      <div id="layout-hero" class="layout">
+        <div id="content-wrapper-hero" class="content-wrapper">
+          <div class="badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Accepting New Patients
+          </div>
+          <h1 id="heading-xl-hero" class="heading-xl">Compassionate Care for Your Whole Family</h1>
+          <p id="body-lg-hero" class="body-lg" style="margin-top: var(--space-lg);">
+            From newborns to seniors, our dedicated team provides comprehensive primary care services in a warm, welcoming environment.
+          </p>
+          <div id="button-wrapper-hero" class="button-wrapper">
+            <a class="btn-primary" href="#">
+              Schedule Visit
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a class="btn-phone" href="tel:5551234567">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call Now
+            </a>
+          </div>
+        </div>
+        <div id="image-wrapper-hero" class="image-wrapper">
+          <img style="width: 100%; border-radius: var(--radius-xl); box-shadow: var(--shadow-xl);" src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=600&h=500&fit=crop" alt="Friendly doctor with patient">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS SECTION -->
+  <section id="section-stats" class="section-stats section-light">
+    <div id="container-stats" class="container_lg">
+      <div class="layout-grid layout-grid-4">
+        <div class="stat-card">
+          <span class="stat-number">25+</span>
+          <p class="body-md">Years Serving Our Community</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">15,000+</span>
+          <p class="body-md">Patients Treated</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">4.9/5</span>
+          <p class="body-md">Patient Rating</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">Same Day</span>
+          <p class="body-md">Appointments Available</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES SECTION -->
+  <section id="section-services" class="section-services">
+    <div id="container-services" class="container_lg">
+      <div class="content-wrapper text-center" style="max-width: 700px; margin: 0 auto var(--space-3xl);">
+        <span class="eyebrow">Our Services</span>
+        <h2 class="heading-lg">Comprehensive Care Under One Roof</h2>
+        <p class="body-lg" style="margin-top: var(--space-md);">
+          From preventive care to chronic disease management, we offer a full range of services to keep your family healthy.
+        </p>
+      </div>
+      <div class="layout-grid layout-grid-3">
+        <div class="card-service">
+          <img class="card-service-image" src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=200&fit=crop" alt="Preventive Care">
+          <div class="card-service-content">
+            <h3 class="heading-md">Preventive Care</h3>
+            <p class="body-md" style="margin-top: var(--space-sm);">Annual wellness exams, immunizations, and health screenings to keep you at your best.</p>
+          </div>
+        </div>
+        <div class="card-service">
+          <img class="card-service-image" src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=200&fit=crop" alt="Chronic Care">
+          <div class="card-service-content">
+            <h3 class="heading-md">Chronic Care Management</h3>
+            <p class="body-md" style="margin-top: var(--space-sm);">Ongoing support for diabetes, hypertension, heart disease, and other chronic conditions.</p>
+          </div>
+        </div>
+        <div class="card-service">
+          <img class="card-service-image" src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400&h=200&fit=crop" alt="Pediatrics">
+          <div class="card-service-content">
+            <h3 class="heading-md">Pediatric Care</h3>
+            <p class="body-md" style="margin-top: var(--space-sm);">Comprehensive care for children from newborn through adolescence.</p>
+          </div>
+        </div>
+        <div class="card-service">
+          <img class="card-service-image" src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=200&fit=crop" alt="Women's Health">
+          <div class="card-service-content">
+            <h3 class="heading-md">Women's Health</h3>
+            <p class="body-md" style="margin-top: var(--space-sm);">Annual exams, family planning, prenatal care, and menopause management.</p>
+          </div>
+        </div>
+        <div class="card-service">
+          <img class="card-service-image" src="https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=200&fit=crop" alt="Mental Health">
+          <div class="card-service-content">
+            <h3 class="heading-md">Behavioral Health</h3>
+            <p class="body-md" style="margin-top: var(--space-sm);">Depression, anxiety, and stress management integrated into your primary care.</p>
+          </div>
+        </div>
+        <div class="card-service">
+          <img class="card-service-image" src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=400&h=200&fit=crop" alt="Telehealth">
+          <div class="card-service-content">
+            <h3 class="heading-md">Telehealth Visits</h3>
+            <p class="body-md" style="margin-top: var(--space-sm);">Convenient virtual appointments from the comfort of your home.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US SECTION -->
+  <section id="section-why" class="section-why section-light">
+    <div id="container-why" class="container_lg">
+      <div class="layout">
+        <div class="image-wrapper">
+          <img style="width: 100%; border-radius: var(--radius-xl);" src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?w=500&h=600&fit=crop" alt="Medical team">
+        </div>
+        <div class="content-wrapper">
+          <span class="eyebrow">Why Choose Us</span>
+          <h2 class="heading-lg">Patient-Centered Care That Makes a Difference</h2>
+          <p class="body-lg" style="margin-top: var(--space-md); margin-bottom: var(--space-xl);">
+            We believe healthcare should be personal, accessible, and focused on your unique needs.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: var(--space-lg);">
+            <div class="process-step">
+              <div class="feature-icon" style="margin-bottom: 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+              <div class="step-content">
+                <h3 class="heading-sm">Personalized Attention</h3>
+                <p class="body-md">We take time to listen and understand your health goals.</p>
+              </div>
+            </div>
+            <div class="process-step">
+              <div class="feature-icon" style="margin-bottom: 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="step-content">
+                <h3 class="heading-sm">Convenient Scheduling</h3>
+                <p class="body-md">Same-day appointments and extended hours available.</p>
+              </div>
+            </div>
+            <div class="process-step">
+              <div class="feature-icon" style="margin-bottom: 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="step-content">
+                <h3 class="heading-sm">Experienced Team</h3>
+                <p class="body-md">Board-certified physicians and caring support staff.</p>
+              </div>
+            </div>
+            <div class="process-step">
+              <div class="feature-icon" style="margin-bottom: 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+              <div class="step-content">
+                <h3 class="heading-sm">Modern Technology</h3>
+                <p class="body-md">Online scheduling, patient portal, and telehealth options.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS SECTION -->
+  <section id="section-process" class="section-process">
+    <div id="container-process" class="container_lg">
+      <div class="content-wrapper text-center" style="max-width: 700px; margin: 0 auto var(--space-3xl);">
+        <span class="eyebrow">Getting Started</span>
+        <h2 class="heading-lg">Your First Visit Made Easy</h2>
+        <p class="body-lg" style="margin-top: var(--space-md);">We've streamlined the process so you can focus on your health, not paperwork.</p>
+      </div>
+      <div class="layout-grid layout-grid-3">
+        <div class="card-wrapper text-center">
+          <div class="step-number" style="margin: 0 auto var(--space-lg);">1</div>
+          <h3 class="heading-md">Book Online or Call</h3>
+          <p class="body-md" style="margin-top: var(--space-sm);">Schedule your appointment through our website or give us a call. We'll find a time that works for you.</p>
+        </div>
+        <div class="card-wrapper text-center">
+          <div class="step-number" style="margin: 0 auto var(--space-lg);">2</div>
+          <h3 class="heading-md">Complete Forms Online</h3>
+          <p class="body-md" style="margin-top: var(--space-sm);">Fill out your new patient paperwork from home through our secure patient portal.</p>
+        </div>
+        <div class="card-wrapper text-center">
+          <div class="step-number" style="margin: 0 auto var(--space-lg);">3</div>
+          <h3 class="heading-md">Meet Your Care Team</h3>
+          <p class="body-md" style="margin-top: var(--space-sm);">Arrive 15 minutes early for your comprehensive initial consultation with your provider.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL SECTION -->
+  <section id="section-testimonial" class="section-testimonial section-light">
+    <div id="container-testimonial" class="container_md">
+      <div class="testimonial-card text-center">
+        <p class="testimonial-text">
+          "Dr. Martinez and her team have been caring for our family for over 10 years. They truly know us, remember our history, and always make us feel heard. This is what healthcare should be."
+        </p>
+        <div class="testimonial-author" style="justify-content: center;">
+          <div class="author-avatar"></div>
+          <div style="text-align: left;">
+            <p class="heading-sm" style="margin-bottom: 0;">Jennifer Thompson</p>
+            <p class="body-sm">Patient since 2014</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSURANCE SECTION -->
+  <section id="section-insurance" class="section-insurance">
+    <div id="container-insurance" class="container_lg">
+      <div class="text-center" style="margin-bottom: var(--space-xl);">
+        <span class="eyebrow">Insurance</span>
+        <h2 class="heading-md">We Accept Most Major Insurance Plans</h2>
+      </div>
+      <div class="insurance-grid">
+        <span style="font-weight: 600; padding: var(--space-md) var(--space-lg); background: var(--color-bg-secondary); border-radius: var(--radius-md);">Blue Cross</span>
+        <span style="font-weight: 600; padding: var(--space-md) var(--space-lg); background: var(--color-bg-secondary); border-radius: var(--radius-md);">Aetna</span>
+        <span style="font-weight: 600; padding: var(--space-md) var(--space-lg); background: var(--color-bg-secondary); border-radius: var(--radius-md);">Cigna</span>
+        <span style="font-weight: 600; padding: var(--space-md) var(--space-lg); background: var(--color-bg-secondary); border-radius: var(--radius-md);">United</span>
+        <span style="font-weight: 600; padding: var(--space-md) var(--space-lg); background: var(--color-bg-secondary); border-radius: var(--radius-md);">Medicare</span>
+        <span style="font-weight: 600; padding: var(--space-md) var(--space-lg); background: var(--color-bg-secondary); border-radius: var(--radius-md);">Humana</span>
+      </div>
+      <p class="body-md text-center" style="margin-top: var(--space-lg);">Don't see your plan? <a href="#" style="color: var(--color-primary);">Contact us</a> to verify coverage.</p>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section id="section-cta" class="section-cta" style="background: var(--color-primary); color: var(--color-white);">
+    <div id="container-cta" class="container_md">
+      <div class="content-wrapper text-center">
+        <h2 class="heading-lg" style="color: var(--color-white);">Ready to Experience Better Healthcare?</h2>
+        <p class="body-lg" style="margin-top: var(--space-md); color: rgba(255,255,255,0.9);">
+          Schedule your appointment today and discover what personalized care feels like.
+        </p>
+        <div class="button-wrapper" style="justify-content: center;">
+          <a class="btn-secondary" href="#" style="background: var(--color-white); color: var(--color-primary); border-color: var(--color-white);">
+            Book Appointment
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a class="btn-secondary" href="tel:5551234567" style="border-color: rgba(255,255,255,0.5); color: var(--color-white);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            (555) 123-4567
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="section-footer" class="section-footer section-light">
+    <div id="container-footer" class="container_lg">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="logo" href="#">Harmony Family Medicine</a>
+          <p class="body-md" style="margin-top: var(--space-md); max-width: 300px;">Providing compassionate, comprehensive healthcare for families in our community since 1999.</p>
+          <div style="margin-top: var(--space-lg);">
+            <p class="body-sm"><strong>Address:</strong> 123 Medical Center Drive, Suite 100</p>
+            <p class="body-sm"><strong>Phone:</strong> (555) 123-4567</p>
+            <p class="body-sm"><strong>Email:</strong> info@harmonyfamilymed.com</p>
+          </div>
+        </div>
+        <div class="footer-column">
+          <p class="footer-heading">Services</p>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="#">Preventive Care</a></li>
+            <li><a class="footer-link" href="#">Chronic Care</a></li>
+            <li><a class="footer-link" href="#">Pediatrics</a></li>
+            <li><a class="footer-link" href="#">Women's Health</a></li>
+            <li><a class="footer-link" href="#">Telehealth</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <p class="footer-heading">Patients</p>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="#">Patient Portal</a></li>
+            <li><a class="footer-link" href="#">New Patients</a></li>
+            <li><a class="footer-link" href="#">Insurance</a></li>
+            <li><a class="footer-link" href="#">Forms</a></li>
+            <li><a class="footer-link" href="#">FAQs</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <p class="footer-heading">About</p>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="#">Our Team</a></li>
+            <li><a class="footer-link" href="#">Careers</a></li>
+            <li><a class="footer-link" href="#">News</a></li>
+            <li><a class="footer-link" href="#">Privacy Policy</a></li>
+            <li><a class="footer-link" href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+        <p class="body-sm">&copy; 2026 Harmony Family Medicine. All rights reserved.</p>
+        <div style="display: flex; gap: var(--space-lg);">
+          <a class="footer-link" href="#">Facebook</a>
+          <a class="footer-link" href="#">Instagram</a>
+          <a class="footer-link" href="#">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

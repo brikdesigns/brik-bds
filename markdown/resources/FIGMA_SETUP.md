@@ -1,202 +1,223 @@
 # Figma Integration Setup Guide
 
-This guide will help you set up the complete Figma → GitHub → Webflow integration for your project.
+This guide covers Figma integration for both **Claude Code MCP access** and the **Figma → GitHub → Webflow pipeline**.
 
-## 🎯 Overview
+## Overview
 
 The integration provides:
+- **Claude Code MCP**: Direct access to Figma files for CSS extraction, design inspection, etc.
 - **Figma to GitHub**: Automatic sync of design tokens from multiple files
 - **Figma to Webflow**: Direct plugin integration
 - **GitHub to Webflow**: Automated deployment
 
-## 📋 Prerequisites
+---
 
-- ✅ Figma account with personal access token: `***REMOVED***`
-- ✅ GitHub repository
-- ✅ Webflow account
-- ✅ Node.js installed
+## Part 1: Claude Code MCP Setup (AI Assistant Access)
 
-## 🔧 Step 1: GitHub Secrets Setup
+This allows Claude Code to access Figma directly in any project.
 
-1. Go to your GitHub repository
-2. Navigate to **Settings** → **Secrets and variables** → **Actions**
-3. Add these secrets:
+### Global MCP Configuration
 
-### Required Secrets:
-- **`FIGMA_ACCESS_TOKEN`**: `***REMOVED***`
-- **`FIGMA_FILE_KEYS`**: `7uPDq1zzZVoEdBe7PTauRS,Rkdc3SIWJUdgoAkeadgZZe` (comma-separated)
-- **`WEBFLOW_API_TOKEN`**: Your Webflow API token
-- **`WEBFLOW_SITE_ID`**: Your Webflow site ID
+Create `~/.mcp.json` in your home directory:
 
-### How to get Figma File Keys:
+```json
+{
+  "mcpServers": {
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp"
+    },
+    "figma-desktop": {
+      "type": "http",
+      "url": "http://127.0.0.1:3845/mcp"
+    },
+    "webflow": {
+      "type": "sse",
+      "url": "https://mcp.webflow.com/sse"
+    },
+    "notion": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_TOKEN": "<your-notion-token>"
+      }
+    }
+  }
+}
+```
+
+### Configuration Hierarchy
+
+| Location | Scope |
+|----------|-------|
+| `~/.mcp.json` | All projects (global) |
+| `<project>/.mcp.json` | Single project (overrides global) |
+
+### Figma Authentication
+
+Figma MCP uses OAuth - no manual token management needed:
+1. On first use, Claude Code will prompt for Figma authorization
+2. Authorize via Figma's OAuth flow
+3. Token is managed automatically by the MCP server
+
+### Figma Desktop Plugin (Optional)
+
+For `figma-desktop` MCP to work:
+1. Install the Figma desktop app
+2. Install the "Claude Talk to Figma" plugin
+3. The plugin runs a local server on `127.0.0.1:3845`
+
+### After Setup
+
+Reload VSCode (`Cmd+Shift+P` → "Developer: Reload Window") to activate MCP servers.
+
+---
+
+## Part 2: Figma File Keys
+
+### Current Brik Files
+
+| File | Key |
+|------|-----|
+| Brik Brand Toolkit | `7uPDq1zzZVoEdBe7PTauRS` |
+| Brik Foundations | `Rkdc3SIWJUdgoAkeadgZZe` |
+
+### Finding File Keys
+
 1. Open your Figma file
 2. Copy the URL: `https://www.figma.com/design/abc123def456/My-Design`
 3. The file key is `abc123def456`
-4. For multiple files, separate with commas: `key1,key2,key3`
 
-### Current Files:
-- **❖ Brik Brand Toolkit**: `7uPDq1zzZVoEdBe7PTauRS`
-- **❖ Brik Foundations**: `Rkdc3SIWJUdgoAkeadgZZe`
+---
 
-## 🔧 Step 2: Install Figma to Webflow Plugin
+## Part 3: GitHub Actions Pipeline
 
-1. Go to [https://webflow.com/figma-to-webflow](https://webflow.com/figma-to-webflow)
-2. Click **"Install plugin"**
-3. In Figma, go to **Plugins** → **Figma to Webflow**
+### Required GitHub Secrets
+
+Go to **Settings** → **Secrets and variables** → **Actions**:
+
+| Secret | Description |
+|--------|-------------|
+| `FIGMA_ACCESS_TOKEN` | Personal access token from Figma settings |
+| `FIGMA_FILE_KEYS` | Comma-separated file keys |
+| `WEBFLOW_API_TOKEN` | Your Webflow API token |
+| `WEBFLOW_SITE_ID` | Your Webflow site ID |
+
+### Generating a Figma Access Token
+
+1. Go to Figma → Settings → Account → Personal access tokens
+2. Click "Generate new token"
+3. Copy and save securely (shown only once)
+4. Add to GitHub Secrets as `FIGMA_ACCESS_TOKEN`
+
+---
+
+## Part 4: Figma Plugins
+
+### Figma to Webflow (Primary)
+
+1. Go to [webflow.com/figma-to-webflow](https://webflow.com/figma-to-webflow)
+2. Click "Install plugin"
+3. In Figma: Plugins → Figma to Webflow
 4. Authorize your Webflow account
-5. Select your Webflow site/workspace
 
-## 🔧 Step 3: Install Tokens Studio Plugin (Optional)
+### Tokens Studio (Optional)
 
+For design token synchronization with GitHub:
 1. Install [Tokens Studio for Figma](https://www.figma.com/community/plugin/843461159747178978/Tokens-Studio-for-Figma)
-2. In the plugin, go to **Settings** → **Sync**
-3. Configure GitHub sync:
-   - Repository: `yourusername/brik-bds`
-   - Branch: `main`
-   - Path: `design-tokens`
-   - Token: `***REMOVED***`
+2. Configure GitHub sync in plugin settings
 
-## 🔧 Step 4: Local Development Setup
+---
 
-1. **Clone and install dependencies**:
-   ```bash
-   git clone https://github.com/yourusername/brik-bds.git
-   cd brik-bds
-   npm install
-   ```
+## Part 5: Local Development
 
-2. **Create environment file**:
-   ```bash
-   # Create .env file
-   echo "FIGMA_ACCESS_TOKEN=***REMOVED***" > .env
-   echo "FIGMA_FILE_KEYS=7uPDq1zzZVoEdBe7PTauRS,Rkdc3SIWJUdgoAkeadgZZe" >> .env
-   ```
+### Setup
 
-3. **Test the sync**:
-   ```bash
-   npm run sync-figma
-   npm run transform-tokens
-   ```
+```bash
+git clone https://github.com/brikdesigns/brik-bds.git
+cd brik-bds
+npm install
+```
 
-## 🔄 Workflow Usage
+### Environment File
 
-### Automatic Sync (Recommended)
-- Design tokens sync automatically daily at 9 AM UTC
+Create `.env` (do not commit):
+
+```bash
+FIGMA_ACCESS_TOKEN=<your-token>
+FIGMA_FILE_KEYS=7uPDq1zzZVoEdBe7PTauRS,Rkdc3SIWJUdgoAkeadgZZe
+```
+
+### Commands
+
+```bash
+npm run sync-figma          # Sync Figma designs to tokens
+npm run transform-tokens    # Transform tokens to CSS
+npm run sync-and-transform  # Do both
+```
+
+---
+
+## Part 6: Workflow Automation
+
+### Automatic Sync
+- Design tokens sync daily at 9 AM UTC
 - Changes create pull requests for review
 - Merged changes trigger Webflow deployment
 
-### Manual Sync
-```bash
-# Sync Figma designs to tokens
-npm run sync-figma
-
-# Transform tokens to CSS
-npm run transform-tokens
-
-# Do both
-npm run sync-and-transform
-```
-
-### GitHub Actions Manual Trigger
-1. Go to **Actions** tab in your repository
+### Manual Trigger
+1. Go to **Actions** tab in GitHub
 2. Select **"Sync Figma Designs"** workflow
 3. Click **"Run workflow"**
-4. Enter your Figma file keys (comma-separated)
-5. Click **"Run workflow"**
 
-## 📁 File Structure
+---
+
+## File Structure
 
 ```
 brik-bds/
 ├── design-tokens/          # Auto-synced from Figma
-│   ├── tokens.json         # Combined design tokens from all files
-│   └── metadata.json       # File metadata for each Figma file
+│   ├── tokens.json
+│   └── metadata.json
 ├── css/
 │   └── design-tokens.css   # Auto-generated CSS variables
 ├── scripts/
-│   ├── sync-figma.js       # Figma sync script (multi-file support)
-│   └── transform-tokens.js # Token transformer
+│   ├── sync-figma.js
+│   └── transform-tokens.js
 └── .github/workflows/
-    └── figma-sync.yml      # GitHub Actions workflow
+    └── figma-sync.yml
 ```
 
-## 🎨 Using Design Tokens in Webflow
+---
 
-### CSS Variables
-The sync creates CSS variables you can use in Webflow:
+## Troubleshooting
 
-```css
-/* Colors from Brik Brand Toolkit */
---color_brik_brand_toolkit_primary: #007bff;
---color_brik_brand_toolkit_secondary: #6c757d;
+### Claude Code MCP Issues
 
-/* Colors from Brik Foundations */
---color_brik_foundations_primary: #28a745;
---color_brik_foundations_secondary: #ffc107;
+| Issue | Solution |
+|-------|----------|
+| MCP tools not appearing | Reload VSCode after creating `~/.mcp.json` |
+| Figma auth prompt every session | Re-authorize via OAuth flow |
+| "Token expired" error | Generate new token in Figma settings, update GitHub Secrets |
 
-/* Typography from Brik Brand Toolkit */
---font_brik_brand_toolkit_heading-family: "Arial, sans-serif";
---font_brik_brand_toolkit_heading-size: 24px;
+### Pipeline Issues
 
-/* Typography from Brik Foundations */
---font_brik_foundations_body-family: "Helvetica, sans-serif";
---font_brik_foundations_body-size: 16px;
-```
+| Issue | Solution |
+|-------|----------|
+| "No Figma file keys provided" | Check `FIGMA_FILE_KEYS` secret in GitHub |
+| "Authentication failed" | Regenerate Figma access token |
+| "No design tokens found" | Run `npm run sync-figma` first |
 
-### Utility Classes
-```css
-.color-brik-brand-toolkit-primary { color: var(--color_brik_brand_toolkit_primary); }
-.bg-brik-foundations-primary { background-color: var(--color_brik_foundations_primary); }
-```
+---
 
-## 🔍 Troubleshooting
-
-### Common Issues:
-
-1. **"No Figma file keys provided"**
-   - Check that `FIGMA_FILE_KEYS` secret is set in GitHub
-   - Verify the file keys in your Figma URLs
-
-2. **"Authentication failed"**
-   - Verify your Figma access token is correct
-   - Check token permissions in Figma settings
-
-3. **"No design tokens found"**
-   - Run `npm run sync-figma` first
-   - Check that your Figma files have design elements
-
-4. **GitHub Actions failing**
-   - Check the Actions tab for error details
-   - Verify all secrets are set correctly
-
-### Debug Commands:
-```bash
-# Check if tokens exist
-ls -la design-tokens/
-
-# View token content
-cat design-tokens/tokens.json
-
-# Test sync locally
-FIGMA_ACCESS_TOKEN=***REMOVED*** FIGMA_FILE_KEYS=7uPDq1zzZVoEdBe7PTauRS,Rkdc3SIWJUdgoAkeadgZZe npm run sync-figma
-```
-
-## 📚 Resources
+## Resources
 
 - [Figma API Documentation](https://www.figma.com/developers/api)
 - [Figma to Webflow Plugin](https://webflow.com/figma-to-webflow)
 - [Tokens Studio Documentation](https://docs.tokens.studio/)
-- [Official Figma GitHub Actions Example](https://github.com/figma/variables-github-action-example)
 - [Webflow API Documentation](https://developers.webflow.com/)
-
-## 🆘 Support
-
-If you encounter issues:
-1. Check the troubleshooting section above
-2. Review GitHub Actions logs
-3. Verify all secrets are set correctly
-4. Test the sync locally first
 
 ---
 
-**Last updated**: January 2025 
+**Last updated**: January 2025

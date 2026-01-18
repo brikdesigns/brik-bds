@@ -26,7 +26,8 @@
     "setup-copilot": "node scripts/setup-copilot-onlook.js",
     "open-onlook": "echo \"Visit https://onlook.com to connect your repository\"",
     "copilot-guide": "open VISUAL_COPILOT_GUIDE.md",
-    "onlook-guide": "open ONLOOK_GUIDE.md"
+    "onlook-guide": "open ONLOOK_GUIDE.md",
+    "populate-notion": "node scripts/populate-notion-tokens.js"
   },
   "keywords": [
     "webflow",
