@@ -1,9 +1,17 @@
 {
-  "color": { ... },
-  "typography": { ... },
-  "spacing": { ... },
-  "size": { ... },
-  "border": { ... },
-  "shadow": { ... },
-  "theme": { ... }
+  "files": [
+    {
+      "name": "❖ Brik Foundations",
+      "key": "Rkdc3SIWJUdgoAkeadgZZe"
+    },
+    {
+      "name": "❖ Modern Theme Web Toolkit",
+      "key": "GLi4Xm9q783AniSTY009p5"
+    },
+    {
+      "name": "❖ Expressive Theme Web Toolkit",
+      "key": "XEXnuAmnklNKw55kxjvNR5"
+    }
+  ],
+  "syncedAt": "2026-01-19T17:51:42.320Z"
 }
