@@ -1,0 +1,1893 @@
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Feb 02 2026 18:10:33 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="683f3be6bf15b9af3735399e" data-wf-site="67c4e62250923072710d472c" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Brik Web Templates [Demo]</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="css/brik-bds.webflow.css" rel="stylesheet" type="text/css">
+  <style>html.w-mod-js:not(.w-mod-ix3) :is(.cms-wrapper) {visibility: hidden !important;}</style>
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic","Droid Sans:400,700","Geist:300,400,500,600,700","Geist Mono:300,400,500,600,700","Hind:300,400,500,600,700","IBM Plex Mono:300,400,500,600,700","IBM Plex Sans:300,400,500,600,700","Libre Franklin:300,400,500,600,700","Newsreader:300,400,500,600,700","Playfair Display:300,400,500,600,700","Source Code Pro:300,400,500,600,700","Source Sans 3:300,400,500,600,700"]  }});</script>
+  <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+  <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="images/webclip.png" rel="apple-touch-icon">
+  <style>
+/* ============================================= */
+/*             BRIK BDS DESIGN SYSTEM          */
+/*          Webflow-Aligned CSS Variables      */
+/* ============================================= */
+/* 
+ * This file provides CSS custom properties for 
+ * seamless integration between local development  
+ * and Webflow deployment with 8 theme support.
+ */
+  /* ============================================= */
+/*                BASE TOKENS                   */
+  /* ============================================= */
+:root {
+  /* Grayscale Foundation */
+  --grayscale--white: white;
+  --grayscale--black: black;
+  --grayscale--lightest: #f2f2f2;
+  --grayscale--lighter: #e0e0e0;
+  --grayscale--light: #bdbdbd;
+  --grayscale--dark: #828282;
+  --grayscale--darker: #4f4f4f;
+  --grayscale--darkest: #333;
+  /* System Colors */
+  --system--blue: #2f80ed;
+  --system--green: #27ae60;
+  --system--red: #eb5757;
+  --system--yellow: #f2c94c;
+  --system--orange: #f2994a;
+  --system--purple: #9b51e0;
+  --system--lightbox: #000000a3;
+  --system--transparent: #0000;
+  /* Typography Scale */
+  --font-family--body: Poppins;
+  --font-family--label: Poppins;
+  --font-family--display: Poppins;
+  --font-family--heading: Poppins;
+  --font-family--icon: "Font Awesome 6 Pro";
+  --font-family--icon-brands: "Font Awesome 6 Brands";
+  /* Font Weights */
+  --font-weight--thin: 300;
+  --font-weight--light: 300;
+  --font-weight--regular: 400;
+  --font-weight--medium: 500;
+  --font-weight--semi-bold: 600;
+  --font-weight--bold: 700;
+  --font-weight--extra-bold: 800;
+  --font-weight--black: 900;
+  /* Font Size Scale */
+  --font-size--25: 10.26px;
+  --font-size--50: 11.54px;
+  --font-size--75: 14px;
+  --font-size--100: 16px;
+  --font-size--200: 18px;
+  --font-size--300: 20px;
+  --font-size--400: 22.5px;
+  --font-size--500: 25.3px;
+  --font-size--600: 28.5px;
+  --font-size--700: 32px;
+  --font-size--800: 36px;
+  --font-size--900: 40.5px;
+  --font-size--1000: 45.5px;
+  --font-size--1100: 51px;
+  --font-size--1200: 57.5px;
+  --font-size--1300: 64.7px;
+  --font-size--1400: 72.8px;
+  --font-size--1500: 81.9px;
+  --font-size--1600: 92.2px;
+  --font-size--1700: 103.9px;
+  --font-size--1800: 116.9px;
+  --font-size--1900: 143px;
+  --font-size--2000: 171px;
+  --font-size--2100: 205px;
+  --font-size--2200: 247px;
+  --font-size--2300: 296px;
+  --font-size--2400: 355px;
+  --font-size--2500: 426px;
+  --font-size--2600: 515px;
+  /* Line Heights */
+  --font-line-height--none: 0%;
+  --font-line-height--100: 100%;
+  --font-line-height--125: 125%;
+  --font-line-height--150: 150%;
+  --font-line-height--175: 175%;
+  --font-line-height--200: 200%;
+  /* Spacing System */
+  --space--0: 0px;
+  --space--25: 1px;
+  --space--50: 2px;
+  --space--100: 4px;
+  --space--150: 6px;
+  --space--200: 8px;
+  --space--250: 10px;
+  --space--300: 12px;
+  --space--350: 14px;
+  --space--400: 16px;
+  --space--450: 18px;
+  --space--500: 20px;
+  --space--600: 24px;
+  --space--700: 28px;
+  --space--800: 32px;
+  --space--900: 36px;
+  --space--1000: 40px;
+  --space--1100: 44px;
+  --space--1200: 48px;
+  --space--1300: 52px;
+  --space--1400: 56px;
+  --space--1500: 60px;
+  --space--1600: 64px;
+  --space--1700: 72px;
+  --space--1800: 80px;
+  --space--1900: 84px;
+  --space--2000: 88px;
+  --space--2100: 96px;
+  --space--2200: 104px;
+  --space--2300: 112px;
+  --space--2400: 128px;
+  --space--2500: 136px;
+  --space--2600: 144px;
+  --space--2700: 152px;
+  --space--2800: 160px;
+  --space--2900: 168px;
+  --space--3000: 176px;
+  /* Size System */
+  --size--0: 0px;
+  --size--25: 1px;
+  --size--50: 2px;
+  --size--100: 4px;
+  --size--150: 6px;
+  --size--200: 8px;
+  --size--300: 12px;
+  --size--400: 16px;
+  --size--500: 20px;
+  --size--600: 24px;
+  --size--700: 28px;
+  --size--800: 32px;
+  --size--900: 36px;
+  --size--1000: 40px;
+  --size--1100: 44px;
+  --size--1200: 48px;
+  --size--1300: 48px;
+  --size--1400: 52px;
+  --size--1500: 56px;
+  --size--1600: 60px;
+  --size--1700: 64px;
+  --size--1800: 72px;
+  --size--1900: 80px;
+  --size--2000: 84px;
+  --size--2100: 88px;
+  --size--2200: 96px;
+  /* Border System */
+  --border-radius--0: 0px;
+  --border-radius--50: 2px;
+  --border-radius--100: 4px;
+  --border-radius--200: 8px;
+  --border-radius--300: 10px;
+  --border-radius--400: 12px;
+  --border-radius--500: 14px;
+  --border-radius--600: 16px;
+  --border-radius--700: 20px;
+  --border-radius--800: 24px;
+  --border-radius--900: 28px;
+  --border-radius--1000: 32px;
+  --border-radius--1100: 36px;
+  --border-radius--1200: 40px;
+  --border-radius--1300: 44px;
+  --border-radius--1400: 48px;
+  --border-radius--1500: 999px;
+  --border-radius--1600: 9999px;
+  --border-radius--pill: 999px;
+  --border-radius--circle: 9999px;
+  --border-width--0: 0px;
+  --border-width--25: .25px;
+  --border-width--50: .5px;
+  --border-width--100: 1px;
+  --border-width--200: 2px;
+  --border-width--300: 3px;
+  --border-width--400: 4px;
+  --border-width--500: 5px;
+  --border-width--600: 6px;
+  /* Shadow System */
+  --shadow-spread--0: 0px;
+  --shadow-spread--100: 2px;
+  --shadow-spread--200: 4px;
+  --shadow-spread--300: 8px;
+  --shadow-spread--400: 10px;
+  --shadow-spread--500: 12px;
+  --shadow-spread--600: 14px;
+  --shadow-spread--700: 16px;
+  --shadow-spread--800: 16px;
+  --shadow-blur--0: 0px;
+  --shadow-blur--100: 2px;
+  --shadow-blur--200: 4px;
+  --shadow-blur--300: 6px;
+  --shadow-blur--400: 8px;
+  --shadow-blur--500: 10px;
+  --shadow-blur--600: 12px;
+  --shadow-blur--700: 14px;
+  --shadow-blur--800: 16px;
+  --shadow-offset--0: 0px;
+  --shadow-offset--25: -4px;
+  --shadow-offset--50: -2px;
+  --shadow-offset--75: -2px;
+  --shadow-offset--100: 2px;
+  --shadow-offset--200: 4px;
+  --shadow-offset--300: 8px;
+  --shadow-offset--400: 10px;
+  --shadow-offset--500: 12px;
+  --shadow-offset--600: 16px;
+  --shadow-offset--700: 14px;
+  --shadow-offset--800: 16px;
+  /* Container & Screen Sizes */
+  --_size---container-size--max-hero-height: 100vh;
+  --_size---container-size--max-hero-width: 100vw;
+  --_size---container-size--full-width: 100%;
+  --_size---container-size--half-width: 50%;
+  --_size---container-size--three-quarter-width: 75%;
+  --_size---container-size--quarter-width: 25%;
+  --_size---container-size--one-third-width: 33%;
+  --_size---container-size--two-third-width: 66%;
+  --_size---screen-size--wider: 1440px;
+  --_size---screen-size--wide: 1280px;
+  --_size---screen-size--desktop: 1080px;
+  --_size---screen-size--tablet: 768px;
+  --_size---screen-size--mobile: 320px;
+}
+  /* ============================================= */
+/*              THEME COLOR PALETTES            */
+  /* ============================================= */
+:root {
+  /* Blue-Green Theme */
+  --_themes---blue-green--blue-light: #4665f5;
+  --_themes---blue-green--blue-lighter: #79b0d9;
+  --_themes---blue-green--blue-lightest: #edf2f6;
+  --_themes---blue-green--blue-dark: #0e212a;
+  --_themes---blue-green--green: #79d799;
+  /* Yellow-Orange Theme */
+  --_themes---yellow-orange--yellow: #e8ea76;
+  --_themes---yellow-orange--yellow-dark: #d8d96a;
+  --_themes---yellow-orange--orange: #ef8f4b;
+  --_themes---yellow-orange--black: black;
+  /* Peach-Brown Theme */
+  --_themes---peach-brown--peach: #ed8059;
+  --_themes---peach-brown--peach-light: #efc7a2;
+  --_themes---peach-brown--peach-lightest: #f2eee5;
+  --_themes---peach-brown--peach-darkest: #443b2b;
+  /* Yellow-Brown Theme */
+  --_themes---yellow-brown--yellow: #f3b94d;
+  --_themes---yellow-brown--green: #615f36;
+  --_themes---yellow-brown--brown: #372d2b;
+  --_themes---yellow-brown--tan: #fffaeb;
+  /* Green-Orange Theme */
+  --_themes---green-orange--yellow-light: #fdd595;
+  --_themes---green-orange--brown-light: #656153;
+  --_themes---green-orange--yellow: #ffa600;
+  --_themes---green-orange--green-light: #9eb28d;
+  --_themes---green-orange--brown: #322b2f;
+  --_themes---green-orange--green: #1bb58c;
+  --_themes---green-orange--orange-light: #ffae26;
+  --_themes---green-orange--orange-lightest: #fef2cd;
+  --_themes---green-orange--red: #fd2253;
+  --_themes---green-orange--orange: #ff7828;
+  /* Pastel Theme */
+  --_themes---pastel--pastel-purple: #42ff00;
+  --_themes---pastel--pastel-green: #B9FD98;
+  --_themes---pastel--pastel-orange-light: #FDF2D5;
+  --_themes---pastel--pastel-blue: #ff5c00;
+  --_themes---pastel--pastel-black: #fff;
+  --_themes---pastel--pastel-white: #000;
+  /* Vibrant Theme */
+  --_themes---vibrant--blue: #5889f7;
+  --_themes---vibrant--green: #4aa35b;
+  --_themes---vibrant--orange: #ed7648;
+  --_themes---vibrant--yellow: #f6c647;
+  --_themes---vibrant--purple: #7a78f7;
+  --_themes---vibrant--tan: #fcf9f2;
+  /* Blue-Red Theme */
+  --_themes---blue-red--green: #74b4a8;
+  --_themes---blue-red--green-blue: #317d9e;
+  --_themes---blue-red--red: #fe1755;
+  --_themes---blue-red--blue-dark: #f5ffbe;
+  --_themes---blue-red--green-light: #b2dbc0;
+  /* Blue-Orange Theme */
+  --_themes---blue-orange--yellow: #f16b4d;
+  --_themes---blue-orange--blue-dark: #263343;
+  --_themes---blue-orange--blue-light: #98c0d9;
+  --_themes---blue-orange--blue-lightest: #ddfbfa;
+  --_themes---blue-orange--blue: #3d5b83;
+}
+/* ============================================= */
+/*              BASE SEMANTIC TOKENS            */
+/* ============================================= */
+:root {
+  /* Semantic Sizing */
+  --_size---huge: var(--size--1000);
+  --_size---none: var(--size--0);
+  --_size---tiny: var(--size--50);
+  --_size---sm: var(--size--100);
+  --_size---md: var(--size--200);
+  --_size---lg: var(--size--400);
+  --_size---xl: var(--size--600);
+  --_size---xxl: var(--size--800);
+  /* Semantic Spacing */
+  --_space---none: var(--space--0);
+  --_space---tiny: var(--space--100);
+  --_space---sm: var(--space--150);
+  --_space---md: var(--space--200);
+  --_space---lg: var(--space--400);
+  --_space---xl: var(--space--600);
+  --_space---xxl: var(--space--800);
+  --_space---huge: var(--space--1000);
+  /* Semantic Gaps */
+  --_space---gap--none: var(--space--0);
+  --_space---gap--tiny: var(--space--50);
+  --_space---gap--sm: var(--space--100);
+  --_space---gap--md: var(--space--200);
+  --_space---gap--lg: var(--space--400);
+  --_space---gap--xl: var(--space--500);
+  /* Semantic Borders */
+  --_border-width---none: var(--border-width--0);
+  --_border-width---sm: var(--border-width--25);
+  --_border-width---md: var(--border-width--50);
+  --_border-width---lg: var(--border-width--100);
+  --_border-radius---none: var(--border-radius--0);
+  --_border-radius---sm: var(--border-radius--50);
+  --_border-radius---md: var(--border-radius--100);
+  --_border-radius---lg: var(--border-radius--200);
+  --_border-radius---input: var(--border-radius--50);
+  --_border-radius---button: var(--border-radius--50);
+  /* Semantic Shadows */
+  --_box-shadow---none: var(--shadow-spread--0);
+  --_box-shadow---sm: var(--shadow-spread--0);
+  --_box-shadow---md: var(--shadow-spread--0);
+  --_box-shadow---lg: var(--shadow-spread--0);
+  --_blur-radius---none: var(--shadow-blur--0);
+  --_blur-radius---sm: var(--shadow-blur--0);
+  --_blur-radius---md: var(--shadow-blur--0);
+  --_blur-radius---lg: var(--shadow-blur--0);
+  /* Base Theme Colors (Theme 1) */
+  --_color---background--primary: var(--grayscale--white);
+  --_color---background--secondary: var(--grayscale--lightest);
+  --_color---background--inverse: var(--grayscale--white);
+  --_color---background--input: var(--grayscale--white);
+  --_color---background--image: #17171799;
+  --_color---background--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---background--brand-secondary: white;
+  --_color---background--image-brand: var(--_themes---blue-green--blue-light);
+  --_color---surface--primary: var(--grayscale--white);
+  --_color---surface--secondary: var(--grayscale--lightest);
+  --_color---surface--nav: var(--grayscale--white);
+  --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---text--primary: var(--grayscale--darkest);
+  --_color---text--secondary: var(--grayscale--darker);
+  --_color---text--muted: var(--grayscale--dark);
+  --_color---text--inverse: var(--grayscale--white);
+  --_color---text--brand: var(--_themes---blue-green--blue-light);
+  --_color---border--primary: var(--grayscale--dark);
+  --_color---border--secondary: var(--grayscale--light);
+  --_color---border--input: var(--grayscale--light);
+  --_color---border--brand: var(--grayscale--black);
+  --_color---border--inverse: var(--grayscale--white);
+  --_color---page--primary: var(--grayscale--white);
+  --_color---page--secondary: var(--grayscale--lighter);
+  --_color---page--brand: var(--_themes---blue-green--blue-light);
+  --_color---theme--primary: var(--_themes---blue-green--blue-light);
+  --_color---theme--secondary: var(--_themes---blue-green--blue-lighter);
+  --_color---theme--tertiary: var(--_themes---blue-green--blue-dark);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--fourth: white;
+  /* Typography Tokens */
+  --_typography---font-family--label: "Open Sans", sans-serif;
+  --_typography---font-family--body: "Open Sans", sans-serif;
+  --_typography---font-family--heading: "Droid Sans", sans-serif;
+  --_typography---font-family--display: "Droid Sans", sans-serif;
+  --_typography---font-family--icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --_typography---body--tiny: var(--font-size--25);
+  --_typography---body--x-small: var(--font-size--50);
+  --_typography---body--small: var(--font-size--75);
+  --_typography---body--medium-base: var(--font-size--100);
+  --_typography---body--large: var(--font-size--200);
+  --_typography---label--small: var(--font-size--75);
+  --_typography---label--medium-base: var(--font-size--100);
+  --_typography---label--large: var(--font-size--200);
+  --_typography---heading--tiny: var(--font-size--100);
+  --_typography---heading--small: var(--font-size--300);
+  --_typography---heading--medium: var(--font-size--500);
+  --_typography---heading--large: var(--font-size--700);
+  --_typography---heading--x-large: var(--font-size--900);
+  --_typography---heading--xx-large: var(--font-size--1000);
+  --_typography---heading--xxx-large: var(--font-size--1200);
+  --_typography---display--small: var(--font-size--1600);
+  --_typography---display--medium: var(--font-size--1500);
+  --_typography---display--large: var(--font-size--1400);
+  --_typography---icon--small: var(--font-size--75);
+  --_typography---icon--medium-base: var(--font-size--100);
+  --_typography---icon--large: var(--font-size--200);
+  /* Utility Tokens */
+  --_space---button: var(--space--200);
+  --_space---input: var(--space--200);
+}
+/* ============================================= */
+/*                 THEME CLASSES                */
+/* ============================================= */
+/* Theme 1 - Blue Theme (Default) */
+.body.theme-1 {
+  /* Inherits all base values from :root */
+}
+/* Theme 2 - Dark + Yellow */
+.body.theme-2 {
+  --_color---border--secondary: var(--grayscale--dark);
+  --_color---surface--nav: var(--grayscale--black);
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---text--inverse: var(--grayscale--darkest);
+  --_color---background--primary: var(--grayscale--darkest);
+  --_color---text--primary: var(--grayscale--lightest);
+  --_color---background--inverse: var(--grayscale--black);
+  --_color---surface--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--light);
+  --_color---page--primary: var(--grayscale--black);
+  --_color---text--muted: var(--grayscale--dark);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---border--input: var(--grayscale--dark);
+  --_color---text--secondary: var(--grayscale--light);
+  --_color---surface--secondary: var(--grayscale--darkest);
+  --_color---background--secondary: var(--grayscale--black);
+  --_color---theme--accent: var(--_themes---yellow-orange--orange);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---background--input: var(--grayscale--darkest);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--inverse: var(--grayscale--black);
+  --_color---page--secondary: var(--grayscale--darkest);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
+  --_color---theme--fourth: var(--grayscale--white);
+  --_typography---font-family--label: "Geist Mono", sans-serif;
+  --_typography---font-family--body: "Geist Mono", sans-serif;
+  --_typography---font-family--heading: Geist, sans-serif;
+  --_typography---font-family--display: Geist, sans-serif;
+}
+/* Theme 3 - IBM Plex + Blue */
+.body.theme-3 {
+  --_color---background--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---text--brand: var(--_themes---blue-green--blue-light);
+  --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--tertiary: var(--_themes---blue-green--blue-dark);
+  --_color---theme--secondary: var(--_themes---blue-green--blue-lighter);
+  --_color---theme--primary: var(--_themes---blue-green--blue-light);
+  --_color---background--image-brand: var(--_themes---blue-green--blue-light);
+  --_color---border--brand: var(--_themes---blue-green--blue-light);
+  --_color---page--brand: var(--_themes---blue-green--blue-light);
+  --_typography---font-family--label: "Source Sans 3", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--display: "IBM Plex Sans", sans-serif;
+}
+/* Theme 4 - Lato + Yellow */
+.body.theme-4 {
+  --_color---text--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
+  --_typography---font-family--label: Hind, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--display: Lato, Arial, sans-serif;
+}
+/* Theme 5 - Newsreader + Peach */
+.body.theme-5 {
+  --_color---border--secondary: var(--grayscale--darker);
+  --_color---surface--nav: var(--_themes---peach-brown--peach-lightest);
+  --_color---background--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---background--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---text--primary: var(--grayscale--black);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---page--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---text--brand: var(--_themes---peach-brown--peach);
+  --_color---surface--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---border--input: var(--_themes---peach-brown--peach-darkest);
+  --_color---surface--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--accent: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--tertiary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--secondary: var(--_themes---peach-brown--peach-light);
+  --_color---theme--primary: var(--_themes---peach-brown--peach);
+  --_color---background--brand-secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---background--image-brand: var(--_themes---peach-brown--peach);
+  --_color---border--brand: var(--_themes---peach-brown--peach);
+  --_color---border--inverse: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--brand: var(--_themes---peach-brown--peach);
+  --_typography---font-family--heading: Newsreader, sans-serif;
+  --_typography---font-family--display: Newsreader, sans-serif;
+}
+/* Theme 6 - IBM Plex + Pastel */
+.body.theme-6 {
+  --_color---background--brand-primary: var(--_themes---pastel--pastel-purple);
+  --_color---surface--primary: var(--grayscale--white);
+  --_color---border--primary: var(--grayscale--black);
+  --_color---page--primary: var(--grayscale--white);
+  --_color---text--brand: var(--_themes---pastel--pastel-purple);
+  --_color---surface--brand-primary: var(--_themes---pastel--pastel-purple);
+  --_color---theme--accent: var(--_themes---pastel--pastel-orange-light);
+  --_color---theme--tertiary: var(--_themes---pastel--pastel-purple);
+  --_color---theme--secondary: var(--_themes---pastel--pastel-green);
+  --_color---theme--primary: var(--_themes---pastel--pastel-purple);
+  --_color---background--image-brand: var(--_themes---neon--neon-green);
+  --_color---border--brand: var(--_themes---pastel--pastel-green);
+  --_color---page--brand: var(--_themes---pastel--pastel-green);
+  --_typography---font-family--label: "Source Sans 3", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--display: "IBM Plex Sans", sans-serif;
+}
+/* Theme 7 - Lato + Yellow-Brown */
+.body.theme-7 {
+  --_color---surface--nav: var(--_themes---yellow-brown--tan);
+  --_color---background--brand-primary: var(--_themes---yellow-brown--brown);
+  --_color---background--primary: var(--_themes---yellow-brown--tan);
+  --_color---surface--primary: var(--_themes---yellow-brown--tan);
+  --_color---page--primary: var(--_themes---yellow-brown--tan);
+  --_color---text--brand: var(--_themes---yellow-brown--brown);
+  --_color---surface--brand-primary: var(--_themes---green-orange--yellow);
+  --_color---theme--accent: var(--_themes---yellow-brown--yellow);
+  --_color---theme--tertiary: var(--_themes---yellow-brown--tan);
+  --_color---theme--secondary: var(--_themes---yellow-brown--green);
+  --_color---theme--primary: var(--_themes---yellow-brown--brown);
+  --_color---background--image-brand: var(--_themes---green-orange--brown);
+  --_color---border--brand: var(--_themes---green-orange--brown);
+  --_color---page--brand: var(--_themes---green-orange--yellow);
+  --_color---theme--fourth: var(--_themes---yellow-brown--tan);
+  --_typography---font-family--label: Hind, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--display: Lato, Arial, sans-serif;
+}
+/* Theme 8 - Playfair Display + Vibrant Green */
+.body.theme-8 {
+  --_color---surface--nav: var(--_themes---vibrant--tan);
+  --_color---background--brand-primary: var(--_themes---vibrant--green);
+  --_color---page--primary: var(--_themes---vibrant--tan);
+  --_color---text--brand: var(--_themes---vibrant--green);
+  --_color---surface--brand-primary: var(--_themes---vibrant--green);
+  --_color---theme--accent: var(--_themes---vibrant--purple);
+  --_color---theme--tertiary: var(--_themes---blue-red--green-blue);
+  --_color---theme--secondary: var(--_themes---vibrant--yellow);
+  --_color---theme--primary: var(--_themes---vibrant--green);
+  --_color---background--image-brand: var(--_themes---vibrant--green);
+  --_color---border--brand: var(--_themes---vibrant--green);
+  --_color---page--secondary: var(--_themes---yellow-brown--brown);
+  --_color---page--brand: var(--_themes---vibrant--green);
+  --_color---theme--fourth: var(--_themes---vibrant--tan);
+  --_typography---font-family--label: Hind, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+  --_typography---font-family--heading: "Playfair Display", sans-serif;
+  --_typography---font-family--display: "Playfair Display", sans-serif;
+  --_space---xxl: var(--space--800);
+  --_space---tiny: var(--space--100);
+  --_space---sm: var(--space--150);
+  --_size---huge: var(--size--0);
+  --_size---tiny: var(--size--0);
+  --_size---sm: var(--size--0);
+  --_size---md: var(--size--0);
+  --_size---lg: var(--size--0);
+  --_size---xl: var(--size--0);
+  --_size---xxl: var(--size--0);
+}
+/* ============================================= */
+/*            LAYOUT THEME SYSTEM               */
+/* ============================================= */
+/* Compact Layout */
+.layout-compact {
+  --_layout---space--space-tiny: var(--space--25);
+  --_layout---space--space-sm: var(--space--50);
+  --_layout---space--space-md: var(--space--200);
+  --_layout---space--space-lg: var(--space--600);
+  --_layout---space--space-xl: var(--space--600);
+  --_layout---space--space-xxl: var(--space--800);
+  --_layout---space--space-huge: var(--space--1000);
+  --_layout---gap--gap-tiny: var(--space--25);
+  --_layout---gap--gap-sm: var(--space--50);
+  --_layout---gap--gap-md: var(--space--100);
+  --_layout---gap--gap-lg: var(--space--200);
+  --_layout---gap--gap-xl: var(--space--400);
+}
+/* Comfortable Layout */
+.layout-comfortable {
+  --_layout---space--space-tiny: var(--space--100);
+  --_layout---space--space-sm: var(--space--200);
+  --_layout---space--space-md: var(--space--300);
+  --_layout---space--space-lg: var(--space--500);
+  --_layout---space--space-xl: var(--space--600);
+  --_layout---space--space-xxl: var(--space--800);
+  --_layout---space--space-huge: var(--space--1000);
+  --_layout---gap--gap-tiny: var(--space--50);
+  --_layout---gap--gap-sm: var(--space--100);
+  --_layout---gap--gap-md: var(--space--200);
+  --_layout---gap--gap-lg: var(--space--400);
+  --_layout---gap--gap-xl: var(--space--500);
+}
+/* Cozy Layout */
+.layout-cozy {
+  --_layout---space--space-tiny: var(--space--200);
+  --_layout---space--space-sm: var(--space--300);
+  --_layout---space--space-md: var(--space--400);
+  --_layout---space--space-lg: var(--space--500);
+  --_layout---space--space-xl: var(--space--600);
+  --_layout---space--space-xxl: var(--space--700);
+  --_layout---space--space-huge: var(--space--800);
+  --_layout---gap--gap-tiny: var(--space--50);
+  --_layout---gap--gap-sm: var(--space--100);
+  --_layout---gap--gap-md: var(--space--200);
+  --_layout---gap--gap-lg: var(--space--400);
+  --_layout---gap--gap-xl: var(--space--500);
+}
+/* ============================================= */
+/*            INDUSTRY FILTERING SYSTEM         */
+/* ============================================= */
+/* Content Visibility Rules */
+body.filter-dental .industry-content [data-industry]:not([data-industry="dental"]) { 
+  display: none !important; 
+}
+body.filter-finance .industry-content [data-industry]:not([data-industry="finance"]) { 
+  display: none !important; 
+}
+body.filter-real-estate .industry-content [data-industry]:not([data-industry="real-estate"]) { 
+  display: none !important; 
+}
+body.filter-small-business .industry-content [data-industry]:not([data-industry="small-business"]) { 
+  display: none !important; 
+}
+body.filter-all .industry-content [data-industry] { 
+  display: block !important; 
+}
+/* CMS Integration Rules */
+body.filter-dental [data-industry="dental"] { display: block !important; }
+body.filter-finance [data-industry="finance"] { display: block !important; }
+body.filter-real-estate [data-industry="real-estate"] { display: block !important; }
+body.filter-small-business [data-industry="small-business"] { display: block !important; }
+/* Fallback Rules */
+body.filter-dental .w-dyn-items > .w-dyn-item:first-child:not([data-industry="finance"]):not([data-industry="real-estate"]):not([data-industry="small-business"]) { 
+  display: block !important; 
+}
+body.filter-finance .w-dyn-items > .w-dyn-item:first-child:not([data-industry="dental"]):not([data-industry="real-estate"]):not([data-industry="small-business"]) { 
+  display: block !important; 
+}
+body.filter-real-estate .w-dyn-items > .w-dyn-item:first-child:not([data-industry="dental"]):not([data-industry="finance"]):not([data-industry="small-business"]) { 
+  display: block !important; 
+}
+body.filter-small-business .w-dyn-items > .w-dyn-item:first-child:not([data-industry="dental"]):not([data-industry="finance"]):not([data-industry="real-estate"]) { 
+  display: block !important; 
+}
+/* Empty State Management */
+body.filter-dental .w-dyn-empty,
+body.filter-finance .w-dyn-empty,
+body.filter-real-estate .w-dyn-empty,
+body.filter-small-business .w-dyn-empty {
+  display: none !important;
+}
+/* Industry Switcher Always Visible */
+body.filter-finance #industry-theme-switcher [data-industry],
+body.filter-dental #industry-theme-switcher [data-industry],
+body.filter-real-estate #industry-theme-switcher [data-industry],
+body.filter-small-business #industry-theme-switcher [data-industry] {
+  display: block !important;
+}
+/* ============================================= */
+/*              WEBFLOW FIXES                   */
+/* ============================================= */
+/* Dropdown Positioning Fix */
+.w-dropdown-list {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+.w-dropdown.w--open .w-dropdown-list {
+  z-index: 9999 !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  transform: none !important;
+}
+#smooth-wrapper,
+#smooth-content {
+  position: relative !important;
+  z-index: auto !important;
+}
+.navbar {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+.theme-switcher-component .w-dropdown-list,
+.button_primary-dropdown .w-dropdown-list {
+  z-index: 10000 !important;
+  position: absolute !important;
+  background: var(--_color---surface--primary) !important;
+  border: 1px solid var(--_color---border--secondary) !important;
+  border-radius: var(--_border-radius---sm) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  min-width: 200px !important;
+}
+/* ============================================= */
+/*       LOADING OVERLAY ENHANCEMENTS           */
+/* ============================================= */
+/* Ensure loading overlays completely cover content during transitions */
+[class*="loading-overlay"],
+[class*="loading"],
+[class*="page-overlay"],
+.w-lightbox-backdrop,
+[data-w-id*="loading"],
+.loading-overlay-backup {
+  z-index: 99999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: auto !important;
+}
+/* Specific styles for Webflow loading elements */
+[data-w-id] {
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+/* Enhanced flash prevention for theme switching */
+body:not(.theme-applied) {
+  /* Hide main content areas until theme is applied */
+}
+body:not(.theme-applied) main,
+body:not(.theme-applied) .hero,
+body:not(.theme-applied) .hero-section,
+body:not(.theme-applied) [class*="hero"],
+body:not(.theme-applied) .section {
+  opacity: 0 !important;
+  transition: opacity 0.2s ease-in-out !important;
+}
+body.theme-applied main,
+body.theme-applied .hero,
+body.theme-applied .hero-section,
+body.theme-applied [class*="hero"],
+body.theme-applied .section {
+  opacity: 1 !important;
+}
+/* Always keep navigation visible */
+nav,
+.navbar,
+.navigation,
+.theme-switcher-component,
+#color-theme-switcher,
+#industry-theme-switcher {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+/* Loading overlay should cover everything including Webflow smooth scroll */
+.loading-overlay-backup {
+  background: var(--_color---background--primary, white) !important;
+  backdrop-filter: blur(2px) !important;
+}
+/* ============================================= */
+/*            COMPONENT FIXES                   */
+/* ============================================= */
+/* Button Theme Inheritance */
+.navigation .button_outline_new.w-button,
+.button_outline_new.w-button {
+  color: var(--_color---text--brand) !important;
+  border: 1px solid var(--_color---border--brand) !important;
+  background-color: transparent !important;
+}
+.navigation .button_outline_new.w-button:hover,
+.button_outline_new.w-button:hover {
+  background-color: var(--_color---background--brand-primary) !important;
+  color: var(--grayscale--white) !important;
+  border-color: var(--_color---background--brand-primary) !important;
+}
+.button_primary {
+  background-color: var(--_color---background--brand-primary) !important;
+  color: var(--grayscale--white) !important;
+}
+.button_outline {
+  color: var(--_color---text--brand) !important;
+  border-color: var(--_color---border--brand) !important;
+  background-color: var(--_color---background--primary) !important;
+}
+.button_outline:hover {
+  background-color: var(--_color---background--brand-primary) !important;
+  color: var(--grayscale--white) !important;
+}
+.hero_interior {
+  background-color: var(--_color---surface--brand-primary) !important;
+}
+/* Navigation Menu Fixes */
+nav .theme-link {
+  font-family: var(--_typography---font-family--body);
+}
+/* ============================================= */
+/*            DROPDOWN STYLING                  */
+/* ============================================= */
+/* Theme Switcher Dropdown */
+.theme-switcher-component .w-dropdown-toggle {
+  font-family: var(--_typography---font-family--label) !important;
+}
+.theme-switcher-component .w-dropdown-toggle .text_label-sm {
+  font-family: var(--_typography---font-family--label) !important;
+}
+.theme-switcher-component .w-dropdown-list {
+  background-color: var(--_color---background--primary) !important;
+  border: 1px solid var(--_color---border--secondary) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  padding: 8px 0 !important;
+}
+.theme-switcher-component .w-dropdown-list .w-dropdown-link {
+  padding: 12px 16px !important;
+  display: block !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  font-family: inherit !important;
+  color: inherit !important;
+}
+/* Industry Switcher Dropdown */
+.industry-switcher-component .w-dropdown-list,
+.industry-switcher-component .w-dropdown-list .w-dropdown-link {
+  color: var(--_color---text--primary) !important;
+  font-size: var(--_typography---label--medium-base) !important;
+  line-height: 1.4 !important;
+  font-family: var(--_typography---font-family--label) !important;
+}
+.industry-switcher-component .w-dropdown-toggle {
+  color: var(--_color---text--primary) !important;
+  font-size: var(--_typography---label--medium-base) !important;
+  font-family: var(--_typography---font-family--label) !important;
+}
+.industry-switcher-component .w-dropdown-link:hover {
+  color: var(--_color---text--secondary) !important;
+  background-color: var(--_color---background--secondary) !important;
+}
+.industry-switcher-component .w-dropdown-link:focus {
+  color: var(--_color---text--brand) !important;
+  background-color: var(--_color---background--brand-primary) !important;
+  outline: 2px solid var(--_color---border--brand) !important;
+  outline-offset: -2px !important;
+}
+/* ============================================= */
+/*          LEGACY COMPATIBILITY                */
+/* ============================================= */
+/* Modern Theme Aliases */
+.modern-theme-1 {
+  /* Inherits from .body.theme-1 */
+}
+.modern-theme-2 {
+  --_color---text--primary: var(--grayscale--lightest);
+  --_color---background--primary: var(--grayscale--darkest);
+  --_color---surface--nav: var(--grayscale--black);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_typography---font-family--heading: Geist, sans-serif;
+  --_typography---font-family--body: "Geist Mono", sans-serif;
+}
+.modern-theme-3 {
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+  --_typography---font-family--body: "Source Sans 3", sans-serif;
+}
+.modern-theme-4 {
+  --_color---text--primary: var(--grayscale--black);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+  --_typography---font-family--body: Hind, sans-serif;
+}
+/* Expressive Theme Aliases */
+.expressive-theme-1 {
+  --_color---text--brand: var(--_themes---peach-brown--peach);
+  --_color---background--primary: var(--_themes---peach-brown--peach-lightest);
+  --_typography---font-family--heading: Newsreader, sans-serif;
+}
+.expressive-theme-2 {
+  --_color---text--brand: var(--_themes---neon--neon-green);
+  --_color---page--primary: var(--grayscale--black);
+  --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
+}
+.expressive-theme-3 {
+  --_color---background--primary: var(--_themes---yellow-brown--tan);
+  --_color---text--brand: var(--_themes---yellow-brown--brown);
+  --_typography---font-family--heading: Lato, Arial, sans-serif;
+}
+.expressive-theme-4 {
+  --_color---background--primary: var(--_themes---vibrant--tan);
+  --_color---text--brand: var(--_themes---vibrant--green);
+  --_typography---font-family--heading: "Playfair Display", sans-serif;
+}
+</style>
+</head>
+<body>
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=67c4e62250923072710d472c" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="js/webflow.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/gsap.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/Flip.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/ScrollTrigger.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/SplitText.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/Draggable.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/DrawSVGPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/TextPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/ScrollToPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/ScrollSmoother.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/ScrambleTextPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/PhysicsPropsPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/Physics2DPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/Observer.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/MotionPathPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/MotionPathHelper.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/MorphSVGPlugin.min.js" type="text/javascript"></script>
+  <script src="https://cdn.prod.website-files.com/gsap/3.14.2/InertiaPlugin.min.js" type="text/javascript"></script>
+  <script type="text/javascript">gsap.registerPlugin(Flip,ScrollTrigger,SplitText,Draggable,DrawSVGPlugin,TextPlugin,ScrollToPlugin,ScrollSmoother,ScrambleTextPlugin,PhysicsPropsPlugin,Physics2DPlugin,Observer,MotionPathPlugin,MotionPathHelper,MorphSVGPlugin,InertiaPlugin);</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollSmoother.min.js"></script>
+  <script src="https://kit.fontawesome.com/cd4a011d2b.js" crossorigin="anonymous"></script>
+  <script>
+/*
+ * =============================================
+ *           BRIK BDS THEME SYSTEM
+ * =============================================
+ * Unified theme and industry switching system
+ * for Webflow integration with localStorage
+ * persistence and CMS content mapping.
+ * =============================================
+ */
+// =============================================
+// CONFIGURATION & CONSTANTS
+// =============================================
+const CONFIG = {
+  THEME_STORAGE_KEY: 'brik-bds-theme',
+  INDUSTRY_STORAGE_KEY: 'brik-bds-industry',
+  // Theme mapping: picker ID → CSS class
+  THEME_MAPPING: {
+    'modern-theme-1': 'theme-1',
+    'modern-theme-2': 'theme-2', 
+    'modern-theme-3': 'theme-3',
+    'modern-theme-4': 'theme-4',
+    'expressive-theme-1': 'theme-5',
+    'expressive-theme-2': 'theme-6',
+    'expressive-theme-3': 'theme-7',
+    'expressive-theme-4': 'theme-8'
+  },
+  DEFAULT_THEME: 'modern-theme-1',
+  DEFAULT_INDUSTRY: 'dental',
+  INDUSTRIES: ['dental', 'finance', 'real-estate', 'small-business']
+};
+// Derived constants
+const ALL_THEME_IDS = Object.keys(CONFIG.THEME_MAPPING);
+const ALL_THEME_CLASSES = Object.values(CONFIG.THEME_MAPPING);
+// =============================================
+// WEBFLOW INTERACTION COMPATIBILITY
+// =============================================
+/**
+ * Checks if a click should be handled by our JavaScript or allowed to proceed to Webflow
+ * This preserves Webflow interactions while maintaining our theme functionality
+ * @param {Element} element - Clicked element
+ * @returns {boolean} True if we should handle it, false if Webflow should handle it
+ */
+function shouldHandleClick(element) {
+  // Handle theme and industry switcher clicks
+  if (element.classList.contains('theme-link') || 
+      element.hasAttribute('data-theme') || 
+      element.hasAttribute('data-industry')) {
+    return true;
+  }
+  // Handle clicks within theme/industry switcher components
+  const themeSwitcher = element.closest('.theme-switcher-component, #color-theme-switcher, #industry-theme-switcher');
+  if (themeSwitcher) {
+    return true;
+  }
+  // Let Webflow handle all other navigation clicks (preserves loading interactions)
+  return false;
+}
+/**
+ * Checks if an element is a navigation link that should trigger loading overlay
+ * @param {Element} element - Clicked element
+ * @returns {boolean} True if it's a navigation link
+ */
+function isNavigationLink(element) {
+  // Check if it's a direct link with href
+  if (element.tagName === 'A' && element.href && 
+      element.href !== window.location.href && 
+      !element.href.startsWith('mailto:') && 
+      !element.href.startsWith('tel:') &&
+      !element.href.startsWith('#')) {
+    return true;
+  }
+  // Check if it's inside a navigation area
+  const navParent = element.closest('nav, .navbar, .navigation, .nav-menu, [class*="nav"]');
+  if (navParent && element.tagName === 'A') {
+    return true;
+  }
+  // Check for common navigation classes
+  if (element.classList.contains('nav-link') || 
+      element.classList.contains('menu-link') ||
+      element.closest('.nav-link, .menu-link')) {
+    return true;
+  }
+  return false;
+}
+/**
+ * Programmatically trigger the Webflow loading overlay to ensure it appears
+ * This ensures the loading animation shows every time, not just when Webflow detects it
+ */
+function triggerLoadingOverlay() {
+  // Look for existing Webflow loading interactions
+  const loadingElements = document.querySelectorAll('[data-w-id], [class*="loading"]');
+  // Try to find and trigger Webflow interactions programmatically
+  loadingElements.forEach(element => {
+    const wId = element.getAttribute('data-w-id');
+    if (wId) {
+      console.log(`🎭 Attempting to trigger loading interaction: ${wId}`);
+      // Try to trigger Webflow interaction
+      if (window.Webflow && window.Webflow.push) {
+        try {
+          // Trigger the interaction
+          element.style.display = 'flex';
+          element.style.opacity = '1';
+          element.style.visibility = 'visible';
+          console.log(`✅ Loading overlay triggered programmatically`);
+        } catch (error) {
+          console.log(`⚠️ Could not trigger Webflow interaction:`, error);
+        }
+      }
+    }
+  });
+  // Backup: Create our own loading overlay if none exists or works
+  if (!document.querySelector('.loading-overlay-backup')) {
+    createBackupLoadingOverlay();
+  } else {
+    showBackupLoadingOverlay();
+  }
+}
+/**
+ * Create a backup loading overlay to ensure consistent coverage
+ * This shows when Webflow's native loading doesn't trigger
+ */
+function createBackupLoadingOverlay() {
+  const overlay = document.createElement('div');
+  overlay.className = 'loading-overlay-backup';
+  overlay.style.cssText = `
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: white !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease-in-out !important;
+  `;
+  overlay.innerHTML = `
+    <div style="text-align: center;">
+      <div style="width: 40px; height: 40px; border: 3px solid #f3f3f3; border-top: 3px solid var(--_color---theme--primary, #4665f5); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+      <p style="color: var(--_color---text--primary, #333); font-family: var(--_typography---font-family--body, sans-serif); margin: 0;">Loading...</p>
+    </div>
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  `;
+  document.body.appendChild(overlay);
+  // Fade in the overlay
+  setTimeout(() => {
+    overlay.style.opacity = '1';
+  }, 10);
+  console.log(`🛡️ Backup loading overlay created`);
+}
+/**
+ * Show the backup loading overlay
+ */
+function showBackupLoadingOverlay() {
+  const overlay = document.querySelector('.loading-overlay-backup');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    overlay.style.opacity = '1';
+    console.log(`🛡️ Backup loading overlay shown`);
+  }
+}
+/**
+ * Enhanced click handler that preserves Webflow interactions and ensures loading overlay
+ * @param {Event} e - Click event
+ */
+function handleSmartClick(e) {
+  const element = e.target;
+  // Only prevent default for our theme/industry switcher links
+  if (shouldHandleClick(element)) {
+    e.preventDefault();
+    e.stopPropagation();
+    const themePickerId = element.id;
+    const industry = element.getAttribute('data-industry') || element.id;
+    console.log(`🖱️ Handling click: ${themePickerId || industry}`);
+    // Handle theme switching
+    if (ALL_THEME_IDS.includes(themePickerId)) {
+      applyTheme(themePickerId);
+      closeWebflowDropdown(element);
+    }
+    // Handle industry switching
+    else if (CONFIG.INDUSTRIES.includes(industry)) {
+      applyIndustry(industry);
+      closeWebflowDropdown(element);
+    }
+  }
+  // For navigation links, ensure loading overlay appears and apply state immediately
+  else if (isNavigationLink(element)) {
+    console.log(`🔄 Navigation click detected: ${element.href || element.textContent}`);
+    // Apply current state immediately before navigation
+    applyImmediateState();
+    // Trigger loading overlay programmatically to ensure it shows
+    triggerLoadingOverlay();
+    // Let Webflow handle the navigation naturally (don't prevent default)
+  }
+  // For all other clicks, let Webflow handle them naturally
+}
+// =============================================
+// WEBFLOW INTEGRATION FIXES
+// =============================================
+/**
+ * Apply Webflow-specific fixes for dropdowns and components
+ */
+function applyWebflowFixes() {
+  // Fix missing theme-switcher-component classes
+  const colorThemeSwitcher = document.getElementById('color-theme-switcher');
+  const industryThemeSwitcher = document.getElementById('industry-theme-switcher');
+  if (colorThemeSwitcher && !colorThemeSwitcher.classList.contains('theme-switcher-component')) {
+    colorThemeSwitcher.classList.add('theme-switcher-component');
+    console.log('✅ Fixed missing theme-switcher-component class');
+  }
+  if (industryThemeSwitcher && !industryThemeSwitcher.classList.contains('theme-switcher-component')) {
+    industryThemeSwitcher.classList.add('theme-switcher-component');
+    console.log('✅ Fixed missing industry-switcher-component class');
+  }
+  // Add dropdown positioning fixes
+  const dropdownFixCSS = `
+  <style id="webflow-dropdown-fix">
+  .w-dropdown-list {
+    z-index: 9999 !important;
+    position: absolute !important;
+  }
+  .w-dropdown.w--open .w-dropdown-list {
+    z-index: 9999 !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+  }
+  #smooth-wrapper, #smooth-content {
+    position: relative !important;
+    z-index: auto !important;
+  }
+  .navbar {
+    position: relative !important;
+    z-index: 1000 !important;
+  }
+  .theme-switcher-component .w-dropdown-list {
+    z-index: 10000 !important;
+    background: var(--_color---surface--primary) !important;
+    border: 1px solid var(--_color---border--secondary) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  }
+  </style>
+  `;
+  if (!document.getElementById('webflow-dropdown-fix')) {
+    document.head.insertAdjacentHTML('beforeend', dropdownFixCSS);
+    console.log('✅ Added Webflow dropdown positioning fixes');
+  }
+  // Preserve Webflow interactions by using smart click handling
+  document.body.addEventListener('click', handleSmartClick, true);
+  console.log('✅ Added smart click handler for Webflow compatibility');
+}
+// =============================================
+// THEME SYSTEM
+// =============================================
+/**
+ * Apply theme to the page
+ * @param {string} themePickerId - Theme picker ID (e.g., 'modern-theme-1')
+ */
+function applyTheme(themePickerId) {
+  const cssThemeClass = CONFIG.THEME_MAPPING[themePickerId];
+  if (!cssThemeClass) {
+    console.warn(`⚠️ Unknown theme: ${themePickerId}`);
+    return;
+  }
+  console.log(`🎨 Switching to theme: ${themePickerId} → ${cssThemeClass}`);
+  // Ensure body has the 'body' class for Webflow theme structure
+  if (!document.body.classList.contains('body')) {
+    document.body.classList.add('body');
+  }
+  // Remove all existing theme classes
+  ALL_THEME_CLASSES.forEach(cls => document.body.classList.remove(cls));
+  ALL_THEME_IDS.forEach(id => document.body.classList.remove(id));
+  // Apply the correct Webflow theme class
+  document.body.classList.add(cssThemeClass);
+  // Mark that theme has been applied (shows content)
+  document.body.classList.add('theme-applied');
+  // Force reflow
+  document.body.offsetHeight;
+  // Save to localStorage
+  saveToStorage(CONFIG.THEME_STORAGE_KEY, themePickerId);
+  // Update UI
+  updateDropdownLabels();
+  // Dispatch event
+  dispatchThemeEvent(themePickerId, cssThemeClass);
+  console.log(`✅ Applied theme: ${themePickerId} (CSS: ${cssThemeClass})`);
+}
+/**
+ * Initialize theme switcher components (Webflow-compatible)
+ * Uses smart click handling that preserves Webflow interactions
+ * @param {Element} switcher - Theme switcher component
+ */
+function initializeThemeSwitcher(switcher) {
+  const links = switcher.querySelectorAll('.theme-link');
+  console.log(`🔗 Found ${links.length} theme links (using smart click handling)`);
+  // Ensure theme links have proper attributes for smart click handling
+  links.forEach(link => {
+    if (!link.hasAttribute('data-theme') && link.id) {
+      link.setAttribute('data-theme', link.id);
+    }
+  });
+  console.log(`✅ Theme switcher initialized with Webflow interaction preservation`);
+}
+// =============================================
+// INDUSTRY SYSTEM
+// =============================================
+/**
+ * Apply industry filter
+ * @param {string} industry - Industry name
+ */
+function applyIndustry(industry) {
+  if (!CONFIG.INDUSTRIES.includes(industry)) {
+    console.warn(`⚠️ Unsupported industry: ${industry}`);
+    return;
+  }
+  console.log(`🎯 Switching to industry: ${industry}`);
+  // Show only the selected industry content using JavaScript
+  showIndustryContent(industry);
+  // Remove existing filter classes
+  document.body.classList.forEach(cls => {
+    if (cls.startsWith('filter-')) {
+      document.body.classList.remove(cls);
+    }
+  });
+  // Apply new filter class for CSS fallback
+  document.body.classList.add(`filter-${industry}`);
+  // Save to localStorage
+  saveToStorage(CONFIG.INDUSTRY_STORAGE_KEY, industry);
+  // Update UI
+  updateDropdownLabels();
+  // Dispatch event
+  dispatchIndustryEvent(industry);
+  console.log(`✅ Applied industry filter: filter-${industry}`);
+}
+/**
+ * Initialize industry switcher (Webflow-compatible)
+ * Uses smart click handling that preserves Webflow interactions
+ */
+function initializeIndustrySwitcher() {
+  const industrySwitcher = document.getElementById('industry-theme-switcher');
+  if (!industrySwitcher) return;
+  const industryLinks = industrySwitcher.querySelectorAll('.theme-link');
+  console.log(`🎯 Found ${industryLinks.length} industry links (using smart click handling)`);
+  // Ensure industry links have proper attributes for smart click handling
+  industryLinks.forEach(link => {
+    if (!link.hasAttribute('data-industry') && link.id) {
+      link.setAttribute('data-industry', link.id);
+    }
+  });
+  console.log(`✅ Industry switcher initialized with Webflow interaction preservation`);
+}
+// =============================================
+// CMS CONTENT MAPPING
+// =============================================
+/**
+ * Show only the selected industry content using JavaScript display control
+ * This handles both correct data-industry attributes AND content-based detection
+ * @param {string} industry - Industry to show
+ */
+function showIndustryContent(industry) {
+  console.log(`🔄 Showing content for industry: ${industry}`);
+  // Find content wrappers
+  const contentWrappers = document.querySelectorAll('.industry-content');
+  if (contentWrappers.length === 0) {
+    // Fallback: if no specific wrappers, search the entire document
+    console.log('⚠️ No .industry-content wrappers found, searching entire document');
+    const allItems = document.querySelectorAll('[data-industry]');
+    showHideItems(allItems, industry);
+    return;
+  }
+  // Process each content wrapper
+  contentWrappers.forEach(wrapper => {
+    const items = wrapper.querySelectorAll('[data-industry]');
+    showHideItemsWithContentDetection(items, industry);
+  });
+  console.log(`✅ Industry content visibility updated for: ${industry}`);
+}
+/**
+ * Helper function to show/hide items based on industry with smart content detection
+ * This handles both correct data-industry attributes AND content-based detection
+ * @param {NodeList} items - Items to process
+ * @param {string} targetIndustry - Industry to show
+ */
+function showHideItemsWithContentDetection(items, targetIndustry) {
+  if (items.length === 0) return;
+  let foundMatch = false;
+  const industryTextMap = {
+    'dental': ['dental', 'tooth', 'dentist', 'oral', 'teeth'],
+    'finance': ['finance', 'financial', 'money', 'investment', 'banking'],
+    'real-estate': ['real estate', 'property', 'housing', 'realty'],
+    'small-business': ['small business', 'entrepreneur', 'startup', 'sme']
+  };
+  // Show/hide items based on data-industry attribute OR content detection
+  items.forEach(item => {
+    const itemIndustry = item.getAttribute('data-industry');
+    let shouldShow = false;
+    // First, check if data-industry matches exactly
+    if (itemIndustry === targetIndustry) {
+      shouldShow = true;
+      console.log(`👁️ Showing item: ${itemIndustry} (exact match)`);
+    }
+    // If no exact match, check content for industry keywords
+    else {
+      const itemText = item.textContent.toLowerCase();
+      const targetKeywords = industryTextMap[targetIndustry] || [targetIndustry];
+      const hasKeyword = targetKeywords.some(keyword => 
+        itemText.includes(keyword.toLowerCase())
+      );
+      if (hasKeyword) {
+        shouldShow = true;
+        console.log(`👁️ Showing item: ${itemIndustry} (content match for "${targetIndustry}")`);
+      } else {
+        console.log(`🙈 Hiding item: ${itemIndustry} (no match for "${targetIndustry}")`);
+      }
+    }
+    if (shouldShow) {
+      item.style.display = '';
+      foundMatch = true;
+    } else {
+      item.style.display = 'none';
+    }
+  });
+  // Fallback: if no match found, show the first available item
+  if (!foundMatch && items.length > 0) {
+    items[0].style.display = '';
+    console.log(`🔄 No matches found, showing first available item as fallback`);
+  }
+}
+/**
+ * Helper function to show/hide items based on industry (original simple version)
+ * @param {NodeList} items - Items to process
+ * @param {string} targetIndustry - Industry to show
+ */
+function showHideItems(items, targetIndustry) {
+  if (items.length === 0) return;
+  let foundMatch = false;
+  // Show/hide items based on their data-industry attribute
+  items.forEach(item => {
+    const itemIndustry = item.getAttribute('data-industry');
+    if (itemIndustry === targetIndustry) {
+      item.style.display = ''; // Show the item
+      foundMatch = true;
+      console.log(`👁️ Showing item: ${itemIndustry}`);
+    } else {
+      item.style.display = 'none'; // Hide the item
+      console.log(`🙈 Hiding item: ${itemIndustry}`);
+    }
+  });
+  // Fallback: if no exact match found, show the first available item
+  if (!foundMatch && items.length > 0) {
+    items[0].style.display = '';
+    console.log(`🔄 No exact match found, showing first available item as fallback`);
+  }
+}
+// =============================================
+// UTILITY FUNCTIONS
+// =============================================
+/**
+ * Save value to localStorage with error handling
+ * @param {string} key - Storage key
+ * @param {string} value - Value to save
+ */
+function saveToStorage(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    console.warn(`⚠️ Could not save ${key} to localStorage:`, error);
+  }
+}
+/**
+ * Load value from localStorage with error handling
+ * @param {string} key - Storage key
+ * @param {string} defaultValue - Default value if not found
+ * @returns {string} Stored or default value
+ */
+function loadFromStorage(key, defaultValue) {
+  try {
+    return localStorage.getItem(key) || defaultValue;
+  } catch (error) {
+    console.warn(`⚠️ Could not load ${key} from localStorage:`, error);
+    return defaultValue;
+  }
+}
+/**
+ * Get URL parameter value
+ * @param {string} name - Parameter name
+ * @returns {string|null} Parameter value
+ */
+function getUrlParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+/**
+ * Close Webflow dropdown
+ * @param {Element} element - Element inside dropdown
+ */
+function closeWebflowDropdown(element) {
+  const dropdown = element.closest('.w-dropdown');
+  if (dropdown) {
+    const toggle = dropdown.querySelector('.w-dropdown-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') === 'true') {
+      toggle.click();
+    }
+  }
+}
+/**
+ * Update dropdown labels to show current selections
+ */
+function updateDropdownLabels() {
+  const currentTheme = loadFromStorage(CONFIG.THEME_STORAGE_KEY, CONFIG.DEFAULT_THEME);
+  const currentIndustry = loadFromStorage(CONFIG.INDUSTRY_STORAGE_KEY, CONFIG.DEFAULT_INDUSTRY);
+  updateThemeDropdownLabel(currentTheme);
+  updateIndustryDropdownLabel(currentIndustry);
+}
+/**
+ * Update theme dropdown label
+ * @param {string} themePickerId - Current theme picker ID
+ */
+function updateThemeDropdownLabel(themePickerId) {
+  document.querySelectorAll('.theme-switcher-component').forEach(switcher => {
+    const display = switcher.querySelector('.text_label-sm');
+    const selectedLink = switcher.querySelector(`.theme-link#${themePickerId}`);
+    if (display && selectedLink) {
+      display.textContent = selectedLink.textContent;
+    }
+  });
+}
+/**
+ * Update industry dropdown label
+ * @param {string} industry - Current industry
+ */
+function updateIndustryDropdownLabel(industry) {
+  const industrySwitcher = document.getElementById('industry-theme-switcher');
+  if (industrySwitcher) {
+    const display = industrySwitcher.querySelector('.text_label-sm');
+    const selectedLink = industrySwitcher.querySelector(`.theme-link#${industry}`);
+    if (display && selectedLink) {
+      display.textContent = selectedLink.textContent;
+    } else if (display) {
+      display.textContent = industry.charAt(0).toUpperCase() + industry.slice(1);
+    }
+  }
+}
+/**
+ * Dispatch theme change event
+ * @param {string} themePickerId - Theme picker ID
+ * @param {string} cssClass - CSS class name
+ */
+function dispatchThemeEvent(themePickerId, cssClass) {
+  document.dispatchEvent(new CustomEvent('themeChanged', { 
+    detail: { 
+      themePickerId: themePickerId,
+      cssClass: cssClass
+    } 
+  }));
+}
+/**
+ * Dispatch industry change event
+ * @param {string} industry - Industry name
+ */
+function dispatchIndustryEvent(industry) {
+  const industryChangedEvent = new CustomEvent('industryChanged', {
+    detail: { 
+      industry: industry,
+      timestamp: new Date().toISOString()
+    }
+  });
+  document.dispatchEvent(industryChangedEvent);
+}
+// =============================================
+// IMMEDIATE STATE APPLICATION (FLASH PREVENTION)
+// =============================================
+/**
+ * Apply theme and industry state immediately on page load
+ * This prevents flash of unstyled content by applying styles before DOM is ready
+ */
+function applyImmediateState() {
+  // Add immediate flash prevention CSS if not already added
+  addFlashPreventionCSS();
+  // Get saved state or defaults
+  const savedTheme = loadFromStorage(CONFIG.THEME_STORAGE_KEY, CONFIG.DEFAULT_THEME);
+  const savedIndustry = loadFromStorage(CONFIG.INDUSTRY_STORAGE_KEY, CONFIG.DEFAULT_INDUSTRY);
+  // Handle URL parameters
+  const urlTheme = getUrlParam('theme');
+  const urlIndustry = getUrlParam('industry');
+  const finalTheme = (urlTheme && ALL_THEME_IDS.includes(urlTheme)) ? urlTheme : savedTheme;
+  const finalIndustry = (urlIndustry && CONFIG.INDUSTRIES.includes(urlIndustry)) ? urlIndustry : savedIndustry;
+  // Apply theme immediately without logging (for speed)
+  const cssThemeClass = CONFIG.THEME_MAPPING[finalTheme];
+  if (cssThemeClass) {
+    // Ensure body has the 'body' class
+    document.body.classList.add('body');
+    // Remove all existing theme classes
+    ALL_THEME_CLASSES.forEach(cls => document.body.classList.remove(cls));
+    ALL_THEME_IDS.forEach(id => document.body.classList.remove(id));
+    // Apply theme class
+    document.body.classList.add(cssThemeClass);
+    // Apply industry filter class
+    document.body.classList.forEach(cls => {
+      if (cls.startsWith('filter-')) {
+        document.body.classList.remove(cls);
+      }
+    });
+    document.body.classList.add(`filter-${finalIndustry}`);
+    // Mark that theme has been applied
+    document.body.classList.add('theme-applied');
+    // Save to localStorage if URL params were used
+    if (urlTheme) saveToStorage(CONFIG.THEME_STORAGE_KEY, finalTheme);
+    if (urlIndustry) saveToStorage(CONFIG.INDUSTRY_STORAGE_KEY, finalIndustry);
+  }
+  return { theme: finalTheme, industry: finalIndustry };
+}
+/**
+ * Add CSS to prevent flash of unstyled content during theme switching
+ * This hides content until themes are applied
+ */
+function addFlashPreventionCSS() {
+  if (document.getElementById('flash-prevention-css')) return;
+  const style = document.createElement('style');
+  style.id = 'flash-prevention-css';
+  style.innerHTML = `
+    /* Hide content until theme is applied to prevent flash */
+    body:not(.theme-applied) main,
+    body:not(.theme-applied) .hero,
+    body:not(.theme-applied) .hero-section,
+    body:not(.theme-applied) [class*="hero"] {
+      visibility: hidden !important;
+    }
+    /* Show content once theme is applied */
+    body.theme-applied main,
+    body.theme-applied .hero,
+    body.theme-applied .hero-section,
+    body.theme-applied [class*="hero"] {
+      visibility: visible !important;
+      transition: visibility 0.1s ease-in-out;
+    }
+    /* Ensure navigation and theme switchers are always visible */
+    nav,
+    .navbar,
+    .theme-switcher-component,
+    #color-theme-switcher,
+    #industry-theme-switcher {
+      visibility: visible !important;
+    }
+  `;
+  // Insert at the very beginning of head for maximum priority
+  const head = document.head || document.getElementsByTagName('head')[0];
+  head.insertBefore(style, head.firstChild);
+}
+// =============================================
+// INITIALIZATION
+// =============================================
+// Apply state immediately (before DOM ready for fastest loading)
+let immediateState = null;
+// Apply state as early as possible to prevent flash
+if (document.readyState === 'loading') {
+  // Page still loading - apply immediately and also on DOM ready
+  immediateState = applyImmediateState();
+  document.addEventListener('DOMContentLoaded', function() {
+    // Reapply to ensure everything is set correctly
+    applyImmediateState();
+  });
+} else {
+  // Page already loaded - apply now  
+  immediateState = applyImmediateState();
+}
+// Also apply on page show (for back/forward navigation)
+window.addEventListener('pageshow', function(event) {
+  if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+    // Page was restored from cache, reapply state
+    applyImmediateState();
+  }
+});
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎨 Webflow-Aligned Theme Switcher - Supporting All 8 Themes');
+  // Apply Webflow fixes
+  applyWebflowFixes();
+  // Initialize theme switchers
+  document.querySelectorAll('.theme-switcher-component').forEach(initializeThemeSwitcher);
+  // Initialize industry switcher
+  initializeIndustrySwitcher();
+  // Apply initial state if not already done
+  if (!immediateState) {
+    immediateState = applyImmediateState();
+  }
+  // Apply full state with UI updates  
+  applyTheme(immediateState.theme);
+  applyIndustry(immediateState.industry);
+  // Initialize industry content visibility after Webflow CMS loads
+  setTimeout(() => {
+    showIndustryContent(immediateState.industry);
+  }, 1000);
+  console.log('🚀 Theme system ready!');
+});
+// =============================================
+// GLOBAL API (for debugging and external use)
+// =============================================
+// Expose functions globally
+window.switchToTheme = function(themePickerId) {
+  if (ALL_THEME_IDS.includes(themePickerId)) {
+    applyTheme(themePickerId);
+  } else {
+    console.warn(`⚠️ Unsupported theme: ${themePickerId}`);
+  }
+};
+window.switchToIndustry = function(industry) {
+  if (CONFIG.INDUSTRIES.includes(industry)) {
+    applyIndustry(industry);
+  } else {
+    console.warn(`⚠️ Unsupported industry: ${industry}`);
+  }
+};
+// Debugging functions
+window.debugTheme = function() {
+  console.log('🎨 Theme Debug Info:');
+  console.log(`Current body classes: ${document.body.className}`);
+  console.log(`Theme mapping:`, CONFIG.THEME_MAPPING);
+  console.log(`Available themes:`, ALL_THEME_IDS);
+  const currentThemeClass = ALL_THEME_CLASSES.find(cls => document.body.classList.contains(cls));
+  if (currentThemeClass) {
+    const currentPickerId = Object.keys(CONFIG.THEME_MAPPING).find(key => CONFIG.THEME_MAPPING[key] === currentThemeClass);
+    console.log(`Current theme: ${currentPickerId} → ${currentThemeClass}`);
+  } else {
+    console.log('No theme class found on body');
+  }
+};
+window.debugIndustry = function() {
+  console.log('🎯 Industry Debug Info:');
+  console.log(`Current body classes: ${document.body.className}`);
+  const currentFilterClass = Array.from(document.body.classList).find(cls => cls.startsWith('filter-'));
+  console.log(`Current industry filter: ${currentFilterClass || 'none'}`);
+  const industryItems = document.querySelectorAll('[data-industry]');
+  console.log(`Found ${industryItems.length} items with data-industry attributes`);
+};
+window.debugCMSItems = function() {
+  console.log('🔍 CMS Debug Info:');
+  const dynItems = document.querySelectorAll('[data-industry]');
+  console.log(`Found ${dynItems.length} items with data-industry attributes:`);
+  // Group items by data-industry value
+  const industryGroups = {};
+  dynItems.forEach((item, index) => {
+    const industry = item.getAttribute('data-industry');
+    const isVisible = item.style.display !== 'none' && getComputedStyle(item).display !== 'none';
+    const inlineStyle = item.style.display || 'not set';
+    const contentPreview = item.textContent.substring(0, 50).replace(/\s+/g, ' ').trim();
+    if (!industryGroups[industry]) {
+      industryGroups[industry] = [];
+    }
+    industryGroups[industry].push({
+      index: index + 1,
+      industry,
+      inlineStyle,
+      isVisible,
+      contentPreview
+    });
+  });
+  // Display grouped results
+  Object.keys(industryGroups).forEach(industry => {
+    console.log(`\n📁 data-industry="${industry}" (${industryGroups[industry].length} items):`);
+    industryGroups[industry].forEach(item => {
+      console.log(`  ${item.index}. inline="${item.inlineStyle}" | visible: ${item.isVisible} | content: "${item.contentPreview}"`);
+    });
+  });
+  console.log(`\n📊 Content Wrappers:`);
+  const contentWrappers = document.querySelectorAll('.industry-content');
+  console.log(`Found ${contentWrappers.length} .industry-content wrappers`);
+  console.log(`\n🎯 Body classes: ${document.body.className}`);
+  // Check for potential data attribute issues
+  const expectedIndustries = ['dental', 'finance', 'real-estate', 'small-business'];
+  const actualIndustries = Object.keys(industryGroups);
+  const unexpectedIndustries = actualIndustries.filter(industry => !expectedIndustries.includes(industry));
+  if (unexpectedIndustries.length > 0) {
+    console.log(`\n⚠️ POTENTIAL ISSUES DETECTED:`);
+    console.log(`Expected industries: ${expectedIndustries.join(', ')}`);
+    console.log(`Unexpected data-industry values found: ${unexpectedIndustries.join(', ')}`);
+    console.log(`These items may not filter correctly. Check your Webflow CMS setup.`);
+  }
+};
+window.clearInlineStyles = function() {
+  console.log('🧹 Clearing all inline display styles from industry items...');
+  const dynItems = document.querySelectorAll('[data-industry]');
+  dynItems.forEach(item => {
+    item.style.display = '';
+  });
+  console.log(`✅ Cleared inline styles from ${dynItems.length} items`);
+};
+window.testContentDetection = function() {
+  console.log('🔍 Testing Content-Based Industry Detection:');
+  const industries = ['dental', 'finance', 'real-estate', 'small-business'];
+  const allItems = document.querySelectorAll('[data-industry]');
+  const industryTextMap = {
+    'dental': ['dental', 'tooth', 'dentist', 'oral', 'teeth'],
+    'finance': ['finance', 'financial', 'money', 'investment', 'banking'],
+    'real-estate': ['real estate', 'property', 'housing', 'realty'],
+    'small-business': ['small business', 'entrepreneur', 'startup', 'sme']
+  };
+  industries.forEach(targetIndustry => {
+    console.log(`\n📋 Testing industry: "${targetIndustry}"`);
+    const targetKeywords = industryTextMap[targetIndustry] || [targetIndustry];
+    console.log(`   Keywords: ${targetKeywords.join(', ')}`);
+    let exactMatches = 0;
+    let contentMatches = 0;
+    allItems.forEach((item, index) => {
+      const itemIndustry = item.getAttribute('data-industry');
+      const itemText = item.textContent.toLowerCase();
+      const contentPreview = item.textContent.substring(0, 40).replace(/\s+/g, ' ').trim();
+      if (itemIndustry === targetIndustry) {
+        exactMatches++;
+        console.log(`   ✅ EXACT: data-industry="${itemIndustry}" | "${contentPreview}"`);
+      } else {
+        const hasKeyword = targetKeywords.some(keyword => 
+          itemText.includes(keyword.toLowerCase())
+        );
+        if (hasKeyword) {
+          contentMatches++;
+          const matchedKeyword = targetKeywords.find(keyword => 
+            itemText.includes(keyword.toLowerCase())
+          );
+          console.log(`   🔍 CONTENT: data-industry="${itemIndustry}" (matched: "${matchedKeyword}") | "${contentPreview}"`);
+        }
+      }
+    });
+    console.log(`   📊 Results: ${exactMatches} exact matches, ${contentMatches} content matches`);
+  });
+};
+window.debugWebflowInteraction = function() {
+  console.log('🎭 Webflow Loading Interaction Debug:');
+  // Check for navigation links
+  const navLinks = document.querySelectorAll('nav a, .navbar a, .nav-link');
+  console.log(`\n🔗 Found ${navLinks.length} navigation links`);
+  // Check for loading overlays
+  const loadingElements = document.querySelectorAll('[class*="loading"], [class*="overlay"], .w-lightbox-backdrop');
+  console.log(`\n🎭 Found ${loadingElements.length} potential loading overlay elements:`);
+  loadingElements.forEach((el, index) => {
+    const styles = getComputedStyle(el);
+    console.log(`  ${index + 1}. ${el.className}`);
+    console.log(`     - visible: ${styles.display !== 'none'}`);
+    console.log(`     - opacity: ${styles.opacity}`);
+    console.log(`     - z-index: ${styles.zIndex}`);
+    console.log(`     - position: ${styles.position}`);
+  });
+  // Check for interactions on page
+  const interactiveElements = document.querySelectorAll('[data-w-id]');
+  console.log(`\n⚡ Found ${interactiveElements.length} elements with Webflow interactions (data-w-id)`);
+  console.log(`\n📋 Webflow Loading Interaction Checklist:`);
+  console.log(`  1. ✅ JavaScript preserves navigation clicks for Webflow interactions`);
+  console.log(`  2. ✅ Theme/industry state applied immediately to prevent flash`);
+  console.log(`  3. Check that interaction trigger is set to 'Each time' not 'Only first time'`);
+  console.log(`  4. Ensure interaction is on navigation links, not theme switcher links`);
+  console.log(`  5. Verify loading overlay has proper z-index and covers entire viewport`);
+  console.log(`  6. Check that interaction duration matches your expected timing`);
+  console.log(`\n🔧 Flash Prevention Strategy:`);
+  console.log(`  - Theme applied BEFORE page content loads`);
+  console.log(`  - Industry filtering applied immediately`);  
+  console.log(`  - No content hiding/revealing - relies on Webflow overlay`);
+  console.log(`  - Loading overlay should completely cover any transitions`);
+  console.log(`\n🎯 To test: Click a nav link - overlay should cover any theme changes`);
+};
+window.testOverlayCoverage = function() {
+  console.log('🧪 Testing Loading Overlay Coverage:');
+  // Check if there are any loading overlays
+  const overlays = document.querySelectorAll('[class*="loading"], [class*="overlay"], .w-lightbox-backdrop, [data-w-id]');
+  if (overlays.length === 0) {
+    console.log('❌ No loading overlays found! You need to create a loading animation in Webflow.');
+    console.log('   1. Create a div with "loading-overlay" or similar class name');
+    console.log('   2. Set up a Webflow interaction triggered by navigation clicks');
+    console.log('   3. Make sure the overlay covers the full viewport (100vw x 100vh)');
+    return;
+  }
+  overlays.forEach((overlay, index) => {
+    const styles = getComputedStyle(overlay);
+    const rect = overlay.getBoundingClientRect();
+    const wId = overlay.getAttribute('data-w-id');
+    console.log(`\n📐 Overlay ${index + 1} (${overlay.className}):`);
+    console.log(`   - Data-w-id: ${wId || 'none'}`);
+    console.log(`   - Position: ${styles.position}`);
+    console.log(`   - Z-index: ${styles.zIndex}`);
+    console.log(`   - Width: ${styles.width} (viewport: ${window.innerWidth}px)`);
+    console.log(`   - Height: ${styles.height} (viewport: ${window.innerHeight}px)`);
+    console.log(`   - Top: ${styles.top}, Left: ${styles.left}`);
+    console.log(`   - Covers full viewport: ${rect.width >= window.innerWidth && rect.height >= window.innerHeight}`);
+    console.log(`   - Currently visible: ${styles.display !== 'none' && styles.opacity !== '0'}`);
+  });
+  console.log('\n💡 For best flash prevention:');
+  console.log('   - Overlay should be position: fixed with top: 0, left: 0');
+  console.log('   - Size should be 100vw x 100vh to cover entire viewport');
+  console.log('   - Z-index should be 99999 or higher');
+  console.log('   - Background should be solid (not transparent)');
+  console.log('   - Duration should match your expected page load time');
+  console.log('   - Webflow interaction should trigger on "Page Loading" not just specific links');
+};
+window.testNavigationClick = function() {
+  console.log('🧪 Testing Navigation Click Detection:');
+  // Find navigation links
+  const navLinks = document.querySelectorAll('a');
+  const detectedNavLinks = [];
+  navLinks.forEach((link, index) => {
+    if (isNavigationLink(link)) {
+      detectedNavLinks.push(link);
+      console.log(`🔗 Nav Link ${detectedNavLinks.length}: ${link.textContent.trim()} → ${link.href}`);
+    }
+  });
+  console.log(`\n📊 Found ${detectedNavLinks.length} navigation links that will trigger loading overlay`);
+  if (detectedNavLinks.length > 0) {
+    console.log('\n🎯 To test: Click one of these links to see if loading overlay appears');
+    console.log('   Watch console for "🔄 Navigation click detected" message');
+  } else {
+    console.log('\n❌ No navigation links detected! Check your HTML structure.');
+    console.log('   Make sure nav links are inside <nav> or have nav-related classes');
+  }
+};
+window.forceLoadingOverlay = function() {
+  console.log('🧪 Forcing Loading Overlay Display:');
+  // Apply immediate state
+  applyImmediateState();
+  // Trigger loading overlay
+  triggerLoadingOverlay();
+  console.log('✅ Loading overlay should now be visible');
+  console.log('   This simulates what happens during navigation');
+  // Auto-hide after 5 seconds for testing
+  setTimeout(() => {
+    const backup = document.querySelector('.loading-overlay-backup');
+    if (backup) {
+      backup.style.opacity = '0';
+      setTimeout(() => backup.remove(), 300);
+    }
+    console.log('🎭 Test loading overlay hidden');
+  }, 5000);
+};
+console.log('💡 Debug commands available:');
+console.log('  - switchToTheme("modern-theme-1") - Switch theme');
+console.log('  - switchToIndustry("dental") - Switch industry');  
+console.log('  - debugTheme() - Show theme debug info');
+console.log('  - debugIndustry() - Show industry debug info');
+console.log('  - debugCMSItems() - Show detailed CMS items debug info');
+console.log('  - clearInlineStyles() - Clear all inline display styles');
+console.log('  - testContentDetection() - Test content-based industry detection');
+console.log('  - debugWebflowInteraction() - Debug loading interaction setup');
+console.log('  - testOverlayCoverage() - Test loading overlay configuration');
+console.log('  - testNavigationClick() - Test navigation link detection');
+console.log('  - forceLoadingOverlay() - Force show loading overlay (5s test)');
+</script>
+</body>
+</html>
