@@ -1,0 +1,403 @@
+/* ============================================= */
+/*          BDS DESIGN TOKEN VARIABLES           */
+/* ============================================= */
+/* Auto-generated from Webflow design tokens     */
+/* Source: brik-bds.webflow.css                  */
+/* Generated: 2026-02-02T18:59:47.904Z        */
+/* DO NOT EDIT DIRECTLY - Run: node build.js    */
+/* ============================================= */
+
+:root {
+  /* ============================================= */
+  /*               PRIMITIVE TOKENS               */
+  /* ============================================= */
+
+  /* Grayscale */
+  --grayscale--dark: #828282;
+  --grayscale--darker: #4f4f4f;
+  --grayscale--light: #bdbdbd;
+  --grayscale--lightest: #f2f2f2;
+  --grayscale--lighter: #e0e0e0;
+  --grayscale--darkest: #333;
+  --grayscale--white: white;
+  --grayscale--black: black;
+
+  /* Theme Color Palettes */
+  --themes--blue-green--blue-light: #4665f5;
+  --themes--blue-green--blue-dark: #0e212a;
+  --themes--blue-green--green: #79d799;
+  --themes--blue-green--blue-lighter: #79b0d9;
+  --themes--blue-green--blue-lightest: #edf2f6;
+  --themes--neon--neon-green: #42ff00;
+  --themes--neon--neon-blue: #00f6ff;
+  --themes--neon--neon-purple: #ae00ff;
+  --themes--neon--neon-orange: #ff5c00;
+  --themes--neon--neon-yellow: #fffc00;
+  --themes--neon--neon-pink: #f0c;
+  --themes--blue-orange--blue: #3d5b83;
+  --themes--blue-orange--yellow: #f16b4d;
+  --themes--blue-orange--blue-dark: #263343;
+  --themes--blue-orange--blue-light: #98c0d9;
+  --themes--blue-orange--blue-lightest: #ddfbfa;
+  --themes--yellow-orange--yellow: #e8ea76;
+  --themes--yellow-orange--yellow-dark: #d8d96a;
+  --themes--yellow-orange--orange: #ef8f4b;
+  --themes--yellow-orange--black: black;
+  --themes--peach-brown--peach: #ed8059;
+  --themes--peach-brown--peach-light: #efc7a2;
+  --themes--peach-brown--peach-lightest: #f2eee5;
+  --themes--peach-brown--peach-darkest: #443b2b;
+  --themes--yellow-brown--yellow: #f3b94d;
+  --themes--yellow-brown--green: #615f36;
+  --themes--yellow-brown--brown: #372d2b;
+  --themes--yellow-brown--tan: #fffaeb;
+  --themes--green-orange--yellow-light: #fdd595;
+  --themes--green-orange--brown-light: #656153;
+  --themes--green-orange--yellow: #ffa600;
+  --themes--green-orange--green-light: #9eb28d;
+  --themes--green-orange--brown: #322b2f;
+  --themes--vibrant--blue: #5889f7;
+  --themes--vibrant--green: #4aa35b;
+  --themes--vibrant--orange: #ed7648;
+  --themes--vibrant--yellow: #f6c647;
+  --themes--vibrant--purple: #7a78f7;
+  --themes--vibrant--tan: #fcf9f2;
+  --themes--blue-red--green: #74b4a8;
+  --themes--blue-red--green-blue: #317d9e;
+  --themes--blue-red--red: #fe1755;
+  --themes--blue-red--blue-dark: #f5ffbe;
+  --themes--blue-red--green-light: #b2dbc0;
+  --themes--orange-green--green: #1bb58c;
+  --themes--orange-green--orange-light: #ffae26;
+  --themes--orange-green--orange-lightest: #fef2cd;
+  --themes--orange-green--red: #fd2253;
+  --themes--orange-green--orange: #ff7828;
+  --themes--pastel--purple: #c8aff4;
+  --themes--pastel--green: #b9fd98;
+  --themes--pastel--blue: #384ce2;
+  --themes--pastel--orange-light: #fdf2d5;
+  --themes--pastel--black: black;
+
+  /* Space Scale */
+  --space--0: 0px;
+  --space--25: 1px;
+  --space--50: 2px;
+  --space--100: 4px;
+  --space--150: 6px;
+  --space--200: 8px;
+  --space--250: 10px;
+  --space--300: 12px;
+  --space--350: 14px;
+  --space--400: 16px;
+  --space--450: 18px;
+  --space--500: 20px;
+  --space--600: 24px;
+  --space--700: 28px;
+  --space--800: 32px;
+  --space--900: 36px;
+  --space--1000: 40px;
+  --space--1100: 44px;
+  --space--1200: 48px;
+  --space--1300: 52px;
+  --space--1400: 56px;
+  --space--1500: 60px;
+  --space--1600: 64px;
+  --space--1700: 72px;
+  --space--1800: 80px;
+  --space--1900: 84px;
+  --space--2000: 88px;
+  --space--2100: 96px;
+  --space--2200: 104px;
+  --space--2300: 112px;
+  --space--2400: 128px;
+  --space--2500: 136px;
+  --space--2600: 144px;
+  --space--2700: 152px;
+  --space--2800: 160px;
+  --space--2900: 168px;
+  --space--3000: 176px;
+
+  /* Size Scale */
+  --size--0: 0px;
+  --size--25: 1px;
+  --size--50: 2px;
+  --size--100: 4px;
+  --size--150: 6px;
+  --size--200: 8px;
+  --size--300: 12px;
+  --size--400: 16px;
+  --size--500: 20px;
+  --size--600: 24px;
+  --size--700: 28px;
+  --size--800: 32px;
+  --size--900: 36px;
+  --size--1000: 40px;
+  --size--1100: 44px;
+  --size--1200: 48px;
+  --size--1300: 48px;
+  --size--1400: 52px;
+  --size--1500: 56px;
+  --size--1600: 60px;
+  --size--1700: 64px;
+  --size--1800: 72px;
+  --size--1900: 80px;
+  --size--2000: 84px;
+  --size--2100: 88px;
+  --size--2200: 96px;
+
+  /* Border Width Scale */
+  --border-width--0: 0px;
+  --border-width--25: .25px;
+  --border-width--50: .5px;
+  --border-width--100: 1px;
+  --border-width--200: 2px;
+  --border-width--300: 3px;
+  --border-width--400: 4px;
+  --border-width--500: 5px;
+  --border-width--600: 6px;
+
+  /* Border Radius Scale */
+  --border-radius--0: 0px;
+  --border-radius--pill: 999px;
+  --border-radius--circle: 9999px;
+  --border-radius--50: 2px;
+  --border-radius--100: 4px;
+  --border-radius--200: 8px;
+  --border-radius--300: 10px;
+  --border-radius--400: 12px;
+  --border-radius--500: 14px;
+  --border-radius--600: 16px;
+  --border-radius--700: 20px;
+  --border-radius--800: 24px;
+  --border-radius--900: 28px;
+  --border-radius--1000: 32px;
+  --border-radius--1100: 36px;
+  --border-radius--1200: 40px;
+  --border-radius--1300: 44px;
+  --border-radius--1400: 48px;
+  --border-radius--1500: 999px;
+  --border-radius--1600: 9999px;
+
+  /* Shadow Scales */
+  --shadow-spread--0: 0px;
+  --shadow-spread--100: 2px;
+  --shadow-spread--200: 4px;
+  --shadow-spread--300: 8px;
+  --shadow-spread--400: 10px;
+  --shadow-spread--500: 12px;
+  --shadow-spread--600: 14px;
+  --shadow-spread--700: 16px;
+  --shadow-spread--800: 16px;
+  --shadow-blur--0: 0px;
+  --shadow-blur--100: 2px;
+  --shadow-blur--200: 4px;
+  --shadow-blur--300: 6px;
+  --shadow-blur--400: 8px;
+  --shadow-blur--500: 10px;
+  --shadow-blur--600: 12px;
+  --shadow-blur--700: 14px;
+  --shadow-blur--800: 16px;
+  --shadow-offset--0: 0px;
+  --shadow-offset--25: -4px;
+  --shadow-offset--50: -2px;
+  --shadow-offset--75: -2px;
+  --shadow-offset--100: 2px;
+  --shadow-offset--200: 4px;
+  --shadow-offset--300: 8px;
+  --shadow-offset--400: 10px;
+  --shadow-offset--500: 12px;
+  --shadow-offset--600: 16px;
+  --shadow-offset--700: 14px;
+  --shadow-offset--800: 16px;
+
+  /* Font Size Scale */
+  --font-size--25: 10.26px;
+  --font-size--50: 11.54px;
+  --font-size--75: 14px;
+  --font-size--100: 16px;
+  --font-size--200: 18px;
+  --font-size--300: 20px;
+  --font-size--400: 22.5px;
+  --font-size--500: 25.3px;
+  --font-size--600: 28.5px;
+  --font-size--700: 32px;
+  --font-size--800: 36px;
+  --font-size--900: 40.5px;
+  --font-size--1000: 45.5px;
+  --font-size--1100: 51px;
+  --font-size--1200: 57.5px;
+  --font-size--1300: 64.7px;
+  --font-size--1400: 72.8px;
+  --font-size--1500: 81.9px;
+  --font-size--1600: 92.2px;
+  --font-size--1700: 103.9px;
+  --font-size--1800: 116.9px;
+  --font-size--1900: 143px;
+  --font-size--2000: 171px;
+  --font-size--2100: 205px;
+  --font-size--2200: 247px;
+  --font-size--2300: 296px;
+  --font-size--2400: 355px;
+  --font-size--2500: 426px;
+  --font-size--2600: 515px;
+
+  /* Font Weights */
+  --font-weight--bold: 700;
+  --font-weight--regular: 400;
+  --font-weight--semi-bold: 600;
+  --font-weight--light: 300;
+  --font-weight--medium: 500;
+  --font-weight--extra-bold: 800;
+  --font-weight--black: 900;
+  --font-weight--thin: 300;
+
+  /* Font Line Heights */
+  --font-line-height--100: 100%;
+  --font-line-height--125: 125%;
+  --font-line-height--150: 150%;
+  --font-line-height--175: 175%;
+  --font-line-height--200: 200%;
+  --font-line-height--none: 0%;
+
+  /* Font Families (primitives) */
+  --font-family--body: Poppins;
+  --font-family--label: Poppins;
+  --font-family--display: Poppins;
+  --font-family--heading: Poppins;
+  --font-family--icon-brands: "Font Awesome 6 Brands";
+  --font-family--icon: "Font Awesome 6 Pro";
+
+  /* ============================================= */
+  /*               SEMANTIC TOKENS                 */
+  /* ============================================= */
+
+  /* Color Semantic Tokens (default: light mode) */
+  --color-border-secondary: var(--grayscale--light);
+  --color-surface-nav: var(--grayscale--white);
+  --color-background-brand-primary: var(--themes--blue-green--blue-light);
+  --color-text-inverse: var(--grayscale--white);
+  --color-border-brand: var(--themes--blue-green--blue-light);
+  --color-background-primary: var(--grayscale--white);
+  --color-border-inverse: var(--grayscale--white);
+  --color-text-primary: var(--grayscale--darkest);
+  --color-text-brand: var(--themes--blue-green--blue-light);
+  --color-surface-primary: var(--grayscale--white);
+  --color-border-primary: var(--grayscale--dark);
+  --color-surface-secondary: var(--grayscale--lightest);
+  --color-page-primary: var(--grayscale--white);
+  --color-text-muted: var(--grayscale--dark);
+  --color-surface-brand-primary: var(--themes--blue-green--blue-light);
+  --color-border-input: var(--grayscale--light);
+  --color-surface-brand-secondary: var(--themes--blue-green--green);
+  --color-text-secondary: var(--grayscale--darker);
+  --color-background-secondary: var(--grayscale--lightest);
+  --color-theme-accent: var(--themes--blue-green--green);
+  --color-theme-tertiary: var(--themes--blue-green--blue-dark);
+  --color-theme-secondary: var(--themes--blue-green--blue-lighter);
+  --color-theme-primary: var(--themes--blue-green--blue-light);
+  --color-page-brand: var(--themes--blue-green--blue-light);
+  --color-background-brand-secondary: white;
+  --color-background-inverse: var(--grayscale--white);
+  --color-background-input: var(--grayscale--white);
+  --color-background-image: #17171799;
+  --color-background-image-brand: var(--themes--blue-green--blue-light);
+  --color-page-secondary: var(--grayscale--lighter);
+  --color-theme-fourth: white;
+
+  /* Space Semantic Tokens */
+  --layout-none: var(--space--0);
+  --layout-lg: var(--space--400);
+  --layout-md: var(--space--200);
+  --layout-xl: var(--space--600);
+  --layout-gap-md: var(--space--200);
+  --layout-gap-lg: var(--space--400);
+  --layout-gap-xl: var(--space--500);
+  --layout-gap-none: var(--space--0);
+  --layout-huge: var(--space--1000);
+  --layout-xxl: var(--space--800);
+  --layout-sm: var(--space--150);
+  --layout-gap-sm: var(--space--100);
+  --layout-gap-xxl: var(--space--600);
+  --layout-gap-huge: var(--space--1200);
+  --layout-tiny: var(--space--100);
+  --layout-gap-tiny: var(--space--50);
+  --layout-button: var(--space--200);
+  --layout-input: var(--space--200);
+
+  /* Size Semantic Tokens */
+  --size-none: var(--size--0);
+  --size-container-size-max-hero-height: 100vh;
+  --size-container-size-max-hero-width: 100vw;
+  --size-container-size-full-width: 100%;
+  --size-container-size-half-width: 50%;
+  --size-container-size-three-quarter-width: 75%;
+  --size-container-size-quarter-width: 25%;
+  --size-container-size-one-third-width: 33%;
+  --size-container-size-two-third-width: 66%;
+  --size-screen-size-wider: 1440px;
+  --size-screen-size-wide: 1280px;
+  --size-screen-size-desktop: 1080px;
+  --size-screen-size-tablet: 768px;
+  --size-screen-size-mobile: 320px;
+  --size-tiny: var(--size--50);
+  --size-sm: var(--size--100);
+  --size-md: var(--size--200);
+  --size-lg: var(--size--400);
+  --size-xl: var(--size--600);
+  --size-xxl: var(--size--800);
+  --size-huge: var(--size--1000);
+
+  /* Typography Semantic Tokens */
+  --typography-font-family-label: "Open Sans", sans-serif;
+  --typography-body-sm: var(--font-size--75);
+  --typography-label-md-base: var(--font-size--100);
+  --typography-font-family-body: "Open Sans", sans-serif;
+  --typography-body-md-base: var(--font-size--100);
+  --typography-font-family-heading: "Droid Sans", sans-serif;
+  --typography-heading-xxx-large: var(--font-size--1200);
+  --typography-heading-large: var(--font-size--700);
+  --typography-label-le: var(--font-size--200);
+  --typography-label-sm: var(--font-size--75);
+  --typography-font-family-display: "Droid Sans", sans-serif;
+  --typography-display-large: var(--font-size--1400);
+  --typography-display-medium: var(--font-size--1500);
+  --typography-display-small: var(--font-size--1600);
+  --typography-heading-xx-large: var(--font-size--1000);
+  --typography-heading-x-large: var(--font-size--900);
+  --typography-heading-medium: var(--font-size--500);
+  --typography-heading-small: var(--font-size--300);
+  --typography-body-lg: var(--font-size--200);
+  --typography-heading-tiny: var(--font-size--100);
+  --typography-font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --typography-body-tiny: var(--font-size--25);
+  --typography-body-xs: var(--font-size--50);
+  --typography-icon-small: var(--font-size--75);
+  --typography-icon-medium-base: var(--font-size--100);
+  --typography-icon-large: var(--font-size--200);
+
+  /* Border Width Semantic Tokens */
+  --border-width-none: var(--border-width--0);
+  --border-width-md: var(--border-width--50);
+  --border-width-sm: var(--border-width--25);
+  --border-width-lg: var(--border-width--100);
+
+  /* Border Radius Semantic Tokens */
+  --border-radius-none: var(--border-radius--0);
+  --border-radius-sm: var(--border-radius--50);
+  --border-radius-md: var(--border-radius--100);
+  --border-radius-lg: var(--border-radius--200);
+  --border-radius-input: var(--border-radius--50);
+  --border-radius-button: var(--border-radius--50);
+
+  /* Box Shadow Semantic Tokens */
+  --box-shadow-md: var(--shadow-spread--0);
+  --box-shadow-none: var(--shadow-spread--0);
+  --box-shadow-sm: var(--shadow-spread--0);
+  --box-shadow-lg: var(--shadow-spread--0);
+
+  /* Blur Radius Semantic Tokens */
+  --blur-radius-md: var(--shadow-blur--0);
+  --blur-radius-none: var(--shadow-blur--0);
+  --blur-radius-sm: var(--shadow-blur--0);
+  --blur-radius-lg: var(--shadow-blur--0);
+}

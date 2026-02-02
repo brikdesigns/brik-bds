@@ -1,0 +1,520 @@
+/* ============================================= */
+/*            BDS THEME DEFINITIONS              */
+/* ============================================= */
+/* Auto-generated from Webflow design tokens     */
+/* Source: brik-bds.webflow.css                  */
+/* Generated: 2026-02-02T18:59:47.907Z        */
+/* DO NOT EDIT DIRECTLY - Run: node build.js    */
+/* ============================================= */
+
+/* ============================================= */
+/* Blue-Green (Default Light)                  */
+/* ============================================= */
+.theme-1 {
+  /* Space */
+  --layout-none: var(--space--0);
+  --layout-lg: var(--space--1300);
+  --layout-md: var(--space--1200);
+  --layout-xl: var(--space--1400);
+  --layout-gap-md: var(--space--200);
+  --layout-gap-lg: var(--space--400);
+  --layout-gap-xl: var(--space--500);
+  --layout-gap-none: var(--space--0);
+  --layout-huge: var(--space--1600);
+  --layout-xxl: var(--space--1500);
+  --layout-sm: var(--space--1100);
+  --layout-gap-sm: var(--space--100);
+  --layout-gap-xxl: var(--space--600);
+  --layout-gap-huge: var(--space--1200);
+  --layout-tiny: var(--space--1000);
+  --layout-gap-tiny: var(--space--50);
+  --layout-button: var(--space--300);
+  --layout-input: var(--space--200);
+  /* Size */
+  --size-none: var(--size--0);
+  --size-container-size-max-hero-height: 100vh;
+  --size-container-size-max-hero-width: 100vw;
+  --size-container-size-full-width: 100%;
+  --size-container-size-half-width: 50%;
+  --size-container-size-three-quarter-width: 75%;
+  --size-container-size-quarter-width: 25%;
+  --size-container-size-one-third-width: 33%;
+  --size-container-size-two-third-width: 66%;
+  --size-screen-size-wider: 1440px;
+  --size-screen-size-wide: 1280px;
+  --size-screen-size-desktop: 1080px;
+  --size-screen-size-tablet: 768px;
+  --size-screen-size-mobile: 320px;
+  --size-tiny: var(--size--50);
+  --size-sm: var(--size--100);
+  --size-md: var(--size--200);
+  --size-lg: var(--size--400);
+  --size-xl: var(--size--600);
+  --size-xxl: var(--size--800);
+  --size-huge: var(--size--1000);
+}
+
+/* ============================================= */
+/* Vibrant                                     */
+/* ============================================= */
+.theme-8 {
+  /* Color */
+  --color-border-secondary: var(--grayscale--light);
+  --color-surface-nav: var(--grayscale--white);
+  --color-background-brand-primary: var(--themes--vibrant--green);
+  --color-text-inverse: var(--grayscale--white);
+  --color-border-brand: var(--themes--vibrant--green);
+  --color-background-primary: var(--grayscale--white);
+  --color-border-inverse: var(--grayscale--white);
+  --color-text-primary: var(--grayscale--darkest);
+  --color-text-brand: var(--themes--vibrant--green);
+  --color-surface-primary: var(--themes--vibrant--tan);
+  --color-border-primary: var(--grayscale--dark);
+  --color-surface-secondary: var(--grayscale--lightest);
+  --color-page-primary: var(--themes--vibrant--tan);
+  --color-text-muted: var(--grayscale--dark);
+  --color-surface-brand-primary: var(--themes--vibrant--green);
+  --color-border-input: var(--grayscale--light);
+  --color-surface-brand-secondary: var(--themes--vibrant--purple);
+  --color-text-secondary: var(--grayscale--darker);
+  --color-background-secondary: var(--grayscale--lightest);
+  --color-theme-accent: var(--themes--vibrant--purple);
+  --color-theme-tertiary: var(--themes--blue-red--green-blue);
+  --color-theme-secondary: var(--themes--vibrant--yellow);
+  --color-theme-primary: var(--themes--vibrant--green);
+  --color-page-brand: var(--themes--vibrant--green);
+  --color-background-brand-secondary: white;
+  --color-background-inverse: var(--grayscale--white);
+  --color-background-input: var(--grayscale--white);
+  --color-background-image: #17171799;
+  --color-background-image-brand: var(--themes--vibrant--green);
+  --color-page-secondary: var(--themes--yellow-brown--brown);
+  --color-theme-fourth: var(--themes--vibrant--tan);
+  /* Typography */
+  --typography-font-family-label: Hind, sans-serif;
+  --typography-body-sm: var(--font-size--75);
+  --typography-label-md-base: var(--font-size--100);
+  --typography-font-family-body: Hind, sans-serif;
+  --typography-body-md-base: var(--font-size--100);
+  --typography-font-family-heading: "Playfair Display", sans-serif;
+  --typography-heading-xxx-large: var(--font-size--1200);
+  --typography-heading-large: var(--font-size--700);
+  --typography-label-le: var(--font-size--200);
+  --typography-label-sm: var(--font-size--75);
+  --typography-font-family-display: "Playfair Display", sans-serif;
+  --typography-display-large: var(--font-size--1400);
+  --typography-display-medium: var(--font-size--1500);
+  --typography-display-small: var(--font-size--1600);
+  --typography-heading-xx-large: var(--font-size--1000);
+  --typography-heading-x-large: var(--font-size--900);
+  --typography-heading-medium: var(--font-size--500);
+  --typography-heading-small: var(--font-size--300);
+  --typography-body-lg: var(--font-size--200);
+  --typography-heading-tiny: var(--font-size--100);
+  --typography-font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --typography-body-tiny: var(--font-size--25);
+  --typography-body-xs: var(--font-size--50);
+  --typography-icon-small: var(--font-size--75);
+  --typography-icon-medium-base: var(--font-size--100);
+  --typography-icon-large: var(--font-size--200);
+  /* Space */
+  --layout-none: var(--space--0);
+  --layout-lg: var(--space--400);
+  --layout-md: var(--space--200);
+  --layout-xl: var(--space--600);
+  --layout-gap-md: var(--space--200);
+  --layout-gap-lg: var(--space--400);
+  --layout-gap-xl: var(--space--500);
+  --layout-gap-none: var(--space--0);
+  --layout-huge: var(--space--1000);
+  --layout-xxl: var(--space--800);
+  --layout-sm: var(--space--150);
+  --layout-gap-sm: var(--space--100);
+  --layout-gap-xxl: var(--space--600);
+  --layout-gap-huge: var(--space--1200);
+  --layout-tiny: var(--space--100);
+  --layout-gap-tiny: var(--space--50);
+  --layout-button: var(--space--200);
+  --layout-input: var(--space--200);
+  /* Size */
+  --size-none: var(--size--0);
+  --size-container-size-max-hero-height: 100vh;
+  --size-container-size-max-hero-width: 100vw;
+  --size-container-size-full-width: 100%;
+  --size-container-size-half-width: 50%;
+  --size-container-size-three-quarter-width: 75%;
+  --size-container-size-quarter-width: 25%;
+  --size-container-size-one-third-width: 33%;
+  --size-container-size-two-third-width: 66%;
+  --size-screen-size-wider: 1440px;
+  --size-screen-size-wide: 1280px;
+  --size-screen-size-desktop: 1080px;
+  --size-screen-size-tablet: 768px;
+  --size-screen-size-mobile: 320px;
+  --size-tiny: var(--size--0);
+  --size-sm: var(--size--0);
+  --size-md: var(--size--0);
+  --size-lg: var(--size--0);
+  --size-xl: var(--size--0);
+  --size-xxl: var(--size--0);
+  --size-huge: var(--size--0);
+}
+
+/* ============================================= */
+/* Yellow-Orange (Dark)                        */
+/* ============================================= */
+.theme-2 {
+  /* Color */
+  --color-border-secondary: var(--grayscale--dark);
+  --color-surface-nav: var(--grayscale--black);
+  --color-background-brand-primary: var(--themes--yellow-orange--yellow);
+  --color-text-inverse: var(--grayscale--darkest);
+  --color-border-brand: var(--themes--yellow-orange--yellow);
+  --color-background-primary: var(--grayscale--darkest);
+  --color-border-inverse: var(--grayscale--black);
+  --color-text-primary: var(--grayscale--lightest);
+  --color-text-brand: var(--themes--yellow-orange--yellow);
+  --color-surface-primary: var(--grayscale--black);
+  --color-border-primary: var(--grayscale--light);
+  --color-surface-secondary: var(--grayscale--darkest);
+  --color-page-primary: var(--grayscale--black);
+  --color-text-muted: var(--grayscale--dark);
+  --color-surface-brand-primary: var(--themes--yellow-orange--yellow);
+  --color-border-input: var(--grayscale--dark);
+  --color-surface-brand-secondary: var(--themes--yellow-orange--orange);
+  --color-text-secondary: var(--grayscale--light);
+  --color-background-secondary: var(--grayscale--black);
+  --color-theme-accent: var(--themes--yellow-orange--orange);
+  --color-theme-tertiary: var(--themes--yellow-orange--orange);
+  --color-theme-secondary: var(--themes--yellow-orange--yellow-dark);
+  --color-theme-primary: var(--themes--yellow-orange--yellow);
+  --color-page-brand: var(--themes--yellow-orange--yellow);
+  --color-background-brand-secondary: white;
+  --color-background-inverse: var(--grayscale--black);
+  --color-background-input: var(--grayscale--darkest);
+  --color-background-image: #17171799;
+  --color-background-image-brand: var(--themes--yellow-orange--yellow);
+  --color-page-secondary: var(--grayscale--darkest);
+  --color-theme-fourth: var(--grayscale--white);
+  /* Typography */
+  --typography-font-family-label: "Geist Mono", sans-serif;
+  --typography-body-sm: var(--font-size--75);
+  --typography-label-md-base: var(--font-size--100);
+  --typography-font-family-body: "Geist Mono", sans-serif;
+  --typography-body-md-base: var(--font-size--100);
+  --typography-font-family-heading: Geist, sans-serif;
+  --typography-heading-xxx-large: var(--font-size--1200);
+  --typography-heading-large: var(--font-size--700);
+  --typography-label-le: var(--font-size--200);
+  --typography-label-sm: var(--font-size--75);
+  --typography-font-family-display: Geist, sans-serif;
+  --typography-display-large: var(--font-size--1400);
+  --typography-display-medium: var(--font-size--1500);
+  --typography-display-small: var(--font-size--1600);
+  --typography-heading-xx-large: var(--font-size--1000);
+  --typography-heading-x-large: var(--font-size--900);
+  --typography-heading-medium: var(--font-size--500);
+  --typography-heading-small: var(--font-size--300);
+  --typography-body-lg: var(--font-size--200);
+  --typography-heading-tiny: var(--font-size--100);
+  --typography-font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --typography-body-tiny: var(--font-size--25);
+  --typography-body-xs: var(--font-size--50);
+  --typography-icon-small: var(--font-size--75);
+  --typography-icon-medium-base: var(--font-size--100);
+  --typography-icon-large: var(--font-size--200);
+}
+
+/* ============================================= */
+/* Peach-Brown                                 */
+/* ============================================= */
+.theme-3 {
+  /* Color */
+  --color-border-secondary: var(--grayscale--light);
+  --color-surface-nav: var(--grayscale--white);
+  --color-background-brand-primary: var(--themes--blue-green--blue-light);
+  --color-text-inverse: var(--grayscale--white);
+  --color-border-brand: var(--themes--blue-green--blue-light);
+  --color-background-primary: var(--grayscale--white);
+  --color-border-inverse: var(--grayscale--white);
+  --color-text-primary: var(--grayscale--darkest);
+  --color-text-brand: var(--themes--blue-green--blue-light);
+  --color-surface-primary: var(--grayscale--white);
+  --color-border-primary: var(--grayscale--dark);
+  --color-surface-secondary: var(--grayscale--lightest);
+  --color-page-primary: var(--grayscale--white);
+  --color-text-muted: var(--grayscale--dark);
+  --color-surface-brand-primary: var(--themes--blue-green--blue-light);
+  --color-border-input: var(--grayscale--light);
+  --color-surface-brand-secondary: var(--themes--blue-green--green);
+  --color-text-secondary: var(--grayscale--darker);
+  --color-background-secondary: var(--grayscale--lightest);
+  --color-theme-accent: var(--themes--blue-green--green);
+  --color-theme-tertiary: var(--themes--blue-green--blue-dark);
+  --color-theme-secondary: var(--themes--blue-green--blue-lighter);
+  --color-theme-primary: var(--themes--blue-green--blue-light);
+  --color-page-brand: var(--themes--blue-green--blue-light);
+  --color-background-brand-secondary: white;
+  --color-background-inverse: var(--grayscale--black);
+  --color-background-input: var(--grayscale--white);
+  --color-background-image: #17171799;
+  --color-background-image-brand: var(--themes--blue-green--blue-light);
+  --color-page-secondary: var(--grayscale--lighter);
+  --color-theme-fourth: var(--grayscale--white);
+  /* Typography */
+  --typography-font-family-label: "Source Sans 3", sans-serif;
+  --typography-body-sm: var(--font-size--75);
+  --typography-label-md-base: var(--font-size--100);
+  --typography-font-family-body: "Source Sans 3", sans-serif;
+  --typography-body-md-base: var(--font-size--100);
+  --typography-font-family-heading: "IBM Plex Sans", sans-serif;
+  --typography-heading-xxx-large: var(--font-size--1200);
+  --typography-heading-large: var(--font-size--700);
+  --typography-label-le: var(--font-size--200);
+  --typography-label-sm: var(--font-size--75);
+  --typography-font-family-display: "IBM Plex Sans", sans-serif;
+  --typography-display-large: var(--font-size--1400);
+  --typography-display-medium: var(--font-size--1500);
+  --typography-display-small: var(--font-size--1600);
+  --typography-heading-xx-large: var(--font-size--1000);
+  --typography-heading-x-large: var(--font-size--900);
+  --typography-heading-medium: var(--font-size--500);
+  --typography-heading-small: var(--font-size--300);
+  --typography-body-lg: var(--font-size--200);
+  --typography-heading-tiny: var(--font-size--100);
+  --typography-font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --typography-body-tiny: var(--font-size--25);
+  --typography-body-xs: var(--font-size--50);
+  --typography-icon-small: var(--font-size--75);
+  --typography-icon-medium-base: var(--font-size--100);
+  --typography-icon-large: var(--font-size--200);
+}
+
+/* ============================================= */
+/* Yellow-Brown                                */
+/* ============================================= */
+.theme-4 {
+  /* Color */
+  --color-border-secondary: var(--grayscale--light);
+  --color-surface-nav: var(--grayscale--white);
+  --color-background-brand-primary: var(--themes--yellow-orange--yellow);
+  --color-text-inverse: var(--grayscale--white);
+  --color-border-brand: var(--themes--yellow-orange--yellow);
+  --color-background-primary: var(--grayscale--white);
+  --color-border-inverse: var(--grayscale--white);
+  --color-text-primary: var(--grayscale--black);
+  --color-text-brand: var(--themes--yellow-orange--yellow);
+  --color-surface-primary: var(--grayscale--white);
+  --color-border-primary: var(--grayscale--black);
+  --color-surface-secondary: var(--grayscale--lightest);
+  --color-page-primary: var(--grayscale--white);
+  --color-text-muted: var(--grayscale--dark);
+  --color-surface-brand-primary: var(--themes--yellow-orange--yellow);
+  --color-border-input: var(--grayscale--light);
+  --color-surface-brand-secondary: var(--themes--yellow-orange--orange);
+  --color-text-secondary: var(--grayscale--darker);
+  --color-background-secondary: var(--grayscale--lightest);
+  --color-theme-accent: var(--themes--blue-green--green);
+  --color-theme-tertiary: var(--themes--yellow-orange--orange);
+  --color-theme-secondary: var(--themes--yellow-orange--yellow-dark);
+  --color-theme-primary: var(--themes--yellow-orange--yellow);
+  --color-page-brand: var(--themes--yellow-orange--yellow);
+  --color-background-brand-secondary: white;
+  --color-background-inverse: var(--grayscale--black);
+  --color-background-input: var(--grayscale--white);
+  --color-background-image: #17171799;
+  --color-background-image-brand: var(--themes--yellow-orange--yellow);
+  --color-page-secondary: var(--grayscale--lighter);
+  --color-theme-fourth: var(--grayscale--white);
+  /* Typography */
+  --typography-font-family-label: Hind, sans-serif;
+  --typography-body-sm: var(--font-size--75);
+  --typography-label-md-base: var(--font-size--100);
+  --typography-font-family-body: Hind, sans-serif;
+  --typography-body-md-base: var(--font-size--100);
+  --typography-font-family-heading: Lato, Arial, sans-serif;
+  --typography-heading-xxx-large: var(--font-size--1200);
+  --typography-heading-large: var(--font-size--700);
+  --typography-label-le: var(--font-size--200);
+  --typography-label-sm: var(--font-size--75);
+  --typography-font-family-display: Lato, Arial, sans-serif;
+  --typography-display-large: var(--font-size--1400);
+  --typography-display-medium: var(--font-size--1500);
+  --typography-display-small: var(--font-size--1600);
+  --typography-heading-xx-large: var(--font-size--1000);
+  --typography-heading-x-large: var(--font-size--900);
+  --typography-heading-medium: var(--font-size--500);
+  --typography-heading-small: var(--font-size--300);
+  --typography-body-lg: var(--font-size--200);
+  --typography-heading-tiny: var(--font-size--100);
+  --typography-font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --typography-body-tiny: var(--font-size--25);
+  --typography-body-xs: var(--font-size--50);
+  --typography-icon-small: var(--font-size--75);
+  --typography-icon-medium-base: var(--font-size--100);
+  --typography-icon-large: var(--font-size--200);
+}
+
+/* ============================================= */
+/* Green-Orange                                */
+/* ============================================= */
+.theme-5 {
+  /* Color */
+  --color-border-secondary: var(--grayscale--darker);
+  --color-surface-nav: var(--themes--peach-brown--peach-lightest);
+  --color-background-brand-primary: var(--themes--peach-brown--peach);
+  --color-text-inverse: var(--grayscale--white);
+  --color-border-brand: var(--themes--peach-brown--peach);
+  --color-background-primary: var(--themes--peach-brown--peach-lightest);
+  --color-border-inverse: var(--themes--peach-brown--peach-darkest);
+  --color-text-primary: var(--grayscale--black);
+  --color-text-brand: var(--themes--peach-brown--peach);
+  --color-surface-primary: var(--themes--peach-brown--peach-lightest);
+  --color-border-primary: var(--grayscale--black);
+  --color-surface-secondary: var(--themes--peach-brown--peach-darkest);
+  --color-page-primary: var(--themes--peach-brown--peach-lightest);
+  --color-text-muted: var(--grayscale--dark);
+  --color-surface-brand-primary: var(--themes--peach-brown--peach);
+  --color-border-input: var(--themes--peach-brown--peach-darkest);
+  --color-surface-brand-secondary: var(--themes--peach-brown--peach-light);
+  --color-text-secondary: var(--grayscale--darker);
+  --color-background-secondary: var(--grayscale--lightest);
+  --color-theme-accent: var(--themes--peach-brown--peach-darkest);
+  --color-theme-tertiary: var(--themes--peach-brown--peach-darkest);
+  --color-theme-secondary: var(--themes--peach-brown--peach-light);
+  --color-theme-primary: var(--themes--peach-brown--peach);
+  --color-page-brand: var(--themes--peach-brown--peach);
+  --color-background-brand-secondary: var(--themes--peach-brown--peach-darkest);
+  --color-background-inverse: var(--grayscale--black);
+  --color-background-input: var(--grayscale--white);
+  --color-background-image: #17171799;
+  --color-background-image-brand: var(--themes--peach-brown--peach);
+  --color-page-secondary: var(--themes--peach-brown--peach-darkest);
+  --color-theme-fourth: var(--themes--peach-brown--peach-lightest);
+  /* Typography */
+  --typography-font-family-label: "Open Sans", sans-serif;
+  --typography-body-sm: var(--font-size--75);
+  --typography-label-md-base: var(--font-size--100);
+  --typography-font-family-body: "Open Sans", sans-serif;
+  --typography-body-md-base: var(--font-size--100);
+  --typography-font-family-heading: Newsreader, sans-serif;
+  --typography-heading-xxx-large: var(--font-size--1200);
+  --typography-heading-large: var(--font-size--700);
+  --typography-label-le: var(--font-size--200);
+  --typography-label-sm: var(--font-size--75);
+  --typography-font-family-display: Newsreader, sans-serif;
+  --typography-display-large: var(--font-size--1400);
+  --typography-display-medium: var(--font-size--1500);
+  --typography-display-small: var(--font-size--1600);
+  --typography-heading-xx-large: var(--font-size--1000);
+  --typography-heading-x-large: var(--font-size--900);
+  --typography-heading-medium: var(--font-size--500);
+  --typography-heading-small: var(--font-size--300);
+  --typography-body-lg: var(--font-size--200);
+  --typography-heading-tiny: var(--font-size--100);
+  --typography-font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --typography-body-tiny: var(--font-size--25);
+  --typography-body-xs: var(--font-size--50);
+  --typography-icon-small: var(--font-size--75);
+  --typography-icon-medium-base: var(--font-size--100);
+  --typography-icon-large: var(--font-size--200);
+}
+
+/* ============================================= */
+/* Blue-Orange                                 */
+/* ============================================= */
+.theme-6 {
+  /* Typography */
+  --typography-font-family-label: "Source Sans 3", sans-serif;
+  --typography-body-sm: var(--font-size--75);
+  --typography-label-md-base: var(--font-size--100);
+  --typography-font-family-body: "Source Sans 3", sans-serif;
+  --typography-body-md-base: var(--font-size--100);
+  --typography-font-family-heading: "IBM Plex Sans", sans-serif;
+  --typography-heading-xxx-large: var(--font-size--1200);
+  --typography-heading-large: var(--font-size--700);
+  --typography-label-le: var(--font-size--200);
+  --typography-label-sm: var(--font-size--75);
+  --typography-font-family-display: "IBM Plex Sans", sans-serif;
+  --typography-display-large: var(--font-size--1400);
+  --typography-display-medium: var(--font-size--1500);
+  --typography-display-small: var(--font-size--1600);
+  --typography-heading-xx-large: var(--font-size--1000);
+  --typography-heading-x-large: var(--font-size--900);
+  --typography-heading-medium: var(--font-size--500);
+  --typography-heading-small: var(--font-size--300);
+  --typography-body-lg: var(--font-size--200);
+  --typography-heading-tiny: var(--font-size--100);
+  --typography-font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --typography-body-tiny: var(--font-size--25);
+  --typography-body-xs: var(--font-size--50);
+  --typography-icon-small: var(--font-size--75);
+  --typography-icon-medium-base: var(--font-size--100);
+  --typography-icon-large: var(--font-size--200);
+}
+
+/* ============================================= */
+/* Neon                                        */
+/* ============================================= */
+.theme-7 {
+  /* Color */
+  --color-border-secondary: var(--grayscale--light);
+  --color-surface-nav: var(--themes--yellow-brown--tan);
+  --color-background-brand-primary: var(--themes--yellow-brown--brown);
+  --color-text-inverse: var(--grayscale--white);
+  --color-border-brand: var(--themes--green-orange--brown);
+  --color-background-primary: var(--themes--yellow-brown--tan);
+  --color-border-inverse: var(--grayscale--white);
+  --color-text-primary: var(--grayscale--darkest);
+  --color-text-brand: var(--themes--yellow-brown--brown);
+  --color-surface-primary: var(--themes--yellow-brown--tan);
+  --color-border-primary: var(--grayscale--dark);
+  --color-surface-secondary: var(--grayscale--lightest);
+  --color-page-primary: var(--themes--yellow-brown--tan);
+  --color-text-muted: var(--grayscale--dark);
+  --color-surface-brand-primary: var(--themes--green-orange--yellow);
+  --color-border-input: var(--grayscale--light);
+  --color-surface-brand-secondary: var(--themes--blue-green--green);
+  --color-text-secondary: var(--grayscale--darker);
+  --color-background-secondary: var(--grayscale--lightest);
+  --color-theme-accent: var(--themes--yellow-brown--yellow);
+  --color-theme-tertiary: var(--themes--yellow-brown--tan);
+  --color-theme-secondary: var(--themes--yellow-brown--green);
+  --color-theme-primary: var(--themes--yellow-brown--brown);
+  --color-page-brand: var(--themes--green-orange--yellow);
+  --color-background-brand-secondary: white;
+  --color-background-inverse: var(--grayscale--white);
+  --color-background-input: var(--grayscale--white);
+  --color-background-image: #17171799;
+  --color-background-image-brand: var(--themes--green-orange--brown);
+  --color-page-secondary: var(--grayscale--lighter);
+  --color-theme-fourth: var(--themes--yellow-brown--tan);
+  /* Typography */
+  --typography-font-family-label: Hind, sans-serif;
+  --typography-body-sm: var(--font-size--75);
+  --typography-label-md-base: var(--font-size--100);
+  --typography-font-family-body: Hind, sans-serif;
+  --typography-body-md-base: var(--font-size--100);
+  --typography-font-family-heading: Lato, Arial, sans-serif;
+  --typography-heading-xxx-large: var(--font-size--1200);
+  --typography-heading-large: var(--font-size--700);
+  --typography-label-le: var(--font-size--200);
+  --typography-label-sm: var(--font-size--75);
+  --typography-font-family-display: Lato, Arial, sans-serif;
+  --typography-display-large: var(--font-size--1400);
+  --typography-display-medium: var(--font-size--1500);
+  --typography-display-small: var(--font-size--1600);
+  --typography-heading-xx-large: var(--font-size--1000);
+  --typography-heading-x-large: var(--font-size--900);
+  --typography-heading-medium: var(--font-size--500);
+  --typography-heading-small: var(--font-size--300);
+  --typography-body-lg: var(--font-size--200);
+  --typography-heading-tiny: var(--font-size--100);
+  --typography-font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --typography-body-tiny: var(--font-size--25);
+  --typography-body-xs: var(--font-size--50);
+  --typography-icon-small: var(--font-size--75);
+  --typography-icon-medium-base: var(--font-size--100);
+  --typography-icon-large: var(--font-size--200);
+}
+

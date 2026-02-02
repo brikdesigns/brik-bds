@@ -1,0 +1,145 @@
+/**
+ * Storybook Overrides
+ *
+ * This file ensures Webflow CSS doesn't leak into Storybook's own UI.
+ * Import this AFTER the Webflow CSS to override any conflicts.
+ */
+
+/* ============================================
+   CODE BLOCK STYLING - Override blue backgrounds
+   ============================================ */
+
+/* Target all code-related elements - using design tokens */
+pre,
+code,
+.docblock-source,
+.docblock-code-toggle,
+.docs-story pre,
+.docs-story code,
+[class*="docblock"] pre,
+[class*="docblock"] code,
+.sbdocs pre,
+.sbdocs code,
+.sb-story pre,
+.sb-story code,
+div[class*="Source"] pre,
+div[class*="Source"] code,
+.prismjs,
+[class*="language-"] {
+  background-color: var(--grayscale--darkest, #333) !important;
+  color: var(--grayscale--lightest, #f2f2f2) !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+}
+
+/* Ensure pre blocks don't inherit brand colors */
+pre[class*="language-"],
+code[class*="language-"] {
+  background: var(--grayscale--darkest, #333) !important;
+  color: var(--grayscale--lightest, #f2f2f2) !important;
+  text-shadow: none !important;
+}
+
+/* ============================================
+   PREVIEW CANVAS - Remove inherited borders
+   ============================================ */
+
+/* Reset Storybook preview canvas */
+.sb-show-main,
+.sb-main-padded,
+#storybook-root,
+#storybook-docs,
+.sbdocs-wrapper,
+.sbdocs-content {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Ensure ThemeWrapper doesn't have visible box */
+.body[class*="theme-"] {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Reset the .body class border from Webflow CSS */
+.body {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* ============================================
+   SPACING MODE - Reset to Base mode (not Spacious)
+
+   The .body class in Webflow CSS applies "Spacious" mode by default.
+   We override to use "Base" mode values from :root for Storybook.
+
+   Base mode spacing scale:
+   - tiny: 4px  (space--100)
+   - sm:   6px  (space--150)
+   - md:   8px  (space--200)
+   - lg:   16px (space--400)
+   - xl:   24px (space--600)
+   - xxl:  32px (space--800)
+   - huge: 40px (space--1000)
+   ============================================ */
+
+.body {
+  /* Padding tokens - Base mode */
+  --_space---none: var(--space--0);
+  --_space---tiny: var(--space--100);
+  --_space---sm: var(--space--150);
+  --_space---md: var(--space--200);
+  --_space---lg: var(--space--400);
+  --_space---xl: var(--space--600);
+  --_space---xxl: var(--space--800);
+  --_space---huge: var(--space--1000);
+
+  /* Gap tokens - Base mode */
+  --_space---gap--none: var(--space--0);
+  --_space---gap--tiny: var(--space--50);
+  --_space---gap--sm: var(--space--100);
+  --_space---gap--md: var(--space--200);
+  --_space---gap--lg: var(--space--400);
+  --_space---gap--xl: var(--space--500);
+  --_space---gap--xxl: var(--space--600);
+  --_space---gap--huge: var(--space--1200);
+
+  /* Component-specific spacing - Base mode */
+  --_space---button: var(--space--200);
+  --_space---input: var(--space--200);
+}
+
+/* ============================================
+   SYNTAX HIGHLIGHTING - Fix token colors
+   ============================================ */
+
+.token.tag { color: #569cd6 !important; background: transparent !important; }
+.token.attr-name { color: #9cdcfe !important; background: transparent !important; }
+.token.attr-value { color: #ce9178 !important; background: transparent !important; }
+.token.punctuation { color: #d4d4d4 !important; background: transparent !important; }
+.token.string { color: #ce9178 !important; background: transparent !important; }
+.token.keyword { color: #c586c0 !important; background: transparent !important; }
+.token.function { color: #dcdcaa !important; background: transparent !important; }
+.token.operator { color: #d4d4d4 !important; background: transparent !important; }
+.token.comment { color: #6a9955 !important; background: transparent !important; }
+
+/* ============================================
+   STORYBOOK UI - Protect from Webflow styles
+   ============================================ */
+
+/* Toolbar and sidebar shouldn't inherit Webflow styles */
+.sb-bar,
+[class*="sidebar"],
+[class*="tabbutton"],
+button[class*="IconButton"],
+.sidebar-container,
+nav[class*="sidebar"] {
+  background-color: inherit !important;
+  border-color: inherit !important;
+}
+
+/* Docs page container - using grayscale token */
+.sbdocs.sbdocs-wrapper {
+  background-color: var(--grayscale--white) !important;
+}
