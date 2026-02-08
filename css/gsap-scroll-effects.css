@@ -1,0 +1,334 @@
+/**
+ * Brik Design System - GSAP Scroll Effects Styles
+ *
+ * CSS companion for gsap-scroll-effects.js
+ * Provides layout styles for scroll-based animations.
+ *
+ * Dependencies: gsap-scroll-effects.js
+ */
+
+/* ==========================================================================
+   HORIZONTAL SCROLL SECTION
+   For panels that scroll horizontally while page scrolls vertically
+   ========================================================================== */
+
+[data-scroll-horizontal] {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.horizontal-track {
+  display: flex;
+  flex-wrap: nowrap;
+  will-change: transform;
+}
+
+.horizontal-track .panel {
+  flex-shrink: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Panel variants */
+.panel--half {
+  width: 50vw;
+}
+
+.panel--third {
+  width: 33.333vw;
+}
+
+.panel--auto {
+  width: auto;
+  padding: 0 5vw;
+}
+
+/* ==========================================================================
+   PINNED SECTIONS
+   For content that stays fixed while scrolling
+   ========================================================================== */
+
+[data-scroll-pin] {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pin spacer styles (GSAP adds this wrapper) */
+.pin-spacer {
+  /* GSAP handles sizing automatically */
+}
+
+/* ==========================================================================
+   SMART HEADER
+   Hide on scroll down, show on scroll up
+   Supports dual-nav: utility nav (static) + main nav (fixed)
+   ========================================================================== */
+
+[data-scroll-header] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  will-change: transform;
+  transition: top 0.2s ease-out, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Utility nav - scrolls away naturally (static positioning) */
+[data-scroll-header-utility] {
+  position: relative;
+  z-index: 999;
+}
+
+/* Spacer inserted by JS to prevent content jump */
+.nav-spacer {
+  flex-shrink: 0;
+}
+
+/* Shadow when nav is scrolled past utility nav */
+[data-scroll-header].nav-scrolled {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Add background when scrolled */
+body[data-scrolled-past="true"] [data-scroll-header] {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS-only scroll direction styles (alternative to JS animation) */
+body[data-scroll-direction="down"][data-scrolled-past="true"] .header-hide-on-scroll {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-100%);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+body[data-scroll-direction="up"] .header-hide-on-scroll {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   ANTI-FLICKER / PAGE LOAD
+   Prevent content flash before animations initialize
+   ========================================================================== */
+
+.anti-flicker {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.page-loaded .anti-flicker {
+  /* JS handles the animation, this is fallback */
+  visibility: visible;
+}
+
+/* Staged reveal classes for sequential loading */
+.reveal-stage-1 { transition-delay: 0ms; }
+.reveal-stage-2 { transition-delay: 100ms; }
+.reveal-stage-3 { transition-delay: 200ms; }
+.reveal-stage-4 { transition-delay: 300ms; }
+.reveal-stage-5 { transition-delay: 400ms; }
+
+/* ==========================================================================
+   TEXT SPLIT ANIMATION
+   Styles for split text reveals
+   ========================================================================== */
+
+[data-scroll-text-split] {
+  overflow: hidden;
+}
+
+.split-word,
+.split-char,
+.split-line {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Preserve whitespace between words */
+.split-word + .split-word {
+  margin-left: 0.25em;
+}
+
+/* Line split container */
+.split-line {
+  display: block;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   SCRUB CONTAINER
+   Parent element for scrubbed animations
+   ========================================================================== */
+
+[data-scrub-container] {
+  position: relative;
+}
+
+/* ==========================================================================
+   BATCH ITEMS
+   Default styles for batch-animated items
+   ========================================================================== */
+
+[data-scroll-batch] {
+  /* Container doesn't need special styles */
+}
+
+.batch-item {
+  will-change: transform, opacity;
+}
+
+/* ==========================================================================
+   PARALLAX ELEMENTS
+   GSAP-powered parallax
+   ========================================================================== */
+
+[data-scroll-parallax] {
+  will-change: transform;
+}
+
+/* ==========================================================================
+   SCROLL PROGRESS INDICATOR
+   Visual indicator of scroll progress
+   ========================================================================== */
+
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--_color---theme--primary, #0066ff);
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 9999;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   REVEAL MASKS
+   For clip-path based reveals
+   ========================================================================== */
+
+.reveal-mask {
+  overflow: hidden;
+}
+
+.reveal-mask > * {
+  will-change: transform;
+}
+
+/* Clip path reveal (bottom to top) */
+.clip-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal.is-visible {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ==========================================================================
+   SCALE CONTAINER
+   For zoom effects
+   ========================================================================== */
+
+.scale-container {
+  overflow: hidden;
+}
+
+[data-scroll-scale] {
+  will-change: transform, opacity;
+  transform-origin: center center;
+}
+
+/* ==========================================================================
+   FIXED BACKGROUND PARALLAX
+   Background image that moves slower than content
+   ========================================================================== */
+
+.parallax-bg-fixed {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  right: 0;
+  bottom: -20%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+  z-index: -1;
+}
+
+/* ==========================================================================
+   STAGGER GRID
+   Grid layout for batch animations
+   ========================================================================== */
+
+.stagger-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.stagger-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.stagger-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.stagger-grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 768px) {
+  .stagger-grid--3,
+  .stagger-grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stagger-grid--2,
+  .stagger-grid--3,
+  .stagger-grid--4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   Respect reduced motion preferences
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-fade],
+  [data-scroll-reveal],
+  [data-scroll-parallax],
+  [data-scroll-scale],
+  [data-scroll-rotate],
+  [data-scroll-scrub],
+  .split-word,
+  .split-char,
+  .batch-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .horizontal-track {
+    transform: none !important;
+  }
+
+  .clip-reveal {
+    clip-path: none !important;
+  }
+}
