@@ -17,8 +17,6 @@ This document establishes a **standardized, global workflow** for all new local 
 
 **Important:** This document contains **universal workflow standards** applicable to ALL projects. For project-specific information (project overview, goals, CMS collections, audit dates), see the project's `README.md` file.
 
-See `markdown/README-VS-WORKFLOW-GUIDE.md` for clear separation guidelines.
-
 ---
 
 ## 📁 Standard Project Structure
@@ -56,8 +54,7 @@ project-name.webflow/
 │   ├── positioning/                # Positioning guides
 │   ├── quality-assurance/          # QA & audits
 │   ├── resources/                   # Additional guides
-│   ├── templates/                  # Project templates
-│   └── docs/                       # Documentation guides
+│   └── templates/                  # Project templates
 │
 └── updates/                    # Temporary folder for Webflow exports
     └── [project-name].webflow/
@@ -440,9 +437,6 @@ Every project should have these markdown files in `/markdown`:
 **Templates (`templates/`):**
 20. **templates/README-TEMPLATE.md** - Project README template
 
-**Documentation (`docs/`):**
-21. **docs/README-VS-WORKFLOW-GUIDE.md** - Clear separation guidelines between project-specific README.md and universal workflow docs
-
 **Key Principle:** 
 - `README.md` = Project-specific information (what this project is, audit dates, CMS collections)
 - `markdown/GLOBAL-WEBFLOW-WORKFLOW.md` = Universal workflow standards (how to do things, applicable to all projects)
@@ -471,8 +465,6 @@ Every new project should have a **project-specific `README.md`** in the root dir
 **Important Distinction:**
 - **README.md** = Project-specific information (what this project is, audit dates, CMS collections)
 - **markdown/GLOBAL-WEBFLOW-WORKFLOW.md** = Universal workflow standards (how to do things, applicable to all projects)
-
-See `markdown/docs/README-VS-WORKFLOW-GUIDE.md` for complete separation guidelines.
 
 ---
 
