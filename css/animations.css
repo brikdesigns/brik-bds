@@ -1,0 +1,416 @@
+/**
+ * Brik Design System - Animation Utility Classes
+ *
+ * DEPENDENCY: Requires animation tokens from head.css
+ * Tokens defined there: --duration-*, --ease-*, --stagger-*
+ *
+ * Documentation: See Notion Animation page
+ * Source: https://github.com/brikdesigns/brik-bds
+ *
+ * Usage:
+ *   1. Ensure head.css is loaded (contains tokens)
+ *   2. Add animation classes to elements (e.g., .animate-fade-up)
+ *   3. Trigger with .is-visible class (via JS/Intersection Observer)
+ *
+ * PARALLAX:
+ *   1. Add .parallax-element to moving elements
+ *   2. Set data-parallax-speed attribute (0.05-0.25 range, lower = subtler)
+ *   3. Use parallax.js helper for smooth lerped animation
+ */
+
+/* ==========================================================================
+   ENTRANCE ANIMATIONS
+   Elements appearing on page/scroll
+   ========================================================================== */
+
+/* Fade Up - Most common reveal */
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+.animate-fade-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade Down */
+.animate-fade-down {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+.animate-fade-down.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide In Left */
+.animate-slide-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+.animate-slide-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Slide In Right */
+.animate-slide-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+.animate-slide-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scale In */
+.animate-scale-in {
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+.animate-scale-in.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Fade Only */
+.animate-fade {
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+.animate-fade.is-visible {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   STAGGER DELAYS
+   Apply to children for sequential animations
+   ========================================================================== */
+
+.stagger-1 { transition-delay: var(--stagger-1); }
+.stagger-2 { transition-delay: var(--stagger-2); }
+.stagger-3 { transition-delay: var(--stagger-3); }
+.stagger-4 { transition-delay: var(--stagger-4); }
+.stagger-5 { transition-delay: var(--stagger-5); }
+.stagger-6 { transition-delay: var(--stagger-6); }
+
+/* Auto-stagger for direct children */
+.stagger-children > *:nth-child(1) { transition-delay: var(--stagger-1); }
+.stagger-children > *:nth-child(2) { transition-delay: var(--stagger-2); }
+.stagger-children > *:nth-child(3) { transition-delay: var(--stagger-3); }
+.stagger-children > *:nth-child(4) { transition-delay: var(--stagger-4); }
+.stagger-children > *:nth-child(5) { transition-delay: var(--stagger-5); }
+.stagger-children > *:nth-child(6) { transition-delay: var(--stagger-6); }
+
+/* ==========================================================================
+   HOVER EFFECTS
+   Micro-interactions for interactive elements
+   ========================================================================== */
+
+/* Button Lift */
+.hover-lift {
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Button Scale */
+.hover-scale {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.hover-scale:hover {
+  transform: scale(1.03);
+}
+
+/* Card Glow */
+.hover-glow {
+  transition:
+    box-shadow var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
+}
+.hover-glow:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+/* Image Zoom (apply to image inside overflow:hidden container) */
+.hover-zoom {
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+.hover-zoom:hover,
+*:hover > .hover-zoom {
+  transform: scale(1.05);
+}
+
+/* Nav Link Dim */
+.hover-dim {
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+.hover-dim:hover {
+  opacity: 0.7;
+}
+
+/* Link Underline Grow */
+.hover-underline {
+  position: relative;
+}
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width var(--duration-normal) var(--ease-out);
+}
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* ==========================================================================
+   CLICK/TAP MICRO-INTERACTIONS
+   Instant feedback for user actions
+   ========================================================================== */
+
+/* Button Press */
+.click-press:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   EMPHASIS ANIMATIONS
+   Draw attention without user interaction
+   ========================================================================== */
+
+/* Pulse */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.animate-pulse {
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+/* Shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+.animate-shake {
+  animation: shake 0.3s var(--ease-out);
+}
+
+/* Glow Pulse */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 5px var(--_color---theme--primary, #0066ff); }
+  50% { box-shadow: 0 0 20px var(--_color---theme--primary, #0066ff); }
+}
+.animate-glow {
+  animation: glow-pulse 2s var(--ease-in-out) infinite;
+}
+
+/* ==========================================================================
+   LOADING STATES
+   Progress and waiting indicators
+   ========================================================================== */
+
+/* Skeleton Shimmer */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--colors--grayscale--lightest, #f3f4f6) 25%,
+    var(--colors--grayscale--lighter, #e5e7eb) 50%,
+    var(--colors--grayscale--lightest, #f3f4f6) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--colors--grayscale--lighter, #e5e7eb);
+  border-top-color: var(--_color---theme--primary, #0066ff);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ==========================================================================
+   EXIT ANIMATIONS
+   Elements leaving the page
+   ========================================================================== */
+
+/* Fade Out */
+.animate-fade-out {
+  opacity: 1;
+  transition: opacity var(--duration-normal) var(--ease-in);
+}
+.animate-fade-out.is-hidden {
+  opacity: 0;
+}
+
+/* Collapse (Grid-based) */
+.collapse-container {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-slow) var(--ease-out);
+}
+.collapse-container.is-open {
+  grid-template-rows: 1fr;
+}
+.collapse-content {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   SCROLL ANIMATIONS
+   Header collapse, progress indicators
+   ========================================================================== */
+
+/* Header Collapse (toggle .is-scrolled via JS) */
+.header-collapse {
+  transition:
+    height var(--duration-normal) var(--ease-out),
+    padding var(--duration-normal) var(--ease-out);
+}
+.header-collapse .logo {
+  transition:
+    width var(--duration-normal) var(--ease-out),
+    height var(--duration-normal) var(--ease-out);
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--_color---theme--primary, #0066ff);
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 9999;
+}
+
+/* ==========================================================================
+   PARALLAX SCROLL
+   Depth effects for immersive scrolling experiences
+
+   Usage:
+   - Add .parallax-container to parent section (sets overflow:hidden)
+   - Add .parallax-element to moving elements
+   - Set data-parallax-speed="0.08" (range: 0.05-0.25, lower = subtler)
+   - Use data-parallax-type="image" for image reveal effects
+   - Requires parallax.js helper for smooth lerped animation
+   ========================================================================== */
+
+/* Container clips parallax overflow */
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Parallax background layer */
+.parallax-bg {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  right: 0;
+  bottom: -20%;
+  will-change: transform;
+}
+
+/* General parallax element - GPU accelerated */
+.parallax-element {
+  will-change: transform;
+}
+
+/* Decorative parallax shapes */
+.parallax-shape {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Parallax orb (gradient glow) */
+.parallax-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   FORM STATES
+   Focus, validation feedback
+   ========================================================================== */
+
+/* Input Focus */
+.input-animate {
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+.input-animate:focus {
+  border-color: var(--_color---theme--primary, #0066ff);
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+/* Validation States */
+.input-valid {
+  border-color: var(--colors--system--green, #22c55e);
+}
+.input-invalid {
+  border-color: var(--colors--system--red, #ef4444);
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   Respect user preferences
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Disable parallax for reduced motion users */
+  .parallax-bg,
+  .parallax-element,
+  .parallax-shape,
+  .parallax-orb {
+    transform: none !important;
+  }
+}

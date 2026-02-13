@@ -13,7 +13,13 @@ const meta: Meta<typeof Input> = {
 
 A themed text input component with support for labels, helper text, and error states.
 
+## Size Variants (per Figma)
+- **sm** - Small (14px text, compact height)
+- **md** - Medium (16px text, default)
+- **lg** - Large (18px text, spacious height)
+
 ## Features
+- Size variants matching Figma design specs
 - Optional label
 - Helper text for guidance
 - Error state with message
@@ -28,6 +34,11 @@ Inputs automatically adapt to the current theme, using theme colors for borders,
   },
   tags: ['autodocs'],
   argTypes: {
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size variant (per Figma)',
+    },
     label: {
       control: 'text',
       description: 'Label text',
@@ -151,6 +162,42 @@ export const InputTypes: Story = {
       <Input label="Email" type="email" placeholder="email@example.com" fullWidth />
       <Input label="Password" type="password" placeholder="••••••••" fullWidth />
       <Input label="Number" type="number" placeholder="0" fullWidth />
+    </div>
+  ),
+};
+
+// Size variants (per Figma)
+export const SizeSmall: Story = {
+  args: {
+    size: 'sm',
+    label: 'Small Input',
+    placeholder: '14px text',
+  },
+};
+
+export const SizeMedium: Story = {
+  args: {
+    size: 'md',
+    label: 'Medium Input',
+    placeholder: '16px text (default)',
+  },
+};
+
+export const SizeLarge: Story = {
+  args: {
+    size: 'lg',
+    label: 'Large Input',
+    placeholder: '18px text',
+  },
+};
+
+// All sizes comparison
+export const AllSizes: Story = {
+  render: () => (
+    <div style={{ width: '400px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <Input size="sm" label="Small (sm)" placeholder="14px text" fullWidth />
+      <Input size="md" label="Medium (md)" placeholder="16px text - default" fullWidth />
+      <Input size="lg" label="Large (lg)" placeholder="18px text" fullWidth />
     </div>
   ),
 };
