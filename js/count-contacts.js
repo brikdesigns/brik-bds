@@ -1,6 +1,7 @@
 const { Client } = require('@notionhq/client');
+require('dotenv').config();
 
-const notion = new Client({ auth: '***REMOVED***' });
+const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const databaseId = '1a097d34-ed28-8157-8778-ea3017a052cd';
 
 async function countContacts() {
