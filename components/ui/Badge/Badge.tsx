@@ -61,7 +61,7 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
     color: 'var(--grayscale--white)',
   },
   neutral: {
-    backgroundColor: 'var(--_color---background--subtle)',
+    backgroundColor: 'var(--_color---background--secondary)',
     color: 'var(--_color---text--muted)',
   },
 };
@@ -70,14 +70,14 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
  * Size-based styles using BDS tokens
  *
  * Token reference:
- * - --_typography---label--tiny (sm size)
- * - --_typography---label--sm (md size)
- * - --_typography---label--md (lg size)
+ * - --_typography---body--tiny = 10.26px (sm size — no label--tiny exists)
+ * - --_typography---label--sm = 14px (md size)
+ * - --_typography---label--md-base = 16px (lg size)
  */
 const sizeStyles: Record<BadgeSize, CSSProperties> = {
   sm: {
     padding: '2px 6px',
-    fontSize: 'var(--_typography---label--tiny)',
+    fontSize: 'var(--_typography---body--tiny)',
   },
   md: {
     padding: 'var(--_space---tiny) var(--_space---sm)',
@@ -85,7 +85,7 @@ const sizeStyles: Record<BadgeSize, CSSProperties> = {
   },
   lg: {
     padding: '6px 12px',
-    fontSize: 'var(--_typography---label--md)',
+    fontSize: 'var(--_typography---label--md-base)',
   },
 };
 

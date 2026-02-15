@@ -22,13 +22,13 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
  *
  * Token reference:
  * - --_typography---font-family--body (table font)
- * - --_color---text--base (text color)
+ * - --_color---text--primary (text color)
  */
 const tableStyles: CSSProperties = {
   width: '100%',
   borderCollapse: 'collapse',
   fontFamily: 'var(--_typography---font-family--body)',
-  color: 'var(--_color---text--base)',
+  color: 'var(--_color---text--primary)',
 };
 
 /**
@@ -130,15 +130,15 @@ export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
  * Row styles
  *
  * Token reference:
- * - --_color---background--subtle (hover + striped background)
- * - --_color---border--base (bottom border)
+ * - --_color---background--secondary (hover + striped background)
+ * - --_color---border--secondary (bottom border)
  */
 const rowBaseStyles: CSSProperties = {
-  borderBottom: '1px solid var(--_color---border--base)',
+  borderBottom: '1px solid var(--_color---border--secondary)',
 };
 
 const rowSelectedStyles: CSSProperties = {
-  backgroundColor: 'var(--_color---background--subtle)',
+  backgroundColor: 'var(--_color---background--secondary)',
 };
 
 export function TableRow({
@@ -184,8 +184,8 @@ export interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
  * - --_typography---font-family--label (label font)
  * - --_typography---label--sm (label size)
  * - --_color---text--muted (muted text)
- * - --_color---border--base (bottom border)
- * - --_color---background--subtle (header background)
+ * - --_color---border--secondary (bottom border)
+ * - --_color---background--secondary (header background)
  */
 const headStyles: CSSProperties = {
   padding: 'var(--_space---sm) var(--_space---md)',
@@ -194,8 +194,8 @@ const headStyles: CSSProperties = {
   fontWeight: 600,
   color: 'var(--_color---text--muted)',
   textAlign: 'left',
-  borderBottom: '2px solid var(--_color---border--base)',
-  backgroundColor: 'var(--_color---background--subtle)',
+  borderBottom: '2px solid var(--_color---border--secondary)',
+  backgroundColor: 'var(--_color---background--secondary)',
   whiteSpace: 'nowrap',
 };
 
@@ -261,14 +261,13 @@ export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
  * Token reference:
  * - --_space---sm (vertical padding)
  * - --_space---md (horizontal padding)
- * - --_typography---body--md (body text size)
- * - --_color---text--base (text color)
- * - --_color---border--base (bottom border)
+ * - --_typography---body--md-base (body text size)
+ * - --_color---text--primary (text color)
  */
 const cellStyles: CSSProperties = {
   padding: 'var(--_space---sm) var(--_space---md)',
-  fontSize: 'var(--_typography---body--md)',
-  color: 'var(--_color---text--base)',
+  fontSize: 'var(--_typography---body--md-base)',
+  color: 'var(--_color---text--primary)',
   verticalAlign: 'middle',
 };
 

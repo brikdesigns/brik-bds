@@ -257,7 +257,7 @@ export const Striped: Story = {
         {users.map((user, i) => (
           <TableRow
             key={user.email}
-            style={i % 2 === 1 ? { backgroundColor: 'var(--_color---background--subtle)' } : {}}
+            style={i % 2 === 1 ? { backgroundColor: 'var(--_color---background--secondary)' } : {}}
           >
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
