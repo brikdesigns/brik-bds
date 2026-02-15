@@ -17,35 +17,38 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Base tag styles using BDS tokens
+ * Base tag styles matching Webflow .tag class
  *
- * Token reference:
- * - --_color---background--subtle (neutral gray background)
- * - --_color---text--base (text color)
- * - --_color---border--base (subtle border)
- * - --_border-radius---sm = 2px (NOT pill — per Figma)
+ * Token reference (from brik-bds.webflow.css .tag):
+ * - --_color---background--brand-primary (brand-colored background)
+ * - --_color---text--inverse (white text)
+ * - --_border-radius---sm = 2px
  * - --_typography---font-family--label (label font)
- * - --_typography---label--tiny (tiny label size)
- * - --_space---tiny = 4px (vertical padding)
- * - --_space---sm = 6px (horizontal padding)
- * - --_space---gap--sm = 4px (icon gap)
+ * - --_typography---label--sm = 14px
+ * - --font-line-height--150 = 150%
+ * - --font-weight--bold = 700
+ * - --_space---md = 8px (top/right/bottom padding)
+ * - --_space---lg = 16px (left padding)
+ * - --_space---gap--md = 8px (icon gap)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
+  justifyContent: 'center',
   alignItems: 'center',
-  gap: 'var(--_space---gap--sm)',
-  padding: 'var(--_space---tiny) var(--_space---sm)',
+  gap: 'var(--_space---gap--md)',
+  padding: 'var(--_space---md) var(--_space---md) var(--_space---md) var(--_space---lg)',
   fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--tiny)',
-  fontWeight: 500,
-  lineHeight: 1.5,
-  color: 'var(--_color---text--base)',
-  backgroundColor: 'var(--_color---background--subtle)',
-  border: '1px solid var(--_color---border--base)',
+  fontSize: 'var(--_typography---label--sm)',
+  fontWeight: 'var(--font-weight--bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height--150)',
+  color: 'var(--_color---text--inverse)',
+  backgroundColor: 'var(--_color---background--brand-primary)',
   borderRadius: 'var(--_border-radius---sm)',
+  textDecoration: 'none',
   whiteSpace: 'nowrap',
   cursor: 'default',
   userSelect: 'none',
+  transition: 'background-color 0.2s',
 };
 
 const disabledStyles: CSSProperties = {
@@ -61,7 +64,7 @@ const removeButtonStyles: CSSProperties = {
   border: 'none',
   background: 'none',
   cursor: 'pointer',
-  color: 'var(--_color---text--muted)',
+  color: 'var(--_color---text--inverse)',
   fontSize: '12px',
   lineHeight: 1,
   width: '14px',
@@ -70,9 +73,9 @@ const removeButtonStyles: CSSProperties = {
 };
 
 /**
- * Tag - BDS themed tag/chip component
+ * Tag - BDS themed tag component
  *
- * Neutral gray appearance for categorization and labeling.
+ * Brand-colored tag with white text, matching the Webflow .tag class.
  * Supports leading/trailing icons and an optional dismiss button.
  * Uses CSS variables for theming. All spacing, colors, typography,
  * and border-radius reference BDS tokens.
