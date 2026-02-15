@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './Table';
 import { Badge } from '../Badge';
 import { Tag } from '../Tag';
@@ -144,19 +146,7 @@ export const WithTags: Story = {
   },
 };
 
-// With action buttons
-const EditIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-    <path d="M11.13 1.87a1.5 1.5 0 0 1 2.12 0l.88.88a1.5 1.5 0 0 1 0 2.12L6.25 12.75 2 14l1.25-4.25 7.88-7.88zM10 4l2 2" />
-  </svg>
-);
-
-const TrashIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-    <path d="M5.5 2V1h5v1h3.5v1h-12V2h3.5zM3 4h10l-.75 10H3.75L3 4z" />
-  </svg>
-);
-
+// With action buttons (Font Awesome icons)
 export const WithActions: Story = {
   render: () => (
     <Table>
@@ -187,7 +177,7 @@ export const WithActions: Story = {
                   }}
                   aria-label="Edit"
                 >
-                  <EditIcon />
+                  <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
                 <button
                   type="button"
@@ -200,7 +190,7 @@ export const WithActions: Story = {
                   }}
                   aria-label="Delete"
                 >
-                  <TrashIcon />
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
             </TableCell>

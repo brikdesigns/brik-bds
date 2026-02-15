@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar, faArrowUpRightFromSquare, faTag, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { Tag } from './Tag';
 
 const meta = {
@@ -20,27 +22,17 @@ export const Default: Story = {
   },
 };
 
-const StarIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-    <path d="M6 1l1.545 3.13L11 4.635 8.5 7.07l.59 3.43L6 8.885 2.91 10.5l.59-3.43L1 4.635l3.455-.505L6 1z" />
-  </svg>
-);
-
 export const WithIcon: Story = {
   args: {
     children: 'Featured',
-    icon: <StarIcon />,
+    icon: <FontAwesomeIcon icon={faStar} />,
   },
 };
 
 export const WithTrailingIcon: Story = {
   args: {
     children: 'External',
-    trailingIcon: (
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-        <path d="M9 3L3 9M9 3v4M9 3H5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      </svg>
-    ),
+    trailingIcon: <FontAwesomeIcon icon={faArrowUpRightFromSquare} />,
   },
 };
 
@@ -62,9 +54,9 @@ export const MultipleTags: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
       <Tag>Design</Tag>
-      <Tag>Development</Tag>
-      <Tag>Marketing</Tag>
-      <Tag icon={<StarIcon />}>Featured</Tag>
+      <Tag icon={<FontAwesomeIcon icon={faTag} />}>Development</Tag>
+      <Tag icon={<FontAwesomeIcon icon={faCircle} />}>Marketing</Tag>
+      <Tag icon={<FontAwesomeIcon icon={faStar} />}>Featured</Tag>
       <Tag onRemove={() => {}}>Removable</Tag>
       <Tag disabled>Archived</Tag>
     </div>
