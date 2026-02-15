@@ -17,32 +17,32 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Base tag styles matching Webflow .tag class
+ * Base tag styles
  *
- * Token reference (from brik-bds.webflow.css .tag):
- * - --_color---background--brand-primary (brand-colored background)
- * - --_color---text--inverse (white text)
+ * Token reference:
+ * - --_color---background--secondary (subtle gray background)
+ * - --_color---text--primary (dark text on light bg)
  * - --_border-radius---sm = 2px
  * - --_typography---font-family--label (label font)
  * - --_typography---label--sm = 14px
  * - --font-line-height--150 = 150%
  * - --font-weight--bold = 700
- * - --_space---md = 8px (top/right/bottom padding)
- * - --_space---lg = 16px (left padding)
- * - --_space---gap--md = 8px (icon gap)
+ * - --_space---sm = 6px (vertical padding)
+ * - --_space---md = 8px (horizontal padding)
+ * - --_space---gap--sm = 4px (icon gap)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: 'var(--_space---gap--md)',
-  padding: 'var(--_space---md) var(--_space---md) var(--_space---md) var(--_space---lg)',
+  gap: 'var(--_space---gap--sm)',
+  padding: 'var(--_space---sm) var(--_space---md)',
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: 'var(--_typography---label--sm)',
   fontWeight: 'var(--font-weight--bold)' as unknown as number,
   lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--inverse)',
-  backgroundColor: 'var(--_color---background--brand-primary)',
+  color: 'var(--_color---text--primary)',
+  backgroundColor: 'var(--_color---background--secondary)',
   borderRadius: 'var(--_border-radius---sm)',
   textDecoration: 'none',
   whiteSpace: 'nowrap',
@@ -64,7 +64,7 @@ const removeButtonStyles: CSSProperties = {
   border: 'none',
   background: 'none',
   cursor: 'pointer',
-  color: 'var(--_color---text--inverse)',
+  color: 'var(--_color---text--muted)',
   fontSize: '12px',
   lineHeight: 1,
   width: '14px',
@@ -75,7 +75,7 @@ const removeButtonStyles: CSSProperties = {
 /**
  * Tag - BDS themed tag component
  *
- * Brand-colored tag with white text, matching the Webflow .tag class.
+ * Subtle gray tag with dark text for categorization and labeling.
  * Supports leading/trailing icons and an optional dismiss button.
  * Uses CSS variables for theming. All spacing, colors, typography,
  * and border-radius reference BDS tokens.
