@@ -3,48 +3,11 @@ import { useState } from 'react';
 import { Switch } from './Switch';
 
 const meta: Meta<typeof Switch> = {
-  title: 'UI/Switch',
+  title: 'Components/Switch',
   component: Switch,
   parameters: {
     layout: 'padded',
-    docs: {
-      description: {
-        component: `
-# Switch
-
-A themed toggle switch component for binary on/off states.
-
-## Features
-- Smooth slide animation
-- Theme-aware colors
-- Keyboard accessible
-- Controlled and uncontrolled modes
-- Optional label
-
-## Usage
-Use switches for:
-- Settings toggles (notifications, dark mode)
-- Feature flags
-- Binary preferences
-- Instant state changes (vs checkbox for form submission)
-
-## Controlled vs Uncontrolled
-- **Controlled**: Pass \`checked\` and \`onChange\` props
-- **Uncontrolled**: Use \`defaultChecked\` for initial state
-
-## Theme Integration
-The checked state uses brand primary color, adapting to each theme.
-
-## Accessibility
-- Uses proper \`role="switch"\` attribute
-- Supports keyboard navigation (Space/Enter)
-- Focus visible states
-- Works with screen readers
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     label: {
       control: 'text',
@@ -138,7 +101,7 @@ export const SettingsPanel: Story = {
           width: '320px',
           padding: '24px',
           backgroundColor: 'var(--_color---background--primary)',
-          border: '1px solid var(--_color---border--default)',
+          border: '1px solid var(--_color---border--secondary)',
           borderRadius: 'var(--_border-radius---lg)',
           display: 'flex',
           flexDirection: 'column',
@@ -148,7 +111,7 @@ export const SettingsPanel: Story = {
         <h3
           style={{
             fontFamily: 'var(--_typography---font-family--heading)',
-            fontSize: 'var(--_typography---heading--sm)',
+            fontSize: 'var(--_typography---heading--small)',
             margin: '0 0 8px 0',
           }}
         >
@@ -254,7 +217,7 @@ export const FeatureFlags: Story = {
         <h3
           style={{
             fontFamily: 'var(--_typography---font-family--heading)',
-            fontSize: 'var(--_typography---heading--sm)',
+            fontSize: 'var(--_typography---heading--small)',
             margin: 0,
           }}
         >

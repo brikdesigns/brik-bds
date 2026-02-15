@@ -1,0 +1,67 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Getting Started/Welcome" />
+
+# Brik Design System
+
+The BDS component library provides themed React components powered by CSS custom properties. All components adapt automatically across 8 bundled themes.
+
+## Theme switching
+
+Use the paintbrush icon in the toolbar above to switch between themes. Every component on every page will update in real time.
+
+| Theme | Description |
+|-------|-------------|
+| 1 | Spacious (Playfair Display) |
+| 2 | Yellow-Orange (Dark mode) |
+| 3 | Blue-Green (Light) |
+| 4 | Yellow-Orange (Light) |
+| 5 | Peach-Brown |
+| 6 | Pastel (Geist) |
+| 7 | Yellow-Brown (Lato) |
+| 8 | Vibrant (Playfair Display) |
+
+## Token system
+
+Components use CSS variables from the Webflow export. The naming convention is:
+
+```
+--_[category]---[type]--[variant]
+```
+
+Examples:
+
+- `--_color---background--brand-primary` — brand background color
+- `--_typography---font-family--heading` — heading font family
+- `--_space---lg` — large spacing value (16px base)
+- `--_border-radius---button` — button corner radius
+
+## Component categories
+
+### Data display
+- **Badge** — status indicators and labels
+- **Tag** — categorization and filtering labels
+- **Dot** — small status indicator circles
+- **Avatar** — user profile images with fallback initials
+- **Tooltip** — contextual information on hover
+
+### Form controls
+- **Button** — primary actions and navigation
+- **Input** — text input fields with labels
+- **Textarea** — multi-line text input
+- **Select** — dropdown selection
+- **Checkbox** — binary selection
+- **Radio** — single selection from a group
+- **Switch** — toggle on/off states
+
+### Layout
+- **Card** — content containers with header, body, and footer
+- **Table** — data tables with sortable headers
+- **Modal** — dialog overlays
+
+### Feedback
+- **Spinner** — loading indicator
+- **Skeleton** — content placeholder with shimmer animation
+
+### Navigation
+- **Link** — styled anchor elements

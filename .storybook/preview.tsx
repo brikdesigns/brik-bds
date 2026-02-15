@@ -80,6 +80,11 @@ const preview: Preview = {
   },
   decorators: [withTheme],
   parameters: {
+    options: {
+      storySort: {
+        order: ['Getting Started', 'Components', '*', 'Theme'],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

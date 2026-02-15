@@ -79,7 +79,7 @@ const getAvatarStyles = (size: AvatarSize): CSSProperties => ({
   color: 'var(--_color---text--inverse)',
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: sizeConfig[size].fontSize,
-  fontWeight: 600,
+  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   overflow: 'hidden',
   flexShrink: 0,
   userSelect: 'none',

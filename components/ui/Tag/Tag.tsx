@@ -67,8 +67,8 @@ const removeButtonStyles: CSSProperties = {
   background: 'none',
   cursor: 'pointer',
   color: 'var(--_color---text--muted)',
-  fontSize: '10px',
-  lineHeight: 1,
+  fontSize: 'var(--_typography---body--tiny)',
+  lineHeight: 'var(--font-line-height--100)',
 };
 
 /**

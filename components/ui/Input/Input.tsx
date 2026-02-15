@@ -44,15 +44,15 @@ const sizeStyles: Record<InputSize, { label: CSSProperties; input: CSSProperties
   },
   md: {
     label: {
-      fontSize: 'var(--_typography---label--md)',
+      fontSize: 'var(--_typography---label--md-base)',
     },
     input: {
-      fontSize: 'var(--_typography---body--md)',
+      fontSize: 'var(--_typography---body--md-base)',
     },
   },
   lg: {
     label: {
-      fontSize: 'var(--_typography---label--lg)',
+      fontSize: 'var(--_typography---label--le)',
     },
     input: {
       fontSize: 'var(--_typography---body--lg)',

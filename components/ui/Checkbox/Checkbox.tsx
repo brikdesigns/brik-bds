@@ -63,14 +63,14 @@ const inputDisabledStyles: CSSProperties = {
  *
  * Token reference:
  * - --_typography---font-family--body (body font)
- * - --_typography---body--md (medium body text size, per Figma)
- * - --_color---text--base (text color)
+ * - --_typography---body--md-base (medium body text size)
+ * - --_color---text--primary (text color)
  */
 const textStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md)',
-  lineHeight: 1.5,
-  color: 'var(--_color---text--base)',
+  fontSize: 'var(--_typography---body--md-base)',
+  lineHeight: 'var(--font-line-height--150)',
+  color: 'var(--_color---text--primary)',
 };
 
 /**

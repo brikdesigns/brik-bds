@@ -27,7 +27,7 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       bottom: '100%',
       left: '50%',
       transform: 'translateX(-50%)',
-      marginBottom: '8px',
+      marginBottom: 'var(--_space---md)',
     },
     arrow: {
       top: '100%',
@@ -41,7 +41,7 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       top: '100%',
       left: '50%',
       transform: 'translateX(-50%)',
-      marginTop: '8px',
+      marginTop: 'var(--_space---md)',
     },
     arrow: {
       bottom: '100%',
@@ -55,7 +55,7 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       right: '100%',
       top: '50%',
       transform: 'translateY(-50%)',
-      marginRight: '8px',
+      marginRight: 'var(--_space---md)',
     },
     arrow: {
       left: '100%',
@@ -69,7 +69,7 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       left: '100%',
       top: '50%',
       transform: 'translateY(-50%)',
-      marginLeft: '8px',
+      marginLeft: 'var(--_space---md)',
     },
     arrow: {
       right: '100%',
@@ -92,12 +92,12 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
  */
 const tooltipBaseStyles: CSSProperties = {
   position: 'absolute',
-  padding: '6px 12px',
+  padding: 'var(--_space---sm) var(--_space---lg)',
   backgroundColor: 'var(--grayscale--darkest, #333)',
   color: 'var(--grayscale--white, #fff)',
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: 'var(--_typography---label--sm)',
-  lineHeight: 1.4,
+  lineHeight: 'var(--font-line-height--150)',
   borderRadius: 'var(--_border-radius---sm)',
   whiteSpace: 'nowrap',
   zIndex: 1000,

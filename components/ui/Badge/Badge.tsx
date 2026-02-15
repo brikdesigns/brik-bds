@@ -27,13 +27,17 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 /**
  * Status-based colors using BDS system tokens
  *
+ * On-color text uses theme-aware semantic tokens:
+ * - --_color---text--inverse: adapts per theme (white in light, dark in dark)
+ *   Used on saturated backgrounds (green, red, blue) for contrast
+ * - --_color---text--primary: adapts per theme (dark in light, light in dark)
+ *   Used on warning yellow where dark text is needed for readability
+ *
  * Token reference:
  * - --system--green = #27ae60 (success)
  * - --system--yellow = #f2c94c (warning)
  * - --system--red = #eb5757 (error)
  * - --system--blue = #2f80ed (info)
- * - --grayscale--white (white text)
- * - --grayscale--darkest = #333 (dark text)
  */
 const statusStyles: Record<BadgeStatus, CSSProperties> = {
   default: {
@@ -42,23 +46,23 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
   },
   positive: {
     backgroundColor: 'var(--system--green)',
-    color: 'var(--grayscale--white)',
+    color: 'var(--_color---text--inverse)',
   },
   warning: {
     backgroundColor: 'var(--system--yellow)',
-    color: 'var(--grayscale--darkest)',
+    color: 'var(--_color---text--primary)',
   },
   error: {
     backgroundColor: 'var(--system--red)',
-    color: 'var(--grayscale--white)',
+    color: 'var(--_color---text--inverse)',
   },
   info: {
     backgroundColor: 'var(--system--blue)',
-    color: 'var(--grayscale--white)',
+    color: 'var(--_color---text--inverse)',
   },
   progress: {
     backgroundColor: 'var(--system--blue)',
-    color: 'var(--grayscale--white)',
+    color: 'var(--_color---text--inverse)',
   },
   neutral: {
     backgroundColor: 'var(--_color---background--secondary)',
@@ -105,9 +109,9 @@ const baseStyles: CSSProperties = {
   alignItems: 'center',
   gap: 'var(--_space---gap--sm)',
   fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 600,
-  lineHeight: 1.5,
-  borderRadius: '9999px',
+  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height--150)',
+  borderRadius: '9999px', // pill shape — no BDS token equivalent
   whiteSpace: 'nowrap',
 };
 

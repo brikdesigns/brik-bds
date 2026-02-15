@@ -1,0 +1,103 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Input.stories';
+
+<Meta of={Stories} />
+
+# Input
+
+Text input field for collecting user data. Supports labels, helper text, error states, and multiple input types.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## With Label
+
+Inputs should typically include labels for accessibility and clarity.
+
+<Canvas of={Stories.WithLabel} />
+
+## With Helper Text
+
+Helper text provides guidance or additional context below the input.
+
+<Canvas of={Stories.WithHelperText} />
+
+## Error State
+
+Error messages replace helper text and style the input with error colors.
+
+<Canvas of={Stories.WithError} />
+
+## Disabled State
+
+Disabled inputs prevent user interaction.
+
+<Canvas of={Stories.Disabled} />
+
+## Full Width
+
+Inputs can expand to fill their container width.
+
+<Canvas of={Stories.FullWidth} />
+
+## Sizes
+
+Inputs are available in three sizes per Figma designs.
+
+<Canvas of={Stories.AllSizes} />
+
+## Input Types
+
+The component supports various HTML input types for different data formats.
+
+<Canvas of={Stories.InputTypes} />
+
+## Form Example
+
+Complete form using multiple inputs.
+
+<Canvas of={Stories.FormExample} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Input } from '@brik/bds';
+
+// Basic input
+<Input placeholder="Enter text..." />
+
+// With label
+<Input label="Email Address" placeholder="you@example.com" type="email" />
+
+// With helper text
+<Input
+  label="Password"
+  type="password"
+  helperText="Must be at least 8 characters"
+/>
+
+// Error state
+<Input
+  label="Email"
+  error="Please enter a valid email address"
+  type="email"
+/>
+
+// Sizes
+<Input size="sm" label="Small" />
+<Input size="md" label="Medium" />
+<Input size="lg" label="Large" />
+
+// Full width
+<Input fullWidth label="Full Name" />
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

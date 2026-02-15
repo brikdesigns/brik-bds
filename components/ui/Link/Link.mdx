@@ -1,0 +1,62 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Link.stories';
+
+<Meta of={Stories} />
+
+# Link
+
+Styled anchor element with size variants and hover effects. Use for navigation and inline text links throughout the interface.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Small
+Smaller link size for compact contexts.
+<Canvas of={Stories.Small} />
+
+### External Link
+Open links in new tabs with proper security attributes.
+<Canvas of={Stories.External} />
+
+## Usage Examples
+
+### In Paragraph
+Links within body text.
+<Canvas of={Stories.InParagraph} />
+
+### Navigation Links
+Horizontal navigation menu.
+<Canvas of={Stories.NavigationLinks} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Link } from '@brik/bds';
+
+// Default link
+<Link href="/about">Learn More</Link>
+
+// Small link
+<Link href="/details" size="small">View Details</Link>
+
+// External link
+<Link
+  href="https://example.com"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Visit Website
+</Link>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

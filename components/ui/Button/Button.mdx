@@ -1,0 +1,91 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Button.stories';
+
+<Meta of={Stories} />
+
+# Button
+
+Primary action buttons for user interactions. Buttons come in multiple variants to establish visual hierarchy and guide user attention.
+
+## Overview
+
+<Canvas of={Stories.Primary} />
+
+## Variants
+
+Buttons support four visual variants, each serving different levels of visual prominence.
+
+### All Variants
+<Canvas of={Stories.AllVariants} />
+
+### Primary
+The main call-to-action. Use sparingly — typically one primary button per section.
+<Canvas of={Stories.Primary} />
+
+### Outline
+Secondary actions with medium emphasis. Good for alternatives to the primary action.
+<Canvas of={Stories.Outline} />
+
+### Secondary
+Tertiary actions with subtle styling. Use for supporting actions.
+<Canvas of={Stories.Secondary} />
+
+### Ghost
+Minimal emphasis for low-priority actions. Often used in navigation or repeated actions.
+<Canvas of={Stories.Ghost} />
+
+## Sizes
+
+Buttons are available in three sizes to match UI density and hierarchy.
+
+<Canvas of={Stories.AllSizes} />
+
+## Full Width
+
+Buttons can expand to fill their container width.
+
+<Canvas of={Stories.FullWidth} />
+
+## Disabled State
+
+Disabled buttons prevent user interaction and reduce visual prominence.
+
+<Canvas of={Stories.Disabled} />
+
+## Button Grid
+
+All combinations of variants and sizes.
+
+<Canvas of={Stories.ButtonGrid} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Button } from '@brik/bds';
+
+// Basic button
+<Button variant="primary">Click me</Button>
+
+// Sizes
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+
+// Full width
+<Button fullWidth>Full width</Button>
+
+// Disabled
+<Button disabled>Disabled</Button>
+
+// As link
+<Button as="a" href="/path">Link button</Button>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

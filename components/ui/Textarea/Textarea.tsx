@@ -26,7 +26,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  * Token reference:
  * - --_color---border--input (input border color)
  * - --_color---background--input (input background)
- * - --_color---text--base (text color)
+ * - --_color---text--primary (text color)
  * - --_border-radius---input = 2px (input corners)
  * - --_space---input = 8px (input padding)
  * - --_typography---font-family--body (body font)
@@ -40,10 +40,10 @@ const textareaStyles: CSSProperties = {
   padding: 'var(--_space---input)',
   fontFamily: 'var(--_typography---font-family--body)',
   fontSize: 'var(--_typography---body--sm)',
-  lineHeight: 1.5,
-  color: 'var(--_color---text--base)',
+  lineHeight: 'var(--font-line-height--150)',
+  color: 'var(--_color---text--primary)',
   backgroundColor: 'var(--_color---background--input)',
-  border: '1px solid var(--_color---border--input)',
+  border: 'var(--_border-width---sm) solid var(--_color---border--input)',
   borderRadius: 'var(--_border-radius---input)',
   resize: 'vertical',
 };

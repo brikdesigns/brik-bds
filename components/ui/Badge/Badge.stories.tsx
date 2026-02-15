@@ -4,38 +4,11 @@ import { faCheck, faCircleExclamation, faSpinner, faCircleInfo } from '@fortawes
 import { Badge } from './Badge';
 
 const meta: Meta<typeof Badge> = {
-  title: 'UI/Badge',
+  title: 'Components/Badge',
   component: Badge,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-# Badge
-
-A themed badge component for status indicators and labels.
-
-## Status Variants
-- **default** - Brand colored
-- **positive** - Green, for success states
-- **warning** - Yellow, for caution/pending states
-- **error** - Red, for error/failure states
-- **info** - Blue, for informational messages
-- **progress** - Blue, for active/in-progress states
-- **neutral** - Gray, for inactive/disabled states
-
-## Size Variants
-- **sm** - Small (compact)
-- **md** - Medium (default)
-- **lg** - Large
-
-## Theme Integration
-The default badge uses brand colors that change per theme.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     status: {
       control: 'select',

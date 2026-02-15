@@ -47,14 +47,14 @@ const spinKeyframes = `
  * Base spinner styles using BDS tokens
  *
  * Token reference:
- * - --colors--grayscale--lighter = #e5e7eb (light border)
+ * - --grayscale--lighter = #e0e0e0 (light border)
  * - --_color---theme--primary (theme-aware primary color)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-block',
   borderRadius: '50%',
   borderStyle: 'solid',
-  borderColor: 'var(--colors--grayscale--lighter, #e5e7eb)',
+  borderColor: 'var(--grayscale--lighter, #e0e0e0)',
   borderTopColor: 'var(--_color---theme--primary, #0066ff)',
   animation: 'bds-spinner-spin 0.8s linear infinite',
 };

@@ -7,7 +7,6 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
   argTypes: {
     src: {
       control: 'text',
@@ -204,8 +203,8 @@ export const UserList: Story = {
             <div
               style={{
                 fontFamily: 'var(--_typography---font-family--label)',
-                fontSize: 'var(--_typography---label--md)',
-                fontWeight: 600,
+                fontSize: 'var(--_typography---label--md-base)',
+                fontWeight: 'var(--font-weight--semi-bold)',
               }}
             >
               {user.name}
@@ -214,7 +213,7 @@ export const UserList: Story = {
               style={{
                 fontFamily: 'var(--_typography---font-family--body)',
                 fontSize: 'var(--_typography---body--sm)',
-                color: 'var(--grayscale--medium)',
+                color: 'var(--grayscale--light)',
               }}
             >
               {user.status.charAt(0).toUpperCase() + user.status.slice(1)}

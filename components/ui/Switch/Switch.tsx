@@ -29,7 +29,7 @@ const labelStyles: CSSProperties = {
   cursor: 'pointer',
   userSelect: 'none',
   fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md)',
+  fontSize: 'var(--_typography---body--md-base)',
   color: 'var(--_color---text--primary)',
 };
 
@@ -54,7 +54,7 @@ const inputStyles: CSSProperties = {
  *
  * Token reference:
  * - --_color---background--brand-primary (checked background)
- * - --grayscale--medium (unchecked background)
+ * - --grayscale--light (unchecked background)
  * - --_border-radius---pill (rounded track)
  */
 const trackBaseStyles: CSSProperties = {
@@ -62,7 +62,7 @@ const trackBaseStyles: CSSProperties = {
   display: 'inline-block',
   width: '44px',
   height: '24px',
-  backgroundColor: 'var(--grayscale--medium, #999)',
+  backgroundColor: 'var(--grayscale--light, #bdbdbd)',
   borderRadius: '12px',
   transition: 'background-color 0.2s ease',
   flexShrink: 0,

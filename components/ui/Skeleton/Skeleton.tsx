@@ -32,21 +32,21 @@ const shimmerKeyframes = `
  * Base skeleton styles using BDS tokens
  *
  * Uses the shimmer pattern from animations.css:
- * - Linear gradient with light-to-lighter transition
+ * - Linear gradient with subtle contrast transition
  * - Animated background position for shimmer effect
  *
- * Token reference:
- * - --colors--grayscale--lightest (base color)
- * - --colors--grayscale--lighter (shimmer highlight)
+ * Theme-aware tokens adapt for dark mode:
+ * - Light: --_color---background--secondary = #f2f2f2, --_color---page--secondary = #e0e0e0
+ * - Dark:  --_color---background--secondary = black,   --_color---page--secondary = #333
  */
 const baseStyles: CSSProperties = {
   display: 'inline-block',
-  backgroundColor: 'var(--colors--grayscale--lightest, #f3f4f6)',
+  backgroundColor: 'var(--_color---background--secondary)',
   backgroundImage: `linear-gradient(
     90deg,
-    var(--colors--grayscale--lightest, #f3f4f6) 25%,
-    var(--colors--grayscale--lighter, #e5e7eb) 50%,
-    var(--colors--grayscale--lightest, #f3f4f6) 75%
+    var(--_color---background--secondary) 25%,
+    var(--_color---page--secondary) 50%,
+    var(--_color---background--secondary) 75%
   )`,
   backgroundSize: '200% 100%',
   animation: 'bds-skeleton-shimmer 1.5s infinite',
@@ -59,7 +59,7 @@ const variantDefaults: Record<SkeletonVariant, { width: string; height: string; 
   text: {
     width: '100%',
     height: '1em',
-    borderRadius: '4px',
+    borderRadius: 'var(--_border-radius---md)',
   },
   circular: {
     width: '40px',
@@ -69,7 +69,7 @@ const variantDefaults: Record<SkeletonVariant, { width: string; height: string; 
   rectangular: {
     width: '100%',
     height: '140px',
-    borderRadius: 'var(--_border-radius---md, 8px)',
+    borderRadius: 'var(--_border-radius---md)',
   },
 };
 

@@ -2,37 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from './Input';
 
 const meta: Meta<typeof Input> = {
-  title: 'UI/Input',
+  title: 'Components/Input',
   component: Input,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-# Input
-
-A themed text input component with support for labels, helper text, and error states.
-
-## Size Variants (per Figma)
-- **sm** - Small (14px text, compact height)
-- **md** - Medium (16px text, default)
-- **lg** - Large (18px text, spacious height)
-
-## Features
-- Size variants matching Figma design specs
-- Optional label
-- Helper text for guidance
-- Error state with message
-- Icon support (before/after)
-- Full width option
-
-## Theme Integration
-Inputs automatically adapt to the current theme, using theme colors for borders, text, and error states.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',

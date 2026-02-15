@@ -134,7 +134,7 @@ export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
  * - --_color---border--secondary (bottom border)
  */
 const rowBaseStyles: CSSProperties = {
-  borderBottom: '1px solid var(--_color---border--secondary)',
+  borderBottom: 'var(--_border-width---sm) solid var(--_color---border--secondary)',
 };
 
 const rowSelectedStyles: CSSProperties = {
@@ -191,10 +191,10 @@ const headStyles: CSSProperties = {
   padding: 'var(--_space---sm) var(--_space---md)',
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: 'var(--_typography---label--sm)',
-  fontWeight: 600,
+  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   color: 'var(--_color---text--muted)',
   textAlign: 'left',
-  borderBottom: '2px solid var(--_color---border--secondary)',
+  borderBottom: 'var(--_border-width---md) solid var(--_color---border--secondary)',
   backgroundColor: 'var(--_color---background--secondary)',
   whiteSpace: 'nowrap',
 };
