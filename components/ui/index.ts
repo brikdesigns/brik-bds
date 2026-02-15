@@ -15,3 +15,5 @@ export * from './Dot';
 export * from './Skeleton';
 export * from './Tooltip';
 export * from './Switch';
+export * from './Tag';
+export * from './Table';

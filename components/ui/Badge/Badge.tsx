@@ -3,7 +3,12 @@ import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
 /**
  * Badge status variants
  */
-export type BadgeStatus = 'default' | 'positive' | 'warning' | 'error' | 'info';
+export type BadgeStatus = 'default' | 'positive' | 'warning' | 'error' | 'info' | 'progress' | 'neutral';
+
+/**
+ * Badge size variants
+ */
+export type BadgeSize = 'sm' | 'md' | 'lg';
 
 /**
  * Badge component props
@@ -11,6 +16,8 @@ export type BadgeStatus = 'default' | 'positive' | 'warning' | 'error' | 'info';
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   /** Status variant */
   status?: BadgeStatus;
+  /** Size variant */
+  size?: BadgeSize;
   /** Children content */
   children: ReactNode;
   /** Optional icon before text */
@@ -49,6 +56,37 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
     backgroundColor: 'var(--system--blue)',
     color: 'var(--grayscale--white)',
   },
+  progress: {
+    backgroundColor: 'var(--system--blue)',
+    color: 'var(--grayscale--white)',
+  },
+  neutral: {
+    backgroundColor: 'var(--_color---background--subtle)',
+    color: 'var(--_color---text--muted)',
+  },
+};
+
+/**
+ * Size-based styles using BDS tokens
+ *
+ * Token reference:
+ * - --_typography---label--tiny (sm size)
+ * - --_typography---label--sm (md size)
+ * - --_typography---label--md (lg size)
+ */
+const sizeStyles: Record<BadgeSize, CSSProperties> = {
+  sm: {
+    padding: '2px 6px',
+    fontSize: 'var(--_typography---label--tiny)',
+  },
+  md: {
+    padding: 'var(--_space---tiny) var(--_space---sm)',
+    fontSize: 'var(--_typography---label--sm)',
+  },
+  lg: {
+    padding: '6px 12px',
+    fontSize: 'var(--_typography---label--md)',
+  },
 };
 
 /**
@@ -66,12 +104,10 @@ const baseStyles: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   gap: 'var(--_space---gap--sm)',
-  padding: 'var(--_space---tiny) var(--_space---sm)',
   fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
   fontWeight: 600,
   lineHeight: 1.5,
-  borderRadius: 'var(--_border-radius---sm)',
+  borderRadius: '9999px',
   whiteSpace: 'nowrap',
 };
 
@@ -79,19 +115,22 @@ const baseStyles: CSSProperties = {
  * Badge - BDS themed badge component
  *
  * Uses CSS variables for theming. Supports status variants for
- * indicating state (positive, warning, error, info).
- * All spacing, colors, typography, and border-radius reference BDS tokens.
+ * indicating state (positive, warning, error, info, progress, neutral)
+ * and size variants (sm, md, lg). Pill-shaped border radius per Figma.
+ * All spacing, colors, typography reference BDS tokens.
  *
  * @example
  * ```tsx
  * <Badge status="positive">Success</Badge>
- * <Badge status="warning">Pending</Badge>
- * <Badge status="error">Failed</Badge>
- * <Badge>New</Badge>
+ * <Badge status="warning" size="sm">Pending</Badge>
+ * <Badge status="error" size="lg">Failed</Badge>
+ * <Badge status="progress">In Progress</Badge>
+ * <Badge status="neutral">Inactive</Badge>
  * ```
  */
 export function Badge({
   status = 'default',
+  size = 'md',
   children,
   icon,
   className = '',
@@ -100,6 +139,7 @@ export function Badge({
 }: BadgeProps) {
   const combinedStyles: CSSProperties = {
     ...baseStyles,
+    ...sizeStyles[size],
     ...statusStyles[status],
     ...style,
   };
