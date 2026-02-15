@@ -19,6 +19,13 @@ A themed badge component for status indicators and labels.
 - **warning** - Yellow, for caution/pending states
 - **error** - Red, for error/failure states
 - **info** - Blue, for informational messages
+- **progress** - Blue, for active/in-progress states
+- **neutral** - Gray, for inactive/disabled states
+
+## Size Variants
+- **sm** - Small (compact)
+- **md** - Medium (default)
+- **lg** - Large
 
 ## Theme Integration
 The default badge uses brand colors that change per theme.
@@ -30,8 +37,13 @@ The default badge uses brand colors that change per theme.
   argTypes: {
     status: {
       control: 'select',
-      options: ['default', 'positive', 'warning', 'error', 'info'],
+      options: ['default', 'positive', 'warning', 'error', 'info', 'progress', 'neutral'],
       description: 'Status variant',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size variant',
     },
   },
 };
@@ -74,6 +86,42 @@ export const Info: Story = {
   },
 };
 
+export const Progress: Story = {
+  args: {
+    status: 'progress',
+    children: 'In Progress',
+  },
+};
+
+export const Neutral: Story = {
+  args: {
+    status: 'neutral',
+    children: 'Inactive',
+  },
+};
+
+// Size variants
+export const SizeSmall: Story = {
+  args: {
+    children: 'Small',
+    size: 'sm',
+  },
+};
+
+export const SizeMedium: Story = {
+  args: {
+    children: 'Medium',
+    size: 'md',
+  },
+};
+
+export const SizeLarge: Story = {
+  args: {
+    children: 'Large',
+    size: 'lg',
+  },
+};
+
 // All status variants
 export const AllStatuses: Story = {
   render: () => (
@@ -83,6 +131,46 @@ export const AllStatuses: Story = {
       <Badge status="warning">Warning</Badge>
       <Badge status="error">Error</Badge>
       <Badge status="info">Info</Badge>
+      <Badge status="progress">Progress</Badge>
+      <Badge status="neutral">Neutral</Badge>
+    </div>
+  ),
+};
+
+// All sizes
+export const AllSizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Badge size="sm">Small</Badge>
+      <Badge size="md">Medium</Badge>
+      <Badge size="lg">Large</Badge>
+    </div>
+  ),
+};
+
+// Size × Status matrix
+export const SizeStatusMatrix: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      {(['sm', 'md', 'lg'] as const).map((size) => (
+        <div key={size} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <span style={{
+            fontFamily: 'var(--_typography---font-family--label)',
+            fontSize: '12px',
+            color: 'var(--_color---text--muted)',
+            width: '32px',
+          }}>
+            {size}
+          </span>
+          <Badge size={size}>Default</Badge>
+          <Badge size={size} status="positive">Positive</Badge>
+          <Badge size={size} status="warning">Warning</Badge>
+          <Badge size={size} status="error">Error</Badge>
+          <Badge size={size} status="info">Info</Badge>
+          <Badge size={size} status="progress">Progress</Badge>
+          <Badge size={size} status="neutral">Neutral</Badge>
+        </div>
+      ))}
     </div>
   ),
 };
@@ -98,6 +186,12 @@ export const StatusIndicators: Story = {
         </span>
       </div>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <Badge status="progress">In Review</Badge>
+        <span style={{ fontFamily: 'var(--_typography---font-family--body)' }}>
+          Being reviewed by editor
+        </span>
+      </div>
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Badge status="warning">Draft</Badge>
         <span style={{ fontFamily: 'var(--_typography---font-family--body)' }}>
           Saved but not published
@@ -109,18 +203,12 @@ export const StatusIndicators: Story = {
           Has been removed
         </span>
       </div>
-    </div>
-  ),
-};
-
-// Category tags
-export const CategoryTags: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-      <Badge>Design</Badge>
-      <Badge>Development</Badge>
-      <Badge>Marketing</Badge>
-      <Badge>Strategy</Badge>
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <Badge status="neutral">Inactive</Badge>
+        <span style={{ fontFamily: 'var(--_typography---font-family--body)' }}>
+          Currently disabled
+        </span>
+      </div>
     </div>
   ),
 };
