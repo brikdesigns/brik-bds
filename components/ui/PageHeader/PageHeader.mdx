@@ -1,0 +1,108 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './PageHeader.stories';
+
+<Meta of={Stories} />
+
+# Page Header
+
+Flexible page-level header with breadcrumbs, title/subtitle, action buttons, tab navigation, and metadata sections. Designed for dark backgrounds with inverse (white) title text by default.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Title only
+Minimal usage with just a heading.
+<Canvas of={Stories.TitleOnly} />
+
+### With subtitle
+Title and description text.
+<Canvas of={Stories.WithSubtitle} />
+
+### With breadcrumbs
+Breadcrumb navigation trail above the title. The last item renders as the current page (muted, non-clickable).
+<Canvas of={Stories.WithBreadcrumbs} />
+
+### With actions
+Action buttons aligned to the right of the title row.
+<Canvas of={Stories.WithActions} />
+
+### Tabbed
+Horizontal tab navigation beneath the title and actions.
+<Canvas of={Stories.Default} />
+
+### With metadata
+Key-value metadata grid below the title, separated by a border. Supports ReactNode values for rich content like badge icons.
+<Canvas of={Stories.WithMetadata} />
+
+### Tabs only
+Tab navigation without action buttons.
+<Canvas of={Stories.TabsOnly} />
+
+### On light background
+Override title color for use on light backgrounds via the `style` prop.
+<Canvas of={Stories.OnLightBackground} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { PageHeader } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+// Tabbed variant (designed for dark backgrounds)
+<PageHeader
+  title="My Account"
+  subtitle="Manage your membership plan."
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Settings', href: '/settings' },
+    { label: 'Account' },
+  ]}
+  actions={
+    <>
+      <Button variant="primary">Save</Button>
+      <Button variant="secondary">Cancel</Button>
+    </>
+  }
+  tabs={[
+    { label: 'Overview', active: true },
+    { label: 'Billing' },
+    { label: 'Security' },
+  ]}
+/>
+
+// Metadata variant
+<PageHeader
+  title="Brand Design"
+  subtitle="Service details and billing info."
+  actions={
+    <>
+      <Button variant="primary" size="sm">Edit</Button>
+      <Button variant="secondary" size="sm">Archive</Button>
+    </>
+  }
+  metadata={[
+    { label: 'Category', value: 'Brand Design' },
+    { label: 'Billing', value: 'One-time' },
+    { label: 'Stripe Product', value: 'brand-design' },
+  ]}
+/>
+
+// On light background — override text color
+<PageHeader
+  title="Dashboard"
+  subtitle="Welcome back."
+  style={{ color: 'var(--_color---text--primary)' }}
+/>
+```
+
+## Resources
+
+- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26911-20723)
+- [Design guidelines](#) — coming soon
