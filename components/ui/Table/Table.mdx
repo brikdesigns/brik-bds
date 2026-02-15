@@ -5,7 +5,7 @@ import * as Stories from './Table.stories';
 
 # Table
 
-Data table component with sub-components for structured content display. Supports sorting, selection, and custom cell content.
+Data table component with sub-components for structured content display. Supports sorting, selection, and custom cell content with 12 Figma-defined cell types.
 
 ## Overview
 
@@ -21,31 +21,69 @@ The Table system is composable using these elements:
 - `TableHead` — Header cell with optional sortable props
 - `TableCell` — Body cell for data
 
-## Variants
+## Cell types
 
-### With Badges
-Status indicators in cells.
+### Text cell
+Plain text data in cells. The default cell type.
+<Canvas of={Stories.Default} />
+
+### Text + icon left cell
+Text with a leading icon for visual context (24x24 icon wrapper).
+<Canvas of={Stories.WithTextIconLeft} />
+
+### Text + icon right cell
+Text with a trailing icon for info or supplementary actions.
+<Canvas of={Stories.WithTextIconRight} />
+
+### Badge cell
+Status indicators using the Badge component.
 <Canvas of={Stories.WithBadges} />
 
-### With Tags
-Category labels in cells.
+### Tag cell
+Category labels using the Tag component.
 <Canvas of={Stories.WithTags} />
 
-### With Actions
-Action buttons in the final column.
-<Canvas of={Stories.WithActions} />
-
-### With Checkboxes
-Row selection using checkboxes.
+### Checkbox cell
+Row selection using checkboxes in both header and body cells.
 <Canvas of={Stories.WithCheckboxes} />
 
-### Striped Rows
-Alternating row background colors.
+### Data input cell
+Inline text input fields for editable table data.
+<Canvas of={Stories.WithDataInput} />
+
+### Badge brik cell
+Brand/service badge icon — 28x28 branded square indicator.
+<Canvas of={Stories.WithBadgeBrik} />
+
+### Actions cell
+Icon action buttons — 28x28 primary square buttons for row-level actions (1-4 buttons).
+<Canvas of={Stories.WithActions} />
+
+### Button cell
+Full primary button in a cell for call-to-action columns.
+<Canvas of={Stories.WithButton} />
+
+### Text link cell
+Clickable text link for navigation within table rows using the Link component.
+<Canvas of={Stories.WithTextLink} />
+
+### Header cell with checkbox
+Column header with optional checkbox for bulk selection and sortable columns.
+<Canvas of={Stories.HeaderWithCheckbox} />
+
+## 2-line variants
+
+All cell types support a 2-line layout with primary text and secondary muted text beneath.
+<Canvas of={Stories.TwoLineVariants} />
+
+## Striped rows
+
+Alternating row background colors for improved readability.
 <Canvas of={Stories.Striped} />
 
-## Complex Example
+## Composite example
 
-Full-featured table with sorting, selection, badges, tags, and actions.
+Full-featured table combining all cell types: checkbox, 2-line text, brand badge, tag, badge status, button, and icon action buttons.
 <Canvas of={Stories.CompositeExample} />
 
 ## Props
@@ -63,31 +101,78 @@ import {
   TableHead,
   TableCell
 } from '@brik/bds';
+import { Badge } from '@brik/bds';
+import { Tag } from '@brik/bds';
+import { Button } from '@brik/bds';
+import { Checkbox } from '@brik/bds';
+import { Input } from '@brik/bds';
+import { Link } from '@brik/bds';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash, faPalette } from '@fortawesome/free-solid-svg-icons';
 
-<Table>
-  <TableHeader>
-    <TableRow>
-      <TableHead sortable sortDirection="asc">Name</TableHead>
-      <TableHead>Email</TableHead>
-      <TableHead>Role</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    <TableRow selected>
-      <TableCell>Alice Chen</TableCell>
-      <TableCell>alice@example.com</TableCell>
-      <TableCell>Admin</TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell>Bob Smith</TableCell>
-      <TableCell>bob@example.com</TableCell>
-      <TableCell>Editor</TableCell>
-    </TableRow>
-  </TableBody>
-</Table>
+// Text cell (default)
+<TableCell>Alice Chen</TableCell>
+
+// Text + icon left cell
+<TableCell>
+  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+    <FontAwesomeIcon icon={faPalette} style={{ width: 24 }} />
+    Design
+  </span>
+</TableCell>
+
+// Badge cell
+<TableCell>
+  <Badge status="positive" size="sm">Active</Badge>
+</TableCell>
+
+// Tag cell
+<TableCell>
+  <Tag size="sm">Design</Tag>
+</TableCell>
+
+// Checkbox cell
+<TableCell>
+  <Checkbox name="select" label="" value="alice" />
+</TableCell>
+
+// Data input cell
+<TableCell>
+  <Input size="sm" placeholder="Enter value" />
+</TableCell>
+
+// Icon action buttons
+<TableCell style={{ textAlign: 'right' }}>
+  <button style={iconButtonStyles} aria-label="Edit">
+    <FontAwesomeIcon icon={faPenToSquare} />
+  </button>
+  <button style={iconButtonStyles} aria-label="Delete">
+    <FontAwesomeIcon icon={faTrash} />
+  </button>
+</TableCell>
+
+// Button cell
+<TableCell>
+  <Button variant="primary" size="sm">View profile</Button>
+</TableCell>
+
+// Text link cell
+<TableCell>
+  <Link href="#">View profile</Link>
+</TableCell>
+
+// 2-line text cell
+<TableCell>
+  <div>
+    <div style={{ fontWeight: 600 }}>Alice Chen</div>
+    <div style={{ fontSize: 'var(--_typography---body--sm)', color: 'var(--_color---text--muted)' }}>
+      alice@example.com
+    </div>
+  </div>
+</TableCell>
 ```
 
 ## Resources
 
-- [Figma designs](#) — coming soon
+- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26483-15064)
 - [Design guidelines](#) — coming soon
