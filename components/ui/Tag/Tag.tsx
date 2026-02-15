@@ -1,4 +1,6 @@
 import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Tag component props
@@ -65,11 +67,8 @@ const removeButtonStyles: CSSProperties = {
   background: 'none',
   cursor: 'pointer',
   color: 'var(--_color---text--muted)',
-  fontSize: '12px',
+  fontSize: '10px',
   lineHeight: 1,
-  width: '14px',
-  height: '14px',
-  borderRadius: '2px',
 };
 
 /**
@@ -120,7 +119,7 @@ export function Tag({
           style={removeButtonStyles}
           aria-label="Remove"
         >
-          ×
+          <FontAwesomeIcon icon={faXmark} />
         </button>
       )}
     </span>

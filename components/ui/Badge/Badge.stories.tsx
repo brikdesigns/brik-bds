@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faCircleExclamation, faSpinner, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { Badge } from './Badge';
 
 const meta: Meta<typeof Badge> = {
@@ -144,6 +146,18 @@ export const AllSizes: Story = {
       <Badge size="sm">Small</Badge>
       <Badge size="md">Medium</Badge>
       <Badge size="lg">Large</Badge>
+    </div>
+  ),
+};
+
+// With FA icons
+export const WithIcons: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Success</Badge>
+      <Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Error</Badge>
+      <Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>Loading</Badge>
+      <Badge status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Info</Badge>
     </div>
   ),
 };

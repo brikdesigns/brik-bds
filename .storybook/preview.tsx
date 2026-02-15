@@ -1,6 +1,11 @@
 import type { Preview, Decorator } from '@storybook/react';
 import type { ThemeNumber } from '../tokens';
 
+// Font Awesome 6 — prevent auto-CSS injection, import CSS manually
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
+
 // Import the ORIGINAL Webflow CSS directly
 import '../updates/brik-bds.webflow/css/brik-bds.webflow.css';
 // Import overrides AFTER Webflow CSS to fix Storybook UI conflicts
