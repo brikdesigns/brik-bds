@@ -9,5 +9,8 @@
 # Node
 node_modules/
 
+# Storybook build output
+storybook-static/
+
 # OS files
 .DS_Store
