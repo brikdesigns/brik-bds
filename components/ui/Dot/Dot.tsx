@@ -29,7 +29,7 @@ export interface DotProps extends HTMLAttributes<HTMLSpanElement> {
  * - --system--yellow = #f2c94c (warning)
  * - --system--red = #eb5757 (error)
  * - --system--blue = #2f80ed (info)
- * - --grayscale--medium (neutral)
+ * - --grayscale--light (neutral)
  * - --_color---background--brand-primary (default)
  */
 const statusColors: Record<DotStatus, string> = {
@@ -38,7 +38,7 @@ const statusColors: Record<DotStatus, string> = {
   warning: 'var(--system--yellow)',
   error: 'var(--system--red)',
   info: 'var(--system--blue)',
-  neutral: 'var(--grayscale--medium)',
+  neutral: 'var(--grayscale--light)',
 };
 
 /**

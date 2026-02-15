@@ -4,32 +4,11 @@ import { Button } from '../Button';
 import { Badge } from '../Badge';
 
 const meta: Meta<typeof Card> = {
-  title: 'UI/Card',
+  title: 'Components/Card',
   component: Card,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-# Card
-
-A themed card container component for grouping related content.
-
-## Variants
-- **default** - Plain card with no border or shadow
-- **outlined** - Card with border (default)
-- **elevated** - Card with shadow
-
-## Composition
-Cards can be composed with CardTitle, CardDescription, and CardFooter.
-
-## Theme Integration
-Cards use CSS variables for colors, spacing, and border-radius.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',

@@ -2,34 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Link } from './Link';
 
 const meta: Meta<typeof Link> = {
-  title: 'UI/Link',
+  title: 'Components/Link',
   component: Link,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-# Link
-
-A themed text link component with hover effects.
-
-## Sizes
-- **default** - Standard link size
-- **small** - Smaller, semi-bold variant
-
-## Styling
-- Muted text color in default state
-- Brand color on hover
-- Uppercase text transform
-- Smooth color transition
-
-## Theme Integration
-Links automatically adapt to the current theme. The brand color (shown on hover) changes per theme.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',

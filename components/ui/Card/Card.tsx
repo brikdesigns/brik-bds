@@ -155,7 +155,7 @@ export function CardTitle({ children, as: Tag = 'h3', className = '', style, ...
   const titleStyles: CSSProperties = {
     fontFamily: 'var(--_typography---font-family--heading)',
     fontSize: 'var(--_typography---heading--medium)',
-    fontWeight: 600,
+    fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
     margin: 0,
     color: 'var(--_color---text--primary)',
     ...style,
@@ -186,7 +186,7 @@ export function CardDescription({ children, className = '', style, ...props }: C
     fontSize: 'var(--_typography---body--md-base)',
     color: 'var(--_color---text--secondary)',
     margin: 0,
-    lineHeight: 1.6,
+    lineHeight: 'var(--font-line-height--150)',
     ...style,
   };
 

@@ -1,0 +1,74 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Checkbox.stories';
+
+<Meta of={Stories} />
+
+# Checkbox
+
+Binary selection control for independent options. Users can select multiple checkboxes from a group.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Checked State
+
+Checkbox in the checked state.
+
+<Canvas of={Stories.Checked} />
+
+## Disabled State
+
+Disabled checkboxes prevent user interaction.
+
+<Canvas of={Stories.Disabled} />
+
+## Disabled and Checked
+
+Checkboxes can be both disabled and checked.
+
+<Canvas of={Stories.DisabledChecked} />
+
+## Checkbox Group
+
+Multiple checkboxes allow independent selections.
+
+<Canvas of={Stories.Group} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Checkbox } from '@brik/bds';
+
+// Basic checkbox
+<Checkbox label="Accept terms and conditions" />
+
+// Controlled checkbox
+<Checkbox
+  label="Subscribe to newsletter"
+  checked={isChecked}
+  onChange={(e) => setIsChecked(e.target.checked)}
+/>
+
+// Disabled
+<Checkbox label="Disabled option" disabled />
+
+// Disabled and checked
+<Checkbox label="Cannot change" disabled checked />
+
+// Multiple checkboxes (uncontrolled)
+<div>
+  <Checkbox label="Option 1" defaultChecked />
+  <Checkbox label="Option 2" />
+  <Checkbox label="Option 3" />
+</div>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

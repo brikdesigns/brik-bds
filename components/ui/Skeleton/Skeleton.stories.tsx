@@ -2,45 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Skeleton } from './Skeleton';
 
 const meta: Meta<typeof Skeleton> = {
-  title: 'UI/Skeleton',
+  title: 'Components/Skeleton',
   component: Skeleton,
   parameters: {
     layout: 'padded',
-    docs: {
-      description: {
-        component: `
-# Skeleton
-
-A themed loading placeholder component with shimmer animation.
-
-## Variants
-- **text** - Single line text placeholder (1em height)
-- **circular** - Round placeholder (avatars, icons)
-- **rectangular** - Block placeholder (images, cards)
-
-## Sizing
-All variants accept custom \`width\` and \`height\` props:
-- String values: "200px", "50%", "100%"
-- Number values: Automatically converted to px
-
-## Usage
-Use skeletons to:
-- Show loading states for async content
-- Indicate layout structure before content loads
-- Improve perceived performance
-- Reduce layout shift when content appears
-
-## Animation
-Uses the shimmer pattern from BDS animations.css - a subtle
-linear gradient that moves across the placeholder.
-
-## Accessibility
-Includes proper ARIA role, label, and live region for screen readers.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -92,7 +58,7 @@ export const AllVariants: Story = {
       <div>
         <h4 style={{
           fontFamily: 'var(--_typography---font-family--heading)',
-          fontSize: 'var(--_typography---heading--xs)',
+          fontSize: 'var(--_typography---heading--tiny)',
           marginBottom: '12px',
         }}>
           Text
@@ -107,7 +73,7 @@ export const AllVariants: Story = {
       <div>
         <h4 style={{
           fontFamily: 'var(--_typography---font-family--heading)',
-          fontSize: 'var(--_typography---heading--xs)',
+          fontSize: 'var(--_typography---heading--tiny)',
           marginBottom: '12px',
         }}>
           Circular
@@ -122,7 +88,7 @@ export const AllVariants: Story = {
       <div>
         <h4 style={{
           fontFamily: 'var(--_typography---font-family--heading)',
-          fontSize: 'var(--_typography---heading--xs)',
+          fontSize: 'var(--_typography---heading--tiny)',
           marginBottom: '12px',
         }}>
           Rectangular
@@ -141,7 +107,7 @@ export const ArticleCard: Story = {
         width: '300px',
         padding: '16px',
         backgroundColor: 'var(--_color---background--primary)',
-        border: '1px solid var(--_color---border--default)',
+        border: '1px solid var(--_color---border--secondary)',
         borderRadius: 'var(--_border-radius---lg)',
         display: 'flex',
         flexDirection: 'column',
@@ -164,7 +130,7 @@ export const UserProfile: Story = {
         width: '280px',
         padding: '24px',
         backgroundColor: 'var(--_color---background--primary)',
-        border: '1px solid var(--_color---border--default)',
+        border: '1px solid var(--_color---border--secondary)',
         borderRadius: 'var(--_border-radius---lg)',
         display: 'flex',
         flexDirection: 'column',
@@ -200,7 +166,7 @@ export const CommentList: Story = {
             gap: '12px',
             padding: '12px',
             backgroundColor: 'var(--_color---background--primary)',
-            border: '1px solid var(--_color---border--default)',
+            border: '1px solid var(--_color---border--secondary)',
             borderRadius: 'var(--_border-radius---md)',
           }}
         >
@@ -224,7 +190,7 @@ export const TableRows: Story = {
         display: 'flex',
         flexDirection: 'column',
         gap: '1px',
-        backgroundColor: 'var(--_color---border--default)',
+        backgroundColor: 'var(--_color---border--secondary)',
         borderRadius: 'var(--_border-radius---md)',
         overflow: 'hidden',
       }}

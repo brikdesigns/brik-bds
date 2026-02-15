@@ -1,0 +1,72 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Spinner.stories';
+
+<Meta of={Stories} />
+
+# Spinner
+
+Loading indicator with animated rotation. Theme-colored by default, adapts to current theme context. Available in small and large sizes.
+
+## Overview
+
+<Canvas of={Stories.Small} />
+
+## Sizes
+
+### Small
+16px diameter for inline and button loading states.
+<Canvas of={Stories.Small} />
+
+### Large
+48px diameter for full-page or container loading states.
+<Canvas of={Stories.Large} />
+
+### All Sizes
+Visual comparison of both size options.
+<Canvas of={Stories.AllSizes} />
+
+## Usage Examples
+
+### In Button
+Common pattern for loading button states with custom styling.
+<Canvas of={Stories.InButton} />
+
+### Centered in Container
+Full-page or section loading indicator.
+<Canvas of={Stories.CenteredInContainer} />
+
+### With Text
+Spinner with descriptive loading message.
+<Canvas of={Stories.WithText} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Spinner } from '@brik/bds';
+
+// Small spinner (default)
+<Spinner size="sm" />
+
+// Large spinner
+<Spinner size="lg" />
+
+// In a loading button
+<button disabled>
+  <Spinner size="sm" style={{ borderTopColor: 'white' }} />
+  Loading...
+</button>
+
+// Centered in container
+<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+  <Spinner size="lg" />
+</div>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

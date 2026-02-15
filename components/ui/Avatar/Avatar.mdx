@@ -1,0 +1,90 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Avatar.stories';
+
+<Meta of={Stories} />
+
+# Avatar
+
+User profile images with automatic fallback to initials. Supports multiple sizes and optional status indicators for presence states.
+
+## Overview
+
+<Canvas of={Stories.Initials} />
+
+## Basic Variants
+
+### Initials
+Automatically generates initials from the name prop when no image is provided.
+<Canvas of={Stories.Initials} />
+
+### With Image
+Displays user profile image with alt text for accessibility.
+<Canvas of={Stories.WithImage} />
+
+## Sizes
+
+Available in four sizes: small (32px), medium (40px), large (48px), and extra large (64px).
+<Canvas of={Stories.AllSizes} />
+
+## Status Indicators
+
+Optional status dot overlays to show user presence states.
+
+### All Statuses
+Visual comparison of status indicator colors: online (green), offline (gray), busy (red), away (yellow).
+<Canvas of={Stories.AllStatuses} />
+
+### Image with Status
+Combining profile image with status indicator at larger size.
+<Canvas of={Stories.ImageWithStatus} />
+
+## Usage Examples
+
+### User List
+Common pattern showing avatars with names and status labels.
+<Canvas of={Stories.UserList} />
+
+### Avatar Group
+Stacked avatars for team members or collaborators with negative margin overlap.
+<Canvas of={Stories.AvatarGroup} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Avatar } from '@brik/bds';
+
+// Initials fallback
+<Avatar name="John Doe" />
+
+// With image
+<Avatar
+  src="https://example.com/avatar.jpg"
+  alt="User avatar"
+  name="John Doe"
+/>
+
+// With status
+<Avatar name="Jane Smith" status="online" />
+
+// Different sizes
+<Avatar name="Bob Johnson" size="sm" />
+<Avatar name="Bob Johnson" size="md" />
+<Avatar name="Bob Johnson" size="lg" />
+<Avatar name="Bob Johnson" size="xl" />
+
+// Avatar group (stacked)
+<div style={{ display: 'flex' }}>
+  <Avatar name="User 1" style={{ marginLeft: '-12px' }} />
+  <Avatar name="User 2" style={{ marginLeft: '-12px' }} />
+  <Avatar name="User 3" style={{ marginLeft: '-12px' }} />
+</div>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

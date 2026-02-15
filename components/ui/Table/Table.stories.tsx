@@ -8,31 +8,11 @@ import { Button } from '../Button';
 import { Checkbox } from '../Checkbox';
 
 const meta: Meta<typeof Table> = {
-  title: 'UI/Table',
+  title: 'Components/Table',
   component: Table,
   parameters: {
     layout: 'padded',
-    docs: {
-      description: {
-        component: `
-# Table
-
-A composite table component with sub-components: TableHeader, TableBody, TableRow, TableHead, and TableCell.
-
-Cells can contain any content — plain text, Badges, Tags, Buttons, Checkboxes, or custom elements.
-
-## Sub-components
-- **Table** — \`<table>\` wrapper with optional \`striped\` prop
-- **TableHeader** — \`<thead>\` container
-- **TableBody** — \`<tbody>\` container
-- **TableRow** — \`<tr>\` with optional \`selected\` highlight
-- **TableHead** — \`<th>\` with optional sorting
-- **TableCell** — \`<td>\` body cell
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     striped: { control: 'boolean' },
   },
@@ -290,7 +270,7 @@ export const CompositeExample: Story = {
             </TableCell>
             <TableCell>
               <div>
-                <div style={{ fontWeight: 500 }}>{user.name}</div>
+                <div style={{ fontWeight: 'var(--font-weight--medium)' }}>{user.name}</div>
                 <div style={{
                   fontSize: 'var(--_typography---body--sm)',
                   color: 'var(--_color---text--muted)',

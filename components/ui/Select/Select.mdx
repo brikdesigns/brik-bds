@@ -1,0 +1,61 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Select.stories';
+
+<Meta of={Stories} />
+
+# Select
+
+Dropdown selection control with options array, placeholder text, and disabled states. Use for choosing from a predefined set of values in forms and filters.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### With Default Value
+Pre-select an option when the component loads.
+<Canvas of={Stories.WithDefaultValue} />
+
+### Disabled
+Prevent interaction with the entire select control.
+<Canvas of={Stories.Disabled} />
+
+### With Disabled Options
+Disable specific options while keeping the select functional.
+<Canvas of={Stories.WithDisabledOptions} />
+
+### Plan Selection
+Example with pricing options.
+<Canvas of={Stories.PlanSelection} />
+
+## Usage in Forms
+
+<Canvas of={Stories.FormExample} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Select } from '@brik/bds';
+
+const options = [
+  { label: 'First choice', value: 'first' },
+  { label: 'Second choice', value: 'second' },
+  { label: 'Third choice', value: 'third' },
+];
+
+<Select
+  placeholder="Select one..."
+  options={options}
+  defaultValue="second"
+/>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

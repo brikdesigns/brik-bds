@@ -1,0 +1,86 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Tooltip.stories';
+
+<Meta of={Stories} />
+
+# Tooltip
+
+Contextual information displayed on hover or focus. Helps provide additional context without cluttering the interface. Supports four placement positions.
+
+## Overview
+
+<Canvas of={Stories.Top} />
+
+## Placement Options
+
+### Top
+Tooltip appears above the trigger element (default).
+<Canvas of={Stories.Top} />
+
+### Bottom
+Tooltip appears below the trigger element.
+<Canvas of={Stories.Bottom} />
+
+### Left
+Tooltip appears to the left of the trigger element.
+<Canvas of={Stories.Left} />
+
+### Right
+Tooltip appears to the right of the trigger element.
+<Canvas of={Stories.Right} />
+
+### All Placements
+Visual comparison of all placement positions.
+<Canvas of={Stories.AllPlacements} />
+
+## Usage Examples
+
+### Icon Button
+Common pattern for icon-only buttons where the tooltip describes the action.
+<Canvas of={Stories.IconButton} />
+
+### With Keyboard Shortcut
+Include keyboard shortcuts in tooltip content for power users.
+<Canvas of={Stories.WithKeyboardShortcut} />
+
+### Help Text
+Use tooltips to provide additional context for form fields and labels.
+<Canvas of={Stories.HelpText} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Tooltip } from '@brik/bds';
+
+// Basic tooltip
+<Tooltip content="This is helpful information">
+  <button>Hover me</button>
+</Tooltip>
+
+// With placement
+<Tooltip content="Appears below" placement="bottom">
+  <button>Hover me</button>
+</Tooltip>
+
+// Icon button with tooltip
+<Tooltip content="Edit item">
+  <button aria-label="Edit">✏️</button>
+</Tooltip>
+
+// Help text
+<div>
+  <label>Username</label>
+  <Tooltip content="Must be 3-20 characters" placement="right">
+    <span>?</span>
+  </Tooltip>
+</div>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

@@ -86,12 +86,12 @@ const getModalStyles = (size: ModalSize): CSSProperties => ({
  * Token reference:
  * - --_space---lg = 16px (padding)
  * - --_typography---font-family--heading (heading font)
- * - --_typography---heading--h3 (heading size)
- * - --_color---text--base (text color)
+ * - --_typography---heading--medium (heading size)
+ * - --_color---text--primary (text color)
  */
 const headerStyles: CSSProperties = {
   padding: 'var(--_space---lg)',
-  borderBottom: '1px solid var(--_color---border--input)',
+  borderBottom: 'var(--_border-width---sm) solid var(--_color---border--input)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -100,9 +100,9 @@ const headerStyles: CSSProperties = {
 
 const titleStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--heading)',
-  fontSize: 'var(--_typography---heading--h3)',
-  fontWeight: 600,
-  color: 'var(--_color---text--base)',
+  fontSize: 'var(--_typography---heading--medium)',
+  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+  color: 'var(--_color---text--primary)',
   margin: 0,
 };
 
@@ -112,11 +112,11 @@ const titleStyles: CSSProperties = {
 const closeButtonStyles: CSSProperties = {
   background: 'none',
   border: 'none',
-  fontSize: '24px',
-  lineHeight: 1,
+  fontSize: 'var(--_typography---body--lg)',
+  lineHeight: 'var(--font-line-height--100)',
   cursor: 'pointer',
   padding: 'var(--_space---sm)',
-  color: 'var(--_color---text--base)',
+  color: 'var(--_color---text--primary)',
   opacity: 0.6,
   transition: 'opacity 0.2s',
   borderRadius: 'var(--_border-radius---sm)',
@@ -130,9 +130,9 @@ const bodyStyles: CSSProperties = {
   overflowY: 'auto',
   flex: 1,
   fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md)',
-  color: 'var(--_color---text--base)',
-  lineHeight: 1.5,
+  fontSize: 'var(--_typography---body--md-base)',
+  color: 'var(--_color---text--primary)',
+  lineHeight: 'var(--font-line-height--150)',
 };
 
 /**
@@ -140,7 +140,7 @@ const bodyStyles: CSSProperties = {
  */
 const footerStyles: CSSProperties = {
   padding: 'var(--_space---lg)',
-  borderTop: '1px solid var(--_color---border--input)',
+  borderTop: 'var(--_border-width---sm) solid var(--_color---border--input)',
   display: 'flex',
   gap: 'var(--_space---gap--md)',
   justifyContent: 'flex-end',

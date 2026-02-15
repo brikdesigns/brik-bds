@@ -1,0 +1,98 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './CardSummary.stories';
+
+<Meta of={Stories} />
+
+# CardSummary
+
+Compact metric card for displaying a labeled value with an optional text link. Designed for dashboards, summaries, and stat displays.
+
+## Overview
+
+<Canvas of={Stories.Numeric} />
+
+## Variants
+
+CardSummary comes in two type variants that control how the value is displayed.
+
+### Numeric
+
+Displays the value as a plain formatted number. Default variant.
+
+<Canvas of={Stories.Numeric} />
+
+### Price
+
+Formats the value as USD currency with dollar sign and decimal places.
+
+<Canvas of={Stories.Price} />
+
+### Both Variants Stacked
+
+Numeric and price cards can be stacked by removing the bottom border of the first card.
+
+<Canvas of={Stories.BothVariants} />
+
+## Text Link
+
+The text link in the top-right corner can be shown or hidden.
+
+### With Text Link
+
+Pass a `textLink` object to show the link. Supports `href` for navigation or `onClick` for actions.
+
+<Canvas of={Stories.Numeric} />
+
+### Without Text Link
+
+Omit the `textLink` prop to hide it.
+
+<Canvas of={Stories.NumericNoLink} />
+
+## With Data
+
+Real-world example with populated values.
+
+<Canvas of={Stories.WithData} />
+
+## Dashboard Grid
+
+Multiple summary cards in a responsive grid layout.
+
+<Canvas of={Stories.DashboardGrid} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { CardSummary } from '@brik/bds';
+
+// Numeric (default)
+<CardSummary label="Total" value={42} />
+
+// Price
+<CardSummary label="Amount Due" value={150.50} type="price" />
+
+// With text link
+<CardSummary
+  label="Active Users"
+  value={1284}
+  textLink={{ label: "View All", href: "/users" }}
+/>
+
+// With click handler
+<CardSummary
+  label="Revenue"
+  value={48250.75}
+  type="price"
+  textLink={{ label: "Details", onClick: () => openDrawer() }}
+/>
+```
+
+## Resources
+
+- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26467-6268) — Summary Card
+- [Design guidelines](#) — coming soon

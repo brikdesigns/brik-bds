@@ -345,7 +345,6 @@ const meta: Meta<typeof ThemeDemo> = {
       },
     },
   },
-  tags: ['autodocs'],
 };
 
 export default meta;

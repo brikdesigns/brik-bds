@@ -1,0 +1,93 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Table.stories';
+
+<Meta of={Stories} />
+
+# Table
+
+Data table component with sub-components for structured content display. Supports sorting, selection, and custom cell content.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Sub-components
+
+The Table system is composable using these elements:
+- `Table` — Container with optional striped prop
+- `TableHeader` — Header section wrapper
+- `TableBody` — Body section wrapper
+- `TableRow` — Row container with optional selected state
+- `TableHead` — Header cell with optional sortable props
+- `TableCell` — Body cell for data
+
+## Variants
+
+### With Badges
+Status indicators in cells.
+<Canvas of={Stories.WithBadges} />
+
+### With Tags
+Category labels in cells.
+<Canvas of={Stories.WithTags} />
+
+### With Actions
+Action buttons in the final column.
+<Canvas of={Stories.WithActions} />
+
+### With Checkboxes
+Row selection using checkboxes.
+<Canvas of={Stories.WithCheckboxes} />
+
+### Striped Rows
+Alternating row background colors.
+<Canvas of={Stories.Striped} />
+
+## Complex Example
+
+Full-featured table with sorting, selection, badges, tags, and actions.
+<Canvas of={Stories.CompositeExample} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from '@brik/bds';
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead sortable sortDirection="asc">Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Role</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow selected>
+      <TableCell>Alice Chen</TableCell>
+      <TableCell>alice@example.com</TableCell>
+      <TableCell>Admin</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Bob Smith</TableCell>
+      <TableCell>bob@example.com</TableCell>
+      <TableCell>Editor</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

@@ -1,0 +1,72 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Switch.stories';
+
+<Meta of={Stories} />
+
+# Switch
+
+Toggle control for binary on/off states. Use for settings, feature flags, and preferences where immediate state change is expected.
+
+## Overview
+
+<Canvas of={Stories.Unchecked} />
+
+## Variants
+
+### Checked
+Default checked state.
+<Canvas of={Stories.Checked} />
+
+### Disabled
+Prevent interaction with the switch.
+<Canvas of={Stories.Disabled} />
+
+### Without Label
+Use when the switch context is clear from surrounding content.
+<Canvas of={Stories.WithoutLabel} />
+
+## Controlled Mode
+
+Manage switch state externally for dynamic behavior.
+<Canvas of={Stories.Controlled} />
+
+## Usage Examples
+
+### Settings Panel
+Multiple switches in a preferences panel.
+<Canvas of={Stories.SettingsPanel} />
+
+### With Descriptions
+Add explanatory text below switches.
+<Canvas of={Stories.WithDescriptions} />
+
+### Feature Flags
+Control experimental features.
+<Canvas of={Stories.FeatureFlags} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Switch } from '@brik/bds';
+import { useState } from 'react';
+
+// Uncontrolled
+<Switch label="Enable feature" defaultChecked={true} />
+
+// Controlled
+const [enabled, setEnabled] = useState(false);
+<Switch
+  label="Enable notifications"
+  checked={enabled}
+  onChange={(e) => setEnabled(e.target.checked)}
+/>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

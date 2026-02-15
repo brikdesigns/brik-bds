@@ -2,50 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Tooltip } from './Tooltip';
 
 const meta: Meta<typeof Tooltip> = {
-  title: 'UI/Tooltip',
+  title: 'Components/Tooltip',
   component: Tooltip,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-# Tooltip
-
-A themed tooltip component for contextual information on hover/focus.
-
-## Placement Options
-- **top** - Above the trigger (default)
-- **bottom** - Below the trigger
-- **left** - Left of the trigger
-- **right** - Right of the trigger
-
-## Features
-- Appears on hover and focus
-- Includes directional arrow
-- Keyboard accessible
-- Auto-positions relative to trigger
-- Non-interactive (doesn't block clicks)
-
-## Usage
-Use tooltips for:
-- Explaining icon buttons
-- Providing additional context
-- Showing keyboard shortcuts
-- Clarifying truncated text
-
-## Best Practices
-- Keep content concise (1-2 lines)
-- Use for supplementary info, not critical content
-- Don't use for complex layouts or interactions
-
-## Accessibility
-Includes proper \`role="tooltip"\` and responds to focus events
-for keyboard navigation.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     content: {
       control: 'text',
@@ -204,7 +165,7 @@ export const IconButton: Story = {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'var(--_color---background--secondary)',
-          border: '1px solid var(--_color---border--default)',
+          border: '1px solid var(--_color---border--secondary)',
           borderRadius: 'var(--_border-radius---md)',
           cursor: 'pointer',
         }}>
@@ -219,7 +180,7 @@ export const IconButton: Story = {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'var(--_color---background--secondary)',
-          border: '1px solid var(--_color---border--default)',
+          border: '1px solid var(--_color---border--secondary)',
           borderRadius: 'var(--_border-radius---md)',
           cursor: 'pointer',
         }}>
@@ -234,7 +195,7 @@ export const IconButton: Story = {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'var(--_color---background--secondary)',
-          border: '1px solid var(--_color---border--default)',
+          border: '1px solid var(--_color---border--secondary)',
           borderRadius: 'var(--_border-radius---md)',
           cursor: 'pointer',
         }}>
@@ -266,7 +227,7 @@ export const HelpText: Story = {
   render: () => (
     <div style={{
       fontFamily: 'var(--_typography---font-family--body)',
-      fontSize: 'var(--_typography---body--md)',
+      fontSize: 'var(--_typography---body--md-base)',
       display: 'flex',
       alignItems: 'center',
       gap: '8px',

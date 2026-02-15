@@ -1,0 +1,67 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Tag.stories';
+
+<Meta of={Stories} />
+
+# Tag
+
+Categorization and filtering labels with optional icon, trailing icon, and remove functionality. Tags help organize content and provide visual context for filtering and selection.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### With Icon
+Add a leading icon to provide visual context for the tag category.
+<Canvas of={Stories.WithIcon} />
+
+### With Trailing Icon
+Use a trailing icon for actions like external links or status indicators.
+<Canvas of={Stories.WithTrailingIcon} />
+
+### With Remove Button
+Interactive tags that can be dismissed with a remove button.
+<Canvas of={Stories.WithRemove} />
+
+### Disabled
+Disabled state for non-interactive tags.
+<Canvas of={Stories.Disabled} />
+
+### Multiple Tags
+Display multiple tags together for categorization and filtering.
+<Canvas of={Stories.MultipleTags} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Tag } from '@brik/bds';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+
+// Basic tag
+<Tag>Category</Tag>
+
+// With icon
+<Tag icon={<FontAwesomeIcon icon={faStar} />}>
+  Featured
+</Tag>
+
+// Removable tag
+<Tag onRemove={() => console.log('Removed')}>
+  Filter
+</Tag>
+
+// Disabled tag
+<Tag disabled>Archived</Tag>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

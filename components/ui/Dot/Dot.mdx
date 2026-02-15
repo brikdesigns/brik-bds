@@ -1,0 +1,81 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Dot.stories';
+
+<Meta of={Stories} />
+
+# Dot
+
+Small status indicator circles that communicate state through color. Available in multiple status variants and sizes for different contexts.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Status Variants
+
+### Positive
+<Canvas of={Stories.Positive} />
+
+### Warning
+<Canvas of={Stories.Warning} />
+
+### Error
+<Canvas of={Stories.Error} />
+
+### Info
+<Canvas of={Stories.Info} />
+
+### Neutral
+<Canvas of={Stories.Neutral} />
+
+### All Statuses
+Visual comparison of all status colors.
+<Canvas of={Stories.AllStatuses} />
+
+## Sizes
+
+Three size options for different contexts: small (8px), medium (12px), and large (16px).
+<Canvas of={Stories.AllSizes} />
+
+## Usage Examples
+
+### Online Status
+Combine with text labels to show user presence states.
+<Canvas of={Stories.OnlineStatus} />
+
+### List Items
+Use in status lists to indicate operational states.
+<Canvas of={Stories.ListItems} />
+
+### Activity Feed
+Display status indicators alongside event descriptions.
+<Canvas of={Stories.ActivityFeed} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Dot } from '@brik/bds';
+
+// Basic status indicator
+<Dot status="positive" />
+
+// Different sizes
+<Dot size="sm" status="warning" />
+<Dot size="md" status="error" />
+<Dot size="lg" status="info" />
+
+// With label
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+  <Dot status="positive" />
+  <span>Online</span>
+</div>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

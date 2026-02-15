@@ -1,0 +1,80 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Skeleton.stories';
+
+<Meta of={Stories} />
+
+# Skeleton
+
+Content placeholder with shimmer animation for loading states. Helps maintain layout and reduce perceived load time by showing where content will appear.
+
+## Overview
+
+<Canvas of={Stories.Text} />
+
+## Variants
+
+### Text
+Single-line text placeholder with automatic height based on font size.
+<Canvas of={Stories.Text} />
+
+### Circular
+Round placeholder for avatars and profile images.
+<Canvas of={Stories.Circular} />
+
+### Rectangular
+Block placeholder for images, cards, and content sections.
+<Canvas of={Stories.Rectangular} />
+
+### All Variants
+Visual comparison of skeleton shapes.
+<Canvas of={Stories.AllVariants} />
+
+## Usage Examples
+
+### Article Card
+Skeleton layout matching a typical article card structure.
+<Canvas of={Stories.ArticleCard} />
+
+### User Profile
+Profile loading state with avatar and text placeholders.
+<Canvas of={Stories.UserProfile} />
+
+### Comment List
+Multiple skeleton items for list-based content.
+<Canvas of={Stories.CommentList} />
+
+### Table Rows
+Grid-based skeleton for tabular data.
+<Canvas of={Stories.TableRows} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Skeleton } from '@brik/bds';
+
+// Text line
+<Skeleton variant="text" width="200px" />
+
+// Avatar placeholder
+<Skeleton variant="circular" width={48} height={48} />
+
+// Image placeholder
+<Skeleton variant="rectangular" width="300px" height="200px" />
+
+// Card skeleton
+<div>
+  <Skeleton variant="rectangular" width="100%" height="160px" />
+  <Skeleton variant="text" width="80%" />
+  <Skeleton variant="text" width="100%" />
+  <Skeleton variant="text" width="60%" />
+</div>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

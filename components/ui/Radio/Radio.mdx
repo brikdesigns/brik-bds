@@ -1,0 +1,97 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Radio.stories';
+
+<Meta of={Stories} />
+
+# Radio
+
+Single selection control for mutually exclusive options. Radio buttons are grouped by the `name` prop, allowing only one selection per group.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Checked State
+
+Radio button in the selected state.
+
+<Canvas of={Stories.Checked} />
+
+## Disabled State
+
+Disabled radio buttons prevent user interaction.
+
+<Canvas of={Stories.Disabled} />
+
+## Disabled and Checked
+
+Radio buttons can be both disabled and checked.
+
+<Canvas of={Stories.DisabledChecked} />
+
+## Plan Selection
+
+Common use case for plan or tier selection.
+
+<Canvas of={Stories.PlanSelection} />
+
+## Theme Selection
+
+Multiple options grouped together by name.
+
+<Canvas of={Stories.ThemeSelection} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Radio } from '@brik/bds';
+
+// Basic radio button
+<Radio name="option" value="option1" label="Option 1" />
+
+// Controlled radio group
+const [selected, setSelected] = useState('pro');
+
+<div>
+  <Radio
+    name="plan"
+    value="basic"
+    label="Basic Plan - $9/month"
+    checked={selected === 'basic'}
+    onChange={(e) => setSelected(e.target.value)}
+  />
+  <Radio
+    name="plan"
+    value="pro"
+    label="Pro Plan - $29/month"
+    checked={selected === 'pro'}
+    onChange={(e) => setSelected(e.target.value)}
+  />
+  <Radio
+    name="plan"
+    value="enterprise"
+    label="Enterprise - Custom pricing"
+    checked={selected === 'enterprise'}
+    onChange={(e) => setSelected(e.target.value)}
+  />
+</div>
+
+// Uncontrolled radio group
+<div>
+  <Radio name="theme" value="theme1" label="Theme 1" />
+  <Radio name="theme" value="theme2" label="Theme 2" defaultChecked />
+  <Radio name="theme" value="theme3" label="Theme 3" />
+</div>
+
+// Disabled
+<Radio name="option" value="disabled" label="Disabled option" disabled />
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

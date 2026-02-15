@@ -2,35 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Spinner } from './Spinner';
 
 const meta: Meta<typeof Spinner> = {
-  title: 'UI/Spinner',
+  title: 'Components/Spinner',
   component: Spinner,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-# Spinner
-
-A themed loading spinner component for indicating loading states.
-
-## Size Variants
-- **sm** - Small 16x16px spinner (default)
-- **lg** - Large 48x48px spinner
-
-## Usage
-Use spinners to indicate loading states, async operations, or processing.
-Place near the content being loaded or in buttons during form submission.
-
-## Theme Integration
-The spinner uses the theme primary color, so it adapts to each theme automatically.
-
-## Accessibility
-Includes proper ARIA role and label for screen readers.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
@@ -98,8 +74,8 @@ export const InButton: Story = {
         border: 'none',
         borderRadius: 'var(--_border-radius---md)',
         fontFamily: 'var(--_typography---font-family--label)',
-        fontSize: 'var(--_typography---label--md)',
-        fontWeight: 600,
+        fontSize: 'var(--_typography---label--md-base)',
+        fontWeight: 'var(--font-weight--semi-bold)',
         cursor: 'wait',
       }}
       disabled
@@ -142,7 +118,7 @@ export const WithText: Story = {
       <p
         style={{
           fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md)',
+          fontSize: 'var(--_typography---body--md-base)',
           color: 'var(--_color---text--secondary)',
           margin: 0,
         }}

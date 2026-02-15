@@ -9,7 +9,6 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
   argTypes: {
     isOpen: {
       control: 'boolean',
@@ -323,8 +322,8 @@ export const FormExample: Story = {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
               <label style={{
                 fontFamily: 'var(--_typography---font-family--label)',
-                fontSize: 'var(--_typography---label--md)',
-                fontWeight: 600,
+                fontSize: 'var(--_typography---label--md-base)',
+                fontWeight: 'var(--font-weight--semi-bold)',
               }}>
                 Name
               </label>
@@ -343,8 +342,8 @@ export const FormExample: Story = {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
               <label style={{
                 fontFamily: 'var(--_typography---font-family--label)',
-                fontSize: 'var(--_typography---label--md)',
-                fontWeight: 600,
+                fontSize: 'var(--_typography---label--md-base)',
+                fontWeight: 'var(--font-weight--semi-bold)',
               }}>
                 Email
               </label>
@@ -363,8 +362,8 @@ export const FormExample: Story = {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
               <label style={{
                 fontFamily: 'var(--_typography---font-family--label)',
-                fontSize: 'var(--_typography---label--md)',
-                fontWeight: 600,
+                fontSize: 'var(--_typography---label--md-base)',
+                fontWeight: 'var(--font-weight--semi-bold)',
               }}>
                 Message
               </label>

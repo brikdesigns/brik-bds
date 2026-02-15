@@ -1,0 +1,88 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Card.stories';
+
+<Meta of={Stories} />
+
+# Card
+
+Flexible content container for grouping related information. Cards are composable using CardTitle, CardDescription, and CardFooter subcomponents.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+Cards come in three visual variants to suit different emphasis levels.
+
+### All Variants
+<Canvas of={Stories.AllVariants} />
+
+### Outlined
+Card with a subtle border. The most common variant for content grouping.
+<Canvas of={Stories.Outlined} />
+
+### Elevated
+Card with a shadow for visual prominence.
+<Canvas of={Stories.Elevated} />
+
+## With Action
+
+Cards can include footer actions like buttons.
+
+<Canvas of={Stories.WithAction} />
+
+## Interactive Card
+
+The entire card can be clickable for navigation.
+
+<Canvas of={Stories.Interactive} />
+
+## Card Grid
+
+Cards work well in grid layouts for feature showcases, services, or product listings.
+
+<Canvas of={Stories.CardGrid} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Card, CardTitle, CardDescription, CardFooter } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+// Basic card
+<Card variant="outlined" padding="md">
+  <CardTitle>Title</CardTitle>
+  <CardDescription>
+    Description text goes here.
+  </CardDescription>
+</Card>
+
+// With action
+<Card variant="elevated" padding="lg">
+  <CardTitle>Feature Title</CardTitle>
+  <CardDescription>
+    Feature description text.
+  </CardDescription>
+  <CardFooter>
+    <Button variant="primary" size="sm">Learn More</Button>
+  </CardFooter>
+</Card>
+
+// Interactive card
+<Card interactive variant="outlined" padding="md">
+  <CardTitle>Clickable Card</CardTitle>
+  <CardDescription>
+    Click anywhere on this card.
+  </CardDescription>
+</Card>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

@@ -2,47 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Dot } from './Dot';
 
 const meta: Meta<typeof Dot> = {
-  title: 'UI/Dot',
+  title: 'Components/Dot',
   component: Dot,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-# Dot
-
-A themed status indicator dot for showing state or activity.
-
-## Status Variants
-- **default** - Brand colored
-- **positive** - Green, for success/active states
-- **warning** - Yellow, for caution/pending states
-- **error** - Red, for error/inactive states
-- **info** - Blue, for informational states
-- **neutral** - Gray, for neutral/disabled states
-
-## Size Variants
-- **sm** - 6px (subtle inline indicators)
-- **md** - 8px (default, most common)
-- **lg** - 10px (prominent status display)
-
-## Usage
-Use dots for:
-- Online/offline status indicators
-- List item prefixes
-- Activity indicators
-- Subtle state communication
-
-## Theme Integration
-The default dot uses brand colors that change per theme.
-
-## Accessibility
-Includes proper ARIA role and status label for screen readers.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     status: {
       control: 'select',
@@ -157,7 +121,7 @@ export const OnlineStatus: Story = {
         <Dot status="positive" />
         <span style={{
           fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md)',
+          fontSize: 'var(--_typography---body--md-base)',
         }}>
           Online
         </span>
@@ -166,7 +130,7 @@ export const OnlineStatus: Story = {
         <Dot status="warning" />
         <span style={{
           fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md)',
+          fontSize: 'var(--_typography---body--md-base)',
         }}>
           Away
         </span>
@@ -175,7 +139,7 @@ export const OnlineStatus: Story = {
         <Dot status="error" />
         <span style={{
           fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md)',
+          fontSize: 'var(--_typography---body--md-base)',
         }}>
           Offline
         </span>
@@ -198,7 +162,7 @@ export const ListItems: Story = {
         <Dot status="positive" size="sm" />
         <span style={{
           fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md)',
+          fontSize: 'var(--_typography---body--md-base)',
         }}>
           All systems operational
         </span>
@@ -207,7 +171,7 @@ export const ListItems: Story = {
         <Dot status="warning" size="sm" />
         <span style={{
           fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md)',
+          fontSize: 'var(--_typography---body--md-base)',
         }}>
           Minor service disruption
         </span>
@@ -216,7 +180,7 @@ export const ListItems: Story = {
         <Dot status="error" size="sm" />
         <span style={{
           fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md)',
+          fontSize: 'var(--_typography---body--md-base)',
         }}>
           Service outage detected
         </span>
@@ -241,8 +205,8 @@ export const ActivityFeed: Story = {
         <div>
           <div style={{
             fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--md)',
-            fontWeight: 600,
+            fontSize: 'var(--_typography---body--md-base)',
+            fontWeight: 'var(--font-weight--semi-bold)',
           }}>
             Deployment successful
           </div>
@@ -260,8 +224,8 @@ export const ActivityFeed: Story = {
         <div>
           <div style={{
             fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--md)',
-            fontWeight: 600,
+            fontSize: 'var(--_typography---body--md-base)',
+            fontWeight: 'var(--font-weight--semi-bold)',
           }}>
             Build started
           </div>
@@ -279,8 +243,8 @@ export const ActivityFeed: Story = {
         <div>
           <div style={{
             fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--md)',
-            fontWeight: 600,
+            fontSize: 'var(--_typography---body--md-base)',
+            fontWeight: 'var(--font-weight--semi-bold)',
           }}>
             Code pushed to main
           </div>

@@ -1,0 +1,99 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Badge.stories';
+
+<Meta of={Stories} />
+
+# Badge
+
+Status indicators and labels for displaying contextual information. Badges use semantic colors to communicate status, priority, or category at a glance.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Status Variants
+
+Badges come in seven status variants, each with distinct semantic meaning.
+
+### All Status Variants
+<Canvas of={Stories.AllStatuses} />
+
+### Positive
+Used for success states, completed actions, and positive outcomes.
+<Canvas of={Stories.Positive} />
+
+### Warning
+Used for cautionary states, pending actions, and items requiring attention.
+<Canvas of={Stories.Warning} />
+
+### Error
+Used for error states, failed actions, and critical issues.
+<Canvas of={Stories.Error} />
+
+### Info
+Used for informational states and neutral notifications.
+<Canvas of={Stories.Info} />
+
+### Progress
+Used for in-progress states and active processes.
+<Canvas of={Stories.Progress} />
+
+### Neutral
+Used for inactive states and disabled items.
+<Canvas of={Stories.Neutral} />
+
+## Sizes
+
+Badges are available in three sizes to match surrounding text and UI density.
+
+<Canvas of={Stories.AllSizes} />
+
+## With Icons
+
+Badges can include icons for additional context.
+
+<Canvas of={Stories.WithIcons} />
+
+## Size and Status Matrix
+
+All size and status combinations.
+
+<Canvas of={Stories.SizeStatusMatrix} />
+
+## Contextual Examples
+
+Real-world usage examples showing badges in context.
+
+<Canvas of={Stories.StatusIndicators} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Badge } from '@brik/bds';
+
+// Basic badge
+<Badge>New</Badge>
+
+// With status
+<Badge status="positive">Success</Badge>
+<Badge status="warning">Pending</Badge>
+<Badge status="error">Failed</Badge>
+
+// With size
+<Badge size="sm">Small</Badge>
+<Badge size="lg">Large</Badge>
+
+// With icon
+<Badge status="positive" icon={<CheckIcon />}>
+  Complete
+</Badge>
+```
+
+## Resources
+
+- [Figma designs](#) — coming soon
+- [Design guidelines](#) — coming soon

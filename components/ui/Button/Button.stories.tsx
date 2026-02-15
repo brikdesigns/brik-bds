@@ -2,36 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
-  title: 'UI/Button',
+  title: 'Components/Button',
   component: Button,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-# Button
-
-A themed button component using CSS variables for seamless BDS theme integration.
-
-## Variants
-- **primary** - Solid brand background with inverse text
-- **outline** - Transparent with brand border and brand text
-- **secondary** - Muted background with primary text
-- **ghost** - Transparent with no border
-
-## Sizes
-- **sm** - Small, compact buttons
-- **md** - Default size
-- **lg** - Large, prominent buttons
-
-## Theme Integration
-Buttons automatically adapt to the current theme via CSS variables.
-Use the toolbar above to switch themes.
-        `,
-      },
-    },
   },
-  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',

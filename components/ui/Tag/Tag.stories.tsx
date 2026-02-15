@@ -4,9 +4,8 @@ import { faStar, faArrowUpRightFromSquare, faTag, faCircle } from '@fortawesome/
 import { Tag } from './Tag';
 
 const meta = {
-  title: 'UI/Tag',
+  title: 'Components/Tag',
   component: Tag,
-  tags: ['autodocs'],
   argTypes: {
     disabled: { control: 'boolean' },
     onRemove: { action: 'removed' },

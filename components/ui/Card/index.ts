@@ -11,3 +11,10 @@ export {
   type CardFooterProps,
 } from './Card';
 export { default } from './Card';
+
+export {
+  CardSummary,
+  type CardSummaryProps,
+  type CardSummaryType,
+  type CardSummaryTextLink,
+} from './CardSummary';
