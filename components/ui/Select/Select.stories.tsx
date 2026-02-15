@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Select } from './Select';
 
 const meta = {
-  title: 'Components/Select',
+  title: 'Components/select',
   component: Select,
   parameters: {
     layout: 'centered',
@@ -112,6 +112,31 @@ export const ThemeSelection: Story = {
  * Multiple selects in a form
  */
 export const FormExample: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Select
+  placeholder="Select country..."
+  options={[
+    { label: 'United States', value: 'us' },
+    { label: 'Canada', value: 'ca' },
+    { label: 'United Kingdom', value: 'uk' },
+    { label: 'Australia', value: 'au' },
+  ]}
+/>
+<Select
+  placeholder="Select industry..."
+  options={[
+    { label: 'Technology', value: 'tech' },
+    { label: 'Healthcare', value: 'healthcare' },
+    { label: 'Finance', value: 'finance' },
+    { label: 'Education', value: 'education' },
+    { label: 'Other', value: 'other' },
+  ]}
+/>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)', minWidth: '300px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>

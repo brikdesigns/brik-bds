@@ -3,14 +3,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 /**
+ * Tag size variants
+ */
+export type TagSize = 'sm' | 'md' | 'lg';
+
+/**
  * Tag component props
  */
 export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   /** Tag label content */
   children: ReactNode;
-  /** Optional leading icon */
+  /** Size variant */
+  size?: TagSize;
+  /** Optional leading icon (left) */
   icon?: ReactNode;
-  /** Optional trailing icon */
+  /** Optional trailing icon (right) */
   trailingIcon?: ReactNode;
   /** Show dismiss button and callback */
   onRemove?: () => void;
@@ -19,37 +26,78 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
+ * Size-based styles from Figma spec
+ *
+ * Figma specs (bds-tag):
+ * - sm: padding 2px, gap 0px, font-size ~10px, border-radius 2px, icon 16px
+ * - md: padding 4px, gap 2px, font-size 14px, border-radius 4px, icon 16px
+ * - lg: padding 6px, gap 2px, font-size 18px, border-radius 4px, icon 20px
+ *
+ * Token reference:
+ * - --space--50 = 2px (sm padding, md/lg gap)
+ * - --_space---tiny = 4px (md padding)
+ * - --_space---sm = 6px (lg padding)
+ * - --_typography---body--tiny ~= 10.26px (sm font)
+ * - --_typography---label--sm = 14px (md font)
+ * - --_typography---label--le = 18px (lg font, mapped to font-size--200)
+ * - --_border-radius---sm = 2px (sm radius)
+ * - --_border-radius---md = 4px (md/lg radius)
+ */
+const sizeStyles: Record<TagSize, CSSProperties> = {
+  sm: {
+    padding: 'var(--space--50)',
+    gap: 0,
+    fontSize: 'var(--_typography---body--tiny)',
+    borderRadius: 'var(--_border-radius---sm)',
+  },
+  md: {
+    padding: 'var(--_space---tiny)',
+    gap: 'var(--space--50)',
+    fontSize: 'var(--_typography---label--sm)',
+    borderRadius: 'var(--_border-radius---md)',
+  },
+  lg: {
+    padding: 'var(--_space---sm)',
+    gap: 'var(--space--50)',
+    fontSize: 'var(--_typography---label--le)',
+    borderRadius: 'var(--_border-radius---md)',
+  },
+};
+
+/**
+ * Icon wrapper sizes from Figma spec
+ * - sm/md: 16px wrapper
+ * - lg: 20px wrapper
+ */
+const iconSizeMap: Record<TagSize, CSSProperties> = {
+  sm: { width: 16, height: 16, fontSize: 'var(--_typography---body--tiny)' },
+  md: { width: 16, height: 16, fontSize: 'var(--_typography---body--xs)' },
+  lg: { width: 20, height: 20, fontSize: 'var(--_typography---label--md-base)' },
+};
+
+/**
  * Base tag styles
  *
  * Token reference:
  * - --_color---background--secondary (subtle gray background)
- * - --_color---text--primary (dark text on light bg)
- * - --_border-radius---sm = 2px
+ * - --_color---text--inverse (white text on gray bg — matches Figma)
  * - --_typography---font-family--label (label font)
- * - --_typography---label--sm = 14px
- * - --font-line-height--150 = 150%
- * - --font-weight--bold = 700
- * - --_space---sm = 6px (vertical padding)
- * - --_space---md = 8px (horizontal padding)
- * - --_space---gap--sm = 4px (icon gap)
+ * - --font-weight--semi-bold = 600
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: 'var(--_space---gap--sm)',
-  padding: 'var(--_space---sm) var(--_space---md)',
   fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
-  fontWeight: 'var(--font-weight--bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--primary)',
+  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+  lineHeight: 1,
+  color: 'var(--_color---text--inverse)',
   backgroundColor: 'var(--_color---background--secondary)',
-  borderRadius: 'var(--_border-radius---sm)',
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   cursor: 'default',
   userSelect: 'none',
+  overflow: 'clip',
   transition: 'background-color 0.2s',
 };
 
@@ -66,29 +114,31 @@ const removeButtonStyles: CSSProperties = {
   border: 'none',
   background: 'none',
   cursor: 'pointer',
-  color: 'var(--_color---text--muted)',
-  fontSize: 'var(--_typography---body--tiny)',
-  lineHeight: 'var(--font-line-height--100)',
+  color: 'inherit',
+  fontSize: 'inherit',
+  lineHeight: 'inherit',
 };
 
 /**
  * Tag - BDS themed tag component
  *
- * Subtle gray tag with dark text for categorization and labeling.
- * Supports leading/trailing icons and an optional dismiss button.
+ * Categorization label with optional left/right icons.
+ * Supports three sizes (sm, md, lg) matching the Figma spec.
  * Uses CSS variables for theming. All spacing, colors, typography,
  * and border-radius reference BDS tokens.
  *
  * @example
  * ```tsx
  * <Tag>Category</Tag>
- * <Tag icon={<Icon />}>With Icon</Tag>
+ * <Tag size="lg" icon={<Icon />}>With Icon</Tag>
+ * <Tag trailingIcon={<Icon />}>With Right Icon</Tag>
+ * <Tag icon={<Icon />} trailingIcon={<Icon />}>Both Icons</Tag>
  * <Tag onRemove={() => handleRemove()}>Removable</Tag>
- * <Tag disabled>Disabled</Tag>
  * ```
  */
 export function Tag({
   children,
+  size = 'md',
   icon,
   trailingIcon,
   onRemove,
@@ -99,8 +149,17 @@ export function Tag({
 }: TagProps) {
   const combinedStyles: CSSProperties = {
     ...baseStyles,
+    ...sizeStyles[size],
     ...(disabled ? disabledStyles : {}),
     ...style,
+  };
+
+  const iconStyles: CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    ...iconSizeMap[size],
   };
 
   return (
@@ -109,14 +168,14 @@ export function Tag({
       style={combinedStyles}
       {...props}
     >
-      {icon}
+      {icon && <span style={iconStyles}>{icon}</span>}
       {children}
-      {trailingIcon}
+      {trailingIcon && <span style={iconStyles}>{trailingIcon}</span>}
       {onRemove && !disabled && (
         <button
           type="button"
           onClick={onRemove}
-          style={removeButtonStyles}
+          style={{ ...removeButtonStyles, ...iconSizeMap[size] }}
           aria-label="Remove"
         >
           <FontAwesomeIcon icon={faXmark} />

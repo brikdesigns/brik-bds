@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Link } from './Link';
 
 const meta: Meta<typeof Link> = {
-  title: 'Components/Link',
+  title: 'Components/link',
   component: Link,
   parameters: {
     layout: 'centered',
@@ -52,6 +52,17 @@ export const External: Story = {
 
 // Link in context
 export const InParagraph: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<p>
+  Our team specializes in web design and development.{' '}
+  <Link href="#">Learn more about our services</Link> or{' '}
+  <Link href="#">contact us</Link> to get started.
+</p>`,
+      },
+    },
+  },
   render: () => (
     <p
       style={{
@@ -70,6 +81,18 @@ export const InParagraph: Story = {
 
 // Navigation links
 export const NavigationLinks: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<nav>
+  <Link href="#">Home</Link>
+  <Link href="#">About</Link>
+  <Link href="#">Services</Link>
+  <Link href="#">Contact</Link>
+</nav>`,
+      },
+    },
+  },
   render: () => (
     <nav style={{ display: 'flex', gap: '24px' }}>
       <Link href="#">Home</Link>

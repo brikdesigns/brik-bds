@@ -4,7 +4,7 @@ import { faCheck, faCircleExclamation, faSpinner, faCircleInfo } from '@fortawes
 import { Badge } from './Badge';
 
 const meta: Meta<typeof Badge> = {
-  title: 'Components/Badge',
+  title: 'Components/badge',
   component: Badge,
   parameters: {
     layout: 'centered',
@@ -99,6 +99,19 @@ export const SizeLarge: Story = {
 
 // All status variants
 export const AllStatuses: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Badge>Default</Badge>
+<Badge status="positive">Success</Badge>
+<Badge status="warning">Warning</Badge>
+<Badge status="error">Error</Badge>
+<Badge status="info">Info</Badge>
+<Badge status="progress">Progress</Badge>
+<Badge status="neutral">Neutral</Badge>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge>Default</Badge>
@@ -114,6 +127,15 @@ export const AllStatuses: Story = {
 
 // All sizes
 export const AllSizes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Badge size="sm">Small</Badge>
+<Badge size="md">Medium</Badge>
+<Badge size="lg">Large</Badge>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge size="sm">Small</Badge>
@@ -125,6 +147,16 @@ export const AllSizes: Story = {
 
 // With FA icons
 export const WithIcons: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Success</Badge>
+<Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Error</Badge>
+<Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>Loading</Badge>
+<Badge status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Info</Badge>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Success</Badge>
@@ -137,6 +169,18 @@ export const WithIcons: Story = {
 
 // Size × Status matrix
 export const SizeStatusMatrix: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Badge size="sm">Default</Badge>
+<Badge size="sm" status="positive">Positive</Badge>
+<Badge size="md">Default</Badge>
+<Badge size="md" status="warning">Warning</Badge>
+<Badge size="lg">Default</Badge>
+<Badge size="lg" status="error">Error</Badge>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {(['sm', 'md', 'lg'] as const).map((size) => (
@@ -164,6 +208,17 @@ export const SizeStatusMatrix: Story = {
 
 // Contextual examples
 export const StatusIndicators: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Badge status="positive">Published</Badge>
+<Badge status="progress">In Review</Badge>
+<Badge status="warning">Draft</Badge>
+<Badge status="error">Archived</Badge>
+<Badge status="neutral">Inactive</Badge>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>

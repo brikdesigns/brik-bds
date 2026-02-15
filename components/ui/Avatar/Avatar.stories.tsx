@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Avatar } from './Avatar';
 
 const meta = {
-  title: 'Components/Avatar',
+  title: 'Components/avatar',
   component: Avatar,
   parameters: {
     layout: 'centered',
@@ -153,6 +153,16 @@ export const ImageWithStatus: Story = {
  * All sizes comparison
  */
 export const AllSizes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar name="John Doe" size="sm" />
+<Avatar name="John Doe" size="md" />
+<Avatar name="John Doe" size="lg" />
+<Avatar name="John Doe" size="xl" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--lg)' }}>
       <Avatar name="John Doe" size="sm" />
@@ -167,6 +177,16 @@ export const AllSizes: Story = {
  * All status indicators
  */
 export const AllStatuses: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar name="User" status="online" />
+<Avatar name="User" status="offline" />
+<Avatar name="User" status="busy" />
+<Avatar name="User" status="away" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--lg)' }}>
       <Avatar name="User" status="online" />
@@ -181,6 +201,16 @@ export const AllStatuses: Story = {
  * User list with avatars
  */
 export const UserList: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar name="John Doe" status="online" />
+<Avatar name="Jane Smith" status="away" />
+<Avatar name="Bob Johnson" status="offline" />
+<Avatar name="Alice Williams" status="busy" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
       {[
@@ -229,6 +259,16 @@ export const UserList: Story = {
  * Avatar group (stacked)
  */
 export const AvatarGroup: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar name="John Doe" size="md" />
+<Avatar name="Jane Smith" size="md" />
+<Avatar name="Bob Johnson" size="md" />
+<Avatar name="+5" size="md" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', marginLeft: '12px' }}>
       <Avatar

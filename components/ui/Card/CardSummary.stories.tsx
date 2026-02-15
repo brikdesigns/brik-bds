@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { CardSummary } from './CardSummary';
 
 const meta = {
-  title: 'Components/CardSummary',
+  title: 'Components/card-summary',
   component: CardSummary,
   parameters: {
     layout: 'centered',
@@ -84,6 +84,24 @@ export const PriceNoLink: Story = {
  * Both variants stacked, matching the Figma spec
  */
 export const BothVariants: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<CardSummary
+  label="Total"
+  value={0}
+  type="numeric"
+  textLink={{ label: 'Text Link', href: '#' }}
+/>
+<CardSummary
+  label="Amount Due"
+  value={0}
+  type="price"
+  textLink={{ label: 'Text Link', href: '#' }}
+/>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0', width: '322px' }}>
       <CardSummary
@@ -107,6 +125,24 @@ export const BothVariants: Story = {
  * With populated data
  */
 export const WithData: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<CardSummary
+  label="Active Users"
+  value={1284}
+  type="numeric"
+  textLink={{ label: 'View All', href: '#' }}
+/>
+<CardSummary
+  label="Revenue"
+  value={48250.75}
+  type="price"
+  textLink={{ label: 'Details', href: '#' }}
+/>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
       <CardSummary
@@ -129,6 +165,18 @@ export const WithData: Story = {
  * Dashboard grid layout
  */
 export const DashboardGrid: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<CardSummary label="Orders" value={156} textLink={{ label: 'View', href: '#' }} />
+<CardSummary label="Revenue" value={24830} type="price" textLink={{ label: 'View', href: '#' }} />
+<CardSummary label="Customers" value={892} />
+<CardSummary label="Avg. Order" value={159.17} type="price" />
+<CardSummary label="Returns" value={3} textLink={{ label: 'Review', href: '#' }} />
+<CardSummary label="Refunds" value={478.5} type="price" textLink={{ label: 'Review', href: '#' }} />`,
+      },
+    },
+  },
   render: () => (
     <div style={{
       display: 'grid',

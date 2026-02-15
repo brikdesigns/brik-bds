@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Dot } from './Dot';
 
 const meta: Meta<typeof Dot> = {
-  title: 'Components/Dot',
+  title: 'Components/dot',
   component: Dot,
   parameters: {
     layout: 'centered',
@@ -63,6 +63,18 @@ export const Neutral: Story = {
 
 // All statuses
 export const AllStatuses: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Dot status="default" />
+<Dot status="positive" />
+<Dot status="warning" />
+<Dot status="error" />
+<Dot status="info" />
+<Dot status="neutral" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
       <Dot status="default" />
@@ -77,6 +89,15 @@ export const AllStatuses: Story = {
 
 // All sizes
 export const AllSizes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Dot size="sm" status="positive" />
+<Dot size="md" status="positive" />
+<Dot size="lg" status="positive" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
@@ -115,6 +136,15 @@ export const AllSizes: Story = {
 
 // Contextual examples
 export const OnlineStatus: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Dot status="positive" />
+<Dot status="warning" />
+<Dot status="error" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -149,6 +179,15 @@ export const OnlineStatus: Story = {
 };
 
 export const ListItems: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Dot status="positive" size="sm" />
+<Dot status="warning" size="sm" />
+<Dot status="error" size="sm" />`,
+      },
+    },
+  },
   render: () => (
     <ul style={{
       listStyle: 'none',
@@ -190,6 +229,15 @@ export const ListItems: Story = {
 };
 
 export const ActivityFeed: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Dot status="positive" />
+<Dot status="info" />
+<Dot status="neutral" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{
       display: 'flex',

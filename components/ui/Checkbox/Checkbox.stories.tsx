@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Checkbox } from './Checkbox';
 
 const meta = {
-  title: 'Components/Checkbox',
+  title: 'Components/checkbox',
   component: Checkbox,
   parameters: {
     layout: 'centered',
@@ -70,6 +70,18 @@ export const DisabledChecked: Story = {
  * Multiple checkboxes in a group
  */
 export const Group: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Checkbox label="Hero section" />
+<Checkbox label="1-Column layout" />
+<Checkbox label="2-Column layout" defaultChecked />
+<Checkbox label="3-Column layout" />
+<Checkbox label="CTA section" defaultChecked />
+<Checkbox label="Navigation bar" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
       <Checkbox label="Hero section" />

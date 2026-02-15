@@ -42,6 +42,7 @@
     "serve": "python3 -m http.server 8000",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "extract-tokens": "node scripts/extract-tokens-css.js",
     "build:tokens": "node tokens/build.js",
     "deploy": "webflow deploy",
     "export": "webflow export",

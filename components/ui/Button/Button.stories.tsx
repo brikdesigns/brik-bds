@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: 'Components/button',
   component: Button,
   parameters: {
     layout: 'centered',
@@ -147,6 +147,16 @@ export const Disabled: Story = {
 
 // All variants showcase
 export const AllVariants: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Button variant="primary">Primary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
       <Button variant="primary">Primary</Button>
@@ -159,6 +169,15 @@ export const AllVariants: Story = {
 
 // All sizes
 export const AllSizes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Button variant="primary" size="sm">Small</Button>
+<Button variant="primary" size="md">Medium</Button>
+<Button variant="primary" size="lg">Large</Button>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
       <Button variant="primary" size="sm">Small</Button>
@@ -170,6 +189,27 @@ export const AllSizes: Story = {
 
 // Button grid - all combinations
 export const ButtonGrid: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Button variant="primary" size="sm">Small</Button>
+<Button variant="primary" size="md">Medium</Button>
+<Button variant="primary" size="lg">Large</Button>
+
+<Button variant="outline" size="sm">Small</Button>
+<Button variant="outline" size="md">Medium</Button>
+<Button variant="outline" size="lg">Large</Button>
+
+<Button variant="secondary" size="sm">Small</Button>
+<Button variant="secondary" size="md">Medium</Button>
+<Button variant="secondary" size="lg">Large</Button>
+
+<Button variant="ghost" size="sm">Small</Button>
+<Button variant="ghost" size="md">Medium</Button>
+<Button variant="ghost" size="lg">Large</Button>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {(['primary', 'outline', 'secondary', 'ghost'] as const).map((variant) => (

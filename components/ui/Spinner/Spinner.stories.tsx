@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Spinner } from './Spinner';
 
 const meta: Meta<typeof Spinner> = {
-  title: 'Components/Spinner',
+  title: 'Components/spinner',
   component: Spinner,
   parameters: {
     layout: 'centered',
@@ -34,6 +34,14 @@ export const Large: Story = {
 
 // All sizes
 export const AllSizes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Spinner size="sm" />
+<Spinner size="lg" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
@@ -62,6 +70,16 @@ export const AllSizes: Story = {
 
 // Contextual examples
 export const InButton: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<button disabled>
+  <Spinner size="sm" />
+  Loading...
+</button>`,
+      },
+    },
+  },
   render: () => (
     <button
       style={{
@@ -87,6 +105,15 @@ export const InButton: Story = {
 };
 
 export const CenteredInContainer: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<div className="loading-container">
+  <Spinner size="lg" />
+</div>`,
+      },
+    },
+  },
   render: () => (
     <div
       style={{
@@ -105,6 +132,14 @@ export const CenteredInContainer: Story = {
 };
 
 export const WithText: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Spinner size="lg" />
+<p>Loading your content...</p>`,
+      },
+    },
+  },
   render: () => (
     <div
       style={{
