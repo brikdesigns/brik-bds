@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from './Input';
 
 const meta: Meta<typeof Input> = {
-  title: 'Components/Input',
+  title: 'Components/input',
   component: Input,
   parameters: {
     layout: 'centered',
@@ -112,6 +112,22 @@ export const FullWidth: Story = {
 
 // Form example
 export const FormExample: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Input label="First Name" placeholder="John" fullWidth />
+<Input label="Last Name" placeholder="Doe" fullWidth />
+<Input label="Email" type="email" placeholder="john@example.com" fullWidth />
+<Input
+  label="Phone"
+  type="tel"
+  placeholder="(555) 123-4567"
+  helperText="We'll only contact you about your order"
+  fullWidth
+/>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <Input label="First Name" placeholder="John" fullWidth />
@@ -130,6 +146,16 @@ export const FormExample: Story = {
 
 // Input types
 export const InputTypes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Input label="Text" type="text" placeholder="Plain text" />
+<Input label="Email" type="email" placeholder="email@example.com" />
+<Input label="Password" type="password" placeholder="••••••••" />
+<Input label="Number" type="number" placeholder="0" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ width: '300px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <Input label="Text" type="text" placeholder="Plain text" fullWidth />
@@ -167,6 +193,15 @@ export const SizeLarge: Story = {
 
 // All sizes comparison
 export const AllSizes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Input size="sm" label="Small" placeholder="14px text" />
+<Input size="md" label="Medium" placeholder="16px text" />
+<Input size="lg" label="Large" placeholder="18px text" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ width: '400px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <Input size="sm" label="Small (sm)" placeholder="14px text" fullWidth />

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Skeleton } from './Skeleton';
 
 const meta: Meta<typeof Skeleton> = {
-  title: 'Components/Skeleton',
+  title: 'Components/skeleton',
   component: Skeleton,
   parameters: {
     layout: 'padded',
@@ -53,6 +53,21 @@ export const Rectangular: Story = {
 
 // All variants
 export const AllVariants: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Skeleton variant="text" />
+<Skeleton variant="text" width="85%" />
+<Skeleton variant="text" width="70%" />
+
+<Skeleton variant="circular" width={32} height={32} />
+<Skeleton variant="circular" width={48} height={48} />
+<Skeleton variant="circular" width={64} height={64} />
+
+<Skeleton variant="rectangular" width="300px" height="180px" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div>
@@ -101,6 +116,17 @@ export const AllVariants: Story = {
 
 // Contextual examples
 export const ArticleCard: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Skeleton variant="rectangular" width="100%" height="160px" />
+<Skeleton variant="text" width="80%" height="24px" />
+<Skeleton variant="text" width="100%" />
+<Skeleton variant="text" width="90%" />
+<Skeleton variant="text" width="60%" />`,
+      },
+    },
+  },
   render: () => (
     <div
       style={{
@@ -124,6 +150,16 @@ export const ArticleCard: Story = {
 };
 
 export const UserProfile: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Skeleton variant="circular" width={80} height={80} />
+<Skeleton variant="text" width="60%" height="20px" />
+<Skeleton variant="text" width="80%" height="14px" />
+<Skeleton variant="rectangular" width="100%" height="36px" />`,
+      },
+    },
+  },
   render: () => (
     <div
       style={{
@@ -149,6 +185,17 @@ export const UserProfile: Story = {
 };
 
 export const CommentList: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `{/* Repeat for each comment */}
+<Skeleton variant="circular" width={40} height={40} />
+<Skeleton variant="text" width="30%" height="14px" />
+<Skeleton variant="text" width="100%" />
+<Skeleton variant="text" width="85%" />`,
+      },
+    },
+  },
   render: () => (
     <div
       style={{
@@ -183,6 +230,16 @@ export const CommentList: Story = {
 };
 
 export const TableRows: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `{/* Repeat for each row */}
+<Skeleton variant="text" />
+<Skeleton variant="text" />
+<Skeleton variant="text" width="60%" />`,
+      },
+    },
+  },
   render: () => (
     <div
       style={{

@@ -1,0 +1,62 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Counter.stories';
+
+<Meta of={Stories} />
+
+# Counter
+
+Numeric count indicator with status colors. Counters display a numeric value in a pill-shaped badge, commonly used for notification counts, item quantities, and step indicators.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Statuses
+
+Counters support five status variants that share the system color palette with Badge.
+
+<Canvas of={Stories.AllStatuses} />
+
+## Sizes
+
+Available in three sizes to match UI density.
+
+<Canvas of={Stories.AllSizes} />
+
+## Max count
+
+Set a `max` value to cap the display. Counts exceeding `max` show as "99+" (or whatever max is set to).
+
+<Canvas of={Stories.MaxCount} />
+
+## Counter grid
+
+All combinations of statuses and sizes.
+
+<Canvas of={Stories.CounterGrid} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Counter } from '@brik/bds';
+
+// Basic counter
+<Counter count={5} status="success" />
+
+// Sizes
+<Counter count={3} status="error" size="sm" />
+<Counter count={3} status="error" size="md" />
+<Counter count={3} status="error" size="lg" />
+
+// Max overflow
+<Counter count={150} max={99} status="progress" size="md" />
+```
+
+## Resources
+
+- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26909-17050)
+- [Design guidelines](#) — coming soon

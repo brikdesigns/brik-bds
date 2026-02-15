@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Switch } from './Switch';
 
 const meta: Meta<typeof Switch> = {
-  title: 'Components/Switch',
+  title: 'Components/switch',
   component: Switch,
   parameters: {
     layout: 'padded',
@@ -64,6 +64,19 @@ export const WithoutLabel: Story = {
 
 // Interactive example
 export const Controlled: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `const [enabled, setEnabled] = useState(false);
+
+<Switch
+  label="Enable notifications"
+  checked={enabled}
+  onChange={(e) => setEnabled(e.target.checked)}
+/>`,
+      },
+    },
+  },
   render: () => {
     const [enabled, setEnabled] = useState(false);
     return (
@@ -90,6 +103,27 @@ export const Controlled: Story = {
 
 // Contextual examples
 export const SettingsPanel: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Switch
+  label="Email notifications"
+  checked={notifications}
+  onChange={(e) => setNotifications(e.target.checked)}
+/>
+<Switch
+  label="Dark mode"
+  checked={darkMode}
+  onChange={(e) => setDarkMode(e.target.checked)}
+/>
+<Switch
+  label="Analytics tracking"
+  checked={analytics}
+  onChange={(e) => setAnalytics(e.target.checked)}
+/>`,
+      },
+    },
+  },
   render: () => {
     const [notifications, setNotifications] = useState(true);
     const [darkMode, setDarkMode] = useState(false);
@@ -138,6 +172,25 @@ export const SettingsPanel: Story = {
 };
 
 export const WithDescriptions: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Switch
+  label="Marketing emails"
+  checked={marketing}
+  onChange={(e) => setMarketing(e.target.checked)}
+/>
+<p>Receive promotional emails and product updates</p>
+
+<Switch
+  label="Two-factor authentication"
+  checked={security}
+  onChange={(e) => setSecurity(e.target.checked)}
+/>
+<p>Require a verification code when signing in</p>`,
+      },
+    },
+  },
   render: () => {
     const [marketing, setMarketing] = useState(false);
     const [security, setSecurity] = useState(true);
@@ -191,6 +244,33 @@ export const WithDescriptions: Story = {
 };
 
 export const FeatureFlags: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `const [features, setFeatures] = useState({
+  beta: false,
+  experimental: false,
+  advanced: true,
+});
+
+<Switch
+  label="Beta features"
+  checked={features.beta}
+  onChange={() => toggleFeature('beta')}
+/>
+<Switch
+  label="Experimental mode"
+  checked={features.experimental}
+  onChange={() => toggleFeature('experimental')}
+/>
+<Switch
+  label="Advanced settings"
+  checked={features.advanced}
+  onChange={() => toggleFeature('advanced')}
+/>`,
+      },
+    },
+  },
   render: () => {
     const [features, setFeatures] = useState({
       beta: false,

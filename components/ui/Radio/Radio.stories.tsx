@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Radio } from './Radio';
 
 const meta = {
-  title: 'Components/Radio',
+  title: 'Components/radio',
   component: Radio,
   parameters: {
     layout: 'centered',
@@ -86,6 +86,15 @@ export const DisabledChecked: Story = {
  * Radio group - Plan selection
  */
 export const PlanSelection: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Radio name="plan" value="basic" label="Basic Plan - $9/month" />
+<Radio name="plan" value="pro" label="Pro Plan - $29/month" defaultChecked />
+<Radio name="plan" value="enterprise" label="Enterprise - Custom pricing" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
       <Radio name="plan" value="basic" label="Basic Plan - $9/month" />
@@ -99,6 +108,20 @@ export const PlanSelection: Story = {
  * Radio group - Theme selection
  */
 export const ThemeSelection: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Radio name="theme" value="theme1" label="Theme 1" />
+<Radio name="theme" value="theme2" label="Theme 2" />
+<Radio name="theme" value="theme3" label="Theme 3" defaultChecked />
+<Radio name="theme" value="theme4" label="Theme 4" />
+<Radio name="theme" value="theme5" label="Theme 5" />
+<Radio name="theme" value="theme6" label="Theme 6" />
+<Radio name="theme" value="theme7" label="Theme 7" />
+<Radio name="theme" value="theme8" label="Theme 8" />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
       <Radio name="theme" value="theme1" label="Theme 1" />

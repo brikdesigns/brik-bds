@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Tooltip } from './Tooltip';
 
 const meta: Meta<typeof Tooltip> = {
-  title: 'Components/Tooltip',
+  title: 'Components/tooltip',
   component: Tooltip,
   parameters: {
     layout: 'centered',
@@ -94,6 +94,24 @@ export const Right: Story = {
 
 // All placements
 export const AllPlacements: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Tooltip content="Top placement" placement="top">
+  <button>Top</button>
+</Tooltip>
+<Tooltip content="Bottom placement" placement="bottom">
+  <button>Bottom</button>
+</Tooltip>
+<Tooltip content="Left placement" placement="left">
+  <button>Left</button>
+</Tooltip>
+<Tooltip content="Right placement" placement="right">
+  <button>Right</button>
+</Tooltip>`,
+      },
+    },
+  },
   render: () => (
     <div style={{
       display: 'grid',
@@ -155,6 +173,21 @@ export const AllPlacements: Story = {
 
 // Contextual examples
 export const IconButton: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Tooltip content="Edit item">
+  <button aria-label="Edit">...</button>
+</Tooltip>
+<Tooltip content="Delete item">
+  <button aria-label="Delete">...</button>
+</Tooltip>
+<Tooltip content="Share">
+  <button aria-label="Share">...</button>
+</Tooltip>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '8px' }}>
       <Tooltip content="Edit item">
@@ -207,6 +240,15 @@ export const IconButton: Story = {
 };
 
 export const WithKeyboardShortcut: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Tooltip content="Save (Cmd+S)" placement="bottom">
+  <button>Save</button>
+</Tooltip>`,
+      },
+    },
+  },
   render: () => (
     <Tooltip content="Save (Cmd+S)" placement="bottom">
       <button style={{
@@ -224,6 +266,16 @@ export const WithKeyboardShortcut: Story = {
 };
 
 export const HelpText: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<span>Username</span>
+<Tooltip content="Must be 3-20 characters" placement="right">
+  <span>?</span>
+</Tooltip>`,
+      },
+    },
+  },
   render: () => (
     <div style={{
       fontFamily: 'var(--_typography---font-family--body)',

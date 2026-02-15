@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Textarea } from './Textarea';
 
 const meta = {
-  title: 'Components/Textarea',
+  title: 'Components/textarea',
   component: Textarea,
   parameters: {
     layout: 'centered',
@@ -109,6 +109,14 @@ export const ManyRows: Story = {
  * Form example with label
  */
 export const FormExample: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<label>Comments</label>
+<Textarea placeholder="Share your feedback..." rows={6} />`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)', minWidth: '400px' }}>
       <label style={{

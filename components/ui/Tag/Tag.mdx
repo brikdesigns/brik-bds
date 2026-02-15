@@ -5,23 +5,39 @@ import * as Stories from './Tag.stories';
 
 # Tag
 
-Categorization and filtering labels with optional icon, trailing icon, and remove functionality. Tags help organize content and provide visual context for filtering and selection.
+Categorization and filtering labels with optional left/right icons and remove functionality. Tags help organize content and provide visual context for filtering and selection. Available in three sizes (sm, md, lg).
 
 ## Overview
 
 <Canvas of={Stories.Default} />
 
-## Variants
+## Sizes
 
-### With Icon
+Tags are available in three sizes to match UI density.
+
+<Canvas of={Stories.AllSizes} />
+
+## Icons
+
+### Left icon
 Add a leading icon to provide visual context for the tag category.
-<Canvas of={Stories.WithIcon} />
+<Canvas of={Stories.WithLeftIcon} />
 
-### With Trailing Icon
-Use a trailing icon for actions like external links or status indicators.
-<Canvas of={Stories.WithTrailingIcon} />
+### Right icon
+Use a trailing icon for actions like dismiss or external links.
+<Canvas of={Stories.WithRightIcon} />
 
-### With Remove Button
+### Both icons
+Tags can display icons on both sides simultaneously.
+<Canvas of={Stories.WithBothIcons} />
+
+### Icon positions
+All icon position combinations at a glance.
+<Canvas of={Stories.IconPositions} />
+
+## States
+
+### With remove button
 Interactive tags that can be dismissed with a remove button.
 <Canvas of={Stories.WithRemove} />
 
@@ -29,8 +45,10 @@ Interactive tags that can be dismissed with a remove button.
 Disabled state for non-interactive tags.
 <Canvas of={Stories.Disabled} />
 
-### Multiple Tags
+## Multiple tags
+
 Display multiple tags together for categorization and filtering.
+
 <Canvas of={Stories.MultipleTags} />
 
 ## Props
@@ -42,20 +60,29 @@ Display multiple tags together for categorization and filtering.
 ```tsx
 import { Tag } from '@brik/bds';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 // Basic tag
 <Tag>Category</Tag>
 
-// With icon
-<Tag icon={<FontAwesomeIcon icon={faStar} />}>
-  Featured
+// Sizes
+<Tag size="sm">Small</Tag>
+<Tag size="md">Medium</Tag>
+<Tag size="lg">Large</Tag>
+
+// Left icon
+<Tag icon={<FontAwesomeIcon icon={faCertificate} />}>Featured</Tag>
+
+// Right icon
+<Tag trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Dismiss</Tag>
+
+// Both icons
+<Tag icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>
+  Both
 </Tag>
 
 // Removable tag
-<Tag onRemove={() => console.log('Removed')}>
-  Filter
-</Tag>
+<Tag onRemove={() => console.log('Removed')}>Filter</Tag>
 
 // Disabled tag
 <Tag disabled>Archived</Tag>
@@ -63,5 +90,5 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 ## Resources
 
-- [Figma designs](#) — coming soon
+- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=24917-451)
 - [Design guidelines](#) — coming soon

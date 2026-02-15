@@ -4,7 +4,7 @@ import { Modal } from './Modal';
 import { Button } from '../Button';
 
 const meta = {
-  title: 'Components/Modal',
+  title: 'Components/modal',
   component: Modal,
   parameters: {
     layout: 'centered',
@@ -41,6 +41,18 @@ type Story = StoryObj<typeof meta>;
  * Basic modal with title and content
  */
 export const Basic: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `const [isOpen, setIsOpen] = useState(false);
+
+<Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+<Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Modal Title">
+  <p>This is a basic modal with some content.</p>
+</Modal>`,
+      },
+    },
+  },
   render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -62,6 +74,28 @@ export const Basic: Story = {
  * Modal with footer buttons
  */
 export const WithFooter: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `const [isOpen, setIsOpen] = useState(false);
+
+<Button onClick={() => setIsOpen(true)}>Confirm Action</Button>
+<Modal
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Confirm Delete"
+  footer={
+    <>
+      <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+      <Button onClick={handleDelete}>Delete</Button>
+    </>
+  }
+>
+  <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -97,6 +131,15 @@ export const WithFooter: Story = {
  * Small modal
  */
 export const Small: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Modal isOpen={isOpen} onClose={onClose} title="Small Modal" size="sm">
+  <p>This is a small modal.</p>
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -120,6 +163,15 @@ export const Small: Story = {
  * Medium modal (default)
  */
 export const Medium: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Modal isOpen={isOpen} onClose={onClose} title="Medium Modal" size="md">
+  <p>This is a medium modal (default size).</p>
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -143,6 +195,15 @@ export const Medium: Story = {
  * Large modal
  */
 export const Large: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Modal isOpen={isOpen} onClose={onClose} title="Large Modal" size="lg">
+  <p>This is a large modal with more space for content.</p>
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -167,6 +228,15 @@ export const Large: Story = {
  * Extra large modal
  */
 export const ExtraLarge: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Modal isOpen={isOpen} onClose={onClose} title="Extra Large Modal" size="xl">
+  <p>This is an extra large modal for complex content.</p>
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -190,6 +260,15 @@ export const ExtraLarge: Story = {
  * Full width modal
  */
 export const FullWidth: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Modal isOpen={isOpen} onClose={onClose} title="Full Width Modal" size="full">
+  <p>This modal takes up most of the viewport width.</p>
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -213,6 +292,17 @@ export const FullWidth: Story = {
  * Modal with long scrolling content
  */
 export const ScrollingContent: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Modal isOpen={isOpen} onClose={onClose} title="Long Content">
+  <p>Paragraph 1...</p>
+  <p>Paragraph 2...</p>
+  {/* Modal body scrolls when content exceeds max height */}
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -241,6 +331,21 @@ export const ScrollingContent: Story = {
  * Modal without close button
  */
 export const NoCloseButton: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Modal
+  isOpen={isOpen}
+  onClose={onClose}
+  title="No Close Button"
+  showCloseButton={false}
+  footer={<Button onClick={onClose}>Close</Button>}
+>
+  <p>This modal has no close button in the header.</p>
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -267,6 +372,21 @@ export const NoCloseButton: Story = {
  * Modal that can't be dismissed by backdrop click
  */
 export const NoBackdropClose: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Modal
+  isOpen={isOpen}
+  onClose={onClose}
+  title="Modal with No Backdrop Close"
+  closeOnBackdrop={false}
+  footer={<Button onClick={onClose}>Close</Button>}
+>
+  <p>This modal cannot be closed by clicking the backdrop.</p>
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -293,6 +413,31 @@ export const NoBackdropClose: Story = {
  * Form in modal
  */
 export const FormExample: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `const [isOpen, setIsOpen] = useState(false);
+
+<Button onClick={() => setIsOpen(true)}>Open Form</Button>
+<Modal
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Contact Form"
+  size="md"
+  footer={
+    <>
+      <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+      <Button onClick={handleSubmit}>Submit</Button>
+    </>
+  }
+>
+  <Input label="Name" placeholder="Your name" fullWidth />
+  <Input label="Email" type="email" placeholder="your@email.com" fullWidth />
+  <textarea rows={4} placeholder="Your message" />
+</Modal>`,
+      },
+    },
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
 

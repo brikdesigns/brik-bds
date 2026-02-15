@@ -11,13 +11,6 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-a11y',
-    {
-      name: '@storybook/addon-docs',
-      options: {
-        csfPluginOptions: null,
-        mdxPluginOptions: {},
-      },
-    },
   ],
   framework: {
     name: '@storybook/react-vite',
@@ -36,7 +29,9 @@ const config: StorybookConfig = {
       },
     },
   },
-  docs: {},
+  docs: {
+    defaultName: 'Overview',
+  },
 };
 
 export default config;

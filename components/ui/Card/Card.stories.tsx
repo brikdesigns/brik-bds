@@ -4,7 +4,7 @@ import { Button } from '../Button';
 import { Badge } from '../Badge';
 
 const meta: Meta<typeof Card> = {
-  title: 'Components/Card',
+  title: 'Components/card',
   component: Card,
   parameters: {
     layout: 'centered',
@@ -152,6 +152,26 @@ export const Interactive: Story = {
 
 // All variants
 export const AllVariants: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Card variant="default" padding="md">
+  <CardTitle>Default</CardTitle>
+  <CardDescription>No border or shadow</CardDescription>
+</Card>
+
+<Card variant="outlined" padding="md">
+  <CardTitle>Outlined</CardTitle>
+  <CardDescription>With border</CardDescription>
+</Card>
+
+<Card variant="elevated" padding="md">
+  <CardTitle>Elevated</CardTitle>
+  <CardDescription>With shadow</CardDescription>
+</Card>`,
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
       <Card variant="default" padding="md" style={{ width: '200px' }}>
@@ -172,6 +192,29 @@ export const AllVariants: Story = {
 
 // Card grid
 export const CardGrid: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Card variant="outlined" padding="lg">
+  <Badge>Design</Badge>
+  <CardTitle>Design</CardTitle>
+  <CardDescription>Professional design services.</CardDescription>
+  <CardFooter>
+    <Button variant="outline" size="sm">Learn More</Button>
+  </CardFooter>
+</Card>
+
+<Card variant="outlined" padding="lg">
+  <Badge>Development</Badge>
+  <CardTitle>Development</CardTitle>
+  <CardDescription>Professional development services.</CardDescription>
+  <CardFooter>
+    <Button variant="outline" size="sm">Learn More</Button>
+  </CardFooter>
+</Card>`,
+      },
+    },
+  },
   render: () => (
     <div style={{
       display: 'grid',
