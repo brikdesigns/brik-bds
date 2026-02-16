@@ -5,7 +5,7 @@ import * as Stories from './PageHeader.stories';
 
 # Page header
 
-Composable page-level header that brings together BDS components: Breadcrumb, Button, and TabBar. Designed for dark backgrounds with inverse (white) title text by default.
+Composable page-level header that brings together BDS components: Breadcrumb, Button, and TabBar. No background or forced text color — inherits from its parent context.
 
 ## Overview
 
@@ -54,10 +54,6 @@ Key-value metadata grid below the title, separated by a border. Supports ReactNo
 TabBar navigation without action buttons.
 <Canvas of={Stories.TabsOnly} />
 
-### On light background
-Override title color for use on light backgrounds via the `style` prop.
-<Canvas of={Stories.OnLightBackground} />
-
 ## Props
 
 <ArgTypes of={Stories} />
@@ -67,7 +63,7 @@ Override title color for use on light backgrounds via the `style` prop.
 ```tsx
 import { PageHeader, Breadcrumb, TabBar, Button } from '@brik/bds';
 
-// Tabbed variant (designed for dark backgrounds)
+// Tabbed variant
 <PageHeader
   title="My Account"
   subtitle="Manage your membership plan."
@@ -108,13 +104,6 @@ import { PageHeader, Breadcrumb, TabBar, Button } from '@brik/bds';
     { label: 'Billing', value: 'One-time' },
     { label: 'Stripe Product', value: 'brand-design' },
   ]}
-/>
-
-// On light background — override text color
-<PageHeader
-  title="Dashboard"
-  subtitle="Welcome back."
-  style={{ color: 'var(--_color---text--primary)' }}
 />
 ```
 

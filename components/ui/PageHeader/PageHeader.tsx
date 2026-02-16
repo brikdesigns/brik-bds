@@ -70,11 +70,14 @@ const innerPaddingStyles: CSSProperties = {
  *
  * Token reference:
  * - --_typography---font-family--heading (heading font)
- * - --_typography---heading--lg = 32px (title)
+ * - --_typography---heading--large = font-size-700 = 32px (title)
  * - --_typography---font-family--body (body font)
- * - --_typography---body--lg = 18px (subtitle)
- * - --_color---text--inverse (white text — designed for dark backgrounds)
+ * - --_typography---body--lg = font-size-200 = 18px (subtitle)
  * - --font-weight--bold = 700
+ *
+ * Text color inherits from parent context — no forced color.
+ * Place on a dark section and set color: var(--_color---text--inverse)
+ * on the parent, or use on a light background with default text color.
  */
 const contentWrapperStyles: CSSProperties = {
   display: 'flex',
@@ -84,12 +87,11 @@ const contentWrapperStyles: CSSProperties = {
   alignItems: 'flex-start',
   justifyContent: 'center',
   minWidth: 0,
-  color: 'var(--_color---text--inverse)',
 };
 
 const titleStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--heading)',
-  fontSize: 'var(--_typography---heading--lg)',
+  fontSize: 'var(--_typography---heading--large)',
   fontWeight: 'var(--font-weight--bold)' as unknown as number,
   lineHeight: 1.1,
   margin: 0,
@@ -179,7 +181,8 @@ const metadataValueStyles: CSSProperties = {
  * - **TabBar** for tab navigation
  * - Metadata grid for key-value pairs
  *
- * Designed for dark backgrounds with inverse (white) title text.
+ * No background or forced text color — inherits from parent context.
+ * Place inside a dark section with appropriate text color, or use on light backgrounds.
  *
  * Two primary layouts from Figma (node 26911-20720):
  * - **Tabbed**: breadcrumbs + title + actions + tab bar
