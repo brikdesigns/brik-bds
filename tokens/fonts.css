@@ -7,6 +7,9 @@
  * Source: updates/brik-bds.webflow/css/brik-bds.webflow.css
  */
 
+/* Poppins — Brand font (Google Fonts) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+
 @font-face {
   font-family: Lato;
   src: url('../updates/brik-bds.webflow/fonts/Lato-Bold.ttf') format('truetype');

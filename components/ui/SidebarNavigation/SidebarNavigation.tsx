@@ -153,7 +153,7 @@ export interface SidebarNavItemProps extends ButtonHTMLAttributes<HTMLButtonElem
  * Token reference:
  * - --_color---background--primary (item background)
  * - --_color---text--primary (text color)
- * - --_space---gap--sm = 4px (gap between icon and text)
+ * - --_space---gap--md = 8px (gap between icon and text)
  * - --_space---md = 8px (vertical padding - 24px total with Spacious mode)
  * - --_typography---font-family--icon (icon font)
  * - --_typography---icon--small (icon size)
@@ -165,7 +165,7 @@ const navItemStyles: CSSProperties = {
   color: 'var(--_color---text--primary)',
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--_space---gap--sm)',
+  gap: 'var(--_space---gap--md)',
   paddingTop: 'var(--_space---md)',
   paddingBottom: 'var(--_space---md)',
   paddingLeft: 0,
