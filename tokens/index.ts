@@ -3,12 +3,12 @@
  *
  * Auto-generated from Webflow design tokens
  * Source: brik-bds.webflow.css
- * Generated: 2026-02-16T02:08:27.195Z
+ * Generated: 2026-02-16T13:47:34.912Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
 /**
- * Available theme numbers (maps to .theme-X classes)
+ * Available theme identifiers (maps to .theme-X classes)
  * - theme-1: Blue-Green (Default Light)
  * - theme-2: Yellow-Orange (Dark)
  * - theme-3: Peach-Brown
@@ -17,8 +17,9 @@
  * - theme-6: Blue-Orange
  * - theme-7: Neon
  * - theme-8: Vibrant
+ * - theme-brik: Brik Designs Brand
  */
-export type ThemeNumber = '1' | '8' | '2' | '3' | '4' | '5' | '6' | '7';
+export type ThemeNumber = '1' | '8' | '2' | '3' | '4' | '5' | '6' | '7' | 'brik';
 
 /**
  * Color mode type (friendly names)
@@ -75,6 +76,7 @@ export const themeMetadata: Record<ThemeNumber, { name: string; description: str
   '6': { name: 'Blue-Orange', description: 'Complementary contrast', isDark: false },
   '7': { name: 'Neon', description: 'Vibrant neon colors', isDark: true },
   '8': { name: 'Vibrant', description: 'Bold saturated colors', isDark: false },
+  'brik': { name: 'Brik Designs', description: 'Company brand theme — poppy red, near-black, tan', isDark: false },
 };
 
 /**

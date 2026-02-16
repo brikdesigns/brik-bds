@@ -3,7 +3,7 @@
 /* ============================================= */
 /* Auto-generated from Webflow design tokens     */
 /* Source: brik-bds.webflow.css                  */
-/* Generated: 2026-02-16T02:08:27.193Z        */
+/* Generated: 2026-02-16T13:47:34.910Z        */
 /* DO NOT EDIT DIRECTLY - Run: node build.js    */
 /* ============================================= */
 
@@ -528,5 +528,70 @@
   --typography-icon-small: var(--font-size--75);
   --typography-icon-medium-base: var(--font-size--100);
   --typography-icon-large: var(--font-size--200);
+}
+
+/* ============================================= */
+/* Brik Designs Brand                          */
+/* ============================================= */
+.theme-brik {
+  /* Color */
+  --color-page-primary: var(--grayscale--white);
+  --color-page-secondary: var(--grayscale--lightest);
+  --color-page-accent: #f1f0ec;
+  --color-page-brand: #e35335;
+  --color-text-primary: var(--grayscale--darkest);
+  --color-text-secondary: var(--grayscale--dark);
+  --color-text-muted: var(--grayscale--light);
+  --color-text-inverse: var(--grayscale--white);
+  --color-text-brand: #e35335;
+  --color-surface-primary: var(--grayscale--white);
+  --color-surface-secondary: var(--grayscale--lightest);
+  --color-surface-brand-primary: #e35335;
+  --color-surface-brand-secondary: #f1f0ec;
+  --color-surface-nav: var(--grayscale--white);
+  --color-background-brand-primary: #e35335;
+  --color-background-brand-secondary: #f1f0ec;
+  --color-background-primary: var(--grayscale--white);
+  --color-background-secondary: var(--grayscale--lightest);
+  --color-background-inverse: var(--grayscale--darkest);
+  --color-background-input: var(--grayscale--white);
+  --color-background-image: #17171799;
+  --color-background-image-brand: #e35335;
+  --color-border-primary: var(--grayscale--darkest);
+  --color-border-secondary: var(--grayscale--lighter);
+  --color-border-muted: var(--grayscale--lighter);
+  --color-border-brand: #e35335;
+  --color-border-input: var(--grayscale--light);
+  --color-border-inverse: var(--grayscale--white);
+  --color-border-on-color: white;
+  --color-theme-primary: #e35335;
+  --color-theme-secondary: #f1f0ec;
+  --color-theme-accent: #f4d364;
+  --color-theme-tertiary: #9ada6c;
+  --color-theme-fourth: #8ebbcc;
+  /* Typography */
+  --typography-font-family-body: Poppins, sans-serif;
+  --typography-font-family-label: Poppins, sans-serif;
+  --typography-font-family-heading: Poppins, sans-serif;
+  --typography-font-family-display: Poppins, sans-serif;
+  /* Space */
+  --layout-none: var(--space--0);
+  --layout-tiny: var(--space--100);
+  --layout-sm: var(--space--150);
+  --layout-md: var(--space--200);
+  --layout-lg: var(--space--400);
+  --layout-xl: var(--space--600);
+  --layout-xxl: var(--space--800);
+  --layout-huge: var(--space--1000);
+  --layout-gap-none: var(--space--0);
+  --layout-gap-tiny: var(--space--50);
+  --layout-gap-sm: var(--space--100);
+  --layout-gap-md: var(--space--200);
+  --layout-gap-lg: var(--space--400);
+  --layout-gap-xl: var(--space--500);
+  --layout-gap-xxl: var(--space--600);
+  --layout-gap-huge: var(--space--1200);
+  --layout-button: var(--space--200);
+  --layout-input: var(--space--200);
 }
 
