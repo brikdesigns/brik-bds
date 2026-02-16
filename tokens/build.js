@@ -421,53 +421,53 @@ function generateThemesCSS(tokens) {
       }
     }
 
-    // Output grouped variables (transform variable references to match our naming)
+    // Output grouped variables (preserve BDS naming convention with underscores)
     if (Object.keys(colorVars).length > 0) {
       css += `  /* Color */\n`;
       for (const [name, value] of Object.entries(colorVars)) {
-        css += `  --color-${name.replace(/--/g, '-')}: ${transformVariableReference(value)};\n`;
+        css += `  --_color---${name}: ${transformVariableReference(value)};\n`;
       }
     }
     if (Object.keys(typographyVars).length > 0) {
       css += `  /* Typography */\n`;
       for (const [name, value] of Object.entries(typographyVars)) {
-        css += `  --typography-${name.replace(/--/g, '-')}: ${transformVariableReference(value)};\n`;
+        css += `  --_typography---${name}: ${transformVariableReference(value)};\n`;
       }
     }
     if (Object.keys(spaceVars).length > 0) {
       css += `  /* Space */\n`;
       for (const [name, value] of Object.entries(spaceVars)) {
-        css += `  --layout-${name.replace(/--/g, '-')}: ${transformVariableReference(value)};\n`;
+        css += `  --_space---${name}: ${transformVariableReference(value)};\n`;
       }
     }
     if (Object.keys(sizeVars).length > 0) {
       css += `  /* Size */\n`;
       for (const [name, value] of Object.entries(sizeVars)) {
-        css += `  --size-${name.replace(/--/g, '-')}: ${transformVariableReference(value)};\n`;
+        css += `  --_size---${name}: ${transformVariableReference(value)};\n`;
       }
     }
     if (Object.keys(borderWidthVars).length > 0) {
       css += `  /* Border Width */\n`;
       for (const [name, value] of Object.entries(borderWidthVars)) {
-        css += `  --border-width-${name}: ${transformVariableReference(value)};\n`;
+        css += `  --_border-width---${name}: ${transformVariableReference(value)};\n`;
       }
     }
     if (Object.keys(borderRadiusVars).length > 0) {
       css += `  /* Border Radius */\n`;
       for (const [name, value] of Object.entries(borderRadiusVars)) {
-        css += `  --border-radius-${name.replace(/--/g, '-')}: ${transformVariableReference(value)};\n`;
+        css += `  --_border-radius---${name}: ${transformVariableReference(value)};\n`;
       }
     }
     if (Object.keys(boxShadowVars).length > 0) {
       css += `  /* Box Shadow */\n`;
       for (const [name, value] of Object.entries(boxShadowVars)) {
-        css += `  --box-shadow-${name}: ${transformVariableReference(value)};\n`;
+        css += `  --_box-shadow---${name}: ${transformVariableReference(value)};\n`;
       }
     }
     if (Object.keys(blurRadiusVars).length > 0) {
       css += `  /* Blur Radius */\n`;
       for (const [name, value] of Object.entries(blurRadiusVars)) {
-        css += `  --blur-radius-${name}: ${transformVariableReference(value)};\n`;
+        css += `  --_blur-radius---${name}: ${transformVariableReference(value)};\n`;
       }
     }
 
