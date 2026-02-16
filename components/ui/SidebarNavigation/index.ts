@@ -1,8 +1,6 @@
 export {
   SidebarNavigation,
-  SidebarNavItem,
+  type SidebarNavItem,
   type SidebarNavigationProps,
-  type SidebarNavItemProps,
-  type NavItem,
 } from './SidebarNavigation';
 export { default } from './SidebarNavigation';
