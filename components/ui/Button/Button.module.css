@@ -1,0 +1,50 @@
+/**
+ * BDS Button Interactive States
+ *
+ * Handles hover, focus, active, and disabled states that can't be
+ * expressed in inline CSSProperties.
+ */
+
+/* Base button - all variants */
+.button {
+  /* Hover: 10% darker using filter (works with all colors) */
+  &:hover:not(:disabled) {
+    filter: brightness(0.9);
+  }
+
+  /* Active/pressed: 15% darker */
+  &:active:not(:disabled) {
+    filter: brightness(0.85);
+    transform: translateY(1px);
+  }
+
+  /* Focus: Brand outline for keyboard navigation */
+  &:focus-visible {
+    outline: 2px solid var(--_color---border--brand);
+    outline-offset: 2px;
+  }
+
+  /* Disabled: Reduce opacity */
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* Outline variant: Fill on hover */
+.button-outline:hover:not(:disabled) {
+  background-color: var(--_color---background--brand-primary);
+  color: var(--_color---text--inverse);
+  filter: none; /* Override filter since we're changing colors */
+}
+
+/* Ghost variant: Show background on hover */
+.button-ghost:hover:not(:disabled) {
+  background-color: var(--_color---surface--secondary);
+  filter: none;
+}
+
+/* Secondary variant: Darken border on hover */
+.button-secondary:hover:not(:disabled) {
+  border-color: var(--_color---border--primary);
+}
