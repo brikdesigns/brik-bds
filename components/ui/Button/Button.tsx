@@ -1,4 +1,5 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import styles from './Button.module.css';
 
 /**
  * Button variants
@@ -155,12 +156,19 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...style,
     };
 
+    // Combine CSS module classes with user className
+    const buttonClasses = [
+      styles.button,
+      styles[`button-${variant}`],
+      className,
+    ].filter(Boolean).join(' ');
+
     // Render as anchor if asLink is true
     if (asLink && href) {
       return (
         <a
           href={href}
-          className={className || undefined}
+          className={buttonClasses}
           style={combinedStyles}
           aria-disabled={disabled}
           {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
@@ -175,7 +183,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={className || undefined}
+        className={buttonClasses}
         style={combinedStyles}
         disabled={disabled}
         {...props}
