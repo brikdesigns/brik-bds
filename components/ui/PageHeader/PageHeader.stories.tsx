@@ -3,6 +3,8 @@ import type { CSSProperties } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { PageHeader } from './PageHeader';
+import { Breadcrumb } from '../Breadcrumb';
+import { TabBar } from '../TabBar';
 import { Button } from '../Button';
 
 const meta: Meta<typeof PageHeader> = {
@@ -63,7 +65,7 @@ const sampleTabs = [
 // ─── Default (Tabbed) ────────────────────────────────────────────
 
 /**
- * Default page header with breadcrumbs, title, subtitle, action buttons, and tab bar
+ * Default page header composing Breadcrumb, Button, and TabBar components
  */
 export const Default: Story = {
   parameters: {
@@ -72,25 +74,29 @@ export const Default: Story = {
         code: `<PageHeader
   title="My Account"
   subtitle="Manage your membership plan."
-  breadcrumbs={[
-    { label: 'Show All', href: '#' },
-    { label: 'Product', href: '#' },
-    { label: 'Design System' },
-  ]}
+  breadcrumbs={
+    <Breadcrumb items={[
+      { label: 'Show All', href: '#' },
+      { label: 'Product', href: '#' },
+      { label: 'Design System' },
+    ]} />
+  }
   actions={
     <>
       <Button variant="primary">Primary Button</Button>
       <Button variant="secondary">Secondary Button</Button>
     </>
   }
-  tabs={[
-    { label: 'Active', active: true },
-    { label: 'Latest' },
-    { label: 'Product' },
-    { label: 'Design System' },
-    { label: 'Marketing' },
-    { label: 'Other' },
-  ]}
+  tabs={
+    <TabBar items={[
+      { label: 'Active', active: true },
+      { label: 'Latest' },
+      { label: 'Product' },
+      { label: 'Design System' },
+      { label: 'Marketing' },
+      { label: 'Other' },
+    ]} />
+  }
 />`,
       },
     },
@@ -98,8 +104,8 @@ export const Default: Story = {
   args: {
     title: 'My Account',
     subtitle: 'Manage your membership plan.',
-    breadcrumbs: sampleBreadcrumbs,
-    tabs: sampleTabs,
+    breadcrumbs: <Breadcrumb items={sampleBreadcrumbs} />,
+    tabs: <TabBar items={sampleTabs} />,
     actions: (
       <>
         <Button variant="primary">Primary Button</Button>
@@ -121,11 +127,13 @@ export const WithMetadata: Story = {
         code: `<PageHeader
   title="Brand Design"
   subtitle="Service details and billing info."
-  breadcrumbs={[
-    { label: 'Show All', href: '#' },
-    { label: 'Product', href: '#' },
-    { label: 'Design System' },
-  ]}
+  breadcrumbs={
+    <Breadcrumb items={[
+      { label: 'Show All', href: '#' },
+      { label: 'Product', href: '#' },
+      { label: 'Design System' },
+    ]} />
+  }
   actions={
     <>
       <Button variant="primary" size="sm">Primary Button</Button>
@@ -133,7 +141,7 @@ export const WithMetadata: Story = {
     </>
   }
   metadata={[
-    { label: 'Category', value: <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}><span style={brandBadgeStyles}><FontAwesomeIcon icon={faPalette} /></span>Brand Design</span> },
+    { label: 'Category', value: 'Brand Design' },
     { label: 'Billing', value: 'One-time' },
     { label: 'Stripe Product', value: 'brand-design' },
   ]}
@@ -144,7 +152,7 @@ export const WithMetadata: Story = {
   args: {
     title: 'Brand Design',
     subtitle: 'Service details and billing info.',
-    breadcrumbs: sampleBreadcrumbs,
+    breadcrumbs: <Breadcrumb items={sampleBreadcrumbs} />,
     actions: (
       <>
         <Button variant="primary" size="sm">Primary Button</Button>
@@ -212,7 +220,7 @@ export const WithSubtitle: Story = {
 // ─── With Breadcrumbs ────────────────────────────────────────────
 
 /**
- * Breadcrumb navigation above the title
+ * Breadcrumb navigation above the title using the Breadcrumb component
  */
 export const WithBreadcrumbs: Story = {
   parameters: {
@@ -221,11 +229,13 @@ export const WithBreadcrumbs: Story = {
         code: `<PageHeader
   title="Design System"
   subtitle="Components, tokens, and documentation."
-  breadcrumbs={[
-    { label: 'Home', href: '#' },
-    { label: 'Products', href: '#' },
-    { label: 'Design System' },
-  ]}
+  breadcrumbs={
+    <Breadcrumb items={[
+      { label: 'Home', href: '#' },
+      { label: 'Products', href: '#' },
+      { label: 'Design System' },
+    ]} />
+  }
 />`,
       },
     },
@@ -233,18 +243,22 @@ export const WithBreadcrumbs: Story = {
   args: {
     title: 'Design System',
     subtitle: 'Components, tokens, and documentation.',
-    breadcrumbs: [
-      { label: 'Home', href: '#' },
-      { label: 'Products', href: '#' },
-      { label: 'Design System' },
-    ],
+    breadcrumbs: (
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '#' },
+          { label: 'Products', href: '#' },
+          { label: 'Design System' },
+        ]}
+      />
+    ),
   },
 };
 
 // ─── With Actions ────────────────────────────────────────────────
 
 /**
- * Title row with action buttons aligned right
+ * Title row with action buttons aligned right using the Button component
  */
 export const WithActions: Story = {
   parameters: {
@@ -278,7 +292,7 @@ export const WithActions: Story = {
 // ─── Tabs Only ───────────────────────────────────────────────────
 
 /**
- * Title with tab navigation and no actions
+ * Title with TabBar navigation and no actions
  */
 export const TabsOnly: Story = {
   parameters: {
@@ -287,11 +301,13 @@ export const TabsOnly: Story = {
         code: `<PageHeader
   title="Projects"
   subtitle="Browse and manage all projects."
-  tabs={[
-    { label: 'All', active: true },
-    { label: 'Active' },
-    { label: 'Archived' },
-  ]}
+  tabs={
+    <TabBar items={[
+      { label: 'All', active: true },
+      { label: 'Active' },
+      { label: 'Archived' },
+    ]} />
+  }
 />`,
       },
     },
@@ -299,11 +315,15 @@ export const TabsOnly: Story = {
   args: {
     title: 'Projects',
     subtitle: 'Browse and manage all projects.',
-    tabs: [
-      { label: 'All', active: true },
-      { label: 'Active' },
-      { label: 'Archived' },
-    ],
+    tabs: (
+      <TabBar
+        items={[
+          { label: 'All', active: true },
+          { label: 'Active' },
+          { label: 'Archived' },
+        ]}
+      />
+    ),
   },
 };
 
@@ -327,9 +347,9 @@ export const OnLightBackground: Story = {
   title="My Account"
   subtitle="Manage your membership plan."
   style={{ color: 'var(--_color---text--primary)' }}
-  breadcrumbs={[...]}
+  breadcrumbs={<Breadcrumb items={[...]} />}
   actions={<Button variant="primary">Save</Button>}
-  tabs={[...]}
+  tabs={<TabBar items={[...]} />}
 />`,
       },
     },
@@ -339,14 +359,14 @@ export const OnLightBackground: Story = {
       title="My Account"
       subtitle="Manage your membership plan."
       style={{ color: 'var(--_color---text--primary)' }}
-      breadcrumbs={sampleBreadcrumbs}
+      breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
       actions={
         <>
           <Button variant="primary">Primary Button</Button>
           <Button variant="secondary">Secondary Button</Button>
         </>
       }
-      tabs={sampleTabs}
+      tabs={<TabBar items={sampleTabs} />}
     />
   ),
 };

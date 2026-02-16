@@ -1,0 +1,68 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './TabBar.stories';
+
+<Meta of={Stories} />
+
+# Tab bar
+
+Horizontal tab navigation bar with active/inactive states. Renders a row of tab buttons styled with BDS tokens.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Default
+Full tab bar with one active tab highlighted in brand color.
+<Canvas of={Stories.Default} />
+
+### Few tabs
+Compact tab bar with fewer items.
+<Canvas of={Stories.FewTabs} />
+
+### No active tab
+All tabs in secondary color — useful before a selection is made.
+<Canvas of={Stories.NoActive} />
+
+### On dark background
+Tab bar on a dark brand background, as used inside PageHeader.
+<Canvas of={Stories.OnDarkBackground} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { TabBar } from '@brik/bds';
+
+// Standalone tab bar
+<TabBar
+  items={[
+    { label: 'Overview', active: true, onClick: () => setTab('overview') },
+    { label: 'Billing', onClick: () => setTab('billing') },
+    { label: 'Security', onClick: () => setTab('security') },
+  ]}
+/>
+
+// Composed inside PageHeader
+<PageHeader
+  title="My Account"
+  tabs={
+    <TabBar
+      items={[
+        { label: 'Overview', active: true },
+        { label: 'Billing' },
+        { label: 'Security' },
+      ]}
+    />
+  }
+/>
+```
+
+## Resources
+
+- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26911-20723)
+- [Design guidelines](#) — coming soon

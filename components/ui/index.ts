@@ -17,3 +17,7 @@ export * from './Tooltip';
 export * from './Switch';
 export * from './Tag';
 export * from './Table';
+export * from './Counter';
+export * from './Breadcrumb';
+export * from './TabBar';
+export * from './PageHeader';
