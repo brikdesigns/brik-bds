@@ -11,6 +11,34 @@ Data table component with sub-components for structured content display. Support
 
 <Canvas of={Stories.Default} />
 
+## Framework Compatibility
+
+| Framework | Compatible | Notes |
+|-----------|-----------|-------|
+| **Next.js 14+ (App Router)** | ⚠️ Requires `'use client'` | Uses React Context for size prop |
+| **Next.js (Pages Router)** | ✅ Yes | Works in client components |
+| **React 18+** | ✅ Yes | Standard React component |
+| **Remix** | ✅ Yes | Works in route components |
+
+### Why `'use client'` is Required
+
+The Table component uses React Context (`createContext`/`useContext`) to pass the `size` prop down to TableHead and TableCell components. In Next.js 14+ App Router, components using Context must be marked as client components.
+
+**Already included:** The component file has `'use client'` at the top, so you can import it directly in server components without issues.
+
+```tsx
+// ✅ This works - Table is already marked 'use client'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@bds/components/ui/Table';
+
+export default function ServerComponent() {
+  return (
+    <Table size="comfortable">
+      {/* ... */}
+    </Table>
+  );
+}
+```
+
 ## Sub-components
 
 The Table system is composable using these elements:
