@@ -7,6 +7,7 @@ export * from './Card';
 export * from './Checkbox';
 export * from './Radio';
 export * from './Select';
+export * from './SidebarNavigation';
 export * from './Textarea';
 export * from './Avatar';
 export * from './Modal';

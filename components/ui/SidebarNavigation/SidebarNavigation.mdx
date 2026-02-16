@@ -1,0 +1,119 @@
+import { Canvas, Meta } from '@storybook/blocks';
+import * as SidebarNavigationStories from './SidebarNavigation.stories';
+
+<Meta of={SidebarNavigationStories} />
+
+# SidebarNavigation
+
+A vertical navigation sidebar component that provides consistent navigation across your application. Features logo placement, navigation items with icons, active state indication, and an optional footer section.
+
+## Features
+
+- **Logo Support**: Optional logo placement at the top
+- **Active State**: Visual indication with brand-colored border and text
+- **Icon + Label**: Each navigation item displays an icon and label
+- **Footer Section**: Optional footer for user menus, actions, or additional content
+- **Customizable Width**: Adjustable sidebar width to fit your layout
+- **Keyboard Accessible**: Full keyboard navigation support
+
+## Usage
+
+### Basic
+
+```tsx
+import { SidebarNavigation } from '@/components/ui/SidebarNavigation';
+import { faHome, faFolder, faCog } from '@fortawesome/free-solid-svg-icons';
+
+const navItems = [
+  { id: 'home', icon: faHome, label: 'Home', onClick: () => {} },
+  { id: 'projects', icon: faFolder, label: 'Projects', onClick: () => {} },
+  { id: 'settings', icon: faCog, label: 'Settings', onClick: () => {} },
+];
+
+<SidebarNavigation
+  items={navItems}
+  activeId="home"
+/>
+```
+
+### With Logo and Footer
+
+```tsx
+<SidebarNavigation
+  items={navItems}
+  activeId="projects"
+  logo={<YourLogo />}
+  footer={<FooterContent />}
+/>
+```
+
+## Props
+
+### SidebarNavigation
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `NavItem[]` | required | Array of navigation items |
+| `activeId` | `string` | - | ID of the currently active item |
+| `logo` | `ReactNode` | - | Logo element to display at top |
+| `footer` | `ReactNode` | - | Footer content at bottom |
+| `width` | `number` | `246` | Width of sidebar in pixels |
+
+### NavItem
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | `string` | required | Unique identifier |
+| `icon` | `IconDefinition` | required | Font Awesome icon |
+| `label` | `string` | required | Display label |
+| `onClick` | `() => void` | - | Click handler |
+
+## Design Tokens
+
+The component uses the following BDS tokens:
+
+**Colors:**
+- `--_color---surface--nav` - Navigation background
+- `--_color---text--primary` - Default text color
+- `--_color---text--brand` - Active item text
+- `--_color---border--brand` - Active item border
+
+**Spacing:**
+- `--_space---lg` (32px) - Main padding
+- `--_space---md` (8px) - Item vertical padding
+- `--_space---gap--sm` (4px) - Icon-label gap
+
+**Typography:**
+- `--_typography---font-family--label` - Label font
+- `--_typography---label--md-base` - Label size
+- `--_typography---icon--small` - Icon size
+
+## Accessibility
+
+- Uses semantic `<nav>` element with `aria-label`
+- Active items marked with `aria-current="page"`
+- Full keyboard navigation support
+- Screen reader friendly labels
+
+## Examples
+
+<Canvas of={SidebarNavigationStories.Default} />
+
+## Active States
+
+<Canvas of={SidebarNavigationStories.ActiveStates} />
+
+## Variations
+
+### Without Logo
+<Canvas of={SidebarNavigationStories.WithoutLogo} />
+
+### Without Footer
+<Canvas of={SidebarNavigationStories.WithoutFooter} />
+
+### Custom Width
+<Canvas of={SidebarNavigationStories.CustomWidth} />
+
+## Layout Integration
+
+<Canvas of={SidebarNavigationStories.FullApplicationLayout} />
