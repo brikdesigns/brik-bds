@@ -1,254 +1,206 @@
-import {
-  type HTMLAttributes,
-  type ReactNode,
-  type CSSProperties,
-  type ButtonHTMLAttributes,
-} from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { type IconDefinition } from '@fortawesome/fontawesome-svg-core';
-
-// ─── SidebarNavigation (wrapper) ───────────────────────────────────
+import { type ReactNode, type CSSProperties } from 'react';
 
 /**
- * Navigation item data
+ * Navigation item configuration
  */
-export interface NavItem {
-  /** Unique identifier */
-  id: string;
-  /** Font Awesome icon */
-  icon: IconDefinition;
-  /** Display label */
+export interface SidebarNavItem {
+  /** Item label */
   label: string;
-  /** Click handler */
-  onClick?: () => void;
+  /** Link href */
+  href: string;
+  /** Whether this item is currently active */
+  active?: boolean;
+  /** Optional icon element */
+  icon?: ReactNode;
 }
 
 /**
  * SidebarNavigation component props
  */
-export interface SidebarNavigationProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
+export interface SidebarNavigationProps {
+  /** Logo element to display at top */
+  logo: ReactNode;
   /** Navigation items */
-  items: NavItem[];
-  /** Active item ID */
-  activeId?: string;
-  /** Logo element (optional) */
-  logo?: ReactNode;
-  /** Footer content (optional) */
-  footer?: ReactNode;
-  /** Width of sidebar */
-  width?: number;
+  navItems: SidebarNavItem[];
+  /** Footer actions (buttons, links) */
+  footerActions?: ReactNode;
+  /** User info section */
+  userSection?: ReactNode;
+  /** Optional custom width (default: 260px) */
+  width?: string;
 }
 
 /**
- * Base sidebar styles using BDS tokens
+ * Container styles
  *
  * Token reference:
- * - --_color---surface--nav (navigation surface background)
- * - --_space---lg = 32px (main padding)
- * - --_space---xl = 24px (gap between sections)
+ * - --_color---surface--primary (sidebar background)
+ * - --_color---border--secondary (sidebar border)
  */
-const sidebarStyles: CSSProperties = {
-  backgroundColor: 'var(--_color---surface--nav)',
+const containerStyles: CSSProperties = {
+  backgroundColor: 'var(--_color---surface--primary)',
+  borderRight: '1px solid var(--_color---border--secondary)',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-between',
-  height: '100%',
-  paddingLeft: 'var(--_space---lg)',
-  paddingRight: 0,
-  paddingTop: 'var(--_space---lg)',
-  paddingBottom: 'var(--_space---lg)',
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  bottom: 0,
+  zIndex: 10,
 };
 
 /**
- * SidebarNavigation - Main navigation sidebar component
+ * Logo section styles
  *
- * Provides vertical navigation with logo, menu items, and optional footer.
- * Supports active state indication with brand-colored border and text.
+ * Token reference:
+ * - --_color---border--secondary (bottom border)
+ */
+const logoSectionStyles: CSSProperties = {
+  padding: '24px 24px 20px',
+  borderBottom: '1px solid var(--_color---border--secondary)',
+};
+
+/**
+ * Navigation section styles
+ */
+const navSectionStyles: CSSProperties = {
+  flex: 1,
+  padding: '16px 12px',
+  overflowY: 'auto',
+};
+
+/**
+ * Navigation item base styles
+ *
+ * Token reference:
+ * - --_typography---font-family--body (nav font)
+ * - --_color---text--secondary (default text)
+ */
+const navItemBaseStyles: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  padding: '10px 12px',
+  borderRadius: '6px',
+  fontFamily: 'var(--_typography---font-family--body)',
+  fontSize: '14px',
+  fontWeight: 400,
+  color: 'var(--_color---text--secondary)',
+  backgroundColor: 'transparent',
+  textDecoration: 'none',
+  marginBottom: '4px',
+  transition: 'background-color 0.15s, color 0.15s',
+  cursor: 'pointer',
+};
+
+/**
+ * Active navigation item styles
+ *
+ * Token reference:
+ * - --_color---text--primary (active text)
+ * - --_color---page--secondary (active background)
+ */
+const navItemActiveStyles: CSSProperties = {
+  fontWeight: 600,
+  color: 'var(--_color---text--primary)',
+  backgroundColor: 'var(--_color---page--secondary)',
+};
+
+/**
+ * Navigation item indicator dot
+ *
+ * Token reference:
+ * - --brand--primary (active indicator)
+ * - --_color---border--secondary (inactive indicator)
+ */
+const indicatorStyles = (active: boolean): CSSProperties => ({
+  width: '8px',
+  height: '8px',
+  borderRadius: '2px',
+  backgroundColor: active ? 'var(--brand--primary)' : 'var(--_color---border--secondary)',
+  flexShrink: 0,
+});
+
+/**
+ * Footer section styles
+ *
+ * Token reference:
+ * - --_color---border--secondary (top border)
+ */
+const footerSectionStyles: CSSProperties = {
+  padding: '12px 24px',
+  borderTop: '1px solid var(--_color---border--secondary)',
+};
+
+/**
+ * User section styles
+ *
+ * Token reference:
+ * - --_color---border--secondary (top border)
+ */
+const userSectionStyles: CSSProperties = {
+  padding: '16px 24px',
+  borderTop: '1px solid var(--_color---border--secondary)',
+};
+
+/**
+ * SidebarNavigation - BDS themed sidebar navigation component
+ *
+ * Provides a fixed-position sidebar with logo, navigation items, footer actions,
+ * and user section. Uses BDS tokens for consistent theming.
  *
  * @example
  * ```tsx
  * <SidebarNavigation
- *   items={[
- *     { id: '1', icon: faHome, label: 'Home', onClick: () => {} },
- *     { id: '2', icon: faFolder, label: 'Projects', onClick: () => {} },
- *   ]}
- *   activeId="1"
  *   logo={<img src="/logo.svg" alt="Logo" />}
+ *   navItems={[
+ *     { label: 'Dashboard', href: '/dashboard', active: true },
+ *     { label: 'Settings', href: '/settings' },
+ *   ]}
+ *   footerActions={<Button>Action</Button>}
+ *   userSection={<UserInfo name="John Doe" />}
  * />
  * ```
  */
 export function SidebarNavigation({
-  items,
-  activeId,
   logo,
-  footer,
-  width = 246,
-  className = '',
-  style,
-  ...props
+  navItems,
+  footerActions,
+  userSection,
+  width = '260px',
 }: SidebarNavigationProps) {
-  const combinedStyles: CSSProperties = {
-    ...sidebarStyles,
-    width: `${width}px`,
-    ...style,
-  };
-
   return (
-    <nav
-      className={className || undefined}
-      style={combinedStyles}
-      aria-label="Sidebar navigation"
-      {...props}
-    >
-      {/* Top section: Logo + Nav items */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
-        {/* Logo */}
-        {logo && (
-          <div style={{ width: '140px', overflow: 'hidden' }}>
-            {logo}
-          </div>
-        )}
+    <aside style={{ ...containerStyles, width }}>
+      {/* Logo Section */}
+      <div style={logoSectionStyles}>{logo}</div>
 
-        {/* Navigation items */}
-        <nav aria-label="Main navigation" style={{ display: 'flex', flexDirection: 'column' }}>
-          {items.map((item) => (
-            <SidebarNavItem
-              key={item.id}
-              icon={item.icon}
-              label={item.label}
-              active={item.id === activeId}
-              onClick={item.onClick}
-            />
-          ))}
-        </nav>
-      </div>
+      {/* Navigation */}
+      <nav style={navSectionStyles}>
+        {navItems.map((item) => (
+          <a
+            key={item.href}
+            href={item.href}
+            style={{
+              ...navItemBaseStyles,
+              ...(item.active ? navItemActiveStyles : {}),
+            }}
+          >
+            {item.icon ? (
+              item.icon
+            ) : (
+              <span style={indicatorStyles(item.active || false)} />
+            )}
+            {item.label}
+          </a>
+        ))}
+      </nav>
 
-      {/* Footer section */}
-      {footer && (
-        <div style={{ paddingRight: 'var(--_space---lg)' }}>
-          {footer}
-        </div>
-      )}
-    </nav>
-  );
-}
+      {/* Footer Actions */}
+      {footerActions && <div style={footerSectionStyles}>{footerActions}</div>}
 
-// ─── SidebarNavItem ────────────────────────────────────────────────
-
-/**
- * Navigation item props
- */
-export interface SidebarNavItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Font Awesome icon */
-  icon: IconDefinition;
-  /** Display label */
-  label: string;
-  /** Active state */
-  active?: boolean;
-}
-
-/**
- * Base navigation item styles using BDS tokens
- *
- * Token reference:
- * - --_color---background--primary (item background)
- * - --_color---text--primary (text color)
- * - --_space---gap--md = 8px (gap between icon and text)
- * - --_space---md = 8px (vertical padding - 24px total with Spacious mode)
- * - --_typography---font-family--icon (icon font)
- * - --_typography---icon--small (icon size)
- * - --_typography---font-family--label (label font)
- * - --_typography---label--md-base (label size)
- */
-const navItemStyles: CSSProperties = {
-  backgroundColor: 'var(--_color---background--primary)',
-  color: 'var(--_color---text--primary)',
-  display: 'flex',
-  alignItems: 'center',
-  gap: 'var(--_space---gap--md)',
-  paddingTop: 'var(--_space---md)',
-  paddingBottom: 'var(--_space---md)',
-  paddingLeft: 0,
-  paddingRight: 0,
-  border: 'none',
-  borderRight: '3px solid transparent',
-  width: '100%',
-  textAlign: 'left',
-  cursor: 'pointer',
-  transition: 'all 0.2s ease',
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--md-base)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-};
-
-/**
- * Active state styles using BDS tokens
- *
- * Token reference:
- * - --_color---text--brand (brand text color)
- * - --_color---border--brand (brand border color)
- */
-const navItemActiveStyles: CSSProperties = {
-  color: 'var(--_color---text--brand)',
-  borderRightColor: 'var(--_color---border--brand)',
-};
-
-/**
- * Icon wrapper styles
- *
- * Token reference:
- * - --_typography---icon--small (icon size)
- */
-const iconStyles: CSSProperties = {
-  fontSize: 'var(--_typography---icon--small)',
-  width: '14px',
-  textAlign: 'center',
-  flexShrink: 0,
-};
-
-/**
- * SidebarNavItem - Individual navigation item
- *
- * Displays an icon and label, with active state indicated by brand color
- * border on the right and brand-colored text.
- *
- * @example
- * ```tsx
- * <SidebarNavItem
- *   icon={faHome}
- *   label="Home"
- *   active={true}
- *   onClick={() => console.log('clicked')}
- * />
- * ```
- */
-export function SidebarNavItem({
-  icon,
-  label,
-  active = false,
-  className = '',
-  style,
-  ...props
-}: SidebarNavItemProps) {
-  const combinedStyles: CSSProperties = {
-    ...navItemStyles,
-    ...(active ? navItemActiveStyles : {}),
-    ...style,
-  };
-
-  return (
-    <button
-      type="button"
-      className={className || undefined}
-      style={combinedStyles}
-      aria-current={active ? 'page' : undefined}
-      {...props}
-    >
-      <span style={iconStyles}>
-        <FontAwesomeIcon icon={icon} />
-      </span>
-      <span>{label}</span>
-    </button>
+      {/* User Section */}
+      {userSection && <div style={userSectionStyles}>{userSection}</div>}
+    </aside>
   );
 }
 
