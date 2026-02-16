@@ -65,13 +65,13 @@ function parseWebflowCSS() {
     parseVariablesFromBlock(rootContent, result);
   }
 
-  // Extract theme class definitions
-  const themeClassRegex = /\.body\.theme-(\d+)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/g;
+  // Extract theme class definitions (both numeric and named themes)
+  const themeClassRegex = /\.body\.theme-([\w-]+)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/g;
   let match;
   while ((match = themeClassRegex.exec(css)) !== null) {
-    const themeNum = match[1];
+    const themeName = match[1];
     const themeContent = match[2];
-    result.themeClasses[`theme-${themeNum}`] = parseThemeVariables(themeContent);
+    result.themeClasses[`theme-${themeName}`] = parseThemeVariables(themeContent);
   }
 
   return result;
@@ -381,6 +381,7 @@ function generateThemesCSS(tokens) {
     'theme-6': 'Blue-Orange',
     'theme-7': 'Neon',
     'theme-8': 'Vibrant',
+    'theme-brik': 'Brik Designs Brand',
   };
 
   for (const [themeClass, vars] of Object.entries(tokens.themeClasses)) {
@@ -493,7 +494,7 @@ function generateTypeScript(tokens) {
  */
 
 /**
- * Available theme numbers (maps to .theme-X classes)
+ * Available theme identifiers (maps to .theme-X classes)
  * - theme-1: Blue-Green (Default Light)
  * - theme-2: Yellow-Orange (Dark)
  * - theme-3: Peach-Brown
@@ -502,6 +503,7 @@ function generateTypeScript(tokens) {
  * - theme-6: Blue-Orange
  * - theme-7: Neon
  * - theme-8: Vibrant
+ * - theme-brik: Brik Designs Brand
  */
 export type ThemeNumber = ${themeNumbers.map(n => `'${n}'`).join(' | ')};
 
@@ -560,6 +562,7 @@ export const themeMetadata: Record<ThemeNumber, { name: string; description: str
   '6': { name: 'Blue-Orange', description: 'Complementary contrast', isDark: false },
   '7': { name: 'Neon', description: 'Vibrant neon colors', isDark: true },
   '8': { name: 'Vibrant', description: 'Bold saturated colors', isDark: false },
+  'brik': { name: 'Brik Designs', description: 'Company brand theme — poppy red, near-black, tan', isDark: false },
 };
 
 /**

@@ -75,6 +75,7 @@ const preview: Preview = {
           { value: '6', title: '6: Pastel (Geist)' },
           { value: '7', title: '7: Yellow-Brown (Lato)' },
           { value: '8', title: '8: Vibrant (Playfair)' },
+          { value: 'brik', title: 'Brik: Brik Designs Brand' },
         ],
         dynamicTitle: true,
       },

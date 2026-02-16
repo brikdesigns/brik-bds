@@ -7908,3 +7908,85 @@ figcaption {
   font-style: normal;
   font-display: swap;
 }
+/* ============================================= */
+/*          THEME-BRIK: Brik Designs Brand      */
+/* ============================================= */
+/* Company brand theme (NOT a web template theme) */
+/* Source: brikdesigns.com + figma-variables.json theme.brik */
+/* Colors: Poppy red (#e35335), near-black (#1b1b1b), tan (#f1f0ec) */
+/* Typography: Poppins for all roles */
+/* ============================================= */
+
+.body.theme-brik {
+  /* Typography — Poppins for all roles */
+  --_typography---font-family--body: Poppins, sans-serif;
+  --_typography---font-family--label: Poppins, sans-serif;
+  --_typography---font-family--heading: Poppins, sans-serif;
+  --_typography---font-family--display: Poppins, sans-serif;
+
+  /* Spacing — Base mode (not spacious) */
+  --_space---none: var(--space--0);
+  --_space---tiny: var(--space--100);
+  --_space---sm: var(--space--150);
+  --_space---md: var(--space--200);
+  --_space---lg: var(--space--400);
+  --_space---xl: var(--space--600);
+  --_space---xxl: var(--space--800);
+  --_space---huge: var(--space--1000);
+  --_space---gap--none: var(--space--0);
+  --_space---gap--tiny: var(--space--50);
+  --_space---gap--sm: var(--space--100);
+  --_space---gap--md: var(--space--200);
+  --_space---gap--lg: var(--space--400);
+  --_space---gap--xl: var(--space--500);
+  --_space---gap--xxl: var(--space--600);
+  --_space---gap--huge: var(--space--1200);
+  --_space---button: var(--space--200);
+  --_space---input: var(--space--200);
+
+  /* Page */
+  --_color---page--primary: var(--grayscale--white);
+  --_color---page--secondary: var(--grayscale--lightest);
+  --_color---page--accent: #f1f0ec; /* tan */
+  --_color---page--brand: #e35335; /* poppy red */
+
+  /* Text */
+  --_color---text--primary: var(--grayscale--darkest);
+  --_color---text--secondary: var(--grayscale--dark);
+  --_color---text--muted: var(--grayscale--light);
+  --_color---text--inverse: var(--grayscale--white);
+  --_color---text--brand: #e35335; /* poppy red */
+
+  /* Surface */
+  --_color---surface--primary: var(--grayscale--white);
+  --_color---surface--secondary: var(--grayscale--lightest);
+  --_color---surface--brand-primary: #e35335; /* poppy red */
+  --_color---surface--brand-secondary: #f1f0ec; /* tan */
+  --_color---surface--nav: var(--grayscale--white);
+
+  /* Background */
+  --_color---background--brand-primary: #e35335; /* poppy red */
+  --_color---background--brand-secondary: #f1f0ec; /* tan */
+  --_color---background--primary: var(--grayscale--white);
+  --_color---background--secondary: var(--grayscale--lightest);
+  --_color---background--inverse: var(--grayscale--darkest);
+  --_color---background--input: var(--grayscale--white);
+  --_color---background--image: #17171799;
+  --_color---background--image-brand: #e35335; /* poppy red */
+
+  /* Border */
+  --_color---border--primary: var(--grayscale--darkest);
+  --_color---border--secondary: var(--grayscale--lighter);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--brand: #e35335; /* poppy red */
+  --_color---border--input: var(--grayscale--light);
+  --_color---border--inverse: var(--grayscale--white);
+  --_color---border--on-color: white;
+
+  /* Theme palette (for cards, accents, etc.) */
+  --_color---theme--primary: #e35335; /* poppy red */
+  --_color---theme--secondary: #f1f0ec; /* tan */
+  --_color---theme--accent: #f4d364; /* yellow */
+  --_color---theme--tertiary: #9ada6c; /* green */
+  --_color---theme--fourth: #8ebbcc; /* blue */
+}
