@@ -131,10 +131,10 @@ export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
  *
  * Token reference:
  * - --_color---background--secondary (hover + striped background)
- * - --_color---border--secondary (bottom border)
+ * - --_color---border--muted (subtle bottom border)
  */
 const rowBaseStyles: CSSProperties = {
-  borderBottom: 'var(--_border-width---sm) solid var(--_color---border--secondary)',
+  borderBottom: 'var(--_border-width---sm) solid var(--_color---border--muted)',
 };
 
 const rowSelectedStyles: CSSProperties = {
@@ -184,7 +184,7 @@ export interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
  * - --_typography---font-family--label (label font)
  * - --_typography---label--sm (label size)
  * - --_color---text--muted (muted text)
- * - --_color---border--secondary (bottom border)
+ * - --_color---border--muted (subtle bottom border)
  * - --_color---background--secondary (header background)
  */
 const headStyles: CSSProperties = {
@@ -194,7 +194,7 @@ const headStyles: CSSProperties = {
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   color: 'var(--_color---text--muted)',
   textAlign: 'left',
-  borderBottom: 'var(--_border-width---md) solid var(--_color---border--secondary)',
+  borderBottom: 'var(--_border-width---md) solid var(--_color---border--muted)',
   backgroundColor: 'var(--_color---background--secondary)',
   whiteSpace: 'nowrap',
 };

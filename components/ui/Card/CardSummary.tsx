@@ -50,12 +50,12 @@ function formatValue(value: string | number, type: CardSummaryType): string {
  *
  * Token reference (from brik-bds.webflow.css):
  * - --_color---surface--primary (card background)
- * - --_color---border--primary (card border color)
+ * - --_color---border--muted (subtle card border)
  * - --_border-width---lg = 1px (visible border)
  */
 const containerStyles: CSSProperties = {
   backgroundColor: 'var(--_color---surface--primary)',
-  border: 'var(--_border-width---lg) solid var(--_color---border--primary)',
+  border: 'var(--_border-width---lg) solid var(--_color---border--muted)',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'stretch',
