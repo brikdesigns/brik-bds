@@ -5,10 +5,10 @@
  * DO NOT EDIT — re-run: npm run extract-tokens
  *
  * Source: updates/brik-bds.webflow/css/brik-bds.webflow.css
+ *
+ * Note: Poppins (brand font) is loaded via preview-head.html in Storybook
+ *       to ensure it's available before CSS is applied.
  */
-
-/* Poppins — Brand font (Google Fonts) */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
 
 @font-face {
   font-family: Lato;
