@@ -49,7 +49,7 @@ function ThemeWrapper({
  * and adds toolbar controls for theme switching
  */
 const withTheme: Decorator = (Story, context) => {
-  const themeNumber = (context.globals.themeNumber || '1') as ThemeNumber;
+  const themeNumber = (context.globals.themeNumber || 'brik') as ThemeNumber;
 
   return (
     <ThemeWrapper themeNumber={themeNumber}>
@@ -63,10 +63,11 @@ const preview: Preview = {
     themeNumber: {
       name: 'Theme',
       description: 'BDS theme (bundled color, typography, spacing)',
-      defaultValue: '1',
+      defaultValue: 'brik',
       toolbar: {
         icon: 'paintbrush',
         items: [
+          { value: 'brik', title: 'Brik: Brik Designs Brand (Default)' },
           { value: '1', title: '1: Spacious (Playfair)' },
           { value: '2', title: '2: Yellow-Orange (Dark)' },
           { value: '3', title: '3: Blue-Green (Light)' },
@@ -75,7 +76,6 @@ const preview: Preview = {
           { value: '6', title: '6: Pastel (Geist)' },
           { value: '7', title: '7: Yellow-Brown (Lato)' },
           { value: '8', title: '8: Vibrant (Playfair)' },
-          { value: 'brik', title: 'Brik: Brik Designs Brand' },
         ],
         dynamicTitle: true,
       },
