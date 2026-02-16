@@ -110,11 +110,24 @@ async function syncAllFigmaVariables() {
     console.log(`✅ Successfully processed: ${fileName}`);
   }
 
+  // Validate that we actually got tokens (catches silent API failures)
+  const tokenCount = Object.keys(allTokens).length;
+  if (tokenCount === 0) {
+    console.error('\n❌ SYNC FAILED: No tokens were fetched from any Figma file.');
+    console.error('   This usually means the FIGMA_ACCESS_TOKEN is missing the');
+    console.error('   "file_variables:read" scope. Generate a new token at:');
+    console.error('   https://www.figma.com/developers/api#access-tokens');
+    process.exit(1);
+  }
+
   fs.writeFileSync(path.join(outputDir, 'tokens.json'), JSON.stringify(allTokens, null, 2));
   fs.writeFileSync(path.join(outputDir, 'metadata.json'), JSON.stringify(metadata, null, 2));
 
   console.log('\n✅ Figma variables synced successfully!');
-  console.log(`📁 Processed ${FIGMA_FILE_KEYS.length} files`);
+  console.log(`📁 Processed ${FIGMA_FILE_KEYS.length} files (${tokenCount} top-level token groups)`);
 }
 
-syncAllFigmaVariables(); 
+syncAllFigmaVariables().catch((err) => {
+  console.error('❌ Sync failed:', err.message);
+  process.exit(1);
+});

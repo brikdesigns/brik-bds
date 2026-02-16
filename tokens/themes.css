@@ -3,7 +3,7 @@
 /* ============================================= */
 /* Auto-generated from Webflow design tokens     */
 /* Source: brik-bds.webflow.css                  */
-/* Generated: 2026-02-02T18:59:47.907Z        */
+/* Generated: 2026-02-16T02:08:27.193Z        */
 /* DO NOT EDIT DIRECTLY - Run: node build.js    */
 /* ============================================= */
 
@@ -75,6 +75,8 @@
   --color-text-muted: var(--grayscale--dark);
   --color-surface-brand-primary: var(--themes--vibrant--green);
   --color-border-input: var(--grayscale--light);
+  --color-border-muted: var(--grayscale--lighter);
+  --color-border-on-color: white;
   --color-surface-brand-secondary: var(--themes--vibrant--purple);
   --color-text-secondary: var(--grayscale--darker);
   --color-background-secondary: var(--grayscale--lightest);
@@ -181,6 +183,8 @@
   --color-text-muted: var(--grayscale--dark);
   --color-surface-brand-primary: var(--themes--yellow-orange--yellow);
   --color-border-input: var(--grayscale--dark);
+  --color-border-muted: var(--grayscale--darker);
+  --color-border-on-color: var(--grayscale--darkest);
   --color-surface-brand-secondary: var(--themes--yellow-orange--orange);
   --color-text-secondary: var(--grayscale--light);
   --color-background-secondary: var(--grayscale--black);
@@ -246,6 +250,8 @@
   --color-text-muted: var(--grayscale--dark);
   --color-surface-brand-primary: var(--themes--blue-green--blue-light);
   --color-border-input: var(--grayscale--light);
+  --color-border-muted: var(--grayscale--lighter);
+  --color-border-on-color: white;
   --color-surface-brand-secondary: var(--themes--blue-green--green);
   --color-text-secondary: var(--grayscale--darker);
   --color-background-secondary: var(--grayscale--lightest);
@@ -311,6 +317,8 @@
   --color-text-muted: var(--grayscale--dark);
   --color-surface-brand-primary: var(--themes--yellow-orange--yellow);
   --color-border-input: var(--grayscale--light);
+  --color-border-muted: var(--grayscale--lighter);
+  --color-border-on-color: white;
   --color-surface-brand-secondary: var(--themes--yellow-orange--orange);
   --color-text-secondary: var(--grayscale--darker);
   --color-background-secondary: var(--grayscale--lightest);
@@ -376,6 +384,8 @@
   --color-text-muted: var(--grayscale--dark);
   --color-surface-brand-primary: var(--themes--peach-brown--peach);
   --color-border-input: var(--themes--peach-brown--peach-darkest);
+  --color-border-muted: var(--grayscale--darker);
+  --color-border-on-color: var(--grayscale--darkest);
   --color-surface-brand-secondary: var(--themes--peach-brown--peach-light);
   --color-text-secondary: var(--grayscale--darker);
   --color-background-secondary: var(--grayscale--lightest);
@@ -474,6 +484,8 @@
   --color-text-muted: var(--grayscale--dark);
   --color-surface-brand-primary: var(--themes--green-orange--yellow);
   --color-border-input: var(--grayscale--light);
+  --color-border-muted: var(--grayscale--lighter);
+  --color-border-on-color: white;
   --color-surface-brand-secondary: var(--themes--blue-green--green);
   --color-text-secondary: var(--grayscale--darker);
   --color-background-secondary: var(--grayscale--lightest);

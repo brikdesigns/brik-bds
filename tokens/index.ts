@@ -3,7 +3,7 @@
  *
  * Auto-generated from Webflow design tokens
  * Source: brik-bds.webflow.css
- * Generated: 2026-02-02T18:59:47.909Z
+ * Generated: 2026-02-16T02:08:27.195Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
@@ -65,17 +65,16 @@ export const defaultTheme: BDSThemeConfig = {
 
 /**
  * Theme metadata for UI display
- * Based on actual Webflow CSS theme definitions
  */
 export const themeMetadata: Record<ThemeNumber, { name: string; description: string; isDark: boolean }> = {
-  '1': { name: 'Spacious', description: 'Spacious layout with Playfair Display font', isDark: false },
-  '2': { name: 'Yellow-Orange Dark', description: 'Dark theme with yellow/orange accents', isDark: true },
-  '3': { name: 'Blue-Green', description: 'Light theme with blue/green brand colors', isDark: false },
-  '4': { name: 'Yellow-Orange Light', description: 'Light theme with yellow/orange accents', isDark: false },
-  '5': { name: 'Peach-Brown', description: 'Warm peach and brown tones', isDark: false },
-  '6': { name: 'Pastel', description: 'Soft pastel colors with Geist font', isDark: false },
-  '7': { name: 'Yellow-Brown', description: 'Golden warm tones with Lato font', isDark: false },
-  '8': { name: 'Vibrant', description: 'Vibrant green colors with Playfair Display', isDark: false },
+  '1': { name: 'Blue-Green', description: 'Default light theme with blue/green accents', isDark: false },
+  '2': { name: 'Yellow-Orange', description: 'Dark theme with yellow/orange accents', isDark: true },
+  '3': { name: 'Peach-Brown', description: 'Warm earthy tones', isDark: false },
+  '4': { name: 'Yellow-Brown', description: 'Golden warm tones', isDark: false },
+  '5': { name: 'Green-Orange', description: 'Nature-inspired palette', isDark: false },
+  '6': { name: 'Blue-Orange', description: 'Complementary contrast', isDark: false },
+  '7': { name: 'Neon', description: 'Vibrant neon colors', isDark: true },
+  '8': { name: 'Vibrant', description: 'Bold saturated colors', isDark: false },
 };
 
 /**
@@ -414,6 +413,8 @@ export const semanticColors = {
   "text--muted": "var(--grayscale--dark)",
   "surface--brand-primary": "var(--_themes---blue-green--blue-light)",
   "border--input": "var(--grayscale--light)",
+  "border--muted": "var(--grayscale--lighter)",
+  "border--on-color": "white",
   "surface--brand-secondary": "var(--_themes---blue-green--green)",
   "text--secondary": "var(--grayscale--darker)",
   "background--secondary": "var(--grayscale--lightest)",
