@@ -3,7 +3,7 @@ import { type HTMLAttributes, type CSSProperties } from 'react';
 /**
  * Counter status variants
  */
-export type CounterStatus = 'success' | 'error' | 'warning' | 'neutral' | 'progress';
+export type CounterStatus = 'success' | 'error' | 'warning' | 'neutral' | 'progress' | 'brand';
 
 /**
  * Counter size variants
@@ -33,6 +33,8 @@ export interface CounterProps extends HTMLAttributes<HTMLSpanElement> {
  * - --system--yellow = #f2c94c (warning)
  * - --system--blue = #2f80ed (progress)
  * - --grayscale--lighter = #e0e0e0 (neutral)
+ * - --_color---background--brand-primary (brand background)
+ * - --_color---text--inverse (on-color text)
  */
 const statusStyles: Record<CounterStatus, CSSProperties> = {
   success: {
@@ -53,6 +55,10 @@ const statusStyles: Record<CounterStatus, CSSProperties> = {
   },
   progress: {
     backgroundColor: 'var(--system--blue)',
+    color: 'var(--_color---text--inverse)',
+  },
+  brand: {
+    backgroundColor: 'var(--_color---background--brand-primary)',
     color: 'var(--_color---text--inverse)',
   },
 };
