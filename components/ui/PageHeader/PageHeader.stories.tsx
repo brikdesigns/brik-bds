@@ -17,16 +17,6 @@ const meta: Meta<typeof PageHeader> = {
     title: { control: 'text' },
     subtitle: { control: 'text' },
   },
-  decorators: [
-    (Story) => (
-      <div style={{
-        backgroundColor: 'var(--_color---background--brand-primary)',
-        minHeight: 200,
-      }}>
-        <Story />
-      </div>
-    ),
-  ],
 };
 
 export default meta;
@@ -65,7 +55,8 @@ const sampleTabs = [
 // ─── Default (Tabbed) ────────────────────────────────────────────
 
 /**
- * Default page header composing Breadcrumb, Button, and TabBar components
+ * Default page header composing Breadcrumb, Button, and TabBar components.
+ * No background — the component is transparent per the Figma spec.
  */
 export const Default: Story = {
   parameters: {
@@ -325,48 +316,4 @@ export const TabsOnly: Story = {
       />
     ),
   },
-};
-
-// ─── On Light Background ─────────────────────────────────────────
-
-/**
- * Page header on a light background — override title color for visibility
- */
-export const OnLightBackground: Story = {
-  decorators: [
-    (Story) => (
-      <div style={{ backgroundColor: 'var(--_color---surface--primary)' }}>
-        <Story />
-      </div>
-    ),
-  ],
-  parameters: {
-    docs: {
-      source: {
-        code: `<PageHeader
-  title="My Account"
-  subtitle="Manage your membership plan."
-  style={{ color: 'var(--_color---text--primary)' }}
-  breadcrumbs={<Breadcrumb items={[...]} />}
-  actions={<Button variant="primary">Save</Button>}
-  tabs={<TabBar items={[...]} />}
-/>`,
-      },
-    },
-  },
-  render: () => (
-    <PageHeader
-      title="My Account"
-      subtitle="Manage your membership plan."
-      style={{ color: 'var(--_color---text--primary)' }}
-      breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
-      actions={
-        <>
-          <Button variant="primary">Primary Button</Button>
-          <Button variant="secondary">Secondary Button</Button>
-        </>
-      }
-      tabs={<TabBar items={sampleTabs} />}
-    />
-  ),
 };
