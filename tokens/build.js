@@ -650,6 +650,82 @@ export const semanticTypography = ${JSON.stringify(tokens.semantic.typography, n
 }
 
 // ============================================
+// TOKEN VALIDATION
+// ============================================
+
+/**
+ * Required semantic color tokens.
+ * If any of these are missing from the parsed CSS, the build warns.
+ * This catches drift between Figma exports and the Webflow CSS source.
+ */
+const REQUIRED_SEMANTIC_COLORS = [
+  // Page (page--accent and system--link are portal-level brand tokens, not BDS)
+  'page--primary', 'page--secondary',
+  // Text
+  'text--primary', 'text--secondary', 'text--muted', 'text--inverse', 'text--brand',
+  // Surface
+  'surface--primary', 'surface--secondary', 'surface--brand-primary',
+  // Background
+  'background--brand-primary', 'background--primary', 'background--secondary',
+  'background--inverse', 'background--input',
+  // Border
+  'border--primary', 'border--secondary', 'border--muted', 'border--brand',
+  'border--input', 'border--inverse', 'border--on-color',
+];
+
+const REQUIRED_SEMANTIC_TYPOGRAPHY = [
+  'font-family--body', 'font-family--heading', 'font-family--label',
+  'body--sm', 'body--md-base', 'body--lg',
+  'heading--small', 'heading--medium', 'heading--large',
+];
+
+function validateTokens(tokens) {
+  let warnings = 0;
+
+  console.log('\n🔎 Validating required tokens...');
+
+  // Check semantic colors
+  for (const token of REQUIRED_SEMANTIC_COLORS) {
+    if (!(token in tokens.semantic.color)) {
+      console.log(`   ⚠️  MISSING semantic color: --_color---${token}`);
+      warnings++;
+    }
+  }
+
+  // Check semantic typography
+  for (const token of REQUIRED_SEMANTIC_TYPOGRAPHY) {
+    if (!(token in tokens.semantic.typography)) {
+      console.log(`   ⚠️  MISSING semantic typography: --_typography---${token}`);
+      warnings++;
+    }
+  }
+
+  // Check theme count
+  const themeCount = Object.keys(tokens.themeClasses).length;
+  if (themeCount < 8) {
+    console.log(`   ⚠️  Expected 8 theme classes, found ${themeCount}`);
+    warnings++;
+  }
+
+  // Check themes that define border--input also define border--muted
+  // (themes inheriting everything from :root don't need to redeclare)
+  for (const [themeClass, vars] of Object.entries(tokens.themeClasses)) {
+    if ('_color---border--input' in vars && !('_color---border--muted' in vars)) {
+      console.log(`   ⚠️  ${themeClass} has border--input but missing border--muted`);
+      warnings++;
+    }
+  }
+
+  if (warnings === 0) {
+    console.log('   ✅ All required tokens present');
+  } else {
+    console.log(`\n   ⚠️  ${warnings} validation warning(s) — check Webflow CSS source`);
+  }
+
+  return warnings;
+}
+
+// ============================================
 // MAIN BUILD
 // ============================================
 
@@ -665,6 +741,9 @@ console.log(`   ✅ Found ${Object.keys(tokens.primitives.themes).length} theme 
 console.log(`   ✅ Found ${Object.keys(tokens.primitives.space).length} space scale values`);
 console.log(`   ✅ Found ${Object.keys(tokens.semantic.color).length} semantic color tokens`);
 console.log(`   ✅ Found ${Object.keys(tokens.semantic.typography).length} semantic typography tokens`);
+
+// Validate parsed tokens against expected set
+const validationWarnings = validateTokens(tokens);
 
 // Generate variables.css
 console.log('\n📦 Generating variables.css...');

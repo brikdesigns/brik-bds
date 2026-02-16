@@ -3,7 +3,7 @@
 /* ============================================= */
 /* Auto-generated from Webflow design tokens     */
 /* Source: brik-bds.webflow.css                  */
-/* Generated: 2026-02-02T18:59:47.904Z        */
+/* Generated: 2026-02-16T02:08:27.191Z        */
 /* DO NOT EDIT DIRECTLY - Run: node build.js    */
 /* ============================================= */
 
@@ -288,6 +288,8 @@
   --color-text-muted: var(--grayscale--dark);
   --color-surface-brand-primary: var(--themes--blue-green--blue-light);
   --color-border-input: var(--grayscale--light);
+  --color-border-muted: var(--grayscale--lighter);
+  --color-border-on-color: white;
   --color-surface-brand-secondary: var(--themes--blue-green--green);
   --color-text-secondary: var(--grayscale--darker);
   --color-background-secondary: var(--grayscale--lightest);
