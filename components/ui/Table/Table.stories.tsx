@@ -29,6 +29,11 @@ const meta: Meta<typeof Table> = {
   },
   argTypes: {
     striped: { control: 'boolean' },
+    size: {
+      control: 'select',
+      options: ['default', 'comfortable'],
+      description: 'Cell size variant',
+    },
   },
 };
 
@@ -151,6 +156,109 @@ export const Default: Story = {
         ))}
       </TableBody>
     </Table>
+  ),
+};
+
+// ─── Cell Size Variants ──────────────────────────────────────────
+
+/**
+ * Cell size comparison — default (6px vertical padding) vs comfortable (24px vertical padding = 72px height)
+ */
+export const CellSizeVariants: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `{/* Default size (6px vertical padding) */}
+<Table size="default">
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Role</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Alice Chen</TableCell>
+      <TableCell>alice@example.com</TableCell>
+      <TableCell>Admin</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+{/* Comfortable size (24px vertical padding = 72px cell height) */}
+<Table size="comfortable">
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Role</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Alice Chen</TableCell>
+      <TableCell>alice@example.com</TableCell>
+      <TableCell>Admin</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>`,
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---xl)' }}>
+      <div>
+        <h3 style={{ marginBottom: 'var(--_space---md)', fontSize: 'var(--_typography---body--lg)', fontWeight: 'var(--font-weight--semi-bold)' as unknown as number }}>
+          Default Size
+        </h3>
+        <Table size="default">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Department</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.slice(0, 3).map((user) => (
+              <TableRow key={user.email}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>Engineering</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 'var(--_space---md)', fontSize: 'var(--_typography---body--lg)', fontWeight: 'var(--font-weight--semi-bold)' as unknown as number }}>
+          Comfortable Size (72px cell height)
+        </h3>
+        <Table size="comfortable">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Department</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.slice(0, 3).map((user) => (
+              <TableRow key={user.email}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>Engineering</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   ),
 };
 
