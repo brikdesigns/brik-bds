@@ -80,9 +80,13 @@ const iconSizeMap: Record<TagSize, CSSProperties> = {
  *
  * Token reference:
  * - --_color---background--secondary (subtle gray background)
- * - --_color---text--inverse (white text on gray bg — matches Figma)
+ * - --_color---text--primary (theme-aware text — dark in light mode, light in dark mode)
  * - --_typography---font-family--label (label font)
  * - --font-weight--semi-bold = 600
+ *
+ * Text color follows Badge pattern:
+ * - text-primary for light backgrounds (provides proper contrast)
+ * - text-inverse for saturated backgrounds (used in Badge for colored backgrounds)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
@@ -91,7 +95,7 @@ const baseStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   lineHeight: 1,
-  color: 'var(--_color---text--inverse)',
+  color: 'var(--_color---text--primary)',
   backgroundColor: 'var(--_color---background--secondary)',
   textDecoration: 'none',
   whiteSpace: 'nowrap',
