@@ -1,28 +1,6 @@
 import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
 
 /**
- * Breadcrumb item
- */
-export interface BreadcrumbItem {
-  /** Display label */
-  label: string;
-  /** Link href — omit for current (non-clickable) page */
-  href?: string;
-}
-
-/**
- * Tab item
- */
-export interface TabItem {
-  /** Tab label */
-  label: string;
-  /** Whether this tab is currently active */
-  active?: boolean;
-  /** Click handler */
-  onClick?: () => void;
-}
-
-/**
  * Metadata key-value item
  */
 export interface MetadataItem {
@@ -34,18 +12,24 @@ export interface MetadataItem {
 
 /**
  * PageHeader component props
+ *
+ * Composable page header that accepts BDS components as children:
+ * - breadcrumbs: pass a <Breadcrumb> component
+ * - actions: pass <Button> components
+ * - tabs: pass a <TabBar> component
+ * - metadata: data array rendered as key-value grid
  */
 export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Page title (heading) */
   title: string;
   /** Optional subtitle/description beneath title */
   subtitle?: string;
-  /** Breadcrumb navigation trail */
-  breadcrumbs?: BreadcrumbItem[];
-  /** Action buttons rendered on the right */
+  /** Breadcrumb navigation — pass a <Breadcrumb> component */
+  breadcrumbs?: ReactNode;
+  /** Action buttons — pass <Button> components */
   actions?: ReactNode;
-  /** Tab bar items — renders horizontal tab navigation */
-  tabs?: TabItem[];
+  /** Tab navigation — pass a <TabBar> component */
+  tabs?: ReactNode;
   /** Metadata key-value pairs — renders below title with border separator */
   metadata?: MetadataItem[];
 }
@@ -67,46 +51,6 @@ const containerStyles: CSSProperties = {
   justifyContent: 'center',
   padding: 'var(--_space---xl) 80px',
   width: '100%',
-};
-
-/**
- * Breadcrumb styles
- *
- * Token reference:
- * - --_typography---font-family--label (label font)
- * - --_typography---label--sm = 14px
- * - --_color---text--brand (active breadcrumb link)
- * - --_color---text--muted (separator + current page)
- * - --_space---gap--md = 16px (gap between items)
- */
-const breadcrumbWrapperStyles: CSSProperties = {
-  display: 'flex',
-  gap: 'var(--_space---gap--md)',
-  alignItems: 'center',
-};
-
-const breadcrumbLinkStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 1,
-  color: 'var(--_color---text--brand)',
-  textDecoration: 'none',
-  cursor: 'pointer',
-};
-
-const breadcrumbCurrentStyles: CSSProperties = {
-  ...breadcrumbLinkStyles,
-  color: 'var(--_color---text--muted)',
-  cursor: 'default',
-};
-
-const breadcrumbSeparatorStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--md-base)',
-  color: 'var(--_color---text--muted)',
-  lineHeight: 1,
-  padding: '0 var(--_space---tiny)',
 };
 
 /**
@@ -171,45 +115,6 @@ const buttonWrapperStyles: CSSProperties = {
 };
 
 /**
- * Tab bar styles
- *
- * Token reference:
- * - --_typography---font-family--label (label font)
- * - --_typography---label--md-base = 16px
- * - --_color---text--brand (active tab)
- * - --_color---text--secondary (inactive tab)
- * - --_space---gap--lg = 24px (gap between tabs)
- */
-const tabBarStyles: CSSProperties = {
-  display: 'flex',
-  gap: 'var(--_space---gap--lg)',
-  alignItems: 'center',
-  width: '100%',
-};
-
-const tabBaseStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--md-base)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 1,
-  textAlign: 'center',
-  cursor: 'pointer',
-  background: 'none',
-  border: 'none',
-  padding: 0,
-};
-
-const tabActiveStyles: CSSProperties = {
-  ...tabBaseStyles,
-  color: 'var(--_color---text--brand)',
-};
-
-const tabInactiveStyles: CSSProperties = {
-  ...tabBaseStyles,
-  color: 'var(--_color---text--secondary)',
-};
-
-/**
  * Metadata styles
  *
  * Token reference:
@@ -266,43 +171,47 @@ const metadataValueStyles: CSSProperties = {
 };
 
 /**
- * PageHeader - BDS themed page header component
+ * PageHeader — BDS composable page header
  *
- * Flexible page-level header with breadcrumbs, title/subtitle,
- * action buttons, tab navigation, and metadata sections.
- * Designed for dark backgrounds (title uses inverse/white text).
+ * Flexible page-level header that composes BDS components:
+ * - **Breadcrumb** for navigation trail
+ * - **Button** for action buttons
+ * - **TabBar** for tab navigation
+ * - Metadata grid for key-value pairs
  *
- * Two primary layouts from Figma:
+ * Designed for dark backgrounds with inverse (white) title text.
+ *
+ * Two primary layouts from Figma (node 26911-20720):
  * - **Tabbed**: breadcrumbs + title + actions + tab bar
- * - **With metadata**: breadcrumbs + title + actions + metadata key-value grid
+ * - **With metadata**: breadcrumbs + title + actions + metadata grid
  *
  * @example
  * ```tsx
- * // Tabbed variant
+ * import { PageHeader, Breadcrumb, TabBar, Button } from '@brik/bds';
+ *
  * <PageHeader
  *   title="My Account"
  *   subtitle="Manage your membership plan."
- *   breadcrumbs={[
- *     { label: 'Home', href: '/' },
- *     { label: 'Settings', href: '/settings' },
- *     { label: 'Account' },
- *   ]}
- *   actions={<Button variant="primary">Save</Button>}
- *   tabs={[
- *     { label: 'Overview', active: true },
- *     { label: 'Billing' },
- *     { label: 'Security' },
- *   ]}
- * />
- *
- * // Metadata variant
- * <PageHeader
- *   title="Brand Design"
- *   subtitle="Service details and billing info."
- *   metadata={[
- *     { label: 'Category', value: 'Brand Design' },
- *     { label: 'Billing', value: 'One-time' },
- *   ]}
+ *   breadcrumbs={
+ *     <Breadcrumb items={[
+ *       { label: 'Home', href: '/' },
+ *       { label: 'Settings', href: '/settings' },
+ *       { label: 'Account' },
+ *     ]} />
+ *   }
+ *   actions={
+ *     <>
+ *       <Button variant="primary">Save</Button>
+ *       <Button variant="secondary">Cancel</Button>
+ *     </>
+ *   }
+ *   tabs={
+ *     <TabBar items={[
+ *       { label: 'Overview', active: true },
+ *       { label: 'Billing' },
+ *       { label: 'Security' },
+ *     ]} />
+ *   }
  * />
  * ```
  */
@@ -323,28 +232,8 @@ export function PageHeader({
       style={{ ...containerStyles, ...style }}
       {...props}
     >
-      {/* Breadcrumbs */}
-      {breadcrumbs && breadcrumbs.length > 0 && (
-        <nav style={breadcrumbWrapperStyles} aria-label="Breadcrumb">
-          {breadcrumbs.map((crumb, i) => {
-            const isLast = i === breadcrumbs.length - 1;
-            return (
-              <span key={`${crumb.label}-${i}`} style={{ display: 'contents' }}>
-                {i > 0 && <span style={breadcrumbSeparatorStyles} aria-hidden="true">/</span>}
-                {isLast || !crumb.href ? (
-                  <span style={breadcrumbCurrentStyles} aria-current={isLast ? 'page' : undefined}>
-                    {crumb.label}
-                  </span>
-                ) : (
-                  <a href={crumb.href} style={breadcrumbLinkStyles}>
-                    {crumb.label}
-                  </a>
-                )}
-              </span>
-            );
-          })}
-        </nav>
-      )}
+      {/* Breadcrumbs — pass a <Breadcrumb> component */}
+      {breadcrumbs}
 
       {/* Title row: title/subtitle + actions */}
       <div style={innerPaddingStyles}>
@@ -355,23 +244,8 @@ export function PageHeader({
         {actions && <div style={buttonWrapperStyles}>{actions}</div>}
       </div>
 
-      {/* Tab bar */}
-      {tabs && tabs.length > 0 && (
-        <div style={tabBarStyles} role="tablist">
-          {tabs.map((tab) => (
-            <button
-              key={tab.label}
-              type="button"
-              role="tab"
-              aria-selected={tab.active || false}
-              style={tab.active ? tabActiveStyles : tabInactiveStyles}
-              onClick={tab.onClick}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Tab bar — pass a <TabBar> component */}
+      {tabs}
 
       {/* Metadata */}
       {metadata && metadata.length > 0 && (

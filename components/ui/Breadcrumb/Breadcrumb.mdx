@@ -1,0 +1,82 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Breadcrumb.stories';
+
+<Meta of={Stories} />
+
+# Breadcrumb
+
+Navigation breadcrumb trail showing the user's current location in a page hierarchy. Supports slash and chevron separator variants. The last item renders as the current page (muted, non-clickable).
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Slash separator (default)
+The standard slash `/` separator between breadcrumb items.
+<Canvas of={Stories.Default} />
+
+### Chevron separator
+Right-pointing chevron `›` separator for an alternative style.
+<Canvas of={Stories.ChevronSeparator} />
+
+### Deep nesting
+Multiple levels of breadcrumb hierarchy.
+<Canvas of={Stories.DeepNesting} />
+
+### Single item
+Current page only — renders as muted text with no links.
+<Canvas of={Stories.SingleItem} />
+
+### On dark background
+Breadcrumb on a dark brand background, as used inside PageHeader.
+<Canvas of={Stories.OnDarkBackground} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Breadcrumb } from '@brik/bds';
+
+// Standalone breadcrumb with slash separator
+<Breadcrumb
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'Design System' },
+  ]}
+/>
+
+// Chevron separator
+<Breadcrumb
+  separator="chevron"
+  items={[
+    { label: 'Dashboard', href: '/dashboard' },
+    { label: 'Settings', href: '/settings' },
+    { label: 'Account' },
+  ]}
+/>
+
+// Composed inside PageHeader
+<PageHeader
+  title="Design System"
+  breadcrumbs={
+    <Breadcrumb
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Products', href: '/products' },
+        { label: 'Design System' },
+      ]}
+    />
+  }
+/>
+```
+
+## Resources
+
+- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26432-15231)
+- [Design guidelines](#) — coming soon

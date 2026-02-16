@@ -3,13 +3,26 @@ import * as Stories from './PageHeader.stories';
 
 <Meta of={Stories} />
 
-# Page Header
+# Page header
 
-Flexible page-level header with breadcrumbs, title/subtitle, action buttons, tab navigation, and metadata sections. Designed for dark backgrounds with inverse (white) title text by default.
+Composable page-level header that brings together BDS components: Breadcrumb, Button, and TabBar. Designed for dark backgrounds with inverse (white) title text by default.
 
 ## Overview
 
 <Canvas of={Stories.Default} />
+
+## Composability
+
+PageHeader is built on the BDS Lego principle — it **composes** standalone components rather than reimplementing them:
+
+| Slot | BDS Component | Import |
+|------|---------------|--------|
+| `breadcrumbs` | `<Breadcrumb>` | `import { Breadcrumb } from '@brik/bds'` |
+| `actions` | `<Button>` | `import { Button } from '@brik/bds'` |
+| `tabs` | `<TabBar>` | `import { TabBar } from '@brik/bds'` |
+| `metadata` | Built-in | Key-value grid (data prop) |
+
+Each of these components can also be used **independently** outside of PageHeader.
 
 ## Variants
 
@@ -22,15 +35,15 @@ Title and description text.
 <Canvas of={Stories.WithSubtitle} />
 
 ### With breadcrumbs
-Breadcrumb navigation trail above the title. The last item renders as the current page (muted, non-clickable).
+Breadcrumb navigation trail above the title using the standalone Breadcrumb component.
 <Canvas of={Stories.WithBreadcrumbs} />
 
 ### With actions
-Action buttons aligned to the right of the title row.
+Action buttons aligned to the right of the title row using the Button component.
 <Canvas of={Stories.WithActions} />
 
 ### Tabbed
-Horizontal tab navigation beneath the title and actions.
+Horizontal tab navigation beneath the title using the TabBar component.
 <Canvas of={Stories.Default} />
 
 ### With metadata
@@ -38,7 +51,7 @@ Key-value metadata grid below the title, separated by a border. Supports ReactNo
 <Canvas of={Stories.WithMetadata} />
 
 ### Tabs only
-Tab navigation without action buttons.
+TabBar navigation without action buttons.
 <Canvas of={Stories.TabsOnly} />
 
 ### On light background
@@ -52,29 +65,32 @@ Override title color for use on light backgrounds via the `style` prop.
 ## Usage
 
 ```tsx
-import { PageHeader } from '@brik/bds';
-import { Button } from '@brik/bds';
+import { PageHeader, Breadcrumb, TabBar, Button } from '@brik/bds';
 
 // Tabbed variant (designed for dark backgrounds)
 <PageHeader
   title="My Account"
   subtitle="Manage your membership plan."
-  breadcrumbs={[
-    { label: 'Home', href: '/' },
-    { label: 'Settings', href: '/settings' },
-    { label: 'Account' },
-  ]}
+  breadcrumbs={
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Settings', href: '/settings' },
+      { label: 'Account' },
+    ]} />
+  }
   actions={
     <>
       <Button variant="primary">Save</Button>
       <Button variant="secondary">Cancel</Button>
     </>
   }
-  tabs={[
-    { label: 'Overview', active: true },
-    { label: 'Billing' },
-    { label: 'Security' },
-  ]}
+  tabs={
+    <TabBar items={[
+      { label: 'Overview', active: true },
+      { label: 'Billing' },
+      { label: 'Security' },
+    ]} />
+  }
 />
 
 // Metadata variant
@@ -104,5 +120,5 @@ import { Button } from '@brik/bds';
 
 ## Resources
 
-- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26911-20723)
+- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26911-20720)
 - [Design guidelines](#) — coming soon
