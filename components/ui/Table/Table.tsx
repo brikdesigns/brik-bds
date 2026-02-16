@@ -4,7 +4,26 @@ import {
   type ThHTMLAttributes,
   type ReactNode,
   type CSSProperties,
+  createContext,
+  useContext,
 } from 'react';
+
+// ─── Table Context ─────────────────────────────────────────────
+
+/**
+ * Table size variants
+ */
+export type TableSize = 'default' | 'comfortable';
+
+/**
+ * Context for passing table size to cells
+ */
+const TableContext = createContext<TableSize>('default');
+
+/**
+ * Hook to access table size from context
+ */
+const useTableSize = () => useContext(TableContext);
 
 // ─── Table (wrapper) ───────────────────────────────────────────
 
@@ -14,6 +33,8 @@ import {
 export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   /** Alternating row backgrounds */
   striped?: boolean;
+  /** Cell size variant */
+  size?: TableSize;
   children: ReactNode;
 }
 
@@ -58,6 +79,7 @@ const tableStyles: CSSProperties = {
  */
 export function Table({
   striped = false,
+  size = 'default',
   children,
   className = '',
   style,
@@ -69,14 +91,17 @@ export function Table({
   };
 
   return (
-    <table
-      className={className || undefined}
-      style={combinedStyles}
-      data-striped={striped || undefined}
-      {...props}
-    >
-      {children}
-    </table>
+    <TableContext.Provider value={size}>
+      <table
+        className={className || undefined}
+        style={combinedStyles}
+        data-striped={striped || undefined}
+        data-size={size}
+        {...props}
+      >
+        {children}
+      </table>
+    </TableContext.Provider>
   );
 }
 
@@ -179,16 +204,19 @@ export interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
  * Header cell styles using BDS tokens
  *
  * Token reference:
- * - --_space---sm (vertical padding)
- * - --_space---md (horizontal padding)
+ * - --_space---sm (default vertical padding: 6px)
+ * - --_space---xl (comfortable vertical padding: 24px)
+ * - --_space---md (horizontal padding: 8px)
  * - --_typography---font-family--label (label font)
  * - --_typography---label--sm (label size)
  * - --_color---text--muted (muted text)
  * - --_color---border--muted (subtle bottom border)
  * - --_color---background--secondary (header background)
  */
-const headStyles: CSSProperties = {
-  padding: 'var(--_space---sm) var(--_space---md)',
+const getHeadStyles = (size: TableSize): CSSProperties => ({
+  padding: size === 'comfortable'
+    ? 'var(--_space---xl) var(--_space---md)'
+    : 'var(--_space---sm) var(--_space---md)',
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: 'var(--_typography---label--sm)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
@@ -197,7 +225,7 @@ const headStyles: CSSProperties = {
   borderBottom: 'var(--_border-width---md) solid var(--_color---border--muted)',
   backgroundColor: 'var(--_color---background--secondary)',
   whiteSpace: 'nowrap',
-};
+});
 
 const sortableStyles: CSSProperties = {
   cursor: 'pointer',
@@ -219,8 +247,9 @@ export function TableHead({
   style,
   ...props
 }: TableHeadProps) {
+  const size = useTableSize();
   const combinedStyles: CSSProperties = {
-    ...headStyles,
+    ...getHeadStyles(size),
     ...(sortable ? sortableStyles : {}),
     ...style,
   };
@@ -259,17 +288,20 @@ export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
  * Body cell styles using BDS tokens
  *
  * Token reference:
- * - --_space---sm (vertical padding)
- * - --_space---md (horizontal padding)
+ * - --_space---sm (default vertical padding: 6px)
+ * - --_space---xl (comfortable vertical padding: 24px)
+ * - --_space---md (horizontal padding: 8px)
  * - --_typography---body--md-base (body text size)
  * - --_color---text--primary (text color)
  */
-const cellStyles: CSSProperties = {
-  padding: 'var(--_space---sm) var(--_space---md)',
+const getCellStyles = (size: TableSize): CSSProperties => ({
+  padding: size === 'comfortable'
+    ? 'var(--_space---xl) var(--_space---md)'
+    : 'var(--_space---sm) var(--_space---md)',
   fontSize: 'var(--_typography---body--md-base)',
   color: 'var(--_color---text--primary)',
   verticalAlign: 'middle',
-};
+});
 
 export function TableCell({
   children,
@@ -277,8 +309,9 @@ export function TableCell({
   style,
   ...props
 }: TableCellProps) {
+  const size = useTableSize();
   const combinedStyles: CSSProperties = {
-    ...cellStyles,
+    ...getCellStyles(size),
     ...style,
   };
 

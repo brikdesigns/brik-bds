@@ -11,6 +11,7 @@ export {
   type TableRowProps,
   type TableHeadProps,
   type TableCellProps,
+  type TableSize,
   type SortDirection,
 } from './Table';
 export { default } from './Table';
