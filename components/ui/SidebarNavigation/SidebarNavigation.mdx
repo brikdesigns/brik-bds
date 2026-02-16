@@ -5,65 +5,29 @@ import * as SidebarNavigationStories from './SidebarNavigation.stories';
 
 # SidebarNavigation
 
-Fixed-position sidebar navigation component with logo, navigation items, footer actions, and user section.
+A fixed-position sidebar navigation component with logo, navigation links, footer actions, and user section. Uses BDS tokens for consistent theming.
 
 ## Features
 
-- **Logo Section**: Display your brand logo at the top
-- **Navigation Items**: List of links with active state indicators
-- **Footer Actions**: Optional action buttons (e.g., "View as Client")
-- **User Section**: User info and account actions
-- **BDS Tokens**: Uses design system tokens for theming
-- **Responsive**: Fixed positioning with configurable width
-
-## Framework Compatibility
-
-| Framework | Compatible | Notes |
-|-----------|-----------|-------|
-| **Next.js 14+ (App Router)** | ✅ Yes | Wrap in 'use client' component for Link integration |
-| **Next.js (Pages Router)** | ✅ Yes | Direct usage supported |
-| **React 18+** | ✅ Yes | Standard React component |
-| **Remix** | ✅ Yes | Works with Remix Link |
-
-### Next.js Integration Pattern
-
-```tsx
-'use client';
-
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { SidebarNavigation, type SidebarNavItem } from '@bds/components/ui/SidebarNavigation';
-
-export function AdminSidebar() {
-  const pathname = usePathname();
-
-  const navItems: SidebarNavItem[] = [
-    { label: 'Dashboard', href: '/admin', active: pathname === '/admin' },
-    { label: 'Users', href: '/admin/users', active: pathname.startsWith('/admin/users') },
-  ];
-
-  return (
-    <SidebarNavigation
-      logo={<Link href="/"><YourLogo /></Link>}
-      navItems={navItems}
-      footerActions={<Button>Action</Button>}
-      userSection={<UserInfo />}
-    />
-  );
-}
-```
+- **Fixed Position**: Stays visible while content scrolls
+- **BDS Themed**: Uses design tokens for consistent styling
+- **Flexible Content**: Supports logo, nav items, footer actions, and user section
+- **Active State**: Visual indicator for current page
+- **Icons**: Optional icons for navigation items (any ReactNode)
+- **Custom Width**: Configurable sidebar width
 
 ## Usage
 
 ### Basic
 
 ```tsx
-import { SidebarNavigation } from '@bds/components/ui/SidebarNavigation';
+import { SidebarNavigation } from '@/components/ui/SidebarNavigation';
 
 <SidebarNavigation
   logo={<img src="/logo.svg" alt="Logo" />}
   navItems={[
     { label: 'Dashboard', href: '/dashboard', active: true },
+    { label: 'Projects', href: '/projects' },
     { label: 'Settings', href: '/settings' },
   ]}
 />
@@ -75,13 +39,8 @@ import { SidebarNavigation } from '@bds/components/ui/SidebarNavigation';
 <SidebarNavigation
   logo={<YourLogo />}
   navItems={navItems}
-  footerActions={<Button variant="secondary">View as Client</Button>}
-  userSection={
-    <>
-      <p>John Doe</p>
-      <SignOutButton />
-    </>
-  }
+  footerActions={<Button>New Project</Button>}
+  userSection={<UserInfo name="John Doe" />}
 />
 ```
 
@@ -92,52 +51,80 @@ import { SidebarNavigation } from '@bds/components/ui/SidebarNavigation';
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `logo` | `ReactNode` | required | Logo element to display at top |
-| `navItems` | `SidebarNavItem[]` | required | Navigation items array |
-| `footerActions` | `ReactNode` | - | Optional footer action buttons |
-| `userSection` | `ReactNode` | - | Optional user info section |
-| `width` | `string` | `'260px'` | Optional custom width |
+| `navItems` | `SidebarNavItem[]` | required | Array of navigation items |
+| `footerActions` | `ReactNode` | - | Footer content (buttons, links, etc.) |
+| `userSection` | `ReactNode` | - | User info section at bottom |
+| `width` | `string` | `"260px"` | Width of sidebar (CSS value) |
 
 ### SidebarNavItem
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string` | required | Item label |
-| `href` | `string` | required | Link href |
-| `active` | `boolean` | `false` | Whether this item is currently active |
-| `icon` | `ReactNode` | - | Optional icon element |
+| Prop | Type | Description |
+|------|------|-------------|
+| `label` | `string` | Display label for the navigation item |
+| `href` | `string` | Link destination |
+| `active` | `boolean` | Whether this item is currently active (optional) |
+| `icon` | `ReactNode` | Optional icon element (emoji, SVG, etc.) |
 
 ## Design Tokens
 
-**Surface:**
-- `--_color---surface--primary` - Sidebar background
-- `--_color---border--secondary` - Border and dividers
+The component uses the following BDS tokens:
 
-**Text:**
+**Colors:**
+- `--_color---surface--primary` - Sidebar background
+- `--_color---border--secondary` - Borders
 - `--_color---text--primary` - Active item text
 - `--_color---text--secondary` - Default item text
-
-**Active State:**
 - `--_color---page--secondary` - Active item background
 - `--brand--primary` - Active indicator dot
 
-## Integration Checklist
+**Typography:**
+- `--_typography---font-family--body` - Navigation font
 
-Before using SidebarNavigation in your project:
+**Layout:**
+- Fixed positioning with customizable width (default: 260px)
+- Responsive padding using pixel values
+- Border radius: 6px for navigation items
 
-- [ ] Wrap in `'use client'` component if using Next.js App Router
-- [ ] Integrate with your routing library (Next.js Link, React Router, etc.)
-- [ ] Implement active state detection (usePathname, useLocation, etc.)
-- [ ] Test keyboard navigation
-- [ ] Verify responsive behavior on mobile
+## Sections
 
-## Common Issues
+The sidebar has four sections:
 
-**Issue:** Links don't navigate in Next.js
-**Solution:** Wrap logo and implement navigation with Next.js Link component (see pattern above)
+1. **Logo section** (required) - Top section with your logo or branding
+2. **Navigation section** (required) - List of navigation links
+3. **Footer actions** (optional) - Bottom section for buttons or actions
+4. **User section** (optional) - User info/avatar at the very bottom
 
-**Issue:** Active state not updating
-**Solution:** Use `usePathname()` or similar to derive active state from current route
+## Navigation Items
+
+Items without icons will show a colored dot indicator instead (brand color when active, gray when inactive).
 
 ## Examples
 
 <Canvas of={SidebarNavigationStories.Default} />
+
+## With Icons
+
+<Canvas of={SidebarNavigationStories.WithIcons} />
+
+## Variations
+
+### Without Footer
+<Canvas of={SidebarNavigationStories.WithoutFooter} />
+
+### With User Section
+<Canvas of={SidebarNavigationStories.WithUserSection} />
+
+### Custom Width
+<Canvas of={SidebarNavigationStories.CustomWidth} />
+
+## Layout Integration
+
+<Canvas of={SidebarNavigationStories.FullApplicationLayout} />
+
+## Implementation Notes
+
+- The sidebar uses `position: fixed` - ensure your main content area accounts for the sidebar width
+- Navigation items use `<a>` tags with `href` - integrate with your routing solution (e.g., Next.js Link)
+- Active state is controlled per-item via the `active` boolean property
+- Icons can be any React element (emoji, SVG, Font Awesome components, etc.)
+- The sidebar includes scroll behavior for overflow navigation items
