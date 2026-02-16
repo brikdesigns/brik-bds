@@ -34,11 +34,18 @@ This is the **source of truth** for the Brik Design System React components.
    git commit -m "Update brik-bds submodule"
    ```
 
-## Automated Syncs
+## Figma Variables Sync
 
-GitHub Actions runs daily Figma syncs that update `design-tokens/` files.
-Always pull before starting work to get latest tokens:
+**IMPORTANT:** Figma Variables REST API requires Enterprise plan. We don't have it.
 
+**Sync method:** figma-talk MCP (Plugin API works on any plan)
+**Frequency:** Weekly or when Variables change in Figma (infrequent)
+**Guide:** See [VARIABLES-SYNC.md](VARIABLES-SYNC.md) for step-by-step instructions
+**Architecture:** See [FIGMA-ACCESS-ARCHITECTURE.md](FIGMA-ACCESS-ARCHITECTURE.md)
+
+The old automated sync via GitHub Actions is disabled (it was always failing with 403 Enterprise-required).
+
+Always pull before starting work:
 ```bash
 git pull origin main
 ```
