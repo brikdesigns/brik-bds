@@ -66,7 +66,7 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
     },
   },
   lg: {
-    label: { fontSize: 'var(--_typography---label--le)' },
+    label: { fontSize: 'var(--_typography---label--lg)' },
     select: {
       fontSize: 'var(--_typography---body--lg)',
       padding: 'calc(var(--_space---input) * 1.25)',
