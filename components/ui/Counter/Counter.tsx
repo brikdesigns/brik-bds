@@ -100,7 +100,7 @@ const baseStyles: CSSProperties = {
   justifyContent: 'center',
   fontFamily: 'var(--_typography---font-family--label)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 1,
+  lineHeight: 'var(--font-line-height--100)',
   borderRadius: '9999px',
   whiteSpace: 'nowrap',
   overflow: 'clip',

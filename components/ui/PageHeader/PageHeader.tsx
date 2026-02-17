@@ -93,15 +93,15 @@ const titleStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--heading)',
   fontSize: 'var(--_typography---heading--large)',
   fontWeight: 'var(--font-weight--bold)' as unknown as number,
-  lineHeight: 1.1,
+  lineHeight: 'var(--font-line-height--100)',
   margin: 0,
 };
 
 const subtitleStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--body)',
   fontSize: 'var(--_typography---body--lg)',
-  fontWeight: 400,
-  lineHeight: 1.5,
+  fontWeight: 'var(--font-weight--regular)' as unknown as number,
+  lineHeight: 'var(--font-line-height--150)',
   margin: 0,
 };
 
@@ -160,16 +160,16 @@ const metadataLabelStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: 'var(--_typography---label--sm)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 1.1,
+  lineHeight: 'var(--font-line-height--100)',
   color: 'var(--_color---text--primary)',
 };
 
 const metadataValueStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--body)',
   fontSize: 'var(--_typography---body--sm)',
-  fontWeight: 400,
-  lineHeight: 1.5,
-  color: 'var(--_color---text--accent)',
+  fontWeight: 'var(--font-weight--regular)' as unknown as number,
+  lineHeight: 'var(--font-line-height--150)',
+  color: 'var(--_color---text--brand)',
 };
 
 /**

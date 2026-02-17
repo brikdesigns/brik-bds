@@ -49,7 +49,7 @@ const tabBaseStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: 'var(--_typography---label--md-base)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 1,
+  lineHeight: 'var(--font-line-height--100)',
   textAlign: 'center',
   cursor: 'pointer',
   background: 'none',

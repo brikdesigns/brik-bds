@@ -28,7 +28,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
  * Status-based colors using BDS system tokens
  *
  * On-color text uses theme-aware semantic tokens:
- * - --_color---text--on-color-dark: text on colored/brand backgrounds
+ * - --_color---text--inverse: text on colored/brand backgrounds
  *   Used on saturated backgrounds (green, red, blue, brand) for contrast
  * - --_color---text--primary: adapts per theme (dark in light, light in dark)
  *   Used on warning yellow where dark text is needed for readability
@@ -42,11 +42,11 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 const statusStyles: Record<BadgeStatus, CSSProperties> = {
   default: {
     backgroundColor: 'var(--_color---background--brand-primary)',
-    color: 'var(--_color---text--on-color-dark)',
+    color: 'var(--_color---text--inverse)',
   },
   positive: {
     backgroundColor: 'var(--system--green)',
-    color: 'var(--_color---text--on-color-dark)',
+    color: 'var(--_color---text--inverse)',
   },
   warning: {
     backgroundColor: 'var(--system--yellow)',
@@ -54,15 +54,15 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
   },
   error: {
     backgroundColor: 'var(--system--red)',
-    color: 'var(--_color---text--on-color-dark)',
+    color: 'var(--_color---text--inverse)',
   },
   info: {
     backgroundColor: 'var(--system--blue)',
-    color: 'var(--_color---text--on-color-dark)',
+    color: 'var(--_color---text--inverse)',
   },
   progress: {
     backgroundColor: 'var(--system--blue)',
-    color: 'var(--_color---text--on-color-dark)',
+    color: 'var(--_color---text--inverse)',
   },
   neutral: {
     backgroundColor: 'var(--_color---background--secondary)',

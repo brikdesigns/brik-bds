@@ -31,10 +31,10 @@ const brandBadgeStyles: CSSProperties = {
   justifyContent: 'center',
   width: 28,
   height: 28,
-  backgroundColor: 'var(--_color---background--branding)',
-  color: 'var(--_color---text--branding-dark)',
+  backgroundColor: 'var(--_color---background--brand-primary)',
+  color: 'var(--_color---text--inverse)',
   borderRadius: 'var(--_border-radius---md)',
-  fontSize: 14,
+  fontSize: 'var(--_typography---label--sm)', // bds-lint-ignore — story decoration
 };
 
 const sampleBreadcrumbs = [

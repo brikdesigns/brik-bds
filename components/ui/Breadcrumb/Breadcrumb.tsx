@@ -66,7 +66,7 @@ const linkStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: 'var(--_typography---label--sm)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 1,
+  lineHeight: 'var(--font-line-height--100)',
   color: 'var(--_color---text--brand)',
   textDecoration: 'none',
   cursor: 'pointer',
@@ -101,7 +101,7 @@ const separatorStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontSize: 'var(--_typography---label--md-base)',
   color: 'var(--_color---text--muted)',
-  lineHeight: 1,
+  lineHeight: 'var(--font-line-height--100)',
   padding: '0 var(--_space---tiny)',
 };
 

@@ -35,20 +35,23 @@ const iconClassMap: Record<AlertBannerIcon, string> = {
  * Token reference:
  * - --_color---surface--secondary (light gray background)
  * - --_color---text--primary (dark text)
- * - --space--800 = 32px (vertical padding)
- * - --space--600 = 24px (horizontal padding)
+ * - --_space---lg = 16px (vertical padding)
+ * - --_space---xl = 24px (horizontal padding)
  * - --_border-radius---sm = 2px (corners)
+ * - --_space---gap--lg = 16px (gap between content and action)
  */
 const bannerStyles: CSSProperties = {
   display: 'flex',
+  flexWrap: 'wrap',
   alignItems: 'flex-start',
-  gap: 'var(--space--600)',
+  justifyContent: 'space-between',
+  gap: 'var(--_space---gap--lg)',
   backgroundColor: 'var(--_color---surface--secondary)',
   color: 'var(--_color---text--primary)',
-  padding: 'var(--space--800) var(--space--600)',
+  padding: 'var(--_space---lg) var(--_space---xl)',
   borderRadius: 'var(--_border-radius---sm)',
-  overflow: 'hidden',
   width: '100%',
+  boxSizing: 'border-box',
 };
 
 /**
@@ -56,7 +59,7 @@ const bannerStyles: CSSProperties = {
  */
 const innerStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--space--200)',
+  gap: 'var(--_space---gap--md)',
   alignItems: 'flex-start',
   flex: '1 1 0',
   minWidth: 0,
@@ -66,12 +69,11 @@ const innerStyles: CSSProperties = {
  * Icon styles
  *
  * Token reference:
- * - --_typography---font-family--icon (Font Awesome)
- * - --font-size--200 = 18px (icon size)
+ * - --_typography---body--lg = font-size-150 = 18px (icon size via semantic token)
  */
 const iconStyles: CSSProperties = {
-  fontSize: 'var(--font-size--200)',
-  lineHeight: 1.4,
+  fontSize: 'var(--_typography---body--lg)',
+  lineHeight: 'var(--font-line-height--150)',
   flexShrink: 0,
 };
 
@@ -89,18 +91,36 @@ const contentStyles: CSSProperties = {
   minWidth: 0,
 };
 
+/**
+ * Title text styles
+ *
+ * Token reference:
+ * - --_typography---font-family--label (label font)
+ * - --font-weight--semi-bold (SemiBold)
+ * - --_typography---label--md-base = font-size-100 = 16px
+ * - --font-line-height--100 = 100% (tight)
+ */
 const titleStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  fontSize: 'var(--font-size--300)',
-  lineHeight: 1,
+  fontSize: 'var(--_typography---label--md-base)',
+  lineHeight: 'var(--font-line-height--100)',
 };
 
+/**
+ * Description text styles
+ *
+ * Token reference:
+ * - --_typography---font-family--body (body font)
+ * - --font-weight--regular (Regular)
+ * - --_typography---body--md-base = font-size-100 = 16px
+ * - --font-line-height--150 = 150% (comfortable reading)
+ */
 const descriptionStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--body)',
   fontWeight: 'var(--font-weight--regular)' as unknown as number,
   fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 1.5,
+  lineHeight: 'var(--font-line-height--150)',
 };
 
 /**

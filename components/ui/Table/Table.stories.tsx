@@ -78,10 +78,10 @@ const brandBadgeStyles: CSSProperties = {
   justifyContent: 'center',
   width: 28,
   height: 28,
-  backgroundColor: 'var(--_color---background--branding)',
-  color: 'var(--_color---text--branding-dark)',
+  backgroundColor: 'var(--_color---background--brand-primary)',
+  color: 'var(--_color---text--inverse)',
   borderRadius: 'var(--_border-radius---md)',
-  fontSize: 14,
+  fontSize: 'var(--_typography---label--sm)', // bds-lint-ignore — story decoration
 };
 
 /**
@@ -91,13 +91,13 @@ const twoLinePrimary: CSSProperties = {
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   fontSize: 'var(--_typography---body--md-base)',
   color: 'var(--_color---text--primary)',
-  lineHeight: 1.5,
+  lineHeight: 'var(--font-line-height--150)',
 };
 
 const twoLineSecondary: CSSProperties = {
   fontSize: 'var(--_typography---body--sm)',
   color: 'var(--_color---text--muted)',
-  lineHeight: 1.5,
+  lineHeight: 'var(--font-line-height--150)',
 };
 
 // ─── Text Cell (1-line) ──────────────────────────────────────────
@@ -317,7 +317,7 @@ export const WithTextIconLeft: Story = {
             <TableRow key={s.name}>
               <TableCell>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--le)', color: 'var(--_color---text--primary)' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--lg)', color: 'var(--_color---text--primary)' }}>
                     <FontAwesomeIcon icon={s.icon} />
                   </span>
                   {s.name}
@@ -388,7 +388,7 @@ export const WithTextIconRight: Story = {
               <TableCell>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   {f.label}
-                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--le)', color: 'var(--_color---text--muted)' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--lg)', color: 'var(--_color---text--muted)' }}>
                     <FontAwesomeIcon icon={faCircleInfo} />
                   </span>
                 </span>
@@ -681,8 +681,8 @@ export const WithBadgeBrik: Story = {
       <TableCell>
         <span style={{
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          width: 28, height: 28, backgroundColor: 'var(--_color---background--branding)',
-          color: 'var(--_color---text--branding-dark)', borderRadius: 'var(--_border-radius---md)',
+          width: 28, height: 28, backgroundColor: 'var(--_color---background--brand-primary)',
+          color: 'var(--_color---text--inverse)', borderRadius: 'var(--_border-radius---md)',
           fontSize: 14,
         }}>
           <FontAwesomeIcon icon={faPalette} />
@@ -997,7 +997,7 @@ export const TwoLineVariants: Story = {
             {/* 2-line text + icon left cell */}
             <TableCell>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 4 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--le)', color: 'var(--_color---text--primary)', flexShrink: 0, marginTop: 2 }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--lg)', color: 'var(--_color---text--primary)', flexShrink: 0, marginTop: 2 }}>
                   <FontAwesomeIcon icon={row.icon} />
                 </span>
                 <div>

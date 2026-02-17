@@ -88,7 +88,7 @@ const labelStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--body)',
   fontSize: 'var(--_typography---body--lg)',
   color: 'var(--_color---text--secondary)',
-  lineHeight: 1.5,
+  lineHeight: 'var(--font-line-height--150)',
   margin: 0,
 };
 
@@ -110,7 +110,7 @@ const valueStyles: CSSProperties = {
   fontSize: 'var(--_typography---heading--x-large)',
   fontWeight: 'var(--font-weight--bold)' as unknown as number,
   color: 'var(--_color---text--primary)',
-  lineHeight: 1.1,
+  lineHeight: 'var(--font-line-height--100)',
   margin: 0,
 };
 
@@ -128,7 +128,7 @@ const textLinkStyles: CSSProperties = {
   fontSize: 'var(--_typography---label--sm)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   color: 'var(--_color---text--brand)',
-  lineHeight: 1.1,
+  lineHeight: 'var(--font-line-height--100)',
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   cursor: 'pointer',

@@ -39,7 +39,7 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  * - --_space---sm = 6px (lg padding)
  * - --_typography---body--tiny ~= 10.26px (sm font)
  * - --_typography---label--sm = 14px (md font)
- * - --_typography---label--le = 18px (lg font, mapped to font-size--200)
+ * - --_typography---label--lg = 18px (lg font, mapped to font-size--200)
  * - --_border-radius---sm = 2px (sm radius)
  * - --_border-radius---md = 4px (md/lg radius)
  */
@@ -59,7 +59,7 @@ const sizeStyles: Record<TagSize, CSSProperties> = {
   lg: {
     padding: 'var(--_space---sm)',
     gap: 'var(--space--50)',
-    fontSize: 'var(--_typography---label--le)',
+    fontSize: 'var(--_typography---label--lg)',
     borderRadius: 'var(--_border-radius---md)',
   },
 };
@@ -94,7 +94,7 @@ const baseStyles: CSSProperties = {
   alignItems: 'center',
   fontFamily: 'var(--_typography---font-family--label)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 1,
+  lineHeight: 'var(--font-line-height--100)',
   color: 'var(--_color---text--primary)',
   backgroundColor: 'var(--_color---background--secondary)',
   textDecoration: 'none',
