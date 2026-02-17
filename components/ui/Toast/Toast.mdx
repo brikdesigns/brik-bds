@@ -1,0 +1,57 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Toast.stories';
+
+<Meta of={Stories} />
+
+# Toast
+
+Dark overlay notification for transient feedback. Use for confirmations, status updates, and brief messages that don't require user action.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Title only
+Minimal toast for simple confirmations.
+<Canvas of={Stories.TitleOnly} />
+
+### With description
+Add context below the title.
+<Canvas of={Stories.WithDescription} />
+
+### Non-dismissible
+Omit `onDismiss` to hide the close button.
+<Canvas of={Stories.NonDismissible} />
+
+## Interactive example
+
+Toggle toast visibility with a button.
+<Canvas of={Stories.Interactive} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Toast } from '@brik/bds';
+
+<Toast
+  title="Changes saved"
+  description="Your settings have been updated"
+  onDismiss={() => setShowToast(false)}
+/>
+```
+
+## Positioning
+
+The Toast component does not manage its own position. Wrap it in a fixed/absolute container to position it on screen:
+
+```tsx
+<div style={{ position: 'fixed', bottom: 32, left: '50%', transform: 'translateX(-50%)' }}>
+  <Toast title="Saved" onDismiss={handleDismiss} />
+</div>
+```

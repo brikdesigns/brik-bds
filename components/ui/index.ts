@@ -23,3 +23,6 @@ export * from './Counter';
 export * from './Breadcrumb';
 export * from './TabBar';
 export * from './PageHeader';
+export * from './Banner';
+export * from './Toast';
+export * from './AlertBanner';
