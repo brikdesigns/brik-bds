@@ -1,9 +1,9 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import * as Stories from './Link.stories';
+import * as Stories from './TextLink.stories';
 
 <Meta of={Stories} />
 
-# Link
+# TextLink
 
 Styled anchor element with size variants and hover effects. Use for navigation and inline text links throughout the interface.
 
@@ -38,22 +38,22 @@ Horizontal navigation menu.
 ## Usage
 
 ```tsx
-import { Link } from '@brik/bds';
+import { TextLink } from '@brik/bds';
 
 // Default link
-<Link href="/about">Learn More</Link>
+<TextLink href="/about">Learn More</TextLink>
 
 // Small link
-<Link href="/details" size="small">View Details</Link>
+<TextLink href="/details" size="small">View Details</TextLink>
 
 // External link
-<Link
+<TextLink
   href="https://example.com"
   target="_blank"
   rel="noopener noreferrer"
 >
   Visit Website
-</Link>
+</TextLink>
 ```
 
 ## Resources

@@ -1,9 +1,9 @@
 import { type TextareaHTMLAttributes, type CSSProperties } from 'react';
 
 /**
- * Textarea component props
+ * TextArea component props
  */
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   /** Placeholder text */
   placeholder?: string;
   /** Number of visible text rows */
@@ -21,7 +21,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 }
 
 /**
- * Textarea styles using BDS tokens
+ * TextArea styles using BDS tokens
  *
  * Token reference:
  * - --_color---border--input (input border color)
@@ -58,7 +58,7 @@ const textareaDisabledStyles: CSSProperties = {
 };
 
 /**
- * Textarea - BDS themed multi-line text input component
+ * TextArea - BDS themed multi-line text input component
  *
  * Uses CSS variables for theming. Provides a styled textarea with
  * configurable rows and resize behavior. All spacing, colors, and
@@ -66,12 +66,12 @@ const textareaDisabledStyles: CSSProperties = {
  *
  * @example
  * ```tsx
- * <Textarea placeholder="Enter your message..." rows={4} />
- * <Textarea placeholder="Comments" rows={6} resize="none" />
- * <Textarea placeholder="Description" disabled />
+ * <TextArea placeholder="Enter your message..." rows={4} />
+ * <TextArea placeholder="Comments" rows={6} resize="none" />
+ * <TextArea placeholder="Description" disabled />
  * ```
  */
-export function Textarea({
+export function TextArea({
   placeholder,
   rows = 4,
   disabled = false,
@@ -83,7 +83,7 @@ export function Textarea({
   className = '',
   style,
   ...props
-}: TextareaProps) {
+}: TextAreaProps) {
   const combinedStyles: CSSProperties = {
     ...textareaStyles,
     resize,
@@ -107,4 +107,4 @@ export function Textarea({
   );
 }
 
-export default Textarea;
+export default TextArea;

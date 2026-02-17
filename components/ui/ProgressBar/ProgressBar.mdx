@@ -1,0 +1,52 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './ProgressBar.stories';
+
+<Meta of={Stories} />
+
+# Progress bar
+
+Visual indicator showing completion progress. Use for file uploads, multi-step forms, loading states, and any task with measurable progress.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Empty
+No progress yet.
+<Canvas of={Stories.Empty} />
+
+### Half
+Midway through a process.
+<Canvas of={Stories.Half} />
+
+### Complete
+Task fully completed.
+<Canvas of={Stories.Complete} />
+
+## Usage examples
+
+### Animated
+Simulated loading progress with percentage label.
+<Canvas of={Stories.Animated} />
+
+### Multi-step form
+Show progress through a multi-step workflow.
+<Canvas of={Stories.Steps} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { ProgressBar } from '@brik/bds';
+
+<ProgressBar value={35} label="Upload progress" />
+```
+
+## Accessibility
+
+The component uses `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax`. Provide a `label` prop for screen reader context.

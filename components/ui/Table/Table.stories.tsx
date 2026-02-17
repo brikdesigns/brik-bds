@@ -18,8 +18,8 @@ import { Badge } from '../Badge';
 import { Tag } from '../Tag';
 import { Button } from '../Button';
 import { Checkbox } from '../Checkbox';
-import { Input } from '../Input';
-import { Link } from '../Link';
+import { TextInput } from '../TextInput';
+import { TextLink } from '../TextLink';
 
 const meta: Meta<typeof Table> = {
   title: 'Components/table',
@@ -617,13 +617,13 @@ export const WithDataInput: Story = {
     <TableRow>
       <TableCell>Name</TableCell>
       <TableCell>
-        <Input size="sm" placeholder="Enter name" />
+        <TextInput size="sm" placeholder="Enter name" />
       </TableCell>
     </TableRow>
     <TableRow>
       <TableCell>Email</TableCell>
       <TableCell>
-        <Input size="sm" placeholder="Enter email" />
+        <TextInput size="sm" placeholder="Enter email" />
       </TableCell>
     </TableRow>
   </TableBody>
@@ -650,7 +650,7 @@ export const WithDataInput: Story = {
           <TableRow key={row.field}>
             <TableCell>{row.field}</TableCell>
             <TableCell>
-              <Input size="sm" placeholder={row.placeholder} />
+              <TextInput size="sm" placeholder={row.placeholder} />
             </TableCell>
           </TableRow>
         ))}
@@ -895,7 +895,7 @@ export const WithTextLink: Story = {
       <TableCell>Alice Chen</TableCell>
       <TableCell>alice@example.com</TableCell>
       <TableCell>
-        <Link href="#">View profile</Link>
+        <TextLink href="#">View profile</TextLink>
       </TableCell>
     </TableRow>
   </TableBody>
@@ -920,7 +920,7 @@ export const WithTextLink: Story = {
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.role}</TableCell>
             <TableCell>
-              <Link href="#">View profile</Link>
+              <TextLink href="#">View profile</TextLink>
             </TableCell>
           </TableRow>
         ))}

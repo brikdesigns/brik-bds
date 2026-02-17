@@ -13,6 +13,11 @@ const meta: Meta<typeof Switch> = {
       control: 'text',
       description: 'Label text',
     },
+    size: {
+      control: 'radio',
+      options: ['lg', 'md', 'sm'],
+      description: 'Size variant',
+    },
     checked: {
       control: 'boolean',
       description: 'Checked state (controlled)',
@@ -27,10 +32,10 @@ const meta: Meta<typeof Switch> = {
 export default meta;
 type Story = StoryObj<typeof Switch>;
 
-// Basic examples
-export const Unchecked: Story = {
+export const Default: Story = {
   args: {
     label: 'Enable feature',
+    size: 'lg',
   },
 };
 
@@ -62,7 +67,45 @@ export const WithoutLabel: Story = {
   },
 };
 
-// Interactive example
+export const Sizes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Switch size="lg" label="Large (56x32)" />
+<Switch size="md" label="Medium (32x18)" />
+<Switch size="sm" label="Small (28x16)" />`,
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <Switch size="lg" label="Large" />
+      <Switch size="md" label="Medium" />
+      <Switch size="sm" label="Small" />
+    </div>
+  ),
+};
+
+export const SizesChecked: Story = {
+  name: 'Sizes (checked)',
+  parameters: {
+    docs: {
+      source: {
+        code: `<Switch size="lg" label="Large" defaultChecked />
+<Switch size="md" label="Medium" defaultChecked />
+<Switch size="sm" label="Small" defaultChecked />`,
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <Switch size="lg" label="Large" defaultChecked />
+      <Switch size="md" label="Medium" defaultChecked />
+      <Switch size="sm" label="Small" defaultChecked />
+    </div>
+  ),
+};
+
 export const Controlled: Story = {
   parameters: {
     docs: {
@@ -101,26 +144,13 @@ export const Controlled: Story = {
   },
 };
 
-// Contextual examples
 export const SettingsPanel: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Switch
-  label="Email notifications"
-  checked={notifications}
-  onChange={(e) => setNotifications(e.target.checked)}
-/>
-<Switch
-  label="Dark mode"
-  checked={darkMode}
-  onChange={(e) => setDarkMode(e.target.checked)}
-/>
-<Switch
-  label="Analytics tracking"
-  checked={analytics}
-  onChange={(e) => setAnalytics(e.target.checked)}
-/>`,
+        code: `<Switch label="Email notifications" checked={notifications} onChange={...} />
+<Switch label="Dark mode" checked={darkMode} onChange={...} />
+<Switch label="Analytics tracking" checked={analytics} onChange={...} />`,
       },
     },
   },
@@ -171,154 +201,41 @@ export const SettingsPanel: Story = {
   },
 };
 
-export const WithDescriptions: Story = {
+export const CompactSettings: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Switch
-  label="Marketing emails"
-  checked={marketing}
-  onChange={(e) => setMarketing(e.target.checked)}
-/>
-<p>Receive promotional emails and product updates</p>
-
-<Switch
-  label="Two-factor authentication"
-  checked={security}
-  onChange={(e) => setSecurity(e.target.checked)}
-/>
-<p>Require a verification code when signing in</p>`,
+        code: `<Switch size="sm" label="Auto-save" />
+<Switch size="sm" label="Spell check" defaultChecked />
+<Switch size="sm" label="Line numbers" defaultChecked />`,
       },
     },
   },
-  render: () => {
-    const [marketing, setMarketing] = useState(false);
-    const [security, setSecurity] = useState(true);
-
-    return (
-      <div
+  render: () => (
+    <div
+      style={{
+        width: '240px',
+        padding: '16px',
+        backgroundColor: 'var(--_color---background--primary)',
+        border: '1px solid var(--_color---border--secondary)',
+        borderRadius: 'var(--_border-radius---lg)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+      }}
+    >
+      <h3
         style={{
-          width: '400px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '24px',
+          fontFamily: 'var(--_typography---font-family--heading)',
+          fontSize: 'var(--_typography---heading--tiny)',
+          margin: 0,
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Switch
-            label="Marketing emails"
-            checked={marketing}
-            onChange={(e) => setMarketing(e.target.checked)}
-          />
-          <p
-            style={{
-              fontFamily: 'var(--_typography---font-family--body)',
-              fontSize: 'var(--_typography---body--sm)',
-              color: 'var(--_color---text--secondary)',
-              margin: '0 0 0 56px',
-            }}
-          >
-            Receive promotional emails and product updates
-          </p>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Switch
-            label="Two-factor authentication"
-            checked={security}
-            onChange={(e) => setSecurity(e.target.checked)}
-          />
-          <p
-            style={{
-              fontFamily: 'var(--_typography---font-family--body)',
-              fontSize: 'var(--_typography---body--sm)',
-              color: 'var(--_color---text--secondary)',
-              margin: '0 0 0 56px',
-            }}
-          >
-            Require a verification code when signing in
-          </p>
-        </div>
-      </div>
-    );
-  },
-};
-
-export const FeatureFlags: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `const [features, setFeatures] = useState({
-  beta: false,
-  experimental: false,
-  advanced: true,
-});
-
-<Switch
-  label="Beta features"
-  checked={features.beta}
-  onChange={() => toggleFeature('beta')}
-/>
-<Switch
-  label="Experimental mode"
-  checked={features.experimental}
-  onChange={() => toggleFeature('experimental')}
-/>
-<Switch
-  label="Advanced settings"
-  checked={features.advanced}
-  onChange={() => toggleFeature('advanced')}
-/>`,
-      },
-    },
-  },
-  render: () => {
-    const [features, setFeatures] = useState({
-      beta: false,
-      experimental: false,
-      advanced: true,
-    });
-
-    const toggleFeature = (feature: keyof typeof features) => {
-      setFeatures((prev) => ({ ...prev, [feature]: !prev[feature] }));
-    };
-
-    return (
-      <div
-        style={{
-          width: '360px',
-          padding: '24px',
-          backgroundColor: 'var(--_color---background--secondary)',
-          borderRadius: 'var(--_border-radius---lg)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-        }}
-      >
-        <h3
-          style={{
-            fontFamily: 'var(--_typography---font-family--heading)',
-            fontSize: 'var(--_typography---heading--small)',
-            margin: 0,
-          }}
-        >
-          Feature Flags
-        </h3>
-        <Switch
-          label="Beta features"
-          checked={features.beta}
-          onChange={() => toggleFeature('beta')}
-        />
-        <Switch
-          label="Experimental mode"
-          checked={features.experimental}
-          onChange={() => toggleFeature('experimental')}
-        />
-        <Switch
-          label="Advanced settings"
-          checked={features.advanced}
-          onChange={() => toggleFeature('advanced')}
-        />
-      </div>
-    );
-  },
+        Editor settings
+      </h3>
+      <Switch size="sm" label="Auto-save" />
+      <Switch size="sm" label="Spell check" defaultChecked />
+      <Switch size="sm" label="Line numbers" defaultChecked />
+    </div>
+  ),
 };

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Input } from './Input';
+import { TextInput } from './TextInput';
 
-const meta: Meta<typeof Input> = {
-  title: 'Components/input',
-  component: Input,
+const meta: Meta<typeof TextInput> = {
+  title: 'Components/text-input',
+  component: TextInput,
   parameters: {
     layout: 'centered',
   },
@@ -46,7 +46,7 @@ const meta: Meta<typeof Input> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Input>;
+type Story = StoryObj<typeof TextInput>;
 
 // Basic input
 export const Default: Story = {
@@ -115,10 +115,10 @@ export const FormExample: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Input label="First Name" placeholder="John" fullWidth />
-<Input label="Last Name" placeholder="Doe" fullWidth />
-<Input label="Email" type="email" placeholder="john@example.com" fullWidth />
-<Input
+        code: `<TextInput label="First Name" placeholder="John" fullWidth />
+<TextInput label="Last Name" placeholder="Doe" fullWidth />
+<TextInput label="Email" type="email" placeholder="john@example.com" fullWidth />
+<TextInput
   label="Phone"
   type="tel"
   placeholder="(555) 123-4567"
@@ -130,10 +130,10 @@ export const FormExample: Story = {
   },
   render: () => (
     <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Input label="First Name" placeholder="John" fullWidth />
-      <Input label="Last Name" placeholder="Doe" fullWidth />
-      <Input label="Email" type="email" placeholder="john@example.com" fullWidth />
-      <Input
+      <TextInput label="First Name" placeholder="John" fullWidth />
+      <TextInput label="Last Name" placeholder="Doe" fullWidth />
+      <TextInput label="Email" type="email" placeholder="john@example.com" fullWidth />
+      <TextInput
         label="Phone"
         type="tel"
         placeholder="(555) 123-4567"
@@ -149,19 +149,19 @@ export const InputTypes: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Input label="Text" type="text" placeholder="Plain text" />
-<Input label="Email" type="email" placeholder="email@example.com" />
-<Input label="Password" type="password" placeholder="••••••••" />
-<Input label="Number" type="number" placeholder="0" />`,
+        code: `<TextInput label="Text" type="text" placeholder="Plain text" />
+<TextInput label="Email" type="email" placeholder="email@example.com" />
+<TextInput label="Password" type="password" placeholder="••••••••" />
+<TextInput label="Number" type="number" placeholder="0" />`,
       },
     },
   },
   render: () => (
     <div style={{ width: '300px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Input label="Text" type="text" placeholder="Plain text" fullWidth />
-      <Input label="Email" type="email" placeholder="email@example.com" fullWidth />
-      <Input label="Password" type="password" placeholder="••••••••" fullWidth />
-      <Input label="Number" type="number" placeholder="0" fullWidth />
+      <TextInput label="Text" type="text" placeholder="Plain text" fullWidth />
+      <TextInput label="Email" type="email" placeholder="email@example.com" fullWidth />
+      <TextInput label="Password" type="password" placeholder="••••••••" fullWidth />
+      <TextInput label="Number" type="number" placeholder="0" fullWidth />
     </div>
   ),
 };
@@ -196,17 +196,17 @@ export const AllSizes: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Input size="sm" label="Small" placeholder="14px text" />
-<Input size="md" label="Medium" placeholder="16px text" />
-<Input size="lg" label="Large" placeholder="18px text" />`,
+        code: `<TextInput size="sm" label="Small" placeholder="14px text" />
+<TextInput size="md" label="Medium" placeholder="16px text" />
+<TextInput size="lg" label="Large" placeholder="18px text" />`,
       },
     },
   },
   render: () => (
     <div style={{ width: '400px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <Input size="sm" label="Small (sm)" placeholder="14px text" fullWidth />
-      <Input size="md" label="Medium (md)" placeholder="16px text - default" fullWidth />
-      <Input size="lg" label="Large (lg)" placeholder="18px text" fullWidth />
+      <TextInput size="sm" label="Small (sm)" placeholder="14px text" fullWidth />
+      <TextInput size="md" label="Medium (md)" placeholder="16px text - default" fullWidth />
+      <TextInput size="lg" label="Large (lg)" placeholder="18px text" fullWidth />
     </div>
   ),
 };

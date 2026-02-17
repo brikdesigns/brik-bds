@@ -1,14 +1,14 @@
 // UI Components
 export * from './Button';
 export * from './Badge';
-export * from './Link';
-export * from './Input';
+export * from './TextLink';
+export * from './TextInput';
 export * from './Card';
 export * from './Checkbox';
 export * from './Radio';
 export * from './Select';
 export * from './SidebarNavigation';
-export * from './Textarea';
+export * from './TextArea';
 export * from './Avatar';
 export * from './Modal';
 export * from './Spinner';
@@ -18,6 +18,7 @@ export * from './Tooltip';
 export * from './Switch';
 export * from './Tag';
 export * from './Table';
+export * from './ProgressBar';
 export * from './Counter';
 export * from './Breadcrumb';
 export * from './TabBar';
