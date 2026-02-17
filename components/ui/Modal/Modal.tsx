@@ -42,7 +42,11 @@ const sizeConfig: Record<ModalSize, string> = {
 };
 
 /**
- * Backdrop overlay styles using BDS tokens
+ * Backdrop overlay styles
+ *
+ * Token reference:
+ * - Overlay: rgba(0, 0, 0, 0.4) per Figma
+ * - --_space---lg = 16px (safe area padding)
  */
 const backdropStyles: CSSProperties = {
   position: 'fixed',
@@ -50,64 +54,78 @@ const backdropStyles: CSSProperties = {
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: 'rgba(0, 0, 0, 0.4)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   padding: 'var(--_space---lg)',
   zIndex: 1000,
-  backdropFilter: 'blur(2px)',
 };
 
 /**
- * Modal container styles using BDS tokens
+ * Modal container styles
  *
  * Token reference:
- * - --_color---background--input (modal background)
- * - --_border-radius---lg = 8px (modal corners)
- * - --_space---lg = 16px (padding)
+ * - --_color---surface--primary (white background)
+ * - --_border-radius---md = 4px (modal corners)
+ * - Shadow: 0 4px 32px 32px rgba(0,0,0,0.24) per Figma shadow-xl
  */
 const getModalStyles = (size: ModalSize): CSSProperties => ({
   position: 'relative',
   width: '100%',
   maxWidth: sizeConfig[size],
   maxHeight: '90vh',
-  backgroundColor: 'var(--_color---background--input)',
-  borderRadius: 'var(--_border-radius---lg)',
-  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+  backgroundColor: 'var(--_color---surface--primary)',
+  borderRadius: 'var(--_border-radius---md)',
+  boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)',
   display: 'flex',
   flexDirection: 'column',
-  overflow: 'hidden',
 });
 
 /**
- * Modal header styles using BDS tokens
+ * Modal header styles
  *
  * Token reference:
- * - --_space---lg = 16px (padding)
- * - --_typography---font-family--heading (heading font)
- * - --_typography---heading--medium (heading size)
- * - --_color---text--primary (text color)
+ * - --_space---xl = 24px (padding)
+ * - --_color---border--muted (divider line)
+ * - --_border-width---sm (divider thickness)
  */
 const headerStyles: CSSProperties = {
-  padding: 'var(--_space---lg)',
-  borderBottom: 'var(--_border-width---sm) solid var(--_color---border--input)',
+  padding: 'var(--_space---xl)',
+  borderBottom: 'var(--_border-width---sm) solid var(--_color---border--muted)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   flexShrink: 0,
 };
 
+/**
+ * Title styles
+ *
+ * Token reference:
+ * - --_typography---font-family--heading (heading font)
+ * - --_typography---heading--medium = font-size-500 = 25.3px
+ * - --font-weight--bold = 700
+ * - --font-line-height--125 = 125%
+ * - --_color---text--primary (dark text)
+ */
 const titleStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--heading)',
   fontSize: 'var(--_typography---heading--medium)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+  fontWeight: 'var(--font-weight--bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height--125)',
   color: 'var(--_color---text--primary)',
   margin: 0,
 };
 
 /**
- * Close button styles using BDS tokens
+ * Close button styles
+ *
+ * Token reference:
+ * - --_typography---body--lg (icon size)
+ * - --_space---sm = 6px (padding)
+ * - --_color---text--primary (icon color)
+ * - --_border-radius---sm = 2px
  */
 const closeButtonStyles: CSSProperties = {
   background: 'none',
@@ -123,10 +141,17 @@ const closeButtonStyles: CSSProperties = {
 };
 
 /**
- * Modal body styles using BDS tokens
+ * Modal body styles
+ *
+ * Token reference:
+ * - --_space---xl = 24px (padding)
+ * - --_typography---font-family--body (body font)
+ * - --_typography---body--md-base = 16px (body text size)
+ * - --font-line-height--150 = 150%
+ * - --_color---text--primary (text color)
  */
 const bodyStyles: CSSProperties = {
-  padding: 'var(--_space---lg)',
+  padding: 'var(--_space---xl)',
   overflowY: 'auto',
   flex: 1,
   fontFamily: 'var(--_typography---font-family--body)',
@@ -136,13 +161,16 @@ const bodyStyles: CSSProperties = {
 };
 
 /**
- * Modal footer styles using BDS tokens
+ * Modal footer styles
+ *
+ * Token reference:
+ * - --_space---xl = 24px (padding)
+ * - --_space---gap--lg = 16px (button gap)
  */
 const footerStyles: CSSProperties = {
-  padding: 'var(--_space---lg)',
-  borderTop: 'var(--_border-width---sm) solid var(--_color---border--input)',
+  padding: 'var(--_space---xl)',
   display: 'flex',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--_space---gap--lg)',
   justifyContent: 'flex-end',
   flexShrink: 0,
 };
@@ -162,8 +190,8 @@ const footerStyles: CSSProperties = {
  *   title="Confirm Action"
  *   footer={
  *     <>
- *       <Button onClick={() => setIsOpen(false)}>Cancel</Button>
- *       <Button onClick={handleConfirm}>Confirm</Button>
+ *       <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+ *       <Button variant="primary" onClick={handleConfirm}>Save</Button>
  *     </>
  *   }
  * >
@@ -219,7 +247,7 @@ export function Modal({
 
   const modal = (
     <div style={backdropStyles} onClick={handleBackdropClick}>
-      <div ref={modalRef} style={getModalStyles(size)}>
+      <div ref={modalRef} style={getModalStyles(size)} role="dialog" aria-modal="true">
         {(title || showCloseButton) && (
           <div style={headerStyles}>
             {title && <h2 style={titleStyles}>{title}</h2>}

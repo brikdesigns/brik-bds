@@ -38,7 +38,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Basic modal with title and content
+ * Standard modal with title, content, and footer actions.
+ * Matches the Figma "Modal" component: header with close button,
+ * divider, content area, and right-aligned footer buttons.
  */
 export const Basic: Story = {
   parameters: {
@@ -47,8 +49,18 @@ export const Basic: Story = {
         code: `const [isOpen, setIsOpen] = useState(false);
 
 <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-<Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Modal Title">
-  <p>This is a basic modal with some content.</p>
+<Modal
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Title Goes Here"
+  footer={
+    <>
+      <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+      <Button variant="primary" onClick={handleSave}>Save</Button>
+    </>
+  }
+>
+  <p>Description goes here</p>
 </Modal>`,
       },
     },
@@ -59,35 +71,53 @@ export const Basic: Story = {
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-        <Modal {...args} isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          <p>This is a basic modal with some content.</p>
+        <Modal
+          {...args}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          footer={
+            <>
+              <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  alert('Saved!');
+                  setIsOpen(false);
+                }}
+              >
+                Save
+              </Button>
+            </>
+          }
+        >
+          <p>Description goes here</p>
         </Modal>
       </>
     );
   },
   args: {
-    title: 'Modal Title',
+    isOpen: false,
+    onClose: () => {},
+    children: null,
+    title: 'Title Goes Here',
   },
 };
 
 /**
- * Modal with footer buttons
+ * Confirmation dialog with destructive action
  */
-export const WithFooter: Story = {
+export const ConfirmDelete: Story = {
   parameters: {
     docs: {
       source: {
-        code: `const [isOpen, setIsOpen] = useState(false);
-
-<Button onClick={() => setIsOpen(true)}>Confirm Action</Button>
-<Modal
+        code: `<Modal
   isOpen={isOpen}
   onClose={() => setIsOpen(false)}
   title="Confirm Delete"
   footer={
     <>
-      <Button onClick={() => setIsOpen(false)}>Cancel</Button>
-      <Button onClick={handleDelete}>Delete</Button>
+      <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+      <Button variant="primary" onClick={handleDelete}>Delete</Button>
     </>
   }
 >
@@ -96,20 +126,21 @@ export const WithFooter: Story = {
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Confirm Action</Button>
         <Modal
+          {...args}
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
-          title="Confirm Delete"
           footer={
-            <div style={{ display: 'flex', gap: 'var(--_space---gap--md)' }}>
-              <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+            <>
+              <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button
+                variant="primary"
                 onClick={() => {
                   alert('Deleted!');
                   setIsOpen(false);
@@ -117,13 +148,19 @@ export const WithFooter: Story = {
               >
                 Delete
               </Button>
-            </div>
+            </>
           }
         >
           <p>Are you sure you want to delete this item? This action cannot be undone.</p>
         </Modal>
       </>
     );
+  },
+  args: {
+    isOpen: false,
+    onClose: () => {},
+    children: null,
+    title: 'Confirm Delete',
   },
 };
 
@@ -140,54 +177,28 @@ export const Small: Story = {
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Small Modal</Button>
         <Modal
+          {...args}
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
-          title="Small Modal"
-          size="sm"
         >
           <p>This is a small modal.</p>
         </Modal>
       </>
     );
   },
-};
-
-/**
- * Medium modal (default)
- */
-export const Medium: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Modal isOpen={isOpen} onClose={onClose} title="Medium Modal" size="md">
-  <p>This is a medium modal (default size).</p>
-</Modal>`,
-      },
-    },
-  },
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Open Medium Modal</Button>
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Medium Modal"
-          size="md"
-        >
-          <p>This is a medium modal (default size).</p>
-        </Modal>
-      </>
-    );
+  args: {
+    isOpen: false,
+    onClose: () => {},
+    children: null,
+    title: 'Small Modal',
+    size: 'sm',
   },
 };
 
@@ -204,17 +215,16 @@ export const Large: Story = {
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Large Modal</Button>
         <Modal
+          {...args}
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
-          title="Large Modal"
-          size="lg"
         >
           <p>This is a large modal with more space for content.</p>
           <p>It can accommodate more information and longer forms.</p>
@@ -222,69 +232,12 @@ export const Large: Story = {
       </>
     );
   },
-};
-
-/**
- * Extra large modal
- */
-export const ExtraLarge: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Modal isOpen={isOpen} onClose={onClose} title="Extra Large Modal" size="xl">
-  <p>This is an extra large modal for complex content.</p>
-</Modal>`,
-      },
-    },
-  },
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Open XL Modal</Button>
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Extra Large Modal"
-          size="xl"
-        >
-          <p>This is an extra large modal for complex content.</p>
-        </Modal>
-      </>
-    );
-  },
-};
-
-/**
- * Full width modal
- */
-export const FullWidth: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Modal isOpen={isOpen} onClose={onClose} title="Full Width Modal" size="full">
-  <p>This modal takes up most of the viewport width.</p>
-</Modal>`,
-      },
-    },
-  },
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Open Full Width Modal</Button>
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Full Width Modal"
-          size="full"
-        >
-          <p>This modal takes up most of the viewport width.</p>
-        </Modal>
-      </>
-    );
+  args: {
+    isOpen: false,
+    onClose: () => {},
+    children: null,
+    title: 'Large Modal',
+    size: 'lg',
   },
 };
 
@@ -297,22 +250,27 @@ export const ScrollingContent: Story = {
       source: {
         code: `<Modal isOpen={isOpen} onClose={onClose} title="Long Content">
   <p>Paragraph 1...</p>
-  <p>Paragraph 2...</p>
   {/* Modal body scrolls when content exceeds max height */}
 </Modal>`,
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Scrolling Modal</Button>
         <Modal
+          {...args}
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
-          title="Long Content"
+          footer={
+            <>
+              <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+              <Button variant="primary" onClick={() => setIsOpen(false)}>Done</Button>
+            </>
+          }
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
             {Array.from({ length: 20 }, (_, i) => (
@@ -325,10 +283,16 @@ export const ScrollingContent: Story = {
       </>
     );
   },
+  args: {
+    isOpen: false,
+    onClose: () => {},
+    children: null,
+    title: 'Long Content',
+  },
 };
 
 /**
- * Modal without close button
+ * Modal without close button — must use footer or Escape key
  */
 export const NoCloseButton: Story = {
   parameters: {
@@ -339,26 +303,25 @@ export const NoCloseButton: Story = {
   onClose={onClose}
   title="No Close Button"
   showCloseButton={false}
-  footer={<Button onClick={onClose}>Close</Button>}
+  footer={<Button variant="primary" onClick={onClose}>Close</Button>}
 >
   <p>This modal has no close button in the header.</p>
 </Modal>`,
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal
+          {...args}
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
-          title="No Close Button"
-          showCloseButton={false}
           footer={
-            <Button onClick={() => setIsOpen(false)}>Close</Button>
+            <Button variant="primary" onClick={() => setIsOpen(false)}>Close</Button>
           }
         >
           <p>This modal has no close button in the header. You must use the button in the footer or press Escape.</p>
@@ -366,93 +329,69 @@ export const NoCloseButton: Story = {
       </>
     );
   },
-};
-
-/**
- * Modal that can't be dismissed by backdrop click
- */
-export const NoBackdropClose: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Modal
-  isOpen={isOpen}
-  onClose={onClose}
-  title="Modal with No Backdrop Close"
-  closeOnBackdrop={false}
-  footer={<Button onClick={onClose}>Close</Button>}
->
-  <p>This modal cannot be closed by clicking the backdrop.</p>
-</Modal>`,
-      },
-    },
-  },
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Modal with No Backdrop Close"
-          closeOnBackdrop={false}
-          footer={
-            <Button onClick={() => setIsOpen(false)}>Close</Button>
-          }
-        >
-          <p>This modal cannot be closed by clicking the backdrop. Use the close button or press Escape.</p>
-        </Modal>
-      </>
-    );
+  args: {
+    isOpen: false,
+    onClose: () => {},
+    children: null,
+    title: 'No Close Button',
+    showCloseButton: false,
   },
 };
 
 /**
- * Form in modal
+ * Form in modal with footer actions
  */
 export const FormExample: Story = {
   parameters: {
     docs: {
       source: {
-        code: `const [isOpen, setIsOpen] = useState(false);
-
-<Button onClick={() => setIsOpen(true)}>Open Form</Button>
-<Modal
+        code: `<Modal
   isOpen={isOpen}
   onClose={() => setIsOpen(false)}
   title="Contact Form"
-  size="md"
   footer={
     <>
-      <Button onClick={() => setIsOpen(false)}>Cancel</Button>
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+      <Button variant="primary" onClick={handleSubmit}>Submit</Button>
     </>
   }
 >
-  <Input label="Name" placeholder="Your name" fullWidth />
-  <Input label="Email" type="email" placeholder="your@email.com" fullWidth />
-  <textarea rows={4} placeholder="Your message" />
+  <form>...</form>
 </Modal>`,
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const inputStyle: React.CSSProperties = {
+      padding: 'var(--_space---md)',
+      border: 'var(--_border-width---sm) solid var(--_color---border--input)',
+      borderRadius: 'var(--_border-radius---input)',
+      fontFamily: 'var(--_typography---font-family--body)',
+      fontSize: 'var(--_typography---body--md-base)',
+      width: '100%',
+      boxSizing: 'border-box',
+    };
+
+    const labelStyle: React.CSSProperties = {
+      fontFamily: 'var(--_typography---font-family--label)',
+      fontSize: 'var(--_typography---label--md-base)',
+      fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+    };
 
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Form</Button>
         <Modal
+          {...args}
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
-          title="Contact Form"
-          size="md"
           footer={
-            <div style={{ display: 'flex', gap: 'var(--_space---gap--md)' }}>
-              <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+            <>
+              <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button
+                variant="primary"
                 onClick={() => {
                   alert('Form submitted!');
                   setIsOpen(false);
@@ -460,74 +399,36 @@ export const FormExample: Story = {
               >
                 Submit
               </Button>
-            </div>
+            </>
           }
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
-              <label style={{
-                fontFamily: 'var(--_typography---font-family--label)',
-                fontSize: 'var(--_typography---label--md-base)',
-                fontWeight: 'var(--font-weight--semi-bold)',
-              }}>
-                Name
-              </label>
-              <input
-                type="text"
-                placeholder="Your name"
-                style={{
-                  padding: 'var(--_space---input)',
-                  border: '1px solid var(--_color---border--input)',
-                  borderRadius: 'var(--_border-radius---input)',
-                  fontFamily: 'var(--_typography---font-family--body)',
-                  fontSize: 'var(--_typography---body--sm)',
-                }}
-              />
+              <label style={labelStyle}>Name</label>
+              <input type="text" placeholder="Your name" style={inputStyle} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
-              <label style={{
-                fontFamily: 'var(--_typography---font-family--label)',
-                fontSize: 'var(--_typography---label--md-base)',
-                fontWeight: 'var(--font-weight--semi-bold)',
-              }}>
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="your@email.com"
-                style={{
-                  padding: 'var(--_space---input)',
-                  border: '1px solid var(--_color---border--input)',
-                  borderRadius: 'var(--_border-radius---input)',
-                  fontFamily: 'var(--_typography---font-family--body)',
-                  fontSize: 'var(--_typography---body--sm)',
-                }}
-              />
+              <label style={labelStyle}>Email</label>
+              <input type="email" placeholder="your@email.com" style={inputStyle} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
-              <label style={{
-                fontFamily: 'var(--_typography---font-family--label)',
-                fontSize: 'var(--_typography---label--md-base)',
-                fontWeight: 'var(--font-weight--semi-bold)',
-              }}>
-                Message
-              </label>
+              <label style={labelStyle}>Message</label>
               <textarea
                 rows={4}
                 placeholder="Your message"
-                style={{
-                  padding: 'var(--_space---input)',
-                  border: '1px solid var(--_color---border--input)',
-                  borderRadius: 'var(--_border-radius---input)',
-                  fontFamily: 'var(--_typography---font-family--body)',
-                  fontSize: 'var(--_typography---body--sm)',
-                  resize: 'vertical',
-                }}
+                style={{ ...inputStyle, resize: 'vertical' }}
               />
             </div>
           </div>
         </Modal>
       </>
     );
+  },
+  args: {
+    isOpen: false,
+    onClose: () => {},
+    children: null,
+    title: 'Contact Form',
+    size: 'md',
   },
 };
