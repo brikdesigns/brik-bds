@@ -64,7 +64,7 @@ const sizeStyles: Record<ButtonSize, CSSProperties> = {
  *
  * Token reference:
  * - --_color---background--brand-primary (brand background)
- * - --_color---text--inverse (text on brand)
+ * - --_color---text--on-color-dark (text on brand/colored backgrounds)
  * - --_color---text--brand (brand text)
  * - --_color---border--brand (brand border)
  * - --_border-width---sm (thin border)
@@ -73,7 +73,7 @@ const sizeStyles: Record<ButtonSize, CSSProperties> = {
 const variantStyles: Record<ButtonVariant, CSSProperties> = {
   primary: {
     backgroundColor: 'var(--_color---background--brand-primary)',
-    color: 'var(--_color---text--inverse)',
+    color: 'var(--_color---text--on-color-dark)',
     border: 'none',
   },
   outline: {
