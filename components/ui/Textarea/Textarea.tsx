@@ -39,12 +39,15 @@ const textareaStyles: CSSProperties = {
   minWidth: '200px',
   padding: 'var(--_space---input)',
   fontFamily: 'var(--_typography---font-family--body)',
+  fontWeight: 'var(--font-weight--regular)' as unknown as number,
   fontSize: 'var(--_typography---body--sm)',
   lineHeight: 'var(--font-line-height--150)',
   color: 'var(--_color---text--primary)',
   backgroundColor: 'var(--_color---background--input)',
   border: 'var(--_border-width---sm) solid var(--_color---border--input)',
   borderRadius: 'var(--_border-radius---input)',
+  outline: 'none',
+  transition: 'border-color 0.2s',
   resize: 'vertical',
 };
 
@@ -52,11 +55,6 @@ const textareaDisabledStyles: CSSProperties = {
   opacity: 0.5,
   cursor: 'not-allowed',
   resize: 'none',
-};
-
-const textareaFocusStyles: CSSProperties = {
-  outline: '2px solid var(--_color---background--brand-primary)',
-  outlineOffset: '2px',
 };
 
 /**
