@@ -26,3 +26,4 @@ export * from './PageHeader';
 export * from './Banner';
 export * from './Toast';
 export * from './AlertBanner';
+export * from './CardControl';

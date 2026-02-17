@@ -1,0 +1,73 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './CardControl.stories';
+
+<Meta of={Stories} />
+
+# CardControl
+
+Settings control card with badge, title, description, and an action element. Used for toggles, configuration options, and status displays in settings interfaces.
+
+## Overview
+
+<Canvas of={Stories.WithSwitch} />
+
+## Variants
+
+### With Switch
+
+Toggle control for binary settings.
+<Canvas of={Stories.WithSwitch} />
+
+### With Button
+
+Action button for configuration or navigation.
+<Canvas of={Stories.WithButton} />
+
+### Error Status
+
+Displays an error state with a retry action.
+<Canvas of={Stories.ErrorStatus} />
+
+### Warning Status
+
+Displays a warning state with an upgrade action.
+<Canvas of={Stories.WarningStatus} />
+
+### Minimal
+
+Title and action only, without badge or description.
+<Canvas of={Stories.Minimal} />
+
+## Settings Group
+
+Multiple cards stacked in a settings layout.
+<Canvas of={Stories.SettingsGroup} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { CardControl } from '@brik/bds';
+import { Badge } from '@brik/bds';
+import { Switch } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+// With toggle switch
+<CardControl
+  title="Notifications"
+  description="Receive email notifications for updates"
+  badge={<Badge size="xs" status="positive" icon={<CheckIcon />} />}
+  action={<Switch checked={enabled} onChange={handleChange} />}
+/>
+
+// With button action
+<CardControl
+  title="Security"
+  description="Configure two-factor authentication"
+  badge={<Badge size="xs" status="info" icon={<ShieldIcon />} />}
+  action={<Button variant="outline" size="sm">Configure</Button>}
+/>
+```
