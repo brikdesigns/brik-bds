@@ -8,7 +8,7 @@ export type BadgeStatus = 'default' | 'positive' | 'warning' | 'error' | 'info' 
 /**
  * Badge size variants
  */
-export type BadgeSize = 'sm' | 'md' | 'lg';
+export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 
 /**
  * Badge component props
@@ -16,20 +16,20 @@ export type BadgeSize = 'sm' | 'md' | 'lg';
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   /** Status variant */
   status?: BadgeStatus;
-  /** Size variant */
+  /** Size variant — xs is icon-only (no text) */
   size?: BadgeSize;
-  /** Children content */
-  children: ReactNode;
-  /** Optional icon before text */
+  /** Children content (optional for xs/icon-only size) */
+  children?: ReactNode;
+  /** Optional icon before text (required for xs size) */
   icon?: ReactNode;
 }
 
 /**
  * Status-based colors using BDS system tokens
  *
- * On-color text uses theme-aware semantic tokens:
- * - --_color---text--inverse: text on colored/brand backgrounds
- *   Used on saturated backgrounds (green, red, blue, brand) for contrast
+ * On-color text uses constant semantic tokens:
+ * - --_color---text--on-color-dark: always white — for saturated backgrounds
+ * - --_color---text--on-color-light: always black — for light backgrounds
  * - --_color---text--primary: adapts per theme (dark in light, light in dark)
  *   Used on warning yellow where dark text is needed for readability
  *
@@ -42,11 +42,11 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 const statusStyles: Record<BadgeStatus, CSSProperties> = {
   default: {
     backgroundColor: 'var(--_color---background--brand-primary)',
-    color: 'var(--_color---text--inverse)',
+    color: 'var(--_color---text--on-color-dark)',
   },
   positive: {
     backgroundColor: 'var(--system--green)',
-    color: 'var(--_color---text--inverse)',
+    color: 'var(--_color---text--on-color-dark)',
   },
   warning: {
     backgroundColor: 'var(--system--yellow)',
@@ -54,15 +54,15 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
   },
   error: {
     backgroundColor: 'var(--system--red)',
-    color: 'var(--_color---text--inverse)',
+    color: 'var(--_color---text--on-color-dark)',
   },
   info: {
     backgroundColor: 'var(--system--blue)',
-    color: 'var(--_color---text--inverse)',
+    color: 'var(--_color---text--on-color-dark)',
   },
   progress: {
     backgroundColor: 'var(--system--blue)',
-    color: 'var(--_color---text--inverse)',
+    color: 'var(--_color---text--on-color-dark)',
   },
   neutral: {
     backgroundColor: 'var(--_color---background--secondary)',
@@ -74,11 +74,22 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
  * Size-based styles using BDS tokens
  *
  * Token reference:
+ * - --font-size--50 = 11.54px (xs icon size)
  * - --_typography---body--tiny = 10.26px (sm size — no label--tiny exists)
  * - --_typography---label--sm = 14px (md size)
  * - --_typography---label--md-base = 16px (lg size)
+ * - --_space---sm = 6px, --_space---md = 8px
+ * - --_border-radius---sm = 2px (xs uses square corners, not pill)
  */
 const sizeStyles: Record<BadgeSize, CSSProperties> = {
+  xs: {
+    width: '24px',
+    height: '24px',
+    padding: 'var(--_space---sm) var(--_space---md)',
+    fontSize: 'var(--font-size--50)', // bds-lint-ignore — no semantic token for icon-only badge size
+    borderRadius: 'var(--_border-radius---sm)',
+    justifyContent: 'center',
+  },
   sm: {
     padding: '2px 6px',
     fontSize: 'var(--_typography---body--tiny)',
@@ -141,6 +152,7 @@ export function Badge({
   style,
   ...props
 }: BadgeProps) {
+  const isIconOnly = size === 'xs';
   const combinedStyles: CSSProperties = {
     ...baseStyles,
     ...sizeStyles[size],
@@ -155,7 +167,7 @@ export function Badge({
       {...props}
     >
       {icon}
-      {children}
+      {!isIconOnly && children}
     </span>
   );
 }

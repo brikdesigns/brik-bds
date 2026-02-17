@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faCircleExclamation, faSpinner, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCircleExclamation, faSpinner, faCircleInfo, faCircleXmark, faTriangleExclamation, faCircle, faRotate } from '@fortawesome/free-solid-svg-icons';
 import { Badge } from './Badge';
 
 const meta: Meta<typeof Badge> = {
@@ -17,7 +17,7 @@ const meta: Meta<typeof Badge> = {
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['xs', 'sm', 'md', 'lg'],
       description: 'Size variant',
     },
   },
@@ -130,7 +130,8 @@ export const AllSizes: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Badge size="sm">Small</Badge>
+        code: `<Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
+<Badge size="sm">Small</Badge>
 <Badge size="md">Medium</Badge>
 <Badge size="lg">Large</Badge>`,
       },
@@ -138,6 +139,7 @@ export const AllSizes: Story = {
   },
   render: () => (
     <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
       <Badge size="sm">Small</Badge>
       <Badge size="md">Medium</Badge>
       <Badge size="lg">Large</Badge>
@@ -167,22 +169,64 @@ export const WithIcons: Story = {
   ),
 };
 
+// Icon-only (xs) badges
+export const IconOnly: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
+<Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
+<Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
+<Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
+<Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
+<Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />`,
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
+      <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
+      <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
+      <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
+      <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
+      <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
+      <Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />
+    </div>
+  ),
+};
+
 // Size × Status matrix
 export const SizeStatusMatrix: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Badge size="sm">Default</Badge>
-<Badge size="sm" status="positive">Positive</Badge>
+        code: `<Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
+<Badge size="sm">Default</Badge>
 <Badge size="md">Default</Badge>
-<Badge size="md" status="warning">Warning</Badge>
-<Badge size="lg">Default</Badge>
-<Badge size="lg" status="error">Error</Badge>`,
+<Badge size="lg">Default</Badge>`,
       },
     },
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <span style={{
+          fontFamily: 'var(--_typography---font-family--label)',
+          fontSize: '12px',
+          color: 'var(--_color---text--muted)',
+          width: '32px',
+        }}>
+          xs
+        </span>
+        <Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
+        <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
+        <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
+        <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
+        <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
+        <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
+        <Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />
+      </div>
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <span style={{
