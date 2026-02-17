@@ -28,6 +28,6 @@
       "@bds/components/*": ["./components/*"]
     }
   },
-  "include": ["components/**/*", "tokens/**/*", "stories/**/*", ".storybook/**/*"],
+  "include": ["components/**/*", "tokens/**/*", "stories/**/*", ".storybook/**/*", "types/**/*"],
   "exclude": ["node_modules", "dist"]
 }

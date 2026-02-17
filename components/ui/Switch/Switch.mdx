@@ -9,7 +9,17 @@ Toggle control for binary on/off states. Use for settings, feature flags, and pr
 
 ## Overview
 
-<Canvas of={Stories.Unchecked} />
+<Canvas of={Stories.Default} />
+
+## Sizes
+
+Three sizes matching the Figma spec: large (56x32), medium (32x18), and small (28x16).
+
+### Unchecked
+<Canvas of={Stories.Sizes} />
+
+### Checked
+<Canvas of={Stories.SizesChecked} />
 
 ## Variants
 
@@ -21,28 +31,24 @@ Default checked state.
 Prevent interaction with the switch.
 <Canvas of={Stories.Disabled} />
 
-### Without Label
+### Without label
 Use when the switch context is clear from surrounding content.
 <Canvas of={Stories.WithoutLabel} />
 
-## Controlled Mode
+## Controlled mode
 
 Manage switch state externally for dynamic behavior.
 <Canvas of={Stories.Controlled} />
 
-## Usage Examples
+## Usage examples
 
-### Settings Panel
+### Settings panel
 Multiple switches in a preferences panel.
 <Canvas of={Stories.SettingsPanel} />
 
-### With Descriptions
-Add explanatory text below switches.
-<Canvas of={Stories.WithDescriptions} />
-
-### Feature Flags
-Control experimental features.
-<Canvas of={Stories.FeatureFlags} />
+### Compact settings
+Use `sm` size for dense UI like editor preferences.
+<Canvas of={Stories.CompactSettings} />
 
 ## Props
 
@@ -55,7 +61,7 @@ import { Switch } from '@brik/bds';
 import { useState } from 'react';
 
 // Uncontrolled
-<Switch label="Enable feature" defaultChecked={true} />
+<Switch label="Enable feature" defaultChecked />
 
 // Controlled
 const [enabled, setEnabled] = useState(false);
@@ -64,9 +70,9 @@ const [enabled, setEnabled] = useState(false);
   checked={enabled}
   onChange={(e) => setEnabled(e.target.checked)}
 />
+
+// Size variants
+<Switch size="lg" label="Large toggle" />
+<Switch size="md" label="Medium toggle" />
+<Switch size="sm" label="Small toggle" />
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

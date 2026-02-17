@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Link } from './Link';
+import { TextLink } from './TextLink';
 
-const meta: Meta<typeof Link> = {
-  title: 'Components/link',
-  component: Link,
+const meta: Meta<typeof TextLink> = {
+  title: 'Components/text-link',
+  component: TextLink,
   parameters: {
     layout: 'centered',
   },
@@ -21,7 +21,7 @@ const meta: Meta<typeof Link> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Link>;
+type Story = StoryObj<typeof TextLink>;
 
 // Basic link
 export const Default: Story = {
@@ -57,8 +57,8 @@ export const InParagraph: Story = {
       source: {
         code: `<p>
   Our team specializes in web design and development.{' '}
-  <Link href="#">Learn more about our services</Link> or{' '}
-  <Link href="#">contact us</Link> to get started.
+  <TextLink href="#">Learn more about our services</TextLink> or{' '}
+  <TextLink href="#">contact us</TextLink> to get started.
 </p>`,
       },
     },
@@ -73,8 +73,8 @@ export const InParagraph: Story = {
       }}
     >
       Our team specializes in web design and development.{' '}
-      <Link href="#">Learn more about our services</Link> or{' '}
-      <Link href="#">contact us</Link> to get started.
+      <TextLink href="#">Learn more about our services</TextLink> or{' '}
+      <TextLink href="#">contact us</TextLink> to get started.
     </p>
   ),
 };
@@ -85,20 +85,20 @@ export const NavigationLinks: Story = {
     docs: {
       source: {
         code: `<nav>
-  <Link href="#">Home</Link>
-  <Link href="#">About</Link>
-  <Link href="#">Services</Link>
-  <Link href="#">Contact</Link>
+  <TextLink href="#">Home</TextLink>
+  <TextLink href="#">About</TextLink>
+  <TextLink href="#">Services</TextLink>
+  <TextLink href="#">Contact</TextLink>
 </nav>`,
       },
     },
   },
   render: () => (
     <nav style={{ display: 'flex', gap: '24px' }}>
-      <Link href="#">Home</Link>
-      <Link href="#">About</Link>
-      <Link href="#">Services</Link>
-      <Link href="#">Contact</Link>
+      <TextLink href="#">Home</TextLink>
+      <TextLink href="#">About</TextLink>
+      <TextLink href="#">Services</TextLink>
+      <TextLink href="#">Contact</TextLink>
     </nav>
   ),
 };
@@ -107,8 +107,8 @@ export const NavigationLinks: Story = {
 export const AllSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-      <Link href="#">Default Link</Link>
-      <Link href="#" size="small">Small Link</Link>
+      <TextLink href="#">Default Link</TextLink>
+      <TextLink href="#" size="small">Small Link</TextLink>
     </div>
   ),
 };

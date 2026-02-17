@@ -1,16 +1,16 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
 
 /**
- * Link size variants
+ * TextLink size variants
  */
-export type LinkSize = 'default' | 'small';
+export type TextLinkSize = 'default' | 'small';
 
 /**
- * Link component props
+ * TextLink component props
  */
-export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Size variant */
-  size?: LinkSize;
+  size?: TextLinkSize;
   /** Children content */
   children: ReactNode;
   /** Optional icon before text */
@@ -20,18 +20,18 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 /**
- * Link - BDS themed link component
+ * TextLink - BDS themed link component
  *
  * Uses Webflow CSS classes directly to ensure perfect theme integration.
  * Muted text color that transitions to brand color on hover.
  *
  * @example
  * ```tsx
- * <Link href="/about">Learn More</Link>
- * <Link href="/contact" size="small">Contact Us</Link>
+ * <TextLink href="/about">Learn More</TextLink>
+ * <TextLink href="/contact" size="small">Contact Us</TextLink>
  * ```
  */
-export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
+export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
   (
     {
       size = 'default',
@@ -56,6 +56,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
   }
 );
 
-Link.displayName = 'Link';
+TextLink.displayName = 'TextLink';
 
-export default Link;
+export default TextLink;

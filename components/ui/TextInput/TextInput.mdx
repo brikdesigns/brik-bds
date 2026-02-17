@@ -1,9 +1,9 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import * as Stories from './Input.stories';
+import * as Stories from './TextInput.stories';
 
 <Meta of={Stories} />
 
-# Input
+# TextInput
 
 Text input field for collecting user data. Supports labels, helper text, error states, and multiple input types.
 
@@ -66,35 +66,35 @@ Complete form using multiple inputs.
 ## Usage
 
 ```tsx
-import { Input } from '@brik/bds';
+import { TextInput } from '@brik/bds';
 
 // Basic input
-<Input placeholder="Enter text..." />
+<TextInput placeholder="Enter text..." />
 
 // With label
-<Input label="Email Address" placeholder="you@example.com" type="email" />
+<TextInput label="Email Address" placeholder="you@example.com" type="email" />
 
 // With helper text
-<Input
+<TextInput
   label="Password"
   type="password"
   helperText="Must be at least 8 characters"
 />
 
 // Error state
-<Input
+<TextInput
   label="Email"
   error="Please enter a valid email address"
   type="email"
 />
 
 // Sizes
-<Input size="sm" label="Small" />
-<Input size="md" label="Medium" />
-<Input size="lg" label="Large" />
+<TextInput size="sm" label="Small" />
+<TextInput size="md" label="Medium" />
+<TextInput size="lg" label="Large" />
 
 // Full width
-<Input fullWidth label="Full Name" />
+<TextInput fullWidth label="Full Name" />
 ```
 
 ## Resources

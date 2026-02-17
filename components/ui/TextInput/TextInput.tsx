@@ -1,16 +1,17 @@
 import { forwardRef, type InputHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import styles from './TextInput.module.css';
 
 /**
- * Input size variants (per Figma bds-text-input)
+ * TextInput size variants (per Figma bds-text-input)
  */
-export type InputSize = 'sm' | 'md' | 'lg';
+export type TextInputSize = 'sm' | 'md' | 'lg';
 
 /**
- * Input component props
+ * TextInput component props
  */
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Size variant (per Figma design specs) */
-  size?: InputSize;
+  size?: TextInputSize;
   /** Optional label text */
   label?: string;
   /** Helper text shown below input */
@@ -29,12 +30,13 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * Wrapper styles — vertical stack with gap between label and field
  *
  * Token reference:
- * - --_space---gap--sm = 4px (gap between label and field — matches Figma gap/sm)
+ * - --_space---gap--md = 8px (gap between label and field)
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: 'var(--_space---gap--md)',
+  color: 'var(--_color---text--primary)',
 };
 
 /**
@@ -43,13 +45,11 @@ const wrapperStyles: CSSProperties = {
  * Token reference:
  * - --_typography---font-family--label (label font)
  * - --font-weight--semi-bold = 600 (SemiBold per Figma)
- * - --_color---text--primary (label text color)
  */
 const labelBaseStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height--100)',
-  color: 'var(--_color---text--primary)',
 };
 
 /**
@@ -73,7 +73,6 @@ const fieldWrapperStyles: CSSProperties = {
  * - --_typography---font-family--body (field text font — Regular per Figma)
  * - --font-weight--regular = 400
  * - --font-line-height--150 = 150%
- * - --_color---text--primary (typed text color)
  */
 const inputBaseStyles: CSSProperties = {
   width: '100%',
@@ -81,7 +80,6 @@ const inputBaseStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--body)',
   fontWeight: 'var(--font-weight--regular)' as unknown as number,
   lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--primary)',
   backgroundColor: 'var(--_color---background--input)',
   border: 'var(--_border-width---sm) solid var(--_color---border--input)',
   borderRadius: 'var(--_border-radius---input)',
@@ -126,7 +124,7 @@ const helperBaseStyles: CSSProperties = {
  * - md: label font-size/100 (16px), body font-size/100 (16px)
  * - lg: label font-size/200 (18px), body font-size/200 (18px)
  */
-const sizeStyles: Record<InputSize, { label: CSSProperties; input: CSSProperties }> = {
+const sizeStyles: Record<TextInputSize, { label: CSSProperties; input: CSSProperties }> = {
   sm: {
     label: { fontSize: 'var(--_typography---label--sm)' },
     input: { fontSize: 'var(--_typography---body--sm)' },
@@ -142,7 +140,7 @@ const sizeStyles: Record<InputSize, { label: CSSProperties; input: CSSProperties
 };
 
 /**
- * Input - BDS themed text input component
+ * TextInput - BDS themed text input component
  *
  * Fully token-based — does NOT depend on Webflow CSS classes.
  * All styles reference BDS design tokens for consistent theming
@@ -152,12 +150,12 @@ const sizeStyles: Record<InputSize, { label: CSSProperties; input: CSSProperties
  *
  * @example
  * ```tsx
- * <Input size="sm" label="Email" placeholder="Enter your email" />
- * <Input size="md" label="Password" type="password" helperText="Must be at least 8 characters" />
- * <Input size="lg" label="Search" error="Required field" />
+ * <TextInput size="sm" label="Email" placeholder="Enter your email" />
+ * <TextInput size="md" label="Password" type="password" helperText="Must be at least 8 characters" />
+ * <TextInput size="lg" label="Search" error="Required field" />
  * ```
  */
-export const Input = forwardRef<HTMLInputElement, InputProps>(
+export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (
     {
       size = 'md',
@@ -218,6 +216,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
+            className={styles.input}
             style={inputStyles}
             aria-invalid={hasError}
             aria-describedby={
@@ -253,6 +252,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = 'Input';
+TextInput.displayName = 'TextInput';
 
-export default Input;
+export default TextInput;

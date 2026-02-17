@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Textarea } from './Textarea';
+import { TextArea } from './TextArea';
 
 const meta = {
-  title: 'Components/textarea',
-  component: Textarea,
+  title: 'Components/text-area',
+  component: TextArea,
   parameters: {
     layout: 'centered',
   },
@@ -26,7 +26,7 @@ const meta = {
       description: 'Resize behavior',
     },
   },
-} satisfies Meta<typeof Textarea>;
+} satisfies Meta<typeof TextArea>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -113,7 +113,7 @@ export const FormExample: Story = {
     docs: {
       source: {
         code: `<label>Comments</label>
-<Textarea placeholder="Share your feedback..." rows={6} />`,
+<TextArea placeholder="Share your feedback..." rows={6} />`,
       },
     },
   },
@@ -126,7 +126,7 @@ export const FormExample: Story = {
       }}>
         Comments
       </label>
-      <Textarea
+      <TextArea
         placeholder="Share your feedback..."
         rows={6}
       />
@@ -148,7 +148,7 @@ export const MultipleTextareas: Story = {
         }}>
           Description
         </label>
-        <Textarea
+        <TextArea
           placeholder="Describe your needs..."
           rows={4}
         />
@@ -161,7 +161,7 @@ export const MultipleTextareas: Story = {
         }}>
           Additional Information
         </label>
-        <Textarea
+        <TextArea
           placeholder="Any other details..."
           rows={4}
         />
