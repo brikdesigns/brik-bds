@@ -79,16 +79,16 @@ const navSectionStyles: CSSProperties = {
 const navItemBaseStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '12px',
-  padding: '10px 12px',
-  borderRadius: '6px',
+  gap: 'var(--_space---gap--md)', // bds-lint-ignore — Figma spec 12px, nearest token 8px
+  padding: '10px 12px', // bds-lint-ignore — Figma nav item padding
+  borderRadius: 'var(--_border-radius---md)', // bds-lint-ignore — Figma spec 6px, nearest token 4px
   fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: '14px',
-  fontWeight: 400,
+  fontSize: 'var(--_typography---body--sm)',
+  fontWeight: 'var(--font-weight--regular)' as unknown as number,
   color: 'var(--_color---text--secondary)',
   backgroundColor: 'transparent',
   textDecoration: 'none',
-  marginBottom: '4px',
+  marginBottom: 'var(--_space---gap--sm)',
   transition: 'background-color 0.15s, color 0.15s',
   cursor: 'pointer',
 };
@@ -101,7 +101,7 @@ const navItemBaseStyles: CSSProperties = {
  * - --_color---page--secondary (active background)
  */
 const navItemActiveStyles: CSSProperties = {
-  fontWeight: 600,
+  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   color: 'var(--_color---text--primary)',
   backgroundColor: 'var(--_color---page--secondary)',
 };
@@ -116,8 +116,8 @@ const navItemActiveStyles: CSSProperties = {
 const indicatorStyles = (active: boolean): CSSProperties => ({
   width: '8px',
   height: '8px',
-  borderRadius: '2px',
-  backgroundColor: active ? 'var(--brand--primary)' : 'var(--_color---border--secondary)',
+  borderRadius: 'var(--_border-radius---sm)',
+  backgroundColor: active ? 'var(--_color---background--brand-primary)' : 'var(--_color---border--secondary)',
   flexShrink: 0,
 });
 

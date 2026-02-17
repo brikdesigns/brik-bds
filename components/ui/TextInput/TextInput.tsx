@@ -134,7 +134,7 @@ const sizeStyles: Record<TextInputSize, { label: CSSProperties; input: CSSProper
     input: { fontSize: 'var(--_typography---body--md-base)' },
   },
   lg: {
-    label: { fontSize: 'var(--_typography---label--le)' },
+    label: { fontSize: 'var(--_typography---label--lg)' },
     input: { fontSize: 'var(--_typography---body--lg)' },
   },
 };

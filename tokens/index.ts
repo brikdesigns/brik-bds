@@ -403,6 +403,8 @@ export const semanticColors = {
   "surface--nav": "var(--grayscale--white)",
   "background--brand-primary": "var(--_themes---blue-green--blue-light)",
   "text--inverse": "var(--grayscale--white)",
+  "text--on-color-dark": "var(--grayscale--white)",
+  "text--on-color-light": "var(--grayscale--black)",
   "border--brand": "var(--_themes---blue-green--blue-light)",
   "background--primary": "var(--grayscale--white)",
   "border--inverse": "var(--grayscale--white)",

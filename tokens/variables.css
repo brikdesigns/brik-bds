@@ -276,6 +276,8 @@
   --color-surface-nav: var(--grayscale--white);
   --color-background-brand-primary: var(--themes--blue-green--blue-light);
   --color-text-inverse: var(--grayscale--white);
+  --color-text-on-color-dark: var(--grayscale--white);
+  --color-text-on-color-light: var(--grayscale--black);
   --color-border-brand: var(--themes--blue-green--blue-light);
   --color-background-primary: var(--grayscale--white);
   --color-border-inverse: var(--grayscale--white);

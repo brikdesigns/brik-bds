@@ -5,9 +5,6 @@
  * DO NOT EDIT — re-run: npm run extract-tokens
  *
  * Source: updates/brik-bds.webflow/css/brik-bds.webflow.css
- *
- * Note: Poppins (brand font) is loaded via preview-head.html in Storybook
- *       to ensure it's available before CSS is applied.
  */
 
 @font-face {

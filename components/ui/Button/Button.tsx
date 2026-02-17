@@ -64,7 +64,8 @@ const sizeStyles: Record<ButtonSize, CSSProperties> = {
  *
  * Token reference:
  * - --_color---background--brand-primary (brand background)
- * - --_color---text--on-color-dark (text on brand/colored backgrounds)
+ * - --_color---text--on-color-dark (text on dark/colored backgrounds — always white)
+ * - --_color---text--on-color-light (text on light backgrounds — always black)
  * - --_color---text--brand (brand text)
  * - --_color---border--brand (brand border)
  * - --_border-width---sm (thin border)
@@ -83,7 +84,7 @@ const variantStyles: Record<ButtonVariant, CSSProperties> = {
   },
   secondary: {
     backgroundColor: 'var(--_color---surface--secondary)',
-    color: 'var(--_color---text--primary)',
+    color: 'var(--_color---text--on-color-light)',
     border: 'var(--_border-width---sm) solid var(--_color---border--secondary)',
   },
   ghost: {

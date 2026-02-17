@@ -36,10 +36,10 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
  * - --_space---xxl = 32px
  */
 const sizeConfig: Record<AvatarSize, { size: string; fontSize: string }> = {
-  sm: { size: '32px', fontSize: '12px' },
-  md: { size: '40px', fontSize: '14px' },
-  lg: { size: '48px', fontSize: '16px' },
-  xl: { size: '64px', fontSize: '20px' },
+  sm: { size: '32px', fontSize: 'var(--_typography---body--xs)' },
+  md: { size: '40px', fontSize: 'var(--_typography---body--sm)' },
+  lg: { size: '48px', fontSize: 'var(--_typography---body--md-base)' },
+  xl: { size: '64px', fontSize: 'var(--_typography---heading--small)' },
 };
 
 /**

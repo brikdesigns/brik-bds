@@ -665,7 +665,7 @@ const REQUIRED_SEMANTIC_COLORS = [
   // Page (page--accent and system--link are portal-level brand tokens, not BDS)
   'page--primary', 'page--secondary',
   // Text
-  'text--primary', 'text--secondary', 'text--muted', 'text--inverse', 'text--brand',
+  'text--primary', 'text--secondary', 'text--muted', 'text--inverse', 'text--on-color-dark', 'text--on-color-light', 'text--brand',
   // Surface
   'surface--primary', 'surface--secondary', 'surface--brand-primary',
   // Background

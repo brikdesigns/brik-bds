@@ -23,7 +23,7 @@ const trackStyles: CSSProperties = {
   height: '6px',
   backgroundColor: 'var(--_color---background--input)',
   border: 'var(--_border-width---sm) solid var(--_color---border--muted)',
-  borderRadius: '3px',
+  borderRadius: 'var(--_border-radius---sm)', // bds-lint-ignore — half track height
   overflow: 'hidden',
 };
 
@@ -39,7 +39,7 @@ const barStyles: CSSProperties = {
   left: 0,
   bottom: 0,
   backgroundColor: 'var(--_color---background--brand-primary)',
-  borderRadius: '3px',
+  borderRadius: 'var(--_border-radius---sm)', // bds-lint-ignore — half track height
   transition: 'width 0.3s ease',
 };
 

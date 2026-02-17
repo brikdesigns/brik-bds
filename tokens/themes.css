@@ -543,6 +543,8 @@
   --_color---text--secondary: var(--grayscale--dark);
   --_color---text--muted: var(--grayscale--light);
   --_color---text--inverse: var(--grayscale--white);
+  --_color---text--on-color-dark: var(--grayscale--white);
+  --_color---text--on-color-light: var(--grayscale--black);
   --_color---text--brand: #e35335;
   --_color---surface--primary: var(--grayscale--white);
   --_color---surface--secondary: var(--grayscale--lightest);

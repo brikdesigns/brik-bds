@@ -27,6 +27,8 @@
   --_color---background--brand-primary: var(--_themes---blue-green--blue-light);
   --_typography---font-family--label: "Open Sans", sans-serif;
   --_color---text--inverse: var(--grayscale--white);
+  --_color---text--on-color-dark: var(--grayscale--white);
+  --_color---text--on-color-light: var(--grayscale--black);
   --_typography---body--sm: var(--font-size--75);
   --font-line-height--150: 150%;
   --font-weight--bold: 700;
@@ -68,6 +70,8 @@
   --_border-radius---border-radius--lg\<deleted\|variable-f8962751-46b4-00f6-7002-92f0861de90b\>: var(--space--1000);
   --_space---gap--sm: var(--space--100);
   --_color---border--input: var(--grayscale--light);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--on-color: white;
   --_typography---body--md-base: var(--font-size--100);
   --_typography---font-family--heading: "Droid Sans", sans-serif;
   --font-size--50: 11.54px;
@@ -79,9 +83,11 @@
   --space--0: 0px;
   --space--600: 24px;
   --font-size--300: 20px;
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
+  --_typography---label--xl: var(--font-size--300);
   --_space---gap--huge: var(--space--1200);
   --_typography---label--sm: var(--font-size--75);
+  --_typography---body--xl: var(--font-size--300);
   --_color---surface--brand-secondary: var(--_themes---blue-green--green);
   --_typography---font-family--display: "Droid Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -399,6 +405,8 @@
   --_color---text--muted: var(--grayscale--dark);
   --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
   --_color---border--input: var(--grayscale--light);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--on-color: white;
   --_color---surface--brand-secondary: var(--_themes---blue-green--green);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
@@ -422,7 +430,7 @@
   --_typography---font-family--heading: "Droid Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "Droid Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -519,7 +527,7 @@
   --_typography---font-family--heading: "Playfair Display", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "Playfair Display", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -575,6 +583,8 @@
   --_color---text--muted: var(--grayscale--dark);
   --_color---surface--brand-primary: var(--_themes---vibrant--green);
   --_color---border--input: var(--grayscale--light);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--on-color: white;
   --_color---surface--brand-secondary: var(--_themes---vibrant--purple);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
@@ -630,6 +640,8 @@
   --_color---text--muted: var(--grayscale--dark);
   --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
   --_color---border--input: var(--grayscale--dark);
+  --_color---border--muted: var(--grayscale--darker);
+  --_color---border--on-color: var(--grayscale--darkest);
   --_color---surface--brand-secondary: var(--_themes---yellow-orange--orange);
   --_color---text--secondary: var(--grayscale--light);
   --_color---background--secondary: var(--grayscale--black);
@@ -653,7 +665,7 @@
   --_typography---font-family--heading: Geist, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Geist, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -690,6 +702,8 @@
   --_color---text--muted: var(--grayscale--dark);
   --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
   --_color---border--input: var(--grayscale--light);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--on-color: white;
   --_color---surface--brand-secondary: var(--_themes---blue-green--green);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
@@ -713,7 +727,7 @@
   --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "IBM Plex Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -750,6 +764,8 @@
   --_color---text--muted: var(--grayscale--dark);
   --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
   --_color---border--input: var(--grayscale--light);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--on-color: white;
   --_color---surface--brand-secondary: var(--_themes---yellow-orange--orange);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
@@ -773,7 +789,7 @@
   --_typography---font-family--heading: Lato, Arial, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Lato, Arial, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -810,6 +826,8 @@
   --_color---text--muted: var(--grayscale--dark);
   --_color---surface--brand-primary: var(--_themes---peach-brown--peach);
   --_color---border--input: var(--_themes---peach-brown--peach-darkest);
+  --_color---border--muted: var(--grayscale--darker);
+  --_color---border--on-color: var(--grayscale--darkest);
   --_color---surface--brand-secondary: var(--_themes---peach-brown--peach-light);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
@@ -833,7 +851,7 @@
   --_typography---font-family--heading: Newsreader, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Newsreader, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -863,7 +881,7 @@
   --_typography---font-family--heading: Geist, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Geist, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -897,6 +915,8 @@
   --_color---text--muted: var(--grayscale--dark);
   --_color---surface--brand-primary: var(--_themes---pastel--purple);
   --_color---border--input: var(--grayscale--light);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--on-color: white;
   --_color---surface--brand-secondary: var(--_themes---pastel--green);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
@@ -931,6 +951,8 @@
   --_color---text--muted: var(--grayscale--dark);
   --_color---surface--brand-primary: var(--_themes---green-orange--yellow);
   --_color---border--input: var(--grayscale--light);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--on-color: white;
   --_color---surface--brand-secondary: var(--_themes---blue-green--green);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
@@ -954,7 +976,7 @@
   --_typography---font-family--heading: Lato, Arial, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Lato, Arial, sans-serif;
   --_typography---display--large: var(--font-size--1400);

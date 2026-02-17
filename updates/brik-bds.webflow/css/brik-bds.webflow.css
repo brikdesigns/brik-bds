@@ -101,6 +101,8 @@
   --_color---background--brand-primary: var(--_themes---blue-green--blue-light);
   --_typography---font-family--label: "Open Sans", sans-serif;
   --_color---text--inverse: var(--grayscale--white);
+  --_color---text--on-color-dark: var(--grayscale--white);
+  --_color---text--on-color-light: var(--grayscale--black);
   --_typography---body--sm: var(--font-size--75);
   --font-line-height--150: 150%;
   --font-weight--bold: 700;
@@ -155,9 +157,11 @@
   --space--0: 0px;
   --space--600: 24px;
   --font-size--300: 20px;
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
+  --_typography---label--xl: var(--font-size--300);
   --_space---gap--huge: var(--space--1200);
   --_typography---label--sm: var(--font-size--75);
+  --_typography---body--xl: var(--font-size--300);
   --_color---surface--brand-secondary: var(--_themes---blue-green--green);
   --_typography---font-family--display: "Droid Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -1016,7 +1020,7 @@ figcaption {
   --_typography---font-family--heading: "Droid Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "Droid Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -1113,7 +1117,7 @@ figcaption {
   --_typography---font-family--heading: "Playfair Display", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "Playfair Display", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -1251,7 +1255,7 @@ figcaption {
   --_typography---font-family--heading: Geist, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Geist, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -1313,7 +1317,7 @@ figcaption {
   --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "IBM Plex Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -1375,7 +1379,7 @@ figcaption {
   --_typography---font-family--heading: Lato, Arial, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Lato, Arial, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -1437,7 +1441,7 @@ figcaption {
   --_typography---font-family--heading: Newsreader, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Newsreader, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -1467,7 +1471,7 @@ figcaption {
   --_typography---font-family--heading: Geist, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Geist, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -1562,7 +1566,7 @@ figcaption {
   --_typography---font-family--heading: Lato, Arial, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Lato, Arial, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -2496,7 +2500,7 @@ figcaption {
 .text_label-lg {
   font-family: var(--_typography---font-family--label);
   color: var(--_color---text--primary);
-  font-size: var(--_typography---label--le);
+  font-size: var(--_typography---label--lg);
   line-height: var(--font-line-height--125);
   font-weight: var(--font-weight--bold);
   text-align: left;
@@ -3971,7 +3975,7 @@ figcaption {
   --_typography---font-family--heading: "Droid Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "Droid Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -4004,7 +4008,7 @@ figcaption {
   --_typography---font-family--heading: "Droid Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "Droid Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -4099,7 +4103,7 @@ figcaption {
   --_typography---font-family--heading: Geist, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Geist, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -4161,7 +4165,7 @@ figcaption {
   --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "IBM Plex Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -4190,7 +4194,7 @@ figcaption {
   --_typography---font-family--heading: Lato, Arial, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Lato, Arial, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -5898,7 +5902,7 @@ figcaption {
     --_typography---font-family--heading: Geist, sans-serif;
     --_typography---heading--xxx-large: var(--font-size--1200);
     --_typography---heading--large: var(--font-size--700);
-    --_typography---label--le: var(--font-size--200);
+    --_typography---label--lg: var(--font-size--200);
     --_typography---label--sm: var(--font-size--75);
     --_typography---font-family--display: Geist, sans-serif;
     --_typography---display--large: var(--font-size--1400);
@@ -5960,7 +5964,7 @@ figcaption {
     --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
     --_typography---heading--xxx-large: var(--font-size--1200);
     --_typography---heading--large: var(--font-size--700);
-    --_typography---label--le: var(--font-size--200);
+    --_typography---label--lg: var(--font-size--200);
     --_typography---label--sm: var(--font-size--75);
     --_typography---font-family--display: "IBM Plex Sans", sans-serif;
     --_typography---display--large: var(--font-size--1400);
@@ -6022,7 +6026,7 @@ figcaption {
     --_typography---font-family--heading: Lato, Arial, sans-serif;
     --_typography---heading--xxx-large: var(--font-size--1200);
     --_typography---heading--large: var(--font-size--700);
-    --_typography---label--le: var(--font-size--200);
+    --_typography---label--lg: var(--font-size--200);
     --_typography---label--sm: var(--font-size--75);
     --_typography---font-family--display: Lato, Arial, sans-serif;
     --_typography---display--large: var(--font-size--1400);
@@ -6084,7 +6088,7 @@ figcaption {
     --_typography---font-family--heading: Newsreader, sans-serif;
     --_typography---heading--xxx-large: var(--font-size--1200);
     --_typography---heading--large: var(--font-size--700);
-    --_typography---label--le: var(--font-size--200);
+    --_typography---label--lg: var(--font-size--200);
     --_typography---label--sm: var(--font-size--75);
     --_typography---font-family--display: Newsreader, sans-serif;
     --_typography---display--large: var(--font-size--1400);
@@ -6113,7 +6117,7 @@ figcaption {
     --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
     --_typography---heading--xxx-large: var(--font-size--1200);
     --_typography---heading--large: var(--font-size--700);
-    --_typography---label--le: var(--font-size--200);
+    --_typography---label--lg: var(--font-size--200);
     --_typography---label--sm: var(--font-size--75);
     --_typography---font-family--display: "IBM Plex Sans", sans-serif;
     --_typography---display--large: var(--font-size--1400);
@@ -6142,7 +6146,7 @@ figcaption {
     --_typography---font-family--heading: Lato, Arial, sans-serif;
     --_typography---heading--xxx-large: var(--font-size--1200);
     --_typography---heading--large: var(--font-size--700);
-    --_typography---label--le: var(--font-size--200);
+    --_typography---label--lg: var(--font-size--200);
     --_typography---label--sm: var(--font-size--75);
     --_typography---font-family--display: Lato, Arial, sans-serif;
     --_typography---display--large: var(--font-size--1400);
