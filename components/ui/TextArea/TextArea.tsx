@@ -1,4 +1,5 @@
 import { type TextareaHTMLAttributes, type CSSProperties } from 'react';
+import styles from './TextArea.module.css';
 
 /**
  * TextArea component props
@@ -100,7 +101,7 @@ export function TextArea({
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
-      className={className || undefined}
+      className={`${styles.textarea}${className ? ` ${className}` : ''}`}
       style={combinedStyles}
       {...props}
     />
