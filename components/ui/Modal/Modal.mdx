@@ -17,27 +17,15 @@ Dialog overlay component with multiple size variants and configurable close beha
 Compact modal for simple messages or confirmations.
 <Canvas of={Stories.Small} />
 
-### Medium (Default)
-Standard size for most use cases.
-<Canvas of={Stories.Medium} />
-
 ### Large
 Extended space for complex content or longer forms.
 <Canvas of={Stories.Large} />
 
-### Extra Large
-Maximum space for detailed content.
-<Canvas of={Stories.ExtraLarge} />
-
-### Full Width
-Takes up most of the viewport width.
-<Canvas of={Stories.FullWidth} />
-
 ## Features
 
-### With Footer
-Composable footer for action buttons.
-<Canvas of={Stories.WithFooter} />
+### Confirmation Dialog
+Footer with ghost Cancel and primary action button.
+<Canvas of={Stories.ConfirmDelete} />
 
 ### Scrolling Content
 Content automatically scrolls when it exceeds maximum height.
@@ -46,10 +34,6 @@ Content automatically scrolls when it exceeds maximum height.
 ### No Close Button
 Hide the header close button when explicit action is required.
 <Canvas of={Stories.NoCloseButton} />
-
-### No Backdrop Close
-Prevent closing by clicking outside the modal.
-<Canvas of={Stories.NoBackdropClose} />
 
 ## Usage Examples
 
@@ -76,26 +60,15 @@ const [isOpen, setIsOpen] = useState(false);
   <Modal
     isOpen={isOpen}
     onClose={() => setIsOpen(false)}
-    title="Modal Title"
-    size="md"
-    closeOnBackdrop={true}
-    closeOnEscape={true}
-    showCloseButton={true}
+    title="Title Goes Here"
     footer={
-      <div style={{ display: 'flex', gap: '16px' }}>
-        <Button onClick={() => setIsOpen(false)}>Cancel</Button>
-        <Button onClick={() => { /* action */ setIsOpen(false); }}>
-          Confirm
-        </Button>
-      </div>
+      <>
+        <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+        <Button variant="primary" onClick={handleSave}>Save</Button>
+      </>
     }
   >
-    <p>Modal content goes here.</p>
+    <p>Description goes here</p>
   </Modal>
 </>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon
