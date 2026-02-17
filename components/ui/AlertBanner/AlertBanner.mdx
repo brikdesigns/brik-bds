@@ -1,0 +1,58 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './AlertBanner.stories';
+
+<Meta of={Stories} />
+
+# Alert banner
+
+Contextual banner for important messages requiring user attention. Uses a secondary surface background with an icon, title, description, and optional action.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Icon variants
+
+### Info
+General informational messages.
+<Canvas of={Stories.Info} />
+
+### Warning
+Attention-requiring situations.
+<Canvas of={Stories.Warning} />
+
+### Success
+Positive confirmation messages.
+<Canvas of={Stories.Success} />
+
+### Error
+Error states and failures.
+<Canvas of={Stories.Error} />
+
+### All icons
+Side-by-side comparison of all icon variants.
+<Canvas of={Stories.AllIcons} />
+
+## Variants
+
+### Title only
+Minimal alert without description.
+<Canvas of={Stories.TitleOnly} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { AlertBanner } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+<AlertBanner
+  icon="info"
+  title="Update available"
+  description="A new version is ready to install"
+  action={<Button variant="primary" size="sm">Update now</Button>}
+/>
+```

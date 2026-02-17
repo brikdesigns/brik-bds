@@ -1,0 +1,44 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Banner.stories';
+
+<Meta of={Stories} />
+
+# Banner
+
+Full-width marketing banner for announcements, promotions, and site-wide notices. Uses brand-primary background with inverse text.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Title only
+Minimal banner with just a title.
+<Canvas of={Stories.TitleOnly} />
+
+### With action
+Include a button for user interaction.
+<Canvas of={Stories.WithAction} />
+
+### Dismissible
+Add `onDismiss` to show a close button.
+<Canvas of={Stories.Dismissible} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Banner } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+<Banner
+  title="New feature"
+  description="Check out our latest update"
+  action={<Button variant="secondary" size="sm">Learn more</Button>}
+  onDismiss={() => setVisible(false)}
+/>
+```
