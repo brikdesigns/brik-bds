@@ -5,32 +5,49 @@ import * as Stories from './Select.stories';
 
 # Select
 
-Dropdown selection control with options array, placeholder text, and disabled states. Use for choosing from a predefined set of values in forms and filters.
+Dropdown selection control with options array, placeholder text, optional leading icon, and size variants. Use for choosing from a predefined set of values in forms and filters.
 
 ## Overview
 
 <Canvas of={Stories.Default} />
 
-## Variants
+## With Icon
 
-### With Default Value
-Pre-select an option when the component loads.
-<Canvas of={Stories.WithDefaultValue} />
+Add a leading icon for visual context using the `icon` prop.
+
+<Canvas of={Stories.WithIcon} />
+
+### Small with Icon
+
+The `sm` size with a leading icon for compact layouts.
+<Canvas of={Stories.SmallWithIcon} />
+
+### Label and Icon
+
+Combine label, icon, and full width for form fields.
+<Canvas of={Stories.WithLabelAndIcon} />
+
+## Sizes
+
+Three size variants to match surrounding UI density.
+
+<Canvas of={Stories.AllSizes} />
+
+## States
+
+### Error
+
+Show validation errors with the `error` prop.
+<Canvas of={Stories.WithError} />
 
 ### Disabled
-Prevent interaction with the entire select control.
+
+Prevent interaction with the entire control.
 <Canvas of={Stories.Disabled} />
 
-### With Disabled Options
-Disable specific options while keeping the select functional.
-<Canvas of={Stories.WithDisabledOptions} />
+## Form Example
 
-### Plan Selection
-Example with pricing options.
-<Canvas of={Stories.PlanSelection} />
-
-## Usage in Forms
-
+Multiple selects in a form layout.
 <Canvas of={Stories.FormExample} />
 
 ## Props
@@ -41,21 +58,32 @@ Example with pricing options.
 
 ```tsx
 import { Select } from '@brik/bds';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding } from '@fortawesome/free-solid-svg-icons';
 
-const options = [
-  { label: 'First choice', value: 'first' },
-  { label: 'Second choice', value: 'second' },
-  { label: 'Third choice', value: 'third' },
-];
-
+// Basic select
 <Select
   placeholder="Select one..."
+  options={[
+    { label: 'First', value: 'first' },
+    { label: 'Second', value: 'second' },
+  ]}
+/>
+
+// With icon
+<Select
+  placeholder="Select company..."
   options={options}
-  defaultValue="second"
+  icon={<FontAwesomeIcon icon={faBuilding} />}
+/>
+
+// Small size with label
+<Select
+  size="sm"
+  label="User"
+  placeholder="Select user..."
+  options={users}
+  icon={<FontAwesomeIcon icon={faUser} />}
+  fullWidth
 />
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon
