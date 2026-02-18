@@ -213,7 +213,7 @@ export const FullApplicationLayout: Story = {
       <main
         style={{
           flex: 1,
-          padding: 'var(--_space---xxl)',
+          padding: 'var(--_space---xl)',
           backgroundColor: 'var(--_color---page--primary)',
           overflowY: 'auto',
         }}

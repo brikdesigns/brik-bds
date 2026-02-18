@@ -20,30 +20,33 @@ The values below are for **Base mode**, which is the default in Storybook.
 The Webflow CSS `.body` class applies Spacious mode by default, but we override
 this in `storybook-overrides.css` to use Base mode.
 
-### Spacing Modes Reference
+### Spacing Modes Reference (Padding)
 
 | Token | Base | Compact | Comfortable | Spacious |
 |-------|------|---------|-------------|----------|
-| tiny  | 4px  | 2px     | 4px         | 40px     |
-| sm    | 6px  | 4px     | 8px         | 44px     |
-| md    | 8px  | 4px     | 12px        | 48px     |
-| lg    | 16px | 8px     | 20px        | 52px     |
-| xl    | 24px | 12px    | 24px        | 56px     |
-| xxl   | 32px | 16px    | 32px        | 60px     |
-| huge  | 40px | 20px    | 40px        | 64px     |
+| tiny  | 8px  | 2px     | 4px         | 24px     |
+| xs    | 10px | 4px     | 6px         | 24px     |
+| sm    | 12px | 4px     | 8px         | 24px     |
+| md    | 16px | 8px     | 12px        | 32px     |
+| lg    | 24px | 12px    | 20px        | 40px     |
+| xl    | 32px | 16px    | 32px        | 48px     |
+| huge  | 48px | 24px    | 48px        | 88px     |
 
-### Semantic Spacing (Base Mode)
+**Note:** `xxl` is deprecated — use `xl` instead (same value: 32px in Base mode).
+
+### Semantic Spacing — Padding (Base Mode)
 
 | Token | Primitive | Value |
 |-------|-----------|-------|
 | `--_space---none` | `--space--0` | 0px |
-| `--_space---tiny` | `--space--100` | 4px |
-| `--_space---sm` | `--space--150` | 6px |
-| `--_space---md` | `--space--200` | 8px |
-| `--_space---lg` | `--space--400` | 16px |
-| `--_space---xl` | `--space--600` | 24px |
-| `--_space---xxl` | `--space--800` | 32px |
-| `--_space---huge` | `--space--1000` | 40px |
+| `--_space---tiny` | `--space--200` | 8px |
+| `--_space---xs` | `--space--250` | 10px |
+| `--_space---sm` | `--space--300` | 12px |
+| `--_space---md` | `--space--400` | 16px |
+| `--_space---lg` | `--space--600` | 24px |
+| `--_space---xl` | `--space--800` | 32px |
+| `--_space---xxl` | `--space--800` | 32px (deprecated, alias for xl) |
+| `--_space---huge` | `--space--1200` | 48px |
 
 ### Component-Specific Spacing
 | Token | Value | Usage |
@@ -51,17 +54,19 @@ this in `storybook-overrides.css` to use Base mode.
 | `--_space---button` | 8px | Button padding |
 | `--_space---input` | 8px | Input padding |
 
-### Gap Tokens
-| Token | Value |
-|-------|-------|
-| `--_space---gap--none` | 0px |
-| `--_space---gap--tiny` | 2px |
-| `--_space---gap--sm` | 4px |
-| `--_space---gap--md` | 8px |
-| `--_space---gap--lg` | 16px |
-| `--_space---gap--xl` | 20px |
-| `--_space---gap--xxl` | 24px |
-| `--_space---gap--huge` | 48px |
+### Gap Tokens (Base Mode)
+
+| Token | Primitive | Value |
+|-------|-----------|-------|
+| `--_space---gap--none` | `--space--0` | 0px |
+| `--_space---gap--tiny` | `--space--50` | 2px |
+| `--_space---gap--xs` | `--space--100` | 4px |
+| `--_space---gap--sm` | `--space--150` | 6px |
+| `--_space---gap--md` | `--space--200` | 8px |
+| `--_space---gap--lg` | `--space--400` | 16px |
+| `--_space---gap--xl` | `--space--600` | 24px |
+| `--_space---gap--xxl` | `--space--600` | 24px (deprecated, alias for gap--xl) |
+| `--_space---gap--huge` | `--space--800` | 32px |
 
 ---
 

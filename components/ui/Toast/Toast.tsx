@@ -30,7 +30,7 @@ const toastStyles: CSSProperties = {
   gap: 'var(--_space---gap--lg)',
   backgroundColor: 'var(--grayscale--black, black)',
   color: 'var(--_color---text--inverse)',
-  padding: 'var(--_space---xxl)',
+  padding: 'var(--_space---xl)',
   borderRadius: 'var(--_border-radius---lg)',
   boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)',
   width: '100%',

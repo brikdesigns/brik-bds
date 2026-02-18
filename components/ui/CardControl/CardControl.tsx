@@ -22,13 +22,13 @@ export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
  * - --_border-width---lg = 1px (border)
  * - --_color---border--muted (border color)
  * - --_border-radius---lg = 8px (corners)
- * - --_space---xxl = 32px (padding)
+ * - --_space---xl = 32px (padding)
  */
 const cardStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--_space---xxl)',
-  padding: 'var(--_space---xxl)',
+  gap: 'var(--_space---xl)',
+  padding: 'var(--_space---xl)',
   backgroundColor: 'var(--_color---surface--primary)',
   border: 'var(--_border-width---lg) solid var(--_color---border--muted)',
   borderRadius: 'var(--_border-radius---lg)',
