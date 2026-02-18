@@ -133,7 +133,9 @@ export const Interactive: Story = {
     interactive: true,
     children: (
       <>
-        <Badge>New</Badge>
+        <div style={{ alignSelf: 'flex-start' }}>
+          <Badge>New</Badge>
+        </div>
         <CardTitle>Clickable Card</CardTitle>
         <CardDescription>
           This entire card is clickable.
