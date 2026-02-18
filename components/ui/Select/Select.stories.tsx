@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding, faUser, faGlobe, faTag } from '@fortawesome/free-solid-svg-icons';
 import { Select } from './Select';
 
 const meta = {
@@ -15,6 +17,11 @@ const meta = {
     disabled: {
       control: 'boolean',
       description: 'Disabled state',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size variant',
     },
   },
 } satisfies Meta<typeof Select>;
@@ -35,6 +42,54 @@ export const Default: Story = {
   args: {
     placeholder: 'Select one...',
     options: basicOptions,
+  },
+};
+
+/**
+ * Select with a leading icon
+ */
+export const WithIcon: Story = {
+  args: {
+    placeholder: 'Select company...',
+    options: [
+      { label: 'Acme Corp', value: 'acme' },
+      { label: 'Globex Inc', value: 'globex' },
+      { label: 'Initech', value: 'initech' },
+    ],
+    icon: <FontAwesomeIcon icon={faBuilding} />,
+  },
+};
+
+/**
+ * Small select with icon
+ */
+export const SmallWithIcon: Story = {
+  args: {
+    placeholder: 'Select user...',
+    options: [
+      { label: 'Alice Johnson', value: 'alice' },
+      { label: 'Bob Smith', value: 'bob' },
+      { label: 'Carol White', value: 'carol' },
+    ],
+    size: 'sm',
+    icon: <FontAwesomeIcon icon={faUser} />,
+  },
+};
+
+/**
+ * Select with label and icon
+ */
+export const WithLabelAndIcon: Story = {
+  args: {
+    label: 'Company',
+    placeholder: 'Select company...',
+    options: [
+      { label: 'Acme Corp', value: 'acme' },
+      { label: 'Globex Inc', value: 'globex' },
+      { label: 'Initech', value: 'initech' },
+    ],
+    icon: <FontAwesomeIcon icon={faBuilding} />,
+    fullWidth: true,
   },
 };
 
@@ -61,50 +116,45 @@ export const Disabled: Story = {
 };
 
 /**
- * Select with disabled options
+ * Select with error state
  */
-export const WithDisabledOptions: Story = {
+export const WithError: Story = {
   args: {
-    placeholder: 'Select one...',
+    label: 'Region',
+    placeholder: 'Select region...',
     options: [
-      { label: 'Available option', value: 'available' },
-      { label: 'Disabled option', value: 'disabled', disabled: true },
-      { label: 'Another available', value: 'available2' },
+      { label: 'North America', value: 'na' },
+      { label: 'Europe', value: 'eu' },
+      { label: 'Asia Pacific', value: 'apac' },
     ],
+    error: 'Please select a region',
+    icon: <FontAwesomeIcon icon={faGlobe} />,
+    fullWidth: true,
   },
 };
 
 /**
- * Plan selection dropdown
+ * All three sizes compared
  */
-export const PlanSelection: Story = {
-  args: {
-    placeholder: 'Choose your plan...',
-    options: [
-      { label: 'Basic - $9/month', value: 'basic' },
-      { label: 'Pro - $29/month', value: 'pro' },
-      { label: 'Enterprise - Custom', value: 'enterprise' },
-    ],
+export const AllSizes: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Select size="sm" placeholder="Small" options={options} icon={<FontAwesomeIcon icon={faTag} />} />
+<Select size="md" placeholder="Medium" options={options} icon={<FontAwesomeIcon icon={faTag} />} />
+<Select size="lg" placeholder="Large" options={options} icon={<FontAwesomeIcon icon={faTag} />} />`,
+      },
+    },
   },
-};
-
-/**
- * Theme selection dropdown
- */
-export const ThemeSelection: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)', minWidth: '300px' }}>
+      <Select size="sm" placeholder="Small" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
+      <Select size="md" placeholder="Medium" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
+      <Select size="lg" placeholder="Large" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
+    </div>
+  ),
   args: {
-    placeholder: 'Select theme...',
-    options: [
-      { label: 'Theme 1', value: 'theme1' },
-      { label: 'Theme 2', value: 'theme2' },
-      { label: 'Theme 3', value: 'theme3' },
-      { label: 'Theme 4', value: 'theme4' },
-      { label: 'Theme 5', value: 'theme5' },
-      { label: 'Theme 6', value: 'theme6' },
-      { label: 'Theme 7', value: 'theme7' },
-      { label: 'Theme 8', value: 'theme8' },
-    ],
-    defaultValue: 'theme3',
+    options: basicOptions,
   },
 };
 
@@ -115,67 +165,41 @@ export const FormExample: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Select
-  placeholder="Select country..."
-  options={[
-    { label: 'United States', value: 'us' },
-    { label: 'Canada', value: 'ca' },
-    { label: 'United Kingdom', value: 'uk' },
-    { label: 'Australia', value: 'au' },
-  ]}
-/>
-<Select
-  placeholder="Select industry..."
-  options={[
-    { label: 'Technology', value: 'tech' },
-    { label: 'Healthcare', value: 'healthcare' },
-    { label: 'Finance', value: 'finance' },
-    { label: 'Education', value: 'education' },
-    { label: 'Other', value: 'other' },
-  ]}
-/>`,
+        code: `<Select label="Country" placeholder="Select country..." options={countries} icon={<FontAwesomeIcon icon={faGlobe} />} />
+<Select label="Industry" placeholder="Select industry..." options={industries} icon={<FontAwesomeIcon icon={faBuilding} />} />`,
       },
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)', minWidth: '300px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
-        <label style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--md-base)',
-          fontWeight: 'var(--font-weight--semi-bold)',
-        }}>
-          Country
-        </label>
-        <Select
-          placeholder="Select country..."
-          options={[
-            { label: 'United States', value: 'us' },
-            { label: 'Canada', value: 'ca' },
-            { label: 'United Kingdom', value: 'uk' },
-            { label: 'Australia', value: 'au' },
-          ]}
-        />
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
-        <label style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--md-base)',
-          fontWeight: 'var(--font-weight--semi-bold)',
-        }}>
-          Industry
-        </label>
-        <Select
-          placeholder="Select industry..."
-          options={[
-            { label: 'Technology', value: 'tech' },
-            { label: 'Healthcare', value: 'healthcare' },
-            { label: 'Finance', value: 'finance' },
-            { label: 'Education', value: 'education' },
-            { label: 'Other', value: 'other' },
-          ]}
-        />
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)', minWidth: '300px' }}>
+      <Select
+        label="Country"
+        placeholder="Select country..."
+        options={[
+          { label: 'United States', value: 'us' },
+          { label: 'Canada', value: 'ca' },
+          { label: 'United Kingdom', value: 'uk' },
+          { label: 'Australia', value: 'au' },
+        ]}
+        icon={<FontAwesomeIcon icon={faGlobe} />}
+        fullWidth
+      />
+      <Select
+        label="Industry"
+        placeholder="Select industry..."
+        options={[
+          { label: 'Technology', value: 'tech' },
+          { label: 'Healthcare', value: 'healthcare' },
+          { label: 'Finance', value: 'finance' },
+          { label: 'Education', value: 'education' },
+          { label: 'Other', value: 'other' },
+        ]}
+        icon={<FontAwesomeIcon icon={faBuilding} />}
+        fullWidth
+      />
     </div>
   ),
+  args: {
+    options: basicOptions,
+  },
 };

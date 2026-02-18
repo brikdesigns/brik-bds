@@ -1,4 +1,4 @@
-import { type SelectHTMLAttributes, type CSSProperties } from 'react';
+import { type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
 
 /**
  * Select option type
@@ -41,6 +41,8 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
   error?: string;
   /** Full width select */
   fullWidth?: boolean;
+  /** Optional icon displayed before the select text */
+  icon?: ReactNode;
   /** Change handler */
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -115,6 +117,34 @@ const selectDisabledStyles: CSSProperties = {
 };
 
 /**
+ * Field wrapper — positions icon relative to select
+ */
+const fieldWrapperStyles: CSSProperties = {
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+};
+
+/**
+ * Icon positioning styles
+ *
+ * Token reference:
+ * - --_space---input = 8px (icon inset from edge)
+ * - --_color---text--muted (icon color, matches placeholder)
+ * - --_space---gap--md = 8px (icon-text gap)
+ */
+const selectIconStyles: CSSProperties = {
+  position: 'absolute',
+  left: 'var(--_space---input)',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'var(--_color---text--muted)',
+  pointerEvents: 'none',
+  zIndex: 1,
+};
+
+/**
  * Select - BDS themed select dropdown component
  *
  * Uses CSS variables for theming. Provides a styled select dropdown
@@ -145,6 +175,7 @@ export function Select({
   helperText,
   error,
   fullWidth = false,
+  icon,
   onChange,
   id,
   className = '',
@@ -160,6 +191,7 @@ export function Select({
     ...sizeStyle.select,
     ...(disabled ? selectDisabledStyles : {}),
     ...(hasError ? { borderColor: 'var(--system--red, #eb5757)' } : {}),
+    ...(icon ? { paddingLeft: 'calc(var(--_space---input) * 4)' } : {}),
     ...style,
   };
 
@@ -170,7 +202,7 @@ export function Select({
           htmlFor={inputId}
           style={{
             display: 'block',
-            marginBottom: 'var(--_space---sm, 8px)',
+            marginBottom: 'var(--_space---gap--md)',
             fontFamily: 'var(--_typography---font-family--label)',
             fontWeight: 'var(--font-weight--semi-bold)' as string,
             color: hasError ? 'var(--system--red, #eb5757)' : 'var(--_color---text--primary)',
@@ -180,41 +212,48 @@ export function Select({
           {label}
         </label>
       )}
-      <select
-        id={inputId}
-        value={value}
-        defaultValue={defaultValue}
-        disabled={disabled}
-        onChange={onChange}
-        className={className || undefined}
-        style={combinedStyles}
-        aria-invalid={hasError}
-        aria-describedby={
-          error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
-        }
-        {...props}
-      >
-        {placeholder && (
-          <option value="">
-            {placeholder}
-          </option>
+      <div style={fieldWrapperStyles}>
+        {icon && (
+          <span style={selectIconStyles}>
+            {icon}
+          </span>
         )}
-        {options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-            disabled={option.disabled}
-          >
-            {option.label}
-          </option>
-        ))}
-      </select>
+        <select
+          id={inputId}
+          value={value}
+          defaultValue={defaultValue}
+          disabled={disabled}
+          onChange={onChange}
+          className={className || undefined}
+          style={combinedStyles}
+          aria-invalid={hasError}
+          aria-describedby={
+            error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
+          }
+          {...props}
+        >
+          {placeholder && (
+            <option value="">
+              {placeholder}
+            </option>
+          )}
+          {options.map((option) => (
+            <option
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
           style={{
             display: 'block',
-            marginTop: 'var(--_space---sm, 4px)',
+            marginTop: 'var(--_space---gap--sm)',
             fontFamily: 'var(--_typography---font-family--body)',
             fontSize: 'var(--_typography---body--sm)',
             color: 'var(--system--red, #eb5757)',
@@ -228,7 +267,7 @@ export function Select({
           id={inputId ? `${inputId}-helper` : undefined}
           style={{
             display: 'block',
-            marginTop: 'var(--_space---sm, 4px)',
+            marginTop: 'var(--_space---gap--sm)',
             fontFamily: 'var(--_typography---font-family--body)',
             fontSize: 'var(--_typography---body--sm)',
             color: 'var(--_color---text--muted)',

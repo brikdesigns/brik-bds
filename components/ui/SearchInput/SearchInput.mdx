@@ -1,0 +1,56 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './SearchInput.stories';
+
+<Meta of={Stories} />
+
+# SearchInput
+
+A text input with a built-in magnifying glass icon for search functionality. Supports medium and small sizes for different UI densities.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Sizes
+
+### Medium (default)
+
+Standard size for page-level search.
+<Canvas of={Stories.Default} />
+
+### Small
+
+Compact size for toolbars and filters.
+<Canvas of={Stories.Small} />
+
+### Size Comparison
+<Canvas of={Stories.AllSizes} />
+
+## With Label
+
+Add a label for form contexts.
+<Canvas of={Stories.WithLabel} />
+
+## Toolbar Example
+
+Multiple search inputs in a horizontal toolbar layout.
+<Canvas of={Stories.ToolbarExample} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { SearchInput } from '@brik/bds';
+
+// Basic search
+<SearchInput placeholder="Search..." />
+
+// Small size
+<SearchInput size="sm" placeholder="Quick search..." />
+
+// With label, full width
+<SearchInput label="Search" placeholder="Search products..." fullWidth />
+```
