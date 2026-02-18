@@ -1,0 +1,58 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './FilterButton.stories';
+
+<Meta of={Stories} />
+
+# FilterButton
+
+A dropdown filter trigger for filter bars. Displays a pill-shaped button with a chevron that opens a single-select dropdown menu. Switches to an active (brand) style when a value is selected. Click a selected item again to clear the filter.
+
+## Overview
+
+<Canvas of={Stories.Interactive} />
+
+## States
+
+### Default (inactive)
+
+Gray surface background with dark text. No value selected.
+<Canvas of={Stories.Default} />
+
+### Active (value selected)
+
+Brand primary background with white text. Shows the selected option label.
+<Canvas of={Stories.WithValue} />
+
+## Variations
+
+### Text Only
+
+Options without icons for simple category filters.
+<Canvas of={Stories.TextOnly} />
+
+## Filter Bar
+
+Multiple filter buttons composed in a horizontal toolbar.
+<Canvas of={Stories.FilterBar} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { FilterButton } from '@brik/bds';
+
+const [category, setCategory] = useState<string | undefined>();
+
+<FilterButton
+  label="Category"
+  value={category}
+  onChange={setCategory}
+  options={[
+    { id: 'design', label: 'Brand design', icon: <CrownIcon /> },
+    { id: 'marketing', label: 'Marketing', icon: <BullhornIcon /> },
+  ]}
+/>
+```
