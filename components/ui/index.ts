@@ -31,3 +31,4 @@ export * from './Accordion';
 export * from './Menu';
 export * from './Pagination';
 export * from './SearchInput';
+export * from './FilterButton';
