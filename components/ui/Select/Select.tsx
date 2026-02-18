@@ -145,11 +145,56 @@ const selectIconStyles: CSSProperties = {
 };
 
 /**
+ * Wrapper styles — vertical stack matching TextInput pattern
+ *
+ * Token reference:
+ * - --_space---gap--md = 8px (gap between label and field)
+ */
+const wrapperStyles: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--_space---gap--md)',
+  color: 'var(--_color---text--primary)',
+};
+
+/**
+ * Label base styles matching TextInput pattern
+ *
+ * Token reference:
+ * - --_typography---font-family--label (label font)
+ * - --font-weight--semi-bold = 600
+ * - --font-line-height--100 = 100% (matches TextInput label)
+ */
+const labelBaseStyles: CSSProperties = {
+  fontFamily: 'var(--_typography---font-family--label)',
+  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height--100)',
+};
+
+/**
+ * Helper/error text base styles
+ *
+ * Token reference:
+ * - --_typography---font-family--body (helper font)
+ * - --_typography---body--sm (small text size)
+ * - --_color---text--muted (helper text color)
+ */
+const helperBaseStyles: CSSProperties = {
+  fontFamily: 'var(--_typography---font-family--body)',
+  fontSize: 'var(--_typography---body--sm)',
+  lineHeight: 'var(--font-line-height--150)',
+  color: 'var(--_color---text--muted)',
+};
+
+/**
  * Select - BDS themed select dropdown component
  *
  * Uses CSS variables for theming. Provides a styled select dropdown
  * with custom arrow indicator, optional label, helper text, and error state.
  * All spacing, colors, and typography reference BDS tokens.
+ *
+ * Wrapper pattern matches TextInput for consistent alignment when placed
+ * side-by-side in form layouts.
  *
  * @example
  * ```tsx
@@ -196,17 +241,19 @@ export function Select({
   };
 
   return (
-    <div style={{ width: fullWidth ? '100%' : 'auto' }}>
+    <div
+      style={{
+        ...wrapperStyles,
+        width: fullWidth ? '100%' : 'auto',
+      }}
+    >
       {label && (
         <label
           htmlFor={inputId}
           style={{
-            display: 'block',
-            marginBottom: 'var(--_space---gap--md)',
-            fontFamily: 'var(--_typography---font-family--label)',
-            fontWeight: 'var(--font-weight--semi-bold)' as string,
-            color: hasError ? 'var(--system--red, #eb5757)' : 'var(--_color---text--primary)',
+            ...labelBaseStyles,
             ...sizeStyle.label,
+            ...(hasError ? { color: 'var(--system--red, #eb5757)' } : {}),
           }}
         >
           {label}
@@ -251,28 +298,14 @@ export function Select({
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
-          style={{
-            display: 'block',
-            marginTop: 'var(--_space---gap--sm)',
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--system--red, #eb5757)',
-          }}
+          style={{ ...helperBaseStyles, color: 'var(--system--red, #eb5757)' }}
+          role="alert"
         >
           {error}
         </span>
       )}
       {helperText && !error && (
-        <span
-          id={inputId ? `${inputId}-helper` : undefined}
-          style={{
-            display: 'block',
-            marginTop: 'var(--_space---gap--sm)',
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--muted)',
-          }}
-        >
+        <span id={inputId ? `${inputId}-helper` : undefined} style={helperBaseStyles}>
           {helperText}
         </span>
       )}
