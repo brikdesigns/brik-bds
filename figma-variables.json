@@ -2182,205 +2182,89 @@ border.Value.tokens.json
 spacing.default.tokens.json
 {
   "padding": {
-    "none": {
-      "$type": "number",
-      "$value": "{space.0}"
-    },
-    "tiny": {
-      "$type": "number",
-      "$value": "{space.200}"
-    },
-    "sm": {
-      "$type": "number",
-      "$value": "{space.400}"
-    },
-    "md": {
-      "$type": "number",
-      "$value": "{space.600}"
-    },
-    "lg": {
-      "$type": "number",
-      "$value": "{space.800}"
-    },
-    "huge": {
-      "$type": "number",
-      "$value": "{space.1200}"
-    }
+    "tiny": { "$type": "number", "$value": "{space.200}" },
+    "xs": { "$type": "number", "$value": "{space.250}" },
+    "sm": { "$type": "number", "$value": "{space.300}" },
+    "md": { "$type": "number", "$value": "{space.400}" },
+    "lg": { "$type": "number", "$value": "{space.600}" },
+    "xl": { "$type": "number", "$value": "{space.800}" },
+    "huge": { "$type": "number", "$value": "{space.1200}" }
   },
   "gap": {
-    "none": {
-      "$type": "number",
-      "$value": "{space.0}"
-    },
-    "tiny": {
-      "$type": "number",
-      "$value": "{space.100}"
-    },
-    "sm": {
-      "$type": "number",
-      "$value": "{space.200}"
-    },
-    "md": {
-      "$type": "number",
-      "$value": "{space.400}"
-    },
-    "lg": {
-      "$type": "number",
-      "$value": "{space.600}"
-    }
+    "none": { "$type": "number", "$value": "{space.0}" },
+    "tiny": { "$type": "number", "$value": "{space.50}" },
+    "xs": { "$type": "number", "$value": "{space.100}" },
+    "sm": { "$type": "number", "$value": "{space.150}" },
+    "md": { "$type": "number", "$value": "{space.200}" },
+    "lg": { "$type": "number", "$value": "{space.400}" },
+    "xl": { "$type": "number", "$value": "{space.600}" },
+    "huge": { "$type": "number", "$value": "{space.800}" }
   }
 }
 spacing.compact.tokens.json
 {
   "padding": {
-    "none": {
-      "$type": "number",
-      "$value": "{space.0}"
-    },
-    "tiny": {
-      "$type": "number",
-      "$value": "{space.100}"
-    },
-    "sm": {
-      "$type": "number",
-      "$value": "{space.200}"
-    },
-    "md": {
-      "$type": "number",
-      "$value": "{space.400}"
-    },
-    "lg": {
-      "$type": "number",
-      "$value": "{space.600}"
-    },
-    "huge": {
-      "$type": "number",
-      "$value": "{space.1600}"
-    }
+    "tiny": { "$type": "number", "$value": "{space.100}" },
+    "xs": { "$type": "number", "$value": "{space.100}" },
+    "sm": { "$type": "number", "$value": "{space.100}" },
+    "md": { "$type": "number", "$value": "{space.200}" },
+    "lg": { "$type": "number", "$value": "{space.400}" },
+    "xl": { "$type": "number", "$value": "{space.600}" },
+    "huge": { "$type": "number", "$value": "{space.1600}" }
   },
   "gap": {
-    "none": {
-      "$type": "number",
-      "$value": "{space.0}"
-    },
-    "tiny": {
-      "$type": "number",
-      "$value": "{space.50}"
-    },
-    "sm": {
-      "$type": "number",
-      "$value": "{space.100}"
-    },
-    "md": {
-      "$type": "number",
-      "$value": "{space.200}"
-    },
-    "lg": {
-      "$type": "number",
-      "$value": "{space.400}"
-    }
+    "none": { "$type": "number", "$value": "{space.0}" },
+    "tiny": { "$type": "number", "$value": "{space.0}" },
+    "xs": { "$type": "number", "$value": "{space.0}" },
+    "sm": { "$type": "number", "$value": "{space.50}" },
+    "md": { "$type": "number", "$value": "{space.100}" },
+    "lg": { "$type": "number", "$value": "{space.200}" },
+    "xl": { "$type": "number", "$value": "{space.400}" },
+    "huge": { "$type": "number", "$value": "{space.600}" }
   }
 }
 spacing.comfortable.tokens.json
 {
   "padding": {
-    "none": {
-      "$type": "number",
-      "$value": "{space.0}"
-    },
-    "tiny": {
-      "$type": "number",
-      "$value": "{space.400}"
-    },
-    "sm": {
-      "$type": "number",
-      "$value": "{space.600}"
-    },
-    "md": {
-      "$type": "number",
-      "$value": "{space.800}"
-    },
-    "lg": {
-      "$type": "number",
-      "$value": "{space.1000}"
-    },
-    "huge": {
-      "$type": "number",
-      "$value": "{space.1800}"
-    }
+    "tiny": { "$type": "number", "$value": "{space.400}" },
+    "xs": { "$type": "number", "$value": "{space.400}" },
+    "sm": { "$type": "number", "$value": "{space.400}" },
+    "md": { "$type": "number", "$value": "{space.600}" },
+    "lg": { "$type": "number", "$value": "{space.800}" },
+    "xl": { "$type": "number", "$value": "{space.1000}" },
+    "huge": { "$type": "number", "$value": "{space.1800}" }
   },
   "gap": {
-    "none": {
-      "$type": "number",
-      "$value": "{space.0}"
-    },
-    "tiny": {
-      "$type": "number",
-      "$value": "{space.200}"
-    },
-    "sm": {
-      "$type": "number",
-      "$value": "{space.800}"
-    },
-    "md": {
-      "$type": "number",
-      "$value": "{space.1000}"
-    },
-    "lg": {
-      "$type": "number",
-      "$value": "{space.1200}"
-    }
+    "none": { "$type": "number", "$value": "{space.0}" },
+    "tiny": { "$type": "number", "$value": "{space.0}" },
+    "xs": { "$type": "number", "$value": "{space.0}" },
+    "sm": { "$type": "number", "$value": "{space.200}" },
+    "md": { "$type": "number", "$value": "{space.800}" },
+    "lg": { "$type": "number", "$value": "{space.1000}" },
+    "xl": { "$type": "number", "$value": "{space.1200}" },
+    "huge": { "$type": "number", "$value": "{space.1600}" }
   }
 }
 spacing.spacious.tokens.json
 {
   "padding": {
-    "none": {
-      "$type": "number",
-      "$value": "{space.0}"
-    },
-    "tiny": {
-      "$type": "number",
-      "$value": "{space.600}"
-    },
-    "sm": {
-      "$type": "number",
-      "$value": "{space.800}"
-    },
-    "md": {
-      "$type": "number",
-      "$value": "{space.1000}"
-    },
-    "lg": {
-      "$type": "number",
-      "$value": "{space.1200}"
-    },
-    "huge": {
-      "$type": "number",
-      "$value": "{space.2000}"
-    }
+    "tiny": { "$type": "number", "$value": "{space.600}" },
+    "xs": { "$type": "number", "$value": "{space.600}" },
+    "sm": { "$type": "number", "$value": "{space.600}" },
+    "md": { "$type": "number", "$value": "{space.800}" },
+    "lg": { "$type": "number", "$value": "{space.1000}" },
+    "xl": { "$type": "number", "$value": "{space.1200}" },
+    "huge": { "$type": "number", "$value": "{space.2000}" }
   },
   "gap": {
-    "none": {
-      "$type": "number",
-      "$value": "{space.0}"
-    },
-    "tiny": {
-      "$type": "number",
-      "$value": "{space.400}"
-    },
-    "sm": {
-      "$type": "number",
-      "$value": "{space.1200}"
-    },
-    "md": {
-      "$type": "number",
-      "$value": "{space.1400}"
-    },
-    "lg": {
-      "$type": "number",
-      "$value": "{space.1600}"
-    }
+    "none": { "$type": "number", "$value": "{space.0}" },
+    "tiny": { "$type": "number", "$value": "{space.0}" },
+    "xs": { "$type": "number", "$value": "{space.0}" },
+    "sm": { "$type": "number", "$value": "{space.400}" },
+    "md": { "$type": "number", "$value": "{space.1200}" },
+    "lg": { "$type": "number", "$value": "{space.1400}" },
+    "xl": { "$type": "number", "$value": "{space.1600}" },
+    "huge": { "$type": "number", "$value": "{space.2000}" }
   }
 }
 icon.solid.tokens.json

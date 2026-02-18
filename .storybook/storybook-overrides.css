@@ -74,36 +74,38 @@ code[class*="language-"] {
    The .body class in Webflow CSS applies "Spacious" mode by default.
    We override to use "Base" mode values from :root for Storybook.
 
-   Base mode spacing scale:
-   - tiny: 4px  (space--100)
-   - sm:   6px  (space--150)
-   - md:   8px  (space--200)
-   - lg:   16px (space--400)
-   - xl:   24px (space--600)
-   - xxl:  32px (space--800)
-   - huge: 40px (space--1000)
+   Base mode spacing scale (updated 2026-02-18):
+   - tiny: 8px   (space--200)
+   - xs:   10px  (space--250)
+   - sm:   12px  (space--300)
+   - md:   16px  (space--400)
+   - lg:   24px  (space--600)
+   - xl:   32px  (space--800)
+   - huge: 48px  (space--1200)
    ============================================ */
 
 .body {
   /* Padding tokens - Base mode */
   --_space---none: var(--space--0);
-  --_space---tiny: var(--space--100);
-  --_space---sm: var(--space--150);
-  --_space---md: var(--space--200);
-  --_space---lg: var(--space--400);
-  --_space---xl: var(--space--600);
-  --_space---xxl: var(--space--800);
-  --_space---huge: var(--space--1000);
+  --_space---tiny: var(--space--200);
+  --_space---xs: var(--space--250);
+  --_space---sm: var(--space--300);
+  --_space---md: var(--space--400);
+  --_space---lg: var(--space--600);
+  --_space---xl: var(--space--800);
+  --_space---xxl: var(--space--800); /* deprecated — alias for xl */
+  --_space---huge: var(--space--1200);
 
   /* Gap tokens - Base mode */
   --_space---gap--none: var(--space--0);
   --_space---gap--tiny: var(--space--50);
-  --_space---gap--sm: var(--space--100);
+  --_space---gap--xs: var(--space--100);
+  --_space---gap--sm: var(--space--150);
   --_space---gap--md: var(--space--200);
   --_space---gap--lg: var(--space--400);
-  --_space---gap--xl: var(--space--500);
-  --_space---gap--xxl: var(--space--600);
-  --_space---gap--huge: var(--space--1200);
+  --_space---gap--xl: var(--space--600);
+  --_space---gap--xxl: var(--space--600); /* deprecated — alias for gap--xl */
+  --_space---gap--huge: var(--space--800);
 
   /* Component-specific spacing - Base mode */
   --_space---button: var(--space--200);
