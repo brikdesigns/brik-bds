@@ -1,0 +1,7 @@
+.input::placeholder {
+  color: var(--_color---text--muted);
+}
+
+.suggestionItem:hover {
+  background-color: var(--_color---surface--secondary);
+}
