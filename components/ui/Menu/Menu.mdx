@@ -1,0 +1,55 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Menu.stories';
+
+<Meta of={Stories} />
+
+# Menu
+
+A floating dropdown panel for navigation and action menus. Contains a list of selectable items with optional icons. Closes on outside click or Escape key.
+
+## Overview
+
+<Canvas of={Stories.StaticOpen} />
+
+## Interactive
+
+### Triggered by Button
+
+Click the button to open the menu. Click outside or press Escape to close.
+<Canvas of={Stories.Default} />
+
+### With Active Item
+
+Highlight the currently selected item with `activeId`.
+<Canvas of={Stories.WithActiveItem} />
+
+### Text Only
+
+Menu items without icons for simple action menus.
+<Canvas of={Stories.TextOnly} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Menu } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+const [open, setOpen] = useState(false);
+
+<div style={{ position: 'relative' }}>
+  <Button onClick={() => setOpen(!open)}>Options</Button>
+  <Menu
+    isOpen={open}
+    onClose={() => setOpen(false)}
+    items={[
+      { id: '1', label: 'Edit', icon: <EditIcon />, onClick: handleEdit },
+      { id: '2', label: 'Delete', onClick: handleDelete },
+    ]}
+    style={{ top: '100%', left: 0 }}
+  />
+</div>
+```

@@ -1,0 +1,59 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Pagination.stories';
+
+<Meta of={Stories} />
+
+# Pagination
+
+Page navigation controls with previous/next arrows, page numbers, and ellipsis for large page counts. Supports left, center, and right alignment.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Left Aligned
+<Canvas of={Stories.LeftAligned} />
+
+### Right Aligned
+<Canvas of={Stories.RightAligned} />
+
+### Few Pages
+
+When the total page count is small, all page numbers are shown without ellipsis.
+<Canvas of={Stories.FewPages} />
+
+## All Positions
+
+Side-by-side comparison of all alignment options.
+<Canvas of={Stories.AllPositions} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Pagination } from '@brik/bds';
+
+const [page, setPage] = useState(1);
+
+// Centered pagination
+<Pagination
+  currentPage={page}
+  totalPages={80}
+  onChange={setPage}
+  position="center"
+/>
+
+// Left-aligned with more siblings visible
+<Pagination
+  currentPage={page}
+  totalPages={50}
+  onChange={setPage}
+  position="left"
+  siblingCount={2}
+/>
+```

@@ -1,0 +1,66 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as Stories from './Accordion.stories';
+
+<Meta of={Stories} />
+
+# Accordion
+
+Collapsible content sections for FAQs, settings panels, and grouped information. Each item has a title trigger and expandable content area with plus/minus icons.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Default Open
+
+Start with specific items expanded using `defaultOpenItems`.
+<Canvas of={Stories.WithDefaultOpen} />
+
+### Multiple Open
+
+Allow multiple items to be open simultaneously with `allowMultiple`.
+<Canvas of={Stories.MultipleOpen} />
+
+### Rich Content
+
+Accordion content supports any React node, including lists, paragraphs, and nested components.
+<Canvas of={Stories.RichContent} />
+
+### Constrained Width
+
+Works within constrained containers for sidebar or settings panel layouts.
+<Canvas of={Stories.ConstrainedWidth} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Accordion } from '@brik/bds';
+
+// Basic FAQ accordion
+<Accordion
+  items={[
+    { id: '1', title: 'Question one', content: 'Answer one' },
+    { id: '2', title: 'Question two', content: 'Answer two' },
+  ]}
+/>
+
+// Allow multiple open
+<Accordion
+  items={items}
+  allowMultiple
+  defaultOpenItems={['1', '3']}
+/>
+
+// Controlled
+<Accordion
+  items={items}
+  openItems={openIds}
+  onOpenChange={setOpenIds}
+/>
+```
