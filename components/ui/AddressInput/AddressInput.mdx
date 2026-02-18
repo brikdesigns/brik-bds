@@ -1,0 +1,82 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import * as AddressInputStories from './AddressInput.stories';
+
+<Meta of={AddressInputStories} />
+
+# AddressInput
+
+A location text input with a map pin icon and autocomplete suggestion dropdown.
+Designed for forms that require address or location entry. The dropdown follows
+the Menu panel design for visual consistency.
+
+## Default
+
+The base input with a map pin icon and placeholder text.
+
+<Canvas of={AddressInputStories.Default} />
+<Controls of={AddressInputStories.Default} />
+
+## With label
+
+An optional label can be displayed above the input.
+
+<Canvas of={AddressInputStories.WithLabel} />
+
+## Small size
+
+The small variant reduces padding for compact layouts.
+
+<Canvas of={AddressInputStories.Small} />
+
+## With suggestions
+
+When suggestions are provided and the input is focused, a dropdown panel
+appears below the input. Each suggestion can have an optional icon and
+description line.
+
+<Canvas of={AddressInputStories.WithSuggestions} />
+
+## Interactive
+
+A full interactive example simulating autocomplete behavior. Type in the
+field to filter suggestions from a mock dataset.
+
+<Canvas of={AddressInputStories.Interactive} />
+
+## Usage
+
+```tsx
+import { AddressInput, type AddressSuggestion } from './AddressInput';
+
+const [value, setValue] = useState('');
+const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
+
+<AddressInput
+  label="Address"
+  value={value}
+  onChange={(e) => {
+    setValue(e.target.value);
+    // Fetch suggestions from your API
+    fetchSuggestions(e.target.value).then(setSuggestions);
+  }}
+  suggestions={suggestions}
+  onSuggestionSelect={(s) => {
+    setValue(s.label);
+    setSuggestions([]);
+  }}
+  placeholder="Enter location"
+  fullWidth
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'sm' \| 'md'` | `'md'` | Size variant |
+| `label` | `string` | — | Optional label above the input |
+| `fullWidth` | `boolean` | `false` | Stretch to fill container |
+| `suggestions` | `AddressSuggestion[]` | `[]` | Dropdown suggestions |
+| `onSuggestionSelect` | `(suggestion) => void` | — | Selection callback |
+
+Plus all standard `<input>` HTML attributes (value, onChange, placeholder, etc.).
