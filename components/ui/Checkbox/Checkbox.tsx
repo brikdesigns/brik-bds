@@ -20,7 +20,7 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
  * Label wrapper styles using BDS tokens
  *
  * Token reference:
- * - --_space---gap--md = 16px (spacing between checkbox and label)
+ * - --_space---gap--md = 8px (spacing between checkbox and label)
  */
 const labelStyles: CSSProperties = {
   display: 'inline-flex',

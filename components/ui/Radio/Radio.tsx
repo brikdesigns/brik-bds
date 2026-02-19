@@ -24,7 +24,7 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * Label wrapper styles using BDS tokens
  *
  * Token reference:
- * - --_space---gap--md = 16px (spacing between radio and label)
+ * - --_space---gap--md = 8px (spacing between radio and label)
  */
 const labelStyles: CSSProperties = {
   display: 'inline-flex',

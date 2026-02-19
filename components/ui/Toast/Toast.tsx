@@ -42,7 +42,7 @@ const toastStyles: CSSProperties = {
  * Content wrapper — title + description stacked
  *
  * Token reference:
- * - --_space---gap--sm = 4px (gap between title and description)
+ * - --_space---gap--sm = 6px (gap between title and description)
  */
 const contentStyles: CSSProperties = {
   display: 'flex',

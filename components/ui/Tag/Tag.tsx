@@ -35,8 +35,8 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  *
  * Token reference:
  * - --space--50 = 2px (sm padding, md/lg gap)
- * - --_space---tiny = 4px (md padding)
- * - --_space---sm = 6px (lg padding)
+ * - --_space---tiny = 8px (md padding)
+ * - --_space---sm = 12px (lg padding)
  * - --_typography---body--tiny ~= 10.26px (sm font)
  * - --_typography---label--sm = 14px (md font)
  * - --_typography---label--lg = 18px (lg font, mapped to font-size--200)

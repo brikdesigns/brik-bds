@@ -73,34 +73,42 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
 /**
  * Size-based styles using BDS tokens
  *
+ * Figma variable mapping (Base mode):
+ * - padding/sm = --_space---sm = 12px
+ * - padding/md = --_space---md = 16px
+ * - space/150  = --_space---gap--sm = 6px
+ * - gap/sm     = --_space---gap--sm = 6px (icon-to-text)
+ * - gap/md     = --_space---gap--md = 8px (icon-to-text, lg size)
+ *
  * Token reference:
  * - --font-size--50 = 11.54px (xs icon size)
- * - --_typography---body--tiny = 10.26px (sm size — no label--tiny exists)
- * - --_typography---label--sm = 14px (md size)
- * - --_typography---label--md-base = 16px (lg size)
- * - --_space---sm = 6px, --_space---md = 8px
+ * - --_typography---body--tiny = 10.26px (sm label — no label--xs token exists)
+ * - --_typography---label--sm = 14px (md label)
+ * - --_typography---label--md-base = 16px (lg label)
  * - --_border-radius---sm = 2px (xs uses square corners, not pill)
  */
 const sizeStyles: Record<BadgeSize, CSSProperties> = {
   xs: {
     width: '24px',
     height: '24px',
-    padding: 'var(--_space---sm) var(--_space---md)',
+    padding: 0,
     fontSize: 'var(--font-size--50)', // bds-lint-ignore — no semantic token for icon-only badge size
     borderRadius: 'var(--_border-radius---sm)',
     justifyContent: 'center',
+    gap: 0,
   },
   sm: {
-    padding: 'var(--_space---gap--tiny) var(--_space---gap--sm)',
+    padding: 'var(--_space---gap--sm) var(--_space---sm)',
     fontSize: 'var(--_typography---body--tiny)',
   },
   md: {
-    padding: 'var(--_space---tiny) var(--_space---sm)',
+    padding: 'var(--_space---sm) var(--_space---md)',
     fontSize: 'var(--_typography---label--sm)',
   },
   lg: {
-    padding: 'var(--_space---gap--sm) var(--_space---sm)',
+    padding: 'var(--_space---sm) var(--_space---md)',
     fontSize: 'var(--_typography---label--md-base)',
+    gap: 'var(--_space---gap--md)',
   },
 };
 
@@ -108,12 +116,10 @@ const sizeStyles: Record<BadgeSize, CSSProperties> = {
  * Base badge styles using BDS tokens
  *
  * Token reference:
- * - --_space---gap--sm = 4px (icon gap)
- * - --_space---tiny = 4px (vertical padding)
- * - --_space---sm = 6px (horizontal padding)
+ * - --_space---gap--sm = 6px (icon-to-text gap, sm/md sizes)
  * - --_typography---font-family--label (badge font)
- * - --_typography---label--sm (small label size)
- * - --_border-radius---sm = 2px (badge corners)
+ * - --font-weight--semi-bold = 600
+ * - --font-line-height--100 = 100% (tight, per Figma leading-none)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
@@ -121,7 +127,7 @@ const baseStyles: CSSProperties = {
   gap: 'var(--_space---gap--sm)',
   fontFamily: 'var(--_typography---font-family--label)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--150)',
+  lineHeight: 'var(--font-line-height--100)',
   borderRadius: '9999px', // pill shape — no BDS token equivalent
   whiteSpace: 'nowrap',
 };

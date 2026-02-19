@@ -40,10 +40,10 @@ const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
 /**
  * Wrapper styles
  *
- * Figma spec: auto-layout row, gap/md (16px)
+ * Figma spec: auto-layout row, gap/md (8px)
  *
  * Token reference:
- * - --_space---gap--md = 16px (gap between items + separators)
+ * - --_space---gap--md = 8px (gap between items + separators)
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
