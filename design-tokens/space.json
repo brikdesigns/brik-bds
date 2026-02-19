@@ -1,0 +1,633 @@
+{
+  "space": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "25": {
+      "$value": "1px",
+      "$type": "dimension"
+    },
+    "50": {
+      "$value": "2px",
+      "$type": "dimension"
+    },
+    "100": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "150": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "200": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "250": {
+      "$value": "10px",
+      "$type": "dimension"
+    },
+    "300": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "350": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "400": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "450": {
+      "$value": "18px",
+      "$type": "dimension"
+    },
+    "500": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "600": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "700": {
+      "$value": "28px",
+      "$type": "dimension"
+    },
+    "800": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "900": {
+      "$value": "36px",
+      "$type": "dimension"
+    },
+    "1000": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "1100": {
+      "$value": "44px",
+      "$type": "dimension"
+    },
+    "1200": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "1300": {
+      "$value": "52px",
+      "$type": "dimension"
+    },
+    "1400": {
+      "$value": "56px",
+      "$type": "dimension"
+    },
+    "1500": {
+      "$value": "60px",
+      "$type": "dimension"
+    },
+    "1600": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "1700": {
+      "$value": "72px",
+      "$type": "dimension"
+    },
+    "1800": {
+      "$value": "80px",
+      "$type": "dimension"
+    },
+    "1900": {
+      "$value": "84px",
+      "$type": "dimension"
+    },
+    "2000": {
+      "$value": "88px",
+      "$type": "dimension"
+    },
+    "2100": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "2200": {
+      "$value": "104px",
+      "$type": "dimension"
+    },
+    "2300": {
+      "$value": "112px",
+      "$type": "dimension"
+    },
+    "2400": {
+      "$value": "128px",
+      "$type": "dimension"
+    },
+    "2500": {
+      "$value": "136px",
+      "$type": "dimension"
+    },
+    "2600": {
+      "$value": "144px",
+      "$type": "dimension"
+    },
+    "2700": {
+      "$value": "152px",
+      "$type": "dimension"
+    },
+    "2800": {
+      "$value": "160px",
+      "$type": "dimension"
+    },
+    "2900": {
+      "$value": "168px",
+      "$type": "dimension"
+    },
+    "3000": {
+      "$value": "176px",
+      "$type": "dimension"
+    },
+    "none": {
+      "$value": "{space.0}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "lg": {
+      "$value": "{space.600}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "md": {
+      "$value": "{space.400}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "xl": {
+      "$value": "{space.800}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "gap": {
+      "md": {
+        "$value": "{space.200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "lg": {
+        "$value": "{space.400}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xl": {
+        "$value": "{space.600}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "none": {
+        "$value": "{space.0}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xs": {
+        "$value": "{space.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "sm": {
+        "$value": "{space.150}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xxl": {
+        "$value": "{space.600}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "huge": {
+        "$value": "{space.800}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "tiny": {
+        "$value": "{space.50}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "huge": {
+      "$value": "{space.1200}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "xxl": {
+      "$value": "{space.800}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "xs": {
+      "$value": "{space.250}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "sm": {
+      "$value": "{space.300}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "tiny": {
+      "$value": "{space.200}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "button": {
+      "$value": "{space.200}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "input": {
+      "$value": "{space.200}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    }
+  },
+  "size": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "25": {
+      "$value": "1px",
+      "$type": "dimension"
+    },
+    "50": {
+      "$value": "2px",
+      "$type": "dimension"
+    },
+    "100": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "150": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "200": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "300": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "400": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "500": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "600": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "700": {
+      "$value": "28px",
+      "$type": "dimension"
+    },
+    "800": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "900": {
+      "$value": "36px",
+      "$type": "dimension"
+    },
+    "1000": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "1100": {
+      "$value": "44px",
+      "$type": "dimension"
+    },
+    "1200": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "1300": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "1400": {
+      "$value": "52px",
+      "$type": "dimension"
+    },
+    "1500": {
+      "$value": "56px",
+      "$type": "dimension"
+    },
+    "1600": {
+      "$value": "60px",
+      "$type": "dimension"
+    },
+    "1700": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "1800": {
+      "$value": "72px",
+      "$type": "dimension"
+    },
+    "1900": {
+      "$value": "80px",
+      "$type": "dimension"
+    },
+    "2000": {
+      "$value": "84px",
+      "$type": "dimension"
+    },
+    "2100": {
+      "$value": "88px",
+      "$type": "dimension"
+    },
+    "2200": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "none": {
+      "$value": "{size.0}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "container-size": {
+      "max-hero-height": {
+        "$value": "100vh",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "max-hero-width": {
+        "$value": "100vw",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "full-width": {
+        "$value": "100%",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "half-width": {
+        "$value": "50%",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "three-quarter-width": {
+        "$value": "75%",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "quarter-width": {
+        "$value": "25%",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "one-third-width": {
+        "$value": "33%",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "two-third-width": {
+        "$value": "66%",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "screen-size": {
+      "wider": {
+        "$value": "1440px",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "wide": {
+        "$value": "1280px",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "desktop": {
+        "$value": "1080px",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "tablet": {
+        "$value": "768px",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "mobile": {
+        "$value": "320px",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "tiny": {
+      "$value": "{size.50}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "sm": {
+      "$value": "{size.100}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "md": {
+      "$value": "{size.200}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "lg": {
+      "$value": "{size.400}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "xl": {
+      "$value": "{size.600}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "xxl": {
+      "$value": "{size.800}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "huge": {
+      "$value": "{size.1000}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    }
+  }
+}

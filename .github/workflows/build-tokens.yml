@@ -1,0 +1,56 @@
+name: Build Design Tokens
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC
+    - cron: '0 9 * * *'
+  push:
+    paths:
+      - 'updates/brik-bds.webflow/**'
+  workflow_dispatch:
+
+jobs:
+  build-tokens:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Extract DTCG tokens from Webflow CSS
+      run: node scripts/css-to-dtcg.js
+
+    - name: Build multi-platform tokens (Style Dictionary)
+      run: npx style-dictionary build --config sd.config.mjs
+
+    - name: Build web tokens (existing pipeline)
+      run: npm run build:tokens
+
+    - name: Check for changes
+      id: check-changes
+      run: |
+        if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+          echo "no-changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "no-changes=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Commit and push changes
+      if: steps.check-changes.outputs.no-changes == 'false'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add design-tokens/ build/ tokens/
+        git commit -m "Build design tokens — $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+        git push

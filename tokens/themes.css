@@ -3,7 +3,7 @@
 /* ============================================= */
 /* Auto-generated from Webflow design tokens     */
 /* Source: brik-bds.webflow.css                  */
-/* Generated: 2026-02-16T14:09:34.511Z        */
+/* Generated: 2026-02-19T14:15:22.673Z        */
 /* DO NOT EDIT DIRECTLY - Run: node build.js    */
 /* ============================================= */
 
@@ -13,21 +13,23 @@
 .theme-1 {
   /* Space */
   --_space---none: var(--space--0);
-  --_space---lg: var(--space--1300);
-  --_space---md: var(--space--1200);
-  --_space---xl: var(--space--1400);
-  --_space---gap--md: var(--space--200);
-  --_space---gap--lg: var(--space--400);
-  --_space---gap--xl: var(--space--500);
+  --_space---tiny: var(--space--600);
+  --_space---xs: var(--space--600);
+  --_space---sm: var(--space--600);
+  --_space---md: var(--space--800);
+  --_space---lg: var(--space--1000);
+  --_space---xl: var(--space--1200);
+  --_space---xxl: var(--space--1200);
+  --_space---huge: var(--space--2000);
   --_space---gap--none: var(--space--0);
-  --_space---huge: var(--space--1600);
-  --_space---xxl: var(--space--1500);
-  --_space---sm: var(--space--1100);
-  --_space---gap--sm: var(--space--100);
-  --_space---gap--xxl: var(--space--600);
-  --_space---gap--huge: var(--space--1200);
-  --_space---tiny: var(--space--1000);
-  --_space---gap--tiny: var(--space--50);
+  --_space---gap--tiny: var(--space--0);
+  --_space---gap--xs: var(--space--0);
+  --_space---gap--sm: var(--space--400);
+  --_space---gap--md: var(--space--1200);
+  --_space---gap--lg: var(--space--1400);
+  --_space---gap--xl: var(--space--1600);
+  --_space---gap--xxl: var(--space--1600);
+  --_space---gap--huge: var(--space--2000);
   --_space---button: var(--space--300);
   --_space---input: var(--space--200);
   /* Size */
@@ -101,7 +103,7 @@
   --_typography---font-family--heading: "Playfair Display", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "Playfair Display", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -121,21 +123,23 @@
   --_typography---icon--large: var(--font-size--200);
   /* Space */
   --_space---none: var(--space--0);
-  --_space---lg: var(--space--400);
-  --_space---md: var(--space--200);
-  --_space---xl: var(--space--600);
+  --_space---tiny: var(--space--200);
+  --_space---xs: var(--space--250);
+  --_space---sm: var(--space--300);
+  --_space---md: var(--space--400);
+  --_space---lg: var(--space--600);
+  --_space---xl: var(--space--800);
+  --_space---xxl: var(--space--800);
+  --_space---huge: var(--space--1200);
+  --_space---gap--none: var(--space--0);
+  --_space---gap--tiny: var(--space--50);
+  --_space---gap--xs: var(--space--100);
+  --_space---gap--sm: var(--space--150);
   --_space---gap--md: var(--space--200);
   --_space---gap--lg: var(--space--400);
-  --_space---gap--xl: var(--space--500);
-  --_space---gap--none: var(--space--0);
-  --_space---huge: var(--space--1000);
-  --_space---xxl: var(--space--800);
-  --_space---sm: var(--space--150);
-  --_space---gap--sm: var(--space--100);
+  --_space---gap--xl: var(--space--600);
   --_space---gap--xxl: var(--space--600);
-  --_space---gap--huge: var(--space--1200);
-  --_space---tiny: var(--space--100);
-  --_space---gap--tiny: var(--space--50);
+  --_space---gap--huge: var(--space--800);
   --_space---button: var(--space--200);
   --_space---input: var(--space--200);
   /* Size */
@@ -209,7 +213,7 @@
   --_typography---font-family--heading: Geist, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Geist, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -276,7 +280,7 @@
   --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "IBM Plex Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -343,7 +347,7 @@
   --_typography---font-family--heading: Lato, Arial, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Lato, Arial, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -410,7 +414,7 @@
   --_typography---font-family--heading: Newsreader, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Newsreader, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -443,7 +447,7 @@
   --_typography---font-family--heading: "IBM Plex Sans", sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: "IBM Plex Sans", sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -510,7 +514,7 @@
   --_typography---font-family--heading: Lato, Arial, sans-serif;
   --_typography---heading--xxx-large: var(--font-size--1200);
   --_typography---heading--large: var(--font-size--700);
-  --_typography---label--le: var(--font-size--200);
+  --_typography---label--lg: var(--font-size--200);
   --_typography---label--sm: var(--font-size--75);
   --_typography---font-family--display: Lato, Arial, sans-serif;
   --_typography---display--large: var(--font-size--1400);
@@ -543,8 +547,6 @@
   --_color---text--secondary: var(--grayscale--dark);
   --_color---text--muted: var(--grayscale--light);
   --_color---text--inverse: var(--grayscale--white);
-  --_color---text--on-color-dark: var(--grayscale--white);
-  --_color---text--on-color-light: var(--grayscale--black);
   --_color---text--brand: #e35335;
   --_color---surface--primary: var(--grayscale--white);
   --_color---surface--secondary: var(--grayscale--lightest);
@@ -578,21 +580,23 @@
   --_typography---font-family--display: Poppins, sans-serif;
   /* Space */
   --_space---none: var(--space--0);
-  --_space---tiny: var(--space--100);
-  --_space---sm: var(--space--150);
-  --_space---md: var(--space--200);
-  --_space---lg: var(--space--400);
-  --_space---xl: var(--space--600);
+  --_space---tiny: var(--space--200);
+  --_space---xs: var(--space--250);
+  --_space---sm: var(--space--300);
+  --_space---md: var(--space--400);
+  --_space---lg: var(--space--600);
+  --_space---xl: var(--space--800);
   --_space---xxl: var(--space--800);
-  --_space---huge: var(--space--1000);
+  --_space---huge: var(--space--1200);
   --_space---gap--none: var(--space--0);
   --_space---gap--tiny: var(--space--50);
-  --_space---gap--sm: var(--space--100);
+  --_space---gap--xs: var(--space--100);
+  --_space---gap--sm: var(--space--150);
   --_space---gap--md: var(--space--200);
   --_space---gap--lg: var(--space--400);
-  --_space---gap--xl: var(--space--500);
+  --_space---gap--xl: var(--space--600);
   --_space---gap--xxl: var(--space--600);
-  --_space---gap--huge: var(--space--1200);
+  --_space---gap--huge: var(--space--800);
   --_space---button: var(--space--200);
   --_space---input: var(--space--200);
 }

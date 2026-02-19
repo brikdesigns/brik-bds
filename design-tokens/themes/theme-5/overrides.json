@@ -1,0 +1,561 @@
+{
+  "color": {
+    "border": {
+      "secondary": {
+        "$value": "{grayscale.darker}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "brand": {
+        "$value": "{themes.peach-brown.peach}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "inverse": {
+        "$value": "{themes.peach-brown.peach-darkest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "primary": {
+        "$value": "{grayscale.black}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "input": {
+        "$value": "{themes.peach-brown.peach-darkest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "muted": {
+        "$value": "{grayscale.darker}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "on-color": {
+        "$value": "{grayscale.darkest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "surface": {
+      "nav": {
+        "$value": "{themes.peach-brown.peach-lightest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "primary": {
+        "$value": "{themes.peach-brown.peach-lightest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "secondary": {
+        "$value": "{themes.peach-brown.peach-darkest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "brand-primary": {
+        "$value": "{themes.peach-brown.peach}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "brand-secondary": {
+        "$value": "{themes.peach-brown.peach-light}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "background": {
+      "brand-primary": {
+        "$value": "{themes.peach-brown.peach}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "primary": {
+        "$value": "{themes.peach-brown.peach-lightest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "secondary": {
+        "$value": "{grayscale.lightest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "brand-secondary": {
+        "$value": "{themes.peach-brown.peach-darkest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "inverse": {
+        "$value": "{grayscale.black}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "input": {
+        "$value": "{grayscale.white}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "image": {
+        "$value": "#17171799",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "image-brand": {
+        "$value": "{themes.peach-brown.peach}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "text": {
+      "inverse": {
+        "$value": "{grayscale.white}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "primary": {
+        "$value": "{grayscale.black}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "brand": {
+        "$value": "{themes.peach-brown.peach}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "muted": {
+        "$value": "{grayscale.dark}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "secondary": {
+        "$value": "{grayscale.darker}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "page": {
+      "primary": {
+        "$value": "{themes.peach-brown.peach-lightest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "brand": {
+        "$value": "{themes.peach-brown.peach}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "secondary": {
+        "$value": "{themes.peach-brown.peach-darkest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "theme": {
+      "accent": {
+        "$value": "{themes.peach-brown.peach-darkest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "tertiary": {
+        "$value": "{themes.peach-brown.peach-darkest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "secondary": {
+        "$value": "{themes.peach-brown.peach-light}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "primary": {
+        "$value": "{themes.peach-brown.peach}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "fourth": {
+        "$value": "{themes.peach-brown.peach-lightest}",
+        "$type": "color",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    }
+  },
+  "typography": {
+    "font-family": {
+      "label": {
+        "$value": "\"Open Sans\", sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "body": {
+        "$value": "\"Open Sans\", sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "heading": {
+        "$value": "Newsreader, sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "display": {
+        "$value": "Newsreader, sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "icon": {
+        "$value": "\"Font Awesome 6 Pro Solid 900\", Arial, sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "body": {
+      "sm": {
+        "$value": "{font-size.75}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "md-base": {
+        "$value": "{font-size.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "lg": {
+        "$value": "{font-size.200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "tiny": {
+        "$value": "{font-size.25}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xs": {
+        "$value": "{font-size.50}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "label": {
+      "md-base": {
+        "$value": "{font-size.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "lg": {
+        "$value": "{font-size.200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "sm": {
+        "$value": "{font-size.75}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "heading": {
+      "xxx-large": {
+        "$value": "{font-size.1200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "large": {
+        "$value": "{font-size.700}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xx-large": {
+        "$value": "{font-size.1000}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "x-large": {
+        "$value": "{font-size.900}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "medium": {
+        "$value": "{font-size.500}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "small": {
+        "$value": "{font-size.300}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "tiny": {
+        "$value": "{font-size.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "display": {
+      "large": {
+        "$value": "{font-size.1400}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "medium": {
+        "$value": "{font-size.1500}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "small": {
+        "$value": "{font-size.1600}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "icon": {
+      "small": {
+        "$value": "{font-size.75}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "medium-base": {
+        "$value": "{font-size.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "large": {
+        "$value": "{font-size.200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    }
+  }
+}

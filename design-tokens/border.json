@@ -1,0 +1,212 @@
+{
+  "border-width": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "25": {
+      "$value": ".25px",
+      "$type": "dimension"
+    },
+    "50": {
+      "$value": ".5px",
+      "$type": "dimension"
+    },
+    "100": {
+      "$value": "1px",
+      "$type": "dimension"
+    },
+    "200": {
+      "$value": "2px",
+      "$type": "dimension"
+    },
+    "300": {
+      "$value": "3px",
+      "$type": "dimension"
+    },
+    "400": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "500": {
+      "$value": "5px",
+      "$type": "dimension"
+    },
+    "600": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "none": {
+      "$value": "{border-width.0}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "md": {
+      "$value": "{border-width.50}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "sm": {
+      "$value": "{border-width.25}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "lg": {
+      "$value": "{border-width.100}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    }
+  },
+  "border-radius": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "50": {
+      "$value": "2px",
+      "$type": "dimension"
+    },
+    "100": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "200": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "300": {
+      "$value": "10px",
+      "$type": "dimension"
+    },
+    "400": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "500": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "600": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "700": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "800": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "900": {
+      "$value": "28px",
+      "$type": "dimension"
+    },
+    "1000": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "1100": {
+      "$value": "36px",
+      "$type": "dimension"
+    },
+    "1200": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "1300": {
+      "$value": "44px",
+      "$type": "dimension"
+    },
+    "1400": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "1500": {
+      "$value": "999px",
+      "$type": "dimension"
+    },
+    "1600": {
+      "$value": "9999px",
+      "$type": "dimension"
+    },
+    "none": {
+      "$value": "{border-radius.0}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "sm": {
+      "$value": "{border-radius.50}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "md": {
+      "$value": "{border-radius.100}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "lg": {
+      "$value": "{border-radius.200}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "input": {
+      "$value": "{border-radius.50}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    },
+    "pill": {
+      "$value": "999px",
+      "$type": "dimension"
+    },
+    "circle": {
+      "$value": "9999px",
+      "$type": "dimension"
+    },
+    "button": {
+      "$value": "{border-radius.50}",
+      "$type": "dimension",
+      "$extensions": {
+        "com.brikdesigns.bds": {
+          "semantic": true
+        }
+      }
+    }
+  }
+}

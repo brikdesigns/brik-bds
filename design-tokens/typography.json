@@ -1,0 +1,472 @@
+{
+  "typography": {
+    "font-family": {
+      "label": {
+        "$value": "\"Open Sans\", sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "body": {
+        "$value": "\"Open Sans\", sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "heading": {
+        "$value": "\"Droid Sans\", sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "display": {
+        "$value": "\"Droid Sans\", sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "icon": {
+        "$value": "\"Font Awesome 6 Pro Solid 900\", Arial, sans-serif",
+        "$type": "fontFamily",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "body": {
+      "sm": {
+        "$value": "{font-size.75}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "md-base": {
+        "$value": "{font-size.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xl": {
+        "$value": "{font-size.300}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "lg": {
+        "$value": "{font-size.200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "tiny": {
+        "$value": "{font-size.25}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xs": {
+        "$value": "{font-size.50}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "label": {
+      "md-base": {
+        "$value": "{font-size.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "lg": {
+        "$value": "{font-size.200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xl": {
+        "$value": "{font-size.300}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "sm": {
+        "$value": "{font-size.75}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "heading": {
+      "xxx-large": {
+        "$value": "{font-size.1200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "large": {
+        "$value": "{font-size.700}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "xx-large": {
+        "$value": "{font-size.1000}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "x-large": {
+        "$value": "{font-size.900}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "medium": {
+        "$value": "{font-size.500}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "small": {
+        "$value": "{font-size.300}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "tiny": {
+        "$value": "{font-size.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "display": {
+      "large": {
+        "$value": "{font-size.1400}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "medium": {
+        "$value": "{font-size.1500}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "small": {
+        "$value": "{font-size.1600}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    },
+    "icon": {
+      "small": {
+        "$value": "{font-size.75}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "medium-base": {
+        "$value": "{font-size.100}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      },
+      "large": {
+        "$value": "{font-size.200}",
+        "$type": "dimension",
+        "$extensions": {
+          "com.brikdesigns.bds": {
+            "semantic": true
+          }
+        }
+      }
+    }
+  },
+  "font-size": {
+    "25": {
+      "$value": "10.26px",
+      "$type": "dimension"
+    },
+    "50": {
+      "$value": "11.54px",
+      "$type": "dimension"
+    },
+    "75": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "100": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "200": {
+      "$value": "18px",
+      "$type": "dimension"
+    },
+    "300": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "400": {
+      "$value": "22.5px",
+      "$type": "dimension"
+    },
+    "500": {
+      "$value": "25.3px",
+      "$type": "dimension"
+    },
+    "600": {
+      "$value": "28.5px",
+      "$type": "dimension"
+    },
+    "700": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "800": {
+      "$value": "36px",
+      "$type": "dimension"
+    },
+    "900": {
+      "$value": "40.5px",
+      "$type": "dimension"
+    },
+    "1000": {
+      "$value": "45.5px",
+      "$type": "dimension"
+    },
+    "1100": {
+      "$value": "51px",
+      "$type": "dimension"
+    },
+    "1200": {
+      "$value": "57.5px",
+      "$type": "dimension"
+    },
+    "1300": {
+      "$value": "64.7px",
+      "$type": "dimension"
+    },
+    "1400": {
+      "$value": "72.8px",
+      "$type": "dimension"
+    },
+    "1500": {
+      "$value": "81.9px",
+      "$type": "dimension"
+    },
+    "1600": {
+      "$value": "92.2px",
+      "$type": "dimension"
+    },
+    "1700": {
+      "$value": "103.9px",
+      "$type": "dimension"
+    },
+    "1800": {
+      "$value": "116.9px",
+      "$type": "dimension"
+    },
+    "1900": {
+      "$value": "143px",
+      "$type": "dimension"
+    },
+    "2000": {
+      "$value": "171px",
+      "$type": "dimension"
+    },
+    "2100": {
+      "$value": "205px",
+      "$type": "dimension"
+    },
+    "2200": {
+      "$value": "247px",
+      "$type": "dimension"
+    },
+    "2300": {
+      "$value": "296px",
+      "$type": "dimension"
+    },
+    "2400": {
+      "$value": "355px",
+      "$type": "dimension"
+    },
+    "2500": {
+      "$value": "426px",
+      "$type": "dimension"
+    },
+    "2600": {
+      "$value": "515px",
+      "$type": "dimension"
+    }
+  },
+  "font-weight": {
+    "bold": {
+      "$value": "700",
+      "$type": "fontWeight"
+    },
+    "regular": {
+      "$value": "400",
+      "$type": "fontWeight"
+    },
+    "semi-bold": {
+      "$value": "600",
+      "$type": "fontWeight"
+    },
+    "light": {
+      "$value": "300",
+      "$type": "fontWeight"
+    },
+    "medium": {
+      "$value": "500",
+      "$type": "fontWeight"
+    },
+    "extra-bold": {
+      "$value": "800",
+      "$type": "fontWeight"
+    },
+    "black": {
+      "$value": "900",
+      "$type": "fontWeight"
+    },
+    "thin": {
+      "$value": "300",
+      "$type": "fontWeight"
+    }
+  },
+  "font-line-height": {
+    "100": {
+      "$value": "100%",
+      "$type": "number"
+    },
+    "125": {
+      "$value": "125%",
+      "$type": "number"
+    },
+    "150": {
+      "$value": "150%",
+      "$type": "number"
+    },
+    "175": {
+      "$value": "175%",
+      "$type": "number"
+    },
+    "200": {
+      "$value": "200%",
+      "$type": "number"
+    },
+    "none": {
+      "$value": "0%",
+      "$type": "number"
+    }
+  },
+  "font-family": {
+    "body": {
+      "$value": "Poppins",
+      "$type": "fontFamily"
+    },
+    "label": {
+      "$value": "Poppins",
+      "$type": "fontFamily"
+    },
+    "display": {
+      "$value": "Poppins",
+      "$type": "fontFamily"
+    },
+    "heading": {
+      "$value": "Poppins",
+      "$type": "fontFamily"
+    },
+    "icon-brands": {
+      "$value": "\"Font Awesome 6 Brands\"",
+      "$type": "fontFamily"
+    },
+    "icon": {
+      "$value": "\"Font Awesome 6 Pro\"",
+      "$type": "fontFamily"
+    }
+  }
+}
