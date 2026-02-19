@@ -105,7 +105,8 @@ const selectBaseStyles: CSSProperties = {
   cursor: 'pointer',
   appearance: 'none',
   boxSizing: 'border-box',
-  backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
+  // bds-lint-ignore — data URI SVGs cannot reference CSS variables; #333 = text--primary default
+  backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'right var(--_space---input) center',
   paddingRight: 'calc(var(--_space---input) * 3)',
@@ -235,7 +236,7 @@ export function Select({
     ...selectBaseStyles,
     ...sizeStyle.select,
     ...(disabled ? selectDisabledStyles : {}),
-    ...(hasError ? { borderColor: 'var(--system--red, #eb5757)' } : {}),
+    ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
     ...(icon ? { paddingLeft: 'calc(var(--_space---input) * 4)' } : {}),
     ...style,
   };
@@ -253,7 +254,7 @@ export function Select({
           style={{
             ...labelBaseStyles,
             ...sizeStyle.label,
-            ...(hasError ? { color: 'var(--system--red, #eb5757)' } : {}),
+            ...(hasError ? { color: 'var(--system--red)' } : {}),
           }}
         >
           {label}
@@ -298,7 +299,7 @@ export function Select({
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
-          style={{ ...helperBaseStyles, color: 'var(--system--red, #eb5757)' }}
+          style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
           role="alert"
         >
           {error}

@@ -152,7 +152,7 @@ export function TextArea({
     ...textareaStyles,
     resize,
     ...(disabled ? textareaDisabledStyles : {}),
-    ...(hasError ? { borderColor: 'var(--system--red, #eb5757)' } : {}),
+    ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
     ...style,
   };
 
@@ -168,7 +168,7 @@ export function TextArea({
           htmlFor={inputId}
           style={{
             ...labelBaseStyles,
-            ...(hasError ? { color: 'var(--system--red, #eb5757)' } : {}),
+            ...(hasError ? { color: 'var(--system--red)' } : {}),
           }}
         >
           {label}
@@ -193,7 +193,7 @@ export function TextArea({
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
-          style={{ ...helperBaseStyles, color: 'var(--system--red, #eb5757)' }}
+          style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
           role="alert"
         >
           {error}
