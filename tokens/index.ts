@@ -3,7 +3,7 @@
  *
  * Auto-generated from Webflow design tokens
  * Source: brik-bds.webflow.css
- * Generated: 2026-02-19T14:15:22.675Z
+ * Generated: 2026-02-19T14:38:17.129Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
