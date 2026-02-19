@@ -204,6 +204,14 @@ for i in "${!CONSUMER_DIRS[@]}"; do
   # ─── Update Submodule ───────────────────────────────────────
   cd "$CONSUMER_DIR"
 
+  # Stash any local changes in consumer before switching
+  CONSUMER_STASHED=false
+  if [ -n "$(git status --porcelain)" ]; then
+    git stash -u --quiet -m "bds-propagate: auto-stash before update"
+    CONSUMER_STASHED=true
+    info "Stashed local changes in $CONSUMER_NAME"
+  fi
+
   CONSUMER_BRANCH=$(git branch --show-current)
   if [ "$CONSUMER_BRANCH" != "main" ]; then
     warn "$CONSUMER_NAME is on branch $CONSUMER_BRANCH, switching to main"
@@ -216,10 +224,11 @@ for i in "${!CONSUMER_DIRS[@]}"; do
   git checkout -b "$PR_BRANCH" --quiet
   info "Created branch: $PR_BRANCH"
 
-  git submodule update --init "$SUBMODULE_PATH" --quiet
+  # Update submodule to target commit
+  git submodule update --init --quiet -- "$SUBMODULE_PATH"
   cd "$SUBMODULE_PATH"
   git fetch origin main --quiet
-  git checkout "$LOCAL_HEAD" --quiet
+  git checkout --quiet "$LOCAL_HEAD"
   cd "$CONSUMER_DIR"
 
   git add "$SUBMODULE_PATH"
@@ -265,7 +274,15 @@ $CHANGELOG_RENDERED
   ANY_UPDATED=true
   TOTAL_NEW_COMMITS=$NEW_COMMITS
 
+  # Restore consumer to original state
   git checkout main --quiet
+  if [ "$CONSUMER_STASHED" = true ]; then
+    if [ "$CONSUMER_BRANCH" != "main" ]; then
+      git checkout "$CONSUMER_BRANCH" --quiet
+    fi
+    git stash pop --quiet
+    info "Restored local changes in $CONSUMER_NAME"
+  fi
   echo ""
 done
 
