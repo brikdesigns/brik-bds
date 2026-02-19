@@ -48,3 +48,13 @@
 .button-secondary:hover:not(:disabled) {
   border-color: var(--_color---border--primary);
 }
+
+/* Loading state: prevent hover effects */
+.button-loading:hover:not(:disabled) {
+  filter: none;
+}
+
+/* Spinner animation */
+@keyframes bds-button-spin {
+  to { transform: rotate(360deg); }
+}
