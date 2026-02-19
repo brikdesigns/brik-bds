@@ -26,6 +26,7 @@
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "storybook": "^8.5.0",
+    "style-dictionary": "^5.3.1",
     "typescript": "^5.5.0",
     "vite": "^6.0.0"
   },
@@ -34,7 +35,7 @@
     "react-dom": ">=18.0.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "start": "python3 -m http.server 8000",
@@ -48,11 +49,10 @@
     "precommit": "npm run validate",
     "extract-tokens": "node scripts/extract-tokens-css.js",
     "build:tokens": "node tokens/build.js",
+    "build:dtcg": "node scripts/css-to-dtcg.js",
+    "build:sd": "npx style-dictionary build --config sd.config.mjs",
+    "build:all-tokens": "npm run build:dtcg && npm run build:sd && npm run build:tokens",
     "deploy": "webflow deploy",
-    "export": "webflow export",
-    "sync-figma": "node scripts/sync-figma.js",
-    "transform-tokens": "node scripts/transform-tokens.js",
-    "sync-and-transform": "npm run sync-figma && npm run transform-tokens",
     "test": "echo \"No tests specified\" && exit 0",
     "test-integration": "node scripts/test-integration.js",
     "setup-copilot": "node scripts/setup-copilot-onlook.js",

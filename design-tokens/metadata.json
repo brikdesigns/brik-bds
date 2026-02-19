@@ -1,17 +1,17 @@
 {
-  "files": [
-    {
-      "name": "❖ Brik Foundations",
-      "key": "Rkdc3SIWJUdgoAkeadgZZe"
-    },
-    {
-      "name": "❖ Modern Theme Web Toolkit",
-      "key": "GLi4Xm9q783AniSTY009p5"
-    },
-    {
-      "name": "❖ Expressive Theme Web Toolkit",
-      "key": "XEXnuAmnklNKw55kxjvNR5"
-    }
-  ],
-  "syncedAt": "2026-02-15T09:24:04.458Z"
+  "source": "updates/brik-bds.webflow/css/brik-bds.webflow.css",
+  "format": "W3C Design Tokens (DTCG)",
+  "generatedAt": "2026-02-19T14:15:21.744Z",
+  "tokenCount": 363,
+  "themes": [
+    "theme-1",
+    "theme-2",
+    "theme-3",
+    "theme-4",
+    "theme-5",
+    "theme-6",
+    "theme-7",
+    "theme-8",
+    "theme-brik"
+  ]
 }

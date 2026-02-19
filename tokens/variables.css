@@ -3,7 +3,7 @@
 /* ============================================= */
 /* Auto-generated from Webflow design tokens     */
 /* Source: brik-bds.webflow.css                  */
-/* Generated: 2026-02-16T14:09:34.509Z        */
+/* Generated: 2026-02-19T14:15:22.671Z        */
 /* DO NOT EDIT DIRECTLY - Run: node build.js    */
 /* ============================================= */
 
@@ -310,20 +310,22 @@
 
   /* Space Semantic Tokens */
   --layout-none: var(--space--0);
-  --layout-lg: var(--space--400);
-  --layout-md: var(--space--200);
-  --layout-xl: var(--space--600);
+  --layout-lg: var(--space--600);
+  --layout-md: var(--space--400);
+  --layout-xl: var(--space--800);
   --layout-gap-md: var(--space--200);
   --layout-gap-lg: var(--space--400);
-  --layout-gap-xl: var(--space--500);
+  --layout-gap-xl: var(--space--600);
   --layout-gap-none: var(--space--0);
-  --layout-huge: var(--space--1000);
+  --layout-huge: var(--space--1200);
   --layout-xxl: var(--space--800);
-  --layout-sm: var(--space--150);
-  --layout-gap-sm: var(--space--100);
+  --layout-xs: var(--space--250);
+  --layout-sm: var(--space--300);
+  --layout-gap-xs: var(--space--100);
+  --layout-gap-sm: var(--space--150);
   --layout-gap-xxl: var(--space--600);
-  --layout-gap-huge: var(--space--1200);
-  --layout-tiny: var(--space--100);
+  --layout-gap-huge: var(--space--800);
+  --layout-tiny: var(--space--200);
   --layout-gap-tiny: var(--space--50);
   --layout-button: var(--space--200);
   --layout-input: var(--space--200);
@@ -360,8 +362,10 @@
   --typography-font-family-heading: "Droid Sans", sans-serif;
   --typography-heading-xxx-large: var(--font-size--1200);
   --typography-heading-large: var(--font-size--700);
-  --typography-label-le: var(--font-size--200);
+  --typography-label-lg: var(--font-size--200);
+  --typography-label-xl: var(--font-size--300);
   --typography-label-sm: var(--font-size--75);
+  --typography-body-xl: var(--font-size--300);
   --typography-font-family-display: "Droid Sans", sans-serif;
   --typography-display-large: var(--font-size--1400);
   --typography-display-medium: var(--font-size--1500);

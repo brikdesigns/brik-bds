@@ -3,7 +3,7 @@
  *
  * Auto-generated from Webflow design tokens
  * Source: brik-bds.webflow.css
- * Generated: 2026-02-16T14:09:34.513Z
+ * Generated: 2026-02-19T14:15:22.675Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
@@ -441,20 +441,22 @@ export const semanticColors = {
  */
 export const semanticSpace = {
   "none": "var(--space--0)",
-  "lg": "var(--space--400)",
-  "md": "var(--space--200)",
-  "xl": "var(--space--600)",
+  "lg": "var(--space--600)",
+  "md": "var(--space--400)",
+  "xl": "var(--space--800)",
   "gap--md": "var(--space--200)",
   "gap--lg": "var(--space--400)",
-  "gap--xl": "var(--space--500)",
+  "gap--xl": "var(--space--600)",
   "gap--none": "var(--space--0)",
-  "huge": "var(--space--1000)",
+  "huge": "var(--space--1200)",
   "xxl": "var(--space--800)",
-  "sm": "var(--space--150)",
-  "gap--sm": "var(--space--100)",
+  "xs": "var(--space--250)",
+  "sm": "var(--space--300)",
+  "gap--xs": "var(--space--100)",
+  "gap--sm": "var(--space--150)",
   "gap--xxl": "var(--space--600)",
-  "gap--huge": "var(--space--1200)",
-  "tiny": "var(--space--100)",
+  "gap--huge": "var(--space--800)",
+  "tiny": "var(--space--200)",
   "gap--tiny": "var(--space--50)",
   "button": "var(--space--200)",
   "input": "var(--space--200)"
@@ -472,8 +474,10 @@ export const semanticTypography = {
   "font-family--heading": "\"Droid Sans\", sans-serif",
   "heading--xxx-large": "var(--font-size--1200)",
   "heading--large": "var(--font-size--700)",
-  "label--le": "var(--font-size--200)",
+  "label--lg": "var(--font-size--200)",
+  "label--xl": "var(--font-size--300)",
   "label--sm": "var(--font-size--75)",
+  "body--xl": "var(--font-size--300)",
   "font-family--display": "\"Droid Sans\", sans-serif",
   "display--large": "var(--font-size--1400)",
   "display--medium": "var(--font-size--1500)",
