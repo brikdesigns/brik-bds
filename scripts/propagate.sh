@@ -32,9 +32,11 @@ BDS_BRANCH="main"
 # Consumer repos — parallel arrays (bash 3 compatible)
 CONSUMER_DIRS=(
   "/Users/nickstanerson/Documents/GitHub/brik-llm"
+  "/Users/nickstanerson/Documents/GitHub/brik-client-portal"
 )
 CONSUMER_SUBPATHS=(
   "foundations/brik-bds"
+  "brik-bds"
 )
 
 # ─── Argument Parsing ─────────────────────────────────────────────
