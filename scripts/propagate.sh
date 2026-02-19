@@ -224,12 +224,12 @@ for i in "${!CONSUMER_DIRS[@]}"; do
   git checkout -b "$PR_BRANCH" --quiet
   info "Created branch: $PR_BRANCH"
 
-  # Update submodule to target commit
-  git submodule update --init --quiet -- "$SUBMODULE_PATH"
-  cd "$SUBMODULE_PATH"
-  git fetch origin main --quiet
-  git checkout --quiet "$LOCAL_HEAD"
-  cd "$CONSUMER_DIR"
+  # Update submodule to latest remote (fetches from brik-bds origin/main)
+  git submodule update --init --remote --quiet -- "$SUBMODULE_PATH" 2>/dev/null || {
+    # Fallback: manually update inside the submodule
+    info "Using manual submodule update..."
+    (cd "$SUBMODULE_PATH" && git fetch origin main --quiet && git checkout --quiet "$LOCAL_HEAD")
+  }
 
   git add "$SUBMODULE_PATH"
 
