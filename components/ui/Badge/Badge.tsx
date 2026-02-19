@@ -91,7 +91,7 @@ const sizeStyles: Record<BadgeSize, CSSProperties> = {
     justifyContent: 'center',
   },
   sm: {
-    padding: '2px 6px',
+    padding: 'var(--_space---gap--tiny) var(--_space---gap--sm)',
     fontSize: 'var(--_typography---body--tiny)',
   },
   md: {
@@ -99,7 +99,7 @@ const sizeStyles: Record<BadgeSize, CSSProperties> = {
     fontSize: 'var(--_typography---label--sm)',
   },
   lg: {
-    padding: '6px 12px',
+    padding: 'var(--_space---gap--sm) var(--_space---sm)',
     fontSize: 'var(--_typography---label--md-base)',
   },
 };
