@@ -66,10 +66,10 @@ const statusStyles: Record<CounterStatus, CSSProperties> = {
 /**
  * Size-based styles
  *
- * Figma specs:
- * - sm: 6px 8px padding, font-size ~11px (body--tiny)
- * - md: 8px 16px padding, font-size 14px (label--sm)
- * - lg: 8px 16px padding, font-size 16px (label--md-base)
+ * Figma specs (pre-spacing-update, tokens now resolve to larger values):
+ * - sm: --_space---sm (12px) x --_space---md (16px), font-size ~11px (body--tiny)
+ * - md: --_space---md (16px) x --_space---lg (24px), font-size 14px (label--sm)
+ * - lg: --_space---md (16px) x --_space---lg (24px), font-size 16px (label--md-base)
  */
 const sizeStyles: Record<CounterSize, CSSProperties> = {
   sm: {

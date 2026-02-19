@@ -35,8 +35,8 @@ const iconClassMap: Record<AlertBannerIcon, string> = {
  * Token reference:
  * - --_color---surface--secondary (light gray background)
  * - --_color---text--primary (dark text)
- * - --_space---lg = 16px (vertical padding)
- * - --_space---xl = 24px (horizontal padding)
+ * - --_space---lg = 24px (vertical padding)
+ * - --_space---xl = 32px (horizontal padding)
  * - --_border-radius---sm = 2px (corners)
  * - --_space---gap--lg = 16px (gap between content and action)
  */

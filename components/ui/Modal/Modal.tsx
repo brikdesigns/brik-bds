@@ -123,7 +123,7 @@ const titleStyles: CSSProperties = {
  *
  * Token reference:
  * - --_typography---body--lg (icon size)
- * - --_space---sm = 6px (padding)
+ * - --_space---sm = 12px (padding)
  * - --_color---text--primary (icon color)
  * - --_border-radius---sm = 2px
  */

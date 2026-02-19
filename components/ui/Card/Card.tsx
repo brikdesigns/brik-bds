@@ -31,9 +31,9 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
  *
  * Token reference:
  * - --_space---none = 0px
- * - --_space---sm = 6px
- * - --_space---md = 8px
- * - --_space---lg = 16px
+ * - --_space---sm = 12px
+ * - --_space---md = 16px
+ * - --_space---lg = 24px
  */
 const paddingStyles: Record<CardPadding, string> = {
   none: 'var(--_space---none)',
@@ -201,7 +201,7 @@ export function CardDescription({ children, className = '', style, ...props }: C
  * CardFooter - Footer section for cards
  *
  * Token reference:
- * - --_space---sm = 6px (top padding)
+ * - --_space---sm = 12px (top padding)
  */
 export interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;

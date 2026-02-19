@@ -94,7 +94,7 @@ const arrowDisabledStyles: CSSProperties = {
  * - --font-weight--semi-bold = 600
  * - --font-line-height--100
  * - --_color---text--muted (inactive gray)
- * - --_space---sm = 6px (horizontal padding)
+ * - --_space---sm = 12px (horizontal padding)
  */
 const pageStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',

@@ -20,8 +20,8 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
  * Token reference:
  * - --_color---surface--brand-primary (brand blue background)
  * - --_color---text--inverse (white text on brand surface)
- * - --_space---lg = 16px (vertical padding)
- * - --_space---xl = 24px (horizontal padding)
+ * - --_space---lg = 24px (vertical padding)
+ * - --_space---xl = 32px (horizontal padding)
  * - --_border-radius---sm = 2px (corners)
  * - --_space---gap--lg = 16px (gap between content and action)
  */

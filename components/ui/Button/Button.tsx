@@ -39,10 +39,10 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * Size-based styles using BDS spacing tokens
  *
  * Token reference:
- * - --_space---sm = 6px
- * - --_space---md = 8px
- * - --_space---lg = 16px
- * - --_space---xl = 24px
+ * - --_space---sm = 12px
+ * - --_space---md = 16px
+ * - --_space---lg = 24px
+ * - --_space---xl = 32px
  * - --_typography---label--sm (small label)
  * - --_typography---label--md-base (base label)
  */
@@ -100,7 +100,7 @@ const variantStyles: Record<ButtonVariant, CSSProperties> = {
  * Base button styles using BDS tokens
  *
  * Token reference:
- * - --_space---gap--sm = 4px (icon gap)
+ * - --_space---gap--sm = 6px (icon gap)
  * - --_typography---font-family--label (button font)
  * - --_border-radius---button = 2px (button corners)
  */
