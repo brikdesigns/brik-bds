@@ -27,6 +27,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   iconBefore?: ReactNode;
   /** Optional icon after text */
   iconAfter?: ReactNode;
+  /** Loading state — shows spinner and disables interaction */
+  loading?: boolean;
   /** Render as anchor tag (for links) */
   asLink?: boolean;
   /** Link href (when asLink is true) */
@@ -139,6 +141,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       iconBefore,
       iconAfter,
+      loading = false,
       asLink = false,
       href,
       className = '',
@@ -148,12 +151,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const isDisabled = disabled || loading;
+
     const combinedStyles: CSSProperties = {
       ...baseStyles,
       ...sizeStyles[size],
       ...variantStyles[variant],
       ...(fullWidth ? { width: '100%' } : {}),
-      ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}),
+      ...(isDisabled ? { opacity: disabled ? 0.5 : 1, cursor: 'not-allowed' } : {}),
+      ...(loading ? { position: 'relative' as const } : {}),
       ...style,
     };
 
@@ -161,8 +167,48 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const buttonClasses = [
       styles.button,
       styles[`button-${variant}`],
+      loading ? styles['button-loading'] : '',
       className,
     ].filter(Boolean).join(' ');
+
+    const content = (
+      <>
+        <span style={loading ? { visibility: 'hidden' as const } : undefined}>
+          {iconBefore}
+          {children}
+          {iconAfter}
+        </span>
+        {loading && (
+          <span
+            className={styles['button-spinner']}
+            role="status"
+            aria-label="Loading"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <span
+              style={{
+                display: 'inline-block',
+                width: size === 'sm' ? '14px' : '16px',
+                height: size === 'sm' ? '14px' : '16px',
+                borderRadius: '50%',
+                borderWidth: '2px',
+                borderStyle: 'solid',
+                borderColor: 'currentColor',
+                borderTopColor: 'transparent',
+                animation: 'bds-button-spin 0.8s linear infinite',
+                opacity: 0.9,
+              }}
+            />
+          </span>
+        )}
+      </>
+    );
 
     // Render as anchor if asLink is true
     if (asLink && href) {
@@ -171,12 +217,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           href={href}
           className={buttonClasses}
           style={combinedStyles}
-          aria-disabled={disabled}
+          aria-disabled={isDisabled}
+          aria-busy={loading || undefined}
           {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
         >
-          {iconBefore}
-          {children}
-          {iconAfter}
+          {content}
         </a>
       );
     }
@@ -186,12 +231,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={buttonClasses}
         style={combinedStyles}
-        disabled={disabled}
+        disabled={isDisabled}
+        aria-busy={loading || undefined}
         {...props}
       >
-        {iconBefore}
-        {children}
-        {iconAfter}
+        {content}
       </button>
     );
   }

@@ -27,6 +27,10 @@ const meta: Meta<typeof Button> = {
       control: 'boolean',
       description: 'Disabled state',
     },
+    loading: {
+      control: 'boolean',
+      description: 'Loading state — shows spinner and disables interaction',
+    },
   },
 };
 
@@ -353,6 +357,91 @@ export const InteractiveStates: Story = {
   ),
 };
 
+// ─── Loading State ──────────────────────────────────────────────
+
+/**
+ * Loading state - spinner replaces content while preserving button width
+ */
+export const Loading: Story = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    loading: true,
+    children: 'Submit',
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `<Button variant="primary" loading>Submit</Button>`,
+      },
+    },
+  },
+};
+
+/**
+ * Loading state across all variants
+ */
+export const LoadingVariants: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<Button variant="primary" loading>Primary</Button>
+<Button variant="outline" loading>Outline</Button>
+<Button variant="secondary" loading>Secondary</Button>
+<Button variant="ghost" loading>Ghost</Button>`,
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Button variant="primary" loading>Primary</Button>
+      <Button variant="outline" loading>Outline</Button>
+      <Button variant="secondary" loading>Secondary</Button>
+      <Button variant="ghost" loading>Ghost</Button>
+    </div>
+  ),
+};
+
+/**
+ * Interactive loading toggle - click to trigger a loading state
+ */
+export const LoadingToggle: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Click the button to simulate an async action. The spinner replaces the text while preserving the button width.',
+      },
+      source: {
+        code: `const [loading, setLoading] = useState(false);
+const handleClick = () => {
+  setLoading(true);
+  setTimeout(() => setLoading(false), 2000);
+};
+<Button variant="primary" loading={loading} onClick={handleClick}>Save Changes</Button>`,
+      },
+    },
+  },
+  render: () => {
+    const [loading, setLoading] = useState(false);
+
+    const handleClick = () => {
+      setLoading(true);
+      setTimeout(() => setLoading(false), 2000);
+    };
+
+    return (
+      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+        <Button variant="primary" loading={loading} onClick={handleClick}>
+          Save Changes
+        </Button>
+        <Button variant="outline" loading={loading} onClick={handleClick}>
+          Save Changes
+        </Button>
+      </div>
+    );
+  },
+};
+
 // ─── Click Counter ───────────────────────────────────────────────
 
 /**
@@ -412,9 +501,9 @@ export const ClickCounter: Story = {
             variant="outline"
             size="md"
             onClick={handleAsyncClick}
-            disabled={isLoading}
+            loading={isLoading}
           >
-            {isLoading ? 'Loading...' : 'Async +1'}
+            Async +1
           </Button>
 
           <Button
