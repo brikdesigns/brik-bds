@@ -78,25 +78,55 @@ code[class*="language-"] {
 }
 
 /* ============================================
-   DOCS MODE - Story containers
+   DOCS MODE — Seamless story blocks
 
-   In docs, Storybook wraps each story in a .docs-story container
-   with its own bg/padding. We strip that and let our ThemeWrapper
-   (div.body.theme-X) control the visual area instead.
+   In docs mode, stories render directly (no ThemeWrapper).
+   The body carries .body.theme-X for CSS variables.
+
+   Storybook wraps each story in containers with CSS Modules
+   hashed class names (e.g. div.css-xzp052). The old
+   div[class*="docs-story"] selector doesn't match these.
+
+   We use structural selectors targeting the anchor IDs that
+   Storybook generates for each story block, plus a broad
+   css-module catch-all within #storybook-docs.
    ============================================ */
+
+/* SB7 compat — literal class name (if present) */
 div[class*="docs-story"] {
   background: transparent !important;
   padding: 0 !important;
-}
-
-/* Ensure ThemeWrapper doesn't have visible box */
-.body[class*="theme-"] {
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
 
-/* Reset the .body class border from Webflow CSS */
+/* SB8 — story anchor containers use stable ID pattern:
+   #anchor--components-button--base > div.css-HASH */
+#storybook-docs [id^="anchor--"] > div {
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Inner story wrapper (one level deeper) */
+#storybook-docs [id^="anchor--"] > div > div {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Catch-all: any CSS-modules div inside story anchors */
+#storybook-docs [id^="anchor--"] div[class^="css-"] {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Reset the .body class border from Webflow CSS
+   (applies to <body> which gets class "body" from useEffect) */
 .body {
   border: none !important;
   border-radius: 0 !important;
@@ -141,7 +171,7 @@ div[class*="Subtitle"] {
 /* Args/props table */
 div[class*="ArgTypes"] table,
 .docblock-argstable {
-  background: var(--_color---surface--primary, #fff) !important;
+  background: var(--_color---surface--secondary, #f2f2f2) !important;
 }
 
 div[class*="ArgTypes"] th,

@@ -16,39 +16,12 @@ import '../tokens/themes.css';
 import './storybook-overrides.css';
 
 /**
- * Theme wrapper component — centers story content within the
- * themed preview area. Background/text colors come from the
- * body-level theme classes (applied by the decorator).
- */
-function ThemeWrapper({
-  children,
-  themeNumber
-}: {
-  children: React.ReactNode;
-  themeNumber: ThemeNumber;
-}) {
-  return (
-    <div
-      className={`body theme-${themeNumber}`}
-      style={{
-        padding: 'var(--_space---md)',
-        minHeight: '100%',
-        width: '100%',
-        boxSizing: 'border-box' as const,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-/**
  * Theme decorator — applies theme classes to the preview <body>
- * for immersive theming (docs page bg, text, args table all respond
- * to the selected theme), then wraps stories in ThemeWrapper.
+ * for immersive theming. The body carries .body.theme-X so theme
+ * CSS variables cascade to the entire page.
+ *
+ * - Docs mode: stories render directly on the themed page (no wrapper)
+ * - Canvas mode: a centering wrapper provides comfortable padding
  */
 const withTheme: Decorator = (Story, context) => {
   const themeNumber = (context.globals.themeNumber || 'brik') as ThemeNumber;
@@ -63,10 +36,28 @@ const withTheme: Decorator = (Story, context) => {
     body.classList.add('body', `theme-${themeNumber}`);
   }, [themeNumber]);
 
+  // Docs mode: render story directly on the themed page — no wrapper,
+  // no extra padding layers. The body bg IS the story bg.
+  if (context.viewMode === 'docs') {
+    return <Story />;
+  }
+
+  // Canvas mode: center the story with padding for comfortable viewing.
+  // No .body class here — the <body> element handles theme variables.
   return (
-    <ThemeWrapper themeNumber={themeNumber}>
+    <div
+      style={{
+        padding: 'var(--_space---md)',
+        minHeight: '100vh',
+        width: '100%',
+        boxSizing: 'border-box' as const,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <Story />
-    </ThemeWrapper>
+    </div>
   );
 };
 
@@ -110,7 +101,7 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    layout: 'fullscreen', // ThemeWrapper handles padding + bg
+    layout: 'fullscreen',
     backgrounds: {
       disable: true, // Managed by theme
     },
