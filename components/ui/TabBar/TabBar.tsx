@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Tab item
@@ -51,6 +52,7 @@ const tabBaseStyles: CSSProperties = {
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height--100)',
   textAlign: 'center',
+  textTransform: 'capitalize' as const,
   cursor: 'pointer',
   background: 'none',
   border: 'none',
@@ -106,7 +108,7 @@ export function TabBar({
 }: TabBarProps) {
   return (
     <div
-      className={className || undefined}
+      className={bdsClass('bds-tab-bar', className)}
       style={{ ...barStyles, ...style }}
       role="tablist"
       {...props}
@@ -117,6 +119,7 @@ export function TabBar({
           type="button"
           role="tab"
           aria-selected={tab.active || false}
+          className="bds-tab-bar-item"
           style={tab.active ? tabActiveStyles : tabInactiveStyles}
           onClick={tab.onClick}
         >

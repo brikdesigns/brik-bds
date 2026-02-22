@@ -68,15 +68,19 @@ const preview: Preview = {
       toolbar: {
         icon: 'paintbrush',
         items: [
-          { value: 'brik', title: 'Brik: Brik Designs Brand (Default)' },
-          { value: '1', title: '1: Spacious (Playfair)' },
-          { value: '2', title: '2: Yellow-Orange (Dark)' },
-          { value: '3', title: '3: Blue-Green (Light)' },
-          { value: '4', title: '4: Yellow-Orange (Light)' },
-          { value: '5', title: '5: Peach-Brown' },
-          { value: '6', title: '6: Pastel (Geist)' },
-          { value: '7', title: '7: Yellow-Brown (Lato)' },
-          { value: '8', title: '8: Vibrant (Playfair)' },
+          // Brik
+          { value: 'brik', title: 'Brik: Brik Light (Default)' },
+          { value: 'brik-dark', title: 'Brik: Brik Dark' },
+          // Expressive
+          { value: '1', title: '1: Peach (Open Sans)' },
+          { value: '2', title: '2: Pastel (Source Sans)' },
+          { value: '3', title: '3: Luxury (Hind)' },
+          { value: '4', title: '4: Vibrant (Playfair Display)' },
+          // Modern
+          { value: '5', title: '5: White (Open Sans)' },
+          { value: '6', title: '6: Black (Geist Mono)' },
+          { value: '7', title: '7: Blue (Source Sans)' },
+          { value: '8', title: '8: Yellow (Hind)' },
         ],
         dynamicTitle: true,
       },

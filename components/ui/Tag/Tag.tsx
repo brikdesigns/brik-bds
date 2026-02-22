@@ -1,6 +1,7 @@
 import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { bdsClass } from '../../utils';
 
 /**
  * Tag size variants
@@ -99,6 +100,7 @@ const baseStyles: CSSProperties = {
   backgroundColor: 'var(--_color---background--secondary)',
   textDecoration: 'none',
   whiteSpace: 'nowrap',
+  textTransform: 'capitalize' as const,
   cursor: 'default',
   userSelect: 'none',
   overflow: 'clip',
@@ -168,7 +170,7 @@ export function Tag({
 
   return (
     <span
-      className={className || undefined}
+      className={bdsClass('bds-tag', className)}
       style={combinedStyles}
       {...props}
     >

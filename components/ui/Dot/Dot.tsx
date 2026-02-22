@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Dot status variants
@@ -98,7 +99,7 @@ export function Dot({
     <span
       role="status"
       aria-label={`${status} status`}
-      className={className || undefined}
+      className={bdsClass('bds-dot', className)}
       style={combinedStyles}
       {...props}
     />

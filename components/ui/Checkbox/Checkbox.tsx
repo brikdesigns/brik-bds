@@ -1,4 +1,5 @@
 import { type InputHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Checkbox component props
@@ -71,6 +72,7 @@ const textStyles: CSSProperties = {
   fontSize: 'var(--_typography---body--md-base)',
   lineHeight: 'var(--font-line-height--150)',
   color: 'var(--_color---text--primary)',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -110,7 +112,7 @@ export function Checkbox({
 
   return (
     <label
-      className={className || undefined}
+      className={bdsClass('bds-checkbox', className)}
       style={combinedLabelStyles}
     >
       <input

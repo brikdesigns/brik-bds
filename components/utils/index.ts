@@ -1,0 +1,1 @@
+export { bdsClass } from './bdsClass';

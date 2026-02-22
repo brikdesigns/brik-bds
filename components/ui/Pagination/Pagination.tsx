@@ -1,6 +1,7 @@
 import { type HTMLAttributes, type CSSProperties, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { bdsClass } from '../../utils';
 
 /**
  * Pagination alignment
@@ -227,13 +228,14 @@ export function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className={className || undefined}
+      className={bdsClass('bds-pagination', className)}
       style={combinedStyles}
       {...props}
     >
       <div style={wrapperStyles}>
         <button
           type="button"
+          className="bds-pagination-prev"
           aria-label="Previous page"
           onClick={handlePrev}
           disabled={currentPage <= 1}
@@ -268,6 +270,7 @@ export function Pagination({
 
         <button
           type="button"
+          className="bds-pagination-next"
           aria-label="Next page"
           onClick={handleNext}
           disabled={currentPage >= totalPages}

@@ -9,6 +9,7 @@ import {
   createContext,
   useContext,
 } from 'react';
+import { bdsClass } from '../../utils';
 
 // ─── Table Context ─────────────────────────────────────────────
 
@@ -95,7 +96,7 @@ export function Table({
   return (
     <TableContext.Provider value={size}>
       <table
-        className={className || undefined}
+        className={bdsClass('bds-table', className)}
         style={combinedStyles}
         data-striped={striped || undefined}
         data-size={size}
@@ -120,7 +121,7 @@ export function TableHeader({
   ...props
 }: TableHeaderProps) {
   return (
-    <thead className={className || undefined} style={style} {...props}>
+    <thead className={bdsClass('bds-table-header', className)} style={style} {...props}>
       {children}
     </thead>
   );
@@ -139,7 +140,7 @@ export function TableBody({
   ...props
 }: TableBodyProps) {
   return (
-    <tbody className={className || undefined} style={style} {...props}>
+    <tbody className={bdsClass('bds-table-body', className)} style={style} {...props}>
       {children}
     </tbody>
   );
@@ -182,7 +183,7 @@ export function TableRow({
   };
 
   return (
-    <tr className={className || undefined} style={combinedStyles} {...props}>
+    <tr className={bdsClass('bds-table-row', className)} style={combinedStyles} {...props}>
       {children}
     </tr>
   );
@@ -258,7 +259,7 @@ export function TableHead({
 
   return (
     <th
-      className={className || undefined}
+      className={bdsClass('bds-table-head', className)}
       style={combinedStyles}
       onClick={sortable ? onSort : undefined}
       aria-sort={
@@ -318,7 +319,7 @@ export function TableCell({
   };
 
   return (
-    <td className={className || undefined} style={combinedStyles} {...props}>
+    <td className={bdsClass('bds-table-cell', className)} style={combinedStyles} {...props}>
       {children}
     </td>
   );

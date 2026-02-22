@@ -5,6 +5,7 @@ import {
   useState,
   useCallback,
 } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Switch size variants matching Figma specs
@@ -143,12 +144,13 @@ export function Switch({
     fontFamily: 'var(--_typography---font-family--body)',
     fontSize: 'var(--_typography---body--md-base)',
     color: 'var(--_color---text--primary)',
+    textTransform: 'capitalize' as const,
     opacity: disabled ? 0.5 : 1,
     ...style,
   };
 
   return (
-    <label className={className || undefined} style={labelStyles}>
+    <label className={bdsClass('bds-switch', className)} style={labelStyles}>
       <input
         type="checkbox"
         role="switch"

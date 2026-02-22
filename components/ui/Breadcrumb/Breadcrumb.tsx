@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Breadcrumb item
@@ -69,6 +70,7 @@ const linkStyles: CSSProperties = {
   lineHeight: 'var(--font-line-height--100)',
   color: 'var(--_color---text--brand)',
   textDecoration: 'none',
+  textTransform: 'capitalize' as const,
   cursor: 'pointer',
 };
 
@@ -137,7 +139,7 @@ export function Breadcrumb({
 
   return (
     <nav
-      className={className || undefined}
+      className={bdsClass('bds-breadcrumb', className)}
       style={{ ...wrapperStyles, ...style }}
       aria-label="Breadcrumb"
       {...props}
@@ -153,13 +155,14 @@ export function Breadcrumb({
             )}
             {isLast || !item.href ? (
               <span
+                className="bds-breadcrumb-item"
                 style={currentStyles}
                 aria-current={isLast ? 'page' : undefined}
               >
                 {item.label}
               </span>
             ) : (
-              <a href={item.href} style={linkStyles}>
+              <a href={item.href} className="bds-breadcrumb-link" style={linkStyles}>
                 {item.label}
               </a>
             )}

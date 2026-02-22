@@ -1,5 +1,6 @@
 import { forwardRef, type InputHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
-import styles from './TextInput.module.css';
+import { bdsClass } from '../../utils';
+import './TextInput.css';
 
 /**
  * TextInput size variants (per Figma bds-text-input)
@@ -50,6 +51,7 @@ const labelBaseStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height--100)',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -186,7 +188,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 
     return (
       <div
-        className={className || undefined}
+        className={bdsClass('bds-text-input', className)}
         style={{
           ...wrapperStyles,
           width: fullWidth ? '100%' : 'auto',
@@ -216,7 +218,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           <input
             ref={ref}
             id={inputId}
-            className={styles.input}
+            className="bds-text-input-field"
             style={inputStyles}
             aria-invalid={hasError}
             aria-describedby={

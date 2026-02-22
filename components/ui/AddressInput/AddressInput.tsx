@@ -10,7 +10,8 @@ import {
 } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapPin } from '@fortawesome/free-solid-svg-icons';
-import styles from './AddressInput.module.css';
+import { bdsClass } from '../../utils';
+import './AddressInput.css';
 
 /**
  * AddressInput size variants
@@ -74,6 +75,7 @@ const labelStyles: CSSProperties = {
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height--100)',
   color: 'var(--_color---text--primary)',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -341,7 +343,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
     return (
       <div
         ref={wrapperRef}
-        className={className || undefined}
+        className={bdsClass('bds-address-input', className)}
         style={{
           ...wrapperStyles,
           width: fullWidth ? '100%' : 'auto',
@@ -364,7 +366,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
             ref={ref}
             id={inputId}
             type="text"
-            className={styles.input}
+            className="bds-address-input-field"
             style={inputStyles}
             onFocus={handleFocus}
             {...props}
@@ -379,7 +381,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
                   aria-selected={false}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => handleSelect(suggestion)}
-                  className={styles.suggestionItem}
+                  className="bds-address-input-suggestion"
                   style={suggestionItemStyles}
                 >
                   <span style={suggestionIconStyles}>

@@ -1,4 +1,5 @@
 import { type CSSProperties, type HTMLAttributes } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * ProgressBar component props
@@ -57,6 +58,7 @@ const barStyles: CSSProperties = {
 export function ProgressBar({
   value,
   label,
+  className,
   style,
   ...props
 }: ProgressBarProps) {
@@ -69,6 +71,7 @@ export function ProgressBar({
       aria-valuemin={0}
       aria-valuemax={100}
       aria-label={label}
+      className={bdsClass('bds-progress-bar', className)}
       style={{ ...trackStyles, ...style }}
       {...props}
     >

@@ -1,4 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * TextLink size variants
@@ -43,14 +44,19 @@ export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
     },
     ref
   ) => {
-    const sizeClass = size === 'small' ? 'small' : '';
-    const combinedClassName = `text-link ${sizeClass} ${className}`.trim();
+    const combinedClassName = bdsClass(
+      'text-link',
+      'bds-text-link',
+      size === 'small' && 'small',
+      size === 'small' && 'bds-text-link-small',
+      className
+    );
 
     return (
       <a ref={ref} className={combinedClassName} {...props}>
-        {iconBefore && <span className="link-icon-before">{iconBefore}</span>}
+        {iconBefore && <span className="link-icon-before bds-text-link-icon-before">{iconBefore}</span>}
         {children}
-        {iconAfter && <span className="link-icon-after">{iconAfter}</span>}
+        {iconAfter && <span className="link-icon-after bds-text-link-icon-after">{iconAfter}</span>}
       </a>
     );
   }

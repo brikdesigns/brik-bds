@@ -6,6 +6,7 @@ import {
   useEffect,
   useCallback,
 } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * MenuItem data shape
@@ -94,6 +95,7 @@ const itemStyles: CSSProperties = {
   fontSize: 'var(--_typography---body--md-base)',
   lineHeight: 'var(--font-line-height--150)',
   color: 'var(--_color---text--primary)',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -137,7 +139,7 @@ const iconWrapperStyles: CSSProperties = {
 /**
  * MenuItem - Single menu option (exported for direct use)
  */
-export function MenuItem({ item, isActive, style, ...props }: MenuItemProps) {
+export function MenuItem({ item, isActive, className, style, ...props }: MenuItemProps) {
   const baseStyle = item.disabled
     ? disabledItemStyles
     : isActive
@@ -150,6 +152,7 @@ export function MenuItem({ item, isActive, style, ...props }: MenuItemProps) {
       role="menuitem"
       disabled={item.disabled}
       onClick={item.onClick}
+      className={bdsClass('bds-menu-item', isActive && 'bds-menu-item-active', item.disabled && 'bds-menu-item-disabled', className)}
       style={{ ...baseStyle, ...style }}
       {...props}
     >
@@ -232,7 +235,7 @@ export function Menu({
     <div
       ref={menuRef}
       role="menu"
-      className={className || undefined}
+      className={bdsClass('bds-menu', className)}
       style={combinedStyles}
       {...props}
     >

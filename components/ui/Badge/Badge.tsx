@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Badge status variants
@@ -130,6 +131,7 @@ const baseStyles: CSSProperties = {
   lineHeight: 'var(--font-line-height--100)',
   borderRadius: '9999px', // pill shape — no BDS token equivalent
   whiteSpace: 'nowrap',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -168,7 +170,7 @@ export function Badge({
 
   return (
     <span
-      className={className || undefined}
+      className={bdsClass('bds-badge', `bds-badge-${status}`, className)}
       style={combinedStyles}
       {...props}
     >

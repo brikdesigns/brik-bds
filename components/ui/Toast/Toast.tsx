@@ -1,4 +1,5 @@
 import { type ReactNode, type CSSProperties, type HTMLAttributes } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Toast component props
@@ -127,11 +128,12 @@ export function Toast({
   title,
   description,
   onDismiss,
+  className,
   style,
   ...props
 }: ToastProps) {
   return (
-    <div role="alert" style={{ ...toastStyles, ...style }} {...props}>
+    <div role="alert" className={bdsClass('bds-toast', className)} style={{ ...toastStyles, ...style }} {...props}>
       <div style={contentStyles}>
         <span style={titleStyles}>{title}</span>
         {description && <span style={descriptionStyles}>{description}</span>}

@@ -1,4 +1,5 @@
 import { type ReactNode, type CSSProperties, type HTMLAttributes } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Banner component props
@@ -108,11 +109,12 @@ export function Banner({
   description,
   action,
   onDismiss,
+  className,
   style,
   ...props
 }: BannerProps) {
   return (
-    <div role="banner" style={{ ...bannerStyles, ...style }} {...props}>
+    <div role="banner" className={bdsClass('bds-banner', className)} style={{ ...bannerStyles, ...style }} {...props}>
       <div style={contentStyles}>
         <span style={titleStyles}>{title}</span>
         {description && <span style={descriptionStyles}>{description}</span>}

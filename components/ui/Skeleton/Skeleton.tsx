@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Skeleton shape variants
@@ -116,7 +117,7 @@ export function Skeleton({
         role="status"
         aria-label="Loading"
         aria-live="polite"
-        className={className || undefined}
+        className={bdsClass('bds-skeleton', className)}
         style={combinedStyles}
         {...props}
       />
