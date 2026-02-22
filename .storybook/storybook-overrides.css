@@ -60,21 +60,30 @@ code[class*="language-"] {
   box-shadow: none !important;
 }
 
-/* Canvas mode: themed background, full height */
-.sb-show-main,
-#storybook-root {
-  background-color: var(--_color---page--primary, #fff) !important;
-  color: var(--_color---text--primary, #333) !important;
+/* Themed background on BODY only — variables resolve in the
+   same scope where .body.theme-X sets them. All wrappers below
+   are transparent so the body bg shows through. */
+body.body {
+  background-color: var(--_color---page--primary) !important;
+  color: var(--_color---text--primary) !important;
   min-height: 100vh;
 }
 
-/* Docs mode: themed background on wrapper + content */
+/* Canvas container */
+#storybook-root {
+  background: transparent !important;
+  color: inherit !important;
+  min-height: 100vh;
+}
+
+/* Docs wrappers — transparent so body bg shows through.
+   Uses background shorthand to override any emotion CSS. */
 #storybook-docs,
 .sbdocs-wrapper,
 .sbdocs.sbdocs-wrapper,
 .sbdocs-content {
-  background-color: var(--_color---page--primary, #fff) !important;
-  color: var(--_color---text--primary, #333) !important;
+  background: transparent !important;
+  color: inherit !important;
 }
 
 /* ============================================
