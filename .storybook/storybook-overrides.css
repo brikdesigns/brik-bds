@@ -55,6 +55,11 @@ code[class*="language-"] {
   box-shadow: none !important;
 }
 
+/* Fill canvas height so ThemeWrapper bg covers full area */
+#storybook-root {
+  min-height: 100vh;
+}
+
 /* Ensure ThemeWrapper doesn't have visible box */
 .body[class*="theme-"] {
   border: none !important;
