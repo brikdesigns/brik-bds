@@ -31,14 +31,18 @@ function ThemeWrapper({
       className={`body theme-${themeNumber}`}
       style={{
         border: 'none',
-        borderRadius: 0,
+        borderRadius: '4px',
         backgroundColor: 'var(--_color---page--primary)',
         color: 'var(--_color---text--primary)',
         padding: 'var(--_space---lg)',
-        // Fill entire story canvas so theme bg covers the full area
+        // Fill entire story container
         minHeight: '100%',
         width: '100%',
         boxSizing: 'border-box' as const,
+        // Center story content
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       {children}

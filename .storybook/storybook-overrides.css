@@ -60,8 +60,15 @@ code[class*="language-"] {
   min-height: 100vh;
 }
 
-/* Remove Docs Canvas padding so ThemeWrapper fills the preview area edge-to-edge */
-.docs-story {
+/* ============================================
+   DOCS MODE - Story containers
+
+   In docs, Storybook wraps each story in a .docs-story container
+   with its own bg/padding. We strip that and let our ThemeWrapper
+   (div.body.theme-X) control the visual area instead.
+   ============================================ */
+div[class*="docs-story"] {
+  background: transparent !important;
   padding: 0 !important;
 }
 
