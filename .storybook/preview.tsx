@@ -30,14 +30,15 @@ function ThemeWrapper({
     <div
       className={`body theme-${themeNumber}`}
       style={{
-        // Override Webflow's .body border/border-radius for Storybook
         border: 'none',
         borderRadius: 0,
-        // Set background/color from theme tokens
         backgroundColor: 'var(--_color---page--primary)',
         color: 'var(--_color---text--primary)',
-        // Use spacing token: --_space---lg = 16px
         padding: 'var(--_space---lg)',
+        // Fill entire story canvas so theme bg covers the full area
+        minHeight: '100%',
+        width: '100%',
+        boxSizing: 'border-box' as const,
       }}
     >
       {children}
@@ -99,6 +100,7 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    layout: 'fullscreen', // ThemeWrapper handles padding + bg
     backgrounds: {
       disable: true, // Managed by theme
     },
