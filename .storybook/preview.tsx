@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { Preview, Decorator } from '@storybook/react';
 import type { ThemeNumber } from '../tokens';
 
@@ -15,9 +16,9 @@ import '../tokens/themes.css';
 import './storybook-overrides.css';
 
 /**
- * Theme wrapper component that applies Webflow theme classes
- * Uses a div with both 'body' and 'theme-X' classes to match
- * Webflow's .body.theme-X selector pattern
+ * Theme wrapper component — centers story content within the
+ * themed preview area. Background/text colors come from the
+ * body-level theme classes (applied by the decorator).
  */
 function ThemeWrapper({
   children,
@@ -30,16 +31,10 @@ function ThemeWrapper({
     <div
       className={`body theme-${themeNumber}`}
       style={{
-        border: 'none',
-        borderRadius: '4px',
-        backgroundColor: 'var(--_color---page--primary)',
-        color: 'var(--_color---text--primary)',
-        padding: 'var(--_space---lg)',
-        // Fill entire story container
+        padding: 'var(--_space---md)',
         minHeight: '100%',
         width: '100%',
         boxSizing: 'border-box' as const,
-        // Center story content
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -51,11 +46,22 @@ function ThemeWrapper({
 }
 
 /**
- * Theme decorator - wraps all stories in ThemeWrapper
- * and adds toolbar controls for theme switching
+ * Theme decorator — applies theme classes to the preview <body>
+ * for immersive theming (docs page bg, text, args table all respond
+ * to the selected theme), then wraps stories in ThemeWrapper.
  */
 const withTheme: Decorator = (Story, context) => {
   const themeNumber = (context.globals.themeNumber || 'brik') as ThemeNumber;
+
+  // Apply theme classes to the preview iframe <body> so CSS variables
+  // cascade to the entire page — docs wrapper, headings, args table, etc.
+  useEffect(() => {
+    const body = document.body;
+    // Strip any previous theme class
+    body.className = body.className.replace(/\btheme-\S+/g, '');
+    // .body.theme-X matches our CSS selectors in themes.css
+    body.classList.add('body', `theme-${themeNumber}`);
+  }, [themeNumber]);
 
   return (
     <ThemeWrapper themeNumber={themeNumber}>

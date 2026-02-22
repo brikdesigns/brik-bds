@@ -1,7 +1,8 @@
 /**
  * Storybook Overrides
  *
- * This file ensures Webflow CSS doesn't leak into Storybook's own UI.
+ * This file ensures Webflow CSS doesn't leak into Storybook's own UI
+ * and applies immersive theming to the docs page.
  * Import this AFTER the Webflow CSS to override any conflicts.
  */
 
@@ -40,7 +41,11 @@ code[class*="language-"] {
 }
 
 /* ============================================
-   PREVIEW CANVAS - Remove inherited borders
+   PREVIEW CANVAS — Themed backgrounds
+
+   Theme classes (.body.theme-X) are applied to the preview
+   <body> by the decorator's useEffect, making --_color---*
+   variables available to the entire preview iframe.
    ============================================ */
 
 /* Reset Storybook preview canvas */
@@ -55,9 +60,21 @@ code[class*="language-"] {
   box-shadow: none !important;
 }
 
-/* Fill canvas height so ThemeWrapper bg covers full area */
+/* Canvas mode: themed background, full height */
+.sb-show-main,
 #storybook-root {
+  background-color: var(--_color---page--primary, #fff) !important;
+  color: var(--_color---text--primary, #333) !important;
   min-height: 100vh;
+}
+
+/* Docs mode: themed background on wrapper + content */
+#storybook-docs,
+.sbdocs-wrapper,
+.sbdocs.sbdocs-wrapper,
+.sbdocs-content {
+  background-color: var(--_color---page--primary, #fff) !important;
+  color: var(--_color---text--primary, #333) !important;
 }
 
 /* ============================================
@@ -83,6 +100,75 @@ div[class*="docs-story"] {
 .body {
   border: none !important;
   border-radius: 0 !important;
+}
+
+/* ============================================
+   IMMERSIVE DOCS THEMING
+
+   These rules theme the docs page chrome (headings, text,
+   args table, TOC) to match the selected theme. Combined
+   with body-level theme classes, this gives a fully immersive
+   theming experience similar to Carbon Design System.
+   ============================================ */
+
+/* Docs headings — theme heading font + color */
+.sbdocs h1,
+.sbdocs h2,
+.sbdocs h3,
+.sbdocs h4 {
+  color: var(--_color---text--primary) !important;
+  font-family: var(--_typography---font-family--heading, inherit) !important;
+}
+
+/* Docs body text */
+.sbdocs p,
+.sbdocs li {
+  color: var(--_color---text--secondary) !important;
+  font-family: var(--_typography---font-family--body, inherit) !important;
+}
+
+/* Docs links — brand color (exclude code block and anchor links) */
+.sbdocs a:not([class*="docblock"]):not([class*="anchor"]) {
+  color: var(--_color---text--brand) !important;
+}
+
+/* Description / subtitle blocks */
+div[class*="Description"],
+div[class*="Subtitle"] {
+  color: var(--_color---text--secondary) !important;
+}
+
+/* Args/props table */
+div[class*="ArgTypes"] table,
+.docblock-argstable {
+  background: var(--_color---surface--primary, #fff) !important;
+}
+
+div[class*="ArgTypes"] th,
+div[class*="ArgTypes"] td {
+  color: var(--_color---text--primary) !important;
+  border-color: var(--_color---border--secondary) !important;
+}
+
+div[class*="ArgTypes"] td span,
+div[class*="ArgTypes"] td p {
+  color: var(--_color---text--secondary) !important;
+}
+
+/* TOC (table of contents) in docs sidebar */
+.sbdocs [class*="toc"] a {
+  color: var(--_color---text--secondary) !important;
+}
+
+.sbdocs [class*="toc"] a:hover,
+.sbdocs [class*="toc"] a[data-active="true"] {
+  color: var(--_color---text--brand) !important;
+}
+
+/* Show/hide code toggle button */
+div[class*="Source"] button,
+.docblock-code-toggle {
+  color: var(--_color---text--muted) !important;
 }
 
 /* ============================================
@@ -156,9 +242,4 @@ button[class*="IconButton"],
 nav[class*="sidebar"] {
   background-color: inherit !important;
   border-color: inherit !important;
-}
-
-/* Docs page container - using grayscale token */
-.sbdocs.sbdocs-wrapper {
-  background-color: var(--grayscale--white) !important;
 }
