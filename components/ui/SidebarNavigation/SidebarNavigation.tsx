@@ -1,4 +1,5 @@
 import { type ReactNode, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Navigation item configuration
@@ -88,6 +89,7 @@ const navItemBaseStyles: CSSProperties = {
   color: 'var(--_color---text--secondary)',
   backgroundColor: 'transparent',
   textDecoration: 'none',
+  textTransform: 'capitalize' as const,
   marginBottom: 'var(--_space---gap--sm)',
   transition: 'background-color 0.15s, color 0.15s',
   cursor: 'pointer',
@@ -170,7 +172,7 @@ export function SidebarNavigation({
   width = '260px',
 }: SidebarNavigationProps) {
   return (
-    <aside style={{ ...containerStyles, width }}>
+    <aside className="bds-sidebar-navigation" style={{ ...containerStyles, width }}>
       {/* Logo Section */}
       <div style={logoSectionStyles}>{logo}</div>
 
@@ -180,6 +182,7 @@ export function SidebarNavigation({
           <a
             key={item.href}
             href={item.href}
+            className={bdsClass('bds-sidebar-navigation-item', item.active && 'bds-sidebar-navigation-item-active')}
             style={{
               ...navItemBaseStyles,
               ...(item.active ? navItemActiveStyles : {}),

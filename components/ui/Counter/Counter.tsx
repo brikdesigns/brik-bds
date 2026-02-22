@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Counter status variants
@@ -141,7 +142,7 @@ export function Counter({
 
   return (
     <span
-      className={className || undefined}
+      className={bdsClass('bds-counter', className)}
       style={combinedStyles}
       aria-label={`Count: ${count}`}
       {...props}

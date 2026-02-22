@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * CardSummary type variants
@@ -166,7 +167,7 @@ export function CardSummary({
 
   return (
     <div
-      className={className || undefined}
+      className={bdsClass('bds-card-summary', className)}
       style={{ ...containerStyles, ...style }}
       {...props}
     >

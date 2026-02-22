@@ -1,7 +1,8 @@
 import { forwardRef, type InputHTMLAttributes, type CSSProperties } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import styles from './SearchInput.module.css';
+import { bdsClass } from '../../utils';
+import './SearchInput.css';
 
 /**
  * SearchInput size variants
@@ -46,6 +47,7 @@ const labelStyles: CSSProperties = {
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height--100)',
   color: 'var(--_color---text--primary)',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -166,7 +168,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
 
     return (
       <div
-        className={className || undefined}
+        className={bdsClass('bds-search-input', className)}
         style={{
           ...wrapperStyles,
           width: fullWidth ? '100%' : 'auto',
@@ -189,7 +191,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             ref={ref}
             id={inputId}
             type="search"
-            className={styles.input}
+            className="bds-search-input-field"
             style={inputStyles}
             {...props}
           />

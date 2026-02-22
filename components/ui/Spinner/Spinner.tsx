@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Spinner size variants
@@ -89,7 +90,7 @@ export function Spinner({
       <div
         role="status"
         aria-label="Loading"
-        className={className || undefined}
+        className={bdsClass('bds-spinner', className)}
         style={combinedStyles}
         {...props}
       />

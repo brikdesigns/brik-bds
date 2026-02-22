@@ -1,4 +1,5 @@
 import { type ReactNode, type CSSProperties, type HTMLAttributes } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * AlertBanner icon variants
@@ -145,11 +146,12 @@ export function AlertBanner({
   description,
   icon = 'info',
   action,
+  className,
   style,
   ...props
 }: AlertBannerProps) {
   return (
-    <div role="alert" style={{ ...bannerStyles, ...style }} {...props}>
+    <div role="alert" className={bdsClass('bds-alert-banner', className)} style={{ ...bannerStyles, ...style }} {...props}>
       <div style={innerStyles}>
         <i className={iconClassMap[icon]} style={iconStyles} />
         <div style={contentStyles}>

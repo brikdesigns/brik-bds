@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { bdsClass } from '../../utils';
 
 /**
  * AccordionItem data shape
@@ -132,9 +133,10 @@ const itemStyles: CSSProperties = {
  */
 function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
   return (
-    <div style={itemStyles}>
+    <div className="bds-accordion-item" style={itemStyles}>
       <button
         type="button"
+        className="bds-accordion-trigger"
         style={triggerStyles}
         onClick={onToggle}
         aria-expanded={isOpen}
@@ -148,6 +150,7 @@ function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
       {isOpen && (
         <div
           id={`accordion-content-${item.id}`}
+          className="bds-accordion-content"
           role="region"
           style={contentStyles}
         >
@@ -224,7 +227,7 @@ export function Accordion({
   };
 
   return (
-    <div className={className || undefined} style={combinedStyles} {...props}>
+    <div className={bdsClass('bds-accordion', className)} style={combinedStyles} {...props}>
       {items.map((item) => (
         <AccordionItem
           key={item.id}

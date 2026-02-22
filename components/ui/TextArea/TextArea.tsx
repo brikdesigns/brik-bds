@@ -1,5 +1,6 @@
 import { type TextareaHTMLAttributes, type CSSProperties } from 'react';
-import styles from './TextArea.module.css';
+import { bdsClass } from '../../utils';
+import './TextArea.css';
 
 /**
  * TextArea component props
@@ -56,6 +57,7 @@ const labelBaseStyles: CSSProperties = {
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height--100)',
   fontSize: 'var(--_typography---label--md-base)',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -158,6 +160,7 @@ export function TextArea({
 
   return (
     <div
+      className="bds-text-area"
       style={{
         ...wrapperStyles,
         width: fullWidth ? '100%' : 'auto',
@@ -182,7 +185,7 @@ export function TextArea({
         value={value}
         defaultValue={defaultValue}
         onChange={onChange}
-        className={`${styles.textarea}${className ? ` ${className}` : ''}`}
+        className={bdsClass('bds-text-area-field', className)}
         style={combinedStyles}
         aria-invalid={hasError}
         aria-describedby={

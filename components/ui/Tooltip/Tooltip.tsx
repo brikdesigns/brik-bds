@@ -1,4 +1,5 @@
 import { type ReactNode, type HTMLAttributes, type CSSProperties, useState } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Tooltip placement positions
@@ -166,7 +167,7 @@ export function Tooltip({
 
   return (
     <div
-      className={className || undefined}
+      className={bdsClass('bds-tooltip', className)}
       style={containerStyles}
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}

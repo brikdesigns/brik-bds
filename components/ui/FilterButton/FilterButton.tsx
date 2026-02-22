@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { bdsClass } from '../../utils';
 
 /**
  * Filter option shape
@@ -65,6 +66,7 @@ const triggerBaseStyles: CSSProperties = {
   lineHeight: 'var(--font-line-height--100)',
   color: 'var(--_color---text--on-color-light)',
   whiteSpace: 'nowrap',
+  textTransform: 'capitalize' as const,
   minWidth: '120px',
   boxSizing: 'border-box',
 };
@@ -240,12 +242,13 @@ export function FilterButton({
   return (
     <div
       ref={wrapperRef}
-      className={className || undefined}
+      className={bdsClass('bds-filter-button', className)}
       style={{ position: 'relative', display: 'inline-block', ...style }}
       {...props}
     >
       <button
         type="button"
+        className="bds-filter-button-trigger"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
@@ -256,11 +259,12 @@ export function FilterButton({
       </button>
 
       {isOpen && (
-        <div role="listbox" style={dropdownStyles}>
+        <div className="bds-filter-button-dropdown" role="listbox" style={dropdownStyles}>
           {options.map((option) => (
             <button
               key={option.id}
               type="button"
+              className="bds-filter-button-option"
               role="option"
               aria-selected={option.id === value}
               onClick={() => handleSelect(option.id)}

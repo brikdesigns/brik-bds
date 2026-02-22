@@ -1,4 +1,5 @@
 import { type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Select option type
@@ -170,6 +171,7 @@ const labelBaseStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height--100)',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -272,7 +274,7 @@ export function Select({
           defaultValue={defaultValue}
           disabled={disabled}
           onChange={onChange}
-          className={className || undefined}
+          className={bdsClass('bds-select', className)}
           style={combinedStyles}
           aria-invalid={hasError}
           aria-describedby={

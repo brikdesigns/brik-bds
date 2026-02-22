@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * CardControl component props
@@ -135,7 +136,7 @@ export function CardControl({
 
   return (
     <div
-      className={className || undefined}
+      className={bdsClass('bds-card-control', className)}
       style={combinedStyles}
       {...props}
     >

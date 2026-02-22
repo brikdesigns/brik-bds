@@ -246,14 +246,15 @@ export function Modal({
   if (!isOpen) return null;
 
   const modal = (
-    <div style={backdropStyles} onClick={handleBackdropClick}>
-      <div ref={modalRef} style={getModalStyles(size)} role="dialog" aria-modal="true">
+    <div className="bds-modal-backdrop" style={backdropStyles} onClick={handleBackdropClick}>
+      <div ref={modalRef} className="bds-modal" style={getModalStyles(size)} role="dialog" aria-modal="true">
         {(title || showCloseButton) && (
-          <div style={headerStyles}>
+          <div className="bds-modal-header" style={headerStyles}>
             {title && <h2 style={titleStyles}>{title}</h2>}
             {showCloseButton && (
               <button
                 type="button"
+                className="bds-modal-close"
                 onClick={onClose}
                 style={closeButtonStyles}
                 aria-label="Close"
@@ -269,8 +270,8 @@ export function Modal({
             )}
           </div>
         )}
-        <div style={bodyStyles}>{children}</div>
-        {footer && <div style={footerStyles}>{footer}</div>}
+        <div className="bds-modal-body" style={bodyStyles}>{children}</div>
+        {footer && <div className="bds-modal-footer" style={footerStyles}>{footer}</div>}
       </div>
     </div>
   );

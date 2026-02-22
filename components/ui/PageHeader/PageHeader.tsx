@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Metadata key-value item
@@ -231,7 +232,7 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <div
-      className={className || undefined}
+      className={bdsClass('bds-page-header', className)}
       style={{ ...containerStyles, ...style }}
       {...props}
     >
@@ -241,10 +242,10 @@ export function PageHeader({
       {/* Title row: title/subtitle + actions */}
       <div style={innerPaddingStyles}>
         <div style={contentWrapperStyles}>
-          <h1 style={titleStyles}>{title}</h1>
-          {subtitle && <p style={subtitleStyles}>{subtitle}</p>}
+          <h1 className="bds-page-header-title" style={titleStyles}>{title}</h1>
+          {subtitle && <p className="bds-page-header-subtitle" style={subtitleStyles}>{subtitle}</p>}
         </div>
-        {actions && <div style={buttonWrapperStyles}>{actions}</div>}
+        {actions && <div className="bds-page-header-actions" style={buttonWrapperStyles}>{actions}</div>}
       </div>
 
       {/* Tab bar — pass a <TabBar> component */}
@@ -252,7 +253,7 @@ export function PageHeader({
 
       {/* Metadata */}
       {metadata && metadata.length > 0 && (
-        <div style={metadataWrapperStyles}>
+        <div className="bds-page-header-metadata" style={metadataWrapperStyles}>
           <div style={metadataInnerStyles}>
             {metadata.map((item) => (
               <div key={item.label} style={metadataItemStyles}>

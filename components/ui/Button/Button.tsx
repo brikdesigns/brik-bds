@@ -1,5 +1,6 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
-import styles from './Button.module.css';
+import { bdsClass } from '../../utils';
+import './Button.css';
 
 /**
  * Button variants
@@ -117,6 +118,7 @@ const baseStyles: CSSProperties = {
   textDecoration: 'none',
   transition: 'background-color 0.2s, border-color 0.2s, opacity 0.2s',
   whiteSpace: 'nowrap',
+  textTransform: 'capitalize' as const,
 };
 
 /**
@@ -163,13 +165,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...style,
     };
 
-    // Combine CSS module classes with user className
-    const buttonClasses = [
-      styles.button,
-      styles[`button-${variant}`],
-      loading ? styles['button-loading'] : '',
-      className,
-    ].filter(Boolean).join(' ');
+    const buttonClasses = bdsClass(
+      'bds-button',
+      `bds-button-${variant}`,
+      loading && 'bds-button-loading',
+      className
+    );
 
     const content = (
       <>
@@ -180,7 +181,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         </span>
         {loading && (
           <span
-            className={styles['button-spinner']}
+            className="bds-button-spinner"
             role="status"
             aria-label="Loading"
             style={{

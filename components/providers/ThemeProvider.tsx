@@ -87,20 +87,22 @@ export interface ThemeProviderProps {
  * ThemeProvider - Provides BDS theme context to components
  *
  * Features:
- * - 8 complete themes (theme-1 through theme-8)
+ * - 10 complete themes (Brik Light/Dark + 8 numbered)
  * - Each theme bundles color, typography, spacing, and border tokens
  * - localStorage persistence (optional)
  * - Automatic body class application (optional)
  *
  * Available Themes:
- * - theme-1: Blue-Green (Default Light)
- * - theme-2: Yellow-Orange (Dark)
- * - theme-3: Peach-Brown
- * - theme-4: Yellow-Brown
- * - theme-5: Green-Orange
- * - theme-6: Blue-Orange
- * - theme-7: Neon (Dark)
- * - theme-8: Vibrant
+ * - theme-brik: Brik Light (Default)
+ * - theme-brik-dark: Brik Dark
+ * - theme-1: Peach (Open Sans)
+ * - theme-2: Pastel (Source Sans)
+ * - theme-3: Luxury (Hind)
+ * - theme-4: Vibrant (Playfair Display)
+ * - theme-5: White (Open Sans)
+ * - theme-6: Black (Geist Mono)
+ * - theme-7: Blue (Source Sans)
+ * - theme-8: Yellow (Hind)
  *
  * @example
  * ```tsx
@@ -155,6 +157,8 @@ export function ThemeProvider({
 
     // Remove old theme classes
     body.classList.remove(
+      'theme-brik',
+      'theme-brik-dark',
       'theme-1',
       'theme-2',
       'theme-3',

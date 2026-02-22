@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Card variant types
@@ -122,7 +123,7 @@ export function Card({
     return (
       <a
         href={href}
-        className={className || undefined}
+        className={bdsClass('bds-card', className)}
         style={{ ...combinedStyles, textDecoration: 'none', color: 'inherit' }}
         {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
@@ -132,7 +133,7 @@ export function Card({
   }
 
   return (
-    <div className={className || undefined} style={combinedStyles} {...props}>
+    <div className={bdsClass('bds-card', className)} style={combinedStyles} {...props}>
       {children}
     </div>
   );
@@ -162,7 +163,7 @@ export function CardTitle({ children, as: Tag = 'h3', className = '', style, ...
   };
 
   return (
-    <Tag className={className || undefined} style={titleStyles} {...props}>
+    <Tag className={bdsClass('bds-card-title', className)} style={titleStyles} {...props}>
       {children}
     </Tag>
   );
@@ -191,7 +192,7 @@ export function CardDescription({ children, className = '', style, ...props }: C
   };
 
   return (
-    <p className={className || undefined} style={descStyles} {...props}>
+    <p className={bdsClass('bds-card-description', className)} style={descStyles} {...props}>
       {children}
     </p>
   );
@@ -215,7 +216,7 @@ export function CardFooter({ children, className = '', style, ...props }: CardFo
   };
 
   return (
-    <div className={className || undefined} style={footerStyles} {...props}>
+    <div className={bdsClass('bds-card-footer', className)} style={footerStyles} {...props}>
       {children}
     </div>
   );

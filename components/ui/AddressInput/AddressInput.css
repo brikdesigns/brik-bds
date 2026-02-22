@@ -1,7 +1,7 @@
-.input::placeholder {
+.bds-address-input-field::placeholder {
   color: var(--_color---text--muted);
 }
 
-.suggestionItem:hover {
+.bds-address-input-suggestion:hover {
   background-color: var(--_color---surface--secondary);
 }

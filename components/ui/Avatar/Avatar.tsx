@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type CSSProperties, useState } from 'react';
+import { bdsClass } from '../../utils';
 
 /**
  * Avatar size variants
@@ -160,7 +161,7 @@ export function Avatar({
 
   return (
     <div
-      className={className || undefined}
+      className={bdsClass('bds-avatar', className)}
       style={combinedStyles}
       {...props}
     >
