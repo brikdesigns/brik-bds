@@ -9,13 +9,18 @@
 /*             4 Vibrant                         */
 /* Modern:     5 White, 6 Black, 7 Blue,         */
 /*             8 Yellow                          */
+/*                                               */
+/* IMPORTANT: Selectors use .body.theme-N to     */
+/* match webflow-tokens.css specificity. This    */
+/* file loads AFTER webflow-tokens.css so our    */
+/* definitions win by cascade order.             */
 /* ============================================= */
 
 /* ============================================= */
 /* Brik Light (Default)                          */
 /* Poppins / Poppins                             */
 /* ============================================= */
-.theme-brik {
+.body.theme-brik {
   /* Color */
   --_color---page--primary: var(--grayscale--white);
   --_color---page--secondary: var(--grayscale--lightest);
@@ -56,34 +61,13 @@
   --_typography---font-family--label: Poppins, sans-serif;
   --_typography---font-family--heading: Poppins, sans-serif;
   --_typography---font-family--display: Poppins, sans-serif;
-  /* Space */
-  --_space---none: var(--space--0);
-  --_space---tiny: var(--space--200);
-  --_space---xs: var(--space--250);
-  --_space---sm: var(--space--300);
-  --_space---md: var(--space--400);
-  --_space---lg: var(--space--600);
-  --_space---xl: var(--space--800);
-  --_space---xxl: var(--space--800);
-  --_space---huge: var(--space--1200);
-  --_space---gap--none: var(--space--0);
-  --_space---gap--tiny: var(--space--50);
-  --_space---gap--xs: var(--space--100);
-  --_space---gap--sm: var(--space--150);
-  --_space---gap--md: var(--space--200);
-  --_space---gap--lg: var(--space--400);
-  --_space---gap--xl: var(--space--600);
-  --_space---gap--xxl: var(--space--600);
-  --_space---gap--huge: var(--space--800);
-  --_space---button: var(--space--200);
-  --_space---input: var(--space--200);
 }
 
 /* ============================================= */
 /* Brik Dark                                     */
 /* Poppins / Poppins                             */
 /* ============================================= */
-.theme-brik-dark {
+.body.theme-brik-dark {
   /* Color — inverted from Brik Light */
   --_color---page--primary: var(--grayscale--darkest);
   --_color---page--secondary: var(--grayscale--black);
@@ -124,27 +108,6 @@
   --_typography---font-family--label: Poppins, sans-serif;
   --_typography---font-family--heading: Poppins, sans-serif;
   --_typography---font-family--display: Poppins, sans-serif;
-  /* Space — same as Brik Light */
-  --_space---none: var(--space--0);
-  --_space---tiny: var(--space--200);
-  --_space---xs: var(--space--250);
-  --_space---sm: var(--space--300);
-  --_space---md: var(--space--400);
-  --_space---lg: var(--space--600);
-  --_space---xl: var(--space--800);
-  --_space---xxl: var(--space--800);
-  --_space---huge: var(--space--1200);
-  --_space---gap--none: var(--space--0);
-  --_space---gap--tiny: var(--space--50);
-  --_space---gap--xs: var(--space--100);
-  --_space---gap--sm: var(--space--150);
-  --_space---gap--md: var(--space--200);
-  --_space---gap--lg: var(--space--400);
-  --_space---gap--xl: var(--space--600);
-  --_space---gap--xxl: var(--space--600);
-  --_space---gap--huge: var(--space--800);
-  --_space---button: var(--space--200);
-  --_space---input: var(--space--200);
 }
 
 /* ============================================= */
@@ -153,43 +116,43 @@
 
 /* ============================================= */
 /* 1: Peach (Open Sans / Newsreader)             */
-/* was: theme-5 (Green-Orange)                   */
+/* Source: webflow theme-5                       */
 /* ============================================= */
-.theme-1 {
+.body.theme-1 {
   /* Color */
   --_color---border--secondary: var(--grayscale--darker);
-  --_color---surface--nav: var(--themes--peach-brown--peach-lightest);
-  --_color---background--brand-primary: var(--themes--peach-brown--peach);
+  --_color---surface--nav: var(--_themes---peach-brown--peach-lightest);
+  --_color---background--brand-primary: var(--_themes---peach-brown--peach);
   --_color---text--inverse: var(--grayscale--white);
-  --_color---border--brand: var(--themes--peach-brown--peach);
-  --_color---background--primary: var(--themes--peach-brown--peach-lightest);
-  --_color---border--inverse: var(--themes--peach-brown--peach-darkest);
+  --_color---border--brand: var(--_themes---peach-brown--peach);
+  --_color---background--primary: var(--_themes---peach-brown--peach-lightest);
+  --_color---border--inverse: var(--_themes---peach-brown--peach-darkest);
   --_color---text--primary: var(--grayscale--black);
-  --_color---text--brand: var(--themes--peach-brown--peach);
-  --_color---surface--primary: var(--themes--peach-brown--peach-lightest);
+  --_color---text--brand: var(--_themes---peach-brown--peach);
+  --_color---surface--primary: var(--_themes---peach-brown--peach-lightest);
   --_color---border--primary: var(--grayscale--black);
-  --_color---surface--secondary: var(--themes--peach-brown--peach-darkest);
-  --_color---page--primary: var(--themes--peach-brown--peach-lightest);
+  --_color---surface--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---page--primary: var(--_themes---peach-brown--peach-lightest);
   --_color---text--muted: var(--grayscale--dark);
-  --_color---surface--brand-primary: var(--themes--peach-brown--peach);
-  --_color---border--input: var(--themes--peach-brown--peach-darkest);
+  --_color---surface--brand-primary: var(--_themes---peach-brown--peach);
+  --_color---border--input: var(--_themes---peach-brown--peach-darkest);
   --_color---border--muted: var(--grayscale--darker);
   --_color---border--on-color: var(--grayscale--darkest);
-  --_color---surface--brand-secondary: var(--themes--peach-brown--peach-light);
+  --_color---surface--brand-secondary: var(--_themes---peach-brown--peach-light);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
-  --_color---theme--accent: var(--themes--peach-brown--peach-darkest);
-  --_color---theme--tertiary: var(--themes--peach-brown--peach-darkest);
-  --_color---theme--secondary: var(--themes--peach-brown--peach-light);
-  --_color---theme--primary: var(--themes--peach-brown--peach);
-  --_color---page--brand: var(--themes--peach-brown--peach);
-  --_color---background--brand-secondary: var(--themes--peach-brown--peach-darkest);
+  --_color---theme--accent: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--tertiary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--secondary: var(--_themes---peach-brown--peach-light);
+  --_color---theme--primary: var(--_themes---peach-brown--peach);
+  --_color---page--brand: var(--_themes---peach-brown--peach);
+  --_color---background--brand-secondary: var(--_themes---peach-brown--peach-darkest);
   --_color---background--inverse: var(--grayscale--black);
   --_color---background--input: var(--grayscale--white);
   --_color---background--image: #17171799;
-  --_color---background--image-brand: var(--themes--peach-brown--peach);
-  --_color---page--secondary: var(--themes--peach-brown--peach-darkest);
-  --_color---theme--fourth: var(--themes--peach-brown--peach-lightest);
+  --_color---background--image-brand: var(--_themes---peach-brown--peach);
+  --_color---page--secondary: var(--_themes---peach-brown--peach-darkest);
+  --_color---theme--fourth: var(--_themes---peach-brown--peach-lightest);
   /* Typography */
   --_typography---font-family--label: "Open Sans", sans-serif;
   --_typography---body--sm: var(--font-size--75);
@@ -217,7 +180,7 @@
   --_typography---icon--small: var(--font-size--75);
   --_typography---icon--medium-base: var(--font-size--100);
   --_typography---icon--large: var(--font-size--200);
-  /* Space */
+  /* Space — Base mode */
   --_space---none: var(--space--0);
   --_space---tiny: var(--space--200);
   --_space---xs: var(--space--250);
@@ -242,10 +205,45 @@
 
 /* ============================================= */
 /* 2: Pastel (Source Sans 3 / IBM Plex Sans)     */
-/* was: theme-6 (Blue-Orange)                    */
+/* Source: webflow theme-6 colors +              */
+/*         Source Sans / IBM Plex fonts (Figma)  */
 /* ============================================= */
-.theme-2 {
-  /* Typography */
+.body.theme-2 {
+  /* Color — from webflow theme-6 (pastel palette) */
+  --_color---border--secondary: var(--grayscale--light);
+  --_color---surface--nav: var(--_themes---pastel--orange-light);
+  --_color---background--brand-primary: var(--_themes---pastel--purple);
+  --_color---text--inverse: var(--grayscale--white);
+  --_color---border--brand: var(--_themes---pastel--purple);
+  --_color---background--primary: var(--grayscale--white);
+  --_color---border--inverse: var(--grayscale--white);
+  --_color---text--primary: var(--grayscale--darkest);
+  --_color---text--brand: var(--_themes---pastel--purple);
+  --_color---surface--primary: var(--_themes---pastel--orange-light);
+  --_color---border--primary: var(--grayscale--dark);
+  --_color---surface--secondary: var(--grayscale--lightest);
+  --_color---page--primary: var(--_themes---pastel--orange-light);
+  --_color---text--muted: var(--grayscale--dark);
+  --_color---surface--brand-primary: var(--_themes---pastel--purple);
+  --_color---border--input: var(--grayscale--light);
+  --_color---border--muted: var(--grayscale--lighter);
+  --_color---border--on-color: white;
+  --_color---surface--brand-secondary: var(--_themes---pastel--green);
+  --_color---text--secondary: var(--grayscale--darker);
+  --_color---background--secondary: var(--grayscale--lightest);
+  --_color---theme--accent: var(--_themes---pastel--black);
+  --_color---theme--tertiary: var(--_themes---pastel--blue);
+  --_color---theme--secondary: var(--_themes---pastel--green);
+  --_color---theme--primary: var(--_themes---pastel--purple);
+  --_color---page--brand: var(--_themes---pastel--purple);
+  --_color---background--brand-secondary: white;
+  --_color---background--inverse: var(--grayscale--white);
+  --_color---background--input: var(--grayscale--white);
+  --_color---background--image: #17171799;
+  --_color---background--image-brand: var(--_themes---pastel--purple);
+  --_color---page--secondary: var(--_themes---pastel--black);
+  --_color---theme--fourth: var(--_themes---pastel--orange-light);
+  /* Typography — Source Sans 3 / IBM Plex Sans */
   --_typography---font-family--label: "Source Sans 3", sans-serif;
   --_typography---body--sm: var(--font-size--75);
   --_typography---label--md-base: var(--font-size--100);
@@ -276,43 +274,43 @@
 
 /* ============================================= */
 /* 3: Luxury (Hind / Lato)                       */
-/* was: theme-7 (Neon)                           */
+/* Source: webflow theme-7                       */
 /* ============================================= */
-.theme-3 {
+.body.theme-3 {
   /* Color */
   --_color---border--secondary: var(--grayscale--light);
-  --_color---surface--nav: var(--themes--yellow-brown--tan);
-  --_color---background--brand-primary: var(--themes--yellow-brown--brown);
+  --_color---surface--nav: var(--_themes---yellow-brown--tan);
+  --_color---background--brand-primary: var(--_themes---yellow-brown--brown);
   --_color---text--inverse: var(--grayscale--white);
-  --_color---border--brand: var(--themes--green-orange--brown);
-  --_color---background--primary: var(--themes--yellow-brown--tan);
+  --_color---border--brand: var(--_themes---green-orange--brown);
+  --_color---background--primary: var(--_themes---yellow-brown--tan);
   --_color---border--inverse: var(--grayscale--white);
   --_color---text--primary: var(--grayscale--darkest);
-  --_color---text--brand: var(--themes--yellow-brown--brown);
-  --_color---surface--primary: var(--themes--yellow-brown--tan);
+  --_color---text--brand: var(--_themes---yellow-brown--brown);
+  --_color---surface--primary: var(--_themes---yellow-brown--tan);
   --_color---border--primary: var(--grayscale--dark);
   --_color---surface--secondary: var(--grayscale--lightest);
-  --_color---page--primary: var(--themes--yellow-brown--tan);
+  --_color---page--primary: var(--_themes---yellow-brown--tan);
   --_color---text--muted: var(--grayscale--dark);
-  --_color---surface--brand-primary: var(--themes--green-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---green-orange--yellow);
   --_color---border--input: var(--grayscale--light);
   --_color---border--muted: var(--grayscale--lighter);
   --_color---border--on-color: white;
-  --_color---surface--brand-secondary: var(--themes--blue-green--green);
+  --_color---surface--brand-secondary: var(--_themes---blue-green--green);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
-  --_color---theme--accent: var(--themes--yellow-brown--yellow);
-  --_color---theme--tertiary: var(--themes--yellow-brown--tan);
-  --_color---theme--secondary: var(--themes--yellow-brown--green);
-  --_color---theme--primary: var(--themes--yellow-brown--brown);
-  --_color---page--brand: var(--themes--green-orange--yellow);
+  --_color---theme--accent: var(--_themes---yellow-brown--yellow);
+  --_color---theme--tertiary: var(--_themes---yellow-brown--tan);
+  --_color---theme--secondary: var(--_themes---yellow-brown--green);
+  --_color---theme--primary: var(--_themes---yellow-brown--brown);
+  --_color---page--brand: var(--_themes---green-orange--yellow);
   --_color---background--brand-secondary: white;
   --_color---background--inverse: var(--grayscale--white);
   --_color---background--input: var(--grayscale--white);
   --_color---background--image: #17171799;
-  --_color---background--image-brand: var(--themes--green-orange--brown);
+  --_color---background--image-brand: var(--_themes---green-orange--brown);
   --_color---page--secondary: var(--grayscale--lighter);
-  --_color---theme--fourth: var(--themes--yellow-brown--tan);
+  --_color---theme--fourth: var(--_themes---yellow-brown--tan);
   /* Typography */
   --_typography---font-family--label: Hind, sans-serif;
   --_typography---body--sm: var(--font-size--75);
@@ -340,7 +338,7 @@
   --_typography---icon--small: var(--font-size--75);
   --_typography---icon--medium-base: var(--font-size--100);
   --_typography---icon--large: var(--font-size--200);
-  /* Space */
+  /* Space — Base mode */
   --_space---none: var(--space--0);
   --_space---tiny: var(--space--200);
   --_space---xs: var(--space--250);
@@ -365,43 +363,43 @@
 
 /* ============================================= */
 /* 4: Vibrant (Hind / Playfair Display)          */
-/* was: theme-8 (Vibrant)                        */
+/* Source: webflow theme-8                       */
 /* ============================================= */
-.theme-4 {
+.body.theme-4 {
   /* Color */
   --_color---border--secondary: var(--grayscale--light);
   --_color---surface--nav: var(--grayscale--white);
-  --_color---background--brand-primary: var(--themes--vibrant--green);
+  --_color---background--brand-primary: var(--_themes---vibrant--green);
   --_color---text--inverse: var(--grayscale--white);
-  --_color---border--brand: var(--themes--vibrant--green);
+  --_color---border--brand: var(--_themes---vibrant--green);
   --_color---background--primary: var(--grayscale--white);
   --_color---border--inverse: var(--grayscale--white);
   --_color---text--primary: var(--grayscale--darkest);
-  --_color---text--brand: var(--themes--vibrant--green);
-  --_color---surface--primary: var(--themes--vibrant--tan);
+  --_color---text--brand: var(--_themes---vibrant--green);
+  --_color---surface--primary: var(--_themes---vibrant--tan);
   --_color---border--primary: var(--grayscale--dark);
   --_color---surface--secondary: var(--grayscale--lightest);
-  --_color---page--primary: var(--themes--vibrant--tan);
+  --_color---page--primary: var(--_themes---vibrant--tan);
   --_color---text--muted: var(--grayscale--dark);
-  --_color---surface--brand-primary: var(--themes--vibrant--green);
+  --_color---surface--brand-primary: var(--_themes---vibrant--green);
   --_color---border--input: var(--grayscale--light);
   --_color---border--muted: var(--grayscale--lighter);
   --_color---border--on-color: white;
-  --_color---surface--brand-secondary: var(--themes--vibrant--purple);
+  --_color---surface--brand-secondary: var(--_themes---vibrant--purple);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
-  --_color---theme--accent: var(--themes--vibrant--purple);
-  --_color---theme--tertiary: var(--themes--blue-red--green-blue);
-  --_color---theme--secondary: var(--themes--vibrant--yellow);
-  --_color---theme--primary: var(--themes--vibrant--green);
-  --_color---page--brand: var(--themes--vibrant--green);
+  --_color---theme--accent: var(--_themes---vibrant--purple);
+  --_color---theme--tertiary: var(--_themes---blue-red--green-blue);
+  --_color---theme--secondary: var(--_themes---vibrant--yellow);
+  --_color---theme--primary: var(--_themes---vibrant--green);
+  --_color---page--brand: var(--_themes---vibrant--green);
   --_color---background--brand-secondary: white;
   --_color---background--inverse: var(--grayscale--white);
   --_color---background--input: var(--grayscale--white);
   --_color---background--image: #17171799;
-  --_color---background--image-brand: var(--themes--vibrant--green);
-  --_color---page--secondary: var(--themes--yellow-brown--brown);
-  --_color---theme--fourth: var(--themes--vibrant--tan);
+  --_color---background--image-brand: var(--_themes---vibrant--green);
+  --_color---page--secondary: var(--_themes---yellow-brown--brown);
+  --_color---theme--fourth: var(--_themes---vibrant--tan);
   /* Typography */
   --_typography---font-family--label: Hind, sans-serif;
   --_typography---body--sm: var(--font-size--75);
@@ -429,7 +427,7 @@
   --_typography---icon--small: var(--font-size--75);
   --_typography---icon--medium-base: var(--font-size--100);
   --_typography---icon--large: var(--font-size--200);
-  /* Space */
+  /* Space — Base mode */
   --_space---none: var(--space--0);
   --_space---tiny: var(--space--200);
   --_space---xs: var(--space--250);
@@ -480,30 +478,36 @@
 
 /* ============================================= */
 /* 5: White (Open Sans / Droid Sans)             */
-/* was: theme-1 (Blue-Green Default Light)       */
+/* Colors: inherits .body defaults (blue-green)  */
 /* ============================================= */
-.theme-5 {
-  /* Space */
-  --_space---none: var(--space--0);
-  --_space---tiny: var(--space--600);
-  --_space---xs: var(--space--600);
-  --_space---sm: var(--space--600);
-  --_space---md: var(--space--800);
-  --_space---lg: var(--space--1000);
-  --_space---xl: var(--space--1200);
-  --_space---xxl: var(--space--1200);
-  --_space---huge: var(--space--2000);
-  --_space---gap--none: var(--space--0);
-  --_space---gap--tiny: var(--space--0);
-  --_space---gap--xs: var(--space--0);
-  --_space---gap--sm: var(--space--400);
-  --_space---gap--md: var(--space--1200);
-  --_space---gap--lg: var(--space--1400);
-  --_space---gap--xl: var(--space--1600);
-  --_space---gap--xxl: var(--space--1600);
-  --_space---gap--huge: var(--space--2000);
-  --_space---button: var(--space--300);
-  --_space---input: var(--space--200);
+.body.theme-5 {
+  /* Typography — Open Sans / Droid Sans */
+  --_typography---font-family--label: "Open Sans", sans-serif;
+  --_typography---body--sm: var(--font-size--75);
+  --_typography---label--md-base: var(--font-size--100);
+  --_typography---font-family--body: "Open Sans", sans-serif;
+  --_typography---body--md-base: var(--font-size--100);
+  --_typography---font-family--heading: "Droid Sans", sans-serif;
+  --_typography---heading--xxx-large: var(--font-size--1200);
+  --_typography---heading--large: var(--font-size--700);
+  --_typography---label--lg: var(--font-size--200);
+  --_typography---label--sm: var(--font-size--75);
+  --_typography---font-family--display: "Droid Sans", sans-serif;
+  --_typography---display--large: var(--font-size--1400);
+  --_typography---display--medium: var(--font-size--1500);
+  --_typography---display--small: var(--font-size--1600);
+  --_typography---heading--xx-large: var(--font-size--1000);
+  --_typography---heading--x-large: var(--font-size--900);
+  --_typography---heading--medium: var(--font-size--500);
+  --_typography---heading--small: var(--font-size--300);
+  --_typography---body--lg: var(--font-size--200);
+  --_typography---heading--tiny: var(--font-size--100);
+  --_typography---font-family--icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --_typography---body--tiny: var(--font-size--25);
+  --_typography---body--xs: var(--font-size--50);
+  --_typography---icon--small: var(--font-size--75);
+  --_typography---icon--medium-base: var(--font-size--100);
+  --_typography---icon--large: var(--font-size--200);
   /* Size */
   --_size---none: var(--size--0);
   --_size---container-size--max-hero-height: 100vh;
@@ -530,41 +534,41 @@
 
 /* ============================================= */
 /* 6: Black (Geist Mono / Geist)                 */
-/* was: theme-2 (Yellow-Orange Dark)             */
+/* Source: webflow theme-2                       */
 /* ============================================= */
-.theme-6 {
+.body.theme-6 {
   /* Color */
   --_color---border--secondary: var(--grayscale--dark);
   --_color---surface--nav: var(--grayscale--black);
-  --_color---background--brand-primary: var(--themes--yellow-orange--yellow);
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
   --_color---text--inverse: var(--grayscale--darkest);
-  --_color---border--brand: var(--themes--yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
   --_color---background--primary: var(--grayscale--darkest);
   --_color---border--inverse: var(--grayscale--black);
   --_color---text--primary: var(--grayscale--lightest);
-  --_color---text--brand: var(--themes--yellow-orange--yellow);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
   --_color---surface--primary: var(--grayscale--black);
   --_color---border--primary: var(--grayscale--light);
   --_color---surface--secondary: var(--grayscale--darkest);
   --_color---page--primary: var(--grayscale--black);
   --_color---text--muted: var(--grayscale--dark);
-  --_color---surface--brand-primary: var(--themes--yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
   --_color---border--input: var(--grayscale--dark);
   --_color---border--muted: var(--grayscale--darker);
   --_color---border--on-color: var(--grayscale--darkest);
-  --_color---surface--brand-secondary: var(--themes--yellow-orange--orange);
+  --_color---surface--brand-secondary: var(--_themes---yellow-orange--orange);
   --_color---text--secondary: var(--grayscale--light);
   --_color---background--secondary: var(--grayscale--black);
-  --_color---theme--accent: var(--themes--yellow-orange--orange);
-  --_color---theme--tertiary: var(--themes--yellow-orange--orange);
-  --_color---theme--secondary: var(--themes--yellow-orange--yellow-dark);
-  --_color---theme--primary: var(--themes--yellow-orange--yellow);
-  --_color---page--brand: var(--themes--yellow-orange--yellow);
+  --_color---theme--accent: var(--_themes---yellow-orange--orange);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
   --_color---background--brand-secondary: white;
   --_color---background--inverse: var(--grayscale--black);
   --_color---background--input: var(--grayscale--darkest);
   --_color---background--image: #17171799;
-  --_color---background--image-brand: var(--themes--yellow-orange--yellow);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
   --_color---page--secondary: var(--grayscale--darkest);
   --_color---theme--fourth: var(--grayscale--white);
   /* Typography */
@@ -598,41 +602,41 @@
 
 /* ============================================= */
 /* 7: Blue (Source Sans 3 / IBM Plex Sans)       */
-/* was: theme-3 (Peach-Brown)                    */
+/* Source: webflow theme-3                       */
 /* ============================================= */
-.theme-7 {
+.body.theme-7 {
   /* Color */
   --_color---border--secondary: var(--grayscale--light);
   --_color---surface--nav: var(--grayscale--white);
-  --_color---background--brand-primary: var(--themes--blue-green--blue-light);
+  --_color---background--brand-primary: var(--_themes---blue-green--blue-light);
   --_color---text--inverse: var(--grayscale--white);
-  --_color---border--brand: var(--themes--blue-green--blue-light);
+  --_color---border--brand: var(--_themes---blue-green--blue-light);
   --_color---background--primary: var(--grayscale--white);
   --_color---border--inverse: var(--grayscale--white);
   --_color---text--primary: var(--grayscale--darkest);
-  --_color---text--brand: var(--themes--blue-green--blue-light);
+  --_color---text--brand: var(--_themes---blue-green--blue-light);
   --_color---surface--primary: var(--grayscale--white);
   --_color---border--primary: var(--grayscale--dark);
   --_color---surface--secondary: var(--grayscale--lightest);
   --_color---page--primary: var(--grayscale--white);
   --_color---text--muted: var(--grayscale--dark);
-  --_color---surface--brand-primary: var(--themes--blue-green--blue-light);
+  --_color---surface--brand-primary: var(--_themes---blue-green--blue-light);
   --_color---border--input: var(--grayscale--light);
   --_color---border--muted: var(--grayscale--lighter);
   --_color---border--on-color: white;
-  --_color---surface--brand-secondary: var(--themes--blue-green--green);
+  --_color---surface--brand-secondary: var(--_themes---blue-green--green);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
-  --_color---theme--accent: var(--themes--blue-green--green);
-  --_color---theme--tertiary: var(--themes--blue-green--blue-dark);
-  --_color---theme--secondary: var(--themes--blue-green--blue-lighter);
-  --_color---theme--primary: var(--themes--blue-green--blue-light);
-  --_color---page--brand: var(--themes--blue-green--blue-light);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--tertiary: var(--_themes---blue-green--blue-dark);
+  --_color---theme--secondary: var(--_themes---blue-green--blue-lighter);
+  --_color---theme--primary: var(--_themes---blue-green--blue-light);
+  --_color---page--brand: var(--_themes---blue-green--blue-light);
   --_color---background--brand-secondary: white;
   --_color---background--inverse: var(--grayscale--black);
   --_color---background--input: var(--grayscale--white);
   --_color---background--image: #17171799;
-  --_color---background--image-brand: var(--themes--blue-green--blue-light);
+  --_color---background--image-brand: var(--_themes---blue-green--blue-light);
   --_color---page--secondary: var(--grayscale--lighter);
   --_color---theme--fourth: var(--grayscale--white);
   /* Typography */
@@ -666,41 +670,41 @@
 
 /* ============================================= */
 /* 8: Yellow (Hind / Lato)                       */
-/* was: theme-4 (Yellow-Brown)                   */
+/* Source: webflow theme-4                       */
 /* ============================================= */
-.theme-8 {
+.body.theme-8 {
   /* Color */
   --_color---border--secondary: var(--grayscale--light);
   --_color---surface--nav: var(--grayscale--white);
-  --_color---background--brand-primary: var(--themes--yellow-orange--yellow);
+  --_color---background--brand-primary: var(--_themes---yellow-orange--yellow);
   --_color---text--inverse: var(--grayscale--white);
-  --_color---border--brand: var(--themes--yellow-orange--yellow);
+  --_color---border--brand: var(--_themes---yellow-orange--yellow);
   --_color---background--primary: var(--grayscale--white);
   --_color---border--inverse: var(--grayscale--white);
   --_color---text--primary: var(--grayscale--black);
-  --_color---text--brand: var(--themes--yellow-orange--yellow);
+  --_color---text--brand: var(--_themes---yellow-orange--yellow);
   --_color---surface--primary: var(--grayscale--white);
   --_color---border--primary: var(--grayscale--black);
   --_color---surface--secondary: var(--grayscale--lightest);
   --_color---page--primary: var(--grayscale--white);
   --_color---text--muted: var(--grayscale--dark);
-  --_color---surface--brand-primary: var(--themes--yellow-orange--yellow);
+  --_color---surface--brand-primary: var(--_themes---yellow-orange--yellow);
   --_color---border--input: var(--grayscale--light);
   --_color---border--muted: var(--grayscale--lighter);
   --_color---border--on-color: white;
-  --_color---surface--brand-secondary: var(--themes--yellow-orange--orange);
+  --_color---surface--brand-secondary: var(--_themes---yellow-orange--orange);
   --_color---text--secondary: var(--grayscale--darker);
   --_color---background--secondary: var(--grayscale--lightest);
-  --_color---theme--accent: var(--themes--blue-green--green);
-  --_color---theme--tertiary: var(--themes--yellow-orange--orange);
-  --_color---theme--secondary: var(--themes--yellow-orange--yellow-dark);
-  --_color---theme--primary: var(--themes--yellow-orange--yellow);
-  --_color---page--brand: var(--themes--yellow-orange--yellow);
+  --_color---theme--accent: var(--_themes---blue-green--green);
+  --_color---theme--tertiary: var(--_themes---yellow-orange--orange);
+  --_color---theme--secondary: var(--_themes---yellow-orange--yellow-dark);
+  --_color---theme--primary: var(--_themes---yellow-orange--yellow);
+  --_color---page--brand: var(--_themes---yellow-orange--yellow);
   --_color---background--brand-secondary: white;
   --_color---background--inverse: var(--grayscale--black);
   --_color---background--input: var(--grayscale--white);
   --_color---background--image: #17171799;
-  --_color---background--image-brand: var(--themes--yellow-orange--yellow);
+  --_color---background--image-brand: var(--_themes---yellow-orange--yellow);
   --_color---page--secondary: var(--grayscale--lighter);
   --_color---theme--fourth: var(--grayscale--white);
   /* Typography */
