@@ -60,6 +60,11 @@ code[class*="language-"] {
   min-height: 100vh;
 }
 
+/* Remove Docs Canvas padding so ThemeWrapper fills the preview area edge-to-edge */
+.docs-story {
+  padding: 0 !important;
+}
+
 /* Ensure ThemeWrapper doesn't have visible box */
 .body[class*="theme-"] {
   border: none !important;
