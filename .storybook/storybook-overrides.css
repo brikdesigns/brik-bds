@@ -48,14 +48,15 @@ code[class*="language-"] {
    variables available to the entire preview iframe.
    ============================================ */
 
-/* Reset Storybook preview canvas */
+/* Reset Storybook preview canvas — strip all chrome */
 .sb-show-main,
 .sb-main-padded,
 #storybook-root,
 #storybook-docs,
 .sbdocs-wrapper,
 .sbdocs-content {
-  border: none !important;
+  padding: 0 !important;
+  border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
@@ -105,33 +106,31 @@ body.body {
 div[class*="docs-story"] {
   background: transparent !important;
   padding: 0 !important;
-  border: none !important;
+  margin: 0 !important;
+  border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
 
-/* SB8 — story anchor containers use stable ID pattern:
-   #anchor--components-button--base > div.css-HASH */
-#storybook-docs [id^="anchor--"] > div {
+/* SB8 — story containers inside anchor blocks.
+   Doubled ID (#X#X) boosts specificity above Storybook's
+   emotion CSS-in-JS which injects !important rules AFTER
+   our static CSS loads. Without this, cascade order means
+   emotion wins even though both use !important.
+
+   Specificity: (2,1,0,1) beats emotion's (0,1,0,0) */
+#storybook-docs#storybook-docs [id^="anchor--"] > div,
+#storybook-docs#storybook-docs [id^="anchor--"] > div > div,
+#storybook-docs#storybook-docs [id^="anchor--"] div[class^="css-"] {
   background: transparent !important;
   padding: 0 !important;
-  border: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-width: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-}
-
-/* Inner story wrapper (one level deeper) */
-#storybook-docs [id^="anchor--"] > div > div {
-  background: transparent !important;
-  padding: 0 !important;
-}
-
-/* Catch-all: any CSS-modules div inside story anchors */
-#storybook-docs [id^="anchor--"] div[class^="css-"] {
-  background: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  outline: none !important;
+  overflow: visible !important;
 }
 
 /* Reset the .body class border from Webflow CSS
