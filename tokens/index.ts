@@ -3,30 +3,23 @@
  *
  * Auto-generated from Webflow design tokens
  * Source: brik-bds.webflow.css
- * Generated: 2026-02-22T09:28:39.121Z
+ * Generated: 2026-02-23T09:53:10.318Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
 /**
  * Available theme identifiers (maps to .theme-X classes)
- *
- * Brik:
- * - theme-brik: Brik Light (Default)
- * - theme-brik-dark: Brik Dark
- *
- * Expressive:
- * - theme-1: Peach (Open Sans / Newsreader)
- * - theme-2: Pastel (Source Sans 3 / IBM Plex Sans)
- * - theme-3: Luxury (Hind / Lato)
- * - theme-4: Vibrant (Hind / Playfair Display)
- *
- * Modern:
- * - theme-5: White (Open Sans / Droid Sans)
- * - theme-6: Black (Geist Mono / Geist)
- * - theme-7: Blue (Source Sans 3 / IBM Plex Sans)
- * - theme-8: Yellow (Hind / Lato)
+ * - theme-1: Blue-Green (Default Light)
+ * - theme-2: Yellow-Orange (Dark)
+ * - theme-3: Peach-Brown
+ * - theme-4: Yellow-Brown
+ * - theme-5: Green-Orange
+ * - theme-6: Blue-Orange
+ * - theme-7: Neon
+ * - theme-8: Vibrant
+ * - theme-brik: Brik Designs Brand
  */
-export type ThemeNumber = 'brik' | 'brik-dark' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+export type ThemeNumber = '1' | '8' | '2' | '3' | '4' | '5' | '6' | '7' | 'brik';
 
 /**
  * Color mode type (friendly names)
@@ -64,7 +57,7 @@ export interface BDSThemeConfig {
  * Default theme configuration
  */
 export const defaultTheme: BDSThemeConfig = {
-  themeNumber: 'brik',
+  themeNumber: '1',
   colorMode: 'light',
   typography: 'default',
   spacing: 'comfortable',
@@ -75,16 +68,15 @@ export const defaultTheme: BDSThemeConfig = {
  * Theme metadata for UI display
  */
 export const themeMetadata: Record<ThemeNumber, { name: string; description: string; isDark: boolean }> = {
-  'brik': { name: 'Brik Light', description: 'Brik Designs brand — poppy red on white', isDark: false },
-  'brik-dark': { name: 'Brik Dark', description: 'Brik Designs brand — poppy red on dark', isDark: true },
-  '1': { name: 'Peach', description: 'Expressive — warm peach-brown tones (Open Sans)', isDark: false },
-  '2': { name: 'Pastel', description: 'Expressive — soft palette (Source Sans 3)', isDark: false },
-  '3': { name: 'Luxury', description: 'Expressive — warm tan and brown (Hind)', isDark: false },
-  '4': { name: 'Vibrant', description: 'Expressive — bold greens and purples (Playfair Display)', isDark: false },
-  '5': { name: 'White', description: 'Modern — clean white with blue-green accents (Open Sans)', isDark: false },
-  '6': { name: 'Black', description: 'Modern — dark with yellow accents (Geist Mono)', isDark: true },
-  '7': { name: 'Blue', description: 'Modern — blue-green palette (Source Sans 3)', isDark: false },
-  '8': { name: 'Yellow', description: 'Modern — golden warm tones (Hind)', isDark: false },
+  '1': { name: 'Blue-Green', description: 'Default light theme with blue/green accents', isDark: false },
+  '2': { name: 'Yellow-Orange', description: 'Dark theme with yellow/orange accents', isDark: true },
+  '3': { name: 'Peach-Brown', description: 'Warm earthy tones', isDark: false },
+  '4': { name: 'Yellow-Brown', description: 'Golden warm tones', isDark: false },
+  '5': { name: 'Green-Orange', description: 'Nature-inspired palette', isDark: false },
+  '6': { name: 'Blue-Orange', description: 'Complementary contrast', isDark: false },
+  '7': { name: 'Neon', description: 'Vibrant neon colors', isDark: true },
+  '8': { name: 'Vibrant', description: 'Bold saturated colors', isDark: false },
+  'brik': { name: 'Brik Designs', description: 'Company brand theme — poppy red, near-black, tan', isDark: false },
 };
 
 /**
