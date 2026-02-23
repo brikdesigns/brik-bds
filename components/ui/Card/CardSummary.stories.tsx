@@ -84,6 +84,7 @@ export const PriceNoLink: Story = {
  * Both variants stacked, matching the Figma spec
  */
 export const BothVariants: Story = {
+  args: { label: 'Total', value: 0 },
   parameters: {
     docs: {
       source: {
@@ -125,6 +126,7 @@ export const BothVariants: Story = {
  * With populated data
  */
 export const WithData: Story = {
+  args: { label: 'Active Users', value: 1284 },
   parameters: {
     docs: {
       source: {
@@ -165,6 +167,7 @@ export const WithData: Story = {
  * Dashboard grid layout
  */
 export const DashboardGrid: Story = {
+  args: { label: 'Orders', value: 156 },
   parameters: {
     docs: {
       source: {

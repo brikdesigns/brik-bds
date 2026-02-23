@@ -86,6 +86,7 @@ export const DisabledChecked: Story = {
  * Radio group - Plan selection
  */
 export const PlanSelection: Story = {
+  args: { label: 'Basic Plan - $9/month', name: 'plan', value: 'basic' },
   parameters: {
     docs: {
       source: {
@@ -108,6 +109,7 @@ export const PlanSelection: Story = {
  * Radio group - Theme selection
  */
 export const ThemeSelection: Story = {
+  args: { label: 'Theme 1', name: 'theme', value: 'theme1' },
   parameters: {
     docs: {
       source: {

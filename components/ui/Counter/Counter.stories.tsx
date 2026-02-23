@@ -47,6 +47,7 @@ export const Default: Story = {
  * All statuses at small size
  */
 export const AllStatuses: Story = {
+  args: { count: 1 },
   parameters: {
     docs: {
       source: {
@@ -73,6 +74,7 @@ export const AllStatuses: Story = {
  * All sizes
  */
 export const AllSizes: Story = {
+  args: { count: 5 },
   parameters: {
     docs: {
       source: {
@@ -95,6 +97,7 @@ export const AllSizes: Story = {
  * Max count overflow
  */
 export const MaxCount: Story = {
+  args: { count: 5 },
   parameters: {
     docs: {
       source: {
@@ -117,6 +120,7 @@ export const MaxCount: Story = {
  * Full grid — all statuses at all sizes
  */
 export const CounterGrid: Story = {
+  args: { count: 1 },
   parameters: {
     docs: {
       source: {

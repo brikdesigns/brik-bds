@@ -140,6 +140,17 @@ div[class*="docs-story"] {
   border-radius: 0 !important;
 }
 
+/* Story preview container — themed via CSS variables.
+   .sbdocs-preview is a stable semantic class (not a hashed
+   emotion class), so we can target it directly.
+   body.body ensures variables resolve in the theme scope. */
+body.body .sbdocs-preview {
+  background-color: var(--_color---surface--primary) !important;
+  border: var(--_border-width---md) solid var(--_color---border--secondary) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
 /* ============================================
    IMMERSIVE DOCS THEMING
 
