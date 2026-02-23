@@ -70,6 +70,7 @@ export const DisabledChecked: Story = {
  * Multiple checkboxes in a group
  */
 export const Group: Story = {
+  args: { label: 'Hero section' },
   parameters: {
     docs: {
       source: {

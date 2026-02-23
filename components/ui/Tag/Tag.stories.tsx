@@ -37,6 +37,7 @@ export const Default: Story = {
  * All three sizes
  */
 export const AllSizes: Story = {
+  args: { children: 'Tag' },
   parameters: {
     docs: {
       source: {
@@ -81,6 +82,7 @@ export const WithRightIcon: Story = {
  * With both icons — left and right
  */
 export const WithBothIcons: Story = {
+  args: { children: 'Tag' },
   parameters: {
     docs: {
       source: {
@@ -103,6 +105,7 @@ export const WithBothIcons: Story = {
  * Icon positions — left only, right only, both
  */
 export const IconPositions: Story = {
+  args: { children: 'Tag' },
   parameters: {
     docs: {
       source: {
@@ -147,6 +150,7 @@ export const Disabled: Story = {
  * Multiple tags — real-world usage
  */
 export const MultipleTags: Story = {
+  args: { children: 'Tag' },
   parameters: {
     docs: {
       source: {
