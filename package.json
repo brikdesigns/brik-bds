@@ -54,6 +54,8 @@
     "build:sd": "npx style-dictionary build --config sd.config.mjs",
     "build:all-tokens": "npm run build:dtcg && npm run build:sd && npm run build:tokens",
     "deploy": "webflow deploy",
+    "deploy:staging": "npm run build-storybook && npx netlify-cli deploy --dir=storybook-static",
+    "deploy:prod": "npm run build-storybook && npx netlify-cli deploy --prod --dir=storybook-static",
     "test": "echo \"No tests specified\" && exit 0",
     "test-integration": "node scripts/test-integration.js",
     "setup-copilot": "node scripts/setup-copilot-onlook.js",
