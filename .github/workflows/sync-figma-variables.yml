@@ -1,0 +1,81 @@
+name: Sync Figma Variables
+
+on:
+  push:
+    paths:
+      - 'design-tokens/figma-export.json'
+      - 'design-tokens/tokens-studio.json'
+  workflow_dispatch:
+    inputs:
+      skip-build:
+        description: 'Skip token build (just commit the raw export)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  process-figma-export:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Detect source
+      id: detect
+      run: |
+        # Check which file was updated (Tokens Studio vs manual export)
+        if git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -q 'tokens-studio.json'; then
+          echo "source=tokens-studio" >> $GITHUB_OUTPUT
+        else
+          echo "source=manual" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build Tokens Studio → Style Dictionary
+      if: steps.detect.outputs.source == 'tokens-studio' && inputs.skip-build != 'true'
+      run: npm run build:sd-figma
+
+    - name: Transform manual Figma export
+      if: steps.detect.outputs.source == 'manual'
+      run: node scripts/transform-figma-export.js --compare
+
+    - name: Build DTCG tokens (Webflow source)
+      if: inputs.skip-build != 'true'
+      run: node scripts/css-to-dtcg.js
+
+    - name: Build Style Dictionary outputs (Webflow source)
+      if: inputs.skip-build != 'true'
+      run: npx style-dictionary build --config sd.config.mjs
+
+    - name: Build web tokens
+      if: inputs.skip-build != 'true'
+      run: npm run build:tokens
+
+    - name: Check for changes
+      id: check-changes
+      run: |
+        if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+          echo "no-changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "no-changes=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Commit and push changes
+      if: steps.check-changes.outputs.no-changes == 'false'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add design-tokens/ build/ tokens/
+        git commit -m "Sync Figma Variables — $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+        git push

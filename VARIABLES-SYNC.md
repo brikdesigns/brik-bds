@@ -1,173 +1,126 @@
-# Figma Variables Sync — Step-by-Step Guide
+# Figma Variables Sync
 
-**When to run:** Weekly or when Variables change in Figma (infrequent)
+**When to run:** After changing Variables in Figma
 
-**Time required:** ~2 minutes
+**Time required:** ~30 seconds (one click + auto-commit)
 
----
+## How it works
 
-## Prerequisites
+```
+You change variables in Figma
+  ↓
+Open Tokens Studio plugin → Push to GitHub
+  ↓
+Tokens Studio pushes DTCG JSON to brikdesigns/brik-bds (design-tokens/tokens-studio.json)
+  ↓
+GitHub Actions: @tokens-studio/sd-transforms → Style Dictionary → CSS + TS
+  ↓
+Auto-commit: "Sync Figma Variables — YYYY-MM-DD"
+  ↓
+Downstream projects pull on next submodule update
+```
 
-- [ ] Figma Desktop installed
-- [ ] figma-talk MCP configured (`claude mcp list | grep figma-talk`)
-- [ ] "Claude Talk to Figma" plugin installed in Figma
+## One-time setup
 
----
+### 1. Install Tokens Studio plugin
 
-## Step 1: Start figma-talk Server
+1. Open [Tokens Studio for Figma](https://www.figma.com/community/plugin/843461159747178978/tokens-studio-for-figma)
+2. Click "Install"
+
+### 2. Create GitHub PAT
+
+1. Go to [github.com/settings/tokens](https://github.com/settings/tokens) → Fine-grained token
+2. **Name:** `tokens-studio-bds`
+3. **Resource owner:** `brikdesigns`
+4. **Repository access:** Only select repositories → `brik-bds`
+5. **Permissions:** Contents → Read and Write
+6. Copy the token immediately
+
+### 3. Import existing variables
+
+1. Open Brik Foundations file in Figma Desktop
+2. Run Tokens Studio: Cmd+/ → "Tokens Studio"
+3. Select "New empty file" if prompted
+4. Go to **Settings** → change Token Format to **W3C DTCG**
+5. Click **Styles & Variables** → **Import Variables** → import all collections
+6. Review the diff → confirm
+
+### 4. Configure GitHub sync
+
+1. In the plugin → sync settings → Add new → **GitHub**
+2. **Name:** `brik-bds`
+3. **PAT:** paste the token from step 2
+4. **Repository:** `brikdesigns/brik-bds`
+5. **Branch:** `main`
+6. **File path:** `design-tokens/tokens-studio.json`
+7. Push to sync — verify the commit appears on GitHub
+
+## Sync workflow
+
+1. Make variable changes in Figma
+2. Open Tokens Studio plugin → Push
+3. Done
+
+GitHub Actions handles:
+- `@tokens-studio/sd-transforms` — preprocesses Tokens Studio output
+- `style-dictionary build` — multi-platform outputs (CSS, JS, iOS, Android)
+- `tokens/build.js` — CSS variables + TypeScript types
+- Auto-commit if changes detected
+
+## Local commands
 
 ```bash
-/Users/nickstanerson/Documents/GitHub/brik-llm/scripts/mcp/mcp-start-figma-server.sh
+# Build Figma tokens locally (after Tokens Studio push)
+npm run build:sd-figma
+
+# Full Webflow CSS token rebuild
+npm run build:all-tokens
+
+# Legacy: transform manual Figma export + compare
+npm run sync:figma:check
 ```
 
-**Expected output:**
-```
-figma-talk WebSocket server running on http://localhost:3055
-```
+## Alternative: Manual export (no Tokens Studio)
 
-**Verify:**
-```bash
-curl -s http://localhost:3055/status
-# Should return: {"status":"ok"}
-```
+If Tokens Studio isn't set up, you can export manually:
 
----
-
-## Step 2: Open Figma File
-
-1. Open **Figma Desktop** (not browser)
-2. Open any of the 3 BDS files:
-   - ❖ Brik Foundations (`Rkdc3SIWJUdgoAkeadgZZe`)
-   - ❖ Modern Theme Web Toolkit (`GLi4Xm9q783AniSTY009p5`)
-   - ❖ Expressive Theme Web Toolkit (`XEXnuAmnklNKw55kxjvNR5`)
-
----
-
-## Step 3: Connect Plugin
-
-1. Press **Cmd+/** (or Plugins menu → "Claude Talk to Figma")
-2. Click **"Connect"** button in plugin
-3. **Copy the channel ID** (looks like: `channel_abc123xyz`)
-
----
-
-## Step 4: Sync Variables via Claude Code
-
-Open Claude Code in the `brik-bds` repo and run:
-
-```
-Please sync Figma Variables to design-tokens/tokens.json:
-
-1. Join figma-talk channel: <PASTE_CHANNEL_ID_HERE>
-2. Call mcp__figma-talk__get_variable_defs
-3. Export to design-tokens/tokens.json in the expected structure
-4. Run npm run transform-tokens
-5. Show me a summary of what changed
-```
-
-Claude will:
-- Join the figma-talk channel
-- Read Variables from the open Figma file
-- Export to `design-tokens/tokens.json`
-- Generate CSS via `transform-tokens` script
-
----
-
-## Step 5: Verify Output
+1. In Figma, use variables-utilities plugin → Export Variables
+2. Save output to `figma-variables.json` in repo root
+3. Run locally:
 
 ```bash
-# Check tokens were written
-cat design-tokens/tokens.json | jq 'keys'
-
-# Check CSS was generated
-head -20 css/design-tokens.css
+node scripts/transform-figma-export.js --input figma-variables.json --compare
+npm run build:all-tokens
 ```
 
-Expected: Non-empty JSON with color/spacing/typography tokens, CSS with custom properties.
+4\. Commit and push
 
----
+## Update downstream projects
 
-## Step 6: Update BDS Source (if needed)
-
-If the Webflow export (`updates/brik-bds.webflow/css/brik-bds.webflow.css`) needs updating:
+After sync, update submodules in projects that reference brik-bds:
 
 ```bash
-# Manually update brik-bds.webflow.css with new tokens
-# OR export fresh CSS from Webflow
-
-# Then regenerate build outputs
-cd tokens
-node build.js
-```
-
----
-
-## Step 7: Commit and Push
-
-```bash
-git add design-tokens/ css/ tokens/
-git commit -m "Sync Figma Variables - $(date -u +'%Y-%m-%d')"
-git push origin main
-```
-
----
-
-## Step 8: Update Downstream Projects
-
-```bash
-# Update submodule in client-portal
-cd /Users/nickstanerson/Documents/GitHub/brik-client-portal
-git submodule update --remote brik-bds
-git add brik-bds
-git commit -m "Update brik-bds submodule — Variables sync"
-git push
-
-# Update submodule in brik-llm
+# brik-llm
 cd /Users/nickstanerson/Documents/GitHub/brik-llm
 git submodule update --remote foundations/brik-bds
 git add foundations/brik-bds
-git commit -m "Update brik-bds submodule — Variables sync"
+git commit -m "Update brik-bds submodule"
 git push
 ```
 
----
+## FAQ
 
-## Troubleshooting
+**Q: Why not fully automated (no click at all)?**
+A: Figma Variables REST API requires Enterprise plan ($45/seat/mo). The Plugin API (which Tokens Studio uses internally) works on any plan but needs a user action in Figma to trigger the export. One click is the minimum.
 
-### Plugin won't connect
+**Q: How often should I sync?**
+A: After any variable change in Figma. Token changes are infrequent (typically monthly).
 
-**Check server is running:**
-```bash
-lsof -i :3055
-# Should show node process
-```
+**Q: What if Figma and Webflow CSS drift apart?**
+A: Run `npm run sync:figma:check` to compare. The script shows which tokens exist in one source but not the other.
 
-**Restart server:**
-```bash
-pkill -f figma-talk-server
-/Users/nickstanerson/Documents/GitHub/brik-llm/scripts/mcp/mcp-start-figma-server.sh
-```
+**Q: Is Tokens Studio free?**
+A: Yes. The free Starter plan includes single-file GitHub sync — that's all we need. Multi-file sync (folder) is a paid feature.
 
-### "Channel not found" error
-
-- Make sure you copied the channel ID correctly
-- Channel IDs are session-specific — reconnect plugin if it expired
-
-### Tokens JSON is empty
-
-- Verify the Figma file actually has Variables defined
-- Try a different file from the 3 BDS files
-- Check Figma plugin console for errors (Cmd+Opt+I in Figma)
-
----
-
-## Why This Workflow?
-
-**Q: Why not automated daily sync like before?**
-A: The REST API Variables endpoint requires Enterprise plan ($45/seat/month). Plugin API works on any plan but requires Figma Desktop open + manual connection.
-
-**Q: How often should I run this?**
-A: Weekly or when Variables change in Figma. Token changes are infrequent (maybe monthly).
-
-**Q: Can this be scripted?**
-A: Partially. The figma-talk connection step is manual, but the export/transform/commit can be scripted once connected.
+**Q: What's the difference between `build:sd` and `build:sd-figma`?**
+A: `build:sd` processes tokens from Webflow CSS (current source of truth). `build:sd-figma` processes tokens from Figma via Tokens Studio. Both output via Style Dictionary.
