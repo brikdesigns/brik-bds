@@ -1,6 +1,6 @@
 # Figma Access Architecture for Brik Designs
 
-**Last Updated:** 2026-02-16
+**Last Updated:** 2026-03-03
 **Status:** DEFINITIVE — This replaces all previous Figma access discussions
 
 ---
@@ -15,37 +15,41 @@ Figma Variables REST API requires **Enterprise plan**. We don't have Enterprise.
 
 ## The Solution: 3-Tier Architecture
 
-### Tier 1: figma-talk MCP (PRIMARY for Variables)
+### Tier 1: Tokens Studio Plugin (PRIMARY for Variables)
 
 **Use for:**
-- ✅ Reading Figma Variables (no plan restriction via Plugin API)
-- ✅ Canvas manipulation (rare, but supported)
-- ✅ Creating/modifying design elements
+
+- ✅ Syncing Figma Variables to GitHub (one click)
+- ✅ W3C DTCG format output (industry standard)
+- ✅ Bi-directional sync (pull tokens from GitHub back to Figma)
+- ✅ Direct Style Dictionary integration via `@tokens-studio/sd-transforms`
 
 **Setup:**
-```bash
-# 1. Start WebSocket server
-/Users/nickstanerson/Documents/GitHub/brik-llm/scripts/mcp/mcp-start-figma-server.sh
 
-# 2. Open Figma Desktop → open target file
-# 3. Run plugin: Cmd+/ → "Claude Talk to Figma" → "Connect"
-# 4. Copy channel ID from plugin
-# 5. Give channel ID to Claude → Claude calls mcp__figma-talk__join_channel
-```
+1. Install [Tokens Studio for Figma](https://www.figma.com/community/plugin/843461159747178978/tokens-studio-for-figma)
+2. Create GitHub PAT (fine-grained, Contents: Read/Write on `brikdesigns/brik-bds`)
+3. Open Foundations file → import Variables → configure GitHub sync
+4. Target: repo `brikdesigns/brik-bds`, file `design-tokens/tokens-studio.json`
 
 **When to use:**
-- **Variables sync** (weekly or when tokens change)
-- Active design work (canvas manipulation)
+
+- **Variables sync** (after any variable change in Figma)
 
 **Architecture:**
-```
-Claude Code → figma-talk MCP (stdio) → WebSocket (:3055) → Figma Plugin
+
+```text
+Figma Desktop → Tokens Studio plugin → GitHub API → brikdesigns/brik-bds
+  ↓
+GitHub Actions → @tokens-studio/sd-transforms → Style Dictionary → auto-commit
 ```
 
 **Why this works:**
-- Figma Plugin API has full access to Variables regardless of plan
-- No Enterprise requirement
-- Read/write both supported
+
+- Tokens Studio uses Plugin API internally (no Enterprise requirement)
+- Industry standard — used by Salesforce, GitHub, major design systems
+- Native DTCG output feeds directly into Style Dictionary
+- Free Starter plan includes single-file GitHub sync
+- Replaces figma-talk MCP (no WebSocket servers, no channel IDs)
 
 ---
 
@@ -106,10 +110,9 @@ claude mcp list | grep figma
 What do you need?
 │
 ├─ Variables (color, spacing, typography tokens)
-│  └─ USE: figma-talk MCP (Tier 1)
-│     - Start server, open Figma, connect plugin
-│     - Call get_variable_defs or scan file
-│     - Export to design-tokens/tokens.json
+│  └─ USE: Tokens Studio plugin (Tier 1)
+│     - Open Figma → run Tokens Studio → Push
+│     - GitHub Actions processes automatically
 │
 ├─ File metadata, component list, page structure
 │  └─ USE: REST API (Tier 2)
@@ -122,28 +125,30 @@ What do you need?
 │     - OAuth may need refresh
 │
 └─ Canvas manipulation (rare)
-   └─ USE: figma-talk MCP (Tier 1)
-      - Same setup as Variables
-      - Full read/write access
+   └─ USE: figma-talk MCP (if needed)
+      - Start WebSocket server, connect plugin
+      - Only for active design work, not token sync
 ```
 
 ---
 
 ## Variables Sync Workflow
 
-**Old approach (broken):**
+**Legacy (broken):**
+
 - `scripts/sync-figma.js` → REST API `/variables/local` → 403 Enterprise-only
+- figma-talk MCP → fragile WebSocket + channel IDs
 
-**New approach (works):**
-1. Start figma-talk server + connect plugin (manual, ~30 seconds)
-2. Run `scripts/sync-figma-via-plugin.js` (automated)
-3. Exports to `design-tokens/tokens.json`
-4. Run `npm run transform-tokens` to generate CSS
-5. Commit and push
+**Current approach (works):**
 
-**Frequency:** Weekly or when Variables change in Figma (infrequent)
+1. Open Figma → run Tokens Studio plugin → Push
+2. Tokens Studio pushes DTCG JSON to GitHub (`design-tokens/tokens-studio.json`)
+3. GitHub Actions → `@tokens-studio/sd-transforms` → Style Dictionary → auto-commit
+4. Downstream projects pull on next submodule update
 
-**Script:** See `/scripts/sync-figma-via-plugin.js` (uses figma-talk MCP)
+**Frequency:** After any variable change in Figma
+
+**Docs:** See [VARIABLES-SYNC.md](VARIABLES-SYNC.md)
 
 ---
 
@@ -155,20 +160,19 @@ What do you need?
 ❌ **Don't try to use native Figma MCP for Variables**
 → It's read-only and doesn't expose Variables methods.
 
-❌ **Don't expect daily automated sync**
-→ figma-talk requires Figma Desktop open + plugin connected. Best for weekly manual runs.
+❌ **Don't expect fully automated sync (no human action)**
+→ Plugin API requires Figma Desktop open. Tokens Studio reduces it to one click — that's the minimum.
 
 ---
 
 ## Files to Update
 
 When Variables change in Figma:
-1. Run sync script → updates `design-tokens/tokens.json`
-2. `npm run transform-tokens` → updates `css/design-tokens.css`
-3. If BDS source tokens change → update `updates/brik-bds.webflow/css/brik-bds.webflow.css`
-4. Run `tokens/build.js` → regenerates `tokens/*.css` and `tokens/index.ts`
-5. Commit and push
-6. Update submodules in downstream projects (client-portal, brik-llm)
+1. Push via Tokens Studio → updates `design-tokens/tokens-studio.json`
+2. GitHub Actions runs `build:sd-figma` → updates `build/figma/`
+3. GitHub Actions runs `build:all-tokens` → updates `tokens/*.css` and `tokens/index.ts`
+4. Auto-commit and push
+5. Update submodules in downstream projects (client-portal, brik-llm)
 
 ---
 
@@ -176,9 +180,9 @@ When Variables change in Figma:
 
 | Need | Tool | Plan Requirement | Automation |
 |------|------|------------------|------------|
-| **Variables** | figma-talk | Any | Manual trigger |
+| **Variables** | Tokens Studio plugin | Any | One click in Figma |
 | File metadata | REST API | Any | Fully automated |
 | Screenshots | Native Figma MCP | Any | On-demand |
 | Canvas work | figma-talk | Any | Manual |
 
-**The key insight:** Variables require the Plugin API (figma-talk), not the REST API. Stop trying to use REST API tokens for Variables.
+**The key insight:** Variables require the Plugin API, not the REST API. Tokens Studio wraps the Plugin API into a one-click GitHub push with native DTCG output. Stop trying to use REST API tokens for Variables.
