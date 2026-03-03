@@ -4,3 +4,18 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+# ── Staging (branch deploys) ────────────────────────────────────────
+# Any push to `staging` branch auto-deploys to:
+#   staging--brikstorybook.netlify.app
+#
+# Workflow:
+#   main     → brikstorybook.netlify.app  (production)
+#   staging  → staging--brikstorybook.netlify.app
+#   PR #N    → deploy-preview-N--brikstorybook.netlify.app
+
+[context.staging]
+  command = "npm run build-storybook"
+
+[context.deploy-preview]
+  command = "npm run build-storybook"
