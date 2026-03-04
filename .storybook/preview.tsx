@@ -92,7 +92,6 @@ const preview: Preview = {
       defaultValue: 'brik',
       toolbar: {
         icon: 'paintbrush',
-        showName: true,
         items: [
           // Brik brand
           { value: 'brik', title: 'Brik Brand (Poppins)' },
@@ -116,7 +115,6 @@ const preview: Preview = {
       defaultValue: '16',
       toolbar: {
         icon: 'grow',
-        showName: true,
         items: [
           { value: '14', title: '14px' },
           { value: '16', title: '16px' },
@@ -132,7 +130,6 @@ const preview: Preview = {
       defaultValue: 'on',
       toolbar: {
         icon: 'lightning',
-        showName: true,
         items: [
           { value: 'on', title: 'On' },
           { value: 'off', title: 'Off' },
