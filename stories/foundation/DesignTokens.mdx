@@ -1,0 +1,65 @@
+import { Meta } from '@storybook/blocks';
+import { ThemeOverview } from './_components';
+
+<Meta title="Foundation/Design Tokens" />
+
+# Design tokens
+
+Design tokens are the atomic visual decisions that define the Brik Design System. They bridge design and engineering by providing a shared language across platforms.
+
+## Architecture
+
+BDS tokens use a two-layer abstraction:
+
+```
+Primitives (raw scale values)          Semantic tokens (purpose-bound)
+─────────────────────────────          ────────────────────────────────
+--space--400          → 16px           --_space---md    → var(--space--400)
+--font-size--700      → 32px           --_typography---heading--large → var(--font-size--700)
+--grayscale--darkest  → #333           --_color---text--primary → var(--grayscale--darkest)
+```
+
+**Components use semantic tokens only.** Primitives exist for the scale — they should never appear directly in component code.
+
+## Naming convention
+
+```
+--_[category]---[type]--[variant]
+```
+
+| Part | Example | Description |
+|------|---------|-------------|
+| Category | `color`, `space`, `typography` | Token domain |
+| Type | `background`, `gap`, `heading` | Functional purpose |
+| Variant | `brand-primary`, `lg`, `x-large` | Specific value |
+
+## Multi-platform outputs
+
+Tokens are generated for multiple platforms from the same source:
+
+| Platform | Format | Location |
+|----------|--------|----------|
+| CSS | Custom properties | `tokens/variables.css` |
+| JavaScript | ES6 exports | `build/figma/js/tokens.mjs` |
+| TypeScript | Type declarations | `build/figma/js/tokens.d.ts` |
+| SwiftUI | Static enums | `build/figma/swift/*.swift` |
+
+## Themes
+
+BDS ships 9 theme variants. Each theme overrides semantic color, typography, and spacing tokens while preserving the primitive scale.
+
+<ThemeOverview />
+
+Use the paintbrush icon in the toolbar to switch themes. All Foundation pages and components update in real time.
+
+## Token categories
+
+| Category | Tokens | Description |
+|----------|--------|-------------|
+| [Color](?path=/docs/foundation-color--docs) | Grayscale, palettes, semantic roles | All color decisions |
+| [Typography](?path=/docs/foundation-typography--docs) | Font families, sizes, weights, line heights | All type decisions |
+| [Spacing](?path=/docs/foundation-spacing--docs) | Space scale, gaps, padding | All spacing decisions |
+| [Border radius](?path=/docs/foundation-border-radius--docs) | Radius scale, semantic radius | Corner rounding |
+| [Border width](?path=/docs/foundation-border-width--docs) | Width scale, semantic widths | Border thickness |
+| [Shadow](?path=/docs/foundation-shadow--docs) | Blur, spread, offset | Elevation and depth |
+| [Size](?path=/docs/foundation-size--docs) | Size scale, breakpoints, containers | Dimensional constraints |

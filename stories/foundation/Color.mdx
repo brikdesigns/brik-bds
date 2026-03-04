@@ -1,0 +1,119 @@
+import { Meta } from '@storybook/blocks';
+import { PaletteGrid, ColorGrid, ThemeComparison } from './_components';
+import { grayscale, themePalettes } from '../../tokens';
+
+<Meta title="Foundation/Color" />
+
+# Color
+
+Color tokens define the visual identity across all BDS themes. The system separates primitive color scales from semantic color roles.
+
+## Primitives
+
+### Grayscale
+
+The neutral palette used for text, borders, backgrounds, and surfaces.
+
+<PaletteGrid palette={grayscale} prefix="--grayscale" columns={8} />
+
+### Theme palettes
+
+Each theme has its own accent palette. The active theme's palette is mapped to semantic tokens.
+
+<PaletteGrid title="Blue-Green (default)" palette={themePalettes['blue-green']} prefix="--_themes---blue-green" />
+
+<PaletteGrid title="Yellow-Orange" palette={themePalettes['yellow-orange']} prefix="--_themes---yellow-orange" />
+
+<PaletteGrid title="Peach-Brown" palette={themePalettes['peach-brown']} prefix="--_themes---peach-brown" />
+
+<PaletteGrid title="Yellow-Brown" palette={themePalettes['yellow-brown']} prefix="--_themes---yellow-brown" />
+
+<PaletteGrid title="Green-Orange" palette={themePalettes['green-orange']} prefix="--_themes---green-orange" />
+
+<PaletteGrid title="Blue-Orange" palette={themePalettes['blue-orange']} prefix="--_themes---blue-orange" />
+
+<PaletteGrid title="Neon" palette={themePalettes['neon']} prefix="--_themes---neon" />
+
+<PaletteGrid title="Vibrant" palette={themePalettes['vibrant']} prefix="--_themes---vibrant" />
+
+## Semantic colors
+
+Semantic tokens map to purpose, not appearance. Switch themes to see values change.
+
+### Page and surface
+
+<ColorGrid
+  colors={[
+    { name: 'page--primary', cssVar: '--_color---page--primary' },
+    { name: 'page--secondary', cssVar: '--_color---page--secondary' },
+    { name: 'page--brand', cssVar: '--_color---page--brand' },
+    { name: 'surface--primary', cssVar: '--_color---surface--primary' },
+    { name: 'surface--secondary', cssVar: '--_color---surface--secondary' },
+    { name: 'surface--nav', cssVar: '--_color---surface--nav' },
+    { name: 'surface--brand-primary', cssVar: '--_color---surface--brand-primary' },
+    { name: 'surface--brand-secondary', cssVar: '--_color---surface--brand-secondary' },
+  ]}
+  columns={4}
+/>
+
+### Background
+
+<ColorGrid
+  colors={[
+    { name: 'background--brand-primary', cssVar: '--_color---background--brand-primary' },
+    { name: 'background--brand-secondary', cssVar: '--_color---background--brand-secondary' },
+    { name: 'background--primary', cssVar: '--_color---background--primary' },
+    { name: 'background--secondary', cssVar: '--_color---background--secondary' },
+    { name: 'background--inverse', cssVar: '--_color---background--inverse' },
+    { name: 'background--input', cssVar: '--_color---background--input' },
+  ]}
+  columns={3}
+/>
+
+### Text
+
+<ColorGrid
+  colors={[
+    { name: 'text--primary', cssVar: '--_color---text--primary', isText: true },
+    { name: 'text--secondary', cssVar: '--_color---text--secondary', isText: true },
+    { name: 'text--muted', cssVar: '--_color---text--muted', isText: true },
+    { name: 'text--brand', cssVar: '--_color---text--brand', isText: true },
+    { name: 'text--inverse', cssVar: '--_color---text--inverse', isText: true },
+    { name: 'text--on-color-dark', cssVar: '--_color---text--on-color-dark', isText: true },
+    { name: 'text--on-color-light', cssVar: '--_color---text--on-color-light', isText: true },
+  ]}
+  columns={4}
+/>
+
+### Border
+
+<ColorGrid
+  colors={[
+    { name: 'border--primary', cssVar: '--_color---border--primary' },
+    { name: 'border--secondary', cssVar: '--_color---border--secondary' },
+    { name: 'border--muted', cssVar: '--_color---border--muted' },
+    { name: 'border--brand', cssVar: '--_color---border--brand' },
+    { name: 'border--input', cssVar: '--_color---border--input' },
+    { name: 'border--inverse', cssVar: '--_color---border--inverse' },
+    { name: 'border--on-color', cssVar: '--_color---border--on-color' },
+  ]}
+  columns={4}
+/>
+
+### Theme accents
+
+<ColorGrid
+  colors={[
+    { name: 'theme--primary', cssVar: '--_color---theme--primary' },
+    { name: 'theme--secondary', cssVar: '--_color---theme--secondary' },
+    { name: 'theme--tertiary', cssVar: '--_color---theme--tertiary' },
+    { name: 'theme--accent', cssVar: '--_color---theme--accent' },
+  ]}
+  columns={4}
+/>
+
+## Theme comparison
+
+How key color tokens resolve across all 9 themes:
+
+<ThemeComparison />

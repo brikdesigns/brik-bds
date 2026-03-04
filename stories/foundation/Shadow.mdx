@@ -1,0 +1,38 @@
+import { Meta } from '@storybook/blocks';
+import { ShadowScale } from './_components';
+import { shadowBlurScale, shadowSpreadScale } from '../../tokens';
+
+<Meta title="Foundation/Shadow" />
+
+# Shadow
+
+Shadow tokens define elevation through blur, spread, and offset values. These are granular primitives that compose into `box-shadow` declarations.
+
+## Shadow blur scale
+
+Controls the softness/diffusion of shadows.
+
+<ShadowScale scale={shadowBlurScale} prefix="shadow-blur" label="blur" />
+
+## Shadow spread scale
+
+Controls how far a shadow extends outward.
+
+<ShadowScale scale={shadowSpreadScale} prefix="shadow-spread" label="spread" />
+
+## Semantic shadow tokens
+
+| Token | CSS Variable | Description |
+|-------|-------------|-------------|
+| Medium box shadow | `--_box-shadow---md` | Default elevation |
+| Medium blur radius | `--_blur-radius---md` | Default blur |
+
+## Elevation modes
+
+Figma uses elevation modes to control shadow intensity:
+
+| Mode | Effect | Use case |
+|------|--------|----------|
+| Subtle | Minimal shadow | Default, clean |
+| Soft | Gentle shadow | Cards, surfaces |
+| Raised | Prominent shadow | Modals, dropdowns |

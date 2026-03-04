@@ -1,7 +1,33 @@
 <!--
   Manager Head — Load Poppins for Brik-branded sidebar/toolbar.
   This runs in the manager frame (separate from preview).
+  Also includes dark theme CSS for full-page theming.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /*
+   * Full-page theming — dark mode fallback CSS
+   *
+   * The preview decorator sets data-bds-dark="true" on the manager body.
+   * manager.tsx swaps the Storybook theme via addons.setConfig(), but
+   * some elements (search, sidebar tree, panels) need extra CSS overrides.
+   */
+  body[data-bds-dark="true"] [class*="sidebar"] input[type="text"],
+  body[data-bds-dark="true"] [class*="sidebar"] input[type="search"] {
+    background-color: #16213e !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+  }
+
+  body[data-bds-dark="true"] [class*="sidebar"] button:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  /* Smooth transition when switching themes */
+  body {
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+</style>

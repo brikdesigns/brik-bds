@@ -1101,7 +1101,35 @@
   },
   "icon": {
     "$value": "Font Awesome Solid",
-    "$type": "text"
+    "$type": "text",
+    "tiny": {
+      "$value": "{font-size.50}",
+      "$type": "number"
+    },
+    "xs": {
+      "$value": "{font-size.75}",
+      "$type": "number"
+    },
+    "md": {
+      "$value": "{font-size.200}",
+      "$type": "number"
+    },
+    "sm": {
+      "$value": "{font-size.100}",
+      "$type": "number"
+    },
+    "lg": {
+      "$value": "{font-size.300}",
+      "$type": "number"
+    },
+    "xl": {
+      "$value": "{font-size.400}",
+      "$type": "number"
+    },
+    "huge": {
+      "$value": "{font-size.500}",
+      "$type": "number"
+    }
   },
   "lg": {
     "$value": "2px",

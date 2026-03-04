@@ -1,0 +1,34 @@
+import { Meta } from '@storybook/blocks';
+import { BorderRadiusPreview } from './_components';
+import { borderRadiusScale } from '../../tokens';
+
+<Meta title="Foundation/Border Radius" />
+
+# Border radius
+
+Border radius tokens control corner rounding. The system supports modes from sharp (0px) to pill (999px).
+
+## Radius scale (primitives)
+
+<BorderRadiusPreview scale={borderRadiusScale} prefix="--border-radius" />
+
+## Semantic radius tokens
+
+| Token | CSS Variable | Description |
+|-------|-------------|-------------|
+| None | `--_border-radius---none` | No rounding (0px) |
+| Small | `--_border-radius---sm` | Subtle rounding |
+| Medium | `--_border-radius---md` | Default component radius |
+| Large | `--_border-radius---lg` | Prominent rounding |
+| Button | `--_border-radius---button` | Button-specific radius |
+
+## Radius modes
+
+Figma uses border-radius modes to control the overall feel:
+
+| Mode | Effect | Use case |
+|------|--------|----------|
+| Sharp | All radii near 0 | Corporate, minimal |
+| Soft | Moderate radii | Default, balanced |
+| Round | Generous radii | Friendly, modern |
+| Pill | Maximum radii (999px) | Buttons, tags |

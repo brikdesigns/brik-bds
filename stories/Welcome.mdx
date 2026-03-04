@@ -4,22 +4,26 @@ import { Meta } from '@storybook/blocks';
 
 # Brik Design System
 
-The BDS component library provides themed React components powered by CSS custom properties. All components adapt automatically across 8 bundled themes.
+The BDS component library provides themed React components powered by CSS custom properties. All components adapt automatically across 9 bundled themes.
 
 ## Theme switching
 
-Use the paintbrush icon in the toolbar above to switch between themes. Every component on every page will update in real time.
+Use the paintbrush icon in the toolbar above to switch between themes. Every component and documentation page updates in real time — including the sidebar when switching to dark themes.
 
-| Theme | Description |
-|-------|-------------|
-| 1 | Spacious (Playfair Display) |
-| 2 | Yellow-Orange (Dark mode) |
-| 3 | Blue-Green (Light) |
-| 4 | Yellow-Orange (Light) |
-| 5 | Peach-Brown |
-| 6 | Pastel (Geist) |
-| 7 | Yellow-Brown (Lato) |
-| 8 | Vibrant (Playfair Display) |
+## Foundation
+
+Design tokens are the atomic visual decisions that power BDS. Explore each category:
+
+| Category | Description |
+|----------|-------------|
+| [Design Tokens](?path=/docs/foundation-design-tokens--docs) | Architecture overview, naming convention, multi-platform outputs |
+| [Color](?path=/docs/foundation-color--docs) | Grayscale, theme palettes, semantic color roles |
+| [Typography](?path=/docs/foundation-typography--docs) | Font families, sizes, weights, line heights |
+| [Spacing](?path=/docs/foundation-spacing--docs) | Space and gap scales, semantic padding tokens |
+| [Border Radius](?path=/docs/foundation-border-radius--docs) | Radius scale and modes |
+| [Border Width](?path=/docs/foundation-border-width--docs) | Width scale and semantic widths |
+| [Shadow](?path=/docs/foundation-shadow--docs) | Blur, spread, elevation |
+| [Size](?path=/docs/foundation-size--docs) | Size scale, breakpoints, containers |
 
 ## Token system
 
@@ -29,39 +33,30 @@ Components use CSS variables from the Webflow export. The naming convention is:
 --_[category]---[type]--[variant]
 ```
 
-Examples:
+**Primitives** (raw scale values, never in components):
+- `--space--400` — 16px
+- `--font-size--700` — 32px
+- `--grayscale--darkest` — #333
 
+**Semantic** (purpose-bound, used in components):
 - `--_color---background--brand-primary` — brand background color
 - `--_typography---font-family--heading` — heading font family
-- `--_space---lg` — large spacing value (16px base)
+- `--_space---lg` — large spacing value
 - `--_border-radius---button` — button corner radius
 
-## Component categories
+## Components
 
 ### Data display
-- **Badge** — status indicators and labels
-- **Tag** — categorization and filtering labels
-- **Dot** — small status indicator circles
-- **Avatar** — user profile images with fallback initials
-- **Tooltip** — contextual information on hover
+Badge, Tag, Dot, Avatar, Tooltip, Counter
 
 ### Form controls
-- **Button** — primary actions and navigation
-- **Input** — text input fields with labels
-- **Textarea** — multi-line text input
-- **Select** — dropdown selection
-- **Checkbox** — binary selection
-- **Radio** — single selection from a group
-- **Switch** — toggle on/off states
+Button, TextInput, TextArea, Select, Checkbox, Radio, Switch, SearchInput, AddressInput, FilterButton
 
 ### Layout
-- **Card** — content containers with header, body, and footer
-- **Table** — data tables with sortable headers
-- **Modal** — dialog overlays
+Card, CardControl, Table, Modal, Accordion, Menu, PageHeader
 
 ### Feedback
-- **Spinner** — loading indicator
-- **Skeleton** — content placeholder with shimmer animation
+Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner
 
 ### Navigation
-- **Link** — styled anchor elements
+TextLink, TabBar, Breadcrumb, Pagination, SidebarNavigation
