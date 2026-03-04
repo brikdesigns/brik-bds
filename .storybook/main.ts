@@ -26,6 +26,9 @@ const config: StorybookConfig = {
       },
     },
   },
+  tags: {
+    wip: { excludeFromSidebar: true },
+  },
   docs: {
     defaultName: 'Overview',
   },
