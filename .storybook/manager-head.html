@@ -1,33 +1,37 @@
 <!--
-  Manager Head — Load Poppins for Brik-branded sidebar/toolbar.
+  Manager Head — Load all theme fonts for immersive sidebar/toolbar theming.
   This runs in the manager frame (separate from preview).
-  Also includes dark theme CSS for full-page theming.
+
+  Fonts used by themes:
+  - Poppins (Brik brand)
+  - Open Sans (Default, Peach)
+  - Source Sans 3 (Blue, Minimal)
+  - Hind (Gold, Warm, Vibrant)
+  - Lato (Gold, Warm) — loaded from local @font-face in preview
+  - IBM Plex Sans (Blue, Minimal)
+  - Playfair Display (Vibrant)
+  - Newsreader (Peach)
+  - Geist / Geist Mono (Dark) — loaded via npm, not Google Fonts
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&family=Hind:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Newsreader:wght@400;600;700&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
-  /*
-   * Full-page theming — dark mode fallback CSS
-   *
-   * The preview decorator sets data-bds-dark="true" on the manager body.
-   * manager.tsx swaps the Storybook theme via addons.setConfig(), but
-   * some elements (search, sidebar tree, panels) need extra CSS overrides.
-   */
-  body[data-bds-dark="true"] [class*="sidebar"] input[type="text"],
-  body[data-bds-dark="true"] [class*="sidebar"] input[type="search"] {
-    background-color: #16213e !important;
-    color: #e0e0e0 !important;
-    border-color: #333 !important;
-  }
-
-  body[data-bds-dark="true"] [class*="sidebar"] button:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-  }
-
   /* Smooth transition when switching themes */
   body {
     transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  /* Dark theme overrides for elements Storybook's create() API doesn't reach */
+  body[data-bds-theme="2"] [class*="sidebar"] input[type="text"],
+  body[data-bds-theme="2"] [class*="sidebar"] input[type="search"] {
+    background-color: #333 !important;
+    color: #f2f2f2 !important;
+    border-color: #828282 !important;
+  }
+
+  body[data-bds-theme="2"] [class*="sidebar"] button:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
   }
 </style>

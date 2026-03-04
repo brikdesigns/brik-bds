@@ -372,16 +372,17 @@ function generateThemesCSS(tokens) {
 `;
 
   // Map theme numbers to friendly names for documentation
+  // Verified against actual CSS color palettes in Webflow export
   const themeNames = {
-    'theme-1': 'Blue-Green (Default Light)',
-    'theme-2': 'Yellow-Orange (Dark)',
-    'theme-3': 'Peach-Brown',
-    'theme-4': 'Yellow-Brown',
-    'theme-5': 'Green-Orange',
-    'theme-6': 'Blue-Orange',
-    'theme-7': 'Neon',
+    'theme-1': 'Default (Light)',
+    'theme-2': 'Dark',
+    'theme-3': 'Blue',
+    'theme-4': 'Gold',
+    'theme-5': 'Peach',
+    'theme-6': 'Minimal',
+    'theme-7': 'Warm',
     'theme-8': 'Vibrant',
-    'theme-brik': 'Brik Designs Brand',
+    'theme-brik': 'Brik Brand',
   };
 
   for (const [themeClass, vars] of Object.entries(tokens.themeClasses)) {
@@ -495,15 +496,17 @@ function generateTypeScript(tokens) {
 
 /**
  * Available theme identifiers (maps to .theme-X classes)
- * - theme-1: Blue-Green (Default Light)
- * - theme-2: Yellow-Orange (Dark)
- * - theme-3: Peach-Brown
- * - theme-4: Yellow-Brown
- * - theme-5: Green-Orange
- * - theme-6: Blue-Orange
- * - theme-7: Neon
- * - theme-8: Vibrant
- * - theme-brik: Brik Designs Brand
+ * Verified against actual Webflow CSS color palettes.
+ *
+ * - theme-1: Default (Light) — :root defaults, blue-green accents
+ * - theme-2: Dark — yellow-orange accents, Geist fonts
+ * - theme-3: Blue — blue-green accents, IBM Plex Sans
+ * - theme-4: Gold — yellow-orange light, Lato
+ * - theme-5: Peach — peach-brown tones, Newsreader
+ * - theme-6: Minimal — typography-only variant, IBM Plex Sans
+ * - theme-7: Warm — tan earth tones, Lato
+ * - theme-8: Vibrant — green/purple accents, Playfair Display
+ * - theme-brik: Brik Brand — poppy red, Poppins
  */
 export type ThemeNumber = ${themeNumbers.map(n => `'${n}'`).join(' | ')};
 
@@ -552,17 +555,18 @@ export const defaultTheme: BDSThemeConfig = {
 
 /**
  * Theme metadata for UI display
+ * Verified against actual CSS color palettes in Webflow export.
  */
 export const themeMetadata: Record<ThemeNumber, { name: string; description: string; isDark: boolean }> = {
-  '1': { name: 'Blue-Green', description: 'Default light theme with blue/green accents', isDark: false },
-  '2': { name: 'Yellow-Orange', description: 'Dark theme with yellow/orange accents', isDark: true },
-  '3': { name: 'Peach-Brown', description: 'Warm earthy tones', isDark: false },
-  '4': { name: 'Yellow-Brown', description: 'Golden warm tones', isDark: false },
-  '5': { name: 'Green-Orange', description: 'Nature-inspired palette', isDark: false },
-  '6': { name: 'Blue-Orange', description: 'Complementary contrast', isDark: false },
-  '7': { name: 'Neon', description: 'Vibrant neon colors', isDark: true },
-  '8': { name: 'Vibrant', description: 'Bold saturated colors', isDark: false },
-  'brik': { name: 'Brik Designs', description: 'Company brand theme — poppy red, near-black, tan', isDark: false },
+  '1': { name: 'Default', description: 'Base light theme with blue-green accents (Open Sans)', isDark: false },
+  '2': { name: 'Dark', description: 'Dark mode with yellow-orange accents (Geist)', isDark: true },
+  '3': { name: 'Blue', description: 'Clean blue accents (IBM Plex Sans / Source Sans 3)', isDark: false },
+  '4': { name: 'Gold', description: 'Yellow-orange light accents (Lato / Hind)', isDark: false },
+  '5': { name: 'Peach', description: 'Warm peach-brown tones (Newsreader / Open Sans)', isDark: false },
+  '6': { name: 'Minimal', description: 'Typography variant, default colors (IBM Plex Sans)', isDark: false },
+  '7': { name: 'Warm', description: 'Tan earth tones (Lato / Hind)', isDark: false },
+  '8': { name: 'Vibrant', description: 'Bold green and purple accents (Playfair Display / Hind)', isDark: false },
+  'brik': { name: 'Brik Brand', description: 'Company brand — poppy red, near-black, tan (Poppins)', isDark: false },
 };
 
 /**
@@ -647,6 +651,181 @@ export const semanticSpace = ${JSON.stringify(tokens.semantic.space, null, 2)} a
  * Semantic typography tokens (default values)
  */
 export const semanticTypography = ${JSON.stringify(tokens.semantic.typography, null, 2)} as const;
+`;
+
+  return ts;
+}
+
+// ============================================
+// STORYBOOK THEME GENERATION
+// ============================================
+
+/**
+ * Build a flat map of all primitive CSS variable names to resolved hex values.
+ * Used to resolve var() references in theme definitions to final values.
+ */
+function buildResolutionMap(tokens) {
+  const map = {};
+
+  // Grayscale: --grayscale--X → hex
+  for (const [name, value] of Object.entries(tokens.primitives.grayscale)) {
+    map[`grayscale--${name}`] = value;
+  }
+
+  // Theme palettes: --themes--palette--color → hex
+  // Also map the Webflow internal prefix: --_themes---palette--color → hex
+  for (const [palette, colors] of Object.entries(tokens.primitives.themes)) {
+    for (const [colorName, value] of Object.entries(colors)) {
+      map[`themes--${palette}--${colorName}`] = value;
+      map[`_themes---${palette}--${colorName}`] = value;
+    }
+  }
+
+  return map;
+}
+
+/**
+ * Resolve a CSS value that may contain var() references to a final value.
+ * Handles: var(--grayscale--light), var(--themes--peach-brown--peach-lightest),
+ * var(--_themes---blue-green--blue-light), and literal values like #333, white, black.
+ */
+function resolveVar(value, resolutionMap) {
+  if (!value) return value;
+
+  // Already a resolved value (hex, named color, etc.)
+  const varMatch = value.match(/var\(--([^)]+)\)/);
+  if (!varMatch) return value;
+
+  const varName = varMatch[1];
+  const resolved = resolutionMap[varName];
+  if (resolved) return resolved;
+
+  // Fallback: return the raw value (shouldn't happen for color tokens)
+  return value;
+}
+
+/**
+ * Extract the first font family name from a CSS font-family value.
+ * e.g. '"Playfair Display", sans-serif' → 'Playfair Display'
+ */
+function extractFontFamily(value) {
+  if (!value) return null;
+  const match = value.match(/["']?([^"',]+)["']?/);
+  return match ? match[1].trim() : null;
+}
+
+/**
+ * Generate storybook-themes.ts with pre-computed resolved hex values
+ * for each BDS theme, mapped to Storybook's create() API properties.
+ */
+function generateStorybookThemes(tokens) {
+  const resMap = buildResolutionMap(tokens);
+
+  // Default semantic values from :root (used when themes don't override)
+  const defaults = {};
+  for (const [name, value] of Object.entries(tokens.semantic.color)) {
+    defaults[`color--${name}`] = resolveVar(value, resMap);
+  }
+  for (const [name, value] of Object.entries(tokens.semantic.typography)) {
+    defaults[`typography--${name}`] = value; // Font families are literal strings
+  }
+
+  // Theme metadata (must match themeNames in generateThemesCSS)
+  const themeMeta = {
+    '1': { name: 'Default', isDark: false },
+    '2': { name: 'Dark', isDark: true },
+    '3': { name: 'Blue', isDark: false },
+    '4': { name: 'Gold', isDark: false },
+    '5': { name: 'Peach', isDark: false },
+    '6': { name: 'Minimal', isDark: false },
+    '7': { name: 'Warm', isDark: false },
+    '8': { name: 'Vibrant', isDark: false },
+    'brik': { name: 'Brik Brand', isDark: false },
+  };
+
+  // For each theme, resolve color overrides and build Storybook theme config
+  const sbThemes = {};
+
+  for (const [themeClass, vars] of Object.entries(tokens.themeClasses)) {
+    const themeNum = themeClass.replace('theme-', '');
+    const meta = themeMeta[themeNum] || { name: themeClass, isDark: false };
+
+    // Build resolved color map: start with defaults, overlay theme overrides
+    const resolved = { ...defaults };
+    for (const [varName, rawValue] of Object.entries(vars)) {
+      if (varName.startsWith('_color---')) {
+        const name = `color--${varName.replace('_color---', '')}`;
+        resolved[name] = resolveVar(rawValue, resMap);
+      } else if (varName.startsWith('_typography---')) {
+        const name = `typography--${varName.replace('_typography---', '')}`;
+        resolved[name] = rawValue;
+      }
+    }
+
+    // Map BDS tokens → Storybook create() properties
+    const fontBase = resolved['typography--font-family--body']
+      || defaults['typography--font-family--body']
+      || '"Open Sans", sans-serif';
+
+    sbThemes[themeNum] = {
+      base: meta.isDark ? 'dark' : 'light',
+      name: meta.name,
+      colorPrimary: resolved['color--theme--primary'] || '#4665f5',
+      colorSecondary: resolved['color--theme--primary'] || '#4665f5',
+      appBg: resolved['color--page--primary'] || '#ffffff',
+      appContentBg: resolved['color--surface--primary'] || '#ffffff',
+      appPreviewBg: 'transparent',
+      appBorderColor: resolved['color--border--secondary'] || '#e0e0e0',
+      textColor: resolved['color--text--primary'] || '#333333',
+      textInverseColor: resolved['color--text--inverse'] || '#ffffff',
+      textMutedColor: resolved['color--text--muted'] || '#828282',
+      barTextColor: resolved['color--text--muted'] || '#828282',
+      barSelectedColor: resolved['color--theme--primary'] || '#4665f5',
+      barHoverColor: resolved['color--theme--primary'] || '#4665f5',
+      barBg: resolved['color--surface--nav'] || '#ffffff',
+      inputBg: resolved['color--background--input'] || '#ffffff',
+      inputBorder: resolved['color--border--input'] || '#bdbdbd',
+      inputTextColor: resolved['color--text--primary'] || '#333333',
+      fontBase: fontBase,
+    };
+  }
+
+  // Generate TypeScript output
+  let ts = `/**
+ * Storybook Manager Theme Configs
+ *
+ * Auto-generated — resolved hex values for each BDS theme,
+ * mapped to Storybook's create() API properties.
+ *
+ * Generated: ${new Date().toISOString()}
+ * DO NOT EDIT DIRECTLY - Run: node build.js
+ */
+
+import type { ThemeNumber } from './index';
+
+export interface StorybookThemeConfig {
+  base: 'light' | 'dark';
+  name: string;
+  colorPrimary: string;
+  colorSecondary: string;
+  appBg: string;
+  appContentBg: string;
+  appPreviewBg: string;
+  appBorderColor: string;
+  textColor: string;
+  textInverseColor: string;
+  textMutedColor: string;
+  barTextColor: string;
+  barSelectedColor: string;
+  barHoverColor: string;
+  barBg: string;
+  inputBg: string;
+  inputBorder: string;
+  inputTextColor: string;
+  fontBase: string;
+}
+
+export const storybookThemes: Record<ThemeNumber, StorybookThemeConfig> = ${JSON.stringify(sbThemes, null, 2)};
 `;
 
   return ts;
@@ -766,8 +945,15 @@ const typescript = generateTypeScript(tokens);
 fs.writeFileSync(path.join(OUTPUT_DIR, 'index.ts'), typescript);
 console.log('   ✅ index.ts written');
 
+// Generate storybook-themes.ts (resolved hex values for manager frame)
+console.log('📦 Generating storybook-themes.ts...');
+const sbThemes = generateStorybookThemes(tokens);
+fs.writeFileSync(path.join(OUTPUT_DIR, 'storybook-themes.ts'), sbThemes);
+console.log('   ✅ storybook-themes.ts written');
+
 console.log('\n✨ Token build complete!\n');
 console.log('Files generated:');
 console.log(`  - ${path.join(OUTPUT_DIR, 'variables.css')}`);
 console.log(`  - ${path.join(OUTPUT_DIR, 'themes.css')}`);
 console.log(`  - ${path.join(OUTPUT_DIR, 'index.ts')}`);
+console.log(`  - ${path.join(OUTPUT_DIR, 'storybook-themes.ts')}`);

@@ -36,12 +36,11 @@ const withTheme: Decorator = (Story, context) => {
     // .body.theme-X matches our CSS selectors in themes.css
     body.classList.add('body', `theme-${themeNumber}`);
 
-    // Theme manager frame (same-origin iframe → parent access)
+    // Sync theme to manager frame for immersive sidebar/toolbar theming.
+    // manager.tsx watches data-bds-theme and swaps the full Storybook theme.
     try {
       const parentBody = window.parent.document.body;
       parentBody.setAttribute('data-bds-theme', themeNumber);
-      const isDark = ['brik-dark', '2', '7'].includes(themeNumber);
-      parentBody.setAttribute('data-bds-dark', String(isDark));
     } catch {
       // Cross-origin (Chromatic, etc.) — skip silently
     }
@@ -81,19 +80,18 @@ const preview: Preview = {
       toolbar: {
         icon: 'paintbrush',
         items: [
-          // Brik
-          { value: 'brik', title: 'Brik: Brik Light (Default)' },
-          { value: 'brik-dark', title: 'Brik: Brik Dark' },
-          // Expressive
-          { value: '1', title: '1: Peach (Open Sans)' },
-          { value: '2', title: '2: Pastel (Source Sans)' },
-          { value: '3', title: '3: Luxury (Hind)' },
-          { value: '4', title: '4: Vibrant (Playfair Display)' },
-          // Modern
-          { value: '5', title: '5: White (Open Sans)' },
-          { value: '6', title: '6: Black (Geist Mono)' },
-          { value: '7', title: '7: Blue (Source Sans)' },
-          { value: '8', title: '8: Yellow (Hind)' },
+          // Brik brand
+          { value: 'brik', title: 'Brik Brand (Poppins)' },
+          // Light themes
+          { value: '1', title: '1: Default (Open Sans)' },
+          { value: '3', title: '3: Blue (Source Sans 3)' },
+          { value: '4', title: '4: Gold (Hind / Lato)' },
+          { value: '5', title: '5: Peach (Open Sans / Newsreader)' },
+          { value: '6', title: '6: Minimal (Source Sans 3)' },
+          { value: '7', title: '7: Warm (Hind / Lato)' },
+          { value: '8', title: '8: Vibrant (Hind / Playfair)' },
+          // Dark theme
+          { value: '2', title: '2: Dark (Geist)' },
         ],
         dynamicTitle: true,
       },
