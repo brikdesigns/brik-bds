@@ -28,7 +28,10 @@ const withTheme: Decorator = (Story, context) => {
 
   // Apply theme classes to the preview iframe <body> so CSS variables
   // cascade to the entire page — docs wrapper, headings, args table, etc.
-  // Also sync to manager frame for full-page theming (sidebar + toolbar).
+  //
+  // Manager theming is handled primarily by the channel API in manager.tsx
+  // (listens to GLOBALS_UPDATED). The parent bridge below is a fallback
+  // for initial load and edge cases where the channel event is missed.
   useEffect(() => {
     const body = document.body;
     // Strip any previous theme class
@@ -36,11 +39,10 @@ const withTheme: Decorator = (Story, context) => {
     // .body.theme-X matches our CSS selectors in themes.css
     body.classList.add('body', `theme-${themeNumber}`);
 
-    // Sync theme to manager frame for immersive sidebar/toolbar theming.
-    // manager.tsx watches data-bds-theme and swaps the full Storybook theme.
+    // Fallback: sync to manager frame via DOM attribute.
+    // manager.tsx MutationObserver picks this up if channel event was missed.
     try {
-      const parentBody = window.parent.document.body;
-      parentBody.setAttribute('data-bds-theme', themeNumber);
+      window.parent.document.body.setAttribute('data-bds-theme', themeNumber);
     } catch {
       // Cross-origin (Chromatic, etc.) — skip silently
     }

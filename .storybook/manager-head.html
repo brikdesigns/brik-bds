@@ -1,37 +1,155 @@
 <!--
-  Manager Head — Load all theme fonts for immersive sidebar/toolbar theming.
-  This runs in the manager frame (separate from preview).
+  Manager Head — Immersive Storybook Theming
 
-  Fonts used by themes:
-  - Poppins (Brik brand)
-  - Open Sans (Default, Peach)
-  - Source Sans 3 (Blue, Minimal)
-  - Hind (Gold, Warm, Vibrant)
-  - Lato (Gold, Warm) — loaded from local @font-face in preview
-  - IBM Plex Sans (Blue, Minimal)
-  - Playfair Display (Vibrant)
-  - Newsreader (Peach)
-  - Geist / Geist Mono (Dark) — loaded via npm, not Google Fonts
+  Two mechanisms work together:
+  1. manager.tsx sets --sb-* CSS custom properties on <body> (instant)
+  2. This CSS references those variables to style the full chrome
+
+  Fonts are loaded here because the manager frame is separate from preview.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&family=Hind:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Newsreader:wght@400;600;700&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
-  /* Smooth transition when switching themes */
-  body {
-    transition: background-color 200ms ease, color 200ms ease;
+  /* ============================================
+     SMOOTH TRANSITIONS
+     ============================================ */
+  body,
+  body * {
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
   }
 
-  /* Dark theme overrides for elements Storybook's create() API doesn't reach */
-  body[data-bds-theme="2"] [class*="sidebar"] input[type="text"],
-  body[data-bds-theme="2"] [class*="sidebar"] input[type="search"] {
-    background-color: #333 !important;
-    color: #f2f2f2 !important;
-    border-color: #828282 !important;
+  /* ============================================
+     SIDEBAR — Background, text, font
+     ============================================ */
+  /* Sidebar container (Storybook uses emotion CSS with hashed classes) */
+  [class*="sidebar"] {
+    background-color: var(--sb-app-bg, white) !important;
+    color: var(--sb-text-color, #333) !important;
+    font-family: var(--sb-font-base, sans-serif) !important;
   }
 
-  body[data-bds-theme="2"] [class*="sidebar"] button:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+  /* Sidebar nav tree items */
+  [class*="sidebar"] button,
+  [class*="sidebar"] a {
+    color: var(--sb-text-color, #333) !important;
+    font-family: var(--sb-font-base, sans-serif) !important;
+  }
+
+  [class*="sidebar"] button:hover,
+  [class*="sidebar"] a:hover {
+    color: var(--sb-bar-selected, #4665f5) !important;
+    background-color: color-mix(in srgb, var(--sb-text-color, #333) 5%, transparent) !important;
+  }
+
+  /* Sidebar search input */
+  [class*="sidebar"] input[type="text"],
+  [class*="sidebar"] input[type="search"] {
+    background-color: var(--sb-input-bg, white) !important;
+    color: var(--sb-input-text, #333) !important;
+    border-color: var(--sb-input-border, #bdbdbd) !important;
+    font-family: var(--sb-font-base, sans-serif) !important;
+  }
+
+  [class*="sidebar"] input::placeholder {
+    color: var(--sb-text-muted, #828282) !important;
+  }
+
+  /* Sidebar group headings */
+  [class*="sidebar"] [class*="GroupHeading"],
+  [class*="sidebar"] [class*="heading"] {
+    color: var(--sb-text-muted, #828282) !important;
+    font-family: var(--sb-font-base, sans-serif) !important;
+  }
+
+  /* Active/selected sidebar item */
+  [class*="sidebar"] [data-selected="true"],
+  [class*="sidebar"] [aria-current="true"] {
+    color: var(--sb-bar-selected, #4665f5) !important;
+  }
+
+  /* ============================================
+     TOOLBAR — Top bar with controls
+     ============================================ */
+  .sb-bar {
+    background-color: var(--sb-bar-bg, white) !important;
+    border-color: var(--sb-border-color, #e0e0e0) !important;
+    font-family: var(--sb-font-base, sans-serif) !important;
+  }
+
+  .sb-bar button,
+  .sb-bar a {
+    color: var(--sb-bar-text, #828282) !important;
+  }
+
+  .sb-bar button:hover,
+  .sb-bar a:hover {
+    color: var(--sb-bar-hover, #4665f5) !important;
+  }
+
+  .sb-bar button[class*="active"],
+  .sb-bar button[aria-pressed="true"] {
+    color: var(--sb-bar-selected, #4665f5) !important;
+  }
+
+  /* Toolbar separator */
+  .sb-bar [class*="separator"] {
+    border-color: var(--sb-border-color, #e0e0e0) !important;
+  }
+
+  /* ============================================
+     ADDON PANELS — Bottom panel area
+     ============================================ */
+  [class*="tabbutton"] {
+    color: var(--sb-bar-text, #828282) !important;
+    font-family: var(--sb-font-base, sans-serif) !important;
+  }
+
+  [class*="tabbutton"]:hover {
+    color: var(--sb-bar-hover, #4665f5) !important;
+  }
+
+  [class*="tabbutton"][class*="selected"],
+  [class*="tabbutton"][aria-selected="true"] {
+    color: var(--sb-bar-selected, #4665f5) !important;
+  }
+
+  /* Panel content area */
+  [class*="panelInner"],
+  [class*="ActionBar"] {
+    background-color: var(--sb-content-bg, white) !important;
+    color: var(--sb-text-color, #333) !important;
+  }
+
+  /* ============================================
+     DARK THEME — Additional overrides
+     Storybook's emotion CSS fights harder on dark,
+     so we use the data attribute for specificity.
+     ============================================ */
+  body[data-bds-dark="true"] {
+    color-scheme: dark;
+  }
+
+  body[data-bds-dark="true"] [class*="sidebar"],
+  body[data-bds-dark="true"] .sb-bar {
+    border-color: var(--sb-border-color, #444) !important;
+  }
+
+  /* Dark mode scrollbar */
+  body[data-bds-dark="true"] ::-webkit-scrollbar-track {
+    background: var(--sb-app-bg, black);
+  }
+
+  body[data-bds-dark="true"] ::-webkit-scrollbar-thumb {
+    background: var(--sb-text-muted, #555);
+    border-radius: 4px;
+  }
+
+  /* ============================================
+     LOGO AREA — Brand image container
+     ============================================ */
+  [class*="sidebar"] [class*="Head"] {
+    background-color: var(--sb-app-bg, white) !important;
   }
 </style>
