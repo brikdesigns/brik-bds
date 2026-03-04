@@ -7,37 +7,62 @@
  */
 
 /* ============================================
-   CODE BLOCK STYLING - Override blue backgrounds
+   CODE BLOCK STYLING
    ============================================ */
 
-/* Target all code-related elements - using design tokens */
+/* Code blocks — dark background with light text */
 pre,
-code,
 .docblock-source,
-.docblock-code-toggle,
 .docs-story pre,
-.docs-story code,
 [class*="docblock"] pre,
-[class*="docblock"] code,
 .sbdocs pre,
-.sbdocs code,
 .sb-story pre,
-.sb-story code,
 div[class*="Source"] pre,
-div[class*="Source"] code,
-.prismjs,
-[class*="language-"] {
-  background-color: var(--grayscale--darkest, #333) !important;
-  color: var(--grayscale--lightest, #f2f2f2) !important;
+.prismjs {
+  background-color: #1e1e1e !important;
+  color: #d4d4d4 !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  border-radius: 6px !important;
+  text-shadow: none !important;
+}
+
+/* Inline code — subtle background, respects theme text color */
+code:not([class*="language-"]):not(pre code) {
+  background-color: rgba(128, 128, 128, 0.15) !important;
+  color: inherit !important;
+  padding: 0.15em 0.4em !important;
+  border-radius: 3px !important;
+  font-size: 0.9em !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
 }
 
-/* Ensure pre blocks don't inherit brand colors */
-pre[class*="language-"],
-code[class*="language-"] {
-  background: var(--grayscale--darkest, #333) !important;
-  color: var(--grayscale--lightest, #f2f2f2) !important;
+/* Code inside pre blocks */
+pre code,
+pre[class*="language-"] code,
+div[class*="Source"] code {
+  background: transparent !important;
+  color: #d4d4d4 !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
   text-shadow: none !important;
+}
+
+/* "Show code" button container — clean border, proper contrast */
+div[class*="Source"] {
+  background-color: transparent !important;
+  border: 1px solid var(--_color---border--secondary, #e0e0e0) !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+}
+
+/* "Show code" toggle button */
+div[class*="Source"] button,
+.docblock-code-toggle {
+  background-color: var(--_color---surface--secondary, #f5f5f5) !important;
+  color: var(--_color---text--secondary, #666) !important;
+  border-top: 1px solid var(--_color---border--secondary, #e0e0e0) !important;
+  font-family: var(--_typography---font-family--label, sans-serif) !important;
+  font-size: 12px !important;
+  padding: 6px 12px !important;
 }
 
 /* ============================================
@@ -214,12 +239,6 @@ div[class*="ArgTypes"] td p {
   color: var(--_color---text--brand) !important;
 }
 
-/* Show/hide code toggle button */
-div[class*="Source"] button,
-.docblock-code-toggle {
-  color: var(--_color---text--muted) !important;
-}
-
 /* ============================================
    SPACING MODE - Reset to Base mode (not Spacious)
 
@@ -265,7 +284,7 @@ div[class*="Source"] button,
 }
 
 /* ============================================
-   SYNTAX HIGHLIGHTING - Fix token colors
+   SYNTAX HIGHLIGHTING — VS Code Dark+ palette
    ============================================ */
 
 .token.tag { color: #569cd6 !important; background: transparent !important; }
@@ -277,18 +296,75 @@ div[class*="Source"] button,
 .token.function { color: #dcdcaa !important; background: transparent !important; }
 .token.operator { color: #d4d4d4 !important; background: transparent !important; }
 .token.comment { color: #6a9955 !important; background: transparent !important; }
+.token.number { color: #b5cea8 !important; background: transparent !important; }
+.token.boolean { color: #569cd6 !important; background: transparent !important; }
+.token.property { color: #9cdcfe !important; background: transparent !important; }
+.token.class-name { color: #4ec9b0 !important; background: transparent !important; }
 
 /* ============================================
-   STORYBOOK UI - Protect from Webflow styles
+   DOCS PAGE LAYOUT — Breathing room between sections
+   Clarity DS uses generous vertical rhythm for readability.
    ============================================ */
 
-/* Toolbar and sidebar shouldn't inherit Webflow styles */
-.sb-bar,
-[class*="sidebar"],
-[class*="tabbutton"],
-button[class*="IconButton"],
-.sidebar-container,
-nav[class*="sidebar"] {
-  background-color: inherit !important;
-  border-color: inherit !important;
+/* Increase spacing between major sections in docs */
+.sbdocs h1 {
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+}
+
+.sbdocs h2 {
+  margin-top: 48px !important;
+  margin-bottom: 16px !important;
+  padding-top: 24px !important;
+  border-top: 1px solid var(--_color---border--muted, #e0e0e0) !important;
+}
+
+/* First h2 after h1 shouldn't have extra top margin */
+.sbdocs h1 + h2 {
+  margin-top: 32px !important;
+  padding-top: 0 !important;
+  border-top: none !important;
+}
+
+.sbdocs h3 {
+  margin-top: 32px !important;
+  margin-bottom: 12px !important;
+}
+
+/* Paragraphs and lists — comfortable reading rhythm */
+.sbdocs p {
+  margin-bottom: 16px !important;
+  line-height: 1.7 !important;
+}
+
+.sbdocs ul,
+.sbdocs ol {
+  margin-bottom: 16px !important;
+}
+
+.sbdocs li {
+  margin-bottom: 4px !important;
+  line-height: 1.6 !important;
+}
+
+/* Tables — breathing room */
+.sbdocs table {
+  margin-top: 12px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Story preview blocks — space above and below */
+body.body .sbdocs-preview {
+  margin-top: 16px !important;
+  margin-bottom: 32px !important;
+}
+
+/* Component/token grids in Foundation pages — consistent spacing */
+.sbdocs > div {
+  margin-bottom: 24px !important;
+}
+
+/* Max width for comfortable reading */
+.sbdocs-content {
+  max-width: 980px !important;
 }
