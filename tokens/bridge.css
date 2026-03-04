@@ -1,0 +1,196 @@
+/*
+ * BDS Token Bridge
+ *
+ * Maps clean BDS token names to Webflow-internal token names.
+ * Import this AFTER tokens.css to make both naming systems resolve.
+ *
+ * Clean name (--color-*)              → used by Astro section components
+ * Webflow internal (--_color---*)     → used by BDS React components
+ *
+ * Load order:
+ *   1. @brikdesigns/bds/tokens.css    (defines --_color---* names)
+ *   2. @brikdesigns/bds/bridge.css    (this file — aliases --color-* to --_color---*)
+ *   3. @brikdesigns/bds/styles.css    (component CSS)
+ *   4. Your brand-overrides.css       (client theme)
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════
+     Color: Text
+     ═══════════════════════════════════════════════ */
+  --color-text-primary: var(--_color---text--primary);
+  --color-text-secondary: var(--_color---text--secondary);
+  --color-text-muted: var(--_color---text--muted);
+  --color-text-inverse: var(--_color---text--inverse);
+  --color-text-brand: var(--_color---text--brand);
+  --color-text-on-color-dark: var(--_color---text--on-color-dark);
+  --color-text-on-color-light: var(--_color---text--on-color-light);
+
+  /* ═══════════════════════════════════════════════
+     Color: Background
+     ═══════════════════════════════════════════════ */
+  --color-background-primary: var(--_color---background--primary);
+  --color-background-secondary: var(--_color---background--secondary);
+  --color-background-inverse: var(--_color---background--inverse);
+  --color-background-input: var(--_color---background--input);
+  --color-background-brand-primary: var(--_color---background--brand-primary);
+  --color-background-brand-secondary: var(--_color---background--brand-secondary);
+  --color-background-image: var(--_color---background--image);
+  --color-background-image-brand: var(--_color---background--image-brand);
+
+  /* ═══════════════════════════════════════════════
+     Color: Surface
+     ═══════════════════════════════════════════════ */
+  --color-surface-primary: var(--_color---surface--primary);
+  --color-surface-secondary: var(--_color---surface--secondary);
+  --color-surface-nav: var(--_color---surface--nav);
+  --color-surface-brand-primary: var(--_color---surface--brand-primary);
+  --color-surface-brand-secondary: var(--_color---surface--brand-secondary);
+
+  /* ═══════════════════════════════════════════════
+     Color: Border
+     ═══════════════════════════════════════════════ */
+  --color-border-primary: var(--_color---border--primary);
+  --color-border-secondary: var(--_color---border--secondary);
+  --color-border-muted: var(--_color---border--muted);
+  --color-border-brand: var(--_color---border--brand);
+  --color-border-input: var(--_color---border--input);
+  --color-border-inverse: var(--_color---border--inverse);
+  --color-border-on-color: var(--_color---border--on-color);
+
+  /* ═══════════════════════════════════════════════
+     Color: Page
+     ═══════════════════════════════════════════════ */
+  --color-page-primary: var(--_color---page--primary);
+  --color-page-secondary: var(--_color---page--secondary);
+  --color-page-brand: var(--_color---page--brand);
+
+  /* ═══════════════════════════════════════════════
+     Color: Theme
+     ═══════════════════════════════════════════════ */
+  --color-theme-primary: var(--_color---theme--primary);
+  --color-theme-secondary: var(--_color---theme--secondary);
+  --color-theme-tertiary: var(--_color---theme--tertiary);
+  --color-theme-accent: var(--_color---theme--accent);
+  --color-theme-fourth: var(--_color---theme--fourth);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Font Family
+     ═══════════════════════════════════════════════ */
+  --typography-font-family-body: var(--_typography---font-family--body);
+  --typography-font-family-label: var(--_typography---font-family--label);
+  --typography-font-family-heading: var(--_typography---font-family--heading);
+  --typography-font-family-display: var(--_typography---font-family--display);
+  --typography-font-family-icon: var(--_typography---font-family--icon);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Body Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-body-tiny: var(--_typography---body--tiny);
+  --typography-body-xs: var(--_typography---body--xs);
+  --typography-body-sm: var(--_typography---body--sm);
+  --typography-body-md-base: var(--_typography---body--md-base);
+  --typography-body-lg: var(--_typography---body--lg);
+  --typography-body-xl: var(--_typography---body--xl);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Label Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-label-sm: var(--_typography---label--sm);
+  --typography-label-md-base: var(--_typography---label--md-base);
+  --typography-label-lg: var(--_typography---label--lg);
+  --typography-label-xl: var(--_typography---label--xl);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Heading Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-heading-tiny: var(--_typography---heading--tiny);
+  --typography-heading-small: var(--_typography---heading--small);
+  --typography-heading-medium: var(--_typography---heading--medium);
+  --typography-heading-large: var(--_typography---heading--large);
+  --typography-heading-x-large: var(--_typography---heading--x-large);
+  --typography-heading-xx-large: var(--_typography---heading--xx-large);
+  --typography-heading-xxx-large: var(--_typography---heading--xxx-large);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Display Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-display-small: var(--_typography---display--small);
+  --typography-display-medium: var(--_typography---display--medium);
+  --typography-display-large: var(--_typography---display--large);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Icon Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-icon-small: var(--_typography---icon--small);
+  --typography-icon-medium-base: var(--_typography---icon--medium-base);
+  --typography-icon-large: var(--_typography---icon--large);
+
+  /* ═══════════════════════════════════════════════
+     Layout: Space
+     ═══════════════════════════════════════════════ */
+  --layout-none: var(--_space---none);
+  --layout-tiny: var(--_space---tiny);
+  --layout-sm: var(--_space---sm);
+  --layout-md: var(--_space---md);
+  --layout-lg: var(--_space---lg);
+  --layout-xl: var(--_space---xl);
+  --layout-xxl: var(--_space---xxl);
+  --layout-huge: var(--_space---huge);
+  --layout-button: var(--_space---button);
+  --layout-input: var(--_space---input);
+
+  /* ═══════════════════════════════════════════════
+     Layout: Gap
+     ═══════════════════════════════════════════════ */
+  --layout-gap-none: var(--_space---gap--none);
+  --layout-gap-tiny: var(--_space---gap--tiny);
+  --layout-gap-sm: var(--_space---gap--sm);
+  --layout-gap-md: var(--_space---gap--md);
+  --layout-gap-lg: var(--_space---gap--lg);
+  --layout-gap-xl: var(--_space---gap--xl);
+  --layout-gap-xxl: var(--_space---gap--xxl);
+  --layout-gap-huge: var(--_space---gap--huge);
+
+  /* ═══════════════════════════════════════════════
+     Size
+     ═══════════════════════════════════════════════ */
+  --size-none: var(--_size---none);
+  --size-tiny: var(--_size---tiny);
+  --size-sm: var(--_size---sm);
+  --size-md: var(--_size---md);
+  --size-lg: var(--_size---lg);
+  --size-xl: var(--_size---xl);
+  --size-xxl: var(--_size---xxl);
+  --size-huge: var(--_size---huge);
+
+  /* ═══════════════════════════════════════════════
+     Border Width
+     ═══════════════════════════════════════════════ */
+  --border-width-none: var(--_border-width---none);
+  --border-width-sm: var(--_border-width---sm);
+  --border-width-md: var(--_border-width---md);
+  --border-width-lg: var(--_border-width---lg);
+
+  /* ═══════════════════════════════════════════════
+     Border Radius
+     ═══════════════════════════════════════════════ */
+  --border-radius-none: var(--_border-radius---none);
+  --border-radius-sm: var(--_border-radius---sm);
+  --border-radius-md: var(--_border-radius---md);
+  --border-radius-lg: var(--_border-radius---lg);
+  --border-radius-input: var(--_border-radius---input);
+  --border-radius-button: var(--_border-radius---button);
+
+  /* ═══════════════════════════════════════════════
+     Shadow
+     ═══════════════════════════════════════════════ */
+  --box-shadow-none: var(--_box-shadow---none);
+  --box-shadow-sm: var(--_box-shadow---sm);
+  --box-shadow-md: var(--_box-shadow---md);
+  --box-shadow-lg: var(--_box-shadow---lg);
+  --blur-radius-none: var(--_blur-radius---none);
+  --blur-radius-sm: var(--_blur-radius---sm);
+  --blur-radius-md: var(--_blur-radius---md);
+  --blur-radius-lg: var(--_blur-radius---lg);
+}

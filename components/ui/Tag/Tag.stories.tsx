@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faArrowUpRightFromSquare, faTag, faCircle, faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { Tag } from './Tag';

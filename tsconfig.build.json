@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "declaration": true,
+    "declarationDir": "./dist",
+    "emitDeclarationOnly": true,
+    "rootDir": ".",
+    "outDir": "./dist",
+    "paths": {}
+  },
+  "include": [
+    "lib-entry.ts",
+    "components/**/*",
+    "tokens/index.ts",
+    "types/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "stories/**/*",
+    ".storybook/**/*",
+    "**/*.stories.tsx",
+    "**/*.mdx"
+  ]
+}

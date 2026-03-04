@@ -3,7 +3,7 @@
   publish = "storybook-static"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
 # ── Staging (branch deploys) ────────────────────────────────────────
 # Any push to `staging` branch auto-deploys to:

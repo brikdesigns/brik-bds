@@ -139,13 +139,19 @@ div[class*="docs-story"] {
   box-shadow: none !important;
 }
 
-/* SB8 — story containers inside anchor blocks.
+/* SB8 — story containers and their parent emotion wrappers.
    Doubled ID (#X#X) boosts specificity above Storybook's
    emotion CSS-in-JS which injects !important rules AFTER
    our static CSS loads. Without this, cascade order means
    emotion wins even though both use !important.
 
-   Specificity: (2,1,0,1) beats emotion's (0,1,0,0) */
+   :has() targets the emotion wrapper div (direct child of .sbdocs)
+   that CONTAINS a story anchor — this was previously unhandled,
+   allowing emotion backgrounds/margins to bleed through.
+
+   Specificity: (2,0,1,1) for :has(), (2,1,0,1) for descendants */
+#storybook-docs#storybook-docs > div:has(> [id^="anchor--"]),
+#storybook-docs#storybook-docs [id^="anchor--"],
 #storybook-docs#storybook-docs [id^="anchor--"] > div,
 #storybook-docs#storybook-docs [id^="anchor--"] > div > div,
 #storybook-docs#storybook-docs [id^="anchor--"] div[class^="css-"] {
@@ -379,8 +385,11 @@ div[class*="ArgTypes"] td p {
   margin-bottom: 32px !important;
 }
 
-/* Component/token grids in Foundation pages — consistent spacing */
-.sbdocs > div:not(.docs-story):not([class*="sbdocs-preview"]) {
+/* Docs content blocks — spacing between MDX custom elements.
+   Target only non-emotion wrapper divs (custom MDX blocks have
+   no class, while SB8 emotion wrappers have css-* classes).
+   Story anchor blocks are excluded via :not([id^="anchor--"]). */
+.sbdocs > div:not([class]):not([id^="anchor--"]) {
   margin-bottom: 24px !important;
 }
 
