@@ -25,19 +25,30 @@ import './storybook-overrides.css';
  */
 const withTheme: Decorator = (Story, context) => {
   const themeNumber = (context.globals.themeNumber || 'brik') as ThemeNumber;
+  const baseFont = (context.globals.baseFont || '16') as string;
+  const animations = (context.globals.animations || 'on') as string;
 
-  // Apply theme classes to the preview iframe <body> so CSS variables
-  // cascade to the entire page — docs wrapper, headings, args table, etc.
-  //
+  // Apply theme classes + toolbar globals to the preview iframe <body>.
   // Manager theming is handled primarily by the channel API in manager.tsx
-  // (listens to GLOBALS_UPDATED). The parent bridge below is a fallback
-  // for initial load and edge cases where the channel event is missed.
+  // (listens to globalsUpdated). The parent bridge below is a fallback.
   useEffect(() => {
     const body = document.body;
     // Strip any previous theme class
     body.className = body.className.replace(/\btheme-\S+/g, '');
     // .body.theme-X matches our CSS selectors in themes.css
     body.classList.add('body', `theme-${themeNumber}`);
+
+    // Base font size — scales all rem-based tokens
+    body.style.fontSize = `${baseFont}px`;
+
+    // Animations toggle
+    if (animations === 'off') {
+      body.style.setProperty('--bds-duration-multiplier', '0');
+      body.classList.add('bds-no-animations');
+    } else {
+      body.style.removeProperty('--bds-duration-multiplier');
+      body.classList.remove('bds-no-animations');
+    }
 
     // Fallback: sync to manager frame via DOM attribute.
     // manager.tsx MutationObserver picks this up if channel event was missed.
@@ -46,7 +57,7 @@ const withTheme: Decorator = (Story, context) => {
     } catch {
       // Cross-origin (Chromatic, etc.) — skip silently
     }
-  }, [themeNumber]);
+  }, [themeNumber, baseFont, animations]);
 
   // Docs mode: render story directly on the themed page — no wrapper,
   // no extra padding layers. The body bg IS the story bg.
@@ -76,11 +87,12 @@ const withTheme: Decorator = (Story, context) => {
 const preview: Preview = {
   globalTypes: {
     themeNumber: {
-      name: 'Theme',
+      name: 'Themes',
       description: 'BDS theme (bundled color, typography, spacing)',
       defaultValue: 'brik',
       toolbar: {
         icon: 'paintbrush',
+        showName: true,
         items: [
           // Brik brand
           { value: 'brik', title: 'Brik Brand (Poppins)' },
@@ -94,6 +106,36 @@ const preview: Preview = {
           { value: '8', title: '8: Vibrant (Hind / Playfair)' },
           // Dark theme
           { value: '2', title: '2: Dark (Geist)' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    baseFont: {
+      name: 'Base Font',
+      description: 'Root font size (scales all rem-based tokens)',
+      defaultValue: '16',
+      toolbar: {
+        icon: 'grow',
+        showName: true,
+        items: [
+          { value: '14', title: '14px' },
+          { value: '16', title: '16px' },
+          { value: '18', title: '18px' },
+          { value: '20', title: '20px' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    animations: {
+      name: 'Animations',
+      description: 'Toggle CSS animations and transitions',
+      defaultValue: 'on',
+      toolbar: {
+        icon: 'lightning',
+        showName: true,
+        items: [
+          { value: 'on', title: 'On' },
+          { value: 'off', title: 'Off' },
         ],
         dynamicTitle: true,
       },

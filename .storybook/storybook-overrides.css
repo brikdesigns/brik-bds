@@ -10,7 +10,7 @@
    CODE BLOCK STYLING
    ============================================ */
 
-/* Code blocks — dark background with light text */
+/* Code blocks — dark background with light text, tight padding */
 pre,
 .docblock-source,
 .docs-story pre,
@@ -24,6 +24,8 @@ div[class*="Source"] pre,
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
   border-radius: 6px !important;
   text-shadow: none !important;
+  margin: 0 !important;
+  padding: 16px !important;
 }
 
 /* Inline code — subtle background, respects theme text color */
@@ -165,15 +167,20 @@ div[class*="docs-story"] {
   border-radius: 0 !important;
 }
 
-/* Story preview container — themed via CSS variables.
-   .sbdocs-preview is a stable semantic class (not a hashed
-   emotion class), so we can target it directly.
-   body.body ensures variables resolve in the theme scope. */
-body.body .sbdocs-preview {
-  background-color: var(--_color---surface--primary) !important;
-  border: var(--_border-width---md) solid var(--_color---border--secondary) !important;
-  border-radius: 4px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+/* Story preview container — the component demo box in docs.
+   Doubled ID beats emotion's late-injected background.
+   Uses background shorthand to match emotion's shorthand property. */
+#storybook-docs#storybook-docs .sbdocs-preview {
+  background: var(--_color---surface--primary) !important;
+  border: 1px solid var(--_color---border--secondary, #e0e0e0) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  padding: 24px !important;
+}
+
+/* The .docs-story div inside the preview — ensure transparent */
+#storybook-docs#storybook-docs .sbdocs-preview .docs-story {
+  background: transparent !important;
 }
 
 /* ============================================
@@ -284,6 +291,19 @@ div[class*="ArgTypes"] td p {
 }
 
 /* ============================================
+   ANIMATIONS TOGGLE — Disable all motion when off
+   ============================================ */
+
+.bds-no-animations *,
+.bds-no-animations *::before,
+.bds-no-animations *::after {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+/* ============================================
    SYNTAX HIGHLIGHTING — VS Code Dark+ palette
    ============================================ */
 
@@ -354,7 +374,7 @@ div[class*="ArgTypes"] td p {
 }
 
 /* Story preview blocks — space above and below */
-body.body .sbdocs-preview {
+#storybook-docs#storybook-docs .sbdocs-preview {
   margin-top: 16px !important;
   margin-bottom: 32px !important;
 }
