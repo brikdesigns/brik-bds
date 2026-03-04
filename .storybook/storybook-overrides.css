@@ -380,7 +380,7 @@ div[class*="ArgTypes"] td p {
 }
 
 /* Component/token grids in Foundation pages — consistent spacing */
-.sbdocs > div {
+.sbdocs > div:not(.docs-story):not([class*="sbdocs-preview"]) {
   margin-bottom: 24px !important;
 }
 
