@@ -12,6 +12,9 @@ node_modules/
 # Storybook build output
 storybook-static/
 
+# Library build output
+dist/
+
 # OS files
 .DS_Store
 logs/

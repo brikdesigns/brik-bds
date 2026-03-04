@@ -84,6 +84,26 @@ function cleanTree(obj) {
     if (val && typeof val === 'object') {
       if (val.$value !== undefined) {
         result[key] = cleanToken(val);
+        // Handle collision: node is both a token AND a group (e.g. icon collection
+        // sets icon.$value while typography collection adds icon.tiny, icon.xs, etc.)
+        for (const [ck, cv] of Object.entries(val)) {
+          if (ck.startsWith('$')) continue;
+          if (cv && typeof cv === 'object') {
+            if (cv.$value !== undefined) {
+              result[key][ck] = cleanToken(cv);
+            } else {
+              const sub = cleanTree(cv);
+              if (Object.keys(sub).length > 0) {
+                result[key][ck] = sub;
+              }
+            }
+          }
+        }
+        // Warn about collision so it's visible in build output
+        const childKeys = Object.keys(result[key]).filter(k => !k.startsWith('$'));
+        if (childKeys.length > 0) {
+          console.warn(`  COLLISION: "${key}" is both a token ($value) and a group (${childKeys.length} children: ${childKeys.slice(0, 3).join(', ')}${childKeys.length > 3 ? '...' : ''})`);
+        }
       } else {
         const cleaned = cleanTree(val);
         if (Object.keys(cleaned).length > 0) {
@@ -138,13 +158,14 @@ for (const [col, modes] of Object.entries(collections)) {
 // Clean Figma-specific extensions
 const cleaned = cleanTree(merged);
 
-// Count tokens
+// Count tokens (handles collision nodes that are both token AND group)
 let count = 0;
 function countTokens(obj) {
   for (const val of Object.values(obj)) {
     if (val && typeof val === 'object') {
       if (val.$value !== undefined) count++;
-      else countTokens(val);
+      // Always recurse — collision nodes have both $value and children
+      countTokens(val);
     }
   }
 }

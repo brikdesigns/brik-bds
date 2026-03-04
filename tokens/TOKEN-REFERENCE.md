@@ -92,6 +92,19 @@ this in `storybook-overrides.css` to use Base mode.
 | `--border-radius--pill` | 999px |
 | `--border-radius--circle` | 9999px |
 
+### Border Radius Modes
+
+4 modes control border radius across all components simultaneously. Values below are for the Soft (default) mode. See [MODE-ARCHITECTURE.md](../../websites/shared/MODE-ARCHITECTURE.md) for all modes.
+
+| Token | Sharp | Soft | Round | Pill |
+|-------|-------|------|-------|------|
+| none | 0px | 0px | 0px | 0px |
+| sm | 0px | 2px | 6px | 999px |
+| md | 0px | 4px | 12px | 999px |
+| lg | 0px | 8px | 16px | 999px |
+| button | 0px | 4px | 8px | 999px |
+| input | 0px | 4px | 8px | 999px |
+
 ---
 
 ## Border Width Tokens
@@ -103,6 +116,17 @@ this in `storybook-overrides.css` to use Base mode.
 | `--_border-width---md` | Medium border |
 | `--_border-width---lg` | Thick border |
 
+### Border Width Modes
+
+3 modes control border thickness. Values below are for Standard (default) mode.
+
+| Token | Thin | Standard | Bold |
+|-------|------|----------|------|
+| none | 0px | 0px | 0px |
+| sm | 1px | 1px | 2px |
+| md | 1px | 2px | 3px |
+| lg | 2px | 3px | 4px |
+
 ---
 
 ## Box Shadow Tokens
@@ -113,6 +137,17 @@ this in `storybook-overrides.css` to use Base mode.
 | `--_box-shadow---sm` | Subtle shadow |
 | `--_box-shadow---md` | Medium shadow |
 | `--_box-shadow---lg` | Prominent shadow |
+
+### Elevation Modes
+
+4 modes control shadow depth. Values use `rgba(0,0,0,alpha)`.
+
+| Token | Flat | Subtle | Lifted | Dramatic |
+|-------|------|--------|--------|----------|
+| none | none | none | none | none |
+| sm | none | 0 1px 3px rgba(0,0,0,0.06) | 0 2px 8px rgba(0,0,0,0.1) | 0 4px 16px rgba(0,0,0,0.15) |
+| md | none | 0 2px 6px rgba(0,0,0,0.08) | 0 4px 16px rgba(0,0,0,0.12) | 0 8px 32px rgba(0,0,0,0.2) |
+| lg | none | 0 4px 12px rgba(0,0,0,0.1) | 0 8px 24px rgba(0,0,0,0.15) | 0 16px 48px rgba(0,0,0,0.25) |
 
 ---
 
@@ -310,3 +345,58 @@ const cardStyles = {
   boxShadow: 'var(--_box-shadow---sm)',
 };
 ```
+
+---
+
+## Motion Modes
+
+4 modes control animation speed and character. When mode is None, all transitions are disabled.
+
+| Token | None | Reduced | Subtle | Expressive |
+|-------|------|---------|--------|------------|
+| duration-fast | 0ms | 100ms | 150ms | 200ms |
+| duration-normal | 0ms | 150ms | 250ms | 350ms |
+| duration-slow | 0ms | 200ms | 400ms | 600ms |
+| easing-default | none | ease | ease-out | cubic-bezier(0.34, 1.56, 0.64, 1) |
+
+---
+
+## Component-to-Token Mapping
+
+Fixed mapping — component TYPE determines which token is referenced, independent of client or mode. The mode determines what value that token resolves to.
+
+See [MODE-ARCHITECTURE.md](../../websites/shared/MODE-ARCHITECTURE.md) for the full spec.
+
+### Spacing by component
+
+| Component type | padding-y | padding-x | gap |
+|----------------|-----------|-----------|-----|
+| Section wrapper | huge | xl | xl |
+| Container | xl | lg | lg |
+| Card / surface | lg | lg | md |
+| Button | tiny | sm | xs |
+| Input | tiny | xs | xs |
+| Badge / tag | tiny | xs | xs |
+| Modal / dialog | xl | lg | lg |
+| Nav item | xs | sm | sm |
+
+### Border radius by component
+
+| Component type | Token |
+|----------------|-------|
+| Button | button |
+| Input | input |
+| Card / surface | md |
+| Badge / tag | sm |
+| Modal / dialog | lg |
+| Avatar | pill |
+
+### Elevation by component
+
+| Component type | Token |
+|----------------|-------|
+| Card | sm |
+| Dropdown / popover | md |
+| Modal / dialog | lg |
+| Toast / notification | md |
+| Nav (sticky) | sm |

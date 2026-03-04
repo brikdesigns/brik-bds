@@ -28,12 +28,23 @@ const withTheme: Decorator = (Story, context) => {
 
   // Apply theme classes to the preview iframe <body> so CSS variables
   // cascade to the entire page — docs wrapper, headings, args table, etc.
+  // Also sync to manager frame for full-page theming (sidebar + toolbar).
   useEffect(() => {
     const body = document.body;
     // Strip any previous theme class
     body.className = body.className.replace(/\btheme-\S+/g, '');
     // .body.theme-X matches our CSS selectors in themes.css
     body.classList.add('body', `theme-${themeNumber}`);
+
+    // Theme manager frame (same-origin iframe → parent access)
+    try {
+      const parentBody = window.parent.document.body;
+      parentBody.setAttribute('data-bds-theme', themeNumber);
+      const isDark = ['brik-dark', '2', '7'].includes(themeNumber);
+      parentBody.setAttribute('data-bds-dark', String(isDark));
+    } catch {
+      // Cross-origin (Chromatic, etc.) — skip silently
+    }
   }, [themeNumber]);
 
   // Docs mode: render story directly on the themed page — no wrapper,
@@ -92,7 +103,14 @@ const preview: Preview = {
   parameters: {
     options: {
       storySort: {
-        order: ['Getting Started', 'Components', '*', 'Theme'],
+        order: [
+          'Getting Started',
+          'Foundation',
+          ['Design Tokens', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size'],
+          'Components',
+          '*',
+          'Theme',
+        ],
       },
     },
     controls: {
