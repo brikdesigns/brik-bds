@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SidebarNavigation, type SidebarNavItem } from './SidebarNavigation';
 import { Button } from '../Button';
 

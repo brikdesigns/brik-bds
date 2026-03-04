@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import type { Preview, Decorator } from '@storybook/react';
+import type { Preview, Decorator } from '@storybook/react-vite';
 import type { ThemeNumber } from '../tokens';
 
 // Font Awesome 6 — prevent auto-CSS injection, import CSS manually
@@ -163,7 +163,7 @@ const preview: Preview = {
     },
     layout: 'fullscreen',
     backgrounds: {
-      disable: true, // Managed by theme
+      disabled: true,
     },
     docs: {
       toc: true,

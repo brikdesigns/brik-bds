@@ -1,0 +1,83 @@
+/*
+ * BDS Brand Override Template
+ *
+ * Copy this file to your project as theme-[client].css and replace
+ * placeholder values with your client's brand colors and fonts.
+ *
+ * How it works:
+ *   1. tokens.css defines BDS defaults in :root and .body
+ *   2. .body.theme-[client] overrides the palette for your brand
+ *   3. All BDS components inherit your brand automatically
+ *
+ * Setup:
+ *   1. Import tokens.css and bridge.css from @brikdesigns/bds
+ *   2. Copy this file → theme-[client].css, fill in brand values
+ *   3. Import your theme file AFTER tokens.css
+ *   4. Add classes to <body>: class="body theme-[client]"
+ *      OR use <ThemeProvider> in React
+ */
+
+.body.theme-CLIENT {
+
+  /* ── Brand primary color ─────────────────────────
+     The dominant brand color — buttons, CTAs, highlights.
+     Replace #YOUR_PRIMARY with the client's primary brand color. */
+  --_color---theme--primary: #YOUR_PRIMARY;
+  --_color---text--brand: #YOUR_PRIMARY;
+  --_color---background--brand-primary: #YOUR_PRIMARY;
+  --_color---surface--brand-primary: #YOUR_PRIMARY;
+  --_color---border--brand: #YOUR_PRIMARY;
+  --_color---page--brand: #YOUR_PRIMARY;
+  --_color---background--image-brand: #YOUR_PRIMARY;
+
+  /* ── Brand secondary / tint ──────────────────────
+     Light version for subtle backgrounds, hover states.
+     Typically 10-15% opacity of primary, or a tint. */
+  --_color---theme--secondary: #YOUR_TINT;
+  --_color---background--brand-secondary: #YOUR_TINT;
+  --_color---surface--brand-secondary: #YOUR_TINT;
+
+  /* ── Accent color (optional) ─────────────────────
+     Supporting color for tags, badges, decorative elements. */
+  /* --_color---theme--accent: #YOUR_ACCENT; */
+
+  /* ── Page background (optional) ──────────────────
+     Only needed if you want a non-white default page background. */
+  /* --_color---page--primary: #YOUR_PAGE_BG; */
+
+  /* ── Typography (optional) ───────────────────────
+     Only needed if your brand uses different fonts than BDS defaults. */
+  /* --_typography---font-family--body: 'Your Body Font', sans-serif; */
+  /* --_typography---font-family--display: 'Your Display Font', serif; */
+  /* --_typography---font-family--heading: 'Your Heading Font', sans-serif; */
+  /* --_typography---font-family--label: 'Your Label Font', sans-serif; */
+}
+
+
+/* ───────────────────────────────────────────────────
+   Example: Memphis Dental Studio
+   Brand: gold (#A4927B), Instrument Serif + Inter
+   ─────────────────────────────────────────────────── */
+
+/*
+.body.theme-memphis {
+  --_color---theme--primary: #A4927B;
+  --_color---text--brand: #A4927B;
+  --_color---background--brand-primary: #A4927B;
+  --_color---surface--brand-primary: #A4927B;
+  --_color---border--brand: #A4927B;
+  --_color---page--brand: #A4927B;
+  --_color---background--image-brand: #A4927B;
+
+  --_color---theme--secondary: rgba(164, 146, 123, 0.15);
+  --_color---background--brand-secondary: rgba(164, 146, 123, 0.15);
+  --_color---surface--brand-secondary: rgba(164, 146, 123, 0.15);
+
+  --_color---page--primary: #f8f7f5;
+
+  --_typography---font-family--display: 'Instrument Serif', Georgia, serif;
+  --_typography---font-family--heading: 'Instrument Serif', Georgia, serif;
+  --_typography---font-family--body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --_typography---font-family--label: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+*/
