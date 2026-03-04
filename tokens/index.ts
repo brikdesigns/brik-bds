@@ -3,21 +3,23 @@
  *
  * Auto-generated from Webflow design tokens
  * Source: brik-bds.webflow.css
- * Generated: 2026-03-04T13:54:06.250Z
+ * Generated: 2026-03-04T14:22:15.087Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
 /**
  * Available theme identifiers (maps to .theme-X classes)
- * - theme-1: Blue-Green (Default Light)
- * - theme-2: Yellow-Orange (Dark)
- * - theme-3: Peach-Brown
- * - theme-4: Yellow-Brown
- * - theme-5: Green-Orange
- * - theme-6: Blue-Orange
- * - theme-7: Neon
- * - theme-8: Vibrant
- * - theme-brik: Brik Designs Brand
+ * Verified against actual Webflow CSS color palettes.
+ *
+ * - theme-1: Default (Light) — :root defaults, blue-green accents
+ * - theme-2: Dark — yellow-orange accents, Geist fonts
+ * - theme-3: Blue — blue-green accents, IBM Plex Sans
+ * - theme-4: Gold — yellow-orange light, Lato
+ * - theme-5: Peach — peach-brown tones, Newsreader
+ * - theme-6: Minimal — typography-only variant, IBM Plex Sans
+ * - theme-7: Warm — tan earth tones, Lato
+ * - theme-8: Vibrant — green/purple accents, Playfair Display
+ * - theme-brik: Brik Brand — poppy red, Poppins
  */
 export type ThemeNumber = '1' | '8' | '2' | '3' | '4' | '5' | '6' | '7' | 'brik';
 
@@ -66,17 +68,18 @@ export const defaultTheme: BDSThemeConfig = {
 
 /**
  * Theme metadata for UI display
+ * Verified against actual CSS color palettes in Webflow export.
  */
 export const themeMetadata: Record<ThemeNumber, { name: string; description: string; isDark: boolean }> = {
-  '1': { name: 'Blue-Green', description: 'Default light theme with blue/green accents', isDark: false },
-  '2': { name: 'Yellow-Orange', description: 'Dark theme with yellow/orange accents', isDark: true },
-  '3': { name: 'Peach-Brown', description: 'Warm earthy tones', isDark: false },
-  '4': { name: 'Yellow-Brown', description: 'Golden warm tones', isDark: false },
-  '5': { name: 'Green-Orange', description: 'Nature-inspired palette', isDark: false },
-  '6': { name: 'Blue-Orange', description: 'Complementary contrast', isDark: false },
-  '7': { name: 'Neon', description: 'Vibrant neon colors', isDark: true },
-  '8': { name: 'Vibrant', description: 'Bold saturated colors', isDark: false },
-  'brik': { name: 'Brik Designs', description: 'Company brand theme — poppy red, near-black, tan', isDark: false },
+  '1': { name: 'Default', description: 'Base light theme with blue-green accents (Open Sans)', isDark: false },
+  '2': { name: 'Dark', description: 'Dark mode with yellow-orange accents (Geist)', isDark: true },
+  '3': { name: 'Blue', description: 'Clean blue accents (IBM Plex Sans / Source Sans 3)', isDark: false },
+  '4': { name: 'Gold', description: 'Yellow-orange light accents (Lato / Hind)', isDark: false },
+  '5': { name: 'Peach', description: 'Warm peach-brown tones (Newsreader / Open Sans)', isDark: false },
+  '6': { name: 'Minimal', description: 'Typography variant, default colors (IBM Plex Sans)', isDark: false },
+  '7': { name: 'Warm', description: 'Tan earth tones (Lato / Hind)', isDark: false },
+  '8': { name: 'Vibrant', description: 'Bold green and purple accents (Playfair Display / Hind)', isDark: false },
+  'brik': { name: 'Brik Brand', description: 'Company brand — poppy red, near-black, tan (Poppins)', isDark: false },
 };
 
 /**

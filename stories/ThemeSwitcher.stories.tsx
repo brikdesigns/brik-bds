@@ -320,18 +320,19 @@ const meta: Meta<typeof ThemeDemo> = {
         component: `
 # BDS Theme System
 
-8 bundled themes with color, typography, and spacing.
+9 bundled themes (8 numbered + Brik brand), each with color, typography, and spacing.
 
-| # | Name | Font | Mode |
-|---|------|------|------|
-| 1 | Spacious | Playfair Display | Light |
-| 2 | Yellow-Orange | Default | Dark |
-| 3 | Blue-Green | Default | Light |
-| 4 | Yellow-Orange | Default | Light |
-| 5 | Peach-Brown | Default | Light |
-| 6 | Pastel | Geist | Light |
-| 7 | Yellow-Brown | Lato | Light |
-| 8 | Vibrant | Playfair Display | Light |
+| # | Name | Heading Font | Body Font | Mode |
+|---|------|-------------|-----------|------|
+| brik | Brik Brand | Poppins | Poppins | Light |
+| 1 | Default | Droid Sans | Open Sans | Light |
+| 2 | Dark | Geist | Geist Mono | Dark |
+| 3 | Blue | IBM Plex Sans | Source Sans 3 | Light |
+| 4 | Gold | Lato | Hind | Light |
+| 5 | Peach | Newsreader | Open Sans | Light |
+| 6 | Minimal | IBM Plex Sans | Source Sans 3 | Light |
+| 7 | Warm | Lato | Hind | Light |
+| 8 | Vibrant | Playfair Display | Hind | Light |
 
 ## Variable Naming
 
@@ -352,19 +353,27 @@ type Story = StoryObj<typeof ThemeDemo>;
 
 export const Default: Story = {};
 
-export const DarkTheme: Story = {
+export const Dark: Story = {
   globals: { themeNumber: '2' },
 };
 
-export const PeachBrown: Story = {
+export const Blue: Story = {
+  globals: { themeNumber: '3' },
+};
+
+export const Gold: Story = {
+  globals: { themeNumber: '4' },
+};
+
+export const Peach: Story = {
   globals: { themeNumber: '5' },
 };
 
-export const Pastel: Story = {
+export const Minimal: Story = {
   globals: { themeNumber: '6' },
 };
 
-export const YellowBrown: Story = {
+export const Warm: Story = {
   globals: { themeNumber: '7' },
 };
 
