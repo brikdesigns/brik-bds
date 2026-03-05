@@ -15,8 +15,8 @@ import { bdsClass } from '../../utils';
 export interface AccordionItemData {
   /** Unique identifier */
   id: string;
-  /** Title displayed in the trigger row */
-  title: string;
+  /** Title displayed in the trigger row — string or ReactNode for custom rendering */
+  title: ReactNode;
   /** Content shown when expanded */
   content: ReactNode;
 }

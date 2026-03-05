@@ -28,6 +28,7 @@ export * from './Toast';
 export * from './AlertBanner';
 export * from './CardControl';
 export * from './Accordion';
+export * from './CollapsibleCard';
 export * from './Menu';
 export * from './Pagination';
 export * from './SearchInput';
