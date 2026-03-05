@@ -20,7 +20,7 @@ const meta = {
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['sm', 'md'],
       description: 'Size variant',
     },
   },
@@ -134,23 +134,21 @@ export const WithError: Story = {
 };
 
 /**
- * All three sizes compared
+ * Both sizes compared
  */
 export const AllSizes: Story = {
   parameters: {
     docs: {
       source: {
         code: `<Select size="sm" placeholder="Small" options={options} icon={<FontAwesomeIcon icon={faTag} />} />
-<Select size="md" placeholder="Medium" options={options} icon={<FontAwesomeIcon icon={faTag} />} />
-<Select size="lg" placeholder="Large" options={options} icon={<FontAwesomeIcon icon={faTag} />} />`,
+<Select size="md" placeholder="Medium (default)" options={options} icon={<FontAwesomeIcon icon={faTag} />} />`,
       },
     },
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)', minWidth: '300px' }}>
       <Select size="sm" placeholder="Small" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
-      <Select size="md" placeholder="Medium" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
-      <Select size="lg" placeholder="Large" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
+      <Select size="md" placeholder="Medium (default)" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
     </div>
   ),
   args: {

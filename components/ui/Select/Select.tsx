@@ -1,4 +1,6 @@
 import { type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
 
 /**
@@ -14,9 +16,13 @@ export interface SelectOption {
 }
 
 /**
- * Select size variants (matching Input component)
+ * Select size variants
+ *
+ * Figma specs (bds-select):
+ * - md: px 12px, py 16px, font-size 16px, chevron FA caret-down 16px
+ * - sm: px 12px, py 8px, font-size 14px, chevron FA caret-down 14px
  */
-export type SelectSize = 'sm' | 'md' | 'lg';
+export type SelectSize = 'sm' | 'md';
 
 /**
  * Select component props
@@ -32,7 +38,7 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
   defaultValue?: string;
   /** Disabled state */
   disabled?: boolean;
-  /** Size variant (matching Input sizes) */
+  /** Size variant */
   size?: SelectSize;
   /** Optional label text */
   label?: string;
@@ -49,32 +55,33 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 }
 
 /**
- * Size-specific styles (matching Input component)
+ * Size-specific styles matching Figma spec
+ *
+ * Token reference:
+ * - --_space---sm = 12px (horizontal padding)
+ * - --_space---md = 16px (md vertical padding)
+ * - --_space---tiny = 8px (sm vertical padding)
+ * - --_typography---body--md-base = 16px (md font)
+ * - --_typography---body--sm = 14px (sm font)
+ * - --_typography---label--md-base (md label)
+ * - --_typography---label--sm (sm label)
  */
-const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperties }> = {
+const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperties; chevronSize: string }> = {
   sm: {
     label: { fontSize: 'var(--_typography---label--sm)' },
     select: {
       fontSize: 'var(--_typography---body--sm)',
-      padding: 'var(--_space---input)',
-      height: '36px',
+      padding: 'var(--_space---tiny) var(--_space---sm)',
     },
+    chevronSize: 'var(--_typography---body--sm)',
   },
   md: {
     label: { fontSize: 'var(--_typography---label--md-base)' },
     select: {
       fontSize: 'var(--_typography---body--md-base)',
-      padding: 'var(--_space---input)',
-      height: '40px',
+      padding: 'var(--_space---md) var(--_space---sm)',
     },
-  },
-  lg: {
-    label: { fontSize: 'var(--_typography---label--lg)' },
-    select: {
-      fontSize: 'var(--_typography---body--lg)',
-      padding: 'calc(var(--_space---input) * 1.25)',
-      height: '48px',
-    },
+    chevronSize: 'var(--_typography---body--md-base)',
   },
 };
 
@@ -82,13 +89,11 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
  * Select input styles using BDS tokens
  *
  * Token reference:
- * - --_color---border--input (input border color)
+ * - --_color---border--primary (border color per Figma: #e0e0e0)
  * - --_color---background--input (input background)
  * - --_color---text--primary (text color)
- * - --_border-radius---input = 2px (input corners)
- * - --_space---input = 8px (input padding)
+ * - --_border-radius---md = 4px (border radius per Figma)
  * - --_typography---font-family--body (body font)
- * - --_typography---body--sm (small body text size)
  * - --_border-width---sm (border thickness)
  */
 const selectBaseStyles: CSSProperties = {
@@ -99,18 +104,15 @@ const selectBaseStyles: CSSProperties = {
   lineHeight: 'var(--font-line-height--150)',
   color: 'var(--_color---text--primary)',
   backgroundColor: 'var(--_color---background--input)',
-  border: 'var(--_border-width---sm) solid var(--_color---border--input)',
-  borderRadius: 'var(--_border-radius---input)',
+  border: 'var(--_border-width---sm) solid var(--_color---border--primary)',
+  borderRadius: 'var(--_border-radius---md)',
   outline: 'none',
   transition: 'border-color 0.2s',
   cursor: 'pointer',
   appearance: 'none',
   boxSizing: 'border-box',
-  // bds-lint-ignore — data URI SVGs cannot reference CSS variables; #333 = text--primary default
-  backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'right var(--_space---input) center',
-  paddingRight: 'calc(var(--_space---input) * 3)',
+  backgroundImage: 'none',
+  paddingRight: '36px',
 };
 
 const selectDisabledStyles: CSSProperties = {
@@ -119,7 +121,7 @@ const selectDisabledStyles: CSSProperties = {
 };
 
 /**
- * Field wrapper — positions icon relative to select
+ * Field wrapper — positions icon and chevron relative to select
  */
 const fieldWrapperStyles: CSSProperties = {
   position: 'relative',
@@ -128,16 +130,33 @@ const fieldWrapperStyles: CSSProperties = {
 };
 
 /**
- * Icon positioning styles
+ * Chevron icon styles (absolutely positioned right)
  *
  * Token reference:
- * - --_space---input = 8px (icon inset from edge)
- * - --_color---text--muted (icon color, matches placeholder)
- * - --_space---gap--md = 8px (icon-text gap)
+ * - --_space---sm = 12px (right inset matching horizontal padding)
+ * - --_color---text--primary (chevron color per Figma)
+ */
+const chevronStyles: CSSProperties = {
+  position: 'absolute',
+  right: 'var(--_space---sm)',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'var(--_color---text--primary)',
+  pointerEvents: 'none',
+  zIndex: 1,
+};
+
+/**
+ * Leading icon styles
+ *
+ * Token reference:
+ * - --_space---sm = 12px (icon inset from edge)
+ * - --_color---text--muted (icon color per Figma)
  */
 const selectIconStyles: CSSProperties = {
   position: 'absolute',
-  left: 'var(--_space---input)',
+  left: 'var(--_space---sm)',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -165,7 +184,7 @@ const wrapperStyles: CSSProperties = {
  * Token reference:
  * - --_typography---font-family--label (label font)
  * - --font-weight--semi-bold = 600
- * - --font-line-height--100 = 100% (matches TextInput label)
+ * - --font-line-height--100 = 100%
  */
 const labelBaseStyles: CSSProperties = {
   fontFamily: 'var(--_typography---font-family--label)',
@@ -192,12 +211,9 @@ const helperBaseStyles: CSSProperties = {
 /**
  * Select - BDS themed select dropdown component
  *
- * Uses CSS variables for theming. Provides a styled select dropdown
- * with custom arrow indicator, optional label, helper text, and error state.
- * All spacing, colors, and typography reference BDS tokens.
- *
- * Wrapper pattern matches TextInput for consistent alignment when placed
- * side-by-side in form layouts.
+ * Uses Font Awesome caret-down icon as the dropdown indicator.
+ * Two sizes (md, sm) matching Figma spec with proper BDS tokens.
+ * Supports optional label, leading icon, helper text, and error state.
  *
  * @example
  * ```tsx
@@ -239,7 +255,7 @@ export function Select({
     ...sizeStyle.select,
     ...(disabled ? selectDisabledStyles : {}),
     ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
-    ...(icon ? { paddingLeft: 'calc(var(--_space---input) * 4)' } : {}),
+    ...(icon ? { paddingLeft: 'calc(var(--_space---sm) * 3)' } : {}),
     ...style,
   };
 
@@ -297,6 +313,9 @@ export function Select({
             </option>
           ))}
         </select>
+        <span style={{ ...chevronStyles, fontSize: sizeStyle.chevronSize }}>
+          <FontAwesomeIcon icon={faCaretDown} />
+        </span>
       </div>
       {error && (
         <span

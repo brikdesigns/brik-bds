@@ -46,7 +46,7 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  */
 const sizeStyles: Record<TagSize, CSSProperties> = {
   sm: {
-    padding: 'var(--space--50)',
+    padding: '4px var(--space--50)',
     gap: 0,
     fontSize: 'var(--_typography---body--tiny)',
     borderRadius: 'var(--_border-radius---sm)',
@@ -72,7 +72,7 @@ const sizeStyles: Record<TagSize, CSSProperties> = {
  */
 const iconSizeMap: Record<TagSize, CSSProperties> = {
   sm: { width: 16, height: 16, fontSize: 'var(--_typography---body--tiny)' },
-  md: { width: 16, height: 16, fontSize: 'var(--_typography---body--xs)' },
+  md: { width: 16, height: 16, fontSize: 'var(--_typography---body--xs)', marginLeft: '-2px' },
   lg: { width: 20, height: 20, fontSize: 'var(--_typography---label--md-base)' },
 };
 
