@@ -11,33 +11,59 @@ Dropdown selection control with options array, placeholder text, optional leadin
 
 <Canvas of={Stories.Default} />
 
-## With Icon
+## Width behavior
+
+The select fills its container by default (`fullWidth` is true). This matches standard form field behavior — the select adapts fluidly to whatever container it lives in.
+
+- **Full width (default)** — fills parent container, responsive to viewport
+- **Constrained** — respects `max-width` on a parent wrapper
+- **Compact** — set `fullWidth={false}` for inline usage where the select shrinks to content
+
+<Canvas of={Stories.ResponsiveWidth} />
+
+## With icon
 
 Add a leading icon for visual context using the `icon` prop.
 
 <Canvas of={Stories.WithIcon} />
 
-### Small with Icon
+### Small with icon
 
 The `sm` size with a leading icon for compact layouts.
 <Canvas of={Stories.SmallWithIcon} />
 
-### Label and Icon
+### Label and icon
 
 Combine label, icon, and full width for form fields.
 <Canvas of={Stories.WithLabelAndIcon} />
 
+## Option groups
+
+Use `SelectOptionGroup` objects to organize options into categories with `<optgroup>` labels.
+
+<Canvas of={Stories.WithGroups} />
+
 ## Sizes
 
-Three size variants to match surrounding UI density.
+Three size variants — height is driven by padding and line-height tokens, not hardcoded pixel values, so it scales naturally with font size changes.
 
 <Canvas of={Stories.AllSizes} />
 
-## States
+## Interaction states
+
+All states are handled via CSS pseudo-selectors in `Select.css`:
+
+| State | Visual | Token |
+|-------|--------|-------|
+| Default | Light border | `--_color---border--input` |
+| Hover | Darker border | `--_color---border--primary` |
+| Focus | Brand border + ring | `--_color---border--brand` |
+| Error | Red border + ring | `--system--red` |
+| Disabled | 50% opacity | — |
 
 ### Error
 
-Show validation errors with the `error` prop.
+Show validation errors with the `error` prop. Focus ring shows red instead of brand color.
 <Canvas of={Stories.WithError} />
 
 ### Disabled
@@ -45,9 +71,10 @@ Show validation errors with the `error` prop.
 Prevent interaction with the entire control.
 <Canvas of={Stories.Disabled} />
 
-## Form Example
+## Form layout
 
-Multiple selects in a form layout.
+Multiple selects in a responsive form — fills container side-by-side on wide viewports, stacks on narrow.
+
 <Canvas of={Stories.FormExample} />
 
 ## Props
@@ -59,9 +86,9 @@ Multiple selects in a form layout.
 ```tsx
 import { Select } from '@brik/bds';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { faBuilding, faGlobe } from '@fortawesome/free-solid-svg-icons';
 
-// Basic select
+// Basic select (fills container by default)
 <Select
   placeholder="Select one..."
   options={[
@@ -70,20 +97,42 @@ import { faBuilding } from '@fortawesome/free-solid-svg-icons';
   ]}
 />
 
-// With icon
+// With icon and label
 <Select
+  label="Company"
   placeholder="Select company..."
   options={options}
   icon={<FontAwesomeIcon icon={faBuilding} />}
 />
 
-// Small size with label
+// Grouped options
+<Select
+  label="Location"
+  placeholder="Select city..."
+  options={[
+    {
+      label: 'United States',
+      options: [
+        { label: 'New York', value: 'ny' },
+        { label: 'Chicago', value: 'chi' },
+      ],
+    },
+    {
+      label: 'Europe',
+      options: [
+        { label: 'London', value: 'lon' },
+        { label: 'Paris', value: 'par' },
+      ],
+    },
+  ]}
+  icon={<FontAwesomeIcon icon={faGlobe} />}
+/>
+
+// Compact inline usage
 <Select
   size="sm"
-  label="User"
-  placeholder="Select user..."
-  options={users}
-  icon={<FontAwesomeIcon icon={faUser} />}
-  fullWidth
+  placeholder="Filter..."
+  options={filters}
+  fullWidth={false}
 />
 ```

@@ -1,5 +1,6 @@
-import { type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { forwardRef, useState, type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
 import { bdsClass } from '../../utils';
+import './Select.css';
 
 /**
  * Select option type
@@ -14,6 +15,16 @@ export interface SelectOption {
 }
 
 /**
+ * Option group type
+ */
+export interface SelectOptionGroup {
+  /** Group label */
+  label: string;
+  /** Options in this group */
+  options: SelectOption[];
+}
+
+/**
  * Select size variants (matching Input component)
  */
 export type SelectSize = 'sm' | 'md' | 'lg';
@@ -22,8 +33,8 @@ export type SelectSize = 'sm' | 'md' | 'lg';
  * Select component props
  */
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
-  /** Array of options */
-  options: SelectOption[];
+  /** Array of options or option groups */
+  options: (SelectOption | SelectOptionGroup)[];
   /** Placeholder text (shown as first option with empty value) */
   placeholder?: string;
   /** Selected value (controlled) */
@@ -40,7 +51,7 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
   helperText?: string;
   /** Error message (shows error state when provided) */
   error?: string;
-  /** Full width select */
+  /** Full width select (default: true — fills container) */
   fullWidth?: boolean;
   /** Optional icon displayed before the select text */
   icon?: ReactNode;
@@ -49,7 +60,12 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 }
 
 /**
- * Size-specific styles (matching Input component)
+ * Size-specific styles (matching TextInput — no hardcoded heights)
+ *
+ * Token reference:
+ * - --_typography---label--sm/md-base/lg (label font sizes)
+ * - --_typography---body--sm/md-base/lg (select font sizes)
+ * - --_space---input = 8px (input padding)
  */
 const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperties }> = {
   sm: {
@@ -57,7 +73,6 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
     select: {
       fontSize: 'var(--_typography---body--sm)',
       padding: 'var(--_space---input)',
-      height: '36px',
     },
   },
   md: {
@@ -65,7 +80,6 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
     select: {
       fontSize: 'var(--_typography---body--md-base)',
       padding: 'var(--_space---input)',
-      height: '40px',
     },
   },
   lg: {
@@ -73,13 +87,12 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
     select: {
       fontSize: 'var(--_typography---body--lg)',
       padding: 'calc(var(--_space---input) * 1.25)',
-      height: '48px',
     },
   },
 };
 
 /**
- * Select input styles using BDS tokens
+ * Select input base styles using BDS tokens
  *
  * Token reference:
  * - --_color---border--input (input border color)
@@ -88,8 +101,8 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
  * - --_border-radius---input = 2px (input corners)
  * - --_space---input = 8px (input padding)
  * - --_typography---font-family--body (body font)
- * - --_typography---body--sm (small body text size)
  * - --_border-width---sm (border thickness)
+ * - --font-line-height--150 = 150%
  */
 const selectBaseStyles: CSSProperties = {
   display: 'inline-block',
@@ -102,7 +115,7 @@ const selectBaseStyles: CSSProperties = {
   border: 'var(--_border-width---sm) solid var(--_color---border--input)',
   borderRadius: 'var(--_border-radius---input)',
   outline: 'none',
-  transition: 'border-color 0.2s',
+  transition: 'border-color 0.2s, box-shadow 0.2s',
   cursor: 'pointer',
   appearance: 'none',
   boxSizing: 'border-box',
@@ -111,11 +124,6 @@ const selectBaseStyles: CSSProperties = {
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'right var(--_space---input) center',
   paddingRight: 'calc(var(--_space---input) * 3)',
-};
-
-const selectDisabledStyles: CSSProperties = {
-  opacity: 0.5,
-  cursor: 'not-allowed',
 };
 
 /**
@@ -190,14 +198,24 @@ const helperBaseStyles: CSSProperties = {
 };
 
 /**
+ * Type guard for option groups
+ */
+function isOptionGroup(opt: SelectOption | SelectOptionGroup): opt is SelectOptionGroup {
+  return 'options' in opt;
+}
+
+/**
  * Select - BDS themed select dropdown component
  *
  * Uses CSS variables for theming. Provides a styled select dropdown
  * with custom arrow indicator, optional label, helper text, and error state.
  * All spacing, colors, and typography reference BDS tokens.
  *
- * Wrapper pattern matches TextInput for consistent alignment when placed
- * side-by-side in form layouts.
+ * Width: Fills container by default (fullWidth=true). Set fullWidth=false
+ * for inline/compact usage where the select should shrink to content width.
+ *
+ * Interactive states (hover, focus, error) are handled in Select.css using
+ * the same token pattern as Button and TextInput.
  *
  * @example
  * ```tsx
@@ -208,112 +226,148 @@ const helperBaseStyles: CSSProperties = {
  *     { label: 'Active', value: 'active' },
  *     { label: 'Inactive', value: 'inactive' },
  *   ]}
- *   fullWidth
  * />
  * ```
  */
-export function Select({
-  options,
-  placeholder,
-  value,
-  defaultValue,
-  disabled = false,
-  size = 'md',
-  label,
-  helperText,
-  error,
-  fullWidth = false,
-  icon,
-  onChange,
-  id,
-  className = '',
-  style,
-  ...props
-}: SelectProps) {
-  const inputId = id || (label ? `select-${Math.random().toString(36).substring(2, 11)}` : undefined);
-  const hasError = Boolean(error);
-  const sizeStyle = sizeStyles[size];
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
+  (
+    {
+      options,
+      placeholder,
+      value,
+      defaultValue,
+      disabled = false,
+      size = 'md',
+      label,
+      helperText,
+      error,
+      fullWidth = true,
+      icon,
+      onChange,
+      id,
+      className = '',
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    const inputId = id || (label ? `select-${Math.random().toString(36).substring(2, 11)}` : undefined);
+    const hasError = Boolean(error);
+    const sizeStyle = sizeStyles[size];
 
-  const combinedStyles: CSSProperties = {
-    ...selectBaseStyles,
-    ...sizeStyle.select,
-    ...(disabled ? selectDisabledStyles : {}),
-    ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
-    ...(icon ? { paddingLeft: 'calc(var(--_space---input) * 4)' } : {}),
-    ...style,
-  };
+    // Track whether placeholder is showing (for muted text color via CSS)
+    const [isPlaceholder, setIsPlaceholder] = useState(
+      !value && !defaultValue && Boolean(placeholder)
+    );
 
-  return (
-    <div
-      style={{
-        ...wrapperStyles,
-        width: fullWidth ? '100%' : 'auto',
-      }}
-    >
-      {label && (
-        <label
-          htmlFor={inputId}
-          style={{
-            ...labelBaseStyles,
-            ...sizeStyle.label,
-            ...(hasError ? { color: 'var(--system--red)' } : {}),
-          }}
-        >
-          {label}
-        </label>
-      )}
-      <div style={fieldWrapperStyles}>
-        {icon && (
-          <span style={selectIconStyles}>
-            {icon}
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setIsPlaceholder(e.target.value === '');
+      onChange?.(e);
+    };
+
+    const selectClassName = bdsClass(
+      'bds-select',
+      hasError ? 'bds-select--error' : '',
+      isPlaceholder ? 'bds-select--placeholder' : '',
+      className
+    );
+
+    const combinedStyles: CSSProperties = {
+      ...selectBaseStyles,
+      ...sizeStyle.select,
+      ...(icon ? { paddingLeft: 'calc(var(--_space---input) * 4)' } : {}),
+      ...style,
+    };
+
+    return (
+      <div
+        style={{
+          ...wrapperStyles,
+          width: fullWidth ? '100%' : 'auto',
+        }}
+      >
+        {label && (
+          <label
+            htmlFor={inputId}
+            style={{
+              ...labelBaseStyles,
+              ...sizeStyle.label,
+              ...(hasError ? { color: 'var(--system--red)' } : {}),
+            }}
+          >
+            {label}
+          </label>
+        )}
+        <div style={fieldWrapperStyles}>
+          {icon && (
+            <span style={selectIconStyles}>
+              {icon}
+            </span>
+          )}
+          <select
+            ref={ref}
+            id={inputId}
+            value={value}
+            defaultValue={defaultValue}
+            disabled={disabled}
+            onChange={handleChange}
+            className={selectClassName}
+            style={combinedStyles}
+            aria-invalid={hasError}
+            aria-describedby={
+              error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
+            }
+            {...props}
+          >
+            {placeholder && (
+              <option value="">
+                {placeholder}
+              </option>
+            )}
+            {options.map((opt) =>
+              isOptionGroup(opt) ? (
+                <optgroup key={opt.label} label={opt.label}>
+                  {opt.options.map((option) => (
+                    <option
+                      key={option.value}
+                      value={option.value}
+                      disabled={option.disabled}
+                    >
+                      {option.label}
+                    </option>
+                  ))}
+                </optgroup>
+              ) : (
+                <option
+                  key={opt.value}
+                  value={opt.value}
+                  disabled={opt.disabled}
+                >
+                  {opt.label}
+                </option>
+              )
+            )}
+          </select>
+        </div>
+        {error && (
+          <span
+            id={inputId ? `${inputId}-error` : undefined}
+            style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
+            role="alert"
+          >
+            {error}
           </span>
         )}
-        <select
-          id={inputId}
-          value={value}
-          defaultValue={defaultValue}
-          disabled={disabled}
-          onChange={onChange}
-          className={bdsClass('bds-select', className)}
-          style={combinedStyles}
-          aria-invalid={hasError}
-          aria-describedby={
-            error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
-          }
-          {...props}
-        >
-          {placeholder && (
-            <option value="">
-              {placeholder}
-            </option>
-          )}
-          {options.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-              disabled={option.disabled}
-            >
-              {option.label}
-            </option>
-          ))}
-        </select>
+        {helperText && !error && (
+          <span id={inputId ? `${inputId}-helper` : undefined} style={helperBaseStyles}>
+            {helperText}
+          </span>
+        )}
       </div>
-      {error && (
-        <span
-          id={inputId ? `${inputId}-error` : undefined}
-          style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
-          role="alert"
-        >
-          {error}
-        </span>
-      )}
-      {helperText && !error && (
-        <span id={inputId ? `${inputId}-helper` : undefined} style={helperBaseStyles}>
-          {helperText}
-        </span>
-      )}
-    </div>
-  );
-}
+    );
+  }
+);
+
+Select.displayName = 'Select';
 
 export default Select;
