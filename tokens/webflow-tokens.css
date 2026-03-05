@@ -383,6 +383,22 @@
   --_blur-radius---none: var(--shadow-blur--0);
   --_blur-radius---sm: var(--shadow-blur--0);
   --_blur-radius---lg: var(--shadow-blur--0);
+  /* Service color primitives (from brikdesigns.com — pending Foundations Webflow sync) */
+  --services--green: #9ada6c;
+  --services--green-dark: #2a5542;
+  --services--green-light: #f8fff3;
+  --services--yellow: #f4d364;
+  --services--yellow-dark: #634716;
+  --services--yellow-light: #fffee1;
+  --services--blue: #8ebbcc;
+  --services--blue-dark: #314952;
+  --services--blue-light: #f8fdff;
+  --services--purple: #c4b0eb;
+  --services--purple-dark: #362d48;
+  --services--purple-light: #eae3f3;
+  --services--orange: #e76134;
+  --services--orange-dark: #4e1400;
+  --services--orange-light: #ffe8dc;
 }
 
 .body {
@@ -512,6 +528,26 @@
   --_border-width---md: var(--border-width--50);
   --_border-width---sm: var(--border-width--25);
   --_border-width---lg: var(--border-width--100);
+  /* Service semantic tokens (from brikdesigns.com — pending Foundations Webflow sync) */
+  --_color---background--service-marketing: var(--services--green);
+  --_color---background--service-marketing-secondary: var(--services--green-dark);
+  --_color---surface--service-marketing: var(--services--green);
+  --_color---text--service-marketing: var(--services--green-dark);
+  --_color---background--service-brand: var(--services--yellow);
+  --_color---background--service-brand-secondary: var(--services--yellow-dark);
+  --_color---surface--service-brand: var(--services--yellow);
+  --_color---text--service-brand: var(--services--yellow-dark);
+  --_color---background--service-information: var(--services--blue);
+  --_color---background--service-information-secondary: var(--services--blue-dark);
+  --_color---surface--service-information: var(--services--blue);
+  --_color---text--service-information: var(--services--blue-dark);
+  --_color---background--service-product: var(--services--purple);
+  --_color---background--service-product-secondary: var(--services--purple-dark);
+  --_color---surface--service-product: var(--services--purple);
+  --_color---text--service-product: var(--services--purple-dark);
+  --_color---background--service-service: var(--services--orange);
+  --_color---background--service-service-secondary: var(--services--orange-dark);
+  --_color---text--service-service: var(--services--orange-dark);
 }
 
 .body.theme-1 {

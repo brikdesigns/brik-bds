@@ -1,6 +1,7 @@
 // UI Components
 export * from './Button';
 export * from './Badge';
+export * from './ServiceBadge';
 export * from './TextLink';
 export * from './TextInput';
 export * from './Card';

@@ -4,14 +4,16 @@
  * BDS Token Validation Linter
  *
  * Validates CSS variable usage in BDS components against the Webflow CSS export.
- * Catches three types of violations:
+ * Catches four types of violations:
  *   1. Primitive token usage (use semantic tokens instead)
  *   2. Hardcoded CSS values (use tokens)
  *   3. Unknown tokens (typos or non-existent variables)
+ *   4. Spacing values not aligned to 4-point grid (see tokens/GRID-SYSTEM.md)
  *
  * Usage:
  *   node scripts/lint-tokens.js              # full report (errors + warnings)
  *   node scripts/lint-tokens.js --errors-only # errors only (for CI)
+ *   node scripts/lint-tokens.js --check-grid  # grid adherence warnings
  *
  * Exit codes:
  *   0 = no errors (warnings OK)
@@ -47,6 +49,66 @@ const ALLOWED_PRIMITIVES = new Set([
   '--system--',
   '--_themes---',
 ]);
+
+// ---------------------------------------------------------------------------
+// Grid System Configuration (4-point base)
+// ---------------------------------------------------------------------------
+// Valid spacing values (in pixels). All must be multiples of 4.
+// See tokens/GRID-SYSTEM.md for details.
+
+const VALID_SPACING_VALUES = {
+  // Primitives: --space--[index]: [value]
+  '1': '0px',
+  '25': '1px',    // ⚠ Micro adjustment - not 4-point aligned
+  '50': '2px',    // ⚠ Micro adjustment - not 4-point aligned
+  '100': '4px',
+  '150': '6px',   // ⚠ Not 4-point aligned (1.5 × 4)
+  '200': '8px',
+  '250': '10px',  // ⚠ Not 4-point aligned (2.5 × 4)
+  '300': '12px',
+  '350': '14px',  // ⚠ Not 4-point aligned (3.5 × 4)
+  '400': '16px',
+  '450': '18px',  // ⚠ Not 4-point aligned (4.5 × 4)
+  '500': '20px',
+  '600': '24px',
+  '700': '28px',
+  '800': '32px',
+  '900': '36px',
+  '1000': '40px',
+  '1100': '44px',
+  '1200': '48px',
+  '1300': '52px',
+  '1400': '56px',
+  '1500': '60px',
+  '1600': '64px',
+  '1700': '72px',
+  '1800': '80px',
+  '1900': '84px',
+  '2000': '88px',
+  '2100': '96px',
+  '2200': '104px',
+  '2300': '112px',
+  '2400': '128px',
+  '2500': '136px',
+};
+
+// Extract pixel values and track which ones are NOT 4-point aligned
+const SPACING_PX_VALUES = new Map();
+const GRID_VIOLATIONS = new Set();
+
+for (const [index, value] of Object.entries(VALID_SPACING_VALUES)) {
+  const match = value.match(/^(\d+)px$/);
+  if (match) {
+    const px = parseInt(match[1], 10);
+    SPACING_PX_VALUES.set(px, index);
+    
+    // Check 4-point alignment (must be divisible by 4)
+    if (px > 0 && px % 4 !== 0) {
+      GRID_VIOLATIONS.add(px);
+    }
+  }
+}
+
 
 // fontWeight numeric → token mapping
 const FONT_WEIGHT_MAP = {
@@ -184,7 +246,6 @@ function checkPrimitiveTokens(line, lineNum, file, isComponent) {
 
   while ((match = regex.exec(line)) !== null) {
     const fullToken = `${match[1]}--${match[2]}`;
-    const prefix = `${match[1]}--`;
 
     // Skip if this is an allowed primitive (font-weight, line-height, system, themes)
     let isAllowed = false;
@@ -379,6 +440,78 @@ function checkUnknownTokens(line, lineNum, file, tokens) {
   return violations;
 }
 
+/**
+ * Rule 4: 4-point grid compliance
+ * Checks hardcoded px values in component style objects for 4px divisibility.
+ * Also audits CSS token declaration files for off-grid primitive values.
+ * Only runs with --check-grid flag. Warning-only — never blocks CI.
+ */
+function checkGridCompliance(line, lineNum, file) {
+  const violations = [];
+
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) {
+    return violations;
+  }
+  if (line.includes('bds-lint-ignore')) return violations;
+
+  // --- Mode A: CSS token declarations (--space--NNN: Ypx) ---
+  const declRegex = /(--space--)(\d+):\s*(\d+)px/g;
+  let declMatch;
+  while ((declMatch = declRegex.exec(line)) !== null) {
+    const px = parseInt(declMatch[3], 10);
+    if (px === 0 || px <= 2) continue; // micro exempt
+    if (px % 4 !== 0) {
+      const lower = Math.floor(px / 4) * 4;
+      const upper = lower + 4;
+      violations.push({
+        rule: 'grid-4pt',
+        severity: 'warning',
+        file,
+        line: lineNum,
+        column: declMatch.index + 1,
+        message: `Token --space--${declMatch[2]}: ${px}px is not on the 4-point grid`,
+        suggestion: `Nearest grid values: ${lower}px or ${upper}px`,
+      });
+    }
+  }
+
+  // --- Mode B: Component style objects (prop: 'Npx') ---
+  const GRID_PROPS = new Set([
+    'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight',
+    'margin', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight',
+    'gap', 'rowGap', 'columnGap',
+    'width', 'height', 'maxWidth', 'minWidth', 'maxHeight', 'minHeight',
+    'top', 'left', 'right', 'bottom',
+  ]);
+
+  const styleRegex = /(\w+):\s*'(\d+(?:\.\d+)?)px'/g;
+  let styleMatch;
+  while ((styleMatch = styleRegex.exec(line)) !== null) {
+    const prop = styleMatch[1];
+    const px = parseFloat(styleMatch[2]);
+
+    if (!GRID_PROPS.has(prop)) continue;
+    if (px === 0 || px <= 2 || px === 999 || px === 9999) continue;
+
+    if (px % 4 !== 0) {
+      const lower = Math.floor(px / 4) * 4;
+      const upper = lower + 4;
+      violations.push({
+        rule: 'grid-4pt',
+        severity: 'warning',
+        file,
+        line: lineNum,
+        column: styleMatch.index + 1,
+        message: `${prop}: '${styleMatch[2]}px' is not on the 4-point grid`,
+        suggestion: `Nearest grid values: ${lower}px or ${upper}px (use a spacing token instead)`,
+      });
+    }
+  }
+
+  return violations;
+}
+
 // ---------------------------------------------------------------------------
 // Reporter
 // ---------------------------------------------------------------------------
@@ -422,18 +555,22 @@ function formatViolations(violations) {
 function main() {
   const args = process.argv.slice(2);
   const errorsOnly = args.includes('--errors-only');
+  const checkGrid = args.includes('--check-grid');
 
   console.log('\n🔍 BDS Token Linter\n');
 
   // 1. Parse CSS tokens
   const tokens = parseCssTokens();
   console.log(`  Loaded ${tokens.allTokens.size} tokens (${tokens.semanticTokens.size} semantic, ${tokens.primitiveTokens.size} primitive)`);
+  if (checkGrid) {
+    console.log('  📐 4-point grid check enabled');
+  }
 
   // 2. Find files
   const tsxFiles = findFiles(COMPONENTS_DIR, /\.tsx$/);
   console.log(`  Scanning ${tsxFiles.length} files...\n`);
 
-  // 3. Scan
+  // 3. Scan components for token usage violations
   const allViolations = [];
 
   for (const file of tsxFiles) {
@@ -449,21 +586,43 @@ function main() {
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, isComponent));
       allViolations.push(...checkHardcodedValues(line, lineNum, file, isComponent));
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens));
+
+      // Rule 4: grid compliance (opt-in via --check-grid)
+      if (checkGrid) {
+        allViolations.push(...checkGridCompliance(line, lineNum, file));
+      }
     }
   }
 
-  // 4. Filter
+  // 4. If --check-grid, also scan the Webflow CSS source for off-grid token values
+  if (checkGrid) {
+    const css = fs.readFileSync(WEBFLOW_CSS_PATH, 'utf8');
+    const cssLines = css.split('\n');
+    for (let i = 0; i < cssLines.length; i++) {
+      allViolations.push(...checkGridCompliance(cssLines[i], i + 1, WEBFLOW_CSS_PATH));
+    }
+  }
+
+  // 5. Filter
   const filtered = errorsOnly
     ? allViolations.filter(v => v.severity === 'error')
     : allViolations;
 
-  // 5. Report
+  // 6. Report
   if (filtered.length === 0) {
     console.log('  ✅ All clear! No violations found.\n');
     process.exit(0);
   }
 
   const errorCount = formatViolations(filtered);
+
+  // Add grid context if grid violations found
+  const hasGridViolations = filtered.some(v => v.rule === 'grid-4pt');
+  if (hasGridViolations) {
+    console.log('  📐 Grid: BDS uses a 4-point grid. All spacing should be divisible by 4.');
+    console.log('     Exempt: 0, 1px, 2px (micro). See tokens/GRID-SYSTEM.md\n');
+  }
+
   process.exit(errorCount > 0 ? 1 : 0);
 }
 

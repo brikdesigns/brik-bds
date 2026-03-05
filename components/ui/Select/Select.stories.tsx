@@ -7,7 +7,7 @@ const meta = {
   title: 'Components/select',
   component: Select,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
   argTypes: {
     placeholder: {
@@ -23,6 +23,10 @@ const meta = {
       options: ['sm', 'md', 'lg'],
       description: 'Size variant',
     },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Fill container width (default: true)',
+    },
   },
 } satisfies Meta<typeof Select>;
 
@@ -36,7 +40,8 @@ const basicOptions = [
 ];
 
 /**
- * Default select with placeholder
+ * Default select — fills its container by default.
+ * Try resizing the browser to see it respond fluidly.
  */
 export const Default: Story = {
   args: {
@@ -46,7 +51,7 @@ export const Default: Story = {
 };
 
 /**
- * Select with a leading icon
+ * Select with a leading icon for visual context.
  */
 export const WithIcon: Story = {
   args: {
@@ -61,7 +66,7 @@ export const WithIcon: Story = {
 };
 
 /**
- * Small select with icon
+ * Small select with icon for compact layouts.
  */
 export const SmallWithIcon: Story = {
   args: {
@@ -77,7 +82,7 @@ export const SmallWithIcon: Story = {
 };
 
 /**
- * Select with label and icon
+ * Combine label, icon, and full width for standard form fields.
  */
 export const WithLabelAndIcon: Story = {
   args: {
@@ -89,12 +94,11 @@ export const WithLabelAndIcon: Story = {
       { label: 'Initech', value: 'initech' },
     ],
     icon: <FontAwesomeIcon icon={faBuilding} />,
-    fullWidth: true,
   },
 };
 
 /**
- * Select with default value
+ * Select with a pre-selected default value.
  */
 export const WithDefaultValue: Story = {
   args: {
@@ -105,7 +109,7 @@ export const WithDefaultValue: Story = {
 };
 
 /**
- * Disabled select
+ * Disabled select — reduced opacity, no interaction.
  */
 export const Disabled: Story = {
   args: {
@@ -116,7 +120,8 @@ export const Disabled: Story = {
 };
 
 /**
- * Select with error state
+ * Error state with validation message.
+ * Focus ring shows red instead of brand color.
  */
 export const WithError: Story = {
   args: {
@@ -129,12 +134,41 @@ export const WithError: Story = {
     ],
     error: 'Please select a region',
     icon: <FontAwesomeIcon icon={faGlobe} />,
-    fullWidth: true,
   },
 };
 
 /**
- * All three sizes compared
+ * Options grouped by category using `<optgroup>`.
+ */
+export const WithGroups: Story = {
+  args: {
+    label: 'Location',
+    placeholder: 'Select a city...',
+    options: [
+      {
+        label: 'United States',
+        options: [
+          { label: 'New York', value: 'ny' },
+          { label: 'San Francisco', value: 'sf' },
+          { label: 'Chicago', value: 'chi' },
+        ],
+      },
+      {
+        label: 'Europe',
+        options: [
+          { label: 'London', value: 'lon' },
+          { label: 'Paris', value: 'par' },
+          { label: 'Berlin', value: 'ber' },
+        ],
+      },
+    ],
+    icon: <FontAwesomeIcon icon={faGlobe} />,
+  },
+};
+
+/**
+ * All three sizes compared — height is driven by padding + line-height,
+ * not hardcoded pixel values.
  */
 export const AllSizes: Story = {
   parameters: {
@@ -147,10 +181,10 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)', minWidth: '300px' }}>
-      <Select size="sm" placeholder="Small" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
-      <Select size="md" placeholder="Medium" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
-      <Select size="lg" placeholder="Large" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} fullWidth />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)' }}>
+      <Select size="sm" placeholder="Small" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
+      <Select size="md" placeholder="Medium" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
+      <Select size="lg" placeholder="Large" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
     </div>
   ),
   args: {
@@ -159,7 +193,73 @@ export const AllSizes: Story = {
 };
 
 /**
- * Multiple selects in a form
+ * Responsive width — the select fills its container at any size.
+ * Resize the browser window to see the selects adapt fluidly.
+ */
+export const ResponsiveWidth: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `{/* Full width (default) — fills container */}
+<Select placeholder="Full width..." options={options} />
+
+{/* Constrained by parent — still fills its container */}
+<div style={{ maxWidth: '320px' }}>
+  <Select placeholder="Max 320px container..." options={options} />
+</div>
+
+{/* Inline/compact — fullWidth=false */}
+<Select placeholder="Compact..." options={options} fullWidth={false} />`,
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---xl)' }}>
+      <div>
+        <p style={{
+          fontFamily: 'var(--_typography---font-family--label)',
+          fontSize: 'var(--_typography---label--sm)',
+          color: 'var(--_color---text--muted)',
+          marginBottom: 'var(--_space---gap--md)',
+        }}>
+          Full width (default) — fills container
+        </p>
+        <Select placeholder="Full width..." options={basicOptions} />
+      </div>
+      <div>
+        <p style={{
+          fontFamily: 'var(--_typography---font-family--label)',
+          fontSize: 'var(--_typography---label--sm)',
+          color: 'var(--_color---text--muted)',
+          marginBottom: 'var(--_space---gap--md)',
+        }}>
+          Constrained by parent (max-width: 320px)
+        </p>
+        <div style={{ maxWidth: '320px' }}>
+          <Select placeholder="Max 320px container..." options={basicOptions} />
+        </div>
+      </div>
+      <div>
+        <p style={{
+          fontFamily: 'var(--_typography---font-family--label)',
+          fontSize: 'var(--_typography---label--sm)',
+          color: 'var(--_color---text--muted)',
+          marginBottom: 'var(--_space---gap--md)',
+        }}>
+          Compact (fullWidth=false) — shrinks to content
+        </p>
+        <Select placeholder="Compact..." options={basicOptions} fullWidth={false} />
+      </div>
+    </div>
+  ),
+  args: {
+    options: basicOptions,
+  },
+};
+
+/**
+ * Multiple selects in a form layout — fills container side-by-side
+ * or stacks on narrow viewports.
  */
 export const FormExample: Story = {
   parameters: {
@@ -171,32 +271,38 @@ export const FormExample: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)', minWidth: '300px' }}>
-      <Select
-        label="Country"
-        placeholder="Select country..."
-        options={[
-          { label: 'United States', value: 'us' },
-          { label: 'Canada', value: 'ca' },
-          { label: 'United Kingdom', value: 'uk' },
-          { label: 'Australia', value: 'au' },
-        ]}
-        icon={<FontAwesomeIcon icon={faGlobe} />}
-        fullWidth
-      />
-      <Select
-        label="Industry"
-        placeholder="Select industry..."
-        options={[
-          { label: 'Technology', value: 'tech' },
-          { label: 'Healthcare', value: 'healthcare' },
-          { label: 'Finance', value: 'finance' },
-          { label: 'Education', value: 'education' },
-          { label: 'Other', value: 'other' },
-        ]}
-        icon={<FontAwesomeIcon icon={faBuilding} />}
-        fullWidth
-      />
+    <div style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: 'var(--_space---lg)',
+    }}>
+      <div style={{ flex: '1 1 240px', minWidth: 0 }}>
+        <Select
+          label="Country"
+          placeholder="Select country..."
+          options={[
+            { label: 'United States', value: 'us' },
+            { label: 'Canada', value: 'ca' },
+            { label: 'United Kingdom', value: 'uk' },
+            { label: 'Australia', value: 'au' },
+          ]}
+          icon={<FontAwesomeIcon icon={faGlobe} />}
+        />
+      </div>
+      <div style={{ flex: '1 1 240px', minWidth: 0 }}>
+        <Select
+          label="Industry"
+          placeholder="Select industry..."
+          options={[
+            { label: 'Technology', value: 'tech' },
+            { label: 'Healthcare', value: 'healthcare' },
+            { label: 'Finance', value: 'finance' },
+            { label: 'Education', value: 'education' },
+            { label: 'Other', value: 'other' },
+          ]}
+          icon={<FontAwesomeIcon icon={faBuilding} />}
+        />
+      </div>
     </div>
   ),
   args: {

@@ -1,0 +1,87 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './ServiceBadge.stories';
+
+<Meta of={Stories} />
+
+# Service Badge
+
+Colored badge identifying Brik service categories. Each category has a dedicated color palette (primary, dark, light) used across the Brik ecosystem for consistent service identification.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Categories
+
+Five service categories, each with a unique color from the services token palette.
+
+### All categories
+<Canvas of={Stories.AllCategories} />
+
+### Brand
+<Canvas of={Stories.Brand} />
+
+### Marketing
+<Canvas of={Stories.Marketing} />
+
+### Information
+<Canvas of={Stories.Information} />
+
+### Product
+<Canvas of={Stories.Product} />
+
+### Service (back-office)
+<Canvas of={Stories.Service} />
+
+## Sizes
+
+Three size options: small (20px), medium (28px), and large (40px).
+<Canvas of={Stories.AllSizes} />
+
+## Label mode
+
+Inline display with category name text. Uses uppercase label typography with the category dark color.
+<Canvas of={Stories.Labels} />
+
+## Color tokens
+
+Each category maps to a three-tone palette (primary, dark, light) from the `--services--*` primitives.
+<Canvas of={Stories.ColorTokens} />
+
+## Contextual examples
+
+### Inline with text
+Service badges paired with service names in list contexts.
+<Canvas of={Stories.InlineWithText} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { ServiceBadge } from '@brik/bds';
+
+// Category badge
+<ServiceBadge category="marketing" />
+
+// With size
+<ServiceBadge category="brand" size="lg" />
+
+// Label mode
+<ServiceBadge category="product" mode="label" />
+
+// With specific service icon
+<ServiceBadge category="service" serviceName="CRM Setup and Data Cleanup" />
+```
+
+## Token reference
+
+| Category | Primary | Dark | Light |
+|---|---|---|---|
+| Marketing | `--services--green` | `--services--green-dark` | `--services--green-light` |
+| Brand | `--services--yellow` | `--services--yellow-dark` | `--services--yellow-light` |
+| Information | `--services--blue` | `--services--blue-dark` | `--services--blue-light` |
+| Product | `--services--purple` | `--services--purple-dark` | `--services--purple-light` |
+| Service | `--services--orange` | `--services--orange-dark` | `--services--orange-light` |

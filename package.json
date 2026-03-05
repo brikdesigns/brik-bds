@@ -62,6 +62,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint-tokens": "node scripts/lint-tokens.js",
+    "lint-tokens:grid": "node scripts/lint-tokens.js --check-grid",
+    "audit:grid": "node scripts/audit-grid.js",
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/lint-tokens.js --errors-only && npm run typecheck && npm run build-storybook",
     "precommit": "npm run validate",

@@ -75,6 +75,20 @@ Webflow uses **Spacious mode** by default on `.body` class.
 |-------|------|----------|
 | `--_space---lg` | 16px | 52px |
 
+## Consuming tokens in app projects
+
+Any project using brik-bds as a submodule (portals, dashboards, tools) MUST follow the token consumption pattern documented in [CONSUMING-TOKENS.md](CONSUMING-TOKENS.md).
+
+**Key rule:** Never write raw CSS `var()` strings inline. Import from `@/lib/tokens` and `@/lib/styles`.
+
+**Required files in every consuming project:**
+1. `src/lib/tokens.ts` - Figma style name to CSS var() mapping
+2. `src/lib/styles.ts` - Composed CSSProperties presets
+3. `src/components/prose.tsx` - Shared markdown renderer
+4. `.husky/pre-commit` - Token compliance gate (blocks hardcoded px values)
+
+**Reference implementation:** brik-client-portal
+
 ## Don't Edit the Submodule
 
 The copy at `brik-llm/foundations/brik-bds/` is a git submodule.

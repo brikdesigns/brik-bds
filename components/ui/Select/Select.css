@@ -1,0 +1,56 @@
+/**
+ * BDS Select Interactive States
+ *
+ * Handles hover, focus, active, and disabled states that can't be
+ * expressed in inline CSSProperties.
+ *
+ * Token reference:
+ * - --_color---border--input (default border)
+ * - --_color---border--primary (hover border — darker)
+ * - --_color---border--brand (focus border — theme color)
+ * - --_color---text--muted (placeholder color)
+ */
+
+.bds-select {
+  &:hover:not(:disabled) {
+    border-color: var(--_color---border--primary);
+  }
+
+  &:focus {
+    border-color: var(--_color---border--brand);
+    box-shadow: 0 0 0 1px var(--_color---border--brand);
+  }
+
+  &:focus-visible {
+    border-color: var(--_color---border--brand);
+    box-shadow: 0 0 0 1px var(--_color---border--brand);
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Placeholder option color (when first option with empty value is selected) */
+  &:invalid,
+  &.bds-select--placeholder {
+    color: var(--_color---text--muted);
+  }
+}
+
+/* Error state: red border persists through hover/focus */
+.bds-select--error {
+  border-color: var(--system--red);
+
+  &:hover:not(:disabled) {
+    border-color: var(--system--red);
+  }
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--system--red);
+    box-shadow: 0 0 0 1px var(--system--red);
+  }
+}
