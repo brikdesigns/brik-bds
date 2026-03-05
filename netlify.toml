@@ -6,16 +6,19 @@
   NODE_VERSION = "22"
 
 # ── Staging (branch deploys) ────────────────────────────────────────
-# Any push to `staging` branch auto-deploys to:
-#   staging--brikstorybook.netlify.app
-#
 # Workflow:
-#   main     → brikstorybook.netlify.app  (production)
-#   staging  → staging--brikstorybook.netlify.app
-#   PR #N    → deploy-preview-N--brikstorybook.netlify.app
+#   main     → storybook.brikdesigns.com  (production)
+#   staging  → staging.storybook.brikdesigns.com
 
 [context.staging]
   command = "npm run build-storybook"
 
 [context.deploy-preview]
   command = "npm run build-storybook"
+
+# ── Headers ─────────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
