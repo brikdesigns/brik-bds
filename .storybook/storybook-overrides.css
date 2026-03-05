@@ -72,7 +72,7 @@ pre,
 
 /* Inline code — subtle background, respects theme text color */
 code:not([class*="language-"]):not(pre code) {
-  background-color: rgba(128, 128, 128, 0.15) !important;
+  background-color: var(--_color---surface--secondary) !important;
   color: inherit !important;
   padding: 0.15em 0.4em !important;
   border-radius: 4px !important;
@@ -95,7 +95,7 @@ code:not([class*="language-"]):not(pre code) {
 /* Show code / Hide code toggle button */
 button.docblock-code-toggle {
   background-color: transparent !important;
-  color: var(--_color---text--muted, #828282) !important;
+  color: var(--_color---text--muted) !important;
   border: none !important;
   border-top: none !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
@@ -108,7 +108,7 @@ button.docblock-code-toggle {
 
 button.docblock-code-toggle:hover {
   opacity: 1;
-  color: var(--_color---text--brand, #4665f5) !important;
+  color: var(--_color---text--brand) !important;
 }
 
 /* Copy button inside source blocks — style it as a subtle floating pill */
@@ -238,7 +238,7 @@ div[class*="docs-story"] {
    Uses background shorthand to match emotion's shorthand property. */
 #storybook-docs#storybook-docs .sbdocs-preview {
   background: var(--_color---surface--primary) !important;
-  border: 1px solid var(--_color---border--secondary, #e0e0e0) !important;
+  border: 1px solid var(--_color---border--secondary) !important;
   border-radius: 6px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
   padding: 24px !important;
@@ -252,49 +252,15 @@ div[class*="docs-story"] {
 }
 
 /* ============================================
-   DARK MODE — Preview-specific overrides
-   Applied via [data-bds-dark="true"] on preview <body>.
+   DARK MODE — Only overrides that need different
+   non-token values (e.g. box-shadow opacity).
+   All token-based styling is in the IMMERSIVE DOCS
+   section below — tokens resolve per-theme automatically.
    ============================================ */
 
-/* Dark story preview containers */
+/* Dark preview containers need heavier shadow for depth on dark bg */
 body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
-  border-color: rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Dark code block borders — slightly brighter for visibility */
-body[data-bds-dark="true"] .docblock-source {
-  border-color: rgba(255, 255, 255, 0.12) !important;
-}
-
-/* Dark inline code — brighter background for contrast */
-body[data-bds-dark="true"] code:not([class*="language-"]):not(pre code) {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Dark args/props table */
-body[data-bds-dark="true"] div[class*="ArgTypes"] table,
-body[data-bds-dark="true"] .docblock-argstable {
-  border-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-body[data-bds-dark="true"] div[class*="ArgTypes"] th,
-body[data-bds-dark="true"] div[class*="ArgTypes"] td {
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-/* Dark H2 separator line */
-body[data-bds-dark="true"] .sbdocs h2 {
-  border-top-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Dark show-code toggle */
-body[data-bds-dark="true"] button.docblock-code-toggle {
-  color: rgba(255, 255, 255, 0.4) !important;
-}
-
-body[data-bds-dark="true"] button.docblock-code-toggle:hover {
-  color: var(--_color---text--brand, #e8ea76) !important;
 }
 
 /* ============================================
@@ -333,29 +299,47 @@ div[class*="Subtitle"] {
   color: var(--_color---text--secondary) !important;
 }
 
-/* Args/props table */
-div[class*="ArgTypes"] table,
-.docblock-argstable {
-  background: var(--_color---surface--secondary, #f2f2f2) !important;
+/* Args/props table — doubled-ID to beat emotion's && on td backgrounds.
+   SB10 sets background: theme.background.content on tbody > tr > * with && specificity.
+   All values use BDS tokens — they resolve per-theme automatically (including dark). */
+#storybook-docs#storybook-docs .docblock-argstable {
   border-radius: 6px !important;
   overflow: hidden !important;
-}
-
-div[class*="ArgTypes"] th,
-div[class*="ArgTypes"] td {
   color: var(--_color---text--primary) !important;
-  border-color: var(--_color---border--secondary) !important;
 }
 
-div[class*="ArgTypes"] td span,
-div[class*="ArgTypes"] td p {
+#storybook-docs#storybook-docs .docblock-argstable thead th {
+  color: var(--_color---text--muted) !important;
+  border-color: var(--_color---border--muted) !important;
+}
+
+#storybook-docs#storybook-docs .docblock-argstable tbody > tr > td,
+#storybook-docs#storybook-docs .docblock-argstable tbody > tr > th {
+  background: var(--_color---surface--secondary) !important;
+  color: var(--_color---text--primary) !important;
+  border-color: var(--_color---border--muted) !important;
+}
+
+#storybook-docs#storybook-docs .docblock-argstable tbody > tr > td span,
+#storybook-docs#storybook-docs .docblock-argstable tbody > tr > td p {
   color: var(--_color---text--secondary) !important;
 }
 
+/* Prop name (first column) — brand color for emphasis */
+#storybook-docs#storybook-docs .docblock-argstable tbody > tr > td:first-of-type {
+  color: var(--_color---text--brand) !important;
+}
+
 /* Prop default value badges */
-div[class*="ArgTypes"] td code {
-  background-color: rgba(128, 128, 128, 0.15) !important;
+#storybook-docs#storybook-docs .docblock-argstable td code {
+  background-color: var(--_color---surface--primary) !important;
   color: var(--_color---text--primary) !important;
+}
+
+/* Prop type badges (the "undefined", "string", etc. pills) */
+#storybook-docs#storybook-docs .docblock-argstable td button,
+#storybook-docs#storybook-docs .docblock-argstable td [class*="TypeUnion"] span {
+  color: var(--_color---text--muted) !important;
 }
 
 /* TOC (table of contents) in docs sidebar */
@@ -458,7 +442,7 @@ div[class*="ArgTypes"] td code {
   margin-top: 48px !important;
   margin-bottom: 16px !important;
   padding-top: 24px !important;
-  border-top: 1px solid var(--_color---border--muted, #e0e0e0) !important;
+  border-top: 1px solid var(--_color---border--muted) !important;
 }
 
 /* First h2 after h1 shouldn't have extra top margin */
