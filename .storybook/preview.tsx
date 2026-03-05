@@ -202,11 +202,11 @@ const preview: Preview = {
       storySort: {
         order: [
           'Getting Started',
+          ['Welcome', 'ThemeSwitcher'],
           'Foundation',
           ['Design Tokens', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size'],
           'Components',
           '*',
-          'Theme',
         ],
       },
     },
