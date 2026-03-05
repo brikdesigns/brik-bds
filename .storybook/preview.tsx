@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Preview, Decorator } from '@storybook/react-vite';
+import { DocsContainer as DefaultDocsContainer } from '@storybook/addon-docs/blocks';
+import { create } from 'storybook/theming';
 import type { ThemeNumber } from '../tokens';
+import { storybookThemes } from '../tokens/storybook-themes';
 
 // Font Awesome 6 — prevent auto-CSS injection, import CSS manually
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -14,6 +17,57 @@ import '../tokens/webflow-tokens.css';
 import '../tokens/themes.css';
 // Import overrides AFTER Webflow CSS to fix Storybook UI conflicts
 import './storybook-overrides.css';
+
+/**
+ * Build Storybook theme objects for the preview iframe.
+ * This makes emotion-styled internal components (Canvas preview,
+ * Source blocks, ArgTypes, ActionBar) respect our dark/light themes.
+ */
+const previewThemes: Record<string, ReturnType<typeof create>> = {};
+for (const [themeNum, cfg] of Object.entries(storybookThemes)) {
+  previewThemes[themeNum] = create({
+    base: cfg.base,
+    appContentBg: 'transparent',
+    appPreviewBg: 'transparent',
+    appBorderColor: cfg.appBorderColor,
+    barBg: cfg.barBg,
+    barTextColor: cfg.barTextColor,
+    barSelectedColor: cfg.barSelectedColor,
+    barHoverColor: cfg.barHoverColor,
+    textColor: cfg.textColor,
+    textMutedColor: cfg.textMutedColor,
+    colorPrimary: cfg.colorPrimary,
+    colorSecondary: cfg.colorSecondary,
+    inputBg: cfg.inputBg,
+    inputBorder: cfg.inputBorder,
+    inputTextColor: cfg.inputTextColor,
+    fontBase: cfg.fontBase,
+    fontCode: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
+    appBorderRadius: 4,
+  });
+}
+
+/**
+ * Custom DocsContainer — dynamically applies the correct Storybook theme
+ * to the preview iframe's emotion-styled components (Canvas preview,
+ * Source blocks, ArgTypes, ActionBar) based on the selected BDS theme.
+ */
+const ThemedDocsContainer: typeof DefaultDocsContainer = (props) => {
+  const [themeNum, setThemeNum] = useState('brik');
+  const channel = props.context.channel;
+
+  useEffect(() => {
+    const handler = ({ globals }: { globals: Record<string, unknown> }) => {
+      const num = globals?.themeNumber as string;
+      if (num) setThemeNum(num);
+    };
+    channel.on('globalsUpdated', handler);
+    return () => channel.off('globalsUpdated', handler);
+  }, [channel]);
+
+  const theme = previewThemes[themeNum] || previewThemes['brik'];
+  return React.createElement(DefaultDocsContainer, { ...props, theme });
+};
 
 /**
  * Theme decorator — applies theme classes to the preview <body>
@@ -37,6 +91,10 @@ const withTheme: Decorator = (Story, context) => {
     body.className = body.className.replace(/\btheme-\S+/g, '');
     // .body.theme-X matches our CSS selectors in themes.css
     body.classList.add('body', `theme-${themeNumber}`);
+
+    // Set dark mode data attribute for CSS selectors that need light/dark branching
+    const isDark = storybookThemes[themeNumber]?.base === 'dark';
+    body.setAttribute('data-bds-dark', String(isDark));
 
     // Base font size — scales all rem-based tokens
     body.style.fontSize = `${baseFont}px`;
@@ -164,6 +222,7 @@ const preview: Preview = {
     },
     docs: {
       toc: true,
+      container: ThemedDocsContainer,
       source: {
         type: 'dynamic',
         excludeDecorators: true,
