@@ -4,20 +4,62 @@
  * This file ensures Webflow CSS doesn't leak into Storybook's own UI
  * and applies immersive theming to the docs page.
  * Import this AFTER the Webflow CSS to override any conflicts.
+ *
+ * Key architecture:
+ * - Storybook's emotion CSS-in-JS injects styles AFTER static CSS.
+ *   Doubled IDs (#X#X) boost specificity above emotion's !important rules.
+ * - Theme variables come from themes.css (.theme-X selectors on <body>).
+ * - Dark mode uses [data-bds-dark="true"] on <body> for CSS branching.
+ * - Code blocks use a consistent dark style (VS Code Dark+) regardless of theme.
  */
 
 /* ============================================
-   CODE BLOCK STYLING
+   CODE BLOCK STYLING — Unified for all contexts
+   Both MDX fenced blocks and Canvas "Show code"
+   render through the same Source component in SB10.
    ============================================ */
 
-/* Code blocks — dark background with light text, tight padding */
+/* The outer docblock-source wrapper (emotion-styled) */
+.docblock-source {
+  background-color: #1e1e1e !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  margin: 16px 0 24px !important;
+  overflow: hidden !important;
+}
+
+/* Pre blocks inside source containers */
+.docblock-source pre,
+.docblock-source pre.prismjs {
+  background-color: #1e1e1e !important;
+  color: #d4d4d4 !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  border-radius: 0 !important;
+  text-shadow: none !important;
+  margin: 0 !important;
+  padding: 16px 20px !important;
+  overflow-x: auto !important;
+}
+
+/* Code inside pre blocks */
+.docblock-source code,
+pre code,
+pre[class*="language-"] code {
+  background: transparent !important;
+  color: #d4d4d4 !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  text-shadow: none !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Catch-all for any pre blocks outside docblock-source (Canvas source, etc.) */
 pre,
-.docblock-source,
 .docs-story pre,
-[class*="docblock"] pre,
-.sbdocs pre,
 .sb-story pre,
-div[class*="Source"] pre,
 .prismjs {
   background-color: #1e1e1e !important;
   color: #d4d4d4 !important;
@@ -25,7 +67,7 @@ div[class*="Source"] pre,
   border-radius: 6px !important;
   text-shadow: none !important;
   margin: 0 !important;
-  padding: 16px !important;
+  padding: 16px 20px !important;
 }
 
 /* Inline code — subtle background, respects theme text color */
@@ -33,38 +75,58 @@ code:not([class*="language-"]):not(pre code) {
   background-color: rgba(128, 128, 128, 0.15) !important;
   color: inherit !important;
   padding: 0.15em 0.4em !important;
-  border-radius: 3px !important;
-  font-size: 0.9em !important;
+  border-radius: 4px !important;
+  font-size: 0.875em !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
 }
 
-/* Code inside pre blocks */
-pre code,
-pre[class*="language-"] code,
-div[class*="Source"] code {
-  background: transparent !important;
-  color: #d4d4d4 !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
-  text-shadow: none !important;
-}
+/* ============================================
+   ACTION BAR — "Show code" / "Copy" buttons
+   Consistent dark treatment matching code blocks.
+   ============================================ */
 
-/* "Show code" button container — clean border, proper contrast */
-div[class*="Source"] {
+/* The ActionBar container at the bottom of Canvas previews */
+#storybook-docs#storybook-docs .sbdocs-preview [class*="ActionBar"],
+#storybook-docs#storybook-docs .sbdocs-preview div:has(> button.docblock-code-toggle) {
   background-color: transparent !important;
-  border: 1px solid var(--_color---border--secondary, #e0e0e0) !important;
-  border-radius: 6px !important;
-  overflow: hidden !important;
+  border-top: none !important;
 }
 
-/* "Show code" toggle button */
-div[class*="Source"] button,
-.docblock-code-toggle {
-  background-color: var(--_color---surface--secondary, #f5f5f5) !important;
-  color: var(--_color---text--secondary, #666) !important;
-  border-top: 1px solid var(--_color---border--secondary, #e0e0e0) !important;
-  font-family: var(--_typography---font-family--label, sans-serif) !important;
+/* Show code / Hide code toggle button */
+button.docblock-code-toggle {
+  background-color: transparent !important;
+  color: var(--_color---text--muted, #828282) !important;
+  border: none !important;
+  border-top: none !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
   font-size: 12px !important;
-  padding: 6px 12px !important;
+  padding: 8px 16px !important;
+  cursor: pointer !important;
+  opacity: 0.8;
+  transition: opacity 150ms ease, color 150ms ease;
+}
+
+button.docblock-code-toggle:hover {
+  opacity: 1;
+  color: var(--_color---text--brand, #4665f5) !important;
+}
+
+/* Copy button inside source blocks — style it as a subtle floating pill */
+.docblock-source button:not(.docblock-code-toggle) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  font-size: 11px !important;
+  padding: 4px 10px !important;
+  cursor: pointer !important;
+  transition: all 150ms ease;
+}
+
+.docblock-source button:not(.docblock-code-toggle):hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* ============================================
@@ -139,7 +201,7 @@ div[class*="docs-story"] {
   box-shadow: none !important;
 }
 
-/* SB8 — story containers and their parent emotion wrappers.
+/* SB8+ — story containers and their parent emotion wrappers.
    Doubled ID (#X#X) boosts specificity above Storybook's
    emotion CSS-in-JS which injects !important rules AFTER
    our static CSS loads. Without this, cascade order means
@@ -147,9 +209,7 @@ div[class*="docs-story"] {
 
    :has() targets the emotion wrapper div (direct child of .sbdocs)
    that CONTAINS a story anchor — this was previously unhandled,
-   allowing emotion backgrounds/margins to bleed through.
-
-   Specificity: (2,0,1,1) for :has(), (2,1,0,1) for descendants */
+   allowing emotion backgrounds/margins to bleed through. */
 #storybook-docs#storybook-docs > div:has(> [id^="anchor--"]),
 #storybook-docs#storybook-docs [id^="anchor--"],
 #storybook-docs#storybook-docs [id^="anchor--"] > div,
@@ -182,6 +242,8 @@ div[class*="docs-story"] {
   border-radius: 6px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
   padding: 24px !important;
+  margin: 16px 0 24px !important;
+  overflow: hidden !important;
 }
 
 /* The .docs-story div inside the preview — ensure transparent */
@@ -190,12 +252,58 @@ div[class*="docs-story"] {
 }
 
 /* ============================================
+   DARK MODE — Preview-specific overrides
+   Applied via [data-bds-dark="true"] on preview <body>.
+   ============================================ */
+
+/* Dark story preview containers */
+body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Dark code block borders — slightly brighter for visibility */
+body[data-bds-dark="true"] .docblock-source {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Dark inline code — brighter background for contrast */
+body[data-bds-dark="true"] code:not([class*="language-"]):not(pre code) {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Dark args/props table */
+body[data-bds-dark="true"] div[class*="ArgTypes"] table,
+body[data-bds-dark="true"] .docblock-argstable {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body[data-bds-dark="true"] div[class*="ArgTypes"] th,
+body[data-bds-dark="true"] div[class*="ArgTypes"] td {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Dark H2 separator line */
+body[data-bds-dark="true"] .sbdocs h2 {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Dark show-code toggle */
+body[data-bds-dark="true"] button.docblock-code-toggle {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+body[data-bds-dark="true"] button.docblock-code-toggle:hover {
+  color: var(--_color---text--brand, #e8ea76) !important;
+}
+
+/* ============================================
    IMMERSIVE DOCS THEMING
 
    These rules theme the docs page chrome (headings, text,
    args table, TOC) to match the selected theme. Combined
    with body-level theme classes, this gives a fully immersive
-   theming experience similar to Carbon Design System.
+   theming experience.
    ============================================ */
 
 /* Docs headings — theme heading font + color */
@@ -229,6 +337,8 @@ div[class*="Subtitle"] {
 div[class*="ArgTypes"] table,
 .docblock-argstable {
   background: var(--_color---surface--secondary, #f2f2f2) !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
 }
 
 div[class*="ArgTypes"] th,
@@ -240,6 +350,12 @@ div[class*="ArgTypes"] td {
 div[class*="ArgTypes"] td span,
 div[class*="ArgTypes"] td p {
   color: var(--_color---text--secondary) !important;
+}
+
+/* Prop default value badges */
+div[class*="ArgTypes"] td code {
+  background-color: rgba(128, 128, 128, 0.15) !important;
+  color: var(--_color---text--primary) !important;
 }
 
 /* TOC (table of contents) in docs sidebar */
@@ -311,6 +427,7 @@ div[class*="ArgTypes"] td p {
 
 /* ============================================
    SYNTAX HIGHLIGHTING — VS Code Dark+ palette
+   Applied to both MDX fenced blocks and Canvas source.
    ============================================ */
 
 .token.tag { color: #569cd6 !important; background: transparent !important; }
@@ -329,7 +446,6 @@ div[class*="ArgTypes"] td p {
 
 /* ============================================
    DOCS PAGE LAYOUT — Breathing room between sections
-   Clarity DS uses generous vertical rhythm for readability.
    ============================================ */
 
 /* Increase spacing between major sections in docs */
@@ -382,7 +498,7 @@ div[class*="ArgTypes"] td p {
 /* Story preview blocks — space above and below */
 #storybook-docs#storybook-docs .sbdocs-preview {
   margin-top: 16px !important;
-  margin-bottom: 32px !important;
+  margin-bottom: 24px !important;
 }
 
 /* Docs content blocks — spacing between MDX custom elements.
