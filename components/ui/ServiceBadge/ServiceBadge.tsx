@@ -79,6 +79,7 @@ const serviceIconOverrides: Record<string, string> = {
   'Software Automation Setup': 'back-office-automated-workflow',
   'Standard Operating Procedures (SOP) Creation': 'back-office-business-solutions',
   'Training Setup & Organization': 'back-office-consulting',
+  'Information Design': 'information-design',
 };
 
 function normalizeServiceName(name: string): string {
