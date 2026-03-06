@@ -4,7 +4,7 @@ import { Banner } from './Banner';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Banner> = {
-  title: 'Components/banner',
+  title: 'Components/Feedback/banner',
   component: Banner,
   parameters: {
     layout: 'padded',

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Radio } from './Radio';
 
 const meta = {
-  title: 'Components/radio',
+  title: 'Components/Form/radio',
   component: Radio,
   parameters: {
     layout: 'centered',

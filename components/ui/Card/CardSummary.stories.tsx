@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardSummary } from './CardSummary';
 
 const meta = {
-  title: 'Components/card-summary',
+  title: 'Components/Card/card-summary',
   component: CardSummary,
   parameters: {
     layout: 'centered',

@@ -15,7 +15,7 @@ const sampleItems = [
 ];
 
 const meta = {
-  title: 'Components/menu',
+  title: 'Components/Navigation/menu',
   component: Menu,
   parameters: {
     layout: 'centered',

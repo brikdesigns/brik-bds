@@ -3,7 +3,7 @@ import { AlertBanner } from './AlertBanner';
 import { Button } from '../Button';
 
 const meta: Meta<typeof AlertBanner> = {
-  title: 'Components/alert-banner',
+  title: 'Components/Feedback/alert-banner',
   component: AlertBanner,
   parameters: {
     layout: 'padded',

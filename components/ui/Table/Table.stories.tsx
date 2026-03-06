@@ -22,7 +22,7 @@ import { TextInput } from '../TextInput';
 import { TextLink } from '../TextLink';
 
 const meta: Meta<typeof Table> = {
-  title: 'Components/table',
+  title: 'Components/Table/table',
   component: Table,
   parameters: {
     layout: 'padded',

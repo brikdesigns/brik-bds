@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Dot } from './Dot';
 
 const meta: Meta<typeof Dot> = {
-  title: 'Components/dot',
+  title: 'Components/Indicator/dot',
   component: Dot,
   parameters: {
     layout: 'centered',

@@ -13,7 +13,7 @@ import {
 import { FilterButton } from './FilterButton';
 
 const meta = {
-  title: 'Components/filter-button',
+  title: 'Components/Input/filter-button',
   component: FilterButton,
   parameters: {
     layout: 'centered',

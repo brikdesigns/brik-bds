@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Counter } from './Counter';
 
 const meta = {
-  title: 'Components/counter',
+  title: 'Components/Indicator/counter',
   component: Counter,
   parameters: {
     layout: 'centered',
