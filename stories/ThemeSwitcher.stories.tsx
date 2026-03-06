@@ -4,36 +4,33 @@ import { themeMetadata, ThemeNumber } from '../tokens';
 /**
  * ThemeSwitcher Demo
  *
- * Demonstrates the BDS theme system. Use toolbar to switch between 8 themes.
+ * Demonstrates the BDS theme system. Use toolbar to switch between 9 themes.
  * Each theme bundles color palette, typography, and spacing.
- *
- * CSS Variables use Webflow naming: --_color---[category]--[variant]
  */
 
 function ThemeDemo() {
-  // Get current theme from URL or default
   const urlParams = new URLSearchParams(window.location.search);
   const globalsParam = urlParams.get('globals');
-  let currentTheme: ThemeNumber = '1';
+  let currentTheme: ThemeNumber = 'brik';
   if (globalsParam) {
-    const match = globalsParam.match(/themeNumber:(\d)/);
+    const match = globalsParam.match(/themeNumber:([a-z0-9]+)/);
     if (match) currentTheme = match[1] as ThemeNumber;
   }
 
-  const meta = themeMetadata[currentTheme] || themeMetadata['1'];
+  const meta = themeMetadata[currentTheme] || themeMetadata['brik'];
 
   return (
     <div
       style={{
-        padding: 'var(--_space---lg, 24px)',
-        fontFamily: 'var(--_typography---font-family--body, sans-serif)',
+        padding: 'var(--padding-lg)',
+        fontFamily: 'var(--font-family-body)',
       }}
     >
       <h1
         style={{
-          fontFamily: 'var(--_typography---font-family--heading, sans-serif)',
-          fontSize: 'var(--_typography---heading--xx-large, 2.5rem)',
-          marginBottom: 'var(--_space---md, 16px)',
+          fontFamily: 'var(--font-family-heading)',
+          fontSize: 'var(--heading-xxl)',
+          marginBottom: 'var(--padding-md)',
         }}
       >
         BDS Theme Switcher
@@ -41,9 +38,9 @@ function ThemeDemo() {
 
       <p
         style={{
-          fontSize: 'var(--_typography---body--lg, 1.125rem)',
-          color: 'var(--_color---text--secondary)',
-          marginBottom: 'var(--_space---lg, 24px)',
+          fontSize: 'var(--body-lg)',
+          color: 'var(--text-secondary)',
+          marginBottom: 'var(--padding-lg)',
         }}
       >
         Use the toolbar controls above to switch themes.
@@ -54,19 +51,19 @@ function ThemeDemo() {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 'var(--_space---gap--md, 16px)',
-          marginBottom: 'var(--_space---xl, 48px)',
+          gap: 'var(--gap-md)',
+          marginBottom: 'var(--padding-xl)',
         }}
       >
-        <ThemeCard label="Theme Number" value={currentTheme} />
-        <ThemeCard label="Theme Name" value={meta.name} />
+        <ThemeCard label="Theme" value={currentTheme} />
+        <ThemeCard label="Name" value={meta.name} />
         <ThemeCard label="Mode" value={meta.isDark ? 'Dark' : 'Light'} />
       </div>
 
       <p
         style={{
-          color: 'var(--_color---text--muted)',
-          marginBottom: 'var(--_space---xl)',
+          color: 'var(--text-muted)',
+          marginBottom: 'var(--padding-xl)',
           fontStyle: 'italic',
         }}
       >
@@ -74,77 +71,77 @@ function ThemeDemo() {
       </p>
 
       {/* Color Swatches */}
-      <SectionTitle>Page & Surface Colors</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '8px', marginBottom: '32px' }}>
-        <ColorSwatch name="page--primary" />
-        <ColorSwatch name="page--secondary" />
-        <ColorSwatch name="surface--primary" />
-        <ColorSwatch name="surface--secondary" />
-        <ColorSwatch name="surface--nav" />
+      <SectionTitle>Page and surface</SectionTitle>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--gap-md)', marginBottom: 'var(--padding-lg)' }}>
+        <ColorSwatch name="page-primary" />
+        <ColorSwatch name="page-secondary" />
+        <ColorSwatch name="surface-primary" />
+        <ColorSwatch name="surface-secondary" />
+        <ColorSwatch name="surface-nav" />
       </div>
 
-      <SectionTitle>Brand & Background Colors</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '8px', marginBottom: '32px' }}>
-        <ColorSwatch name="background--brand-primary" />
-        <ColorSwatch name="background--brand-secondary" />
-        <ColorSwatch name="background--primary" />
-        <ColorSwatch name="background--secondary" />
+      <SectionTitle>Brand and background</SectionTitle>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--gap-md)', marginBottom: 'var(--padding-lg)' }}>
+        <ColorSwatch name="background-brand-primary" />
+        <ColorSwatch name="background-brand-secondary" />
+        <ColorSwatch name="background-primary" />
+        <ColorSwatch name="background-secondary" />
       </div>
 
-      <SectionTitle>Text Colors</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '8px', marginBottom: '32px' }}>
-        <ColorSwatch name="text--primary" isText />
-        <ColorSwatch name="text--secondary" isText />
-        <ColorSwatch name="text--muted" isText />
-        <ColorSwatch name="text--brand" isText />
-        <ColorSwatch name="text--inverse" isText />
+      <SectionTitle>Text</SectionTitle>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--gap-md)', marginBottom: 'var(--padding-lg)' }}>
+        <ColorSwatch name="text-primary" isText />
+        <ColorSwatch name="text-secondary" isText />
+        <ColorSwatch name="text-muted" isText />
+        <ColorSwatch name="text-brand-primary" isText />
+        <ColorSwatch name="text-inverse" isText />
       </div>
 
-      <SectionTitle>Theme Accent Colors</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '8px', marginBottom: '32px' }}>
-        <ColorSwatch name="theme--primary" />
-        <ColorSwatch name="theme--secondary" />
-        <ColorSwatch name="theme--tertiary" />
-        <ColorSwatch name="theme--accent" />
+      <SectionTitle>Theme accents</SectionTitle>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--gap-md)', marginBottom: 'var(--padding-lg)' }}>
+        <ColorSwatch name="theme-blue-blue-light" />
+        <ColorSwatch name="theme-blue-blue-lighter" />
+        <ColorSwatch name="theme-blue-green" />
+        <ColorSwatch name="theme-blue-blue-dark" />
       </div>
 
       {/* Typography Demo */}
       <SectionTitle>Typography</SectionTitle>
       <div
         style={{
-          backgroundColor: 'var(--_color---surface--secondary)',
-          padding: 'var(--_space---md)',
-          borderRadius: '8px',
-          marginBottom: '32px',
+          backgroundColor: 'var(--surface-secondary)',
+          padding: 'var(--padding-md)',
+          borderRadius: 'var(--border-radius-md)',
+          marginBottom: 'var(--padding-lg)',
         }}
       >
-        <p style={{ fontFamily: 'var(--_typography---font-family--display)', fontSize: '2rem', marginBottom: '8px' }}>
+        <p style={{ fontFamily: 'var(--font-family-display)', fontSize: 'var(--heading-xl)', marginBottom: 'var(--gap-sm)' }}>
           Display Font
         </p>
-        <p style={{ fontFamily: 'var(--_typography---font-family--heading)', fontSize: '1.5rem', marginBottom: '8px' }}>
+        <p style={{ fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-lg)', marginBottom: 'var(--gap-sm)' }}>
           Heading Font
         </p>
-        <p style={{ fontFamily: 'var(--_typography---font-family--body)', fontSize: '1rem', marginBottom: '8px' }}>
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', marginBottom: 'var(--gap-sm)' }}>
           Body font for paragraphs and content
         </p>
-        <p style={{ fontFamily: 'var(--_typography---font-family--label)', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <p style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-md)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Label Font
         </p>
       </div>
 
       {/* Buttons */}
       <SectionTitle>Buttons</SectionTitle>
-      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '32px' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap', marginBottom: 'var(--padding-lg)' }}>
         <button
           style={{
-            padding: '8px 24px',
-            backgroundColor: 'var(--_color---background--brand-primary)',
-            color: 'var(--_color---text--inverse)',
+            padding: 'var(--gap-md) var(--padding-sm)',
+            backgroundColor: 'var(--background-brand-primary)',
+            color: 'var(--text-inverse)',
             border: 'none',
-            borderRadius: '4px',
-            fontFamily: 'var(--_typography---font-family--label)',
-            fontSize: '1rem',
-            fontWeight: 600,
+            borderRadius: 'var(--border-radius-md)',
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-md)',
+            fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
             cursor: 'pointer',
           }}
         >
@@ -152,14 +149,14 @@ function ThemeDemo() {
         </button>
         <button
           style={{
-            padding: '8px 24px',
+            padding: 'var(--gap-md) var(--padding-sm)',
             backgroundColor: 'transparent',
-            color: 'var(--_color---text--brand)',
-            border: '2px solid var(--_color---border--brand)',
-            borderRadius: '4px',
-            fontFamily: 'var(--_typography---font-family--label)',
-            fontSize: '1rem',
-            fontWeight: 600,
+            color: 'var(--text-brand-primary)',
+            border: 'var(--border-width-lg) solid var(--border-brand-primary)',
+            borderRadius: 'var(--border-radius-md)',
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-md)',
+            fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
             cursor: 'pointer',
           }}
         >
@@ -167,13 +164,13 @@ function ThemeDemo() {
         </button>
         <button
           style={{
-            padding: '8px 24px',
-            backgroundColor: 'var(--_color---surface--secondary)',
-            color: 'var(--_color---text--primary)',
-            border: '1px solid var(--_color---border--secondary)',
-            borderRadius: '4px',
-            fontFamily: 'var(--_typography---font-family--label)',
-            fontSize: '1rem',
+            padding: 'var(--gap-md) var(--padding-sm)',
+            backgroundColor: 'var(--surface-secondary)',
+            color: 'var(--text-primary)',
+            border: 'var(--border-width-lg) solid var(--border-secondary)',
+            borderRadius: 'var(--border-radius-md)',
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-md)',
             cursor: 'pointer',
           }}
         >
@@ -182,9 +179,9 @@ function ThemeDemo() {
       </div>
 
       {/* All Themes Grid */}
-      <SectionTitle>All Available Themes</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
-        {(['1', '2', '3', '4', '5', '6', '7', '8'] as ThemeNumber[]).map((num) => (
+      <SectionTitle>All available themes</SectionTitle>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--gap-md)' }}>
+        {(['brik', '1', '2', '3', '4', '5', '6', '7', '8'] as ThemeNumber[]).map((num) => (
           <ThemePreview key={num} themeNum={num} isActive={num === currentTheme} />
         ))}
       </div>
@@ -196,10 +193,10 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <h2
       style={{
-        fontFamily: 'var(--_typography---font-family--heading)',
-        fontSize: 'var(--_typography---heading--large, 1.5rem)',
-        marginBottom: '16px',
-        marginTop: '24px',
+        fontFamily: 'var(--font-family-heading)',
+        fontSize: 'var(--heading-lg)',
+        marginBottom: 'var(--gap-lg)',
+        marginTop: 'var(--padding-lg)',
       }}
     >
       {children}
@@ -211,29 +208,29 @@ function ThemeCard({ label, value }: { label: string; value: string }) {
   return (
     <div
       style={{
-        backgroundColor: 'var(--_color---surface--secondary)',
-        padding: '16px',
-        borderRadius: '8px',
-        border: '1px solid var(--_color---border--secondary)',
+        backgroundColor: 'var(--surface-secondary)',
+        padding: 'var(--padding-sm)',
+        borderRadius: 'var(--border-radius-md)',
+        border: 'var(--border-width-lg) solid var(--border-secondary)',
       }}
     >
       <div
         style={{
-          fontSize: '0.75rem',
-          color: 'var(--_color---text--muted)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-muted)',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
-          marginBottom: '4px',
-          fontFamily: 'var(--_typography---font-family--label)',
+          marginBottom: 'var(--gap-xs)',
+          fontFamily: 'var(--font-family-label)',
         }}
       >
         {label}
       </div>
       <div
         style={{
-          fontSize: '1.25rem',
-          fontWeight: 600,
-          fontFamily: 'var(--_typography---font-family--heading)',
+          fontSize: 'var(--body-lg)',
+          fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+          fontFamily: 'var(--font-family-heading)',
         }}
       >
         {value}
@@ -243,40 +240,39 @@ function ThemeCard({ label, value }: { label: string; value: string }) {
 }
 
 function ColorSwatch({ name, isText }: { name: string; isText?: boolean }) {
-  const varName = `--_color---${name}`;
-  const displayName = name.replace(/--/g, '-');
+  const varName = `--${name}`;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xs)' }}>
       <div
         style={{
           width: '100%',
           height: '48px',
-          backgroundColor: isText ? 'var(--_color---surface--primary)' : `var(${varName})`,
-          borderRadius: '4px',
-          border: '1px solid var(--_color---border--secondary)',
+          backgroundColor: isText ? 'var(--surface-primary)' : `var(${varName})`,
+          borderRadius: 'var(--border-radius-md)',
+          border: 'var(--border-width-lg) solid var(--border-secondary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
         {isText && (
-          <span style={{ color: `var(${varName})`, fontWeight: 600, fontSize: '1.25rem' }}>
+          <span style={{ color: `var(${varName})`, fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, fontSize: 'var(--body-lg)' }}>
             Aa
           </span>
         )}
       </div>
       <span
         style={{
-          fontSize: '0.7rem',
-          color: 'var(--_color---text--muted)',
-          fontFamily: 'var(--_typography---font-family--label)',
+          fontSize: 'var(--body-xs)',
+          color: 'var(--text-muted)',
+          fontFamily: 'var(--font-family-label)',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
         }}
       >
-        {displayName}
+        {name}
       </span>
     </div>
   );
@@ -288,22 +284,22 @@ function ThemePreview({ themeNum, isActive }: { themeNum: ThemeNumber; isActive:
   return (
     <div
       style={{
-        padding: '12px',
-        borderRadius: '8px',
-        border: isActive ? '2px solid var(--_color---border--brand)' : '1px solid var(--_color---border--secondary)',
-        backgroundColor: 'var(--_color---surface--secondary)',
+        padding: 'var(--gap-lg)',
+        borderRadius: 'var(--border-radius-md)',
+        border: isActive ? '2px solid var(--border-brand-primary)' : 'var(--border-width-lg) solid var(--border-secondary)',
+        backgroundColor: 'var(--surface-secondary)',
         opacity: isActive ? 1 : 0.7,
       }}
     >
-      <div style={{ fontWeight: 600, marginBottom: '4px', fontSize: '0.9rem' }}>
+      <div style={{ fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, marginBottom: 'var(--gap-xs)', fontSize: 'var(--body-md)' }}>
         {themeNum}: {meta.name}
       </div>
-      <div style={{ fontSize: '0.75rem', color: 'var(--_color---text--muted)' }}>
-        {meta.isDark ? '🌙 Dark' : '☀️ Light'}
+      <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>
+        {meta.isDark ? 'Dark' : 'Light'}
       </div>
       {isActive && (
-        <div style={{ fontSize: '0.75rem', color: 'var(--_color---text--brand)', fontWeight: 600, marginTop: '4px' }}>
-          ✓ Active
+        <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-brand-primary)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, marginTop: 'var(--gap-xs)' }}>
+          Active
         </div>
       )}
     </div>
@@ -315,36 +311,6 @@ const meta: Meta<typeof ThemeDemo> = {
   component: ThemeDemo,
   parameters: {
     layout: 'fullscreen',
-    docs: {
-      description: {
-        component: `
-# BDS Theme System
-
-9 bundled themes (8 numbered + Brik brand), each with color, typography, and spacing.
-
-| # | Name | Heading Font | Body Font | Mode |
-|---|------|-------------|-----------|------|
-| brik | Brik Brand | Poppins | Poppins | Light |
-| 1 | Default | Droid Sans | Open Sans | Light |
-| 2 | Dark | Geist | Geist Mono | Dark |
-| 3 | Blue | IBM Plex Sans | Source Sans 3 | Light |
-| 4 | Gold | Lato | Hind | Light |
-| 5 | Peach | Newsreader | Open Sans | Light |
-| 6 | Minimal | IBM Plex Sans | Source Sans 3 | Light |
-| 7 | Warm | Lato | Hind | Light |
-| 8 | Vibrant | Playfair Display | Hind | Light |
-
-## Variable Naming
-
-\`\`\`css
---_color---page--primary
---_color---text--brand
---_typography---font-family--heading
---_space---lg
-\`\`\`
-        `,
-      },
-    },
   },
 };
 
@@ -352,6 +318,10 @@ export default meta;
 type Story = StoryObj<typeof ThemeDemo>;
 
 export const Default: Story = {};
+
+export const BrikBrand: Story = {
+  globals: { themeNumber: 'brik' },
+};
 
 export const Dark: Story = {
   globals: { themeNumber: '2' },
