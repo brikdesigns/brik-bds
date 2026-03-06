@@ -311,7 +311,7 @@ function ThemePreview({ themeNum, isActive }: { themeNum: ThemeNumber; isActive:
 }
 
 const meta: Meta<typeof ThemeDemo> = {
-  title: 'Getting Started/ThemeSwitcher',
+  title: 'Overview/ThemeSwitcher',
   component: ThemeDemo,
   parameters: {
     layout: 'fullscreen',

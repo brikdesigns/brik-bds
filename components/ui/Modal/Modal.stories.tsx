@@ -4,7 +4,7 @@ import { Modal } from './Modal';
 import { Button } from '../Button';
 
 const meta = {
-  title: 'Components/Overlay/modal',
+  title: 'Displays/Overlay/modal',
   component: Modal,
   parameters: {
     layout: 'centered',
