@@ -46,7 +46,7 @@ const sizeConfig: Record<ModalSize, string> = {
  *
  * Token reference:
  * - Overlay: rgba(0, 0, 0, 0.4) per Figma
- * - --_space---lg = 16px (safe area padding)
+ * - --padding-lg = 16px (safe area padding)
  */
 const backdropStyles: CSSProperties = {
   position: 'fixed',
@@ -58,7 +58,7 @@ const backdropStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: 'var(--_space---lg)',
+  padding: 'var(--padding-lg)',
   zIndex: 1000,
 };
 
@@ -66,8 +66,8 @@ const backdropStyles: CSSProperties = {
  * Modal container styles
  *
  * Token reference:
- * - --_color---surface--primary (white background)
- * - --_border-radius---md = 4px (modal corners)
+ * - --surface-primary (white background)
+ * - --border-radius-md = 4px (modal corners)
  * - Shadow: 0 4px 32px 32px rgba(0,0,0,0.24) per Figma shadow-xl
  */
 const getModalStyles = (size: ModalSize): CSSProperties => ({
@@ -75,8 +75,8 @@ const getModalStyles = (size: ModalSize): CSSProperties => ({
   width: '100%',
   maxWidth: sizeConfig[size],
   maxHeight: '90vh',
-  backgroundColor: 'var(--_color---surface--primary)',
-  borderRadius: 'var(--_border-radius---md)',
+  backgroundColor: 'var(--surface-primary)',
+  borderRadius: 'var(--border-radius-md)',
   boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)',
   display: 'flex',
   flexDirection: 'column',
@@ -86,13 +86,13 @@ const getModalStyles = (size: ModalSize): CSSProperties => ({
  * Modal header styles
  *
  * Token reference:
- * - --_space---xl = 24px (padding)
- * - --_color---border--muted (divider line)
- * - --_border-width---sm (divider thickness)
+ * - --padding-xl = 24px (padding)
+ * - --border-muted (divider line)
+ * - --border-width-sm (divider thickness)
  */
 const headerStyles: CSSProperties = {
-  padding: 'var(--_space---xl)',
-  borderBottom: 'var(--_border-width---sm) solid var(--_color---border--muted)',
+  padding: 'var(--padding-xl)',
+  borderBottom: 'var(--border-width-sm) solid var(--border-muted)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -103,18 +103,18 @@ const headerStyles: CSSProperties = {
  * Title styles
  *
  * Token reference:
- * - --_typography---font-family--heading (heading font)
- * - --_typography---heading--medium = font-size-500 = 25.3px
- * - --font-weight--bold = 700
- * - --font-line-height--125 = 125%
- * - --_color---text--primary (dark text)
+ * - --font-family-heading (heading font)
+ * - --heading-md = font-size-500 = 25.3px
+ * - --font-weight-bold = 700
+ * - --font-line-height-snug = 125%
+ * - --text-primary (dark text)
  */
 const titleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--heading)',
-  fontSize: 'var(--_typography---heading--medium)',
-  fontWeight: 'var(--font-weight--bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--125)',
-  color: 'var(--_color---text--primary)',
+  fontFamily: 'var(--font-family-heading)',
+  fontSize: 'var(--heading-md)',
+  fontWeight: 'var(--font-weight-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-snug)',
+  color: 'var(--text-primary)',
   margin: 0,
 };
 
@@ -122,55 +122,55 @@ const titleStyles: CSSProperties = {
  * Close button styles
  *
  * Token reference:
- * - --_typography---body--lg (icon size)
- * - --_space---sm = 12px (padding)
- * - --_color---text--primary (icon color)
- * - --_border-radius---sm = 2px
+ * - --body-lg (icon size)
+ * - --padding-sm = 12px (padding)
+ * - --text-primary (icon color)
+ * - --border-radius-sm = 2px
  */
 const closeButtonStyles: CSSProperties = {
   background: 'none',
   border: 'none',
-  fontSize: 'var(--_typography---body--lg)',
-  lineHeight: 'var(--font-line-height--100)',
+  fontSize: 'var(--body-lg)',
+  lineHeight: 'var(--font-line-height-tight)',
   cursor: 'pointer',
-  padding: 'var(--_space---sm)',
-  color: 'var(--_color---text--primary)',
+  padding: 'var(--padding-sm)',
+  color: 'var(--text-primary)',
   opacity: 0.6,
   transition: 'opacity 0.2s',
-  borderRadius: 'var(--_border-radius---sm)',
+  borderRadius: 'var(--border-radius-sm)',
 };
 
 /**
  * Modal body styles
  *
  * Token reference:
- * - --_space---xl = 24px (padding)
- * - --_typography---font-family--body (body font)
- * - --_typography---body--md-base = 16px (body text size)
- * - --font-line-height--150 = 150%
- * - --_color---text--primary (text color)
+ * - --padding-xl = 24px (padding)
+ * - --font-family-body (body font)
+ * - --body-md = 16px (body text size)
+ * - --font-line-height-normal = 150%
+ * - --text-primary (text color)
  */
 const bodyStyles: CSSProperties = {
-  padding: 'var(--_space---xl)',
+  padding: 'var(--padding-xl)',
   overflowY: 'auto',
   flex: 1,
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md-base)',
-  color: 'var(--_color---text--primary)',
-  lineHeight: 'var(--font-line-height--150)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-md)',
+  color: 'var(--text-primary)',
+  lineHeight: 'var(--font-line-height-normal)',
 };
 
 /**
  * Modal footer styles
  *
  * Token reference:
- * - --_space---xl = 24px (padding)
- * - --_space---gap--lg = 16px (button gap)
+ * - --padding-xl = 24px (padding)
+ * - --gap-lg = 16px (button gap)
  */
 const footerStyles: CSSProperties = {
-  padding: 'var(--_space---xl)',
+  padding: 'var(--padding-xl)',
   display: 'flex',
-  gap: 'var(--_space---gap--lg)',
+  gap: 'var(--gap-lg)',
   justifyContent: 'flex-end',
   flexShrink: 0,
 };

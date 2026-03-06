@@ -35,12 +35,12 @@ export interface SidebarNavigationProps {
  * Container styles
  *
  * Token reference:
- * - --_color---surface--primary (sidebar background)
- * - --_color---border--secondary (sidebar border)
+ * - --surface-primary (sidebar background)
+ * - --border-secondary (sidebar border)
  */
 const containerStyles: CSSProperties = {
-  backgroundColor: 'var(--_color---surface--primary)',
-  borderRight: '1px solid var(--_color---border--secondary)',
+  backgroundColor: 'var(--surface-primary)',
+  borderRight: '1px solid var(--border-secondary)',
   display: 'flex',
   flexDirection: 'column',
   position: 'fixed',
@@ -54,11 +54,11 @@ const containerStyles: CSSProperties = {
  * Logo section styles
  *
  * Token reference:
- * - --_color---border--secondary (bottom border)
+ * - --border-secondary (bottom border)
  */
 const logoSectionStyles: CSSProperties = {
   padding: '24px 24px 20px',
-  borderBottom: '1px solid var(--_color---border--secondary)',
+  borderBottom: '1px solid var(--border-secondary)',
 };
 
 /**
@@ -74,23 +74,23 @@ const navSectionStyles: CSSProperties = {
  * Navigation item base styles
  *
  * Token reference:
- * - --_typography---font-family--body (nav font)
- * - --_color---text--secondary (default text)
+ * - --font-family-body (nav font)
+ * - --text-secondary (default text)
  */
 const navItemBaseStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--_space---gap--md)', // bds-lint-ignore — Figma spec 12px, nearest token 8px
+  gap: 'var(--gap-md)', // bds-lint-ignore — Figma spec 12px, nearest token 8px
   padding: '10px 12px', // bds-lint-ignore — Figma nav item padding
-  borderRadius: 'var(--_border-radius---md)', // bds-lint-ignore — Figma spec 6px, nearest token 4px
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--sm)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  color: 'var(--_color---text--secondary)',
+  borderRadius: 'var(--border-radius-md)', // bds-lint-ignore — Figma spec 6px, nearest token 4px
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-sm)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  color: 'var(--text-secondary)',
   backgroundColor: 'transparent',
   textDecoration: 'none',
   textTransform: 'capitalize' as const,
-  marginBottom: 'var(--_space---gap--sm)',
+  marginBottom: 'var(--gap-sm)',
   transition: 'background-color 0.15s, color 0.15s',
   cursor: 'pointer',
 };
@@ -99,13 +99,13 @@ const navItemBaseStyles: CSSProperties = {
  * Active navigation item styles
  *
  * Token reference:
- * - --_color---text--primary (active text)
- * - --_color---page--secondary (active background)
+ * - --text-primary (active text)
+ * - --page-secondary (active background)
  */
 const navItemActiveStyles: CSSProperties = {
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  color: 'var(--_color---text--primary)',
-  backgroundColor: 'var(--_color---page--secondary)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  color: 'var(--text-primary)',
+  backgroundColor: 'var(--page-secondary)',
 };
 
 /**
@@ -113,13 +113,13 @@ const navItemActiveStyles: CSSProperties = {
  *
  * Token reference:
  * - --brand--primary (active indicator)
- * - --_color---border--secondary (inactive indicator)
+ * - --border-secondary (inactive indicator)
  */
 const indicatorStyles = (active: boolean): CSSProperties => ({
   width: '8px',
   height: '8px',
-  borderRadius: 'var(--_border-radius---sm)',
-  backgroundColor: active ? 'var(--_color---background--brand-primary)' : 'var(--_color---border--secondary)',
+  borderRadius: 'var(--border-radius-sm)',
+  backgroundColor: active ? 'var(--background-brand-primary)' : 'var(--border-secondary)',
   flexShrink: 0,
 });
 
@@ -127,22 +127,22 @@ const indicatorStyles = (active: boolean): CSSProperties => ({
  * Footer section styles
  *
  * Token reference:
- * - --_color---border--secondary (top border)
+ * - --border-secondary (top border)
  */
 const footerSectionStyles: CSSProperties = {
   padding: '12px 24px',
-  borderTop: '1px solid var(--_color---border--secondary)',
+  borderTop: '1px solid var(--border-secondary)',
 };
 
 /**
  * User section styles
  *
  * Token reference:
- * - --_color---border--secondary (top border)
+ * - --border-secondary (top border)
  */
 const userSectionStyles: CSSProperties = {
   padding: '16px 24px',
-  borderTop: '1px solid var(--_color---border--secondary)',
+  borderTop: '1px solid var(--border-secondary)',
 };
 
 /**

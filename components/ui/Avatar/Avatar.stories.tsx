@@ -164,7 +164,7 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--lg)' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-lg)' }}>
       <Avatar name="John Doe" size="sm" />
       <Avatar name="John Doe" size="md" />
       <Avatar name="John Doe" size="lg" />
@@ -188,7 +188,7 @@ export const AllStatuses: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--lg)' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-lg)' }}>
       <Avatar name="User" status="online" />
       <Avatar name="User" status="offline" />
       <Avatar name="User" status="busy" />
@@ -212,7 +212,7 @@ export const UserList: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
       {[
         { name: 'John Doe', status: 'online' as const },
         { name: 'Jane Smith', status: 'away' as const },
@@ -225,25 +225,25 @@ export const UserList: Story = {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 'var(--_space---gap--sm)',
+            gap: 'var(--gap-sm)',
           }}
         >
           <Avatar name={user.name} status={user.status} />
           <div>
             <div
               style={{
-                fontFamily: 'var(--_typography---font-family--label)',
-                fontSize: 'var(--_typography---label--md-base)',
-                fontWeight: 'var(--font-weight--semi-bold)',
+                fontFamily: 'var(--font-family-label)',
+                fontSize: 'var(--label-md)',
+                fontWeight: 'var(--font-weight-semi-bold)',
               }}
             >
               {user.name}
             </div>
             <div
               style={{
-                fontFamily: 'var(--_typography---font-family--body)',
-                fontSize: 'var(--_typography---body--sm)',
-                color: 'var(--grayscale--light)',
+                fontFamily: 'var(--font-family-body)',
+                fontSize: 'var(--body-sm)',
+                color: 'var(--color-grayscale-light)',
               }}
             >
               {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
@@ -274,22 +274,22 @@ export const AvatarGroup: Story = {
       <Avatar
         name="John Doe"
         size="md"
-        style={{ marginLeft: '-12px', border: '2px solid var(--_color---background--input)' }}
+        style={{ marginLeft: '-12px', border: '2px solid var(--background-input)' }}
       />
       <Avatar
         name="Jane Smith"
         size="md"
-        style={{ marginLeft: '-12px', border: '2px solid var(--_color---background--input)' }}
+        style={{ marginLeft: '-12px', border: '2px solid var(--background-input)' }}
       />
       <Avatar
         name="Bob Johnson"
         size="md"
-        style={{ marginLeft: '-12px', border: '2px solid var(--_color---background--input)' }}
+        style={{ marginLeft: '-12px', border: '2px solid var(--background-input)' }}
       />
       <Avatar
         name="+5"
         size="md"
-        style={{ marginLeft: '-12px', border: '2px solid var(--_color---background--input)' }}
+        style={{ marginLeft: '-12px', border: '2px solid var(--background-input)' }}
       />
     </div>
   ),

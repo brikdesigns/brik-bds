@@ -131,9 +131,9 @@ export const Controlled: Story = {
         />
         <p
           style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--secondary)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-secondary)',
             margin: 0,
           }}
         >
@@ -164,9 +164,9 @@ export const SettingsPanel: Story = {
         style={{
           width: '320px',
           padding: '24px',
-          backgroundColor: 'var(--_color---background--primary)',
-          border: '1px solid var(--_color---border--secondary)',
-          borderRadius: 'var(--_border-radius---lg)',
+          backgroundColor: 'var(--background-primary)',
+          border: '1px solid var(--border-secondary)',
+          borderRadius: 'var(--border-radius-lg)',
           display: 'flex',
           flexDirection: 'column',
           gap: '20px',
@@ -174,8 +174,8 @@ export const SettingsPanel: Story = {
       >
         <h3
           style={{
-            fontFamily: 'var(--_typography---font-family--heading)',
-            fontSize: 'var(--_typography---heading--small)',
+            fontFamily: 'var(--font-family-heading)',
+            fontSize: 'var(--heading-sm)',
             margin: '0 0 8px 0',
           }}
         >
@@ -216,9 +216,9 @@ export const CompactSettings: Story = {
       style={{
         width: '240px',
         padding: '16px',
-        backgroundColor: 'var(--_color---background--primary)',
-        border: '1px solid var(--_color---border--secondary)',
-        borderRadius: 'var(--_border-radius---lg)',
+        backgroundColor: 'var(--background-primary)',
+        border: '1px solid var(--border-secondary)',
+        borderRadius: 'var(--border-radius-lg)',
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
@@ -226,8 +226,8 @@ export const CompactSettings: Story = {
     >
       <h3
         style={{
-          fontFamily: 'var(--_typography---font-family--heading)',
-          fontSize: 'var(--_typography---heading--tiny)',
+          fontFamily: 'var(--font-family-heading)',
+          fontSize: 'var(--heading-tiny)',
           margin: 0,
         }}
       >

@@ -1,0 +1,63 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './PricingCard.stories';
+
+<Meta of={Stories} />
+
+# Pricing card
+
+A pricing tier display card with title, price, features list, and call-to-action. Supports a highlighted state for the recommended plan.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Highlighted
+
+Use the `highlighted` prop with a badge to draw attention to the recommended plan.
+
+<Canvas of={Stories.Highlighted} />
+
+## Free tier
+
+Pricing cards work for free plans too.
+
+<Canvas of={Stories.Free} />
+
+## Pricing grid
+
+The typical layout — three tiers side by side with the middle plan highlighted.
+
+<Canvas of={Stories.PricingGrid} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { PricingCard } from '@brik/bds';
+import { Badge } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+// Standard pricing card
+<PricingCard
+  title="Professional"
+  price="$49"
+  period="/month"
+  description="For growing businesses."
+  features={['Unlimited projects', 'Priority support']}
+  action={<Button variant="primary" fullWidth>Get started</Button>}
+/>
+
+// Highlighted (recommended) plan
+<PricingCard
+  title="Professional"
+  price="$49"
+  period="/month"
+  badge={<Badge>Most popular</Badge>}
+  features={['Unlimited projects', 'Priority support']}
+  action={<Button variant="primary" fullWidth>Get started</Button>}
+  highlighted
+/>
+```

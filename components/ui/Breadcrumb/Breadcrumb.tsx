@@ -44,11 +44,11 @@ const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
  * Figma spec: auto-layout row, gap/md (8px)
  *
  * Token reference:
- * - --_space---gap--md = 8px (gap between items + separators)
+ * - --gap-md = 8px (gap between items + separators)
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
   alignItems: 'center',
 };
 
@@ -58,17 +58,17 @@ const wrapperStyles: CSSProperties = {
  * Figma spec: font-family/label, font-size/75 (14px), SemiBold, text/brand-primary
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --_typography---label--sm = 14px (font-size/75)
- * - --font-weight--semi-bold = 600
- * - --_color---text--brand (active breadcrumb link)
+ * - --font-family-label (label font)
+ * - --label-sm = 14px (font-size/75)
+ * - --font-weight-semi-bold = 600
+ * - --text-brand-primary (active breadcrumb link)
  */
 const linkStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
-  color: 'var(--_color---text--brand)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-sm)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
+  color: 'var(--text-brand-primary)',
   textDecoration: 'none',
   textTransform: 'capitalize' as const,
   cursor: 'pointer',
@@ -80,11 +80,11 @@ const linkStyles: CSSProperties = {
  * Figma spec: same as link but text/muted, non-clickable
  *
  * Token reference:
- * - --_color---text--muted (current page color)
+ * - --text-muted (current page color)
  */
 const currentStyles: CSSProperties = {
   ...linkStyles,
-  color: 'var(--_color---text--muted)',
+  color: 'var(--text-muted)',
   cursor: 'default',
 };
 
@@ -94,17 +94,17 @@ const currentStyles: CSSProperties = {
  * Figma spec: font-family/icon, font-size/100 (16px), text/muted, padding/tiny horizontal
  *
  * Token reference:
- * - --_typography---font-family--label (separator font)
- * - --_typography---label--md-base = 16px (font-size/100)
- * - --_color---text--muted (separator color)
- * - --_space---tiny = 8px (horizontal padding)
+ * - --font-family-label (separator font)
+ * - --label-md = 16px (font-size/100)
+ * - --text-muted (separator color)
+ * - --padding-tiny = 8px (horizontal padding)
  */
 const separatorStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--md-base)',
-  color: 'var(--_color---text--muted)',
-  lineHeight: 'var(--font-line-height--100)',
-  padding: '0 var(--_space---tiny)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-md)',
+  color: 'var(--text-muted)',
+  lineHeight: 'var(--font-line-height-tight)',
+  padding: '0 var(--padding-tiny)',
 };
 
 /**

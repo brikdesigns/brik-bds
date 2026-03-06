@@ -48,7 +48,7 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--_space---gap--md)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
       <Tag size="sm">Tag</Tag>
       <Tag size="md">Tag</Tag>
       <Tag size="lg">Tag</Tag>
@@ -93,7 +93,7 @@ export const WithBothIcons: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--_space---gap--md)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
       <Tag size="sm" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
       <Tag size="md" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
       <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
@@ -116,7 +116,7 @@ export const IconPositions: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--_space---gap--md)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
       <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />}>Left icon</Tag>
       <Tag size="lg" trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Right icon</Tag>
       <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Both icons</Tag>
@@ -165,7 +165,7 @@ export const MultipleTags: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--_space---gap--sm)', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-sm)', flexWrap: 'wrap' }}>
       <Tag size="md">Design</Tag>
       <Tag size="md" icon={<FontAwesomeIcon icon={faTag} />}>Development</Tag>
       <Tag size="md" icon={<FontAwesomeIcon icon={faCircle} />}>Marketing</Tag>

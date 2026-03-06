@@ -220,12 +220,12 @@ export const ButtonGrid: Story = {
       {(['primary', 'outline', 'secondary', 'ghost'] as const).map((variant) => (
         <div key={variant}>
           <div style={{
-            fontFamily: 'var(--_typography---font-family--label)',
+            fontFamily: 'var(--font-family-label)',
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             marginBottom: '8px',
-            color: 'var(--_color---text--muted)',
+            color: 'var(--text-muted)',
           }}>
             {variant}
           </div>
@@ -264,9 +264,9 @@ export const InteractiveStates: Story = {
       {/* Hover Instructions */}
       <div style={{
         padding: 16,
-        backgroundColor: 'var(--_color---surface--secondary)',
-        borderRadius: 'var(--_border-radius---md)',
-        fontFamily: 'var(--_typography---font-family--body)',
+        backgroundColor: 'var(--surface-secondary)',
+        borderRadius: 'var(--border-radius-md)',
+        fontFamily: 'var(--font-family-body)',
         fontSize: '14px',
       }}>
         <strong style={{ display: 'block', marginBottom: 8 }}>Interactive State Guide:</strong>
@@ -287,21 +287,21 @@ export const InteractiveStates: Story = {
       }}>
         {/* Header Row */}
         <div />
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--_color---text--muted)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>
           Default
         </div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--_color---text--muted)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>
           Hover (try it!)
         </div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--_color---text--muted)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>
           Focus (tab)
         </div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--_color---text--muted)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>
           Disabled
         </div>
 
         {/* Primary Row */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--_color---text--secondary)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
           Primary
         </div>
         <Button variant="primary" size="md">Button</Button>
@@ -310,7 +310,7 @@ export const InteractiveStates: Story = {
         <Button variant="primary" size="md" disabled>Disabled</Button>
 
         {/* Outline Row */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--_color---text--secondary)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
           Outline
         </div>
         <Button variant="outline" size="md">Button</Button>
@@ -319,7 +319,7 @@ export const InteractiveStates: Story = {
         <Button variant="outline" size="md" disabled>Disabled</Button>
 
         {/* Secondary Row */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--_color---text--secondary)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
           Secondary
         </div>
         <Button variant="secondary" size="md">Button</Button>
@@ -328,7 +328,7 @@ export const InteractiveStates: Story = {
         <Button variant="secondary" size="md" disabled>Disabled</Button>
 
         {/* Ghost Row */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--_color---text--secondary)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
           Ghost
         </div>
         <Button variant="ghost" size="md">Button</Button>
@@ -340,9 +340,9 @@ export const InteractiveStates: Story = {
       {/* Variant-Specific Hover Behaviors */}
       <div style={{
         padding: 16,
-        backgroundColor: 'var(--_color---surface--secondary)',
-        borderRadius: 'var(--_border-radius---md)',
-        fontFamily: 'var(--_typography---font-family--body)',
+        backgroundColor: 'var(--surface-secondary)',
+        borderRadius: 'var(--border-radius-md)',
+        fontFamily: 'var(--font-family-body)',
         fontSize: '14px',
       }}>
         <strong style={{ display: 'block', marginBottom: 8 }}>Variant-Specific Hover Behaviors:</strong>
@@ -471,9 +471,9 @@ export const ClickCounter: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'flex-start' }}>
         {/* Counter Display */}
         <div style={{
-          fontFamily: 'var(--_typography---font-family--heading)',
-          fontSize: 'var(--_typography---heading--large)',
-          color: 'var(--_color---text--primary)',
+          fontFamily: 'var(--font-family-heading)',
+          fontSize: 'var(--heading-lg)',
+          color: 'var(--text-primary)',
         }}>
           Count: {count}
         </div>
@@ -520,10 +520,10 @@ export const ClickCounter: Story = {
         {isLoading && (
           <div style={{
             padding: 12,
-            backgroundColor: 'var(--_color---surface--secondary)',
-            borderRadius: 'var(--_border-radius---md)',
+            backgroundColor: 'var(--surface-secondary)',
+            borderRadius: 'var(--border-radius-md)',
             fontSize: 14,
-            color: 'var(--_color---text--muted)',
+            color: 'var(--text-muted)',
           }}>
             Simulating async operation... button is disabled during load
           </div>

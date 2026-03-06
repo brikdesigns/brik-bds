@@ -29,45 +29,45 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
  * Status-based colors using BDS system tokens
  *
  * On-color text uses constant semantic tokens:
- * - --_color---text--on-color-dark: always white — for saturated backgrounds
- * - --_color---text--on-color-light: always black — for light backgrounds
- * - --_color---text--primary: adapts per theme (dark in light, light in dark)
+ * - --text-on-color-dark: always white — for saturated backgrounds
+ * - --text-on-color-light: always black — for light backgrounds
+ * - --text-primary: adapts per theme (dark in light, light in dark)
  *   Used on warning yellow where dark text is needed for readability
  *
  * Token reference:
- * - --system--green = #27ae60 (success)
- * - --system--yellow = #f2c94c (warning)
- * - --system--red = #eb5757 (error)
- * - --system--blue = #2f80ed (info)
+ * - --color-system-green = #27ae60 (success)
+ * - --color-system-yellow = #f2c94c (warning)
+ * - --color-system-red = #eb5757 (error)
+ * - --color-system-blue = #2f80ed (info)
  */
 const statusStyles: Record<BadgeStatus, CSSProperties> = {
   default: {
-    backgroundColor: 'var(--_color---background--brand-primary)',
-    color: 'var(--_color---text--on-color-dark)',
+    backgroundColor: 'var(--background-brand-primary)',
+    color: 'var(--text-on-color-dark)',
   },
   positive: {
-    backgroundColor: 'var(--system--green)',
-    color: 'var(--_color---text--on-color-dark)',
+    backgroundColor: 'var(--color-system-green)',
+    color: 'var(--text-on-color-dark)',
   },
   warning: {
-    backgroundColor: 'var(--system--yellow)',
-    color: 'var(--_color---text--primary)',
+    backgroundColor: 'var(--color-system-yellow)',
+    color: 'var(--text-primary)',
   },
   error: {
-    backgroundColor: 'var(--system--red)',
-    color: 'var(--_color---text--on-color-dark)',
+    backgroundColor: 'var(--color-system-red)',
+    color: 'var(--text-on-color-dark)',
   },
   info: {
-    backgroundColor: 'var(--system--blue)',
-    color: 'var(--_color---text--on-color-dark)',
+    backgroundColor: 'var(--color-system-blue)',
+    color: 'var(--text-on-color-dark)',
   },
   progress: {
-    backgroundColor: 'var(--system--blue)',
-    color: 'var(--_color---text--on-color-dark)',
+    backgroundColor: 'var(--color-system-blue)',
+    color: 'var(--text-on-color-dark)',
   },
   neutral: {
-    backgroundColor: 'var(--_color---background--secondary)',
-    color: 'var(--_color---text--muted)',
+    backgroundColor: 'var(--background-secondary)',
+    color: 'var(--text-muted)',
   },
 };
 
@@ -75,41 +75,41 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
  * Size-based styles using BDS tokens
  *
  * Figma variable mapping (Base mode):
- * - padding/sm = --_space---sm = 12px
- * - padding/md = --_space---md = 16px
- * - space/150  = --_space---gap--sm = 6px
- * - gap/sm     = --_space---gap--sm = 6px (icon-to-text)
- * - gap/md     = --_space---gap--md = 8px (icon-to-text, lg size)
+ * - padding/sm = --padding-sm = 12px
+ * - padding/md = --padding-md = 16px
+ * - space/150  = --gap-sm = 6px
+ * - gap/sm     = --gap-sm = 6px (icon-to-text)
+ * - gap/md     = --gap-md = 8px (icon-to-text, lg size)
  *
  * Token reference:
- * - --font-size--50 = 11.54px (xs icon size)
- * - --_typography---body--tiny = 10.26px (sm label — no label--xs token exists)
- * - --_typography---label--sm = 14px (md label)
- * - --_typography---label--md-base = 16px (lg label)
- * - --_border-radius---sm = 2px (xs uses square corners, not pill)
+ * - --font-size-50 = 11.54px (xs icon size)
+ * - --body-tiny = 10.26px (sm label — no label--xs token exists)
+ * - --label-sm = 14px (md label)
+ * - --label-md = 16px (lg label)
+ * - --border-radius-sm = 2px (xs uses square corners, not pill)
  */
 const sizeStyles: Record<BadgeSize, CSSProperties> = {
   xs: {
     width: '24px',
     height: '24px',
     padding: 0,
-    fontSize: 'var(--font-size--50)', // bds-lint-ignore — no semantic token for icon-only badge size
-    borderRadius: 'var(--_border-radius---sm)',
+    fontSize: 'var(--font-size-50)', // bds-lint-ignore — no semantic token for icon-only badge size
+    borderRadius: 'var(--border-radius-sm)',
     justifyContent: 'center',
     gap: 0,
   },
   sm: {
-    padding: 'var(--_space---gap--sm) var(--_space---sm)',
-    fontSize: 'var(--_typography---body--tiny)',
+    padding: 'var(--padding-tiny) var(--padding-sm)',
+    fontSize: 'var(--body-tiny)',
   },
   md: {
-    padding: 'var(--_space---sm) var(--_space---md)',
-    fontSize: 'var(--_typography---label--sm)',
+    padding: 'var(--padding-sm) var(--padding-md)',
+    fontSize: 'var(--label-sm)',
   },
   lg: {
-    padding: 'var(--_space---sm) var(--_space---md)',
-    fontSize: 'var(--_typography---label--md-base)',
-    gap: 'var(--_space---gap--md)',
+    padding: 'var(--padding-sm) var(--padding-md)',
+    fontSize: 'var(--label-md)',
+    gap: 'var(--gap-md)',
   },
 };
 
@@ -117,18 +117,18 @@ const sizeStyles: Record<BadgeSize, CSSProperties> = {
  * Base badge styles using BDS tokens
  *
  * Token reference:
- * - --_space---gap--sm = 6px (icon-to-text gap, sm/md sizes)
- * - --_typography---font-family--label (badge font)
- * - --font-weight--semi-bold = 600
- * - --font-line-height--100 = 100% (tight, per Figma leading-none)
+ * - --gap-sm = 6px (icon-to-text gap, sm/md sizes)
+ * - --font-family-label (badge font)
+ * - --font-weight-semi-bold = 600
+ * - --font-line-height-tight = 100% (tight, per Figma leading-none)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
-  gap: 'var(--_space---gap--sm)',
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  gap: 'var(--gap-sm)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
   borderRadius: '9999px', // pill shape — no BDS token equivalent
   whiteSpace: 'nowrap',
   textTransform: 'capitalize' as const,

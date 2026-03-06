@@ -1,0 +1,64 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './CardDisplay.stories';
+
+<Meta of={Stories} />
+
+# Card display
+
+A content display card for showcasing items with an optional image, badge, title, description, and action. Designed for product listings, blog previews, feature showcases, and related content grids.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Without image
+
+Cards work without images for text-focused content like guides or articles.
+
+<Canvas of={Stories.WithoutImage} />
+
+## Minimal
+
+Just a title and description — the simplest form.
+
+<Canvas of={Stories.Minimal} />
+
+## As link
+
+The entire card becomes clickable when an `href` is provided.
+
+<Canvas of={Stories.AsLink} />
+
+## Grid layout
+
+Cards work well in responsive grid layouts.
+
+<Canvas of={Stories.Grid} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { CardDisplay } from '@brik/bds';
+import { Badge } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+<CardDisplay
+  imageSrc="/product.jpg"
+  imageAlt="Product photo"
+  badge={<Badge size="sm">New</Badge>}
+  title="Product name"
+  description="Short product description."
+  action={<Button variant="primary" size="sm">View details</Button>}
+/>
+
+// In a grid
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+  <CardDisplay title="Card 1" description="..." />
+  <CardDisplay title="Card 2" description="..." />
+  <CardDisplay title="Card 3" description="..." />
+</div>
+```

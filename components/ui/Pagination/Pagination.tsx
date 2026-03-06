@@ -30,7 +30,7 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onCh
 const containerStyles: CSSProperties = {
   display: 'flex',
   width: '100%',
-  padding: 'var(--_space---lg) 0',
+  padding: 'var(--padding-lg) 0',
   boxSizing: 'border-box',
 };
 
@@ -47,20 +47,20 @@ const positionMap: Record<PaginationPosition, CSSProperties['justifyContent']> =
  * Pagination wrapper (items row)
  *
  * Token reference:
- * - --_space---gap--lg = 16px (gap between items)
+ * - --gap-lg = 16px (gap between items)
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--_space---gap--lg)',
+  gap: 'var(--gap-lg)',
 };
 
 /**
  * Arrow button styles
  *
  * Token reference:
- * - --_color---background--brand-primary (brand blue)
- * - --_color---text--on-color-dark (white icon on brand bg)
+ * - --background-brand-primary (brand blue)
+ * - --text-on-color-dark (white icon on brand bg)
  */
 const arrowStyles: CSSProperties = {
   display: 'flex',
@@ -69,11 +69,11 @@ const arrowStyles: CSSProperties = {
   width: '48px',
   height: '48px',
   borderRadius: '9999px',
-  backgroundColor: 'var(--_color---background--brand-primary)',
-  color: 'var(--_color---text--on-color-dark)',
+  backgroundColor: 'var(--background-brand-primary)',
+  color: 'var(--text-on-color-dark)',
   border: 'none',
   cursor: 'pointer',
-  fontSize: 'var(--_typography---icon--large)',
+  fontSize: 'var(--icon-lg)',
   flexShrink: 0,
 };
 
@@ -90,20 +90,20 @@ const arrowDisabledStyles: CSSProperties = {
  * Page number styles (inactive)
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --_typography---label--sm = 14px
- * - --font-weight--semi-bold = 600
- * - --font-line-height--100
- * - --_color---text--muted (inactive gray)
- * - --_space---sm = 12px (horizontal padding)
+ * - --font-family-label (label font)
+ * - --label-sm = 14px
+ * - --font-weight-semi-bold = 600
+ * - --font-line-height-tight
+ * - --text-muted (inactive gray)
+ * - --padding-sm = 12px (horizontal padding)
  */
 const pageStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
-  color: 'var(--_color---text--muted)',
-  padding: 'var(--_space---sm)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-sm)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
+  color: 'var(--text-muted)',
+  padding: 'var(--padding-sm)',
   background: 'none',
   border: 'none',
   cursor: 'pointer',
@@ -115,11 +115,11 @@ const pageStyles: CSSProperties = {
  * Active page number styles
  *
  * Token reference:
- * - --_color---text--brand (brand blue for active page)
+ * - --text-brand-primary (brand blue for active page)
  */
 const activePageStyles: CSSProperties = {
   ...pageStyles,
-  color: 'var(--_color---text--brand)',
+  color: 'var(--text-brand-primary)',
   cursor: 'default',
 };
 
@@ -129,7 +129,7 @@ const activePageStyles: CSSProperties = {
 const ellipsisStyles: CSSProperties = {
   ...pageStyles,
   cursor: 'default',
-  color: 'var(--_color---text--muted)',
+  color: 'var(--text-muted)',
 };
 
 /**

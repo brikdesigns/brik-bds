@@ -212,9 +212,9 @@ export const SizeStatusMatrix: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <span style={{
-          fontFamily: 'var(--_typography---font-family--label)',
+          fontFamily: 'var(--font-family-label)',
           fontSize: '12px',
-          color: 'var(--_color---text--muted)',
+          color: 'var(--text-muted)',
           width: '32px',
         }}>
           xs
@@ -230,9 +230,9 @@ export const SizeStatusMatrix: Story = {
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <span style={{
-            fontFamily: 'var(--_typography---font-family--label)',
+            fontFamily: 'var(--font-family-label)',
             fontSize: '12px',
-            color: 'var(--_color---text--muted)',
+            color: 'var(--text-muted)',
             width: '32px',
           }}>
             {size}
@@ -267,31 +267,31 @@ export const StatusIndicators: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Badge status="positive">Published</Badge>
-        <span style={{ fontFamily: 'var(--_typography---font-family--body)' }}>
+        <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Article is live and visible
         </span>
       </div>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Badge status="progress">In Review</Badge>
-        <span style={{ fontFamily: 'var(--_typography---font-family--body)' }}>
+        <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Being reviewed by editor
         </span>
       </div>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Badge status="warning">Draft</Badge>
-        <span style={{ fontFamily: 'var(--_typography---font-family--body)' }}>
+        <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Saved but not published
         </span>
       </div>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Badge status="error">Archived</Badge>
-        <span style={{ fontFamily: 'var(--_typography---font-family--body)' }}>
+        <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Has been removed
         </span>
       </div>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Badge status="neutral">Inactive</Badge>
-        <span style={{ fontFamily: 'var(--_typography---font-family--body)' }}>
+        <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Currently disabled
         </span>
       </div>

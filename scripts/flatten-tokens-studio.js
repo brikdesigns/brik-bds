@@ -139,6 +139,21 @@ for (const [col, modes] of Object.entries(collections)) {
   console.log(`    ${col}: ${modes.join(', ')}  → using "${marker}"`);
 }
 
+// ─── Detect if a set's direct children are all leaf tokens ────
+// Sets like border-width/default and breakpoint/default have tokens
+// directly at root ({sm: {$value}, md: {$value}}) with no parent
+// group wrapper. These need wrapping under the collection name so
+// they don't orphan into the global namespace.
+
+function needsWrapping(setData) {
+  for (const val of Object.values(setData)) {
+    if (val && typeof val === 'object' && val.$value !== undefined) {
+      return true; // direct leaf tokens at root — needs wrapping
+    }
+  }
+  return false;
+}
+
 // Merge selected sets
 const merged = {};
 for (const [col, modes] of Object.entries(collections)) {
@@ -152,7 +167,35 @@ for (const [col, modes] of Object.entries(collections)) {
     console.warn(`  WARNING: Set "${setKey}" not found, skipping`);
     continue;
   }
-  deepMerge(merged, setData);
+
+  // Wrap rootless semantic sets under their collection name
+  // e.g. border-width/default → { "border-width": { sm, md, lg } }
+  //      breakpoint/default   → { "breakpoint": { web, tablet, mobile } }
+  if (col !== 'primitives' && needsWrapping(setData)) {
+    console.log(`    ↳ Wrapping "${setKey}" tokens under "${col}"`);
+    deepMerge(merged, { [col]: setData });
+  } else {
+    deepMerge(merged, setData);
+  }
+}
+
+// ─── Fix font-line-height: Tokens Studio exports % as px ─────
+// Figma stores line-height as percentages (110%, 125%, 150%) but
+// Tokens Studio exports them as "110px", "125px". Convert back.
+
+if (merged['font-line-height']) {
+  for (const [key, token] of Object.entries(merged['font-line-height'])) {
+    if (token && token.$value && typeof token.$value === 'string' && token.$value.endsWith('px')) {
+      const num = parseFloat(token.$value);
+      // Line-height values are percentages (100-200 range), not pixel values
+      if (num >= 100 && num <= 300) {
+        const fixed = `${num}%`;
+        console.log(`    ↳ Fixed font-line-height/${key}: ${token.$value} → ${fixed}`);
+        token.$value = fixed;
+        token.$type = 'number'; // percentage, not dimension
+      }
+    }
+  }
 }
 
 // Clean Figma-specific extensions

@@ -45,14 +45,14 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
  * Base table styles using BDS tokens
  *
  * Token reference:
- * - --_typography---font-family--body (table font)
- * - --_color---text--primary (text color)
+ * - --font-family-body (table font)
+ * - --text-primary (text color)
  */
 const tableStyles: CSSProperties = {
   width: '100%',
   borderCollapse: 'collapse',
-  fontFamily: 'var(--_typography---font-family--body)',
-  color: 'var(--_color---text--primary)',
+  fontFamily: 'var(--font-family-body)',
+  color: 'var(--text-primary)',
 };
 
 /**
@@ -158,15 +158,15 @@ export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
  * Row styles
  *
  * Token reference:
- * - --_color---background--secondary (hover + striped background)
- * - --_color---border--muted (subtle bottom border)
+ * - --background-secondary (hover + striped background)
+ * - --border-muted (subtle bottom border)
  */
 const rowBaseStyles: CSSProperties = {
-  borderBottom: 'var(--_border-width---sm) solid var(--_color---border--muted)',
+  borderBottom: 'var(--border-width-sm) solid var(--border-muted)',
 };
 
 const rowSelectedStyles: CSSProperties = {
-  backgroundColor: 'var(--_color---background--secondary)',
+  backgroundColor: 'var(--background-secondary)',
 };
 
 export function TableRow({
@@ -207,26 +207,26 @@ export interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
  * Header cell styles using BDS tokens
  *
  * Token reference:
- * - --_space---sm (default vertical padding: 6px)
- * - --_space---xl (comfortable vertical padding: 24px)
- * - --_space---md (horizontal padding: 8px)
- * - --_typography---font-family--label (label font)
- * - --_typography---label--sm (label size)
- * - --_color---text--muted (muted text)
- * - --_color---border--muted (subtle bottom border)
- * - --_color---background--secondary (header background)
+ * - --padding-sm (default vertical padding: 6px)
+ * - --padding-xl (comfortable vertical padding: 24px)
+ * - --padding-md (horizontal padding: 8px)
+ * - --font-family-label (label font)
+ * - --label-sm (label size)
+ * - --text-muted (muted text)
+ * - --border-muted (subtle bottom border)
+ * - --background-secondary (header background)
  */
 const getHeadStyles = (size: TableSize): CSSProperties => ({
   padding: size === 'comfortable'
-    ? 'var(--_space---xl) var(--_space---md)'
-    : 'var(--_space---sm) var(--_space---md)',
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  color: 'var(--_color---text--muted)',
+    ? 'var(--padding-xl) var(--padding-md)'
+    : 'var(--padding-sm) var(--padding-md)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-sm)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  color: 'var(--text-muted)',
   textAlign: 'left',
-  borderBottom: 'var(--_border-width---md) solid var(--_color---border--muted)',
-  backgroundColor: 'var(--_color---background--secondary)',
+  borderBottom: 'var(--border-width-md) solid var(--border-muted)',
+  backgroundColor: 'var(--background-secondary)',
   whiteSpace: 'nowrap',
 });
 
@@ -291,18 +291,18 @@ export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
  * Body cell styles using BDS tokens
  *
  * Token reference:
- * - --_space---sm (default vertical padding: 6px)
- * - --_space---xl (comfortable vertical padding: 24px)
- * - --_space---md (horizontal padding: 8px)
- * - --_typography---body--md-base (body text size)
- * - --_color---text--primary (text color)
+ * - --padding-sm (default vertical padding: 6px)
+ * - --padding-xl (comfortable vertical padding: 24px)
+ * - --padding-md (horizontal padding: 8px)
+ * - --body-md (body text size)
+ * - --text-primary (text color)
  */
 const getCellStyles = (size: TableSize): CSSProperties => ({
   padding: size === 'comfortable'
-    ? 'var(--_space---xl) var(--_space---md)'
-    : 'var(--_space---sm) var(--_space---md)',
-  fontSize: 'var(--_typography---body--md-base)',
-  color: 'var(--_color---text--primary)',
+    ? 'var(--padding-xl) var(--padding-md)'
+    : 'var(--padding-sm) var(--padding-md)',
+  fontSize: 'var(--body-md)',
+  color: 'var(--text-primary)',
   verticalAlign: 'middle',
 });
 

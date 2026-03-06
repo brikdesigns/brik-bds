@@ -97,7 +97,7 @@ export const PlanSelection: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
       <Radio name="plan" value="basic" label="Basic Plan - $9/month" />
       <Radio name="plan" value="pro" label="Pro Plan - $29/month" defaultChecked />
       <Radio name="plan" value="enterprise" label="Enterprise - Custom pricing" />
@@ -125,7 +125,7 @@ export const ThemeSelection: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
       <Radio name="theme" value="theme1" label="Theme 1" />
       <Radio name="theme" value="theme2" label="Theme 2" />
       <Radio name="theme" value="theme3" label="Theme 3" defaultChecked />

@@ -118,11 +118,11 @@ export const FormExample: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)', minWidth: '400px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)', minWidth: '400px' }}>
       <label style={{
-        fontFamily: 'var(--_typography---font-family--label)',
-        fontSize: 'var(--_typography---label--md-base)',
-        fontWeight: 'var(--font-weight--semi-bold)',
+        fontFamily: 'var(--font-family-label)',
+        fontSize: 'var(--label-md)',
+        fontWeight: 'var(--font-weight-semi-bold)',
       }}>
         Comments
       </label>
@@ -139,12 +139,12 @@ export const FormExample: Story = {
  */
 export const MultipleTextareas: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)', minWidth: '400px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', minWidth: '400px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
         <label style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--md-base)',
-          fontWeight: 'var(--font-weight--semi-bold)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-md)',
+          fontWeight: 'var(--font-weight-semi-bold)',
         }}>
           Description
         </label>
@@ -153,11 +153,11 @@ export const MultipleTextareas: Story = {
           rows={4}
         />
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
         <label style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--md-base)',
-          fontWeight: 'var(--font-weight--semi-bold)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-md)',
+          fontWeight: 'var(--font-weight-semi-bold)',
         }}>
           Additional Information
         </label>

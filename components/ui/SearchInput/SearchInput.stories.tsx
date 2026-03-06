@@ -88,7 +88,7 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)', minWidth: '300px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-lg)', minWidth: '300px' }}>
       <SearchInput size="md" placeholder="Medium search..." fullWidth />
       <SearchInput size="sm" placeholder="Small search..." fullWidth />
     </div>
@@ -123,7 +123,7 @@ export const ToolbarExample: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--_space---gap--lg)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
       <SearchInput size="sm" placeholder="Search products..." />
       <SearchInput size="sm" placeholder="Filter by name..." />
     </div>

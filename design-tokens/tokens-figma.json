@@ -627,6 +627,22 @@
     "circle": {
       "$value": "9999px",
       "$type": "dimension"
+    },
+    "lg": {
+      "$value": "{border-radius.600}",
+      "$type": "number"
+    },
+    "md": {
+      "$value": "{border-radius.400}",
+      "$type": "number"
+    },
+    "none": {
+      "$value": "{border-radius.0}",
+      "$type": "number"
+    },
+    "sm": {
+      "$value": "{border-radius.200}",
+      "$type": "number"
     }
   },
   "border-width": {
@@ -657,36 +673,60 @@
     "500": {
       "$value": "6px",
       "$type": "dimension"
+    },
+    "sm": {
+      "$value": "0.5px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "1px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "3px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "2px",
+      "$type": "dimension"
+    },
+    "huge": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "none": {
+      "$value": "0px",
+      "$type": "dimension"
     }
   },
   "font-line-height": {
     "tight": {
-      "$value": "110px",
-      "$type": "dimension"
+      "$value": "110%",
+      "$type": "number"
     },
     "snug": {
-      "$value": "125px",
-      "$type": "dimension"
+      "$value": "125%",
+      "$type": "number"
     },
     "normal": {
-      "$value": "150px",
-      "$type": "dimension"
+      "$value": "150%",
+      "$type": "number"
     },
     "relaxed": {
-      "$value": "175px",
-      "$type": "dimension"
+      "$value": "175%",
+      "$type": "number"
     },
     "loose": {
-      "$value": "200px",
-      "$type": "dimension"
+      "$value": "200%",
+      "$type": "number"
     },
     "none": {
       "$value": "0px",
       "$type": "dimension"
     },
     "moderate": {
-      "$value": "138px",
-      "$type": "dimension"
+      "$value": "138%",
+      "$type": "number"
     }
   },
   "size": {
@@ -1095,13 +1135,15 @@
       "$type": "color"
     }
   },
-  "logo": {
-    "$value": "Font Awesome Brand",
-    "$type": "text"
-  },
   "icon": {
-    "$value": "Font Awesome Solid",
-    "$type": "text",
+    "logo": {
+      "$value": "Font Awesome Brand",
+      "$type": "text"
+    },
+    "icon": {
+      "$value": "Font Awesome Solid",
+      "$type": "text"
+    },
     "tiny": {
       "$value": "{font-size.50}",
       "$type": "number"
@@ -1130,22 +1172,6 @@
       "$value": "{font-size.500}",
       "$type": "number"
     }
-  },
-  "lg": {
-    "$value": "2px",
-    "$type": "dimension"
-  },
-  "md": {
-    "$value": "1px",
-    "$type": "dimension"
-  },
-  "none": {
-    "$value": "0px",
-    "$type": "dimension"
-  },
-  "sm": {
-    "$value": "0.5px",
-    "$type": "dimension"
   },
   "padding": {
     "xl": {
@@ -1215,25 +1241,19 @@
       "$type": "number"
     }
   },
-  "web": {
-    "$value": "1200px",
-    "$type": "dimension"
-  },
-  "tablet": {
-    "$value": "768px",
-    "$type": "dimension"
-  },
-  "mobile": {
-    "$value": "320px",
-    "$type": "dimension"
-  },
-  "xl": {
-    "$value": "3px",
-    "$type": "dimension"
-  },
-  "huge": {
-    "$value": "4px",
-    "$type": "dimension"
+  "breakpoint": {
+    "web": {
+      "$value": "1200px",
+      "$type": "dimension"
+    },
+    "tablet": {
+      "$value": "768px",
+      "$type": "dimension"
+    },
+    "mobile": {
+      "$value": "320px",
+      "$type": "dimension"
+    }
   },
   "blur-radius": {
     "sm": {

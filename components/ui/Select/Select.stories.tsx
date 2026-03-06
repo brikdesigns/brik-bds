@@ -181,7 +181,7 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-lg)' }}>
       <Select size="sm" placeholder="Small" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
       <Select size="md" placeholder="Medium" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
       <Select size="lg" placeholder="Large" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
@@ -214,13 +214,13 @@ export const ResponsiveWidth: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---xl)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-xl)' }}>
       <div>
         <p style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--sm)',
-          color: 'var(--_color---text--muted)',
-          marginBottom: 'var(--_space---gap--md)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-muted)',
+          marginBottom: 'var(--gap-md)',
         }}>
           Full width (default) — fills container
         </p>
@@ -228,10 +228,10 @@ export const ResponsiveWidth: Story = {
       </div>
       <div>
         <p style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--sm)',
-          color: 'var(--_color---text--muted)',
-          marginBottom: 'var(--_space---gap--md)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-muted)',
+          marginBottom: 'var(--gap-md)',
         }}>
           Constrained by parent (max-width: 320px)
         </p>
@@ -241,10 +241,10 @@ export const ResponsiveWidth: Story = {
       </div>
       <div>
         <p style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--sm)',
-          color: 'var(--_color---text--muted)',
-          marginBottom: 'var(--_space---gap--md)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-muted)',
+          marginBottom: 'var(--gap-md)',
         }}>
           Compact (fullWidth=false) — shrinks to content
         </p>
@@ -274,7 +274,7 @@ export const FormExample: Story = {
     <div style={{
       display: 'flex',
       flexWrap: 'wrap',
-      gap: 'var(--_space---lg)',
+      gap: 'var(--padding-lg)',
     }}>
       <div style={{ flex: '1 1 240px', minWidth: 0 }}>
         <Select

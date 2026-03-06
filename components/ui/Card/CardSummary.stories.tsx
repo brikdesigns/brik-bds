@@ -146,7 +146,7 @@ export const WithData: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
       <CardSummary
         label="Active Users"
         value={1284}
@@ -184,7 +184,7 @@ export const DashboardGrid: Story = {
     <div style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: 'var(--_space---gap--md)',
+      gap: 'var(--gap-md)',
       width: '100%',
       maxWidth: '1000px',
     }}>

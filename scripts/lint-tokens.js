@@ -30,24 +30,36 @@ const path = require('path');
 const WEBFLOW_CSS_PATH = path.join(
   __dirname, '..', 'updates', 'brik-bds.webflow', 'css', 'brik-bds.webflow.css'
 );
+const SD_CSS_PATH = path.join(
+  __dirname, '..', 'build', 'figma', 'css', 'variables.css'
+);
 const COMPONENTS_DIR = path.join(__dirname, '..', 'components', 'ui');
 
 // Primitive token prefixes that should be replaced with semantic equivalents
+// Covers both Webflow (double-dash) and SD (single-dash) naming
 const PRIMITIVE_PREFIXES = {
-  '--font-size--': '--_typography---*',
-  '--space--': '--_space---*',
-  '--grayscale--': '--_color---*',
-  '--border-radius--': '--_border-radius---*',
-  '--border-width--': '--_border-width---*',
-  '--size--': '--_size---*',
+  '--font-size--': '--body-* / --heading-* / --label-*',
+  '--font-size-': '--body-* / --heading-* / --label-*',
+  '--space--': '--padding-* / --gap-*',
+  '--space-': '--padding-* / --gap-*',
+  '--grayscale--': '--text-* / --background-* / --surface-*',
+  '--color-grayscale-': '--text-* / --background-* / --surface-*',
+  '--border-radius--': '--border-radius-*',
+  '--border-width--': '--border-width-*',
+  '--size--': '--size-*',
 };
 
 // These primitive prefixes are acceptable in components (no semantic layer above them)
 const ALLOWED_PRIMITIVES = new Set([
   '--font-weight--',
+  '--font-weight-',
   '--font-line-height--',
+  '--font-line-height-',
   '--system--',
+  '--color-system-',
+  '--color-annotation-',
   '--_themes---',
+  '--theme-',
 ]);
 
 // ---------------------------------------------------------------------------
@@ -171,43 +183,75 @@ function parseCssTokens() {
     process.exit(1);
   }
 
-  const css = fs.readFileSync(WEBFLOW_CSS_PATH, 'utf8');
-  const lines = css.split('\n');
-
   const allTokens = new Set();
   const semanticTokens = new Set();
   const primitiveTokens = new Set();
 
-  let i = 0;
-  while (i < lines.length) {
-    const line = lines[i];
+  // SD semantic token prefixes (tokens that are purpose-bound, not raw scale values)
+  const SD_SEMANTIC_PREFIXES = [
+    '--padding-', '--gap-', '--text-', '--background-', '--surface-',
+    '--border-primary', '--border-secondary', '--border-muted', '--border-brand',
+    '--border-input', '--border-inverse', '--border-on-color', '--border-width-',
+    '--border-radius-', '--page-', '--body-', '--label-', '--heading-',
+    '--display-', '--subtitle-', '--icon-', '--font-family-', '--box-shadow-',
+    '--blur-radius-', '--size-',
+  ];
 
-    // Match :root {, .body {, .body.theme-N { at column 0
-    if (/^(:root|\.body)\s*\{/.test(line) || /^\.body\.theme-\d+/.test(line)) {
-      i++;
-      let braceDepth = 1;
-      while (i < lines.length && braceDepth > 0) {
-        if (lines[i].includes('{')) braceDepth++;
-        if (lines[i].includes('}')) braceDepth--;
+  // Load tokens from a CSS file
+  function loadFromCss(cssPath) {
+    const css = fs.readFileSync(cssPath, 'utf8');
+    const lines = css.split('\n');
 
-        // Extract custom property declarations
-        const match = lines[i].match(/^\s*(--[\w-]+)/);
-        if (match) {
-          const tokenName = match[1];
-          allTokens.add(tokenName);
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
 
-          if (tokenName.startsWith('--_')) {
-            semanticTokens.add(tokenName);
-          } else {
-            primitiveTokens.add(tokenName);
-          }
-        }
+      if (/^(:root|\.body)\s*\{/.test(line) || /^\.body\.theme-\d+/.test(line)) {
         i++;
+        let braceDepth = 1;
+        while (i < lines.length && braceDepth > 0) {
+          if (lines[i].includes('{')) braceDepth++;
+          if (lines[i].includes('}')) braceDepth--;
+
+          const match = lines[i].match(/^\s*(--[\w-]+)/);
+          if (match) {
+            const tokenName = match[1];
+            allTokens.add(tokenName);
+
+            // Webflow semantic tokens start with --_
+            if (tokenName.startsWith('--_')) {
+              semanticTokens.add(tokenName);
+            } else {
+              // SD tokens: check prefix to classify
+              const isSemantic = SD_SEMANTIC_PREFIXES.some(p => tokenName.startsWith(p));
+              if (isSemantic) {
+                semanticTokens.add(tokenName);
+              } else {
+                primitiveTokens.add(tokenName);
+              }
+            }
+          }
+          i++;
+        }
+        continue;
       }
-      continue;
+      i++;
     }
-    i++;
   }
+
+  // Load Webflow tokens (original export)
+  loadFromCss(WEBFLOW_CSS_PATH);
+
+  // Load Style Dictionary tokens (SD naming convention)
+  if (fs.existsSync(SD_CSS_PATH)) {
+    loadFromCss(SD_CSS_PATH);
+  }
+
+  // Load migrated token files (themes + webflow-tokens with SD names)
+  const MIGRATED_TOKENS = path.join(__dirname, '..', 'tokens', 'webflow-tokens.css');
+  const MIGRATED_THEMES = path.join(__dirname, '..', 'tokens', 'themes.css');
+  if (fs.existsSync(MIGRATED_TOKENS)) loadFromCss(MIGRATED_TOKENS);
+  if (fs.existsSync(MIGRATED_THEMES)) loadFromCss(MIGRATED_THEMES);
 
   return { allTokens, semanticTokens, primitiveTokens };
 }
@@ -341,7 +385,7 @@ function checkHardcodedValues(line, lineNum, file, isComponent) {
       line: lineNum,
       column: fsMatch.index + 1,
       message: `Hardcoded fontSize: '${fsMatch[1]}'`,
-      suggestion: `Use a typography token: var(--_typography---body--*) or var(--_typography---heading--*)`,
+      suggestion: `Use a typography token: var(--body-*) or var(--heading-*)`,
     });
   }
 
@@ -355,7 +399,7 @@ function checkHardcodedValues(line, lineNum, file, isComponent) {
       line: lineNum,
       column: fsNumMatch.index + 1,
       message: `Hardcoded fontSize: ${fsNumMatch[1]}`,
-      suggestion: `Use a typography token: var(--_typography---*)`,
+      suggestion: `Use a typography token: var(--body-*) or var(--heading-*)`,
     });
   }
 
@@ -375,10 +419,10 @@ function checkHardcodedValues(line, lineNum, file, isComponent) {
       if (prop === 'borderRadius' && (spMatch[1] === '9999px' || spMatch[1] === '999px')) continue;
 
       const category = prop === 'borderRadius'
-        ? 'var(--_border-radius---*)'
+        ? 'var(--border-radius-*)'
         : prop === 'gap' || prop === 'rowGap' || prop === 'columnGap'
-          ? 'var(--_space---gap--*)'
-          : 'var(--_space---*)';
+          ? 'var(--gap-*)'
+          : 'var(--padding-*)';
 
       violations.push({
         rule: 'hardcoded-value',
@@ -432,8 +476,8 @@ function checkUnknownTokens(line, lineNum, file, tokens) {
       file,
       line: lineNum,
       column: match.index + 1,
-      message: `Unknown token "var(${tokenName})" — not found in Webflow CSS`,
-      suggestion: `Check TOKEN-REFERENCE.md or grep the Webflow CSS for the correct name`,
+      message: `Unknown token "var(${tokenName})" — not found in token sources`,
+      suggestion: `Check TOKEN-REFERENCE.md or grep build/figma/css/variables.css for the correct name`,
     });
   }
 

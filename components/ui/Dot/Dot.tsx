@@ -26,20 +26,20 @@ export interface DotProps extends HTMLAttributes<HTMLSpanElement> {
  * Matches Badge component color system for consistency
  *
  * Token reference:
- * - --system--green = #27ae60 (success)
- * - --system--yellow = #f2c94c (warning)
- * - --system--red = #eb5757 (error)
- * - --system--blue = #2f80ed (info)
- * - --grayscale--light (neutral)
- * - --_color---background--brand-primary (default)
+ * - --color-system-green = #27ae60 (success)
+ * - --color-system-yellow = #f2c94c (warning)
+ * - --color-system-red = #eb5757 (error)
+ * - --color-system-blue = #2f80ed (info)
+ * - --color-grayscale-light (neutral)
+ * - --background-brand-primary (default)
  */
 const statusColors: Record<DotStatus, string> = {
-  default: 'var(--_color---background--brand-primary)',
-  positive: 'var(--system--green)',
-  warning: 'var(--system--yellow)',
-  error: 'var(--system--red)',
-  info: 'var(--system--blue)',
-  neutral: 'var(--grayscale--light)',
+  default: 'var(--background-brand-primary)',
+  positive: 'var(--color-system-green)',
+  warning: 'var(--color-system-yellow)',
+  error: 'var(--color-system-red)',
+  info: 'var(--color-system-blue)',
+  neutral: 'var(--color-grayscale-light)',
 };
 
 /**

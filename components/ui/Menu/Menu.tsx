@@ -52,21 +52,21 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
  * Panel styles — floating dropdown container
  *
  * Token reference:
- * - --_color---background--primary (white background)
- * - --_border-radius---lg = 8px (corners)
- * - --_space---xl = 24px (padding)
- * - --_space---gap--md = 8px (item gap)
+ * - --background-primary (white background)
+ * - --border-radius-lg = 8px (corners)
+ * - --padding-xl = 24px (padding)
+ * - --gap-md = 8px (item gap)
  */
 const panelStyles: CSSProperties = {
   position: 'absolute',
   zIndex: 100,
-  backgroundColor: 'var(--_color---background--primary)',
-  borderRadius: 'var(--_border-radius---lg)',
-  padding: 'var(--_space---xl)',
+  backgroundColor: 'var(--background-primary)',
+  borderRadius: 'var(--border-radius-lg)',
+  padding: 'var(--padding-xl)',
   boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.12)',
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
   minWidth: '200px',
 };
 
@@ -74,27 +74,27 @@ const panelStyles: CSSProperties = {
  * Menu item button styles
  *
  * Token reference:
- * - --_space---gap--md = 8px (icon-text gap)
- * - --_typography---font-family--body (body font)
- * - --_typography---body--md-base = 16px
- * - --font-line-height--150
- * - --_color---text--primary
+ * - --gap-md = 8px (icon-text gap)
+ * - --font-family-body (body font)
+ * - --body-md = 16px
+ * - --font-line-height-normal
+ * - --text-primary
  */
 const itemStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--_space---gap--md)',
-  padding: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
+  padding: 'var(--padding-tiny)',
   background: 'none',
   border: 'none',
-  borderRadius: 'var(--_border-radius---sm)',
+  borderRadius: 'var(--border-radius-sm)',
   cursor: 'pointer',
   width: '100%',
   textAlign: 'left',
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--primary)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
   textTransform: 'capitalize' as const,
 };
 
@@ -102,11 +102,11 @@ const itemStyles: CSSProperties = {
  * Active item styles
  *
  * Token reference:
- * - --_color---surface--secondary (active background)
+ * - --surface-secondary (active background)
  */
 const activeItemStyles: CSSProperties = {
   ...itemStyles,
-  backgroundColor: 'var(--_color---surface--secondary)',
+  backgroundColor: 'var(--surface-secondary)',
 };
 
 /**
@@ -122,8 +122,8 @@ const disabledItemStyles: CSSProperties = {
  * Icon wrapper styles
  *
  * Token reference:
- * - --_typography---icon--large = 18px (icon size)
- * - --_color---text--primary
+ * - --icon-lg = 18px (icon size)
+ * - --text-primary
  */
 const iconWrapperStyles: CSSProperties = {
   display: 'flex',
@@ -131,8 +131,8 @@ const iconWrapperStyles: CSSProperties = {
   justifyContent: 'center',
   width: '24px',
   height: '24px',
-  fontSize: 'var(--_typography---icon--large)',
-  color: 'var(--_color---text--primary)',
+  fontSize: 'var(--icon-lg)',
+  color: 'var(--text-primary)',
   flexShrink: 0,
 };
 

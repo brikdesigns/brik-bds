@@ -31,26 +31,26 @@ export interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElemen
  * Wrapper styles — vertical stack with gap between label and field
  *
  * Token reference:
- * - --_space---gap--md = 8px (gap between label and field)
+ * - --gap-md = 8px (gap between label and field)
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--md)',
-  color: 'var(--_color---text--primary)',
+  gap: 'var(--gap-md)',
+  color: 'var(--text-primary)',
 };
 
 /**
  * Label base styles using BDS tokens
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --font-weight--semi-bold = 600 (SemiBold per Figma)
+ * - --font-family-label (label font)
+ * - --font-weight-semi-bold = 600 (SemiBold per Figma)
  */
 const labelBaseStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
   textTransform: 'capitalize' as const,
 };
 
@@ -67,24 +67,24 @@ const fieldWrapperStyles: CSSProperties = {
  * Input field base styles using BDS tokens
  *
  * Token reference:
- * - --_color---background--input (field background — white per Figma background/input)
- * - --_color---border--input (field border — grayscale/light per Figma)
- * - --_border-width---sm (border thickness)
- * - --_border-radius---input = 2px (field corners — matches Figma border-radius/small)
- * - --_space---input = 8px (field padding)
- * - --_typography---font-family--body (field text font — Regular per Figma)
- * - --font-weight--regular = 400
- * - --font-line-height--150 = 150%
+ * - --background-input (field background — white per Figma background/input)
+ * - --border-input (field border — grayscale/light per Figma)
+ * - --border-width-sm (border thickness)
+ * - --border-radius-50 = 2px (field corners — matches Figma border-radius/small)
+ * - --padding-tiny = 8px (field padding)
+ * - --font-family-body (field text font — Regular per Figma)
+ * - --font-weight-regular = 400
+ * - --font-line-height-normal = 150%
  */
 const inputBaseStyles: CSSProperties = {
   width: '100%',
-  padding: 'var(--_space---input)',
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height--150)',
-  backgroundColor: 'var(--_color---background--input)',
-  border: 'var(--_border-width---sm) solid var(--_color---border--input)',
-  borderRadius: 'var(--_border-radius---input)',
+  padding: 'var(--padding-tiny)',
+  fontFamily: 'var(--font-family-body)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  lineHeight: 'var(--font-line-height-normal)',
+  backgroundColor: 'var(--background-input)',
+  border: 'var(--border-width-sm) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-50)',
   outline: 'none',
   transition: 'border-color 0.2s',
 };
@@ -93,29 +93,29 @@ const inputBaseStyles: CSSProperties = {
  * Icon positioning styles
  *
  * Token reference:
- * - --_space---input = 8px (icon inset from edge)
+ * - --padding-tiny = 8px (icon inset from edge)
  */
 const iconStyles: CSSProperties = {
   position: 'absolute',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: 'var(--_color---text--muted)',
+  color: 'var(--text-muted)',
 };
 
 /**
  * Helper/error text base styles
  *
  * Token reference:
- * - --_typography---font-family--body (helper font)
- * - --_typography---body--sm (small text size)
- * - --_color---text--muted (helper text color)
+ * - --font-family-body (helper font)
+ * - --body-sm (small text size)
+ * - --text-muted (helper text color)
  */
 const helperBaseStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--sm)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--muted)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-sm)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-muted)',
 };
 
 /**
@@ -128,16 +128,16 @@ const helperBaseStyles: CSSProperties = {
  */
 const sizeStyles: Record<TextInputSize, { label: CSSProperties; input: CSSProperties }> = {
   sm: {
-    label: { fontSize: 'var(--_typography---label--sm)' },
-    input: { fontSize: 'var(--_typography---body--sm)' },
+    label: { fontSize: 'var(--label-sm)' },
+    input: { fontSize: 'var(--body-sm)' },
   },
   md: {
-    label: { fontSize: 'var(--_typography---label--md-base)' },
-    input: { fontSize: 'var(--_typography---body--md-base)' },
+    label: { fontSize: 'var(--label-md)' },
+    input: { fontSize: 'var(--body-md)' },
   },
   lg: {
-    label: { fontSize: 'var(--_typography---label--lg)' },
-    input: { fontSize: 'var(--_typography---body--lg)' },
+    label: { fontSize: 'var(--label-lg)' },
+    input: { fontSize: 'var(--body-lg)' },
   },
 };
 
@@ -181,9 +181,9 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const inputStyles: CSSProperties = {
       ...inputBaseStyles,
       ...sizeStyle.input,
-      ...(iconBefore ? { paddingLeft: 'calc(var(--_space---input) * 4)' } : {}),
-      ...(iconAfter ? { paddingRight: 'calc(var(--_space---input) * 4)' } : {}),
-      ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
+      ...(iconBefore ? { paddingLeft: 'calc(var(--padding-tiny) * 4)' } : {}),
+      ...(iconAfter ? { paddingRight: 'calc(var(--padding-tiny) * 4)' } : {}),
+      ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
     };
 
     return (
@@ -201,7 +201,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             style={{
               ...labelBaseStyles,
               ...sizeStyle.label,
-              ...(hasError ? { color: 'var(--system--red)' } : {}),
+              ...(hasError ? { color: 'var(--color-system-red)' } : {}),
             }}
           >
             {label}
@@ -210,7 +210,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 
         <div style={fieldWrapperStyles}>
           {iconBefore && (
-            <span style={{ ...iconStyles, left: 'var(--_space---input)' }}>
+            <span style={{ ...iconStyles, left: 'var(--padding-tiny)' }}>
               {iconBefore}
             </span>
           )}
@@ -228,7 +228,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           />
 
           {iconAfter && (
-            <span style={{ ...iconStyles, right: 'var(--_space---input)' }}>
+            <span style={{ ...iconStyles, right: 'var(--padding-tiny)' }}>
               {iconAfter}
             </span>
           )}
@@ -237,7 +237,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         {error && (
           <span
             id={`${inputId}-error`}
-            style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
+            style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
             role="alert"
           >
             {error}

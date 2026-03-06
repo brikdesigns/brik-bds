@@ -29,38 +29,38 @@ export interface CounterProps extends HTMLAttributes<HTMLSpanElement> {
  * Status-based colors using BDS system tokens
  *
  * Token reference:
- * - --system--green = #27ae60 (success)
- * - --system--red = #eb5757 (error)
- * - --system--yellow = #f2c94c (warning)
- * - --system--blue = #2f80ed (progress)
- * - --grayscale--lighter = #e0e0e0 (neutral)
- * - --_color---background--brand-primary (brand background)
- * - --_color---text--inverse (on-color text)
+ * - --color-system-green = #27ae60 (success)
+ * - --color-system-red = #eb5757 (error)
+ * - --color-system-yellow = #f2c94c (warning)
+ * - --color-system-blue = #2f80ed (progress)
+ * - --color-grayscale-lighter = #e0e0e0 (neutral)
+ * - --background-brand-primary (brand background)
+ * - --text-inverse (on-color text)
  */
 const statusStyles: Record<CounterStatus, CSSProperties> = {
   success: {
-    backgroundColor: 'var(--system--green)',
-    color: 'var(--_color---text--inverse)',
+    backgroundColor: 'var(--color-system-green)',
+    color: 'var(--text-inverse)',
   },
   error: {
-    backgroundColor: 'var(--system--red)',
-    color: 'var(--_color---text--inverse)',
+    backgroundColor: 'var(--color-system-red)',
+    color: 'var(--text-inverse)',
   },
   warning: {
-    backgroundColor: 'var(--system--yellow)',
-    color: 'var(--_color---text--primary)',
+    backgroundColor: 'var(--color-system-yellow)',
+    color: 'var(--text-primary)',
   },
   neutral: {
-    backgroundColor: 'var(--grayscale--lighter)',
-    color: 'var(--_color---text--primary)',
+    backgroundColor: 'var(--color-grayscale-lighter)',
+    color: 'var(--text-primary)',
   },
   progress: {
-    backgroundColor: 'var(--system--blue)',
-    color: 'var(--_color---text--inverse)',
+    backgroundColor: 'var(--color-system-blue)',
+    color: 'var(--text-inverse)',
   },
   brand: {
-    backgroundColor: 'var(--_color---background--brand-primary)',
-    color: 'var(--_color---text--inverse)',
+    backgroundColor: 'var(--background-brand-primary)',
+    color: 'var(--text-inverse)',
   },
 };
 
@@ -68,22 +68,22 @@ const statusStyles: Record<CounterStatus, CSSProperties> = {
  * Size-based styles
  *
  * Figma specs (pre-spacing-update, tokens now resolve to larger values):
- * - sm: --_space---sm (12px) x --_space---md (16px), font-size ~11px (body--tiny)
- * - md: --_space---md (16px) x --_space---lg (24px), font-size 14px (label--sm)
- * - lg: --_space---md (16px) x --_space---lg (24px), font-size 16px (label--md-base)
+ * - sm: --padding-sm (12px) x --padding-md (16px), font-size ~11px (body--tiny)
+ * - md: --padding-md (16px) x --padding-lg (24px), font-size 14px (label--sm)
+ * - lg: --padding-md (16px) x --padding-lg (24px), font-size 16px (label--md-base)
  */
 const sizeStyles: Record<CounterSize, CSSProperties> = {
   sm: {
-    padding: 'var(--_space---sm) var(--_space---md)',
-    fontSize: 'var(--_typography---body--tiny)',
+    padding: 'var(--padding-sm) var(--padding-md)',
+    fontSize: 'var(--body-tiny)',
   },
   md: {
-    padding: 'var(--_space---md) var(--_space---lg)',
-    fontSize: 'var(--_typography---label--sm)',
+    padding: 'var(--padding-md) var(--padding-lg)',
+    fontSize: 'var(--label-sm)',
   },
   lg: {
-    padding: 'var(--_space---md) var(--_space---lg)',
-    fontSize: 'var(--_typography---label--md-base)',
+    padding: 'var(--padding-md) var(--padding-lg)',
+    fontSize: 'var(--label-md)',
   },
 };
 
@@ -91,17 +91,17 @@ const sizeStyles: Record<CounterSize, CSSProperties> = {
  * Base counter styles
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --font-weight--semi-bold = 600
+ * - --font-family-label (label font)
+ * - --font-weight-semi-bold = 600
  * - border-radius: 9999px (full pill)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
   borderRadius: '9999px',
   whiteSpace: 'nowrap',
   overflow: 'clip',

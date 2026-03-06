@@ -143,13 +143,13 @@ export const AllPositions: Story = {
     const [page3, setPage3] = useState(15);
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---xl)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-xl)' }}>
         <div>
           <p style={{
-            fontFamily: 'var(--_typography---font-family--label)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--muted)',
-            margin: '0 0 var(--_space---gap--md) 0',
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-muted)',
+            margin: '0 0 var(--gap-md) 0',
           }}>
             position=&quot;left&quot;
           </p>
@@ -157,10 +157,10 @@ export const AllPositions: Story = {
         </div>
         <div>
           <p style={{
-            fontFamily: 'var(--_typography---font-family--label)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--muted)',
-            margin: '0 0 var(--_space---gap--md) 0',
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-muted)',
+            margin: '0 0 var(--gap-md) 0',
           }}>
             position=&quot;center&quot;
           </p>
@@ -168,10 +168,10 @@ export const AllPositions: Story = {
         </div>
         <div>
           <p style={{
-            fontFamily: 'var(--_typography---font-family--label)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--muted)',
-            margin: '0 0 var(--_space---gap--md) 0',
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-muted)',
+            margin: '0 0 var(--gap-md) 0',
           }}>
             position=&quot;right&quot;
           </p>

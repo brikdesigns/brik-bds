@@ -179,7 +179,7 @@ export const SettingsGroup: Story = {
     const [darkMode, setDarkMode] = useState(false);
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)', maxWidth: '600px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-lg)', maxWidth: '600px' }}>
         <CardControl
           title="Notifications"
           description="Receive email notifications for updates"

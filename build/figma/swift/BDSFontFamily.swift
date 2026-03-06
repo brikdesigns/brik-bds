@@ -9,6 +9,4 @@ public enum BDSFontFamily {
     public static let fontFamilyBody = "Poppins"
     public static let fontFamilyIcon = "Font Awesome 6 Pro"
     public static let fontFamilyLogo = "Font Awesome 6 Brands"
-    public static let logo = "Font Awesome Brand"
-    public static let icon = "Font Awesome Solid"
 }

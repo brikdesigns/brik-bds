@@ -118,12 +118,12 @@ export const WithUserSection: Story = {
             width: 40,
             height: 40,
             borderRadius: '50%',
-            backgroundColor: 'var(--_color---background--brand-primary)',
+            backgroundColor: 'var(--background-brand-primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'var(--_color---text--inverse)',
-            fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+            color: 'var(--text-inverse)',
+            fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
           }}
         >
           JD
@@ -132,13 +132,13 @@ export const WithUserSection: Story = {
           <div
             style={{
               fontSize: 14,
-              fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-              color: 'var(--_color---text--primary)',
+              fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+              color: 'var(--text-primary)',
             }}
           >
             John Doe
           </div>
-          <div style={{ fontSize: 12, color: 'var(--_color---text--secondary)' }}>
+          <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
             john@example.com
           </div>
         </div>
@@ -183,12 +183,12 @@ export const FullApplicationLayout: Story = {
                 width: 40,
                 height: 40,
                 borderRadius: '50%',
-                backgroundColor: 'var(--_color---background--brand-primary)',
+                backgroundColor: 'var(--background-brand-primary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--_color---text--inverse)',
-                fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+                color: 'var(--text-inverse)',
+                fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
               }}
             >
               JD
@@ -197,13 +197,13 @@ export const FullApplicationLayout: Story = {
               <div
                 style={{
                   fontSize: 14,
-                  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-                  color: 'var(--_color---text--primary)',
+                  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+                  color: 'var(--text-primary)',
                 }}
               >
                 John Doe
               </div>
-              <div style={{ fontSize: 12, color: 'var(--_color---text--secondary)' }}>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
                 john@example.com
               </div>
             </div>
@@ -213,25 +213,25 @@ export const FullApplicationLayout: Story = {
       <main
         style={{
           flex: 1,
-          padding: 'var(--_space---xl)',
-          backgroundColor: 'var(--_color---page--primary)',
+          padding: 'var(--padding-xl)',
+          backgroundColor: 'var(--page-primary)',
           overflowY: 'auto',
         }}
       >
         <h1
           style={{
-            fontSize: 'var(--_typography---heading--xx-large)',
-            fontFamily: 'var(--_typography---font-family--heading)',
-            marginBottom: 'var(--_space---lg)',
+            fontSize: 'var(--heading-xxl)',
+            fontFamily: 'var(--font-family-heading)',
+            marginBottom: 'var(--padding-lg)',
           }}
         >
           Dashboard
         </h1>
         <p
           style={{
-            fontSize: 'var(--_typography---body--md-base)',
-            color: 'var(--_color---text--secondary)',
-            marginBottom: 'var(--_space---xl)',
+            fontSize: 'var(--body-md)',
+            color: 'var(--text-secondary)',
+            marginBottom: 'var(--padding-xl)',
           }}
         >
           Welcome to your application dashboard. Use the sidebar navigation to explore different
@@ -243,32 +243,32 @@ export const FullApplicationLayout: Story = {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-            gap: 'var(--_space---lg)',
+            gap: 'var(--padding-lg)',
           }}
         >
           {['Projects', 'Analytics', 'Reports', 'Settings'].map((title) => (
             <div
               key={title}
               style={{
-                padding: 'var(--_space---xl)',
-                backgroundColor: 'var(--_color---surface--primary)',
-                borderRadius: 'var(--_border-radius---lg)',
-                border: '1px solid var(--_color---border--secondary)',
+                padding: 'var(--padding-xl)',
+                backgroundColor: 'var(--surface-primary)',
+                borderRadius: 'var(--border-radius-lg)',
+                border: '1px solid var(--border-secondary)',
               }}
             >
               <h3
                 style={{
-                  fontSize: 'var(--_typography---heading--small)',
-                  fontFamily: 'var(--_typography---font-family--heading)',
-                  marginBottom: 'var(--_space---md)',
+                  fontSize: 'var(--heading-sm)',
+                  fontFamily: 'var(--font-family-heading)',
+                  marginBottom: 'var(--padding-md)',
                 }}
               >
                 {title}
               </h3>
               <p
                 style={{
-                  fontSize: 'var(--_typography---body--sm)',
-                  color: 'var(--_color---text--secondary)',
+                  fontSize: 'var(--body-sm)',
+                  color: 'var(--text-secondary)',
                 }}
               >
                 Sample content for {title.toLowerCase()} section.

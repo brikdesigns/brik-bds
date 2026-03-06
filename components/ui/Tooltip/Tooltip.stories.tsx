@@ -30,10 +30,10 @@ export const Top: Story = {
     placement: 'top',
     children: <button style={{
       padding: '8px 16px',
-      backgroundColor: 'var(--_color---background--brand-primary)',
-      color: 'var(--_color---text--inverse)',
+      backgroundColor: 'var(--background-brand-primary)',
+      color: 'var(--text-inverse)',
       border: 'none',
-      borderRadius: 'var(--_border-radius---md)',
+      borderRadius: 'var(--border-radius-md)',
       cursor: 'pointer',
     }}>
       Hover me
@@ -47,10 +47,10 @@ export const Bottom: Story = {
     placement: 'bottom',
     children: <button style={{
       padding: '8px 16px',
-      backgroundColor: 'var(--_color---background--brand-primary)',
-      color: 'var(--_color---text--inverse)',
+      backgroundColor: 'var(--background-brand-primary)',
+      color: 'var(--text-inverse)',
       border: 'none',
-      borderRadius: 'var(--_border-radius---md)',
+      borderRadius: 'var(--border-radius-md)',
       cursor: 'pointer',
     }}>
       Hover me
@@ -64,10 +64,10 @@ export const Left: Story = {
     placement: 'left',
     children: <button style={{
       padding: '8px 16px',
-      backgroundColor: 'var(--_color---background--brand-primary)',
-      color: 'var(--_color---text--inverse)',
+      backgroundColor: 'var(--background-brand-primary)',
+      color: 'var(--text-inverse)',
       border: 'none',
-      borderRadius: 'var(--_border-radius---md)',
+      borderRadius: 'var(--border-radius-md)',
       cursor: 'pointer',
     }}>
       Hover me
@@ -81,10 +81,10 @@ export const Right: Story = {
     placement: 'right',
     children: <button style={{
       padding: '8px 16px',
-      backgroundColor: 'var(--_color---background--brand-primary)',
-      color: 'var(--_color---text--inverse)',
+      backgroundColor: 'var(--background-brand-primary)',
+      color: 'var(--text-inverse)',
       border: 'none',
-      borderRadius: 'var(--_border-radius---md)',
+      borderRadius: 'var(--border-radius-md)',
       cursor: 'pointer',
     }}>
       Hover me
@@ -122,10 +122,10 @@ export const AllPlacements: Story = {
       <Tooltip content="Top placement" placement="top">
         <button style={{
           padding: '8px 16px',
-          backgroundColor: 'var(--_color---background--brand-primary)',
-          color: 'var(--_color---text--inverse)',
+          backgroundColor: 'var(--background-brand-primary)',
+          color: 'var(--text-inverse)',
           border: 'none',
-          borderRadius: 'var(--_border-radius---md)',
+          borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
           Top
@@ -134,10 +134,10 @@ export const AllPlacements: Story = {
       <Tooltip content="Bottom placement" placement="bottom">
         <button style={{
           padding: '8px 16px',
-          backgroundColor: 'var(--_color---background--brand-primary)',
-          color: 'var(--_color---text--inverse)',
+          backgroundColor: 'var(--background-brand-primary)',
+          color: 'var(--text-inverse)',
           border: 'none',
-          borderRadius: 'var(--_border-radius---md)',
+          borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
           Bottom
@@ -146,10 +146,10 @@ export const AllPlacements: Story = {
       <Tooltip content="Left placement" placement="left">
         <button style={{
           padding: '8px 16px',
-          backgroundColor: 'var(--_color---background--brand-primary)',
-          color: 'var(--_color---text--inverse)',
+          backgroundColor: 'var(--background-brand-primary)',
+          color: 'var(--text-inverse)',
           border: 'none',
-          borderRadius: 'var(--_border-radius---md)',
+          borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
           Left
@@ -158,10 +158,10 @@ export const AllPlacements: Story = {
       <Tooltip content="Right placement" placement="right">
         <button style={{
           padding: '8px 16px',
-          backgroundColor: 'var(--_color---background--brand-primary)',
-          color: 'var(--_color---text--inverse)',
+          backgroundColor: 'var(--background-brand-primary)',
+          color: 'var(--text-inverse)',
           border: 'none',
-          borderRadius: 'var(--_border-radius---md)',
+          borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
           Right
@@ -197,9 +197,9 @@ export const IconButton: Story = {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: 'var(--_color---background--secondary)',
-          border: '1px solid var(--_color---border--secondary)',
-          borderRadius: 'var(--_border-radius---md)',
+          backgroundColor: 'var(--background-secondary)',
+          border: '1px solid var(--border-secondary)',
+          borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
           ✏️
@@ -212,9 +212,9 @@ export const IconButton: Story = {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: 'var(--_color---background--secondary)',
-          border: '1px solid var(--_color---border--secondary)',
-          borderRadius: 'var(--_border-radius---md)',
+          backgroundColor: 'var(--background-secondary)',
+          border: '1px solid var(--border-secondary)',
+          borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
           🗑️
@@ -227,9 +227,9 @@ export const IconButton: Story = {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: 'var(--_color---background--secondary)',
-          border: '1px solid var(--_color---border--secondary)',
-          borderRadius: 'var(--_border-radius---md)',
+          backgroundColor: 'var(--background-secondary)',
+          border: '1px solid var(--border-secondary)',
+          borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
           📤
@@ -253,10 +253,10 @@ export const WithKeyboardShortcut: Story = {
     <Tooltip content="Save (Cmd+S)" placement="bottom">
       <button style={{
         padding: '8px 16px',
-        backgroundColor: 'var(--_color---background--brand-primary)',
-        color: 'var(--_color---text--inverse)',
+        backgroundColor: 'var(--background-brand-primary)',
+        color: 'var(--text-inverse)',
         border: 'none',
-        borderRadius: 'var(--_border-radius---md)',
+        borderRadius: 'var(--border-radius-md)',
         cursor: 'pointer',
       }}>
         Save
@@ -278,8 +278,8 @@ export const HelpText: Story = {
   },
   render: () => (
     <div style={{
-      fontFamily: 'var(--_typography---font-family--body)',
-      fontSize: 'var(--_typography---body--md-base)',
+      fontFamily: 'var(--font-family-body)',
+      fontSize: 'var(--body-md)',
       display: 'flex',
       alignItems: 'center',
       gap: '8px',
@@ -292,8 +292,8 @@ export const HelpText: Story = {
           justifyContent: 'center',
           width: '16px',
           height: '16px',
-          backgroundColor: 'var(--_color---background--secondary)',
-          color: 'var(--_color---text--secondary)',
+          backgroundColor: 'var(--background-secondary)',
+          color: 'var(--text-secondary)',
           borderRadius: '50%',
           fontSize: '12px',
           cursor: 'help',

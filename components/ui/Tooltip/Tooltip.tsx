@@ -28,13 +28,13 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       bottom: '100%',
       left: '50%',
       transform: 'translateX(-50%)',
-      marginBottom: 'var(--_space---md)',
+      marginBottom: 'var(--padding-md)',
     },
     arrow: {
       top: '100%',
       left: '50%',
       transform: 'translateX(-50%)',
-      borderTopColor: 'var(--grayscale--darkest, #333)',
+      borderTopColor: 'var(--color-grayscale-darkest, #333)',
     },
   },
   bottom: {
@@ -42,13 +42,13 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       top: '100%',
       left: '50%',
       transform: 'translateX(-50%)',
-      marginTop: 'var(--_space---md)',
+      marginTop: 'var(--padding-md)',
     },
     arrow: {
       bottom: '100%',
       left: '50%',
       transform: 'translateX(-50%)',
-      borderBottomColor: 'var(--grayscale--darkest, #333)',
+      borderBottomColor: 'var(--color-grayscale-darkest, #333)',
     },
   },
   left: {
@@ -56,13 +56,13 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       right: '100%',
       top: '50%',
       transform: 'translateY(-50%)',
-      marginRight: 'var(--_space---md)',
+      marginRight: 'var(--padding-md)',
     },
     arrow: {
       left: '100%',
       top: '50%',
       transform: 'translateY(-50%)',
-      borderLeftColor: 'var(--grayscale--darkest, #333)',
+      borderLeftColor: 'var(--color-grayscale-darkest, #333)',
     },
   },
   right: {
@@ -70,13 +70,13 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       left: '100%',
       top: '50%',
       transform: 'translateY(-50%)',
-      marginLeft: 'var(--_space---md)',
+      marginLeft: 'var(--padding-md)',
     },
     arrow: {
       right: '100%',
       top: '50%',
       transform: 'translateY(-50%)',
-      borderRightColor: 'var(--grayscale--darkest, #333)',
+      borderRightColor: 'var(--color-grayscale-darkest, #333)',
     },
   },
 };
@@ -85,21 +85,21 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
  * Base tooltip styles using BDS tokens
  *
  * Token reference:
- * - --grayscale--darkest = #333 (dark background)
- * - --grayscale--white (white text)
- * - --_typography---font-family--label (tooltip font)
- * - --_typography---label--sm (small label size)
- * - --_border-radius---sm (tooltip corners)
+ * - --color-grayscale-darkest = #333 (dark background)
+ * - --color-grayscale-white (white text)
+ * - --font-family-label (tooltip font)
+ * - --label-sm (small label size)
+ * - --border-radius-sm (tooltip corners)
  */
 const tooltipBaseStyles: CSSProperties = {
   position: 'absolute',
-  padding: 'var(--_space---sm) var(--_space---lg)',
-  backgroundColor: 'var(--grayscale--darkest, #333)',
-  color: 'var(--grayscale--white, #fff)',
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
-  lineHeight: 'var(--font-line-height--150)',
-  borderRadius: 'var(--_border-radius---sm)',
+  padding: 'var(--padding-sm) var(--padding-lg)',
+  backgroundColor: 'var(--color-grayscale-darkest, #333)',
+  color: 'var(--color-grayscale-white, #fff)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-sm)',
+  lineHeight: 'var(--font-line-height-normal)',
+  borderRadius: 'var(--border-radius-sm)',
   whiteSpace: 'nowrap',
   zIndex: 1000,
   pointerEvents: 'none',

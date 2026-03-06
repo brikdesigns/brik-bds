@@ -31,7 +31,4 @@ public enum BDSSize {
     public static let size2200: CGFloat = 100
     public static let sizePill: CGFloat = 9999
     public static let sizeCircle: CGFloat = 99999
-    public static let web: CGFloat = 1200
-    public static let tablet: CGFloat = 768
-    public static let mobile: CGFloat = 320
 }

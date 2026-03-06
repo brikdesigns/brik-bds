@@ -62,8 +62,8 @@ function getTrackStyles(size: SwitchSize, isChecked: boolean): CSSProperties {
     width: `${s.trackW}px`,
     height: `${s.trackH}px`,
     backgroundColor: isChecked
-      ? 'var(--_color---background--brand-primary)'
-      : 'var(--grayscale--light, #bdbdbd)',
+      ? 'var(--background-brand-primary)'
+      : 'var(--color-grayscale-light, #bdbdbd)',
     borderRadius: '9999px',
     transition: 'background-color 0.2s ease',
     flexShrink: 0,
@@ -79,7 +79,7 @@ function getKnobStyles(size: SwitchSize, isChecked: boolean): CSSProperties {
     left: `${s.pad}px`,
     width: `${s.knob}px`,
     height: `${s.knob}px`,
-    backgroundColor: 'var(--grayscale--white, #fff)',
+    backgroundColor: 'var(--color-grayscale-white, #fff)',
     borderRadius: '50%',
     transition: 'transform 0.2s ease',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.06)',
@@ -138,12 +138,12 @@ export function Switch({
   const labelStyles: CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    gap: 'var(--_space---gap--md)',
+    gap: 'var(--gap-md)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     userSelect: 'none',
-    fontFamily: 'var(--_typography---font-family--body)',
-    fontSize: 'var(--_typography---body--md-base)',
-    color: 'var(--_color---text--primary)',
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-md)',
+    color: 'var(--text-primary)',
     textTransform: 'capitalize' as const,
     opacity: disabled ? 0.5 : 1,
     ...style,

@@ -59,7 +59,7 @@ export const AllCategories: Story = {
   render: () => {
     const categories = Object.keys(categoryConfig) as ServiceCategory[];
     return (
-      <div style={{ display: 'flex', gap: 'var(--_space---gap--lg)', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
         {categories.map((cat) => (
           <ServiceBadge key={cat} category={cat} />
         ))}
@@ -74,7 +74,7 @@ export const AllSizes: Story = {
   render: () => {
     const sizes: ServiceBadgeSize[] = ['sm', 'md', 'lg'];
     return (
-      <div style={{ display: 'flex', gap: 'var(--_space---gap--xl)', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
         {sizes.map((size) => (
           <ServiceBadge key={size} category="marketing" size={size} />
         ))}
@@ -89,7 +89,7 @@ export const Labels: Story = {
   render: () => {
     const categories = Object.keys(categoryConfig) as ServiceCategory[];
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
         {categories.map((cat) => (
           <ServiceBadge key={cat} category={cat} mode="label" size="sm" />
         ))}
@@ -104,7 +104,7 @@ export const ColorTokens: Story = {
   render: () => {
     const categories = Object.keys(categoryConfig) as ServiceCategory[];
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--xl)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
         {categories.map((cat) => {
           const config = categoryConfig[cat];
           return (
@@ -113,7 +113,7 @@ export const ColorTokens: Story = {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 'var(--_space---gap--lg)',
+                gap: 'var(--gap-lg)',
               }}
             >
               {/* Primary */}
@@ -121,8 +121,8 @@ export const ColorTokens: Story = {
                 style={{
                   width: '40px',
                   height: '40px',
-                  borderRadius: 'var(--_border-radius---md)',
-                  backgroundColor: `var(--_color---background--service-${cat})`,
+                  borderRadius: 'var(--border-radius-md)',
+                  backgroundColor: `var(--background-service-${cat})`,
                 }}
               />
               {/* Dark */}
@@ -130,8 +130,8 @@ export const ColorTokens: Story = {
                 style={{
                   width: '40px',
                   height: '40px',
-                  borderRadius: 'var(--_border-radius---md)',
-                  backgroundColor: `var(--_color---background--service-${cat}-secondary)`,
+                  borderRadius: 'var(--border-radius-md)',
+                  backgroundColor: `var(--background-service-${cat}-secondary)`,
                 }}
               />
               {/* Light */}
@@ -139,18 +139,18 @@ export const ColorTokens: Story = {
                 style={{
                   width: '40px',
                   height: '40px',
-                  borderRadius: 'var(--_border-radius---md)',
+                  borderRadius: 'var(--border-radius-md)',
                   backgroundColor: `var(--services--${config.token}-light)`,
-                  border: '1px solid var(--_color---border--muted)',
+                  border: '1px solid var(--border-muted)',
                 }}
               />
               {/* Label */}
               <span
                 style={{
-                  fontFamily: 'var(--_typography---font-family--label)',
-                  fontSize: 'var(--_typography---label--sm)',
-                  color: `var(--_color---text--service-${cat})`,
-                  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+                  fontFamily: 'var(--font-family-label)',
+                  fontSize: 'var(--label-sm)',
+                  color: `var(--text-service-${cat})`,
+                  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
                   textTransform: 'uppercase' as const,
                   letterSpacing: '0.5px',
                   minWidth: '100px',
@@ -160,9 +160,9 @@ export const ColorTokens: Story = {
               </span>
               <span
                 style={{
-                  fontFamily: 'var(--_typography---font-family--body)',
-                  fontSize: 'var(--_typography---body--sm)',
-                  color: 'var(--_color---text--muted)',
+                  fontFamily: 'var(--font-family-body)',
+                  fontSize: 'var(--body-sm)',
+                  color: 'var(--text-muted)',
                 }}
               >
                 --services--{config.token} / {config.token}-dark / {config.token}-light
@@ -179,33 +179,33 @@ export const ColorTokens: Story = {
 
 export const InlineWithText: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
         <ServiceBadge category="marketing" size="sm" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
-          color: 'var(--_color---text--primary)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
+          color: 'var(--text-primary)',
         }}>
           Website Design &amp; Development
         </span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--md)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
         <ServiceBadge category="brand" size="sm" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
-          color: 'var(--_color---text--primary)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
+          color: 'var(--text-primary)',
         }}>
           Logo Design &amp; Brand Guidelines
         </span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--md)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
         <ServiceBadge category="service" size="sm" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
-          color: 'var(--_color---text--primary)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
+          color: 'var(--text-primary)',
         }}>
           CRM Setup &amp; Data Cleanup
         </span>

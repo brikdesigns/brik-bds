@@ -72,8 +72,8 @@ export const AllVariants: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div>
         <h4 style={{
-          fontFamily: 'var(--_typography---font-family--heading)',
-          fontSize: 'var(--_typography---heading--tiny)',
+          fontFamily: 'var(--font-family-heading)',
+          fontSize: 'var(--heading-tiny)',
           marginBottom: '12px',
         }}>
           Text
@@ -87,8 +87,8 @@ export const AllVariants: Story = {
 
       <div>
         <h4 style={{
-          fontFamily: 'var(--_typography---font-family--heading)',
-          fontSize: 'var(--_typography---heading--tiny)',
+          fontFamily: 'var(--font-family-heading)',
+          fontSize: 'var(--heading-tiny)',
           marginBottom: '12px',
         }}>
           Circular
@@ -102,8 +102,8 @@ export const AllVariants: Story = {
 
       <div>
         <h4 style={{
-          fontFamily: 'var(--_typography---font-family--heading)',
-          fontSize: 'var(--_typography---heading--tiny)',
+          fontFamily: 'var(--font-family-heading)',
+          fontSize: 'var(--heading-tiny)',
           marginBottom: '12px',
         }}>
           Rectangular
@@ -132,9 +132,9 @@ export const ArticleCard: Story = {
       style={{
         width: '300px',
         padding: '16px',
-        backgroundColor: 'var(--_color---background--primary)',
-        border: '1px solid var(--_color---border--secondary)',
-        borderRadius: 'var(--_border-radius---lg)',
+        backgroundColor: 'var(--background-primary)',
+        border: '1px solid var(--border-secondary)',
+        borderRadius: 'var(--border-radius-lg)',
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
@@ -165,9 +165,9 @@ export const UserProfile: Story = {
       style={{
         width: '280px',
         padding: '24px',
-        backgroundColor: 'var(--_color---background--primary)',
-        border: '1px solid var(--_color---border--secondary)',
-        borderRadius: 'var(--_border-radius---lg)',
+        backgroundColor: 'var(--background-primary)',
+        border: '1px solid var(--border-secondary)',
+        borderRadius: 'var(--border-radius-lg)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -212,9 +212,9 @@ export const CommentList: Story = {
             display: 'flex',
             gap: '12px',
             padding: '12px',
-            backgroundColor: 'var(--_color---background--primary)',
-            border: '1px solid var(--_color---border--secondary)',
-            borderRadius: 'var(--_border-radius---md)',
+            backgroundColor: 'var(--background-primary)',
+            border: '1px solid var(--border-secondary)',
+            borderRadius: 'var(--border-radius-md)',
           }}
         >
           <Skeleton variant="circular" width={40} height={40} />
@@ -247,8 +247,8 @@ export const TableRows: Story = {
         display: 'flex',
         flexDirection: 'column',
         gap: '1px',
-        backgroundColor: 'var(--_color---border--secondary)',
-        borderRadius: 'var(--_border-radius---md)',
+        backgroundColor: 'var(--border-secondary)',
+        borderRadius: 'var(--border-radius-md)',
         overflow: 'hidden',
       }}
     >
@@ -260,7 +260,7 @@ export const TableRows: Story = {
             gridTemplateColumns: '1fr 2fr 1fr',
             gap: '16px',
             padding: '12px 16px',
-            backgroundColor: 'var(--_color---background--primary)',
+            backgroundColor: 'var(--background-primary)',
           }}
         >
           <Skeleton variant="text" />

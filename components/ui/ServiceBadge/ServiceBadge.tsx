@@ -40,8 +40,8 @@ export interface ServiceBadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 
  * and display labels. Uses semantic service tokens from BDS.
  *
  * Token pattern:
- * - background: --_color---background--service-{category}
- * - text/icon:  --_color---text--service-{category}
+ * - background: --background-service-{category}
+ * - text/icon:  --text-service-{category}
  * - light bg:   --services--{token}-light
  */
 export const categoryConfig: Record<ServiceCategory, { token: string; label: string }> = {
@@ -103,13 +103,13 @@ function getServiceIconPath(category: ServiceCategory, serviceName: string): str
  * Size styles using BDS tokens
  *
  * Token reference:
- * - --_border-radius---sm = 2px
- * - --_border-radius---md = 4px
+ * - --border-radius-sm = 2px
+ * - --border-radius-md = 4px
  */
 const sizeMap: Record<ServiceBadgeSize, { box: number; iconScale: number; radius: string }> = {
-  sm: { box: 20, iconScale: 0.55, radius: 'var(--_border-radius---sm)' },
-  md: { box: 28, iconScale: 0.6, radius: 'var(--_border-radius---md)' },
-  lg: { box: 40, iconScale: 0.6, radius: 'var(--_border-radius---md)' },
+  sm: { box: 20, iconScale: 0.55, radius: 'var(--border-radius-sm)' },
+  md: { box: 28, iconScale: 0.6, radius: 'var(--border-radius-md)' },
+  lg: { box: 40, iconScale: 0.6, radius: 'var(--border-radius-md)' },
 };
 
 /**
@@ -154,8 +154,8 @@ export function ServiceBadge({
     width: `${box}px`,
     height: `${box}px`,
     borderRadius: radius,
-    backgroundColor: `var(--_color---background--service-${category})`,
-    color: `var(--_color---text--service-${category})`,
+    backgroundColor: `var(--background-service-${category})`,
+    color: `var(--text-service-${category})`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -190,12 +190,12 @@ export function ServiceBadge({
     const labelStyles: CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
-      gap: 'var(--_space---gap--md)',
-      fontFamily: 'var(--_typography---font-family--label)',
-      fontSize: 'var(--_typography---body--sm)',
-      fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-      lineHeight: 'var(--font-line-height--100)',
-      color: `var(--_color---text--service-${category})`,
+      gap: 'var(--gap-md)',
+      fontFamily: 'var(--font-family-label)',
+      fontSize: 'var(--body-sm)',
+      fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+      lineHeight: 'var(--font-line-height-tight)',
+      color: `var(--text-service-${category})`,
       textTransform: 'uppercase' as const,
       letterSpacing: '0.5px',
     };

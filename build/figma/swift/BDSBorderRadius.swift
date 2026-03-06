@@ -21,4 +21,8 @@ public enum BDSBorderRadius {
     public static let borderRadius1400: CGFloat = 48
     public static let borderRadiusPill: CGFloat = 999
     public static let borderRadiusCircle: CGFloat = 9999
+    public static let borderRadiusLg: CGFloat = 16
+    public static let borderRadiusMd: CGFloat = 12
+    public static let borderRadiusNone: CGFloat = 0
+    public static let borderRadiusSm: CGFloat = 8
 }

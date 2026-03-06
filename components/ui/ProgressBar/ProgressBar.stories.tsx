@@ -83,9 +83,9 @@ useEffect(() => {
         <ProgressBar value={progress} label="Loading" />
         <p
           style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--secondary)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-secondary)',
             marginTop: '8px',
           }}
         >
@@ -122,9 +122,9 @@ export const Steps: Story = {
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--secondary)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-secondary)',
             marginBottom: '8px',
           }}
         >

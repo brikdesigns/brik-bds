@@ -50,13 +50,13 @@ function formatValue(value: string | number, type: CardSummaryType): string {
  * Container styles
  *
  * Token reference (from brik-bds.webflow.css):
- * - --_color---surface--primary (card background)
- * - --_color---border--muted (subtle card border)
- * - --_border-width---lg = 1px (visible border)
+ * - --surface-primary (card background)
+ * - --border-muted (subtle card border)
+ * - --border-width-lg = 1px (visible border)
  */
 const containerStyles: CSSProperties = {
-  backgroundColor: 'var(--_color---surface--primary)',
-  border: 'var(--_border-width---lg) solid var(--_color---border--muted)',
+  backgroundColor: 'var(--surface-primary)',
+  border: 'var(--border-width-lg) solid var(--border-muted)',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'stretch',
@@ -67,29 +67,29 @@ const containerStyles: CSSProperties = {
  * Inner padding wrapper
  *
  * Token reference (from brik-bds.webflow.css):
- * - --_space---lg = 16px (inner padding, Base mode)
- * - --_space---gap--md = 8px (gap between content and link)
+ * - --padding-lg = 16px (inner padding, Base mode)
+ * - --gap-md = 8px (gap between content and link)
  */
 const innerStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
   alignItems: 'flex-start',
-  padding: 'var(--_space---lg)',
+  padding: 'var(--padding-lg)',
 };
 
 /**
  * Label styles — Figma: body/lg
  *
  * Token reference (from brik-bds.webflow.css):
- * - --_typography---font-family--body (theme-aware body font)
- * - --_typography---body--lg = font-size--200 = 18px
- * - --_color---text--secondary
+ * - --font-family-body (theme-aware body font)
+ * - --body-lg = font-size--200 = 18px
+ * - --text-secondary
  */
 const labelStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--lg)',
-  color: 'var(--_color---text--secondary)',
-  lineHeight: 'var(--font-line-height--150)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-lg)',
+  color: 'var(--text-secondary)',
+  lineHeight: 'var(--font-line-height-normal)',
   margin: 0,
 };
 
@@ -97,21 +97,21 @@ const labelStyles: CSSProperties = {
  * Value styles — Figma: heading/xxl (font-size/900 = 40.5px)
  *
  * NOTE: Figma names this "heading/xxl" but the Webflow CSS token is
- * --_typography---heading--x-large (both = font-size--900 = 40.5px).
+ * --heading-xl (both = font-size--900 = 40.5px).
  * This is a known naming mismatch between Figma and Webflow tokens.
  *
  * Token reference (from brik-bds.webflow.css):
- * - --_typography---font-family--heading (theme-aware heading font)
- * - --_typography---heading--x-large = font-size--900 = 40.5px
- * - --font-weight--bold = 700
- * - --_color---text--primary
+ * - --font-family-heading (theme-aware heading font)
+ * - --heading-xl = font-size--900 = 40.5px
+ * - --font-weight-bold = 700
+ * - --text-primary
  */
 const valueStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--heading)',
-  fontSize: 'var(--_typography---heading--x-large)',
-  fontWeight: 'var(--font-weight--bold)' as unknown as number,
-  color: 'var(--_color---text--primary)',
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-heading)',
+  fontSize: 'var(--heading-xl)',
+  fontWeight: 'var(--font-weight-bold)' as unknown as number,
+  color: 'var(--text-primary)',
+  lineHeight: 'var(--font-line-height-tight)',
   margin: 0,
 };
 
@@ -119,17 +119,17 @@ const valueStyles: CSSProperties = {
  * Text link styles — Figma: label/sm
  *
  * Token reference (from brik-bds.webflow.css):
- * - --_typography---font-family--label (theme-aware label font)
- * - --_typography---label--sm = font-size--75 = 14px
- * - --font-weight--semi-bold = 600
- * - --_color---text--brand (theme-aware accent color)
+ * - --font-family-label (theme-aware label font)
+ * - --label-sm = font-size--75 = 14px
+ * - --font-weight-semi-bold = 600
+ * - --text-brand-primary (theme-aware accent color)
  */
 const textLinkStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  color: 'var(--_color---text--brand)',
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-sm)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  color: 'var(--text-brand-primary)',
+  lineHeight: 'var(--font-line-height-tight)',
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   cursor: 'pointer',
@@ -173,7 +173,7 @@ export function CardSummary({
     >
       <div style={innerStyles}>
         {/* Left: label + value */}
-        <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)', minWidth: 0 }}>
+        <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)', minWidth: 0 }}>
           <p style={labelStyles}>{label}</p>
           <p style={valueStyles}>{formatted}</p>
         </div>

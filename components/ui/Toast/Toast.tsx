@@ -17,10 +17,10 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
  * Toast container styles
  *
  * Token reference:
- * - --grayscale--black (dark background — no surface--inverse token)
- * - --_color---text--inverse (white text)
- * - --space--700 = 28px (padding)
- * - --_border-radius---lg = 8px (rounded corners)
+ * - --color-grayscale-black (dark background — no surface--inverse token)
+ * - --text-inverse (white text)
+ * - --space-700 = 28px (padding)
+ * - --border-radius-lg = 8px (rounded corners)
  * - Shadow: 0 4px 32px 32px rgba(0,0,0,0.24) per Figma shadow-xl
  */
 const toastStyles: CSSProperties = {
@@ -28,11 +28,11 @@ const toastStyles: CSSProperties = {
   flexWrap: 'wrap',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 'var(--_space---gap--lg)',
-  backgroundColor: 'var(--grayscale--black, black)',
-  color: 'var(--_color---text--inverse)',
-  padding: 'var(--_space---xl)',
-  borderRadius: 'var(--_border-radius---lg)',
+  gap: 'var(--gap-lg)',
+  backgroundColor: 'var(--color-grayscale-black, black)',
+  color: 'var(--text-inverse)',
+  padding: 'var(--padding-xl)',
+  borderRadius: 'var(--border-radius-lg)',
   boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)',
   width: '100%',
   maxWidth: '600px',
@@ -43,12 +43,12 @@ const toastStyles: CSSProperties = {
  * Content wrapper — title + description stacked
  *
  * Token reference:
- * - --_space---gap--sm = 6px (gap between title and description)
+ * - --gap-sm = 6px (gap between title and description)
  */
 const contentStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--sm)',
+  gap: 'var(--gap-sm)',
   minWidth: 0,
   flex: '1 1 0',
 };
@@ -57,41 +57,41 @@ const contentStyles: CSSProperties = {
  * Title text styles
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --font-weight--semi-bold (SemiBold)
- * - --_typography---label--md-base = font-size-100 = 16px
- * - --font-line-height--100 = 100% (tight)
+ * - --font-family-label (label font)
+ * - --font-weight-semi-bold (SemiBold)
+ * - --label-md = font-size-100 = 16px
+ * - --font-line-height-tight = 100% (tight)
  */
 const titleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  fontSize: 'var(--_typography---label--md-base)',
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontSize: 'var(--label-md)',
+  lineHeight: 'var(--font-line-height-tight)',
 };
 
 /**
  * Description text styles
  *
  * Token reference:
- * - --_typography---font-family--body (body font)
- * - --font-weight--regular (Regular)
- * - --_typography---body--md-base = font-size-100 = 16px
- * - --font-line-height--150 = 150% (comfortable reading)
+ * - --font-family-body (body font)
+ * - --font-weight-regular (Regular)
+ * - --body-md = font-size-100 = 16px
+ * - --font-line-height-normal = 150% (comfortable reading)
  */
 const descriptionStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
+  fontFamily: 'var(--font-family-body)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
 };
 
 /**
  * Close button — brand-primary background, 48px square
  *
  * Token reference:
- * - --_color---background--brand-primary (blue bg)
- * - --_border-radius---md = 4px (button corners)
- * - --_typography---body--sm = font-size-50 = 14px (icon size)
+ * - --background-brand-primary (blue bg)
+ * - --border-radius-md = 4px (button corners)
+ * - --body-sm = font-size-50 = 14px (icon size)
  */
 const closeButtonStyles: CSSProperties = {
   display: 'inline-flex',
@@ -99,13 +99,13 @@ const closeButtonStyles: CSSProperties = {
   justifyContent: 'center',
   width: '48px',
   height: '48px',
-  backgroundColor: 'var(--_color---background--brand-primary)',
-  color: 'var(--_color---text--inverse)',
+  backgroundColor: 'var(--background-brand-primary)',
+  color: 'var(--text-inverse)',
   border: 'none',
-  borderRadius: 'var(--_border-radius---md)',
+  borderRadius: 'var(--border-radius-md)',
   cursor: 'pointer',
   flexShrink: 0,
-  fontSize: 'var(--_typography---body--sm)',
+  fontSize: 'var(--body-sm)',
 };
 
 /**

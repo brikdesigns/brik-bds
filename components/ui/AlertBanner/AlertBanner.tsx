@@ -34,23 +34,23 @@ const iconClassMap: Record<AlertBannerIcon, string> = {
  * AlertBanner container styles
  *
  * Token reference:
- * - --_color---surface--secondary (light gray background)
- * - --_color---text--primary (dark text)
- * - --_space---lg = 24px (vertical padding)
- * - --_space---xl = 32px (horizontal padding)
- * - --_border-radius---sm = 2px (corners)
- * - --_space---gap--lg = 16px (gap between content and action)
+ * - --surface-secondary (light gray background)
+ * - --text-primary (dark text)
+ * - --padding-lg = 24px (vertical padding)
+ * - --padding-xl = 32px (horizontal padding)
+ * - --border-radius-sm = 2px (corners)
+ * - --gap-lg = 16px (gap between content and action)
  */
 const bannerStyles: CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
-  gap: 'var(--_space---gap--lg)',
-  backgroundColor: 'var(--_color---surface--secondary)',
-  color: 'var(--_color---text--primary)',
-  padding: 'var(--_space---lg) var(--_space---xl)',
-  borderRadius: 'var(--_border-radius---sm)',
+  gap: 'var(--gap-lg)',
+  backgroundColor: 'var(--surface-secondary)',
+  color: 'var(--text-primary)',
+  padding: 'var(--padding-lg) var(--padding-xl)',
+  borderRadius: 'var(--border-radius-sm)',
   width: '100%',
   boxSizing: 'border-box',
 };
@@ -60,7 +60,7 @@ const bannerStyles: CSSProperties = {
  */
 const innerStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
   alignItems: 'flex-start',
   flex: '1 1 0',
   minWidth: 0,
@@ -70,11 +70,11 @@ const innerStyles: CSSProperties = {
  * Icon styles
  *
  * Token reference:
- * - --_typography---body--lg = font-size-150 = 18px (icon size via semantic token)
+ * - --body-lg = font-size-150 = 18px (icon size via semantic token)
  */
 const iconStyles: CSSProperties = {
-  fontSize: 'var(--_typography---body--lg)',
-  lineHeight: 'var(--font-line-height--150)',
+  fontSize: 'var(--body-lg)',
+  lineHeight: 'var(--font-line-height-normal)',
   flexShrink: 0,
 };
 
@@ -82,12 +82,12 @@ const iconStyles: CSSProperties = {
  * Content wrapper — title + description stacked
  *
  * Token reference:
- * - --_space---gap--sm = 4px (gap between title and description)
+ * - --gap-sm = 4px (gap between title and description)
  */
 const contentStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
   flex: '1 1 0',
   minWidth: 0,
 };
@@ -96,32 +96,32 @@ const contentStyles: CSSProperties = {
  * Title text styles
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --font-weight--semi-bold (SemiBold)
- * - --_typography---label--md-base = font-size-100 = 16px
- * - --font-line-height--100 = 100% (tight)
+ * - --font-family-label (label font)
+ * - --font-weight-semi-bold (SemiBold)
+ * - --label-md = font-size-100 = 16px
+ * - --font-line-height-tight = 100% (tight)
  */
 const titleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  fontSize: 'var(--_typography---label--md-base)',
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontSize: 'var(--label-md)',
+  lineHeight: 'var(--font-line-height-tight)',
 };
 
 /**
  * Description text styles
  *
  * Token reference:
- * - --_typography---font-family--body (body font)
- * - --font-weight--regular (Regular)
- * - --_typography---body--md-base = font-size-100 = 16px
- * - --font-line-height--150 = 150% (comfortable reading)
+ * - --font-family-body (body font)
+ * - --font-weight-regular (Regular)
+ * - --body-md = font-size-100 = 16px
+ * - --font-line-height-normal = 150% (comfortable reading)
  */
 const descriptionStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
+  fontFamily: 'var(--font-family-body)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
 };
 
 /**

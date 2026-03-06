@@ -272,7 +272,7 @@ export const ScrollingContent: Story = {
             </>
           }
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
             {Array.from({ length: 20 }, (_, i) => (
               <p key={i}>
                 This is paragraph {i + 1}. The modal body will scroll if content exceeds the maximum height.
@@ -365,19 +365,19 @@ export const FormExample: Story = {
     const [isOpen, setIsOpen] = useState(false);
 
     const inputStyle: React.CSSProperties = {
-      padding: 'var(--_space---md)',
-      border: 'var(--_border-width---sm) solid var(--_color---border--input)',
-      borderRadius: 'var(--_border-radius---input)',
-      fontFamily: 'var(--_typography---font-family--body)',
-      fontSize: 'var(--_typography---body--md-base)',
+      padding: 'var(--padding-md)',
+      border: 'var(--border-width-sm) solid var(--border-input)',
+      borderRadius: 'var(--border-radius-50)',
+      fontFamily: 'var(--font-family-body)',
+      fontSize: 'var(--body-md)',
       width: '100%',
       boxSizing: 'border-box',
     };
 
     const labelStyle: React.CSSProperties = {
-      fontFamily: 'var(--_typography---font-family--label)',
-      fontSize: 'var(--_typography---label--md-base)',
-      fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+      fontFamily: 'var(--font-family-label)',
+      fontSize: 'var(--label-md)',
+      fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
     };
 
     return (
@@ -402,16 +402,16 @@ export const FormExample: Story = {
             </>
           }
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
               <label style={labelStyle}>Name</label>
               <input type="text" placeholder="Your name" style={inputStyle} />
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
               <label style={labelStyle}>Email</label>
               <input type="email" placeholder="your@email.com" style={inputStyle} />
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--sm)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
               <label style={labelStyle}>Message</label>
               <textarea
                 rows={4}

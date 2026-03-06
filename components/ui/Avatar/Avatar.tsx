@@ -31,42 +31,42 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
  * Size configurations using BDS tokens
  *
  * Token reference:
- * - --_space---md = 8px
- * - --_space---lg = 16px
- * - --_space---lg = 24px
- * - --_space---xl = 32px
+ * - --padding-md = 8px
+ * - --padding-lg = 16px
+ * - --padding-lg = 24px
+ * - --padding-xl = 32px
  */
 const sizeConfig: Record<AvatarSize, { size: string; fontSize: string }> = {
-  sm: { size: '32px', fontSize: 'var(--_typography---body--xs)' },
-  md: { size: '40px', fontSize: 'var(--_typography---body--sm)' },
-  lg: { size: '48px', fontSize: 'var(--_typography---body--md-base)' },
-  xl: { size: '64px', fontSize: 'var(--_typography---heading--small)' },
+  sm: { size: '32px', fontSize: 'var(--body-xs)' },
+  md: { size: '40px', fontSize: 'var(--body-sm)' },
+  lg: { size: '48px', fontSize: 'var(--body-md)' },
+  xl: { size: '64px', fontSize: 'var(--heading-sm)' },
 };
 
 /**
  * Status indicator colors using BDS tokens
  *
  * Token reference:
- * - --system--green = #27ae60 (online)
- * - --system--gray (offline)
- * - --system--red = #eb5757 (busy)
- * - --system--yellow = #f2c94c (away)
+ * - --color-system-green = #27ae60 (online)
+ * - --color-system-gray (offline)
+ * - --color-system-red = #eb5757 (busy)
+ * - --color-system-yellow = #f2c94c (away)
  */
 const statusColors: Record<AvatarStatus, string> = {
-  online: 'var(--system--green)',
-  offline: 'var(--grayscale--light)',
-  busy: 'var(--system--red)',
-  away: 'var(--system--yellow)',
+  online: 'var(--color-system-green)',
+  offline: 'var(--color-grayscale-light)',
+  busy: 'var(--color-system-red)',
+  away: 'var(--color-system-yellow)',
 };
 
 /**
  * Base avatar container styles using BDS tokens
  *
  * Token reference:
- * - --_color---background--brand-primary (background for initials)
- * - --_color---text--inverse (text color for initials)
- * - --_typography---font-family--label (font for initials)
- * - --border-radius--circle = 9999px (circular shape)
+ * - --background-brand-primary (background for initials)
+ * - --text-inverse (text color for initials)
+ * - --font-family-label (font for initials)
+ * - --border-radius-circle = 9999px (circular shape)
  */
 const getAvatarStyles = (size: AvatarSize): CSSProperties => ({
   position: 'relative',
@@ -75,12 +75,12 @@ const getAvatarStyles = (size: AvatarSize): CSSProperties => ({
   justifyContent: 'center',
   width: sizeConfig[size].size,
   height: sizeConfig[size].size,
-  borderRadius: 'var(--border-radius--circle)',
-  backgroundColor: 'var(--_color---background--brand-primary)',
-  color: 'var(--_color---text--inverse)',
-  fontFamily: 'var(--_typography---font-family--label)',
+  borderRadius: 'var(--border-radius-circle)',
+  backgroundColor: 'var(--background-brand-primary)',
+  color: 'var(--text-inverse)',
+  fontFamily: 'var(--font-family-label)',
   fontSize: sizeConfig[size].fontSize,
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
   overflow: 'hidden',
   flexShrink: 0,
   userSelect: 'none',
@@ -109,7 +109,7 @@ const getStatusStyles = (size: AvatarSize, status: AvatarStatus): CSSProperties 
     height: statusSize,
     borderRadius: '50%',
     backgroundColor: statusColors[status],
-    border: '2px solid var(--_color---background--input)',
+    border: '2px solid var(--background-input)',
   };
 };
 

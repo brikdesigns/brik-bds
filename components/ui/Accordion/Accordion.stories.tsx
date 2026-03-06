@@ -100,9 +100,9 @@ export const RichContent: Story = {
         id: '1',
         title: 'Getting started',
         content: (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
             <p style={{ margin: 0 }}>Follow these steps to get started with our platform:</p>
-            <ol style={{ margin: 0, paddingLeft: 'var(--_space---xl)' }}>
+            <ol style={{ margin: 0, paddingLeft: 'var(--padding-xl)' }}>
               <li>Create your account</li>
               <li>Complete the onboarding questionnaire</li>
               <li>Schedule your kickoff call</li>
@@ -115,7 +115,7 @@ export const RichContent: Story = {
         id: '2',
         title: 'Billing and payments',
         content: (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
             <p style={{ margin: 0 }}>We accept all major credit cards, ACH transfers, and invoicing for enterprise clients.</p>
             <p style={{ margin: 0 }}>Payments are due within 15 days of invoice date. Late payments may incur a 1.5% monthly fee.</p>
           </div>

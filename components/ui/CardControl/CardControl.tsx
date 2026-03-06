@@ -19,20 +19,20 @@ export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
  * Card container styles
  *
  * Token reference:
- * - --_color---surface--primary (white background)
- * - --_border-width---lg = 1px (border)
- * - --_color---border--muted (border color)
- * - --_border-radius---lg = 8px (corners)
- * - --_space---xl = 32px (padding)
+ * - --surface-primary (white background)
+ * - --border-width-lg = 1px (border)
+ * - --border-muted (border color)
+ * - --border-radius-lg = 8px (corners)
+ * - --padding-xl = 32px (padding)
  */
 const cardStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--_space---xl)',
-  padding: 'var(--_space---xl)',
-  backgroundColor: 'var(--_color---surface--primary)',
-  border: 'var(--_border-width---lg) solid var(--_color---border--muted)',
-  borderRadius: 'var(--_border-radius---lg)',
+  gap: 'var(--padding-xl)',
+  padding: 'var(--padding-xl)',
+  backgroundColor: 'var(--surface-primary)',
+  border: 'var(--border-width-lg) solid var(--border-muted)',
+  borderRadius: 'var(--border-radius-lg)',
   boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.06)',
   width: '100%',
   boxSizing: 'border-box',
@@ -45,7 +45,7 @@ const cardStyles: CSSProperties = {
 const contentStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--_space---lg)',
+  gap: 'var(--padding-lg)',
   flex: 1,
   minWidth: 0,
 };
@@ -56,7 +56,7 @@ const contentStyles: CSSProperties = {
 const textGroupStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--sm)',
+  gap: 'var(--gap-sm)',
   minWidth: 0,
 };
 
@@ -64,18 +64,18 @@ const textGroupStyles: CSSProperties = {
  * Title styles
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --_typography---label--lg = font-size-200 = 18px
- * - --font-weight--semi-bold = 600
- * - --font-line-height--100 = 100% (tight)
- * - --_color---text--primary
+ * - --font-family-label (label font)
+ * - --label-lg = font-size-200 = 18px
+ * - --font-weight-semi-bold = 600
+ * - --font-line-height-tight = 100% (tight)
+ * - --text-primary
  */
 const titleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--lg)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
-  color: 'var(--_color---text--primary)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-lg)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
+  color: 'var(--text-primary)',
   margin: 0,
 };
 
@@ -83,16 +83,16 @@ const titleStyles: CSSProperties = {
  * Description styles
  *
  * Token reference:
- * - --_typography---font-family--body (body font)
- * - --_typography---body--md-base = font-size-100 = 16px
- * - --font-line-height--150 = 150%
- * - --_color---text--muted
+ * - --font-family-body (body font)
+ * - --body-md = font-size-100 = 16px
+ * - --font-line-height-normal = 150%
+ * - --text-muted
  */
 const descriptionStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--muted)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-muted)',
   margin: 0,
 };
 
