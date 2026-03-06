@@ -4,19 +4,16 @@ import { storybookThemes, type StorybookThemeConfig } from '../tokens/storybook-
 import type { ThemeNumber } from '../tokens';
 
 /**
- * Brik Design System — Immersive Manager Theming
+ * Brik Design System — Manager Theming
  *
- * Two-layer approach for reliable, instant theme switching:
+ * CSS custom properties on <body> handle all visual updates instantly.
+ * manager-head.html references --sb-* variables to style sidebar,
+ * toolbar, search inputs, and chrome elements.
  *
- * 1. CSS custom properties on <body> — instant visual update, no React
- *    re-render needed. manager-head.html uses these to style sidebar,
- *    toolbar, search inputs, etc.
- *
- * 2. addons.setConfig({ theme }) — updates Storybook's internal theme
- *    store for anything CSS can't reach (addon panels, deep UI).
- *
- * The preview decorator also sets data-bds-theme on window.parent.body
- * as a fallback, but the channel listener here fires first.
+ * addons.setConfig({ theme }) is called ONCE at startup (its intended
+ * use). It is NOT called on theme switches — it triggers expensive
+ * React re-renders of the entire manager UI (Storybook Theming 2.0
+ * RFC confirms this is a startup-time API, not a runtime API).
  */
 
 const sharedBrand = {
@@ -26,33 +23,6 @@ const sharedBrand = {
   appBorderRadius: 4,
   inputBorderRadius: 4,
 };
-
-// Pre-build a Storybook theme object for each BDS theme
-const sbThemes: Record<string, ReturnType<typeof create>> = {};
-for (const [themeNum, config] of Object.entries(storybookThemes)) {
-  sbThemes[themeNum] = create({
-    ...sharedBrand,
-    brandImage: config.base === 'dark' ? '/brik-logo-white.svg' : '/brik-logo.svg',
-    base: config.base,
-    colorPrimary: config.colorPrimary,
-    colorSecondary: config.colorSecondary,
-    appBg: config.appBg,
-    appContentBg: config.appContentBg,
-    appPreviewBg: config.appPreviewBg,
-    appBorderColor: config.appBorderColor,
-    textColor: config.textColor,
-    textInverseColor: config.textInverseColor,
-    textMutedColor: config.textMutedColor,
-    barTextColor: config.barTextColor,
-    barSelectedColor: config.barSelectedColor,
-    barHoverColor: config.barHoverColor,
-    barBg: config.barBg,
-    inputBg: config.inputBg,
-    inputBorder: config.inputBorder,
-    inputTextColor: config.inputTextColor,
-    fontBase: config.fontBase,
-  });
-}
 
 /**
  * Apply CSS custom properties to the manager <body>.
@@ -81,47 +51,47 @@ function applyThemeVars(config: StorybookThemeConfig) {
   document.body.setAttribute('data-bds-dark', String(config.base === 'dark'));
 }
 
-/**
- * Full theme application — CSS vars (instant) + setConfig (formal).
- */
-function applyTheme(themeNum: string) {
-  const config = storybookThemes[themeNum as ThemeNumber];
-  const sbTheme = sbThemes[themeNum];
-  if (!config || !sbTheme) return;
+// Set initial theme — setConfig() at startup (its intended use)
+const initialConfig = storybookThemes['brik'];
+applyThemeVars(initialConfig);
+addons.setConfig({
+  theme: create({
+    ...sharedBrand,
+    brandImage: '/brik-logo.svg',
+    base: initialConfig.base,
+    colorPrimary: initialConfig.colorPrimary,
+    colorSecondary: initialConfig.colorSecondary,
+    appBg: initialConfig.appBg,
+    appContentBg: initialConfig.appContentBg,
+    appPreviewBg: initialConfig.appPreviewBg,
+    appBorderColor: initialConfig.appBorderColor,
+    textColor: initialConfig.textColor,
+    textInverseColor: initialConfig.textInverseColor,
+    textMutedColor: initialConfig.textMutedColor,
+    barTextColor: initialConfig.barTextColor,
+    barSelectedColor: initialConfig.barSelectedColor,
+    barHoverColor: initialConfig.barHoverColor,
+    barBg: initialConfig.barBg,
+    inputBg: initialConfig.inputBg,
+    inputBorder: initialConfig.inputBorder,
+    inputTextColor: initialConfig.inputTextColor,
+    fontBase: initialConfig.fontBase,
+  }),
+});
 
-  // Layer 1: Instant CSS custom property update (no React re-render needed)
-  applyThemeVars(config);
-
-  // Layer 2: Storybook's internal theme store (for addon panels, etc.)
-  addons.setConfig({ theme: sbTheme });
-}
-
-// Set initial theme
-applyTheme('brik');
-
-// Listen for theme changes via Storybook's channel API.
-// This is the primary mechanism — fires when the toolbar global changes,
-// without the latency of preview useEffect → parent DOM → MutationObserver.
+// Listen for theme changes — CSS vars only (instant, no React re-render)
 if (typeof window !== 'undefined') {
   const channel = addons.getChannel();
   channel.on('globalsUpdated', ({ globals }: { globals: Record<string, unknown> }) => {
     const themeNum = globals.themeNumber as string;
-    if (themeNum) {
-      applyTheme(themeNum);
+    const config = storybookThemes[themeNum as ThemeNumber];
+    if (config) {
+      applyThemeVars(config);
+      // Swap logo for dark themes
+      const logo = document.querySelector('[class*="sidebar"] img') as HTMLImageElement;
+      if (logo) {
+        logo.src = config.base === 'dark' ? '/brik-logo-white.svg' : '/brik-logo.svg';
+      }
     }
-  });
-
-  // Fallback: MutationObserver catches theme changes set by the preview
-  // decorator (e.g., on initial load or when channel event is missed).
-  const observer = new MutationObserver(() => {
-    const themeNum = document.body.getAttribute('data-bds-theme');
-    // Only act on theme NUMBER values (not the name we set above)
-    if (themeNum && storybookThemes[themeNum as ThemeNumber]) {
-      applyTheme(themeNum);
-    }
-  });
-  observer.observe(document.body, {
-    attributes: true,
-    attributeFilter: ['data-bds-theme'],
   });
 }

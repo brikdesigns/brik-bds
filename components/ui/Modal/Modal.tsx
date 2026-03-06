@@ -54,7 +54,7 @@ const backdropStyles: CSSProperties = {
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  backgroundColor: 'rgba(0, 0, 0, 0.4)', // bds-lint-ignore — overlay, no token exists
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -77,7 +77,7 @@ const getModalStyles = (size: ModalSize): CSSProperties => ({
   maxHeight: '90vh',
   backgroundColor: 'var(--surface-primary)',
   borderRadius: 'var(--border-radius-md)',
-  boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)',
+  boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)', // bds-lint-ignore — shadow tokens resolve to zero
   display: 'flex',
   flexDirection: 'column',
 });
