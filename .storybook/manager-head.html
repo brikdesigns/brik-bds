@@ -63,9 +63,11 @@
     font-family: var(--sb-font-base, sans-serif) !important;
   }
 
-  /* Active/selected sidebar item */
+  /* Active/selected sidebar item — text and icon */
   [class*="sidebar"] [data-selected="true"],
-  [class*="sidebar"] [aria-current="true"] {
+  [class*="sidebar"] [aria-current="true"],
+  [class*="sidebar"] [data-selected="true"] svg,
+  [class*="sidebar"] [aria-current="true"] svg {
     color: var(--sb-bar-selected, #4665f5) !important;
   }
 

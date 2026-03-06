@@ -14,9 +14,9 @@ BDS tokens use a two-layer abstraction:
 ```
 Primitives (raw scale values)          Semantic tokens (purpose-bound)
 ─────────────────────────────          ────────────────────────────────
---space--400          → 16px           --_space---md    → var(--space--400)
---font-size--700      → 32px           --_typography---heading--large → var(--font-size--700)
---grayscale--darkest  → #333           --_color---text--primary → var(--grayscale--darkest)
+--space-400           → 16px           --padding-md     → var(--space-400)
+--font-size-700       → 32px           --heading-lg     → var(--font-size-700)
+--color-grayscale-darkest → #333       --text-primary   → var(--color-grayscale-darkest)
 ```
 
 **Components use semantic tokens only.** Primitives exist for the scale — they should never appear directly in component code.
@@ -24,14 +24,16 @@ Primitives (raw scale values)          Semantic tokens (purpose-bound)
 ## Naming convention
 
 ```
---_[category]---[type]--[variant]
+--[role]-[variant]
 ```
 
-| Part | Example | Description |
-|------|---------|-------------|
-| Category | `color`, `space`, `typography` | Token domain |
-| Type | `background`, `gap`, `heading` | Functional purpose |
-| Variant | `brand-primary`, `lg`, `x-large` | Specific value |
+| Pattern | Example | Description |
+|---------|---------|-------------|
+| Color | `--text-primary`, `--background-brand-primary` | Semantic color role |
+| Typography | `--font-family-heading`, `--heading-lg` | Font stacks and sizes |
+| Spacing | `--padding-lg`, `--gap-md` | Padding and gap scales |
+| Border | `--border-radius-md`, `--border-width-lg` | Border properties |
+| Scale | `--font-size-700`, `--space-400` | Primitive scale steps |
 
 ## Multi-platform outputs
 

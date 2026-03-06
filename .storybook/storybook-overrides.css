@@ -493,7 +493,8 @@ div[class*="Subtitle"] {
   margin-bottom: 24px !important;
 }
 
-/* Max width for comfortable reading */
+/* Max width for comfortable reading + top breathing room */
 .sbdocs-content {
   max-width: 980px !important;
+  padding-top: 32px !important;
 }

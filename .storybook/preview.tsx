@@ -151,18 +151,15 @@ const preview: Preview = {
       toolbar: {
         icon: 'paintbrush',
         items: [
-          // Brik brand
           { value: 'brik', title: 'Brik Brand (Poppins)' },
-          // Light themes
           { value: '1', title: '1: Default (Open Sans)' },
+          { value: '2', title: '2: Dark (Geist)' },
           { value: '3', title: '3: Blue (Source Sans 3)' },
           { value: '4', title: '4: Gold (Hind / Lato)' },
           { value: '5', title: '5: Peach (Open Sans / Newsreader)' },
           { value: '6', title: '6: Minimal (Source Sans 3)' },
           { value: '7', title: '7: Warm (Hind / Lato)' },
           { value: '8', title: '8: Vibrant (Hind / Playfair)' },
-          // Dark theme
-          { value: '2', title: '2: Dark (Geist)' },
         ],
         dynamicTitle: true,
       },

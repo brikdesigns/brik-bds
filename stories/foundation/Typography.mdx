@@ -5,44 +5,24 @@ import {
   SemanticTypographyTable,
   FontWeightShowcase,
 } from './_components';
-import { fontSizeScale, fontWeights, fontLineHeights, semanticTypography } from '../../tokens';
+import { fontSizeScale, fontWeights, semanticTypography } from '../../tokens';
 
 <Meta title="Foundations/Design Tokens/Typography" />
 
 # Typography
 
-Typography tokens control font families, sizes, weights, and line heights. Each theme can override font families — switch themes to see the type change.
+Typography tokens control font families, sizes, weights, and line heights. Each theme can override font families — switch themes in the toolbar to see the type change.
 
 ## Font families
 
 <FontFamilyShowcase
   families={[
-    { name: 'Display', cssVar: '--_typography---font-family--display', value: semanticTypography['font-family--display'] },
-    { name: 'Heading', cssVar: '--_typography---font-family--heading', value: semanticTypography['font-family--heading'] },
-    { name: 'Body', cssVar: '--_typography---font-family--body', value: semanticTypography['font-family--body'] },
-    { name: 'Label', cssVar: '--_typography---font-family--label', value: semanticTypography['font-family--label'] },
+    { name: 'Display', cssVar: '--font-family-display', value: semanticTypography['font-family--display'] },
+    { name: 'Heading', cssVar: '--font-family-heading', value: semanticTypography['font-family--heading'] },
+    { name: 'Body', cssVar: '--font-family-body', value: semanticTypography['font-family--body'] },
+    { name: 'Label', cssVar: '--font-family-label', value: semanticTypography['font-family--label'] },
   ]}
 />
-
-## Font size scale
-
-Primitive scale from 10px to 515px. Components reference these through semantic tokens.
-
-<TypographyScale scale={fontSizeScale} prefix="--font-size" />
-
-## Font weights
-
-<FontWeightShowcase weights={fontWeights} />
-
-## Line heights
-
-| Token | Value |
-|-------|-------|
-| `--font-line-height--100` | 100% |
-| `--font-line-height--125` | 125% |
-| `--font-line-height--150` | 150% |
-| `--font-line-height--175` | 175% |
-| `--font-line-height--200` | 200% |
 
 ## Semantic typography
 
@@ -65,3 +45,23 @@ Primitive scale from 10px to 515px. Components reference these through semantic 
 ### Icon sizes
 
 <SemanticTypographyTable title="Icons" tokens={semanticTypography} category="icon" />
+
+## Font size scale
+
+Primitive scale from 10px to 515px. Components reference these through semantic tokens.
+
+<TypographyScale scale={fontSizeScale} prefix="--font-size" />
+
+## Font weights
+
+<FontWeightShowcase weights={fontWeights} />
+
+## Line heights
+
+| Token | Value |
+|-------|-------|
+| `--font-line-height-tight` | 100% |
+| `--font-line-height-snug` | 125% |
+| `--font-line-height-normal` | 150% |
+| `--font-line-height-175` | 175% |
+| `--font-line-height-200` | 200% |
