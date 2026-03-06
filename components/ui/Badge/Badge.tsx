@@ -51,7 +51,7 @@ const statusStyles: Record<BadgeStatus, CSSProperties> = {
   },
   warning: {
     backgroundColor: 'var(--color-system-yellow)',
-    color: 'var(--text-primary)',
+    color: 'var(--text-on-color-light)',
   },
   error: {
     backgroundColor: 'var(--color-system-red)',
