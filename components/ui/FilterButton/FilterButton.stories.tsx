@@ -37,7 +37,7 @@ const categoryOptions = [
   { id: 'brand', label: 'Brand design', icon: <FontAwesomeIcon icon={faCrown} /> },
   { id: 'marketing', label: 'Marketing design', icon: <FontAwesomeIcon icon={faBullhorn} /> },
   { id: 'product', label: 'Product design', icon: <FontAwesomeIcon icon={faMobileScreen} /> },
-  { id: 'service', label: 'Service design', icon: <FontAwesomeIcon icon={faGear} /> },
+  { id: 'service', label: 'Back office design', icon: <FontAwesomeIcon icon={faGear} /> },
   { id: 'information', label: 'Information design', icon: <FontAwesomeIcon icon={faChalkboardUser} /> },
   { id: 'templates', label: 'Templates', icon: <FontAwesomeIcon icon={faCopy} /> },
 ];

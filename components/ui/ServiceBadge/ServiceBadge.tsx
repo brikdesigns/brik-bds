@@ -49,7 +49,7 @@ export const categoryConfig: Record<ServiceCategory, { token: string; label: str
   marketing: { token: 'green', label: 'Marketing' },
   information: { token: 'blue', label: 'Information' },
   product: { token: 'purple', label: 'Product' },
-  service: { token: 'orange', label: 'Service' },
+  service: { token: 'orange', label: 'Back Office' },
 };
 
 /**

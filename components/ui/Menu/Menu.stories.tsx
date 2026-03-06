@@ -9,7 +9,7 @@ const sampleItems = [
   { id: '1', label: 'Brand design', icon: <FontAwesomeIcon icon={faPalette} />, onClick: () => {} },
   { id: '2', label: 'Marketing design', icon: <FontAwesomeIcon icon={faBullhorn} />, onClick: () => {} },
   { id: '3', label: 'Product design', icon: <FontAwesomeIcon icon={faBox} />, onClick: () => {} },
-  { id: '4', label: 'Service design', icon: <FontAwesomeIcon icon={faWrench} />, onClick: () => {} },
+  { id: '4', label: 'Back office design', icon: <FontAwesomeIcon icon={faWrench} />, onClick: () => {} },
   { id: '5', label: 'Information design', icon: <FontAwesomeIcon icon={faCircleInfo} />, onClick: () => {} },
   { id: '6', label: 'Templates', icon: <FontAwesomeIcon icon={faLayerGroup} />, onClick: () => {} },
 ];
