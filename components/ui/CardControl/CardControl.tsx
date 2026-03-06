@@ -33,7 +33,7 @@ const cardStyles: CSSProperties = {
   backgroundColor: 'var(--surface-primary)',
   border: 'var(--border-width-lg) solid var(--border-muted)',
   borderRadius: 'var(--border-radius-lg)',
-  boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+  boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.06)', // bds-lint-ignore — shadow tokens resolve to zero
   width: '100%',
   boxSizing: 'border-box',
   flexWrap: 'wrap',
