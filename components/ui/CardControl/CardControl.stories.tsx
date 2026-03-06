@@ -8,7 +8,7 @@ import { Switch } from '../Switch';
 import { Button } from '../Button';
 
 const meta = {
-  title: 'Components/Card/card-control',
+  title: 'Displays/Card/card-control',
   component: CardControl,
   parameters: {
     layout: 'padded',

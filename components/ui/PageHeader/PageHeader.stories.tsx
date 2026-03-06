@@ -8,7 +8,7 @@ import { TabBar } from '../TabBar';
 import { Button } from '../Button';
 
 const meta: Meta<typeof PageHeader> = {
-  title: 'Components/Navigation/page-header',
+  title: 'Navigation/page-header',
   component: PageHeader,
   parameters: {
     layout: 'fullscreen',
