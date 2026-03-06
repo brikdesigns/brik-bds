@@ -25,12 +25,12 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * Label wrapper styles using BDS tokens
  *
  * Token reference:
- * - --_space---gap--md = 8px (spacing between radio and label)
+ * - --gap-md = 8px (spacing between radio and label)
  */
 const labelStyles: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
   cursor: 'pointer',
   userSelect: 'none',
 };
@@ -44,9 +44,9 @@ const labelDisabledStyles: CSSProperties = {
  * Radio input styles using BDS tokens
  *
  * Token reference:
- * - --_color---border--input (input border color)
- * - --_color---background--input (input background)
- * - --_color---background--brand-primary (checked background)
+ * - --border-input (input border color)
+ * - --background-input (input background)
+ * - --background-brand-primary (checked background)
  */
 const inputStyles: CSSProperties = {
   width: '16px',
@@ -54,7 +54,7 @@ const inputStyles: CSSProperties = {
   margin: 0,
   cursor: 'pointer',
   flexShrink: 0,
-  accentColor: 'var(--_color---background--brand-primary)',
+  accentColor: 'var(--background-brand-primary)',
 };
 
 const inputDisabledStyles: CSSProperties = {
@@ -65,15 +65,15 @@ const inputDisabledStyles: CSSProperties = {
  * Label text styles using BDS tokens
  *
  * Token reference:
- * - --_typography---font-family--body (body font)
- * - --_typography---body--md-base (medium body text size)
- * - --_color---text--primary (text color)
+ * - --font-family-body (body font)
+ * - --body-md (medium body text size)
+ * - --text-primary (text color)
  */
 const textStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--primary)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
   textTransform: 'capitalize' as const,
 };
 

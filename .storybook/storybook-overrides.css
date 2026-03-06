@@ -72,7 +72,7 @@ pre,
 
 /* Inline code — subtle background, respects theme text color */
 code:not([class*="language-"]):not(pre code) {
-  background-color: var(--_color---surface--secondary) !important;
+  background-color: var(--surface-secondary) !important;
   color: inherit !important;
   padding: 0.15em 0.4em !important;
   border-radius: 4px !important;
@@ -95,7 +95,7 @@ code:not([class*="language-"]):not(pre code) {
 /* Show code / Hide code toggle button */
 button.docblock-code-toggle {
   background-color: transparent !important;
-  color: var(--_color---text--muted) !important;
+  color: var(--text-muted) !important;
   border: none !important;
   border-top: none !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
@@ -108,7 +108,7 @@ button.docblock-code-toggle {
 
 button.docblock-code-toggle:hover {
   opacity: 1;
-  color: var(--_color---text--brand) !important;
+  color: var(--text-brand-primary) !important;
 }
 
 /* Copy button inside source blocks — style it as a subtle floating pill */
@@ -154,8 +154,8 @@ button.docblock-code-toggle:hover {
    same scope where .body.theme-X sets them. All wrappers below
    are transparent so the body bg shows through. */
 body.body {
-  background-color: var(--_color---page--primary) !important;
-  color: var(--_color---text--primary) !important;
+  background-color: var(--page-primary) !important;
+  color: var(--text-primary) !important;
   min-height: 100vh;
 }
 
@@ -237,8 +237,8 @@ div[class*="docs-story"] {
    Doubled ID beats emotion's late-injected background.
    Uses background shorthand to match emotion's shorthand property. */
 #storybook-docs#storybook-docs .sbdocs-preview {
-  background: var(--_color---surface--primary) !important;
-  border: 1px solid var(--_color---border--secondary) !important;
+  background: var(--surface-primary) !important;
+  border: 1px solid var(--border-secondary) !important;
   border-radius: 6px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
   padding: 24px !important;
@@ -277,26 +277,26 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
 .sbdocs h2,
 .sbdocs h3,
 .sbdocs h4 {
-  color: var(--_color---text--primary) !important;
-  font-family: var(--_typography---font-family--heading, inherit) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-family-heading, inherit) !important;
 }
 
 /* Docs body text */
 .sbdocs p,
 .sbdocs li {
-  color: var(--_color---text--secondary) !important;
-  font-family: var(--_typography---font-family--body, inherit) !important;
+  color: var(--text-secondary) !important;
+  font-family: var(--font-family-body, inherit) !important;
 }
 
 /* Docs links — brand color (exclude code block and anchor links) */
 .sbdocs a:not([class*="docblock"]):not([class*="anchor"]) {
-  color: var(--_color---text--brand) !important;
+  color: var(--text-brand-primary) !important;
 }
 
 /* Description / subtitle blocks */
 div[class*="Description"],
 div[class*="Subtitle"] {
-  color: var(--_color---text--secondary) !important;
+  color: var(--text-secondary) !important;
 }
 
 /* Args/props table — doubled-ID to beat emotion's && on td backgrounds.
@@ -305,51 +305,51 @@ div[class*="Subtitle"] {
 #storybook-docs#storybook-docs .docblock-argstable {
   border-radius: 6px !important;
   overflow: hidden !important;
-  color: var(--_color---text--primary) !important;
+  color: var(--text-primary) !important;
 }
 
 #storybook-docs#storybook-docs .docblock-argstable thead th {
-  color: var(--_color---text--muted) !important;
-  border-color: var(--_color---border--muted) !important;
+  color: var(--text-muted) !important;
+  border-color: var(--border-muted) !important;
 }
 
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td,
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > th {
-  background: var(--_color---surface--secondary) !important;
-  color: var(--_color---text--primary) !important;
-  border-color: var(--_color---border--muted) !important;
+  background: var(--surface-secondary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-muted) !important;
 }
 
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td span,
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td p {
-  color: var(--_color---text--secondary) !important;
+  color: var(--text-secondary) !important;
 }
 
 /* Prop name (first column) — brand color for emphasis */
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td:first-of-type {
-  color: var(--_color---text--brand) !important;
+  color: var(--text-brand-primary) !important;
 }
 
 /* Prop default value badges */
 #storybook-docs#storybook-docs .docblock-argstable td code {
-  background-color: var(--_color---surface--primary) !important;
-  color: var(--_color---text--primary) !important;
+  background-color: var(--surface-primary) !important;
+  color: var(--text-primary) !important;
 }
 
 /* Prop type badges (the "undefined", "string", etc. pills) */
 #storybook-docs#storybook-docs .docblock-argstable td button,
 #storybook-docs#storybook-docs .docblock-argstable td [class*="TypeUnion"] span {
-  color: var(--_color---text--muted) !important;
+  color: var(--text-muted) !important;
 }
 
 /* TOC (table of contents) in docs sidebar */
 .sbdocs [class*="toc"] a {
-  color: var(--_color---text--secondary) !important;
+  color: var(--text-secondary) !important;
 }
 
 .sbdocs [class*="toc"] a:hover,
 .sbdocs [class*="toc"] a[data-active="true"] {
-  color: var(--_color---text--brand) !important;
+  color: var(--text-brand-primary) !important;
 }
 
 /* ============================================
@@ -370,30 +370,30 @@ div[class*="Subtitle"] {
 
 .body {
   /* Padding tokens - Base mode */
-  --_space---none: var(--space--0);
-  --_space---tiny: var(--space--200);
-  --_space---xs: var(--space--250);
-  --_space---sm: var(--space--300);
-  --_space---md: var(--space--400);
-  --_space---lg: var(--space--600);
-  --_space---xl: var(--space--800);
-  --_space---xxl: var(--space--800); /* deprecated — alias for xl */
-  --_space---huge: var(--space--1200);
+  --padding-none: var(--space-0);
+  --padding-tiny: var(--space-200);
+  --padding-xs: var(--space-250);
+  --padding-sm: var(--space-300);
+  --padding-md: var(--space-400);
+  --padding-lg: var(--space-600);
+  --padding-xl: var(--space-800);
+  --padding-xl: var(--space-800); /* deprecated — alias for xl */
+  --padding-huge: var(--space-1200);
 
   /* Gap tokens - Base mode */
-  --_space---gap--none: var(--space--0);
-  --_space---gap--tiny: var(--space--50);
-  --_space---gap--xs: var(--space--100);
-  --_space---gap--sm: var(--space--150);
-  --_space---gap--md: var(--space--200);
-  --_space---gap--lg: var(--space--400);
-  --_space---gap--xl: var(--space--600);
-  --_space---gap--xxl: var(--space--600); /* deprecated — alias for gap--xl */
-  --_space---gap--huge: var(--space--800);
+  --gap-none: var(--space-0);
+  --gap-tiny: var(--space-50);
+  --gap-xs: var(--space-100);
+  --gap-sm: var(--space-150);
+  --gap-md: var(--space-200);
+  --gap-lg: var(--space-400);
+  --gap-xl: var(--space-600);
+  --gap-xl: var(--space-600); /* deprecated — alias for gap--xl */
+  --gap-huge: var(--space-800);
 
   /* Component-specific spacing - Base mode */
-  --_space---button: var(--space--200);
-  --_space---input: var(--space--200);
+  --padding-tiny: var(--space-200);
+  --padding-tiny: var(--space-200);
 }
 
 /* ============================================
@@ -442,7 +442,7 @@ div[class*="Subtitle"] {
   margin-top: 48px !important;
   margin-bottom: 16px !important;
   padding-top: 24px !important;
-  border-top: 1px solid var(--_color---border--muted) !important;
+  border-top: 1px solid var(--border-muted) !important;
 }
 
 /* First h2 after h1 shouldn't have extra top margin */

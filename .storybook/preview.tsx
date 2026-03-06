@@ -128,7 +128,7 @@ const withTheme: Decorator = (Story, context) => {
   return (
     <div
       style={{
-        padding: 'var(--_space---md)',
+        padding: 'var(--padding-md)',
         minHeight: '100vh',
         width: '100%',
         boxSizing: 'border-box' as const,

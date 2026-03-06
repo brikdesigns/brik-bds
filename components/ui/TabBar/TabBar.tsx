@@ -27,11 +27,11 @@ export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
  * Figma spec: auto-layout row, gap/lg (24px), full width
  *
  * Token reference:
- * - --_space---gap--lg = 24px (gap between tabs)
+ * - --gap-lg = 24px (gap between tabs)
  */
 const barStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--_space---gap--lg)',
+  gap: 'var(--gap-lg)',
   alignItems: 'center',
   width: '100%',
 };
@@ -42,15 +42,15 @@ const barStyles: CSSProperties = {
  * Figma spec: font-family/label, font-size/100 (16px), SemiBold
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --_typography---label--md-base = 16px (font-size/100)
- * - --font-weight--semi-bold = 600
+ * - --font-family-label (label font)
+ * - --label-md = 16px (font-size/100)
+ * - --font-weight-semi-bold = 600
  */
 const tabBaseStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--md-base)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-md)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
   textAlign: 'center',
   textTransform: 'capitalize' as const,
   cursor: 'pointer',
@@ -63,22 +63,22 @@ const tabBaseStyles: CSSProperties = {
  * Active tab styles
  *
  * Token reference:
- * - --_color---text--brand (active tab text)
+ * - --text-brand-primary (active tab text)
  */
 const tabActiveStyles: CSSProperties = {
   ...tabBaseStyles,
-  color: 'var(--_color---text--brand)',
+  color: 'var(--text-brand-primary)',
 };
 
 /**
  * Inactive tab styles
  *
  * Token reference:
- * - --_color---text--secondary (inactive tab text)
+ * - --text-secondary (inactive tab text)
  */
 const tabInactiveStyles: CSSProperties = {
   ...tabBaseStyles,
-  color: 'var(--_color---text--secondary)',
+  color: 'var(--text-secondary)',
 };
 
 /**

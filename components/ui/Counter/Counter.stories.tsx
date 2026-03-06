@@ -60,7 +60,7 @@ export const AllStatuses: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--_space---gap--md)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
       <Counter count={1} status="success" />
       <Counter count={1} status="error" />
       <Counter count={1} status="warning" />
@@ -85,7 +85,7 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--_space---gap--md)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
       <Counter count={5} status="success" size="sm" />
       <Counter count={5} status="success" size="md" />
       <Counter count={5} status="success" size="lg" />
@@ -108,7 +108,7 @@ export const MaxCount: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--_space---gap--md)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
       <Counter count={5} max={99} status="error" size="md" />
       <Counter count={99} max={99} status="error" size="md" />
       <Counter count={150} max={99} status="error" size="md" />
@@ -151,9 +151,9 @@ export const CounterGrid: Story = {
     const statuses = ['success', 'error', 'warning', 'neutral', 'progress'] as const;
     const sizes = ['sm', 'md', 'lg'] as const;
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
         {sizes.map((size) => (
-          <div key={size} style={{ display: 'flex', gap: 'var(--_space---gap--md)', alignItems: 'center' }}>
+          <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
             {statuses.map((status) => (
               <Counter key={`${size}-${status}`} count={1} status={status} size={size} />
             ))}

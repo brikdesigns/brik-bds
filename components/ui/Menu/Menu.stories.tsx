@@ -61,7 +61,7 @@ export const Default: Story = {
           isOpen={open}
           onClose={() => setOpen(false)}
           items={sampleItems}
-          style={{ top: '100%', left: 0, marginTop: 'var(--_space---gap--md)' }}
+          style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
         />
       </div>
     );
@@ -111,7 +111,7 @@ export const WithActiveItem: Story = {
           onClose={() => setOpen(false)}
           items={items}
           activeId={activeId}
-          style={{ top: '100%', left: 0, marginTop: 'var(--_space---gap--md)' }}
+          style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
         />
       </div>
     );
@@ -157,7 +157,7 @@ export const TextOnly: Story = {
             { id: '3', label: 'Archive', onClick: () => setOpen(false) },
             { id: '4', label: 'Delete', disabled: true },
           ]}
-          style={{ top: '100%', left: 0, marginTop: 'var(--_space---gap--md)' }}
+          style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
         />
       </div>
     );

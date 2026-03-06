@@ -18,179 +18,179 @@
   /* ═══════════════════════════════════════════════
      Color: Text
      ═══════════════════════════════════════════════ */
-  --color-text-primary: var(--_color---text--primary);
-  --color-text-secondary: var(--_color---text--secondary);
-  --color-text-muted: var(--_color---text--muted);
-  --color-text-inverse: var(--_color---text--inverse);
-  --color-text-brand: var(--_color---text--brand);
-  --color-text-on-color-dark: var(--_color---text--on-color-dark);
-  --color-text-on-color-light: var(--_color---text--on-color-light);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-brand: var(--text-brand-primary);
+  --color-text-on-color-dark: var(--text-on-color-dark);
+  --color-text-on-color-light: var(--text-on-color-light);
 
   /* ═══════════════════════════════════════════════
      Color: Background
      ═══════════════════════════════════════════════ */
-  --color-background-primary: var(--_color---background--primary);
-  --color-background-secondary: var(--_color---background--secondary);
-  --color-background-inverse: var(--_color---background--inverse);
-  --color-background-input: var(--_color---background--input);
-  --color-background-brand-primary: var(--_color---background--brand-primary);
-  --color-background-brand-secondary: var(--_color---background--brand-secondary);
-  --color-background-image: var(--_color---background--image);
-  --color-background-image-brand: var(--_color---background--image-brand);
+  --color-background-primary: var(--background-primary);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-inverse: var(--background-inverse);
+  --color-background-input: var(--background-input);
+  --color-background-brand-primary: var(--background-brand-primary);
+  --color-background-brand-secondary: var(--background-brand-secondary);
+  --color-background-image: var(--background-image);
+  --color-background-image-brand: var(--background-image-brand);
 
   /* ═══════════════════════════════════════════════
      Color: Surface
      ═══════════════════════════════════════════════ */
-  --color-surface-primary: var(--_color---surface--primary);
-  --color-surface-secondary: var(--_color---surface--secondary);
-  --color-surface-nav: var(--_color---surface--nav);
-  --color-surface-brand-primary: var(--_color---surface--brand-primary);
-  --color-surface-brand-secondary: var(--_color---surface--brand-secondary);
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-nav: var(--surface-nav);
+  --color-surface-brand-primary: var(--surface-brand-primary);
+  --color-surface-brand-secondary: var(--surface-brand-secondary);
 
   /* ═══════════════════════════════════════════════
      Color: Border
      ═══════════════════════════════════════════════ */
-  --color-border-primary: var(--_color---border--primary);
-  --color-border-secondary: var(--_color---border--secondary);
-  --color-border-muted: var(--_color---border--muted);
-  --color-border-brand: var(--_color---border--brand);
-  --color-border-input: var(--_color---border--input);
-  --color-border-inverse: var(--_color---border--inverse);
-  --color-border-on-color: var(--_color---border--on-color);
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-muted: var(--border-muted);
+  --color-border-brand: var(--border-brand-primary);
+  --color-border-input: var(--border-input);
+  --color-border-inverse: var(--border-inverse);
+  --color-border-on-color: var(--border-on-color-dark);
 
   /* ═══════════════════════════════════════════════
      Color: Page
      ═══════════════════════════════════════════════ */
-  --color-page-primary: var(--_color---page--primary);
-  --color-page-secondary: var(--_color---page--secondary);
-  --color-page-brand: var(--_color---page--brand);
+  --color-page-primary: var(--page-primary);
+  --color-page-secondary: var(--page-secondary);
+  --color-page-brand: var(--page-brand-primary);
 
   /* ═══════════════════════════════════════════════
      Color: Theme
      ═══════════════════════════════════════════════ */
-  --color-theme-primary: var(--_color---theme--primary);
-  --color-theme-secondary: var(--_color---theme--secondary);
-  --color-theme-tertiary: var(--_color---theme--tertiary);
-  --color-theme-accent: var(--_color---theme--accent);
-  --color-theme-fourth: var(--_color---theme--fourth);
+  --color-theme-primary: var(--theme-blue-blue-light);
+  --color-theme-secondary: var(--theme-blue-blue-lighter);
+  --color-theme-tertiary: var(--theme-blue-blue-lightest);
+  --color-theme-accent: var(--theme-blue-green);
+  --color-theme-fourth: var(--theme-blue-blue-dark);
 
   /* ═══════════════════════════════════════════════
      Typography: Font Family
      ═══════════════════════════════════════════════ */
-  --typography-font-family-body: var(--_typography---font-family--body);
-  --typography-font-family-label: var(--_typography---font-family--label);
-  --typography-font-family-heading: var(--_typography---font-family--heading);
-  --typography-font-family-display: var(--_typography---font-family--display);
-  --typography-font-family-icon: var(--_typography---font-family--icon);
+  --typography-font-family-body: var(--font-family-body);
+  --typography-font-family-label: var(--font-family-label);
+  --typography-font-family-heading: var(--font-family-heading);
+  --typography-font-family-display: var(--font-family-display);
+  --typography-font-family-icon: var(--font-family-icon);
 
   /* ═══════════════════════════════════════════════
      Typography: Body Sizes
      ═══════════════════════════════════════════════ */
-  --typography-body-tiny: var(--_typography---body--tiny);
-  --typography-body-xs: var(--_typography---body--xs);
-  --typography-body-sm: var(--_typography---body--sm);
-  --typography-body-md-base: var(--_typography---body--md-base);
-  --typography-body-lg: var(--_typography---body--lg);
-  --typography-body-xl: var(--_typography---body--xl);
+  --typography-body-tiny: var(--body-tiny);
+  --typography-body-xs: var(--body-xs);
+  --typography-body-sm: var(--body-sm);
+  --typography-body-md-base: var(--body-md);
+  --typography-body-lg: var(--body-lg);
+  --typography-body-xl: var(--body-xl);
 
   /* ═══════════════════════════════════════════════
      Typography: Label Sizes
      ═══════════════════════════════════════════════ */
-  --typography-label-sm: var(--_typography---label--sm);
-  --typography-label-md-base: var(--_typography---label--md-base);
-  --typography-label-lg: var(--_typography---label--lg);
-  --typography-label-xl: var(--_typography---label--xl);
+  --typography-label-sm: var(--label-sm);
+  --typography-label-md-base: var(--label-md);
+  --typography-label-lg: var(--label-lg);
+  --typography-label-xl: var(--label-xl);
 
   /* ═══════════════════════════════════════════════
      Typography: Heading Sizes
      ═══════════════════════════════════════════════ */
-  --typography-heading-tiny: var(--_typography---heading--tiny);
-  --typography-heading-small: var(--_typography---heading--small);
-  --typography-heading-medium: var(--_typography---heading--medium);
-  --typography-heading-large: var(--_typography---heading--large);
-  --typography-heading-x-large: var(--_typography---heading--x-large);
-  --typography-heading-xx-large: var(--_typography---heading--xx-large);
-  --typography-heading-xxx-large: var(--_typography---heading--xxx-large);
+  --typography-heading-tiny: var(--heading-tiny);
+  --typography-heading-small: var(--heading-sm);
+  --typography-heading-medium: var(--heading-md);
+  --typography-heading-large: var(--heading-lg);
+  --typography-heading-x-large: var(--heading-xl);
+  --typography-heading-xx-large: var(--heading-xxl);
+  --typography-heading-xxx-large: var(--heading-huge);
 
   /* ═══════════════════════════════════════════════
      Typography: Display Sizes
      ═══════════════════════════════════════════════ */
-  --typography-display-small: var(--_typography---display--small);
-  --typography-display-medium: var(--_typography---display--medium);
-  --typography-display-large: var(--_typography---display--large);
+  --typography-display-small: var(--display-sm);
+  --typography-display-medium: var(--display-md);
+  --typography-display-large: var(--display-lg);
 
   /* ═══════════════════════════════════════════════
      Typography: Icon Sizes
      ═══════════════════════════════════════════════ */
-  --typography-icon-small: var(--_typography---icon--small);
-  --typography-icon-medium-base: var(--_typography---icon--medium-base);
-  --typography-icon-large: var(--_typography---icon--large);
+  --typography-icon-small: var(--icon-sm);
+  --typography-icon-medium-base: var(--icon-md);
+  --typography-icon-large: var(--icon-lg);
 
   /* ═══════════════════════════════════════════════
      Layout: Space
      ═══════════════════════════════════════════════ */
-  --layout-none: var(--_space---none);
-  --layout-tiny: var(--_space---tiny);
-  --layout-sm: var(--_space---sm);
-  --layout-md: var(--_space---md);
-  --layout-lg: var(--_space---lg);
-  --layout-xl: var(--_space---xl);
-  --layout-xxl: var(--_space---xxl);
-  --layout-huge: var(--_space---huge);
-  --layout-button: var(--_space---button);
-  --layout-input: var(--_space---input);
+  --layout-none: var(--padding-none);
+  --layout-tiny: var(--padding-tiny);
+  --layout-sm: var(--padding-sm);
+  --layout-md: var(--padding-md);
+  --layout-lg: var(--padding-lg);
+  --layout-xl: var(--padding-xl);
+  --layout-xxl: var(--padding-xl);
+  --layout-huge: var(--padding-huge);
+  --layout-button: var(--padding-tiny);
+  --layout-input: var(--padding-tiny);
 
   /* ═══════════════════════════════════════════════
      Layout: Gap
      ═══════════════════════════════════════════════ */
-  --layout-gap-none: var(--_space---gap--none);
-  --layout-gap-tiny: var(--_space---gap--tiny);
-  --layout-gap-sm: var(--_space---gap--sm);
-  --layout-gap-md: var(--_space---gap--md);
-  --layout-gap-lg: var(--_space---gap--lg);
-  --layout-gap-xl: var(--_space---gap--xl);
-  --layout-gap-xxl: var(--_space---gap--xxl);
-  --layout-gap-huge: var(--_space---gap--huge);
+  --layout-gap-none: var(--gap-none);
+  --layout-gap-tiny: var(--gap-tiny);
+  --layout-gap-sm: var(--gap-sm);
+  --layout-gap-md: var(--gap-md);
+  --layout-gap-lg: var(--gap-lg);
+  --layout-gap-xl: var(--gap-xl);
+  --layout-gap-xxl: var(--gap-xl);
+  --layout-gap-huge: var(--gap-huge);
 
   /* ═══════════════════════════════════════════════
      Size
      ═══════════════════════════════════════════════ */
-  --size-none: var(--_size---none);
-  --size-tiny: var(--_size---tiny);
-  --size-sm: var(--_size---sm);
-  --size-md: var(--_size---md);
-  --size-lg: var(--_size---lg);
-  --size-xl: var(--_size---xl);
-  --size-xxl: var(--_size---xxl);
-  --size-huge: var(--_size---huge);
+  --size-none: var(--size-0);
+  --size-tiny: var(--size-50);
+  --size-sm: var(--size-200);
+  --size-md: var(--size-400);
+  --size-lg: var(--size-600);
+  --size-xl: var(--size-800);
+  --size-xxl: var(--size-1000);
+  --size-huge: var(--size-1200);
 
   /* ═══════════════════════════════════════════════
      Border Width
      ═══════════════════════════════════════════════ */
-  --border-width-none: var(--_border-width---none);
-  --border-width-sm: var(--_border-width---sm);
-  --border-width-md: var(--_border-width---md);
-  --border-width-lg: var(--_border-width---lg);
+  --border-width-none: var(--border-width-none);
+  --border-width-sm: var(--border-width-sm);
+  --border-width-md: var(--border-width-md);
+  --border-width-lg: var(--border-width-lg);
 
   /* ═══════════════════════════════════════════════
      Border Radius
      ═══════════════════════════════════════════════ */
-  --border-radius-none: var(--_border-radius---none);
-  --border-radius-sm: var(--_border-radius---sm);
-  --border-radius-md: var(--_border-radius---md);
-  --border-radius-lg: var(--_border-radius---lg);
-  --border-radius-input: var(--_border-radius---input);
-  --border-radius-button: var(--_border-radius---button);
+  --border-radius-none: var(--border-radius-none);
+  --border-radius-sm: var(--border-radius-sm);
+  --border-radius-md: var(--border-radius-md);
+  --border-radius-lg: var(--border-radius-lg);
+  --border-radius-input: var(--border-radius-50);
+  --border-radius-button: var(--border-radius-50);
 
   /* ═══════════════════════════════════════════════
      Shadow
      ═══════════════════════════════════════════════ */
-  --box-shadow-none: var(--_box-shadow---none);
-  --box-shadow-sm: var(--_box-shadow---sm);
-  --box-shadow-md: var(--_box-shadow---md);
-  --box-shadow-lg: var(--_box-shadow---lg);
-  --blur-radius-none: var(--_blur-radius---none);
-  --blur-radius-sm: var(--_blur-radius---sm);
-  --blur-radius-md: var(--_blur-radius---md);
-  --blur-radius-lg: var(--_blur-radius---lg);
+  --box-shadow-none: var(--box-shadow-none);
+  --box-shadow-sm: var(--box-shadow-sm);
+  --box-shadow-md: var(--box-shadow-md);
+  --box-shadow-lg: var(--box-shadow-lg);
+  --blur-radius-none: var(--blur-radius-sm);
+  --blur-radius-sm: var(--blur-radius-sm);
+  --blur-radius-md: var(--blur-radius-md);
+  --blur-radius-lg: var(--blur-radius-lg);
 }

@@ -19,23 +19,23 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
  * Banner container styles
  *
  * Token reference:
- * - --_color---surface--brand-primary (brand blue background)
- * - --_color---text--inverse (white text on brand surface)
- * - --_space---lg = 24px (vertical padding)
- * - --_space---xl = 32px (horizontal padding)
- * - --_border-radius---sm = 2px (corners)
- * - --_space---gap--lg = 16px (gap between content and action)
+ * - --surface-brand-primary (brand blue background)
+ * - --text-inverse (white text on brand surface)
+ * - --padding-lg = 24px (vertical padding)
+ * - --padding-xl = 32px (horizontal padding)
+ * - --border-radius-sm = 2px (corners)
+ * - --gap-lg = 16px (gap between content and action)
  */
 const bannerStyles: CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 'var(--_space---gap--lg)',
-  backgroundColor: 'var(--_color---surface--brand-primary)',
-  color: 'var(--_color---text--inverse)',
-  padding: 'var(--_space---lg) var(--_space---xl)',
-  borderRadius: 'var(--_border-radius---sm)',
+  gap: 'var(--gap-lg)',
+  backgroundColor: 'var(--surface-brand-primary)',
+  color: 'var(--text-inverse)',
+  padding: 'var(--padding-lg) var(--padding-xl)',
+  borderRadius: 'var(--border-radius-sm)',
   width: '100%',
   boxSizing: 'border-box',
 };
@@ -44,7 +44,7 @@ const bannerStyles: CSSProperties = {
  * Content wrapper — title + description inline
  *
  * Token reference:
- * - --_space---gap--md = 8px (gap between title and description)
+ * - --gap-md = 8px (gap between title and description)
  *
  * Figma text styles:
  * - Title: label/md — font-family/label, SemiBold, font-size/100 (16px), line-height 1
@@ -54,22 +54,22 @@ const contentStyles: CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
   minWidth: 0,
 };
 
 const titleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  fontSize: 'var(--_typography---label--md-base)',
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontSize: 'var(--label-md)',
+  lineHeight: 'var(--font-line-height-tight)',
 };
 
 const descriptionStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
+  fontFamily: 'var(--font-family-body)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
 };
 
 const closeButtonStyles: CSSProperties = {
@@ -77,12 +77,12 @@ const closeButtonStyles: CSSProperties = {
   border: 'none',
   color: 'inherit',
   cursor: 'pointer',
-  padding: 'var(--_space---gap--sm)',
+  padding: 'var(--padding-tiny)',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
   flexShrink: 0,
-  fontSize: 'var(--_typography---body--sm)',
+  fontSize: 'var(--body-sm)',
   opacity: 0.8,
 };
 
@@ -120,7 +120,7 @@ export function Banner({
         {description && <span style={descriptionStyles}>{description}</span>}
       </div>
       {(action || onDismiss) && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--md)', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)', flexShrink: 0 }}>
           {action}
           {onDismiss && (
             <button

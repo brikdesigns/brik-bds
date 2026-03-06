@@ -128,7 +128,7 @@ export const FilterBar: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<div style={{ display: 'flex', gap: 'var(--_space---gap--md)' }}>
+        code: `<div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
   <FilterButton label="Category" options={categories} value={cat} onChange={setCat} />
   <FilterButton label="Region" options={regions} value={reg} onChange={setReg} />
   <FilterButton label="Status" options={statuses} value={stat} onChange={setStat} />
@@ -141,7 +141,7 @@ export const FilterBar: Story = {
     const [reg, setReg] = useState<string | undefined>();
     const [tag, setTag] = useState<string | undefined>();
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--_space---gap--md)' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-md)' }}>
         <FilterButton label="Category" options={categoryOptions} value={cat} onChange={setCat} />
         <FilterButton label="Region" options={regionOptions} value={reg} onChange={setReg} />
         <FilterButton label="Status" options={tagOptions} value={tag} onChange={setTag} />

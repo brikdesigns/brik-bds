@@ -47,9 +47,9 @@ export const AllSizes: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
         <Spinner size="sm" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--sm)',
-          color: 'var(--_color---text--secondary)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-secondary)',
         }}>
           Small (16px)
         </span>
@@ -57,9 +57,9 @@ export const AllSizes: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
         <Spinner size="lg" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--sm)',
-          color: 'var(--_color---text--secondary)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-secondary)',
         }}>
           Large (48px)
         </span>
@@ -87,13 +87,13 @@ export const InButton: Story = {
         alignItems: 'center',
         gap: '8px',
         padding: '12px 24px',
-        backgroundColor: 'var(--_color---background--brand-primary)',
-        color: 'var(--_color---text--inverse)',
+        backgroundColor: 'var(--background-brand-primary)',
+        color: 'var(--text-inverse)',
         border: 'none',
-        borderRadius: 'var(--_border-radius---md)',
-        fontFamily: 'var(--_typography---font-family--label)',
-        fontSize: 'var(--_typography---label--md-base)',
-        fontWeight: 'var(--font-weight--semi-bold)',
+        borderRadius: 'var(--border-radius-md)',
+        fontFamily: 'var(--font-family-label)',
+        fontSize: 'var(--label-md)',
+        fontWeight: 'var(--font-weight-semi-bold)',
         cursor: 'wait',
       }}
       disabled
@@ -122,8 +122,8 @@ export const CenteredInContainer: Story = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'var(--_color---background--secondary)',
-        borderRadius: 'var(--_border-radius---md)',
+        backgroundColor: 'var(--background-secondary)',
+        borderRadius: 'var(--border-radius-md)',
       }}
     >
       <Spinner size="lg" />
@@ -152,9 +152,9 @@ export const WithText: Story = {
       <Spinner size="lg" />
       <p
         style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
-          color: 'var(--_color---text--secondary)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
+          color: 'var(--text-secondary)',
           margin: 0,
         }}
       >

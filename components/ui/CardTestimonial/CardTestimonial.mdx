@@ -1,0 +1,69 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './CardTestimonial.stories';
+
+<Meta of={Stories} />
+
+# Card testimonial
+
+A customer testimonial card displaying a quote with attribution and optional star rating. Supports brand (colored background) and outlined variants.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Outlined variant
+
+For use on colored backgrounds or when you want a lighter treatment.
+
+<Canvas of={Stories.Outlined} />
+
+## Without rating
+
+Stars are optional. Omit the `rating` prop to hide them.
+
+<Canvas of={Stories.WithoutRating} />
+
+## Grid layout
+
+Testimonials shine in multi-column grid layouts.
+
+<Canvas of={Stories.Grid} />
+
+## Mixed variants
+
+Combine brand and outlined cards for visual variety.
+
+<Canvas of={Stories.MixedVariants} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { CardTestimonial } from '@brik/bds';
+
+// Brand variant (default)
+<CardTestimonial
+  quote="Amazing service and results."
+  authorName="Sarah Chen"
+  authorRole="Owner, Bloom Cafe"
+  rating={5}
+/>
+
+// Outlined variant
+<CardTestimonial
+  variant="outlined"
+  quote="Professional and creative team."
+  authorName="Marcus Johnson"
+  authorRole="Director, Apex Corp"
+  rating={4}
+/>
+
+// Without rating
+<CardTestimonial
+  quote="Best investment we made."
+  authorName="Alex Turner"
+/>
+```

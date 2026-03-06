@@ -34,29 +34,29 @@ export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  * Wrapper styles — vertical stack matching TextInput pattern
  *
  * Token reference:
- * - --_space---gap--md = 8px (gap between label and field)
+ * - --gap-md = 8px (gap between label and field)
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--md)',
-  color: 'var(--_color---text--primary)',
+  gap: 'var(--gap-md)',
+  color: 'var(--text-primary)',
 };
 
 /**
  * Label base styles matching TextInput pattern
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --font-weight--semi-bold = 600
- * - --font-line-height--100 = 100% (matches TextInput label)
- * - --_typography---label--md-base (default label size)
+ * - --font-family-label (label font)
+ * - --font-weight-semi-bold = 600
+ * - --font-line-height-tight = 100% (matches TextInput label)
+ * - --label-md (default label size)
  */
 const labelBaseStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
-  fontSize: 'var(--_typography---label--md-base)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
+  fontSize: 'var(--label-md)',
   textTransform: 'capitalize' as const,
 };
 
@@ -64,43 +64,43 @@ const labelBaseStyles: CSSProperties = {
  * Helper/error text base styles
  *
  * Token reference:
- * - --_typography---font-family--body (helper font)
- * - --_typography---body--sm (small text size)
- * - --_color---text--muted (helper text color)
+ * - --font-family-body (helper font)
+ * - --body-sm (small text size)
+ * - --text-muted (helper text color)
  */
 const helperBaseStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--sm)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--muted)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-sm)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-muted)',
 };
 
 /**
  * TextArea styles using BDS tokens
  *
  * Token reference:
- * - --_color---border--input (input border color)
- * - --_color---background--input (input background)
- * - --_color---text--primary (text color)
- * - --_border-radius---input = 2px (input corners)
- * - --_space---input = 8px (input padding)
- * - --_typography---font-family--body (body font)
- * - --_typography---body--sm (small body text size)
- * - --_border-width---sm (border thickness)
+ * - --border-input (input border color)
+ * - --background-input (input background)
+ * - --text-primary (text color)
+ * - --border-radius-50 = 2px (input corners)
+ * - --padding-tiny = 8px (input padding)
+ * - --font-family-body (body font)
+ * - --body-sm (small body text size)
+ * - --border-width-sm (border thickness)
  */
 const textareaStyles: CSSProperties = {
   display: 'block',
   width: '100%',
   minWidth: '200px',
-  padding: 'var(--_space---input)',
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--primary)',
-  backgroundColor: 'var(--_color---background--input)',
-  border: 'var(--_border-width---sm) solid var(--_color---border--input)',
-  borderRadius: 'var(--_border-radius---input)',
+  padding: 'var(--padding-tiny)',
+  fontFamily: 'var(--font-family-body)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
+  backgroundColor: 'var(--background-input)',
+  border: 'var(--border-width-sm) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-50)',
   outline: 'none',
   transition: 'border-color 0.2s',
   resize: 'vertical',
@@ -154,7 +154,7 @@ export function TextArea({
     ...textareaStyles,
     resize,
     ...(disabled ? textareaDisabledStyles : {}),
-    ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
+    ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
     ...style,
   };
 
@@ -171,7 +171,7 @@ export function TextArea({
           htmlFor={inputId}
           style={{
             ...labelBaseStyles,
-            ...(hasError ? { color: 'var(--system--red)' } : {}),
+            ...(hasError ? { color: 'var(--color-system-red)' } : {}),
           }}
         >
           {label}
@@ -196,7 +196,7 @@ export function TextArea({
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
-          style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
+          style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
           role="alert"
         >
           {error}

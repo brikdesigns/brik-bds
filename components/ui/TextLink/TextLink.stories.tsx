@@ -66,8 +66,8 @@ export const InParagraph: Story = {
   render: () => (
     <p
       style={{
-        fontFamily: 'var(--_typography---font-family--body)',
-        color: 'var(--_color---text--primary)',
+        fontFamily: 'var(--font-family-body)',
+        color: 'var(--text-primary)',
         maxWidth: '400px',
         lineHeight: '1.6',
       }}

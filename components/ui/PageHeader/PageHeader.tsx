@@ -41,16 +41,16 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
  * Figma spec: flex column, gap 24px, px 80px, py padding/md (24px)
  *
  * Token reference:
- * - --_space---gap--lg = 24px (gap between sections)
- * - --_space---xl = 24px (vertical padding)
+ * - --gap-lg = 24px (gap between sections)
+ * - --padding-xl = 24px (vertical padding)
  */
 const containerStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--lg)',
+  gap: 'var(--gap-lg)',
   alignItems: 'flex-start',
   justifyContent: 'center',
-  padding: 'var(--_space---xl) 80px',
+  padding: 'var(--padding-xl) 80px',
   width: '100%',
 };
 
@@ -61,7 +61,7 @@ const containerStyles: CSSProperties = {
  */
 const innerPaddingStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--_space---gap--sm)',
+  gap: 'var(--gap-sm)',
   alignItems: 'flex-start',
   width: '100%',
 };
@@ -70,39 +70,39 @@ const innerPaddingStyles: CSSProperties = {
  * Content wrapper (title + subtitle)
  *
  * Token reference:
- * - --_typography---font-family--heading (heading font)
- * - --_typography---heading--large = font-size-700 = 32px (title)
- * - --_typography---font-family--body (body font)
- * - --_typography---body--lg = font-size-200 = 18px (subtitle)
- * - --font-weight--bold = 700
+ * - --font-family-heading (heading font)
+ * - --heading-lg = font-size-700 = 32px (title)
+ * - --font-family-body (body font)
+ * - --body-lg = font-size-200 = 18px (subtitle)
+ * - --font-weight-bold = 700
  *
  * Text color inherits from parent context — no forced color.
- * Place on a dark section and set color: var(--_color---text--inverse)
+ * Place on a dark section and set color: var(--text-inverse)
  * on the parent, or use on a light background with default text color.
  */
 const contentWrapperStyles: CSSProperties = {
   display: 'flex',
   flex: '1 0 0',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--sm)',
+  gap: 'var(--gap-sm)',
   alignItems: 'flex-start',
   justifyContent: 'center',
   minWidth: 0,
 };
 
 const titleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--heading)',
-  fontSize: 'var(--_typography---heading--large)',
-  fontWeight: 'var(--font-weight--bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-heading)',
+  fontSize: 'var(--heading-lg)',
+  fontWeight: 'var(--font-weight-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
   margin: 0,
 };
 
 const subtitleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--lg)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height--150)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-lg)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  lineHeight: 'var(--font-line-height-normal)',
   margin: 0,
 };
 
@@ -111,7 +111,7 @@ const subtitleStyles: CSSProperties = {
  */
 const buttonWrapperStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--_space---gap--sm)',
+  gap: 'var(--gap-sm)',
   alignItems: 'flex-start',
   justifyContent: 'flex-end',
   flexShrink: 0,
@@ -121,13 +121,13 @@ const buttonWrapperStyles: CSSProperties = {
  * Metadata styles
  *
  * Token reference:
- * - --_color---border--secondary (top border)
- * - --_space---xl = 24px (padding-top)
- * - --_space---gap--sm = 8px (label-value gap)
- * - --_typography---font-family--label (label font)
- * - --_typography---label--sm = 14px (label size)
- * - --_color---text--primary (label color)
- * - --_typography---font-family--body (value font)
+ * - --border-secondary (top border)
+ * - --padding-xl = 24px (padding-top)
+ * - --gap-sm = 8px (label-value gap)
+ * - --font-family-label (label font)
+ * - --label-sm = 14px (label size)
+ * - --text-primary (label color)
+ * - --font-family-body (value font)
  * - --_color---text--accent (value color)
  */
 const metadataWrapperStyles: CSSProperties = {
@@ -136,14 +136,14 @@ const metadataWrapperStyles: CSSProperties = {
   alignItems: 'flex-start',
   justifyContent: 'center',
   width: '100%',
-  borderTop: 'var(--_border-width---sm) solid var(--_color---border--secondary)',
+  borderTop: 'var(--border-width-sm) solid var(--border-secondary)',
 };
 
 const metadataInnerStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--_space---gap--sm)',
+  gap: 'var(--gap-sm)',
   alignItems: 'flex-start',
-  paddingTop: 'var(--_space---xl)',
+  paddingTop: 'var(--padding-xl)',
   width: '100%',
 };
 
@@ -151,26 +151,26 @@ const metadataItemStyles: CSSProperties = {
   display: 'flex',
   flex: '1 0 0',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--sm)',
+  gap: 'var(--gap-sm)',
   alignItems: 'flex-start',
   justifyContent: 'center',
   minWidth: 0,
 };
 
 const metadataLabelStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--sm)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
-  color: 'var(--_color---text--primary)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-sm)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
+  color: 'var(--text-primary)',
 };
 
 const metadataValueStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--sm)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--brand)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-sm)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-brand-primary)',
 };
 
 /**

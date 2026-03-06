@@ -35,33 +35,33 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  * - lg: padding 6px, gap 2px, font-size 18px, border-radius 4px, icon 20px
  *
  * Token reference:
- * - --space--50 = 2px (sm padding, md/lg gap)
- * - --_space---tiny = 8px (md padding)
- * - --_space---sm = 12px (lg padding)
- * - --_typography---body--tiny ~= 10.26px (sm font)
- * - --_typography---label--sm = 14px (md font)
- * - --_typography---label--lg = 18px (lg font, mapped to font-size--200)
- * - --_border-radius---sm = 2px (sm radius)
- * - --_border-radius---md = 4px (md/lg radius)
+ * - --space-50 = 2px (sm padding, md/lg gap)
+ * - --padding-tiny = 8px (md padding)
+ * - --padding-sm = 12px (lg padding)
+ * - --body-tiny ~= 10.26px (sm font)
+ * - --label-sm = 14px (md font)
+ * - --label-lg = 18px (lg font, mapped to font-size--200)
+ * - --border-radius-sm = 2px (sm radius)
+ * - --border-radius-md = 4px (md/lg radius)
  */
 const sizeStyles: Record<TagSize, CSSProperties> = {
   sm: {
-    padding: 'var(--space--50)',
+    padding: 'var(--space-50)',
     gap: 0,
-    fontSize: 'var(--_typography---body--tiny)',
-    borderRadius: 'var(--_border-radius---sm)',
+    fontSize: 'var(--body-tiny)',
+    borderRadius: 'var(--border-radius-sm)',
   },
   md: {
-    padding: 'var(--_space---tiny)',
-    gap: 'var(--space--50)',
-    fontSize: 'var(--_typography---label--sm)',
-    borderRadius: 'var(--_border-radius---md)',
+    padding: 'var(--padding-tiny)',
+    gap: 'var(--space-50)',
+    fontSize: 'var(--label-sm)',
+    borderRadius: 'var(--border-radius-md)',
   },
   lg: {
-    padding: 'var(--_space---sm)',
-    gap: 'var(--space--50)',
-    fontSize: 'var(--_typography---label--lg)',
-    borderRadius: 'var(--_border-radius---md)',
+    padding: 'var(--padding-sm)',
+    gap: 'var(--space-50)',
+    fontSize: 'var(--label-lg)',
+    borderRadius: 'var(--border-radius-md)',
   },
 };
 
@@ -71,19 +71,19 @@ const sizeStyles: Record<TagSize, CSSProperties> = {
  * - lg: 20px wrapper
  */
 const iconSizeMap: Record<TagSize, CSSProperties> = {
-  sm: { width: 16, height: 16, fontSize: 'var(--_typography---body--tiny)' },
-  md: { width: 16, height: 16, fontSize: 'var(--_typography---body--xs)' },
-  lg: { width: 20, height: 20, fontSize: 'var(--_typography---label--md-base)' },
+  sm: { width: 16, height: 16, fontSize: 'var(--body-tiny)' },
+  md: { width: 16, height: 16, fontSize: 'var(--body-xs)' },
+  lg: { width: 20, height: 20, fontSize: 'var(--label-md)' },
 };
 
 /**
  * Base tag styles
  *
  * Token reference:
- * - --_color---background--secondary (subtle gray background)
- * - --_color---text--primary (theme-aware text — dark in light mode, light in dark mode)
- * - --_typography---font-family--label (label font)
- * - --font-weight--semi-bold = 600
+ * - --background-secondary (subtle gray background)
+ * - --text-primary (theme-aware text — dark in light mode, light in dark mode)
+ * - --font-family-label (label font)
+ * - --font-weight-semi-bold = 600
  *
  * Text color follows Badge pattern:
  * - text-primary for light backgrounds (provides proper contrast)
@@ -93,11 +93,11 @@ const baseStyles: CSSProperties = {
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
-  color: 'var(--_color---text--primary)',
-  backgroundColor: 'var(--_color---background--secondary)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
+  color: 'var(--text-primary)',
+  backgroundColor: 'var(--background-secondary)',
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   textTransform: 'capitalize' as const,

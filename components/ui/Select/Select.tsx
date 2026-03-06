@@ -63,30 +63,30 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
  * Size-specific styles (matching TextInput — no hardcoded heights)
  *
  * Token reference:
- * - --_typography---label--sm/md-base/lg (label font sizes)
- * - --_typography---body--sm/md-base/lg (select font sizes)
- * - --_space---input = 8px (input padding)
+ * - --label-sm/md-base/lg (label font sizes)
+ * - --body-sm/md-base/lg (select font sizes)
+ * - --padding-tiny = 8px (input padding)
  */
 const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperties }> = {
   sm: {
-    label: { fontSize: 'var(--_typography---label--sm)' },
+    label: { fontSize: 'var(--label-sm)' },
     select: {
-      fontSize: 'var(--_typography---body--sm)',
-      padding: 'var(--_space---input)',
+      fontSize: 'var(--body-sm)',
+      padding: 'var(--padding-tiny)',
     },
   },
   md: {
-    label: { fontSize: 'var(--_typography---label--md-base)' },
+    label: { fontSize: 'var(--label-md)' },
     select: {
-      fontSize: 'var(--_typography---body--md-base)',
-      padding: 'var(--_space---input)',
+      fontSize: 'var(--body-md)',
+      padding: 'var(--padding-tiny)',
     },
   },
   lg: {
-    label: { fontSize: 'var(--_typography---label--lg)' },
+    label: { fontSize: 'var(--label-lg)' },
     select: {
-      fontSize: 'var(--_typography---body--lg)',
-      padding: 'calc(var(--_space---input) * 1.25)',
+      fontSize: 'var(--body-lg)',
+      padding: 'calc(var(--padding-tiny) * 1.25)',
     },
   },
 };
@@ -95,25 +95,25 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
  * Select input base styles using BDS tokens
  *
  * Token reference:
- * - --_color---border--input (input border color)
- * - --_color---background--input (input background)
- * - --_color---text--primary (text color)
- * - --_border-radius---input = 2px (input corners)
- * - --_space---input = 8px (input padding)
- * - --_typography---font-family--body (body font)
- * - --_border-width---sm (border thickness)
- * - --font-line-height--150 = 150%
+ * - --border-input (input border color)
+ * - --background-input (input background)
+ * - --text-primary (text color)
+ * - --border-radius-50 = 2px (input corners)
+ * - --padding-tiny = 8px (input padding)
+ * - --font-family-body (body font)
+ * - --border-width-sm (border thickness)
+ * - --font-line-height-normal = 150%
  */
 const selectBaseStyles: CSSProperties = {
   display: 'inline-block',
   width: '100%',
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontWeight: 'var(--font-weight--regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--primary)',
-  backgroundColor: 'var(--_color---background--input)',
-  border: 'var(--_border-width---sm) solid var(--_color---border--input)',
-  borderRadius: 'var(--_border-radius---input)',
+  fontFamily: 'var(--font-family-body)',
+  fontWeight: 'var(--font-weight-regular)' as unknown as number,
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
+  backgroundColor: 'var(--background-input)',
+  border: 'var(--border-width-sm) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-50)',
   outline: 'none',
   transition: 'border-color 0.2s, box-shadow 0.2s',
   cursor: 'pointer',
@@ -122,8 +122,8 @@ const selectBaseStyles: CSSProperties = {
   // bds-lint-ignore — data URI SVGs cannot reference CSS variables; #333 = text--primary default
   backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
   backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'right var(--_space---input) center',
-  paddingRight: 'calc(var(--_space---input) * 3)',
+  backgroundPosition: 'right var(--padding-tiny) center',
+  paddingRight: 'calc(var(--padding-tiny) * 3)',
 };
 
 /**
@@ -139,17 +139,17 @@ const fieldWrapperStyles: CSSProperties = {
  * Icon positioning styles
  *
  * Token reference:
- * - --_space---input = 8px (icon inset from edge)
- * - --_color---text--muted (icon color, matches placeholder)
- * - --_space---gap--md = 8px (icon-text gap)
+ * - --padding-tiny = 8px (icon inset from edge)
+ * - --text-muted (icon color, matches placeholder)
+ * - --gap-md = 8px (icon-text gap)
  */
 const selectIconStyles: CSSProperties = {
   position: 'absolute',
-  left: 'var(--_space---input)',
+  left: 'var(--padding-tiny)',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: 'var(--_color---text--muted)',
+  color: 'var(--text-muted)',
   pointerEvents: 'none',
   zIndex: 1,
 };
@@ -158,27 +158,27 @@ const selectIconStyles: CSSProperties = {
  * Wrapper styles — vertical stack matching TextInput pattern
  *
  * Token reference:
- * - --_space---gap--md = 8px (gap between label and field)
+ * - --gap-md = 8px (gap between label and field)
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--md)',
-  color: 'var(--_color---text--primary)',
+  gap: 'var(--gap-md)',
+  color: 'var(--text-primary)',
 };
 
 /**
  * Label base styles matching TextInput pattern
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --font-weight--semi-bold = 600
- * - --font-line-height--100 = 100% (matches TextInput label)
+ * - --font-family-label (label font)
+ * - --font-weight-semi-bold = 600
+ * - --font-line-height-tight = 100% (matches TextInput label)
  */
 const labelBaseStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
   textTransform: 'capitalize' as const,
 };
 
@@ -186,15 +186,15 @@ const labelBaseStyles: CSSProperties = {
  * Helper/error text base styles
  *
  * Token reference:
- * - --_typography---font-family--body (helper font)
- * - --_typography---body--sm (small text size)
- * - --_color---text--muted (helper text color)
+ * - --font-family-body (helper font)
+ * - --body-sm (small text size)
+ * - --text-muted (helper text color)
  */
 const helperBaseStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--sm)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--muted)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-sm)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-muted)',
 };
 
 /**
@@ -275,7 +275,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const combinedStyles: CSSProperties = {
       ...selectBaseStyles,
       ...sizeStyle.select,
-      ...(icon ? { paddingLeft: 'calc(var(--_space---input) * 4)' } : {}),
+      ...(icon ? { paddingLeft: 'calc(var(--padding-tiny) * 4)' } : {}),
       ...style,
     };
 
@@ -292,7 +292,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             style={{
               ...labelBaseStyles,
               ...sizeStyle.label,
-              ...(hasError ? { color: 'var(--system--red)' } : {}),
+              ...(hasError ? { color: 'var(--color-system-red)' } : {}),
             }}
           >
             {label}
@@ -352,7 +352,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {error && (
           <span
             id={inputId ? `${inputId}-error` : undefined}
-            style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
+            style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
             role="alert"
           >
             {error}

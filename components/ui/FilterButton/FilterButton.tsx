@@ -41,30 +41,30 @@ export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 
  * Trigger button base styles (inactive)
  *
  * Token reference:
- * - --_color---surface--secondary = #f2f2f2 (inactive background)
- * - --_border-radius---md = 4px (corners)
- * - --_space---lg = 16px (padding)
- * - --_typography---font-family--label (label font)
- * - --_typography---label--md-base = 16px (font size)
- * - --font-weight--semi-bold = 600
- * - --font-line-height--100 = 1 (tight leading)
- * - --_color---text--on-color-light = black (text on light bg)
+ * - --surface-secondary = #f2f2f2 (inactive background)
+ * - --border-radius-md = 4px (corners)
+ * - --padding-lg = 16px (padding)
+ * - --font-family-label (label font)
+ * - --label-md = 16px (font size)
+ * - --font-weight-semi-bold = 600
+ * - --font-line-height-tight = 1 (tight leading)
+ * - --text-on-color-light = black (text on light bg)
  */
 const triggerBaseStyles: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 'var(--_space---gap--lg)',
-  padding: 'var(--_space---lg)',
-  backgroundColor: 'var(--_color---surface--secondary)',
-  borderRadius: 'var(--_border-radius---md)',
+  gap: 'var(--gap-lg)',
+  padding: 'var(--padding-lg)',
+  backgroundColor: 'var(--surface-secondary)',
+  borderRadius: 'var(--border-radius-md)',
   border: 'none',
   cursor: 'pointer',
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--md-base)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
-  color: 'var(--_color---text--on-color-light)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-md)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-tight)',
+  color: 'var(--text-on-color-light)',
   whiteSpace: 'nowrap',
   textTransform: 'capitalize' as const,
   minWidth: '120px',
@@ -75,36 +75,36 @@ const triggerBaseStyles: CSSProperties = {
  * Trigger button active styles (value selected)
  *
  * Token reference:
- * - --_color---background--brand-primary (brand blue background)
- * - --_color---text--on-color-dark = white (text on dark bg)
+ * - --background-brand-primary (brand blue background)
+ * - --text-on-color-dark = white (text on dark bg)
  */
 const triggerActiveStyles: CSSProperties = {
   ...triggerBaseStyles,
-  backgroundColor: 'var(--_color---background--brand-primary)',
-  color: 'var(--_color---text--on-color-dark)',
+  backgroundColor: 'var(--background-brand-primary)',
+  color: 'var(--text-on-color-dark)',
 };
 
 /**
  * Dropdown panel styles (matches Menu panel)
  *
  * Token reference:
- * - --_color---background--primary (white)
- * - --_border-radius---lg = 8px
- * - --_space---xl = 24px (padding)
- * - --_space---gap--md = 8px (item gap)
+ * - --background-primary (white)
+ * - --border-radius-lg = 8px
+ * - --padding-xl = 24px (padding)
+ * - --gap-md = 8px (item gap)
  */
 const dropdownStyles: CSSProperties = {
   position: 'absolute',
-  top: 'calc(100% + var(--_space---gap--md))',
+  top: 'calc(100% + var(--gap-md))',
   left: 0,
   zIndex: 100,
-  backgroundColor: 'var(--_color---background--primary)',
-  borderRadius: 'var(--_border-radius---lg)',
-  padding: 'var(--_space---xl)',
+  backgroundColor: 'var(--background-primary)',
+  borderRadius: 'var(--border-radius-lg)',
+  padding: 'var(--padding-xl)',
   boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.12)',
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
   minWidth: '200px',
 };
 
@@ -112,47 +112,47 @@ const dropdownStyles: CSSProperties = {
  * Dropdown item styles
  *
  * Token reference:
- * - --_typography---font-family--body
- * - --_typography---body--md-base = 16px
- * - --font-line-height--150
- * - --_color---text--primary
- * - --_space---gap--md = 8px (icon-text gap + item padding)
- * - --_border-radius---sm = 2px
+ * - --font-family-body
+ * - --body-md = 16px
+ * - --font-line-height-normal
+ * - --text-primary
+ * - --gap-md = 8px (icon-text gap + item padding)
+ * - --border-radius-sm = 2px
  */
 const itemStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--_space---gap--md)',
-  padding: 'var(--_space---gap--md)',
+  gap: 'var(--gap-md)',
+  padding: 'var(--padding-tiny)',
   background: 'none',
   border: 'none',
-  borderRadius: 'var(--_border-radius---sm)',
+  borderRadius: 'var(--border-radius-sm)',
   cursor: 'pointer',
   width: '100%',
   textAlign: 'left',
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--primary)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
 };
 
 /**
  * Selected item highlight
  *
  * Token reference:
- * - --_color---surface--secondary (selected bg)
+ * - --surface-secondary (selected bg)
  */
 const selectedItemStyles: CSSProperties = {
   ...itemStyles,
-  backgroundColor: 'var(--_color---surface--secondary)',
+  backgroundColor: 'var(--surface-secondary)',
 };
 
 /**
  * Icon wrapper in dropdown items
  *
  * Token reference:
- * - --_typography---icon--large = 18px
- * - --_color---text--primary
+ * - --icon-lg = 18px
+ * - --text-primary
  */
 const iconWrapperStyles: CSSProperties = {
   display: 'flex',
@@ -160,8 +160,8 @@ const iconWrapperStyles: CSSProperties = {
   justifyContent: 'center',
   width: '24px',
   height: '24px',
-  fontSize: 'var(--_typography---icon--large)',
-  color: 'var(--_color---text--primary)',
+  fontSize: 'var(--icon-lg)',
+  color: 'var(--text-primary)',
   flexShrink: 0,
 };
 

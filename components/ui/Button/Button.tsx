@@ -40,25 +40,25 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * Size-based styles using BDS spacing tokens
  *
  * Token reference:
- * - --_space---sm = 12px
- * - --_space---md = 16px
- * - --_space---lg = 24px
- * - --_space---xl = 32px
- * - --_typography---label--sm (small label)
- * - --_typography---label--md-base (base label)
+ * - --padding-sm = 12px
+ * - --padding-md = 16px
+ * - --padding-lg = 24px
+ * - --padding-xl = 32px
+ * - --label-sm (small label)
+ * - --label-md (base label)
  */
 const sizeStyles: Record<ButtonSize, CSSProperties> = {
   sm: {
-    padding: 'var(--_space---sm) var(--_space---md)',
-    fontSize: 'var(--_typography---label--sm)',
+    padding: 'var(--padding-sm) var(--padding-md)',
+    fontSize: 'var(--label-sm)',
   },
   md: {
-    padding: 'var(--_space---md) var(--_space---lg)',
-    fontSize: 'var(--_typography---label--md-base)',
+    padding: 'var(--padding-md) var(--padding-lg)',
+    fontSize: 'var(--label-md)',
   },
   lg: {
-    padding: 'var(--_space---lg) var(--_space---xl)',
-    fontSize: 'var(--_typography---label--md-base)',
+    padding: 'var(--padding-lg) var(--padding-xl)',
+    fontSize: 'var(--label-md)',
   },
 };
 
@@ -66,33 +66,33 @@ const sizeStyles: Record<ButtonSize, CSSProperties> = {
  * Variant-based styles using BDS color and border tokens
  *
  * Token reference:
- * - --_color---background--brand-primary (brand background)
- * - --_color---text--on-color-dark (text on dark/colored backgrounds — always white)
- * - --_color---text--primary (text on light backgrounds — theme-adaptive)
- * - --_color---text--brand (brand text)
- * - --_color---border--brand (brand border)
- * - --_border-width---sm (thin border)
- * - --_border-width---md (medium border)
+ * - --background-brand-primary (brand background)
+ * - --text-on-color-dark (text on dark/colored backgrounds — always white)
+ * - --text-primary (text on light backgrounds — theme-adaptive)
+ * - --text-brand-primary (brand text)
+ * - --border-brand-primary (brand border)
+ * - --border-width-sm (thin border)
+ * - --border-width-md (medium border)
  */
 const variantStyles: Record<ButtonVariant, CSSProperties> = {
   primary: {
-    backgroundColor: 'var(--_color---background--brand-primary)',
-    color: 'var(--_color---text--on-color-dark)',
+    backgroundColor: 'var(--background-brand-primary)',
+    color: 'var(--text-on-color-dark)',
     border: 'none',
   },
   outline: {
     backgroundColor: 'transparent',
-    color: 'var(--_color---text--brand)',
-    border: 'var(--_border-width---md) solid var(--_color---border--brand)',
+    color: 'var(--text-brand-primary)',
+    border: 'var(--border-width-md) solid var(--border-brand-primary)',
   },
   secondary: {
-    backgroundColor: 'var(--_color---surface--secondary)',
-    color: 'var(--_color---text--primary)',
-    border: 'var(--_border-width---sm) solid var(--_color---border--secondary)',
+    backgroundColor: 'var(--surface-secondary)',
+    color: 'var(--text-primary)',
+    border: 'var(--border-width-sm) solid var(--border-secondary)',
   },
   ghost: {
     backgroundColor: 'transparent',
-    color: 'var(--_color---text--primary)',
+    color: 'var(--text-primary)',
     border: 'none',
   },
 };
@@ -101,19 +101,19 @@ const variantStyles: Record<ButtonVariant, CSSProperties> = {
  * Base button styles using BDS tokens
  *
  * Token reference:
- * - --_space---gap--sm = 6px (icon gap)
- * - --_typography---font-family--label (button font)
- * - --_border-radius---button = 2px (button corners)
+ * - --gap-sm = 6px (icon gap)
+ * - --font-family-label (button font)
+ * - --border-radius-50 = 2px (button corners)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: 'var(--_space---gap--sm)',
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--150)',
-  borderRadius: 'var(--_border-radius---button)',
+  gap: 'var(--gap-sm)',
+  fontFamily: 'var(--font-family-label)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-normal)',
+  borderRadius: 'var(--border-radius-50)',
   cursor: 'pointer',
   textDecoration: 'none',
   transition: 'background-color 0.2s, border-color 0.2s, opacity 0.2s',

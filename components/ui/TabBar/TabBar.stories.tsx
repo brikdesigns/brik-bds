@@ -111,8 +111,8 @@ export const OnDarkBackground: Story = {
   decorators: [
     (Story) => (
       <div style={{
-        backgroundColor: 'var(--_color---background--brand-primary)',
-        padding: 'var(--_space---xl)',
+        backgroundColor: 'var(--background-brand-primary)',
+        padding: 'var(--padding-xl)',
       }}>
         <Story />
       </div>

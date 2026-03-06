@@ -1,0 +1,51 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Divider.stories';
+
+<Meta of={Stories} />
+
+# Divider
+
+A visual separator used to divide content sections. Supports horizontal and vertical orientations with configurable spacing.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## With spacing
+
+Dividers can include built-in margin to create breathing room between content sections.
+
+<Canvas of={Stories.WithSpacing} />
+
+## Vertical
+
+Use vertical dividers to separate inline or flex-row content.
+
+<Canvas of={Stories.Vertical} />
+
+## All spacings
+
+<Canvas of={Stories.AllSpacings} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Divider } from '@brik/bds';
+
+// Basic horizontal divider
+<Divider />
+
+// With spacing
+<Divider spacing="lg" />
+
+// Vertical in a flex row
+<div style={{ display: 'flex', alignItems: 'center' }}>
+  <span>Left</span>
+  <Divider orientation="vertical" spacing="md" />
+  <span>Right</span>
+</div>
+```

@@ -66,9 +66,9 @@ export const Dismissible: Story = {
           type="button"
           onClick={() => setVisible(true)}
           style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--muted)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-muted)',
             background: 'none',
             border: 'none',
             cursor: 'pointer',

@@ -74,14 +74,14 @@ export const Interactive: Story = {
           type="button"
           onClick={() => setVisible(true)}
           style={{
-            fontFamily: 'var(--_typography---font-family--label)',
-            fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-            fontSize: 'var(--_typography---label--sm)',
-            padding: 'var(--_space---gap--md) var(--_space---gap--lg)',
-            backgroundColor: 'var(--_color---background--brand-primary)',
-            color: 'var(--_color---text--inverse)',
+            fontFamily: 'var(--font-family-label)',
+            fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+            fontSize: 'var(--label-sm)',
+            padding: 'var(--padding-tiny) var(--padding-md)',
+            backgroundColor: 'var(--background-brand-primary)',
+            color: 'var(--text-inverse)',
             border: 'none',
-            borderRadius: 'var(--_border-radius---md)',
+            borderRadius: 'var(--border-radius-md)',
             cursor: 'pointer',
           }}
         >

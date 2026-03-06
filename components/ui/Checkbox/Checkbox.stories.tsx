@@ -84,7 +84,7 @@ export const Group: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
       <Checkbox label="Hero section" />
       <Checkbox label="1-Column layout" />
       <Checkbox label="2-Column layout" defaultChecked />

@@ -50,37 +50,37 @@ interface AccordionItemProps {
  * Trigger row styles (title + icon)
  *
  * Token reference:
- * - --_space---xl = 24px (vertical padding)
+ * - --padding-xl = 24px (vertical padding)
  */
 const triggerStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   width: '100%',
-  padding: 'var(--_space---xl) 0',
+  padding: 'var(--padding-xl) 0',
   cursor: 'pointer',
   background: 'none',
   border: 'none',
   textAlign: 'left',
-  gap: 'var(--_space---gap--lg)',
+  gap: 'var(--gap-lg)',
 };
 
 /**
  * Title styles
  *
  * Token reference:
- * - --_typography---font-family--label (label font)
- * - --_typography---label--lg = font-size-200 = 18px
- * - --font-weight--bold = 700
- * - --font-line-height--125
- * - --_color---text--primary
+ * - --font-family-label (label font)
+ * - --label-lg = font-size-200 = 18px
+ * - --font-weight-bold = 700
+ * - --font-line-height-snug
+ * - --text-primary
  */
 const titleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--label)',
-  fontSize: 'var(--_typography---label--lg)',
-  fontWeight: 'var(--font-weight--bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--125)',
-  color: 'var(--_color---text--primary)',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-lg)',
+  fontWeight: 'var(--font-weight-bold)' as unknown as number,
+  lineHeight: 'var(--font-line-height-snug)',
+  color: 'var(--text-primary)',
   margin: 0,
   flex: 1,
   minWidth: 0,
@@ -90,12 +90,12 @@ const titleStyles: CSSProperties = {
  * Icon styles
  *
  * Token reference:
- * - --_typography---icon--large = font-size-200 = 18px
- * - --_color---text--primary
+ * - --icon-lg = font-size-200 = 18px
+ * - --text-primary
  */
 const iconStyles: CSSProperties = {
-  fontSize: 'var(--_typography---icon--large)',
-  color: 'var(--_color---text--primary)',
+  fontSize: 'var(--icon-lg)',
+  color: 'var(--text-primary)',
   flexShrink: 0,
 };
 
@@ -103,29 +103,29 @@ const iconStyles: CSSProperties = {
  * Content area styles (expanded body)
  *
  * Token reference:
- * - --_typography---font-family--body (body font)
- * - --_typography---body--md-base = font-size-100 = 16px
- * - --font-line-height--150
- * - --_color---text--primary
- * - --_space---xl = 24px (bottom padding)
+ * - --font-family-body (body font)
+ * - --body-md = font-size-100 = 16px
+ * - --font-line-height-normal
+ * - --text-primary
+ * - --padding-xl = 24px (bottom padding)
  */
 const contentStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--body)',
-  fontSize: 'var(--_typography---body--md-base)',
-  lineHeight: 'var(--font-line-height--150)',
-  color: 'var(--_color---text--primary)',
-  paddingBottom: 'var(--_space---xl)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
+  paddingBottom: 'var(--padding-xl)',
 };
 
 /**
  * Item wrapper styles — bottom border separator
  *
  * Token reference:
- * - --_border-width---lg = 1px
- * - --_color---border--muted
+ * - --border-width-lg = 1px
+ * - --border-muted
  */
 const itemStyles: CSSProperties = {
-  borderBottom: 'var(--_border-width---lg) solid var(--_color---border--muted)',
+  borderBottom: 'var(--border-width-lg) solid var(--border-muted)',
 };
 
 /**

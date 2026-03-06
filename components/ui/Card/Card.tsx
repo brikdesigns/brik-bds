@@ -31,43 +31,43 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
  * Padding values using BDS spacing tokens
  *
  * Token reference:
- * - --_space---none = 0px
- * - --_space---sm = 12px
- * - --_space---md = 16px
- * - --_space---lg = 24px
+ * - --padding-none = 0px
+ * - --padding-sm = 12px
+ * - --padding-md = 16px
+ * - --padding-lg = 24px
  */
 const paddingStyles: Record<CardPadding, string> = {
-  none: 'var(--_space---none)',
-  sm: 'var(--_space---sm)',
-  md: 'var(--_space---md)',
-  lg: 'var(--_space---lg)',
+  none: 'var(--padding-none)',
+  sm: 'var(--padding-sm)',
+  md: 'var(--padding-md)',
+  lg: 'var(--padding-lg)',
 };
 
 /**
  * Variant-based styles using BDS tokens
  *
  * Token reference:
- * - --_color---surface--primary (card background)
- * - --_color---surface--secondary (outlined card background)
- * - --_border-width---sm (thin border)
- * - --_color---border--secondary (subtle border)
- * - --_box-shadow---md (elevation shadow)
+ * - --surface-primary (card background)
+ * - --surface-secondary (outlined card background)
+ * - --border-width-sm (thin border)
+ * - --border-secondary (subtle border)
+ * - --box-shadow-md (elevation shadow)
  */
 const variantStyles: Record<CardVariant, CSSProperties> = {
   default: {
-    backgroundColor: 'var(--_color---surface--primary)',
+    backgroundColor: 'var(--surface-primary)',
     border: 'none',
-    boxShadow: 'var(--_box-shadow---none)',
+    boxShadow: 'var(--box-shadow-none)',
   },
   outlined: {
-    backgroundColor: 'var(--_color---surface--secondary)',
-    border: 'var(--_border-width---sm) solid var(--_color---border--secondary)',
-    boxShadow: 'var(--_box-shadow---none)',
+    backgroundColor: 'var(--surface-secondary)',
+    border: 'var(--border-width-sm) solid var(--border-secondary)',
+    boxShadow: 'var(--box-shadow-none)',
   },
   elevated: {
-    backgroundColor: 'var(--_color---surface--primary)',
+    backgroundColor: 'var(--surface-primary)',
     border: 'none',
-    boxShadow: 'var(--_box-shadow---md)',
+    boxShadow: 'var(--box-shadow-md)',
   },
 };
 
@@ -75,14 +75,14 @@ const variantStyles: Record<CardVariant, CSSProperties> = {
  * Base card styles using BDS tokens
  *
  * Token reference:
- * - --_space---gap--md = 8px (content gap)
- * - --_border-radius---md = 4px (card corners)
+ * - --gap-md = 8px (content gap)
+ * - --border-radius-md = 4px (card corners)
  */
 const baseStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--_space---gap--md)',
-  borderRadius: 'var(--_border-radius---md)',
+  gap: 'var(--gap-md)',
+  borderRadius: 'var(--border-radius-md)',
   transition: 'box-shadow 0.2s, transform 0.2s',
 };
 
@@ -143,9 +143,9 @@ export function Card({
  * CardTitle - Title for cards
  *
  * Token reference:
- * - --_typography---font-family--heading
- * - --_typography---heading--medium
- * - --_color---text--primary
+ * - --font-family-heading
+ * - --heading-md
+ * - --text-primary
  */
 export interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {
   children: ReactNode;
@@ -154,11 +154,11 @@ export interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {
 
 export function CardTitle({ children, as: Tag = 'h3', className = '', style, ...props }: CardTitleProps) {
   const titleStyles: CSSProperties = {
-    fontFamily: 'var(--_typography---font-family--heading)',
-    fontSize: 'var(--_typography---heading--medium)',
-    fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-md)',
+    fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
     margin: 0,
-    color: 'var(--_color---text--primary)',
+    color: 'var(--text-primary)',
     ...style,
   };
 
@@ -173,9 +173,9 @@ export function CardTitle({ children, as: Tag = 'h3', className = '', style, ...
  * CardDescription - Description text for cards
  *
  * Token reference:
- * - --_typography---font-family--body
- * - --_typography---body--md-base
- * - --_color---text--secondary
+ * - --font-family-body
+ * - --body-md
+ * - --text-secondary
  */
 export interface CardDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
   children: ReactNode;
@@ -183,11 +183,11 @@ export interface CardDescriptionProps extends HTMLAttributes<HTMLParagraphElemen
 
 export function CardDescription({ children, className = '', style, ...props }: CardDescriptionProps) {
   const descStyles: CSSProperties = {
-    fontFamily: 'var(--_typography---font-family--body)',
-    fontSize: 'var(--_typography---body--md-base)',
-    color: 'var(--_color---text--secondary)',
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-md)',
+    color: 'var(--text-secondary)',
     margin: 0,
-    lineHeight: 'var(--font-line-height--150)',
+    lineHeight: 'var(--font-line-height-normal)',
     ...style,
   };
 
@@ -202,7 +202,7 @@ export function CardDescription({ children, className = '', style, ...props }: C
  * CardFooter - Footer section for cards
  *
  * Token reference:
- * - --_space---sm = 12px (top padding)
+ * - --padding-sm = 12px (top padding)
  */
 export interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
@@ -211,7 +211,7 @@ export interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
 export function CardFooter({ children, className = '', style, ...props }: CardFooterProps) {
   const footerStyles: CSSProperties = {
     marginTop: 'auto',
-    paddingTop: 'var(--_space---sm)',
+    paddingTop: 'var(--padding-sm)',
     ...style,
   };
 

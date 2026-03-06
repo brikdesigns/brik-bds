@@ -37,17 +37,17 @@ const shimmerKeyframes = `
  * - Animated background position for shimmer effect
  *
  * Theme-aware tokens adapt for dark mode:
- * - Light: --_color---background--secondary = #f2f2f2, --_color---page--secondary = #e0e0e0
- * - Dark:  --_color---background--secondary = black,   --_color---page--secondary = #333
+ * - Light: --background-secondary = #f2f2f2, --page-secondary = #e0e0e0
+ * - Dark:  --background-secondary = black,   --page-secondary = #333
  */
 const baseStyles: CSSProperties = {
   display: 'inline-block',
-  backgroundColor: 'var(--_color---background--secondary)',
+  backgroundColor: 'var(--background-secondary)',
   backgroundImage: `linear-gradient(
     90deg,
-    var(--_color---background--secondary) 25%,
-    var(--_color---page--secondary) 50%,
-    var(--_color---background--secondary) 75%
+    var(--background-secondary) 25%,
+    var(--page-secondary) 50%,
+    var(--background-secondary) 75%
   )`,
   backgroundSize: '200% 100%',
   animation: 'bds-skeleton-shimmer 1.5s infinite',
@@ -60,7 +60,7 @@ const variantDefaults: Record<SkeletonVariant, { width: string; height: string; 
   text: {
     width: '100%',
     height: '1em',
-    borderRadius: 'var(--_border-radius---md)',
+    borderRadius: 'var(--border-radius-md)',
   },
   circular: {
     width: '40px',
@@ -70,7 +70,7 @@ const variantDefaults: Record<SkeletonVariant, { width: string; height: string; 
   rectangular: {
     width: '100%',
     height: '140px',
-    borderRadius: 'var(--_border-radius---md)',
+    borderRadius: 'var(--border-radius-md)',
   },
 };
 

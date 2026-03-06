@@ -103,9 +103,9 @@ export const AllSizes: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
         <Dot size="sm" status="positive" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--sm)',
-          color: 'var(--_color---text--secondary)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-secondary)',
         }}>
           Small
         </span>
@@ -113,9 +113,9 @@ export const AllSizes: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
         <Dot size="md" status="positive" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--sm)',
-          color: 'var(--_color---text--secondary)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-secondary)',
         }}>
           Medium
         </span>
@@ -123,9 +123,9 @@ export const AllSizes: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
         <Dot size="lg" status="positive" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--label)',
-          fontSize: 'var(--_typography---label--sm)',
-          color: 'var(--_color---text--secondary)',
+          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--label-sm)',
+          color: 'var(--text-secondary)',
         }}>
           Large
         </span>
@@ -150,8 +150,8 @@ export const OnlineStatus: Story = {
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Dot status="positive" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
         }}>
           Online
         </span>
@@ -159,8 +159,8 @@ export const OnlineStatus: Story = {
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Dot status="warning" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
         }}>
           Away
         </span>
@@ -168,8 +168,8 @@ export const OnlineStatus: Story = {
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
         <Dot status="error" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
         }}>
           Offline
         </span>
@@ -200,8 +200,8 @@ export const ListItems: Story = {
       <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
         <Dot status="positive" size="sm" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
         }}>
           All systems operational
         </span>
@@ -209,8 +209,8 @@ export const ListItems: Story = {
       <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
         <Dot status="warning" size="sm" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
         }}>
           Minor service disruption
         </span>
@@ -218,8 +218,8 @@ export const ListItems: Story = {
       <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
         <Dot status="error" size="sm" />
         <span style={{
-          fontFamily: 'var(--_typography---font-family--body)',
-          fontSize: 'var(--_typography---body--md-base)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-md)',
         }}>
           Service outage detected
         </span>
@@ -244,24 +244,24 @@ export const ActivityFeed: Story = {
       flexDirection: 'column',
       gap: '16px',
       padding: '16px',
-      backgroundColor: 'var(--_color---background--secondary)',
-      borderRadius: 'var(--_border-radius---md)',
+      backgroundColor: 'var(--background-secondary)',
+      borderRadius: 'var(--border-radius-md)',
       width: '300px',
     }}>
       <div style={{ display: 'flex', gap: '12px' }}>
         <Dot status="positive" style={{ marginTop: '4px' }} />
         <div>
           <div style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--md-base)',
-            fontWeight: 'var(--font-weight--semi-bold)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-md)',
+            fontWeight: 'var(--font-weight-semi-bold)',
           }}>
             Deployment successful
           </div>
           <div style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--secondary)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-secondary)',
           }}>
             2 minutes ago
           </div>
@@ -271,16 +271,16 @@ export const ActivityFeed: Story = {
         <Dot status="info" style={{ marginTop: '4px' }} />
         <div>
           <div style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--md-base)',
-            fontWeight: 'var(--font-weight--semi-bold)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-md)',
+            fontWeight: 'var(--font-weight-semi-bold)',
           }}>
             Build started
           </div>
           <div style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--secondary)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-secondary)',
           }}>
             5 minutes ago
           </div>
@@ -290,16 +290,16 @@ export const ActivityFeed: Story = {
         <Dot status="neutral" style={{ marginTop: '4px' }} />
         <div>
           <div style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--md-base)',
-            fontWeight: 'var(--font-weight--semi-bold)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-md)',
+            fontWeight: 'var(--font-weight-semi-bold)',
           }}>
             Code pushed to main
           </div>
           <div style={{
-            fontFamily: 'var(--_typography---font-family--body)',
-            fontSize: 'var(--_typography---body--sm)',
-            color: 'var(--_color---text--secondary)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-secondary)',
           }}>
             10 minutes ago
           </div>

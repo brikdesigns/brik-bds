@@ -59,11 +59,11 @@ const iconButtonStyles: CSSProperties = {
   justifyContent: 'center',
   width: 28,
   height: 28,
-  padding: 'var(--_space---tiny)',
-  backgroundColor: 'var(--_color---background--brand-primary)',
-  color: 'var(--_color---text--inverse)',
+  padding: 'var(--padding-tiny)',
+  backgroundColor: 'var(--background-brand-primary)',
+  color: 'var(--text-inverse)',
   border: 'none',
-  borderRadius: 'var(--_border-radius---md)',
+  borderRadius: 'var(--border-radius-md)',
   cursor: 'pointer',
   fontSize: 12,
 };
@@ -78,26 +78,26 @@ const brandBadgeStyles: CSSProperties = {
   justifyContent: 'center',
   width: 28,
   height: 28,
-  backgroundColor: 'var(--_color---background--brand-primary)',
-  color: 'var(--_color---text--inverse)',
-  borderRadius: 'var(--_border-radius---md)',
-  fontSize: 'var(--_typography---label--sm)', // bds-lint-ignore — story decoration
+  backgroundColor: 'var(--background-brand-primary)',
+  color: 'var(--text-inverse)',
+  borderRadius: 'var(--border-radius-md)',
+  fontSize: 'var(--label-sm)', // bds-lint-ignore — story decoration
 };
 
 /**
  * 2-line cell content styles matching Figma spec
  */
 const twoLinePrimary: CSSProperties = {
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  fontSize: 'var(--_typography---body--md-base)',
-  color: 'var(--_color---text--primary)',
-  lineHeight: 'var(--font-line-height--150)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontSize: 'var(--body-md)',
+  color: 'var(--text-primary)',
+  lineHeight: 'var(--font-line-height-normal)',
 };
 
 const twoLineSecondary: CSSProperties = {
-  fontSize: 'var(--_typography---body--sm)',
-  color: 'var(--_color---text--muted)',
-  lineHeight: 'var(--font-line-height--150)',
+  fontSize: 'var(--body-sm)',
+  color: 'var(--text-muted)',
+  lineHeight: 'var(--font-line-height-normal)',
 };
 
 // ─── Text Cell (1-line) ──────────────────────────────────────────
@@ -207,9 +207,9 @@ export const CellSizeVariants: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---xl)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-xl)' }}>
       <div>
-        <h3 style={{ marginBottom: 'var(--_space---md)', fontSize: 'var(--_typography---body--lg)', fontWeight: 'var(--font-weight--semi-bold)' as unknown as number }}>
+        <h3 style={{ marginBottom: 'var(--padding-md)', fontSize: 'var(--body-lg)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number }}>
           Default Size
         </h3>
         <Table size="default">
@@ -234,7 +234,7 @@ export const CellSizeVariants: Story = {
         </Table>
       </div>
       <div>
-        <h3 style={{ marginBottom: 'var(--_space---md)', fontSize: 'var(--_typography---body--lg)', fontWeight: 'var(--font-weight--semi-bold)' as unknown as number }}>
+        <h3 style={{ marginBottom: 'var(--padding-md)', fontSize: 'var(--body-lg)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number }}>
           Comfortable Size (72px cell height)
         </h3>
         <Table size="comfortable">
@@ -317,7 +317,7 @@ export const WithTextIconLeft: Story = {
             <TableRow key={s.name}>
               <TableCell>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--lg)', color: 'var(--_color---text--primary)' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--label-lg)', color: 'var(--text-primary)' }}>
                     <FontAwesomeIcon icon={s.icon} />
                   </span>
                   {s.name}
@@ -388,7 +388,7 @@ export const WithTextIconRight: Story = {
               <TableCell>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   {f.label}
-                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--lg)', color: 'var(--_color---text--muted)' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--label-lg)', color: 'var(--text-muted)' }}>
                     <FontAwesomeIcon icon={faCircleInfo} />
                   </span>
                 </span>
@@ -681,8 +681,8 @@ export const WithBadgeBrik: Story = {
       <TableCell>
         <span style={{
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          width: 28, height: 28, backgroundColor: 'var(--_color---background--brand-primary)',
-          color: 'var(--_color---text--inverse)', borderRadius: 'var(--_border-radius---md)',
+          width: 28, height: 28, backgroundColor: 'var(--background-brand-primary)',
+          color: 'var(--text-inverse)', borderRadius: 'var(--border-radius-md)',
           fontSize: 14,
         }}>
           <FontAwesomeIcon icon={faPalette} />
@@ -757,7 +757,7 @@ export const WithActions: Story = {
       <TableCell>Alice Chen</TableCell>
       <TableCell>alice@example.com</TableCell>
       <TableCell style={{ textAlign: 'right' }}>
-        <div style={{ display: 'inline-flex', gap: 'var(--_space---gap--sm)' }}>
+        <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
           <button type="button" style={iconButtonStyles} aria-label="Edit">
             <FontAwesomeIcon icon={faPenToSquare} />
           </button>
@@ -767,7 +767,7 @@ export const WithActions: Story = {
           <button type="button" style={iconButtonStyles} aria-label="More">
             <FontAwesomeIcon icon={faEllipsisVertical} />
           </button>
-          <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--system--red)' }} aria-label="Delete">
+          <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--color-system-red)' }} aria-label="Delete">
             <FontAwesomeIcon icon={faTrash} />
           </button>
         </div>
@@ -795,7 +795,7 @@ export const WithActions: Story = {
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.role}</TableCell>
             <TableCell style={{ textAlign: 'right' }}>
-              <div style={{ display: 'inline-flex', gap: 'var(--_space---gap--sm)' }}>
+              <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
                 <button type="button" style={iconButtonStyles} aria-label="Edit">
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
@@ -805,7 +805,7 @@ export const WithActions: Story = {
                 <button type="button" style={iconButtonStyles} aria-label="More">
                   <FontAwesomeIcon icon={faEllipsisVertical} />
                 </button>
-                <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--system--red)' }} aria-label="Delete">
+                <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--color-system-red)' }} aria-label="Delete">
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
@@ -997,7 +997,7 @@ export const TwoLineVariants: Story = {
             {/* 2-line text + icon left cell */}
             <TableCell>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 4 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--_typography---label--lg)', color: 'var(--_color---text--primary)', flexShrink: 0, marginTop: 2 }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--label-lg)', color: 'var(--text-primary)', flexShrink: 0, marginTop: 2 }}>
                   <FontAwesomeIcon icon={row.icon} />
                 </span>
                 <div>
@@ -1031,11 +1031,11 @@ export const TwoLineVariants: Story = {
             </TableCell>
             {/* Actions cell */}
             <TableCell style={{ textAlign: 'right' }}>
-              <div style={{ display: 'inline-flex', gap: 'var(--_space---gap--sm)' }}>
+              <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
                 <button type="button" style={iconButtonStyles} aria-label="Edit">
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
-                <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--system--red)' }} aria-label="Delete">
+                <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--color-system-red)' }} aria-label="Delete">
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
@@ -1094,7 +1094,7 @@ export const Striped: Story = {
         {users.map((user, i) => (
           <TableRow
             key={user.email}
-            style={i % 2 === 1 ? { backgroundColor: 'var(--_color---background--secondary)' } : {}}
+            style={i % 2 === 1 ? { backgroundColor: 'var(--background-secondary)' } : {}}
           >
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
@@ -1272,11 +1272,11 @@ export const CompositeExample: Story = {
                 <Button variant="primary" size="sm">View</Button>
               </TableCell>
               <TableCell style={{ textAlign: 'right' }}>
-                <div style={{ display: 'inline-flex', gap: 'var(--_space---gap--sm)' }}>
+                <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
                   <button type="button" style={iconButtonStyles} aria-label="Edit">
                     <FontAwesomeIcon icon={faPenToSquare} />
                   </button>
-                  <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--system--red)' }} aria-label="Delete">
+                  <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--color-system-red)' }} aria-label="Delete">
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
                 </div>
