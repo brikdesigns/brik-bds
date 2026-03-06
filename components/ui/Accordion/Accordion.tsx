@@ -16,7 +16,7 @@ export interface AccordionItemData {
   /** Unique identifier */
   id: string;
   /** Title displayed in the trigger row */
-  title: string;
+  title: ReactNode;
   /** Content shown when expanded */
   content: ReactNode;
 }
