@@ -28,32 +28,41 @@ export const Default: Story = {
   args: {
     category: 'marketing',
     size: 'md',
+    serviceName: 'Custom Standard Web Development and Design',
   },
 };
 
 // --- Category variants ---
 
 export const Brand: Story = {
-  args: { category: 'brand' },
+  args: { category: 'brand', serviceName: 'Brand Identity Bundle' },
 };
 
 export const Marketing: Story = {
-  args: { category: 'marketing' },
+  args: { category: 'marketing', serviceName: 'Custom Standard Web Development and Design' },
 };
 
 export const Information: Story = {
-  args: { category: 'information' },
+  args: { category: 'information', serviceName: 'Information Design' },
 };
 
 export const Product: Story = {
-  args: { category: 'product' },
+  args: { category: 'product', serviceName: 'Product Design' },
 };
 
-export const Service: Story = {
-  args: { category: 'service' },
+export const BackOffice: Story = {
+  args: { category: 'service', serviceName: 'CRM Setup and Data Cleanup' },
 };
 
 // --- All categories ---
+
+const sampleServiceNames: Record<ServiceCategory, string> = {
+  brand: 'Brand Identity Bundle',
+  marketing: 'Custom Standard Web Development and Design',
+  information: 'Information Design',
+  product: 'Product Design',
+  service: 'CRM Setup and Data Cleanup',
+};
 
 export const AllCategories: Story = {
   render: () => {
@@ -61,7 +70,7 @@ export const AllCategories: Story = {
     return (
       <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
         {categories.map((cat) => (
-          <ServiceBadge key={cat} category={cat} />
+          <ServiceBadge key={cat} category={cat} serviceName={sampleServiceNames[cat]} />
         ))}
       </div>
     );
@@ -76,7 +85,7 @@ export const AllSizes: Story = {
     return (
       <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
         {sizes.map((size) => (
-          <ServiceBadge key={size} category="marketing" size={size} />
+          <ServiceBadge key={size} category="marketing" size={size} serviceName="Custom Standard Web Development and Design" />
         ))}
       </div>
     );
@@ -181,7 +190,7 @@ export const InlineWithText: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
-        <ServiceBadge category="marketing" size="sm" />
+        <ServiceBadge category="marketing" size="sm" serviceName="Custom Standard Web Development and Design" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
           fontSize: 'var(--body-md)',
@@ -191,7 +200,7 @@ export const InlineWithText: Story = {
         </span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
-        <ServiceBadge category="brand" size="sm" />
+        <ServiceBadge category="brand" size="sm" serviceName="Brand Identity Bundle" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
           fontSize: 'var(--body-md)',
@@ -201,7 +210,7 @@ export const InlineWithText: Story = {
         </span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
-        <ServiceBadge category="service" size="sm" />
+        <ServiceBadge category="service" size="sm" serviceName="CRM Setup and Data Cleanup" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
           fontSize: 'var(--body-md)',
@@ -212,4 +221,38 @@ export const InlineWithText: Story = {
       </div>
     </div>
   ),
+};
+
+// --- With icons showcase ---
+
+export const WithIcons: Story = {
+  render: () => {
+    const examples: { category: ServiceCategory; serviceName: string; label: string }[] = [
+      { category: 'brand', serviceName: 'Brand Identity Bundle', label: 'Brand Identity Bundle' },
+      { category: 'brand', serviceName: 'Premium Logo Design', label: 'Premium Logo Design' },
+      { category: 'marketing', serviceName: 'Custom Standard Web Development and Design', label: 'Web Design' },
+      { category: 'marketing', serviceName: 'Email Drip Campaign (Up to 6 Emails)', label: 'Email Campaign' },
+      { category: 'information', serviceName: 'Information Design', label: 'Information Design' },
+      { category: 'product', serviceName: 'Product Design', label: 'Product Design' },
+      { category: 'service', serviceName: 'CRM Setup and Data Cleanup', label: 'CRM Setup' },
+      { category: 'service', serviceName: 'Automated Workflow and AI Integration', label: 'Automation & AI' },
+      { category: 'service', serviceName: 'Software and Subscription Audit', label: 'Software Audit' },
+    ];
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+        {examples.map(({ category, serviceName, label }) => (
+          <div key={serviceName} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+            <ServiceBadge category={category} serviceName={serviceName} />
+            <span style={{
+              fontFamily: 'var(--font-family-body)',
+              fontSize: 'var(--body-md)',
+              color: 'var(--text-primary)',
+            }}>
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  },
 };
