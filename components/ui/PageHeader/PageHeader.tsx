@@ -170,7 +170,7 @@ const metadataValueStyles: CSSProperties = {
   fontSize: 'var(--body-sm)',
   fontWeight: 'var(--font-weight-regular)' as unknown as number,
   lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-brand-primary)',
+  color: 'var(--text-primary)',
 };
 
 /**
