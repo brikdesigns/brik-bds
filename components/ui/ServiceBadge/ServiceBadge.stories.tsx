@@ -3,7 +3,7 @@ import { ServiceBadge, categoryConfig } from './ServiceBadge';
 import type { ServiceCategory, ServiceBadgeSize } from './ServiceBadge';
 
 const meta: Meta<typeof ServiceBadge> = {
-  title: 'Components/service-badge',
+  title: 'Components/Indicator/service-badge',
   component: ServiceBadge,
   argTypes: {
     category: {

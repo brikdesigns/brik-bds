@@ -35,7 +35,7 @@ const sampleItems = [
 ];
 
 const meta = {
-  title: 'Components/accordion',
+  title: 'Components/Accordion/accordion',
   component: Accordion,
   parameters: {
     layout: 'padded',

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabBar } from './TabBar';
 
 const meta: Meta<typeof TabBar> = {
-  title: 'Components/tab-bar',
+  title: 'Components/Navigation/tab-bar',
   component: TabBar,
   parameters: {
     layout: 'padded',

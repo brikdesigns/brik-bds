@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/button',
+  title: 'Components/Action/button',
   component: Button,
   parameters: {
     layout: 'centered',

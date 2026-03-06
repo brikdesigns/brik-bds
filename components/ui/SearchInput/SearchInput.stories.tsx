@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SearchInput } from './SearchInput';
 
 const meta = {
-  title: 'Components/search-input',
+  title: 'Components/Input/search-input',
   component: SearchInput,
   parameters: {
     layout: 'centered',

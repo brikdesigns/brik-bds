@@ -4,7 +4,7 @@ import { faStar, faArrowUpRightFromSquare, faTag, faCircle, faCertificate, faCir
 import { Tag } from './Tag';
 
 const meta = {
-  title: 'Components/tag',
+  title: 'Components/Indicator/tag',
   component: Tag,
   parameters: {
     layout: 'centered',

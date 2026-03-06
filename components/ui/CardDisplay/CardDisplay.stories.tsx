@@ -4,7 +4,7 @@ import { Badge } from '../Badge';
 import { Button } from '../Button';
 
 const meta: Meta<typeof CardDisplay> = {
-  title: 'Components/card-display',
+  title: 'Components/Card/card-display',
   component: CardDisplay,
   parameters: {
     layout: 'centered',

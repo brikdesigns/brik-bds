@@ -5,7 +5,7 @@ import { faBuilding, faHouse, faLocationDot } from '@fortawesome/free-solid-svg-
 import { AddressInput, type AddressSuggestion } from './AddressInput';
 
 const meta: Meta<typeof AddressInput> = {
-  title: 'Components/address-input',
+  title: 'Components/Input/address-input',
   component: AddressInput,
   args: {
     placeholder: 'Enter location',

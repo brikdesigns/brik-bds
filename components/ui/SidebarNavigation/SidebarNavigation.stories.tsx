@@ -3,7 +3,7 @@ import { SidebarNavigation, type SidebarNavItem } from './SidebarNavigation';
 import { Button } from '../Button';
 
 const meta: Meta<typeof SidebarNavigation> = {
-  title: 'Components/sidebar-navigation',
+  title: 'Components/Navigation/sidebar-navigation',
   component: SidebarNavigation,
   parameters: {
     layout: 'fullscreen',

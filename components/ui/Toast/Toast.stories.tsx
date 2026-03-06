@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Toast } from './Toast';
 
 const meta: Meta<typeof Toast> = {
-  title: 'Components/toast',
+  title: 'Components/Feedback/toast',
   component: Toast,
   parameters: {
     layout: 'centered',

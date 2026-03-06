@@ -4,7 +4,7 @@ import { faCheck, faCircleExclamation, faSpinner, faCircleInfo, faCircleXmark, f
 import { Badge } from './Badge';
 
 const meta: Meta<typeof Badge> = {
-  title: 'Components/badge',
+  title: 'Components/Indicator/badge',
   component: Badge,
   parameters: {
     layout: 'centered',

@@ -4,7 +4,7 @@ import { faBuilding, faUser, faGlobe, faTag } from '@fortawesome/free-solid-svg-
 import { Select } from './Select';
 
 const meta = {
-  title: 'Components/select',
+  title: 'Components/Form/select',
   component: Select,
   parameters: {
     layout: 'padded',
