@@ -9,6 +9,8 @@ export interface ProgressBarProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   value: number;
   /** Accessible label for screen readers */
   label?: string;
+  /** Override fill bar color (defaults to brand-primary) */
+  fillColor?: string;
 }
 
 /**
@@ -58,6 +60,7 @@ const barStyles: CSSProperties = {
 export function ProgressBar({
   value,
   label,
+  fillColor,
   className,
   style,
   ...props
@@ -79,6 +82,7 @@ export function ProgressBar({
         style={{
           ...barStyles,
           width: `${clampedValue}%`,
+          ...(fillColor ? { backgroundColor: fillColor } : {}),
         }}
       />
     </div>
