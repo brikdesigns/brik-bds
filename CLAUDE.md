@@ -89,7 +89,35 @@ Any project using brik-bds as a submodule (portals, dashboards, tools) MUST foll
 
 **Reference implementation:** brik-client-portal
 
-## Don't Edit the Submodule
+## Component Completeness Convention
 
-The copy at `brik-llm/foundations/brik-bds/` is a git submodule.
-**Never edit files there directly.** Changes won't persist and cause sync issues.
+Every component has a **type** that determines what interactive states it needs:
+
+| Type | Components | Required states |
+|------|-----------|----------------|
+| **Input** | TextInput, TextArea, Select, SearchInput, AddressInput | CSS: `:hover`, `:focus`, `:disabled`, `::placeholder`. Props: `error`, `fullWidth` |
+| **Interactive** | Button, FilterButton, Switch, Checkbox, Radio, Accordion, TabBar, Pagination | `:hover`, `:focus`/`:focus-visible`, `:disabled` (CSS or JS) |
+| **Display** | Everything else | Storybook story |
+
+**How states are implemented:**
+- Inline `CSSProperties` handle base styles (shape, spacing, typography)
+- A companion `.css` file handles pseudo-states (`:hover`, `:focus`, `:disabled`) that can't be expressed inline
+- Some interactive components use JS-based state handling (onMouseEnter/etc.) — that's fine
+
+**Run the audit anytime:**
+
+```bash
+./scripts/component-audit.sh              # Full report
+./scripts/component-audit.sh --summary    # Counts only
+./scripts/component-audit.sh TextInput    # Single component
+```
+
+**Convention for agents:** Run the audit after modifying any component. Fix FAILs before pushing. WARNs are tracked but don't block.
+
+## Don't Edit Submodules
+
+The copies at `brik-llm/foundations/brik-bds/` and `brik-client-portal/brik-bds/` are git submodules.
+**Never edit files there directly.** All BDS development happens in this repo. Changes in submodule copies won't persist and cause sync issues.
+
+Consuming projects have sync scripts:
+- **Client Portal:** `./scripts/bds-sync.sh` (pulls latest BDS, builds, commits ref)
