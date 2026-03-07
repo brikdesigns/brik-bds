@@ -33,6 +33,7 @@ export * from './CardTestimonial';
 export * from './PricingCard';
 export * from './Divider';
 export * from './Accordion';
+export * from './CollapsibleCard';
 export * from './Menu';
 export * from './Pagination';
 export * from './SearchInput';
