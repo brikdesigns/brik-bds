@@ -82,7 +82,7 @@ const helperBaseStyles: CSSProperties = {
  * - --border-input (input border color)
  * - --background-input (input background)
  * - --text-primary (text color)
- * - --border-radius-50 = 2px (input corners)
+ * - --border-radius-md = 4px (input corners — per Figma)
  * - --padding-tiny = 8px (input padding)
  * - --font-family-body (body font)
  * - --body-sm (small body text size)
@@ -100,9 +100,9 @@ const textareaStyles: CSSProperties = {
   color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
   border: 'var(--border-width-sm) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
-  transition: 'border-color 0.2s',
+  transition: 'border-color 0.2s, background-color 0.2s',
   resize: 'vertical',
   boxSizing: 'border-box',
 };
@@ -141,7 +141,7 @@ export function TextArea({
   label,
   helperText,
   error,
-  fullWidth = false,
+  fullWidth = true,
   id,
   className = '',
   style,

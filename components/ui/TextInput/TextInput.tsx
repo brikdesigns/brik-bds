@@ -70,11 +70,12 @@ const fieldWrapperStyles: CSSProperties = {
  * - --background-input (field background — white per Figma background/input)
  * - --border-input (field border — grayscale/light per Figma)
  * - --border-width-sm (border thickness)
- * - --border-radius-50 = 2px (field corners — matches Figma border-radius/small)
+ * - --border-radius-md = 4px (field corners — per Figma)
  * - --padding-tiny = 8px (field padding)
  * - --font-family-body (field text font — Regular per Figma)
  * - --font-weight-regular = 400
  * - --font-line-height-normal = 150%
+ * - --text-primary (input text — theme-adaptive)
  */
 const inputBaseStyles: CSSProperties = {
   width: '100%',
@@ -82,11 +83,12 @@ const inputBaseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-body)',
   fontWeight: 'var(--font-weight-regular)' as unknown as number,
   lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
   border: 'var(--border-width-sm) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
-  transition: 'border-color 0.2s',
+  transition: 'border-color 0.2s, background-color 0.2s',
 };
 
 /**
@@ -164,7 +166,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       label,
       helperText,
       error,
-      fullWidth = false,
+      fullWidth = true,
       iconBefore,
       iconAfter,
       className = '',

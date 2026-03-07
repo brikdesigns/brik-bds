@@ -166,6 +166,31 @@ export const InputTypes: Story = {
   ),
 };
 
+// All states comparison
+export const States: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<TextInput label="Default" placeholder="Placeholder text" />
+<TextInput label="With Value" defaultValue="Entered text" />
+<TextInput label="Error" error="This field is required" defaultValue="Bad input" />
+<TextInput label="Disabled" placeholder="Cannot edit" disabled />
+<TextInput label="Disabled with Value" defaultValue="Locked value" disabled />`,
+      },
+    },
+  },
+  render: () => (
+    <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <TextInput label="Default" placeholder="Placeholder text" fullWidth />
+      <TextInput label="With value" defaultValue="Entered text" fullWidth />
+      <TextInput label="Error" error="This field is required" defaultValue="Bad input" fullWidth />
+      <TextInput label="Helper text" placeholder="Enter email" helperText="We won't share your email" fullWidth />
+      <TextInput label="Disabled" placeholder="Cannot edit" disabled fullWidth />
+      <TextInput label="Disabled with value" defaultValue="Locked value" disabled fullWidth />
+    </div>
+  ),
+};
+
 // Size variants (per Figma)
 export const SizeSmall: Story = {
   args: {

@@ -248,9 +248,6 @@ export function PageHeader({
         {actions && <div className="bds-page-header-actions" style={buttonWrapperStyles}>{actions}</div>}
       </div>
 
-      {/* Tab bar — pass a <TabBar> component */}
-      {tabs}
-
       {/* Metadata */}
       {metadata && metadata.length > 0 && (
         <div className="bds-page-header-metadata" style={metadataWrapperStyles}>
@@ -264,6 +261,9 @@ export function PageHeader({
           </div>
         </div>
       )}
+
+      {/* Tab bar — pass a <TabBar> component */}
+      {tabs}
     </div>
   );
 }

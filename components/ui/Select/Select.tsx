@@ -98,7 +98,7 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
  * - --border-input (input border color)
  * - --background-input (input background)
  * - --text-primary (text color)
- * - --border-radius-50 = 2px (input corners)
+ * - --border-radius-md = 4px (input corners — per Figma)
  * - --padding-tiny = 8px (input padding)
  * - --font-family-body (body font)
  * - --border-width-sm (border thickness)
@@ -113,9 +113,9 @@ const selectBaseStyles: CSSProperties = {
   color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
   border: 'var(--border-width-sm) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
+  transition: 'border-color 0.2s, box-shadow 0.2s, background-color 0.2s',
   cursor: 'pointer',
   appearance: 'none',
   boxSizing: 'border-box',

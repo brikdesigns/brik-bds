@@ -6,28 +6,31 @@
  *
  * Token reference:
  * - --_color---border--input (default border)
- * - --_color---border--primary (hover border — darker)
- * - --_color---border--brand (focus border — theme color)
+ * - --_color---border--brand-primary (hover/focus border — brand color)
  * - --_color---text--muted (placeholder color)
+ * - --_color---surface--secondary (disabled background)
  */
 
 .bds-select {
-  &:hover:not(:disabled) {
-    border-color: var(--_color---border--primary);
+  &:hover:not(:disabled):not(:focus) {
+    border-color: var(--_color---border--brand-primary);
   }
 
   &:focus {
-    border-color: var(--_color---border--brand);
-    box-shadow: 0 0 0 1px var(--_color---border--brand);
+    border-color: var(--_color---border--brand-primary);
+    box-shadow: 0 0 0 1px var(--_color---border--brand-primary);
+    outline: none;
   }
 
   &:focus-visible {
-    border-color: var(--_color---border--brand);
-    box-shadow: 0 0 0 1px var(--_color---border--brand);
+    border-color: var(--_color---border--brand-primary);
+    box-shadow: 0 0 0 1px var(--_color---border--brand-primary);
     outline: none;
   }
 
   &:disabled {
+    background-color: var(--_color---surface--secondary);
+    color: var(--_color---text--muted);
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;

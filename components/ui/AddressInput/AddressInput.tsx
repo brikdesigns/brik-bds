@@ -121,7 +121,7 @@ const iconStyles: CSSProperties = {
  * - --background-input (white)
  * - --border-input (border)
  * - --border-width-lg = 1px (visible border)
- * - --border-radius-50 = 2px (corners)
+ * - --border-radius-md = 4px (corners — per Figma)
  * - --font-family-body
  * - --body-md = 16px
  * - --font-weight-regular = 400
@@ -136,9 +136,9 @@ const inputBaseStyles: CSSProperties = {
   color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
   border: 'var(--border-width-lg) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
-  transition: 'border-color 0.2s',
+  transition: 'border-color 0.2s, background-color 0.2s',
   boxSizing: 'border-box',
 };
 
@@ -280,7 +280,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
     {
       size = 'md',
       label,
-      fullWidth = false,
+      fullWidth = true,
       suggestions = [],
       onSuggestionSelect,
       className = '',

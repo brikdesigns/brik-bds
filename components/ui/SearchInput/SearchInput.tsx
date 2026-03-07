@@ -92,7 +92,7 @@ const iconStyles: CSSProperties = {
  * - --background-input (white)
  * - --border-input (border)
  * - --border-width-sm (border thickness)
- * - --border-radius-50 = 2px (corners)
+ * - --border-radius-md = 4px (corners — per Figma)
  * - --padding-tiny = 8px (padding)
  * - --font-family-body
  * - --body-md = 16px
@@ -108,9 +108,9 @@ const inputBaseStyles: CSSProperties = {
   color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
   border: 'var(--border-width-sm) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
-  transition: 'border-color 0.2s',
+  transition: 'border-color 0.2s, background-color 0.2s',
   boxSizing: 'border-box',
   paddingLeft: 'calc(var(--padding-tiny) * 4)',
 };
@@ -151,7 +151,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     {
       size = 'md',
       label,
-      fullWidth = false,
+      fullWidth = true,
       className = '',
       id,
       style,

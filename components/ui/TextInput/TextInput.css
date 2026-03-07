@@ -1,3 +1,23 @@
 .bds-text-input-field::placeholder {
   color: var(--_color---text--muted);
 }
+
+.bds-text-input-field:hover:not(:disabled):not(:focus) {
+  border-color: var(--_color---border--brand-primary);
+}
+
+.bds-text-input-field:focus {
+  border-color: var(--_color---border--brand-primary);
+  outline: none;
+}
+
+.bds-text-input-field:disabled {
+  background-color: var(--_color---surface--secondary);
+  color: var(--_color---text--muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.bds-text-input-field:disabled::placeholder {
+  color: var(--_color---text--muted);
+}
