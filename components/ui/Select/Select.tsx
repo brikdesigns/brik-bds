@@ -1,4 +1,4 @@
-import { forwardRef, useState, type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { forwardRef, type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
 import { bdsClass } from '../../utils';
 import './Select.css';
 
@@ -255,15 +255,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const hasError = Boolean(error);
     const sizeStyle = sizeStyles[size];
 
-    // Track whether placeholder is showing (for muted text color via CSS)
-    const [isPlaceholder, setIsPlaceholder] = useState(
-      !value && !defaultValue && Boolean(placeholder)
-    );
-
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setIsPlaceholder(e.target.value === '');
-      onChange?.(e);
-    };
+    // Derive placeholder state from value prop (controlled) — no stale useState
+    const isPlaceholder = value !== undefined
+      ? (value === '' && Boolean(placeholder))
+      : (!defaultValue && Boolean(placeholder));
 
     const selectClassName = bdsClass(
       'bds-select',
@@ -275,6 +270,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const combinedStyles: CSSProperties = {
       ...selectBaseStyles,
       ...sizeStyle.select,
+      // Inline style beats CSS class — apply muted color here for placeholder
+      ...(isPlaceholder ? { color: 'var(--text-muted)' } : {}),
       ...(icon ? { paddingLeft: 'calc(var(--padding-tiny) * 4)' } : {}),
       ...style,
     };
@@ -310,7 +307,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             value={value}
             defaultValue={defaultValue}
             disabled={disabled}
-            onChange={handleChange}
+            onChange={onChange}
             className={selectClassName}
             style={combinedStyles}
             aria-invalid={hasError}
