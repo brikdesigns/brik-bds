@@ -199,6 +199,7 @@ export function FilterButton({
 }: FilterButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((o) => o.id === value);
   const isActive = Boolean(value);
@@ -232,6 +233,26 @@ export function FilterButton({
     };
   }, [isOpen, handleClickOutside, handleEscape]);
 
+  // Reposition dropdown if it overflows the viewport
+  useEffect(() => {
+    if (!isOpen || !dropdownRef.current) return;
+    const dropdown = dropdownRef.current;
+    const rect = dropdown.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Horizontal: if right edge overflows, align to right edge of trigger instead
+    if (rect.right > viewportWidth) {
+      dropdown.style.left = 'auto';
+      dropdown.style.right = '0';
+    }
+    // Vertical: if bottom overflows, open upward
+    if (rect.bottom > viewportHeight) {
+      dropdown.style.top = 'auto';
+      dropdown.style.bottom = 'calc(100% + var(--gap-md))';
+    }
+  }, [isOpen]);
+
   const handleSelect = (optionId: string) => {
     onChange?.(optionId === value ? undefined : optionId);
     setIsOpen(false);
@@ -259,7 +280,7 @@ export function FilterButton({
       </button>
 
       {isOpen && (
-        <div className="bds-filter-button-dropdown" role="listbox" style={dropdownStyles}>
+        <div ref={dropdownRef} className="bds-filter-button-dropdown" role="listbox" style={dropdownStyles}>
           {options.map((option) => (
             <button
               key={option.id}
