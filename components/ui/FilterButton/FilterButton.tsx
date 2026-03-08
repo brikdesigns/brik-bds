@@ -290,7 +290,7 @@ export function FilterButton({
         style={buttonStyles}
       >
         <span>{selectedOption?.label ?? label}</span>
-        <FontAwesomeIcon icon={faCaretDown} />
+        <FontAwesomeIcon icon={faCaretDown} style={{ fontSize: 'var(--icon-sm)' }} />
       </button>
 
       {isOpen && (
