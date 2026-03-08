@@ -24,6 +24,11 @@ export interface FilterButtonOption {
 }
 
 /**
+ * FilterButton sizes (matches Button size scale)
+ */
+export type FilterButtonSize = 'sm' | 'md' | 'lg';
+
+/**
  * FilterButton component props
  */
 export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
@@ -35,7 +40,38 @@ export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   value?: string;
   /** Callback when selection changes (undefined = cleared) */
   onChange?: (value: string | undefined) => void;
+  /** Size of the trigger button (default: 'md') */
+  size?: FilterButtonSize;
 }
+
+/**
+ * Size-based styles matching Button's size scale
+ *
+ * Token reference:
+ * - --padding-sm = 12px
+ * - --padding-md = 16px
+ * - --padding-lg = 24px
+ * - --padding-xl = 32px
+ * - --label-sm (small label)
+ * - --label-md (base label)
+ */
+const sizeStyles: Record<FilterButtonSize, CSSProperties> = {
+  sm: {
+    padding: 'var(--padding-sm) var(--padding-md)',
+    fontSize: 'var(--label-sm)',
+    gap: 'var(--gap-sm)',
+  },
+  md: {
+    padding: 'var(--padding-md) var(--padding-lg)',
+    fontSize: 'var(--label-md)',
+    gap: 'var(--gap-md)',
+  },
+  lg: {
+    padding: 'var(--padding-lg) var(--padding-xl)',
+    fontSize: 'var(--label-md)',
+    gap: 'var(--gap-lg)',
+  },
+};
 
 /**
  * Trigger button base styles (inactive)
@@ -43,28 +79,23 @@ export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 
  * Token reference:
  * - --surface-secondary = #f2f2f2 (inactive background)
  * - --border-radius-md = 4px (corners)
- * - --padding-lg = 16px (padding)
  * - --font-family-label (label font)
- * - --label-md = 16px (font size)
  * - --font-weight-semi-bold = 600
  * - --font-line-height-tight = 1 (tight leading)
- * - --text-on-color-light = black (text on light bg)
+ * - --text-primary (theme-adaptive text)
  */
 const triggerBaseStyles: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 'var(--gap-lg)',
-  padding: 'var(--padding-lg)',
   backgroundColor: 'var(--surface-secondary)',
   borderRadius: 'var(--border-radius-md)',
   border: 'none',
   cursor: 'pointer',
   fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-md)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height-tight)',
-  color: 'var(--text-on-color-light)',
+  color: 'var(--text-primary)',
   whiteSpace: 'nowrap',
   textTransform: 'capitalize' as const,
   minWidth: '120px',
@@ -193,6 +224,7 @@ export function FilterButton({
   options,
   value,
   onChange,
+  size = 'md',
   className = '',
   style,
   ...props
@@ -258,7 +290,10 @@ export function FilterButton({
     setIsOpen(false);
   };
 
-  const buttonStyles = isActive ? triggerActiveStyles : triggerBaseStyles;
+  const buttonStyles = {
+    ...(isActive ? triggerActiveStyles : triggerBaseStyles),
+    ...sizeStyles[size],
+  };
 
   return (
     <div
@@ -276,7 +311,7 @@ export function FilterButton({
         style={buttonStyles}
       >
         <span>{selectedOption?.label ?? label}</span>
-        <FontAwesomeIcon icon={faCaretDown} />
+        <FontAwesomeIcon icon={faCaretDown} style={{ fontSize: 'var(--icon-sm)' }} />
       </button>
 
       {isOpen && (
