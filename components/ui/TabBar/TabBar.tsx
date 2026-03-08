@@ -34,6 +34,8 @@ const barStyles: CSSProperties = {
   gap: 'var(--gap-lg)',
   alignItems: 'center',
   width: '100%',
+  borderBottom: 'var(--border-width-sm) solid var(--border-muted)',
+  paddingBottom: 'var(--gap-md)',
 };
 
 /**
