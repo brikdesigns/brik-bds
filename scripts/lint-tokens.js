@@ -600,6 +600,8 @@ function main() {
   const args = process.argv.slice(2);
   const errorsOnly = args.includes('--errors-only');
   const checkGrid = args.includes('--check-grid');
+  const filesIdx = args.indexOf('--files');
+  const explicitFiles = filesIdx !== -1 ? args.slice(filesIdx + 1).filter(f => !f.startsWith('--')) : null;
 
   console.log('\n🔍 BDS Token Linter\n');
 
@@ -610,8 +612,14 @@ function main() {
     console.log('  📐 4-point grid check enabled');
   }
 
-  // 2. Find files
-  const tsxFiles = findFiles(COMPONENTS_DIR, /\.tsx$/);
+  // 2. Find files — use explicit list if provided, otherwise scan all
+  const tsxFiles = explicitFiles
+    ? explicitFiles.filter(f => /\.tsx$/.test(f)).map(f => path.resolve(f))
+    : findFiles(COMPONENTS_DIR, /\.tsx$/);
+  if (tsxFiles.length === 0) {
+    console.log('  No .tsx files to scan — skipping.\n');
+    process.exit(0);
+  }
   console.log(`  Scanning ${tsxFiles.length} files...\n`);
 
   // 3. Scan components for token usage violations
