@@ -4,7 +4,7 @@
  * Auto-generated — resolved hex values for each BDS theme,
  * mapped to Storybook's create() API properties.
  *
- * Generated: 2026-03-08T09:27:30.190Z
+ * Generated: 2026-03-09T09:48:10.576Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
