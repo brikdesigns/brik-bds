@@ -39,4 +39,7 @@ export * from './Pagination';
 export * from './SearchInput';
 export * from './FilterButton';
 export * from './AddressInput';
+export * from './PasswordInput';
 export * from './EmptyState';
+export * from './ProgressStepper';
+export * from './ProgressDots';
