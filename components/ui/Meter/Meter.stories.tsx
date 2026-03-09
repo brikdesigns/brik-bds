@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Meter } from './Meter';
 
 const meta: Meta<typeof Meter> = {
-  title: 'Components/meter',
+  title: 'Displays/Charts/meter',
   component: Meter,
   parameters: {
     layout: 'centered',
@@ -28,7 +28,12 @@ const meta: Meta<typeof Meter> = {
     },
     showValue: {
       control: 'boolean',
-      description: 'Show formatted value below bar',
+      description: 'Show formatted value',
+    },
+    labelPosition: {
+      control: 'select',
+      options: ['above', 'below'],
+      description: 'Position label/value above or below the bar',
     },
   },
   decorators: [
@@ -121,6 +126,43 @@ export const CustomFormatter: Story = {
     label: 'Pass',
     valueFormatter: (value: number, max: number) => `${Math.round((value / max) * 100)}%`,
   },
+};
+
+// Label position variants
+export const LabelAbove: Story = {
+  args: {
+    value: 6,
+    max: 7,
+    status: 'positive',
+    label: 'Pass',
+    labelPosition: 'above',
+  },
+};
+
+export const LabelBelow: Story = {
+  args: {
+    value: 6,
+    max: 7,
+    status: 'positive',
+    label: 'Pass',
+    labelPosition: 'below',
+  },
+};
+
+// Label position comparison
+export const LabelPositionComparison: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 48, width: 600 }}>
+      <div style={{ flex: 1 }}>
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)', marginBottom: 12 }}>labelPosition=&quot;above&quot;</p>
+        <Meter value={6} max={7} status="positive" label="Pass" labelPosition="above" />
+      </div>
+      <div style={{ flex: 1 }}>
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)', marginBottom: 12 }}>labelPosition=&quot;below&quot;</p>
+        <Meter value={6} max={7} status="positive" label="Pass" labelPosition="below" />
+      </div>
+    </div>
+  ),
 };
 
 // All statuses side by side

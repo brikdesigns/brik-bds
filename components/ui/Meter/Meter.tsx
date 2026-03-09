@@ -17,6 +17,11 @@ export type MeterSize = 'sm' | 'md' | 'lg';
  * Horizontal bar gauge that visualizes a value relative to a maximum.
  * Inspired by Carbon Design System gauge API surface.
  */
+/**
+ * Label position relative to the bar
+ */
+export type MeterLabelPosition = 'above' | 'below';
+
 export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Current value */
   value: number;
@@ -26,19 +31,21 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   status?: MeterStatus;
   /** Bar height: sm=8px, md=12px, lg=16px */
   size?: MeterSize;
-  /** Label below bar (e.g. "Pass", "Fair", "Fail") */
+  /** Label text (e.g. "Pass", "Fair", "Fail") */
   label?: string;
-  /** Show formatted value below label (default: true) */
+  /** Show formatted value (default: true) */
   showValue?: boolean;
   /** Custom value formatter (default: "6/7") */
   valueFormatter?: (value: number, max: number) => string;
+  /** Position label/value above or below the bar (default: "below") */
+  labelPosition?: MeterLabelPosition;
 }
 
 const STATUS_COLORS: Record<MeterStatus, string> = {
   positive: 'var(--system--green)',
   warning: 'var(--system--yellow)',
   error: 'var(--system--red)',
-  neutral: 'var(--_color---background--secondary)',
+  neutral: 'var(--background-secondary)',
 };
 
 const SIZE_HEIGHT: Record<MeterSize, number> = {
@@ -72,6 +79,7 @@ export function Meter({
   label,
   showValue = true,
   valueFormatter = defaultFormatter,
+  labelPosition = 'below',
   className,
   style,
   ...rest
@@ -83,7 +91,7 @@ export function Meter({
   const trackStyle: CSSProperties = {
     width: '100%',
     height: barHeight,
-    backgroundColor: 'var(--_color---background--secondary)',
+    backgroundColor: 'var(--background-secondary)',
     borderRadius: barHeight / 2,
     overflow: 'hidden',
   };
@@ -99,29 +107,47 @@ export function Meter({
   const containerStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    gap: 'var(--_space---xs)',
+    gap: 'var(--padding-xs)',
     ...style,
   };
 
   const labelStyle: CSSProperties = {
-    fontFamily: 'var(--_typography---font-family--body)',
-    fontSize: 'var(--_typography---body--sm)',
-    color: 'var(--_color---text--secondary)',
-    marginTop: 'var(--_space---gap--xs)',
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-sm)',
+    color: 'var(--text-secondary)',
+    ...(labelPosition === 'below' ? { marginTop: 'var(--gap-xs)' } : { marginBottom: 'var(--gap-xs)' }),
   };
 
   const valueStyle: CSSProperties = {
-    fontFamily: 'var(--_typography---font-family--heading)',
-    fontSize: 'var(--_typography---heading--large)',
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-lg)',
     fontWeight: 'var(--font-weight--bold)' as unknown as number,
-    color: 'var(--_color---text--primary)',
+    color: 'var(--text-primary)',
   };
 
   const valueSubStyle: CSSProperties = {
-    fontFamily: 'var(--_typography---font-family--body)',
-    fontSize: 'var(--_typography---body--sm)',
-    color: 'var(--_color---text--secondary)',
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-sm)',
+    color: 'var(--text-secondary)',
   };
+
+  const textContent = (
+    <>
+      {label && <span style={labelStyle}>{label}</span>}
+      {showValue && (
+        <div>
+          <span style={valueStyle}>{valueFormatter(value, max)}</span>
+          <span style={valueSubStyle}> Score</span>
+        </div>
+      )}
+    </>
+  );
+
+  const track = (
+    <div style={trackStyle}>
+      <div style={fillStyle} />
+    </div>
+  );
 
   return (
     <div
@@ -134,15 +160,16 @@ export function Meter({
       aria-label={label ?? `${value} of ${max}`}
       {...rest}
     >
-      <div style={trackStyle}>
-        <div style={fillStyle} />
-      </div>
-      {label && <span style={labelStyle}>{label}</span>}
-      {showValue && (
-        <div>
-          <span style={valueStyle}>{valueFormatter(value, max)}</span>
-          <span style={valueSubStyle}> Score</span>
-        </div>
+      {labelPosition === 'above' ? (
+        <>
+          {textContent}
+          {track}
+        </>
+      ) : (
+        <>
+          {track}
+          {textContent}
+        </>
       )}
     </div>
   );
