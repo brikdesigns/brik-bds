@@ -1,5 +1,7 @@
 import { type ReactNode, type CSSProperties, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Modal size variants
@@ -66,7 +68,7 @@ const backdropStyles: CSSProperties = {
  * Modal container styles
  *
  * Token reference:
- * - --surface-primary (white background)
+ * - --surface-overlay (modal panel surface)
  * - --border-radius-md = 4px (modal corners)
  * - Shadow: 0 4px 32px 32px rgba(0,0,0,0.24) per Figma shadow-xl
  */
@@ -75,7 +77,7 @@ const getModalStyles = (size: ModalSize): CSSProperties => ({
   width: '100%',
   maxWidth: sizeConfig[size],
   maxHeight: '90vh',
-  backgroundColor: 'var(--surface-primary)',
+  backgroundColor: 'var(--surface-overlay)',
   borderRadius: 'var(--border-radius-md)',
   boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)', // bds-lint-ignore — shadow tokens resolve to zero
   display: 'flex',
@@ -86,12 +88,12 @@ const getModalStyles = (size: ModalSize): CSSProperties => ({
  * Modal header styles
  *
  * Token reference:
- * - --padding-xl = 24px (padding)
+ * - --padding-lg (top/bottom padding)
  * - --border-muted (divider line)
  * - --border-width-sm (divider thickness)
  */
 const headerStyles: CSSProperties = {
-  padding: 'var(--padding-xl)',
+  padding: 'var(--padding-lg)',
   borderBottom: 'var(--border-width-sm) solid var(--border-muted)',
   display: 'flex',
   alignItems: 'center',
@@ -122,22 +124,26 @@ const titleStyles: CSSProperties = {
  * Close button styles
  *
  * Token reference:
- * - --body-lg (icon size)
- * - --padding-sm = 12px (padding)
+ * - --icon-md = font-size-200 = 18px (icon size per Figma solid-icon/lg)
+ * - --padding-md = 16px (inner padding)
  * - --text-primary (icon color)
- * - --border-radius-sm = 2px
+ * - --border-radius-md = 4px
+ * - 44×44 touch target per Figma button-icon-md
  */
 const closeButtonStyles: CSSProperties = {
   background: 'none',
   border: 'none',
-  fontSize: 'var(--body-lg)',
-  lineHeight: 'var(--font-line-height-tight)',
+  fontSize: 'var(--icon-md)',
+  lineHeight: 'var(--font-line-height--100)',
   cursor: 'pointer',
-  padding: 'var(--padding-sm)',
+  padding: 'var(--padding-md)',
   color: 'var(--text-primary)',
   opacity: 0.6,
   transition: 'opacity 0.2s',
-  borderRadius: 'var(--border-radius-sm)',
+  borderRadius: 'var(--border-radius-md)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
 /**
@@ -265,7 +271,7 @@ export function Modal({
                   e.currentTarget.style.opacity = '0.6';
                 }}
               >
-                ×
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             )}
           </div>
