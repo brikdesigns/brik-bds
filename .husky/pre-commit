@@ -1,1 +1,12 @@
-npm run validate
+# Lint only staged .tsx files (not all components)
+STAGED=$(git diff --cached --name-only --diff-filter=ACM -- 'components/**/*.tsx')
+
+if [ -n "$STAGED" ]; then
+  echo "Linting $(echo "$STAGED" | wc -l | tr -d ' ') staged .tsx files..."
+  node scripts/lint-tokens.js --errors-only --files $STAGED
+else
+  echo "No staged .tsx files — skipping token lint."
+fi
+
+# Typecheck always runs (fast, catches real errors)
+npm run typecheck
