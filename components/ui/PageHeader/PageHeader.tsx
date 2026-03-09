@@ -182,7 +182,7 @@ const metadataValueStyles: CSSProperties = {
  */
 const tabWrapperStyles: CSSProperties = {
   width: '100%',
-  borderBottom: 'var(--border-width-lg) solid var(--border-primary)',
+  borderBottom: 'var(--border-width-lg) solid var(--border-secondary)',
 };
 
 /**
