@@ -85,7 +85,7 @@ function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
     ? 'var(--border-on-color-dark)'
     : active
       ? 'var(--border-brand-primary)'
-      : 'var(--border-primary)';
+      : 'transparent';
 
   const textColor = onColor
     ? 'var(--text-on-color-dark)'
@@ -99,6 +99,7 @@ function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
     backgroundColor: onColor ? 'transparent' : 'var(--background-primary)',
     padding: 'var(--padding-lg)',
     borderBottom: `var(--border-width-lg) solid ${borderColor}`,
+    marginBottom: 'calc(-1 * var(--border-width-lg))',
     opacity: onColor && !active ? 0.6 : 1,
   };
 }

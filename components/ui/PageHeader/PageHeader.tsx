@@ -174,6 +174,18 @@ const metadataValueStyles: CSSProperties = {
 };
 
 /**
+ * Tab wrapper styles
+ *
+ * Full-width baseline border. TabBar `tab` variant items use negative
+ * margin-bottom to overlap this border so the active tab's brand-colored
+ * border visually replaces the baseline.
+ */
+const tabWrapperStyles: CSSProperties = {
+  width: '100%',
+  borderBottom: 'var(--border-width-lg) solid var(--border-primary)',
+};
+
+/**
  * PageHeader — BDS composable page header
  *
  * Flexible page-level header that composes BDS components:
@@ -262,8 +274,12 @@ export function PageHeader({
         </div>
       )}
 
-      {/* Tab bar — pass a <TabBar> component */}
-      {tabs}
+      {/* Tab bar — full-width baseline border, tabs overlap via negative margin */}
+      {tabs && (
+        <div className="bds-page-header-tabs" style={tabWrapperStyles}>
+          {tabs}
+        </div>
+      )}
     </div>
   );
 }
