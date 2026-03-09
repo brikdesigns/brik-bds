@@ -1,0 +1,83 @@
+/* TabBar — pseudo-state styles (hover, pressed, disabled)
+   Inline CSSProperties can't handle :hover/:active/:disabled,
+   so these live in CSS. */
+
+/* ── Shared cursor + transition ── */
+
+.bds-tab-bar-item {
+  transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.bds-tab-bar-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── Text variant ── */
+
+.bds-tab-bar--text .bds-tab-bar-item:hover:not(:disabled) {
+  color: var(--text-brand-primary);
+}
+
+.bds-tab-bar--text .bds-tab-bar-item:active:not(:disabled) {
+  opacity: 0.7;
+}
+
+/* ── Text variant on-color ── */
+
+.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled) {
+  opacity: 0.5;
+}
+
+/* ── Tab variant ── */
+
+.bds-tab-bar--tab .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-primary);
+}
+
+.bds-tab-bar--tab .bds-tab-bar-item:active:not(:disabled) {
+  opacity: 0.7;
+}
+
+/* ── Tab variant on-color ── */
+
+.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+  opacity: 0.8;
+  border-bottom-color: var(--border-on-color-dark);
+}
+
+.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled) {
+  opacity: 0.5;
+}
+
+/* ── Box variant ── */
+
+.bds-tab-bar--box .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.bds-tab-bar--box .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
+  background-color: var(--background-tertiary);
+}
+
+.bds-tab-bar--box .bds-tab-bar-item[aria-selected="true"]:active:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* ── Box variant on-color ── */
+
+.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+  opacity: 0.8;
+}
+
+.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
+  opacity: 0.5;
+}

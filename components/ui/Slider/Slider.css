@@ -1,0 +1,83 @@
+/* Slider CSS — needed for pseudo-elements (::-webkit-slider-thumb, etc.) */
+
+.bds-slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  margin: 0;
+}
+
+/* Track */
+.bds-slider-input::-webkit-slider-runnable-track {
+  height: var(--bds-slider-track-height, 6px);
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--background-brand-primary) 0%,
+    var(--background-brand-primary) var(--bds-slider-percent, 50%),
+    var(--border-secondary) var(--bds-slider-percent, 50%),
+    var(--border-secondary) 100%
+  );
+}
+
+.bds-slider-input::-moz-range-track {
+  height: var(--bds-slider-track-height, 6px);
+  border-radius: 999px;
+  background: var(--border-secondary);
+  border: none;
+}
+
+.bds-slider-input::-moz-range-progress {
+  height: var(--bds-slider-track-height, 6px);
+  border-radius: 999px;
+  background: var(--background-brand-primary);
+}
+
+/* Thumb */
+.bds-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: var(--bds-slider-thumb-size, 20px);
+  height: var(--bds-slider-thumb-size, 20px);
+  border-radius: 50%;
+  background: var(--surface-primary);
+  border: var(--border-width-200) solid var(--background-brand-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin-top: calc((var(--bds-slider-track-height, 6px) - var(--bds-slider-thumb-size, 20px)) / 2);
+  transition: box-shadow 0.15s ease;
+}
+
+.bds-slider-input::-moz-range-thumb {
+  width: var(--bds-slider-thumb-size, 20px);
+  height: var(--bds-slider-thumb-size, 20px);
+  border-radius: 50%;
+  background: var(--surface-primary);
+  border: var(--border-width-200) solid var(--background-brand-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+
+/* Focus */
+.bds-slider-input:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--background-brand-primary) 30%, transparent);
+}
+
+.bds-slider-input:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--background-brand-primary) 30%, transparent);
+}
+
+/* Disabled */
+.bds-slider-input:disabled {
+  pointer-events: none;
+}
+
+.bds-slider-input:disabled::-webkit-slider-thumb {
+  background: var(--border-secondary);
+  border-color: var(--border-secondary);
+}
+
+.bds-slider-input:disabled::-moz-range-thumb {
+  background: var(--border-secondary);
+  border-color: var(--border-secondary);
+}
