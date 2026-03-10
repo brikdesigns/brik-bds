@@ -36,8 +36,7 @@ const iconClassMap: Record<AlertBannerIcon, string> = {
  * Token reference:
  * - --surface-secondary (light gray background)
  * - --text-primary (dark text)
- * - --padding-lg = 24px (vertical padding)
- * - --padding-xl = 32px (horizontal padding)
+ * - --padding-lg = 24px (all sides)
  * - --border-radius-sm = 2px (corners)
  * - --gap-lg = 16px (gap between content and action)
  */
@@ -49,7 +48,7 @@ const bannerStyles: CSSProperties = {
   gap: 'var(--gap-lg)',
   backgroundColor: 'var(--surface-secondary)',
   color: 'var(--text-primary)',
-  padding: 'var(--padding-lg) var(--padding-xl)',
+  padding: 'var(--padding-lg)',
   borderRadius: 'var(--border-radius-sm)',
   width: '100%',
   boxSizing: 'border-box',
@@ -60,7 +59,7 @@ const bannerStyles: CSSProperties = {
  */
 const innerStyles: CSSProperties = {
   display: 'flex',
-  gap: 'var(--gap-md)',
+  gap: 'var(--gap-sm)',
   alignItems: 'flex-start',
   flex: '1 1 0',
   minWidth: 0,
@@ -87,7 +86,7 @@ const iconStyles: CSSProperties = {
 const contentStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--gap-md)',
+  gap: 'var(--gap-sm)',
   flex: '1 1 0',
   minWidth: 0,
 };

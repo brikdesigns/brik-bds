@@ -19,17 +19,22 @@
    render through the same Source component in SB10.
    ============================================ */
 
-/* The outer docblock-source wrapper (emotion-styled) */
+/* The outer docblock-source wrapper (emotion-styled).
+   Doubled-ID beats emotion's late-injected !important styles.
+   Fallback class selector for pages outside #storybook-docs. */
+#storybook-docs#storybook-docs .docblock-source,
 .docblock-source {
   background-color: #1e1e1e !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid var(--border-muted, rgba(0, 0, 0, 0.12)) !important;
   border-radius: 6px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
   margin: 16px 0 24px !important;
   overflow: hidden !important;
 }
 
 /* Pre blocks inside source containers */
+#storybook-docs#storybook-docs .docblock-source pre,
+#storybook-docs#storybook-docs .docblock-source pre.prismjs,
 .docblock-source pre,
 .docblock-source pre.prismjs {
   background-color: #1e1e1e !important;
@@ -45,6 +50,8 @@
 }
 
 /* Code inside pre blocks */
+#storybook-docs#storybook-docs .docblock-source code,
+#storybook-docs#storybook-docs pre code,
 .docblock-source code,
 pre code,
 pre[class*="language-"] code {
@@ -57,6 +64,10 @@ pre[class*="language-"] code {
 }
 
 /* Catch-all for any pre blocks outside docblock-source (Canvas source, etc.) */
+#storybook-docs#storybook-docs pre,
+#storybook-docs#storybook-docs .docs-story pre,
+#storybook-docs#storybook-docs .sb-story pre,
+#storybook-docs#storybook-docs .prismjs,
 pre,
 .docs-story pre,
 .sb-story pre,
@@ -64,10 +75,24 @@ pre,
   background-color: #1e1e1e !important;
   color: #d4d4d4 !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  border: 1px solid var(--border-muted, rgba(0, 0, 0, 0.12)) !important;
   border-radius: 6px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
   text-shadow: none !important;
   margin: 0 !important;
   padding: 16px 20px !important;
+}
+
+/* Emotion wrapper divs around source blocks — SB10 injects background/border
+   via emotion CSS-in-JS on wrapper divs with css-* class names. Target any
+   div[class^="css-"] that directly contains a pre block. */
+#storybook-docs#storybook-docs div[class^="css-"]:has(> pre),
+#storybook-docs#storybook-docs div[class^="css-"]:has(> .docblock-source) {
+  background-color: #1e1e1e !important;
+  border: 1px solid var(--border-muted, rgba(0, 0, 0, 0.12)) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  overflow: hidden !important;
 }
 
 /* Inline code — subtle background, respects theme text color */
@@ -214,9 +239,9 @@ div[class*="docs-story"] {
    allowing emotion backgrounds/margins to bleed through. */
 #storybook-docs#storybook-docs > div:has(> [id^="anchor--"]),
 #storybook-docs#storybook-docs [id^="anchor--"],
-#storybook-docs#storybook-docs [id^="anchor--"] > div,
-#storybook-docs#storybook-docs [id^="anchor--"] > div > div,
-#storybook-docs#storybook-docs [id^="anchor--"] div[class^="css-"] {
+#storybook-docs#storybook-docs [id^="anchor--"] > div:not(.sbdocs-preview),
+#storybook-docs#storybook-docs [id^="anchor--"] > div > div:not(.sbdocs-preview),
+#storybook-docs#storybook-docs [id^="anchor--"] div[class^="css-"]:not(.sbdocs-preview) {
   background: transparent !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -430,7 +455,6 @@ div[class*="Subtitle"] {
   --padding-md: var(--space-400);
   --padding-lg: var(--space-600);
   --padding-xl: var(--space-800);
-  --padding-xl: var(--space-800); /* deprecated — alias for xl */
   --padding-huge: var(--space-1200);
 
   /* Gap tokens - Base mode */
@@ -441,12 +465,7 @@ div[class*="Subtitle"] {
   --gap-md: var(--space-200);
   --gap-lg: var(--space-400);
   --gap-xl: var(--space-600);
-  --gap-xl: var(--space-600); /* deprecated — alias for gap--xl */
   --gap-huge: var(--space-800);
-
-  /* Component-specific spacing - Base mode */
-  --padding-tiny: var(--space-200);
-  --padding-tiny: var(--space-200);
 }
 
 /* ============================================
