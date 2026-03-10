@@ -67,28 +67,28 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
  * Token reference:
  * - --label-sm/md-base/lg (label font sizes)
  * - --body-sm/md-base/lg (select font sizes)
- * - --padding-tiny = 8px (input padding)
+ * - --padding-xs = 10px (input padding — matches TextInput)
  */
 const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperties }> = {
   sm: {
     label: { fontSize: 'var(--label-sm)' },
     select: {
       fontSize: 'var(--body-sm)',
-      padding: 'var(--padding-tiny)',
+      padding: 'var(--padding-xs)',
     },
   },
   md: {
     label: { fontSize: 'var(--label-md)' },
     select: {
       fontSize: 'var(--body-md)',
-      padding: 'var(--padding-tiny)',
+      padding: 'var(--padding-xs)',
     },
   },
   lg: {
     label: { fontSize: 'var(--label-lg)' },
     select: {
       fontSize: 'var(--body-lg)',
-      padding: 'calc(var(--padding-tiny) * 1.25)',
+      padding: 'var(--padding-xs)',
     },
   },
 };
@@ -101,7 +101,7 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
  * - --background-input (input background)
  * - --text-primary (text color)
  * - --border-radius-md = 4px (input corners)
- * - --padding-tiny = 8px (input padding)
+ * - --padding-xs = 10px (input padding — matches TextInput)
  * - --font-family-body (body font)
  * - --border-width-md = 1px (border thickness)
  * - --font-line-height-normal = 150%
@@ -121,19 +121,19 @@ const selectBaseStyles: CSSProperties = {
   cursor: 'pointer',
   appearance: 'none',
   boxSizing: 'border-box',
-  paddingRight: 'calc(var(--padding-tiny) * 4)',
+  paddingRight: 'calc(var(--padding-xs) * 4)',
 };
 
 /**
  * Chevron icon positioning (right side)
  *
  * Token reference:
- * - --padding-tiny = 8px (icon inset from edge)
+ * - --padding-xs = 10px (icon inset from edge — matches TextInput)
  * - --text-muted (icon color)
  */
 const chevronStyles: CSSProperties = {
   position: 'absolute',
-  right: 'var(--padding-tiny)',
+  right: 'var(--padding-xs)',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -156,13 +156,13 @@ const fieldWrapperStyles: CSSProperties = {
  * Icon positioning styles
  *
  * Token reference:
- * - --padding-tiny = 8px (icon inset from edge)
+ * - --padding-xs = 10px (icon inset from edge — matches TextInput)
  * - --text-muted (icon color, matches placeholder)
  * - --gap-md = 8px (icon-text gap)
  */
 const selectIconStyles: CSSProperties = {
   position: 'absolute',
-  left: 'var(--padding-tiny)',
+  left: 'var(--padding-xs)',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -292,7 +292,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const combinedStyles: CSSProperties = {
       ...selectBaseStyles,
       ...sizeStyle.select,
-      ...(icon ? { paddingLeft: 'calc(var(--padding-tiny) * 4)' } : {}),
+      ...(icon ? { paddingLeft: 'calc(var(--padding-xs) * 4)' } : {}),
       ...style,
     };
 
