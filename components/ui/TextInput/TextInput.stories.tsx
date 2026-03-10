@@ -129,7 +129,7 @@ export const FormExample: Story = {
     },
   },
   render: () => (
-    <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
       <TextInput label="First Name" placeholder="John" fullWidth />
       <TextInput label="Last Name" placeholder="Doe" fullWidth />
       <TextInput label="Email" type="email" placeholder="john@example.com" fullWidth />
@@ -157,7 +157,7 @@ export const InputTypes: Story = {
     },
   },
   render: () => (
-    <div style={{ width: '300px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ width: '300px', display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
       <TextInput label="Text" type="text" placeholder="Plain text" fullWidth />
       <TextInput label="Email" type="email" placeholder="email@example.com" fullWidth />
       <TextInput label="Password" type="password" placeholder="••••••••" fullWidth />
@@ -203,7 +203,7 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ width: '400px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ width: '400px', display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
       <TextInput size="sm" label="Small (sm)" placeholder="14px text" fullWidth />
       <TextInput size="md" label="Medium (md)" placeholder="16px text - default" fullWidth />
       <TextInput size="lg" label="Large (lg)" placeholder="18px text" fullWidth />

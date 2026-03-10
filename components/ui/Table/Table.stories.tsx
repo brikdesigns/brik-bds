@@ -65,7 +65,7 @@ const iconButtonStyles: CSSProperties = {
   border: 'none',
   borderRadius: 'var(--border-radius-md)',
   cursor: 'pointer',
-  fontSize: 12,
+  fontSize: 12, // bds-lint-ignore — matches Figma 28x28 icon button spec
 };
 
 /**
@@ -683,7 +683,7 @@ export const WithBadgeBrik: Story = {
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
           width: 28, height: 28, backgroundColor: 'var(--background-brand-primary)',
           color: 'var(--text-inverse)', borderRadius: 'var(--border-radius-md)',
-          fontSize: 14,
+          fontSize: 'var(--body-sm)',
         }}>
           <FontAwesomeIcon icon={faPalette} />
         </span>
@@ -941,7 +941,7 @@ export const TwoLineVariants: Story = {
         code: `{/* 2-line text cell */}
 <TableCell>
   <div>
-    <div style={{ fontWeight: 600 }}>Alice Chen</div>
+    <div style={{ fontWeight: 600 }}>Alice Chen</div>{/* bds-lint-ignore — docs example */}
     <div style={{ fontSize: '...body--sm', color: '...text--muted' }}>alice@example.com</div>
   </div>
 </TableCell>
@@ -951,7 +951,7 @@ export const TwoLineVariants: Story = {
   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 4 }}>
     <FontAwesomeIcon icon={faPalette} style={{ width: 24, marginTop: 2 }} />
     <div>
-      <div style={{ fontWeight: 600 }}>Design</div>
+      <div style={{ fontWeight: 600 }}>Design</div>{/* bds-lint-ignore — docs example */}
       <div style={{ fontSize: '...body--sm', color: '...text--muted' }}>Brand &amp; visual identity</div>
     </div>
   </div>

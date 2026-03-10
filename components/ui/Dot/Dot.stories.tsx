@@ -76,7 +76,7 @@ export const AllStatuses: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
       <Dot status="default" />
       <Dot status="positive" />
       <Dot status="warning" />
@@ -99,8 +99,8 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
         <Dot size="sm" status="positive" />
         <span style={{
           fontFamily: 'var(--font-family-label)',
@@ -110,7 +110,7 @@ export const AllSizes: Story = {
           Small
         </span>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
         <Dot size="md" status="positive" />
         <span style={{
           fontFamily: 'var(--font-family-label)',
@@ -120,7 +120,7 @@ export const AllSizes: Story = {
           Medium
         </span>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
         <Dot size="lg" status="positive" />
         <span style={{
           fontFamily: 'var(--font-family-label)',
@@ -146,8 +146,8 @@ export const OnlineStatus: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-sm)' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <Dot status="positive" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
@@ -156,7 +156,7 @@ export const OnlineStatus: Story = {
           Online
         </span>
       </div>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <Dot status="warning" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
@@ -165,7 +165,7 @@ export const OnlineStatus: Story = {
           Away
         </span>
       </div>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <Dot status="error" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
@@ -195,9 +195,9 @@ export const ListItems: Story = {
       margin: 0,
       display: 'flex',
       flexDirection: 'column',
-      gap: '12px',
+      gap: 'var(--padding-sm)',
     }}>
-      <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+      <li style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
         <Dot status="positive" size="sm" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
@@ -206,7 +206,7 @@ export const ListItems: Story = {
           All systems operational
         </span>
       </li>
-      <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+      <li style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
         <Dot status="warning" size="sm" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
@@ -215,7 +215,7 @@ export const ListItems: Story = {
           Minor service disruption
         </span>
       </li>
-      <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+      <li style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
         <Dot status="error" size="sm" />
         <span style={{
           fontFamily: 'var(--font-family-body)',
@@ -242,14 +242,14 @@ export const ActivityFeed: Story = {
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
-      padding: '16px',
+      gap: 'var(--gap-lg)',
+      padding: 'var(--padding-md)',
       backgroundColor: 'var(--background-secondary)',
       borderRadius: 'var(--border-radius-md)',
       width: '300px',
     }}>
-      <div style={{ display: 'flex', gap: '12px' }}>
-        <Dot status="positive" style={{ marginTop: '4px' }} />
+      <div style={{ display: 'flex', gap: 'var(--padding-sm)' }}>
+        <Dot status="positive" style={{ marginTop: 'var(--gap-xs)' }} />
         <div>
           <div style={{
             fontFamily: 'var(--font-family-body)',
@@ -267,8 +267,8 @@ export const ActivityFeed: Story = {
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: '12px' }}>
-        <Dot status="info" style={{ marginTop: '4px' }} />
+      <div style={{ display: 'flex', gap: 'var(--padding-sm)' }}>
+        <Dot status="info" style={{ marginTop: 'var(--gap-xs)' }} />
         <div>
           <div style={{
             fontFamily: 'var(--font-family-body)',
@@ -286,8 +286,8 @@ export const ActivityFeed: Story = {
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: '12px' }}>
-        <Dot status="neutral" style={{ marginTop: '4px' }} />
+      <div style={{ display: 'flex', gap: 'var(--padding-sm)' }}>
+        <Dot status="neutral" style={{ marginTop: 'var(--gap-xs)' }} />
         <div>
           <div style={{
             fontFamily: 'var(--font-family-body)',

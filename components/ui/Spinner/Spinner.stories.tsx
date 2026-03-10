@@ -43,8 +43,8 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-huge)', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
         <Spinner size="sm" />
         <span style={{
           fontFamily: 'var(--font-family-label)',
@@ -54,7 +54,7 @@ export const AllSizes: Story = {
           Small (16px)
         </span>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
         <Spinner size="lg" />
         <span style={{
           fontFamily: 'var(--font-family-label)',
@@ -85,8 +85,8 @@ export const InButton: Story = {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '8px',
-        padding: '12px 24px',
+        gap: 'var(--gap-md)',
+        padding: 'var(--padding-sm) var(--padding-lg)',
         backgroundColor: 'var(--background-brand-primary)',
         color: 'var(--text-inverse)',
         border: 'none',
@@ -146,7 +146,7 @@ export const WithText: Story = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '16px',
+        gap: 'var(--gap-lg)',
       }}
     >
       <Spinner size="lg" />

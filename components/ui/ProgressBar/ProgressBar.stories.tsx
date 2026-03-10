@@ -86,7 +86,7 @@ useEffect(() => {
             fontFamily: 'var(--font-family-body)',
             fontSize: 'var(--body-sm)',
             color: 'var(--text-secondary)',
-            marginTop: '8px',
+            marginTop: 'var(--gap-md)',
           }}
         >
           {progress}%
@@ -125,7 +125,7 @@ export const Steps: Story = {
             fontFamily: 'var(--font-family-body)',
             fontSize: 'var(--body-sm)',
             color: 'var(--text-secondary)',
-            marginBottom: '8px',
+            marginBottom: 'var(--gap-md)',
           }}
         >
           <span>

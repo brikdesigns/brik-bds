@@ -58,7 +58,7 @@ export const LinearMode: Story = {
           activeStep={active}
           onDotClick={setActive}
         />
-        <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '14px', color: '#666' }}>
+        <p style={{ textAlign: 'center', marginTop: 'var(--gap-lg)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
           Step {active + 1} of {args.count} — can only go back
         </p>
       </div>
@@ -71,13 +71,13 @@ export const Interactive = () => {
   const count = 4;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-xl)' }}>
       <ProgressDots
         count={count}
         activeStep={active}
         onDotClick={setActive}
       />
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
         <button onClick={() => setActive(Math.max(0, active - 1))} disabled={active === 0}>
           Previous
         </button>

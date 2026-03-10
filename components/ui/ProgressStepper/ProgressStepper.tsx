@@ -123,10 +123,10 @@ export function ProgressStepper({
           transition: 'all 0.15s ease',
           ...(status === 'active' ? {
             backgroundColor: 'var(--background-brand-primary)',
-            color: '#ffffff',
+            color: 'var(--text-inverse)',
           } : status === 'complete' ? {
             backgroundColor: 'var(--background-brand-primary)',
-            color: '#ffffff',
+            color: 'var(--text-inverse)',
           } : {
             backgroundColor: 'var(--surface-secondary)',
             color: 'var(--text-muted)',

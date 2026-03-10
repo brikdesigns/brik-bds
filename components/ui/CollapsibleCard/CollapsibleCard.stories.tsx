@@ -46,14 +46,14 @@ export const WithRichContent: Story = {
     defaultOpen: true,
     children: (
       <div>
-        <h4 style={{ margin: '0 0 8px', color: 'var(--text-primary)' }}>Phase 1: Discovery</h4>
-        <ul style={{ margin: '0 0 16px', paddingLeft: '24px', color: 'var(--text-secondary)' }}>
+        <h4 style={{ margin: '0 0 var(--gap-md)', color: 'var(--text-primary)' }}>Phase 1: Discovery</h4>
+        <ul style={{ margin: '0 0 var(--gap-lg)', paddingLeft: 'var(--padding-lg)', color: 'var(--text-secondary)' }}>
           <li>Stakeholder interviews</li>
           <li>Competitive analysis</li>
           <li>Requirements gathering</li>
         </ul>
-        <h4 style={{ margin: '0 0 8px', color: 'var(--text-primary)' }}>Phase 2: Design</h4>
-        <ul style={{ margin: 0, paddingLeft: '24px', color: 'var(--text-secondary)' }}>
+        <h4 style={{ margin: '0 0 var(--gap-md)', color: 'var(--text-primary)' }}>Phase 2: Design</h4>
+        <ul style={{ margin: 0, paddingLeft: 'var(--padding-lg)', color: 'var(--text-secondary)' }}>
           <li>Wireframes and prototypes</li>
           <li>Visual design</li>
           <li>Design review</li>
@@ -66,7 +66,7 @@ export const WithRichContent: Story = {
 export const MultipleSections: Story = {
   args: { title: 'Overview and Goals', children: 'Content' },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
       <CollapsibleCard sectionLabel="Section 01" title="Overview and Goals">
         <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
           Strategic overview of the project objectives and expected outcomes.

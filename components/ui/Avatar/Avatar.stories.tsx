@@ -270,7 +270,7 @@ export const AvatarGroup: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', marginLeft: '12px' }}>
+    <div style={{ display: 'flex', marginLeft: 'var(--padding-sm)' }}>
       <Avatar
         name="John Doe"
         size="md"

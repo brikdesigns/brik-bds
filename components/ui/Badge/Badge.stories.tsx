@@ -113,7 +113,7 @@ export const AllStatuses: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge>Default</Badge>
       <Badge status="positive">Success</Badge>
       <Badge status="warning">Warning</Badge>
@@ -138,7 +138,7 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
       <Badge size="sm">Small</Badge>
       <Badge size="md">Medium</Badge>
@@ -160,7 +160,7 @@ export const WithIcons: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Success</Badge>
       <Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Error</Badge>
       <Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>Loading</Badge>
@@ -184,7 +184,7 @@ export const IconOnly: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
       <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
       <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
@@ -209,11 +209,11 @@ export const SizeStatusMatrix: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <span style={{
           fontFamily: 'var(--font-family-label)',
-          fontSize: '12px',
+          fontSize: 'var(--body-xs)',
           color: 'var(--text-muted)',
           width: '32px',
         }}>
@@ -228,10 +228,10 @@ export const SizeStatusMatrix: Story = {
         <Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />
       </div>
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
           <span style={{
             fontFamily: 'var(--font-family-label)',
-            fontSize: '12px',
+            fontSize: 'var(--body-xs)',
             color: 'var(--text-muted)',
             width: '32px',
           }}>
@@ -264,32 +264,32 @@ export const StatusIndicators: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <Badge status="positive">Published</Badge>
         <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Article is live and visible
         </span>
       </div>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <Badge status="progress">In Review</Badge>
         <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Being reviewed by editor
         </span>
       </div>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <Badge status="warning">Draft</Badge>
         <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Saved but not published
         </span>
       </div>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <Badge status="error">Archived</Badge>
         <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Has been removed
         </span>
       </div>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
         <Badge status="neutral">Inactive</Badge>
         <span style={{ fontFamily: 'var(--font-family-body)' }}>
           Currently disabled

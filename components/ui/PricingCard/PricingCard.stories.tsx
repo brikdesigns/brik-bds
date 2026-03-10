@@ -87,7 +87,7 @@ export const PricingGrid: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+        code: `<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--gap-xl)' }}>
   <PricingCard title="Starter" price="Free" ... />
   <PricingCard title="Professional" price="$49" highlighted ... />
   <PricingCard title="Enterprise" price="$199" ... />

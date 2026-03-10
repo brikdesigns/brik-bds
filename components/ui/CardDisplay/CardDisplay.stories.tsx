@@ -92,7 +92,7 @@ export const Grid: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+        code: `<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--gap-xl)' }}>
   <CardDisplay
     imageSrc="..."
     badge={<Badge size="sm">Design</Badge>}

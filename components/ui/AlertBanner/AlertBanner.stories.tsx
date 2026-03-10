@@ -85,7 +85,7 @@ export const AllIcons: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
       <AlertBanner icon="info" title="Info" description="Informational message for the user" />
       <AlertBanner icon="warning" title="Warning" description="Something needs your attention" />
       <AlertBanner icon="success" title="Success" description="The operation completed successfully" />
