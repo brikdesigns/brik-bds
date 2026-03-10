@@ -1,0 +1,75 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './ProgressStepper.stories';
+
+<Meta of={Stories} />
+
+# Progress stepper
+
+Labeled step indicator showing progress through a multi-step process. Use for checkout flows, setup wizards, and multi-page forms where users need to see their position and progress.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## With descriptions
+
+Add description text to each step for additional context.
+<Canvas of={Stories.WithDescriptions} />
+
+## Step positions
+
+### First step
+<Canvas of={Stories.FirstStep} />
+
+### Last step
+<Canvas of={Stories.LastStep} />
+
+### All complete
+<Canvas of={Stories.AllComplete} />
+
+## Sizes
+
+### Small
+Compact stepper for constrained layouts.
+<Canvas of={Stories.SmallSize} />
+
+## Linear mode
+
+Interactive stepper restricted to sequential navigation.
+<Canvas of={Stories.LinearMode} />
+
+## Interactive
+
+Click steps to navigate between them.
+<Canvas of={Stories.Interactive} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { ProgressStepper } from '@brik/bds';
+
+// Basic stepper
+<ProgressStepper
+  steps={[
+    { label: 'Account' },
+    { label: 'Profile' },
+    { label: 'Review' },
+  ]}
+  activeStep={1}
+/>
+
+// With descriptions
+<ProgressStepper
+  steps={[
+    { label: 'Details', description: 'Enter your information' },
+    { label: 'Payment', description: 'Add billing details' },
+    { label: 'Confirm', description: 'Review and submit' },
+  ]}
+  activeStep={0}
+  onStepClick={(step) => setStep(step)}
+/>
+```

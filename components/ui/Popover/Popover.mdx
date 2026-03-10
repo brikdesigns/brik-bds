@@ -1,0 +1,61 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Popover.stories';
+
+<Meta of={Stories} />
+
+# Popover
+
+Floating content panel anchored to a trigger element. Use for contextual menus, additional information, and inline editing surfaces.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Placement
+
+### Bottom (default)
+Content appears below the trigger.
+<Canvas of={Stories.Default} />
+
+### Top
+Content appears above the trigger.
+<Canvas of={Stories.TopPlacement} />
+
+## Trigger modes
+
+### Click (default)
+Opens on click, closes on click outside.
+<Canvas of={Stories.Default} />
+
+### Hover
+Opens on mouse enter, closes on mouse leave.
+<Canvas of={Stories.HoverTrigger} />
+
+## Rich content
+
+Supports any React content inside the popover panel.
+<Canvas of={Stories.RichContent} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Popover } from '@brik/bds';
+
+// Click-triggered popover
+<Popover content={<p>Additional details here</p>}>
+  <button>More info</button>
+</Popover>
+
+// Hover-triggered, top placement
+<Popover
+  content={<p>Tooltip-style content</p>}
+  trigger="hover"
+  placement="top"
+>
+  <span>Hover me</span>
+</Popover>
+```

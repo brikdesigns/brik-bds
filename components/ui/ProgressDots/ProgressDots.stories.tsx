@@ -5,7 +5,6 @@ import { ProgressDots } from './ProgressDots';
 const meta: Meta<typeof ProgressDots> = {
   title: 'Navigation/Stepper/progress-dots',
   component: ProgressDots,
-  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },

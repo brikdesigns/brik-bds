@@ -1,0 +1,57 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './FileUploader.stories';
+
+<Meta of={Stories} />
+
+# File uploader
+
+Drag-and-drop file upload zone with file list management. Use for document uploads, image attachments, and bulk file imports.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## With file list
+
+Shows selected files with remove capability.
+<Canvas of={Stories.WithFileList} />
+
+## Validation
+
+### Size limit
+Display file size restrictions to the user.
+<Canvas of={Stories.WithSizeLimit} />
+
+### Error state
+Show validation errors for rejected files.
+<Canvas of={Stories.WithError} />
+
+## States
+
+### Disabled
+Prevent file selection when uploading is not available.
+<Canvas of={Stories.Disabled} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { FileUploader } from '@brik/bds';
+
+// Basic file uploader
+<FileUploader
+  accept=".pdf,.jpg,.png"
+  onChange={(files) => handleFiles(files)}
+/>
+
+// With size limit and multiple files
+<FileUploader
+  accept="image/*"
+  multiple
+  maxSize={5 * 1024 * 1024}
+  onChange={(files) => handleFiles(files)}
+/>
+```

@@ -1,0 +1,66 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Snackbar.stories';
+
+<Meta of={Stories} />
+
+# Snackbar
+
+Brief notification bar that appears at the edge of the screen. Use for non-critical feedback that doesn't require user action, like "Item saved" or "Connection restored."
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+Status variants control the visual appearance.
+<Canvas of={Stories.Variants} />
+
+## With action
+
+Add an inline action button for undo or follow-up.
+<Canvas of={Stories.WithAction} />
+
+## Positions
+
+Anchor the snackbar to different screen edges.
+<Canvas of={Stories.Positions} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Snackbar } from '@brik/bds';
+import { useState } from 'react';
+
+const [isOpen, setIsOpen] = useState(false);
+
+// Basic snackbar
+<Snackbar
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  message="Changes saved"
+/>
+
+// With action and variant
+<Snackbar
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  message="Item deleted"
+  variant="error"
+  actionLabel="Undo"
+  onAction={handleUndo}
+/>
+
+// Custom position
+<Snackbar
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  message="Connected"
+  variant="success"
+  position="top"
+/>
+```

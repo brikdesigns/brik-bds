@@ -1,0 +1,58 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './NavBar.stories';
+
+<Meta of={Stories} />
+
+# Nav bar
+
+Top-level navigation bar with logo, links, and action buttons. Use as the primary navigation element at the top of marketing sites and application shells.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variations
+
+### Links only
+Navigation links without action buttons.
+<Canvas of={Stories.LinksOnly} />
+
+### With multiple actions
+Multiple CTA buttons for complex navigation needs.
+<Canvas of={Stories.WithMultipleActions} />
+
+### Minimal
+Logo only, no links or actions.
+<Canvas of={Stories.Minimal} />
+
+## Sticky
+
+Fixed to the top of the viewport on scroll.
+<Canvas of={Stories.Sticky} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { NavBar } from '@brik/bds';
+
+<NavBar
+  logo={<img src="/logo.svg" alt="Acme" />}
+  links={[
+    { label: 'Features', href: '/features' },
+    { label: 'Pricing', href: '/pricing' },
+    { label: 'About', href: '/about' },
+  ]}
+  actions={<Button variant="primary" size="sm">Get started</Button>}
+/>
+
+// Sticky nav bar
+<NavBar
+  logo={<img src="/logo.svg" alt="Acme" />}
+  links={[{ label: 'Home', href: '/' }]}
+  sticky
+/>
+```

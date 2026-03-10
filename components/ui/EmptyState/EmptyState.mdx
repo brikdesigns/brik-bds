@@ -1,0 +1,54 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './EmptyState.stories';
+
+<Meta of={Stories} />
+
+# Empty state
+
+Placeholder for screens with no data. Use when a list, table, or page has no content to display, guiding users toward their next action.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variations
+
+### Without button
+Informational empty state with no call to action.
+<Canvas of={Stories.WithoutButton} />
+
+### Without description
+Title and action only, for simple empty contexts.
+<Canvas of={Stories.WithoutDescription} />
+
+### Title only
+Minimal variant when no further guidance is needed.
+<Canvas of={Stories.TitleOnly} />
+
+### Custom content
+Replace default layout with fully custom content.
+<Canvas of={Stories.CustomContent} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { EmptyState } from '@brik/bds';
+
+// Full empty state
+<EmptyState
+  title="No companies yet"
+  description="Add your first company to get started."
+  buttonLabel="Add company"
+  onAction={handleAdd}
+/>
+
+// Informational only
+<EmptyState
+  title="No results found"
+  description="Try adjusting your search or filters."
+/>
+```

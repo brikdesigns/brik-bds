@@ -1,0 +1,64 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Form.stories';
+
+<Meta of={Stories} />
+
+# Form
+
+Structured form container with layout control and submission handling. Use to wrap form fields with consistent spacing, error display, and submit actions.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Layout
+
+### Vertical (default)
+Fields stack vertically. The standard form layout.
+<Canvas of={Stories.Default} />
+
+### Horizontal
+Labels and fields side by side for compact forms.
+<Canvas of={Stories.HorizontalLayout} />
+
+## States
+
+### With error
+Display form-level error messages.
+<Canvas of={Stories.WithError} />
+
+### With success
+Show confirmation after successful submission.
+<Canvas of={Stories.WithSuccess} />
+
+## Interactive form
+
+Full working example with validation and submission.
+<Canvas of={Stories.InteractiveForm} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Form } from '@brik/bds';
+import { TextInput } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+<Form
+  title="Contact Us"
+  onSubmit={handleSubmit}
+  submitLabel="Send message"
+>
+  <TextInput label="Name" required />
+  <TextInput label="Email" type="email" required />
+</Form>
+
+// Horizontal layout
+<Form layout="horizontal" onSubmit={handleSubmit}>
+  <TextInput label="Search" />
+  <Button type="submit">Go</Button>
+</Form>
+```

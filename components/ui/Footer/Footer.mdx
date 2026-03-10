@@ -1,0 +1,68 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Footer.stories';
+
+<Meta of={Stories} />
+
+# Footer
+
+Site-wide footer with logo, navigation columns, and optional social links. Use at the bottom of marketing pages and application shells.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Default
+Standard footer on the primary background.
+<Canvas of={Stories.Default} />
+
+### Brand
+Footer on a brand-colored background for stronger visual presence.
+<Canvas of={Stories.BrandVariant} />
+
+## Variations
+
+### With social links
+Add social media icons alongside navigation.
+<Canvas of={Stories.WithSocialLinks} />
+
+### Minimal
+Logo, tagline, and copyright only.
+<Canvas of={Stories.Minimal} />
+
+### Columns only
+Navigation columns without logo or tagline.
+<Canvas of={Stories.ColumnsOnly} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Footer } from '@brik/bds';
+
+<Footer
+  logo={<img src="/logo.svg" alt="Acme" />}
+  tagline="Building better products."
+  columns={[
+    {
+      heading: 'Product',
+      links: [
+        { label: 'Features', href: '/features' },
+        { label: 'Pricing', href: '/pricing' },
+      ],
+    },
+    {
+      heading: 'Company',
+      links: [
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' },
+      ],
+    },
+  ]}
+  copyright="2026 Acme Inc."
+/>
+```
