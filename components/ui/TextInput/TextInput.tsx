@@ -46,11 +46,12 @@ const wrapperStyles: CSSProperties = {
  * Token reference:
  * - --font-family-label (label font)
  * - --font-weight-semi-bold = 600 (SemiBold per Figma)
+ * - --font-line-height-tight = 100% (compact label line-height)
  */
 const labelBaseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  lineHeight: 'var(--font-line-height-tight)',
   textTransform: 'capitalize' as const,
 };
 

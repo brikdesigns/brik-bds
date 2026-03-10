@@ -62,19 +62,28 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 }
 
 /**
- * Size-specific styles (matching TextInput — no hardcoded heights)
+ * Size-specific styles (matching TextInput — explicit height via calc)
+ *
+ * Browser <select> elements compute height differently than <input> even with
+ * appearance:none + matching padding/font/line-height. We set an explicit height
+ * using calc(padding*2 + 1.5em + border*2) where 1.5em = line-height(150%) * font-size.
+ * This guarantees pixel-perfect alignment with TextInput at every size scale.
  *
  * Token reference:
- * - --label-sm/md-base/lg (label font sizes)
- * - --body-sm/md-base/lg (select font sizes)
+ * - --label-sm/md/lg (label font sizes)
+ * - --body-sm/md/lg (select font sizes)
  * - --padding-xs = 10px (input padding — matches TextInput)
+ * - --border-width-md = 1px (border thickness)
  */
+const selectHeight = 'calc(var(--padding-xs) * 2 + 1.5em + var(--border-width-md) * 2)';
+
 const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperties }> = {
   sm: {
     label: { fontSize: 'var(--label-sm)' },
     select: {
       fontSize: 'var(--body-sm)',
       padding: 'var(--padding-xs)',
+      height: selectHeight,
     },
   },
   md: {
@@ -82,6 +91,7 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
     select: {
       fontSize: 'var(--body-md)',
       padding: 'var(--padding-xs)',
+      height: selectHeight,
     },
   },
   lg: {
@@ -89,6 +99,7 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
     select: {
       fontSize: 'var(--body-lg)',
       padding: 'var(--padding-xs)',
+      height: selectHeight,
     },
   },
 };
