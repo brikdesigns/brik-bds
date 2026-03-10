@@ -1,0 +1,147 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './SegmentedControl.stories';
+
+<Meta of={Stories} />
+
+# Segmented control
+
+A pill-shaped toggle for switching between mutually exclusive views or modes within the same context. Unlike TabBar (navigation between pages), SegmentedControl switches content in-place.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Sizes
+
+Three sizes for different density contexts.
+
+| Size | Padding | Font | Use case |
+|------|---------|------|----------|
+| `sm` | `gap-xs` / `padding-md` | `label-sm` | Compact toolbars, dense UI |
+| `md` | `gap-sm` / `padding-lg` | `label-md` | Default — forms, panels |
+| `lg` | `gap-md` / `padding-xl` | `label-md` | Prominent page-level toggles |
+
+<Canvas of={Stories.Sizes} />
+
+## Multiple segments
+
+Handles 2–5+ segments. Content determines segment width.
+
+### Two segments
+<Canvas of={Stories.Default} />
+
+### Three segments
+<Canvas of={Stories.ThreeSegments} />
+
+### Many segments
+<Canvas of={Stories.ManySegments} />
+
+## Full width
+
+Segments expand equally to fill the container. Use for binary toggles or when the control should match the width of surrounding content.
+
+<Canvas of={Stories.FullWidth} />
+
+## States
+
+### Default (inactive)
+Inactive segments use `text-secondary` on a transparent background. On hover they show `background-tertiary` with `text-primary`.
+
+### Active
+The selected segment elevates with `background-primary`, `text-primary`, and a subtle shadow to lift it from the container track.
+
+### Disabled (individual)
+Individual segments can be disabled. Disabled segments show 40% opacity and cannot be clicked.
+
+<Canvas of={Stories.WithDisabled} />
+
+### Disabled (entire control)
+The whole control can be disabled at once.
+
+<Canvas of={Stories.FullyDisabled} />
+
+### Focus
+Keyboard focus shows a `border-brand-primary` outline ring via `:focus-visible`.
+
+## Anatomy
+
+```
+┌─ container (background-secondary, border-radius-md) ──────────────┐
+│  ┌─ segment ─┐  ┌─ segment (active) ─┐  ┌─ segment ─┐           │
+│  │   Label   │  │   ████ Label ████   │  │   Label   │           │
+│  └───────────┘  └─────────────────────┘  └───────────┘           │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+- **Container**: `background-secondary` track with `border-radius-md`
+- **Active segment**: `background-primary` pill with `border-radius-sm` and shadow
+- **Inactive segment**: transparent, `text-secondary`
+
+## Design tokens used
+
+| Property | Token |
+|----------|-------|
+| Container background | `--background-secondary` |
+| Active background | `--background-primary` |
+| Active text | `--text-primary` |
+| Inactive text | `--text-secondary` |
+| Hover background | `--background-tertiary` |
+| Container radius | `--border-radius-md` |
+| Segment radius | `--border-radius-sm` |
+| Font family | `--font-family-label` |
+| Font weight | `--font-weight-semi-bold` |
+| Focus ring | `--border-brand-primary` |
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { SegmentedControl } from '@brik/bds';
+import { useState } from 'react';
+
+const [view, setView] = useState('grid');
+
+<SegmentedControl
+  value={view}
+  onChange={setView}
+  items={[
+    { label: 'Grid', value: 'grid' },
+    { label: 'List', value: 'list' },
+  ]}
+/>
+
+// Full width with size
+<SegmentedControl
+  value={period}
+  onChange={setPeriod}
+  size="lg"
+  fullWidth
+  items={[
+    { label: 'Monthly', value: 'monthly' },
+    { label: 'Yearly', value: 'yearly' },
+  ]}
+/>
+
+// With disabled segment
+<SegmentedControl
+  value={status}
+  onChange={setStatus}
+  items={[
+    { label: 'Published', value: 'published' },
+    { label: 'Draft', value: 'draft' },
+    { label: 'Archived', value: 'archived', disabled: true },
+  ]}
+/>
+```
+
+## When to use
+
+| Scenario | Component |
+|----------|-----------|
+| Toggle between 2–5 views in the same panel | **SegmentedControl** |
+| Navigate between pages or sections | TabBar |
+| Binary on/off toggle | Switch |
+| Select from a long list | Select |
