@@ -8,6 +8,11 @@ const meta = {
     layout: 'centered',
   },
   argTypes: {
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size variant (controls font-size)',
+    },
     placeholder: {
       control: 'text',
       description: 'Placeholder text',
@@ -103,6 +108,64 @@ export const ManyRows: Story = {
     placeholder: 'Large text area with many rows',
     rows: 10,
   },
+};
+
+/**
+ * Small size
+ */
+export const SizeSmall: Story = {
+  args: {
+    size: 'sm',
+    label: 'Notes',
+    placeholder: 'Small textarea...',
+    rows: 4,
+    fullWidth: true,
+  },
+};
+
+/**
+ * Medium size (default)
+ */
+export const SizeMedium: Story = {
+  args: {
+    size: 'md',
+    label: 'Notes',
+    placeholder: 'Medium textarea...',
+    rows: 4,
+    fullWidth: true,
+  },
+};
+
+/**
+ * Large size
+ */
+export const SizeLarge: Story = {
+  args: {
+    size: 'lg',
+    label: 'Notes',
+    placeholder: 'Large textarea...',
+    rows: 4,
+    fullWidth: true,
+  },
+};
+
+/**
+ * All sizes side by side
+ */
+export const AllSizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 'var(--gap-lg)', minWidth: '800px' }}>
+      <div style={{ flex: 1 }}>
+        <TextArea size="sm" label="Small" placeholder="sm variant..." rows={3} fullWidth />
+      </div>
+      <div style={{ flex: 1 }}>
+        <TextArea size="md" label="Medium" placeholder="md variant..." rows={3} fullWidth />
+      </div>
+      <div style={{ flex: 1 }}>
+        <TextArea size="lg" label="Large" placeholder="lg variant..." rows={3} fullWidth />
+      </div>
+    </div>
+  ),
 };
 
 /**

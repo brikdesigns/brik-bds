@@ -1,7 +1,37 @@
+/**
+ * BDS AddressInput Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ */
+
 .bds-address-input-field::placeholder {
-  color: var(--_color---text--muted);
+  color: var(--text-muted);
+}
+
+.bds-address-input-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-address-input-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+.bds-address-input-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  outline: none;
+}
+
+.bds-address-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .bds-address-input-suggestion:hover {
-  background-color: var(--_color---surface--secondary);
+  background-color: var(--surface-secondary);
 }

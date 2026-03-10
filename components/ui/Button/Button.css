@@ -20,7 +20,7 @@
 
   /* Focus: Brand outline for keyboard navigation */
   &:focus-visible {
-    outline: 2px solid var(--_color---border--brand);
+    outline: 2px solid var(--border-brand-primary);
     outline-offset: 2px;
   }
 
@@ -33,20 +33,20 @@
 
 /* Outline variant: Fill on hover */
 .bds-button-outline:hover:not(:disabled) {
-  background-color: var(--_color---background--brand-primary);
-  color: var(--_color---text--inverse);
+  background-color: var(--background-brand-primary);
+  color: var(--text-inverse);
   filter: none; /* Override filter since we're changing colors */
 }
 
 /* Ghost variant: Show background on hover */
 .bds-button-ghost:hover:not(:disabled) {
-  background-color: var(--_color---surface--secondary);
+  background-color: var(--surface-secondary);
   filter: none;
 }
 
 /* Secondary variant: Darken border on hover */
 .bds-button-secondary:hover:not(:disabled) {
-  border-color: var(--_color---border--primary);
+  border-color: var(--border-primary);
 }
 
 /* Loading state: prevent hover effects */

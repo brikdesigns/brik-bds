@@ -9,13 +9,21 @@ Horizontal tab navigation bar with active/inactive states. Renders a row of tab 
 
 ## Overview
 
-<Canvas of={Stories.Default} />
+<Canvas of={Stories.AllVariants} />
 
 ## Variants
 
-### Default
-Full tab bar with one active tab highlighted in brand color.
-<Canvas of={Stories.Default} />
+### Text
+Plain text labels with brand color for the active tab.
+<Canvas of={Stories.Text} />
+
+### Tab
+Underline indicator with bottom border.
+<Canvas of={Stories.Tab} />
+
+### Box
+Filled background for active, bordered for inactive.
+<Canvas of={Stories.Box} />
 
 ### Few tabs
 Compact tab bar with fewer items.
@@ -25,9 +33,13 @@ Compact tab bar with fewer items.
 All tabs in secondary color — useful before a selection is made.
 <Canvas of={Stories.NoActive} />
 
+### Disabled tabs
+Individual tabs can be disabled.
+<Canvas of={Stories.WithDisabled} />
+
 ### On dark background
-Tab bar on a dark brand background, as used inside PageHeader.
-<Canvas of={Stories.OnDarkBackground} />
+Tab bar on a dark brand background using `onColor` prop.
+<Canvas of={Stories.TextOnColor} />
 
 ## Props
 

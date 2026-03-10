@@ -3,9 +3,16 @@ import { bdsClass } from '../../utils';
 import './TextArea.css';
 
 /**
+ * TextArea size variants — matches TextInput sizes
+ */
+export type TextAreaSize = 'sm' | 'md' | 'lg';
+
+/**
  * TextArea component props
  */
 export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  /** Size variant (controls font-size, matching TextInput) */
+  size?: TextAreaSize;
   /** Placeholder text */
   placeholder?: string;
   /** Number of visible text rows */
@@ -34,7 +41,7 @@ export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  * Wrapper styles — vertical stack matching TextInput pattern
  *
  * Token reference:
- * - --gap-md = 8px (gap between label and field)
+ * - --gap-md = 8px
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
@@ -47,26 +54,47 @@ const wrapperStyles: CSSProperties = {
  * Label base styles matching TextInput pattern
  *
  * Token reference:
- * - --font-family-label (label font)
+ * - --font-family-label
  * - --font-weight-semi-bold = 600
- * - --font-line-height-tight = 100% (matches TextInput label)
- * - --label-md (default label size)
+ * - --font-line-height--100
  */
 const labelBaseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  fontSize: 'var(--label-md)',
+  lineHeight: 'var(--font-line-height--100)',
   textTransform: 'capitalize' as const,
+};
+
+/**
+ * Size-variant styles — matches TextInput exactly
+ *
+ * Figma specs:
+ * - sm: label 14px, body 14px
+ * - md: label 16px, body 16px
+ * - lg: label 18px, body 18px
+ */
+const sizeStyles: Record<TextAreaSize, { label: CSSProperties; textarea: CSSProperties }> = {
+  sm: {
+    label: { fontSize: 'var(--label-sm)' },
+    textarea: { fontSize: 'var(--body-sm)' },
+  },
+  md: {
+    label: { fontSize: 'var(--label-md)' },
+    textarea: { fontSize: 'var(--body-md)' },
+  },
+  lg: {
+    label: { fontSize: 'var(--label-lg)' },
+    textarea: { fontSize: 'var(--body-lg)' },
+  },
 };
 
 /**
  * Helper/error text base styles
  *
  * Token reference:
- * - --font-family-body (helper font)
- * - --body-sm (small text size)
- * - --text-muted (helper text color)
+ * - --font-family-body
+ * - --body-sm (14px)
+ * - --text-muted
  */
 const helperBaseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-body)',
@@ -76,31 +104,31 @@ const helperBaseStyles: CSSProperties = {
 };
 
 /**
- * TextArea styles using BDS tokens
+ * TextArea styles — matches TextInput, SearchInput, AddressInput
  *
  * Token reference:
- * - --border-input (input border color)
- * - --background-input (input background)
- * - --text-primary (text color)
- * - --border-radius-50 = 2px (input corners)
- * - --padding-tiny = 8px (input padding)
- * - --font-family-body (body font)
- * - --body-sm (small body text size)
- * - --border-width-sm (border thickness)
+ * - --background-input (field background)
+ * - --border-input (field border)
+ * - --border-width-md = 1px (border thickness)
+ * - --border-radius-md = 4px (corners)
+ * - --padding-xs = 10px (padding)
+ * - --font-family-body
+ * - --body-md = 16px
+ * - --font-weight-regular = 400
+ * - --font-line-height-normal
  */
 const textareaStyles: CSSProperties = {
   display: 'block',
   width: '100%',
-  minWidth: '200px',
-  padding: 'var(--padding-tiny)',
+  minWidth: 200,
+  padding: 'var(--padding-xs)',
   fontFamily: 'var(--font-family-body)',
   fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  fontSize: 'var(--body-md)',
   lineHeight: 'var(--font-line-height-normal)',
   color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-sm) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  border: 'var(--border-width-md) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
   transition: 'border-color 0.2s',
   resize: 'vertical',
@@ -116,12 +144,8 @@ const textareaDisabledStyles: CSSProperties = {
 /**
  * TextArea - BDS themed multi-line text input component
  *
- * Uses CSS variables for theming. Provides a styled textarea with
- * configurable rows, resize behavior, optional label, helper text,
- * and error state. All spacing, colors, and typography reference BDS tokens.
- *
- * Wrapper pattern matches TextInput and Select for consistent alignment
- * when placed in form layouts.
+ * Uses identical border, radius, background, and typography tokens as
+ * TextInput, SearchInput, and AddressInput for consistent form styling.
  *
  * @example
  * ```tsx
@@ -131,6 +155,7 @@ const textareaDisabledStyles: CSSProperties = {
  * ```
  */
 export function TextArea({
+  size = 'md',
   placeholder,
   rows = 4,
   disabled = false,
@@ -149,12 +174,14 @@ export function TextArea({
 }: TextAreaProps) {
   const inputId = id || (label ? `textarea-${Math.random().toString(36).substring(2, 11)}` : undefined);
   const hasError = Boolean(error);
+  const sizeStyle = sizeStyles[size];
 
   const combinedStyles: CSSProperties = {
     ...textareaStyles,
+    ...sizeStyle.textarea,
     resize,
     ...(disabled ? textareaDisabledStyles : {}),
-    ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
+    ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
     ...style,
   };
 
@@ -171,7 +198,8 @@ export function TextArea({
           htmlFor={inputId}
           style={{
             ...labelBaseStyles,
-            ...(hasError ? { color: 'var(--color-system-red)' } : {}),
+            ...sizeStyle.label,
+            ...(hasError ? { color: 'var(--system--red)' } : {}),
           }}
         >
           {label}
@@ -196,7 +224,7 @@ export function TextArea({
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
-          style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
+          style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
           role="alert"
         >
           {error}

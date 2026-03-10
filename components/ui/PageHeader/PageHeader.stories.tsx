@@ -1,14 +1,25 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { PageHeader } from './PageHeader';
 import { Breadcrumb } from '../Breadcrumb';
-import { TabBar } from '../TabBar';
+import { TabBar, type TabItem } from '../TabBar';
 import { Button } from '../Button';
 
+/** Interactive tab helper — clicking a tab switches active state */
+function useInteractiveTabs(labels: string[]): TabItem[] {
+  const [activeIndex, setActiveIndex] = useState(0);
+  return labels.map((label, i) => ({
+    label,
+    active: i === activeIndex,
+    onClick: () => setActiveIndex(i),
+  }));
+}
+
 const meta: Meta<typeof PageHeader> = {
-  title: 'Navigation/page-header',
+  title: 'Navigation/Secondary/page-header',
   component: PageHeader,
   parameters: {
     layout: 'fullscreen',
@@ -43,14 +54,7 @@ const sampleBreadcrumbs = [
   { label: 'Design System' },
 ];
 
-const sampleTabs = [
-  { label: 'Active', active: true },
-  { label: 'Latest' },
-  { label: 'Product' },
-  { label: 'Design System' },
-  { label: 'Marketing' },
-  { label: 'Other' },
-];
+const sampleTabLabels = ['Active', 'Latest', 'Product', 'Design System', 'Marketing', 'Other'];
 
 // ─── Default (Tabbed) ────────────────────────────────────────────
 
@@ -59,50 +63,22 @@ const sampleTabs = [
  * No background — the component is transparent per the Figma spec.
  */
 export const Default: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<PageHeader
-  title="My Account"
-  subtitle="Manage your membership plan."
-  breadcrumbs={
-    <Breadcrumb items={[
-      { label: 'Show All', href: '#' },
-      { label: 'Product', href: '#' },
-      { label: 'Design System' },
-    ]} />
-  }
-  actions={
-    <>
-      <Button variant="primary">Primary Button</Button>
-      <Button variant="secondary">Secondary Button</Button>
-    </>
-  }
-  tabs={
-    <TabBar items={[
-      { label: 'Active', active: true },
-      { label: 'Latest' },
-      { label: 'Product' },
-      { label: 'Design System' },
-      { label: 'Marketing' },
-      { label: 'Other' },
-    ]} />
-  }
-/>`,
-      },
-    },
-  },
-  args: {
-    title: 'My Account',
-    subtitle: 'Manage your membership plan.',
-    breadcrumbs: <Breadcrumb items={sampleBreadcrumbs} />,
-    tabs: <TabBar items={sampleTabs} />,
-    actions: (
-      <>
-        <Button variant="primary">Primary Button</Button>
-        <Button variant="secondary">Secondary Button</Button>
-      </>
-    ),
+  render: () => {
+    const tabs = useInteractiveTabs(sampleTabLabels);
+    return (
+      <PageHeader
+        title="My Account"
+        subtitle="Manage your membership plan."
+        breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
+        actions={
+          <>
+            <Button variant="primary">Primary Button</Button>
+            <Button variant="secondary">Secondary Button</Button>
+          </>
+        }
+        tabs={<TabBar variant="tab" items={tabs} />}
+      />
+    );
   },
 };
 
@@ -286,34 +262,14 @@ export const WithActions: Story = {
  * Title with TabBar navigation and no actions
  */
 export const TabsOnly: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<PageHeader
-  title="Projects"
-  subtitle="Browse and manage all projects."
-  tabs={
-    <TabBar items={[
-      { label: 'All', active: true },
-      { label: 'Active' },
-      { label: 'Archived' },
-    ]} />
-  }
-/>`,
-      },
-    },
-  },
-  args: {
-    title: 'Projects',
-    subtitle: 'Browse and manage all projects.',
-    tabs: (
-      <TabBar
-        items={[
-          { label: 'All', active: true },
-          { label: 'Active' },
-          { label: 'Archived' },
-        ]}
+  render: () => {
+    const tabs = useInteractiveTabs(['All', 'Active', 'Archived']);
+    return (
+      <PageHeader
+        title="Projects"
+        subtitle="Browse and manage all projects."
+        tabs={<TabBar variant="tab" items={tabs} />}
       />
-    ),
+    );
   },
 };

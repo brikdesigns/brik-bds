@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { CollapsibleCard } from './CollapsibleCard';
 
 const meta = {
-  title: 'Components/collapsible-card',
+  title: 'Displays/Card/collapsible-card',
   component: CollapsibleCard,
   parameters: {
     layout: 'padded',
@@ -46,14 +46,14 @@ export const WithRichContent: Story = {
     defaultOpen: true,
     children: (
       <div>
-        <h4 style={{ margin: '0 0 8px', color: 'var(--_color---text--primary)' }}>Phase 1: Discovery</h4>
-        <ul style={{ margin: '0 0 16px', paddingLeft: '24px', color: 'var(--_color---text--secondary)' }}>
+        <h4 style={{ margin: '0 0 8px', color: 'var(--text-primary)' }}>Phase 1: Discovery</h4>
+        <ul style={{ margin: '0 0 16px', paddingLeft: '24px', color: 'var(--text-secondary)' }}>
           <li>Stakeholder interviews</li>
           <li>Competitive analysis</li>
           <li>Requirements gathering</li>
         </ul>
-        <h4 style={{ margin: '0 0 8px', color: 'var(--_color---text--primary)' }}>Phase 2: Design</h4>
-        <ul style={{ margin: 0, paddingLeft: '24px', color: 'var(--_color---text--secondary)' }}>
+        <h4 style={{ margin: '0 0 8px', color: 'var(--text-primary)' }}>Phase 2: Design</h4>
+        <ul style={{ margin: 0, paddingLeft: '24px', color: 'var(--text-secondary)' }}>
           <li>Wireframes and prototypes</li>
           <li>Visual design</li>
           <li>Design review</li>
@@ -68,22 +68,22 @@ export const MultipleSections: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <CollapsibleCard sectionLabel="Section 01" title="Overview and Goals">
-        <p style={{ margin: 0, color: 'var(--_color---text--secondary)' }}>
+        <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
           Strategic overview of the project objectives and expected outcomes.
         </p>
       </CollapsibleCard>
       <CollapsibleCard sectionLabel="Section 02" title="Scope of Project">
-        <p style={{ margin: 0, color: 'var(--_color---text--secondary)' }}>
+        <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
           Detailed breakdown of deliverables and service offerings.
         </p>
       </CollapsibleCard>
       <CollapsibleCard sectionLabel="Section 03" title="Project Timeline">
-        <p style={{ margin: 0, color: 'var(--_color---text--secondary)' }}>
+        <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
           Phased timeline with milestones and deliverable dates.
         </p>
       </CollapsibleCard>
       <CollapsibleCard sectionLabel="Section 04" title="Fee Summary">
-        <p style={{ margin: 0, color: 'var(--_color---text--secondary)' }}>
+        <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
           Pricing breakdown with service-level detail.
         </p>
       </CollapsibleCard>

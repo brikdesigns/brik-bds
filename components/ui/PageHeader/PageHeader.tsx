@@ -176,13 +176,12 @@ const metadataValueStyles: CSSProperties = {
 /**
  * Tab wrapper styles
  *
- * Full-width baseline border. TabBar `tab` variant items use negative
- * margin-bottom to overlap this border so the active tab's brand-colored
- * border visually replaces the baseline.
+ * Neutral full-width container for the TabBar. No extra border —
+ * each TabBar variant handles its own visual treatment (underlines,
+ * box borders, etc.) so the wrapper stays transparent.
  */
 const tabWrapperStyles: CSSProperties = {
   width: '100%',
-  borderBottom: 'var(--border-width-lg) solid var(--border-secondary)',
 };
 
 /**

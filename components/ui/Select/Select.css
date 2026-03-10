@@ -5,25 +5,25 @@
  * expressed in inline CSSProperties.
  *
  * Token reference:
- * - --_color---border--input (default border)
- * - --_color---border--primary (hover border — darker)
- * - --_color---border--brand (focus border — theme color)
- * - --_color---text--muted (placeholder color)
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
  */
 
 .bds-select {
   &:hover:not(:disabled) {
-    border-color: var(--_color---border--primary);
+    border-color: var(--border-primary);
   }
 
   &:focus {
-    border-color: var(--_color---border--brand);
-    box-shadow: 0 0 0 1px var(--_color---border--brand);
+    border-color: var(--border-brand-primary);
+    box-shadow: 0 0 0 1px var(--border-brand-primary);
   }
 
   &:focus-visible {
-    border-color: var(--_color---border--brand);
-    box-shadow: 0 0 0 1px var(--_color---border--brand);
+    border-color: var(--border-brand-primary);
+    box-shadow: 0 0 0 1px var(--border-brand-primary);
     outline: none;
   }
 
@@ -36,7 +36,7 @@
   /* Placeholder option color (when first option with empty value is selected) */
   &:invalid,
   &.bds-select--placeholder {
-    color: var(--_color---text--muted);
+    color: var(--text-muted);
   }
 }
 

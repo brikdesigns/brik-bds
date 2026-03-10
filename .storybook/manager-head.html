@@ -141,6 +141,41 @@
   }
 
   /* ============================================
+     SIDEBAR — Focus/hover outlines
+     Storybook uses colorSecondary for focus rings
+     and hover box-shadows on sidebar items. Override
+     to remove the colored drop-shadow effect.
+     ============================================ */
+  [class*="sidebar"] button:focus-visible,
+  [class*="sidebar"] a:focus-visible {
+    outline: 2px solid var(--sb-bar-selected, #4665f5) !important;
+    outline-offset: -2px !important;
+    box-shadow: none !important;
+  }
+
+  [class*="sidebar"] button:focus:not(:focus-visible),
+  [class*="sidebar"] a:focus:not(:focus-visible) {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  [class*="sidebar"] button,
+  [class*="sidebar"] a,
+  [class*="sidebar"] [class*="IconButton"],
+  [class*="sidebar"] [data-action],
+  [class*="sidebar"] [role="treeitem"] {
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  [class*="sidebar"] button:hover,
+  [class*="sidebar"] a:hover,
+  [class*="sidebar"] [class*="IconButton"]:hover {
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  /* ============================================
      LOGO AREA — Brand image container
      ============================================ */
   [class*="sidebar"] [class*="Head"] {

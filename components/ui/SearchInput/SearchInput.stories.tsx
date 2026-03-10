@@ -30,6 +30,16 @@ const meta = {
       description: 'Disabled state',
     },
   },
+  decorators: [
+    (Story) => (
+      <div style={{ minHeight: 120, maxWidth: 520, padding: 'var(--padding-lg)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  args: {
+    fullWidth: true,
+  },
 } satisfies Meta<typeof SearchInput>;
 
 export default meta;
