@@ -69,22 +69,22 @@ export const WithIcons: Story = {
         label: 'Dashboard',
         href: '#dashboard',
         active: true,
-        icon: <span style={{ fontSize: 16 }}>🏠</span>,
+        icon: <span style={{ fontSize: 'var(--body-md)' }}>🏠</span>,
       },
       {
         label: 'Projects',
         href: '#projects',
-        icon: <span style={{ fontSize: 16 }}>📁</span>,
+        icon: <span style={{ fontSize: 'var(--body-md)' }}>📁</span>,
       },
       {
         label: 'Analytics',
         href: '#analytics',
-        icon: <span style={{ fontSize: 16 }}>📊</span>,
+        icon: <span style={{ fontSize: 'var(--body-md)' }}>📊</span>,
       },
       {
         label: 'Settings',
         href: '#settings',
-        icon: <span style={{ fontSize: 16 }}>⚙️</span>,
+        icon: <span style={{ fontSize: 'var(--body-md)' }}>⚙️</span>,
       },
     ],
   },
@@ -112,7 +112,7 @@ export const WithUserSection: Story = {
     logo: <BrikLogo />,
     navItems: sampleNavItems,
     userSection: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--padding-sm)' }}>
         <div
           style={{
             width: 40,
@@ -131,14 +131,14 @@ export const WithUserSection: Story = {
         <div>
           <div
             style={{
-              fontSize: 14,
+              fontSize: 'var(--body-sm)',
               fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
               color: 'var(--text-primary)',
             }}
           >
             John Doe
           </div>
-          <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+          <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
             john@example.com
           </div>
         </div>
@@ -177,7 +177,7 @@ export const FullApplicationLayout: Story = {
           </Button>
         }
         userSection={
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--padding-sm)' }}>
             <div
               style={{
                 width: 40,
@@ -196,14 +196,14 @@ export const FullApplicationLayout: Story = {
             <div>
               <div
                 style={{
-                  fontSize: 14,
+                  fontSize: 'var(--body-sm)',
                   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
                   color: 'var(--text-primary)',
                 }}
               >
                 John Doe
               </div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+              <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
                 john@example.com
               </div>
             </div>

@@ -94,7 +94,7 @@ export const NavigationLinks: Story = {
     },
   },
   render: () => (
-    <nav style={{ display: 'flex', gap: '24px' }}>
+    <nav style={{ display: 'flex', gap: 'var(--gap-xl)' }}>
       <TextLink href="#">Home</TextLink>
       <TextLink href="#">About</TextLink>
       <TextLink href="#">Services</TextLink>
@@ -106,7 +106,7 @@ export const NavigationLinks: Story = {
 // All sizes
 export const AllSizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
       <TextLink href="#">Default Link</TextLink>
       <TextLink href="#" size="small">Small Link</TextLink>
     </div>

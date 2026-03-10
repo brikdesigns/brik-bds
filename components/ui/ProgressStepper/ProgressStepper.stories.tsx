@@ -78,7 +78,7 @@ export const LinearMode = () => {
   const [active, setActive] = useState(1);
 
   return (
-    <div style={{ display: 'flex', gap: '40px' }}>
+    <div style={{ display: 'flex', gap: 'var(--space-1000)' }}>{/* bds-lint-ignore — 40px, no gap token */}
       <ProgressStepper
         steps={onboardingSteps}
         activeStep={active}
@@ -87,16 +87,16 @@ export const LinearMode = () => {
         style={{ width: '260px' }}
       />
       <div style={{ flex: 1 }}>
-        <h2 style={{ margin: '0 0 8px' }}>{onboardingSteps[active]?.label ?? 'Complete'}</h2>
-        <p style={{ color: '#666', margin: '0 0 4px' }}>
+        <h2 style={{ margin: '0 0 var(--gap-md)' }}>{onboardingSteps[active]?.label ?? 'Complete'}</h2>
+        <p style={{ color: 'var(--text-secondary)', margin: '0 0 var(--gap-xs)' }}>
           {active < onboardingSteps.length
             ? onboardingSteps[active].description
             : 'All steps completed!'}
         </p>
-        <p style={{ color: '#999', fontSize: '13px', margin: '0 0 24px' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: 'var(--body-sm)', margin: '0 0 var(--gap-xl)' }}>
           Try clicking an upcoming step — only completed steps are navigable.
         </p>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
           <button
             onClick={() => setActive(Math.max(0, active - 1))}
             disabled={active === 0}
@@ -106,7 +106,7 @@ export const LinearMode = () => {
           <button
             onClick={() => setActive(Math.min(onboardingSteps.length, active + 1))}
             disabled={active >= onboardingSteps.length}
-            style={{ backgroundColor: '#E35335', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}
+            style={{ backgroundColor: 'var(--background-brand-primary)', color: 'var(--text-inverse)', border: 'none', padding: 'var(--padding-tiny) var(--padding-md)', borderRadius: 'var(--border-radius-md)', cursor: 'pointer' }}
           >
             Next
           </button>
@@ -123,7 +123,7 @@ export const Interactive = () => {
   const [active, setActive] = useState(0);
 
   return (
-    <div style={{ display: 'flex', gap: '40px' }}>
+    <div style={{ display: 'flex', gap: 'var(--space-1000)' }}>{/* bds-lint-ignore — 40px, no gap token */}
       <ProgressStepper
         steps={onboardingSteps}
         activeStep={active}
@@ -131,13 +131,13 @@ export const Interactive = () => {
         style={{ width: '260px' }}
       />
       <div style={{ flex: 1 }}>
-        <h2 style={{ margin: '0 0 8px' }}>{onboardingSteps[active]?.label ?? 'Complete'}</h2>
-        <p style={{ color: '#666', margin: 0 }}>
+        <h2 style={{ margin: '0 0 var(--gap-md)' }}>{onboardingSteps[active]?.label ?? 'Complete'}</h2>
+        <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
           {active < onboardingSteps.length
             ? onboardingSteps[active].description
             : 'All steps completed!'}
         </p>
-        <div style={{ marginTop: '24px', display: 'flex', gap: '8px' }}>
+        <div style={{ marginTop: 'var(--padding-lg)', display: 'flex', gap: 'var(--gap-md)' }}>
           <button
             onClick={() => setActive(Math.max(0, active - 1))}
             disabled={active === 0}

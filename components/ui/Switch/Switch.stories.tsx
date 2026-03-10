@@ -78,7 +78,7 @@ export const Sizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
       <Switch size="lg" label="Large" />
       <Switch size="md" label="Medium" />
       <Switch size="sm" label="Small" />
@@ -98,7 +98,7 @@ export const SizesChecked: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
       <Switch size="lg" label="Large" defaultChecked />
       <Switch size="md" label="Medium" defaultChecked />
       <Switch size="sm" label="Small" defaultChecked />
@@ -123,7 +123,7 @@ export const Controlled: Story = {
   render: () => {
     const [enabled, setEnabled] = useState(false);
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-sm)' }}>
         <Switch
           label="Enable notifications"
           checked={enabled}
@@ -163,20 +163,20 @@ export const SettingsPanel: Story = {
       <div
         style={{
           width: '320px',
-          padding: '24px',
+          padding: 'var(--padding-lg)',
           backgroundColor: 'var(--background-primary)',
           border: '1px solid var(--border-secondary)',
           borderRadius: 'var(--border-radius-lg)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '20px',
+          gap: '20px', // bds-lint-ignore — visual spacing between settings items
         }}
       >
         <h3
           style={{
             fontFamily: 'var(--font-family-heading)',
             fontSize: 'var(--heading-sm)',
-            margin: '0 0 8px 0',
+            margin: '0 0 var(--gap-md) 0',
           }}
         >
           Preferences
@@ -215,13 +215,13 @@ export const CompactSettings: Story = {
     <div
       style={{
         width: '240px',
-        padding: '16px',
+        padding: 'var(--padding-md)',
         backgroundColor: 'var(--background-primary)',
         border: '1px solid var(--border-secondary)',
         borderRadius: 'var(--border-radius-lg)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px',
+        gap: 'var(--padding-sm)',
       }}
     >
       <h3

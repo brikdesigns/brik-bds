@@ -109,7 +109,7 @@ export const FullWidth: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
       <PasswordInput size="sm" label="Small (sm)" placeholder="Enter password" fullWidth />
       <PasswordInput size="md" label="Medium (md)" placeholder="Enter password" fullWidth />
       <PasswordInput size="lg" label="Large (lg)" placeholder="Enter password" fullWidth />

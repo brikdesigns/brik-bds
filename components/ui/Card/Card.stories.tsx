@@ -175,7 +175,7 @@ export const AllVariants: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap' }}>
       <Card variant="default" padding="md" style={{ width: '200px' }}>
         <CardTitle as="h4">Default</CardTitle>
         <CardDescription>No border or shadow</CardDescription>
@@ -221,7 +221,7 @@ export const CardGrid: Story = {
     <div style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: '16px',
+      gap: 'var(--gap-lg)',
       maxWidth: '800px',
     }}>
       {['Design', 'Development', 'Strategy'].map((title) => (

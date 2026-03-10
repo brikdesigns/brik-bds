@@ -23,7 +23,7 @@ const meta: Meta<typeof Tooltip> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ padding: '64px' }}>
+      <div style={{ padding: '64px' /* bds-lint-ignore — extra space for tooltip overflow */ }}>
         <Story />
       </div>
     ),

@@ -163,7 +163,7 @@ export const AllVariants: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
       <Button variant="primary">Primary</Button>
       <Button variant="outline">Outline</Button>
       <Button variant="secondary">Secondary</Button>
@@ -184,7 +184,7 @@ export const AllSizes: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
       <Button variant="primary" size="sm">Small</Button>
       <Button variant="primary" size="md">Medium</Button>
       <Button variant="primary" size="lg">Large</Button>
@@ -216,20 +216,20 @@ export const ButtonGrid: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
       {(['primary', 'outline', 'secondary', 'ghost'] as const).map((variant) => (
         <div key={variant}>
           <div style={{
             fontFamily: 'var(--font-family-label)',
-            fontSize: '0.75rem',
+            fontSize: 'var(--body-xs)', // bds-lint-ignore — closest to 0.75rem (12px)
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            marginBottom: '8px',
+            marginBottom: 'var(--gap-md)',
             color: 'var(--text-muted)',
           }}>
             {variant}
           </div>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
             <Button variant={variant} size="sm">Small</Button>
             <Button variant={variant} size="md">Medium</Button>
             <Button variant={variant} size="lg">Large</Button>
@@ -260,16 +260,16 @@ export const InteractiveStates: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-huge)' }}>
       {/* Hover Instructions */}
       <div style={{
-        padding: 16,
+        padding: 'var(--padding-md)',
         backgroundColor: 'var(--surface-secondary)',
         borderRadius: 'var(--border-radius-md)',
         fontFamily: 'var(--font-family-body)',
-        fontSize: '14px',
+        fontSize: 'var(--body-sm)',
       }}>
-        <strong style={{ display: 'block', marginBottom: 8 }}>Interactive State Guide:</strong>
+        <strong style={{ display: 'block', marginBottom: 'var(--gap-md)' }}>Interactive State Guide:</strong>
         <ul style={{ margin: 0, paddingLeft: 20 }}>
           <li><strong>Hover:</strong> Move your mouse over any button</li>
           <li><strong>Active:</strong> Click and hold on any button</li>
@@ -282,26 +282,26 @@ export const InteractiveStates: Story = {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'auto 1fr 1fr 1fr 1fr',
-        gap: '16px 24px',
+        gap: 'var(--gap-lg) var(--gap-xl)',
         alignItems: 'center',
       }}>
         {/* Header Row */}
         <div />
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>
+        <div style={{ fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-muted)' }}>
           Default
         </div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>
+        <div style={{ fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-muted)' }}>
           Hover (try it!)
         </div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>
+        <div style={{ fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-muted)' }}>
           Focus (tab)
         </div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>
+        <div style={{ fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-muted)' }}>
           Disabled
         </div>
 
         {/* Primary Row */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
+        <div style={{ fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-secondary)' }}>
           Primary
         </div>
         <Button variant="primary" size="md">Button</Button>
@@ -310,7 +310,7 @@ export const InteractiveStates: Story = {
         <Button variant="primary" size="md" disabled>Disabled</Button>
 
         {/* Outline Row */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
+        <div style={{ fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-secondary)' }}>
           Outline
         </div>
         <Button variant="outline" size="md">Button</Button>
@@ -319,7 +319,7 @@ export const InteractiveStates: Story = {
         <Button variant="outline" size="md" disabled>Disabled</Button>
 
         {/* Secondary Row */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
+        <div style={{ fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-secondary)' }}>
           Secondary
         </div>
         <Button variant="secondary" size="md">Button</Button>
@@ -328,7 +328,7 @@ export const InteractiveStates: Story = {
         <Button variant="secondary" size="md" disabled>Disabled</Button>
 
         {/* Ghost Row */}
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
+        <div style={{ fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-secondary)' }}>
           Ghost
         </div>
         <Button variant="ghost" size="md">Button</Button>
@@ -339,13 +339,13 @@ export const InteractiveStates: Story = {
 
       {/* Variant-Specific Hover Behaviors */}
       <div style={{
-        padding: 16,
+        padding: 'var(--padding-md)',
         backgroundColor: 'var(--surface-secondary)',
         borderRadius: 'var(--border-radius-md)',
         fontFamily: 'var(--font-family-body)',
-        fontSize: '14px',
+        fontSize: 'var(--body-sm)',
       }}>
-        <strong style={{ display: 'block', marginBottom: 8 }}>Variant-Specific Hover Behaviors:</strong>
+        <strong style={{ display: 'block', marginBottom: 'var(--gap-md)' }}>Variant-Specific Hover Behaviors:</strong>
         <ul style={{ margin: 0, paddingLeft: 20 }}>
           <li><strong>Primary:</strong> Darkens by 10% (filter: brightness(0.9))</li>
           <li><strong>Outline:</strong> Fills with brand color + inverse text</li>
@@ -393,7 +393,7 @@ export const LoadingVariants: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
       <Button variant="primary" loading>Primary</Button>
       <Button variant="outline" loading>Outline</Button>
       <Button variant="secondary" loading>Secondary</Button>
@@ -430,7 +430,7 @@ const handleClick = () => {
     };
 
     return (
-      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
         <Button variant="primary" loading={loading} onClick={handleClick}>
           Save Changes
         </Button>
@@ -468,7 +468,7 @@ export const ClickCounter: Story = {
     };
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', alignItems: 'flex-start' }}>
         {/* Counter Display */}
         <div style={{
           fontFamily: 'var(--font-family-heading)',
@@ -479,7 +479,7 @@ export const ClickCounter: Story = {
         </div>
 
         {/* Action Buttons */}
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap' }}>
           <Button
             variant="primary"
             size="md"
@@ -519,10 +519,10 @@ export const ClickCounter: Story = {
         {/* Loading State Explanation */}
         {isLoading && (
           <div style={{
-            padding: 12,
+            padding: 'var(--padding-sm)',
             backgroundColor: 'var(--surface-secondary)',
             borderRadius: 'var(--border-radius-md)',
-            fontSize: 14,
+            fontSize: 'var(--body-sm)',
             color: 'var(--text-muted)',
           }}>
             Simulating async operation... button is disabled during load

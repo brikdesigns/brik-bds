@@ -96,7 +96,7 @@ export const Grid: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+        code: `<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--gap-xl)' }}>
   <CardTestimonial
     quote="Amazing service and results."
     authorName="Sarah Chen"

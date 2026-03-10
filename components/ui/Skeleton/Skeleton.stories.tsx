@@ -69,16 +69,16 @@ export const AllVariants: Story = {
     },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-huge)' }}>
       <div>
         <h4 style={{
           fontFamily: 'var(--font-family-heading)',
           fontSize: 'var(--heading-tiny)',
-          marginBottom: '12px',
+          marginBottom: 'var(--padding-sm)',
         }}>
           Text
         </h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '400px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)', maxWidth: '400px' }}>
           <Skeleton variant="text" />
           <Skeleton variant="text" width="85%" />
           <Skeleton variant="text" width="70%" />
@@ -89,11 +89,11 @@ export const AllVariants: Story = {
         <h4 style={{
           fontFamily: 'var(--font-family-heading)',
           fontSize: 'var(--heading-tiny)',
-          marginBottom: '12px',
+          marginBottom: 'var(--padding-sm)',
         }}>
           Circular
         </h4>
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <div style={{ display: 'flex', gap: 'var(--gap-lg)' }}>
           <Skeleton variant="circular" width={32} height={32} />
           <Skeleton variant="circular" width={48} height={48} />
           <Skeleton variant="circular" width={64} height={64} />
@@ -104,7 +104,7 @@ export const AllVariants: Story = {
         <h4 style={{
           fontFamily: 'var(--font-family-heading)',
           fontSize: 'var(--heading-tiny)',
-          marginBottom: '12px',
+          marginBottom: 'var(--padding-sm)',
         }}>
           Rectangular
         </h4>
@@ -131,13 +131,13 @@ export const ArticleCard: Story = {
     <div
       style={{
         width: '300px',
-        padding: '16px',
+        padding: 'var(--padding-md)',
         backgroundColor: 'var(--background-primary)',
         border: '1px solid var(--border-secondary)',
         borderRadius: 'var(--border-radius-lg)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px',
+        gap: 'var(--padding-sm)',
       }}
     >
       <Skeleton variant="rectangular" width="100%" height="160px" />
@@ -164,20 +164,20 @@ export const UserProfile: Story = {
     <div
       style={{
         width: '280px',
-        padding: '24px',
+        padding: 'var(--padding-lg)',
         backgroundColor: 'var(--background-primary)',
         border: '1px solid var(--border-secondary)',
         borderRadius: 'var(--border-radius-lg)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '16px',
+        gap: 'var(--gap-lg)',
       }}
     >
       <Skeleton variant="circular" width={80} height={80} />
       <Skeleton variant="text" width="60%" height="20px" />
       <Skeleton variant="text" width="80%" height="14px" />
-      <div style={{ width: '100%', display: 'flex', gap: '8px', marginTop: '12px' }}>
+      <div style={{ width: '100%', display: 'flex', gap: 'var(--gap-md)', marginTop: 'var(--padding-sm)' }}>
         <Skeleton variant="rectangular" width="100%" height="36px" />
       </div>
     </div>
@@ -202,7 +202,7 @@ export const CommentList: Story = {
         width: '400px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
+        gap: 'var(--gap-lg)',
       }}
     >
       {[1, 2, 3].map((i) => (
@@ -210,15 +210,15 @@ export const CommentList: Story = {
           key={i}
           style={{
             display: 'flex',
-            gap: '12px',
-            padding: '12px',
+            gap: 'var(--padding-sm)',
+            padding: 'var(--padding-sm)',
             backgroundColor: 'var(--background-primary)',
             border: '1px solid var(--border-secondary)',
             borderRadius: 'var(--border-radius-md)',
           }}
         >
           <Skeleton variant="circular" width={40} height={40} />
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
             <Skeleton variant="text" width="30%" height="14px" />
             <Skeleton variant="text" width="100%" />
             <Skeleton variant="text" width="85%" />
@@ -246,7 +246,7 @@ export const TableRows: Story = {
         width: '500px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '1px',
+        gap: '1px', // bds-lint-ignore — 1px separator between rows
         backgroundColor: 'var(--border-secondary)',
         borderRadius: 'var(--border-radius-md)',
         overflow: 'hidden',
@@ -258,8 +258,8 @@ export const TableRows: Story = {
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 2fr 1fr',
-            gap: '16px',
-            padding: '12px 16px',
+            gap: 'var(--gap-lg)',
+            padding: 'var(--padding-sm) var(--padding-md)',
             backgroundColor: 'var(--background-primary)',
           }}
         >
