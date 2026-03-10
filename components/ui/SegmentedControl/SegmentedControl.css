@@ -1,0 +1,44 @@
+/* SegmentedControl — pseudo-state styles (hover, pressed, disabled)
+   Inline CSSProperties can't handle :hover/:active/:disabled,
+   so these live in CSS. */
+
+/* ── Shared transition ── */
+
+.bds-segmented-control-item {
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* ── Disabled ── */
+
+.bds-segmented-control-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── Inactive hover ── */
+
+.bds-segmented-control-item:hover:not(:disabled):not(.bds-segmented-control-item--active) {
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
+}
+
+/* ── Inactive press ── */
+
+.bds-segmented-control-item:active:not(:disabled):not(.bds-segmented-control-item--active) {
+  background-color: var(--background-tertiary);
+  opacity: 0.7;
+}
+
+/* ── Active press ── */
+
+.bds-segmented-control-item--active:active:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* ── Focus visible (keyboard navigation) ── */
+
+.bds-segmented-control-item:focus-visible {
+  outline: 2px solid var(--border-brand-primary);
+  outline-offset: 1px;
+}

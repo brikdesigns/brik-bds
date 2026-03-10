@@ -39,6 +39,7 @@ export * from './ProgressDots';
 export * from './ProgressStepper';
 export * from './Radio';
 export * from './SearchInput';
+export * from './SegmentedControl';
 export * from './Select';
 export * from './ServiceBadge';
 export * from './Sheet';
