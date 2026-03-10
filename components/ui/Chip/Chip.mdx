@@ -1,0 +1,58 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Chip.stories';
+
+<Meta of={Stories} />
+
+# Chip
+
+Compact label for categorization, filtering, or selection. Use for tags, filter pills, and multi-select tokens.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+All available color and appearance combinations.
+<Canvas of={Stories.AllVariants} />
+
+### Primary light
+Softer appearance for secondary contexts.
+<Canvas of={Stories.PrimaryLight} />
+
+## Sizes
+
+Three sizes for different density contexts.
+<Canvas of={Stories.Sizes} />
+
+## States
+
+### Removable
+Add a dismiss button for user-removable chips.
+<Canvas of={Stories.Removable} />
+
+### Disabled
+Prevent interaction while maintaining visibility.
+<Canvas of={Stories.Disabled} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Chip } from '@brik/bds';
+
+// Basic chip
+<Chip label="Design" />
+
+// Removable chip
+<Chip label="Filter" onRemove={() => removeFilter('design')} />
+
+// Size and variant
+<Chip label="Active" size="sm" variant="primary" appearance="light" />
+
+// Disabled
+<Chip label="Archived" disabled />
+```

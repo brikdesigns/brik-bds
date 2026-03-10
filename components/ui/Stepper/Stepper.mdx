@@ -1,0 +1,59 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Stepper.stories';
+
+<Meta of={Stories} />
+
+# Stepper
+
+Numeric input with increment and decrement buttons. Use for quantity selectors, pagination controls, and any setting that adjusts a number in discrete steps.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Sizes
+
+Three sizes for different layout contexts.
+<Canvas of={Stories.Sizes} />
+
+## With bounds
+
+Set minimum and maximum limits.
+<Canvas of={Stories.WithBounds} />
+
+## Custom step
+
+Increment by values other than 1.
+<Canvas of={Stories.CustomStep} />
+
+## States
+
+### Disabled
+Prevent interaction while showing the current value.
+<Canvas of={Stories.Disabled} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Stepper } from '@brik/bds';
+import { useState } from 'react';
+
+const [count, setCount] = useState(1);
+
+// Basic stepper
+<Stepper value={count} onChange={setCount} />
+
+// With bounds and custom step
+<Stepper
+  value={count}
+  onChange={setCount}
+  min={0}
+  max={100}
+  step={5}
+  size="lg"
+/>
+```

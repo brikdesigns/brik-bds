@@ -1,0 +1,54 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Slider.stories';
+
+<Meta of={Stories} />
+
+# Slider
+
+Range input for selecting a numeric value by dragging. Use for volume controls, price filters, and any setting where approximate selection is acceptable.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Sizes
+
+Three track sizes for different layout contexts.
+<Canvas of={Stories.Sizes} />
+
+## Custom range
+
+Set minimum, maximum, and step values.
+<Canvas of={Stories.CustomRange} />
+
+## States
+
+### Disabled
+Prevent interaction while showing the current value.
+<Canvas of={Stories.Disabled} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Slider } from '@brik/bds';
+import { useState } from 'react';
+
+const [value, setValue] = useState(50);
+
+// Basic slider
+<Slider value={value} onChange={setValue} />
+
+// Custom range with step
+<Slider
+  value={value}
+  onChange={setValue}
+  min={0}
+  max={1000}
+  step={50}
+  size="lg"
+/>
+```

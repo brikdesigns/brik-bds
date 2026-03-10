@@ -1,0 +1,62 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './ProgressDots.stories';
+
+<Meta of={Stories} />
+
+# Progress dots
+
+Minimal step indicator using dots. Use for onboarding flows, carousels, and wizards where step labels aren't needed.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Step positions
+
+### First step
+<Canvas of={Stories.FirstStep} />
+
+### Last step
+<Canvas of={Stories.LastStep} />
+
+## Sizes
+
+### Small
+Compact dots for tight layouts.
+<Canvas of={Stories.SmallSize} />
+
+### Medium (default)
+<Canvas of={Stories.Default} />
+
+## Linear mode
+
+Restrict navigation to sequential steps only.
+<Canvas of={Stories.LinearMode} />
+
+## Interactive
+
+Click dots to navigate between steps.
+<Canvas of={Stories.Interactive} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { ProgressDots } from '@brik/bds';
+
+// Basic progress dots
+<ProgressDots count={5} activeStep={2} />
+
+// Small, linear mode
+<ProgressDots count={4} activeStep={0} size="sm" linear />
+
+// With step change handler
+<ProgressDots
+  count={3}
+  activeStep={currentStep}
+  onStepClick={(step) => setCurrentStep(step)}
+/>
+```

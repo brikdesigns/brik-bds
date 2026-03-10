@@ -1,0 +1,65 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './CardFeature.stories';
+
+<Meta of={Stories} />
+
+# Card feature
+
+Highlights a single feature or benefit with an icon, title, and description. Use in feature grids, landing pages, and product overviews.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Alignment
+
+### Left (default)
+Icon and text aligned to the start.
+<Canvas of={Stories.Default} />
+
+### Centered
+Center-aligned layout for symmetrical grids.
+<Canvas of={Stories.Centered} />
+
+## Variations
+
+### With action
+Add a call-to-action link or button below the description.
+<Canvas of={Stories.WithAction} />
+
+### Without icon
+Text-only card when no icon is needed.
+<Canvas of={Stories.NoIcon} />
+
+## Feature grid
+
+Multiple cards in a responsive grid layout.
+<Canvas of={Stories.FeatureGrid} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { CardFeature } from '@brik/bds';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
+
+// Basic feature card
+<CardFeature
+  icon={<FontAwesomeIcon icon={faBolt} />}
+  title="Fast Performance"
+  description="Optimized for speed and reliability."
+/>
+
+// Centered with action
+<CardFeature
+  alignment="center"
+  icon={<FontAwesomeIcon icon={faBolt} />}
+  title="Enterprise Security"
+  description="Built with security best practices."
+  action={<a href="/security">Learn more</a>}
+/>
+```

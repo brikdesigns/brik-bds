@@ -1,0 +1,61 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Dialog.stories';
+
+<Meta of={Stories} />
+
+# Dialog
+
+Modal confirmation prompt for actions that need explicit user consent. Use for destructive operations, confirmations, and simple decision points.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Default
+Standard confirmation dialog with primary action.
+<Canvas of={Stories.Default} />
+
+### Destructive
+Red-toned action button for irreversible operations like deletions.
+<Canvas of={Stories.Destructive} />
+
+## Custom content
+
+Replace the default description with rich content for complex confirmations.
+<Canvas of={Stories.CustomContent} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Dialog } from '@brik/bds';
+import { useState } from 'react';
+
+const [isOpen, setIsOpen] = useState(false);
+
+// Confirmation dialog
+<Dialog
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Save changes?"
+  description="You have unsaved changes that will be lost."
+  confirmLabel="Save"
+  onConfirm={handleSave}
+/>
+
+// Destructive dialog
+<Dialog
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Delete company?"
+  description="This action cannot be undone."
+  variant="destructive"
+  confirmLabel="Delete"
+  onConfirm={handleDelete}
+/>
+```

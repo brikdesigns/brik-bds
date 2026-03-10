@@ -1,0 +1,60 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './ButtonGroup.stories';
+
+<Meta of={Stories} />
+
+# Button group
+
+Groups related buttons into a single visual unit. Use for action sets where buttons share context, like toolbar controls or segmented actions.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Orientation
+
+### Horizontal (default)
+Buttons are laid out in a row. The default for most action sets.
+<Canvas of={Stories.Default} />
+
+### Vertical
+Stack buttons vertically for sidebar actions or narrow containers.
+<Canvas of={Stories.Vertical} />
+
+## Variations
+
+### Three buttons
+Supports any number of child buttons.
+<Canvas of={Stories.WithThreeButtons} />
+
+### Full width
+Expand the group to fill its container.
+<Canvas of={Stories.FullWidth} />
+
+### Small buttons
+Works with any button size.
+<Canvas of={Stories.SmallButtons} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { ButtonGroup } from '@brik/bds';
+import { Button } from '@brik/bds';
+
+// Horizontal group (default)
+<ButtonGroup>
+  <Button variant="primary">Save</Button>
+  <Button variant="secondary">Cancel</Button>
+</ButtonGroup>
+
+// Vertical group
+<ButtonGroup orientation="vertical">
+  <Button variant="primary">Option A</Button>
+  <Button variant="secondary">Option B</Button>
+  <Button variant="secondary">Option C</Button>
+</ButtonGroup>
+```

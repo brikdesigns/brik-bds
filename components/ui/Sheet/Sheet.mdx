@@ -1,0 +1,68 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Sheet.stories';
+
+<Meta of={Stories} />
+
+# Sheet
+
+Sliding panel overlay anchored to a screen edge. Use for detail views, forms, and secondary content that shouldn't replace the current page.
+
+## Overview
+
+<Canvas of={Stories.Default} />
+
+## Sides
+
+### Right (default)
+Slides in from the right edge.
+<Canvas of={Stories.Default} />
+
+### Left
+Slides in from the left edge.
+<Canvas of={Stories.LeftSide} />
+
+### Bottom
+Slides up from the bottom for mobile-friendly layouts.
+<Canvas of={Stories.BottomSheet} />
+
+## Variations
+
+### Wide sheet
+Increase the panel width for content-heavy views.
+<Canvas of={Stories.WideSheet} />
+
+### Without title
+Omit the header for custom layouts.
+<Canvas of={Stories.NoTitle} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Sheet } from '@brik/bds';
+import { useState } from 'react';
+
+const [isOpen, setIsOpen] = useState(false);
+
+// Right-side detail panel
+<Sheet
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Company details"
+>
+  <p>Detail content here...</p>
+</Sheet>
+
+// Bottom sheet
+<Sheet
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  side="bottom"
+  title="Filters"
+>
+  <p>Filter controls here...</p>
+</Sheet>
+```

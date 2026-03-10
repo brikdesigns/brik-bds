@@ -1,0 +1,88 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Meter.stories';
+
+<Meta of={Stories} />
+
+# Meter
+
+Visual gauge for displaying a value within a known range. Use for scores, completion rates, performance metrics, and health indicators.
+
+## Overview
+
+<Canvas of={Stories.AllStatuses} />
+
+## Statuses
+
+### Pass
+Green indicator for values meeting the threshold.
+<Canvas of={Stories.Pass} />
+
+### Fair
+Yellow indicator for borderline values.
+<Canvas of={Stories.Fair} />
+
+### Fail
+Red indicator for values below acceptable range.
+<Canvas of={Stories.Fail} />
+
+### Neutral
+Gray indicator when no judgment is applied.
+<Canvas of={Stories.Neutral} />
+
+## Sizes
+
+Three sizes for different layout contexts.
+
+### Small
+<Canvas of={Stories.Small} />
+
+### Medium (default)
+<Canvas of={Stories.Pass} />
+
+### Large
+<Canvas of={Stories.Large} />
+
+## Label position
+
+### Above
+<Canvas of={Stories.LabelAbove} />
+
+### Below
+<Canvas of={Stories.LabelBelow} />
+
+### Comparison
+<Canvas of={Stories.LabelPositionComparison} />
+
+## Variations
+
+### Without value label
+<Canvas of={Stories.NoValue} />
+
+### Custom formatter
+Format the displayed value with a custom function.
+<Canvas of={Stories.CustomFormatter} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Usage
+
+```tsx
+import { Meter } from '@brik/bds';
+
+// Basic meter
+<Meter value={82} max={100} status="positive" label="Score" />
+
+// With custom formatter
+<Meter
+  value={0.73}
+  max={1}
+  status="warning"
+  label="Completion"
+  formatter={(v) => `${Math.round(v * 100)}%`}
+/>
+
+// Small size, label below
+<Meter value={45} max={100} size="sm" labelPosition="below" />
+```
