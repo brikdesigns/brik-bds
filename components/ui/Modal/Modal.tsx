@@ -68,7 +68,7 @@ const backdropStyles: CSSProperties = {
  * Modal container styles
  *
  * Token reference:
- * - --surface-overlay (modal panel surface)
+ * - --surface-primary (modal panel surface — white)
  * - --border-radius-md = 4px (modal corners)
  * - Shadow: 0 4px 32px 32px rgba(0,0,0,0.24) per Figma shadow-xl
  */
@@ -77,7 +77,7 @@ const getModalStyles = (size: ModalSize): CSSProperties => ({
   width: '100%',
   maxWidth: sizeConfig[size],
   maxHeight: '90vh',
-  backgroundColor: 'var(--surface-overlay)',
+  backgroundColor: 'var(--surface-primary)',
   borderRadius: 'var(--border-radius-md)',
   boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)', // bds-lint-ignore — shadow tokens resolve to zero
   display: 'flex',
