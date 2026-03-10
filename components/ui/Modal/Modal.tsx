@@ -78,10 +78,11 @@ const getModalStyles = (size: ModalSize): CSSProperties => ({
   maxWidth: sizeConfig[size],
   maxHeight: '90vh',
   backgroundColor: 'var(--surface-primary)',
-  borderRadius: 'var(--border-radius-md)',
-  boxShadow: '0px 4px 32px 32px rgba(0, 0, 0, 0.24)', // bds-lint-ignore — shadow tokens resolve to zero
+  borderRadius: 'var(--border-radius-lg)',
+  boxShadow: '0px 4px 32px 0px rgba(0, 0, 0, 0.24)', // bds-lint-ignore — shadow tokens resolve to zero
   display: 'flex',
   flexDirection: 'column',
+  overflow: 'hidden',
 });
 
 /**
@@ -178,6 +179,7 @@ const footerStyles: CSSProperties = {
   display: 'flex',
   gap: 'var(--gap-lg)',
   justifyContent: 'flex-end',
+  flexWrap: 'wrap',
   flexShrink: 0,
 };
 
