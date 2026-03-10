@@ -103,7 +103,7 @@ const variantStyles: Record<ButtonVariant, CSSProperties> = {
  * Token reference:
  * - --gap-sm = 6px (icon gap)
  * - --font-family-label (button font)
- * - --border-radius-50 = 2px (button corners)
+ * - --border-radius-md = 4px (button corners)
  */
 const baseStyles: CSSProperties = {
   display: 'inline-flex',
@@ -113,7 +113,7 @@ const baseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height-normal)',
-  borderRadius: 'var(--border-radius-50)',
+  borderRadius: 'var(--border-radius-md)',
   cursor: 'pointer',
   textDecoration: 'none',
   transition: 'background-color 0.2s, border-color 0.2s, opacity 0.2s',
