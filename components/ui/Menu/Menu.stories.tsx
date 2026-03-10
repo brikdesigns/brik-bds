@@ -1,9 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPalette, faBullhorn, faBox, faWrench, faCircleInfo, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPalette,
+  faBullhorn,
+  faBox,
+  faWrench,
+  faCircleInfo,
+  faLayerGroup,
+  faCaretDown,
+} from '@fortawesome/free-solid-svg-icons';
 import { Menu } from './Menu';
-import { Button } from '../Button';
+import { FilterButton } from '../FilterButton';
 
 const sampleItems = [
   { id: '1', label: 'Brand design', icon: <FontAwesomeIcon icon={faPalette} />, onClick: () => {} },
@@ -14,8 +22,14 @@ const sampleItems = [
   { id: '6', label: 'Templates', icon: <FontAwesomeIcon icon={faLayerGroup} />, onClick: () => {} },
 ];
 
+const filterOptions = sampleItems.map((item) => ({
+  id: item.id,
+  label: item.label,
+  icon: item.icon,
+}));
+
 const meta = {
-  title: 'Navigation/menu',
+  title: 'Navigation/Menu/menu',
   component: Menu,
   parameters: {
     layout: 'centered',
@@ -32,40 +46,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Menu triggered by a button click
+ * Menu triggered by a FilterButton — the chevron signals dropdown interactivity.
  */
 export const Default: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `const [open, setOpen] = useState(false);
-
-<div style={{ position: 'relative' }}>
-  <Button onClick={() => setOpen(!open)}>Services</Button>
-  <Menu
-    isOpen={open}
-    onClose={() => setOpen(false)}
-    items={items}
-  />
-</div>`,
-      },
-    },
-  },
-  render: () => {
-    const [open, setOpen] = useState(false);
-
-    return (
-      <div style={{ position: 'relative', display: 'inline-block' }}>
-        <Button onClick={() => setOpen(!open)}>Services</Button>
-        <Menu
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          items={sampleItems}
-          style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
-        />
-      </div>
-    );
-  },
+  render: () => (
+    <FilterButton
+      label="Services"
+      options={filterOptions}
+    />
+  ),
   args: {
     items: sampleItems,
     isOpen: false,
@@ -74,46 +63,19 @@ export const Default: Story = {
 };
 
 /**
- * Menu with an active/selected item
+ * Menu with a pre-selected value — FilterButton shows active state.
  */
 export const WithActiveItem: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Menu
-  isOpen={true}
-  onClose={handleClose}
-  items={items}
-  activeId="2"
-/>`,
-      },
-    },
-  },
   render: () => {
-    const [open, setOpen] = useState(false);
-    const [activeId, setActiveId] = useState('2');
-
-    const items = sampleItems.map((item) => ({
-      ...item,
-      onClick: () => {
-        setActiveId(item.id);
-        setOpen(false);
-      },
-    }));
+    const [value, setValue] = useState<string | undefined>('2');
 
     return (
-      <div style={{ position: 'relative', display: 'inline-block' }}>
-        <Button onClick={() => setOpen(!open)}>
-          {sampleItems.find((i) => i.id === activeId)?.label ?? 'Select'}
-        </Button>
-        <Menu
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          items={items}
-          activeId={activeId}
-          style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
-        />
-      </div>
+      <FilterButton
+        label="Services"
+        value={value}
+        onChange={setValue}
+        options={filterOptions}
+      />
     );
   },
   args: {
@@ -124,30 +86,38 @@ export const WithActiveItem: Story = {
 };
 
 /**
- * Menu without icons
+ * Menu without icons — plain text options with a chevron trigger.
  */
 export const TextOnly: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Menu
-  isOpen={open}
-  onClose={() => setOpen(false)}
-  items={[
-    { id: '1', label: 'Edit' },
-    { id: '2', label: 'Duplicate' },
-    { id: '3', label: 'Delete', disabled: true },
-  ]}
-/>`,
-      },
-    },
-  },
   render: () => {
     const [open, setOpen] = useState(false);
 
+    const triggerStyles = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 'var(--gap-md)',
+      padding: 'var(--padding-md) var(--padding-lg)',
+      backgroundColor: 'var(--surface-secondary)',
+      borderRadius: 'var(--border-radius-md)',
+      border: 'none',
+      cursor: 'pointer',
+      fontFamily: 'var(--font-family-label)',
+      fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+      fontSize: 'var(--label-md)',
+      lineHeight: 'var(--font-line-height-tight)',
+      color: 'var(--text-primary)',
+    };
+
     return (
       <div style={{ position: 'relative', display: 'inline-block' }}>
-        <Button variant="outline" onClick={() => setOpen(!open)}>Actions</Button>
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          style={triggerStyles}
+        >
+          <span>Actions</span>
+          <FontAwesomeIcon icon={faCaretDown} style={{ fontSize: 'var(--icon-sm)' }} />
+        </button>
         <Menu
           isOpen={open}
           onClose={() => setOpen(false)}
@@ -170,7 +140,7 @@ export const TextOnly: Story = {
 };
 
 /**
- * Static open menu for documentation
+ * Static open menu for documentation — shows the panel layout.
  */
 export const StaticOpen: Story = {
   render: () => (

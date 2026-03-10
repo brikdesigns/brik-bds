@@ -25,7 +25,7 @@ export interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElem
  * Wrapper styles — vertical stack with gap between label and field
  *
  * Token reference:
- * - --gap-md = 8px (gap between label and field)
+ * - --gap-md = 8px
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
@@ -39,13 +39,13 @@ const wrapperStyles: CSSProperties = {
  * Token reference:
  * - --font-family-label
  * - --font-weight-semi-bold = 600
- * - --font-line-height-tight
+ * - --font-line-height--100
  * - --text-primary
  */
 const labelStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
+  lineHeight: 'var(--font-line-height--100)',
   color: 'var(--text-primary)',
   textTransform: 'capitalize' as const,
 };
@@ -71,12 +71,12 @@ const fieldWrapperStyles: CSSProperties = {
  * Search icon positioning
  *
  * Token reference:
- * - --padding-tiny = 8px (icon inset)
+ * - --padding-sm = 12px (icon inset)
  * - --text-muted (icon color)
  */
 const iconStyles: CSSProperties = {
   position: 'absolute',
-  left: 'var(--padding-tiny)',
+  left: 'var(--padding-sm)',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -86,14 +86,13 @@ const iconStyles: CSSProperties = {
 };
 
 /**
- * Input base styles
+ * Input base styles — matches TextInput and AddressInput
  *
  * Token reference:
  * - --background-input (white)
  * - --border-input (border)
- * - --border-width-sm (border thickness)
- * - --border-radius-50 = 2px (corners)
- * - --padding-tiny = 8px (padding)
+ * - --border-width-md = 1px (border thickness)
+ * - --border-radius-md = 4px (corners)
  * - --font-family-body
  * - --body-md = 16px
  * - --font-weight-regular = 400
@@ -102,34 +101,34 @@ const iconStyles: CSSProperties = {
 const inputBaseStyles: CSSProperties = {
   width: '100%',
   fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)',
   fontWeight: 'var(--font-weight-regular)' as unknown as number,
   lineHeight: 'var(--font-line-height-normal)',
   color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-sm) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  border: 'var(--border-width-md) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
   transition: 'border-color 0.2s',
   boxSizing: 'border-box',
-  paddingLeft: 'calc(var(--padding-tiny) * 4)',
 };
 
 /**
- * Size-specific padding
- *
- * Figma specs:
- * - md: padding 8px all around (--padding-tiny), with left increased for icon
- * - sm: same horizontal padding, reduced vertical
+ * Size-specific padding and font-size
  */
 const inputSizeStyles: Record<SearchInputSize, CSSProperties> = {
   md: {
-    padding: 'var(--padding-tiny)',
-    paddingLeft: 'calc(var(--padding-tiny) * 4)',
+    fontSize: 'var(--body-md)',
+    paddingTop: 'var(--padding-xs)',
+    paddingRight: 'var(--padding-xs)',
+    paddingBottom: 'var(--padding-xs)',
+    paddingLeft: 'calc(var(--padding-sm) + 16px + var(--gap-sm))',
   },
   sm: {
-    padding: 'var(--padding-tiny) var(--padding-tiny)',
-    paddingLeft: 'calc(var(--padding-tiny) * 4)',
+    fontSize: 'var(--body-sm)',
+    paddingTop: 'var(--gap-md)',
+    paddingRight: 'var(--padding-xs)',
+    paddingBottom: 'var(--gap-md)',
+    paddingLeft: 'calc(var(--padding-sm) + 16px + var(--gap-sm))',
   },
 };
 
@@ -137,7 +136,7 @@ const inputSizeStyles: Record<SearchInputSize, CSSProperties> = {
  * SearchInput - BDS search input component
  *
  * A text input with a built-in magnifying glass search icon.
- * Supports sm and md sizes per Figma bds-search-input spec.
+ * Uses identical border, radius, and background tokens as TextInput and AddressInput.
  *
  * @example
  * ```tsx

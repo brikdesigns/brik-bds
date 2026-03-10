@@ -54,7 +54,7 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
  * Token reference:
  * - --background-primary (white background)
  * - --border-radius-lg = 8px (corners)
- * - --padding-xl = 24px (padding)
+ * - --padding-md = 16px (panel padding)
  * - --gap-md = 8px (item gap)
  */
 const panelStyles: CSSProperties = {
@@ -62,7 +62,7 @@ const panelStyles: CSSProperties = {
   zIndex: 100,
   backgroundColor: 'var(--background-primary)',
   borderRadius: 'var(--border-radius-lg)',
-  padding: 'var(--padding-xl)',
+  padding: 'var(--padding-md)',
   boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.12)', // bds-lint-ignore — shadow tokens resolve to zero
   display: 'flex',
   flexDirection: 'column',

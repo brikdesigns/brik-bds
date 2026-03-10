@@ -40,9 +40,9 @@ export interface CollapsibleCardProps extends HTMLAttributes<HTMLDivElement> {
  * - --_border-radius---md = 4px (corners)
  */
 const cardStyles: CSSProperties = {
-  backgroundColor: 'var(--_color---surface--primary)',
-  padding: 'var(--_space---lg)',
-  borderRadius: 'var(--_border-radius---md)',
+  backgroundColor: 'var(--surface-primary)',
+  padding: 'var(--padding-lg)',
+  borderRadius: 'var(--border-radius-md)',
   width: '100%',
   boxSizing: 'border-box',
 };
@@ -55,7 +55,7 @@ const headerStyles: CSSProperties = {
   alignItems: 'flex-start',
   justifyContent: 'space-between',
   cursor: 'pointer',
-  gap: 'var(--_space---gap--lg)',
+  gap: 'var(--gap-lg)',
 };
 
 /**
@@ -68,10 +68,10 @@ const headerStyles: CSSProperties = {
  * - --_color---text--secondary (muted gray)
  */
 const sectionLabelStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--heading)',
+  fontFamily: 'var(--font-family-heading)',
   fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  fontSize: 'var(--_typography---heading--tiny)',
-  color: 'var(--_color---text--secondary)',
+  fontSize: 'var(--heading-tiny)',
+  color: 'var(--text-secondary)',
   textTransform: 'uppercase',
   letterSpacing: '0.05em',
   lineHeight: 'var(--font-line-height--100)',
@@ -88,10 +88,10 @@ const sectionLabelStyles: CSSProperties = {
  * - --_color---text--primary
  */
 const titleStyles: CSSProperties = {
-  fontFamily: 'var(--_typography---font-family--heading)',
+  fontFamily: 'var(--font-family-heading)',
   fontWeight: 'var(--font-weight--bold)' as unknown as number,
-  fontSize: 'var(--_typography---heading--small)',
-  color: 'var(--_color---text--primary)',
+  fontSize: 'var(--heading-sm)',
+  color: 'var(--text-primary)',
   lineHeight: 'var(--font-line-height--100)',
   margin: 0,
 };
@@ -110,13 +110,13 @@ const iconButtonStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: 'var(--_color---background--secondary)',
-  borderRadius: 'var(--_border-radius---md)',
+  backgroundColor: 'var(--background-secondary)',
+  borderRadius: 'var(--border-radius-md)',
   border: 'none',
   cursor: 'pointer',
   flexShrink: 0,
-  color: 'var(--_color---text--primary)',
-  fontSize: 'var(--_typography---body--lg)', // bds-lint-ignore — icon sizing, not text
+  color: 'var(--text-primary)',
+  fontSize: 'var(--body-lg)', // bds-lint-ignore — icon sizing, not text
 };
 
 /**
@@ -126,7 +126,7 @@ const iconButtonStyles: CSSProperties = {
  * - --_space---lg = 24px (top margin)
  */
 const contentStyles: CSSProperties = {
-  marginTop: 'var(--_space---lg)',
+  marginTop: 'var(--padding-lg)',
 };
 
 /**
@@ -192,13 +192,13 @@ export function CollapsibleCard({
           }
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---lg)', flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-lg)', flex: 1, minWidth: 0 }}>
           {sectionLabel && (
             <span style={sectionLabelStyles}>{sectionLabel}</span>
           )}
           <h3 style={titleStyles}>{title}</h3>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--_space---gap--md)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
           {headerActions}
           <span style={iconButtonStyles} aria-hidden="true">
             <FontAwesomeIcon icon={open ? faMinus : faPlus} />

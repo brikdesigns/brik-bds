@@ -7,9 +7,20 @@ import { AddressInput, type AddressSuggestion } from './AddressInput';
 const meta: Meta<typeof AddressInput> = {
   title: 'Components/Input/address-input',
   component: AddressInput,
+  parameters: {
+    layout: 'padded',
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ minHeight: 360, maxWidth: 520, padding: 'var(--padding-lg)' }}>
+        <Story />
+      </div>
+    ),
+  ],
   args: {
-    placeholder: 'Enter location',
+    placeholder: 'Enter address',
     size: 'md',
+    fullWidth: true,
   },
   argTypes: {
     size: {
@@ -21,40 +32,6 @@ const meta: Meta<typeof AddressInput> = {
 
 export default meta;
 type Story = StoryObj<typeof AddressInput>;
-
-/**
- * Default address input with no suggestions
- */
-export const Default: Story = {};
-
-/**
- * With an optional label above the input
- */
-export const WithLabel: Story = {
-  args: {
-    label: 'Address',
-  },
-};
-
-/**
- * Small size variant
- */
-export const Small: Story = {
-  args: {
-    size: 'sm',
-    placeholder: 'Enter location',
-  },
-};
-
-/**
- * Full width input stretches to fill its container
- */
-export const FullWidth: Story = {
-  args: {
-    fullWidth: true,
-    label: 'Location',
-  },
-};
 
 /**
  * Mock suggestions data
@@ -91,6 +68,37 @@ const mockSuggestions: AddressSuggestion[] = [
 ];
 
 /**
+ * Default address input
+ */
+export const Default: Story = {
+  args: {
+    label: 'Address',
+    placeholder: 'Enter address',
+  },
+};
+
+/**
+ * With label above the input
+ */
+export const WithLabel: Story = {
+  args: {
+    label: 'Delivery address',
+    placeholder: 'Enter address',
+  },
+};
+
+/**
+ * Small size variant
+ */
+export const Small: Story = {
+  args: {
+    label: 'Address',
+    size: 'sm',
+    placeholder: 'Enter address',
+  },
+};
+
+/**
  * Interactive example with simulated autocomplete suggestions.
  * Type in the field to see suggestions appear.
  */
@@ -98,30 +106,12 @@ export const Interactive: Story = {
   parameters: {
     docs: {
       source: {
-        code: `const [value, setValue] = useState('');
-const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
-
-const handleChange = (e) => {
-  const query = e.target.value;
-  setValue(query);
-  // Simulate filtering suggestions
-  setSuggestions(
-    query.length > 0
-      ? allSuggestions.filter((s) =>
-          s.label.toLowerCase().includes(query.toLowerCase())
-        )
-      : []
-  );
-};
-
-<AddressInput
+        code: `<AddressInput
+  label="Delivery address"
   value={value}
   onChange={handleChange}
   suggestions={suggestions}
-  onSuggestionSelect={(s) => {
-    setValue(s.label);
-    setSuggestions([]);
-  }}
+  onSuggestionSelect={(s) => setValue(s.label)}
   placeholder="Start typing an address..."
   fullWidth
 />`,
@@ -155,17 +145,15 @@ const handleChange = (e) => {
     }, []);
 
     return (
-      <div style={{ maxWidth: '432px' }}>
-        <AddressInput
-          label="Delivery address"
-          value={value}
-          onChange={handleChange}
-          suggestions={suggestions}
-          onSuggestionSelect={handleSelect}
-          placeholder="Start typing an address..."
-          fullWidth
-        />
-      </div>
+      <AddressInput
+        label="Delivery address"
+        value={value}
+        onChange={handleChange}
+        suggestions={suggestions}
+        onSuggestionSelect={handleSelect}
+        placeholder="Start typing an address..."
+        fullWidth
+      />
     );
   },
 };
@@ -178,28 +166,29 @@ export const WithSuggestions: Story = {
     docs: {
       source: {
         code: `<AddressInput
-  placeholder="Enter location"
+  label="Location"
+  placeholder="Enter address"
   suggestions={[
     { id: '1', label: '123 Main Street', description: 'Nashville, TN 37201' },
     { id: '2', label: '456 Broadway Ave', description: 'Nashville, TN 37203' },
+    { id: '3', label: '789 Music Row', description: 'Nashville, TN 37212' },
   ]}
   onSuggestionSelect={(s) => console.log(s)}
+  fullWidth
 />`,
       },
     },
   },
   render: function WithSuggestionsStory() {
     return (
-      <div style={{ maxWidth: '432px' }}>
-        <AddressInput
-          label="Location"
-          defaultValue="Nash"
-          suggestions={mockSuggestions.slice(0, 3)}
-          onSuggestionSelect={(s) => console.log('Selected:', s)}
-          placeholder="Enter location"
-          fullWidth
-        />
-      </div>
+      <AddressInput
+        label="Location"
+        defaultValue="Nash"
+        suggestions={mockSuggestions.slice(0, 3)}
+        onSuggestionSelect={(s) => console.log('Selected:', s)}
+        placeholder="Enter address"
+        fullWidth
+      />
     );
   },
 };

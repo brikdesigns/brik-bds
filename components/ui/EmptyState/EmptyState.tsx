@@ -41,7 +41,7 @@ const textWrapperStyles: CSSProperties = {
 
 const titleStyles: CSSProperties = {
   fontFamily: 'var(--font-family-heading)',
-  fontSize: 'var(--_typography---heading--medium)',
+  fontSize: 'var(--heading-md)',
   fontWeight: 'var(--font-weight-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height-tight)',
   color: 'var(--text-primary)',

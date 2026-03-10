@@ -131,7 +131,7 @@ export const ColorTokens: Story = {
                   width: '40px',
                   height: '40px',
                   borderRadius: 'var(--border-radius-md)',
-                  backgroundColor: `var(--_color---background--service-${cat})`,
+                  backgroundColor: `var(--background-service-${cat})`,
                 }}
               />
               {/* Dark */}
@@ -140,7 +140,7 @@ export const ColorTokens: Story = {
                   width: '40px',
                   height: '40px',
                   borderRadius: 'var(--border-radius-md)',
-                  backgroundColor: `var(--_color---background--service-${cat}-secondary)`,
+                  backgroundColor: `var(--background-service-${cat}-secondary)`,
                 }}
               />
               {/* Light */}
@@ -158,7 +158,7 @@ export const ColorTokens: Story = {
                 style={{
                   fontFamily: 'var(--font-family-label)',
                   fontSize: 'var(--label-sm)',
-                  color: `var(--_color---text--service-${cat})`,
+                  color: `var(--text-service-${cat})`,
                   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
                   textTransform: 'uppercase' as const,
                   letterSpacing: '0.5px',

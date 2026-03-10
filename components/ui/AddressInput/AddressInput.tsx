@@ -9,7 +9,7 @@ import {
   useCallback,
 } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapPin } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
 import './AddressInput.css';
 
@@ -53,7 +53,7 @@ export interface AddressInputProps
  * Wrapper styles — vertical stack with gap between label and field
  *
  * Token reference:
- * - --gap-md = 8px (gap between label and field)
+ * - --gap-md = 8px
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
@@ -67,13 +67,13 @@ const wrapperStyles: CSSProperties = {
  * Token reference:
  * - --font-family-label
  * - --font-weight-semi-bold = 600
- * - --font-line-height-tight
+ * - --font-line-height--100
  * - --text-primary
  */
 const labelStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
+  lineHeight: 'var(--font-line-height--100)',
   color: 'var(--text-primary)',
   textTransform: 'capitalize' as const,
 };
@@ -96,32 +96,31 @@ const fieldWrapperStyles: CSSProperties = {
 };
 
 /**
- * Map pin icon positioning
+ * Address icon positioning
  *
  * Token reference:
  * - --text-muted (icon color)
- * - --icon-md = 16px
+ * - --padding-xs = 10px (inset)
  */
 const iconStyles: CSSProperties = {
   position: 'absolute',
-  left: 'var(--padding-md)',
+  left: 'var(--padding-sm)',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
   color: 'var(--text-muted)',
-  fontSize: 'var(--icon-md)',
   pointerEvents: 'none',
   zIndex: 1,
 };
 
 /**
- * Input base styles
+ * Input base styles — matches TextInput and SearchInput
  *
  * Token reference:
  * - --background-input (white)
  * - --border-input (border)
- * - --border-width-lg = 1px (visible border)
- * - --border-radius-50 = 2px (corners)
+ * - --border-width-md = 1px (border thickness)
+ * - --border-radius-md = 4px (corners)
  * - --font-family-body
  * - --body-md = 16px
  * - --font-weight-regular = 400
@@ -130,43 +129,40 @@ const iconStyles: CSSProperties = {
 const inputBaseStyles: CSSProperties = {
   width: '100%',
   fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)',
   fontWeight: 'var(--font-weight-regular)' as unknown as number,
   lineHeight: 'var(--font-line-height-normal)',
   color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-lg) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  border: 'var(--border-width-md) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
   transition: 'border-color 0.2s',
   boxSizing: 'border-box',
 };
 
 /**
- * Size-specific padding
- *
- * Figma specs:
- * - md: padding/md (16px) all around, left increased for icon
- * - sm: padding/xs (10px) horizontal, padding/tiny (8px) vertical
+ * Size-specific padding and font-size
  */
 const inputSizeStyles: Record<AddressInputSize, CSSProperties> = {
   md: {
-    padding: 'var(--padding-md)',
-    paddingLeft: 'calc(var(--padding-md) + 24px)',
+    fontSize: 'var(--body-md)',
+    padding: 'var(--padding-sm)',
+    paddingLeft: 'calc(var(--padding-sm) + 24px)',
   },
   sm: {
-    padding: 'var(--padding-tiny) var(--padding-xs)',
+    fontSize: 'var(--body-sm)',
+    padding: 'var(--gap-md) var(--padding-xs)',
     paddingLeft: 'calc(var(--padding-xs) + 24px)',
   },
 };
 
 /**
- * Suggestions dropdown panel (follows Menu panel design)
+ * Suggestions dropdown panel
  *
  * Token reference:
- * - --background-primary (white)
+ * - --surface-primary (white)
  * - --border-radius-lg = 8px
- * - --padding-md = 16px (padding)
+ * - --padding-sm = 12px (padding)
  * - --gap-sm = 6px (item gap)
  */
 const dropdownStyles: CSSProperties = {
@@ -176,34 +172,35 @@ const dropdownStyles: CSSProperties = {
   right: 0,
   zIndex: 100,
   marginTop: 'var(--gap-sm)',
-  backgroundColor: 'var(--background-primary)',
+  backgroundColor: 'var(--surface-primary)',
   borderRadius: 'var(--border-radius-lg)',
-  padding: 'var(--padding-md)',
+  border: 'var(--border-width-lg) solid var(--border-primary)',
+  padding: 'var(--padding-sm)',
   boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.12)', // bds-lint-ignore — shadow tokens resolve to zero
   display: 'flex',
   flexDirection: 'column',
   gap: 'var(--gap-sm)',
-  maxHeight: '240px',
+  maxHeight: 240,
   overflowY: 'auto',
   boxSizing: 'border-box',
 };
 
 /**
- * Suggestion item button styles (follows Menu item pattern)
+ * Suggestion item button styles
  *
  * Token reference:
  * - --font-family-body
  * - --body-md = 16px
  * - --font-line-height-normal
  * - --text-primary
- * - --gap-md = 8px (icon gap + padding)
+ * - --gap-md = 8px (icon gap)
  * - --border-radius-sm = 2px
  */
 const suggestionItemStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'flex-start',
   gap: 'var(--gap-md)',
-  padding: 'var(--padding-tiny)',
+  padding: 'var(--padding-xs)',
   background: 'none',
   border: 'none',
   borderRadius: 'var(--border-radius-sm)',
@@ -220,18 +217,13 @@ const suggestionItemStyles: CSSProperties = {
 
 /**
  * Suggestion icon wrapper
- *
- * Token reference:
- * - --icon-md = 16px
- * - --text-muted
  */
 const suggestionIconStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '20px',
-  height: '24px',
-  fontSize: 'var(--icon-md)',
+  width: 20,
+  height: 24,
   color: 'var(--text-muted)',
   flexShrink: 0,
 };
@@ -261,13 +253,13 @@ const suggestionDescriptionStyles: CSSProperties = {
  * AddressInput - Location input with autocomplete suggestions
  *
  * A text input with a map pin icon and a dropdown panel for location
- * suggestions. Follows the SearchInput field pattern with Menu-style
- * dropdown for results. Supports sm and md sizes.
+ * suggestions. Uses identical border, radius, and background tokens as
+ * TextInput and SearchInput.
  *
  * @example
  * ```tsx
  * <AddressInput
- *   placeholder="Enter location"
+ *   placeholder="Enter address"
  *   suggestions={[
  *     { id: '1', label: '123 Main St', description: 'Nashville, TN 37201' },
  *   ]}
@@ -360,7 +352,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
         )}
         <div style={fieldWrapperStyles}>
           <span style={iconStyles}>
-            <FontAwesomeIcon icon={faMapPin} />
+            <FontAwesomeIcon icon={faLocationDot} />
           </span>
           <input
             ref={ref}
@@ -385,7 +377,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
                   style={suggestionItemStyles}
                 >
                   <span style={suggestionIconStyles}>
-                    {suggestion.icon || <FontAwesomeIcon icon={faMapPin} />}
+                    {suggestion.icon || <FontAwesomeIcon icon={faLocationDot} />}
                   </span>
                   <span style={suggestionTextStyles}>
                     <span>{suggestion.label}</span>

@@ -1,5 +1,6 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
 import { bdsClass } from '../../utils';
+import './TabBar.css';
 
 /**
  * Tab item
@@ -9,6 +10,8 @@ export interface TabItem {
   label: string;
   /** Whether this tab is currently active */
   active?: boolean;
+  /** Whether this tab is disabled */
+  disabled?: boolean;
   /** Click handler */
   onClick?: () => void;
 }
@@ -81,11 +84,13 @@ function getTextStyles(active: boolean, onColor: boolean): CSSProperties {
 }
 
 function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
+  /* Figma spec: all tabs have a bottom border (border-width-lg = 2px).
+     Active = brand-primary, inactive = border-primary (baseline). */
   const borderColor = onColor
     ? 'var(--border-on-color-dark)'
     : active
       ? 'var(--border-brand-primary)'
-      : 'transparent';
+      : 'var(--border-secondary)';
 
   const textColor = onColor
     ? 'var(--text-on-color-dark)'
@@ -99,19 +104,22 @@ function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
     backgroundColor: onColor ? 'transparent' : 'var(--background-primary)',
     padding: 'var(--padding-lg)',
     borderBottom: `var(--border-width-lg) solid ${borderColor}`,
-    marginBottom: 'calc(-1 * var(--border-width-lg))',
     opacity: onColor && !active ? 0.6 : 1,
   };
 }
 
 function getBoxStyles(active: boolean, onColor: boolean): CSSProperties {
+  /* All tabs get the same border width to maintain consistent sizing.
+     Active tab uses a transparent border so it doesn't shift layout. */
+  const baseBorder = 'var(--border-width-md)';
+
   if (active) {
     return {
       ...tabBase,
       color: 'var(--text-inverse)',
       backgroundColor: 'var(--background-brand-primary)',
       padding: 'var(--padding-lg)',
-      border: 'none',
+      border: `${baseBorder} solid transparent`,
     };
   }
   const borderColor = onColor
@@ -125,7 +133,7 @@ function getBoxStyles(active: boolean, onColor: boolean): CSSProperties {
     color: textColor,
     backgroundColor: 'var(--background-primary)',
     padding: 'var(--padding-lg)',
-    border: `var(--border-width-md) solid ${borderColor}`,
+    border: `${baseBorder} solid ${borderColor}`,
     opacity: onColor && !active ? 0.6 : 1,
   };
 }
@@ -168,9 +176,12 @@ export function TabBar({
 }: TabBarProps) {
   const getStyles = styleBuilders[variant];
 
+  const variantClass = `bds-tab-bar--${variant}`;
+  const onColorClass = onColor ? 'bds-tab-bar--on-color' : '';
+
   return (
     <div
-      className={bdsClass('bds-tab-bar', className)}
+      className={bdsClass('bds-tab-bar', variantClass, onColorClass, className)}
       style={{ ...barVariantStyles[variant], ...style }}
       role="tablist"
       {...props}
@@ -181,6 +192,7 @@ export function TabBar({
           type="button"
           role="tab"
           aria-selected={tab.active || false}
+          disabled={tab.disabled || false}
           className="bds-tab-bar-item"
           style={getStyles(tab.active || false, onColor)}
           onClick={tab.onClick}

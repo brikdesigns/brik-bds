@@ -1,3 +1,47 @@
+/**
+ * BDS SearchInput Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ * - --text-primary (clear button color)
+ */
+
 .bds-search-input-field::placeholder {
-  color: var(--_color---text--muted);
+  color: var(--text-muted);
+}
+
+.bds-search-input-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-search-input-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+.bds-search-input-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  outline: none;
+}
+
+.bds-search-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Native clear button — force solid color instead of browser gradient */
+/* bds-lint-ignore — data URI SVGs cannot reference CSS variables; #333 = text-primary default */
+.bds-search-input-field::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23333' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256l105.3-105.4z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
 }

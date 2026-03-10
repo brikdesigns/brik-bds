@@ -1,5 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { CSSProperties } from 'react';
 import { Tooltip } from './Tooltip';
+
+/** Shared trigger button style for story demos */
+const triggerStyles: CSSProperties = {
+  padding: 'var(--padding-sm) var(--padding-lg)',
+  backgroundColor: 'var(--background-brand-primary)',
+  color: 'var(--text-inverse)',
+  border: 'none',
+  borderRadius: 'var(--border-radius-md)',
+  cursor: 'pointer',
+  fontFamily: 'var(--font-family-label)',
+  fontSize: 'var(--label-sm)',
+  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+};
 
 const meta: Meta<typeof Tooltip> = {
   title: 'Components/Feedback/tooltip',
@@ -7,6 +21,13 @@ const meta: Meta<typeof Tooltip> = {
   parameters: {
     layout: 'centered',
   },
+  decorators: [
+    (Story) => (
+      <div style={{ padding: '64px' }}>
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     content: {
       control: 'text',
@@ -28,16 +49,7 @@ export const Top: Story = {
   args: {
     content: 'This is a tooltip',
     placement: 'top',
-    children: <button style={{
-      padding: '8px 16px',
-      backgroundColor: 'var(--background-brand-primary)',
-      color: 'var(--text-inverse)',
-      border: 'none',
-      borderRadius: 'var(--border-radius-md)',
-      cursor: 'pointer',
-    }}>
-      Hover me
-    </button>,
+    children: <button style={triggerStyles}>Hover me</button>,
   },
 };
 
@@ -45,16 +57,7 @@ export const Bottom: Story = {
   args: {
     content: 'This appears below',
     placement: 'bottom',
-    children: <button style={{
-      padding: '8px 16px',
-      backgroundColor: 'var(--background-brand-primary)',
-      color: 'var(--text-inverse)',
-      border: 'none',
-      borderRadius: 'var(--border-radius-md)',
-      cursor: 'pointer',
-    }}>
-      Hover me
-    </button>,
+    children: <button style={triggerStyles}>Hover me</button>,
   },
 };
 
@@ -62,16 +65,7 @@ export const Left: Story = {
   args: {
     content: 'To the left',
     placement: 'left',
-    children: <button style={{
-      padding: '8px 16px',
-      backgroundColor: 'var(--background-brand-primary)',
-      color: 'var(--text-inverse)',
-      border: 'none',
-      borderRadius: 'var(--border-radius-md)',
-      cursor: 'pointer',
-    }}>
-      Hover me
-    </button>,
+    children: <button style={triggerStyles}>Hover me</button>,
   },
 };
 
@@ -79,93 +73,30 @@ export const Right: Story = {
   args: {
     content: 'To the right',
     placement: 'right',
-    children: <button style={{
-      padding: '8px 16px',
-      backgroundColor: 'var(--background-brand-primary)',
-      color: 'var(--text-inverse)',
-      border: 'none',
-      borderRadius: 'var(--border-radius-md)',
-      cursor: 'pointer',
-    }}>
-      Hover me
-    </button>,
+    children: <button style={triggerStyles}>Hover me</button>,
   },
 };
 
 // All placements
 export const AllPlacements: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tooltip content="Top placement" placement="top">
-  <button>Top</button>
-</Tooltip>
-<Tooltip content="Bottom placement" placement="bottom">
-  <button>Bottom</button>
-</Tooltip>
-<Tooltip content="Left placement" placement="left">
-  <button>Left</button>
-</Tooltip>
-<Tooltip content="Right placement" placement="right">
-  <button>Right</button>
-</Tooltip>`,
-      },
-    },
-  },
   render: () => (
     <div style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(2, 1fr)',
-      gap: '32px',
-      padding: '64px',
+      gap: 'var(--padding-xl)',
+      justifyItems: 'center',
     }}>
       <Tooltip content="Top placement" placement="top">
-        <button style={{
-          padding: '8px 16px',
-          backgroundColor: 'var(--background-brand-primary)',
-          color: 'var(--text-inverse)',
-          border: 'none',
-          borderRadius: 'var(--border-radius-md)',
-          cursor: 'pointer',
-        }}>
-          Top
-        </button>
+        <button style={triggerStyles}>Top</button>
       </Tooltip>
       <Tooltip content="Bottom placement" placement="bottom">
-        <button style={{
-          padding: '8px 16px',
-          backgroundColor: 'var(--background-brand-primary)',
-          color: 'var(--text-inverse)',
-          border: 'none',
-          borderRadius: 'var(--border-radius-md)',
-          cursor: 'pointer',
-        }}>
-          Bottom
-        </button>
+        <button style={triggerStyles}>Bottom</button>
       </Tooltip>
       <Tooltip content="Left placement" placement="left">
-        <button style={{
-          padding: '8px 16px',
-          backgroundColor: 'var(--background-brand-primary)',
-          color: 'var(--text-inverse)',
-          border: 'none',
-          borderRadius: 'var(--border-radius-md)',
-          cursor: 'pointer',
-        }}>
-          Left
-        </button>
+        <button style={triggerStyles}>Left</button>
       </Tooltip>
       <Tooltip content="Right placement" placement="right">
-        <button style={{
-          padding: '8px 16px',
-          backgroundColor: 'var(--background-brand-primary)',
-          color: 'var(--text-inverse)',
-          border: 'none',
-          borderRadius: 'var(--border-radius-md)',
-          cursor: 'pointer',
-        }}>
-          Right
-        </button>
+        <button style={triggerStyles}>Right</button>
       </Tooltip>
     </div>
   ),
@@ -173,23 +104,8 @@ export const AllPlacements: Story = {
 
 // Contextual examples
 export const IconButton: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tooltip content="Edit item">
-  <button aria-label="Edit">...</button>
-</Tooltip>
-<Tooltip content="Delete item">
-  <button aria-label="Delete">...</button>
-</Tooltip>
-<Tooltip content="Share">
-  <button aria-label="Share">...</button>
-</Tooltip>`,
-      },
-    },
-  },
   render: () => (
-    <div style={{ display: 'flex', gap: '8px' }}>
+    <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
       <Tooltip content="Edit item">
         <button style={{
           width: '32px',
@@ -198,7 +114,7 @@ export const IconButton: Story = {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'var(--background-secondary)',
-          border: '1px solid var(--border-secondary)',
+          border: 'var(--border-width-md) solid var(--border-secondary)',
           borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
@@ -213,7 +129,7 @@ export const IconButton: Story = {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'var(--background-secondary)',
-          border: '1px solid var(--border-secondary)',
+          border: 'var(--border-width-md) solid var(--border-secondary)',
           borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
@@ -228,7 +144,7 @@ export const IconButton: Story = {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'var(--background-secondary)',
-          border: '1px solid var(--border-secondary)',
+          border: 'var(--border-width-md) solid var(--border-secondary)',
           borderRadius: 'var(--border-radius-md)',
           cursor: 'pointer',
         }}>
@@ -240,49 +156,21 @@ export const IconButton: Story = {
 };
 
 export const WithKeyboardShortcut: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tooltip content="Save (Cmd+S)" placement="bottom">
-  <button>Save</button>
-</Tooltip>`,
-      },
-    },
-  },
   render: () => (
     <Tooltip content="Save (Cmd+S)" placement="bottom">
-      <button style={{
-        padding: '8px 16px',
-        backgroundColor: 'var(--background-brand-primary)',
-        color: 'var(--text-inverse)',
-        border: 'none',
-        borderRadius: 'var(--border-radius-md)',
-        cursor: 'pointer',
-      }}>
-        Save
-      </button>
+      <button style={triggerStyles}>Save</button>
     </Tooltip>
   ),
 };
 
 export const HelpText: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<span>Username</span>
-<Tooltip content="Must be 3-20 characters" placement="right">
-  <span>?</span>
-</Tooltip>`,
-      },
-    },
-  },
   render: () => (
     <div style={{
       fontFamily: 'var(--font-family-body)',
       fontSize: 'var(--body-md)',
       display: 'flex',
       alignItems: 'center',
-      gap: '8px',
+      gap: 'var(--gap-md)',
     }}>
       <span>Username</span>
       <Tooltip content="Must be 3-20 characters" placement="right">
@@ -295,7 +183,7 @@ export const HelpText: Story = {
           backgroundColor: 'var(--background-secondary)',
           color: 'var(--text-secondary)',
           borderRadius: '50%',
-          fontSize: '12px',
+          fontSize: 'var(--label-sm)', // bds-lint-ignore — matches help icon size
           cursor: 'help',
         }}>
           ?

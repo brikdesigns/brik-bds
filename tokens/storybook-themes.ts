@@ -205,7 +205,7 @@ export const storybookThemes: Record<ThemeNumber, StorybookThemeConfig> = {
     "base": "light",
     "name": "Brik Brand",
     "colorPrimary": "#e35335",
-    "colorSecondary": "#e35335",
+    "colorSecondary": "#4665f5",
     "appBg": "white",
     "appContentBg": "white",
     "appPreviewBg": "transparent",

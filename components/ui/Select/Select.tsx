@@ -1,4 +1,6 @@
 import { forwardRef, useState, type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
 import './Select.css';
 
@@ -98,10 +100,10 @@ const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperti
  * - --border-input (input border color)
  * - --background-input (input background)
  * - --text-primary (text color)
- * - --border-radius-50 = 2px (input corners)
+ * - --border-radius-md = 4px (input corners)
  * - --padding-tiny = 8px (input padding)
  * - --font-family-body (body font)
- * - --border-width-sm (border thickness)
+ * - --border-width-md = 1px (border thickness)
  * - --font-line-height-normal = 150%
  */
 const selectBaseStyles: CSSProperties = {
@@ -112,18 +114,33 @@ const selectBaseStyles: CSSProperties = {
   lineHeight: 'var(--font-line-height-normal)',
   color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-sm) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  border: 'var(--border-width-md) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
   transition: 'border-color 0.2s, box-shadow 0.2s',
   cursor: 'pointer',
   appearance: 'none',
   boxSizing: 'border-box',
-  // bds-lint-ignore — data URI SVGs cannot reference CSS variables; #333 = text--primary default
-  backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'right var(--padding-tiny) center',
-  paddingRight: 'calc(var(--padding-tiny) * 3)',
+  paddingRight: 'calc(var(--padding-tiny) * 4)',
+};
+
+/**
+ * Chevron icon positioning (right side)
+ *
+ * Token reference:
+ * - --padding-tiny = 8px (icon inset from edge)
+ * - --text-muted (icon color)
+ */
+const chevronStyles: CSSProperties = {
+  position: 'absolute',
+  right: 'var(--padding-tiny)',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'var(--text-muted)',
+  pointerEvents: 'none',
+  zIndex: 1,
+  fontSize: '0.75em', // bds-lint-ignore — relative to input font size for proportional scaling
 };
 
 /**
@@ -348,6 +365,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               )
             )}
           </select>
+          <span style={chevronStyles} aria-hidden="true">
+            <FontAwesomeIcon icon={faChevronDown} />
+          </span>
         </div>
         {error && (
           <span

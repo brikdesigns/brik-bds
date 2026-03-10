@@ -31,7 +31,7 @@ export interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElemen
  * Wrapper styles — vertical stack with gap between label and field
  *
  * Token reference:
- * - --gap-md = 8px (gap between label and field)
+ * - --gap-md = 8px
  */
 const wrapperStyles: CSSProperties = {
   display: 'flex',
@@ -50,7 +50,7 @@ const wrapperStyles: CSSProperties = {
 const labelBaseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
+  lineHeight: 'var(--font-line-height--100)',
   textTransform: 'capitalize' as const,
 };
 
@@ -64,36 +64,38 @@ const fieldWrapperStyles: CSSProperties = {
 };
 
 /**
- * Input field base styles using BDS tokens
+ * Input field base styles using BDS semantic tokens
  *
  * Token reference:
- * - --background-input (field background — white per Figma background/input)
+ * - --background-input (field background — white per Figma)
  * - --border-input (field border — grayscale/light per Figma)
- * - --border-width-sm (border thickness)
- * - --border-radius-50 = 2px (field corners — matches Figma border-radius/small)
- * - --padding-tiny = 8px (field padding)
- * - --font-family-body (field text font — Regular per Figma)
+ * - --border-width-md = 1px (border thickness)
+ * - --border-radius-md = 4px (field corners)
+ * - --padding-xs = 10px (field padding)
+ * - --font-family-body (field text font)
  * - --font-weight-regular = 400
  * - --font-line-height-normal = 150%
  */
 const inputBaseStyles: CSSProperties = {
   width: '100%',
-  padding: 'var(--padding-tiny)',
+  padding: 'var(--padding-xs)',
   fontFamily: 'var(--font-family-body)',
   fontWeight: 'var(--font-weight-regular)' as unknown as number,
   lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
   backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-sm) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
+  border: 'var(--border-width-md) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-md)',
   outline: 'none',
   transition: 'border-color 0.2s',
+  boxSizing: 'border-box',
 };
 
 /**
  * Icon positioning styles
  *
  * Token reference:
- * - --padding-tiny = 8px (icon inset from edge)
+ * - --padding-xs = 10px (icon inset from edge)
  */
 const iconStyles: CSSProperties = {
   position: 'absolute',
@@ -122,9 +124,9 @@ const helperBaseStyles: CSSProperties = {
  * Size-specific typography tokens (per Figma bds-text-input)
  *
  * Figma specs:
- * - sm: label font-size/75 (14px), body font-size/75 (14px)
- * - md: label font-size/100 (16px), body font-size/100 (16px)
- * - lg: label font-size/200 (18px), body font-size/200 (18px)
+ * - sm: label 14px, body 14px
+ * - md: label 16px, body 16px
+ * - lg: label 18px, body 18px
  */
 const sizeStyles: Record<TextInputSize, { label: CSSProperties; input: CSSProperties }> = {
   sm: {
@@ -144,10 +146,7 @@ const sizeStyles: Record<TextInputSize, { label: CSSProperties; input: CSSProper
 /**
  * TextInput - BDS themed text input component
  *
- * Fully token-based — does NOT depend on Webflow CSS classes.
- * All styles reference BDS design tokens for consistent theming
- * across all 8 theme variants.
- *
+ * Fully token-based — all styles reference BDS semantic design tokens.
  * Matches Figma component: bds-text-input (sizes sm/md/lg)
  *
  * @example
@@ -181,9 +180,9 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const inputStyles: CSSProperties = {
       ...inputBaseStyles,
       ...sizeStyle.input,
-      ...(iconBefore ? { paddingLeft: 'calc(var(--padding-tiny) * 4)' } : {}),
-      ...(iconAfter ? { paddingRight: 'calc(var(--padding-tiny) * 4)' } : {}),
-      ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
+      ...(iconBefore ? { paddingLeft: 'calc(var(--padding-xs) * 4)' } : {}),
+      ...(iconAfter ? { paddingRight: 'calc(var(--padding-xs) * 4)' } : {}),
+      ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
     };
 
     return (
@@ -201,7 +200,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             style={{
               ...labelBaseStyles,
               ...sizeStyle.label,
-              ...(hasError ? { color: 'var(--color-system-red)' } : {}),
+              ...(hasError ? { color: 'var(--system--red)' } : {}),
             }}
           >
             {label}
@@ -210,7 +209,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 
         <div style={fieldWrapperStyles}>
           {iconBefore && (
-            <span style={{ ...iconStyles, left: 'var(--padding-tiny)' }}>
+            <span style={{ ...iconStyles, left: 'var(--padding-xs)' }}>
               {iconBefore}
             </span>
           )}
@@ -228,7 +227,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           />
 
           {iconAfter && (
-            <span style={{ ...iconStyles, right: 'var(--padding-tiny)' }}>
+            <span style={{ ...iconStyles, right: 'var(--padding-xs)' }}>
               {iconAfter}
             </span>
           )}
@@ -237,7 +236,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         {error && (
           <span
             id={`${inputId}-error`}
-            style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
+            style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
             role="alert"
           >
             {error}

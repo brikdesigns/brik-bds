@@ -13,11 +13,18 @@ import {
 import { FilterButton } from './FilterButton';
 
 const meta = {
-  title: 'Components/Input/filter-button',
+  title: 'Components/Action/filter-button',
   component: FilterButton,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
+  decorators: [
+    (Story) => (
+      <div style={{ minHeight: 360, padding: 'var(--padding-lg)', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     label: {
       control: 'text',
@@ -141,7 +148,7 @@ export const FilterBar: Story = {
     const [reg, setReg] = useState<string | undefined>();
     const [tag, setTag] = useState<string | undefined>();
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-md)' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-md)', justifyContent: 'center', width: '100%' }}>
         <FilterButton label="Category" options={categoryOptions} value={cat} onChange={setCat} />
         <FilterButton label="Region" options={regionOptions} value={reg} onChange={setReg} />
         <FilterButton label="Status" options={tagOptions} value={tag} onChange={setTag} />

@@ -121,7 +121,7 @@ const triggerActiveStyles: CSSProperties = {
  * Token reference:
  * - --background-primary (white)
  * - --border-radius-lg = 8px
- * - --padding-xl = 24px (padding)
+ * - --padding-md = 16px (panel padding)
  * - --gap-md = 8px (item gap)
  */
 const dropdownStyles: CSSProperties = {
@@ -131,7 +131,7 @@ const dropdownStyles: CSSProperties = {
   zIndex: 100,
   backgroundColor: 'var(--background-primary)',
   borderRadius: 'var(--border-radius-lg)',
-  padding: 'var(--padding-xl)',
+  padding: 'var(--padding-md)',
   boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.12)', // bds-lint-ignore — shadow tokens resolve to zero
   display: 'flex',
   flexDirection: 'column',
