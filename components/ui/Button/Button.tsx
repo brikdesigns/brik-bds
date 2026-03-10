@@ -195,10 +195,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             <span
               style={{
                 display: 'inline-block',
-                width: size === 'sm' ? '14px' : '16px',
-                height: size === 'sm' ? '14px' : '16px',
+                width: size === 'sm' ? '14px' : '16px', // bds-lint-ignore — spinner dimensions match Figma
+                height: size === 'sm' ? '14px' : '16px', // bds-lint-ignore
                 borderRadius: '50%',
-                borderWidth: '2px',
+                borderWidth: 'var(--border-width-lg)',
                 borderStyle: 'solid',
                 borderColor: 'currentColor',
                 borderTopColor: 'transparent',

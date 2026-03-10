@@ -84,6 +84,7 @@ const variantStyles: Record<`${ChipVariant}-${ChipAppearance}`, CSSProperties> =
   },
 };
 
+// bds-lint-ignore — Figma-driven icon dimensions, numeric for use in width/height/fontSize
 const iconSizeMap: Record<ChipSize, number> = {
   sm: 10,
   md: 16,
@@ -94,7 +95,7 @@ const baseStyles: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: '9999px', // bds-lint-ignore — pill shape, no token
+  borderRadius: 'var(--border-radius-pill)',
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height-tight)',
@@ -180,7 +181,7 @@ export function Chip({
       {...props}
     >
       {avatar && (
-        <span style={{ ...iconWrapperStyles, borderRadius: '9999px', overflow: 'hidden' }}>
+        <span style={{ ...iconWrapperStyles, borderRadius: 'var(--border-radius-pill)', overflow: 'hidden' }}>
           {avatar}
         </span>
       )}

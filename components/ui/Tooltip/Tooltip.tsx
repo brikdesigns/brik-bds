@@ -34,7 +34,7 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       top: '100%',
       left: '50%',
       transform: 'translateX(-50%)',
-      borderTopColor: 'var(--color-grayscale-darkest, #333)',
+      borderTopColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
     },
   },
   bottom: {
@@ -48,7 +48,7 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       bottom: '100%',
       left: '50%',
       transform: 'translateX(-50%)',
-      borderBottomColor: 'var(--color-grayscale-darkest, #333)',
+      borderBottomColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
     },
   },
   left: {
@@ -62,7 +62,7 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       left: '100%',
       top: '50%',
       transform: 'translateY(-50%)',
-      borderLeftColor: 'var(--color-grayscale-darkest, #333)',
+      borderLeftColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
     },
   },
   right: {
@@ -76,7 +76,7 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
       right: '100%',
       top: '50%',
       transform: 'translateY(-50%)',
-      borderRightColor: 'var(--color-grayscale-darkest, #333)',
+      borderRightColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
     },
   },
 };
@@ -94,8 +94,8 @@ const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow:
 const tooltipBaseStyles: CSSProperties = {
   position: 'absolute',
   padding: 'var(--padding-sm) var(--padding-lg)',
-  backgroundColor: 'var(--color-grayscale-darkest, #333)',
-  color: 'var(--color-grayscale-white, #fff)',
+  backgroundColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
+  color: 'var(--text-inverse)',
   fontFamily: 'var(--font-family-label)',
   fontSize: 'var(--label-sm)',
   lineHeight: 'var(--font-line-height-normal)',
@@ -115,7 +115,7 @@ const arrowBaseStyles: CSSProperties = {
   width: 0,
   height: 0,
   borderStyle: 'solid',
-  borderWidth: '4px',
+  borderWidth: '4px', // bds-lint-ignore — CSS triangle size, not a visual border
   borderColor: 'transparent',
 };
 

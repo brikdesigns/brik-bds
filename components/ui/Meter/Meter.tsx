@@ -42,12 +42,13 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
 }
 
 const STATUS_COLORS: Record<MeterStatus, string> = {
-  positive: 'var(--system--green)',
-  warning: 'var(--system--yellow)',
-  error: 'var(--system--red)',
+  positive: 'var(--color-system-green)',
+  warning: 'var(--color-system-yellow)',
+  error: 'var(--color-system-red)',
   neutral: 'var(--background-secondary)',
 };
 
+// bds-lint-ignore — Figma-driven bar heights, no semantic size token
 const SIZE_HEIGHT: Record<MeterSize, number> = {
   sm: 8,
   md: 12,
@@ -121,7 +122,7 @@ export function Meter({
   const valueStyle: CSSProperties = {
     fontFamily: 'var(--font-family-heading)',
     fontSize: 'var(--heading-lg)',
-    fontWeight: 'var(--font-weight--bold)' as unknown as number,
+    fontWeight: 'var(--font-weight-bold)' as unknown as number,
     color: 'var(--text-primary)',
   };
 

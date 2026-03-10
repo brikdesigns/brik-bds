@@ -129,8 +129,8 @@ const iconWrapperStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '24px',
-  height: '24px',
+  width: '24px', // bds-lint-ignore — icon wrapper touch target
+  height: '24px', // bds-lint-ignore
   fontSize: 'var(--icon-lg)',
   color: 'var(--text-primary)',
   flexShrink: 0,

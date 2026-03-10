@@ -59,12 +59,12 @@ function getTrackStyles(size: SwitchSize, isChecked: boolean): CSSProperties {
   return {
     position: 'relative',
     display: 'inline-block',
-    width: `${s.trackW}px`,
-    height: `${s.trackH}px`,
+    width: `${s.trackW}px`, // bds-lint-ignore — Figma-driven switch dimensions, no semantic size token
+    height: `${s.trackH}px`, // bds-lint-ignore
     backgroundColor: isChecked
       ? 'var(--background-brand-primary)'
-      : 'var(--color-grayscale-light, #bdbdbd)',
-    borderRadius: '9999px',
+      : 'var(--border-muted)', // bds-lint-ignore — no semantic switch-track-inactive token; --border-muted = #bdbdbd matches Figma
+    borderRadius: 'var(--border-radius-pill)',
     transition: 'background-color 0.2s ease',
     flexShrink: 0,
     cursor: 'inherit',
@@ -75,14 +75,14 @@ function getKnobStyles(size: SwitchSize, isChecked: boolean): CSSProperties {
   const s = sizes[size];
   return {
     position: 'absolute',
-    top: `${s.pad}px`,
-    left: `${s.pad}px`,
-    width: `${s.knob}px`,
-    height: `${s.knob}px`,
-    backgroundColor: 'var(--color-grayscale-white, #fff)',
+    top: `${s.pad}px`, // bds-lint-ignore — Figma-driven switch dimensions
+    left: `${s.pad}px`, // bds-lint-ignore
+    width: `${s.knob}px`, // bds-lint-ignore
+    height: `${s.knob}px`, // bds-lint-ignore
+    backgroundColor: 'var(--surface-primary)',
     borderRadius: '50%',
     transition: 'transform 0.2s ease',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.06)',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.06)', // bds-lint-ignore — knob shadow, shadow tokens resolve to zero
     transform: isChecked ? `translateX(${s.travel}px)` : 'translateX(0)',
   };
 }

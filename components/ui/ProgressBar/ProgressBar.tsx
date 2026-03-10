@@ -23,7 +23,7 @@ export interface ProgressBarProps extends Omit<HTMLAttributes<HTMLDivElement>, '
 const trackStyles: CSSProperties = {
   position: 'relative',
   width: '100%',
-  height: '6px',
+  height: '6px', // bds-lint-ignore — Figma-driven track height
   backgroundColor: 'var(--background-input)',
   border: 'var(--border-width-sm) solid var(--border-muted)',
   borderRadius: 'var(--border-radius-sm)', // bds-lint-ignore — half track height
