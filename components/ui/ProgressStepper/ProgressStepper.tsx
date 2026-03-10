@@ -38,20 +38,20 @@ const sizeConfig: Record<ProgressStepperSize, {
   connectorWidth: string;
 }> = {
   sm: {
-    circleSize: 24,
+    circleSize: 24, // bds-lint-ignore — Figma-driven step circle size
     fontSize: 'var(--body-tiny)',
     labelSize: 'var(--body-sm)',
     descSize: 'var(--body-tiny)',
     gap: 'var(--gap-xs)',
-    connectorWidth: '2px',
+    connectorWidth: '2px', // bds-lint-ignore — Figma connector width
   },
   md: {
-    circleSize: 32,
+    circleSize: 32, // bds-lint-ignore — Figma-driven step circle size
     fontSize: 'var(--body-sm)',
     labelSize: 'var(--body-md)',
     descSize: 'var(--body-sm)',
     gap: 'var(--gap-sm)',
-    connectorWidth: '2px',
+    connectorWidth: '2px', // bds-lint-ignore — Figma connector width
   },
 };
 
@@ -157,7 +157,7 @@ export function ProgressStepper({
         const connectorStyle: CSSProperties = {
           width: config.connectorWidth,
           flexGrow: 1,
-          minHeight: '16px',
+          minHeight: '16px', // bds-lint-ignore — minimum connector height
           backgroundColor: status === 'complete'
             ? 'var(--background-brand-primary)'
             : 'var(--border-secondary)',

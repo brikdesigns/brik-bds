@@ -102,7 +102,7 @@ const baseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height-tight)',
-  borderRadius: '9999px',
+  borderRadius: 'var(--border-radius-pill)',
   whiteSpace: 'nowrap',
   overflow: 'clip',
   minWidth: 0,

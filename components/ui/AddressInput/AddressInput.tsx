@@ -222,8 +222,8 @@ const suggestionIconStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: 20,
-  height: 24,
+  width: 20, // bds-lint-ignore — icon wrapper alignment
+  height: 24, // bds-lint-ignore
   color: 'var(--text-muted)',
   flexShrink: 0,
 };

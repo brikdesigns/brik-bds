@@ -45,6 +45,7 @@ const statusColors: Record<DotStatus, string> = {
 /**
  * Size-based dimensions
  */
+// bds-lint-ignore — Figma-driven dot dimensions, no semantic size token
 const sizeStyles: Record<DotSize, CSSProperties> = {
   sm: {
     width: '6px',

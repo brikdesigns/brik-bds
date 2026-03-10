@@ -129,7 +129,7 @@ const baseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
   lineHeight: 'var(--font-line-height-tight)',
-  borderRadius: '9999px', // pill shape — no BDS token equivalent
+  borderRadius: 'var(--border-radius-pill)',
   whiteSpace: 'nowrap',
   textTransform: 'capitalize' as const,
 };

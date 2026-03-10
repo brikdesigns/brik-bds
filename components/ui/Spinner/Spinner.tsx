@@ -23,14 +23,14 @@ export interface SpinnerProps extends HTMLAttributes<HTMLDivElement> {
  */
 const sizeStyles: Record<SpinnerSize, CSSProperties> = {
   sm: {
-    width: '16px',
-    height: '16px',
-    borderWidth: '2px',
+    width: '16px', // bds-lint-ignore — Figma-driven spinner dimensions
+    height: '16px', // bds-lint-ignore
+    borderWidth: 'var(--border-width-lg)',
   },
   lg: {
-    width: '48px',
-    height: '48px',
-    borderWidth: '4px',
+    width: '48px', // bds-lint-ignore — Figma-driven spinner dimensions
+    height: '48px', // bds-lint-ignore
+    borderWidth: 'var(--border-width-huge)',
   },
 };
 
@@ -55,8 +55,8 @@ const baseStyles: CSSProperties = {
   display: 'inline-block',
   borderRadius: '50%',
   borderStyle: 'solid',
-  borderColor: 'var(--color-grayscale-lighter, #e0e0e0)',
-  borderTopColor: 'var(--theme-blue-blue-light, #0066ff)',
+  borderColor: 'var(--border-primary)',
+  borderTopColor: 'var(--border-brand-primary)',
   animation: 'bds-spinner-spin 0.8s linear infinite',
 };
 

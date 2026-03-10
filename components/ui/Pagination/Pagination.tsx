@@ -68,7 +68,7 @@ const arrowStyles: CSSProperties = {
   justifyContent: 'center',
   width: '48px',
   height: '48px',
-  borderRadius: '9999px',
+  borderRadius: 'var(--border-radius-pill)',
   backgroundColor: 'var(--background-brand-primary)',
   color: 'var(--text-on-color-dark)',
   border: 'none',

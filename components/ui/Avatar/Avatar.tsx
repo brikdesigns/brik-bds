@@ -36,6 +36,7 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
  * - --padding-lg = 24px
  * - --padding-xl = 32px
  */
+// bds-lint-ignore — Figma-driven avatar dimensions, no semantic size token
 const sizeConfig: Record<AvatarSize, { size: string; fontSize: string }> = {
   sm: { size: '32px', fontSize: 'var(--body-xs)' },
   md: { size: '40px', fontSize: 'var(--body-sm)' },
@@ -99,7 +100,7 @@ const imageStyles: CSSProperties = {
  * Status indicator styles
  */
 const getStatusStyles = (size: AvatarSize, status: AvatarStatus): CSSProperties => {
-  const statusSize = size === 'sm' ? '8px' : size === 'md' ? '10px' : '12px';
+  const statusSize = size === 'sm' ? '8px' : size === 'md' ? '10px' : '12px'; // bds-lint-ignore — Figma-driven status indicator sizes
 
   return {
     position: 'absolute',
@@ -109,7 +110,7 @@ const getStatusStyles = (size: AvatarSize, status: AvatarStatus): CSSProperties 
     height: statusSize,
     borderRadius: '50%',
     backgroundColor: statusColors[status],
-    border: '2px solid var(--background-input)',
+    border: 'var(--border-width-lg) solid var(--background-input)',
   };
 };
 

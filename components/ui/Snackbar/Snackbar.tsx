@@ -43,7 +43,7 @@ export interface SnackbarProps {
  */
 const variantStyles: Record<SnackbarVariant, CSSProperties> = {
   default: {
-    backgroundColor: 'var(--color-grayscale-black, black)',
+    backgroundColor: 'var(--color-grayscale-black)',
     color: 'var(--text-inverse)',
   },
   success: {
