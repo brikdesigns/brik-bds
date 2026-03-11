@@ -49,7 +49,7 @@ const paddingStyles: Record<CardPadding, string> = {
  * Token reference:
  * - --surface-primary (card background)
  * - --surface-secondary (outlined card background)
- * - --border-width-sm (thin border)
+ * - --border-width-md (standard border)
  * - --border-secondary (subtle border)
  * - --box-shadow-md (elevation shadow)
  */
@@ -61,7 +61,7 @@ const variantStyles: Record<CardVariant, CSSProperties> = {
   },
   outlined: {
     backgroundColor: 'var(--surface-secondary)',
-    border: 'var(--border-width-sm) solid var(--border-secondary)',
+    border: 'var(--border-width-md) solid var(--border-secondary)',
     boxShadow: 'var(--box-shadow-none)',
   },
   elevated: {

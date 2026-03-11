@@ -26,7 +26,7 @@ export interface CardDisplayProps extends HTMLAttributes<HTMLDivElement> {
  *
  * Token reference (from Figma bds-3-column-cards):
  * - --surface-primary (card background)
- * - --border-width-sm (border weight)
+ * - --border-width-md (border weight)
  * - --border-secondary (border color)
  * - --border-radius-lg (card corner radius — 8px in Figma)
  */
@@ -34,7 +34,7 @@ const cardStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: 'var(--surface-primary)',
-  border: 'var(--border-width-sm) solid var(--border-secondary)',
+  border: 'var(--border-width-md) solid var(--border-secondary)',
   borderRadius: 'var(--border-radius-lg)',
   overflow: 'hidden',
   width: '100%',

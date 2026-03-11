@@ -27,7 +27,7 @@ export interface CardFeatureProps extends HTMLAttributes<HTMLDivElement> {
  *
  * Token reference:
  * - --surface-primary (card background)
- * - --border-width-sm / --border-secondary (card border)
+ * - --border-width-md / --border-secondary (card border)
  * - --border-radius-lg = 8px (card corners)
  * - --padding-lg = 24px (card padding)
  * - --gap-lg = 16px (gap between content sections)
@@ -36,7 +36,7 @@ const cardStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: 'var(--surface-primary)',
-  border: 'var(--border-width-sm) solid var(--border-secondary)',
+  border: 'var(--border-width-md) solid var(--border-secondary)',
   borderRadius: 'var(--border-radius-lg)',
   padding: 'var(--padding-lg)',
   gap: 'var(--gap-lg)',

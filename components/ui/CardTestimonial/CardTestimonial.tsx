@@ -62,7 +62,7 @@ const variantStyles: Record<CardTestimonialVariant, {
   outlined: {
     card: {
       backgroundColor: 'var(--surface-primary)',
-      border: 'var(--border-width-sm) solid var(--border-secondary)',
+      border: 'var(--border-width-md) solid var(--border-secondary)',
     },
     quote: {},
     body: {
