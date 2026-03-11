@@ -40,7 +40,7 @@ export interface SidebarNavigationProps {
  */
 const containerStyles: CSSProperties = {
   backgroundColor: 'var(--surface-primary)',
-  borderRight: 'var(--border-width-lg) solid var(--border-secondary)',
+  borderRight: 'var(--border-width-md) solid var(--border-secondary)',
   display: 'flex',
   flexDirection: 'column',
   position: 'fixed',
@@ -58,7 +58,7 @@ const containerStyles: CSSProperties = {
  */
 const logoSectionStyles: CSSProperties = {
   padding: '24px 24px 20px', // bds-lint-ignore — Figma sidebar spec
-  borderBottom: 'var(--border-width-lg) solid var(--border-secondary)',
+  borderBottom: 'var(--border-width-md) solid var(--border-secondary)',
 };
 
 /**
@@ -131,7 +131,7 @@ const indicatorStyles = (active: boolean): CSSProperties => ({
  */
 const footerSectionStyles: CSSProperties = {
   padding: '12px 24px', // bds-lint-ignore — Figma sidebar spec
-  borderTop: 'var(--border-width-lg) solid var(--border-secondary)',
+  borderTop: 'var(--border-width-md) solid var(--border-secondary)',
 };
 
 /**
@@ -142,7 +142,7 @@ const footerSectionStyles: CSSProperties = {
  */
 const userSectionStyles: CSSProperties = {
   padding: '16px 24px', // bds-lint-ignore — Figma sidebar spec
-  borderTop: 'var(--border-width-lg) solid var(--border-secondary)',
+  borderTop: 'var(--border-width-md) solid var(--border-secondary)',
 };
 
 /**
