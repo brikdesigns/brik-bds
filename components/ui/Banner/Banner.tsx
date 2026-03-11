@@ -21,8 +21,7 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
  * Token reference:
  * - --surface-brand-primary (brand blue background)
  * - --text-inverse (white text on brand surface)
- * - --padding-lg = 24px (vertical padding)
- * - --padding-xl = 32px (horizontal padding)
+ * - --padding-lg = 24px (all sides)
  * - --border-radius-sm = 2px (corners)
  * - --gap-lg = 16px (gap between content and action)
  */
@@ -34,7 +33,7 @@ const bannerStyles: CSSProperties = {
   gap: 'var(--gap-lg)',
   backgroundColor: 'var(--surface-brand-primary)',
   color: 'var(--text-inverse)',
-  padding: 'var(--padding-lg) var(--padding-xl)',
+  padding: 'var(--padding-lg)',
   borderRadius: 'var(--border-radius-sm)',
   width: '100%',
   boxSizing: 'border-box',

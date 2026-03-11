@@ -5,33 +5,31 @@ import * as Stories from './AlertBanner.stories';
 
 # Alert banner
 
-Contextual banner for important messages requiring user attention. Uses a secondary surface background with an icon, title, description, and optional action.
+Contextual banner for important messages requiring user attention. Uses a secondary surface background with an icon-only Badge, title, description, and optional action.
 
 ## Overview
 
 <Canvas of={Stories.Default} />
 
-## Icon variants
+## Variants
 
-### Info
-General informational messages.
-<Canvas of={Stories.Info} />
+Each variant includes a colored icon-only Badge that communicates severity at a glance.
+
+### Information
+General informational messages. Neutral badge with circle-info icon.
+<Canvas of={Stories.Information} />
 
 ### Warning
-Attention-requiring situations.
+Attention-requiring situations. Yellow badge with triangle icon.
 <Canvas of={Stories.Warning} />
 
-### Success
-Positive confirmation messages.
-<Canvas of={Stories.Success} />
-
 ### Error
-Error states and failures.
+Error states and failures. Red badge with triangle-exclamation icon.
 <Canvas of={Stories.Error} />
 
-### All icons
-Side-by-side comparison of all icon variants.
-<Canvas of={Stories.AllIcons} />
+### All variants
+Side-by-side comparison of all variants.
+<Canvas of={Stories.AllVariants} />
 
 ## Variants
 
@@ -50,7 +48,7 @@ import { AlertBanner } from '@brik/bds';
 import { Button } from '@brik/bds';
 
 <AlertBanner
-  icon="info"
+  variant="information"
   title="Update available"
   description="A new version is ready to install"
   action={<Button variant="primary" size="sm">Update now</Button>}

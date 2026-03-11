@@ -1,10 +1,11 @@
 import { type ReactNode, type CSSProperties, type HTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
+import { Badge } from '../Badge';
 
 /**
- * AlertBanner icon variants
+ * AlertBanner variant types
  */
-export type AlertBannerIcon = 'info' | 'warning' | 'success' | 'error';
+export type AlertBannerVariant = 'warning' | 'error' | 'information';
 
 /**
  * AlertBanner component props
@@ -14,20 +15,33 @@ export interface AlertBannerProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   title: ReactNode;
   /** Description text below the title */
   description?: ReactNode;
-  /** Icon type shown before the content */
-  icon?: AlertBannerIcon;
+  /** Variant determines icon and badge color */
+  variant?: AlertBannerVariant;
   /** Action element (e.g. Button) aligned to the right */
   action?: ReactNode;
 }
 
 /**
- * Font Awesome icon class mapping
+ * Variant → Badge status mapping
+ *
+ * Token reference:
+ * - warning → Badge status="warning" (--color-system-yellow)
+ * - error → Badge status="error" (--color-system-red)
+ * - information → Badge status="neutral" (--background-secondary)
  */
-const iconClassMap: Record<AlertBannerIcon, string> = {
-  info: 'fa-solid fa-circle-info',
+const badgeStatusMap: Record<AlertBannerVariant, 'warning' | 'error' | 'neutral'> = {
+  warning: 'warning',
+  error: 'error',
+  information: 'neutral',
+};
+
+/**
+ * Variant → Font Awesome icon class mapping
+ */
+const iconClassMap: Record<AlertBannerVariant, string> = {
   warning: 'fa-solid fa-triangle-exclamation',
-  success: 'fa-solid fa-circle-check',
-  error: 'fa-solid fa-circle-xmark',
+  error: 'fa-solid fa-triangle-exclamation',
+  information: 'fa-solid fa-circle-info',
 };
 
 /**
@@ -55,7 +69,7 @@ const bannerStyles: CSSProperties = {
 };
 
 /**
- * Inner wrapper — icon + content side by side
+ * Inner wrapper — badge + content side by side
  */
 const innerStyles: CSSProperties = {
   display: 'flex',
@@ -63,18 +77,6 @@ const innerStyles: CSSProperties = {
   alignItems: 'flex-start',
   flex: '1 1 0',
   minWidth: 0,
-};
-
-/**
- * Icon styles
- *
- * Token reference:
- * - --body-lg = font-size-150 = 18px (icon size via semantic token)
- */
-const iconStyles: CSSProperties = {
-  fontSize: 'var(--body-lg)',
-  lineHeight: 'var(--font-line-height-normal)',
-  flexShrink: 0,
 };
 
 /**
@@ -127,13 +129,18 @@ const descriptionStyles: CSSProperties = {
  * AlertBanner - BDS alert notification banner
  *
  * A contextual banner for important messages requiring user attention.
- * Uses a secondary surface background with an icon, title, description,
- * and optional action button.
+ * Uses a secondary surface background with an icon-only Badge, title,
+ * description, and optional action button.
+ *
+ * Variants:
+ * - warning: yellow badge with triangle icon
+ * - error: red badge with triangle-exclamation icon
+ * - information: neutral badge with circle-info icon
  *
  * @example
  * ```tsx
  * <AlertBanner
- *   icon="info"
+ *   variant="information"
  *   title="Update available"
  *   description="A new version is ready to install"
  *   action={<Button variant="primary" size="sm">Update now</Button>}
@@ -143,7 +150,7 @@ const descriptionStyles: CSSProperties = {
 export function AlertBanner({
   title,
   description,
-  icon = 'info',
+  variant = 'information',
   action,
   className,
   style,
@@ -152,7 +159,11 @@ export function AlertBanner({
   return (
     <div role="alert" className={bdsClass('bds-alert-banner', className)} style={{ ...bannerStyles, ...style }} {...props}>
       <div style={innerStyles}>
-        <i className={iconClassMap[icon]} style={iconStyles} />
+        <Badge
+          size="xs"
+          status={badgeStatusMap[variant]}
+          icon={<i className={iconClassMap[variant]} />}
+        />
         <div style={contentStyles}>
           <span style={titleStyles}>{title}</span>
           {description && <span style={descriptionStyles}>{description}</span>}
