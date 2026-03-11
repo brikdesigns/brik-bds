@@ -4,7 +4,7 @@ import { Banner } from './Banner';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Banner> = {
-  title: 'Components/Marketing/marketing-banner',
+  title: 'Components/Feedback/marketing-banner',
   component: Banner,
   parameters: {
     layout: 'padded',
@@ -22,7 +22,7 @@ export const Default: Story = {
   args: {
     title: 'Title goes here',
     description: 'Description goes here',
-    action: <Button variant="secondary" size="sm">Learn more</Button>,
+    action: <Button variant="secondary" size="sm" style={{ backgroundColor: 'var(--background-on-color-dark)', color: 'var(--text-primary)', border: 'none' }}>Learn more</Button>,
   },
 };
 
@@ -36,7 +36,7 @@ export const WithAction: Story = {
   args: {
     title: 'Limited time offer',
     description: 'Save 20% on all plans this month',
-    action: <Button variant="secondary" size="sm">View plans</Button>,
+    action: <Button variant="secondary" size="sm" style={{ backgroundColor: 'var(--background-on-color-dark)', color: 'var(--text-primary)', border: 'none' }}>View plans</Button>,
   },
 };
 
@@ -50,7 +50,7 @@ export const Dismissible: Story = {
   <Banner
     title="Cookie notice"
     description="We use cookies to improve your experience"
-    action={<Button variant="secondary" size="sm">Accept</Button>}
+    action={<Button variant="secondary" size="sm" style={{ backgroundColor: 'var(--background-on-color-dark)', color: 'var(--text-primary)', border: 'none' }}>Accept</Button>}
     onDismiss={() => setVisible(false)}
   />
 )}`,
@@ -84,7 +84,7 @@ export const Dismissible: Story = {
       <Banner
         title="Cookie notice"
         description="We use cookies to improve your experience"
-        action={<Button variant="secondary" size="sm">Accept</Button>}
+        action={<Button variant="secondary" size="sm" style={{ backgroundColor: 'var(--background-on-color-dark)', color: 'var(--text-primary)', border: 'none' }}>Accept</Button>}
         onDismiss={() => setVisible(false)}
       />
     );
@@ -95,6 +95,6 @@ export const Announcement: Story = {
   args: {
     title: 'v2.0 is here',
     description: 'Check out the new features and improvements',
-    action: <Button variant="secondary" size="sm">What&apos;s new</Button>,
+    action: <Button variant="secondary" size="sm" style={{ backgroundColor: 'var(--background-on-color-dark)', color: 'var(--text-primary)', border: 'none' }}>What&apos;s new</Button>,
   },
 };
