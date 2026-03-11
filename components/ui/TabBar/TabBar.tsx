@@ -47,7 +47,7 @@ const barBase: CSSProperties = {
 
 const barVariantStyles: Record<TabBarVariant, CSSProperties> = {
   text: { ...barBase, gap: 'var(--gap-xl)' },
-  tab: { ...barBase, gap: 0 },
+  tab: { ...barBase, gap: 0, borderBottom: 'var(--border-width-lg) solid var(--border-secondary)' },
   box: { ...barBase, gap: 0 },
 };
 
