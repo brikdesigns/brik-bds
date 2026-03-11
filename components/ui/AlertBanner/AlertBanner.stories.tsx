@@ -11,10 +11,10 @@ const meta: Meta<typeof AlertBanner> = {
   argTypes: {
     title: { control: 'text', description: 'Bold title text' },
     description: { control: 'text', description: 'Description text' },
-    icon: {
+    variant: {
       control: 'radio',
-      options: ['info', 'warning', 'success', 'error'],
-      description: 'Icon variant',
+      options: ['warning', 'error', 'information'],
+      description: 'Alert variant — determines badge color and icon',
     },
   },
 };
@@ -26,14 +26,14 @@ export const Default: Story = {
   args: {
     title: 'Title goes here',
     description: 'Description goes here',
-    icon: 'info',
+    variant: 'information',
     action: <Button variant="primary" size="sm">Primary button</Button>,
   },
 };
 
-export const Info: Story = {
+export const Information: Story = {
   args: {
-    icon: 'info',
+    variant: 'information',
     title: 'New update available',
     description: 'Version 2.1 includes performance improvements and bug fixes',
     action: <Button variant="primary" size="sm">Update</Button>,
@@ -42,24 +42,16 @@ export const Info: Story = {
 
 export const Warning: Story = {
   args: {
-    icon: 'warning',
+    variant: 'warning',
     title: 'Storage almost full',
     description: 'You have used 90% of your available storage',
     action: <Button variant="primary" size="sm">Manage storage</Button>,
   },
 };
 
-export const Success: Story = {
-  args: {
-    icon: 'success',
-    title: 'Payment received',
-    description: 'Your invoice has been paid successfully',
-  },
-};
-
 export const Error: Story = {
   args: {
-    icon: 'error',
+    variant: 'error',
     title: 'Connection failed',
     description: 'Unable to reach the server. Please check your internet connection.',
     action: <Button variant="primary" size="sm">Retry</Button>,
@@ -68,28 +60,26 @@ export const Error: Story = {
 
 export const TitleOnly: Story = {
   args: {
-    icon: 'info',
+    variant: 'information',
     title: 'Your session will expire in 5 minutes',
   },
 };
 
-export const AllIcons: Story = {
+export const AllVariants: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<AlertBanner icon="info" title="Info" description="Informational message" />
-<AlertBanner icon="warning" title="Warning" description="Warning message" />
-<AlertBanner icon="success" title="Success" description="Success message" />
-<AlertBanner icon="error" title="Error" description="Error message" />`,
+        code: `<AlertBanner variant="information" title="Information" description="Informational message" />
+<AlertBanner variant="warning" title="Warning" description="Warning message" />
+<AlertBanner variant="error" title="Error" description="Error message" />`,
       },
     },
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-      <AlertBanner icon="info" title="Info" description="Informational message for the user" />
-      <AlertBanner icon="warning" title="Warning" description="Something needs your attention" />
-      <AlertBanner icon="success" title="Success" description="The operation completed successfully" />
-      <AlertBanner icon="error" title="Error" description="Something went wrong, please try again" />
+      <AlertBanner variant="information" title="Information" description="Informational message for the user" />
+      <AlertBanner variant="warning" title="Warning" description="Something needs your attention" />
+      <AlertBanner variant="error" title="Error" description="Something went wrong, please try again" />
     </div>
   ),
 };
