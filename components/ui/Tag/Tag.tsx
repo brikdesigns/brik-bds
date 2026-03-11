@@ -30,14 +30,14 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  * Size-based styles from Figma spec
  *
  * Figma specs (bds-tag):
- * - sm: padding 2px, gap 0px, font-size ~10px, border-radius 2px, icon 16px
- * - md: padding 4px, gap 2px, font-size 14px, border-radius 4px, icon 16px
- * - lg: padding 6px, gap 2px, font-size 18px, border-radius 4px, icon 20px
+ * - sm: padding tiny, gap 0px, font-size ~10px, border-radius 2px, icon 16px
+ * - md: padding tiny, gap 2px, font-size 14px, border-radius 4px, icon 16px
+ * - lg: padding sm, gap 2px, font-size 18px, border-radius 4px, icon 20px
  *
- * Token reference:
- * - --space-50 = 2px (sm padding, md/lg gap)
- * - --padding-tiny = 8px (md padding)
- * - --padding-sm = 12px (lg padding)
+ * Token reference (padding tokens, not space tokens):
+ * - --padding-tiny (sm/md padding — responsive, scales at breakpoints)
+ * - --padding-sm (lg padding)
+ * - --space-50 = 2px (md/lg gap only)
  * - --body-tiny ~= 10.26px (sm font)
  * - --label-sm = 14px (md font)
  * - --label-lg = 18px (lg font, mapped to font-size--200)
@@ -46,7 +46,7 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  */
 const sizeStyles: Record<TagSize, CSSProperties> = {
   sm: {
-    padding: 'var(--space-50)',
+    padding: 'var(--padding-tiny)',
     gap: 0,
     fontSize: 'var(--body-tiny)',
     borderRadius: 'var(--border-radius-sm)',
