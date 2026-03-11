@@ -240,6 +240,88 @@ export const ButtonGrid: Story = {
   ),
 };
 
+// ─── Icons ──────────────────────────────────────────────────────
+
+/** Simple inline SVG icons for stories (no dependency on icon libraries) */
+const ArrowRight = () => (
+  <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+    <path d="M8.354 1.646a.5.5 0 0 0-.708.708L12.793 7.5H2a.5.5 0 0 0 0 1h10.793l-5.147 5.146a.5.5 0 0 0 .708.708l6-6a.5.5 0 0 0 0-.708l-6-6z" />
+  </svg>
+);
+
+const Plus = () => (
+  <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+    <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z" />
+  </svg>
+);
+
+const Download = () => (
+  <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.1a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5v-2.1a.5.5 0 0 1 1 0v2.1a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5v-2.1a.5.5 0 0 1 .5-.5z" />
+    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+  </svg>
+);
+
+/**
+ * Icons — left (iconBefore) and right (iconAfter) icon slots
+ *
+ * Use `iconBefore` for leading icons and `iconAfter` for trailing icons.
+ * Pass any ReactNode — SVG, FontAwesome, Lucide, etc. Use `1em` sizing
+ * so the icon scales with the button's font size.
+ */
+export const WithIcons: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Buttons support `iconBefore` and `iconAfter` props. Icons inherit `currentColor` and scale with font size when sized in `em` units.',
+      },
+      source: {
+        code: `<Button iconAfter={<ArrowRight />}>Get started</Button>
+<Button variant="outline" iconBefore={<Plus />}>Add item</Button>
+<Button variant="secondary" iconAfter={<Download />}>Download</Button>
+<Button variant="ghost" iconBefore={<Plus />}>New</Button>`,
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Button variant="primary" iconAfter={<ArrowRight />}>Get started</Button>
+      <Button variant="outline" iconBefore={<Plus />}>Add item</Button>
+      <Button variant="secondary" iconAfter={<Download />}>Download</Button>
+      <Button variant="ghost" iconBefore={<Plus />}>New</Button>
+    </div>
+  ),
+};
+
+/**
+ * Icons across all sizes — verifies gap scales correctly
+ */
+export const IconSizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+      {(['sm', 'md', 'lg'] as const).map((size) => (
+        <div key={size}>
+          <div style={{
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-xs)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            marginBottom: 'var(--gap-md)',
+            color: 'var(--text-muted)',
+          }}>
+            {size}
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
+            <Button variant="primary" size={size} iconBefore={<Plus />}>Create</Button>
+            <Button variant="outline" size={size} iconAfter={<ArrowRight />}>Continue</Button>
+            <Button variant="ghost" size={size} iconBefore={<Download />}>Export</Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
 // ─── Interactive States ──────────────────────────────────────────
 
 /**

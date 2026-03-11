@@ -174,7 +174,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const content = (
       <>
-        <span style={loading ? { visibility: 'hidden' as const } : undefined}>
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 'inherit',
+            ...(loading ? { visibility: 'hidden' as const } : undefined),
+          }}
+        >
           {iconBefore}
           {children}
           {iconAfter}
