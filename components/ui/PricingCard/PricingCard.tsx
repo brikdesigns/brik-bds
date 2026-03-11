@@ -28,7 +28,7 @@ export interface PricingCardProps extends HTMLAttributes<HTMLDivElement> {
  *
  * Token reference:
  * - --surface-primary (card background)
- * - --border-width-sm (border weight)
+ * - --border-width-md (border weight)
  * - --border-secondary (border color)
  * - --border-radius-md (card corners)
  * - --padding-lg = 24px (padding)
@@ -40,7 +40,7 @@ const baseCardStyles: CSSProperties = {
   gap: 'var(--gap-lg)',
   padding: 'var(--padding-lg)',
   backgroundColor: 'var(--surface-primary)',
-  border: 'var(--border-width-sm) solid var(--border-secondary)',
+  border: 'var(--border-width-md) solid var(--border-secondary)',
   borderRadius: 'var(--border-radius-md)',
   width: '100%',
   minWidth: 0,
@@ -187,12 +187,12 @@ const actionStyles: CSSProperties = {
  * Divider styles between price section and features
  *
  * Token reference:
- * - --border-width-sm (line thickness)
+ * - --border-width-md (line thickness)
  * - --border-muted (subtle separator)
  */
 const dividerStyles: CSSProperties = {
   border: 'none',
-  borderTop: 'var(--border-width-sm) solid var(--border-muted)',
+  borderTop: 'var(--border-width-md) solid var(--border-muted)',
   margin: 0,
 };
 
