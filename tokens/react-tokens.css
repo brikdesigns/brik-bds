@@ -216,6 +216,8 @@
   --background-secondary: var(--color-grayscale-lightest);
   --background-input: var(--color-grayscale-white);
   --background-inverse: var(--color-grayscale-white);
+  --background-on-color-dark: var(--color-grayscale-white);
+  --background-on-color-light: var(--color-grayscale-black);
 
   --border-primary: var(--color-grayscale-dark);
   --border-secondary: var(--color-grayscale-light);
