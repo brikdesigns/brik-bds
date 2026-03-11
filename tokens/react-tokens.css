@@ -112,6 +112,8 @@
   --border-width-50: .5px;
   --border-width-100: 1px;
   --border-width-200: 2px;
+  --border-width-300: 3px;
+  --border-width-400: 4px;
 
   /* Border Radius Scale */
   --border-radius-0: 0px;
@@ -134,10 +136,12 @@
   /* ============================================= */
 
   /* Border Width Semantic */
-  --border-width-none: 0px;
-  --border-width-sm: var(--border-width-25);
-  --border-width-md: var(--border-width-50);
-  --border-width-lg: var(--border-width-100);
+  --border-width-none: var(--border-width-0);
+  --border-width-sm: var(--border-width-50);
+  --border-width-md: var(--border-width-100);
+  --border-width-lg: var(--border-width-200);
+  --border-width-xl: var(--border-width-300);
+  --border-width-huge: var(--border-width-400);
 
   /* Border Radius Semantic */
   --border-radius-none: 0px;

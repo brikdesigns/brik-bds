@@ -15,6 +15,11 @@
 :root {
   --untitled--medium-sea-green\<deleted\|variable-8804431a\>: #5ab963;
   --border-width-none: var(--border-width-0);
+  --border-width-sm: var(--border-width-50);
+  --border-width-md: var(--border-width-100);
+  --border-width-lg: var(--border-width-200);
+  --border-width-xl: var(--border-width-300);
+  --border-width-huge: var(--border-width-400);
   --border-secondary: var(--color-grayscale-light);
   --border-radius-none: var(--border-radius-0);
   --surface-nav: var(--color-grayscale-white);
@@ -37,7 +42,6 @@
   --theme-blue-green--blue-light: #4665f5;
   --padding-xl: var(--space-600);
   --gap-md: var(--space-200);
-  --border-width-md: var(--border-width-50);
   --label-md: var(--font-size-100);
   --border-inverse: var(--color-grayscale-white);
   --text-primary: var(--color-grayscale-darkest);
@@ -52,7 +56,6 @@
   --border-primary: var(--color-grayscale-dark);
   --border-radius-md: var(--border-radius-100);
   --surface-secondary: var(--color-grayscale-lightest);
-  --border-width-sm: var(--border-width-25);
   --page-primary: var(--color-grayscale-white);
   --font-family-body: "Open Sans", sans-serif;
   --text-muted: var(--color-grayscale-dark);
@@ -177,7 +180,6 @@
   --border-radius-600: 16px;
   --border-radius-700: 20px;
   --border-radius-800: 24px;
-  --border-width-lg: var(--border-width-100);
   --border-radius-900: 28px;
   --font-size-500: 25.3px;
   --border-radius-1000: 32px;
@@ -524,10 +526,6 @@
   --border-radius-50: var(--border-radius-50);
   --_border-radius---border-radius-xl\<deleted\|variable-fb0ecf43-bace-dcb0-70f7-9f6c9134cf35\>: var(--space-1900);
   --border-radius-50: var(--border-radius-50);
-  --border-width-none: var(--border-width-0);
-  --border-width-md: var(--border-width-50);
-  --border-width-sm: var(--border-width-25);
-  --border-width-lg: var(--border-width-100);
   /* Service semantic tokens (from brikdesigns.com — pending Foundations Webflow sync) */
   --_color---background--service-marketing: var(--services--green);
   --_color---background--service-marketing-secondary: var(--services--green-dark);
