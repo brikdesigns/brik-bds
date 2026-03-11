@@ -39,7 +39,7 @@
 
 /* Tabs overlap the container's baseline border so active indicator replaces it */
 .bds-tab-bar--tab .bds-tab-bar-item {
-  margin-bottom: calc(-1 * var(--border-width-lg));
+  margin-bottom: calc(-1 * var(--border-width-md));
 }
 
 .bds-tab-bar--tab .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
