@@ -1,8 +1,10 @@
+#!/bin/sh
+
 # BDS Component Completeness Check
 BARREL="components/ui/index.ts"
 UI_DIR="components/ui"
-MISSING_INDEX=()
-MISSING_EXPORT=()
+MISSING_INDEX=""
+MISSING_EXPORT=""
 
 for dir in "$UI_DIR"/*/; do
   name=$(basename "$dir")
@@ -10,27 +12,27 @@ for dir in "$UI_DIR"/*/; do
   [ -d "$dir" ] || continue
   # Check for index.ts
   if [ ! -f "${dir}index.ts" ]; then
-    MISSING_INDEX+=("$dir")
+    MISSING_INDEX="$MISSING_INDEX $dir"
   fi
   # Check for barrel export
   if ! grep -q "export \* from './${name}'" "$BARREL" 2>/dev/null; then
-    MISSING_EXPORT+=("$name")
+    MISSING_EXPORT="$MISSING_EXPORT $name"
   fi
 done
 
-if [ ${#MISSING_INDEX[@]} -gt 0 ] || [ ${#MISSING_EXPORT[@]} -gt 0 ]; then
+if [ -n "$MISSING_INDEX" ] || [ -n "$MISSING_EXPORT" ]; then
   echo ""
   echo "✗ BDS Component Completeness Check"
   echo ""
-  if [ ${#MISSING_INDEX[@]} -gt 0 ]; then
+  if [ -n "$MISSING_INDEX" ]; then
     echo "  Missing index.ts:"
-    for item in "${MISSING_INDEX[@]}"; do
+    for item in $MISSING_INDEX; do
       echo "    $item"
     done
   fi
-  if [ ${#MISSING_EXPORT[@]} -gt 0 ]; then
+  if [ -n "$MISSING_EXPORT" ]; then
     echo "  Missing barrel export in components/ui/index.ts:"
-    for item in "${MISSING_EXPORT[@]}"; do
+    for item in $MISSING_EXPORT; do
       echo "    $item — add: export * from './${item}';"
     done
   fi
