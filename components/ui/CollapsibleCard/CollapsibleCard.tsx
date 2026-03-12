@@ -35,9 +35,9 @@ export interface CollapsibleCardProps extends HTMLAttributes<HTMLDivElement> {
  * Card container styles
  *
  * Token reference:
- * - --_color---surface--primary (card background)
- * - --_space---lg = 24px (padding)
- * - --_border-radius---md = 4px (corners)
+ * - --surface-primary (card background)
+ * - --padding-lg = 24px (padding)
+ * - --border-radius-md = 4px (corners)
  */
 const cardStyles: CSSProperties = {
   backgroundColor: 'var(--surface-primary)',
@@ -62,10 +62,10 @@ const headerStyles: CSSProperties = {
  * Section label styles (uppercase muted text)
  *
  * Token reference:
- * - --_typography---font-family--heading (heading font)
+ * - --font-family-heading (heading font)
  * - --font-weight--semi-bold
- * - --_typography---heading--xsmall = font-size-50 ≈ 11.54px
- * - --_color---text--secondary (muted gray)
+ * - --heading-tiny ≈ 11.54px
+ * - --text-secondary (muted gray)
  */
 const sectionLabelStyles: CSSProperties = {
   fontFamily: 'var(--font-family-heading)',
@@ -82,10 +82,10 @@ const sectionLabelStyles: CSSProperties = {
  * Title styles
  *
  * Token reference:
- * - --_typography---font-family--heading (heading font)
+ * - --font-family-heading (heading font)
  * - --font-weight--bold = 700
- * - --_typography---heading--small = font-size-400 ≈ 22.5px
- * - --_color---text--primary
+ * - --heading-sm ≈ 22.5px
+ * - --text-primary
  */
 const titleStyles: CSSProperties = {
   fontFamily: 'var(--font-family-heading)',
@@ -100,9 +100,9 @@ const titleStyles: CSSProperties = {
  * Icon button styles
  *
  * Token reference:
- * - --_color---background--secondary (dark button background)
- * - --_border-radius---md = 4px
- * - --_color---text--primary (icon color)
+ * - --background-secondary (button background)
+ * - --border-radius-md = 4px
+ * - --text-primary (icon color)
  */
 const iconButtonStyles: CSSProperties = {
   width: '40px',
@@ -123,7 +123,7 @@ const iconButtonStyles: CSSProperties = {
  * Content area styles (expanded body)
  *
  * Token reference:
- * - --_space---lg = 24px (top margin)
+ * - --padding-lg = 24px (top margin)
  */
 const contentStyles: CSSProperties = {
   marginTop: 'var(--padding-lg)',
