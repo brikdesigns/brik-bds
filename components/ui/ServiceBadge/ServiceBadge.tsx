@@ -39,9 +39,9 @@ export interface ServiceBadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 
  * Category configuration — maps service categories to their color tokens
  * and display labels. Uses semantic service tokens from BDS.
  *
- * Token pattern (webflow-tokens.css):
- * - background: --_color---background--service-{category}
- * - text/icon:  --_color---text--service-{category}
+ * Token pattern (semantic service tokens):
+ * - background: --background-service-{category}
+ * - text/icon:  --text-service-{category}
  * - light bg:   --services--{token}-light
  */
 export const categoryConfig: Record<ServiceCategory, { token: string; label: string }> = {

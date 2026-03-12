@@ -128,7 +128,7 @@ const buttonWrapperStyles: CSSProperties = {
  * - --label-sm = 14px (label size)
  * - --text-primary (label color)
  * - --font-family-body (value font)
- * - --_color---text--accent (value color)
+ * - --text-accent (value color)
  */
 const metadataWrapperStyles: CSSProperties = {
   display: 'flex',
