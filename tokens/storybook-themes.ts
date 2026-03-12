@@ -4,7 +4,7 @@
  * Auto-generated — resolved hex values for each BDS theme,
  * mapped to Storybook's create() API properties.
  *
- * Generated: 2026-03-09T09:48:10.576Z
+ * Generated: 2026-03-12T09:40:15.866Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
@@ -205,7 +205,7 @@ export const storybookThemes: Record<ThemeNumber, StorybookThemeConfig> = {
     "base": "light",
     "name": "Brik Brand",
     "colorPrimary": "#e35335",
-    "colorSecondary": "#4665f5",
+    "colorSecondary": "#e35335",
     "appBg": "white",
     "appContentBg": "white",
     "appPreviewBg": "transparent",
