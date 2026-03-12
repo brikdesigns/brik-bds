@@ -28,6 +28,7 @@ export * from './Form';
 export * from './Menu';
 export * from './Meter';
 export * from './Modal';
+export * from './MultiSelect';
 export * from './NavBar';
 export * from './PageHeader';
 export * from './Pagination';
