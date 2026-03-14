@@ -29,7 +29,7 @@
 .bds-tag--sm {
   padding: var(--padding-tiny);
   gap: 0;
-  font-size: var(--body-tiny);
+  font-size: var(--label-tiny);
   border-radius: var(--border-radius-sm);
 }
 
@@ -67,7 +67,7 @@
 .bds-tag--sm .bds-tag__icon {
   width: 16px;
   height: 16px;
-  font-size: var(--body-tiny);
+  font-size: var(--label-tiny);
 }
 
 .bds-tag--md .bds-tag__icon {
