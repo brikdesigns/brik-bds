@@ -121,10 +121,18 @@ export function ServiceBadge({
 
   if (mode === 'label') {
     return (
-      <div className={bdsClass('bds-service-badge-label', `bds-service-badge-label--${category}`)}>
-        {badge}
-        <span>{config.label}</span>
-      </div>
+      <span
+        className={bdsClass(
+          'bds-service-badge-label',
+          `bds-service-badge-label--${size}`,
+          `bds-service-badge-label--${category}`,
+          className,
+        )}
+        style={style}
+        {...props}
+      >
+        {config.label}
+      </span>
     );
   }
 
