@@ -84,13 +84,15 @@ function getTextStyles(active: boolean, onColor: boolean): CSSProperties {
 }
 
 function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
-  /* All tabs have a bottom border (border-width-md = 1px).
-     Active = brand-primary, inactive = border-primary (baseline). */
+  /* Active tab uses border-width-xl (3px) for a prominent indicator.
+     Inactive tabs use border-width-md (1px) baseline. */
   const borderColor = onColor
     ? 'var(--border-on-color-dark)'
     : active
       ? 'var(--border-brand-primary)'
       : 'var(--border-secondary)';
+
+  const borderWidth = active ? 'var(--border-width-xl)' : 'var(--border-width-md)';
 
   const textColor = onColor
     ? 'var(--text-on-color-dark)'
@@ -103,7 +105,7 @@ function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
     color: textColor,
     backgroundColor: onColor ? 'transparent' : 'var(--background-primary)',
     padding: 'var(--padding-lg)',
-    borderBottom: `var(--border-width-md) solid ${borderColor}`,
+    borderBottom: `${borderWidth} solid ${borderColor}`,
     opacity: onColor && !active ? 0.6 : 1,
   };
 }

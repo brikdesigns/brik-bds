@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useGlobals } from 'storybook/preview-api';
 import { themeMetadata, ThemeNumber } from '../tokens';
 
 /**
@@ -8,15 +9,7 @@ import { themeMetadata, ThemeNumber } from '../tokens';
  * Each theme bundles color palette, typography, and spacing.
  */
 
-function ThemeDemo() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const globalsParam = urlParams.get('globals');
-  let currentTheme: ThemeNumber = 'brik';
-  if (globalsParam) {
-    const match = globalsParam.match(/themeNumber:([a-z0-9]+)/);
-    if (match) currentTheme = match[1] as ThemeNumber;
-  }
-
+function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
   const meta = themeMetadata[currentTheme] || themeMetadata['brik'];
 
   return (
@@ -311,6 +304,11 @@ const meta: Meta<typeof ThemeDemo> = {
   component: ThemeDemo,
   parameters: {
     layout: 'fullscreen',
+  },
+  render: () => {
+    const [globals] = useGlobals();
+    const currentTheme = (globals.themeNumber || 'brik') as ThemeNumber;
+    return <ThemeDemo currentTheme={currentTheme} />;
   },
 };
 

@@ -5,7 +5,7 @@ import * as Stories from './Badge.stories';
 
 # Badge
 
-Status indicators and labels for displaying contextual information. Badges use semantic colors to communicate status, priority, or category at a glance.
+Status indicators and labels for displaying contextual information. Badges use semantic system colors to communicate status at a glance, with dark (saturated) and light (pastel) visual variants.
 
 ## Playground
 
@@ -15,23 +15,26 @@ Use the Controls panel to explore all props interactively.
 
 ## Variants
 
-Seven status variants across four sizes. The `xs` size renders a compact icon-only badge.
+Five status variants across four sizes, each available in dark and light styles. The `xs` size renders a compact icon-only badge.
 
 <Canvas of={Stories.Variants} />
 
-| Status | Use for |
-|--------|---------|
-| **default** | General-purpose label. No specific semantic. |
-| **positive** | Success states, completed actions. |
-| **warning** | Cautionary states, pending actions. |
-| **error** | Error states, failed actions, critical issues. |
-| **info** | Informational states, neutral notifications. |
-| **progress** | In-progress states, active processes. |
-| **neutral** | Inactive states, disabled items. |
+| Status | Dark | Light | Use for |
+|--------|------|-------|---------|
+| **positive** | Green bg, white text | Green-light bg, green text | Success, completed actions |
+| **warning** | Yellow bg, dark text | Yellow-light bg, dark text | Cautionary states, pending actions |
+| **error** | Red bg, white text | Red-light bg, red text | Error states, failed actions |
+| **info** | Neutral-light bg, dark text | Neutral-light bg, dark text | Informational, neutral notifications |
+| **progress** | Blue bg, white text | Blue-light bg, blue text | In-progress states, active processes |
+
+| Variant | When to use |
+|---------|-------------|
+| **dark** (default) | High emphasis, standalone badges, dark backgrounds |
+| **light** | Lower emphasis, inline with content, table cells, cards |
 
 ## Icons
 
-Badges can include a leading icon alongside text for additional context.
+Badges can include a leading icon alongside text, shown in both dark and light variants.
 
 <Canvas of={Stories.Icons} />
 
@@ -50,20 +53,37 @@ Real-world compositions for common badge use cases.
 ```tsx
 import { Badge } from '@brik/bds';
 
-// Basic badge
-<Badge>New</Badge>
+// Dark variant (default)
+<Badge status="positive">Done</Badge>
+<Badge status="warning">Needs Attention</Badge>
+<Badge status="error">Canceled</Badge>
 
-// With status
-<Badge status="positive">Success</Badge>
-<Badge status="warning">Pending</Badge>
-<Badge status="error">Failed</Badge>
-
-// With size
-<Badge size="sm">Small</Badge>
-<Badge size="lg">Large</Badge>
+// Light variant
+<Badge status="positive" variant="light">Done</Badge>
+<Badge status="progress" variant="light">In Progress</Badge>
 
 // With icon
-<Badge status="positive" icon={<CheckIcon />}>
-  Complete
+<Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>
+  Done
 </Badge>
+
+// Icon-only (xs)
+<Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
 ```
+
+## Tokens
+
+System color tokens used by badge variants:
+
+| Token | Value | Used by |
+|-------|-------|---------|
+| `--color-system-green` | `#27ae60` | positive dark |
+| `--color-system-green-light` | `#bef4d4` | positive light |
+| `--color-system-red` | `#eb5757` | error dark |
+| `--color-system-red-light` | `#fccccc` | error light |
+| `--color-system-yellow` | `#f2c94c` | warning dark |
+| `--color-system-yellow-light` | `#f7e190` | warning light |
+| `--color-system-blue` | `#2f80ed` | progress dark |
+| `--color-system-blue-light` | `#bfe2fe` | progress light |
+| `--color-system-neutral` | `#363636` | info/warning text |
+| `--color-system-neutral-light` | `#d4d4d4` | info bg |

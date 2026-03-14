@@ -31,6 +31,16 @@
   min-width: 0;
 }
 
+.bds-page-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.bds-page-header__badge {
+  flex-shrink: 0;
+}
+
 .bds-page-header__title {
   font-family: var(--font-family-heading);
   font-size: var(--heading-lg);

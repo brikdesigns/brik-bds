@@ -20,6 +20,10 @@ const meta: Meta<typeof Badge> = {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg'],
     },
+    variant: {
+      control: 'select',
+      options: ['dark', 'light'],
+    },
   },
 };
 
@@ -49,45 +53,69 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
+const statuses = ['positive', 'warning', 'error', 'info', 'progress'] as const;
+
 /* ═══════════════════════════════════════════════════════════════
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
 export const Playground: Story = {
-  args: { children: 'New', status: 'info', size: 'md' },
+  args: { children: 'New', status: 'info', size: 'md', variant: 'dark' },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — All statuses × all sizes
+   2. VARIANTS — Dark and light styles × all statuses × all sizes
    ═══════════════════════════════════════════════════════════════ */
 
 export const Variants: Story = {
   render: () => (
     <Stack>
-      {/* xs row — icon only */}
+      {/* Dark variant */}
       <div>
-        <SectionLabel>xs (icon only)</SectionLabel>
-        <Row>
-          <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
-          <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
-          <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
-          <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
-          <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
-        </Row>
+        <SectionLabel>Dark (default)</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <Row key={size}>
+              {statuses.map((s) => (
+                <Badge key={s} size={size} status={s} variant="dark">{s}</Badge>
+              ))}
+            </Row>
+          ))}
+        </Stack>
       </div>
-      {/* sm, md, lg rows — text labels */}
-      {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size}>
-          <SectionLabel>{size}</SectionLabel>
+      {/* Light variant */}
+      <div>
+        <SectionLabel>Light</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <Row key={size}>
+              {statuses.map((s) => (
+                <Badge key={s} size={size} status={s} variant="light">{s}</Badge>
+              ))}
+            </Row>
+          ))}
+        </Stack>
+      </div>
+      {/* xs icon-only — both variants */}
+      <div>
+        <SectionLabel>xs icon-only</SectionLabel>
+        <Stack gap="var(--gap-lg)">
           <Row>
-            <Badge size={size} status="positive">Positive</Badge>
-            <Badge size={size} status="warning">Warning</Badge>
-            <Badge size={size} status="error">Error</Badge>
-            <Badge size={size} status="info">Info</Badge>
-            <Badge size={size} status="progress">Progress</Badge>
+            <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
+            <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
+            <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
+            <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
+            <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
           </Row>
-        </div>
-      ))}
+          <Row>
+            <Badge size="xs" status="positive" variant="light" icon={<FontAwesomeIcon icon={faCheck} />} />
+            <Badge size="xs" status="warning" variant="light" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
+            <Badge size="xs" status="error" variant="light" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
+            <Badge size="xs" status="info" variant="light" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
+            <Badge size="xs" status="progress" variant="light" icon={<FontAwesomeIcon icon={faRotate} />} />
+          </Row>
+        </Stack>
+      </div>
     </Stack>
   ),
 };
@@ -100,13 +128,23 @@ export const Icons: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>With icons</SectionLabel>
+        <SectionLabel>Dark with icons</SectionLabel>
         <Row>
-          <Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Success</Badge>
-          <Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Error</Badge>
-          <Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>Loading</Badge>
-          <Badge status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Info</Badge>
-          <Badge status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />}>Warning</Badge>
+          <Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Done</Badge>
+          <Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Canceled</Badge>
+          <Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>In Progress</Badge>
+          <Badge status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Neutral</Badge>
+          <Badge status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />}>Needs Attention</Badge>
+        </Row>
+      </div>
+      <div>
+        <SectionLabel>Light with icons</SectionLabel>
+        <Row>
+          <Badge status="positive" variant="light" icon={<FontAwesomeIcon icon={faCheck} />}>Done</Badge>
+          <Badge status="error" variant="light" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Canceled</Badge>
+          <Badge status="progress" variant="light" icon={<FontAwesomeIcon icon={faSpinner} />}>In Progress</Badge>
+          <Badge status="info" variant="light" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Neutral</Badge>
+          <Badge status="warning" variant="light" icon={<FontAwesomeIcon icon={faTriangleExclamation} />}>Needs Attention</Badge>
         </Row>
       </div>
     </Stack>
@@ -122,7 +160,7 @@ export const Patterns: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>Content status</SectionLabel>
+        <SectionLabel>Content status (dark)</SectionLabel>
         <Stack gap="var(--gap-lg)">
           {([
             { status: 'positive' as const, label: 'Published', desc: 'Article is live and visible' },
@@ -132,6 +170,24 @@ export const Patterns: Story = {
           ]).map(({ status, label, desc }) => (
             <div key={status} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
               <Badge status={status}>{label}</Badge>
+              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+                {desc}
+              </span>
+            </div>
+          ))}
+        </Stack>
+      </div>
+      <div>
+        <SectionLabel>Content status (light)</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          {([
+            { status: 'positive' as const, label: 'Published', desc: 'Article is live and visible' },
+            { status: 'progress' as const, label: 'In Review', desc: 'Being reviewed by editor' },
+            { status: 'warning' as const, label: 'Draft', desc: 'Saved but not published' },
+            { status: 'error' as const, label: 'Archived', desc: 'Has been removed' },
+          ]).map(({ status, label, desc }) => (
+            <div key={`${status}-light`} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
+              <Badge status={status} variant="light">{label}</Badge>
               <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
                 {desc}
               </span>

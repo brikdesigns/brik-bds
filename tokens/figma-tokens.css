@@ -26,12 +26,17 @@
 
   /* ── System Colors ── */
   --color-system-red: #eb5757;
+  --color-system-red-light: #fccccc;
   --color-system-green: #27ae60;
+  --color-system-green-light: #bef4d4;
   --color-system-yellow: #f2c94c;
+  --color-system-yellow-light: #f7e190;
   --color-system-blue: #2f80ed;
+  --color-system-blue-light: #bfe2fe;
   --color-system-purple: #9b51e0;
   --color-system-orange: #f2994a;
-  --color-system-neutral: #d4d4d4;
+  --color-system-neutral: #363636;
+  --color-system-neutral-light: #d4d4d4;
 
   /* ── Annotation Colors ── */
   --color-annotation-annotation-pink: #bb1eeb;

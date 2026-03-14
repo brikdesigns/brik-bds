@@ -48,30 +48,57 @@
   gap: var(--gap-md);
 }
 
-/* ─── Status Variants ─────────────────────────────────────────── */
+/* ─── Status × Dark (default) ─────────────────────────────────── */
 
-.bds-badge--positive {
+.bds-badge--dark.bds-badge--positive {
   background-color: var(--color-system-green);
   color: var(--text-on-color-dark);
 }
 
-.bds-badge--warning {
+.bds-badge--dark.bds-badge--warning {
   background-color: var(--color-system-yellow);
-  color: var(--text-on-color-light);
+  color: var(--color-system-neutral);
 }
 
-.bds-badge--error {
+.bds-badge--dark.bds-badge--error {
   background-color: var(--color-system-red);
   color: var(--text-on-color-dark);
 }
 
-.bds-badge--info {
-  background-color: var(--background-secondary);
-  color: var(--text-muted);
+.bds-badge--dark.bds-badge--info {
+  background-color: var(--color-system-neutral-light);
+  color: var(--color-system-neutral);
 }
 
-.bds-badge--progress {
+.bds-badge--dark.bds-badge--progress {
   background-color: var(--color-system-blue);
   color: var(--text-on-color-dark);
+}
+
+/* ─── Status × Light (pastel bg, saturated text) ─────────────── */
+
+.bds-badge--light.bds-badge--positive {
+  background-color: var(--color-system-green-light);
+  color: var(--color-system-green);
+}
+
+.bds-badge--light.bds-badge--warning {
+  background-color: var(--color-system-yellow-light);
+  color: var(--color-system-neutral);
+}
+
+.bds-badge--light.bds-badge--error {
+  background-color: var(--color-system-red-light);
+  color: var(--color-system-red);
+}
+
+.bds-badge--light.bds-badge--info {
+  background-color: var(--color-system-neutral-light);
+  color: var(--color-system-neutral);
+}
+
+.bds-badge--light.bds-badge--progress {
+  background-color: var(--color-system-blue-light);
+  color: var(--color-system-blue);
 }
 
