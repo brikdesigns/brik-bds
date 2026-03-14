@@ -60,11 +60,50 @@ Runs at http://localhost:6006. Theme switching available in toolbar.
 
 ## Token System
 
-All components use CSS variables from the Webflow export:
-- Naming: `--_[category]---[type]--[variant]`
-- Example: `--_color---background--brand-primary`
+### Two naming conventions (don't confuse them)
+
+| Convention | Example | Where used | Source |
+| --- | --- | --- | --- |
+| **Webflow semantic** | `--_color---text--primary` | `tokens/variables.css`, `tokens.ts` | Webflow CSS export |
+| **Figma single-dash** | `--text-primary`, `--label-tiny` | `tokens/figma-tokens.css`, component CSS | Style Dictionary from Figma |
+
+BDS components use **Figma single-dash** names in their CSS files. Consuming projects import `figma-tokens.css` to define these variables at runtime.
+
+The portal's `tokens.ts` maps Webflow semantic names to `var()` references — this is the TypeScript consumption layer. The CSS layer underneath (`figma-tokens.css`) provides the actual computed values.
+
+### Token build pipeline
+
+```
+Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform outputs
+```
+
+| Command | Input | Output |
+| --- | --- | --- |
+| `npm run build:sd-figma` | `design-tokens/tokens-studio.json` | `tokens/figma-tokens.css`, `build/figma/swift/*.swift`, `build/figma/js/tokens.mjs` |
+| `npm run build:tokens` | `updates/brik-bds.webflow/css/` | `tokens/variables.css`, `tokens/themes.css`, `tokens/index.ts` |
+| `npm run build:all-tokens` | Both | Full rebuild |
+
+### Token files — which to use
+
+| File | Status | Use |
+| --- | --- | --- |
+| `tokens/figma-tokens.css` | **Active** (auto-generated) | Import in consuming project `globals.css` |
+| `tokens/fonts.css` | **Active** (manual) | Import in consuming project `globals.css` |
+| `tokens/react-tokens.css` | **DEPRECATED** | Was manually maintained, drifted. Use `figma-tokens.css` |
+| `tokens/webflow-tokens.css` | **Webflow only** | Circular refs, 8 theme blocks — never import in React |
+| `tokens/variables.css` | **Internal** | Webflow semantic names, used by `tokens/index.ts` |
+
+### Adding a new token
+
+1. Add in Figma Variables
+2. Export via Tokens Studio → `design-tokens/tokens-studio.json`
+3. Run `npm run build:sd-figma` — updates `figma-tokens.css` automatically
+4. If the component CSS references it, consuming projects get it on next `bds-sync.sh`
+
+**Never manually add tokens to CSS files.** Style Dictionary is the single build path.
 
 See [tokens/TOKEN-REFERENCE.md](tokens/TOKEN-REFERENCE.md) for complete reference.
+See [CONSUMING-TOKENS.md](CONSUMING-TOKENS.md) for the consumption pattern in app projects.
 
 ## Spacing Modes
 
