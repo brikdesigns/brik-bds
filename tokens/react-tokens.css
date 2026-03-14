@@ -184,6 +184,8 @@
   --body-lg: var(--font-size-200);
   --body-xl: var(--font-size-300);
 
+  --label-tiny: var(--font-size-25);
+  --label-xs: var(--font-size-50);
   --label-sm: var(--font-size-75);
   --label-md: var(--font-size-100);
   --label-lg: var(--font-size-200);
