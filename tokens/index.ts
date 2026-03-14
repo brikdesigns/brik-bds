@@ -3,7 +3,7 @@
  *
  * Auto-generated from Webflow design tokens
  * Source: brik-bds.webflow.css
- * Generated: 2026-03-13T09:37:09.510Z
+ * Generated: 2026-03-14T09:30:45.118Z
  * DO NOT EDIT DIRECTLY - Run: node build.js
  */
 
@@ -497,19 +497,4 @@ export const semanticTypography = {
   "icon--small": "var(--font-size--75)",
   "icon--medium-base": "var(--font-size--100)",
   "icon--large": "var(--font-size--200)"
-} as const;
-
-/**
- * Text-transform tokens per typography role
- *
- * Semantic casing rules: heading/label = capitalize (Title Case),
- * subtitle = uppercase, body/display = none.
- * Source: overrides.css :root block.
- */
-export const textTransform = {
-  heading: 'var(--text-transform-heading)',
-  label: 'var(--text-transform-label)',
-  subtitle: 'var(--text-transform-subtitle)',
-  body: 'var(--text-transform-body)',
-  display: 'var(--text-transform-display)',
 } as const;
