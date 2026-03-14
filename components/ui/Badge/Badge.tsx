@@ -8,12 +8,17 @@ export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress'
 /** Badge size variants */
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 
+/** Badge visual style — dark (saturated bg) or light (pastel bg) */
+export type BadgeVariant = 'dark' | 'light';
+
 /** Badge component props */
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   /** Status variant */
   status?: BadgeStatus;
   /** Size variant — xs is icon-only (no text) */
   size?: BadgeSize;
+  /** Visual style — dark uses saturated bg, light uses pastel bg */
+  variant?: BadgeVariant;
   /** Children content (optional for xs/icon-only size) */
   children?: ReactNode;
   /** Optional icon before text (required for xs size) */
@@ -36,6 +41,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 export function Badge({
   status = 'info',
   size = 'md',
+  variant = 'dark',
   children,
   icon,
   className,
@@ -48,6 +54,7 @@ export function Badge({
     'bds-badge',
     `bds-badge--${status}`,
     `bds-badge--${size}`,
+    `bds-badge--${variant}`,
     className
   );
 

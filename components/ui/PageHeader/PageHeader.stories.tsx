@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { PageHeader } from './PageHeader';
 import { Breadcrumb } from '../Breadcrumb';
 import { TabBar, type TabItem } from '../TabBar';
 import { Button } from '../Button';
+import { ServiceBadge } from '../ServiceBadge';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
@@ -42,18 +41,6 @@ const sampleBreadcrumbs = [
   { label: 'Product', href: '#' },
   { label: 'Design System' },
 ];
-
-const brandBadgeStyles: React.CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 28,
-  height: 28,
-  backgroundColor: 'var(--background-brand-primary)',
-  color: 'var(--text-inverse)',
-  borderRadius: 'var(--border-radius-md)',
-  fontSize: 'var(--label-sm)', // bds-lint-ignore — story decoration
-};
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -148,10 +135,11 @@ export const Variants: Story = {
         </div>
 
         <div>
-          <SectionLabel>With metadata</SectionLabel>
+          <SectionLabel>With badge + metadata</SectionLabel>
           <PageHeader
             title="Brand Design"
             subtitle="Service details and billing info."
+            badge={<ServiceBadge category="brand" serviceName="Brand Identity Bundle" size="lg" />}
             breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
             actions={
               <>
@@ -160,15 +148,7 @@ export const Variants: Story = {
               </>
             }
             metadata={[
-              {
-                label: 'Category',
-                value: (
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={brandBadgeStyles}><FontAwesomeIcon icon={faPalette} /></span>
-                    Brand Design
-                  </span>
-                ),
-              },
+              { label: 'Category', value: 'Brand' },
               { label: 'Billing', value: 'One-time' },
               { label: 'Stripe Product', value: 'brand-design' },
             ]}
@@ -205,6 +185,29 @@ export const Patterns: Story = {
 
     return (
       <Stack gap="var(--gap-huge)">
+        {/* Service detail page */}
+        <div>
+          <SectionLabel>Service detail page</SectionLabel>
+          <PageHeader
+            title="Website Design"
+            subtitle="Custom web development and design service."
+            badge={<ServiceBadge category="marketing" serviceName="Custom Standard Web Development and Design" size="lg" />}
+            breadcrumbs={
+              <Breadcrumb items={[
+                { label: 'Admin', href: '#' },
+                { label: 'Services', href: '#' },
+                { label: 'Website Design' },
+              ]} />
+            }
+            actions={<Button variant="primary" size="sm">Edit Service</Button>}
+            metadata={[
+              { label: 'Category', value: 'Marketing' },
+              { label: 'Billing', value: 'Monthly' },
+              { label: 'Status', value: 'Active' },
+            ]}
+          />
+        </div>
+
         {/* Company detail page */}
         <div>
           <SectionLabel>Company detail page</SectionLabel>

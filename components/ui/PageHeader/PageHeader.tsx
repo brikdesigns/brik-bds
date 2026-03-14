@@ -10,6 +10,8 @@ export interface MetadataItem {
 export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   subtitle?: string;
+  /** Badge displayed to the left of the title (e.g. ServiceBadge) */
+  badge?: ReactNode;
   breadcrumbs?: ReactNode;
   actions?: ReactNode;
   tabs?: ReactNode;
@@ -17,11 +19,12 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * PageHeader — composable page-level header with breadcrumbs, actions, metadata, and tabs.
+ * PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, and tabs.
  */
 export function PageHeader({
   title,
   subtitle,
+  badge,
   breadcrumbs,
   actions,
   tabs,
@@ -40,7 +43,10 @@ export function PageHeader({
 
       <div className="bds-page-header__inner">
         <div className="bds-page-header__content">
-          <h1 className="bds-page-header__title">{title}</h1>
+          <div className="bds-page-header__title-row">
+            {badge && <div className="bds-page-header__badge">{badge}</div>}
+            <h1 className="bds-page-header__title">{title}</h1>
+          </div>
           {subtitle && <p className="bds-page-header__subtitle">{subtitle}</p>}
         </div>
         {actions && <div className="bds-page-header__actions">{actions}</div>}

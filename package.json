@@ -85,6 +85,8 @@
     "open-onlook": "echo \"Visit https://onlook.com to connect your repository\"",
     "copilot-guide": "open VISUAL_COPILOT_GUIDE.md",
     "onlook-guide": "open ONLOOK_GUIDE.md",
+    "sync:figma-mcp": "node scripts/sync-figma-mcp.js",
+    "sync:figma-mcp:build": "node scripts/sync-figma-mcp.js --build",
     "sync:figma": "node scripts/transform-figma-export.js && npm run build:all-tokens",
     "sync:figma:check": "node scripts/transform-figma-export.js --dry-run --compare",
     "populate-notion": "node scripts/populate-notion-tokens.js",

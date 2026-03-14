@@ -26,10 +26,12 @@ export const categoryConfig: Record<ServiceCategory, { token: string; label: str
 };
 
 const serviceIconOverrides: Record<string, string> = {
+  // Brand
   'Brand Identity Bundle': 'brand-design',
   'Logo Update': 'brand-logo',
   'Premium Logo Design': 'brand-logo',
   'Standard Logo Design': 'brand-logo',
+  // Marketing
   'Comprehensive Marketing Audit & Consultation': 'marketing-consulting',
   'Custom Large E-Commerce Web Development and Design': 'marketing-web-design',
   'Custom Large Web Development and Design': 'marketing-web-design',
@@ -41,7 +43,16 @@ const serviceIconOverrides: Record<string, string> = {
   'Social Media Graphic Designs': 'marketing-social-graphics',
   'Swag and Merchandise Design': 'marketing-swag',
   'Website Experience Mapping': 'website-experience',
+  // Information
+  'Information Design': 'information-design',
+  // Back Office (service)
   'Automated Workflow and AI Integration': 'back-office-automation-ai',
+  'Back Office Consulting': 'back-office-consulting',
+  'Back Office Customer Support': 'back-office-customer-support',
+  'Back Office Design': 'back-office-design',
+  'Back Office Software Audit': 'back-office-software-audit',
+  'Back Office SOP Creation': 'back-office-sop-creation',
+  'Back Office Training Setup': 'back-office-training-setup',
   'CRM Setup and Data Cleanup': 'back-office-crm-data',
   'Customer Journey Mapping': 'back-office-journey-mapping',
   'Digital File Organization': 'back-office-digital-file-organization',
@@ -49,7 +60,6 @@ const serviceIconOverrides: Record<string, string> = {
   'Software Automation Setup': 'back-office-automated-workflow',
   'Standard Operating Procedures (SOP) Creation': 'back-office-business-solutions',
   'Training Setup & Organization': 'back-office-consulting',
-  'Information Design': 'information-design',
 };
 
 function normalizeServiceName(name: string): string {
