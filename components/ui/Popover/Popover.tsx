@@ -1,5 +1,4 @@
 import {
-  type CSSProperties,
   type ReactNode,
   type HTMLAttributes,
   useState,
@@ -8,6 +7,7 @@ import {
   useCallback,
 } from 'react';
 import { bdsClass } from '../../utils';
+import './Popover.css';
 
 export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
 export type PopoverTrigger = 'click' | 'hover';
@@ -26,50 +26,6 @@ export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, 'cont
   /** Controlled change handler */
   onOpenChange?: (open: boolean) => void;
 }
-
-const containerStyles: CSSProperties = {
-  position: 'relative',
-  display: 'inline-block',
-};
-
-const panelBase: CSSProperties = {
-  position: 'absolute',
-  backgroundColor: 'var(--background-primary)',
-  borderRadius: 'var(--border-radius-lg)',
-  boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.12)', // bds-lint-ignore — no shadow token
-  border: 'var(--border-width-sm) solid var(--border-secondary)',
-  padding: 'var(--padding-md)',
-  zIndex: 100,
-  boxSizing: 'border-box',
-  minWidth: 200,
-};
-
-const placementStyles: Record<PopoverPlacement, CSSProperties> = {
-  top: {
-    bottom: '100%',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    marginBottom: 'var(--gap-sm)',
-  },
-  bottom: {
-    top: '100%',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    marginTop: 'var(--gap-sm)',
-  },
-  left: {
-    right: '100%',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    marginRight: 'var(--gap-sm)',
-  },
-  right: {
-    left: '100%',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    marginLeft: 'var(--gap-sm)',
-  },
-};
 
 /**
  * Popover — floating content panel anchored to a trigger element.
@@ -102,7 +58,6 @@ export function Popover({
     [isControlled, onOpenChange],
   );
 
-  // Click outside
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -112,7 +67,6 @@ export function Popover({
     [setOpen],
   );
 
-  // Escape key
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
@@ -147,18 +101,17 @@ export function Popover({
     <div
       ref={containerRef}
       className={bdsClass('bds-popover', className)}
-      style={{ ...containerStyles, ...style }}
+      style={style}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <div onClick={handleClick} style={{ display: 'inline-block' }}>
+      <div className="bds-popover__trigger" onClick={handleClick}>
         {children}
       </div>
       {isOpen && (
         <div
-          className={bdsClass('bds-popover-panel')}
-          style={{ ...panelBase, ...placementStyles[placement] }}
+          className={bdsClass('bds-popover__panel', `bds-popover__panel--${placement}`)}
           role="dialog"
         >
           {content}

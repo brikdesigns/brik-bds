@@ -1,0 +1,71 @@
+/* ─── Card ────────────────────────────────────────────────────── */
+
+.bds-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  border-radius: var(--border-radius-md);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+/* ─── Variants ───────────────────────────────────────────────── */
+
+.bds-card--default {
+  background-color: var(--surface-primary);
+  border: none;
+  box-shadow: var(--box-shadow-none);
+}
+
+.bds-card--outlined {
+  background-color: var(--surface-secondary);
+  border: var(--border-width-md) solid var(--border-secondary);
+  box-shadow: var(--box-shadow-none);
+}
+
+.bds-card--elevated {
+  background-color: var(--surface-primary);
+  border: none;
+  box-shadow: var(--box-shadow-md);
+}
+
+/* ─── Padding ────────────────────────────────────────────────── */
+
+.bds-card--padding-none { padding: var(--padding-none); }
+.bds-card--padding-sm   { padding: var(--padding-sm); }
+.bds-card--padding-md   { padding: var(--padding-md); }
+.bds-card--padding-lg   { padding: var(--padding-lg); }
+
+/* ─── Interactive ────────────────────────────────────────────── */
+
+.bds-card--interactive {
+  cursor: pointer;
+}
+
+.bds-card--link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ─── Subcomponents ──────────────────────────────────────────── */
+
+.bds-card-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-semi-bold);
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.bds-card-description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: var(--font-line-height-normal);
+}
+
+.bds-card-footer {
+  margin-top: auto;
+  padding-top: var(--padding-sm);
+}

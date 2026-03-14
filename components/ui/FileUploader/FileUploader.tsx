@@ -1,7 +1,8 @@
-import { type HTMLAttributes, type CSSProperties, useState, useRef, useCallback } from 'react';
+import { type HTMLAttributes, useState, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
+import './FileUploader.css';
 
 /**
  * FileUploader component props
@@ -24,114 +25,6 @@ export interface FileUploaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   /** Change handler with selected files */
   onChange?: (files: File[]) => void;
 }
-
-/**
- * Dropzone styles
- *
- * Token reference:
- * - --surface-primary (background)
- * - --border-secondary (dashed border)
- * - --border-radius-lg = 8px
- * - --padding-xl = 32px
- * - --gap-md = 8px
- */
-const dropzoneStyles: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: 'var(--gap-md)',
-  padding: 'var(--padding-xl)',
-  backgroundColor: 'var(--surface-primary)',
-  border: 'var(--border-width-lg) dashed var(--border-secondary)',
-  borderRadius: 'var(--border-radius-lg)',
-  cursor: 'pointer',
-  transition: 'border-color 0.15s ease, background-color 0.15s ease',
-  textAlign: 'center',
-  width: '100%',
-  boxSizing: 'border-box',
-};
-
-const dropzoneActiveStyles: CSSProperties = {
-  borderColor: 'var(--border-brand-primary)',
-  backgroundColor: 'color-mix(in srgb, var(--background-brand-primary) 5%, var(--surface-primary))',
-};
-
-const dropzoneDisabledStyles: CSSProperties = {
-  opacity: 0.5,
-  cursor: 'not-allowed',
-};
-
-/**
- * Icon styles
- *
- * Token reference:
- * - --text-brand-primary (icon color)
- * - --heading-md = 25.3px
- */
-const iconStyles: CSSProperties = {
-  fontSize: 'var(--heading-md)',
-  color: 'var(--text-brand-primary)',
-};
-
-/**
- * Label styles
- *
- * Token reference:
- * - --font-family-label
- * - --label-md = 16px
- * - --font-weight-semi-bold = 600
- * - --text-primary
- */
-const labelTextStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-md)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-snug)',
-  color: 'var(--text-primary)',
-  margin: 0,
-};
-
-/**
- * Helper text styles
- *
- * Token reference:
- * - --font-family-body
- * - --body-sm = 14px
- * - --text-secondary
- */
-const helperStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-secondary)',
-  margin: 0,
-};
-
-/**
- * Error text styles
- *
- * Token reference:
- * - --color-system-red
- */
-const errorTextStyles: CSSProperties = {
-  ...helperStyles,
-  color: 'var(--color-system-red)',
-};
-
-/**
- * Browse link styles
- *
- * Token reference:
- * - --text-brand-primary
- */
-const browseLinkStyles: CSSProperties = {
-  color: 'var(--text-brand-primary)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  textDecoration: 'underline',
-  cursor: 'pointer',
-};
 
 /**
  * FileUploader - BDS drag-and-drop file upload zone
@@ -233,7 +126,7 @@ export function FileUploader({
   return (
     <div
       className={bdsClass('bds-file-uploader', className)}
-      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)', width: '100%', ...style }}
+      style={style}
       {...props}
     >
       <div
@@ -244,22 +137,22 @@ export function FileUploader({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); } }}
-        style={{
-          ...dropzoneStyles,
-          ...(isDragOver ? dropzoneActiveStyles : {}),
-          ...(disabled ? dropzoneDisabledStyles : {}),
-          ...(displayError ? { borderColor: 'var(--color-system-red)' } : {}),
-        }}
+        className={bdsClass(
+          'bds-file-uploader__dropzone',
+          isDragOver ? 'bds-file-uploader__dropzone--active' : undefined,
+          disabled ? 'bds-file-uploader__dropzone--disabled' : undefined,
+          displayError ? 'bds-file-uploader__dropzone--error' : undefined,
+        )}
         aria-label="File upload dropzone"
       >
-        <span style={iconStyles}><FontAwesomeIcon icon={faCloudArrowUp} /></span>
-        <p style={labelTextStyles}>{label}</p>
-        <p style={helperStyles}>
-          or <span style={browseLinkStyles}>browse files</span>
+        <span className="bds-file-uploader__icon"><FontAwesomeIcon icon={faCloudArrowUp} /></span>
+        <p className="bds-file-uploader__label">{label}</p>
+        <p className="bds-file-uploader__helper">
+          or <span className="bds-file-uploader__browse">browse files</span>
         </p>
       </div>
-      {helperText && !displayError && <p style={helperStyles}>{helperText}</p>}
-      {displayError && <p style={errorTextStyles}>{displayError}</p>}
+      {helperText && !displayError && <p className="bds-file-uploader__helper">{helperText}</p>}
+      {displayError && <p className="bds-file-uploader__error">{displayError}</p>}
       <input
         ref={inputRef}
         type="file"

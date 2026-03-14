@@ -1,0 +1,42 @@
+/* ProgressDots — horizontal dot step indicator */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-progress-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ─── Dot ─────────────────────────────────────────────── */
+
+.bds-progress-dots__dot {
+  border-radius: var(--border-radius-sm);
+  border: none;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.bds-progress-dots__dot--active {
+  background-color: var(--background-brand-primary);
+  opacity: 1;
+}
+
+.bds-progress-dots__dot--complete {
+  background-color: var(--background-brand-primary);
+  opacity: 0.5;
+}
+
+.bds-progress-dots__dot--inactive {
+  background-color: var(--border-secondary);
+  opacity: 1;
+}
+
+.bds-progress-dots__dot--clickable {
+  cursor: pointer;
+}
+
+.bds-progress-dots__dot--non-clickable {
+  cursor: default;
+}

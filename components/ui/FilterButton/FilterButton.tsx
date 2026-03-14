@@ -1,7 +1,6 @@
 import {
   type HTMLAttributes,
   type ReactNode,
-  type CSSProperties,
   useState,
   useRef,
   useEffect,
@@ -10,6 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
+import './FilterButton.css';
 
 /**
  * Filter option shape
@@ -43,158 +43,6 @@ export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   /** Size of the trigger button (default: 'md') */
   size?: FilterButtonSize;
 }
-
-/**
- * Size-based styles matching Button's size scale
- *
- * Token reference:
- * - --padding-sm = 12px
- * - --padding-md = 16px
- * - --padding-lg = 24px
- * - --padding-xl = 32px
- * - --label-sm (small label)
- * - --label-md (base label)
- */
-const sizeStyles: Record<FilterButtonSize, CSSProperties> = {
-  sm: {
-    padding: 'var(--padding-sm) var(--padding-md)',
-    fontSize: 'var(--label-sm)',
-    gap: 'var(--gap-sm)',
-  },
-  md: {
-    padding: 'var(--padding-md) var(--padding-lg)',
-    fontSize: 'var(--label-md)',
-    gap: 'var(--gap-md)',
-  },
-  lg: {
-    padding: 'var(--padding-lg) var(--padding-xl)',
-    fontSize: 'var(--label-md)',
-    gap: 'var(--gap-lg)',
-  },
-};
-
-/**
- * Trigger button base styles (inactive)
- *
- * Token reference:
- * - --surface-secondary = #f2f2f2 (inactive background)
- * - --border-radius-md = 4px (corners)
- * - --font-family-label (label font)
- * - --font-weight-semi-bold = 600
- * - --font-line-height-tight = 1 (tight leading)
- * - --text-primary (theme-adaptive text)
- */
-const triggerBaseStyles: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  backgroundColor: 'var(--surface-secondary)',
-  borderRadius: 'var(--border-radius-md)',
-  border: 'none',
-  cursor: 'pointer',
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  color: 'var(--text-primary)',
-  whiteSpace: 'nowrap',
-  textTransform: 'capitalize' as const,
-  minWidth: '120px',
-  boxSizing: 'border-box',
-};
-
-/**
- * Trigger button active styles (value selected)
- *
- * Token reference:
- * - --background-brand-primary (brand blue background)
- * - --text-on-color-dark = white (text on dark bg)
- */
-const triggerActiveStyles: CSSProperties = {
-  ...triggerBaseStyles,
-  backgroundColor: 'var(--background-brand-primary)',
-  color: 'var(--text-on-color-dark)',
-};
-
-/**
- * Dropdown panel styles (matches Menu panel)
- *
- * Token reference:
- * - --background-primary (white)
- * - --border-radius-lg = 8px
- * - --padding-md = 16px (panel padding)
- * - --gap-md = 8px (item gap)
- */
-const dropdownStyles: CSSProperties = {
-  position: 'absolute',
-  top: 'calc(100% + var(--gap-md))',
-  left: 0,
-  zIndex: 100,
-  backgroundColor: 'var(--background-primary)',
-  borderRadius: 'var(--border-radius-lg)',
-  padding: 'var(--padding-md)',
-  boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.12)', // bds-lint-ignore — shadow tokens resolve to zero
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'var(--gap-md)',
-  minWidth: '200px',
-};
-
-/**
- * Dropdown item styles
- *
- * Token reference:
- * - --font-family-body
- * - --body-md = 16px
- * - --font-line-height-normal
- * - --text-primary
- * - --gap-md = 8px (icon-text gap + item padding)
- * - --border-radius-sm = 2px
- */
-const itemStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 'var(--gap-md)',
-  padding: 'var(--padding-tiny)',
-  background: 'none',
-  border: 'none',
-  borderRadius: 'var(--border-radius-sm)',
-  cursor: 'pointer',
-  width: '100%',
-  textAlign: 'left',
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)',
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
-};
-
-/**
- * Selected item highlight
- *
- * Token reference:
- * - --surface-secondary (selected bg)
- */
-const selectedItemStyles: CSSProperties = {
-  ...itemStyles,
-  backgroundColor: 'var(--surface-secondary)',
-};
-
-/**
- * Icon wrapper in dropdown items
- *
- * Token reference:
- * - --icon-lg = 18px
- * - --text-primary
- */
-const iconWrapperStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '24px', // bds-lint-ignore — icon wrapper touch target
-  height: '24px', // bds-lint-ignore
-  fontSize: 'var(--icon-lg)',
-  color: 'var(--text-primary)',
-  flexShrink: 0,
-};
 
 /**
  * FilterButton - A dropdown filter trigger for filter bars
@@ -265,7 +113,7 @@ export function FilterButton({
     };
   }, [isOpen, handleClickOutside, handleEscape]);
 
-  // Reposition dropdown if it overflows the viewport
+  // Reposition dropdown if it overflows the viewport (runtime-calculated)
   useEffect(() => {
     if (!isOpen || !dropdownRef.current) return;
     const dropdown = dropdownRef.current;
@@ -273,12 +121,10 @@ export function FilterButton({
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    // Horizontal: if right edge overflows, align to right edge of trigger instead
     if (rect.right > viewportWidth) {
       dropdown.style.left = 'auto';
       dropdown.style.right = '0';
     }
-    // Vertical: if bottom overflows, open upward
     if (rect.bottom > viewportHeight) {
       dropdown.style.top = 'auto';
       dropdown.style.bottom = 'calc(100% + var(--gap-md))';
@@ -290,43 +136,43 @@ export function FilterButton({
     setIsOpen(false);
   };
 
-  const buttonStyles = {
-    ...(isActive ? triggerActiveStyles : triggerBaseStyles),
-    ...sizeStyles[size],
-  };
-
   return (
     <div
       ref={wrapperRef}
       className={bdsClass('bds-filter-button', className)}
-      style={{ position: 'relative', display: 'inline-block', ...style }}
+      style={style}
       {...props}
     >
       <button
         type="button"
-        className="bds-filter-button-trigger"
+        className={bdsClass(
+          'bds-filter-button__trigger',
+          `bds-filter-button__trigger--${size}`,
+          isActive && 'bds-filter-button__trigger--active',
+        )}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        style={buttonStyles}
       >
         <span>{selectedOption?.label ?? label}</span>
-        <FontAwesomeIcon icon={faCaretDown} style={{ fontSize: 'var(--icon-sm)' }} />
+        <FontAwesomeIcon icon={faCaretDown} className="bds-filter-button__caret" />
       </button>
 
       {isOpen && (
-        <div ref={dropdownRef} className="bds-filter-button-dropdown" role="listbox" style={dropdownStyles}>
+        <div ref={dropdownRef} className="bds-filter-button__dropdown" role="listbox">
           {options.map((option) => (
             <button
               key={option.id}
               type="button"
-              className="bds-filter-button-option"
+              className={bdsClass(
+                'bds-filter-button__option',
+                option.id === value && 'bds-filter-button__option--selected',
+              )}
               role="option"
               aria-selected={option.id === value}
               onClick={() => handleSelect(option.id)}
-              style={option.id === value ? selectedItemStyles : itemStyles}
             >
-              {option.icon && <span style={iconWrapperStyles}>{option.icon}</span>}
+              {option.icon && <span className="bds-filter-button__icon">{option.icon}</span>}
               <span>{option.label}</span>
             </button>
           ))}

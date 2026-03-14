@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,33 +13,30 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FilterButton } from './FilterButton';
 
-const meta = {
-  title: 'Components/Action/filter-button',
-  component: FilterButton,
-  parameters: {
-    layout: 'padded',
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ minHeight: 360, padding: 'var(--padding-lg)', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
-        <Story />
-      </div>
-    ),
-  ],
-  argTypes: {
-    label: {
-      control: 'text',
-      description: 'Default label text when no option is selected',
-    },
-    value: {
-      control: 'text',
-      description: 'Currently selected option ID',
-    },
-  },
-} satisfies Meta<typeof FilterButton>;
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'flex-start' }}>{children}</div>
+);
+
+/* ─── Shared Data ─────────────────────────────────────── */
 
 const categoryOptions = [
   { id: 'brand', label: 'Brand design', icon: <FontAwesomeIcon icon={faCrown} /> },
@@ -62,101 +60,95 @@ const tagOptions = [
   { id: 'archived', label: 'Archived' },
 ];
 
-/**
- * Default filter button — click to open dropdown, select to activate
- */
-export const Default: Story = {
-  args: {
-    label: 'Category',
-    options: categoryOptions,
-  },
-};
+/* ─── Meta ────────────────────────────────────────────── */
 
-/**
- * Filter button with a pre-selected value (active state)
- */
-export const WithValue: Story = {
-  args: {
-    label: 'Category',
-    options: categoryOptions,
-    value: 'brand',
-  },
-};
-
-/**
- * Text-only options without icons
- */
-export const TextOnly: Story = {
-  args: {
-    label: 'Status',
-    options: tagOptions,
-  },
-};
-
-/**
- * Interactive example with state management
- */
-export const Interactive: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `const [value, setValue] = useState<string | undefined>();
-
-<FilterButton
-  label="Category"
-  options={categoryOptions}
-  value={value}
-  onChange={setValue}
-/>`,
-      },
-    },
-  },
-  render: function InteractiveFilter() {
-    const [value, setValue] = useState<string | undefined>();
-    return (
-      <FilterButton
-        label="Category"
-        options={categoryOptions}
-        value={value}
-        onChange={setValue}
-      />
-    );
-  },
-  args: {
-    label: 'Category',
-    options: categoryOptions,
-  },
-};
-
-/**
- * Multiple filter buttons in a toolbar layout
- */
-export const FilterBar: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
-  <FilterButton label="Category" options={categories} value={cat} onChange={setCat} />
-  <FilterButton label="Region" options={regions} value={reg} onChange={setReg} />
-  <FilterButton label="Status" options={statuses} value={stat} onChange={setStat} />
-</div>`,
-      },
-    },
-  },
-  render: function FilterBarExample() {
-    const [cat, setCat] = useState<string | undefined>();
-    const [reg, setReg] = useState<string | undefined>();
-    const [tag, setTag] = useState<string | undefined>();
-    return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-md)', justifyContent: 'center', width: '100%' }}>
-        <FilterButton label="Category" options={categoryOptions} value={cat} onChange={setCat} />
-        <FilterButton label="Region" options={regionOptions} value={reg} onChange={setReg} />
-        <FilterButton label="Status" options={tagOptions} value={tag} onChange={setTag} />
+const meta = {
+  title: 'Components/Action/filter-button',
+  component: FilterButton,
+  parameters: { layout: 'padded' },
+  decorators: [
+    (Story) => (
+      <div style={{ minHeight: 360, padding: 'var(--padding-lg)', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+        <Story />
       </div>
-    );
-  },
+    ),
+  ],
+} satisfies Meta<typeof FilterButton>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
     label: 'Category',
     options: categoryOptions,
+    size: 'md',
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Sizes, states, text-only
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Variants: Story = {
+  args: { label: 'Category', options: categoryOptions },
+  render: () => (
+    <Stack>
+      <div>
+        <SectionLabel>Sizes</SectionLabel>
+        <Row>
+          <FilterButton label="Small" options={categoryOptions} size="sm" />
+          <FilterButton label="Medium" options={categoryOptions} size="md" />
+          <FilterButton label="Large" options={categoryOptions} size="lg" />
+        </Row>
+      </div>
+
+      <div>
+        <SectionLabel>Active (value selected)</SectionLabel>
+        <Row>
+          <FilterButton label="Category" options={categoryOptions} value="brand" size="sm" />
+          <FilterButton label="Category" options={categoryOptions} value="marketing" size="md" />
+          <FilterButton label="Category" options={categoryOptions} value="product" size="lg" />
+        </Row>
+      </div>
+
+      <div>
+        <SectionLabel>Text-only options (no icons)</SectionLabel>
+        <FilterButton label="Status" options={tagOptions} />
+      </div>
+    </Stack>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Interactive filter bar
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Patterns: Story = {
+  args: { label: 'Category', options: categoryOptions },
+  render: () => {
+    function FilterBar() {
+      const [cat, setCat] = useState<string | undefined>();
+      const [reg, setReg] = useState<string | undefined>();
+      const [tag, setTag] = useState<string | undefined>();
+
+      return (
+        <Stack>
+          <div>
+            <SectionLabel>Filter bar</SectionLabel>
+            <Row>
+              <FilterButton label="Category" options={categoryOptions} value={cat} onChange={setCat} />
+              <FilterButton label="Region" options={regionOptions} value={reg} onChange={setReg} />
+              <FilterButton label="Status" options={tagOptions} value={tag} onChange={setTag} />
+            </Row>
+          </div>
+        </Stack>
+      );
+    }
+    return <FilterBar />;
   },
 };

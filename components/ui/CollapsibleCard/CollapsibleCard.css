@@ -1,0 +1,82 @@
+/* CollapsibleCard — expandable content section */
+
+/* ─── Card container ──────────────────────────────────── */
+
+.bds-collapsible-card {
+  background-color: var(--surface-primary);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Header ──────────────────────────────────────────── */
+
+.bds-collapsible-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  cursor: pointer;
+  gap: var(--gap-lg);
+}
+
+.bds-collapsible-card__header-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-lg);
+  flex: 1;
+  min-width: 0;
+}
+
+.bds-collapsible-card__header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+/* ─── Section label ───────────────────────────────────── */
+
+.bds-collapsible-card__section-label {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight--semi-bold);
+  font-size: var(--heading-tiny);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: var(--font-line-height--100);
+  margin: 0;
+}
+
+/* ─── Title ───────────────────────────────────────────── */
+
+.bds-collapsible-card__title {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight--bold);
+  font-size: var(--heading-sm);
+  color: var(--text-primary);
+  line-height: var(--font-line-height--100);
+  margin: 0;
+}
+
+/* ─── Toggle icon button ─────────────────────────────── */
+
+.bds-collapsible-card__toggle {
+  width: 40px; /* bds-lint-ignore — icon button touch target */
+  height: 40px; /* bds-lint-ignore */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--text-primary);
+  font-size: var(--body-lg); /* bds-lint-ignore — icon sizing */
+}
+
+/* ─── Content area ────────────────────────────────────── */
+
+.bds-collapsible-card__content {
+  margin-top: var(--padding-lg);
+}

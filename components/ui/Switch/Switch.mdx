@@ -5,50 +5,31 @@ import * as Stories from './Switch.stories';
 
 # Switch
 
-Toggle control for binary on/off states. Use for settings, feature flags, and preferences where immediate state change is expected.
+Toggle control for binary on/off states. Available in three sizes with controlled and uncontrolled modes.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Sizes
-
-Three sizes matching the Figma spec: large (56x32), medium (32x18), and small (28x16).
-
-### Unchecked
-<Canvas of={Stories.Sizes} />
-
-### Checked
-<Canvas of={Stories.SizesChecked} />
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Checked
-Default checked state.
-<Canvas of={Stories.Checked} />
+All sizes, states, and the without-label option.
 
-### Disabled
-Prevent interaction with the switch.
-<Canvas of={Stories.Disabled} />
+<Canvas of={Stories.Variants} />
 
-### Without label
-Use when the switch context is clear from surrounding content.
-<Canvas of={Stories.WithoutLabel} />
+| Size | Dimensions | Use case |
+|------|-----------|----------|
+| **lg** | 56x32 | Primary settings, feature toggles |
+| **md** | 32x18 | Standard form controls |
+| **sm** | 28x16 | Compact settings panels |
 
-## Controlled mode
+## Patterns
 
-Manage switch state externally for dynamic behavior.
-<Canvas of={Stories.Controlled} />
+Real-world usage: preferences panel and compact editor settings.
 
-## Usage examples
-
-### Settings panel
-Multiple switches in a preferences panel.
-<Canvas of={Stories.SettingsPanel} />
-
-### Compact settings
-Use `sm` size for dense UI like editor preferences.
-<Canvas of={Stories.CompactSettings} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -58,21 +39,14 @@ Use `sm` size for dense UI like editor preferences.
 
 ```tsx
 import { Switch } from '@brik/bds';
-import { useState } from 'react';
 
 // Uncontrolled
-<Switch label="Enable feature" defaultChecked />
+<Switch label="Enable feature" size="lg" defaultChecked />
 
 // Controlled
-const [enabled, setEnabled] = useState(false);
 <Switch
-  label="Enable notifications"
-  checked={enabled}
-  onChange={(e) => setEnabled(e.target.checked)}
+  label="Dark mode"
+  checked={darkMode}
+  onChange={(e) => setDarkMode(e.target.checked)}
 />
-
-// Size variants
-<Switch size="lg" label="Large toggle" />
-<Switch size="md" label="Medium toggle" />
-<Switch size="sm" label="Small toggle" />
 ```

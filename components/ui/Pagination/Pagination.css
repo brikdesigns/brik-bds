@@ -1,0 +1,87 @@
+/* Pagination — page navigation controls */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-pagination {
+  display: flex;
+  width: 100%;
+  padding: var(--padding-lg) 0;
+  box-sizing: border-box;
+}
+
+.bds-pagination--left {
+  justify-content: flex-start;
+}
+
+.bds-pagination--center {
+  justify-content: center;
+}
+
+.bds-pagination--right {
+  justify-content: flex-end;
+}
+
+/* ─── Items row ───────────────────────────────────────── */
+
+.bds-pagination__items {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+}
+
+/* ─── Arrow buttons ───────────────────────────────────── */
+
+.bds-pagination__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; /* bds-lint-ignore — Figma-driven arrow size */
+  height: 48px; /* bds-lint-ignore */
+  border-radius: var(--border-radius-pill);
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+  border: none;
+  cursor: pointer;
+  font-size: var(--icon-lg);
+  flex-shrink: 0;
+}
+
+.bds-pagination__arrow--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── Page numbers ────────────────────────────────────── */
+
+.bds-pagination__page {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-muted);
+  padding: var(--padding-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-width: 24px; /* bds-lint-ignore — touch target */
+  text-align: center;
+}
+
+.bds-pagination__page--active {
+  color: var(--text-brand-primary);
+  cursor: default;
+}
+
+/* ─── Ellipsis ────────────────────────────────────────── */
+
+.bds-pagination__ellipsis {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-muted);
+  padding: var(--padding-sm);
+  min-width: 24px; /* bds-lint-ignore */
+  text-align: center;
+  cursor: default;
+}

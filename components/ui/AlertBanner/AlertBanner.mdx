@@ -7,35 +7,29 @@ import * as Stories from './AlertBanner.stories';
 
 Contextual banner for important messages requiring user attention. Uses a secondary surface background with an icon-only Badge, title, description, and optional action.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Variants
-
-Each variant includes a colored icon-only Badge that communicates severity at a glance.
-
-### Information
-General informational messages. Neutral badge with circle-info icon.
-<Canvas of={Stories.Information} />
-
-### Warning
-Attention-requiring situations. Yellow badge with triangle icon.
-<Canvas of={Stories.Warning} />
-
-### Error
-Error states and failures. Red badge with triangle-exclamation icon.
-<Canvas of={Stories.Error} />
-
-### All variants
-Side-by-side comparison of all variants.
-<Canvas of={Stories.AllVariants} />
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Title only
-Minimal alert without description.
-<Canvas of={Stories.TitleOnly} />
+All alert variants with badge icons, plus title-only usage.
+
+<Canvas of={Stories.Variants} />
+
+| Variant | Badge | Icon |
+|---------|-------|------|
+| **information** | Neutral | circle-info |
+| **warning** | Yellow | triangle-exclamation |
+| **error** | Red | triangle-exclamation |
+
+## Patterns
+
+Real-world usage: maintenance notices, error recovery, and informational alerts.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -44,8 +38,7 @@ Minimal alert without description.
 ## Usage
 
 ```tsx
-import { AlertBanner } from '@brik/bds';
-import { Button } from '@brik/bds';
+import { AlertBanner, Button } from '@brik/bds';
 
 <AlertBanner
   variant="information"

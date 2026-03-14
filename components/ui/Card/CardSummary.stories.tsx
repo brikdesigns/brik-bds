@@ -1,43 +1,38 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardSummary } from './CardSummary';
 
-const meta = {
+const meta: Meta<typeof CardSummary> = {
   title: 'Displays/Card/card-summary',
   component: CardSummary,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    type: {
-      control: 'select',
-      options: ['numeric', 'price'],
-      description: 'Value display type',
-    },
-    label: {
-      control: 'text',
-      description: 'Label text above the value',
-    },
-    value: {
-      control: 'text',
-      description: 'Display value (number or string)',
-    },
+    type: { control: 'select', options: ['numeric', 'price'] },
+    label: { control: 'text' },
+    value: { control: 'text' },
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '322px' }}>
-        <Story />
-      </div>
-    ),
-  ],
-} satisfies Meta<typeof CardSummary>;
+  decorators: [(Story) => <div style={{ width: 322 }}><Story /></div>],
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Numeric variant with text link visible
- */
-export const Numeric: Story = {
+/* ─── Layout helpers ─────────────────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+    {children}
+  </span>
+);
+
+const Stack = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%' }}>
+    {children}
+  </div>
+);
+
+/* ─── Playground ─────────────────────────────────────────────── */
+
+export const Playground: Story = {
   args: {
     label: 'Total',
     value: 0,
@@ -46,161 +41,47 @@ export const Numeric: Story = {
   },
 };
 
-/**
- * Price variant with text link visible
- */
-export const Price: Story = {
-  args: {
-    label: 'Amount Due',
-    value: 0,
-    type: 'price',
-    textLink: { label: 'Text Link', href: '#' },
-  },
-};
+/* ─── Variants ───────────────────────────────────────────────── */
 
-/**
- * Numeric variant without text link
- */
-export const NumericNoLink: Story = {
-  args: {
-    label: 'Total',
-    value: 0,
-    type: 'numeric',
-  },
-};
-
-/**
- * Price variant without text link
- */
-export const PriceNoLink: Story = {
-  args: {
-    label: 'Amount Due',
-    value: 0,
-    type: 'price',
-  },
-};
-
-/**
- * Both variants stacked, matching the Figma spec
- */
-export const BothVariants: Story = {
-  args: { label: 'Total', value: 0 },
-  parameters: {
-    docs: {
-      source: {
-        code: `<CardSummary
-  label="Total"
-  value={0}
-  type="numeric"
-  textLink={{ label: 'Text Link', href: '#' }}
-/>
-<CardSummary
-  label="Amount Due"
-  value={0}
-  type="price"
-  textLink={{ label: 'Text Link', href: '#' }}
-/>`,
-      },
-    },
-  },
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0', width: '322px' }}>
-      <CardSummary
-        label="Total"
-        value={0}
-        type="numeric"
-        textLink={{ label: 'Text Link', href: '#' }}
-        style={{ borderBottom: 'none' }}
-      />
-      <CardSummary
-        label="Amount Due"
-        value={0}
-        type="price"
-        textLink={{ label: 'Text Link', href: '#' }}
-      />
-    </div>
-  ),
-};
+    <Stack>
+      <SectionLabel>Numeric with link</SectionLabel>
+      <CardSummary label="Total" value={0} type="numeric" textLink={{ label: 'Text Link', href: '#' }} />
 
-/**
- * With populated data
- */
-export const WithData: Story = {
-  args: { label: 'Active Users', value: 1284 },
-  parameters: {
-    docs: {
-      source: {
-        code: `<CardSummary
-  label="Active Users"
-  value={1284}
-  type="numeric"
-  textLink={{ label: 'View All', href: '#' }}
-/>
-<CardSummary
-  label="Revenue"
-  value={48250.75}
-  type="price"
-  textLink={{ label: 'Details', href: '#' }}
-/>`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
-      <CardSummary
-        label="Active Users"
-        value={1284}
-        type="numeric"
-        textLink={{ label: 'View All', href: '#' }}
-      />
-      <CardSummary
-        label="Revenue"
-        value={48250.75}
-        type="price"
-        textLink={{ label: 'Details', href: '#' }}
-      />
-    </div>
-  ),
-};
+      <SectionLabel>Price with link</SectionLabel>
+      <CardSummary label="Amount Due" value={0} type="price" textLink={{ label: 'Text Link', href: '#' }} />
 
-/**
- * Dashboard grid layout
- */
-export const DashboardGrid: Story = {
-  args: { label: 'Orders', value: 156 },
-  parameters: {
-    docs: {
-      source: {
-        code: `<CardSummary label="Orders" value={156} textLink={{ label: 'View', href: '#' }} />
-<CardSummary label="Revenue" value={24830} type="price" textLink={{ label: 'View', href: '#' }} />
-<CardSummary label="Customers" value={892} />
-<CardSummary label="Avg. Order" value={159.17} type="price" />
-<CardSummary label="Returns" value={3} textLink={{ label: 'Review', href: '#' }} />
-<CardSummary label="Refunds" value={478.5} type="price" textLink={{ label: 'Review', href: '#' }} />`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: 'var(--gap-md)',
-      width: '100%',
-      maxWidth: '1000px',
-    }}>
-      <CardSummary label="Orders" value={156} textLink={{ label: 'View', href: '#' }} />
-      <CardSummary label="Revenue" value={24830} type="price" textLink={{ label: 'View', href: '#' }} />
-      <CardSummary label="Customers" value={892} />
-      <CardSummary label="Avg. Order" value={159.17} type="price" />
-      <CardSummary label="Returns" value={3} textLink={{ label: 'Review', href: '#' }} />
-      <CardSummary label="Refunds" value={478.5} type="price" textLink={{ label: 'Review', href: '#' }} />
-    </div>
-  ),
-  decorators: [
-    (Story) => (
-      <div style={{ width: '1000px' }}>
-        <Story />
+      <SectionLabel>Numeric without link</SectionLabel>
+      <CardSummary label="Total" value={0} type="numeric" />
+
+      <SectionLabel>Price without link</SectionLabel>
+      <CardSummary label="Amount Due" value={0} type="price" />
+
+      <SectionLabel>Stacked (border removed between)</SectionLabel>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        <CardSummary label="Total" value={0} type="numeric" textLink={{ label: 'Text Link', href: '#' }} style={{ borderBottom: 'none' }} />
+        <CardSummary label="Amount Due" value={0} type="price" textLink={{ label: 'Text Link', href: '#' }} />
       </div>
-    ),
-  ],
+    </Stack>
+  ),
+};
+
+/* ─── Patterns ───────────────────────────────────────────────── */
+
+export const Patterns: Story = {
+  decorators: [(Story) => <div style={{ width: 1000 }}><Story /></div>],
+  render: () => (
+    <Stack>
+      <SectionLabel>Dashboard metrics grid</SectionLabel>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--gap-md)', width: '100%' }}>
+        <CardSummary label="Orders" value={156} textLink={{ label: 'View', href: '#' }} />
+        <CardSummary label="Revenue" value={24830} type="price" textLink={{ label: 'View', href: '#' }} />
+        <CardSummary label="Customers" value={892} />
+        <CardSummary label="Avg. Order" value={159.17} type="price" />
+        <CardSummary label="Returns" value={3} textLink={{ label: 'Review', href: '#' }} />
+        <CardSummary label="Refunds" value={478.5} type="price" textLink={{ label: 'Review', href: '#' }} />
+      </div>
+    </Stack>
+  ),
 };

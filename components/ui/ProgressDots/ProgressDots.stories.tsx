@@ -1,89 +1,141 @@
+import React from 'react';
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressDots } from './ProgressDots';
+import { Button } from '../Button';
+
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap, alignItems: 'center' }}>{children}</div>
+);
+
+/* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof ProgressDots> = {
   title: 'Navigation/Stepper/progress-dots',
   component: ProgressDots,
-  parameters: {
-    layout: 'centered',
-  },
-};
+  parameters: { layout: 'centered' },
+} satisfies Meta<typeof ProgressDots>;
 
 export default meta;
 type Story = StoryObj<typeof ProgressDots>;
 
-export const Default: Story = {
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
     count: 4,
     activeStep: 1,
+    size: 'md',
   },
 };
 
-export const FirstStep: Story = {
-  args: {
-    count: 3,
-    activeStep: 0,
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Sizes, step positions, linear mode
+   ═══════════════════════════════════════════════════════════════ */
 
-export const LastStep: Story = {
-  args: {
-    count: 3,
-    activeStep: 2,
-  },
-};
-
-export const SmallSize: Story = {
-  args: {
-    count: 5,
-    activeStep: 2,
-    size: 'sm',
-  },
-};
-
-export const LinearMode: Story = {
-  args: {
-    count: 4,
-    activeStep: 2,
-    linear: true,
-  },
-  render: (args) => {
-    const [active, setActive] = useState(args.activeStep);
-    return (
+export const Variants: Story = {
+  render: () => (
+    <Stack>
       <div>
-        <ProgressDots
-          {...args}
-          activeStep={active}
-          onDotClick={setActive}
-        />
-        <p style={{ textAlign: 'center', marginTop: 'var(--gap-lg)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
-          Step {active + 1} of {args.count} — can only go back
-        </p>
+        <SectionLabel>Sizes</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          <ProgressDots count={5} activeStep={2} size="sm" />
+          <ProgressDots count={5} activeStep={2} size="md" />
+        </Stack>
       </div>
-    );
-  },
+
+      <div>
+        <SectionLabel>Step positions</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          <ProgressDots count={4} activeStep={0} />
+          <ProgressDots count={4} activeStep={1} />
+          <ProgressDots count={4} activeStep={2} />
+          <ProgressDots count={4} activeStep={3} />
+        </Stack>
+      </div>
+    </Stack>
+  ),
 };
 
-export const Interactive = () => {
-  const [active, setActive] = useState(0);
-  const count = 4;
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Interactive wizard + linear mode
+   ═══════════════════════════════════════════════════════════════ */
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-xl)' }}>
-      <ProgressDots
-        count={count}
-        activeStep={active}
-        onDotClick={setActive}
-      />
-      <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
-        <button onClick={() => setActive(Math.max(0, active - 1))} disabled={active === 0}>
-          Previous
-        </button>
-        <button onClick={() => setActive(Math.min(count - 1, active + 1))} disabled={active >= count - 1}>
-          Next
-        </button>
-      </div>
-    </div>
-  );
+export const Patterns: Story = {
+  render: () => {
+    function DotsPatterns() {
+      const [freeStep, setFreeStep] = useState(0);
+      const [linearStep, setLinearStep] = useState(2);
+      const count = 5;
+
+      return (
+        <Stack>
+          <div>
+            <SectionLabel>Interactive wizard</SectionLabel>
+            <Stack gap="var(--gap-md)">
+              <ProgressDots
+                count={count}
+                activeStep={freeStep}
+                onDotClick={setFreeStep}
+              />
+              <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setFreeStep(Math.max(0, freeStep - 1))}
+                  disabled={freeStep === 0}
+                >
+                  Previous
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => setFreeStep(Math.min(count - 1, freeStep + 1))}
+                  disabled={freeStep >= count - 1}
+                >
+                  Next
+                </Button>
+              </div>
+            </Stack>
+          </div>
+
+          <div>
+            <SectionLabel>Linear mode (back only)</SectionLabel>
+            <Stack gap="var(--gap-md)">
+              <ProgressDots
+                count={4}
+                activeStep={linearStep}
+                linear
+                onDotClick={setLinearStep}
+              />
+              <p style={{
+                fontSize: 'var(--body-sm)',
+                color: 'var(--text-secondary)',
+                fontFamily: 'var(--font-family-body)',
+              }}>
+                Step {linearStep + 1} of 4 — can only go back
+              </p>
+            </Stack>
+          </div>
+        </Stack>
+      );
+    }
+    return <DotsPatterns />;
+  },
 };

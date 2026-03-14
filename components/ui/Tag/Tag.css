@@ -1,0 +1,102 @@
+/**
+ * BDS Tag — Categorization label with optional icons and dismiss
+ *
+ * Naming: .bds-tag, .bds-tag--{size}, .bds-tag__{element}
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-tag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  background-color: var(--background-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: capitalize;
+  cursor: default;
+  user-select: none;
+  overflow: clip;
+  transition: background-color 0.2s;
+}
+
+/* ─── Sizes ───────────────────────────────────────────────────── */
+
+.bds-tag--sm {
+  padding: var(--padding-tiny);
+  gap: 0;
+  font-size: var(--body-tiny);
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-tag--md {
+  padding: var(--padding-tiny);
+  gap: var(--space-50);
+  font-size: var(--label-sm);
+  border-radius: var(--border-radius-md);
+}
+
+.bds-tag--lg {
+  padding: var(--padding-sm);
+  gap: var(--space-50);
+  font-size: var(--label-lg);
+  border-radius: var(--border-radius-md);
+}
+
+/* ─── Disabled ────────────────────────────────────────────────── */
+
+.bds-tag--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Icon Wrapper ────────────────────────────────────────────── */
+
+.bds-tag__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* bds-lint-ignore — Figma-driven icon dimensions, numeric for width/height */
+.bds-tag--sm .bds-tag__icon {
+  width: 16px;
+  height: 16px;
+  font-size: var(--body-tiny);
+}
+
+.bds-tag--md .bds-tag__icon {
+  width: 16px;
+  height: 16px;
+  font-size: var(--body-xs);
+}
+
+.bds-tag--lg .bds-tag__icon {
+  width: 20px;
+  height: 20px;
+  font-size: var(--label-md);
+}
+
+/* ─── Remove Button ───────────────────────────────────────────── */
+
+.bds-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.bds-tag__remove:hover {
+  opacity: 0.7;
+}

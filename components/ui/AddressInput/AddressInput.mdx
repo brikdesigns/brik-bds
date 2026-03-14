@@ -1,52 +1,44 @@
-import { Meta, Canvas, Story, Controls } from '@storybook/addon-docs/blocks';
-import * as AddressInputStories from './AddressInput.stories';
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './AddressInput.stories';
 
-<Meta of={AddressInputStories} />
+<Meta of={Stories} />
 
-# AddressInput
+# Address input
 
-A location text input with a location icon and autocomplete suggestion dropdown.
-Designed for forms that require address or location entry. The dropdown follows
-the Menu panel design for visual consistency.
+Location text input with a location icon and autocomplete suggestion dropdown. Designed for forms that require address or location entry.
 
-## Default
+## Playground
 
-The base input with a location icon and placeholder text.
+Use the Controls panel to explore all props interactively.
 
-<Canvas of={AddressInputStories.Default} />
-<Controls of={AddressInputStories.Default} />
+<Canvas of={Stories.Playground} />
 
-## With label
+## Variants
 
-An optional label can be displayed above the input.
+Sizes and suggestion dropdown.
 
-<Canvas of={AddressInputStories.WithLabel} />
+<Canvas of={Stories.Variants} />
 
-## Small size
+| Size | Description |
+|------|-------------|
+| **md** | Standard size — default |
+| **sm** | Compact for dense layouts |
 
-The small variant reduces padding for compact layouts.
+## Patterns
 
-<Canvas of={AddressInputStories.Small} />
+Interactive autocomplete with simulated suggestions. Type in the field to filter results.
 
-## With suggestions
+<Canvas of={Stories.Patterns} />
 
-When suggestions are provided and the input is focused, a dropdown panel
-appears below the input. Each suggestion can have an optional icon and
-description line.
+## Props
 
-<Canvas of={AddressInputStories.WithSuggestions} />
-
-## Interactive
-
-A full interactive example simulating autocomplete behavior. Type in the
-field to filter suggestions from a mock dataset.
-
-<Canvas of={AddressInputStories.Interactive} />
+<ArgTypes of={Stories} />
 
 ## Usage
 
 ```tsx
-import { AddressInput, type AddressSuggestion } from './AddressInput';
+import { AddressInput, type AddressSuggestion } from '@brik/bds';
+import { useState } from 'react';
 
 const [value, setValue] = useState('');
 const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
@@ -56,7 +48,6 @@ const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   value={value}
   onChange={(e) => {
     setValue(e.target.value);
-    // Fetch suggestions from your API
     fetchSuggestions(e.target.value).then(setSuggestions);
   }}
   suggestions={suggestions}
@@ -68,15 +59,3 @@ const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   fullWidth
 />
 ```
-
-## Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `size` | `'sm' \| 'md'` | `'md'` | Size variant |
-| `label` | `string` | — | Optional label above the input |
-| `fullWidth` | `boolean` | `false` | Stretch to fill container |
-| `suggestions` | `AddressSuggestion[]` | `[]` | Dropdown suggestions |
-| `onSuggestionSelect` | `(suggestion) => void` | — | Selection callback |
-
-Plus all standard `<input>` HTML attributes (value, onChange, placeholder, etc.).

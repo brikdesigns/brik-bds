@@ -1,9 +1,7 @@
-import { type ReactNode, type CSSProperties, type HTMLAttributes } from 'react';
+import { type ReactNode, type HTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
+import './Banner.css';
 
-/**
- * Banner component props
- */
 export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Bold title text */
   title: ReactNode;
@@ -16,92 +14,10 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
 }
 
 /**
- * Banner container styles
+ * Banner — full-width branded banner for announcements
  *
- * Token reference:
- * - --surface-brand-primary (brand blue background)
- * - --text-inverse (white text on brand surface)
- * - --padding-lg = 24px (all sides)
- * - --border-radius-sm = 2px (corners)
- * - --gap-lg = 16px (gap between content and action)
- */
-const bannerStyles: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: 'var(--gap-lg)',
-  backgroundColor: 'var(--surface-brand-primary)',
-  color: 'var(--text-inverse)',
-  padding: 'var(--padding-lg)',
-  borderRadius: 'var(--border-radius-sm)',
-  width: '100%',
-  boxSizing: 'border-box',
-};
-
-/**
- * Content wrapper — title + description inline
- *
- * Token reference:
- * - --gap-md = 8px (gap between title and description)
- *
- * Figma text styles:
- * - Title: label/md — font-family/label, SemiBold, font-size/100 (16px), line-height 1
- * - Description: body/md — font-family/body, Regular, font-size/100 (16px), line-height 1.5
- */
-const contentStyles: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  gap: 'var(--gap-md)',
-  minWidth: 0,
-};
-
-const titleStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  fontSize: 'var(--label-md)',
-  lineHeight: 'var(--font-line-height-tight)',
-};
-
-const descriptionStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  fontSize: 'var(--body-md)',
-  lineHeight: 'var(--font-line-height-normal)',
-};
-
-const closeButtonStyles: CSSProperties = {
-  background: 'none',
-  border: 'none',
-  color: 'inherit',
-  cursor: 'pointer',
-  padding: 'var(--padding-tiny)',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexShrink: 0,
-  fontSize: 'var(--body-sm)',
-  opacity: 0.8,
-};
-
-/**
- * Banner - BDS marketing banner component
- *
- * A full-width branded banner with title, description, and optional action.
- * Uses brand-primary surface with inverse text. Ideal for announcements,
- * promotions, or site-wide notices.
- *
- * Responsive: flex-wraps content and action when the container narrows.
- *
- * @example
- * ```tsx
- * <Banner
- *   title="New feature"
- *   description="Check out our latest update"
- *   action={<Button variant="secondary" size="sm">Learn more</Button>}
- * />
- * ```
+ * Uses brand-primary surface with inverse text. Ideal for
+ * announcements, promotions, or site-wide notices.
  */
 export function Banner({
   title,
@@ -113,20 +29,20 @@ export function Banner({
   ...props
 }: BannerProps) {
   return (
-    <div role="banner" className={bdsClass('bds-banner', className)} style={{ ...bannerStyles, ...style }} {...props}>
-      <div style={contentStyles}>
-        <span style={titleStyles}>{title}</span>
-        {description && <span style={descriptionStyles}>{description}</span>}
+    <div role="banner" className={bdsClass('bds-banner', className)} style={style} {...props}>
+      <div className="bds-banner__content">
+        <span className="bds-banner__title">{title}</span>
+        {description && <span className="bds-banner__description">{description}</span>}
       </div>
       {(action || onDismiss) && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)', flexShrink: 0 }}>
+        <div className="bds-banner__actions">
           {action}
           {onDismiss && (
             <button
               type="button"
               onClick={onDismiss}
               aria-label="Dismiss banner"
-              style={closeButtonStyles}
+              className="bds-banner__close"
             >
               <i className="fa-solid fa-xmark" />
             </button>

@@ -1,0 +1,61 @@
+/* ─── CardControl ────────────────────────────────────────────── */
+
+.bds-card-control {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-xl);
+  padding: var(--padding-xl);
+  background-color: var(--surface-primary);
+  border: var(--border-width-lg) solid var(--border-muted);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* bds-lint-ignore — shadow tokens resolve to zero */
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+/* ─── Content — badge + text ─────────────────────────────────── */
+
+.bds-card-control__content {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-lg);
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── Text group — title + description ───────────────────────── */
+
+.bds-card-control__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-card-control__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-card-control__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ─── Action ─────────────────────────────────────────────────── */
+
+.bds-card-control__action {
+  flex-shrink: 0;
+}

@@ -5,30 +5,25 @@ import * as Stories from './NavBar.stories';
 
 # Nav bar
 
-Top-level navigation bar with logo, links, and action buttons. Use as the primary navigation element at the top of marketing sites and application shells.
+Top-level navigation bar with logo, links, and action buttons. Supports sticky positioning for scroll-persistent navigation.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Variations
+<Canvas of={Stories.Playground} />
 
-### Links only
-Navigation links without action buttons.
-<Canvas of={Stories.LinksOnly} />
+## Variants
 
-### With multiple actions
-Multiple CTA buttons for complex navigation needs.
-<Canvas of={Stories.WithMultipleActions} />
+Full nav, links only, multiple actions, and minimal configurations.
 
-### Minimal
-Logo only, no links or actions.
-<Canvas of={Stories.Minimal} />
+<Canvas of={Stories.Variants} />
 
-## Sticky
+## Patterns
 
-Fixed to the top of the viewport on scroll.
-<Canvas of={Stories.Sticky} />
+Real-world usage: sticky nav bar with scrollable page content.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -38,15 +33,16 @@ Fixed to the top of the viewport on scroll.
 
 ```tsx
 import { NavBar } from '@brik/bds';
+import { Button } from '@brik/bds';
 
 <NavBar
   logo={<img src="/logo.svg" alt="Acme" />}
   links={[
-    { label: 'Features', href: '/features' },
+    { label: 'Features', href: '/features', active: true },
     { label: 'Pricing', href: '/pricing' },
     { label: 'About', href: '/about' },
   ]}
-  actions={<Button variant="primary" size="sm">Get started</Button>}
+  actions={<Button size="sm">Get Started</Button>}
 />
 
 // Sticky nav bar

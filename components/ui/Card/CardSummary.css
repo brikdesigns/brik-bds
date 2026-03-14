@@ -1,0 +1,82 @@
+/* ─── CardSummary ────────────────────────────────────────────── */
+
+.bds-card-summary {
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* ─── Inner ──────────────────────────────────────────────────── */
+
+.bds-card-summary__inner {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: flex-start;
+  padding: var(--padding-lg);
+}
+
+/* ─── Content — label + value ────────────────────────────────── */
+
+.bds-card-summary__content {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-card-summary__label {
+  font-family: var(--font-family-body);
+  font-size: var(--body-lg);
+  color: var(--text-secondary);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* ─── Value ──────────────────────────────────────────────────── */
+
+.bds-card-summary__value {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+/* ─── Text link area ─────────────────────────────────────────── */
+
+.bds-card-summary__link-area {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+/* ─── Text link ──────────────────────────────────────────────── */
+
+.bds-card-summary__link {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-brand-primary);
+  line-height: var(--font-line-height-tight);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: center;
+}
+
+.bds-card-summary__link:hover {
+  text-decoration: underline;
+}

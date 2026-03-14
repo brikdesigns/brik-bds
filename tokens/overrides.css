@@ -92,6 +92,19 @@
   --theme-neon--neon-yellow: #fffc00;
   --theme-neon--neon-pink: #f0c;
 
+  /* ── Typography Text-Transform ──
+     Semantic casing rules per font role.
+     heading/label/subtitle = capitalize (Title Case)
+     body/display = none (no forced casing)
+     subtitle = uppercase (all-caps labels)
+     Components reference these via var(), Webflow classes inherit directly.
+     Override per-theme by redefining in .body.theme-N blocks. */
+  --text-transform-heading: capitalize;
+  --text-transform-label: capitalize;
+  --text-transform-subtitle: uppercase;
+  --text-transform-body: none;
+  --text-transform-display: none;
+
   /* ── System Color Extras ── */
   --color-system-transparent: #0000;
   --color-system-lightbox: #000000a3;

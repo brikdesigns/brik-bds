@@ -1,0 +1,29 @@
+/* ─── Counter ────────────────────────────────────────────────── */
+
+.bds-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  border-radius: var(--border-radius-pill);
+  white-space: nowrap;
+  overflow: clip;
+  min-width: 0;
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+
+.bds-counter--sm { padding: var(--padding-sm) var(--padding-md); font-size: var(--body-tiny); }
+.bds-counter--md { padding: var(--padding-md) var(--padding-lg); font-size: var(--label-sm); }
+.bds-counter--lg { padding: var(--padding-md) var(--padding-lg); font-size: var(--label-md); }
+
+/* ─── Status colors ──────────────────────────────────────────── */
+
+.bds-counter--success  { background-color: var(--color-system-green);   color: var(--text-inverse); }
+.bds-counter--error    { background-color: var(--color-system-red);     color: var(--text-inverse); }
+.bds-counter--warning  { background-color: var(--color-system-yellow);  color: var(--text-primary); }
+.bds-counter--neutral  { background-color: var(--color-grayscale-lighter); color: var(--text-primary); }
+.bds-counter--progress { background-color: var(--color-system-blue);    color: var(--text-inverse); }
+.bds-counter--brand    { background-color: var(--background-brand-primary); color: var(--text-inverse); }

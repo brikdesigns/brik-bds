@@ -1,27 +1,46 @@
-import { Canvas, Meta } from '@storybook/addon-docs/blocks';
-import * as SidebarNavigationStories from './SidebarNavigation.stories';
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './SidebarNavigation.stories';
 
-<Meta of={SidebarNavigationStories} />
+<Meta of={Stories} />
 
-# SidebarNavigation
+# Sidebar navigation
 
-A fixed-position sidebar navigation component with logo, navigation links, footer actions, and user section. Uses BDS tokens for consistent theming.
+Fixed-position sidebar with logo, navigation links, footer actions, and user section. Width is configurable via prop.
 
-## Features
+## Playground
 
-- **Fixed Position**: Stays visible while content scrolls
-- **BDS Themed**: Uses design tokens for consistent styling
-- **Flexible Content**: Supports logo, nav items, footer actions, and user section
-- **Active State**: Visual indicator for current page
-- **Icons**: Optional icons for navigation items (any ReactNode)
-- **Custom Width**: Configurable sidebar width
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+Default, with icons, with user section, and custom width configurations.
+
+<Canvas of={Stories.Variants} />
+
+| Section | Required | Description |
+|---------|----------|-------------|
+| **Logo** | Yes | Top section with branding |
+| **Nav items** | Yes | Navigation links with active state |
+| **Footer** | No | Bottom actions (buttons, links) |
+| **User** | No | User info at very bottom |
+
+## Patterns
+
+Full application layout with sidebar and main content area.
+
+<Canvas of={Stories.Patterns} />
+
+## Props
+
+<ArgTypes of={Stories} />
 
 ## Usage
 
-### Basic
-
 ```tsx
-import { SidebarNavigation } from '@/components/ui/SidebarNavigation';
+import { SidebarNavigation } from '@brik/bds';
+import { Button } from '@brik/bds';
 
 <SidebarNavigation
   logo={<img src="/logo.svg" alt="Logo" />}
@@ -30,101 +49,7 @@ import { SidebarNavigation } from '@/components/ui/SidebarNavigation';
     { label: 'Projects', href: '/projects' },
     { label: 'Settings', href: '/settings' },
   ]}
+  footerActions={<Button variant="primary" size="sm" fullWidth>New Project</Button>}
+  width="260px"
 />
 ```
-
-### With Footer Actions and User Section
-
-```tsx
-<SidebarNavigation
-  logo={<YourLogo />}
-  navItems={navItems}
-  footerActions={<Button>New Project</Button>}
-  userSection={<UserInfo name="John Doe" />}
-/>
-```
-
-## Props
-
-### SidebarNavigation
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `logo` | `ReactNode` | required | Logo element to display at top |
-| `navItems` | `SidebarNavItem[]` | required | Array of navigation items |
-| `footerActions` | `ReactNode` | - | Footer content (buttons, links, etc.) |
-| `userSection` | `ReactNode` | - | User info section at bottom |
-| `width` | `string` | `"260px"` | Width of sidebar (CSS value) |
-
-### SidebarNavItem
-
-| Prop | Type | Description |
-|------|------|-------------|
-| `label` | `string` | Display label for the navigation item |
-| `href` | `string` | Link destination |
-| `active` | `boolean` | Whether this item is currently active (optional) |
-| `icon` | `ReactNode` | Optional icon element (emoji, SVG, etc.) |
-
-## Design Tokens
-
-The component uses the following BDS tokens:
-
-**Colors:**
-- `--surface-primary` - Sidebar background
-- `--border-secondary` - Borders
-- `--text-primary` - Active item text
-- `--text-secondary` - Default item text
-- `--page-secondary` - Active item background
-- `--brand--primary` - Active indicator dot
-
-**Typography:**
-- `--font-family-body` - Navigation font
-
-**Layout:**
-- Fixed positioning with customizable width (default: 260px)
-- Responsive padding using pixel values
-- Border radius: 6px for navigation items
-
-## Sections
-
-The sidebar has four sections:
-
-1. **Logo section** (required) - Top section with your logo or branding
-2. **Navigation section** (required) - List of navigation links
-3. **Footer actions** (optional) - Bottom section for buttons or actions
-4. **User section** (optional) - User info/avatar at the very bottom
-
-## Navigation Items
-
-Items without icons will show a colored dot indicator instead (brand color when active, gray when inactive).
-
-## Examples
-
-<Canvas of={SidebarNavigationStories.Default} />
-
-## With Icons
-
-<Canvas of={SidebarNavigationStories.WithIcons} />
-
-## Variations
-
-### Without Footer
-<Canvas of={SidebarNavigationStories.WithoutFooter} />
-
-### With User Section
-<Canvas of={SidebarNavigationStories.WithUserSection} />
-
-### Custom Width
-<Canvas of={SidebarNavigationStories.CustomWidth} />
-
-## Layout Integration
-
-<Canvas of={SidebarNavigationStories.FullApplicationLayout} />
-
-## Implementation Notes
-
-- The sidebar uses `position: fixed` - ensure your main content area accounts for the sidebar width
-- Navigation items use `<a>` tags with `href` - integrate with your routing solution (e.g., Next.js Link)
-- Active state is controlled per-item via the `active` boolean property
-- Icons can be any React element (emoji, SVG, Font Awesome components, etc.)
-- The sidebar includes scroll behavior for overflow navigation items

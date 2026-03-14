@@ -1,34 +1,38 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SearchInput } from './SearchInput';
+
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta = {
   title: 'Components/Input/search-input',
   component: SearchInput,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['sm', 'md'],
-      description: 'Size variant',
-    },
-    placeholder: {
-      control: 'text',
-      description: 'Placeholder text',
-    },
-    label: {
-      control: 'text',
-      description: 'Optional label text',
-    },
-    fullWidth: {
-      control: 'boolean',
-      description: 'Full width input',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
+    size: { control: 'select', options: ['sm', 'md'] },
+    placeholder: { control: 'text' },
+    label: { control: 'text' },
+    fullWidth: { control: 'boolean' },
+    disabled: { control: 'boolean' },
   },
   decorators: [
     (Story) => (
@@ -37,108 +41,78 @@ const meta = {
       </div>
     ),
   ],
-  args: {
-    fullWidth: true,
-  },
+  args: { fullWidth: true },
 } satisfies Meta<typeof SearchInput>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default search input
- */
-export const Default: Story = {
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
     placeholder: 'Search...',
+    size: 'md',
   },
 };
 
-/**
- * Small search input
- */
-export const Small: Story = {
-  args: {
-    placeholder: 'Search...',
-    size: 'sm',
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Sizes, label, disabled
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Search with label
- */
-export const WithLabel: Story = {
-  args: {
-    label: 'Search',
-    placeholder: 'Search products...',
-    fullWidth: true,
-  },
-};
-
-/**
- * Disabled search input
- */
-export const Disabled: Story = {
-  args: {
-    placeholder: 'Search...',
-    disabled: true,
-  },
-};
-
-/**
- * Both sizes compared
- */
-export const AllSizes: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<SearchInput size="md" placeholder="Medium search..." />
-<SearchInput size="sm" placeholder="Small search..." />`,
-      },
-    },
-  },
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-lg)', minWidth: '300px' }}>
-      <SearchInput size="md" placeholder="Medium search..." fullWidth />
-      <SearchInput size="sm" placeholder="Small search..." fullWidth />
-    </div>
+    <Stack>
+      {/* Sizes */}
+      <div>
+        <SectionLabel>Sizes</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          <SearchInput size="md" placeholder="Medium search..." fullWidth />
+          <SearchInput size="sm" placeholder="Small search..." fullWidth />
+        </Stack>
+      </div>
+
+      {/* With label */}
+      <div>
+        <SectionLabel>With label</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          <SearchInput label="Search" placeholder="Search products..." fullWidth />
+          <SearchInput label="Filter" placeholder="Filter results..." size="sm" fullWidth />
+        </Stack>
+      </div>
+
+      {/* Disabled */}
+      <div>
+        <SectionLabel>Disabled</SectionLabel>
+        <SearchInput placeholder="Search..." disabled fullWidth />
+      </div>
+    </Stack>
   ),
-  args: {
-    placeholder: 'Search...',
-  },
 };
 
-/**
- * Small search with label for compact layouts
- */
-export const SmallWithLabel: Story = {
-  args: {
-    label: 'Filter',
-    placeholder: 'Filter results...',
-    size: 'sm',
-    fullWidth: true,
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Real-world layouts
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Search inputs in a toolbar layout
- */
-export const ToolbarExample: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<SearchInput size="sm" placeholder="Search products..." />
-<SearchInput size="sm" placeholder="Filter by name..." />`,
-      },
-    },
-  },
+export const Patterns: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
-      <SearchInput size="sm" placeholder="Search products..." />
-      <SearchInput size="sm" placeholder="Filter by name..." />
-    </div>
+    <Stack>
+      {/* Toolbar search */}
+      <div>
+        <SectionLabel>Toolbar search</SectionLabel>
+        <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
+          <SearchInput size="sm" placeholder="Search products..." />
+          <SearchInput size="sm" placeholder="Filter by name..." />
+        </div>
+      </div>
+
+      {/* Full-width page search */}
+      <div>
+        <SectionLabel>Page search</SectionLabel>
+        <SearchInput label="Search" placeholder="Search the knowledge base..." fullWidth />
+      </div>
+    </Stack>
   ),
-  args: {
-    placeholder: 'Search...',
-  },
 };

@@ -1,19 +1,50 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaintBrush, faBullhorn, faCircleInfo, faCube, faCog } from '@fortawesome/free-solid-svg-icons';
 import { MultiSelect } from './MultiSelect';
 
-const meta = {
-  title: 'Components/Form/select',
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ─── Meta ────────────────────────────────────────────── */
+
+const meta: Meta<typeof MultiSelect> = {
+  title: 'Components/Form/multi-select',
   component: MultiSelect,
-  parameters: {
-    layout: 'padded',
+  parameters: { layout: 'padded' },
+  decorators: [(Story) => <div style={{ maxWidth: 480 }}><Story /></div>],
+  argTypes: {
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    label: { control: 'text' },
+    placeholder: { control: 'text' },
+    helperText: { control: 'text' },
+    error: { control: 'text' },
+    disabled: { control: 'boolean' },
+    fullWidth: { control: 'boolean' },
   },
-} satisfies Meta<typeof MultiSelect>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof MultiSelect>;
+
+/* ─── Shared data ─────────────────────────────────────── */
 
 const serviceOptions = [
   { label: 'Brand Design', value: 'brand', icon: <FontAwesomeIcon icon={faPaintBrush} /> },
@@ -34,153 +65,94 @@ const skillOptions = [
   { label: 'GraphQL', value: 'graphql' },
 ];
 
-/**
- * Multi-select with Tag chips — pick multiple options from the dropdown.
- * Selected items appear as removable Tags below the select.
- */
-export const MultiSelectDefault: Story = {
-  name: 'Multi-select',
-  args: { options: serviceOptions },
-  render: () => {
-    const [values, setValues] = useState<string[]>([]);
-    return (
-      <div style={{ maxWidth: '480px' }}>
-        <MultiSelect
-          label="Service lines"
-          placeholder="Select service lines..."
-          options={serviceOptions}
-          value={values}
-          onChange={setValues}
-        />
-      </div>
-    );
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
+  args: {
+    label: 'Service lines',
+    placeholder: 'Select service lines...',
+    options: serviceOptions,
   },
 };
 
-/**
- * Multi-select with some options pre-selected.
- */
-export const MultiSelectPreSelected: Story = {
-  name: 'Multi-select (pre-selected)',
-  args: { options: serviceOptions },
-  render: () => {
-    const [values, setValues] = useState<string[]>(['brand', 'product']);
-    return (
-      <div style={{ maxWidth: '480px' }}>
-        <MultiSelect
-          label="Service lines"
-          placeholder="Select service lines..."
-          options={serviceOptions}
-          value={values}
-          onChange={setValues}
-        />
-      </div>
-    );
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Sizes, pre-selected, disabled, error
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Multi-select with many options — tags wrap naturally.
- */
-export const MultiSelectManyOptions: Story = {
-  name: 'Multi-select (many options)',
-  args: { options: skillOptions },
-  render: () => {
-    const [values, setValues] = useState<string[]>(['react', 'typescript', 'nextjs']);
-    return (
-      <div style={{ maxWidth: '480px' }}>
-        <MultiSelect
-          label="Skills"
-          placeholder="Add skills..."
-          options={skillOptions}
-          value={values}
-          onChange={setValues}
-          helperText="Select all that apply"
-        />
-      </div>
-    );
-  },
-};
-
-/**
- * Multi-select sizes — sm, md, lg matching other form components.
- */
-export const MultiSelectSizes: Story = {
-  name: 'Multi-select sizes',
+export const Variants: Story = {
   args: { options: serviceOptions },
   render: () => {
     const [smValues, setSmValues] = useState<string[]>(['brand']);
     const [mdValues, setMdValues] = useState<string[]>(['brand', 'marketing']);
     const [lgValues, setLgValues] = useState<string[]>(['brand', 'marketing', 'product']);
+    const [errorValues, setErrorValues] = useState<string[]>([]);
+
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-xl)', maxWidth: '480px' }}>
-        <MultiSelect
-          label="Small"
-          size="sm"
-          placeholder="Select..."
-          options={serviceOptions}
-          value={smValues}
-          onChange={setSmValues}
-        />
-        <MultiSelect
-          label="Medium (default)"
-          size="md"
-          placeholder="Select..."
-          options={serviceOptions}
-          value={mdValues}
-          onChange={setMdValues}
-        />
-        <MultiSelect
-          label="Large"
-          size="lg"
-          placeholder="Select..."
-          options={serviceOptions}
-          value={lgValues}
-          onChange={setLgValues}
-        />
-      </div>
+      <Stack>
+        <div>
+          <SectionLabel>Sizes</SectionLabel>
+          <Stack gap="var(--gap-lg)">
+            <MultiSelect label="Small" size="sm" placeholder="Select..." options={serviceOptions} value={smValues} onChange={setSmValues} />
+            <MultiSelect label="Medium (default)" size="md" placeholder="Select..." options={serviceOptions} value={mdValues} onChange={setMdValues} />
+            <MultiSelect label="Large" size="lg" placeholder="Select..." options={serviceOptions} value={lgValues} onChange={setLgValues} />
+          </Stack>
+        </div>
+
+        <div>
+          <SectionLabel>States</SectionLabel>
+          <Stack gap="var(--gap-lg)">
+            <MultiSelect label="Disabled" placeholder="Select..." options={serviceOptions} value={['brand', 'marketing']} disabled />
+            <MultiSelect
+              label="With error"
+              placeholder="Select at least one..."
+              options={serviceOptions}
+              value={errorValues}
+              onChange={setErrorValues}
+              error={errorValues.length === 0 ? 'Please select at least one service' : undefined}
+            />
+          </Stack>
+        </div>
+      </Stack>
     );
   },
 };
 
-/**
- * Disabled multi-select — tags are visible but not removable.
- */
-export const MultiSelectDisabled: Story = {
-  name: 'Multi-select (disabled)',
-  args: { options: serviceOptions },
-  render: () => (
-    <div style={{ maxWidth: '480px' }}>
-      <MultiSelect
-        label="Service lines"
-        placeholder="Select..."
-        options={serviceOptions}
-        value={['brand', 'marketing']}
-        disabled
-      />
-    </div>
-  ),
-};
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Form with multi-select fields
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Multi-select with error validation.
- */
-export const MultiSelectWithError: Story = {
-  name: 'Multi-select (error)',
+export const Patterns: Story = {
   args: { options: serviceOptions },
   render: () => {
-    const [values, setValues] = useState<string[]>([]);
+    const [services, setServices] = useState<string[]>([]);
+    const [skills, setSkills] = useState<string[]>(['react', 'typescript']);
+
     return (
-      <div style={{ maxWidth: '480px' }}>
-        <MultiSelect
-          label="Required services"
-          placeholder="Select at least one..."
-          options={serviceOptions}
-          value={values}
-          onChange={setValues}
-          error={values.length === 0 ? 'Please select at least one service' : undefined}
-        />
-      </div>
+      <Stack>
+        <div>
+          <SectionLabel>Project intake form</SectionLabel>
+          <Stack gap="var(--gap-lg)">
+            <MultiSelect
+              label="Service lines"
+              placeholder="Select service lines..."
+              options={serviceOptions}
+              value={services}
+              onChange={setServices}
+              helperText="Choose all services that apply"
+            />
+            <MultiSelect
+              label="Required skills"
+              placeholder="Add skills..."
+              options={skillOptions}
+              value={skills}
+              onChange={setSkills}
+              helperText="Select all that apply"
+            />
+          </Stack>
+        </div>
+      </Stack>
     );
   },
 };

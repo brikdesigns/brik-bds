@@ -1,0 +1,59 @@
+/* ─── AlertBanner ─────────────────────────────────────────────── */
+
+.bds-alert-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Inner — badge + content ────────────────────────────────── */
+
+.bds-alert-banner__inner {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* ─── Content — title + description stacked ──────────────────── */
+
+.bds-alert-banner__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-alert-banner__title {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  font-size: var(--label-md);
+  line-height: var(--font-line-height-tight);
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-alert-banner__description {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+}
+
+/* ─── Action ─────────────────────────────────────────────────── */
+
+.bds-alert-banner__action {
+  flex-shrink: 0;
+}

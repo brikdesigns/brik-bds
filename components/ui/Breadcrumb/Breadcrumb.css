@@ -1,0 +1,42 @@
+/* ─── Breadcrumb ─────────────────────────────────────────────── */
+
+.bds-breadcrumb {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: center;
+}
+
+/* ─── Link ───────────────────────────────────────────────────── */
+
+.bds-breadcrumb__link {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-brand-primary);
+  text-decoration: none;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+/* ─── Current page ───────────────────────────────────────────── */
+
+.bds-breadcrumb__current {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-muted);
+  text-transform: capitalize;
+  cursor: default;
+}
+
+/* ─── Separator ──────────────────────────────────────────────── */
+
+.bds-breadcrumb__separator {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  color: var(--text-muted);
+  line-height: var(--font-line-height-tight);
+  padding: 0 var(--padding-tiny);
+}

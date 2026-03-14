@@ -3,61 +3,33 @@ import * as Stories from './TextInput.stories';
 
 <Meta of={Stories} />
 
-# TextInput
+# Text input
 
-Text input field for collecting user data. Supports labels, helper text, error states, and multiple input types.
+Text input field for collecting user data. Supports labels, helper text, error states, icons, size variants, and multiple input types.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## With Label
+<Canvas of={Stories.Playground} />
 
-Inputs should typically include labels for accessibility and clarity.
+## Variants
 
-<Canvas of={Stories.WithLabel} />
+Sizes, states, icons, and input types.
 
-## With Helper Text
+<Canvas of={Stories.Variants} />
 
-Helper text provides guidance or additional context below the input.
+| Size | Description |
+|------|-------------|
+| **sm** | 14px text — compact forms |
+| **md** | 16px text — default |
+| **lg** | 18px text — prominent inputs |
 
-<Canvas of={Stories.WithHelperText} />
+## Patterns
 
-## Error State
+Real-world usage: contact form and login form layouts.
 
-Error messages replace helper text and style the input with error colors.
-
-<Canvas of={Stories.WithError} />
-
-## Disabled State
-
-Disabled inputs prevent user interaction.
-
-<Canvas of={Stories.Disabled} />
-
-## Full Width
-
-Inputs can expand to fill their container width.
-
-<Canvas of={Stories.FullWidth} />
-
-## Sizes
-
-Inputs are available in three sizes per Figma designs.
-
-<Canvas of={Stories.AllSizes} />
-
-## Input Types
-
-The component supports various HTML input types for different data formats.
-
-<Canvas of={Stories.InputTypes} />
-
-## Form Example
-
-Complete form using multiple inputs.
-
-<Canvas of={Stories.FormExample} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -71,10 +43,7 @@ import { TextInput } from '@brik/bds';
 // Basic input
 <TextInput placeholder="Enter text..." />
 
-// With label
-<TextInput label="Email Address" placeholder="you@example.com" type="email" />
-
-// With helper text
+// With label and helper
 <TextInput
   label="Password"
   type="password"
@@ -88,16 +57,10 @@ import { TextInput } from '@brik/bds';
   type="email"
 />
 
-// Sizes
-<TextInput size="sm" label="Small" />
-<TextInput size="md" label="Medium" />
-<TextInput size="lg" label="Large" />
-
-// Full width
-<TextInput fullWidth label="Full Name" />
+// With icon
+<TextInput
+  label="Email"
+  placeholder="you@example.com"
+  iconBefore={<FontAwesomeIcon icon={faEnvelope} />}
+/>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

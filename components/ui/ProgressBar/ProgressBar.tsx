@@ -1,5 +1,6 @@
-import { type CSSProperties, type HTMLAttributes } from 'react';
+import { type HTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
+import './ProgressBar.css';
 
 /**
  * ProgressBar component props
@@ -12,39 +13,6 @@ export interface ProgressBarProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   /** Override fill bar color (defaults to brand-primary) */
   fillColor?: string;
 }
-
-/**
- * Track (outer container) styles
- *
- * Token reference:
- * - --background-input (track background — white)
- * - --border-muted (track border — lighter gray)
- */
-const trackStyles: CSSProperties = {
-  position: 'relative',
-  width: '100%',
-  height: '6px', // bds-lint-ignore — Figma-driven track height
-  backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-sm) solid var(--border-muted)',
-  borderRadius: 'var(--border-radius-sm)', // bds-lint-ignore — half track height
-  overflow: 'hidden',
-};
-
-/**
- * Fill bar styles
- *
- * Token reference:
- * - --background-brand-primary (fill color — blue)
- */
-const barStyles: CSSProperties = {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  bottom: 0,
-  backgroundColor: 'var(--background-brand-primary)',
-  borderRadius: 'var(--border-radius-sm)', // bds-lint-ignore — half track height
-  transition: 'width 0.3s ease',
-};
 
 /**
  * ProgressBar - BDS themed progress indicator
@@ -75,12 +43,12 @@ export function ProgressBar({
       aria-valuemax={100}
       aria-label={label}
       className={bdsClass('bds-progress-bar', className)}
-      style={{ ...trackStyles, ...style }}
+      style={style}
       {...props}
     >
       <div
+        className="bds-progress-bar__fill"
         style={{
-          ...barStyles,
           width: `${clampedValue}%`,
           ...(fillColor ? { backgroundColor: fillColor } : {}),
         }}

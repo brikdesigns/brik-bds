@@ -1,16 +1,13 @@
-import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { type HTMLAttributes, type ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
+import './Tag.css';
 
-/**
- * Tag size variants
- */
+/** Tag size variants */
 export type TagSize = 'sm' | 'md' | 'lg';
 
-/**
- * Tag component props
- */
+/** Tag component props */
 export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   /** Tag label content */
   children: ReactNode;
@@ -27,118 +24,12 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Size-based styles from Figma spec
- *
- * Figma specs (bds-tag):
- * - sm: padding tiny, gap 0px, font-size ~10px, border-radius 2px, icon 16px
- * - md: padding tiny, gap 2px, font-size 14px, border-radius 4px, icon 16px
- * - lg: padding sm, gap 2px, font-size 18px, border-radius 4px, icon 20px
- *
- * Token reference (padding tokens, not space tokens):
- * - --padding-tiny (sm/md padding — responsive, scales at breakpoints)
- * - --padding-sm (lg padding)
- * - --space-50 = 2px (md/lg gap only)
- * - --body-tiny ~= 10.26px (sm font)
- * - --label-sm = 14px (md font)
- * - --label-lg = 18px (lg font, mapped to font-size--200)
- * - --border-radius-sm = 2px (sm radius)
- * - --border-radius-md = 4px (md/lg radius)
- */
-const sizeStyles: Record<TagSize, CSSProperties> = {
-  sm: {
-    padding: 'var(--padding-tiny)',
-    gap: 0,
-    fontSize: 'var(--body-tiny)',
-    borderRadius: 'var(--border-radius-sm)',
-  },
-  md: {
-    padding: 'var(--padding-tiny)',
-    gap: 'var(--space-50)',
-    fontSize: 'var(--label-sm)',
-    borderRadius: 'var(--border-radius-md)',
-  },
-  lg: {
-    padding: 'var(--padding-sm)',
-    gap: 'var(--space-50)',
-    fontSize: 'var(--label-lg)',
-    borderRadius: 'var(--border-radius-md)',
-  },
-};
-
-/**
- * Icon wrapper sizes from Figma spec
- * - sm/md: 16px wrapper
- * - lg: 20px wrapper
- */
-const iconSizeMap: Record<TagSize, CSSProperties> = {
-  sm: { width: 16, height: 16, fontSize: 'var(--body-tiny)' },
-  md: { width: 16, height: 16, fontSize: 'var(--body-xs)' },
-  lg: { width: 20, height: 20, fontSize: 'var(--label-md)' },
-};
-
-/**
- * Base tag styles
- *
- * Token reference:
- * - --background-secondary (subtle gray background)
- * - --text-primary (theme-aware text — dark in light mode, light in dark mode)
- * - --font-family-label (label font)
- * - --font-weight-semi-bold = 600
- *
- * Text color follows Badge pattern:
- * - text-primary for light backgrounds (provides proper contrast)
- * - text-inverse for saturated backgrounds (used in Badge for colored backgrounds)
- */
-const baseStyles: CSSProperties = {
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  color: 'var(--text-primary)',
-  backgroundColor: 'var(--background-secondary)',
-  textDecoration: 'none',
-  whiteSpace: 'nowrap',
-  textTransform: 'capitalize' as const,
-  cursor: 'default',
-  userSelect: 'none',
-  overflow: 'clip',
-  transition: 'background-color 0.2s',
-};
-
-const disabledStyles: CSSProperties = {
-  opacity: 0.5,
-  cursor: 'not-allowed',
-};
-
-const removeButtonStyles: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: 0,
-  border: 'none',
-  background: 'none',
-  cursor: 'pointer',
-  color: 'inherit',
-  fontSize: 'inherit',
-  lineHeight: 'inherit',
-};
-
-/**
- * Tag - BDS themed tag component
- *
- * Categorization label with optional left/right icons.
- * Supports three sizes (sm, md, lg) matching the Figma spec.
- * Uses CSS variables for theming. All spacing, colors, typography,
- * and border-radius reference BDS tokens.
+ * Tag — categorization label with optional icons and dismiss
  *
  * @example
  * ```tsx
  * <Tag>Category</Tag>
  * <Tag size="lg" icon={<Icon />}>With Icon</Tag>
- * <Tag trailingIcon={<Icon />}>With Right Icon</Tag>
- * <Tag icon={<Icon />} trailingIcon={<Icon />}>Both Icons</Tag>
  * <Tag onRemove={() => handleRemove()}>Removable</Tag>
  * ```
  */
@@ -149,39 +40,27 @@ export function Tag({
   trailingIcon,
   onRemove,
   disabled = false,
-  className = '',
+  className,
   style,
   ...props
 }: TagProps) {
-  const combinedStyles: CSSProperties = {
-    ...baseStyles,
-    ...sizeStyles[size],
-    ...(disabled ? disabledStyles : {}),
-    ...style,
-  };
-
-  const iconStyles: CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-    ...iconSizeMap[size],
-  };
+  const classes = bdsClass(
+    'bds-tag',
+    `bds-tag--${size}`,
+    disabled && 'bds-tag--disabled',
+    className
+  );
 
   return (
-    <span
-      className={bdsClass('bds-tag', className)}
-      style={combinedStyles}
-      {...props}
-    >
-      {icon && <span style={iconStyles}>{icon}</span>}
+    <span className={classes} style={style} {...props}>
+      {icon && <span className="bds-tag__icon">{icon}</span>}
       {children}
-      {trailingIcon && <span style={iconStyles}>{trailingIcon}</span>}
+      {trailingIcon && <span className="bds-tag__icon">{trailingIcon}</span>}
       {onRemove && !disabled && (
         <button
           type="button"
           onClick={onRemove}
-          style={{ ...removeButtonStyles, ...iconSizeMap[size] }}
+          className="bds-tag__remove bds-tag__icon"
           aria-label="Remove"
         >
           <FontAwesomeIcon icon={faXmark} />

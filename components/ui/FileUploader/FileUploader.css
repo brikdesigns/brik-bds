@@ -1,0 +1,102 @@
+/**
+ * BDS FileUploader
+ *
+ * Token reference:
+ * - --surface-primary (dropzone bg)
+ * - --border-secondary (dashed border)
+ * - --border-brand-primary (drag-over border)
+ * - --border-radius-lg
+ * - --padding-xl
+ * - --gap-sm, --gap-md
+ * - --color-system-red (error)
+ */
+
+/* ─── Wrapper ─────────────────────────────────────────────────── */
+
+.bds-file-uploader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+/* ─── Dropzone ────────────────────────────────────────────────── */
+
+.bds-file-uploader__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-md);
+  padding: var(--padding-xl);
+  background-color: var(--surface-primary);
+  border: var(--border-width-lg) dashed var(--border-secondary);
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bds-file-uploader__dropzone--active {
+  border-color: var(--border-brand-primary);
+  background-color: color-mix(in srgb, var(--background-brand-primary) 5%, var(--surface-primary));
+}
+
+.bds-file-uploader__dropzone--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bds-file-uploader__dropzone--error {
+  border-color: var(--color-system-red);
+}
+
+/* ─── Icon ────────────────────────────────────────────────────── */
+
+.bds-file-uploader__icon {
+  font-size: var(--heading-md);
+  color: var(--text-brand-primary);
+}
+
+/* ─── Label ───────────────────────────────────────────────────── */
+
+.bds-file-uploader__label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* ─── Helper / Error text ─────────────────────────────────────── */
+
+.bds-file-uploader__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.bds-file-uploader__error {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--color-system-red);
+  margin: 0;
+}
+
+/* ─── Browse link ─────────────────────────────────────────────── */
+
+.bds-file-uploader__browse {
+  color: var(--text-brand-primary);
+  font-weight: var(--font-weight-semi-bold);
+  text-decoration: underline;
+  cursor: pointer;
+}

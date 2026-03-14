@@ -7,70 +7,39 @@ import * as Stories from './Badge.stories';
 
 Status indicators and labels for displaying contextual information. Badges use semantic colors to communicate status, priority, or category at a glance.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Status Variants
+<Canvas of={Stories.Playground} />
 
-Badges come in seven status variants, each with distinct semantic meaning.
+## Variants
 
-### All Status Variants
-<Canvas of={Stories.AllStatuses} />
+Seven status variants across four sizes. The `xs` size renders a compact icon-only badge.
 
-### Positive
-Used for success states, completed actions, and positive outcomes.
-<Canvas of={Stories.Positive} />
+<Canvas of={Stories.Variants} />
 
-### Warning
-Used for cautionary states, pending actions, and items requiring attention.
-<Canvas of={Stories.Warning} />
+| Status | Use for |
+|--------|---------|
+| **default** | General-purpose label. No specific semantic. |
+| **positive** | Success states, completed actions. |
+| **warning** | Cautionary states, pending actions. |
+| **error** | Error states, failed actions, critical issues. |
+| **info** | Informational states, neutral notifications. |
+| **progress** | In-progress states, active processes. |
+| **neutral** | Inactive states, disabled items. |
 
-### Error
-Used for error states, failed actions, and critical issues.
-<Canvas of={Stories.Error} />
+## Icons
 
-### Info
-Used for informational states and neutral notifications.
-<Canvas of={Stories.Info} />
+Badges can include a leading icon alongside text for additional context.
 
-### Progress
-Used for in-progress states and active processes.
-<Canvas of={Stories.Progress} />
+<Canvas of={Stories.Icons} />
 
-### Neutral
-Used for inactive states and disabled items.
-<Canvas of={Stories.Neutral} />
+## Patterns
 
-## Sizes
+Real-world compositions for common badge use cases.
 
-Badges are available in four sizes. The `xs` size is icon-only with square corners.
-
-<Canvas of={Stories.AllSizes} />
-
-## Icon Only
-
-The `xs` size renders a compact 24px icon-only badge with square corners (2px radius). Use with the `icon` prop and no children.
-
-<Canvas of={Stories.IconOnly} />
-
-## With Icons
-
-Badges can include icons alongside text for additional context.
-
-<Canvas of={Stories.WithIcons} />
-
-## Size and Status Matrix
-
-All size and status combinations.
-
-<Canvas of={Stories.SizeStatusMatrix} />
-
-## Contextual Examples
-
-Real-world usage examples showing badges in context.
-
-<Canvas of={Stories.StatusIndicators} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -98,8 +67,3 @@ import { Badge } from '@brik/bds';
   Complete
 </Badge>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

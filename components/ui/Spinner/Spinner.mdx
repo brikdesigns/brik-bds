@@ -5,39 +5,30 @@ import * as Stories from './Spinner.stories';
 
 # Spinner
 
-Loading indicator with animated rotation. Theme-colored by default, adapts to current theme context. Available in small and large sizes.
+Circular loading indicator with animated rotation. Theme-colored by default, adapts to current theme context.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Small} />
+Use the Controls panel to explore all props interactively.
 
-## Sizes
+<Canvas of={Stories.Playground} />
 
-### Small
-16px diameter for inline and button loading states.
-<Canvas of={Stories.Small} />
+## Variants
 
-### Large
-48px diameter for full-page or container loading states.
-<Canvas of={Stories.Large} />
+Size comparison: small (16px) for inline use, large (48px) for container loading.
 
-### All Sizes
-Visual comparison of both size options.
-<Canvas of={Stories.AllSizes} />
+<Canvas of={Stories.Variants} />
 
-## Usage Examples
+| Size | Dimensions | Use for |
+|------|-----------|---------|
+| **sm** | 16 x 16px | Inline, button loading states |
+| **lg** | 48 x 48px | Container, full-page loading |
 
-### In Button
-Common pattern for loading button states with custom styling.
-<Canvas of={Stories.InButton} />
+## Patterns
 
-### Centered in Container
-Full-page or section loading indicator.
-<Canvas of={Stories.CenteredInContainer} />
+Real-world usage: loading buttons, centered containers, and loading text.
 
-### With Text
-Spinner with descriptive loading message.
-<Canvas of={Stories.WithText} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -54,19 +45,6 @@ import { Spinner } from '@brik/bds';
 // Large spinner
 <Spinner size="lg" />
 
-// In a loading button
-<button disabled>
-  <Spinner size="sm" style={{ borderTopColor: 'white' }} />
-  Loading...
-</button>
-
-// Centered in container
-<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-  <Spinner size="lg" />
-</div>
+// Custom colors for dark backgrounds
+<Spinner size="sm" style={{ borderColor: 'rgba(255,255,255,0.3)', borderTopColor: 'white' }} />
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

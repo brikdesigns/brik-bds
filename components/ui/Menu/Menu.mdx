@@ -5,28 +5,25 @@ import * as Stories from './Menu.stories';
 
 # Menu
 
-A floating dropdown panel for navigation and action menus. Contains a list of selectable items with optional icons. Closes on outside click or Escape key.
+Floating dropdown panel for navigation and action menus. Contains selectable items with optional icons. Closes on outside click or Escape key.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.StaticOpen} />
+Use the Controls panel to explore all props interactively.
 
-## Interactive
+<Canvas of={Stories.Playground} />
 
-### Triggered by Button
+## Variants
 
-Click the button to open the menu. Click outside or press Escape to close.
-<Canvas of={Stories.Default} />
+With icons, text-only with disabled item, and active item highlight.
 
-### With Active Item
+<Canvas of={Stories.Variants} />
 
-Highlight the currently selected item with `activeId`.
-<Canvas of={Stories.WithActiveItem} />
+## Patterns
 
-### Text Only
+Real-world usage: FilterButton trigger and Button trigger with action menu.
 
-Menu items without icons for simple action menus.
-<Canvas of={Stories.TextOnly} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 

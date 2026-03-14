@@ -5,35 +5,30 @@ import * as Stories from './CardTestimonial.stories';
 
 # Card testimonial
 
-A customer testimonial card displaying a quote with attribution and optional star rating. Supports brand (colored background) and outlined variants.
+Customer testimonial card with quote, attribution, and optional star rating. Supports brand (colored background) and outlined variants.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Outlined variant
+<Canvas of={Stories.Playground} />
 
-For use on colored backgrounds or when you want a lighter treatment.
+## Variants
 
-<Canvas of={Stories.Outlined} />
+Brand, outlined, without rating, and minimal attribution.
 
-## Without rating
+<Canvas of={Stories.Variants} />
 
-Stars are optional. Omit the `rating` prop to hide them.
+| Variant | Description |
+|---------|-------------|
+| **brand** | Colored background with inverse text (default) |
+| **outlined** | Light background with border |
 
-<Canvas of={Stories.WithoutRating} />
+## Patterns
 
-## Grid layout
+Mixed variant testimonials in a grid layout.
 
-Testimonials shine in multi-column grid layouts.
-
-<Canvas of={Stories.Grid} />
-
-## Mixed variants
-
-Combine brand and outlined cards for visual variety.
-
-<Canvas of={Stories.MixedVariants} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -44,26 +39,10 @@ Combine brand and outlined cards for visual variety.
 ```tsx
 import { CardTestimonial } from '@brik/bds';
 
-// Brand variant (default)
 <CardTestimonial
   quote="Amazing service and results."
   authorName="Sarah Chen"
   authorRole="Owner, Bloom Cafe"
   rating={5}
-/>
-
-// Outlined variant
-<CardTestimonial
-  variant="outlined"
-  quote="Professional and creative team."
-  authorName="Marcus Johnson"
-  authorRole="Director, Apex Corp"
-  rating={4}
-/>
-
-// Without rating
-<CardTestimonial
-  quote="Best investment we made."
-  authorName="Alex Turner"
 />
 ```

@@ -1,6 +1,26 @@
+import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SegmentedControl } from './SegmentedControl';
+
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
 
 /** Interactive wrapper — manages selected value state */
 function InteractiveSegmentedControl({
@@ -31,71 +51,42 @@ function InteractiveSegmentedControl({
   );
 }
 
+/* ─── Meta ────────────────────────────────────────────────────── */
+
 const meta: Meta<typeof SegmentedControl> = {
   title: 'Components/Control/segmented-control',
   component: SegmentedControl,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'],
-      description: 'Size variant',
-    },
-    fullWidth: {
-      control: 'boolean',
-      description: 'Expand to fill container width',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disable all segments',
-    },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    fullWidth: { control: 'boolean' },
+    disabled: { control: 'boolean' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof SegmentedControl>;
 
-// ─── Default ────────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Default segmented control with two options. Click to toggle.
- */
-export const Default: Story = {
-  render: () => (
-    <InteractiveSegmentedControl
-      items={[
-        { label: 'Grid', value: 'grid' },
-        { label: 'List', value: 'list' },
-      ]}
-    />
-  ),
+export const Playground: Story = {
+  args: {
+    items: [
+      { label: 'Grid', value: 'grid' },
+      { label: 'List', value: 'list' },
+    ],
+    value: 'grid',
+    size: 'md',
+  },
 };
 
-// ─── Three Segments ─────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Sizes, disabled, full-width, many segments
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Three-segment control for view switching.
- */
-export const ThreeSegments: Story = {
-  render: () => (
-    <InteractiveSegmentedControl
-      items={[
-        { label: 'Day', value: 'day' },
-        { label: 'Week', value: 'week' },
-        { label: 'Month', value: 'month' },
-      ]}
-    />
-  ),
-};
-
-// ─── Sizes ──────────────────────────────────────────────────────
-
-/**
- * All three sizes compared side by side.
- */
-export const Sizes: Story = {
+export const Variants: Story = {
   render: () => {
     const items = [
       { label: 'Active', value: 'active' },
@@ -104,113 +95,144 @@ export const Sizes: Story = {
     ];
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-xl)', alignItems: 'flex-start' }}>
+      <Stack>
+        {/* Sizes */}
         <div>
-          <p style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--label-sm)',
-            color: 'var(--text-muted)',
-            marginBottom: 'var(--gap-sm)',
-          }}>
-            Small
-          </p>
+          <SectionLabel>Small</SectionLabel>
           <InteractiveSegmentedControl items={items} size="sm" />
         </div>
         <div>
-          <p style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--label-sm)',
-            color: 'var(--text-muted)',
-            marginBottom: 'var(--gap-sm)',
-          }}>
-            Medium (default)
-          </p>
+          <SectionLabel>Medium (default)</SectionLabel>
           <InteractiveSegmentedControl items={items} size="md" />
         </div>
         <div>
-          <p style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--label-sm)',
-            color: 'var(--text-muted)',
-            marginBottom: 'var(--gap-sm)',
-          }}>
-            Large
-          </p>
+          <SectionLabel>Large</SectionLabel>
           <InteractiveSegmentedControl items={items} size="lg" />
         </div>
-      </div>
+
+        {/* Full width */}
+        <div>
+          <SectionLabel>Full width</SectionLabel>
+          <div style={{ width: 400 }}>
+            <InteractiveSegmentedControl
+              fullWidth
+              items={[
+                { label: 'Monthly', value: 'monthly' },
+                { label: 'Yearly', value: 'yearly' },
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* Disabled states */}
+        <div>
+          <SectionLabel>Individual segment disabled</SectionLabel>
+          <InteractiveSegmentedControl
+            items={[
+              { label: 'Published', value: 'published' },
+              { label: 'Draft', value: 'draft' },
+              { label: 'Archived', value: 'archived', disabled: true },
+            ]}
+          />
+        </div>
+        <div>
+          <SectionLabel>Fully disabled</SectionLabel>
+          <InteractiveSegmentedControl
+            disabled
+            items={[
+              { label: 'Grid', value: 'grid' },
+              { label: 'List', value: 'list' },
+            ]}
+          />
+        </div>
+
+        {/* Many segments */}
+        <div>
+          <SectionLabel>Many segments</SectionLabel>
+          <InteractiveSegmentedControl
+            items={[
+              { label: 'All', value: 'all' },
+              { label: 'Active', value: 'active' },
+              { label: 'Paused', value: 'paused' },
+              { label: 'Draft', value: 'draft' },
+              { label: 'Archived', value: 'archived' },
+            ]}
+          />
+        </div>
+      </Stack>
     );
   },
 };
 
-// ─── Full Width ─────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Real-world usage
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Full-width mode — segments expand equally to fill the container.
- */
-export const FullWidth: Story = {
-  render: () => (
-    <div style={{ width: '400px' }}>
-      <InteractiveSegmentedControl
-        fullWidth
-        items={[
-          { label: 'Monthly', value: 'monthly' },
-          { label: 'Yearly', value: 'yearly' },
-        ]}
-      />
-    </div>
-  ),
-};
+export const Patterns: Story = {
+  render: () => {
+    function ViewSwitcher() {
+      const [view, setView] = useState('grid');
+      return (
+        <div>
+          <SectionLabel>View switcher</SectionLabel>
+          <SegmentedControl
+            items={[
+              { label: 'Grid', value: 'grid' },
+              { label: 'List', value: 'list' },
+            ]}
+            value={view}
+            onChange={setView}
+            size="sm"
+          />
+        </div>
+      );
+    }
 
-// ─── Disabled Segments ──────────────────────────────────────────
+    function PricingToggle() {
+      const [plan, setPlan] = useState('monthly');
+      return (
+        <div>
+          <SectionLabel>Pricing toggle</SectionLabel>
+          <div style={{ width: 320 }}>
+            <SegmentedControl
+              items={[
+                { label: 'Monthly', value: 'monthly' },
+                { label: 'Yearly', value: 'yearly' },
+              ]}
+              value={plan}
+              onChange={setPlan}
+              fullWidth
+            />
+          </div>
+        </div>
+      );
+    }
 
-/**
- * Individual segments can be disabled while others remain interactive.
- */
-export const WithDisabled: Story = {
-  render: () => (
-    <InteractiveSegmentedControl
-      items={[
-        { label: 'Published', value: 'published' },
-        { label: 'Draft', value: 'draft' },
-        { label: 'Archived', value: 'archived', disabled: true },
-      ]}
-    />
-  ),
-};
+    function DateRange() {
+      const [range, setRange] = useState('week');
+      return (
+        <div>
+          <SectionLabel>Date range selector</SectionLabel>
+          <SegmentedControl
+            items={[
+              { label: 'Day', value: 'day' },
+              { label: 'Week', value: 'week' },
+              { label: 'Month', value: 'month' },
+              { label: 'Year', value: 'year' },
+            ]}
+            value={range}
+            onChange={setRange}
+          />
+        </div>
+      );
+    }
 
-// ─── Fully Disabled ─────────────────────────────────────────────
-
-/**
- * Entire control disabled — no segments are interactive.
- */
-export const FullyDisabled: Story = {
-  render: () => (
-    <InteractiveSegmentedControl
-      disabled
-      items={[
-        { label: 'Grid', value: 'grid' },
-        { label: 'List', value: 'list' },
-      ]}
-    />
-  ),
-};
-
-// ─── Many Segments ──────────────────────────────────────────────
-
-/**
- * Handles many items gracefully. Content determines width.
- */
-export const ManySegments: Story = {
-  render: () => (
-    <InteractiveSegmentedControl
-      items={[
-        { label: 'All', value: 'all' },
-        { label: 'Active', value: 'active' },
-        { label: 'Paused', value: 'paused' },
-        { label: 'Draft', value: 'draft' },
-        { label: 'Archived', value: 'archived' },
-      ]}
-    />
-  ),
+    return (
+      <Stack>
+        <ViewSwitcher />
+        <PricingToggle />
+        <DateRange />
+      </Stack>
+    );
+  },
 };

@@ -1,0 +1,20 @@
+/**
+ * BDS ButtonGroup — groups related buttons together
+ */
+
+.bds-button-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.bds-button-group--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.bds-button-group--full-width {
+  width: 100%;
+}

@@ -4,6 +4,7 @@ import { useState, useMemo, type CSSProperties, type ReactNode } from 'react';
 import { Select, type SelectOption, type SelectSize } from '../Select/Select';
 import { Tag } from '../Tag/Tag';
 import { bdsClass } from '../../utils';
+import './MultiSelect.css';
 
 /**
  * MultiSelect option type
@@ -55,20 +56,6 @@ export interface MultiSelectProps {
   /** Optional style override */
   style?: CSSProperties;
 }
-
-/**
- * Tag container styles
- *
- * Token reference:
- * - --gap-sm = 6px (gap between tags)
- * - --padding-xs = 10px (top margin for tag area)
- */
-const tagContainerStyles: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: 'var(--gap-sm)',
-  marginTop: 'var(--gap-md)',
-};
 
 /**
  * MultiSelect - BDS themed multi-select component
@@ -151,11 +138,12 @@ export function MultiSelect({
 
   return (
     <div
-      className={bdsClass('bds-multi-select', className)}
-      style={{
-        width: fullWidth ? '100%' : 'auto',
-        ...style,
-      }}
+      className={bdsClass(
+        'bds-multi-select',
+        !fullWidth && 'bds-multi-select--auto-width',
+        className,
+      )}
+      style={style}
     >
       <Select
         label={label}
@@ -175,7 +163,7 @@ export function MultiSelect({
       />
 
       {selectedValues.length > 0 && (
-        <div style={tagContainerStyles}>
+        <div className="bds-multi-select__tags">
           {selectedValues.map((val) => {
             const opt = optionMap.get(val);
             if (!opt) return null;

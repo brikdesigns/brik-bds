@@ -116,6 +116,7 @@ export function Meter({
     fontFamily: 'var(--font-family-body)',
     fontSize: 'var(--body-sm)',
     color: 'var(--text-secondary)',
+    textTransform: 'capitalize' as const,
     ...(labelPosition === 'below' ? { marginTop: 'var(--gap-xs)' } : { marginBottom: 'var(--gap-xs)' }),
   };
 

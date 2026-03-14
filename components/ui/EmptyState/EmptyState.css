@@ -1,0 +1,52 @@
+/* ─── EmptyState ─────────────────────────────────────────────── */
+
+.bds-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xl);
+  padding: var(--padding-xl);
+  background-color: var(--surface-secondary);
+  border: var(--border-width-sm) solid var(--border-secondary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 240px; /* bds-lint-ignore — design constraint */
+}
+
+/* ─── Text wrapper ───────────────────────────────────────────── */
+
+.bds-empty-state__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-empty-state__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-empty-state__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}

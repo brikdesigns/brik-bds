@@ -5,26 +5,30 @@ import * as Stories from './Dialog.stories';
 
 # Dialog
 
-Modal confirmation prompt for actions that need explicit user consent. Use for destructive operations, confirmations, and simple decision points.
+Focused confirmation overlay for user decisions. Simpler than Modal — intended for confirm/cancel flows.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Default
-Standard confirmation dialog with primary action.
-<Canvas of={Stories.Default} />
+Default, destructive, and custom content modes.
 
-### Destructive
-Red-toned action button for irreversible operations like deletions.
-<Canvas of={Stories.Destructive} />
+<Canvas of={Stories.Variants} />
 
-## Custom content
+| Variant | Description |
+|---------|-------------|
+| **default** | Standard confirmation with primary action |
+| **destructive** | Red action button for irreversible operations |
 
-Replace the default description with rich content for complex confirmations.
-<Canvas of={Stories.CustomContent} />
+## Patterns
+
+Save-before-leaving and delete confirmation flows.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -38,7 +42,6 @@ import { useState } from 'react';
 
 const [isOpen, setIsOpen] = useState(false);
 
-// Confirmation dialog
 <Dialog
   isOpen={isOpen}
   onClose={() => setIsOpen(false)}
@@ -46,16 +49,5 @@ const [isOpen, setIsOpen] = useState(false);
   description="You have unsaved changes that will be lost."
   confirmLabel="Save"
   onConfirm={handleSave}
-/>
-
-// Destructive dialog
-<Dialog
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  title="Delete company?"
-  description="This action cannot be undone."
-  variant="destructive"
-  confirmLabel="Delete"
-  onConfirm={handleDelete}
 />
 ```

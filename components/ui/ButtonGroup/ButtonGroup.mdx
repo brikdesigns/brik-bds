@@ -5,35 +5,25 @@ import * as Stories from './ButtonGroup.stories';
 
 # Button group
 
-Groups related buttons into a single visual unit. Use for action sets where buttons share context, like toolbar controls or segmented actions.
+Groups related buttons into a single visual unit. Use for action sets where buttons share context.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Orientation
+<Canvas of={Stories.Playground} />
 
-### Horizontal (default)
-Buttons are laid out in a row. The default for most action sets.
-<Canvas of={Stories.Default} />
+## Variants
 
-### Vertical
-Stack buttons vertically for sidebar actions or narrow containers.
-<Canvas of={Stories.Vertical} />
+Orientations, widths, and button sizes.
 
-## Variations
+<Canvas of={Stories.Variants} />
 
-### Three buttons
-Supports any number of child buttons.
-<Canvas of={Stories.WithThreeButtons} />
+## Patterns
 
-### Full width
-Expand the group to fill its container.
-<Canvas of={Stories.FullWidth} />
+Real-world usage: dialog actions, destructive confirmations, and form footers.
 
-### Small buttons
-Works with any button size.
-<Canvas of={Stories.SmallButtons} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -42,8 +32,7 @@ Works with any button size.
 ## Usage
 
 ```tsx
-import { ButtonGroup } from '@brik/bds';
-import { Button } from '@brik/bds';
+import { ButtonGroup, Button } from '@brik/bds';
 
 // Horizontal group (default)
 <ButtonGroup>
@@ -53,8 +42,7 @@ import { Button } from '@brik/bds';
 
 // Vertical group
 <ButtonGroup orientation="vertical">
-  <Button variant="primary">Option A</Button>
-  <Button variant="secondary">Option B</Button>
-  <Button variant="secondary">Option C</Button>
+  <Button variant="primary" fullWidth>Sign up</Button>
+  <Button variant="outline" fullWidth>Log in</Button>
 </ButtonGroup>
 ```

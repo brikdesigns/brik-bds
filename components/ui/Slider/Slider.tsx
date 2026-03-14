@@ -91,6 +91,7 @@ const labelStyles: CSSProperties = {
   lineHeight: 'var(--font-line-height-snug)',
   color: 'var(--text-primary)',
   margin: 0,
+  textTransform: 'capitalize' as const,
 };
 
 /**

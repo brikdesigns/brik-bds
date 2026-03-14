@@ -1,234 +1,140 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TextArea } from './TextArea';
+
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'flex-start' }}>{children}</div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta = {
   title: 'Components/Form/text-area',
   component: TextArea,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'],
-      description: 'Size variant (controls font-size)',
-    },
-    placeholder: {
-      control: 'text',
-      description: 'Placeholder text',
-    },
-    rows: {
-      control: 'number',
-      description: 'Number of visible text rows',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    resize: {
-      control: 'select',
-      options: ['none', 'both', 'horizontal', 'vertical'],
-      description: 'Resize behavior',
-    },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    label: { control: 'text' },
+    placeholder: { control: 'text' },
+    helperText: { control: 'text' },
+    error: { control: 'text' },
+    rows: { control: 'number' },
+    fullWidth: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    resize: { control: 'select', options: ['none', 'both', 'horizontal', 'vertical'] },
   },
 } satisfies Meta<typeof TextArea>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default textarea
- */
-export const Default: Story = {
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
+    label: 'Notes',
     placeholder: 'Enter your text here...',
     rows: 4,
-  },
-};
-
-/**
- * With placeholder
- */
-export const WithPlaceholder: Story = {
-  args: {
-    placeholder: 'Tell us about your project...',
-    rows: 6,
-  },
-};
-
-/**
- * With default value
- */
-export const WithDefaultValue: Story = {
-  args: {
-    placeholder: 'Message',
-    rows: 4,
-    defaultValue: 'This is some default text that appears in the textarea.',
-  },
-};
-
-/**
- * Disabled textarea
- */
-export const Disabled: Story = {
-  args: {
-    placeholder: 'This field is disabled',
-    rows: 4,
-    disabled: true,
-  },
-};
-
-/**
- * No resize
- */
-export const NoResize: Story = {
-  args: {
-    placeholder: 'This textarea cannot be resized',
-    rows: 4,
-    resize: 'none',
-  },
-};
-
-/**
- * Horizontal resize only
- */
-export const HorizontalResize: Story = {
-  args: {
-    placeholder: 'Resize horizontally',
-    rows: 4,
-    resize: 'horizontal',
-  },
-};
-
-/**
- * Many rows
- */
-export const ManyRows: Story = {
-  args: {
-    placeholder: 'Large text area with many rows',
-    rows: 10,
-  },
-};
-
-/**
- * Small size
- */
-export const SizeSmall: Story = {
-  args: {
-    size: 'sm',
-    label: 'Notes',
-    placeholder: 'Small textarea...',
-    rows: 4,
-    fullWidth: true,
-  },
-};
-
-/**
- * Medium size (default)
- */
-export const SizeMedium: Story = {
-  args: {
     size: 'md',
-    label: 'Notes',
-    placeholder: 'Medium textarea...',
-    rows: 4,
     fullWidth: true,
   },
 };
 
-/**
- * Large size
- */
-export const SizeLarge: Story = {
-  args: {
-    size: 'lg',
-    label: 'Notes',
-    placeholder: 'Large textarea...',
-    rows: 4,
-    fullWidth: true,
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Sizes, states, resize modes
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * All sizes side by side
- */
-export const AllSizes: Story = {
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-lg)', minWidth: '800px' }}>
-      <div style={{ flex: 1 }}>
-        <TextArea size="sm" label="Small" placeholder="sm variant..." rows={3} fullWidth />
-      </div>
-      <div style={{ flex: 1 }}>
-        <TextArea size="md" label="Medium" placeholder="md variant..." rows={3} fullWidth />
-      </div>
-      <div style={{ flex: 1 }}>
-        <TextArea size="lg" label="Large" placeholder="lg variant..." rows={3} fullWidth />
-      </div>
+    <div style={{ width: 520 }}>
+      <Stack>
+        {/* Sizes */}
+        <div>
+          <SectionLabel>Sizes</SectionLabel>
+          <Row gap="var(--gap-lg)">
+            <div style={{ flex: 1 }}>
+              <TextArea size="sm" label="Small" placeholder="sm variant..." rows={3} fullWidth />
+            </div>
+            <div style={{ flex: 1 }}>
+              <TextArea size="md" label="Medium" placeholder="md variant..." rows={3} fullWidth />
+            </div>
+            <div style={{ flex: 1 }}>
+              <TextArea size="lg" label="Large" placeholder="lg variant..." rows={3} fullWidth />
+            </div>
+          </Row>
+        </div>
+
+        {/* States */}
+        <div>
+          <SectionLabel>States</SectionLabel>
+          <Stack gap="var(--gap-lg)">
+            <TextArea label="Default" placeholder="Enter your message..." rows={3} fullWidth />
+            <TextArea label="With value" defaultValue="This is some default text that appears in the textarea." rows={3} fullWidth />
+            <TextArea label="Helper text" placeholder="Describe your needs..." helperText="Maximum 500 characters" rows={3} fullWidth />
+            <TextArea label="Error" placeholder="Required field" error="This field is required" rows={3} fullWidth />
+            <TextArea label="Disabled" placeholder="This field is disabled" disabled rows={3} fullWidth />
+          </Stack>
+        </div>
+
+        {/* Resize modes */}
+        <div>
+          <SectionLabel>Resize modes</SectionLabel>
+          <Stack gap="var(--gap-lg)">
+            <TextArea label="Vertical (default)" placeholder="Resize vertically..." rows={3} resize="vertical" fullWidth />
+            <TextArea label="None" placeholder="Cannot be resized" rows={3} resize="none" fullWidth />
+            <TextArea label="Both" placeholder="Resize in any direction" rows={3} resize="both" fullWidth />
+          </Stack>
+        </div>
+      </Stack>
     </div>
   ),
 };
 
-/**
- * Form example with label
- */
-export const FormExample: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<label>Comments</label>
-<TextArea placeholder="Share your feedback..." rows={6} />`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)', minWidth: '400px' }}>
-      <label style={{
-        fontFamily: 'var(--font-family-label)',
-        fontSize: 'var(--label-md)',
-        fontWeight: 'var(--font-weight-semi-bold)',
-      }}>
-        Comments
-      </label>
-      <TextArea
-        placeholder="Share your feedback..."
-        rows={6}
-      />
-    </div>
-  ),
-};
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Real-world form layouts
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Multiple textareas in a form
- */
-export const MultipleTextareas: Story = {
+export const Patterns: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', minWidth: '400px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
-        <label style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--label-md)',
-          fontWeight: 'var(--font-weight-semi-bold)',
-        }}>
-          Description
-        </label>
-        <TextArea
-          placeholder="Describe your needs..."
-          rows={4}
-        />
+    <Row gap="var(--padding-xl)">
+      {/* Feedback form */}
+      <div style={{ width: 400 }}>
+        <SectionLabel>Feedback form</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          <TextArea label="Description" placeholder="Describe your needs..." rows={4} fullWidth />
+          <TextArea label="Additional information" placeholder="Any other details..." rows={4} fullWidth />
+        </Stack>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
-        <label style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--label-md)',
-          fontWeight: 'var(--font-weight-semi-bold)',
-        }}>
-          Additional Information
-        </label>
-        <TextArea
-          placeholder="Any other details..."
-          rows={4}
-        />
+
+      {/* Compact notes */}
+      <div style={{ width: 300 }}>
+        <SectionLabel>Compact notes</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          <TextArea size="sm" label="Internal notes" placeholder="Add a note..." rows={3} resize="none" fullWidth />
+          <TextArea size="sm" label="Comments" placeholder="Share your feedback..." rows={6} fullWidth />
+        </Stack>
       </div>
-    </div>
+    </Row>
   ),
 };

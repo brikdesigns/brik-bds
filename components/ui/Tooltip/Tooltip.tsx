@@ -1,5 +1,6 @@
-import { type ReactNode, type HTMLAttributes, type CSSProperties, useState } from 'react';
+import { type ReactNode, type HTMLAttributes, useState } from 'react';
 import { bdsClass } from '../../utils';
+import './Tooltip.css';
 
 /**
  * Tooltip placement positions
@@ -17,107 +18,6 @@ export interface TooltipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'cont
   /** Children (trigger element) */
   children: ReactNode;
 }
-
-/**
- * Position-based tooltip styles
- * Arrow points toward the trigger element
- */
-const placementStyles: Record<TooltipPlacement, { tooltip: CSSProperties; arrow: CSSProperties }> = {
-  top: {
-    tooltip: {
-      bottom: '100%',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      marginBottom: 'var(--padding-md)',
-    },
-    arrow: {
-      top: '100%',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      borderTopColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
-    },
-  },
-  bottom: {
-    tooltip: {
-      top: '100%',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      marginTop: 'var(--padding-md)',
-    },
-    arrow: {
-      bottom: '100%',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      borderBottomColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
-    },
-  },
-  left: {
-    tooltip: {
-      right: '100%',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      marginRight: 'var(--padding-md)',
-    },
-    arrow: {
-      left: '100%',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      borderLeftColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
-    },
-  },
-  right: {
-    tooltip: {
-      left: '100%',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      marginLeft: 'var(--padding-md)',
-    },
-    arrow: {
-      right: '100%',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      borderRightColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
-    },
-  },
-};
-
-/**
- * Base tooltip styles using BDS tokens
- *
- * Token reference:
- * - --color-grayscale-darkest = #333 (dark background)
- * - --color-grayscale-white (white text)
- * - --font-family-label (tooltip font)
- * - --label-sm (small label size)
- * - --border-radius-sm (tooltip corners)
- */
-const tooltipBaseStyles: CSSProperties = {
-  position: 'absolute',
-  padding: 'var(--padding-sm) var(--padding-lg)',
-  backgroundColor: 'var(--color-grayscale-darkest)', // bds-lint-ignore — no semantic tooltip-bg token
-  color: 'var(--text-inverse)',
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-sm)',
-  lineHeight: 'var(--font-line-height-normal)',
-  borderRadius: 'var(--border-radius-sm)',
-  whiteSpace: 'nowrap',
-  zIndex: 1000,
-  pointerEvents: 'none',
-  opacity: 0,
-  transition: 'opacity 0.2s ease-out',
-};
-
-/**
- * Arrow styles (small triangle pointing to trigger)
- */
-const arrowBaseStyles: CSSProperties = {
-  position: 'absolute',
-  width: 0,
-  height: 0,
-  borderStyle: 'solid',
-  borderWidth: '4px', // bds-lint-ignore — CSS triangle size, not a visual border
-  borderColor: 'transparent',
-};
 
 /**
  * Tooltip - BDS themed tooltip component
@@ -146,29 +46,10 @@ export function Tooltip({
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const { tooltip: tooltipPosition, arrow: arrowPosition } = placementStyles[placement];
-
-  const tooltipStyles: CSSProperties = {
-    ...tooltipBaseStyles,
-    ...tooltipPosition,
-    opacity: isVisible ? 1 : 0,
-  };
-
-  const arrowStyles: CSSProperties = {
-    ...arrowBaseStyles,
-    ...arrowPosition,
-  };
-
-  const containerStyles: CSSProperties = {
-    position: 'relative',
-    display: 'inline-block',
-    ...style,
-  };
-
   return (
     <div
       className={bdsClass('bds-tooltip', className)}
-      style={containerStyles}
+      style={style}
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
       onFocus={() => setIsVisible(true)}
@@ -176,9 +57,16 @@ export function Tooltip({
       {...props}
     >
       {children}
-      <div role="tooltip" style={tooltipStyles}>
+      <div
+        role="tooltip"
+        className={bdsClass(
+          'bds-tooltip__bubble',
+          `bds-tooltip__bubble--${placement}`,
+          isVisible && 'bds-tooltip__bubble--visible',
+        )}
+      >
         {content}
-        <div style={arrowStyles} />
+        <div className={bdsClass('bds-tooltip__arrow', `bds-tooltip__arrow--${placement}`)} />
       </div>
     </div>
   );

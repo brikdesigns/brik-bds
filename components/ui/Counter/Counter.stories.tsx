@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Counter } from './Counter';
 
-const meta = {
+/* ─── Meta ────────────────────────────────────────────────────── */
+
+const meta: Meta<typeof Counter> = {
   title: 'Components/Indicator/counter',
   component: Counter,
   parameters: {
@@ -10,156 +12,116 @@ const meta = {
   argTypes: {
     count: {
       control: { type: 'number', min: 0, max: 999 },
-      description: 'Numeric count to display',
     },
     status: {
       control: 'select',
-      options: ['success', 'error', 'warning', 'neutral', 'progress'],
-      description: 'Status color variant',
+      options: ['success', 'error', 'warning', 'neutral', 'progress', 'brand'],
     },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
-      description: 'Size variant',
     },
     max: {
       control: { type: 'number', min: 1, max: 999 },
-      description: 'Max count — displays "99+" when exceeded',
     },
   },
-} satisfies Meta<typeof Counter>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Counter>;
 
-/**
- * Default counter
- */
-export const Default: Story = {
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
-    count: 1,
+    count: 5,
     status: 'success',
     size: 'sm',
   },
 };
 
-/**
- * All statuses at small size
- */
-export const AllStatuses: Story = {
-  args: { count: 1 },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Counter count={1} status="success" />
-<Counter count={1} status="error" />
-<Counter count={1} status="warning" />
-<Counter count={1} status="neutral" />
-<Counter count={1} status="progress" />`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-      <Counter count={1} status="success" />
-      <Counter count={1} status="error" />
-      <Counter count={1} status="warning" />
-      <Counter count={1} status="neutral" />
-      <Counter count={1} status="progress" />
-    </div>
-  ),
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — All statuses × all sizes + max overflow
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * All sizes
- */
-export const AllSizes: Story = {
-  args: { count: 5 },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Counter count={5} status="success" size="sm" />
-<Counter count={5} status="success" size="md" />
-<Counter count={5} status="success" size="lg" />`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-      <Counter count={5} status="success" size="sm" />
-      <Counter count={5} status="success" size="md" />
-      <Counter count={5} status="success" size="lg" />
-    </div>
-  ),
-};
-
-/**
- * Max count overflow
- */
-export const MaxCount: Story = {
-  args: { count: 5 },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Counter count={5} max={99} status="error" size="md" />
-<Counter count={99} max={99} status="error" size="md" />
-<Counter count={150} max={99} status="error" size="md" />`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-      <Counter count={5} max={99} status="error" size="md" />
-      <Counter count={99} max={99} status="error" size="md" />
-      <Counter count={150} max={99} status="error" size="md" />
-    </div>
-  ),
-};
-
-/**
- * Full grid — all statuses at all sizes
- */
-export const CounterGrid: Story = {
-  args: { count: 1 },
-  parameters: {
-    docs: {
-      source: {
-        code: `// sm
-<Counter count={1} status="success" size="sm" />
-<Counter count={1} status="error" size="sm" />
-<Counter count={1} status="warning" size="sm" />
-<Counter count={1} status="neutral" size="sm" />
-<Counter count={1} status="progress" size="sm" />
-
-// md
-<Counter count={1} status="success" size="md" />
-<Counter count={1} status="error" size="md" />
-<Counter count={1} status="warning" size="md" />
-<Counter count={1} status="neutral" size="md" />
-<Counter count={1} status="progress" size="md" />
-
-// lg
-<Counter count={1} status="success" size="lg" />
-<Counter count={1} status="error" size="lg" />
-<Counter count={1} status="warning" size="lg" />
-<Counter count={1} status="neutral" size="lg" />
-<Counter count={1} status="progress" size="lg" />`,
-      },
-    },
-  },
+export const Variants: Story = {
   render: () => {
-    const statuses = ['success', 'error', 'warning', 'neutral', 'progress'] as const;
+    const statuses = ['success', 'error', 'warning', 'neutral', 'progress', 'brand'] as const;
     const sizes = ['sm', 'md', 'lg'] as const;
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+      <Stack>
         {sizes.map((size) => (
-          <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-            {statuses.map((status) => (
-              <Counter key={`${size}-${status}`} count={1} status={status} size={size} />
-            ))}
+          <div key={size}>
+            <SectionLabel>{size}</SectionLabel>
+            <Row>
+              {statuses.map((status) => (
+                <Counter key={`${size}-${status}`} count={1} status={status} size={size} />
+              ))}
+            </Row>
           </div>
         ))}
-      </div>
+        <div>
+          <SectionLabel>Max overflow</SectionLabel>
+          <Row>
+            <Counter count={5} max={99} status="error" size="md" />
+            <Counter count={99} max={99} status="error" size="md" />
+            <Counter count={150} max={99} status="error" size="md" />
+          </Row>
+        </div>
+      </Stack>
     );
   },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Real-world usage
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Patterns: Story = {
+  name: 'Patterns',
+  render: () => (
+    <Stack>
+      <div>
+        <SectionLabel>Notification counts</SectionLabel>
+        <Stack gap="var(--gap-md)">
+          {[
+            { label: 'Inbox', count: 12, status: 'brand' as const },
+            { label: 'Errors', count: 3, status: 'error' as const },
+            { label: 'Pending', count: 7, status: 'warning' as const },
+            { label: 'Complete', count: 42, status: 'success' as const },
+          ].map(({ label, count, status }) => (
+            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+              <Counter count={count} status={status} />
+              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)' }}>{label}</span>
+            </div>
+          ))}
+        </Stack>
+      </div>
+    </Stack>
+  ),
 };

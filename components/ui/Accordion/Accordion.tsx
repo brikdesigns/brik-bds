@@ -1,149 +1,46 @@
 import {
   type HTMLAttributes,
   type ReactNode,
-  type CSSProperties,
   useState,
   useCallback,
 } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
+import './Accordion.css';
 
-/**
- * AccordionItem data shape
- */
 export interface AccordionItemData {
-  /** Unique identifier */
   id: string;
-  /** Title displayed in the trigger row */
   title: ReactNode;
-  /** Content shown when expanded */
   content: ReactNode;
 }
 
-/**
- * Accordion component props
- */
 export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
-  /** Array of accordion items */
   items: AccordionItemData[];
-  /** Allow multiple items open simultaneously */
   allowMultiple?: boolean;
-  /** Controlled: array of open item IDs */
   openItems?: string[];
-  /** Callback when open items change */
   onOpenChange?: (openItems: string[]) => void;
-  /** Initially open item IDs (uncontrolled) */
   defaultOpenItems?: string[];
 }
 
-/**
- * AccordionItem component props (internal)
- */
 interface AccordionItemProps {
   item: AccordionItemData;
   isOpen: boolean;
   onToggle: () => void;
 }
 
-/**
- * Trigger row styles (title + icon)
- *
- * Token reference:
- * - --padding-xl = 24px (vertical padding)
- */
-const triggerStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  width: '100%',
-  padding: 'var(--padding-xl) 0',
-  cursor: 'pointer',
-  background: 'none',
-  border: 'none',
-  textAlign: 'left',
-  gap: 'var(--gap-lg)',
-};
-
-/**
- * Title styles
- *
- * Token reference:
- * - --font-family-label (label font)
- * - --label-lg = font-size-200 = 18px
- * - --font-weight-bold = 700
- * - --font-line-height-snug
- * - --text-primary
- */
-const titleStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-lg)',
-  fontWeight: 'var(--font-weight-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-snug)',
-  color: 'var(--text-primary)',
-  margin: 0,
-  flex: 1,
-  minWidth: 0,
-};
-
-/**
- * Icon styles
- *
- * Token reference:
- * - --icon-lg = font-size-200 = 18px
- * - --text-primary
- */
-const iconStyles: CSSProperties = {
-  fontSize: 'var(--icon-lg)',
-  color: 'var(--text-primary)',
-  flexShrink: 0,
-};
-
-/**
- * Content area styles (expanded body)
- *
- * Token reference:
- * - --font-family-body (body font)
- * - --body-md = font-size-100 = 16px
- * - --font-line-height-normal
- * - --text-primary
- * - --padding-xl = 24px (bottom padding)
- */
-const contentStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)',
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
-  paddingBottom: 'var(--padding-xl)',
-};
-
-/**
- * Item wrapper styles — bottom border separator
- *
- * Token reference:
- * - --border-width-lg = 1px
- * - --border-muted
- */
-const itemStyles: CSSProperties = {
-  borderBottom: 'var(--border-width-lg) solid var(--border-muted)',
-};
-
-/**
- * Single accordion item (internal component)
- */
 function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
   return (
-    <div className="bds-accordion-item" style={itemStyles}>
+    <div className="bds-accordion-item">
       <button
         type="button"
         className="bds-accordion-trigger"
-        style={triggerStyles}
         onClick={onToggle}
         aria-expanded={isOpen}
         aria-controls={`accordion-content-${item.id}`}
       >
-        <span style={titleStyles}>{item.title}</span>
-        <span style={iconStyles}>
+        <span className="bds-accordion-trigger__title">{item.title}</span>
+        <span className="bds-accordion-trigger__icon">
           <FontAwesomeIcon icon={isOpen ? faMinus : faPlus} />
         </span>
       </button>
@@ -152,7 +49,6 @@ function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
           id={`accordion-content-${item.id}`}
           className="bds-accordion-content"
           role="region"
-          style={contentStyles}
         >
           {item.content}
         </div>
@@ -162,29 +58,7 @@ function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
 }
 
 /**
- * Container styles
- */
-const containerStyles: CSSProperties = {
-  width: '100%',
-  boxSizing: 'border-box',
-};
-
-/**
- * Accordion - BDS collapsible content component
- *
- * Displays a list of expandable/collapsible items with title and content.
- * Uses plus/minus icons per Figma spec (accordion-item-1 variant).
- * Supports single or multiple open items.
- *
- * @example
- * ```tsx
- * <Accordion
- *   items={[
- *     { id: '1', title: 'Question one', content: 'Answer one' },
- *     { id: '2', title: 'Question two', content: 'Answer two' },
- *   ]}
- * />
- * ```
+ * Accordion — collapsible content sections with plus/minus icons.
  */
 export function Accordion({
   items,
@@ -192,7 +66,7 @@ export function Accordion({
   openItems,
   onOpenChange,
   defaultOpenItems = [],
-  className = '',
+  className,
   style,
   ...props
 }: AccordionProps) {
@@ -221,13 +95,8 @@ export function Accordion({
     [currentOpen, allowMultiple, isControlled, onOpenChange],
   );
 
-  const combinedStyles: CSSProperties = {
-    ...containerStyles,
-    ...style,
-  };
-
   return (
-    <div className={bdsClass('bds-accordion', className)} style={combinedStyles} {...props}>
+    <div className={bdsClass('bds-accordion', className)} style={style} {...props}>
       {items.map((item) => (
         <AccordionItem
           key={item.id}

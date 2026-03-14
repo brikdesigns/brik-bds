@@ -1,5 +1,6 @@
-import { type InputHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { type InputHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
+import './Radio.css';
 
 /**
  * Radio component props
@@ -20,62 +21,6 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   /** Change handler */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
-
-/**
- * Label wrapper styles using BDS tokens
- *
- * Token reference:
- * - --gap-md = 8px (spacing between radio and label)
- */
-const labelStyles: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: 'var(--gap-md)',
-  cursor: 'pointer',
-  userSelect: 'none',
-};
-
-const labelDisabledStyles: CSSProperties = {
-  opacity: 0.5,
-  cursor: 'not-allowed',
-};
-
-/**
- * Radio input styles using BDS tokens
- *
- * Token reference:
- * - --border-input (input border color)
- * - --background-input (input background)
- * - --background-brand-primary (checked background)
- */
-const inputStyles: CSSProperties = {
-  width: '16px',
-  height: '16px',
-  margin: 0,
-  cursor: 'pointer',
-  flexShrink: 0,
-  accentColor: 'var(--background-brand-primary)',
-};
-
-const inputDisabledStyles: CSSProperties = {
-  cursor: 'not-allowed',
-};
-
-/**
- * Label text styles using BDS tokens
- *
- * Token reference:
- * - --font-family-body (body font)
- * - --body-md (medium body text size)
- * - --text-primary (text color)
- */
-const textStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)',
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
-  textTransform: 'capitalize' as const,
-};
 
 /**
  * Radio - BDS themed radio button component
@@ -105,21 +50,10 @@ export function Radio({
   style,
   ...props
 }: RadioProps) {
-  const combinedLabelStyles: CSSProperties = {
-    ...labelStyles,
-    ...(disabled ? labelDisabledStyles : {}),
-    ...style,
-  };
-
-  const combinedInputStyles: CSSProperties = {
-    ...inputStyles,
-    ...(disabled ? inputDisabledStyles : {}),
-  };
-
   return (
     <label
-      className={bdsClass('bds-radio', className)}
-      style={combinedLabelStyles}
+      className={bdsClass('bds-radio', disabled && 'bds-radio--disabled', className)}
+      style={style}
     >
       <input
         type="radio"
@@ -130,10 +64,10 @@ export function Radio({
         disabled={disabled}
         onChange={onChange}
         id={id}
-        style={combinedInputStyles}
+        className="bds-radio__input"
         {...props}
       />
-      <span style={textStyles}>{label}</span>
+      <span className="bds-radio__text">{label}</span>
     </label>
   );
 }

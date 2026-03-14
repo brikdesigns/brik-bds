@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faArrowUpRightFromSquare, faTag, faCircle, faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { Tag } from './Tag';
 
-const meta = {
+/* ─── Meta ────────────────────────────────────────────────────── */
+
+const meta: Meta<typeof Tag> = {
   title: 'Components/Indicator/tag',
   component: Tag,
   parameters: {
@@ -13,166 +15,114 @@ const meta = {
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
-      description: 'Size variant',
     },
     disabled: { control: 'boolean' },
     onRemove: { action: 'removed' },
   },
-} satisfies Meta<typeof Tag>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Tag>;
 
-/**
- * Default tag at medium size
- */
-export const Default: Story = {
-  args: {
-    children: 'Tag',
-    size: 'md',
-  },
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
+  args: { children: 'Tag', size: 'md' },
 };
 
-/**
- * All three sizes
- */
-export const AllSizes: Story = {
-  args: { children: 'Tag' },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tag size="sm">Tag</Tag>
-<Tag size="md">Tag</Tag>
-<Tag size="lg">Tag</Tag>`,
-      },
-    },
-  },
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Sizes, icons, states in one view
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-      <Tag size="sm">Tag</Tag>
-      <Tag size="md">Tag</Tag>
-      <Tag size="lg">Tag</Tag>
-    </div>
+    <Stack>
+      <div>
+        <SectionLabel>Sizes</SectionLabel>
+        <Row>
+          <Tag size="sm">Small</Tag>
+          <Tag size="md">Medium</Tag>
+          <Tag size="lg">Large</Tag>
+        </Row>
+      </div>
+      <div>
+        <SectionLabel>With icons</SectionLabel>
+        <Row>
+          <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />}>Left icon</Tag>
+          <Tag size="lg" trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Right icon</Tag>
+          <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Both</Tag>
+        </Row>
+      </div>
+      <div>
+        <SectionLabel>Icons across sizes</SectionLabel>
+        {(['sm', 'md', 'lg'] as const).map((size) => (
+          <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center', marginBottom: 'var(--gap-md)' }}>
+            <Tag size={size} icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
+          </div>
+        ))}
+      </div>
+      <div>
+        <SectionLabel>States</SectionLabel>
+        <Row>
+          <Tag>Default</Tag>
+          <Tag onRemove={() => {}}>Removable</Tag>
+          <Tag disabled>Disabled</Tag>
+        </Row>
+      </div>
+    </Stack>
   ),
 };
 
-/**
- * With left icon
- */
-export const WithLeftIcon: Story = {
-  args: {
-    children: 'Tag',
-    size: 'lg',
-    icon: <FontAwesomeIcon icon={faCertificate} />,
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Real-world usage
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * With right icon
- */
-export const WithRightIcon: Story = {
-  args: {
-    children: 'Tag',
-    size: 'lg',
-    trailingIcon: <FontAwesomeIcon icon={faCircleXmark} />,
-  },
-};
-
-/**
- * With both icons — left and right
- */
-export const WithBothIcons: Story = {
-  args: { children: 'Tag' },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tag size="sm" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
-<Tag size="md" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
-<Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>`,
-      },
-    },
-  },
+export const Patterns: Story = {
+  name: 'Patterns',
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-      <Tag size="sm" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
-      <Tag size="md" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
-      <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
-    </div>
-  ),
-};
-
-/**
- * Icon positions — left only, right only, both
- */
-export const IconPositions: Story = {
-  args: { children: 'Tag' },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />}>Left icon</Tag>
-<Tag size="lg" trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Right icon</Tag>
-<Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Both icons</Tag>`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-      <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />}>Left icon</Tag>
-      <Tag size="lg" trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Right icon</Tag>
-      <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Both icons</Tag>
-    </div>
-  ),
-};
-
-/**
- * With remove button
- */
-export const WithRemove: Story = {
-  args: {
-    children: 'Removable',
-    size: 'md',
-    onRemove: () => {},
-  },
-};
-
-/**
- * Disabled state
- */
-export const Disabled: Story = {
-  args: {
-    children: 'Disabled',
-    size: 'md',
-    disabled: true,
-  },
-};
-
-/**
- * Multiple tags — real-world usage
- */
-export const MultipleTags: Story = {
-  args: { children: 'Tag' },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tag size="md">Design</Tag>
-<Tag size="md" icon={<FontAwesomeIcon icon={faTag} />}>Development</Tag>
-<Tag size="md" icon={<FontAwesomeIcon icon={faCircle} />}>Marketing</Tag>
-<Tag size="md" icon={<FontAwesomeIcon icon={faStar} />}>Featured</Tag>
-<Tag size="md" trailingIcon={<FontAwesomeIcon icon={faArrowUpRightFromSquare} />}>External</Tag>
-<Tag size="md" onRemove={() => {}}>Removable</Tag>
-<Tag size="md" disabled>Archived</Tag>`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-sm)', flexWrap: 'wrap' }}>
-      <Tag size="md">Design</Tag>
-      <Tag size="md" icon={<FontAwesomeIcon icon={faTag} />}>Development</Tag>
-      <Tag size="md" icon={<FontAwesomeIcon icon={faCircle} />}>Marketing</Tag>
-      <Tag size="md" icon={<FontAwesomeIcon icon={faStar} />}>Featured</Tag>
-      <Tag size="md" trailingIcon={<FontAwesomeIcon icon={faArrowUpRightFromSquare} />}>External</Tag>
-      <Tag size="md" onRemove={() => {}}>Removable</Tag>
-      <Tag size="md" disabled>Archived</Tag>
-    </div>
+    <Stack>
+      <div>
+        <SectionLabel>Category labels</SectionLabel>
+        <Row>
+          <Tag icon={<FontAwesomeIcon icon={faTag} />}>Development</Tag>
+          <Tag icon={<FontAwesomeIcon icon={faCircle} />}>Marketing</Tag>
+          <Tag icon={<FontAwesomeIcon icon={faStar} />}>Featured</Tag>
+          <Tag trailingIcon={<FontAwesomeIcon icon={faArrowUpRightFromSquare} />}>External</Tag>
+        </Row>
+      </div>
+      <div>
+        <SectionLabel>Filter chips</SectionLabel>
+        <Row>
+          <Tag onRemove={() => {}}>Design</Tag>
+          <Tag onRemove={() => {}}>React</Tag>
+          <Tag onRemove={() => {}}>Webflow</Tag>
+        </Row>
+      </div>
+    </Stack>
   ),
 };

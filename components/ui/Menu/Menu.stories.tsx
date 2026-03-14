@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import React from 'react';
 import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPalette,
@@ -8,10 +9,31 @@ import {
   faWrench,
   faCircleInfo,
   faLayerGroup,
-  faCaretDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { Menu } from './Menu';
 import { FilterButton } from '../FilterButton';
+import { Button } from '../Button';
+
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ─── Shared Data ─────────────────────────────────────── */
 
 const sampleItems = [
   { id: '1', label: 'Brand design', icon: <FontAwesomeIcon icon={faPalette} />, onClick: () => {} },
@@ -28,134 +50,129 @@ const filterOptions = sampleItems.map((item) => ({
   icon: item.icon,
 }));
 
+/* ─── Meta ────────────────────────────────────────────── */
+
 const meta = {
   title: 'Navigation/Menu/menu',
   component: Menu,
-  parameters: {
-    layout: 'centered',
-  },
-  argTypes: {
-    isOpen: {
-      control: 'boolean',
-      description: 'Whether the menu is visible',
-    },
-  },
+  parameters: { layout: 'centered' },
+  decorators: [
+    (Story) => (
+      <div style={{ minHeight: 360, padding: 'var(--padding-lg)' }}>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Menu>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Menu triggered by a FilterButton — the chevron signals dropdown interactivity.
- */
-export const Default: Story = {
-  render: () => (
-    <FilterButton
-      label="Services"
-      options={filterOptions}
-    />
-  ),
-  args: {
-    items: sampleItems,
-    isOpen: false,
-    onClose: () => {},
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Static open menu for Controls panel
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Menu with a pre-selected value — FilterButton shows active state.
- */
-export const WithActiveItem: Story = {
-  render: () => {
-    const [value, setValue] = useState<string | undefined>('2');
-
-    return (
-      <FilterButton
-        label="Services"
-        value={value}
-        onChange={setValue}
-        options={filterOptions}
-      />
-    );
-  },
-  args: {
-    items: sampleItems,
-    isOpen: false,
-    onClose: () => {},
-  },
-};
-
-/**
- * Menu without icons — plain text options with a chevron trigger.
- */
-export const TextOnly: Story = {
-  render: () => {
-    const [open, setOpen] = useState(false);
-
-    const triggerStyles = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 'var(--gap-md)',
-      padding: 'var(--padding-md) var(--padding-lg)',
-      backgroundColor: 'var(--surface-secondary)',
-      borderRadius: 'var(--border-radius-md)',
-      border: 'none',
-      cursor: 'pointer',
-      fontFamily: 'var(--font-family-label)',
-      fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-      fontSize: 'var(--label-md)',
-      lineHeight: 'var(--font-line-height-tight)',
-      color: 'var(--text-primary)',
-    };
-
-    return (
-      <div style={{ position: 'relative', display: 'inline-block' }}>
-        <button
-          type="button"
-          onClick={() => setOpen(!open)}
-          style={triggerStyles}
-        >
-          <span>Actions</span>
-          <FontAwesomeIcon icon={faCaretDown} style={{ fontSize: 'var(--icon-sm)' }} />
-        </button>
-        <Menu
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          items={[
-            { id: '1', label: 'Edit', onClick: () => setOpen(false) },
-            { id: '2', label: 'Duplicate', onClick: () => setOpen(false) },
-            { id: '3', label: 'Archive', onClick: () => setOpen(false) },
-            { id: '4', label: 'Delete', disabled: true },
-          ]}
-          style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
-        />
-      </div>
-    );
-  },
-  args: {
-    items: [],
-    isOpen: false,
-    onClose: () => {},
-  },
-};
-
-/**
- * Static open menu for documentation — shows the panel layout.
- */
-export const StaticOpen: Story = {
-  render: () => (
-    <div style={{ position: 'relative', height: '300px' }}>
-      <Menu
-        isOpen
-        onClose={() => {}}
-        items={sampleItems}
-        style={{ position: 'relative' }}
-      />
-    </div>
-  ),
+export const Playground: Story = {
   args: {
     items: sampleItems,
     isOpen: true,
     onClose: () => {},
+    style: { position: 'relative' },
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — With icons, text-only, active item, disabled
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Variants: Story = {
+  args: { items: sampleItems, isOpen: true, onClose: () => {} },
+  render: () => (
+    <Stack>
+      <div>
+        <SectionLabel>With icons</SectionLabel>
+        <Menu
+          isOpen
+          onClose={() => {}}
+          items={sampleItems}
+          style={{ position: 'relative' }}
+        />
+      </div>
+
+      <div>
+        <SectionLabel>Text-only with disabled item</SectionLabel>
+        <Menu
+          isOpen
+          onClose={() => {}}
+          items={[
+            { id: '1', label: 'Edit', onClick: () => {} },
+            { id: '2', label: 'Duplicate', onClick: () => {} },
+            { id: '3', label: 'Archive', onClick: () => {} },
+            { id: '4', label: 'Delete', disabled: true },
+          ]}
+          style={{ position: 'relative' }}
+        />
+      </div>
+
+      <div>
+        <SectionLabel>With active item</SectionLabel>
+        <Menu
+          isOpen
+          onClose={() => {}}
+          items={sampleItems}
+          activeId="2"
+          style={{ position: 'relative' }}
+        />
+      </div>
+    </Stack>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — FilterButton trigger + Button trigger
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Patterns: Story = {
+  args: { items: sampleItems, isOpen: true, onClose: () => {} },
+  render: () => {
+    function MenuPatterns() {
+      const [filterValue, setFilterValue] = useState<string | undefined>();
+      const [actionOpen, setActionOpen] = useState(false);
+
+      return (
+        <Stack>
+          <div>
+            <SectionLabel>FilterButton trigger</SectionLabel>
+            <FilterButton
+              label="Services"
+              value={filterValue}
+              onChange={setFilterValue}
+              options={filterOptions}
+            />
+          </div>
+
+          <div>
+            <SectionLabel>Button trigger with actions</SectionLabel>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <Button variant="outline" onClick={() => setActionOpen(!actionOpen)}>
+                Actions
+              </Button>
+              <Menu
+                isOpen={actionOpen}
+                onClose={() => setActionOpen(false)}
+                items={[
+                  { id: '1', label: 'Edit', onClick: () => setActionOpen(false) },
+                  { id: '2', label: 'Duplicate', onClick: () => setActionOpen(false) },
+                  { id: '3', label: 'Archive', onClick: () => setActionOpen(false) },
+                  { id: '4', label: 'Delete', disabled: true },
+                ]}
+                style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
+              />
+            </div>
+          </div>
+        </Stack>
+      );
+    }
+    return <MenuPatterns />;
   },
 };

@@ -1,0 +1,105 @@
+/**
+ * BDS Form
+ *
+ * Token reference:
+ * - --gap-sm, --gap-md, --gap-lg, --gap-xl
+ * - --padding-sm, --padding-md
+ * - --border-radius-md
+ * - --color-system-red, --color-system-green
+ */
+
+/* ─── Container ───────────────────────────────────────────────── */
+
+.bds-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Gap variants ────────────────────────────────────────────── */
+
+.bds-form--gap-sm { gap: var(--gap-md); }
+.bds-form--gap-md { gap: var(--gap-lg); }
+.bds-form--gap-lg { gap: var(--gap-xl); }
+
+/* ─── Header ──────────────────────────────────────────────────── */
+
+.bds-form__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.bds-form__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-form__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Messages ────────────────────────────────────────────────── */
+
+.bds-form__error {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--color-system-red);
+  margin: 0;
+  padding: var(--padding-sm);
+  background: color-mix(in srgb, var(--color-system-red) 8%, transparent);
+  border-radius: var(--border-radius-md);
+}
+
+.bds-form__success {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--color-system-green);
+  margin: 0;
+  padding: var(--padding-sm);
+  background: color-mix(in srgb, var(--color-system-green) 8%, transparent);
+  border-radius: var(--border-radius-md);
+}
+
+/* ─── Fields ──────────────────────────────────────────────────── */
+
+.bds-form__fields {
+  display: flex;
+  width: 100%;
+}
+
+.bds-form__fields--vertical {
+  flex-direction: column;
+}
+
+.bds-form__fields--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.bds-form__fields--gap-sm { gap: var(--gap-md); }
+.bds-form__fields--gap-md { gap: var(--gap-lg); }
+.bds-form__fields--gap-lg { gap: var(--gap-xl); }
+
+/* ─── Footer ──────────────────────────────────────────────────── */
+
+.bds-form__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding-top: var(--padding-md);
+}

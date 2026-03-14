@@ -5,35 +5,25 @@ import * as Stories from './CardDisplay.stories';
 
 # Card display
 
-A content display card for showcasing items with an optional image, badge, title, description, and action. Designed for product listings, blog previews, feature showcases, and related content grids.
+Content display card with optional image, badge, title, description, and action. Designed for product listings, blog previews, and feature showcases.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Without image
+<Canvas of={Stories.Playground} />
 
-Cards work without images for text-focused content like guides or articles.
+## Variants
 
-<Canvas of={Stories.WithoutImage} />
+Full card, without image, minimal, and link modes.
 
-## Minimal
+<Canvas of={Stories.Variants} />
 
-Just a title and description — the simplest form.
+## Patterns
 
-<Canvas of={Stories.Minimal} />
+Service cards in a responsive grid layout.
 
-## As link
-
-The entire card becomes clickable when an `href` is provided.
-
-<Canvas of={Stories.AsLink} />
-
-## Grid layout
-
-Cards work well in responsive grid layouts.
-
-<Canvas of={Stories.Grid} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -42,9 +32,7 @@ Cards work well in responsive grid layouts.
 ## Usage
 
 ```tsx
-import { CardDisplay } from '@brik/bds';
-import { Badge } from '@brik/bds';
-import { Button } from '@brik/bds';
+import { CardDisplay, Badge, Button } from '@brik/bds';
 
 <CardDisplay
   imageSrc="/product.jpg"
@@ -54,11 +42,4 @@ import { Button } from '@brik/bds';
   description="Short product description."
   action={<Button variant="primary" size="sm">View details</Button>}
 />
-
-// In a grid
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-  <CardDisplay title="Card 1" description="..." />
-  <CardDisplay title="Card 2" description="..." />
-  <CardDisplay title="Card 3" description="..." />
-</div>
 ```

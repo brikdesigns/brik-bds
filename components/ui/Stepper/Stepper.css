@@ -1,0 +1,45 @@
+/* Stepper — numeric input with increment/decrement */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-stepper {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* ─── Buttons ─────────────────────────────────────────── */
+
+.bds-stepper__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-width-sm) solid var(--border-secondary);
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0;
+  transition: filter 0.15s ease;
+  flex-shrink: 0;
+}
+
+.bds-stepper__button--disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* ─── Value display ───────────────────────────────────── */
+
+.bds-stepper__value {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  text-align: center;
+  user-select: none;
+}
+
+.bds-stepper__value--disabled {
+  color: var(--text-muted);
+}

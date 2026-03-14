@@ -1,0 +1,25 @@
+/* ProgressBar — horizontal progress indicator */
+
+/* ─── Track (outer container) ─────────────────────────── */
+
+.bds-progress-bar {
+  position: relative;
+  width: 100%;
+  height: 6px; /* bds-lint-ignore — Figma-driven track height */
+  background-color: var(--background-input);
+  border: var(--border-width-sm) solid var(--border-muted);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+/* ─── Fill bar ────────────────────────────────────────── */
+
+.bds-progress-bar__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: var(--background-brand-primary);
+  border-radius: var(--border-radius-sm);
+  transition: width 0.3s ease;
+}

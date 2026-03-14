@@ -1,0 +1,109 @@
+/* ─── PageHeader ─────────────────────────────────────────────── */
+
+.bds-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--padding-xl) 80px; /* bds-lint-ignore — Figma page header spec */
+  width: 100%;
+}
+
+/* ─── Title row ──────────────────────────────────────────────── */
+
+.bds-page-header__inner {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* ─── Content (title + subtitle) ─────────────────────────────── */
+
+.bds-page-header__content {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+}
+
+.bds-page-header__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+.bds-page-header__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+}
+
+/* ─── Actions ────────────────────────────────────────────────── */
+
+.bds-page-header__actions {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* ─── Metadata ───────────────────────────────────────────────── */
+
+.bds-page-header__metadata {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  border-top: var(--border-width-sm) solid var(--border-secondary);
+}
+
+.bds-page-header__metadata-inner {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  padding-top: var(--padding-xl);
+  width: 100%;
+}
+
+.bds-page-header__metadata-item {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+}
+
+.bds-page-header__metadata-label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bds-page-header__metadata-value {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+}
+
+/* ─── Tabs ───────────────────────────────────────────────────── */
+
+.bds-page-header__tabs {
+  width: 100%;
+}

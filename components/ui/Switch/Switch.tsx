@@ -6,37 +6,22 @@ import {
   useCallback,
 } from 'react';
 import { bdsClass } from '../../utils';
+import './Switch.css';
 
-/**
- * Switch size variants matching Figma specs
- */
 export type SwitchSize = 'lg' | 'md' | 'sm';
 
-/**
- * Switch component props
- */
 export interface SwitchProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
-  /** Label text for the switch */
   label?: ReactNode;
-  /** Size variant */
   size?: SwitchSize;
-  /** Checked state (controlled) */
   checked?: boolean;
-  /** Default checked state (uncontrolled) */
   defaultChecked?: boolean;
-  /** Disabled state */
   disabled?: boolean;
-  /** Change handler */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 /**
- * Size dimensions from Figma
- *
- * lg: track 56x32, knob 28px, travel 24px
- * md: track 32x18, knob 14px, travel 14px
- * sm: track 28x16, knob 12px, travel 12px
+ * Size dimensions from Figma — runtime-calculated, stays inline.
  */
 const sizes = {
   lg: { trackW: 56, trackH: 32, knob: 28, travel: 24, pad: 2 },
@@ -45,70 +30,10 @@ const sizes = {
 } as const;
 
 /**
- * Hidden input styles — visually hidden but accessible
- */
-const inputStyles: CSSProperties = {
-  position: 'absolute',
-  opacity: 0,
-  width: 0,
-  height: 0,
-};
-
-function getTrackStyles(size: SwitchSize, isChecked: boolean): CSSProperties {
-  const s = sizes[size];
-  return {
-    position: 'relative',
-    display: 'inline-block',
-    width: `${s.trackW}px`, // bds-lint-ignore — Figma-driven switch dimensions, no semantic size token
-    height: `${s.trackH}px`, // bds-lint-ignore
-    backgroundColor: isChecked
-      ? 'var(--background-brand-primary)'
-      : 'var(--border-muted)', // bds-lint-ignore — no semantic switch-track-inactive token; --border-muted = #bdbdbd matches Figma
-    borderRadius: 'var(--border-radius-pill)',
-    transition: 'background-color 0.2s ease',
-    flexShrink: 0,
-    cursor: 'inherit',
-  };
-}
-
-function getKnobStyles(size: SwitchSize, isChecked: boolean): CSSProperties {
-  const s = sizes[size];
-  return {
-    position: 'absolute',
-    top: `${s.pad}px`, // bds-lint-ignore — Figma-driven switch dimensions
-    left: `${s.pad}px`, // bds-lint-ignore
-    width: `${s.knob}px`, // bds-lint-ignore
-    height: `${s.knob}px`, // bds-lint-ignore
-    backgroundColor: 'var(--surface-primary)',
-    borderRadius: '50%',
-    transition: 'transform 0.2s ease',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.06)', // bds-lint-ignore — knob shadow, shadow tokens resolve to zero
-    transform: isChecked ? `translateX(${s.travel}px)` : 'translateX(0)',
-  };
-}
-
-/**
- * Switch - BDS themed toggle switch component
+ * Switch — toggle control for binary on/off states.
  *
- * An interactive toggle control for binary on/off states.
- * Supports lg, md, and sm sizes from the Figma spec.
- * Works in both controlled and uncontrolled modes.
- *
- * @example
- * ```tsx
- * // Controlled
- * <Switch
- *   label="Enable notifications"
- *   checked={enabled}
- *   onChange={(e) => setEnabled(e.target.checked)}
- * />
- *
- * // Uncontrolled
- * <Switch label="Remember me" defaultChecked />
- *
- * // Size variants
- * <Switch size="sm" label="Compact" />
- * ```
+ * Track/knob dimensions are size-dependent (runtime-calculated inline styles).
+ * Colors and typography are in Switch.css.
  */
 export function Switch({
   label,
@@ -117,7 +42,7 @@ export function Switch({
   defaultChecked = false,
   disabled = false,
   onChange,
-  className = '',
+  className,
   style,
   ...props
 }: SwitchProps) {
@@ -135,34 +60,43 @@ export function Switch({
     [isControlled, onChange],
   );
 
-  const labelStyles: CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 'var(--gap-md)',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    userSelect: 'none',
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-md)',
-    color: 'var(--text-primary)',
-    textTransform: 'capitalize' as const,
-    opacity: disabled ? 0.5 : 1,
-    ...style,
+  const s = sizes[size];
+
+  // Runtime-calculated track dimensions
+  const trackStyle: CSSProperties = {
+    width: `${s.trackW}px`, // bds-lint-ignore — Figma-driven switch dimensions
+    height: `${s.trackH}px`, // bds-lint-ignore
+    backgroundColor: isChecked
+      ? 'var(--background-brand-primary)'
+      : 'var(--border-muted)', // bds-lint-ignore — no semantic switch-track-inactive token
+  };
+
+  // Runtime-calculated knob dimensions + position
+  const knobStyle: CSSProperties = {
+    top: `${s.pad}px`, // bds-lint-ignore
+    left: `${s.pad}px`, // bds-lint-ignore
+    width: `${s.knob}px`, // bds-lint-ignore
+    height: `${s.knob}px`, // bds-lint-ignore
+    transform: isChecked ? `translateX(${s.travel}px)` : 'translateX(0)',
   };
 
   return (
-    <label className={bdsClass('bds-switch', className)} style={labelStyles}>
+    <label
+      className={bdsClass('bds-switch', disabled && 'bds-switch--disabled', className)}
+      style={style}
+    >
       <input
         type="checkbox"
         role="switch"
+        className="bds-switch__input"
         checked={isControlled ? checked : undefined}
         defaultChecked={isControlled ? undefined : defaultChecked}
         disabled={disabled}
         onChange={handleChange}
-        style={inputStyles}
         {...props}
       />
-      <span style={getTrackStyles(size, isChecked)}>
-        <span style={getKnobStyles(size, isChecked)} />
+      <span className="bds-switch__track" style={trackStyle}>
+        <span className="bds-switch__knob" style={knobStyle} />
       </span>
       {label && <span>{label}</span>}
     </label>

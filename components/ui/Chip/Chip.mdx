@@ -5,35 +5,32 @@ import * as Stories from './Chip.stories';
 
 # Chip
 
-Compact label for categorization, filtering, or selection. Use for tags, filter pills, and multi-select tokens.
+Compact label for categorization, filtering, or selection. Use for filter pills, dropdown triggers, and multi-select tokens.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-All available color and appearance combinations.
-<Canvas of={Stories.AllVariants} />
+All variant, appearance, size, and state combinations.
 
-### Primary light
-Softer appearance for secondary contexts.
-<Canvas of={Stories.PrimaryLight} />
+<Canvas of={Stories.Variants} />
 
-## Sizes
+| Variant + Appearance | Use for |
+|---------------------|---------|
+| **secondary dark** | Default filter chip. High contrast. |
+| **secondary light** | Softer filter chip. Secondary contexts. |
+| **primary dark** | Active/selected filter. Brand emphasis. |
+| **primary light** | Active filter with softer appearance. |
 
-Three sizes for different density contexts.
-<Canvas of={Stories.Sizes} />
+## Patterns
 
-## States
+Real-world compositions for filtering and selection.
 
-### Removable
-Add a dismiss button for user-removable chips.
-<Canvas of={Stories.Removable} />
-
-### Disabled
-Prevent interaction while maintaining visibility.
-<Canvas of={Stories.Disabled} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -47,8 +44,11 @@ import { Chip } from '@brik/bds';
 // Basic chip
 <Chip label="Design" />
 
-// Removable chip
-<Chip label="Filter" onRemove={() => removeFilter('design')} />
+// Filter dropdown trigger
+<Chip label="All statuses" icon={<FilterIcon />} showDropdown onChipClick={() => openMenu()} />
+
+// Removable chip (active filter)
+<Chip label="Status: Active" onRemove={() => removeFilter('status')} />
 
 // Size and variant
 <Chip label="Active" size="sm" variant="primary" appearance="light" />

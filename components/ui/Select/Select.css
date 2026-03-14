@@ -1,56 +1,164 @@
-/**
- * BDS Select Interactive States
- *
- * Handles hover, focus, active, and disabled states that can't be
- * expressed in inline CSSProperties.
- *
- * Token reference:
- * - --border-input (default border)
- * - --border-primary (hover border — darker)
- * - --border-brand-primary (focus border — theme color)
- * - --text-muted (placeholder color)
- */
+/* ─── Select wrapper ─────────────────────────────────────────── */
 
-.bds-select {
-  &:hover:not(:disabled) {
-    border-color: var(--border-primary);
-  }
-
-  &:focus {
-    border-color: var(--border-brand-primary);
-    box-shadow: 0 0 0 1px var(--border-brand-primary);
-  }
-
-  &:focus-visible {
-    border-color: var(--border-brand-primary);
-    box-shadow: 0 0 0 1px var(--border-brand-primary);
-    outline: none;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  /* Placeholder option color (when first option with empty value is selected) */
-  &:invalid,
-  &.bds-select--placeholder {
-    color: var(--text-muted);
-  }
+.bds-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  color: var(--text-primary);
 }
 
-/* Error state: red border persists through hover/focus */
+.bds-select-wrapper--full-width {
+  width: 100%;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-select-label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: capitalize;
+}
+
+.bds-select-label--sm { font-size: var(--label-sm); }
+.bds-select-label--md { font-size: var(--label-md); }
+.bds-select-label--lg { font-size: var(--label-lg); }
+
+.bds-select-label--error {
+  color: var(--color-system-red);
+}
+
+/* ─── Field wrapper ──────────────────────────────────────────── */
+
+.bds-select-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Select element ─────────────────────────────────────────── */
+
+.bds-select {
+  display: inline-block;
+  width: 100%;
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  appearance: none;
+  box-sizing: border-box;
+  padding-right: calc(var(--padding-xs) * 4);
+}
+
+/* Size variants */
+.bds-select--sm {
+  font-size: var(--body-sm);
+  padding: var(--padding-xs);
+  height: calc(var(--padding-xs) * 2 + 1.5em + var(--border-width-md) * 2);
+}
+
+.bds-select--md {
+  font-size: var(--body-md);
+  padding: var(--padding-xs);
+  height: calc(var(--padding-xs) * 2 + 1.5em + var(--border-width-md) * 2);
+}
+
+.bds-select--lg {
+  font-size: var(--body-lg);
+  padding: var(--padding-xs);
+  height: calc(var(--padding-xs) * 2 + 1.5em + var(--border-width-md) * 2);
+}
+
+/* With icon — extra left padding */
+.bds-select--has-icon {
+  padding-left: calc(var(--padding-xs) * 4);
+}
+
+/* Interactive states */
+.bds-select:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-select:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+.bds-select:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  outline: none;
+}
+
+.bds-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Placeholder color */
+.bds-select:invalid,
+.bds-select--placeholder {
+  color: var(--text-muted);
+}
+
+/* Error state */
 .bds-select--error {
   border-color: var(--system--red);
+}
 
-  &:hover:not(:disabled) {
-    border-color: var(--system--red);
-  }
+.bds-select--error:hover:not(:disabled) {
+  border-color: var(--system--red);
+}
 
-  &:focus,
-  &:focus-visible {
-    border-color: var(--system--red);
-    box-shadow: 0 0 0 1px var(--system--red);
-  }
+.bds-select--error:focus,
+.bds-select--error:focus-visible {
+  border-color: var(--system--red);
+  box-shadow: 0 0 0 1px var(--system--red);
+}
+
+/* ─── Chevron icon ───────────────────────────────────────────── */
+
+.bds-select-chevron {
+  position: absolute;
+  right: var(--padding-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 1;
+  font-size: 0.75em; /* bds-lint-ignore — relative to input font size */
+}
+
+/* ─── Leading icon ───────────────────────────────────────────── */
+
+.bds-select-icon {
+  position: absolute;
+  left: var(--padding-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Helper / error text ────────────────────────────────────── */
+
+.bds-select-helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-select-helper--error {
+  color: var(--color-system-red);
 }

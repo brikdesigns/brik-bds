@@ -5,30 +5,33 @@ import * as Stories from './Toast.stories';
 
 # Toast
 
-Dark overlay notification for transient feedback. Use for confirmations, status updates, and brief messages that don't require user action.
+White surface notification with optional colored Badge icon indicating status. The surface never changes color — only the badge communicates success, error, warning, or info.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Title only
-Minimal toast for simple confirmations.
-<Canvas of={Stories.TitleOnly} />
+All status variants, title-only, and non-dismissible configurations.
 
-### With description
-Add context below the title.
-<Canvas of={Stories.Default} />
+<Canvas of={Stories.Variants} />
 
-### Non-dismissible
-Omit `onDismiss` to hide the close button.
-<Canvas of={Stories.NonDismissible} />
+| Variant | Badge | Icon |
+|---------|-------|------|
+| **default** | None | — |
+| **success** | Positive | circle-check |
+| **error** | Error | circle-exclamation |
+| **warning** | Warning | triangle-exclamation |
+| **info** | Info | circle-info |
 
-## Interactive example
+## Patterns
 
-Toggle toast visibility with a button.
-<Canvas of={Stories.Interactive} />
+Real-world usage: interactive toggle, error context, and informational messages.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -42,16 +45,7 @@ import { Toast } from '@brik/bds';
 <Toast
   title="Changes saved"
   description="Your settings have been updated"
+  variant="success"
   onDismiss={() => setShowToast(false)}
 />
-```
-
-## Positioning
-
-The Toast component does not manage its own position. Wrap it in a fixed/absolute container to position it on screen:
-
-```tsx
-<div style={{ position: 'fixed', bottom: 32, left: '50%', transform: 'translateX(-50%)' }}>
-  <Toast title="Saved" onDismiss={handleDismiss} />
-</div>
 ```

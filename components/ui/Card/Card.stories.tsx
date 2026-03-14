@@ -6,236 +6,131 @@ import { Badge } from '../Badge';
 const meta: Meta<typeof Card> = {
   title: 'Displays/Card/card',
   component: Card,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    variant: {
-      control: 'select',
-      options: ['default', 'outlined', 'elevated'],
-      description: 'Card style variant',
-    },
-    padding: {
-      control: 'select',
-      options: ['none', 'sm', 'md', 'lg'],
-      description: 'Padding size',
-    },
-    interactive: {
-      control: 'boolean',
-      description: 'Whether card is interactive/clickable',
-    },
+    variant: { control: 'select', options: ['default', 'outlined', 'elevated'] },
+    padding: { control: 'select', options: ['none', 'sm', 'md', 'lg'] },
+    interactive: { control: 'boolean' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Card>;
 
-// Basic card
-export const Default: Story = {
+/* ─── Layout helpers ─────────────────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+    {children}
+  </span>
+);
+
+const Stack = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%' }}>
+    {children}
+  </div>
+);
+
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap' }}>
+    {children}
+  </div>
+);
+
+/* ─── Playground ─────────────────────────────────────────────── */
+
+export const Playground: Story = {
   args: {
     variant: 'outlined',
     padding: 'md',
     children: (
       <>
-        <CardTitle>Card Title</CardTitle>
+        <CardTitle>Card title</CardTitle>
         <CardDescription>
           This is a basic card with some description text.
         </CardDescription>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '320px' }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-// Outlined variant
-export const Outlined: Story = {
-  args: {
-    variant: 'outlined',
-    padding: 'lg',
-    children: (
-      <>
-        <CardTitle>Outlined Card</CardTitle>
-        <CardDescription>
-          Card with a subtle border, good for content grouping.
-        </CardDescription>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '300px' }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-// Elevated variant
-export const Elevated: Story = {
-  args: {
-    variant: 'elevated',
-    padding: 'lg',
-    children: (
-      <>
-        <CardTitle>Elevated Card</CardTitle>
-        <CardDescription>
-          Card with a shadow for visual prominence.
-        </CardDescription>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '300px' }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-// With footer and button
-export const WithAction: Story = {
-  args: {
-    variant: 'outlined',
-    padding: 'lg',
-    children: (
-      <>
-        <CardTitle>Feature Card</CardTitle>
-        <CardDescription>
-          Cards can include buttons and other interactive elements.
-        </CardDescription>
         <CardFooter>
-          <Button variant="primary" size="sm">Learn More</Button>
+          <Button variant="primary" size="sm">Action</Button>
         </CardFooter>
       </>
     ),
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '300px' }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [(Story) => <div style={{ width: 320 }}><Story /></div>],
 };
 
-// Interactive card
-export const Interactive: Story = {
-  args: {
-    variant: 'outlined',
-    padding: 'md',
-    interactive: true,
-    children: (
-      <>
-        <div style={{ alignSelf: 'flex-start' }}>
-          <Badge>New</Badge>
-        </div>
-        <CardTitle>Clickable Card</CardTitle>
-        <CardDescription>
-          This entire card is clickable.
-        </CardDescription>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '300px' }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
+/* ─── Variants ───────────────────────────────────────────────── */
 
-// All variants
-export const AllVariants: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Card variant="default" padding="md">
-  <CardTitle>Default</CardTitle>
-  <CardDescription>No border or shadow</CardDescription>
-</Card>
-
-<Card variant="outlined" padding="md">
-  <CardTitle>Outlined</CardTitle>
-  <CardDescription>With border</CardDescription>
-</Card>
-
-<Card variant="elevated" padding="md">
-  <CardTitle>Elevated</CardTitle>
-  <CardDescription>With shadow</CardDescription>
-</Card>`,
-      },
-    },
-  },
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap' }}>
-      <Card variant="default" padding="md" style={{ width: '200px' }}>
-        <CardTitle as="h4">Default</CardTitle>
-        <CardDescription>No border or shadow</CardDescription>
-      </Card>
-      <Card variant="outlined" padding="md" style={{ width: '200px' }}>
-        <CardTitle as="h4">Outlined</CardTitle>
-        <CardDescription>With border</CardDescription>
-      </Card>
-      <Card variant="elevated" padding="md" style={{ width: '200px' }}>
-        <CardTitle as="h4">Elevated</CardTitle>
-        <CardDescription>With shadow</CardDescription>
-      </Card>
-    </div>
+    <Stack>
+      <SectionLabel>Variant: default / outlined / elevated</SectionLabel>
+      <Row>
+        {(['default', 'outlined', 'elevated'] as const).map((v) => (
+          <Card key={v} variant={v} padding="md" style={{ width: 220 }}>
+            <CardTitle as="h4">{v}</CardTitle>
+            <CardDescription>Card variant preview</CardDescription>
+          </Card>
+        ))}
+      </Row>
+
+      <SectionLabel>Padding: none / sm / md / lg</SectionLabel>
+      <Row>
+        {(['none', 'sm', 'md', 'lg'] as const).map((p) => (
+          <Card key={p} variant="outlined" padding={p} style={{ width: 180 }}>
+            <CardTitle as="h4">{p}</CardTitle>
+          </Card>
+        ))}
+      </Row>
+
+      <SectionLabel>Interactive</SectionLabel>
+      <Row>
+        <Card variant="outlined" padding="md" interactive style={{ width: 260 }}>
+          <Badge>New</Badge>
+          <CardTitle as="h4">Clickable card</CardTitle>
+          <CardDescription>Hover to see cursor change</CardDescription>
+        </Card>
+      </Row>
+
+      <SectionLabel>Link card</SectionLabel>
+      <Row>
+        <Card variant="outlined" padding="md" href="#" style={{ width: 260 }}>
+          <CardTitle as="h4">Link card</CardTitle>
+          <CardDescription>Renders as an anchor element</CardDescription>
+        </Card>
+      </Row>
+    </Stack>
   ),
 };
 
-// Card grid
-export const CardGrid: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Card variant="outlined" padding="lg">
-  <Badge>Design</Badge>
-  <CardTitle>Design</CardTitle>
-  <CardDescription>Professional design services.</CardDescription>
-  <CardFooter>
-    <Button variant="outline" size="sm">Learn More</Button>
-  </CardFooter>
-</Card>
+/* ─── Patterns ───────────────────────────────────────────────── */
 
-<Card variant="outlined" padding="lg">
-  <Badge>Development</Badge>
-  <CardTitle>Development</CardTitle>
-  <CardDescription>Professional development services.</CardDescription>
-  <CardFooter>
-    <Button variant="outline" size="sm">Learn More</Button>
-  </CardFooter>
-</Card>`,
-      },
-    },
-  },
+export const Patterns: Story = {
   render: () => (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: 'var(--gap-lg)',
-      maxWidth: '800px',
-    }}>
-      {['Design', 'Development', 'Strategy'].map((title) => (
-        <Card key={title} variant="outlined" padding="lg">
-          <Badge>{title}</Badge>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>
-            Professional {title.toLowerCase()} services.
-          </CardDescription>
-          <CardFooter>
-            <Button variant="outline" size="sm">Learn More</Button>
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
+    <Stack>
+      <SectionLabel>Service cards grid</SectionLabel>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--gap-lg)', maxWidth: 800 }}>
+        {['Design', 'Development', 'Strategy'].map((title) => (
+          <Card key={title} variant="outlined" padding="lg">
+            <Badge>{title}</Badge>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription>Professional {title.toLowerCase()} services.</CardDescription>
+            <CardFooter>
+              <Button variant="outline" size="sm">Learn more</Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+
+      <SectionLabel>Feature card with action</SectionLabel>
+      <Card variant="elevated" padding="lg" style={{ maxWidth: 360 }}>
+        <CardTitle>Premium plan</CardTitle>
+        <CardDescription>
+          Everything in the free plan, plus advanced analytics and priority support.
+        </CardDescription>
+        <CardFooter>
+          <Button variant="primary" size="sm">Upgrade</Button>
+        </CardFooter>
+      </Card>
+    </Stack>
   ),
 };
