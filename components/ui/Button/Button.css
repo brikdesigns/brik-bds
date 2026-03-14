@@ -127,9 +127,9 @@
   filter: none;
 }
 
-/* Secondary: darken border on hover */
+/* Secondary: remove border on hover */
 .bds-button--secondary:hover:not(:disabled):not(.bds-button--loading) {
-  border-color: var(--border-primary);
+  border-color: transparent;
 }
 
 /* Danger outline: fill on hover */
