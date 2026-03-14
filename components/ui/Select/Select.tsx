@@ -1,261 +1,43 @@
-import { forwardRef, useState, type SelectHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { forwardRef, useState, type SelectHTMLAttributes, type ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
 import './Select.css';
 
-/**
- * Select option type
- */
 export interface SelectOption {
-  /** Display label */
   label: string;
-  /** Option value */
   value: string;
-  /** Disabled state for this option */
   disabled?: boolean;
 }
 
-/**
- * Option group type
- */
 export interface SelectOptionGroup {
-  /** Group label */
   label: string;
-  /** Options in this group */
   options: SelectOption[];
 }
 
-/**
- * Select size variants (matching Input component)
- */
 export type SelectSize = 'sm' | 'md' | 'lg';
 
-/**
- * Select component props
- */
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
-  /** Array of options or option groups */
   options: (SelectOption | SelectOptionGroup)[];
-  /** Placeholder text (shown as first option with empty value) */
   placeholder?: string;
-  /** Selected value (controlled) */
   value?: string;
-  /** Default selected value (uncontrolled) */
   defaultValue?: string;
-  /** Disabled state */
   disabled?: boolean;
-  /** Size variant (matching Input sizes) */
   size?: SelectSize;
-  /** Optional label text */
   label?: string;
-  /** Helper text shown below select */
   helperText?: string;
-  /** Error message (shows error state when provided) */
   error?: string;
-  /** Full width select (default: true — fills container) */
   fullWidth?: boolean;
-  /** Optional icon displayed before the select text */
   icon?: ReactNode;
-  /** Change handler */
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-/**
- * Size-specific styles (matching TextInput — explicit height via calc)
- *
- * Browser <select> elements compute height differently than <input> even with
- * appearance:none + matching padding/font/line-height. We set an explicit height
- * using calc(padding*2 + 1.5em + border*2) where 1.5em = line-height(150%) * font-size.
- * This guarantees pixel-perfect alignment with TextInput at every size scale.
- *
- * Token reference:
- * - --label-sm/md/lg (label font sizes)
- * - --body-sm/md/lg (select font sizes)
- * - --padding-xs = 10px (input padding — matches TextInput)
- * - --border-width-md = 1px (border thickness)
- */
-const selectHeight = 'calc(var(--padding-xs) * 2 + 1.5em + var(--border-width-md) * 2)';
-
-const sizeStyles: Record<SelectSize, { label: CSSProperties; select: CSSProperties }> = {
-  sm: {
-    label: { fontSize: 'var(--label-sm)' },
-    select: {
-      fontSize: 'var(--body-sm)',
-      padding: 'var(--padding-xs)',
-      height: selectHeight,
-    },
-  },
-  md: {
-    label: { fontSize: 'var(--label-md)' },
-    select: {
-      fontSize: 'var(--body-md)',
-      padding: 'var(--padding-xs)',
-      height: selectHeight,
-    },
-  },
-  lg: {
-    label: { fontSize: 'var(--label-lg)' },
-    select: {
-      fontSize: 'var(--body-lg)',
-      padding: 'var(--padding-xs)',
-      height: selectHeight,
-    },
-  },
-};
-
-/**
- * Select input base styles using BDS tokens
- *
- * Token reference:
- * - --border-input (input border color)
- * - --background-input (input background)
- * - --text-primary (text color)
- * - --border-radius-md = 4px (input corners)
- * - --padding-xs = 10px (input padding — matches TextInput)
- * - --font-family-body (body font)
- * - --border-width-md = 1px (border thickness)
- * - --font-line-height-normal = 150%
- */
-const selectBaseStyles: CSSProperties = {
-  display: 'inline-block',
-  width: '100%',
-  fontFamily: 'var(--font-family-body)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
-  backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-md) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-md)',
-  outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
-  cursor: 'pointer',
-  appearance: 'none',
-  boxSizing: 'border-box',
-  paddingRight: 'calc(var(--padding-xs) * 4)',
-};
-
-/**
- * Chevron icon positioning (right side)
- *
- * Token reference:
- * - --padding-xs = 10px (icon inset from edge — matches TextInput)
- * - --text-muted (icon color)
- */
-const chevronStyles: CSSProperties = {
-  position: 'absolute',
-  right: 'var(--padding-xs)',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: 'var(--text-muted)',
-  pointerEvents: 'none',
-  zIndex: 1,
-  fontSize: '0.75em', // bds-lint-ignore — relative to input font size for proportional scaling
-};
-
-/**
- * Field wrapper — positions icon relative to select
- */
-const fieldWrapperStyles: CSSProperties = {
-  position: 'relative',
-  display: 'flex',
-  alignItems: 'center',
-};
-
-/**
- * Icon positioning styles
- *
- * Token reference:
- * - --padding-xs = 10px (icon inset from edge — matches TextInput)
- * - --text-muted (icon color, matches placeholder)
- * - --gap-md = 8px (icon-text gap)
- */
-const selectIconStyles: CSSProperties = {
-  position: 'absolute',
-  left: 'var(--padding-xs)',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: 'var(--text-muted)',
-  pointerEvents: 'none',
-  zIndex: 1,
-};
-
-/**
- * Wrapper styles — vertical stack matching TextInput pattern
- *
- * Token reference:
- * - --gap-md = 8px (gap between label and field)
- */
-const wrapperStyles: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'var(--gap-md)',
-  color: 'var(--text-primary)',
-};
-
-/**
- * Label base styles matching TextInput pattern
- *
- * Token reference:
- * - --font-family-label (label font)
- * - --font-weight-semi-bold = 600
- * - --font-line-height-tight = 100% (matches TextInput label)
- */
-const labelBaseStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  textTransform: 'capitalize' as const,
-};
-
-/**
- * Helper/error text base styles
- *
- * Token reference:
- * - --font-family-body (helper font)
- * - --body-sm (small text size)
- * - --text-muted (helper text color)
- */
-const helperBaseStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-muted)',
-};
-
-/**
- * Type guard for option groups
- */
 function isOptionGroup(opt: SelectOption | SelectOptionGroup): opt is SelectOptionGroup {
   return 'options' in opt;
 }
 
 /**
- * Select - BDS themed select dropdown component
- *
- * Uses CSS variables for theming. Provides a styled select dropdown
- * with custom arrow indicator, optional label, helper text, and error state.
- * All spacing, colors, and typography reference BDS tokens.
- *
- * Width: Fills container by default (fullWidth=true). Set fullWidth=false
- * for inline/compact usage where the select should shrink to content width.
- *
- * Interactive states (hover, focus, error) are handled in Select.css using
- * the same token pattern as Button and TextInput.
- *
- * @example
- * ```tsx
- * <Select
- *   label="Status"
- *   placeholder="Select a status..."
- *   options={[
- *     { label: 'Active', value: 'active' },
- *     { label: 'Inactive', value: 'inactive' },
- *   ]}
- * />
- * ```
+ * Select — themed select dropdown with label, helper text, and error state.
  */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   (
@@ -273,7 +55,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
       icon,
       onChange,
       id,
-      className = '',
+      className,
       style,
       ...props
     },
@@ -281,9 +63,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ) => {
     const inputId = id || (label ? `select-${Math.random().toString(36).substring(2, 11)}` : undefined);
     const hasError = Boolean(error);
-    const sizeStyle = sizeStyles[size];
 
-    // Track whether placeholder is showing (for muted text color via CSS)
     const [isPlaceholder, setIsPlaceholder] = useState(
       !value && !defaultValue && Boolean(placeholder)
     );
@@ -295,43 +75,31 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
     const selectClassName = bdsClass(
       'bds-select',
-      hasError ? 'bds-select--error' : '',
-      isPlaceholder ? 'bds-select--placeholder' : '',
-      className
+      `bds-select--${size}`,
+      hasError && 'bds-select--error',
+      isPlaceholder && 'bds-select--placeholder',
+      icon ? 'bds-select--has-icon' : undefined,
+      className,
     );
-
-    const combinedStyles: CSSProperties = {
-      ...selectBaseStyles,
-      ...sizeStyle.select,
-      ...(icon ? { paddingLeft: 'calc(var(--padding-xs) * 4)' } : {}),
-      ...style,
-    };
 
     return (
       <div
-        style={{
-          ...wrapperStyles,
-          width: fullWidth ? '100%' : 'auto',
-        }}
+        className={bdsClass('bds-select-wrapper', fullWidth && 'bds-select-wrapper--full-width')}
       >
         {label && (
           <label
             htmlFor={inputId}
-            style={{
-              ...labelBaseStyles,
-              ...sizeStyle.label,
-              ...(hasError ? { color: 'var(--color-system-red)' } : {}),
-            }}
+            className={bdsClass(
+              'bds-select-label',
+              `bds-select-label--${size}`,
+              hasError && 'bds-select-label--error',
+            )}
           >
             {label}
           </label>
         )}
-        <div style={fieldWrapperStyles}>
-          {icon && (
-            <span style={selectIconStyles}>
-              {icon}
-            </span>
-          )}
+        <div className="bds-select-field">
+          {icon && <span className="bds-select-icon">{icon}</span>}
           <select
             ref={ref}
             id={inputId}
@@ -340,57 +108,45 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             disabled={disabled}
             onChange={handleChange}
             className={selectClassName}
-            style={combinedStyles}
+            style={style}
             aria-invalid={hasError}
             aria-describedby={
               error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
             }
             {...props}
           >
-            {placeholder && (
-              <option value="">
-                {placeholder}
-              </option>
-            )}
+            {placeholder && <option value="">{placeholder}</option>}
             {options.map((opt) =>
               isOptionGroup(opt) ? (
                 <optgroup key={opt.label} label={opt.label}>
                   {opt.options.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                      disabled={option.disabled}
-                    >
+                    <option key={option.value} value={option.value} disabled={option.disabled}>
                       {option.label}
                     </option>
                   ))}
                 </optgroup>
               ) : (
-                <option
-                  key={opt.value}
-                  value={opt.value}
-                  disabled={opt.disabled}
-                >
+                <option key={opt.value} value={opt.value} disabled={opt.disabled}>
                   {opt.label}
                 </option>
               )
             )}
           </select>
-          <span style={chevronStyles} aria-hidden="true">
+          <span className="bds-select-chevron" aria-hidden="true">
             <FontAwesomeIcon icon={faChevronDown} />
           </span>
         </div>
         {error && (
           <span
             id={inputId ? `${inputId}-error` : undefined}
-            style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
+            className="bds-select-helper bds-select-helper--error"
             role="alert"
           >
             {error}
           </span>
         )}
         {helperText && !error && (
-          <span id={inputId ? `${inputId}-helper` : undefined} style={helperBaseStyles}>
+          <span id={inputId ? `${inputId}-helper` : undefined} className="bds-select-helper">
             {helperText}
           </span>
         )}

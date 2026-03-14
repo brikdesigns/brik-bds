@@ -5,51 +5,25 @@ import * as Stories from './Tag.stories';
 
 # Tag
 
-Categorization and filtering labels with optional left/right icons and remove functionality. Tags help organize content and provide visual context for filtering and selection. Available in three sizes (sm, md, lg).
+Categorization and filtering labels with optional left/right icons and remove functionality. Available in three sizes (sm, md, lg).
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Sizes
+<Canvas of={Stories.Playground} />
 
-Tags are available in three sizes to match UI density.
+## Variants
 
-<Canvas of={Stories.AllSizes} />
+Sizes, icon positions, and states in one view.
 
-## Icons
+<Canvas of={Stories.Variants} />
 
-### Left icon
-Add a leading icon to provide visual context for the tag category.
-<Canvas of={Stories.WithLeftIcon} />
+## Patterns
 
-### Right icon
-Use a trailing icon for actions like dismiss or external links.
-<Canvas of={Stories.WithRightIcon} />
+Real-world compositions for categorization and filtering.
 
-### Both icons
-Tags can display icons on both sides simultaneously.
-<Canvas of={Stories.WithBothIcons} />
-
-### Icon positions
-All icon position combinations at a glance.
-<Canvas of={Stories.IconPositions} />
-
-## States
-
-### With remove button
-Interactive tags that can be dismissed with a remove button.
-<Canvas of={Stories.WithRemove} />
-
-### Disabled
-Disabled state for non-interactive tags.
-<Canvas of={Stories.Disabled} />
-
-## Multiple tags
-
-Display multiple tags together for categorization and filtering.
-
-<Canvas of={Stories.MultipleTags} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -87,8 +61,3 @@ import { faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 // Disabled tag
 <Tag disabled>Archived</Tag>
 ```
-
-## Resources
-
-- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=24917-451)
-- [Design guidelines](#) — coming soon

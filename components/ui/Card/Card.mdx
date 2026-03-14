@@ -7,42 +7,29 @@ import * as Stories from './Card.stories';
 
 Flexible content container for grouping related information. Cards are composable using CardTitle, CardDescription, and CardFooter subcomponents.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-Cards come in three visual variants to suit different emphasis levels.
+All visual variants, padding sizes, interactive, and link modes.
 
-### All Variants
-<Canvas of={Stories.AllVariants} />
+<Canvas of={Stories.Variants} />
 
-### Outlined
-Card with a subtle border. The most common variant for content grouping.
-<Canvas of={Stories.Outlined} />
+| Variant | Description |
+|---------|-------------|
+| **default** | No border or shadow |
+| **outlined** | Subtle border — most common |
+| **elevated** | Shadow for visual prominence |
 
-### Elevated
-Card with a shadow for visual prominence.
-<Canvas of={Stories.Elevated} />
+## Patterns
 
-## With Action
+Real-world usage: service grids and feature cards with actions.
 
-Cards can include footer actions like buttons.
-
-<Canvas of={Stories.WithAction} />
-
-## Interactive Card
-
-The entire card can be clickable for navigation.
-
-<Canvas of={Stories.Interactive} />
-
-## Card Grid
-
-Cards work well in grid layouts for feature showcases, services, or product listings.
-
-<Canvas of={Stories.CardGrid} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -54,35 +41,11 @@ Cards work well in grid layouts for feature showcases, services, or product list
 import { Card, CardTitle, CardDescription, CardFooter } from '@brik/bds';
 import { Button } from '@brik/bds';
 
-// Basic card
 <Card variant="outlined" padding="md">
   <CardTitle>Title</CardTitle>
-  <CardDescription>
-    Description text goes here.
-  </CardDescription>
-</Card>
-
-// With action
-<Card variant="elevated" padding="lg">
-  <CardTitle>Feature Title</CardTitle>
-  <CardDescription>
-    Feature description text.
-  </CardDescription>
+  <CardDescription>Description text goes here.</CardDescription>
   <CardFooter>
-    <Button variant="primary" size="sm">Learn More</Button>
+    <Button variant="primary" size="sm">Action</Button>
   </CardFooter>
 </Card>
-
-// Interactive card
-<Card interactive variant="outlined" padding="md">
-  <CardTitle>Clickable Card</CardTitle>
-  <CardDescription>
-    Click anywhere on this card.
-  </CardDescription>
-</Card>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

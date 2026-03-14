@@ -1,5 +1,6 @@
 import { type CSSProperties, type HTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
+import './ProgressDots.css';
 
 export type ProgressDotsSize = 'sm' | 'md';
 
@@ -58,18 +59,10 @@ export function ProgressDots({
 }: ProgressDotsProps) {
   const config = sizeConfig[size];
 
-  const containerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: config.gap,
-    ...style,
-  };
-
   return (
     <nav
       className={bdsClass('bds-progress-dots', className)}
-      style={containerStyle}
+      style={{ gap: config.gap, ...style }}
       role="tablist"
       aria-label="Progress"
       {...props}
@@ -81,21 +74,10 @@ export function ProgressDots({
           linear ? isComplete : true
         );
 
+        // Runtime-calculated dimensions per dot state — must stay inline
         const dotStyle: CSSProperties = {
           width: isActive ? config.activeDotWidth : config.dotSize,
           height: config.dotSize,
-          borderRadius: 'var(--border-radius-sm)',
-          backgroundColor: isActive
-            ? 'var(--background-brand-primary)'
-            : isComplete
-              ? 'var(--background-brand-primary)'
-              : 'var(--border-secondary)',
-          opacity: isComplete ? 0.5 : 1,
-          border: 'none',
-          cursor: isClickable ? 'pointer' : 'default',
-          transition: 'all 0.2s ease',
-          padding: 0,
-          flexShrink: 0,
         };
 
         return (
@@ -103,6 +85,13 @@ export function ProgressDots({
             key={index}
             type="button"
             role="tab"
+            className={bdsClass(
+              'bds-progress-dots__dot',
+              isActive && 'bds-progress-dots__dot--active',
+              isComplete && 'bds-progress-dots__dot--complete',
+              !isActive && !isComplete && 'bds-progress-dots__dot--inactive',
+              isClickable ? 'bds-progress-dots__dot--clickable' : 'bds-progress-dots__dot--non-clickable',
+            )}
             style={dotStyle}
             onClick={isClickable ? () => onDotClick(index) : undefined}
             aria-selected={isActive}

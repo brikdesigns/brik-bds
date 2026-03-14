@@ -1,0 +1,72 @@
+/* ─── Banner ─────────────────────────────────────────────────── */
+
+.bds-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+  background-color: var(--surface-brand-primary);
+  color: var(--text-inverse);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Content — title + description inline ───────────────────── */
+
+.bds-banner__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-banner__title {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  font-size: var(--label-md);
+  line-height: var(--font-line-height-tight);
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-banner__description {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+}
+
+/* ─── Actions area ───────────────────────────────────────────── */
+
+.bds-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+}
+
+/* ─── Close button ───────────────────────────────────────────── */
+
+.bds-banner__close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: var(--padding-tiny);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--body-sm);
+  opacity: 0.8;
+}
+
+.bds-banner__close:hover {
+  opacity: 1;
+}

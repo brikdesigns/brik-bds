@@ -1,0 +1,120 @@
+/* PricingCard — pricing tier display card */
+
+/* ─── Card container ──────────────────────────────────── */
+
+.bds-pricing-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  padding: var(--padding-lg);
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-secondary);
+  border-radius: var(--border-radius-md);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.bds-pricing-card--highlighted {
+  border-color: var(--border-brand-primary);
+  box-shadow: var(--box-shadow-md);
+}
+
+/* ─── Header ──────────────────────────────────────────── */
+
+.bds-pricing-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-pricing-card__badge {
+  align-self: flex-start;
+}
+
+.bds-pricing-card__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Price block ─────────────────────────────────────── */
+
+.bds-pricing-card__price-block {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-xs);
+}
+
+.bds-pricing-card__price {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-pricing-card__period {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-muted);
+}
+
+/* ─── Description ─────────────────────────────────────── */
+
+.bds-pricing-card__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Divider ─────────────────────────────────────────── */
+
+.bds-pricing-card__divider {
+  border: none;
+  border-top: var(--border-width-md) solid var(--border-muted);
+  margin: 0;
+}
+
+/* ─── Features list ───────────────────────────────────── */
+
+.bds-pricing-card__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bds-pricing-card__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-md);
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+}
+
+.bds-pricing-card__checkmark {
+  font-family: var(--font-family-icon);
+  color: var(--text-brand-primary);
+  flex-shrink: 0;
+  line-height: var(--font-line-height-normal);
+}
+
+/* ─── Action footer ───────────────────────────────────── */
+
+.bds-pricing-card__action {
+  margin-top: auto;
+  padding-top: var(--padding-sm);
+}

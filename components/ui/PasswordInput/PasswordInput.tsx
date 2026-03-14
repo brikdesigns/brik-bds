@@ -1,5 +1,6 @@
-import { useState, useId, type CSSProperties } from 'react';
+import { useState, useId } from 'react';
 import { TextInput, type TextInputProps } from '../TextInput/TextInput';
+import './PasswordInput.css';
 
 /**
  * PasswordInput component props
@@ -10,26 +11,7 @@ import { TextInput, type TextInputProps } from '../TextInput/TextInput';
 export type PasswordInputProps = Omit<TextInputProps, 'type' | 'iconAfter'>;
 
 /**
- * Toggle button base styles.
- *
- * Positioned inside the field via the TextInput `iconAfter` slot (which
- * handles absolute positioning already). We only need to reset button
- * chrome and apply cursor/color.
- */
-const toggleButtonStyles: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: 0,
-  border: 'none',
-  background: 'none',
-  cursor: 'pointer',
-  color: 'var(--text-muted)',
-  lineHeight: 'var(--font-line-height--100)',
-};
-
-/**
- * Inline SVG: eye-open icon (16×16).
+ * Inline SVG: eye-open icon (16x16).
  * Standard eye shape — elliptical outline + filled pupil circle.
  */
 const EyeOpenIcon = () => (
@@ -54,7 +36,7 @@ const EyeOpenIcon = () => (
 );
 
 /**
- * Inline SVG: eye-closed icon (16×16).
+ * Inline SVG: eye-closed icon (16x16).
  * Eye shape with a diagonal slash through it.
  */
 const EyeClosedIcon = () => (
@@ -116,7 +98,7 @@ export const PasswordInput = ({
   const toggleButton = (
     <button
       type="button"
-      style={toggleButtonStyles}
+      className="bds-password-toggle"
       aria-label={showPassword ? 'Hide password' : 'Show password'}
       onClick={() => setShowPassword((prev) => !prev)}
       tabIndex={0}

@@ -1,17 +1,28 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NavBar } from './NavBar';
 import { Button } from '../Button';
 
-const meta: Meta<typeof NavBar> = {
-  title: 'Navigation/Primary/nav-bar',
-  component: NavBar,
-  parameters: {
-    layout: 'fullscreen',
-  },
-} satisfies Meta<typeof NavBar>;
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ─── Shared Data ─────────────────────────────────────────────── */
 
 const sampleLinks = [
   { label: 'Home', href: '#', active: true },
@@ -32,7 +43,22 @@ const LogoPlaceholder = () => (
   </div>
 );
 
-export const Default: Story = {
+/* ─── Meta ────────────────────────────────────────────────────── */
+
+const meta: Meta<typeof NavBar> = {
+  title: 'Navigation/Primary/nav-bar',
+  component: NavBar,
+  parameters: { layout: 'fullscreen' },
+} satisfies Meta<typeof NavBar>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
     logo: <LogoPlaceholder />,
     links: sampleLinks,
@@ -40,34 +66,54 @@ export const Default: Story = {
   },
 };
 
-export const LinksOnly: Story = {
-  args: {
-    logo: <LogoPlaceholder />,
-    links: sampleLinks,
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Links only, multiple actions, minimal, sticky
+   ═══════════════════════════════════════════════════════════════ */
 
-export const WithMultipleActions: Story = {
-  args: {
-    logo: <LogoPlaceholder />,
-    links: sampleLinks.slice(0, 3),
-    actions: (
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Button variant="ghost" size="sm">Log In</Button>
-        <Button size="sm">Sign Up</Button>
+export const Variants: Story = {
+  render: () => (
+    <Stack>
+      <div>
+        <SectionLabel>Full nav bar</SectionLabel>
+        <NavBar
+          logo={<LogoPlaceholder />}
+          links={sampleLinks}
+          actions={<Button size="sm">Get Started</Button>}
+        />
       </div>
-    ),
-  },
+
+      <div>
+        <SectionLabel>Links only</SectionLabel>
+        <NavBar logo={<LogoPlaceholder />} links={sampleLinks} />
+      </div>
+
+      <div>
+        <SectionLabel>Multiple actions</SectionLabel>
+        <NavBar
+          logo={<LogoPlaceholder />}
+          links={sampleLinks.slice(0, 3)}
+          actions={
+            <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
+              <Button variant="ghost" size="sm">Log In</Button>
+              <Button size="sm">Sign Up</Button>
+            </div>
+          }
+        />
+      </div>
+
+      <div>
+        <SectionLabel>Minimal (logo + action)</SectionLabel>
+        <NavBar logo={<LogoPlaceholder />} actions={<Button size="sm">Contact</Button>} />
+      </div>
+    </Stack>
+  ),
 };
 
-export const Minimal: Story = {
-  args: {
-    logo: <LogoPlaceholder />,
-    actions: <Button size="sm">Contact</Button>,
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Sticky nav with scrollable content
+   ═══════════════════════════════════════════════════════════════ */
 
-export const Sticky: Story = {
+export const Patterns: Story = {
   render: () => (
     <div>
       <NavBar

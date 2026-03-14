@@ -5,87 +5,120 @@ import * as Stories from './Button.stories';
 
 # Button
 
-Primary action buttons for user interactions. Buttons come in multiple variants to establish visual hierarchy and guide user attention.
+Triggers an event or action. The button family includes three components for different semantic needs.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Primary} />
+Use the Controls panel to explore all props interactively.
 
-## Variants
+<Canvas of={Stories.Playground} />
 
-Buttons support four visual variants, each serving different levels of visual prominence.
+## Variants and sizes
 
-### All Variants
-<Canvas of={Stories.AllVariants} />
+Seven variants across three sizes. Standard variants for general actions, danger variants for destructive actions.
 
-### Primary
-The main call-to-action. Use sparingly — typically one primary button per section.
-<Canvas of={Stories.Primary} />
+<Canvas of={Stories.Variants} />
 
-### Outline
-Secondary actions with medium emphasis. Good for alternatives to the primary action.
-<Canvas of={Stories.Outline} />
+| Variant | Use for |
+|---------|---------|
+| **primary** | Main call-to-action. One per section. |
+| **outline** | Secondary emphasis. Alternative to primary. |
+| **secondary** | Tertiary/subtle. Supporting actions. |
+| **ghost** | Minimal emphasis. Navigation, repeated actions. |
+| **danger** | Destructive primary action (delete, remove). |
+| **danger-outline** | Destructive with less emphasis. |
+| **danger-ghost** | Destructive, minimal emphasis (inline delete). |
 
-### Secondary
-Tertiary actions with subtle styling. Use for supporting actions.
-<Canvas of={Stories.Secondary} />
+## Icons
 
-### Ghost
-Minimal emphasis for low-priority actions. Often used in navigation or repeated actions.
-<Canvas of={Stories.Ghost} />
+Use `iconBefore` and `iconAfter` props. Icons should use `1em` sizing to scale with the button.
 
-## Sizes
+<Canvas of={Stories.Icons} />
 
-Buttons are available in three sizes to match UI density and hierarchy.
+## Interactive states
 
-<Canvas of={Stories.AllSizes} />
+Hover, focus, active, disabled, and loading states. Each variant has custom hover behavior.
 
-## Full Width
+<Canvas of={Stories.States} />
 
-Buttons can expand to fill their container width.
+## Loading
 
-<Canvas of={Stories.FullWidth} />
+Spinner replaces content while preserving button width. Button is disabled during loading.
 
-## Disabled State
+<Canvas of={Stories.Loading} />
 
-Disabled buttons prevent user interaction and reduce visual prominence.
+## LinkButton
 
-<Canvas of={Stories.Disabled} />
+An `<a>` element styled as a button. Use when the action navigates to a URL. The `href` prop is required.
 
-## Button Grid
+<Canvas of={Stories.Link} />
 
-All combinations of variants and sizes.
+```tsx
+import { LinkButton } from '@brik/bds';
 
-<Canvas of={Stories.ButtonGrid} />
+<LinkButton href="/docs" variant="outline">Read docs</LinkButton>
+```
+
+## IconButton
+
+An icon-only button with a required `label` prop for accessibility.
+
+<Canvas of={Stories.IconOnly} />
+
+```tsx
+import { IconButton } from '@brik/bds';
+
+<IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />
+<IconButton icon={<TrashIcon />} label="Delete item" variant="danger-ghost" />
+```
+
+## Patterns
+
+Real-world compositions for common button use cases.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
+### Button
+
 <ArgTypes of={Stories} />
+
+### LinkButton
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `href` | `string` | *required* | Link destination |
+| `variant` | `ButtonVariant` | `'primary'` | Visual style variant |
+| `size` | `ButtonSize` | `'md'` | Button size |
+| `fullWidth` | `boolean` | `false` | Full width |
+| `iconBefore` | `ReactNode` | — | Icon before text |
+| `iconAfter` | `ReactNode` | — | Icon after text |
+
+### IconButton
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `ReactNode` | *required* | The icon to render |
+| `label` | `string` | *required* | Accessible label (aria-label) |
+| `variant` | `ButtonVariant` | `'ghost'` | Visual style variant |
+| `size` | `ButtonSize` | `'md'` | Button size |
+| `loading` | `boolean` | `false` | Loading state |
 
 ## Usage
 
 ```tsx
-import { Button } from '@brik/bds';
+import { Button, LinkButton, IconButton } from '@brik/bds';
 
-// Basic button
-<Button variant="primary">Click me</Button>
+// Standard action
+<Button variant="primary" size="md">Save changes</Button>
 
-// Sizes
-<Button size="sm">Small</Button>
-<Button size="md">Medium</Button>
-<Button size="lg">Large</Button>
+// Navigation
+<LinkButton href="/docs" variant="outline">Documentation</LinkButton>
 
-// Full width
-<Button fullWidth>Full width</Button>
+// Icon-only
+<IconButton icon={<EditIcon />} label="Edit" variant="secondary" />
 
-// Disabled
-<Button disabled>Disabled</Button>
-
-// As link
-<Button as="a" href="/path">Link button</Button>
+// Destructive action
+<Button variant="danger">Delete project</Button>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

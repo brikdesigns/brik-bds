@@ -2,26 +2,27 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SidebarNavigation, type SidebarNavItem } from './SidebarNavigation';
 import { Button } from '../Button';
 
-const meta: Meta<typeof SidebarNavigation> = {
-  title: 'Navigation/Primary/sidebar-navigation',
-  component: SidebarNavigation,
-  parameters: {
-    layout: 'fullscreen',
-  },
-};
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
-export default meta;
-type Story = StoryObj<typeof SidebarNavigation>;
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
 
-// Brik logo component
+/* ─── Shared Assets ───────────────────────────────────────────── */
+
 const BrikLogo = () => (
   <svg
-    width="154"
-    height="42"
-    viewBox="0 0 154 42"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ width: '100%', height: 'auto' }}
+    width="154" height="42" viewBox="0 0 154 42" fill="none"
+    xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto' }}
   >
     <path d="M133.253 0.736023C136.986 0.736023 140.384 1.61335 143.445 3.36802C146.544 5.08535 148.97 7.49336 150.725 10.592C152.517 13.6907 153.413 17.1814 153.413 21.064C153.413 24.9467 152.517 28.4374 150.725 31.536C148.933 34.6347 146.488 37.0614 143.389 38.816C140.328 40.5334 136.949 41.392 133.253 41.392C129.557 41.392 126.16 40.5334 123.061 38.816C119.962 37.0614 117.517 34.6347 115.725 31.536C113.933 28.4374 113.037 24.9467 113.037 21.064C113.037 17.1814 113.933 13.6907 115.725 10.592C117.517 7.49336 119.962 5.08535 123.061 3.36802C126.16 1.61335 129.557 0.736023 133.253 0.736023ZM133.253 10.928C130.453 10.928 128.25 11.8427 126.645 13.672C125.04 15.464 124.237 17.928 124.237 21.064C124.237 24.1254 125.04 26.5707 126.645 28.4C128.25 30.2294 130.453 31.144 133.253 31.144C136.016 31.144 138.2 30.2294 139.805 28.4C141.41 26.5707 142.213 24.1254 142.213 21.064C142.213 17.928 141.41 15.464 139.805 13.672C138.237 11.8427 136.053 10.928 133.253 10.928Z" fill="currentColor"/>
     <path d="M90.5341 1.01599C95.6114 1.01599 99.7741 2.24799 103.022 4.71199C106.27 7.17599 108.23 10.4987 108.902 14.68H97.3101C96.7127 13.5973 95.8354 12.7387 94.6781 12.104C93.5207 11.4693 92.1581 11.152 90.5901 11.152C87.9021 11.152 85.7554 12.0667 84.1501 13.896C82.5821 15.688 81.7981 18.096 81.7981 21.12C81.7981 24.5547 82.6381 27.168 84.3181 28.96C86.0354 30.7147 88.5367 31.592 91.8221 31.592C93.6887 31.592 95.3314 31.144 96.7501 30.248C98.1687 29.352 99.2887 28.0267 100.11 26.272H89.1341V18.432H109.238V29.352C107.819 32.6373 105.542 35.456 102.406 37.808C99.3074 40.1227 95.3874 41.28 90.6461 41.28C86.6141 41.28 83.0861 40.44 80.0621 38.76C77.0381 37.0427 74.7047 34.6533 73.0621 31.592C71.4567 28.5307 70.6541 25.04 70.6541 21.12C70.6541 17.2 71.4567 13.728 73.0621 10.704C74.7047 7.64266 77.0194 5.27199 80.0061 3.59199C82.9927 1.87466 86.5021 1.01599 90.5341 1.01599Z" fill="currentColor"/>
@@ -30,7 +31,6 @@ const BrikLogo = () => (
   </svg>
 );
 
-// Sample navigation items using new API
 const sampleNavItems: SidebarNavItem[] = [
   { label: 'Dashboard', href: '#dashboard', active: true },
   { label: 'Projects', href: '#projects' },
@@ -39,238 +39,157 @@ const sampleNavItems: SidebarNavItem[] = [
   { label: 'Settings', href: '#settings' },
 ];
 
-// ─── Default ─────────────────────────────────────────────────────
+const iconNavItems: SidebarNavItem[] = [
+  { label: 'Dashboard', href: '#dashboard', active: true, icon: <span style={{ fontSize: 'var(--body-md)' }}>🏠</span> },
+  { label: 'Projects', href: '#projects', icon: <span style={{ fontSize: 'var(--body-md)' }}>📁</span> },
+  { label: 'Analytics', href: '#analytics', icon: <span style={{ fontSize: 'var(--body-md)' }}>📊</span> },
+  { label: 'Settings', href: '#settings', icon: <span style={{ fontSize: 'var(--body-md)' }}>⚙️</span> },
+];
 
-/**
- * Default sidebar navigation with all sections
- */
-export const Default: Story = {
+const userSection = (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--padding-sm)' }}>
+    <div style={{
+      width: 40, height: 40, borderRadius: '50%',
+      backgroundColor: 'var(--background-brand-primary)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      color: 'var(--text-inverse)',
+      fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+    }}>
+      JD
+    </div>
+    <div>
+      <div style={{ fontSize: 'var(--body-sm)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-primary)' }}>
+        John Doe
+      </div>
+      <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+        john@example.com
+      </div>
+    </div>
+  </div>
+);
+
+/* ─── Meta ────────────────────────────────────────────────────── */
+
+const meta: Meta<typeof SidebarNavigation> = {
+  title: 'Navigation/Primary/sidebar-navigation',
+  component: SidebarNavigation,
+  parameters: { layout: 'fullscreen' },
+};
+
+export default meta;
+type Story = StoryObj<typeof SidebarNavigation>;
+
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
     logo: <BrikLogo />,
     navItems: sampleNavItems,
     footerActions: (
-      <Button variant="primary" size="sm" fullWidth>
-        Primary Action
-      </Button>
+      <Button variant="primary" size="sm" fullWidth>Primary Action</Button>
     ),
   },
 };
 
-// ─── With Icons ──────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Different configurations
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Navigation items with custom icons
- */
-export const WithIcons: Story = {
-  args: {
-    logo: <BrikLogo />,
-    navItems: [
-      {
-        label: 'Dashboard',
-        href: '#dashboard',
-        active: true,
-        icon: <span style={{ fontSize: 'var(--body-md)' }}>🏠</span>,
-      },
-      {
-        label: 'Projects',
-        href: '#projects',
-        icon: <span style={{ fontSize: 'var(--body-md)' }}>📁</span>,
-      },
-      {
-        label: 'Analytics',
-        href: '#analytics',
-        icon: <span style={{ fontSize: 'var(--body-md)' }}>📊</span>,
-      },
-      {
-        label: 'Settings',
-        href: '#settings',
-        icon: <span style={{ fontSize: 'var(--body-md)' }}>⚙️</span>,
-      },
-    ],
-  },
-};
-
-// ─── Without Footer ──────────────────────────────────────────────
-
-/**
- * Sidebar without footer actions
- */
-export const WithoutFooter: Story = {
-  args: {
-    logo: <BrikLogo />,
-    navItems: sampleNavItems,
-  },
-};
-
-// ─── With User Section ───────────────────────────────────────────
-
-/**
- * Sidebar with user section at bottom
- */
-export const WithUserSection: Story = {
-  args: {
-    logo: <BrikLogo />,
-    navItems: sampleNavItems,
-    userSection: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--padding-sm)' }}>
-        <div
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            backgroundColor: 'var(--background-brand-primary)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--text-inverse)',
-            fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-          }}
-        >
-          JD
-        </div>
-        <div>
-          <div
-            style={{
-              fontSize: 'var(--body-sm)',
-              fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-              color: 'var(--text-primary)',
-            }}
-          >
-            John Doe
-          </div>
-          <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
-            john@example.com
-          </div>
+export const Variants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 'var(--padding-xl)', height: '600px' }}>
+      <div>
+        <SectionLabel>Default</SectionLabel>
+        <div style={{ position: 'relative', height: '100%' }}>
+          <SidebarNavigation logo={<BrikLogo />} navItems={sampleNavItems} />
         </div>
       </div>
-    ),
-  },
+
+      <div>
+        <SectionLabel>With icons</SectionLabel>
+        <div style={{ position: 'relative', height: '100%' }}>
+          <SidebarNavigation logo={<BrikLogo />} navItems={iconNavItems} />
+        </div>
+      </div>
+
+      <div>
+        <SectionLabel>With user section</SectionLabel>
+        <div style={{ position: 'relative', height: '100%' }}>
+          <SidebarNavigation
+            logo={<BrikLogo />}
+            navItems={sampleNavItems}
+            userSection={userSection}
+          />
+        </div>
+      </div>
+
+      <div>
+        <SectionLabel>Custom width (200px)</SectionLabel>
+        <div style={{ position: 'relative', height: '100%' }}>
+          <SidebarNavigation logo={<BrikLogo />} navItems={sampleNavItems} width="200px" />
+        </div>
+      </div>
+    </div>
+  ),
 };
 
-// ─── Custom Width ────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Real-world compositions
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Sidebar with custom width
- */
-export const CustomWidth: Story = {
-  args: {
-    logo: <BrikLogo />,
-    navItems: sampleNavItems,
-    width: '200px',
-  },
-};
-
-// ─── Full Application Layout ─────────────────────────────────────
-
-/**
- * Complete application layout with sidebar
- */
-export const FullApplicationLayout: Story = {
+export const Patterns: Story = {
   render: () => (
     <div style={{ display: 'flex', height: '100vh' }}>
       <SidebarNavigation
         logo={<BrikLogo />}
         navItems={sampleNavItems}
         footerActions={
-          <Button variant="primary" size="sm" fullWidth>
-            New Project
-          </Button>
+          <Button variant="primary" size="sm" fullWidth>New Project</Button>
         }
-        userSection={
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--padding-sm)' }}>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                backgroundColor: 'var(--background-brand-primary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-inverse)',
-                fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-              }}
-            >
-              JD
-            </div>
-            <div>
-              <div
-                style={{
-                  fontSize: 'var(--body-sm)',
-                  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-                  color: 'var(--text-primary)',
-                }}
-              >
-                John Doe
-              </div>
-              <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
-                john@example.com
-              </div>
-            </div>
-          </div>
-        }
+        userSection={userSection}
       />
-      <main
-        style={{
-          flex: 1,
-          padding: 'var(--padding-xl)',
-          backgroundColor: 'var(--page-primary)',
-          overflowY: 'auto',
-        }}
-      >
-        <h1
-          style={{
-            fontSize: 'var(--heading-xxl)',
-            fontFamily: 'var(--font-family-heading)',
-            marginBottom: 'var(--padding-lg)',
-          }}
-        >
+      <main style={{
+        flex: 1,
+        padding: 'var(--padding-xl)',
+        backgroundColor: 'var(--page-primary)',
+        overflowY: 'auto',
+      }}>
+        <h1 style={{
+          fontSize: 'var(--heading-xxl)',
+          fontFamily: 'var(--font-family-heading)',
+          marginBottom: 'var(--padding-lg)',
+        }}>
           Dashboard
         </h1>
-        <p
-          style={{
-            fontSize: 'var(--body-md)',
-            color: 'var(--text-secondary)',
-            marginBottom: 'var(--padding-xl)',
-          }}
-        >
-          Welcome to your application dashboard. Use the sidebar navigation to explore different
-          sections.
+        <p style={{
+          fontSize: 'var(--body-md)',
+          color: 'var(--text-secondary)',
+          marginBottom: 'var(--padding-xl)',
+        }}>
+          Welcome to your application dashboard. Use the sidebar to explore different sections.
         </p>
-
-        {/* Sample content cards */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-            gap: 'var(--padding-lg)',
-          }}
-        >
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+          gap: 'var(--padding-lg)',
+        }}>
           {['Projects', 'Analytics', 'Reports', 'Settings'].map((title) => (
-            <div
-              key={title}
-              style={{
-                padding: 'var(--padding-xl)',
-                backgroundColor: 'var(--surface-primary)',
-                borderRadius: 'var(--border-radius-lg)',
-                border: '1px solid var(--border-secondary)',
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: 'var(--heading-sm)',
-                  fontFamily: 'var(--font-family-heading)',
-                  marginBottom: 'var(--padding-md)',
-                }}
-              >
+            <div key={title} style={{
+              padding: 'var(--padding-xl)',
+              backgroundColor: 'var(--surface-primary)',
+              borderRadius: 'var(--border-radius-lg)',
+              border: 'var(--border-width-md) solid var(--border-secondary)',
+            }}>
+              <h3 style={{
+                fontSize: 'var(--heading-sm)',
+                fontFamily: 'var(--font-family-heading)',
+                marginBottom: 'var(--padding-md)',
+              }}>
                 {title}
               </h3>
-              <p
-                style={{
-                  fontSize: 'var(--body-sm)',
-                  color: 'var(--text-secondary)',
-                }}
-              >
+              <p style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
                 Sample content for {title.toLowerCase()} section.
               </p>
             </div>

@@ -1,0 +1,56 @@
+/* Popover — floating content panel anchored to a trigger */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-popover {
+  position: relative;
+  display: inline-block;
+}
+
+.bds-popover__trigger {
+  display: inline-block;
+}
+
+/* ─── Panel ───────────────────────────────────────────── */
+
+.bds-popover__panel {
+  position: absolute;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12); /* bds-lint-ignore — no shadow token */
+  border: var(--border-width-sm) solid var(--border-secondary);
+  padding: var(--padding-md);
+  z-index: 100;
+  box-sizing: border-box;
+  min-width: 200px;
+}
+
+/* ─── Placement modifiers ─────────────────────────────── */
+
+.bds-popover__panel--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--gap-sm);
+}
+
+.bds-popover__panel--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: var(--gap-sm);
+}
+
+.bds-popover__panel--left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: var(--gap-sm);
+}
+
+.bds-popover__panel--right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: var(--gap-sm);
+}

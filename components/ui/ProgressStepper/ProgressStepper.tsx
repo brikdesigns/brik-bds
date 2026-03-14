@@ -142,6 +142,7 @@ export function ProgressStepper({
             : 'var(--font-weight-regular)' as unknown as number,
           lineHeight: 'var(--font-line-height-snug)',
           color: status === 'upcoming' ? 'var(--text-muted)' : 'var(--text-primary)',
+          textTransform: 'capitalize' as const,
           transition: 'color 0.15s ease',
         };
 

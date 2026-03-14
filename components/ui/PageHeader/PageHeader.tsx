@@ -1,234 +1,23 @@
-import { type HTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
+import './PageHeader.css';
 
-/**
- * Metadata key-value item
- */
 export interface MetadataItem {
-  /** Metadata label */
   label: string;
-  /** Metadata value — string or ReactNode (e.g. badge + text) */
   value: ReactNode;
 }
 
-/**
- * PageHeader component props
- *
- * Composable page header that accepts BDS components as children:
- * - breadcrumbs: pass a <Breadcrumb> component
- * - actions: pass <Button> components
- * - tabs: pass a <TabBar> component
- * - metadata: data array rendered as key-value grid
- */
 export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
-  /** Page title (heading) */
   title: string;
-  /** Optional subtitle/description beneath title */
   subtitle?: string;
-  /** Breadcrumb navigation — pass a <Breadcrumb> component */
   breadcrumbs?: ReactNode;
-  /** Action buttons — pass <Button> components */
   actions?: ReactNode;
-  /** Tab navigation — pass a <TabBar> component */
   tabs?: ReactNode;
-  /** Metadata key-value pairs — renders below title with border separator */
   metadata?: MetadataItem[];
 }
 
 /**
- * Container styles
- *
- * Figma spec: flex column, gap 24px, px 80px, py padding/md (24px)
- *
- * Token reference:
- * - --gap-lg = 24px (gap between sections)
- * - --padding-xl = 24px (vertical padding)
- */
-const containerStyles: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'var(--gap-lg)',
-  alignItems: 'flex-start',
-  justifyContent: 'center',
-  padding: 'var(--padding-xl) 80px',
-  width: '100%',
-};
-
-/**
- * Inner padding (title row)
- *
- * Figma spec: flex row, gap 8px, title area (flex 1) + buttons (right)
- */
-const innerPaddingStyles: CSSProperties = {
-  display: 'flex',
-  gap: 'var(--gap-sm)',
-  alignItems: 'flex-start',
-  width: '100%',
-};
-
-/**
- * Content wrapper (title + subtitle)
- *
- * Token reference:
- * - --font-family-heading (heading font)
- * - --heading-lg = font-size-700 = 32px (title)
- * - --font-family-body (body font)
- * - --body-lg = font-size-200 = 18px (subtitle)
- * - --font-weight-bold = 700
- *
- * Text color inherits from parent context — no forced color.
- * Place on a dark section and set color: var(--text-inverse)
- * on the parent, or use on a light background with default text color.
- */
-const contentWrapperStyles: CSSProperties = {
-  display: 'flex',
-  flex: '1 0 0',
-  flexDirection: 'column',
-  gap: 'var(--gap-sm)',
-  alignItems: 'flex-start',
-  justifyContent: 'center',
-  minWidth: 0,
-};
-
-const titleStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-heading)',
-  fontSize: 'var(--heading-lg)',
-  fontWeight: 'var(--font-weight-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  margin: 0,
-};
-
-const subtitleStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-lg)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height-normal)',
-  margin: 0,
-};
-
-/**
- * Button wrapper
- */
-const buttonWrapperStyles: CSSProperties = {
-  display: 'flex',
-  gap: 'var(--gap-sm)',
-  alignItems: 'flex-start',
-  justifyContent: 'flex-end',
-  flexShrink: 0,
-};
-
-/**
- * Metadata styles
- *
- * Token reference:
- * - --border-secondary (top border)
- * - --padding-xl = 24px (padding-top)
- * - --gap-sm = 8px (label-value gap)
- * - --font-family-label (label font)
- * - --label-sm = 14px (label size)
- * - --text-primary (label color)
- * - --font-family-body (value font)
- * - --text-accent (value color)
- */
-const metadataWrapperStyles: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  justifyContent: 'center',
-  width: '100%',
-  borderTop: 'var(--border-width-sm) solid var(--border-secondary)',
-};
-
-const metadataInnerStyles: CSSProperties = {
-  display: 'flex',
-  gap: 'var(--gap-sm)',
-  alignItems: 'flex-start',
-  paddingTop: 'var(--padding-xl)',
-  width: '100%',
-};
-
-const metadataItemStyles: CSSProperties = {
-  display: 'flex',
-  flex: '1 0 0',
-  flexDirection: 'column',
-  gap: 'var(--gap-sm)',
-  alignItems: 'flex-start',
-  justifyContent: 'center',
-  minWidth: 0,
-};
-
-const metadataLabelStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-sm)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  color: 'var(--text-primary)',
-};
-
-const metadataValueStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
-};
-
-/**
- * Tab wrapper styles
- *
- * Neutral full-width container for the TabBar. No extra border —
- * each TabBar variant handles its own visual treatment (underlines,
- * box borders, etc.) so the wrapper stays transparent.
- */
-const tabWrapperStyles: CSSProperties = {
-  width: '100%',
-};
-
-/**
- * PageHeader — BDS composable page header
- *
- * Flexible page-level header that composes BDS components:
- * - **Breadcrumb** for navigation trail
- * - **Button** for action buttons
- * - **TabBar** for tab navigation
- * - Metadata grid for key-value pairs
- *
- * No background or forced text color — inherits from parent context.
- * Place inside a dark section with appropriate text color, or use on light backgrounds.
- *
- * Two primary layouts from Figma (node 26911-20720):
- * - **Tabbed**: breadcrumbs + title + actions + tab bar
- * - **With metadata**: breadcrumbs + title + actions + metadata grid
- *
- * @example
- * ```tsx
- * import { PageHeader, Breadcrumb, TabBar, Button } from '@brik/bds';
- *
- * <PageHeader
- *   title="My Account"
- *   subtitle="Manage your membership plan."
- *   breadcrumbs={
- *     <Breadcrumb items={[
- *       { label: 'Home', href: '/' },
- *       { label: 'Settings', href: '/settings' },
- *       { label: 'Account' },
- *     ]} />
- *   }
- *   actions={
- *     <>
- *       <Button variant="primary">Save</Button>
- *       <Button variant="secondary">Cancel</Button>
- *     </>
- *   }
- *   tabs={
- *     <TabBar items={[
- *       { label: 'Overview', active: true },
- *       { label: 'Billing' },
- *       { label: 'Security' },
- *     ]} />
- *   }
- * />
- * ```
+ * PageHeader — composable page-level header with breadcrumbs, actions, metadata, and tabs.
  */
 export function PageHeader({
   title,
@@ -237,48 +26,40 @@ export function PageHeader({
   actions,
   tabs,
   metadata,
-  className = '',
+  className,
   style,
   ...props
 }: PageHeaderProps) {
   return (
     <div
       className={bdsClass('bds-page-header', className)}
-      style={{ ...containerStyles, ...style }}
+      style={style}
       {...props}
     >
-      {/* Breadcrumbs — pass a <Breadcrumb> component */}
       {breadcrumbs}
 
-      {/* Title row: title/subtitle + actions */}
-      <div style={innerPaddingStyles}>
-        <div style={contentWrapperStyles}>
-          <h1 className="bds-page-header-title" style={titleStyles}>{title}</h1>
-          {subtitle && <p className="bds-page-header-subtitle" style={subtitleStyles}>{subtitle}</p>}
+      <div className="bds-page-header__inner">
+        <div className="bds-page-header__content">
+          <h1 className="bds-page-header__title">{title}</h1>
+          {subtitle && <p className="bds-page-header__subtitle">{subtitle}</p>}
         </div>
-        {actions && <div className="bds-page-header-actions" style={buttonWrapperStyles}>{actions}</div>}
+        {actions && <div className="bds-page-header__actions">{actions}</div>}
       </div>
 
-      {/* Metadata */}
       {metadata && metadata.length > 0 && (
-        <div className="bds-page-header-metadata" style={metadataWrapperStyles}>
-          <div style={metadataInnerStyles}>
+        <div className="bds-page-header__metadata">
+          <div className="bds-page-header__metadata-inner">
             {metadata.map((item) => (
-              <div key={item.label} style={metadataItemStyles}>
-                <span style={metadataLabelStyles}>{item.label}</span>
-                <span style={metadataValueStyles}>{item.value}</span>
+              <div key={item.label} className="bds-page-header__metadata-item">
+                <span className="bds-page-header__metadata-label">{item.label}</span>
+                <span className="bds-page-header__metadata-value">{item.value}</span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Tab bar — full-width baseline border, tabs overlap via negative margin */}
-      {tabs && (
-        <div className="bds-page-header-tabs" style={tabWrapperStyles}>
-          {tabs}
-        </div>
-      )}
+      {tabs && <div className="bds-page-header__tabs">{tabs}</div>}
     </div>
   );
 }

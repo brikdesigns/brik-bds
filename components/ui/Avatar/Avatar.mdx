@@ -7,46 +7,30 @@ import * as Stories from './Avatar.stories';
 
 User profile images with automatic fallback to initials. Supports multiple sizes and optional status indicators for presence states.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Initials} />
+Use the Controls panel to explore all props interactively.
 
-## Basic Variants
+<Canvas of={Stories.Playground} />
 
-### Initials
-Automatically generates initials from the name prop when no image is provided.
-<Canvas of={Stories.Initials} />
+## Variants
 
-### With Image
-Displays user profile image with alt text for accessibility.
-<Canvas of={Stories.WithImage} />
+Sizes, content types (initials vs image), and status indicators.
 
-## Sizes
+<Canvas of={Stories.Variants} />
 
-Available in four sizes: small (32px), medium (40px), large (48px), and extra large (64px).
-<Canvas of={Stories.AllSizes} />
+| Size | Dimensions | Use for |
+|------|-----------|---------|
+| **sm** | 32px | Compact lists, inline mentions |
+| **md** | 40px | Default, cards, comments |
+| **lg** | 48px | Profile headers, featured users |
+| **xl** | 64px | Hero profiles, account settings |
 
-## Status Indicators
+## Patterns
 
-Optional status dot overlays to show user presence states.
+Real-world compositions: user lists and stacked avatar groups.
 
-### All Statuses
-Visual comparison of status indicator colors: online (green), offline (gray), busy (red), away (yellow).
-<Canvas of={Stories.AllStatuses} />
-
-### Image with Status
-Combining profile image with status indicator at larger size.
-<Canvas of={Stories.ImageWithStatus} />
-
-## Usage Examples
-
-### User List
-Common pattern showing avatars with names and status labels.
-<Canvas of={Stories.UserList} />
-
-### Avatar Group
-Stacked avatars for team members or collaborators with negative margin overlap.
-<Canvas of={Stories.AvatarGroup} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -61,30 +45,11 @@ import { Avatar } from '@brik/bds';
 <Avatar name="John Doe" />
 
 // With image
-<Avatar
-  src="https://example.com/avatar.jpg"
-  alt="User avatar"
-  name="John Doe"
-/>
+<Avatar src="/user.jpg" alt="User avatar" name="John Doe" />
 
 // With status
 <Avatar name="Jane Smith" status="online" />
 
 // Different sizes
-<Avatar name="Bob Johnson" size="sm" />
-<Avatar name="Bob Johnson" size="md" />
 <Avatar name="Bob Johnson" size="lg" />
-<Avatar name="Bob Johnson" size="xl" />
-
-// Avatar group (stacked)
-<div style={{ display: 'flex' }}>
-  <Avatar name="User 1" style={{ marginLeft: '-12px' }} />
-  <Avatar name="User 2" style={{ marginLeft: '-12px' }} />
-  <Avatar name="User 3" style={{ marginLeft: '-12px' }} />
-</div>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

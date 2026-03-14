@@ -5,53 +5,19 @@ import * as Stories from './Select.stories';
 
 # Select
 
-Dropdown selection control with options array, placeholder text, optional leading icon, and size variants. Use for choosing from a predefined set of values in forms and filters.
+Dropdown selection control with options, placeholder, optional leading icon, and size variants. Fills its container by default.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Width behavior
+<Canvas of={Stories.Playground} />
 
-The select fills its container by default (`fullWidth` is true). This matches standard form field behavior — the select adapts fluidly to whatever container it lives in.
+## Variants
 
-- **Full width (default)** — fills parent container, responsive to viewport
-- **Constrained** — respects `max-width` on a parent wrapper
-- **Compact** — set `fullWidth={false}` for inline usage where the select shrinks to content
+Sizes, icons, states, option groups, and width modes.
 
-<Canvas of={Stories.ResponsiveWidth} />
-
-## With icon
-
-Add a leading icon for visual context using the `icon` prop.
-
-<Canvas of={Stories.WithIcon} />
-
-### Small with icon
-
-The `sm` size with a leading icon for compact layouts.
-<Canvas of={Stories.SmallWithIcon} />
-
-### Label and icon
-
-Combine label, icon, and full width for form fields.
-<Canvas of={Stories.WithLabelAndIcon} />
-
-## Option groups
-
-Use `SelectOptionGroup` objects to organize options into categories with `<optgroup>` labels.
-
-<Canvas of={Stories.WithGroups} />
-
-## Sizes
-
-Three size variants — height is driven by padding and line-height tokens, not hardcoded pixel values, so it scales naturally with font size changes.
-
-<Canvas of={Stories.AllSizes} />
-
-## Interaction states
-
-All states are handled via CSS pseudo-selectors in `Select.css`:
+<Canvas of={Stories.Variants} />
 
 | State | Visual | Token |
 |-------|--------|-------|
@@ -61,21 +27,11 @@ All states are handled via CSS pseudo-selectors in `Select.css`:
 | Error | Red border + ring | `--color-system-red` |
 | Disabled | 50% opacity | — |
 
-### Error
+## Patterns
 
-Show validation errors with the `error` prop. Focus ring shows red instead of brand color.
-<Canvas of={Stories.WithError} />
+Real-world usage: form layouts and constrained containers.
 
-### Disabled
-
-Prevent interaction with the entire control.
-<Canvas of={Stories.Disabled} />
-
-## Form layout
-
-Multiple selects in a responsive form — fills container side-by-side on wide viewports, stacks on narrow.
-
-<Canvas of={Stories.FormExample} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -86,9 +42,9 @@ Multiple selects in a responsive form — fills container side-by-side on wide v
 ```tsx
 import { Select } from '@brik/bds';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faBuilding } from '@fortawesome/free-solid-svg-icons';
 
-// Basic select (fills container by default)
+// Basic select
 <Select
   placeholder="Select one..."
   options={[
@@ -110,29 +66,8 @@ import { faBuilding, faGlobe } from '@fortawesome/free-solid-svg-icons';
   label="Location"
   placeholder="Select city..."
   options={[
-    {
-      label: 'United States',
-      options: [
-        { label: 'New York', value: 'ny' },
-        { label: 'Chicago', value: 'chi' },
-      ],
-    },
-    {
-      label: 'Europe',
-      options: [
-        { label: 'London', value: 'lon' },
-        { label: 'Paris', value: 'par' },
-      ],
-    },
+    { label: 'US', options: [{ label: 'NYC', value: 'ny' }] },
+    { label: 'Europe', options: [{ label: 'London', value: 'lon' }] },
   ]}
-  icon={<FontAwesomeIcon icon={faGlobe} />}
-/>
-
-// Compact inline usage
-<Select
-  size="sm"
-  placeholder="Filter..."
-  options={filters}
-  fullWidth={false}
 />
 ```

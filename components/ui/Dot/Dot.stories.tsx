@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Dot } from './Dot';
 
+/* ─── Meta ────────────────────────────────────────────────────── */
+
 const meta: Meta<typeof Dot> = {
   title: 'Components/Indicator/dot',
   component: Dot,
@@ -11,12 +13,10 @@ const meta: Meta<typeof Dot> = {
     status: {
       control: 'select',
       options: ['default', 'positive', 'warning', 'error', 'info', 'neutral'],
-      description: 'Status variant',
     },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
-      description: 'Size variant',
     },
   },
 };
@@ -24,287 +24,136 @@ const meta: Meta<typeof Dot> = {
 export default meta;
 type Story = StoryObj<typeof Dot>;
 
-// Status variants
-export const Default: Story = {
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
     status: 'default',
+    size: 'md',
   },
 };
 
-export const Positive: Story = {
-  args: {
-    status: 'positive',
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — All statuses × all sizes
+   ═══════════════════════════════════════════════════════════════ */
 
-export const Warning: Story = {
-  args: {
-    status: 'warning',
-  },
-};
-
-export const Error: Story = {
-  args: {
-    status: 'error',
-  },
-};
-
-export const Info: Story = {
-  args: {
-    status: 'info',
-  },
-};
-
-export const Neutral: Story = {
-  args: {
-    status: 'neutral',
-  },
-};
-
-// All statuses
-export const AllStatuses: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Dot status="default" />
-<Dot status="positive" />
-<Dot status="warning" />
-<Dot status="error" />
-<Dot status="info" />
-<Dot status="neutral" />`,
-      },
-    },
-  },
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
-      <Dot status="default" />
-      <Dot status="positive" />
-      <Dot status="warning" />
-      <Dot status="error" />
-      <Dot status="info" />
-      <Dot status="neutral" />
-    </div>
+    <Stack>
+      <div>
+        <SectionLabel>Statuses</SectionLabel>
+        <Row>
+          <Dot status="default" />
+          <Dot status="positive" />
+          <Dot status="warning" />
+          <Dot status="error" />
+          <Dot status="info" />
+          <Dot status="neutral" />
+        </Row>
+      </div>
+      <div>
+        <SectionLabel>Sizes</SectionLabel>
+        <Row>
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
+              <Dot size={size} status="positive" />
+              <span style={{
+                fontFamily: 'var(--font-family-label)',
+                fontSize: 'var(--label-sm)', // bds-lint-ignore
+                color: 'var(--text-secondary)',
+              }}>
+                {size}
+              </span>
+            </div>
+          ))}
+        </Row>
+      </div>
+    </Stack>
   ),
 };
 
-// All sizes
-export const AllSizes: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Dot size="sm" status="positive" />
-<Dot size="md" status="positive" />
-<Dot size="lg" status="positive" />`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
-        <Dot size="sm" status="positive" />
-        <span style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--label-sm)',
-          color: 'var(--text-secondary)',
-        }}>
-          Small
-        </span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
-        <Dot size="md" status="positive" />
-        <span style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--label-sm)',
-          color: 'var(--text-secondary)',
-        }}>
-          Medium
-        </span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
-        <Dot size="lg" status="positive" />
-        <span style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--label-sm)',
-          color: 'var(--text-secondary)',
-        }}>
-          Large
-        </span>
-      </div>
-    </div>
-  ),
-};
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Real-world usage
+   ═══════════════════════════════════════════════════════════════ */
 
-// Contextual examples
-export const OnlineStatus: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Dot status="positive" />
-<Dot status="warning" />
-<Dot status="error" />`,
-      },
-    },
-  },
+export const Patterns: Story = {
+  name: 'Patterns',
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-sm)' }}>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Dot status="positive" />
-        <span style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-md)',
-        }}>
-          Online
-        </span>
+    <Stack>
+      <div>
+        <SectionLabel>Status list</SectionLabel>
+        <Stack gap="var(--gap-md)">
+          {[
+            { status: 'positive' as const, label: 'All systems operational' },
+            { status: 'warning' as const, label: 'Minor service disruption' },
+            { status: 'error' as const, label: 'Service outage detected' },
+          ].map(({ status, label }) => (
+            <div key={status} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
+              <Dot status={status} size="sm" />
+              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)' }}>{label}</span>
+            </div>
+          ))}
+        </Stack>
       </div>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Dot status="warning" />
-        <span style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-md)',
+      <div>
+        <SectionLabel>Activity feed</SectionLabel>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--gap-lg)',
+          padding: 'var(--padding-md)',
+          backgroundColor: 'var(--background-secondary)',
+          borderRadius: 'var(--border-radius-md)',
+          width: '300px',
         }}>
-          Away
-        </span>
-      </div>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Dot status="error" />
-        <span style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-md)',
-        }}>
-          Offline
-        </span>
-      </div>
-    </div>
-  ),
-};
-
-export const ListItems: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Dot status="positive" size="sm" />
-<Dot status="warning" size="sm" />
-<Dot status="error" size="sm" />`,
-      },
-    },
-  },
-  render: () => (
-    <ul style={{
-      listStyle: 'none',
-      padding: 0,
-      margin: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 'var(--padding-sm)',
-    }}>
-      <li style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
-        <Dot status="positive" size="sm" />
-        <span style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-md)',
-        }}>
-          All systems operational
-        </span>
-      </li>
-      <li style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
-        <Dot status="warning" size="sm" />
-        <span style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-md)',
-        }}>
-          Minor service disruption
-        </span>
-      </li>
-      <li style={{ display: 'flex', gap: 'var(--padding-sm)', alignItems: 'center' }}>
-        <Dot status="error" size="sm" />
-        <span style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-md)',
-        }}>
-          Service outage detected
-        </span>
-      </li>
-    </ul>
-  ),
-};
-
-export const ActivityFeed: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Dot status="positive" />
-<Dot status="info" />
-<Dot status="neutral" />`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 'var(--gap-lg)',
-      padding: 'var(--padding-md)',
-      backgroundColor: 'var(--background-secondary)',
-      borderRadius: 'var(--border-radius-md)',
-      width: '300px',
-    }}>
-      <div style={{ display: 'flex', gap: 'var(--padding-sm)' }}>
-        <Dot status="positive" style={{ marginTop: 'var(--gap-xs)' }} />
-        <div>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-md)',
-            fontWeight: 'var(--font-weight-semi-bold)',
-          }}>
-            Deployment successful
-          </div>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
-          }}>
-            2 minutes ago
-          </div>
+          {[
+            { status: 'positive' as const, title: 'Deployment successful', time: '2 minutes ago' },
+            { status: 'info' as const, title: 'Build started', time: '5 minutes ago' },
+            { status: 'neutral' as const, title: 'Code pushed to main', time: '10 minutes ago' },
+          ].map(({ status, title, time }) => (
+            <div key={title} style={{ display: 'flex', gap: 'var(--padding-sm)' }}>
+              <Dot status={status} style={{ marginTop: 'var(--gap-xs)' }} />
+              <div>
+                <div style={{
+                  fontFamily: 'var(--font-family-body)',
+                  fontSize: 'var(--body-md)', // bds-lint-ignore
+                  fontWeight: 'var(--font-weight-semi-bold)',
+                }}>{title}</div>
+                <div style={{
+                  fontFamily: 'var(--font-family-body)',
+                  fontSize: 'var(--body-sm)', // bds-lint-ignore
+                  color: 'var(--text-secondary)',
+                }}>{time}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 'var(--padding-sm)' }}>
-        <Dot status="info" style={{ marginTop: 'var(--gap-xs)' }} />
-        <div>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-md)',
-            fontWeight: 'var(--font-weight-semi-bold)',
-          }}>
-            Build started
-          </div>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
-          }}>
-            5 minutes ago
-          </div>
-        </div>
-      </div>
-      <div style={{ display: 'flex', gap: 'var(--padding-sm)' }}>
-        <Dot status="neutral" style={{ marginTop: 'var(--gap-xs)' }} />
-        <div>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-md)',
-            fontWeight: 'var(--font-weight-semi-bold)',
-          }}>
-            Code pushed to main
-          </div>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
-          }}>
-            10 minutes ago
-          </div>
-        </div>
-      </div>
-    </div>
+    </Stack>
   ),
 };

@@ -1,27 +1,9 @@
-import { type HTMLAttributes, type CSSProperties, useState } from 'react';
+import { type HTMLAttributes, useState } from 'react';
 import { bdsClass } from '../../utils';
+import './ServiceBadge.css';
 
-/**
- * Brik service categories
- */
 export type ServiceCategory = 'brand' | 'marketing' | 'information' | 'product' | 'service';
-
-/**
- * ServiceBadge size variants
- *
- * Token reference (Base mode):
- * - sm: 20px — inline/table use
- * - md: 28px — default, card/list context
- * - lg: 40px — hero/feature context
- */
 export type ServiceBadgeSize = 'sm' | 'md' | 'lg';
-
-/**
- * ServiceBadge display modes
- *
- * - badge: colored square with optional icon (default)
- * - label: small badge + category name text
- */
 export type ServiceBadgeMode = 'badge' | 'label';
 
 export interface ServiceBadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
@@ -35,15 +17,6 @@ export interface ServiceBadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   serviceName?: string;
 }
 
-/**
- * Category configuration — maps service categories to their color tokens
- * and display labels. Uses semantic service tokens from BDS.
- *
- * Token pattern (semantic service tokens):
- * - background: --background-service-{category}
- * - text/icon:  --text-service-{category}
- * - light bg:   --services--{token}-light
- */
 export const categoryConfig: Record<ServiceCategory, { token: string; label: string }> = {
   brand: { token: 'yellow', label: 'Brand' },
   marketing: { token: 'green', label: 'Marketing' },
@@ -52,9 +25,6 @@ export const categoryConfig: Record<ServiceCategory, { token: string; label: str
   service: { token: 'orange', label: 'Back Office' },
 };
 
-/**
- * Manual mapping for services with non-standard icon filenames
- */
 const serviceIconOverrides: Record<string, string> = {
   'Brand Identity Bundle': 'brand-design',
   'Logo Update': 'brand-logo',
@@ -83,10 +53,7 @@ const serviceIconOverrides: Record<string, string> = {
 };
 
 function normalizeServiceName(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '');
+  return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
 function getServiceIconPath(category: ServiceCategory, serviceName: string): string {
@@ -100,42 +67,18 @@ function getServiceIconPath(category: ServiceCategory, serviceName: string): str
   return `/icons/${category}/${category}-${normalized.replace(`${category}-`, '')}.svg`;
 }
 
-/**
- * Size styles using BDS tokens
- *
- * Token reference:
- * - --border-radius-sm = 2px
- * - --border-radius-md = 4px
- */
-const sizeMap: Record<ServiceBadgeSize, { box: number; iconScale: number; radius: string }> = {
-  sm: { box: 20, iconScale: 0.55, radius: 'var(--border-radius-sm)' },
-  md: { box: 28, iconScale: 0.6, radius: 'var(--border-radius-md)' },
-  lg: { box: 40, iconScale: 0.6, radius: 'var(--border-radius-md)' },
-};
+// bds-lint-ignore — Figma-driven badge dimensions
+const iconScaleMap: Record<ServiceBadgeSize, number> = { sm: 0.55, md: 0.6, lg: 0.6 };
+const boxSizeMap: Record<ServiceBadgeSize, number> = { sm: 20, md: 28, lg: 40 };
 
 /**
- * ServiceBadge — Brik service category badge component
- *
- * Renders a colored square badge for Brik service categories
- * (brand, marketing, information, product, service). Supports
- * optional service-specific icons and a label display mode.
- *
- * Colors use BDS semantic service tokens that map to the
- * services color palette (green, yellow, blue, purple, orange).
+ * ServiceBadge - Brik service category badge.
  *
  * @example
  * ```tsx
- * // Category badge (colored square)
  * <ServiceBadge category="marketing" />
- *
- * // With specific service icon
  * <ServiceBadge category="brand" serviceName="Brand Design" />
- *
- * // Label mode (badge + text)
  * <ServiceBadge category="product" mode="label" />
- *
- * // Size variants
- * <ServiceBadge category="service" size="lg" />
  * ```
  */
 export function ServiceBadge({
@@ -143,44 +86,33 @@ export function ServiceBadge({
   mode = 'badge',
   size = 'md',
   serviceName,
-  className = '',
+  className,
   style,
   ...props
 }: ServiceBadgeProps) {
   const config = categoryConfig[category];
-  const { box, iconScale, radius } = sizeMap[size];
   const [imageError, setImageError] = useState(false);
-
-  const badgeStyles: CSSProperties = {
-    width: `${box}px`,
-    height: `${box}px`,
-    borderRadius: radius,
-    backgroundColor: `var(--background-service-${category})`,
-    color: `var(--text-service-${category})`,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-    overflow: 'hidden',
-  };
-
-  const iconSize = Math.round(box * iconScale);
+  const iconSize = Math.round(boxSizeMap[size] * iconScaleMap[size]);
 
   const badge = (
     <div
-      className={bdsClass('bds-service-badge', `bds-service-badge-${category}`, className)}
-      style={{ ...badgeStyles, ...style }}
+      className={bdsClass(
+        'bds-service-badge',
+        `bds-service-badge--${size}`,
+        `bds-service-badge--${category}`,
+        className,
+      )}
+      style={style}
       title={serviceName || config.label}
       {...props}
     >
       {serviceName && !imageError && (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={getServiceIconPath(category, serviceName)}
           alt=""
           width={iconSize}
           height={iconSize}
-          style={{ objectFit: 'contain', display: 'block' }}
+          className="bds-service-badge__icon"
           onError={() => setImageError(true)}
         />
       )}
@@ -188,21 +120,8 @@ export function ServiceBadge({
   );
 
   if (mode === 'label') {
-    const labelStyles: CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 'var(--gap-md)',
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-sm)',
-      fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-      lineHeight: 'var(--font-line-height-tight)',
-      color: `var(--text-service-${category})`,
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.5px',
-    };
-
     return (
-      <div style={labelStyles}>
+      <div className={bdsClass('bds-service-badge-label', `bds-service-badge-label--${category}`)}>
         {badge}
         <span>{config.label}</span>
       </div>

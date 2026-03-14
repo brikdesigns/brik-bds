@@ -7,39 +7,23 @@ import * as Stories from './Radio.stories';
 
 Single selection control for mutually exclusive options. Radio buttons are grouped by the `name` prop, allowing only one selection per group.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Checked State
+<Canvas of={Stories.Playground} />
 
-Radio button in the selected state.
+## Variants
 
-<Canvas of={Stories.Checked} />
+States (default, checked, disabled) and horizontal layout.
 
-## Disabled State
+<Canvas of={Stories.Variants} />
 
-Disabled radio buttons prevent user interaction.
+## Patterns
 
-<Canvas of={Stories.Disabled} />
+Real-world usage: plan selection and theme selection groups.
 
-## Disabled and Checked
-
-Radio buttons can be both disabled and checked.
-
-<Canvas of={Stories.DisabledChecked} />
-
-## Plan Selection
-
-Common use case for plan or tier selection.
-
-<Canvas of={Stories.PlanSelection} />
-
-## Theme Selection
-
-Multiple options grouped together by name.
-
-<Canvas of={Stories.ThemeSelection} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -50,48 +34,18 @@ Multiple options grouped together by name.
 ```tsx
 import { Radio } from '@brik/bds';
 
-// Basic radio button
-<Radio name="option" value="option1" label="Option 1" />
+// Basic radio group
+<Radio name="plan" value="basic" label="Basic Plan" />
+<Radio name="plan" value="pro" label="Pro Plan" defaultChecked />
 
-// Controlled radio group
+// Controlled group
 const [selected, setSelected] = useState('pro');
 
-<div>
-  <Radio
-    name="plan"
-    value="basic"
-    label="Basic Plan - $9/month"
-    checked={selected === 'basic'}
-    onChange={(e) => setSelected(e.target.value)}
-  />
-  <Radio
-    name="plan"
-    value="pro"
-    label="Pro Plan - $29/month"
-    checked={selected === 'pro'}
-    onChange={(e) => setSelected(e.target.value)}
-  />
-  <Radio
-    name="plan"
-    value="enterprise"
-    label="Enterprise - Custom pricing"
-    checked={selected === 'enterprise'}
-    onChange={(e) => setSelected(e.target.value)}
-  />
-</div>
-
-// Uncontrolled radio group
-<div>
-  <Radio name="theme" value="theme1" label="Theme 1" />
-  <Radio name="theme" value="theme2" label="Theme 2" defaultChecked />
-  <Radio name="theme" value="theme3" label="Theme 3" />
-</div>
-
-// Disabled
-<Radio name="option" value="disabled" label="Disabled option" disabled />
+<Radio
+  name="plan"
+  value="basic"
+  label="Basic Plan"
+  checked={selected === 'basic'}
+  onChange={(e) => setSelected(e.target.value)}
+/>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

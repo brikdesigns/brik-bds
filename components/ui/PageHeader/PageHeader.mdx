@@ -5,54 +5,32 @@ import * as Stories from './PageHeader.stories';
 
 # Page header
 
-Composable page-level header that brings together BDS components: Breadcrumb, Button, and TabBar. No background or forced text color — inherits from its parent context.
+Composable page-level header that brings together BDS components: Breadcrumb, Button, and TabBar. No background — inherits from parent context.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Composability
-
-PageHeader is built on the BDS Lego principle — it **composes** standalone components rather than reimplementing them:
-
-| Slot | BDS Component | Import |
-|------|---------------|--------|
-| `breadcrumbs` | `<Breadcrumb>` | `import { Breadcrumb } from '@brik/bds'` |
-| `actions` | `<Button>` | `import { Button } from '@brik/bds'` |
-| `tabs` | `<TabBar>` | `import { TabBar } from '@brik/bds'` |
-| `metadata` | Built-in | Key-value grid (data prop) |
-
-Each of these components can also be used **independently** outside of PageHeader.
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Title only
-Minimal usage with just a heading.
-<Canvas of={Stories.TitleOnly} />
+All slot combinations: title only, subtitle, breadcrumbs, actions, tabs, metadata, and full composition.
 
-### With subtitle
-Title and description text.
-<Canvas of={Stories.WithSubtitle} />
+<Canvas of={Stories.Variants} />
 
-### With breadcrumbs
-Breadcrumb navigation trail above the title using the standalone Breadcrumb component.
-<Canvas of={Stories.WithBreadcrumbs} />
+| Slot | BDS Component | Description |
+|------|---------------|-------------|
+| `breadcrumbs` | `<Breadcrumb>` | Navigation trail above title |
+| `actions` | `<Button>` | Action buttons aligned right |
+| `tabs` | `<TabBar>` | Tab navigation below title |
+| `metadata` | Built-in | Key-value grid with border-top |
 
-### With actions
-Action buttons aligned to the right of the title row using the Button component.
-<Canvas of={Stories.WithActions} />
+## Patterns
 
-### Tabbed
-Horizontal tab navigation beneath the title using the TabBar component.
-<Canvas of={Stories.Default} />
+Real-world usage: company detail pages and analytics dashboards.
 
-### With metadata
-Key-value metadata grid below the title, separated by a border. Supports ReactNode values for rich content like badge icons.
-<Canvas of={Stories.WithMetadata} />
-
-### Tabs only
-TabBar navigation without action buttons.
-<Canvas of={Stories.TabsOnly} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -63,14 +41,12 @@ TabBar navigation without action buttons.
 ```tsx
 import { PageHeader, Breadcrumb, TabBar, Button } from '@brik/bds';
 
-// Tabbed variant
 <PageHeader
   title="My Account"
   subtitle="Manage your membership plan."
   breadcrumbs={
     <Breadcrumb items={[
       { label: 'Home', href: '/' },
-      { label: 'Settings', href: '/settings' },
       { label: 'Account' },
     ]} />
   }
@@ -80,34 +56,6 @@ import { PageHeader, Breadcrumb, TabBar, Button } from '@brik/bds';
       <Button variant="secondary">Cancel</Button>
     </>
   }
-  tabs={
-    <TabBar items={[
-      { label: 'Overview', active: true },
-      { label: 'Billing' },
-      { label: 'Security' },
-    ]} />
-  }
-/>
-
-// Metadata variant
-<PageHeader
-  title="Brand Design"
-  subtitle="Service details and billing info."
-  actions={
-    <>
-      <Button variant="primary" size="sm">Edit</Button>
-      <Button variant="secondary" size="sm">Archive</Button>
-    </>
-  }
-  metadata={[
-    { label: 'Category', value: 'Brand Design' },
-    { label: 'Billing', value: 'One-time' },
-    { label: 'Stripe Product', value: 'brand-design' },
-  ]}
+  tabs={<TabBar items={[{ label: 'Overview', active: true }, { label: 'Billing' }]} />}
 />
 ```
-
-## Resources
-
-- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26911-20720)
-- [Design guidelines](#) — coming soon

@@ -1,0 +1,86 @@
+/* ─── SidebarNavigation ──────────────────────────────────────── */
+
+.bds-sidebar-nav {
+  background-color: var(--surface-primary);
+  border-right: var(--border-width-md) solid var(--border-secondary);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* ─── Logo ───────────────────────────────────────────────────── */
+
+.bds-sidebar-nav__logo {
+  padding: 24px 24px 20px; /* bds-lint-ignore — Figma sidebar spec */
+  border-bottom: var(--border-width-md) solid var(--border-secondary);
+}
+
+/* ─── Nav section ────────────────────────────────────────────── */
+
+.bds-sidebar-nav__nav {
+  flex: 1;
+  padding: 16px 12px; /* bds-lint-ignore — Figma sidebar spec */
+  overflow-y: auto;
+}
+
+/* ─── Nav item ───────────────────────────────────────────────── */
+
+.bds-sidebar-nav__item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md); /* bds-lint-ignore — Figma spec 12px, nearest token 8px */
+  padding: 10px 12px; /* bds-lint-ignore — Figma nav item padding */
+  border-radius: var(--border-radius-md); /* bds-lint-ignore — Figma spec 6px, nearest token 4px */
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-secondary);
+  background-color: transparent;
+  text-decoration: none;
+  text-transform: capitalize;
+  margin-bottom: var(--gap-sm);
+  transition: background-color 0.15s, color 0.15s;
+  cursor: pointer;
+}
+
+.bds-sidebar-nav__item:hover {
+  background-color: var(--page-secondary);
+}
+
+.bds-sidebar-nav__item--active {
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+  background-color: var(--page-secondary);
+}
+
+/* ─── Indicator dot ──────────────────────────────────────────── */
+
+.bds-sidebar-nav__indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--border-secondary);
+  flex-shrink: 0;
+}
+
+.bds-sidebar-nav__indicator--active {
+  background-color: var(--background-brand-primary);
+}
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+
+.bds-sidebar-nav__footer {
+  padding: 12px 24px; /* bds-lint-ignore — Figma sidebar spec */
+  border-top: var(--border-width-md) solid var(--border-secondary);
+}
+
+/* ─── User section ───────────────────────────────────────────── */
+
+.bds-sidebar-nav__user {
+  padding: 16px 24px; /* bds-lint-ignore — Figma sidebar spec */
+  border-top: var(--border-width-md) solid var(--border-secondary);
+}

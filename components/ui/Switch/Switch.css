@@ -1,0 +1,49 @@
+/* ─── Switch ─────────────────────────────────────────────────── */
+
+.bds-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-md);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.bds-switch--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Hidden input ───────────────────────────────────────────── */
+
+.bds-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* ─── Track ──────────────────────────────────────────────────── */
+/* Track and knob dimensions are size-dependent (runtime calculated) */
+
+.bds-switch__track {
+  position: relative;
+  display: inline-block;
+  border-radius: var(--border-radius-pill);
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  cursor: inherit;
+}
+
+/* ─── Knob ───────────────────────────────────────────────────── */
+
+.bds-switch__knob {
+  position: absolute;
+  background-color: var(--surface-primary);
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06); /* bds-lint-ignore — knob shadow, shadow tokens resolve to zero */
+}

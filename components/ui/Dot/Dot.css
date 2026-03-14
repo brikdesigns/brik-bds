@@ -1,0 +1,23 @@
+/* ─── Dot ────────────────────────────────────────────────────── */
+
+.bds-dot {
+  display: inline-block;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+/* bds-lint-ignore — Figma-driven dot dimensions */
+
+.bds-dot--sm { width: 6px; height: 6px; }
+.bds-dot--md { width: 8px; height: 8px; }
+.bds-dot--lg { width: 10px; height: 10px; }
+
+/* ─── Status colors ──────────────────────────────────────────── */
+
+.bds-dot--default  { background-color: var(--background-brand-primary); }
+.bds-dot--positive { background-color: var(--color-system-green); }
+.bds-dot--warning  { background-color: var(--color-system-yellow); }
+.bds-dot--error    { background-color: var(--color-system-red); }
+.bds-dot--info     { background-color: var(--color-system-blue); }
+.bds-dot--neutral  { background-color: var(--color-grayscale-light); }

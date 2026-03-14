@@ -1,0 +1,58 @@
+/* ─── Accordion ──────────────────────────────────────────────── */
+
+.bds-accordion {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Item ───────────────────────────────────────────────────── */
+
+.bds-accordion-item {
+  border-bottom: var(--border-width-lg) solid var(--border-muted);
+}
+
+/* ─── Trigger ────────────────────────────────────────────────── */
+
+.bds-accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--padding-xl) 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  gap: var(--gap-lg);
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-accordion-trigger__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── Icon ───────────────────────────────────────────────────── */
+
+.bds-accordion-trigger__icon {
+  font-size: var(--icon-lg);
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+/* ─── Content ────────────────────────────────────────────────── */
+
+.bds-accordion-content {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  padding-bottom: var(--padding-xl);
+}

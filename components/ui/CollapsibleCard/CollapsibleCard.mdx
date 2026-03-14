@@ -7,34 +7,21 @@ import * as Stories from './CollapsibleCard.stories';
 
 Expandable content section with a clickable header. Use for FAQs, settings panels, and long-form content that benefits from progressive disclosure.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+<Canvas of={Stories.Playground} />
 
-## States
+## Variants
 
-### Collapsed (default)
-Content is hidden, only the header is visible.
-<Canvas of={Stories.Default} />
+Collapsed, expanded, without section label, and with rich content.
 
-### Expanded
-Content is visible below the header.
-<Canvas of={Stories.Open} />
+<Canvas of={Stories.Variants} />
 
-## Variations
+## Patterns
 
-### Without section label
-Omit the section label for simpler layouts.
-<Canvas of={Stories.NoSectionLabel} />
+Stacked proposal sections in an accordion-style layout.
 
-### With rich content
-Supports any React content inside the expandable area.
-<Canvas of={Stories.WithRichContent} />
-
-## Multiple sections
-
-Stack multiple collapsible cards for accordion-style layouts.
-<Canvas of={Stories.MultipleSections} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 

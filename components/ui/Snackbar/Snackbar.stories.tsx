@@ -6,25 +6,39 @@ import { Button } from '../Button';
 const meta: Meta<typeof Snackbar> = {
   title: 'Components/Feedback/snackbar',
   component: Snackbar,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    position: {
-      control: 'select',
-      options: ['top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'],
-    },
-    variant: {
-      control: 'select',
-      options: ['default', 'success', 'error', 'warning'],
-    },
+    position: { control: 'select', options: ['top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'] },
+    variant: { control: 'select', options: ['default', 'success', 'error', 'warning'] },
   },
-} satisfies Meta<typeof Snackbar>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+/* ─── Layout helpers ─────────────────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+    {children}
+  </span>
+);
+
+const Stack = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', alignItems: 'center' }}>
+    {children}
+  </div>
+);
+
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-md)' }}>
+    {children}
+  </div>
+);
+
+/* ─── Playground ─────────────────────────────────────────────── */
+
+export const Playground: Story = {
   render: (args) => {
     const [open, setOpen] = useState(false);
     return (
@@ -42,72 +56,60 @@ export const Default: Story = {
   },
 };
 
+/* ─── Variants ───────────────────────────────────────────────── */
+
 export const Variants: Story = {
   render: () => {
     const [active, setActive] = useState<string | null>(null);
     return (
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap' }}>
-        <Button onClick={() => setActive('default')}>Default</Button>
-        <Button onClick={() => setActive('success')}>Success</Button>
-        <Button onClick={() => setActive('error')}>Error</Button>
-        <Button onClick={() => setActive('warning')}>Warning</Button>
-        <Snackbar
-          isOpen={active === 'default'}
-          onClose={() => setActive(null)}
-          message="Default notification"
-          position="bottom"
-        />
-        <Snackbar
-          isOpen={active === 'success'}
-          onClose={() => setActive(null)}
-          message="Operation completed successfully!"
-          variant="success"
-          position="bottom"
-        />
-        <Snackbar
-          isOpen={active === 'error'}
-          onClose={() => setActive(null)}
-          message="Something went wrong. Please try again."
-          variant="error"
-          position="bottom"
-        />
-        <Snackbar
-          isOpen={active === 'warning'}
-          onClose={() => setActive(null)}
-          message="Your session will expire in 5 minutes."
-          variant="warning"
-          position="bottom"
-        />
-      </div>
+      <Stack>
+        <SectionLabel>Click to preview each variant</SectionLabel>
+        <Row>
+          <Button size="sm" onClick={() => setActive('default')}>Default</Button>
+          <Button size="sm" onClick={() => setActive('success')}>Success</Button>
+          <Button size="sm" onClick={() => setActive('error')}>Error</Button>
+          <Button size="sm" onClick={() => setActive('warning')}>Warning</Button>
+        </Row>
+        <Snackbar isOpen={active === 'default'} onClose={() => setActive(null)} message="Default notification" position="bottom" />
+        <Snackbar isOpen={active === 'success'} onClose={() => setActive(null)} message="Operation completed successfully!" variant="success" position="bottom" />
+        <Snackbar isOpen={active === 'error'} onClose={() => setActive(null)} message="Something went wrong. Please try again." variant="error" position="bottom" />
+        <Snackbar isOpen={active === 'warning'} onClose={() => setActive(null)} message="Your session will expire in 5 minutes." variant="warning" position="bottom" />
+      </Stack>
     );
   },
 };
 
-export const WithAction: Story = {
+/* ─── Patterns ───────────────────────────────────────────────── */
+
+export const Patterns: Story = {
+  name: 'Patterns',
   render: () => {
-    const [open, setOpen] = useState(false);
+    const [pos, setPos] = useState<string | null>(null);
+    const [undoOpen, setUndoOpen] = useState(false);
+
     return (
-      <>
-        <Button onClick={() => setOpen(true)}>Delete Item</Button>
+      <Stack>
+        <SectionLabel>Position options</SectionLabel>
+        <Row>
+          {(['top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map((p) => (
+            <Button key={p} size="sm" variant="outline" onClick={() => setPos(p)}>{p}</Button>
+          ))}
+        </Row>
+        {(['top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map((p) => (
+          <Snackbar key={p} isOpen={pos === p} onClose={() => setPos(null)} message={`Snackbar at ${p}`} position={p} duration={3000} />
+        ))}
+
+        <SectionLabel>With undo action</SectionLabel>
+        <Button size="sm" variant="outline" onClick={() => setUndoOpen(true)}>Delete item</Button>
         <Snackbar
-          isOpen={open}
-          onClose={() => setOpen(false)}
+          isOpen={undoOpen}
+          onClose={() => setUndoOpen(false)}
           message="Item deleted"
           action={
             <button
               type="button"
-              onClick={() => { setOpen(false); }}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--text-brand-primary)',
-                fontFamily: 'var(--font-family-label)',
-                fontSize: 'var(--label-sm)',
-                fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-                cursor: 'pointer',
-                textDecoration: 'underline',
-                flexShrink: 0,
-              }}
+              onClick={() => setUndoOpen(false)}
+              style={{ background: 'none', border: 'none', color: 'var(--text-brand-primary)', fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline', flexShrink: 0 }}
             >
               Undo
             </button>
@@ -115,32 +117,7 @@ export const WithAction: Story = {
           duration={5000}
           position="bottom"
         />
-      </>
-    );
-  },
-};
-
-export const Positions: Story = {
-  render: () => {
-    const [pos, setPos] = useState<string | null>(null);
-    return (
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap' }}>
-        {(['top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map((p) => (
-          <Button key={p} size="sm" variant="outline" onClick={() => setPos(p)}>
-            {p}
-          </Button>
-        ))}
-        {(['top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map((p) => (
-          <Snackbar
-            key={p}
-            isOpen={pos === p}
-            onClose={() => setPos(null)}
-            message={`Snackbar at ${p}`}
-            position={p}
-            duration={3000}
-          />
-        ))}
-      </div>
+      </Stack>
     );
   },
 };

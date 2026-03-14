@@ -1,0 +1,79 @@
+/**
+ * BDS NavBar
+ *
+ * Token reference:
+ * - --surface-nav (navbar background)
+ * - --padding-md, --padding-lg
+ * - --gap-xl, --gap-lg, --gap-md
+ * - --text-secondary, --text-primary
+ */
+
+/* ─── Container ───────────────────────────────────────────────── */
+
+.bds-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--padding-md) var(--padding-lg);
+  background-color: var(--surface-nav);
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+.bds-nav-bar--sticky {
+  position: sticky;
+  top: 0;
+}
+
+/* ─── Left section: logo + links ──────────────────────────────── */
+
+.bds-nav-bar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xl);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.bds-nav-bar__logo {
+  flex-shrink: 0;
+}
+
+.bds-nav-bar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  flex-wrap: wrap;
+}
+
+/* ─── Link styles ─────────────────────────────────────────────── */
+
+.bds-nav-bar__link {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+  cursor: pointer;
+}
+
+.bds-nav-bar__link:hover {
+  color: var(--text-primary);
+}
+
+.bds-nav-bar__link--active {
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+}
+
+/* ─── Actions ─────────────────────────────────────────────────── */
+
+.bds-nav-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+}

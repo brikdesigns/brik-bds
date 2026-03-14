@@ -5,35 +5,30 @@ import * as Stories from './Footer.stories';
 
 # Footer
 
-Site-wide footer with logo, navigation columns, and optional social links. Use at the bottom of marketing pages and application shells.
+Site-wide footer with logo, navigation columns, social links, and copyright. Supports default and brand color variants.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Default
-Standard footer on the primary background.
-<Canvas of={Stories.Default} />
+Default, brand, social links, and minimal configurations.
 
-### Brand
-Footer on a brand-colored background for stronger visual presence.
-<Canvas of={Stories.BrandVariant} />
+<Canvas of={Stories.Variants} />
 
-## Variations
+| Variant | Description |
+|---------|-------------|
+| **default** | Primary background with border-top |
+| **brand** | Brand-colored background with inverse text |
 
-### With social links
-Add social media icons alongside navigation.
-<Canvas of={Stories.WithSocialLinks} />
+## Patterns
 
-### Minimal
-Logo, tagline, and copyright only.
-<Canvas of={Stories.Minimal} />
+Real-world usage: full marketing site footer with services, resources, legal columns, and social links.
 
-### Columns only
-Navigation columns without logo or tagline.
-<Canvas of={Stories.ColumnsOnly} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 

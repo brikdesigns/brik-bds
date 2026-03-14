@@ -5,33 +5,30 @@ import * as Stories from './Breadcrumb.stories';
 
 # Breadcrumb
 
-Navigation breadcrumb trail showing the user's current location in a page hierarchy. Supports slash and chevron separator variants. The last item renders as the current page (muted, non-clickable).
+Navigation breadcrumb trail showing the current page location within a hierarchy. Supports slash and chevron separators.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Slash separator (default)
-The standard slash `/` separator between breadcrumb items.
-<Canvas of={Stories.Default} />
+Separator styles, nesting depths, and dark background usage.
 
-### Chevron separator
-Right-pointing chevron `›` separator for an alternative style.
-<Canvas of={Stories.ChevronSeparator} />
+<Canvas of={Stories.Variants} />
 
-### Deep nesting
-Multiple levels of breadcrumb hierarchy.
-<Canvas of={Stories.DeepNesting} />
+| Separator | Character | Description |
+|-----------|-----------|-------------|
+| **slash** | `/` | Default separator |
+| **chevron** | `›` | Alternative visual style |
 
-### Single item
-Current page only — renders as muted text with no links.
-<Canvas of={Stories.SingleItem} />
+## Patterns
 
-### On dark background
-Breadcrumb on a dark brand background, as used inside PageHeader.
-<Canvas of={Stories.OnDarkBackground} />
+Real-world usage: page headers and settings navigation.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -42,41 +39,12 @@ Breadcrumb on a dark brand background, as used inside PageHeader.
 ```tsx
 import { Breadcrumb } from '@brik/bds';
 
-// Standalone breadcrumb with slash separator
 <Breadcrumb
   items={[
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products' },
     { label: 'Design System' },
   ]}
-/>
-
-// Chevron separator
-<Breadcrumb
   separator="chevron"
-  items={[
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Settings', href: '/settings' },
-    { label: 'Account' },
-  ]}
-/>
-
-// Composed inside PageHeader
-<PageHeader
-  title="Design System"
-  breadcrumbs={
-    <Breadcrumb
-      items={[
-        { label: 'Home', href: '/' },
-        { label: 'Products', href: '/products' },
-        { label: 'Design System' },
-      ]}
-    />
-  }
 />
 ```
-
-## Resources
-
-- [Figma designs](https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=26432-15231)
-- [Design guidelines](#) — coming soon

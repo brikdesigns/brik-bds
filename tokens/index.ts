@@ -498,3 +498,18 @@ export const semanticTypography = {
   "icon--medium-base": "var(--font-size--100)",
   "icon--large": "var(--font-size--200)"
 } as const;
+
+/**
+ * Text-transform tokens per typography role
+ *
+ * Semantic casing rules: heading/label = capitalize (Title Case),
+ * subtitle = uppercase, body/display = none.
+ * Source: overrides.css :root block.
+ */
+export const textTransform = {
+  heading: 'var(--text-transform-heading)',
+  label: 'var(--text-transform-label)',
+  subtitle: 'var(--text-transform-subtitle)',
+  body: 'var(--text-transform-body)',
+  display: 'var(--text-transform-display)',
+} as const;

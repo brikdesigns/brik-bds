@@ -5,27 +5,32 @@ import * as Stories from './Divider.stories';
 
 # Divider
 
-A visual separator used to divide content sections. Supports horizontal and vertical orientations with configurable spacing.
+Visual separator for content sections. Supports horizontal and vertical orientations with configurable spacing.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## With spacing
+<Canvas of={Stories.Playground} />
 
-Dividers can include built-in margin to create breathing room between content sections.
+## Variants
 
-<Canvas of={Stories.WithSpacing} />
+Orientations and spacing options.
 
-## Vertical
+<Canvas of={Stories.Variants} />
 
-Use vertical dividers to separate inline or flex-row content.
+| Spacing | Value | Use for |
+|---------|-------|---------|
+| **none** | 0px | Tight separators, table rows |
+| **sm** | 12px | Compact spacing |
+| **md** | 16px | Default breathing room |
+| **lg** | 24px | Section-level separation |
 
-<Canvas of={Stories.Vertical} />
+## Patterns
 
-## All spacings
+Real-world usage: content sections and toolbar separators.
 
-<Canvas of={Stories.AllSpacings} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 

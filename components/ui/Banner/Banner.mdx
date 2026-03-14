@@ -5,25 +5,25 @@ import * as Stories from './Banner.stories';
 
 # Marketing banner
 
-Full-width marketing banner for announcements, promotions, and site-wide notices. Uses brand-primary background with inverse text.
+Full-width branded banner for announcements, promotions, and site-wide notices. Uses brand-primary background with inverse text.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Title only
-Minimal banner with just a title.
-<Canvas of={Stories.TitleOnly} />
+Action, title-only, and dismissible configurations.
 
-### With action
-Include a button for user interaction.
-<Canvas of={Stories.WithAction} />
+<Canvas of={Stories.Variants} />
 
-### Dismissible
-Add `onDismiss` to show a close button.
-<Canvas of={Stories.Dismissible} />
+## Patterns
+
+Real-world usage: announcements and dismissible notices.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -32,8 +32,7 @@ Add `onDismiss` to show a close button.
 ## Usage
 
 ```tsx
-import { Banner } from '@brik/bds';
-import { Button } from '@brik/bds';
+import { Banner, Button } from '@brik/bds';
 
 <Banner
   title="New feature"

@@ -2,6 +2,7 @@ import { type CSSProperties, type HTMLAttributes } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
+import './Stepper.css';
 
 export type StepperSize = 'sm' | 'md' | 'lg';
 
@@ -26,7 +27,6 @@ const sizeConfig: Record<StepperSize, {
   buttonSize: number;
   iconSize: number;
   fontSize: string;
-  padding: string;
   gap: string;
   borderRadius: string;
 }> = {
@@ -34,7 +34,6 @@ const sizeConfig: Record<StepperSize, {
     buttonSize: 28,
     iconSize: 10,
     fontSize: 'var(--label-sm)',
-    padding: 'var(--padding-tiny)',
     gap: 'var(--gap-sm)',
     borderRadius: 'var(--border-radius-sm)',
   },
@@ -42,7 +41,6 @@ const sizeConfig: Record<StepperSize, {
     buttonSize: 36,
     iconSize: 12,
     fontSize: 'var(--label-md)',
-    padding: 'var(--padding-sm)',
     gap: 'var(--gap-md)',
     borderRadius: 'var(--border-radius-md)',
   },
@@ -50,16 +48,9 @@ const sizeConfig: Record<StepperSize, {
     buttonSize: 44,
     iconSize: 14,
     fontSize: 'var(--label-lg)',
-    padding: 'var(--padding-md)',
     gap: 'var(--gap-md)',
     borderRadius: 'var(--border-radius-md)',
   },
-};
-
-const baseStyles: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  boxSizing: 'border-box',
 };
 
 /**
@@ -94,39 +85,23 @@ export function Stepper({
     if (canIncrement) onChange(value + step);
   };
 
-  const buttonStyles = (enabled: boolean): CSSProperties => ({
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+  // Runtime-calculated dimensions per size — must stay inline
+  const buttonStyle = (): CSSProperties => ({
     width: config.buttonSize,
     height: config.buttonSize,
     borderRadius: config.borderRadius,
-    border: 'var(--border-width-sm) solid var(--border-secondary)',
-    backgroundColor: 'var(--surface-secondary)',
-    color: enabled ? 'var(--text-primary)' : 'var(--text-muted)',
-    cursor: enabled ? 'pointer' : 'not-allowed',
-    opacity: enabled ? 1 : 0.4,
-    padding: 0,
     fontSize: config.iconSize,
-    transition: 'filter 0.15s ease',
-    flexShrink: 0,
   });
 
-  const valueStyles: CSSProperties = {
-    fontFamily: 'var(--font-family-label)',
-    fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  const valueStyle: CSSProperties = {
     fontSize: config.fontSize,
-    lineHeight: 'var(--font-line-height-tight)',
-    color: disabled ? 'var(--text-muted)' : 'var(--text-primary)',
-    textAlign: 'center',
     minWidth: config.buttonSize,
-    userSelect: 'none',
   };
 
   return (
     <div
       className={bdsClass('bds-stepper', className)}
-      style={{ ...baseStyles, gap: config.gap, ...style }}
+      style={{ gap: config.gap, ...style }}
       role="group"
       aria-label="Stepper"
       {...props}
@@ -135,19 +110,25 @@ export function Stepper({
         type="button"
         onClick={handleDecrement}
         disabled={!canDecrement}
-        style={buttonStyles(canDecrement)}
+        className={bdsClass('bds-stepper__button', !canDecrement && 'bds-stepper__button--disabled')}
+        style={buttonStyle()}
         aria-label="Decrease"
       >
         <FontAwesomeIcon icon={faMinus} />
       </button>
-      <span style={valueStyles} aria-live="polite">
+      <span
+        className={bdsClass('bds-stepper__value', disabled && 'bds-stepper__value--disabled')}
+        style={valueStyle}
+        aria-live="polite"
+      >
         {value}
       </span>
       <button
         type="button"
         onClick={handleIncrement}
         disabled={!canIncrement}
-        style={buttonStyles(canIncrement)}
+        className={bdsClass('bds-stepper__button', !canIncrement && 'bds-stepper__button--disabled')}
+        style={buttonStyle()}
         aria-label="Increase"
       >
         <FontAwesomeIcon icon={faPlus} />

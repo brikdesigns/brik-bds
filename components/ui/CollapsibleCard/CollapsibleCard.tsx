@@ -2,7 +2,6 @@
 
 import {
   type ReactNode,
-  type CSSProperties,
   type HTMLAttributes,
   useState,
   useCallback,
@@ -10,6 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
+import './CollapsibleCard.css';
 
 /**
  * CollapsibleCard component props
@@ -30,104 +30,6 @@ export interface CollapsibleCardProps extends HTMLAttributes<HTMLDivElement> {
   /** Additional action buttons rendered next to the toggle */
   headerActions?: ReactNode;
 }
-
-/**
- * Card container styles
- *
- * Token reference:
- * - --surface-primary (card background)
- * - --padding-lg = 24px (padding)
- * - --border-radius-md = 4px (corners)
- */
-const cardStyles: CSSProperties = {
-  backgroundColor: 'var(--surface-primary)',
-  padding: 'var(--padding-lg)',
-  borderRadius: 'var(--border-radius-md)',
-  width: '100%',
-  boxSizing: 'border-box',
-};
-
-/**
- * Header row styles — section label + title on left, actions + toggle on right
- */
-const headerStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'flex-start',
-  justifyContent: 'space-between',
-  cursor: 'pointer',
-  gap: 'var(--gap-lg)',
-};
-
-/**
- * Section label styles (uppercase muted text)
- *
- * Token reference:
- * - --font-family-heading (heading font)
- * - --font-weight--semi-bold
- * - --heading-tiny ≈ 11.54px
- * - --text-secondary (muted gray)
- */
-const sectionLabelStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-heading)',
-  fontWeight: 'var(--font-weight--semi-bold)' as unknown as number,
-  fontSize: 'var(--heading-tiny)',
-  color: 'var(--text-secondary)',
-  textTransform: 'uppercase',
-  letterSpacing: '0.05em',
-  lineHeight: 'var(--font-line-height--100)',
-  margin: 0,
-};
-
-/**
- * Title styles
- *
- * Token reference:
- * - --font-family-heading (heading font)
- * - --font-weight--bold = 700
- * - --heading-sm ≈ 22.5px
- * - --text-primary
- */
-const titleStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-heading)',
-  fontWeight: 'var(--font-weight--bold)' as unknown as number,
-  fontSize: 'var(--heading-sm)',
-  color: 'var(--text-primary)',
-  lineHeight: 'var(--font-line-height--100)',
-  margin: 0,
-};
-
-/**
- * Icon button styles
- *
- * Token reference:
- * - --background-secondary (button background)
- * - --border-radius-md = 4px
- * - --text-primary (icon color)
- */
-const iconButtonStyles: CSSProperties = {
-  width: '40px',
-  height: '40px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: 'var(--background-secondary)',
-  borderRadius: 'var(--border-radius-md)',
-  border: 'none',
-  cursor: 'pointer',
-  flexShrink: 0,
-  color: 'var(--text-primary)',
-  fontSize: 'var(--body-lg)', // bds-lint-ignore — icon sizing, not text
-};
-
-/**
- * Content area styles (expanded body)
- *
- * Token reference:
- * - --padding-lg = 24px (top margin)
- */
-const contentStyles: CSSProperties = {
-  marginTop: 'var(--padding-lg)',
-};
 
 /**
  * CollapsibleCard - BDS composite component
@@ -176,11 +78,11 @@ export function CollapsibleCard({
   return (
     <div
       className={bdsClass('bds-collapsible-card', className)}
-      style={{ ...cardStyles, ...style }}
+      style={style}
       {...props}
     >
       <div
-        style={headerStyles}
+        className="bds-collapsible-card__header"
         onClick={handleToggle}
         role="button"
         tabIndex={0}
@@ -192,22 +94,22 @@ export function CollapsibleCard({
           }
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--padding-lg)', flex: 1, minWidth: 0 }}>
+        <div className="bds-collapsible-card__header-left">
           {sectionLabel && (
-            <span style={sectionLabelStyles}>{sectionLabel}</span>
+            <span className="bds-collapsible-card__section-label">{sectionLabel}</span>
           )}
-          <h3 style={titleStyles}>{title}</h3>
+          <h3 className="bds-collapsible-card__title">{title}</h3>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+        <div className="bds-collapsible-card__header-right">
           {headerActions}
-          <span style={iconButtonStyles} aria-hidden="true">
+          <span className="bds-collapsible-card__toggle" aria-hidden="true">
             <FontAwesomeIcon icon={open ? faMinus : faPlus} />
           </span>
         </div>
       </div>
 
       {open && (
-        <div className="bds-collapsible-card-content" style={contentStyles}>
+        <div className="bds-collapsible-card__content">
           {children}
         </div>
       )}

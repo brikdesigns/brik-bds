@@ -7,27 +7,23 @@ import * as Stories from './Pagination.stories';
 
 Page navigation controls with previous/next arrows, page numbers, and ellipsis for large page counts. Supports left, center, and right alignment.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Left Aligned
-<Canvas of={Stories.LeftAligned} />
+Alignment positions (left, center, right), few pages, and single page.
 
-### Right Aligned
-<Canvas of={Stories.RightAligned} />
+<Canvas of={Stories.Variants} />
 
-### Few Pages
+## Patterns
 
-When the total page count is small, all page numbers are shown without ellipsis.
-<Canvas of={Stories.FewPages} />
+Real-world usage: table pagination with result count.
 
-## All Positions
-
-Side-by-side comparison of all alignment options.
-<Canvas of={Stories.AllPositions} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -40,20 +36,10 @@ import { Pagination } from '@brik/bds';
 
 const [page, setPage] = useState(1);
 
-// Centered pagination
 <Pagination
   currentPage={page}
   totalPages={80}
   onChange={setPage}
   position="center"
-/>
-
-// Left-aligned with more siblings visible
-<Pagination
-  currentPage={page}
-  totalPages={50}
-  onChange={setPage}
-  position="left"
-  siblingCount={2}
 />
 ```

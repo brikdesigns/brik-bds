@@ -5,59 +5,33 @@ import * as Stories from './ServiceBadge.stories';
 
 # Service Badge
 
-Colored badge identifying Brik service categories. Each category has a dedicated color palette (primary, dark, light) used across the Brik ecosystem for consistent service identification.
+Colored badge identifying Brik service categories. Each category has a dedicated color palette used across the Brik ecosystem for consistent service identification.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Categories
+<Canvas of={Stories.Playground} />
 
-Five service categories, each with a unique color from the services token palette.
+## Variants
 
-### All categories
-<Canvas of={Stories.AllCategories} />
+Categories, sizes, label mode, and icon display.
 
-### Brand
-<Canvas of={Stories.Brand} />
+<Canvas of={Stories.Variants} />
 
-### Marketing
-<Canvas of={Stories.Marketing} />
+| Category | Color | Token |
+|----------|-------|-------|
+| **Brand** | Yellow | `--services--yellow` |
+| **Marketing** | Green | `--services--green` |
+| **Information** | Blue | `--services--blue` |
+| **Product** | Purple | `--services--purple` |
+| **Back Office** | Orange | `--services--orange` |
 
-### Information
-<Canvas of={Stories.Information} />
+## Patterns
 
-### Product
-<Canvas of={Stories.Product} />
+Real-world usage: service lists and color palette reference.
 
-### Back Office
-<Canvas of={Stories.BackOffice} />
-
-## Sizes
-
-Three size options: small (20px), medium (28px), and large (40px).
-<Canvas of={Stories.AllSizes} />
-
-## Label mode
-
-Inline display with category name text. Uses uppercase label typography with the category dark color.
-<Canvas of={Stories.Labels} />
-
-## Color tokens
-
-Each category maps to a three-tone palette (primary, dark, light) from the `--services--*` primitives.
-<Canvas of={Stories.ColorTokens} />
-
-## With icons
-
-Badges with service-specific icons. Pass the `serviceName` prop to display the corresponding SVG icon inside the badge.
-<Canvas of={Stories.WithIcons} />
-
-## Contextual examples
-
-### Inline with text
-Service badges paired with service names in list contexts.
-<Canvas of={Stories.InlineWithText} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -77,16 +51,6 @@ import { ServiceBadge } from '@brik/bds';
 // Label mode
 <ServiceBadge category="product" mode="label" />
 
-// With specific service icon (back office category)
+// With specific service icon
 <ServiceBadge category="service" serviceName="CRM Setup and Data Cleanup" />
 ```
-
-## Token reference
-
-| Category | Primary | Dark | Light |
-|---|---|---|---|
-| Marketing | `--services--green` | `--services--green-dark` | `--services--green-light` |
-| Brand | `--services--yellow` | `--services--yellow-dark` | `--services--yellow-light` |
-| Information | `--services--blue` | `--services--blue-dark` | `--services--blue-light` |
-| Product | `--services--purple` | `--services--purple-dark` | `--services--purple-light` |
-| Back Office | `--services--orange` | `--services--orange-dark` | `--services--orange-light` |

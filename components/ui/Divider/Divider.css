@@ -1,0 +1,33 @@
+/* ─── Divider ────────────────────────────────────────────────── */
+
+.bds-divider {
+  border: none;
+  margin: 0;
+}
+
+/* ─── Horizontal (default) ───────────────────────────────────── */
+
+.bds-divider--horizontal {
+  width: 100%;
+  height: 0;
+  border-top: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Vertical ───────────────────────────────────────────────── */
+
+.bds-divider--vertical {
+  width: 0;
+  height: 100%;
+  align-self: stretch;
+  border-left: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Spacing ────────────────────────────────────────────────── */
+
+.bds-divider--horizontal.bds-divider--spacing-sm { margin-top: var(--padding-sm); margin-bottom: var(--padding-sm); }
+.bds-divider--horizontal.bds-divider--spacing-md { margin-top: var(--padding-md); margin-bottom: var(--padding-md); }
+.bds-divider--horizontal.bds-divider--spacing-lg { margin-top: var(--padding-lg); margin-bottom: var(--padding-lg); }
+
+.bds-divider--vertical.bds-divider--spacing-sm { margin-left: var(--padding-sm); margin-right: var(--padding-sm); }
+.bds-divider--vertical.bds-divider--spacing-md { margin-left: var(--padding-md); margin-right: var(--padding-md); }
+.bds-divider--vertical.bds-divider--spacing-lg { margin-left: var(--padding-lg); margin-right: var(--padding-lg); }

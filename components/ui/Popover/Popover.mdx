@@ -5,36 +5,25 @@ import * as Stories from './Popover.stories';
 
 # Popover
 
-Floating content panel anchored to a trigger element. Use for contextual menus, additional information, and inline editing surfaces.
+Floating content panel anchored to a trigger element. Supports click or hover triggering, four placements, and controlled/uncontrolled modes.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Placement
+<Canvas of={Stories.Playground} />
 
-### Bottom (default)
-Content appears below the trigger.
-<Canvas of={Stories.Default} />
+## Variants
 
-### Top
-Content appears above the trigger.
-<Canvas of={Stories.TopPlacement} />
+Placements (top, bottom, left, right) and trigger modes (click, hover).
 
-## Trigger modes
+<Canvas of={Stories.Variants} />
 
-### Click (default)
-Opens on click, closes on click outside.
-<Canvas of={Stories.Default} />
+## Patterns
 
-### Hover
-Opens on mouse enter, closes on mouse leave.
-<Canvas of={Stories.HoverTrigger} />
+Real-world usage: notification settings popover with form controls.
 
-## Rich content
-
-Supports any React content inside the popover panel.
-<Canvas of={Stories.RichContent} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 

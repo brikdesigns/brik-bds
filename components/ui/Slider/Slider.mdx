@@ -7,25 +7,29 @@ import * as Stories from './Slider.stories';
 
 Range input for selecting a numeric value by dragging. Use for volume controls, price filters, and any setting where approximate selection is acceptable.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Sizes
+<Canvas of={Stories.Playground} />
 
-Three track sizes for different layout contexts.
-<Canvas of={Stories.Sizes} />
+## Variants
 
-## Custom range
+Sizes, custom range, and disabled state.
 
-Set minimum, maximum, and step values.
-<Canvas of={Stories.CustomRange} />
+<Canvas of={Stories.Variants} />
 
-## States
+| Size | Track | Thumb | Use case |
+|------|-------|-------|----------|
+| **sm** | 4px | 16px | Compact settings |
+| **md** | 6px | 20px | Default |
+| **lg** | 8px | 24px | Prominent controls |
 
-### Disabled
-Prevent interaction while showing the current value.
-<Canvas of={Stories.Disabled} />
+## Patterns
+
+Real-world usage: audio settings panel and budget filter.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -40,15 +44,17 @@ import { useState } from 'react';
 const [value, setValue] = useState(50);
 
 // Basic slider
-<Slider value={value} onChange={setValue} />
+<Slider label="Volume" value={value} onChange={setValue} showValue />
 
 // Custom range with step
 <Slider
+  label="Price"
   value={value}
   onChange={setValue}
   min={0}
   max={1000}
   step={50}
   size="lg"
+  showValue
 />
 ```

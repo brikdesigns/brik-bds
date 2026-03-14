@@ -1,0 +1,20 @@
+/* MultiSelect — select dropdown with tag chips */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-multi-select {
+  width: 100%;
+}
+
+.bds-multi-select--auto-width {
+  width: auto;
+}
+
+/* ─── Tag container ───────────────────────────────────── */
+
+.bds-multi-select__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  margin-top: var(--gap-md);
+}

@@ -1,139 +1,135 @@
+import React from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Radio } from './Radio';
+
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'center' }}>{children}</div>
+);
+
+/* ─── Meta ────────────────────────────────────────────── */
 
 const meta = {
   title: 'Components/Form/radio',
   component: Radio,
-  parameters: {
-    layout: 'centered',
-  },
-  argTypes: {
-    label: {
-      control: 'text',
-      description: 'Label text for the radio button',
-    },
-    name: {
-      control: 'text',
-      description: 'Radio group name (required for grouping)',
-    },
-    value: {
-      control: 'text',
-      description: 'Value of this radio option',
-    },
-    checked: {
-      control: 'boolean',
-      description: 'Checked state (controlled)',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-  },
+  parameters: { layout: 'centered' },
 } satisfies Meta<typeof Radio>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default radio button
- */
-export const Default: Story = {
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
   args: {
     label: 'Option 1',
-    name: 'example',
+    name: 'playground',
     value: 'option1',
   },
 };
 
-/**
- * Checked radio button
- */
-export const Checked: Story = {
-  args: {
-    label: 'Selected option',
-    name: 'example',
-    value: 'selected',
-    checked: true,
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — States: default, checked, disabled
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Disabled radio button
- */
-export const Disabled: Story = {
-  args: {
-    label: 'Disabled option',
-    name: 'example',
-    value: 'disabled',
-    disabled: true,
-  },
-};
-
-/**
- * Disabled and checked
- */
-export const DisabledChecked: Story = {
-  args: {
-    label: 'Disabled but selected',
-    name: 'example',
-    value: 'disabled-selected',
-    disabled: true,
-    checked: true,
-  },
-};
-
-/**
- * Radio group - Plan selection
- */
-export const PlanSelection: Story = {
-  args: { label: 'Basic Plan - $9/month', name: 'plan', value: 'basic' },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Radio name="plan" value="basic" label="Basic Plan - $9/month" />
-<Radio name="plan" value="pro" label="Pro Plan - $29/month" defaultChecked />
-<Radio name="plan" value="enterprise" label="Enterprise - Custom pricing" />`,
-      },
-    },
-  },
+export const Variants: Story = {
+  args: { label: 'Option', name: 'variants', value: 'v' },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
-      <Radio name="plan" value="basic" label="Basic Plan - $9/month" />
-      <Radio name="plan" value="pro" label="Pro Plan - $29/month" defaultChecked />
-      <Radio name="plan" value="enterprise" label="Enterprise - Custom pricing" />
-    </div>
+    <Stack>
+      <div>
+        <SectionLabel>States</SectionLabel>
+        <Stack gap="var(--gap-md)">
+          <Radio name="states" value="default" label="Default" />
+          <Radio name="states" value="checked" label="Checked" defaultChecked />
+          <Radio name="states-disabled" value="disabled" label="Disabled" disabled />
+          <Radio name="states-disabled-checked" value="disabled-checked" label="Disabled checked" disabled checked />
+        </Stack>
+      </div>
+
+      <div>
+        <SectionLabel>Horizontal group</SectionLabel>
+        <Row gap="var(--gap-lg)">
+          <Radio name="horizontal" value="a" label="Option A" defaultChecked />
+          <Radio name="horizontal" value="b" label="Option B" />
+          <Radio name="horizontal" value="c" label="Option C" />
+        </Row>
+      </div>
+    </Stack>
   ),
 };
 
-/**
- * Radio group - Theme selection
- */
-export const ThemeSelection: Story = {
-  args: { label: 'Theme 1', name: 'theme', value: 'theme1' },
-  parameters: {
-    docs: {
-      source: {
-        code: `<Radio name="theme" value="theme1" label="Theme 1" />
-<Radio name="theme" value="theme2" label="Theme 2" />
-<Radio name="theme" value="theme3" label="Theme 3" defaultChecked />
-<Radio name="theme" value="theme4" label="Theme 4" />
-<Radio name="theme" value="theme5" label="Theme 5" />
-<Radio name="theme" value="theme6" label="Theme 6" />
-<Radio name="theme" value="theme7" label="Theme 7" />
-<Radio name="theme" value="theme8" label="Theme 8" />`,
-      },
-    },
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Plan selection + theme selection
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Patterns: Story = {
+  args: { label: 'Option', name: 'patterns', value: 'p' },
+  render: () => {
+    function RadioPatterns() {
+      const [plan, setPlan] = useState('pro');
+      const [theme, setTheme] = useState('theme3');
+
+      return (
+        <Stack>
+          <div>
+            <SectionLabel>Plan selection</SectionLabel>
+            <Stack gap="var(--gap-md)">
+              {[
+                { value: 'basic', label: 'Basic Plan - $9/month' },
+                { value: 'pro', label: 'Pro Plan - $29/month' },
+                { value: 'enterprise', label: 'Enterprise - Custom pricing' },
+              ].map((opt) => (
+                <Radio
+                  key={opt.value}
+                  name="plan"
+                  value={opt.value}
+                  label={opt.label}
+                  checked={plan === opt.value}
+                  onChange={(e) => setPlan(e.target.value)}
+                />
+              ))}
+            </Stack>
+          </div>
+
+          <div>
+            <SectionLabel>Theme selection</SectionLabel>
+            <Stack gap="var(--gap-md)">
+              {Array.from({ length: 8 }, (_, i) => `theme${i + 1}`).map((t) => (
+                <Radio
+                  key={t}
+                  name="theme"
+                  value={t}
+                  label={`Theme ${t.replace('theme', '')}`}
+                  checked={theme === t}
+                  onChange={(e) => setTheme(e.target.value)}
+                />
+              ))}
+            </Stack>
+          </div>
+        </Stack>
+      );
+    }
+    return <RadioPatterns />;
   },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
-      <Radio name="theme" value="theme1" label="Theme 1" />
-      <Radio name="theme" value="theme2" label="Theme 2" />
-      <Radio name="theme" value="theme3" label="Theme 3" defaultChecked />
-      <Radio name="theme" value="theme4" label="Theme 4" />
-      <Radio name="theme" value="theme5" label="Theme 5" />
-      <Radio name="theme" value="theme6" label="Theme 6" />
-      <Radio name="theme" value="theme7" label="Theme 7" />
-      <Radio name="theme" value="theme8" label="Theme 8" />
-    </div>
-  ),
 };

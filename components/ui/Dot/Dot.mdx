@@ -5,51 +5,34 @@ import * as Stories from './Dot.stories';
 
 # Dot
 
-Small status indicator circles that communicate state through color. Available in multiple status variants and sizes for different contexts.
+Small status indicator circles that communicate state through color. Available in six status variants and three sizes.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Status Variants
+<Canvas of={Stories.Playground} />
 
-### Positive
-<Canvas of={Stories.Positive} />
+## Variants
 
-### Warning
-<Canvas of={Stories.Warning} />
+All statuses and sizes in one view.
 
-### Error
-<Canvas of={Stories.Error} />
+<Canvas of={Stories.Variants} />
 
-### Info
-<Canvas of={Stories.Info} />
+| Status | Color | Use for |
+|--------|-------|---------|
+| **default** | Brand primary | General-purpose indicator |
+| **positive** | Green | Online, success, operational |
+| **warning** | Yellow | Away, attention needed |
+| **error** | Red | Offline, failure, outage |
+| **info** | Blue | Informational, in-progress |
+| **neutral** | Gray | Inactive, disabled |
 
-### Neutral
-<Canvas of={Stories.Neutral} />
+## Patterns
 
-### All Statuses
-Visual comparison of all status colors.
-<Canvas of={Stories.AllStatuses} />
+Real-world compositions: status lists and activity feeds.
 
-## Sizes
-
-Three size options for different contexts: small (8px), medium (12px), and large (16px).
-<Canvas of={Stories.AllSizes} />
-
-## Usage Examples
-
-### Online Status
-Combine with text labels to show user presence states.
-<Canvas of={Stories.OnlineStatus} />
-
-### List Items
-Use in status lists to indicate operational states.
-<Canvas of={Stories.ListItems} />
-
-### Activity Feed
-Display status indicators alongside event descriptions.
-<Canvas of={Stories.ActivityFeed} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -65,8 +48,7 @@ import { Dot } from '@brik/bds';
 
 // Different sizes
 <Dot size="sm" status="warning" />
-<Dot size="md" status="error" />
-<Dot size="lg" status="info" />
+<Dot size="lg" status="error" />
 
 // With label
 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -74,8 +56,3 @@ import { Dot } from '@brik/bds';
   <span>Online</span>
 </div>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

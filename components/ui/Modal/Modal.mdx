@@ -5,41 +5,33 @@ import * as Stories from './Modal.stories';
 
 # Modal
 
-Dialog overlay component with multiple size variants and configurable close behavior. Use for focused tasks, confirmations, and forms that require user attention.
+Portal-rendered dialog overlay with backdrop, escape key, and scroll lock. Use for focused tasks, confirmations, and forms.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Basic} />
+Use the Controls panel to explore all props interactively.
 
-## Sizes
+<Canvas of={Stories.Playground} />
 
-### Small
-Compact modal for simple messages or confirmations.
-<Canvas of={Stories.Small} />
+## Variants
 
-### Large
-Extended space for complex content or longer forms.
-<Canvas of={Stories.Large} />
+Size variants, scrolling content, and no close button.
 
-## Features
+<Canvas of={Stories.Variants} />
 
-### Confirmation Dialog
-Footer with ghost Cancel and primary action button.
-<Canvas of={Stories.ConfirmDelete} />
+| Size | Description |
+|------|-------------|
+| **sm** | Compact — simple messages |
+| **md** | Default — standard dialogs |
+| **lg** | Extended — complex content |
+| **xl** | Extra large — data-heavy views |
+| **full** | Full screen |
 
-### Scrolling Content
-Content automatically scrolls when it exceeds maximum height.
-<Canvas of={Stories.ScrollingContent} />
+## Patterns
 
-### No Close Button
-Hide the header close button when explicit action is required.
-<Canvas of={Stories.NoCloseButton} />
+Confirm delete and form in modal.
 
-## Usage Examples
-
-### Form in Modal
-Complete form with labels, inputs, and action buttons.
-<Canvas of={Stories.FormExample} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -48,27 +40,23 @@ Complete form with labels, inputs, and action buttons.
 ## Usage
 
 ```tsx
-import { Modal } from '@brik/bds';
-import { Button } from '@brik/bds';
+import { Modal, Button } from '@brik/bds';
 import { useState } from 'react';
 
 const [isOpen, setIsOpen] = useState(false);
 
-<>
-  <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-
-  <Modal
-    isOpen={isOpen}
-    onClose={() => setIsOpen(false)}
-    title="Title Goes Here"
-    footer={
-      <>
-        <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
-        <Button variant="primary" onClick={handleSave}>Save</Button>
-      </>
-    }
-  >
-    <p>Description goes here</p>
-  </Modal>
-</>
+<Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+<Modal
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Title"
+  footer={
+    <>
+      <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+      <Button variant="primary" onClick={handleSave}>Save</Button>
+    </>
+  }
+>
+  <p>Content here</p>
+</Modal>
 ```

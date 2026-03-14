@@ -7,27 +7,23 @@ import * as Stories from './EmptyState.stories';
 
 Placeholder for screens with no data. Use when a list, table, or page has no content to display, guiding users toward their next action.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Variations
+<Canvas of={Stories.Playground} />
 
-### Without button
-Informational empty state with no call to action.
-<Canvas of={Stories.WithoutButton} />
+## Variants
 
-### Without description
-Title and action only, for simple empty contexts.
-<Canvas of={Stories.WithoutDescription} />
+With button, without button, title-only, and custom content configurations.
 
-### Title only
-Minimal variant when no further guidance is needed.
-<Canvas of={Stories.TitleOnly} />
+<Canvas of={Stories.Variants} />
 
-### Custom content
-Replace default layout with fully custom content.
-<Canvas of={Stories.CustomContent} />
+## Patterns
+
+Real-world usage: inbox zero, first-time user, and search with no results.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -38,12 +34,11 @@ Replace default layout with fully custom content.
 ```tsx
 import { EmptyState } from '@brik/bds';
 
-// Full empty state
+// With action button
 <EmptyState
-  title="No companies yet"
-  description="Add your first company to get started."
-  buttonLabel="Add company"
-  onAction={handleAdd}
+  title="No projects yet"
+  description="Create your first project to get started."
+  buttonProps={{ children: 'Create Project', onClick: handleCreate }}
 />
 
 // Informational only

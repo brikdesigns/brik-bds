@@ -1,7 +1,8 @@
-import { type HTMLAttributes, type CSSProperties, useCallback } from 'react';
+import { type HTMLAttributes, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
+import './Pagination.css';
 
 /**
  * Pagination alignment
@@ -25,114 +26,6 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onCh
 }
 
 /**
- * Container styles
- */
-const containerStyles: CSSProperties = {
-  display: 'flex',
-  width: '100%',
-  padding: 'var(--padding-lg) 0',
-  boxSizing: 'border-box',
-};
-
-/**
- * Position-based alignment
- */
-const positionMap: Record<PaginationPosition, CSSProperties['justifyContent']> = {
-  left: 'flex-start',
-  center: 'center',
-  right: 'flex-end',
-};
-
-/**
- * Pagination wrapper (items row)
- *
- * Token reference:
- * - --gap-lg = 16px (gap between items)
- */
-const wrapperStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 'var(--gap-lg)',
-};
-
-/**
- * Arrow button styles
- *
- * Token reference:
- * - --background-brand-primary (brand blue)
- * - --text-on-color-dark (white icon on brand bg)
- */
-const arrowStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '48px',
-  height: '48px',
-  borderRadius: 'var(--border-radius-pill)',
-  backgroundColor: 'var(--background-brand-primary)',
-  color: 'var(--text-on-color-dark)',
-  border: 'none',
-  cursor: 'pointer',
-  fontSize: 'var(--icon-lg)',
-  flexShrink: 0,
-};
-
-/**
- * Disabled arrow styles
- */
-const arrowDisabledStyles: CSSProperties = {
-  ...arrowStyles,
-  opacity: 0.4,
-  cursor: 'not-allowed',
-};
-
-/**
- * Page number styles (inactive)
- *
- * Token reference:
- * - --font-family-label (label font)
- * - --label-sm = 14px
- * - --font-weight-semi-bold = 600
- * - --font-line-height-tight
- * - --text-muted (inactive gray)
- * - --padding-sm = 12px (horizontal padding)
- */
-const pageStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-sm)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  color: 'var(--text-muted)',
-  padding: 'var(--padding-sm)',
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer',
-  minWidth: '24px',
-  textAlign: 'center',
-};
-
-/**
- * Active page number styles
- *
- * Token reference:
- * - --text-brand-primary (brand blue for active page)
- */
-const activePageStyles: CSSProperties = {
-  ...pageStyles,
-  color: 'var(--text-brand-primary)',
-  cursor: 'default',
-};
-
-/**
- * Ellipsis styles
- */
-const ellipsisStyles: CSSProperties = {
-  ...pageStyles,
-  cursor: 'default',
-  color: 'var(--text-muted)',
-};
-
-/**
  * Generate page numbers with ellipsis
  */
 function getPageNumbers(
@@ -140,7 +33,7 @@ function getPageNumbers(
   totalPages: number,
   siblingCount: number,
 ): (number | 'ellipsis-start' | 'ellipsis-end')[] {
-  const totalSlots = siblingCount * 2 + 5; // first + last + current + 2 siblings + 2 ellipsis
+  const totalSlots = siblingCount * 2 + 5;
 
   if (totalPages <= totalSlots) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -219,27 +112,20 @@ export function Pagination({
 
   const pages = getPageNumbers(currentPage, totalPages, siblingCount);
 
-  const combinedStyles: CSSProperties = {
-    ...containerStyles,
-    justifyContent: positionMap[position],
-    ...style,
-  };
-
   return (
     <nav
       aria-label="Pagination"
-      className={bdsClass('bds-pagination', className)}
-      style={combinedStyles}
+      className={bdsClass('bds-pagination', `bds-pagination--${position}`, className)}
+      style={style}
       {...props}
     >
-      <div style={wrapperStyles}>
+      <div className="bds-pagination__items">
         <button
           type="button"
-          className="bds-pagination-prev"
+          className={bdsClass('bds-pagination__arrow', currentPage <= 1 && 'bds-pagination__arrow--disabled')}
           aria-label="Previous page"
           onClick={handlePrev}
           disabled={currentPage <= 1}
-          style={currentPage <= 1 ? arrowDisabledStyles : arrowStyles}
         >
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
@@ -247,7 +133,7 @@ export function Pagination({
         {pages.map((item) => {
           if (typeof item === 'string') {
             return (
-              <span key={item} style={ellipsisStyles} aria-hidden>
+              <span key={item} className="bds-pagination__ellipsis" aria-hidden>
                 &hellip;
               </span>
             );
@@ -261,7 +147,7 @@ export function Pagination({
               aria-label={`Page ${item}`}
               aria-current={isActive ? 'page' : undefined}
               onClick={() => onChange(item)}
-              style={isActive ? activePageStyles : pageStyles}
+              className={bdsClass('bds-pagination__page', isActive && 'bds-pagination__page--active')}
             >
               {item}
             </button>
@@ -270,11 +156,10 @@ export function Pagination({
 
         <button
           type="button"
-          className="bds-pagination-next"
+          className={bdsClass('bds-pagination__arrow', currentPage >= totalPages && 'bds-pagination__arrow--disabled')}
           aria-label="Next page"
           onClick={handleNext}
           disabled={currentPage >= totalPages}
-          style={currentPage >= totalPages ? arrowDisabledStyles : arrowStyles}
         >
           <FontAwesomeIcon icon={faChevronRight} />
         </button>

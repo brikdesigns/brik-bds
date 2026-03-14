@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCircleExclamation, faSpinner, faCircleInfo, faCircleXmark, faTriangleExclamation, faCircle, faRotate } from '@fortawesome/free-solid-svg-icons';
 import { Badge } from './Badge';
 
+/* ─── Meta ────────────────────────────────────────────────────── */
+
 const meta: Meta<typeof Badge> = {
   title: 'Components/Indicator/badge',
   component: Badge,
@@ -13,12 +15,10 @@ const meta: Meta<typeof Badge> = {
     status: {
       control: 'select',
       options: ['default', 'positive', 'warning', 'error', 'info', 'progress', 'neutral'],
-      description: 'Status variant',
     },
     size: {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Size variant',
     },
   },
 };
@@ -26,275 +26,124 @@ const meta: Meta<typeof Badge> = {
 export default meta;
 type Story = StoryObj<typeof Badge>;
 
-// Status variants
-export const Default: Story = {
-  args: {
-    children: 'New',
-  },
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Playground: Story = {
+  args: { children: 'New', status: 'default', size: 'md' },
 };
 
-export const Positive: Story = {
-  args: {
-    status: 'positive',
-    children: 'Success',
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — All statuses × all sizes
+   ═══════════════════════════════════════════════════════════════ */
 
-export const Warning: Story = {
-  args: {
-    status: 'warning',
-    children: 'Pending',
-  },
-};
-
-export const Error: Story = {
-  args: {
-    status: 'error',
-    children: 'Failed',
-  },
-};
-
-export const Info: Story = {
-  args: {
-    status: 'info',
-    children: 'Info',
-  },
-};
-
-export const Progress: Story = {
-  args: {
-    status: 'progress',
-    children: 'In Progress',
-  },
-};
-
-export const Neutral: Story = {
-  args: {
-    status: 'neutral',
-    children: 'Inactive',
-  },
-};
-
-// Size variants
-export const SizeSmall: Story = {
-  args: {
-    children: 'Small',
-    size: 'sm',
-  },
-};
-
-export const SizeMedium: Story = {
-  args: {
-    children: 'Medium',
-    size: 'md',
-  },
-};
-
-export const SizeLarge: Story = {
-  args: {
-    children: 'Large',
-    size: 'lg',
-  },
-};
-
-// All status variants
-export const AllStatuses: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Badge>Default</Badge>
-<Badge status="positive">Success</Badge>
-<Badge status="warning">Warning</Badge>
-<Badge status="error">Error</Badge>
-<Badge status="info">Info</Badge>
-<Badge status="progress">Progress</Badge>
-<Badge status="neutral">Neutral</Badge>`,
-      },
-    },
-  },
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Badge>Default</Badge>
-      <Badge status="positive">Success</Badge>
-      <Badge status="warning">Warning</Badge>
-      <Badge status="error">Error</Badge>
-      <Badge status="info">Info</Badge>
-      <Badge status="progress">Progress</Badge>
-      <Badge status="neutral">Neutral</Badge>
-    </div>
-  ),
-};
-
-// All sizes
-export const AllSizes: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
-<Badge size="sm">Small</Badge>
-<Badge size="md">Medium</Badge>
-<Badge size="lg">Large</Badge>`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
-      <Badge size="sm">Small</Badge>
-      <Badge size="md">Medium</Badge>
-      <Badge size="lg">Large</Badge>
-    </div>
-  ),
-};
-
-// With FA icons
-export const WithIcons: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Success</Badge>
-<Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Error</Badge>
-<Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>Loading</Badge>
-<Badge status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Info</Badge>`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Success</Badge>
-      <Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Error</Badge>
-      <Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>Loading</Badge>
-      <Badge status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Info</Badge>
-    </div>
-  ),
-};
-
-// Icon-only (xs) badges
-export const IconOnly: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
-<Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
-<Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
-<Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
-<Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
-<Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
-      <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
-      <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
-      <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
-      <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
-      <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
-      <Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />
-    </div>
-  ),
-};
-
-// Size × Status matrix
-export const SizeStatusMatrix: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
-<Badge size="sm">Default</Badge>
-<Badge size="md">Default</Badge>
-<Badge size="lg">Default</Badge>`,
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <span style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--body-xs)',
-          color: 'var(--text-muted)',
-          width: '32px',
-        }}>
-          xs
-        </span>
-        <Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
-        <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
-        <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
-        <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
-        <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
-        <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
-        <Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />
+    <Stack>
+      {/* xs row — icon only */}
+      <div>
+        <SectionLabel>xs (icon only)</SectionLabel>
+        <Row>
+          <Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
+          <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
+          <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
+          <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
+          <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
+          <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
+          <Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />
+        </Row>
       </div>
+      {/* sm, md, lg rows — text labels */}
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-          <span style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-xs)',
-            color: 'var(--text-muted)',
-            width: '32px',
-          }}>
-            {size}
-          </span>
-          <Badge size={size}>Default</Badge>
-          <Badge size={size} status="positive">Positive</Badge>
-          <Badge size={size} status="warning">Warning</Badge>
-          <Badge size={size} status="error">Error</Badge>
-          <Badge size={size} status="info">Info</Badge>
-          <Badge size={size} status="progress">Progress</Badge>
-          <Badge size={size} status="neutral">Neutral</Badge>
+        <div key={size}>
+          <SectionLabel>{size}</SectionLabel>
+          <Row>
+            <Badge size={size}>Default</Badge>
+            <Badge size={size} status="positive">Positive</Badge>
+            <Badge size={size} status="warning">Warning</Badge>
+            <Badge size={size} status="error">Error</Badge>
+            <Badge size={size} status="info">Info</Badge>
+            <Badge size={size} status="progress">Progress</Badge>
+            <Badge size={size} status="neutral">Neutral</Badge>
+          </Row>
         </div>
       ))}
-    </div>
+    </Stack>
   ),
 };
 
-// Contextual examples
-export const StatusIndicators: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Badge status="positive">Published</Badge>
-<Badge status="progress">In Review</Badge>
-<Badge status="warning">Draft</Badge>
-<Badge status="error">Archived</Badge>
-<Badge status="neutral">Inactive</Badge>`,
-      },
-    },
-  },
+/* ═══════════════════════════════════════════════════════════════
+   3. ICONS — Badges with leading icons
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Icons: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Badge status="positive">Published</Badge>
-        <span style={{ fontFamily: 'var(--font-family-body)' }}>
-          Article is live and visible
-        </span>
+    <Stack>
+      <div>
+        <SectionLabel>With icons</SectionLabel>
+        <Row>
+          <Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Success</Badge>
+          <Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Error</Badge>
+          <Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>Loading</Badge>
+          <Badge status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Info</Badge>
+          <Badge status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />}>Warning</Badge>
+        </Row>
       </div>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Badge status="progress">In Review</Badge>
-        <span style={{ fontFamily: 'var(--font-family-body)' }}>
-          Being reviewed by editor
-        </span>
+    </Stack>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   4. PATTERNS — Real-world usage
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Patterns: Story = {
+  name: 'Patterns',
+  render: () => (
+    <Stack>
+      <div>
+        <SectionLabel>Content status</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          {([
+            { status: 'positive' as const, label: 'Published', desc: 'Article is live and visible' },
+            { status: 'progress' as const, label: 'In Review', desc: 'Being reviewed by editor' },
+            { status: 'warning' as const, label: 'Draft', desc: 'Saved but not published' },
+            { status: 'error' as const, label: 'Archived', desc: 'Has been removed' },
+            { status: 'neutral' as const, label: 'Inactive', desc: 'Currently disabled' },
+          ]).map(({ status, label, desc }) => (
+            <div key={status} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
+              <Badge status={status}>{label}</Badge>
+              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+                {desc}
+              </span>
+            </div>
+          ))}
+        </Stack>
       </div>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Badge status="warning">Draft</Badge>
-        <span style={{ fontFamily: 'var(--font-family-body)' }}>
-          Saved but not published
-        </span>
-      </div>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Badge status="error">Archived</Badge>
-        <span style={{ fontFamily: 'var(--font-family-body)' }}>
-          Has been removed
-        </span>
-      </div>
-      <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-        <Badge status="neutral">Inactive</Badge>
-        <span style={{ fontFamily: 'var(--font-family-body)' }}>
-          Currently disabled
-        </span>
-      </div>
-    </div>
+    </Stack>
   ),
 };

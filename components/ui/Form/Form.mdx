@@ -5,36 +5,36 @@ import * as Stories from './Form.stories';
 
 # Form
 
-Structured form container with layout control and submission handling. Use to wrap form fields with consistent spacing, error display, and submit actions.
+Structured form container with layout control, error/success messaging, and consistent spacing. Wraps form fields with title, description, and footer actions.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Layout
+<Canvas of={Stories.Playground} />
 
-### Vertical (default)
-Fields stack vertically. The standard form layout.
-<Canvas of={Stories.Default} />
+## Variants
 
-### Horizontal
-Labels and fields side by side for compact forms.
-<Canvas of={Stories.HorizontalLayout} />
+Error state, success state, and horizontal layout.
 
-## States
+<Canvas of={Stories.Variants} />
 
-### With error
-Display form-level error messages.
-<Canvas of={Stories.WithError} />
+| Layout | Description |
+|--------|-------------|
+| **vertical** | Fields stack vertically — default |
+| **horizontal** | Fields side by side for compact forms |
 
-### With success
-Show confirmation after successful submission.
-<Canvas of={Stories.WithSuccess} />
+| Gap | Token | Value |
+|-----|-------|-------|
+| **sm** | `--gap-md` | 8px |
+| **md** | `--gap-lg` | 16px |
+| **lg** | `--gap-xl` | 24px |
 
-## Interactive form
+## Patterns
 
-Full working example with validation and submission.
-<Canvas of={Stories.InteractiveForm} />
+Real-world usage: interactive feedback form with validation and submission.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -43,22 +43,16 @@ Full working example with validation and submission.
 ## Usage
 
 ```tsx
-import { Form } from '@brik/bds';
-import { TextInput } from '@brik/bds';
-import { Button } from '@brik/bds';
+import { Form, TextInput, TextArea, Button } from '@brik/bds';
 
 <Form
   title="Contact Us"
+  description="We'll get back to you within 24 hours."
   onSubmit={handleSubmit}
-  submitLabel="Send message"
+  footer={<Button type="submit">Send Message</Button>}
 >
-  <TextInput label="Name" required />
-  <TextInput label="Email" type="email" required />
-</Form>
-
-// Horizontal layout
-<Form layout="horizontal" onSubmit={handleSubmit}>
-  <TextInput label="Search" />
-  <Button type="submit">Go</Button>
+  <TextInput label="Name" placeholder="Your name" fullWidth />
+  <TextInput label="Email" type="email" placeholder="you@example.com" fullWidth />
+  <TextArea label="Message" placeholder="How can we help?" fullWidth />
 </Form>
 ```

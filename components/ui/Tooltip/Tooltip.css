@@ -1,0 +1,101 @@
+/* Tooltip — contextual information on hover/focus */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* ─── Tooltip bubble ──────────────────────────────────── */
+
+.bds-tooltip__bubble {
+  position: absolute;
+  padding: var(--padding-sm) var(--padding-lg);
+  background-color: var(--color-grayscale-darkest); /* bds-lint-ignore — no semantic tooltip-bg token */
+  color: var(--text-inverse);
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  line-height: var(--font-line-height-normal);
+  border-radius: var(--border-radius-sm);
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.bds-tooltip__bubble--visible {
+  opacity: 1;
+}
+
+/* ─── Placement modifiers ─────────────────────────────── */
+
+.bds-tooltip__bubble--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--padding-md);
+}
+
+.bds-tooltip__bubble--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: var(--padding-md);
+}
+
+.bds-tooltip__bubble--left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: var(--padding-md);
+}
+
+.bds-tooltip__bubble--right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: var(--padding-md);
+}
+
+/* ─── Arrow ───────────────────────────────────────────── */
+
+.bds-tooltip__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px; /* bds-lint-ignore — CSS triangle size, not a visual border */
+  border-color: transparent;
+}
+
+/* Arrow direction per placement */
+
+.bds-tooltip__arrow--top {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--color-grayscale-darkest); /* bds-lint-ignore */
+}
+
+.bds-tooltip__arrow--bottom {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--color-grayscale-darkest); /* bds-lint-ignore */
+}
+
+.bds-tooltip__arrow--left {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--color-grayscale-darkest); /* bds-lint-ignore */
+}
+
+.bds-tooltip__arrow--right {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--color-grayscale-darkest); /* bds-lint-ignore */
+}

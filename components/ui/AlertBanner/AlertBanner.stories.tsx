@@ -5,24 +5,34 @@ import { Button } from '../Button';
 const meta: Meta<typeof AlertBanner> = {
   title: 'Components/Feedback/alert-banner',
   component: AlertBanner,
-  parameters: {
-    layout: 'padded',
-  },
+  parameters: { layout: 'padded' },
   argTypes: {
-    title: { control: 'text', description: 'Bold title text' },
-    description: { control: 'text', description: 'Description text' },
-    variant: {
-      control: 'radio',
-      options: ['warning', 'error', 'information'],
-      description: 'Alert variant — determines badge color and icon',
-    },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    variant: { control: 'radio', options: ['warning', 'error', 'information'] },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof AlertBanner>;
 
-export const Default: Story = {
+/* ─── Layout helpers ─────────────────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+    {children}
+  </span>
+);
+
+const Stack = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%' }}>
+    {children}
+  </div>
+);
+
+/* ─── Playground ─────────────────────────────────────────────── */
+
+export const Playground: Story = {
   args: {
     title: 'Title goes here',
     description: 'Description goes here',
@@ -31,55 +41,72 @@ export const Default: Story = {
   },
 };
 
-export const Information: Story = {
-  args: {
-    variant: 'information',
-    title: 'New update available',
-    description: 'Version 2.1 includes performance improvements and bug fixes',
-    action: <Button variant="primary" size="sm">Update</Button>,
-  },
-};
+/* ─── Variants ───────────────────────────────────────────────── */
 
-export const Warning: Story = {
-  args: {
-    variant: 'warning',
-    title: 'Storage almost full',
-    description: 'You have used 90% of your available storage',
-    action: <Button variant="primary" size="sm">Manage storage</Button>,
-  },
-};
-
-export const Error: Story = {
-  args: {
-    variant: 'error',
-    title: 'Connection failed',
-    description: 'Unable to reach the server. Please check your internet connection.',
-    action: <Button variant="primary" size="sm">Retry</Button>,
-  },
-};
-
-export const TitleOnly: Story = {
-  args: {
-    variant: 'information',
-    title: 'Your session will expire in 5 minutes',
-  },
-};
-
-export const AllVariants: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<AlertBanner variant="information" title="Information" description="Informational message" />
-<AlertBanner variant="warning" title="Warning" description="Warning message" />
-<AlertBanner variant="error" title="Error" description="Error message" />`,
-      },
-    },
-  },
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-      <AlertBanner variant="information" title="Information" description="Informational message for the user" />
-      <AlertBanner variant="warning" title="Warning" description="Something needs your attention" />
-      <AlertBanner variant="error" title="Error" description="Something went wrong, please try again" />
-    </div>
+    <Stack>
+      <SectionLabel>Information</SectionLabel>
+      <AlertBanner
+        variant="information"
+        title="New update available"
+        description="Version 2.1 includes performance improvements and bug fixes"
+        action={<Button variant="primary" size="sm">Update</Button>}
+      />
+
+      <SectionLabel>Warning</SectionLabel>
+      <AlertBanner
+        variant="warning"
+        title="Storage almost full"
+        description="You have used 90% of your available storage"
+        action={<Button variant="primary" size="sm">Manage storage</Button>}
+      />
+
+      <SectionLabel>Error</SectionLabel>
+      <AlertBanner
+        variant="error"
+        title="Connection failed"
+        description="Unable to reach the server. Please check your internet connection."
+        action={<Button variant="primary" size="sm">Retry</Button>}
+      />
+
+      <SectionLabel>Title only</SectionLabel>
+      <AlertBanner
+        variant="information"
+        title="Your session will expire in 5 minutes"
+      />
+    </Stack>
+  ),
+};
+
+/* ─── Patterns ───────────────────────────────────────────────── */
+
+export const Patterns: Story = {
+  name: 'Patterns',
+  render: () => (
+    <Stack>
+      <SectionLabel>System maintenance notice</SectionLabel>
+      <AlertBanner
+        variant="warning"
+        title="Scheduled maintenance"
+        description="The system will be unavailable on Saturday from 2:00 AM to 4:00 AM EST."
+      />
+
+      <SectionLabel>Error with retry action</SectionLabel>
+      <AlertBanner
+        variant="error"
+        title="Payment failed"
+        description="Your payment method was declined. Please update your billing information."
+        action={<Button variant="primary" size="sm">Update payment</Button>}
+      />
+
+      <SectionLabel>Informational with learn more</SectionLabel>
+      <AlertBanner
+        variant="information"
+        title="New permissions model"
+        description="We've updated how roles and permissions work. Your existing settings have been preserved."
+        action={<Button variant="outline" size="sm">Learn more</Button>}
+      />
+    </Stack>
   ),
 };

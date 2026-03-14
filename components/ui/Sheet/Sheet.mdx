@@ -7,33 +7,29 @@ import * as Stories from './Sheet.stories';
 
 Sliding panel overlay anchored to a screen edge. Use for detail views, forms, and secondary content that shouldn't replace the current page.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Sides
+<Canvas of={Stories.Playground} />
 
-### Right (default)
-Slides in from the right edge.
-<Canvas of={Stories.Default} />
+## Variants
 
-### Left
-Slides in from the left edge.
-<Canvas of={Stories.LeftSide} />
+Right, left, bottom, wide, and no-title configurations.
 
-### Bottom
-Slides up from the bottom for mobile-friendly layouts.
-<Canvas of={Stories.BottomSheet} />
+<Canvas of={Stories.Variants} />
 
-## Variations
+| Side | Description |
+|------|-------------|
+| **right** | Default — slides from right edge |
+| **left** | Navigation or sidebar panels |
+| **bottom** | Mobile-friendly bottom sheet |
 
-### Wide sheet
-Increase the panel width for content-heavy views.
-<Canvas of={Stories.WideSheet} />
+## Patterns
 
-### Without title
-Omit the header for custom layouts.
-<Canvas of={Stories.NoTitle} />
+Detail panel with actions and mobile bottom sheet.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -47,22 +43,11 @@ import { useState } from 'react';
 
 const [isOpen, setIsOpen] = useState(false);
 
-// Right-side detail panel
 <Sheet
   isOpen={isOpen}
   onClose={() => setIsOpen(false)}
   title="Company details"
 >
   <p>Detail content here...</p>
-</Sheet>
-
-// Bottom sheet
-<Sheet
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  side="bottom"
-  title="Filters"
->
-  <p>Filter controls here...</p>
 </Sheet>
 ```

@@ -4,162 +4,86 @@ import { Spinner } from './Spinner';
 const meta: Meta<typeof Spinner> = {
   title: 'Components/Indicator/spinner',
   component: Spinner,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['sm', 'lg'],
-      description: 'Size variant',
-    },
+    size: { control: 'select', options: ['sm', 'lg'] },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Spinner>;
 
-// Size variants
-export const Small: Story = {
-  args: {
-    size: 'sm',
-  },
+/* ─── Layout helpers ─────────────────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+    {children}
+  </span>
+);
+
+const Stack = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', alignItems: 'center' }}>
+    {children}
+  </div>
+);
+
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', gap: 'var(--gap-huge)', alignItems: 'center' }}>
+    {children}
+  </div>
+);
+
+/* ─── Playground ─────────────────────────────────────────────── */
+
+export const Playground: Story = {
+  args: { size: 'sm' },
 };
 
-export const Large: Story = {
-  args: {
-    size: 'lg',
-  },
-};
+/* ─── Variants ───────────────────────────────────────────────── */
 
-// All sizes
-export const AllSizes: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Spinner size="sm" />
-<Spinner size="lg" />`,
-      },
-    },
-  },
+export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-huge)', alignItems: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
-        <Spinner size="sm" />
-        <span style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--label-sm)',
-          color: 'var(--text-secondary)',
-        }}>
-          Small (16px)
-        </span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
-        <Spinner size="lg" />
-        <span style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--label-sm)',
-          color: 'var(--text-secondary)',
-        }}>
-          Large (48px)
-        </span>
-      </div>
-    </div>
+    <Stack>
+      <SectionLabel>Sizes</SectionLabel>
+      <Row>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
+          <Spinner size="sm" />
+          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-secondary)' }}>Small (16px)</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-md)' }}>
+          <Spinner size="lg" />
+          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-secondary)' }}>Large (48px)</span>
+        </div>
+      </Row>
+    </Stack>
   ),
 };
 
-// Contextual examples
-export const InButton: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<button disabled>
-  <Spinner size="sm" />
-  Loading...
-</button>`,
-      },
-    },
-  },
-  render: () => (
-    <button
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 'var(--gap-md)',
-        padding: 'var(--padding-sm) var(--padding-lg)',
-        backgroundColor: 'var(--background-brand-primary)',
-        color: 'var(--text-inverse)',
-        border: 'none',
-        borderRadius: 'var(--border-radius-md)',
-        fontFamily: 'var(--font-family-label)',
-        fontSize: 'var(--label-md)',
-        fontWeight: 'var(--font-weight-semi-bold)',
-        cursor: 'wait',
-      }}
-      disabled
-    >
-      <Spinner size="sm" style={{ borderColor: 'rgba(255,255,255,0.3)', borderTopColor: 'white' }} />
-      Loading...
-    </button>
-  ),
-};
+/* ─── Patterns ───────────────────────────────────────────────── */
 
-export const CenteredInContainer: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<div className="loading-container">
-  <Spinner size="lg" />
-</div>`,
-      },
-    },
-  },
+export const Patterns: Story = {
+  name: 'Patterns',
   render: () => (
-    <div
-      style={{
-        width: '400px',
-        height: '200px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'var(--background-secondary)',
-        borderRadius: 'var(--border-radius-md)',
-      }}
-    >
-      <Spinner size="lg" />
-    </div>
-  ),
-};
-
-export const WithText: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Spinner size="lg" />
-<p>Loading your content...</p>`,
-      },
-    },
-  },
-  render: () => (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 'var(--gap-lg)',
-      }}
-    >
-      <Spinner size="lg" />
-      <p
-        style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-md)',
-          color: 'var(--text-secondary)',
-          margin: 0,
-        }}
+    <Stack>
+      <SectionLabel>Loading button</SectionLabel>
+      <button
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--gap-md)', padding: 'var(--padding-sm) var(--padding-lg)', backgroundColor: 'var(--background-brand-primary)', color: 'var(--text-inverse)', border: 'none', borderRadius: 'var(--border-radius-md)', fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-md)', cursor: 'wait' }}
+        disabled
       >
-        Loading your content...
-      </p>
-    </div>
+        <Spinner size="sm" style={{ borderColor: 'rgba(255,255,255,0.3)', borderTopColor: 'white' }} />
+        Loading...
+      </button>
+
+      <SectionLabel>Centered in container</SectionLabel>
+      <div style={{ width: '400px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--background-secondary)', borderRadius: 'var(--border-radius-md)' }}>
+        <Spinner size="lg" />
+      </div>
+
+      <SectionLabel>With loading text</SectionLabel>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-lg)' }}>
+        <Spinner size="lg" />
+        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-secondary)', margin: 0 }}>Loading your content...</p>
+      </div>
+    </Stack>
   ),
 };

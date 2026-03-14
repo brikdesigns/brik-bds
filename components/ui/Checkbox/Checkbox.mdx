@@ -5,35 +5,32 @@ import * as Stories from './Checkbox.stories';
 
 # Checkbox
 
-Binary selection control for independent options. Users can select multiple checkboxes from a group.
+Themed checkbox with label text for boolean selections. Supports controlled and uncontrolled modes.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Checked State
+<Canvas of={Stories.Playground} />
 
-Checkbox in the checked state.
+## Variants
 
-<Canvas of={Stories.Checked} />
+States and group layout.
 
-## Disabled State
+<Canvas of={Stories.Variants} />
 
-Disabled checkboxes prevent user interaction.
+| State | Description |
+|-------|-------------|
+| **Unchecked** | Default state |
+| **Checked** | Selected via `checked` or `defaultChecked` |
+| **Disabled** | Reduced opacity, no interaction |
+| **Disabled checked** | Locked in checked state |
 
-<Canvas of={Stories.Disabled} />
+## Patterns
 
-## Disabled and Checked
+Real-world usage: notification preferences and terms acceptance.
 
-Checkboxes can be both disabled and checked.
-
-<Canvas of={Stories.DisabledChecked} />
-
-## Checkbox Group
-
-Multiple checkboxes allow independent selections.
-
-<Canvas of={Stories.Group} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -44,31 +41,13 @@ Multiple checkboxes allow independent selections.
 ```tsx
 import { Checkbox } from '@brik/bds';
 
-// Basic checkbox
-<Checkbox label="Accept terms and conditions" />
+// Uncontrolled
+<Checkbox label="Accept terms" defaultChecked />
 
-// Controlled checkbox
+// Controlled
 <Checkbox
-  label="Subscribe to newsletter"
-  checked={isChecked}
-  onChange={(e) => setIsChecked(e.target.checked)}
+  label="Enable notifications"
+  checked={enabled}
+  onChange={(e) => setEnabled(e.target.checked)}
 />
-
-// Disabled
-<Checkbox label="Disabled option" disabled />
-
-// Disabled and checked
-<Checkbox label="Cannot change" disabled checked />
-
-// Multiple checkboxes (uncontrolled)
-<div>
-  <Checkbox label="Option 1" defaultChecked />
-  <Checkbox label="Option 2" />
-  <Checkbox label="Option 3" />
-</div>
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

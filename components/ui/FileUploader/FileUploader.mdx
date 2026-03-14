@@ -5,32 +5,25 @@ import * as Stories from './FileUploader.stories';
 
 # File uploader
 
-Drag-and-drop file upload zone with file list management. Use for document uploads, image attachments, and bulk file imports.
+Drag-and-drop file upload zone with click-to-browse fallback. Supports file type filtering, size limits, multiple files, and error states.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## With file list
+<Canvas of={Stories.Playground} />
 
-Shows selected files with remove capability.
-<Canvas of={Stories.WithFileList} />
+## Variants
 
-## Validation
+Default, size limit, error, and disabled states.
 
-### Size limit
-Display file size restrictions to the user.
-<Canvas of={Stories.WithSizeLimit} />
+<Canvas of={Stories.Variants} />
 
-### Error state
-Show validation errors for rejected files.
-<Canvas of={Stories.WithError} />
+## Patterns
 
-## States
+Real-world usage: interactive uploader with file list display.
 
-### Disabled
-Prevent file selection when uploading is not available.
-<Canvas of={Stories.Disabled} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -44,6 +37,7 @@ import { FileUploader } from '@brik/bds';
 // Basic file uploader
 <FileUploader
   accept=".pdf,.jpg,.png"
+  helperText="PDF, JPG, or PNG up to 10MB"
   onChange={(files) => handleFiles(files)}
 />
 
@@ -52,6 +46,8 @@ import { FileUploader } from '@brik/bds';
   accept="image/*"
   multiple
   maxSize={5 * 1024 * 1024}
+  label="Upload images"
+  helperText="Select one or more images"
   onChange={(files) => handleFiles(files)}
 />
 ```

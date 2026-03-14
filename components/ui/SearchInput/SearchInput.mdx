@@ -3,38 +3,32 @@ import * as Stories from './SearchInput.stories';
 
 <Meta of={Stories} />
 
-# SearchInput
+# Search input
 
-A text input with a built-in magnifying glass icon for search functionality. Supports medium and small sizes for different UI densities.
+Text input with a built-in magnifying glass icon for search functionality. Supports medium and small sizes for different UI densities.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Sizes
+<Canvas of={Stories.Playground} />
 
-### Medium (default)
+## Variants
 
-Standard size for page-level search.
-<Canvas of={Stories.Default} />
+Sizes, labels, and disabled state.
 
-### Small
+<Canvas of={Stories.Variants} />
 
-Compact size for toolbars and filters.
-<Canvas of={Stories.Small} />
+| Size | Description |
+|------|-------------|
+| **md** | Standard size for page-level search |
+| **sm** | Compact size for toolbars and filters |
 
-### Size Comparison
-<Canvas of={Stories.AllSizes} />
+## Patterns
 
-## With Label
+Real-world usage: toolbar search and full-width page search.
 
-Add a label for form contexts.
-<Canvas of={Stories.WithLabel} />
-
-## Toolbar Example
-
-Multiple search inputs in a horizontal toolbar layout.
-<Canvas of={Stories.ToolbarExample} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 

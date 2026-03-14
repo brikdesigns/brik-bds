@@ -7,31 +7,30 @@ import * as Stories from './Accordion.stories';
 
 Collapsible content sections for FAQs, settings panels, and grouped information. Each item has a title trigger and expandable content area with plus/minus icons.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Default Open
+Behavior modes, pre-opened items, and rich content.
 
-Start with specific items expanded using `defaultOpenItems`.
-<Canvas of={Stories.WithDefaultOpen} />
+<Canvas of={Stories.Variants} />
 
-### Multiple Open
+| Feature | Description |
+|---------|-------------|
+| **Single open** | Only one item open at a time (default) |
+| **Multiple open** | `allowMultiple` allows simultaneous open items |
+| **Default open** | `defaultOpenItems` sets initially expanded items |
+| **Rich content** | Content supports any React node |
 
-Allow multiple items to be open simultaneously with `allowMultiple`.
-<Canvas of={Stories.MultipleOpen} />
+## Patterns
 
-### Rich Content
+Real-world usage: FAQ sections and settings panels.
 
-Accordion content supports any React node, including lists, paragraphs, and nested components.
-<Canvas of={Stories.RichContent} />
-
-### Constrained Width
-
-Works within constrained containers for sidebar or settings panel layouts.
-<Canvas of={Stories.ConstrainedWidth} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -42,7 +41,7 @@ Works within constrained containers for sidebar or settings panel layouts.
 ```tsx
 import { Accordion } from '@brik/bds';
 
-// Basic FAQ accordion
+// Basic FAQ
 <Accordion
   items={[
     { id: '1', title: 'Question one', content: 'Answer one' },
@@ -51,16 +50,8 @@ import { Accordion } from '@brik/bds';
 />
 
 // Allow multiple open
-<Accordion
-  items={items}
-  allowMultiple
-  defaultOpenItems={['1', '3']}
-/>
+<Accordion items={items} allowMultiple defaultOpenItems={['1', '3']} />
 
 // Controlled
-<Accordion
-  items={items}
-  openItems={openIds}
-  onOpenChange={setOpenIds}
-/>
+<Accordion items={items} openItems={openIds} onOpenChange={setOpenIds} />
 ```

@@ -1,0 +1,141 @@
+/**
+ * BDS Chip — Interactive pill for filtering, selection, or input
+ *
+ * Naming: .bds-chip, .bds-chip--{variant}-{appearance}, .bds-chip--{size}
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-pill);
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  overflow: clip;
+  transition: filter 0.15s ease;
+  box-sizing: border-box;
+}
+
+.bds-chip:hover:not(.bds-chip--disabled) {
+  filter: brightness(0.9);
+}
+
+.bds-chip:active:not(.bds-chip--disabled) {
+  filter: brightness(0.85);
+}
+
+/* ─── Sizes ───────────────────────────────────────────────────── */
+
+.bds-chip--sm {
+  padding: var(--space-150) var(--padding-sm);
+  font-size: var(--body-tiny);
+  gap: var(--gap-xs);
+}
+
+.bds-chip--md {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--label-sm);
+  gap: var(--gap-sm);
+}
+
+.bds-chip--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--label-md);
+  gap: var(--gap-md);
+}
+
+/* ─── Variant + Appearance ────────────────────────────────────── */
+
+.bds-chip--primary-dark {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+.bds-chip--primary-light {
+  background-color: transparent;
+  color: var(--text-brand-primary);
+  border: var(--border-width-md) solid var(--border-brand-primary);
+}
+
+.bds-chip--secondary-dark {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.bds-chip--secondary-light {
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  border: var(--border-width-md) solid var(--border-secondary);
+}
+
+/* ─── Disabled ────────────────────────────────────────────────── */
+
+.bds-chip--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Child Elements ──────────────────────────────────────────── */
+
+.bds-chip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* bds-lint-ignore — Figma-driven icon dimensions */
+.bds-chip--sm .bds-chip__icon {
+  width: 10px;
+  height: 10px;
+  font-size: 10px;
+}
+
+.bds-chip--md .bds-chip__icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.bds-chip--lg .bds-chip__icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.bds-chip__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-pill);
+  overflow: hidden;
+}
+
+.bds-chip__label {
+  white-space: nowrap;
+}
+
+.bds-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  line-height: inherit;
+  flex-shrink: 0;
+}
+
+.bds-chip__remove:hover {
+  opacity: 0.7;
+}

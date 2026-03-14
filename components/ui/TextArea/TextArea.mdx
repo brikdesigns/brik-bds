@@ -3,35 +3,40 @@ import * as Stories from './TextArea.stories';
 
 <Meta of={Stories} />
 
-# TextArea
+# Text area
 
-Multi-line text input with configurable rows, resize behavior, and placeholder support. Use for longer-form text entry like comments, descriptions, and messages.
+Multi-line text input with configurable rows, resize behavior, and size variants. Use for longer-form text entry like comments, descriptions, and messages.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### With Default Value
-Display pre-filled content in the textarea.
-<Canvas of={Stories.WithDefaultValue} />
+Sizes, states, and resize modes.
 
-### Disabled
-Prevent interaction with the textarea.
-<Canvas of={Stories.Disabled} />
+<Canvas of={Stories.Variants} />
 
-### No Resize
-Lock the textarea dimensions to prevent user resizing.
-<Canvas of={Stories.NoResize} />
+| Size | Description |
+|------|-------------|
+| **sm** | 14px text — compact forms |
+| **md** | 16px text — default |
+| **lg** | 18px text — prominent inputs |
 
-### Many Rows
-Increase visible rows for longer content.
-<Canvas of={Stories.ManyRows} />
+| Resize | Behavior |
+|--------|----------|
+| **vertical** | Default — height only |
+| **none** | Fixed dimensions |
+| **both** | Width and height |
+| **horizontal** | Width only |
 
-## Usage in Forms
+## Patterns
 
-<Canvas of={Stories.FormExample} />
+Real-world usage: feedback form and compact notes.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -42,15 +47,21 @@ Increase visible rows for longer content.
 ```tsx
 import { TextArea } from '@brik/bds';
 
+// Basic textarea
+<TextArea placeholder="Enter your text here..." rows={4} />
+
+// With label and helper
 <TextArea
-  placeholder="Enter your text here..."
+  label="Notes"
+  placeholder="Enter your message..."
+  helperText="Maximum 500 characters"
   rows={4}
-  resize="vertical"
-  defaultValue="Pre-filled content"
+  fullWidth
 />
+
+// Error state
+<TextArea label="Description" error="This field is required" rows={3} fullWidth />
+
+// No resize
+<TextArea placeholder="Fixed size" rows={4} resize="none" />
 ```
-
-## Resources
-
-- [Figma designs](#) — coming soon
-- [Design guidelines](#) — coming soon

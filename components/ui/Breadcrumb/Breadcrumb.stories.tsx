@@ -1,165 +1,162 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumb } from './Breadcrumb';
+
+/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+
+const SectionLabel = ({ children }: { children: string }) => (
+  <div style={{
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+    marginBottom: 'var(--gap-md)',
+    color: 'var(--text-muted)',
+  }}>
+    {children}
+  </div>
+);
+
+const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
+
+/* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Breadcrumb> = {
   title: 'Navigation/Secondary/breadcrumb',
   component: Breadcrumb,
-  parameters: {
-    layout: 'padded',
-  },
+  parameters: { layout: 'padded' },
   argTypes: {
-    separator: {
-      control: 'select',
-      options: ['slash', 'chevron'],
-    },
+    separator: { control: 'select', options: ['slash', 'chevron'] },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Breadcrumb>;
 
-// ─── Default (Slash separator) ──────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════
+   1. PLAYGROUND — Args-based, use Controls panel to explore
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Default breadcrumb with slash separator
- */
-export const Default: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Breadcrumb
-  items={[
-    { label: 'Home', href: '#' },
-    { label: 'Products', href: '#' },
-    { label: 'Design System' },
-  ]}
-/>`,
-      },
-    },
-  },
+export const Playground: Story = {
   args: {
     items: [
       { label: 'Home', href: '#' },
       { label: 'Products', href: '#' },
       { label: 'Design System' },
     ],
+    separator: 'slash',
   },
 };
 
-// ─── Chevron Separator ──────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Separator styles, depths, single item
+   ═══════════════════════════════════════════════════════════════ */
 
-/**
- * Breadcrumb with chevron (›) separator
- */
-export const ChevronSeparator: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Breadcrumb
-  separator="chevron"
-  items={[
-    { label: 'Home', href: '#' },
-    { label: 'Products', href: '#' },
-    { label: 'Design System' },
-  ]}
-/>`,
-      },
-    },
-  },
-  args: {
-    separator: 'chevron',
-    items: [
-      { label: 'Home', href: '#' },
-      { label: 'Products', href: '#' },
-      { label: 'Design System' },
-    ],
-  },
-};
-
-// ─── Deep Nesting ───────────────────────────────────────────────
-
-/**
- * Breadcrumb with many levels
- */
-export const DeepNesting: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Breadcrumb
-  items={[
-    { label: 'Home', href: '#' },
-    { label: 'Products', href: '#' },
-    { label: 'Design System', href: '#' },
-    { label: 'Components', href: '#' },
-    { label: 'Breadcrumb' },
-  ]}
-/>`,
-      },
-    },
-  },
-  args: {
-    items: [
-      { label: 'Home', href: '#' },
-      { label: 'Products', href: '#' },
-      { label: 'Design System', href: '#' },
-      { label: 'Components', href: '#' },
-      { label: 'Breadcrumb' },
-    ],
-  },
-};
-
-// ─── Single Item ────────────────────────────────────────────────
-
-/**
- * Breadcrumb with a single item (current page only)
- */
-export const SingleItem: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<Breadcrumb items={[{ label: 'Dashboard' }]} />`,
-      },
-    },
-  },
-  args: {
-    items: [{ label: 'Dashboard' }],
-  },
-};
-
-// ─── On Dark Background ─────────────────────────────────────────
-
-/**
- * Breadcrumb on a dark brand background (as used inside PageHeader)
- */
-export const OnDarkBackground: Story = {
-  decorators: [
-    (Story) => (
-      <div style={{
-        backgroundColor: 'var(--background-brand-primary)',
-        padding: 'var(--padding-xl)',
-      }}>
-        <Story />
+export const Variants: Story = {
+  render: () => (
+    <Stack>
+      <div>
+        <SectionLabel>Slash separator (default)</SectionLabel>
+        <Breadcrumb
+          items={[
+            { label: 'Home', href: '#' },
+            { label: 'Products', href: '#' },
+            { label: 'Design System' },
+          ]}
+        />
       </div>
-    ),
-  ],
-  parameters: {
-    docs: {
-      source: {
-        code: `<Breadcrumb
-  items={[
-    { label: 'Show All', href: '#' },
-    { label: 'Product', href: '#' },
-    { label: 'Design System' },
-  ]}
-/>`,
-      },
-    },
-  },
-  args: {
-    items: [
-      { label: 'Show All', href: '#' },
-      { label: 'Product', href: '#' },
-      { label: 'Design System' },
-    ],
-  },
+
+      <div>
+        <SectionLabel>Chevron separator</SectionLabel>
+        <Breadcrumb
+          separator="chevron"
+          items={[
+            { label: 'Home', href: '#' },
+            { label: 'Products', href: '#' },
+            { label: 'Design System' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <SectionLabel>Deep nesting</SectionLabel>
+        <Breadcrumb
+          items={[
+            { label: 'Home', href: '#' },
+            { label: 'Products', href: '#' },
+            { label: 'Design System', href: '#' },
+            { label: 'Components', href: '#' },
+            { label: 'Breadcrumb' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <SectionLabel>Single item</SectionLabel>
+        <Breadcrumb items={[{ label: 'Dashboard' }]} />
+      </div>
+
+      <div>
+        <SectionLabel>On dark background</SectionLabel>
+        <div style={{ backgroundColor: 'var(--background-brand-primary)', padding: 'var(--padding-xl)', borderRadius: 'var(--border-radius-md)' }}>
+          <Breadcrumb
+            items={[
+              { label: 'Show All', href: '#' },
+              { label: 'Product', href: '#' },
+              { label: 'Design System' },
+            ]}
+          />
+        </div>
+      </div>
+    </Stack>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3. PATTERNS — Real-world compositions
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Patterns: Story = {
+  render: () => (
+    <Stack gap="var(--gap-huge)">
+      {/* Page header breadcrumb */}
+      <div>
+        <SectionLabel>Page header context</SectionLabel>
+        <div style={{
+          padding: 'var(--padding-xl)',
+          borderBottom: 'var(--border-width-md) solid var(--border-secondary)',
+        }}>
+          <Breadcrumb
+            separator="chevron"
+            items={[
+              { label: 'Admin', href: '#' },
+              { label: 'Companies', href: '#' },
+              { label: 'Acme Corp' },
+            ]}
+          />
+          <h1 style={{
+            fontFamily: 'var(--font-family-heading)',
+            fontSize: 'var(--heading-lg)',
+            marginTop: 'var(--gap-lg)',
+          }}>
+            Acme Corp
+          </h1>
+        </div>
+      </div>
+
+      {/* Settings path */}
+      <div>
+        <SectionLabel>Settings navigation</SectionLabel>
+        <Breadcrumb
+          items={[
+            { label: 'Settings', href: '#' },
+            { label: 'Integrations', href: '#' },
+            { label: 'Webflow API' },
+          ]}
+        />
+      </div>
+    </Stack>
+  ),
 };

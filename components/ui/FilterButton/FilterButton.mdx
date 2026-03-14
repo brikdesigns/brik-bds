@@ -3,37 +3,27 @@ import * as Stories from './FilterButton.stories';
 
 <Meta of={Stories} />
 
-# FilterButton
+# Filter button
 
-A dropdown filter trigger for filter bars. Displays a pill-shaped button with a chevron that opens a single-select dropdown menu. Switches to an active (brand) style when a value is selected. Click a selected item again to clear the filter.
+Dropdown filter trigger for filter bars. Displays a pill-shaped button with a chevron that opens a single-select dropdown. Switches to an active (brand) style when a value is selected. Click a selected item again to clear.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Interactive} />
+Use the Controls panel to explore all props interactively.
 
-## States
+<Canvas of={Stories.Playground} />
 
-### Default (inactive)
+## Variants
 
-Gray surface background with dark text. No value selected.
-<Canvas of={Stories.Default} />
+Sizes (sm, md, lg), active state, and text-only options.
 
-### Active (value selected)
+<Canvas of={Stories.Variants} />
 
-Brand primary background with white text. Shows the selected option label.
-<Canvas of={Stories.WithValue} />
+## Patterns
 
-## Variations
+Real-world usage: interactive filter bar with multiple FilterButtons.
 
-### Text Only
-
-Options without icons for simple category filters.
-<Canvas of={Stories.TextOnly} />
-
-## Filter Bar
-
-Multiple filter buttons composed in a horizontal toolbar.
-<Canvas of={Stories.FilterBar} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 

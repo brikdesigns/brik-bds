@@ -7,36 +7,23 @@ import * as Stories from './ProgressDots.stories';
 
 Minimal step indicator using dots. Use for onboarding flows, carousels, and wizards where step labels aren't needed.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+Use the Controls panel to explore all props interactively.
 
-## Step positions
+<Canvas of={Stories.Playground} />
 
-### First step
-<Canvas of={Stories.FirstStep} />
+## Variants
 
-### Last step
-<Canvas of={Stories.LastStep} />
+Sizes (sm, md) and all step positions.
 
-## Sizes
+<Canvas of={Stories.Variants} />
 
-### Small
-Compact dots for tight layouts.
-<Canvas of={Stories.SmallSize} />
+## Patterns
 
-### Medium (default)
-<Canvas of={Stories.Default} />
+Real-world usage: interactive wizard with prev/next buttons and linear mode.
 
-## Linear mode
-
-Restrict navigation to sequential steps only.
-<Canvas of={Stories.LinearMode} />
-
-## Interactive
-
-Click dots to navigate between steps.
-<Canvas of={Stories.Interactive} />
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
@@ -57,6 +44,6 @@ import { ProgressDots } from '@brik/bds';
 <ProgressDots
   count={3}
   activeStep={currentStep}
-  onStepClick={(step) => setCurrentStep(step)}
+  onDotClick={(step) => setCurrentStep(step)}
 />
 ```

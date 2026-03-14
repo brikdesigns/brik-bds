@@ -1,0 +1,51 @@
+/* ─── ServiceBadge ───────────────────────────────────────────── */
+
+.bds-service-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+/* bds-lint-ignore — Figma-driven badge dimensions */
+
+.bds-service-badge--sm { width: 20px; height: 20px; border-radius: var(--border-radius-sm); }
+.bds-service-badge--md { width: 28px; height: 28px; border-radius: var(--border-radius-md); }
+.bds-service-badge--lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); }
+
+/* ─── Category colors ────────────────────────────────────────── */
+
+.bds-service-badge--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand); }
+.bds-service-badge--marketing   { background-color: var(--background-service-marketing);   color: var(--text-service-marketing); }
+.bds-service-badge--information { background-color: var(--background-service-information); color: var(--text-service-information); }
+.bds-service-badge--product     { background-color: var(--background-service-product);     color: var(--text-service-product); }
+.bds-service-badge--service     { background-color: var(--background-service-service);     color: var(--text-service-service); }
+
+/* ─── Icon ───────────────────────────────────────────────────── */
+
+.bds-service-badge__icon {
+  object-fit: contain;
+  display: block;
+}
+
+/* ─── Label mode ─────────────────────────────────────────────── */
+
+.bds-service-badge-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-md);
+  font-family: var(--font-family-label);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bds-service-badge-label--brand       { color: var(--text-service-brand); }
+.bds-service-badge-label--marketing   { color: var(--text-service-marketing); }
+.bds-service-badge-label--information { color: var(--text-service-information); }
+.bds-service-badge-label--product     { color: var(--text-service-product); }
+.bds-service-badge-label--service     { color: var(--text-service-service); }
