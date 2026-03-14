@@ -1,14 +1,16 @@
 /* ============================================= */
-/*       BDS REACT TOKEN DEFINITIONS             */
+/*       DEPRECATED — use figma-tokens.css        */
 /* ============================================= */
-/* Clean, single-dash naming for React apps.     */
-/* Source of truth: variables.css (Figma export)  */
+/* This file was a manually maintained subset of  */
+/* BDS tokens for React apps. It has been replaced*/
+/* by figma-tokens.css, which is auto-generated   */
+/* by Style Dictionary (npm run build:sd-figma).  */
 /*                                                */
-/* DO NOT import webflow-tokens.css in React —    */
-/* it has circular refs, deleted vars, and        */
-/* 8 theme blocks meant for Webflow only.         */
+/* Migration:                                     */
+/* @import '../../brik-bds/tokens/react-tokens.css'  */
+/*   → @import '../../brik-bds/tokens/figma-tokens.css' */
 /*                                                */
-/* Usage: @import '../../brik-bds/tokens/react-tokens.css'; */
+/* This file will be removed in a future release. */
 /* ============================================= */
 
 :root {
