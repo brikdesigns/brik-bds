@@ -102,8 +102,12 @@ export const Variants: Story = {
       <div>
         <SectionLabel>Label mode</SectionLabel>
         <Stack gap="var(--gap-lg)">
-          {categories.map((cat) => (
-            <ServiceBadge key={cat} category={cat} mode="label" size="sm" />
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <Row key={size}>
+              {categories.map((cat) => (
+                <ServiceBadge key={cat} category={cat} mode="label" size={size} />
+              ))}
+            </Row>
           ))}
         </Stack>
       </div>

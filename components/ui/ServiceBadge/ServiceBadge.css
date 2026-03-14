@@ -35,17 +35,33 @@
 .bds-service-badge-label {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-md);
   font-family: var(--font-family-label);
-  font-size: var(--body-sm);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--font-line-height-tight);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  white-space: nowrap;
+  color: var(--text-on-color-dark);
+  border-radius: var(--border-radius-sm);
 }
 
-.bds-service-badge-label--brand       { color: var(--text-service-brand); }
-.bds-service-badge-label--marketing   { color: var(--text-service-marketing); }
-.bds-service-badge-label--information { color: var(--text-service-information); }
-.bds-service-badge-label--product     { color: var(--text-service-product); }
-.bds-service-badge-label--service     { color: var(--text-service-service); }
+/* Label sizes */
+.bds-service-badge-label--sm {
+  padding: var(--padding-tiny) var(--padding-sm);
+  font-size: var(--body-tiny);
+}
+
+.bds-service-badge-label--md {
+  padding: var(--padding-tiny) var(--padding-sm);
+  font-size: var(--label-sm);
+}
+
+.bds-service-badge-label--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--label-md);
+}
+
+/* Label category colors */
+.bds-service-badge-label--brand       { background-color: var(--background-service-brand); }
+.bds-service-badge-label--marketing   { background-color: var(--background-service-marketing); }
+.bds-service-badge-label--information { background-color: var(--background-service-information); }
+.bds-service-badge-label--product     { background-color: var(--background-service-product); }
+.bds-service-badge-label--service     { background-color: var(--background-service-service); }
