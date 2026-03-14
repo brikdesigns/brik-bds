@@ -15,9 +15,9 @@
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
-.bds-counter--sm { padding: var(--padding-sm) var(--padding-md); font-size: var(--body-tiny); }
-.bds-counter--md { padding: var(--padding-md) var(--padding-lg); font-size: var(--label-sm); }
-.bds-counter--lg { padding: var(--padding-md) var(--padding-lg); font-size: var(--label-md); }
+.bds-counter--sm { padding: var(--padding-tiny) var(--padding-sm); font-size: var(--body-tiny); }
+.bds-counter--md { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-sm); }
+.bds-counter--lg { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-md); }
 
 /* ─── Status colors ──────────────────────────────────────────── */
 
