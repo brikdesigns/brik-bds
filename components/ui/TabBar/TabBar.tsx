@@ -84,7 +84,7 @@ function getTextStyles(active: boolean, onColor: boolean): CSSProperties {
 }
 
 function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
-  /* Figma spec: all tabs have a bottom border (border-width-lg = 2px).
+  /* All tabs have a bottom border (border-width-md = 1px).
      Active = brand-primary, inactive = border-primary (baseline). */
   const borderColor = onColor
     ? 'var(--border-on-color-dark)'
@@ -103,7 +103,7 @@ function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
     color: textColor,
     backgroundColor: onColor ? 'transparent' : 'var(--background-primary)',
     padding: 'var(--padding-lg)',
-    borderBottom: `var(--border-width-lg) solid ${borderColor}`,
+    borderBottom: `var(--border-width-md) solid ${borderColor}`,
     opacity: onColor && !active ? 0.6 : 1,
   };
 }
