@@ -6,7 +6,7 @@
   gap: var(--padding-xl);
   padding: var(--padding-xl);
   background-color: var(--surface-primary);
-  border: var(--border-width-lg) solid var(--border-muted);
+  border: var(--border-width-md) solid var(--border-muted);
   border-radius: var(--border-radius-lg);
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* bds-lint-ignore — shadow tokens resolve to zero */
   width: 100%;
