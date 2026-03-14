@@ -97,7 +97,7 @@ export const Variants: Story = {
             period="/month"
             description="Most popular choice for growing businesses."
             features={commonFeatures}
-            badge={<Badge status="default" size="sm">Most popular</Badge>}
+            badge={<Badge status="positive" size="sm">Most popular</Badge>}
             action={<Button variant="primary" fullWidth>Get started</Button>}
             highlighted
           />
@@ -149,7 +149,7 @@ export const Patterns: Story = {
             period="/month"
             description="Most popular choice for growing businesses."
             features={['Unlimited projects', 'Priority support', 'Custom domain', 'Analytics dashboard', 'API access']}
-            badge={<Badge status="default" size="sm">Most popular</Badge>}
+            badge={<Badge status="positive" size="sm">Most popular</Badge>}
             action={<Button variant="primary" fullWidth>Get started</Button>}
             highlighted
           />

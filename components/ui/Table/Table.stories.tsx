@@ -88,7 +88,7 @@ const users = [
   { name: 'Alice Chen', email: 'alice@example.com', role: 'Admin', status: 'positive' as const },
   { name: 'Bob Smith', email: 'bob@example.com', role: 'Editor', status: 'positive' as const },
   { name: 'Carol Davis', email: 'carol@example.com', role: 'Viewer', status: 'warning' as const },
-  { name: 'Dan Lee', email: 'dan@example.com', role: 'Editor', status: 'neutral' as const },
+  { name: 'Dan Lee', email: 'dan@example.com', role: 'Editor', status: 'info' as const },
   { name: 'Eve Johnson', email: 'eve@example.com', role: 'Admin', status: 'error' as const },
 ];
 

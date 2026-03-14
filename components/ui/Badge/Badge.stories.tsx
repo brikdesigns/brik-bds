@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faCircleExclamation, faSpinner, faCircleInfo, faCircleXmark, faTriangleExclamation, faCircle, faRotate } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCircleExclamation, faSpinner, faCircleInfo, faCircleXmark, faTriangleExclamation, faRotate } from '@fortawesome/free-solid-svg-icons';
 import { Badge } from './Badge';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -14,7 +14,7 @@ const meta: Meta<typeof Badge> = {
   argTypes: {
     status: {
       control: 'select',
-      options: ['default', 'positive', 'warning', 'error', 'info', 'progress', 'neutral'],
+      options: ['positive', 'warning', 'error', 'info', 'progress'],
     },
     size: {
       control: 'select',
@@ -54,7 +54,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
    ═══════════════════════════════════════════════════════════════ */
 
 export const Playground: Story = {
-  args: { children: 'New', status: 'default', size: 'md' },
+  args: { children: 'New', status: 'info', size: 'md' },
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -68,13 +68,11 @@ export const Variants: Story = {
       <div>
         <SectionLabel>xs (icon only)</SectionLabel>
         <Row>
-          <Badge size="xs" icon={<FontAwesomeIcon icon={faCheck} />} />
           <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
           <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
           <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
           <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
           <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
-          <Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faCircle} />} />
         </Row>
       </div>
       {/* sm, md, lg rows — text labels */}
@@ -82,13 +80,11 @@ export const Variants: Story = {
         <div key={size}>
           <SectionLabel>{size}</SectionLabel>
           <Row>
-            <Badge size={size}>Default</Badge>
             <Badge size={size} status="positive">Positive</Badge>
             <Badge size={size} status="warning">Warning</Badge>
             <Badge size={size} status="error">Error</Badge>
             <Badge size={size} status="info">Info</Badge>
             <Badge size={size} status="progress">Progress</Badge>
-            <Badge size={size} status="neutral">Neutral</Badge>
           </Row>
         </div>
       ))}
@@ -133,7 +129,6 @@ export const Patterns: Story = {
             { status: 'progress' as const, label: 'In Review', desc: 'Being reviewed by editor' },
             { status: 'warning' as const, label: 'Draft', desc: 'Saved but not published' },
             { status: 'error' as const, label: 'Archived', desc: 'Has been removed' },
-            { status: 'neutral' as const, label: 'Inactive', desc: 'Currently disabled' },
           ]).map(({ status, label, desc }) => (
             <div key={status} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
               <Badge status={status}>{label}</Badge>

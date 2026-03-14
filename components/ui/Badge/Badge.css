@@ -50,11 +50,6 @@
 
 /* ─── Status Variants ─────────────────────────────────────────── */
 
-.bds-badge--default {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
-}
-
 .bds-badge--positive {
   background-color: var(--color-system-green);
   color: var(--text-on-color-dark);
@@ -71,8 +66,8 @@
 }
 
 .bds-badge--info {
-  background-color: var(--color-system-blue);
-  color: var(--text-on-color-dark);
+  background-color: var(--background-secondary);
+  color: var(--text-muted);
 }
 
 .bds-badge--progress {
@@ -80,7 +75,3 @@
   color: var(--text-on-color-dark);
 }
 
-.bds-badge--neutral {
-  background-color: var(--background-secondary);
-  color: var(--text-muted);
-}

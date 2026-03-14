@@ -3,7 +3,7 @@ import { bdsClass } from '../../utils';
 import './Badge.css';
 
 /** Badge status variants */
-export type BadgeStatus = 'default' | 'positive' | 'warning' | 'error' | 'info' | 'progress' | 'neutral';
+export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress';
 
 /** Badge size variants */
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
@@ -34,7 +34,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
  * ```
  */
 export function Badge({
-  status = 'default',
+  status = 'info',
   size = 'md',
   children,
   icon,
