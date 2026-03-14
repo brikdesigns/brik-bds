@@ -118,7 +118,7 @@ export const Patterns: Story = {
         <CardControl
           title="Dark Mode"
           description="Switch to a darker color theme"
-          badge={<Badge size="xs" status="neutral" icon={<FontAwesomeIcon icon={faGear} />} />}
+          badge={<Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faGear} />} />}
           action={<Switch checked={darkMode} onChange={(e) => setDarkMode(e.target.checked)} />}
         />
         <CardControl

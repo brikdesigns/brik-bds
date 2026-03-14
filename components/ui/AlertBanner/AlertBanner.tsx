@@ -1,4 +1,7 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTriangleExclamation, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { bdsClass } from '../../utils';
 import { Badge } from '../Badge';
 import './AlertBanner.css';
@@ -16,16 +19,16 @@ export interface AlertBannerProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   action?: ReactNode;
 }
 
-const badgeStatusMap: Record<AlertBannerVariant, 'warning' | 'error' | 'neutral'> = {
+const badgeStatusMap: Record<AlertBannerVariant, 'warning' | 'error' | 'info'> = {
   warning: 'warning',
   error: 'error',
-  information: 'neutral',
+  information: 'info',
 };
 
-const iconClassMap: Record<AlertBannerVariant, string> = {
-  warning: 'fa-solid fa-triangle-exclamation',
-  error: 'fa-solid fa-triangle-exclamation',
-  information: 'fa-solid fa-circle-info',
+const iconMap: Record<AlertBannerVariant, IconDefinition> = {
+  warning: faTriangleExclamation,
+  error: faTriangleExclamation,
+  information: faCircleInfo,
 };
 
 /**
@@ -49,7 +52,7 @@ export function AlertBanner({
         <Badge
           size="xs"
           status={badgeStatusMap[variant]}
-          icon={<i className={iconClassMap[variant]} />}
+          icon={<FontAwesomeIcon icon={iconMap[variant]} />}
         />
         <div className="bds-alert-banner__content">
           <span className="bds-alert-banner__title">{title}</span>
