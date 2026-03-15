@@ -5,11 +5,20 @@ import './Button.css';
 /**
  * Button variants — visual hierarchy for actions
  *
+ * Brand variants (UI hierarchy):
  * - primary: Main CTA (brand fill)
  * - outline: Secondary emphasis (brand border)
  * - secondary: Tertiary/subtle (surface fill)
  * - ghost: Minimal emphasis (no background)
- * - danger: Destructive action (red fill)
+ * - inverse: For dark backgrounds (white fill)
+ *
+ * System variants (semantic actions):
+ * - destructive: Destructive action (system red)
+ * - positive: Confirming action (system green)
+ * - selected: Active/selected state (brand primary)
+ *
+ * Legacy (still supported, prefer system variants):
+ * - danger: Alias for destructive
  * - danger-outline: Destructive with less emphasis
  * - danger-ghost: Destructive, minimal emphasis
  */
@@ -18,12 +27,16 @@ export type ButtonVariant =
   | 'outline'
   | 'secondary'
   | 'ghost'
+  | 'inverse'
   | 'danger'
   | 'danger-outline'
-  | 'danger-ghost';
+  | 'danger-ghost'
+  | 'destructive'
+  | 'positive'
+  | 'selected';
 
 /** Button sizes */
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
 
 /** Button component props */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

@@ -5,9 +5,9 @@ import './Button.css';
 /** IconButton props — label is required for accessibility */
 export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** Visual style variant */
-  variant?: 'primary' | 'outline' | 'secondary' | 'ghost' | 'danger' | 'danger-outline' | 'danger-ghost';
+  variant?: 'primary' | 'outline' | 'secondary' | 'ghost' | 'inverse' | 'danger' | 'danger-outline' | 'danger-ghost' | 'destructive' | 'positive' | 'selected';
   /** Size of the button */
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
   /** The icon to render (ReactNode — SVG, FontAwesome, Lucide, etc.) */
   icon: ReactNode;
   /** Accessible label — required, announced by screen readers */
