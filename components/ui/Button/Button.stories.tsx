@@ -16,11 +16,11 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'outline', 'secondary', 'ghost', 'danger', 'danger-outline', 'danger-ghost'],
+      options: ['primary', 'outline', 'secondary', 'ghost', 'inverse', 'destructive', 'positive', 'selected'],
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['tiny', 'sm', 'md', 'lg', 'xl'],
     },
     fullWidth: { control: 'boolean' },
     disabled: { control: 'boolean' },
@@ -109,15 +109,30 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => (
     <Stack>
-      {(['primary', 'outline', 'secondary', 'ghost', 'danger', 'danger-outline', 'danger-ghost'] as const).map((variant) => (
-        <div key={variant}>
+      <SectionLabel>Brand buttons (UI hierarchy)</SectionLabel>
+      {(['primary', 'secondary', 'outline', 'ghost', 'inverse'] as const).map((variant) => (
+        <div key={variant} style={variant === 'inverse' ? { background: 'var(--surface-inverse)', padding: 'var(--padding-md)', borderRadius: 'var(--border-radius-md)' } : undefined}>
           <SectionLabel>{variant}</SectionLabel>
           <Row>
+            <Button variant={variant} size="tiny">Tiny</Button>
             <Button variant={variant} size="sm">Small</Button>
             <Button variant={variant} size="md">Medium</Button>
             <Button variant={variant} size="lg">Large</Button>
-            <Button variant={variant} size="md" disabled>Disabled</Button>
-            <Button variant={variant} size="md" fullWidth>Full Width</Button>
+            <Button variant={variant} size="xl">X-Large</Button>
+          </Row>
+        </div>
+      ))}
+
+      <SectionLabel>System buttons (semantic actions)</SectionLabel>
+      {(['selected', 'destructive', 'positive'] as const).map((variant) => (
+        <div key={variant}>
+          <SectionLabel>{variant}</SectionLabel>
+          <Row>
+            <Button variant={variant} size="tiny">Tiny</Button>
+            <Button variant={variant} size="sm">Small</Button>
+            <Button variant={variant} size="md">Medium</Button>
+            <Button variant={variant} size="lg">Large</Button>
+            <Button variant={variant} size="xl">X-Large</Button>
           </Row>
         </div>
       ))}
@@ -141,7 +156,7 @@ export const Icons: Story = {
           <Button variant="ghost" iconBefore={<Plus />}>New</Button>
         </Row>
       </div>
-      {(['sm', 'md', 'lg'] as const).map((size) => (
+      {(['tiny', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <div key={size}>
           <SectionLabel>{size}</SectionLabel>
           <Row>
@@ -181,7 +196,7 @@ export const States: Story = {
         <SectionLabel>Disabled</SectionLabel>
         <SectionLabel>Loading</SectionLabel>
 
-        {(['primary', 'outline', 'secondary', 'ghost', 'danger', 'danger-outline', 'danger-ghost'] as const).map((variant) => (
+        {(['primary', 'outline', 'secondary', 'ghost', 'inverse', 'destructive', 'positive', 'selected'] as const).map((variant) => (
           <React.Fragment key={variant}>
             <SectionLabel>{variant}</SectionLabel>
             <Button variant={variant} size="md">Button</Button>
@@ -217,7 +232,7 @@ export const Loading: Story = {
       <Row gap="var(--gap-lg)">
         <Button variant="primary" loading={loading} onClick={handleClick}>Save Changes</Button>
         <Button variant="outline" loading={loading} onClick={handleClick}>Save Changes</Button>
-        <Button variant="danger" loading={loading} onClick={handleClick}>Delete</Button>
+        <Button variant="destructive" loading={loading} onClick={handleClick}>Delete</Button>
       </Row>
     );
   },
@@ -254,28 +269,42 @@ export const IconOnly: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>Standard</SectionLabel>
+        <SectionLabel>Brand variants</SectionLabel>
         <Row>
-          <IconButton icon={<Close />} label="Close" variant="ghost" />
-          <IconButton icon={<Edit />} label="Edit" variant="secondary" />
           <IconButton icon={<Plus />} label="Add" variant="primary" />
+          <IconButton icon={<Edit />} label="Edit" variant="secondary" />
           <IconButton icon={<Download />} label="Download" variant="outline" />
+          <IconButton icon={<Close />} label="Close" variant="ghost" />
         </Row>
       </div>
       <div>
-        <SectionLabel>Danger</SectionLabel>
+        <SectionLabel>System variants</SectionLabel>
         <Row>
-          <IconButton icon={<Trash />} label="Delete" variant="danger" />
-          <IconButton icon={<Trash />} label="Delete" variant="danger-outline" />
-          <IconButton icon={<Trash />} label="Delete" variant="danger-ghost" />
+          <IconButton icon={<Plus />} label="Selected" variant="selected" />
+          <IconButton icon={<Trash />} label="Delete" variant="destructive" />
+          <IconButton icon={<Plus />} label="Approve" variant="positive" />
         </Row>
       </div>
       <div>
-        <SectionLabel>Sizes</SectionLabel>
+        <SectionLabel>All sizes (primary)</SectionLabel>
         <Row>
-          <IconButton icon={<Edit />} label="Edit" variant="secondary" size="sm" />
-          <IconButton icon={<Edit />} label="Edit" variant="secondary" size="md" />
-          <IconButton icon={<Edit />} label="Edit" variant="secondary" size="lg" />
+          <IconButton icon={<Plus />} label="Add" variant="primary" size="tiny" />
+          <IconButton icon={<Plus />} label="Add" variant="primary" size="sm" />
+          <IconButton icon={<Plus />} label="Add" variant="primary" size="md" />
+          <IconButton icon={<Plus />} label="Add" variant="primary" size="lg" />
+          <IconButton icon={<Plus />} label="Add" variant="primary" size="xl" />
+        </Row>
+      </div>
+      <div>
+        <SectionLabel>All sizes (system)</SectionLabel>
+        <Row>
+          {(['selected', 'destructive', 'positive'] as const).map((variant) => (
+            <Row key={variant} gap="var(--gap-xs)">
+              {(['tiny', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
+                <IconButton key={`${variant}-${size}`} icon={variant === 'destructive' ? <Trash /> : <Plus />} label={variant} variant={variant} size={size} />
+              ))}
+            </Row>
+          ))}
         </Row>
       </div>
     </Stack>
@@ -322,7 +351,7 @@ export const Patterns: Story = {
             This action cannot be undone. All data will be permanently removed.
           </div>
           <Row>
-            <Button variant="danger">Delete project</Button>
+            <Button variant="destructive">Delete project</Button>
             <Button variant="ghost">Cancel</Button>
           </Row>
         </div>
@@ -343,7 +372,7 @@ export const Patterns: Story = {
           <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)' }}>
             document-final-v2.pdf
           </span>
-          <IconButton icon={<Trash />} label="Delete file" variant="danger-ghost" size="sm" />
+          <IconButton icon={<Trash />} label="Delete file" variant="destructive" size="sm" />
         </div>
       </div>
 
@@ -353,7 +382,7 @@ export const Patterns: Story = {
         <Row gap="var(--gap-lg)">
           <Button variant="primary" iconAfter={<ArrowRight />}>Continue</Button>
           <Button variant="outline">Save draft</Button>
-          <Button variant="danger-ghost">Discard</Button>
+          <Button variant="destructive">Discard</Button>
         </Row>
       </div>
     </Stack>

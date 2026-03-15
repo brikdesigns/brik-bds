@@ -31,19 +31,30 @@
 
 /* ─── Sizes ───────────────────────────────────────────────────── */
 
+.bds-button--tiny {
+  padding: var(--padding-tiny);
+  font-size: var(--label-xs);
+  gap: var(--gap-xs);
+}
+
 .bds-button--sm {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--padding-sm);
   font-size: var(--label-sm);
 }
 
 .bds-button--md {
-  padding: var(--padding-md) var(--padding-lg);
+  padding: var(--padding-md);
   font-size: var(--label-md);
 }
 
 .bds-button--lg {
-  padding: var(--padding-lg) var(--padding-xl);
-  font-size: var(--label-md);
+  padding: var(--padding-md);
+  font-size: var(--label-lg);
+}
+
+.bds-button--xl {
+  padding: var(--padding-lg);
+  font-size: var(--label-xl);
 }
 
 /* ─── Variants ────────────────────────────────────────────────── */
@@ -70,6 +81,11 @@
   color: var(--text-primary);
 }
 
+.bds-button--inverse {
+  background-color: var(--background-inverse);
+  color: var(--text-on-color-light);
+}
+
 .bds-button--danger {
   background-color: var(--background-accent-red);
   color: var(--text-on-color-dark);
@@ -84,6 +100,23 @@
 .bds-button--danger-ghost {
   background-color: transparent;
   color: var(--text-accent-red);
+}
+
+/* ─── System Variants (semantic actions) ─────────────────────── */
+
+.bds-button--destructive {
+  background-color: var(--color-system-red);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--positive {
+  background-color: var(--color-system-green);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--selected {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
 }
 
 /* ─── Modifiers ───────────────────────────────────────────────── */
@@ -132,6 +165,11 @@
   border-color: transparent;
 }
 
+/* Inverse: slight dim on hover */
+.bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
+  filter: brightness(0.95);
+}
+
 /* Danger outline: fill on hover */
 .bds-button--danger-outline:hover:not(:disabled):not(.bds-button--loading) {
   background-color: var(--background-accent-red);
@@ -149,8 +187,14 @@
 /* Danger: red focus ring */
 .bds-button--danger:focus-visible,
 .bds-button--danger-outline:focus-visible,
-.bds-button--danger-ghost:focus-visible {
-  outline-color: var(--text-accent-red);
+.bds-button--danger-ghost:focus-visible,
+.bds-button--destructive:focus-visible {
+  outline-color: var(--color-system-red);
+}
+
+/* Positive: green focus ring */
+.bds-button--positive:focus-visible {
+  outline-color: var(--color-system-green);
 }
 
 /* ─── Loading State ───────────────────────────────────────────── */
@@ -201,6 +245,11 @@
 .bds-icon-button {
   /* Square padding — icon-only buttons need equal padding */
   padding: var(--padding-md);
+  gap: 0;
+}
+
+.bds-icon-button--tiny {
+  padding: var(--padding-tiny);
 }
 
 .bds-icon-button--sm {
@@ -215,6 +264,10 @@
   padding: var(--padding-lg);
 }
 
+.bds-icon-button--xl {
+  padding: var(--padding-lg);
+}
+
 .bds-icon-button__icon {
   display: flex;
   align-items: center;
@@ -224,8 +277,20 @@
   font-size: var(--label-md);
 }
 
+.bds-icon-button--tiny .bds-icon-button__icon {
+  font-size: var(--label-xs);
+}
+
 .bds-icon-button--sm .bds-icon-button__icon {
   font-size: var(--label-sm);
+}
+
+.bds-icon-button--lg .bds-icon-button__icon {
+  font-size: var(--label-lg);
+}
+
+.bds-icon-button--xl .bds-icon-button__icon {
+  font-size: var(--label-xl);
 }
 
 /* ─── Animation ───────────────────────────────────────────────── */
