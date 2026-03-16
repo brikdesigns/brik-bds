@@ -96,6 +96,30 @@ npm run storybook
 
 Runs at http://localhost:6006. Theme switching available in toolbar.
 
+### Storybook MCP addon
+
+The MCP addon (`@storybook/addon-mcp`) exposes the full BDS component library as an MCP server. When Storybook is running, Claude Code can query structured component specs (props, types, defaults, usage examples from stories) instead of reading source files.
+
+**Tools available at `http://localhost:6006/mcp`:**
+- `list-all-documentation` — discover all components
+- `get-documentation` — full props and JSX examples for a component
+- `get-documentation-for-story` — docs for a specific story variant
+- `preview-stories` — live preview URLs for visual verification
+- `get-storybook-story-instructions` — patterns for writing stories
+
+**When building portal UI:** Start Storybook first. Claude will auto-query BDS components via MCP for correct prop usage.
+
+**Addon vitest** (`@storybook/addon-vitest`) is also installed for the test feedback loop.
+
+## Radix UI primitives
+
+BDS uses [Radix UI](https://www.radix-ui.com/) primitives for complex interactive components that need accessibility foundations (focus trapping, keyboard nav, ARIA, portal rendering). Radix handles behavior; BDS owns all styling via CSS custom properties.
+
+**Currently used:**
+- `@radix-ui/react-popover` — DatePicker
+
+**Pattern:** Install a single `@radix-ui/react-*` package per component need. Build the visual layer on BDS tokens. No shadcn/ui, no component library CSS variables.
+
 ## Token System
 
 ### Two naming conventions (don't confuse them)

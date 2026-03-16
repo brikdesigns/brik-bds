@@ -8,7 +8,12 @@ const config: StorybookConfig = {
     '../components/**/*.mdx',
     '../components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
-  addons: ['@storybook/addon-a11y', '@storybook/addon-docs'],
+  addons: [
+    '@storybook/addon-a11y',
+    '@storybook/addon-docs',
+    '@storybook/addon-vitest',
+    '@storybook/addon-mcp',
+  ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
@@ -28,6 +33,9 @@ const config: StorybookConfig = {
   },
   tags: {
     wip: { excludeFromSidebar: true },
+  },
+  features: {
+    experimentalComponentsManifest: true,
   },
   docs: {
     defaultName: 'Overview',
