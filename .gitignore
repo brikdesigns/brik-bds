@@ -22,3 +22,7 @@ logs/
 # Local Netlify folder
 .netlify
 claude-talk-to-figma-mcp/
+
+# Claude Code local state (skills/ and references/ SHOULD be committed)
+.claude/settings.local.json
+.claude/workstreams.json
