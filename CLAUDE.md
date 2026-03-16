@@ -111,6 +111,28 @@ The MCP addon (`@storybook/addon-mcp`) exposes the full BDS component library as
 
 **Addon vitest** (`@storybook/addon-vitest`) is also installed for the test feedback loop.
 
+### Chromatic (visual testing + hosted Storybook)
+
+BDS Storybook is published to **Chromatic** for visual regression testing and hosted browsing.
+
+- **App ID:** `69b8918cac3056b39424d5d3`
+- **Published URL:** https://69b8918cac3056b39424d5d3-jtcwcnhshz.chromatic.com/
+- **Dashboard:** https://www.chromatic.com/builds?appId=69b8918cac3056b39424d5d3
+
+**Publish manually:**
+```bash
+npm run chromatic
+```
+
+**What Chromatic does:**
+- Snapshots every story on every publish (226 snapshots across 63 components)
+- Visual diff detection — flags pixel-level changes between builds
+- Hosted Storybook URL that stays current (no Netlify deploy needed)
+
+**When to publish:** After any component CSS or story changes are committed. Run `npm run chromatic` before pushing to get a visual diff you can review.
+
+**Netlify deploys still exist** (`deploy:staging`, `deploy:prod`) but Chromatic is the primary visual review tool.
+
 ## Radix UI primitives
 
 BDS uses [Radix UI](https://www.radix-ui.com/) primitives for complex interactive components that need accessibility foundations (focus trapping, keyboard nav, ARIA, portal rendering). Radix handles behavior; BDS owns all styling via CSS custom properties.
@@ -194,3 +216,15 @@ Any project using brik-bds as a submodule (portals, dashboards, tools) MUST foll
 
 The copy at `brik-llm/foundations/brik-bds/` is a git submodule.
 **Never edit files there directly.** Changes won't persist and cause sync issues.
+
+---
+
+## Related Skills & References
+
+These global files provide cross-project context. Load on demand.
+
+| File | Load when... |
+|------|-------------|
+| `~/.claude/skills/bds-global.md` | Task routing, dual-output architecture, consumption standard |
+| `~/.claude/skills/figma-workflow.md` | Brand extraction, figma-talk setup, variable sync |
+| `~/.claude/references/webflow-site-registry.md` | Brik Foundations site ID, token names |
