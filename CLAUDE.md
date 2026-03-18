@@ -133,6 +133,17 @@ npm run chromatic
 
 **Netlify deploys still exist** (`deploy:staging`, `deploy:prod`) but Chromatic is the primary visual review tool.
 
+## Paper — Pre-implementation design
+
+For new or composite components, iterate in Paper before writing code. Paper (Claude Code's HTML canvas) renders real HTML/CSS instantly.
+
+**Rule:** Only BDS token names in Paper — `var(--text-primary)`, `var(--padding-lg)`, etc. Never raw values. Validate against `tokens/figma-tokens.css` before use.
+
+**When to use:** Complex new components, unclear interaction patterns, first-time BDS patterns.
+**When to skip:** Simple variants of existing components, clear Figma spec exists.
+
+See [docs/COMPONENT-PATTERNS.md](docs/COMPONENT-PATTERNS.md) → "Pre-implementation: Design in Paper" for the full workflow.
+
 ## Radix UI primitives
 
 BDS uses [Radix UI](https://www.radix-ui.com/) primitives for complex interactive components that need accessibility foundations (focus trapping, keyboard nav, ARIA, portal rendering). Radix handles behavior; BDS owns all styling via CSS custom properties.
@@ -187,7 +198,7 @@ Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform out
 **Never manually add tokens to CSS files.** Style Dictionary is the single build path.
 
 See [tokens/TOKEN-REFERENCE.md](tokens/TOKEN-REFERENCE.md) for complete reference.
-See [CONSUMING-TOKENS.md](CONSUMING-TOKENS.md) for the consumption pattern in app projects.
+See [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) for the consumption pattern in app projects.
 
 ## Spacing Modes
 
@@ -200,7 +211,7 @@ Webflow uses **Spacious mode** by default on `.body` class.
 
 ## Consuming tokens in app projects
 
-Any project using brik-bds as a submodule (portals, dashboards, tools) MUST follow the token consumption pattern documented in [CONSUMING-TOKENS.md](CONSUMING-TOKENS.md).
+Any project using brik-bds as a submodule (portals, dashboards, tools) MUST follow the token consumption pattern documented in [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md).
 
 **Key rule:** Never write raw CSS `var()` strings inline. Import from `@/lib/tokens` and `@/lib/styles`.
 

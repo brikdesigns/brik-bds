@@ -1,0 +1,19 @@
+{
+  "name": "brik-color-ramp-generator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Figma plugin to generate Tailwind-quality color ramps as Figma Variables",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch",
+    "clean": "rm -rf dist && mkdir dist"
+  },
+  "dependencies": {
+    "chroma-js": "^2.6.0"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.97.0",
+    "@types/chroma-js": "^2.4.4",
+    "esbuild": "^0.25.0"
+  }
+}

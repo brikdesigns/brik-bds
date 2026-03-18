@@ -9,17 +9,24 @@
 # Node
 node_modules/
 
-# Storybook build output
-storybook-static/
-
-# Library build output
+# Build outputs (all regenerable)
 dist/
+build/
+storybook-static/
+build-storybook.log
+*.tar.gz
 
 # OS files
 .DS_Store
 logs/
 
-# Local Netlify folder
+# Webflow exports — keep in updates/, ignore if dumped at root
+/*.html
+
+# Archive (local reference only, not tracked)
+archive/
+
+# Local tooling
 .netlify
 claude-talk-to-figma-mcp/
 
