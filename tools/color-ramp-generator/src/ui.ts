@@ -35,7 +35,6 @@ function update() {
   }
 
   const hex = normalizeHex(rawHex);
-  hexInput.value = hex;
   colorPreview.style.backgroundColor = hex;
 
   currentRamp = generateRamp(nameInput.value.trim() || 'color', hex);
@@ -88,11 +87,13 @@ function renderSwatches(ramp: ColorRamp) {
 
 hexInput.addEventListener('input', update);
 hexInput.addEventListener('blur', () => {
-  const hex = hexInput.value.trim();
-  if (hex && !hex.startsWith('#')) {
-    hexInput.value = '#' + hex;
-    update();
+  const raw = hexInput.value.trim();
+  if (!raw) return;
+  const withHash = raw.startsWith('#') ? raw : '#' + raw;
+  if (isValidHex(withHash)) {
+    hexInput.value = normalizeHex(withHash);
   }
+  update();
 });
 
 nameInput.addEventListener('input', () => {
@@ -131,9 +132,8 @@ createBtn.addEventListener('click', () => {
   );
 });
 
-document.getElementById('close-btn')?.addEventListener('click', () => {
-  parent.postMessage({ pluginMessage: { type: 'close' } }, '*');
-});
+// Run on load in case the field is pre-populated
+update();
 
 // ─── Messages from plugin main thread ────────────────────────────────────────
 
