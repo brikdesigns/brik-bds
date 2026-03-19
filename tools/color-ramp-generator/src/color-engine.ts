@@ -17,10 +17,10 @@ export type Stop = typeof STOPS[number];
 // Calibrated to match tints.dev / Tailwind CSS generator output
 const LIGHTNESS: Record<Stop, number> = {
   50:  97,
-  100: 94,
-  200: 88,
-  300: 81,
-  400: 73,
+  100: 93,
+  200: 87,
+  300: 79,
+  400: 71,
   500: 62,
   600: 53,
   700: 42,
@@ -31,18 +31,20 @@ const LIGHTNESS: Record<Stop, number> = {
 
 // Chroma multipliers: reduce saturation at extremes to avoid neon lights / mud
 // 500 is always 1.0 (the anchor stop matches your input color's saturation)
+// Calibrated against Tailwind CSS generator output — near-neutral at 50,
+// strong saturation 100-400, gentle fade on dark end
 const CHROMA: Record<Stop, number> = {
-  50:  0.22,
+  50:  0.08,
   100: 0.28,
   200: 0.50,
   300: 0.76,
-  400: 0.94,
+  400: 0.92,
   500: 1.00,
-  600: 0.92,
-  700: 0.78,
-  800: 0.62,
-  900: 0.46,
-  950: 0.32,
+  600: 0.88,
+  700: 0.68,
+  800: 0.52,
+  900: 0.42,
+  950: 0.30,
 };
 
 export interface ColorStop {
@@ -98,10 +100,22 @@ export function generateRamp(name: string, inputHex: string): ColorRamp | null {
     return inputL - t * (inputL - DARK_MIN);
   }
 
+  // Dark-end hue rotation: shift toward warmer tones (lower LCH hue) as stops
+  // go darker. Matches Tailwind's warm-brown character in 700–950 range.
+  // Max rotation of ~15° at stop 950, zero at 500 and above.
+  const HUE_ROTATION: Partial<Record<Stop, number>> = {
+    600: -2,
+    700: -6,
+    800: -10,
+    900: -13,
+    950: -15,
+  };
+
   const stops: ColorStop[] = STOPS.map((stop) => {
     const targetL = anchoredLightness(stop);
     const targetC = baseChr * CHROMA[stop];
-    const color = stop === 500 ? base : chroma.lch(targetL, targetC, baseHue).clamp();
+    const hueShift = HUE_ROTATION[stop] ?? 0;
+    const color = stop === 500 ? base : chroma.lch(targetL, targetC, baseHue + hueShift);
     const hexVal = color.hex();
     const [r, g, b] = color.rgb().map(Math.round);
     const [h, s, l] = color.hsl();
