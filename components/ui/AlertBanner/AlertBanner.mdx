@@ -5,7 +5,9 @@ import * as Stories from './AlertBanner.stories';
 
 # Alert banner
 
-Contextual banner for important messages requiring user attention. Uses a secondary surface background with an icon-only Badge, title, description, and optional action.
+Contextual banner for important messages requiring user attention. Uses a secondary surface background with an icon-only `Badge`, title, description, and optional action.
+
+---
 
 ## Playground
 
@@ -19,11 +21,9 @@ All alert variants with badge icons, plus title-only usage.
 
 <Canvas of={Stories.Variants} />
 
-| Variant | Badge status | Icon | Color |
-|---------|-------------|------|-------|
-| **information** | info | circle-info | Neutral gray |
-| **warning** | warning | triangle-exclamation | Yellow |
-| **error** | error | triangle-exclamation | Red |
+- **`information`** — `circle-info` icon, neutral gray
+- **`warning`** — `triangle-exclamation` icon, yellow
+- **`error`** — `triangle-exclamation` icon, red
 
 ## Patterns
 
@@ -31,9 +31,13 @@ Real-world usage: maintenance notices, error recovery, and informational alerts.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

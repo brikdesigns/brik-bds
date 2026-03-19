@@ -7,6 +7,8 @@ import * as Stories from './TabBar.stories';
 
 Horizontal tab navigation with three style variants: text, tab (underline), and box (filled). Supports on-color backgrounds and disabled tabs.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -17,13 +19,11 @@ Use the Controls panel to explore all props interactively.
 
 All three variants, on-color backgrounds, disabled tabs, and compact tab bars.
 
-<Canvas of={Stories.Variants} />
+- **`text`** — plain labels with brand color for active tab
+- **`tab`** — underline indicator with bottom border
+- **`box`** — filled background for active, bordered for inactive
 
-| Variant | Description |
-|---------|-------------|
-| **text** | Plain labels with brand color for active tab |
-| **tab** | Underline indicator with bottom border |
-| **box** | Filled background for active, bordered for inactive |
+<Canvas of={Stories.Variants} />
 
 ## Patterns
 
@@ -31,9 +31,13 @@ Real-world usage: settings page navigation and content filter tabs.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

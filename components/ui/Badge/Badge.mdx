@@ -7,6 +7,8 @@ import * as Stories from './Badge.stories';
 
 Status indicators and labels for displaying contextual information. Badges use semantic system colors to communicate status at a glance, with dark (saturated) and light (pastel) visual variants.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -19,18 +21,18 @@ Five status variants across four sizes, each available in dark and light styles.
 
 <Canvas of={Stories.Variants} />
 
-| Status | Dark | Light | Use for |
-|--------|------|-------|---------|
-| **positive** | Green bg, white text | Green-light bg, green text | Success, completed actions |
-| **warning** | Yellow bg, dark text | Yellow-light bg, dark text | Cautionary states, pending actions |
-| **error** | Red bg, white text | Red-light bg, red text | Error states, failed actions |
-| **info** | Neutral-light bg, dark text | Neutral-light bg, dark text | Informational, neutral notifications |
-| **progress** | Blue bg, white text | Blue-light bg, blue text | In-progress states, active processes |
+**Status colors:**
 
-| Variant | When to use |
-|---------|-------------|
-| **dark** (default) | High emphasis, standalone badges, dark backgrounds |
-| **light** | Lower emphasis, inline with content, table cells, cards |
+- **`positive`** — Green. Success, completed actions.
+- **`warning`** — Yellow. Cautionary states, pending actions.
+- **`error`** — Red. Error states, failed actions.
+- **`info`** — Neutral. Informational, neutral notifications.
+- **`progress`** — Blue. In-progress states, active processes.
+
+**Appearance:**
+
+- **`dark`** (default) — High emphasis, standalone badges, dark backgrounds.
+- **`light`** — Lower emphasis, inline with content, table cells, cards.
 
 ## Icons
 
@@ -44,9 +46,13 @@ Real-world compositions for common badge use cases.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 
@@ -71,19 +77,12 @@ import { Badge } from '@brik/bds';
 <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
 ```
 
+---
+
 ## Tokens
 
-System color tokens used by badge variants:
-
-| Token | Value | Used by |
-|-------|-------|---------|
-| `--color-system-green` | `#27ae60` | positive dark |
-| `--color-system-green-light` | `#bef4d4` | positive light |
-| `--color-system-red` | `#eb5757` | error dark |
-| `--color-system-red-light` | `#fccccc` | error light |
-| `--color-system-yellow` | `#f2c94c` | warning dark |
-| `--color-system-yellow-light` | `#f7e190` | warning light |
-| `--color-system-blue` | `#2f80ed` | progress dark |
-| `--color-system-blue-light` | `#bfe2fe` | progress light |
-| `--color-system-neutral` | `#363636` | info/warning text |
-| `--color-system-neutral-light` | `#d4d4d4` | info bg |
+- `--color-system-green` / `--color-system-green-light` — Positive status
+- `--color-system-red` / `--color-system-red-light` — Error status
+- `--color-system-yellow` / `--color-system-yellow-light` — Warning status
+- `--color-system-blue` / `--color-system-blue-light` — Progress status
+- `--color-system-neutral` / `--color-system-neutral-light` — Info status

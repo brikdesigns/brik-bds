@@ -1,0 +1,125 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Board.stories';
+
+<Meta of={Stories} />
+
+# Board
+
+A kanban-style board layout for displaying grouped items in horizontal columns. Designed for task management, staff overviews, and any workflow that benefits from a column-based view.
+
+Board is a **composite component** — it composes existing BDS primitives (`Avatar`, `ProgressBar`) into a reusable layout pattern without introducing new visual atoms.
+
+---
+
+## Overview
+
+The Board system is composed of three components:
+
+- **`Board`** — Horizontal scroll container. Nests `BoardColumn` children.
+- **`BoardColumn`** — Vertical lane with a title, count, and item stack. Nests `BoardHeader` children.
+- **`BoardHeader`** — Card displaying an avatar, name, subtitle, and optional progress. Composes `Avatar` and `ProgressBar`.
+
+---
+
+## Playground
+
+Full board with four columns, initials-based avatars, and progress bars.
+
+<Canvas of={Stories.Playground} />
+
+## Single Column
+
+A board can render a single column for focused views.
+
+<Canvas of={Stories.SingleColumn} />
+
+## With Avatars
+
+`BoardHeader` accepts an `avatarSrc` prop. When omitted, `Avatar` falls back to initials generated from the `name` prop.
+
+<Canvas of={Stories.WithAvatars} />
+
+## Empty Column
+
+Columns gracefully handle zero items.
+
+<Canvas of={Stories.EmptyColumn} />
+
+---
+
+## Component API
+
+### Board
+
+The outer container. Provides horizontal scrolling with `scroll-snap-type: x proximity`.
+
+<ArgTypes of={Stories} />
+
+### BoardColumn
+
+A single vertical lane within the board.
+
+- **`title`** `string` — Column heading (rendered as uppercase label).
+- **`count`** `number` — Item count displayed beside the title.
+- **`headerAction`** `ReactNode` — Slot for buttons or menus in the column header.
+- **`children`** `ReactNode` — `BoardHeader` components.
+
+### BoardHeader
+
+A card representing a person, role, or entity with optional progress.
+
+- **`name`** `string` *required* — Display name. Also used for avatar initials fallback.
+- **`subtitle`** `string` — Secondary text (role, department).
+- **`avatarSrc`** `string` — Image URL for the avatar.
+- **`progress`** `number` — Value from 0–100. Omit to hide the progress bar.
+- **`progressLabel`** `string` — Screen reader label for the progress bar.
+- **`children`** `ReactNode` — Additional content rendered below the header.
+
+---
+
+## Design Decisions
+
+- **Horizontal scroll** — `scroll-snap-type: x proximity` snaps to column boundaries on mobile and trackpad.
+- **Flexible columns** — Each column flexes equally between `280px` min and `400px` max, responsive without media queries.
+- **Progress bar alignment** — Left-padded past the avatar width so the bar visually aligns with the text, not the avatar.
+- **Avatar size** — Locked to `lg` (48px) per the Figma spec for board context.
+- **Content slot** — `BoardHeader` children slot allows extending with badges, action buttons, or task counts without modifying the component.
+
+---
+
+## Usage
+
+```tsx
+import { Board, BoardColumn, BoardHeader } from '@bds/components/ui/Board';
+
+<Board>
+  <BoardColumn title="Opening" count={2}>
+    <BoardHeader
+      name="Cassidy Moore"
+      subtitle="Dental Hygienist"
+      avatarSrc="/cassidy.jpg"
+      progress={37}
+    />
+    <BoardHeader
+      name="Alex Rivera"
+      subtitle="Receptionist"
+      progress={62}
+    />
+  </BoardColumn>
+</Board>
+```
+
+---
+
+## Tokens
+
+- `--gap-md` — Board column spacing
+- `--gap-sm` — Column item spacing, header internals
+- `--border-radius-200` — BoardHeader card corners
+- `--surface-primary` — BoardHeader background
+- `--text-primary` — Name text
+- `--text-secondary` — Column title, subtitle
+- `--background-brand-primary` — ProgressBar fill (via `ProgressBar`)
+- `--font-family-body` — Name, subtitle
+- `--font-family-label` — Column title
+- `--shadow-sm` — BoardHeader hover state

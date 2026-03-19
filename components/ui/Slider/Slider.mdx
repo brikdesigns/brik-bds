@@ -7,6 +7,8 @@ import * as Stories from './Slider.stories';
 
 Range input for selecting a numeric value by dragging. Use for volume controls, price filters, and any setting where approximate selection is acceptable.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -19,11 +21,9 @@ Sizes, custom range, and disabled state.
 
 <Canvas of={Stories.Variants} />
 
-| Size | Track | Thumb | Use case |
-|------|-------|-------|----------|
-| **sm** | 4px | 16px | Compact settings |
-| **md** | 6px | 20px | Default |
-| **lg** | 8px | 24px | Prominent controls |
+- **`sm`** — 4px track, 16px thumb. Compact settings.
+- **`md`** — 6px track, 20px thumb. Default.
+- **`lg`** — 8px track, 24px thumb. Prominent controls.
 
 ## Patterns
 
@@ -31,9 +31,13 @@ Real-world usage: audio settings panel and budget filter.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

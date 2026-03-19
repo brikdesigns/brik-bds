@@ -7,6 +7,8 @@ import * as Stories from './Form.stories';
 
 Structured form container with layout control, error/success messaging, and consistent spacing. Wraps form fields with title, description, and footer actions.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -19,16 +21,14 @@ Error state, success state, and horizontal layout.
 
 <Canvas of={Stories.Variants} />
 
-| Layout | Description |
-|--------|-------------|
-| **vertical** | Fields stack vertically — default |
-| **horizontal** | Fields side by side for compact forms |
+- **`vertical`** — Fields stack vertically (default)
+- **`horizontal`** — Fields side by side for compact forms
 
-| Gap | Token | Value |
-|-----|-------|-------|
-| **sm** | `--gap-md` | 8px |
-| **md** | `--gap-lg` | 16px |
-| **lg** | `--gap-xl` | 24px |
+Gap sizes:
+
+- **`sm`** — `--gap-md` (8px)
+- **`md`** — `--gap-lg` (16px)
+- **`lg`** — `--gap-xl` (24px)
 
 ## Patterns
 
@@ -36,9 +36,13 @@ Real-world usage: interactive feedback form with validation and submission.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

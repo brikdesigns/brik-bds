@@ -4,7 +4,7 @@ import { Sheet } from './Sheet';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Sheet> = {
-  title: 'Components/Overlay/sheet',
+  title: 'Displays/Overlay/sheet',
   component: Sheet,
   parameters: { layout: 'centered' },
   argTypes: {

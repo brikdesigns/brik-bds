@@ -7,6 +7,8 @@ import * as Stories from './Snackbar.stories';
 
 Brief notification bar that appears at the edge of the screen via portal. Auto-dismisses after a configurable duration. Use for non-critical feedback like "Item saved" or "Connection restored."
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -19,12 +21,10 @@ Status variants control the visual appearance.
 
 <Canvas of={Stories.Variants} />
 
-| Variant | Background | Text |
-|---------|-----------|------|
-| **default** | Black | Inverse |
-| **success** | System green | On-color dark |
-| **error** | System red | On-color dark |
-| **warning** | System orange | On-color light |
+- **`default`** — Black background, inverse text
+- **`success`** — System green background, on-color dark text
+- **`error`** — System red background, on-color dark text
+- **`warning`** — System orange background, on-color light text
 
 ## Patterns
 
@@ -32,9 +32,13 @@ Real-world usage: position options and undo actions.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

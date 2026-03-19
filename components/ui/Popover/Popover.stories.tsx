@@ -49,7 +49,7 @@ const sampleContent = (
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof Popover> = {
-  title: 'Components/Overlay/popover',
+  title: 'Displays/Overlay/popover',
   component: Popover,
   parameters: { layout: 'centered' },
   decorators: [

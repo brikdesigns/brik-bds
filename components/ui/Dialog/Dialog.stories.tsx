@@ -4,7 +4,7 @@ import { Dialog } from './Dialog';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Dialog> = {
-  title: 'Components/Overlay/dialog',
+  title: 'Displays/Overlay/dialog',
   component: Dialog,
   parameters: { layout: 'centered' },
   argTypes: {

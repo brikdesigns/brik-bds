@@ -5,7 +5,9 @@ import * as Stories from './Tag.stories';
 
 # Tag
 
-Categorization and filtering labels with optional left/right icons and remove functionality. Available in three sizes (sm, md, lg).
+Categorization and filtering labels with optional left/right icons and remove functionality. Available in three sizes (`sm`, `md`, `lg`).
+
+---
 
 ## Playground
 
@@ -25,9 +27,13 @@ Real-world compositions for categorization and filtering.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 
@@ -49,11 +55,6 @@ import { faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 
 // Right icon
 <Tag trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Dismiss</Tag>
-
-// Both icons
-<Tag icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>
-  Both
-</Tag>
 
 // Removable tag
 <Tag onRemove={() => console.log('Removed')}>Filter</Tag>

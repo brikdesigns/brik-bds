@@ -42,7 +42,9 @@
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
   font-size: 13px !important;
   line-height: 1.5 !important;
+  border: none !important;
   border-radius: 0 !important;
+  box-shadow: none !important;
   text-shadow: none !important;
   margin: 0 !important;
   padding: 16px 20px !important;
@@ -63,7 +65,9 @@ pre[class*="language-"] code {
   line-height: inherit !important;
 }
 
-/* Catch-all for any pre blocks outside docblock-source (Canvas source, etc.) */
+/* Catch-all for any pre blocks — dark background, no own border.
+   Border/radius/shadow belong on the WRAPPER (docblock-source or
+   emotion div), not the pre itself. */
 #storybook-docs#storybook-docs pre,
 #storybook-docs#storybook-docs .docs-story pre,
 #storybook-docs#storybook-docs .sb-story pre,
@@ -75,9 +79,9 @@ pre,
   background-color: #1e1e1e !important;
   color: #d4d4d4 !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
-  border: 1px solid var(--border-muted, rgba(0, 0, 0, 0.12)) !important;
-  border-radius: 6px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   text-shadow: none !important;
   margin: 0 !important;
   padding: 16px 20px !important;
@@ -95,6 +99,39 @@ pre,
   overflow: hidden !important;
 }
 
+/* docblock-source inside Canvas — SB10 natively renders this as a
+   direct child of PreviewContainer with flat top corners and no border.
+   We just ensure the background matches and the Copy button is subtle. */
+#storybook-docs#storybook-docs .sbdocs-preview .docblock-source {
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Pre block inside Canvas source — strip the catch-all border/radius/shadow
+   so it sits seamlessly inside the docblock-source wrapper. */
+#storybook-docs#storybook-docs .sbdocs-preview .docblock-source pre,
+#storybook-docs#storybook-docs .sbdocs-preview .docblock-source pre.prismjs {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Copy button inside Canvas source — subtle dark pill */
+#storybook-docs#storybook-docs .sbdocs-preview .docblock-source button {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  padding: 4px 12px !important;
+}
+
+#storybook-docs#storybook-docs .sbdocs-preview .docblock-source button:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
 /* Inline code — subtle background, respects theme text color */
 code:not([class*="language-"]):not(pre code) {
   background-color: var(--surface-secondary) !important;
@@ -107,50 +144,66 @@ code:not([class*="language-"]):not(pre code) {
 
 /* ============================================
    ACTION BAR — "Show code" / "Copy" buttons
-   Consistent dark treatment matching code blocks.
+   Clean, minimal treatment. No floating cards,
+   no accent lines, no elevation.
    ============================================ */
 
-/* The ActionBar container at the bottom of Canvas previews */
+/* The ActionBar container at the bottom of Canvas previews —
+   let SB10 position it natively, just ensure clean styling. */
 #storybook-docs#storybook-docs .sbdocs-preview [class*="ActionBar"],
 #storybook-docs#storybook-docs .sbdocs-preview div:has(> button.docblock-code-toggle) {
   background-color: transparent !important;
-  border-top: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* Show code / Hide code toggle button */
+/* Show code / Hide code toggle button — muted text with breathing room */
+#storybook-docs#storybook-docs button.docblock-code-toggle,
 button.docblock-code-toggle {
-  background-color: transparent !important;
+  background: none !important;
   color: var(--text-muted) !important;
   border: none !important;
-  border-top: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
   font-size: 12px !important;
-  padding: 8px 16px !important;
+  padding: 8px 15px !important;
+  margin: 0 !important;
   cursor: pointer !important;
-  opacity: 0.8;
+  opacity: 0.6;
   transition: opacity 150ms ease, color 150ms ease;
+  text-decoration: none !important;
+  outline: none !important;
 }
 
+#storybook-docs#storybook-docs button.docblock-code-toggle:hover,
 button.docblock-code-toggle:hover {
   opacity: 1;
   color: var(--text-brand-primary) !important;
 }
 
-/* Copy button inside source blocks — style it as a subtle floating pill */
+/* Kill any pseudo-element accent lines on the toggle */
+button.docblock-code-toggle::before,
+button.docblock-code-toggle::after {
+  display: none !important;
+}
+
+/* Copy button — subtle dark pill matching the code block */
 .docblock-source button:not(.docblock-code-toggle) {
-  background-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
   color: rgba(255, 255, 255, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 4px !important;
+  box-shadow: none !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
-  font-size: 11px !important;
-  padding: 4px 10px !important;
+  font-size: 12px !important;
+  padding: 4px 12px !important;
   cursor: pointer !important;
   transition: all 150ms ease;
 }
 
 .docblock-source button:not(.docblock-code-toggle):hover {
-  background-color: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
   color: rgba(255, 255, 255, 0.8) !important;
 }
 
@@ -261,22 +314,24 @@ div[class*="docs-story"] {
 }
 
 /* Story preview container — the component demo box in docs.
-   Doubled ID beats emotion's late-injected background.
-   Uses background shorthand to match emotion's shorthand property. */
+   Let SB10's native emotion styles handle border-radius and border
+   (it removes bottom border/radius when code is expanded).
+   We only override background and shadow to match our theme. */
 #storybook-docs#storybook-docs .sbdocs-preview {
   background: var(--surface-primary) !important;
-  border: 1px solid var(--border-secondary) !important;
-  border-radius: 6px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
-  padding: 24px !important;
   margin: 16px 0 24px !important;
   overflow: hidden !important;
 }
 
-/* The .docs-story div inside the preview — ensure transparent */
+/* Override centered layout in docs Canvas — prevent the tall
+   min-height and excessive padding that `layout: 'centered'`
+   adds, so previews are compact and left-aligned in docs. */
 #storybook-docs#storybook-docs .sbdocs-preview .docs-story {
   background: transparent !important;
 }
+
+/* The .docs-story div inside the preview — transparent bg
+   (layout overrides are on the rule above at .sbdocs-preview .docs-story) */
 
 /* ============================================
    DARK MODE — Only overrides that need different
@@ -551,11 +606,7 @@ div[class*="Subtitle"] {
   margin-bottom: 24px !important;
 }
 
-/* Story preview blocks — space above and below */
-#storybook-docs#storybook-docs .sbdocs-preview {
-  margin-top: 16px !important;
-  margin-bottom: 24px !important;
-}
+/* Story preview blocks — margin already set in main .sbdocs-preview rule */
 
 /* Docs content blocks — spacing between MDX custom elements.
    Target only non-emotion wrapper divs (custom MDX blocks have
