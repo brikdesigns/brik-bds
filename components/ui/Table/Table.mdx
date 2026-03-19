@@ -7,6 +7,8 @@ import * as Stories from './Table.stories';
 
 Data table with composable sub-components. Supports sorting, selection, striped rows, size variants, and custom cell content.
 
+---
+
 ## Playground
 
 Use the Controls panel to toggle `striped` and `size` props.
@@ -19,14 +21,10 @@ Size variants, striped rows, sortable headers, and all cell types: icon left/rig
 
 <Canvas of={Stories.Variants} />
 
-| Size | Description |
-|------|-------------|
-| **default** | Compact padding for dense data |
-| **comfortable** | Generous padding (72px cell height) |
+- **`default`** — Compact padding for dense data
+- **`comfortable`** — Generous padding (72px cell height)
 
-### Size propagation
-
-Size is set on `<Table>` via `data-size` attribute. CSS selectors apply padding to all child `<th>` and `<td>` elements automatically — no React context needed.
+Size is set on `Table` via `data-size` attribute. CSS selectors apply padding to all child `<th>` and `<td>` elements automatically — no React context needed.
 
 ## Patterns
 
@@ -34,20 +32,24 @@ Full-featured composite table and striped comfortable layout.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Sub-components
 
-| Component | Element | Description |
-|-----------|---------|-------------|
-| `Table` | `<table>` | Container with `striped` and `size` props |
-| `TableHeader` | `<thead>` | Header section wrapper |
-| `TableBody` | `<tbody>` | Body section wrapper |
-| `TableRow` | `<tr>` | Row with optional `selected` state |
-| `TableHead` | `<th>` | Header cell with optional `sortable` / `sortDirection` |
-| `TableCell` | `<td>` | Body cell for data |
+- **`Table`** — `<table>` container with `striped` and `size` props
+- **`TableHeader`** — `<thead>` header section wrapper
+- **`TableBody`** — `<tbody>` body section wrapper
+- **`TableRow`** — `<tr>` row with optional `selected` state
+- **`TableHead`** — `<th>` header cell with optional `sortable` / `sortDirection`
+- **`TableCell`** — `<td>` body cell for data
+
+---
 
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

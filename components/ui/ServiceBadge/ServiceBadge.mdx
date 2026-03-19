@@ -9,6 +9,8 @@ Colored badge identifying Brik service categories. Each category has a dedicated
 
 Available in **badge mode** (colored square with optional icon) and **label mode** (pill-shaped text label).
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -21,13 +23,11 @@ Categories, sizes, label mode, and icon display.
 
 <Canvas of={Stories.Variants} />
 
-| Category | Color | Label |
-|----------|-------|-------|
-| **Brand** | Yellow | Brand |
-| **Marketing** | Green | Marketing |
-| **Information** | Blue | Information |
-| **Product** | Purple | Product |
-| **Back Office** | Orange | Back Office |
+- **Brand** — Yellow
+- **Marketing** — Green
+- **Information** — Blue
+- **Product** — Purple
+- **Back Office** — Orange
 
 ## All services
 
@@ -41,9 +41,13 @@ Real-world usage: service lists and color palette reference.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 
@@ -65,11 +69,13 @@ import { ServiceBadge } from '@brik/bds';
 <ServiceBadge category="information" mode="label" size="lg" />
 ```
 
+---
+
 ## Icon resolution
 
 The `serviceName` prop resolves to an SVG icon via two mechanisms:
 
-1. **Explicit overrides** — common service names map directly to icon files (e.g., "Premium Logo Design" resolves to `brand-logo.svg`)
-2. **Normalization** — service names are lowercased and hyphenated, then prefixed by category (e.g., "Brand Guidelines" resolves to `brand-guidelines.svg`)
+- **Explicit overrides** — common service names map directly to icon files (e.g., "Premium Logo Design" resolves to `brand-logo.svg`)
+- **Normalization** — service names are lowercased and hyphenated, then prefixed by category (e.g., "Brand Guidelines" resolves to `brand-guidelines.svg`)
 
 Icons are stored in `components/ui/ServiceBadge/icons/[category]/` and served from `.storybook/public/icons/` in Storybook.

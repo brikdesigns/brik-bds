@@ -7,6 +7,8 @@ import * as Stories from './Skeleton.stories';
 
 Content placeholder with shimmer animation for loading states. Maintains layout and reduces perceived load time.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -19,11 +21,9 @@ Three shape variants: text, circular, and rectangular.
 
 <Canvas of={Stories.Variants} />
 
-| Variant | Default size | Use for |
-|---------|-------------|---------|
-| **text** | 100% x 1em | Text line placeholders |
-| **circular** | 40px | Avatar, icon placeholders |
-| **rectangular** | 100% x 140px | Image, card, section placeholders |
+- **`text`** -- 100% x 1em. Use for text line placeholders.
+- **`circular`** -- 40px. Use for avatar and icon placeholders.
+- **`rectangular`** -- 100% x 140px. Use for image, card, and section placeholders.
 
 ## Patterns
 
@@ -31,9 +31,13 @@ Real-world loading states: article cards and comment lists.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

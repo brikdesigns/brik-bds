@@ -7,6 +7,8 @@ import * as Stories from './Button.stories';
 
 Triggers an event or action. The button family includes three components for different semantic needs.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -19,15 +21,13 @@ Seven variants across three sizes. Standard variants for general actions, danger
 
 <Canvas of={Stories.Variants} />
 
-| Variant | Use for |
-|---------|---------|
-| **primary** | Main call-to-action. One per section. |
-| **outline** | Secondary emphasis. Alternative to primary. |
-| **secondary** | Tertiary/subtle. Supporting actions. |
-| **ghost** | Minimal emphasis. Navigation, repeated actions. |
-| **danger** | Destructive primary action (delete, remove). |
-| **danger-outline** | Destructive with less emphasis. |
-| **danger-ghost** | Destructive, minimal emphasis (inline delete). |
+- **`primary`** — Main call-to-action. One per section.
+- **`outline`** — Secondary emphasis. Alternative to primary.
+- **`secondary`** — Tertiary/subtle. Supporting actions.
+- **`ghost`** — Minimal emphasis. Navigation, repeated actions.
+- **`danger`** — Destructive primary action (delete, remove).
+- **`danger-outline`** — Destructive with less emphasis.
+- **`danger-ghost`** — Destructive, minimal emphasis (inline delete).
 
 ## Icons
 
@@ -78,6 +78,8 @@ Real-world compositions for common button use cases.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 ### Button
@@ -86,24 +88,22 @@ Real-world compositions for common button use cases.
 
 ### LinkButton
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `href` | `string` | *required* | Link destination |
-| `variant` | `ButtonVariant` | `'primary'` | Visual style variant |
-| `size` | `ButtonSize` | `'md'` | Button size |
-| `fullWidth` | `boolean` | `false` | Full width |
-| `iconBefore` | `ReactNode` | — | Icon before text |
-| `iconAfter` | `ReactNode` | — | Icon after text |
+- **`href`** `string` *required* — Link destination.
+- **`variant`** `ButtonVariant` — Visual style variant. Default `'primary'`.
+- **`size`** `ButtonSize` — Button size. Default `'md'`.
+- **`fullWidth`** `boolean` — Full width. Default `false`.
+- **`iconBefore`** `ReactNode` — Icon before text.
+- **`iconAfter`** `ReactNode` — Icon after text.
 
 ### IconButton
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `icon` | `ReactNode` | *required* | The icon to render |
-| `label` | `string` | *required* | Accessible label (aria-label) |
-| `variant` | `ButtonVariant` | `'ghost'` | Visual style variant |
-| `size` | `ButtonSize` | `'md'` | Button size |
-| `loading` | `boolean` | `false` | Loading state |
+- **`icon`** `ReactNode` *required* — The icon to render.
+- **`label`** `string` *required* — Accessible label (`aria-label`).
+- **`variant`** `ButtonVariant` — Visual style variant. Default `'ghost'`.
+- **`size`** `ButtonSize` — Button size. Default `'md'`.
+- **`loading`** `boolean` — Loading state. Default `false`.
+
+---
 
 ## Usage
 

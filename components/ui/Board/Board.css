@@ -1,0 +1,267 @@
+/* Board — Kanban-style horizontal board layout */
+
+/* ─── Board container ─────────────────────────────────── */
+
+.bds-board {
+  display: flex;
+  gap: var(--gap-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  min-height: 0;
+}
+
+/* Hide scrollbar but keep functionality */
+.bds-board::-webkit-scrollbar {
+  height: 6px;
+}
+
+.bds-board::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bds-board::-webkit-scrollbar-thumb {
+  background-color: var(--border-muted);
+  border-radius: var(--border-radius-pill);
+}
+
+.bds-board:hover::-webkit-scrollbar-thumb {
+  background-color: var(--border-secondary);
+}
+
+/* ─── Board column ────────────────────────────────────── */
+
+.bds-board-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 0;
+  min-width: 280px;
+  max-width: 400px;
+  scroll-snap-align: start;
+  border-radius: var(--border-radius-200);
+  overflow: clip;
+}
+
+/* When column has a background color, apply internal padding */
+.bds-board-column[style*="background"] .bds-board-column__items {
+  padding: 0 var(--padding-sm);
+}
+
+.bds-board-column__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-sm) var(--padding-sm) var(--padding-md);
+  flex-shrink: 0;
+}
+
+.bds-board-column__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+.bds-board-column__count {
+  font-family: var(--font-family-label);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  line-height: var(--font-line-height-tight);
+}
+
+.bds-board-column__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ─── Board header (column header with avatar + progress) */
+
+.bds-board-header {
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius-200);
+  padding: var(--padding-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  flex-shrink: 0;
+  transition: box-shadow var(--duration-200) ease;
+}
+
+.bds-board-header:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.bds-board-header__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.bds-board-header__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.bds-board-header__name {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-100);
+  font-weight: var(--font-weight-extra-bold);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bds-board-header__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bds-board-header__progress {
+  padding-left: calc(48px + var(--gap-sm)); /* Align with text, past avatar */
+}
+
+/* Avatar size override — board headers always use lg */
+.bds-board-header .bds-avatar {
+  flex-shrink: 0;
+}
+
+.bds-board-header__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* ─── Board card (task card) ─────────────────────────── */
+
+.bds-board-card {
+  --bds-board-card-accent: var(--border-primary);
+  background-color: var(--surface-primary);
+  border-left: var(--border-width-xl) solid var(--bds-board-card-accent);
+  border-radius: var(--border-radius-200);
+  padding: var(--space-500) var(--padding-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+  transition: box-shadow var(--duration-200) ease;
+}
+
+.bds-board-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.bds-board-card--checked {
+  opacity: 0.7;
+}
+
+/* Top row: title + check */
+
+.bds-board-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.bds-board-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-50);
+  min-width: 0;
+  flex: 1;
+}
+
+.bds-board-card__title {
+  font-family: var(--font-family-label);
+  font-size: var(--font-size-100);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+.bds-board-card__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+}
+
+/* Circular check toggle */
+
+.bds-board-card__check {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-circle);
+  border: var(--border-width-lg) solid var(--border-primary);
+  background-color: rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--duration-200) ease;
+}
+
+.bds-board-card__check:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.bds-board-card__check--checked {
+  background-color: var(--background-input);
+  border-color: var(--border-primary);
+}
+
+.bds-board-card__check-icon {
+  display: block;
+  width: 12px;
+  height: 12px;
+  /* CSS-only checkmark */
+  border-left: 2px solid var(--text-on-color-dark, #fff);
+  border-bottom: 2px solid var(--text-on-color-dark, #fff);
+  transform: rotate(-45deg) translate(1px, -1px);
+  width: 10px;
+  height: 6px;
+}
+
+/* Footer: tags row */
+
+.bds-board-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.bds-board-card__tags {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+  flex-wrap: wrap;
+  min-width: 0;
+}

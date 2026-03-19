@@ -7,6 +7,8 @@ import * as Stories from './AddressInput.stories';
 
 Location text input with a location icon and autocomplete suggestion dropdown. Designed for forms that require address or location entry.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -17,12 +19,10 @@ Use the Controls panel to explore all props interactively.
 
 Sizes and suggestion dropdown.
 
-<Canvas of={Stories.Variants} />
+- **`md`** — standard size, default
+- **`sm`** — compact for dense layouts
 
-| Size | Description |
-|------|-------------|
-| **md** | Standard size — default |
-| **sm** | Compact for dense layouts |
+<Canvas of={Stories.Variants} />
 
 ## Patterns
 
@@ -30,9 +30,13 @@ Interactive autocomplete with simulated suggestions. Type in the field to filter
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

@@ -7,6 +7,8 @@ import * as Stories from './Footer.stories';
 
 Site-wide footer with logo, navigation columns, social links, and copyright. Supports default and brand color variants.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -17,12 +19,10 @@ Use the Controls panel to explore all props interactively.
 
 Default, brand, social links, and minimal configurations.
 
-<Canvas of={Stories.Variants} />
+- **`default`** — primary background with border-top
+- **`brand`** — brand-colored background with inverse text
 
-| Variant | Description |
-|---------|-------------|
-| **default** | Primary background with border-top |
-| **brand** | Brand-colored background with inverse text |
+<Canvas of={Stories.Variants} />
 
 ## Patterns
 
@@ -30,9 +30,13 @@ Real-world usage: full marketing site footer with services, resources, legal col
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

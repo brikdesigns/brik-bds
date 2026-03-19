@@ -5,7 +5,9 @@ import * as Stories from './PageHeader.stories';
 
 # Page header
 
-Composable page-level header that brings together BDS components: Breadcrumb, Button, and TabBar. No background — inherits from parent context.
+Composable page-level header that brings together BDS components: `Breadcrumb`, `Button`, and `TabBar`. No background — inherits from parent context.
+
+---
 
 ## Playground
 
@@ -17,15 +19,13 @@ Use the Controls panel to explore all props interactively.
 
 All slot combinations: title only, subtitle, breadcrumbs, actions, tabs, metadata, and full composition.
 
-<Canvas of={Stories.Variants} />
+- **`badge`** — `ServiceBadge` icon badge left of title (service pages)
+- **`breadcrumbs`** — `Breadcrumb` navigation trail above title
+- **`actions`** — `Button` action buttons aligned right
+- **`tabs`** — `TabBar` tab navigation below title
+- **`metadata`** — built-in key-value grid with border-top
 
-| Slot | BDS Component | Description |
-|------|---------------|-------------|
-| `badge` | `<ServiceBadge>` | Icon badge left of title (service pages) |
-| `breadcrumbs` | `<Breadcrumb>` | Navigation trail above title |
-| `actions` | `<Button>` | Action buttons aligned right |
-| `tabs` | `<TabBar>` | Tab navigation below title |
-| `metadata` | Built-in | Key-value grid with border-top |
+<Canvas of={Stories.Variants} />
 
 ## Patterns
 
@@ -33,9 +33,13 @@ Real-world usage: company detail pages and analytics dashboards.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

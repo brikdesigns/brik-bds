@@ -238,13 +238,70 @@ export const Patterns: Story = {
 
 Layout helpers (`SectionLabel`, `Row`, `Stack`) are defined per story file for consistent visual grouping.
 
-The `.mdx` page references stories and adds brief prose context:
+## MDX documentation
+
+Every component has a `.mdx` file. Follow these rules for readable, professional docs.
+
+**Structure:**
 
 ```mdx
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Component.stories';
+
+<Meta of={Stories} />
+
+# Component
+
+One-line description of what the component does.
+
+---
+
+## Playground
+
 <Canvas of={Stories.Playground} />
+
+## Variants
+
 <Canvas of={Stories.Variants} />
+
+## Patterns
+
 <Canvas of={Stories.Patterns} />
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+(code block with import + common patterns)
+
+---
+
+## Tokens
+
+(bulleted list of tokens used)
 ```
+
+**Formatting rules:**
+
+- **No markdown tables** for component composition, token lists, or variant descriptions. Use bulleted lists with **bold** labels instead. Tables render as unreadable text in Storybook.
+- **`<ArgTypes>`** for the primary component's props — auto-generated from TypeScript, always up to date.
+- **Bulleted definition lists** for sub-component props that don't have their own story meta:
+  ```mdx
+  - **`title`** `string` — Column heading text.
+  - **`count`** `number` — Item count beside the title.
+  ```
+- **Horizontal rules** (`---`) between major sections for visual breathing room.
+- **Inline code** for prop names, token names, and component references.
+- **One sentence** of context before each `<Canvas>` block — what the reader is looking at and why.
+- **No variant tables** — if variants need explanation, use a bulleted list after the Canvas.
+
+**Golden reference:** `Board/Board.mdx`
 
 
 ## Migration checklist

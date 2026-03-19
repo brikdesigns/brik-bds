@@ -7,6 +7,8 @@ import * as Stories from './TextArea.stories';
 
 Multi-line text input with configurable rows, resize behavior, and size variants. Use for longer-form text entry like comments, descriptions, and messages.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -19,18 +21,16 @@ Sizes, states, and resize modes.
 
 <Canvas of={Stories.Variants} />
 
-| Size | Description |
-|------|-------------|
-| **sm** | 14px text — compact forms |
-| **md** | 16px text — default |
-| **lg** | 18px text — prominent inputs |
+- **`sm`** — 14px text, compact forms
+- **`md`** — 16px text, default
+- **`lg`** — 18px text, prominent inputs
 
-| Resize | Behavior |
-|--------|----------|
-| **vertical** | Default — height only |
-| **none** | Fixed dimensions |
-| **both** | Width and height |
-| **horizontal** | Width only |
+Resize modes:
+
+- **`vertical`** — Default, height only
+- **`none`** — Fixed dimensions
+- **`both`** — Width and height
+- **`horizontal`** — Width only
 
 ## Patterns
 
@@ -38,9 +38,13 @@ Real-world usage: feedback form and compact notes.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

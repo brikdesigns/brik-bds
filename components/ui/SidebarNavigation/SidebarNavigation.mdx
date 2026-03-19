@@ -7,6 +7,8 @@ import * as Stories from './SidebarNavigation.stories';
 
 Fixed-position sidebar with logo, navigation links, footer actions, and user section. Width is configurable via prop.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -17,14 +19,12 @@ Use the Controls panel to explore all props interactively.
 
 Default, with icons, with user section, and custom width configurations.
 
-<Canvas of={Stories.Variants} />
+- **`logo`** (required) — top section with branding
+- **`navItems`** (required) — navigation links with active state
+- **`footerActions`** — bottom actions (buttons, links)
+- **`user`** — user info at very bottom
 
-| Section | Required | Description |
-|---------|----------|-------------|
-| **Logo** | Yes | Top section with branding |
-| **Nav items** | Yes | Navigation links with active state |
-| **Footer** | No | Bottom actions (buttons, links) |
-| **User** | No | User info at very bottom |
+<Canvas of={Stories.Variants} />
 
 ## Patterns
 
@@ -32,9 +32,13 @@ Full application layout with sidebar and main content area.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

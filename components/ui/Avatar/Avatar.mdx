@@ -7,6 +7,8 @@ import * as Stories from './Avatar.stories';
 
 User profile images with automatic fallback to initials. Supports multiple sizes and optional status indicators for presence states.
 
+---
+
 ## Playground
 
 Use the Controls panel to explore all props interactively.
@@ -19,12 +21,10 @@ Sizes, content types (initials vs image), and status indicators.
 
 <Canvas of={Stories.Variants} />
 
-| Size | Dimensions | Use for |
-|------|-----------|---------|
-| **sm** | 32px | Compact lists, inline mentions |
-| **md** | 40px | Default, cards, comments |
-| **lg** | 48px | Profile headers, featured users |
-| **xl** | 64px | Hero profiles, account settings |
+- **`sm`** — 32px, compact lists and inline mentions
+- **`md`** — 40px, default for cards and comments
+- **`lg`** — 48px, profile headers and featured users
+- **`xl`** — 64px, hero profiles and account settings
 
 ## Patterns
 
@@ -32,9 +32,13 @@ Real-world compositions: user lists and stacked avatar groups.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

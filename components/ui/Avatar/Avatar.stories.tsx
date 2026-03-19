@@ -47,13 +47,25 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
+/* ─── Character headshots (The Office) ────────────────────────── */
+
+const headshots = {
+  michael: 'https://randomuser.me/api/portraits/men/32.jpg',
+  dwight:  'https://randomuser.me/api/portraits/men/44.jpg',
+  jim:     'https://randomuser.me/api/portraits/men/75.jpg',
+  pam:     'https://randomuser.me/api/portraits/women/68.jpg',
+  creed:   'https://randomuser.me/api/portraits/men/85.jpg',
+  oscar:   'https://randomuser.me/api/portraits/men/52.jpg',
+};
+
 /* ═══════════════════════════════════════════════════════════════
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
 export const Playground: Story = {
   args: {
-    name: 'John Doe',
+    name: 'Michael Scott',
+    src: headshots.michael,
     size: 'md',
   },
 };
@@ -68,36 +80,36 @@ export const Variants: Story = {
       <div>
         <SectionLabel>Sizes (initials)</SectionLabel>
         <Row>
-          <Avatar name="John Doe" size="sm" />
-          <Avatar name="John Doe" size="md" />
-          <Avatar name="John Doe" size="lg" />
-          <Avatar name="John Doe" size="xl" />
+          <Avatar name="Michael Scott" size="sm" />
+          <Avatar name="Dwight Schrute" size="md" />
+          <Avatar name="Jim Halpert" size="lg" />
+          <Avatar name="Pam Beesly" size="xl" />
         </Row>
       </div>
       <div>
         <SectionLabel>With image</SectionLabel>
         <Row>
-          <Avatar src="https://i.pravatar.cc/150?img=1" alt="User" name="Sarah J" size="sm" />
-          <Avatar src="https://i.pravatar.cc/150?img=1" alt="User" name="Sarah J" size="md" />
-          <Avatar src="https://i.pravatar.cc/150?img=1" alt="User" name="Sarah J" size="lg" />
-          <Avatar src="https://i.pravatar.cc/150?img=1" alt="User" name="Sarah J" size="xl" />
+          <Avatar src={headshots.michael} alt="Michael Scott" name="Michael Scott" size="sm" />
+          <Avatar src={headshots.dwight} alt="Dwight Schrute" name="Dwight Schrute" size="md" />
+          <Avatar src={headshots.jim} alt="Jim Halpert" name="Jim Halpert" size="lg" />
+          <Avatar src={headshots.pam} alt="Pam Beesly" name="Pam Beesly" size="xl" />
         </Row>
       </div>
       <div>
         <SectionLabel>Status indicators</SectionLabel>
         <Row>
-          <Avatar name="User" status="online" />
-          <Avatar name="User" status="offline" />
-          <Avatar name="User" status="busy" />
-          <Avatar name="User" status="away" />
+          <Avatar src={headshots.michael} alt="Michael Scott" name="Michael Scott" status="online" />
+          <Avatar src={headshots.dwight} alt="Dwight Schrute" name="Dwight Schrute" status="offline" />
+          <Avatar src={headshots.jim} alt="Jim Halpert" name="Jim Halpert" status="busy" />
+          <Avatar src={headshots.pam} alt="Pam Beesly" name="Pam Beesly" status="away" />
         </Row>
       </div>
       <div>
-        <SectionLabel>Image + status</SectionLabel>
+        <SectionLabel>Image + status (large)</SectionLabel>
         <Row>
-          <Avatar src="https://i.pravatar.cc/150?img=5" alt="User" name="Sarah" status="online" size="lg" />
-          <Avatar src="https://i.pravatar.cc/150?img=3" alt="User" name="Alex" status="busy" size="lg" />
-          <Avatar src="https://i.pravatar.cc/150?img=8" alt="User" name="Taylor" status="away" size="lg" />
+          <Avatar src={headshots.creed} alt="Creed Bratton" name="Creed Bratton" status="online" size="lg" />
+          <Avatar src={headshots.oscar} alt="Oscar Martinez" name="Oscar Martinez" status="busy" size="lg" />
+          <Avatar src={headshots.michael} alt="Michael Scott" name="Michael Scott" status="away" size="lg" />
         </Row>
       </div>
     </Stack>
@@ -115,14 +127,16 @@ export const Patterns: Story = {
       <div>
         <SectionLabel>User list</SectionLabel>
         <Stack gap="var(--gap-md)">
-          {[
-            { name: 'John Doe', status: 'online' as const },
-            { name: 'Jane Smith', status: 'away' as const },
-            { name: 'Bob Johnson', status: 'offline' as const },
-            { name: 'Alice Williams', status: 'busy' as const },
-          ].map((user) => (
+          {([
+            { name: 'Michael Scott', src: headshots.michael, status: 'online' as const },
+            { name: 'Dwight Schrute', src: headshots.dwight, status: 'online' as const },
+            { name: 'Jim Halpert', src: headshots.jim, status: 'away' as const },
+            { name: 'Pam Beesly', src: headshots.pam, status: 'online' as const },
+            { name: 'Creed Bratton', src: headshots.creed, status: 'offline' as const },
+            { name: 'Oscar Martinez', src: headshots.oscar, status: 'busy' as const },
+          ]).map((user) => (
             <div key={user.name} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)' }}>
-              <Avatar name={user.name} status={user.status} />
+              <Avatar name={user.name} src={user.src} status={user.status} />
               <div>
                 <div style={{
                   fontFamily: 'var(--font-family-label)',
@@ -146,10 +160,17 @@ export const Patterns: Story = {
       <div>
         <SectionLabel>Avatar group (stacked)</SectionLabel>
         <div style={{ display: 'flex', marginLeft: '12px' }}>
-          {['John Doe', 'Jane Smith', 'Bob Johnson', '+5'].map((name) => (
+          {([
+            { name: 'Michael Scott', src: headshots.michael },
+            { name: 'Dwight Schrute', src: headshots.dwight },
+            { name: 'Jim Halpert', src: headshots.jim },
+            { name: 'Pam Beesly', src: headshots.pam },
+            { name: '+2', src: undefined },
+          ]).map((user) => (
             <Avatar
-              key={name}
-              name={name}
+              key={user.name}
+              name={user.name}
+              src={user.src}
               size="md"
               style={{ marginLeft: '-12px', border: '2px solid var(--background-input)' }}
             />

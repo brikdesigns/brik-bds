@@ -5,7 +5,9 @@ import * as Stories from './SegmentedControl.stories';
 
 # Segmented control
 
-Pill-shaped toggle for switching between mutually exclusive views or modes. Unlike TabBar (page navigation), SegmentedControl switches content in-place.
+Pill-shaped toggle for switching between mutually exclusive views or modes. Unlike `TabBar` (page navigation), `SegmentedControl` switches content in-place.
+
+---
 
 ## Playground
 
@@ -19,11 +21,9 @@ Sizes, full-width, disabled states, and many segments.
 
 <Canvas of={Stories.Variants} />
 
-| Size | Use case |
-|------|----------|
-| **sm** | Compact toolbars, dense UI |
-| **md** | Default — forms, panels |
-| **lg** | Prominent page-level toggles |
+- **`sm`** — Compact toolbars, dense UI
+- **`md`** — Default for forms and panels
+- **`lg`** — Prominent page-level toggles
 
 ## Patterns
 
@@ -31,9 +31,13 @@ Real-world usage: view switcher, pricing toggle, and date range selector.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 
@@ -65,11 +69,11 @@ const [view, setView] = useState('grid');
 />
 ```
 
+---
+
 ## When to use
 
-| Scenario | Component |
-|----------|-----------|
-| Toggle between 2–5 views in the same panel | **SegmentedControl** |
-| Navigate between pages or sections | TabBar |
-| Binary on/off toggle | Switch |
-| Select from a long list | Select |
+- **Toggle between 2-5 views in the same panel** — `SegmentedControl`
+- **Navigate between pages or sections** — `TabBar`
+- **Binary on/off toggle** — `Switch`
+- **Select from a long list** — `Select`

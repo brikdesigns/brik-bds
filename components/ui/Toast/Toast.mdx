@@ -5,7 +5,9 @@ import * as Stories from './Toast.stories';
 
 # Toast
 
-White surface notification with optional colored Badge icon indicating status. The surface never changes color — only the badge communicates success, error, warning, or info.
+White surface notification with optional colored `Badge` icon indicating status. The surface never changes color — only the badge communicates success, error, warning, or info.
+
+---
 
 ## Playground
 
@@ -19,13 +21,11 @@ All status variants, title-only, and non-dismissible configurations.
 
 <Canvas of={Stories.Variants} />
 
-| Variant | Badge | Icon |
-|---------|-------|------|
-| **default** | None | — |
-| **success** | Positive | circle-check |
-| **error** | Error | circle-exclamation |
-| **warning** | Warning | triangle-exclamation |
-| **info** | Info | circle-info |
+- **`default`** — No badge, no icon
+- **`success`** — Positive badge, `circle-check` icon
+- **`error`** — Error badge, `circle-exclamation` icon
+- **`warning`** — Warning badge, `triangle-exclamation` icon
+- **`info`** — Info badge, `circle-info` icon
 
 ## Patterns
 
@@ -33,9 +33,13 @@ Real-world usage: interactive toggle, error context, and informational messages.
 
 <Canvas of={Stories.Patterns} />
 
+---
+
 ## Props
 
 <ArgTypes of={Stories} />
+
+---
 
 ## Usage
 

@@ -250,8 +250,12 @@ function parseCssTokens() {
   // Load migrated token files (themes + webflow-tokens with SD names)
   const MIGRATED_TOKENS = path.join(__dirname, '..', 'tokens', 'webflow-tokens.css');
   const MIGRATED_THEMES = path.join(__dirname, '..', 'tokens', 'themes.css');
+  const FIGMA_TOKENS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');
+  const OVERRIDES = path.join(__dirname, '..', 'tokens', 'overrides.css');
   if (fs.existsSync(MIGRATED_TOKENS)) loadFromCss(MIGRATED_TOKENS);
   if (fs.existsSync(MIGRATED_THEMES)) loadFromCss(MIGRATED_THEMES);
+  if (fs.existsSync(FIGMA_TOKENS)) loadFromCss(FIGMA_TOKENS);
+  if (fs.existsSync(OVERRIDES)) loadFromCss(OVERRIDES);
 
   return { allTokens, semanticTokens, primitiveTokens };
 }
@@ -443,7 +447,7 @@ function checkHardcodedValues(line, lineNum, file, isComponent) {
  * Rule 3: Unknown tokens
  * Flags any var(--...) reference that doesn't exist in the Webflow CSS
  */
-function checkUnknownTokens(line, lineNum, file, tokens) {
+function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
   const violations = [];
   const regex = /var\((--[\w-]+)(?:\s*,\s*[^)]+)?\)/g;
   let match;
@@ -472,7 +476,7 @@ function checkUnknownTokens(line, lineNum, file, tokens) {
 
     violations.push({
       rule: 'unknown-token',
-      severity: 'error',
+      severity: isComponent ? 'error' : 'warning',
       file,
       line: lineNum,
       column: match.index + 1,
@@ -637,7 +641,7 @@ function main() {
 
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, isComponent));
       allViolations.push(...checkHardcodedValues(line, lineNum, file, isComponent));
-      allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens));
+      allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, isComponent));
 
       // Rule 4: grid compliance (opt-in via --check-grid)
       if (checkGrid) {

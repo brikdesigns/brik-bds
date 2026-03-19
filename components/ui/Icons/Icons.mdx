@@ -1,0 +1,81 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './Icons.stories';
+
+<Meta of={Stories} />
+
+# Icons
+
+Font Awesome 7 icon reference for BDS. This is a **living document** — add new icons here as they're adopted in components.
+
+---
+
+## Setup
+
+| Package | Version | Style |
+|---------|---------|-------|
+| `@fortawesome/free-solid-svg-icons` | 7.2+ | Solid (filled) |
+| `@fortawesome/react-fontawesome` | 3.2+ | React wrapper |
+
+Storybook configures `autoAddCss = false` in `.storybook/preview.tsx` — icon styles are imported once via `@fortawesome/fontawesome-svg-core/styles.css`.
+
+---
+
+## Setup
+
+Package info, usage pattern, and style availability.
+
+<Canvas of={Stories.Setup} />
+
+## System
+
+Feedback, status, and alert icons used in Toast, Badge, AlertBanner.
+
+<Canvas of={Stories.System} />
+
+## Navigation
+
+Directional icons for Pagination, Accordion, menus, and breadcrumbs.
+
+<Canvas of={Stories.Navigation} />
+
+## Actions
+
+CRUD operations, search, filter, sort — used across forms and tables.
+
+<Canvas of={Stories.Actions} />
+
+## Objects
+
+People, places, content, and UI element icons.
+
+<Canvas of={Stories.Objects} />
+
+## Domain
+
+Industry-specific and feature/marketing icons for cards and landing pages.
+
+<Canvas of={Stories.Domain} />
+
+## Sizing
+
+Built-in FA size prop and `fixedWidth` for aligned icon menus.
+
+<Canvas of={Stories.Sizing} />
+
+---
+
+## Adding icons
+
+1. Import from `@fortawesome/free-solid-svg-icons`
+2. Add to the relevant category story above
+3. If a new category is needed, add a new story section
+
+## Outline vs filled
+
+Only **solid** (filled) is installed. To add outline style:
+
+```bash
+npm i @fortawesome/free-regular-svg-icons
+```
+
+Then import from `@fortawesome/free-regular-svg-icons` with the `far` prefix convention.
