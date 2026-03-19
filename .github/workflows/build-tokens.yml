@@ -35,7 +35,7 @@ jobs:
       run: npx style-dictionary build --config sd.config.mjs
 
     - name: Build web tokens (existing pipeline)
-      run: npm run build:tokens
+      run: npm run build:all-tokens
 
     - name: Check for changes
       id: check-changes
