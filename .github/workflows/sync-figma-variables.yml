@@ -48,7 +48,12 @@ jobs:
 
     - name: Transform manual Figma export
       if: steps.detect.outputs.source == 'manual'
-      run: node scripts/transform-figma-export.js --compare
+      run: |
+        if [ -f scripts/transform-figma-export.js ]; then
+          node scripts/transform-figma-export.js --compare
+        else
+          echo "⚠ scripts/transform-figma-export.js not found — skipping manual transform"
+        fi
 
     - name: Build DTCG tokens (Webflow source)
       if: inputs.skip-build != 'true'
@@ -60,7 +65,7 @@ jobs:
 
     - name: Build web tokens
       if: inputs.skip-build != 'true'
-      run: npm run build:tokens
+      run: npm run build:all-tokens
 
     - name: Check for changes
       id: check-changes
