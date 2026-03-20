@@ -1,5 +1,7 @@
 import { type ReactNode, type CSSProperties, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { bdsClass } from '../../utils';
 import './Sheet.css';
 
@@ -16,12 +18,15 @@ export interface SheetProps {
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   showCloseButton?: boolean;
+  /** Optional footer pinned to bottom of sheet */
+  footer?: ReactNode;
 }
 
 /**
  * Sheet — sliding panel overlay for contextual content.
  *
  * Width is a runtime value passed via inline style since it's user-configurable.
+ * Close icon matches Modal dismiss treatment (FontAwesome xmark).
  */
 export function Sheet({
   isOpen,
@@ -33,6 +38,7 @@ export function Sheet({
   closeOnBackdrop = true,
   closeOnEscape = true,
   showCloseButton = true,
+  footer,
 }: SheetProps) {
   useEffect(() => {
     if (!isOpen || !closeOnEscape) return;
@@ -73,13 +79,19 @@ export function Sheet({
           <div className="bds-sheet__header">
             {title && <h2 className="bds-sheet__title">{title}</h2>}
             {showCloseButton && (
-              <button type="button" onClick={onClose} className="bds-sheet__close" aria-label="Close">
-                ×
+              <button
+                type="button"
+                onClick={onClose}
+                className="bds-sheet__close"
+                aria-label="Close"
+              >
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             )}
           </div>
         )}
         <div className="bds-sheet__body">{children}</div>
+        {footer && <div className="bds-sheet__footer">{footer}</div>}
       </div>
     </>
   );
