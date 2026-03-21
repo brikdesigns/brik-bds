@@ -28,13 +28,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Extract DTCG tokens from Webflow CSS
-      run: node scripts/css-to-dtcg.js
-
-    - name: Build multi-platform tokens (Style Dictionary)
-      run: npx style-dictionary build --config sd.config.mjs
-
-    - name: Build web tokens (existing pipeline)
+    - name: Build all tokens (Style Dictionary from Figma)
       run: npm run build:all-tokens
 
     - name: Check for changes
