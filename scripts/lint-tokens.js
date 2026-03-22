@@ -178,11 +178,6 @@ const LINE_ALLOWLIST = [
 // ---------------------------------------------------------------------------
 
 function parseCssTokens() {
-  if (!fs.existsSync(WEBFLOW_CSS_PATH)) {
-    console.error(`ERROR: Webflow CSS not found at ${WEBFLOW_CSS_PATH}`);
-    process.exit(1);
-  }
-
   const allTokens = new Set();
   const semanticTokens = new Set();
   const primitiveTokens = new Set();
@@ -239,8 +234,10 @@ function parseCssTokens() {
     }
   }
 
-  // Load Webflow tokens (original export)
-  loadFromCss(WEBFLOW_CSS_PATH);
+  // Load Webflow tokens (original export — may not exist if gitignored)
+  if (fs.existsSync(WEBFLOW_CSS_PATH)) {
+    loadFromCss(WEBFLOW_CSS_PATH);
+  }
 
   // Load Style Dictionary tokens (SD naming convention)
   if (fs.existsSync(SD_CSS_PATH)) {
@@ -256,6 +253,15 @@ function parseCssTokens() {
   if (fs.existsSync(MIGRATED_THEMES)) loadFromCss(MIGRATED_THEMES);
   if (fs.existsSync(FIGMA_TOKENS)) loadFromCss(FIGMA_TOKENS);
   if (fs.existsSync(OVERRIDES)) loadFromCss(OVERRIDES);
+
+  // Ensure at least one token source was loaded
+  if (allTokens.size === 0) {
+    console.error('ERROR: No token sources found. Need at least one of:');
+    console.error(`  - ${WEBFLOW_CSS_PATH}`);
+    console.error(`  - ${SD_CSS_PATH}`);
+    console.error(`  - ${MIGRATED_TOKENS}`);
+    process.exit(1);
+  }
 
   return { allTokens, semanticTokens, primitiveTokens };
 }
