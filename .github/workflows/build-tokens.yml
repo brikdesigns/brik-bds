@@ -45,6 +45,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add design-tokens/ build/ tokens/
+        git add design-tokens/ tokens/
+        git add -f build/
         git commit -m "Build design tokens — $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
         git push
