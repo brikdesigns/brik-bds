@@ -46,7 +46,7 @@ If a token doesn't exist in `figma-tokens.css` after the build, it needs to be a
 | `components/providers/` | ThemeProvider context |
 | `.storybook/` | Storybook configuration |
 | `tokens/` | Token documentation and build scripts |
-| `updates/brik-bds.webflow/` | Webflow CSS export (source of tokens) |
+| `updates/brik-bds.webflow/` | Legacy Webflow CSS export (archived, no longer token source) |
 
 ## Workflow
 
@@ -175,8 +175,7 @@ Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform out
 | Command | Input | Output |
 | --- | --- | --- |
 | `npm run build:sd-figma` | `design-tokens/tokens-studio.json` | `tokens/figma-tokens.css`, `build/figma/swift/*.swift`, `build/figma/js/tokens.mjs` |
-| `npm run build:tokens` | `updates/brik-bds.webflow/css/` | `tokens/variables.css`, `tokens/themes.css`, `tokens/index.ts` |
-| `npm run build:all-tokens` | Both | Full rebuild |
+| `npm run build:all-tokens` | Same as above | Full rebuild (calls `build:sd-figma`) |
 
 ### Token files — which to use
 
@@ -193,7 +192,7 @@ Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform out
 1. Add in Figma Variables
 2. Export via Tokens Studio → `design-tokens/tokens-studio.json`
 3. Run `npm run build:sd-figma` — updates `figma-tokens.css` automatically
-4. If the component CSS references it, consuming projects get it on next `bds-sync.sh`
+4. If the component CSS references it, consuming projects get it on next `npm run propagate`
 
 **Never manually add tokens to CSS files.** Style Dictionary is the single build path.
 
@@ -237,5 +236,5 @@ These global files provide cross-project context. Load on demand.
 | File | Load when... |
 |------|-------------|
 | `~/.claude/skills/bds-global.md` | Task routing, dual-output architecture, consumption standard |
-| `~/.claude/skills/figma-workflow.md` | Brand extraction, figma-talk setup, variable sync |
+| `~/.claude/skills/figma-workflow.md` | Brand extraction, Figma MCP variable sync |
 | `~/.claude/references/webflow-site-registry.md` | Brik Foundations site ID, token names |

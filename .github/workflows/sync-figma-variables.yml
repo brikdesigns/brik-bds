@@ -46,24 +46,7 @@ jobs:
       if: steps.detect.outputs.source == 'tokens-studio' && inputs.skip-build != 'true'
       run: npm run build:sd-figma
 
-    - name: Transform manual Figma export
-      if: steps.detect.outputs.source == 'manual'
-      run: |
-        if [ -f scripts/transform-figma-export.js ]; then
-          node scripts/transform-figma-export.js --compare
-        else
-          echo "⚠ scripts/transform-figma-export.js not found — skipping manual transform"
-        fi
-
-    - name: Build DTCG tokens (Webflow source)
-      if: inputs.skip-build != 'true'
-      run: node scripts/css-to-dtcg.js
-
-    - name: Build Style Dictionary outputs (Webflow source)
-      if: inputs.skip-build != 'true'
-      run: npx style-dictionary build --config sd.config.mjs
-
-    - name: Build web tokens
+    - name: Build all tokens
       if: inputs.skip-build != 'true'
       run: npm run build:all-tokens
 
@@ -81,6 +64,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add design-tokens/ build/ tokens/
+        git add design-tokens/ tokens/
+        git add -f build/
         git commit -m "Sync Figma Variables — $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
         git push
