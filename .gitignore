@@ -38,21 +38,23 @@ images/
 test/
 
 # ─── Root css/ and js/ directories ───────────────────────────────
-# These contain the BDS animation library (used by mockups and Astro builds)
-# AND legacy Webflow artifacts. Ignore the dir, un-ignore BDS files.
-css/
-!css/animations.css
-!css/gsap-scroll-effects.css
-!css/premium-effects.css
-!css/head.css
-!css/head-theme-for-brik.css
-!css/primitives.css
-js/
-!js/scroll-animations.js
-!js/gsap-scroll-effects.js
-!js/premium-scroll.js
-!js/parallax.js
-!js/smooth-scroller.js
+# BDS animation library lives here (used by mockups and Astro builds).
+# Legacy Webflow artifacts also exist here — ignore those specifically.
+css/*.webflow.css
+css/brik-bds.css
+css/filtering.css
+css/normalize.css
+css/webflow.css
+css/wf-*.css
+js/webflow.js
+js/cms-content-system.js
+js/count-contacts.js
+js/footer.js
+js/industry-data.js
+js/list-notion-databases.js
+js/publish-webflow*.js
+js/test-*.js
+js/theme-switcher.js
 
 # ─── Webflow HTML pages (site exports) ───────────────────────────
 # Only .html inside .storybook/ should be tracked
