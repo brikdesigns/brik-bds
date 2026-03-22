@@ -11,3 +11,4 @@ export {
 export { BorderRadiusPreview, BorderWidthPreview } from './BorderRadiusPreview';
 export { ShadowScale } from './ShadowPreview';
 export { ThemeComparison, ThemeOverview } from './ThemeComparison';
+export { TokenDirectory } from './TokenDirectory';

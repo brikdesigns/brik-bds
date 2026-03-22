@@ -196,11 +196,11 @@ const preview: Preview = {
       storySort: {
         order: [
           'Overview',
-          ['Welcome', 'ThemeSwitcher'],
+          ['Welcome', 'Getting Started', 'ThemeSwitcher'],
           'Foundations',
           [
             'Design Tokens',
-            ['Overview', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size'],
+            ['Overview', 'Token Directory', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size'],
             'Assets',
             '*',
           ],

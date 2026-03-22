@@ -1,0 +1,13 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { TokenDirectory } from './_components/TokenDirectory';
+
+<Meta title="Foundations/Design Tokens/Token Directory" />
+
+# Token directory
+
+A complete inventory of every design token generated from Figma via Style Dictionary. Search, filter by category, and copy token references. Values update live when you switch themes in the toolbar.
+
+> **Semantic tokens** (blue badges) reference primitives via `var()` — use these in components.
+> **Primitive tokens** define the raw scale values — never reference directly in component code.
+
+<TokenDirectory />

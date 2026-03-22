@@ -1,0 +1,132 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Overview/Getting Started" />
+
+# Getting started
+
+Welcome to the Brik Design System. If you're building with BDS for the first time, this page walks through everything you need to get up and running.
+
+## Steps
+
+- [Step 1: Understand the token system](#step-1-understand-the-token-system)
+- [Step 2: Set up your project](#step-2-set-up-your-project)
+- [Step 3: Explore the components](#step-3-explore-the-components)
+- [Step 4: Work with themes](#step-4-work-with-themes)
+- [Step 5: Review usage guidance](#step-5-review-usage-guidance)
+
+---
+
+## Step 1: Understand the token system
+
+BDS is powered by **design tokens** — named values that represent every visual decision (colors, spacing, typography, borders, shadows). Tokens flow from Figma through Style Dictionary into CSS custom properties, JS modules, and SwiftUI enums.
+
+There are two layers:
+
+| Layer | Example | Use in components? |
+|-------|---------|-------------------|
+| **Semantic** | `--text-primary`, `--padding-lg` | Yes — always |
+| **Primitive** | `--font-size-700`, `--space-400` | No — never reference directly |
+
+Components reference semantic tokens only. When a theme changes, semantic tokens re-map to different primitives — components update automatically.
+
+**Next:** [Design Tokens overview](?path=/docs/foundations-design-tokens-overview--docs) for the full architecture.
+
+---
+
+## Step 2: Set up your project
+
+### Install BDS as a submodule
+
+```bash
+git submodule add https://github.com/brikdesigns/brik-bds.git brik-bds
+```
+
+### Import tokens in your CSS
+
+Every consuming project needs two imports in `globals.css`, in this order:
+
+```css
+/* src/app/globals.css */
+@import '../../brik-bds/tokens/fonts.css';        /* @font-face declarations */
+@import '../../brik-bds/tokens/figma-tokens.css';  /* All CSS custom properties */
+```
+
+This makes every `var(--...)` reference resolve at runtime. Without these imports, components render with no styles.
+
+### Set up the token layer (React/Next.js)
+
+Copy the reference files from `brik-client-portal`:
+
+| File | Purpose |
+|------|---------|
+| `src/lib/tokens.ts` | Figma style name to `var()` mapping |
+| `src/lib/styles.ts` | Composed `CSSProperties` presets |
+| `src/components/prose.tsx` | Shared markdown renderer |
+
+**Never write raw `var()` strings inline.** Always import from `@/lib/tokens` and `@/lib/styles`.
+
+**Full guide:** [Consuming Tokens](https://github.com/brikdesigns/brik-bds/blob/main/docs/CONSUMING-TOKENS.md)
+
+---
+
+## Step 3: Explore the components
+
+BDS ships React components across several categories:
+
+| Category | Components |
+|----------|------------|
+| **Action** | Button, LinkButton, IconButton, ButtonGroup |
+| **Form** | TextInput, TextArea, Select, SearchInput, Checkbox, Radio, Switch |
+| **Display** | Badge, Tag, Chip, Avatar, Tooltip, Counter, Dot |
+| **Feedback** | Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner |
+| **Structure** | Card, Table, Modal, Sheet, Accordion, Menu, PageHeader |
+| **Navigation** | TextLink, TabBar, Breadcrumb, Pagination, SidebarNavigation |
+
+Browse them in the **Components** section of the sidebar. Every component has:
+
+- **Playground** — interactive Controls panel
+- **Variants** — all visual permutations in one view
+- **Patterns** — real-world compositions
+
+---
+
+## Step 4: Work with themes
+
+BDS includes 9 theme variants, each overriding semantic tokens for color, typography, and spacing. Use the **paintbrush icon** in the Storybook toolbar to switch between them.
+
+| Theme | Font pairing | Mood |
+|-------|-------------|------|
+| Brik Brand | Poppins | Warm, modern |
+| Theme 1 | Open Sans | Clean, neutral |
+| Theme 2 | Geist | Dark, technical |
+| Theme 3 | Source Sans 3 | Blue, corporate |
+| Theme 4 | Hind / Lato | Gold, professional |
+| Theme 5 | Open Sans / Newsreader | Peach, editorial |
+| Theme 6 | Source Sans 3 | Minimal, airy |
+| Theme 7 | Hind / Lato | Warm, approachable |
+| Theme 8 | Hind / Playfair | Vibrant, expressive |
+
+Themes work by overriding CSS custom properties on a `.body.theme-N` wrapper. Components don't need any changes — they read the same token names and get different values.
+
+**Next:** [Theme Switcher](?path=/docs/overview-themeswitcher--docs) to see all components under each theme.
+
+---
+
+## Step 5: Review usage guidance
+
+Before building, review these resources:
+
+| Resource | What it covers |
+|----------|---------------|
+| [Token Reference](https://github.com/brikdesigns/brik-bds/blob/main/tokens/TOKEN-REFERENCE.md) | Complete list of every token name, value, and category |
+| [Token Directory](?path=/docs/foundations-design-tokens-token-directory--docs) | Searchable, filterable, live-updating token browser |
+| [Component Patterns](https://github.com/brikdesigns/brik-bds/blob/main/docs/COMPONENT-PATTERNS.md) | CSS-first approach, BEM naming, story standard |
+| [Consuming Tokens](https://github.com/brikdesigns/brik-bds/blob/main/docs/CONSUMING-TOKENS.md) | How app projects import and use BDS tokens |
+| [Grid System](https://github.com/brikdesigns/brik-bds/blob/main/tokens/GRID-SYSTEM.md) | 4-point mathematical grid, spacing scale |
+
+### Key rules
+
+1. **Semantic tokens only** in component code — never primitives, never hardcoded values
+2. **CSS custom properties** for all visual values — never hex codes or px values inline
+3. **Import order matters** — `fonts.css` before `figma-tokens.css`
+4. **Token linter enforces compliance** — `npm run lint-tokens` catches violations

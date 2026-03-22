@@ -4,59 +4,54 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Brik Design System
 
-The BDS component library provides themed React components powered by CSS custom properties. All components adapt automatically across 9 bundled themes.
+Themed React components powered by CSS custom properties. All components adapt automatically across 9 bundled themes — switch with the paintbrush icon in the toolbar.
 
-## Theme switching
+---
 
-Use the paintbrush icon in the toolbar above to switch between themes. Every component and documentation page updates in real time — including the sidebar when switching to dark themes.
+## Start here
 
-## Foundation
+| | |
+|---|---|
+| [Getting Started](?path=/docs/overview-getting-started--docs) | Set up your project, understand the token system, explore components |
+| [Theme Switcher](?path=/docs/overview-themeswitcher--docs) | Preview all components under each of the 9 themes |
 
-Design tokens are the atomic visual decisions that power BDS. Explore each category:
+## Foundations
 
-| Category | Description |
-|----------|-------------|
-| [Design Tokens](?path=/docs/foundation-design-tokens--docs) | Architecture overview, naming convention, multi-platform outputs |
-| [Color](?path=/docs/foundation-color--docs) | Grayscale, theme palettes, semantic color roles |
-| [Typography](?path=/docs/foundation-typography--docs) | Font families, sizes, weights, line heights |
-| [Spacing](?path=/docs/foundation-spacing--docs) | Space and gap scales, semantic padding tokens |
-| [Border Radius](?path=/docs/foundation-border-radius--docs) | Radius scale and modes |
-| [Border Width](?path=/docs/foundation-border-width--docs) | Width scale and semantic widths |
-| [Shadow](?path=/docs/foundation-shadow--docs) | Blur, spread, elevation |
-| [Size](?path=/docs/foundation-size--docs) | Size scale, breakpoints, containers |
+Design tokens are the atomic visual decisions that power BDS. They bridge design and engineering with a shared language across platforms.
 
-## Token system
-
-Components use CSS variables from the Webflow export. The naming convention is:
-
-```
---_[category]---[type]--[variant]
-```
-
-**Primitives** (raw scale values, never in components):
-- `--space--400` — 16px
-- `--font-size--700` — 32px
-- `--grayscale--darkest` — #333
-
-**Semantic** (purpose-bound, used in components):
-- `--_color---background--brand-primary` — brand background color
-- `--_typography---font-family--heading` — heading font family
-- `--_space---lg` — large spacing value
-- `--_border-radius---button` — button corner radius
+| | |
+|---|---|
+| [Design Tokens](?path=/docs/foundations-design-tokens-overview--docs) | Architecture, naming convention, multi-platform outputs |
+| [Token Directory](?path=/docs/foundations-design-tokens-token-directory--docs) | Searchable inventory of every token with live values |
+| [Color](?path=/docs/foundations-design-tokens-color--docs) | Grayscale, theme palettes, semantic color roles |
+| [Typography](?path=/docs/foundations-design-tokens-typography--docs) | Font families, sizes, weights, line heights |
+| [Spacing](?path=/docs/foundations-design-tokens-spacing--docs) | Space and gap scales, semantic padding tokens |
+| [Border Radius](?path=/docs/foundations-design-tokens-border-radius--docs) | Radius scale and modes |
+| [Border Width](?path=/docs/foundations-design-tokens-border-width--docs) | Width scale and semantic widths |
+| [Shadow](?path=/docs/foundations-design-tokens-shadow--docs) | Blur, spread, elevation |
+| [Size](?path=/docs/foundations-design-tokens-size--docs) | Size scale, breakpoints, containers |
 
 ## Components
 
-### Data display
-Badge, Tag, Dot, Avatar, Tooltip, Counter
+| Category | Components |
+|----------|------------|
+| **Action** | Button, LinkButton, IconButton, ButtonGroup |
+| **Form** | TextInput, TextArea, Select, SearchInput, Checkbox, Radio, Switch |
+| **Display** | Badge, Tag, Chip, Avatar, Tooltip, Counter, Dot |
+| **Feedback** | Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner |
+| **Structure** | Card, Table, Modal, Sheet, Accordion, Menu, PageHeader |
+| **Navigation** | TextLink, TabBar, Breadcrumb, Pagination, SidebarNavigation |
 
-### Form controls
-Button, TextInput, TextArea, Select, Checkbox, Radio, Switch, SearchInput, AddressInput, FilterButton
+## Token system
 
-### Layout
-Card, CardControl, Table, Modal, Accordion, Menu, PageHeader
+Components use CSS custom properties generated from Figma via Style Dictionary:
 
-### Feedback
-Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner
+```
+Primitives (raw scale)              Semantic (purpose-bound)
+──────────────────────              ────────────────────────
+--space-400         → 16px          --padding-md   → var(--space-400)
+--font-size-700     → 32px          --heading-lg   → var(--font-size-700)
+--color-grayscale-darkest → #333    --text-primary → var(--color-grayscale-darkest)
+```
 
-### Navigation
-TextLink, TabBar, Breadcrumb, Pagination, SidebarNavigation
+**Components use semantic tokens only.** Primitives define the scale — never reference them directly.
