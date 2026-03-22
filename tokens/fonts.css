@@ -1,47 +1,15 @@
 /**
  * BDS Font Declarations
  *
- * Auto-generated from Webflow CSS export.
- * DO NOT EDIT — re-run: npm run extract-tokens
+ * Body/heading fonts (Lato, Poppins, etc.) are loaded via Google Fonts
+ * in .storybook/manager-head.html. Only icon fonts need local @font-face.
  *
- * Source: updates/brik-bds.webflow/css/brik-bds.webflow.css
+ * Font files: tokens/fonts/
  */
 
 @font-face {
-  font-family: Lato;
-  src: url('../updates/brik-bds.webflow/fonts/Lato-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Lato;
-  src: url('../updates/brik-bds.webflow/fonts/Lato-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Lato;
-  src: url('../updates/brik-bds.webflow/fonts/Lato-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Lato;
-  src: url('../updates/brik-bds.webflow/fonts/Lato-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: "Font Awesome 6 Free 400";
-  src: url('../updates/brik-bds.webflow/fonts/Font-Awesome-6-Free-Regular-400.otf') format('opentype');
+  src: url('fonts/Font-Awesome-6-Free-Regular-400.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -49,7 +17,7 @@
 
 @font-face {
   font-family: "Font Awesome 6 Brands 400";
-  src: url('../updates/brik-bds.webflow/fonts/Font-Awesome-6-Brands-Regular-400.otf') format('opentype');
+  src: url('fonts/Font-Awesome-6-Brands-Regular-400.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -57,7 +25,7 @@
 
 @font-face {
   font-family: "Font Awesome 6 Free Solid 900";
-  src: url('../updates/brik-bds.webflow/fonts/Font-Awesome-6-Free-Solid-900.otf') format('opentype');
+  src: url('fonts/Font-Awesome-6-Free-Solid-900.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -65,7 +33,7 @@
 
 @font-face {
   font-family: "Font Awesome 6 Pro Solid 900";
-  src: url('../updates/brik-bds.webflow/fonts/Font-Awesome-6-Pro-Solid-900.otf') format('opentype');
+  src: url('fonts/Font-Awesome-6-Pro-Solid-900.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -73,7 +41,7 @@
 
 @font-face {
   font-family: "Font Awesome 6 Pro 300";
-  src: url('../updates/brik-bds.webflow/fonts/Font-Awesome-6-Pro-Light-300.otf') format('opentype');
+  src: url('fonts/Font-Awesome-6-Pro-Light-300.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -81,7 +49,7 @@
 
 @font-face {
   font-family: "Font Awesome 6 Pro 400";
-  src: url('../updates/brik-bds.webflow/fonts/Font-Awesome-6-Pro-Regular-400.otf') format('opentype');
+  src: url('fonts/Font-Awesome-6-Pro-Regular-400.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -89,7 +57,7 @@
 
 @font-face {
   font-family: "Font Awesome 6 Pro 100";
-  src: url('../updates/brik-bds.webflow/fonts/Font-Awesome-6-Pro-Thin-100.otf') format('opentype');
+  src: url('fonts/Font-Awesome-6-Pro-Thin-100.otf') format('opentype');
   font-weight: 100;
   font-style: normal;
   font-display: swap;

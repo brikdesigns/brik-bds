@@ -28,17 +28,31 @@ tools/
 
 # ─── Legacy Webflow Artifacts (removed 2026-03-22) ───────────────
 # Webflow is a secondary platform. Token source is Figma → Style Dictionary.
-# Component animations live in components/ui/[Name]/[Name].css, NOT in root css/.
 updates/
 archive/
 *.webflow/
-css/
-js/
 json/
 cms/
 markdown/
 images/
 test/
+
+# ─── Root css/ and js/ directories ───────────────────────────────
+# These contain the BDS animation library (used by mockups and Astro builds)
+# AND legacy Webflow artifacts. Ignore the dir, un-ignore BDS files.
+css/
+!css/animations.css
+!css/gsap-scroll-effects.css
+!css/premium-effects.css
+!css/head.css
+!css/head-theme-for-brik.css
+!css/primitives.css
+js/
+!js/scroll-animations.js
+!js/gsap-scroll-effects.js
+!js/premium-scroll.js
+!js/parallax.js
+!js/smooth-scroller.js
 
 # ─── Webflow HTML pages (site exports) ───────────────────────────
 # Only .html inside .storybook/ should be tracked

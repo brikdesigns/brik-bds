@@ -1,0 +1,711 @@
+/**
+ * Brik Design System - Premium Visual Effects
+ *
+ * Advanced CSS effects for elevated website explorations.
+ * These go beyond entrance animations — they create atmosphere,
+ * texture, and visual sophistication.
+ *
+ * DEPENDENCY: Requires animation tokens from head.css
+ * COMPANION: Works alongside animations.css + gsap-scroll-effects.css
+ *
+ * Categories:
+ *   1. Clip-path reveals (image/section unveils)
+ *   2. Background color morphs (section-to-section transitions)
+ *   3. Grain & texture overlays (film grain, noise, gradients)
+ *   4. Magnetic & cursor effects (proximity hover)
+ *   5. Image treatments (Ken Burns, reveal masks, parallax crops)
+ *   6. Typography effects (gradient text, stroke, variable weight)
+ *   7. Glassmorphism & blur layers
+ *   8. Decorative elements (dividers, shapes, orbs)
+ *   9. Dark mode / light mode transitions
+ *  10. Counter & stat animations
+ *
+ * Usage:
+ *   1. Load after animations.css
+ *   2. Add classes to elements
+ *   3. Some effects require premium-scroll.js for scroll-triggered activation
+ */
+
+/* ==========================================================================
+   1. CLIP-PATH REVEALS
+   Cinematic image and section unveils
+   ========================================================================== */
+
+/* Circle expand from center */
+.clip-circle-reveal {
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.clip-circle-reveal.is-visible {
+  clip-path: circle(75% at 50% 50%);
+}
+
+/* Diagonal wipe (top-left to bottom-right) */
+.clip-diagonal-reveal {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.clip-diagonal-reveal.is-visible {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Curtain pull (center out) */
+.clip-curtain-reveal {
+  clip-path: inset(0 50% 0 50%);
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.clip-curtain-reveal.is-visible {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Horizontal wipe (left to right) */
+.clip-wipe-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.clip-wipe-reveal.is-visible {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Vertical wipe (bottom to top) */
+.clip-rise-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.clip-rise-reveal.is-visible {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Diamond reveal */
+.clip-diamond-reveal {
+  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.clip-diamond-reveal.is-visible {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+/* ==========================================================================
+   2. BACKGROUND COLOR MORPHS
+   Smooth section-to-section color transitions via CSS custom properties
+
+   Usage:
+     <section class="section-morph" style="--bg-from: #fff; --bg-to: #0a0a0a; --text-from: #111; --text-to: #fff">
+
+   JS activates by setting --morph-progress (0 to 1) via GSAP scrub
+   ========================================================================== */
+
+.section-morph {
+  --morph-progress: 0;
+  background-color: color-mix(
+    in srgb,
+    var(--bg-from, #ffffff) calc((1 - var(--morph-progress)) * 100%),
+    var(--bg-to, #0a0a0a)
+  );
+  color: color-mix(
+    in srgb,
+    var(--text-from, #111111) calc((1 - var(--morph-progress)) * 100%),
+    var(--text-to, #ffffff)
+  );
+  transition: background-color 0.1s linear, color 0.1s linear;
+}
+
+/* Pre-defined morph presets */
+.morph-light-to-dark {
+  --bg-from: #ffffff;
+  --bg-to: #0a0a0a;
+  --text-from: #111111;
+  --text-to: #ffffff;
+}
+
+.morph-dark-to-light {
+  --bg-from: #0a0a0a;
+  --bg-to: #ffffff;
+  --text-from: #ffffff;
+  --text-to: #111111;
+}
+
+.morph-light-to-brand {
+  --bg-from: #ffffff;
+  --bg-to: var(--background-brand-primary, #0a0a0a);
+  --text-from: #111111;
+  --text-to: #ffffff;
+}
+
+/* ==========================================================================
+   3. GRAIN & TEXTURE OVERLAYS
+   Film grain, noise, mesh gradients for atmosphere
+   ========================================================================== */
+
+/* Film grain overlay — apply to a section or full page */
+.grain-overlay {
+  position: relative;
+}
+.grain-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Heavier grain for dark sections */
+.grain-overlay--heavy::after {
+  opacity: 0.08;
+}
+
+/* Subtle grain for light sections */
+.grain-overlay--light::after {
+  opacity: 0.025;
+}
+
+/* Animated grain (subtle motion for hero sections) */
+@keyframes grain-drift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-2%, 2%); }
+  50%  { transform: translate(1%, -1%); }
+  75%  { transform: translate(-1%, -2%); }
+  100% { transform: translate(0, 0); }
+}
+
+.grain-overlay--animated::after {
+  animation: grain-drift 8s steps(4) infinite;
+}
+
+/* Mesh gradient background */
+.mesh-gradient {
+  background:
+    radial-gradient(at 20% 30%, var(--mesh-color-1, rgba(99, 102, 241, 0.15)) 0%, transparent 50%),
+    radial-gradient(at 80% 70%, var(--mesh-color-2, rgba(139, 92, 246, 0.12)) 0%, transparent 50%),
+    radial-gradient(at 50% 50%, var(--mesh-color-3, rgba(59, 130, 246, 0.08)) 0%, transparent 70%);
+}
+
+/* Gradient orb (floating decorative glow) */
+.gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.gradient-orb--brand {
+  background: var(--background-brand-primary, #4665f5);
+}
+
+.gradient-orb--accent {
+  background: var(--background-brand-secondary, #79d799);
+}
+
+/* ==========================================================================
+   4. MAGNETIC & CURSOR EFFECTS
+   Buttons/elements that respond to cursor proximity
+   Requires premium-scroll.js for JS-driven magnetic behavior
+   ========================================================================== */
+
+/* Magnetic hover target — JS moves the element toward cursor */
+.magnetic {
+  will-change: transform;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Cursor spotlight — section reveals a radial gradient at cursor position */
+.cursor-spotlight {
+  position: relative;
+  overflow: hidden;
+}
+.cursor-spotlight::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--spotlight-color, rgba(255,255,255,0.06)) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  /* Position set by JS via --cursor-x, --cursor-y */
+  left: var(--cursor-x, 50%);
+  top: var(--cursor-y, 50%);
+}
+.cursor-spotlight:hover::before {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   5. IMAGE TREATMENTS
+   Ken Burns, reveal masks, parallax crops
+   ========================================================================== */
+
+/* Ken Burns — slow zoom on images (great for hero backgrounds) */
+@keyframes ken-burns {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.ken-burns {
+  overflow: hidden;
+}
+.ken-burns img,
+.ken-burns video {
+  animation: ken-burns 20s ease-in-out alternate infinite;
+  will-change: transform;
+}
+
+/* Ken Burns variants */
+.ken-burns--slow img,
+.ken-burns--slow video {
+  animation-duration: 30s;
+}
+
+.ken-burns--fast img,
+.ken-burns--fast video {
+  animation-duration: 12s;
+}
+
+/* Image reveal mask — image slides up while container clips */
+.image-reveal {
+  overflow: hidden;
+  position: relative;
+}
+.image-reveal img {
+  transform: scale(1.2) translateY(20%);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.image-reveal.is-visible img {
+  transform: scale(1) translateY(0);
+}
+
+/* Parallax crop — oversized image in fixed-height container */
+.parallax-crop {
+  overflow: hidden;
+  position: relative;
+}
+.parallax-crop img {
+  position: absolute;
+  top: -15%;
+  left: 0;
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Image tint overlay */
+.image-tint {
+  position: relative;
+}
+.image-tint::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--tint-color, rgba(0, 0, 0, 0.3));
+  pointer-events: none;
+  mix-blend-mode: var(--tint-blend, multiply);
+}
+
+/* Gradient overlay on images (bottom fade for text readability) */
+.image-gradient-bottom {
+  position: relative;
+}
+.image-gradient-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(to top, var(--gradient-color, rgba(0,0,0,0.7)) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   6. TYPOGRAPHY EFFECTS
+   Gradient text, stroke outlines, variable weight
+   ========================================================================== */
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--text-gradient-from, var(--text-primary, #111)) 0%,
+    var(--text-gradient-to, var(--background-brand-primary, #4665f5)) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient text presets */
+.text-gradient--brand {
+  --text-gradient-from: var(--background-brand-primary, #4665f5);
+  --text-gradient-to: var(--background-brand-secondary, #79d799);
+}
+
+/* Stroke / outline text */
+.text-stroke {
+  -webkit-text-stroke: 1px currentColor;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-stroke--thick {
+  -webkit-text-stroke: 2px currentColor;
+}
+
+/* Text shadow glow (for dark backgrounds) */
+.text-glow {
+  text-shadow: 0 0 40px var(--glow-color, rgba(255, 255, 255, 0.15));
+}
+
+/* Highlight span — animated background reveal */
+.text-highlight {
+  background-image: linear-gradient(
+    var(--highlight-color, var(--background-brand-primary, #4665f5)) 0%,
+    var(--highlight-color, var(--background-brand-primary, #4665f5)) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  background-position: left;
+  transition: background-size 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0.05em 0.15em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.text-highlight.is-visible {
+  background-size: 100% 100%;
+}
+
+/* Marquee — infinite horizontal scroll for text or logos */
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+.marquee-track {
+  display: inline-flex;
+  animation: marquee-scroll var(--marquee-speed, 30s) linear infinite;
+  will-change: transform;
+}
+.marquee--reverse .marquee-track {
+  animation-direction: reverse;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ==========================================================================
+   7. GLASSMORPHISM & BLUR LAYERS
+   Frosted glass, backdrop blur, layered depth
+   ========================================================================== */
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass--light {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.glass--dark {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Frosted card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+/* ==========================================================================
+   8. DECORATIVE ELEMENTS
+   Section dividers, angled sections, floating shapes
+   ========================================================================== */
+
+/* Angled section top */
+.section-angle-top {
+  position: relative;
+}
+.section-angle-top::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: inherit;
+  clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  z-index: 1;
+}
+
+/* Angled section bottom */
+.section-angle-bottom {
+  position: relative;
+}
+.section-angle-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: inherit;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  z-index: 1;
+}
+
+/* Curved section divider */
+.section-curve-bottom {
+  position: relative;
+}
+.section-curve-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: inherit;
+  clip-path: ellipse(55% 100% at 50% 0%);
+  z-index: 1;
+}
+
+/* Horizontal rule with gradient */
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--divider-color, rgba(255, 255, 255, 0.15)) 50%,
+    transparent 100%
+  );
+  border: none;
+}
+
+/* Dot grid background pattern */
+.dot-grid {
+  background-image: radial-gradient(
+    circle,
+    var(--dot-color, rgba(0, 0, 0, 0.08)) 1px,
+    transparent 1px
+  );
+  background-size: var(--dot-spacing, 24px) var(--dot-spacing, 24px);
+}
+
+/* ==========================================================================
+   9. SECTION THEMING
+   Dark/light section switching with smooth edges
+   ========================================================================== */
+
+/* Dark section base */
+.section-dark {
+  background-color: var(--bg-dark, #0a0a0a);
+  color: var(--text-dark, #f5f5f5);
+}
+
+/* Light section base */
+.section-light {
+  background-color: var(--bg-light, #ffffff);
+  color: var(--text-light, #111111);
+}
+
+/* Muted/warm section */
+.section-warm {
+  background-color: var(--bg-warm, #f8f5f0);
+  color: var(--text-light, #111111);
+}
+
+/* Brand section */
+.section-brand {
+  background-color: var(--background-brand-primary, #0a0a0a);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   10. COUNTER & STAT ANIMATIONS
+   Number counting effects (JS-driven via premium-scroll.js)
+   ========================================================================== */
+
+.counter {
+  font-variant-numeric: tabular-nums;
+  will-change: contents;
+}
+
+/* Stat card layout */
+.stat-group {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.stat-label {
+  opacity: 0.7;
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   11. VIDEO BACKGROUNDS
+   Full-bleed video sections with overlay control
+   ========================================================================== */
+
+.video-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.video-bg video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 0;
+}
+
+.video-bg > *:not(video) {
+  position: relative;
+  z-index: 2;
+}
+
+/* Video overlay (darken for text readability) */
+.video-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--video-overlay, rgba(0, 0, 0, 0.45));
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Lighter overlay for ambient videos */
+.video-bg--light::after {
+  --video-overlay: rgba(0, 0, 0, 0.2);
+}
+
+/* Heavier overlay for text-heavy sections */
+.video-bg--heavy::after {
+  --video-overlay: rgba(0, 0, 0, 0.65);
+}
+
+/* Gradient overlay (fade to section color at bottom) */
+.video-bg--gradient::after {
+  background: linear-gradient(
+    to bottom,
+    var(--video-overlay-top, rgba(0, 0, 0, 0.3)) 0%,
+    var(--video-overlay-bottom, rgba(0, 0, 0, 0.8)) 100%
+  );
+}
+
+/* ==========================================================================
+   12. SCROLL-SCRUBBED VIDEO
+   Video playback tied to scroll position
+   Requires premium-scroll.js data-scrub-video attribute
+   ========================================================================== */
+
+.scrub-video-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.scrub-video-container video {
+  width: 100%;
+  display: block;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   Respect user preferences
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .clip-circle-reveal,
+  .clip-diagonal-reveal,
+  .clip-curtain-reveal,
+  .clip-wipe-reveal,
+  .clip-rise-reveal,
+  .clip-diamond-reveal {
+    clip-path: none !important;
+    transition: none !important;
+  }
+
+  .ken-burns img,
+  .ken-burns video {
+    animation: none !important;
+  }
+
+  .image-reveal img {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .marquee-track {
+    animation: none !important;
+  }
+
+  .grain-overlay--animated::after {
+    animation: none !important;
+  }
+
+  .text-highlight {
+    background-size: 100% 100% !important;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   Scale down effects for mobile
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .gradient-orb {
+    filter: blur(60px);
+    opacity: 0.2;
+  }
+
+  .cursor-spotlight::before {
+    display: none; /* No cursor on touch */
+  }
+
+  .stat-group {
+    gap: 1.5rem;
+  }
+
+  .section-angle-top::before,
+  .section-angle-bottom::after {
+    height: 30px;
+  }
+
+  .section-curve-bottom::after {
+    height: 40px;
+  }
+}
