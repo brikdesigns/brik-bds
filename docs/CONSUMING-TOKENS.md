@@ -11,7 +11,7 @@ This guide is for any project that uses brik-bds as a submodule (client portals,
 ```
 Figma Variables (source of truth)
     |
-    v  Tokens Studio plugin exports to JSON
+    v  Figma MCP → sync-figma-mcp.js → tokens-studio.json
     v  Style Dictionary transforms per platform (npm run build:sd-figma)
     |
 brik-bds/tokens/figma-tokens.css  <- AUTO-GENERATED CSS custom properties

@@ -195,7 +195,7 @@ Before adding a new token:
 2. **Ensure 4-point alignment** — Must be divisible by 4
 3. **Document the use case** — Why does this value exist?
 4. **Update this file** — Add it to the scale above
-5. **Extract from Webflow** — Run `npm run extract-tokens`
+5. **Rebuild tokens** — Run `npm run build:sd-figma`
 
 **Example: Adding 44px spacing**
 ```
@@ -241,7 +241,7 @@ Before adding a new token:
 
 If a spacing value seems off, check:
 1. Is it a multiple of 4?
-2. Is it defined in `webflow-tokens.css`?
+2. Is it defined in `figma-tokens.css`?
 3. Did the design system scan catch it in `lint-tokens`?
 
 For REM planning or grid questions, raise an issue in the repo.
