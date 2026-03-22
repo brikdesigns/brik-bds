@@ -1,24 +1,49 @@
-# MCP configuration (contains tokens)
-.mcp.json
-
-# Environment files
+# ─── Environment & Secrets ────────────────────────────────────────
 .env
 .env.local
 .env.*.local
+.mcp.json
 
-# Node
+# ─── Dependencies ─────────────────────────────────────────────────
 node_modules/
 
-# Storybook build output
-storybook-static/
-
-# Library build output
+# ─── Build Artifacts ──────────────────────────────────────────────
 dist/
+storybook-static/
+.netlify/
 
-# OS files
+# ─── OS Files ─────────────────────────────────────────────────────
 .DS_Store
 logs/
 
-# Local Netlify folder
-.netlify
+# ─── External Tools (not part of BDS) ────────────────────────────
 claude-talk-to-figma-mcp/
+tools/
+
+# ─── Legacy Webflow Artifacts (removed 2026-03-22) ───────────────
+# Webflow is a secondary platform. Token source is Figma → Style Dictionary.
+# Component animations live in components/ui/[Name]/[Name].css, NOT in root css/.
+updates/
+*.webflow/
+css/
+js/
+json/
+cms/
+markdown/
+images/
+test/
+
+# ─── Webflow HTML pages (site exports) ───────────────────────────
+# Only .html inside .storybook/ should be tracked
+/*.html
+detail_*.html
+static-template-*.html
+web-modules*.html
+healthcare-*.html
+image-license-info.html
+modules.html
+
+# ─── Stale one-off files ─────────────────────────────────────────
+webflow.tar.gz
+variables-*.json
+notion-tokens-to-add.md

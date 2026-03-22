@@ -19,8 +19,12 @@ This is the **source of truth** for the Brik Design System React components.
 | `components/ui/` | React components (Button, Badge, Card, etc.) |
 | `components/providers/` | ThemeProvider context |
 | `.storybook/` | Storybook configuration |
+| `stories/` | Foundation Storybook docs (tokens, typography, color) |
 | `tokens/` | Token documentation and build scripts |
-| `updates/brik-bds.webflow/` | Webflow CSS export (source of tokens) |
+| `design-tokens/` | Figma token definitions (Style Dictionary input) |
+| `scripts/` | Build automation and linting |
+| `fonts/` | Font Awesome 6 font files |
+| `build/` | Style Dictionary output (CSS, JS, Swift) |
 
 ## Workflow
 
