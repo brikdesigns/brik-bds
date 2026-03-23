@@ -110,17 +110,17 @@
 
 /* Error state */
 .bds-select--error {
-  border-color: var(--system--red);
+  border-color: var(--color-system-red);
 }
 
 .bds-select--error:hover:not(:disabled) {
-  border-color: var(--system--red);
+  border-color: var(--color-system-red);
 }
 
 .bds-select--error:focus,
 .bds-select--error:focus-visible {
-  border-color: var(--system--red);
-  box-shadow: 0 0 0 1px var(--system--red);
+  border-color: var(--color-system-red);
+  box-shadow: 0 0 0 1px var(--color-system-red);
 }
 
 /* ─── Chevron icon ───────────────────────────────────────────── */

@@ -497,7 +497,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
     const triggerStyles: CSSProperties = {
       ...triggerBaseStyles,
       ...sizeStyle.trigger,
-      ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
+      ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
       ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}),
       ...(open ? { borderColor: 'var(--border-brand-primary)' } : {}),
     };
@@ -516,7 +516,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             style={{
               ...labelBaseStyles,
               ...sizeStyle.label,
-              ...(hasError ? { color: 'var(--system--red)' } : {}),
+              ...(hasError ? { color: 'var(--color-system-red)' } : {}),
             }}
           >
             {label}
@@ -568,7 +568,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         {error && (
           <span
             id={`${inputId}-error`}
-            style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
+            style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
             role="alert"
           >
             {error}

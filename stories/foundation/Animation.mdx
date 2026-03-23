@@ -1,0 +1,282 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import {
+  TierBadge,
+  AnimationDemo,
+  ClipRevealDemo,
+  GrainDemo,
+  GlassDemo,
+  TextEffectDemo,
+  HoverDemo,
+  VideoDemo,
+  SectionThemeDemo,
+  EffectGrid,
+  CodeSnippet,
+} from './_animation-components';
+
+<Meta title="Foundations/Animation" />
+
+# Animation
+
+BDS provides a three-tier animation system. Every tier builds on the previous one — load only what you need.
+
+| Tier | Files | Use when |
+|------|-------|----------|
+| **Lightweight** | `animations.css` + `scroll-animations.js` | Default for every mockup. Fade/slide reveals, hover effects, stagger. |
+| **GSAP** | + `gsap-scroll-effects.js/css` | Design calls for pinning, scrubbing, horizontal scroll, text splitting. |
+| **Premium** | + `premium-effects.css` + `premium-scroll.js` | Design calls for atmosphere: hero sequences, color morphs, grain, magnetic buttons, video scrub. |
+
+---
+
+## Clip-Path Reveals <TierBadge tier="css" />
+
+Cinematic image and section unveils. Add `.is-visible` to trigger (via IntersectionObserver or GSAP).
+
+<EffectGrid columns={3}>
+  <AnimationDemo label="Circle" height={180}>
+    <ClipRevealDemo type="circle" />
+  </AnimationDemo>
+  <AnimationDemo label="Curtain" height={180}>
+    <ClipRevealDemo type="curtain" />
+  </AnimationDemo>
+  <AnimationDemo label="Wipe" height={180}>
+    <ClipRevealDemo type="wipe" />
+  </AnimationDemo>
+</EffectGrid>
+
+<EffectGrid columns={3}>
+  <AnimationDemo label="Rise" height={180}>
+    <ClipRevealDemo type="rise" />
+  </AnimationDemo>
+  <AnimationDemo label="Diagonal" height={180}>
+    <ClipRevealDemo type="diagonal" />
+  </AnimationDemo>
+  <AnimationDemo label="Diamond" height={180}>
+    <ClipRevealDemo type="diamond" />
+  </AnimationDemo>
+</EffectGrid>
+
+<CodeSnippet code={`<div class="clip-circle-reveal is-visible">
+  <img src="photo.jpg" alt="...">
+</div>`} />
+
+---
+
+## Grain & Texture Overlays <TierBadge tier="css" />
+
+Film grain adds atmosphere. Apply to any section — the `::after` pseudo-element handles the overlay.
+
+<EffectGrid columns={3}>
+  <GrainDemo />
+  <GrainDemo variant="heavy" />
+  <GrainDemo variant="light" />
+</EffectGrid>
+
+<CodeSnippet code={`<!-- Standard grain (4% opacity) -->
+<section class="grain-overlay">Content</section>
+
+<!-- Heavy grain for dark sections (8%) -->
+<section class="grain-overlay grain-overlay--heavy">Dark content</section>
+
+<!-- Animated grain for hero sections -->
+<section class="grain-overlay grain-overlay--animated">Hero</section>`} />
+
+---
+
+## Glassmorphism <TierBadge tier="css" />
+
+Frosted glass effects using `backdrop-filter`. Three variants for different backgrounds.
+
+<EffectGrid columns={3}>
+  <GlassDemo />
+  <GlassDemo variant="light" />
+  <GlassDemo variant="dark" />
+</EffectGrid>
+
+<CodeSnippet code={`<div class="glass">Default frosted glass</div>
+<div class="glass--light">Light glass (70% white bg)</div>
+<div class="glass--dark">Dark glass (40% black bg)</div>
+<div class="glass-card">Card with 16px blur + border-radius</div>`} />
+
+---
+
+## Typography Effects <TierBadge tier="css" />
+
+<EffectGrid columns={2}>
+  <TextEffectDemo className="text-gradient" label="Gradient Text" />
+  <TextEffectDemo className="text-gradient--brand" label="Brand Gradient" />
+  <TextEffectDemo className="text-stroke" label="Stroke Text" />
+  <TextEffectDemo className="text-glow" label="Glowing Text" dark />
+  <TextEffectDemo className="text-highlight" label="Highlighted" />
+  <TextEffectDemo className="text-stroke--thick" label="Thick Stroke" />
+</EffectGrid>
+
+<CodeSnippet code={`<h1 class="text-gradient">Gradient heading</h1>
+<h1 class="text-stroke">Outlined heading</h1>
+<h1 class="text-glow">Glowing heading</h1>
+<span class="text-highlight is-visible">Highlighted phrase</span>`} />
+
+---
+
+## Video Backgrounds <TierBadge tier="css" />
+
+Full-bleed video sections with configurable overlay darkness.
+
+<EffectGrid columns={2}>
+  <VideoDemo />
+  <VideoDemo variant="light" />
+  <VideoDemo variant="heavy" />
+  <VideoDemo variant="gradient" />
+</EffectGrid>
+
+<CodeSnippet code={`<section class="video-bg video-bg--gradient">
+  <video autoplay muted loop playsinline>
+    <source src="ambient.mp4" type="video/mp4">
+  </video>
+  <h1>Content above video</h1>
+</section>`} />
+
+---
+
+## Section Theming <TierBadge tier="css" />
+
+Quick section color presets. Combine with grain, glass, and dividers.
+
+<EffectGrid columns={2}>
+  <SectionThemeDemo className="section-dark" label="Dark background" />
+  <SectionThemeDemo className="section-light" label="Light background" />
+  <SectionThemeDemo className="section-warm" label="Warm/cream background" />
+  <SectionThemeDemo className="section-brand" label="Brand primary background" />
+</EffectGrid>
+
+---
+
+## Hover Effects <TierBadge tier="css" />
+
+Micro-interactions for buttons, cards, and links. These are CSS-only — no JS needed.
+
+<EffectGrid columns={3}>
+  <HoverDemo className="hover-lift" label=".hover-lift" />
+  <HoverDemo className="hover-scale" label=".hover-scale" />
+  <HoverDemo className="hover-glow" label=".hover-glow" />
+</EffectGrid>
+
+<EffectGrid columns={3}>
+  <HoverDemo className="hover-dim" label=".hover-dim" />
+  <HoverDemo className="hover-underline" label=".hover-underline" />
+  <HoverDemo className="hover-lift click-press" label=".hover-lift .click-press" />
+</EffectGrid>
+
+---
+
+## Premium Compositions <TierBadge tier="premium" />
+
+These require `premium-scroll.js` and GSAP. They chain multiple effects into signature website experiences.
+
+### Hero Entrance Sequence
+
+Orchestrated page-load animation. Elements stagger in order: badge → headline → body → CTA → media.
+
+<CodeSnippet code={`<section data-premium-hero data-hero-delay="0.3">
+  <span data-hero-badge>New Patient Special</span>
+  <h1 data-hero-headline>Your smile starts here</h1>
+  <p data-hero-body>Modern care in a comfortable setting</p>
+  <div data-hero-cta>
+    <a href="#" class="magnetic" data-premium-magnetic>Book Now</a>
+  </div>
+  <div data-hero-media class="image-reveal">
+    <img src="hero.webp" alt="...">
+  </div>
+</section>
+
+<script>BrikPremium.init();</script>`} />
+
+### Background Color Morph
+
+Sections that transition background/text color as you scroll through.
+
+<CodeSnippet code={`<section data-premium-morph class="morph-light-to-dark grain-overlay">
+  <h2>Our approach</h2>
+  <p>Text color adapts as you scroll...</p>
+</section>`} />
+
+### Counter / Stats Animation
+
+Numbers that count up when scrolled into view.
+
+<CodeSnippet code={`<div class="stat-group">
+  <div class="stat-item">
+    <span class="stat-number" data-premium-counter="500" data-counter-suffix="+">0</span>
+    <span class="stat-label">Happy Clients</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number" data-premium-counter="98" data-counter-suffix="%">0</span>
+    <span class="stat-label">Satisfaction</span>
+  </div>
+</div>`} />
+
+### Scroll-Scrubbed Video
+
+Video playback tied to scroll position (Apple-style product reveals).
+
+<CodeSnippet code={`<div data-premium-video-scrub data-scrub-pin="true" data-scrub-distance="300vh">
+  <video muted playsinline preload="auto">
+    <source src="product-reveal.mp4" type="video/mp4">
+  </video>
+</div>`} />
+
+### Scroll-Activated Tabs
+
+Pinned section that switches content as you scroll — like Daylight Computer's feature explorer.
+
+<CodeSnippet code={`<section data-premium-tabs data-tab-pin-distance="400vh">
+  <nav class="tabs-nav">
+    <button class="tab-trigger" data-tab="0">Implants</button>
+    <button class="tab-trigger" data-tab="1">Cosmetic</button>
+  </nav>
+  <div class="tabs-content">
+    <div class="tab-panel" data-tab-panel="0">Implants content...</div>
+    <div class="tab-panel" data-tab-panel="1">Cosmetic content...</div>
+  </div>
+</section>`} />
+
+---
+
+## Dream Site Recipes
+
+Compositions inspired by real reference sites. See `ANIMATION-REFERENCE.md` for full recipes.
+
+| Recipe | Key techniques |
+|--------|---------------|
+| **Daylight Computer** | `morph-light-to-dark`, `grain-overlay`, `ken-burns`, `data-scroll-text-split`, `data-scroll-horizontal`, `magnetic` |
+| **RealFood.gov** | `section-warm` + `section-dark` alternation, `clip-rise-reveal`, `data-premium-counter`, `image-gradient-bottom`, `text-highlight` |
+| **Legend.xyz** | `section-dark`, `glass-card`, `text-gradient`, `data-scroll-batch`, `divider-gradient`, `cursor-spotlight`, `hover-glow` |
+| **Luxury / Law** | `grain-overlay--light`, `ken-burns--slow`, `clip-curtain-reveal`, `morph-light-to-dark`, `text-stroke`, `glass--light` nav |
+| **Modern Medical** | `video-bg--gradient` hero, `data-premium-hero`, `data-premium-counter`, `image-reveal`, `section-warm`, `text-highlight` |
+
+---
+
+## Choosing a Tier
+
+| Need | Tier |
+|------|------|
+| Fade/slide/scale reveals on scroll | Lightweight |
+| Staggered entrance animations | Lightweight |
+| Hover effects on buttons/cards | Lightweight (CSS only) |
+| Parallax backgrounds | Lightweight (`parallax.js`) |
+| Pinned/sticky scroll sections | GSAP |
+| Scroll-scrubbed animations | GSAP |
+| Horizontal scroll sections | GSAP |
+| Text split / letter animations | GSAP |
+| Film grain / texture overlays | Premium (CSS) |
+| Glassmorphism / frosted glass | Premium (CSS) |
+| Gradient text / stroke text | Premium (CSS) |
+| Video backgrounds | Premium (CSS) |
+| Clip-path image reveals | Premium (CSS) |
+| Hero entrance orchestration | Premium (JS) |
+| Background color morphs | Premium (JS) |
+| Animated number counters | Premium (JS) |
+| Magnetic cursor buttons | Premium (JS) |
+| Scroll-scrubbed video | Premium (JS) |
+| Scroll-activated tab switching | Premium (JS) |
+
+**Default to Lightweight.** Only escalate when the design audit specifically calls for the effect.

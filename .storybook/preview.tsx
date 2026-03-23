@@ -18,6 +18,8 @@ config.autoAddCss = false;
 import '../tokens/fonts.css';
 import '../tokens/figma-tokens.css';
 import '../tokens/overrides.css';
+import '../css/animations.css';
+import '../css/premium-effects.css';
 import './storybook-overrides.css';
 
 /**

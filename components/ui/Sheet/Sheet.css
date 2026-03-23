@@ -56,7 +56,7 @@
   background: none;
   border: none;
   font-size: var(--icon-md);
-  line-height: var(--font-line-height--100);
+  line-height: var(--font-line-height-tight);
   cursor: pointer;
   padding: var(--padding-md);
   color: var(--text-primary);
