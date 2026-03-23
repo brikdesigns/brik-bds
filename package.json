@@ -83,14 +83,12 @@
     "prepare": "husky"
   },
   "keywords": [
-    "webflow",
-    "business",
-    "template",
-    "responsive",
     "brik",
-    "design",
+    "design-system",
+    "react",
     "figma",
-    "design-tokens"
+    "design-tokens",
+    "storybook"
   ],
   "author": "Brik Designs",
   "license": "UNLICENSED",
