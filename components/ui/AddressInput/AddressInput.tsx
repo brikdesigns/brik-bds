@@ -67,13 +67,13 @@ const wrapperStyles: CSSProperties = {
  * Token reference:
  * - --font-family-label
  * - --font-weight-semi-bold = 600
- * - --font-line-height--100
+ * - --font-line-height-tight
  * - --text-primary
  */
 const labelStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  lineHeight: 'var(--font-line-height-tight)',
   color: 'var(--text-primary)',
   textTransform: 'capitalize' as const,
 };

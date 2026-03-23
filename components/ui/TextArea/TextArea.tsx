@@ -56,12 +56,12 @@ const wrapperStyles: CSSProperties = {
  * Token reference:
  * - --font-family-label
  * - --font-weight-semi-bold = 600
- * - --font-line-height--100
+ * - --font-line-height-tight
  */
 const labelBaseStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height--100)',
+  lineHeight: 'var(--font-line-height-tight)',
   textTransform: 'capitalize' as const,
 };
 
@@ -181,7 +181,7 @@ export function TextArea({
     ...sizeStyle.textarea,
     resize,
     ...(disabled ? textareaDisabledStyles : {}),
-    ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
+    ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
     ...style,
   };
 
@@ -199,7 +199,7 @@ export function TextArea({
           style={{
             ...labelBaseStyles,
             ...sizeStyle.label,
-            ...(hasError ? { color: 'var(--system--red)' } : {}),
+            ...(hasError ? { color: 'var(--color-system-red)' } : {}),
           }}
         >
           {label}
@@ -224,7 +224,7 @@ export function TextArea({
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
-          style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
+          style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
           role="alert"
         >
           {error}

@@ -183,7 +183,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       ...sizeStyle.input,
       ...(iconBefore ? { paddingLeft: 'calc(var(--padding-xs) * 4)' } : {}),
       ...(iconAfter ? { paddingRight: 'calc(var(--padding-xs) * 4)' } : {}),
-      ...(hasError ? { borderColor: 'var(--system--red)' } : {}),
+      ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
     };
 
     return (
@@ -201,7 +201,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             style={{
               ...labelBaseStyles,
               ...sizeStyle.label,
-              ...(hasError ? { color: 'var(--system--red)' } : {}),
+              ...(hasError ? { color: 'var(--color-system-red)' } : {}),
             }}
           >
             {label}
@@ -237,7 +237,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         {error && (
           <span
             id={`${inputId}-error`}
-            style={{ ...helperBaseStyles, color: 'var(--system--red)' }}
+            style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
             role="alert"
           >
             {error}

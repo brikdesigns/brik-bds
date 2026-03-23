@@ -43,7 +43,7 @@
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  line-height: var(--font-line-height--100);
+  line-height: var(--font-line-height-tight);
   margin: 0;
 }
 
@@ -54,7 +54,7 @@
   font-weight: var(--font-weight--bold);
   font-size: var(--heading-sm);
   color: var(--text-primary);
-  line-height: var(--font-line-height--100);
+  line-height: var(--font-line-height-tight);
   margin: 0;
 }
 
