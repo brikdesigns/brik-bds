@@ -6,7 +6,8 @@ on:
     - cron: '0 9 * * *'
   push:
     paths:
-      - 'updates/brik-bds.webflow/**'
+      - 'design-tokens/**'
+      - 'sd.config.tokens-studio.mjs'
   workflow_dispatch:
 
 jobs:
@@ -31,21 +32,18 @@ jobs:
     - name: Build all tokens (Style Dictionary from Figma)
       run: npm run build:all-tokens
 
-    - name: Check for changes
-      id: check-changes
+    - name: Stage token outputs
       run: |
-        if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
-          echo "no-changes=true" >> $GITHUB_OUTPUT
-        else
-          echo "no-changes=false" >> $GITHUB_OUTPUT
-        fi
-
-    - name: Commit and push changes
-      if: steps.check-changes.outputs.no-changes == 'false'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
         git add design-tokens/ tokens/
         git add -f build/
+
+    - name: Commit and push changes
+      run: |
+        if git diff --cached --quiet; then
+          echo "No token changes to commit"
+          exit 0
+        fi
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         git commit -m "Build design tokens — $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
         git push
