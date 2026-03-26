@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faArrowUpRightFromSquare, faTag, faCircle, faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { Tag } from './Tag';
+import { Badge } from '../Badge/Badge';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -14,7 +15,7 @@ const meta: Meta<typeof Tag> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['xs', 'sm', 'md', 'lg'],
     },
     disabled: { control: 'boolean' },
     onRemove: { action: 'removed' },
@@ -65,6 +66,7 @@ export const Variants: Story = {
       <div>
         <SectionLabel>Sizes</SectionLabel>
         <Row>
+          <Tag size="xs" icon={<FontAwesomeIcon icon={faTag} />} />
           <Tag size="sm">Small</Tag>
           <Tag size="md">Medium</Tag>
           <Tag size="lg">Large</Tag>
@@ -80,9 +82,13 @@ export const Variants: Story = {
       </div>
       <div>
         <SectionLabel>Icons across sizes</SectionLabel>
-        {(['sm', 'md', 'lg'] as const).map((size) => (
+        {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
           <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center', marginBottom: 'var(--gap-md)' }}>
-            <Tag size={size} icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
+            {size === 'xs' ? (
+              <Tag size={size} icon={<FontAwesomeIcon icon={faCertificate} />} />
+            ) : (
+              <Tag size={size} icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
+            )}
           </div>
         ))}
       </div>
@@ -99,7 +105,36 @@ export const Variants: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world usage
+   3. ALIGNMENT — Side-by-side with Badge at every size
+   ═══════════════════════════════════════════════════════════════ */
+
+export const Alignment: Story = {
+  name: 'Badge + Tag alignment',
+  render: () => (
+    <Stack>
+      <SectionLabel>Badge and Tag share the same height at every size tier</SectionLabel>
+      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+        <Row key={size}>
+          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
+          {size === 'xs' ? (
+            <>
+              <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faStar} />} />
+              <Tag size="xs" icon={<FontAwesomeIcon icon={faTag} />} />
+            </>
+          ) : (
+            <>
+              <Badge size={size} status="positive" icon={<FontAwesomeIcon icon={faStar} />}>Active</Badge>
+              <Tag size={size} icon={<FontAwesomeIcon icon={faTag} />}>Category</Tag>
+            </>
+          )}
+        </Row>
+      ))}
+    </Stack>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   4. PATTERNS — Real-world usage
    ═══════════════════════════════════════════════════════════════ */
 
 export const Patterns: Story = {

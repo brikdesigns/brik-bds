@@ -5,7 +5,7 @@ import './Badge.css';
 /** Badge status variants */
 export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress';
 
-/** Badge size variants */
+/** Badge size variants — shared scale with Tag */
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 
 /** Badge visual style — dark (saturated bg) or light (pastel bg) */
@@ -30,6 +30,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
  *
  * Pill-shaped label for communicating status, category, or count.
  * Uses BDS system color tokens for consistent status semantics.
+ * Sizing scale is shared with Tag for side-by-side alignment.
  *
  * @example
  * ```tsx
@@ -60,7 +61,7 @@ export function Badge({
 
   return (
     <span className={classes} style={style} {...props}>
-      {icon}
+      {icon && <span className="bds-badge__icon">{icon}</span>}
       {!isIconOnly && children}
     </span>
   );
