@@ -15,6 +15,7 @@
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
+.bds-counter--xs { padding: 1px var(--padding-tiny); font-size: var(--body-tiny); }
 .bds-counter--sm { padding: var(--padding-tiny) var(--padding-sm); font-size: var(--body-tiny); }
 .bds-counter--md { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-sm); }
 .bds-counter--lg { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-md); }

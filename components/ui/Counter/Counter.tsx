@@ -3,7 +3,7 @@ import { bdsClass } from '../../utils';
 import './Counter.css';
 
 export type CounterStatus = 'success' | 'error' | 'warning' | 'neutral' | 'progress' | 'brand';
-export type CounterSize = 'sm' | 'md' | 'lg';
+export type CounterSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export interface CounterProps extends HTMLAttributes<HTMLSpanElement> {
   /** Numeric count to display */
