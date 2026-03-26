@@ -2,6 +2,8 @@
  * BDS Badge — Status indicator with semantic colors
  *
  * Naming: .bds-badge, .bds-badge--{status}, .bds-badge--{size}
+ *
+ * Sizing scale is shared with Tag for side-by-side alignment.
  */
 
 /* ─── Base ────────────────────────────────────────────────────── */
@@ -9,24 +11,20 @@
 .bds-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--font-line-height-tight);
   border-radius: var(--border-radius-pill);
   white-space: nowrap;
-  text-transform: capitalize;
 }
 
-/* ─── Sizes ───────────────────────────────────────────────────── */
+/* ─── Sizes (shared scale with Tag) ──────────────────────────── */
 
 .bds-badge--xs {
-  /* bds-lint-ignore — 24px icon-only badge matches Figma spec */
+  /* bds-lint-ignore — 24px icon-only badge matches shared indicator spec */
   width: 24px;
   height: 24px;
   padding: 0;
-  /* bds-lint-ignore — no semantic token for icon-only badge size */
-  font-size: var(--font-size-50);
   border-radius: var(--border-radius-sm);
   justify-content: center;
   gap: 0;
@@ -34,18 +32,53 @@
 
 .bds-badge--sm {
   padding: var(--padding-tiny) var(--padding-sm);
-  font-size: var(--body-tiny);
+  gap: var(--gap-xs);
+  font-size: var(--subtitle-sm);
 }
 
 .bds-badge--md {
   padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--label-sm);
+  gap: var(--gap-sm);
+  /* bds-lint-ignore — 14px has no subtitle token; using base font-size */
+  font-size: var(--font-size-75);
 }
 
 .bds-badge--lg {
   padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--label-md);
   gap: var(--gap-md);
+  font-size: var(--subtitle-lg);
+}
+
+/* ─── Icon Wrapper (shared sizing with Tag) ──────────────────── */
+
+.bds-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* bds-lint-ignore — Figma-driven icon dimensions, numeric for width/height */
+.bds-badge--xs .bds-badge__icon {
+  font-size: var(--icon-tiny);
+}
+
+.bds-badge--sm .bds-badge__icon {
+  width: 14px;
+  height: 14px;
+  font-size: var(--icon-tiny);
+}
+
+.bds-badge--md .bds-badge__icon {
+  width: 16px;
+  height: 16px;
+  font-size: var(--icon-xs);
+}
+
+.bds-badge--lg .bds-badge__icon {
+  width: 20px;
+  height: 20px;
+  font-size: var(--icon-sm);
 }
 
 /* ─── Status × Dark (default) ─────────────────────────────────── */
@@ -101,4 +134,3 @@
   background-color: var(--color-system-blue-light);
   color: var(--color-system-blue);
 }
-
