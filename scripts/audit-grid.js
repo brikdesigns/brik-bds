@@ -3,8 +3,8 @@
 /**
  * BDS 4-Point Grid Audit
  *
- * Reads the Webflow CSS export and reports which token VALUES align with
- * the 4-point mathematical grid (all values divisible by 4px).
+ * Reads the Style Dictionary CSS output and reports which token VALUES align
+ * with the 4-point mathematical grid (all values divisible by 4px).
  *
  * Audits: spacing, sizing, border-radius, font-size (informational).
  * Font sizes use a type scale and are reported separately — they follow
@@ -20,30 +20,29 @@
 const fs = require('fs');
 const path = require('path');
 
-const WEBFLOW_CSS = path.join(
-  __dirname, '..', 'updates', 'brik-bds.webflow', 'css', 'brik-bds.webflow.css'
-);
+const FIGMA_CSS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');
+const OVERRIDES_CSS = path.join(__dirname, '..', 'tokens', 'overrides.css');
 
 const GRID_BASE = 4;
 
-// Token categories to audit, with their primitive prefix
+// Token categories to audit, with their primitive prefix (SD single-dash naming)
 const CATEGORIES = [
-  { name: 'Spacing (--space--)', prefix: '--space--', spatial: true },
-  { name: 'Sizing (--size--)', prefix: '--size--', spatial: true },
-  { name: 'Border Radius (--border-radius--)', prefix: '--border-radius--', spatial: true },
-  { name: 'Border Width (--border-width--)', prefix: '--border-width--', spatial: false }, // 1-4px, too small for grid
-  { name: 'Font Size (--font-size--)', prefix: '--font-size--', spatial: false }, // type scale, not spatial grid
+  { name: 'Spacing (--space-)', prefix: '--space-', spatial: true },
+  { name: 'Sizing (--size-)', prefix: '--size-', spatial: true },
+  { name: 'Border Radius (--border-radius-)', prefix: '--border-radius-', spatial: true },
+  { name: 'Border Width (--border-width-)', prefix: '--border-width-', spatial: false }, // 1-4px, too small for grid
+  { name: 'Font Size (--font-size-)', prefix: '--font-size-', spatial: false }, // type scale, not spatial grid
 ];
 
 // Semantic token categories (resolved to primitives via var() references)
 const SEMANTIC_CATEGORIES = [
-  { name: 'Semantic Spacing (--_space---)', prefix: '--_space---' },
-  { name: 'Semantic Size (--_size---)', prefix: '--_size---' },
-  { name: 'Semantic Border Radius (--_border-radius---)', prefix: '--_border-radius---' },
+  { name: 'Semantic Spacing (--padding-/--gap-)', prefix: '--padding-' },
+  { name: 'Semantic Gap (--gap-)', prefix: '--gap-' },
+  { name: 'Semantic Size (--size-icon-)', prefix: '--size-icon-' },
 ];
 
-function parseCss() {
-  const css = fs.readFileSync(WEBFLOW_CSS, 'utf8');
+function parseCssFile(filePath) {
+  const css = fs.readFileSync(filePath, 'utf8');
   const lines = css.split('\n');
 
   // Collect all token declarations: name → value
@@ -196,7 +195,7 @@ function audit(tokens, summaryOnly) {
   console.log(`  Spatial tokens: ${totalOnGrid}/${totalTokens} on 4-point grid (${pct}%)`);
   if (totalOffGrid > 0) {
     console.log(`  ${totalOffGrid} off-grid values need review`);
-    console.log('  (Fix in Figma/Webflow source, not in component code)');
+    console.log('  (Fix in Figma source, not in component code)');
   }
 
   // REM migration note
@@ -210,10 +209,18 @@ function audit(tokens, summaryOnly) {
 const args = process.argv.slice(2);
 const summaryOnly = args.includes('--summary');
 
-if (!fs.existsSync(WEBFLOW_CSS)) {
-  console.error(`ERROR: Webflow CSS not found at ${WEBFLOW_CSS}`);
+if (!fs.existsSync(FIGMA_CSS)) {
+  console.error(`ERROR: Token CSS not found at ${FIGMA_CSS}`);
+  console.error('Run: npm run build:sd-figma');
   process.exit(1);
 }
 
-const tokens = parseCss();
+// Load tokens from all CSS sources
+const tokens = parseCssFile(FIGMA_CSS);
+if (fs.existsSync(OVERRIDES_CSS)) {
+  const overrides = parseCssFile(OVERRIDES_CSS);
+  for (const [k, v] of overrides) {
+    if (!tokens.has(k)) tokens.set(k, v);
+  }
+}
 audit(tokens, summaryOnly);

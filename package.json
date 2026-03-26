@@ -68,7 +68,8 @@
     "validate": "node scripts/lint-tokens.js --errors-only && npm run typecheck && npm run build-storybook",
     "precommit": "npm run validate",
     "build:sd-figma": "node scripts/flatten-tokens-studio.js && npx style-dictionary build --config sd.config.tokens-studio.mjs",
-    "build:all-tokens": "npm run build:sd-figma",
+    "build:sd-dark": "node scripts/flatten-tokens-studio.js --mode color=dark --output design-tokens/tokens-figma-dark.json && npx style-dictionary build --config sd.config.dark.mjs",
+    "build:all-tokens": "npm run build:sd-figma && npm run build:sd-dark",
     "build:lib": "vite build --config vite.config.lib.ts && npm run build:types && npm run build:dist-tokens",
     "build:types": "tsc --project tsconfig.build.json",
     "build:dist-tokens": "node scripts/build-dist-tokens.js",
@@ -83,14 +84,12 @@
     "prepare": "husky"
   },
   "keywords": [
-    "webflow",
-    "business",
-    "template",
-    "responsive",
     "brik",
-    "design",
+    "design-system",
+    "react",
     "figma",
-    "design-tokens"
+    "design-tokens",
+    "storybook"
   ],
   "author": "Brik Designs",
   "license": "UNLICENSED",

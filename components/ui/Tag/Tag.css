@@ -2,6 +2,8 @@
  * BDS Tag — Categorization label with optional icons and dismiss
  *
  * Naming: .bds-tag, .bds-tag--{size}, .bds-tag__{element}
+ *
+ * Sizing scale is shared with Badge for side-by-side alignment.
  */
 
 /* ─── Base ────────────────────────────────────────────────────── */
@@ -17,33 +19,43 @@
   background-color: var(--background-secondary);
   text-decoration: none;
   white-space: nowrap;
-  text-transform: capitalize;
   cursor: default;
   user-select: none;
   overflow: clip;
   transition: background-color 0.2s;
 }
 
-/* ─── Sizes ───────────────────────────────────────────────────── */
+/* ─── Sizes (shared scale with Badge) ────────────────────────── */
+
+.bds-tag--xs {
+  /* bds-lint-ignore — 24px icon-only tag matches shared indicator spec */
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: var(--border-radius-sm);
+  justify-content: center;
+  gap: 0;
+}
 
 .bds-tag--sm {
-  padding: var(--padding-tiny);
-  gap: 0;
-  font-size: var(--label-tiny);
+  padding: var(--padding-tiny) var(--padding-sm);
+  gap: var(--gap-xs);
+  font-size: var(--subtitle-sm);
   border-radius: var(--border-radius-sm);
 }
 
 .bds-tag--md {
-  padding: var(--padding-tiny);
-  gap: var(--space-50);
-  font-size: var(--label-sm);
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-sm);
+  /* bds-lint-ignore — 14px has no subtitle token; using base font-size */
+  font-size: var(--font-size-75);
   border-radius: var(--border-radius-md);
 }
 
 .bds-tag--lg {
-  padding: var(--padding-sm);
-  gap: var(--space-50);
-  font-size: var(--label-lg);
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-md);
+  font-size: var(--subtitle-lg);
   border-radius: var(--border-radius-md);
 }
 
@@ -54,7 +66,7 @@
   cursor: not-allowed;
 }
 
-/* ─── Icon Wrapper ────────────────────────────────────────────── */
+/* ─── Icon Wrapper (shared sizing with Badge) ────────────────── */
 
 .bds-tag__icon {
   display: inline-flex;
@@ -64,22 +76,26 @@
 }
 
 /* bds-lint-ignore — Figma-driven icon dimensions, numeric for width/height */
+.bds-tag--xs .bds-tag__icon {
+  font-size: var(--icon-tiny);
+}
+
 .bds-tag--sm .bds-tag__icon {
-  width: 16px;
-  height: 16px;
-  font-size: var(--label-tiny);
+  width: 14px;
+  height: 14px;
+  font-size: var(--icon-tiny);
 }
 
 .bds-tag--md .bds-tag__icon {
   width: 16px;
   height: 16px;
-  font-size: var(--body-xs);
+  font-size: var(--icon-xs);
 }
 
 .bds-tag--lg .bds-tag__icon {
   width: 20px;
   height: 20px;
-  font-size: var(--label-md);
+  font-size: var(--icon-sm);
 }
 
 /* ─── Remove Button ───────────────────────────────────────────── */

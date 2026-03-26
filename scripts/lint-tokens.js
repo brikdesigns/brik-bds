@@ -3,7 +3,7 @@
 /**
  * BDS Token Validation Linter
  *
- * Validates CSS variable usage in BDS components against the Webflow CSS export.
+ * Validates CSS variable usage in BDS components against Style Dictionary token outputs.
  * Catches four types of violations:
  *   1. Primitive token usage (use semantic tokens instead)
  *   2. Hardcoded CSS values (use tokens)
@@ -27,9 +27,6 @@ const path = require('path');
 // Config
 // ---------------------------------------------------------------------------
 
-const WEBFLOW_CSS_PATH = path.join(
-  __dirname, '..', 'updates', 'brik-bds.webflow', 'css', 'brik-bds.webflow.css'
-);
 const SD_CSS_PATH = path.join(
   __dirname, '..', 'build', 'figma', 'css', 'variables.css'
 );
@@ -234,11 +231,6 @@ function parseCssTokens() {
     }
   }
 
-  // Load Webflow tokens (original export — may not exist if gitignored)
-  if (fs.existsSync(WEBFLOW_CSS_PATH)) {
-    loadFromCss(WEBFLOW_CSS_PATH);
-  }
-
   // Load Style Dictionary tokens (SD naming convention)
   if (fs.existsSync(SD_CSS_PATH)) {
     loadFromCss(SD_CSS_PATH);
@@ -257,7 +249,6 @@ function parseCssTokens() {
   // Ensure at least one token source was loaded
   if (allTokens.size === 0) {
     console.error('ERROR: No token sources found. Need at least one of:');
-    console.error(`  - ${WEBFLOW_CSS_PATH}`);
     console.error(`  - ${SD_CSS_PATH}`);
     console.error(`  - ${MIGRATED_TOKENS}`);
     process.exit(1);
@@ -656,12 +647,15 @@ function main() {
     }
   }
 
-  // 4. If --check-grid, also scan the Webflow CSS source for off-grid token values
+  // 4. If --check-grid, also scan the token CSS source for off-grid token values
   if (checkGrid) {
-    const css = fs.readFileSync(WEBFLOW_CSS_PATH, 'utf8');
-    const cssLines = css.split('\n');
-    for (let i = 0; i < cssLines.length; i++) {
-      allViolations.push(...checkGridCompliance(cssLines[i], i + 1, WEBFLOW_CSS_PATH));
+    const FIGMA_CSS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');
+    if (fs.existsSync(FIGMA_CSS)) {
+      const css = fs.readFileSync(FIGMA_CSS, 'utf8');
+      const cssLines = css.split('\n');
+      for (let i = 0; i < cssLines.length; i++) {
+        allViolations.push(...checkGridCompliance(cssLines[i], i + 1, FIGMA_CSS));
+      }
     }
   }
 

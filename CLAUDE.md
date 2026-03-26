@@ -26,6 +26,8 @@ This updates `design-tokens/tokens-studio.json` → runs `build:sd-figma` → re
 
 If a token doesn't exist in `figma-tokens.css` after the build, it needs to be added in **Figma first**, not in CSS. The only exception is `tokens/overrides.css` which provides gap-fill tokens not yet in Figma.
 
+**NEVER hand-write dark mode token overrides in consuming projects.** Dark mode is generated from Figma's `color/dark` mode via `npm run build:sd-dark` → `tokens/figma-tokens-dark.css`. Consumer projects import this file instead of writing `[data-theme="dark"]` blocks.
+
 **Before writing ANY `var(--...)` reference**, verify the token exists in `tokens/figma-tokens.css` or `tokens/overrides.css`.
 
 ## Repository Architecture
@@ -53,11 +55,11 @@ If a token doesn't exist in `figma-tokens.css` after the build, it needs to be a
 
 ## Workflow
 
-1. **Develop** in this repo (`/Documents/GitHub/brik-bds/`)
+1. **Develop** in this repo (`/Documents/GitHub/brik/brik-bds/`)
 2. **Commit and push** to GitHub
 3. **Update submodule** in brik-llm when needed:
    ```bash
-   cd /Users/nickstanerson/Documents/GitHub/brik-llm
+   cd /Users/nickstanerson/Documents/GitHub/brik/brik-llm
    git submodule update --remote foundations/brik-bds
    git add foundations/brik-bds
    git commit -m "Update brik-bds submodule"
@@ -178,14 +180,17 @@ Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform out
 | Command | Input | Output |
 | --- | --- | --- |
 | `npm run build:sd-figma` | `design-tokens/tokens-studio.json` | `tokens/figma-tokens.css`, `build/figma/swift/*.swift`, `build/figma/js/tokens.mjs` |
-| `npm run build:all-tokens` | Same as above | Full rebuild (calls `build:sd-figma`) |
+| `npm run build:sd-dark` | `design-tokens/tokens-studio.json` (color=dark mode) | `tokens/figma-tokens-dark.css` (scoped to `[data-theme="dark"]`) |
+| `npm run build:all-tokens` | Both of the above | Full rebuild (light + dark modes) |
 
 ### Token files — which to use
 
 | File | Status | Use |
 | --- | --- | --- |
-| `tokens/figma-tokens.css` | **Active** (auto-generated) | Import in consuming project `globals.css` |
+| `tokens/figma-tokens.css` | **Active** (auto-generated) | Light mode tokens — import in consuming project `globals.css` |
+| `tokens/figma-tokens-dark.css` | **Active** (auto-generated) | Dark mode tokens — import in consuming project `globals.css` after light |
 | `tokens/fonts.css` | **Active** (manual) | Import in consuming project `globals.css` |
+| `tokens/overrides.css` | **Active** (manual) | Theme palettes + gap-fill tokens not yet in Figma |
 | `tokens/react-tokens.css` | **DEPRECATED** | Was manually maintained, drifted. Use `figma-tokens.css` |
 | `tokens/webflow-tokens.css` | **Webflow only** | Circular refs, 8 theme blocks — never import in React |
 | `tokens/variables.css` | **Internal** | Webflow semantic names, used by `tokens/index.ts` |
@@ -238,6 +243,6 @@ These global files provide cross-project context. Load on demand.
 
 | File | Load when... |
 |------|-------------|
-| `~/.claude/skills/bds-global.md` | Task routing, dual-output architecture, consumption standard |
+| `~/.claude/skills/bds-agent-instructions.md` | Token rules, component tiers, platform consumption |
 | `~/.claude/skills/figma-workflow.md` | Brand extraction, Figma MCP variable sync |
 | `~/.claude/references/webflow-site-registry.md` | Brik Foundations site ID, token names |

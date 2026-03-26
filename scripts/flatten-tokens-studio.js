@@ -26,7 +26,7 @@ const fs = require('fs');
 const path = require('path');
 
 const INPUT = path.join(__dirname, '../design-tokens/tokens-studio.json');
-const OUTPUT = path.join(__dirname, '../design-tokens/tokens-figma.json');
+let OUTPUT = path.join(__dirname, '../design-tokens/tokens-figma.json');
 
 // Default modes — these match the Webflow Foundations site defaults
 const DEFAULT_MODES = {
@@ -41,7 +41,7 @@ const DEFAULT_MODES = {
   typography: 'default',
 };
 
-// Parse CLI overrides: --mode spacing=spacious,color=dark
+// Parse CLI overrides: --mode spacing=spacious,color=dark  --output path/to/output.json
 const args = process.argv.slice(2);
 const modeIdx = args.indexOf('--mode');
 if (modeIdx !== -1 && args[modeIdx + 1]) {
@@ -50,6 +50,10 @@ if (modeIdx !== -1 && args[modeIdx + 1]) {
     const [col, mode] = o.split('=');
     if (col && mode) DEFAULT_MODES[col] = mode;
   }
+}
+const outIdx = args.indexOf('--output');
+if (outIdx !== -1 && args[outIdx + 1]) {
+  OUTPUT = path.resolve(args[outIdx + 1]);
 }
 
 // ─── Deep merge ──────────────────────────────────────────────────
@@ -216,5 +220,5 @@ countTokens(cleaned);
 
 // Write output
 fs.writeFileSync(OUTPUT, JSON.stringify(cleaned, null, 2) + '\n');
-console.log(`\n  Written: design-tokens/tokens-figma.json (${count} tokens)`);
-console.log('  Ready for: npm run build:sd-figma\n');
+console.log(`\n  Written: ${path.relative(path.join(__dirname, '..'), OUTPUT)} (${count} tokens)`);
+console.log('  Ready for Style Dictionary build\n');
