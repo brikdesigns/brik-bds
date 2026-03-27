@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 import { PaletteGrid, ColorGrid } from './_components';
-import { grayscale } from '../../tokens';
+import { grayscale, poppy, tan, orange, yellow, green, blue, purple, pink } from '../../tokens';
 
 <Meta title="Foundations/Design Tokens/Color" />
 
@@ -84,10 +84,62 @@ Semantic tokens map to purpose, not appearance. These values change when you swi
   columns={4}
 />
 
+## Interaction states
+
+Tokenized interaction colors for buttons and interactive elements. These replace all `filter: brightness()` and `opacity` hacks.
+
+<ColorGrid
+  colors={[
+    { name: 'brand-primary-hover', cssVar: '--interaction-background-brand-primary-hover' },
+    { name: 'brand-primary-pressed', cssVar: '--interaction-background-brand-primary-pressed' },
+    { name: 'secondary-hover', cssVar: '--interaction-surface-secondary-hover' },
+    { name: 'secondary-pressed', cssVar: '--interaction-surface-secondary-pressed' },
+    { name: 'subtle-hover', cssVar: '--interaction-surface-subtle-hover' },
+    { name: 'disabled-bg', cssVar: '--interaction-background-disabled' },
+    { name: 'disabled-text', cssVar: '--interaction-text-disabled', isText: true },
+    { name: 'focus-ring', cssVar: '--interaction-border-focus' },
+  ]}
+  columns={4}
+/>
+
 ## Primitives
+
+Every color in BDS comes from a 6-step scale defined in the Figma Brand Kit. Components reference these via semantic tokens — never by hex value.
 
 ### Grayscale
 
 The neutral palette used for text, borders, backgrounds, and surfaces.
 
 <PaletteGrid palette={grayscale} prefix="--color-grayscale" columns={8} />
+
+### Poppy (brand primary)
+
+<PaletteGrid palette={poppy} prefix="--color-poppy" columns={6} />
+
+### Tan
+
+<PaletteGrid palette={tan} prefix="--color-tan" columns={6} />
+
+### Orange
+
+<PaletteGrid palette={orange} prefix="--color-orange" columns={6} />
+
+### Yellow
+
+<PaletteGrid palette={yellow} prefix="--color-yellow" columns={6} />
+
+### Green
+
+<PaletteGrid palette={green} prefix="--color-green" columns={6} />
+
+### Blue
+
+<PaletteGrid palette={blue} prefix="--color-blue" columns={6} />
+
+### Purple
+
+<PaletteGrid palette={purple} prefix="--color-purple" columns={6} />
+
+### Pink
+
+<PaletteGrid palette={pink} prefix="--color-pink" columns={6} />

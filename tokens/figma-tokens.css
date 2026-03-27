@@ -24,6 +24,70 @@
   --color-grayscale-lighter: #e0e0e0;
   --color-grayscale-lightest: #f2f2f2;
 
+  /* ── Poppy (Brand Primary) ── */
+  --color-poppy-lightest: #ffefeb;
+  --color-poppy-lighter: #ffa693;
+  --color-poppy-light: #e35335;
+  --color-poppy-dark: #b0351b;
+  --color-poppy-darker: #7d1d09;
+  --color-poppy-darkest: #4a0d00;
+
+  /* ── Tan ── */
+  --color-tan-lightest: #f1f0ec;
+  --color-tan-lighter: #cfcdc5;
+  --color-tan-light: #adaaa0;
+  --color-tan-dark: #8b887d;
+  --color-tan-darker: #69665c;
+  --color-tan-darkest: #47453c;
+
+  /* ── Orange ── */
+  --color-orange-lightest: #ffe8dc;
+  --color-orange-lighter: #ffad92;
+  --color-orange-light: #e76134;
+  --color-orange-dark: #b4411a;
+  --color-orange-darker: #812608;
+  --color-orange-darkest: #4e1400;
+
+  /* ── Yellow ── */
+  --color-yellow-lightest: #fffee1;
+  --color-yellow-lighter: #ffecac;
+  --color-yellow-light: #f4d364;
+  --color-yellow-dark: #c1a443;
+  --color-yellow-darker: #8e7729;
+  --color-yellow-darkest: #634716;
+
+  /* ── Green ── */
+  --color-green-lightest: #f8fff3;
+  --color-green-lighter: #daffc0;
+  --color-green-light: #bcff8c;
+  --color-green-dark: #9ada6c;
+  --color-green-darker: #71a74a;
+  --color-green-darkest: #2a5542;
+
+  /* ── Blue ── */
+  --color-blue-lightest: #f8fdff;
+  --color-blue-lighter: #b2e3f5;
+  --color-blue-light: #8ebbcc;
+  --color-blue-dark: #6c95a3;
+  --color-blue-darker: #4d6e7b;
+  --color-blue-darkest: #314952;
+
+  /* ── Purple ── */
+  --color-purple-lightest: #f2f0f7;
+  --color-purple-lighter: #c4b0eb;
+  --color-purple-light: #9e8bc2;
+  --color-purple-dark: #796999;
+  --color-purple-darker: #574a71;
+  --color-purple-darkest: #362d48;
+
+  /* ── Pink ── */
+  --color-pink-lightest: #ffe9f6;
+  --color-pink-lighter: #ffa8dd;
+  --color-pink-light: #ff67c3;
+  --color-pink-dark: #ff25aa;
+  --color-pink-darker: #d20080;
+  --color-pink-darkest: #8e0057;
+
   /* ── System Colors ── */
   --color-system-red: #eb5757;
   --color-system-red-light: #fccccc;
@@ -350,6 +414,17 @@
   --border-inverse: var(--color-grayscale-white);
   --border-on-color-light: var(--color-grayscale-black);
   --border-input: var(--color-grayscale-light);
+
+  /* ── Interaction States ── */
+  --interaction-background-brand-primary-hover: var(--color-poppy-dark);
+  --interaction-background-brand-primary-pressed: var(--color-poppy-darker);
+  --interaction-surface-secondary-hover: var(--color-grayscale-light);
+  --interaction-surface-secondary-pressed: var(--color-grayscale-dark);
+  --interaction-surface-subtle-hover: var(--color-grayscale-lightest);
+  --interaction-background-disabled: var(--color-grayscale-dark);
+  --interaction-text-disabled: var(--color-grayscale-light);
+  --interaction-border-disabled: var(--color-grayscale-dark);
+  --interaction-border-focus: var(--border-brand-primary);
 
   /* ── Icon Sizes ── */
   --icon-tiny: var(--font-size-50);

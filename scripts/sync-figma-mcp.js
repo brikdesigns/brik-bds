@@ -175,12 +175,33 @@ if (dryRun) {
 // ─── Build ───────────────────────────────────────────────────────
 
 if (runBuild && !dryRun) {
-  console.log('\n🔨 Running npm run build:sd-figma...\n');
+  console.log('\n🔨 Running npm run build:all-tokens...\n');
   try {
-    execSync('npm run build:sd-figma', {
+    execSync('npm run build:all-tokens', {
       cwd: path.join(__dirname, '..'),
       stdio: 'inherit',
     });
+
+    // ── Auto-propagate build output to consumed token files ──
+    // tokens/figma-tokens.css is the file consuming projects import via submodule.
+    // It has a curated header — preserve it, replace only the :root block.
+    const buildOutput = path.join(__dirname, '../build/figma/css/variables.css');
+    const consumedFile = path.join(__dirname, '../tokens/figma-tokens.css');
+
+    if (fs.existsSync(buildOutput) && fs.existsSync(consumedFile)) {
+      const buildCSS = fs.readFileSync(buildOutput, 'utf8');
+      const consumed = fs.readFileSync(consumedFile, 'utf8');
+
+      // Extract :root block from build output
+      const buildRoot = buildCSS.match(/:root\s*\{[\s\S]*?\n\}/);
+      if (buildRoot) {
+        // Replace :root block in consumed file, keep header
+        const updated = consumed.replace(/:root\s*\{[\s\S]*?\n\}/, buildRoot[0]);
+        fs.writeFileSync(consumedFile, updated, 'utf8');
+        console.log(`\n✅ Propagated build output → tokens/figma-tokens.css`);
+      }
+    }
+
     console.log('\n✅ Token build complete.');
   } catch (e) {
     console.error('\n❌ Build failed:', e.message);
