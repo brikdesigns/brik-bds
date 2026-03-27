@@ -1170,11 +1170,29 @@
   },
   "page": {
     "primary": {
-      "$value": "{color.grayscale.white}",
+      "$value": "{color.grayscale.black}",
       "$type": "color"
     },
     "secondary": {
-      "$value": "{color.grayscale.lighter}",
+      "$value": "{color.grayscale.darker}",
+      "$type": "color"
+    },
+    "brand-primary": {
+      "$value": "{theme.blue.blue-light}",
+      "$type": "color"
+    },
+    "inverse": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    }
+  },
+  "background": {
+    "primary": {
+      "$value": "{color.grayscale.black}",
+      "$type": "color"
+    },
+    "secondary": {
+      "$value": "{color.grayscale.light}",
       "$type": "color"
     },
     "brand-primary": {
@@ -1183,24 +1201,6 @@
     },
     "inverse": {
       "$value": "{color.grayscale.black}",
-      "$type": "color"
-    }
-  },
-  "background": {
-    "primary": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "secondary": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color"
-    },
-    "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
-      "$type": "color"
-    },
-    "inverse": {
-      "$value": "{color.grayscale.white}",
       "$type": "color"
     },
     "accent-yellow": {
@@ -1224,29 +1224,51 @@
       "$type": "color"
     },
     "input": {
-      "$value": "{color.grayscale.white}",
+      "$value": "{color.grayscale.black}",
       "$type": "color"
     },
     "on-color-dark": {
-      "$value": "{color.grayscale.white}",
+      "$value": "{color.grayscale.black}",
       "$type": "color"
     },
     "muted": {
-      "$value": "{color.grayscale.lighter}",
+      "$value": "{color.grayscale.darker}",
       "$type": "color"
     },
     "on-color-light": {
-      "$value": "{color.grayscale.black}",
+      "$value": "{color.grayscale.white}",
       "$type": "color"
     }
   },
   "surface": {
     "primary": {
-      "$value": "{color.grayscale.white}",
+      "$value": "{color.grayscale.black}",
       "$type": "color"
     },
     "secondary": {
-      "$value": "{color.grayscale.lighter}",
+      "$value": "{color.grayscale.darker}",
+      "$type": "color"
+    },
+    "brand-primary": {
+      "$value": "{theme.blue.blue-light}",
+      "$type": "color"
+    },
+    "inverse": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "overlay": {
+      "$value": "{color.grayscale.black}",
+      "$type": "color"
+    }
+  },
+  "text": {
+    "primary": {
+      "$value": "{color.grayscale.lightest}",
+      "$type": "color"
+    },
+    "secondary": {
+      "$value": "{color.grayscale.light}",
       "$type": "color"
     },
     "brand-primary": {
@@ -1255,28 +1277,6 @@
     },
     "inverse": {
       "$value": "{color.grayscale.black}",
-      "$type": "color"
-    },
-    "overlay": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    }
-  },
-  "text": {
-    "primary": {
-      "$value": "{color.grayscale.darkest}",
-      "$type": "color"
-    },
-    "secondary": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color"
-    },
-    "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
-      "$type": "color"
-    },
-    "inverse": {
-      "$value": "{color.grayscale.white}",
       "$type": "color"
     },
     "accent-yellow": {
@@ -1300,7 +1300,7 @@
       "$type": "color"
     },
     "muted": {
-      "$value": "{color.grayscale.light}",
+      "$value": "{color.grayscale.dark}",
       "$type": "color"
     },
     "on-color-dark": {
@@ -1318,7 +1318,7 @@
   },
   "border": {
     "primary": {
-      "$value": "{color.grayscale.lighter}",
+      "$value": "{color.grayscale.darker}",
       "$type": "color"
     },
     "brand-primary": {
@@ -1326,75 +1326,75 @@
       "$type": "color"
     },
     "on-color-dark": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "secondary": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color"
-    },
-    "muted": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color"
-    },
-    "inverse": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "on-color-light": {
       "$value": "{color.grayscale.black}",
       "$type": "color"
     },
-    "input": {
+    "secondary": {
       "$value": "{color.grayscale.light}",
+      "$type": "color"
+    },
+    "muted": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color"
+    },
+    "inverse": {
+      "$value": "{color.grayscale.black}",
+      "$type": "color"
+    },
+    "on-color-light": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "input": {
+      "$value": "{color.grayscale.dark}",
       "$type": "color"
     }
   },
   "interaction": {
     "background-brand-primary-hover": {
-      "$value": "{color.poppy.dark}",
+      "$value": "{color.poppy.lighter}",
       "$type": "color",
-      "$description": "Primary button hover background"
+      "$description": "Primary button hover background (dark mode)"
     },
     "background-brand-primary-pressed": {
-      "$value": "{color.poppy.darker}",
+      "$value": "{color.poppy.lightest}",
       "$type": "color",
-      "$description": "Primary button pressed background"
+      "$description": "Primary button pressed background (dark mode)"
     },
     "surface-secondary-hover": {
-      "$value": "{color.grayscale.light}",
+      "$value": "{color.grayscale.darker}",
       "$type": "color",
-      "$description": "Secondary button hover background"
+      "$description": "Secondary button hover (dark mode)"
     },
     "surface-secondary-pressed": {
       "$value": "{color.grayscale.dark}",
       "$type": "color",
-      "$description": "Secondary button pressed background"
+      "$description": "Secondary button pressed (dark mode)"
     },
     "surface-subtle-hover": {
-      "$value": "{color.grayscale.lightest}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color",
-      "$description": "Ghost and outline button hover background"
+      "$description": "Ghost and outline hover (dark mode)"
     },
     "background-disabled": {
-      "$value": "{color.grayscale.dark}",
+      "$value": "{color.grayscale.darker}",
       "$type": "color",
-      "$description": "Disabled button background (all variants)"
+      "$description": "Disabled background (dark mode)"
     },
     "text-disabled": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color",
-      "$description": "Disabled button text (all variants)"
-    },
-    "border-disabled": {
       "$value": "{color.grayscale.dark}",
       "$type": "color",
-      "$description": "Disabled button border (all variants)"
+      "$description": "Disabled text (dark mode)"
+    },
+    "border-disabled": {
+      "$value": "{color.grayscale.darker}",
+      "$type": "color",
+      "$description": "Disabled border (dark mode)"
     },
     "border-focus": {
       "$value": "{border.brand-primary}",
       "$type": "color",
-      "$description": "Focus ring color"
+      "$description": "Focus ring (dark mode)"
     }
   },
   "icon": {

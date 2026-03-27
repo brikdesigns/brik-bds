@@ -11,6 +11,54 @@
   --color-grayscale-light: #bdbdbd; /** Secondary Borders / Muted UI */
   --color-grayscale-lighter: #e0e0e0; /** Borders / Disabled Text */
   --color-grayscale-lightest: #f2f2f2; /** Light Background / UI Elements */
+  --color-poppy-lightest: #ffefeb; /** Subtle tints / hover backgrounds */
+  --color-poppy-lighter: #ffa693; /** Light accent */
+  --color-poppy-light: #e35335; /** Brand primary base */
+  --color-poppy-dark: #b0351b; /** Hover state */
+  --color-poppy-darker: #7d1d09; /** Pressed state */
+  --color-poppy-darkest: #4a0d00; /** Deep accent */
+  --color-tan-lightest: #f1f0ec; /** Accent background */
+  --color-tan-lighter: #cfcdc5;
+  --color-tan-light: #adaaa0;
+  --color-tan-dark: #8b887d;
+  --color-tan-darker: #69665c;
+  --color-tan-darkest: #47453c;
+  --color-orange-lightest: #ffe8dc;
+  --color-orange-lighter: #ffad92;
+  --color-orange-light: #e76134;
+  --color-orange-dark: #b4411a;
+  --color-orange-darker: #812608;
+  --color-orange-darkest: #4e1400;
+  --color-yellow-lightest: #fffee1;
+  --color-yellow-lighter: #ffecac;
+  --color-yellow-light: #f4d364;
+  --color-yellow-dark: #c1a443;
+  --color-yellow-darker: #8e7729;
+  --color-yellow-darkest: #634716;
+  --color-green-lightest: #f8fff3;
+  --color-green-lighter: #daffc0;
+  --color-green-light: #bcff8c;
+  --color-green-dark: #9ada6c;
+  --color-green-darker: #71a74a;
+  --color-green-darkest: #2a5542;
+  --color-blue-lightest: #f8fdff;
+  --color-blue-lighter: #b2e3f5;
+  --color-blue-light: #8ebbcc;
+  --color-blue-dark: #6c95a3;
+  --color-blue-darker: #4d6e7b;
+  --color-blue-darkest: #314952;
+  --color-purple-lightest: #f2f0f7;
+  --color-purple-lighter: #c4b0eb;
+  --color-purple-light: #9e8bc2;
+  --color-purple-dark: #796999;
+  --color-purple-darker: #574a71;
+  --color-purple-darkest: #362d48;
+  --color-pink-lightest: #ffe9f6;
+  --color-pink-lighter: #ffa8dd;
+  --color-pink-light: #ff67c3;
+  --color-pink-dark: #ff25aa;
+  --color-pink-darker: #d20080;
+  --color-pink-darkest: #8e0057;
   --color-system-red: #eb5757;
   --color-system-green: #27ae60;
   --color-system-yellow: #f2c94c;
@@ -285,6 +333,14 @@
   --border-inverse: var(--color-grayscale-white);
   --border-on-color-light: var(--color-grayscale-black);
   --border-input: var(--color-grayscale-light);
+  --interaction-background-brand-primary-hover: var(--color-poppy-dark); /** Primary button hover background */
+  --interaction-background-brand-primary-pressed: var(--color-poppy-darker); /** Primary button pressed background */
+  --interaction-surface-secondary-hover: var(--color-grayscale-light); /** Secondary button hover background */
+  --interaction-surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed background */
+  --interaction-surface-subtle-hover: var(--color-grayscale-lightest); /** Ghost and outline button hover background */
+  --interaction-background-disabled: var(--color-grayscale-dark); /** Disabled button background (all variants) */
+  --interaction-text-disabled: var(--color-grayscale-light); /** Disabled button text (all variants) */
+  --interaction-border-disabled: var(--color-grayscale-dark); /** Disabled button border (all variants) */
   --icon-tiny: var(--font-size-50);
   --icon-xs: var(--font-size-75);
   --icon-md: var(--font-size-200);
@@ -319,13 +375,13 @@
   --display-lg: var(--font-size-1600);
   --display-md: var(--font-size-1500);
   --display-xl: var(--font-size-1800);
-  --heading-lg: var(--font-size-700);
-  --heading-xl: var(--font-size-800);
-  --heading-xxl: var(--font-size-900);
-  --heading-md: var(--font-size-600);
-  --heading-tiny: var(--font-size-400);
-  --heading-sm: var(--font-size-500);
-  --heading-huge: var(--font-size-1000);
+  --heading-lg: var(--font-size-600);
+  --heading-xl: var(--font-size-700);
+  --heading-xxl: var(--font-size-800);
+  --heading-md: var(--font-size-400);
+  --heading-tiny: var(--font-size-200);
+  --heading-sm: var(--font-size-300);
+  --heading-huge: var(--font-size-900);
   --label-tiny: var(--font-size-25);
   --label-md: var(--font-size-100);
   --label-lg: var(--font-size-200);
@@ -335,4 +391,5 @@
   --subtitle-lg: var(--font-size-100);
   --subtitle-md: var(--font-size-50);
   --subtitle-sm: var(--font-size-25);
+  --interaction-border-focus: var(--border-brand-primary); /** Focus ring color */
 }
