@@ -1,0 +1,221 @@
+/* ─── TaskConsole ─────────────────────────────────────────────── */
+
+.bds-task-console {
+  position: fixed;
+  z-index: 9999;
+  width: 360px; /* bds-lint-ignore — design constraint matching Google Drive widget */
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-primary);
+  border: var(--border-width-lg) solid var(--border-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0px 8px 24px 4px rgba(0, 0, 0, 0.20); /* bds-lint-ignore — elevated shadow */
+  overflow: hidden;
+  font-family: var(--font-family-body);
+}
+
+/* ─── Position modifiers ─────────────────────────────────────── */
+
+.bds-task-console--bottom-right {
+  bottom: var(--padding-lg);
+  right: var(--padding-lg);
+}
+
+.bds-task-console--bottom-left {
+  bottom: var(--padding-lg);
+  left: var(--padding-lg);
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+
+.bds-task-console__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-md) var(--padding-lg);
+  background-color: var(--surface-secondary);
+  cursor: pointer;
+  user-select: none;
+  min-height: 48px; /* bds-lint-ignore — touch target */
+  box-sizing: border-box;
+}
+
+.bds-task-console--success .bds-task-console__header {
+  background-color: var(--color-system-green-surface);
+}
+
+.bds-task-console--has-errors .bds-task-console__header {
+  background-color: var(--color-system-red-surface);
+}
+
+.bds-task-console__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* bds-lint-ignore — tight spacing for subtitle */
+  min-width: 0;
+  flex: 1;
+}
+
+.bds-task-console__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bds-task-console__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-task-console__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  flex-shrink: 0;
+}
+
+/* ─── Header buttons ─────────────────────────────────────────── */
+
+.bds-task-console__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; /* bds-lint-ignore — icon button sizing */
+  height: 28px; /* bds-lint-ignore — icon button sizing */
+  background: none;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  color: var(--text-primary);
+  opacity: 0.6;
+  font-size: var(--icon-sm);
+  padding: 0;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.bds-task-console__btn:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Progress bar ───────────────────────────────────────────── */
+
+.bds-task-console__progress-track {
+  height: 3px; /* bds-lint-ignore — thin progress bar */
+  background-color: var(--border-primary);
+  flex-shrink: 0;
+}
+
+.bds-task-console__progress-fill {
+  height: 100%;
+  background-color: var(--color-system-blue);
+  transition: width 0.4s ease;
+  border-radius: 0 2px 2px 0; /* bds-lint-ignore — progress bar cap */
+}
+
+.bds-task-console__progress-fill--error {
+  background-color: var(--color-system-red);
+}
+
+/* ─── Item list ──────────────────────────────────────────────── */
+
+.bds-task-console__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  max-height: 320px; /* bds-lint-ignore — scroll constraint */
+}
+
+.bds-task-console__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-md) var(--padding-lg);
+  gap: var(--gap-md);
+  border-bottom: var(--border-width-sm) solid var(--border-primary);
+  transition: background-color 0.15s ease;
+}
+
+.bds-task-console__item:last-child {
+  border-bottom: none;
+}
+
+.bds-task-console__item--in_progress {
+  background-color: var(--color-system-blue-surface);
+}
+
+.bds-task-console__item--failed {
+  background-color: var(--color-system-red-surface);
+}
+
+/* ─── Item content ───────────────────────────────────────────── */
+
+.bds-task-console__item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* bds-lint-ignore — tight spacing */
+  min-width: 0;
+  flex: 1;
+}
+
+.bds-task-console__item-label {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bds-task-console__item--completed .bds-task-console__item-label {
+  color: var(--text-muted);
+}
+
+.bds-task-console__item-detail {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ─── Status icons ───────────────────────────────────────────── */
+
+.bds-task-console__icon {
+  flex-shrink: 0;
+  font-size: var(--icon-sm);
+}
+
+.bds-task-console__icon--completed {
+  color: var(--color-system-green);
+}
+
+.bds-task-console__icon--failed {
+  color: var(--color-system-red);
+}
+
+.bds-task-console__icon--in-progress {
+  color: var(--color-system-blue);
+}
+
+.bds-task-console__icon--pending {
+  display: inline-block;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  border-radius: var(--border-radius-pill);
+  border: var(--border-width-lg) solid var(--border-primary);
+  box-sizing: border-box;
+}
