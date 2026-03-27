@@ -61,5 +61,6 @@ export * from './Tag';
 export * from './TextArea';
 export * from './TextInput';
 export * from './TextLink';
+export * from './TaskConsole';
 export * from './Toast';
 export * from './Tooltip';
