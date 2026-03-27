@@ -126,62 +126,90 @@
 }
 
 /* ─── Interactive States ──────────────────────────────────────── */
+/* All states use semantic interaction tokens from BDS.
+ * No filter: brightness(), no opacity hacks, no hardcoded values.
+ * Tokens resolve per-theme via Figma Variables → Style Dictionary. */
 
-/* Default hover: darken via filter */
-.bds-button:hover:not(:disabled):not(.bds-button--loading) {
-  filter: brightness(0.9);
+/* ── Primary ── */
+.bds-button--primary:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--interaction-background-brand-primary-hover);
 }
 
-.bds-button:active:not(:disabled) {
-  filter: brightness(0.85);
+.bds-button--primary:active:not(:disabled) {
+  background-color: var(--interaction-background-brand-primary-pressed);
   transform: translateY(1px);
 }
 
-.bds-button:focus-visible {
-  outline: 2px solid var(--border-brand-primary);
-  outline-offset: 2px;
-}
-
-.bds-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Outline: fill on hover */
-.bds-button--outline:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
-  filter: none;
-}
-
-/* Ghost: show surface on hover */
-.bds-button--ghost:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--surface-secondary);
-  filter: none;
-}
-
-/* Secondary: remove border on hover */
+/* ── Secondary ── */
 .bds-button--secondary:hover:not(:disabled):not(.bds-button--loading) {
-  border-color: transparent;
+  background-color: var(--interaction-surface-secondary-hover);
+  border-color: var(--interaction-surface-secondary-hover);
 }
 
-/* Inverse: slight dim on hover */
+.bds-button--secondary:active:not(:disabled) {
+  background-color: var(--interaction-surface-secondary-pressed);
+  color: var(--text-on-color-dark);
+  border-color: var(--interaction-surface-secondary-pressed);
+  transform: translateY(1px);
+}
+
+/* ── Outline ── */
+.bds-button--outline:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--interaction-surface-subtle-hover);
+}
+
+.bds-button--outline:active:not(:disabled) {
+  background-color: var(--interaction-background-brand-primary-pressed);
+  color: var(--text-on-color-dark);
+  border-color: var(--interaction-background-brand-primary-pressed);
+  transform: translateY(1px);
+}
+
+/* ── Ghost ── */
+.bds-button--ghost:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--interaction-surface-subtle-hover);
+}
+
+.bds-button--ghost:active:not(:disabled) {
+  background-color: var(--interaction-surface-secondary-hover);
+  transform: translateY(1px);
+}
+
+/* ── Inverse ── */
 .bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
-  filter: brightness(0.95);
+  background-color: var(--interaction-surface-secondary-pressed);
+  color: var(--text-on-color-dark);
 }
 
-/* Danger outline: fill on hover */
+.bds-button--inverse:active:not(:disabled) {
+  background-color: var(--interaction-background-brand-primary-pressed);
+  color: var(--text-on-color-dark);
+  transform: translateY(1px);
+}
+
+/* ── Danger variants ── */
 .bds-button--danger-outline:hover:not(:disabled):not(.bds-button--loading) {
   background-color: var(--background-accent-red);
   color: var(--text-on-color-dark);
-  filter: none;
 }
 
-/* Danger ghost: show red surface on hover */
 .bds-button--danger-ghost:hover:not(:disabled):not(.bds-button--loading) {
   background-color: var(--background-accent-red);
   color: var(--text-on-color-dark);
-  filter: none;
+}
+
+/* ── Disabled (all variants) ── */
+.bds-button:disabled {
+  background-color: var(--interaction-background-disabled);
+  color: var(--interaction-text-disabled);
+  border-color: var(--interaction-border-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Focus (all variants) ── */
+.bds-button:focus-visible {
+  outline: 2px solid var(--interaction-border-focus);
+  outline-offset: 2px;
 }
 
 /* Danger: red focus ring */

@@ -16,6 +16,61 @@ export const colorGrayscaleLight: string;
 export const colorGrayscaleLighter: string;
 /** Light Background / UI Elements */
 export const colorGrayscaleLightest: string;
+/** Subtle tints / hover backgrounds */
+export const colorPoppyLightest: string;
+/** Light accent */
+export const colorPoppyLighter: string;
+/** Brand primary base */
+export const colorPoppyLight: string;
+/** Hover state */
+export const colorPoppyDark: string;
+/** Pressed state */
+export const colorPoppyDarker: string;
+/** Deep accent */
+export const colorPoppyDarkest: string;
+/** Accent background */
+export const colorTanLightest: string;
+export const colorTanLighter: string;
+export const colorTanLight: string;
+export const colorTanDark: string;
+export const colorTanDarker: string;
+export const colorTanDarkest: string;
+export const colorOrangeLightest: string;
+export const colorOrangeLighter: string;
+export const colorOrangeLight: string;
+export const colorOrangeDark: string;
+export const colorOrangeDarker: string;
+export const colorOrangeDarkest: string;
+export const colorYellowLightest: string;
+export const colorYellowLighter: string;
+export const colorYellowLight: string;
+export const colorYellowDark: string;
+export const colorYellowDarker: string;
+export const colorYellowDarkest: string;
+export const colorGreenLightest: string;
+export const colorGreenLighter: string;
+export const colorGreenLight: string;
+export const colorGreenDark: string;
+export const colorGreenDarker: string;
+export const colorGreenDarkest: string;
+export const colorBlueLightest: string;
+export const colorBlueLighter: string;
+export const colorBlueLight: string;
+export const colorBlueDark: string;
+export const colorBlueDarker: string;
+export const colorBlueDarkest: string;
+export const colorPurpleLightest: string;
+export const colorPurpleLighter: string;
+export const colorPurpleLight: string;
+export const colorPurpleDark: string;
+export const colorPurpleDarker: string;
+export const colorPurpleDarkest: string;
+export const colorPinkLightest: string;
+export const colorPinkLighter: string;
+export const colorPinkLight: string;
+export const colorPinkDark: string;
+export const colorPinkDarker: string;
+export const colorPinkDarkest: string;
 export const colorSystemRed: string;
 export const colorSystemGreen: string;
 export const colorSystemYellow: string;
@@ -277,6 +332,24 @@ export const borderMuted: string;
 export const borderInverse: string;
 export const borderOnColorLight: string;
 export const borderInput: string;
+/** Primary button hover background */
+export const interactionBackgroundBrandPrimaryHover: string;
+/** Primary button pressed background */
+export const interactionBackgroundBrandPrimaryPressed: string;
+/** Secondary button hover background */
+export const interactionSurfaceSecondaryHover: string;
+/** Secondary button pressed background */
+export const interactionSurfaceSecondaryPressed: string;
+/** Ghost and outline button hover background */
+export const interactionSurfaceSubtleHover: string;
+/** Disabled button background (all variants) */
+export const interactionBackgroundDisabled: string;
+/** Disabled button text (all variants) */
+export const interactionTextDisabled: string;
+/** Disabled button border (all variants) */
+export const interactionBorderDisabled: string;
+/** Focus ring color */
+export const interactionBorderFocus: string;
 export const iconLogo: string;
 export const iconIcon: string;
 export const iconTiny: string;

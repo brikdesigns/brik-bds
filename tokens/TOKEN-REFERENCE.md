@@ -218,17 +218,54 @@ this in `storybook-overrides.css` to use Base mode.
 | `--system--orange` | #f2994a | Caution states |
 | `--system--purple` | #9b51e0 | Special states |
 
-### Grayscale (non-themed)
-| Token | Value |
-|-------|-------|
-| `--grayscale--white` | white |
-| `--grayscale--lightest` | #f2f2f2 |
-| `--grayscale--lighter` | #e0e0e0 |
-| `--grayscale--light` | #bdbdbd |
-| `--grayscale--dark` | #828282 |
-| `--grayscale--darker` | #4f4f4f |
-| `--grayscale--darkest` | #333 |
-| `--grayscale--black` | black |
+### Grayscale
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--color-grayscale-white` | #ffffff | White backgrounds |
+| `--color-grayscale-lightest` | #f2f2f2 | Light backgrounds, ghost hover |
+| `--color-grayscale-lighter` | #e0e0e0 | Borders, dividers |
+| `--color-grayscale-light` | #bdbdbd | Muted text, disabled text |
+| `--color-grayscale-dark` | #828282 | Secondary text, disabled bg |
+| `--color-grayscale-darker` | #4f4f4f | Tertiary content |
+| `--color-grayscale-darkest` | #333333 | Primary text (light mode) |
+| `--color-grayscale-black` | #000000 | Pure black |
+
+### Brand Color Scales (6-step ramps)
+
+Every brand color has a consistent 6-step scale: `lightest → lighter → light [base] → dark → darker → darkest`. These are the **primitive building blocks** for semantic tokens and interaction states.
+
+**Source of truth:** Figma Brand Kit → Figma Variables → `tokens-studio.json` → Style Dictionary → `figma-tokens.css`
+
+| Family | lightest | lighter | light (base) | dark | darker | darkest |
+|--------|----------|---------|--------------|------|--------|---------|
+| **Poppy** | `#ffefeb` | `#ffa693` | `#e35335` | `#b0351b` | `#7d1d09` | `#4a0d00` |
+| **Tan** | `#f1f0ec` | `#cfcdc5` | `#adaaa0` | `#8b887d` | `#69665c` | `#47453c` |
+| **Orange** | `#ffe8dc` | `#ffad92` | `#e76134` | `#b4411a` | `#812608` | `#4e1400` |
+| **Yellow** | `#fffee1` | `#ffecac` | `#f4d364` | `#c1a443` | `#8e7729` | `#634716` |
+| **Green** | `#f8fff3` | `#daffc0` | `#bcff8c` | `#9ada6c` | `#71a74a` | `#2a5542` |
+| **Blue** | `#f8fdff` | `#b2e3f5` | `#8ebbcc` | `#6c95a3` | `#4d6e7b` | `#314952` |
+| **Purple** | `#f2f0f7` | `#c4b0eb` | `#9e8bc2` | `#796999` | `#574a71` | `#362d48` |
+| **Pink** | `#ffe9f6` | `#ffa8dd` | `#ff67c3` | `#ff25aa` | `#d20080` | `#8e0057` |
+
+**CSS usage:** `var(--color-poppy-dark)`, `var(--color-blue-lightest)`, etc.
+
+**NEVER write raw hex values.** Always reference the token. These scales are consumed by interaction tokens, service colors, and theme overrides.
+
+### Interaction States
+
+Semantic tokens for hover, pressed, disabled, and focus states. These resolve to different primitive scale positions per light/dark mode.
+
+| Token | Light mode | Dark mode | Usage |
+|-------|-----------|-----------|-------|
+| `--interaction-background-brand-primary-hover` | poppy-dark | poppy-lighter | Primary button hover |
+| `--interaction-background-brand-primary-pressed` | poppy-darker | poppy-lightest | Primary button pressed |
+| `--interaction-surface-secondary-hover` | grayscale-light | grayscale-darker | Secondary button hover |
+| `--interaction-surface-secondary-pressed` | grayscale-dark | grayscale-dark | Secondary button pressed |
+| `--interaction-surface-subtle-hover` | grayscale-lightest | grayscale-darkest | Ghost/outline hover |
+| `--interaction-background-disabled` | grayscale-dark | grayscale-darker | All disabled backgrounds |
+| `--interaction-text-disabled` | grayscale-light | grayscale-dark | All disabled text |
+| `--interaction-border-disabled` | grayscale-dark | grayscale-darker | All disabled borders |
+| `--interaction-border-focus` | border-brand-primary | border-brand-primary | Focus ring color |
 
 ---
 
