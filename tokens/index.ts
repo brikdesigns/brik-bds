@@ -110,6 +110,51 @@ export const grayscale = {
 } as const;
 
 /**
+ * Brand color primitive scales
+ * Source of truth: Figma Variables → tokens-studio.json → Style Dictionary
+ * Each family has 6 steps: lightest → lighter → light [base] → dark → darker → darkest
+ */
+export const poppy = {
+  "lightest": "#ffefeb", "lighter": "#ffa693", "light": "#e35335",
+  "dark": "#b0351b", "darker": "#7d1d09", "darkest": "#4a0d00"
+} as const;
+
+export const tan = {
+  "lightest": "#f1f0ec", "lighter": "#cfcdc5", "light": "#adaaa0",
+  "dark": "#8b887d", "darker": "#69665c", "darkest": "#47453c"
+} as const;
+
+export const orange = {
+  "lightest": "#ffe8dc", "lighter": "#ffad92", "light": "#e76134",
+  "dark": "#b4411a", "darker": "#812608", "darkest": "#4e1400"
+} as const;
+
+export const yellow = {
+  "lightest": "#fffee1", "lighter": "#ffecac", "light": "#f4d364",
+  "dark": "#c1a443", "darker": "#8e7729", "darkest": "#634716"
+} as const;
+
+export const green = {
+  "lightest": "#f8fff3", "lighter": "#daffc0", "light": "#bcff8c",
+  "dark": "#9ada6c", "darker": "#71a74a", "darkest": "#2a5542"
+} as const;
+
+export const blue = {
+  "lightest": "#f8fdff", "lighter": "#b2e3f5", "light": "#8ebbcc",
+  "dark": "#6c95a3", "darker": "#4d6e7b", "darkest": "#314952"
+} as const;
+
+export const purple = {
+  "lightest": "#f2f0f7", "lighter": "#c4b0eb", "light": "#9e8bc2",
+  "dark": "#796999", "darker": "#574a71", "darkest": "#362d48"
+} as const;
+
+export const pink = {
+  "lightest": "#ffe9f6", "lighter": "#ffa8dd", "light": "#ff67c3",
+  "dark": "#ff25aa", "darker": "#d20080", "darkest": "#8e0057"
+} as const;
+
+/**
  * Theme color palettes
  */
 export const themePalettes = {

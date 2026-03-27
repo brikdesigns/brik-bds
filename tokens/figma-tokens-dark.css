@@ -1,0 +1,60 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root[data-theme="dark"] {
+  --page-primary: var(--color-grayscale-black);
+  --page-secondary: var(--color-grayscale-darker);
+  --page-brand-primary: var(--theme-blue-blue-light);
+  --page-inverse: var(--color-grayscale-white);
+  --background-primary: var(--color-grayscale-black);
+  --background-secondary: var(--color-grayscale-light);
+  --background-brand-primary: var(--theme-blue-blue-light);
+  --background-inverse: var(--color-grayscale-black);
+  --background-accent-yellow: var(--color-system-yellow);
+  --background-accent-blue: var(--color-system-blue);
+  --background-accent-green: var(--color-system-green);
+  --background-accent-purple: var(--color-system-purple);
+  --background-accent-red: var(--color-system-red);
+  --background-input: var(--color-grayscale-black);
+  --background-on-color-dark: var(--color-grayscale-black);
+  --background-muted: var(--color-grayscale-darker);
+  --background-on-color-light: var(--color-grayscale-white);
+  --surface-primary: var(--color-grayscale-black);
+  --surface-secondary: var(--color-grayscale-darker);
+  --surface-brand-primary: var(--theme-blue-blue-light);
+  --surface-inverse: var(--color-grayscale-white);
+  --surface-overlay: var(--color-grayscale-black);
+  --text-primary: var(--color-grayscale-lightest);
+  --text-secondary: var(--color-grayscale-light);
+  --text-brand-primary: var(--theme-blue-blue-light);
+  --text-inverse: var(--color-grayscale-black);
+  --text-accent-yellow: var(--color-system-yellow);
+  --text-accent-blue: var(--color-system-blue);
+  --text-accent-green: var(--color-system-green);
+  --text-accent-purple: var(--color-system-purple);
+  --text-accent-red: var(--color-system-red);
+  --text-muted: var(--color-grayscale-dark);
+  --text-on-color-dark: var(--color-grayscale-white);
+  --text-text-link: var(--theme-blue-blue-light);
+  --text-on-color-light: var(--color-grayscale-black);
+  --border-primary: var(--color-grayscale-darker);
+  --border-brand-primary: var(--theme-blue-blue-light);
+  --border-on-color-dark: var(--color-grayscale-black);
+  --border-secondary: var(--color-grayscale-light);
+  --border-muted: var(--color-grayscale-dark);
+  --border-inverse: var(--color-grayscale-black);
+  --border-on-color-light: var(--color-grayscale-white);
+  --border-input: var(--color-grayscale-dark);
+
+  /* ── Interaction States (Dark) ── */
+  --interaction-background-brand-primary-hover: var(--color-poppy-lighter);
+  --interaction-background-brand-primary-pressed: var(--color-poppy-lightest);
+  --interaction-surface-secondary-hover: var(--color-grayscale-darker);
+  --interaction-surface-secondary-pressed: var(--color-grayscale-dark);
+  --interaction-surface-subtle-hover: var(--color-grayscale-darkest);
+  --interaction-background-disabled: var(--color-grayscale-darker);
+  --interaction-text-disabled: var(--color-grayscale-dark);
+  --interaction-border-disabled: var(--color-grayscale-darker);
+  --interaction-border-focus: var(--border-brand-primary);
+}

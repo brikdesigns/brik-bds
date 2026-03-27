@@ -17,7 +17,7 @@ import StyleDictionary from 'style-dictionary';
 register(StyleDictionary);
 
 // Semantic color groups — only these change between light and dark modes
-const SEMANTIC_GROUPS = ['background', 'text', 'border', 'surface', 'page'];
+const SEMANTIC_GROUPS = ['background', 'text', 'border', 'surface', 'page', 'interaction'];
 
 export default {
   log: {
