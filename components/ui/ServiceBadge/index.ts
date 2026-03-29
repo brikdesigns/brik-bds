@@ -5,3 +5,6 @@ export type {
   ServiceBadgeSize,
   ServiceBadgeMode,
 } from './ServiceBadge';
+
+export { ServiceTag } from './ServiceTag';
+export type { ServiceTagProps, ServiceTagVariant } from './ServiceTag';

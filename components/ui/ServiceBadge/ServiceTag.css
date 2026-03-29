@@ -1,0 +1,48 @@
+/* ─── ServiceTag ─────────────────────────────────────────────── */
+
+.bds-service-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  white-space: nowrap;
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-service-tag--has-icon {
+  gap: var(--gap-xs);
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+
+.bds-service-tag--sm {
+  padding: var(--padding-tiny) var(--padding-sm);
+  font-size: var(--body-tiny);
+}
+
+.bds-service-tag--md {
+  padding: var(--padding-tiny) var(--padding-sm);
+  font-size: var(--label-sm);
+}
+
+.bds-service-tag--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--label-md);
+}
+
+/* ─── Category colors ────────────────────────────────────────── */
+
+.bds-service-tag--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand); }
+.bds-service-tag--marketing   { background-color: var(--background-service-marketing);   color: var(--text-service-marketing); }
+.bds-service-tag--information { background-color: var(--background-service-information); color: var(--text-service-information); }
+.bds-service-tag--product     { background-color: var(--background-service-product);     color: var(--text-service-product); }
+.bds-service-tag--service     { background-color: var(--background-service-service);     color: var(--text-service-service); }
+
+/* ─── Icon ───────────────────────────────────────────────────── */
+
+.bds-service-tag__icon {
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
