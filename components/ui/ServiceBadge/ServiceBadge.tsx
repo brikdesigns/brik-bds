@@ -9,7 +9,10 @@ export type ServiceBadgeMode = 'badge' | 'label';
 export interface ServiceBadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Service category */
   category: ServiceCategory;
-  /** Display mode */
+  /**
+   * Display mode
+   * @deprecated Use `ServiceTag` for text/label display. ServiceBadge is icon-only going forward.
+   */
   mode?: ServiceBadgeMode;
   /** Size variant */
   size?: ServiceBadgeSize;
@@ -25,7 +28,7 @@ export const categoryConfig: Record<ServiceCategory, { token: string; label: str
   service: { token: 'orange', label: 'Back Office' },
 };
 
-const serviceIconOverrides: Record<string, string> = {
+export const serviceIconOverrides: Record<string, string> = {
   // Brand
   'Brand Identity Bundle': 'brand-design',
   'Logo Update': 'brand-logo',
@@ -62,11 +65,11 @@ const serviceIconOverrides: Record<string, string> = {
   'Training Setup & Organization': 'back-office-consulting',
 };
 
-function normalizeServiceName(name: string): string {
+export function normalizeServiceName(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-function getServiceIconPath(category: ServiceCategory, serviceName: string): string {
+export function getServiceIconPath(category: ServiceCategory, serviceName: string): string {
   if (serviceIconOverrides[serviceName]) {
     return `/icons/${category}/${serviceIconOverrides[serviceName]}.svg`;
   }
