@@ -183,6 +183,20 @@
   color: var(--text-muted);
 }
 
+.bds-task-console__item-link {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-normal);
+  color: var(--color-system-blue);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bds-task-console__item-link:hover {
+  text-decoration: underline;
+}
+
 .bds-task-console__item-detail {
   font-family: var(--font-family-body);
   font-size: var(--body-sm);

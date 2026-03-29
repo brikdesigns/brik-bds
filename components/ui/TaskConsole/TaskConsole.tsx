@@ -20,6 +20,8 @@ export interface TaskConsoleItem {
   status: TaskItemStatus;
   /** Optional detail text (shown below label when in_progress) */
   detail?: string;
+  /** Optional URL — shown as "View" link when completed */
+  href?: string;
 }
 
 export interface TaskConsoleProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -170,6 +172,17 @@ export function TaskConsole({
                 <span className="bds-task-console__item-label">{item.label}</span>
                 {item.detail && item.status === 'in_progress' && (
                   <span className="bds-task-console__item-detail">{item.detail}</span>
+                )}
+                {item.href && item.status === 'completed' && (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bds-task-console__item-link"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    View →
+                  </a>
                 )}
               </div>
               <StatusIcon status={item.status} />
