@@ -16,6 +16,12 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   actions?: ReactNode;
   tabs?: ReactNode;
   metadata?: MetadataItem[];
+  /** Show divider and top padding above metadata. Default: true */
+  showDivider?: boolean;
+  /** Remove horizontal padding (for layouts that provide their own). Default: false */
+  flush?: boolean;
+  /** Title scale. Default: 'lg' */
+  size?: 'sm' | 'md' | 'lg';
 }
 
 /**
@@ -29,13 +35,16 @@ export function PageHeader({
   actions,
   tabs,
   metadata,
+  showDivider = true,
+  flush = false,
+  size = 'lg',
   className,
   style,
   ...props
 }: PageHeaderProps) {
   return (
     <div
-      className={bdsClass('bds-page-header', className)}
+      className={bdsClass('bds-page-header', flush && 'bds-page-header--flush', size !== 'lg' && `bds-page-header--${size}`, className)}
       style={style}
       {...props}
     >
@@ -53,7 +62,7 @@ export function PageHeader({
       </div>
 
       {metadata && metadata.length > 0 && (
-        <div className="bds-page-header__metadata">
+        <div className={bdsClass('bds-page-header__metadata', !showDivider && 'bds-page-header__metadata--no-divider')}>
           <div className="bds-page-header__metadata-inner">
             {metadata.map((item) => (
               <div key={item.label} className="bds-page-header__metadata-item">
