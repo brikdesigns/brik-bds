@@ -66,6 +66,7 @@
   line-height: var(--font-line-height-tight);
   cursor: pointer;
   padding: var(--padding-md);
+  margin-right: calc(-1 * var(--padding-md));
   color: var(--text-primary);
   opacity: 0.6;
   transition: opacity 0.2s;
@@ -76,6 +77,12 @@
 }
 
 .bds-modal__close:hover {
+  opacity: 1;
+}
+
+.bds-modal__close:focus-visible {
+  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+  outline-offset: 2px;
   opacity: 1;
 }
 
