@@ -50,6 +50,25 @@
   user-select: none;
 }
 
+/* ─── Subheader row (section / phase divider) ───────────────── */
+
+.bds-table-subheader {
+  background-color: var(--surface-secondary);
+  color: var(--text-muted);
+  font-family: var(--font-family-label);
+  font-size: var(--subtitle-sm);
+  font-weight: var(--font-weight-semi-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: var(--padding-tiny) var(--padding-md);
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* Suppress striped background on subheader rows */
+.bds-table[data-striped="true"] .bds-table-body .bds-table-subheader-row {
+  background-color: transparent;
+}
+
 /* ─── Body cell ──────────────────────────────────────────────── */
 
 .bds-table-cell {
