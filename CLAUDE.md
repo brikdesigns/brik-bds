@@ -9,20 +9,21 @@ This is the **source of truth** for the Brik Design System React components.
 When the user says "pull latest tokens from Figma" or "we updated tokens in Figma":
 
 ```bash
-# THE workflow — no other method exists
-# Step 1: Claude calls Figma MCP to read current variables
-#   mcp__claude_ai_Figma__get_variable_defs(fileKey: "Rkdc3SIWJUdgoAkeadgZZe", nodeId: "0:1")
-#
-# Step 2: Write MCP output to temp file
-#   /tmp/figma-vars.json
-#
-# Step 3: Patch tokens-studio.json + rebuild
-#   node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build
+# Step 1: Pull variables via dev plugin + WebSocket relay
+# Requires: Figma Desktop open, dev plugin running, relay on port 3055
+bun brik/_tools/claude-talk-to-figma-mcp/scripts/pull-variables.js <channel-id> > /tmp/figma-vars.json
+
+# Step 2: Patch tokens-studio.json + rebuild
+node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build
 ```
 
 This updates `design-tokens/tokens-studio.json` → runs `build:sd-figma` → regenerates `tokens/figma-tokens.css` + JS + Swift.
 
-**No manual Figma plugin steps. No Tokens Studio push. No figma-talk MCP.**
+**Do NOT use REST API for variables** — `file_variables:read` scope is Enterprise-only, not available on Pro.
+**Do NOT use `mcp__claude_ai_Figma__get_variable_defs`** — returns screenshots, not variable data.
+**Do NOT use `mcp__figma-desktop__get_variable_defs`** — returns node-bound variables, not file-level collections.
+
+If the dev plugin isn't connected: ask the user to connect it OR export CSS from Figma UI. ONE clear ask.
 
 If a token doesn't exist in `figma-tokens.css` after the build, it needs to be added in **Figma first**, not in CSS. The only exception is `tokens/overrides.css` which provides gap-fill tokens not yet in Figma.
 
@@ -222,6 +223,8 @@ Any project using brik-bds as a submodule (portals, dashboards, tools) MUST foll
 
 **Key rule:** Never write raw CSS `var()` strings inline. Import from `@/lib/tokens` and `@/lib/styles`.
 
+See this file (brik-bds/CLAUDE.md) — loaded via @import in all consuming projects.
+
 **Required files in every consuming project:**
 1. `src/lib/tokens.ts` - Figma style name to CSS var() mapping
 2. `src/lib/styles.ts` - Composed CSSProperties presets
@@ -237,12 +240,41 @@ The copy at `brik-llm/foundations/brik-bds/` is a git submodule.
 
 ---
 
-## Related Skills & References
+## Quick Reference — Wrong vs Right
 
-These global files provide cross-project context. Load on demand.
+The most commonly broken patterns across all Brik projects.
 
-| File | Load when... |
-|------|-------------|
-| `~/.claude/skills/bds-agent-instructions.md` | Token rules, component tiers, platform consumption |
-| `~/.claude/skills/figma-workflow.md` | Brand extraction, Figma MCP variable sync |
-| `~/.claude/references/webflow-site-registry.md` | Brik Foundations site ID, token names |
+```tsx
+// ❌ WRONG: Ghost variant on a primary action
+<IconButton variant="ghost" icon={<Play />} label="Start" />
+// ✅ RIGHT: Preserve the action's hierarchy — primary action = primary variant
+<IconButton variant="primary" icon={<Play />} label="Start" />
+// Rule: Converting Button → IconButton doesn't change the action's importance.
+// ghost = low emphasis. primary = high emphasis. Match the original.
+
+// ❌ WRONG: Raw var() string in style prop
+style={{ color: 'var(--text-primary)', fontSize: '16px' }}
+// ✅ RIGHT: Import from the token layer
+import { color, font } from '@/lib/tokens';
+style={{ color: color.text.primary, fontSize: font.size.body.md }}
+
+// ❌ WRONG: Hardcoded hex color
+style={{ backgroundColor: '#E35335' }}
+// ✅ RIGHT: Always look up the semantic token — never assume
+style={{ backgroundColor: color.brand.primary }}
+// Note: grep globals.css first. Never assume what "primary" resolves to.
+
+// ❌ WRONG: Mixing font family with wrong size scale
+style={{ fontSize: font.size.body.md, fontFamily: font.family.heading }}
+// ✅ RIGHT: Use composed style presets
+import { text } from '@/lib/styles';
+style={text.body}  // family + size + lineHeight, always matched correctly
+
+// ❌ WRONG: Editing the submodule directly
+// brik-client-portal/brik-bds/components/ui/Button/Button.css ← NEVER
+// ✅ RIGHT: Edit in standalone repo, sync to consumers
+// ~/Documents/GitHub/brik/brik-bds/ ← ALWAYS
+// Then: ./scripts/bds-sync.sh in each consuming project
+```
+
+All BDS-consuming projects load this file via `@import` in their CLAUDE.md.
