@@ -42,14 +42,19 @@ if [ -n "$MISSING_INDEX" ] || [ -n "$MISSING_EXPORT" ]; then
   exit 1
 fi
 
-# Lint only staged .tsx files (not all components)
-STAGED=$(git diff --cached --name-only --diff-filter=ACM -- 'components/**/*.tsx')
+# Lint staged .tsx and .css files for token violations
+STAGED_TSX=$(git diff --cached --name-only --diff-filter=ACM -- 'components/**/*.tsx')
+STAGED_CSS=$(git diff --cached --name-only --diff-filter=ACM -- 'components/**/*.css')
 
-if [ -n "$STAGED" ]; then
-  echo "Linting $(echo "$STAGED" | wc -l | tr -d ' ') staged .tsx files..."
-  node scripts/lint-tokens.js --errors-only --files $STAGED
+if [ -n "$STAGED_TSX" ] || [ -n "$STAGED_CSS" ]; then
+  TSX_COUNT=$([ -n "$STAGED_TSX" ] && echo "$STAGED_TSX" | wc -l | tr -d ' ' || echo "0")
+  CSS_COUNT=$([ -n "$STAGED_CSS" ] && echo "$STAGED_CSS" | wc -l | tr -d ' ' || echo "0")
+  echo "Linting $TSX_COUNT staged .tsx + $CSS_COUNT staged .css files..."
+  node scripts/lint-tokens.js --errors-only \
+    ${STAGED_TSX:+--files $STAGED_TSX} \
+    ${STAGED_CSS:+--css-files $STAGED_CSS}
 else
-  echo "No staged .tsx files — skipping token lint."
+  echo "No staged component files — skipping token lint."
 fi
 
 # Typecheck always runs (fast, catches real errors)
