@@ -617,11 +617,22 @@ function main() {
   const tsxFiles = explicitFiles
     ? explicitFiles.filter(f => /\.tsx$/.test(f)).map(f => path.resolve(f))
     : findFiles(COMPONENTS_DIR, /\.tsx$/);
-  if (tsxFiles.length === 0) {
-    console.log('  No .tsx files to scan — skipping.\n');
+
+  // CSS files: explicit list (from pre-commit hook) or full scan
+  const cssFilesIdx = args.indexOf('--css-files');
+  const explicitCssFiles = cssFilesIdx !== -1
+    ? args.slice(cssFilesIdx + 1).filter(f => !f.startsWith('--'))
+    : null;
+  const cssFiles = explicitCssFiles
+    ? explicitCssFiles.filter(f => /\.css$/.test(f)).map(f => path.resolve(f))
+    : findFiles(COMPONENTS_DIR, /\.css$/);
+
+  const totalFiles = tsxFiles.length + cssFiles.length;
+  if (totalFiles === 0) {
+    console.log('  No files to scan — skipping.\n');
     process.exit(0);
   }
-  console.log(`  Scanning ${tsxFiles.length} files...\n`);
+  console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css files...\n`);
 
   // 3. Scan components for token usage violations
   const allViolations = [];
@@ -641,6 +652,26 @@ function main() {
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, isComponent));
 
       // Rule 4: grid compliance (opt-in via --check-grid)
+      if (checkGrid) {
+        allViolations.push(...checkGridCompliance(line, lineNum, file));
+      }
+    }
+  }
+
+  // CSS files: apply token-reference rules only (no TSX style-object rules)
+  for (const file of cssFiles) {
+    const content = fs.readFileSync(file, 'utf8');
+    const lines = content.split('\n');
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const lineNum = i + 1;
+
+      // Rule 1: primitive token usage in CSS
+      allViolations.push(...checkPrimitiveTokens(line, lineNum, file, true));
+      // Rule 3: unknown token references in CSS (catches stale var() after renames)
+      allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
+
       if (checkGrid) {
         allViolations.push(...checkGridCompliance(line, lineNum, file));
       }
