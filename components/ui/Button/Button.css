@@ -136,57 +136,57 @@
 
 /* ── Primary ── */
 .bds-button--primary:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--interaction-background-brand-primary-hover);
+  background-color: var(--background-brand-primary-hover);
 }
 
 .bds-button--primary:active:not(:disabled) {
-  background-color: var(--interaction-background-brand-primary-pressed);
+  background-color: var(--background-brand-primary-pressed);
   transform: translateY(1px);
 }
 
 /* ── Secondary ── */
 .bds-button--secondary:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--interaction-surface-secondary-hover);
-  border-color: var(--interaction-surface-secondary-hover);
+  background-color: var(--surface-secondary-hover);
+  border-color: var(--surface-secondary-hover);
 }
 
 .bds-button--secondary:active:not(:disabled) {
-  background-color: var(--interaction-surface-secondary-pressed);
+  background-color: var(--surface-secondary-pressed);
   color: var(--text-on-color-dark);
-  border-color: var(--interaction-surface-secondary-pressed);
+  border-color: var(--surface-secondary-pressed);
   transform: translateY(1px);
 }
 
 /* ── Outline ── */
 .bds-button--outline:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--interaction-surface-subtle-hover);
+  background-color: var(--surface-subtle-hover);
 }
 
 .bds-button--outline:active:not(:disabled) {
-  background-color: var(--interaction-background-brand-primary-pressed);
+  background-color: var(--background-brand-primary-pressed);
   color: var(--text-on-color-dark);
-  border-color: var(--interaction-background-brand-primary-pressed);
+  border-color: var(--background-brand-primary-pressed);
   transform: translateY(1px);
 }
 
 /* ── Ghost ── */
 .bds-button--ghost:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--interaction-surface-subtle-hover);
+  background-color: var(--surface-subtle-hover);
 }
 
 .bds-button--ghost:active:not(:disabled) {
-  background-color: var(--interaction-surface-secondary-hover);
+  background-color: var(--surface-secondary-hover);
   transform: translateY(1px);
 }
 
 /* ── Inverse ── */
 .bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--interaction-surface-secondary-pressed);
+  background-color: var(--surface-secondary-pressed);
   color: var(--text-on-color-dark);
 }
 
 .bds-button--inverse:active:not(:disabled) {
-  background-color: var(--interaction-background-brand-primary-pressed);
+  background-color: var(--background-brand-primary-pressed);
   color: var(--text-on-color-dark);
   transform: translateY(1px);
 }
@@ -204,15 +204,15 @@
 
 /* ── Disabled (all variants) ── */
 .bds-button:disabled {
-  background-color: var(--interaction-background-disabled);
-  color: var(--interaction-text-disabled);
-  border-color: var(--interaction-border-disabled);
+  background-color: var(--background-disabled);
+  color: var(--text-disabled);
+  border-color: var(--border-disabled);
   cursor: not-allowed;
 }
 
 /* ── Focus (all variants) ── */
 .bds-button:focus-visible {
-  outline: 2px solid var(--interaction-border-focus);
+  outline: 2px solid var(--border-focus);
   outline-offset: 2px;
 }
 
