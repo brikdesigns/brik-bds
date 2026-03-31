@@ -65,13 +65,15 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         aria-busy={loading || undefined}
         {...props}
       >
-        {loading ? (
+        <span
+          className={bdsClass('bds-icon-button__icon', loading && 'bds-button__content--hidden')}
+          aria-hidden="true"
+        >
+          {icon}
+        </span>
+        {loading && (
           <span className="bds-button__spinner" role="status" aria-label="Loading">
             <span className="bds-button__spinner-icon" />
-          </span>
-        ) : (
-          <span className="bds-icon-button__icon" aria-hidden="true">
-            {icon}
           </span>
         )}
       </button>
