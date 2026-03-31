@@ -76,7 +76,7 @@ export function BoardCard({
               'bds-board-card__check',
               checked && 'bds-board-card__check--checked'
             )}
-            onClick={() => onCheckedChange(!checked)}
+            onClick={(e) => { e.stopPropagation(); onCheckedChange(!checked); }}
             aria-label={checked ? 'Mark incomplete' : 'Mark complete'}
             aria-pressed={checked}
           >

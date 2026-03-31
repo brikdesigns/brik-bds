@@ -69,6 +69,18 @@
   background-color: transparent;
 }
 
+/* ─── Flush (remove outer padding on first/last cells) ────── */
+
+.bds-table[data-flush="true"] .bds-table-head:first-child,
+.bds-table[data-flush="true"] .bds-table-cell:first-child {
+  padding-left: 0;
+}
+
+.bds-table[data-flush="true"] .bds-table-head:last-child,
+.bds-table[data-flush="true"] .bds-table-cell:last-child {
+  padding-right: 0;
+}
+
 /* ─── Body cell ──────────────────────────────────────────────── */
 
 .bds-table-cell {

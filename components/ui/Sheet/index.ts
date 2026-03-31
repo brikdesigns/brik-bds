@@ -1,1 +1,1 @@
-export { Sheet, type SheetProps, type SheetSide } from './Sheet';
+export { Sheet, type SheetProps, type SheetSide, type SheetTab } from './Sheet';
