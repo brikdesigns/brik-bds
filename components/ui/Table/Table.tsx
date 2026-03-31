@@ -158,6 +158,47 @@ export function TableHead({
   );
 }
 
+// ─── TableSubheader (<tr> section divider) ────────────────────
+
+export interface TableSubheaderProps extends HTMLAttributes<HTMLTableRowElement> {
+  /** Section label — rendered all-caps in subtitle-sm font */
+  label: string;
+  /** Spans this many columns. Default: 100 (spans full width of any table) */
+  colSpan?: number;
+}
+
+/**
+ * TableSubheader — thin section-divider row for grouping table rows by phase or category.
+ *
+ * Renders a full-width `<tr>` with a surface-secondary background and an
+ * all-caps subtitle label. Use it inside `<TableBody>` between row groups.
+ *
+ * @example
+ * ```tsx
+ * <TableBody>
+ *   <TableSubheader label="Phase 1 — Discovery" />
+ *   <TableRow>...</TableRow>
+ *   <TableSubheader label="Phase 2 — Design" />
+ *   <TableRow>...</TableRow>
+ * </TableBody>
+ * ```
+ */
+export function TableSubheader({
+  label,
+  colSpan = 100,
+  className,
+  style,
+  ...props
+}: TableSubheaderProps) {
+  return (
+    <tr className={bdsClass('bds-table-subheader-row', className)} style={style} {...props}>
+      <td className="bds-table-subheader" colSpan={colSpan}>
+        {label}
+      </td>
+    </tr>
+  );
+}
+
 // ─── TableCell (<td>) ──────────────────────────────────────────
 
 export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
