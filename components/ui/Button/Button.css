@@ -268,6 +268,12 @@
   height: 14px;
 }
 
+/* Icon buttons: spinner scales with the button's font-size (matches icon 1em × 1em) */
+.bds-icon-button .bds-button__spinner-icon {
+  width: 1em;
+  height: 1em;
+}
+
 /* ─── Icon Button ─────────────────────────────────────────────── */
 
 .bds-icon-button {
