@@ -154,6 +154,12 @@
   --background-service-service: var(--services--orange);
   --background-service-service-secondary: var(--services--orange-dark);
   --text-service-service: var(--services--orange-dark);
+
+  /* ── Interaction state overlays (gap-fill — add to Figma when interaction tokens land) */
+  --state-hover-overlay: rgba(0, 0, 0, 0.04); /* bds-lint-ignore — rgba overlay, no token equivalent */
+  --state-pressed-overlay: rgba(0, 0, 0, 0.08); /* bds-lint-ignore — rgba overlay, no token equivalent */
+  --state-focus: currentColor; /* bds-lint-ignore — resolves at use-site */
+  --state-disabled-opacity: 0.4;
 }
 
 /* ============================================

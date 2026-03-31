@@ -6,7 +6,7 @@ import './Chip.css';
 
 export type ChipSize = 'sm' | 'md' | 'lg';
 export type ChipVariant = 'primary' | 'secondary';
-export type ChipAppearance = 'dark' | 'light';
+export type ChipAppearance = 'dark' | 'light' | 'solid';
 
 export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Chip label text */

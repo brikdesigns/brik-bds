@@ -240,6 +240,26 @@ The copy at `brik-llm/foundations/brik-bds/` is a git submodule.
 
 ---
 
+## Token Rename History
+
+When Figma reorganizes variable groups, token names change. Log every rename here so consuming project CSS can be audited.
+
+| Date | Change | Old CSS name → New CSS name |
+|------|--------|-----------------------------|
+| 2026-03-31 | Figma dropped `interaction/` group prefix from all interaction tokens | `--interaction-background-brand-primary-hover` → `--background-brand-primary-hover` |
+| | | `--interaction-background-brand-primary-pressed` → `--background-brand-primary-pressed` |
+| | | `--interaction-background-secondary-hover` → `--background-secondary-hover` |
+| | | `--interaction-background-secondary-pressed` → `--background-secondary-pressed` |
+| | | `--interaction-background-outline-hover` → `--background-outline-hover` |
+| | | `--interaction-background-outline-pressed` → `--background-outline-pressed` |
+| | | `--interaction-background-disabled` → `--background-disabled` |
+| | | `--interaction-text-disabled` → `--text-disabled` |
+| | | `--interaction-border-disabled` → `--border-disabled` |
+
+**After any Figma sync that renames tokens:** run `node scripts/lint-tokens.js` against all component CSS files to catch stale references before committing.
+
+---
+
 ## Quick Reference — Wrong vs Right
 
 The most commonly broken patterns across all Brik projects.

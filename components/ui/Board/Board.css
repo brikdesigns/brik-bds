@@ -87,24 +87,18 @@
 /* ─── Board header (column header with avatar + progress) */
 
 .bds-board-header {
-  background-color: var(--surface-primary);
   border-radius: var(--border-radius-200);
-  padding: var(--padding-md);
+  padding: var(--padding-md) 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-md);
   flex-shrink: 0;
-  transition: box-shadow var(--duration-200) ease;
 }
 
-.bds-board-header:hover {
-  box-shadow: var(--shadow-sm);
-}
-
-.bds-board-header__header {
+.bds-board-header__profile {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-md);
 }
 
 .bds-board-header__info {
@@ -118,7 +112,7 @@
   font-family: var(--font-family-body);
   font-size: var(--font-size-100);
   font-weight: var(--font-weight-extra-bold);
-  color: var(--text-primary);
+  color: var(--text-on-color-dark);
   line-height: var(--font-line-height-tight);
   margin: 0;
   white-space: nowrap;
@@ -130,7 +124,8 @@
   font-family: var(--font-family-body);
   font-size: var(--body-sm);
   font-weight: var(--font-weight-regular);
-  color: var(--text-primary);
+  color: var(--text-on-color-dark);
+  opacity: 0.8;
   line-height: var(--font-line-height-tight);
   margin: 0;
   white-space: nowrap;
@@ -139,7 +134,7 @@
 }
 
 .bds-board-header__progress {
-  padding-left: calc(48px + var(--gap-sm)); /* Align with text, past avatar */
+  /* Full width below avatar + name row */
 }
 
 /* Avatar size override — board headers always use lg */
@@ -156,20 +151,22 @@
 /* ─── Board card (task card) ─────────────────────────── */
 
 .bds-board-card {
-  --bds-board-card-accent: var(--border-primary);
+  --bds-board-card-accent: var(--border-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   background-color: var(--surface-primary);
-  border-left: var(--border-width-xl) solid var(--bds-board-card-accent);
+  border-left: var(--border-width-xl) solid var(--bds-board-card-accent); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   border-radius: var(--border-radius-200);
   padding: var(--space-500) var(--padding-md);
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
   flex-shrink: 0;
-  transition: box-shadow var(--duration-200) ease;
+  transition: box-shadow var(--duration-200) ease, transform var(--duration-200) ease;
 }
 
 .bds-board-card:hover {
-  box-shadow: var(--shadow-sm);
+  box-shadow: inset 0 0 0 999px var(--state-hover-overlay, rgba(0, 0, 0, 0.04)),
+    0 4px 12px rgba(0, 0, 0, 0.12); /* bds-lint-ignore — elevation shadow */
+  transform: translateY(-1px);
 }
 
 .bds-board-card--checked {
@@ -221,26 +218,29 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--border-radius-circle);
-  border: var(--border-width-lg) solid var(--border-primary);
-  background-color: rgba(255, 255, 255, 0.15);
+  border: var(--border-width-md) solid var(--border-input);
+  background-color: var(--background-input);
   cursor: pointer;
   padding: 0;
-  transition: background-color var(--duration-200) ease;
+  transition: background-color var(--duration-200) ease, border-color var(--duration-200) ease;
 }
 
 .bds-board-card__check:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--border-primary);
+}
+
+.bds-board-card__check:focus-visible {
+  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+  outline-offset: 2px;
 }
 
 .bds-board-card__check--checked {
-  background-color: var(--background-input);
-  border-color: var(--border-primary);
+  background-color: var(--background-brand-primary);
+  border-color: var(--background-brand-primary);
 }
 
 .bds-board-card__check-icon {
   display: block;
-  width: 12px;
-  height: 12px;
   /* CSS-only checkmark */
   border-left: 2px solid var(--text-on-color-dark, #fff);
   border-bottom: 2px solid var(--text-on-color-dark, #fff);

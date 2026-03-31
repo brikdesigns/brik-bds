@@ -16,6 +16,8 @@ export type TableSize = 'default' | 'comfortable';
 export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   striped?: boolean;
   size?: TableSize;
+  /** Remove left padding on first cell, right padding on last cell */
+  flush?: boolean;
   children: ReactNode;
 }
 
@@ -29,6 +31,7 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
 export function Table({
   striped = false,
   size = 'default',
+  flush = false,
   children,
   className,
   style,
@@ -40,6 +43,7 @@ export function Table({
       style={style}
       data-striped={striped || undefined}
       data-size={size}
+      data-flush={flush || undefined}
       {...props}
     >
       {children}
