@@ -39,6 +39,7 @@
     "chromatic": "^15.3.0",
     "dotenv": "^16.6.1",
     "husky": "^9.1.7",
+    "lottie-react": "^2.4.1",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "storybook": "10.2.19",
@@ -50,6 +51,7 @@
     "@fortawesome/fontawesome-svg-core": ">=7.0.0",
     "@fortawesome/free-solid-svg-icons": ">=7.0.0",
     "@fortawesome/react-fontawesome": ">=3.0.0",
+    "lottie-react": ">=2.4.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },

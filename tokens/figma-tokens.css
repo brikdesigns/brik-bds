@@ -145,8 +145,9 @@
   --font-family-logo: Font Awesome 6 Brands;
 
   /* ── Animation ── */
-  --easing-ease-in: String value;
-  --easing-ease-out: String value;
+  --easing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --delay-0: 0ms;
   --delay-100: 100ms;
   --delay-200: 200ms;
