@@ -1,6 +1,7 @@
 // UI Components
 export * from './Accordion';
 export * from './AddressInput';
+export * from './AnimatedIcon';
 export * from './AlertBanner';
 export * from './Avatar';
 export * from './Badge';

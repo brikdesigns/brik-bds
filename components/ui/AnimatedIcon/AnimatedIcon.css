@@ -1,0 +1,13 @@
+/* ─── AnimatedIcon ────────────────────────────────────────────── */
+
+.bds-animated-icon {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-animated-icon {
+    /* lottie-react respects prefers-reduced-motion natively when
+       autoplay is false — no additional override needed here */
+  }
+}

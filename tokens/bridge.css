@@ -193,4 +193,22 @@
   --blur-radius-sm: var(--blur-radius-sm);
   --blur-radius-md: var(--blur-radius-md);
   --blur-radius-lg: var(--blur-radius-lg);
+
+  /* ═══════════════════════════════════════════════
+     Motion
+     ═══════════════════════════════════════════════ */
+  --ease-in: var(--easing-ease-in);
+  --ease-out: var(--easing-ease-out);
+  --ease-in-out: var(--easing-ease-in-out);
+
+  --duration-fast: var(--duration-100);
+  --duration-normal: var(--duration-200);
+  --duration-slow: var(--duration-300);
+
+  --stagger-1: 0ms;
+  --stagger-2: 50ms;
+  --stagger-3: 100ms;
+  --stagger-4: 150ms;
+  --stagger-5: 200ms;
+  --stagger-6: 250ms;
 }
