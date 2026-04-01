@@ -21,3 +21,18 @@
 .bds-dot--error    { background-color: var(--color-system-red); }
 .bds-dot--info     { background-color: var(--color-system-blue); }
 .bds-dot--neutral  { background-color: var(--color-grayscale-light); }
+
+/* ─── Pulse animation ────────────────────────────────────────── */
+
+@keyframes bds-dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(1.4); }
+}
+
+.bds-dot--pulse {
+  animation: bds-dot-pulse 1.4s var(--easing-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-dot--pulse { animation: none; opacity: 0.75; }
+}
