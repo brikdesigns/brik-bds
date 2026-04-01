@@ -10,6 +10,8 @@ export interface DotProps extends HTMLAttributes<HTMLSpanElement> {
   status?: DotStatus;
   /** Size variant */
   size?: DotSize;
+  /** Pulse animation — use for active/running states */
+  pulse?: boolean;
 }
 
 /**
@@ -24,6 +26,7 @@ export interface DotProps extends HTMLAttributes<HTMLSpanElement> {
 export function Dot({
   status = 'default',
   size = 'md',
+  pulse = false,
   className,
   style,
   ...props
@@ -32,7 +35,7 @@ export function Dot({
     <span
       role="status"
       aria-label={`${status} status`}
-      className={bdsClass('bds-dot', `bds-dot--${size}`, `bds-dot--${status}`, className)}
+      className={bdsClass('bds-dot', `bds-dot--${size}`, `bds-dot--${status}`, pulse && 'bds-dot--pulse', className)}
       style={style}
       {...props}
     />
