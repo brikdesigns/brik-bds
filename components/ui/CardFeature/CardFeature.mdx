@@ -42,11 +42,10 @@ Feature grid with multiple cards.
 
 ```tsx
 import { CardFeature } from '@brik/bds';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 
 <CardFeature
-  icon={<FontAwesomeIcon icon={faBolt} />}
+  icon={<Icon icon="ph:lightning" />}
   title="Fast Performance"
   description="Optimized for speed and reliability."
 />

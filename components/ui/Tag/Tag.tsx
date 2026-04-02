@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { X } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Tag.css';
 
@@ -68,7 +68,7 @@ export function Tag({
           className="bds-tag__remove bds-tag__icon"
           aria-label="Remove"
         >
-          <FontAwesomeIcon icon={faXmark} />
+          <Icon icon={X} />
         </button>
       )}
     </span>

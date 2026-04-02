@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faCircleXmark, faTriangleExclamation, faBell, faShieldHalved, faGear } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { CardControl } from './CardControl';
 import { Badge } from '../Badge';
 import { Switch } from '../Switch';
@@ -42,7 +41,7 @@ export const Playground: Story = {
     return (
       <CardControl
         {...args}
-        badge={<Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />}
+        badge={<Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />}
         action={<Switch checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
       />
     );
@@ -62,7 +61,7 @@ export const Variants: Story = {
       <CardControl
         title="Notifications"
         description="Receive email notifications for updates"
-        badge={<Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />}
+        badge={<Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />}
         action={<Switch checked onChange={() => {}} />}
       />
 
@@ -70,7 +69,7 @@ export const Variants: Story = {
       <CardControl
         title="Security Settings"
         description="Configure two-factor authentication"
-        badge={<Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faShieldHalved} />} />}
+        badge={<Badge size="xs" status="info" icon={<Icon icon="ph:shield-check" />} />}
         action={<Button variant="outline" size="sm">Configure</Button>}
       />
 
@@ -78,7 +77,7 @@ export const Variants: Story = {
       <CardControl
         title="Connection Failed"
         description="Unable to reach the API server"
-        badge={<Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />}
+        badge={<Badge size="xs" status="error" icon={<Icon icon="ph:x-circle" />} />}
         action={<Button variant="primary" size="sm">Retry</Button>}
       />
 
@@ -86,7 +85,7 @@ export const Variants: Story = {
       <CardControl
         title="Storage Almost Full"
         description="You have used 90% of your available storage"
-        badge={<Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />}
+        badge={<Badge size="xs" status="warning" icon={<Icon icon="ph:warning" />} />}
         action={<Button variant="outline" size="sm">Upgrade</Button>}
       />
 
@@ -112,19 +111,19 @@ export const Patterns: Story = {
         <CardControl
           title="Notifications"
           description="Receive email notifications for updates"
-          badge={<Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faBell} />} />}
+          badge={<Badge size="xs" status="positive" icon={<Icon icon="ph:bell" />} />}
           action={<Switch checked={notifications} onChange={(e) => setNotifications(e.target.checked)} />}
         />
         <CardControl
           title="Dark Mode"
           description="Switch to a darker color theme"
-          badge={<Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faGear} />} />}
+          badge={<Badge size="xs" status="info" icon={<Icon icon="ph:gear" />} />}
           action={<Switch checked={darkMode} onChange={(e) => setDarkMode(e.target.checked)} />}
         />
         <CardControl
           title="Security"
           description="Configure two-factor authentication"
-          badge={<Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faShieldHalved} />} />}
+          badge={<Badge size="xs" status="info" icon={<Icon icon="ph:shield-check" />} />}
           action={<Button variant="outline" size="sm">Configure</Button>}
         />
       </Stack>

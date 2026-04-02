@@ -39,8 +39,7 @@ Real-world compositions for categorization and filtering.
 
 ```tsx
 import { Tag } from '@brik/bds';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 
 // Basic tag
 <Tag>Category</Tag>
@@ -51,10 +50,10 @@ import { faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 <Tag size="lg">Large</Tag>
 
 // Left icon
-<Tag icon={<FontAwesomeIcon icon={faCertificate} />}>Featured</Tag>
+<Tag icon={<Icon icon="ph:certificate" />}>Featured</Tag>
 
 // Right icon
-<Tag trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Dismiss</Tag>
+<Tag trailingIcon={<Icon icon="ph:x-circle" />}>Dismiss</Tag>
 
 // Removable tag
 <Tag onRemove={() => console.log('Removed')}>Filter</Tag>

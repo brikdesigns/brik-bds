@@ -1,8 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState, useCallback } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding, faHouse, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { AddressInput, type AddressSuggestion } from './AddressInput';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -27,9 +26,9 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Mock Data ───────────────────────────────────────────────── */
 
 const mockSuggestions: AddressSuggestion[] = [
-  { id: '1', label: '123 Main Street', description: 'Nashville, TN 37201', icon: <FontAwesomeIcon icon={faHouse} /> },
-  { id: '2', label: '456 Broadway Ave', description: 'Nashville, TN 37203', icon: <FontAwesomeIcon icon={faBuilding} /> },
-  { id: '3', label: '789 Music Row', description: 'Nashville, TN 37212', icon: <FontAwesomeIcon icon={faLocationDot} /> },
+  { id: '1', label: '123 Main Street', description: 'Nashville, TN 37201', icon: <Icon icon="ph:house" /> },
+  { id: '2', label: '456 Broadway Ave', description: 'Nashville, TN 37203', icon: <Icon icon="ph:buildings" /> },
+  { id: '3', label: '789 Music Row', description: 'Nashville, TN 37212', icon: <Icon icon="ph:map-pin" /> },
   { id: '4', label: '321 West End Ave', description: 'Nashville, TN 37205' },
   { id: '5', label: '555 Demonbreun St', description: 'Nashville, TN 37203' },
 ];

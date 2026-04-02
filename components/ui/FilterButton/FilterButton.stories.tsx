@@ -1,16 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCrown,
-  faBullhorn,
-  faMobileScreen,
-  faGear,
-  faChalkboardUser,
-  faCopy,
-  faGlobe,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { FilterButton } from './FilterButton';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -39,18 +30,18 @@ const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; g
 /* ─── Shared Data ─────────────────────────────────────── */
 
 const categoryOptions = [
-  { id: 'brand', label: 'Brand design', icon: <FontAwesomeIcon icon={faCrown} /> },
-  { id: 'marketing', label: 'Marketing design', icon: <FontAwesomeIcon icon={faBullhorn} /> },
-  { id: 'product', label: 'Product design', icon: <FontAwesomeIcon icon={faMobileScreen} /> },
-  { id: 'service', label: 'Back office design', icon: <FontAwesomeIcon icon={faGear} /> },
-  { id: 'information', label: 'Information design', icon: <FontAwesomeIcon icon={faChalkboardUser} /> },
-  { id: 'templates', label: 'Templates', icon: <FontAwesomeIcon icon={faCopy} /> },
+  { id: 'brand', label: 'Brand design', icon: <Icon icon="ph:crown" /> },
+  { id: 'marketing', label: 'Marketing design', icon: <Icon icon="ph:megaphone" /> },
+  { id: 'product', label: 'Product design', icon: <Icon icon="ph:device-mobile" /> },
+  { id: 'service', label: 'Back office design', icon: <Icon icon="ph:gear" /> },
+  { id: 'information', label: 'Information design', icon: <Icon icon="ph:chalkboard-teacher" /> },
+  { id: 'templates', label: 'Templates', icon: <Icon icon="ph:copy" /> },
 ];
 
 const regionOptions = [
-  { id: 'na', label: 'North America', icon: <FontAwesomeIcon icon={faGlobe} /> },
-  { id: 'eu', label: 'Europe', icon: <FontAwesomeIcon icon={faGlobe} /> },
-  { id: 'apac', label: 'Asia Pacific', icon: <FontAwesomeIcon icon={faGlobe} /> },
+  { id: 'na', label: 'North America', icon: <Icon icon="ph:globe" /> },
+  { id: 'eu', label: 'Europe', icon: <Icon icon="ph:globe" /> },
+  { id: 'apac', label: 'Asia Pacific', icon: <Icon icon="ph:globe" /> },
 ];
 
 const tagOptions = [
