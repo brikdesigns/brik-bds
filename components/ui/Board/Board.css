@@ -130,11 +130,11 @@
 /*
  * Column header subtitle — label family (not body).
  * Subtitles are UI metadata labels; they belong to the label family.
- * --subtitle-sm matches the visual size (10.26px) with correct semantics.
+ * --subtitle-md matches the visual size with correct semantics.
  */
 .bds-board-header__subtitle {
   font-family: var(--font-family-label);
-  font-size: var(--subtitle-sm);
+  font-size: var(--subtitle-md);
   font-weight: var(--font-weight-regular);
   color: var(--text-on-color-dark);
   opacity: 0.8;
