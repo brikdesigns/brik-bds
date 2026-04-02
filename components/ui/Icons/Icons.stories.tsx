@@ -1,86 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  /* ── System / feedback ── */
-  faCircleCheck,
-  faCircleExclamation,
-  faTriangleExclamation,
-  faCircleInfo,
-  faCircleXmark,
-  faSpinner,
-  faRotate,
-  faXmark,
-
-  /* ── Navigation ── */
-  faChevronLeft,
-  faChevronRight,
-  faChevronDown,
-  faChevronUp,
-  faArrowLeft,
-  faArrowRight,
-  faArrowUp,
-  faArrowDown,
-  faCaretDown,
-  faCaretUp,
-  faBars,
-  faEllipsis,
-  faEllipsisVertical,
-
-  /* ── Actions ── */
-  faPlus,
-  faMinus,
-  faPen,
-  faTrash,
-  faCheck,
-  faCopy,
-  faDownload,
-  faUpload,
-  faShareNodes,
-  faMagnifyingGlass,
-  faFilter,
-  faSort,
-
-  /* ── Objects / content ── */
-  faUser,
-  faUsers,
-  faEnvelope,
-  faPhone,
-  faLocationDot,
-  faCalendar,
-  faClock,
-  faFile,
-  faFolder,
-  faImage,
-  faLink,
-  faPaperclip,
-  faComment,
-  faBell,
-  faGear,
-  faHouse,
-  faBuilding,
-  faTag,
-  faStar,
-  faHeart,
-  faBookmark,
-  faLock,
-  faUnlock,
-  faEye,
-  faEyeSlash,
-
-  /* ── Branding / domain ── */
-  faRocket,
-  faPalette,
-  faShieldHalved,
-  faGears,
-  faChartLine,
-  faChartPie,
-  faChartBar,
-  faBriefcase,
-  faGraduationCap,
-  faStethoscope,
-} from '@fortawesome/free-solid-svg-icons';
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { Icon } from '@iconify/react';
+import * as Icons from '../../icons';
 
 /* ─── Layout helpers (story-only) ─────────────────────────────── */
 
@@ -97,7 +18,7 @@ const SectionLabel = ({ children }: { children: string }) => (
   </div>
 );
 
-const IconGrid = ({ icons }: { icons: { icon: IconDefinition; label: string }[] }) => (
+const IconGrid = ({ icons }: { icons: { icon: string; label: string }[] }) => (
   <div style={{
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
@@ -113,7 +34,7 @@ const IconGrid = ({ icons }: { icons: { icon: IconDefinition; label: string }[] 
         borderRadius: 'var(--border-radius-md)',
         border: '1px solid var(--border-default)',
       }}>
-        <FontAwesomeIcon icon={icon} style={{ fontSize: '20px', color: 'var(--text-primary)' }} />
+        <Icon icon={icon} style={{ fontSize: '20px', color: 'var(--text-primary)' }} />
         <span style={{
           fontFamily: 'var(--font-family-mono, monospace)',
           fontSize: '10px', // bds-lint-ignore — caption size
@@ -151,7 +72,7 @@ export default meta;
 type Story = StoryObj<typeof IconsReference>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. OVERVIEW — Package info, setup, style comparison
+   1. OVERVIEW — Package info, setup
    ═══════════════════════════════════════════════════════════════ */
 
 export const Setup: Story = {
@@ -166,16 +87,15 @@ export const Setup: Story = {
         maxWidth: '640px',
       }}>
         <h3 style={{ fontFamily: 'var(--font-family-heading)', margin: '0 0 var(--gap-sm)' }}>
-          Font Awesome 7 — Free Solid
+          Iconify — Phosphor Icons
         </h3>
         <p style={{ margin: '0 0 var(--gap-md)', color: 'var(--text-secondary)' }}>
-          BDS uses <code>@fortawesome/free-solid-svg-icons</code> (v7.2+) with the React component
-          wrapper <code>@fortawesome/react-fontawesome</code>. Icons render as inline SVGs — no
-          icon font files, no CSS injection at runtime (<code>autoAddCss = false</code>).
+          BDS uses <code>@iconify/react</code> with the <code>@iconify-json/ph</code> (Phosphor) icon
+          set. Icons render as inline SVGs from a bundled JSON collection — no network requests at runtime.
         </p>
         <p style={{ margin: '0 0 var(--gap-md)', color: 'var(--text-secondary)' }}>
-          Only <strong>solid</strong> (filled) style is currently installed. Regular (outline) icons
-          would require adding <code>@fortawesome/free-regular-svg-icons</code>.
+          Icon string constants are defined in <code>components/icons.ts</code>. Import from there
+          rather than using raw Iconify strings in components.
         </p>
       </div>
 
@@ -192,36 +112,22 @@ export const Setup: Story = {
           margin: 0,
           color: 'var(--text-primary)',
         }}>
-{`import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+{`import { Icon } from '@iconify/react';
+import { Check, X, Info } from 'components/icons';
 
-<FontAwesomeIcon icon={faCheck} />
-<FontAwesomeIcon icon={faCheck} size="lg" />
-<FontAwesomeIcon icon={faCheck} fixedWidth />`}
+<Icon icon={Check} />
+<Icon icon={X} style={{ fontSize: '24px' }} />
+<Icon icon={Info} className="my-class" />`}
         </pre>
       </div>
 
       <div>
-        <SectionLabel>Solid (filled) — current</SectionLabel>
+        <SectionLabel>Sample icons</SectionLabel>
         <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
-          {[faCheck, faXmark, faCircleInfo, faHouse, faGear].map((icon, i) => (
-            <FontAwesomeIcon key={i} icon={icon} style={{ fontSize: '24px', color: 'var(--text-primary)' }} />
+          {[Icons.Check, Icons.X, Icons.Info, Icons.House, Icons.Gear].map((icon) => (
+            <Icon key={icon} icon={icon} style={{ fontSize: '24px', color: 'var(--text-primary)' }} />
           ))}
         </div>
-      </div>
-
-      <div style={{
-        padding: 'var(--padding-md)',
-        background: 'var(--background-warning)',
-        borderRadius: 'var(--border-radius-md)',
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-sm)',
-        color: 'var(--text-primary)',
-      }}>
-        <strong>Outline (regular) icons</strong> — not yet installed. To add:
-        <code style={{ display: 'block', marginTop: 'var(--gap-xs)' }}>
-          npm i @fortawesome/free-regular-svg-icons
-        </code>
       </div>
     </Stack>
   ),
@@ -238,20 +144,20 @@ export const System: Story = {
       <div>
         <SectionLabel>Feedback &amp; status</SectionLabel>
         <IconGrid icons={[
-          { icon: faCircleCheck, label: 'circle-check' },
-          { icon: faCircleExclamation, label: 'circle-exclamation' },
-          { icon: faTriangleExclamation, label: 'triangle-exclamation' },
-          { icon: faCircleInfo, label: 'circle-info' },
-          { icon: faCircleXmark, label: 'circle-xmark' },
-          { icon: faCheck, label: 'check' },
-          { icon: faXmark, label: 'xmark' },
+          { icon: Icons.CheckCircle, label: 'CheckCircle' },
+          { icon: Icons.WarningCircle, label: 'WarningCircle' },
+          { icon: Icons.Warning, label: 'Warning' },
+          { icon: Icons.Info, label: 'Info' },
+          { icon: Icons.CircleX, label: 'CircleX' },
+          { icon: Icons.Check, label: 'Check' },
+          { icon: Icons.X, label: 'X' },
         ]} />
       </div>
       <div>
         <SectionLabel>Loading &amp; progress</SectionLabel>
         <IconGrid icons={[
-          { icon: faSpinner, label: 'spinner' },
-          { icon: faRotate, label: 'rotate' },
+          { icon: Icons.Spinner, label: 'Spinner' },
+          { icon: Icons.Rotate, label: 'Rotate' },
         ]} />
       </div>
     </Stack>
@@ -259,7 +165,7 @@ export const System: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. NAVIGATION — Arrows, chevrons, menus
+   3. NAVIGATION — Arrows, carets, menus
    ═══════════════════════════════════════════════════════════════ */
 
 export const Navigation: Story = {
@@ -267,31 +173,29 @@ export const Navigation: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>Chevrons</SectionLabel>
+        <SectionLabel>Carets</SectionLabel>
         <IconGrid icons={[
-          { icon: faChevronLeft, label: 'chevron-left' },
-          { icon: faChevronRight, label: 'chevron-right' },
-          { icon: faChevronDown, label: 'chevron-down' },
-          { icon: faChevronUp, label: 'chevron-up' },
-          { icon: faCaretDown, label: 'caret-down' },
-          { icon: faCaretUp, label: 'caret-up' },
+          { icon: Icons.CaretLeft, label: 'CaretLeft' },
+          { icon: Icons.CaretRight, label: 'CaretRight' },
+          { icon: Icons.CaretDown, label: 'CaretDown' },
+          { icon: Icons.CaretUp, label: 'CaretUp' },
         ]} />
       </div>
       <div>
         <SectionLabel>Arrows</SectionLabel>
         <IconGrid icons={[
-          { icon: faArrowLeft, label: 'arrow-left' },
-          { icon: faArrowRight, label: 'arrow-right' },
-          { icon: faArrowUp, label: 'arrow-up' },
-          { icon: faArrowDown, label: 'arrow-down' },
+          { icon: Icons.ArrowLeft, label: 'ArrowLeft' },
+          { icon: Icons.ArrowRight, label: 'ArrowRight' },
+          { icon: Icons.ArrowUp, label: 'ArrowUp' },
+          { icon: Icons.ArrowDown, label: 'ArrowDown' },
         ]} />
       </div>
       <div>
         <SectionLabel>Menus</SectionLabel>
         <IconGrid icons={[
-          { icon: faBars, label: 'bars' },
-          { icon: faEllipsis, label: 'ellipsis' },
-          { icon: faEllipsisVertical, label: 'ellipsis-vertical' },
+          { icon: Icons.Bars, label: 'Bars' },
+          { icon: Icons.Ellipsis, label: 'Ellipsis' },
+          { icon: Icons.EllipsisVertical, label: 'EllipsisVertical' },
         ]} />
       </div>
     </Stack>
@@ -309,28 +213,29 @@ export const Actions: Story = {
       <div>
         <SectionLabel>Core actions</SectionLabel>
         <IconGrid icons={[
-          { icon: faPlus, label: 'plus' },
-          { icon: faMinus, label: 'minus' },
-          { icon: faPen, label: 'pen' },
-          { icon: faTrash, label: 'trash' },
-          { icon: faCheck, label: 'check' },
-          { icon: faCopy, label: 'copy' },
+          { icon: Icons.Plus, label: 'Plus' },
+          { icon: Icons.Minus, label: 'Minus' },
+          { icon: Icons.Pen, label: 'Pen' },
+          { icon: Icons.Trash, label: 'Trash' },
+          { icon: Icons.Check, label: 'Check' },
+          { icon: Icons.Copy, label: 'Copy' },
         ]} />
       </div>
       <div>
         <SectionLabel>File operations</SectionLabel>
         <IconGrid icons={[
-          { icon: faDownload, label: 'download' },
-          { icon: faUpload, label: 'upload' },
-          { icon: faShareNodes, label: 'share-nodes' },
+          { icon: Icons.Download, label: 'Download' },
+          { icon: Icons.Upload, label: 'Upload' },
+          { icon: Icons.ShareNodes, label: 'ShareNodes' },
+          { icon: Icons.CloudArrowUp, label: 'CloudArrowUp' },
         ]} />
       </div>
       <div>
         <SectionLabel>Search &amp; filter</SectionLabel>
         <IconGrid icons={[
-          { icon: faMagnifyingGlass, label: 'magnifying-glass' },
-          { icon: faFilter, label: 'filter' },
-          { icon: faSort, label: 'sort' },
+          { icon: Icons.MagnifyingGlass, label: 'MagnifyingGlass' },
+          { icon: Icons.Filter, label: 'Filter' },
+          { icon: Icons.Sort, label: 'Sort' },
         ]} />
       </div>
     </Stack>
@@ -348,46 +253,46 @@ export const Objects: Story = {
       <div>
         <SectionLabel>People &amp; communication</SectionLabel>
         <IconGrid icons={[
-          { icon: faUser, label: 'user' },
-          { icon: faUsers, label: 'users' },
-          { icon: faEnvelope, label: 'envelope' },
-          { icon: faPhone, label: 'phone' },
-          { icon: faComment, label: 'comment' },
-          { icon: faBell, label: 'bell' },
+          { icon: Icons.User, label: 'User' },
+          { icon: Icons.Users, label: 'Users' },
+          { icon: Icons.Envelope, label: 'Envelope' },
+          { icon: Icons.Phone, label: 'Phone' },
+          { icon: Icons.Comment, label: 'Comment' },
+          { icon: Icons.Bell, label: 'Bell' },
         ]} />
       </div>
       <div>
         <SectionLabel>Location &amp; time</SectionLabel>
         <IconGrid icons={[
-          { icon: faLocationDot, label: 'location-dot' },
-          { icon: faBuilding, label: 'building' },
-          { icon: faHouse, label: 'house' },
-          { icon: faCalendar, label: 'calendar' },
-          { icon: faClock, label: 'clock' },
+          { icon: Icons.MapPin, label: 'MapPin' },
+          { icon: Icons.Building, label: 'Building' },
+          { icon: Icons.House, label: 'House' },
+          { icon: Icons.Calendar, label: 'Calendar' },
+          { icon: Icons.Clock, label: 'Clock' },
         ]} />
       </div>
       <div>
         <SectionLabel>Content &amp; media</SectionLabel>
         <IconGrid icons={[
-          { icon: faFile, label: 'file' },
-          { icon: faFolder, label: 'folder' },
-          { icon: faImage, label: 'image' },
-          { icon: faLink, label: 'link' },
-          { icon: faPaperclip, label: 'paperclip' },
+          { icon: Icons.File, label: 'File' },
+          { icon: Icons.Folder, label: 'Folder' },
+          { icon: Icons.Image, label: 'Image' },
+          { icon: Icons.Link, label: 'Link' },
+          { icon: Icons.Paperclip, label: 'Paperclip' },
         ]} />
       </div>
       <div>
         <SectionLabel>UI elements</SectionLabel>
         <IconGrid icons={[
-          { icon: faGear, label: 'gear' },
-          { icon: faTag, label: 'tag' },
-          { icon: faStar, label: 'star' },
-          { icon: faHeart, label: 'heart' },
-          { icon: faBookmark, label: 'bookmark' },
-          { icon: faLock, label: 'lock' },
-          { icon: faUnlock, label: 'unlock' },
-          { icon: faEye, label: 'eye' },
-          { icon: faEyeSlash, label: 'eye-slash' },
+          { icon: Icons.Gear, label: 'Gear' },
+          { icon: Icons.Tag, label: 'Tag' },
+          { icon: Icons.Star, label: 'Star' },
+          { icon: Icons.Heart, label: 'Heart' },
+          { icon: Icons.Bookmark, label: 'Bookmark' },
+          { icon: Icons.Lock, label: 'Lock' },
+          { icon: Icons.Unlock, label: 'Unlock' },
+          { icon: Icons.Eye, label: 'Eye' },
+          { icon: Icons.EyeSlash, label: 'EyeSlash' },
         ]} />
       </div>
     </Stack>
@@ -405,26 +310,26 @@ export const Domain: Story = {
       <div>
         <SectionLabel>Feature / marketing</SectionLabel>
         <IconGrid icons={[
-          { icon: faRocket, label: 'rocket' },
-          { icon: faPalette, label: 'palette' },
-          { icon: faShieldHalved, label: 'shield-halved' },
-          { icon: faGears, label: 'gears' },
+          { icon: Icons.Rocket, label: 'Rocket' },
+          { icon: Icons.Palette, label: 'Palette' },
+          { icon: Icons.Shield, label: 'Shield' },
+          { icon: Icons.Gears, label: 'Gears' },
         ]} />
       </div>
       <div>
         <SectionLabel>Data &amp; analytics</SectionLabel>
         <IconGrid icons={[
-          { icon: faChartLine, label: 'chart-line' },
-          { icon: faChartPie, label: 'chart-pie' },
-          { icon: faChartBar, label: 'chart-bar' },
+          { icon: Icons.ChartLine, label: 'ChartLine' },
+          { icon: Icons.ChartPie, label: 'ChartPie' },
+          { icon: Icons.ChartBar, label: 'ChartBar' },
         ]} />
       </div>
       <div>
         <SectionLabel>Industry</SectionLabel>
         <IconGrid icons={[
-          { icon: faBriefcase, label: 'briefcase' },
-          { icon: faGraduationCap, label: 'graduation-cap' },
-          { icon: faStethoscope, label: 'stethoscope' },
+          { icon: Icons.Briefcase, label: 'Briefcase' },
+          { icon: Icons.GraduationCap, label: 'GraduationCap' },
+          { icon: Icons.Stethoscope, label: 'Stethoscope' },
         ]} />
       </div>
     </Stack>
@@ -440,11 +345,11 @@ export const Sizing: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>Built-in size prop</SectionLabel>
+        <SectionLabel>fontSize scale</SectionLabel>
         <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'end' }}>
-          {(['xs', 'sm', 'lg', 'xl', '2xl'] as const).map((size) => (
+          {(['12px', '16px', '20px', '24px', '32px'] as const).map((size) => (
             <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-xs)' }}>
-              <FontAwesomeIcon icon={faStar} size={size} style={{ color: 'var(--text-primary)' }} />
+              <Icon icon={Icons.Star} style={{ fontSize: size, color: 'var(--text-primary)' }} />
               <span style={{
                 fontFamily: 'var(--font-family-mono, monospace)',
                 fontSize: '10px', // bds-lint-ignore
@@ -457,10 +362,10 @@ export const Sizing: Story = {
         </div>
       </div>
       <div>
-        <SectionLabel>fixedWidth (equal-width column alignment)</SectionLabel>
+        <SectionLabel>Fixed-width column alignment</SectionLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xs)' }}>
-          {[faHouse, faUser, faEnvelope, faGear].map((icon, i) => (
-            <div key={i} style={{
+          {[Icons.House, Icons.User, Icons.Envelope, Icons.Gear].map((icon, i) => (
+            <div key={icon} style={{
               display: 'flex',
               alignItems: 'center',
               gap: 'var(--gap-sm)',
@@ -468,7 +373,7 @@ export const Sizing: Story = {
               fontSize: 'var(--body-md)',
               color: 'var(--text-primary)',
             }}>
-              <FontAwesomeIcon icon={icon} fixedWidth style={{ color: 'var(--text-secondary)' }} />
+              <Icon icon={icon} width={16} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
               <span>Menu item {i + 1}</span>
             </div>
           ))}

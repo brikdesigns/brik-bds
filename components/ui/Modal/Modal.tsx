@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { X } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Modal.css';
 
@@ -75,7 +75,7 @@ export function Modal({
                 onClick={onClose}
                 aria-label="Close"
               >
-                <FontAwesomeIcon icon={faXmark} />
+                <Icon icon={X} />
               </button>
             )}
           </div>

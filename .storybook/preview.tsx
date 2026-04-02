@@ -5,10 +5,10 @@ import { create } from 'storybook/theming';
 import type { ThemeNumber } from '../tokens';
 import { storybookThemes } from '../tokens/storybook-themes';
 
-// Font Awesome 6 — prevent auto-CSS injection, import CSS manually
-import { config } from '@fortawesome/fontawesome-svg-core';
-import '@fortawesome/fontawesome-svg-core/styles.css';
-config.autoAddCss = false;
+// Iconify — register Phosphor icon collection for offline/SSR use
+import { addCollection } from '@iconify/react';
+import phData from '@iconify-json/ph/icons.json';
+addCollection(phData as Parameters<typeof addCollection>[0]);
 
 // Import token CSS in cascade order:
 // 1. Font declarations (@font-face from Webflow export)

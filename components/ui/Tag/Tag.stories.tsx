@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faArrowUpRightFromSquare, faTag, faCircle, faCertificate, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { Tag } from './Tag';
 import { Badge } from '../Badge/Badge';
 
@@ -66,7 +65,7 @@ export const Variants: Story = {
       <div>
         <SectionLabel>Sizes</SectionLabel>
         <Row>
-          <Tag size="xs" icon={<FontAwesomeIcon icon={faTag} />} />
+          <Tag size="xs" icon={<Icon icon="ph:tag" />} />
           <Tag size="sm">Small</Tag>
           <Tag size="md">Medium</Tag>
           <Tag size="lg">Large</Tag>
@@ -75,9 +74,9 @@ export const Variants: Story = {
       <div>
         <SectionLabel>With icons</SectionLabel>
         <Row>
-          <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />}>Left icon</Tag>
-          <Tag size="lg" trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Right icon</Tag>
-          <Tag size="lg" icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Both</Tag>
+          <Tag size="lg" icon={<Icon icon="ph:certificate" />}>Left icon</Tag>
+          <Tag size="lg" trailingIcon={<Icon icon="ph:x-circle" />}>Right icon</Tag>
+          <Tag size="lg" icon={<Icon icon="ph:certificate" />} trailingIcon={<Icon icon="ph:x-circle" />}>Both</Tag>
         </Row>
       </div>
       <div>
@@ -85,9 +84,9 @@ export const Variants: Story = {
         {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
           <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center', marginBottom: 'var(--gap-md)' }}>
             {size === 'xs' ? (
-              <Tag size={size} icon={<FontAwesomeIcon icon={faCertificate} />} />
+              <Tag size={size} icon={<Icon icon="ph:certificate" />} />
             ) : (
-              <Tag size={size} icon={<FontAwesomeIcon icon={faCertificate} />} trailingIcon={<FontAwesomeIcon icon={faCircleXmark} />}>Tag</Tag>
+              <Tag size={size} icon={<Icon icon="ph:certificate" />} trailingIcon={<Icon icon="ph:x-circle" />}>Tag</Tag>
             )}
           </div>
         ))}
@@ -118,13 +117,13 @@ export const Alignment: Story = {
           <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
           {size === 'xs' ? (
             <>
-              <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faStar} />} />
-              <Tag size="xs" icon={<FontAwesomeIcon icon={faTag} />} />
+              <Badge size="xs" status="positive" icon={<Icon icon="ph:star" />} />
+              <Tag size="xs" icon={<Icon icon="ph:tag" />} />
             </>
           ) : (
             <>
-              <Badge size={size} status="positive" icon={<FontAwesomeIcon icon={faStar} />}>Active</Badge>
-              <Tag size={size} icon={<FontAwesomeIcon icon={faTag} />}>Category</Tag>
+              <Badge size={size} status="positive" icon={<Icon icon="ph:star" />}>Active</Badge>
+              <Tag size={size} icon={<Icon icon="ph:tag" />}>Category</Tag>
             </>
           )}
         </Row>
@@ -144,10 +143,10 @@ export const Patterns: Story = {
       <div>
         <SectionLabel>Category labels</SectionLabel>
         <Row>
-          <Tag icon={<FontAwesomeIcon icon={faTag} />}>Development</Tag>
-          <Tag icon={<FontAwesomeIcon icon={faCircle} />}>Marketing</Tag>
-          <Tag icon={<FontAwesomeIcon icon={faStar} />}>Featured</Tag>
-          <Tag trailingIcon={<FontAwesomeIcon icon={faArrowUpRightFromSquare} />}>External</Tag>
+          <Tag icon={<Icon icon="ph:tag" />}>Development</Tag>
+          <Tag icon={<Icon icon="ph:circle" />}>Marketing</Tag>
+          <Tag icon={<Icon icon="ph:star" />}>Featured</Tag>
+          <Tag trailingIcon={<Icon icon="ph:arrow-square-out" />}>External</Tag>
         </Row>
       </div>
       <div>

@@ -1,6 +1,6 @@
 import { forwardRef, useState, type SelectHTMLAttributes, type ReactNode } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { CaretDown } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Select.css';
 
@@ -133,7 +133,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             )}
           </select>
           <span className="bds-select-chevron" aria-hidden="true">
-            <FontAwesomeIcon icon={faChevronDown} />
+            <Icon icon={CaretDown} />
           </span>
         </div>
         {error && (

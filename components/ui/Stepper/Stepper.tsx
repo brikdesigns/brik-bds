@@ -1,6 +1,6 @@
 import { type CSSProperties, type HTMLAttributes } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { Minus, Plus } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Stepper.css';
 
@@ -114,7 +114,7 @@ export function Stepper({
         style={buttonStyle()}
         aria-label="Decrease"
       >
-        <FontAwesomeIcon icon={faMinus} />
+        <Icon icon={Minus} />
       </button>
       <span
         className={bdsClass('bds-stepper__value', disabled && 'bds-stepper__value--disabled')}
@@ -131,7 +131,7 @@ export function Stepper({
         style={buttonStyle()}
         aria-label="Increase"
       >
-        <FontAwesomeIcon icon={faPlus} />
+        <Icon icon={Plus} />
       </button>
     </div>
   );

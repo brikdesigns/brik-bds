@@ -1,6 +1,6 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faCircleExclamation, faTriangleExclamation, faCircleInfo, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { CheckCircle, WarningCircle, Warning, Info, X } from '../../icons';
 import { bdsClass } from '../../utils';
 import { Badge } from '../Badge';
 import './Toast.css';
@@ -18,11 +18,11 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   onDismiss?: () => void;
 }
 
-const variantBadge: Record<Exclude<ToastVariant, 'default'>, { status: 'positive' | 'error' | 'warning' | 'info'; icon: typeof faCircleCheck }> = {
-  success: { status: 'positive', icon: faCircleCheck },
-  error: { status: 'error', icon: faCircleExclamation },
-  warning: { status: 'warning', icon: faTriangleExclamation },
-  info: { status: 'info', icon: faCircleInfo },
+const variantBadge: Record<Exclude<ToastVariant, 'default'>, { status: 'positive' | 'error' | 'warning' | 'info'; icon: string }> = {
+  success: { status: 'positive', icon: CheckCircle },
+  error: { status: 'error', icon: WarningCircle },
+  warning: { status: 'warning', icon: Warning },
+  info: { status: 'info', icon: Info },
 };
 
 /**
@@ -49,7 +49,7 @@ export function Toast({
           <Badge
             status={badge.status}
             size="xs"
-            icon={<FontAwesomeIcon icon={badge.icon} />}
+            icon={<Icon icon={badge.icon} />}
           />
         )}
         <div className="bds-toast__text">
@@ -64,7 +64,7 @@ export function Toast({
           aria-label="Dismiss notification"
           className="bds-toast__close"
         >
-          <FontAwesomeIcon icon={faXmark} />
+          <Icon icon={X} />
         </button>
       )}
     </div>

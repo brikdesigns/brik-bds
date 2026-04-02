@@ -6,8 +6,8 @@ import {
   useEffect,
   useCallback,
 } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { CaretDown } from '../../icons';
 import { bdsClass } from '../../utils';
 import './FilterButton.css';
 
@@ -61,8 +61,8 @@ export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 
  *   value={category}
  *   onChange={setCategory}
  *   options={[
- *     { id: 'design', label: 'Brand design', icon: <FontAwesomeIcon icon={faCrown} /> },
- *     { id: 'marketing', label: 'Marketing', icon: <FontAwesomeIcon icon={faBullhorn} /> },
+ *     { id: 'design', label: 'Brand design', icon: <Icon icon="ph:crown" /> },
+ *     { id: 'marketing', label: 'Marketing', icon: <Icon icon="ph:megaphone" /> },
  *   ]}
  * />
  * ```
@@ -155,7 +155,7 @@ export function FilterButton({
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <span>{selectedOption?.label ?? label}</span>
-        <FontAwesomeIcon icon={faCaretDown} className="bds-filter-button__caret" />
+        <Icon icon={CaretDown} className="bds-filter-button__caret" />
       </button>
 
       {isOpen && (

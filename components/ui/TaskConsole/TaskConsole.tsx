@@ -1,7 +1,7 @@
 import { type ReactNode, type HTMLAttributes, useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp, faXmark, faCircleCheck, faCircleExclamation, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { CaretDown, CaretUp, X, CheckCircle, WarningCircle, Spinner } from '../../icons';
 import { bdsClass } from '../../utils';
 import './TaskConsole.css';
 
@@ -48,11 +48,11 @@ export interface TaskConsoleProps extends Omit<HTMLAttributes<HTMLDivElement>, '
 function StatusIcon({ status }: { status: TaskItemStatus }) {
   switch (status) {
     case 'completed':
-      return <FontAwesomeIcon icon={faCircleCheck} className="bds-task-console__icon bds-task-console__icon--completed" />;
+      return <Icon icon={CheckCircle} className="bds-task-console__icon bds-task-console__icon--completed" />;
     case 'failed':
-      return <FontAwesomeIcon icon={faCircleExclamation} className="bds-task-console__icon bds-task-console__icon--failed" />;
+      return <Icon icon={WarningCircle} className="bds-task-console__icon bds-task-console__icon--failed" />;
     case 'in_progress':
-      return <FontAwesomeIcon icon={faSpinner} className="bds-task-console__icon bds-task-console__icon--in-progress" spin />;
+      return <Icon icon={Spinner} className="bds-task-console__icon bds-task-console__icon--in-progress" />;
     case 'pending':
     default:
       return <span className="bds-task-console__icon bds-task-console__icon--pending" />;
@@ -129,7 +129,7 @@ export function TaskConsole({
             onClick={(e) => { e.stopPropagation(); toggleCollapse(); }}
             aria-label={collapsed ? 'Expand' : 'Collapse'}
           >
-            <FontAwesomeIcon icon={collapsed ? faChevronUp : faChevronDown} />
+            <Icon icon={collapsed ? CaretUp : CaretDown} />
           </button>
           {onDismiss && (
             <button
@@ -138,7 +138,7 @@ export function TaskConsole({
               onClick={(e) => { e.stopPropagation(); onDismiss(); }}
               aria-label="Dismiss"
             >
-              <FontAwesomeIcon icon={faXmark} />
+              <Icon icon={X} />
             </button>
           )}
         </div>

@@ -1,6 +1,6 @@
 import { forwardRef, type InputHTMLAttributes, type CSSProperties } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { MagnifyingGlass } from '../../icons';
 import { bdsClass } from '../../utils';
 import './SearchInput.css';
 
@@ -184,7 +184,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         )}
         <div style={fieldWrapperStyles}>
           <span style={iconStyles}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
+            <Icon icon={MagnifyingGlass} />
           </span>
           <input
             ref={ref}

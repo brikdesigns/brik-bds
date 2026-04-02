@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faCircleExclamation, faSpinner, faCircleInfo, faCircleXmark, faTriangleExclamation, faRotate, faStar, faTag } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { Badge } from './Badge';
 import { Tag } from '../Tag/Tag';
 
@@ -102,18 +101,18 @@ export const Variants: Story = {
         <SectionLabel>xs icon-only</SectionLabel>
         <Stack gap="var(--gap-lg)">
           <Row>
-            <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
-            <Badge size="xs" status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
-            <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
-            <Badge size="xs" status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
-            <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
+            <Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />
+            <Badge size="xs" status="warning" icon={<Icon icon="ph:warning" />} />
+            <Badge size="xs" status="error" icon={<Icon icon="ph:x-circle" />} />
+            <Badge size="xs" status="info" icon={<Icon icon="ph:info" />} />
+            <Badge size="xs" status="progress" icon={<Icon icon="ph:arrows-clockwise" />} />
           </Row>
           <Row>
-            <Badge size="xs" status="positive" variant="light" icon={<FontAwesomeIcon icon={faCheck} />} />
-            <Badge size="xs" status="warning" variant="light" icon={<FontAwesomeIcon icon={faTriangleExclamation} />} />
-            <Badge size="xs" status="error" variant="light" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
-            <Badge size="xs" status="info" variant="light" icon={<FontAwesomeIcon icon={faCircleInfo} />} />
-            <Badge size="xs" status="progress" variant="light" icon={<FontAwesomeIcon icon={faRotate} />} />
+            <Badge size="xs" status="positive" variant="light" icon={<Icon icon="ph:check" />} />
+            <Badge size="xs" status="warning" variant="light" icon={<Icon icon="ph:warning" />} />
+            <Badge size="xs" status="error" variant="light" icon={<Icon icon="ph:x-circle" />} />
+            <Badge size="xs" status="info" variant="light" icon={<Icon icon="ph:info" />} />
+            <Badge size="xs" status="progress" variant="light" icon={<Icon icon="ph:arrows-clockwise" />} />
           </Row>
         </Stack>
       </div>
@@ -131,21 +130,21 @@ export const Icons: Story = {
       <div>
         <SectionLabel>Dark with icons</SectionLabel>
         <Row>
-          <Badge status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Done</Badge>
-          <Badge status="error" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Canceled</Badge>
-          <Badge status="progress" icon={<FontAwesomeIcon icon={faSpinner} />}>In Progress</Badge>
-          <Badge status="info" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Neutral</Badge>
-          <Badge status="warning" icon={<FontAwesomeIcon icon={faTriangleExclamation} />}>Needs Attention</Badge>
+          <Badge status="positive" icon={<Icon icon="ph:check" />}>Done</Badge>
+          <Badge status="error" icon={<Icon icon="ph:warning-circle" />}>Canceled</Badge>
+          <Badge status="progress" icon={<Icon icon="ph:spinner" />}>In Progress</Badge>
+          <Badge status="info" icon={<Icon icon="ph:info" />}>Neutral</Badge>
+          <Badge status="warning" icon={<Icon icon="ph:warning" />}>Needs Attention</Badge>
         </Row>
       </div>
       <div>
         <SectionLabel>Light with icons</SectionLabel>
         <Row>
-          <Badge status="positive" variant="light" icon={<FontAwesomeIcon icon={faCheck} />}>Done</Badge>
-          <Badge status="error" variant="light" icon={<FontAwesomeIcon icon={faCircleExclamation} />}>Canceled</Badge>
-          <Badge status="progress" variant="light" icon={<FontAwesomeIcon icon={faSpinner} />}>In Progress</Badge>
-          <Badge status="info" variant="light" icon={<FontAwesomeIcon icon={faCircleInfo} />}>Neutral</Badge>
-          <Badge status="warning" variant="light" icon={<FontAwesomeIcon icon={faTriangleExclamation} />}>Needs Attention</Badge>
+          <Badge status="positive" variant="light" icon={<Icon icon="ph:check" />}>Done</Badge>
+          <Badge status="error" variant="light" icon={<Icon icon="ph:warning-circle" />}>Canceled</Badge>
+          <Badge status="progress" variant="light" icon={<Icon icon="ph:spinner" />}>In Progress</Badge>
+          <Badge status="info" variant="light" icon={<Icon icon="ph:info" />}>Neutral</Badge>
+          <Badge status="warning" variant="light" icon={<Icon icon="ph:warning" />}>Needs Attention</Badge>
         </Row>
       </div>
       <div>
@@ -155,15 +154,15 @@ export const Icons: Story = {
             <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
             {size === 'xs' ? (
               <>
-                <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faCheck} />} />
-                <Badge size="xs" status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />} />
-                <Badge size="xs" status="progress" icon={<FontAwesomeIcon icon={faRotate} />} />
+                <Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />
+                <Badge size="xs" status="error" icon={<Icon icon="ph:x-circle" />} />
+                <Badge size="xs" status="progress" icon={<Icon icon="ph:arrows-clockwise" />} />
               </>
             ) : (
               <>
-                <Badge size={size} status="positive" icon={<FontAwesomeIcon icon={faCheck} />}>Done</Badge>
-                <Badge size={size} status="error" icon={<FontAwesomeIcon icon={faCircleXmark} />}>Failed</Badge>
-                <Badge size={size} status="progress" icon={<FontAwesomeIcon icon={faRotate} />}>Running</Badge>
+                <Badge size={size} status="positive" icon={<Icon icon="ph:check" />}>Done</Badge>
+                <Badge size={size} status="error" icon={<Icon icon="ph:x-circle" />}>Failed</Badge>
+                <Badge size={size} status="progress" icon={<Icon icon="ph:arrows-clockwise" />}>Running</Badge>
               </>
             )}
           </div>
@@ -187,13 +186,13 @@ export const Alignment: Story = {
           <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
           {size === 'xs' ? (
             <>
-              <Badge size="xs" status="positive" icon={<FontAwesomeIcon icon={faStar} />} />
-              <Tag size="xs" icon={<FontAwesomeIcon icon={faTag} />} />
+              <Badge size="xs" status="positive" icon={<Icon icon="ph:star" />} />
+              <Tag size="xs" icon={<Icon icon="ph:tag" />} />
             </>
           ) : (
             <>
-              <Badge size={size} status="positive" icon={<FontAwesomeIcon icon={faStar} />}>Active</Badge>
-              <Tag size={size} icon={<FontAwesomeIcon icon={faTag} />}>Category</Tag>
+              <Badge size={size} status="positive" icon={<Icon icon="ph:star" />}>Active</Badge>
+              <Tag size={size} icon={<Icon icon="ph:tag" />}>Category</Tag>
             </>
           )}
         </Row>

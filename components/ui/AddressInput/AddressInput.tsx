@@ -8,8 +8,8 @@ import {
   useEffect,
   useCallback,
 } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { MapPin } from '../../icons';
 import { bdsClass } from '../../utils';
 import './AddressInput.css';
 
@@ -352,7 +352,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
         )}
         <div style={fieldWrapperStyles}>
           <span style={iconStyles}>
-            <FontAwesomeIcon icon={faLocationDot} />
+            <Icon icon={MapPin} />
           </span>
           <input
             ref={ref}
@@ -377,7 +377,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
                   style={suggestionItemStyles}
                 >
                   <span style={suggestionIconStyles}>
-                    {suggestion.icon || <FontAwesomeIcon icon={faLocationDot} />}
+                    {suggestion.icon || <Icon icon={MapPin} />}
                   </span>
                   <span style={suggestionTextStyles}>
                     <span>{suggestion.label}</span>
