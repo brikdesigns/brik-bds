@@ -140,9 +140,6 @@
   opacity: 0.8;
   line-height: var(--font-line-height-tight);
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .bds-board-header__progress {
