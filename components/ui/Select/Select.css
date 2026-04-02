@@ -25,7 +25,7 @@
 .bds-select-label--lg { font-size: var(--label-lg); }
 
 .bds-select-label--error {
-  color: var(--color-system-red);
+  color: var(--text-status-error);
 }
 
 /* ─── Field wrapper ──────────────────────────────────────────── */
@@ -110,17 +110,17 @@
 
 /* Error state */
 .bds-select--error {
-  border-color: var(--color-system-red);
+  border-color: var(--text-status-error);
 }
 
 .bds-select--error:hover:not(:disabled) {
-  border-color: var(--color-system-red);
+  border-color: var(--text-status-error);
 }
 
 .bds-select--error:focus,
 .bds-select--error:focus-visible {
-  border-color: var(--color-system-red);
-  box-shadow: 0 0 0 1px var(--color-system-red);
+  border-color: var(--text-status-error);
+  box-shadow: 0 0 0 1px var(--text-status-error);
 }
 
 /* ─── Chevron icon ───────────────────────────────────────────── */
@@ -160,5 +160,5 @@
 }
 
 .bds-select-helper--error {
-  color: var(--color-system-red);
+  color: var(--text-status-error);
 }

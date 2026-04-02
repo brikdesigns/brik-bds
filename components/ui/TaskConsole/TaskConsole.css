@@ -42,11 +42,11 @@
 }
 
 .bds-task-console--success .bds-task-console__header {
-  background-color: var(--color-system-green-surface);
+  background-color: var(--surface-status-success);
 }
 
 .bds-task-console--has-errors .bds-task-console__header {
-  background-color: var(--color-system-red-surface);
+  background-color: var(--surface-status-error);
 }
 
 .bds-task-console__header-text {
@@ -117,13 +117,13 @@
 
 .bds-task-console__progress-fill {
   height: 100%;
-  background-color: var(--color-system-blue);
+  background-color: var(--background-status-info);
   transition: width 0.4s ease;
   border-radius: 0 2px 2px 0; /* bds-lint-ignore — progress bar cap */
 }
 
 .bds-task-console__progress-fill--error {
-  background-color: var(--color-system-red);
+  background-color: var(--background-status-error);
 }
 
 /* ─── Item list ──────────────────────────────────────────────── */
@@ -151,11 +151,11 @@
 }
 
 .bds-task-console__item--in_progress {
-  background-color: var(--color-system-blue-surface);
+  background-color: var(--surface-status-info);
 }
 
 .bds-task-console__item--failed {
-  background-color: var(--color-system-red-surface);
+  background-color: var(--surface-status-error);
 }
 
 /* ─── Item content ───────────────────────────────────────────── */
@@ -188,7 +188,7 @@
   font-size: var(--body-sm);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--font-line-height-normal);
-  color: var(--color-system-blue);
+  color: var(--text-status-info);
   text-decoration: none;
   cursor: pointer;
 }
@@ -214,15 +214,15 @@
 }
 
 .bds-task-console__icon--completed {
-  color: var(--color-system-green);
+  color: var(--text-status-success);
 }
 
 .bds-task-console__icon--failed {
-  color: var(--color-system-red);
+  color: var(--text-status-error);
 }
 
 .bds-task-console__icon--in-progress {
-  color: var(--color-system-blue);
+  color: var(--text-status-info);
 }
 
 .bds-task-console__icon--pending {
