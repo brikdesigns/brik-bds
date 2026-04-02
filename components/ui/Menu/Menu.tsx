@@ -88,8 +88,8 @@ export function MenuItem({ item, isActive, className, style, ...props }: MenuIte
  *     isOpen={open}
  *     onClose={() => setOpen(false)}
  *     items={[
- *       { id: '1', label: 'Edit', icon: <FontAwesomeIcon icon={faPen} /> },
- *       { id: '2', label: 'Delete', icon: <FontAwesomeIcon icon={faTrash} /> },
+ *       { id: '1', label: 'Edit', icon: <Icon icon="ph:pencil" /> },
+ *       { id: '2', label: 'Delete', icon: <Icon icon="ph:trash" /> },
  *     ]}
  *   />
  * </div>

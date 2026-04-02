@@ -1,6 +1,6 @@
 import { type HTMLAttributes, useState, useRef, useCallback } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { CloudArrowUp } from '../../icons';
 import { bdsClass } from '../../utils';
 import './FileUploader.css';
 
@@ -145,7 +145,7 @@ export function FileUploader({
         )}
         aria-label="File upload dropzone"
       >
-        <span className="bds-file-uploader__icon"><FontAwesomeIcon icon={faCloudArrowUp} /></span>
+        <span className="bds-file-uploader__icon"><Icon icon={CloudArrowUp} /></span>
         <p className="bds-file-uploader__label">{label}</p>
         <p className="bds-file-uploader__helper">
           or <span className="bds-file-uploader__browse">browse files</span>

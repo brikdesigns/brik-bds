@@ -1,18 +1,6 @@
 import React, { type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faTrash,
-  faCircleInfo,
-  faDownload,
-  faEllipsisVertical,
-  faPalette,
-  faCode,
-  faBullhorn,
-  faChartLine,
-  faCog,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './Table';
 import { Badge } from '../Badge';
 import { Tag } from '../Tag';
@@ -149,11 +137,11 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => {
     const services = [
-      { name: 'Design', icon: faPalette },
-      { name: 'Development', icon: faCode },
-      { name: 'Marketing', icon: faBullhorn },
-      { name: 'Analytics', icon: faChartLine },
-      { name: 'Operations', icon: faCog },
+      { name: 'Design', icon: 'ph:palette' },
+      { name: 'Development', icon: 'ph:code' },
+      { name: 'Marketing', icon: 'ph:megaphone' },
+      { name: 'Analytics', icon: 'ph:chart-line' },
+      { name: 'Operations', icon: 'ph:gear' },
     ];
     const categories = ['Design', 'Development', 'Marketing', 'Strategy', 'Operations'];
 
@@ -271,7 +259,7 @@ export const Variants: Story = {
                   <TableCell>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                       <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--label-lg)', color: 'var(--text-primary)' }}>
-                        <FontAwesomeIcon icon={s.icon} />
+                        <Icon icon={s.icon} />
                       </span>
                       {s.name}
                     </span>
@@ -304,7 +292,7 @@ export const Variants: Story = {
                     <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                       {f.label}
                       <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--label-lg)', color: 'var(--text-muted)' }}>
-                        <FontAwesomeIcon icon={faCircleInfo} />
+                        <Icon icon="ph:info" />
                       </span>
                     </span>
                   </TableCell>
@@ -331,15 +319,15 @@ export const Variants: Story = {
               {['Brand Refresh', 'API Migration', 'Q1 Campaign', 'Roadmap 2026', 'Vendor Audit'].map((project, i) => (
                 <TableRow key={project}>
                   <TableCell>
-                    <span style={brandBadgeStyles}><FontAwesomeIcon icon={services[i].icon} /></span>
+                    <span style={brandBadgeStyles}><Icon icon={services[i].icon} /></span>
                   </TableCell>
                   <TableCell>{project}</TableCell>
                   <TableCell><Tag size="sm">{categories[i]}</Tag></TableCell>
                   <TableCell><Button variant="primary" size="sm">View</Button></TableCell>
                   <TableCell style={{ textAlign: 'right' }}>
                     <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
-                      <button type="button" style={iconButtonStyles} aria-label="Edit"><FontAwesomeIcon icon={faPenToSquare} /></button>
-                      <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--color-system-red)' }} aria-label="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+                      <button type="button" style={iconButtonStyles} aria-label="Edit"><Icon icon="ph:pencil-square" /></button>
+                      <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--color-system-red)' }} aria-label="Delete"><Icon icon="ph:trash" /></button>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -387,9 +375,9 @@ export const Variants: Story = {
             </TableHeader>
             <TableBody>
               {[
-                { name: 'Alice Chen', email: 'alice@example.com', service: 'Design', desc: 'Brand & visual identity', icon: faPalette, status: 'positive' as const, since: 'Since Jan 2024' },
-                { name: 'Bob Smith', email: 'bob@example.com', service: 'Development', desc: 'Frontend engineering', icon: faCode, status: 'positive' as const, since: 'Since Mar 2024' },
-                { name: 'Carol Davis', email: 'carol@example.com', service: 'Marketing', desc: 'Content & campaigns', icon: faBullhorn, status: 'warning' as const, since: 'Since Jun 2024' },
+                { name: 'Alice Chen', email: 'alice@example.com', service: 'Design', desc: 'Brand & visual identity', icon: 'ph:palette', status: 'positive' as const, since: 'Since Jan 2024' },
+                { name: 'Bob Smith', email: 'bob@example.com', service: 'Development', desc: 'Frontend engineering', icon: 'ph:code', status: 'positive' as const, since: 'Since Mar 2024' },
+                { name: 'Carol Davis', email: 'carol@example.com', service: 'Marketing', desc: 'Content & campaigns', icon: 'ph:megaphone', status: 'warning' as const, since: 'Since Jun 2024' },
               ].map((row) => (
                 <TableRow key={row.email}>
                   <TableCell>
@@ -401,7 +389,7 @@ export const Variants: Story = {
                   <TableCell>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 4 }}>
                       <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--label-lg)', color: 'var(--text-primary)', flexShrink: 0, marginTop: 2 }}>
-                        <FontAwesomeIcon icon={row.icon} />
+                        <Icon icon={row.icon} />
                       </span>
                       <div>
                         <div style={twoLinePrimary}>{row.service}</div>
@@ -432,7 +420,7 @@ export const Variants: Story = {
 export const Patterns: Story = {
   render: () => {
     const categories = ['Design', 'Development', 'Marketing', 'Strategy', 'Operations'];
-    const icons = [faPalette, faCode, faBullhorn, faChartLine, faCog];
+    const icons = ['ph:palette', 'ph:code', 'ph:megaphone', 'ph:chart-line', 'ph:gear'];
 
     return (
       <Stack gap="var(--gap-huge)">
@@ -462,7 +450,7 @@ export const Patterns: Story = {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span style={brandBadgeStyles}><FontAwesomeIcon icon={icons[i]} /></span>
+                    <span style={brandBadgeStyles}><Icon icon={icons[i]} /></span>
                   </TableCell>
                   <TableCell><Tag size="sm">{categories[i]}</Tag></TableCell>
                   <TableCell>
@@ -471,10 +459,10 @@ export const Patterns: Story = {
                   <TableCell><Button variant="primary" size="sm">View</Button></TableCell>
                   <TableCell style={{ textAlign: 'right' }}>
                     <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
-                      <button type="button" style={iconButtonStyles} aria-label="Edit"><FontAwesomeIcon icon={faPenToSquare} /></button>
-                      <button type="button" style={iconButtonStyles} aria-label="Download"><FontAwesomeIcon icon={faDownload} /></button>
-                      <button type="button" style={iconButtonStyles} aria-label="More"><FontAwesomeIcon icon={faEllipsisVertical} /></button>
-                      <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--color-system-red)' }} aria-label="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+                      <button type="button" style={iconButtonStyles} aria-label="Edit"><Icon icon="ph:pencil-square" /></button>
+                      <button type="button" style={iconButtonStyles} aria-label="Download"><Icon icon="ph:download-simple" /></button>
+                      <button type="button" style={iconButtonStyles} aria-label="More"><Icon icon="ph:dots-three-vertical" /></button>
+                      <button type="button" style={{ ...iconButtonStyles, backgroundColor: 'var(--color-system-red)' }} aria-label="Delete"><Icon icon="ph:trash" /></button>
                     </div>
                   </TableCell>
                 </TableRow>

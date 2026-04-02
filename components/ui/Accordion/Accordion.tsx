@@ -4,8 +4,8 @@ import {
   useState,
   useCallback,
 } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { Plus, Minus } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Accordion.css';
 
@@ -41,7 +41,7 @@ function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
       >
         <span className="bds-accordion-trigger__title">{item.title}</span>
         <span className="bds-accordion-trigger__icon">
-          <FontAwesomeIcon icon={isOpen ? faMinus : faPlus} />
+          <Icon icon={isOpen ? Minus : Plus} />
         </span>
       </button>
       {isOpen && (

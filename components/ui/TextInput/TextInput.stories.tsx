@@ -1,8 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TextInput } from './TextInput';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faUser, faLock } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
@@ -94,8 +93,8 @@ export const Variants: Story = {
         <div>
           <SectionLabel>With icons</SectionLabel>
           <Stack gap="var(--gap-lg)">
-            <TextInput label="Icon before" placeholder="you@example.com" iconBefore={<FontAwesomeIcon icon={faEnvelope} />} fullWidth />
-            <TextInput label="Icon after" placeholder="Enter name" iconAfter={<FontAwesomeIcon icon={faUser} />} fullWidth />
+            <TextInput label="Icon before" placeholder="you@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
+            <TextInput label="Icon after" placeholder="Enter name" iconAfter={<Icon icon="ph:user" />} fullWidth />
           </Stack>
         </div>
 
@@ -127,7 +126,7 @@ export const Patterns: Story = {
         <Stack gap="var(--gap-lg)">
           <TextInput label="First name" placeholder="John" fullWidth />
           <TextInput label="Last name" placeholder="Doe" fullWidth />
-          <TextInput label="Email" type="email" placeholder="john@example.com" iconBefore={<FontAwesomeIcon icon={faEnvelope} />} fullWidth />
+          <TextInput label="Email" type="email" placeholder="john@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
           <TextInput label="Phone" type="tel" placeholder="(555) 123-4567" helperText="We'll only contact you about your order" fullWidth />
         </Stack>
       </div>
@@ -136,8 +135,8 @@ export const Patterns: Story = {
       <div style={{ width: 320 }}>
         <SectionLabel>Login form</SectionLabel>
         <Stack gap="var(--gap-lg)">
-          <TextInput label="Email" type="email" placeholder="you@example.com" iconBefore={<FontAwesomeIcon icon={faEnvelope} />} fullWidth />
-          <TextInput label="Password" type="password" placeholder="••••••••" iconBefore={<FontAwesomeIcon icon={faLock} />} fullWidth />
+          <TextInput label="Email" type="email" placeholder="you@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
+          <TextInput label="Password" type="password" placeholder="••••••••" iconBefore={<Icon icon="ph:lock" />} fullWidth />
         </Stack>
       </div>
     </Row>

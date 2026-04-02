@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { CaretDown, X } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Chip.css';
 
@@ -100,12 +100,12 @@ export function Chip({
           className="bds-chip__remove bds-chip__icon"
           aria-label="Remove"
         >
-          <FontAwesomeIcon icon={faXmark} />
+          <Icon icon={X} />
         </button>
       )}
       {showDropdown && (
         <span className="bds-chip__icon">
-          <FontAwesomeIcon icon={faCaretDown} />
+          <Icon icon={CaretDown} />
         </span>
       )}
     </div>

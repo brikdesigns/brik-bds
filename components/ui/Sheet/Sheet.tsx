@@ -1,7 +1,7 @@
 import { type ReactNode, type CSSProperties, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { X } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Sheet.css';
 
@@ -124,7 +124,7 @@ export function Sheet({
                   className="bds-sheet__close"
                   aria-label="Close"
                 >
-                  <FontAwesomeIcon icon={faXmark} />
+                  <Icon icon={X} />
                 </button>
               )}
             </div>
