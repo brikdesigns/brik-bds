@@ -8,7 +8,7 @@
  * - --border-radius-lg
  * - --padding-xl
  * - --gap-sm, --gap-md
- * - --color-system-red (error)
+ * - --text-status-error (error)
  */
 
 /* ─── Wrapper ─────────────────────────────────────────────────── */
@@ -50,7 +50,7 @@
 }
 
 .bds-file-uploader__dropzone--error {
-  border-color: var(--color-system-red);
+  border-color: var(--text-status-error);
 }
 
 /* ─── Icon ────────────────────────────────────────────────────── */
@@ -88,7 +88,7 @@
   font-size: var(--body-sm);
   font-weight: var(--font-weight-regular);
   line-height: var(--font-line-height-normal);
-  color: var(--color-system-red);
+  color: var(--text-status-error);
   margin: 0;
 }
 

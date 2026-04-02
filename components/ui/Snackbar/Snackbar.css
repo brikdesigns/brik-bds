@@ -17,22 +17,22 @@
 /* ─── Variants ───────────────────────────────────────────────── */
 
 .bds-snackbar--default {
-  background-color: var(--color-grayscale-black);
+  background-color: var(--background-inverse);
   color: var(--text-inverse);
 }
 
 .bds-snackbar--success {
-  background-color: var(--color-system-green);
+  background-color: var(--background-status-success);
   color: var(--text-on-color-dark);
 }
 
 .bds-snackbar--error {
-  background-color: var(--color-system-red);
+  background-color: var(--background-status-error);
   color: var(--text-on-color-dark);
 }
 
 .bds-snackbar--warning {
-  background-color: var(--color-system-orange);
+  background-color: var(--background-status-orange);
   color: var(--text-on-color-light);
 }
 

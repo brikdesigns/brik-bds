@@ -47,7 +47,7 @@
 .bds-avatar--lg .bds-avatar__status,
 .bds-avatar--xl .bds-avatar__status { width: 12px; height: 12px; }
 
-.bds-avatar__status--online  { background-color: var(--color-system-green); }
-.bds-avatar__status--offline { background-color: var(--color-grayscale-light); }
-.bds-avatar__status--busy    { background-color: var(--color-system-red); }
-.bds-avatar__status--away    { background-color: var(--color-system-yellow); }
+.bds-avatar__status--online  { background-color: var(--background-presence-online); }
+.bds-avatar__status--offline { background-color: var(--background-presence-offline); }
+.bds-avatar__status--busy    { background-color: var(--background-presence-busy); }
+.bds-avatar__status--away    { background-color: var(--background-presence-away); }
