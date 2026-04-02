@@ -246,15 +246,15 @@ When Figma reorganizes variable groups, token names change. Log every rename her
 
 | Date | Change | Old CSS name → New CSS name |
 |------|--------|-----------------------------|
-| 2026-03-31 | Figma dropped `interaction/` group prefix from all interaction tokens | `--interaction-background-brand-primary-hover` → `--background-brand-primary-hover` |
+| 2026-04-02 | Removed `interaction/` group from `tokens-studio.json`; tokens now live in their semantic sub-groups. SD rebuild completed, `overrides.css` bridge aliases removed. | `--interaction-background-brand-primary-hover` → `--background-brand-primary-hover` |
 | | | `--interaction-background-brand-primary-pressed` → `--background-brand-primary-pressed` |
-| | | `--interaction-background-secondary-hover` → `--background-secondary-hover` |
-| | | `--interaction-background-secondary-pressed` → `--background-secondary-pressed` |
-| | | `--interaction-background-outline-hover` → `--background-outline-hover` |
-| | | `--interaction-background-outline-pressed` → `--background-outline-pressed` |
+| | | `--interaction-surface-secondary-hover` → `--surface-secondary-hover` |
+| | | `--interaction-surface-secondary-pressed` → `--surface-secondary-pressed` |
+| | | `--interaction-surface-subtle-hover` → `--surface-subtle-hover` |
 | | | `--interaction-background-disabled` → `--background-disabled` |
 | | | `--interaction-text-disabled` → `--text-disabled` |
 | | | `--interaction-border-disabled` → `--border-disabled` |
+| | Note: `--background-secondary-hover`, `--background-outline-hover` (and pressed variants) were dead aliases — never had backing tokens. Removed entirely. |
 
 **After any Figma sync that renames tokens:** run `node scripts/lint-tokens.js` against all component CSS files to catch stale references before committing.
 

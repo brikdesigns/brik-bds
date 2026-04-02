@@ -20,11 +20,17 @@
   --background-on-color-dark: var(--color-grayscale-black);
   --background-muted: var(--color-grayscale-darker);
   --background-on-color-light: var(--color-grayscale-white);
+  --background-brand-primary-hover: var(--color-poppy-lighter); /** Primary button hover background (dark mode) */
+  --background-brand-primary-pressed: var(--color-poppy-lightest); /** Primary button pressed background (dark mode) */
+  --background-disabled: var(--color-grayscale-darker); /** Disabled background (dark mode) */
   --surface-primary: var(--color-grayscale-black);
   --surface-secondary: var(--color-grayscale-darker);
   --surface-brand-primary: var(--theme-blue-blue-light);
   --surface-inverse: var(--color-grayscale-white);
   --surface-overlay: var(--color-grayscale-black);
+  --surface-secondary-hover: var(--color-grayscale-darker); /** Secondary button hover (dark mode) */
+  --surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed (dark mode) */
+  --surface-subtle-hover: var(--color-grayscale-darkest); /** Ghost and outline hover (dark mode) */
   --text-primary: var(--color-grayscale-lightest);
   --text-secondary: var(--color-grayscale-light);
   --text-brand-primary: var(--theme-blue-blue-light);
@@ -38,6 +44,7 @@
   --text-on-color-dark: var(--color-grayscale-white);
   --text-text-link: var(--theme-blue-blue-light);
   --text-on-color-light: var(--color-grayscale-black);
+  --text-disabled: var(--color-grayscale-dark); /** Disabled text (dark mode) */
   --border-primary: var(--color-grayscale-darker);
   --border-brand-primary: var(--theme-blue-blue-light);
   --border-on-color-dark: var(--color-grayscale-black);
@@ -46,15 +53,5 @@
   --border-inverse: var(--color-grayscale-black);
   --border-on-color-light: var(--color-grayscale-white);
   --border-input: var(--color-grayscale-dark);
-
-  /* ── Interaction States (Dark) ── */
-  --interaction-background-brand-primary-hover: var(--color-poppy-lighter);
-  --interaction-background-brand-primary-pressed: var(--color-poppy-lightest);
-  --interaction-surface-secondary-hover: var(--color-grayscale-darker);
-  --interaction-surface-secondary-pressed: var(--color-grayscale-dark);
-  --interaction-surface-subtle-hover: var(--color-grayscale-darkest);
-  --interaction-background-disabled: var(--color-grayscale-darker);
-  --interaction-text-disabled: var(--color-grayscale-dark);
-  --interaction-border-disabled: var(--color-grayscale-darker);
-  --interaction-border-focus: var(--border-brand-primary);
+  --border-disabled: var(--color-grayscale-darker); /** Disabled border (dark mode) */
 }
