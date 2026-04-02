@@ -1,0 +1,126 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { ThemeOverview } from './_components';
+
+<Meta title="Foundations/Design Tokens/Client Theming" />
+
+# Client Theming
+
+BDS ships 9 built-in themes. Each theme overrides a curated set of semantic color and typography tokens while leaving primitives and spacing untouched.
+
+## How themes work
+
+Themes are applied by adding a class to `<body>`. The `ThemeProvider` component manages this automatically.
+
+```tsx
+// In your layout or app root:
+<ThemeProvider theme="theme-1">
+  <App />
+</ThemeProvider>
+```
+
+Internally, `ThemeProvider` sets `document.body.className = 'body theme-{n}'`. The CSS selector `.body.theme-N { ... }` in `tokens/overrides.css` then overrides the semantic tokens for that theme.
+
+## Built-in themes
+
+<ThemeOverview />
+
+| Class | Description |
+|-------|-------------|
+| *(default)* | Brik brand — Poppy red primary |
+| `.body.theme-1` | Blue light variant |
+| `.body.theme-2` | Theme 2 |
+| `.body.theme-3` | Theme 3 |
+| `.body.theme-4` | Theme 4 |
+| `.body.theme-5` | Theme 5 |
+| `.body.theme-6` | Theme 6 |
+| `.body.theme-7` | Theme 7 |
+| `.body.theme-8` | Theme 8 |
+| `.body.theme-client-sim` | Font override demo — not a color theme |
+
+Use the paintbrush icon in the Storybook toolbar to switch themes in real time.
+
+## Token cascade
+
+The full cascade order in a consuming project's `globals.css`:
+
+```css
+@import '@brikdesigns/bds/tokens.css';   /* 1. Primitives + semantic defaults + all .body.theme-N blocks */
+@import '@brikdesigns/bds/bridge.css';   /* 2. Clean name aliases (interaction renames, etc.) */
+@import '@brikdesigns/bds/styles.css';   /* 3. Component CSS */
+/* 4. Client brand overrides — see below */
+```
+
+`tokens.css` bundles everything: `figma-tokens.css` (primitives + semantic defaults), `overrides.css` (gap-fills, theme blocks, status/shadow tokens), and `bridge.css` (token rename aliases).
+
+## What each theme overrides
+
+Each `.body.theme-N` block overrides a fixed set of **semantic color tokens** — the same tokens that appear in the [Color](?path=/docs/foundations-design-tokens-color--docs) doc. These include:
+
+- `--background-brand-primary`, `--background-brand-secondary`
+- `--text-primary`, `--text-secondary`, `--text-muted`, `--text-brand-primary`
+- `--surface-primary`, `--surface-secondary`, `--surface-nav`, `--surface-brand-primary`
+- `--border-primary`, `--border-secondary`, `--border-brand-primary`
+- `--page-primary`, `--page-brand-primary`
+
+**Typography tokens** are NOT overridden by theme-1 through theme-8 — all themes share the Brik font stack. The `theme-client-sim` class demonstrates font family overrides only.
+
+**Spacing tokens** are not theme-controlled — spacing comes from the Base/Spacious mode set on `.body`, not from theme classes.
+
+## Adding a custom client brand
+
+For client projects, add a fourth CSS layer after the three BDS imports:
+
+```css
+/* globals.css in your consuming project */
+@import '@brikdesigns/bds/tokens.css';
+@import '@brikdesigns/bds/bridge.css';
+@import '@brikdesigns/bds/styles.css';
+
+/* Client brand — override semantic tokens at :root or .body level */
+:root {
+  --background-brand-primary: #2563EB;   /* client primary */
+  --text-brand-primary:       #2563EB;
+  --border-brand-primary:     #2563EB;
+  --surface-brand-primary:    #EFF6FF;
+  --font-family-heading:      'Neue Haas Grotesk', sans-serif;
+  --font-family-body:         'Inter', sans-serif;
+}
+```
+
+This overrides the defaults for every component in that project. No `.body.theme-N` class needed — the `:root` block always wins via cascade order.
+
+## Known gaps — what is NOT per-client overridable
+
+**Interaction states (hover/focus/press) are global, not per-theme.**
+
+Tokens like `--background-brand-primary-hover` and `--background-brand-primary-pressed` are defined once in `tokens/overrides.css` at the `:root` level. They are *not* inside any `.body.theme-N` block. This means:
+
+- If a client overrides `--background-brand-primary` to blue, the hover state still uses the default Poppy red tint.
+- Fix: also override the interaction tokens in your client `:root` block:
+
+```css
+:root {
+  --background-brand-primary:         #2563EB;
+  --background-brand-primary-hover:   #1D4ED8;   /* must set manually */
+  --background-brand-primary-pressed: #1E40AF;   /* must set manually */
+}
+```
+
+**Status and presence tokens are global.** `--background-status-error`, `--background-presence-online`, etc. are fixed values (red, green, yellow) — they are intentionally not theme-customizable. Do not override these per-client.
+
+**Shadow tokens are global.** `--shadow-sm` through `--shadow-xl` and `--background-overlay` use hardcoded `rgba()` values. They are not expected to vary per brand.
+
+## Typography-only client override
+
+To override fonts without changing any colors:
+
+```css
+:root {
+  --font-family-heading: 'Playfair Display', serif;
+  --font-family-body:    'Source Sans 3', sans-serif;
+  --font-family-label:   'Source Sans 3', sans-serif;
+  --font-family-display: 'Playfair Display', serif;
+}
+```
+
+This is exactly what `.body.theme-client-sim` demonstrates in the toolbar.

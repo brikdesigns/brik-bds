@@ -35,33 +35,54 @@ Primitives (raw scale values)          Semantic tokens (purpose-bound)
 | Border | `--border-radius-md`, `--border-width-lg` | Border properties |
 | Scale | `--font-size-700`, `--space-400` | Primitive scale steps |
 
-## Multi-platform outputs
+## Token pipeline
 
-Tokens are generated for multiple platforms from the same source:
+Tokens flow in one direction — Figma is the source of truth:
 
-| Platform | Format | Location |
-|----------|--------|----------|
-| CSS | Custom properties | `tokens/variables.css` |
-| JavaScript | ES6 exports | `build/figma/js/tokens.mjs` |
-| TypeScript | Type declarations | `build/figma/js/tokens.d.ts` |
-| SwiftUI | Static enums | `build/figma/swift/*.swift` |
+```
+Figma Variables → design-tokens/tokens-studio.json → Style Dictionary → tokens/figma-tokens.css
+                                                                        build/figma/js/tokens.mjs
+                                                                        build/figma/swift/*.swift
+```
+
+To regenerate after a Figma change: `npm run build:sd-figma`
+
+**Published npm package exports** (`@brikdesigns/bds`):
+
+| Export | File | Contents |
+|--------|------|----------|
+| `@brikdesigns/bds/tokens.css` | `dist/tokens.css` | All tokens: primitives + semantic defaults + all theme overrides |
+| `@brikdesigns/bds/bridge.css` | `dist/bridge.css` | Clean name aliases for Astro/Next.js consumption |
+| `@brikdesigns/bds/styles.css` | `dist/styles.css` | All component CSS |
+
+**Load order in consuming project `globals.css`:**
+
+```css
+@import '@brikdesigns/bds/tokens.css';   /* 1. All token values + theme blocks */
+@import '@brikdesigns/bds/bridge.css';   /* 2. Clean name aliases */
+@import '@brikdesigns/bds/styles.css';   /* 3. Component CSS */
+/* 4. Your client brand overrides (optional — see Client Theming) */
+```
 
 ## Themes
 
-BDS ships 9 theme variants. Each theme overrides semantic color, typography, and spacing tokens while preserving the primitive scale.
+BDS ships 9 built-in themes. Each applies via a `.body.theme-N` class on `<body>` and overrides semantic color, typography, and spacing tokens while leaving primitives unchanged.
 
 <ThemeOverview />
 
 Use the paintbrush icon in the toolbar to switch themes. All Foundation pages and components update in real time.
 
+See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for how to configure a client brand.
+
 ## Token categories
 
 | Category | Tokens | Description |
 |----------|--------|-------------|
-| [Color](?path=/docs/foundation-color--docs) | Grayscale, palettes, semantic roles | All color decisions |
-| [Typography](?path=/docs/foundation-typography--docs) | Font families, sizes, weights, line heights | All type decisions |
-| [Spacing](?path=/docs/foundation-spacing--docs) | Space scale, gaps, padding | All spacing decisions |
-| [Border radius](?path=/docs/foundation-border-radius--docs) | Radius scale, semantic radius | Corner rounding |
-| [Border width](?path=/docs/foundation-border-width--docs) | Width scale, semantic widths | Border thickness |
-| [Shadow](?path=/docs/foundation-shadow--docs) | Blur, spread, offset | Elevation and depth |
-| [Size](?path=/docs/foundation-size--docs) | Size scale, breakpoints, containers | Dimensional constraints |
+| [Color](?path=/docs/foundations-design-tokens-color--docs) | Grayscale, palettes, semantic roles, status, interaction | All color decisions |
+| [Typography](?path=/docs/foundations-design-tokens-typography--docs) | Font families, sizes, weights, line heights | All type decisions |
+| [Spacing](?path=/docs/foundations-design-tokens-spacing--docs) | Space scale, gaps, padding | All spacing decisions |
+| [Border radius](?path=/docs/foundations-design-tokens-border-radius--docs) | Radius scale, semantic radius | Corner rounding |
+| [Border width](?path=/docs/foundations-design-tokens-border-width--docs) | Width scale, semantic widths | Border thickness |
+| [Shadow](?path=/docs/foundations-design-tokens-shadow--docs) | Composed elevation tokens + primitive scales | Elevation and depth |
+| [Size](?path=/docs/foundations-design-tokens-size--docs) | Size scale, breakpoints, containers | Dimensional constraints |
+| [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) | Theme system, cascade, custom brand guide | How to apply a client brand |
