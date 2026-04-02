@@ -109,12 +109,12 @@
 /* ─── System Variants (semantic actions) ─────────────────────── */
 
 .bds-button--destructive {
-  background-color: var(--color-system-red);
+  background-color: var(--background-status-error);
   color: var(--text-on-color-dark);
 }
 
 .bds-button--positive {
-  background-color: var(--color-system-green);
+  background-color: var(--background-status-success);
   color: var(--text-on-color-dark);
 }
 
@@ -221,12 +221,12 @@
 .bds-button--danger-outline:focus-visible,
 .bds-button--danger-ghost:focus-visible,
 .bds-button--destructive:focus-visible {
-  outline-color: var(--color-system-red);
+  outline-color: var(--text-status-error);
 }
 
 /* Positive: green focus ring */
 .bds-button--positive:focus-visible {
-  outline-color: var(--color-system-green);
+  outline-color: var(--text-status-success);
 }
 
 /* ─── Loading State ───────────────────────────────────────────── */
