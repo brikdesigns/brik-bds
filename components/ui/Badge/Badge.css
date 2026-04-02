@@ -13,7 +13,7 @@
   align-items: center;
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semi-bold);
-  line-height: var(--font-line-height-tight);
+  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
   border-radius: var(--border-radius-pill);
   white-space: nowrap;
 }
