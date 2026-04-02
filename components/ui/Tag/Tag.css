@@ -40,6 +40,7 @@
 .bds-tag--sm {
   padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
+  font-family: var(--font-family-subtitle);
   font-size: var(--subtitle-sm);
   border-radius: var(--border-radius-sm);
 }
@@ -55,6 +56,7 @@
 .bds-tag--lg {
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-md);
+  font-family: var(--font-family-subtitle);
   font-size: var(--subtitle-lg);
   border-radius: var(--border-radius-md);
 }

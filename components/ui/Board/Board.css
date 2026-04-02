@@ -128,12 +128,11 @@
 }
 
 /*
- * Column header subtitle — label family (not body).
- * Subtitles are UI metadata labels; they belong to the label family.
+ * Column header subtitle — subtitle family.
  * --subtitle-md matches the visual size with correct semantics.
  */
 .bds-board-header__subtitle {
-  font-family: var(--font-family-label);
+  font-family: var(--font-family-subtitle);
   font-size: var(--subtitle-md);
   font-weight: var(--font-weight-regular);
   color: var(--text-on-color-dark);
@@ -215,11 +214,11 @@
 }
 
 /*
- * Card subtitle — label family (not body).
+ * Card subtitle — subtitle family.
  * Uses --subtitle-md (11.54px) for correct semantic sizing.
  */
 .bds-board-card__subtitle {
-  font-family: var(--font-family-label);
+  font-family: var(--font-family-subtitle);
   font-size: var(--subtitle-md);
   font-weight: var(--font-weight-regular);
   color: var(--text-primary);
