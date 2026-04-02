@@ -32,7 +32,7 @@
 
 .bds-sheet__header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: var(--padding-lg);
   border-bottom: var(--border-width-sm) solid var(--border-muted);
@@ -73,7 +73,7 @@
   font-size: var(--icon-md);
   line-height: var(--font-line-height-tight);
   cursor: pointer;
-  padding: var(--padding-md);
+  padding: 0 var(--padding-md) var(--padding-md);
   margin-right: calc(-1 * var(--padding-md));
   color: var(--text-primary);
   opacity: 0.6;
