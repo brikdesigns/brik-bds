@@ -203,14 +203,14 @@
 }
 
 /*
- * Card title — heading family, semibold.
- * Uses --heading-tiny (18px) — the minimum heading size.
- * Client themes that need a more compact card title can override
- * font-size in their globals.css; the family must remain heading.
+ * Card title — label family, lg size.
+ * Task titles are UI metadata, not editorial headings — label family
+ * gives better legibility at card density. --label-lg (16px) is the
+ * largest label size and reads well in a compact Kanban card.
  */
 .bds-board-card__title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-tiny);
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
   font-weight: var(--font-weight-semi-bold);
   color: var(--text-primary);
   line-height: var(--font-line-height-tight);
