@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaintBrush, faBullhorn, faCircleInfo, faCube, faCog } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { MultiSelect } from './MultiSelect';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -47,11 +46,11 @@ type Story = StoryObj<typeof MultiSelect>;
 /* ─── Shared data ─────────────────────────────────────── */
 
 const serviceOptions = [
-  { label: 'Brand Design', value: 'brand', icon: <FontAwesomeIcon icon={faPaintBrush} /> },
-  { label: 'Marketing', value: 'marketing', icon: <FontAwesomeIcon icon={faBullhorn} /> },
-  { label: 'Information Design', value: 'information', icon: <FontAwesomeIcon icon={faCircleInfo} /> },
-  { label: 'Product Design', value: 'product', icon: <FontAwesomeIcon icon={faCube} /> },
-  { label: 'Service Design', value: 'service', icon: <FontAwesomeIcon icon={faCog} /> },
+  { label: 'Brand Design', value: 'brand', icon: <Icon icon="ph:paint-brush" /> },
+  { label: 'Marketing', value: 'marketing', icon: <Icon icon="ph:megaphone" /> },
+  { label: 'Information Design', value: 'information', icon: <Icon icon="ph:info" /> },
+  { label: 'Product Design', value: 'product', icon: <Icon icon="ph:cube" /> },
+  { label: 'Service Design', value: 'service', icon: <Icon icon="ph:gear" /> },
 ];
 
 const skillOptions = [

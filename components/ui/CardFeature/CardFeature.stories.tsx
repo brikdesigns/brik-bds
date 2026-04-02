@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocket, faPalette, faShieldHalved, faGears } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { CardFeature } from './CardFeature';
 import { TextLink } from '../TextLink';
 
@@ -42,7 +41,7 @@ const Row = ({ children }: { children: React.ReactNode }) => (
 
 export const Playground: Story = {
   args: {
-    icon: <FontAwesomeIcon icon={faRocket} />,
+    icon: <Icon icon="ph:rocket" />,
     title: 'Fast Performance',
     description: 'Lightning-fast load times with optimized delivery across all devices.',
     align: 'left',
@@ -59,7 +58,7 @@ export const Variants: Story = {
       <Row>
         <div style={{ width: 320 }}>
           <CardFeature
-            icon={<FontAwesomeIcon icon={faRocket} />}
+            icon={<Icon icon="ph:rocket" />}
             title="Fast Performance"
             description="Lightning-fast load times with optimized delivery."
           />
@@ -70,7 +69,7 @@ export const Variants: Story = {
       <Row>
         <div style={{ width: 320 }}>
           <CardFeature
-            icon={<FontAwesomeIcon icon={faPalette} />}
+            icon={<Icon icon="ph:palette" />}
             title="Beautiful Design"
             description="Thoughtfully crafted interfaces that delight users."
             align="center"
@@ -82,7 +81,7 @@ export const Variants: Story = {
       <Row>
         <div style={{ width: 320 }}>
           <CardFeature
-            icon={<FontAwesomeIcon icon={faShieldHalved} />}
+            icon={<Icon icon="ph:shield-check" />}
             title="Enterprise Security"
             description="Bank-grade encryption and compliance built in."
             action={<TextLink href="#">Learn more</TextLink>}
@@ -111,22 +110,22 @@ export const Patterns: Story = {
       <SectionLabel>Feature grid</SectionLabel>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--gap-lg)', maxWidth: 700 }}>
         <CardFeature
-          icon={<FontAwesomeIcon icon={faRocket} />}
+          icon={<Icon icon="ph:rocket" />}
           title="Fast Performance"
           description="Lightning-fast load times with optimized delivery."
         />
         <CardFeature
-          icon={<FontAwesomeIcon icon={faPalette} />}
+          icon={<Icon icon="ph:palette" />}
           title="Beautiful Design"
           description="Thoughtfully crafted interfaces that delight users."
         />
         <CardFeature
-          icon={<FontAwesomeIcon icon={faShieldHalved} />}
+          icon={<Icon icon="ph:shield-check" />}
           title="Enterprise Security"
           description="Bank-grade encryption and compliance built in."
         />
         <CardFeature
-          icon={<FontAwesomeIcon icon={faGears} />}
+          icon={<Icon icon="ph:gear-six" />}
           title="Easy Integration"
           description="Connect with your existing tools in minutes."
         />

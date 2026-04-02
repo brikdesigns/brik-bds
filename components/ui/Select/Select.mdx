@@ -45,8 +45,7 @@ Real-world usage: form layouts and constrained containers.
 
 ```tsx
 import { Select } from '@brik/bds';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 
 // Basic select
 <Select
@@ -62,7 +61,7 @@ import { faBuilding } from '@fortawesome/free-solid-svg-icons';
   label="Company"
   placeholder="Select company..."
   options={options}
-  icon={<FontAwesomeIcon icon={faBuilding} />}
+  icon={<Icon icon="ph:buildings" />}
 />
 
 // Grouped options

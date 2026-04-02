@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faTag } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { Chip } from './Chip';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -62,7 +61,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 export const Playground: Story = {
   args: {
     label: 'Chip',
-    icon: <FontAwesomeIcon icon={faFilter} />,
+    icon: <Icon icon="ph:funnel" />,
     showDropdown: true,
   },
 };
@@ -77,26 +76,26 @@ export const Variants: Story = {
       <div>
         <SectionLabel>Variant + Appearance</SectionLabel>
         <Row>
-          <Chip label="Secondary Dark" variant="secondary" appearance="dark" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown />
-          <Chip label="Secondary Light" variant="secondary" appearance="light" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown />
-          <Chip label="Primary Dark" variant="primary" appearance="dark" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown />
-          <Chip label="Primary Light" variant="primary" appearance="light" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown />
+          <Chip label="Secondary Dark" variant="secondary" appearance="dark" icon={<Icon icon="ph:funnel" />} showDropdown />
+          <Chip label="Secondary Light" variant="secondary" appearance="light" icon={<Icon icon="ph:funnel" />} showDropdown />
+          <Chip label="Primary Dark" variant="primary" appearance="dark" icon={<Icon icon="ph:funnel" />} showDropdown />
+          <Chip label="Primary Light" variant="primary" appearance="light" icon={<Icon icon="ph:funnel" />} showDropdown />
         </Row>
       </div>
       <div>
         <SectionLabel>Sizes</SectionLabel>
         <Row>
-          <Chip label="Small" size="sm" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown />
-          <Chip label="Medium" size="md" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown />
-          <Chip label="Large" size="lg" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown />
+          <Chip label="Small" size="sm" icon={<Icon icon="ph:funnel" />} showDropdown />
+          <Chip label="Medium" size="md" icon={<Icon icon="ph:funnel" />} showDropdown />
+          <Chip label="Large" size="lg" icon={<Icon icon="ph:funnel" />} showDropdown />
         </Row>
       </div>
       <div>
         <SectionLabel>States</SectionLabel>
         <Row>
-          <Chip label="Default" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown />
-          <Chip label="Removable" icon={<FontAwesomeIcon icon={faTag} />} onRemove={() => {}} />
-          <Chip label="Disabled" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown disabled />
+          <Chip label="Default" icon={<Icon icon="ph:funnel" />} showDropdown />
+          <Chip label="Removable" icon={<Icon icon="ph:tag" />} onRemove={() => {}} />
+          <Chip label="Disabled" icon={<Icon icon="ph:funnel" />} showDropdown disabled />
         </Row>
       </div>
     </Stack>
@@ -122,8 +121,8 @@ export const Patterns: Story = {
       <div>
         <SectionLabel>Filter dropdown</SectionLabel>
         <Row>
-          <Chip label="All statuses" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown onChipClick={() => {}} />
-          <Chip label="Category" icon={<FontAwesomeIcon icon={faFilter} />} showDropdown onChipClick={() => {}} />
+          <Chip label="All statuses" icon={<Icon icon="ph:funnel" />} showDropdown onChipClick={() => {}} />
+          <Chip label="Category" icon={<Icon icon="ph:funnel" />} showDropdown onChipClick={() => {}} />
         </Row>
       </div>
     </Stack>

@@ -1,6 +1,6 @@
 import { type HTMLAttributes, useCallback } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { CaretLeft, CaretRight } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Pagination.css';
 
@@ -127,7 +127,7 @@ export function Pagination({
           onClick={handlePrev}
           disabled={currentPage <= 1}
         >
-          <FontAwesomeIcon icon={faChevronLeft} />
+          <Icon icon={CaretLeft} />
         </button>
 
         {pages.map((item) => {
@@ -161,7 +161,7 @@ export function Pagination({
           onClick={handleNext}
           disabled={currentPage >= totalPages}
         >
-          <FontAwesomeIcon icon={faChevronRight} />
+          <Icon icon={CaretRight} />
         </button>
       </div>
     </nav>

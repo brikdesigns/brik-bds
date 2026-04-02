@@ -6,8 +6,8 @@ import {
   useState,
   useCallback,
 } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import { Plus, Minus } from '../../icons';
 import { bdsClass } from '../../utils';
 import './CollapsibleCard.css';
 
@@ -103,7 +103,7 @@ export function CollapsibleCard({
         <div className="bds-collapsible-card__header-right">
           {headerActions}
           <span className="bds-collapsible-card__toggle" aria-hidden="true">
-            <FontAwesomeIcon icon={open ? faMinus : faPlus} />
+            <Icon icon={open ? Minus : Plus} />
           </span>
         </div>
       </div>

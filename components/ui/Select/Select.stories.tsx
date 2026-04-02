@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding, faGlobe, faTag } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
 import { Select } from './Select';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -90,9 +89,9 @@ export const Variants: Story = {
       <div>
         <SectionLabel>Sizes</SectionLabel>
         <Stack gap="var(--gap-lg)">
-          <Select size="sm" placeholder="Small" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
-          <Select size="md" placeholder="Medium" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
-          <Select size="lg" placeholder="Large" options={basicOptions} icon={<FontAwesomeIcon icon={faTag} />} />
+          <Select size="sm" placeholder="Small" options={basicOptions} icon={<Icon icon="ph:tag" />} />
+          <Select size="md" placeholder="Medium" options={basicOptions} icon={<Icon icon="ph:tag" />} />
+          <Select size="lg" placeholder="Large" options={basicOptions} icon={<Icon icon="ph:tag" />} />
         </Stack>
       </div>
 
@@ -106,7 +105,7 @@ export const Variants: Story = {
             { label: 'Globex Inc', value: 'globex' },
             { label: 'Initech', value: 'initech' },
           ]}
-          icon={<FontAwesomeIcon icon={faBuilding} />}
+          icon={<Icon icon="ph:buildings" />}
         />
       </div>
 
@@ -131,7 +130,7 @@ export const Variants: Story = {
             { label: 'Asia Pacific', value: 'apac' },
           ]}
           error="Please select a region"
-          icon={<FontAwesomeIcon icon={faGlobe} />}
+          icon={<Icon icon="ph:globe" />}
         />
       </div>
 
@@ -141,7 +140,7 @@ export const Variants: Story = {
           label="Location"
           placeholder="Select a city..."
           options={groupedOptions}
-          icon={<FontAwesomeIcon icon={faGlobe} />}
+          icon={<Icon icon="ph:globe" />}
         />
       </div>
 
@@ -174,7 +173,7 @@ export const Patterns: Story = {
                 { label: 'United Kingdom', value: 'uk' },
                 { label: 'Australia', value: 'au' },
               ]}
-              icon={<FontAwesomeIcon icon={faGlobe} />}
+              icon={<Icon icon="ph:globe" />}
             />
           </div>
           <div style={{ flex: '1 1 240px', minWidth: 0 }}>
@@ -187,7 +186,7 @@ export const Patterns: Story = {
                 { label: 'Finance', value: 'finance' },
                 { label: 'Education', value: 'education' },
               ]}
-              icon={<FontAwesomeIcon icon={faBuilding} />}
+              icon={<Icon icon="ph:buildings" />}
             />
           </div>
         </div>
