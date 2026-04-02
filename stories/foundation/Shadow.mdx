@@ -20,19 +20,21 @@ Controls how far a shadow extends outward.
 
 <ShadowScale scale={shadowSpreadScale} prefix="shadow-spread" label="spread" />
 
-## Semantic shadow tokens
+## Composed shadow tokens
 
-| Token | CSS Variable | Description |
-|-------|-------------|-------------|
-| Medium box shadow | `--box-shadow-md` | Default elevation |
-| Medium blur radius | `--blur-radius-md` | Default blur |
+Ready-to-use `box-shadow` values defined in `tokens/overrides.css`. Use these in component CSS — never compose raw blur/spread values manually.
 
-## Elevation modes
+| Token | CSS Variable | Value | Use case |
+|-------|-------------|-------|----------|
+| Small | `--shadow-sm` | `0px 2px 4px 0px rgba(0,0,0,0.06)` | Subtle cards, inputs |
+| Medium | `--shadow-md` | `0px 4px 8px 0px rgba(0,0,0,0.08)` | Cards, panels |
+| Large | `--shadow-lg` | `0px 8px 16px 0px rgba(0,0,0,0.10)` | Dropdowns, popovers |
+| Extra large | `--shadow-xl` | `0px 16px 32px 0px rgba(0,0,0,0.12)` | Modals, dialogs |
 
-Figma uses elevation modes to control shadow intensity:
+### Overlay
 
-| Mode | Effect | Use case |
-|------|--------|----------|
-| Subtle | Minimal shadow | Default, clean |
-| Soft | Gentle shadow | Cards, surfaces |
-| Raised | Prominent shadow | Modals, dropdowns |
+| Token | CSS Variable | Value |
+|-------|-------------|-------|
+| Overlay | `--background-overlay` | `rgba(0, 0, 0, 0.4)` |
+
+Used for modal backdrops and drawer overlays.

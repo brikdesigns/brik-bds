@@ -86,18 +86,81 @@ Semantic tokens map to purpose, not appearance. These values change when you swi
 
 ## Interaction states
 
-Tokenized interaction colors for buttons and interactive elements. These replace all `filter: brightness()` and `opacity` hacks.
+Tokenized interaction colors for hover, press, and disabled states. These replace all `filter: brightness()` and `opacity` hacks. As of 2026-03-31, Figma dropped the `interaction/` group prefix — use the new aliases below.
 
 <ColorGrid
   colors={[
-    { name: 'brand-primary-hover', cssVar: '--interaction-background-brand-primary-hover' },
-    { name: 'brand-primary-pressed', cssVar: '--interaction-background-brand-primary-pressed' },
-    { name: 'secondary-hover', cssVar: '--interaction-surface-secondary-hover' },
-    { name: 'secondary-pressed', cssVar: '--interaction-surface-secondary-pressed' },
-    { name: 'subtle-hover', cssVar: '--interaction-surface-subtle-hover' },
-    { name: 'disabled-bg', cssVar: '--interaction-background-disabled' },
-    { name: 'disabled-text', cssVar: '--interaction-text-disabled', isText: true },
-    { name: 'focus-ring', cssVar: '--interaction-border-focus' },
+    { name: 'background-brand-primary-hover', cssVar: '--background-brand-primary-hover' },
+    { name: 'background-brand-primary-pressed', cssVar: '--background-brand-primary-pressed' },
+    { name: 'background-secondary-hover', cssVar: '--background-secondary-hover' },
+    { name: 'background-secondary-pressed', cssVar: '--background-secondary-pressed' },
+    { name: 'background-outline-hover', cssVar: '--background-outline-hover' },
+    { name: 'background-outline-pressed', cssVar: '--background-outline-pressed' },
+    { name: 'background-disabled', cssVar: '--background-disabled' },
+    { name: 'text-disabled', cssVar: '--text-disabled', isText: true },
+    { name: 'border-disabled', cssVar: '--border-disabled' },
+  ]}
+  columns={3}
+/>
+
+## Status tokens
+
+Semantic tokens for error, success, warning, info, and other status states. Use these in components — never use `--color-system-*` primitives directly.
+
+### Background status
+
+<ColorGrid
+  colors={[
+    { name: 'background-status-error', cssVar: '--background-status-error' },
+    { name: 'background-status-error-subtle', cssVar: '--background-status-error-subtle' },
+    { name: 'background-status-success', cssVar: '--background-status-success' },
+    { name: 'background-status-success-subtle', cssVar: '--background-status-success-subtle' },
+    { name: 'background-status-warning', cssVar: '--background-status-warning' },
+    { name: 'background-status-warning-subtle', cssVar: '--background-status-warning-subtle' },
+    { name: 'background-status-info', cssVar: '--background-status-info' },
+    { name: 'background-status-info-subtle', cssVar: '--background-status-info-subtle' },
+    { name: 'background-status-neutral', cssVar: '--background-status-neutral' },
+    { name: 'background-status-purple', cssVar: '--background-status-purple' },
+    { name: 'background-status-orange', cssVar: '--background-status-orange' },
+  ]}
+  columns={4}
+/>
+
+### Text status
+
+<ColorGrid
+  colors={[
+    { name: 'text-status-error', cssVar: '--text-status-error', isText: true },
+    { name: 'text-status-success', cssVar: '--text-status-success', isText: true },
+    { name: 'text-status-warning', cssVar: '--text-status-warning', isText: true },
+    { name: 'text-status-info', cssVar: '--text-status-info', isText: true },
+    { name: 'text-status-neutral', cssVar: '--text-status-neutral', isText: true },
+  ]}
+  columns={3}
+/>
+
+### Surface status
+
+<ColorGrid
+  colors={[
+    { name: 'surface-status-error', cssVar: '--surface-status-error' },
+    { name: 'surface-status-success', cssVar: '--surface-status-success' },
+    { name: 'surface-status-warning', cssVar: '--surface-status-warning' },
+    { name: 'surface-status-info', cssVar: '--surface-status-info' },
+  ]}
+  columns={4}
+/>
+
+## Presence tokens
+
+Online/presence indicator tokens used by Avatar, Dot, and presence-aware components.
+
+<ColorGrid
+  colors={[
+    { name: 'background-presence-online', cssVar: '--background-presence-online' },
+    { name: 'background-presence-away', cssVar: '--background-presence-away' },
+    { name: 'background-presence-busy', cssVar: '--background-presence-busy' },
+    { name: 'background-presence-offline', cssVar: '--background-presence-offline' },
   ]}
   columns={4}
 />
