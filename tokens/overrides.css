@@ -109,6 +109,50 @@
   --color-system-transparent: #0000;
   --color-system-lightbox: #000000a3;
 
+  /* ── Interaction Token Aliases (renamed 2026-03-31) ──
+     Figma dropped the --interaction/ group prefix. Components already use
+     the new names. These aliases bridge the old figma-tokens.css names
+     until the next SD rebuild picks up the Figma rename.
+     See: CLAUDE.md → Token Rename History */
+  --background-brand-primary-hover:    var(--interaction-background-brand-primary-hover);
+  --background-brand-primary-pressed:  var(--interaction-background-brand-primary-pressed);
+  --background-secondary-hover:        var(--interaction-background-secondary-hover);
+  --background-secondary-pressed:      var(--interaction-background-secondary-pressed);
+  --background-outline-hover:          var(--interaction-background-outline-hover);
+  --background-outline-pressed:        var(--interaction-background-outline-pressed);
+  --background-disabled:               var(--interaction-background-disabled);
+  --text-disabled:                     var(--interaction-text-disabled);
+  --border-disabled:                   var(--interaction-border-disabled);
+  --border-focus:                      var(--interaction-border-focus);
+
+  /* Surface interaction aliases */
+  --surface-secondary-hover:   var(--interaction-surface-secondary-hover);
+  --surface-secondary-pressed: var(--interaction-surface-secondary-pressed);
+  --surface-subtle-hover:      var(--interaction-surface-subtle-hover);
+
+  /* ── Font Weight Aliases (Webflow double-dash → SD single-dash) ──
+     Old components reference --font-weight--bold; SD uses --font-weight-bold. */
+  --font-weight--bold:       var(--font-weight-bold);
+  --font-weight--semi-bold:  var(--font-weight-semi-bold);
+  --font-weight--medium:     var(--font-weight-medium);
+  --font-weight--regular:    var(--font-weight-regular);
+  --font-weight--thin:       var(--font-weight-thin);
+
+  /* ── Missing Semantic Tokens ── */
+  --background-tertiary: var(--color-grayscale-lighter);
+
+  /* System color surface variants (used by TaskConsole status rows) */
+  --color-system-red-surface:   var(--color-system-red-light);
+  --color-system-green-surface: var(--color-system-green-light);
+  --color-system-blue-surface:  var(--color-system-blue-light);
+
+  /* ── Slider Component Variables ──
+     CSS custom properties set dynamically by the Slider component via JS.
+     Defined here so the linter knows they are intentional component vars. */
+  --bds-slider-percent:      0%;
+  --bds-slider-thumb-size:   20px;
+  --bds-slider-track-height: 4px;
+
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --surface-nav: var(--color-grayscale-white);
   --surface-brand-secondary: var(--theme-blue-green);
@@ -116,6 +160,60 @@
   --background-image: #17171799;
   --background-image-brand: var(--theme-blue-blue-light);
   --box-shadow-none: 0px;
+
+  /* ── Status Semantic Tokens ──
+     Maps the --color-system-* primitives to semantic status names.
+     Components should always use these; never reference --color-system-* directly.
+     Override per-theme by redefining in .body.theme-N blocks.
+     TODO: promote to Figma variables → Style Dictionary once layer is stable. */
+
+  /* Backgrounds */
+  --background-status-error:          var(--color-system-red);
+  --background-status-error-subtle:   var(--color-system-red-light);
+  --background-status-success:        var(--color-system-green);
+  --background-status-success-subtle: var(--color-system-green-light);
+  --background-status-warning:        var(--color-system-yellow);
+  --background-status-warning-subtle: var(--color-system-yellow-light);
+  --background-status-info:           var(--color-system-blue);
+  --background-status-info-subtle:    var(--color-system-blue-light);
+  --background-status-neutral:        var(--color-system-neutral-light);
+  --background-status-purple:         var(--color-system-purple);
+  --background-status-orange:         var(--color-system-orange);
+
+  /* Text */
+  --text-status-error:   var(--color-system-red);
+  --text-status-success: var(--color-system-green);
+  --text-status-warning: var(--color-system-yellow);
+  --text-status-info:    var(--color-system-blue);
+  --text-status-neutral: var(--color-system-neutral);
+
+  /* Surfaces (container backgrounds for status zones) */
+  --surface-status-error:   var(--color-system-red-light);
+  --surface-status-success: var(--color-system-green-light);
+  --surface-status-warning: var(--color-system-yellow-light);
+  --surface-status-info:    var(--color-system-blue-light);
+
+  /* Presence (for Avatar online/away/busy/offline indicators) */
+  --background-presence-online:  var(--color-system-green);
+  --background-presence-away:    var(--color-system-yellow);
+  --background-presence-busy:    var(--color-system-red);
+  --background-presence-offline: var(--color-grayscale-light);
+
+  /* ── Shadow Semantic Tokens ──
+     Composed box-shadow values for consistent elevation.
+     Components should use these instead of raw rgba() values.
+     TODO: promote to Figma variables → Style Dictionary once layer is stable. */
+  --shadow-sm:      0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  --shadow-md:      0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+  --shadow-lg:      0px 4px 16px 0px rgba(0, 0, 0, 0.12);
+  --shadow-xl:      0px 8px 24px 4px rgba(0, 0, 0, 0.20);
+
+  /* Overlay (for Modal, Sheet, Dialog backdrops) */
+  --background-overlay: rgba(0, 0, 0, 0.4);
+
+  /* ── Tooltip component tokens ── */
+  --tooltip-background: var(--color-grayscale-darkest);
+  --tooltip-text: var(--text-inverse);
 
   /* ── Service Color Primitives ── */
   --services--green: #9ada6c;
