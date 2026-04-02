@@ -117,6 +117,60 @@
   --background-image-brand: var(--theme-blue-blue-light);
   --box-shadow-none: 0px;
 
+  /* ── Status Semantic Tokens ──
+     Maps the --color-system-* primitives to semantic status names.
+     Components should always use these; never reference --color-system-* directly.
+     Override per-theme by redefining in .body.theme-N blocks.
+     TODO: promote to Figma variables → Style Dictionary once layer is stable. */
+
+  /* Backgrounds */
+  --background-status-error:          var(--color-system-red);
+  --background-status-error-subtle:   var(--color-system-red-light);
+  --background-status-success:        var(--color-system-green);
+  --background-status-success-subtle: var(--color-system-green-light);
+  --background-status-warning:        var(--color-system-yellow);
+  --background-status-warning-subtle: var(--color-system-yellow-light);
+  --background-status-info:           var(--color-system-blue);
+  --background-status-info-subtle:    var(--color-system-blue-light);
+  --background-status-neutral:        var(--color-system-neutral-light);
+  --background-status-purple:         var(--color-system-purple);
+  --background-status-orange:         var(--color-system-orange);
+
+  /* Text */
+  --text-status-error:   var(--color-system-red);
+  --text-status-success: var(--color-system-green);
+  --text-status-warning: var(--color-system-yellow);
+  --text-status-info:    var(--color-system-blue);
+  --text-status-neutral: var(--color-system-neutral);
+
+  /* Surfaces (container backgrounds for status zones) */
+  --surface-status-error:   var(--color-system-red-light);
+  --surface-status-success: var(--color-system-green-light);
+  --surface-status-warning: var(--color-system-yellow-light);
+  --surface-status-info:    var(--color-system-blue-light);
+
+  /* Presence (for Avatar online/away/busy/offline indicators) */
+  --background-presence-online:  var(--color-system-green);
+  --background-presence-away:    var(--color-system-yellow);
+  --background-presence-busy:    var(--color-system-red);
+  --background-presence-offline: var(--color-grayscale-light);
+
+  /* ── Shadow Semantic Tokens ──
+     Composed box-shadow values for consistent elevation.
+     Components should use these instead of raw rgba() values.
+     TODO: promote to Figma variables → Style Dictionary once layer is stable. */
+  --shadow-sm:      0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  --shadow-md:      0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+  --shadow-lg:      0px 4px 16px 0px rgba(0, 0, 0, 0.12);
+  --shadow-xl:      0px 8px 24px 4px rgba(0, 0, 0, 0.20);
+
+  /* Overlay (for Modal, Sheet, Dialog backdrops) */
+  --background-overlay: rgba(0, 0, 0, 0.4);
+
+  /* ── Tooltip component tokens ── */
+  --tooltip-background: var(--color-grayscale-darkest);
+  --tooltip-text: var(--text-inverse);
+
   /* ── Service Color Primitives ── */
   --services--green: #9ada6c;
   --services--green-dark: #2a5542;
