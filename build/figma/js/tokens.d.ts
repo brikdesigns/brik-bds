@@ -306,11 +306,23 @@ export const backgroundInput: string;
 export const backgroundOnColorDark: string;
 export const backgroundMuted: string;
 export const backgroundOnColorLight: string;
+/** Primary button hover background */
+export const backgroundBrandPrimaryHover: string;
+/** Primary button pressed background */
+export const backgroundBrandPrimaryPressed: string;
+/** Disabled button background (all variants) */
+export const backgroundDisabled: string;
 export const surfacePrimary: string;
 export const surfaceSecondary: string;
 export const surfaceBrandPrimary: string;
 export const surfaceInverse: string;
 export const surfaceOverlay: string;
+/** Secondary button hover background */
+export const surfaceSecondaryHover: string;
+/** Secondary button pressed background */
+export const surfaceSecondaryPressed: string;
+/** Ghost and outline button hover background */
+export const surfaceSubtleHover: string;
 export const textPrimary: string;
 export const textSecondary: string;
 export const textBrandPrimary: string;
@@ -324,6 +336,8 @@ export const textMuted: string;
 export const textOnColorDark: string;
 export const textTextLink: string;
 export const textOnColorLight: string;
+/** Disabled button text (all variants) */
+export const textDisabled: string;
 export const borderPrimary: string;
 export const borderBrandPrimary: string;
 export const borderOnColorDark: string;
@@ -332,24 +346,8 @@ export const borderMuted: string;
 export const borderInverse: string;
 export const borderOnColorLight: string;
 export const borderInput: string;
-/** Primary button hover background */
-export const interactionBackgroundBrandPrimaryHover: string;
-/** Primary button pressed background */
-export const interactionBackgroundBrandPrimaryPressed: string;
-/** Secondary button hover background */
-export const interactionSurfaceSecondaryHover: string;
-/** Secondary button pressed background */
-export const interactionSurfaceSecondaryPressed: string;
-/** Ghost and outline button hover background */
-export const interactionSurfaceSubtleHover: string;
-/** Disabled button background (all variants) */
-export const interactionBackgroundDisabled: string;
-/** Disabled button text (all variants) */
-export const interactionTextDisabled: string;
 /** Disabled button border (all variants) */
-export const interactionBorderDisabled: string;
-/** Focus ring color */
-export const interactionBorderFocus: string;
+export const borderDisabled: string;
 export const iconLogo: string;
 export const iconIcon: string;
 export const iconTiny: string;

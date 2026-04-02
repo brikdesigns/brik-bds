@@ -307,11 +307,17 @@
   --background-on-color-dark: var(--color-grayscale-white);
   --background-muted: var(--color-grayscale-lighter);
   --background-on-color-light: var(--color-grayscale-black);
+  --background-brand-primary-hover: var(--color-poppy-dark); /** Primary button hover background */
+  --background-brand-primary-pressed: var(--color-poppy-darker); /** Primary button pressed background */
+  --background-disabled: var(--color-grayscale-dark); /** Disabled button background (all variants) */
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lighter);
   --surface-brand-primary: var(--theme-blue-blue-light);
   --surface-inverse: var(--color-grayscale-black);
   --surface-overlay: var(--color-grayscale-white);
+  --surface-secondary-hover: var(--color-grayscale-light); /** Secondary button hover background */
+  --surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed background */
+  --surface-subtle-hover: var(--color-grayscale-lightest); /** Ghost and outline button hover background */
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
   --text-brand-primary: var(--theme-blue-blue-light);
@@ -325,6 +331,7 @@
   --text-on-color-dark: var(--color-grayscale-white);
   --text-text-link: var(--theme-blue-blue-light);
   --text-on-color-light: var(--color-grayscale-black);
+  --text-disabled: var(--color-grayscale-light); /** Disabled button text (all variants) */
   --border-primary: var(--color-grayscale-lighter);
   --border-brand-primary: var(--theme-blue-blue-light);
   --border-on-color-dark: var(--color-grayscale-white);
@@ -333,14 +340,7 @@
   --border-inverse: var(--color-grayscale-white);
   --border-on-color-light: var(--color-grayscale-black);
   --border-input: var(--color-grayscale-light);
-  --interaction-background-brand-primary-hover: var(--color-poppy-dark); /** Primary button hover background */
-  --interaction-background-brand-primary-pressed: var(--color-poppy-darker); /** Primary button pressed background */
-  --interaction-surface-secondary-hover: var(--color-grayscale-light); /** Secondary button hover background */
-  --interaction-surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed background */
-  --interaction-surface-subtle-hover: var(--color-grayscale-lightest); /** Ghost and outline button hover background */
-  --interaction-background-disabled: var(--color-grayscale-dark); /** Disabled button background (all variants) */
-  --interaction-text-disabled: var(--color-grayscale-light); /** Disabled button text (all variants) */
-  --interaction-border-disabled: var(--color-grayscale-dark); /** Disabled button border (all variants) */
+  --border-disabled: var(--color-grayscale-dark); /** Disabled button border (all variants) */
   --icon-tiny: var(--font-size-50);
   --icon-xs: var(--font-size-75);
   --icon-md: var(--font-size-200);
@@ -391,5 +391,4 @@
   --subtitle-lg: var(--font-size-100);
   --subtitle-md: var(--font-size-50);
   --subtitle-sm: var(--font-size-25);
-  --interaction-border-focus: var(--border-brand-primary); /** Focus ring color */
 }
