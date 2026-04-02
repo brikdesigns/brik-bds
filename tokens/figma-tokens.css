@@ -14,110 +14,80 @@
  */
 
 :root {
-  /* ── Grayscale Primitives ── */
   --color-grayscale-white: #ffffff;
   --color-grayscale-black: #000000;
-  --color-grayscale-darkest: #333333;
-  --color-grayscale-darker: #4f4f4f;
-  --color-grayscale-dark: #828282;
-  --color-grayscale-light: #bdbdbd;
-  --color-grayscale-lighter: #e0e0e0;
-  --color-grayscale-lightest: #f2f2f2;
-
-  /* ── Poppy (Brand Primary) ── */
-  --color-poppy-lightest: #ffefeb;
-  --color-poppy-lighter: #ffa693;
-  --color-poppy-light: #e35335;
-  --color-poppy-dark: #b0351b;
-  --color-poppy-darker: #7d1d09;
-  --color-poppy-darkest: #4a0d00;
-
-  /* ── Tan ── */
-  --color-tan-lightest: #f1f0ec;
+  --color-grayscale-darkest: #333333; /** Primary Text on Light Backgrounds */
+  --color-grayscale-darker: #4f4f4f; /** Secondary Text / Icons */
+  --color-grayscale-dark: #828282; /** Placeholder Text / Tertiary Content */
+  --color-grayscale-light: #bdbdbd; /** Secondary Borders / Muted UI */
+  --color-grayscale-lighter: #e0e0e0; /** Borders / Disabled Text */
+  --color-grayscale-lightest: #f2f2f2; /** Light Background / UI Elements */
+  --color-poppy-lightest: #ffefeb; /** Subtle tints / hover backgrounds */
+  --color-poppy-lighter: #ffa693; /** Light accent */
+  --color-poppy-light: #e35335; /** Brand primary base */
+  --color-poppy-dark: #b0351b; /** Hover state */
+  --color-poppy-darker: #7d1d09; /** Pressed state */
+  --color-poppy-darkest: #4a0d00; /** Deep accent */
+  --color-tan-lightest: #f1f0ec; /** Accent background */
   --color-tan-lighter: #cfcdc5;
   --color-tan-light: #adaaa0;
   --color-tan-dark: #8b887d;
   --color-tan-darker: #69665c;
   --color-tan-darkest: #47453c;
-
-  /* ── Orange ── */
   --color-orange-lightest: #ffe8dc;
   --color-orange-lighter: #ffad92;
   --color-orange-light: #e76134;
   --color-orange-dark: #b4411a;
   --color-orange-darker: #812608;
   --color-orange-darkest: #4e1400;
-
-  /* ── Yellow ── */
   --color-yellow-lightest: #fffee1;
   --color-yellow-lighter: #ffecac;
   --color-yellow-light: #f4d364;
   --color-yellow-dark: #c1a443;
   --color-yellow-darker: #8e7729;
   --color-yellow-darkest: #634716;
-
-  /* ── Green ── */
   --color-green-lightest: #f8fff3;
   --color-green-lighter: #daffc0;
   --color-green-light: #bcff8c;
   --color-green-dark: #9ada6c;
   --color-green-darker: #71a74a;
   --color-green-darkest: #2a5542;
-
-  /* ── Blue ── */
   --color-blue-lightest: #f8fdff;
   --color-blue-lighter: #b2e3f5;
   --color-blue-light: #8ebbcc;
   --color-blue-dark: #6c95a3;
   --color-blue-darker: #4d6e7b;
   --color-blue-darkest: #314952;
-
-  /* ── Purple ── */
   --color-purple-lightest: #f2f0f7;
   --color-purple-lighter: #c4b0eb;
   --color-purple-light: #9e8bc2;
   --color-purple-dark: #796999;
   --color-purple-darker: #574a71;
   --color-purple-darkest: #362d48;
-
-  /* ── Pink ── */
   --color-pink-lightest: #ffe9f6;
   --color-pink-lighter: #ffa8dd;
   --color-pink-light: #ff67c3;
   --color-pink-dark: #ff25aa;
   --color-pink-darker: #d20080;
   --color-pink-darkest: #8e0057;
-
-  /* ── System Colors ── */
   --color-system-red: #eb5757;
-  --color-system-red-light: #fccccc;
   --color-system-green: #27ae60;
-  --color-system-green-light: #bef4d4;
   --color-system-yellow: #f2c94c;
-  --color-system-yellow-light: #f7e190;
   --color-system-blue: #2f80ed;
-  --color-system-blue-light: #bfe2fe;
   --color-system-purple: #9b51e0;
   --color-system-orange: #f2994a;
-  --color-system-neutral: #363636;
-  --color-system-neutral-light: #d4d4d4;
-
-  /* ── Annotation Colors ── */
+  --color-system-neutral: #d4d4d4;
   --color-annotation-annotation-pink: #bb1eeb;
   --color-annotation-annotation-purple: #601ff9;
   --color-annotation-annotation-blue: #2f80ed;
   --color-annotation-annotation-light-pink: #f8e8fd;
   --color-annotation-annotation-light-purple: #e6dbff;
   --color-annotation-annotation-light-blue: #d1e5ff;
-
-  /* ── Theme Blue (Figma default mode) ── */
   --theme-blue-blue-dark: #0e212a;
   --theme-blue-blue-lighter: #79b0d9;
   --theme-blue-blue-lightest: #edf2f6;
   --theme-blue-green: #79d799;
   --theme-blue-blue-light: #4665f5;
-
-  /* ── Theme Brik Brand ── */
   --theme-brik-poppy-red: #e35335;
   --theme-brik-tan: #f1f0ec;
   --theme-brik-black: #000000;
@@ -126,8 +96,6 @@
   --theme-brik-green: #bcff8c;
   --theme-brik-blue: #8ebbcc;
   --theme-brik-purple: #9e8bc2;
-
-  /* ── Font Weight ── */
   --font-weight-bold: 700;
   --font-weight-semi-bold: 600;
   --font-weight-medium: 500;
@@ -135,19 +103,14 @@
   --font-weight-thin: 300;
   --font-weight-extra-bold: 800;
   --font-weight-black: 900;
-
-  /* ── Font Family ── */
   --font-family-display: Poppins;
   --font-family-heading: Poppins;
   --font-family-label: Poppins;
   --font-family-body: Poppins;
   --font-family-icon: Font Awesome 6 Pro;
   --font-family-logo: Font Awesome 6 Brands;
-
-  /* ── Animation ── */
-  --easing-ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-ease-in: String value;
+  --easing-ease-out: String value;
   --delay-0: 0ms;
   --delay-100: 100ms;
   --delay-200: 200ms;
@@ -159,8 +122,6 @@
   --duration-400: 500ms;
   --duration-500: 800ms;
   --duration-600: 1000ms;
-
-  /* ── Font Size Scale ── */
   --font-size-5: 5.69px;
   --font-size-10: 6.41px;
   --font-size-15: 8.11px;
@@ -194,8 +155,6 @@
   --font-size-2400: 355px;
   --font-size-2500: 426px;
   --font-size-2600: 515px;
-
-  /* ── Space Scale ── */
   --space-0: 0px;
   --space-25: 1px;
   --space-50: 2px;
@@ -233,8 +192,6 @@
   --space-2800: 160px;
   --space-2900: 168px;
   --space-3000: 176px;
-
-  /* ── Border Radius Scale ── */
   --border-radius-0: 0px;
   --border-radius-50: 2px;
   --border-radius-100: 4px;
@@ -253,8 +210,6 @@
   --border-radius-1400: 48px;
   --border-radius-pill: 999px;
   --border-radius-circle: 9999px;
-
-  /* ── Border Width Scale ── */
   --border-width-0: 0px;
   --border-width-50: 1px;
   --border-width-100: 2px;
@@ -268,8 +223,6 @@
   --border-width-lg: 2px;
   --border-width-huge: 4px;
   --border-width-none: 0px;
-
-  /* ── Line Height ── */
   --font-line-height-tight: 110%;
   --font-line-height-snug: 125%;
   --font-line-height-normal: 150%;
@@ -277,8 +230,6 @@
   --font-line-height-loose: 200%;
   --font-line-height-none: 0px;
   --font-line-height-moderate: 138%;
-
-  /* ── Size Scale ── */
   --size-0: 0px;
   --size-25: 1px;
   --size-50: 2px;
@@ -307,8 +258,6 @@
   --size-2200: 100px;
   --size-pill: 9999px;
   --size-circle: 99999px;
-
-  /* ── Shadow Primitives ── */
   --shadow-blur-0: 0px;
   --shadow-blur-100: 2px;
   --shadow-blur-200: 4px;
@@ -335,41 +284,27 @@
   --shadow-spread-500: 12px;
   --shadow-spread-600: 14px;
   --shadow-spread-700: 16px;
-
-  /* ── Icon Font Families ── */
   --icon-logo: Font Awesome Brand;
   --icon-icon: Font Awesome Solid;
-
-  /* ── Breakpoints ── */
   --breakpoint-web: 1200px;
   --breakpoint-tablet: 768px;
   --breakpoint-mobile: 320px;
-
-  /* ── Blur Radius (semantic) ── */
   --blur-radius-sm: 8px;
   --blur-radius-md: 12px;
   --blur-radius-lg: 14px;
   --blur-radius-xl: 16px;
-
-  /* ── Box Shadow (semantic) ── */
   --box-shadow-sm: 2px;
   --box-shadow-md: 8px;
   --box-shadow-lg: 10px;
   --box-shadow-xl: 12px;
-
-  /* ── Border Radius (semantic) ── */
   --border-radius-lg: var(--border-radius-600);
   --border-radius-md: var(--border-radius-400);
   --border-radius-none: var(--border-radius-0);
   --border-radius-sm: var(--border-radius-200);
-
-  /* ── Page Colors ── */
   --page-primary: var(--color-grayscale-white);
   --page-secondary: var(--color-grayscale-lighter);
   --page-brand-primary: var(--theme-blue-blue-light);
   --page-inverse: var(--color-grayscale-black);
-
-  /* ── Background Colors ── */
   --background-primary: var(--color-grayscale-white);
   --background-secondary: var(--color-grayscale-dark);
   --background-brand-primary: var(--theme-blue-blue-light);
@@ -383,15 +318,17 @@
   --background-on-color-dark: var(--color-grayscale-white);
   --background-muted: var(--color-grayscale-lighter);
   --background-on-color-light: var(--color-grayscale-black);
-
-  /* ── Surface Colors ── */
+  --background-brand-primary-hover: var(--color-poppy-dark); /** Primary button hover background */
+  --background-brand-primary-pressed: var(--color-poppy-darker); /** Primary button pressed background */
+  --background-disabled: var(--color-grayscale-dark); /** Disabled button background (all variants) */
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lighter);
   --surface-brand-primary: var(--theme-blue-blue-light);
   --surface-inverse: var(--color-grayscale-black);
   --surface-overlay: var(--color-grayscale-white);
-
-  /* ── Text Colors ── */
+  --surface-secondary-hover: var(--color-grayscale-light); /** Secondary button hover background */
+  --surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed background */
+  --surface-subtle-hover: var(--color-grayscale-lightest); /** Ghost and outline button hover background */
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
   --text-brand-primary: var(--theme-blue-blue-light);
@@ -405,8 +342,7 @@
   --text-on-color-dark: var(--color-grayscale-white);
   --text-text-link: var(--theme-blue-blue-light);
   --text-on-color-light: var(--color-grayscale-black);
-
-  /* ── Border Colors ── */
+  --text-disabled: var(--color-grayscale-light); /** Disabled button text (all variants) */
   --border-primary: var(--color-grayscale-lighter);
   --border-brand-primary: var(--theme-blue-blue-light);
   --border-on-color-dark: var(--color-grayscale-white);
@@ -415,19 +351,7 @@
   --border-inverse: var(--color-grayscale-white);
   --border-on-color-light: var(--color-grayscale-black);
   --border-input: var(--color-grayscale-light);
-
-  /* ── Interaction States ── */
-  --interaction-background-brand-primary-hover: var(--color-poppy-dark);
-  --interaction-background-brand-primary-pressed: var(--color-poppy-darker);
-  --interaction-surface-secondary-hover: var(--color-grayscale-light);
-  --interaction-surface-secondary-pressed: var(--color-grayscale-dark);
-  --interaction-surface-subtle-hover: var(--color-grayscale-lightest);
-  --interaction-background-disabled: var(--color-grayscale-dark);
-  --interaction-text-disabled: var(--color-grayscale-light);
-  --interaction-border-disabled: var(--color-grayscale-dark);
-  --interaction-border-focus: var(--border-brand-primary);
-
-  /* ── Icon Sizes ── */
+  --border-disabled: var(--color-grayscale-dark); /** Disabled button border (all variants) */
   --icon-tiny: var(--font-size-50);
   --icon-xs: var(--font-size-75);
   --icon-md: var(--font-size-200);
@@ -435,8 +359,6 @@
   --icon-lg: var(--font-size-300);
   --icon-xl: var(--font-size-400);
   --icon-huge: var(--font-size-500);
-
-  /* ── Padding (Base mode) ── */
   --padding-xl: var(--space-800);
   --padding-lg: var(--space-600);
   --padding-none: var(--space-0);
@@ -445,8 +367,6 @@
   --padding-huge: var(--space-1200);
   --padding-xs: var(--space-250);
   --padding-tiny: var(--space-200);
-
-  /* ── Gap (Base mode) ── */
   --gap-none: var(--space-0);
   --gap-md: var(--space-200);
   --gap-lg: var(--space-400);
@@ -455,8 +375,6 @@
   --gap-huge: var(--space-800);
   --gap-xs: var(--space-100);
   --gap-tiny: var(--space-50);
-
-  /* ── Body Typography ── */
   --body-xs: var(--font-size-50);
   --body-tiny: var(--font-size-25);
   --body-md: var(--font-size-100);
@@ -464,14 +382,10 @@
   --body-lg: var(--font-size-200);
   --body-xl: var(--font-size-300);
   --body-huge: var(--font-size-500);
-
-  /* ── Display Typography ── */
   --display-sm: var(--font-size-1400);
   --display-lg: var(--font-size-1600);
   --display-md: var(--font-size-1500);
   --display-xl: var(--font-size-1800);
-
-  /* ── Heading Typography ── */
   --heading-lg: var(--font-size-600);
   --heading-xl: var(--font-size-700);
   --heading-xxl: var(--font-size-800);
@@ -479,16 +393,12 @@
   --heading-tiny: var(--font-size-200);
   --heading-sm: var(--font-size-300);
   --heading-huge: var(--font-size-900);
-
-  /* ── Label Typography ── */
   --label-tiny: var(--font-size-25);
   --label-md: var(--font-size-100);
   --label-lg: var(--font-size-200);
   --label-xs: var(--font-size-50);
   --label-sm: var(--font-size-75);
   --label-xl: var(--font-size-300);
-
-  /* ── Subtitle Typography ── */
   --subtitle-lg: var(--font-size-100);
   --subtitle-md: var(--font-size-50);
   --subtitle-sm: var(--font-size-25);
