@@ -290,6 +290,25 @@ style={{ fontSize: font.size.body.md, fontFamily: font.family.heading }}
 import { text } from '@/lib/styles';
 style={text.body}  // family + size + lineHeight, always matched correctly
 
+// ❌ WRONG: Heading/title element using body font family
+.bds-card__name { font-family: var(--font-family-body); }
+// ✅ RIGHT: Semantic family matches element role
+.bds-card__name { font-family: var(--font-family-heading); }
+// Rule: Font family token MUST match the element's semantic role.
+//   Heading/title/name elements     → --font-family-heading
+//   Label/badge/tag/button/caption  → --font-family-label
+//   Body copy/description/paragraph → --font-family-body
+//
+// WHY THIS MATTERS: BDS defaults all three tokens to Poppins, so misuse is
+// invisible during BDS development. The violation surfaces only when a client
+// theme assigns distinct typefaces per family (e.g. Century Schoolbook for
+// heading, Avenir for body/label). Always validate component CSS with the
+// ★ Client Sim theme in Storybook — it assigns Georgia/Verdana/Courier New
+// to expose mismatches instantly before any client theme reveals them.
+//
+// HEADING SCALE STARTS AT 18px: --heading-tiny = font-size/200 = 18px.
+// font-size/100 (16px) is body/label territory. Never use it on a heading element.
+
 // ❌ WRONG: Editing the submodule directly
 // brik-client-portal/brik-bds/components/ui/Button/Button.css ← NEVER
 // ✅ RIGHT: Edit in standalone repo, sync to consumers

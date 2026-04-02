@@ -201,6 +201,27 @@ export const storybookThemes: Record<ThemeNumber, StorybookThemeConfig> = {
     "inputTextColor": "#333",
     "fontBase": "Hind, sans-serif"
   },
+  "client-sim": {
+    "base": "light",
+    "name": "Client Sim",
+    "colorPrimary": "#333",
+    "colorSecondary": "#333",
+    "appBg": "white",
+    "appContentBg": "white",
+    "appPreviewBg": "transparent",
+    "appBorderColor": "#bdbdbd",
+    "textColor": "#333",
+    "textInverseColor": "white",
+    "textMutedColor": "#828282",
+    "barTextColor": "#828282",
+    "barSelectedColor": "#333",
+    "barHoverColor": "#333",
+    "barBg": "white",
+    "inputBg": "white",
+    "inputBorder": "#bdbdbd",
+    "inputTextColor": "#333",
+    "fontBase": "Verdana, sans-serif"
+  },
   "brik": {
     "base": "light",
     "name": "Brik Brand",
