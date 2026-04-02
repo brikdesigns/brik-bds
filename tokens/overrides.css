@@ -728,3 +728,33 @@
   --icon-md: var(--font-size-100);
   --icon-lg: var(--font-size-200);
 }
+
+/*
+ * ── Client Simulation Theme (theme-client-sim) ────────────────────────────────
+ *
+ * PURPOSE: Semantic font-family validation tool.
+ * Assigns maximally distinct system fonts to each family token so that any
+ * component using the wrong family token is immediately legible during development.
+ *
+ *   --font-family-heading  → Georgia (serif)         ← heading/title elements
+ *   --font-family-display  → Georgia (serif)         ← display/hero elements
+ *   --font-family-label    → Courier New (monospace) ← labels, badges, tags, buttons
+ *   --font-family-body     → Verdana (sans-serif)    ← body copy, descriptions
+ *
+ * If you see:
+ *   - A heading rendered in Verdana or Courier New  → wrong font-family token
+ *   - A badge/label rendered in Georgia or Verdana  → wrong font-family token
+ *   - Body copy rendered in Georgia or Courier New  → wrong font-family token
+ *
+ * This theme is NOT for client delivery. Run it in Storybook toolbar when:
+ *   1. Building a new component
+ *   2. Reviewing a component PR
+ *   3. Validating a client theme override will work correctly
+ */
+.body.theme-client-sim {
+  --font-family-heading: Georgia, "Times New Roman", serif;
+  --font-family-display: Georgia, "Times New Roman", serif;
+  --font-family-label: "Courier New", Courier, monospace;
+  --font-family-body: Verdana, Geneva, sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+}
