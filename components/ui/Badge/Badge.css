@@ -84,53 +84,53 @@
 /* ─── Status × Dark (default) ─────────────────────────────────── */
 
 .bds-badge--dark.bds-badge--positive {
-  background-color: var(--color-system-green);
+  background-color: var(--background-status-success);
   color: var(--text-on-color-dark);
 }
 
 .bds-badge--dark.bds-badge--warning {
-  background-color: var(--color-system-yellow);
-  color: var(--color-system-neutral);
+  background-color: var(--background-status-warning);
+  color: var(--text-status-neutral);
 }
 
 .bds-badge--dark.bds-badge--error {
-  background-color: var(--color-system-red);
+  background-color: var(--background-status-error);
   color: var(--text-on-color-dark);
 }
 
 .bds-badge--dark.bds-badge--info {
-  background-color: var(--color-system-neutral-light);
-  color: var(--color-system-neutral);
+  background-color: var(--background-status-neutral);
+  color: var(--text-status-neutral);
 }
 
 .bds-badge--dark.bds-badge--progress {
-  background-color: var(--color-system-blue);
+  background-color: var(--background-status-info);
   color: var(--text-on-color-dark);
 }
 
 /* ─── Status × Light (pastel bg, saturated text) ─────────────── */
 
 .bds-badge--light.bds-badge--positive {
-  background-color: var(--color-system-green-light);
-  color: var(--color-system-green);
+  background-color: var(--background-status-success-subtle);
+  color: var(--text-status-success);
 }
 
 .bds-badge--light.bds-badge--warning {
-  background-color: var(--color-system-yellow-light);
-  color: var(--color-system-neutral);
+  background-color: var(--background-status-warning-subtle);
+  color: var(--text-status-neutral);
 }
 
 .bds-badge--light.bds-badge--error {
-  background-color: var(--color-system-red-light);
-  color: var(--color-system-red);
+  background-color: var(--background-status-error-subtle);
+  color: var(--text-status-error);
 }
 
 .bds-badge--light.bds-badge--info {
-  background-color: var(--color-system-neutral-light);
-  color: var(--color-system-neutral);
+  background-color: var(--background-status-neutral);
+  color: var(--text-status-neutral);
 }
 
 .bds-badge--light.bds-badge--progress {
-  background-color: var(--color-system-blue-light);
-  color: var(--color-system-blue);
+  background-color: var(--background-status-info-subtle);
+  color: var(--text-status-info);
 }

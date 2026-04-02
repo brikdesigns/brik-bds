@@ -16,11 +16,11 @@
 /* ─── Status colors ──────────────────────────────────────────── */
 
 .bds-dot--default  { background-color: var(--background-brand-primary); }
-.bds-dot--positive { background-color: var(--color-system-green); }
-.bds-dot--warning  { background-color: var(--color-system-yellow); }
-.bds-dot--error    { background-color: var(--color-system-red); }
-.bds-dot--info     { background-color: var(--color-system-blue); }
-.bds-dot--neutral  { background-color: var(--color-grayscale-light); }
+.bds-dot--positive { background-color: var(--background-status-success); }
+.bds-dot--warning  { background-color: var(--background-status-warning); }
+.bds-dot--error    { background-color: var(--background-status-error); }
+.bds-dot--info     { background-color: var(--background-status-info); }
+.bds-dot--neutral  { background-color: var(--background-status-neutral); }
 
 /* ─── Pulse animation ────────────────────────────────────────── */
 

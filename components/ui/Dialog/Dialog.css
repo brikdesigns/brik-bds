@@ -83,6 +83,6 @@
 }
 
 .bds-dialog__button--destructive {
-  background-color: var(--color-system-red);
+  background-color: var(--background-status-error);
   color: var(--text-on-color-dark);
 }
