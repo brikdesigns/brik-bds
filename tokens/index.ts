@@ -20,8 +20,12 @@
  * - theme-7: Warm — tan earth tones, Lato
  * - theme-8: Vibrant — green/purple accents, Playfair Display
  * - theme-brik: Brik Brand — poppy red, Poppins
+ * - theme-client-sim: Client Simulation — intentionally distinct system fonts per family.
+ *   Use this theme during component development to validate semantic font-family usage.
+ *   heading=Georgia (serif), body=Verdana (sans), label=Courier New (mono).
+ *   Any component using the wrong family token becomes immediately visible.
  */
-export type ThemeNumber = '1' | '8' | '2' | '3' | '4' | '5' | '6' | '7' | 'brik';
+export type ThemeNumber = '1' | '8' | '2' | '3' | '4' | '5' | '6' | '7' | 'brik' | 'client-sim';
 
 /**
  * Color mode type (friendly names)
@@ -80,6 +84,7 @@ export const themeMetadata: Record<ThemeNumber, { name: string; description: str
   '7': { name: 'Warm', description: 'Tan earth tones (Lato / Hind)', isDark: false },
   '8': { name: 'Vibrant', description: 'Bold green and purple accents (Playfair Display / Hind)', isDark: false },
   'brik': { name: 'Brik Brand', description: 'Company brand — poppy red, near-black, tan (Poppins)', isDark: false },
+  'client-sim': { name: 'Client Sim', description: 'Font-family audit tool — Georgia/Verdana/Courier New exposes semantic token misuse', isDark: false },
 };
 
 /**
