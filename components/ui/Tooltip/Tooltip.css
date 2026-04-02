@@ -12,8 +12,8 @@
 .bds-tooltip__bubble {
   position: absolute;
   padding: var(--padding-sm) var(--padding-lg);
-  background-color: var(--color-grayscale-darkest); /* bds-lint-ignore — no semantic tooltip-bg token */
-  color: var(--text-inverse);
+  background-color: var(--tooltip-background);
+  color: var(--tooltip-text);
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
   line-height: var(--font-line-height-normal);
@@ -76,26 +76,26 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-top-color: var(--color-grayscale-darkest); /* bds-lint-ignore */
+  border-top-color: var(--tooltip-background);
 }
 
 .bds-tooltip__arrow--bottom {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-bottom-color: var(--color-grayscale-darkest); /* bds-lint-ignore */
+  border-bottom-color: var(--tooltip-background);
 }
 
 .bds-tooltip__arrow--left {
   left: 100%;
   top: 50%;
   transform: translateY(-50%);
-  border-left-color: var(--color-grayscale-darkest); /* bds-lint-ignore */
+  border-left-color: var(--tooltip-background);
 }
 
 .bds-tooltip__arrow--right {
   right: 100%;
   top: 50%;
   transform: translateY(-50%);
-  border-right-color: var(--color-grayscale-darkest); /* bds-lint-ignore */
+  border-right-color: var(--tooltip-background);
 }
