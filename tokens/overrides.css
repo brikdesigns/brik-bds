@@ -105,6 +105,12 @@
   --text-transform-body: none;
   --text-transform-display: none;
 
+  /* ── Font Family Subtitle ──
+     Semantic font-family for subtitle-sized text (--subtitle-sm/md/lg).
+     Defaults to label family. Override per-theme to visually differentiate.
+     TODO: promote to Figma variables once stable. */
+  --font-family-subtitle: var(--font-family-label);
+
   /* ── System Color Extras ── */
   --color-system-transparent: #0000;
   --color-system-lightbox: #000000a3;
@@ -302,6 +308,7 @@
 
   /* Typography */
   --font-family-label: "Open Sans", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
   --font-family-body: "Open Sans", sans-serif;
   --font-family-heading: "Droid Sans", sans-serif;
   --font-family-display: "Droid Sans", sans-serif;
@@ -390,6 +397,7 @@
 
   /* Typography */
   --font-family-label: "Geist Mono", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
   --font-family-body: "Geist Mono", sans-serif;
   --font-family-heading: Geist, sans-serif;
   --font-family-display: Geist, sans-serif;
@@ -455,6 +463,7 @@
 
   /* Typography */
   --font-family-label: "Source Sans 3", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
   --font-family-body: "Source Sans 3", sans-serif;
   --font-family-heading: "IBM Plex Sans", sans-serif;
   --font-family-display: "IBM Plex Sans", sans-serif;
@@ -523,6 +532,7 @@
 
   /* Typography */
   --font-family-label: Hind, sans-serif;
+  --font-family-subtitle: var(--font-family-label);
   --font-family-body: Hind, sans-serif;
   --font-family-heading: Lato, Arial, sans-serif;
   --font-family-display: Lato, Arial, sans-serif;
@@ -591,6 +601,7 @@
 
   /* Typography */
   --font-family-label: "Open Sans", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
   --font-family-body: "Open Sans", sans-serif;
   --font-family-heading: Newsreader, sans-serif;
   --font-family-display: Newsreader, sans-serif;
@@ -662,6 +673,7 @@
 
   /* Typography */
   --font-family-label: "Geist Mono", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
   --font-family-body: "Geist Mono", sans-serif;
   --font-family-heading: Geist, sans-serif;
   --font-family-display: Geist, sans-serif;
@@ -731,6 +743,7 @@
 
   /* Typography */
   --font-family-label: Hind, sans-serif;
+  --font-family-subtitle: var(--font-family-label);
   --font-family-body: Hind, sans-serif;
   --font-family-heading: Lato, Arial, sans-serif;
   --font-family-display: Lato, Arial, sans-serif;
@@ -800,6 +813,7 @@
 
   /* Typography */
   --font-family-label: Hind, sans-serif;
+  --font-family-subtitle: var(--font-family-label);
   --font-family-body: Hind, sans-serif;
   --font-family-heading: "Playfair Display", sans-serif;
   --font-family-display: "Playfair Display", sans-serif;
@@ -834,15 +848,17 @@
  * Assigns maximally distinct system fonts to each family token so that any
  * component using the wrong family token is immediately legible during development.
  *
- *   --font-family-heading  → Georgia (serif)         ← heading/title elements
- *   --font-family-display  → Georgia (serif)         ← display/hero elements
- *   --font-family-label    → Courier New (monospace) ← labels, badges, tags, buttons
- *   --font-family-body     → Verdana (sans-serif)    ← body copy, descriptions
+ *   --font-family-heading   → Georgia (serif)         ← heading/title elements
+ *   --font-family-display   → Georgia (serif)         ← display/hero elements
+ *   --font-family-label     → Courier New (monospace) ← labels, badges, tags, buttons
+ *   --font-family-subtitle  → Impact (condensed)      ← subtitle-sized text (badge sm/lg, table subheader, board subtitle)
+ *   --font-family-body      → Verdana (sans-serif)    ← body copy, descriptions
  *
  * If you see:
- *   - A heading rendered in Verdana or Courier New  → wrong font-family token
- *   - A badge/label rendered in Georgia or Verdana  → wrong font-family token
- *   - Body copy rendered in Georgia or Courier New  → wrong font-family token
+ *   - A heading rendered in Verdana, Courier New, or Impact  → wrong font-family token
+ *   - A badge/label rendered in Georgia, Verdana, or Impact  → wrong font-family token
+ *   - Subtitle text rendered in Georgia, Verdana, or Courier → wrong font-family token
+ *   - Body copy rendered in Georgia, Courier New, or Impact  → wrong font-family token
  *
  * This theme is NOT for client delivery. Run it in Storybook toolbar when:
  *   1. Building a new component
@@ -853,6 +869,7 @@
   --font-family-heading: Georgia, "Times New Roman", serif;
   --font-family-display: Georgia, "Times New Roman", serif;
   --font-family-label: "Courier New", Courier, monospace;
+  --font-family-subtitle: Impact, "Arial Narrow", sans-serif;
   --font-family-body: Verdana, Geneva, sans-serif;
   --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
 }

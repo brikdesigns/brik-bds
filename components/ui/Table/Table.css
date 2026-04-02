@@ -55,7 +55,7 @@
 .bds-table-subheader {
   background-color: var(--surface-secondary);
   color: var(--text-muted);
-  font-family: var(--font-family-label);
+  font-family: var(--font-family-subtitle);
   font-size: var(--subtitle-sm);
   font-weight: var(--font-weight-semi-bold);
   text-transform: uppercase;
