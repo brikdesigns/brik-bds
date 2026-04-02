@@ -109,6 +109,50 @@
   --color-system-transparent: #0000;
   --color-system-lightbox: #000000a3;
 
+  /* ── Interaction Token Aliases (renamed 2026-03-31) ──
+     Figma dropped the --interaction/ group prefix. Components already use
+     the new names. These aliases bridge the old figma-tokens.css names
+     until the next SD rebuild picks up the Figma rename.
+     See: CLAUDE.md → Token Rename History */
+  --background-brand-primary-hover:    var(--interaction-background-brand-primary-hover);
+  --background-brand-primary-pressed:  var(--interaction-background-brand-primary-pressed);
+  --background-secondary-hover:        var(--interaction-background-secondary-hover);
+  --background-secondary-pressed:      var(--interaction-background-secondary-pressed);
+  --background-outline-hover:          var(--interaction-background-outline-hover);
+  --background-outline-pressed:        var(--interaction-background-outline-pressed);
+  --background-disabled:               var(--interaction-background-disabled);
+  --text-disabled:                     var(--interaction-text-disabled);
+  --border-disabled:                   var(--interaction-border-disabled);
+  --border-focus:                      var(--interaction-border-focus);
+
+  /* Surface interaction aliases */
+  --surface-secondary-hover:   var(--interaction-surface-secondary-hover);
+  --surface-secondary-pressed: var(--interaction-surface-secondary-pressed);
+  --surface-subtle-hover:      var(--interaction-surface-subtle-hover);
+
+  /* ── Font Weight Aliases (Webflow double-dash → SD single-dash) ──
+     Old components reference --font-weight--bold; SD uses --font-weight-bold. */
+  --font-weight--bold:       var(--font-weight-bold);
+  --font-weight--semi-bold:  var(--font-weight-semi-bold);
+  --font-weight--medium:     var(--font-weight-medium);
+  --font-weight--regular:    var(--font-weight-regular);
+  --font-weight--thin:       var(--font-weight-thin);
+
+  /* ── Missing Semantic Tokens ── */
+  --background-tertiary: var(--color-grayscale-lighter);
+
+  /* System color surface variants (used by TaskConsole status rows) */
+  --color-system-red-surface:   var(--color-system-red-light);
+  --color-system-green-surface: var(--color-system-green-light);
+  --color-system-blue-surface:  var(--color-system-blue-light);
+
+  /* ── Slider Component Variables ──
+     CSS custom properties set dynamically by the Slider component via JS.
+     Defined here so the linter knows they are intentional component vars. */
+  --bds-slider-percent:      0%;
+  --bds-slider-thumb-size:   20px;
+  --bds-slider-track-height: 4px;
+
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --surface-nav: var(--color-grayscale-white);
   --surface-brand-secondary: var(--theme-blue-green);
