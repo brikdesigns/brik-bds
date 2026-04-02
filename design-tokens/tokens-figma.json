@@ -1238,6 +1238,21 @@
     "on-color-light": {
       "$value": "{color.grayscale.black}",
       "$type": "color"
+    },
+    "brand-primary-hover": {
+      "$value": "{color.poppy.dark}",
+      "$type": "color",
+      "$description": "Primary button hover background"
+    },
+    "brand-primary-pressed": {
+      "$value": "{color.poppy.darker}",
+      "$type": "color",
+      "$description": "Primary button pressed background"
+    },
+    "disabled": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color",
+      "$description": "Disabled button background (all variants)"
     }
   },
   "surface": {
@@ -1260,6 +1275,21 @@
     "overlay": {
       "$value": "{color.grayscale.white}",
       "$type": "color"
+    },
+    "secondary-hover": {
+      "$value": "{color.grayscale.light}",
+      "$type": "color",
+      "$description": "Secondary button hover background"
+    },
+    "secondary-pressed": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color",
+      "$description": "Secondary button pressed background"
+    },
+    "subtle-hover": {
+      "$value": "{color.grayscale.lightest}",
+      "$type": "color",
+      "$description": "Ghost and outline button hover background"
     }
   },
   "text": {
@@ -1314,6 +1344,11 @@
     "on-color-light": {
       "$value": "{color.grayscale.black}",
       "$type": "color"
+    },
+    "disabled": {
+      "$value": "{color.grayscale.light}",
+      "$type": "color",
+      "$description": "Disabled button text (all variants)"
     }
   },
   "border": {
@@ -1348,53 +1383,11 @@
     "input": {
       "$value": "{color.grayscale.light}",
       "$type": "color"
-    }
-  },
-  "interaction": {
-    "background-brand-primary-hover": {
-      "$value": "{color.poppy.dark}",
-      "$type": "color",
-      "$description": "Primary button hover background"
     },
-    "background-brand-primary-pressed": {
-      "$value": "{color.poppy.darker}",
-      "$type": "color",
-      "$description": "Primary button pressed background"
-    },
-    "surface-secondary-hover": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color",
-      "$description": "Secondary button hover background"
-    },
-    "surface-secondary-pressed": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color",
-      "$description": "Secondary button pressed background"
-    },
-    "surface-subtle-hover": {
-      "$value": "{color.grayscale.lightest}",
-      "$type": "color",
-      "$description": "Ghost and outline button hover background"
-    },
-    "background-disabled": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color",
-      "$description": "Disabled button background (all variants)"
-    },
-    "text-disabled": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color",
-      "$description": "Disabled button text (all variants)"
-    },
-    "border-disabled": {
+    "disabled": {
       "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Disabled button border (all variants)"
-    },
-    "border-focus": {
-      "$value": "{border.brand-primary}",
-      "$type": "color",
-      "$description": "Focus ring color"
     }
   },
   "icon": {
