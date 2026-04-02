@@ -1238,6 +1238,21 @@
     "on-color-light": {
       "$value": "{color.grayscale.white}",
       "$type": "color"
+    },
+    "brand-primary-hover": {
+      "$value": "{color.poppy.lighter}",
+      "$type": "color",
+      "$description": "Primary button hover background (dark mode)"
+    },
+    "brand-primary-pressed": {
+      "$value": "{color.poppy.lightest}",
+      "$type": "color",
+      "$description": "Primary button pressed background (dark mode)"
+    },
+    "disabled": {
+      "$value": "{color.grayscale.darker}",
+      "$type": "color",
+      "$description": "Disabled background (dark mode)"
     }
   },
   "surface": {
@@ -1260,6 +1275,21 @@
     "overlay": {
       "$value": "{color.grayscale.black}",
       "$type": "color"
+    },
+    "secondary-hover": {
+      "$value": "{color.grayscale.darker}",
+      "$type": "color",
+      "$description": "Secondary button hover (dark mode)"
+    },
+    "secondary-pressed": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color",
+      "$description": "Secondary button pressed (dark mode)"
+    },
+    "subtle-hover": {
+      "$value": "{color.grayscale.darkest}",
+      "$type": "color",
+      "$description": "Ghost and outline hover (dark mode)"
     }
   },
   "text": {
@@ -1314,6 +1344,11 @@
     "on-color-light": {
       "$value": "{color.grayscale.black}",
       "$type": "color"
+    },
+    "disabled": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color",
+      "$description": "Disabled text (dark mode)"
     }
   },
   "border": {
@@ -1348,53 +1383,11 @@
     "input": {
       "$value": "{color.grayscale.dark}",
       "$type": "color"
-    }
-  },
-  "interaction": {
-    "background-brand-primary-hover": {
-      "$value": "{color.poppy.lighter}",
-      "$type": "color",
-      "$description": "Primary button hover background (dark mode)"
     },
-    "background-brand-primary-pressed": {
-      "$value": "{color.poppy.lightest}",
-      "$type": "color",
-      "$description": "Primary button pressed background (dark mode)"
-    },
-    "surface-secondary-hover": {
-      "$value": "{color.grayscale.darker}",
-      "$type": "color",
-      "$description": "Secondary button hover (dark mode)"
-    },
-    "surface-secondary-pressed": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color",
-      "$description": "Secondary button pressed (dark mode)"
-    },
-    "surface-subtle-hover": {
-      "$value": "{color.grayscale.darkest}",
-      "$type": "color",
-      "$description": "Ghost and outline hover (dark mode)"
-    },
-    "background-disabled": {
-      "$value": "{color.grayscale.darker}",
-      "$type": "color",
-      "$description": "Disabled background (dark mode)"
-    },
-    "text-disabled": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color",
-      "$description": "Disabled text (dark mode)"
-    },
-    "border-disabled": {
+    "disabled": {
       "$value": "{color.grayscale.darker}",
       "$type": "color",
       "$description": "Disabled border (dark mode)"
-    },
-    "border-focus": {
-      "$value": "{border.brand-primary}",
-      "$type": "color",
-      "$description": "Focus ring (dark mode)"
     }
   },
   "icon": {

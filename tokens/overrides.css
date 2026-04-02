@@ -115,26 +115,9 @@
   --color-system-transparent: #0000;
   --color-system-lightbox: #000000a3;
 
-  /* ── Interaction Token Aliases (renamed 2026-03-31) ──
-     Figma dropped the --interaction/ group prefix. Components already use
-     the new names. These aliases bridge the old figma-tokens.css names
-     until the next SD rebuild picks up the Figma rename.
-     See: CLAUDE.md → Token Rename History */
-  --background-brand-primary-hover:    var(--interaction-background-brand-primary-hover);
-  --background-brand-primary-pressed:  var(--interaction-background-brand-primary-pressed);
-  --background-secondary-hover:        var(--interaction-background-secondary-hover);
-  --background-secondary-pressed:      var(--interaction-background-secondary-pressed);
-  --background-outline-hover:          var(--interaction-background-outline-hover);
-  --background-outline-pressed:        var(--interaction-background-outline-pressed);
-  --background-disabled:               var(--interaction-background-disabled);
-  --text-disabled:                     var(--interaction-text-disabled);
-  --border-disabled:                   var(--interaction-border-disabled);
-  --border-focus:                      var(--interaction-border-focus);
-
-  /* Surface interaction aliases */
-  --surface-secondary-hover:   var(--interaction-surface-secondary-hover);
-  --surface-secondary-pressed: var(--interaction-surface-secondary-pressed);
-  --surface-subtle-hover:      var(--interaction-surface-subtle-hover);
+  /* ── Focus ring (gap-fill — not yet in Figma/SD) ──
+     References the border brand-primary token. Override per-theme for branded focus rings. */
+  --border-focus: var(--border-brand-primary);
 
   /* ── Font Weight Aliases (Webflow double-dash → SD single-dash) ──
      Old components reference --font-weight--bold; SD uses --font-weight-bold. */
