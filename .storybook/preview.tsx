@@ -160,7 +160,7 @@ const preview: Preview = {
           { value: '6', title: '6: Minimal (Source Sans 3)' },
           { value: '7', title: '7: Warm (Hind / Lato)' },
           { value: '8', title: '8: Vibrant (Hind / Playfair)' },
-          { value: 'client-sim', title: '★ Client Sim (Georgia / Verdana / Courier — font-family audit)' },
+          { value: 'client-sim', title: '★ Font Audit' },
         ],
         dynamicTitle: true,
       },
