@@ -28,22 +28,22 @@ Design tokens are the atomic visual decisions that power BDS. Explore each categ
 
 ## Token system
 
-Components use CSS variables from the Webflow export. The naming convention is:
+Components use CSS custom properties from the Style Dictionary token pipeline. The naming convention is:
 
 ```
---_[category]---[type]--[variant]
+--[category]-[type]-[variant]
 ```
 
 **Primitives** (raw scale values, never in components):
-- `--space--400` — 16px
-- `--font-size--700` — 32px
-- `--grayscale--darkest` — #333
+- `--space-400` — 16px
+- `--font-size-700` — 32px
+- `--color-grayscale-darkest` — #333
 
 **Semantic** (purpose-bound, used in components):
-- `--_color---background--brand-primary` — brand background color
-- `--_typography---font-family--heading` — heading font family
-- `--_space---lg` — large spacing value
-- `--_border-radius---button` — button corner radius
+- `--background-brand-primary` — brand background color
+- `--font-family-heading` — heading font family
+- `--padding-lg` — large spacing value
+- `--border-radius-md` — button corner radius
 
 ## Components
 

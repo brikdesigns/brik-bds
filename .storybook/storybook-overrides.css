@@ -446,7 +446,6 @@ div[class*="Subtitle"] {
   /* Color */
   --page-primary: var(--color-grayscale-white);
   --page-secondary: var(--color-grayscale-lightest);
-  --_color---page--accent: #f1f0ec;
   --page-brand-primary: #e35335;
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
