@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Checkbox ───────────────────────────────────────────────── */
 
 .bds-checkbox {
@@ -36,4 +37,5 @@
   line-height: var(--font-line-height-normal);
   color: var(--text-primary);
   text-transform: capitalize;
+}
 }

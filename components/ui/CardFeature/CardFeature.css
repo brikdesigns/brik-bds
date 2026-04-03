@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── CardFeature ────────────────────────────────────────────── */
 
 .bds-card-feature {
@@ -77,4 +78,5 @@
 .bds-card-feature__action {
   margin-top: auto;
   padding-top: var(--gap-md);
+}
 }

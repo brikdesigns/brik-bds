@@ -1,3 +1,4 @@
+@layer bds-components {
 /* CollapsibleCard — expandable content section */
 
 /* ─── Card container ──────────────────────────────────── */
@@ -79,4 +80,5 @@
 
 .bds-collapsible-card__content {
   margin-top: var(--padding-lg);
+}
 }

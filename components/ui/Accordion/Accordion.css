@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Accordion ──────────────────────────────────────────────── */
 
 .bds-accordion {
@@ -55,4 +56,5 @@
   line-height: var(--font-line-height-normal);
   color: var(--text-primary);
   padding-bottom: var(--padding-xl);
+}
 }

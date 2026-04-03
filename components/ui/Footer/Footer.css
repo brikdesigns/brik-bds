@@ -1,3 +1,4 @@
+@layer bds-components {
 /**
  * BDS Footer
  *
@@ -131,3 +132,4 @@
 .bds-footer--brand .bds-footer__link { color: var(--text-inverse); }
 .bds-footer--brand .bds-footer__tagline { color: var(--text-inverse); }
 .bds-footer--brand .bds-footer__copyright { color: var(--text-inverse); }
+}

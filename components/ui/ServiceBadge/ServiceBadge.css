@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── ServiceBadge ───────────────────────────────────────────── */
 
 .bds-service-badge {
@@ -65,3 +66,4 @@
 .bds-service-badge-label--information { background-color: var(--background-service-information); }
 .bds-service-badge-label--product     { background-color: var(--background-service-product); }
 .bds-service-badge-label--service     { background-color: var(--background-service-service); }
+}

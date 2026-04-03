@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Select wrapper ─────────────────────────────────────────── */
 
 .bds-select-wrapper {
@@ -165,4 +166,5 @@
 
 .bds-select-helper--error {
   color: var(--text-status-error);
+}
 }

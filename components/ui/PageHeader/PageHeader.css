@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── PageHeader ─────────────────────────────────────────────── */
 
 .bds-page-header {
@@ -143,4 +144,5 @@
 .bds-page-header__tabs .bds-tab-bar--tab .bds-tab-bar-item {
   border-bottom-width: var(--border-width-sm);
   margin-bottom: calc(-1 * var(--border-width-sm));
+}
 }

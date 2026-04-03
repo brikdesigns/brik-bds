@@ -1,3 +1,4 @@
+@layer bds-components {
 /**
  * BDS Button Family — Class-based styles
  *
@@ -344,4 +345,5 @@
 
 @keyframes bds-button-spin {
   to { transform: rotate(360deg); }
+}
 }

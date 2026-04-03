@@ -1,3 +1,4 @@
+@layer bds-components {
 /* TabBar — pseudo-state styles (hover, pressed, disabled)
    Inline CSSProperties can't handle :hover/:active/:disabled,
    so these live in CSS. */
@@ -85,4 +86,5 @@
 
 .bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.5;
+}
 }
