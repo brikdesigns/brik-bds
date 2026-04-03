@@ -158,6 +158,7 @@
   --shadow-md:      0px 4px 12px 0px rgba(0, 0, 0, 0.12);
   --shadow-lg:      0px 4px 16px 0px rgba(0, 0, 0, 0.12);
   --shadow-xl:      0px 8px 24px 4px rgba(0, 0, 0, 0.20);
+  --shadow-overlay: 0px 4px 32px 0px rgba(0, 0, 0, 0.24); /* elevated panel shadow — Modal, Dialog, Sheet */
 
   /* Bridge aliases — consuming projects (tokens.ts) reference --box-shadow-*;
      these ensure the default values resolve even without a client theme file.

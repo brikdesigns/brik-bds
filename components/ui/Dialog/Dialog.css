@@ -3,7 +3,7 @@
 .bds-dialog-backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* bds-lint-ignore — no overlay token */
+  background-color: var(--background-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +13,7 @@
 .bds-dialog {
   background-color: var(--surface-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0px 4px 32px rgba(0, 0, 0, 0.24); /* bds-lint-ignore — no shadow token */
+  box-shadow: var(--shadow-overlay);
   max-width: 440px; /* bds-lint-ignore — design constraint */
   width: 100%;
   box-sizing: border-box;
