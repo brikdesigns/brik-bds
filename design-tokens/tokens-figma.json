@@ -1411,6 +1411,26 @@
       "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Disabled button background (all variants)"
+    },
+    "info": {
+      "$value": "{color.system.neutral}",
+      "$type": "color"
+    },
+    "primary-hover": {
+      "$value": "{color.grayscale.lightest}",
+      "$type": "color"
+    },
+    "primary-pressed": {
+      "$value": "{color.grayscale.lighter}",
+      "$type": "color"
+    },
+    "secondary-hover": {
+      "$value": "{color.grayscale.darker}",
+      "$type": "color"
+    },
+    "secondary-pressed": {
+      "$value": "{color.grayscale.darkest}",
+      "$type": "color"
     }
   },
   "surface": {
@@ -1448,6 +1468,10 @@
       "$value": "{color.grayscale.lightest}",
       "$type": "color",
       "$description": "Ghost and outline button hover background"
+    },
+    "info": {
+      "$value": "{color.system.neutral-light}",
+      "$type": "color"
     }
   },
   "text": {
@@ -1507,6 +1531,10 @@
       "$value": "{color.grayscale.light}",
       "$type": "color",
       "$description": "Disabled button text (all variants)"
+    },
+    "info": {
+      "$value": "{color.system.neutral}",
+      "$type": "color"
     }
   },
   "border": {
@@ -1546,6 +1574,10 @@
       "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Disabled button border (all variants)"
+    },
+    "info": {
+      "$value": "{color.system.neutral}",
+      "$type": "color"
     }
   },
   "padding": {
