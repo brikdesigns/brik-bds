@@ -2919,6 +2919,51 @@
         "$type": "color",
         "$value": "{color.grayscale.dark}",
         "$description": "Disabled button background (all variants)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{color.system.neutral}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "primary-hover": {
+        "$type": "color",
+        "$value": "{color.grayscale.lightest}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "primary-pressed": {
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "secondary-hover": {
+        "$type": "color",
+        "$value": "{color.grayscale.darker}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "secondary-pressed": {
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "surface": {
@@ -2996,6 +3041,15 @@
         "$type": "color",
         "$value": "{color.grayscale.lightest}",
         "$description": "Ghost and outline button hover background"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{color.system.neutral-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "text": {
@@ -3125,6 +3179,15 @@
         "$type": "color",
         "$value": "{color.grayscale.light}",
         "$description": "Disabled button text (all variants)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{color.system.neutral}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "border": {
@@ -3209,6 +3272,15 @@
         "$type": "color",
         "$value": "{color.grayscale.dark}",
         "$description": "Disabled button border (all variants)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{color.system.neutral}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     }
   },
@@ -3398,6 +3470,51 @@
         "$type": "color",
         "$value": "{color.grayscale.darker}",
         "$description": "Disabled background (dark mode)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{color.system.neutral}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "primary-hover": {
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "primary-pressed": {
+        "$type": "color",
+        "$value": "{color.grayscale.darker}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "secondary-hover": {
+        "$type": "color",
+        "$value": "{color.grayscale.dark}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "secondary-pressed": {
+        "$type": "color",
+        "$value": "{color.grayscale.darker}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "surface": {
@@ -3475,6 +3592,15 @@
         "$type": "color",
         "$value": "{color.grayscale.darkest}",
         "$description": "Ghost and outline hover (dark mode)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{color.system.neutral-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "text": {
@@ -3604,6 +3730,15 @@
         "$type": "color",
         "$value": "{color.grayscale.dark}",
         "$description": "Disabled text (dark mode)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{color.system.neutral}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "border": {
@@ -3688,6 +3823,15 @@
         "$type": "color",
         "$value": "{color.grayscale.darker}",
         "$description": "Disabled border (dark mode)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{color.system.neutral}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     }
   },

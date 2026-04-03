@@ -23,6 +23,11 @@ public enum BDSSemanticColor {
     public static let backgroundBrandPrimaryHover = Color(red: 0.6902, green: 0.2078, blue: 0.1059) /// Primary button hover background
     public static let backgroundBrandPrimaryPressed = Color(red: 0.4902, green: 0.1137, blue: 0.0353) /// Primary button pressed background
     public static let backgroundDisabled = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Disabled button background (all variants)
+    public static let backgroundInfo = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
+    public static let backgroundPrimaryHover = Color(red: 0.9490, green: 0.9490, blue: 0.9490)
+    public static let backgroundPrimaryPressed = Color(red: 0.8784, green: 0.8784, blue: 0.8784)
+    public static let backgroundSecondaryHover = Color(red: 0.3098, green: 0.3098, blue: 0.3098)
+    public static let backgroundSecondaryPressed = Color(red: 0.2000, green: 0.2000, blue: 0.2000)
     public static let surfacePrimary = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
     public static let surfaceSecondary = Color(red: 0.8784, green: 0.8784, blue: 0.8784)
     public static let surfaceBrandPrimary = Color(red: 0.2745, green: 0.3961, blue: 0.9608)
@@ -31,6 +36,7 @@ public enum BDSSemanticColor {
     public static let surfaceSecondaryHover = Color(red: 0.7412, green: 0.7412, blue: 0.7412) /// Secondary button hover background
     public static let surfaceSecondaryPressed = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Secondary button pressed background
     public static let surfaceSubtleHover = Color(red: 0.9490, green: 0.9490, blue: 0.9490) /// Ghost and outline button hover background
+    public static let surfaceInfo = Color(red: 0.8314, green: 0.8314, blue: 0.8314)
     public static let textPrimary = Color(red: 0.2000, green: 0.2000, blue: 0.2000)
     public static let textSecondary = Color(red: 0.5098, green: 0.5098, blue: 0.5098)
     public static let textBrandPrimary = Color(red: 0.2745, green: 0.3961, blue: 0.9608)
@@ -45,6 +51,7 @@ public enum BDSSemanticColor {
     public static let textTextLink = Color(red: 0.2745, green: 0.3961, blue: 0.9608)
     public static let textOnColorLight = Color(red: 0.0000, green: 0.0000, blue: 0.0000)
     public static let textDisabled = Color(red: 0.7412, green: 0.7412, blue: 0.7412) /// Disabled button text (all variants)
+    public static let textInfo = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
     public static let borderPrimary = Color(red: 0.8784, green: 0.8784, blue: 0.8784)
     public static let borderBrandPrimary = Color(red: 0.2745, green: 0.3961, blue: 0.9608)
     public static let borderOnColorDark = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
@@ -54,4 +61,5 @@ public enum BDSSemanticColor {
     public static let borderOnColorLight = Color(red: 0.0000, green: 0.0000, blue: 0.0000)
     public static let borderInput = Color(red: 0.7412, green: 0.7412, blue: 0.7412)
     public static let borderDisabled = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Disabled button border (all variants)
+    public static let borderInfo = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
 }

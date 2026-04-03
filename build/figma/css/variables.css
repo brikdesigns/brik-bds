@@ -329,6 +329,11 @@
   --background-brand-primary-hover: var(--color-poppy-dark); /** Primary button hover background */
   --background-brand-primary-pressed: var(--color-poppy-darker); /** Primary button pressed background */
   --background-disabled: var(--color-grayscale-dark); /** Disabled button background (all variants) */
+  --background-info: var(--color-system-neutral);
+  --background-primary-hover: var(--color-grayscale-lightest);
+  --background-primary-pressed: var(--color-grayscale-lighter);
+  --background-secondary-hover: var(--color-grayscale-darker);
+  --background-secondary-pressed: var(--color-grayscale-darkest);
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lighter);
   --surface-brand-primary: var(--theme-blue-blue-light);
@@ -337,6 +342,7 @@
   --surface-secondary-hover: var(--color-grayscale-light); /** Secondary button hover background */
   --surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed background */
   --surface-subtle-hover: var(--color-grayscale-lightest); /** Ghost and outline button hover background */
+  --surface-info: var(--color-system-neutral-light);
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
   --text-brand-primary: var(--theme-blue-blue-light);
@@ -351,6 +357,7 @@
   --text-text-link: var(--theme-blue-blue-light);
   --text-on-color-light: var(--color-grayscale-black);
   --text-disabled: var(--color-grayscale-light); /** Disabled button text (all variants) */
+  --text-info: var(--color-system-neutral);
   --border-primary: var(--color-grayscale-lighter);
   --border-brand-primary: var(--theme-blue-blue-light);
   --border-on-color-dark: var(--color-grayscale-white);
@@ -360,6 +367,7 @@
   --border-on-color-light: var(--color-grayscale-black);
   --border-input: var(--color-grayscale-light);
   --border-disabled: var(--color-grayscale-dark); /** Disabled button border (all variants) */
+  --border-info: var(--color-system-neutral);
   --padding-xl: var(--space-800);
   --padding-lg: var(--space-600);
   --padding-none: var(--space-0);
