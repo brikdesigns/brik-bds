@@ -4,60 +4,85 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Brik Design System
 
-The BDS component library provides themed React components powered by CSS custom properties. All components adapt automatically across 9 bundled themes.
+The BDS component library provides themed React components powered by CSS custom properties. All components adapt automatically across 9 bundled themes — switch using the paintbrush icon in the toolbar above.
 
-## Theme switching
-
-Use the paintbrush icon in the toolbar above to switch between themes. Every component and documentation page updates in real time — including the sidebar when switching to dark themes.
+---
 
 ## Foundation
 
-Design tokens are the atomic visual decisions that power BDS. Explore each category:
+Design tokens are the atomic visual decisions that power BDS. Every component references tokens — never raw values.
 
-| Category | Description |
-|----------|-------------|
-| [Design Tokens](?path=/docs/foundation-design-tokens--docs) | Architecture overview, naming convention, multi-platform outputs |
-| [Color](?path=/docs/foundation-color--docs) | Grayscale, theme palettes, semantic color roles |
-| [Typography](?path=/docs/foundation-typography--docs) | Font families, sizes, weights, line heights |
-| [Spacing](?path=/docs/foundation-spacing--docs) | Space and gap scales, semantic padding tokens |
-| [Border Radius](?path=/docs/foundation-border-radius--docs) | Radius scale and modes |
-| [Border Width](?path=/docs/foundation-border-width--docs) | Width scale and semantic widths |
-| [Shadow](?path=/docs/foundation-shadow--docs) | Blur, spread, elevation |
-| [Size](?path=/docs/foundation-size--docs) | Size scale, breakpoints, containers |
-| [Animation](?path=/docs/foundations-animation--docs) | Three-tier system: entrance reveals, GSAP scroll, premium effects |
+<table>
+  <thead>
+    <tr><th>Category</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><a href="?path=/docs/foundations-design-tokens-overview--docs">Design Tokens</a></td><td>Architecture overview, three-tier hierarchy, naming convention, multi-platform outputs</td></tr>
+    <tr><td><a href="?path=/docs/foundations-design-tokens-color--docs">Color</a></td><td>Grayscale, theme palettes, semantic color roles (background, text, surface, border)</td></tr>
+    <tr><td><a href="?path=/docs/foundations-design-tokens-typography--docs">Typography</a></td><td>Font families, sizes, weights, line heights, composite type tokens</td></tr>
+    <tr><td><a href="?path=/docs/foundations-design-tokens-spacing--docs">Spacing</a></td><td>Space and gap scales, semantic padding tokens</td></tr>
+    <tr><td><a href="?path=/docs/foundations-design-tokens-border-radius--docs">Border Radius</a></td><td>Radius scale and semantic sizes</td></tr>
+    <tr><td><a href="?path=/docs/foundations-design-tokens-border-width--docs">Border Width</a></td><td>Width scale and semantic widths</td></tr>
+    <tr><td><a href="?path=/docs/foundations-design-tokens-shadow--docs">Shadow</a></td><td>Blur, spread, and elevation scale</td></tr>
+    <tr><td><a href="?path=/docs/foundations-design-tokens-size--docs">Size</a></td><td>Size scale, breakpoints, container widths</td></tr>
+    <tr><td><a href="?path=/docs/foundations-animations-animation--docs">Animation</a></td><td>Three-tier system: CSS reveals, GSAP scroll, premium effects</td></tr>
+  </tbody>
+</table>
+
+---
 
 ## Token system
 
-Components use CSS custom properties from the Style Dictionary token pipeline. The naming convention is:
+Components use CSS custom properties from the Style Dictionary token pipeline:
 
 ```
 --[category]-[type]-[variant]
 ```
 
-**Primitives** (raw scale values, never in components):
+**Primitives** — raw scale values, never used directly in components:
+
 - `--space-400` — 16px
 - `--font-size-700` — 32px
 - `--color-grayscale-darkest` — #333
 
-**Semantic** (purpose-bound, used in components):
+**Semantic** — purpose-bound aliases, always use these in components:
+
 - `--background-brand-primary` — brand background color
 - `--font-family-heading` — heading font family
 - `--padding-lg` — large spacing value
-- `--border-radius-md` — button corner radius
+- `--border-radius-md` — button/card corner radius
+
+---
 
 ## Components
 
-### Data display
-Badge, Tag, Dot, Avatar, Tooltip, Counter
+<table>
+  <thead>
+    <tr><th>Category</th><th>Components</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Action</strong></td><td>Button, IconButton, TextLink</td></tr>
+    <tr><td><strong>Form</strong></td><td>TextInput, TextArea, Select, AddressInput, SearchInput</td></tr>
+    <tr><td><strong>Control</strong></td><td>Checkbox, Radio, Switch, FilterButton</td></tr>
+    <tr><td><strong>Indicator</strong></td><td>Badge, Tag, Dot, Counter, Avatar</td></tr>
+    <tr><td><strong>Feedback</strong></td><td>Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner, Tooltip</td></tr>
+    <tr><td><strong>Structure</strong></td><td>Card, CardControl, Table, Modal, Accordion, Menu, PageHeader, DatePicker</td></tr>
+    <tr><td><strong>Navigation</strong></td><td>TabBar, Breadcrumb, Pagination, SidebarNavigation</td></tr>
+  </tbody>
+</table>
 
-### Form controls
-Button, TextInput, TextArea, Select, Checkbox, Radio, Switch, SearchInput, AddressInput, FilterButton
+---
 
-### Layout
-Card, CardControl, Table, Modal, Accordion, Menu, PageHeader
+## Toolbar reference
 
-### Feedback
-Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner
-
-### Navigation
-TextLink, TabBar, Breadcrumb, Pagination, SidebarNavigation
+<table>
+  <thead>
+    <tr><th>Control</th><th>What it does</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>🎨 Paintbrush</td><td>Switch between the 9 built-in BDS themes. Every component and doc page updates in real time.</td></tr>
+    <tr><td>⬡ Base Font</td><td>Set the root font size (14–20px). Scales all rem-based spacing and type tokens.</td></tr>
+    <tr><td>⚡ Animations</td><td>Toggle CSS animations and transitions on/off across all stories.</td></tr>
+    <tr><td>★ Font Audit</td><td>QA diagnostic theme. Assigns Georgia → heading, Verdana → body, Courier New → label. Any component using the wrong <code>--font-family-*</code> token renders the wrong typeface instantly — exposes misuse before a client theme does.</td></tr>
+  </tbody>
+</table>
