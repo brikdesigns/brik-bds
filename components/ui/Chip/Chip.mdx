@@ -40,6 +40,25 @@ Real-world compositions for filtering and selection.
 
 ---
 
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-chip`. Set on a wrapping element to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--chip-hover-overlay` | `var(--state-hover-overlay)` | Inset overlay color on hover |
+| `--chip-pressed-overlay` | `var(--state-pressed-overlay)` | Inset overlay color on press |
+
+```css
+/* Example: stronger hover feedback on a filter bar */
+.filter-bar {
+  --chip-hover-overlay: rgba(0, 0, 0, 0.08);
+  --chip-pressed-overlay: rgba(0, 0, 0, 0.14);
+}
+```
+
+---
+
 ## Usage
 
 ```tsx
