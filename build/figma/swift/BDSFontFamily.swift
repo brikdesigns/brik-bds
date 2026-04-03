@@ -7,6 +7,7 @@ public enum BDSFontFamily {
     public static let fontFamilyHeading = "Poppins"
     public static let fontFamilyLabel = "Poppins"
     public static let fontFamilyBody = "Poppins"
+    public static let fontFamilySubtitle = "Poppins"
     public static let fontFamilyIcon = "Font Awesome 6 Pro"
     public static let fontFamilyLogo = "Font Awesome 6 Brands"
 }

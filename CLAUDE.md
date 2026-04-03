@@ -246,6 +246,7 @@ When Figma reorganizes variable groups, token names change. Log every rename her
 
 | Date | Change | Old CSS name → New CSS name |
 |------|--------|-----------------------------|
+| 2026-04-02 | `--font-family-subtitle` promoted from `overrides.css` gap-fill to first-class Figma variable. Global fallback (`var(--font-family-label)`) removed from `overrides.css`. Per-theme blocks retain explicit overrides. **Requires Figma sync to land in `figma-tokens.css`.** | No rename — CSS variable name unchanged. |
 | 2026-04-02 | Removed `interaction/` group from `tokens-studio.json`; tokens now live in their semantic sub-groups. SD rebuild completed, `overrides.css` bridge aliases removed. | `--interaction-background-brand-primary-hover` → `--background-brand-primary-hover` |
 | | | `--interaction-background-brand-primary-pressed` → `--background-brand-primary-pressed` |
 | | | `--interaction-surface-secondary-hover` → `--surface-secondary-hover` |
