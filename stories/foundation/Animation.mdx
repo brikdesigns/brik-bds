@@ -13,17 +13,22 @@ import {
   CodeSnippet,
 } from './_animation-components';
 
-<Meta title="Foundations/Animation" />
+<Meta title="Animations/Animation" />
 
 # Animation
 
 BDS provides a three-tier animation system. Every tier builds on the previous one — load only what you need.
 
-| Tier | Files | Use when |
-|------|-------|----------|
-| **Lightweight** | `animations.css` + `scroll-animations.js` | Default for every mockup. Fade/slide reveals, hover effects, stagger. |
-| **GSAP** | + `gsap-scroll-effects.js/css` | Design calls for pinning, scrubbing, horizontal scroll, text splitting. |
-| **Premium** | + `premium-effects.css` + `premium-scroll.js` | Design calls for atmosphere: hero sequences, color morphs, grain, magnetic buttons, video scrub. |
+<table>
+  <thead>
+    <tr><th>Tier</th><th>Files</th><th>Use when</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Lightweight</strong></td><td>{'animations.css + scroll-animations.js'}</td><td>Default for every mockup. Fade/slide reveals, hover effects, stagger.</td></tr>
+    <tr><td><strong>GSAP</strong></td><td>{'+ gsap-scroll-effects.js/css'}</td><td>Design calls for pinning, scrubbing, horizontal scroll, text splitting.</td></tr>
+    <tr><td><strong>Premium</strong></td><td>{'+ premium-effects.css + premium-scroll.js'}</td><td>Design calls for atmosphere: hero sequences, color morphs, grain, magnetic buttons, video scrub.</td></tr>
+  </tbody>
+</table>
 
 ---
 
@@ -245,38 +250,48 @@ Pinned section that switches content as you scroll — like Daylight Computer's 
 
 Compositions inspired by real reference sites. See `ANIMATION-REFERENCE.md` for full recipes.
 
-| Recipe | Key techniques |
-|--------|---------------|
-| **Daylight Computer** | `morph-light-to-dark`, `grain-overlay`, `ken-burns`, `data-scroll-text-split`, `data-scroll-horizontal`, `magnetic` |
-| **RealFood.gov** | `section-warm` + `section-dark` alternation, `clip-rise-reveal`, `data-premium-counter`, `image-gradient-bottom`, `text-highlight` |
-| **Legend.xyz** | `section-dark`, `glass-card`, `text-gradient`, `data-scroll-batch`, `divider-gradient`, `cursor-spotlight`, `hover-glow` |
-| **Luxury / Law** | `grain-overlay--light`, `ken-burns--slow`, `clip-curtain-reveal`, `morph-light-to-dark`, `text-stroke`, `glass--light` nav |
-| **Modern Medical** | `video-bg--gradient` hero, `data-premium-hero`, `data-premium-counter`, `image-reveal`, `section-warm`, `text-highlight` |
+<table>
+  <thead>
+    <tr><th>Recipe</th><th>Key techniques</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Daylight Computer</strong></td><td>{'morph-light-to-dark, grain-overlay, ken-burns, data-scroll-text-split, data-scroll-horizontal, magnetic'}</td></tr>
+    <tr><td><strong>RealFood.gov</strong></td><td>{'section-warm + section-dark alternation, clip-rise-reveal, data-premium-counter, image-gradient-bottom, text-highlight'}</td></tr>
+    <tr><td><strong>Legend.xyz</strong></td><td>{'section-dark, glass-card, text-gradient, data-scroll-batch, divider-gradient, cursor-spotlight, hover-glow'}</td></tr>
+    <tr><td><strong>Luxury / Law</strong></td><td>{'grain-overlay--light, ken-burns--slow, clip-curtain-reveal, morph-light-to-dark, text-stroke, glass--light nav'}</td></tr>
+    <tr><td><strong>Modern Medical</strong></td><td>{'video-bg--gradient hero, data-premium-hero, data-premium-counter, image-reveal, section-warm, text-highlight'}</td></tr>
+  </tbody>
+</table>
 
 ---
 
 ## Choosing a Tier
 
-| Need | Tier |
-|------|------|
-| Fade/slide/scale reveals on scroll | Lightweight |
-| Staggered entrance animations | Lightweight |
-| Hover effects on buttons/cards | Lightweight (CSS only) |
-| Parallax backgrounds | Lightweight (`parallax.js`) |
-| Pinned/sticky scroll sections | GSAP |
-| Scroll-scrubbed animations | GSAP |
-| Horizontal scroll sections | GSAP |
-| Text split / letter animations | GSAP |
-| Film grain / texture overlays | Premium (CSS) |
-| Glassmorphism / frosted glass | Premium (CSS) |
-| Gradient text / stroke text | Premium (CSS) |
-| Video backgrounds | Premium (CSS) |
-| Clip-path image reveals | Premium (CSS) |
-| Hero entrance orchestration | Premium (JS) |
-| Background color morphs | Premium (JS) |
-| Animated number counters | Premium (JS) |
-| Magnetic cursor buttons | Premium (JS) |
-| Scroll-scrubbed video | Premium (JS) |
-| Scroll-activated tab switching | Premium (JS) |
+<table>
+  <thead>
+    <tr><th>Need</th><th>Tier</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Fade/slide/scale reveals on scroll</td><td>Lightweight</td></tr>
+    <tr><td>Staggered entrance animations</td><td>Lightweight</td></tr>
+    <tr><td>Hover effects on buttons/cards</td><td>Lightweight (CSS only)</td></tr>
+    <tr><td>Parallax backgrounds</td><td>{'Lightweight (parallax.js)'}</td></tr>
+    <tr><td>Pinned/sticky scroll sections</td><td>GSAP</td></tr>
+    <tr><td>Scroll-scrubbed animations</td><td>GSAP</td></tr>
+    <tr><td>Horizontal scroll sections</td><td>GSAP</td></tr>
+    <tr><td>Text split / letter animations</td><td>GSAP</td></tr>
+    <tr><td>Film grain / texture overlays</td><td>Premium (CSS)</td></tr>
+    <tr><td>Glassmorphism / frosted glass</td><td>Premium (CSS)</td></tr>
+    <tr><td>Gradient text / stroke text</td><td>Premium (CSS)</td></tr>
+    <tr><td>Video backgrounds</td><td>Premium (CSS)</td></tr>
+    <tr><td>Clip-path image reveals</td><td>Premium (CSS)</td></tr>
+    <tr><td>Hero entrance orchestration</td><td>Premium (JS)</td></tr>
+    <tr><td>Background color morphs</td><td>Premium (JS)</td></tr>
+    <tr><td>Animated number counters</td><td>Premium (JS)</td></tr>
+    <tr><td>Magnetic cursor buttons</td><td>Premium (JS)</td></tr>
+    <tr><td>Scroll-scrubbed video</td><td>Premium (JS)</td></tr>
+    <tr><td>Scroll-activated tab switching</td><td>Premium (JS)</td></tr>
+  </tbody>
+</table>
 
 **Default to Lightweight.** Only escalate when the design audit specifically calls for the effect.
