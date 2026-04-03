@@ -12,14 +12,14 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
   });
 
   return (
-    <div style={{ marginBottom: 'var(--_space---xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--_typography---font-family--heading)',
-            fontSize: 'var(--_typography---heading--small, 20px)',
-            marginBottom: 'var(--_space---gap--md, 8px)',
-            color: 'var(--_color---text--primary)',
+            fontFamily: 'var(--font-family-heading)',
+            fontSize: 'var(--heading-sm, 20px)',
+            marginBottom: 'var(--gap-md, 8px)',
+            color: 'var(--text-primary)',
           }}
         >
           {title}
@@ -29,7 +29,7 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
-          gap: 'var(--_space---gap--lg, 16px)',
+          gap: 'var(--gap-lg, 16px)',
         }}
       >
         {entries.map(([step, value]) => (
@@ -38,7 +38,7 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
               style={{
                 width: '72px',
                 height: '72px',
-                backgroundColor: 'var(--_color---background--brand-primary)',
+                backgroundColor: 'var(--background-brand-primary)',
                 borderRadius: value,
                 margin: '0 auto 8px',
                 opacity: 0.8,
@@ -48,7 +48,7 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
               style={{
                 fontSize: '12px',
                 fontWeight: 600,
-                color: 'var(--_color---text--primary)',
+                color: 'var(--text-primary)',
               }}
             >
               {step}
@@ -56,7 +56,7 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
             <code
               style={{
                 fontSize: '11px',
-                color: 'var(--_color---text--muted)',
+                color: 'var(--text-muted)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
               }}
             >
@@ -81,14 +81,14 @@ export function BorderWidthPreview({ title, scale, prefix }: BorderWidthPreviewP
   );
 
   return (
-    <div style={{ marginBottom: 'var(--_space---xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--_typography---font-family--heading)',
-            fontSize: 'var(--_typography---heading--small, 20px)',
-            marginBottom: 'var(--_space---gap--md, 8px)',
-            color: 'var(--_color---text--primary)',
+            fontFamily: 'var(--font-family-heading)',
+            fontSize: 'var(--heading-sm, 20px)',
+            marginBottom: 'var(--gap-md, 8px)',
+            color: 'var(--text-primary)',
           }}
         >
           {title}
@@ -111,7 +111,7 @@ export function BorderWidthPreview({ title, scale, prefix }: BorderWidthPreviewP
                 fontSize: '12px',
                 width: '180px',
                 flexShrink: 0,
-                color: 'var(--_color---text--muted)',
+                color: 'var(--text-muted)',
               }}
             >
               {prefix}--{step}
@@ -120,14 +120,14 @@ export function BorderWidthPreview({ title, scale, prefix }: BorderWidthPreviewP
               style={{
                 width: '200px',
                 height: '0',
-                borderTop: `${value} solid var(--_color---border--brand)`,
+                borderTop: `${value} solid var(--border-brand-primary)`,
                 flexShrink: 0,
               }}
             />
             <span
               style={{
                 fontSize: '12px',
-                color: 'var(--_color---text--secondary)',
+                color: 'var(--text-secondary)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
               }}
             >

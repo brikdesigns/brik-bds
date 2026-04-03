@@ -10,14 +10,14 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
   );
 
   return (
-    <div style={{ marginBottom: 'var(--_space---xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--_typography---font-family--heading)',
-            fontSize: 'var(--_typography---heading--small, 20px)',
-            marginBottom: 'var(--_space---gap--md, 8px)',
-            color: 'var(--_color---text--primary)',
+            fontFamily: 'var(--font-family-heading)',
+            fontSize: 'var(--heading-sm, 20px)',
+            marginBottom: 'var(--gap-md, 8px)',
+            color: 'var(--text-primary)',
           }}
         >
           {title}
@@ -32,7 +32,7 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
               alignItems: 'baseline',
               gap: '16px',
               padding: '6px 0',
-              borderBottom: '1px solid var(--_color---border--muted, #e0e0e0)',
+              borderBottom: '1px solid var(--border-muted, #e0e0e0)',
             }}
           >
             <code
@@ -41,7 +41,7 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
                 fontSize: '12px',
                 width: '140px',
                 flexShrink: 0,
-                color: 'var(--_color---text--muted)',
+                color: 'var(--text-muted)',
               }}
             >
               {prefix}--{step}
@@ -50,8 +50,8 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
               style={{
                 fontSize: value,
                 lineHeight: 1.2,
-                fontFamily: 'var(--_typography---font-family--body)',
-                color: 'var(--_color---text--primary)',
+                fontFamily: 'var(--font-family-body)',
+                color: 'var(--text-primary)',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
@@ -63,7 +63,7 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
             <span
               style={{
                 fontSize: '12px',
-                color: 'var(--_color---text--muted)',
+                color: 'var(--text-muted)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 flexShrink: 0,
                 marginLeft: 'auto',
@@ -84,23 +84,23 @@ interface FontFamilyShowcaseProps {
 
 export function FontFamilyShowcase({ families }: FontFamilyShowcaseProps) {
   return (
-    <div style={{ marginBottom: 'var(--_space---xl, 32px)' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--_space---gap--lg, 16px)' }}>
+    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg, 16px)' }}>
         {families.map((f) => (
           <div
             key={f.cssVar}
             style={{
-              padding: 'var(--_space---md, 16px)',
-              backgroundColor: 'var(--_color---surface--secondary)',
-              borderRadius: 'var(--_border-radius---md, 4px)',
-              border: '1px solid var(--_color---border--muted)',
+              padding: 'var(--padding-md, 16px)',
+              backgroundColor: 'var(--surface-secondary)',
+              borderRadius: 'var(--border-radius-md, 4px)',
+              border: '1px solid var(--border-muted)',
             }}
           >
             <div
               style={{
                 fontSize: '12px',
                 fontWeight: 600,
-                color: 'var(--_color---text--muted)',
+                color: 'var(--text-muted)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 marginBottom: '8px',
@@ -112,7 +112,7 @@ export function FontFamilyShowcase({ families }: FontFamilyShowcaseProps) {
               style={{
                 fontFamily: `var(${f.cssVar})`,
                 fontSize: '28px',
-                color: 'var(--_color---text--primary)',
+                color: 'var(--text-primary)',
                 marginBottom: '4px',
               }}
             >
@@ -122,7 +122,7 @@ export function FontFamilyShowcase({ families }: FontFamilyShowcaseProps) {
               style={{
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 fontSize: '11px',
-                color: 'var(--_color---text--muted)',
+                color: 'var(--text-muted)',
               }}
             >
               {f.cssVar} → {f.value}
@@ -144,14 +144,14 @@ export function SemanticTypographyTable({ title, tokens, category }: SemanticTyp
   const entries = Object.entries(tokens).filter(([name]) => name.startsWith(category));
 
   return (
-    <div style={{ marginBottom: 'var(--_space---xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--_typography---font-family--heading)',
-            fontSize: 'var(--_typography---heading--small, 20px)',
-            marginBottom: 'var(--_space---gap--md, 8px)',
-            color: 'var(--_color---text--primary)',
+            fontFamily: 'var(--font-family-heading)',
+            fontSize: 'var(--heading-sm, 20px)',
+            marginBottom: 'var(--gap-md, 8px)',
+            color: 'var(--text-primary)',
           }}
         >
           {title}
@@ -159,7 +159,7 @@ export function SemanticTypographyTable({ title, tokens, category }: SemanticTyp
       )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
         {entries.map(([name, value]) => {
-          const cssVar = `--_typography---${name}`;
+          const cssVar = `--${name}`;
           return (
             <div
               key={name}
@@ -168,7 +168,7 @@ export function SemanticTypographyTable({ title, tokens, category }: SemanticTyp
                 alignItems: 'baseline',
                 gap: '16px',
                 padding: '8px 0',
-                borderBottom: '1px solid var(--_color---border--muted, #e0e0e0)',
+                borderBottom: '1px solid var(--border-muted, #e0e0e0)',
               }}
             >
               <code
@@ -177,7 +177,7 @@ export function SemanticTypographyTable({ title, tokens, category }: SemanticTyp
                   fontSize: '12px',
                   width: '200px',
                   flexShrink: 0,
-                  color: 'var(--_color---text--muted)',
+                  color: 'var(--text-muted)',
                 }}
               >
                 {cssVar}
@@ -186,8 +186,8 @@ export function SemanticTypographyTable({ title, tokens, category }: SemanticTyp
                 style={{
                   fontSize: `var(${cssVar})`,
                   lineHeight: 1.3,
-                  fontFamily: 'var(--_typography---font-family--body)',
-                  color: 'var(--_color---text--primary)',
+                  fontFamily: 'var(--font-family-body)',
+                  color: 'var(--text-primary)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -201,7 +201,7 @@ export function SemanticTypographyTable({ title, tokens, category }: SemanticTyp
                 style={{
                   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                   fontSize: '11px',
-                  color: 'var(--_color---text--muted)',
+                  color: 'var(--text-muted)',
                   flexShrink: 0,
                 }}
               >
@@ -223,7 +223,7 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
   const entries = Object.entries(weights).sort((a, b) => parseInt(a[1]) - parseInt(b[1]));
 
   return (
-    <div style={{ marginBottom: 'var(--_space---xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
         {entries.map(([name, value]) => (
           <div
@@ -233,7 +233,7 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
               alignItems: 'baseline',
               gap: '16px',
               padding: '6px 0',
-              borderBottom: '1px solid var(--_color---border--muted, #e0e0e0)',
+              borderBottom: '1px solid var(--border-muted, #e0e0e0)',
             }}
           >
             <code
@@ -242,7 +242,7 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
                 fontSize: '12px',
                 width: '200px',
                 flexShrink: 0,
-                color: 'var(--_color---text--muted)',
+                color: 'var(--text-muted)',
               }}
             >
               --font-weight--{name}
@@ -251,8 +251,8 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
               style={{
                 fontWeight: parseInt(value) as unknown as number,
                 fontSize: '18px',
-                fontFamily: 'var(--_typography---font-family--body)',
-                color: 'var(--_color---text--primary)',
+                fontFamily: 'var(--font-family-body)',
+                color: 'var(--text-primary)',
               }}
             >
               The quick brown fox ({value})
