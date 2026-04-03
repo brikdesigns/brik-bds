@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* bds-lint-ignore — overlay, no token exists */
+  background-color: var(--background-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,7 @@
   max-height: 90vh;
   background-color: var(--surface-primary);
   border-radius: var(--border-radius-lg);
-  box-shadow: 0px 4px 32px 0px rgba(0, 0, 0, 0.24); /* bds-lint-ignore — shadow tokens resolve to zero */
+  box-shadow: var(--shadow-overlay);
   display: flex;
   flex-direction: column;
   overflow: hidden;

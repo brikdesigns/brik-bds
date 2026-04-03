@@ -17,7 +17,7 @@
   position: absolute;
   background-color: var(--background-primary);
   border-radius: var(--border-radius-lg);
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12); /* bds-lint-ignore — no shadow token */
+  box-shadow: var(--shadow-lg);
   border: var(--border-width-sm) solid var(--border-secondary);
   padding: var(--padding-md);
   z-index: 100;

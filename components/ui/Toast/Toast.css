@@ -1,13 +1,16 @@
 /* ─── Toast ──────────────────────────────────────────────────── */
 
 .bds-toast {
+  /* ─── Component-scoped override surface ── */
+  --toast-shadow: 0px 4px 12px 4px rgba(0, 0, 0, 0.24); /* bds-lint-ignore — unique spread, no token equivalent; promote to Figma */
+
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   background-color: var(--surface-primary);
   border: var(--border-width-lg) solid var(--border-primary);
   border-radius: var(--border-radius-lg);
-  box-shadow: 0px 4px 12px 4px rgba(0, 0, 0, 0.24); /* bds-lint-ignore — Figma shadow-subtle */
+  box-shadow: var(--toast-shadow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   padding: var(--padding-lg);
   width: 100%;
   max-width: 600px; /* bds-lint-ignore — design constraint */

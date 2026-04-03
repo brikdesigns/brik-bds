@@ -1,13 +1,16 @@
 /* ─── Snackbar ───────────────────────────────────────────────── */
 
 .bds-snackbar {
+  /* ─── Component-scoped override surface ── */
+  --snackbar-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2); /* bds-lint-ignore — stronger alpha than --shadow-lg; promote to Figma */
+
   position: fixed;
   display: flex;
   align-items: center;
   gap: var(--gap-lg);
   padding: var(--padding-md) var(--padding-lg);
   border-radius: var(--border-radius-lg);
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2); /* bds-lint-ignore — shadow tokens resolve to zero */
+  box-shadow: var(--snackbar-shadow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   z-index: 1100;
   max-width: 560px; /* bds-lint-ignore — design constraint */
   min-width: 280px; /* bds-lint-ignore — design constraint */

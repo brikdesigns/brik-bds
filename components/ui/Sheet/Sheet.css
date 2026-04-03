@@ -7,14 +7,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* bds-lint-ignore — overlay, matches Modal */
+  background-color: var(--background-overlay);
   z-index: 1000;
 }
 
 .bds-sheet {
   position: fixed;
   background-color: var(--surface-primary);
-  box-shadow: 0px 4px 32px 0px rgba(0, 0, 0, 0.24); /* bds-lint-ignore — matches Modal elevation */
+  box-shadow: var(--shadow-overlay);
   display: flex;
   flex-direction: column;
   z-index: 1001;
