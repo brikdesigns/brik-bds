@@ -5,7 +5,6 @@
  * Import this in EVERY consuming project (portals, SaaS apps, marketing sites) after figma-tokens.css.
  *
  * What lives here:
- *   - Theme palette primitives (--theme-*) referenced by website-themes.css and some gap-fill tokens
  *   - Semantic tokens not yet promoted to Figma variables
  *   - Status/service/presence semantic tokens
  *   - Shadow, overlay, and interaction state tokens
@@ -23,83 +22,7 @@
  * Run `npm run build:sd-figma` to regenerate figma-tokens.css from the Figma source.
  */
 
-/* ============================================
-   THEME PALETTE PRIMITIVES
-   Raw color values for the website template themes.
-   Referenced by website-themes.css .body.theme-N blocks
-   and by a few gap-fill tokens below.
-   ============================================ */
-
 :root {
-  /* Theme: Yellow-Orange (Theme 2, 4) */
-  --theme-yellow-orange--yellow: #e8ea76;
-  --theme-yellow-orange--yellow-dark: #d8d96a;
-  --theme-yellow-orange--orange: #ef8f4b;
-  --theme-yellow-orange--black: black;
-
-  /* Theme: Yellow-Brown (Theme 4, 7) */
-  --theme-yellow-brown--yellow: #f3b94d;
-  --theme-yellow-brown--green: #615f36;
-  --theme-yellow-brown--brown: #372d2b;
-  --theme-yellow-brown--tan: #fffaeb;
-
-  /* Theme: Peach-Brown (Theme 5) */
-  --theme-peach-brown--peach: #ed8059;
-  --theme-peach-brown--peach-light: #efc7a2;
-  --theme-peach-brown--peach-lightest: #f2eee5;
-  --theme-peach-brown--peach-darkest: #443b2b;
-
-  /* Theme: Pastel (Theme 6) */
-  --theme-pastel--purple: #c8aff4;
-  --theme-pastel--green: #b9fd98;
-  --theme-pastel--blue: #384ce2;
-  --theme-pastel--orange-light: #fdf2d5;
-  --theme-pastel--black: black;
-
-  /* Theme: Green-Orange (Theme 7) */
-  --theme-green-orange--yellow-light: #fdd595;
-  --theme-green-orange--brown-light: #656153;
-  --theme-green-orange--yellow: #ffa600;
-  --theme-green-orange--green-light: #9eb28d;
-  --theme-green-orange--brown: #322b2f;
-
-  /* Theme: Vibrant (Theme 8) */
-  --theme-vibrant--blue: #5889f7;
-  --theme-vibrant--green: #4aa35b;
-  --theme-vibrant--orange: #ed7648;
-  --theme-vibrant--yellow: #f6c647;
-  --theme-vibrant--purple: #7a78f7;
-  --theme-vibrant--tan: #fcf9f2;
-
-  /* Theme: Blue-Orange */
-  --theme-blue-orange--blue: #3d5b83;
-  --theme-blue-orange--yellow: #f16b4d;
-  --theme-blue-orange--blue-dark: #263343;
-  --theme-blue-orange--blue-light: #98c0d9;
-  --theme-blue-orange--blue-lightest: #ddfbfa;
-
-  /* Theme: Blue-Red */
-  --theme-blue-red--green: #74b4a8;
-  --theme-blue-red--green-blue: #317d9e;
-  --theme-blue-red--red: #fe1755;
-  --theme-blue-red--blue-dark: #f5ffbe;
-  --theme-blue-red--green-light: #b2dbc0;
-
-  /* Theme: Orange-Green */
-  --theme-orange-green--green: #1bb58c;
-  --theme-orange-green--orange-light: #ffae26;
-  --theme-orange-green--orange-lightest: #fef2cd;
-  --theme-orange-green--red: #fd2253;
-  --theme-orange-green--orange: #ff7828;
-
-  /* Theme: Neon */
-  --theme-neon--neon-green: #42ff00;
-  --theme-neon--neon-blue: #00f6ff;
-  --theme-neon--neon-purple: #ae00ff;
-  --theme-neon--neon-orange: #ff5c00;
-  --theme-neon--neon-yellow: #fffc00;
-  --theme-neon--neon-pink: #f0c;
-
   /* ── Typography Text-Transform ──
      Semantic casing rules per font role.
      heading/label/subtitle = capitalize (Title Case)
@@ -128,6 +51,14 @@
   --font-weight--medium:     var(--font-weight-medium);
   --font-weight--regular:    var(--font-weight-regular);
   --font-weight--thin:       var(--font-weight-thin);
+
+  /* ── Easing overrides ──
+     figma-tokens.css (SD output) exports --easing-ease-in and --easing-ease-out as the
+     literal string "String value" — a Figma limitation (no native easing variable type).
+     These declarations overwrite those broken values with correct CSS cubic-bezier curves.
+     ⚠️  LOAD-BEARING OVERRIDE: do not remove without fixing the Figma variable type first. */
+  --easing-ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  --easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
 
   /* ── Missing Semantic Tokens ── */
   --background-tertiary: var(--color-grayscale-lighter);
@@ -160,8 +91,8 @@
   --surface-nav: var(--color-grayscale-white);
   --surface-navigation: var(--color-grayscale-white); /* canonical; --surface-nav kept for backward compat */
   --surface-brand-secondary: var(--theme-blue-green);
-  --background-brand-secondary: white;
-  --background-image: #17171799;
+  --background-brand-secondary: var(--color-grayscale-white);
+  --background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
   --background-image-brand: var(--theme-blue-blue-light);
   --box-shadow-none: 0px;
 
@@ -229,7 +160,11 @@
 
   /* Bridge aliases — consuming projects (tokens.ts) reference --box-shadow-*;
      these ensure the default values resolve even without a client theme file.
-     Per-theme blocks may override --box-shadow-* to suppress or restyle elevation. */
+     Per-theme blocks may override --box-shadow-* to suppress or restyle elevation.
+     ⚠️  LOAD-BEARING OVERRIDE: figma-tokens.css (SD output) exports --box-shadow-sm/md/lg/xl
+     as single blur values (e.g. "2px") — a Figma variable limitation. These declarations
+     intentionally overwrite those with the correct full box-shadow shorthand.
+     Do NOT remove these or reorder the import cascade (figma-tokens.css → gap-fills.css). */
   --box-shadow-sm:  var(--shadow-sm);
   --box-shadow-md:  var(--shadow-md);
   --box-shadow-lg:  var(--shadow-lg);
