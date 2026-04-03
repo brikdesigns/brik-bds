@@ -77,19 +77,24 @@ Primitives define the palette. Semantics define the intent. Components only know
 --[category]-[role]-[variant]
 ```
 
-| Category | Pattern | Examples |
-|----------|---------|---------|
-| Background | `--background-{role}` | `--background-brand-primary`, `--background-primary-hover`, `--background-info` |
-| Text | `--text-{role}` | `--text-primary`, `--text-brand-primary`, `--text-info` |
-| Surface | `--surface-{role}` | `--surface-primary`, `--surface-secondary`, `--surface-info` |
-| Border | `--border-{role}` | `--border-primary`, `--border-brand-primary`, `--border-info` |
-| Page | `--page-{role}` | `--page-primary`, `--page-secondary` |
-| Font family | `--font-family-{role}` | `--font-family-heading`, `--font-family-body`, `--font-family-label` |
-| Typography | `--{style}-{size}` | `--heading-lg`, `--body-md`, `--label-sm` |
-| Spacing | `--padding-{size}`, `--gap-{size}` | `--padding-lg`, `--gap-md` |
-| Border radius | `--border-radius-{size}` | `--border-radius-sm`, `--border-radius-md` |
-| Shadow | `--shadow-{size}` | `--shadow-sm`, `--shadow-lg` |
-| Scale step | `--{category}-{index}` | `--space-400`, `--font-size-700`, `--color-grayscale-dark` |
+<table>
+  <thead>
+    <tr><th>Category</th><th>Pattern</th><th>Examples</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Background</td><td>{'--background-{role}'}</td><td>{'--background-brand-primary, --background-primary-hover, --background-info'}</td></tr>
+    <tr><td>Text</td><td>{'--text-{role}'}</td><td>{'--text-primary, --text-brand-primary, --text-info'}</td></tr>
+    <tr><td>Surface</td><td>{'--surface-{role}'}</td><td>{'--surface-primary, --surface-secondary, --surface-info'}</td></tr>
+    <tr><td>Border</td><td>{'--border-{role}'}</td><td>{'--border-primary, --border-brand-primary, --border-info'}</td></tr>
+    <tr><td>Page</td><td>{'--page-{role}'}</td><td>{'--page-primary, --page-secondary'}</td></tr>
+    <tr><td>Font family</td><td>{'--font-family-{role}'}</td><td>{'--font-family-heading, --font-family-body, --font-family-label'}</td></tr>
+    <tr><td>Typography</td><td>{'--{style}-{size}'}</td><td>{'--heading-lg, --body-md, --label-sm'}</td></tr>
+    <tr><td>Spacing</td><td>{'--padding-{size}, --gap-{size}'}</td><td>{'--padding-lg, --gap-md'}</td></tr>
+    <tr><td>Border radius</td><td>{'--border-radius-{size}'}</td><td>{'--border-radius-sm, --border-radius-md'}</td></tr>
+    <tr><td>Shadow</td><td>{'--shadow-{size}'}</td><td>{'--shadow-sm, --shadow-lg'}</td></tr>
+    <tr><td>Scale step</td><td>{'--{category}-{index}'}</td><td>{'--space-400, --font-size-700, --color-grayscale-dark'}</td></tr>
+  </tbody>
+</table>
 
 ---
 
@@ -97,16 +102,21 @@ Primitives define the palette. Semantics define the intent. Components only know
 
 Figma organises variables into named collections. Each collection has modes. Style Dictionary flattens the active mode of each collection into `figma-tokens.css`.
 
-| Figma collection | Active modes used | What it generates |
-|-----------------|-------------------|-------------------|
-| `primitives` | `value` | Raw scale: `--color-poppy-*`, `--space-*`, `--font-size-*`, `--border-radius-*`, `--shadow-blur-*` |
-| `color` | `light` / `dark` | Semantic roles: `--background-*`, `--text-*`, `--surface-*`, `--border-*`, `--page-*` |
-| `typography` | `default` | Composite tokens: `--heading-lg`, `--body-md`, `--label-sm`, `--font-family-*` |
-| `spacing` | `default` | `--padding-*`, `--gap-*` |
-| `border-radius` | `soft` | `--border-radius-sm/md/lg` |
-| `border-width` | `default` | `--border-width-sm/md/lg` |
-| `elevation` | `subtle` | `--shadow-sm/md/lg/xl`, `--blur-radius-*` |
-| `breakpoint` | `default` | `--breakpoint-web/tablet/mobile` |
+<table>
+  <thead>
+    <tr><th>Figma collection</th><th>Active mode</th><th>What it generates</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>{'primitives'}</td><td>{'value'}</td><td>{'Raw scale: --color-poppy-*, --space-*, --font-size-*, --border-radius-*, --shadow-blur-*'}</td></tr>
+    <tr><td>{'color'}</td><td>{'light / dark'}</td><td>{'Semantic roles: --background-*, --text-*, --surface-*, --border-*, --page-*'}</td></tr>
+    <tr><td>{'typography'}</td><td>{'default'}</td><td>{'Composite tokens: --heading-lg, --body-md, --label-sm, --font-family-*'}</td></tr>
+    <tr><td>{'spacing'}</td><td>{'default'}</td><td>{'--padding-*, --gap-*'}</td></tr>
+    <tr><td>{'border-radius'}</td><td>{'soft'}</td><td>{'--border-radius-sm/md/lg'}</td></tr>
+    <tr><td>{'border-width'}</td><td>{'default'}</td><td>{'--border-width-sm/md/lg'}</td></tr>
+    <tr><td>{'elevation'}</td><td>{'subtle'}</td><td>{'--shadow-sm/md/lg/xl, --blur-radius-*'}</td></tr>
+    <tr><td>{'breakpoint'}</td><td>{'default'}</td><td>{'--breakpoint-web/tablet/mobile'}</td></tr>
+  </tbody>
+</table>
 
 **Light vs dark mode:** `figma-tokens.css` uses the `light` mode of the `color` collection. `figma-tokens-dark.css` uses the `dark` mode. Both files use identical variable names — consuming projects import dark after light, and the browser applies whichever matches `[data-theme="dark"]`.
 
