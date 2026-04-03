@@ -41,12 +41,39 @@ if (!inputFile) {
 
 // ─── Read inputs ─────────────────────────────────────────────────
 
-const mcpData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
+const rawData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
 const tokensStudio = JSON.parse(fs.readFileSync(TOKENS_FILE, 'utf8'));
+
+// ─── Normalize input format ───────────────────────────────────────
+//
+// Two possible input formats:
+//
+// 1. Flat map (original MCP get_variable_defs format):
+//    { "color/system/green-light": "#bef4d4", ... }
+//
+// 2. pull-variables.js format (Figma WebSocket relay):
+//    { totalVariables: 359, collections: [...], variables: [{ id, name, resolvedType, collection, valuesByMode }] }
+//
+// Normalize format 2 → format 1 before patching.
+
+let mcpData = rawData;
+
+if (Array.isArray(rawData.variables)) {
+  mcpData = {};
+  for (const v of rawData.variables) {
+    const modes = Object.entries(v.valuesByMode);
+    if (modes.length === 0) continue;
+    const [, modeValue] = modes[0];
+    // Only handle direct values (strings/numbers) — skip alias references
+    if (typeof modeValue === 'string' || typeof modeValue === 'number') {
+      mcpData[v.name] = modeValue;
+    }
+  }
+}
 
 // ─── Map MCP variable paths to tokens-studio.json structure ──────
 //
-// MCP returns: { "color/system/green-light": "#bef4d4", ... }
+// Flat map: { "color/system/green-light": "#bef4d4", ... }
 // tokens-studio.json has: { "primitives/value": { "color": { "system": { "green-light": { "$value": "#bef4d4" } } } } }
 //
 // Strategy:

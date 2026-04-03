@@ -23,6 +23,10 @@ register(StyleDictionary);
 // and border-width.lg land in separate enums — no collision.
 
 function hexToSwiftColor(hex) {
+  if (typeof hex !== 'string' || !hex.startsWith('#')) {
+    // Non-hex value (number, alias, etc.) — return a safe placeholder
+    return 'Color(red: 0, green: 0, blue: 0)';
+  }
   const h = hex.replace('#', '');
   const r = (parseInt(h.slice(0, 2), 16) / 255).toFixed(4);
   const g = (parseInt(h.slice(2, 4), 16) / 255).toFixed(4);
