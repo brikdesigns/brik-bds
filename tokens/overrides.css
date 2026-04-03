@@ -136,19 +136,10 @@
   --bds-slider-thumb-size:   20px;
   --bds-slider-track-height: 4px;
 
-  /* ── Line-height fix (gap-fill — SD pipeline emits px instead of %) ──
-     Style Dictionary treats unitless Figma numbers as px; correct values are %.
-     Remove this block once the SD transform is fixed and re-exports correctly. */
-  --font-line-height-tight:    110%;
-  --font-line-height-snug:     125%;
-  --font-line-height-normal:   150%;
-  --font-line-height-relaxed:  175%;
-  --font-line-height-loose:    200%;
-  --font-line-height-moderate: 138%;
-
-  /* ── Icon size aliases (gap-fill — deleted from figma-tokens.css in sync) ──
+  /* ── Icon size aliases (gap-fill — deleted from figma-tokens.css in 2026-04-03 sync) ──
      Components reference --icon-tiny/xs/xl/huge; restore the full set here.
-     The per-theme blocks already carry --icon-sm/md/lg — those are fine. */
+     The per-theme blocks already carry --icon-sm/md/lg — those are fine.
+     Remove once these are added back to Figma and regenerated via SD. */
   --icon-tiny: var(--font-size-50);
   --icon-xs:   var(--font-size-75);
   --icon-sm:   var(--font-size-100);
