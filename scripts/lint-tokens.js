@@ -240,10 +240,12 @@ function parseCssTokens() {
   const MIGRATED_TOKENS = path.join(__dirname, '..', 'tokens', 'webflow-tokens.css');
   const MIGRATED_THEMES = path.join(__dirname, '..', 'tokens', 'themes.css');
   const FIGMA_TOKENS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');
+  const GAP_FILLS = path.join(__dirname, '..', 'tokens', 'gap-fills.css');
   const OVERRIDES = path.join(__dirname, '..', 'tokens', 'overrides.css');
   if (fs.existsSync(MIGRATED_TOKENS)) loadFromCss(MIGRATED_TOKENS);
   if (fs.existsSync(MIGRATED_THEMES)) loadFromCss(MIGRATED_THEMES);
   if (fs.existsSync(FIGMA_TOKENS)) loadFromCss(FIGMA_TOKENS);
+  if (fs.existsSync(GAP_FILLS)) loadFromCss(GAP_FILLS);
   if (fs.existsSync(OVERRIDES)) loadFromCss(OVERRIDES);
 
   // Ensure at least one token source was loaded
@@ -466,6 +468,10 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
 
     // Check against valid token set
     if (tokens.allTokens.has(tokenName)) continue;
+
+    // --bds-* tokens are component-local custom properties (e.g. --bds-slider-percent).
+    // They are set by the component's JS/TSX and are not global BDS tokens — skip.
+    if (tokenName.startsWith('--bds-')) continue;
 
     // Some component-specific CSS properties (e.g. in Storybook theme wrappers)
     // use tokens that are defined in .body.theme-N blocks — already in allTokens.
