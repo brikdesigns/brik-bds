@@ -132,7 +132,8 @@ const helperBaseStyles: CSSProperties = {
 const sizeStyles: Record<TextInputSize, { label: CSSProperties; input: CSSProperties }> = {
   sm: {
     label: { fontSize: 'var(--label-sm)' },
-    input: { fontSize: 'var(--body-sm)' },
+    // min-height: 44px snaps to 4px grid and aligns with Button sm
+    input: { fontSize: 'var(--body-sm)', minHeight: '44px' },
   },
   md: {
     label: { fontSize: 'var(--label-md)' },
