@@ -178,6 +178,18 @@ const swiftFiles = [
   },
 ];
 
+// ─── Custom transforms ───────────────────────────────────────────
+
+// Line-height values from Figma are percentages stored as plain numbers
+// (e.g. 150 = 150%). $type "number" prevents ts/size/px from adding "px",
+// but we still need the "%" unit for CSS to interpret them correctly.
+StyleDictionary.registerTransform({
+  name: 'bds/lineHeight/percent',
+  type: 'value',
+  filter: (token) => token.path[0] === 'font-line-height' && token.$value !== 0,
+  transform: (token) => `${token.$value}%`,
+});
+
 // ─── Config ─────────────────────────────────────────────────────
 
 export default {
@@ -186,7 +198,7 @@ export default {
   platforms: {
     css: {
       transformGroup: 'tokens-studio',
-      transforms: ['name/kebab'],
+      transforms: ['name/kebab', 'bds/lineHeight/percent'],
       buildPath: 'build/figma/css/',
       files: [
         {
