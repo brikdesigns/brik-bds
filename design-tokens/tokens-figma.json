@@ -417,6 +417,10 @@
       "$value": "Poppins",
       "$type": "text"
     },
+    "subtitle": {
+      "$value": "Poppins",
+      "$type": "text"
+    },
     "icon": {
       "$value": "Font Awesome 6 Pro",
       "$type": "text"
