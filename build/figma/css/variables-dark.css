@@ -23,6 +23,11 @@
   --background-brand-primary-hover: var(--color-poppy-lighter); /** Primary button hover background (dark mode) */
   --background-brand-primary-pressed: var(--color-poppy-lightest); /** Primary button pressed background (dark mode) */
   --background-disabled: var(--color-grayscale-darker); /** Disabled background (dark mode) */
+  --background-info: var(--color-system-neutral);
+  --background-primary-hover: var(--color-grayscale-darkest);
+  --background-primary-pressed: var(--color-grayscale-darker);
+  --background-secondary-hover: var(--color-grayscale-dark);
+  --background-secondary-pressed: var(--color-grayscale-darker);
   --surface-primary: var(--color-grayscale-black);
   --surface-secondary: var(--color-grayscale-darker);
   --surface-brand-primary: var(--theme-blue-blue-light);
@@ -31,6 +36,7 @@
   --surface-secondary-hover: var(--color-grayscale-darker); /** Secondary button hover (dark mode) */
   --surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed (dark mode) */
   --surface-subtle-hover: var(--color-grayscale-darkest); /** Ghost and outline hover (dark mode) */
+  --surface-info: var(--color-system-neutral-light);
   --text-primary: var(--color-grayscale-lightest);
   --text-secondary: var(--color-grayscale-light);
   --text-brand-primary: var(--theme-blue-blue-light);
@@ -45,6 +51,7 @@
   --text-text-link: var(--theme-blue-blue-light);
   --text-on-color-light: var(--color-grayscale-black);
   --text-disabled: var(--color-grayscale-dark); /** Disabled text (dark mode) */
+  --text-info: var(--color-system-neutral);
   --border-primary: var(--color-grayscale-darker);
   --border-brand-primary: var(--theme-blue-blue-light);
   --border-on-color-dark: var(--color-grayscale-black);
@@ -54,4 +61,5 @@
   --border-on-color-light: var(--color-grayscale-white);
   --border-input: var(--color-grayscale-dark);
   --border-disabled: var(--color-grayscale-darker); /** Disabled border (dark mode) */
+  --border-info: var(--color-system-neutral);
 }

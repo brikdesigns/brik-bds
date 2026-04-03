@@ -341,6 +341,11 @@ export const backgroundBrandPrimaryHover: string;
 export const backgroundBrandPrimaryPressed: string;
 /** Disabled button background (all variants) */
 export const backgroundDisabled: string;
+export const backgroundInfo: string;
+export const backgroundPrimaryHover: string;
+export const backgroundPrimaryPressed: string;
+export const backgroundSecondaryHover: string;
+export const backgroundSecondaryPressed: string;
 export const surfacePrimary: string;
 export const surfaceSecondary: string;
 export const surfaceBrandPrimary: string;
@@ -352,6 +357,7 @@ export const surfaceSecondaryHover: string;
 export const surfaceSecondaryPressed: string;
 /** Ghost and outline button hover background */
 export const surfaceSubtleHover: string;
+export const surfaceInfo: string;
 export const textPrimary: string;
 export const textSecondary: string;
 export const textBrandPrimary: string;
@@ -367,6 +373,7 @@ export const textTextLink: string;
 export const textOnColorLight: string;
 /** Disabled button text (all variants) */
 export const textDisabled: string;
+export const textInfo: string;
 export const borderPrimary: string;
 export const borderBrandPrimary: string;
 export const borderOnColorDark: string;
@@ -377,6 +384,7 @@ export const borderOnColorLight: string;
 export const borderInput: string;
 /** Disabled button border (all variants) */
 export const borderDisabled: string;
+export const borderInfo: string;
 export const paddingXl: string;
 export const paddingLg: string;
 export const paddingNone: string;
