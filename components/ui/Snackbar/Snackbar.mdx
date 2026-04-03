@@ -40,6 +40,23 @@ Real-world usage: position options and undo actions.
 
 ---
 
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-snackbar`. Set on a wrapping element to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--snackbar-shadow` | `0px 4px 16px rgba(0,0,0,0.2)` | Elevation shadow on the snackbar bar |
+
+```css
+/* Example: remove shadow when snackbar appears at the very bottom edge */
+.full-bleed-snackbar {
+  --snackbar-shadow: none;
+}
+```
+
+---
+
 ## Usage
 
 ```tsx

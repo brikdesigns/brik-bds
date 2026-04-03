@@ -10,6 +10,11 @@
 /* ─── Base ────────────────────────────────────────────────────── */
 
 .bds-button {
+  /* ─── Component-scoped override surface ── */
+  --button-active-translate-y: 1px;    /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --button-focus-outline-width: 2px;   /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --button-focus-outline-offset: 2px;  /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -145,7 +150,7 @@
 
 .bds-button--primary:active:not(:disabled) {
   background-color: var(--background-brand-primary-pressed);
-  transform: translateY(1px);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Secondary ── */
@@ -158,7 +163,7 @@
   background-color: var(--surface-secondary-pressed);
   color: var(--text-on-color-dark);
   border-color: var(--surface-secondary-pressed);
-  transform: translateY(1px);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Outline ── */
@@ -170,7 +175,7 @@
   background-color: var(--background-brand-primary-pressed);
   color: var(--text-on-color-dark);
   border-color: var(--background-brand-primary-pressed);
-  transform: translateY(1px);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Ghost ── */
@@ -180,7 +185,7 @@
 
 .bds-button--ghost:active:not(:disabled) {
   background-color: var(--surface-secondary-hover);
-  transform: translateY(1px);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Inverse ── */
@@ -192,7 +197,7 @@
 .bds-button--inverse:active:not(:disabled) {
   background-color: var(--background-brand-primary-pressed);
   color: var(--text-on-color-dark);
-  transform: translateY(1px);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Danger variants ── */
@@ -216,8 +221,8 @@
 
 /* ── Focus (all variants) ── */
 .bds-button:focus-visible {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
+  outline: var(--button-focus-outline-width) solid var(--border-focus); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  outline-offset: var(--button-focus-outline-offset); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* Danger: red focus ring */

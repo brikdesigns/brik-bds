@@ -123,3 +123,26 @@ import { Board, BoardColumn, BoardHeader } from '@bds/components/ui/Board';
 - `--font-family-body` — Name, subtitle
 - `--font-family-label` — Column title
 - `--shadow-sm` — BoardHeader hover state
+
+---
+
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-board-card`. Set on a wrapping element or column to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--bds-board-card-accent` | `var(--border-primary)` | Left border accent color per card |
+| `--board-card-hover-translate-y` | `-1px` | Upward lift on card hover |
+
+```css
+/* Example: brand-colored accent on priority cards */
+.priority-column .bds-board-card {
+  --bds-board-card-accent: var(--background-status-error);
+}
+
+/* Example: disable lift in a dense list view */
+.compact-board {
+  --board-card-hover-translate-y: 0;
+}
+```

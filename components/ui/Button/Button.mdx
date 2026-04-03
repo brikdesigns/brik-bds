@@ -122,3 +122,23 @@ import { Button, LinkButton, IconButton } from '@brik/bds';
 // Destructive action
 <Button variant="danger">Delete project</Button>
 ```
+
+---
+
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-button`. Set these on a wrapping element or directly on the button to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--button-active-translate-y` | `1px` | Downward shift on `:active` press |
+| `--button-focus-outline-width` | `2px` | Focus ring stroke width |
+| `--button-focus-outline-offset` | `2px` | Gap between button edge and focus ring |
+
+```css
+/* Example: flatten press effect in a toolbar context */
+.my-toolbar {
+  --button-active-translate-y: 0;
+  --button-focus-outline-width: 3px;
+}
+```

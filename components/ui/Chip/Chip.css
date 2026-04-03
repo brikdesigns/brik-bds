@@ -7,6 +7,10 @@
 /* ─── Base ────────────────────────────────────────────────────── */
 
 .bds-chip {
+  /* ─── Component-scoped override surface ── */
+  --chip-hover-overlay: var(--state-hover-overlay, rgba(0, 0, 0, 0.04));     /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --chip-pressed-overlay: var(--state-pressed-overlay, rgba(0, 0, 0, 0.08)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -23,11 +27,11 @@
 }
 
 .bds-chip:hover:not(.bds-chip--disabled) {
-  box-shadow: inset 0 0 0 999px var(--state-hover-overlay, rgba(0, 0, 0, 0.04));
+  box-shadow: inset 0 0 0 999px var(--chip-hover-overlay); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 .bds-chip:active:not(.bds-chip--disabled) {
-  box-shadow: inset 0 0 0 999px var(--state-pressed-overlay, rgba(0, 0, 0, 0.08));
+  box-shadow: inset 0 0 0 999px var(--chip-pressed-overlay); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 .bds-chip:focus-visible {

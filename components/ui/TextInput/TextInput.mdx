@@ -39,6 +39,23 @@ Real-world usage: contact form and login form layouts.
 
 ---
 
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-text-input-field`. Set on a wrapping element to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--text-input-focus-ring-width` | `1px` | Width of the focus ring shadow spread |
+
+```css
+/* Example: thicker focus ring in a high-contrast context */
+.my-form {
+  --text-input-focus-ring-width: 2px;
+}
+```
+
+---
+
 ## Usage
 
 ```tsx

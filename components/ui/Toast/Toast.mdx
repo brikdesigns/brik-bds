@@ -41,6 +41,23 @@ Real-world usage: interactive toggle, error context, and informational messages.
 
 ---
 
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-toast`. Set on a wrapping element to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--toast-shadow` | `0px 4px 12px 4px rgba(0,0,0,0.24)` | Elevation shadow on the toast surface |
+
+```css
+/* Example: softer elevation in an already-elevated panel */
+.side-panel {
+  --toast-shadow: 0px 2px 8px rgba(0, 0, 0, 0.12);
+}
+```
+
+---
+
 ## Usage
 
 ```tsx

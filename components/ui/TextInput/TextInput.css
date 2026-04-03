@@ -8,6 +8,11 @@
  * - --text-muted (placeholder color)
  */
 
+.bds-text-input-field {
+  /* ─── Component-scoped override surface ── */
+  --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
 .bds-text-input-field::placeholder {
   color: var(--text-muted);
 }
@@ -18,12 +23,12 @@
 
 .bds-text-input-field:focus {
   border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 .bds-text-input-field:focus-visible {
   border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   outline: none;
 }
 
