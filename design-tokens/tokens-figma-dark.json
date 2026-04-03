@@ -1411,6 +1411,26 @@
       "$value": "{color.grayscale.darker}",
       "$type": "color",
       "$description": "Disabled background (dark mode)"
+    },
+    "info": {
+      "$value": "{color.system.neutral}",
+      "$type": "color"
+    },
+    "primary-hover": {
+      "$value": "{color.grayscale.darkest}",
+      "$type": "color"
+    },
+    "primary-pressed": {
+      "$value": "{color.grayscale.darker}",
+      "$type": "color"
+    },
+    "secondary-hover": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color"
+    },
+    "secondary-pressed": {
+      "$value": "{color.grayscale.darker}",
+      "$type": "color"
     }
   },
   "surface": {
@@ -1448,6 +1468,10 @@
       "$value": "{color.grayscale.darkest}",
       "$type": "color",
       "$description": "Ghost and outline hover (dark mode)"
+    },
+    "info": {
+      "$value": "{color.system.neutral-light}",
+      "$type": "color"
     }
   },
   "text": {
@@ -1507,6 +1531,10 @@
       "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Disabled text (dark mode)"
+    },
+    "info": {
+      "$value": "{color.system.neutral}",
+      "$type": "color"
     }
   },
   "border": {
@@ -1546,6 +1574,10 @@
       "$value": "{color.grayscale.darker}",
       "$type": "color",
       "$description": "Disabled border (dark mode)"
+    },
+    "info": {
+      "$value": "{color.system.neutral}",
+      "$type": "color"
     }
   },
   "padding": {
