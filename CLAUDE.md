@@ -11,7 +11,7 @@ When the user says "pull latest tokens from Figma" or "we updated tokens in Figm
 ```bash
 # Step 1: Pull variables via dev plugin + WebSocket relay
 # Requires: Figma Desktop open, dev plugin running, relay on port 3055
-bun brik/_tools/claude-talk-to-figma-mcp/scripts/pull-variables.js <channel-id> > /tmp/figma-vars.json
+bun scripts/pull-variables.js <channel-id> > /tmp/figma-vars.json
 
 # Step 2: Patch tokens-studio.json + rebuild
 node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build
@@ -25,11 +25,11 @@ This updates `design-tokens/tokens-studio.json` → runs `build:sd-figma` → re
 
 If the dev plugin isn't connected: ask the user to connect it OR export CSS from Figma UI. ONE clear ask.
 
-If a token doesn't exist in `figma-tokens.css` after the build, it needs to be added in **Figma first**, not in CSS. The only exception is `tokens/overrides.css` which provides gap-fill tokens not yet in Figma.
+If a token doesn't exist in `figma-tokens.css` after the build, it needs to be added in **Figma first**, not in CSS. The only exception is `tokens/gap-fills.css` which provides gap-fill tokens not yet in Figma.
 
 **NEVER hand-write dark mode token overrides in consuming projects.** Dark mode is generated from Figma's `color/dark` mode via `npm run build:sd-dark` → `tokens/figma-tokens-dark.css`. Consumer projects import this file instead of writing `[data-theme="dark"]` blocks.
 
-**Before writing ANY `var(--...)` reference**, verify the token exists in `tokens/figma-tokens.css` or `tokens/overrides.css`.
+**Before writing ANY `var(--...)` reference**, verify the token exists in `tokens/figma-tokens.css` or `tokens/gap-fills.css`.
 
 ## Repository Architecture
 
@@ -161,16 +161,11 @@ BDS uses [Radix UI](https://www.radix-ui.com/) primitives for complex interactiv
 
 ## Token System
 
-### Two naming conventions (don't confuse them)
+### Naming convention
 
-| Convention | Example | Where used | Source |
-| --- | --- | --- | --- |
-| **Webflow semantic** | `--_color---text--primary` | `tokens/variables.css`, `tokens.ts` | Webflow CSS export |
-| **Figma single-dash** | `--text-primary`, `--label-tiny` | `tokens/figma-tokens.css`, component CSS | Style Dictionary from Figma |
+BDS components use **Figma single-dash** names (`--text-primary`, `--background-brand-primary`, `--padding-lg`). This is the only active convention.
 
-BDS components use **Figma single-dash** names in their CSS files. Consuming projects import `figma-tokens.css` to define these variables at runtime.
-
-The portal's `tokens.ts` maps Webflow semantic names to `var()` references — this is the TypeScript consumption layer. The CSS layer underneath (`figma-tokens.css`) provides the actual computed values.
+The old Webflow double-underscore prefix (`--_color---text--primary`) exists in `tokens/variables.css` as a legacy internal mapping for the Webflow platform. **Do not use these in new code** — they are not the BDS token names.
 
 ### Token build pipeline
 
@@ -188,10 +183,12 @@ Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform out
 
 | File | Status | Use |
 | --- | --- | --- |
-| `tokens/figma-tokens.css` | **Active** (auto-generated) | Light mode tokens — import in consuming project `globals.css` |
-| `tokens/figma-tokens-dark.css` | **Active** (auto-generated) | Dark mode tokens — import in consuming project `globals.css` after light |
-| `tokens/fonts.css` | **Active** (manual) | Import in consuming project `globals.css` |
-| `tokens/overrides.css` | **Active** (manual) | Theme palettes + gap-fill tokens not yet in Figma |
+| `tokens/figma-tokens.css` | **Active** (auto-generated) | Light mode tokens — import in all consuming projects |
+| `tokens/figma-tokens-dark.css` | **Active** (auto-generated) | Dark mode tokens — import after light in `globals.css` |
+| `tokens/fonts.css` | **Active** (manual) | Import in all consuming projects |
+| `tokens/gap-fills.css` | **Active** (manual) | Gap-fill tokens not yet in Figma — import in all consuming projects |
+| `tokens/website-themes.css` | **Active** (manual) | Website template themes (.body.theme-N) — Storybook + template product only, NOT for client projects |
+| `tokens/overrides.css` | **DEPRECATED shim** | @imports gap-fills.css + website-themes.css for backwards compat. Migrate to explicit imports. |
 | `tokens/react-tokens.css` | **DEPRECATED** | Was manually maintained, drifted. Use `figma-tokens.css` |
 | `tokens/webflow-tokens.css` | **Webflow only** | Circular refs, 8 theme blocks — never import in React |
 | `tokens/variables.css` | **Internal** | Webflow semantic names, used by `tokens/index.ts` |
@@ -219,14 +216,29 @@ Webflow uses **Spacious mode** by default on `.body` class.
 
 ## Consuming tokens in app projects
 
-Any project using brik-bds as a submodule (portals, dashboards, tools) MUST follow the token consumption pattern documented in [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md).
+BDS uses a **2-tier architecture** for client projects:
+
+- **Tier 1 — BDS Foundations:** `fonts.css` + `figma-tokens.css` + `gap-fills.css` (submodule files, never edit)
+- **Tier 2 — Client Theme:** `theme-{client}.css` in the consuming project (overrides semantic tokens)
+
+The `website-themes.css` file (8 pre-built template themes) is **NOT** part of this cascade. It is a separate product layer used only in Storybook and future website template work. Never import it in client portals or SaaS apps.
+
+**Standard globals.css cascade:**
+
+```css
+@import '../../brik-bds/tokens/fonts.css';
+@import '../../brik-bds/tokens/figma-tokens.css';
+@import '../../brik-bds/tokens/gap-fills.css';
+@import './styles/theme-{client}.css';
+```
 
 **Key rule:** Never write raw CSS `var()` strings inline. Import from `@/lib/tokens` and `@/lib/styles`.
 
-See this file (brik-bds/CLAUDE.md) — loaded via @import in all consuming projects.
+See [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) for the full consumption pattern.
 
 **Required files in every consuming project:**
-1. `src/lib/tokens.ts` - Figma style name to CSS var() mapping
+
+1. `src/lib/tokens.ts` - CSS var() mapping for TypeScript use
 2. `src/lib/styles.ts` - Composed CSSProperties presets
 3. `src/components/prose.tsx` - Shared markdown renderer
 4. `.husky/pre-commit` - Token compliance gate (blocks hardcoded px values)

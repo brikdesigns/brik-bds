@@ -8,44 +8,77 @@ Design tokens are the single source of truth for every visual decision in the Br
 
 ---
 
-## Three-tier library hierarchy
+## Two-tier architecture (client projects)
 
-Every project in the Brik ecosystem sits in a three-tier stack:
+Client portals, SaaS apps, and marketing sites use a **2-tier** model:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  TIER 1 — BDS Foundations  (this repo)                                  │
-│  brik-bds · github.com/brikdesigns/brik-bds                             │
+│  TIER 1 — BDS Foundations  (brik-bds submodule)                         │
 │                                                                         │
-│  Primitive scale tokens — the raw numbers and colors that never change  │
-│  between clients. Consumed by Tier 2 and Tier 3 via CSS cascade.        │
+│  figma-tokens.css  — SD-generated primitives + semantic tokens          │
+│  gap-fills.css     — gap-fill tokens not yet promoted to Figma          │
 │                                                                         │
-│  --color-poppy-light  --space-400  --font-size-700  --border-radius-200  │
-└──────────────────────────────┬──────────────────────────────────────────┘
-                               │  CSS cascade (submodule import)
-┌──────────────────────────────▼──────────────────────────────────────────┐
-│  TIER 2 — Brik Brand Kit  (overrides.css + theme blocks)                │
-│                                                                         │
-│  Semantic tokens — purpose-bound aliases that map to Tier 1 primitives. │
-│  These are what components use. Values change per theme; names never do. │
-│                                                                         │
-│  --background-brand-primary  --text-primary  --padding-lg  --shadow-sm  │
-│                                                                         │
-│  9 built-in themes ship here. Each .body.theme-N block overrides the    │
-│  semantic color tokens for that brand without touching any component.   │
+│  --color-poppy-light  --space-400  --background-brand-primary           │
+│  --background-status-error  --icon-md  --shadow-sm                      │
 └──────────────────────────────┬──────────────────────────────────────────┘
                                │  CSS cascade (client globals.css)
 ┌──────────────────────────────▼──────────────────────────────────────────┐
-│  TIER 3 — Client Theme  (theme-{client}.css in consuming project)       │
+│  TIER 2 — Client Theme  (theme-{client}.css in consuming project)       │
 │                                                                         │
-│  Client brand overrides — same token names as Tier 2, different values. │
+│  Same semantic token names as Tier 1, different values for this brand.  │
 │  One file per client. Cascade wins. Components are untouched.           │
 │                                                                         │
 │  :root { --background-brand-primary: #2563EB; --font-family-heading: … }│
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-**The key rule:** token names are fixed at Tier 2. Only values change between tiers. A component written against `--background-brand-primary` works for Brik's poppy red, any built-in theme, or any client brand — with zero code changes.
+**The key rule:** token names are fixed in Tier 1. Only values change in Tier 2. A component written against `--background-brand-primary` works for every client brand with zero code changes.
+
+---
+
+## BDS Theming — website template layer (separate from client work)
+
+BDS also ships a **BDS Theming** layer (`website-themes.css`) that contains 8 pre-built brand configurations. This is a **separate product effort** — a website template theme library, not part of the client project architecture.
+
+```
+website-themes.css  →  .body.theme-1 through .body.theme-8
+                       Each block overrides semantic color + font-family tokens
+```
+
+This layer is used in:
+- **Storybook** — the toolbar theme switcher demos all 8 configurations
+- **Website template product** (future) — pre-built brand themes for site builds
+
+**Client projects do not import website-themes.css.** They define their own Tier 2 via `theme-{client}.css`.
+
+---
+
+## CSS import cascade
+
+### Client projects (portals, SaaS, marketing sites)
+
+```css
+/* 1. Web fonts */
+@import '../brik-bds/tokens/fonts.css';
+
+/* 2. Generated token values (primitives + semantic) */
+@import '../brik-bds/tokens/figma-tokens.css';
+
+/* 3. Gap-fill tokens not yet in Figma/SD */
+@import '../brik-bds/tokens/gap-fills.css';
+
+/* 4. Client brand — same token names, different values */
+@import './styles/theme-{client}.css';
+```
+
+### Storybook / website template work
+
+```css
+@import '../tokens/figma-tokens.css';
+@import '../tokens/gap-fills.css';
+@import '../tokens/website-themes.css';  /* adds .body.theme-N blocks */
+```
 
 ---
 
@@ -140,58 +173,13 @@ Figma is the only place tokens are edited. The pipeline is:
    → design-tokens/tokens-figma.json  (flattened, mode-resolved)
          ↓
 5. Style Dictionary
-   → tokens/figma-tokens.css          ← imported by consuming projects
+   → tokens/figma-tokens.css          ← Tier 1, imported by all projects
    → tokens/figma-tokens-dark.css     ← dark mode variant
    → build/figma/js/tokens.mjs        ← JS / TypeScript
    → build/figma/swift/*.swift        ← iOS
 ```
 
-**Rule:** never manually edit `tokens/figma-tokens.css`. It is generated on every sync. Manual edits will be overwritten. Use `tokens/overrides.css` for gap-fill tokens that aren't in Figma yet.
-
----
-
-## Consuming BDS in a project
-
-Every Brik product and client project consumes BDS as a git submodule.
-
-### 1. CSS import cascade (globals.css — order matters)
-
-```css
-/* 1. Web fonts */
-@import '../brik-bds/tokens/fonts.css';
-
-/* 2. Generated token values — light mode */
-@import '../brik-bds/tokens/figma-tokens.css';
-
-/* 3. Generated token values — dark mode (scoped to [data-theme="dark"]) */
-@import '../brik-bds/tokens/figma-tokens-dark.css';
-
-/* 4. Gap-fill and theme palette overrides */
-@import '../brik-bds/tokens/overrides.css';
-
-/* 5. Client brand — same token names, different values */
-@import './styles/theme-{client}.css';
-```
-
-### 2. TypeScript token layer (src/lib/tokens.ts)
-
-Never write raw `var(--...)` strings inline. Map every token to a typed export:
-
-```ts
-import { color, font, space, gap, size, border, shadow } from '@/lib/tokens';
-
-// ✅ Correct
-style={{ color: color.text.primary, fontSize: font.size.body.md }}
-
-// ❌ Wrong — bypasses the type layer, breaks refactor
-style={{ color: 'var(--text-primary)', fontSize: '16px' }}
-```
-
-The reference implementation lives in `brik-client-portal/src/lib/tokens.ts`. Copy it to every new project; update the entries to match what the client theme exposes.
-
-### 3. Pre-commit enforcement
-
-A token compliance gate blocks hardcoded hex colors, raw `var()` strings, and hardcoded `fontSize`/`rgba`/`padding` values at commit time. Copy `.husky/pre-commit` from `brik-client-portal` into every new project.
+**Rule:** never manually edit `tokens/figma-tokens.css`. It is generated on every sync. Use `tokens/gap-fills.css` for gap-fill tokens that aren't in Figma yet.
 
 ---
 
@@ -199,13 +187,15 @@ A token compliance gate blocks hardcoded hex colors, raw `var()` strings, and ha
 
 A client brand is a single CSS file (~12–27 token overrides). No components change. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the full cascade, override tiers, known gaps, and font-only override patterns.
 
-**Validate with Client Sim theme:** Switch to `★ Client Sim` in the Storybook toolbar. It assigns Georgia/Verdana/Courier New to heading/body/label families — any component using the wrong `--font-family-*` token becomes immediately visible.
+**Validate with ★ Font Audit:** Switch to `★ Font Audit` in the Storybook toolbar. It assigns Georgia/Verdana/Courier New to heading/body/label families — any component using the wrong `--font-family-*` token becomes immediately visible.
 
 ---
 
-## Built-in themes
+## BDS Theming — website template themes
 
-BDS ships 9 themes. Switch using the paintbrush icon in the toolbar above. Each theme overrides semantic color tokens only — spacing, shadows, and component structure are theme-invariant. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the full theme gallery and how to add a custom brand.
+BDS ships 8 pre-built brand configurations as website template themes. Switch between them using the paintbrush icon in the toolbar above. These themes are **not** part of the client project architecture — they are a separate product layer for template-driven site work.
+
+Each theme overrides semantic color and font-family tokens only — spacing, shadows, radius, and component structure are theme-invariant. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for how to build a custom client theme on top of the 2-tier foundation.
 
 ---
 
@@ -259,7 +249,7 @@ BDS ships 9 themes. Switch using the paintbrush icon in the toolbar above. Each 
     </tr>
     <tr>
       <td><a href="?path=/docs/foundations-design-tokens-client-theming--docs">Client Theming</a></td>
-      <td>How to configure a client brand</td>
+      <td>How to configure a client brand (Tier 2)</td>
       <td>Cascade, overrides, known gaps</td>
     </tr>
   </tbody>
@@ -273,13 +263,11 @@ BDS ships 9 themes. Switch using the paintbrush icon in the toolbar above. Each 
 
 1. Add the variable to the correct collection in the Figma Foundations file
 2. Connect Claude with the Figma dev plugin (provide channel ID)
-3. Run the sync: `bun pull-variables.js <channel> > /tmp/vars.json && node scripts/sync-figma-mcp.js /tmp/vars.json --build`
+3. Run the sync: `bun scripts/pull-variables.js <channel> > /tmp/vars.json && node scripts/sync-figma-mcp.js /tmp/vars.json --build`
 4. Verify the token appears in `tokens/figma-tokens.css`
 5. Add it to the consuming project's `src/lib/tokens.ts` export map
 
-If the token is a semantic alias (references another variable), it must be added manually to `design-tokens/tokens-studio.json` under `color/light` and `color/dark` after the sync — the pipeline only patches primitive values automatically.
-
-**Exception:** structural gap-fill tokens that don't belong in Figma (e.g., theme-specific palette values) go in `tokens/overrides.css`.
+**Exception:** tokens that aren't ready for Figma yet go in `tokens/gap-fills.css` with a `TODO: promote to Figma` comment.
 
 ---
 
@@ -304,4 +292,10 @@ style={{ color: 'var(--text-primary)' }}
 /* ✅ Import from the token map */
 import { color } from '@/lib/tokens';
 style={{ color: color.text.primary }}
+
+/* ❌ Never import website-themes.css in a client project */
+@import '../brik-bds/tokens/website-themes.css';
+/* ✅ Client projects only need gap-fills.css + their own theme */
+@import '../brik-bds/tokens/gap-fills.css';
+@import './styles/theme-{client}.css';
 ```

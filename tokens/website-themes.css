@@ -1,0 +1,638 @@
+/**
+ * BDS Website Template Themes — Manually Maintained
+ *
+ * These are pre-built brand configurations for the BDS website template product.
+ * They are NOT part of the client project architecture.
+ *
+ * WHO IMPORTS THIS:
+ *   ✅ Storybook (for theme-switching demos in the toolbar)
+ *   ✅ Website template product (future)
+ *   ❌ Client portals (brik-client-portal, renew-pms, etc.) — DO NOT import
+ *   ❌ Marketing sites (brikdesigns.com) — DO NOT import
+ *
+ * Client projects use the 2-tier architecture:
+ *   Tier 1 → figma-tokens.css + gap-fills.css  (BDS Foundations)
+ *   Tier 2 → theme-{client}.css                (Client Brand)
+ *
+ * These themes apply when .body has a .theme-N class.
+ * Each block overrides semantic color and typography tokens for that brand.
+ *
+ * Themes:
+ *   theme-1   Default     (Open Sans / Droid Sans)
+ *   theme-2   Dark        (Geist Mono / Geist)
+ *   theme-3   Blue        (Source Sans 3 / IBM Plex Sans)
+ *   theme-4   Gold        (Hind / Lato)
+ *   theme-5   Peach       (Open Sans / Newsreader)
+ *   theme-6   Minimal     (Geist Mono / Geist)
+ *   theme-7   Warm        (Hind / Lato)
+ *   theme-8   Vibrant     (Hind / Playfair Display)
+ *   theme-client-sim  ★ Font Audit — QA/validation tool, not for delivery
+ */
+
+/* ============================================
+   THEME 1 — Default (Open Sans / Droid Sans)
+
+   Expanded from old .body block. Overrides
+   SD :root defaults with Theme 1 values.
+   ============================================ */
+
+.body.theme-1 {
+  background-color: var(--page-primary);
+
+  /* Color */
+  --border-secondary: var(--color-grayscale-light);
+  --surface-nav: var(--color-grayscale-white);
+  --background-brand-primary: var(--theme-blue-blue-light);
+  --text-inverse: var(--color-grayscale-white);
+  --border-brand-primary: var(--theme-blue-blue-light);
+  --background-primary: var(--color-grayscale-white);
+  --border-inverse: var(--color-grayscale-white);
+  --text-primary: var(--color-grayscale-darkest);
+  --text-brand-primary: var(--theme-blue-blue-light);
+  --surface-primary: var(--color-grayscale-white);
+  --border-primary: var(--color-grayscale-dark);
+  --surface-secondary: var(--color-grayscale-lightest);
+  --page-primary: var(--color-grayscale-white);
+  --text-muted: var(--color-grayscale-dark);
+  --surface-brand-primary: var(--theme-blue-blue-light);
+  --border-input: var(--color-grayscale-light);
+  --border-muted: var(--color-grayscale-lighter);
+  --border-on-color-dark: white;
+  --surface-brand-secondary: var(--theme-blue-green);
+  --text-secondary: var(--color-grayscale-darker);
+  --background-secondary: var(--color-grayscale-lightest);
+  --page-brand-primary: var(--theme-blue-blue-light);
+  --background-brand-secondary: white;
+  --background-inverse: var(--color-grayscale-white);
+  --background-input: var(--color-grayscale-white);
+  --background-image: #17171799;
+  --background-image-brand: var(--theme-blue-blue-light);
+  --page-secondary: var(--color-grayscale-lighter);
+
+  /* Typography */
+  --font-family-label: "Open Sans", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
+  --font-family-body: "Open Sans", sans-serif;
+  --font-family-heading: "Droid Sans", sans-serif;
+  --font-family-display: "Droid Sans", sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --body-sm: var(--font-size-75);
+  --body-md: var(--font-size-100);
+  --body-lg: var(--font-size-200);
+  --body-xs: var(--font-size-50);
+  --body-tiny: var(--font-size-25);
+  --label-md: var(--font-size-100);
+  --label-lg: var(--font-size-200);
+  --label-sm: var(--font-size-75);
+  --heading-huge: var(--font-size-1200);
+  --heading-lg: var(--font-size-700);
+  --heading-xxl: var(--font-size-1000);
+  --heading-xl: var(--font-size-900);
+  --heading-md: var(--font-size-500);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --display-lg: var(--font-size-1400);
+  --display-md: var(--font-size-1500);
+  --display-sm: var(--font-size-1600);
+  --icon-sm: var(--font-size-75);
+  --icon-md: var(--font-size-100);
+  --icon-lg: var(--font-size-200);
+
+  /* Border */
+  --border-radius-sm: var(--border-radius-50);
+  --border-radius-md: var(--border-radius-100);
+  --border-radius-lg: var(--border-radius-200);
+  --border-radius-none: var(--border-radius-0);
+  --border-width-lg: 1px;
+  --border-width-md: 0.5px;
+  --border-width-sm: 0.25px;
+  --border-width-none: 0px;
+
+  /* Shadow/blur */
+  --box-shadow-md: var(--shadow-spread-0);
+  --box-shadow-none: var(--shadow-spread-0);
+  --box-shadow-sm: var(--shadow-spread-0);
+  --box-shadow-lg: var(--shadow-spread-0);
+  --blur-radius-md: var(--shadow-blur-0);
+  --blur-radius-sm: var(--shadow-blur-0);
+  --blur-radius-lg: var(--shadow-blur-0);
+}
+
+/* ============================================
+   THEME 2 — Dark (Geist)
+   ============================================ */
+
+.body.theme-2 {
+  /* Color */
+  --border-secondary: var(--color-grayscale-dark);
+  --surface-nav: var(--color-grayscale-black);
+  --background-brand-primary: var(--theme-yellow-orange--yellow);
+  --text-inverse: var(--color-grayscale-darkest);
+  --border-brand-primary: var(--theme-yellow-orange--yellow);
+  --background-primary: var(--color-grayscale-darkest);
+  --border-inverse: var(--color-grayscale-black);
+  --text-primary: var(--color-grayscale-lightest);
+  --text-brand-primary: var(--theme-yellow-orange--yellow);
+  --surface-primary: var(--color-grayscale-black);
+  --border-primary: var(--color-grayscale-light);
+  --surface-secondary: var(--color-grayscale-darkest);
+  --page-primary: var(--color-grayscale-black);
+  --text-muted: var(--color-grayscale-dark);
+  --surface-brand-primary: var(--theme-yellow-orange--yellow);
+  --border-input: var(--color-grayscale-dark);
+  --border-muted: var(--color-grayscale-darker);
+  --border-on-color-dark: var(--color-grayscale-darkest);
+  --surface-brand-secondary: var(--theme-yellow-orange--orange);
+  --text-secondary: var(--color-grayscale-light);
+  --background-secondary: var(--color-grayscale-black);
+  --theme-blue-green: var(--theme-yellow-orange--orange);
+  --theme-blue-blue-lightest: var(--theme-yellow-orange--orange);
+  --theme-blue-blue-lighter: var(--theme-yellow-orange--yellow-dark);
+  --theme-blue-blue-light: var(--theme-yellow-orange--yellow);
+  --page-brand-primary: var(--theme-yellow-orange--yellow);
+  --background-brand-secondary: white;
+  --background-inverse: var(--color-grayscale-black);
+  --background-input: var(--color-grayscale-darkest);
+  --background-image: #17171799;
+  --background-image-brand: var(--theme-yellow-orange--yellow);
+  --page-secondary: var(--color-grayscale-darkest);
+  --theme-blue-blue-dark: var(--color-grayscale-white);
+
+  /* Typography */
+  --font-family-label: "Geist Mono", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
+  --font-family-body: "Geist Mono", sans-serif;
+  --font-family-heading: Geist, sans-serif;
+  --font-family-display: Geist, sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --body-sm: var(--font-size-75);
+  --body-md: var(--font-size-100);
+  --body-lg: var(--font-size-200);
+  --body-xs: var(--font-size-50);
+  --body-tiny: var(--font-size-25);
+  --label-md: var(--font-size-100);
+  --label-lg: var(--font-size-200);
+  --label-sm: var(--font-size-75);
+  --heading-huge: var(--font-size-1200);
+  --heading-lg: var(--font-size-700);
+  --heading-xxl: var(--font-size-1000);
+  --heading-xl: var(--font-size-900);
+  --heading-md: var(--font-size-500);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --display-lg: var(--font-size-1400);
+  --display-md: var(--font-size-1500);
+  --display-sm: var(--font-size-1600);
+  --icon-sm: var(--font-size-75);
+  --icon-md: var(--font-size-100);
+  --icon-lg: var(--font-size-200);
+}
+
+/* ============================================
+   THEME 3 — Blue (Source Sans 3 / IBM Plex Sans)
+   ============================================ */
+
+.body.theme-3 {
+  /* Color */
+  --border-secondary: var(--color-grayscale-light);
+  --surface-nav: var(--color-grayscale-white);
+  --background-brand-primary: var(--theme-blue-blue-light);
+  --text-inverse: var(--color-grayscale-white);
+  --border-brand-primary: var(--theme-blue-blue-light);
+  --background-primary: var(--color-grayscale-white);
+  --border-inverse: var(--color-grayscale-white);
+  --text-primary: var(--color-grayscale-darkest);
+  --text-brand-primary: var(--theme-blue-blue-light);
+  --surface-primary: var(--color-grayscale-white);
+  --border-primary: var(--color-grayscale-dark);
+  --surface-secondary: var(--color-grayscale-lightest);
+  --page-primary: var(--color-grayscale-white);
+  --text-muted: var(--color-grayscale-dark);
+  --surface-brand-primary: var(--theme-blue-blue-light);
+  --border-input: var(--color-grayscale-light);
+  --border-muted: var(--color-grayscale-lighter);
+  --border-on-color-dark: white;
+  --surface-brand-secondary: var(--theme-blue-green);
+  --text-secondary: var(--color-grayscale-darker);
+  --background-secondary: var(--color-grayscale-lightest);
+  --page-brand-primary: var(--theme-blue-blue-light);
+  --background-brand-secondary: white;
+  --background-inverse: var(--color-grayscale-black);
+  --background-input: var(--color-grayscale-white);
+  --background-image: #17171799;
+  --background-image-brand: var(--theme-blue-blue-light);
+  --page-secondary: var(--color-grayscale-lighter);
+  --theme-blue-blue-dark: var(--color-grayscale-white);
+
+  /* Typography */
+  --font-family-label: "Source Sans 3", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
+  --font-family-body: "Source Sans 3", sans-serif;
+  --font-family-heading: "IBM Plex Sans", sans-serif;
+  --font-family-display: "IBM Plex Sans", sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --body-sm: var(--font-size-75);
+  --body-md: var(--font-size-100);
+  --body-lg: var(--font-size-200);
+  --body-xs: var(--font-size-50);
+  --body-tiny: var(--font-size-25);
+  --label-md: var(--font-size-100);
+  --label-lg: var(--font-size-200);
+  --label-sm: var(--font-size-75);
+  --heading-huge: var(--font-size-1200);
+  --heading-lg: var(--font-size-700);
+  --heading-xxl: var(--font-size-1000);
+  --heading-xl: var(--font-size-900);
+  --heading-md: var(--font-size-500);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --display-lg: var(--font-size-1400);
+  --display-md: var(--font-size-1500);
+  --display-sm: var(--font-size-1600);
+  --icon-sm: var(--font-size-75);
+  --icon-md: var(--font-size-100);
+  --icon-lg: var(--font-size-200);
+}
+
+/* ============================================
+   THEME 4 — Gold (Hind / Lato)
+   ============================================ */
+
+.body.theme-4 {
+  /* Color */
+  --border-secondary: var(--color-grayscale-light);
+  --surface-nav: var(--color-grayscale-white);
+  --background-brand-primary: var(--theme-yellow-orange--yellow);
+  --text-inverse: var(--color-grayscale-white);
+  --border-brand-primary: var(--theme-yellow-orange--yellow);
+  --background-primary: var(--color-grayscale-white);
+  --border-inverse: var(--color-grayscale-white);
+  --text-primary: var(--color-grayscale-black);
+  --text-brand-primary: var(--theme-yellow-orange--yellow);
+  --surface-primary: var(--color-grayscale-white);
+  --border-primary: var(--color-grayscale-black);
+  --surface-secondary: var(--color-grayscale-lightest);
+  --page-primary: var(--color-grayscale-white);
+  --text-muted: var(--color-grayscale-dark);
+  --surface-brand-primary: var(--theme-yellow-orange--yellow);
+  --border-input: var(--color-grayscale-light);
+  --border-muted: var(--color-grayscale-lighter);
+  --border-on-color-dark: white;
+  --surface-brand-secondary: var(--theme-yellow-orange--orange);
+  --text-secondary: var(--color-grayscale-darker);
+  --background-secondary: var(--color-grayscale-lightest);
+  --theme-blue-blue-lightest: var(--theme-yellow-orange--orange);
+  --theme-blue-blue-lighter: var(--theme-yellow-orange--yellow-dark);
+  --theme-blue-blue-light: var(--theme-yellow-orange--yellow);
+  --page-brand-primary: var(--theme-yellow-orange--yellow);
+  --background-brand-secondary: white;
+  --background-inverse: var(--color-grayscale-black);
+  --background-input: var(--color-grayscale-white);
+  --background-image: #17171799;
+  --background-image-brand: var(--theme-yellow-orange--yellow);
+  --page-secondary: var(--color-grayscale-lighter);
+  --theme-blue-blue-dark: var(--color-grayscale-white);
+
+  /* Typography */
+  --font-family-label: Hind, sans-serif;
+  --font-family-subtitle: var(--font-family-label);
+  --font-family-body: Hind, sans-serif;
+  --font-family-heading: Lato, Arial, sans-serif;
+  --font-family-display: Lato, Arial, sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --body-sm: var(--font-size-75);
+  --body-md: var(--font-size-100);
+  --body-lg: var(--font-size-200);
+  --body-xs: var(--font-size-50);
+  --body-tiny: var(--font-size-25);
+  --label-md: var(--font-size-100);
+  --label-lg: var(--font-size-200);
+  --label-sm: var(--font-size-75);
+  --heading-huge: var(--font-size-1200);
+  --heading-lg: var(--font-size-700);
+  --heading-xxl: var(--font-size-1000);
+  --heading-xl: var(--font-size-900);
+  --heading-md: var(--font-size-500);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --display-lg: var(--font-size-1400);
+  --display-md: var(--font-size-1500);
+  --display-sm: var(--font-size-1600);
+  --icon-sm: var(--font-size-75);
+  --icon-md: var(--font-size-100);
+  --icon-lg: var(--font-size-200);
+}
+
+/* ============================================
+   THEME 5 — Peach (Open Sans / Newsreader)
+   ============================================ */
+
+.body.theme-5 {
+  /* Color */
+  --border-secondary: var(--color-grayscale-darker);
+  --surface-nav: var(--theme-peach-brown--peach-lightest);
+  --background-brand-primary: var(--theme-peach-brown--peach);
+  --text-inverse: var(--color-grayscale-white);
+  --border-brand-primary: var(--theme-peach-brown--peach);
+  --background-primary: var(--theme-peach-brown--peach-lightest);
+  --border-inverse: var(--theme-peach-brown--peach-darkest);
+  --text-primary: var(--color-grayscale-black);
+  --text-brand-primary: var(--theme-peach-brown--peach);
+  --surface-primary: var(--theme-peach-brown--peach-lightest);
+  --border-primary: var(--color-grayscale-black);
+  --surface-secondary: var(--theme-peach-brown--peach-darkest);
+  --page-primary: var(--theme-peach-brown--peach-lightest);
+  --text-muted: var(--color-grayscale-dark);
+  --surface-brand-primary: var(--theme-peach-brown--peach);
+  --border-input: var(--theme-peach-brown--peach-darkest);
+  --border-muted: var(--color-grayscale-darker);
+  --border-on-color-dark: var(--color-grayscale-darkest);
+  --surface-brand-secondary: var(--theme-peach-brown--peach-light);
+  --text-secondary: var(--color-grayscale-darker);
+  --background-secondary: var(--color-grayscale-lightest);
+  --theme-blue-blue-lightest: var(--theme-peach-brown--peach-darkest);
+  --theme-blue-blue-lighter: var(--theme-peach-brown--peach-light);
+  --theme-blue-blue-light: var(--theme-peach-brown--peach);
+  --page-brand-primary: var(--theme-peach-brown--peach);
+  --background-brand-secondary: var(--theme-peach-brown--peach-darkest);
+  --background-inverse: var(--color-grayscale-black);
+  --background-input: var(--color-grayscale-white);
+  --background-image: #17171799;
+  --background-image-brand: var(--theme-peach-brown--peach);
+  --page-secondary: var(--theme-peach-brown--peach-darkest);
+  --theme-blue-blue-dark: var(--theme-peach-brown--peach-lightest);
+
+  /* Typography */
+  --font-family-label: "Open Sans", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
+  --font-family-body: "Open Sans", sans-serif;
+  --font-family-heading: Newsreader, sans-serif;
+  --font-family-display: Newsreader, sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --body-sm: var(--font-size-75);
+  --body-md: var(--font-size-100);
+  --body-lg: var(--font-size-200);
+  --body-xs: var(--font-size-50);
+  --body-tiny: var(--font-size-25);
+  --label-md: var(--font-size-100);
+  --label-lg: var(--font-size-200);
+  --label-sm: var(--font-size-75);
+  --heading-huge: var(--font-size-1200);
+  --heading-lg: var(--font-size-700);
+  --heading-xxl: var(--font-size-1000);
+  --heading-xl: var(--font-size-900);
+  --heading-md: var(--font-size-500);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --display-lg: var(--font-size-1400);
+  --display-md: var(--font-size-1500);
+  --display-sm: var(--font-size-1600);
+  --icon-sm: var(--font-size-75);
+  --icon-md: var(--font-size-100);
+  --icon-lg: var(--font-size-200);
+}
+
+/* ============================================
+   THEME 6 — Minimal (Geist Mono / Geist)
+   ============================================ */
+
+.body.theme-6 {
+  background-color: var(--page-primary);
+
+  /* Color */
+  --border-secondary: var(--color-grayscale-light);
+  --surface-nav: var(--theme-pastel--orange-light);
+  --background-brand-primary: var(--theme-pastel--purple);
+  --text-inverse: var(--color-grayscale-white);
+  --border-brand-primary: var(--theme-pastel--purple);
+  --background-primary: var(--color-grayscale-white);
+  --border-inverse: var(--color-grayscale-white);
+  --text-primary: var(--color-grayscale-darkest);
+  --text-brand-primary: var(--theme-pastel--purple);
+  --surface-primary: var(--theme-pastel--orange-light);
+  --border-primary: var(--color-grayscale-dark);
+  --surface-secondary: var(--color-grayscale-lightest);
+  --page-primary: var(--theme-pastel--orange-light);
+  --text-muted: var(--color-grayscale-dark);
+  --surface-brand-primary: var(--theme-pastel--purple);
+  --border-input: var(--color-grayscale-light);
+  --border-muted: var(--color-grayscale-lighter);
+  --border-on-color-dark: white;
+  --surface-brand-secondary: var(--theme-pastel--green);
+  --text-secondary: var(--color-grayscale-darker);
+  --background-secondary: var(--color-grayscale-lightest);
+  --theme-blue-green: var(--theme-pastel--black);
+  --theme-blue-blue-lightest: var(--theme-pastel--blue);
+  --theme-blue-blue-lighter: var(--theme-pastel--green);
+  --theme-blue-blue-light: var(--theme-pastel--purple);
+  --page-brand-primary: var(--theme-pastel--purple);
+  --background-brand-secondary: white;
+  --background-inverse: var(--color-grayscale-white);
+  --background-input: var(--color-grayscale-white);
+  --background-image: #17171799;
+  --background-image-brand: var(--theme-pastel--purple);
+  --page-secondary: var(--theme-pastel--black);
+  --theme-blue-blue-dark: var(--theme-pastel--orange-light);
+
+  /* Typography */
+  --font-family-label: "Geist Mono", sans-serif;
+  --font-family-subtitle: var(--font-family-label);
+  --font-family-body: "Geist Mono", sans-serif;
+  --font-family-heading: Geist, sans-serif;
+  --font-family-display: Geist, sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --body-sm: var(--font-size-75);
+  --body-md: var(--font-size-100);
+  --body-lg: var(--font-size-200);
+  --body-xs: var(--font-size-50);
+  --body-tiny: var(--font-size-25);
+  --label-md: var(--font-size-100);
+  --label-lg: var(--font-size-200);
+  --label-sm: var(--font-size-75);
+  --heading-huge: var(--font-size-1200);
+  --heading-lg: var(--font-size-700);
+  --heading-xxl: var(--font-size-1000);
+  --heading-xl: var(--font-size-900);
+  --heading-md: var(--font-size-500);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --display-lg: var(--font-size-1400);
+  --display-md: var(--font-size-1500);
+  --display-sm: var(--font-size-1600);
+  --icon-sm: var(--font-size-75);
+  --icon-md: var(--font-size-100);
+  --icon-lg: var(--font-size-200);
+}
+
+/* ============================================
+   THEME 7 — Warm (Hind / Lato)
+   ============================================ */
+
+.body.theme-7 {
+  /* Color */
+  --border-secondary: var(--color-grayscale-light);
+  --surface-nav: var(--theme-yellow-brown--tan);
+  --background-brand-primary: var(--theme-yellow-brown--brown);
+  --text-inverse: var(--color-grayscale-white);
+  --border-brand-primary: var(--theme-green-orange--brown);
+  --background-primary: var(--theme-yellow-brown--tan);
+  --border-inverse: var(--color-grayscale-white);
+  --text-primary: var(--color-grayscale-darkest);
+  --text-brand-primary: var(--theme-yellow-brown--brown);
+  --surface-primary: var(--theme-yellow-brown--tan);
+  --border-primary: var(--color-grayscale-dark);
+  --surface-secondary: var(--color-grayscale-lightest);
+  --page-primary: var(--theme-yellow-brown--tan);
+  --text-muted: var(--color-grayscale-dark);
+  --surface-brand-primary: var(--theme-green-orange--yellow);
+  --border-input: var(--color-grayscale-light);
+  --border-muted: var(--color-grayscale-lighter);
+  --border-on-color-dark: white;
+  --surface-brand-secondary: var(--theme-blue-green);
+  --text-secondary: var(--color-grayscale-darker);
+  --background-secondary: var(--color-grayscale-lightest);
+  --theme-blue-green: var(--theme-yellow-brown--yellow);
+  --theme-blue-blue-lightest: var(--theme-yellow-brown--tan);
+  --theme-blue-blue-lighter: var(--theme-yellow-brown--green);
+  --theme-blue-blue-light: var(--theme-yellow-brown--brown);
+  --page-brand-primary: var(--theme-green-orange--yellow);
+  --background-brand-secondary: white;
+  --background-inverse: var(--color-grayscale-white);
+  --background-input: var(--color-grayscale-white);
+  --background-image: #17171799;
+  --background-image-brand: var(--theme-green-orange--brown);
+  --page-secondary: var(--color-grayscale-lighter);
+  --theme-blue-blue-dark: var(--theme-yellow-brown--tan);
+
+  /* Typography */
+  --font-family-label: Hind, sans-serif;
+  --font-family-subtitle: var(--font-family-label);
+  --font-family-body: Hind, sans-serif;
+  --font-family-heading: Lato, Arial, sans-serif;
+  --font-family-display: Lato, Arial, sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --body-sm: var(--font-size-75);
+  --body-md: var(--font-size-100);
+  --body-lg: var(--font-size-200);
+  --body-xs: var(--font-size-50);
+  --body-tiny: var(--font-size-25);
+  --label-md: var(--font-size-100);
+  --label-lg: var(--font-size-200);
+  --label-sm: var(--font-size-75);
+  --heading-huge: var(--font-size-1200);
+  --heading-lg: var(--font-size-700);
+  --heading-xxl: var(--font-size-1000);
+  --heading-xl: var(--font-size-900);
+  --heading-md: var(--font-size-500);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --display-lg: var(--font-size-1400);
+  --display-md: var(--font-size-1500);
+  --display-sm: var(--font-size-1600);
+  --icon-sm: var(--font-size-75);
+  --icon-md: var(--font-size-100);
+  --icon-lg: var(--font-size-200);
+}
+
+/* ============================================
+   THEME 8 — Vibrant (Hind / Playfair Display)
+   ============================================ */
+
+.body.theme-8 {
+  /* Color */
+  --border-secondary: var(--color-grayscale-light);
+  --surface-nav: var(--color-grayscale-white);
+  --background-brand-primary: var(--theme-vibrant--green);
+  --text-inverse: var(--color-grayscale-white);
+  --border-brand-primary: var(--theme-vibrant--green);
+  --background-primary: var(--color-grayscale-white);
+  --border-inverse: var(--color-grayscale-white);
+  --text-primary: var(--color-grayscale-darkest);
+  --text-brand-primary: var(--theme-vibrant--green);
+  --surface-primary: var(--theme-vibrant--tan);
+  --border-primary: var(--color-grayscale-dark);
+  --surface-secondary: var(--color-grayscale-lightest);
+  --page-primary: var(--theme-vibrant--tan);
+  --text-muted: var(--color-grayscale-dark);
+  --surface-brand-primary: var(--theme-vibrant--green);
+  --border-input: var(--color-grayscale-light);
+  --border-muted: var(--color-grayscale-lighter);
+  --border-on-color-dark: white;
+  --surface-brand-secondary: var(--theme-vibrant--purple);
+  --text-secondary: var(--color-grayscale-darker);
+  --background-secondary: var(--color-grayscale-lightest);
+  --theme-blue-green: var(--theme-vibrant--purple);
+  --theme-blue-blue-lightest: var(--theme-blue-red--green-blue);
+  --theme-blue-blue-lighter: var(--theme-vibrant--yellow);
+  --theme-blue-blue-light: var(--theme-vibrant--green);
+  --page-brand-primary: var(--theme-vibrant--green);
+  --background-brand-secondary: white;
+  --background-inverse: var(--color-grayscale-white);
+  --background-input: var(--color-grayscale-white);
+  --background-image: #17171799;
+  --background-image-brand: var(--theme-vibrant--green);
+  --page-secondary: var(--theme-yellow-brown--brown);
+  --theme-blue-blue-dark: var(--theme-vibrant--tan);
+
+  /* Typography */
+  --font-family-label: Hind, sans-serif;
+  --font-family-subtitle: var(--font-family-label);
+  --font-family-body: Hind, sans-serif;
+  --font-family-heading: "Playfair Display", sans-serif;
+  --font-family-display: "Playfair Display", sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+  --body-sm: var(--font-size-75);
+  --body-md: var(--font-size-100);
+  --body-lg: var(--font-size-200);
+  --body-xs: var(--font-size-50);
+  --body-tiny: var(--font-size-25);
+  --label-md: var(--font-size-100);
+  --label-lg: var(--font-size-200);
+  --label-sm: var(--font-size-75);
+  --heading-huge: var(--font-size-1200);
+  --heading-lg: var(--font-size-700);
+  --heading-xxl: var(--font-size-1000);
+  --heading-xl: var(--font-size-900);
+  --heading-md: var(--font-size-500);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --display-lg: var(--font-size-1400);
+  --display-md: var(--font-size-1500);
+  --display-sm: var(--font-size-1600);
+  --icon-sm: var(--font-size-75);
+  --icon-md: var(--font-size-100);
+  --icon-lg: var(--font-size-200);
+}
+
+/*
+ * ── Client Simulation Theme (theme-client-sim) ────────────────────────────────
+ *
+ * PURPOSE: Semantic font-family validation tool.
+ * Assigns maximally distinct system fonts to each family token so that any
+ * component using the wrong family token is immediately legible during development.
+ *
+ *   --font-family-heading   → Georgia (serif)         ← heading/title elements
+ *   --font-family-display   → Georgia (serif)         ← display/hero elements
+ *   --font-family-label     → Courier New (monospace) ← labels, badges, tags, buttons
+ *   --font-family-subtitle  → Impact (condensed)      ← subtitle-sized text (badge sm/lg, table subheader, board subtitle)
+ *   --font-family-body      → Verdana (sans-serif)    ← body copy, descriptions
+ *
+ * If you see:
+ *   - A heading rendered in Verdana, Courier New, or Impact  → wrong font-family token
+ *   - A badge/label rendered in Georgia, Verdana, or Impact  → wrong font-family token
+ *   - Subtitle text rendered in Georgia, Verdana, or Courier → wrong font-family token
+ *   - Body copy rendered in Georgia, Courier New, or Impact  → wrong font-family token
+ *
+ * This theme is NOT for client delivery. Run it in Storybook toolbar when:
+ *   1. Building a new component
+ *   2. Reviewing a component PR
+ *   3. Validating a client theme override will work correctly
+ */
+.body.theme-client-sim {
+  --font-family-heading: Georgia, "Times New Roman", serif;
+  --font-family-display: Georgia, "Times New Roman", serif;
+  --font-family-label: "Courier New", Courier, monospace;
+  --font-family-subtitle: Impact, "Arial Narrow", sans-serif;
+  --font-family-body: Verdana, Geneva, sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+}
