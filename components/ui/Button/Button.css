@@ -42,8 +42,12 @@
 }
 
 .bds-button--sm {
-  padding: var(--padding-sm);
+  /* Block padding aligned with TextInput sm (--padding-xs = 10px) so both
+   * components share the same natural height. min-height: 44px snaps to 4px grid. */
+  padding-block: var(--padding-xs);
+  padding-inline: var(--padding-sm);
   font-size: var(--label-sm);
+  min-height: 44px;
 }
 
 .bds-button--md {
