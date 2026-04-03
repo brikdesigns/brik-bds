@@ -21,7 +21,7 @@ Semantic tokens map to purpose, not appearance. These values change when you swi
     { name: 'page-brand-primary', cssVar: '--page-brand-primary' },
     { name: 'surface-primary', cssVar: '--surface-primary' },
     { name: 'surface-secondary', cssVar: '--surface-secondary' },
-    { name: 'surface-nav', cssVar: '--surface-nav' },
+    { name: 'surface-navigation', cssVar: '--surface-navigation' },
     { name: 'surface-brand-primary', cssVar: '--surface-brand-primary' },
     { name: 'surface-brand-secondary', cssVar: '--surface-brand-secondary' },
   ]}
@@ -149,6 +149,79 @@ Semantic tokens for error, success, warning, info, and other status states. Use 
     { name: 'surface-status-info', cssVar: '--surface-status-info' },
   ]}
   columns={4}
+/>
+
+### Semantic negative / positive / warning
+
+Alternative status aliases used by client themes and some BDS components. These map to the same system colors as `--*-status-*` by default, but **can be overridden per client** to use brand-appropriate tints. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the distinction between these and the frozen `--*-status-*` tokens.
+
+<ColorGrid
+  colors={[
+    { name: 'surface-negative', cssVar: '--surface-negative' },
+    { name: 'surface-positive', cssVar: '--surface-positive' },
+    { name: 'surface-warning', cssVar: '--surface-warning' },
+    { name: 'text-negative', cssVar: '--text-negative', isText: true },
+    { name: 'text-positive', cssVar: '--text-positive', isText: true },
+    { name: 'text-warning', cssVar: '--text-warning', isText: true },
+    { name: 'border-negative', cssVar: '--border-negative' },
+    { name: 'border-positive', cssVar: '--border-positive' },
+    { name: 'border-warning', cssVar: '--border-warning' },
+  ]}
+  columns={3}
+/>
+
+## Department colors
+
+Semantic tokens for categorical color-coding by organizational department (Clinical, Front Desk, Administration, etc.). Consumed via the `departmentColor(key)` helper in `src/lib/tokens.ts`. Valid keys: `blue`, `green`, `red`, `gold`, `purple`, `taupe`.
+
+These tokens are **client-overridable** — override the full set in your theme file to match your client's departmental palette.
+
+### Department backgrounds
+
+<ColorGrid
+  colors={[
+    { name: 'background-department-blue', cssVar: '--background-department-blue' },
+    { name: 'background-department-blue-light', cssVar: '--background-department-blue-light' },
+    { name: 'background-department-green', cssVar: '--background-department-green' },
+    { name: 'background-department-green-light', cssVar: '--background-department-green-light' },
+    { name: 'background-department-gold', cssVar: '--background-department-gold' },
+    { name: 'background-department-gold-light', cssVar: '--background-department-gold-light' },
+    { name: 'background-department-red', cssVar: '--background-department-red' },
+    { name: 'background-department-red-light', cssVar: '--background-department-red-light' },
+    { name: 'background-department-purple', cssVar: '--background-department-purple' },
+    { name: 'background-department-purple-light', cssVar: '--background-department-purple-light' },
+    { name: 'background-department-taupe', cssVar: '--background-department-taupe' },
+    { name: 'background-department-taupe-light', cssVar: '--background-department-taupe-light' },
+  ]}
+  columns={4}
+/>
+
+### Department text
+
+<ColorGrid
+  colors={[
+    { name: 'text-department-blue', cssVar: '--text-department-blue', isText: true },
+    { name: 'text-department-green', cssVar: '--text-department-green', isText: true },
+    { name: 'text-department-gold', cssVar: '--text-department-gold', isText: true },
+    { name: 'text-department-red', cssVar: '--text-department-red', isText: true },
+    { name: 'text-department-purple', cssVar: '--text-department-purple', isText: true },
+    { name: 'text-department-taupe', cssVar: '--text-department-taupe', isText: true },
+  ]}
+  columns={3}
+/>
+
+### Department borders
+
+<ColorGrid
+  colors={[
+    { name: 'border-department-blue', cssVar: '--border-department-blue' },
+    { name: 'border-department-green', cssVar: '--border-department-green' },
+    { name: 'border-department-gold', cssVar: '--border-department-gold' },
+    { name: 'border-department-red', cssVar: '--border-department-red' },
+    { name: 'border-department-purple', cssVar: '--border-department-purple' },
+    { name: 'border-department-taupe', cssVar: '--border-department-taupe' },
+  ]}
+  columns={3}
 />
 
 ## Presence tokens
