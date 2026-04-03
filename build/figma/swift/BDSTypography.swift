@@ -3,15 +3,6 @@
 
 import SwiftUI
 public enum BDSTypography {
-    public static let iconLogo = "Font Awesome Brand"
-    public static let iconIcon = "Font Awesome Solid"
-    public static let iconTiny: CGFloat = 11.54
-    public static let iconXs: CGFloat = 14
-    public static let iconMd: CGFloat = 18
-    public static let iconSm: CGFloat = 16
-    public static let iconLg: CGFloat = 20
-    public static let iconXl: CGFloat = 22.5
-    public static let iconHuge: CGFloat = 25.3
     public static let bodyXs: CGFloat = 11.54
     public static let bodyTiny: CGFloat = 10.26
     public static let bodyMd: CGFloat = 16

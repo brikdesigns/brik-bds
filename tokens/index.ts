@@ -1,10 +1,13 @@
 /**
  * BDS Design Token Types
  *
- * Auto-generated from Webflow design tokens
- * Source: brik-bds.webflow.css
- * Generated: 2026-03-18T09:52:20.052Z
- * DO NOT EDIT DIRECTLY - Run: node build.js
+ * Primitive scales and type exports for Storybook docs and ThemeProvider.
+ * Source of truth: design-tokens/tokens-studio.json → Style Dictionary → figma-tokens.css
+ *
+ * Primitive values (spaceScale, sizeScale, etc.) are used in Storybook foundation docs.
+ * ThemeNumber and BDSThemeConfig drive the ThemeProvider component.
+ *
+ * For component development, import from @/lib/tokens (consuming project) instead.
  */
 
 /**
@@ -91,7 +94,7 @@ export const themeMetadata: Record<ThemeNumber, { name: string; description: str
  * Generate CSS class string for theme
  */
 export function getThemeClasses(config: Partial<BDSThemeConfig>): string {
-  const classes: string[] = [];
+  const classes: string[] = ['body'];
 
   if (config.themeNumber && config.themeNumber !== '1') {
     classes.push(`theme-${config.themeNumber}`);
@@ -450,6 +453,13 @@ export const fontLineHeights = {
 
 /**
  * Semantic color tokens (default theme values)
+ *
+ * @deprecated These reference Webflow-format variable names (--grayscale--, --_themes---).
+ * Do NOT use these in components or new code. Use CSS custom properties from
+ * figma-tokens.css directly (--text-primary, --background-brand-primary, etc.)
+ * or import from @/lib/tokens in consuming projects.
+ *
+ * Retained for legacy Storybook compatibility only.
  */
 export const semanticColors = {
   "border--secondary": "var(--grayscale--light)",
@@ -491,32 +501,39 @@ export const semanticColors = {
 
 /**
  * Semantic space tokens (default values)
+ * Used by Storybook Spacing.mdx to render the semantic spacing scale.
+ * Maps to SD single-dash --space-* variables (NOT the legacy --space-- double-dash format).
  */
 export const semanticSpace = {
-  "none": "var(--space--0)",
-  "lg": "var(--space--600)",
-  "md": "var(--space--400)",
-  "xl": "var(--space--800)",
-  "gap--md": "var(--space--200)",
-  "gap--lg": "var(--space--400)",
-  "gap--xl": "var(--space--600)",
-  "gap--none": "var(--space--0)",
-  "huge": "var(--space--1200)",
-  "xxl": "var(--space--800)",
-  "xs": "var(--space--250)",
-  "sm": "var(--space--300)",
-  "gap--xs": "var(--space--100)",
-  "gap--sm": "var(--space--150)",
-  "gap--xxl": "var(--space--600)",
-  "gap--huge": "var(--space--800)",
-  "tiny": "var(--space--200)",
-  "gap--tiny": "var(--space--50)",
-  "button": "var(--space--200)",
-  "input": "var(--space--200)"
+  "none": "var(--space-0)",
+  "tiny": "var(--space-200)",
+  "xs": "var(--space-250)",
+  "sm": "var(--space-300)",
+  "md": "var(--space-400)",
+  "lg": "var(--space-600)",
+  "xl": "var(--space-800)",
+  "huge": "var(--space-1200)",
+  "gap--none": "var(--space-0)",
+  "gap--tiny": "var(--space-50)",
+  "gap--xs": "var(--space-100)",
+  "gap--sm": "var(--space-150)",
+  "gap--md": "var(--space-200)",
+  "gap--lg": "var(--space-400)",
+  "gap--xl": "var(--space-600)",
+  "gap--huge": "var(--space-800)",
+  "button": "var(--space-200)",
+  "input": "var(--space-200)"
 } as const;
 
 /**
  * Semantic typography tokens (default values)
+ *
+ * @deprecated Font family values here reflect an old Webflow theme configuration
+ * and do not match the current BDS token stack (Poppins/Avenir/Century Schoolbook).
+ * Do NOT use these in components. Use --font-family-heading/body/label/display from
+ * figma-tokens.css, or import font.family.* from @/lib/tokens in consuming projects.
+ *
+ * Retained for legacy Storybook compatibility only.
  */
 export const semanticTypography = {
   "font-family--label": "\"Open Sans\", sans-serif",
