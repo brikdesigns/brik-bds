@@ -961,31 +961,31 @@
   "font-line-height": {
     "tight": {
       "$value": 110,
-      "$type": "dimension"
+      "$type": "number"
     },
     "snug": {
       "$value": 125,
-      "$type": "dimension"
+      "$type": "number"
     },
     "normal": {
       "$value": 150,
-      "$type": "dimension"
+      "$type": "number"
     },
     "relaxed": {
       "$value": 175,
-      "$type": "dimension"
+      "$type": "number"
     },
     "loose": {
       "$value": 200,
-      "$type": "dimension"
+      "$type": "number"
     },
     "none": {
       "$value": 0,
-      "$type": "dimension"
+      "$type": "number"
     },
     "moderate": {
       "$value": 138,
-      "$type": "dimension"
+      "$type": "number"
     }
   },
   "size": {
