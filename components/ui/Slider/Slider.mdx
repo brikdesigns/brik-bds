@@ -39,6 +39,23 @@ Real-world usage: audio settings panel and budget filter.
 
 ---
 
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-slider`. Set on a wrapping element to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--slider-thumb-shadow` | `0 2px 4px rgba(0,0,0,0.1)` | Drop shadow on the draggable thumb |
+
+```css
+/* Example: stronger shadow in a light-on-white context */
+.settings-panel {
+  --slider-thumb-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+```
+
+---
+
 ## Usage
 
 ```tsx

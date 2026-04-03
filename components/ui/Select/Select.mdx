@@ -41,6 +41,25 @@ Real-world usage: form layouts and constrained containers.
 
 ---
 
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-select`. Set on a wrapping element to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--select-chevron-color` | `var(--text-muted)` | Color of the dropdown chevron icon |
+| `--select-icon-color` | `var(--text-muted)` | Color of the optional leading icon |
+
+```css
+/* Example: match chevron to brand color in a themed form */
+.branded-form {
+  --select-chevron-color: var(--text-brand-primary);
+  --select-icon-color: var(--text-brand-primary);
+}
+```
+
+---
+
 ## Usage
 
 ```tsx
