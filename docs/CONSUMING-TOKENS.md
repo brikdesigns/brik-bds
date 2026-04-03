@@ -48,14 +48,26 @@ Style Dictionary generates platform-specific token files from the same Figma sou
 
 ## CSS layer (CRITICAL — this is where tokens become available to the browser)
 
-Every consuming project must import `figma-tokens.css` in `globals.css`. This makes the CSS custom properties available at runtime. Without this import, `var()` references in components resolve to nothing.
+Every consuming project must import these three files in `globals.css` in order. Without this import, `var()` references in components resolve to nothing.
 
 ```css
-/* src/app/globals.css */
+/* src/app/globals.css — standard import cascade for client projects */
+
+/* 1. Web fonts */
 @import '../../brik-bds/tokens/fonts.css';
+
+/* 2. SD-generated primitives + semantic tokens (light mode) */
 @import '../../brik-bds/tokens/figma-tokens.css';
+
+/* 3. Gap-fill tokens not yet promoted to Figma/Style Dictionary */
+@import '../../brik-bds/tokens/gap-fills.css';
+
+/* 4. Client brand overrides (Tier 2) */
+@import './styles/theme-{client}.css';
 ```
 
+**Do NOT import `overrides.css`** — it is now a deprecated shim. Use `gap-fills.css` explicitly.
+**Do NOT import `website-themes.css`** — those are website template themes, not for client projects.
 **Do NOT import `react-tokens.css`** — it is deprecated (manually maintained, prone to drift).
 **Do NOT import `webflow-tokens.css`** — it has circular refs and 8 theme blocks for Webflow only.
 
