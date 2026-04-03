@@ -1,5 +1,4 @@
 import { Meta } from '@storybook/addon-docs/blocks';
-import { ThemeOverview } from './_components';
 
 <Meta title="Foundations/Design Tokens/Overview" />
 
@@ -186,48 +185,17 @@ A token compliance gate blocks hardcoded hex colors, raw `var()` strings, and ha
 
 ---
 
-## Client theming: how it works
+## Client theming
 
-A client brand is a single CSS file that overrides ~12–27 semantic tokens. No components change.
+A client brand is a single CSS file (~12–27 token overrides). No components change. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the full cascade, override tiers, known gaps, and font-only override patterns.
 
-```css
-/* theme-acme.css — all that's needed for a full rebrand */
-:root {
-  /* Tier 1 overrides — required */
-  --background-brand-primary:  #2563EB;
-  --text-brand-primary:        #2563EB;
-  --border-brand-primary:      #2563EB;
-  --surface-brand-primary:     #EFF6FF;
-
-  /* Tier 2 overrides — recommended */
-  --page-primary:              #F8FAFC;
-  --surface-primary:           #FFFFFF;
-  --surface-secondary:         #F1F5F9;
-
-  /* Typography — if client has custom fonts */
-  --font-family-heading:       'Neue Haas Grotesk', sans-serif;
-  --font-family-body:          'Inter', sans-serif;
-  --font-family-label:         'Inter', sans-serif;
-
-  /* Interaction states — must set if overriding brand-primary */
-  --background-brand-primary-hover:   #1D4ED8;
-  --background-brand-primary-pressed: #1E40AF;
-}
-```
-
-**Validate with Client Sim theme:** Switch to `★ Client Sim` in the Storybook toolbar. It assigns Georgia/Verdana/Courier New to heading/body/label families. Any component using the wrong `--font-family-*` token becomes immediately visible. Always validate new components in this theme before shipping.
-
-See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the full cascade and known gaps.
+**Validate with Client Sim theme:** Switch to `★ Client Sim` in the Storybook toolbar. It assigns Georgia/Verdana/Courier New to heading/body/label families — any component using the wrong `--font-family-*` token becomes immediately visible.
 
 ---
 
 ## Built-in themes
 
-BDS ships 9 themes. Switch using the paintbrush icon in the toolbar above.
-
-<ThemeOverview />
-
-Each theme overrides semantic color tokens. Spacing, shadows, and component structure are theme-invariant.
+BDS ships 9 themes. Switch using the paintbrush icon in the toolbar above. Each theme overrides semantic color tokens only — spacing, shadows, and component structure are theme-invariant. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the full theme gallery and how to add a custom brand.
 
 ---
 
@@ -235,16 +203,57 @@ Each theme overrides semantic color tokens. Spacing, shadows, and component stru
 
 417 tokens across all collections. Browse each category:
 
-| Category | Page | What's inside |
-|----------|------|---------------|
-| [Color](?path=/docs/foundations-design-tokens-color--docs) | Semantic roles, interaction states, status, presence, primitives | `--background-*`, `--text-*`, `--surface-*`, `--border-*` |
-| [Typography](?path=/docs/foundations-design-tokens-typography--docs) | Font families, sizes, weights, line heights | `--font-family-*`, `--heading-*`, `--body-*`, `--label-*` |
-| [Spacing](?path=/docs/foundations-design-tokens-spacing--docs) | Padding, gap, raw space scale | `--padding-*`, `--gap-*`, `--space-*` |
-| [Border Radius](?path=/docs/foundations-design-tokens-border-radius--docs) | Radius scale and semantic sizes | `--border-radius-*` |
-| [Border Width](?path=/docs/foundations-design-tokens-border-width--docs) | Width scale and semantic sizes | `--border-width-*` |
-| [Shadow](?path=/docs/foundations-design-tokens-shadow--docs) | Composed elevation + blur/spread scales | `--shadow-*`, `--blur-radius-*` |
-| [Size](?path=/docs/foundations-design-tokens-size--docs) | Size scale, breakpoints | `--size-*`, `--breakpoint-*` |
-| [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) | How to configure a client brand | Cascade, overrides, known gaps |
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Token patterns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="?path=/docs/foundations-design-tokens-color--docs">Color</a></td>
+      <td>Semantic roles, interaction states, status, presence, primitives</td>
+      <td><code>--background-*</code> <code>--text-*</code> <code>--surface-*</code> <code>--border-*</code></td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/foundations-design-tokens-typography--docs">Typography</a></td>
+      <td>Font families, sizes, weights, line heights</td>
+      <td><code>--font-family-*</code> <code>--heading-*</code> <code>--body-*</code> <code>--label-*</code></td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/foundations-design-tokens-spacing--docs">Spacing</a></td>
+      <td>Padding, gap, raw space scale</td>
+      <td><code>--padding-*</code> <code>--gap-*</code> <code>--space-*</code></td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/foundations-design-tokens-border-radius--docs">Border Radius</a></td>
+      <td>Radius scale and semantic sizes</td>
+      <td><code>--border-radius-*</code></td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/foundations-design-tokens-border-width--docs">Border Width</a></td>
+      <td>Width scale and semantic sizes</td>
+      <td><code>--border-width-*</code></td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/foundations-design-tokens-shadow--docs">Shadow</a></td>
+      <td>Composed elevation + blur/spread scales</td>
+      <td><code>--shadow-*</code> <code>--blur-radius-*</code></td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/foundations-design-tokens-size--docs">Size</a></td>
+      <td>Size scale, breakpoints</td>
+      <td><code>--size-*</code> <code>--breakpoint-*</code></td>
+    </tr>
+    <tr>
+      <td><a href="?path=/docs/foundations-design-tokens-client-theming--docs">Client Theming</a></td>
+      <td>How to configure a client brand</td>
+      <td>Cascade, overrides, known gaps</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
