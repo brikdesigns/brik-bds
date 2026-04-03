@@ -899,6 +899,15 @@
         "$type": "text",
         "$value": "Poppins"
       },
+      "subtitle": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "text",
+        "$value": "Poppins"
+      },
       "icon": {
         "$extensions": {
           "com.figma.scopes": [

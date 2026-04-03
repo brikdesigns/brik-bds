@@ -105,12 +105,6 @@
   --text-transform-body: none;
   --text-transform-display: none;
 
-  /* ── Font Family Subtitle ──
-     Semantic font-family for subtitle-sized text (--subtitle-sm/md/lg).
-     Defaults to label family. Override per-theme to visually differentiate.
-     TODO: promote to Figma variables once stable. */
-  --font-family-subtitle: var(--font-family-label);
-
   /* ── System Color Extras ── */
   --color-system-transparent: #0000;
   --color-system-lightbox: #000000a3;

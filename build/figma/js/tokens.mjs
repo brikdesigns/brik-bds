@@ -95,6 +95,7 @@ export const fontFamilyDisplay = "Poppins";
 export const fontFamilyHeading = "Poppins";
 export const fontFamilyLabel = "Poppins";
 export const fontFamilyBody = "Poppins";
+export const fontFamilySubtitle = "Poppins";
 export const fontFamilyIcon = "Font Awesome 6 Pro";
 export const fontFamilyLogo = "Font Awesome 6 Brands";
 export const easingEaseIn = "String value";

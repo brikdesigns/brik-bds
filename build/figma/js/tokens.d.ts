@@ -108,6 +108,7 @@ export const fontFamilyDisplay: string;
 export const fontFamilyHeading: string;
 export const fontFamilyLabel: string;
 export const fontFamilyBody: string;
+export const fontFamilySubtitle: string;
 export const fontFamilyIcon: string;
 export const fontFamilyLogo: string;
 export const easingEaseIn: string;
