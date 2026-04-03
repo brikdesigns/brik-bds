@@ -245,6 +245,24 @@ See [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) for the full consumption pat
 
 **Reference implementation:** brik-client-portal
 
+## Token PR Checklist
+
+Run before raising any PR touching a token file, theme file, or component CSS:
+
+```bash
+# From brik-bds root:
+./scripts/pr-checklist.sh
+
+# From a consuming project:
+./brik-bds/scripts/pr-checklist.sh
+```
+
+Runs automated checks (lint-tokens, token-audit, Tier 2 hex scan) then prints the manual reviewer steps. See [docs/TOKEN-PR-CHECKLIST.md](docs/TOKEN-PR-CHECKLIST.md) for the full checklist and architecture reference.
+
+**Scope rule:** one concern per PR — theme changes, component fixes, and submodule syncs are always separate PRs.
+
+---
+
 ## Don't Edit the Submodule
 
 The copy at `brik-llm/foundations/brik-bds/` is a git submodule.

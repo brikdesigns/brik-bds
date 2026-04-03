@@ -30,6 +30,84 @@
  */
 
 /* ============================================
+   WEBSITE TEMPLATE THEME PRIMITIVES
+   Raw color values private to this file.
+   Only used by the .body.theme-N blocks below.
+   NOT for use in client projects or BDS components.
+   ============================================ */
+
+:root {
+  /* Theme: Yellow-Orange (Theme 2, 4) */
+  --theme-yellow-orange--yellow: #e8ea76;
+  --theme-yellow-orange--yellow-dark: #d8d96a;
+  --theme-yellow-orange--orange: #ef8f4b;
+  --theme-yellow-orange--black: black;
+
+  /* Theme: Yellow-Brown (Theme 4, 7) */
+  --theme-yellow-brown--yellow: #f3b94d;
+  --theme-yellow-brown--green: #615f36;
+  --theme-yellow-brown--brown: #372d2b;
+  --theme-yellow-brown--tan: #fffaeb;
+
+  /* Theme: Peach-Brown (Theme 5) */
+  --theme-peach-brown--peach: #ed8059;
+  --theme-peach-brown--peach-light: #efc7a2;
+  --theme-peach-brown--peach-lightest: #f2eee5;
+  --theme-peach-brown--peach-darkest: #443b2b;
+
+  /* Theme: Pastel (Theme 6) */
+  --theme-pastel--purple: #c8aff4;
+  --theme-pastel--green: #b9fd98;
+  --theme-pastel--blue: #384ce2;
+  --theme-pastel--orange-light: #fdf2d5;
+  --theme-pastel--black: black;
+
+  /* Theme: Green-Orange (Theme 7) */
+  --theme-green-orange--yellow-light: #fdd595;
+  --theme-green-orange--brown-light: #656153;
+  --theme-green-orange--yellow: #ffa600;
+  --theme-green-orange--green-light: #9eb28d;
+  --theme-green-orange--brown: #322b2f;
+
+  /* Theme: Vibrant (Theme 8) */
+  --theme-vibrant--blue: #5889f7;
+  --theme-vibrant--green: #4aa35b;
+  --theme-vibrant--orange: #ed7648;
+  --theme-vibrant--yellow: #f6c647;
+  --theme-vibrant--purple: #7a78f7;
+  --theme-vibrant--tan: #fcf9f2;
+
+  /* Theme: Blue-Orange */
+  --theme-blue-orange--blue: #3d5b83;
+  --theme-blue-orange--yellow: #f16b4d;
+  --theme-blue-orange--blue-dark: #263343;
+  --theme-blue-orange--blue-light: #98c0d9;
+  --theme-blue-orange--blue-lightest: #ddfbfa;
+
+  /* Theme: Blue-Red */
+  --theme-blue-red--green: #74b4a8;
+  --theme-blue-red--green-blue: #317d9e;
+  --theme-blue-red--red: #fe1755;
+  --theme-blue-red--blue-dark: #f5ffbe;
+  --theme-blue-red--green-light: #b2dbc0;
+
+  /* Theme: Orange-Green */
+  --theme-orange-green--green: #1bb58c;
+  --theme-orange-green--orange-light: #ffae26;
+  --theme-orange-green--orange-lightest: #fef2cd;
+  --theme-orange-green--red: #fd2253;
+  --theme-orange-green--orange: #ff7828;
+
+  /* Theme: Neon */
+  --theme-neon--neon-green: #42ff00;
+  --theme-neon--neon-blue: #00f6ff;
+  --theme-neon--neon-purple: #ae00ff;
+  --theme-neon--neon-orange: #ff5c00;
+  --theme-neon--neon-yellow: #fffc00;
+  --theme-neon--neon-pink: #f0c;
+}
+
+/* ============================================
    THEME 1 — Default (Open Sans / Droid Sans)
 
    Expanded from old .body block. Overrides
