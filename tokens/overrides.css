@@ -219,6 +219,14 @@
   --shadow-lg:      0px 4px 16px 0px rgba(0, 0, 0, 0.12);
   --shadow-xl:      0px 8px 24px 4px rgba(0, 0, 0, 0.20);
 
+  /* Bridge aliases — consuming projects (tokens.ts) reference --box-shadow-*;
+     these ensure the default values resolve even without a client theme file.
+     Per-theme blocks may override --box-shadow-* to suppress or restyle elevation. */
+  --box-shadow-sm:  var(--shadow-sm);
+  --box-shadow-md:  var(--shadow-md);
+  --box-shadow-lg:  var(--shadow-lg);
+  --box-shadow-xl:  var(--shadow-xl);
+
   /* Overlay (for Modal, Sheet, Dialog backdrops) */
   --background-overlay: rgba(0, 0, 0, 0.4);
 
