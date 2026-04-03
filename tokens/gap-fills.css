@@ -57,8 +57,9 @@
      literal string "String value" — a Figma limitation (no native easing variable type).
      These declarations overwrite those broken values with correct CSS cubic-bezier curves.
      ⚠️  LOAD-BEARING OVERRIDE: do not remove without fixing the Figma variable type first. */
-  --easing-ease-in:  cubic-bezier(0.4, 0, 1, 1);
-  --easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-ease-in:     cubic-bezier(0.4, 0, 1, 1);
+  --easing-ease-out:    cubic-bezier(0, 0, 0.2, 1);
+  --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* TODO: promote to Figma */
 
   /* ── Missing Semantic Tokens ── */
   --background-tertiary: var(--color-grayscale-lighter);
