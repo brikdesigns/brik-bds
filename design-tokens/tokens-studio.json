@@ -2012,7 +2012,7 @@
             "ALL_SCOPES"
           ]
         },
-        "$type": "dimension",
+        "$type": "number",
         "$value": 110
       },
       "snug": {
@@ -2021,7 +2021,7 @@
             "ALL_SCOPES"
           ]
         },
-        "$type": "dimension",
+        "$type": "number",
         "$value": 125
       },
       "normal": {
@@ -2030,7 +2030,7 @@
             "ALL_SCOPES"
           ]
         },
-        "$type": "dimension",
+        "$type": "number",
         "$value": 150
       },
       "relaxed": {
@@ -2039,7 +2039,7 @@
             "ALL_SCOPES"
           ]
         },
-        "$type": "dimension",
+        "$type": "number",
         "$value": 175
       },
       "loose": {
@@ -2048,7 +2048,7 @@
             "ALL_SCOPES"
           ]
         },
-        "$type": "dimension",
+        "$type": "number",
         "$value": 200
       },
       "none": {
@@ -2057,7 +2057,7 @@
             "ALL_SCOPES"
           ]
         },
-        "$type": "dimension",
+        "$type": "number",
         "$value": 0
       },
       "moderate": {
@@ -2066,7 +2066,7 @@
             "ALL_SCOPES"
           ]
         },
-        "$type": "dimension",
+        "$type": "number",
         "$value": 138
       }
     },
