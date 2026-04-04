@@ -113,21 +113,17 @@ export function FilterButton({
     };
   }, [isOpen, handleClickOutside, handleEscape]);
 
-  // Reposition dropdown if it overflows the viewport (runtime-calculated)
+  // Reposition dropdown if it overflows the viewport horizontally (runtime-calculated)
+  // Vertical flip is intentionally omitted — dropdowns open below by default.
   useEffect(() => {
     if (!isOpen || !dropdownRef.current) return;
     const dropdown = dropdownRef.current;
     const rect = dropdown.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
 
     if (rect.right > viewportWidth) {
       dropdown.style.left = 'auto';
       dropdown.style.right = '0';
-    }
-    if (rect.bottom > viewportHeight) {
-      dropdown.style.top = 'auto';
-      dropdown.style.bottom = 'calc(100% + var(--gap-md))';
     }
   }, [isOpen]);
 
