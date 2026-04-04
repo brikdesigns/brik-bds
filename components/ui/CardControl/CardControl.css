@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── CardControl ────────────────────────────────────────────── */
 
 .bds-card-control {
@@ -58,4 +59,5 @@
 
 .bds-card-control__action {
   flex-shrink: 0;
+}
 }

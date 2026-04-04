@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Table ──────────────────────────────────────────────────── */
 
 .bds-table {
@@ -98,4 +99,5 @@
 /* Size: comfortable */
 .bds-table[data-size="comfortable"] .bds-table-cell {
   padding: var(--padding-xl) var(--padding-md);
+}
 }

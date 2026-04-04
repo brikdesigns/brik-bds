@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Skeleton ───────────────────────────────────────────────── */
 
 @keyframes bds-skeleton-shimmer {
@@ -36,4 +37,5 @@
   width: 100%;
   height: 140px;
   border-radius: var(--border-radius-md);
+}
 }

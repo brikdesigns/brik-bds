@@ -1,3 +1,4 @@
+@layer bds-components {
 /* SegmentedControl — pseudo-state styles (hover, pressed, disabled)
    Inline CSSProperties can't handle :hover/:active/:disabled,
    so these live in CSS. */
@@ -41,4 +42,5 @@
 .bds-segmented-control-item:focus-visible {
   outline: 2px solid var(--border-brand-primary);
   outline-offset: 1px;
+}
 }

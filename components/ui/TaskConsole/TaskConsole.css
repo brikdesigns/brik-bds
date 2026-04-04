@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── TaskConsole ─────────────────────────────────────────────── */
 
 .bds-task-console {
@@ -235,4 +236,5 @@
   border-radius: var(--border-radius-pill);
   border: var(--border-width-lg) solid var(--border-primary);
   box-sizing: border-box;
+}
 }

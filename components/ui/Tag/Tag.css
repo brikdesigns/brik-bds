@@ -1,3 +1,4 @@
+@layer bds-components {
 /**
  * BDS Tag — Categorization label with optional icons and dismiss
  *
@@ -117,4 +118,5 @@
 
 .bds-tag__remove:hover {
   opacity: 0.7;
+}
 }

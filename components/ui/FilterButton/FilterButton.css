@@ -1,3 +1,4 @@
+@layer bds-components {
 /* FilterButton — dropdown filter trigger for filter bars */
 
 /* ─── Container ───────────────────────────────────────── */
@@ -109,4 +110,5 @@
   font-size: var(--icon-lg);
   color: var(--text-primary);
   flex-shrink: 0;
+}
 }

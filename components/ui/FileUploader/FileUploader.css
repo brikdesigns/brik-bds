@@ -1,3 +1,4 @@
+@layer bds-components {
 /**
  * BDS FileUploader
  *
@@ -99,4 +100,5 @@
   font-weight: var(--font-weight-semi-bold);
   text-decoration: underline;
   cursor: pointer;
+}
 }

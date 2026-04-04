@@ -1,3 +1,4 @@
+@layer bds-components {
 /* Board — Kanban-style horizontal board layout */
 
 /* ─── Board container ─────────────────────────────────── */
@@ -290,4 +291,5 @@
   gap: var(--space-100);
   flex-wrap: wrap;
   min-width: 0;
+}
 }

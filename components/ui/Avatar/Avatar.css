@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Avatar ─────────────────────────────────────────────────── */
 
 .bds-avatar {
@@ -51,3 +52,4 @@
 .bds-avatar__status--offline { background-color: var(--background-presence-offline); }
 .bds-avatar__status--busy    { background-color: var(--background-presence-busy); }
 .bds-avatar__status--away    { background-color: var(--background-presence-away); }
+}

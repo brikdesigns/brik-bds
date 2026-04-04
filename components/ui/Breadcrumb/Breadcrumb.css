@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Breadcrumb ─────────────────────────────────────────────── */
 
 .bds-breadcrumb {
@@ -39,4 +40,5 @@
   color: var(--text-muted);
   line-height: var(--font-line-height-tight);
   padding: 0 var(--padding-tiny);
+}
 }

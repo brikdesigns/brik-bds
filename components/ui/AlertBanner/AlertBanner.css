@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── AlertBanner ─────────────────────────────────────────────── */
 
 .bds-alert-banner {
@@ -56,4 +57,5 @@
 
 .bds-alert-banner__action {
   flex-shrink: 0;
+}
 }

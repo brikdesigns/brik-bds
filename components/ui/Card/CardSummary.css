@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── CardSummary ────────────────────────────────────────────── */
 
 .bds-card-summary {
@@ -79,4 +80,5 @@
 
 .bds-card-summary__link:hover {
   text-decoration: underline;
+}
 }

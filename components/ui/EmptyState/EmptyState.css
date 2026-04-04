@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── EmptyState ─────────────────────────────────────────────── */
 
 .bds-empty-state {
@@ -49,4 +50,5 @@
   color: var(--text-primary);
   margin: 0;
   text-align: center;
+}
 }

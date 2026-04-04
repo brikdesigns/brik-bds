@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── CardTestimonial ────────────────────────────────────────── */
 
 .bds-card-testimonial {
@@ -92,4 +93,5 @@
   font-size: var(--heading-lg);
   line-height: var(--font-line-height-snug);
   color: var(--background-status-warning);
+}
 }

@@ -1,3 +1,4 @@
+@layer bds-components {
 /**
  * BDS Badge — Status indicator with semantic colors
  *
@@ -135,4 +136,5 @@
 .bds-badge--light.bds-badge--progress {
   background-color: var(--background-status-info-subtle);
   color: var(--text-status-info);
+}
 }

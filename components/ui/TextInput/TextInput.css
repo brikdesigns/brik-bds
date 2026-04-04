@@ -1,3 +1,4 @@
+@layer bds-components {
 /**
  * BDS TextInput Interactive States
  *
@@ -35,4 +36,5 @@
 .bds-text-input-field:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
 }

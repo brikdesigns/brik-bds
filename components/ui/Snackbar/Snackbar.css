@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Snackbar ───────────────────────────────────────────────── */
 
 .bds-snackbar {
@@ -75,4 +76,5 @@
 
 .bds-snackbar__close:hover {
   opacity: 1;
+}
 }

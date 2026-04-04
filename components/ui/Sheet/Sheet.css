@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Sheet ──────────────────────────────────────────────────── */
 /* Overlay treatment aligned with Modal (2026-03-20)            */
 
@@ -144,4 +145,5 @@
   flex-wrap: wrap;
   flex-shrink: 0;
   border-top: var(--border-width-sm) solid var(--border-muted);
+}
 }

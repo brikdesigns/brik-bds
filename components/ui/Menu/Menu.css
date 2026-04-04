@@ -1,3 +1,4 @@
+@layer bds-components {
 /* Menu — floating dropdown panel for navigation and actions */
 
 /* ─── Panel ───────────────────────────────────────────── */
@@ -55,4 +56,5 @@
   font-size: var(--icon-lg);
   color: var(--text-primary);
   flex-shrink: 0;
+}
 }

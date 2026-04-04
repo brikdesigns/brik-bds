@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── AnimatedIcon ────────────────────────────────────────────── */
 
 .bds-animated-icon {
@@ -10,4 +11,5 @@
     /* lottie-react respects prefers-reduced-motion natively when
        autoplay is false — no additional override needed here */
   }
+}
 }

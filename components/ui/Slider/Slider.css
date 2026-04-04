@@ -1,3 +1,4 @@
+@layer bds-components {
 /* Slider CSS — needed for pseudo-elements (::-webkit-slider-thumb, etc.) */
 /* --bds-slider-track-height, --bds-slider-thumb-size, --bds-slider-percent are component-local
    custom properties set by Slider.tsx. The --bds-* prefix marks them as non-global. */
@@ -87,4 +88,5 @@
 .bds-slider-input:disabled::-moz-range-thumb {
   background: var(--border-secondary);
   border-color: var(--border-secondary);
+}
 }

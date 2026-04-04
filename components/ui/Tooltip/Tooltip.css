@@ -1,3 +1,4 @@
+@layer bds-components {
 /* Tooltip — contextual information on hover/focus */
 
 /* ─── Container ───────────────────────────────────────── */
@@ -98,4 +99,5 @@
   top: 50%;
   transform: translateY(-50%);
   border-right-color: var(--tooltip-background);
+}
 }

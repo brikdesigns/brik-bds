@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── SidebarNavigation ──────────────────────────────────────── */
 
 .bds-sidebar-nav {
@@ -83,4 +84,5 @@
 .bds-sidebar-nav__user {
   padding: 16px 24px; /* bds-lint-ignore — Figma sidebar spec */
   border-top: var(--border-width-md) solid var(--border-secondary);
+}
 }
