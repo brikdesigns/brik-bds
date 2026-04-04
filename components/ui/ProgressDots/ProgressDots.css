@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ProgressDots — horizontal dot step indicator */
 
 /* ─── Container ───────────────────────────────────────── */
@@ -39,4 +40,5 @@
 
 .bds-progress-dots__dot--non-clickable {
   cursor: default;
+}
 }

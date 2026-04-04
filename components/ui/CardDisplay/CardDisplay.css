@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── CardDisplay ────────────────────────────────────────────── */
 
 .bds-card-display {
@@ -73,4 +74,5 @@
 .bds-card-display__action {
   margin-top: auto;
   padding-top: var(--padding-lg);
+}
 }

@@ -1,3 +1,4 @@
+@layer bds-components {
 /**
  * BDS TextArea Interactive States
  *
@@ -30,4 +31,5 @@
 .bds-text-area-field:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
 }

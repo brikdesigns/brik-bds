@@ -1,3 +1,4 @@
+@layer bds-components {
 /* PricingCard — pricing tier display card */
 
 /* ─── Card container ──────────────────────────────────── */
@@ -117,4 +118,5 @@
 .bds-pricing-card__action {
   margin-top: auto;
   padding-top: var(--padding-sm);
+}
 }

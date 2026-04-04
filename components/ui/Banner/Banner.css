@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Banner ─────────────────────────────────────────────────── */
 
 .bds-banner {
@@ -69,4 +70,5 @@
 
 .bds-banner__close:hover {
   opacity: 1;
+}
 }

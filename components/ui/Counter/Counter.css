@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Counter ────────────────────────────────────────────────── */
 
 .bds-counter {
@@ -27,3 +28,4 @@
 .bds-counter--neutral  { background-color: var(--color-grayscale-lighter); color: var(--text-primary); }
 .bds-counter--progress { background-color: var(--color-system-blue);    color: var(--text-inverse); }
 .bds-counter--brand    { background-color: var(--background-brand-primary); color: var(--text-inverse); }
+}

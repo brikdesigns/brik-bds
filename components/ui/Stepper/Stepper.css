@@ -1,3 +1,4 @@
+@layer bds-components {
 /* Stepper — numeric input with increment/decrement */
 
 /* ─── Container ───────────────────────────────────────── */
@@ -42,4 +43,5 @@
 
 .bds-stepper__value--disabled {
   color: var(--text-muted);
+}
 }

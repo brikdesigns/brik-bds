@@ -1,3 +1,4 @@
+@layer bds-components {
 /* ─── Divider ────────────────────────────────────────────────── */
 
 .bds-divider {
@@ -31,3 +32,4 @@
 .bds-divider--vertical.bds-divider--spacing-sm { margin-left: var(--padding-sm); margin-right: var(--padding-sm); }
 .bds-divider--vertical.bds-divider--spacing-md { margin-left: var(--padding-md); margin-right: var(--padding-md); }
 .bds-divider--vertical.bds-divider--spacing-lg { margin-left: var(--padding-lg); margin-right: var(--padding-lg); }
+}

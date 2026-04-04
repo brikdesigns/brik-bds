@@ -1,3 +1,4 @@
+@layer bds-components {
 /**
  * BDS Chip — Interactive pill for filtering, selection, or input
  *
@@ -152,4 +153,5 @@
 
 .bds-chip__remove:hover {
   opacity: 0.7;
+}
 }
