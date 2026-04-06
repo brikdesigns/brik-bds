@@ -1,0 +1,110 @@
+@layer bds-components {
+/**
+ * BDS Meter — Class-based styles
+ *
+ * Horizontal bar gauge for visualizing scores and ratings.
+ * Status-driven fill color via system tokens.
+ *
+ * Naming: BEM-lite — .bds-meter, .bds-meter__track, .bds-meter__fill
+ */
+
+/* ─── Container ──────────────────────────────────────────────── */
+
+.bds-meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-xs);
+}
+
+/* ─── Track ──────────────────────────────────────────────────── */
+
+.bds-meter__track {
+  width: 100%;
+  background-color: var(--background-secondary);
+  overflow: hidden;
+}
+
+.bds-meter__track--sm {
+  height: 8px; /* bds-lint-ignore — Figma-driven bar height */
+  border-radius: 4px; /* bds-lint-ignore — half of bar height */
+}
+
+.bds-meter__track--md {
+  height: 12px; /* bds-lint-ignore — Figma-driven bar height */
+  border-radius: 6px; /* bds-lint-ignore — half of bar height */
+}
+
+.bds-meter__track--lg {
+  height: 16px; /* bds-lint-ignore — Figma-driven bar height */
+  border-radius: 8px; /* bds-lint-ignore — half of bar height */
+}
+
+/* ─── Fill ───────────────────────────────────────────────────── */
+
+.bds-meter__fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.bds-meter__fill--sm {
+  border-radius: 4px; /* bds-lint-ignore — half of bar height */
+}
+
+.bds-meter__fill--md {
+  border-radius: 6px; /* bds-lint-ignore — half of bar height */
+}
+
+.bds-meter__fill--lg {
+  border-radius: 8px; /* bds-lint-ignore — half of bar height */
+}
+
+/* Status colors */
+.bds-meter__fill--positive {
+  background-color: var(--color-system-green);
+}
+
+.bds-meter__fill--warning {
+  background-color: var(--color-system-yellow);
+}
+
+.bds-meter__fill--error {
+  background-color: var(--color-system-red);
+}
+
+.bds-meter__fill--neutral {
+  background-color: var(--background-secondary);
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-meter__label {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.bds-meter__label--above {
+  margin-bottom: var(--gap-xs);
+}
+
+.bds-meter__label--below {
+  margin-top: var(--gap-xs);
+}
+
+/* ─── Value ──────────────────────────────────────────────────── */
+
+.bds-meter__value {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.bds-meter__value-suffix {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  color: var(--text-secondary);
+}
+
+} /* end @layer bds-components */

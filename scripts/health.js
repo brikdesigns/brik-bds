@@ -56,6 +56,13 @@ const WEBSITE_ONLY = new Set([
   'CardDisplay',
 ]);
 
+// Documentation-only or placeholder directories — no exported component,
+// so a CSS file is not expected. Excluded from CSS completeness check.
+const DOCS_ONLY = new Set([
+  'Calendar',  // placeholder — calendar is a sub-component of DatePicker
+  'Icons',     // reference page — icon grid stories only, no styled component
+]);
+
 // ─── CLI args ────────────────────────────────────────────────────────
 
 const args = process.argv.slice(2);
@@ -128,7 +135,7 @@ function checkCompleteness() {
     const missing = [];
     if (!hasStory) missing.push('story');
     if (!hasMdx) missing.push('mdx');
-    if (!hasCss) missing.push('css');
+    if (!hasCss && !DOCS_ONLY.has(name)) missing.push('css');
     if (!hasIndex) missing.push('index');
 
     results.push({ name, hasStory, hasMdx, hasCss, hasIndex, missing });

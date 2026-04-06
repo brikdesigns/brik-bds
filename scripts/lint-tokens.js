@@ -607,6 +607,7 @@ function main() {
   const args = process.argv.slice(2);
   const errorsOnly = args.includes('--errors-only');
   const checkGrid = args.includes('--check-grid');
+  const jsonMode = args.includes('--json');
   const filesIdx = args.indexOf('--files');
   const explicitFiles = filesIdx !== -1 ? args.slice(filesIdx + 1).filter(f => !f.startsWith('--')) : null;
 
@@ -701,7 +702,27 @@ function main() {
     ? allViolations.filter(v => v.severity === 'error')
     : allViolations;
 
-  // 6. Report
+  // 6. JSON mode — structured output for dashboards
+  if (jsonMode) {
+    const errors = filtered.filter(v => v.severity === 'error');
+    const warnings = filtered.filter(v => v.severity === 'warning');
+    console.log(JSON.stringify({
+      errors: errors.length,
+      warnings: warnings.length,
+      totalFiles: totalFiles,
+      totalTokens: tokens.allTokens.size,
+      violations: filtered.map(v => ({
+        rule: v.rule,
+        severity: v.severity,
+        file: path.relative(process.cwd(), v.file),
+        line: v.line,
+        message: v.message,
+      })),
+    }, null, 2));
+    process.exit(errors.length > 0 ? 1 : 0);
+  }
+
+  // 7. Report
   if (filtered.length === 0) {
     console.log('  ✅ All clear! No violations found.\n');
     process.exit(0);

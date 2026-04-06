@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { DatePicker } from './DatePicker';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -61,6 +62,24 @@ export const Playground: Story = {
         <DatePicker {...args} value={value} onChange={setValue} />
       </div>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: /select a date/i });
+
+    // Open calendar
+    await userEvent.click(trigger);
+
+    // Calendar opens in a portal
+    const dialog = within(document.body).getByRole('dialog');
+    await expect(dialog).toBeVisible();
+
+    // Click a day cell
+    const dayCells = within(dialog).getAllByRole('gridcell');
+    const clickableDay = dayCells.find(cell => !cell.hasAttribute('disabled') && cell.textContent);
+    if (clickableDay) {
+      await userEvent.click(clickableDay);
+    }
   },
 };
 

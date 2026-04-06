@@ -1,2 +1,2 @@
-echo "Running Storybook build check before push..."
-npm run build-storybook
+echo "Running full validation suite before push..."
+npm run validate:full

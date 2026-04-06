@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within, fn } from 'storybook/test';
 import { TabBar } from './TabBar';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -74,14 +75,27 @@ type Story = StoryObj<typeof TabBar>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+const tabClickHandler = fn();
+
 export const Playground: Story = {
   args: {
     variant: 'tab',
     items: [
-      { label: 'Overview', active: true },
-      { label: 'Billing' },
-      { label: 'Security' },
+      { label: 'Overview', active: true, onClick: tabClickHandler },
+      { label: 'Billing', onClick: tabClickHandler },
+      { label: 'Security', onClick: tabClickHandler },
     ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const tabs = canvas.getAllByRole('tab');
+
+    await expect(tabs).toHaveLength(3);
+    await expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
+
+    // Click second tab
+    await userEvent.click(tabs[1]);
+    await expect(tabClickHandler).toHaveBeenCalled();
   },
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within, fn } from 'storybook/test';
 import { Switch } from './Switch';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -46,6 +47,29 @@ export const Playground: Story = {
   args: {
     label: 'Enable feature',
     size: 'lg',
+    onChange: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole('switch');
+
+    await expect(toggle).toBeVisible();
+    await expect(toggle).toHaveAttribute('aria-checked', 'false');
+    await userEvent.click(toggle);
+    await expect(args.onChange).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** Interaction test: disabled switch blocks toggle */
+export const InteractionTest: Story = {
+  args: { label: 'Locked setting', size: 'lg', disabled: true, onChange: fn() },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole('switch');
+
+    await expect(toggle).toBeDisabled();
+    await userEvent.click(toggle);
+    await expect(args.onChange).not.toHaveBeenCalled();
   },
 };
 

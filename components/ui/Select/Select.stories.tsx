@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within, fn } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import { Select } from './Select';
 
@@ -76,6 +77,16 @@ export const Playground: Story = {
     options: basicOptions,
     label: 'Choice',
     size: 'md',
+    onChange: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const select = canvas.getByRole('combobox');
+
+    await expect(select).toBeVisible();
+    await userEvent.selectOptions(select, 'second');
+    await expect(args.onChange).toHaveBeenCalled();
+    await expect(select).toHaveValue('second');
   },
 };
 

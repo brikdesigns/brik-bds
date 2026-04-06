@@ -30,10 +30,12 @@ export const categoryConfig: Record<ServiceCategory, { token: string; label: str
 
 export const serviceIconOverrides: Record<string, string> = {
   // Brand
+  'Brand Identity': 'brand-design',
   'Brand Identity Bundle': 'brand-design',
   'Logo Update': 'brand-logo',
   'Premium Logo Design': 'brand-logo',
   'Standard Logo Design': 'brand-logo',
+  'Print Materials': 'info-print-design',
   // Marketing
   'Comprehensive Marketing Audit & Consultation': 'marketing-consulting',
   'Custom Large E-Commerce Web Development and Design': 'marketing-web-design',
@@ -44,12 +46,17 @@ export const serviceIconOverrides: Record<string, string> = {
   'Landing Pages': 'marketing-landing-pages',
   'Patient Experience Mapping': 'patient-experience',
   'Social Media Graphic Designs': 'marketing-social-graphics',
+  'Social Media Graphics': 'marketing-social-graphics',
   'Swag and Merchandise Design': 'marketing-swag',
+  'Swag & Merchandise Design': 'marketing-swag',
+  'Web Design & Development': 'marketing-web-design',
   'Website Experience Mapping': 'website-experience',
   // Information
   'Information Design': 'information-design',
-  // Back Office (service)
+  'Infographics': 'info-infographics',
+  // Back Office (service) — DB uses & where overrides used "and"
   'Automated Workflow and AI Integration': 'back-office-automation-ai',
+  'Automated Workflow & AI Integration': 'back-office-automation-ai',
   'Back Office Consulting': 'back-office-consulting',
   'Back Office Customer Support': 'back-office-customer-support',
   'Back Office Design': 'back-office-design',
@@ -57,12 +64,15 @@ export const serviceIconOverrides: Record<string, string> = {
   'Back Office SOP Creation': 'back-office-sop-creation',
   'Back Office Training Setup': 'back-office-training-setup',
   'CRM Setup and Data Cleanup': 'back-office-crm-data',
+  'CRM Setup & Data Cleanup': 'back-office-crm-data',
   'Customer Journey Mapping': 'back-office-journey-mapping',
   'Digital File Organization': 'back-office-digital-file-organization',
   'Software and Subscription Audit': 'back-office-audit',
+  'Software & Subscription Audit': 'back-office-audit',
   'Software Automation Setup': 'back-office-automated-workflow',
+  'SOP Creation': 'back-office-sop-creation',
   'Standard Operating Procedures (SOP) Creation': 'back-office-business-solutions',
-  'Training Setup & Organization': 'back-office-consulting',
+  'Training Setup & Organization': 'back-office-training-setup',
 };
 
 export function normalizeServiceName(name: string): string {

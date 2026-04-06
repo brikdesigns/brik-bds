@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { useState } from 'react';
 import { Modal } from './Modal';
 import { Button } from '../Button';
@@ -68,6 +69,21 @@ export const Playground: Story = {
     children: null,
     title: 'Title goes here',
     size: 'md',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Open modal' });
+
+    // Open the modal
+    await userEvent.click(trigger);
+
+    // Modal renders in a portal — query from document.body
+    const dialog = within(document.body).getByRole('dialog');
+    await expect(dialog).toBeVisible();
+
+    // Close via the close button
+    const closeButton = within(dialog).getByLabelText('Close');
+    await userEvent.click(closeButton);
   },
 };
 

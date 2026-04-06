@@ -31,6 +31,20 @@ If a token doesn't exist in `figma-tokens.css` after the build, it needs to be a
 
 **Before writing ANY `var(--...)` reference**, verify the token exists in `tokens/figma-tokens.css` or `tokens/gap-fills.css`.
 
+## Token Discipline (ALL consuming projects)
+
+These rules apply in every project that imports BDS tokens (portal, renew-pms, brikdesigns, client sites).
+
+1. **Three-layer architecture:** BDS foundations (figma-tokens.css) → interaction states (gap-fills.css) → client domain (theme-{client}.css). Never skip layers or write tokens outside this cascade.
+2. **Never use a token outside its semantic category.** `--text-*` is for text, `--background-*` is for backgrounds, `--border-*` is for borders. No `--text-primary` on a `background-color`. No `--border-*` as a fill.
+3. **All colors must be token references.** No hex values, no `filter` hacks, no `opacity` workarounds. If a semantic token doesn't exist, add it in Figma first (or `gap-fills.css` as a temporary bridge).
+4. **Before rewriting `:root` or any token file**, grep for all `var(--...)` usages across the project first. A removed token silently breaks every reference — no error, no visual.
+5. **When changing a background token**, immediately verify that the paired text and icon tokens still have sufficient contrast on that surface.
+6. **Never guess token values.** Every value must come from Figma data or explicit user input. If unsure, pull variables from Figma or ask.
+7. **Never hand-write dark mode overrides.** Dark mode is auto-generated from Figma's `color/dark` mode. Consumer projects import `figma-tokens-dark.css`, never write `[data-theme="dark"]` blocks.
+8. **Single-source components.** Never duplicate a form, view, or interactive component across routes. Build one shared component with context props. If it exists in BDS, use BDS — don't rebuild locally.
+9. **Check Storybook before building custom UI.** Query `list-all-documentation` and `get-documentation` via Storybook MCP first. If a BDS component covers the need, use it. Fix at consumer level before editing BDS CSS.
+
 ## Repository Architecture
 
 ```

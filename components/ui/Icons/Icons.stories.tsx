@@ -32,11 +32,11 @@ const IconGrid = ({ icons }: { icons: { icon: string; label: string }[] }) => (
         gap: 'var(--gap-xs)',
         padding: 'var(--padding-md)',
         borderRadius: 'var(--border-radius-md)',
-        border: '1px solid var(--border-default)',
+        border: '1px solid var(--border-muted)',
       }}>
-        <Icon icon={icon} style={{ fontSize: '20px', color: 'var(--text-primary)' }} />
+        <Icon icon={icon} style={{ fontSize: '20px', color: 'var(--text-primary)' }} /> {/* bds-lint-ignore — icon display size */}
         <span style={{
-          fontFamily: 'var(--font-family-mono, monospace)',
+          fontFamily: 'var(--font-family-system, monospace)',
           fontSize: '10px', // bds-lint-ignore — caption size
           color: 'var(--text-secondary)',
           textAlign: 'center' as const,
@@ -102,12 +102,12 @@ export const Setup: Story = {
       <div>
         <SectionLabel>Usage</SectionLabel>
         <pre style={{
-          fontFamily: 'var(--font-family-mono, monospace)',
+          fontFamily: 'var(--font-family-system, monospace)',
           fontSize: '13px', // bds-lint-ignore
-          background: 'var(--background-card)',
+          background: 'var(--surface-primary)',
           padding: 'var(--padding-lg)',
           borderRadius: 'var(--border-radius-md)',
-          border: '1px solid var(--border-default)',
+          border: '1px solid var(--border-muted)',
           overflow: 'auto',
           margin: 0,
           color: 'var(--text-primary)',
@@ -125,7 +125,7 @@ import { Check, X, Info } from 'components/icons';
         <SectionLabel>Sample icons</SectionLabel>
         <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
           {[Icons.Check, Icons.X, Icons.Info, Icons.House, Icons.Gear].map((icon) => (
-            <Icon key={icon} icon={icon} style={{ fontSize: '24px', color: 'var(--text-primary)' }} />
+            <Icon key={icon} icon={icon} style={{ fontSize: '24px', color: 'var(--text-primary)' }} /> /* bds-lint-ignore — icon display size */
           ))}
         </div>
       </div>
@@ -351,7 +351,7 @@ export const Sizing: Story = {
             <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-xs)' }}>
               <Icon icon={Icons.Star} style={{ fontSize: size, color: 'var(--text-primary)' }} />
               <span style={{
-                fontFamily: 'var(--font-family-mono, monospace)',
+                fontFamily: 'var(--font-family-system, monospace)',
                 fontSize: '10px', // bds-lint-ignore
                 color: 'var(--text-secondary)',
               }}>

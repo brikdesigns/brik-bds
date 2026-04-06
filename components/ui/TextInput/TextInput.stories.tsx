@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { TextInput } from './TextInput';
 import { Icon } from '@iconify/react';
 
@@ -57,6 +58,15 @@ export const Playground: Story = {
     placeholder: 'you@example.com',
     type: 'email',
     size: 'md',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+
+    await expect(input).toBeVisible();
+    await userEvent.clear(input);
+    await userEvent.type(input, 'test@example.com');
+    await expect(input).toHaveValue('test@example.com');
   },
 };
 

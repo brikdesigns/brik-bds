@@ -1,5 +1,6 @@
-import { type HTMLAttributes, type CSSProperties } from 'react';
+import { type HTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
+import './Meter.css';
 
 /**
  * Meter status variants — maps to BDS system color tokens
@@ -12,16 +13,15 @@ export type MeterStatus = 'positive' | 'warning' | 'error' | 'neutral';
 export type MeterSize = 'sm' | 'md' | 'lg';
 
 /**
- * Meter component props
- *
- * Horizontal bar gauge that visualizes a value relative to a maximum.
- * Inspired by Carbon Design System gauge API surface.
- */
-/**
  * Label position relative to the bar
  */
 export type MeterLabelPosition = 'above' | 'below';
 
+/**
+ * Meter component props
+ *
+ * Horizontal bar gauge that visualizes a value relative to a maximum.
+ */
 export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Current value */
   value: number;
@@ -41,20 +41,6 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   labelPosition?: MeterLabelPosition;
 }
 
-const STATUS_COLORS: Record<MeterStatus, string> = {
-  positive: 'var(--color-system-green)',
-  warning: 'var(--color-system-yellow)',
-  error: 'var(--color-system-red)',
-  neutral: 'var(--background-secondary)',
-};
-
-// bds-lint-ignore — Figma-driven bar heights, no semantic size token
-const SIZE_HEIGHT: Record<MeterSize, number> = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-};
-
 function defaultFormatter(value: number, max: number): string {
   return `${value}/${max}`;
 }
@@ -63,7 +49,6 @@ function defaultFormatter(value: number, max: number): string {
  * Meter — a horizontal bar gauge for visualizing scores and ratings.
  *
  * Uses BDS system color tokens for status-driven fill colors.
- * No external dependencies — pure CSS with inline styles.
  *
  * @example
  * ```tsx
@@ -86,75 +71,36 @@ export function Meter({
   ...rest
 }: MeterProps) {
   const percentage = max > 0 ? Math.min(Math.max((value / max) * 100, 0), 100) : 0;
-  const barHeight = SIZE_HEIGHT[size];
-  const fillColor = STATUS_COLORS[status];
-
-  const trackStyle: CSSProperties = {
-    width: '100%',
-    height: barHeight,
-    backgroundColor: 'var(--background-secondary)',
-    borderRadius: barHeight / 2,
-    overflow: 'hidden',
-  };
-
-  const fillStyle: CSSProperties = {
-    width: `${percentage}%`,
-    height: '100%',
-    backgroundColor: fillColor,
-    borderRadius: barHeight / 2,
-    transition: 'width 0.3s ease',
-  };
-
-  const containerStyle: CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--padding-xs)',
-    ...style,
-  };
-
-  const labelStyle: CSSProperties = {
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-sm)',
-    color: 'var(--text-secondary)',
-    textTransform: 'capitalize' as const,
-    ...(labelPosition === 'below' ? { marginTop: 'var(--gap-xs)' } : { marginBottom: 'var(--gap-xs)' }),
-  };
-
-  const valueStyle: CSSProperties = {
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--heading-lg)',
-    fontWeight: 'var(--font-weight-bold)' as unknown as number,
-    color: 'var(--text-primary)',
-  };
-
-  const valueSubStyle: CSSProperties = {
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-sm)',
-    color: 'var(--text-secondary)',
-  };
 
   const textContent = (
     <>
-      {label && <span style={labelStyle}>{label}</span>}
+      {label && (
+        <span className={bdsClass('bds-meter__label', `bds-meter__label--${labelPosition}`)}>
+          {label}
+        </span>
+      )}
       {showValue && (
         <div>
-          <span style={valueStyle}>{valueFormatter(value, max)}</span>
-          <span style={valueSubStyle}> Score</span>
+          <span className="bds-meter__value">{valueFormatter(value, max)}</span>
+          <span className="bds-meter__value-suffix"> Score</span>
         </div>
       )}
     </>
   );
 
   const track = (
-    <div style={trackStyle}>
-      <div style={fillStyle} />
+    <div className={bdsClass('bds-meter__track', `bds-meter__track--${size}`)}>
+      <div
+        className={bdsClass('bds-meter__fill', `bds-meter__fill--${size}`, `bds-meter__fill--${status}`)}
+        style={{ width: `${percentage}%` }}
+      />
     </div>
   );
 
   return (
     <div
       className={bdsClass('bds-meter', className)}
-      style={containerStyle}
+      style={style}
       role="meter"
       aria-valuenow={value}
       aria-valuemin={0}
