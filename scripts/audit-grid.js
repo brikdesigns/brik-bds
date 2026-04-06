@@ -205,9 +205,40 @@ function audit(tokens, summaryOnly) {
   console.log('   48px = 3rem      64px = 4rem       96px = 6rem\n');
 }
 
+// JSON data collector — used when --json flag is passed
+function auditJson(tokens) {
+  const results = { categories: [], spatialOnGrid: 0, spatialTotal: 0, spatialPct: 0 };
+
+  for (const cat of [...CATEGORIES, ...SEMANTIC_CATEGORIES]) {
+    const matching = [];
+    for (const [name, value] of tokens) {
+      if (name.startsWith(cat.prefix)) {
+        const px = cat.spatial !== undefined ? extractPx(value) : resolvePx(value, tokens);
+        if (px !== null) matching.push({ name, value, px });
+      }
+    }
+    if (matching.length === 0) continue;
+    matching.sort((a, b) => a.px - b.px);
+    const onGrid = matching.filter(t => t.px === 0 || t.px <= 2 || t.px % GRID_BASE === 0);
+    const offGrid = matching.filter(t => t.px > 2 && t.px % GRID_BASE !== 0);
+    const spatial = cat.spatial === true || cat.spatial === undefined;
+    if (spatial) { results.spatialOnGrid += onGrid.length; results.spatialTotal += matching.length; }
+    results.categories.push({
+      name: cat.name,
+      total: matching.length, onGrid: onGrid.length, offGrid: offGrid.length,
+      pct: Math.round((onGrid.length / matching.length) * 100),
+      offGridTokens: offGrid.map(t => t.name),
+    });
+  }
+  results.spatialPct = results.spatialTotal > 0
+    ? Math.round((results.spatialOnGrid / results.spatialTotal) * 100) : 100;
+  return results;
+}
+
 // Main
 const args = process.argv.slice(2);
 const summaryOnly = args.includes('--summary');
+const jsonMode = args.includes('--json');
 
 if (!fs.existsSync(FIGMA_CSS)) {
   console.error(`ERROR: Token CSS not found at ${FIGMA_CSS}`);
@@ -223,4 +254,9 @@ if (fs.existsSync(OVERRIDES_CSS)) {
     if (!tokens.has(k)) tokens.set(k, v);
   }
 }
-audit(tokens, summaryOnly);
+
+if (jsonMode) {
+  console.log(JSON.stringify(auditJson(tokens), null, 2));
+} else {
+  audit(tokens, summaryOnly);
+}
