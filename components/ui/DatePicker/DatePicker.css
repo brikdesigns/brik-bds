@@ -1,0 +1,219 @@
+@layer bds-components {
+/**
+ * BDS DatePicker — Class-based styles
+ *
+ * Token-based date picker with Radix Popover for accessible behavior.
+ * Matches BDS form component conventions (label, helper, error, size variants).
+ *
+ * Naming: BEM-lite — .bds-date-picker, .bds-date-picker__trigger
+ */
+
+/* ─── Wrapper ────────────────────────────────────────────────── */
+
+.bds-date-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  color: var(--text-primary);
+}
+
+.bds-date-picker--full-width {
+  width: 100%;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-date-picker__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: capitalize;
+}
+
+.bds-date-picker__label--error {
+  color: var(--color-system-red);
+}
+
+/* Label sizes */
+.bds-date-picker--sm .bds-date-picker__label { font-size: var(--label-sm); }
+.bds-date-picker--md .bds-date-picker__label { font-size: var(--label-md); }
+.bds-date-picker--lg .bds-date-picker__label { font-size: var(--label-lg); }
+
+/* ─── Trigger ────────────────────────────────────────────────── */
+
+.bds-date-picker__trigger {
+  width: 100%;
+  padding: var(--padding-xs);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bds-date-picker__trigger--error {
+  border-color: var(--color-system-red);
+}
+
+.bds-date-picker__trigger--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bds-date-picker__trigger--open {
+  border-color: var(--border-brand-primary);
+}
+
+/* Trigger sizes */
+.bds-date-picker--sm .bds-date-picker__trigger { font-size: var(--body-sm); }
+.bds-date-picker--md .bds-date-picker__trigger { font-size: var(--body-md); }
+.bds-date-picker--lg .bds-date-picker__trigger { font-size: var(--body-lg); }
+
+/* ─── Trigger placeholder & caret ────────────────────────────── */
+
+.bds-date-picker__placeholder {
+  color: var(--text-muted);
+}
+
+.bds-date-picker__caret {
+  color: var(--text-muted);
+  font-size: var(--body-sm);
+}
+
+/* ─── Helper / Error text ────────────────────────────────────── */
+
+.bds-date-picker__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-date-picker__helper--error {
+  color: var(--color-system-red);
+}
+
+/* ─── Calendar popover ───────────────────────────────────────── */
+
+.bds-date-picker__calendar {
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-lg);
+  border: var(--border-width-md) solid var(--border-muted);
+  padding: var(--padding-sm);
+  width: 280px; /* bds-lint-ignore — fixed calendar width */
+  z-index: 50; /* bds-lint-ignore — popover stacking */
+}
+
+/* ─── Calendar header ────────────────────────────────────────── */
+
+.bds-date-picker__calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--padding-xs);
+}
+
+.bds-date-picker__month-label {
+  font-family: var(--font-family-label);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+}
+
+/* ─── Nav buttons ────────────────────────────────────────────── */
+
+.bds-date-picker__nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--padding-tiny);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--body-md);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; /* bds-lint-ignore — fixed nav button size */
+  height: 28px; /* bds-lint-ignore — fixed nav button size */
+  transition: background-color 0.15s;
+}
+
+.bds-date-picker__nav-button:hover {
+  background-color: var(--surface-secondary);
+}
+
+/* ─── Day grid ───────────────────────────────────────────────── */
+
+.bds-date-picker__day-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px; /* bds-lint-ignore — tight day grid gap */
+}
+
+.bds-date-picker__day-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.bds-date-picker__day-label {
+  font-family: var(--font-family-label);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--gap-xs) 0;
+}
+
+/* ─── Day button ─────────────────────────────────────────────── */
+
+.bds-date-picker__day {
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: 1;
+  width: 32px; /* bds-lint-ignore — fixed day cell size */
+  height: 32px; /* bds-lint-ignore — fixed day cell size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s, color 0.15s;
+  color: var(--text-primary);
+}
+
+.bds-date-picker__day:hover:not(:disabled):not(.bds-date-picker__day--selected) {
+  background-color: var(--surface-secondary);
+}
+
+.bds-date-picker__day--selected {
+  background-color: var(--surface-brand-primary);
+  color: var(--text-inverse);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.bds-date-picker__day--today:not(.bds-date-picker__day--selected) {
+  border: var(--border-width-md) solid var(--border-brand-primary);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.bds-date-picker__day:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+} /* end @layer bds-components */

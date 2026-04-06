@@ -1,5 +1,6 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
+import './TextLink.css';
 
 /**
  * TextLink size variants

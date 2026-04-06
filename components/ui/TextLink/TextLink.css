@@ -1,0 +1,53 @@
+@layer bds-components {
+/**
+ * BDS TextLink — Class-based styles
+ *
+ * Muted text color that transitions to brand color on hover.
+ * Token references use the BDS semantic token layer (never primitives).
+ *
+ * Naming: BEM-lite — .bds-text-link, .bds-text-link--small
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-text-link);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.bds-text-link:hover {
+  color: var(--text-brand-primary);
+  text-decoration: underline;
+}
+
+.bds-text-link:focus-visible {
+  outline: 2px solid var(--border-brand-primary); /* bds-lint-ignore — focus ring */
+  outline-offset: 2px; /* bds-lint-ignore — focus ring offset */
+  border-radius: var(--border-radius-sm);
+}
+
+/* ─── Small variant ──────────────────────────────────────────── */
+
+.bds-text-link-small {
+  font-size: var(--body-sm);
+}
+
+/* ─── Icon slots ─────────────────────────────────────────────── */
+
+.bds-text-link-icon-before,
+.bds-text-link-icon-after {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+} /* end @layer bds-components */
