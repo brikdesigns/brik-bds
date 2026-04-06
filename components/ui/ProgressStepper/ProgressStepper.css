@@ -1,0 +1,150 @@
+@layer bds-components {
+/**
+ * BDS ProgressStepper — Class-based styles
+ *
+ * Vertical step progression indicator with complete/active/upcoming states.
+ * Token references use the BDS semantic token layer (never primitives).
+ *
+ * Naming: BEM-lite — .bds-progress-stepper, .bds-progress-stepper__circle
+ */
+
+/* ─── Container ──────────────────────────────────────────────── */
+
+.bds-progress-stepper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Step row ───────────────────────────────────────────────── */
+
+.bds-progress-stepper__step-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.bds-progress-stepper__step-row--clickable {
+  cursor: pointer;
+}
+
+.bds-progress-stepper__step-row--sm {
+  gap: var(--gap-xs);
+}
+
+.bds-progress-stepper__step-row--md {
+  gap: var(--gap-sm);
+}
+
+/* ─── Circle ─────────────────────────────────────────────────── */
+
+.bds-progress-stepper__circle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.bds-progress-stepper__circle--sm {
+  width: 24px; /* bds-lint-ignore — Figma-driven step circle size */
+  height: 24px; /* bds-lint-ignore — Figma-driven step circle size */
+  font-size: var(--body-tiny);
+}
+
+.bds-progress-stepper__circle--md {
+  width: 32px; /* bds-lint-ignore — Figma-driven step circle size */
+  height: 32px; /* bds-lint-ignore — Figma-driven step circle size */
+  font-size: var(--body-sm);
+}
+
+/* Circle states */
+.bds-progress-stepper__circle--active,
+.bds-progress-stepper__circle--complete {
+  background-color: var(--background-brand-primary);
+  color: var(--text-inverse);
+}
+
+.bds-progress-stepper__circle--upcoming {
+  background-color: var(--surface-secondary);
+  color: var(--text-muted);
+  border: var(--border-width-sm) solid var(--border-secondary);
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-progress-stepper__label {
+  font-family: var(--font-family-body);
+  line-height: var(--font-line-height-snug);
+  text-transform: capitalize;
+  transition: color 0.15s ease;
+}
+
+.bds-progress-stepper__label--sm {
+  font-size: var(--body-sm);
+}
+
+.bds-progress-stepper__label--md {
+  font-size: var(--body-md);
+}
+
+.bds-progress-stepper__label--active {
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+}
+
+.bds-progress-stepper__label--complete {
+  font-weight: var(--font-weight-regular);
+  color: var(--text-primary);
+}
+
+.bds-progress-stepper__label--upcoming {
+  font-weight: var(--font-weight-regular);
+  color: var(--text-muted);
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-progress-stepper__desc {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  margin-top: var(--space-50);
+}
+
+.bds-progress-stepper__desc--sm {
+  font-size: var(--body-tiny);
+}
+
+.bds-progress-stepper__desc--md {
+  font-size: var(--body-sm);
+}
+
+/* ─── Connector ──────────────────────────────────────────────── */
+
+.bds-progress-stepper__connector {
+  width: 2px; /* bds-lint-ignore — Figma connector width */
+  flex-grow: 1;
+  min-height: 16px; /* bds-lint-ignore — minimum connector height */
+  transition: background-color 0.15s ease;
+}
+
+.bds-progress-stepper__connector--sm {
+  margin-left: 11px; /* bds-lint-ignore — (24 - 2) / 2 to center under circle */
+}
+
+.bds-progress-stepper__connector--md {
+  margin-left: 15px; /* bds-lint-ignore — (32 - 2) / 2 to center under circle */
+}
+
+.bds-progress-stepper__connector--complete {
+  background-color: var(--background-brand-primary);
+}
+
+.bds-progress-stepper__connector--incomplete {
+  background-color: var(--border-secondary);
+}
+
+} /* end @layer bds-components */

@@ -159,7 +159,7 @@ export const Patterns: Story = {
       </div>
       <div>
         <SectionLabel>Avatar group (stacked)</SectionLabel>
-        <div style={{ display: 'flex', marginLeft: '12px' }}>
+        <div style={{ display: 'flex', marginLeft: 'var(--padding-sm)' }}>
           {([
             { name: 'Michael Scott', src: headshots.michael },
             { name: 'Dwight Schrute', src: headshots.dwight },

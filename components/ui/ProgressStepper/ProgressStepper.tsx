@@ -1,5 +1,6 @@
-import { type CSSProperties, type HTMLAttributes } from 'react';
+import { type HTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
+import './ProgressStepper.css';
 
 export type ProgressStepperSize = 'sm' | 'md';
 
@@ -29,30 +30,10 @@ export interface ProgressStepperProps extends HTMLAttributes<HTMLElement> {
   onStepClick?: (index: number) => void;
 }
 
-const sizeConfig: Record<ProgressStepperSize, {
-  circleSize: number;
-  fontSize: string;
-  labelSize: string;
-  descSize: string;
-  gap: string;
-  connectorWidth: string;
-}> = {
-  sm: {
-    circleSize: 24, // bds-lint-ignore — Figma-driven step circle size
-    fontSize: 'var(--body-tiny)',
-    labelSize: 'var(--body-sm)',
-    descSize: 'var(--body-tiny)',
-    gap: 'var(--gap-xs)',
-    connectorWidth: '2px', // bds-lint-ignore — Figma connector width
-  },
-  md: {
-    circleSize: 32, // bds-lint-ignore — Figma-driven step circle size
-    fontSize: 'var(--body-sm)',
-    labelSize: 'var(--body-md)',
-    descSize: 'var(--body-sm)',
-    gap: 'var(--gap-sm)',
-    connectorWidth: '2px', // bds-lint-ignore — Figma connector width
-  },
+// bds-lint-ignore — Figma-driven circle sizes, used for label padding calc
+const CIRCLE_SIZE: Record<ProgressStepperSize, number> = {
+  sm: 24,
+  md: 32,
 };
 
 function getStepStatus(index: number, activeStep: number): StepStatus {
@@ -81,18 +62,12 @@ export function ProgressStepper({
   style,
   ...props
 }: ProgressStepperProps) {
-  const config = sizeConfig[size];
-
-  const containerStyle: CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    ...style,
-  };
+  const circleSize = CIRCLE_SIZE[size];
 
   return (
     <nav
       className={bdsClass('bds-progress-stepper', className)}
-      style={containerStyle}
+      style={style}
       role="list"
       aria-label="Progress"
       {...props}
@@ -101,77 +76,11 @@ export function ProgressStepper({
         const status = getStepStatus(index, activeStep);
         const isLast = index === steps.length - 1;
 
-        // In linear mode: only complete steps are clickable (go back).
-        // In non-linear mode: complete + active steps are clickable.
         const isClickable = onStepClick && (
           linear
             ? status === 'complete'
             : status !== 'upcoming'
         );
-
-        const circleStyle: CSSProperties = {
-          width: config.circleSize,
-          height: config.circleSize,
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: config.fontSize,
-          fontFamily: 'var(--font-family-label)',
-          fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-          flexShrink: 0,
-          transition: 'all 0.15s ease',
-          ...(status === 'active' ? {
-            backgroundColor: 'var(--background-brand-primary)',
-            color: 'var(--text-inverse)',
-          } : status === 'complete' ? {
-            backgroundColor: 'var(--background-brand-primary)',
-            color: 'var(--text-inverse)',
-          } : {
-            backgroundColor: 'var(--surface-secondary)',
-            color: 'var(--text-muted)',
-            border: 'var(--border-width-sm) solid var(--border-secondary)',
-          }),
-        };
-
-        const labelStyle: CSSProperties = {
-          fontFamily: 'var(--font-family-body)',
-          fontSize: config.labelSize,
-          fontWeight: status === 'active'
-            ? 'var(--font-weight-semi-bold)' as unknown as number
-            : 'var(--font-weight-regular)' as unknown as number,
-          lineHeight: 'var(--font-line-height-snug)',
-          color: status === 'upcoming' ? 'var(--text-muted)' : 'var(--text-primary)',
-          textTransform: 'capitalize' as const,
-          transition: 'color 0.15s ease',
-        };
-
-        const descStyle: CSSProperties = {
-          fontFamily: 'var(--font-family-body)',
-          fontSize: config.descSize,
-          fontWeight: 'var(--font-weight-regular)' as unknown as number,
-          lineHeight: 'var(--font-line-height-normal)',
-          color: 'var(--text-muted)',
-          marginTop: 'var(--space-50)',
-        };
-
-        const connectorStyle: CSSProperties = {
-          width: config.connectorWidth,
-          flexGrow: 1,
-          minHeight: '16px', // bds-lint-ignore — minimum connector height
-          backgroundColor: status === 'complete'
-            ? 'var(--background-brand-primary)'
-            : 'var(--border-secondary)',
-          marginLeft: `${(config.circleSize - parseInt(config.connectorWidth)) / 2}px`,
-          transition: 'background-color 0.15s ease',
-        };
-
-        const stepRowStyle: CSSProperties = {
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: config.gap,
-          cursor: isClickable ? 'pointer' : 'default',
-        };
 
         const handleClick = () => {
           if (isClickable) onStepClick(index);
@@ -187,7 +96,11 @@ export function ProgressStepper({
         return (
           <div key={index} role="listitem" aria-current={status === 'active' ? 'step' : undefined}>
             <div
-              style={stepRowStyle}
+              className={bdsClass(
+                'bds-progress-stepper__step-row',
+                `bds-progress-stepper__step-row--${size}`,
+                isClickable && 'bds-progress-stepper__step-row--clickable',
+              )}
               onClick={handleClick}
               onKeyDown={handleKeyDown}
               role={isClickable ? 'button' : undefined}
@@ -195,21 +108,56 @@ export function ProgressStepper({
               aria-label={isClickable ? `Go to step ${index + 1}: ${step.label}` : undefined}
               aria-disabled={!isClickable && onStepClick ? true : undefined}
             >
-              <div style={circleStyle}>
+              <div
+                className={bdsClass(
+                  'bds-progress-stepper__circle',
+                  `bds-progress-stepper__circle--${size}`,
+                  `bds-progress-stepper__circle--${status}`,
+                )}
+              >
                 {status === 'complete' ? (
-                  <svg width={config.circleSize * 0.45} height={config.circleSize * 0.45} viewBox="0 0 12 12" fill="none">
+                  <svg width={circleSize * 0.45} height={circleSize * 0.45} viewBox="0 0 12 12" fill="none">
                     <path d="M2 6L5 9L10 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ) : (
                   index + 1
                 )}
               </div>
-              <div style={{ paddingTop: `${(config.circleSize - 20) / 2}px` }}>
-                <div style={labelStyle}>{step.label}</div>
-                {step.description && <div style={descStyle}>{step.description}</div>}
+              {/* bds-lint-ignore — padding aligns label vertically with circle center */}
+              <div style={{ paddingTop: `${(circleSize - 20) / 2}px` }}>
+                <div
+                  className={bdsClass(
+                    'bds-progress-stepper__label',
+                    `bds-progress-stepper__label--${size}`,
+                    `bds-progress-stepper__label--${status}`,
+                  )}
+                >
+                  {step.label}
+                </div>
+                {step.description && (
+                  <div
+                    className={bdsClass(
+                      'bds-progress-stepper__desc',
+                      `bds-progress-stepper__desc--${size}`,
+                    )}
+                  >
+                    {step.description}
+                  </div>
+                )}
               </div>
             </div>
-            {!isLast && <div style={connectorStyle} aria-hidden="true" />}
+            {!isLast && (
+              <div
+                className={bdsClass(
+                  'bds-progress-stepper__connector',
+                  `bds-progress-stepper__connector--${size}`,
+                  status === 'complete'
+                    ? 'bds-progress-stepper__connector--complete'
+                    : 'bds-progress-stepper__connector--incomplete',
+                )}
+                aria-hidden="true"
+              />
+            )}
           </div>
         );
       })}

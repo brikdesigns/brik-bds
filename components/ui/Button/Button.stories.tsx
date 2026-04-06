@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within, fn } from 'storybook/test';
 import { useState } from 'react';
 import { Button } from './Button';
 import { LinkButton } from './LinkButton';
@@ -99,7 +100,28 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
    ═══════════════════════════════════════════════════════════════ */
 
 export const Playground: Story = {
-  args: { variant: 'primary', size: 'md', children: 'Button' },
+  args: { variant: 'primary', size: 'md', children: 'Button', onClick: fn() },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button', { name: 'Button' });
+
+    await expect(button).toBeVisible();
+    await userEvent.click(button);
+    await expect(args.onClick).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** Interaction test: disabled and loading states block click */
+export const InteractionTest: Story = {
+  args: { variant: 'primary', size: 'md', children: 'Submit', disabled: true, onClick: fn() },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button', { name: 'Submit' });
+
+    await expect(button).toBeDisabled();
+    await userEvent.click(button);
+    await expect(args.onClick).not.toHaveBeenCalled();
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════════

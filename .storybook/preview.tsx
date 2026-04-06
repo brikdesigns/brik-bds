@@ -201,7 +201,7 @@ const preview: Preview = {
       storySort: {
         order: [
           'Overview',
-          ['Welcome', 'ThemeSwitcher'],
+          ['Welcome', 'ThemeSwitcher', 'Health Dashboard', 'Theme Compliance', 'Token Coverage'],
           'Foundations',
           [
             'Design Tokens',

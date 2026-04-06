@@ -3,11 +3,11 @@ import {
   useState,
   useCallback,
   useMemo,
-  type CSSProperties,
   type KeyboardEvent,
 } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { bdsClass } from '../../utils';
+import './DatePicker.css';
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -90,181 +90,6 @@ function isDateDisabled(date: Date, minDate?: Date, maxDate?: Date): boolean {
   return false;
 }
 
-// ─── Styles ─────────────────────────────────────────────────────────
-
-/**
- * Wrapper styles — vertical stack with gap between label and field
- *
- * Token reference:
- * - --gap-md = 8px
- */
-const wrapperStyles: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'var(--gap-md)',
-  color: 'var(--text-primary)',
-};
-
-/**
- * Label base styles
- *
- * Token reference:
- * - --font-family-label
- * - --font-weight-semi-bold = 600
- * - --font-line-height-tight = 100%
- */
-const labelBaseStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  textTransform: 'capitalize',
-};
-
-/**
- * Trigger button base styles — mirrors TextInput field styles
- *
- * Token reference:
- * - --background-input
- * - --border-input
- * - --border-width-md = 1px
- * - --border-radius-md = 4px
- * - --padding-xs = 10px
- */
-const triggerBaseStyles: CSSProperties = {
-  width: '100%',
-  padding: 'var(--padding-xs)',
-  fontFamily: 'var(--font-family-body)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
-  backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-md) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-md)',
-  outline: 'none',
-  transition: 'border-color 0.2s',
-  boxSizing: 'border-box',
-  cursor: 'pointer',
-  textAlign: 'left',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-};
-
-/**
- * Helper/error text base styles
- *
- * Token reference:
- * - --font-family-body
- * - --body-sm
- * - --text-muted
- */
-const helperBaseStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-muted)',
-};
-
-/**
- * Size-specific typography tokens — matches bds-text-input sizing
- *
- * - sm: label 14px, trigger 14px
- * - md: label 16px, trigger 16px
- * - lg: label 18px, trigger 18px
- */
-const sizeStyles: Record<DatePickerSize, { label: CSSProperties; trigger: CSSProperties }> = {
-  sm: {
-    label: { fontSize: 'var(--label-sm)' },
-    trigger: { fontSize: 'var(--body-sm)' },
-  },
-  md: {
-    label: { fontSize: 'var(--label-md)' },
-    trigger: { fontSize: 'var(--body-md)' },
-  },
-  lg: {
-    label: { fontSize: 'var(--label-lg)' },
-    trigger: { fontSize: 'var(--body-lg)' },
-  },
-};
-
-/**
- * Calendar popover container styles
- *
- * Token reference:
- * - --surface-primary
- * - --border-radius-md = 4px
- * - --box-shadow-lg
- * - --border-muted
- * - --padding-sm
- */
-const calendarStyles: CSSProperties = {
-  backgroundColor: 'var(--surface-primary)',
-  borderRadius: 'var(--border-radius-md)',
-  boxShadow: 'var(--box-shadow-lg)',
-  border: 'var(--border-width-md) solid var(--border-muted)',
-  padding: 'var(--padding-sm)',
-  width: 280,
-  zIndex: 50,
-};
-
-const calendarHeaderStyles: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  paddingBottom: 'var(--padding-xs)',
-};
-
-/**
- * Month navigation button styles
- *
- * Token reference:
- * - --padding-tiny
- * - --border-radius-sm
- * - --text-secondary
- */
-const navButtonStyles: CSSProperties = {
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer',
-  padding: 'var(--padding-tiny)',
-  borderRadius: 'var(--border-radius-sm)',
-  color: 'var(--text-secondary)',
-  fontSize: 'var(--body-md)',
-  lineHeight: '1',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 28,
-  height: 28,
-  transition: 'background-color 0.15s',
-};
-
-const dayHeaderStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--body-xs)',
-  fontWeight: 'var(--font-weight-medium)' as unknown as number,
-  color: 'var(--text-muted)',
-  textAlign: 'center',
-  padding: 'var(--gap-xs) 0',
-};
-
-const dayButtonBase: CSSProperties = {
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer',
-  borderRadius: 'var(--border-radius-sm)',
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  lineHeight: '1',
-  width: 32,
-  height: 32,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  transition: 'background-color 0.15s, color 0.15s',
-  color: 'var(--text-primary)',
-};
-
 // ─── Calendar Sub-component ─────────────────────────────────────────
 
 function Calendar({
@@ -315,59 +140,37 @@ function Calendar({
   return (
     <div
       className="bds-date-picker__calendar"
-      style={calendarStyles}
       onKeyDown={handleKeyDown}
       role="dialog"
       aria-label="Choose date"
     >
       {/* Header: month/year nav */}
-      <div style={calendarHeaderStyles}>
+      <div className="bds-date-picker__calendar-header">
         <button
           type="button"
           className="bds-date-picker__nav-button"
           onClick={prevMonth}
-          style={navButtonStyles}
           aria-label="Previous month"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--surface-secondary)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
         >
           ‹
         </button>
-        <span
-          style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-sm)',
-            fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-            color: 'var(--text-primary)',
-          }}
-        >
+        <span className="bds-date-picker__month-label">
           {MONTHS[month]} {year}
         </span>
         <button
           type="button"
           className="bds-date-picker__nav-button"
           onClick={nextMonth}
-          style={navButtonStyles}
           aria-label="Next month"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--surface-secondary)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
         >
           ›
         </button>
       </div>
 
       {/* Day-of-week headers */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
+      <div className="bds-date-picker__day-header">
         {DAYS.map((d) => (
-          <div key={d} style={dayHeaderStyles}>
+          <div key={d} className="bds-date-picker__day-label">
             {d}
           </div>
         ))}
@@ -375,7 +178,7 @@ function Calendar({
 
       {/* Day grid */}
       <div
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}
+        className="bds-date-picker__day-grid"
         role="grid"
         aria-label={`${MONTHS[month]} ${year}`}
       >
@@ -388,45 +191,18 @@ function Calendar({
           const today = isToday(day);
           const disabled = isDateDisabled(day, minDate, maxDate);
 
-          const dayStyle: CSSProperties = {
-            ...dayButtonBase,
-            ...(disabled
-              ? { color: 'var(--text-muted)', cursor: 'not-allowed', opacity: 0.4 }
-              : {}),
-            ...(selected
-              ? {
-                  backgroundColor: 'var(--surface-brand-primary)',
-                  color: 'var(--text-inverse)',
-                  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-                }
-              : {}),
-            ...(today && !selected
-              ? {
-                  border: 'var(--border-width-md) solid var(--border-brand-primary)',
-                  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-                }
-              : {}),
-          };
-
           return (
             <button
               key={day.toISOString()}
               type="button"
-              className="bds-date-picker__day"
-              style={dayStyle}
+              className={bdsClass(
+                'bds-date-picker__day',
+                selected && 'bds-date-picker__day--selected',
+                today && !selected && 'bds-date-picker__day--today',
+              )}
               disabled={disabled}
               onClick={() => {
                 if (!disabled) onChange(day);
-              }}
-              onMouseEnter={(e) => {
-                if (!disabled && !selected) {
-                  e.currentTarget.style.backgroundColor = 'var(--surface-secondary)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!disabled && !selected) {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }
               }}
               aria-label={day.toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -484,7 +260,6 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
     const [open, setOpen] = useState(false);
     const inputId = id || `datepicker-${Math.random().toString(36).substring(2, 11)}`;
     const hasError = Boolean(error);
-    const sizeStyle = sizeStyles[size];
 
     const handleSelect = useCallback(
       (date: Date) => {
@@ -494,30 +269,22 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       [onChange]
     );
 
-    const triggerStyles: CSSProperties = {
-      ...triggerBaseStyles,
-      ...sizeStyle.trigger,
-      ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
-      ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}),
-      ...(open ? { borderColor: 'var(--border-brand-primary)' } : {}),
-    };
-
     return (
       <div
-        className={bdsClass('bds-date-picker', `bds-date-picker--${size}`, className)}
-        style={{
-          ...wrapperStyles,
-          width: fullWidth ? '100%' : 'auto',
-        }}
+        className={bdsClass(
+          'bds-date-picker',
+          `bds-date-picker--${size}`,
+          fullWidth && 'bds-date-picker--full-width',
+          className,
+        )}
       >
         {label && (
           <label
             htmlFor={inputId}
-            style={{
-              ...labelBaseStyles,
-              ...sizeStyle.label,
-              ...(hasError ? { color: 'var(--color-system-red)' } : {}),
-            }}
+            className={bdsClass(
+              'bds-date-picker__label',
+              hasError && 'bds-date-picker__label--error',
+            )}
           >
             {label}
           </label>
@@ -529,20 +296,21 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
               ref={ref}
               id={inputId}
               type="button"
-              className="bds-date-picker__trigger"
-              style={triggerStyles}
+              className={bdsClass(
+                'bds-date-picker__trigger',
+                hasError && 'bds-date-picker__trigger--error',
+                disabled && 'bds-date-picker__trigger--disabled',
+                open && 'bds-date-picker__trigger--open',
+              )}
               aria-invalid={hasError}
               aria-describedby={
                 error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
               }
             >
-              <span style={value ? {} : { color: 'var(--text-muted)' }}>
+              <span className={value ? undefined : 'bds-date-picker__placeholder'}>
                 {value ? formatDate(value) : placeholder}
               </span>
-              <span
-                style={{ color: 'var(--text-muted)', fontSize: 'var(--body-sm)' }}
-                aria-hidden
-              >
+              <span className="bds-date-picker__caret" aria-hidden>
                 ▾
               </span>
             </button>
@@ -568,7 +336,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         {error && (
           <span
             id={`${inputId}-error`}
-            style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
+            className="bds-date-picker__helper bds-date-picker__helper--error"
             role="alert"
           >
             {error}
@@ -576,7 +344,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         )}
 
         {helperText && !error && (
-          <span id={`${inputId}-helper`} style={helperBaseStyles}>
+          <span id={`${inputId}-helper`} className="bds-date-picker__helper">
             {helperText}
           </span>
         )}
