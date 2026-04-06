@@ -1,13 +1,14 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
+import type { ButtonVariant, ButtonSize } from './Button';
 import './Button.css';
 
 /** LinkButton props — href is required */
 export interface LinkButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Visual style variant */
-  variant?: 'primary' | 'outline' | 'secondary' | 'ghost' | 'danger' | 'danger-outline' | 'danger-ghost';
+  variant?: ButtonVariant;
   /** Size of the button */
-  size?: 'sm' | 'md' | 'lg';
+  size?: ButtonSize;
   /** Full width */
   fullWidth?: boolean;
   /** Link destination (required) */
