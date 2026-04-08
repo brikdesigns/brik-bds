@@ -8,11 +8,7 @@ import { grayscale, poppy, tan, orange, yellow, green, blue, purple, pink } from
 
 Color tokens define the visual identity across all BDS themes. The system separates primitive color scales from semantic color roles. Switch themes in the toolbar to see values update in real time.
 
-## Semantic colors
-
-Semantic tokens map to purpose, not appearance. These values change when you switch themes.
-
-### Page and surface
+## Page and surface
 
 <ColorGrid
   colors={[
@@ -21,14 +17,13 @@ Semantic tokens map to purpose, not appearance. These values change when you swi
     { name: 'page-brand-primary', cssVar: '--page-brand-primary' },
     { name: 'surface-primary', cssVar: '--surface-primary' },
     { name: 'surface-secondary', cssVar: '--surface-secondary' },
-    { name: 'surface-navigation', cssVar: '--surface-navigation' },
+    { name: 'surface-muted', cssVar: '--surface-muted' },
     { name: 'surface-brand-primary', cssVar: '--surface-brand-primary' },
-    { name: 'surface-brand-secondary', cssVar: '--surface-brand-secondary' },
   ]}
   columns={4}
 />
 
-### Background
+## Background
 
 <ColorGrid
   colors={[
@@ -38,11 +33,12 @@ Semantic tokens map to purpose, not appearance. These values change when you swi
     { name: 'background-secondary', cssVar: '--background-secondary' },
     { name: 'background-inverse', cssVar: '--background-inverse' },
     { name: 'background-input', cssVar: '--background-input' },
+    { name: 'background-muted', cssVar: '--background-muted' },
   ]}
-  columns={3}
+  columns={4}
 />
 
-### Text
+## Text
 
 <ColorGrid
   colors={[
@@ -57,7 +53,7 @@ Semantic tokens map to purpose, not appearance. These values change when you swi
   columns={4}
 />
 
-### Border
+## Border
 
 <ColorGrid
   colors={[
@@ -67,35 +63,22 @@ Semantic tokens map to purpose, not appearance. These values change when you swi
     { name: 'border-brand-primary', cssVar: '--border-brand-primary' },
     { name: 'border-input', cssVar: '--border-input' },
     { name: 'border-inverse', cssVar: '--border-inverse' },
-    { name: 'border-on-color-dark', cssVar: '--border-on-color-dark' },
   ]}
-  columns={4}
-/>
-
-### Theme accents
-
-<ColorGrid
-  colors={[
-    { name: 'theme-blue-light', cssVar: '--theme-blue-blue-light' },
-    { name: 'theme-blue-lighter', cssVar: '--theme-blue-blue-lighter' },
-    { name: 'theme-green', cssVar: '--theme-blue-green' },
-    { name: 'theme-blue-dark', cssVar: '--theme-blue-blue-dark' },
-  ]}
-  columns={4}
+  columns={3}
 />
 
 ## Interaction states
 
-Tokenized interaction colors for hover, press, and disabled states. These replace all `filter: brightness()` and `opacity` hacks. As of 2026-03-31, Figma dropped the `interaction/` group prefix — use the new aliases below.
+Hover, press, and disabled states. These replace `filter: brightness()` and `opacity` hacks.
 
 <ColorGrid
   colors={[
     { name: 'background-brand-primary-hover', cssVar: '--background-brand-primary-hover' },
     { name: 'background-brand-primary-pressed', cssVar: '--background-brand-primary-pressed' },
+    { name: 'background-primary-hover', cssVar: '--background-primary-hover' },
+    { name: 'background-primary-pressed', cssVar: '--background-primary-pressed' },
     { name: 'background-secondary-hover', cssVar: '--background-secondary-hover' },
     { name: 'background-secondary-pressed', cssVar: '--background-secondary-pressed' },
-    { name: 'background-outline-hover', cssVar: '--background-outline-hover' },
-    { name: 'background-outline-pressed', cssVar: '--background-outline-pressed' },
     { name: 'background-disabled', cssVar: '--background-disabled' },
     { name: 'text-disabled', cssVar: '--text-disabled', isText: true },
     { name: 'border-disabled', cssVar: '--border-disabled' },
@@ -103,179 +86,67 @@ Tokenized interaction colors for hover, press, and disabled states. These replac
   columns={3}
 />
 
-## Status tokens
+## Status
 
-Semantic tokens for error, success, warning, info, and other status states. Use these in components — never use `--color-system-*` primitives directly.
-
-### Background status
+Canonical Figma tokens for positive, negative, and warning states. Background variants are saturated; surface variants are subtle tints.
 
 <ColorGrid
   colors={[
-    { name: 'background-status-error', cssVar: '--background-status-error' },
-    { name: 'background-status-error-subtle', cssVar: '--background-status-error-subtle' },
-    { name: 'background-status-success', cssVar: '--background-status-success' },
-    { name: 'background-status-success-subtle', cssVar: '--background-status-success-subtle' },
-    { name: 'background-status-warning', cssVar: '--background-status-warning' },
-    { name: 'background-status-warning-subtle', cssVar: '--background-status-warning-subtle' },
-    { name: 'background-status-info', cssVar: '--background-status-info' },
-    { name: 'background-status-info-subtle', cssVar: '--background-status-info-subtle' },
-    { name: 'background-status-neutral', cssVar: '--background-status-neutral' },
-    { name: 'background-status-purple', cssVar: '--background-status-purple' },
-    { name: 'background-status-orange', cssVar: '--background-status-orange' },
-  ]}
-  columns={4}
-/>
-
-### Text status
-
-<ColorGrid
-  colors={[
-    { name: 'text-status-error', cssVar: '--text-status-error', isText: true },
-    { name: 'text-status-success', cssVar: '--text-status-success', isText: true },
-    { name: 'text-status-warning', cssVar: '--text-status-warning', isText: true },
-    { name: 'text-status-info', cssVar: '--text-status-info', isText: true },
-    { name: 'text-status-neutral', cssVar: '--text-status-neutral', isText: true },
-  ]}
-  columns={3}
-/>
-
-### Surface status
-
-<ColorGrid
-  colors={[
-    { name: 'surface-status-error', cssVar: '--surface-status-error' },
-    { name: 'surface-status-success', cssVar: '--surface-status-success' },
-    { name: 'surface-status-warning', cssVar: '--surface-status-warning' },
-    { name: 'surface-status-info', cssVar: '--surface-status-info' },
-  ]}
-  columns={4}
-/>
-
-### Semantic negative / positive / warning
-
-Alternative status aliases used by client themes and some BDS components. These map to the same system colors as `--*-status-*` by default, but **can be overridden per client** to use brand-appropriate tints. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the distinction between these and the frozen `--*-status-*` tokens.
-
-<ColorGrid
-  colors={[
-    { name: 'surface-negative', cssVar: '--surface-negative' },
+    { name: 'background-positive', cssVar: '--background-positive' },
+    { name: 'background-negative', cssVar: '--background-negative' },
+    { name: 'background-warning', cssVar: '--background-warning' },
     { name: 'surface-positive', cssVar: '--surface-positive' },
+    { name: 'surface-negative', cssVar: '--surface-negative' },
     { name: 'surface-warning', cssVar: '--surface-warning' },
-    { name: 'text-negative', cssVar: '--text-negative', isText: true },
     { name: 'text-positive', cssVar: '--text-positive', isText: true },
+    { name: 'text-negative', cssVar: '--text-negative', isText: true },
     { name: 'text-warning', cssVar: '--text-warning', isText: true },
-    { name: 'border-negative', cssVar: '--border-negative' },
     { name: 'border-positive', cssVar: '--border-positive' },
+    { name: 'border-negative', cssVar: '--border-negative' },
     { name: 'border-warning', cssVar: '--border-warning' },
   ]}
   columns={3}
 />
 
-## Department colors
-
-Semantic tokens for categorical color-coding by organizational department (Clinical, Front Desk, Administration, etc.). Consumed via the `departmentColor(key)` helper in `src/lib/tokens.ts`. Valid keys: `blue`, `green`, `red`, `gold`, `purple`, `taupe`.
-
-These tokens are **client-overridable** — override the full set in your theme file to match your client's departmental palette.
-
-### Department backgrounds
+**Extended status (gap-fills)** — additional status tokens not yet in Figma. Deprecated `--*-status-error/success/warning` aliases forward to the canonical tokens above.
 
 <ColorGrid
   colors={[
-    { name: 'background-department-blue', cssVar: '--background-department-blue' },
-    { name: 'background-department-blue-light', cssVar: '--background-department-blue-light' },
-    { name: 'background-department-green', cssVar: '--background-department-green' },
-    { name: 'background-department-green-light', cssVar: '--background-department-green-light' },
-    { name: 'background-department-gold', cssVar: '--background-department-gold' },
-    { name: 'background-department-gold-light', cssVar: '--background-department-gold-light' },
-    { name: 'background-department-red', cssVar: '--background-department-red' },
-    { name: 'background-department-red-light', cssVar: '--background-department-red-light' },
-    { name: 'background-department-purple', cssVar: '--background-department-purple' },
-    { name: 'background-department-purple-light', cssVar: '--background-department-purple-light' },
-    { name: 'background-department-taupe', cssVar: '--background-department-taupe' },
-    { name: 'background-department-taupe-light', cssVar: '--background-department-taupe-light' },
+    { name: 'background-status-info', cssVar: '--background-status-info' },
+    { name: 'background-status-info-subtle', cssVar: '--background-status-info-subtle' },
+    { name: 'background-status-neutral', cssVar: '--background-status-neutral' },
+    { name: 'background-status-purple', cssVar: '--background-status-purple' },
+    { name: 'background-status-orange', cssVar: '--background-status-orange' },
+    { name: 'text-status-info', cssVar: '--text-status-info', isText: true },
+    { name: 'surface-status-info', cssVar: '--surface-status-info' },
   ]}
   columns={4}
 />
 
-### Department text
+## Presence
+
+Online/offline indicator tokens used by Avatar and Dot components.
 
 <ColorGrid
   colors={[
-    { name: 'text-department-blue', cssVar: '--text-department-blue', isText: true },
-    { name: 'text-department-green', cssVar: '--text-department-green', isText: true },
-    { name: 'text-department-gold', cssVar: '--text-department-gold', isText: true },
-    { name: 'text-department-red', cssVar: '--text-department-red', isText: true },
-    { name: 'text-department-purple', cssVar: '--text-department-purple', isText: true },
-    { name: 'text-department-taupe', cssVar: '--text-department-taupe', isText: true },
-  ]}
-  columns={3}
-/>
-
-### Department borders
-
-<ColorGrid
-  colors={[
-    { name: 'border-department-blue', cssVar: '--border-department-blue' },
-    { name: 'border-department-green', cssVar: '--border-department-green' },
-    { name: 'border-department-gold', cssVar: '--border-department-gold' },
-    { name: 'border-department-red', cssVar: '--border-department-red' },
-    { name: 'border-department-purple', cssVar: '--border-department-purple' },
-    { name: 'border-department-taupe', cssVar: '--border-department-taupe' },
-  ]}
-  columns={3}
-/>
-
-## Presence tokens
-
-Online/presence indicator tokens used by Avatar, Dot, and presence-aware components.
-
-<ColorGrid
-  colors={[
-    { name: 'background-presence-online', cssVar: '--background-presence-online' },
-    { name: 'background-presence-away', cssVar: '--background-presence-away' },
-    { name: 'background-presence-busy', cssVar: '--background-presence-busy' },
-    { name: 'background-presence-offline', cssVar: '--background-presence-offline' },
+    { name: 'presence-online', cssVar: '--background-presence-online' },
+    { name: 'presence-away', cssVar: '--background-presence-away' },
+    { name: 'presence-busy', cssVar: '--background-presence-busy' },
+    { name: 'presence-offline', cssVar: '--background-presence-offline' },
   ]}
   columns={4}
 />
 
 ## Primitives
 
-Every color in BDS comes from a 6-step scale defined in the Figma Brand Kit. Components reference these via semantic tokens — never by hex value.
+Raw color scales from the Figma Brand Kit. Components reference these via semantic tokens — never directly.
 
-### Grayscale
-
-The neutral palette used for text, borders, backgrounds, and surfaces.
-
-<PaletteGrid palette={grayscale} prefix="--color-grayscale" columns={8} />
-
-### Poppy (brand primary)
-
-<PaletteGrid palette={poppy} prefix="--color-poppy" columns={6} />
-
-### Tan
-
-<PaletteGrid palette={tan} prefix="--color-tan" columns={6} />
-
-### Orange
-
-<PaletteGrid palette={orange} prefix="--color-orange" columns={6} />
-
-### Yellow
-
-<PaletteGrid palette={yellow} prefix="--color-yellow" columns={6} />
-
-### Green
-
-<PaletteGrid palette={green} prefix="--color-green" columns={6} />
-
-### Blue
-
-<PaletteGrid palette={blue} prefix="--color-blue" columns={6} />
-
-### Purple
-
-<PaletteGrid palette={purple} prefix="--color-purple" columns={6} />
-
-### Pink
-
-<PaletteGrid palette={pink} prefix="--color-pink" columns={6} />
+<PaletteGrid title="Grayscale" palette={grayscale} prefix="--color-grayscale" columns={8} />
+<PaletteGrid title="Poppy (brand primary)" palette={poppy} prefix="--color-poppy" columns={6} />
+<PaletteGrid title="Tan" palette={tan} prefix="--color-tan" columns={6} />
+<PaletteGrid title="Orange" palette={orange} prefix="--color-orange" columns={6} />
+<PaletteGrid title="Yellow" palette={yellow} prefix="--color-yellow" columns={6} />
+<PaletteGrid title="Green" palette={green} prefix="--color-green" columns={6} />
+<PaletteGrid title="Blue" palette={blue} prefix="--color-blue" columns={6} />
+<PaletteGrid title="Purple" palette={purple} prefix="--color-purple" columns={6} />
+<PaletteGrid title="Pink" palette={pink} prefix="--color-pink" columns={6} />

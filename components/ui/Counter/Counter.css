@@ -22,10 +22,10 @@
 
 /* ─── Status colors ──────────────────────────────────────────── */
 
-.bds-counter--success  { background-color: var(--color-system-green);   color: var(--text-inverse); }
-.bds-counter--error    { background-color: var(--color-system-red);     color: var(--text-inverse); }
-.bds-counter--warning  { background-color: var(--color-system-yellow);  color: var(--text-primary); }
+.bds-counter--success  { background-color: var(--background-positive);     color: var(--text-inverse); }
+.bds-counter--error    { background-color: var(--background-negative);     color: var(--text-inverse); }
+.bds-counter--warning  { background-color: var(--background-warning);      color: var(--text-primary); }
 .bds-counter--neutral  { background-color: var(--color-grayscale-lighter); color: var(--text-primary); }
-.bds-counter--progress { background-color: var(--color-system-blue);    color: var(--text-inverse); }
+.bds-counter--progress { background-color: var(--background-status-info);  color: var(--text-inverse); }
 .bds-counter--brand    { background-color: var(--background-brand-primary); color: var(--text-inverse); }
 }

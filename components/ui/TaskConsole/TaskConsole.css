@@ -46,11 +46,11 @@
 }
 
 .bds-task-console--success .bds-task-console__header {
-  background-color: var(--surface-status-success);
+  background-color: var(--surface-positive);
 }
 
 .bds-task-console--has-errors .bds-task-console__header {
-  background-color: var(--surface-status-error);
+  background-color: var(--surface-negative);
 }
 
 .bds-task-console__header-text {
@@ -103,7 +103,8 @@
   opacity: 0.6;
   font-size: var(--icon-sm);
   padding: 0;
-  transition: opacity 0.15s ease, background-color 0.15s ease;
+  transition: opacity var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
 }
 
 .bds-task-console__btn:hover {
@@ -122,12 +123,12 @@
 .bds-task-console__progress-fill {
   height: 100%;
   background-color: var(--background-status-info);
-  transition: width 0.4s ease;
+  transition: width var(--duration-400) var(--ease-out);
   border-radius: 0 2px 2px 0; /* bds-lint-ignore — progress bar cap */
 }
 
 .bds-task-console__progress-fill--error {
-  background-color: var(--background-status-error);
+  background-color: var(--background-negative);
 }
 
 /* ─── Item list ──────────────────────────────────────────────── */
@@ -147,7 +148,7 @@
   padding: var(--padding-md) var(--padding-lg);
   gap: var(--gap-md);
   border-bottom: var(--border-width-sm) solid var(--border-primary);
-  transition: background-color 0.15s ease;
+  transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .bds-task-console__item:last-child {
@@ -159,7 +160,7 @@
 }
 
 .bds-task-console__item--failed {
-  background-color: var(--surface-status-error);
+  background-color: var(--surface-negative);
 }
 
 /* ─── Item content ───────────────────────────────────────────── */
@@ -218,11 +219,11 @@
 }
 
 .bds-task-console__icon--completed {
-  color: var(--text-status-success);
+  color: var(--text-positive);
 }
 
 .bds-task-console__icon--failed {
-  color: var(--text-status-error);
+  color: var(--text-negative);
 }
 
 .bds-task-console__icon--in-progress {

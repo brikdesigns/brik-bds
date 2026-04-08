@@ -17,9 +17,9 @@
 /* ─── Status colors ──────────────────────────────────────────── */
 
 .bds-dot--default  { background-color: var(--background-brand-primary); }
-.bds-dot--positive { background-color: var(--background-status-success); }
-.bds-dot--warning  { background-color: var(--background-status-warning); }
-.bds-dot--error    { background-color: var(--background-status-error); }
+.bds-dot--positive { background-color: var(--background-positive); }
+.bds-dot--warning  { background-color: var(--background-warning); }
+.bds-dot--error    { background-color: var(--background-negative); }
 .bds-dot--info     { background-color: var(--background-status-info); }
 .bds-dot--neutral  { background-color: var(--background-status-neutral); }
 
@@ -31,7 +31,7 @@
 }
 
 .bds-dot--pulse {
-  animation: bds-dot-pulse 1.4s var(--easing-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
+  animation: bds-dot-pulse 1.4s var(--ease-in-out) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1431,6 +1431,18 @@
     "secondary-pressed": {
       "$value": "{color.grayscale.darkest}",
       "$type": "color"
+    },
+    "positive": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "negative": {
+      "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow}",
+      "$type": "color"
     }
   },
   "surface": {
@@ -1471,6 +1483,22 @@
     },
     "info": {
       "$value": "{color.system.neutral-light}",
+      "$type": "color"
+    },
+    "positive": {
+      "$value": "{color.system.green-light}",
+      "$type": "color"
+    },
+    "negative": {
+      "$value": "{color.system.red-light}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow-light}",
+      "$type": "color"
+    },
+    "muted": {
+      "$value": "{color.grayscale.lightest}",
       "$type": "color"
     }
   },
@@ -1535,6 +1563,18 @@
     "info": {
       "$value": "{color.system.neutral}",
       "$type": "color"
+    },
+    "positive": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "negative": {
+      "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow}",
+      "$type": "color"
     }
   },
   "border": {
@@ -1577,6 +1617,18 @@
     },
     "info": {
       "$value": "{color.system.neutral}",
+      "$type": "color"
+    },
+    "positive": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "negative": {
+      "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow}",
       "$type": "color"
     }
   },

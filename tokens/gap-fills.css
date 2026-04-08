@@ -57,8 +57,8 @@
      literal string "String value" — a Figma limitation (no native easing variable type).
      These declarations overwrite those broken values with correct CSS cubic-bezier curves.
      ⚠️  LOAD-BEARING OVERRIDE: do not remove without fixing the Figma variable type first. */
-  --easing-ease-in:     cubic-bezier(0.4, 0, 1, 1);
-  --easing-ease-out:    cubic-bezier(0, 0, 0.2, 1);
+  --easing-ease-in:     cubic-bezier(0.4, 0, 1, 1); /* bds-lint-ignore — load-bearing override of SD "String value" */
+  --easing-ease-out:    cubic-bezier(0, 0, 0.2, 1); /* bds-lint-ignore — load-bearing override of SD "String value" */
   --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* TODO: promote to Figma */
 
   /* ── Missing Semantic Tokens ── */
@@ -98,51 +98,43 @@
   --box-shadow-none: 0px;
 
   /* ── Status Semantic Tokens ──
-     Maps the --color-system-* primitives to semantic status names.
-     Components should always use these; never reference --color-system-* directly.
-     Override per-theme by redefining in .body.theme-N blocks.
-     TODO: promote to Figma variables → Style Dictionary once layer is stable. */
+     Canonical names: --background-positive/negative/warning, --surface-positive/negative/warning,
+     --text-positive/negative/warning, --border-positive/negative/warning.
+     These are now first-class Figma variables → generated into figma-tokens.css via Style Dictionary.
 
-  /* Backgrounds */
-  --background-status-error:          var(--color-system-red);
-  --background-status-error-subtle:   var(--color-system-red-light);
-  --background-status-success:        var(--color-system-green);
-  --background-status-success-subtle: var(--color-system-green-light);
-  --background-status-warning:        var(--color-system-yellow);
-  --background-status-warning-subtle: var(--color-system-yellow-light);
+     The --*-status-* backward-compat aliases below map old names to canonical tokens.
+     Consuming projects should migrate to the canonical names.
+     BDS components use canonical names directly.
+
+     Tokens with NO Figma equivalent remain as direct gap-fills here:
+     info (blue), neutral, purple, orange. */
+
+  /* ── Backward-compat aliases (old --*-status-* → canonical Figma names) ──
+     ⚠️ DEPRECATED: migrate consuming projects to canonical names, then remove. */
+  --background-status-error:          var(--background-negative);
+  --background-status-error-subtle:   var(--surface-negative);
+  --background-status-success:        var(--background-positive);
+  --background-status-success-subtle: var(--surface-positive);
+  --background-status-warning:        var(--background-warning);
+  --background-status-warning-subtle: var(--surface-warning);
+  --text-status-error:                var(--text-negative);
+  --text-status-success:              var(--text-positive);
+  --text-status-warning:              var(--text-warning);
+  --surface-status-error:             var(--surface-negative);
+  --surface-status-success:           var(--surface-positive);
+  --surface-status-warning:           var(--surface-warning);
+
+  /* ── Info / Neutral / Purple / Orange status tokens (no Figma equivalent) ──
+     Note: Figma's --background-info / --text-info / --surface-info map to system/neutral (gray),
+     NOT blue. These blue "info" status tokens are a separate concept — keep as gap-fills. */
   --background-status-info:           var(--color-system-blue);
   --background-status-info-subtle:    var(--color-system-blue-light);
   --background-status-neutral:        var(--color-system-neutral-light);
   --background-status-purple:         var(--color-system-purple);
   --background-status-orange:         var(--color-system-orange);
-
-  /* Text */
-  --text-status-error:   var(--color-system-red);
-  --text-status-success: var(--color-system-green);
-  --text-status-warning: var(--color-system-yellow);
-  --text-status-info:    var(--color-system-blue);
-  --text-status-neutral: var(--color-system-neutral);
-
-  /* Surfaces (container backgrounds for status zones) */
-  --surface-status-error:   var(--color-system-red-light);
-  --surface-status-success: var(--color-system-green-light);
-  --surface-status-warning: var(--color-system-yellow-light);
-  --surface-status-info:    var(--color-system-blue-light);
-
-  /* ── Negative / Positive / Warning semantic aliases ──
-     Alternative naming convention used by client themes (Renew et al.) and some
-     BDS components for semantic status coloring. Override these in your theme
-     to use brand-appropriate tints while keeping component contracts intact.
-     BDS default maps to the same system colors as --*-status-* above. */
-  --surface-negative: var(--color-system-red-light);
-  --surface-positive: var(--color-system-green-light);
-  --surface-warning:  var(--color-system-yellow-light);
-  --text-negative:    var(--color-system-red);
-  --text-positive:    var(--color-system-green);
-  --text-warning:     var(--color-system-yellow);
-  --border-negative:  var(--color-system-red);
-  --border-positive:  var(--color-system-green);
-  --border-warning:   var(--color-system-yellow);
+  --text-status-info:                 var(--color-system-blue);
+  --text-status-neutral:              var(--color-system-neutral);
+  --surface-status-info:              var(--color-system-blue-light);
 
   /* Presence (for Avatar online/away/busy/offline indicators) */
   --background-presence-online:  var(--color-system-green);
@@ -167,10 +159,10 @@
      as single blur values (e.g. "2px") — a Figma variable limitation. These declarations
      intentionally overwrite those with the correct full box-shadow shorthand.
      Do NOT remove these or reorder the import cascade (figma-tokens.css → gap-fills.css). */
-  --box-shadow-sm:  var(--shadow-sm);
-  --box-shadow-md:  var(--shadow-md);
-  --box-shadow-lg:  var(--shadow-lg);
-  --box-shadow-xl:  var(--shadow-xl);
+  --box-shadow-sm:  var(--shadow-sm); /* bds-lint-ignore — load-bearing override of SD single-blur values */
+  --box-shadow-md:  var(--shadow-md); /* bds-lint-ignore — load-bearing override */
+  --box-shadow-lg:  var(--shadow-lg); /* bds-lint-ignore — load-bearing override */
+  --box-shadow-xl:  var(--shadow-xl); /* bds-lint-ignore — load-bearing override */
 
   /* Overlay (for Modal, Sheet, Dialog backdrops) */
   --background-overlay: rgba(0, 0, 0, 0.4);

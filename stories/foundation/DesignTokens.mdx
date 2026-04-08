@@ -6,8 +6,6 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 Design tokens are the single source of truth for every visual decision in the Brik ecosystem — color, type, spacing, radius, shadow, motion. A token gives a value a name and a purpose. Components never reference raw values; they reference tokens. This means a component built once works correctly across every Brik client without touching its code.
 
----
-
 ## Two-tier architecture (client projects)
 
 Client portals, SaaS apps, and marketing sites use a **2-tier** model:
@@ -35,8 +33,6 @@ Client portals, SaaS apps, and marketing sites use a **2-tier** model:
 
 **The key rule:** token names are fixed in Tier 1. Only values change in Tier 2. A component written against `--background-brand-primary` works for every client brand with zero code changes.
 
----
-
 ## BDS Theming — website template layer (separate from client work)
 
 BDS also ships a **BDS Theming** layer (`website-themes.css`) that contains 8 pre-built brand configurations. This is a **separate product effort** — a website template theme library, not part of the client project architecture.
@@ -51,8 +47,6 @@ This layer is used in:
 - **Website template product** (future) — pre-built brand themes for site builds
 
 **Client projects do not import website-themes.css.** They define their own Tier 2 via `theme-{client}.css`.
-
----
 
 ## CSS import cascade
 
@@ -80,8 +74,6 @@ This layer is used in:
 @import '../tokens/website-themes.css';  /* adds .body.theme-N blocks */
 ```
 
----
-
 ## Token types: primitives vs semantic
 
 | Type | Purpose | Example | Used in |
@@ -101,8 +93,6 @@ Primitives define the palette. Semantics define the intent. Components only know
 /* ❌ Wrong — primitive, breaks the abstraction */
 .bds-button { background: var(--color-poppy-light); }
 ```
-
----
 
 ## Naming convention
 
@@ -129,8 +119,6 @@ Primitives define the palette. Semantics define the intent. Components only know
   </tbody>
 </table>
 
----
-
 ## Figma variable collections → CSS output
 
 Figma organises variables into named collections. Each collection has modes. Style Dictionary flattens the active mode of each collection into `figma-tokens.css`.
@@ -152,8 +140,6 @@ Figma organises variables into named collections. Each collection has modes. Sty
 </table>
 
 **Light vs dark mode:** `figma-tokens.css` uses the `light` mode of the `color` collection. `figma-tokens-dark.css` uses the `dark` mode. Both files use identical variable names — consuming projects import dark after light, and the browser applies whichever matches `[data-theme="dark"]`.
-
----
 
 ## Style Dictionary pipeline
 
@@ -181,23 +167,17 @@ Figma is the only place tokens are edited. The pipeline is:
 
 **Rule:** never manually edit `tokens/figma-tokens.css`. It is generated on every sync. Use `tokens/gap-fills.css` for gap-fill tokens that aren't in Figma yet.
 
----
-
 ## Client theming
 
 A client brand is a single CSS file (~12–27 token overrides). No components change. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the full cascade, override tiers, known gaps, and font-only override patterns.
 
 **Validate with ★ Font Audit:** Switch to `★ Font Audit` in the Storybook toolbar. It assigns Georgia/Verdana/Courier New to heading/body/label families — any component using the wrong `--font-family-*` token becomes immediately visible.
 
----
-
 ## BDS Theming — website template themes
 
 BDS ships 8 pre-built brand configurations as website template themes. Switch between them using the paintbrush icon in the toolbar above. These themes are **not** part of the client project architecture — they are a separate product layer for template-driven site work.
 
 Each theme overrides semantic color and font-family tokens only — spacing, shadows, radius, and component structure are theme-invariant. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for how to build a custom client theme on top of the 2-tier foundation.
-
----
 
 ## Current token inventory
 
@@ -255,8 +235,6 @@ Each theme overrides semantic color and font-family tokens only — spacing, sha
   </tbody>
 </table>
 
----
-
 ## Adding a new token
 
 **Always start in Figma — never in CSS.**
@@ -268,8 +246,6 @@ Each theme overrides semantic color and font-family tokens only — spacing, sha
 5. Add it to the consuming project's `src/lib/tokens.ts` export map
 
 **Exception:** tokens that aren't ready for Figma yet go in `tokens/gap-fills.css` with a `TODO: promote to Figma` comment.
-
----
 
 ## What NOT to do
 

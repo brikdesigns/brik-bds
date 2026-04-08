@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 import { ThemeOverview } from './_components';
 
-<Meta title="Foundations/Design Tokens/Client Theming" />
+<Meta title="Overview/Theming/Client Theming" />
 
 # Client Theming
 
@@ -126,13 +126,15 @@ Tokens like `--background-brand-primary-hover` and `--background-brand-primary-p
 }
 ```
 
-**There are two status token namespaces — only one is frozen.**
+**Status tokens use the canonical Figma naming convention.**
 
-`--background-status-*` / `--text-status-*` / `--surface-status-*` tokens (used by Badge, Dot, and Alert components) are **intentionally frozen**. They use system colors that carry universal semantic meaning (red = error, green = success, yellow = warning). Do not override these per-client — doing so would break the shared meaning of status indicators across the Brik ecosystem.
+`--background-positive/negative/warning`, `--surface-positive/negative/warning`, `--text-positive/negative/warning`, and `--border-positive/negative/warning` are the canonical status tokens (first-class Figma variables). They are **client-overridable** — override them in your client theme to use brand-appropriate tints while keeping component contracts intact. Example: a client whose brand red clashes with error-red can override `--surface-negative` to a neutral tint.
 
-`--surface-negative/positive/warning`, `--text-negative/positive/warning`, and `--border-negative/positive/warning` are **client-overridable semantic aliases**. They map to the same system colors by default but can be overridden in your client theme to use brand-appropriate tints. Example: a client whose brand red clashes with error-red can override `--surface-negative` to a neutral tint while leaving `--background-status-error` untouched.
+The old `--*-status-*` names (`--background-status-error`, `--text-status-success`, etc.) are deprecated backward-compat aliases that forward to the canonical tokens. Migrate to the canonical names.
 
-`--background-presence-*` tokens (online/away/busy/offline indicators) are **intentionally frozen** for the same reason as `--background-status-*`.
+Extended status tokens (`--background-status-info`, `--background-status-neutral`, `--background-status-purple`, `--background-status-orange`) remain as gap-fills with no Figma equivalent. These use system colors with universal semantic meaning and should not be overridden per-client.
+
+`--background-presence-*` tokens (online/away/busy/offline indicators) are **intentionally frozen** — do not override per-client.
 
 **Shadow tokens are global.** `--shadow-sm` through `--shadow-xl` and `--background-overlay` use hardcoded `rgba()` values. They are not expected to vary per brand.
 

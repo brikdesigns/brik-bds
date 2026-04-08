@@ -20,7 +20,7 @@
   color: var(--text-primary);
   cursor: pointer;
   padding: 0;
-  transition: filter 0.15s ease;
+  transition: filter var(--duration-fast) var(--ease-out);
   flex-shrink: 0;
 }
 
