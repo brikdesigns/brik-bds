@@ -1,6 +1,18 @@
 @layer bds-components {
 /* ─── Dialog ─────────────────────────────────────────────────── */
 
+/* ─── Entrance keyframes (shared with Modal) ────────────────── */
+
+@keyframes bds-dialog-backdrop-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bds-dialog-enter {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
 .bds-dialog-backdrop {
   position: fixed;
   inset: 0;
@@ -9,6 +21,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  animation: bds-dialog-backdrop-fade var(--duration-normal) var(--ease-out);
 }
 
 .bds-dialog {
@@ -16,6 +29,7 @@
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-overlay);
   max-width: 440px; /* bds-lint-ignore — design constraint */
+  animation: bds-dialog-enter var(--duration-slow) var(--ease-out);
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -65,7 +79,7 @@
   border-radius: var(--border-radius-sm);
   cursor: pointer;
   border: none;
-  transition: filter 0.15s ease;
+  transition: filter var(--duration-fast) var(--ease-out);
 }
 
 .bds-dialog__button:hover {
@@ -84,7 +98,14 @@
 }
 
 .bds-dialog__button--destructive {
-  background-color: var(--background-status-error);
+  background-color: var(--background-negative);
   color: var(--text-on-color-dark);
+}
+
+/* ─── Reduced motion ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-dialog-backdrop { animation: none; }
+  .bds-dialog { animation: none; }
 }
 }

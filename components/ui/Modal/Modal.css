@@ -1,6 +1,18 @@
 @layer bds-components {
 /* ─── Modal ──────────────────────────────────────────────────── */
 
+/* ─── Entrance keyframes ────────────────────────────────────── */
+
+@keyframes bds-modal-backdrop-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bds-modal-enter {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 .bds-modal-backdrop {
   position: fixed;
   top: 0;
@@ -13,9 +25,14 @@
   justify-content: center;
   padding: var(--padding-lg);
   z-index: 1000;
+  animation: bds-modal-backdrop-fade var(--duration-normal) var(--ease-out);
 }
 
 .bds-modal {
+  /* ─── Component-scoped override surface ── */
+  --modal-enter-duration: var(--duration-slow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --modal-enter-ease: var(--ease-out);          /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
   position: relative;
   width: 100%;
   max-height: 90vh;
@@ -25,6 +42,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: bds-modal-enter var(--modal-enter-duration) var(--modal-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
 }
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
@@ -70,7 +88,7 @@
   margin-right: calc(-1 * var(--padding-md));
   color: var(--text-primary);
   opacity: 0.6;
-  transition: opacity 0.2s;
+  transition: opacity var(--duration-normal) var(--ease-out);
   border-radius: var(--border-radius-md);
   display: flex;
   align-items: center;
@@ -108,5 +126,12 @@
   justify-content: flex-end;
   flex-wrap: wrap;
   flex-shrink: 0;
+}
+
+/* ─── Reduced motion ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-modal-backdrop { animation: none; }
+  .bds-modal { animation: none; }
 }
 }

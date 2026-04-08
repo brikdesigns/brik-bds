@@ -70,6 +70,17 @@ const ThemedDocsContainer: typeof DefaultDocsContainer = (props) => {
     return () => channel.off('globalsUpdated', handler);
   }, [channel]);
 
+  // Apply theme class to body — pure MDX pages (Color, Typography, etc.)
+  // don't embed stories, so the withTheme decorator never fires for them.
+  // Without this, CSS vars stay stale when the user switches themes.
+  useLayoutEffect(() => {
+    const body = document.body;
+    body.className = body.className.replace(/\btheme-\S+/g, '');
+    body.classList.add('body', `theme-${themeNum}`);
+    const isDark = storybookThemes[themeNum as ThemeNumber]?.base === 'dark';
+    body.setAttribute('data-bds-dark', String(isDark));
+  }, [themeNum]);
+
   const theme = previewThemes[themeNum] || previewThemes['brik'];
   return React.createElement(DefaultDocsContainer, { ...props, theme });
 };
@@ -201,7 +212,7 @@ const preview: Preview = {
       storySort: {
         order: [
           'Overview',
-          ['Welcome', 'ThemeSwitcher', 'Health Dashboard', 'Theme Compliance', 'Token Coverage'],
+          ['Welcome', 'Theming', ['Theme Switcher', 'Client Theming'], 'Health', ['Health Dashboard', 'Theme Compliance', 'Token Coverage']],
           'Foundations',
           [
             'Design Tokens',
@@ -245,7 +256,10 @@ const preview: Preview = {
       disabled: true,
     },
     docs: {
-      toc: true,
+      toc: {
+        headingSelector: 'h2',
+        title: '',
+      },
       container: ThemedDocsContainer,
       source: {
         type: 'dynamic',

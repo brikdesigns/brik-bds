@@ -23,7 +23,7 @@
   cursor: default;
   user-select: none;
   overflow: clip;
-  transition: background-color 0.2s;
+  transition: background-color var(--duration-normal) var(--ease-out);
 }
 
 /* ─── Sizes (shared scale with Badge) ────────────────────────── */

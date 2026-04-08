@@ -1,9 +1,33 @@
 @layer bds-components {
 /* ─── Snackbar ───────────────────────────────────────────────── */
 
+/* ─── Entrance / exit keyframes ─────────────────────────────── */
+
+@keyframes bds-snackbar-slide-in-bottom {
+  from { opacity: 0; transform: translateX(-50%) translateY(100%); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes bds-snackbar-slide-in-top {
+  from { opacity: 0; transform: translateX(-50%) translateY(-100%); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes bds-snackbar-slide-in-left {
+  from { opacity: 0; transform: translateX(-100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bds-snackbar-slide-in-right {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 .bds-snackbar {
   /* ─── Component-scoped override surface ── */
   --snackbar-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2); /* bds-lint-ignore — stronger alpha than --shadow-lg; promote to Figma */
+  --snackbar-enter-duration: var(--duration-slow);       /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --snackbar-enter-ease: var(--ease-out);                /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 
   position: fixed;
   display: flex;
@@ -18,6 +42,31 @@
   box-sizing: border-box;
 }
 
+/* ─── Entrance animations by position ───────────────────────── */
+
+.bds-snackbar--bottom,
+.bds-snackbar--bottom-left,
+.bds-snackbar--bottom-right {
+  animation: bds-snackbar-slide-in-bottom var(--snackbar-enter-duration) var(--snackbar-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
+}
+
+.bds-snackbar--top,
+.bds-snackbar--top-left,
+.bds-snackbar--top-right {
+  animation: bds-snackbar-slide-in-top var(--snackbar-enter-duration) var(--snackbar-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
+}
+
+/* Corner positions without centered transform use directional slides */
+.bds-snackbar--top-left,
+.bds-snackbar--bottom-left {
+  animation-name: bds-snackbar-slide-in-left;
+}
+
+.bds-snackbar--top-right,
+.bds-snackbar--bottom-right {
+  animation-name: bds-snackbar-slide-in-right;
+}
+
 /* ─── Variants ───────────────────────────────────────────────── */
 
 .bds-snackbar--default {
@@ -26,12 +75,12 @@
 }
 
 .bds-snackbar--success {
-  background-color: var(--background-status-success);
+  background-color: var(--background-positive);
   color: var(--text-on-color-dark);
 }
 
 .bds-snackbar--error {
-  background-color: var(--background-status-error);
+  background-color: var(--background-negative);
   color: var(--text-on-color-dark);
 }
 
@@ -76,5 +125,19 @@
 
 .bds-snackbar__close:hover {
   opacity: 1;
+}
+
+/* ─── Exit ──────────────────────────────────────────────────── */
+
+.bds-snackbar--exiting {
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-in);
+}
+
+/* ─── Reduced motion ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-snackbar { animation: none; }
+  .bds-snackbar--exiting { transition: none; }
 }
 }

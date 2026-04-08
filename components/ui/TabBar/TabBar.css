@@ -6,8 +6,16 @@
 /* ── Shared cursor + transition ── */
 
 .bds-tab-bar-item {
-  transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease,
-    border-color 0.15s ease;
+  transition: opacity var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+/* Micro press feedback on click */
+.bds-tab-bar-item:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .bds-tab-bar-item:disabled {

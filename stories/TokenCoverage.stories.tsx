@@ -1,5 +1,6 @@
 import { useState, useEffect, type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { docTable, docTh, docTd, docTdMono, docTdMuted, docTdRight } from './foundation/_components/docTableStyles';
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -48,14 +49,6 @@ const metric: CSSProperties = {
   color: 'var(--text-primary)',
 };
 
-const tableCell: CSSProperties = {
-  padding: 'var(--gap-xs) var(--gap-sm)',
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  borderBottom: '1px solid var(--border-muted)', // bds-lint-ignore
-  color: 'var(--text-primary)',
-};
-
 // ─── Components ─────────────────────────────────────────────────────
 
 function Bar({ value, max, color }: { value: number; max: number; color: string }) {
@@ -69,22 +62,22 @@ function Bar({ value, max, color }: { value: number; max: number; color: string 
 
 function TokenUsageTable({ tokens, maxCount }: { tokens: CoverageData['used']; maxCount: number }) {
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <table style={docTable}>
       <thead>
-        <tr style={{ borderBottom: '2px solid var(--border-muted)' }}>{/* bds-lint-ignore */}
-          <th style={{ ...tableCell, textAlign: 'left', color: 'var(--text-secondary)' }}>Token</th>
-          <th style={{ ...tableCell, textAlign: 'right', color: 'var(--text-secondary)', width: 60 }}>Uses</th>
-          <th style={{ ...tableCell, color: 'var(--text-secondary)', width: 120 }}>Coverage</th>
-          <th style={{ ...tableCell, textAlign: 'left', color: 'var(--text-secondary)' }}>Components</th>
+        <tr>
+          <th style={docTh}>Token</th>
+          <th style={{ ...docTh, textAlign: 'right', width: 60 }}>Uses</th>
+          <th style={{ ...docTh, width: 120 }}>Coverage</th>
+          <th style={docTh}>Components</th>
         </tr>
       </thead>
       <tbody>
         {tokens.slice(0, 30).map(t => (
           <tr key={t.token}>
-            <td style={{ ...tableCell, fontFamily: 'var(--font-family-system, monospace)', fontSize: 'var(--body-xs)' }}>{t.token}</td>
-            <td style={{ ...tableCell, textAlign: 'right' }}>{t.count}</td>
-            <td style={tableCell}><Bar value={t.count} max={maxCount} color="var(--color-system-green)" /></td>
-            <td style={{ ...tableCell, fontSize: 'var(--body-xs)', color: 'var(--text-muted)' }}>{t.components.slice(0, 5).join(', ')}{t.components.length > 5 ? ` +${t.components.length - 5}` : ''}</td>
+            <td style={docTdMono}>{t.token}</td>
+            <td style={docTdRight}>{t.count}</td>
+            <td style={docTd}><Bar value={t.count} max={maxCount} color="var(--color-system-green)" /></td>
+            <td style={docTdMuted}>{t.components.slice(0, 5).join(', ')}{t.components.length > 5 ? ` +${t.components.length - 5}` : ''}</td>
           </tr>
         ))}
       </tbody>
@@ -121,13 +114,13 @@ function HardcodedLeaderboard({ items }: { items: CoverageData['hardcoded'] }) {
   if (items.length === 0) return <div style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)' }}>No hardcoded values detected</div>;
   const max = items[0]?.count ?? 1;
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <table style={docTable}>
       <tbody>
         {items.slice(0, 15).map(item => (
           <tr key={item.component}>
-            <td style={{ ...tableCell, width: 180 }}>{item.component}</td>
-            <td style={{ ...tableCell, textAlign: 'right', width: 50 }}>{item.count}</td>
-            <td style={tableCell}><Bar value={item.count} max={max} color="var(--color-system-yellow)" /></td>
+            <td style={{ ...docTd, width: 180 }}>{item.component}</td>
+            <td style={{ ...docTdRight, width: 50 }}>{item.count}</td>
+            <td style={docTd}><Bar value={item.count} max={max} color="var(--color-system-yellow)" /></td>
           </tr>
         ))}
       </tbody>
@@ -202,12 +195,12 @@ function TokenCoverageDashboard() {
           <div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)', marginBottom: 'var(--gap-sm)' }}>
             Tokens used in components but not defined in figma-tokens.css or gap-fills.css
           </div>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table style={docTable}>
             <tbody>
               {data.undeclared.slice(0, 20).map(u => (
                 <tr key={u.token}>
-                  <td style={{ ...tableCell, fontFamily: 'var(--font-family-system, monospace)', fontSize: 'var(--body-xs)' }}>{u.token}</td>
-                  <td style={{ ...tableCell, color: 'var(--text-muted)' }}>{u.components.join(', ')}</td>
+                  <td style={docTdMono}>{u.token}</td>
+                  <td style={docTdMuted}>{u.components.join(', ')}</td>
                 </tr>
               ))}
             </tbody>
@@ -221,7 +214,7 @@ function TokenCoverageDashboard() {
 // ─── Meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof TokenCoverageDashboard> = {
-  title: 'Overview/Token Coverage',
+  title: 'Overview/Health/Token Coverage',
   component: TokenCoverageDashboard,
   parameters: { layout: 'fullscreen' },
 };

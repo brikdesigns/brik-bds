@@ -2,6 +2,28 @@
 /* ─── Sheet ──────────────────────────────────────────────────── */
 /* Overlay treatment aligned with Modal (2026-03-20)            */
 
+/* ─── Entrance keyframes ────────────────────────────────────── */
+
+@keyframes bds-sheet-backdrop-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bds-sheet-slide-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes bds-sheet-slide-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes bds-sheet-slide-bottom {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
 .bds-sheet-backdrop {
   position: fixed;
   top: 0;
@@ -10,9 +32,14 @@
   bottom: 0;
   background-color: var(--background-overlay);
   z-index: 1000;
+  animation: bds-sheet-backdrop-fade var(--duration-normal) var(--ease-out);
 }
 
 .bds-sheet {
+  /* ─── Component-scoped override surface ── */
+  --sheet-enter-duration: var(--duration-slow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --sheet-enter-ease: var(--ease-out);          /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
   position: fixed;
   background-color: var(--surface-primary);
   box-shadow: var(--shadow-overlay);
@@ -23,11 +50,20 @@
   box-sizing: border-box;
 }
 
-/* ─── Side positions ─────────────────────────────────────────── */
+/* ─── Side positions + entrance animations ───────────────────── */
 
-.bds-sheet--right  { top: 0; right: 0; bottom: 0; max-width: 90vw; }
-.bds-sheet--left   { top: 0; left: 0; bottom: 0; max-width: 90vw; }
-.bds-sheet--bottom { left: 0; right: 0; bottom: 0; max-height: 80vh; }
+.bds-sheet--right {
+  top: 0; right: 0; bottom: 0; max-width: 90vw;
+  animation: bds-sheet-slide-right var(--sheet-enter-duration) var(--sheet-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
+}
+.bds-sheet--left {
+  top: 0; left: 0; bottom: 0; max-width: 90vw;
+  animation: bds-sheet-slide-left var(--sheet-enter-duration) var(--sheet-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
+}
+.bds-sheet--bottom {
+  left: 0; right: 0; bottom: 0; max-height: 80vh;
+  animation: bds-sheet-slide-bottom var(--sheet-enter-duration) var(--sheet-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
+}
 
 /* ─── Header (matches Modal) ────────────────────────────────── */
 
@@ -78,7 +114,7 @@
   margin-right: calc(-1 * var(--padding-md));
   color: var(--text-primary);
   opacity: 0.6;
-  transition: opacity 0.2s;
+  transition: opacity var(--duration-normal) var(--ease-out);
   border-radius: var(--border-radius-md);
   display: flex;
   align-items: center;
@@ -113,7 +149,8 @@
   font-weight: var(--font-weight-semi-bold);
   color: var(--text-muted);
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
   white-space: nowrap;
 }
 
@@ -145,5 +182,14 @@
   flex-wrap: wrap;
   flex-shrink: 0;
   border-top: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Reduced motion ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-sheet-backdrop { animation: none; }
+  .bds-sheet--right,
+  .bds-sheet--left,
+  .bds-sheet--bottom { animation: none; }
 }
 }

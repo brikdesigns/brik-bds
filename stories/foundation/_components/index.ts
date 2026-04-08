@@ -11,3 +11,4 @@ export {
 export { BorderRadiusPreview, BorderWidthPreview } from './BorderRadiusPreview';
 export { ShadowScale } from './ShadowPreview';
 export { ThemeComparison, ThemeOverview } from './ThemeComparison';
+export { docTable, docTh, docTd, docTdMono, docTdMuted, docTdRight } from './docTableStyles';

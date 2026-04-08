@@ -31,7 +31,7 @@
 }
 
 .bds-date-picker__label--error {
-  color: var(--color-system-red);
+  color: var(--text-negative);
 }
 
 /* Label sizes */
@@ -52,7 +52,7 @@
   border: var(--border-width-md) solid var(--border-input);
   border-radius: var(--border-radius-md);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color var(--duration-normal) var(--ease-out);
   box-sizing: border-box;
   cursor: pointer;
   text-align: left;
@@ -62,7 +62,7 @@
 }
 
 .bds-date-picker__trigger--error {
-  border-color: var(--color-system-red);
+  border-color: var(--border-negative);
 }
 
 .bds-date-picker__trigger--disabled {
@@ -100,7 +100,7 @@
 }
 
 .bds-date-picker__helper--error {
-  color: var(--color-system-red);
+  color: var(--text-negative);
 }
 
 /* ─── Calendar popover ───────────────────────────────────────── */
@@ -147,7 +147,7 @@
   justify-content: center;
   width: 28px; /* bds-lint-ignore — fixed nav button size */
   height: 28px; /* bds-lint-ignore — fixed nav button size */
-  transition: background-color 0.15s;
+  transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .bds-date-picker__nav-button:hover {
@@ -191,7 +191,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s, color 0.15s;
+  transition: background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
   color: var(--text-primary);
 }
 

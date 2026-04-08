@@ -26,7 +26,7 @@
 .bds-select-label--lg { font-size: var(--label-lg); }
 
 .bds-select-label--error {
-  color: var(--text-status-error);
+  color: var(--text-negative);
 }
 
 /* ─── Field wrapper ──────────────────────────────────────────── */
@@ -54,7 +54,8 @@
   border: var(--border-width-md) solid var(--border-input);
   border-radius: var(--border-radius-md);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
   cursor: pointer;
   appearance: none;
   box-sizing: border-box;
@@ -115,17 +116,17 @@
 
 /* Error state */
 .bds-select--error {
-  border-color: var(--text-status-error);
+  border-color: var(--text-negative);
 }
 
 .bds-select--error:hover:not(:disabled) {
-  border-color: var(--text-status-error);
+  border-color: var(--text-negative);
 }
 
 .bds-select--error:focus,
 .bds-select--error:focus-visible {
-  border-color: var(--text-status-error);
-  box-shadow: 0 0 0 1px var(--text-status-error);
+  border-color: var(--text-negative);
+  box-shadow: 0 0 0 1px var(--text-negative);
 }
 
 /* ─── Chevron icon ───────────────────────────────────────────── */
@@ -165,6 +166,6 @@
 }
 
 .bds-select-helper--error {
-  color: var(--text-status-error);
+  color: var(--text-negative);
 }
 }

@@ -1,6 +1,7 @@
 import { type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useThemeCompliance, type ThemeResult } from './_components/useThemeCompliance';
+import { docTable, docTd } from './foundation/_components/docTableStyles';
 
 // ─── Styles ─────────────────────────────────────────────────────────
 
@@ -20,13 +21,6 @@ const sectionLabel: CSSProperties = {
   margin: '0 0 var(--gap-sm)',
   textTransform: 'uppercase' as const,
   letterSpacing: '0.05em',
-};
-
-const tableCell: CSSProperties = {
-  padding: 'var(--gap-xs) var(--gap-sm)',
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  borderBottom: '1px solid var(--border-muted)', // bds-lint-ignore
 };
 
 const swatch = (color: string): CSSProperties => ({
@@ -70,16 +64,16 @@ function ThemeCard({ theme }: { theme: ThemeResult }) {
       </h3>
 
       {/* Contrast pairs */}
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 'var(--gap-md)' }}>
+      <table style={{ ...docTable, marginBottom: 'var(--gap-md)' }}>
         <tbody>
           {theme.contrastPairs.map((pair) => (
             <tr key={pair.label}>
-              <td style={tableCell}>
+              <td style={docTd}>
                 <span style={swatch(pair.bgValue || 'transparent')} />
                 <span style={swatch(pair.textValue || 'transparent')} />
                 {pair.label}
               </td>
-              <td style={{ ...tableCell, textAlign: 'right' }}>
+              <td style={{ ...docTd, textAlign: 'right' }}>
                 <span style={{
                   ...passBadge,
                   backgroundColor: pair.pass ? 'var(--color-system-green)' : 'var(--color-system-red)',
@@ -140,7 +134,7 @@ function ThemeComplianceDashboard() {
 // ─── Meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof ThemeComplianceDashboard> = {
-  title: 'Overview/Theme Compliance',
+  title: 'Overview/Health/Theme Compliance',
   component: ThemeComplianceDashboard,
   parameters: { layout: 'fullscreen' },
 };

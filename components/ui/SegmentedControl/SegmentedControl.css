@@ -6,7 +6,9 @@
 /* ── Shared transition ── */
 
 .bds-segmented-control-item {
-  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
 /* ── Disabled ── */
