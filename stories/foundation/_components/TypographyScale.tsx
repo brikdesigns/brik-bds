@@ -32,7 +32,7 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
               alignItems: 'baseline',
               gap: '16px',
               padding: '6px 0',
-              borderBottom: '1px solid var(--border-muted, #e0e0e0)',
+              borderBottom: '1px solid var(--border-muted)',
             }}
           >
             <code
@@ -168,7 +168,7 @@ export function SemanticTypographyTable({ title, tokens, category }: SemanticTyp
                 alignItems: 'baseline',
                 gap: '16px',
                 padding: '8px 0',
-                borderBottom: '1px solid var(--border-muted, #e0e0e0)',
+                borderBottom: '1px solid var(--border-muted)',
               }}
             >
               <code
@@ -233,7 +233,7 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
               alignItems: 'baseline',
               gap: '16px',
               padding: '6px 0',
-              borderBottom: '1px solid var(--border-muted, #e0e0e0)',
+              borderBottom: '1px solid var(--border-muted)',
             }}
           >
             <code
