@@ -157,14 +157,14 @@ const thStyle: React.CSSProperties = {
 
 const tdStyle: React.CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '1px solid var(--border-muted, #e0e0e0)',
+  borderBottom: '1px solid var(--border-muted)',
   verticalAlign: 'middle',
 };
 
 const codeStyle: React.CSSProperties = {
   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
   fontSize: '12px',
-  background: 'var(--surface-secondary, #f2f2f2)',
+  background: 'var(--surface-secondary)',
   padding: '2px 6px',
   borderRadius: '3px',
 };
