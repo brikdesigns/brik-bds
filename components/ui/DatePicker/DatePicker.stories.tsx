@@ -70,8 +70,9 @@ export const Playground: Story = {
     // Open calendar
     await userEvent.click(trigger);
 
-    // Calendar opens in a portal
-    const dialog = within(document.body).getByRole('dialog');
+    // Calendar opens in a Radix portal — use findByRole to wait for async render
+    const body = within(document.body);
+    const dialog = await body.findByRole('dialog');
     await expect(dialog).toBeVisible();
 
     // Click a day cell
