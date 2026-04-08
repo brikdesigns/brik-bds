@@ -164,6 +164,6 @@ const thStyle: React.CSSProperties = {
 
 const tdStyle: React.CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '1px solid var(--border-muted, #e0e0e0)',
+  borderBottom: '1px solid var(--border-muted)',
   verticalAlign: 'middle',
 };
