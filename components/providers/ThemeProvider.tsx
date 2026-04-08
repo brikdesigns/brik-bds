@@ -141,7 +141,7 @@ export function ThemeProvider({
   const themeClasses = getThemeClasses(theme);
 
   // Get metadata for current theme
-  const metadata = themeMetadata[theme.themeNumber] || themeMetadata['1'];
+  const metadata = themeMetadata[theme.themeNumber] || themeMetadata['brik'];
 
   // Apply theme to body
   useEffect(() => {

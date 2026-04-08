@@ -12,23 +12,16 @@
 
 /**
  * Available theme identifiers (maps to .theme-X classes)
- * Verified against actual Webflow CSS color palettes.
  *
- * - theme-1: Default (Light) — :root defaults, blue-green accents
- * - theme-2: Dark — yellow-orange accents, Geist fonts
- * - theme-3: Blue — blue-green accents, IBM Plex Sans
- * - theme-4: Gold — yellow-orange light, Lato
- * - theme-5: Peach — peach-brown tones, Newsreader
- * - theme-6: Minimal — typography-only variant, IBM Plex Sans
- * - theme-7: Warm — tan earth tones, Lato
- * - theme-8: Vibrant — green/purple accents, Playfair Display
  * - theme-brik: Brik Brand — poppy red, Poppins
- * - theme-client-sim: Client Simulation — intentionally distinct system fonts per family.
- *   Use this theme during component development to validate semantic font-family usage.
+ * - theme-brik.dark: Brik Brand dark mode — poppy red on near-black
+ * - theme-client-sim: Font Audit — intentionally distinct system fonts per family.
  *   heading=Georgia (serif), body=Verdana (sans), label=Courier New (mono).
  *   Any component using the wrong family token becomes immediately visible.
+ *
+ * Website template themes (1-8) moved to brik/brik-website-themes repo.
  */
-export type ThemeNumber = '1' | '8' | '2' | '3' | '4' | '5' | '6' | '7' | 'brik' | 'brik-dark' | 'client-sim';
+export type ThemeNumber = 'brik' | 'brik-dark' | 'client-sim';
 
 /**
  * Color mode type (friendly names)
@@ -66,7 +59,7 @@ export interface BDSThemeConfig {
  * Default theme configuration
  */
 export const defaultTheme: BDSThemeConfig = {
-  themeNumber: '1',
+  themeNumber: 'brik',
   colorMode: 'light',
   typography: 'default',
   spacing: 'comfortable',
@@ -78,14 +71,6 @@ export const defaultTheme: BDSThemeConfig = {
  * Verified against actual CSS color palettes in Webflow export.
  */
 export const themeMetadata: Record<ThemeNumber, { name: string; description: string; isDark: boolean }> = {
-  '1': { name: 'Default', description: 'Base light theme with blue-green accents (Open Sans)', isDark: false },
-  '2': { name: 'Dark', description: 'Dark mode with yellow-orange accents (Geist)', isDark: true },
-  '3': { name: 'Blue', description: 'Clean blue accents (IBM Plex Sans / Source Sans 3)', isDark: false },
-  '4': { name: 'Gold', description: 'Yellow-orange light accents (Lato / Hind)', isDark: false },
-  '5': { name: 'Peach', description: 'Warm peach-brown tones (Newsreader / Open Sans)', isDark: false },
-  '6': { name: 'Minimal', description: 'Typography variant, default colors (IBM Plex Sans)', isDark: false },
-  '7': { name: 'Warm', description: 'Tan earth tones (Lato / Hind)', isDark: false },
-  '8': { name: 'Vibrant', description: 'Bold green and purple accents (Playfair Display / Hind)', isDark: false },
   'brik': { name: 'Brik Brand', description: 'Company brand — poppy red, near-black, tan (Poppins)', isDark: false },
   'brik-dark': { name: 'Brik Brand (Dark)', description: 'Dark mode — poppy red on near-black (Poppins)', isDark: true },
   'client-sim': { name: 'Client Sim', description: 'Font-family audit tool — Georgia/Verdana/Courier New exposes semantic token misuse', isDark: false },
@@ -97,7 +82,7 @@ export const themeMetadata: Record<ThemeNumber, { name: string; description: str
 export function getThemeClasses(config: Partial<BDSThemeConfig>): string {
   const classes: string[] = ['body'];
 
-  if (config.themeNumber && config.themeNumber !== '1') {
+  if (config.themeNumber) {
     classes.push(`theme-${config.themeNumber}`);
   }
 

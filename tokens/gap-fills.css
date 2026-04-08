@@ -17,7 +17,7 @@
  *   @import '../brik-bds/tokens/gap-fills.css';
  *   @import './styles/theme-{client}.css';
  *
- * DO NOT import website-themes.css in client projects — those are website template themes only.
+ * Website template themes (1-8) have moved to brik/brik-website-themes repo.
  * DO NOT put primitives here that belong in figma-tokens.css.
  * Run `npm run build:sd-figma` to regenerate figma-tokens.css from the Figma source.
  */
