@@ -1,27 +1,33 @@
 /**
- * Brik Brand Theme — Light mode
+ * Brik Brand Theme — Light + Dark modes
  *
  * The canonical theme for brikdesigns.com, brik-client-portal, and Storybook default.
  * Color + typography overrides only; spacing uses Base mode defaults from figma-tokens.css.
  *
- * Dark mode, high-contrast, and accessibility variants will be added below
- * as `.theme-brik.dark { ... }` blocks in a future phase.
+ * Dark mode values sourced from figma-tokens-dark.css (Figma color/dark mode),
+ * re-scoped from :root[data-theme="dark"] to .theme-brik.dark for class-based switching.
  */
+
+/* ─── Light mode ─────────────────────────────────────────────── */
+
 .theme-brik {
-  /* Color */
+  /* Page */
   --page-primary: var(--color-grayscale-white);
   --page-secondary: var(--color-grayscale-lightest);
   --page-brand-primary: #e35335;
+  /* Text */
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
   --text-muted: var(--color-grayscale-light);
   --text-inverse: var(--color-grayscale-white);
   --text-brand-primary: #e35335;
+  /* Surface */
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lightest);
   --surface-brand-primary: #e35335;
   --surface-brand-secondary: #f1f0ec;
   --surface-nav: var(--color-grayscale-white);
+  /* Background */
   --background-brand-primary: #e35335;
   --background-brand-secondary: #f1f0ec;
   --background-primary: var(--color-grayscale-white);
@@ -30,6 +36,7 @@
   --background-input: var(--color-grayscale-white);
   --background-image: #17171799;
   --background-image-brand: #e35335;
+  /* Border */
   --border-primary: var(--color-grayscale-darkest);
   --border-secondary: var(--color-grayscale-lighter);
   --border-muted: var(--color-grayscale-lighter);
@@ -37,6 +44,7 @@
   --border-input: var(--color-grayscale-light);
   --border-inverse: var(--color-grayscale-white);
   --border-on-color-dark: white;
+  /* Theme palette aliases */
   --theme-blue-blue-light: #e35335;
   --theme-blue-blue-lighter: #f1f0ec;
   --theme-blue-green: #f4d364;
@@ -47,4 +55,110 @@
   --font-family-label: Poppins, sans-serif;
   --font-family-heading: Poppins, sans-serif;
   --font-family-display: Poppins, sans-serif;
+}
+
+/* ─── Dark mode (explicit class) ─────────────────────────────── */
+
+.theme-brik.dark {
+  /* Page */
+  --page-primary: var(--color-grayscale-black);
+  --page-secondary: var(--color-grayscale-darker);
+  --page-brand-primary: #e35335;
+  /* Text */
+  --text-primary: var(--color-grayscale-lightest);
+  --text-secondary: var(--color-grayscale-light);
+  --text-muted: var(--color-grayscale-dark);
+  --text-inverse: var(--color-grayscale-black);
+  --text-brand-primary: #e35335;
+  --text-on-color-dark: var(--color-grayscale-white);
+  --text-on-color-light: var(--color-grayscale-black);
+  --text-disabled: var(--color-grayscale-dark);
+  /* Surface */
+  --surface-primary: var(--color-grayscale-black);
+  --surface-secondary: var(--color-grayscale-darker);
+  --surface-brand-primary: #e35335;
+  --surface-brand-secondary: var(--color-grayscale-darkest);
+  --surface-nav: var(--color-grayscale-black);
+  --surface-muted: var(--color-grayscale-darkest);
+  --surface-overlay: var(--color-grayscale-black);
+  /* Background */
+  --background-brand-primary: #e35335;
+  --background-brand-secondary: var(--color-grayscale-darkest);
+  --background-primary: var(--color-grayscale-black);
+  --background-secondary: var(--color-grayscale-light);
+  --background-inverse: var(--color-grayscale-black);
+  --background-input: var(--color-grayscale-black);
+  --background-muted: var(--color-grayscale-darker);
+  --background-image: #000000cc;
+  --background-image-brand: #e35335;
+  --background-brand-primary-hover: var(--color-poppy-lighter);
+  --background-brand-primary-pressed: var(--color-poppy-lightest);
+  --background-disabled: var(--color-grayscale-darker);
+  --background-primary-hover: var(--color-grayscale-darkest);
+  --background-primary-pressed: var(--color-grayscale-darker);
+  --background-secondary-hover: var(--color-grayscale-dark);
+  --background-secondary-pressed: var(--color-grayscale-darker);
+  /* Border */
+  --border-primary: var(--color-grayscale-darker);
+  --border-secondary: var(--color-grayscale-light);
+  --border-muted: var(--color-grayscale-dark);
+  --border-brand-primary: #e35335;
+  --border-input: var(--color-grayscale-dark);
+  --border-inverse: var(--color-grayscale-black);
+  --border-on-color-dark: var(--color-grayscale-black);
+  --border-disabled: var(--color-grayscale-darker);
+}
+
+/* ─── Dark mode (system preference auto-switch) ──────────────── */
+
+@media (prefers-color-scheme: dark) {
+  .theme-brik:not(.light) {
+    /* Page */
+    --page-primary: var(--color-grayscale-black);
+    --page-secondary: var(--color-grayscale-darker);
+    --page-brand-primary: #e35335;
+    /* Text */
+    --text-primary: var(--color-grayscale-lightest);
+    --text-secondary: var(--color-grayscale-light);
+    --text-muted: var(--color-grayscale-dark);
+    --text-inverse: var(--color-grayscale-black);
+    --text-brand-primary: #e35335;
+    --text-on-color-dark: var(--color-grayscale-white);
+    --text-on-color-light: var(--color-grayscale-black);
+    --text-disabled: var(--color-grayscale-dark);
+    /* Surface */
+    --surface-primary: var(--color-grayscale-black);
+    --surface-secondary: var(--color-grayscale-darker);
+    --surface-brand-primary: #e35335;
+    --surface-brand-secondary: var(--color-grayscale-darkest);
+    --surface-nav: var(--color-grayscale-black);
+    --surface-muted: var(--color-grayscale-darkest);
+    --surface-overlay: var(--color-grayscale-black);
+    /* Background */
+    --background-brand-primary: #e35335;
+    --background-brand-secondary: var(--color-grayscale-darkest);
+    --background-primary: var(--color-grayscale-black);
+    --background-secondary: var(--color-grayscale-light);
+    --background-inverse: var(--color-grayscale-black);
+    --background-input: var(--color-grayscale-black);
+    --background-muted: var(--color-grayscale-darker);
+    --background-image: #000000cc;
+    --background-image-brand: #e35335;
+    --background-brand-primary-hover: var(--color-poppy-lighter);
+    --background-brand-primary-pressed: var(--color-poppy-lightest);
+    --background-disabled: var(--color-grayscale-darker);
+    --background-primary-hover: var(--color-grayscale-darkest);
+    --background-primary-pressed: var(--color-grayscale-darker);
+    --background-secondary-hover: var(--color-grayscale-dark);
+    --background-secondary-pressed: var(--color-grayscale-darker);
+    /* Border */
+    --border-primary: var(--color-grayscale-darker);
+    --border-secondary: var(--color-grayscale-light);
+    --border-muted: var(--color-grayscale-dark);
+    --border-brand-primary: #e35335;
+    --border-input: var(--color-grayscale-dark);
+    --border-inverse: var(--color-grayscale-black);
+    --border-on-color-dark: var(--color-grayscale-black);
+    --border-disabled: var(--color-grayscale-darker);
+  }
 }
