@@ -98,10 +98,17 @@ const withTheme: Decorator = (Story, context) => {
   // useLayoutEffect runs synchronously before paint — no flash of old theme.
   useLayoutEffect(() => {
     const body = document.body;
-    // Strip any previous theme class
+    // Strip any previous theme and dark/light classes
     body.className = body.className.replace(/\btheme-\S+/g, '');
-    // .body.theme-X matches our CSS selectors in themes.css
-    body.classList.add('body', `theme-${themeNumber}`);
+    body.classList.remove('dark', 'light');
+
+    // Handle brik-dark: apply .theme-brik.dark (two classes)
+    // All other themes: apply .theme-X as before
+    if (themeNumber === 'brik-dark') {
+      body.classList.add('body', 'theme-brik', 'dark');
+    } else {
+      body.classList.add('body', `theme-${themeNumber}`, 'light');
+    }
 
     // Set dark mode data attribute for CSS selectors that need light/dark branching
     const isDark = storybookThemes[themeNumber]?.base === 'dark';
@@ -157,7 +164,8 @@ const preview: Preview = {
       toolbar: {
         icon: 'paintbrush',
         items: [
-          { value: 'brik', title: 'Brik Brand (Poppins)' },
+          { value: 'brik', title: 'Brik Brand' },
+          { value: 'brik-dark', title: 'Brik Brand (Dark)' },
           { value: '1', title: '1: Default (Open Sans)' },
           { value: '2', title: '2: Dark (Geist)' },
           { value: '3', title: '3: Blue (Source Sans 3)' },
