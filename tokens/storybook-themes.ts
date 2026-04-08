@@ -242,5 +242,26 @@ export const storybookThemes: Record<ThemeNumber, StorybookThemeConfig> = {
     "inputBorder": "#bdbdbd",
     "inputTextColor": "#333",
     "fontBase": "Poppins, sans-serif"
+  },
+  "brik-dark": {
+    "base": "dark",
+    "name": "Brik Brand (Dark)",
+    "colorPrimary": "#e35335",
+    "colorSecondary": "#e35335",
+    "appBg": "black",
+    "appContentBg": "black",
+    "appPreviewBg": "transparent",
+    "appBorderColor": "#4f4f4f",
+    "textColor": "#f2f2f2",
+    "textInverseColor": "#333",
+    "textMutedColor": "#828282",
+    "barTextColor": "#828282",
+    "barSelectedColor": "#e35335",
+    "barHoverColor": "#e35335",
+    "barBg": "black",
+    "inputBg": "#333",
+    "inputBorder": "#828282",
+    "inputTextColor": "#f2f2f2",
+    "fontBase": "Poppins, sans-serif"
   }
 };
