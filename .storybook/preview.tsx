@@ -14,14 +14,12 @@ addCollection(phData as Parameters<typeof addCollection>[0]);
 // 1. Font declarations (@font-face from Webflow export)
 // 2. Figma tokens (SD output — primitives + semantic defaults)
 // 3. Gap-fills (manual tokens not yet in Figma)
-// 4. Website template themes (1-8, will move to brik-website-themes repo)
-// 5. Brik Brand theme (extracted from storybook-overrides)
-// 6. Font Audit tool (extracted from website-themes)
-// 7. Storybook overrides (Base mode spacing, UI fixes)
+// 4. Brik Brand theme (light + dark)
+// 5. Font Audit tool (client-sim theme for font-family validation)
+// 6. Storybook overrides (Base mode spacing, UI fixes)
 import '../tokens/fonts.css';
 import '../tokens/figma-tokens.css';
 import '../tokens/gap-fills.css';
-import '../tokens/website-themes.css';
 import '../tokens/theme-brik.css';
 import '../tokens/font-audit.css';
 import '../css/animations.css';
@@ -74,6 +72,22 @@ const ThemedDocsContainer: typeof DefaultDocsContainer = (props) => {
     channel.on('globalsUpdated', handler);
     return () => channel.off('globalsUpdated', handler);
   }, [channel]);
+
+  // Apply theme class to body — pure MDX pages (Color, Typography, etc.)
+  // don't embed stories, so the withTheme decorator never fires for them.
+  // Without this, CSS vars stay stale when the user switches themes.
+  useLayoutEffect(() => {
+    const body = document.body;
+    body.className = body.className.replace(/\btheme-\S+/g, '');
+    body.classList.remove('dark', 'light');
+    if (themeNum === 'brik-dark') {
+      body.classList.add('body', 'theme-brik', 'dark');
+    } else {
+      body.classList.add('body', `theme-${themeNum}`, 'light');
+    }
+    const isDark = storybookThemes[themeNum as ThemeNumber]?.base === 'dark';
+    body.setAttribute('data-bds-dark', String(isDark));
+  }, [themeNum]);
 
   const theme = previewThemes[themeNum] || previewThemes['brik'];
   return React.createElement(DefaultDocsContainer, { ...props, theme });
@@ -166,15 +180,7 @@ const preview: Preview = {
         items: [
           { value: 'brik', title: 'Brik Brand' },
           { value: 'brik-dark', title: 'Brik Brand (Dark)' },
-          { value: '1', title: '1: Default (Open Sans)' },
-          { value: '2', title: '2: Dark (Geist)' },
-          { value: '3', title: '3: Blue (Source Sans 3)' },
-          { value: '4', title: '4: Gold (Hind / Lato)' },
-          { value: '5', title: '5: Peach (Open Sans / Newsreader)' },
-          { value: '6', title: '6: Minimal (Source Sans 3)' },
-          { value: '7', title: '7: Warm (Hind / Lato)' },
-          { value: '8', title: '8: Vibrant (Hind / Playfair)' },
-          { value: 'client-sim', title: '★ Font Audit' },
+          { value: 'client-sim', title: 'Font Audit' },
         ],
         dynamicTitle: true,
       },
