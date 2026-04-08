@@ -334,6 +334,9 @@
   --background-primary-pressed: var(--color-grayscale-lighter);
   --background-secondary-hover: var(--color-grayscale-darker);
   --background-secondary-pressed: var(--color-grayscale-darkest);
+  --background-positive: var(--color-system-green);
+  --background-negative: var(--color-system-red);
+  --background-warning: var(--color-system-yellow);
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lighter);
   --surface-brand-primary: var(--theme-blue-blue-light);
@@ -343,6 +346,10 @@
   --surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed background */
   --surface-subtle-hover: var(--color-grayscale-lightest); /** Ghost and outline button hover background */
   --surface-info: var(--color-system-neutral-light);
+  --surface-positive: var(--color-system-green-light);
+  --surface-negative: var(--color-system-red-light);
+  --surface-warning: var(--color-system-yellow-light);
+  --surface-muted: var(--color-grayscale-lightest);
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
   --text-brand-primary: var(--theme-blue-blue-light);
@@ -358,6 +365,9 @@
   --text-on-color-light: var(--color-grayscale-black);
   --text-disabled: var(--color-grayscale-light); /** Disabled button text (all variants) */
   --text-info: var(--color-system-neutral);
+  --text-positive: var(--color-system-green);
+  --text-negative: var(--color-system-red);
+  --text-warning: var(--color-system-yellow);
   --border-primary: var(--color-grayscale-lighter);
   --border-brand-primary: var(--theme-blue-blue-light);
   --border-on-color-dark: var(--color-grayscale-white);
@@ -368,6 +378,9 @@
   --border-input: var(--color-grayscale-light);
   --border-disabled: var(--color-grayscale-dark); /** Disabled button border (all variants) */
   --border-info: var(--color-system-neutral);
+  --border-positive: var(--color-system-green);
+  --border-negative: var(--color-system-red);
+  --border-warning: var(--color-system-yellow);
   --padding-xl: var(--space-800);
   --padding-lg: var(--space-600);
   --padding-none: var(--space-0);

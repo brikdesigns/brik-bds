@@ -44,7 +44,7 @@
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semi-bold);
   flex-shrink: 0;
-  transition: all var(--duration-fast) var(--ease-out);
+  transition: all 0.15s ease;
 }
 
 .bds-progress-stepper__circle--sm {
@@ -78,7 +78,7 @@
   font-family: var(--font-family-body);
   line-height: var(--font-line-height-snug);
   text-transform: capitalize;
-  transition: color var(--duration-fast) var(--ease-out);
+  transition: color 0.15s ease;
 }
 
 .bds-progress-stepper__label--sm {
@@ -128,7 +128,7 @@
   width: 2px; /* bds-lint-ignore — Figma connector width */
   flex-grow: 1;
   min-height: 16px; /* bds-lint-ignore — minimum connector height */
-  transition: background-color var(--duration-fast) var(--ease-out);
+  transition: background-color 0.15s ease;
 }
 
 .bds-progress-stepper__connector--sm {

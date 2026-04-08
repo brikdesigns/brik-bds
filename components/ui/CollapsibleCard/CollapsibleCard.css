@@ -74,39 +74,11 @@
   flex-shrink: 0;
   color: var(--text-primary);
   font-size: var(--body-lg); /* bds-lint-ignore — icon sizing */
-  transition: transform var(--duration-normal) var(--ease-out);
-}
-
-.bds-collapsible-card--open .bds-collapsible-card__toggle {
-  transform: rotate(180deg);
-}
-
-/* ─── Content wrapper — animated grid collapse ──────── */
-
-.bds-collapsible-card__content-wrapper {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows var(--duration-slow) var(--ease-out);
-}
-
-.bds-collapsible-card--open .bds-collapsible-card__content-wrapper {
-  grid-template-rows: 1fr;
-}
-
-.bds-collapsible-card__content-wrapper > div {
-  overflow: hidden;
 }
 
 /* ─── Content area ────────────────────────────────────── */
 
 .bds-collapsible-card__content {
   margin-top: var(--padding-lg);
-}
-
-/* ─── Reduced motion ─────────────────────────────────── */
-
-@media (prefers-reduced-motion: reduce) {
-  .bds-collapsible-card__toggle { transition: none; }
-  .bds-collapsible-card__content-wrapper { transition: none; }
 }
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect, type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { docTable, docTh, docTd } from './foundation/_components/docTableStyles';
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -105,18 +104,18 @@ function MetricCard({ value, label, status }: { value: string; label: string; st
 function CompletenessGrid({ gaps }: { gaps: { name: string; missing: string[] }[] }) {
   if (gaps.length === 0) return <div style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)' }}>All components complete</div>;
   return (
-    <table style={docTable}>
+    <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)' }}>
       <thead>
-        <tr>
-          <th style={docTh}>Component</th>
-          <th style={docTh}>Missing</th>
+        <tr style={{ borderBottom: '1px solid var(--border-muted)' }}>{/* bds-lint-ignore */}
+          <th style={{ textAlign: 'left', padding: 'var(--gap-xs)', color: 'var(--text-secondary)' }}>Component</th>
+          <th style={{ textAlign: 'left', padding: 'var(--gap-xs)', color: 'var(--text-secondary)' }}>Missing</th>
         </tr>
       </thead>
       <tbody>
         {gaps.map(g => (
-          <tr key={g.name}>
-            <td style={docTd}>{g.name}</td>
-            <td style={docTd}>
+          <tr key={g.name} style={{ borderBottom: '1px solid var(--border-muted)' }}>{/* bds-lint-ignore */}
+            <td style={{ padding: 'var(--gap-xs)', color: 'var(--text-primary)' }}>{g.name}</td>
+            <td style={{ padding: 'var(--gap-xs)' }}>
               {g.missing.map(m => <span key={m} style={{ ...badge(false), marginRight: 'var(--gap-xs)' }}>{m}</span>)}
             </td>
           </tr>
@@ -240,7 +239,7 @@ function HealthDashboard() {
 // ─── Meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof HealthDashboard> = {
-  title: 'Overview/Health/Health Dashboard',
+  title: 'Overview/Health Dashboard',
   component: HealthDashboard,
   parameters: { layout: 'fullscreen' },
 };

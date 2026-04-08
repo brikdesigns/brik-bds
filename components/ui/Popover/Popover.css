@@ -12,25 +12,9 @@
   display: inline-block;
 }
 
-/* ─── Entrance keyframe ──────────────────────────────── */
-
-@keyframes bds-popover-enter {
-  from { opacity: 0; transform: scale(0.95) translateX(-50%); }
-  to   { opacity: 1; transform: scale(1) translateX(-50%); }
-}
-
-@keyframes bds-popover-enter-side {
-  from { opacity: 0; transform: scale(0.95) translateY(-50%); }
-  to   { opacity: 1; transform: scale(1) translateY(-50%); }
-}
-
 /* ─── Panel ───────────────────────────────────────────── */
 
 .bds-popover__panel {
-  /* ─── Component-scoped override surface ── */
-  --popover-enter-duration: var(--duration-normal); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  --popover-enter-ease: var(--ease-out);            /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-
   position: absolute;
   background-color: var(--background-primary);
   border-radius: var(--border-radius-lg);
@@ -70,25 +54,5 @@
   top: 50%;
   transform: translateY(-50%);
   margin-left: var(--gap-sm);
-}
-
-/* ─── Entrance per placement ─────────────────────────── */
-
-.bds-popover__panel--top,
-.bds-popover__panel--bottom {
-  animation: bds-popover-enter var(--popover-enter-duration) var(--popover-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
-  transform-origin: center;
-}
-
-.bds-popover__panel--left,
-.bds-popover__panel--right {
-  animation: bds-popover-enter-side var(--popover-enter-duration) var(--popover-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
-  transform-origin: center;
-}
-
-/* ─── Reduced motion ─────────────────────────────────── */
-
-@media (prefers-reduced-motion: reduce) {
-  .bds-popover__panel { animation: none; }
 }
 }
