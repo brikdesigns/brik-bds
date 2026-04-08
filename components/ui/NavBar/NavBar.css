@@ -57,7 +57,7 @@
   line-height: var(--font-line-height-snug);
   color: var(--text-secondary);
   text-decoration: none;
-  transition: color 0.15s ease;
+  transition: color var(--duration-fast) var(--ease-out);
   cursor: pointer;
 }
 

@@ -2964,6 +2964,33 @@
             "ALL_SCOPES"
           ]
         }
+      },
+      "positive": {
+        "$type": "color",
+        "$value": "{color.system.green}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "negative": {
+        "$type": "color",
+        "$value": "{color.system.red}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.system.yellow}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "surface": {
@@ -3045,6 +3072,42 @@
       "info": {
         "$type": "color",
         "$value": "{color.system.neutral-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "positive": {
+        "$type": "color",
+        "$value": "{color.system.green-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "negative": {
+        "$type": "color",
+        "$value": "{color.system.red-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.system.yellow-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{color.grayscale.lightest}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3188,6 +3251,33 @@
             "ALL_SCOPES"
           ]
         }
+      },
+      "positive": {
+        "$type": "color",
+        "$value": "{color.system.green}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "negative": {
+        "$type": "color",
+        "$value": "{color.system.red}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.system.yellow}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "border": {
@@ -3276,6 +3366,33 @@
       "info": {
         "$type": "color",
         "$value": "{color.system.neutral}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "positive": {
+        "$type": "color",
+        "$value": "{color.system.green}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "negative": {
+        "$type": "color",
+        "$value": "{color.system.red}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.system.yellow}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3515,6 +3632,33 @@
             "ALL_SCOPES"
           ]
         }
+      },
+      "positive": {
+        "$type": "color",
+        "$value": "{color.system.green}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "negative": {
+        "$type": "color",
+        "$value": "{color.system.red}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.system.yellow}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "surface": {
@@ -3596,6 +3740,42 @@
       "info": {
         "$type": "color",
         "$value": "{color.system.neutral-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "positive": {
+        "$type": "color",
+        "$value": "{color.system.green-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "negative": {
+        "$type": "color",
+        "$value": "{color.system.red-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.system.yellow-light}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3739,6 +3919,33 @@
             "ALL_SCOPES"
           ]
         }
+      },
+      "positive": {
+        "$type": "color",
+        "$value": "{color.system.green}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "negative": {
+        "$type": "color",
+        "$value": "{color.system.red}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.system.yellow}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
       }
     },
     "border": {
@@ -3827,6 +4034,33 @@
       "info": {
         "$type": "color",
         "$value": "{color.system.neutral}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "positive": {
+        "$type": "color",
+        "$value": "{color.system.green}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "negative": {
+        "$type": "color",
+        "$value": "{color.system.red}",
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.system.yellow}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"

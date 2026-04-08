@@ -562,20 +562,34 @@ div[class*="Subtitle"] {
 .sbdocs h1 {
   margin-top: 0 !important;
   margin-bottom: 16px !important;
+  border: none !important;
+}
+
+/* Kill all heading borders/underlines — headings provide their own visual weight */
+.sbdocs h1,
+.sbdocs h2,
+.sbdocs h3,
+.sbdocs h4 {
+  border-top: none !important;
+  border-bottom: none !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Storybook anchor wrapper around headings — remove its border too */
+.sbdocs .sbdocs-a--heading,
+.sbdocs [class*="anchor"] {
+  border-bottom: none !important;
 }
 
 .sbdocs h2 {
   margin-top: 48px !important;
   margin-bottom: 16px !important;
-  padding-top: 24px !important;
-  border-top: 1px solid var(--border-muted) !important;
 }
 
-/* First h2 after h1 shouldn't have extra top margin */
+/* First h2 after h1 — tighter spacing */
 .sbdocs h1 + h2 {
   margin-top: 32px !important;
-  padding-top: 0 !important;
-  border-top: none !important;
 }
 
 .sbdocs h3 {

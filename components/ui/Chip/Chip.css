@@ -23,7 +23,7 @@
   user-select: none;
   border: none;
   overflow: clip;
-  transition: filter 0.15s ease;
+  transition: filter var(--duration-fast) var(--ease-out);
   box-sizing: border-box;
 }
 

@@ -1,9 +1,20 @@
 @layer bds-components {
 /* Menu — floating dropdown panel for navigation and actions */
 
+/* ─── Entrance keyframe ──────────────────────────────── */
+
+@keyframes bds-menu-enter {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
 /* ─── Panel ───────────────────────────────────────────── */
 
 .bds-menu {
+  /* ─── Component-scoped override surface ── */
+  --menu-enter-duration: var(--duration-normal); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --menu-enter-ease: var(--ease-out);            /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
   position: absolute;
   z-index: 100;
   background-color: var(--background-primary);
@@ -14,6 +25,8 @@
   flex-direction: column;
   gap: var(--gap-md);
   min-width: 200px;
+  animation: bds-menu-enter var(--menu-enter-duration) var(--menu-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
+  transform-origin: top center;
 }
 
 /* ─── Menu item ───────────────────────────────────────── */
@@ -43,6 +56,22 @@
 .bds-menu__item--disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ─── Item hover ─────────────────────────────────────── */
+
+.bds-menu__item:not(.bds-menu__item--disabled) {
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.bds-menu__item:hover:not(.bds-menu__item--disabled) {
+  background-color: var(--surface-secondary);
+}
+
+/* ─── Reduced motion ─────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-menu { animation: none; }
 }
 
 /* ─── Icon wrapper ────────────────────────────────────── */

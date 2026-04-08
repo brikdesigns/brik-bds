@@ -168,9 +168,12 @@ export function useResolvedValue(cssVarName: string): string {
 
   useEffect(() => {
     const resolve = () => {
-      const body = document.querySelector('body.body') || document.body;
-      const raw = getComputedStyle(body).getPropertyValue(cssVarName).trim();
-      setValue(raw);
+      // Wait one frame so the browser has recalculated styles after class change
+      requestAnimationFrame(() => {
+        const body = document.querySelector('body.body') || document.body;
+        const raw = getComputedStyle(body).getPropertyValue(cssVarName).trim();
+        setValue(raw);
+      });
     };
     resolve();
 

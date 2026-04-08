@@ -6,7 +6,7 @@
  * - --gap-sm, --gap-md, --gap-lg, --gap-xl
  * - --padding-sm, --padding-md
  * - --border-radius-md
- * - --text-status-error, --text-status-success
+ * - --text-negative, --text-positive
  */
 
 /* ─── Container ───────────────────────────────────────────────── */
@@ -57,10 +57,10 @@
   font-size: var(--body-sm);
   font-weight: var(--font-weight-regular);
   line-height: var(--font-line-height-normal);
-  color: var(--text-status-error);
+  color: var(--text-negative);
   margin: 0;
   padding: var(--padding-sm);
-  background: color-mix(in srgb, var(--text-status-error) 8%, transparent);
+  background: color-mix(in srgb, var(--text-negative) 8%, transparent);
   border-radius: var(--border-radius-md);
 }
 
@@ -69,10 +69,10 @@
   font-size: var(--body-sm);
   font-weight: var(--font-weight-regular);
   line-height: var(--font-line-height-normal);
-  color: var(--text-status-success);
+  color: var(--text-positive);
   margin: 0;
   padding: var(--padding-sm);
-  background: color-mix(in srgb, var(--text-status-success) 8%, transparent);
+  background: color-mix(in srgb, var(--text-positive) 8%, transparent);
   border-radius: var(--border-radius-md);
 }
 

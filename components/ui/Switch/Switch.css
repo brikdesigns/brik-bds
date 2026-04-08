@@ -34,7 +34,7 @@
   position: relative;
   display: inline-block;
   border-radius: var(--border-radius-pill);
-  transition: background-color 0.2s ease;
+  transition: background-color var(--duration-normal) var(--ease-out);
   flex-shrink: 0;
   cursor: inherit;
 }
@@ -45,7 +45,7 @@
   position: absolute;
   background-color: var(--surface-primary);
   border-radius: 50%;
-  transition: transform 0.2s ease;
+  transition: transform var(--duration-normal) var(--ease-out);
   box-shadow: var(--shadow-sm);
 }
 }

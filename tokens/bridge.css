@@ -195,11 +195,27 @@
   --blur-radius-lg: var(--blur-radius-lg);
 
   /* ═══════════════════════════════════════════════
-     Motion
+     Motion — Client-Themeable Animation Surface
+     ═══════════════════════════════════════════════
+     Override any of these in theme-{client}.css to
+     customize animation feel per brand:
+       --duration-fast/normal/slow  = interaction speed
+       --ease-out/in/in-out/spring  = animation personality
+       --stagger-*                  = list reveal cadence
+     Example (luxury, slow & elegant):
+       --duration-fast: 150ms;
+       --duration-normal: 300ms;
+       --duration-slow: 500ms;
+       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+     Example (snappy SaaS dashboard):
+       --duration-fast: 80ms;
+       --duration-normal: 150ms;
+       --duration-slow: 250ms;
      ═══════════════════════════════════════════════ */
   --ease-in: var(--easing-ease-in);
   --ease-out: var(--easing-ease-out);
   --ease-in-out: var(--easing-ease-in-out);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — use for pop-in, badge appear */
 
   --duration-fast: var(--duration-100);
   --duration-normal: var(--duration-200);

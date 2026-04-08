@@ -12,8 +12,11 @@ function ColorSwatch({ name, cssVar, isText }: ColorSwatchProps) {
 
   useEffect(() => {
     const resolve = () => {
-      const body = document.querySelector('body.body') || document.body;
-      setResolved(getComputedStyle(body).getPropertyValue(cssVar).trim());
+      // Wait one frame so the browser has recalculated styles after class change
+      requestAnimationFrame(() => {
+        const body = document.querySelector('body.body') || document.body;
+        setResolved(getComputedStyle(body).getPropertyValue(cssVar).trim());
+      });
     };
     resolve();
     const observer = new MutationObserver(resolve);
@@ -136,7 +139,7 @@ interface PaletteGridProps {
 export function PaletteGrid({ title, palette, prefix, columns = 8 }: PaletteGridProps) {
   const colors = Object.entries(palette).map(([name, hex]) => ({
     name,
-    cssVar: `${prefix}--${name}`,
+    cssVar: `${prefix}-${name}`,
     hex,
   }));
 
@@ -174,15 +177,16 @@ export function PaletteGrid({ title, palette, prefix, columns = 8 }: PaletteGrid
             />
             <div
               style={{
-                fontSize: '12px',
+                fontSize: '11px',
                 fontWeight: 600,
                 color: 'var(--text-primary)',
+                fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
               }}
             >
-              {c.name}
+              {c.cssVar}
             </div>
             <div
               style={{

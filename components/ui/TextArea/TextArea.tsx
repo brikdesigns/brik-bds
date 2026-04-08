@@ -181,7 +181,7 @@ export function TextArea({
     ...sizeStyle.textarea,
     resize,
     ...(disabled ? textareaDisabledStyles : {}),
-    ...(hasError ? { borderColor: 'var(--color-system-red)' } : {}),
+    ...(hasError ? { borderColor: 'var(--border-negative)' } : {}),
     ...style,
   };
 
@@ -199,7 +199,7 @@ export function TextArea({
           style={{
             ...labelBaseStyles,
             ...sizeStyle.label,
-            ...(hasError ? { color: 'var(--color-system-red)' } : {}),
+            ...(hasError ? { color: 'var(--text-negative)' } : {}),
           }}
         >
           {label}
@@ -224,7 +224,7 @@ export function TextArea({
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
-          style={{ ...helperBaseStyles, color: 'var(--color-system-red)' }}
+          style={{ ...helperBaseStyles, color: 'var(--text-negative)' }}
           role="alert"
         >
           {error}

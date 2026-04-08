@@ -14,7 +14,7 @@
 .bds-progress-dots__dot {
   border-radius: var(--border-radius-sm);
   border: none;
-  transition: all 0.2s ease;
+  transition: all var(--duration-normal) var(--ease-out);
   padding: 0;
   flex-shrink: 0;
 }

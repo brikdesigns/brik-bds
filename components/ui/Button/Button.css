@@ -35,7 +35,10 @@
   border: var(--border-width-md) solid transparent;
   background: none;
   color: inherit;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+  transition: background-color var(--duration-normal) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out),
+    color var(--duration-normal) var(--ease-out),
+    opacity var(--duration-normal) var(--ease-out);
   box-sizing: border-box;
 }
 
@@ -85,9 +88,8 @@
 }
 
 .bds-button--secondary {
-  background-color: var(--surface-secondary);
+  background-color: var(--background-secondary);
   color: var(--text-primary);
-  border-color: var(--border-secondary);
 }
 
 .bds-button--ghost {
@@ -119,12 +121,12 @@
 /* ─── System Variants (semantic actions) ─────────────────────── */
 
 .bds-button--destructive {
-  background-color: var(--background-status-error);
+  background-color: var(--background-negative);
   color: var(--text-on-color-dark);
 }
 
 .bds-button--positive {
-  background-color: var(--background-status-success);
+  background-color: var(--background-positive);
   color: var(--text-on-color-dark);
 }
 
@@ -156,20 +158,18 @@
 
 /* ── Secondary ── */
 .bds-button--secondary:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--surface-secondary-hover);
-  border-color: var(--surface-secondary-hover);
+  background-color: var(--background-secondary-hover);
 }
 
 .bds-button--secondary:active:not(:disabled) {
-  background-color: var(--surface-secondary-pressed);
+  background-color: var(--background-secondary-pressed);
   color: var(--text-on-color-dark);
-  border-color: var(--surface-secondary-pressed);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Outline ── */
 .bds-button--outline:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--surface-subtle-hover);
+  background-color: var(--background-primary-hover);
 }
 
 .bds-button--outline:active:not(:disabled) {
@@ -181,17 +181,17 @@
 
 /* ── Ghost ── */
 .bds-button--ghost:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--surface-subtle-hover);
+  background-color: var(--background-primary-hover);
 }
 
 .bds-button--ghost:active:not(:disabled) {
-  background-color: var(--surface-secondary-hover);
+  background-color: var(--background-secondary-hover);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Inverse ── */
 .bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--surface-secondary-pressed);
+  background-color: var(--background-secondary-pressed);
   color: var(--text-on-color-dark);
 }
 
@@ -231,12 +231,12 @@
 .bds-button--danger-outline:focus-visible,
 .bds-button--danger-ghost:focus-visible,
 .bds-button--destructive:focus-visible {
-  outline-color: var(--text-status-error);
+  outline-color: var(--text-negative);
 }
 
 /* Positive: green focus ring */
 .bds-button--positive:focus-visible {
-  outline-color: var(--text-status-success);
+  outline-color: var(--text-positive);
 }
 
 /* ─── Loading State ───────────────────────────────────────────── */

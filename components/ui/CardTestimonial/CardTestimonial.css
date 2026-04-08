@@ -92,6 +92,7 @@
   font-family: var(--font-family-icon);
   font-size: var(--heading-lg);
   line-height: var(--font-line-height-snug);
-  color: var(--background-status-warning);
+  color: var(--background-warning);
+}
 }
 }

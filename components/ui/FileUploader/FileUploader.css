@@ -9,7 +9,7 @@
  * - --border-radius-lg
  * - --padding-xl
  * - --gap-sm, --gap-md
- * - --text-status-error (error)
+ * - --text-negative (error)
  */
 
 /* ─── Wrapper ─────────────────────────────────────────────────── */
@@ -34,7 +34,8 @@
   border: var(--border-width-lg) dashed var(--border-secondary);
   border-radius: var(--border-radius-lg);
   cursor: pointer;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  transition: border-color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
   text-align: center;
   width: 100%;
   box-sizing: border-box;
@@ -51,7 +52,7 @@
 }
 
 .bds-file-uploader__dropzone--error {
-  border-color: var(--text-status-error);
+  border-color: var(--text-negative);
 }
 
 /* ─── Icon ────────────────────────────────────────────────────── */
@@ -89,7 +90,7 @@
   font-size: var(--body-sm);
   font-weight: var(--font-weight-regular);
   line-height: var(--font-line-height-normal);
-  color: var(--text-status-error);
+  color: var(--text-negative);
   margin: 0;
 }
 

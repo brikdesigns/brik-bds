@@ -52,7 +52,7 @@
   box-shadow: var(--slider-thumb-shadow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   cursor: pointer;
   margin-top: calc((var(--bds-slider-track-height, 6px) - var(--bds-slider-thumb-size, 20px)) / 2);
-  transition: box-shadow 0.15s ease;
+  transition: box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .bds-slider-input::-moz-range-thumb {
@@ -63,7 +63,7 @@
   border: var(--border-width-200) solid var(--background-brand-primary);
   box-shadow: var(--slider-thumb-shadow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   cursor: pointer;
-  transition: box-shadow 0.15s ease;
+  transition: box-shadow var(--duration-fast) var(--ease-out);
 }
 
 /* Focus */

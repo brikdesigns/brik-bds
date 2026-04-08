@@ -90,14 +90,6 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
         <ColorSwatch name="text-inverse" isText />
       </div>
 
-      <SectionTitle>Theme accents</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--gap-md)', marginBottom: 'var(--padding-lg)' }}>
-        <ColorSwatch name="theme-blue-blue-light" />
-        <ColorSwatch name="theme-blue-blue-lighter" />
-        <ColorSwatch name="theme-blue-green" />
-        <ColorSwatch name="theme-blue-blue-dark" />
-      </div>
-
       {/* Typography Demo */}
       <SectionTitle>Typography</SectionTitle>
       <div
@@ -300,10 +292,14 @@ function ThemePreview({ themeNum, isActive }: { themeNum: ThemeNumber; isActive:
 }
 
 const meta: Meta<typeof ThemeDemo> = {
-  title: 'Overview/ThemeSwitcher',
+  title: 'Overview/Theming/Theme Switcher',
   component: ThemeDemo,
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      story: { inline: true, iframeHeight: 'auto' },
+      container: ({ children }: { children: React.ReactNode }) => <div style={{ margin: 0, padding: 0, maxWidth: 'none' }}>{children}</div>,
+    },
   },
   render: () => {
     const [globals] = useGlobals();

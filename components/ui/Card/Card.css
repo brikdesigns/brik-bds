@@ -6,7 +6,8 @@
   flex-direction: column;
   gap: var(--gap-md);
   border-radius: var(--border-radius-md);
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
 }
 
 /* ─── Variants ───────────────────────────────────────────────── */
