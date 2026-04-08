@@ -1,0 +1,35 @@
+/**
+ * Font Audit Theme (theme-client-sim)
+ *
+ * Semantic font-family validation tool for component development.
+ * Assigns maximally distinct system fonts to each family token so that any
+ * component using the wrong family token is immediately visible.
+ *
+ *   --font-family-heading   → Georgia (serif)         ← heading/title elements
+ *   --font-family-display   → Georgia (serif)         ← display/hero elements
+ *   --font-family-label     → Courier New (monospace) ← labels, badges, tags, buttons
+ *   --font-family-subtitle  → Impact (condensed)      ← subtitle-sized text
+ *   --font-family-body      → Verdana (sans-serif)    ← body copy, descriptions
+ *
+ * If you see:
+ *   - A heading in Verdana, Courier New, or Impact  → wrong font-family token
+ *   - A badge/label in Georgia, Verdana, or Impact  → wrong font-family token
+ *   - Subtitle text in Georgia, Verdana, or Courier → wrong font-family token
+ *   - Body copy in Georgia, Courier New, or Impact  → wrong font-family token
+ *
+ * NOT for client delivery. Use in Storybook toolbar when:
+ *   1. Building a new component
+ *   2. Reviewing a component PR
+ *   3. Validating a client theme override will work correctly
+ *
+ * This file lives in BDS core so every consumer Storybook can import it:
+ *   import '../brik-bds/tokens/font-audit.css';
+ */
+.body.theme-client-sim {
+  --font-family-heading: Georgia, "Times New Roman", serif;
+  --font-family-display: Georgia, "Times New Roman", serif;
+  --font-family-label: "Courier New", Courier, monospace;
+  --font-family-subtitle: Impact, "Arial Narrow", sans-serif;
+  --font-family-body: Verdana, Geneva, sans-serif;
+  --font-family-icon: "Font Awesome 6 Pro Solid 900", Arial, sans-serif;
+}

@@ -54,7 +54,7 @@ export const Playground: Story = {
     const toggle = canvas.getByRole('switch');
 
     await expect(toggle).toBeVisible();
-    await expect(toggle).toHaveAttribute('aria-checked', 'false');
+    await expect(toggle).not.toBeChecked();
     await userEvent.click(toggle);
     await expect(args.onChange).toHaveBeenCalledTimes(1);
   },
