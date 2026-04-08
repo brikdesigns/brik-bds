@@ -1,7 +1,7 @@
 import React from 'react';
 import { themeMetadata, type ThemeNumber } from '../../../tokens';
 
-const THEME_KEYS: ThemeNumber[] = ['brik', '1', '2', '3', '4', '5', '6', '7', '8'];
+const THEME_KEYS: ThemeNumber[] = ['brik', 'brik-dark', 'client-sim'];
 
 interface ThemeComparisonProps {
   /** CSS variable names to compare across themes (without var()) */
