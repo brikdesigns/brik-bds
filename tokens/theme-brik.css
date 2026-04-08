@@ -1,0 +1,50 @@
+/**
+ * Brik Brand Theme — Light mode
+ *
+ * The canonical theme for brikdesigns.com, brik-client-portal, and Storybook default.
+ * Color + typography overrides only; spacing uses Base mode defaults from figma-tokens.css.
+ *
+ * Dark mode, high-contrast, and accessibility variants will be added below
+ * as `.theme-brik.dark { ... }` blocks in a future phase.
+ */
+.theme-brik {
+  /* Color */
+  --page-primary: var(--color-grayscale-white);
+  --page-secondary: var(--color-grayscale-lightest);
+  --page-brand-primary: #e35335;
+  --text-primary: var(--color-grayscale-darkest);
+  --text-secondary: var(--color-grayscale-dark);
+  --text-muted: var(--color-grayscale-light);
+  --text-inverse: var(--color-grayscale-white);
+  --text-brand-primary: #e35335;
+  --surface-primary: var(--color-grayscale-white);
+  --surface-secondary: var(--color-grayscale-lightest);
+  --surface-brand-primary: #e35335;
+  --surface-brand-secondary: #f1f0ec;
+  --surface-nav: var(--color-grayscale-white);
+  --background-brand-primary: #e35335;
+  --background-brand-secondary: #f1f0ec;
+  --background-primary: var(--color-grayscale-white);
+  --background-secondary: var(--color-grayscale-lightest);
+  --background-inverse: var(--color-grayscale-darkest);
+  --background-input: var(--color-grayscale-white);
+  --background-image: #17171799;
+  --background-image-brand: #e35335;
+  --border-primary: var(--color-grayscale-darkest);
+  --border-secondary: var(--color-grayscale-lighter);
+  --border-muted: var(--color-grayscale-lighter);
+  --border-brand-primary: #e35335;
+  --border-input: var(--color-grayscale-light);
+  --border-inverse: var(--color-grayscale-white);
+  --border-on-color-dark: white;
+  --theme-blue-blue-light: #e35335;
+  --theme-blue-blue-lighter: #f1f0ec;
+  --theme-blue-green: #f4d364;
+  --theme-blue-blue-lightest: #9ada6c;
+  --theme-blue-blue-dark: #8ebbcc;
+  /* Typography */
+  --font-family-body: Poppins, sans-serif;
+  --font-family-label: Poppins, sans-serif;
+  --font-family-heading: Poppins, sans-serif;
+  --font-family-display: Poppins, sans-serif;
+}

@@ -13,12 +13,17 @@ addCollection(phData as Parameters<typeof addCollection>[0]);
 // Import token CSS in cascade order:
 // 1. Font declarations (@font-face from Webflow export)
 // 2. Figma tokens (SD output — primitives + semantic defaults)
-// 3. Overrides (theme palettes, theme blocks, gap-fill tokens)
-// 4. Storybook overrides (.theme-brik, Base mode spacing, UI fixes)
+// 3. Gap-fills (manual tokens not yet in Figma)
+// 4. Website template themes (1-8, will move to brik-website-themes repo)
+// 5. Brik Brand theme (extracted from storybook-overrides)
+// 6. Font Audit tool (extracted from website-themes)
+// 7. Storybook overrides (Base mode spacing, UI fixes)
 import '../tokens/fonts.css';
 import '../tokens/figma-tokens.css';
 import '../tokens/gap-fills.css';
 import '../tokens/website-themes.css';
+import '../tokens/theme-brik.css';
+import '../tokens/font-audit.css';
 import '../css/animations.css';
 import '../css/premium-effects.css';
 import './storybook-overrides.css';
