@@ -138,42 +138,22 @@
   color: var(--text-status-info);
 }
 
-/* ─── Notification micro-interactions ───────────────────────── */
-
-@keyframes bds-badge-pop {
-  0%   { transform: scale(0); opacity: 0; }
-  60%  { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes bds-badge-shake {
-  0%, 100% { transform: rotate(0deg); }
-  15%      { transform: rotate(12deg); }
-  30%      { transform: rotate(-10deg); }
-  45%      { transform: rotate(8deg); }
-  60%      { transform: rotate(-6deg); }
-  75%      { transform: rotate(3deg); }
-}
+/* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */
 
 /* Pop-in: badge appears with a bounce scale */
 .bds-badge--animate-in {
-  animation: bds-badge-pop var(--duration-slow) var(--ease-out);
+  animation: bds-pop var(--duration-slow) var(--ease-out);
 }
 
 /* Shake: bell icon / notification attention-getter */
 .bds-badge--shake {
-  animation: bds-badge-shake 0.5s var(--ease-out); /* bds-lint-ignore — shake needs specific timing */
+  animation: bds-shake 0.5s var(--ease-out); /* bds-lint-ignore — shake needs specific timing */
 }
 
 /* Pulse: persistent attention on unread notification badges */
 .bds-badge--pulse {
-  animation: bds-badge-pop var(--duration-slow) var(--ease-out),
-    bds-dot-pulse 1.4s var(--ease-in-out) 0.3s infinite;
-}
-
-@keyframes bds-dot-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.7; transform: scale(1.1); }
+  animation: bds-pop var(--duration-slow) var(--ease-out),
+    bds-pulse 1.4s var(--ease-in-out) 0.3s infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

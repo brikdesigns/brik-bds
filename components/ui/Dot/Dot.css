@@ -23,15 +23,10 @@
 .bds-dot--info     { background-color: var(--background-status-info); }
 .bds-dot--neutral  { background-color: var(--background-status-neutral); }
 
-/* ─── Pulse animation ────────────────────────────────────────── */
-
-@keyframes bds-dot-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(1.4); }
-}
+/* ─── Pulse animation (keyframe in tokens/animations.css) ────── */
 
 .bds-dot--pulse {
-  animation: bds-dot-pulse 1.4s var(--ease-in-out) infinite;
+  animation: bds-pulse 1.4s var(--ease-in-out) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
