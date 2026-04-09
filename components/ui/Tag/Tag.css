@@ -42,7 +42,7 @@
   padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
   font-family: var(--font-family-subtitle);
-  font-size: var(--label-tiny);
+  font-size: var(--subtitle-sm);
   border-radius: var(--border-radius-sm);
 }
 
