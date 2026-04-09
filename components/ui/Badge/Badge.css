@@ -35,7 +35,7 @@
   padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
   font-family: var(--font-family-subtitle);
-  font-size: var(--subtitle-sm);
+  font-size: var(--label-tiny);
 }
 
 .bds-badge--md {
