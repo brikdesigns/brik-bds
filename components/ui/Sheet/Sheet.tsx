@@ -13,6 +13,8 @@ export interface SheetTab {
   content: ReactNode;
 }
 
+export type SheetVariant = 'default' | 'floating';
+
 export interface SheetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,6 +23,12 @@ export interface SheetProps {
   title?: ReactNode;
   /** Width for left/right sheets (default: 400px) */
   width?: string;
+  /**
+   * Visual variant:
+   * - `default` — full-height overlay with backdrop (forms, edit workflows)
+   * - `floating` — rounded floating panel with elevation, no backdrop (read-only detail views)
+   */
+  variant?: SheetVariant;
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   showCloseButton?: boolean;
@@ -50,6 +58,7 @@ export function Sheet({
   side = 'right',
   title,
   width = '400px',
+  variant = 'default',
   closeOnBackdrop = true,
   closeOnEscape = true,
   showCloseButton = true,
@@ -58,6 +67,7 @@ export function Sheet({
   activeTab: controlledTab,
   onTabChange,
 }: SheetProps) {
+  const isFloating = variant === 'floating';
   const [internalTab, setInternalTab] = useState(tabs?.[0]?.id ?? '');
 
   const activeTab = controlledTab ?? internalTab;
@@ -78,11 +88,11 @@ export function Sheet({
   }, [isOpen, closeOnEscape, onClose]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isFloating) {
       document.body.style.overflow = 'hidden';
       return () => { document.body.style.overflow = ''; };
     }
-  }, [isOpen]);
+  }, [isOpen, isFloating]);
 
   if (!isOpen) return null;
 
@@ -106,11 +116,11 @@ export function Sheet({
 
   const sheet = (
     <>
-      <div className="bds-sheet-backdrop" onClick={handleBackdropClick} />
+      {!isFloating && <div className="bds-sheet-backdrop" onClick={handleBackdropClick} />}
       <div
-        className={bdsClass('bds-sheet', `bds-sheet--${side}`)}
+        className={bdsClass('bds-sheet', `bds-sheet--${side}`, isFloating ? 'bds-sheet--floating' : '')}
         role="dialog"
-        aria-modal="true"
+        aria-modal={!isFloating}
         style={widthStyle}
       >
         {(title || showCloseButton) && (
