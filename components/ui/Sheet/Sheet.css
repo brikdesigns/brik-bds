@@ -29,6 +29,25 @@
 .bds-sheet--left   { top: 0; left: 0; bottom: 0; max-width: 90vw; }
 .bds-sheet--bottom { left: 0; right: 0; bottom: 0; max-height: 80vh; }
 
+/* ─── Floating variant — no backdrop, rounded, elevated ─────── */
+
+.bds-sheet--floating {
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.bds-sheet--floating.bds-sheet--right {
+  top: var(--padding-lg);
+  right: var(--padding-lg);
+  bottom: var(--padding-lg);
+}
+
+.bds-sheet--floating.bds-sheet--left {
+  top: var(--padding-lg);
+  left: var(--padding-lg);
+  bottom: var(--padding-lg);
+}
+
 /* ─── Header (matches Modal) ────────────────────────────────── */
 
 .bds-sheet__header {
@@ -145,5 +164,69 @@
   flex-wrap: wrap;
   flex-shrink: 0;
   border-top: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Stack frame transitions ──────────────────────────────────── */
+
+.bds-sheet-stack__frame {
+  animation: bds-sheet-frame-enter 0.2s ease-out;
+}
+
+.bds-sheet-stack__frame--exiting {
+  animation: bds-sheet-frame-exit 0.15s ease-in forwards;
+}
+
+.bds-sheet-stack__frame--back {
+  animation: bds-sheet-frame-back 0.2s ease-out;
+}
+
+@keyframes bds-sheet-frame-enter {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bds-sheet-frame-exit {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(40px); }
+}
+
+@keyframes bds-sheet-frame-back {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── Back button (sheet stack header) ─────────────────────────── */
+
+.bds-sheet__back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.bds-sheet__back-btn:hover {
+  opacity: 1;
+}
+
+/* ─── Nav link (clickable entity reference inside sheets) ──────── */
+
+.bds-sheet__nav-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-brand);
+  font: inherit;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.bds-sheet__nav-link:hover {
+  text-decoration: underline;
 }
 }
