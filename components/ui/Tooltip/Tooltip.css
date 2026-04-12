@@ -60,6 +60,19 @@
   margin-left: var(--padding-md);
 }
 
+/* ─── Portal mode (fixed positioning, escapes overflow) ── */
+
+.bds-tooltip__bubble--portal {
+  /* Override placement absolute positioning — inline fixed styles take over */
+  position: fixed;
+  top: auto;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  transform: none;
+  margin: 0;
+}
+
 /* ─── Arrow ───────────────────────────────────────────── */
 
 .bds-tooltip__arrow {
