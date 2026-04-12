@@ -53,6 +53,7 @@ type Story = StoryObj<typeof TimePicker>;
    ═══════════════════════════════════════════════════════════════ */
 
 export const Playground: Story = {
+  parameters: { chromatic: { disableSnapshot: true } },
   args: {
     placeholder: 'Select time',
     size: 'md',

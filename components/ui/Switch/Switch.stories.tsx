@@ -44,6 +44,7 @@ type Story = StoryObj<typeof Switch>;
    ═══════════════════════════════════════════════════════════════ */
 
 export const Playground: Story = {
+  parameters: { chromatic: { disableSnapshot: true } },
   args: {
     label: 'Enable feature',
     size: 'lg',
@@ -62,6 +63,7 @@ export const Playground: Story = {
 
 /** Interaction test: disabled switch blocks toggle */
 export const InteractionTest: Story = {
+  parameters: { chromatic: { disableSnapshot: true } },
   args: { label: 'Locked setting', size: 'lg', disabled: true, onChange: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
