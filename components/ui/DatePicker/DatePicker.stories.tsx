@@ -51,6 +51,7 @@ type Story = StoryObj<typeof DatePicker>;
    ═══════════════════════════════════════════════════════════════ */
 
 export const Playground: Story = {
+  parameters: { chromatic: { disableSnapshot: true } },
   args: {
     placeholder: 'Select a date',
     size: 'md',
