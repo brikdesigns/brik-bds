@@ -221,4 +221,18 @@
   --state-pressed-overlay: rgba(0, 0, 0, 0.08); /* bds-lint-ignore — rgba overlay, no token equivalent */
   --state-focus: currentColor; /* bds-lint-ignore — resolves at use-site */
   --state-disabled-opacity: 0.4;
+
+  /* ── Motion semantic aliases ──
+     Semantic duration + easing tokens consumed by all BDS component CSS.
+     Map to Figma primitive duration/easing tokens where available.
+     Note: --easing-ease-* in figma-tokens.css export as "String value"
+     (Figma limitation) so direct cubic-bezier values are used here. */
+  --duration-fast:   var(--duration-100);   /* 100ms — micro-interactions: hover, focus */
+  --duration-normal: var(--duration-200);   /* 200ms — standard transitions: buttons, cards */
+  --duration-slow:   var(--duration-300);   /* 300ms — emphasis: modals, sheets, reveals */
+
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);    /* decelerate — most UI transitions */
+  --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);    /* accelerate — exits, collapses */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* symmetric — looping, continuous */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
 }
