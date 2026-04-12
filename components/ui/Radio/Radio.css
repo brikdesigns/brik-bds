@@ -16,18 +16,65 @@
   cursor: not-allowed;
 }
 
-/* ─── Input ───────────────────────────────────────────── */
+/* ─── Hidden native input ────────────────────────────── */
 
 .bds-radio__input {
-  width: 16px; /* bds-lint-ignore — native radio size */
-  height: 16px; /* bds-lint-ignore */
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
   margin: 0;
-  cursor: pointer;
-  flex-shrink: 0;
-  accent-color: var(--background-brand-primary);
+  pointer-events: none;
 }
 
-.bds-radio--disabled .bds-radio__input {
+/* ─── Custom indicator ───────────────────────────────── */
+
+.bds-radio__indicator {
+  width: 22px; /* bds-lint-ignore — fixed radio indicator size */
+  height: 22px; /* bds-lint-ignore */
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: var(--border-width-lg) solid var(--border-primary);
+  background-color: var(--background-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+/* Inner dot — hidden by default */
+.bds-radio__indicator::after {
+  content: '';
+  width: 10px; /* bds-lint-ignore — fixed inner dot size */
+  height: 10px; /* bds-lint-ignore */
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.15s;
+}
+
+/* ── Hover ── */
+.bds-radio:hover:not(.bds-radio--disabled) .bds-radio__indicator {
+  border-color: var(--border-brand-primary);
+}
+
+/* ── Checked ── */
+.bds-radio__input:checked + .bds-radio__indicator {
+  border-color: var(--border-brand-primary);
+}
+
+.bds-radio__input:checked + .bds-radio__indicator::after {
+  background-color: var(--surface-brand-primary);
+}
+
+/* ── Focus-visible ── */
+.bds-radio__input:focus-visible + .bds-radio__indicator {
+  box-shadow: 0 0 0 2px var(--border-brand-primary); /* bds-lint-ignore — focus ring */
+  outline: none;
+}
+
+/* ── Disabled ── */
+.bds-radio--disabled .bds-radio__indicator {
   cursor: not-allowed;
 }
 

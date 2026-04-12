@@ -27,11 +27,18 @@
   overflow: hidden;
 }
 
+/* ─── Desktop min-width ──────────────────────────────────────── */
+/* bds-lint-ignore — design-spec min-width */
+
+@media (min-width: 768px) {
+  .bds-modal { min-width: 640px; }
+}
+
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — design-spec max-widths */
 
-.bds-modal--sm  { max-width: 400px; }
-.bds-modal--md  { max-width: 600px; }
+.bds-modal--sm  { max-width: 640px; }
+.bds-modal--md  { max-width: 720px; }
 .bds-modal--lg  { max-width: 800px; }
 .bds-modal--xl  { max-width: 1000px; }
 .bds-modal--full { max-width: 95vw; }
