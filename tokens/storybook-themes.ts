@@ -52,7 +52,7 @@ export const storybookThemes: Record<ThemeNumber, StorybookThemeConfig> = {
     "inputBg": "white",
     "inputBorder": "#bdbdbd",
     "inputTextColor": "#333",
-    "fontBase": "Verdana, sans-serif"
+    "fontBase": "Poppins, sans-serif"
   },
   "brik": {
     "base": "light",

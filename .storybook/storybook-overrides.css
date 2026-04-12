@@ -314,11 +314,13 @@ div[class*="docs-story"] {
 }
 
 /* Story preview container — the component demo box in docs.
-   Let SB10's native emotion styles handle border-radius and border
-   (it removes bottom border/radius when code is expanded).
-   We only override background and shadow to match our theme. */
+   Take full control of background, border, and shadow away from emotion's
+   getBlockBackgroundStyle(theme) — emotion injects after our CSS and wins
+   specificity battles. Token-based values auto-resolve per theme. */
 #storybook-docs#storybook-docs .sbdocs-preview {
   background: var(--surface-primary) !important;
+  border-color: var(--border-secondary) !important;
+  box-shadow: none !important;
   margin: 16px 0 24px !important;
   overflow: hidden !important;
 }
@@ -340,7 +342,7 @@ div[class*="docs-story"] {
    section below — tokens resolve per-theme automatically.
    ============================================ */
 
-/* Dark preview containers need heavier shadow for depth on dark bg */
+/* Dark preview containers — heavier shadow for depth on dark bg */
 body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
 }

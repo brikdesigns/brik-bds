@@ -38,8 +38,10 @@
   align-items: center;
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semi-bold);
-  line-height: var(--font-line-height-tight);
+  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically; shared with Badge + Tag */
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--text-on-color-dark);
   border-radius: var(--border-radius-sm);
 }
@@ -47,7 +49,7 @@
 /* Label sizes */
 .bds-service-badge-label--sm {
   padding: var(--padding-tiny) var(--padding-sm);
-  font-size: var(--body-tiny);
+  font-size: var(--label-tiny);
 }
 
 .bds-service-badge-label--md {

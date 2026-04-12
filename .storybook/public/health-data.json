@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-06T21:29:15.179Z",
+  "generatedAt": "2026-04-08T21:52:28.535Z",
   "health": {
     "completeness": {
       "total": 66,
@@ -169,13 +169,13 @@
       ]
     },
     "deps": {
-      "total": 17,
+      "total": 19,
       "major": [
         {
           "name": "@notionhq/client",
           "current": "3.1.3",
           "wanted": "3.1.3",
-          "latest": "5.16.0",
+          "latest": "5.17.0",
           "isMajor": true
         },
         {
@@ -217,14 +217,14 @@
           "name": "react",
           "current": "18.3.1",
           "wanted": "18.3.1",
-          "latest": "19.2.4",
+          "latest": "19.2.5",
           "isMajor": true
         },
         {
           "name": "react-dom",
           "current": "18.3.1",
           "wanted": "18.3.1",
-          "latest": "19.2.4",
+          "latest": "19.2.5",
           "isMajor": true
         },
         {
@@ -238,7 +238,7 @@
           "name": "vite",
           "current": "6.4.1",
           "wanted": "6.4.2",
-          "latest": "8.0.5",
+          "latest": "8.0.7",
           "isMajor": true
         }
       ],
@@ -247,14 +247,14 @@
           "name": "@storybook/addon-a11y",
           "current": "10.2.19",
           "wanted": "10.2.19",
-          "latest": "10.3.4",
+          "latest": "10.3.5",
           "isMajor": false
         },
         {
           "name": "@storybook/addon-docs",
           "current": "10.2.19",
           "wanted": "10.2.19",
-          "latest": "10.3.4",
+          "latest": "10.3.5",
           "isMajor": false
         },
         {
@@ -267,22 +267,29 @@
         {
           "name": "@storybook/addon-vitest",
           "current": "10.2.19",
-          "wanted": "10.3.4",
-          "latest": "10.3.4",
+          "wanted": "10.3.5",
+          "latest": "10.3.5",
           "isMajor": false
         },
         {
           "name": "@storybook/react-vite",
           "current": "10.2.19",
           "wanted": "10.2.19",
-          "latest": "10.3.4",
+          "latest": "10.3.5",
+          "isMajor": false
+        },
+        {
+          "name": "@vitest/browser",
+          "current": "4.1.2",
+          "wanted": "4.1.3",
+          "latest": "4.1.3",
           "isMajor": false
         },
         {
           "name": "storybook",
           "current": "10.2.19",
           "wanted": "10.2.19",
-          "latest": "10.3.4",
+          "latest": "10.3.5",
           "isMajor": false
         },
         {
@@ -290,6 +297,13 @@
           "current": "5.3.1",
           "wanted": "5.4.0",
           "latest": "5.4.0",
+          "isMajor": false
+        },
+        {
+          "name": "vitest",
+          "current": "4.1.2",
+          "wanted": "4.1.3",
+          "latest": "4.1.3",
           "isMajor": false
         }
       ]
@@ -414,9 +428,9 @@
     "spatialPct": 86
   },
   "coverage": {
-    "totalDefined": 522,
-    "totalUsed": 165,
-    "totalOrphaned": 357,
+    "totalDefined": 526,
+    "totalUsed": 168,
+    "totalOrphaned": 358,
     "usagePct": 32,
     "used": [
       {
@@ -1746,26 +1760,6 @@
         "count": 14
       },
       {
-        "token": "--surface-secondary",
-        "components": [
-          "AddressInput",
-          "AlertBanner",
-          "Board",
-          "Button",
-          "Card",
-          "DatePicker",
-          "Dialog",
-          "EmptyState",
-          "FilterButton",
-          "Menu",
-          "ProgressStepper",
-          "Stepper",
-          "Table",
-          "TaskConsole"
-        ],
-        "count": 14
-      },
-      {
         "token": "--text-inverse",
         "components": [
           "Avatar",
@@ -1797,6 +1791,25 @@
           "Menu",
           "ProgressStepper",
           "ServiceBadge",
+          "Table",
+          "Tag",
+          "Tooltip"
+        ],
+        "count": 13
+      },
+      {
+        "token": "--background-secondary",
+        "components": [
+          "Button",
+          "Chip",
+          "CollapsibleCard",
+          "Dot",
+          "FilterButton",
+          "Meter",
+          "SegmentedControl",
+          "Skeleton",
+          "Spinner",
+          "TabBar",
           "Table",
           "Tag",
           "Tooltip"
@@ -1859,6 +1872,24 @@
         "count": 12
       },
       {
+        "token": "--surface-secondary",
+        "components": [
+          "AddressInput",
+          "AlertBanner",
+          "Board",
+          "Card",
+          "DatePicker",
+          "Dialog",
+          "EmptyState",
+          "Menu",
+          "ProgressStepper",
+          "Stepper",
+          "Table",
+          "TaskConsole"
+        ],
+        "count": 12
+      },
+      {
         "token": "--text-brand-primary",
         "components": [
           "Breadcrumb",
@@ -1872,23 +1903,6 @@
           "Snackbar",
           "TabBar",
           "TextLink"
-        ],
-        "count": 11
-      },
-      {
-        "token": "--background-secondary",
-        "components": [
-          "Chip",
-          "CollapsibleCard",
-          "Dot",
-          "Meter",
-          "SegmentedControl",
-          "Skeleton",
-          "Spinner",
-          "TabBar",
-          "Table",
-          "Tag",
-          "Tooltip"
         ],
         "count": 11
       },
@@ -1986,6 +2000,20 @@
         "count": 8
       },
       {
+        "token": "--text-negative",
+        "components": [
+          "Badge",
+          "Button",
+          "FileUploader",
+          "Form",
+          "Select",
+          "TaskConsole",
+          "TextArea",
+          "TextInput"
+        ],
+        "count": 8
+      },
+      {
         "token": "--border-input",
         "components": [
           "AddressInput",
@@ -2055,30 +2083,6 @@
         "count": 7
       },
       {
-        "token": "--background-status-error",
-        "components": [
-          "Badge",
-          "Button",
-          "Dialog",
-          "Dot",
-          "Snackbar",
-          "TaskConsole"
-        ],
-        "count": 6
-      },
-      {
-        "token": "--text-status-error",
-        "components": [
-          "Badge",
-          "Button",
-          "FileUploader",
-          "Form",
-          "Select",
-          "TaskConsole"
-        ],
-        "count": 6
-      },
-      {
         "token": "--heading-md",
         "components": [
           "Card",
@@ -2091,16 +2095,15 @@
         "count": 6
       },
       {
-        "token": "--color-system-red",
+        "token": "--background-negative",
         "components": [
+          "Badge",
+          "Button",
           "Counter",
-          "DatePicker",
-          "Meter",
-          "Table",
-          "TextArea",
-          "TextInput"
+          "Dot",
+          "TaskConsole"
         ],
-        "count": 6
+        "count": 5
       },
       {
         "token": "--icon-lg",
@@ -2133,17 +2136,37 @@
         "count": 4
       },
       {
-        "token": "--background-status-success",
+        "token": "--background-positive",
         "components": [
           "Badge",
           "Button",
-          "Dot",
-          "Snackbar"
+          "Counter",
+          "Dot"
         ],
         "count": 4
       },
       {
-        "token": "--text-status-success",
+        "token": "--background-warning",
+        "components": [
+          "Badge",
+          "CardTestimonial",
+          "Counter",
+          "Dot"
+        ],
+        "count": 4
+      },
+      {
+        "token": "--background-status-info",
+        "components": [
+          "Badge",
+          "Counter",
+          "Dot",
+          "TaskConsole"
+        ],
+        "count": 4
+      },
+      {
+        "token": "--text-positive",
         "components": [
           "Badge",
           "Button",
@@ -2192,24 +2215,6 @@
         "count": 3
       },
       {
-        "token": "--background-status-warning",
-        "components": [
-          "Badge",
-          "CardTestimonial",
-          "Dot"
-        ],
-        "count": 3
-      },
-      {
-        "token": "--background-status-info",
-        "components": [
-          "Badge",
-          "Dot",
-          "TaskConsole"
-        ],
-        "count": 3
-      },
-      {
         "token": "--font-weight-medium",
         "components": [
           "Board",
@@ -2233,6 +2238,15 @@
           "Button",
           "Chip",
           "Snackbar"
+        ],
+        "count": 3
+      },
+      {
+        "token": "--color-system-red",
+        "components": [
+          "DatePicker",
+          "Meter",
+          "Table"
         ],
         "count": 3
       },
@@ -2401,18 +2415,10 @@
         "count": 2
       },
       {
-        "token": "--color-system-green",
+        "token": "--background-status-error",
         "components": [
-          "Counter",
-          "Meter"
-        ],
-        "count": 2
-      },
-      {
-        "token": "--color-system-yellow",
-        "components": [
-          "Counter",
-          "Meter"
+          "Dialog",
+          "Snackbar"
         ],
         "count": 2
       },
@@ -2437,6 +2443,14 @@
         "components": [
           "Board",
           "SidebarNavigation"
+        ],
+        "count": 2
+      },
+      {
+        "token": "--border-negative",
+        "components": [
+          "TextArea",
+          "TextInput"
         ],
         "count": 2
       },
@@ -2525,13 +2539,6 @@
         "count": 1
       },
       {
-        "token": "--duration-200",
-        "components": [
-          "Board"
-        ],
-        "count": 1
-      },
-      {
         "token": "--shadow-md",
         "components": [
           "Board"
@@ -2581,21 +2588,21 @@
         "count": 1
       },
       {
-        "token": "--surface-secondary-hover",
+        "token": "--background-secondary-hover",
         "components": [
           "Button"
         ],
         "count": 1
       },
       {
-        "token": "--surface-secondary-pressed",
+        "token": "--background-secondary-pressed",
         "components": [
           "Button"
         ],
         "count": 1
       },
       {
-        "token": "--surface-subtle-hover",
+        "token": "--background-primary-hover",
         "components": [
           "Button"
         ],
@@ -2686,16 +2693,23 @@
         "count": 1
       },
       {
-        "token": "--color-system-blue",
+        "token": "--box-shadow-lg",
         "components": [
-          "Counter"
+          "DatePicker"
         ],
         "count": 1
       },
       {
-        "token": "--box-shadow-lg",
+        "token": "--color-system-green",
         "components": [
-          "DatePicker"
+          "Meter"
+        ],
+        "count": 1
+      },
+      {
+        "token": "--color-system-yellow",
+        "components": [
+          "Meter"
         ],
         "count": 1
       },
@@ -2715,6 +2729,13 @@
       },
       {
         "token": "--background-muted",
+        "components": [
+          "ProgressBar"
+        ],
+        "count": 1
+      },
+      {
+        "token": "--duration-500",
         "components": [
           "ProgressBar"
         ],
@@ -2798,6 +2819,13 @@
         "count": 1
       },
       {
+        "token": "--background-status-success",
+        "components": [
+          "Snackbar"
+        ],
+        "count": 1
+      },
+      {
         "token": "--background-status-orange",
         "components": [
           "Snackbar"
@@ -2826,14 +2854,21 @@
         "count": 1
       },
       {
-        "token": "--surface-status-success",
+        "token": "--surface-positive",
         "components": [
           "TaskConsole"
         ],
         "count": 1
       },
       {
-        "token": "--surface-status-error",
+        "token": "--surface-negative",
+        "components": [
+          "TaskConsole"
+        ],
+        "count": 1
+      },
+      {
+        "token": "--duration-400",
         "components": [
           "TaskConsole"
         ],
@@ -2931,16 +2966,14 @@
       "--background-image-brand",
       "--background-info",
       "--background-on-color-light",
-      "--background-primary-hover",
       "--background-primary-pressed",
-      "--background-secondary-hover",
-      "--background-secondary-pressed",
       "--background-service-brand-secondary",
       "--background-service-information-secondary",
       "--background-service-marketing-secondary",
       "--background-service-product-secondary",
       "--background-service-service-secondary",
       "--background-status-purple",
+      "--background-status-warning",
       "--bds-slider-percent",
       "--bds-slider-thumb-size",
       "--bds-slider-track-height",
@@ -2952,7 +2985,6 @@
       "--body-xl",
       "--border-info",
       "--border-inverse",
-      "--border-negative",
       "--border-on-color-light",
       "--border-positive",
       "--border-radius-0",
@@ -3032,6 +3064,7 @@
       "--color-purple-light",
       "--color-purple-lighter",
       "--color-purple-lightest",
+      "--color-system-blue",
       "--color-system-blue-light",
       "--color-system-blue-surface",
       "--color-system-green-light",
@@ -3067,9 +3100,8 @@
       "--display-sm",
       "--display-xl",
       "--duration-100",
+      "--duration-200",
       "--duration-300",
-      "--duration-400",
-      "--duration-500",
       "--duration-600",
       "--easing-ease-in",
       "--easing-ease-in-out",
@@ -3243,15 +3275,19 @@
       "--state-pressed-overlay",
       "--surface-brand-secondary",
       "--surface-info",
+      "--surface-muted",
       "--surface-navigation",
-      "--surface-negative",
       "--surface-overlay",
-      "--surface-positive",
+      "--surface-secondary-hover",
+      "--surface-secondary-pressed",
       "--surface-service-brand",
       "--surface-service-information",
       "--surface-service-marketing",
       "--surface-service-product",
+      "--surface-status-error",
+      "--surface-status-success",
       "--surface-status-warning",
+      "--surface-subtle-hover",
       "--surface-warning",
       "--tablet",
       "--text-accent-blue",
@@ -3259,8 +3295,8 @@
       "--text-accent-purple",
       "--text-accent-yellow",
       "--text-info",
-      "--text-negative",
-      "--text-positive",
+      "--text-status-error",
+      "--text-status-success",
       "--text-status-warning",
       "--text-transform-body",
       "--text-transform-display",
@@ -3324,6 +3360,87 @@
         "token": "--chip-pressed-overlay",
         "components": [
           "Chip"
+        ]
+      },
+      {
+        "token": "--duration-fast",
+        "components": [
+          "Chip",
+          "FileUploader",
+          "Footer",
+          "Menu",
+          "NavBar",
+          "SegmentedControl",
+          "SidebarNavigation",
+          "Slider",
+          "Stepper",
+          "TabBar",
+          "TaskConsole"
+        ]
+      },
+      {
+        "token": "--duration-normal",
+        "components": [
+          "Board",
+          "Button",
+          "Card",
+          "Menu",
+          "ProgressDots",
+          "Select",
+          "Switch",
+          "Tag",
+          "Tooltip"
+        ]
+      },
+      {
+        "token": "--duration-slow",
+        "components": [
+          "Badge"
+        ]
+      },
+      {
+        "token": "--ease-in-out",
+        "components": [
+          "Badge",
+          "Dot",
+          "ProgressBar"
+        ]
+      },
+      {
+        "token": "--ease-out",
+        "components": [
+          "Badge",
+          "Board",
+          "Button",
+          "Card",
+          "Chip",
+          "FileUploader",
+          "Footer",
+          "Menu",
+          "NavBar",
+          "ProgressDots",
+          "SegmentedControl",
+          "Select",
+          "SidebarNavigation",
+          "Slider",
+          "Stepper",
+          "Switch",
+          "TabBar",
+          "Tag",
+          "TaskConsole",
+          "Tooltip"
+        ]
+      },
+      {
+        "token": "--menu-enter-duration",
+        "components": [
+          "Menu"
+        ]
+      },
+      {
+        "token": "--menu-enter-ease",
+        "components": [
+          "Menu"
         ]
       },
       {

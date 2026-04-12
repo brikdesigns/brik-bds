@@ -79,19 +79,44 @@ addons.setConfig({
   }),
 });
 
-// Listen for theme changes — CSS vars only (instant, no React re-render)
+// Listen for theme changes — update both CSS vars (instant visual) and
+// manager emotion theme (api.setOptions). This is the standard approach
+// used by storybook-dark-mode addon and major design systems.
 if (typeof window !== 'undefined') {
   const channel = addons.getChannel();
   channel.on('globalsUpdated', ({ globals }: { globals: Record<string, unknown> }) => {
     const themeNum = globals.themeNumber as string;
     const config = storybookThemes[themeNum as ThemeNumber];
     if (config) {
+      // 1. CSS vars — instant visual update for sidebar/toolbar
       applyThemeVars(config);
-      // Swap logo for dark themes
-      const logo = document.querySelector('[class*="sidebar"] img') as HTMLImageElement;
-      if (logo) {
-        logo.src = config.base === 'dark' ? '/brik-logo-white.svg' : '/brik-logo.svg';
-      }
+
+      // 2. Emotion theme — updates all emotion-styled manager components
+      //    (tabs, panels, borders, etc. that CSS vars don't reach)
+      addons.setConfig({
+        theme: create({
+          ...sharedBrand,
+          brandImage: config.base === 'dark' ? '/brik-logo-white.svg' : '/brik-logo.svg',
+          base: config.base,
+          colorPrimary: config.colorPrimary,
+          colorSecondary: config.colorSecondary,
+          appBg: config.appBg,
+          appContentBg: config.appContentBg,
+          appPreviewBg: config.appPreviewBg,
+          appBorderColor: config.appBorderColor,
+          textColor: config.textColor,
+          textInverseColor: config.textInverseColor,
+          textMutedColor: config.textMutedColor,
+          barTextColor: config.barTextColor,
+          barSelectedColor: config.barSelectedColor,
+          barHoverColor: config.barHoverColor,
+          barBg: config.barBg,
+          inputBg: config.inputBg,
+          inputBorder: config.inputBorder,
+          inputTextColor: config.inputTextColor,
+          fontBase: config.fontBase,
+        }),
+      });
     }
   });
 }

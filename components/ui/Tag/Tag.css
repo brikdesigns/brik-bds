@@ -20,6 +20,8 @@
   background-color: var(--background-secondary);
   text-decoration: none;
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: default;
   user-select: none;
   overflow: clip;
@@ -41,24 +43,21 @@
 .bds-tag--sm {
   padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
-  font-family: var(--font-family-subtitle);
-  font-size: var(--subtitle-sm);
+  font-size: var(--label-tiny);
   border-radius: var(--border-radius-sm);
 }
 
 .bds-tag--md {
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-sm);
-  /* bds-lint-ignore — 14px has no subtitle token; using base font-size */
-  font-size: var(--font-size-75);
+  font-size: var(--label-sm);
   border-radius: var(--border-radius-md);
 }
 
 .bds-tag--lg {
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-md);
-  font-family: var(--font-family-subtitle);
-  font-size: var(--subtitle-lg);
+  font-size: var(--label-md);
   border-radius: var(--border-radius-md);
 }
 
@@ -78,27 +77,27 @@
   flex-shrink: 0;
 }
 
-/* bds-lint-ignore — Figma-driven icon dimensions, numeric for width/height */
+/* Icon font-size matches container so the glyph fills the box */
 .bds-tag--xs .bds-tag__icon {
-  font-size: var(--icon-tiny);
+  font-size: var(--icon-xs);
 }
 
 .bds-tag--sm .bds-tag__icon {
   width: 14px;
   height: 14px;
-  font-size: var(--icon-tiny);
+  font-size: var(--icon-xs);
 }
 
 .bds-tag--md .bds-tag__icon {
   width: 16px;
   height: 16px;
-  font-size: var(--icon-xs);
+  font-size: var(--icon-sm);
 }
 
 .bds-tag--lg .bds-tag__icon {
   width: 20px;
   height: 20px;
-  font-size: var(--icon-sm);
+  font-size: var(--label-xl);
 }
 
 /* ─── Remove Button ───────────────────────────────────────────── */
