@@ -289,31 +289,46 @@
 }
 
 /* ─── Icon Button ─────────────────────────────────────────────── */
+/*
+ * Sizing uses explicit width/height on a 4px grid instead of
+ * deriving size from padding + icon font-size (which produced
+ * fractional totals like 27.54px and 38px).
+ *
+ * Scale: tiny=24  sm=32  md=40  lg=48  xl=56  (8px steps)
+ * Icon:  tiny=12  sm=16  md=16  lg=20  xl=24  (whole px, centered)
+ */
 
 .bds-icon-button {
-  /* Square padding — icon-only buttons need equal padding */
-  padding: var(--padding-md);
+  padding: 0;
   gap: 0;
+  width: 40px;   /* md default */
+  height: 40px;
+  flex-shrink: 0;
 }
 
 .bds-icon-button--tiny {
-  padding: var(--padding-tiny);
+  width: 24px;
+  height: 24px;
 }
 
 .bds-icon-button--sm {
-  padding: var(--padding-sm);
+  width: 32px;
+  height: 32px;
 }
 
 .bds-icon-button--md {
-  padding: var(--padding-md);
+  width: 40px;
+  height: 40px;
 }
 
 .bds-icon-button--lg {
-  padding: var(--padding-lg);
+  width: 48px;
+  height: 48px;
 }
 
 .bds-icon-button--xl {
-  padding: var(--padding-lg);
+  width: 56px;
+  height: 56px;
 }
 
 .bds-icon-button__icon {
@@ -322,23 +337,23 @@
   justify-content: center;
   width: 1em;
   height: 1em;
-  font-size: var(--label-md);
+  font-size: 16px;  /* md default */
 }
 
 .bds-icon-button--tiny .bds-icon-button__icon {
-  font-size: var(--label-xs);
+  font-size: 12px;
 }
 
 .bds-icon-button--sm .bds-icon-button__icon {
-  font-size: var(--label-sm);
+  font-size: 16px;
 }
 
 .bds-icon-button--lg .bds-icon-button__icon {
-  font-size: var(--label-lg);
+  font-size: 20px;
 }
 
 .bds-icon-button--xl .bds-icon-button__icon {
-  font-size: var(--label-xl);
+  font-size: 24px;
 }
 
 }
