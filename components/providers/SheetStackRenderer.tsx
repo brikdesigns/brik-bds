@@ -17,6 +17,8 @@ export interface RenderFrameContext {
   back: () => void;
   /** Current stack depth */
   depth: number;
+  /** App-level props passed through to every frame (e.g. { isAdmin }) */
+  globalFrameProps: Record<string, unknown>;
 }
 
 export interface SheetStackRendererProps {
@@ -27,6 +29,8 @@ export interface SheetStackRendererProps {
   renderFrame: (frame: SheetFrame, ctx: RenderFrameContext) => ReactNode;
   /** Sheet width (default: '600px') */
   width?: string;
+  /** App-level props passed through to every frame's RenderFrameContext */
+  globalFrameProps?: Record<string, unknown>;
 }
 
 // ─── Styles ─────────────────────────────────────────────────────────────────
@@ -69,7 +73,7 @@ const headerRowStyle: CSSProperties = {
  * />
  * ```
  */
-export function SheetStackRenderer({ renderFrame, width = '600px' }: SheetStackRendererProps) {
+export function SheetStackRenderer({ renderFrame, width = '600px', globalFrameProps = {} }: SheetStackRendererProps) {
   const { stack, isOpen, isExiting, direction, back, closeAll, pushSheet } = useSheetStack();
 
   if (!isOpen) return null;
@@ -82,6 +86,7 @@ export function SheetStackRenderer({ renderFrame, width = '600px' }: SheetStackR
     pushSheet,
     back,
     depth: stack.length,
+    globalFrameProps,
   };
 
   // Build the title — includes back arrow when stack is deep

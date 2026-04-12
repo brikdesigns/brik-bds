@@ -1,4 +1,4 @@
-import { type ReactNode, type HTMLAttributes, useState } from 'react';
+import { type ReactNode, type HTMLAttributes, useState, useRef, useCallback } from 'react';
 import { bdsClass } from '../../utils';
 import './Tooltip.css';
 
@@ -15,6 +15,8 @@ export interface TooltipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'cont
   content: ReactNode;
   /** Placement position relative to children */
   placement?: TooltipPlacement;
+  /** Delay in ms before showing the tooltip (default: 0 = instant) */
+  delay?: number;
   /** Children (trigger element) */
   children: ReactNode;
 }
@@ -39,21 +41,41 @@ export interface TooltipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'cont
 export function Tooltip({
   content,
   placement = 'top',
+  delay = 0,
   children,
   className = '',
   style,
   ...props
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+  }, []);
+
+  const show = useCallback(() => {
+    clearTimer();
+    if (delay > 0) {
+      timerRef.current = setTimeout(() => setIsVisible(true), delay);
+    } else {
+      setIsVisible(true);
+    }
+  }, [delay, clearTimer]);
+
+  const hide = useCallback(() => {
+    clearTimer();
+    setIsVisible(false);
+  }, [clearTimer]);
 
   return (
     <div
       className={bdsClass('bds-tooltip', className)}
       style={style}
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-      onFocus={() => setIsVisible(true)}
-      onBlur={() => setIsVisible(false)}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onFocus={show}
+      onBlur={hide}
       {...props}
     >
       {children}

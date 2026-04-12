@@ -8,7 +8,7 @@ import {
   useRef,
   type ReactNode,
 } from 'react';
-import type { SheetVariant } from '../ui/Sheet';
+import type { SheetVariant, SheetTab } from '../ui/Sheet';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -46,6 +46,26 @@ export interface SheetStackContextValue {
 
 const SheetStackContext = createContext<SheetStackContextValue | undefined>(undefined);
 
+// ─── Sheet Config (headless mode) ──────────────────────────────────────────
+
+/** Configuration set by headless sheet components via useConfigureSheet */
+export interface SheetConfig {
+  title?: ReactNode;
+  tabs?: SheetTab[];
+  activeTab?: string;
+  onTabChange?: (id: string) => void;
+  footer?: ReactNode;
+  /** Override body content (e.g. skeleton while loading) */
+  body?: ReactNode;
+}
+
+interface SheetConfigContextValue {
+  config: SheetConfig;
+  setConfig: (config: SheetConfig) => void;
+}
+
+const SheetConfigContext = createContext<SheetConfigContextValue | undefined>(undefined);
+
 // ─── Provider ───────────────────────────────────────────────────────────────
 
 let frameCounter = 0;
@@ -71,6 +91,7 @@ export function SheetStackProvider({ children }: SheetStackProviderProps) {
   const [isExiting, setIsExiting] = useState(false);
   const [direction, setDirection] = useState<'forward' | 'back'>('forward');
   const exitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [sheetConfig, setSheetConfig] = useState<SheetConfig>({});
 
   const clearExitTimer = useCallback(() => {
     if (exitTimer.current) {
@@ -146,9 +167,13 @@ export function SheetStackProvider({ children }: SheetStackProviderProps) {
     closeAll,
   };
 
+  const configValue: SheetConfigContextValue = { config: sheetConfig, setConfig: setSheetConfig };
+
   return (
     <SheetStackContext.Provider value={value}>
-      {children}
+      <SheetConfigContext.Provider value={configValue}>
+        {children}
+      </SheetConfigContext.Provider>
     </SheetStackContext.Provider>
   );
 }
@@ -180,6 +205,42 @@ export function useSheetStack(): SheetStackContextValue {
     throw new Error('useSheetStack must be used within a SheetStackProvider');
   }
   return context;
+}
+
+/**
+ * useConfigureSheet — headless mode hook for sheet view components.
+ *
+ * Call from a useLayoutEffect to push title, tabs, footer, etc. up to the
+ * SheetStackRenderer without rendering your own `<Sheet>`.
+ *
+ * @returns setter function that accepts a SheetConfig object
+ *
+ * @example
+ * ```tsx
+ * const configureSheet = useConfigureSheet();
+ *
+ * useLayoutEffect(() => {
+ *   configureSheet({ title: user.name, tabs: myTabs, footer: <SaveButton /> });
+ * }, [user, configureSheet]);
+ *
+ * return null; // headless — renderer owns the Sheet chrome
+ * ```
+ */
+export function useConfigureSheet(): (config: SheetConfig) => void {
+  const context = useContext(SheetConfigContext);
+  if (context === undefined) {
+    throw new Error('useConfigureSheet must be used within a SheetStackProvider');
+  }
+  return context.setConfig;
+}
+
+/**
+ * useSheetConfig — read the current sheet configuration (used by SheetStackRenderer).
+ * @internal
+ */
+export function useSheetConfig(): SheetConfig {
+  const context = useContext(SheetConfigContext);
+  return context?.config ?? {};
 }
 
 export default SheetStackProvider;
