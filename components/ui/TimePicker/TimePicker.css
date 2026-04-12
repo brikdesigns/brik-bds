@@ -1,0 +1,180 @@
+@layer bds-components {
+/**
+ * BDS TimePicker — Class-based styles
+ *
+ * Token-based time picker with Radix Popover for accessible behavior.
+ * Matches BDS form component conventions (label, helper, error, size variants).
+ *
+ * Naming: BEM-lite — .bds-time-picker, .bds-time-picker__trigger
+ */
+
+/* ─── Wrapper ────────────────────────────────────────────────── */
+
+.bds-time-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  color: var(--text-primary);
+}
+
+.bds-time-picker--full-width {
+  width: 100%;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-time-picker__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: capitalize;
+}
+
+.bds-time-picker__label--error {
+  color: var(--color-system-red);
+}
+
+/* Label sizes */
+.bds-time-picker--sm .bds-time-picker__label { font-size: var(--label-sm); }
+.bds-time-picker--md .bds-time-picker__label { font-size: var(--label-md); }
+.bds-time-picker--lg .bds-time-picker__label { font-size: var(--label-lg); }
+
+/* ─── Trigger ────────────────────────────────────────────────── */
+
+.bds-time-picker__trigger {
+  width: 100%;
+  padding: var(--padding-xs);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  box-sizing: border-box;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bds-time-picker__trigger:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-time-picker__trigger--error {
+  border-color: var(--color-system-red);
+}
+
+.bds-time-picker__trigger--error:hover:not(:disabled) {
+  border-color: var(--color-system-red);
+}
+
+.bds-time-picker__trigger--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bds-time-picker__trigger--open {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+/* Trigger sizes */
+.bds-time-picker--sm .bds-time-picker__trigger { font-size: var(--body-sm); }
+.bds-time-picker--md .bds-time-picker__trigger { font-size: var(--body-md); }
+.bds-time-picker--lg .bds-time-picker__trigger { font-size: var(--body-lg); }
+
+/* ─── Trigger placeholder & icon ─────────────────────────────── */
+
+.bds-time-picker__placeholder {
+  color: var(--text-muted);
+}
+
+.bds-time-picker__icon {
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.125em; /* bds-lint-ignore — relative to trigger font size */
+}
+
+/* ─── Helper / Error text ────────────────────────────────────── */
+
+.bds-time-picker__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-time-picker__helper--error {
+  color: var(--color-system-red);
+}
+
+/* ─── Popover panel ──────────────────────────────────────────── */
+
+.bds-time-picker__popover {
+  outline: none;
+}
+
+.bds-time-picker__columns {
+  display: flex;
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-lg);
+  border: var(--border-width-md) solid var(--border-muted);
+  overflow: hidden;
+}
+
+/* ─── Scroll column ──────────────────────────────────────────── */
+
+.bds-time-picker__column {
+  display: flex;
+  flex-direction: column;
+  max-height: 224px; /* bds-lint-ignore — 7 rows × 32px = 224px visible area */
+  overflow-y: auto;
+  min-width: 56px; /* bds-lint-ignore — minimum column width for two-digit values */
+  scrollbar-width: none; /* Firefox */
+}
+
+.bds-time-picker__column::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Column dividers (not on the last column) */
+.bds-time-picker__column:not(:last-child) {
+  border-right: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Cell ───────────────────────────────────────────────────── */
+
+.bds-time-picker__cell {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  color: var(--text-primary);
+  padding: var(--padding-xs) var(--padding-sm);
+  text-align: center;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.bds-time-picker__cell:hover:not(.bds-time-picker__cell--selected) {
+  background-color: var(--surface-secondary);
+}
+
+.bds-time-picker__cell--selected {
+  background-color: var(--surface-brand-primary);
+  color: var(--text-inverse);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+} /* end @layer bds-components */
