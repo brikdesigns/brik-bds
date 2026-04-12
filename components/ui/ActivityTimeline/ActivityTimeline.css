@@ -1,0 +1,108 @@
+@layer bds-components {
+/**
+ * BDS ActivityTimeline — Vertical event timeline display
+ *
+ * Token-based. Matches BDS display component conventions.
+ * Naming: BEM-lite — .bds-activity-timeline, .bds-activity-timeline__dot
+ */
+
+/* ─── Container ──────────────────────────────────────────────── */
+
+.bds-activity-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Event row ──────────────────────────────────────────────── */
+
+.bds-activity-timeline__event {
+  display: flex;
+  gap: var(--gap-md);
+}
+
+/* ─── Rail (dot + line) ──────────────────────────────────────── */
+
+.bds-activity-timeline__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 28px; /* bds-lint-ignore — fixed rail width matching dot size */
+  flex-shrink: 0;
+}
+
+/* Dot */
+.bds-activity-timeline__dot {
+  width: 28px; /* bds-lint-ignore — fixed dot size */
+  height: 28px; /* bds-lint-ignore */
+  border-radius: var(--border-radius-pill);
+  background-color: var(--surface-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Origin dot — brand colored */
+.bds-activity-timeline__dot--origin {
+  background-color: var(--background-brand-primary);
+}
+
+/* Icon inside dot */
+.bds-activity-timeline__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--body-sm);
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+.bds-activity-timeline__dot--origin .bds-activity-timeline__icon {
+  color: var(--text-on-color-dark);
+}
+
+/* Connector line */
+.bds-activity-timeline__line {
+  width: 2px; /* bds-lint-ignore — hairline connector */
+  flex: 1;
+  min-height: 20px; /* bds-lint-ignore — minimum connector height */
+  background-color: var(--border-muted);
+}
+
+/* ─── Content ────────────────────────────────────────────────── */
+
+.bds-activity-timeline__content {
+  padding-top: var(--padding-tiny);
+  padding-bottom: var(--padding-lg);
+}
+
+.bds-activity-timeline__content--last {
+  padding-bottom: 0;
+}
+
+/* Label — primary event text */
+.bds-activity-timeline__label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+}
+
+/* Detail — secondary info */
+.bds-activity-timeline__detail {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  color: var(--text-secondary);
+  margin-top: 2px; /* bds-lint-ignore — tight detail spacing */
+}
+
+/* Timestamp */
+.bds-activity-timeline__timestamp {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  color: var(--text-muted);
+  margin-top: 2px; /* bds-lint-ignore — tight timestamp spacing */
+}
+
+} /* end @layer bds-components */
