@@ -220,7 +220,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  color: var(--text-brand);
+  color: var(--text-brand-primary);
   font: inherit;
   text-decoration: none;
   transition: color 0.15s;

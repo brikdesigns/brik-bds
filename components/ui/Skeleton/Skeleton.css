@@ -1,11 +1,6 @@
 @layer bds-components {
 /* ─── Skeleton ───────────────────────────────────────────────── */
 
-@keyframes bds-skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
 .bds-skeleton {
   display: inline-block;
   background-color: var(--background-secondary);
@@ -16,7 +11,7 @@
     var(--background-secondary) 75%
   );
   background-size: 200% 100%;
-  animation: bds-skeleton-shimmer 1.5s infinite;
+  animation: bds-shimmer 1.5s infinite;
 }
 
 /* ─── Variants ───────────────────────────────────────────────── */

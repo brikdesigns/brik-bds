@@ -82,11 +82,32 @@ const ThemedDocsContainer: typeof DefaultDocsContainer = (props) => {
     body.classList.remove('dark', 'light');
     if (themeNum === 'brik-dark') {
       body.classList.add('body', 'theme-brik', 'dark');
+    } else if (themeNum === 'client-sim') {
+      body.classList.add('body', 'theme-brik', 'theme-client-sim', 'light');
     } else {
       body.classList.add('body', `theme-${themeNum}`, 'light');
     }
     const isDark = storybookThemes[themeNum as ThemeNumber]?.base === 'dark';
     body.setAttribute('data-bds-dark', String(isDark));
+
+    // Force dark overrides on emotion-styled elements (same as withTheme decorator)
+    let darkStyle = document.getElementById('bds-theme-overrides') as HTMLStyleElement;
+    if (!darkStyle) {
+      darkStyle = document.createElement('style');
+      darkStyle.id = 'bds-theme-overrides';
+      document.head.appendChild(darkStyle);
+    }
+    if (isDark) {
+      darkStyle.textContent = `
+        .sbdocs-preview { border-color: var(--border-secondary) !important; background: var(--surface-primary) !important; }
+        .docblock-argstable { border-color: var(--border-secondary) !important; }
+        .docblock-argstable th, .docblock-argstable td { border-color: var(--border-muted) !important; color: var(--text-primary) !important; }
+        .docblock-argstable th { background: var(--surface-secondary) !important; }
+        [class*="ActionBar"] button { color: var(--text-muted) !important; }
+      `;
+    } else {
+      darkStyle.textContent = '';
+    }
   }, [themeNum]);
 
   const theme = previewThemes[themeNum] || previewThemes['brik'];
@@ -116,10 +137,14 @@ const withTheme: Decorator = (Story, context) => {
     body.className = body.className.replace(/\btheme-\S+/g, '');
     body.classList.remove('dark', 'light');
 
-    // Handle brik-dark: apply .theme-brik.dark (two classes)
-    // All other themes: apply .theme-X as before
+    // Apply theme classes:
+    // - brik-dark: .theme-brik.dark
+    // - client-sim (Font Audit): .theme-brik.theme-client-sim (inherit Brik colors, override fonts)
+    // - all others: .theme-X
     if (themeNumber === 'brik-dark') {
       body.classList.add('body', 'theme-brik', 'dark');
+    } else if (themeNumber === 'client-sim') {
+      body.classList.add('body', 'theme-brik', 'theme-client-sim', 'light');
     } else {
       body.classList.add('body', `theme-${themeNumber}`, 'light');
     }
@@ -127,6 +152,27 @@ const withTheme: Decorator = (Story, context) => {
     // Set dark mode data attribute for CSS selectors that need light/dark branching
     const isDark = storybookThemes[themeNumber]?.base === 'dark';
     body.setAttribute('data-bds-dark', String(isDark));
+
+    // Force dark mode overrides on emotion-styled Storybook elements.
+    // Emotion injects CSS AFTER our stylesheets, winning specificity battles.
+    // This <style> tag at the end of <head> runs after emotion, guaranteed to win.
+    let darkStyle = document.getElementById('bds-theme-overrides') as HTMLStyleElement;
+    if (!darkStyle) {
+      darkStyle = document.createElement('style');
+      darkStyle.id = 'bds-theme-overrides';
+      document.head.appendChild(darkStyle);
+    }
+    if (isDark) {
+      darkStyle.textContent = `
+        .sbdocs-preview { border-color: var(--border-secondary) !important; background: var(--surface-primary) !important; }
+        .docblock-argstable { border-color: var(--border-secondary) !important; }
+        .docblock-argstable th, .docblock-argstable td { border-color: var(--border-muted) !important; color: var(--text-primary) !important; }
+        .docblock-argstable th { background: var(--surface-secondary) !important; }
+        [class*="ActionBar"] button { color: var(--text-muted) !important; }
+      `;
+    } else {
+      darkStyle.textContent = '';
+    }
 
     // Base font size — scales all rem-based tokens
     body.style.fontSize = `${baseFont}px`;

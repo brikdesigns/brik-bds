@@ -10,13 +10,15 @@
   line-height: var(--font-line-height-tight);
   border-radius: var(--border-radius-pill);
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   min-width: 0;
 }
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
-.bds-counter--xs { padding: var(--space-50) var(--padding-tiny); font-size: var(--body-tiny); }
-.bds-counter--sm { padding: var(--padding-tiny) var(--padding-sm); font-size: var(--body-tiny); }
+.bds-counter--xs { padding: var(--space-50) var(--padding-tiny); font-size: var(--label-tiny); }
+.bds-counter--sm { padding: var(--padding-tiny) var(--padding-sm); font-size: var(--label-tiny); }
 .bds-counter--md { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-sm); }
 .bds-counter--lg { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-md); }
 

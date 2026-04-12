@@ -1,0 +1,72 @@
+/**
+ * BDS Motion Utility Classes
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Composable CSS classes for common animation patterns. Apply directly in JSX:
+ *
+ *   <Dot status="error" className="bds-anim-pulse" />
+ *   <div className="bds-enter-pop">New content</div>
+ *
+ * Requires: animations.css (shared keyframes) imported first.
+ * All classes use BDS duration/easing tokens for theme consistency.
+ *
+ * Import in consumer projects (opt-in):
+ *   @import '../../brik-bds/tokens/animations.css';
+ *   @import '../../brik-bds/tokens/motion-classes.css';
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ─── Entrance animations ───────────────────────────────────────────────────
+   Apply once on mount — element animates into view                           */
+
+.bds-enter-fade {
+  animation: bds-fade-in var(--duration-normal) var(--ease-out) both;
+}
+
+.bds-enter-slide-up {
+  animation: bds-slide-up var(--duration-normal) var(--ease-out) both;
+}
+
+.bds-enter-slide-down {
+  animation: bds-slide-down var(--duration-normal) var(--ease-out) both;
+}
+
+.bds-enter-pop {
+  animation: bds-pop var(--duration-slow) var(--ease-spring) both;
+}
+
+/* ─── Attention animations ──────────────────────────────────────────────────
+   Draw the eye to a changed state — persistent or one-shot                   */
+
+.bds-anim-pulse {
+  animation: bds-pulse 1.4s var(--ease-in-out) infinite;
+}
+
+.bds-anim-shake {
+  animation: bds-shake 0.5s var(--ease-out);
+}
+
+.bds-anim-bounce {
+  animation: bds-pop var(--duration-slow) var(--ease-spring);
+}
+
+/* ─── State animations ──────────────────────────────────────────────────────
+   Continuous indicators for loading / processing                             */
+
+.bds-anim-spin {
+  animation: bds-spin 0.8s linear infinite;
+}
+
+.bds-anim-shimmer {
+  animation: bds-shimmer 1.5s linear infinite;
+}
+
+/* ─── Stagger helpers ───────────────────────────────────────────────────────
+   Combine with entrance classes for sequential list appearance:
+   <li className="bds-enter-fade bds-stagger-2"> ... </li>                   */
+
+.bds-stagger-1 { animation-delay: var(--stagger-1); }
+.bds-stagger-2 { animation-delay: var(--stagger-2); }
+.bds-stagger-3 { animation-delay: var(--stagger-3); }
+.bds-stagger-4 { animation-delay: var(--stagger-4); }
+.bds-stagger-5 { animation-delay: var(--stagger-5); }
+.bds-stagger-6 { animation-delay: var(--stagger-6); }

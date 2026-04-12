@@ -17,6 +17,8 @@
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
   border-radius: var(--border-radius-pill);
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* ─── Sizes (shared scale with Tag) ──────────────────────────── */
@@ -34,22 +36,19 @@
 .bds-badge--sm {
   padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
-  font-family: var(--font-family-subtitle);
-  font-size: var(--subtitle-sm);
+  font-size: var(--label-tiny);
 }
 
 .bds-badge--md {
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-sm);
-  /* bds-lint-ignore — 14px has no subtitle token; using base font-size */
-  font-size: var(--font-size-75);
+  font-size: var(--label-sm);
 }
 
 .bds-badge--lg {
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-md);
-  font-family: var(--font-family-subtitle);
-  font-size: var(--subtitle-lg);
+  font-size: var(--label-md);
 }
 
 /* ─── Icon Wrapper (shared sizing with Tag) ──────────────────── */
@@ -61,27 +60,27 @@
   flex-shrink: 0;
 }
 
-/* bds-lint-ignore — Figma-driven icon dimensions, numeric for width/height */
+/* Icon font-size matches container so the glyph fills the box */
 .bds-badge--xs .bds-badge__icon {
-  font-size: var(--icon-tiny);
+  font-size: var(--icon-xs);
 }
 
 .bds-badge--sm .bds-badge__icon {
   width: 14px;
   height: 14px;
-  font-size: var(--icon-tiny);
+  font-size: var(--icon-xs);
 }
 
 .bds-badge--md .bds-badge__icon {
   width: 16px;
   height: 16px;
-  font-size: var(--icon-xs);
+  font-size: var(--icon-sm);
 }
 
 .bds-badge--lg .bds-badge__icon {
   width: 20px;
   height: 20px;
-  font-size: var(--icon-sm);
+  font-size: var(--label-xl);
 }
 
 /* ─── Status × Dark (default) ─────────────────────────────────── */
@@ -138,42 +137,22 @@
   color: var(--text-status-info);
 }
 
-/* ─── Notification micro-interactions ───────────────────────── */
-
-@keyframes bds-badge-pop {
-  0%   { transform: scale(0); opacity: 0; }
-  60%  { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes bds-badge-shake {
-  0%, 100% { transform: rotate(0deg); }
-  15%      { transform: rotate(12deg); }
-  30%      { transform: rotate(-10deg); }
-  45%      { transform: rotate(8deg); }
-  60%      { transform: rotate(-6deg); }
-  75%      { transform: rotate(3deg); }
-}
+/* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */
 
 /* Pop-in: badge appears with a bounce scale */
 .bds-badge--animate-in {
-  animation: bds-badge-pop var(--duration-slow) var(--ease-out);
+  animation: bds-pop var(--duration-slow) var(--ease-out);
 }
 
 /* Shake: bell icon / notification attention-getter */
 .bds-badge--shake {
-  animation: bds-badge-shake 0.5s var(--ease-out); /* bds-lint-ignore — shake needs specific timing */
+  animation: bds-shake 0.5s var(--ease-out); /* bds-lint-ignore — shake needs specific timing */
 }
 
 /* Pulse: persistent attention on unread notification badges */
 .bds-badge--pulse {
-  animation: bds-badge-pop var(--duration-slow) var(--ease-out),
-    bds-dot-pulse 1.4s var(--ease-in-out) 0.3s infinite;
-}
-
-@keyframes bds-dot-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.7; transform: scale(1.1); }
+  animation: bds-pop var(--duration-slow) var(--ease-out),
+    bds-pulse 1.4s var(--ease-in-out) 0.3s infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

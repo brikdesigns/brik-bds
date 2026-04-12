@@ -19,6 +19,8 @@
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--font-line-height-tight);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
   user-select: none;
   border: none;
@@ -44,7 +46,7 @@
 
 .bds-chip--sm {
   padding: var(--space-150) var(--padding-sm);
-  font-size: var(--body-tiny);
+  font-size: var(--label-tiny);
   gap: var(--gap-xs);
 }
 
@@ -106,23 +108,23 @@
   flex-shrink: 0;
 }
 
-/* bds-lint-ignore — Figma-driven icon dimensions */
+/* Icon font-size matches container so the glyph fills the box */
 .bds-chip--sm .bds-chip__icon {
   width: 10px;
   height: 10px;
-  font-size: 10px;
+  font-size: var(--label-tiny);
 }
 
 .bds-chip--md .bds-chip__icon {
   width: 16px;
   height: 16px;
-  font-size: 16px;
+  font-size: var(--icon-sm);
 }
 
 .bds-chip--lg .bds-chip__icon {
   width: 20px;
   height: 20px;
-  font-size: 20px;
+  font-size: var(--label-xl);
 }
 
 .bds-chip__avatar {
