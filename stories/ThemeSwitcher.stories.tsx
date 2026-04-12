@@ -166,7 +166,7 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
       {/* All Themes Grid */}
       <SectionTitle>All available themes</SectionTitle>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--gap-md)' }}>
-        {(['brik', '1', '2', '3', '4', '5', '6', '7', '8'] as ThemeNumber[]).map((num) => (
+        {(['brik', 'brik-dark', 'client-sim'] as ThemeNumber[]).map((num) => (
           <ThemePreview key={num} themeNum={num} isActive={num === currentTheme} />
         ))}
       </div>
@@ -317,30 +317,10 @@ export const BrikBrand: Story = {
   globals: { themeNumber: 'brik' },
 };
 
-export const Dark: Story = {
-  globals: { themeNumber: '2' },
+export const BrikDark: Story = {
+  globals: { themeNumber: 'brik-dark' },
 };
 
-export const Blue: Story = {
-  globals: { themeNumber: '3' },
-};
-
-export const Gold: Story = {
-  globals: { themeNumber: '4' },
-};
-
-export const Peach: Story = {
-  globals: { themeNumber: '5' },
-};
-
-export const Minimal: Story = {
-  globals: { themeNumber: '6' },
-};
-
-export const Warm: Story = {
-  globals: { themeNumber: '7' },
-};
-
-export const Vibrant: Story = {
-  globals: { themeNumber: '8' },
+export const ClientSim: Story = {
+  globals: { themeNumber: 'client-sim' },
 };
