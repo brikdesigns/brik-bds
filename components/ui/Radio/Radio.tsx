@@ -67,6 +67,7 @@ export function Radio({
         className="bds-radio__input"
         {...props}
       />
+      <span className="bds-radio__indicator" aria-hidden />
       <span className="bds-radio__text">{label}</span>
     </label>
   );
