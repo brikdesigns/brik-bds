@@ -9,7 +9,7 @@
   right: 0;
   bottom: 0;
   background-color: var(--background-overlay);
-  z-index: 1000;
+  z-index: 900;
 }
 
 .bds-sheet {
@@ -18,7 +18,7 @@
   box-shadow: var(--shadow-overlay);
   display: flex;
   flex-direction: column;
-  z-index: 1001;
+  z-index: 901;
   overflow: hidden;
   box-sizing: border-box;
 }

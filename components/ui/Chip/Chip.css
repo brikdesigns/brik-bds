@@ -18,9 +18,8 @@
   border-radius: var(--border-radius-pill);
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semi-bold);
-  line-height: var(--font-line-height-tight);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  line-height: var(--font-line-height-normal);
+  text-transform: capitalize;
   cursor: pointer;
   user-select: none;
   border: none;

@@ -3,7 +3,7 @@
 import { type ReactNode, type CSSProperties } from 'react';
 import { Icon } from '@iconify/react';
 import { Sheet } from '../ui/Sheet';
-import { useSheetStack, type SheetFrame } from './SheetStackProvider';
+import { useSheetStack, useSheetConfig, type SheetFrame } from './SheetStackProvider';
 import { bdsClass } from '../utils';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -75,6 +75,7 @@ const headerRowStyle: CSSProperties = {
  */
 export function SheetStackRenderer({ renderFrame, width = '600px', globalFrameProps = {} }: SheetStackRendererProps) {
   const { stack, isOpen, isExiting, direction, back, closeAll, pushSheet } = useSheetStack();
+  const config = useSheetConfig();
 
   if (!isOpen) return null;
 
@@ -89,6 +90,9 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
     globalFrameProps,
   };
 
+  // Resolve title: prefer headless config title, fall back to frame title
+  const baseTitle = config.title ?? topFrame.title ?? topFrame.type;
+
   // Build the title — includes back arrow when stack is deep
   const titleContent = isDeep ? (
     <span style={headerRowStyle}>
@@ -101,10 +105,10 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
       >
         <Icon icon="ph:arrow-left-bold" />
       </button>
-      {topFrame.title ?? topFrame.type}
+      {baseTitle}
     </span>
   ) : (
-    topFrame.title ?? topFrame.type
+    baseTitle
   );
 
   // Animation class for frame content
@@ -114,19 +118,31 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
     !isExiting && direction === 'back' ? 'bds-sheet-stack__frame--back' : '',
   );
 
+  // Headless components return null but must stay mounted for effects (data fetching,
+  // configureSheet calls). Render them in a hidden container outside the Sheet body
+  // so they survive the tabs/body swap inside the Sheet.
+  const frameContent = renderFrame(topFrame, ctx);
+
   return (
-    <Sheet
-      isOpen
-      onClose={closeAll}
-      title={titleContent}
-      width={width}
-      variant={topFrame.variant}
-      closeOnEscape
-    >
-      <div className={frameClass} key={topFrame.key}>
-        {renderFrame(topFrame, ctx)}
-      </div>
-    </Sheet>
+    <>
+      <div style={{ display: 'none' }}>{frameContent}</div>
+      <Sheet
+        isOpen
+        onClose={closeAll}
+        title={titleContent}
+        width={width}
+        variant={topFrame.variant}
+        closeOnEscape
+        tabs={config.tabs}
+        activeTab={config.activeTab}
+        onTabChange={config.onTabChange}
+        footer={config.footer}
+      >
+        <div className={frameClass} key={topFrame.key}>
+          {config.body}
+        </div>
+      </Sheet>
+    </>
   );
 }
 
