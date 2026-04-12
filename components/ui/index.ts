@@ -1,5 +1,6 @@
 // UI Components
 export * from './Accordion';
+export * from './ActivityTimeline';
 export * from './AddressInput';
 export * from './AnimatedIcon';
 export * from './AlertBanner';
@@ -35,6 +36,7 @@ export * from './Meter';
 export * from './Modal';
 export * from './MultiSelect';
 export * from './NavBar';
+export * from './NotificationList';
 export * from './PageHeader';
 export * from './Pagination';
 export * from './PasswordInput';
