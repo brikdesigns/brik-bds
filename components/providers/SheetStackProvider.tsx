@@ -108,6 +108,7 @@ export function SheetStackProvider({ children }: SheetStackProviderProps) {
     clearExitTimer();
     setIsExiting(false);
     setDirection('forward');
+    setSheetConfig({});
     setStack([{
       key: nextKey(type),
       type,
@@ -125,6 +126,7 @@ export function SheetStackProvider({ children }: SheetStackProviderProps) {
     clearExitTimer();
     setIsExiting(false);
     setDirection('forward');
+    setSheetConfig({});
     setStack((prev) => [...prev, {
       key: nextKey(type),
       type,
@@ -146,6 +148,7 @@ export function SheetStackProvider({ children }: SheetStackProviderProps) {
     clearExitTimer();
     exitTimer.current = setTimeout(() => {
       setIsExiting(false);
+      setSheetConfig({});
       setStack((prev) => prev.slice(0, -1));
     }, 150);
   }, [stack.length, clearExitTimer]);
