@@ -37,18 +37,21 @@
   padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
   font-size: var(--label-tiny);
+  height: 28px;
 }
 
 .bds-badge--md {
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-sm);
   font-size: var(--label-sm);
+  height: 32px;
 }
 
 .bds-badge--lg {
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-md);
   font-size: var(--label-md);
+  height: 40px;
 }
 
 /* ─── Icon Wrapper (shared sizing with Tag) ──────────────────── */

@@ -49,6 +49,7 @@
   font-size: var(--label-xs);
   gap: var(--gap-xs);
   border-radius: var(--border-radius-sm);
+  min-height: 36px;
 }
 
 .bds-button--sm {
@@ -63,16 +64,19 @@
 .bds-button--md {
   padding: var(--padding-md);
   font-size: var(--label-md);
+  min-height: 56px;
 }
 
 .bds-button--lg {
   padding: var(--padding-md);
   font-size: var(--label-lg);
+  min-height: 64px;
 }
 
 .bds-button--xl {
   padding: var(--padding-lg);
   font-size: var(--label-xl);
+  min-height: 80px;
 }
 
 /* ─── Variants ────────────────────────────────────────────────── */
