@@ -44,6 +44,7 @@
   padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
   font-size: var(--label-tiny);
+  height: 28px;
   border-radius: var(--border-radius-sm);
 }
 
@@ -51,6 +52,7 @@
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-sm);
   font-size: var(--label-sm);
+  height: 32px;
   border-radius: var(--border-radius-md);
 }
 
@@ -58,6 +60,7 @@
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-md);
   font-size: var(--label-md);
+  height: 40px;
   border-radius: var(--border-radius-md);
 }
 

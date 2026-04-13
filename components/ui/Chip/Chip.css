@@ -47,18 +47,21 @@
   padding: var(--space-150) var(--padding-sm);
   font-size: var(--label-tiny);
   gap: var(--gap-xs);
+  height: 28px;
 }
 
 .bds-chip--md {
   padding: var(--padding-sm) var(--padding-md);
   font-size: var(--label-sm);
   gap: var(--gap-sm);
+  height: 32px;
 }
 
 .bds-chip--lg {
   padding: var(--padding-sm) var(--padding-md);
   font-size: var(--label-md);
   gap: var(--gap-md);
+  height: 40px;
 }
 
 /* ─── Variant + Appearance ────────────────────────────────────── */
