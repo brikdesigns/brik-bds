@@ -44,39 +44,44 @@
 
 /* ─── Sizes ───────────────────────────────────────────────────── */
 
+/*
+ * Height scale shares the same 4px grid as IconButton:
+ *   tiny=24  sm=32  md=40  lg=48  xl=56  (8px steps)
+ *
+ * Vertical centering is handled by the base flexbox (align-items: center).
+ * Only padding-inline remains for horizontal spacing.
+ */
+
 .bds-button--tiny {
-  padding: var(--padding-tiny);
+  height: 24px;
+  padding-inline: var(--padding-tiny);
   font-size: var(--label-xs);
   gap: var(--gap-xs);
   border-radius: var(--border-radius-sm);
-  min-height: 36px;
 }
 
 .bds-button--sm {
-  /* Block padding aligned with TextInput sm (--padding-xs = 10px) so both
-   * components share the same natural height. min-height: 44px snaps to 4px grid. */
-  padding-block: var(--padding-xs);
+  height: 32px;
   padding-inline: var(--padding-sm);
   font-size: var(--label-sm);
-  min-height: 44px;
 }
 
 .bds-button--md {
-  padding: var(--padding-md);
+  height: 40px;
+  padding-inline: var(--padding-md);
   font-size: var(--label-md);
-  min-height: 56px;
 }
 
 .bds-button--lg {
-  padding: var(--padding-md);
+  height: 48px;
+  padding-inline: var(--padding-md);
   font-size: var(--label-lg);
-  min-height: 64px;
 }
 
 .bds-button--xl {
-  padding: var(--padding-lg);
+  height: 56px;
+  padding-inline: var(--padding-lg);
   font-size: var(--label-xl);
-  min-height: 80px;
 }
 
 /* ─── Variants ────────────────────────────────────────────────── */
