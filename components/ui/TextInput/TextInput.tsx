@@ -72,14 +72,14 @@ const fieldWrapperStyles: CSSProperties = {
  * - --border-input (field border — grayscale/light per Figma)
  * - --border-width-md = 1px (border thickness)
  * - --border-radius-md = 4px (field corners)
- * - --padding-xs = 10px (field padding)
+ * - --padding-xs = 10px (horizontal field padding)
  * - --font-family-body (field text font)
  * - --font-weight-regular = 400
  * - --font-line-height-normal = 150%
  */
 const inputBaseStyles: CSSProperties = {
   width: '100%',
-  padding: 'var(--padding-xs)',
+  padding: '0 var(--padding-xs)',
   fontFamily: 'var(--font-family-body)',
   fontWeight: 'var(--font-weight-regular)' as unknown as number,
   lineHeight: 'var(--font-line-height-normal)',
@@ -122,9 +122,12 @@ const helperBaseStyles: CSSProperties = {
 };
 
 /**
- * Size-specific typography tokens (per Figma bds-text-input)
+ * Size-specific styles (per Figma bds-text-input)
  *
- * Figma specs:
+ * Heights match Button scale (8px steps, 4px grid):
+ *   sm=32  md=40  lg=48
+ *
+ * Typography:
  * - sm: label 14px, body 14px
  * - md: label 16px, body 16px
  * - lg: label 18px, body 18px
@@ -132,16 +135,15 @@ const helperBaseStyles: CSSProperties = {
 const sizeStyles: Record<TextInputSize, { label: CSSProperties; input: CSSProperties }> = {
   sm: {
     label: { fontSize: 'var(--label-sm)' },
-    // min-height: 44px snaps to 4px grid and aligns with Button sm
-    input: { fontSize: 'var(--body-sm)', minHeight: '44px' },
+    input: { fontSize: 'var(--body-sm)', height: '32px' },
   },
   md: {
     label: { fontSize: 'var(--label-md)' },
-    input: { fontSize: 'var(--body-md)' },
+    input: { fontSize: 'var(--body-md)', height: '40px' },
   },
   lg: {
     label: { fontSize: 'var(--label-lg)' },
-    input: { fontSize: 'var(--body-lg)' },
+    input: { fontSize: 'var(--body-lg)', height: '48px' },
   },
 };
 
