@@ -26,6 +26,7 @@
   user-select: none;
   overflow: clip;
   transition: background-color var(--duration-normal) var(--ease-out);
+  box-sizing: border-box;
 }
 
 /* ─── Sizes (shared scale with Badge) ────────────────────────── */

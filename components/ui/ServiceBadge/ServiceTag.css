@@ -11,6 +11,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-radius: var(--border-radius-sm);
+  box-sizing: border-box;
 }
 
 .bds-service-tag--has-icon {
@@ -20,17 +21,20 @@
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
 .bds-service-tag--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
+  height: 28px;
+  padding-inline: var(--padding-sm);
   font-size: var(--label-tiny);
 }
 
 .bds-service-tag--md {
-  padding: var(--padding-tiny) var(--padding-sm);
+  height: 32px;
+  padding-inline: var(--padding-sm);
   font-size: var(--label-sm);
 }
 
 .bds-service-tag--lg {
-  padding: var(--padding-sm) var(--padding-md);
+  height: 40px;
+  padding-inline: var(--padding-md);
   font-size: var(--label-md);
 }
 
