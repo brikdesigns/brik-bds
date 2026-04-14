@@ -211,6 +211,26 @@
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
+/* ── Destructive ── */
+.bds-button--destructive:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-negative-hover);
+}
+
+.bds-button--destructive:active:not(:disabled) {
+  background-color: var(--background-negative-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Positive ── */
+.bds-button--positive:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-positive-hover);
+}
+
+.bds-button--positive:active:not(:disabled) {
+  background-color: var(--background-positive-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
 /* ── Danger variants ── */
 .bds-button--danger-outline:hover:not(:disabled):not(.bds-button--loading) {
   background-color: var(--background-accent-red);
@@ -222,8 +242,8 @@
   color: var(--text-on-color-dark);
 }
 
-/* ── Disabled (all variants) ── */
-.bds-button:disabled {
+/* ── Disabled (all variants, except loading) ── */
+.bds-button:disabled:not(.bds-button--loading) {
   background-color: var(--background-disabled);
   color: var(--text-disabled);
   border-color: var(--border-disabled);
