@@ -204,6 +204,57 @@ Danger actions        → color + text/icon (never color alone)
 ```
 
 
+## Button & IconButton sizing
+
+All sizes follow the 4px grid (24, 32, 40, 48, 56px).
+
+```
+tiny  (24px)   Compact UI — sidebar icons, inline badges, dense lists
+sm    (32px)   Secondary controls — filter bar, toolbar, card footers
+md    (40px)   Default — table row actions, form controls, most content areas
+lg    (48px)   Primary actions — page-level CTAs, dialog footers
+xl    (56px)   Hero actions — landing pages, mobile touch targets
+```
+
+**Context rules:**
+
+- **Table cells** → always `md`. Never `sm` — too small for click targets in data rows.
+- **Filter bars / toolbars** → `sm` is acceptable for dense horizontal groupings.
+- **Dialog / sheet actions** → `md` for secondary, `lg` for primary confirm.
+- **Card footers** → `sm` for compact cards, `md` for standard cards.
+- **Inline with text** → `tiny` only, and only when the button is decorative/supplemental.
+
+**IconButton ≠ smaller Button.** An icon-only button at `md` is the same 40px height as a labeled `md` Button. Don't use `sm` IconButton as a "compact alternative" to `md` Button in the same row.
+
+
+## Table cell patterns
+
+Table cells accept any ReactNode. Consistent patterns per column type:
+
+```
+Status column      → Badge or StatusBadge (never raw text for status)
+Action column      → IconButton (md, right-aligned, flex row with gap-xs)
+Name/title column  → TextLink (font-weight-medium, text-primary color)
+Metadata column    → Plain text (text-secondary, body-sm)
+Tag column         → Tag component (sm size)
+```
+
+**Action column rules:**
+
+- Use `IconButton` at `md` size for all row-level actions.
+- Right-align actions with `justify-content: flex-end`.
+- Group multiple actions in a flex row with `gap-xs` spacing.
+- Primary action first (leftmost), secondary/destructive last.
+- Use `title` prop on every IconButton — it is the only label visible on hover.
+
+**Text links in cells:**
+
+- Use `TextLink` component (not raw `<a>` tags) for navigable names/titles.
+- Color: `text-primary` for the link, never `text-brand` inside table rows.
+- No underline by default — underline on hover only.
+- If the entire row is clickable, don't also make the name a link (double navigation).
+
+
 ## Storybook stories
 
 Three required stories per component. Zero redundancy.
