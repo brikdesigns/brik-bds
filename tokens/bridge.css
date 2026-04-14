@@ -1,17 +1,12 @@
 /*
+ * @deprecated — scheduled for removal once Webflow projects migrate to clean token names.
+ *
  * BDS Token Bridge
  *
- * Maps clean BDS token names to Webflow-internal token names.
- * Import this AFTER tokens.css to make both naming systems resolve.
+ * Maps clean BDS token names (--color-*) to legacy Webflow-internal names (--_color---*).
+ * The --_ prefix convention is deprecated. New projects should use figma-tokens.css directly.
  *
- * Clean name (--color-*)              → used by Astro section components
- * Webflow internal (--_color---*)     → used by BDS React components
- *
- * Load order:
- *   1. @brikdesigns/bds/tokens.css    (defines --_color---* names)
- *   2. @brikdesigns/bds/bridge.css    (this file — aliases --color-* to --_color---*)
- *   3. @brikdesigns/bds/styles.css    (component CSS)
- *   4. Your brand-overrides.css       (client theme)
+ * Still exported as @brikdesigns/bds/bridge.css for backward compatibility.
  */
 
 :root {

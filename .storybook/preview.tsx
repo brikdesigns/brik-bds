@@ -11,13 +11,11 @@ import phData from '@iconify-json/ph/icons.json';
 addCollection(phData as Parameters<typeof addCollection>[0]);
 
 // Import token CSS in cascade order:
-// 1. Font declarations (@font-face from Webflow export)
-// 2. Figma tokens (SD output — primitives + semantic defaults)
-// 3. Gap-fills (manual tokens not yet in Figma)
-// 4. Brik Brand theme (light + dark)
-// 5. Font Audit tool (client-sim theme for font-family validation)
-// 6. Storybook overrides (Base mode spacing, UI fixes)
-import '../tokens/fonts.css';
+// 1. Figma tokens (SD output — primitives + semantic defaults)
+// 2. Gap-fills (manual tokens not yet in Figma)
+// 3. Brik Brand theme (light + dark)
+// 4. Font Audit tool (client-sim theme for font-family validation)
+// 5. Storybook overrides (Base mode spacing, UI fixes)
 import '../tokens/figma-tokens.css';
 import '../tokens/gap-fills.css';
 import '../tokens/theme-brik.css';

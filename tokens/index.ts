@@ -544,7 +544,7 @@ export const semanticTypography = {
   "heading--small": "var(--font-size--300)",
   "body--lg": "var(--font-size--200)",
   "heading--tiny": "var(--font-size--100)",
-  "font-family--icon": "\"Font Awesome 6 Pro Solid 900\", Arial, sans-serif",
+  "font-family--icon": "\"Apple Symbols\", \"Segoe UI Symbol\", sans-serif",
   "body--tiny": "var(--font-size--25)",
   "body--xs": "var(--font-size--50)",
   "icon--small": "var(--font-size--75)",
