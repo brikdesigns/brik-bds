@@ -32,6 +32,7 @@
   --background-brand-secondary: #f1f0ec;
   --background-primary: var(--color-grayscale-white);
   --background-secondary: var(--color-grayscale-lightest);
+  --background-secondary-hover: var(--color-grayscale-lighter);
   --background-inverse: var(--color-grayscale-darkest);
   --background-input: var(--color-grayscale-white);
   --background-image: #17171799;

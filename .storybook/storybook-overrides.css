@@ -372,8 +372,8 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
   font-family: var(--font-family-body, inherit) !important;
 }
 
-/* Docs links — brand color (exclude code block and anchor links) */
-.sbdocs a:not([class*="docblock"]):not([class*="anchor"]) {
+/* Docs links — brand color (exclude code blocks, anchors, and button components) */
+.sbdocs a:not([class*="docblock"]):not([class*="anchor"]):not([class*="bds-button"]) {
   color: var(--text-brand-primary) !important;
 }
 

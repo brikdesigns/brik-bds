@@ -128,6 +128,14 @@
   --text-status-neutral:              var(--color-system-neutral);
   --surface-status-info:              var(--color-system-blue-light);
 
+  /* ── System color hover/pressed states ──
+     Darken system colors for interactive feedback on destructive/positive buttons.
+     TODO: promote to Figma variables once interaction states are modeled for system colors. */
+  --background-negative-hover:   color-mix(in srgb, var(--color-system-red) 85%, black);
+  --background-negative-pressed: color-mix(in srgb, var(--color-system-red) 70%, black);
+  --background-positive-hover:   color-mix(in srgb, var(--color-system-green) 85%, black);
+  --background-positive-pressed: color-mix(in srgb, var(--color-system-green) 70%, black);
+
   /* Presence (for Avatar online/away/busy/offline indicators) */
   --background-presence-online:  var(--color-system-green);
   --background-presence-away:    var(--color-system-yellow);
