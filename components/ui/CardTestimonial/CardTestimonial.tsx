@@ -1,4 +1,5 @@
 import { type HTMLAttributes } from 'react';
+import { Icon } from '@iconify/react';
 import { bdsClass } from '../../utils';
 import './CardTestimonial.css';
 
@@ -47,9 +48,7 @@ export function CardTestimonial({
       {rating != null && rating > 0 && (
         <div className="bds-card-testimonial__stars" role="img" aria-label={`${rating} out of 5 stars`}>
           {Array.from({ length: 5 }, (_, i) => (
-            <span key={i} style={{ opacity: i < rating ? 1 : 0.3 }}>
-              {'\uF005'}
-            </span>
+            <Icon key={i} icon="ph:star-fill" style={{ opacity: i < rating ? 1 : 0.3 }} />
           ))}
         </div>
       )}

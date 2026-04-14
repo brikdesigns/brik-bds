@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
+import { Icon } from '@iconify/react';
 import { bdsClass } from '../../utils';
 import './PricingCard.css';
 
@@ -88,7 +89,7 @@ export function PricingCard({
         <ul className="bds-pricing-card__features">
           {features.map((feature) => (
             <li key={feature} className="bds-pricing-card__feature">
-              <span className="bds-pricing-card__checkmark" aria-hidden="true">{'\uF00C'}</span>
+              <Icon icon="ph:check" className="bds-pricing-card__checkmark" aria-hidden="true" />
               {feature}
             </li>
           ))}

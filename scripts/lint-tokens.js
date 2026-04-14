@@ -8,7 +8,7 @@
  *   1. Primitive token usage (use semantic tokens instead)
  *   2. Hardcoded CSS values (use tokens)
  *   3. Unknown tokens (typos or non-existent variables)
- *   4. Spacing values not aligned to 4-point grid (see tokens/GRID-SYSTEM.md)
+ *   4. Spacing values not aligned to 4-point grid (see docs/GRID-SYSTEM.md)
  *
  * Usage:
  *   node scripts/lint-tokens.js              # full report (errors + warnings)
@@ -62,7 +62,7 @@ const ALLOWED_PRIMITIVES = new Set([
 // Grid System Configuration (4-point base)
 // ---------------------------------------------------------------------------
 // Valid spacing values (in pixels). All must be multiples of 4.
-// See tokens/GRID-SYSTEM.md for details.
+// See docs/GRID-SYSTEM.md for details.
 
 const VALID_SPACING_VALUES = {
   // Primitives: --space--[index]: [value]
@@ -612,12 +612,12 @@ function main() {
   const filesIdx = args.indexOf('--files');
   const explicitFiles = filesIdx !== -1 ? args.slice(filesIdx + 1).filter(f => !f.startsWith('--')) : null;
 
-  console.log('\n🔍 BDS Token Linter\n');
+  if (!jsonMode) console.log('\n🔍 BDS Token Linter\n');
 
   // 1. Parse CSS tokens
   const tokens = parseCssTokens();
-  console.log(`  Loaded ${tokens.allTokens.size} tokens (${tokens.semanticTokens.size} semantic, ${tokens.primitiveTokens.size} primitive)`);
-  if (checkGrid) {
+  if (!jsonMode) console.log(`  Loaded ${tokens.allTokens.size} tokens (${tokens.semanticTokens.size} semantic, ${tokens.primitiveTokens.size} primitive)`);
+  if (checkGrid && !jsonMode) {
     console.log('  📐 4-point grid check enabled');
   }
 
@@ -637,10 +637,13 @@ function main() {
 
   const totalFiles = tsxFiles.length + cssFiles.length;
   if (totalFiles === 0) {
-    console.log('  No files to scan — skipping.\n');
+    if (!jsonMode) console.log('  No files to scan — skipping.\n');
+    if (jsonMode) {
+      console.log(JSON.stringify({ errors: 0, warnings: 0, totalFiles: 0, totalTokens: tokens.allTokens.size, violations: [] }, null, 2));
+    }
     process.exit(0);
   }
-  console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css files...\n`);
+  if (!jsonMode) console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css files...\n`);
 
   // 3. Scan components for token usage violations
   const allViolations = [];
@@ -767,7 +770,7 @@ function main() {
   const hasGridViolations = filtered.some(v => v.rule === 'grid-4pt');
   if (hasGridViolations) {
     console.log('  📐 Grid: BDS uses a 4-point grid. All spacing should be divisible by 4.');
-    console.log('     Exempt: 0, 1px, 2px (micro). See tokens/GRID-SYSTEM.md\n');
+    console.log('     Exempt: 0, 1px, 2px (micro). See docs/GRID-SYSTEM.md\n');
   }
 
   process.exit(errorCount > 0 ? 1 : 0);

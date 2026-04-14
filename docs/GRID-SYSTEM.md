@@ -232,7 +232,7 @@ Before adding a new token:
 
 - **4-Point Grid Article**: [Medium - Designing with Spacing: The Power of a 4-Point System](https://medium.com/@linz07m/designing-with-spacing-the-power-of-a-4-point-system-949771d8dbf4)
 - **8-Point Grid Article**: [UX Planet - Everything You Should Know About 8-Point Grid System](https://uxplanet.org/everything-you-should-know-about-8-point-grid-system-in-ux-design-b69cb945b18d)
-- **Token Reference**: [tokens/TOKEN-REFERENCE.md](./TOKEN-REFERENCE.md)
+- **Token Reference**: [docs/TOKEN-REFERENCE.md](./TOKEN-REFERENCE.md)
 - **Theme System**: [tokens/themes.css](./themes.css)
 
 ---
