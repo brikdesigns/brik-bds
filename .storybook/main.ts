@@ -35,7 +35,7 @@ const config: StorybookConfig = {
     wip: { excludeFromSidebar: true },
   },
   features: {
-    experimentalCodeExamples: true,
+    experimentalComponentsManifest: true,
   },
   docs: {
     defaultName: 'Overview',
