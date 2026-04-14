@@ -113,21 +113,22 @@ const inputBaseStyles: CSSProperties = {
 };
 
 /**
- * Size-specific padding and font-size
+ * Size-specific styles
+ *
+ * Heights match Button scale (8px steps, 4px grid):
+ *   sm=32  md=40
  */
 const inputSizeStyles: Record<SearchInputSize, CSSProperties> = {
   md: {
     fontSize: 'var(--body-md)',
-    paddingTop: 'var(--padding-xs)',
+    height: '40px',
     paddingRight: 'var(--padding-xs)',
-    paddingBottom: 'var(--padding-xs)',
     paddingLeft: 'calc(var(--padding-sm) + 16px + var(--gap-sm))',
   },
   sm: {
     fontSize: 'var(--body-sm)',
-    paddingTop: 'var(--gap-md)',
+    height: '32px',
     paddingRight: 'var(--padding-xs)',
-    paddingBottom: 'var(--gap-md)',
     paddingLeft: 'calc(var(--padding-sm) + 16px + var(--gap-sm))',
   },
 };

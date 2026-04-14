@@ -216,7 +216,7 @@ Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform out
 
 **Never manually add tokens to CSS files.** Style Dictionary is the single build path.
 
-See [tokens/TOKEN-REFERENCE.md](tokens/TOKEN-REFERENCE.md) for complete reference.
+See [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md) for complete reference.
 See [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) for the consumption pattern in app projects.
 
 ## Spacing Modes

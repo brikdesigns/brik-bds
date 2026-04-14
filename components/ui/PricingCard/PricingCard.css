@@ -107,10 +107,8 @@
 }
 
 .bds-pricing-card__checkmark {
-  font-family: var(--font-family-icon);
   color: var(--text-brand-primary);
   flex-shrink: 0;
-  line-height: var(--font-line-height-normal);
 }
 
 /* ─── Action footer ───────────────────────────────────── */

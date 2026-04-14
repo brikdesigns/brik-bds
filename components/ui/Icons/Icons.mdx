@@ -5,24 +5,35 @@ import * as Stories from './Icons.stories';
 
 # Icons
 
-Font Awesome 7 icon reference for BDS. This is a **living document** — add new icons here as they're adopted in components.
+Iconify + Phosphor icon reference for BDS. Icons render as inline SVGs via `@iconify/react` using the [Phosphor](https://phosphoricons.com/) collection (`ph:*`).
 
 ---
 
 ## Setup
 
-| Package | Version | Style |
-|---------|---------|-------|
-| `@fortawesome/free-solid-svg-icons` | 7.2+ | Solid (filled) |
-| `@fortawesome/react-fontawesome` | 3.2+ | React wrapper |
+| Package | Purpose |
+|---------|---------|
+| `@iconify/react` | Renders any Iconify icon as a React `<Icon>` component |
+| `@iconify-json/ph` | Phosphor icon data (bundled for offline/SSR use) |
 
-Storybook configures `autoAddCss = false` in `.storybook/preview.tsx` — icon styles are imported once via `@fortawesome/fontawesome-svg-core/styles.css`.
+BDS registers the Phosphor collection at startup in `.storybook/preview.tsx` via `addCollection()`. No CDN calls needed.
+
+### Usage
+
+```tsx
+import { Icon } from '@iconify/react';
+
+// Direct string reference
+<Icon icon="ph:star-fill" />
+
+// Or import from BDS constants (preferred inside BDS components)
+import { Star } from '../../icons';
+<Icon icon={Star} />
+```
+
+BDS icon constants live in `components/icons.ts` and follow the pattern `export const Name = 'ph:icon-name';`.
 
 ---
-
-## Setup
-
-Package info, usage pattern, and style availability.
 
 <Canvas of={Stories.Setup} />
 
@@ -58,7 +69,7 @@ Industry-specific and feature/marketing icons for cards and landing pages.
 
 ## Sizing
 
-Built-in FA size prop and `fixedWidth` for aligned icon menus.
+Iconify icons inherit `font-size` from their parent or accept an explicit `width`/`height` prop.
 
 <Canvas of={Stories.Sizing} />
 
@@ -66,16 +77,11 @@ Built-in FA size prop and `fixedWidth` for aligned icon menus.
 
 ## Adding icons
 
-1. Import from `@fortawesome/free-solid-svg-icons`
-2. Add to the relevant category story above
-3. If a new category is needed, add a new story section
+1. Find the icon name at [phosphoricons.com](https://phosphoricons.com/)
+2. Add a named constant to `components/icons.ts` using the `ph:icon-name` format
+3. Add to the relevant category story above
+4. If a new category is needed, add a new story section
 
-## Outline vs filled
+## Variants
 
-Only **solid** (filled) is installed. To add outline style:
-
-```bash
-npm i @fortawesome/free-regular-svg-icons
-```
-
-Then import from `@fortawesome/free-regular-svg-icons` with the `far` prefix convention.
+Phosphor provides six weights per icon: `ph:name` (regular), `ph:name-bold`, `ph:name-fill`, `ph:name-light`, `ph:name-thin`, `ph:name-duotone`. BDS uses regular and fill variants.

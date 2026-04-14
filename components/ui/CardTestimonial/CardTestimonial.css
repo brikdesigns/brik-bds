@@ -89,7 +89,6 @@
 .bds-card-testimonial__stars {
   display: flex;
   gap: var(--gap-md);
-  font-family: var(--font-family-icon);
   font-size: var(--heading-lg);
   line-height: var(--font-line-height-snug);
   color: var(--background-warning);

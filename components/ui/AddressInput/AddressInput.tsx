@@ -141,17 +141,22 @@ const inputBaseStyles: CSSProperties = {
 };
 
 /**
- * Size-specific padding and font-size
+ * Size-specific styles
+ *
+ * Heights match Button scale (8px steps, 4px grid):
+ *   sm=32  md=40
  */
 const inputSizeStyles: Record<AddressInputSize, CSSProperties> = {
   md: {
     fontSize: 'var(--body-md)',
-    padding: 'var(--padding-sm)',
+    height: '40px',
+    paddingRight: 'var(--padding-sm)',
     paddingLeft: 'calc(var(--padding-sm) + 24px)',
   },
   sm: {
     fontSize: 'var(--body-sm)',
-    padding: 'var(--gap-md) var(--padding-xs)',
+    height: '32px',
+    paddingRight: 'var(--padding-xs)',
     paddingLeft: 'calc(var(--padding-xs) + 24px)',
   },
 };

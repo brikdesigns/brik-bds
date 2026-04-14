@@ -12,14 +12,12 @@ export default defineConfig({
       fileName: (format) => format === 'es' ? 'index.esm.js' : 'index.cjs.js',
     },
     rollupOptions: {
-      // Externalize peer dependencies — do NOT bundle React or FontAwesome
+      // Externalize peer dependencies — do NOT bundle React or Iconify
       external: [
         'react',
         'react/jsx-runtime',
         'react-dom',
-        '@fortawesome/react-fontawesome',
-        '@fortawesome/free-solid-svg-icons',
-        '@fortawesome/fontawesome-svg-core',
+        '@iconify/react',
       ],
       output: {
         globals: {

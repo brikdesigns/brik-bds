@@ -30,7 +30,7 @@ For new or composite components, use Paper (Claude Code's HTML canvas) to iterat
 
 **The exit:** Once the Paper design is approved internally, export the token usage as a reference and implement directly in `.tsx` + `.css`. The component CSS should map almost 1:1 with what Paper used.
 
-**Token reference:** `tokens/TOKEN-REFERENCE.md` — validate every token before using it in Paper or CSS.
+**Token reference:** `docs/TOKEN-REFERENCE.md` — validate every token before using it in Paper or CSS.
 
 
 ## File structure

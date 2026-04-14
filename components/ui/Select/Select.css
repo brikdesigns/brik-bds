@@ -59,26 +59,28 @@
   cursor: pointer;
   appearance: none;
   box-sizing: border-box;
-  padding-right: calc(var(--padding-xs) * 4);
+  padding-inline: var(--padding-xs) calc(var(--padding-xs) * 4);
 }
 
-/* Size variants */
+/*
+ * Height scale matches Button (8px steps, 4px grid):
+ *   sm=32  md=40  lg=48
+ * Horizontal padding lives on the base .bds-select rule.
+ * Browser auto-centers text within the explicit height.
+ */
 .bds-select--sm {
   font-size: var(--body-sm);
-  padding: var(--padding-xs);
-  height: calc(var(--padding-xs) * 2 + 1.5em + var(--border-width-md) * 2);
+  height: 32px;
 }
 
 .bds-select--md {
   font-size: var(--body-md);
-  padding: var(--padding-xs);
-  height: calc(var(--padding-xs) * 2 + 1.5em + var(--border-width-md) * 2);
+  height: 40px;
 }
 
 .bds-select--lg {
   font-size: var(--body-lg);
-  padding: var(--padding-xs);
-  height: calc(var(--padding-xs) * 2 + 1.5em + var(--border-width-md) * 2);
+  height: 48px;
 }
 
 /* With icon — extra left padding */

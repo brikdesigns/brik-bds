@@ -13,6 +13,7 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  width: fit-content;
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semi-bold);
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
