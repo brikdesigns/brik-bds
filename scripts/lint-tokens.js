@@ -612,12 +612,12 @@ function main() {
   const filesIdx = args.indexOf('--files');
   const explicitFiles = filesIdx !== -1 ? args.slice(filesIdx + 1).filter(f => !f.startsWith('--')) : null;
 
-  console.log('\n🔍 BDS Token Linter\n');
+  if (!jsonMode) console.log('\n🔍 BDS Token Linter\n');
 
   // 1. Parse CSS tokens
   const tokens = parseCssTokens();
-  console.log(`  Loaded ${tokens.allTokens.size} tokens (${tokens.semanticTokens.size} semantic, ${tokens.primitiveTokens.size} primitive)`);
-  if (checkGrid) {
+  if (!jsonMode) console.log(`  Loaded ${tokens.allTokens.size} tokens (${tokens.semanticTokens.size} semantic, ${tokens.primitiveTokens.size} primitive)`);
+  if (checkGrid && !jsonMode) {
     console.log('  📐 4-point grid check enabled');
   }
 
@@ -637,10 +637,13 @@ function main() {
 
   const totalFiles = tsxFiles.length + cssFiles.length;
   if (totalFiles === 0) {
-    console.log('  No files to scan — skipping.\n');
+    if (!jsonMode) console.log('  No files to scan — skipping.\n');
+    if (jsonMode) {
+      console.log(JSON.stringify({ errors: 0, warnings: 0, totalFiles: 0, totalTokens: tokens.allTokens.size, violations: [] }, null, 2));
+    }
     process.exit(0);
   }
-  console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css files...\n`);
+  if (!jsonMode) console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css files...\n`);
 
   // 3. Scan components for token usage violations
   const allViolations = [];
