@@ -19,6 +19,7 @@
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  box-sizing: border-box;
 }
 
 /* ─── Sizes (shared scale with Tag) ──────────────────────────── */
