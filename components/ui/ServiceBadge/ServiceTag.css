@@ -53,4 +53,20 @@
   display: block;
   flex-shrink: 0;
 }
+
+/* ─── Icon-only variant (square badge) ───────────────────────── */
+
+.bds-service-tag--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* bds-lint-ignore — Figma-driven badge dimensions */
+.bds-service-tag--icon-sm { width: 20px; height: 20px; border-radius: var(--border-radius-sm); } /* bds-lint-ignore */
+.bds-service-tag--icon-md { width: 28px; height: 28px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
+.bds-service-tag--icon-lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
 }

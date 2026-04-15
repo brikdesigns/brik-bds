@@ -4,7 +4,7 @@ import { PageHeader } from './PageHeader';
 import { Breadcrumb } from '../Breadcrumb';
 import { TabBar, type TabItem } from '../TabBar';
 import { Button } from '../Button';
-import { ServiceBadge } from '../ServiceBadge';
+import { ServiceTag } from '../ServiceBadge';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
@@ -139,7 +139,7 @@ export const Variants: Story = {
           <PageHeader
             title="Brand Design"
             subtitle="Service details and billing info."
-            badge={<ServiceBadge category="brand" serviceName="Brand Identity Bundle" size="lg" />}
+            badge={<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />}
             breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
             actions={
               <>
@@ -191,7 +191,7 @@ export const Patterns: Story = {
           <PageHeader
             title="Website Design"
             subtitle="Custom web development and design service."
-            badge={<ServiceBadge category="marketing" serviceName="Custom Standard Web Development and Design" size="lg" />}
+            badge={<ServiceTag category="marketing" variant="icon" serviceName="Custom Standard Web Development and Design" size="lg" />}
             breadcrumbs={
               <Breadcrumb items={[
                 { label: 'Admin', href: '#' },

@@ -1,0 +1,107 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './ServiceTag.stories';
+
+<Meta of={Stories} />
+
+# Service Tag
+
+Colored indicator identifying Brik service categories. Each category has a dedicated color palette used across the Brik ecosystem for consistent service identification.
+
+Available in three variants:
+- **`text`** — colored pill with label text only
+- **`icon-text`** — colored pill with service icon + label text
+- **`icon`** — colored square with service icon only (the icon badge, previously `ServiceBadge`)
+
+---
+
+## Playground
+
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+All three display variants across categories and sizes.
+
+<Canvas of={Stories.Variants} />
+
+- **Brand** — Yellow
+- **Marketing** — Green
+- **Information** — Blue
+- **Product** — Purple
+- **Back Office** — Orange
+
+## All services (icon-text)
+
+Complete catalog of all services with icon + text, organized by category.
+
+<Canvas of={Stories.AllServices} />
+
+## All services (icon)
+
+Complete catalog of all service icon badges, organized by category.
+
+<Canvas of={Stories.AllServicesIcon} />
+
+## Patterns
+
+Real-world usage: table cells, service lists, and color palette reference.
+
+<Canvas of={Stories.Patterns} />
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { ServiceTag } from '@brik/bds';
+
+// Text pill — category label
+<ServiceTag category="marketing" />
+
+// Text pill — custom label
+<ServiceTag category="brand" label="Brand Identity Bundle" />
+
+// Icon + text pill
+<ServiceTag category="marketing" variant="icon-text" serviceName="Email Drip Campaign (Up to 6 Emails)" label="Email Campaign" />
+
+// Icon-only badge (square)
+<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" />
+<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
+
+// Sizes
+<ServiceTag category="product" size="sm" />
+<ServiceTag category="product" size="lg" />
+```
+
+---
+
+## Migration from ServiceBadge
+
+`ServiceBadge` is deprecated. Migrate to `ServiceTag variant="icon"`:
+
+```tsx
+// Old
+<ServiceBadge category="brand" serviceName="Brand Identity Bundle" size="lg" />
+
+// New
+<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
+```
+
+---
+
+## Icon resolution
+
+The `serviceName` prop resolves to an SVG icon via two mechanisms:
+
+- **Explicit overrides** — common service names map directly to icon files (e.g., "Premium Logo Design" resolves to `brand-logo.svg`)
+- **Normalization** — service names are lowercased and hyphenated, then prefixed by category (e.g., "Brand Guidelines" resolves to `brand-guidelines.svg`)
+
+Icons are stored in `components/ui/ServiceBadge/icons/[category]/` and served from `.storybook/public/icons/` in Storybook.

@@ -19,7 +19,7 @@ Use the Controls panel to explore all props interactively.
 
 All slot combinations: title only, subtitle, breadcrumbs, actions, tabs, metadata, and full composition.
 
-- **`badge`** — `ServiceBadge` icon badge left of title (service pages)
+- **`badge`** — `ServiceTag variant="icon"` icon badge left of title (service pages)
 - **`breadcrumbs`** — `Breadcrumb` navigation trail above title
 - **`actions`** — `Button` action buttons aligned right
 - **`tabs`** — `TabBar` tab navigation below title
@@ -44,13 +44,13 @@ Real-world usage: company detail pages and analytics dashboards.
 ## Usage
 
 ```tsx
-import { PageHeader, Breadcrumb, TabBar, Button, ServiceBadge } from '@brik/bds';
+import { PageHeader, Breadcrumb, TabBar, Button, ServiceTag } from '@brik/bds';
 
-// With service badge
+// With service icon badge
 <PageHeader
   title="Website Design"
   subtitle="Custom web development and design."
-  badge={<ServiceBadge category="marketing" serviceName="Custom Standard Web Development and Design" size="lg" />}
+  badge={<ServiceTag category="marketing" variant="icon" serviceName="Custom Standard Web Development and Design" size="lg" />}
   breadcrumbs={<Breadcrumb items={[{ label: 'Services', href: '/' }, { label: 'Website Design' }]} />}
   actions={<Button variant="primary">Edit Service</Button>}
 />
