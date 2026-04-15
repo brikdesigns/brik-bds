@@ -18,7 +18,7 @@ const meta: Meta<typeof ServiceTag> = {
     },
     variant: {
       control: 'select',
-      options: ['text', 'icon-text'],
+      options: ['text', 'icon-text', 'icon'],
     },
     size: {
       control: 'select',
@@ -57,7 +57,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 
 const categories = Object.keys(categoryConfig) as ServiceCategory[];
 
-// One representative service per category for icon-text stories
+// One representative service per category for icon-text and icon stories
 const categoryServices: Record<ServiceCategory, { serviceName: string; label: string }> = {
   brand:       { serviceName: 'Brand Identity Bundle',                         label: 'Brand Design' },
   marketing:   { serviceName: 'Custom Standard Web Development and Design',    label: 'Marketing Design' },
@@ -66,7 +66,7 @@ const categoryServices: Record<ServiceCategory, { serviceName: string; label: st
   service:     { serviceName: 'Digital File Organization',                     label: 'Back Office' },
 };
 
-// Full service list for the icon-text catalog story
+// Full service list for catalog stories
 const allServices: Record<ServiceCategory, { serviceName: string; label: string }[]> = {
   brand: [
     { serviceName: 'Brand Business Card',                                    label: 'Business Card' },
@@ -81,16 +81,22 @@ const allServices: Record<ServiceCategory, { serviceName: string; label: string 
     { serviceName: 'Comprehensive Marketing Audit & Consultation',           label: 'Consulting' },
     { serviceName: 'Marketing Design',                                       label: 'Design' },
     { serviceName: 'Email Drip Campaign (Up to 6 Emails)',                   label: 'Email' },
+    { serviceName: 'Marketing Email Signature',                              label: 'Email Signature' },
     { serviceName: 'Landing Pages',                                          label: 'Landing Pages' },
     { serviceName: 'Social Media Graphic Designs',                           label: 'Social Graphics' },
     { serviceName: 'Swag and Merchandise Design',                            label: 'Swag' },
     { serviceName: 'Custom Standard Web Development and Design',             label: 'Web Design' },
+    { serviceName: 'Patient Experience Mapping',                             label: 'Patient Experience' },
+    { serviceName: 'Website Experience Mapping',                             label: 'Website Experience' },
   ],
   information: [
     { serviceName: 'Digital Design',                                         label: 'Digital Design' },
     { serviceName: 'Infographics',                                           label: 'Infographics' },
+    { serviceName: 'Intake Form',                                            label: 'Intake Form' },
     { serviceName: 'Layout Design',                                          label: 'Layout Design' },
     { serviceName: 'Print Design',                                           label: 'Print Design' },
+    { serviceName: 'Sales Materials',                                        label: 'Sales Materials' },
+    { serviceName: 'Signage',                                                label: 'Signage' },
     { serviceName: 'Welcome Kit',                                            label: 'Welcome Kit' },
     { serviceName: 'Information Design',                                     label: 'Information Design' },
   ],
@@ -105,11 +111,14 @@ const allServices: Record<ServiceCategory, { serviceName: string; label: string 
     { serviceName: 'Software and Subscription Audit',                        label: 'Audit' },
     { serviceName: 'Software Automation Setup',                              label: 'Automated Workflow' },
     { serviceName: 'Automated Workflow and AI Integration',                  label: 'Automation & AI' },
+    { serviceName: 'Standard Operating Procedures (SOP) Creation',          label: 'Business Solutions' },
     { serviceName: 'Back Office Consulting',                                 label: 'Consulting' },
     { serviceName: 'CRM Setup and Data Cleanup',                             label: 'CRM & Data' },
     { serviceName: 'Back Office Customer Support',                           label: 'Customer Support' },
+    { serviceName: 'Back Office Design',                                     label: 'Design' },
     { serviceName: 'Digital File Organization',                              label: 'File Organization' },
     { serviceName: 'Customer Journey Mapping',                               label: 'Journey Mapping' },
+    { serviceName: 'Back Office Software Audit',                             label: 'Software Audit' },
     { serviceName: 'Back Office SOP Creation',                               label: 'SOP Creation' },
     { serviceName: 'Back Office Training Setup',                             label: 'Training Setup' },
   ],
@@ -130,7 +139,7 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Both display variants × all categories × sizes
+   2. VARIANTS — All display variants × all categories × sizes
    ═══════════════════════════════════════════════════════════════ */
 
 export const Variants: Story = {
@@ -192,6 +201,39 @@ export const Variants: Story = {
           ))}
         </Stack>
       </div>
+
+      <div>
+        <SectionLabel>Icon only — all categories</SectionLabel>
+        <Row>
+          {categories.map((cat) => (
+            <ServiceTag
+              key={cat}
+              category={cat}
+              variant="icon"
+              serviceName={categoryServices[cat].serviceName}
+            />
+          ))}
+        </Row>
+      </div>
+
+      <div>
+        <SectionLabel>Icon only — sizes</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <Row key={size}>
+              {categories.map((cat) => (
+                <ServiceTag
+                  key={cat}
+                  category={cat}
+                  variant="icon"
+                  size={size}
+                  serviceName={categoryServices[cat].serviceName}
+                />
+              ))}
+            </Row>
+          ))}
+        </Stack>
+      </div>
     </Stack>
   ),
 };
@@ -231,7 +273,41 @@ export const AllServices: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   4. PATTERNS — Real-world usage contexts
+   4. ALL SERVICES — Complete icon catalog by category
+   ═══════════════════════════════════════════════════════════════ */
+
+export const AllServicesIcon: Story = {
+  name: 'All services (icon)',
+  parameters: { layout: 'padded' },
+  render: () => (
+    <Stack>
+      {categories.map((cat) => (
+        <div key={cat}>
+          <SectionLabel>{`${categoryConfig[cat].label} (${allServices[cat].length})`}</SectionLabel>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+            gap: 'var(--gap-lg)',
+          }}>
+            {allServices[cat].map(({ serviceName, label }) => (
+              <div key={serviceName} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+                <ServiceTag category={cat} variant="icon" size="lg" serviceName={serviceName} />
+                <span style={{
+                  fontFamily: 'var(--font-family-body)',
+                  fontSize: 'var(--body-sm)', // bds-lint-ignore
+                  color: 'var(--text-primary)',
+                }}>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </Stack>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   5. PATTERNS — Real-world usage contexts
    ═══════════════════════════════════════════════════════════════ */
 
 export const Patterns: Story = {
@@ -300,6 +376,50 @@ export const Patterns: Story = {
             </div>
           ))}
         </div>
+      </div>
+
+      <div>
+        <SectionLabel>Service list with icon badges</SectionLabel>
+        <Stack gap="var(--gap-md)">
+          {[
+            { category: 'marketing' as const, serviceName: 'Custom Standard Web Development and Design', label: 'Website Design & Development' },
+            { category: 'brand' as const, serviceName: 'Brand Identity Bundle', label: 'Logo Design & Brand Guidelines' },
+            { category: 'service' as const, serviceName: 'CRM Setup and Data Cleanup', label: 'CRM Setup & Data Cleanup' },
+            { category: 'information' as const, serviceName: 'Print Design', label: 'Print Design & Collateral' },
+            { category: 'product' as const, serviceName: 'Product Design Systems', label: 'Design Systems & Libraries' },
+          ].map(({ category, serviceName, label }) => (
+            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+              <ServiceTag category={category} variant="icon" size="sm" serviceName={serviceName} />
+              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-primary)' }}>{label}</span>
+            </div>
+          ))}
+        </Stack>
+      </div>
+
+      <div>
+        <SectionLabel>Color palette reference</SectionLabel>
+        <Stack gap="var(--gap-md)">
+          {categories.map((cat) => {
+            const config = categoryConfig[cat];
+            return (
+              <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-lg)' }}>
+                <ServiceTag category={cat} variant="icon" size="lg" />
+                <span style={{
+                  fontFamily: 'var(--font-family-label)',
+                  fontSize: 'var(--label-sm)', // bds-lint-ignore
+                  textTransform: 'uppercase' as const,
+                  letterSpacing: '0.5px',
+                  minWidth: '100px',
+                }}>{config.label}</span>
+                <span style={{
+                  fontFamily: 'var(--font-family-body)',
+                  fontSize: 'var(--body-sm)', // bds-lint-ignore
+                  color: 'var(--text-muted)',
+                }}>--services--{config.token}</span>
+              </div>
+            );
+          })}
+        </Stack>
       </div>
     </Stack>
   ),

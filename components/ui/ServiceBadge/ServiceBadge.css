@@ -1,5 +1,5 @@
 @layer bds-components {
-/* ─── ServiceBadge ───────────────────────────────────────────── */
+/* ─── ServiceBadge (deprecated — use ServiceTag variant="icon") ── */
 
 .bds-service-badge {
   display: flex;
@@ -12,9 +12,9 @@
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — Figma-driven badge dimensions */
 
-.bds-service-badge--sm { width: 20px; height: 20px; border-radius: var(--border-radius-sm); }
-.bds-service-badge--md { width: 28px; height: 28px; border-radius: var(--border-radius-md); }
-.bds-service-badge--lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); }
+.bds-service-badge--sm { width: 20px; height: 20px; border-radius: var(--border-radius-sm); } /* bds-lint-ignore */
+.bds-service-badge--md { width: 28px; height: 28px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
+.bds-service-badge--lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
 
 /* ─── Category colors ────────────────────────────────────────── */
 
@@ -30,42 +30,4 @@
   object-fit: contain;
   display: block;
 }
-
-/* ─── Label mode ─────────────────────────────────────────────── */
-
-.bds-service-badge-label {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
-  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically; shared with Badge + Tag */
-  white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-on-color-dark);
-  border-radius: var(--border-radius-sm);
-}
-
-/* Label sizes */
-.bds-service-badge-label--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
-  font-size: var(--label-tiny);
-}
-
-.bds-service-badge-label--md {
-  padding: var(--padding-tiny) var(--padding-sm);
-  font-size: var(--label-sm);
-}
-
-.bds-service-badge-label--lg {
-  padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--label-md);
-}
-
-/* Label category colors */
-.bds-service-badge-label--brand       { background-color: var(--background-service-brand); }
-.bds-service-badge-label--marketing   { background-color: var(--background-service-marketing); }
-.bds-service-badge-label--information { background-color: var(--background-service-information); }
-.bds-service-badge-label--product     { background-color: var(--background-service-product); }
-.bds-service-badge-label--service     { background-color: var(--background-service-service); }
 }

@@ -4,6 +4,7 @@ import './ServiceBadge.css';
 
 export type ServiceCategory = 'brand' | 'marketing' | 'information' | 'product' | 'service';
 export type ServiceBadgeSize = 'sm' | 'md' | 'lg';
+/** @deprecated `mode` is no longer used. ServiceBadge is icon-only. Use ServiceTag for text labels. */
 export type ServiceBadgeMode = 'badge' | 'label';
 
 export interface ServiceBadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
@@ -11,7 +12,7 @@ export interface ServiceBadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   category: ServiceCategory;
   /**
    * Display mode
-   * @deprecated Use `ServiceTag` for text/label display. ServiceBadge is icon-only going forward.
+   * @deprecated This prop is ignored. ServiceBadge is icon-only going forward. Use `ServiceTag variant="icon"` for the same visual. Use `ServiceTag variant="text"` or `variant="icon-text"` for text labels.
    */
   mode?: ServiceBadgeMode;
   /** Size variant */
@@ -95,18 +96,19 @@ const iconScaleMap: Record<ServiceBadgeSize, number> = { sm: 0.55, md: 0.6, lg: 
 const boxSizeMap: Record<ServiceBadgeSize, number> = { sm: 20, md: 28, lg: 40 };
 
 /**
- * ServiceBadge - Brik service category badge.
+ * @deprecated Use `ServiceTag variant="icon"` instead. ServiceBadge is kept for backwards compatibility only.
+ *
+ * ServiceBadge — icon-only colored square badge for a Brik service category.
+ * The `mode="label"` prop is no longer supported; use `ServiceTag` for text labels.
  *
  * @example
- * ```tsx
- * <ServiceBadge category="marketing" />
- * <ServiceBadge category="brand" serviceName="Brand Design" />
- * <ServiceBadge category="product" mode="label" />
- * ```
+ * // Migration: replace ServiceBadge with ServiceTag
+ * // Old: <ServiceBadge category="brand" serviceName="Brand Identity Bundle" size="lg" />
+ * // New: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
  */
 export function ServiceBadge({
   category,
-  mode = 'badge',
+  mode: _mode,
   size = 'md',
   serviceName,
   className,
@@ -117,7 +119,7 @@ export function ServiceBadge({
   const [imageError, setImageError] = useState(false);
   const iconSize = Math.round(boxSizeMap[size] * iconScaleMap[size]);
 
-  const badge = (
+  return (
     <div
       className={bdsClass(
         'bds-service-badge',
@@ -141,25 +143,6 @@ export function ServiceBadge({
       )}
     </div>
   );
-
-  if (mode === 'label') {
-    return (
-      <span
-        className={bdsClass(
-          'bds-service-badge-label',
-          `bds-service-badge-label--${size}`,
-          `bds-service-badge-label--${category}`,
-          className,
-        )}
-        style={style}
-        {...props}
-      >
-        {config.label}
-      </span>
-    );
-  }
-
-  return badge;
 }
 
 export default ServiceBadge;
