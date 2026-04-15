@@ -221,7 +221,7 @@ function TokenCoverageDashboard() {
 // ─── Meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof TokenCoverageDashboard> = {
-  title: 'Overview/Token Coverage',
+  title: 'Overview/Health/Token Coverage',
   component: TokenCoverageDashboard,
   parameters: { layout: 'fullscreen' },
 };

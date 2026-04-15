@@ -239,7 +239,7 @@ function HealthDashboard() {
 // ─── Meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof HealthDashboard> = {
-  title: 'Overview/Health Dashboard',
+  title: 'Overview/Health/Health Dashboard',
   component: HealthDashboard,
   parameters: { layout: 'fullscreen' },
 };

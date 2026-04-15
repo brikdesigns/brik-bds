@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-04-14T14:42:33.082Z",
+  "generatedAt": "2026-04-15T12:33:54.113Z",
   "health": {
     "completeness": {
-      "total": 69,
+      "total": 70,
       "complete": 63,
-      "pct": 91,
+      "pct": 90,
       "gaps": [
         {
           "name": "ActivityTimeline",
@@ -21,6 +21,12 @@
         },
         {
           "name": "DatePicker",
+          "missing": [
+            "mdx"
+          ]
+        },
+        {
+          "name": "FilterToggle",
           "missing": [
             "mdx"
           ]
@@ -57,13 +63,12 @@
       "consumers": [
         {
           "name": "brik-client-portal",
-          "total": 63,
-          "adopted": 34,
-          "adoptedPct": 54,
+          "total": 64,
+          "adopted": 35,
+          "adoptedPct": 55,
           "unadopted": 29,
           "unadoptedList": [
             "ActivityTimeline",
-            "AddressInput",
             "AnimatedIcon",
             "Avatar",
             "Board",
@@ -73,6 +78,7 @@
             "DatePicker",
             "Divider",
             "FileUploader",
+            "FilterToggle",
             "Form",
             "Icons",
             "Menu",
@@ -95,15 +101,15 @@
           "topUsed": [
             {
               "name": "Button",
-              "imports": 93
+              "imports": 95
             },
             {
               "name": "Skeleton",
-              "imports": 33
+              "imports": 35
             },
             {
               "name": "TextInput",
-              "imports": 31
+              "imports": 30
             },
             {
               "name": "Card",
@@ -218,7 +224,7 @@
           "name": "chromatic",
           "current": "15.3.0",
           "wanted": "15.3.1",
-          "latest": "16.2.0",
+          "latest": "16.3.0",
           "isMajor": true
         },
         {
@@ -327,8 +333,8 @@
   "lint": {
     "errors": 0,
     "warnings": 1,
-    "totalFiles": 213,
-    "totalTokens": 632,
+    "totalFiles": 216,
+    "totalTokens": 636,
     "violations": [
       {
         "rule": "hardcoded-value",
@@ -455,8 +461,8 @@
     "spatialPct": 86
   },
   "coverage": {
-    "totalDefined": 533,
-    "totalUsed": 170,
+    "totalDefined": 537,
+    "totalUsed": 174,
     "totalOrphaned": 363,
     "usagePct": 32,
     "used": [
@@ -490,6 +496,78 @@
           "EmptyState",
           "FileUploader",
           "FilterButton",
+          "FilterToggle",
+          "Footer",
+          "Form",
+          "Icons",
+          "Menu",
+          "Modal",
+          "MultiSelect",
+          "NavBar",
+          "NotificationList",
+          "PageHeader",
+          "Pagination",
+          "PasswordInput",
+          "Popover",
+          "PricingCard",
+          "ProgressBar",
+          "ProgressDots",
+          "ProgressStepper",
+          "Radio",
+          "SearchInput",
+          "SegmentedControl",
+          "Select",
+          "ServiceBadge",
+          "Sheet",
+          "SidebarNavigation",
+          "Skeleton",
+          "Slider",
+          "Snackbar",
+          "Spinner",
+          "Stepper",
+          "Switch",
+          "TabBar",
+          "Table",
+          "Tag",
+          "TaskConsole",
+          "TextArea",
+          "TextInput",
+          "TimePicker",
+          "Toast",
+          "Tooltip"
+        ],
+        "count": 66
+      },
+      {
+        "token": "--text-muted",
+        "components": [
+          "Accordion",
+          "ActivityTimeline",
+          "AddressInput",
+          "AlertBanner",
+          "Avatar",
+          "Badge",
+          "Banner",
+          "Breadcrumb",
+          "Button",
+          "ButtonGroup",
+          "Card",
+          "CardControl",
+          "CardDisplay",
+          "CardFeature",
+          "CardTestimonial",
+          "Checkbox",
+          "Chip",
+          "CollapsibleCard",
+          "Counter",
+          "DatePicker",
+          "Dialog",
+          "Divider",
+          "Dot",
+          "EmptyState",
+          "FileUploader",
+          "FilterButton",
+          "FilterToggle",
           "Footer",
           "Form",
           "Icons",
@@ -532,76 +610,6 @@
         "count": 65
       },
       {
-        "token": "--text-muted",
-        "components": [
-          "Accordion",
-          "ActivityTimeline",
-          "AddressInput",
-          "AlertBanner",
-          "Avatar",
-          "Badge",
-          "Banner",
-          "Breadcrumb",
-          "Button",
-          "ButtonGroup",
-          "Card",
-          "CardControl",
-          "CardDisplay",
-          "CardFeature",
-          "CardTestimonial",
-          "Checkbox",
-          "Chip",
-          "CollapsibleCard",
-          "Counter",
-          "DatePicker",
-          "Dialog",
-          "Divider",
-          "Dot",
-          "EmptyState",
-          "FileUploader",
-          "FilterButton",
-          "Footer",
-          "Form",
-          "Icons",
-          "Menu",
-          "Modal",
-          "MultiSelect",
-          "NavBar",
-          "NotificationList",
-          "PageHeader",
-          "Pagination",
-          "PasswordInput",
-          "Popover",
-          "PricingCard",
-          "ProgressBar",
-          "ProgressDots",
-          "ProgressStepper",
-          "Radio",
-          "SearchInput",
-          "SegmentedControl",
-          "Select",
-          "ServiceBadge",
-          "Sheet",
-          "SidebarNavigation",
-          "Skeleton",
-          "Slider",
-          "Snackbar",
-          "Spinner",
-          "Stepper",
-          "Switch",
-          "TabBar",
-          "Table",
-          "Tag",
-          "TaskConsole",
-          "TextArea",
-          "TextInput",
-          "TimePicker",
-          "Toast",
-          "Tooltip"
-        ],
-        "count": 64
-      },
-      {
         "token": "--gap-md",
         "components": [
           "Accordion",
@@ -628,6 +636,7 @@
           "Dot",
           "FileUploader",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Form",
           "Icons",
@@ -667,7 +676,7 @@
           "Toast",
           "Tooltip"
         ],
-        "count": 62
+        "count": 63
       },
       {
         "token": "--gap-xl",
@@ -697,6 +706,7 @@
           "EmptyState",
           "FileUploader",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Form",
           "Icons",
@@ -735,7 +745,7 @@
           "Toast",
           "Tooltip"
         ],
-        "count": 62
+        "count": 63
       },
       {
         "token": "--font-family-body",
@@ -825,6 +835,7 @@
           "EmptyState",
           "FileUploader",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Form",
           "Icons",
@@ -857,7 +868,7 @@
           "TimePicker",
           "Toast"
         ],
-        "count": 53
+        "count": 54
       },
       {
         "token": "--body-xs",
@@ -880,6 +891,7 @@
           "Dot",
           "FileUploader",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Form",
           "Icons",
@@ -912,7 +924,7 @@
           "TimePicker",
           "Tooltip"
         ],
-        "count": 49
+        "count": 50
       },
       {
         "token": "--gap-lg",
@@ -937,6 +949,7 @@
           "Dialog",
           "Dot",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Form",
           "Icons",
@@ -964,7 +977,7 @@
           "TimePicker",
           "Tooltip"
         ],
-        "count": 46
+        "count": 47
       },
       {
         "token": "--label-sm",
@@ -989,6 +1002,7 @@
           "Dot",
           "EmptyState",
           "FilterButton",
+          "FilterToggle",
           "Modal",
           "NavBar",
           "NotificationList",
@@ -1012,7 +1026,7 @@
           "Toast",
           "Tooltip"
         ],
-        "count": 42
+        "count": 43
       },
       {
         "token": "--font-weight-semi-bold",
@@ -1036,6 +1050,7 @@
           "Dot",
           "FileUploader",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "NavBar",
           "NotificationList",
@@ -1060,7 +1075,7 @@
           "TimePicker",
           "Toast"
         ],
-        "count": 42
+        "count": 43
       },
       {
         "token": "--body-md",
@@ -1259,6 +1274,7 @@
           "Dialog",
           "Divider",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Icons",
           "Menu",
@@ -1279,7 +1295,7 @@
           "TaskConsole",
           "Toast"
         ],
-        "count": 34
+        "count": 35
       },
       {
         "token": "--border-radius-md",
@@ -1295,6 +1311,7 @@
           "Dot",
           "EmptyState",
           "FilterButton",
+          "FilterToggle",
           "Form",
           "Icons",
           "Modal",
@@ -1318,7 +1335,7 @@
           "TimePicker",
           "Tooltip"
         ],
-        "count": 33
+        "count": 34
       },
       {
         "token": "--padding-md",
@@ -1334,6 +1351,7 @@
           "Dot",
           "EmptyState",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Form",
           "Icons",
@@ -1356,7 +1374,7 @@
           "Toast",
           "Tooltip"
         ],
-        "count": 32
+        "count": 33
       },
       {
         "token": "--font-line-height-tight",
@@ -1375,6 +1393,7 @@
           "DatePicker",
           "EmptyState",
           "FilterButton",
+          "FilterToggle",
           "Modal",
           "PageHeader",
           "Pagination",
@@ -1393,7 +1412,7 @@
           "TimePicker",
           "Toast"
         ],
-        "count": 31
+        "count": 32
       },
       {
         "token": "--label-md",
@@ -1411,6 +1430,7 @@
           "DatePicker",
           "FileUploader",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Modal",
           "NotificationList",
@@ -1429,7 +1449,7 @@
           "TimePicker",
           "Toast"
         ],
-        "count": 30
+        "count": 31
       },
       {
         "token": "--gap-sm",
@@ -1607,6 +1627,7 @@
           "EmptyState",
           "FileUploader",
           "FilterButton",
+          "FilterToggle",
           "Footer",
           "Form",
           "Modal",
@@ -1621,6 +1642,35 @@
           "TaskConsole",
           "TextArea",
           "TextInput"
+        ],
+        "count": 24
+      },
+      {
+        "token": "--background-brand-primary",
+        "components": [
+          "ActivityTimeline",
+          "Avatar",
+          "Board",
+          "Breadcrumb",
+          "Button",
+          "CardFeature",
+          "Checkbox",
+          "Counter",
+          "Dialog",
+          "Dot",
+          "FileUploader",
+          "FilterButton",
+          "FilterToggle",
+          "Pagination",
+          "ProgressBar",
+          "ProgressDots",
+          "ProgressStepper",
+          "SidebarNavigation",
+          "Slider",
+          "Spinner",
+          "Switch",
+          "TabBar",
+          "Table"
         ],
         "count": 23
       },
@@ -1652,34 +1702,6 @@
           "Toast"
         ],
         "count": 23
-      },
-      {
-        "token": "--background-brand-primary",
-        "components": [
-          "ActivityTimeline",
-          "Avatar",
-          "Board",
-          "Breadcrumb",
-          "Button",
-          "CardFeature",
-          "Checkbox",
-          "Counter",
-          "Dialog",
-          "Dot",
-          "FileUploader",
-          "FilterButton",
-          "Pagination",
-          "ProgressBar",
-          "ProgressDots",
-          "ProgressStepper",
-          "SidebarNavigation",
-          "Slider",
-          "Spinner",
-          "Switch",
-          "TabBar",
-          "Table"
-        ],
-        "count": 22
       },
       {
         "token": "--ease-out",
@@ -1850,6 +1872,27 @@
         "count": 15
       },
       {
+        "token": "--label-lg",
+        "components": [
+          "Accordion",
+          "Board",
+          "Button",
+          "CardControl",
+          "DatePicker",
+          "FilterButton",
+          "FilterToggle",
+          "Footer",
+          "NavBar",
+          "Select",
+          "Stepper",
+          "Table",
+          "TextArea",
+          "TextInput",
+          "TimePicker"
+        ],
+        "count": 15
+      },
+      {
         "token": "--font-weight-bold",
         "components": [
           "Accordion",
@@ -1934,26 +1977,6 @@
         "count": 15
       },
       {
-        "token": "--label-lg",
-        "components": [
-          "Accordion",
-          "Board",
-          "Button",
-          "CardControl",
-          "DatePicker",
-          "FilterButton",
-          "Footer",
-          "NavBar",
-          "Select",
-          "Stepper",
-          "Table",
-          "TextArea",
-          "TextInput",
-          "TimePicker"
-        ],
-        "count": 14
-      },
-      {
         "token": "--padding-tiny",
         "components": [
           "ActivityTimeline",
@@ -1972,6 +1995,45 @@
           "Tooltip"
         ],
         "count": 14
+      },
+      {
+        "token": "--background-secondary",
+        "components": [
+          "Button",
+          "Chip",
+          "CollapsibleCard",
+          "Dot",
+          "FilterButton",
+          "FilterToggle",
+          "Meter",
+          "SegmentedControl",
+          "Skeleton",
+          "Spinner",
+          "TabBar",
+          "Table",
+          "Tag",
+          "Tooltip"
+        ],
+        "count": 14
+      },
+      {
+        "token": "--text-on-color-dark",
+        "components": [
+          "ActivityTimeline",
+          "Badge",
+          "Banner",
+          "Board",
+          "Button",
+          "CardFeature",
+          "Dialog",
+          "FilterButton",
+          "FilterToggle",
+          "Pagination",
+          "ServiceBadge",
+          "Snackbar",
+          "TabBar"
+        ],
+        "count": 13
       },
       {
         "token": "--text-inverse",
@@ -2010,43 +2072,6 @@
           "TextLink"
         ],
         "count": 13
-      },
-      {
-        "token": "--background-secondary",
-        "components": [
-          "Button",
-          "Chip",
-          "CollapsibleCard",
-          "Dot",
-          "FilterButton",
-          "Meter",
-          "SegmentedControl",
-          "Skeleton",
-          "Spinner",
-          "TabBar",
-          "Table",
-          "Tag",
-          "Tooltip"
-        ],
-        "count": 13
-      },
-      {
-        "token": "--text-on-color-dark",
-        "components": [
-          "ActivityTimeline",
-          "Badge",
-          "Banner",
-          "Board",
-          "Button",
-          "CardFeature",
-          "Dialog",
-          "FilterButton",
-          "Pagination",
-          "ServiceBadge",
-          "Snackbar",
-          "TabBar"
-        ],
-        "count": 12
       },
       {
         "token": "--border-primary",
@@ -2771,6 +2796,34 @@
       },
       {
         "token": "--background-primary-hover",
+        "components": [
+          "Button"
+        ],
+        "count": 1
+      },
+      {
+        "token": "--background-negative-hover",
+        "components": [
+          "Button"
+        ],
+        "count": 1
+      },
+      {
+        "token": "--background-negative-pressed",
+        "components": [
+          "Button"
+        ],
+        "count": 1
+      },
+      {
+        "token": "--background-positive-hover",
+        "components": [
+          "Button"
+        ],
+        "count": 1
+      },
+      {
+        "token": "--background-positive-pressed",
         "components": [
           "Button"
         ],
@@ -3640,6 +3693,10 @@
         "count": 3
       },
       {
+        "component": "FilterToggle",
+        "count": 3
+      },
+      {
         "component": "Select",
         "count": 3
       },
@@ -3649,6 +3706,10 @@
       },
       {
         "component": "Slider",
+        "count": 3
+      },
+      {
+        "component": "TimePicker",
         "count": 3
       },
       {

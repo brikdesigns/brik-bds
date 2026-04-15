@@ -140,7 +140,7 @@ function ThemeComplianceDashboard() {
 // ─── Meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof ThemeComplianceDashboard> = {
-  title: 'Overview/Theme Compliance',
+  title: 'Overview/Health/Theme Compliance',
   component: ThemeComplianceDashboard,
   parameters: { layout: 'fullscreen' },
 };
