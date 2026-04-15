@@ -10,6 +10,9 @@ import { addCollection } from '@iconify/react';
 import phData from '@iconify-json/ph/icons.json';
 addCollection(phData as Parameters<typeof addCollection>[0]);
 
+// Feedback widget — floating FAB in preview iframe
+import { FeedbackWidget } from './FeedbackWidget';
+
 // Import token CSS in cascade order:
 // 1. Figma tokens (SD output — primitives + semantic defaults)
 // 2. Gap-fills (manual tokens not yet in Figma)
@@ -258,7 +261,16 @@ const preview: Preview = {
       },
     },
   },
-  decorators: [withTheme],
+  decorators: [
+    withTheme,
+    // Feedback widget — floating FAB on every story/docs page
+    (Story) => (
+      <>
+        <Story />
+        <FeedbackWidget />
+      </>
+    ),
+  ],
   parameters: {
     options: {
       storySort: {
