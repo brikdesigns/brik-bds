@@ -20,6 +20,10 @@ export default defineConfig({
         '@iconify/react',
       ],
       output: {
+        // Next.js App Router requires 'use client' directive for modules that
+        // call React.createContext, useState, etc. Without this, SSR fails with
+        // "createContext is not a function". The banner is added to both ESM and CJS.
+        banner: "'use client';",
         globals: {
           'react': 'React',
           'react/jsx-runtime': 'ReactJSXRuntime',

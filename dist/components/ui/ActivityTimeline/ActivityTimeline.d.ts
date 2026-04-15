@@ -1,0 +1,42 @@
+import { type ReactNode } from 'react';
+import './ActivityTimeline.css';
+export interface TimelineEvent {
+    /** Icon element rendered inside the event dot */
+    icon: ReactNode;
+    /** Primary label (e.g. "Request submitted") */
+    label: string;
+    /** Secondary detail line (e.g. "by Emily Rivera") */
+    detail?: string | null;
+    /** Timestamp string (pre-formatted by consumer) */
+    timestamp: string;
+    /** Whether this is the "origin" event — uses brand-colored dot */
+    isOrigin?: boolean;
+}
+export interface ActivityTimelineProps {
+    /** Array of timeline events to render (top → bottom, chronological) */
+    events: TimelineEvent[];
+    /** Additional className */
+    className?: string;
+}
+/**
+ * ActivityTimeline — vertical timeline display component.
+ *
+ * Renders a list of chronological events with a connecting rail,
+ * icon dots, labels, detail text, and timestamps. The first event
+ * (or any event with `isOrigin`) uses the brand-colored dot;
+ * all others use a muted surface dot.
+ *
+ * This is a pure display component — no internal state, no data fetching.
+ * The consumer provides pre-formatted events.
+ *
+ * @example
+ * ```tsx
+ * <ActivityTimeline events={[
+ *   { icon: <Icon icon="ph:plus" />, label: 'Created', detail: 'by Jane', timestamp: 'Apr 12, 2026', isOrigin: true },
+ *   { icon: <Icon icon="ph:user" />, label: 'Assigned', detail: 'to Nick', timestamp: 'Apr 12, 2026' },
+ *   { icon: <Icon icon="ph:check-circle" />, label: 'Completed', timestamp: 'Apr 13, 2026' },
+ * ]} />
+ * ```
+ */
+export declare function ActivityTimeline({ events, className }: ActivityTimelineProps): import("react/jsx-runtime").JSX.Element | null;
+export default ActivityTimeline;
