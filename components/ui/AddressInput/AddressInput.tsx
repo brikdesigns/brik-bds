@@ -360,6 +360,8 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
             <Icon icon={MapPin} />
           </span>
           <input
+            data-1p-ignore=""
+            data-lpignore="true"
             ref={ref}
             id={inputId}
             type="text"

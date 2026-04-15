@@ -206,6 +206,8 @@ export function TextArea({
         </label>
       )}
       <textarea
+        data-1p-ignore=""
+        data-lpignore="true"
         id={inputId}
         placeholder={placeholder}
         rows={rows}

@@ -188,6 +188,8 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             <Icon icon={MagnifyingGlass} />
           </span>
           <input
+            data-1p-ignore=""
+            data-lpignore="true"
             ref={ref}
             id={inputId}
             type="search"
