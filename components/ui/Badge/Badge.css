@@ -115,6 +115,11 @@
   color: var(--text-on-color-dark);
 }
 
+.bds-badge--dark.bds-badge--brand {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
 /* ─── Status × Light (pastel bg, saturated text) ─────────────── */
 
 .bds-badge--light.bds-badge--positive {
@@ -140,6 +145,11 @@
 .bds-badge--light.bds-badge--progress {
   background-color: var(--background-status-info-subtle);
   color: var(--text-status-info);
+}
+
+.bds-badge--light.bds-badge--brand {
+  background-color: var(--background-brand-secondary);
+  color: var(--text-brand-primary);
 }
 
 /* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */
