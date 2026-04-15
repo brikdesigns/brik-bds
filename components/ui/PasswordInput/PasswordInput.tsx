@@ -112,6 +112,8 @@ export const PasswordInput = ({
       id={inputId}
       type={showPassword ? 'text' : 'password'}
       iconAfter={toggleButton}
+      data-1p-ignore={undefined}
+      data-lpignore={undefined}
       {...props}
     />
   );
