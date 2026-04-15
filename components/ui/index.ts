@@ -25,6 +25,7 @@ export * from './DatePicker';
 export * from './Dialog';
 export * from './Divider';
 export * from './Dot';
+export * from './EmailInput';
 export * from './EmptyState';
 export * from './FileUploader';
 export * from './FilterButton';
