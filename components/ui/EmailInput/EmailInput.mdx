@@ -1,0 +1,66 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './EmailInput.stories';
+
+<Meta of={Stories} />
+
+# Email input
+
+Text input for email address fields. Extends `TextInput` with `type="email"`, `autocomplete="email"`, and a built-in envelope icon. Inherits all TextInput props except `type` and `iconBefore`.
+
+Password managers (1Password, LastPass, Bitwarden) recognise the `type` + `autocomplete` combination and show their autofill popover automatically.
+
+---
+
+## Playground
+
+Use the Controls panel to explore all props interactively.
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+Sizes (`sm`, `md`, `lg`) and states (helper text, error, disabled).
+
+<Canvas of={Stories.Variants} />
+
+## Patterns
+
+Login form pairing with `PasswordInput`, and standalone newsletter signup.
+
+<Canvas of={Stories.Patterns} />
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { EmailInput } from '@brik/bds';
+
+// Basic email input
+<EmailInput label="Email" placeholder="you@example.com" />
+
+// Login form — pair with PasswordInput for full autofill support
+<EmailInput label="Email" autoComplete="email" fullWidth />
+<PasswordInput label="Password" autoComplete="current-password" fullWidth />
+
+// Override autocomplete for non-login contexts
+<EmailInput label="Billing email" autoComplete="off" />
+```
+
+## Password manager support
+
+The `EmailInput` + `PasswordInput` pairing gives password managers the signals they need:
+
+| Attribute | EmailInput default | PasswordInput default | Why |
+|-----------|-------------------|----------------------|-----|
+| `type` | `email` | `password` | Identifies the field purpose |
+| `autocomplete` | `email` | _(pass explicitly)_ | Tells the browser and extensions what to fill |
+| `name` | _(pass explicitly)_ | _(pass explicitly)_ | Some managers match on `name` as a fallback |
+
+For inputs that should **not** trigger password manager popovers, add `data-1p-ignore` (1Password) and `data-lpignore="true"` (LastPass) to the underlying `TextInput`.
