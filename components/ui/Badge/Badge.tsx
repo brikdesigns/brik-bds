@@ -3,7 +3,7 @@ import { bdsClass } from '../../utils';
 import './Badge.css';
 
 /** Badge status variants */
-export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress';
+export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress' | 'brand';
 
 /** Badge size variants — shared scale with Tag */
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
