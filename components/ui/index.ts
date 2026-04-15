@@ -28,6 +28,7 @@ export * from './Dot';
 export * from './EmptyState';
 export * from './FileUploader';
 export * from './FilterButton';
+export * from './FilterToggle';
 export * from './Footer';
 export * from './Form';
 export * from './Icons';

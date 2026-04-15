@@ -1,0 +1,49 @@
+@layer bds-components {
+/* FilterToggle — binary on/off filter pill for filter bars */
+
+/* ─── Base ────────────────────────────────────────────── */
+
+.bds-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* ─── Active state ────────────────────────────────────── */
+
+.bds-filter-toggle--active {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+/* ─── Size variants — matches FilterButton/Button height scale (4px grid, 8px steps) ─── */
+
+.bds-filter-toggle--sm {
+  height: 32px;
+  padding-inline: var(--padding-md);
+  font-size: var(--label-sm);
+}
+
+.bds-filter-toggle--md {
+  height: 40px;
+  padding-inline: var(--padding-lg);
+  font-size: var(--label-md);
+}
+
+.bds-filter-toggle--lg {
+  height: 48px;
+  padding-inline: var(--padding-xl);
+  font-size: var(--label-lg);
+}
+}
