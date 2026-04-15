@@ -219,6 +219,8 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           )}
 
           <input
+            data-1p-ignore=""
+            data-lpignore="true"
             ref={ref}
             id={inputId}
             className="bds-text-input-field"
