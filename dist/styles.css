@@ -1,0 +1,6490 @@
+@layer bds-components {
+/* ─── Sheet ──────────────────────────────────────────────────── */
+/* Overlay treatment aligned with Modal (2026-03-20)            */
+
+.bds-sheet-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-overlay);
+  z-index: 900;
+}
+
+.bds-sheet {
+  position: fixed;
+  background-color: var(--surface-primary);
+  box-shadow: var(--shadow-overlay);
+  display: flex;
+  flex-direction: column;
+  z-index: 901;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ─── Side positions ─────────────────────────────────────────── */
+
+.bds-sheet--right  { top: 0; right: 0; bottom: 0; max-width: 90vw; }
+.bds-sheet--left   { top: 0; left: 0; bottom: 0; max-width: 90vw; }
+.bds-sheet--bottom { left: 0; right: 0; bottom: 0; max-height: 80vh; }
+
+/* ─── Floating variant — no backdrop, rounded, elevated ─────── */
+
+.bds-sheet--floating {
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.bds-sheet--floating.bds-sheet--right {
+  top: var(--padding-lg);
+  right: var(--padding-lg);
+  bottom: var(--padding-lg);
+}
+
+.bds-sheet--floating.bds-sheet--left {
+  top: var(--padding-lg);
+  left: var(--padding-lg);
+  bottom: var(--padding-lg);
+}
+
+/* ─── Header (matches Modal) ────────────────────────────────── */
+
+.bds-sheet__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--padding-lg);
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  flex-shrink: 0;
+}
+
+/* When tabs are present, header becomes a column layout */
+.bds-sheet__header--has-tabs {
+  flex-direction: column;
+  align-items: stretch;
+  padding-bottom: 0;
+  gap: 0;
+}
+
+.bds-sheet__header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ─── Title (matches Modal) ─────────────────────────────────── */
+
+.bds-sheet__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Close button (matches Modal) ──────────────────────────── */
+
+.bds-sheet__close {
+  background: none;
+  border: none;
+  font-size: var(--icon-md);
+  line-height: var(--font-line-height-tight);
+  cursor: pointer;
+  padding: 0 var(--padding-md) var(--padding-md);
+  margin-right: calc(-1 * var(--padding-md));
+  color: var(--text-primary);
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bds-sheet__close:hover {
+  opacity: 1;
+}
+
+.bds-sheet__close:focus-visible {
+  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* ─── Tabs (optional, renders below title row) ──────────────── */
+
+.bds-sheet__tabs {
+  display: flex;
+  gap: var(--gap-lg);
+  width: 100%;
+}
+
+.bds-sheet__tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--padding-sm) 0;
+  font-family: var(--font-family-label);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.bds-sheet__tab:hover {
+  color: var(--text-primary);
+}
+
+.bds-sheet__tab--active {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-brand-primary);
+}
+
+/* ─── Body ───────────────────────────────────────────────────── */
+
+.bds-sheet__body {
+  flex: 1;
+  padding: var(--padding-xl) var(--padding-lg);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ─── Footer (pinned to bottom, matches Modal footer) ────────── */
+
+.bds-sheet__footer {
+  padding: var(--padding-lg);
+  display: flex;
+  gap: var(--gap-lg);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  border-top: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Stack frame transitions ──────────────────────────────────── */
+
+.bds-sheet-stack__frame {
+  animation: bds-sheet-frame-enter 0.2s ease-out;
+}
+
+.bds-sheet-stack__frame--exiting {
+  animation: bds-sheet-frame-exit 0.15s ease-in forwards;
+}
+
+.bds-sheet-stack__frame--back {
+  animation: bds-sheet-frame-back 0.2s ease-out;
+}
+
+@keyframes bds-sheet-frame-enter {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bds-sheet-frame-exit {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(40px); }
+}
+
+@keyframes bds-sheet-frame-back {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── Back button (sheet stack header) ─────────────────────────── */
+
+.bds-sheet__back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.bds-sheet__back-btn:hover {
+  opacity: 1;
+}
+
+/* ─── Nav link (clickable entity reference inside sheets) ──────── */
+
+.bds-sheet__nav-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-brand-primary);
+  font: inherit;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.bds-sheet__nav-link:hover {
+  text-decoration: underline;
+}
+}
+@layer bds-components {
+/* ─── Accordion ──────────────────────────────────────────────── */
+
+.bds-accordion {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Item ───────────────────────────────────────────────────── */
+
+.bds-accordion-item {
+  border-bottom: var(--border-width-lg) solid var(--border-muted);
+}
+
+/* ─── Trigger ────────────────────────────────────────────────── */
+
+.bds-accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--padding-xl) 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  gap: var(--gap-lg);
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-accordion-trigger__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── Icon ───────────────────────────────────────────────────── */
+
+.bds-accordion-trigger__icon {
+  font-size: var(--icon-lg);
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+/* ─── Content ────────────────────────────────────────────────── */
+
+.bds-accordion-content {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  padding-bottom: var(--padding-xl);
+}
+}
+@layer bds-components {
+/**
+ * BDS ActivityTimeline — Vertical event timeline display
+ *
+ * Token-based. Matches BDS display component conventions.
+ * Naming: BEM-lite — .bds-activity-timeline, .bds-activity-timeline__dot
+ */
+
+/* ─── Container ──────────────────────────────────────────────── */
+
+.bds-activity-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Event row ──────────────────────────────────────────────── */
+
+.bds-activity-timeline__event {
+  display: flex;
+  gap: var(--gap-md);
+}
+
+/* ─── Rail (dot + line) ──────────────────────────────────────── */
+
+.bds-activity-timeline__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 28px; /* bds-lint-ignore — fixed rail width matching dot size */
+  flex-shrink: 0;
+}
+
+/* Dot */
+.bds-activity-timeline__dot {
+  width: 28px; /* bds-lint-ignore — fixed dot size */
+  height: 28px; /* bds-lint-ignore */
+  border-radius: var(--border-radius-pill);
+  background-color: var(--surface-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Origin dot — brand colored */
+.bds-activity-timeline__dot--origin {
+  background-color: var(--background-brand-primary);
+}
+
+/* Icon inside dot */
+.bds-activity-timeline__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--body-sm);
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+.bds-activity-timeline__dot--origin .bds-activity-timeline__icon {
+  color: var(--text-on-color-dark);
+}
+
+/* Connector line */
+.bds-activity-timeline__line {
+  width: 2px; /* bds-lint-ignore — hairline connector */
+  flex: 1;
+  min-height: 20px; /* bds-lint-ignore — minimum connector height */
+  background-color: var(--border-muted);
+}
+
+/* ─── Content ────────────────────────────────────────────────── */
+
+.bds-activity-timeline__content {
+  padding-top: var(--padding-tiny);
+  padding-bottom: var(--padding-lg);
+}
+
+.bds-activity-timeline__content--last {
+  padding-bottom: 0;
+}
+
+/* Label — primary event text */
+.bds-activity-timeline__label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+}
+
+/* Detail — secondary info */
+.bds-activity-timeline__detail {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  color: var(--text-secondary);
+  margin-top: 2px; /* bds-lint-ignore — tight detail spacing */
+}
+
+/* Timestamp */
+.bds-activity-timeline__timestamp {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  color: var(--text-muted);
+  margin-top: 2px; /* bds-lint-ignore — tight timestamp spacing */
+}
+
+} /* end @layer bds-components */
+@layer bds-components {
+/**
+ * BDS AddressInput Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ */
+
+.bds-address-input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-address-input-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-address-input-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+.bds-address-input-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  outline: none;
+}
+
+.bds-address-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bds-address-input-suggestion:hover {
+  background-color: var(--surface-secondary);
+}
+}
+@layer bds-components {
+/* ─── AnimatedIcon ────────────────────────────────────────────── */
+
+.bds-animated-icon {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-animated-icon {
+    /* lottie-react respects prefers-reduced-motion natively when
+       autoplay is false — no additional override needed here */
+  }
+}
+}
+@layer bds-components {
+/**
+ * BDS Badge — Status indicator with semantic colors
+ *
+ * Naming: .bds-badge, .bds-badge--{status}, .bds-badge--{size}
+ *
+ * Sizing scale is shared with Tag for side-by-side alignment.
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
+  border-radius: var(--border-radius-pill);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-sizing: border-box;
+}
+
+/* ─── Sizes (shared scale with Tag) ──────────────────────────── */
+
+.bds-badge--xs {
+  /* bds-lint-ignore — 24px icon-only badge matches shared indicator spec */
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: var(--border-radius-sm);
+  justify-content: center;
+  gap: 0;
+}
+
+.bds-badge--sm {
+  padding: var(--padding-tiny) var(--padding-sm);
+  gap: var(--gap-xs);
+  font-size: var(--label-tiny);
+  height: 28px;
+}
+
+.bds-badge--md {
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-sm);
+  font-size: var(--label-sm);
+  height: 32px;
+}
+
+.bds-badge--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-md);
+  font-size: var(--label-md);
+  height: 40px;
+}
+
+/* ─── Icon Wrapper (shared sizing with Tag) ──────────────────── */
+
+.bds-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Icon font-size matches container so the glyph fills the box */
+.bds-badge--xs .bds-badge__icon {
+  font-size: var(--icon-xs);
+}
+
+.bds-badge--sm .bds-badge__icon {
+  width: 14px;
+  height: 14px;
+  font-size: var(--icon-xs);
+}
+
+.bds-badge--md .bds-badge__icon {
+  width: 16px;
+  height: 16px;
+  font-size: var(--icon-sm);
+}
+
+.bds-badge--lg .bds-badge__icon {
+  width: 20px;
+  height: 20px;
+  font-size: var(--label-xl);
+}
+
+/* ─── Status × Dark (default) ─────────────────────────────────── */
+
+.bds-badge--dark.bds-badge--positive {
+  background-color: var(--background-positive);
+  color: var(--text-on-color-dark);
+}
+
+.bds-badge--dark.bds-badge--warning {
+  background-color: var(--background-warning);
+  color: var(--text-status-neutral);
+}
+
+.bds-badge--dark.bds-badge--error {
+  background-color: var(--background-negative);
+  color: var(--text-on-color-dark);
+}
+
+.bds-badge--dark.bds-badge--info {
+  background-color: var(--background-status-neutral);
+  color: var(--text-status-neutral);
+}
+
+.bds-badge--dark.bds-badge--progress {
+  background-color: var(--background-status-info);
+  color: var(--text-on-color-dark);
+}
+
+.bds-badge--dark.bds-badge--brand {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+/* ─── Status × Light (pastel bg, saturated text) ─────────────── */
+
+.bds-badge--light.bds-badge--positive {
+  background-color: var(--background-status-success-subtle);
+  color: var(--text-positive);
+}
+
+.bds-badge--light.bds-badge--warning {
+  background-color: var(--background-status-warning-subtle);
+  color: var(--text-status-neutral);
+}
+
+.bds-badge--light.bds-badge--error {
+  background-color: var(--background-status-error-subtle);
+  color: var(--text-negative);
+}
+
+.bds-badge--light.bds-badge--info {
+  background-color: var(--background-status-neutral);
+  color: var(--text-status-neutral);
+}
+
+.bds-badge--light.bds-badge--progress {
+  background-color: var(--background-status-info-subtle);
+  color: var(--text-status-info);
+}
+
+.bds-badge--light.bds-badge--brand {
+  background-color: var(--background-brand-secondary);
+  color: var(--text-brand-primary);
+}
+
+/* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */
+
+/* Pop-in: badge appears with a bounce scale */
+.bds-badge--animate-in {
+  animation: bds-pop var(--duration-slow) var(--ease-out);
+}
+
+/* Shake: bell icon / notification attention-getter */
+.bds-badge--shake {
+  animation: bds-shake 0.5s var(--ease-out); /* bds-lint-ignore — shake needs specific timing */
+}
+
+/* Pulse: persistent attention on unread notification badges */
+.bds-badge--pulse {
+  animation: bds-pop var(--duration-slow) var(--ease-out),
+    bds-pulse 1.4s var(--ease-in-out) 0.3s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-badge--animate-in,
+  .bds-badge--shake,
+  .bds-badge--pulse { animation: none; }
+}
+}
+@layer bds-components {
+/* ─── AlertBanner ─────────────────────────────────────────────── */
+
+.bds-alert-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Inner — badge + content ────────────────────────────────── */
+
+.bds-alert-banner__inner {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* ─── Content — title + description stacked ──────────────────── */
+
+.bds-alert-banner__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-alert-banner__title {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  font-size: var(--label-md);
+  line-height: var(--font-line-height-tight);
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-alert-banner__description {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+}
+
+/* ─── Action ─────────────────────────────────────────────────── */
+
+.bds-alert-banner__action {
+  flex-shrink: 0;
+}
+}
+@layer bds-components {
+/* ─── Avatar ─────────────────────────────────────────────────── */
+
+.bds-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-circle);
+  background-color: var(--background-brand-primary);
+  color: var(--text-inverse);
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+/* bds-lint-ignore — Figma-driven avatar dimensions, no semantic size token */
+
+.bds-avatar--sm { width: 32px; height: 32px; font-size: var(--body-xs); }
+.bds-avatar--md { width: 40px; height: 40px; font-size: var(--body-sm); }
+.bds-avatar--lg { width: 48px; height: 48px; font-size: var(--body-md); }
+.bds-avatar--xl { width: 64px; height: 64px; font-size: var(--heading-sm); }
+
+/* ─── Image ──────────────────────────────────────────────────── */
+
+.bds-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* ─── Status indicator ───────────────────────────────────────── */
+/* bds-lint-ignore — Figma-driven status dot sizes */
+
+.bds-avatar__status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  border: var(--border-width-lg) solid var(--background-input);
+}
+
+.bds-avatar--sm .bds-avatar__status { width: 8px; height: 8px; }
+.bds-avatar--md .bds-avatar__status { width: 10px; height: 10px; }
+.bds-avatar--lg .bds-avatar__status,
+.bds-avatar--xl .bds-avatar__status { width: 12px; height: 12px; }
+
+.bds-avatar__status--online  { background-color: var(--background-presence-online); }
+.bds-avatar__status--offline { background-color: var(--background-presence-offline); }
+.bds-avatar__status--busy    { background-color: var(--background-presence-busy); }
+.bds-avatar__status--away    { background-color: var(--background-presence-away); }
+}
+@layer bds-components {
+/* Board — Kanban-style horizontal board layout */
+
+/* ─── Board container ─────────────────────────────────── */
+
+.bds-board {
+  display: flex;
+  gap: var(--gap-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  min-height: 0;
+}
+
+/* Hide scrollbar but keep functionality */
+.bds-board::-webkit-scrollbar {
+  height: 6px;
+}
+
+.bds-board::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bds-board::-webkit-scrollbar-thumb {
+  background-color: var(--border-muted);
+  border-radius: var(--border-radius-pill);
+}
+
+.bds-board:hover::-webkit-scrollbar-thumb {
+  background-color: var(--border-secondary);
+}
+
+/* ─── Board column ────────────────────────────────────── */
+
+.bds-board-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 0;
+  min-width: 280px;
+  max-width: 400px;
+  scroll-snap-align: start;
+  border-radius: var(--border-radius-200);
+  /* overflow: visible — allows tooltip bubbles to escape column bounds.
+     Clip is applied only when a background is present (see below). */
+  overflow: visible;
+}
+
+/* When column has a background color, clip to rounded corners + add internal padding */
+.bds-board-column[style*="background"] {
+  overflow: clip;
+}
+
+.bds-board-column[style*="background"] .bds-board-column__items {
+  padding: 0 var(--padding-sm);
+}
+
+.bds-board-column__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-sm) var(--padding-sm) var(--padding-md);
+  flex-shrink: 0;
+}
+
+.bds-board-column__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+.bds-board-column__count {
+  font-family: var(--font-family-label);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  line-height: var(--font-line-height-tight);
+}
+
+.bds-board-column__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ─── Board header (column header with avatar + progress) */
+
+.bds-board-header {
+  border-radius: var(--border-radius-200);
+  padding: var(--padding-md) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+}
+
+.bds-board-header__profile {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.bds-board-header__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+/*
+ * Column header name — heading family, semibold.
+ * Heading scale minimum is --heading-tiny (18px / font-size-200).
+ * --font-size-100 (16px) is body/label territory; never use it for a heading.
+ * --font-weight-extra-bold (800) is inappropriate on heading family;
+ * semibold (600) is the standard heading weight.
+ */
+.bds-board-header__name {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-tiny);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-on-color-dark);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+ * Column header subtitle — subtitle family.
+ * --subtitle-md matches the visual size with correct semantics.
+ */
+.bds-board-header__subtitle {
+  font-family: var(--font-family-subtitle);
+  font-size: var(--subtitle-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-on-color-dark);
+  opacity: 0.8;
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+.bds-board-header__progress {
+  /* Full width below avatar + name row */
+}
+
+/* Avatar size override — board headers always use lg */
+.bds-board-header .bds-avatar {
+  flex-shrink: 0;
+}
+
+.bds-board-header__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* ─── Board card (task card) ─────────────────────────── */
+
+.bds-board-card {
+  /* ─── Component-scoped override surface ── */
+  --bds-board-card-accent: var(--border-primary);       /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --board-card-hover-translate-y: -1px;                 /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  background-color: var(--surface-primary);
+  border-left: var(--border-width-xl) solid var(--bds-board-card-accent); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  border-radius: var(--border-radius-200);
+  padding: var(--space-500) var(--padding-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+  transition: box-shadow var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
+}
+
+.bds-board-card:hover {
+  box-shadow: inset 0 0 0 999px var(--state-hover-overlay),
+    var(--shadow-md);
+  transform: translateY(var(--board-card-hover-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-board-card--checked {
+  opacity: 0.7;
+}
+
+/* Top row: title + check */
+
+.bds-board-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.bds-board-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-50);
+  min-width: 0;
+  flex: 1;
+}
+
+/*
+ * Card title — label family, lg size.
+ * Task titles are UI metadata, not editorial headings — label family
+ * gives better legibility at card density. --label-lg (16px) is the
+ * largest label size and reads well in a compact Kanban card.
+ */
+.bds-board-card__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+/*
+ * Card subtitle — subtitle family.
+ * Uses --subtitle-md (11.54px) for correct semantic sizing.
+ */
+.bds-board-card__subtitle {
+  font-family: var(--font-family-subtitle);
+  font-size: var(--subtitle-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+}
+
+/* Circular check toggle */
+
+.bds-board-card__check {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-circle);
+  border: var(--border-width-md) solid var(--border-input);
+  background-color: var(--background-input);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--duration-normal) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out);
+}
+
+.bds-board-card__check:hover {
+  border-color: var(--border-primary);
+}
+
+.bds-board-card__check:focus-visible {
+  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+  outline-offset: 2px;
+}
+
+.bds-board-card__check--checked {
+  background-color: var(--background-brand-primary);
+  border-color: var(--background-brand-primary);
+}
+
+.bds-board-card__check-icon {
+  display: block;
+  /* CSS-only checkmark */
+  border-left: 2px solid var(--text-on-color-dark, #fff);
+  border-bottom: 2px solid var(--text-on-color-dark, #fff);
+  transform: rotate(-45deg) translate(1px, -1px);
+  width: 10px;
+  height: 6px;
+}
+
+/* Footer: tags row */
+
+.bds-board-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.bds-board-card__tags {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+}
+@layer bds-components {
+/* ProgressBar — horizontal progress indicator */
+
+/* ─── Track (outer container) ─────────────────────────── */
+
+.bds-progress-bar {
+  position: relative;
+  width: 100%;
+  height: var(--space-200);
+  background-color: var(--background-muted);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+/* ─── Fill bar ────────────────────────────────────────── */
+
+.bds-progress-bar__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: var(--background-brand-primary);
+  border-radius: var(--border-radius-sm);
+  transition: width var(--duration-500) var(--ease-in-out);
+}
+}
+@layer bds-components {
+/* ─── Banner ─────────────────────────────────────────────────── */
+
+.bds-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+  background-color: var(--surface-brand-primary);
+  color: var(--text-on-color-dark);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Content — title stacked above description ────────────────── */
+
+.bds-banner__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-banner__title {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  font-size: var(--label-md);
+  line-height: var(--font-line-height-tight);
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-banner__description {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+}
+
+/* ─── Actions area ───────────────────────────────────────────── */
+
+.bds-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+}
+
+/* ─── Close button ───────────────────────────────────────────── */
+
+.bds-banner__close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: var(--padding-tiny);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--body-sm);
+  opacity: 0.8;
+}
+
+.bds-banner__close:hover {
+  opacity: 1;
+}
+}
+@layer bds-components {
+/* ─── Breadcrumb ─────────────────────────────────────────────── */
+
+.bds-breadcrumb {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: center;
+}
+
+/* ─── Link ───────────────────────────────────────────────────── */
+
+.bds-breadcrumb__link {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-brand-primary);
+  text-decoration: none;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+/* ─── Current page ───────────────────────────────────────────── */
+
+.bds-breadcrumb__current {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-muted);
+  text-transform: capitalize;
+  cursor: default;
+}
+
+/* ─── Separator ──────────────────────────────────────────────── */
+
+.bds-breadcrumb__separator {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  color: var(--text-muted);
+  line-height: var(--font-line-height-tight);
+  padding: 0 var(--padding-tiny);
+}
+}
+@layer bds-components {
+/**
+ * BDS Button Family — Class-based styles
+ *
+ * All visual styles live here. Component TSX handles logic + class composition only.
+ * Token references use the BDS semantic token layer (never primitives).
+ *
+ * Naming: BEM-lite — .bds-button, .bds-button--primary, .bds-button--sm
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-button {
+  /* ─── Component-scoped override surface ── */
+  --button-active-translate-y: 1px;    /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --button-focus-outline-width: 2px;   /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --button-focus-outline-offset: 2px;  /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-normal);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: capitalize;
+  /* Unified border model — all variants share the same box dimensions.
+   * Bordered variants (secondary, outline) override border-color only.
+   * Without this, sub-pixel border widths cause 1–2px height differences
+   * between bordered and non-bordered variants at the same size. */
+  border: var(--border-width-md) solid transparent;
+  background: none;
+  color: inherit;
+  transition: background-color var(--duration-normal) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out),
+    color var(--duration-normal) var(--ease-out),
+    opacity var(--duration-normal) var(--ease-out);
+  box-sizing: border-box;
+}
+
+/* ─── Sizes ───────────────────────────────────────────────────── */
+
+/*
+ * Height scale shares the same 4px grid as IconButton:
+ *   tiny=24  sm=32  md=40  lg=48  xl=56  (8px steps)
+ *
+ * Vertical centering is handled by the base flexbox (align-items: center).
+ * Only padding-inline remains for horizontal spacing.
+ */
+
+.bds-button--tiny {
+  height: 24px;
+  padding-inline: var(--padding-tiny);
+  font-size: var(--label-xs);
+  gap: var(--gap-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-button--sm {
+  height: 32px;
+  padding-inline: var(--padding-sm);
+  font-size: var(--label-sm);
+}
+
+.bds-button--md {
+  height: 40px;
+  padding-inline: var(--padding-md);
+  font-size: var(--label-md);
+}
+
+.bds-button--lg {
+  height: 48px;
+  padding-inline: var(--padding-md);
+  font-size: var(--label-lg);
+}
+
+.bds-button--xl {
+  height: 56px;
+  padding-inline: var(--padding-lg);
+  font-size: var(--label-xl);
+}
+
+/* ─── Variants ────────────────────────────────────────────────── */
+
+.bds-button--primary {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--outline {
+  background-color: transparent;
+  color: var(--text-brand-primary);
+  border-color: var(--border-brand-primary);
+}
+
+.bds-button--secondary {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.bds-button--ghost {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+.bds-button--inverse {
+  background-color: var(--background-inverse);
+  color: var(--text-on-color-light);
+}
+
+.bds-button--danger {
+  background-color: var(--background-accent-red);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--danger-outline {
+  background-color: transparent;
+  color: var(--text-accent-red);
+  border-color: var(--text-accent-red);
+}
+
+.bds-button--danger-ghost {
+  background-color: transparent;
+  color: var(--text-accent-red);
+}
+
+/* ─── System Variants (semantic actions) ─────────────────────── */
+
+.bds-button--destructive {
+  background-color: var(--background-negative);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--positive {
+  background-color: var(--background-positive);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--selected {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+/* ─── Modifiers ───────────────────────────────────────────────── */
+
+.bds-button--full-width {
+  width: 100%;
+}
+
+/* ─── Interactive States ──────────────────────────────────────── */
+/* All states use semantic interaction tokens from BDS.
+ * No filter: brightness(), no opacity hacks, no hardcoded values.
+ * Tokens resolve per-theme via Figma Variables → Style Dictionary. */
+
+/* ── Primary ── */
+.bds-button--primary:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-brand-primary-hover);
+}
+
+.bds-button--primary:active:not(:disabled) {
+  background-color: var(--background-brand-primary-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Secondary ── */
+.bds-button--secondary:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-secondary-hover);
+}
+
+.bds-button--secondary:active:not(:disabled) {
+  background-color: var(--background-secondary-pressed);
+  color: var(--text-on-color-dark);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Outline ── */
+.bds-button--outline:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-primary-hover);
+}
+
+.bds-button--outline:active:not(:disabled) {
+  background-color: var(--background-brand-primary-pressed);
+  color: var(--text-on-color-dark);
+  border-color: var(--background-brand-primary-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Ghost ── */
+.bds-button--ghost:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-primary-hover);
+}
+
+.bds-button--ghost:active:not(:disabled) {
+  background-color: var(--background-secondary-hover);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Inverse ── */
+.bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-secondary-pressed);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--inverse:active:not(:disabled) {
+  background-color: var(--background-brand-primary-pressed);
+  color: var(--text-on-color-dark);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Destructive ── */
+.bds-button--destructive:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-negative-hover);
+}
+
+.bds-button--destructive:active:not(:disabled) {
+  background-color: var(--background-negative-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Positive ── */
+.bds-button--positive:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-positive-hover);
+}
+
+.bds-button--positive:active:not(:disabled) {
+  background-color: var(--background-positive-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Danger variants ── */
+.bds-button--danger-outline:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-accent-red);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--danger-ghost:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-accent-red);
+  color: var(--text-on-color-dark);
+}
+
+/* ── Disabled (all variants, except loading) ── */
+.bds-button:disabled:not(.bds-button--loading) {
+  background-color: var(--background-disabled);
+  color: var(--text-disabled);
+  border-color: var(--border-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Focus (all variants) ── */
+.bds-button:focus-visible {
+  outline: var(--button-focus-outline-width) solid var(--border-focus); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  outline-offset: var(--button-focus-outline-offset); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* Danger: red focus ring */
+.bds-button--danger:focus-visible,
+.bds-button--danger-outline:focus-visible,
+.bds-button--danger-ghost:focus-visible,
+.bds-button--destructive:focus-visible {
+  outline-color: var(--text-negative);
+}
+
+/* Positive: green focus ring */
+.bds-button--positive:focus-visible {
+  outline-color: var(--text-positive);
+}
+
+/* ─── Loading State ───────────────────────────────────────────── */
+
+.bds-button--loading {
+  position: relative;
+  cursor: wait;
+}
+
+.bds-button__content {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+}
+
+.bds-button__content--hidden {
+  visibility: hidden;
+}
+
+.bds-button__spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bds-button__spinner-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border-width: var(--border-width-lg);
+  border-style: solid;
+  border-color: currentColor;
+  border-top-color: transparent;
+  animation: bds-spin 0.8s linear infinite;
+  opacity: 0.9;
+}
+
+.bds-button--sm .bds-button__spinner-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Icon buttons: spinner scales with the button's font-size (matches icon 1em × 1em) */
+.bds-icon-button .bds-button__spinner-icon {
+  width: 1em;
+  height: 1em;
+}
+
+/* ─── Icon Button ─────────────────────────────────────────────── */
+/*
+ * Sizing uses explicit width/height on a 4px grid instead of
+ * deriving size from padding + icon font-size (which produced
+ * fractional totals like 27.54px and 38px).
+ *
+ * Scale: tiny=24  sm=32  md=40  lg=48  xl=56  (8px steps)
+ * Icon:  tiny=12  sm=16  md=16  lg=20  xl=24  (whole px, centered)
+ */
+
+.bds-icon-button {
+  padding: 0;
+  gap: 0;
+  width: 40px;   /* md default */
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.bds-icon-button--tiny {
+  width: 24px;
+  height: 24px;
+}
+
+.bds-icon-button--sm {
+  width: 32px;
+  height: 32px;
+}
+
+.bds-icon-button--md {
+  width: 40px;
+  height: 40px;
+}
+
+.bds-icon-button--lg {
+  width: 48px;
+  height: 48px;
+}
+
+.bds-icon-button--xl {
+  width: 56px;
+  height: 56px;
+}
+
+.bds-icon-button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  font-size: 16px;  /* md default */
+}
+
+.bds-icon-button--tiny .bds-icon-button__icon {
+  font-size: 12px;
+}
+
+.bds-icon-button--sm .bds-icon-button__icon {
+  font-size: 16px;
+}
+
+.bds-icon-button--lg .bds-icon-button__icon {
+  font-size: 20px;
+}
+
+.bds-icon-button--xl .bds-icon-button__icon {
+  font-size: 24px;
+}
+
+}
+@layer bds-components {
+/**
+ * BDS ButtonGroup — groups related buttons together
+ */
+
+.bds-button-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.bds-button-group--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.bds-button-group--full-width {
+  width: 100%;
+}
+}
+@layer bds-components {
+/* ─── Card ────────────────────────────────────────────────────── */
+
+.bds-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  border-radius: var(--border-radius-md);
+  transition: box-shadow var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
+}
+
+/* ─── Variants ───────────────────────────────────────────────── */
+
+.bds-card--default {
+  background-color: var(--surface-primary);
+  border: none;
+  box-shadow: var(--box-shadow-none);
+}
+
+.bds-card--outlined {
+  background-color: var(--surface-secondary);
+  border: var(--border-width-md) solid var(--border-secondary);
+  box-shadow: var(--box-shadow-none);
+}
+
+.bds-card--elevated {
+  background-color: var(--surface-primary);
+  border: none;
+  box-shadow: var(--box-shadow-md);
+}
+
+/* ─── Padding ────────────────────────────────────────────────── */
+
+.bds-card--padding-none { padding: var(--padding-none); }
+.bds-card--padding-sm   { padding: var(--padding-sm); }
+.bds-card--padding-md   { padding: var(--padding-md); }
+.bds-card--padding-lg   { padding: var(--padding-lg); }
+
+/* ─── Interactive ────────────────────────────────────────────── */
+
+.bds-card--interactive {
+  cursor: pointer;
+}
+
+.bds-card--link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ─── Subcomponents ──────────────────────────────────────────── */
+
+.bds-card-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-semi-bold);
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.bds-card-description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: var(--font-line-height-normal);
+}
+
+.bds-card-footer {
+  margin-top: auto;
+  padding-top: var(--padding-sm);
+}
+}
+@layer bds-components {
+/* ─── CardSummary ────────────────────────────────────────────── */
+
+.bds-card-summary {
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* ─── Inner ──────────────────────────────────────────────────── */
+
+.bds-card-summary__inner {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: flex-start;
+  padding: var(--padding-lg);
+}
+
+/* ─── Content — label + value ────────────────────────────────── */
+
+.bds-card-summary__content {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-card-summary__label {
+  font-family: var(--font-family-body);
+  font-size: var(--body-lg);
+  color: var(--text-secondary);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* ─── Value ──────────────────────────────────────────────────── */
+
+.bds-card-summary__value {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+/* ─── Text link area ─────────────────────────────────────────── */
+
+.bds-card-summary__link-area {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+/* ─── Text link ──────────────────────────────────────────────── */
+
+.bds-card-summary__link {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-brand-primary);
+  line-height: var(--font-line-height-tight);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: center;
+}
+
+.bds-card-summary__link:hover {
+  text-decoration: underline;
+}
+}
+@layer bds-components {
+/* ─── CardControl ────────────────────────────────────────────── */
+
+.bds-card-control {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-xl);
+  padding: var(--padding-xl);
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-muted);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+/* ─── Content — badge + text ─────────────────────────────────── */
+
+.bds-card-control__content {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-lg);
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── Text group — title + description ───────────────────────── */
+
+.bds-card-control__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-card-control__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-card-control__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ─── Action ─────────────────────────────────────────────────── */
+
+.bds-card-control__action {
+  flex-shrink: 0;
+}
+}
+@layer bds-components {
+/* ─── CardDisplay ────────────────────────────────────────────── */
+
+.bds-card-display {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-secondary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.bds-card-display--link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ─── Image ──────────────────────────────────────────────────── */
+
+.bds-card-display__image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bds-card-display__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─── Content ────────────────────────────────────────────────── */
+
+.bds-card-display__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  padding: var(--padding-lg) var(--padding-md);
+  flex-grow: 1;
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-card-display__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-card-display__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Action ─────────────────────────────────────────────────── */
+
+.bds-card-display__action {
+  margin-top: auto;
+  padding-top: var(--padding-lg);
+}
+}
+@layer bds-components {
+/* ─── CardFeature ────────────────────────────────────────────── */
+
+.bds-card-feature {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--padding-lg);
+  gap: var(--gap-lg);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ─── Alignment ──────────────────────────────────────────────── */
+
+.bds-card-feature--left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.bds-card-feature--center {
+  align-items: center;
+  text-align: center;
+}
+
+/* ─── Icon container ─────────────────────────────────────────── */
+/* bds-lint-ignore — Figma-driven icon container dimensions */
+
+.bds-card-feature__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+  font-size: var(--body-lg);
+  flex-shrink: 0;
+}
+
+/* ─── Text group ─────────────────────────────────────────────── */
+
+.bds-card-feature__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-card-feature__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-card-feature__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Action ─────────────────────────────────────────────────── */
+
+.bds-card-feature__action {
+  margin-top: auto;
+  padding-top: var(--gap-md);
+}
+}
+@layer bds-components {
+/* ─── CardTestimonial ────────────────────────────────────────── */
+
+.bds-card-testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-md);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ─── Variants ───────────────────────────────────────────────── */
+
+.bds-card-testimonial--brand {
+  background-color: var(--surface-brand-primary);
+}
+
+.bds-card-testimonial--outlined {
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-secondary);
+}
+
+/* ─── Quote mark ─────────────────────────────────────────────── */
+
+.bds-card-testimonial__quote-mark {
+  font-family: var(--font-family-display);
+  font-size: var(--heading-huge);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+  user-select: none;
+}
+
+.bds-card-testimonial--brand .bds-card-testimonial__quote-mark { color: var(--text-inverse); }
+.bds-card-testimonial--outlined .bds-card-testimonial__quote-mark { color: var(--text-brand-primary); }
+
+/* ─── Quote body ─────────────────────────────────────────────── */
+
+.bds-card-testimonial__body {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+}
+
+.bds-card-testimonial--brand .bds-card-testimonial__body { color: var(--text-inverse); }
+.bds-card-testimonial--outlined .bds-card-testimonial__body { color: var(--text-primary); }
+
+/* ─── Attribution ────────────────────────────────────────────── */
+
+.bds-card-testimonial__attribution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+/* ─── Author name ────────────────────────────────────────────── */
+
+.bds-card-testimonial__name {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-snug);
+  margin: 0;
+}
+
+.bds-card-testimonial--brand .bds-card-testimonial__name { color: var(--text-inverse); }
+.bds-card-testimonial--outlined .bds-card-testimonial__name { color: var(--text-primary); }
+
+/* ─── Author role ────────────────────────────────────────────── */
+
+.bds-card-testimonial__role {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+}
+
+.bds-card-testimonial--brand .bds-card-testimonial__role { color: var(--text-inverse); }
+.bds-card-testimonial--outlined .bds-card-testimonial__role { color: var(--text-secondary); }
+
+/* ─── Star rating ────────────────────────────────────────────── */
+
+.bds-card-testimonial__stars {
+  display: flex;
+  gap: var(--gap-md);
+  font-size: var(--heading-lg);
+  line-height: var(--font-line-height-snug);
+  color: var(--background-warning);
+}
+}
+@layer bds-components {
+/* ─── Checkbox ───────────────────────────────────────────────── */
+
+.bds-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-md);
+  cursor: pointer;
+  user-select: none;
+}
+
+.bds-checkbox--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Input ──────────────────────────────────────────────────── */
+
+.bds-checkbox__input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: var(--background-brand-primary);
+}
+
+.bds-checkbox--disabled .bds-checkbox__input {
+  cursor: not-allowed;
+}
+
+/* ─── Label text ─────────────────────────────────────────────── */
+
+.bds-checkbox__text {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+}
+@layer bds-components {
+/**
+ * BDS Chip — Interactive pill for filtering, selection, or input
+ *
+ * Naming: .bds-chip, .bds-chip--{variant}-{appearance}, .bds-chip--{size}
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-chip {
+  /* ─── Component-scoped override surface ── */
+  --chip-hover-overlay: var(--state-hover-overlay, rgba(0, 0, 0, 0.04));     /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --chip-pressed-overlay: var(--state-pressed-overlay, rgba(0, 0, 0, 0.08)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-pill);
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-normal);
+  text-transform: capitalize;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  overflow: clip;
+  transition: filter var(--duration-fast) var(--ease-out);
+  box-sizing: border-box;
+}
+
+.bds-chip:hover:not(.bds-chip--disabled) {
+  box-shadow: inset 0 0 0 999px var(--chip-hover-overlay); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-chip:active:not(.bds-chip--disabled) {
+  box-shadow: inset 0 0 0 999px var(--chip-pressed-overlay); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-chip:focus-visible {
+  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+  outline-offset: 2px;
+}
+
+/* ─── Sizes ───────────────────────────────────────────────────── */
+
+.bds-chip--sm {
+  padding: var(--space-150) var(--padding-sm);
+  font-size: var(--label-tiny);
+  gap: var(--gap-xs);
+  height: 28px;
+}
+
+.bds-chip--md {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--label-sm);
+  gap: var(--gap-sm);
+  height: 32px;
+}
+
+.bds-chip--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--label-md);
+  gap: var(--gap-md);
+  height: 40px;
+}
+
+/* ─── Variant + Appearance ────────────────────────────────────── */
+
+.bds-chip--primary-dark {
+  background-color: var(--background-inverse);
+  color: var(--text-inverse);
+}
+
+.bds-chip--primary-light {
+  background-color: transparent;
+  color: var(--text-brand-primary);
+  border: var(--border-width-md) solid var(--border-brand-primary);
+}
+
+.bds-chip--primary-solid {
+  background-color: var(--background-inverse);
+  color: var(--text-inverse);
+}
+
+.bds-chip--secondary-dark {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.bds-chip--secondary-light {
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  border: var(--border-width-md) solid var(--border-secondary);
+}
+
+/* ─── Disabled ────────────────────────────────────────────────── */
+
+.bds-chip--disabled {
+  opacity: var(--state-disabled-opacity, 0.4);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Child Elements ──────────────────────────────────────────── */
+
+.bds-chip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Icon font-size matches container so the glyph fills the box */
+.bds-chip--sm .bds-chip__icon {
+  width: 10px;
+  height: 10px;
+  font-size: var(--label-tiny);
+}
+
+.bds-chip--md .bds-chip__icon {
+  width: 16px;
+  height: 16px;
+  font-size: var(--icon-sm);
+}
+
+.bds-chip--lg .bds-chip__icon {
+  width: 20px;
+  height: 20px;
+  font-size: var(--label-xl);
+}
+
+.bds-chip__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-pill);
+  overflow: hidden;
+}
+
+.bds-chip__label {
+  white-space: nowrap;
+}
+
+.bds-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  line-height: inherit;
+  flex-shrink: 0;
+}
+
+.bds-chip__remove:hover {
+  opacity: 0.7;
+}
+}
+@layer bds-components {
+/* CollapsibleCard — expandable content section */
+
+/* ─── Card container ──────────────────────────────────── */
+
+.bds-collapsible-card {
+  background-color: var(--surface-primary);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Header ──────────────────────────────────────────── */
+
+.bds-collapsible-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  cursor: pointer;
+  gap: var(--gap-lg);
+}
+
+.bds-collapsible-card__header-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-lg);
+  flex: 1;
+  min-width: 0;
+}
+
+.bds-collapsible-card__header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+/* ─── Section label ───────────────────────────────────── */
+
+.bds-collapsible-card__section-label {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight--semi-bold);
+  font-size: var(--heading-tiny);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+/* ─── Title ───────────────────────────────────────────── */
+
+.bds-collapsible-card__title {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight--bold);
+  font-size: var(--heading-sm);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+/* ─── Toggle icon button ─────────────────────────────── */
+
+.bds-collapsible-card__toggle {
+  width: 40px; /* bds-lint-ignore — icon button touch target */
+  height: 40px; /* bds-lint-ignore */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--text-primary);
+  font-size: var(--body-lg); /* bds-lint-ignore — icon sizing */
+}
+
+/* ─── Content area ────────────────────────────────────── */
+
+.bds-collapsible-card__content {
+  margin-top: var(--padding-lg);
+}
+}
+@layer bds-components {
+/* ─── Counter ────────────────────────────────────────────────── */
+
+.bds-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  border-radius: var(--border-radius-pill);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 0;
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+
+.bds-counter--xs { padding: var(--space-50) var(--padding-tiny); font-size: var(--label-tiny); }
+.bds-counter--sm { padding: var(--padding-tiny) var(--padding-sm); font-size: var(--label-tiny); }
+.bds-counter--md { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-sm); }
+.bds-counter--lg { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-md); }
+
+/* ─── Status colors ──────────────────────────────────────────── */
+
+.bds-counter--success  { background-color: var(--background-positive);     color: var(--text-inverse); }
+.bds-counter--error    { background-color: var(--background-negative);     color: var(--text-inverse); }
+.bds-counter--warning  { background-color: var(--background-warning);      color: var(--text-primary); }
+.bds-counter--neutral  { background-color: var(--color-grayscale-lighter); color: var(--text-primary); }
+.bds-counter--progress { background-color: var(--background-status-info);  color: var(--text-inverse); }
+.bds-counter--brand    { background-color: var(--background-brand-primary); color: var(--text-inverse); }
+}
+@layer bds-components {
+/**
+ * BDS DatePicker — Class-based styles
+ *
+ * Token-based date picker with Radix Popover for accessible behavior.
+ * Matches BDS form component conventions (label, helper, error, size variants).
+ *
+ * Naming: BEM-lite — .bds-date-picker, .bds-date-picker__trigger
+ */
+
+/* ─── Wrapper ────────────────────────────────────────────────── */
+
+.bds-date-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  color: var(--text-primary);
+}
+
+.bds-date-picker--full-width {
+  width: 100%;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-date-picker__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: capitalize;
+}
+
+.bds-date-picker__label--error {
+  color: var(--color-system-red);
+}
+
+/* Label sizes */
+.bds-date-picker--sm .bds-date-picker__label { font-size: var(--label-sm); }
+.bds-date-picker--md .bds-date-picker__label { font-size: var(--label-md); }
+.bds-date-picker--lg .bds-date-picker__label { font-size: var(--label-lg); }
+
+/* ─── Trigger ────────────────────────────────────────────────── */
+
+.bds-date-picker__trigger {
+  width: 100%;
+  padding: 0 var(--padding-xs);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bds-date-picker__trigger--error {
+  border-color: var(--color-system-red);
+}
+
+.bds-date-picker__trigger--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bds-date-picker__trigger--open {
+  border-color: var(--border-brand-primary);
+}
+
+/* Trigger sizes — heights match Button scale (8px steps, 4px grid) */
+.bds-date-picker--sm .bds-date-picker__trigger { font-size: var(--body-sm); height: 32px; }
+.bds-date-picker--md .bds-date-picker__trigger { font-size: var(--body-md); height: 40px; }
+.bds-date-picker--lg .bds-date-picker__trigger { font-size: var(--body-lg); height: 48px; }
+
+/* ─── Trigger placeholder & caret ────────────────────────────── */
+
+.bds-date-picker__placeholder {
+  color: var(--text-muted);
+}
+
+.bds-date-picker__caret {
+  color: var(--text-muted);
+  font-size: var(--body-sm);
+}
+
+/* ─── Helper / Error text ────────────────────────────────────── */
+
+.bds-date-picker__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-date-picker__helper--error {
+  color: var(--color-system-red);
+}
+
+/* ─── Calendar popover ───────────────────────────────────────── */
+
+.bds-date-picker__calendar {
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-lg);
+  border: var(--border-width-md) solid var(--border-muted);
+  padding: var(--padding-sm);
+  width: 280px; /* bds-lint-ignore — fixed calendar width */
+  z-index: 50; /* bds-lint-ignore — popover stacking */
+}
+
+/* ─── Calendar header ────────────────────────────────────────── */
+
+.bds-date-picker__calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--padding-xs);
+}
+
+.bds-date-picker__month-label {
+  font-family: var(--font-family-label);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+}
+
+/* ─── Nav buttons ────────────────────────────────────────────── */
+
+.bds-date-picker__nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--padding-tiny);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--body-md);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; /* bds-lint-ignore — fixed nav button size */
+  height: 28px; /* bds-lint-ignore — fixed nav button size */
+  transition: background-color 0.15s;
+}
+
+.bds-date-picker__nav-button:hover {
+  background-color: var(--surface-secondary);
+}
+
+/* ─── Day grid ───────────────────────────────────────────────── */
+
+.bds-date-picker__day-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px; /* bds-lint-ignore — tight day grid gap */
+}
+
+.bds-date-picker__day-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.bds-date-picker__day-label {
+  font-family: var(--font-family-label);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--gap-xs) 0;
+}
+
+/* ─── Day button ─────────────────────────────────────────────── */
+
+.bds-date-picker__day {
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: 1;
+  width: 32px; /* bds-lint-ignore — fixed day cell size */
+  height: 32px; /* bds-lint-ignore — fixed day cell size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s, color 0.15s;
+  color: var(--text-primary);
+}
+
+.bds-date-picker__day:hover:not(:disabled):not(.bds-date-picker__day--selected) {
+  background-color: var(--surface-secondary);
+}
+
+.bds-date-picker__day--selected {
+  background-color: var(--surface-brand-primary);
+  color: var(--text-inverse);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.bds-date-picker__day--today:not(.bds-date-picker__day--selected) {
+  border: var(--border-width-md) solid var(--border-brand-primary);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.bds-date-picker__day:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+} /* end @layer bds-components */
+@layer bds-components {
+/* ─── Dialog ─────────────────────────────────────────────────── */
+
+.bds-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: var(--background-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.bds-dialog {
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-overlay);
+  max-width: 440px; /* bds-lint-ignore — design constraint */
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  padding: var(--padding-xl);
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-dialog__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-dialog__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Actions ────────────────────────────────────────────────── */
+
+.bds-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-md);
+  flex-wrap: wrap;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────── */
+
+.bds-dialog__button {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  font-size: var(--label-sm);
+  line-height: var(--font-line-height-normal);
+  padding: var(--padding-sm) var(--padding-lg);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  border: none;
+  transition: filter 0.15s ease;
+}
+
+.bds-dialog__button:hover {
+  filter: brightness(0.9);
+}
+
+.bds-dialog__button--cancel {
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  border: var(--border-width-sm) solid var(--border-secondary);
+}
+
+.bds-dialog__button--confirm {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+.bds-dialog__button--destructive {
+  background-color: var(--background-status-error);
+  color: var(--text-on-color-dark);
+}
+}
+@layer bds-components {
+/* ─── Divider ────────────────────────────────────────────────── */
+
+.bds-divider {
+  border: none;
+  margin: 0;
+}
+
+/* ─── Horizontal (default) ───────────────────────────────────── */
+
+.bds-divider--horizontal {
+  width: 100%;
+  height: 0;
+  border-top: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Vertical ───────────────────────────────────────────────── */
+
+.bds-divider--vertical {
+  width: 0;
+  height: 100%;
+  align-self: stretch;
+  border-left: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Spacing ────────────────────────────────────────────────── */
+
+.bds-divider--horizontal.bds-divider--spacing-sm { margin-top: var(--padding-sm); margin-bottom: var(--padding-sm); }
+.bds-divider--horizontal.bds-divider--spacing-md { margin-top: var(--padding-md); margin-bottom: var(--padding-md); }
+.bds-divider--horizontal.bds-divider--spacing-lg { margin-top: var(--padding-lg); margin-bottom: var(--padding-lg); }
+
+.bds-divider--vertical.bds-divider--spacing-sm { margin-left: var(--padding-sm); margin-right: var(--padding-sm); }
+.bds-divider--vertical.bds-divider--spacing-md { margin-left: var(--padding-md); margin-right: var(--padding-md); }
+.bds-divider--vertical.bds-divider--spacing-lg { margin-left: var(--padding-lg); margin-right: var(--padding-lg); }
+}
+@layer bds-components {
+/* ─── Dot ────────────────────────────────────────────────────── */
+
+.bds-dot {
+  display: inline-block;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+/* bds-lint-ignore — Figma-driven dot dimensions */
+
+.bds-dot--sm { width: 6px; height: 6px; }
+.bds-dot--md { width: 8px; height: 8px; }
+.bds-dot--lg { width: 10px; height: 10px; }
+
+/* ─── Status colors ──────────────────────────────────────────── */
+
+.bds-dot--default  { background-color: var(--background-brand-primary); }
+.bds-dot--positive { background-color: var(--background-positive); }
+.bds-dot--warning  { background-color: var(--background-warning); }
+.bds-dot--error    { background-color: var(--background-negative); }
+.bds-dot--info     { background-color: var(--background-status-info); }
+.bds-dot--neutral  { background-color: var(--background-status-neutral); }
+
+/* ─── Pulse animation (keyframe in tokens/animations.css) ────── */
+
+.bds-dot--pulse {
+  animation: bds-pulse 1.4s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-dot--pulse { animation: none; opacity: 0.75; }
+}
+}
+@layer bds-components {
+/**
+ * BDS TextInput Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ */
+
+.bds-text-input-field {
+  /* ─── Component-scoped override surface ── */
+  --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-text-input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-text-input-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-text-input-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-text-input-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  outline: none;
+}
+
+.bds-text-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+}
+@layer bds-components {
+/* ─── EmptyState ─────────────────────────────────────────────── */
+
+.bds-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xl);
+  padding: var(--padding-xl);
+  background-color: var(--surface-secondary);
+  border: var(--border-width-sm) solid var(--border-secondary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 240px; /* bds-lint-ignore — design constraint */
+}
+
+/* ─── Text wrapper ───────────────────────────────────────────── */
+
+.bds-empty-state__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-empty-state__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-empty-state__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+}
+@layer bds-components {
+/**
+ * BDS FileUploader
+ *
+ * Token reference:
+ * - --surface-primary (dropzone bg)
+ * - --border-secondary (dashed border)
+ * - --border-brand-primary (drag-over border)
+ * - --border-radius-lg
+ * - --padding-xl
+ * - --gap-sm, --gap-md
+ * - --text-negative (error)
+ */
+
+/* ─── Wrapper ─────────────────────────────────────────────────── */
+
+.bds-file-uploader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+/* ─── Dropzone ────────────────────────────────────────────────── */
+
+.bds-file-uploader__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-md);
+  padding: var(--padding-xl);
+  background-color: var(--surface-primary);
+  border: var(--border-width-lg) dashed var(--border-secondary);
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bds-file-uploader__dropzone--active {
+  border-color: var(--border-brand-primary);
+  background-color: color-mix(in srgb, var(--background-brand-primary) 5%, var(--surface-primary));
+}
+
+.bds-file-uploader__dropzone--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bds-file-uploader__dropzone--error {
+  border-color: var(--text-negative);
+}
+
+/* ─── Icon ────────────────────────────────────────────────────── */
+
+.bds-file-uploader__icon {
+  font-size: var(--heading-md);
+  color: var(--text-brand-primary);
+}
+
+/* ─── Label ───────────────────────────────────────────────────── */
+
+.bds-file-uploader__label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* ─── Helper / Error text ─────────────────────────────────────── */
+
+.bds-file-uploader__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.bds-file-uploader__error {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-negative);
+  margin: 0;
+}
+
+/* ─── Browse link ─────────────────────────────────────────────── */
+
+.bds-file-uploader__browse {
+  color: var(--text-brand-primary);
+  font-weight: var(--font-weight-semi-bold);
+  text-decoration: underline;
+  cursor: pointer;
+}
+}
+@layer bds-components {
+/* FilterButton — dropdown filter trigger for filter bars */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-filter-button {
+  position: relative;
+  display: inline-block;
+}
+
+/* ─── Trigger button ──────────────────────────────────── */
+
+.bds-filter-button__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  white-space: nowrap;
+  text-transform: capitalize;
+  min-width: 120px;
+  box-sizing: border-box;
+}
+
+.bds-filter-button__trigger--active {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+/* Size variants — height scale matches Button/IconButton (4px grid, 8px steps) */
+
+.bds-filter-button__trigger--sm {
+  height: 32px;
+  padding-inline: var(--padding-md);
+  font-size: var(--label-sm);
+  gap: var(--gap-sm);
+}
+
+.bds-filter-button__trigger--md {
+  height: 40px;
+  padding-inline: var(--padding-lg);
+  font-size: var(--label-md);
+  gap: var(--gap-md);
+}
+
+.bds-filter-button__trigger--lg {
+  height: 48px;
+  padding-inline: var(--padding-xl);
+  font-size: var(--label-lg);
+  gap: var(--gap-lg);
+}
+
+/* ─── Caret icon ──────────────────────────────────────── */
+
+.bds-filter-button__caret {
+  font-size: var(--icon-sm);
+}
+
+/* ─── Dropdown panel ──────────────────────────────────── */
+
+.bds-filter-button__dropdown {
+  position: absolute;
+  top: calc(100% + var(--gap-md));
+  left: 0;
+  z-index: 100;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--padding-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 200px;
+}
+
+/* ─── Option items ────────────────────────────────────── */
+
+.bds-filter-button__option {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: var(--padding-tiny);
+  background: none;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+}
+
+.bds-filter-button__option--selected {
+  background-color: var(--background-secondary);
+}
+
+/* ─── Icon wrapper ────────────────────────────────────── */
+
+.bds-filter-button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; /* bds-lint-ignore — icon wrapper touch target */
+  height: 24px; /* bds-lint-ignore */
+  font-size: var(--icon-lg);
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+}
+@layer bds-components {
+/* FilterToggle — binary on/off filter pill for filter bars */
+
+/* ─── Base ────────────────────────────────────────────── */
+
+.bds-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* ─── Active state ────────────────────────────────────── */
+
+.bds-filter-toggle--active {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+/* ─── Size variants — matches FilterButton/Button height scale (4px grid, 8px steps) ─── */
+
+.bds-filter-toggle--sm {
+  height: 32px;
+  padding-inline: var(--padding-md);
+  font-size: var(--label-sm);
+}
+
+.bds-filter-toggle--md {
+  height: 40px;
+  padding-inline: var(--padding-lg);
+  font-size: var(--label-md);
+}
+
+.bds-filter-toggle--lg {
+  height: 48px;
+  padding-inline: var(--padding-xl);
+  font-size: var(--label-lg);
+}
+}
+@layer bds-components {
+/**
+ * BDS Footer
+ *
+ * Token reference:
+ * - --surface-primary (default bg)
+ * - --surface-brand-primary (brand bg)
+ * - --border-secondary (borders)
+ * - --padding-xl, --padding-lg, --padding-md
+ * - --gap-xl, --gap-lg, --gap-md, --gap-sm
+ */
+
+/* ─── Container ───────────────────────────────────────────────── */
+
+.bds-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+  padding: var(--padding-xl) var(--padding-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Variants ────────────────────────────────────────────────── */
+
+.bds-footer--default {
+  background-color: var(--surface-primary);
+  border-top: var(--border-width-lg) solid var(--border-secondary);
+}
+
+.bds-footer--brand {
+  background-color: var(--surface-brand-primary);
+}
+
+/* ─── Top section: logo + columns ─────────────────────────────── */
+
+.bds-footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xl);
+  width: 100%;
+}
+
+.bds-footer__logo-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 200px;
+  flex: 1 1 200px;
+}
+
+.bds-footer__tagline {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+  max-width: 280px;
+}
+
+/* ─── Columns ─────────────────────────────────────────────────── */
+
+.bds-footer__columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xl);
+  flex: 2 1 400px;
+}
+
+.bds-footer__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.bds-footer__heading {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-snug);
+  margin: 0;
+}
+
+.bds-footer__link {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.bds-footer__link:hover {
+  opacity: 0.7;
+}
+
+/* ─── Bottom bar ──────────────────────────────────────────────── */
+
+.bds-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap-lg);
+  padding-top: var(--padding-md);
+  border-top: var(--border-width-sm) solid var(--border-secondary);
+}
+
+.bds-footer__copyright {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-regular);
+  margin: 0;
+}
+
+.bds-footer__social {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+/* ─── Variant color overrides ─────────────────────────────────── */
+
+.bds-footer--default .bds-footer__heading { color: var(--text-primary); }
+.bds-footer--default .bds-footer__link { color: var(--text-secondary); }
+.bds-footer--default .bds-footer__tagline { color: var(--text-secondary); }
+.bds-footer--default .bds-footer__copyright { color: var(--text-muted); }
+
+.bds-footer--brand .bds-footer__heading { color: var(--text-inverse); }
+.bds-footer--brand .bds-footer__link { color: var(--text-inverse); }
+.bds-footer--brand .bds-footer__tagline { color: var(--text-inverse); }
+.bds-footer--brand .bds-footer__copyright { color: var(--text-inverse); }
+}
+@layer bds-components {
+/**
+ * BDS Form
+ *
+ * Token reference:
+ * - --gap-sm, --gap-md, --gap-lg, --gap-xl
+ * - --padding-sm, --padding-md
+ * - --border-radius-md
+ * - --text-negative, --text-positive
+ */
+
+/* ─── Container ───────────────────────────────────────────────── */
+
+.bds-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Gap variants ────────────────────────────────────────────── */
+
+.bds-form--gap-sm { gap: var(--gap-md); }
+.bds-form--gap-md { gap: var(--gap-lg); }
+.bds-form--gap-lg { gap: var(--gap-xl); }
+
+/* ─── Header ──────────────────────────────────────────────────── */
+
+.bds-form__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.bds-form__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-form__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Messages ────────────────────────────────────────────────── */
+
+.bds-form__error {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-negative);
+  margin: 0;
+  padding: var(--padding-sm);
+  background: color-mix(in srgb, var(--text-negative) 8%, transparent);
+  border-radius: var(--border-radius-md);
+}
+
+.bds-form__success {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-positive);
+  margin: 0;
+  padding: var(--padding-sm);
+  background: color-mix(in srgb, var(--text-positive) 8%, transparent);
+  border-radius: var(--border-radius-md);
+}
+
+/* ─── Fields ──────────────────────────────────────────────────── */
+
+.bds-form__fields {
+  display: flex;
+  width: 100%;
+}
+
+.bds-form__fields--vertical {
+  flex-direction: column;
+}
+
+.bds-form__fields--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.bds-form__fields--gap-sm { gap: var(--gap-md); }
+.bds-form__fields--gap-md { gap: var(--gap-lg); }
+.bds-form__fields--gap-lg { gap: var(--gap-xl); }
+
+/* ─── Footer ──────────────────────────────────────────────────── */
+
+.bds-form__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding-top: var(--padding-md);
+}
+}
+@layer bds-components {
+/* Menu — floating dropdown panel for navigation and actions */
+
+/* ─── Entrance keyframe ──────────────────────────────── */
+
+@keyframes bds-menu-enter {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── Panel ───────────────────────────────────────────── */
+
+.bds-menu {
+  /* ─── Component-scoped override surface ── */
+  --menu-enter-duration: var(--duration-normal); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --menu-enter-ease: var(--ease-out);            /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
+  position: absolute;
+  z-index: 100;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--padding-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 200px;
+  animation: bds-menu-enter var(--menu-enter-duration) var(--menu-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
+  transform-origin: top center;
+}
+
+/* ─── Menu item ───────────────────────────────────────── */
+
+.bds-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: var(--padding-tiny);
+  background: none;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.bds-menu__item--active {
+  background-color: var(--surface-secondary);
+}
+
+.bds-menu__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Item hover ─────────────────────────────────────── */
+
+.bds-menu__item:not(.bds-menu__item--disabled) {
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.bds-menu__item:hover:not(.bds-menu__item--disabled) {
+  background-color: var(--surface-secondary);
+}
+
+/* ─── Reduced motion ─────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-menu { animation: none; }
+}
+
+/* ─── Icon wrapper ────────────────────────────────────── */
+
+.bds-menu__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; /* bds-lint-ignore — icon wrapper touch target */
+  height: 24px; /* bds-lint-ignore */
+  font-size: var(--icon-lg);
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+}
+@layer bds-components {
+/**
+ * BDS Meter — Class-based styles
+ *
+ * Horizontal bar gauge for visualizing scores and ratings.
+ * Status-driven fill color via system tokens.
+ *
+ * Naming: BEM-lite — .bds-meter, .bds-meter__track, .bds-meter__fill
+ */
+
+/* ─── Container ──────────────────────────────────────────────── */
+
+.bds-meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-xs);
+}
+
+/* ─── Track ──────────────────────────────────────────────────── */
+
+.bds-meter__track {
+  width: 100%;
+  background-color: var(--background-secondary);
+  overflow: hidden;
+}
+
+.bds-meter__track--sm {
+  height: 8px; /* bds-lint-ignore — Figma-driven bar height */
+  border-radius: 4px; /* bds-lint-ignore — half of bar height */
+}
+
+.bds-meter__track--md {
+  height: 12px; /* bds-lint-ignore — Figma-driven bar height */
+  border-radius: 6px; /* bds-lint-ignore — half of bar height */
+}
+
+.bds-meter__track--lg {
+  height: 16px; /* bds-lint-ignore — Figma-driven bar height */
+  border-radius: 8px; /* bds-lint-ignore — half of bar height */
+}
+
+/* ─── Fill ───────────────────────────────────────────────────── */
+
+.bds-meter__fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.bds-meter__fill--sm {
+  border-radius: 4px; /* bds-lint-ignore — half of bar height */
+}
+
+.bds-meter__fill--md {
+  border-radius: 6px; /* bds-lint-ignore — half of bar height */
+}
+
+.bds-meter__fill--lg {
+  border-radius: 8px; /* bds-lint-ignore — half of bar height */
+}
+
+/* Status colors */
+.bds-meter__fill--positive {
+  background-color: var(--color-system-green);
+}
+
+.bds-meter__fill--warning {
+  background-color: var(--color-system-yellow);
+}
+
+.bds-meter__fill--error {
+  background-color: var(--color-system-red);
+}
+
+.bds-meter__fill--neutral {
+  background-color: var(--background-secondary);
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-meter__label {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.bds-meter__label--above {
+  margin-bottom: var(--gap-xs);
+}
+
+.bds-meter__label--below {
+  margin-top: var(--gap-xs);
+}
+
+/* ─── Value ──────────────────────────────────────────────────── */
+
+.bds-meter__value {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.bds-meter__value-suffix {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  color: var(--text-secondary);
+}
+
+} /* end @layer bds-components */
+@layer bds-components {
+/* ─── Modal ──────────────────────────────────────────────────── */
+
+.bds-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-lg);
+  z-index: 1000;
+}
+
+.bds-modal {
+  position: relative;
+  width: 100%;
+  max-height: 90vh;
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-overlay);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─── Desktop min-width ──────────────────────────────────────── */
+/* bds-lint-ignore — design-spec min-width */
+
+@media (min-width: 768px) {
+  .bds-modal { min-width: 640px; }
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+/* bds-lint-ignore — design-spec max-widths */
+
+.bds-modal--sm  { max-width: 640px; }
+.bds-modal--md  { max-width: 720px; }
+.bds-modal--lg  { max-width: 800px; }
+.bds-modal--xl  { max-width: 1000px; }
+.bds-modal--full { max-width: 95vw; }
+
+/* ─── Header ─────────────────────────────────────────────────── */
+
+.bds-modal__header {
+  padding: var(--padding-lg);
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-modal__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Close button ───────────────────────────────────────────── */
+
+.bds-modal__close {
+  background: none;
+  border: none;
+  font-size: var(--icon-md);
+  line-height: var(--font-line-height-tight);
+  cursor: pointer;
+  padding: var(--padding-md);
+  margin-right: calc(-1 * var(--padding-md));
+  color: var(--text-primary);
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bds-modal__close:hover {
+  opacity: 1;
+}
+
+.bds-modal__close:focus-visible {
+  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* ─── Body ───────────────────────────────────────────────────── */
+
+.bds-modal__body {
+  padding: var(--padding-xl);
+  overflow-y: auto;
+  flex: 1;
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-normal);
+}
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+
+.bds-modal__footer {
+  padding: var(--padding-xl);
+  display: flex;
+  gap: var(--gap-lg);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+}
+@layer bds-components {
+/* ─── Select wrapper ─────────────────────────────────────────── */
+
+.bds-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  color: var(--text-primary);
+}
+
+.bds-select-wrapper--full-width {
+  width: 100%;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-select-label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: capitalize;
+}
+
+.bds-select-label--sm { font-size: var(--label-sm); }
+.bds-select-label--md { font-size: var(--label-md); }
+.bds-select-label--lg { font-size: var(--label-lg); }
+
+.bds-select-label--error {
+  color: var(--text-negative);
+}
+
+/* ─── Field wrapper ──────────────────────────────────────────── */
+
+.bds-select-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Select element ─────────────────────────────────────────── */
+
+.bds-select {
+  /* ─── Component-scoped override surface ── */
+  --select-chevron-color: var(--text-muted);
+  --select-icon-color: var(--text-muted);
+
+  display: inline-block;
+  width: 100%;
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  cursor: pointer;
+  appearance: none;
+  box-sizing: border-box;
+  padding-inline: var(--padding-xs) calc(var(--padding-xs) * 4);
+}
+
+/*
+ * Height scale matches Button (8px steps, 4px grid):
+ *   sm=32  md=40  lg=48
+ * Horizontal padding lives on the base .bds-select rule.
+ * Browser auto-centers text within the explicit height.
+ */
+.bds-select--sm {
+  font-size: var(--body-sm);
+  height: 32px;
+}
+
+.bds-select--md {
+  font-size: var(--body-md);
+  height: 40px;
+}
+
+.bds-select--lg {
+  font-size: var(--body-lg);
+  height: 48px;
+}
+
+/* With icon — extra left padding */
+.bds-select--has-icon {
+  padding-left: calc(var(--padding-xs) * 4);
+}
+
+/* Interactive states */
+.bds-select:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-select:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+.bds-select:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  outline: none;
+}
+
+.bds-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Placeholder color */
+.bds-select:invalid,
+.bds-select--placeholder {
+  color: var(--text-muted);
+}
+
+/* Error state */
+.bds-select--error {
+  border-color: var(--text-negative);
+}
+
+.bds-select--error:hover:not(:disabled) {
+  border-color: var(--text-negative);
+}
+
+.bds-select--error:focus,
+.bds-select--error:focus-visible {
+  border-color: var(--text-negative);
+  box-shadow: 0 0 0 1px var(--text-negative);
+}
+
+/* ─── Chevron icon ───────────────────────────────────────────── */
+
+.bds-select-chevron {
+  position: absolute;
+  right: var(--padding-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--select-chevron-color); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  pointer-events: none;
+  z-index: 1;
+  font-size: 0.75em; /* bds-lint-ignore — relative to input font size */
+}
+
+/* ─── Leading icon ───────────────────────────────────────────── */
+
+.bds-select-icon {
+  position: absolute;
+  left: var(--padding-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--select-icon-color); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Helper / error text ────────────────────────────────────── */
+
+.bds-select-helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-select-helper--error {
+  color: var(--text-negative);
+}
+}
+@layer bds-components {
+/**
+ * BDS Tag — Categorization label with optional icons and dismiss
+ *
+ * Naming: .bds-tag, .bds-tag--{size}, .bds-tag__{element}
+ *
+ * Sizing scale is shared with Badge for side-by-side alignment.
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-tag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
+  color: var(--text-primary);
+  background-color: var(--background-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: default;
+  user-select: none;
+  overflow: clip;
+  transition: background-color var(--duration-normal) var(--ease-out);
+  box-sizing: border-box;
+}
+
+/* ─── Sizes (shared scale with Badge) ────────────────────────── */
+
+.bds-tag--xs {
+  /* bds-lint-ignore — 24px icon-only tag matches shared indicator spec */
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: var(--border-radius-sm);
+  justify-content: center;
+  gap: 0;
+}
+
+.bds-tag--sm {
+  padding: var(--padding-tiny) var(--padding-sm);
+  gap: var(--gap-xs);
+  font-size: var(--label-tiny);
+  height: 28px;
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-tag--md {
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-sm);
+  font-size: var(--label-sm);
+  height: 32px;
+  border-radius: var(--border-radius-md);
+}
+
+.bds-tag--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-md);
+  font-size: var(--label-md);
+  height: 40px;
+  border-radius: var(--border-radius-md);
+}
+
+/* ─── Disabled ────────────────────────────────────────────────── */
+
+.bds-tag--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Icon Wrapper (shared sizing with Badge) ────────────────── */
+
+.bds-tag__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Icon font-size matches container so the glyph fills the box */
+.bds-tag--xs .bds-tag__icon {
+  font-size: var(--icon-xs);
+}
+
+.bds-tag--sm .bds-tag__icon {
+  width: 14px;
+  height: 14px;
+  font-size: var(--icon-xs);
+}
+
+.bds-tag--md .bds-tag__icon {
+  width: 16px;
+  height: 16px;
+  font-size: var(--icon-sm);
+}
+
+.bds-tag--lg .bds-tag__icon {
+  width: 20px;
+  height: 20px;
+  font-size: var(--label-xl);
+}
+
+/* ─── Remove Button ───────────────────────────────────────────── */
+
+.bds-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.bds-tag__remove:hover {
+  opacity: 0.7;
+}
+}
+@layer bds-components {
+/* MultiSelect — select dropdown with tag chips */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-multi-select {
+  width: 100%;
+}
+
+.bds-multi-select--auto-width {
+  width: auto;
+}
+
+/* ─── Tag container ───────────────────────────────────── */
+
+.bds-multi-select__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  margin-top: var(--gap-md);
+}
+}
+@layer bds-components {
+/**
+ * BDS NavBar
+ *
+ * Token reference:
+ * - --surface-nav (navbar background)
+ * - --padding-md, --padding-lg
+ * - --gap-xl, --gap-lg, --gap-md
+ * - --text-secondary, --text-primary
+ */
+
+/* ─── Container ───────────────────────────────────────────────── */
+
+.bds-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--padding-md) var(--padding-lg);
+  background-color: var(--surface-nav);
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+.bds-nav-bar--sticky {
+  position: sticky;
+  top: 0;
+}
+
+/* ─── Left section: logo + links ──────────────────────────────── */
+
+.bds-nav-bar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xl);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.bds-nav-bar__logo {
+  flex-shrink: 0;
+}
+
+.bds-nav-bar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  flex-wrap: wrap;
+}
+
+/* ─── Link styles ─────────────────────────────────────────────── */
+
+.bds-nav-bar__link {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+}
+
+.bds-nav-bar__link:hover {
+  color: var(--text-primary);
+}
+
+.bds-nav-bar__link--active {
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+}
+
+/* ─── Actions ─────────────────────────────────────────────────── */
+
+.bds-nav-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+}
+}
+@layer bds-components {
+/**
+ * BDS NotificationList — Notification presentation components
+ *
+ * Covers: NotificationItem, NotificationList, NotificationPopover.
+ * All token-based. Presentation only — no data/behavior logic.
+ *
+ * Naming: BEM-lite — .bds-notification-item, .bds-notification-popover
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   NotificationItem
+   ═══════════════════════════════════════════════════════════════ */
+
+.bds-notification-item {
+  display: flex;
+  gap: var(--gap-md);
+  padding: var(--padding-sm) var(--padding-md);
+  cursor: pointer;
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  transition: background-color 0.15s;
+}
+
+.bds-notification-item:hover {
+  background-color: var(--surface-secondary);
+}
+
+/* Unread highlight */
+.bds-notification-item--unread {
+  background-color: var(--surface-secondary);
+}
+
+/* Unread dot */
+.bds-notification-item__dot {
+  width: 8px; /* bds-lint-ignore — fixed unread dot size */
+  height: 8px; /* bds-lint-ignore */
+  border-radius: var(--border-radius-pill);
+  background-color: var(--surface-brand-primary);
+  flex-shrink: 0;
+  margin-top: 6px; /* bds-lint-ignore — optical alignment with title baseline */
+}
+
+/* Content */
+.bds-notification-item__content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Title */
+.bds-notification-item__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-snug);
+}
+
+/* Body */
+.bds-notification-item__body {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  color: var(--text-secondary);
+  line-height: var(--font-line-height-normal);
+  margin-top: var(--gap-xs);
+}
+
+/* Timestamp */
+.bds-notification-item__time {
+  font-family: var(--font-family-label);
+  font-size: var(--body-tiny);
+  color: var(--text-muted);
+  margin-top: var(--gap-xs);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NotificationList
+   ═══════════════════════════════════════════════════════════════ */
+
+.bds-notification-list {
+  overflow-y: auto;
+}
+
+/* Empty state */
+.bds-notification-list__empty {
+  padding: var(--padding-xl);
+  text-align: center;
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NotificationPopover (presentation shell)
+   ═══════════════════════════════════════════════════════════════ */
+
+.bds-notification-popover {
+  width: 360px; /* bds-lint-ignore — design-spec popover width */
+  max-height: 480px; /* bds-lint-ignore — design-spec max scroll height */
+  background-color: var(--surface-primary);
+  border: var(--border-width-sm) solid var(--border-muted);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.bds-notification-popover__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-sm) var(--padding-md);
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  flex-shrink: 0;
+}
+
+/* Title */
+.bds-notification-popover__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+}
+
+/* Header action (Mark all read) */
+.bds-notification-popover__action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-label);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-brand-primary);
+  padding: 0;
+  transition: opacity 0.15s;
+}
+
+.bds-notification-popover__action:hover {
+  opacity: 0.8;
+}
+
+} /* end @layer bds-components */
+@layer bds-components {
+/* ─── PageHeader ─────────────────────────────────────────────── */
+
+.bds-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--padding-xl) 80px; /* bds-lint-ignore — Figma page header spec */
+  width: 100%;
+}
+
+.bds-page-header--flush {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ─── Title row ──────────────────────────────────────────────── */
+
+.bds-page-header__inner {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* ─── Content (title + subtitle) ─────────────────────────────── */
+
+.bds-page-header__content {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+}
+
+.bds-page-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.bds-page-header__badge {
+  flex-shrink: 0;
+}
+
+.bds-page-header__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+.bds-page-header--md .bds-page-header__title {
+  font-size: var(--heading-md);
+}
+
+.bds-page-header--sm .bds-page-header__title {
+  font-size: var(--heading-sm);
+}
+
+.bds-page-header__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+}
+
+/* ─── Actions ────────────────────────────────────────────────── */
+
+.bds-page-header__actions {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* ─── Metadata ───────────────────────────────────────────────── */
+
+.bds-page-header__metadata {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  border-top: var(--border-width-sm) solid var(--border-secondary);
+}
+
+.bds-page-header__metadata--no-divider {
+  border-top: none;
+}
+
+.bds-page-header__metadata-inner {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  padding-top: var(--padding-xl);
+  width: 100%;
+}
+
+.bds-page-header__metadata--no-divider .bds-page-header__metadata-inner {
+  padding-top: 0;
+}
+
+.bds-page-header__metadata-item {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+}
+
+.bds-page-header__metadata-label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bds-page-header__metadata-value {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+}
+
+/* ─── Tabs ───────────────────────────────────────────────────── */
+
+.bds-page-header__tabs {
+  width: 100%;
+  border-bottom: var(--border-width-sm) solid var(--border-secondary);
+}
+
+.bds-page-header__tabs .bds-tab-bar--tab .bds-tab-bar-item {
+  border-bottom-width: var(--border-width-sm);
+  margin-bottom: calc(-1 * var(--border-width-sm));
+}
+}
+@layer bds-components {
+/* Pagination — page navigation controls */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-pagination {
+  display: flex;
+  width: 100%;
+  padding: var(--padding-lg) 0;
+  box-sizing: border-box;
+}
+
+.bds-pagination--left {
+  justify-content: flex-start;
+}
+
+.bds-pagination--center {
+  justify-content: center;
+}
+
+.bds-pagination--right {
+  justify-content: flex-end;
+}
+
+/* ─── Items row ───────────────────────────────────────── */
+
+.bds-pagination__items {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+}
+
+/* ─── Arrow buttons ───────────────────────────────────── */
+
+.bds-pagination__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; /* bds-lint-ignore — Figma-driven arrow size */
+  height: 48px; /* bds-lint-ignore */
+  border-radius: var(--border-radius-pill);
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+  border: none;
+  cursor: pointer;
+  font-size: var(--icon-lg);
+  flex-shrink: 0;
+}
+
+.bds-pagination__arrow--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── Page numbers ────────────────────────────────────── */
+
+.bds-pagination__page {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-muted);
+  padding: var(--padding-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-width: 24px; /* bds-lint-ignore — touch target */
+  text-align: center;
+}
+
+.bds-pagination__page--active {
+  color: var(--text-brand-primary);
+  cursor: default;
+}
+
+/* ─── Ellipsis ────────────────────────────────────────── */
+
+.bds-pagination__ellipsis {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-muted);
+  padding: var(--padding-sm);
+  min-width: 24px; /* bds-lint-ignore */
+  text-align: center;
+  cursor: default;
+}
+}
+@layer bds-components {
+/* PasswordInput — toggle button for show/hide password */
+
+.bds-password-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  line-height: var(--font-line-height-tight);
+}
+}
+@layer bds-components {
+/* Popover — floating content panel anchored to a trigger */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-popover {
+  position: relative;
+  display: inline-block;
+}
+
+.bds-popover__trigger {
+  display: inline-block;
+}
+
+/* ─── Panel ───────────────────────────────────────────── */
+
+.bds-popover__panel {
+  position: absolute;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: var(--border-width-sm) solid var(--border-secondary);
+  padding: var(--padding-md);
+  z-index: 100;
+  box-sizing: border-box;
+  min-width: 200px;
+}
+
+/* ─── Placement modifiers ─────────────────────────────── */
+
+.bds-popover__panel--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--gap-sm);
+}
+
+.bds-popover__panel--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: var(--gap-sm);
+}
+
+.bds-popover__panel--left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: var(--gap-sm);
+}
+
+.bds-popover__panel--right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: var(--gap-sm);
+}
+}
+@layer bds-components {
+/* PricingCard — pricing tier display card */
+
+/* ─── Card container ──────────────────────────────────── */
+
+.bds-pricing-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  padding: var(--padding-lg);
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-secondary);
+  border-radius: var(--border-radius-md);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.bds-pricing-card--highlighted {
+  border-color: var(--border-brand-primary);
+  box-shadow: var(--box-shadow-md);
+}
+
+/* ─── Header ──────────────────────────────────────────── */
+
+.bds-pricing-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-pricing-card__badge {
+  align-self: flex-start;
+}
+
+.bds-pricing-card__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Price block ─────────────────────────────────────── */
+
+.bds-pricing-card__price-block {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-xs);
+}
+
+.bds-pricing-card__price {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-pricing-card__period {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-muted);
+}
+
+/* ─── Description ─────────────────────────────────────── */
+
+.bds-pricing-card__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Divider ─────────────────────────────────────────── */
+
+.bds-pricing-card__divider {
+  border: none;
+  border-top: var(--border-width-md) solid var(--border-muted);
+  margin: 0;
+}
+
+/* ─── Features list ───────────────────────────────────── */
+
+.bds-pricing-card__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bds-pricing-card__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-md);
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+}
+
+.bds-pricing-card__checkmark {
+  color: var(--text-brand-primary);
+  flex-shrink: 0;
+}
+
+/* ─── Action footer ───────────────────────────────────── */
+
+.bds-pricing-card__action {
+  margin-top: auto;
+  padding-top: var(--padding-sm);
+}
+}
+@layer bds-components {
+/* ProgressDots — horizontal dot step indicator */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-progress-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ─── Dot ─────────────────────────────────────────────── */
+
+.bds-progress-dots__dot {
+  border-radius: var(--border-radius-sm);
+  border: none;
+  transition: all var(--duration-normal) var(--ease-out);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.bds-progress-dots__dot--active {
+  background-color: var(--background-brand-primary);
+  opacity: 1;
+}
+
+.bds-progress-dots__dot--complete {
+  background-color: var(--background-brand-primary);
+  opacity: 0.5;
+}
+
+.bds-progress-dots__dot--inactive {
+  background-color: var(--border-secondary);
+  opacity: 1;
+}
+
+.bds-progress-dots__dot--clickable {
+  cursor: pointer;
+}
+
+.bds-progress-dots__dot--non-clickable {
+  cursor: default;
+}
+}
+@layer bds-components {
+/**
+ * BDS ProgressStepper — Class-based styles
+ *
+ * Vertical step progression indicator with complete/active/upcoming states.
+ * Token references use the BDS semantic token layer (never primitives).
+ *
+ * Naming: BEM-lite — .bds-progress-stepper, .bds-progress-stepper__circle
+ */
+
+/* ─── Container ──────────────────────────────────────────────── */
+
+.bds-progress-stepper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Step row ───────────────────────────────────────────────── */
+
+.bds-progress-stepper__step-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.bds-progress-stepper__step-row--clickable {
+  cursor: pointer;
+}
+
+.bds-progress-stepper__step-row--sm {
+  gap: var(--gap-xs);
+}
+
+.bds-progress-stepper__step-row--md {
+  gap: var(--gap-sm);
+}
+
+/* ─── Circle ─────────────────────────────────────────────────── */
+
+.bds-progress-stepper__circle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.bds-progress-stepper__circle--sm {
+  width: 24px; /* bds-lint-ignore — Figma-driven step circle size */
+  height: 24px; /* bds-lint-ignore — Figma-driven step circle size */
+  font-size: var(--body-tiny);
+}
+
+.bds-progress-stepper__circle--md {
+  width: 32px; /* bds-lint-ignore — Figma-driven step circle size */
+  height: 32px; /* bds-lint-ignore — Figma-driven step circle size */
+  font-size: var(--body-sm);
+}
+
+/* Circle states */
+.bds-progress-stepper__circle--active,
+.bds-progress-stepper__circle--complete {
+  background-color: var(--background-brand-primary);
+  color: var(--text-inverse);
+}
+
+.bds-progress-stepper__circle--upcoming {
+  background-color: var(--surface-secondary);
+  color: var(--text-muted);
+  border: var(--border-width-sm) solid var(--border-secondary);
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-progress-stepper__label {
+  font-family: var(--font-family-body);
+  line-height: var(--font-line-height-snug);
+  text-transform: capitalize;
+  transition: color 0.15s ease;
+}
+
+.bds-progress-stepper__label--sm {
+  font-size: var(--body-sm);
+}
+
+.bds-progress-stepper__label--md {
+  font-size: var(--body-md);
+}
+
+.bds-progress-stepper__label--active {
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+}
+
+.bds-progress-stepper__label--complete {
+  font-weight: var(--font-weight-regular);
+  color: var(--text-primary);
+}
+
+.bds-progress-stepper__label--upcoming {
+  font-weight: var(--font-weight-regular);
+  color: var(--text-muted);
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-progress-stepper__desc {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  margin-top: var(--space-50);
+}
+
+.bds-progress-stepper__desc--sm {
+  font-size: var(--body-tiny);
+}
+
+.bds-progress-stepper__desc--md {
+  font-size: var(--body-sm);
+}
+
+/* ─── Connector ──────────────────────────────────────────────── */
+
+.bds-progress-stepper__connector {
+  width: 2px; /* bds-lint-ignore — Figma connector width */
+  flex-grow: 1;
+  min-height: 16px; /* bds-lint-ignore — minimum connector height */
+  transition: background-color 0.15s ease;
+}
+
+.bds-progress-stepper__connector--sm {
+  margin-left: 11px; /* bds-lint-ignore — (24 - 2) / 2 to center under circle */
+}
+
+.bds-progress-stepper__connector--md {
+  margin-left: 15px; /* bds-lint-ignore — (32 - 2) / 2 to center under circle */
+}
+
+.bds-progress-stepper__connector--complete {
+  background-color: var(--background-brand-primary);
+}
+
+.bds-progress-stepper__connector--incomplete {
+  background-color: var(--border-secondary);
+}
+
+} /* end @layer bds-components */
+@layer bds-components {
+/* Radio — single selection control */
+
+/* ─── Label wrapper ───────────────────────────────────── */
+
+.bds-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-md);
+  cursor: pointer;
+  user-select: none;
+}
+
+.bds-radio--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Hidden native input ────────────────────────────── */
+
+.bds-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+/* ─── Custom indicator ───────────────────────────────── */
+
+.bds-radio__indicator {
+  width: 22px; /* bds-lint-ignore — fixed radio indicator size */
+  height: 22px; /* bds-lint-ignore */
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: var(--border-width-lg) solid var(--border-primary);
+  background-color: var(--background-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+/* Inner dot — hidden by default */
+.bds-radio__indicator::after {
+  content: '';
+  width: 10px; /* bds-lint-ignore — fixed inner dot size */
+  height: 10px; /* bds-lint-ignore */
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.15s;
+}
+
+/* ── Hover ── */
+.bds-radio:hover:not(.bds-radio--disabled) .bds-radio__indicator {
+  border-color: var(--border-brand-primary);
+}
+
+/* ── Checked ── */
+.bds-radio__input:checked + .bds-radio__indicator {
+  border-color: var(--border-brand-primary);
+}
+
+.bds-radio__input:checked + .bds-radio__indicator::after {
+  background-color: var(--surface-brand-primary);
+}
+
+/* ── Focus-visible ── */
+.bds-radio__input:focus-visible + .bds-radio__indicator {
+  box-shadow: 0 0 0 2px var(--border-brand-primary); /* bds-lint-ignore — focus ring */
+  outline: none;
+}
+
+/* ── Disabled ── */
+.bds-radio--disabled .bds-radio__indicator {
+  cursor: not-allowed;
+}
+
+/* ─── Label text ──────────────────────────────────────── */
+
+.bds-radio__text {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+}
+@layer bds-components {
+/**
+ * BDS SearchInput Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ * - --text-primary (clear button color)
+ */
+
+.bds-search-input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-search-input-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-search-input-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+.bds-search-input-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  outline: none;
+}
+
+.bds-search-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Native clear button — force solid color instead of browser gradient */
+/* bds-lint-ignore — data URI SVGs cannot reference CSS variables; #333 = text-primary default */
+.bds-search-input-field::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23333' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256l105.3-105.4z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+}
+@layer bds-components {
+/* SegmentedControl — pseudo-state styles (hover, pressed, disabled)
+   Inline CSSProperties can't handle :hover/:active/:disabled,
+   so these live in CSS. */
+
+/* ── Shared transition ── */
+
+.bds-segmented-control-item {
+  transition: background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+/* ── Disabled ── */
+
+.bds-segmented-control-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── Inactive hover ── */
+
+.bds-segmented-control-item:hover:not(:disabled):not(.bds-segmented-control-item--active) {
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
+}
+
+/* ── Inactive press ── */
+
+.bds-segmented-control-item:active:not(:disabled):not(.bds-segmented-control-item--active) {
+  background-color: var(--background-tertiary);
+  opacity: 0.7;
+}
+
+/* ── Active press ── */
+
+.bds-segmented-control-item--active:active:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* ── Focus visible (keyboard navigation) ── */
+
+.bds-segmented-control-item:focus-visible {
+  outline: 2px solid var(--border-brand-primary);
+  outline-offset: 1px;
+}
+}
+@layer bds-components {
+/* ─── ServiceBadge (deprecated — use ServiceTag variant="icon") ── */
+
+.bds-service-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+/* bds-lint-ignore — Figma-driven badge dimensions */
+
+.bds-service-badge--sm { width: 20px; height: 20px; border-radius: var(--border-radius-sm); } /* bds-lint-ignore */
+.bds-service-badge--md { width: 28px; height: 28px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
+.bds-service-badge--lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
+
+/* ─── Category colors ────────────────────────────────────────── */
+
+.bds-service-badge--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand); }
+.bds-service-badge--marketing   { background-color: var(--background-service-marketing);   color: var(--text-service-marketing); }
+.bds-service-badge--information { background-color: var(--background-service-information); color: var(--text-service-information); }
+.bds-service-badge--product     { background-color: var(--background-service-product);     color: var(--text-service-product); }
+.bds-service-badge--service     { background-color: var(--background-service-service);     color: var(--text-service-service); }
+
+/* ─── Icon ───────────────────────────────────────────────────── */
+
+.bds-service-badge__icon {
+  object-fit: contain;
+  display: block;
+}
+}
+@layer bds-components {
+/* ─── ServiceTag ─────────────────────────────────────────────── */
+
+.bds-service-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically; shared with Badge + Tag */
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--border-radius-sm);
+  box-sizing: border-box;
+}
+
+.bds-service-tag--has-icon {
+  gap: var(--gap-xs);
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+
+.bds-service-tag--sm {
+  height: 28px;
+  padding-inline: var(--padding-sm);
+  font-size: var(--label-tiny);
+}
+
+.bds-service-tag--md {
+  height: 32px;
+  padding-inline: var(--padding-sm);
+  font-size: var(--label-sm);
+}
+
+.bds-service-tag--lg {
+  height: 40px;
+  padding-inline: var(--padding-md);
+  font-size: var(--label-md);
+}
+
+/* ─── Category colors ────────────────────────────────────────── */
+
+.bds-service-tag--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand); }
+.bds-service-tag--marketing   { background-color: var(--background-service-marketing);   color: var(--text-service-marketing); }
+.bds-service-tag--information { background-color: var(--background-service-information); color: var(--text-service-information); }
+.bds-service-tag--product     { background-color: var(--background-service-product);     color: var(--text-service-product); }
+.bds-service-tag--service     { background-color: var(--background-service-service);     color: var(--text-service-service); }
+
+/* ─── Icon ───────────────────────────────────────────────────── */
+
+.bds-service-tag__icon {
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ─── Icon-only variant (square badge) ───────────────────────── */
+
+.bds-service-tag--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* bds-lint-ignore — Figma-driven badge dimensions */
+.bds-service-tag--icon-sm { width: 20px; height: 20px; border-radius: var(--border-radius-sm); } /* bds-lint-ignore */
+.bds-service-tag--icon-md { width: 28px; height: 28px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
+.bds-service-tag--icon-lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
+}
+@layer bds-components {
+/* ─── SidebarNavigation ──────────────────────────────────────── */
+
+.bds-sidebar-nav {
+  background-color: var(--surface-primary);
+  border-right: var(--border-width-md) solid var(--border-secondary);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* ─── Logo ───────────────────────────────────────────────────── */
+
+.bds-sidebar-nav__logo {
+  padding: 24px 24px 20px; /* bds-lint-ignore — Figma sidebar spec */
+  border-bottom: var(--border-width-md) solid var(--border-secondary);
+}
+
+/* ─── Nav section ────────────────────────────────────────────── */
+
+.bds-sidebar-nav__nav {
+  flex: 1;
+  padding: 16px 12px; /* bds-lint-ignore — Figma sidebar spec */
+  overflow-y: auto;
+}
+
+/* ─── Nav item ───────────────────────────────────────────────── */
+
+.bds-sidebar-nav__item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md); /* bds-lint-ignore — Figma spec 12px, nearest token 8px */
+  padding: 10px 12px; /* bds-lint-ignore — Figma nav item padding */
+  border-radius: var(--border-radius-md); /* bds-lint-ignore — Figma spec 6px, nearest token 4px */
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-secondary);
+  background-color: transparent;
+  text-decoration: none;
+  text-transform: capitalize;
+  margin-bottom: var(--gap-sm);
+  transition: background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+}
+
+.bds-sidebar-nav__item:hover {
+  background-color: var(--page-secondary);
+}
+
+.bds-sidebar-nav__item--active {
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+  background-color: var(--page-secondary);
+}
+
+/* ─── Indicator dot ──────────────────────────────────────────── */
+
+.bds-sidebar-nav__indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--border-secondary);
+  flex-shrink: 0;
+}
+
+.bds-sidebar-nav__indicator--active {
+  background-color: var(--background-brand-primary);
+}
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+
+.bds-sidebar-nav__footer {
+  padding: 12px 24px; /* bds-lint-ignore — Figma sidebar spec */
+  border-top: var(--border-width-md) solid var(--border-secondary);
+}
+
+/* ─── User section ───────────────────────────────────────────── */
+
+.bds-sidebar-nav__user {
+  padding: 16px 24px; /* bds-lint-ignore — Figma sidebar spec */
+  border-top: var(--border-width-md) solid var(--border-secondary);
+}
+}
+@layer bds-components {
+/* ─── Skeleton ───────────────────────────────────────────────── */
+
+.bds-skeleton {
+  display: inline-block;
+  background-color: var(--background-secondary);
+  background-image: linear-gradient(
+    90deg,
+    var(--background-secondary) 25%,
+    var(--page-secondary) 50%,
+    var(--background-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: bds-shimmer 1.5s infinite;
+}
+
+/* ─── Variants ───────────────────────────────────────────────── */
+
+.bds-skeleton--text {
+  width: 100%;
+  height: 1em;
+  border-radius: var(--border-radius-md);
+}
+
+.bds-skeleton--circular {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.bds-skeleton--rectangular {
+  width: 100%;
+  height: 140px;
+  border-radius: var(--border-radius-md);
+}
+}
+@layer bds-components {
+/* Slider CSS — needed for pseudo-elements (::-webkit-slider-thumb, etc.) */
+/* --bds-slider-track-height, --bds-slider-thumb-size, --bds-slider-percent are component-local
+   custom properties set by Slider.tsx. The --bds-* prefix marks them as non-global. */
+
+/* ─── Component-scoped override surface ── */
+.bds-slider {
+  --slider-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* bds-lint-ignore — lighter than --shadow-sm; promote to Figma */
+}
+
+.bds-slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  margin: 0;
+}
+
+/* Track */
+.bds-slider-input::-webkit-slider-runnable-track {
+  height: var(--bds-slider-track-height, 6px);
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--background-brand-primary) 0%,
+    var(--background-brand-primary) var(--bds-slider-percent, 50%),
+    var(--border-secondary) var(--bds-slider-percent, 50%),
+    var(--border-secondary) 100%
+  );
+}
+
+.bds-slider-input::-moz-range-track {
+  height: var(--bds-slider-track-height, 6px);
+  border-radius: 999px;
+  background: var(--border-secondary);
+  border: none;
+}
+
+.bds-slider-input::-moz-range-progress {
+  height: var(--bds-slider-track-height, 6px);
+  border-radius: 999px;
+  background: var(--background-brand-primary);
+}
+
+/* Thumb */
+.bds-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: var(--bds-slider-thumb-size, 20px);
+  height: var(--bds-slider-thumb-size, 20px);
+  border-radius: 50%;
+  background: var(--surface-primary);
+  border: var(--border-width-200) solid var(--background-brand-primary);
+  box-shadow: var(--slider-thumb-shadow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  cursor: pointer;
+  margin-top: calc((var(--bds-slider-track-height, 6px) - var(--bds-slider-thumb-size, 20px)) / 2);
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.bds-slider-input::-moz-range-thumb {
+  width: var(--bds-slider-thumb-size, 20px);
+  height: var(--bds-slider-thumb-size, 20px);
+  border-radius: 50%;
+  background: var(--surface-primary);
+  border: var(--border-width-200) solid var(--background-brand-primary);
+  box-shadow: var(--slider-thumb-shadow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  cursor: pointer;
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+/* Focus */
+.bds-slider-input:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--background-brand-primary) 30%, transparent);
+}
+
+.bds-slider-input:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--background-brand-primary) 30%, transparent);
+}
+
+/* Disabled */
+.bds-slider-input:disabled {
+  pointer-events: none;
+}
+
+.bds-slider-input:disabled::-webkit-slider-thumb {
+  background: var(--border-secondary);
+  border-color: var(--border-secondary);
+}
+
+.bds-slider-input:disabled::-moz-range-thumb {
+  background: var(--border-secondary);
+  border-color: var(--border-secondary);
+}
+}
+@layer bds-components {
+/* ─── Snackbar ───────────────────────────────────────────────── */
+
+.bds-snackbar {
+  /* ─── Component-scoped override surface ── */
+  --snackbar-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2); /* bds-lint-ignore — stronger alpha than --shadow-lg; promote to Figma */
+
+  position: fixed;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  padding: var(--padding-md) var(--padding-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--snackbar-shadow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  z-index: 1100;
+  max-width: 560px; /* bds-lint-ignore — design constraint */
+  min-width: 280px; /* bds-lint-ignore — design constraint */
+  box-sizing: border-box;
+}
+
+/* ─── Variants ───────────────────────────────────────────────── */
+
+.bds-snackbar--default {
+  background-color: var(--background-inverse);
+  color: var(--text-inverse);
+}
+
+.bds-snackbar--success {
+  background-color: var(--background-status-success);
+  color: var(--text-on-color-dark);
+}
+
+.bds-snackbar--error {
+  background-color: var(--background-status-error);
+  color: var(--text-on-color-dark);
+}
+
+.bds-snackbar--warning {
+  background-color: var(--background-status-orange);
+  color: var(--text-on-color-light);
+}
+
+/* ─── Positions ──────────────────────────────────────────────── */
+
+.bds-snackbar--top         { top: var(--padding-lg); left: 50%; transform: translateX(-50%); }
+.bds-snackbar--bottom      { bottom: var(--padding-lg); left: 50%; transform: translateX(-50%); }
+.bds-snackbar--top-left    { top: var(--padding-lg); left: var(--padding-lg); }
+.bds-snackbar--top-right   { top: var(--padding-lg); right: var(--padding-lg); }
+.bds-snackbar--bottom-left { bottom: var(--padding-lg); left: var(--padding-lg); }
+.bds-snackbar--bottom-right { bottom: var(--padding-lg); right: var(--padding-lg); }
+
+/* ─── Message ────────────────────────────────────────────────── */
+
+.bds-snackbar__message {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  flex: 1;
+  margin: 0;
+}
+
+/* ─── Close button ───────────────────────────────────────────── */
+
+.bds-snackbar__close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: var(--gap-sm);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-tight);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.bds-snackbar__close:hover {
+  opacity: 1;
+}
+}
+@layer bds-components {
+/* ─── Spinner ────────────────────────────────────────────────── */
+
+.bds-spinner {
+  display: inline-block;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--border-primary);
+  border-top-color: var(--border-brand-primary);
+  animation: bds-spin 0.8s linear infinite;
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+/* bds-lint-ignore — Figma-driven spinner dimensions */
+
+.bds-spinner--sm {
+  width: 16px;
+  height: 16px;
+  border-width: var(--border-width-lg);
+}
+
+.bds-spinner--lg {
+  width: 48px;
+  height: 48px;
+  border-width: var(--border-width-huge);
+}
+}
+@layer bds-components {
+/* Stepper — numeric input with increment/decrement */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-stepper {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* ─── Buttons ─────────────────────────────────────────── */
+
+.bds-stepper__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-width-sm) solid var(--border-secondary);
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0;
+  transition: filter var(--duration-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.bds-stepper__button--disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* ─── Value display ───────────────────────────────────── */
+
+.bds-stepper__value {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  text-align: center;
+  user-select: none;
+}
+
+.bds-stepper__value--disabled {
+  color: var(--text-muted);
+}
+}
+@layer bds-components {
+/* ─── Switch ─────────────────────────────────────────────────── */
+
+.bds-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-md);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.bds-switch--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Hidden input ───────────────────────────────────────────── */
+
+.bds-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* ─── Track ──────────────────────────────────────────────────── */
+/* Track and knob dimensions are size-dependent (runtime calculated) */
+
+.bds-switch__track {
+  position: relative;
+  display: inline-block;
+  border-radius: var(--border-radius-pill);
+  transition: background-color var(--duration-normal) var(--ease-out);
+  flex-shrink: 0;
+  cursor: inherit;
+}
+
+/* ─── Knob ───────────────────────────────────────────────────── */
+
+.bds-switch__knob {
+  position: absolute;
+  background-color: var(--surface-primary);
+  border-radius: 50%;
+  transition: transform var(--duration-normal) var(--ease-out);
+  box-shadow: var(--shadow-sm);
+}
+}
+@layer bds-components {
+/* TabBar — pseudo-state styles (hover, pressed, disabled)
+   Inline CSSProperties can't handle :hover/:active/:disabled,
+   so these live in CSS. */
+
+/* ── Shared cursor + transition ── */
+
+.bds-tab-bar-item {
+  transition: opacity var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+/* Micro press feedback on click */
+.bds-tab-bar-item:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.bds-tab-bar-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── Text variant ── */
+
+.bds-tab-bar--text .bds-tab-bar-item:hover:not(:disabled) {
+  color: var(--text-brand-primary);
+}
+
+.bds-tab-bar--text .bds-tab-bar-item:active:not(:disabled) {
+  opacity: 0.7;
+}
+
+/* ── Text variant on-color ── */
+
+.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled) {
+  opacity: 0.5;
+}
+
+/* ── Tab variant ── */
+
+/* Tabs overlap the container's baseline border so active indicator replaces it */
+.bds-tab-bar--tab .bds-tab-bar-item {
+  margin-bottom: calc(-1 * var(--border-width-md));
+}
+
+.bds-tab-bar--tab .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-primary);
+}
+
+.bds-tab-bar--tab .bds-tab-bar-item:active:not(:disabled) {
+  opacity: 0.7;
+}
+
+/* ── Tab variant on-color ── */
+
+.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+  opacity: 0.8;
+  border-bottom-color: var(--border-on-color-dark);
+}
+
+.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled) {
+  opacity: 0.5;
+}
+
+/* ── Box variant ── */
+
+.bds-tab-bar--box .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.bds-tab-bar--box .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
+  background-color: var(--background-tertiary);
+}
+
+.bds-tab-bar--box .bds-tab-bar-item[aria-selected="true"]:active:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* ── Box variant on-color ── */
+
+.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+  opacity: 0.8;
+}
+
+.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
+  opacity: 0.5;
+}
+}
+@layer bds-components {
+/* ─── Table ──────────────────────────────────────────────────── */
+
+.bds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-family-body);
+  color: var(--text-primary);
+}
+
+/* ─── Row ────────────────────────────────────────────────────── */
+
+.bds-table-row {
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+}
+
+.bds-table-row--selected {
+  background-color: var(--background-secondary);
+}
+
+/* Striped rows */
+.bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) {
+  background-color: var(--background-secondary);
+}
+
+/* ─── Header cell ────────────────────────────────────────────── */
+
+.bds-table-head {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-muted);
+  text-align: left;
+  border-bottom: var(--border-width-md) solid var(--border-muted);
+  background-color: var(--background-secondary);
+  white-space: nowrap;
+}
+
+/* Size: default */
+.bds-table[data-size="default"] .bds-table-head {
+  padding: var(--padding-sm) var(--padding-md);
+}
+
+/* Size: comfortable */
+.bds-table[data-size="comfortable"] .bds-table-head {
+  padding: var(--padding-xl) var(--padding-md);
+}
+
+.bds-table-head--sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ─── Subheader row (section / phase divider) ───────────────── */
+
+.bds-table-subheader {
+  background-color: var(--surface-secondary);
+  color: var(--text-muted);
+  font-family: var(--font-family-subtitle);
+  font-size: var(--subtitle-sm);
+  font-weight: var(--font-weight-semi-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: var(--padding-tiny) var(--padding-md);
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* Suppress striped background on subheader rows */
+.bds-table[data-striped="true"] .bds-table-body .bds-table-subheader-row {
+  background-color: transparent;
+}
+
+/* ─── Flush (remove outer padding on first/last cells) ────── */
+
+.bds-table[data-flush="true"] .bds-table-head:first-child,
+.bds-table[data-flush="true"] .bds-table-cell:first-child {
+  padding-left: 0;
+}
+
+.bds-table[data-flush="true"] .bds-table-head:last-child,
+.bds-table[data-flush="true"] .bds-table-cell:last-child {
+  padding-right: 0;
+}
+
+/* ─── Body cell ──────────────────────────────────────────────── */
+
+.bds-table-cell {
+  font-size: var(--body-md);
+  color: var(--text-primary);
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+/* Size: default */
+.bds-table[data-size="default"] .bds-table-cell {
+  padding: var(--padding-sm) var(--padding-md);
+}
+
+/* Size: comfortable */
+.bds-table[data-size="comfortable"] .bds-table-cell {
+  padding: var(--padding-xl) var(--padding-md);
+}
+}
+@layer bds-components {
+/**
+ * BDS TextArea Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ */
+
+.bds-text-area-field::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-text-area-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-text-area-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+.bds-text-area-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  outline: none;
+}
+
+.bds-text-area-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+}
+@layer bds-components {
+/**
+ * BDS TimePicker — Class-based styles
+ *
+ * Token-based time picker with Radix Popover for accessible behavior.
+ * Matches BDS form component conventions (label, helper, error, size variants).
+ *
+ * Naming: BEM-lite — .bds-time-picker, .bds-time-picker__trigger
+ */
+
+/* ─── Wrapper ────────────────────────────────────────────────── */
+
+.bds-time-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  color: var(--text-primary);
+}
+
+.bds-time-picker--full-width {
+  width: 100%;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-time-picker__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: capitalize;
+}
+
+.bds-time-picker__label--error {
+  color: var(--color-system-red);
+}
+
+/* Label sizes */
+.bds-time-picker--sm .bds-time-picker__label { font-size: var(--label-sm); }
+.bds-time-picker--md .bds-time-picker__label { font-size: var(--label-md); }
+.bds-time-picker--lg .bds-time-picker__label { font-size: var(--label-lg); }
+
+/* ─── Trigger ────────────────────────────────────────────────── */
+
+.bds-time-picker__trigger {
+  width: 100%;
+  padding: 0 var(--padding-xs);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  box-sizing: border-box;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bds-time-picker__trigger:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-time-picker__trigger--error {
+  border-color: var(--color-system-red);
+}
+
+.bds-time-picker__trigger--error:hover:not(:disabled) {
+  border-color: var(--color-system-red);
+}
+
+.bds-time-picker__trigger--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bds-time-picker__trigger--open {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+/* Trigger sizes — heights match Button scale (8px steps, 4px grid) */
+.bds-time-picker--sm .bds-time-picker__trigger { font-size: var(--body-sm); height: 32px; }
+.bds-time-picker--md .bds-time-picker__trigger { font-size: var(--body-md); height: 40px; }
+.bds-time-picker--lg .bds-time-picker__trigger { font-size: var(--body-lg); height: 48px; }
+
+/* ─── Trigger placeholder & icon ─────────────────────────────── */
+
+.bds-time-picker__placeholder {
+  color: var(--text-muted);
+}
+
+.bds-time-picker__icon {
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.125em; /* bds-lint-ignore — relative to trigger font size */
+}
+
+/* ─── Helper / Error text ────────────────────────────────────── */
+
+.bds-time-picker__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-time-picker__helper--error {
+  color: var(--color-system-red);
+}
+
+/* ─── Popover panel ──────────────────────────────────────────── */
+
+.bds-time-picker__popover {
+  outline: none;
+}
+
+.bds-time-picker__columns {
+  display: flex;
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-lg);
+  border: var(--border-width-md) solid var(--border-muted);
+  overflow: hidden;
+}
+
+/* ─── Scroll column ──────────────────────────────────────────── */
+
+.bds-time-picker__column {
+  display: flex;
+  flex-direction: column;
+  max-height: 224px; /* bds-lint-ignore — 7 rows × 32px = 224px visible area */
+  overflow-y: auto;
+  min-width: 56px; /* bds-lint-ignore — minimum column width for two-digit values */
+  scrollbar-width: none; /* Firefox */
+}
+
+.bds-time-picker__column::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Column dividers (not on the last column) */
+.bds-time-picker__column:not(:last-child) {
+  border-right: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* ─── Cell ───────────────────────────────────────────────────── */
+
+.bds-time-picker__cell {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  color: var(--text-primary);
+  padding: var(--padding-xs) var(--padding-sm);
+  text-align: center;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.bds-time-picker__cell:hover:not(.bds-time-picker__cell--selected) {
+  background-color: var(--surface-secondary);
+}
+
+.bds-time-picker__cell--selected {
+  background-color: var(--surface-brand-primary);
+  color: var(--text-inverse);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+} /* end @layer bds-components */
+@layer bds-components {
+/**
+ * BDS TextLink — Class-based styles
+ *
+ * Muted text color that transitions to brand color on hover.
+ * Token references use the BDS semantic token layer (never primitives).
+ *
+ * Naming: BEM-lite — .bds-text-link, .bds-text-link--small
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-text-link);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.bds-text-link:hover {
+  color: var(--text-brand-primary);
+  text-decoration: underline;
+}
+
+.bds-text-link:focus-visible {
+  outline: 2px solid var(--border-brand-primary); /* bds-lint-ignore — focus ring */
+  outline-offset: 2px; /* bds-lint-ignore — focus ring offset */
+  border-radius: var(--border-radius-sm);
+}
+
+/* ─── Small variant ──────────────────────────────────────────── */
+
+.bds-text-link-small {
+  font-size: var(--body-sm);
+}
+
+/* ─── Icon slots ─────────────────────────────────────────────── */
+
+.bds-text-link-icon-before,
+.bds-text-link-icon-after {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+} /* end @layer bds-components */
+@layer bds-components {
+/* ─── TaskConsole ─────────────────────────────────────────────── */
+
+.bds-task-console {
+  /* ─── Component-scoped override surface ── */
+  --task-console-btn-hover-bg: var(--state-hover-overlay);
+
+  position: fixed;
+  z-index: 9999;
+  width: 360px; /* bds-lint-ignore — design constraint matching Google Drive widget */
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-primary);
+  border: var(--border-width-lg) solid var(--border-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  font-family: var(--font-family-body);
+}
+
+/* ─── Position modifiers ─────────────────────────────────────── */
+
+.bds-task-console--bottom-right {
+  bottom: var(--padding-lg);
+  right: var(--padding-lg);
+}
+
+.bds-task-console--bottom-left {
+  bottom: var(--padding-lg);
+  left: var(--padding-lg);
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+
+.bds-task-console__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-md) var(--padding-lg);
+  background-color: var(--surface-secondary);
+  cursor: pointer;
+  user-select: none;
+  min-height: 48px; /* bds-lint-ignore — touch target */
+  box-sizing: border-box;
+}
+
+.bds-task-console--success .bds-task-console__header {
+  background-color: var(--surface-positive);
+}
+
+.bds-task-console--has-errors .bds-task-console__header {
+  background-color: var(--surface-negative);
+}
+
+.bds-task-console__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* bds-lint-ignore — tight spacing for subtitle */
+  min-width: 0;
+  flex: 1;
+}
+
+.bds-task-console__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bds-task-console__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-task-console__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  flex-shrink: 0;
+}
+
+/* ─── Header buttons ─────────────────────────────────────────── */
+
+.bds-task-console__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; /* bds-lint-ignore — icon button sizing */
+  height: 28px; /* bds-lint-ignore — icon button sizing */
+  background: none;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  color: var(--text-primary);
+  opacity: 0.6;
+  font-size: var(--icon-sm);
+  padding: 0;
+  transition: opacity var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+.bds-task-console__btn:hover {
+  opacity: 1;
+  background-color: var(--task-console-btn-hover-bg); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ─── Progress bar ───────────────────────────────────────────── */
+
+.bds-task-console__progress-track {
+  height: 3px; /* bds-lint-ignore — thin progress bar */
+  background-color: var(--border-primary);
+  flex-shrink: 0;
+}
+
+.bds-task-console__progress-fill {
+  height: 100%;
+  background-color: var(--background-status-info);
+  transition: width var(--duration-400) var(--ease-out);
+  border-radius: 0 2px 2px 0; /* bds-lint-ignore — progress bar cap */
+}
+
+.bds-task-console__progress-fill--error {
+  background-color: var(--background-negative);
+}
+
+/* ─── Item list ──────────────────────────────────────────────── */
+
+.bds-task-console__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  max-height: 320px; /* bds-lint-ignore — scroll constraint */
+}
+
+.bds-task-console__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-md) var(--padding-lg);
+  gap: var(--gap-md);
+  border-bottom: var(--border-width-sm) solid var(--border-primary);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.bds-task-console__item:last-child {
+  border-bottom: none;
+}
+
+.bds-task-console__item--in_progress {
+  background-color: var(--surface-status-info);
+}
+
+.bds-task-console__item--failed {
+  background-color: var(--surface-negative);
+}
+
+/* ─── Item content ───────────────────────────────────────────── */
+
+.bds-task-console__item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* bds-lint-ignore — tight spacing */
+  min-width: 0;
+  flex: 1;
+}
+
+.bds-task-console__item-label {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bds-task-console__item--completed .bds-task-console__item-label {
+  color: var(--text-muted);
+}
+
+.bds-task-console__item-link {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-status-info);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bds-task-console__item-link:hover {
+  text-decoration: underline;
+}
+
+.bds-task-console__item-detail {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ─── Status icons ───────────────────────────────────────────── */
+
+.bds-task-console__icon {
+  flex-shrink: 0;
+  font-size: var(--icon-sm);
+}
+
+.bds-task-console__icon--completed {
+  color: var(--text-positive);
+}
+
+.bds-task-console__icon--failed {
+  color: var(--text-negative);
+}
+
+.bds-task-console__icon--in-progress {
+  color: var(--text-status-info);
+}
+
+.bds-task-console__icon--pending {
+  display: inline-block;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  border-radius: var(--border-radius-pill);
+  border: var(--border-width-lg) solid var(--border-primary);
+  box-sizing: border-box;
+}
+}
+@layer bds-components {
+/* ─── Toast ──────────────────────────────────────────────────── */
+
+.bds-toast {
+  /* ─── Component-scoped override surface ── */
+  --toast-shadow: 0px 4px 12px 4px rgba(0, 0, 0, 0.24); /* bds-lint-ignore — unique spread, no token equivalent; promote to Figma */
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background-color: var(--surface-primary);
+  border: var(--border-width-lg) solid var(--border-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--toast-shadow); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  padding: var(--padding-lg);
+  width: 100%;
+  max-width: 600px; /* bds-lint-ignore — design constraint */
+  box-sizing: border-box;
+}
+
+/* ─── Content wrapper — badge + text ─────────────────────────── */
+
+.bds-toast__content {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-md);
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── Text wrapper — title + description ─────────────────────── */
+
+.bds-toast__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* ─── Title ──────────────────────────────────────────────────── */
+
+.bds-toast__title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Description ────────────────────────────────────────────── */
+
+.bds-toast__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Close button ───────────────────────────────────────────── */
+
+.bds-toast__close {
+  background: none;
+  border: none;
+  font-size: var(--icon-md);
+  line-height: var(--font-line-height-tight);
+  cursor: pointer;
+  padding: var(--padding-md);
+  color: var(--text-primary);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.bds-toast__close:hover {
+  opacity: 1;
+}
+}
+@layer bds-components {
+/* Tooltip — contextual information on hover/focus */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* ─── Tooltip bubble ──────────────────────────────────── */
+
+.bds-tooltip__bubble {
+  position: absolute;
+  padding: var(--padding-tiny) var(--padding-md);
+  background-color: var(--tooltip-background);
+  color: var(--tooltip-text);
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  line-height: var(--font-line-height-normal);
+  border-radius: var(--border-radius-sm);
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+.bds-tooltip__bubble--visible {
+  opacity: 1;
+}
+
+/* ─── Placement modifiers ─────────────────────────────── */
+
+.bds-tooltip__bubble--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--padding-md);
+}
+
+.bds-tooltip__bubble--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: var(--padding-md);
+}
+
+.bds-tooltip__bubble--left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: var(--padding-md);
+}
+
+.bds-tooltip__bubble--right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: var(--padding-md);
+}
+
+/* ─── Portal mode (fixed positioning, escapes overflow) ── */
+
+.bds-tooltip__bubble--portal {
+  /* Override placement absolute positioning — inline fixed styles take over */
+  position: fixed;
+  top: auto;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  transform: none;
+  margin: 0;
+}
+
+/* ─── Arrow ───────────────────────────────────────────── */
+
+.bds-tooltip__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px; /* bds-lint-ignore — CSS triangle size, not a visual border */
+  border-color: transparent;
+}
+
+/* Arrow direction per placement */
+
+.bds-tooltip__arrow--top {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--tooltip-background);
+}
+
+.bds-tooltip__arrow--bottom {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--tooltip-background);
+}
+
+.bds-tooltip__arrow--left {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--tooltip-background);
+}
+
+.bds-tooltip__arrow--right {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--tooltip-background);
+}
+}

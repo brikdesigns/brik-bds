@@ -1,6 +1,6 @@
 {
   "name": "@brikdesigns/bds",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "Brik Design System - React component library with Webflow-synced design tokens",
   "private": false,
   "main": "dist/index.cjs.js",
@@ -54,7 +54,7 @@
     "react-dom": ">=18.0.0"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "test": "vitest run",

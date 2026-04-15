@@ -1,0 +1,225 @@
+/*
+ * @deprecated — scheduled for removal once Webflow projects migrate to clean token names.
+ *
+ * BDS Token Bridge
+ *
+ * Maps clean BDS token names (--color-*) to legacy Webflow-internal names (--_color---*).
+ * The --_ prefix convention is deprecated. New projects should use figma-tokens.css directly.
+ *
+ * Still exported as @brikdesigns/bds/bridge.css for backward compatibility.
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════
+     Color: Text
+     ═══════════════════════════════════════════════ */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-brand: var(--text-brand-primary);
+  --color-text-on-color-dark: var(--text-on-color-dark);
+  --color-text-on-color-light: var(--text-on-color-light);
+
+  /* ═══════════════════════════════════════════════
+     Color: Background
+     ═══════════════════════════════════════════════ */
+  --color-background-primary: var(--background-primary);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-inverse: var(--background-inverse);
+  --color-background-input: var(--background-input);
+  --color-background-brand-primary: var(--background-brand-primary);
+  --color-background-brand-secondary: var(--background-brand-secondary);
+  --color-background-image: var(--background-image);
+  --color-background-image-brand: var(--background-image-brand);
+
+  /* ═══════════════════════════════════════════════
+     Color: Surface
+     ═══════════════════════════════════════════════ */
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-nav: var(--surface-nav);
+  --color-surface-brand-primary: var(--surface-brand-primary);
+  --color-surface-brand-secondary: var(--surface-brand-secondary);
+
+  /* ═══════════════════════════════════════════════
+     Color: Border
+     ═══════════════════════════════════════════════ */
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-muted: var(--border-muted);
+  --color-border-brand: var(--border-brand-primary);
+  --color-border-input: var(--border-input);
+  --color-border-inverse: var(--border-inverse);
+  --color-border-on-color: var(--border-on-color-dark);
+
+  /* ═══════════════════════════════════════════════
+     Color: Page
+     ═══════════════════════════════════════════════ */
+  --color-page-primary: var(--page-primary);
+  --color-page-secondary: var(--page-secondary);
+  --color-page-brand: var(--page-brand-primary);
+
+  /* ═══════════════════════════════════════════════
+     Color: Theme
+     ═══════════════════════════════════════════════ */
+  --color-theme-primary: var(--theme-blue-blue-light);
+  --color-theme-secondary: var(--theme-blue-blue-lighter);
+  --color-theme-tertiary: var(--theme-blue-blue-lightest);
+  --color-theme-accent: var(--theme-blue-green);
+  --color-theme-fourth: var(--theme-blue-blue-dark);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Font Family
+     ═══════════════════════════════════════════════ */
+  --typography-font-family-body: var(--font-family-body);
+  --typography-font-family-label: var(--font-family-label);
+  --typography-font-family-heading: var(--font-family-heading);
+  --typography-font-family-display: var(--font-family-display);
+  --typography-font-family-icon: var(--font-family-icon);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Body Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-body-tiny: var(--body-tiny);
+  --typography-body-xs: var(--body-xs);
+  --typography-body-sm: var(--body-sm);
+  --typography-body-md-base: var(--body-md);
+  --typography-body-lg: var(--body-lg);
+  --typography-body-xl: var(--body-xl);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Label Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-label-sm: var(--label-sm);
+  --typography-label-md-base: var(--label-md);
+  --typography-label-lg: var(--label-lg);
+  --typography-label-xl: var(--label-xl);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Heading Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-heading-tiny: var(--heading-tiny);
+  --typography-heading-small: var(--heading-sm);
+  --typography-heading-medium: var(--heading-md);
+  --typography-heading-large: var(--heading-lg);
+  --typography-heading-x-large: var(--heading-xl);
+  --typography-heading-xx-large: var(--heading-xxl);
+  --typography-heading-xxx-large: var(--heading-huge);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Display Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-display-small: var(--display-sm);
+  --typography-display-medium: var(--display-md);
+  --typography-display-large: var(--display-lg);
+
+  /* ═══════════════════════════════════════════════
+     Typography: Icon Sizes
+     ═══════════════════════════════════════════════ */
+  --typography-icon-small: var(--icon-sm);
+  --typography-icon-medium-base: var(--icon-md);
+  --typography-icon-large: var(--icon-lg);
+
+  /* ═══════════════════════════════════════════════
+     Layout: Space
+     ═══════════════════════════════════════════════ */
+  --layout-none: var(--padding-none);
+  --layout-tiny: var(--padding-tiny);
+  --layout-sm: var(--padding-sm);
+  --layout-md: var(--padding-md);
+  --layout-lg: var(--padding-lg);
+  --layout-xl: var(--padding-xl);
+  --layout-xxl: var(--padding-xl);
+  --layout-huge: var(--padding-huge);
+  --layout-button: var(--padding-tiny);
+  --layout-input: var(--padding-tiny);
+
+  /* ═══════════════════════════════════════════════
+     Layout: Gap
+     ═══════════════════════════════════════════════ */
+  --layout-gap-none: var(--gap-none);
+  --layout-gap-tiny: var(--gap-tiny);
+  --layout-gap-sm: var(--gap-sm);
+  --layout-gap-md: var(--gap-md);
+  --layout-gap-lg: var(--gap-lg);
+  --layout-gap-xl: var(--gap-xl);
+  --layout-gap-xxl: var(--gap-xl);
+  --layout-gap-huge: var(--gap-huge);
+
+  /* ═══════════════════════════════════════════════
+     Size
+     ═══════════════════════════════════════════════ */
+  --size-none: var(--size-0);
+  --size-tiny: var(--size-50);
+  --size-sm: var(--size-200);
+  --size-md: var(--size-400);
+  --size-lg: var(--size-600);
+  --size-xl: var(--size-800);
+  --size-xxl: var(--size-1000);
+  --size-huge: var(--size-1200);
+
+  /* ═══════════════════════════════════════════════
+     Border Width
+     ═══════════════════════════════════════════════ */
+  --border-width-none: var(--border-width-none);
+  --border-width-sm: var(--border-width-sm);
+  --border-width-md: var(--border-width-md);
+  --border-width-lg: var(--border-width-lg);
+
+  /* ═══════════════════════════════════════════════
+     Border Radius
+     ═══════════════════════════════════════════════ */
+  --border-radius-none: var(--border-radius-none);
+  --border-radius-sm: var(--border-radius-sm);
+  --border-radius-md: var(--border-radius-md);
+  --border-radius-lg: var(--border-radius-lg);
+  --border-radius-input: var(--border-radius-50);
+  --border-radius-button: var(--border-radius-50);
+
+  /* ═══════════════════════════════════════════════
+     Shadow
+     ═══════════════════════════════════════════════ */
+  --box-shadow-none: var(--box-shadow-none);
+  --box-shadow-sm: var(--box-shadow-sm);
+  --box-shadow-md: var(--box-shadow-md);
+  --box-shadow-lg: var(--box-shadow-lg);
+  --blur-radius-none: var(--blur-radius-sm);
+  --blur-radius-sm: var(--blur-radius-sm);
+  --blur-radius-md: var(--blur-radius-md);
+  --blur-radius-lg: var(--blur-radius-lg);
+
+  /* ═══════════════════════════════════════════════
+     Motion — Client-Themeable Animation Surface
+     ═══════════════════════════════════════════════
+     Override any of these in theme-{client}.css to
+     customize animation feel per brand:
+       --duration-fast/normal/slow  = interaction speed
+       --ease-out/in/in-out/spring  = animation personality
+       --stagger-*                  = list reveal cadence
+     Example (luxury, slow & elegant):
+       --duration-fast: 150ms;
+       --duration-normal: 300ms;
+       --duration-slow: 500ms;
+       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+     Example (snappy SaaS dashboard):
+       --duration-fast: 80ms;
+       --duration-normal: 150ms;
+       --duration-slow: 250ms;
+     ═══════════════════════════════════════════════ */
+  --ease-in: var(--easing-ease-in);
+  --ease-out: var(--easing-ease-out);
+  --ease-in-out: var(--easing-ease-in-out);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — use for pop-in, badge appear */
+
+  --duration-fast: var(--duration-100);
+  --duration-normal: var(--duration-200);
+  --duration-slow: var(--duration-300);
+
+  --stagger-1: 0ms;
+  --stagger-2: 50ms;
+  --stagger-3: 100ms;
+  --stagger-4: 150ms;
+  --stagger-5: 200ms;
+  --stagger-6: 250ms;
+}
