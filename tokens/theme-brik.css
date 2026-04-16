@@ -45,12 +45,12 @@
   --border-input: var(--color-grayscale-light);
   --border-inverse: var(--color-grayscale-white);
   --border-on-color-dark: white;
-  /* Theme palette aliases */
-  --theme-blue-blue-light: #e35335;
-  --theme-blue-blue-lighter: #f1f0ec;
-  --theme-blue-green: #f4d364;
-  --theme-blue-blue-lightest: #9ada6c;
-  --theme-blue-blue-dark: #8ebbcc;
+  /* Brand palette overrides (neutral intermediate layer) */
+  --brand-primary: #e35335;
+  --brand-secondary: #f1f0ec;
+  --brand-accent: #f4d364;
+  --brand-tertiary: #9ada6c;
+  --brand-dark: #8ebbcc;
   /* Typography */
   --font-family-body: Poppins, sans-serif;
   --font-family-label: Poppins, sans-serif;
