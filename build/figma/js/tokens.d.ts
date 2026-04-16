@@ -104,6 +104,16 @@ export const themeBrikOrange: string;
 export const themeBrikGreen: string;
 export const themeBrikBlue: string;
 export const themeBrikPurple: string;
+/** Brand primary accent — override per-theme to set the main brand color */
+export const brandPrimary: string;
+/** Brand secondary — supporting surface/accent color */
+export const brandSecondary: string;
+/** Brand tertiary — subtle/lightest accent */
+export const brandTertiary: string;
+/** Brand accent — contrasting highlight color */
+export const brandAccent: string;
+/** Brand dark — deep/dark variant */
+export const brandDark: string;
 export const fontWeightBold: string;
 export const fontWeightSemiBold: string;
 export const fontWeightMedium: string;

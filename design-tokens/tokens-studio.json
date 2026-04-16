@@ -860,6 +860,58 @@
         }
       }
     },
+    "brand": {
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}",
+        "$description": "Brand primary accent — override per-theme to set the main brand color"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.tan.lightest}",
+        "$description": "Brand secondary — supporting surface/accent color"
+      },
+      "tertiary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.dark}",
+        "$description": "Brand tertiary — subtle/lightest accent"
+      },
+      "accent": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.light}",
+        "$description": "Brand accent — contrasting highlight color"
+      },
+      "dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.light}",
+        "$description": "Brand dark — deep/dark variant"
+      }
+    },
     "font-weight": {
       "bold": {
         "$extensions": {
@@ -2760,7 +2812,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "inverse": {
         "$extensions": {
@@ -2798,7 +2850,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "inverse": {
         "$extensions": {
@@ -3019,7 +3071,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "inverse": {
         "$extensions": {
@@ -3141,7 +3193,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "inverse": {
         "$extensions": {
@@ -3222,7 +3274,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "on-color-light": {
         "$extensions": {
@@ -3297,7 +3349,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -3428,7 +3480,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "inverse": {
         "$extensions": {
@@ -3466,7 +3518,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "inverse": {
         "$extensions": {
@@ -3687,7 +3739,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "inverse": {
         "$extensions": {
@@ -3809,7 +3861,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "inverse": {
         "$extensions": {
@@ -3890,7 +3942,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "on-color-light": {
         "$extensions": {
@@ -3965,7 +4017,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{brand.primary}"
       },
       "on-color-dark": {
         "$extensions": {

@@ -398,6 +398,33 @@
       }
     }
   },
+  "brand": {
+    "primary": {
+      "$value": "{color.poppy.light}",
+      "$type": "color",
+      "$description": "Brand primary accent — override per-theme to set the main brand color"
+    },
+    "secondary": {
+      "$value": "{color.tan.lightest}",
+      "$type": "color",
+      "$description": "Brand secondary — supporting surface/accent color"
+    },
+    "tertiary": {
+      "$value": "{color.green.dark}",
+      "$type": "color",
+      "$description": "Brand tertiary — subtle/lightest accent"
+    },
+    "accent": {
+      "$value": "{color.yellow.light}",
+      "$type": "color",
+      "$description": "Brand accent — contrasting highlight color"
+    },
+    "dark": {
+      "$value": "{color.blue.light}",
+      "$type": "color",
+      "$description": "Brand dark — deep/dark variant"
+    }
+  },
   "font-weight": {
     "bold": {
       "$value": "700",
@@ -1336,7 +1363,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{brand.primary}",
       "$type": "color"
     },
     "inverse": {
@@ -1354,7 +1381,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{brand.primary}",
       "$type": "color"
     },
     "inverse": {
@@ -1455,7 +1482,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{brand.primary}",
       "$type": "color"
     },
     "inverse": {
@@ -1512,7 +1539,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{brand.primary}",
       "$type": "color"
     },
     "inverse": {
@@ -1548,7 +1575,7 @@
       "$type": "color"
     },
     "text-link": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{brand.primary}",
       "$type": "color"
     },
     "on-color-light": {
@@ -1583,7 +1610,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{brand.primary}",
       "$type": "color"
     },
     "on-color-dark": {
