@@ -1,4 +1,393 @@
 @layer bds-components {
+/**
+ * BDS Button Family — Class-based styles
+ *
+ * All visual styles live here. Component TSX handles logic + class composition only.
+ * Token references use the BDS semantic token layer (never primitives).
+ *
+ * Naming: BEM-lite — .bds-button, .bds-button--primary, .bds-button--sm
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-button {
+  /* ─── Component-scoped override surface ── */
+  --button-active-translate-y: 1px;    /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --button-focus-outline-width: 2px;   /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --button-focus-outline-offset: 2px;  /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-normal);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: capitalize;
+  /* Unified border model — all variants share the same box dimensions.
+   * Bordered variants (secondary, outline) override border-color only.
+   * Without this, sub-pixel border widths cause 1–2px height differences
+   * between bordered and non-bordered variants at the same size. */
+  border: var(--border-width-md) solid transparent;
+  background: none;
+  color: inherit;
+  transition: background-color var(--duration-normal) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out),
+    color var(--duration-normal) var(--ease-out),
+    opacity var(--duration-normal) var(--ease-out);
+  box-sizing: border-box;
+}
+
+/* ─── Sizes ───────────────────────────────────────────────────── */
+
+/*
+ * Height scale shares the same 4px grid as IconButton:
+ *   tiny=24  sm=32  md=40  lg=48  xl=56  (8px steps)
+ *
+ * Vertical centering is handled by the base flexbox (align-items: center).
+ * Only padding-inline remains for horizontal spacing.
+ */
+
+.bds-button--tiny {
+  height: 24px;
+  padding-inline: var(--padding-tiny);
+  font-size: var(--label-xs);
+  gap: var(--gap-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-button--sm {
+  height: 32px;
+  padding-inline: var(--padding-sm);
+  font-size: var(--label-sm);
+}
+
+.bds-button--md {
+  height: 40px;
+  padding-inline: var(--padding-md);
+  font-size: var(--label-md);
+}
+
+.bds-button--lg {
+  height: 48px;
+  padding-inline: var(--padding-md);
+  font-size: var(--label-lg);
+}
+
+.bds-button--xl {
+  height: 56px;
+  padding-inline: var(--padding-lg);
+  font-size: var(--label-xl);
+}
+
+/* ─── Variants ────────────────────────────────────────────────── */
+
+.bds-button--primary {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--outline {
+  background-color: transparent;
+  color: var(--text-brand-primary);
+  border-color: var(--border-brand-primary);
+}
+
+.bds-button--secondary {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.bds-button--ghost {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+.bds-button--inverse {
+  background-color: var(--background-inverse);
+  color: var(--text-on-color-light);
+}
+
+.bds-button--danger {
+  background-color: var(--background-accent-red);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--danger-outline {
+  background-color: transparent;
+  color: var(--text-accent-red);
+  border-color: var(--text-accent-red);
+}
+
+.bds-button--danger-ghost {
+  background-color: transparent;
+  color: var(--text-accent-red);
+}
+
+/* ─── System Variants (semantic actions) ─────────────────────── */
+
+.bds-button--destructive {
+  background-color: var(--background-negative);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--positive {
+  background-color: var(--background-positive);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--selected {
+  background-color: var(--background-brand-primary);
+  color: var(--text-on-color-dark);
+}
+
+/* ─── Modifiers ───────────────────────────────────────────────── */
+
+.bds-button--full-width {
+  width: 100%;
+}
+
+/* ─── Interactive States ──────────────────────────────────────── */
+/* All states use semantic interaction tokens from BDS.
+ * No filter: brightness(), no opacity hacks, no hardcoded values.
+ * Tokens resolve per-theme via Figma Variables → Style Dictionary. */
+
+/* ── Primary ── */
+.bds-button--primary:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-brand-primary-hover);
+}
+
+.bds-button--primary:active:not(:disabled) {
+  background-color: var(--background-brand-primary-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Secondary ── */
+.bds-button--secondary:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-secondary-hover);
+}
+
+.bds-button--secondary:active:not(:disabled) {
+  background-color: var(--background-secondary-pressed);
+  color: var(--text-on-color-dark);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Outline ── */
+.bds-button--outline:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-primary-hover);
+}
+
+.bds-button--outline:active:not(:disabled) {
+  background-color: var(--background-brand-primary-pressed);
+  color: var(--text-on-color-dark);
+  border-color: var(--background-brand-primary-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Ghost ── */
+.bds-button--ghost:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-primary-hover);
+}
+
+.bds-button--ghost:active:not(:disabled) {
+  background-color: var(--background-secondary-hover);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Inverse ── */
+.bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-secondary-pressed);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--inverse:active:not(:disabled) {
+  background-color: var(--background-brand-primary-pressed);
+  color: var(--text-on-color-dark);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Destructive ── */
+.bds-button--destructive:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-negative-hover);
+}
+
+.bds-button--destructive:active:not(:disabled) {
+  background-color: var(--background-negative-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Positive ── */
+.bds-button--positive:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-positive-hover);
+}
+
+.bds-button--positive:active:not(:disabled) {
+  background-color: var(--background-positive-pressed);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Danger variants ── */
+.bds-button--danger-outline:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-accent-red);
+  color: var(--text-on-color-dark);
+}
+
+.bds-button--danger-ghost:hover:not(:disabled):not(.bds-button--loading) {
+  background-color: var(--background-accent-red);
+  color: var(--text-on-color-dark);
+}
+
+/* ── Disabled (all variants, except loading) ── */
+.bds-button:disabled:not(.bds-button--loading) {
+  background-color: var(--background-disabled);
+  color: var(--text-disabled);
+  border-color: var(--border-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Focus (all variants) ── */
+.bds-button:focus-visible {
+  outline: var(--button-focus-outline-width) solid var(--border-focus); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  outline-offset: var(--button-focus-outline-offset); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* Danger: red focus ring */
+.bds-button--danger:focus-visible,
+.bds-button--danger-outline:focus-visible,
+.bds-button--danger-ghost:focus-visible,
+.bds-button--destructive:focus-visible {
+  outline-color: var(--text-negative);
+}
+
+/* Positive: green focus ring */
+.bds-button--positive:focus-visible {
+  outline-color: var(--text-positive);
+}
+
+/* ─── Loading State ───────────────────────────────────────────── */
+
+.bds-button--loading {
+  position: relative;
+  cursor: wait;
+}
+
+.bds-button__content {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+}
+
+.bds-button__content--hidden {
+  visibility: hidden;
+}
+
+.bds-button__spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bds-button__spinner-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border-width: var(--border-width-lg);
+  border-style: solid;
+  border-color: currentColor;
+  border-top-color: transparent;
+  animation: bds-spin 0.8s linear infinite;
+  opacity: 0.9;
+}
+
+.bds-button--sm .bds-button__spinner-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Icon buttons: spinner scales with the button's font-size (matches icon 1em × 1em) */
+.bds-icon-button .bds-button__spinner-icon {
+  width: 1em;
+  height: 1em;
+}
+
+/* ─── Icon Button ─────────────────────────────────────────────── */
+/*
+ * Sizing uses explicit width/height on a 4px grid instead of
+ * deriving size from padding + icon font-size (which produced
+ * fractional totals like 27.54px and 38px).
+ *
+ * Scale: tiny=24  sm=32  md=40  lg=48  xl=56  (8px steps)
+ * Icon:  tiny=12  sm=16  md=16  lg=20  xl=24  (whole px, centered)
+ */
+
+.bds-icon-button {
+  padding: 0;
+  gap: 0;
+  width: 40px;   /* md default */
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.bds-icon-button--tiny {
+  width: 24px;
+  height: 24px;
+}
+
+.bds-icon-button--sm {
+  width: 32px;
+  height: 32px;
+}
+
+.bds-icon-button--md {
+  width: 40px;
+  height: 40px;
+}
+
+.bds-icon-button--lg {
+  width: 48px;
+  height: 48px;
+}
+
+.bds-icon-button--xl {
+  width: 56px;
+  height: 56px;
+}
+
+.bds-icon-button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  font-size: 16px;  /* md default */
+}
+
+.bds-icon-button--tiny .bds-icon-button__icon {
+  font-size: 12px;
+}
+
+.bds-icon-button--sm .bds-icon-button__icon {
+  font-size: 16px;
+}
+
+.bds-icon-button--lg .bds-icon-button__icon {
+  font-size: 20px;
+}
+
+.bds-icon-button--xl .bds-icon-button__icon {
+  font-size: 24px;
+}
+
+}
+@layer bds-components {
 /* ─── Sheet ──────────────────────────────────────────────────── */
 /* Overlay treatment aligned with Modal (2026-03-20)            */
 
@@ -69,9 +458,25 @@
 
 .bds-sheet__header-top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   width: 100%;
+  gap: var(--gap-md);
+}
+
+.bds-sheet__header-lead {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-md);
+  min-width: 0;
+  flex: 1;
+}
+
+.bds-sheet__titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  min-width: 0;
 }
 
 /* ─── Title (matches Modal) ─────────────────────────────────── */
@@ -85,16 +490,24 @@
   margin: 0;
 }
 
+.bds-sheet__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
 /* ─── Close button (matches Modal) ──────────────────────────── */
 
 .bds-sheet__close {
   background: none;
   border: none;
   font-size: var(--icon-md);
-  line-height: var(--font-line-height-tight);
+  line-height: 1;
   cursor: pointer;
-  padding: 0 var(--padding-md) var(--padding-md);
-  margin-right: calc(-1 * var(--padding-md));
+  padding: var(--padding-xs);
+  margin: calc(-1 * var(--padding-xs));
   color: var(--text-primary);
   opacity: 0.6;
   transition: opacity 0.2s;
@@ -102,6 +515,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .bds-sheet__close:hover {
@@ -201,15 +615,27 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: var(--padding-xs);
+  margin: calc(-1 * var(--padding-xs));
   display: flex;
   align-items: center;
+  justify-content: center;
   color: var(--text-primary);
+  font-size: var(--icon-md);
+  line-height: 1;
+  border-radius: var(--border-radius-md);
   opacity: 0.6;
   transition: opacity 0.2s;
+  flex-shrink: 0;
 }
 
 .bds-sheet__back-btn:hover {
+  opacity: 1;
+}
+
+.bds-sheet__back-btn:focus-visible {
+  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+  outline-offset: 2px;
   opacity: 1;
 }
 
@@ -398,6 +824,218 @@
 }
 
 } /* end @layer bds-components */
+@layer bds-components {
+/**
+ * BDS Tag — Categorization label with optional icons and dismiss
+ *
+ * Naming: .bds-tag, .bds-tag--{size}, .bds-tag__{element}
+ *
+ * Sizing scale is shared with Badge for side-by-side alignment.
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-tag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
+  color: var(--text-primary);
+  background-color: var(--background-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: default;
+  user-select: none;
+  overflow: clip;
+  transition: background-color var(--duration-normal) var(--ease-out);
+  box-sizing: border-box;
+}
+
+/* ─── Sizes (shared scale with Badge) ────────────────────────── */
+
+.bds-tag--xs {
+  /* bds-lint-ignore — 24px icon-only tag matches shared indicator spec */
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: var(--border-radius-sm);
+  justify-content: center;
+  gap: 0;
+}
+
+.bds-tag--sm {
+  padding: var(--padding-tiny) var(--padding-sm);
+  gap: var(--gap-xs);
+  font-size: var(--label-tiny);
+  height: 28px;
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-tag--md {
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-sm);
+  font-size: var(--label-sm);
+  height: 32px;
+  border-radius: var(--border-radius-md);
+}
+
+.bds-tag--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-md);
+  font-size: var(--label-md);
+  height: 40px;
+  border-radius: var(--border-radius-md);
+}
+
+/* ─── Disabled ────────────────────────────────────────────────── */
+
+.bds-tag--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Icon Wrapper (shared sizing with Badge) ────────────────── */
+
+.bds-tag__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Icon font-size matches container so the glyph fills the box */
+.bds-tag--xs .bds-tag__icon {
+  font-size: var(--icon-xs);
+}
+
+.bds-tag--sm .bds-tag__icon {
+  width: 14px;
+  height: 14px;
+  font-size: var(--icon-xs);
+}
+
+.bds-tag--md .bds-tag__icon {
+  width: 16px;
+  height: 16px;
+  font-size: var(--icon-sm);
+}
+
+.bds-tag--lg .bds-tag__icon {
+  width: 20px;
+  height: 20px;
+  font-size: var(--label-xl);
+}
+
+/* ─── Remove Button ───────────────────────────────────────────── */
+
+.bds-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.bds-tag__remove:hover {
+  opacity: 0.7;
+}
+}
+@layer bds-components {
+/**
+ * BDS TextInput Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ */
+
+.bds-text-input-field {
+  /* ─── Component-scoped override surface ── */
+  --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-text-input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-text-input-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-text-input-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-text-input-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  outline: none;
+}
+
+.bds-text-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+}
+.bds-addable-text-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  width: 100%;
+}
+
+.bds-addable-text-list__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.bds-addable-text-list__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  align-items: center;
+}
+
+.bds-addable-text-list__empty {
+  font-family: var(--font-family-body);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.bds-addable-text-list__input-row {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.bds-addable-text-list__input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bds-addable-text-list__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
 @layer bds-components {
 /**
  * BDS AddressInput Interactive States
@@ -1186,395 +1824,6 @@
   line-height: var(--font-line-height-tight);
   padding: 0 var(--padding-tiny);
 }
-}
-@layer bds-components {
-/**
- * BDS Button Family — Class-based styles
- *
- * All visual styles live here. Component TSX handles logic + class composition only.
- * Token references use the BDS semantic token layer (never primitives).
- *
- * Naming: BEM-lite — .bds-button, .bds-button--primary, .bds-button--sm
- */
-
-/* ─── Base ────────────────────────────────────────────────────── */
-
-.bds-button {
-  /* ─── Component-scoped override surface ── */
-  --button-active-translate-y: 1px;    /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  --button-focus-outline-width: 2px;   /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  --button-focus-outline-offset: 2px;  /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--gap-sm);
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
-  line-height: var(--font-line-height-normal);
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  text-transform: capitalize;
-  /* Unified border model — all variants share the same box dimensions.
-   * Bordered variants (secondary, outline) override border-color only.
-   * Without this, sub-pixel border widths cause 1–2px height differences
-   * between bordered and non-bordered variants at the same size. */
-  border: var(--border-width-md) solid transparent;
-  background: none;
-  color: inherit;
-  transition: background-color var(--duration-normal) var(--ease-out),
-    border-color var(--duration-normal) var(--ease-out),
-    color var(--duration-normal) var(--ease-out),
-    opacity var(--duration-normal) var(--ease-out);
-  box-sizing: border-box;
-}
-
-/* ─── Sizes ───────────────────────────────────────────────────── */
-
-/*
- * Height scale shares the same 4px grid as IconButton:
- *   tiny=24  sm=32  md=40  lg=48  xl=56  (8px steps)
- *
- * Vertical centering is handled by the base flexbox (align-items: center).
- * Only padding-inline remains for horizontal spacing.
- */
-
-.bds-button--tiny {
-  height: 24px;
-  padding-inline: var(--padding-tiny);
-  font-size: var(--label-xs);
-  gap: var(--gap-xs);
-  border-radius: var(--border-radius-sm);
-}
-
-.bds-button--sm {
-  height: 32px;
-  padding-inline: var(--padding-sm);
-  font-size: var(--label-sm);
-}
-
-.bds-button--md {
-  height: 40px;
-  padding-inline: var(--padding-md);
-  font-size: var(--label-md);
-}
-
-.bds-button--lg {
-  height: 48px;
-  padding-inline: var(--padding-md);
-  font-size: var(--label-lg);
-}
-
-.bds-button--xl {
-  height: 56px;
-  padding-inline: var(--padding-lg);
-  font-size: var(--label-xl);
-}
-
-/* ─── Variants ────────────────────────────────────────────────── */
-
-.bds-button--primary {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
-}
-
-.bds-button--outline {
-  background-color: transparent;
-  color: var(--text-brand-primary);
-  border-color: var(--border-brand-primary);
-}
-
-.bds-button--secondary {
-  background-color: var(--background-secondary);
-  color: var(--text-primary);
-}
-
-.bds-button--ghost {
-  background-color: transparent;
-  color: var(--text-primary);
-}
-
-.bds-button--inverse {
-  background-color: var(--background-inverse);
-  color: var(--text-on-color-light);
-}
-
-.bds-button--danger {
-  background-color: var(--background-accent-red);
-  color: var(--text-on-color-dark);
-}
-
-.bds-button--danger-outline {
-  background-color: transparent;
-  color: var(--text-accent-red);
-  border-color: var(--text-accent-red);
-}
-
-.bds-button--danger-ghost {
-  background-color: transparent;
-  color: var(--text-accent-red);
-}
-
-/* ─── System Variants (semantic actions) ─────────────────────── */
-
-.bds-button--destructive {
-  background-color: var(--background-negative);
-  color: var(--text-on-color-dark);
-}
-
-.bds-button--positive {
-  background-color: var(--background-positive);
-  color: var(--text-on-color-dark);
-}
-
-.bds-button--selected {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
-}
-
-/* ─── Modifiers ───────────────────────────────────────────────── */
-
-.bds-button--full-width {
-  width: 100%;
-}
-
-/* ─── Interactive States ──────────────────────────────────────── */
-/* All states use semantic interaction tokens from BDS.
- * No filter: brightness(), no opacity hacks, no hardcoded values.
- * Tokens resolve per-theme via Figma Variables → Style Dictionary. */
-
-/* ── Primary ── */
-.bds-button--primary:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-brand-primary-hover);
-}
-
-.bds-button--primary:active:not(:disabled) {
-  background-color: var(--background-brand-primary-pressed);
-  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* ── Secondary ── */
-.bds-button--secondary:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-secondary-hover);
-}
-
-.bds-button--secondary:active:not(:disabled) {
-  background-color: var(--background-secondary-pressed);
-  color: var(--text-on-color-dark);
-  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* ── Outline ── */
-.bds-button--outline:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-primary-hover);
-}
-
-.bds-button--outline:active:not(:disabled) {
-  background-color: var(--background-brand-primary-pressed);
-  color: var(--text-on-color-dark);
-  border-color: var(--background-brand-primary-pressed);
-  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* ── Ghost ── */
-.bds-button--ghost:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-primary-hover);
-}
-
-.bds-button--ghost:active:not(:disabled) {
-  background-color: var(--background-secondary-hover);
-  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* ── Inverse ── */
-.bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-secondary-pressed);
-  color: var(--text-on-color-dark);
-}
-
-.bds-button--inverse:active:not(:disabled) {
-  background-color: var(--background-brand-primary-pressed);
-  color: var(--text-on-color-dark);
-  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* ── Destructive ── */
-.bds-button--destructive:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-negative-hover);
-}
-
-.bds-button--destructive:active:not(:disabled) {
-  background-color: var(--background-negative-pressed);
-  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* ── Positive ── */
-.bds-button--positive:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-positive-hover);
-}
-
-.bds-button--positive:active:not(:disabled) {
-  background-color: var(--background-positive-pressed);
-  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* ── Danger variants ── */
-.bds-button--danger-outline:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-accent-red);
-  color: var(--text-on-color-dark);
-}
-
-.bds-button--danger-ghost:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-accent-red);
-  color: var(--text-on-color-dark);
-}
-
-/* ── Disabled (all variants, except loading) ── */
-.bds-button:disabled:not(.bds-button--loading) {
-  background-color: var(--background-disabled);
-  color: var(--text-disabled);
-  border-color: var(--border-disabled);
-  cursor: not-allowed;
-}
-
-/* ── Focus (all variants) ── */
-.bds-button:focus-visible {
-  outline: var(--button-focus-outline-width) solid var(--border-focus); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  outline-offset: var(--button-focus-outline-offset); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* Danger: red focus ring */
-.bds-button--danger:focus-visible,
-.bds-button--danger-outline:focus-visible,
-.bds-button--danger-ghost:focus-visible,
-.bds-button--destructive:focus-visible {
-  outline-color: var(--text-negative);
-}
-
-/* Positive: green focus ring */
-.bds-button--positive:focus-visible {
-  outline-color: var(--text-positive);
-}
-
-/* ─── Loading State ───────────────────────────────────────────── */
-
-.bds-button--loading {
-  position: relative;
-  cursor: wait;
-}
-
-.bds-button__content {
-  display: inline-flex;
-  align-items: center;
-  gap: inherit;
-}
-
-.bds-button__content--hidden {
-  visibility: hidden;
-}
-
-.bds-button__spinner {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bds-button__spinner-icon {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border-width: var(--border-width-lg);
-  border-style: solid;
-  border-color: currentColor;
-  border-top-color: transparent;
-  animation: bds-spin 0.8s linear infinite;
-  opacity: 0.9;
-}
-
-.bds-button--sm .bds-button__spinner-icon {
-  width: 14px;
-  height: 14px;
-}
-
-/* Icon buttons: spinner scales with the button's font-size (matches icon 1em × 1em) */
-.bds-icon-button .bds-button__spinner-icon {
-  width: 1em;
-  height: 1em;
-}
-
-/* ─── Icon Button ─────────────────────────────────────────────── */
-/*
- * Sizing uses explicit width/height on a 4px grid instead of
- * deriving size from padding + icon font-size (which produced
- * fractional totals like 27.54px and 38px).
- *
- * Scale: tiny=24  sm=32  md=40  lg=48  xl=56  (8px steps)
- * Icon:  tiny=12  sm=16  md=16  lg=20  xl=24  (whole px, centered)
- */
-
-.bds-icon-button {
-  padding: 0;
-  gap: 0;
-  width: 40px;   /* md default */
-  height: 40px;
-  flex-shrink: 0;
-}
-
-.bds-icon-button--tiny {
-  width: 24px;
-  height: 24px;
-}
-
-.bds-icon-button--sm {
-  width: 32px;
-  height: 32px;
-}
-
-.bds-icon-button--md {
-  width: 40px;
-  height: 40px;
-}
-
-.bds-icon-button--lg {
-  width: 48px;
-  height: 48px;
-}
-
-.bds-icon-button--xl {
-  width: 56px;
-  height: 56px;
-}
-
-.bds-icon-button__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1em;
-  height: 1em;
-  font-size: 16px;  /* md default */
-}
-
-.bds-icon-button--tiny .bds-icon-button__icon {
-  font-size: 12px;
-}
-
-.bds-icon-button--sm .bds-icon-button__icon {
-  font-size: 16px;
-}
-
-.bds-icon-button--lg .bds-icon-button__icon {
-  font-size: 20px;
-}
-
-.bds-icon-button--xl .bds-icon-button__icon {
-  font-size: 24px;
-}
-
 }
 @layer bds-components {
 /**
@@ -2774,46 +3023,6 @@
 }
 }
 @layer bds-components {
-/**
- * BDS TextInput Interactive States
- *
- * Token reference:
- * - --border-input (default border)
- * - --border-primary (hover border — darker)
- * - --border-brand-primary (focus border — theme color)
- * - --text-muted (placeholder color)
- */
-
-.bds-text-input-field {
-  /* ─── Component-scoped override surface ── */
-  --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-.bds-text-input-field::placeholder {
-  color: var(--text-muted);
-}
-
-.bds-text-input-field:hover:not(:disabled) {
-  border-color: var(--border-primary);
-}
-
-.bds-text-input-field:focus {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-.bds-text-input-field:focus-visible {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  outline: none;
-}
-
-.bds-text-input-field:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-}
-@layer bds-components {
 /* ─── EmptyState ─────────────────────────────────────────────── */
 
 .bds-empty-state {
@@ -3869,132 +4078,6 @@
 
 .bds-select-helper--error {
   color: var(--text-negative);
-}
-}
-@layer bds-components {
-/**
- * BDS Tag — Categorization label with optional icons and dismiss
- *
- * Naming: .bds-tag, .bds-tag--{size}, .bds-tag__{element}
- *
- * Sizing scale is shared with Badge for side-by-side alignment.
- */
-
-/* ─── Base ────────────────────────────────────────────────────── */
-
-.bds-tag {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
-  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
-  color: var(--text-primary);
-  background-color: var(--background-secondary);
-  text-decoration: none;
-  white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  cursor: default;
-  user-select: none;
-  overflow: clip;
-  transition: background-color var(--duration-normal) var(--ease-out);
-  box-sizing: border-box;
-}
-
-/* ─── Sizes (shared scale with Badge) ────────────────────────── */
-
-.bds-tag--xs {
-  /* bds-lint-ignore — 24px icon-only tag matches shared indicator spec */
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border-radius: var(--border-radius-sm);
-  justify-content: center;
-  gap: 0;
-}
-
-.bds-tag--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
-  gap: var(--gap-xs);
-  font-size: var(--label-tiny);
-  height: 28px;
-  border-radius: var(--border-radius-sm);
-}
-
-.bds-tag--md {
-  padding: var(--padding-sm) var(--padding-md);
-  gap: var(--gap-sm);
-  font-size: var(--label-sm);
-  height: 32px;
-  border-radius: var(--border-radius-md);
-}
-
-.bds-tag--lg {
-  padding: var(--padding-sm) var(--padding-md);
-  gap: var(--gap-md);
-  font-size: var(--label-md);
-  height: 40px;
-  border-radius: var(--border-radius-md);
-}
-
-/* ─── Disabled ────────────────────────────────────────────────── */
-
-.bds-tag--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ─── Icon Wrapper (shared sizing with Badge) ────────────────── */
-
-.bds-tag__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* Icon font-size matches container so the glyph fills the box */
-.bds-tag--xs .bds-tag__icon {
-  font-size: var(--icon-xs);
-}
-
-.bds-tag--sm .bds-tag__icon {
-  width: 14px;
-  height: 14px;
-  font-size: var(--icon-xs);
-}
-
-.bds-tag--md .bds-tag__icon {
-  width: 16px;
-  height: 16px;
-  font-size: var(--icon-sm);
-}
-
-.bds-tag--lg .bds-tag__icon {
-  width: 20px;
-  height: 20px;
-  font-size: var(--label-xl);
-}
-
-/* ─── Remove Button ───────────────────────────────────────────── */
-
-.bds-tag__remove {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: inherit;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-.bds-tag__remove:hover {
-  opacity: 0.7;
 }
 }
 @layer bds-components {
