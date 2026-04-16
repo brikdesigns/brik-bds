@@ -5,7 +5,7 @@ import './CardTestimonial.css';
 
 export type CardTestimonialVariant = 'brand' | 'outlined';
 
-export interface CardTestimonialProps extends HTMLAttributes<HTMLDivElement> {
+export interface CardTestimonialProps extends HTMLAttributes<HTMLElement> {
   quote: string;
   authorName: string;
   authorRole?: string;
@@ -27,7 +27,7 @@ export function CardTestimonial({
   ...props
 }: CardTestimonialProps) {
   return (
-    <div
+    <figure
       className={bdsClass('bds-card-testimonial', `bds-card-testimonial--${variant}`, className)}
       style={style}
       {...props}
@@ -40,10 +40,10 @@ export function CardTestimonial({
         {quote}
       </blockquote>
 
-      <div className="bds-card-testimonial__attribution">
-        <p className="bds-card-testimonial__name">{authorName}</p>
-        {authorRole && <p className="bds-card-testimonial__role">{authorRole}</p>}
-      </div>
+      <figcaption className="bds-card-testimonial__attribution">
+        <cite className="bds-card-testimonial__name">{authorName}</cite>
+        {authorRole && <span className="bds-card-testimonial__role">{authorRole}</span>}
+      </figcaption>
 
       {rating != null && rating > 0 && (
         <div className="bds-card-testimonial__stars" role="img" aria-label={`${rating} out of 5 stars`}>
@@ -52,7 +52,7 @@ export function CardTestimonial({
           ))}
         </div>
       )}
-    </div>
+    </figure>
   );
 }
 

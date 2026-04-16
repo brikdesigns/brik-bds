@@ -12,15 +12,15 @@
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
-.bds-card--default {
+.bds-card--outlined {
   background-color: var(--surface-primary);
-  border: none;
+  border: var(--border-width-md) solid var(--border-secondary);
   box-shadow: var(--box-shadow-none);
 }
 
-.bds-card--outlined {
-  background-color: var(--surface-secondary);
-  border: var(--border-width-md) solid var(--border-secondary);
+.bds-card--brand {
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-brand-primary);
   box-shadow: var(--box-shadow-none);
 }
 

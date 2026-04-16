@@ -1,0 +1,59 @@
+@layer bds-components {
+/* ─── CardList ───────────────────────────────────────────────── */
+
+.bds-card-list {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Orientation ────────────────────────────────────────────── */
+
+.bds-card-list--vertical {
+  flex-direction: column;
+}
+
+.bds-card-list--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+/* ─── Gap ────────────────────────────────────────────────────── */
+
+.bds-card-list--gap-sm { gap: var(--gap-sm); }
+.bds-card-list--gap-md { gap: var(--gap-md); }
+.bds-card-list--gap-lg { gap: var(--gap-lg); }
+.bds-card-list--gap-xl { gap: var(--gap-xl); }
+
+/* ─── Items ──────────────────────────────────────────────────── */
+
+.bds-card-list__item {
+  display: flex;
+  min-width: 0;
+}
+
+.bds-card-list--vertical > .bds-card-list__item {
+  flex-direction: column;
+  width: 100%;
+}
+
+.bds-card-list--horizontal > .bds-card-list__item {
+  flex: 1 1 0;
+  flex-direction: column;
+}
+
+.bds-card-list--horizontal.bds-card-list--fit > .bds-card-list__item {
+  flex: 0 0 auto;
+}
+
+/* Ensure direct card children stretch to fill the item cell */
+.bds-card-list__item > * {
+  width: 100%;
+  height: 100%;
+}
+}

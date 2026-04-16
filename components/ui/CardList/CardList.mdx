@@ -1,0 +1,65 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './CardList.stories';
+
+<Meta of={Stories} />
+
+# CardList
+
+Layout wrapper that stacks any card component (`Card`, `CardDisplay`, `CardFeature`, `CardTestimonial`, etc.) in a vertical column or horizontal row. Handles gap, equal column distribution, and wrapping so the card components themselves stay layout-agnostic.
+
+---
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Vertical
+
+Stacks cards top-to-bottom at full width. Use for feeds, settings lists, or any full-width content column.
+
+<Canvas of={Stories.Vertical} />
+
+## Horizontal
+
+Lays cards out in a row with equal-width columns by default. Wraps to a new line on narrow viewports.
+
+<Canvas of={Stories.Horizontal} />
+
+## Horizontal — fit content
+
+Set `fitContent` when each card declares its own width (e.g. a scrollable product carousel). Items won't stretch to fill the row.
+
+<Canvas of={Stories.HorizontalFitContent} />
+
+## Gap scale
+
+<Canvas of={Stories.GapScale} />
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { CardList, Card, CardTitle, CardDescription } from '@brik/bds';
+
+<CardList orientation="horizontal" gap="lg">
+  <Card variant="outlined" padding="lg">
+    <CardTitle>Design</CardTitle>
+    <CardDescription>Brand and identity.</CardDescription>
+  </Card>
+  <Card variant="outlined" padding="lg">
+    <CardTitle>Development</CardTitle>
+    <CardDescription>Product engineering.</CardDescription>
+  </Card>
+</CardList>
+```
+
+- `orientation` — `'vertical'` (default) or `'horizontal'`
+- `gap` — `'sm' | 'md' | 'lg' | 'xl'` (default `'md'`)
+- `fitContent` — horizontal only; when `true`, items size to their children instead of filling equal columns

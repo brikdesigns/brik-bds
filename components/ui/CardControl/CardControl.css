@@ -3,7 +3,6 @@
 
 .bds-card-control {
   display: flex;
-  align-items: center;
   gap: var(--padding-xl);
   padding: var(--padding-xl);
   background-color: var(--surface-primary);
@@ -14,6 +13,11 @@
   box-sizing: border-box;
   flex-wrap: wrap;
 }
+
+/* ─── Action alignment ───────────────────────────────────────── */
+
+.bds-card-control--action-center { align-items: center; }
+.bds-card-control--action-top    { align-items: flex-start; }
 
 /* ─── Content — badge + text ─────────────────────────────────── */
 
