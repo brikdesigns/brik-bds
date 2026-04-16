@@ -356,30 +356,40 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
    theming experience.
    ============================================ */
 
-/* Docs headings — theme heading font + color */
-.sbdocs h1,
-.sbdocs h2,
-.sbdocs h3,
-.sbdocs h4 {
+/* Docs-chrome typography — MDX body content only.
+ *
+ * Story canvases render inside .sbdocs-preview > .docs-story. Those subtrees
+ * must NOT inherit docs-chrome colors/fonts, or any component using <p>, <li>,
+ * <h*>, or <a> with a custom color inside a Docs preview gets silently
+ * overridden (incl. !important). The :not() exclusions below keep the docs
+ * chrome themed without bleeding into rendered components.
+ *
+ * Regression covered by: Displays/Card/card-testimonial — Variants.
+ */
+
+.sbdocs h1:not(.sbdocs-preview *),
+.sbdocs h2:not(.sbdocs-preview *),
+.sbdocs h3:not(.sbdocs-preview *),
+.sbdocs h4:not(.sbdocs-preview *) {
   color: var(--text-primary) !important;
   font-family: var(--font-family-heading, inherit) !important;
 }
 
-/* Docs body text */
-.sbdocs p,
-.sbdocs li {
+.sbdocs p:not(.sbdocs-preview *),
+.sbdocs li:not(.sbdocs-preview *) {
   color: var(--text-secondary) !important;
   font-family: var(--font-family-body, inherit) !important;
 }
 
-/* Docs links — brand color (exclude code blocks, anchors, and button components) */
-.sbdocs a:not([class*="docblock"]):not([class*="anchor"]):not([class*="bds-button"]) {
+.sbdocs a:not([class*="docblock"]):not([class*="anchor"]):not([class*="bds-button"]):not(.sbdocs-preview *) {
   color: var(--text-brand-primary) !important;
 }
 
-/* Description / subtitle blocks */
-div[class*="Description"],
-div[class*="Subtitle"] {
+/* Description / subtitle blocks — scope to docs chrome only.
+ * Unscoped this would match any <div class="...Description..."> anywhere,
+ * including consumer components. */
+.sbdocs div[class*="Description"]:not(.sbdocs-preview *),
+.sbdocs div[class*="Subtitle"]:not(.sbdocs-preview *) {
   color: var(--text-secondary) !important;
 }
 
