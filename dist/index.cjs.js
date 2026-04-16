@@ -18850,20 +18850,33 @@ function CardControl({
   description,
   badge,
   action,
+  actionAlign = "center",
   className,
   style,
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-card-control", className), style, ...props, children: [
-    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-card-control__content", children: [
-      badge,
-      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-card-control__text", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-card-control__title", children: title }),
-        description && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-card-control__description", children: description })
-      ] })
-    ] }),
-    action && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-card-control__action", children: action })
-  ] });
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    "div",
+    {
+      className: bdsClass(
+        "bds-card-control",
+        `bds-card-control--action-${actionAlign}`,
+        className
+      ),
+      style,
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-card-control__content", children: [
+          badge,
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-card-control__text", children: [
+            /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-card-control__title", children: title }),
+            description && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-card-control__description", children: description })
+          ] })
+        ] }),
+        action && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-card-control__action", children: action })
+      ]
+    }
+  );
 }
 function CardDisplay({
   imageSrc,
@@ -18919,6 +18932,28 @@ function CardFeature({
     }
   );
 }
+function CardList({
+  orientation = "vertical",
+  gap = "md",
+  fitContent = false,
+  children,
+  className,
+  style,
+  ...props
+}) {
+  const classes = bdsClass(
+    "bds-card-list",
+    `bds-card-list--${orientation}`,
+    `bds-card-list--gap-${gap}`,
+    orientation === "horizontal" && fitContent && "bds-card-list--fit",
+    className
+  );
+  return /* @__PURE__ */ jsxRuntime.jsx("ul", { className: classes, style, ...props, children: React.Children.map(children, (child, index2) => {
+    if (!React.isValidElement(child)) return null;
+    const key2 = child.key ?? index2;
+    return /* @__PURE__ */ jsxRuntime.jsx("li", { className: "bds-card-list__item", children: child }, key2);
+  }) });
+}
 function CardTestimonial({
   quote,
   authorName,
@@ -18930,7 +18965,7 @@ function CardTestimonial({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(
-    "div",
+    "figure",
     {
       className: bdsClass("bds-card-testimonial", `bds-card-testimonial--${variant}`, className),
       style,
@@ -18938,9 +18973,9 @@ function CardTestimonial({
       children: [
         /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-card-testimonial__quote-mark", "aria-hidden": "true", children: "“" }),
         /* @__PURE__ */ jsxRuntime.jsx("blockquote", { className: "bds-card-testimonial__body", children: quote }),
-        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-card-testimonial__attribution", children: [
-          /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-card-testimonial__name", children: authorName }),
-          authorRole && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-card-testimonial__role", children: authorRole })
+        /* @__PURE__ */ jsxRuntime.jsxs("figcaption", { className: "bds-card-testimonial__attribution", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("cite", { className: "bds-card-testimonial__name", children: authorName }),
+          authorRole && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-card-testimonial__role", children: authorRole })
         ] }),
         rating != null && rating > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-card-testimonial__stars", role: "img", "aria-label": `${rating} out of 5 stars`, children: Array.from({ length: 5 }, (_, i) => /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:star-fill", style: { opacity: i < rating ? 1 : 0.3 } }, i)) })
       ]
@@ -26814,6 +26849,7 @@ exports.CardDescription = CardDescription;
 exports.CardDisplay = CardDisplay;
 exports.CardFeature = CardFeature;
 exports.CardFooter = CardFooter;
+exports.CardList = CardList;
 exports.CardSummary = CardSummary;
 exports.CardTestimonial = CardTestimonial;
 exports.CardTitle = CardTitle;
