@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Sheet } from './Sheet';
 import { Button } from '../Button';
+import { TextInput } from '../TextInput';
 
 const meta: Meta<typeof Sheet> = {
   title: 'Displays/Overlay/sheet',
@@ -9,7 +10,10 @@ const meta: Meta<typeof Sheet> = {
   parameters: { layout: 'centered' },
   argTypes: {
     side: { control: 'select', options: ['right', 'left', 'bottom'] },
+    variant: { control: 'select', options: ['default', 'floating'] },
+    mode: { control: 'select', options: [undefined, 'read', 'edit'] },
     title: { control: 'text' },
+    subtitle: { control: 'text' },
     width: { control: 'text' },
     closeOnBackdrop: { control: 'boolean' },
     closeOnEscape: { control: 'boolean' },
@@ -47,6 +51,37 @@ const SampleContent = () => (
   </div>
 );
 
+/* ─── Read-only detail view (faux) ───────────────────────────── */
+
+const ReadOnlyFields = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+    {[
+      { label: 'Company', value: 'Brik Designs' },
+      { label: 'Owner', value: 'Nick Stanerson' },
+      { label: 'Industry', value: 'Design & Engineering' },
+      { label: 'Status', value: 'Active' },
+    ].map((field) => (
+      <div key={field.label} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xs)' }}>
+        <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          {field.label}
+        </span>
+        <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-primary)' }}>
+          {field.value}
+        </span>
+      </div>
+    ))}
+  </div>
+);
+
+const EditFormFields = ({ onChange }: { onChange?: (k: string, v: string) => void }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+    <TextInput label="Company" defaultValue="Brik Designs" onChange={(e) => onChange?.('company', e.target.value)} />
+    <TextInput label="Owner" defaultValue="Nick Stanerson" onChange={(e) => onChange?.('owner', e.target.value)} />
+    <TextInput label="Industry" defaultValue="Design & Engineering" onChange={(e) => onChange?.('industry', e.target.value)} />
+    <TextInput label="Status" defaultValue="Active" onChange={(e) => onChange?.('status', e.target.value)} />
+  </div>
+);
+
 /* ─── Playground ─────────────────────────────────────────────── */
 
 export const Playground: Story = {
@@ -66,6 +101,7 @@ export const Playground: Story = {
     onClose: () => {},
     children: null,
     title: 'Details',
+    subtitle: 'Metadata for this company record',
     side: 'right',
     width: '400px',
   },
@@ -135,6 +171,179 @@ export const Variants: Story = {
   },
 };
 
+/* ─── Header (title, subtitle, back button) ──────────────────── */
+
+export const Header: Story = {
+  render: () => {
+    const [openId, setOpenId] = useState<string | null>(null);
+    const open = (id: string) => setOpenId(id);
+    const close = () => setOpenId(null);
+
+    return (
+      <Stack>
+        <SectionLabel>Title only</SectionLabel>
+        <Row>
+          <div>
+            <Button onClick={() => open('title')}>Open</Button>
+            <Sheet isOpen={openId === 'title'} onClose={close} title="Company details">
+              <SampleContent />
+            </Sheet>
+          </div>
+        </Row>
+
+        <SectionLabel>Title + subtitle</SectionLabel>
+        <Row>
+          <div>
+            <Button onClick={() => open('subtitle')}>Open</Button>
+            <Sheet
+              isOpen={openId === 'subtitle'}
+              onClose={close}
+              title="Company details"
+              subtitle="Metadata for this company record"
+            >
+              <SampleContent />
+            </Sheet>
+          </div>
+        </Row>
+
+        <SectionLabel>With back button (nested flow)</SectionLabel>
+        <Row>
+          <div>
+            <Button onClick={() => open('back')}>Open nested</Button>
+            <Sheet
+              isOpen={openId === 'back'}
+              onClose={close}
+              title="Contact"
+              subtitle="Opened from Company details"
+              onBack={close}
+            >
+              <SampleContent />
+            </Sheet>
+          </div>
+        </Row>
+      </Stack>
+    );
+  },
+};
+
+/* ─── Read mode — footer renders [Close] [Edit] ──────────────── */
+
+export const ReadMode: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>View company</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Brik Designs"
+          subtitle="Active · Updated 2 days ago"
+          mode="read"
+          onEdit={() => alert('Switch to edit mode')}
+        >
+          <ReadOnlyFields />
+        </Sheet>
+      </>
+    );
+  },
+};
+
+/* ─── Edit mode — footer renders [Cancel] [Save] ─────────────── */
+
+export const EditMode: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const handleSave = () => {
+      setSaving(true);
+      setTimeout(() => {
+        setSaving(false);
+        setOpen(false);
+      }, 900);
+    };
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Edit company</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Edit company"
+          subtitle="Update record details"
+          mode="edit"
+          onSave={handleSave}
+          saveLoading={saving}
+        >
+          <EditFormFields />
+        </Sheet>
+      </>
+    );
+  },
+};
+
+/* ─── Read ↔ Edit toggle — the canonical pattern ─────────────── */
+
+export const ReadEditToggle: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    const [mode, setMode] = useState<'read' | 'edit'>('read');
+    const [saving, setSaving] = useState(false);
+
+    const handleOpen = () => {
+      setMode('read');
+      setOpen(true);
+    };
+    const handleSave = () => {
+      setSaving(true);
+      setTimeout(() => {
+        setSaving(false);
+        setMode('read');
+      }, 700);
+    };
+
+    return (
+      <>
+        <Button onClick={handleOpen}>Open company</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Brik Designs"
+          subtitle={mode === 'read' ? 'Active · Updated 2 days ago' : 'Editing record'}
+          mode={mode}
+          onEdit={() => setMode('edit')}
+          onSave={handleSave}
+          onCancel={() => setMode('read')}
+          saveLoading={saving}
+        >
+          {mode === 'read' ? <ReadOnlyFields /> : <EditFormFields />}
+        </Sheet>
+      </>
+    );
+  },
+};
+
+/* ─── Read-only floating (popover, no footer) ────────────────── */
+
+export const ReadOnlyFloating: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Show info</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Quick info"
+          subtitle="Read-only — no CTA needed"
+          variant="floating"
+        >
+          <SampleContent />
+        </Sheet>
+      </>
+    );
+  },
+};
+
 /* ─── Patterns ───────────────────────────────────────────────── */
 
 export const Patterns: Story = {
@@ -145,18 +354,23 @@ export const Patterns: Story = {
 
     return (
       <Stack>
-        <SectionLabel>Detail panel with actions</SectionLabel>
+        <SectionLabel>Custom footer (overrides mode)</SectionLabel>
         <Row>
           <div>
-            <Button onClick={() => open('detail')}>View details</Button>
-            <Sheet isOpen={openId === 'detail'} onClose={close} title="Company details">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-                <SampleContent />
-                <div style={{ display: 'flex', gap: 'var(--gap-md)', justifyContent: 'flex-end' }}>
+            <Button onClick={() => open('custom')}>View details</Button>
+            <Sheet
+              isOpen={openId === 'custom'}
+              onClose={close}
+              title="Company details"
+              footer={(
+                <>
+                  <Button variant="danger-ghost" onClick={close}>Archive</Button>
                   <Button variant="ghost" onClick={close}>Cancel</Button>
                   <Button variant="primary" onClick={close}>Save</Button>
-                </div>
-              </div>
+                </>
+              )}
+            >
+              <SampleContent />
             </Sheet>
           </div>
         </Row>

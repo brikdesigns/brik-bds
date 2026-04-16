@@ -7,6 +7,11 @@ import * as Stories from './Sheet.stories';
 
 Sliding panel overlay anchored to a screen edge. Use for detail views, forms, and secondary content that shouldn't replace the current page.
 
+Sheets support two modes that map to the most common UX pattern across the product suite:
+
+- **`read`** — view-only display. Footer (if shown) renders `[Close] [Edit]`.
+- **`edit`** — active form state. Footer renders `[Cancel] [Save]`.
+
 ---
 
 ## Playground
@@ -25,11 +30,68 @@ Right, left, bottom, wide, and no-title configurations.
 - **`left`** — Navigation or sidebar panels
 - **`bottom`** — Mobile-friendly bottom sheet
 
+## Header
+
+The header composes `title`, `subtitle`, and an optional `onBack` button for nested flows.
+
+<Canvas of={Stories.Header} />
+
+- Use **`subtitle`** for record state, timestamps, or short context.
+- Use **`onBack`** when a sheet is pushed on top of another sheet (e.g. a related-entity drilldown). Pair with your sheet stack controller.
+- The close icon uses the Phosphor **bold** weight so it reads at a glance.
+
+## Read mode
+
+Read mode displays data. When `onEdit` is supplied, the footer auto-renders a primary **Edit** action alongside a secondary **Close**.
+
+<Canvas of={Stories.ReadMode} />
+
+Don't put the Edit button in the body. It belongs in the footer where the user expects primary actions.
+
+## Edit mode
+
+Edit mode is the active form state. The footer auto-renders `[Cancel] [Save]`. Pass `saveLoading` while the save promise is in flight and `saveDisabled` when the form is invalid.
+
+<Canvas of={Stories.EditMode} />
+
+## Read ↔ Edit toggle
+
+The canonical pattern: open in `read`, let the user click Edit to switch to `edit`, then Save / Cancel returns to `read`.
+
+<Canvas of={Stories.ReadEditToggle} />
+
+This mirrors the renew-pms convention. `brik-client-portal` should adopt the same pattern — no more edit buttons floating inside the sheet body.
+
+## Read-only floating
+
+Pure read content that doesn't require an action can skip the backdrop and render as a floating popover with `variant="floating"`. Skip the footer entirely.
+
+<Canvas of={Stories.ReadOnlyFloating} />
+
 ## Patterns
 
-Detail panel with actions and mobile bottom sheet.
+Custom footer (overrides mode) and mobile bottom sheet.
 
 <Canvas of={Stories.Patterns} />
+
+A custom `footer` always wins over mode-driven auto-footer. Use it for non-standard action sets (e.g. Archive / Cancel / Save).
+
+---
+
+## When to use which treatment
+
+| Scenario | Variant | Footer |
+|---|---|---|
+| Read-only metadata, no CTA | `floating` | none |
+| Read detail with edit capability | `default`, `mode="read"` + `onEdit` | `[Close] [Edit]` (auto) |
+| Active form / edit workflow | `default`, `mode="edit"` + `onSave` | `[Cancel] [Save]` (auto) |
+| Non-standard action set | any | custom `footer` |
+
+Rules:
+
+- Don't render Edit as a button in the body. Use `mode="read"` + `onEdit`.
+- Read-only sheets without any action don't need a footer — and often don't need a backdrop; prefer `variant="floating"`.
+- Edit mode always has a footer.
 
 ---
 
@@ -42,16 +104,26 @@ Detail panel with actions and mobile bottom sheet.
 ## Usage
 
 ```tsx
-import { Sheet } from '@brik/bds';
+import { Sheet } from '@brikdesigns/bds';
 import { useState } from 'react';
 
-const [isOpen, setIsOpen] = useState(false);
+function CompanySheet() {
+  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<'read' | 'edit'>('read');
 
-<Sheet
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  title="Company details"
->
-  <p>Detail content here...</p>
-</Sheet>
+  return (
+    <Sheet
+      isOpen={open}
+      onClose={() => setOpen(false)}
+      title="Brik Designs"
+      subtitle="Active · Updated 2 days ago"
+      mode={mode}
+      onEdit={() => setMode('edit')}
+      onSave={async () => { await save(); setMode('read'); }}
+      onCancel={() => setMode('read')}
+    >
+      {mode === 'read' ? <ReadOnlyFields /> : <EditFormFields />}
+    </Sheet>
+  );
+}
 ```
