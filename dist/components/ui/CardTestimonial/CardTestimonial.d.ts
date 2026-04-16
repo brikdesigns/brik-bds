@@ -1,7 +1,7 @@
 import { type HTMLAttributes } from 'react';
 import './CardTestimonial.css';
 export type CardTestimonialVariant = 'brand' | 'outlined';
-export interface CardTestimonialProps extends HTMLAttributes<HTMLDivElement> {
+export interface CardTestimonialProps extends HTMLAttributes<HTMLElement> {
     quote: string;
     authorName: string;
     authorRole?: string;

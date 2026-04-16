@@ -16,6 +16,7 @@ export * from './Card';
 export * from './CardControl';
 export * from './CardDisplay';
 export * from './CardFeature';
+export * from './CardList';
 export * from './CardTestimonial';
 export * from './Checkbox';
 export * from './Chip';
