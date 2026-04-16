@@ -1,0 +1,54 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './AddableEntryList.stories';
+
+<Meta of={Stories} />
+
+# Addable entry list
+
+The text + textarea sibling of [`AddableTextList`](?path=/docs/components-form-addable-text-list--overview). Existing entries render as read-only cards with a remove button. Clicking "Add" reveals a form with a text input (primary) and textarea (secondary). **Save** commits the entry and keeps the form open for rapid entry; **Escape** cancels.
+
+Use for lists where each row needs a headline value + context (competitor URL + notes, reference site + why, line item + description, team member + role). The entry shape is intentionally generic so a single BDS component serves all of these — map your domain shape to `{ primary, secondary }` at the boundary.
+
+---
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Empty state
+
+<Canvas of={Stories.Empty} />
+
+## Secondary is optional
+
+The `secondary` field can be left blank — the rendered card only shows it when present.
+
+<Canvas of={Stories.PrimaryOnly} />
+
+## Variants
+
+Sizes, empty/helper/disabled states, and item limit.
+
+<Canvas of={Stories.Variants} />
+
+---
+
+## Behavior
+
+- **Save** commits the entry (primary trimmed, secondary trimmed) and keeps the form open for rapid entry.
+- **Escape** cancels and hides the form.
+- **Primary is required**; empty-primary submissions are silently dropped.
+- Duplicates are blocked case-insensitively on the primary value unless `allowDuplicates` is set.
+- When `maxItems` is reached, the Add button is hidden.
+- Entries are read-only once added — remove to replace.
+
+## When to use this vs. `AddableTextList`
+
+| Pick | When |
+| ---- | ---- |
+| `AddableTextList` | Each row is a single short value (service name, payment type, tag). |
+| `AddableEntryList` | Each row needs a primary value **and** a secondary note or description. |
+
+## Props
+
+<ArgTypes of={Stories} />
