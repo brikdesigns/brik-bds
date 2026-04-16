@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import type { SheetVariant, SheetTab } from '../ui/Sheet';
+import type { SheetVariant, SheetTab, SheetMode } from '../ui/Sheet';
 export interface SheetFrame {
     /** Unique key for React reconciliation */
     key: string;
@@ -39,12 +39,32 @@ export interface SheetStackContextValue {
 /** Configuration set by headless sheet components via useConfigureSheet */
 export interface SheetConfig {
     title?: ReactNode;
+    /** Subtitle rendered under the title */
+    subtitle?: ReactNode;
     tabs?: SheetTab[];
     activeTab?: string;
     onTabChange?: (id: string) => void;
+    /**
+     * Custom footer. When provided, overrides the mode-driven auto-footer.
+     */
     footer?: ReactNode;
     /** Override body content (e.g. skeleton while loading) */
     body?: ReactNode;
+    /**
+     * Sheet mode — drives auto-footer when no custom `footer` is set.
+     * - `read` with `onEdit` → `[Close] [Edit]`
+     * - `edit` with `onSave` → `[Cancel] [Save]`
+     */
+    mode?: SheetMode;
+    onEdit?: () => void;
+    onSave?: () => void;
+    onCancel?: () => void;
+    editLabel?: string;
+    saveLabel?: string;
+    cancelLabel?: string;
+    closeLabel?: string;
+    saveDisabled?: boolean;
+    saveLoading?: boolean;
 }
 export interface SheetStackProviderProps {
     children: ReactNode;
