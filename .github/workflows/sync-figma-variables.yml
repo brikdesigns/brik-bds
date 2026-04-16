@@ -50,21 +50,15 @@ jobs:
       if: inputs.skip-build != 'true'
       run: npm run build:all-tokens
 
-    - name: Check for changes
-      id: check-changes
-      run: |
-        if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
-          echo "no-changes=true" >> $GITHUB_OUTPUT
-        else
-          echo "no-changes=false" >> $GITHUB_OUTPUT
-        fi
-
     - name: Commit and push changes
-      if: steps.check-changes.outputs.no-changes == 'false'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add design-tokens/ tokens/
         git add -f build/
-        git commit -m "Sync Figma Variables — $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-        git push
+        if git diff --cached --quiet; then
+          echo "No token changes to commit — build output matches branch."
+        else
+          git commit -m "Sync Figma Variables — $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          git push
+        fi
