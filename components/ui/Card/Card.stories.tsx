@@ -8,7 +8,7 @@ const meta: Meta<typeof Card> = {
   component: Card,
   parameters: { layout: 'centered' },
   argTypes: {
-    variant: { control: 'select', options: ['default', 'outlined', 'elevated'] },
+    variant: { control: 'select', options: ['outlined', 'brand', 'elevated'] },
     padding: { control: 'select', options: ['none', 'sm', 'md', 'lg'] },
     interactive: { control: 'boolean' },
   },
@@ -63,9 +63,9 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => (
     <Stack>
-      <SectionLabel>Variant: default / outlined / elevated</SectionLabel>
+      <SectionLabel>Variant: outlined / brand / elevated</SectionLabel>
       <Row>
-        {(['default', 'outlined', 'elevated'] as const).map((v) => (
+        {(['outlined', 'brand', 'elevated'] as const).map((v) => (
           <Card key={v} variant={v} padding="md" style={{ width: 220 }}>
             <CardTitle as="h4">{v}</CardTitle>
             <CardDescription>Card variant preview</CardDescription>

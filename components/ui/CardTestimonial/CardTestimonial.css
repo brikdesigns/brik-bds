@@ -10,6 +10,7 @@
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  margin: 0;
 }
 
 /* ─── Variants ───────────────────────────────────────────────── */
@@ -34,7 +35,7 @@
   user-select: none;
 }
 
-.bds-card-testimonial--brand .bds-card-testimonial__quote-mark { color: var(--text-inverse); }
+.bds-card-testimonial--brand .bds-card-testimonial__quote-mark { color: var(--text-on-color-dark); }
 .bds-card-testimonial--outlined .bds-card-testimonial__quote-mark { color: var(--text-brand-primary); }
 
 /* ─── Quote body ─────────────────────────────────────────────── */
@@ -47,7 +48,7 @@
   margin: 0;
 }
 
-.bds-card-testimonial--brand .bds-card-testimonial__body { color: var(--text-inverse); }
+.bds-card-testimonial--brand .bds-card-testimonial__body { color: var(--text-on-color-dark); }
 .bds-card-testimonial--outlined .bds-card-testimonial__body { color: var(--text-primary); }
 
 /* ─── Attribution ────────────────────────────────────────────── */
@@ -65,10 +66,11 @@
   font-size: var(--label-md);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--font-line-height-snug);
+  font-style: normal;
   margin: 0;
 }
 
-.bds-card-testimonial--brand .bds-card-testimonial__name { color: var(--text-inverse); }
+.bds-card-testimonial--brand .bds-card-testimonial__name { color: var(--text-on-color-dark); }
 .bds-card-testimonial--outlined .bds-card-testimonial__name { color: var(--text-primary); }
 
 /* ─── Author role ────────────────────────────────────────────── */
@@ -81,7 +83,7 @@
   margin: 0;
 }
 
-.bds-card-testimonial--brand .bds-card-testimonial__role { color: var(--text-inverse); }
+.bds-card-testimonial--brand .bds-card-testimonial__role { color: var(--text-on-color-dark); }
 .bds-card-testimonial--outlined .bds-card-testimonial__role { color: var(--text-secondary); }
 
 /* ─── Star rating ────────────────────────────────────────────── */
