@@ -1,7 +1,6 @@
 'use client';
 
-import { type ReactNode, type CSSProperties } from 'react';
-import { Icon } from '@iconify/react';
+import { type ReactNode } from 'react';
 import { Sheet } from '../ui/Sheet';
 import { useSheetStack, useSheetConfig, type SheetFrame } from './SheetStackProvider';
 import { bdsClass } from '../utils';
@@ -33,25 +32,6 @@ export interface SheetStackRendererProps {
   globalFrameProps?: Record<string, unknown>;
 }
 
-// ─── Styles ─────────────────────────────────────────────────────────────────
-
-const backBtnStyle: CSSProperties = {
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer',
-  padding: 0,
-  display: 'flex',
-  alignItems: 'center',
-  opacity: 0.6,
-  transition: 'opacity 0.2s',
-};
-
-const headerRowStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 'var(--gap-sm)',
-};
-
 // ─── Component ──────────────────────────────────────────────────────────────
 
 /**
@@ -63,12 +43,17 @@ const headerRowStyle: CSSProperties = {
  * The `renderFrame` callback maps frame types to your app's sheet components.
  * BDS doesn't know about your entity types — the app defines the mapping.
  *
+ * Headless sheet components call `useConfigureSheet()` to push their
+ * body, title, subtitle, tabs, footer, or read/edit mode up to this
+ * renderer. When the stack is deep (>1 frame), a back button auto-renders
+ * in the header to pop back to the previous frame.
+ *
  * @example
  * ```tsx
  * <SheetStackRenderer
  *   renderFrame={(frame, ctx) => {
  *     const Component = sheetComponents[frame.type];
- *     return <Component {...frame.props} onClose={ctx.closeAll} onNavigate={ctx.pushSheet} />;
+ *     return <Component {...frame.props} onNavigate={ctx.pushSheet} />;
  *   }}
  * />
  * ```
@@ -91,25 +76,7 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
   };
 
   // Resolve title: prefer headless config title, fall back to frame title
-  const baseTitle = config.title ?? topFrame.title ?? topFrame.type;
-
-  // Build the title — includes back arrow when stack is deep
-  const titleContent = isDeep ? (
-    <span style={headerRowStyle}>
-      <button
-        type="button"
-        style={backBtnStyle}
-        onClick={back}
-        aria-label="Back"
-        className="bds-sheet__back-btn"
-      >
-        <Icon icon="ph:arrow-left-bold" />
-      </button>
-      {baseTitle}
-    </span>
-  ) : (
-    baseTitle
-  );
+  const resolvedTitle = config.title ?? topFrame.title ?? topFrame.type;
 
   // Animation class for frame content
   const frameClass = bdsClass(
@@ -129,7 +96,9 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
       <Sheet
         isOpen
         onClose={closeAll}
-        title={titleContent}
+        title={resolvedTitle}
+        subtitle={config.subtitle}
+        onBack={isDeep ? back : undefined}
         width={width}
         variant={topFrame.variant}
         closeOnEscape
@@ -137,6 +106,16 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
         activeTab={config.activeTab}
         onTabChange={config.onTabChange}
         footer={config.footer}
+        mode={config.mode}
+        onEdit={config.onEdit}
+        onSave={config.onSave}
+        onCancel={config.onCancel}
+        editLabel={config.editLabel}
+        saveLabel={config.saveLabel}
+        cancelLabel={config.cancelLabel}
+        closeLabel={config.closeLabel}
+        saveDisabled={config.saveDisabled}
+        saveLoading={config.saveLoading}
       >
         <div className={frameClass} key={topFrame.key}>
           {config.body}
