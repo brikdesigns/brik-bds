@@ -1861,15 +1861,15 @@
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
-.bds-card--default {
+.bds-card--outlined {
   background-color: var(--surface-primary);
-  border: none;
+  border: var(--border-width-md) solid var(--border-secondary);
   box-shadow: var(--box-shadow-none);
 }
 
-.bds-card--outlined {
-  background-color: var(--surface-secondary);
-  border: var(--border-width-md) solid var(--border-secondary);
+.bds-card--brand {
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-brand-primary);
   box-shadow: var(--box-shadow-none);
 }
 
@@ -2010,7 +2010,6 @@
 
 .bds-card-control {
   display: flex;
-  align-items: center;
   gap: var(--padding-xl);
   padding: var(--padding-xl);
   background-color: var(--surface-primary);
@@ -2021,6 +2020,11 @@
   box-sizing: border-box;
   flex-wrap: wrap;
 }
+
+/* ─── Action alignment ───────────────────────────────────────── */
+
+.bds-card-control--action-center { align-items: center; }
+.bds-card-control--action-top    { align-items: flex-start; }
 
 /* ─── Content — badge + text ─────────────────────────────────── */
 
@@ -2229,6 +2233,65 @@
 }
 }
 @layer bds-components {
+/* ─── CardList ───────────────────────────────────────────────── */
+
+.bds-card-list {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Orientation ────────────────────────────────────────────── */
+
+.bds-card-list--vertical {
+  flex-direction: column;
+}
+
+.bds-card-list--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+/* ─── Gap ────────────────────────────────────────────────────── */
+
+.bds-card-list--gap-sm { gap: var(--gap-sm); }
+.bds-card-list--gap-md { gap: var(--gap-md); }
+.bds-card-list--gap-lg { gap: var(--gap-lg); }
+.bds-card-list--gap-xl { gap: var(--gap-xl); }
+
+/* ─── Items ──────────────────────────────────────────────────── */
+
+.bds-card-list__item {
+  display: flex;
+  min-width: 0;
+}
+
+.bds-card-list--vertical > .bds-card-list__item {
+  flex-direction: column;
+  width: 100%;
+}
+
+.bds-card-list--horizontal > .bds-card-list__item {
+  flex: 1 1 0;
+  flex-direction: column;
+}
+
+.bds-card-list--horizontal.bds-card-list--fit > .bds-card-list__item {
+  flex: 0 0 auto;
+}
+
+/* Ensure direct card children stretch to fill the item cell */
+.bds-card-list__item > * {
+  width: 100%;
+  height: 100%;
+}
+}
+@layer bds-components {
 /* ─── CardTestimonial ────────────────────────────────────────── */
 
 .bds-card-testimonial {
@@ -2240,6 +2303,7 @@
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  margin: 0;
 }
 
 /* ─── Variants ───────────────────────────────────────────────── */
@@ -2264,7 +2328,7 @@
   user-select: none;
 }
 
-.bds-card-testimonial--brand .bds-card-testimonial__quote-mark { color: var(--text-inverse); }
+.bds-card-testimonial--brand .bds-card-testimonial__quote-mark { color: var(--text-on-color-dark); }
 .bds-card-testimonial--outlined .bds-card-testimonial__quote-mark { color: var(--text-brand-primary); }
 
 /* ─── Quote body ─────────────────────────────────────────────── */
@@ -2277,7 +2341,7 @@
   margin: 0;
 }
 
-.bds-card-testimonial--brand .bds-card-testimonial__body { color: var(--text-inverse); }
+.bds-card-testimonial--brand .bds-card-testimonial__body { color: var(--text-on-color-dark); }
 .bds-card-testimonial--outlined .bds-card-testimonial__body { color: var(--text-primary); }
 
 /* ─── Attribution ────────────────────────────────────────────── */
@@ -2295,10 +2359,11 @@
   font-size: var(--label-md);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--font-line-height-snug);
+  font-style: normal;
   margin: 0;
 }
 
-.bds-card-testimonial--brand .bds-card-testimonial__name { color: var(--text-inverse); }
+.bds-card-testimonial--brand .bds-card-testimonial__name { color: var(--text-on-color-dark); }
 .bds-card-testimonial--outlined .bds-card-testimonial__name { color: var(--text-primary); }
 
 /* ─── Author role ────────────────────────────────────────────── */
@@ -2311,7 +2376,7 @@
   margin: 0;
 }
 
-.bds-card-testimonial--brand .bds-card-testimonial__role { color: var(--text-inverse); }
+.bds-card-testimonial--brand .bds-card-testimonial__role { color: var(--text-on-color-dark); }
 .bds-card-testimonial--outlined .bds-card-testimonial__role { color: var(--text-secondary); }
 
 /* ─── Star rating ────────────────────────────────────────────── */
