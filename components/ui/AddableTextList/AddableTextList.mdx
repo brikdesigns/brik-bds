@@ -1,0 +1,39 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './AddableTextList.stories';
+
+<Meta of={Stories} />
+
+# Addable text list
+
+A list of text values with a reveal-on-click add pattern. The input is hidden until the user clicks the "Add New" button; pressing **Enter** commits the value and re-focuses the input for rapid entry, **Escape** cancels. Existing values render as removable tags.
+
+Use for lightweight list capture where a full multi-select is overkill (e.g. services offered, payment types, back-office tools). Designed to be swapped for a MultiSelect later without changing data shape.
+
+---
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Empty state
+
+<Canvas of={Stories.Empty} />
+
+## Variants
+
+Sizes, empty/helper/disabled states, and item limit.
+
+<Canvas of={Stories.Variants} />
+
+---
+
+## Behavior
+
+- **Enter** commits the trimmed value and keeps the input open for the next entry.
+- **Escape** or **blur on empty** cancels and hides the input.
+- Duplicates are blocked case-insensitively unless `allowDuplicates` is set.
+- When `maxItems` is reached, the Add button is hidden.
+
+## Props
+
+<ArgTypes of={Stories} />
