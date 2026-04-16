@@ -1,6 +1,7 @@
 // UI Components
 export * from './Accordion';
 export * from './ActivityTimeline';
+export * from './AddableTextList';
 export * from './AddressInput';
 export * from './AnimatedIcon';
 export * from './AlertBanner';
