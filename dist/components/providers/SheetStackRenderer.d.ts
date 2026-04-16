@@ -35,12 +35,17 @@ export interface SheetStackRendererProps {
  * The `renderFrame` callback maps frame types to your app's sheet components.
  * BDS doesn't know about your entity types — the app defines the mapping.
  *
+ * Headless sheet components call `useConfigureSheet()` to push their
+ * body, title, subtitle, tabs, footer, or read/edit mode up to this
+ * renderer. When the stack is deep (>1 frame), a back button auto-renders
+ * in the header to pop back to the previous frame.
+ *
  * @example
  * ```tsx
  * <SheetStackRenderer
  *   renderFrame={(frame, ctx) => {
  *     const Component = sheetComponents[frame.type];
- *     return <Component {...frame.props} onClose={ctx.closeAll} onNavigate={ctx.pushSheet} />;
+ *     return <Component {...frame.props} onNavigate={ctx.pushSheet} />;
  *   }}
  * />
  * ```

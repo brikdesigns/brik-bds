@@ -3,8 +3,8 @@
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const jsxRuntime = require("react/jsx-runtime");
 const React = require("react");
-const react = require("@iconify/react");
 const ReactDOM = require("react-dom");
+const react = require("@iconify/react");
 function _interopNamespaceDefault(e) {
   const n = Object.create(null, { [Symbol.toStringTag]: { value: "Module" } });
   if (e) {
@@ -953,21 +953,6 @@ function Sheet({
   ] });
   return ReactDOM.createPortal(sheet, document.body);
 }
-const backBtnStyle = {
-  background: "none",
-  border: "none",
-  cursor: "pointer",
-  padding: 0,
-  display: "flex",
-  alignItems: "center",
-  opacity: 0.6,
-  transition: "opacity 0.2s"
-};
-const headerRowStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "var(--gap-sm)"
-};
 function SheetStackRenderer({ renderFrame, width: width2 = "600px", globalFrameProps = {} }) {
   const { stack, isOpen, isExiting, direction, back, closeAll, pushSheet } = useSheetStack();
   const config = useSheetConfig();
@@ -981,21 +966,7 @@ function SheetStackRenderer({ renderFrame, width: width2 = "600px", globalFrameP
     depth: stack.length,
     globalFrameProps
   };
-  const baseTitle = config.title ?? topFrame.title ?? topFrame.type;
-  const titleContent = isDeep ? /* @__PURE__ */ jsxRuntime.jsxs("span", { style: headerRowStyle, children: [
-    /* @__PURE__ */ jsxRuntime.jsx(
-      "button",
-      {
-        type: "button",
-        style: backBtnStyle,
-        onClick: back,
-        "aria-label": "Back",
-        className: "bds-sheet__back-btn",
-        children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:arrow-left-bold" })
-      }
-    ),
-    baseTitle
-  ] }) : baseTitle;
+  const resolvedTitle = config.title ?? topFrame.title ?? topFrame.type;
   const frameClass = bdsClass(
     "bds-sheet-stack__frame",
     isExiting ? "bds-sheet-stack__frame--exiting" : "",
@@ -1009,7 +980,9 @@ function SheetStackRenderer({ renderFrame, width: width2 = "600px", globalFrameP
       {
         isOpen: true,
         onClose: closeAll,
-        title: titleContent,
+        title: resolvedTitle,
+        subtitle: config.subtitle,
+        onBack: isDeep ? back : void 0,
         width: width2,
         variant: topFrame.variant,
         closeOnEscape: true,
@@ -1017,6 +990,16 @@ function SheetStackRenderer({ renderFrame, width: width2 = "600px", globalFrameP
         activeTab: config.activeTab,
         onTabChange: config.onTabChange,
         footer: config.footer,
+        mode: config.mode,
+        onEdit: config.onEdit,
+        onSave: config.onSave,
+        onCancel: config.onCancel,
+        editLabel: config.editLabel,
+        saveLabel: config.saveLabel,
+        cancelLabel: config.cancelLabel,
+        closeLabel: config.closeLabel,
+        saveDisabled: config.saveDisabled,
+        saveLoading: config.saveLoading,
         children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: frameClass, children: config.body }, topFrame.key)
       }
     )
