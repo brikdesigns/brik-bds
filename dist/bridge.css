@@ -63,11 +63,11 @@
   /* ═══════════════════════════════════════════════
      Color: Theme
      ═══════════════════════════════════════════════ */
-  --color-theme-primary: var(--theme-blue-blue-light);
-  --color-theme-secondary: var(--theme-blue-blue-lighter);
-  --color-theme-tertiary: var(--theme-blue-blue-lightest);
-  --color-theme-accent: var(--theme-blue-green);
-  --color-theme-fourth: var(--theme-blue-blue-dark);
+  --color-theme-primary: var(--brand-primary);
+  --color-theme-secondary: var(--brand-secondary);
+  --color-theme-tertiary: var(--brand-tertiary);
+  --color-theme-accent: var(--brand-accent);
+  --color-theme-fourth: var(--brand-dark);
 
   /* ═══════════════════════════════════════════════
      Typography: Font Family

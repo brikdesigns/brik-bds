@@ -1,4 +1,5 @@
 export declare const X = "ph:x";
+export declare const XBold = "ph:x-bold";
 export declare const Plus = "ph:plus";
 export declare const Minus = "ph:minus";
 export declare const CaretDown = "ph:caret-down";
@@ -15,6 +16,7 @@ export declare const Info = "ph:info";
 export declare const Spinner = "ph:spinner";
 export declare const CircleX = "ph:x-circle";
 export declare const ArrowLeft = "ph:arrow-left";
+export declare const ArrowLeftBold = "ph:arrow-left-bold";
 export declare const ArrowRight = "ph:arrow-right";
 export declare const ArrowUp = "ph:arrow-up";
 export declare const ArrowDown = "ph:arrow-down";

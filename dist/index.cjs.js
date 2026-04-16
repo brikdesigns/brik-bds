@@ -644,6 +644,7 @@ function useSheetConfig() {
   return (context == null ? void 0 : context.config) ?? {};
 }
 const X = "ph:x";
+const XBold = "ph:x-bold";
 const Plus = "ph:plus";
 const Minus = "ph:minus";
 const CaretDown = "ph:caret-down";
@@ -658,22 +659,167 @@ const WarningCircle = "ph:warning-circle";
 const Warning = "ph:warning";
 const Info = "ph:info";
 const Spinner$1 = "ph:spinner";
+const ArrowLeftBold = "ph:arrow-left-bold";
+const Pen = "ph:pencil";
 const Envelope = "ph:envelope";
 const Clock = "ph:clock";
 function bdsClass(base, ...modifiers) {
   return [base, ...modifiers].filter(Boolean).join(" ");
 }
+const Button = React.forwardRef(
+  ({
+    variant = "primary",
+    size: size2 = "md",
+    fullWidth = false,
+    children,
+    iconBefore,
+    iconAfter,
+    loading = false,
+    className,
+    disabled,
+    style,
+    ...props
+  }, ref) => {
+    const isDisabled = disabled || loading;
+    const classes = bdsClass(
+      "bds-button",
+      `bds-button--${variant}`,
+      `bds-button--${size2}`,
+      fullWidth && "bds-button--full-width",
+      loading && "bds-button--loading",
+      className
+    );
+    return /* @__PURE__ */ jsxRuntime.jsxs(
+      "button",
+      {
+        ref,
+        className: classes,
+        style,
+        disabled: isDisabled,
+        "aria-busy": loading || void 0,
+        ...props,
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("span", { className: bdsClass("bds-button__content", loading && "bds-button__content--hidden"), children: [
+            iconBefore,
+            children,
+            iconAfter
+          ] }),
+          loading && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-button__spinner", role: "status", "aria-label": "Loading", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-button__spinner-icon" }) })
+        ]
+      }
+    );
+  }
+);
+Button.displayName = "Button";
+const LinkButton = React.forwardRef(
+  ({
+    variant = "primary",
+    size: size2 = "md",
+    fullWidth = false,
+    href,
+    children,
+    iconBefore,
+    iconAfter,
+    className,
+    style,
+    ...props
+  }, ref) => {
+    const classes = bdsClass(
+      "bds-button",
+      `bds-button--${variant}`,
+      `bds-button--${size2}`,
+      fullWidth && "bds-button--full-width",
+      className
+    );
+    return /* @__PURE__ */ jsxRuntime.jsx(
+      "a",
+      {
+        ref,
+        href,
+        className: classes,
+        style,
+        role: "button",
+        ...props,
+        children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "bds-button__content", children: [
+          iconBefore,
+          children,
+          iconAfter
+        ] })
+      }
+    );
+  }
+);
+LinkButton.displayName = "LinkButton";
+const IconButton = React.forwardRef(
+  ({
+    variant = "ghost",
+    size: size2 = "md",
+    icon,
+    label,
+    loading = false,
+    className,
+    disabled,
+    style,
+    ...props
+  }, ref) => {
+    const isDisabled = disabled || loading;
+    const classes = bdsClass(
+      "bds-button",
+      "bds-icon-button",
+      `bds-button--${variant}`,
+      `bds-icon-button--${size2}`,
+      loading && "bds-button--loading",
+      className
+    );
+    return /* @__PURE__ */ jsxRuntime.jsxs(
+      "button",
+      {
+        ref,
+        className: classes,
+        style,
+        disabled: isDisabled,
+        "aria-label": label,
+        "aria-busy": loading || void 0,
+        ...props,
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsx(
+            "span",
+            {
+              className: bdsClass("bds-icon-button__icon", loading && "bds-button__content--hidden"),
+              "aria-hidden": "true",
+              children: icon
+            }
+          ),
+          loading && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-button__spinner", role: "status", "aria-label": "Loading", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-button__spinner-icon" }) })
+        ]
+      }
+    );
+  }
+);
+IconButton.displayName = "IconButton";
 function Sheet({
   isOpen,
   onClose,
   children,
   side = "right",
   title,
+  subtitle,
   width: width2 = "400px",
   variant = "default",
   closeOnBackdrop = true,
   closeOnEscape = true,
   showCloseButton = true,
+  onBack,
+  mode,
+  onEdit,
+  onSave,
+  onCancel,
+  editLabel = "Edit",
+  saveLabel = "Save",
+  cancelLabel = "Cancel",
+  closeLabel = "Close",
+  saveDisabled,
+  saveLoading,
   footer,
   tabs,
   activeTab: controlledTab,
@@ -718,6 +864,32 @@ function Sheet({
   };
   const widthStyle = side !== "bottom" ? { width: width2 } : void 0;
   const activeTabContent = (_b = tabs == null ? void 0 : tabs.find((t) => t.id === activeTab)) == null ? void 0 : _b.content;
+  const resolvedFooter = (() => {
+    if (footer !== void 0) return footer;
+    if (mode === "edit" && onSave) {
+      return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Button, { variant: "ghost", onClick: onCancel ?? onClose, children: cancelLabel }),
+        /* @__PURE__ */ jsxRuntime.jsx(
+          Button,
+          {
+            variant: "primary",
+            onClick: onSave,
+            disabled: saveDisabled,
+            loading: saveLoading,
+            children: saveLabel
+          }
+        )
+      ] });
+    }
+    if (mode === "read" && onEdit) {
+      return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Button, { variant: "ghost", onClick: onClose, children: closeLabel }),
+        /* @__PURE__ */ jsxRuntime.jsx(Button, { variant: "primary", onClick: onEdit, iconBefore: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: Pen }), children: editLabel })
+      ] });
+    }
+    return null;
+  })();
+  const hasHeaderContent = title || subtitle || onBack || showCloseButton;
   const sheet = /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     !isFloating && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet-backdrop", onClick: handleBackdropClick }),
     /* @__PURE__ */ jsxRuntime.jsxs(
@@ -728,9 +900,24 @@ function Sheet({
         "aria-modal": !isFloating,
         style: widthStyle,
         children: [
-          (title || showCloseButton) && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-sheet__header", tabs ? "bds-sheet__header--has-tabs" : ""), children: [
+          hasHeaderContent && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-sheet__header", tabs ? "bds-sheet__header--has-tabs" : ""), children: [
             /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-sheet__header-top", children: [
-              title && /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "bds-sheet__title", children: title }),
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-sheet__header-lead", children: [
+                onBack && /* @__PURE__ */ jsxRuntime.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: onBack,
+                    className: "bds-sheet__back-btn",
+                    "aria-label": "Back",
+                    children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: ArrowLeftBold })
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-sheet__titles", children: [
+                  title && /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "bds-sheet__title", children: title }),
+                  subtitle && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-sheet__subtitle", children: subtitle })
+                ] })
+              ] }),
               showCloseButton && /* @__PURE__ */ jsxRuntime.jsx(
                 "button",
                 {
@@ -738,7 +925,7 @@ function Sheet({
                   onClick: onClose,
                   className: "bds-sheet__close",
                   "aria-label": "Close",
-                  children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X })
+                  children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: XBold })
                 }
               )
             ] }),
@@ -759,7 +946,7 @@ function Sheet({
             )) })
           ] }),
           /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet__body", children: tabs ? activeTabContent : children }),
-          footer && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet__footer", children: footer })
+          resolvedFooter && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet__footer", children: resolvedFooter })
         ]
       }
     )
@@ -930,7 +1117,308 @@ function ActivityTimeline({ events, className = "" }) {
     ] }, idx);
   }) });
 }
+function Tag({
+  children,
+  size: size2 = "md",
+  icon,
+  trailingIcon,
+  onRemove,
+  disabled = false,
+  className,
+  style,
+  ...props
+}) {
+  const isIconOnly = size2 === "xs";
+  const classes = bdsClass(
+    "bds-tag",
+    `bds-tag--${size2}`,
+    disabled && "bds-tag--disabled",
+    className
+  );
+  return /* @__PURE__ */ jsxRuntime.jsxs("span", { className: classes, style, ...props, children: [
+    icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: icon }),
+    !isIconOnly && children,
+    !isIconOnly && trailingIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: trailingIcon }),
+    !isIconOnly && onRemove && !disabled && /* @__PURE__ */ jsxRuntime.jsx(
+      "button",
+      {
+        type: "button",
+        onClick: onRemove,
+        className: "bds-tag__remove bds-tag__icon",
+        "aria-label": "Remove",
+        children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X })
+      }
+    )
+  ] });
+}
 const wrapperStyles$4 = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "var(--gap-md)",
+  color: "var(--text-primary)"
+};
+const labelBaseStyles$1 = {
+  fontFamily: "var(--font-family-label)",
+  fontWeight: "var(--font-weight-semi-bold)",
+  lineHeight: "var(--font-line-height-tight)",
+  textTransform: "capitalize"
+};
+const fieldWrapperStyles$2 = {
+  position: "relative",
+  display: "flex",
+  alignItems: "center"
+};
+const inputBaseStyles$2 = {
+  width: "100%",
+  padding: "0 var(--padding-xs)",
+  fontFamily: "var(--font-family-body)",
+  fontWeight: "var(--font-weight-regular)",
+  lineHeight: "var(--font-line-height-normal)",
+  color: "var(--text-primary)",
+  backgroundColor: "var(--background-input)",
+  border: "var(--border-width-md) solid var(--border-input)",
+  borderRadius: "var(--border-radius-md)",
+  outline: "none",
+  transition: "border-color 0.2s",
+  boxSizing: "border-box"
+};
+const iconStyles$2 = {
+  position: "absolute",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: "var(--text-muted)"
+};
+const helperBaseStyles$1 = {
+  fontFamily: "var(--font-family-body)",
+  fontSize: "var(--body-sm)",
+  lineHeight: "var(--font-line-height-normal)",
+  color: "var(--text-muted)"
+};
+const sizeStyles$2 = {
+  sm: {
+    label: { fontSize: "var(--label-sm)" },
+    input: { fontSize: "var(--body-sm)", height: "32px" }
+  },
+  md: {
+    label: { fontSize: "var(--label-md)" },
+    input: { fontSize: "var(--body-md)", height: "40px" }
+  },
+  lg: {
+    label: { fontSize: "var(--label-lg)" },
+    input: { fontSize: "var(--body-lg)", height: "48px" }
+  }
+};
+const TextInput = React.forwardRef(
+  ({
+    size: size2 = "md",
+    label,
+    helperText,
+    error,
+    fullWidth = false,
+    iconBefore,
+    iconAfter,
+    className = "",
+    id,
+    style,
+    ...props
+  }, ref) => {
+    const inputId = id || `input-${Math.random().toString(36).substring(2, 11)}`;
+    const hasError = Boolean(error);
+    const sizeStyle = sizeStyles$2[size2];
+    const inputStyles = {
+      ...inputBaseStyles$2,
+      ...sizeStyle.input,
+      ...iconBefore ? { paddingLeft: "calc(var(--padding-xs) * 4)" } : {},
+      ...iconAfter ? { paddingRight: "calc(var(--padding-xs) * 4)" } : {},
+      ...hasError ? { borderColor: "var(--border-negative)" } : {}
+    };
+    return /* @__PURE__ */ jsxRuntime.jsxs(
+      "div",
+      {
+        className: bdsClass("bds-text-input", className),
+        style: {
+          ...wrapperStyles$4,
+          width: fullWidth ? "100%" : "auto",
+          ...style
+        },
+        children: [
+          label && /* @__PURE__ */ jsxRuntime.jsx(
+            "label",
+            {
+              htmlFor: inputId,
+              style: {
+                ...labelBaseStyles$1,
+                ...sizeStyle.label,
+                ...hasError ? { color: "var(--text-negative)" } : {}
+              },
+              children: label
+            }
+          ),
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { style: fieldWrapperStyles$2, children: [
+            iconBefore && /* @__PURE__ */ jsxRuntime.jsx("span", { style: { ...iconStyles$2, left: "var(--padding-xs)" }, children: iconBefore }),
+            /* @__PURE__ */ jsxRuntime.jsx(
+              "input",
+              {
+                "data-1p-ignore": "",
+                "data-lpignore": "true",
+                ref,
+                id: inputId,
+                className: "bds-text-input-field",
+                style: inputStyles,
+                "aria-invalid": hasError,
+                "aria-describedby": error ? `${inputId}-error` : helperText ? `${inputId}-helper` : void 0,
+                ...props
+              }
+            ),
+            iconAfter && /* @__PURE__ */ jsxRuntime.jsx("span", { style: { ...iconStyles$2, right: "var(--padding-xs)" }, children: iconAfter })
+          ] }),
+          error && /* @__PURE__ */ jsxRuntime.jsx(
+            "span",
+            {
+              id: `${inputId}-error`,
+              style: { ...helperBaseStyles$1, color: "var(--text-negative)" },
+              role: "alert",
+              children: error
+            }
+          ),
+          helperText && !error && /* @__PURE__ */ jsxRuntime.jsx("span", { id: `${inputId}-helper`, style: helperBaseStyles$1, children: helperText })
+        ]
+      }
+    );
+  }
+);
+TextInput.displayName = "TextInput";
+const TAG_SIZE = { sm: "sm", md: "md", lg: "md" };
+const BUTTON_SIZE = { sm: "sm", md: "md", lg: "lg" };
+const INPUT_SIZE = { sm: "sm", md: "md", lg: "lg" };
+function AddableTextList({
+  values,
+  onChange,
+  label,
+  helperText,
+  placeholder,
+  addLabel = "Add New",
+  emptyLabel,
+  size: size2 = "md",
+  disabled = false,
+  maxItems,
+  className,
+  allowDuplicates = false
+}) {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [draft, setDraft] = React.useState("");
+  const inputRef = React.useRef(null);
+  const atLimit = typeof maxItems === "number" && values.length >= maxItems;
+  const reveal = () => {
+    setDraft("");
+    setIsEditing(true);
+    requestAnimationFrame(() => {
+      var _a;
+      return (_a = inputRef.current) == null ? void 0 : _a.focus();
+    });
+  };
+  const cancel = () => {
+    setDraft("");
+    setIsEditing(false);
+  };
+  const commit = () => {
+    const trimmed = draft.trim();
+    if (!trimmed) {
+      cancel();
+      return;
+    }
+    if (!allowDuplicates && values.some((v) => v.toLowerCase() === trimmed.toLowerCase())) {
+      cancel();
+      return;
+    }
+    onChange([...values, trimmed]);
+    setDraft("");
+    requestAnimationFrame(() => {
+      var _a;
+      return (_a = inputRef.current) == null ? void 0 : _a.focus();
+    });
+  };
+  const remove = (index2) => {
+    onChange(values.filter((_, i) => i !== index2));
+  };
+  const handleKey = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      commit();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      cancel();
+    }
+  };
+  const showEmpty = values.length === 0 && !isEditing && emptyLabel;
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-addable-text-list", className), children: [
+    label && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-text-list__label", children: label }),
+    values.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-addable-text-list__items", role: "list", children: values.map((value2, index2) => /* @__PURE__ */ jsxRuntime.jsx(
+      Tag,
+      {
+        size: TAG_SIZE[size2],
+        onRemove: disabled ? void 0 : () => remove(index2),
+        role: "listitem",
+        children: value2
+      },
+      `${index2}-${value2}`
+    )) }),
+    showEmpty && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-text-list__empty", children: emptyLabel }),
+    !disabled && isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-text-list__input-row", children: [
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-addable-text-list__input", children: /* @__PURE__ */ jsxRuntime.jsx(
+        TextInput,
+        {
+          ref: inputRef,
+          size: INPUT_SIZE[size2],
+          value: draft,
+          onChange: (e) => setDraft(e.target.value),
+          onKeyDown: handleKey,
+          onBlur: () => {
+            if (!draft.trim()) cancel();
+          },
+          placeholder,
+          "aria-label": label ? `Add ${label}` : "Add item",
+          fullWidth: true
+        }
+      ) }),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        Button,
+        {
+          size: BUTTON_SIZE[size2],
+          variant: "primary",
+          onMouseDown: (e) => e.preventDefault(),
+          onClick: commit,
+          children: "Add"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        Button,
+        {
+          size: BUTTON_SIZE[size2],
+          variant: "ghost",
+          onMouseDown: (e) => e.preventDefault(),
+          onClick: cancel,
+          children: "Cancel"
+        }
+      )
+    ] }),
+    !disabled && !isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsxs(
+      Button,
+      {
+        size: BUTTON_SIZE[size2],
+        variant: "outline",
+        onClick: reveal,
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:plus" }),
+          addLabel
+        ]
+      }
+    ) }),
+    helperText && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-text-list__helper", children: helperText })
+  ] });
+}
+const wrapperStyles$3 = {
   display: "flex",
   flexDirection: "column",
   gap: "var(--gap-md)"
@@ -946,12 +1434,12 @@ const labelSizeStyles$1 = {
   sm: { fontSize: "var(--label-sm)" },
   md: { fontSize: "var(--label-md)" }
 };
-const fieldWrapperStyles$2 = {
+const fieldWrapperStyles$1 = {
   position: "relative",
   display: "flex",
   alignItems: "center"
 };
-const iconStyles$2 = {
+const iconStyles$1 = {
   position: "absolute",
   left: "var(--padding-sm)",
   display: "inline-flex",
@@ -961,7 +1449,7 @@ const iconStyles$2 = {
   pointerEvents: "none",
   zIndex: 1
 };
-const inputBaseStyles$2 = {
+const inputBaseStyles$1 = {
   width: "100%",
   fontFamily: "var(--font-family-body)",
   fontWeight: "var(--font-weight-regular)",
@@ -1096,7 +1584,7 @@ const AddressInput = React.forwardRef(
       setIsFocused(false);
     };
     const inputStyles = {
-      ...inputBaseStyles$2,
+      ...inputBaseStyles$1,
       ...inputSizeStyles$1[size2]
     };
     return /* @__PURE__ */ jsxRuntime.jsxs(
@@ -1105,7 +1593,7 @@ const AddressInput = React.forwardRef(
         ref: wrapperRef,
         className: bdsClass("bds-address-input", className),
         style: {
-          ...wrapperStyles$4,
+          ...wrapperStyles$3,
           width: fullWidth ? "100%" : "auto",
           ...style
         },
@@ -1118,8 +1606,8 @@ const AddressInput = React.forwardRef(
               children: label
             }
           ),
-          /* @__PURE__ */ jsxRuntime.jsxs("div", { style: fieldWrapperStyles$2, children: [
-            /* @__PURE__ */ jsxRuntime.jsx("span", { style: iconStyles$2, children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: MapPin }) }),
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { style: fieldWrapperStyles$1, children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { style: iconStyles$1, children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: MapPin }) }),
             /* @__PURE__ */ jsxRuntime.jsx(
               "input",
               {
@@ -18302,137 +18790,6 @@ function Breadcrumb({
     }
   );
 }
-const Button = React.forwardRef(
-  ({
-    variant = "primary",
-    size: size2 = "md",
-    fullWidth = false,
-    children,
-    iconBefore,
-    iconAfter,
-    loading = false,
-    className,
-    disabled,
-    style,
-    ...props
-  }, ref) => {
-    const isDisabled = disabled || loading;
-    const classes = bdsClass(
-      "bds-button",
-      `bds-button--${variant}`,
-      `bds-button--${size2}`,
-      fullWidth && "bds-button--full-width",
-      loading && "bds-button--loading",
-      className
-    );
-    return /* @__PURE__ */ jsxRuntime.jsxs(
-      "button",
-      {
-        ref,
-        className: classes,
-        style,
-        disabled: isDisabled,
-        "aria-busy": loading || void 0,
-        ...props,
-        children: [
-          /* @__PURE__ */ jsxRuntime.jsxs("span", { className: bdsClass("bds-button__content", loading && "bds-button__content--hidden"), children: [
-            iconBefore,
-            children,
-            iconAfter
-          ] }),
-          loading && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-button__spinner", role: "status", "aria-label": "Loading", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-button__spinner-icon" }) })
-        ]
-      }
-    );
-  }
-);
-Button.displayName = "Button";
-const LinkButton = React.forwardRef(
-  ({
-    variant = "primary",
-    size: size2 = "md",
-    fullWidth = false,
-    href,
-    children,
-    iconBefore,
-    iconAfter,
-    className,
-    style,
-    ...props
-  }, ref) => {
-    const classes = bdsClass(
-      "bds-button",
-      `bds-button--${variant}`,
-      `bds-button--${size2}`,
-      fullWidth && "bds-button--full-width",
-      className
-    );
-    return /* @__PURE__ */ jsxRuntime.jsx(
-      "a",
-      {
-        ref,
-        href,
-        className: classes,
-        style,
-        role: "button",
-        ...props,
-        children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "bds-button__content", children: [
-          iconBefore,
-          children,
-          iconAfter
-        ] })
-      }
-    );
-  }
-);
-LinkButton.displayName = "LinkButton";
-const IconButton = React.forwardRef(
-  ({
-    variant = "ghost",
-    size: size2 = "md",
-    icon,
-    label,
-    loading = false,
-    className,
-    disabled,
-    style,
-    ...props
-  }, ref) => {
-    const isDisabled = disabled || loading;
-    const classes = bdsClass(
-      "bds-button",
-      "bds-icon-button",
-      `bds-button--${variant}`,
-      `bds-icon-button--${size2}`,
-      loading && "bds-button--loading",
-      className
-    );
-    return /* @__PURE__ */ jsxRuntime.jsxs(
-      "button",
-      {
-        ref,
-        className: classes,
-        style,
-        disabled: isDisabled,
-        "aria-label": label,
-        "aria-busy": loading || void 0,
-        ...props,
-        children: [
-          /* @__PURE__ */ jsxRuntime.jsx(
-            "span",
-            {
-              className: bdsClass("bds-icon-button__icon", loading && "bds-button__content--hidden"),
-              "aria-hidden": "true",
-              children: icon
-            }
-          ),
-          loading && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-button__spinner", role: "status", "aria-label": "Loading", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-button__spinner-icon" }) })
-        ]
-      }
-    );
-  }
-);
-IconButton.displayName = "IconButton";
 function ButtonGroup({
   children,
   orientation = "horizontal",
@@ -23341,144 +23698,6 @@ function Dot({
     }
   );
 }
-const wrapperStyles$3 = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "var(--gap-md)",
-  color: "var(--text-primary)"
-};
-const labelBaseStyles$1 = {
-  fontFamily: "var(--font-family-label)",
-  fontWeight: "var(--font-weight-semi-bold)",
-  lineHeight: "var(--font-line-height-tight)",
-  textTransform: "capitalize"
-};
-const fieldWrapperStyles$1 = {
-  position: "relative",
-  display: "flex",
-  alignItems: "center"
-};
-const inputBaseStyles$1 = {
-  width: "100%",
-  padding: "0 var(--padding-xs)",
-  fontFamily: "var(--font-family-body)",
-  fontWeight: "var(--font-weight-regular)",
-  lineHeight: "var(--font-line-height-normal)",
-  color: "var(--text-primary)",
-  backgroundColor: "var(--background-input)",
-  border: "var(--border-width-md) solid var(--border-input)",
-  borderRadius: "var(--border-radius-md)",
-  outline: "none",
-  transition: "border-color 0.2s",
-  boxSizing: "border-box"
-};
-const iconStyles$1 = {
-  position: "absolute",
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  color: "var(--text-muted)"
-};
-const helperBaseStyles$1 = {
-  fontFamily: "var(--font-family-body)",
-  fontSize: "var(--body-sm)",
-  lineHeight: "var(--font-line-height-normal)",
-  color: "var(--text-muted)"
-};
-const sizeStyles$2 = {
-  sm: {
-    label: { fontSize: "var(--label-sm)" },
-    input: { fontSize: "var(--body-sm)", height: "32px" }
-  },
-  md: {
-    label: { fontSize: "var(--label-md)" },
-    input: { fontSize: "var(--body-md)", height: "40px" }
-  },
-  lg: {
-    label: { fontSize: "var(--label-lg)" },
-    input: { fontSize: "var(--body-lg)", height: "48px" }
-  }
-};
-const TextInput = React.forwardRef(
-  ({
-    size: size2 = "md",
-    label,
-    helperText,
-    error,
-    fullWidth = false,
-    iconBefore,
-    iconAfter,
-    className = "",
-    id,
-    style,
-    ...props
-  }, ref) => {
-    const inputId = id || `input-${Math.random().toString(36).substring(2, 11)}`;
-    const hasError = Boolean(error);
-    const sizeStyle = sizeStyles$2[size2];
-    const inputStyles = {
-      ...inputBaseStyles$1,
-      ...sizeStyle.input,
-      ...iconBefore ? { paddingLeft: "calc(var(--padding-xs) * 4)" } : {},
-      ...iconAfter ? { paddingRight: "calc(var(--padding-xs) * 4)" } : {},
-      ...hasError ? { borderColor: "var(--border-negative)" } : {}
-    };
-    return /* @__PURE__ */ jsxRuntime.jsxs(
-      "div",
-      {
-        className: bdsClass("bds-text-input", className),
-        style: {
-          ...wrapperStyles$3,
-          width: fullWidth ? "100%" : "auto",
-          ...style
-        },
-        children: [
-          label && /* @__PURE__ */ jsxRuntime.jsx(
-            "label",
-            {
-              htmlFor: inputId,
-              style: {
-                ...labelBaseStyles$1,
-                ...sizeStyle.label,
-                ...hasError ? { color: "var(--text-negative)" } : {}
-              },
-              children: label
-            }
-          ),
-          /* @__PURE__ */ jsxRuntime.jsxs("div", { style: fieldWrapperStyles$1, children: [
-            iconBefore && /* @__PURE__ */ jsxRuntime.jsx("span", { style: { ...iconStyles$1, left: "var(--padding-xs)" }, children: iconBefore }),
-            /* @__PURE__ */ jsxRuntime.jsx(
-              "input",
-              {
-                "data-1p-ignore": "",
-                "data-lpignore": "true",
-                ref,
-                id: inputId,
-                className: "bds-text-input-field",
-                style: inputStyles,
-                "aria-invalid": hasError,
-                "aria-describedby": error ? `${inputId}-error` : helperText ? `${inputId}-helper` : void 0,
-                ...props
-              }
-            ),
-            iconAfter && /* @__PURE__ */ jsxRuntime.jsx("span", { style: { ...iconStyles$1, right: "var(--padding-xs)" }, children: iconAfter })
-          ] }),
-          error && /* @__PURE__ */ jsxRuntime.jsx(
-            "span",
-            {
-              id: `${inputId}-error`,
-              style: { ...helperBaseStyles$1, color: "var(--text-negative)" },
-              role: "alert",
-              children: error
-            }
-          ),
-          helperText && !error && /* @__PURE__ */ jsxRuntime.jsx("span", { id: `${inputId}-helper`, style: helperBaseStyles$1, children: helperText })
-        ]
-      }
-    );
-  }
-);
-TextInput.displayName = "TextInput";
 const EmailInput = React.forwardRef(
   ({ autoComplete = "email", ...props }, ref) => {
     return /* @__PURE__ */ jsxRuntime.jsx(
@@ -24136,40 +24355,6 @@ const Select = React.forwardRef(
   }
 );
 Select.displayName = "Select";
-function Tag({
-  children,
-  size: size2 = "md",
-  icon,
-  trailingIcon,
-  onRemove,
-  disabled = false,
-  className,
-  style,
-  ...props
-}) {
-  const isIconOnly = size2 === "xs";
-  const classes = bdsClass(
-    "bds-tag",
-    `bds-tag--${size2}`,
-    disabled && "bds-tag--disabled",
-    className
-  );
-  return /* @__PURE__ */ jsxRuntime.jsxs("span", { className: classes, style, ...props, children: [
-    icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: icon }),
-    !isIconOnly && children,
-    !isIconOnly && trailingIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: trailingIcon }),
-    !isIconOnly && onRemove && !disabled && /* @__PURE__ */ jsxRuntime.jsx(
-      "button",
-      {
-        type: "button",
-        onClick: onRemove,
-        className: "bds-tag__remove bds-tag__icon",
-        "aria-label": "Remove",
-        children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X })
-      }
-    )
-  ] });
-}
 function MultiSelect({
   options: options2,
   value: controlledValue,
@@ -26626,6 +26811,7 @@ function Tooltip({
 }
 exports.Accordion = Accordion;
 exports.ActivityTimeline = ActivityTimeline;
+exports.AddableTextList = AddableTextList;
 exports.AddressInput = AddressInput;
 exports.AlertBanner = AlertBanner;
 exports.AnimatedIcon = AnimatedIcon;
