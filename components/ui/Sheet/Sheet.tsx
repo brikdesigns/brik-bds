@@ -1,7 +1,8 @@
 import { type ReactNode, type CSSProperties, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
-import { X } from '../../icons';
+import { XBold, ArrowLeftBold, Pen } from '../../icons';
+import { Button } from '../Button';
 import { bdsClass } from '../../utils';
 import './Sheet.css';
 
@@ -14,6 +15,7 @@ export interface SheetTab {
 }
 
 export type SheetVariant = 'default' | 'floating';
+export type SheetMode = 'read' | 'edit';
 
 export interface SheetProps {
   isOpen: boolean;
@@ -21,6 +23,8 @@ export interface SheetProps {
   children?: ReactNode;
   side?: SheetSide;
   title?: ReactNode;
+  /** Optional subtitle rendered under the title */
+  subtitle?: ReactNode;
   /** Width for left/right sheets (default: 400px) */
   width?: string;
   /**
@@ -32,7 +36,35 @@ export interface SheetProps {
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   showCloseButton?: boolean;
-  /** Optional footer pinned to bottom of sheet */
+  /**
+   * When set, renders a back button in the header for nested sheet navigation.
+   */
+  onBack?: () => void;
+  /**
+   * Sheet mode. When set, the footer auto-renders mode-appropriate actions
+   * unless a custom `footer` is provided.
+   * - `read` with `onEdit` → renders `[Close] [Edit]` (primary Edit)
+   * - `edit` → renders `[Cancel] [Save]` (primary Save)
+   */
+  mode?: SheetMode;
+  /** Triggered from the primary action in read mode (switch to edit) */
+  onEdit?: () => void;
+  /** Triggered from the primary action in edit mode (commit changes) */
+  onSave?: () => void;
+  /** Triggered from the secondary action in edit mode. Falls back to `onClose`. */
+  onCancel?: () => void;
+  editLabel?: string;
+  saveLabel?: string;
+  cancelLabel?: string;
+  closeLabel?: string;
+  /** Disable the save button (e.g. while form is invalid) */
+  saveDisabled?: boolean;
+  /** Show loading state on the save button */
+  saveLoading?: boolean;
+  /**
+   * Custom footer. When provided, overrides mode-driven auto-footer.
+   * Use this for non-standard action sets.
+   */
   footer?: ReactNode;
   /** Optional tabs rendered below the header. When provided, children is ignored. */
   tabs?: SheetTab[];
@@ -45,11 +77,10 @@ export interface SheetProps {
 /**
  * Sheet — sliding panel overlay for contextual content.
  *
- * Width is a runtime value passed via inline style since it's user-configurable.
- * Close icon matches Modal dismiss treatment (FontAwesome xmark).
- *
- * Tab variant: pass `tabs` array to render a tab bar below the header.
- * Each tab's content replaces `children` in the body area.
+ * Read / edit mode: pass `mode="read"` with `onEdit` for a view-only sheet that
+ * exposes a primary Edit action in the footer. Pass `mode="edit"` with `onSave`
+ * to switch into form state with Cancel / Save actions. Custom `footer` always
+ * wins when supplied.
  */
 export function Sheet({
   isOpen,
@@ -57,11 +88,23 @@ export function Sheet({
   children,
   side = 'right',
   title,
+  subtitle,
   width = '400px',
   variant = 'default',
   closeOnBackdrop = true,
   closeOnEscape = true,
   showCloseButton = true,
+  onBack,
+  mode,
+  onEdit,
+  onSave,
+  onCancel,
+  editLabel = 'Edit',
+  saveLabel = 'Save',
+  cancelLabel = 'Cancel',
+  closeLabel = 'Close',
+  saveDisabled,
+  saveLoading,
   footer,
   tabs,
   activeTab: controlledTab,
@@ -108,11 +151,46 @@ export function Sheet({
     }
   };
 
-  // Width is runtime-configurable, so it stays as inline style
   const widthStyle: CSSProperties | undefined =
     side !== 'bottom' ? { width } : undefined;
 
   const activeTabContent = tabs?.find((t) => t.id === activeTab)?.content;
+
+  const resolvedFooter = (() => {
+    if (footer !== undefined) return footer;
+    if (mode === 'edit' && onSave) {
+      return (
+        <>
+          <Button variant="ghost" onClick={onCancel ?? onClose}>
+            {cancelLabel}
+          </Button>
+          <Button
+            variant="primary"
+            onClick={onSave}
+            disabled={saveDisabled}
+            loading={saveLoading}
+          >
+            {saveLabel}
+          </Button>
+        </>
+      );
+    }
+    if (mode === 'read' && onEdit) {
+      return (
+        <>
+          <Button variant="ghost" onClick={onClose}>
+            {closeLabel}
+          </Button>
+          <Button variant="primary" onClick={onEdit} iconBefore={<Icon icon={Pen} />}>
+            {editLabel}
+          </Button>
+        </>
+      );
+    }
+    return null;
+  })();
+
+  const hasHeaderContent = title || subtitle || onBack || showCloseButton;
 
   const sheet = (
     <>
@@ -123,10 +201,25 @@ export function Sheet({
         aria-modal={!isFloating}
         style={widthStyle}
       >
-        {(title || showCloseButton) && (
+        {hasHeaderContent && (
           <div className={bdsClass('bds-sheet__header', tabs ? 'bds-sheet__header--has-tabs' : '')}>
             <div className="bds-sheet__header-top">
-              {title && <h2 className="bds-sheet__title">{title}</h2>}
+              <div className="bds-sheet__header-lead">
+                {onBack && (
+                  <button
+                    type="button"
+                    onClick={onBack}
+                    className="bds-sheet__back-btn"
+                    aria-label="Back"
+                  >
+                    <Icon icon={ArrowLeftBold} />
+                  </button>
+                )}
+                <div className="bds-sheet__titles">
+                  {title && <h2 className="bds-sheet__title">{title}</h2>}
+                  {subtitle && <p className="bds-sheet__subtitle">{subtitle}</p>}
+                </div>
+              </div>
               {showCloseButton && (
                 <button
                   type="button"
@@ -134,7 +227,7 @@ export function Sheet({
                   className="bds-sheet__close"
                   aria-label="Close"
                 >
-                  <Icon icon={X} />
+                  <Icon icon={XBold} />
                 </button>
               )}
             </div>
@@ -162,7 +255,7 @@ export function Sheet({
         <div className="bds-sheet__body">
           {tabs ? activeTabContent : children}
         </div>
-        {footer && <div className="bds-sheet__footer">{footer}</div>}
+        {resolvedFooter && <div className="bds-sheet__footer">{resolvedFooter}</div>}
       </div>
     </>
   );

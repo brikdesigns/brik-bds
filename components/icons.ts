@@ -3,6 +3,7 @@
 // Render: <Icon icon={X} />
 
 export const X = 'ph:x';
+export const XBold = 'ph:x-bold';
 export const Plus = 'ph:plus';
 export const Minus = 'ph:minus';
 export const CaretDown = 'ph:caret-down';
@@ -20,6 +21,7 @@ export const Spinner = 'ph:spinner';
 export const CircleX = 'ph:x-circle';
 // Navigation / general
 export const ArrowLeft = 'ph:arrow-left';
+export const ArrowLeftBold = 'ph:arrow-left-bold';
 export const ArrowRight = 'ph:arrow-right';
 export const ArrowUp = 'ph:arrow-up';
 export const ArrowDown = 'ph:arrow-down';
