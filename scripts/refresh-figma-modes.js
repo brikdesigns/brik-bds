@@ -60,7 +60,9 @@ ws.addEventListener('message', (event) => {
 
     if (msg.message && msg.message.id === commandId && msg.message.result !== undefined) {
       const result = msg.message.result;
-      console.log(`\nDone — visited ${result.nodesVisited} nodes, refreshed ${result.refreshed} mode assignments.\n`);
+      console.log(`\nDone — visited ${result.nodesVisited} nodes.`);
+      console.log(`  Refreshed: ${result.refreshed} valid mode assignments`);
+      console.log(`  Orphans cleared: ${result.orphansCleared || 0} ghost collection references\n`);
 
       if (result.collections && result.collections.length) {
         console.log('Collections processed:');
@@ -70,9 +72,16 @@ ws.addEventListener('message', (event) => {
         }
       }
 
-      if (result.log && result.log.length) {
-        console.log('\nRefreshed nodes (first 50):');
-        for (const entry of result.log) {
+      if (result.orphanLog && result.orphanLog.length) {
+        console.log('\nOrphan mode references cleared:');
+        for (const entry of result.orphanLog) {
+          console.log(`  ${entry.nodeName} (${entry.nodeType}) — ghost collection ${entry.ghostCollectionId}`);
+        }
+      }
+
+      if (result.refreshLog && result.refreshLog.length) {
+        console.log('\nRefreshed nodes:');
+        for (const entry of result.refreshLog) {
           console.log(`  ${entry.nodeName} — ${entry.collection}/${entry.mode}`);
         }
       }
