@@ -528,7 +528,6 @@
  *   - Icon size aliases (removed from figma-tokens.css in 2026-04-03 sync)
  *
  * Standard import cascade for client projects:
- *   @import '../brik-bds/tokens/fonts.css';
  *   @import '../brik-bds/tokens/figma-tokens.css';
  *   @import '../brik-bds/tokens/gap-fills.css';
  *   @import './styles/theme-{client}.css';

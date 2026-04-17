@@ -279,7 +279,11 @@
 .bds-button__content {
   display: inline-flex;
   align-items: center;
-  gap: inherit;
+  gap: var(--gap-sm);
+}
+
+.bds-button--tiny .bds-button__content {
+  gap: var(--gap-xs);
 }
 
 .bds-button__content--hidden {
@@ -296,7 +300,7 @@
 
 .bds-button__spinner-icon {
   display: inline-block;
-  width: 16px;
+  width: 16px;  /* md default — scaled per size below */
   height: 16px;
   border-radius: 50%;
   border-width: var(--border-width-lg);
@@ -307,9 +311,25 @@
   opacity: 0.9;
 }
 
+/* Size-specific spinner scale — mirrors IconButton icon scale (tiny=12, sm=14, md=16, lg=20, xl=24) */
+.bds-button--tiny .bds-button__spinner-icon {
+  width: 12px;
+  height: 12px;
+}
+
 .bds-button--sm .bds-button__spinner-icon {
   width: 14px;
   height: 14px;
+}
+
+.bds-button--lg .bds-button__spinner-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.bds-button--xl .bds-button__spinner-icon {
+  width: 24px;
+  height: 24px;
 }
 
 /* Icon buttons: spinner scales with the button's font-size (matches icon 1em × 1em) */
@@ -826,6 +846,190 @@
 } /* end @layer bds-components */
 @layer bds-components {
 /**
+ * BDS TextInput Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ */
+
+.bds-text-input-field {
+  /* ─── Component-scoped override surface ── */
+  --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-text-input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-text-input-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-text-input-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-text-input-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  outline: none;
+}
+
+.bds-text-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+}
+@layer bds-components {
+/**
+ * BDS TextArea Interactive States
+ *
+ * Token reference:
+ * - --border-input (default border)
+ * - --border-primary (hover border — darker)
+ * - --border-brand-primary (focus border — theme color)
+ * - --text-muted (placeholder color)
+ */
+
+.bds-text-area-field::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-text-area-field:hover:not(:disabled) {
+  border-color: var(--border-primary);
+}
+
+.bds-text-area-field:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+}
+
+.bds-text-area-field:focus-visible {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  outline: none;
+}
+
+.bds-text-area-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+}
+.bds-addable-entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  width: 100%;
+}
+
+.bds-addable-entry-list__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.bds-addable-entry-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.bds-addable-entry-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-sm);
+  padding: var(--padding-md);
+  border: var(--border-width-md) solid var(--border-muted);
+  border-radius: var(--border-radius-md);
+}
+
+.bds-addable-entry-list__item-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-tiny);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bds-addable-entry-list__item-primary {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.bds-addable-entry-list__item-secondary {
+  font-family: var(--font-family-body);
+  color: var(--text-secondary);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.bds-addable-entry-list__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  flex-shrink: 0;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.bds-addable-entry-list__remove:hover {
+  background: var(--background-muted);
+  color: var(--text-primary);
+}
+
+.bds-addable-entry-list__remove:focus-visible {
+  outline: var(--border-width-md) solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.bds-addable-entry-list__remove svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.bds-addable-entry-list__empty {
+  font-family: var(--font-family-body);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.bds-addable-entry-list__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  padding: var(--padding-md);
+  border: var(--border-width-md) solid var(--border-muted);
+  border-radius: var(--border-radius-md);
+}
+
+.bds-addable-entry-list__form-actions {
+  display: flex;
+  gap: var(--gap-sm);
+  justify-content: flex-end;
+}
+
+.bds-addable-entry-list__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+@layer bds-components {
+/**
  * BDS Tag — Categorization label with optional icons and dismiss
  *
  * Naming: .bds-tag, .bds-tag--{size}, .bds-tag__{element}
@@ -948,46 +1152,6 @@
 
 .bds-tag__remove:hover {
   opacity: 0.7;
-}
-}
-@layer bds-components {
-/**
- * BDS TextInput Interactive States
- *
- * Token reference:
- * - --border-input (default border)
- * - --border-primary (hover border — darker)
- * - --border-brand-primary (focus border — theme color)
- * - --text-muted (placeholder color)
- */
-
-.bds-text-input-field {
-  /* ─── Component-scoped override surface ── */
-  --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-.bds-text-input-field::placeholder {
-  color: var(--text-muted);
-}
-
-.bds-text-input-field:hover:not(:disabled) {
-  border-color: var(--border-primary);
-}
-
-.bds-text-input-field:focus {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-.bds-text-input-field:focus-visible {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  outline: none;
-}
-
-.bds-text-input-field:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 }
 .bds-addable-text-list {
@@ -4527,6 +4691,12 @@
   color: var(--text-primary);
 }
 
+/* ─── Stats ──────────────────────────────────────────────────── */
+
+.bds-page-header__stats {
+  width: 100%;
+}
+
 /* ─── Tabs ───────────────────────────────────────────────────── */
 
 .bds-page-header__tabs {
@@ -5928,41 +6098,6 @@
 /* Size: comfortable */
 .bds-table[data-size="comfortable"] .bds-table-cell {
   padding: var(--padding-xl) var(--padding-md);
-}
-}
-@layer bds-components {
-/**
- * BDS TextArea Interactive States
- *
- * Token reference:
- * - --border-input (default border)
- * - --border-primary (hover border — darker)
- * - --border-brand-primary (focus border — theme color)
- * - --text-muted (placeholder color)
- */
-
-.bds-text-area-field::placeholder {
-  color: var(--text-muted);
-}
-
-.bds-text-area-field:hover:not(:disabled) {
-  border-color: var(--border-primary);
-}
-
-.bds-text-area-field:focus {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 1px var(--border-brand-primary);
-}
-
-.bds-text-area-field:focus-visible {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 1px var(--border-brand-primary);
-  outline: none;
-}
-
-.bds-text-area-field:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 }
 @layer bds-components {

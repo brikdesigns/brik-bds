@@ -1,5 +1,6 @@
 export * from './Accordion';
 export * from './ActivityTimeline';
+export * from './AddableEntryList';
 export * from './AddableTextList';
 export * from './AddressInput';
 export * from './AnimatedIcon';

@@ -5,6 +5,7 @@ import { Breadcrumb } from '../Breadcrumb';
 import { TabBar, type TabItem } from '../TabBar';
 import { Button } from '../Button';
 import { ServiceTag } from '../ServiceBadge';
+import { CardSummary } from '../Card';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
@@ -152,6 +153,32 @@ export const Variants: Story = {
               { label: 'Billing', value: 'One-time' },
               { label: 'Stripe Product', value: 'brand-design' },
             ]}
+          />
+        </div>
+
+        <div>
+          <SectionLabel>With stats (summary cards above tabs)</SectionLabel>
+          <PageHeader
+            title="Acme Corp"
+            breadcrumbs={<Breadcrumb items={[
+              { label: 'Admin', href: '#' },
+              { label: 'Companies', href: '#' },
+              { label: 'Acme Corp' },
+            ]} />}
+            metadata={[
+              { label: 'Status', value: 'Active' },
+              { label: 'Type', value: 'Client' },
+              { label: 'Start Date', value: 'Jan 1, 2024' },
+            ]}
+            stats={
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--gap-lg)' }}>
+                <CardSummary label="Services" value={4} />
+                <CardSummary label="Projects" value={2} />
+                <CardSummary label="Open Invoices" value={1} />
+                <CardSummary label="Contacts" value={5} />
+              </div>
+            }
+            tabs={<TabBar variant="tab" items={filterTabs} />}
           />
         </div>
 

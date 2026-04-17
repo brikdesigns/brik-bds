@@ -23,6 +23,18 @@ import './Button.css';
 export type ButtonVariant = 'primary' | 'outline' | 'secondary' | 'ghost' | 'inverse' | 'danger' | 'danger-outline' | 'danger-ghost' | 'destructive' | 'positive' | 'selected';
 /** Button sizes */
 export type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
+/**
+ * Shared class composer for Button and LinkButton.
+ * Single source for variant/size/fullWidth/loading so the two can't drift.
+ * IconButton uses its own size scale (bds-icon-button--*) and skips this helper.
+ */
+export declare function composeButtonClasses({ variant, size, fullWidth, loading, className, }: {
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+    fullWidth?: boolean;
+    loading?: boolean;
+    className?: string;
+}): string;
 /** Button component props */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     /** Visual style variant */
