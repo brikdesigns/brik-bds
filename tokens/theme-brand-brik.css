@@ -68,7 +68,10 @@
 
 /* ─── Dark mode (data-theme attribute) ───────────────────────── */
 
-.theme-brand-brik[data-theme="dark"] {
+/* `data-theme` lives on :root (html) — same element as Figma tokens —
+ * while .theme-brand-brik is applied to body. Use a descendant combinator
+ * so both anchors resolve correctly. */
+:root[data-theme="dark"] .theme-brand-brik {
   /* Page */
   --page-primary: var(--color-grayscale-black);
   --page-secondary: var(--color-grayscale-darker);
@@ -118,56 +121,9 @@
   --border-disabled: var(--color-grayscale-darker);
 }
 
-/* ─── Dark mode (system preference auto-switch) ──────────────── */
-
-@media (prefers-color-scheme: dark) {
-  .theme-brand-brik:not([data-theme="light"]) {
-    /* Page */
-    --page-primary: var(--color-grayscale-black);
-    --page-secondary: var(--color-grayscale-darker);
-    --page-brand-primary: #e35335;
-    /* Text */
-    --text-primary: var(--color-grayscale-lightest);
-    --text-secondary: var(--color-grayscale-light);
-    --text-muted: var(--color-grayscale-dark);
-    --text-inverse: var(--color-grayscale-black);
-    --text-brand-primary: #e35335;
-    --text-on-color-dark: var(--color-grayscale-white);
-    --text-on-color-light: var(--color-grayscale-black);
-    --text-disabled: var(--color-grayscale-dark);
-    /* Surface */
-    --surface-primary: var(--color-grayscale-black);
-    --surface-secondary: var(--color-grayscale-darker);
-    --surface-brand-primary: #e35335;
-    --surface-brand-secondary: var(--color-grayscale-darkest);
-    --surface-nav: var(--color-grayscale-black);
-    --surface-muted: var(--color-grayscale-darkest);
-    --surface-overlay: var(--color-grayscale-black);
-    /* Background */
-    --background-brand-primary: #e35335;
-    --background-brand-secondary: var(--color-grayscale-darkest);
-    --background-primary: var(--color-grayscale-black);
-    --background-secondary: var(--color-grayscale-light);
-    --background-inverse: var(--color-grayscale-black);
-    --background-input: var(--color-grayscale-black);
-    --background-muted: var(--color-grayscale-darker);
-    --background-image: #000000cc;
-    --background-image-brand: #e35335;
-    --background-brand-primary-hover: var(--color-poppy-lighter);
-    --background-brand-primary-pressed: var(--color-poppy-lightest);
-    --background-disabled: var(--color-grayscale-darker);
-    --background-primary-hover: var(--color-grayscale-darkest);
-    --background-primary-pressed: var(--color-grayscale-darker);
-    --background-secondary-hover: var(--color-grayscale-dark);
-    --background-secondary-pressed: var(--color-grayscale-darker);
-    /* Border */
-    --border-primary: var(--color-grayscale-darker);
-    --border-secondary: var(--color-grayscale-light);
-    --border-muted: var(--color-grayscale-dark);
-    --border-brand-primary: #e35335;
-    --border-input: var(--color-grayscale-dark);
-    --border-inverse: var(--color-grayscale-black);
-    --border-on-color-dark: var(--color-grayscale-black);
-    --border-disabled: var(--color-grayscale-darker);
-  }
-}
+/* No `prefers-color-scheme` fallback here on purpose.
+ * Figma-generated tokens (figma-tokens-dark.css) don't have one either —
+ * the `data-theme` attribute is always set explicitly (by ThemeProvider
+ * for React consumers, or by the app's layout code). If we ever want a
+ * system-preference fallback, add it in ONE place that applies to both
+ * Figma tokens and brand overrides. */

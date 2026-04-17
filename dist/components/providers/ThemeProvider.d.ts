@@ -39,9 +39,9 @@ export interface ThemeProviderProps {
  * - localStorage persistence (optional)
  * - Automatic body class application (optional)
  *
- * Available Themes:
- * - theme-brik: Brik Light (Default)
- * - theme-brik-dark: Brik Dark
+ * Available Themes (class + data-theme attribute):
+ * - theme-brand-brik + data-theme="light": Brik Light (default)
+ * - theme-brand-brik + data-theme="dark": Brik Dark
  * - theme-1: Peach (Open Sans)
  * - theme-2: Pastel (Source Sans)
  * - theme-3: Luxury (Hind)

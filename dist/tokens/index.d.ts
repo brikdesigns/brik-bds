@@ -10,13 +10,15 @@
  * For component development, import from @/lib/tokens (consuming project) instead.
  */
 /**
- * Available theme identifiers (maps to .theme-X classes)
+ * Available theme identifiers
  *
- * - theme-brik: Brik Brand — poppy red, Poppins
- * - theme-brik.dark: Brik Brand dark mode — poppy red on near-black
- * - theme-client-sim: Font Audit — intentionally distinct system fonts per family.
- *   heading=Georgia (serif), body=Verdana (sans), label=Courier New (mono).
- *   Any component using the wrong family token becomes immediately visible.
+ * Brand themes share the `.theme-brand-brik` class and differentiate via the
+ * `data-theme` attribute on <html>. Numbered template themes keep the
+ * `.theme-X` class pattern (no data-theme attribute).
+ *
+ * - brik          → `.theme-brand-brik` + `data-theme="light"` (Brik Brand — poppy red, Poppins)
+ * - brik-dark     → `.theme-brand-brik` + `data-theme="dark"` (poppy red on near-black)
+ * - client-sim    → `.theme-brand-brik.theme-client-sim` + `data-theme="light"` (Font Audit tool)
  *
  * Website template themes (1-8) moved to brik/brik-website-themes repo.
  */
@@ -61,7 +63,14 @@ export declare const themeMetadata: Record<ThemeNumber, {
     isDark: boolean;
 }>;
 /**
- * Generate CSS class string for theme
+ * Generate CSS class string for theme.
+ *
+ * Brand themes (brik, brik-dark, client-sim) return `.theme-brand-brik` — the
+ * light/dark split is expressed via the `data-theme` attribute on <html>, not
+ * the class string. Apply that attribute separately (ThemeProvider does this
+ * automatically when `applyToBody` is true).
+ *
+ * Numbered template themes (theme-1 through theme-8) return their own class.
  */
 export declare function getThemeClasses(config: Partial<BDSThemeConfig>): string;
 /**
