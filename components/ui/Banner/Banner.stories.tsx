@@ -31,9 +31,7 @@ const Stack = ({ children }: { children: React.ReactNode }) => (
 );
 
 const BannerAction = ({ children }: { children: string }) => (
-  <Button variant="secondary" size="sm" style={{ backgroundColor: 'var(--background-on-color-dark)', color: 'var(--text-primary)', border: 'none' }}>
-    {children}
-  </Button>
+  <Button variant="on-color" size="md">{children}</Button>
 );
 
 /* ─── Playground ─────────────────────────────────────────────── */

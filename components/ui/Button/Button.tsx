@@ -10,7 +10,8 @@ import './Button.css';
  * - outline: Secondary emphasis (brand border)
  * - secondary: Tertiary/subtle (surface fill)
  * - ghost: Minimal emphasis (no background)
- * - inverse: For dark backgrounds (white fill)
+ * - inverse: For dark theme surfaces (white in light mode, black in dark mode — flips with theme)
+ * - on-color: For brand-colored surfaces like banner backgrounds (always white fill, black text — does not flip with theme)
  *
  * System variants (semantic actions):
  * - destructive: Destructive action (system red)
@@ -28,6 +29,7 @@ export type ButtonVariant =
   | 'secondary'
   | 'ghost'
   | 'inverse'
+  | 'on-color'
   | 'danger'
   | 'danger-outline'
   | 'danger-ghost'

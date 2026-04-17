@@ -112,6 +112,11 @@
   color: var(--text-on-color-light);
 }
 
+.bds-button--on-color {
+  background-color: var(--background-on-color-dark);
+  color: var(--text-on-color-light);
+}
+
 .bds-button--danger {
   background-color: var(--background-accent-red);
   color: var(--text-on-color-dark);
@@ -208,6 +213,16 @@
 .bds-button--inverse:active:not(:disabled) {
   background-color: var(--background-brand-primary-pressed);
   color: var(--text-on-color-dark);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── On-color ── Static white button for use on brand-colored surfaces. */
+.bds-button--on-color:hover:not(:disabled):not(.bds-button--loading) {
+  opacity: 0.9;
+}
+
+.bds-button--on-color:active:not(:disabled) {
+  opacity: 0.8;
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
