@@ -44,13 +44,10 @@ Use the paintbrush icon in the Storybook toolbar to switch themes in real time.
 The full cascade order in a consuming project's `globals.css` (order matters):
 
 ```css
-/* 1. Web fonts */
-@import '../brik-bds/tokens/fonts.css';
-
-/* 2. Generated token values — light mode (never edit) */
+/* 1. Generated token values — light mode (never edit) */
 @import '../brik-bds/tokens/figma-tokens.css';
 
-/* 3. Generated token values — dark mode, scoped to [data-theme="dark"] */
+/* 2. Generated token values — dark mode, scoped to [data-theme="dark"] */
 @import '../brik-bds/tokens/figma-tokens-dark.css';
 
 /* 4. Gap-fill tokens + 9 built-in theme palette blocks */

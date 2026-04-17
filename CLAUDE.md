@@ -82,26 +82,28 @@ These rules apply in every project that imports BDS tokens (portal, renew-pms, b
 
 ## Figma Variables Sync
 
-**One method: Figma MCP → sync script → Style Dictionary.**
+**One method: Dev plugin + WebSocket relay → sync script → Style Dictionary.**
 
-The native Figma MCP (`get_variable_defs`) reads variables directly from the Figma file — no Enterprise plan, no plugins, no manual export.
+The Figma Desktop dev plugin communicates via WebSocket relay on port 3055. This is the only reliable method for reading file-level variable collections on a Pro plan.
 
 | Step | Who | What happens |
 | ---- | --- | ------------ |
 | 1 | User | Edits variables in Figma |
 | 2 | User/Agent | Says "pull latest tokens from Figma" |
-| 3 | Agent | Calls `get_variable_defs` on Foundations file |
-| 4 | Agent | Writes result to `/tmp/figma-vars.json` |
-| 5 | Agent | Runs `node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build` |
-| 6 | Auto | `tokens-studio.json` patched → `build:sd-figma` → `figma-tokens.css` regenerated |
+| 3 | Agent | Runs `bun scripts/pull-variables.js <channel-id> > /tmp/figma-vars.json` |
+| 4 | Agent | Runs `node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build` |
+| 5 | Auto | `tokens-studio.json` patched → `build:sd-figma` → `figma-tokens.css` regenerated |
 
+**Requires:** Figma Desktop open + dev plugin running + WebSocket relay on port 3055.
 **Foundations file key:** `Rkdc3SIWJUdgoAkeadgZZe`
-**Root node:** `0:1` (for all variables) or specific page nodes for scoped pulls
 
 **Legacy methods (DO NOT USE):**
-- ~~Tokens Studio plugin push~~ — replaced by MCP sync
-- ~~figma-talk MCP~~ — replaced by native Figma MCP
-- ~~Manual Figma export + transform~~ — replaced by MCP sync
+
+- ~~`mcp__claude_ai_Figma__get_variable_defs`~~ — returns screenshots, not variable data
+- ~~`mcp__figma-desktop__get_variable_defs`~~ — returns node-bound variables, not file-level collections
+- ~~Figma REST API~~ — `file_variables:read` scope is Enterprise-only
+- ~~Tokens Studio plugin push~~ — replaced by dev plugin pipeline
+- ~~Manual Figma export + transform~~ — replaced by dev plugin pipeline
 
 Always pull before starting work:
 ```bash
@@ -199,13 +201,16 @@ Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform out
 | --- | --- | --- |
 | `tokens/figma-tokens.css` | **Active** (auto-generated) | Light mode tokens — import in all consuming projects |
 | `tokens/figma-tokens-dark.css` | **Active** (auto-generated) | Dark mode tokens — import after light in `globals.css` |
-| `tokens/fonts.css` | **Active** (manual) | Import in all consuming projects |
 | `tokens/gap-fills.css` | **Active** (manual) | Gap-fill tokens not yet in Figma — import in all consuming projects |
-| `tokens/website-themes.css` | **Active** (manual) | Website template themes (.body.theme-N) — Storybook + template product only, NOT for client projects |
-| `tokens/overrides.css` | **DEPRECATED shim** | @imports gap-fills.css + website-themes.css for backwards compat. Migrate to explicit imports. |
-| `tokens/react-tokens.css` | **DEPRECATED** | Was manually maintained, drifted. Use `figma-tokens.css` |
-| `tokens/webflow-tokens.css` | **Webflow only** | Circular refs, 8 theme blocks — never import in React |
-| `tokens/variables.css` | **Internal** | Webflow semantic names, used by `tokens/index.ts` |
+| `tokens/theme-brik.css` | **Active** (manual) | Brik's own brand theme — imported in Storybook only. Client projects provide their own `theme-{client}.css`. |
+| `tokens/animations.css` | **Active** (manual) | Animation tokens (durations, easings) |
+| `tokens/motion-classes.css` | **Active** (manual) | Utility classes that compose animation tokens |
+| `tokens/bridge.css` | **Internal** | Compatibility aliases between legacy names and current tokens |
+| `tokens/font-audit.css` | **Dev-only** | Storybook audit overlay — do not import in consuming projects |
+| `tokens/storybook-themes.ts` | **Internal** | TypeScript map consumed by Storybook manager theme switcher |
+| `tokens/index.ts` | **Internal** | TS export surface for token names (used by components) |
+
+**Fonts are not loaded by BDS.** Consuming projects load their own font files (Google Fonts, Next.js font loader, etc.). The `--font-family-*` tokens in `figma-tokens.css` reference font families by name (e.g. `Poppins`) — it's the consumer's responsibility to ensure that font is actually available.
 
 ### Adding a new token
 
@@ -232,15 +237,14 @@ Webflow uses **Spacious mode** by default on `.body` class.
 
 BDS uses a **2-tier architecture** for client projects:
 
-- **Tier 1 — BDS Foundations:** `fonts.css` + `figma-tokens.css` + `gap-fills.css` (submodule files, never edit)
+- **Tier 1 — BDS Foundations:** `figma-tokens.css` + `gap-fills.css` (submodule files, never edit)
 - **Tier 2 — Client Theme:** `theme-{client}.css` in the consuming project (overrides semantic tokens)
 
-The `website-themes.css` file (8 pre-built template themes) is **NOT** part of this cascade. It is a separate product layer used only in Storybook and future website template work. Never import it in client portals or SaaS apps.
+Font loading is the consumer's responsibility (Google Fonts, Next.js font loader, etc.) — BDS no longer ships a `fonts.css`.
 
 **Standard globals.css cascade:**
 
 ```css
-@import '../../brik-bds/tokens/fonts.css';
 @import '../../brik-bds/tokens/figma-tokens.css';
 @import '../../brik-bds/tokens/gap-fills.css';
 @import './styles/theme-{client}.css';

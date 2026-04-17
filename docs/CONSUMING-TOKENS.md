@@ -48,18 +48,15 @@ Style Dictionary generates platform-specific token files from the same Figma sou
 
 ## CSS layer (CRITICAL — this is where tokens become available to the browser)
 
-Every consuming project must import these three files in `globals.css` in order. Without this import, `var()` references in components resolve to nothing.
+Every consuming project must import these two files in `globals.css` in order. Without this import, `var()` references in components resolve to nothing. Web fonts are the consumer's responsibility — load them via Google Fonts, the Next.js font loader, or a `<link>` tag before this cascade runs.
 
 ```css
 /* src/app/globals.css — standard import cascade for client projects */
 
-/* 1. Web fonts */
-@import '../../brik-bds/tokens/fonts.css';
-
-/* 2. SD-generated primitives + semantic tokens (light mode) */
+/* 1. SD-generated primitives + semantic tokens (light mode) */
 @import '../../brik-bds/tokens/figma-tokens.css';
 
-/* 3. Gap-fill tokens not yet promoted to Figma/Style Dictionary */
+/* 2. Gap-fill tokens not yet promoted to Figma/Style Dictionary */
 @import '../../brik-bds/tokens/gap-fills.css';
 
 /* 4. Client brand overrides (Tier 2) */

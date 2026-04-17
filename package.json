@@ -61,6 +61,7 @@
     "test:watch": "vitest",
     "prestorybook": "node scripts/build-health-data.js",
     "storybook": "storybook dev -p 6006",
+    "prebuild-storybook": "node scripts/build-health-data.js",
     "build-storybook": "storybook build",
     "lint-tokens": "node scripts/lint-tokens.js",
     "lint-tokens:grid": "node scripts/lint-tokens.js --check-grid",
