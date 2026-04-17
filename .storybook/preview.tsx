@@ -260,14 +260,28 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+    devWidgets: {
+      name: 'Dev Widgets',
+      description: 'Show the Brik DevBar + Feedback widget in the preview',
+      defaultValue: 'off',
+      toolbar: {
+        icon: 'wrench',
+        items: [
+          { value: 'on', title: 'On' },
+          { value: 'off', title: 'Off' },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
   decorators: [
     withTheme,
-    // Feedback widget — floating FAB on every story/docs page
-    (Story) => (
+    // Feedback widget — opt-in via the Dev Widgets toolbar toggle so it
+    // doesn't register into the DevBar on every story by default.
+    (Story, context) => (
       <>
         <Story />
-        <FeedbackWidget />
+        {context.globals.devWidgets === 'on' && <FeedbackWidget />}
       </>
     ),
   ],
