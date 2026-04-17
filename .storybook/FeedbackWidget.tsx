@@ -62,7 +62,8 @@ const headerStyle: CSSProperties = {
 };
 
 const typeRowStyle: CSSProperties = {
-  display: 'flex',
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
   gap: '6px',
 };
 
