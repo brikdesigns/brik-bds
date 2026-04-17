@@ -1,8 +1,13 @@
 /**
  * BDS Gap-Fill Tokens — Manually Maintained
  *
+ * Loaded by: bundled into dist/tokens.css (last in cascade). Every consumer
+ * picks these up automatically via `@import '@brikdesigns/bds/tokens.css'`.
+ * Also imported directly in Storybook preview.tsx.
+ *
+ * See tokens/CASCADE.md for the full load-order + decision tree.
+ *
  * Supplements figma-tokens.css with tokens that are NOT yet in Figma/Style Dictionary.
- * Import this in EVERY consuming project (portals, SaaS apps, marketing sites) after figma-tokens.css.
  *
  * What lives here:
  *   - Semantic tokens not yet promoted to Figma variables
@@ -10,11 +15,6 @@
  *   - Shadow, overlay, and interaction state tokens
  *   - Font weight bridge aliases (Webflow double-dash → SD single-dash)
  *   - Icon size aliases (removed from figma-tokens.css in 2026-04-03 sync)
- *
- * Standard import cascade for client projects:
- *   @import '../brik-bds/tokens/figma-tokens.css';
- *   @import '../brik-bds/tokens/gap-fills.css';
- *   @import './styles/theme-{client}.css';
  *
  * Website template themes (1-8) have moved to brik/brik-website-themes repo.
  * DO NOT put primitives here that belong in figma-tokens.css.

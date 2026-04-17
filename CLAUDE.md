@@ -31,6 +31,8 @@ If a token doesn't exist in `figma-tokens.css` after the build, it needs to be a
 
 **Before writing ANY `var(--...)` reference**, verify the token exists in `tokens/figma-tokens.css` or `tokens/gap-fills.css`.
 
+**Before editing ANY `tokens/*.css` file** — especially for a dark-mode fix — read [tokens/CASCADE.md](tokens/CASCADE.md) first. It documents which files ship in `dist/tokens.css` (reachable from consumers) vs which are Storybook-only, and the dark-mode selector contract. Editing the wrong file is a silent no-op for consumers.
+
 ## Token Discipline (ALL consuming projects)
 
 These rules apply in every project that imports BDS tokens (portal, renew-pms, brikdesigns, client sites).

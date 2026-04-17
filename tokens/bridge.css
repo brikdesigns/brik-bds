@@ -3,10 +3,14 @@
  *
  * BDS Token Bridge
  *
+ * Loaded by: copied to dist/bridge.css and exported as `@brikdesigns/bds/bridge.css`.
+ * NOT bundled into dist/tokens.css — consumers opt in explicitly when they need
+ * the --_ legacy name aliases. New projects should NOT import this.
+ *
+ * See tokens/CASCADE.md for the full load-order + decision tree.
+ *
  * Maps clean BDS token names (--color-*) to legacy Webflow-internal names (--_color---*).
  * The --_ prefix convention is deprecated. New projects should use figma-tokens.css directly.
- *
- * Still exported as @brikdesigns/bds/bridge.css for backward compatibility.
  */
 
 :root {
