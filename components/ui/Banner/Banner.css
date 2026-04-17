@@ -9,8 +9,8 @@
   gap: var(--gap-lg);
   background-color: var(--surface-brand-primary);
   color: var(--text-on-color-dark);
-  padding: var(--padding-lg);
-  border-radius: var(--border-radius-sm);
+  padding: var(--padding-md) var(--padding-huge);
+  border-radius: var(--border-radius-100);
   width: 100%;
   box-sizing: border-box;
 }

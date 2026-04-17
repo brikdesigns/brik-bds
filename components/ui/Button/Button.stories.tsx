@@ -17,7 +17,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'outline', 'secondary', 'ghost', 'inverse', 'destructive', 'positive', 'selected'],
+      options: ['primary', 'outline', 'secondary', 'ghost', 'inverse', 'on-color', 'destructive', 'positive', 'selected'],
     },
     size: {
       control: 'select',
@@ -132,18 +132,26 @@ export const Variants: Story = {
   render: () => (
     <Stack>
       <SectionLabel>Brand buttons (UI hierarchy)</SectionLabel>
-      {(['primary', 'secondary', 'outline', 'ghost', 'inverse'] as const).map((variant) => (
-        <div key={variant} style={variant === 'inverse' ? { background: 'var(--surface-inverse)', padding: 'var(--padding-md)', borderRadius: 'var(--border-radius-md)' } : undefined}>
-          <SectionLabel>{variant}</SectionLabel>
-          <Row>
-            <Button variant={variant} size="tiny">Tiny</Button>
-            <Button variant={variant} size="sm">Small</Button>
-            <Button variant={variant} size="md">Medium</Button>
-            <Button variant={variant} size="lg">Large</Button>
-            <Button variant={variant} size="xl">X-Large</Button>
-          </Row>
-        </div>
-      ))}
+      {(['primary', 'secondary', 'outline', 'ghost', 'inverse', 'on-color'] as const).map((variant) => {
+        const surfaceStyle =
+          variant === 'inverse'
+            ? { background: 'var(--surface-inverse)', padding: 'var(--padding-md)', borderRadius: 'var(--border-radius-md)' }
+            : variant === 'on-color'
+              ? { background: 'var(--surface-brand-primary)', padding: 'var(--padding-md)', borderRadius: 'var(--border-radius-md)' }
+              : undefined;
+        return (
+          <div key={variant} style={surfaceStyle}>
+            <SectionLabel>{variant}</SectionLabel>
+            <Row>
+              <Button variant={variant} size="tiny">Tiny</Button>
+              <Button variant={variant} size="sm">Small</Button>
+              <Button variant={variant} size="md">Medium</Button>
+              <Button variant={variant} size="lg">Large</Button>
+              <Button variant={variant} size="xl">X-Large</Button>
+            </Row>
+          </div>
+        );
+      })}
 
       <SectionLabel>System buttons (semantic actions)</SectionLabel>
       {(['selected', 'destructive', 'positive'] as const).map((variant) => (
@@ -218,7 +226,7 @@ export const States: Story = {
         <SectionLabel>Disabled</SectionLabel>
         <SectionLabel>Loading</SectionLabel>
 
-        {(['primary', 'outline', 'secondary', 'ghost', 'inverse', 'destructive', 'positive', 'selected'] as const).map((variant) => (
+        {(['primary', 'outline', 'secondary', 'ghost', 'inverse', 'on-color', 'destructive', 'positive', 'selected'] as const).map((variant) => (
           <React.Fragment key={variant}>
             <SectionLabel>{variant}</SectionLabel>
             <Button variant={variant} size="md">Button</Button>
