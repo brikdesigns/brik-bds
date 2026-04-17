@@ -4,7 +4,7 @@
  * Called by: npm run build:lib (as the final step)
  *
  * Produces:
- *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + gap-fills.css concatenated
+ *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + figma-dark-corrections.css + gap-fills.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
  */
 const fs = require('fs');
@@ -47,7 +47,15 @@ if (fs.existsSync(darkTokensPath)) {
   console.log('  ⚠ No figma-tokens-dark.css found — run npm run build:sd-dark to generate');
 }
 
-fs.writeFileSync(path.join(DIST_DIR, 'tokens.css'), header + figmaTokens + darkTokens + '\n\n' + gapFills);
+// Post-Figma dark-mode corrections — overrides for values the Figma export gets wrong
+const darkCorrectionsPath = path.join(TOKENS_DIR, 'figma-dark-corrections.css');
+let darkCorrections = '';
+if (fs.existsSync(darkCorrectionsPath)) {
+  darkCorrections = '\n\n' + fs.readFileSync(darkCorrectionsPath, 'utf8');
+  console.log('  ✓ Including dark-mode corrections');
+}
+
+fs.writeFileSync(path.join(DIST_DIR, 'tokens.css'), header + figmaTokens + darkTokens + darkCorrections + '\n\n' + gapFills);
 console.log('  ✓ dist/tokens.css');
 
 // Copy bridge.css
