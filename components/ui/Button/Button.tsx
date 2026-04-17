@@ -38,6 +38,34 @@ export type ButtonVariant =
 /** Button sizes */
 export type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
 
+/**
+ * Shared class composer for Button and LinkButton.
+ * Single source for variant/size/fullWidth/loading so the two can't drift.
+ * IconButton uses its own size scale (bds-icon-button--*) and skips this helper.
+ */
+export function composeButtonClasses({
+  variant = 'primary',
+  size = 'md',
+  fullWidth = false,
+  loading = false,
+  className,
+}: {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+  loading?: boolean;
+  className?: string;
+}): string {
+  return bdsClass(
+    'bds-button',
+    `bds-button--${variant}`,
+    `bds-button--${size}`,
+    fullWidth && 'bds-button--full-width',
+    loading && 'bds-button--loading',
+    className
+  );
+}
+
 /** Button component props */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Visual style variant */
@@ -87,15 +115,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const isDisabled = disabled || loading;
-
-    const classes = bdsClass(
-      'bds-button',
-      `bds-button--${variant}`,
-      `bds-button--${size}`,
-      fullWidth && 'bds-button--full-width',
-      loading && 'bds-button--loading',
-      className
-    );
+    const classes = composeButtonClasses({ variant, size, fullWidth, loading, className });
 
     return (
       <button

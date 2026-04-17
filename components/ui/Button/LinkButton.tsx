@@ -1,6 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
-import { bdsClass } from '../../utils';
-import type { ButtonVariant, ButtonSize } from './Button';
+import { composeButtonClasses, type ButtonVariant, type ButtonSize } from './Button';
 import './Button.css';
 
 /** LinkButton props — href is required */
@@ -49,13 +48,7 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
     },
     ref
   ) => {
-    const classes = bdsClass(
-      'bds-button',
-      `bds-button--${variant}`,
-      `bds-button--${size}`,
-      fullWidth && 'bds-button--full-width',
-      className
-    );
+    const classes = composeButtonClasses({ variant, size, fullWidth, className });
 
     return (
       <a
@@ -63,7 +56,6 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
         href={href}
         className={classes}
         style={style}
-        role="button"
         {...props}
       >
         <span className="bds-button__content">
