@@ -1,0 +1,94 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './FilterBar.stories';
+
+<Meta of={Stories} />
+
+# Filter bar
+
+Shared heading + counter + filter-controls row for list/table views. Renders a `heading-sm` title and a `Counter` on the left, filter children on the right, and an optional ghost "Clear filters" button that appears when any filter is active.
+
+Pairs naturally with [FilterButton](/?path=/docs/components-action-filter-button--docs) and [FilterToggle](/?path=/docs/components-action-filter-toggle--docs) for the control children.
+
+---
+
+## Default
+
+No filter applied — counter stays neutral and the Clear button is hidden.
+
+<Canvas of={Stories.Default} />
+
+## Filtered
+
+When `filtered < total`, the counter switches to `brand` (configurable via `activeStatus`) and, if `onClear` is provided, a ghost Clear button appears after the controls.
+
+<Canvas of={Stories.Filtered} />
+
+## No title
+
+The title is optional. When omitted the counter leads the row.
+
+<Canvas of={Stories.NoTitle} />
+
+## No clear callback
+
+Omit `onClear` to suppress the Clear button entirely — useful for table views that don't support bulk-clearing all filters at once.
+
+<Canvas of={Stories.NoClear} />
+
+## Interactive
+
+Real-world wiring: local state holds filter values, `filtered.length` feeds the counter, and `onClear` resets all filters.
+
+<Canvas of={Stories.Interactive} />
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { FilterBar, FilterButton } from '@brikdesigns/bds';
+import { useState, useMemo } from 'react';
+
+function EngagementsTable({ rows }) {
+  const [status, setStatus] = useState<string | undefined>();
+
+  const filtered = useMemo(
+    () => (status ? rows.filter((r) => r.status === status) : rows),
+    [rows, status],
+  );
+
+  return (
+    <FilterBar
+      title="Engagements"
+      total={rows.length}
+      filtered={filtered.length}
+      label="engagements"
+      onClear={() => setStatus(undefined)}
+    >
+      <FilterButton
+        label="Status"
+        value={status}
+        onChange={setStatus}
+        options={[
+          { id: 'active', label: 'Active' },
+          { id: 'pending', label: 'Pending' },
+        ]}
+      />
+    </FilterBar>
+  );
+}
+```
+
+---
+
+## Accessibility
+
+- The title renders as an `<h2>` — ensure the surrounding page uses a sensible heading hierarchy (typically an `<h1>` on the page and `<h2>` per table).
+- The container carries an `aria-label` (falls back to `"{title} filter bar"` or `"{label} filter bar"`).
+- Counter announces `"Count: {n}"` via `aria-label`.
