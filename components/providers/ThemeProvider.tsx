@@ -92,9 +92,9 @@ export interface ThemeProviderProps {
  * - localStorage persistence (optional)
  * - Automatic body class application (optional)
  *
- * Available Themes:
- * - theme-brik: Brik Light (Default)
- * - theme-brik-dark: Brik Dark
+ * Available Themes (class + data-theme attribute):
+ * - theme-brand-brik + data-theme="light": Brik Light (default)
+ * - theme-brand-brik + data-theme="dark": Brik Dark
  * - theme-1: Peach (Open Sans)
  * - theme-2: Pastel (Source Sans)
  * - theme-3: Luxury (Hind)
@@ -155,10 +155,13 @@ export function ThemeProvider({
       body.classList.add('body');
     }
 
-    // Remove old theme classes
+    // Remove old theme classes (includes legacy 'theme-brik' / 'theme-brik-dark'
+    // names from pre-v0.7 BDS in case a consumer upgrades without a hard reload)
     body.classList.remove(
       'theme-brik',
       'theme-brik-dark',
+      'theme-brand-brik',
+      'theme-client-sim',
       'theme-1',
       'theme-2',
       'theme-3',
@@ -169,8 +172,20 @@ export function ThemeProvider({
       'theme-8'
     );
 
-    // Add theme class (always add it, including theme-1)
-    body.classList.add(`theme-${theme.themeNumber}`);
+    // Brand themes share the 'theme-brand-brik' class and differentiate via
+    // the `data-theme` attribute on <html>. Numbered template themes keep the
+    // 'theme-X' class (no data-theme attribute).
+    const html = document.documentElement;
+    if (theme.themeNumber === 'brik' || theme.themeNumber === 'brik-dark') {
+      body.classList.add('theme-brand-brik');
+      html.setAttribute('data-theme', theme.themeNumber === 'brik-dark' ? 'dark' : 'light');
+    } else if (theme.themeNumber === 'client-sim') {
+      body.classList.add('theme-brand-brik', 'theme-client-sim');
+      html.setAttribute('data-theme', 'light');
+    } else {
+      body.classList.add(`theme-${theme.themeNumber}`);
+      html.removeAttribute('data-theme');
+    }
 
     // Dispatch custom event for other scripts
     document.dispatchEvent(

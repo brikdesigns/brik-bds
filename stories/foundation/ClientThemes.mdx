@@ -9,26 +9,26 @@ BDS ships 3 built-in themes. Each theme overrides a curated set of semantic colo
 
 ## How themes work
 
-Themes are applied by adding a class to `<body>`. The `ThemeProvider` component manages this automatically.
+Brand themes use a class on `<body>` plus the `data-theme` attribute on `<html>`. The `ThemeProvider` component manages both automatically.
 
 ```tsx
 // In your layout or app root:
-<ThemeProvider theme="brik">
+<ThemeProvider initialTheme={{ themeNumber: 'brik-dark' }}>
   <App />
 </ThemeProvider>
 ```
 
-Internally, `ThemeProvider` sets `document.body.className = 'body theme-{name}'`. The CSS selector `.body.theme-{name} { ... }` then overrides the semantic tokens for that theme. Brik's own blocks live in `tokens/theme-brik.css`; the client-sim block lives in `tokens/font-audit.css`.
+Internally, `ThemeProvider` sets `body.classList.add('theme-brand-brik')` and `html.setAttribute('data-theme', 'dark')`. The CSS selector `.theme-brand-brik[data-theme="dark"] { ... }` then overrides the semantic tokens for that theme. Brik's blocks live in `tokens/theme-brand-brik.css` (bundled into `dist/tokens.css`); the client-sim block lives in `tokens/font-audit.css`. See `tokens/CASCADE.md` for the full load order.
 
 ## Built-in themes
 
 <ThemeOverview />
 
-| Class | Description |
-|-------|-------------|
-| `.body.theme-brik` | Brik brand — poppy red on near-black, Poppins |
-| `.body.theme-brik-dark` | Brik brand, dark mode — poppy red on near-black |
-| `.body.theme-client-sim` | Font audit tool — Georgia/Verdana/Courier New exposes semantic font-family misuse |
+| Selector | Description |
+|----------|-------------|
+| `.theme-brand-brik[data-theme="light"]` (or no `data-theme`) | Brik brand — poppy red, Poppins on white |
+| `.theme-brand-brik[data-theme="dark"]` | Brik brand, dark mode — poppy red on near-black |
+| `.theme-brand-brik.theme-client-sim` | Font audit tool — Georgia/Verdana/Courier New exposes semantic font-family misuse |
 
 Use the paintbrush icon in the Storybook toolbar to switch themes in real time.
 
@@ -64,7 +64,7 @@ Each `.body.theme-{name}` block overrides a fixed set of **semantic color tokens
 
 > **Note:** `--surface-nav` is a deprecated alias for `--surface-navigation`. Both resolve to the same value. Prefer `--surface-navigation` in new client overrides.
 
-**Typography tokens** are not overridden by `theme-brik` or `theme-brik-dark` — both share the Brik font stack. The `theme-client-sim` class demonstrates font family overrides only.
+**Typography tokens** are not overridden by `data-theme="light"` vs `data-theme="dark"` — both share the Brik font stack. The `theme-client-sim` class demonstrates font family overrides only.
 
 **Spacing tokens** are not theme-controlled — spacing comes from the Base/Spacious mode set on `.body`, not from theme classes.
 

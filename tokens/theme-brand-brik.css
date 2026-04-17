@@ -1,23 +1,24 @@
 /**
  * Brik Brand Theme — Light + Dark modes
  *
- * Loaded by: Storybook ONLY (.storybook/preview.tsx). NOT bundled into
- * dist/tokens.css. Consumers that apply Brik brand colors (portal,
- * brikdesigns.com) ship their own brand-theme file until consolidation.
+ * Loaded by: bundled into dist/tokens.css (after figma-dark-corrections.css).
+ * Every consumer with `@import '@brikdesigns/bds/tokens.css'` receives these
+ * brand overrides. Also imported directly in Storybook preview.tsx.
  *
  * See tokens/CASCADE.md for the full load-order + selector contract.
  *
  * Color + typography overrides only; spacing uses Base mode defaults from figma-tokens.css.
  *
- * Dark mode uses `.theme-brik.dark` (class toggle) instead of the consumer
- * `:root[data-theme="dark"]` selector. The values here duplicate what
- * figma-tokens-dark.css declares — kept in sync by convention until the
- * structural followup rescopes this file to `[data-theme="dark"]`.
+ * Selector contract: `.theme-brand-brik` for light mode, scoped with the
+ * consumer-standard `[data-theme="dark"]` attribute for dark mode. Matches
+ * figma-tokens-dark.css's dark-mode mechanism so Storybook and consumers
+ * share one switch. Set by ThemeProvider for React apps; set manually on
+ * html/body for Astro/Webflow/static sites.
  */
 
 /* ─── Light mode ─────────────────────────────────────────────── */
 
-.theme-brik {
+.theme-brand-brik {
   /* Page */
   --page-primary: var(--color-grayscale-white);
   --page-secondary: var(--color-grayscale-lightest);
@@ -65,9 +66,9 @@
   --font-family-display: Poppins, sans-serif;
 }
 
-/* ─── Dark mode (explicit class) ─────────────────────────────── */
+/* ─── Dark mode (data-theme attribute) ───────────────────────── */
 
-.theme-brik.dark {
+.theme-brand-brik[data-theme="dark"] {
   /* Page */
   --page-primary: var(--color-grayscale-black);
   --page-secondary: var(--color-grayscale-darker);
@@ -120,7 +121,7 @@
 /* ─── Dark mode (system preference auto-switch) ──────────────── */
 
 @media (prefers-color-scheme: dark) {
-  .theme-brik:not(.light) {
+  .theme-brand-brik:not([data-theme="light"]) {
     /* Page */
     --page-primary: var(--color-grayscale-black);
     --page-secondary: var(--color-grayscale-darker);
