@@ -112,6 +112,11 @@
   color: var(--text-on-color-light);
 }
 
+.bds-button--on-color {
+  background-color: var(--background-on-color-dark);
+  color: var(--text-on-color-light);
+}
+
 .bds-button--danger {
   background-color: var(--background-accent-red);
   color: var(--text-on-color-dark);
@@ -208,6 +213,16 @@
 .bds-button--inverse:active:not(:disabled) {
   background-color: var(--background-brand-primary-pressed);
   color: var(--text-on-color-dark);
+  transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── On-color ── Static white button for use on brand-colored surfaces. */
+.bds-button--on-color:hover:not(:disabled):not(.bds-button--loading) {
+  opacity: 0.9;
+}
+
+.bds-button--on-color:active:not(:disabled) {
+  opacity: 0.8;
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
@@ -1882,8 +1897,8 @@
   gap: var(--gap-lg);
   background-color: var(--surface-brand-primary);
   color: var(--text-on-color-dark);
-  padding: var(--padding-lg);
-  border-radius: var(--border-radius-sm);
+  padding: var(--padding-md) var(--padding-huge);
+  border-radius: var(--border-radius-100);
   width: 100%;
   box-sizing: border-box;
 }
@@ -3408,6 +3423,39 @@
   font-weight: var(--font-weight-semi-bold);
   text-decoration: underline;
   cursor: pointer;
+}
+}
+@layer bds-components {
+/* FilterBar — heading + counter + filter-controls row for list/table views */
+
+.bds-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  margin-bottom: var(--padding-lg);
+  flex-wrap: wrap;
+}
+
+/* ─── Title (heading-sm) ───────────────────────────────── */
+
+.bds-filter-bar__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* ─── Controls (filter buttons + clear button) ─────────── */
+
+.bds-filter-bar__controls {
+  display: flex;
+  gap: var(--gap-xs);
+  margin-left: auto;
+  flex-wrap: wrap;
+  align-items: center;
 }
 }
 @layer bds-components {
