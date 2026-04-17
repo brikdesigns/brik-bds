@@ -178,7 +178,7 @@ const rootVars = { ...(figmaBlocks[':root'] || {}), ...(gapBlocks[':root'] || {}
 
 // Determine theme names from CSS
 const themeNames = Object.keys(themeBlocks).filter(k => k.startsWith('theme-'));
-if (!themeNames.includes('theme-brik')) themeNames.unshift('theme-brik');
+if (!themeNames.includes('theme-brand-brik')) themeNames.unshift('theme-brand-brik');
 
 const results = [];
 

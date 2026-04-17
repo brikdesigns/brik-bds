@@ -21,7 +21,7 @@ import { FeedbackWidget } from './FeedbackWidget';
 // 5. Storybook overrides (Base mode spacing, UI fixes)
 import '../tokens/figma-tokens.css';
 import '../tokens/gap-fills.css';
-import '../tokens/theme-brik.css';
+import '../tokens/theme-brand-brik.css';
 import '../tokens/font-audit.css';
 import '../css/animations.css';
 import '../css/premium-effects.css';
@@ -79,14 +79,20 @@ const ThemedDocsContainer: typeof DefaultDocsContainer = (props) => {
   // Without this, CSS vars stay stale when the user switches themes.
   useLayoutEffect(() => {
     const body = document.body;
+    const html = document.documentElement;
     body.className = body.className.replace(/\btheme-\S+/g, '');
-    body.classList.remove('dark', 'light');
     if (themeNum === 'brik-dark') {
-      body.classList.add('body', 'theme-brik', 'dark');
+      body.classList.add('body', 'theme-brand-brik');
+      html.setAttribute('data-theme', 'dark');
     } else if (themeNum === 'client-sim') {
-      body.classList.add('body', 'theme-brik', 'theme-client-sim', 'light');
+      body.classList.add('body', 'theme-brand-brik', 'theme-client-sim');
+      html.setAttribute('data-theme', 'light');
+    } else if (themeNum === 'brik') {
+      body.classList.add('body', 'theme-brand-brik');
+      html.setAttribute('data-theme', 'light');
     } else {
-      body.classList.add('body', `theme-${themeNum}`, 'light');
+      body.classList.add('body', `theme-${themeNum}`);
+      html.removeAttribute('data-theme');
     }
     const isDark = storybookThemes[themeNum as ThemeNumber]?.base === 'dark';
     body.setAttribute('data-bds-dark', String(isDark));
@@ -134,20 +140,26 @@ const withTheme: Decorator = (Story, context) => {
   // useLayoutEffect runs synchronously before paint — no flash of old theme.
   useLayoutEffect(() => {
     const body = document.body;
-    // Strip any previous theme and dark/light classes
+    const html = document.documentElement;
+    // Strip any previous theme classes
     body.className = body.className.replace(/\btheme-\S+/g, '');
-    body.classList.remove('dark', 'light');
 
     // Apply theme classes:
-    // - brik-dark: .theme-brik.dark
-    // - client-sim (Font Audit): .theme-brik.theme-client-sim (inherit Brik colors, override fonts)
-    // - all others: .theme-X
+    // - brik + brik-dark: .theme-brand-brik + data-theme attr (light/dark)
+    // - client-sim (Font Audit): .theme-brand-brik.theme-client-sim + data-theme="light"
+    // - all others: .theme-X (no data-theme attribute)
     if (themeNumber === 'brik-dark') {
-      body.classList.add('body', 'theme-brik', 'dark');
+      body.classList.add('body', 'theme-brand-brik');
+      html.setAttribute('data-theme', 'dark');
     } else if (themeNumber === 'client-sim') {
-      body.classList.add('body', 'theme-brik', 'theme-client-sim', 'light');
+      body.classList.add('body', 'theme-brand-brik', 'theme-client-sim');
+      html.setAttribute('data-theme', 'light');
+    } else if (themeNumber === 'brik') {
+      body.classList.add('body', 'theme-brand-brik');
+      html.setAttribute('data-theme', 'light');
     } else {
-      body.classList.add('body', `theme-${themeNumber}`, 'light');
+      body.classList.add('body', `theme-${themeNumber}`);
+      html.removeAttribute('data-theme');
     }
 
     // Set dark mode data attribute for CSS selectors that need light/dark branching
