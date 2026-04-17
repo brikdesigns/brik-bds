@@ -1,0 +1,33 @@
+@layer bds-components {
+/* FilterBar — heading + counter + filter-controls row for list/table views */
+
+.bds-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  margin-bottom: var(--padding-lg);
+  flex-wrap: wrap;
+}
+
+/* ─── Title (heading-sm) ───────────────────────────────── */
+
+.bds-filter-bar__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* ─── Controls (filter buttons + clear button) ─────────── */
+
+.bds-filter-bar__controls {
+  display: flex;
+  gap: var(--gap-xs);
+  margin-left: auto;
+  flex-wrap: wrap;
+  align-items: center;
+}
+}

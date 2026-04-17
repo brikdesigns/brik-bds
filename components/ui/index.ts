@@ -31,6 +31,7 @@ export * from './Dot';
 export * from './EmailInput';
 export * from './EmptyState';
 export * from './FileUploader';
+export * from './FilterBar';
 export * from './FilterButton';
 export * from './FilterToggle';
 export * from './Footer';
