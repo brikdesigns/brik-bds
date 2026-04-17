@@ -19,7 +19,11 @@ const themeMetadata = {
 };
 function getThemeClasses(config) {
   const classes = ["body"];
-  if (config.themeNumber) {
+  if (config.themeNumber === "brik" || config.themeNumber === "brik-dark") {
+    classes.push("theme-brand-brik");
+  } else if (config.themeNumber === "client-sim") {
+    classes.push("theme-brand-brik", "theme-client-sim");
+  } else if (config.themeNumber) {
     classes.push(`theme-${config.themeNumber}`);
   }
   return classes.join(" ");
@@ -489,6 +493,8 @@ function ThemeProvider({
     body.classList.remove(
       "theme-brik",
       "theme-brik-dark",
+      "theme-brand-brik",
+      "theme-client-sim",
       "theme-1",
       "theme-2",
       "theme-3",
@@ -498,7 +504,17 @@ function ThemeProvider({
       "theme-7",
       "theme-8"
     );
-    body.classList.add(`theme-${theme.themeNumber}`);
+    const html = document.documentElement;
+    if (theme.themeNumber === "brik" || theme.themeNumber === "brik-dark") {
+      body.classList.add("theme-brand-brik");
+      html.setAttribute("data-theme", theme.themeNumber === "brik-dark" ? "dark" : "light");
+    } else if (theme.themeNumber === "client-sim") {
+      body.classList.add("theme-brand-brik", "theme-client-sim");
+      html.setAttribute("data-theme", "light");
+    } else {
+      body.classList.add(`theme-${theme.themeNumber}`);
+      html.removeAttribute("data-theme");
+    }
     document.dispatchEvent(
       new CustomEvent("bds-theme-changed", {
         detail: theme
