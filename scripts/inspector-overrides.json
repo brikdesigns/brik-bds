@@ -1,0 +1,10 @@
+{
+  "$comment": "Hand-edited overrides for the BDS inspector manifest. Anything not listed here defaults to { status: 'stable' }. Edit when a component ships experimental / gets deprecated / needs a custom description.",
+  "components": {
+    "DevFeedbackWidget": {
+      "status": "stable",
+      "introduced_in": "0.5.0",
+      "description": "Dev-only feedback widget. Registers into the Brik DevBar; renders a 2x2 type selector + textarea; submits to /api/feedback."
+    }
+  }
+}
