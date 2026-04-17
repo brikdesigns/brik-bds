@@ -12,21 +12,24 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 1. `figma-tokens.css` — auto-generated light-mode tokens (`:root`)
 2. `figma-tokens-dark.css` — auto-generated dark-mode tokens (`:root[data-theme="dark"]`)
 3. `figma-dark-corrections.css` — manual overrides for known-wrong Figma dark values
-4. `gap-fills.css` — manual tokens not yet in Figma
+4. `theme-brand-brik.css` — Brik brand overrides (scoped to `.theme-brand-brik` class)
+5. `gap-fills.css` — manual tokens not yet in Figma
 
-**Not bundled:** `theme-brik.css`, `bridge.css`, `font-audit.css`, `animations.css`,
-`motion-classes.css`, `storybook-themes.ts`, `index.ts`.
+**Not bundled:** `bridge.css` (opt-in via separate export), `font-audit.css`
+(Storybook-only), `animations.css`, `motion-classes.css`, `storybook-themes.ts`,
+`index.ts`.
 
 ## Dark-mode selector contract
 
-**Consumers: `:root[data-theme="dark"]`** — set via a `data-theme` attribute on
-`<html>` (pattern used by portal). This is the only dark-mode selector that
-ships in `dist/tokens.css`.
+**Single switch across the ecosystem: `[data-theme="dark"]` attribute on `<html>`.**
 
-**Storybook:** uses `.theme-brik.dark` (class-based), declared in
-`theme-brik.css`. This file is Storybook-only. A structural consolidation to
-`[data-theme]` is tracked as a follow-up — until then, dark-mode changes need
-to be made in two places to stay aligned.
+- Figma-generated tokens: `:root[data-theme="dark"]`
+- Brand overrides: `.theme-brand-brik[data-theme="dark"]`
+- Storybook sets the attribute via the theme toolbar (`preview.tsx`)
+- React consumers use `ThemeProvider` (which sets it automatically when `applyToBody` is true)
+- Astro/Webflow/static consumers set it manually on `<html>`
+
+No consumer should toggle a `.dark` class — the attribute is the only switch.
 
 ## Decision tree — where to put a change
 
@@ -34,7 +37,7 @@ to be made in two places to stay aligned.
 |---|---|
 | Fix a value that came out of Figma wrong | `figma-dark-corrections.css` (dark) or a new `figma-corrections.css` (light — doesn't exist yet, add when needed) |
 | Add a semantic token Figma doesn't export | `gap-fills.css` |
-| Adjust Brik's brand colors / fonts | `theme-brik.css` (caveat: Storybook only — consumers need their own theme file) |
+| Adjust Brik's brand colors / fonts | `theme-brand-brik.css` — consumers get these automatically when they apply `.theme-brand-brik` to `<body>` |
 | Add a Webflow-facing alias | `bridge.css` (deprecated layer) |
 | Touch an auto-generated file | Don't. Fix in Figma and re-pull, or add an override in a manual file. |
 
@@ -49,10 +52,10 @@ place for a correction is a manual file bundled AFTER the auto-generated ones.
 ## Manual (safe to edit)
 
 - `figma-dark-corrections.css` — known-wrong dark values
+- `theme-brand-brik.css` — Brik brand overrides (class-scoped, bundled into dist)
 - `gap-fills.css` — tokens Figma doesn't export yet
-- `theme-brik.css` — Storybook-only brand theme (see consolidation followup)
-- `bridge.css` — legacy Webflow aliases (deprecated)
-- `animations.css`, `motion-classes.css`, `font-audit.css` — component-level
+- `bridge.css` — legacy Webflow aliases (deprecated, opt-in only)
+- `font-audit.css`, `animations.css`, `motion-classes.css` — Storybook/component-level
 
 ## Adding a new file to the bundle
 

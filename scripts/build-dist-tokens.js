@@ -4,7 +4,7 @@
  * Called by: npm run build:lib (as the final step)
  *
  * Produces:
- *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + figma-dark-corrections.css + gap-fills.css concatenated
+ *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + figma-dark-corrections.css + theme-brand-brik.css + gap-fills.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
  */
 const fs = require('fs');
@@ -55,7 +55,15 @@ if (fs.existsSync(darkCorrectionsPath)) {
   console.log('  ✓ Including dark-mode corrections');
 }
 
-fs.writeFileSync(path.join(DIST_DIR, 'tokens.css'), header + figmaTokens + darkTokens + darkCorrections + '\n\n' + gapFills);
+// Brik brand theme — applied when consumer sets .theme-brand-brik on <body>
+const themeBrandBrikPath = path.join(TOKENS_DIR, 'theme-brand-brik.css');
+let themeBrandBrik = '';
+if (fs.existsSync(themeBrandBrikPath)) {
+  themeBrandBrik = '\n\n' + fs.readFileSync(themeBrandBrikPath, 'utf8');
+  console.log('  ✓ Including Brik brand theme');
+}
+
+fs.writeFileSync(path.join(DIST_DIR, 'tokens.css'), header + figmaTokens + darkTokens + darkCorrections + themeBrandBrik + '\n\n' + gapFills);
 console.log('  ✓ dist/tokens.css');
 
 // Copy bridge.css
