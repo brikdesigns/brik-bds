@@ -1,0 +1,235 @@
+{
+  "$comment": "Hand-edited overrides for the BDS inspector manifest. Anything not listed here defaults to { status: 'stable' }. Edit when a component ships experimental / gets deprecated / needs a custom description.",
+  "components": {
+    "DevFeedbackWidget": {
+      "status": "stable",
+      "introduced_in": "0.5.0",
+      "description": "Dev-only feedback widget. Registers into the Brik DevBar; renders a 2x2 type selector + textarea; submits to /api/feedback."
+    },
+    "Accordion": {
+      "introduced_in": "0.1.3"
+    },
+    "ActivityTimeline": {
+      "introduced_in": "0.1.3"
+    },
+    "AddableEntryList": {
+      "introduced_in": "0.5.0"
+    },
+    "AddableTextList": {
+      "introduced_in": "0.1.6"
+    },
+    "AddressInput": {
+      "introduced_in": "0.1.3"
+    },
+    "AlertBanner": {
+      "introduced_in": "0.1.3"
+    },
+    "AnimatedIcon": {
+      "introduced_in": "0.1.3"
+    },
+    "Avatar": {
+      "introduced_in": "0.1.3"
+    },
+    "Badge": {
+      "introduced_in": "0.1.3"
+    },
+    "Banner": {
+      "introduced_in": "0.1.3"
+    },
+    "Board": {
+      "introduced_in": "0.1.3"
+    },
+    "Breadcrumb": {
+      "introduced_in": "0.1.3"
+    },
+    "Button": {
+      "introduced_in": "0.1.3"
+    },
+    "ButtonGroup": {
+      "introduced_in": "0.1.3"
+    },
+    "Calendar": {
+      "introduced_in": "0.1.3"
+    },
+    "Card": {
+      "introduced_in": "0.1.3"
+    },
+    "CardControl": {
+      "introduced_in": "0.1.3"
+    },
+    "CardDisplay": {
+      "introduced_in": "0.1.3"
+    },
+    "CardFeature": {
+      "introduced_in": "0.1.3"
+    },
+    "CardList": {
+      "introduced_in": "0.2.0"
+    },
+    "CardTestimonial": {
+      "introduced_in": "0.1.3"
+    },
+    "Checkbox": {
+      "introduced_in": "0.1.3"
+    },
+    "Chip": {
+      "introduced_in": "0.1.3"
+    },
+    "CollapsibleCard": {
+      "introduced_in": "0.1.3"
+    },
+    "Counter": {
+      "introduced_in": "0.1.3"
+    },
+    "DatePicker": {
+      "introduced_in": "0.1.3"
+    },
+    "Dialog": {
+      "introduced_in": "0.1.3"
+    },
+    "Divider": {
+      "introduced_in": "0.1.3"
+    },
+    "Dot": {
+      "introduced_in": "0.1.3"
+    },
+    "EmailInput": {
+      "introduced_in": "0.1.3"
+    },
+    "EmptyState": {
+      "introduced_in": "0.1.3"
+    },
+    "FileUploader": {
+      "introduced_in": "0.1.3"
+    },
+    "FilterBar": {
+      "introduced_in": "0.5.0"
+    },
+    "FilterButton": {
+      "introduced_in": "0.1.3"
+    },
+    "FilterToggle": {
+      "introduced_in": "0.1.3"
+    },
+    "Footer": {
+      "introduced_in": "0.1.3"
+    },
+    "Form": {
+      "introduced_in": "0.1.3"
+    },
+    "Icons": {
+      "introduced_in": "0.1.3"
+    },
+    "Menu": {
+      "introduced_in": "0.1.3"
+    },
+    "Meter": {
+      "introduced_in": "0.1.3"
+    },
+    "Modal": {
+      "introduced_in": "0.1.3"
+    },
+    "MultiSelect": {
+      "introduced_in": "0.1.3"
+    },
+    "NavBar": {
+      "introduced_in": "0.1.3"
+    },
+    "NotificationList": {
+      "introduced_in": "0.1.3"
+    },
+    "PageHeader": {
+      "introduced_in": "0.1.3"
+    },
+    "Pagination": {
+      "introduced_in": "0.1.3"
+    },
+    "PasswordInput": {
+      "introduced_in": "0.1.3"
+    },
+    "Popover": {
+      "introduced_in": "0.1.3"
+    },
+    "PricingCard": {
+      "introduced_in": "0.1.3"
+    },
+    "ProgressBar": {
+      "introduced_in": "0.1.3"
+    },
+    "ProgressDots": {
+      "introduced_in": "0.1.3"
+    },
+    "ProgressStepper": {
+      "introduced_in": "0.1.3"
+    },
+    "Radio": {
+      "introduced_in": "0.1.3"
+    },
+    "SearchInput": {
+      "introduced_in": "0.1.3"
+    },
+    "SegmentedControl": {
+      "introduced_in": "0.1.3"
+    },
+    "Select": {
+      "introduced_in": "0.1.3"
+    },
+    "ServiceBadge": {
+      "introduced_in": "0.1.3"
+    },
+    "Sheet": {
+      "introduced_in": "0.1.3"
+    },
+    "SidebarNavigation": {
+      "introduced_in": "0.1.3"
+    },
+    "Skeleton": {
+      "introduced_in": "0.1.3"
+    },
+    "Slider": {
+      "introduced_in": "0.1.3"
+    },
+    "Snackbar": {
+      "introduced_in": "0.1.3"
+    },
+    "Spinner": {
+      "introduced_in": "0.1.3"
+    },
+    "Stepper": {
+      "introduced_in": "0.1.3"
+    },
+    "Switch": {
+      "introduced_in": "0.1.3"
+    },
+    "TabBar": {
+      "introduced_in": "0.1.3"
+    },
+    "Table": {
+      "introduced_in": "0.1.3"
+    },
+    "Tag": {
+      "introduced_in": "0.1.3"
+    },
+    "TaskConsole": {
+      "introduced_in": "0.1.3"
+    },
+    "TextArea": {
+      "introduced_in": "0.1.3"
+    },
+    "TextInput": {
+      "introduced_in": "0.1.3"
+    },
+    "TextLink": {
+      "introduced_in": "0.1.3"
+    },
+    "TimePicker": {
+      "introduced_in": "0.1.3"
+    },
+    "Toast": {
+      "introduced_in": "0.1.3"
+    },
+    "Tooltip": {
+      "introduced_in": "0.1.3"
+    }
+  }
+}
