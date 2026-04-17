@@ -1,0 +1,22 @@
+/**
+ * figma-dark-corrections.css — post-Figma dark-mode overrides
+ *
+ * Figma's dark-mode export (figma-tokens-dark.css) flips values that
+ * shouldn't flip. This file re-asserts the correct values and is
+ * concatenated into dist/tokens.css AFTER figma-tokens-dark.css, so
+ * these overrides survive the next Figma pull.
+ *
+ * Keep edits here minimal — prefer fixing the source in Figma and
+ * removing the correction when the sync confirms the fix.
+ */
+
+:root[data-theme="dark"] {
+  /**
+   * `--background-on-color-*` describes contrast for non-neutral
+   * (brand-colored) surfaces, which don't flip with theme. The sibling
+   * `--text-on-color-*` tokens already stay static in both modes — the
+   * backgrounds must behave the same.
+   */
+  --background-on-color-dark: var(--color-grayscale-white);
+  --background-on-color-light: var(--color-grayscale-black);
+}
