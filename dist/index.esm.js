@@ -23885,6 +23885,383 @@ const DatePicker = forwardRef(
   }
 );
 DatePicker.displayName = "DatePicker";
+const BDS = {
+  poppy: "#e35335",
+  white: "#ffffff",
+  grayLighter: "#e0e0e0",
+  grayDark: "#828282",
+  grayDarkest: "#333333",
+  fontFamily: "'Poppins', system-ui, sans-serif"
+};
+const FEEDBACK_TYPES = [
+  { label: "Bug", value: "bug" },
+  { label: "UI", value: "ui" },
+  { label: "Suggestion", value: "suggestion" },
+  { label: "Question", value: "question" }
+];
+function DevFeedbackWidget({
+  endpoint = "/api/feedback",
+  contextLabel = "Page",
+  getContextValue,
+  fabPosition = { bottom: "16px", left: "72px" },
+  extraPayload
+} = {}) {
+  const [open, setOpen] = useState(false);
+  const [type, setType] = useState("bug");
+  const [description, setDescription] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [contextValue, setContextValue] = useState("");
+  const [devBarPresent, setDevBarPresent] = useState(false);
+  const panelRef = useRef(null);
+  const fabRef = useRef(null);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (document.querySelector('link[href*="Poppins"]')) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap";
+    document.head.appendChild(link);
+  }, []);
+  useEffect(() => {
+    if (!open) return;
+    const next = getContextValue ? getContextValue() : typeof window !== "undefined" ? window.location.pathname : "";
+    setContextValue(next);
+  }, [open, getContextValue]);
+  useEffect(() => {
+    if (!open) return;
+    const onMouseDown = (e) => {
+      var _a, _b, _c;
+      const target = e.target;
+      if (!target) return;
+      if ((_a = panelRef.current) == null ? void 0 : _a.contains(target)) return;
+      if ((_b = fabRef.current) == null ? void 0 : _b.contains(target)) return;
+      if (target.nodeType === 1 && ((_c = target.closest) == null ? void 0 : _c.call(target, ".bdb-bar"))) {
+        return;
+      }
+      setOpen(false);
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  useEffect(() => {
+    const check = () => {
+      if (typeof window !== "undefined" && window.BrikDevBar) {
+        setDevBarPresent(true);
+      }
+    };
+    check();
+    const iv = setInterval(check, 100);
+    const stop = setTimeout(() => clearInterval(iv), 2e3);
+    return () => {
+      clearInterval(iv);
+      clearTimeout(stop);
+    };
+  }, []);
+  const slotDef = useMemo(
+    () => ({
+      id: "feedback",
+      label: "Feedback",
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+      order: 10,
+      onActivate: () => setOpen(true),
+      onDeactivate: () => setOpen(false)
+    }),
+    []
+  );
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const tryRegister = () => {
+      if (window.BrikDevBar) {
+        window.BrikDevBar.register(slotDef);
+        return true;
+      }
+      return false;
+    };
+    if (tryRegister()) {
+      return () => {
+        var _a;
+        (_a = window.BrikDevBar) == null ? void 0 : _a.unregister(slotDef.id);
+      };
+    }
+    window.BrikDevBarQueue = window.BrikDevBarQueue || [];
+    window.BrikDevBarQueue.push(slotDef);
+    const iv = setInterval(() => {
+      if (tryRegister()) clearInterval(iv);
+    }, 100);
+    const stop = setTimeout(() => clearInterval(iv), 2e3);
+    return () => {
+      var _a;
+      clearInterval(iv);
+      clearTimeout(stop);
+      (_a = window.BrikDevBar) == null ? void 0 : _a.unregister(slotDef.id);
+    };
+  }, [slotDef]);
+  useEffect(() => {
+    var _a;
+    (_a = window.BrikDevBar) == null ? void 0 : _a.setActive("feedback", open);
+  }, [open]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!description.trim()) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          page_url: typeof window !== "undefined" ? window.location.pathname : "",
+          feedback_type: type,
+          description: description.trim(),
+          context: contextValue,
+          ...extraPayload
+        })
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        setTimeout(() => {
+          setOpen(false);
+          setSubmitted(false);
+          setDescription("");
+          setType("bug");
+        }, 1500);
+        return;
+      }
+      const data2 = await res.json().catch(() => ({}));
+      console.error("[DevFeedbackWidget] submission failed:", data2);
+      window.alert(
+        `Feedback failed: ${JSON.stringify(
+          data2.details ?? data2.error ?? "unknown"
+        )}`
+      );
+    } catch (err) {
+      console.error("[DevFeedbackWidget] submission error:", err);
+      window.alert("Feedback failed — see console for details.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  const fabStyle = {
+    position: "fixed",
+    bottom: fabPosition.bottom,
+    left: fabPosition.left,
+    right: fabPosition.right,
+    zIndex: 9998,
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    backgroundColor: BDS.poppy,
+    color: BDS.white,
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "18px",
+    // bds-lint-ignore — dev overlay renders fixed size
+    fontFamily: BDS.fontFamily,
+    boxShadow: "0 4px 20px rgba(0,0,0,0.22)",
+    transition: "background-color 0.15s ease, transform 0.15s ease"
+  };
+  const panelStyleBase = {
+    position: "fixed",
+    bottom: "64px",
+    left: "16px",
+    zIndex: 9998,
+    width: "320px",
+    backgroundColor: BDS.white,
+    borderRadius: "12px",
+    // bds-lint-ignore — dev overlay renders fixed
+    border: `1px solid ${BDS.grayLighter}`,
+    boxShadow: "0 12px 48px rgba(0,0,0,0.18)",
+    padding: "16px",
+    // bds-lint-ignore — dev overlay renders fixed
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    // bds-lint-ignore — dev overlay renders fixed
+    fontFamily: BDS.fontFamily,
+    color: BDS.grayDarkest
+  };
+  const panelStyleAnchored = {
+    ...panelStyleBase,
+    bottom: "72px",
+    left: "50%",
+    transform: "translateX(-50%)"
+  };
+  const headerStyle = {
+    fontSize: "11px",
+    // bds-lint-ignore — dev overlay renders fixed
+    fontWeight: 700,
+    // bds-lint-ignore — dev overlay renders fixed
+    color: BDS.grayDark,
+    textTransform: "uppercase",
+    letterSpacing: "0.08em"
+  };
+  const typeGridStyle = {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "8px"
+    // bds-lint-ignore — dev overlay renders fixed
+  };
+  const typeBtnStyle = (active2) => ({
+    padding: "8px 12px",
+    borderRadius: "999px",
+    border: `1px solid ${active2 ? BDS.poppy : BDS.grayLighter}`,
+    backgroundColor: active2 ? BDS.poppy : "transparent",
+    color: active2 ? BDS.white : BDS.grayDarkest,
+    fontFamily: BDS.fontFamily,
+    fontSize: "13px",
+    // bds-lint-ignore — dev overlay renders fixed
+    fontWeight: 600,
+    // bds-lint-ignore — dev overlay renders fixed
+    letterSpacing: "0.02em",
+    cursor: "pointer",
+    lineHeight: 1,
+    // bds-lint-ignore — dev overlay renders fixed
+    transition: "background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease"
+  });
+  const textareaStyle = {
+    width: "100%",
+    minHeight: "80px",
+    padding: "10px 12px",
+    borderRadius: "8px",
+    // bds-lint-ignore — dev overlay renders fixed
+    border: `1px solid ${BDS.grayLighter}`,
+    backgroundColor: BDS.white,
+    color: BDS.grayDarkest,
+    fontSize: "13px",
+    // bds-lint-ignore — dev overlay renders fixed
+    fontFamily: BDS.fontFamily,
+    resize: "vertical",
+    outline: "none",
+    boxSizing: "border-box"
+  };
+  const contextStyle = {
+    fontSize: "10px",
+    // bds-lint-ignore — dev overlay renders fixed
+    color: BDS.grayDark,
+    fontFamily: BDS.fontFamily,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap"
+  };
+  const submitBtnStyle = (disabled) => ({
+    padding: "10px 16px",
+    borderRadius: "999px",
+    border: "none",
+    backgroundColor: disabled ? BDS.grayLighter : BDS.poppy,
+    color: disabled ? BDS.grayDark : BDS.white,
+    cursor: disabled ? "not-allowed" : "pointer",
+    fontSize: "13px",
+    // bds-lint-ignore — dev overlay renders fixed
+    fontFamily: BDS.fontFamily,
+    fontWeight: 600,
+    // bds-lint-ignore — dev overlay renders fixed
+    letterSpacing: "0.02em",
+    transition: "background-color 0.12s ease"
+  });
+  const successStyle = {
+    textAlign: "center",
+    color: BDS.poppy,
+    fontSize: "13px",
+    // bds-lint-ignore — dev overlay renders fixed
+    fontFamily: BDS.fontFamily,
+    fontWeight: 600,
+    // bds-lint-ignore — dev overlay renders fixed
+    padding: "20px 0"
+  };
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    !devBarPresent && /* @__PURE__ */ jsx(
+      "div",
+      {
+        ref: fabRef,
+        style: fabStyle,
+        role: "button",
+        tabIndex: 0,
+        "aria-label": open ? "Close feedback" : "Open feedback",
+        title: open ? "Close feedback" : "Open feedback",
+        onClick: () => setOpen((v) => !v),
+        onKeyDown: (e) => {
+          if (e.key === "Enter" || e.key === " ") setOpen((v) => !v);
+        },
+        children: open ? "✕" : "💬"
+      }
+    ),
+    open && typeof document !== "undefined" && createPortal(
+      /* @__PURE__ */ jsxs(
+        "div",
+        {
+          ref: panelRef,
+          style: devBarPresent ? panelStyleAnchored : panelStyleBase,
+          role: "dialog",
+          "aria-label": "Submit feedback",
+          children: [
+            /* @__PURE__ */ jsx("div", { style: headerStyle, children: "Submit Feedback" }),
+            submitted ? /* @__PURE__ */ jsx("div", { style: successStyle, children: "Submitted — thank you!" }) : /* @__PURE__ */ jsxs(
+              "form",
+              {
+                onSubmit: handleSubmit,
+                style: {
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px"
+                  // bds-lint-ignore — dev overlay renders fixed
+                },
+                children: [
+                  /* @__PURE__ */ jsx("div", { style: typeGridStyle, role: "radiogroup", "aria-label": "Feedback type", children: FEEDBACK_TYPES.map((ft) => /* @__PURE__ */ jsx(
+                    "button",
+                    {
+                      type: "button",
+                      role: "radio",
+                      "aria-checked": type === ft.value,
+                      style: typeBtnStyle(type === ft.value),
+                      onClick: () => setType(ft.value),
+                      children: ft.label
+                    },
+                    ft.value
+                  )) }),
+                  /* @__PURE__ */ jsx(
+                    "textarea",
+                    {
+                      style: textareaStyle,
+                      placeholder: "Describe what you found...",
+                      value: description,
+                      onChange: (e) => setDescription(e.target.value),
+                      autoFocus: true
+                    }
+                  ),
+                  /* @__PURE__ */ jsxs("div", { style: contextStyle, children: [
+                    contextLabel,
+                    ": ",
+                    contextValue
+                  ] }),
+                  /* @__PURE__ */ jsx(
+                    "button",
+                    {
+                      type: "submit",
+                      style: submitBtnStyle(submitting || !description.trim()),
+                      disabled: submitting || !description.trim(),
+                      children: submitting ? "Submitting..." : "Submit Feedback"
+                    }
+                  )
+                ]
+              }
+            )
+          ]
+        }
+      ),
+      document.body
+    )
+  ] });
+}
 function Dialog({
   isOpen,
   onClose,
@@ -24162,6 +24539,46 @@ function FileUploader({
             tabIndex: -1
           }
         )
+      ]
+    }
+  );
+}
+function FilterBar({
+  total,
+  filtered,
+  label,
+  title,
+  activeStatus = "brand",
+  onClear,
+  clearLabel = "Clear filters",
+  children,
+  className,
+  style,
+  ...props
+}) {
+  const isFiltered = filtered < total;
+  const ariaLabel = props["aria-label"] ?? (typeof title === "string" ? `${title} filter bar` : `${label} filter bar`);
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: bdsClass("bds-filter-bar", className),
+      style,
+      "aria-label": ariaLabel,
+      ...props,
+      children: [
+        title && /* @__PURE__ */ jsx("h2", { className: "bds-filter-bar__title", children: title }),
+        /* @__PURE__ */ jsx(
+          Counter,
+          {
+            count: filtered,
+            status: isFiltered ? activeStatus : "neutral",
+            size: "sm"
+          }
+        ),
+        /* @__PURE__ */ jsxs("div", { className: "bds-filter-bar__controls", children: [
+          children,
+          onClear && isFiltered && /* @__PURE__ */ jsx(Button, { variant: "ghost", size: "md", onClick: onClear, children: clearLabel })
+        ] })
       ]
     }
   );
@@ -27015,12 +27432,14 @@ export {
   CollapsibleCard,
   Counter,
   DatePicker,
+  DevFeedbackWidget,
   Dialog,
   Divider,
   Dot,
   EmailInput,
   EmptyState,
   FileUploader,
+  FilterBar,
   FilterButton,
   FilterToggle,
   Footer,
