@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 
 const FIGMA_CSS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');
-const OVERRIDES_CSS = path.join(__dirname, '..', 'tokens', 'overrides.css');
+const GAP_FILLS_CSS = path.join(__dirname, '..', 'tokens', 'gap-fills.css');
 
 const GRID_BASE = 4;
 
@@ -248,9 +248,9 @@ if (!fs.existsSync(FIGMA_CSS)) {
 
 // Load tokens from all CSS sources
 const tokens = parseCssFile(FIGMA_CSS);
-if (fs.existsSync(OVERRIDES_CSS)) {
-  const overrides = parseCssFile(OVERRIDES_CSS);
-  for (const [k, v] of overrides) {
+if (fs.existsSync(GAP_FILLS_CSS)) {
+  const gapFills = parseCssFile(GAP_FILLS_CSS);
+  for (const [k, v] of gapFills) {
     if (!tokens.has(k)) tokens.set(k, v);
   }
 }
