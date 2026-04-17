@@ -16,6 +16,8 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   actions?: ReactNode;
   tabs?: ReactNode;
   metadata?: MetadataItem[];
+  /** Summary content (e.g. stat cards) rendered between metadata and tabs. */
+  stats?: ReactNode;
   /** Show divider and top padding above metadata. Default: true */
   showDivider?: boolean;
   /** Remove horizontal padding (for layouts that provide their own). Default: false */
@@ -25,7 +27,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, and tabs.
+ * PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, stats, and tabs.
  */
 export function PageHeader({
   title,
@@ -35,6 +37,7 @@ export function PageHeader({
   actions,
   tabs,
   metadata,
+  stats,
   showDivider = true,
   flush = false,
   size = 'lg',
@@ -73,6 +76,8 @@ export function PageHeader({
           </div>
         </div>
       )}
+
+      {stats && <div className="bds-page-header__stats">{stats}</div>}
 
       {tabs && <div className="bds-page-header__tabs">{tabs}</div>}
     </div>

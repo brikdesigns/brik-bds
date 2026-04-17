@@ -666,6 +666,22 @@ const Clock = "ph:clock";
 function bdsClass(base, ...modifiers) {
   return [base, ...modifiers].filter(Boolean).join(" ");
 }
+function composeButtonClasses({
+  variant = "primary",
+  size: size2 = "md",
+  fullWidth = false,
+  loading = false,
+  className
+}) {
+  return bdsClass(
+    "bds-button",
+    `bds-button--${variant}`,
+    `bds-button--${size2}`,
+    fullWidth && "bds-button--full-width",
+    loading && "bds-button--loading",
+    className
+  );
+}
 const Button = React.forwardRef(
   ({
     variant = "primary",
@@ -681,14 +697,7 @@ const Button = React.forwardRef(
     ...props
   }, ref) => {
     const isDisabled = disabled || loading;
-    const classes = bdsClass(
-      "bds-button",
-      `bds-button--${variant}`,
-      `bds-button--${size2}`,
-      fullWidth && "bds-button--full-width",
-      loading && "bds-button--loading",
-      className
-    );
+    const classes = composeButtonClasses({ variant, size: size2, fullWidth, loading, className });
     return /* @__PURE__ */ jsxRuntime.jsxs(
       "button",
       {
@@ -724,13 +733,7 @@ const LinkButton = React.forwardRef(
     style,
     ...props
   }, ref) => {
-    const classes = bdsClass(
-      "bds-button",
-      `bds-button--${variant}`,
-      `bds-button--${size2}`,
-      fullWidth && "bds-button--full-width",
-      className
-    );
+    const classes = composeButtonClasses({ variant, size: size2, fullWidth, className });
     return /* @__PURE__ */ jsxRuntime.jsx(
       "a",
       {
@@ -738,7 +741,6 @@ const LinkButton = React.forwardRef(
         href,
         className: classes,
         style,
-        role: "button",
         ...props,
         children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "bds-button__content", children: [
           iconBefore,
@@ -1100,40 +1102,6 @@ function ActivityTimeline({ events, className = "" }) {
     ] }, idx);
   }) });
 }
-function Tag({
-  children,
-  size: size2 = "md",
-  icon,
-  trailingIcon,
-  onRemove,
-  disabled = false,
-  className,
-  style,
-  ...props
-}) {
-  const isIconOnly = size2 === "xs";
-  const classes = bdsClass(
-    "bds-tag",
-    `bds-tag--${size2}`,
-    disabled && "bds-tag--disabled",
-    className
-  );
-  return /* @__PURE__ */ jsxRuntime.jsxs("span", { className: classes, style, ...props, children: [
-    icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: icon }),
-    !isIconOnly && children,
-    !isIconOnly && trailingIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: trailingIcon }),
-    !isIconOnly && onRemove && !disabled && /* @__PURE__ */ jsxRuntime.jsx(
-      "button",
-      {
-        type: "button",
-        onClick: onRemove,
-        className: "bds-tag__remove bds-tag__icon",
-        "aria-label": "Remove",
-        children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X })
-      }
-    )
-  ] });
-}
 const wrapperStyles$4 = {
   display: "flex",
   flexDirection: "column",
@@ -1272,6 +1240,346 @@ const TextInput = React.forwardRef(
   }
 );
 TextInput.displayName = "TextInput";
+const wrapperStyles$3 = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "var(--gap-md)",
+  color: "var(--text-primary)"
+};
+const labelBaseStyles = {
+  fontFamily: "var(--font-family-label)",
+  fontWeight: "var(--font-weight-semi-bold)",
+  lineHeight: "var(--font-line-height-tight)",
+  textTransform: "capitalize"
+};
+const sizeStyles$1 = {
+  sm: {
+    label: { fontSize: "var(--label-sm)" },
+    textarea: { fontSize: "var(--body-sm)" }
+  },
+  md: {
+    label: { fontSize: "var(--label-md)" },
+    textarea: { fontSize: "var(--body-md)" }
+  },
+  lg: {
+    label: { fontSize: "var(--label-lg)" },
+    textarea: { fontSize: "var(--body-lg)" }
+  }
+};
+const helperBaseStyles = {
+  fontFamily: "var(--font-family-body)",
+  fontSize: "var(--body-sm)",
+  lineHeight: "var(--font-line-height-normal)",
+  color: "var(--text-muted)"
+};
+const textareaStyles = {
+  display: "block",
+  width: "100%",
+  minWidth: 200,
+  padding: "var(--padding-xs)",
+  fontFamily: "var(--font-family-body)",
+  fontWeight: "var(--font-weight-regular)",
+  lineHeight: "var(--font-line-height-normal)",
+  color: "var(--text-primary)",
+  backgroundColor: "var(--background-input)",
+  border: "var(--border-width-md) solid var(--border-input)",
+  borderRadius: "var(--border-radius-md)",
+  outline: "none",
+  transition: "border-color 0.2s",
+  resize: "vertical",
+  boxSizing: "border-box"
+};
+const textareaDisabledStyles = {
+  opacity: 0.5,
+  cursor: "not-allowed",
+  resize: "none"
+};
+function TextArea({
+  size: size2 = "md",
+  placeholder,
+  rows = 4,
+  disabled = false,
+  value: value2,
+  defaultValue,
+  onChange,
+  resize = "vertical",
+  label,
+  helperText,
+  error,
+  fullWidth = false,
+  id,
+  className = "",
+  style,
+  ...props
+}) {
+  const inputId = id || (label ? `textarea-${Math.random().toString(36).substring(2, 11)}` : void 0);
+  const hasError = Boolean(error);
+  const sizeStyle = sizeStyles$1[size2];
+  const combinedStyles = {
+    ...textareaStyles,
+    ...sizeStyle.textarea,
+    resize,
+    ...disabled ? textareaDisabledStyles : {},
+    ...hasError ? { borderColor: "var(--border-negative)" } : {},
+    ...style
+  };
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    "div",
+    {
+      className: "bds-text-area",
+      style: {
+        ...wrapperStyles$3,
+        width: fullWidth ? "100%" : "auto"
+      },
+      children: [
+        label && /* @__PURE__ */ jsxRuntime.jsx(
+          "label",
+          {
+            htmlFor: inputId,
+            style: {
+              ...labelBaseStyles,
+              ...sizeStyle.label,
+              ...hasError ? { color: "var(--text-negative)" } : {}
+            },
+            children: label
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsx(
+          "textarea",
+          {
+            "data-1p-ignore": "",
+            "data-lpignore": "true",
+            id: inputId,
+            placeholder,
+            rows,
+            disabled,
+            value: value2,
+            defaultValue,
+            onChange,
+            className: bdsClass("bds-text-area-field", className),
+            style: combinedStyles,
+            "aria-invalid": hasError,
+            "aria-describedby": error ? `${inputId}-error` : helperText ? `${inputId}-helper` : void 0,
+            ...props
+          }
+        ),
+        error && /* @__PURE__ */ jsxRuntime.jsx(
+          "span",
+          {
+            id: inputId ? `${inputId}-error` : void 0,
+            style: { ...helperBaseStyles, color: "var(--text-negative)" },
+            role: "alert",
+            children: error
+          }
+        ),
+        helperText && !error && /* @__PURE__ */ jsxRuntime.jsx("span", { id: inputId ? `${inputId}-helper` : void 0, style: helperBaseStyles, children: helperText })
+      ]
+    }
+  );
+}
+const BUTTON_SIZE$1 = { sm: "sm", md: "md", lg: "lg" };
+const INPUT_SIZE$1 = { sm: "sm", md: "md", lg: "lg" };
+const TEXTAREA_SIZE = { sm: "sm", md: "md", lg: "lg" };
+function AddableEntryList({
+  entries,
+  onChange,
+  label,
+  helperText,
+  primaryLabel,
+  secondaryLabel,
+  primaryPlaceholder,
+  secondaryPlaceholder,
+  addLabel = "Add New",
+  removeLabel = "Remove entry",
+  emptyLabel,
+  size: size2 = "md",
+  disabled = false,
+  maxItems,
+  secondaryRows = 2,
+  className,
+  allowDuplicates = false
+}) {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [primaryDraft, setPrimaryDraft] = React.useState("");
+  const [secondaryDraft, setSecondaryDraft] = React.useState("");
+  const inputRef = React.useRef(null);
+  const atLimit = typeof maxItems === "number" && entries.length >= maxItems;
+  const reveal = () => {
+    setPrimaryDraft("");
+    setSecondaryDraft("");
+    setIsEditing(true);
+    requestAnimationFrame(() => {
+      var _a;
+      return (_a = inputRef.current) == null ? void 0 : _a.focus();
+    });
+  };
+  const cancel = () => {
+    setPrimaryDraft("");
+    setSecondaryDraft("");
+    setIsEditing(false);
+  };
+  const commit = () => {
+    const trimmedPrimary = primaryDraft.trim();
+    const trimmedSecondary = secondaryDraft.trim();
+    if (!trimmedPrimary) {
+      cancel();
+      return;
+    }
+    if (!allowDuplicates && entries.some((e) => e.primary.toLowerCase() === trimmedPrimary.toLowerCase())) {
+      cancel();
+      return;
+    }
+    onChange([...entries, { primary: trimmedPrimary, secondary: trimmedSecondary }]);
+    setPrimaryDraft("");
+    setSecondaryDraft("");
+    requestAnimationFrame(() => {
+      var _a;
+      return (_a = inputRef.current) == null ? void 0 : _a.focus();
+    });
+  };
+  const remove = (index2) => {
+    onChange(entries.filter((_, i) => i !== index2));
+  };
+  const handlePrimaryKey = (e) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      cancel();
+    }
+  };
+  const handleSecondaryKey = (e) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      cancel();
+    }
+  };
+  const showEmpty = entries.length === 0 && !isEditing && emptyLabel;
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-addable-entry-list", className), children: [
+    label && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__label", children: label }),
+    entries.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-addable-entry-list__items", role: "list", children: entries.map((entry, index2) => /* @__PURE__ */ jsxRuntime.jsxs(
+      "div",
+      {
+        className: "bds-addable-entry-list__item",
+        role: "listitem",
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__item-content", children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__item-primary", children: entry.primary }),
+            entry.secondary && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__item-secondary", children: entry.secondary })
+          ] }),
+          !disabled && /* @__PURE__ */ jsxRuntime.jsx(
+            "button",
+            {
+              type: "button",
+              className: "bds-addable-entry-list__remove",
+              onClick: () => remove(index2),
+              "aria-label": removeLabel,
+              children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:x" })
+            }
+          )
+        ]
+      },
+      `${index2}-${entry.primary}`
+    )) }),
+    showEmpty && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__empty", children: emptyLabel }),
+    !disabled && isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__form", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        TextInput,
+        {
+          ref: inputRef,
+          size: INPUT_SIZE$1[size2],
+          label: primaryLabel,
+          value: primaryDraft,
+          onChange: (e) => setPrimaryDraft(e.target.value),
+          onKeyDown: handlePrimaryKey,
+          placeholder: primaryPlaceholder,
+          "aria-label": primaryLabel ?? (label ? `Add ${label}` : "New entry"),
+          fullWidth: true
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        TextArea,
+        {
+          size: TEXTAREA_SIZE[size2],
+          label: secondaryLabel,
+          value: secondaryDraft,
+          onChange: (e) => setSecondaryDraft(e.target.value),
+          onKeyDown: handleSecondaryKey,
+          placeholder: secondaryPlaceholder,
+          rows: secondaryRows,
+          fullWidth: true
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__form-actions", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(
+          Button,
+          {
+            size: BUTTON_SIZE$1[size2],
+            variant: "primary",
+            onMouseDown: (e) => e.preventDefault(),
+            onClick: commit,
+            children: "Add"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsx(
+          Button,
+          {
+            size: BUTTON_SIZE$1[size2],
+            variant: "ghost",
+            onMouseDown: (e) => e.preventDefault(),
+            onClick: cancel,
+            children: "Cancel"
+          }
+        )
+      ] })
+    ] }),
+    !disabled && !isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsxs(
+      Button,
+      {
+        size: BUTTON_SIZE$1[size2],
+        variant: "outline",
+        onClick: reveal,
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:plus" }),
+          addLabel
+        ]
+      }
+    ) }),
+    helperText && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__helper", children: helperText })
+  ] });
+}
+function Tag({
+  children,
+  size: size2 = "md",
+  icon,
+  trailingIcon,
+  onRemove,
+  disabled = false,
+  className,
+  style,
+  ...props
+}) {
+  const isIconOnly = size2 === "xs";
+  const classes = bdsClass(
+    "bds-tag",
+    `bds-tag--${size2}`,
+    disabled && "bds-tag--disabled",
+    className
+  );
+  return /* @__PURE__ */ jsxRuntime.jsxs("span", { className: classes, style, ...props, children: [
+    icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: icon }),
+    !isIconOnly && children,
+    !isIconOnly && trailingIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: trailingIcon }),
+    !isIconOnly && onRemove && !disabled && /* @__PURE__ */ jsxRuntime.jsx(
+      "button",
+      {
+        type: "button",
+        onClick: onRemove,
+        className: "bds-tag__remove bds-tag__icon",
+        "aria-label": "Remove",
+        children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X })
+      }
+    )
+  ] });
+}
 const TAG_SIZE = { sm: "sm", md: "md", lg: "md" };
 const BUTTON_SIZE = { sm: "sm", md: "md", lg: "lg" };
 const INPUT_SIZE = { sm: "sm", md: "md", lg: "lg" };
@@ -1401,7 +1709,7 @@ function AddableTextList({
     helperText && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-text-list__helper", children: helperText })
   ] });
 }
-const wrapperStyles$3 = {
+const wrapperStyles$2 = {
   display: "flex",
   flexDirection: "column",
   gap: "var(--gap-md)"
@@ -1576,7 +1884,7 @@ const AddressInput = React.forwardRef(
         ref: wrapperRef,
         className: bdsClass("bds-address-input", className),
         style: {
-          ...wrapperStyles$3,
+          ...wrapperStyles$2,
           width: fullWidth ? "100%" : "auto",
           ...style
         },
@@ -24579,6 +24887,7 @@ function PageHeader({
   actions,
   tabs,
   metadata,
+  stats,
   showDivider = true,
   flush = false,
   size: size2 = "lg",
@@ -24608,6 +24917,7 @@ function PageHeader({
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-page-header__metadata-label", children: item.label }),
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-page-header__metadata-value", children: item.value })
         ] }, item.label)) }) }),
+        stats && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-page-header__stats", children: stats }),
         tabs && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-page-header__tabs", children: tabs })
       ]
     }
@@ -25147,7 +25457,7 @@ function Radio({
     }
   );
 }
-const wrapperStyles$2 = {
+const wrapperStyles$1 = {
   display: "flex",
   flexDirection: "column",
   gap: "var(--gap-md)"
@@ -25225,7 +25535,7 @@ const SearchInput = React.forwardRef(
       {
         className: bdsClass("bds-search-input", className),
         style: {
-          ...wrapperStyles$2,
+          ...wrapperStyles$1,
           width: fullWidth ? "100%" : "auto",
           ...style
         },
@@ -25269,7 +25579,7 @@ const containerBase = {
   boxSizing: "border-box",
   gap: "var(--border-width-lg)"
 };
-const sizeStyles$1 = {
+const sizeStyles = {
   sm: {
     padding: "var(--gap-xs) var(--padding-md)",
     fontSize: "var(--label-sm)"
@@ -25332,7 +25642,7 @@ function SegmentedControl({
         const isDisabled = disabled || item.disabled;
         const segmentStyles = {
           ...segmentBase,
-          ...sizeStyles$1[size2],
+          ...sizeStyles[size2],
           ...isActive ? activeSegmentStyles : {},
           ...fullWidth ? { flex: 1 } : {}
         };
@@ -25612,7 +25922,7 @@ const thumbSizes = {
   md: 20,
   lg: 24
 };
-const wrapperStyles$1 = {
+const wrapperStyles = {
   display: "flex",
   flexDirection: "column",
   gap: "var(--gap-md)",
@@ -25683,7 +25993,7 @@ function Slider({
     "div",
     {
       className: bdsClass("bds-slider", className),
-      style: { ...wrapperStyles$1, ...style },
+      style: { ...wrapperStyles, ...style },
       children: [
         (label || showValue) && /* @__PURE__ */ jsxRuntime.jsxs("div", { style: labelRowStyles, children: [
           label && /* @__PURE__ */ jsxRuntime.jsx("span", { style: labelStyles, children: label }),
@@ -26151,143 +26461,6 @@ function TableCell({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntime.jsx("td", { className: bdsClass("bds-table-cell", className), style, ...props, children });
-}
-const wrapperStyles = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "var(--gap-md)",
-  color: "var(--text-primary)"
-};
-const labelBaseStyles = {
-  fontFamily: "var(--font-family-label)",
-  fontWeight: "var(--font-weight-semi-bold)",
-  lineHeight: "var(--font-line-height-tight)",
-  textTransform: "capitalize"
-};
-const sizeStyles = {
-  sm: {
-    label: { fontSize: "var(--label-sm)" },
-    textarea: { fontSize: "var(--body-sm)" }
-  },
-  md: {
-    label: { fontSize: "var(--label-md)" },
-    textarea: { fontSize: "var(--body-md)" }
-  },
-  lg: {
-    label: { fontSize: "var(--label-lg)" },
-    textarea: { fontSize: "var(--body-lg)" }
-  }
-};
-const helperBaseStyles = {
-  fontFamily: "var(--font-family-body)",
-  fontSize: "var(--body-sm)",
-  lineHeight: "var(--font-line-height-normal)",
-  color: "var(--text-muted)"
-};
-const textareaStyles = {
-  display: "block",
-  width: "100%",
-  minWidth: 200,
-  padding: "var(--padding-xs)",
-  fontFamily: "var(--font-family-body)",
-  fontWeight: "var(--font-weight-regular)",
-  lineHeight: "var(--font-line-height-normal)",
-  color: "var(--text-primary)",
-  backgroundColor: "var(--background-input)",
-  border: "var(--border-width-md) solid var(--border-input)",
-  borderRadius: "var(--border-radius-md)",
-  outline: "none",
-  transition: "border-color 0.2s",
-  resize: "vertical",
-  boxSizing: "border-box"
-};
-const textareaDisabledStyles = {
-  opacity: 0.5,
-  cursor: "not-allowed",
-  resize: "none"
-};
-function TextArea({
-  size: size2 = "md",
-  placeholder,
-  rows = 4,
-  disabled = false,
-  value: value2,
-  defaultValue,
-  onChange,
-  resize = "vertical",
-  label,
-  helperText,
-  error,
-  fullWidth = false,
-  id,
-  className = "",
-  style,
-  ...props
-}) {
-  const inputId = id || (label ? `textarea-${Math.random().toString(36).substring(2, 11)}` : void 0);
-  const hasError = Boolean(error);
-  const sizeStyle = sizeStyles[size2];
-  const combinedStyles = {
-    ...textareaStyles,
-    ...sizeStyle.textarea,
-    resize,
-    ...disabled ? textareaDisabledStyles : {},
-    ...hasError ? { borderColor: "var(--border-negative)" } : {},
-    ...style
-  };
-  return /* @__PURE__ */ jsxRuntime.jsxs(
-    "div",
-    {
-      className: "bds-text-area",
-      style: {
-        ...wrapperStyles,
-        width: fullWidth ? "100%" : "auto"
-      },
-      children: [
-        label && /* @__PURE__ */ jsxRuntime.jsx(
-          "label",
-          {
-            htmlFor: inputId,
-            style: {
-              ...labelBaseStyles,
-              ...sizeStyle.label,
-              ...hasError ? { color: "var(--text-negative)" } : {}
-            },
-            children: label
-          }
-        ),
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "textarea",
-          {
-            "data-1p-ignore": "",
-            "data-lpignore": "true",
-            id: inputId,
-            placeholder,
-            rows,
-            disabled,
-            value: value2,
-            defaultValue,
-            onChange,
-            className: bdsClass("bds-text-area-field", className),
-            style: combinedStyles,
-            "aria-invalid": hasError,
-            "aria-describedby": error ? `${inputId}-error` : helperText ? `${inputId}-helper` : void 0,
-            ...props
-          }
-        ),
-        error && /* @__PURE__ */ jsxRuntime.jsx(
-          "span",
-          {
-            id: inputId ? `${inputId}-error` : void 0,
-            style: { ...helperBaseStyles, color: "var(--text-negative)" },
-            role: "alert",
-            children: error
-          }
-        ),
-        helperText && !error && /* @__PURE__ */ jsxRuntime.jsx("span", { id: inputId ? `${inputId}-helper` : void 0, style: helperBaseStyles, children: helperText })
-      ]
-    }
-  );
 }
 function pad(n) {
   return n.toString().padStart(2, "0");
@@ -26829,6 +27002,7 @@ function Tooltip({
 }
 exports.Accordion = Accordion;
 exports.ActivityTimeline = ActivityTimeline;
+exports.AddableEntryList = AddableEntryList;
 exports.AddableTextList = AddableTextList;
 exports.AddressInput = AddressInput;
 exports.AlertBanner = AlertBanner;
