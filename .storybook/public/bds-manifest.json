@@ -1,0 +1,5347 @@
+{
+  "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
+  "bds_version": "0.5.0",
+  "generated_at": "2026-04-17T20:20:41.128Z",
+  "component_count": 76,
+  "token_count": 426,
+  "components": {
+    "bds-accordion": {
+      "name": "Accordion",
+      "class_prefix": "bds-accordion",
+      "storybook_url": "/?path=/story/components-accordion--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Accordion — collapsible content sections with plus/minus icons.",
+      "source_path": "components/ui/Accordion/Accordion.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--body-xs",
+        "--border-muted",
+        "--border-width-lg",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-bold",
+        "--gap-huge",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--icon-lg",
+        "--label-lg",
+        "--padding-xl",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-controls",
+          "aria-expanded"
+        ],
+        "roles": [
+          "region"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-activity-timeline": {
+      "name": "ActivityTimeline",
+      "class_prefix": "bds-activity-timeline",
+      "storybook_url": "/?path=/story/components-activity-timeline--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "ActivityTimeline — vertical timeline display component.",
+      "source_path": "components/ui/ActivityTimeline/ActivityTimeline.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-sm",
+        "--body-xs",
+        "--border-muted",
+        "--border-radius-pill",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-tiny",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-addable-entry-list": {
+      "name": "AddableEntryList",
+      "class_prefix": "bds-addable-entry-list",
+      "storybook_url": "/?path=/story/components-addable-entry-list--primary",
+      "status": "stable",
+      "introduced_in": "0.5.0",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Generic entry shape. Consumers map their domain types",
+      "source_path": "components/ui/AddableEntryList/AddableEntryList.tsx",
+      "tokens_used": [
+        "--background-muted",
+        "--body-sm",
+        "--body-xs",
+        "--border-focus",
+        "--border-muted",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-tiny",
+        "--gap-xl",
+        "--padding-md",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [
+          "list",
+          "listitem"
+        ],
+        "manages_focus": true,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-addable-text-list": {
+      "name": "AddableTextList",
+      "class_prefix": "bds-addable-text-list",
+      "storybook_url": "/?path=/story/components-addable-text-list--primary",
+      "status": "stable",
+      "introduced_in": "0.1.6",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "AddableTextList — list of text values with a reveal-on-click add pattern.",
+      "source_path": "components/ui/AddableTextList/AddableTextList.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--body-xs",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [
+          "list",
+          "listitem"
+        ],
+        "manages_focus": true,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-address-input": {
+      "name": "AddressInput",
+      "class_prefix": "bds-address-input",
+      "storybook_url": "/?path=/story/components-address-input--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "AddressInput size variants",
+      "source_path": "components/ui/AddressInput/AddressInput.tsx",
+      "tokens_used": [
+        "--background-input",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-input",
+        "--border-primary",
+        "--border-radius-lg",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-width-lg",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-sm",
+        "--padding-xs",
+        "--surface-primary",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-selected"
+        ],
+        "roles": [
+          "listbox",
+          "option"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-alert-banner": {
+      "name": "AlertBanner",
+      "class_prefix": "bds-alert-banner",
+      "storybook_url": "/?path=/story/components-alert-banner--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "AlertBanner — contextual banner for important messages",
+      "source_path": "components/ui/AlertBanner/AlertBanner.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--border-radius-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-sm",
+        "--gap-xl",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "alert"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-animated-icon": {
+      "name": "AnimatedIcon",
+      "class_prefix": "bds-animated-icon",
+      "storybook_url": "/?path=/story/components-animated-icon--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "AnimatedIcon — Lottie wrapper for animated UI icon states.",
+      "source_path": "components/ui/AnimatedIcon/AnimatedIcon.tsx",
+      "tokens_used": [],
+      "a11y": {
+        "aria_attrs": [
+          "aria-hidden",
+          "aria-label"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-avatar": {
+      "name": "Avatar",
+      "class_prefix": "bds-avatar",
+      "storybook_url": "/?path=/story/components-avatar--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Avatar - User profile image with initials fallback and optional status indicator.",
+      "source_path": "components/ui/Avatar/Avatar.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-input",
+        "--background-presence-away",
+        "--background-presence-busy",
+        "--background-presence-offline",
+        "--background-presence-online",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-circle",
+        "--border-width-lg",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--heading-sm",
+        "--label-md",
+        "--padding-sm",
+        "--text-inverse",
+        "--text-muted",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-badge": {
+      "name": "Badge",
+      "class_prefix": "bds-badge",
+      "storybook_url": "/?path=/story/components-badge--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Badge — status indicator with semantic colors",
+      "source_path": "components/ui/Badge/Badge.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-brand-secondary",
+        "--background-negative",
+        "--background-positive",
+        "--background-status-error-subtle",
+        "--background-status-info",
+        "--background-status-info-subtle",
+        "--background-status-neutral",
+        "--background-status-success-subtle",
+        "--background-status-warning-subtle",
+        "--background-warning",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-pill",
+        "--border-radius-sm",
+        "--duration-slow",
+        "--ease-in-out",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--icon-sm",
+        "--icon-xs",
+        "--label-md",
+        "--label-sm",
+        "--label-tiny",
+        "--label-xl",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-tiny",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-negative",
+        "--text-on-color-dark",
+        "--text-positive",
+        "--text-secondary",
+        "--text-status-info",
+        "--text-status-neutral"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-banner": {
+      "name": "Banner",
+      "class_prefix": "bds-banner",
+      "storybook_url": "/?path=/story/components-banner--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Banner — full-width branded banner for announcements",
+      "source_path": "components/ui/Banner/Banner.tsx",
+      "tokens_used": [
+        "--background-on-color-dark",
+        "--body-md",
+        "--body-sm",
+        "--border-radius-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--gap-xs",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-tiny",
+        "--surface-brand-primary",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [
+          "banner"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-board": {
+      "name": "Board",
+      "class_prefix": "bds-board",
+      "storybook_url": "/?path=/story/components-board--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Board — Horizontal kanban-style container for columns.",
+      "source_path": "components/ui/Board/Board.tsx",
+      "tokens_used": [
+        "--background-accent-blue",
+        "--background-accent-green",
+        "--background-accent-purple",
+        "--background-accent-red",
+        "--background-brand-primary",
+        "--background-input",
+        "--bds-board-card-accent",
+        "--board-card-hover-translate-y",
+        "--body-xs",
+        "--border-input",
+        "--border-muted",
+        "--border-primary",
+        "--border-radius-200",
+        "--border-radius-circle",
+        "--border-radius-pill",
+        "--border-secondary",
+        "--border-width-lg",
+        "--border-width-md",
+        "--border-width-xl",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-family-subtitle",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-medium",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xs",
+        "--heading-tiny",
+        "--label-lg",
+        "--label-sm",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-xl",
+        "--page-primary",
+        "--shadow-md",
+        "--space-100",
+        "--space-50",
+        "--space-500",
+        "--state-focus",
+        "--state-hover-overlay",
+        "--subtitle-md",
+        "--surface-primary",
+        "--surface-secondary",
+        "--text-on-color-dark",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [
+          "region"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-breadcrumb": {
+      "name": "Breadcrumb",
+      "class_prefix": "bds-breadcrumb",
+      "storybook_url": "/?path=/story/components-breadcrumb--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Breadcrumb — navigation breadcrumb trail with separator variants.",
+      "source_path": "components/ui/Breadcrumb/Breadcrumb.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-xs",
+        "--border-radius-md",
+        "--border-secondary",
+        "--border-width-md",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-huge",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--heading-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-tiny",
+        "--padding-xl",
+        "--text-brand-primary",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-current",
+          "aria-hidden",
+          "aria-label"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-button": {
+      "name": "Button",
+      "class_prefix": "bds-button",
+      "storybook_url": "/?path=/story/components-button--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Button variants — visual hierarchy for actions",
+      "source_path": "components/ui/Button/Button.tsx",
+      "tokens_used": [
+        "--background-accent-red",
+        "--background-brand-primary",
+        "--background-brand-primary-hover",
+        "--background-brand-primary-pressed",
+        "--background-disabled",
+        "--background-inverse",
+        "--background-negative",
+        "--background-negative-hover",
+        "--background-negative-pressed",
+        "--background-positive",
+        "--background-positive-hover",
+        "--background-positive-pressed",
+        "--background-primary-hover",
+        "--background-secondary",
+        "--background-secondary-hover",
+        "--background-secondary-pressed",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-disabled",
+        "--border-focus",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-secondary",
+        "--border-width-lg",
+        "--border-width-md",
+        "--border-width-sm",
+        "--button-active-translate-y",
+        "--button-focus-outline-offset",
+        "--button-focus-outline-width",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-weight-semi-bold",
+        "--gap-huge",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--heading-sm",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--label-xl",
+        "--label-xs",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-tiny",
+        "--surface-inverse",
+        "--text-accent-red",
+        "--text-brand-primary",
+        "--text-disabled",
+        "--text-muted",
+        "--text-negative",
+        "--text-on-color-dark",
+        "--text-on-color-light",
+        "--text-positive",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-busy",
+          "aria-label"
+        ],
+        "roles": [
+          "status"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-button-group": {
+      "name": "ButtonGroup",
+      "class_prefix": "bds-button-group",
+      "storybook_url": "/?path=/story/components-button-group--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "ButtonGroup — groups related Button components together.",
+      "source_path": "components/ui/ButtonGroup/ButtonGroup.tsx",
+      "tokens_used": [
+        "--body-xs",
+        "--font-family-label",
+        "--gap-md",
+        "--gap-xl",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "group"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-calendar": {
+      "name": "Calendar",
+      "class_prefix": "bds-calendar",
+      "storybook_url": "/?path=/story/components-calendar--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "",
+      "source_path": "components/ui/Calendar/Calendar.tsx",
+      "tokens_used": [
+        "--font-family-body",
+        "--padding-xl",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-card": {
+      "name": "Card",
+      "class_prefix": "bds-card",
+      "storybook_url": "/?path=/story/components-card--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Card — flexible content container with variant styles",
+      "source_path": "components/ui/Card/Card.tsx",
+      "tokens_used": [
+        "--body-lg",
+        "--body-md",
+        "--border-brand-primary",
+        "--border-muted",
+        "--border-radius-md",
+        "--border-secondary",
+        "--border-width-md",
+        "--box-shadow-md",
+        "--box-shadow-none",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-bold",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--heading-md",
+        "--heading-xl",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-none",
+        "--padding-sm",
+        "--surface-primary",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-card-control": {
+      "name": "CardControl",
+      "class_prefix": "bds-card-control",
+      "storybook_url": "/?path=/story/components-card-control--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "CardControl — settings control card with badge, title, description, and action.",
+      "source_path": "components/ui/CardControl/CardControl.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--border-muted",
+        "--border-radius-lg",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-sm",
+        "--gap-xl",
+        "--label-lg",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-xl",
+        "--shadow-sm",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-card-display": {
+      "name": "CardDisplay",
+      "class_prefix": "bds-card-display",
+      "storybook_url": "/?path=/story/components-card-display--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "CardDisplay — content display card with image, badge, title, description, and action.",
+      "source_path": "components/ui/CardDisplay/CardDisplay.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--border-radius-lg",
+        "--border-secondary",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--heading-sm",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-card-feature": {
+      "name": "CardFeature",
+      "class_prefix": "bds-card-feature",
+      "storybook_url": "/?path=/story/components-card-feature--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "CardFeature — feature showcase card with icon, title, description, and action.",
+      "source_path": "components/ui/CardFeature/CardFeature.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-lg",
+        "--body-sm",
+        "--border-radius-lg",
+        "--border-secondary",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--heading-sm",
+        "--label-sm",
+        "--padding-lg",
+        "--surface-primary",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-card-list": {
+      "name": "CardList",
+      "class_prefix": "bds-card-list",
+      "storybook_url": "/?path=/story/components-card-list--primary",
+      "status": "stable",
+      "introduced_in": "0.2.0",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "CardList — layout wrapper that stacks card components vertically or horizontally.",
+      "source_path": "components/ui/CardList/CardList.tsx",
+      "tokens_used": [
+        "--font-family-label",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--label-sm",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-card-testimonial": {
+      "name": "CardTestimonial",
+      "class_prefix": "bds-card-testimonial",
+      "storybook_url": "/?path=/story/components-card-testimonial--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "CardTestimonial — customer testimonial card with quote, attribution, and stars.",
+      "source_path": "components/ui/CardTestimonial/CardTestimonial.tsx",
+      "tokens_used": [
+        "--background-warning",
+        "--body-md",
+        "--body-sm",
+        "--border-radius-md",
+        "--border-secondary",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-display",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-line-height-tight",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--gap-xs",
+        "--heading-huge",
+        "--heading-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--surface-brand-primary",
+        "--surface-primary",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-hidden",
+          "aria-label"
+        ],
+        "roles": [
+          "img"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-checkbox": {
+      "name": "Checkbox",
+      "class_prefix": "bds-checkbox",
+      "storybook_url": "/?path=/story/components-checkbox--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Checkbox — themed checkbox with label text.",
+      "source_path": "components/ui/Checkbox/Checkbox.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-md",
+        "--body-xs",
+        "--border-radius-lg",
+        "--border-secondary",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--gap-huge",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--padding-lg",
+        "--padding-sm",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-chip": {
+      "name": "Chip",
+      "class_prefix": "bds-chip",
+      "storybook_url": "/?path=/story/components-chip--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Chip — compact interactive element for filtering, selection, or input",
+      "source_path": "components/ui/Chip/Chip.tsx",
+      "tokens_used": [
+        "--background-inverse",
+        "--background-primary",
+        "--background-secondary",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-radius-pill",
+        "--border-secondary",
+        "--border-width-lg",
+        "--border-width-md",
+        "--chip-hover-overlay",
+        "--chip-pressed-overlay",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--icon-sm",
+        "--label-md",
+        "--label-sm",
+        "--label-tiny",
+        "--label-xl",
+        "--padding-md",
+        "--padding-sm",
+        "--space-150",
+        "--state-disabled-opacity",
+        "--state-focus",
+        "--state-hover-overlay",
+        "--state-pressed-overlay",
+        "--text-brand-primary",
+        "--text-inverse",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-collapsible-card": {
+      "name": "CollapsibleCard",
+      "class_prefix": "bds-collapsible-card",
+      "storybook_url": "/?path=/story/components-collapsible-card--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "CollapsibleCard component props",
+      "source_path": "components/ui/CollapsibleCard/CollapsibleCard.tsx",
+      "tokens_used": [
+        "--background-secondary",
+        "--body-lg",
+        "--body-xs",
+        "--border-radius-md",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight--bold",
+        "--font-weight--semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--heading-sm",
+        "--heading-tiny",
+        "--padding-lg",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-expanded",
+          "aria-hidden"
+        ],
+        "roles": [
+          "button"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-counter": {
+      "name": "Counter",
+      "class_prefix": "bds-counter",
+      "storybook_url": "/?path=/story/components-counter--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Counter - Numeric count indicator with status colors.",
+      "source_path": "components/ui/Counter/Counter.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-negative",
+        "--background-positive",
+        "--background-status-info",
+        "--background-warning",
+        "--body-md",
+        "--body-xs",
+        "--border-radius-pill",
+        "--color-grayscale-lighter",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-xl",
+        "--label-md",
+        "--label-sm",
+        "--label-tiny",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-tiny",
+        "--space-50",
+        "--text-inverse",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-date-picker": {
+      "name": "DatePicker",
+      "class_prefix": "bds-date-picker",
+      "storybook_url": "/?path=/story/components-date-picker--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "DatePicker - BDS themed date picker component",
+      "source_path": "components/ui/DatePicker/DatePicker.tsx",
+      "tokens_used": [
+        "--background-input",
+        "--body-lg",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-input",
+        "--border-muted",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-width-md",
+        "--box-shadow-lg",
+        "--color-system-red",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-medium",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--gap-xs",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-sm",
+        "--padding-tiny",
+        "--padding-xs",
+        "--surface-brand-primary",
+        "--surface-primary",
+        "--surface-secondary",
+        "--text-inverse",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-describedby",
+          "aria-hidden",
+          "aria-invalid",
+          "aria-label",
+          "aria-selected"
+        ],
+        "roles": [
+          "alert",
+          "dialog",
+          "grid",
+          "gridcell"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-dev-feedback-widget": {
+      "name": "DevFeedbackWidget",
+      "class_prefix": "bds-dev-feedback-widget",
+      "storybook_url": "/?path=/story/components-dev-feedback-widget--primary",
+      "status": "stable",
+      "introduced_in": "0.5.0",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Dev-only feedback widget. Registers into the Brik DevBar; renders a 2x2 type selector + textarea; submits to /api/feedback.",
+      "source_path": "components/ui/DevFeedbackWidget/DevFeedbackWidget.tsx",
+      "tokens_used": [],
+      "a11y": {
+        "aria_attrs": [
+          "aria-checked",
+          "aria-label"
+        ],
+        "roles": [
+          "button",
+          "dialog",
+          "radio",
+          "radiogroup"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-dialog": {
+      "name": "Dialog",
+      "class_prefix": "bds-dialog",
+      "storybook_url": "/?path=/story/components-dialog--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Dialog — focused confirmation overlay for user decisions.",
+      "source_path": "components/ui/Dialog/Dialog.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-overlay",
+        "--background-status-error",
+        "--body-md",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-secondary",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-bold",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--heading-sm",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-sm",
+        "--padding-xl",
+        "--shadow-overlay",
+        "--surface-primary",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-describedby",
+          "aria-labelledby",
+          "aria-modal"
+        ],
+        "roles": [
+          "alertdialog",
+          "presentation"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": [
+          "Must receive an aria-labelledby or aria-label. Focus trap lives in the component."
+        ]
+      }
+    },
+    "bds-divider": {
+      "name": "Divider",
+      "class_prefix": "bds-divider",
+      "storybook_url": "/?path=/story/components-divider--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Divider - Visual separator for content sections.",
+      "source_path": "components/ui/Divider/Divider.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-muted",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--gap-md",
+        "--gap-xl",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-sm",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-orientation"
+        ],
+        "roles": [
+          "separator"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-dot": {
+      "name": "Dot",
+      "class_prefix": "bds-dot",
+      "storybook_url": "/?path=/story/components-dot--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Dot - Small status indicator circle.",
+      "source_path": "components/ui/Dot/Dot.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-negative",
+        "--background-positive",
+        "--background-secondary",
+        "--background-status-info",
+        "--background-status-neutral",
+        "--background-warning",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-md",
+        "--ease-in-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--gap-xs",
+        "--label-sm",
+        "--padding-md",
+        "--padding-sm",
+        "--text-muted",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [
+          "status"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-email-input": {
+      "name": "EmailInput",
+      "class_prefix": "bds-email-input",
+      "storybook_url": "/?path=/story/components-email-input--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "EmailInput component props",
+      "source_path": "components/ui/EmailInput/EmailInput.tsx",
+      "tokens_used": [
+        "--body-xs",
+        "--font-family-label",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-empty-state": {
+      "name": "EmptyState",
+      "class_prefix": "bds-empty-state",
+      "storybook_url": "/?path=/story/components-empty-state--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "EmptyState — feedback component for empty content areas",
+      "source_path": "components/ui/EmptyState/EmptyState.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--body-sm",
+        "--border-radius-lg",
+        "--border-radius-md",
+        "--border-secondary",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--gap-sm",
+        "--gap-xl",
+        "--heading-md",
+        "--label-sm",
+        "--padding-md",
+        "--padding-xl",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-file-uploader": {
+      "name": "FileUploader",
+      "class_prefix": "bds-file-uploader",
+      "storybook_url": "/?path=/story/components-file-uploader--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "FileUploader component props",
+      "source_path": "components/ui/FileUploader/FileUploader.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-radius-lg",
+        "--border-secondary",
+        "--border-width-lg",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--heading-md",
+        "--label-md",
+        "--padding-xl",
+        "--surface-primary",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-negative",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [
+          "button"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-filter-bar": {
+      "name": "FilterBar",
+      "class_prefix": "bds-filter-bar",
+      "storybook_url": "/?path=/story/components-filter-bar--primary",
+      "status": "stable",
+      "introduced_in": "0.5.0",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "FilterBar — shared heading + counter + filter-controls row for list views.",
+      "source_path": "components/ui/FilterBar/FilterBar.tsx",
+      "tokens_used": [
+        "--border-muted",
+        "--font-family-heading",
+        "--font-line-height-snug",
+        "--font-weight-semi-bold",
+        "--gap-sm",
+        "--gap-xs",
+        "--heading-sm",
+        "--padding-lg",
+        "--padding-sm",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-filter-button": {
+      "name": "FilterButton",
+      "class_prefix": "bds-filter-button",
+      "storybook_url": "/?path=/story/components-filter-button--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Filter option shape",
+      "source_path": "components/ui/FilterButton/FilterButton.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-primary",
+        "--background-secondary",
+        "--body-md",
+        "--body-xs",
+        "--border-radius-lg",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--icon-lg",
+        "--icon-sm",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-tiny",
+        "--padding-xl",
+        "--shadow-lg",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-selected"
+        ],
+        "roles": [
+          "listbox",
+          "option"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-filter-toggle": {
+      "name": "FilterToggle",
+      "class_prefix": "bds-filter-toggle",
+      "storybook_url": "/?path=/story/components-filter-toggle--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "FilterToggle sizes (matches FilterButton/Button size scale)",
+      "source_path": "components/ui/FilterToggle/FilterToggle.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-secondary",
+        "--body-xs",
+        "--border-radius-md",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-xl",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-pressed"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-footer": {
+      "name": "Footer",
+      "class_prefix": "bds-footer",
+      "storybook_url": "/?path=/story/components-footer--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Footer link column",
+      "source_path": "components/ui/Footer/Footer.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-secondary",
+        "--border-width-lg",
+        "--border-width-sm",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-lg",
+        "--label-md",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-xl",
+        "--surface-brand-primary",
+        "--surface-primary",
+        "--text-inverse",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-form": {
+      "name": "Form",
+      "class_prefix": "bds-form",
+      "storybook_url": "/?path=/story/components-form--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Form layout direction",
+      "source_path": "components/ui/Form/Form.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-md",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--heading-sm",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-xl",
+        "--text-muted",
+        "--text-negative",
+        "--text-positive",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "alert",
+          "status"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-icons": {
+      "name": "Icons",
+      "class_prefix": "bds-icons",
+      "storybook_url": "/?path=/story/components-icons--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "",
+      "source_path": "components/ui/Icons/Icons.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--body-xs",
+        "--border-muted",
+        "--border-radius-md",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-family-system",
+        "--font-line-height-normal",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--padding-lg",
+        "--padding-md",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-menu": {
+      "name": "Menu",
+      "class_prefix": "bds-menu",
+      "storybook_url": "/?path=/story/components-menu--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "MenuItem data shape",
+      "source_path": "components/ui/Menu/Menu.tsx",
+      "tokens_used": [
+        "--background-primary",
+        "--body-md",
+        "--body-xs",
+        "--border-radius-lg",
+        "--border-radius-sm",
+        "--duration-fast",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--gap-md",
+        "--gap-xl",
+        "--icon-lg",
+        "--menu-enter-duration",
+        "--menu-enter-ease",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-tiny",
+        "--shadow-lg",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "menu",
+          "menuitem"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-meter": {
+      "name": "Meter",
+      "class_prefix": "bds-meter",
+      "storybook_url": "/?path=/story/components-meter--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Meter status variants — maps to BDS system color tokens",
+      "source_path": "components/ui/Meter/Meter.tsx",
+      "tokens_used": [
+        "--background-secondary",
+        "--body-sm",
+        "--color-system-green",
+        "--color-system-red",
+        "--color-system-yellow",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-weight-bold",
+        "--gap-xs",
+        "--heading-lg",
+        "--padding-xs",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label",
+          "aria-valuemax",
+          "aria-valuemin",
+          "aria-valuenow"
+        ],
+        "roles": [
+          "meter"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-modal": {
+      "name": "Modal",
+      "class_prefix": "bds-modal",
+      "storybook_url": "/?path=/story/components-modal--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Modal — portal-rendered dialog with backdrop, escape key, and scroll lock.",
+      "source_path": "components/ui/Modal/Modal.tsx",
+      "tokens_used": [
+        "--background-overlay",
+        "--body-md",
+        "--border-input",
+        "--border-muted",
+        "--border-radius-50",
+        "--border-radius-lg",
+        "--border-radius-md",
+        "--border-width-lg",
+        "--border-width-md",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-line-height-tight",
+        "--font-weight-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--heading-md",
+        "--icon-md",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-xl",
+        "--shadow-overlay",
+        "--state-focus",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label",
+          "aria-modal"
+        ],
+        "roles": [
+          "dialog"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": [
+          "Must receive an aria-labelledby or aria-label. Focus trap lives in the component."
+        ]
+      }
+    },
+    "bds-multi-select": {
+      "name": "MultiSelect",
+      "class_prefix": "bds-multi-select",
+      "storybook_url": "/?path=/story/components-multi-select--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "MultiSelect option type",
+      "source_path": "components/ui/MultiSelect/MultiSelect.tsx",
+      "tokens_used": [
+        "--body-xs",
+        "--font-family-label",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-nav-bar": {
+      "name": "NavBar",
+      "class_prefix": "bds-nav-bar",
+      "storybook_url": "/?path=/story/components-nav-bar--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Navigation link item",
+      "source_path": "components/ui/NavBar/NavBar.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--body-xs",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-snug",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-lg",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-xl",
+        "--surface-nav",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-current"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-notification-list": {
+      "name": "NotificationList",
+      "class_prefix": "bds-notification-list",
+      "storybook_url": "/?path=/story/components-notification-list--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "NotificationItem — single notification row.",
+      "source_path": "components/ui/NotificationList/NotificationList.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--body-tiny",
+        "--body-xs",
+        "--border-muted",
+        "--border-radius-md",
+        "--border-radius-pill",
+        "--border-width-sm",
+        "--box-shadow-lg",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-medium",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-xs",
+        "--label-md",
+        "--label-sm",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-xl",
+        "--surface-brand-primary",
+        "--surface-primary",
+        "--surface-secondary",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "button"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-page-header": {
+      "name": "PageHeader",
+      "class_prefix": "bds-page-header",
+      "storybook_url": "/?path=/story/components-page-header--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, stats, and tabs.",
+      "source_path": "components/ui/PageHeader/PageHeader.tsx",
+      "tokens_used": [
+        "--body-lg",
+        "--body-sm",
+        "--body-xs",
+        "--border-secondary",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-huge",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--heading-lg",
+        "--heading-md",
+        "--heading-sm",
+        "--label-sm",
+        "--padding-xl",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-pagination": {
+      "name": "Pagination",
+      "class_prefix": "bds-pagination",
+      "storybook_url": "/?path=/story/components-pagination--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Pagination alignment",
+      "source_path": "components/ui/Pagination/Pagination.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-pill",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--icon-lg",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-sm",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-current",
+          "aria-hidden",
+          "aria-label"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-password-input": {
+      "name": "PasswordInput",
+      "class_prefix": "bds-password-input",
+      "storybook_url": "/?path=/story/components-password-input--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "PasswordInput component props",
+      "source_path": "components/ui/PasswordInput/PasswordInput.tsx",
+      "tokens_used": [
+        "--body-xs",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-hidden",
+          "aria-label"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-popover": {
+      "name": "Popover",
+      "class_prefix": "bds-popover",
+      "storybook_url": "/?path=/story/components-popover--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Popover — floating content panel anchored to a trigger element.",
+      "source_path": "components/ui/Popover/Popover.tsx",
+      "tokens_used": [
+        "--background-primary",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-lg",
+        "--border-secondary",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--label-md",
+        "--padding-md",
+        "--shadow-lg",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "dialog"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-pricing-card": {
+      "name": "PricingCard",
+      "class_prefix": "bds-pricing-card",
+      "storybook_url": "/?path=/story/components-pricing-card--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "PricingCard component props",
+      "source_path": "components/ui/PricingCard/PricingCard.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-muted",
+        "--border-radius-md",
+        "--border-secondary",
+        "--border-width-md",
+        "--box-shadow-md",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-line-height-tight",
+        "--font-weight-bold",
+        "--font-weight-regular",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--gap-xs",
+        "--heading-sm",
+        "--heading-xl",
+        "--padding-lg",
+        "--padding-sm",
+        "--surface-primary",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-hidden"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-progress-bar": {
+      "name": "ProgressBar",
+      "class_prefix": "bds-progress-bar",
+      "storybook_url": "/?path=/story/components-progress-bar--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "ProgressBar component props",
+      "source_path": "components/ui/ProgressBar/ProgressBar.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-muted",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-sm",
+        "--duration-500",
+        "--ease-in-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--gap-md",
+        "--gap-xl",
+        "--space-200",
+        "--text-muted",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label",
+          "aria-valuemax",
+          "aria-valuemin",
+          "aria-valuenow"
+        ],
+        "roles": [
+          "progressbar"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-progress-dots": {
+      "name": "ProgressDots",
+      "class_prefix": "bds-progress-dots",
+      "storybook_url": "/?path=/story/components-progress-dots--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "When true, only completed dots (before active) are clickable.",
+      "source_path": "components/ui/ProgressDots/ProgressDots.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-sm",
+        "--border-secondary",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--text-muted",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-disabled",
+          "aria-label",
+          "aria-selected"
+        ],
+        "roles": [
+          "tab",
+          "tablist"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-progress-stepper": {
+      "name": "ProgressStepper",
+      "class_prefix": "bds-progress-stepper",
+      "storybook_url": "/?path=/story/components-progress-stepper--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "When true, users can only navigate to completed steps — not skip ahead.",
+      "source_path": "components/ui/ProgressStepper/ProgressStepper.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-md",
+        "--body-sm",
+        "--body-tiny",
+        "--border-radius-md",
+        "--border-secondary",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-tiny",
+        "--space-1000",
+        "--space-50",
+        "--surface-secondary",
+        "--text-inverse",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-current",
+          "aria-disabled",
+          "aria-hidden",
+          "aria-label"
+        ],
+        "roles": [
+          "list",
+          "listitem"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      }
+    },
+    "bds-radio": {
+      "name": "Radio",
+      "class_prefix": "bds-radio",
+      "storybook_url": "/?path=/story/components-radio--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Radio component props",
+      "source_path": "components/ui/Radio/Radio.tsx",
+      "tokens_used": [
+        "--background-input",
+        "--body-md",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-primary",
+        "--border-width-lg",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--surface-brand-primary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-hidden"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-search-input": {
+      "name": "SearchInput",
+      "class_prefix": "bds-search-input",
+      "storybook_url": "/?path=/story/components-search-input--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "SearchInput size variants",
+      "source_path": "components/ui/SearchInput/SearchInput.tsx",
+      "tokens_used": [
+        "--background-input",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-input",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-sm",
+        "--padding-xs",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-segmented-control": {
+      "name": "SegmentedControl",
+      "class_prefix": "bds-segmented-control",
+      "storybook_url": "/?path=/story/components-segmented-control--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Individual segment item",
+      "source_path": "components/ui/SegmentedControl/SegmentedControl.tsx",
+      "tokens_used": [
+        "--background-primary",
+        "--background-secondary",
+        "--background-tertiary",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-width-lg",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-xl",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-checked"
+        ],
+        "roles": [
+          "radio",
+          "radiogroup"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-select": {
+      "name": "Select",
+      "class_prefix": "bds-select",
+      "storybook_url": "/?path=/story/components-select--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Select — themed select dropdown with label, helper text, and error state.",
+      "source_path": "components/ui/Select/Select.tsx",
+      "tokens_used": [
+        "--background-input",
+        "--body-lg",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-input",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-width-md",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-huge",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-xs",
+        "--select-chevron-color",
+        "--select-icon-color",
+        "--text-muted",
+        "--text-negative",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-describedby",
+          "aria-hidden",
+          "aria-invalid"
+        ],
+        "roles": [
+          "alert"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": [
+          "Pair with a visible <label> via htmlFor + id, or supply aria-label when a visible label is intentionally omitted."
+        ]
+      }
+    },
+    "bds-service-badge": {
+      "name": "ServiceBadge",
+      "class_prefix": "bds-service-badge",
+      "storybook_url": "/?path=/story/components-service-badge--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Display mode",
+      "source_path": "components/ui/ServiceBadge/ServiceBadge.tsx",
+      "tokens_used": [
+        "--background-service-brand",
+        "--background-service-information",
+        "--background-service-marketing",
+        "--background-service-product",
+        "--background-service-service",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-secondary",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--gap-xs",
+        "--label-md",
+        "--label-sm",
+        "--label-tiny",
+        "--padding-md",
+        "--padding-sm",
+        "--text-muted",
+        "--text-primary",
+        "--text-service-brand",
+        "--text-service-information",
+        "--text-service-marketing",
+        "--text-service-product",
+        "--text-service-service"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-sheet": {
+      "name": "Sheet",
+      "class_prefix": "bds-sheet",
+      "storybook_url": "/?path=/story/components-sheet--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Visual variant:",
+      "source_path": "components/ui/Sheet/Sheet.tsx",
+      "tokens_used": [
+        "--background-overlay",
+        "--body-md",
+        "--body-sm",
+        "--border-brand-primary",
+        "--border-muted",
+        "--border-radius-md",
+        "--border-width-lg",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-bold",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--gap-xs",
+        "--heading-md",
+        "--icon-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-sm",
+        "--padding-xl",
+        "--padding-xs",
+        "--shadow-overlay",
+        "--state-focus",
+        "--surface-primary",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label",
+          "aria-modal",
+          "aria-selected"
+        ],
+        "roles": [
+          "dialog",
+          "tab",
+          "tablist"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-sidebar-navigation": {
+      "name": "SidebarNavigation",
+      "class_prefix": "bds-sidebar-navigation",
+      "storybook_url": "/?path=/story/components-sidebar-navigation--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "SidebarNavigation — fixed sidebar with logo, nav items, footer, and user section.",
+      "source_path": "components/ui/SidebarNavigation/SidebarNavigation.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-lg",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-secondary",
+        "--border-width-md",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--heading-sm",
+        "--heading-xxl",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-xl",
+        "--page-primary",
+        "--page-secondary",
+        "--surface-primary",
+        "--text-inverse",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-skeleton": {
+      "name": "Skeleton",
+      "class_prefix": "bds-skeleton",
+      "storybook_url": "/?path=/story/components-skeleton--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Skeleton - Loading placeholder with shimmer animation.",
+      "source_path": "components/ui/Skeleton/Skeleton.tsx",
+      "tokens_used": [
+        "--background-primary",
+        "--background-secondary",
+        "--body-xs",
+        "--border-radius-lg",
+        "--border-radius-md",
+        "--border-secondary",
+        "--border-width-md",
+        "--font-family-label",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--padding-md",
+        "--padding-sm",
+        "--page-secondary",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label",
+          "aria-live"
+        ],
+        "roles": [
+          "status"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-slider": {
+      "name": "Slider",
+      "class_prefix": "bds-slider",
+      "storybook_url": "/?path=/story/components-slider--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Slider size variants",
+      "source_path": "components/ui/Slider/Slider.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--bds-slider-percent",
+        "--bds-slider-thumb-size",
+        "--bds-slider-track-height",
+        "--body-xs",
+        "--border-secondary",
+        "--border-width-200",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-label",
+        "--font-line-height-snug",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-sm",
+        "--slider-thumb-shadow",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-snackbar": {
+      "name": "Snackbar",
+      "class_prefix": "bds-snackbar",
+      "storybook_url": "/?path=/story/components-snackbar--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Snackbar — brief notification at screen edge via portal",
+      "source_path": "components/ui/Snackbar/Snackbar.tsx",
+      "tokens_used": [
+        "--background-inverse",
+        "--background-status-error",
+        "--background-status-orange",
+        "--background-status-success",
+        "--body-md",
+        "--body-sm",
+        "--border-radius-lg",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--snackbar-shadow",
+        "--text-brand-primary",
+        "--text-inverse",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-on-color-light"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label",
+          "aria-live"
+        ],
+        "roles": [
+          "status"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-spinner": {
+      "name": "Spinner",
+      "class_prefix": "bds-spinner",
+      "storybook_url": "/?path=/story/components-spinner--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Spinner — circular loading indicator with CSS animation",
+      "source_path": "components/ui/Spinner/Spinner.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-secondary",
+        "--body-md",
+        "--border-brand-primary",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-width-huge",
+        "--border-width-lg",
+        "--font-family-body",
+        "--font-family-label",
+        "--gap-huge",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-sm",
+        "--text-inverse",
+        "--text-muted",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [
+          "status"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-stepper": {
+      "name": "Stepper",
+      "class_prefix": "bds-stepper",
+      "storybook_url": "/?path=/story/components-stepper--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Stepper — numeric input with increment/decrement buttons.",
+      "source_path": "components/ui/Stepper/Stepper.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--body-xs",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-secondary",
+        "--border-width-sm",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label",
+          "aria-live"
+        ],
+        "roles": [
+          "group"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-switch": {
+      "name": "Switch",
+      "class_prefix": "bds-switch",
+      "storybook_url": "/?path=/story/components-switch--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Size dimensions from Figma — runtime-calculated, stays inline.",
+      "source_path": "components/ui/Switch/Switch.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-primary",
+        "--body-md",
+        "--body-xs",
+        "--border-muted",
+        "--border-radius-lg",
+        "--border-radius-pill",
+        "--border-secondary",
+        "--border-width-md",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--gap-huge",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--padding-lg",
+        "--padding-md",
+        "--shadow-sm",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "switch"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-tab-bar": {
+      "name": "TabBar",
+      "class_prefix": "bds-tab-bar",
+      "storybook_url": "/?path=/story/components-tab-bar--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Tab item",
+      "source_path": "components/ui/TabBar/TabBar.tsx",
+      "tokens_used": [
+        "--background-brand-primary",
+        "--background-primary",
+        "--background-secondary",
+        "--background-tertiary",
+        "--body-md",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-on-color-dark",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-secondary",
+        "--border-width-md",
+        "--border-width-xl",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-xl",
+        "--label-md",
+        "--padding-lg",
+        "--padding-xl",
+        "--text-brand-primary",
+        "--text-inverse",
+        "--text-muted",
+        "--text-on-color-dark",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-selected"
+        ],
+        "roles": [
+          "tab",
+          "tablist"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-table": {
+      "name": "Table",
+      "class_prefix": "bds-table",
+      "storybook_url": "/?path=/story/components-table--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Table — themed data table with striped and size variants.",
+      "source_path": "components/ui/Table/Table.tsx",
+      "tokens_used": [
+        "--background-secondary",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-muted",
+        "--border-width-md",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-family-subtitle",
+        "--font-line-height-normal",
+        "--font-weight-semi-bold",
+        "--gap-huge",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-tiny",
+        "--padding-xl",
+        "--subtitle-sm",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-hidden",
+          "aria-sort"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-tag": {
+      "name": "Tag",
+      "class_prefix": "bds-tag",
+      "storybook_url": "/?path=/story/components-tag--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Tag — categorization label with optional icons and dismiss",
+      "source_path": "components/ui/Tag/Tag.tsx",
+      "tokens_used": [
+        "--background-secondary",
+        "--body-xs",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-label",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--icon-sm",
+        "--icon-xs",
+        "--label-md",
+        "--label-sm",
+        "--label-tiny",
+        "--label-xl",
+        "--padding-md",
+        "--padding-sm",
+        "--padding-tiny",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-task-console": {
+      "name": "TaskConsole",
+      "class_prefix": "bds-task-console",
+      "storybook_url": "/?path=/story/components-task-console--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "TaskConsole — floating progress overlay for long-running operations",
+      "source_path": "components/ui/TaskConsole/TaskConsole.tsx",
+      "tokens_used": [
+        "--background-negative",
+        "--background-status-info",
+        "--body-sm",
+        "--border-primary",
+        "--border-radius-lg",
+        "--border-radius-pill",
+        "--border-radius-sm",
+        "--border-width-lg",
+        "--border-width-sm",
+        "--duration-400",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-xl",
+        "--gap-xs",
+        "--icon-sm",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--padding-xl",
+        "--shadow-xl",
+        "--state-hover-overlay",
+        "--surface-negative",
+        "--surface-positive",
+        "--surface-primary",
+        "--surface-secondary",
+        "--surface-status-info",
+        "--task-console-btn-hover-bg",
+        "--text-muted",
+        "--text-negative",
+        "--text-positive",
+        "--text-primary",
+        "--text-status-info"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label",
+          "aria-live"
+        ],
+        "roles": [
+          "log"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-text-area": {
+      "name": "TextArea",
+      "class_prefix": "bds-text-area",
+      "storybook_url": "/?path=/story/components-text-area--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "TextArea size variants — matches TextInput sizes",
+      "source_path": "components/ui/TextArea/TextArea.tsx",
+      "tokens_used": [
+        "--background-input",
+        "--body-lg",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-input",
+        "--border-negative",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-sm",
+        "--padding-xl",
+        "--padding-xs",
+        "--text-muted",
+        "--text-negative",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-describedby",
+          "aria-invalid"
+        ],
+        "roles": [
+          "alert"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": [
+          "Pair with a visible <label> via htmlFor + id, or supply aria-label when a visible label is intentionally omitted."
+        ]
+      }
+    },
+    "bds-text-input": {
+      "name": "TextInput",
+      "class_prefix": "bds-text-input",
+      "storybook_url": "/?path=/story/components-text-input--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "TextInput size variants (per Figma bds-text-input)",
+      "source_path": "components/ui/TextInput/TextInput.tsx",
+      "tokens_used": [
+        "--background-input",
+        "--body-lg",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-input",
+        "--border-negative",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-sm",
+        "--padding-xl",
+        "--padding-xs",
+        "--text-input-focus-ring-width",
+        "--text-muted",
+        "--text-negative",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-describedby",
+          "aria-invalid"
+        ],
+        "roles": [
+          "alert"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": [
+          "Pair with a visible <label> via htmlFor + id, or supply aria-label when a visible label is intentionally omitted."
+        ]
+      }
+    },
+    "bds-text-link": {
+      "name": "TextLink",
+      "class_prefix": "bds-text-link",
+      "storybook_url": "/?path=/story/components-text-link--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "TextLink size variants",
+      "source_path": "components/ui/TextLink/TextLink.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--body-sm",
+        "--border-brand-primary",
+        "--border-radius-sm",
+        "--font-family-body",
+        "--font-line-height-normal",
+        "--font-weight-medium",
+        "--gap-xl",
+        "--gap-xs",
+        "--text-brand-primary",
+        "--text-primary",
+        "--text-text-link"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-time-picker": {
+      "name": "TimePicker",
+      "class_prefix": "bds-time-picker",
+      "storybook_url": "/?path=/story/components-time-picker--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "TimePicker - BDS themed time picker component",
+      "source_path": "components/ui/TimePicker/TimePicker.tsx",
+      "tokens_used": [
+        "--background-input",
+        "--body-lg",
+        "--body-md",
+        "--body-sm",
+        "--body-xs",
+        "--border-brand-primary",
+        "--border-input",
+        "--border-muted",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-width-md",
+        "--border-width-sm",
+        "--box-shadow-lg",
+        "--color-system-red",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-lg",
+        "--label-md",
+        "--label-sm",
+        "--padding-sm",
+        "--padding-xs",
+        "--surface-brand-primary",
+        "--surface-primary",
+        "--surface-secondary",
+        "--text-inverse",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-describedby",
+          "aria-hidden",
+          "aria-invalid",
+          "aria-label",
+          "aria-selected"
+        ],
+        "roles": [
+          "alert",
+          "dialog",
+          "listbox",
+          "option"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-toast": {
+      "name": "Toast",
+      "class_prefix": "bds-toast",
+      "storybook_url": "/?path=/story/components-toast--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Toast — white surface notification with optional colored Badge",
+      "source_path": "components/ui/Toast/Toast.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--border-primary",
+        "--border-radius-lg",
+        "--border-width-lg",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--icon-md",
+        "--label-md",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-md",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary",
+        "--toast-shadow"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-label"
+        ],
+        "roles": [
+          "alert"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-tooltip": {
+      "name": "Tooltip",
+      "class_prefix": "bds-tooltip",
+      "storybook_url": "/?path=/story/components-tooltip--primary",
+      "status": "stable",
+      "introduced_in": "0.1.3",
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Tooltip placement positions",
+      "source_path": "components/ui/Tooltip/Tooltip.tsx",
+      "tokens_used": [
+        "--background-secondary",
+        "--body-md",
+        "--body-xs",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-secondary",
+        "--border-width-md",
+        "--duration-normal",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--label-sm",
+        "--padding-md",
+        "--padding-tiny",
+        "--text-muted",
+        "--text-secondary",
+        "--tooltip-background",
+        "--tooltip-text"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "tooltip"
+        ],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    }
+  },
+  "tokens": {
+    "--color-grayscale-white": {
+      "value": "#ffffff",
+      "category": "color"
+    },
+    "--color-grayscale-black": {
+      "value": "#000000",
+      "category": "color"
+    },
+    "--color-grayscale-darkest": {
+      "value": "#333333",
+      "category": "color",
+      "description": "Primary Text on Light Backgrounds"
+    },
+    "--color-grayscale-darker": {
+      "value": "#4f4f4f",
+      "category": "color",
+      "description": "Secondary Text / Icons"
+    },
+    "--color-grayscale-dark": {
+      "value": "#828282",
+      "category": "color",
+      "description": "Placeholder Text / Tertiary Content"
+    },
+    "--color-grayscale-light": {
+      "value": "#bdbdbd",
+      "category": "color",
+      "description": "Secondary Borders / Muted UI"
+    },
+    "--color-grayscale-lighter": {
+      "value": "#e0e0e0",
+      "category": "color",
+      "description": "Borders / Disabled Text"
+    },
+    "--color-grayscale-lightest": {
+      "value": "#f2f2f2",
+      "category": "color",
+      "description": "Light Background / UI Elements"
+    },
+    "--color-poppy-lightest": {
+      "value": "#ffefeb",
+      "category": "color",
+      "description": "Subtle tints / hover backgrounds"
+    },
+    "--color-poppy-lighter": {
+      "value": "#ffa693",
+      "category": "color",
+      "description": "Light accent"
+    },
+    "--color-poppy-light": {
+      "value": "#e35335",
+      "category": "color",
+      "description": "Brand primary base"
+    },
+    "--color-poppy-dark": {
+      "value": "#b0351b",
+      "category": "color",
+      "description": "Hover state"
+    },
+    "--color-poppy-darker": {
+      "value": "#7d1d09",
+      "category": "color",
+      "description": "Pressed state"
+    },
+    "--color-poppy-darkest": {
+      "value": "#4a0d00",
+      "category": "color",
+      "description": "Deep accent"
+    },
+    "--color-tan-lightest": {
+      "value": "#f1f0ec",
+      "category": "color",
+      "description": "Accent background"
+    },
+    "--color-tan-lighter": {
+      "value": "#cfcdc5",
+      "category": "color"
+    },
+    "--color-tan-light": {
+      "value": "#adaaa0",
+      "category": "color"
+    },
+    "--color-tan-dark": {
+      "value": "#8b887d",
+      "category": "color"
+    },
+    "--color-tan-darker": {
+      "value": "#69665c",
+      "category": "color"
+    },
+    "--color-tan-darkest": {
+      "value": "#47453c",
+      "category": "color"
+    },
+    "--color-orange-lightest": {
+      "value": "#ffe8dc",
+      "category": "color"
+    },
+    "--color-orange-lighter": {
+      "value": "#ffad92",
+      "category": "color"
+    },
+    "--color-orange-light": {
+      "value": "#e76134",
+      "category": "color"
+    },
+    "--color-orange-dark": {
+      "value": "#b4411a",
+      "category": "color"
+    },
+    "--color-orange-darker": {
+      "value": "#812608",
+      "category": "color"
+    },
+    "--color-orange-darkest": {
+      "value": "#4e1400",
+      "category": "color"
+    },
+    "--color-yellow-lightest": {
+      "value": "#fffee1",
+      "category": "color"
+    },
+    "--color-yellow-lighter": {
+      "value": "#ffecac",
+      "category": "color"
+    },
+    "--color-yellow-light": {
+      "value": "#f4d364",
+      "category": "color"
+    },
+    "--color-yellow-dark": {
+      "value": "#c1a443",
+      "category": "color"
+    },
+    "--color-yellow-darker": {
+      "value": "#8e7729",
+      "category": "color"
+    },
+    "--color-yellow-darkest": {
+      "value": "#634716",
+      "category": "color"
+    },
+    "--color-green-lightest": {
+      "value": "#f8fff3",
+      "category": "color"
+    },
+    "--color-green-lighter": {
+      "value": "#daffc0",
+      "category": "color"
+    },
+    "--color-green-light": {
+      "value": "#bcff8c",
+      "category": "color"
+    },
+    "--color-green-dark": {
+      "value": "#9ada6c",
+      "category": "color"
+    },
+    "--color-green-darker": {
+      "value": "#71a74a",
+      "category": "color"
+    },
+    "--color-green-darkest": {
+      "value": "#2a5542",
+      "category": "color"
+    },
+    "--color-blue-lightest": {
+      "value": "#f8fdff",
+      "category": "color"
+    },
+    "--color-blue-lighter": {
+      "value": "#b2e3f5",
+      "category": "color"
+    },
+    "--color-blue-light": {
+      "value": "#8ebbcc",
+      "category": "color"
+    },
+    "--color-blue-dark": {
+      "value": "#6c95a3",
+      "category": "color"
+    },
+    "--color-blue-darker": {
+      "value": "#4d6e7b",
+      "category": "color"
+    },
+    "--color-blue-darkest": {
+      "value": "#314952",
+      "category": "color"
+    },
+    "--color-purple-lightest": {
+      "value": "#f2f0f7",
+      "category": "color"
+    },
+    "--color-purple-lighter": {
+      "value": "#c4b0eb",
+      "category": "color"
+    },
+    "--color-purple-light": {
+      "value": "#9e8bc2",
+      "category": "color"
+    },
+    "--color-purple-dark": {
+      "value": "#796999",
+      "category": "color"
+    },
+    "--color-purple-darker": {
+      "value": "#574a71",
+      "category": "color"
+    },
+    "--color-purple-darkest": {
+      "value": "#362d48",
+      "category": "color"
+    },
+    "--color-pink-lightest": {
+      "value": "#ffe9f6",
+      "category": "color"
+    },
+    "--color-pink-lighter": {
+      "value": "#ffa8dd",
+      "category": "color"
+    },
+    "--color-pink-light": {
+      "value": "#ff67c3",
+      "category": "color"
+    },
+    "--color-pink-dark": {
+      "value": "#ff25aa",
+      "category": "color"
+    },
+    "--color-pink-darker": {
+      "value": "#d20080",
+      "category": "color"
+    },
+    "--color-pink-darkest": {
+      "value": "#8e0057",
+      "category": "color"
+    },
+    "--color-system-red": {
+      "value": "#eb5757",
+      "category": "color"
+    },
+    "--color-system-green": {
+      "value": "#27ae60",
+      "category": "color"
+    },
+    "--color-system-yellow": {
+      "value": "#f2c94c",
+      "category": "color"
+    },
+    "--color-system-blue": {
+      "value": "#2f80ed",
+      "category": "color"
+    },
+    "--color-system-purple": {
+      "value": "#9b51e0",
+      "category": "color"
+    },
+    "--color-system-orange": {
+      "value": "#f2994a",
+      "category": "color"
+    },
+    "--color-system-neutral": {
+      "value": "#363636",
+      "category": "color"
+    },
+    "--color-system-blue-light": {
+      "value": "#bfe2fe",
+      "category": "color"
+    },
+    "--color-system-neutral-light": {
+      "value": "#d4d4d4",
+      "category": "color"
+    },
+    "--color-system-green-light": {
+      "value": "#bef4d4",
+      "category": "color"
+    },
+    "--color-system-red-light": {
+      "value": "#fccccc",
+      "category": "color"
+    },
+    "--color-system-yellow-light": {
+      "value": "#f7e190",
+      "category": "color"
+    },
+    "--color-system-orange-light": {
+      "value": "#fad9ae",
+      "category": "color"
+    },
+    "--color-system-purple-light": {
+      "value": "#e9d8fc",
+      "category": "color"
+    },
+    "--color-annotation-annotation-pink": {
+      "value": "#bb1eeb",
+      "category": "color"
+    },
+    "--color-annotation-annotation-purple": {
+      "value": "#601ff9",
+      "category": "color"
+    },
+    "--color-annotation-annotation-blue": {
+      "value": "#2f80ed",
+      "category": "color"
+    },
+    "--color-annotation-annotation-light-pink": {
+      "value": "#f8e8fd",
+      "category": "color"
+    },
+    "--color-annotation-annotation-light-purple": {
+      "value": "#e6dbff",
+      "category": "color"
+    },
+    "--color-annotation-annotation-light-blue": {
+      "value": "#d1e5ff",
+      "category": "color"
+    },
+    "--theme-blue-blue-dark": {
+      "value": "#0e212a",
+      "category": "other"
+    },
+    "--theme-blue-blue-lighter": {
+      "value": "#79b0d9",
+      "category": "other"
+    },
+    "--theme-blue-blue-lightest": {
+      "value": "#edf2f6",
+      "category": "other"
+    },
+    "--theme-blue-green": {
+      "value": "#79d799",
+      "category": "other"
+    },
+    "--theme-blue-blue-light": {
+      "value": "#4665f5",
+      "category": "other"
+    },
+    "--theme-brik-poppy-red": {
+      "value": "#e35335",
+      "category": "other"
+    },
+    "--theme-brik-tan": {
+      "value": "#f1f0ec",
+      "category": "other"
+    },
+    "--theme-brik-black": {
+      "value": "#000000",
+      "category": "other"
+    },
+    "--theme-brik-yellow": {
+      "value": "#f4d364",
+      "category": "other"
+    },
+    "--theme-brik-orange": {
+      "value": "#e76134",
+      "category": "other"
+    },
+    "--theme-brik-green": {
+      "value": "#bcff8c",
+      "category": "other"
+    },
+    "--theme-brik-blue": {
+      "value": "#8ebbcc",
+      "category": "other"
+    },
+    "--theme-brik-purple": {
+      "value": "#9e8bc2",
+      "category": "other"
+    },
+    "--font-weight-bold": {
+      "value": "700",
+      "category": "typography"
+    },
+    "--font-weight-semi-bold": {
+      "value": "600",
+      "category": "typography"
+    },
+    "--font-weight-medium": {
+      "value": "500",
+      "category": "typography"
+    },
+    "--font-weight-regular": {
+      "value": "400",
+      "category": "typography"
+    },
+    "--font-weight-thin": {
+      "value": "300",
+      "category": "typography"
+    },
+    "--font-weight-extra-bold": {
+      "value": "800",
+      "category": "typography"
+    },
+    "--font-weight-black": {
+      "value": "900",
+      "category": "typography"
+    },
+    "--font-weight-semibold": {
+      "value": "600",
+      "category": "typography"
+    },
+    "--font-weight-extrabold": {
+      "value": "800",
+      "category": "typography"
+    },
+    "--font-family-display": {
+      "value": "Poppins",
+      "category": "typography"
+    },
+    "--font-family-heading": {
+      "value": "Poppins",
+      "category": "typography"
+    },
+    "--font-family-label": {
+      "value": "Poppins",
+      "category": "typography"
+    },
+    "--font-family-body": {
+      "value": "Poppins",
+      "category": "typography"
+    },
+    "--font-family-subtitle": {
+      "value": "Poppins",
+      "category": "typography"
+    },
+    "--font-family-icon": {
+      "value": "Font Awesome 6 Pro",
+      "category": "typography"
+    },
+    "--font-family-logo": {
+      "value": "Font Awesome 6 Brands",
+      "category": "typography"
+    },
+    "--font-family-system": {
+      "value": "'Courier New'",
+      "category": "typography"
+    },
+    "--easing-ease-in": {
+      "value": "String value",
+      "category": "other"
+    },
+    "--easing-ease-out": {
+      "value": "String value",
+      "category": "other"
+    },
+    "--delay-0": {
+      "value": "0ms",
+      "category": "other"
+    },
+    "--delay-100": {
+      "value": "100ms",
+      "category": "other"
+    },
+    "--delay-200": {
+      "value": "200ms",
+      "category": "other"
+    },
+    "--iteration-1": {
+      "value": "1ms",
+      "category": "other"
+    },
+    "--iteration-infinite": {
+      "value": "infinite",
+      "category": "other"
+    },
+    "--duration-100": {
+      "value": "100ms",
+      "category": "other"
+    },
+    "--duration-200": {
+      "value": "200ms",
+      "category": "other"
+    },
+    "--duration-300": {
+      "value": "300ms",
+      "category": "other"
+    },
+    "--duration-400": {
+      "value": "500ms",
+      "category": "other"
+    },
+    "--duration-500": {
+      "value": "800ms",
+      "category": "other"
+    },
+    "--duration-600": {
+      "value": "1000ms",
+      "category": "other"
+    },
+    "--font-size-5": {
+      "value": "5.690000057220459px",
+      "category": "typography"
+    },
+    "--font-size-10": {
+      "value": "6.409999847412109px",
+      "category": "typography"
+    },
+    "--font-size-15": {
+      "value": "8.109999656677246px",
+      "category": "typography"
+    },
+    "--font-size-20": {
+      "value": "9.119999885559082px",
+      "category": "typography"
+    },
+    "--font-size-25": {
+      "value": "10.260000228881836px",
+      "category": "typography"
+    },
+    "--font-size-50": {
+      "value": "11.539999961853027px",
+      "category": "typography"
+    },
+    "--font-size-75": {
+      "value": "14px",
+      "category": "typography"
+    },
+    "--font-size-100": {
+      "value": "16px",
+      "category": "typography"
+    },
+    "--font-size-200": {
+      "value": "18px",
+      "category": "typography"
+    },
+    "--font-size-300": {
+      "value": "20px",
+      "category": "typography"
+    },
+    "--font-size-400": {
+      "value": "22.5px",
+      "category": "typography"
+    },
+    "--font-size-500": {
+      "value": "25.299999237060547px",
+      "category": "typography"
+    },
+    "--font-size-600": {
+      "value": "28.5px",
+      "category": "typography"
+    },
+    "--font-size-700": {
+      "value": "32px",
+      "category": "typography"
+    },
+    "--font-size-800": {
+      "value": "36px",
+      "category": "typography"
+    },
+    "--font-size-900": {
+      "value": "40.5px",
+      "category": "typography"
+    },
+    "--font-size-1000": {
+      "value": "45.5px",
+      "category": "typography"
+    },
+    "--font-size-1100": {
+      "value": "51px",
+      "category": "typography"
+    },
+    "--font-size-1200": {
+      "value": "57.5px",
+      "category": "typography"
+    },
+    "--font-size-1300": {
+      "value": "64.69999694824219px",
+      "category": "typography"
+    },
+    "--font-size-1400": {
+      "value": "72.80000305175781px",
+      "category": "typography"
+    },
+    "--font-size-1500": {
+      "value": "81.9000015258789px",
+      "category": "typography"
+    },
+    "--font-size-1600": {
+      "value": "92.19999694824219px",
+      "category": "typography"
+    },
+    "--font-size-1700": {
+      "value": "103.9000015258789px",
+      "category": "typography"
+    },
+    "--font-size-1800": {
+      "value": "116.9000015258789px",
+      "category": "typography"
+    },
+    "--font-size-1900": {
+      "value": "143px",
+      "category": "typography"
+    },
+    "--font-size-2000": {
+      "value": "171px",
+      "category": "typography"
+    },
+    "--font-size-2100": {
+      "value": "205px",
+      "category": "typography"
+    },
+    "--font-size-2200": {
+      "value": "247px",
+      "category": "typography"
+    },
+    "--font-size-2300": {
+      "value": "296px",
+      "category": "typography"
+    },
+    "--font-size-2400": {
+      "value": "355px",
+      "category": "typography"
+    },
+    "--font-size-2500": {
+      "value": "426px",
+      "category": "typography"
+    },
+    "--font-size-2600": {
+      "value": "515px",
+      "category": "typography"
+    },
+    "--space-0": {
+      "value": "0",
+      "category": "spacing"
+    },
+    "--space-25": {
+      "value": "1px",
+      "category": "spacing"
+    },
+    "--space-50": {
+      "value": "2px",
+      "category": "spacing"
+    },
+    "--space-100": {
+      "value": "4px",
+      "category": "spacing"
+    },
+    "--space-150": {
+      "value": "6px",
+      "category": "spacing"
+    },
+    "--space-200": {
+      "value": "8px",
+      "category": "spacing"
+    },
+    "--space-250": {
+      "value": "10px",
+      "category": "spacing"
+    },
+    "--space-300": {
+      "value": "12px",
+      "category": "spacing"
+    },
+    "--space-350": {
+      "value": "14px",
+      "category": "spacing"
+    },
+    "--space-400": {
+      "value": "16px",
+      "category": "spacing"
+    },
+    "--space-450": {
+      "value": "18px",
+      "category": "spacing"
+    },
+    "--space-500": {
+      "value": "20px",
+      "category": "spacing"
+    },
+    "--space-600": {
+      "value": "24px",
+      "category": "spacing"
+    },
+    "--space-700": {
+      "value": "28px",
+      "category": "spacing"
+    },
+    "--space-800": {
+      "value": "32px",
+      "category": "spacing"
+    },
+    "--space-900": {
+      "value": "36px",
+      "category": "spacing"
+    },
+    "--space-1000": {
+      "value": "40px",
+      "category": "spacing"
+    },
+    "--space-1100": {
+      "value": "44px",
+      "category": "spacing"
+    },
+    "--space-1200": {
+      "value": "48px",
+      "category": "spacing"
+    },
+    "--space-1300": {
+      "value": "52px",
+      "category": "spacing"
+    },
+    "--space-1400": {
+      "value": "56px",
+      "category": "spacing"
+    },
+    "--space-1500": {
+      "value": "60px",
+      "category": "spacing"
+    },
+    "--space-1600": {
+      "value": "64px",
+      "category": "spacing"
+    },
+    "--space-1700": {
+      "value": "72px",
+      "category": "spacing"
+    },
+    "--space-1800": {
+      "value": "80px",
+      "category": "spacing"
+    },
+    "--space-1900": {
+      "value": "84px",
+      "category": "spacing"
+    },
+    "--space-2000": {
+      "value": "88px",
+      "category": "spacing"
+    },
+    "--space-2100": {
+      "value": "96px",
+      "category": "spacing"
+    },
+    "--space-2200": {
+      "value": "104px",
+      "category": "spacing"
+    },
+    "--space-2300": {
+      "value": "112px",
+      "category": "spacing"
+    },
+    "--space-2400": {
+      "value": "128px",
+      "category": "spacing"
+    },
+    "--space-2500": {
+      "value": "136px",
+      "category": "spacing"
+    },
+    "--space-2600": {
+      "value": "144px",
+      "category": "spacing"
+    },
+    "--space-2700": {
+      "value": "152px",
+      "category": "spacing"
+    },
+    "--space-2800": {
+      "value": "160px",
+      "category": "spacing"
+    },
+    "--space-2900": {
+      "value": "168px",
+      "category": "spacing"
+    },
+    "--space-3000": {
+      "value": "176px",
+      "category": "spacing"
+    },
+    "--border-radius-0": {
+      "value": "0",
+      "category": "radius"
+    },
+    "--border-radius-50": {
+      "value": "2px",
+      "category": "radius"
+    },
+    "--border-radius-100": {
+      "value": "4px",
+      "category": "radius"
+    },
+    "--border-radius-200": {
+      "value": "8px",
+      "category": "radius"
+    },
+    "--border-radius-300": {
+      "value": "10px",
+      "category": "radius"
+    },
+    "--border-radius-400": {
+      "value": "12px",
+      "category": "radius"
+    },
+    "--border-radius-500": {
+      "value": "14px",
+      "category": "radius"
+    },
+    "--border-radius-600": {
+      "value": "16px",
+      "category": "radius"
+    },
+    "--border-radius-700": {
+      "value": "20px",
+      "category": "radius"
+    },
+    "--border-radius-800": {
+      "value": "24px",
+      "category": "radius"
+    },
+    "--border-radius-900": {
+      "value": "28px",
+      "category": "radius"
+    },
+    "--border-radius-1000": {
+      "value": "32px",
+      "category": "radius"
+    },
+    "--border-radius-1100": {
+      "value": "36px",
+      "category": "radius"
+    },
+    "--border-radius-1200": {
+      "value": "40px",
+      "category": "radius"
+    },
+    "--border-radius-1300": {
+      "value": "44px",
+      "category": "radius"
+    },
+    "--border-radius-1400": {
+      "value": "48px",
+      "category": "radius"
+    },
+    "--border-radius-pill": {
+      "value": "999px",
+      "category": "radius"
+    },
+    "--border-radius-circle": {
+      "value": "9999px",
+      "category": "radius"
+    },
+    "--border-width-0": {
+      "value": "0",
+      "category": "border"
+    },
+    "--border-width-50": {
+      "value": "1px",
+      "category": "border"
+    },
+    "--border-width-100": {
+      "value": "2px",
+      "category": "border"
+    },
+    "--border-width-200": {
+      "value": "3px",
+      "category": "border"
+    },
+    "--border-width-300": {
+      "value": "4px",
+      "category": "border"
+    },
+    "--border-width-400": {
+      "value": "5px",
+      "category": "border"
+    },
+    "--border-width-500": {
+      "value": "6px",
+      "category": "border"
+    },
+    "--border-width-sm": {
+      "value": "0.5px",
+      "category": "border"
+    },
+    "--border-width-md": {
+      "value": "1px",
+      "category": "border"
+    },
+    "--border-width-xl": {
+      "value": "3px",
+      "category": "border"
+    },
+    "--border-width-lg": {
+      "value": "2px",
+      "category": "border"
+    },
+    "--border-width-huge": {
+      "value": "4px",
+      "category": "border"
+    },
+    "--border-width-none": {
+      "value": "0px",
+      "category": "border"
+    },
+    "--font-line-height-tight": {
+      "value": "110%",
+      "category": "typography"
+    },
+    "--font-line-height-snug": {
+      "value": "125%",
+      "category": "typography"
+    },
+    "--font-line-height-normal": {
+      "value": "150%",
+      "category": "typography"
+    },
+    "--font-line-height-relaxed": {
+      "value": "175%",
+      "category": "typography"
+    },
+    "--font-line-height-loose": {
+      "value": "200%",
+      "category": "typography"
+    },
+    "--font-line-height-none": {
+      "value": "0",
+      "category": "typography"
+    },
+    "--font-line-height-moderate": {
+      "value": "138%",
+      "category": "typography"
+    },
+    "--size-0": {
+      "value": "0",
+      "category": "other"
+    },
+    "--size-25": {
+      "value": "1px",
+      "category": "other"
+    },
+    "--size-50": {
+      "value": "2px",
+      "category": "other"
+    },
+    "--size-100": {
+      "value": "4px",
+      "category": "other"
+    },
+    "--size-150": {
+      "value": "6px",
+      "category": "other"
+    },
+    "--size-200": {
+      "value": "8px",
+      "category": "other"
+    },
+    "--size-300": {
+      "value": "12px",
+      "category": "other"
+    },
+    "--size-400": {
+      "value": "16px",
+      "category": "other"
+    },
+    "--size-500": {
+      "value": "20px",
+      "category": "other"
+    },
+    "--size-600": {
+      "value": "24px",
+      "category": "other"
+    },
+    "--size-700": {
+      "value": "28px",
+      "category": "other"
+    },
+    "--size-800": {
+      "value": "32px",
+      "category": "other"
+    },
+    "--size-900": {
+      "value": "36px",
+      "category": "other"
+    },
+    "--size-1000": {
+      "value": "40px",
+      "category": "other"
+    },
+    "--size-1100": {
+      "value": "44px",
+      "category": "other"
+    },
+    "--size-1200": {
+      "value": "48px",
+      "category": "other"
+    },
+    "--size-1300": {
+      "value": "52px",
+      "category": "other"
+    },
+    "--size-1400": {
+      "value": "56px",
+      "category": "other"
+    },
+    "--size-1500": {
+      "value": "60px",
+      "category": "other"
+    },
+    "--size-1600": {
+      "value": "64px",
+      "category": "other"
+    },
+    "--size-1700": {
+      "value": "72px",
+      "category": "other"
+    },
+    "--size-1800": {
+      "value": "80px",
+      "category": "other"
+    },
+    "--size-1900": {
+      "value": "84px",
+      "category": "other"
+    },
+    "--size-2000": {
+      "value": "88px",
+      "category": "other"
+    },
+    "--size-2100": {
+      "value": "96px",
+      "category": "other"
+    },
+    "--size-2200": {
+      "value": "100px",
+      "category": "other"
+    },
+    "--size-pill": {
+      "value": "9999px",
+      "category": "other"
+    },
+    "--size-circle": {
+      "value": "99999px",
+      "category": "other"
+    },
+    "--shadow-blur-0": {
+      "value": "0",
+      "category": "shadow"
+    },
+    "--shadow-blur-100": {
+      "value": "2px",
+      "category": "shadow"
+    },
+    "--shadow-blur-200": {
+      "value": "4px",
+      "category": "shadow"
+    },
+    "--shadow-blur-300": {
+      "value": "6px",
+      "category": "shadow"
+    },
+    "--shadow-blur-400": {
+      "value": "8px",
+      "category": "shadow"
+    },
+    "--shadow-blur-500": {
+      "value": "10px",
+      "category": "shadow"
+    },
+    "--shadow-blur-600": {
+      "value": "12px",
+      "category": "shadow"
+    },
+    "--shadow-blur-700": {
+      "value": "14px",
+      "category": "shadow"
+    },
+    "--shadow-blur-800": {
+      "value": "16px",
+      "category": "shadow"
+    },
+    "--shadow-offset-0": {
+      "value": "0",
+      "category": "shadow"
+    },
+    "--shadow-offset-25": {
+      "value": "-4px",
+      "category": "shadow"
+    },
+    "--shadow-offset-50": {
+      "value": "-2px",
+      "category": "shadow"
+    },
+    "--shadow-offset-100": {
+      "value": "2px",
+      "category": "shadow"
+    },
+    "--shadow-offset-200": {
+      "value": "4px",
+      "category": "shadow"
+    },
+    "--shadow-offset-300": {
+      "value": "8px",
+      "category": "shadow"
+    },
+    "--shadow-offset-400": {
+      "value": "10px",
+      "category": "shadow"
+    },
+    "--shadow-offset-500": {
+      "value": "12px",
+      "category": "shadow"
+    },
+    "--shadow-offset-600": {
+      "value": "16px",
+      "category": "shadow"
+    },
+    "--shadow-spread-0": {
+      "value": "0",
+      "category": "shadow"
+    },
+    "--shadow-spread-100": {
+      "value": "2px",
+      "category": "shadow"
+    },
+    "--shadow-spread-200": {
+      "value": "4px",
+      "category": "shadow"
+    },
+    "--shadow-spread-300": {
+      "value": "8px",
+      "category": "shadow"
+    },
+    "--shadow-spread-400": {
+      "value": "10px",
+      "category": "shadow"
+    },
+    "--shadow-spread-500": {
+      "value": "12px",
+      "category": "shadow"
+    },
+    "--shadow-spread-600": {
+      "value": "14px",
+      "category": "shadow"
+    },
+    "--shadow-spread-700": {
+      "value": "16px",
+      "category": "shadow"
+    },
+    "--logo": {
+      "value": "Font Awesome Brand",
+      "category": "other"
+    },
+    "--icon": {
+      "value": "Font Awesome Solid",
+      "category": "other"
+    },
+    "--web": {
+      "value": "1200",
+      "category": "other"
+    },
+    "--tablet": {
+      "value": "768",
+      "category": "other"
+    },
+    "--mobile": {
+      "value": "320",
+      "category": "other"
+    },
+    "--blur-radius-sm": {
+      "value": "8px",
+      "category": "other"
+    },
+    "--blur-radius-md": {
+      "value": "12px",
+      "category": "other"
+    },
+    "--blur-radius-lg": {
+      "value": "14px",
+      "category": "other"
+    },
+    "--blur-radius-xl": {
+      "value": "16px",
+      "category": "other"
+    },
+    "--box-shadow-sm": {
+      "value": "2px",
+      "category": "other"
+    },
+    "--box-shadow-md": {
+      "value": "8px",
+      "category": "other"
+    },
+    "--box-shadow-lg": {
+      "value": "10px",
+      "category": "other"
+    },
+    "--box-shadow-xl": {
+      "value": "12px",
+      "category": "other"
+    },
+    "--font-casing-none": {
+      "value": "none",
+      "category": "typography"
+    },
+    "--font-casing-lowercase": {
+      "value": "lowercase",
+      "category": "typography"
+    },
+    "--font-casing-uppercase": {
+      "value": "uppercase",
+      "category": "typography"
+    },
+    "--font-casing-capitalize": {
+      "value": "capitalize",
+      "category": "typography"
+    },
+    "--font-casing-smallcaps": {
+      "value": "small-caps",
+      "category": "typography"
+    },
+    "--breakpoint-web": {
+      "value": "1200px",
+      "category": "other"
+    },
+    "--breakpoint-tablet": {
+      "value": "768px",
+      "category": "other"
+    },
+    "--breakpoint-mobile": {
+      "value": "320px",
+      "category": "other"
+    },
+    "--brand-primary": {
+      "value": "var(--color-poppy-light)",
+      "category": "other",
+      "description": "Brand primary accent — override per-theme to set the main brand color"
+    },
+    "--brand-secondary": {
+      "value": "var(--color-tan-lightest)",
+      "category": "other",
+      "description": "Brand secondary — supporting surface/accent color"
+    },
+    "--brand-tertiary": {
+      "value": "var(--color-green-dark)",
+      "category": "other",
+      "description": "Brand tertiary — subtle/lightest accent"
+    },
+    "--brand-accent": {
+      "value": "var(--color-yellow-light)",
+      "category": "other",
+      "description": "Brand accent — contrasting highlight color"
+    },
+    "--brand-dark": {
+      "value": "var(--color-blue-light)",
+      "category": "other",
+      "description": "Brand dark — deep/dark variant"
+    },
+    "--border-radius-lg": {
+      "value": "var(--border-radius-600)",
+      "category": "radius"
+    },
+    "--border-radius-md": {
+      "value": "var(--border-radius-400)",
+      "category": "radius"
+    },
+    "--border-radius-none": {
+      "value": "var(--border-radius-0)",
+      "category": "radius"
+    },
+    "--border-radius-sm": {
+      "value": "var(--border-radius-200)",
+      "category": "radius"
+    },
+    "--page-primary": {
+      "value": "var(--color-grayscale-white)",
+      "category": "other"
+    },
+    "--page-secondary": {
+      "value": "var(--color-grayscale-lighter)",
+      "category": "other"
+    },
+    "--page-inverse": {
+      "value": "var(--color-grayscale-black)",
+      "category": "other"
+    },
+    "--background-primary": {
+      "value": "var(--color-grayscale-white)",
+      "category": "color"
+    },
+    "--background-secondary": {
+      "value": "var(--color-grayscale-dark)",
+      "category": "color"
+    },
+    "--background-inverse": {
+      "value": "var(--color-grayscale-white)",
+      "category": "color"
+    },
+    "--background-accent-yellow": {
+      "value": "var(--color-system-yellow)",
+      "category": "color"
+    },
+    "--background-accent-blue": {
+      "value": "var(--color-system-blue)",
+      "category": "color"
+    },
+    "--background-accent-green": {
+      "value": "var(--color-system-green)",
+      "category": "color"
+    },
+    "--background-accent-purple": {
+      "value": "var(--color-system-purple)",
+      "category": "color"
+    },
+    "--background-accent-red": {
+      "value": "var(--color-system-red)",
+      "category": "color"
+    },
+    "--background-input": {
+      "value": "var(--color-grayscale-white)",
+      "category": "color"
+    },
+    "--background-on-color-dark": {
+      "value": "var(--color-grayscale-white)",
+      "category": "color"
+    },
+    "--background-muted": {
+      "value": "var(--color-grayscale-lighter)",
+      "category": "color"
+    },
+    "--background-on-color-light": {
+      "value": "var(--color-grayscale-black)",
+      "category": "color"
+    },
+    "--background-brand-primary-hover": {
+      "value": "var(--color-poppy-dark)",
+      "category": "color",
+      "description": "Primary button hover background"
+    },
+    "--background-brand-primary-pressed": {
+      "value": "var(--color-poppy-darker)",
+      "category": "color",
+      "description": "Primary button pressed background"
+    },
+    "--background-disabled": {
+      "value": "var(--color-grayscale-dark)",
+      "category": "color",
+      "description": "Disabled button background (all variants)"
+    },
+    "--background-info": {
+      "value": "var(--color-system-neutral)",
+      "category": "color"
+    },
+    "--background-primary-hover": {
+      "value": "var(--color-grayscale-lightest)",
+      "category": "color"
+    },
+    "--background-primary-pressed": {
+      "value": "var(--color-grayscale-lighter)",
+      "category": "color"
+    },
+    "--background-secondary-hover": {
+      "value": "var(--color-grayscale-darker)",
+      "category": "color"
+    },
+    "--background-secondary-pressed": {
+      "value": "var(--color-grayscale-darkest)",
+      "category": "color"
+    },
+    "--background-positive": {
+      "value": "var(--color-system-green)",
+      "category": "color"
+    },
+    "--background-negative": {
+      "value": "var(--color-system-red)",
+      "category": "color"
+    },
+    "--background-warning": {
+      "value": "var(--color-system-yellow)",
+      "category": "color"
+    },
+    "--surface-primary": {
+      "value": "var(--color-grayscale-white)",
+      "category": "color"
+    },
+    "--surface-secondary": {
+      "value": "var(--color-grayscale-lighter)",
+      "category": "color"
+    },
+    "--surface-inverse": {
+      "value": "var(--color-grayscale-black)",
+      "category": "color"
+    },
+    "--surface-overlay": {
+      "value": "var(--color-grayscale-white)",
+      "category": "color"
+    },
+    "--surface-secondary-hover": {
+      "value": "var(--color-grayscale-light)",
+      "category": "color",
+      "description": "Secondary button hover background"
+    },
+    "--surface-secondary-pressed": {
+      "value": "var(--color-grayscale-dark)",
+      "category": "color",
+      "description": "Secondary button pressed background"
+    },
+    "--surface-subtle-hover": {
+      "value": "var(--color-grayscale-lightest)",
+      "category": "color",
+      "description": "Ghost and outline button hover background"
+    },
+    "--surface-info": {
+      "value": "var(--color-system-neutral-light)",
+      "category": "color"
+    },
+    "--surface-positive": {
+      "value": "var(--color-system-green-light)",
+      "category": "color"
+    },
+    "--surface-negative": {
+      "value": "var(--color-system-red-light)",
+      "category": "color"
+    },
+    "--surface-warning": {
+      "value": "var(--color-system-yellow-light)",
+      "category": "color"
+    },
+    "--surface-muted": {
+      "value": "var(--color-grayscale-lightest)",
+      "category": "color"
+    },
+    "--text-primary": {
+      "value": "var(--color-grayscale-darkest)",
+      "category": "color"
+    },
+    "--text-secondary": {
+      "value": "var(--color-grayscale-dark)",
+      "category": "color"
+    },
+    "--text-inverse": {
+      "value": "var(--color-grayscale-white)",
+      "category": "color"
+    },
+    "--text-accent-yellow": {
+      "value": "var(--color-system-yellow)",
+      "category": "color"
+    },
+    "--text-accent-blue": {
+      "value": "var(--color-system-blue)",
+      "category": "color"
+    },
+    "--text-accent-green": {
+      "value": "var(--color-system-green)",
+      "category": "color"
+    },
+    "--text-accent-purple": {
+      "value": "var(--color-system-purple)",
+      "category": "color"
+    },
+    "--text-accent-red": {
+      "value": "var(--color-system-red)",
+      "category": "color"
+    },
+    "--text-muted": {
+      "value": "var(--color-grayscale-light)",
+      "category": "color"
+    },
+    "--text-on-color-dark": {
+      "value": "var(--color-grayscale-white)",
+      "category": "color"
+    },
+    "--text-on-color-light": {
+      "value": "var(--color-grayscale-black)",
+      "category": "color"
+    },
+    "--text-disabled": {
+      "value": "var(--color-grayscale-light)",
+      "category": "color",
+      "description": "Disabled button text (all variants)"
+    },
+    "--text-info": {
+      "value": "var(--color-system-neutral)",
+      "category": "color"
+    },
+    "--text-positive": {
+      "value": "var(--color-system-green)",
+      "category": "color"
+    },
+    "--text-negative": {
+      "value": "var(--color-system-red)",
+      "category": "color"
+    },
+    "--text-warning": {
+      "value": "var(--color-system-yellow)",
+      "category": "color"
+    },
+    "--border-primary": {
+      "value": "var(--color-grayscale-lighter)",
+      "category": "border"
+    },
+    "--border-on-color-dark": {
+      "value": "var(--color-grayscale-white)",
+      "category": "border"
+    },
+    "--border-secondary": {
+      "value": "var(--color-grayscale-dark)",
+      "category": "border"
+    },
+    "--border-muted": {
+      "value": "var(--color-grayscale-light)",
+      "category": "border"
+    },
+    "--border-inverse": {
+      "value": "var(--color-grayscale-white)",
+      "category": "border"
+    },
+    "--border-on-color-light": {
+      "value": "var(--color-grayscale-black)",
+      "category": "border"
+    },
+    "--border-input": {
+      "value": "var(--color-grayscale-light)",
+      "category": "border"
+    },
+    "--border-disabled": {
+      "value": "var(--color-grayscale-dark)",
+      "category": "border",
+      "description": "Disabled button border (all variants)"
+    },
+    "--border-info": {
+      "value": "var(--color-system-neutral)",
+      "category": "border"
+    },
+    "--border-positive": {
+      "value": "var(--color-system-green)",
+      "category": "border"
+    },
+    "--border-negative": {
+      "value": "var(--color-system-red)",
+      "category": "border"
+    },
+    "--border-warning": {
+      "value": "var(--color-system-yellow)",
+      "category": "border"
+    },
+    "--padding-xl": {
+      "value": "var(--space-800)",
+      "category": "padding"
+    },
+    "--padding-lg": {
+      "value": "var(--space-600)",
+      "category": "padding"
+    },
+    "--padding-none": {
+      "value": "var(--space-0)",
+      "category": "padding"
+    },
+    "--padding-md": {
+      "value": "var(--space-400)",
+      "category": "padding"
+    },
+    "--padding-sm": {
+      "value": "var(--space-300)",
+      "category": "padding"
+    },
+    "--padding-huge": {
+      "value": "var(--space-1200)",
+      "category": "padding"
+    },
+    "--padding-xs": {
+      "value": "var(--space-250)",
+      "category": "padding"
+    },
+    "--padding-tiny": {
+      "value": "var(--space-200)",
+      "category": "padding"
+    },
+    "--gap-none": {
+      "value": "var(--space-0)",
+      "category": "gap"
+    },
+    "--gap-md": {
+      "value": "var(--space-200)",
+      "category": "gap"
+    },
+    "--gap-lg": {
+      "value": "var(--space-400)",
+      "category": "gap"
+    },
+    "--gap-xl": {
+      "value": "var(--space-600)",
+      "category": "gap"
+    },
+    "--gap-sm": {
+      "value": "var(--space-150)",
+      "category": "gap"
+    },
+    "--gap-huge": {
+      "value": "var(--space-800)",
+      "category": "gap"
+    },
+    "--gap-xs": {
+      "value": "var(--space-100)",
+      "category": "gap"
+    },
+    "--gap-tiny": {
+      "value": "var(--space-50)",
+      "category": "gap"
+    },
+    "--body-xs": {
+      "value": "var(--font-size-50)",
+      "category": "other"
+    },
+    "--body-tiny": {
+      "value": "var(--font-size-25)",
+      "category": "other"
+    },
+    "--body-md": {
+      "value": "var(--font-size-100)",
+      "category": "other"
+    },
+    "--body-sm": {
+      "value": "var(--font-size-75)",
+      "category": "other"
+    },
+    "--body-lg": {
+      "value": "var(--font-size-200)",
+      "category": "other"
+    },
+    "--body-xl": {
+      "value": "var(--font-size-300)",
+      "category": "other"
+    },
+    "--body-huge": {
+      "value": "var(--font-size-500)",
+      "category": "other"
+    },
+    "--display-sm": {
+      "value": "var(--font-size-1400)",
+      "category": "other"
+    },
+    "--display-lg": {
+      "value": "var(--font-size-1600)",
+      "category": "other"
+    },
+    "--display-md": {
+      "value": "var(--font-size-1500)",
+      "category": "other"
+    },
+    "--display-xl": {
+      "value": "var(--font-size-1800)",
+      "category": "other"
+    },
+    "--heading-lg": {
+      "value": "var(--font-size-600)",
+      "category": "other"
+    },
+    "--heading-xl": {
+      "value": "var(--font-size-700)",
+      "category": "other"
+    },
+    "--heading-xxl": {
+      "value": "var(--font-size-800)",
+      "category": "other"
+    },
+    "--heading-md": {
+      "value": "var(--font-size-400)",
+      "category": "other"
+    },
+    "--heading-tiny": {
+      "value": "var(--font-size-200)",
+      "category": "other"
+    },
+    "--heading-sm": {
+      "value": "var(--font-size-300)",
+      "category": "other"
+    },
+    "--heading-huge": {
+      "value": "var(--font-size-900)",
+      "category": "other"
+    },
+    "--label-tiny": {
+      "value": "var(--font-size-25)",
+      "category": "other"
+    },
+    "--label-md": {
+      "value": "var(--font-size-100)",
+      "category": "other"
+    },
+    "--label-lg": {
+      "value": "var(--font-size-200)",
+      "category": "other"
+    },
+    "--label-xs": {
+      "value": "var(--font-size-50)",
+      "category": "other"
+    },
+    "--label-sm": {
+      "value": "var(--font-size-75)",
+      "category": "other"
+    },
+    "--label-xl": {
+      "value": "var(--font-size-300)",
+      "category": "other"
+    },
+    "--subtitle-lg": {
+      "value": "var(--font-size-100)",
+      "category": "other"
+    },
+    "--subtitle-md": {
+      "value": "var(--font-size-50)",
+      "category": "other"
+    },
+    "--subtitle-sm": {
+      "value": "var(--font-size-25)",
+      "category": "other"
+    },
+    "--page-brand-primary": {
+      "value": "var(--brand-primary)",
+      "category": "other"
+    },
+    "--background-brand-primary": {
+      "value": "var(--brand-primary)",
+      "category": "color"
+    },
+    "--surface-brand-primary": {
+      "value": "var(--brand-primary)",
+      "category": "color"
+    },
+    "--text-brand-primary": {
+      "value": "var(--brand-primary)",
+      "category": "color"
+    },
+    "--text-text-link": {
+      "value": "var(--brand-primary)",
+      "category": "color"
+    },
+    "--border-brand-primary": {
+      "value": "var(--brand-primary)",
+      "category": "border"
+    }
+  }
+}

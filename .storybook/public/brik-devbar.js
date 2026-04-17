@@ -32,7 +32,7 @@
  * If devbar.js isn't loaded, widgets should fall back to their own standalone
  * FAB — just check: `if (window.BrikDevBar) …` at init.
  *
- * Zero deps, standalone, BDS-branded to match the rest of mockup-shared.
+ * Zero deps, standalone, BDS-branded to match the rest of brik-dev-tool.
  */
 
 (function () {
@@ -70,13 +70,14 @@
     space400: '16px',
     radius100:  '4px',
     radius200:  '8px',
+    radius300:  '12px',
+    radius400:  '16px',
     radiusPill: '999px',
   };
 
   // ── State ───────────────────────────────────────────────────────────────
   const slots = new Map();              // id → slot definition
-  const elRefs = { bar: null, list: null, toggle: null, logo: null };
-  let collapsed = localStorage.getItem('brik-devbar-collapsed') === '1';
+  const elRefs = { bar: null, list: null, logo: null };
   let initialized = false;
 
   // ── Font load (shared with sibling widgets) ────────────────────────────
@@ -94,26 +95,19 @@
       bottom: ${T.space400};
       left: 50%;
       transform: translateX(-50%);
-      z-index: 2147483640;
+      z-index: 2147483647;
       display: inline-flex;
       align-items: center;
       gap: ${T.space200};
       padding: ${T.space200} ${T.space300};
       background: ${T.backgroundBrandPrimary};
       color: ${T.colorGrayscaleWhite};
-      border: 1px solid ${T.interactionBrandHover};
-      border-radius: ${T.radiusPill};
+      border: none;
+      border-radius: ${T.radius400};
       box-shadow: 0 8px 28px rgba(0,0,0,0.22);
       font-family: ${T.fontFamily};
       font-size: ${T.fontSizeBody};
-      transition: padding 0.18s ease, gap 0.18s ease;
     }
-    .bdb-bar[data-collapsed="true"] {
-      padding: ${T.space200};
-      gap: 0;
-    }
-    .bdb-bar[data-collapsed="true"] .bdb-list { display: none; }
-    .bdb-bar[data-collapsed="true"] .bdb-divider { display: none; }
 
     .bdb-logo {
       display: inline-flex; align-items: center; gap: ${T.space200};
@@ -126,26 +120,11 @@
       pointer-events: none;
     }
     .bdb-logo__mark {
-      position: relative;
-      width: 20px; height: 20px;
-      border-radius: ${T.radius100};
-      background: ${T.colorGrayscaleWhite};
-      color: ${T.backgroundBrandPrimary};
+      width: 22px; height: 22px;
       display: inline-flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: ${T.fontWeightBold};
-      letter-spacing: 0;
+      flex-shrink: 0;
     }
-    /* Aggregate dot — shown when any slot has a badge. Especially useful when
-       the bar is collapsed and the slots themselves are hidden. */
-    .bdb-logo__mark[data-agg-badge="true"]::after {
-      content: '';
-      position: absolute;
-      top: -3px; right: -3px;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: ${T.colorGrayscaleDarkest};
-      border: 1.5px solid ${T.backgroundBrandPrimary};
-    }
+    .bdb-logo__mark svg { width: 22px; height: 22px; display: block; }
 
     .bdb-divider {
       width: 1px; height: 18px;
@@ -209,22 +188,6 @@
       color: ${T.backgroundBrandPrimary};
     }
 
-    .bdb-toggle {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 28px; height: 28px;
-      padding: 0;
-      background: transparent;
-      color: rgba(255,255,255,0.78);
-      border: none;
-      border-radius: ${T.radiusPill};
-      cursor: pointer;
-      transition: background 0.12s ease, color 0.12s ease;
-    }
-    .bdb-toggle:hover {
-      background: rgba(255,255,255,0.15);
-      color: ${T.colorGrayscaleWhite};
-    }
-    .bdb-toggle svg { width: 14px; height: 14px; }
   `;
 
   function injectStyles() {
@@ -235,9 +198,20 @@
     document.head.appendChild(style);
   }
 
-  // ── Icons ───────────────────────────────────────────────────────────────
-  const ICON_EXPAND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
-  const ICON_COLLAPSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+  // ── Brand logomark (Brik) ──────────────────────────────────────────────
+  // Inline SVG of the Brik logomark on its own Poppy rounded-square bg,
+  // baked-in to match the surrounding bar color. IDs are prefixed so they
+  // don't collide with anything on the host page.
+  const LOGO_SVG = `
+<svg width="22" height="22" viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<g clip-path="url(#bdb-logo-clip)">
+<rect width="104" height="104" rx="12" fill="#E35335"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M104 0H0V104H104V0ZM70.044 35.7735C66.768 33.4995 63.0977 32.3625 59.033 32.3625C55.4537 32.3625 52.3597 33.2071 49.751 34.8964C47.1423 36.5207 45.201 38.7947 43.927 41.7183V18.3071C43.927 16.812 42.7953 15.6 41.3992 15.6H28.5278C27.1317 15.6 26 16.812 26 18.3071V85.0107C26 86.5058 27.1317 87.7178 28.5278 87.7178H41.3992C42.7953 87.7178 43.927 86.5058 43.927 85.0107V79.0442C45.201 81.9679 47.1423 84.2743 49.751 85.9636C52.3597 87.5879 55.4537 88.4 59.033 88.4C63.0977 88.4 66.768 87.2955 70.044 85.0865C73.32 82.8125 75.8983 79.5639 77.779 75.3408C79.6597 71.0527 80.6 66.05 80.6 60.3325C80.6 54.6151 79.6597 49.6448 77.779 45.4217C75.8983 41.1986 73.32 37.9825 70.044 35.7735ZM46.475 52.1462C48.2343 50.1321 50.4487 49.125 53.118 49.125C55.9087 49.125 58.1533 50.1321 59.852 52.1462C61.6113 54.0953 62.491 56.8241 62.491 60.3325C62.491 63.9059 61.6113 66.6997 59.852 68.7138C58.1533 70.6629 55.9087 71.6375 53.118 71.6375C50.4487 71.6375 48.2343 70.6304 46.475 68.6163C44.7157 66.6022 43.836 63.841 43.836 60.3325C43.836 56.8891 44.7157 54.1603 46.475 52.1462Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="bdb-logo-clip"><rect width="104" height="104" rx="12" fill="white"/></clipPath>
+</defs>
+</svg>`;
 
   // ── DOM ─────────────────────────────────────────────────────────────────
   function buildBar() {
@@ -247,11 +221,10 @@
     bar.className = 'bdb-bar';
     bar.setAttribute('role', 'toolbar');
     bar.setAttribute('aria-label', 'Brik DevBar');
-    bar.setAttribute('data-collapsed', String(collapsed));
 
     const logo = document.createElement('div');
     logo.className = 'bdb-logo';
-    logo.innerHTML = `<span class="bdb-logo__mark">B</span><span>Brik</span>`;
+    logo.innerHTML = `<span class="bdb-logo__mark">${LOGO_SVG}</span><span>brik</span>`;
     bar.appendChild(logo);
 
     const divider = document.createElement('span');
@@ -263,30 +236,11 @@
     list.setAttribute('role', 'group');
     bar.appendChild(list);
 
-    const toggle = document.createElement('button');
-    toggle.type = 'button';
-    toggle.className = 'bdb-toggle';
-    toggle.setAttribute('aria-label', 'Collapse DevBar');
-    toggle.innerHTML = collapsed ? ICON_EXPAND : ICON_COLLAPSE;
-    toggle.addEventListener('click', toggleCollapsed);
-    bar.appendChild(toggle);
-
     document.body.appendChild(bar);
 
     elRefs.bar = bar;
     elRefs.list = list;
-    elRefs.toggle = toggle;
     elRefs.logo = logo;
-  }
-
-  function toggleCollapsed() {
-    collapsed = !collapsed;
-    localStorage.setItem('brik-devbar-collapsed', collapsed ? '1' : '0');
-    if (elRefs.bar) elRefs.bar.setAttribute('data-collapsed', String(collapsed));
-    if (elRefs.toggle) {
-      elRefs.toggle.innerHTML = collapsed ? ICON_EXPAND : ICON_COLLAPSE;
-      elRefs.toggle.setAttribute('aria-label', collapsed ? 'Expand DevBar' : 'Collapse DevBar');
-    }
   }
 
   // ── Slot rendering ──────────────────────────────────────────────────────
@@ -345,7 +299,6 @@
       initialized = true;
     }
     resort();
-    updateAggregateBadge();
     return api;
   }
 
@@ -353,12 +306,10 @@
     if (!slots.has(id)) return;
     slots.delete(id);
     resort();
-    updateAggregateBadge();
     if (slots.size === 0 && elRefs.bar) {
       elRefs.bar.remove();
       elRefs.bar = null;
       elRefs.list = null;
-      elRefs.toggle = null;
       elRefs.logo = null;
       initialized = false;
     }
@@ -369,31 +320,18 @@
     if (!slot) return;
     slot.badge = value;
     const btn = elRefs.list?.querySelector(`[data-slot-id="${id}"]`);
-    if (btn) {
-      let badgeEl = btn.querySelector('.bdb-slot__badge');
-      if (value == null) {
-        if (badgeEl) badgeEl.remove();
-      } else {
-        if (!badgeEl) {
-          badgeEl = document.createElement('span');
-          badgeEl.className = 'bdb-slot__badge';
-          btn.appendChild(badgeEl);
-        }
-        badgeEl.textContent = String(value);
-      }
+    if (!btn) return;
+    let badgeEl = btn.querySelector('.bdb-slot__badge');
+    if (value == null) {
+      if (badgeEl) badgeEl.remove();
+      return;
     }
-    updateAggregateBadge();
-  }
-
-  // When any slot has a badge, show a small dot on the logo mark so the
-  // user sees activity even when the bar is collapsed.
-  function updateAggregateBadge() {
-    const hasAny = Array.from(slots.values()).some((s) => s.badge != null && s.badge !== '' && s.badge !== 0);
-    if (!elRefs.logo) return;
-    const mark = elRefs.logo.querySelector('.bdb-logo__mark');
-    if (!mark) return;
-    if (hasAny) mark.setAttribute('data-agg-badge', 'true');
-    else mark.removeAttribute('data-agg-badge');
+    if (!badgeEl) {
+      badgeEl = document.createElement('span');
+      badgeEl.className = 'bdb-slot__badge';
+      btn.appendChild(badgeEl);
+    }
+    badgeEl.textContent = String(value);
   }
 
   function setActive(id, active) {
