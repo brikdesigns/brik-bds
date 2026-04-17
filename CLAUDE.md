@@ -131,6 +131,8 @@ The MCP addon (`@storybook/addon-mcp`) exposes the full BDS component library as
 
 **When building portal UI:** Start Storybook first. Claude will auto-query BDS components via MCP for correct prop usage.
 
+**MCP unreachable?** If `get-storybook-story-instructions` fails (Storybook not running, connection refused), read the cached fallback at [`docs/STORYBOOK-WRITING-GUIDE.md`](docs/STORYBOOK-WRITING-GUIDE.md). This mirrors the MCP output and is kept in sync — if you call the MCP later and its content differs, update the cached file in the same PR.
+
 **Addon vitest** (`@storybook/addon-vitest`) is also installed for the test feedback loop.
 
 ### Chromatic (visual testing + hosted Storybook)
