@@ -133,6 +133,14 @@ The MCP addon (`@storybook/addon-mcp`) exposes the full BDS component library as
 
 **MCP unreachable?** If `get-storybook-story-instructions` fails (Storybook not running, connection refused), read the cached fallback at [`docs/STORYBOOK-WRITING-GUIDE.md`](docs/STORYBOOK-WRITING-GUIDE.md). This mirrors the MCP output and is kept in sync — if you call the MCP later and its content differs, update the cached file in the same PR.
 
+### Shared autostart helper
+
+[`scripts/ensure-storybook.sh`](scripts/ensure-storybook.sh) is the source of truth for the Storybook autostart logic used by every BDS-consumer's `session-guard.sh` hook (portal, renew-pms, brikdesigns). Each consumer pipes its Claude Code `tool_input` JSON into this helper on stdin; if the edit targets a UI file and Storybook isn't listening on `:6006`, the helper launches it in the background.
+
+**Why shared:** before this helper existed, each consumer carried a ~35-line copy of the autostart logic. Now the consumers have a 3-line invocation; changes to the autostart behavior happen here and propagate on next consumer commit.
+
+**Marker keying:** the helper reads `SESSION_GUARD_PARENT_PID` (exported by the caller) so all consumer hooks share one "already-fired" marker per Claude Code session. Without it, each hook would fire independently.
+
 **Addon vitest** (`@storybook/addon-vitest`) is also installed for the test feedback loop.
 
 ### Chromatic (visual testing + hosted Storybook)
