@@ -92,6 +92,81 @@ function extractTokensUsed(componentDir) {
   return Array.from(tokens).sort();
 }
 
+/**
+ * Extract static a11y signals from a component's .tsx source: which
+ * aria-* attributes it references, which role= values, whether it appears
+ * to manage focus (usesFocus), whether it exposes a label prop.
+ *
+ * Not a replacement for a real axe run — this is a cheap, zero-runtime
+ * signal for the inspect widget's Accessibility section, showing "what
+ * this component offers for a11y," complementing the runtime checks on
+ * actual DOM instances.
+ */
+function extractA11ySignals(componentDir, pascalName) {
+  const signals = {
+    aria_attrs: new Set(),
+    roles: new Set(),
+    manages_focus: false,
+    has_label_prop: false,
+    uses_keyboard_handlers: false,
+    notes: [],
+  };
+  const tsxPath = join(componentDir, `${pascalName}.tsx`);
+  if (!existsSync(tsxPath)) {
+    return normalizeA11ySignals(signals);
+  }
+  const src = readFileSync(tsxPath, 'utf8');
+
+  // aria-* usage — catches both JSX props (aria-label={...}) and string literals ('aria-label').
+  const ariaRe = /aria-[a-z]+/g;
+  let m;
+  while ((m = ariaRe.exec(src)) !== null) signals.aria_attrs.add(m[0]);
+
+  // role="..." props
+  const roleRe = /role=["']([a-z-]+)["']/g;
+  while ((m = roleRe.exec(src)) !== null) signals.roles.add(m[1]);
+
+  // Focus management hints
+  if (/\.focus\(\)|useAutoFocus|autoFocus=\{|FocusTrap|focus-visible/i.test(src)) {
+    signals.manages_focus = true;
+  }
+
+  // Label prop (a common Brik/BDS pattern — e.g. IconButton requires label).
+  if (/\blabel\??:\s*string/i.test(src) || /label:\s*ReactNode/i.test(src)) {
+    signals.has_label_prop = true;
+  }
+
+  // Keyboard handlers
+  if (/onKeyDown|onKeyUp|onKeyPress/i.test(src)) {
+    signals.uses_keyboard_handlers = true;
+  }
+
+  // Known components that require specific a11y wiring — surface a note so
+  // the inspect panel can nudge the consumer ("IconButton: label prop is required").
+  if (pascalName === 'IconButton') {
+    signals.notes.push('Requires a `label` prop — becomes aria-label on the button.');
+  }
+  if (pascalName === 'Dialog' || pascalName === 'Modal') {
+    signals.notes.push('Must receive an aria-labelledby or aria-label. Focus trap lives in the component.');
+  }
+  if (pascalName === 'TextInput' || pascalName === 'TextArea' || pascalName === 'Select') {
+    signals.notes.push('Pair with a visible <label> via htmlFor + id, or supply aria-label when a visible label is intentionally omitted.');
+  }
+
+  return normalizeA11ySignals(signals);
+}
+
+function normalizeA11ySignals(signals) {
+  return {
+    aria_attrs: Array.from(signals.aria_attrs).sort(),
+    roles: Array.from(signals.roles).sort(),
+    manages_focus: signals.manages_focus,
+    has_label_prop: signals.has_label_prop,
+    uses_keyboard_handlers: signals.uses_keyboard_handlers,
+    notes: signals.notes,
+  };
+}
+
 function buildComponents() {
   if (!existsSync(COMPONENTS_DIR)) return {};
   const components = {};
@@ -115,6 +190,7 @@ function buildComponents() {
       description: override.description ?? readDescription(dir, pascalName),
       source_path: `components/ui/${pascalName}/${pascalName}.tsx`,
       tokens_used: extractTokensUsed(dir),
+      a11y: extractA11ySignals(dir, pascalName),
     };
   }
   return components;
