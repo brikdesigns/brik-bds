@@ -235,25 +235,19 @@ function parseCssTokens() {
     loadFromCss(SD_CSS_PATH);
   }
 
-  // Load migrated token files (themes + webflow-tokens with SD names)
-  const MIGRATED_TOKENS = path.join(__dirname, '..', 'tokens', 'webflow-tokens.css');
-  const MIGRATED_THEMES = path.join(__dirname, '..', 'tokens', 'themes.css');
+  // Load token files
   const FIGMA_TOKENS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');
   const GAP_FILLS = path.join(__dirname, '..', 'tokens', 'gap-fills.css');
-  const OVERRIDES = path.join(__dirname, '..', 'tokens', 'overrides.css');
   const BRIDGE = path.join(__dirname, '..', 'tokens', 'bridge.css');
-  if (fs.existsSync(MIGRATED_TOKENS)) loadFromCss(MIGRATED_TOKENS);
-  if (fs.existsSync(MIGRATED_THEMES)) loadFromCss(MIGRATED_THEMES);
   if (fs.existsSync(FIGMA_TOKENS)) loadFromCss(FIGMA_TOKENS);
   if (fs.existsSync(GAP_FILLS)) loadFromCss(GAP_FILLS);
-  if (fs.existsSync(OVERRIDES)) loadFromCss(OVERRIDES);
   if (fs.existsSync(BRIDGE)) loadFromCss(BRIDGE);
 
   // Ensure at least one token source was loaded
   if (allTokens.size === 0) {
     console.error('ERROR: No token sources found. Need at least one of:');
     console.error(`  - ${SD_CSS_PATH}`);
-    console.error(`  - ${MIGRATED_TOKENS}`);
+    console.error(`  - ${FIGMA_TOKENS}`);
     process.exit(1);
   }
 
