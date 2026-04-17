@@ -1,11 +1,18 @@
 /**
  * Brik Brand Theme — Light + Dark modes
  *
- * The canonical theme for brikdesigns.com, brik-client-portal, and Storybook default.
+ * Loaded by: Storybook ONLY (.storybook/preview.tsx). NOT bundled into
+ * dist/tokens.css. Consumers that apply Brik brand colors (portal,
+ * brikdesigns.com) ship their own brand-theme file until consolidation.
+ *
+ * See tokens/CASCADE.md for the full load-order + selector contract.
+ *
  * Color + typography overrides only; spacing uses Base mode defaults from figma-tokens.css.
  *
- * Dark mode values sourced from figma-tokens-dark.css (Figma color/dark mode),
- * re-scoped from :root[data-theme="dark"] to .theme-brik.dark for class-based switching.
+ * Dark mode uses `.theme-brik.dark` (class toggle) instead of the consumer
+ * `:root[data-theme="dark"]` selector. The values here duplicate what
+ * figma-tokens-dark.css declares — kept in sync by convention until the
+ * structural followup rescopes this file to `[data-theme="dark"]`.
  */
 
 /* ─── Light mode ─────────────────────────────────────────────── */
