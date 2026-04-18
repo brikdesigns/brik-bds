@@ -67,6 +67,7 @@ These rules apply in every project that imports BDS tokens (portal, renew-pms, b
 | `stories/` | Foundation Storybook docs (tokens, typography, color) |
 | `tokens/` | Token documentation and build scripts |
 | `design-tokens/` | Figma token definitions (Style Dictionary input) |
+| `content-system/` | **BCS** — content vocabulary (industries, voices, locked enums) |
 | `scripts/` | Build automation and linting |
 | `docs/` | Reference docs (token consumption, Figma architecture) |
 
@@ -274,6 +275,68 @@ See [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) for the full consumption pat
 4. `.husky/pre-commit` - Token compliance gate (blocks hardcoded px values)
 
 **Reference implementation:** brik-client-portal
+
+## Content System (BCS)
+
+BCS is the **content-vocabulary peer** to the token system. Lives at `content-system/` in this repo. Same cascade pattern as tokens, but for copy instead of visuals.
+
+Shipped as a second npm entry point:
+
+```tsx
+import {
+  industryPacks,
+  voicePatterns,
+  PERSONALITY_VALUES,
+  VOICE_VALUES,
+  VISUAL_STYLE_VALUES,
+  DEFAULT_INDUSTRY_SLUG,
+  type IndustryPack,
+  type VoicePattern,
+} from '@brikdesigns/bds/content-system';
+```
+
+### Architecture
+
+```
+content-system/
+├── vocabularies/   Locked enums — Personality × 11, Voice × 8, Visual Style × 11, Industry slugs
+├── schema/         IndustryPack + VoicePattern TypeScript types
+├── industries/     {slug}.ts (data) + {slug}.mdx (narrative) pairs
+└── voices/         {slug}.ts per voice trait + Overview.mdx
+```
+
+Each industry or voice has its structured data in `.ts` and human narrative in `.mdx`. The MDX imports from the `.ts` so values render inline — single source of truth. Storybook renders the MDX; automations consume the TS.
+
+### BCS Discipline
+
+These rules apply to every BCS authoring or consumption task — same weight as the token rules above.
+
+1. **Locked enums are the single source of truth.** `PERSONALITY_VALUES`, `VOICE_VALUES`, `VISUAL_STYLE_VALUES`, `INDUSTRY_SLUGS` are exported from BCS and imported by the portal. Never hardcode these values in consumer code; never drift them between repos.
+2. **Industry slug registry + packs must stay in sync.** Adding a slug to `INDUSTRY_SLUGS` without a matching `industries/{slug}.ts` + `.mdx` fails typecheck via `Record<IndustrySlug, IndustryPack>`. Do not bypass with `as` assertions.
+3. **Versioning + review cadence are mandatory.** Every pack has `version`, `reviewCadence`, `lastReviewed`. Bump on content change (semver); update `lastReviewed` when you've confirmed accuracy on a review pass even without changes.
+4. **The catch-all graduates.** `small-business` is `DEFAULT_INDUSTRY_SLUG`. Graduate a vertical out when Brik has 3+ clients OR seasonality/regulation/terminology diverges meaningfully OR strategy docs repeat 60%+.
+5. **Voice patterns compose compositionally, not via lookup table.** Each voice defines structured rules. The portal resolver blends up to 3 picks with first-pick-60 / second-30 / third-10 weighting. Don't try to enumerate all 336 combinations.
+6. **Client overrides win over industry defaults.** Same cascade as tokens: `company_profile.cta_language` / `anti_messages` / `naming_conventions` override the industry pack. Fill-through where client data is empty.
+7. **No literal `<` in MDX copy.** MDX v3 parses `<` as a JSX tag opening. Use "under" or `&lt;` or wrap in backticks.
+
+### Authoring a new industry pack
+
+1. Add slug to `content-system/vocabularies/industry.ts` in `INDUSTRY_SLUGS`.
+2. Create `content-system/industries/{slug}.ts` — typed `IndustryPack` data. Use `dental.ts` as reference for maximum structure.
+3. Create `content-system/industries/{slug}.mdx` — narrative companion. Include `<Meta title="Content System/Industries/{DisplayName}" />`.
+4. Register the pack in `content-system/industries/index.ts`.
+5. Run `npm run build:content-system && npm run build-storybook` to validate.
+
+### BCS build pipeline
+
+| Command | Input | Output |
+| --- | --- | --- |
+| `npm run build:content-system` | `content-system/**/*.ts` | `dist/content-system/**/*.js` + `.d.ts` |
+| `npm run build:lib` (includes content-system) | Full repo | Publishable `dist/` |
+
+`tsconfig.content-system.json` is the scoped build config — keeps content-system compilation separate from the Vite lib build of components.
+
+See [content-system/README.md](content-system/README.md) and the Storybook **Content System / Overview** page for the full authoring guide.
 
 ## Token PR Checklist
 

@@ -11,7 +11,7 @@ content-system/
 ├── vocabularies/    Locked enums — portal imports these directly
 ├── schema/          TypeScript types for pack authoring
 ├── industries/      Industry packs ({slug}.ts + {slug}.mdx pairs)
-└── voices/          Voice patterns (phase 2)
+└── voices/          Voice patterns (8 traits — rules, examples, pairings)
 ```
 
 ## Locked enums
