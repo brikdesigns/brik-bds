@@ -1,0 +1,152 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { PERSONALITY_VALUES, VOICE_VALUES, VISUAL_STYLE_VALUES, INDUSTRY_SLUGS } from './vocabularies';
+import { industryPacks } from './industries';
+import { voicePatterns } from './voices';
+
+<Meta title="Content System/Overview" />
+
+# Brik Content System (BCS)
+
+BCS is the **content vocabulary** that pairs with BDS's visual vocabulary. Together they form the two halves of the resolver in the client portal: signal in → design + copy out, with consistent constraints and shared taxonomy.
+
+BDS answers *"what does the site look like?"* — tokens, components, blueprints, themes.
+BCS answers *"what does the site sound like, and for whom?"* — voice patterns, industry packs, service catalogs, regulatory constraints.
+
+Both live in this repo because they're the same kind of artifact: a versioned vocabulary that many consumers depend on. Portal, mockup generators, content automations, and strategy workers all import from here.
+
+## Architecture
+
+```
+content-system/
+├── vocabularies/          Locked enums — single source of truth for the 3 portal axes
+│   ├── personality.ts     11 traits
+│   ├── voice.ts           8 traits
+│   ├── visual-style.ts    11 traits
+│   └── industry.ts        slug registry
+├── schema/                TypeScript types for pack authoring
+│   └── industry-pack.ts
+├── industries/            Industry packs — data + narrative
+│   ├── dental.ts  + .mdx
+│   └── small-business.ts  + .mdx
+└── voices/                Voice patterns — 8 VoicePattern files + blender spec
+```
+
+Each industry pack is two co-located files: a `.ts` file exporting the typed `IndustryPack` data, and an `.mdx` narrative that renders in this Storybook. Both describe the same industry — keep them in sync.
+
+Voice patterns are lighter weight — one `.ts` file per voice trait, plus a single [Voices Overview](?path=/docs/content-system-voices-overview--docs) page that renders all 8 side-by-side for comparison.
+
+## The three axes
+
+Captured in the client portal; imported from here so nothing drifts.
+
+| Axis | Count | Values |
+|---|---|---|
+| **Personality** | {PERSONALITY_VALUES.length} | {PERSONALITY_VALUES.join(' · ')} |
+| **Voice** | {VOICE_VALUES.length} | {VOICE_VALUES.join(' · ')} |
+| **Visual Style** | {VISUAL_STYLE_VALUES.length} | {VISUAL_STYLE_VALUES.join(' · ')} |
+
+Clients pick up to 3 in each axis. Overlap across axes (e.g. "Approachable" in Personality + Voice) is a strength signal the resolver should weight higher.
+
+## Voice patterns
+
+{VOICE_VALUES.length} canonical voices, {Object.keys(voicePatterns).length} patterns authored. Browse the [Voices Overview](?path=/docs/content-system-voices-overview--docs) to see all 8 side-by-side with examples.
+
+<table>
+  <thead><tr><th>Voice</th><th>Summary</th></tr></thead>
+  <tbody>
+    {VOICE_VALUES.map(v => (
+      <tr key={v}><td><strong>{v}</strong></td><td>{voicePatterns[v].summary}</td></tr>
+    ))}
+  </tbody>
+</table>
+
+## Industry packs
+
+{INDUSTRY_SLUGS.length} registered slugs, {Object.keys(industryPacks).length} with full packs ported.
+
+<table>
+  <thead><tr><th>Slug</th><th>Display Name</th><th>Version</th><th>Last Reviewed</th></tr></thead>
+  <tbody>
+    {INDUSTRY_SLUGS.map(s => {
+      const p = industryPacks[s];
+      return p ? (
+        <tr key={s}>
+          <td><code>{s}</code></td>
+          <td>{p.displayName}</td>
+          <td>{p.version}</td>
+          <td>{p.lastReviewed}</td>
+        </tr>
+      ) : (
+        <tr key={s}>
+          <td><code>{s}</code></td>
+          <td><em>(pending port)</em></td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table>
+
+## How the portal uses BCS
+
+```ts
+// In the portal resolver:
+import {
+  industryPacks,
+  DEFAULT_INDUSTRY_SLUG,
+  type IndustrySlug,
+} from '@brikdesigns/bds/content-system';
+
+function resolveBrandLanguage(profile: CompanyProfile) {
+  const slug = (profile.industry_slug ?? DEFAULT_INDUSTRY_SLUG) as IndustrySlug;
+  const pack = industryPacks[slug];
+
+  return {
+    ctaLanguage: {
+      approved: dedupe([
+        ...profile.cta_language?.approved ?? [],  // client override wins
+        ...pack.ctaDefaults.approved,              // industry default fills gaps
+      ]),
+      rejected: dedupe([
+        ...profile.cta_language?.rejected ?? [],
+        ...pack.ctaDefaults.rejected,
+      ]),
+    },
+    vocabulary: {
+      preferred: pack.vocabulary.preferred,
+      avoid: [
+        ...pack.vocabulary.avoid,
+        ...profile.anti_messages.map(m => ({ term: m, reason: 'client-specified' })),
+      ],
+    },
+    // ...page archetypes, services, regulatory, seasonality...
+  };
+}
+```
+
+Same cascade pattern as token theming: **client > industry > baseline**.
+
+## Authoring an industry pack
+
+1. Add the slug to [`vocabularies/industry.ts`](?path=/docs/content-system-vocabularies--docs).
+2. Create `industries/{slug}.ts` — typed `IndustryPack` data. Use dental.ts as a model for structure depth.
+3. Create `industries/{slug}.mdx` — narrative companion. Use dental.mdx as a model for sections.
+4. Add to the registry in `industries/index.ts`.
+5. Bump `version` and set `lastReviewed` to today.
+6. Review cadence is quarterly by default. CI should flag packs past their review date (future enhancement).
+
+## Phase roadmap
+
+- ✓ Phase 1 — Vocabulary lock + schema + first 3 industry packs
+- ✓ Phase 2 — 8 voice pattern files + blender spec
+- ☐ Phase 3 — Resolver in portal (`resolveBrandLanguage`, `resolveTheme`, `composeBlueprints`)
+- ☐ Phase 4 — Blueprint library materialized with Personality/Voice/VisualStyle tags
+- ☐ Phase 5 — Claude Design in Paper consuming resolved output
+- ☐ Phase 6 — Build script: `content-system.json` emit for non-TS consumers
+
+## Related
+
+- [Industries index](?path=/docs/content-system-industries-dental--docs)
+- [Design Tokens overview](?path=/docs/foundations-design-tokens-overview--docs)
+- [Client Themes](?path=/docs/foundations-design-tokens-client-themes--docs)

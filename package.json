@@ -12,6 +12,10 @@
       "import": "./dist/index.esm.js",
       "require": "./dist/index.cjs.js"
     },
+    "./content-system": {
+      "types": "./dist/content-system/index.d.ts",
+      "import": "./dist/content-system/index.js"
+    },
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
     "./bridge.css": "./dist/bridge.css"
@@ -75,7 +79,8 @@
     "build:sd-figma": "node scripts/flatten-tokens-studio.js && npx style-dictionary build --config sd.config.tokens-studio.mjs",
     "build:sd-dark": "node scripts/flatten-tokens-studio.js --mode color=dark --output design-tokens/tokens-figma-dark.json && npx style-dictionary build --config sd.config.dark.mjs",
     "build:all-tokens": "npm run build:sd-figma && npm run build:sd-dark",
-    "build:lib": "vite build --config vite.config.lib.ts && npm run build:types && npm run build:dist-tokens && npm run build:inspector-manifest",
+    "build:lib": "vite build --config vite.config.lib.ts && npm run build:types && npm run build:content-system && npm run build:dist-tokens && npm run build:inspector-manifest",
+    "build:content-system": "tsc --project tsconfig.content-system.json",
     "build:inspector-manifest": "node scripts/build-inspector-manifest.mjs",
     "build:types": "tsc --project tsconfig.build.json",
     "build:dist-tokens": "node scripts/build-dist-tokens.js",

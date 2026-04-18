@@ -1,0 +1,115 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { dental } from './dental';
+
+<Meta title="Content System/Industries/Dental" />
+
+# Dental
+
+**Version:** {dental.version}  •  **Last reviewed:** {dental.lastReviewed}  •  **Review cadence:** {dental.reviewCadence}
+
+Static reference. Automations reference this when generating strategy documents. Never injected into client briefs as client-specific fact — always layer through the resolver so client overrides win.
+
+Structured data lives in [`dental.ts`](?path=/docs/content-system-industries-dental--docs). This page is the narrative companion. Keep them in sync.
+
+---
+
+## 1. Industry Overview
+
+Dental is a high-trust, local-first professional healthcare category. Patients choose providers based on proximity, insurance acceptance, and reputation signals more than price. The market is bifurcating between independent and small-group practices competing on patient experience, and DSO-backed practices competing on scale, convenience, and marketing spend.
+
+Patient acquisition is expensive and slow. Lifetime value is high — a single retained family can generate **$15K–$40K+** over a decade. This asymmetry is why retention nearly always outperforms acquisition spend for established practices.
+
+## 2. Default Affinities
+
+When a client hasn't yet picked traits in the portal, these are the pack's starting affinities. Clients always override.
+
+| Axis | Affinities (first = strongest) |
+|---|---|
+| **Personality** | {dental.affinities.personality.join(' · ')} |
+| **Voice** | {dental.affinities.voice.join(' · ')} |
+| **Visual Style** | {dental.affinities.visualStyle.join(' · ')} |
+
+Independent practices skew warmer and more conversational; cosmetic boutiques skew more Refined + Modern; pediatric practices skew Playful + Approachable. The pack defaults aim at the median general-practice independent.
+
+## 3. Common Patient Pain Points
+
+- **Cost anxiety** — surprise bills, unclear coverage, sticker shock on crowns/implants/ortho
+- **Dental anxiety** — ~36% of adults report moderate-to-severe dental fear; top reason for avoidance
+- **Insurance confusion** — PPO vs HMO vs FFS, in-network vs out, annual maximums
+- **Trust deficit** — suspicion of over-treatment ("do I really need this crown?")
+- **Scheduling friction** — long new-patient waits, inflexible hours for working parents
+- **Continuity of care** — patients stay for years; hygienist/dentist turnover triggers churn
+- **Cosmetic hesitation** — 3–12 month shopping cycles for veneers, Invisalign, implants
+
+## 4. Seasonality
+
+| Quarter | Intent | Focus |
+|---|---|---|
+| **Q1 (Jan–Mar)** | high | Insurance reset surge. Highest-intent window. New-patient calls peak. |
+| **Q2 (Apr–Jun)** | medium | Tax refunds drive cosmetic/elective inquiries. Long shopping cycles start. |
+| **Q3 (Jul–Aug)** | high | Pediatric + ortho surge during summer break. Adult cosmetic dips. |
+| **Q4 (Nov–Dec)** | high | Use-it-or-lose-it benefits push. Best campaign ROI of year for insurance practices. |
+
+## 5. Competitive Landscape
+
+- **Independent solo/small-group** — relationship, community ties, owner-dentist continuity
+- **DSO-backed** (Heartland, Pacific Dental, Aspen, Smile Brands, MB2) — ad spend, extended hours, standardized experience
+- **Specialty** (ortho, endo, perio, oral surgery, pediatric, prosthodontics) — referral-driven, board-certified authority
+- **Cosmetic / boutique** — design-forward, concierge, premium pricing, Instagram-native
+- **Budget / insurance-heavy** — high-volume, Medicaid/HMO, compete on access
+- **DTC aligner disruptors** — Invisalign, ClearCorrect (SmileDirectClub's collapse slowed but didn't stop this)
+
+## 6. Listings Requirements
+
+**Required:** Google Business Profile (primary category "Dentist" or specialty variant), Bing Places, Apple Business Connect, Facebook, Yelp, Healthgrades, Zocdoc.
+
+**Conditional (insurance-accepting practices only):** Delta Dental, MetLife, Cigna, Aetna, Humana provider finders — verify annually.
+
+**NPI** must match across all listings. Mismatch hurts trust and insurance routing.
+
+## 7. Regulatory Summary
+
+- **HIPAA** — patient photos, reviews, testimonials require written authorization; responses to reviews cannot confirm patient status
+- **State dental boards** — vary by state; common restrictions on "best," "#1," "specialist" (unless board-certified), "painless"
+- **Before/after photos** — require signed release; most states require "individual results vary" disclaimer
+- **ADA specialty recognition** — only 12 specialties are ADA-recognized; "cosmetic dentist" and "implant dentist" are NOT specialties
+- **ADA/WCAG 2.1 AA** — healthcare sites are frequent ADA-lawsuit targets; compliance is non-negotiable
+
+## 8. Vocabulary — Avoid
+
+<table>
+  <thead><tr><th>Term</th><th>Why</th></tr></thead>
+  <tbody>
+    {dental.vocabulary.avoid.map((v, i) => (
+      <tr key={i}><td><strong>{v.term}</strong></td><td>{v.reason}</td></tr>
+    ))}
+  </tbody>
+</table>
+
+## 9. Brik Strategic POV
+
+Three considerations that differentiate Brik's dental strategy. These are not generic industry facts — they reflect Brik's POV and should surface in briefs where applicable.
+
+### Retention Economics
+New-patient CAC ($200–$500+) vastly exceeds reactivation/case-close cost (under $10). A 1% hygiene reappt improvement on a ~2,000 active-patient practice produces $40–60K+/yr. A 5% case-acceptance gain can match 75–150 new patients in revenue. **Stabilize retention before recommending acquisition.**
+
+Brik audits: Total Active Patients, Unscheduled Active, New Patients (Last Month), Total Lost (Last Month), Hygiene Reappt %, Case Acceptance %, Production/Visit, No-Show Rate, Hyg/Dr Visit ratio, Email/Cell capture, ASAP List.
+
+### Independent vs DSO
+Independents should not out-spend DSOs. Structural moats: continuity of care, clinical autonomy, slower more personal experience, community embeddedness, owner-dentist visibility, decision speed, referral velocity.
+
+**Messaging posture:** continuity, ownership, community, clinical integrity. Avoid corporate gloss. "Your dentist. Not a corporation." — the emotional posture, not the literal words.
+
+### FFS Transition
+PPO write-offs commonly consume 20–40% of potential production. Transitioning toward FFS is typically the single highest-leverage long-term business decision for an established independent.
+
+**Prerequisites:** ~1,500+ active patients, hygiene reappt >90%, case acceptance >50%, healthy review presence, membership plan ready ($350–$500/yr covering 2 cleanings + exams + X-rays + 15–20% off treatment), owner-dentist with 3+ years of runway.
+
+Three transition patterns: **selective drop** (lowest-paying PPOs first), **full FFS**, **hybrid/grandfather** (honor existing; FFS for new patients only).
+
+---
+
+## Related
+
+- [Blueprint library](?path=/docs/content-system-blueprints--docs) — page layout patterns tagged with industry affinities
+- [Vocabularies](?path=/docs/content-system-vocabularies--docs) — locked enums for Personality, Voice, Visual Style

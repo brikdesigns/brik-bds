@@ -1,0 +1,127 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { smallBusiness } from './small-business';
+
+<Meta title="Content System/Industries/Small Business (General)" />
+
+# Small Business (General)
+
+**Version:** {smallBusiness.version}  •  **Last reviewed:** {smallBusiness.lastReviewed}  •  **Review cadence:** {smallBusiness.reviewCadence}
+
+Catch-all baseline for clients who don't yet fit a defined Brik sub-industry. Used as `DEFAULT_INDUSTRY_SLUG` by the resolver when no dedicated pack matches.
+
+Structured data lives in [`small-business.ts`](?path=/docs/content-system-industries-small-business--docs). Promotion rules at the bottom of this page govern when to graduate a vertical out of this pack.
+
+---
+
+## 1. What belongs here
+
+Local service and retail operators who don't fit a defined Brik sub-industry yet — boutique fitness, home services (HVAC, plumbing, electrical, landscaping), local legal/financial advisors, specialty retail, restaurants, pet services, and similar.
+
+These businesses share a common playbook — local-search dominance, reputation management, service clarity, conversion-focused sites — but vary widely in sales cycle, seasonality, and regulatory detail.
+
+**Treat this pack as the shared foundation; layer client-specific nuance into the brief.** Flag any finding that would materially change the playbook for the vertical so we know when to promote.
+
+## 2. Default Affinities
+
+| Axis | Affinities (first = strongest) |
+|---|---|
+| **Personality** | {smallBusiness.affinities.personality.join(' · ')} |
+| **Voice** | {smallBusiness.affinities.voice.join(' · ')} |
+| **Visual Style** | {smallBusiness.affinities.visualStyle.join(' · ')} |
+
+Intentionally balanced and conservative — the catch-all should not push clients toward a specific aesthetic. Client intake should always override.
+
+## 3. Common Customer Pain Points
+
+- **Trust and legitimacy** — is this business real, licensed, reviewed by people like me?
+- **Pricing opacity** — "call for quote" friction; customers increasingly expect ranges or transparent pricing
+- **Scheduling friction** — phone-only booking, slow response to web inquiries
+- **Service-area confusion** — do they come to me? do I come to them?
+- **Comparison shopping** — customers routinely get 2–3 quotes and read 3+ review platforms before choosing
+- **Response time** — leads go cold within hours; slow replies kill conversion
+- **Quality anxiety** — will the work be done right, on time, for the quoted price?
+- **Decision fatigue** — too many options, inconsistent credentials, unclear differentiation
+
+## 4. Seasonality (variable by vertical)
+
+| Quarter | Intent | Focus |
+|---|---|---|
+| **Q1** | medium | Tax-refund boost for discretionary (late Feb–Apr). January fitness/wellness surge. Home services quiet. |
+| **Q2** | high | Spring/summer ramp for home services, outdoor services, event/wedding-adjacent. |
+| **Q3** | medium | Back-to-school affects family-oriented services. Peak for most outdoor/seasonal verticals. |
+| **Q4** | high | Holiday retail push (Oct–Dec). Professional services slow late December. Year-end deductible spend. |
+
+**Flag during intake:** always identify the client's actual seasonal curve in onboarding — assumptions from one vertical rarely transfer to another.
+
+## 5. Competitive Landscape Patterns
+
+- **Direct local competitors** — 3–10 businesses in the same ZIP competing for the same queries
+- **Franchise / chain encroachment** — national brands with bigger ad budgets (Mosquito Joe, Mr. Handyman, Anytime Fitness, Massage Envy, H&R Block)
+- **Marketplace aggregators** — Yelp, Thumbtack, Angi, HomeAdvisor, Houzz, TaskRabbit, Bark — intercept bottom-of-funnel searches and resell leads
+- **Platform disruptors** — DoorDash/UberEats (restaurants), Airbnb (lodging), ClassPass (fitness), Rover (pet services)
+- **Solopreneur informal competition** — Nextdoor/Facebook groups competing on price; positioning opportunity for licensed businesses
+- **DIY / self-service alternatives** — YouTube, AI tools, big-box retail
+
+## 6. Listings Requirements
+
+**Foundational (all small businesses):** Google Business Profile (primary category is the #1 local-SEO lever), NAP consistency, Bing Places, Apple Business Connect, Facebook Business Page, Yelp, optional BBB.
+
+**Vertical-specific directory families** (conditional, evaluated during intake):
+
+| Vertical | Directories |
+|---|---|
+| Home services | Angi, Thumbtack, HomeAdvisor, Porch, Nextdoor |
+| Restaurants | Yelp, TripAdvisor, OpenTable, Resy, DoorDash, Uber Eats, Google Food Menu |
+| Legal / financial | Avvo, Justia, FindLaw, Super Lawyers, NAPFA |
+| Medical / wellness | Healthgrades, Zocdoc, Vitals |
+| Beauty | Vagaro, Booksy, StyleSeat, Fresha |
+| Fitness | ClassPass, Mindbody |
+| Real estate | Zillow, Realtor.com, Redfin, Trulia |
+
+## 7. Regulatory Summary
+
+| Topic | Scope | Implication |
+|---|---|---|
+| **Business licensing** | state | Surface license numbers in footer / About where required |
+| **FTC truth-in-advertising** | federal | Never use "best/#1/leading" without substantiation |
+| **FTC Endorsement Guides (2023)** | federal | Paid/incentivized reviews must be disclosed; fake reviews carry civil penalties |
+| **CAN-SPAM** | federal | Email templates need physical address + unsubscribe + 10-day honor |
+| **TCPA** | federal | SMS requires express opt-in; heavy per-message fines |
+| **ADA / WCAG 2.1 AA** | federal | Non-negotiable; small businesses are frequent lawsuit targets |
+| **CCPA / state privacy laws** | state | Privacy policy, cookie consent, right-to-delete mechanisms |
+| **Industry-specific** | industry | HIPAA, GLBA, state bar, licensing boards — cross-check during intake |
+
+## 8. Vocabulary — Avoid (catch-all baseline)
+
+<table>
+  <thead><tr><th>Term</th><th>Why</th></tr></thead>
+  <tbody>
+    {smallBusiness.vocabulary.avoid.map((v, i) => (
+      <tr key={i}><td><strong>{v.term}</strong></td><td>{v.reason}</td></tr>
+    ))}
+  </tbody>
+</table>
+
+**Do not use without client confirmation:** industry-specific jargon — always mirror the client's own language from intake and existing marketing.
+
+## 9. Promotion Criteria — Graduating Out of This Pack
+
+Graduate a sub-industry to its own reference pack when **any** of the following is true:
+
+1. Brik has **3 or more active clients** in that vertical, OR
+2. The vertical has meaningfully different **seasonality, regulation, or terminology** from this catch-all, OR
+3. Strategy documents for that vertical are **materially the same 60%+ of the time**, signaling a repeatable pattern worth codifying.
+
+When graduating:
+
+1. Add the new slug to [`vocabularies/industry.ts`](?path=/docs/content-system-vocabularies--docs).
+2. Create `{new-slug}.ts` (IndustryPack) + `{new-slug}.mdx` (narrative) in `content-system/industries/`.
+3. Backfill existing clients in the portal by updating `company_profiles.industry_slug`.
+4. Bump this pack's `version` and log the graduation in the changelog section of this file.
+
+---
+
+## Related
+
+- [Dental pack](?path=/docs/content-system-industries-dental--docs) — first graduated vertical, reference for pack structure
+- [Vocabularies](?path=/docs/content-system-vocabularies--docs) — locked enums
