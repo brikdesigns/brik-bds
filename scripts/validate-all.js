@@ -23,6 +23,7 @@ const steps = [
   { name: 'Token Lint', cmd: 'node scripts/lint-tokens.js --errors-only' },
   { name: 'Grid Audit', cmd: 'node scripts/audit-grid.js --summary' },
   { name: 'Theme Compliance', cmd: 'node scripts/validate-themes.js' },
+  { name: 'Blueprint Library', cmd: 'node scripts/validate-blueprints.mjs' },
   { name: 'TypeScript', cmd: 'npm run typecheck' },
   { name: 'Storybook Build', cmd: 'npm run build-storybook' },
 ];
