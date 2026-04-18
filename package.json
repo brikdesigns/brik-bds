@@ -16,12 +16,15 @@
       "types": "./dist/content-system/index.d.ts",
       "import": "./dist/content-system/index.js"
     },
+    "./blueprints": "./blueprints/blueprint-library.json",
+    "./blueprints/library.json": "./blueprints/blueprint-library.json",
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
     "./bridge.css": "./dist/bridge.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "blueprints/blueprint-library.json"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -73,7 +76,8 @@
     "health": "node scripts/health.js",
     "health:json": "node scripts/health.js --json",
     "typecheck": "tsc --noEmit",
-    "validate": "node scripts/lint-tokens.js --errors-only && npm run typecheck && npm run build-storybook",
+    "validate:blueprints": "node scripts/validate-blueprints.mjs",
+    "validate": "node scripts/lint-tokens.js --errors-only && npm run validate:blueprints && npm run typecheck && npm run build-storybook",
     "validate:full": "node scripts/validate-all.js",
     "precommit": "npm run validate",
     "build:sd-figma": "node scripts/flatten-tokens-studio.js && npx style-dictionary build --config sd.config.tokens-studio.mjs",
