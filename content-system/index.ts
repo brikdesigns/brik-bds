@@ -10,10 +10,12 @@
  *   - schema/       — TypeScript types for pack authoring
  *   - industries/   — industry packs (data + narrative)
  *   - voices/       — voice patterns (rules, examples, pairings)
+ *   - blueprints/   — layout + interaction pattern library shape
  */
 
 export * from './vocabularies';
 export * from './schema';
+export * from './blueprints';
 export { industryPacks, dental, realEstateRvMhc, smallBusiness } from './industries';
 export {
   voicePatterns,

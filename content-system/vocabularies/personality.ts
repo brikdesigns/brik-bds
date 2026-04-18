@@ -13,7 +13,8 @@
  *   - v0.9.0: added Trustworthy + Energetic. Cross-vertical load-bearing —
  *     Trustworthy is the default signal for medical/legal/financial;
  *     Energetic fills a gap between Playful and Bold for active-lifestyle
- *     and youth-forward brands.
+ *     and youth-forward brands. Also gives the mood→personality bridge
+ *     (blueprints/ARCHITECTURE.md) a clean target for every mood value.
  */
 export const PERSONALITY_VALUES = [
   'Warm',
