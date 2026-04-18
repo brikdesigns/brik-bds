@@ -7,7 +7,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   test: {
-    workspace: [
+    projects: [
       {
         extends: true,
         plugins: [
@@ -22,6 +22,14 @@ export default defineConfig({
             instances: [{ browser: 'chromium' }],
           },
           setupFiles: [path.join(dirname, '.storybook', 'vitest.setup.ts')],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'content-system',
+          environment: 'node',
+          include: ['content-system/**/*.test.ts'],
         },
       },
     ],
