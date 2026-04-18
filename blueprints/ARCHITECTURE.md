@@ -178,8 +178,8 @@ The validator rejects blueprints with neither `layout_spec` nor `pattern_spec` �
 | Phase | Scope | Status |
 |---|---|---|
 | A | Schema + bridges + vocabularies + ARCHITECTURE.md | ✓ Landed 2026-04-18 |
-| B | Port 25–26 blueprints from `design_blueprints` migrations → `blueprint-library.json`; add portal migration that seeds from BDS JSON; add `resolveBlueprintShortlist(profile)` helper | Pending |
-| C | Update 3 Notion docs to declare BDS canonical; publish `@brikdesigns/bds@0.9.0`; sync all consumers | Pending |
+| B | Port 25 blueprints from `design_blueprints` migrations → `blueprint-library.json`; validator CLI wired into `npm run validate`; `./blueprints` subpath export + publish `@brikdesigns/bds@0.9.0`; portal migration that seeds from BDS JSON; sync consumers | ✓ Landed 2026-04-18 |
+| C | Add `resolveBlueprintShortlist(profile)` helper; update 3 Notion docs to declare BDS canonical | Pending |
 | D (future) | Begin populating v2 interaction-pattern fields as Paper-first builds capture reusable effects | Ongoing |
 
 ---
