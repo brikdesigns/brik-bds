@@ -50,3 +50,13 @@ export {
   type ValidationIssue,
   type ValidationResult,
 } from './schema';
+
+export {
+  SHORTLIST_WEIGHTS,
+  scoreBlueprintForProfile,
+  resolveBlueprintShortlist,
+  resolveBlueprintShortlistWithScores,
+  type BlueprintShortlistProfile,
+  type BlueprintShortlistEntry,
+  type ResolveBlueprintShortlistOptions,
+} from './resolver';
