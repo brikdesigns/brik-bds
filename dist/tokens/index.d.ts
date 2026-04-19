@@ -435,53 +435,6 @@ export declare const fontLineHeights: {
     readonly none: "0%";
 };
 /**
- * Semantic color tokens (default theme values)
- *
- * @deprecated These reference Webflow-format variable names (--grayscale--, --_themes---).
- * Do NOT use these in components or new code. Use CSS custom properties from
- * figma-tokens.css directly (--text-primary, --background-brand-primary, etc.)
- * or import from @/lib/tokens in consuming projects.
- *
- * Retained for legacy Storybook compatibility only.
- */
-export declare const semanticColors: {
-    readonly "border--secondary": "var(--grayscale--light)";
-    readonly "surface--nav": "var(--grayscale--white)";
-    readonly "background--brand-primary": "var(--_themes---blue-green--blue-light)";
-    readonly "text--inverse": "var(--grayscale--white)";
-    readonly "text--on-color-dark": "var(--grayscale--white)";
-    readonly "text--on-color-light": "var(--grayscale--black)";
-    readonly "border--brand": "var(--_themes---blue-green--blue-light)";
-    readonly "background--primary": "var(--grayscale--white)";
-    readonly "border--inverse": "var(--grayscale--white)";
-    readonly "text--primary": "var(--grayscale--darkest)";
-    readonly "text--brand": "var(--_themes---blue-green--blue-light)";
-    readonly "surface--primary": "var(--grayscale--white)";
-    readonly "border--primary": "var(--grayscale--dark)";
-    readonly "surface--secondary": "var(--grayscale--lightest)";
-    readonly "page--primary": "var(--grayscale--white)";
-    readonly "text--muted": "var(--grayscale--dark)";
-    readonly "surface--brand-primary": "var(--_themes---blue-green--blue-light)";
-    readonly "border--input": "var(--grayscale--light)";
-    readonly "border--muted": "var(--grayscale--lighter)";
-    readonly "border--on-color": "white";
-    readonly "surface--brand-secondary": "var(--_themes---blue-green--green)";
-    readonly "text--secondary": "var(--grayscale--darker)";
-    readonly "background--secondary": "var(--grayscale--lightest)";
-    readonly "theme--accent": "var(--_themes---blue-green--green)";
-    readonly "theme--tertiary": "var(--_themes---blue-green--blue-dark)";
-    readonly "theme--secondary": "var(--_themes---blue-green--blue-lighter)";
-    readonly "theme--primary": "var(--_themes---blue-green--blue-light)";
-    readonly "page--brand": "var(--_themes---blue-green--blue-light)";
-    readonly "background--brand-secondary": "white";
-    readonly "background--inverse": "var(--grayscale--white)";
-    readonly "background--input": "var(--grayscale--white)";
-    readonly "background--image": "#17171799";
-    readonly "background--image-brand": "var(--_themes---blue-green--blue-light)";
-    readonly "page--secondary": "var(--grayscale--lighter)";
-    readonly "theme--fourth": "white";
-};
-/**
  * Semantic space tokens (default values)
  * Used by Storybook Spacing.mdx to render the semantic spacing scale.
  * Maps to SD single-dash --space-* variables (NOT the legacy --space-- double-dash format).
@@ -505,44 +458,4 @@ export declare const semanticSpace: {
     readonly "gap--huge": "var(--space-800)";
     readonly button: "var(--space-200)";
     readonly input: "var(--space-200)";
-};
-/**
- * Semantic typography tokens (default values)
- *
- * @deprecated Font family values here reflect an old Webflow theme configuration
- * and do not match the current BDS token stack (Poppins/Avenir/Century Schoolbook).
- * Do NOT use these in components. Use --font-family-heading/body/label/display from
- * figma-tokens.css, or import font.family.* from @/lib/tokens in consuming projects.
- *
- * Retained for legacy Storybook compatibility only.
- */
-export declare const semanticTypography: {
-    readonly "font-family--label": "\"Open Sans\", sans-serif";
-    readonly "body--sm": "var(--font-size--75)";
-    readonly "label--md-base": "var(--font-size--100)";
-    readonly "font-family--body": "\"Open Sans\", sans-serif";
-    readonly "body--md-base": "var(--font-size--100)";
-    readonly "font-family--heading": "\"Droid Sans\", sans-serif";
-    readonly "heading--xxx-large": "var(--font-size--1200)";
-    readonly "heading--large": "var(--font-size--700)";
-    readonly "label--lg": "var(--font-size--200)";
-    readonly "label--xl": "var(--font-size--300)";
-    readonly "label--sm": "var(--font-size--75)";
-    readonly "body--xl": "var(--font-size--300)";
-    readonly "font-family--display": "\"Droid Sans\", sans-serif";
-    readonly "display--large": "var(--font-size--1400)";
-    readonly "display--medium": "var(--font-size--1500)";
-    readonly "display--small": "var(--font-size--1600)";
-    readonly "heading--xx-large": "var(--font-size--1000)";
-    readonly "heading--x-large": "var(--font-size--900)";
-    readonly "heading--medium": "var(--font-size--500)";
-    readonly "heading--small": "var(--font-size--300)";
-    readonly "body--lg": "var(--font-size--200)";
-    readonly "heading--tiny": "var(--font-size--100)";
-    readonly "font-family--icon": "\"Apple Symbols\", \"Segoe UI Symbol\", sans-serif";
-    readonly "body--tiny": "var(--font-size--25)";
-    readonly "body--xs": "var(--font-size--50)";
-    readonly "icon--small": "var(--font-size--75)";
-    readonly "icon--medium-base": "var(--font-size--100)";
-    readonly "icon--large": "var(--font-size--200)";
 };
