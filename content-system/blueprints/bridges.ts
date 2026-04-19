@@ -46,7 +46,7 @@ export const MOOD_TO_PERSONALITY: Record<Mood, readonly Personality[]> = {
  * visual correlate. An empty array is explicit, not a bug.
  */
 export const MOOD_TO_VISUAL_STYLE: Record<Mood, readonly VisualStyle[]> = {
-  bold: [],
+  bold: ['Bold'],
   minimal: ['Minimal'],
   warm: [],
   corporate: ['Classic'],

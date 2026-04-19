@@ -1,5 +1,5 @@
 /**
- * Visual Style — the 11 canonical style directions captured in the client portal.
+ * Visual Style — the 13 canonical style directions captured in the client portal.
  *
  * Drives theme token selection (palette density, typography, spacing),
  * imagery treatment, and blueprint shortlist trimming. Distinct from
@@ -9,9 +9,14 @@
  * Clients pick up to 3. "Minimal" and "Playful" also appear in Personality;
  * "Luxurious" overlaps with Personality's "Luxury" (intentional — singular
  * adjective form in Personality, adverbial form here).
+ *
+ * Ordering mirrors the portal's onboarding picker so the eventual
+ * `taxonomy.ts` → BCS import swap is a zero-reorder change.
  */
 export const VISUAL_STYLE_VALUES = [
   'Minimal',
+  'Bold',
+  'Editorial',
   'Playful',
   'Luxurious',
   'Modern',
@@ -39,7 +44,7 @@ export const isVisualStyle = (value: string): value is VisualStyle =>
  *   - Portal onboarding picker (thumbnail next to each option)
  *   - Client-facing proposals and mood boards
  *
- * TODO(bcs): populate `referenceImageUrl` for all 11 styles. Scaffold
+ * TODO(bcs): populate `referenceImageUrl` for all 13 styles. Scaffold
  * ships with empty strings so dependent wiring (Storybook stories,
  * portal picker) can proceed in parallel; fill via a follow-up data-only
  * PR once the canonical URLs are finalized.
@@ -51,6 +56,8 @@ export interface VisualStyleMetadata {
 
 export const VISUAL_STYLE_METADATA: Record<VisualStyle, VisualStyleMetadata> = {
   Minimal: { referenceImageUrl: '' },
+  Bold: { referenceImageUrl: '' },
+  Editorial: { referenceImageUrl: '' },
   Playful: { referenceImageUrl: '' },
   Luxurious: { referenceImageUrl: '' },
   Modern: { referenceImageUrl: '' },
