@@ -1,0 +1,55 @@
+@layer bds-components {
+/* ─── SheetSection ─────────────────────────────────────────────── */
+
+.bds-sheet-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-sheet-section + .bds-sheet-section {
+  margin-top: var(--padding-lg);
+}
+
+.bds-sheet-section--spacing-lg + .bds-sheet-section {
+  margin-top: var(--padding-xl);
+}
+
+/* ─── Heading ───────────────────────────────────────────────── */
+
+.bds-sheet-section__heading {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* ─── Description ───────────────────────────────────────────── */
+
+.bds-sheet-section__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Content ───────────────────────────────────────────────── */
+
+.bds-sheet-section__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* Heading + content gap is tighter than content gap so the heading
+   reads as the label for the block below it. */
+.bds-sheet-section__heading + .bds-sheet-section__content,
+.bds-sheet-section__description + .bds-sheet-section__content {
+  margin-top: var(--gap-xs);
+}
+}

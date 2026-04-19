@@ -1,0 +1,33 @@
+@layer bds-components {
+/* ─── TagList ──────────────────────────────────────────────────── */
+
+.bds-tag-list {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Wrap ──────────────────────────────────────────────────── */
+
+.bds-tag-list--wrap {
+  flex-wrap: wrap;
+}
+
+.bds-tag-list--nowrap {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* ─── Gap ───────────────────────────────────────────────────── */
+
+.bds-tag-list--gap-xs {
+  gap: var(--gap-xs);
+}
+
+.bds-tag-list--gap-sm {
+  gap: var(--gap-sm);
+}
+
+.bds-tag-list--gap-md {
+  gap: var(--gap-md);
+}
+}

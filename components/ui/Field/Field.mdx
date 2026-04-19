@@ -1,0 +1,102 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './Field.stories';
+
+<Meta of={Stories} />
+
+# Field
+
+Label + value pair for read-mode display inside a Sheet. One API covers text, tags, URLs, bullet lists, and empty states.
+
+This is the most important primitive in the sheet body set — it replaces four separate patterns (`FieldPair`, `TextValue`, `SmartTextValue`, raw label/value markup) that were drifting across the portal.
+
+---
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+Stacked layout — label above value — is the default. Use for sheet body rows where the value needs full width.
+
+<Canvas of={Stories.Variants} />
+
+## Inline layout
+
+Label on the left, value right-aligned. Use for compact stat rows ("Status · Active", "Scraped · 8").
+
+<Canvas of={Stories.InlineLayout} />
+
+## Empty states
+
+When `children` is null, undefined, or empty string, `Field` renders an inline muted "Not set" string by default.
+
+<Canvas of={Stories.EmptyStates} />
+
+- Pass a string via `empty="..."` to customize the message per-field (e.g. "No owner assigned", "Independent").
+- The default "Not set" covers the generic case.
+
+## Section-level empty
+
+When an entire section has no data (vs. one missing field), pass an `<EmptyState>` into `empty`. Use the full bordered treatment sparingly — one per section at most.
+
+<Canvas of={Stories.SectionLevelEmpty} />
+
+## Value types
+
+`children` accepts any ReactNode — text, `<TagList>` / `<Tag>` groups, `<a>` links, `<BulletList>`, or compound content.
+
+<Canvas of={Stories.ValueTypes} />
+
+Rules:
+
+- **Don't style the value inline.** If a value needs tag treatment, use `<Tag>`. If it needs a link, use `<a>` (or `<TextLink>`). If it needs a list, use `<BulletList>`. Never reach for raw `color` or `text-transform` on a Field child.
+- **Don't nest Fields.** A value is a value — if you need sub-structure, it belongs in a new `SheetSection`.
+
+## Patterns
+
+Typical sheet-body field stack with mixed filled and empty values.
+
+<Canvas of={Stories.Patterns} />
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { Field, FieldGrid, TagList, Tag, BulletList } from '@brikdesigns/bds';
+
+// Single stacked field
+<Field label="Status">Active</Field>
+
+// Empty with custom message
+<Field label="Parent organization" empty="Independent" />
+
+// Inline layout — compact stat row
+<Field layout="inline" label="Scraped">8</Field>
+
+// Value with tags
+<Field label="Services">
+  <TagList>
+    <Tag size="sm">Cosmetic</Tag>
+    <Tag size="sm">Implants</Tag>
+  </TagList>
+</Field>
+
+// Value with a bullet list
+<Field label="Anti-messages">
+  <BulletList items={['No price-first', 'No corporate-clinic']} />
+</Field>
+
+// Inside a FieldGrid
+<FieldGrid columns={2}>
+  <Field label="Owner">Nick Stanerson</Field>
+  <Field label="Location">Thompson Station, TN</Field>
+</FieldGrid>
+```
