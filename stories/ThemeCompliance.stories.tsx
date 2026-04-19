@@ -1,26 +1,9 @@
 import { type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useThemeCompliance, type ThemeResult } from './_components/useThemeCompliance';
+import { DashboardFrame, DashboardSection } from './_components/DashboardFrame';
 
 // ─── Styles ─────────────────────────────────────────────────────────
-
-const heading: CSSProperties = {
-  fontFamily: 'var(--font-family-heading)',
-  fontSize: 'var(--heading-md)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  color: 'var(--text-primary)',
-  margin: '0 0 var(--gap-md)',
-};
-
-const sectionLabel: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-md)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  color: 'var(--text-secondary)',
-  margin: '0 0 var(--gap-sm)',
-  textTransform: 'uppercase' as const,
-  letterSpacing: '0.05em',
-};
 
 const tableCell: CSSProperties = {
   padding: 'var(--gap-xs) var(--gap-sm)',
@@ -116,24 +99,23 @@ function ThemeComplianceDashboard() {
   const total = results.length;
 
   return (
-    <div style={{ padding: 'var(--padding-xl)', display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', maxWidth: 1200 }}>
-      <div>
-        <h1 style={heading}>Theme Compliance</h1>
-        <div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-secondary)' }}>
-          WCAG AA contrast validation (4.5:1 minimum) across all {total} theme configurations.
-          {' '}<strong>{passing}/{total}</strong> themes fully compliant.
-        </div>
-      </div>
-
-      <div>
-        <h2 style={sectionLabel}>Contrast Matrix</h2>
+    <DashboardFrame
+      title="Theme Compliance"
+      subtitle={
+        <>
+          WCAG AA contrast validation (4.5:1 minimum) across all {total} theme configurations.{' '}
+          <strong>{passing}/{total}</strong> themes fully compliant.
+        </>
+      }
+    >
+      <DashboardSection title="Contrast matrix">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--gap-md)' }}>
           {results.map(theme => (
             <ThemeCard key={theme.name} theme={theme} />
           ))}
         </div>
-      </div>
-    </div>
+      </DashboardSection>
+    </DashboardFrame>
   );
 }
 
