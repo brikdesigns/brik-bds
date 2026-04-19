@@ -4,15 +4,17 @@ Hosted at `https://storybook.brikdesigns.com/visual-styles/{filename}`. Consumed
 
 ## Source
 
-All 11 images below are Paper artboards exported from file [`bds-theming`](https://app.paper.design/file/01KPH6ANXVEPBJ4PAVB7V380JH) at 1440×900. Export at 2x scale (2880×1800) for retina-sharp delivery; Storybook and the portal picker will down-scale as needed.
+All 13 images below are Paper artboards exported from file [`bds-theming`](https://app.paper.design/file/01KPH6ANXVEPBJ4PAVB7V380JH) at 1440×900. Export at 2x scale (2880×1800) for retina-sharp delivery; Storybook and the portal picker will down-scale as needed.
 
 ## Required files
 
-### Primary-style heroes (6)
+### Primary-style heroes (8)
 
 | Filename | Paper artboard | Source of inspiration |
 |---|---|---|
 | `minimal.png` | Minimal — Hero (`14-0`) | leadify-template.webflow.io |
+| `bold.png` | Bold — Hero (`8W-0`) | contemporary display poster |
+| `editorial.png` | Editorial — Hero (`9O-0`) | magazine feature story |
 | `playful.png` | Playful — Hero (`1S-0`) | pizza-guy.webflow.io |
 | `luxurious.png` | Luxurious — Hero (`L-0`) | villabliss-wbs.webflow.io |
 | `modern.png` | Modern — Hero (`2V-0`) | gradienttemplates.webflow.io |
@@ -28,13 +30,6 @@ All 11 images below are Paper artboards exported from file [`bds-theming`](https
 | `minimal-colorful.png` | Minimal + Colorful (`6K-0`) |
 | `luxurious-monochrome.png` | Luxurious + Monochrome (`79-0`) |
 | `classic-textural.png` | Classic + Textural (`7S-0`) |
-
-### Pending (2)
-
-No Paper artboards yet — registry entries ship with empty `referenceImageUrl`. Populate when dedicated heroes are authored.
-
-- `bold.png` — Bold primary hero
-- `editorial.png` — Editorial primary hero
 
 ## Export workflow
 
