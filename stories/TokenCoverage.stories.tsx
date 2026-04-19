@@ -1,5 +1,6 @@
 import { useState, useEffect, type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { DashboardFrame, DashboardSection } from './_components/DashboardFrame';
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -15,24 +16,6 @@ interface CoverageData {
 }
 
 // ─── Styles ─────────────────────────────────────────────────────────
-
-const heading: CSSProperties = {
-  fontFamily: 'var(--font-family-heading)',
-  fontSize: 'var(--heading-md)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  color: 'var(--text-primary)',
-  margin: '0 0 var(--gap-md)',
-};
-
-const sectionLabel: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-md)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  color: 'var(--text-secondary)',
-  margin: '0 0 var(--gap-sm)',
-  textTransform: 'uppercase' as const,
-  letterSpacing: '0.05em',
-};
 
 const card: CSSProperties = {
   padding: 'var(--padding-lg)',
@@ -154,54 +137,47 @@ function TokenCoverageDashboard() {
   const maxCount = data.used[0]?.count ?? 1;
 
   return (
-    <div style={{ padding: 'var(--padding-xl)', display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', maxWidth: 1200 }}>
-      <div>
-        <h1 style={heading}>Token Coverage</h1>
-        <div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-secondary)' }}>
+    <DashboardFrame
+      title="Token Coverage"
+      subtitle={
+        <>
           {data.totalUsed} of {data.totalDefined} defined tokens referenced in component CSS ({data.usagePct}%).
           {data.totalOrphaned > 0 && ` ${data.totalOrphaned} orphaned tokens.`}
+        </>
+      }
+    >
+      <DashboardSection title="Summary">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--gap-md)' }}>
+          <div style={card}><div style={metric}>{data.totalDefined}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Total defined</div></div>
+          <div style={card}><div style={{ ...metric, color: 'var(--color-system-green)' }}>{data.totalUsed}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Used in components</div></div>
+          <div style={card}><div style={{ ...metric, color: data.totalOrphaned > 50 ? 'var(--color-system-yellow)' : 'var(--text-primary)' }}>{data.totalOrphaned}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Orphaned</div></div>
+          <div style={card}><div style={{ ...metric, color: 'var(--color-system-green)' }}>{data.usagePct}%</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Usage rate</div></div>
         </div>
-      </div>
+      </DashboardSection>
 
-      {/* Summary cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--gap-md)' }}>
-        <div style={card}><div style={metric}>{data.totalDefined}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Total defined</div></div>
-        <div style={card}><div style={{ ...metric, color: 'var(--color-system-green)' }}>{data.totalUsed}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Used in components</div></div>
-        <div style={card}><div style={{ ...metric, color: data.totalOrphaned > 50 ? 'var(--color-system-yellow)' : 'var(--text-primary)' }}>{data.totalOrphaned}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Orphaned</div></div>
-        <div style={card}><div style={{ ...metric, color: 'var(--color-system-green)' }}>{data.usagePct}%</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Usage rate</div></div>
-      </div>
-
-      {/* Token usage table */}
-      <div>
-        <h2 style={sectionLabel}>Most-Used Tokens</h2>
+      <DashboardSection title="Most-used tokens">
         <TokenUsageTable tokens={data.used} maxCount={maxCount} />
-      </div>
+      </DashboardSection>
 
-      {/* Hardcoded values */}
       {data.hardcoded.length > 0 && (
-        <div>
-          <h2 style={sectionLabel}>Hardcoded Values by Component</h2>
+        <DashboardSection title="Hardcoded values by component">
           <HardcodedLeaderboard items={data.hardcoded} />
-        </div>
+        </DashboardSection>
       )}
 
-      {/* Orphaned tokens */}
       {data.orphaned.length > 0 && (
-        <div>
-          <h2 style={sectionLabel}>Orphaned Tokens ({data.orphaned.length})</h2>
+        <DashboardSection title={`Orphaned tokens (${data.orphaned.length})`}>
           <div style={{ ...card, maxHeight: 400, overflowY: 'auto' }}>
             <OrphanedList tokens={data.orphaned} />
           </div>
-        </div>
+        </DashboardSection>
       )}
 
-      {/* Undeclared references */}
       {data.undeclared && data.undeclared.length > 0 && (
-        <div>
-          <h2 style={sectionLabel}>Undeclared References ({data.undeclared.length})</h2>
-          <div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)', marginBottom: 'var(--gap-sm)' }}>
-            Tokens used in components but not defined in figma-tokens.css or gap-fills.css
-          </div>
+        <DashboardSection
+          title={`Undeclared references (${data.undeclared.length})`}
+          description="Tokens used in components but not defined in figma-tokens.css or gap-fills.css."
+        >
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <tbody>
               {data.undeclared.slice(0, 20).map(u => (
@@ -212,9 +188,9 @@ function TokenCoverageDashboard() {
               ))}
             </tbody>
           </table>
-        </div>
+        </DashboardSection>
       )}
-    </div>
+    </DashboardFrame>
   );
 }
 

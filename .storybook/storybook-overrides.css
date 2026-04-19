@@ -591,8 +591,12 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
   margin-bottom: 24px !important;
 }
 
-/* Max width for comfortable reading + top breathing room */
+/* Max width for MDX docs pages — prose, tables, code blocks.
+   Narrower than Health dashboards (which use DashboardFrame at 1200px)
+   because prose is best read at ~65-85 characters per line.
+   Margin: 0 auto centers the column in the preview pane. */
 .sbdocs-content {
   max-width: 980px !important;
+  margin: 0 auto !important;
   padding-top: 32px !important;
 }
