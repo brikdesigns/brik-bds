@@ -68,6 +68,34 @@ Pure read content that doesn't require an action can skip the backdrop and rende
 
 <Canvas of={Stories.ReadOnlyFloating} />
 
+## Tabs
+
+Tabs render below the header. Each tab renders its own body content — `children` is ignored when `tabs` is supplied. Use tabs to separate the primary **Details** view from secondary surfaces like **Sources** (provenance / linked records), **History**, or **Activity**.
+
+<Canvas of={Stories.Tabs} />
+
+- Keep the first tab's id in a stable constant (e.g. `'details'`) — it's the default active tab when `activeTab` is uncontrolled.
+- Use `activeTab` + `onTabChange` when you need to programmatically route to a specific tab (e.g. deep-linking to Sources from a notification).
+- Tabs stay in the header region so the back button, title, and tab row compose together cleanly for push-stack flows.
+
+## Secondary action (auto-footer)
+
+For ancillary actions that belong **next to** the primary Edit / Save actions — e.g. *Refresh Brief*, *Run Extraction*, *Re-generate Strategy* — pass `secondaryAction` instead of composing a custom `footer`. The action renders left-aligned; the mode-driven primary actions stay on the right.
+
+<Canvas of={Stories.SecondaryAction} />
+
+Behavior:
+
+- **Read mode** — renders `[Secondary] . . . [Close] [Edit]`.
+- **Edit mode** — secondary action is suppressed so Save's commit surface stays unambiguous.
+- **Custom `footer`** — wins over `secondaryAction`; compose manually.
+
+## Tabs + Secondary action + Read/Edit
+
+The full Phase 3+ sheet: tabs in the header, a secondary action in the footer, and read-edit toggling. Tabs are typically suppressed in edit mode so the form gets the full body.
+
+<Canvas of={Stories.TabsWithSecondaryAction} />
+
 ## Patterns
 
 Custom footer (overrides mode) and mobile bottom sheet.
@@ -85,6 +113,8 @@ A custom `footer` always wins over mode-driven auto-footer. Use it for non-stand
 | Read-only metadata, no CTA | `floating` | none |
 | Read detail with edit capability | `default`, `mode="read"` + `onEdit` | `[Close] [Edit]` (auto) |
 | Active form / edit workflow | `default`, `mode="edit"` + `onSave` | `[Cancel] [Save]` (auto) |
+| Read + ancillary action (refresh, re-run) | `mode="read"` + `onEdit` + `secondaryAction` | `[Refresh] . . . [Close] [Edit]` (auto) |
+| Record with provenance / linked records | any mode + `tabs` | mode-driven |
 | Non-standard action set | any | custom `footer` |
 
 Rules:

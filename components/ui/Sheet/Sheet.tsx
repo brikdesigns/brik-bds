@@ -17,6 +17,21 @@ export interface SheetTab {
 export type SheetVariant = 'default' | 'floating';
 export type SheetMode = 'read' | 'edit';
 
+/**
+ * Ancillary action rendered on the left side of the auto-footer (e.g.
+ * "Refresh Brief", "Run Extraction"). Suppressed when `mode === 'edit'`
+ * to avoid ambiguity about what Save commits.
+ *
+ * Ignored when a custom `footer` is supplied — compose manually in that case.
+ */
+export interface SheetSecondaryAction {
+  label: string;
+  onClick: () => void;
+  icon?: ReactNode;
+  loading?: boolean;
+  disabled?: boolean;
+}
+
 export interface SheetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -66,6 +81,12 @@ export interface SheetProps {
    * Use this for non-standard action sets.
    */
   footer?: ReactNode;
+  /**
+   * Optional left-aligned ancillary action rendered in the auto-footer
+   * alongside the mode-driven primary actions. Suppressed in edit mode.
+   * Ignored when a custom `footer` is supplied.
+   */
+  secondaryAction?: SheetSecondaryAction;
   /** Optional tabs rendered below the header. When provided, children is ignored. */
   tabs?: SheetTab[];
   /** Controlled active tab id (defaults to first tab) */
@@ -106,6 +127,7 @@ export function Sheet({
   saveDisabled,
   saveLoading,
   footer,
+  secondaryAction,
   tabs,
   activeTab: controlledTab,
   onTabChange,
@@ -156,8 +178,21 @@ export function Sheet({
 
   const activeTabContent = tabs?.find((t) => t.id === activeTab)?.content;
 
-  const resolvedFooter = (() => {
-    if (footer !== undefined) return footer;
+  // Secondary action renders on the left side of the footer in read mode only.
+  // Hidden during edit to keep Save's commit surface unambiguous.
+  const secondaryActionNode = secondaryAction && mode !== 'edit' ? (
+    <Button
+      variant="secondary"
+      onClick={secondaryAction.onClick}
+      disabled={secondaryAction.disabled}
+      loading={secondaryAction.loading}
+      iconBefore={secondaryAction.icon}
+    >
+      {secondaryAction.label}
+    </Button>
+  ) : null;
+
+  const primaryActionsNode = (() => {
     if (mode === 'edit' && onSave) {
       return (
         <>
@@ -188,6 +223,17 @@ export function Sheet({
       );
     }
     return null;
+  })();
+
+  const resolvedFooter = (() => {
+    if (footer !== undefined) return footer;
+    if (!secondaryActionNode && !primaryActionsNode) return null;
+    return (
+      <>
+        <div className="bds-sheet__footer-secondary">{secondaryActionNode}</div>
+        <div className="bds-sheet__footer-primary">{primaryActionsNode}</div>
+      </>
+    );
   })();
 
   const hasHeaderContent = title || subtitle || onBack || showCloseButton;
