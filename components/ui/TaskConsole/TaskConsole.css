@@ -186,9 +186,9 @@
 
 .bds-task-console__icon {
   flex-shrink: 0;
-  width: 20px; /* bds-lint-ignore — status icon sized between --icon-sm (16) and --icon-md (18) to match spinner diameter */
-  height: 20px; /* bds-lint-ignore — status icon sized between --icon-sm (16) and --icon-md (18) to match spinner diameter */
-  font-size: 20px; /* bds-lint-ignore — status icon sized to match spinner diameter */
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  font-size: var(--icon-lg);
 }
 
 .bds-task-console__icon--completed {
@@ -203,8 +203,8 @@
    3/4 track (default --border-primary reads dark on white surfaces). The
    leading quadrant keeps the brand accent. */
 .bds-task-console .bds-task-console__icon--in-progress {
-  width: 20px; /* bds-lint-ignore — match status icon diameter */
-  height: 20px; /* bds-lint-ignore — match status icon diameter */
+  width: var(--icon-lg);
+  height: var(--icon-lg);
   border-color: var(--surface-muted);
   border-top-color: var(--border-brand-primary);
 }
