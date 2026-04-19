@@ -12,11 +12,12 @@ export {
 
 export {
   VISUAL_STYLE_VALUES,
-  VISUAL_STYLE_METADATA,
+  VISUAL_STYLE_EXAMPLES,
   isVisualStyle,
-  getVisualStyleMetadata,
+  getVisualStyleExamples,
+  getPrimaryVisualStyleExample,
   type VisualStyle,
-  type VisualStyleMetadata,
+  type VisualStyleExample,
 } from './visual-style';
 
 export {
