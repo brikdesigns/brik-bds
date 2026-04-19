@@ -1,8 +1,12 @@
 import { type ReactNode, type HTMLAttributes, useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
-import { CaretDown, CaretUp, X, CheckCircle, WarningCircle, Spinner } from '../../icons';
+import { CaretDown, CaretUp, X, CheckCircle, Circle, WarningCircle } from '../../icons';
 import { bdsClass } from '../../utils';
+import { IconButton } from '../Button/IconButton';
+import { ButtonGroup } from '../ButtonGroup';
+import { ProgressBar } from '../ProgressBar';
+import { Spinner } from '../Spinner';
 import './TaskConsole.css';
 
 /* ─── Types ──────────────────────────────────────────────────── */
@@ -52,10 +56,10 @@ function StatusIcon({ status }: { status: TaskItemStatus }) {
     case 'failed':
       return <Icon icon={WarningCircle} className="bds-task-console__icon bds-task-console__icon--failed" />;
     case 'in_progress':
-      return <Icon icon={Spinner} className="bds-task-console__icon bds-task-console__icon--in-progress" />;
+      return <Spinner size="sm" className="bds-task-console__icon bds-task-console__icon--in-progress" />;
     case 'pending':
     default:
-      return <span className="bds-task-console__icon bds-task-console__icon--pending" />;
+      return <Icon icon={Circle} className="bds-task-console__icon bds-task-console__icon--pending" />;
   }
 }
 
@@ -89,6 +93,9 @@ export function TaskConsole({
   const failedCount = items.filter((i) => i.status === 'failed').length;
   const allDone = items.length > 0 && completedCount + failedCount === items.length;
   const allSucceeded = allDone && failedCount === 0;
+  const progressValue = items.length > 0
+    ? ((completedCount + failedCount) / items.length) * 100
+    : 0;
 
   // Auto-dismiss after all items complete
   useEffect(() => {
@@ -101,7 +108,7 @@ export function TaskConsole({
 
   if (!isOpen) return null;
 
-  const console = (
+  const consoleEl = (
     <div
       className={bdsClass(
         'bds-task-console',
@@ -122,39 +129,39 @@ export function TaskConsole({
           <span className="bds-task-console__title">{title}</span>
           {subtitle && <span className="bds-task-console__subtitle">{subtitle}</span>}
         </div>
-        <div className="bds-task-console__header-actions">
-          <button
-            type="button"
-            className="bds-task-console__btn"
-            onClick={(e) => { e.stopPropagation(); toggleCollapse(); }}
-            aria-label={collapsed ? 'Expand' : 'Collapse'}
-          >
-            <Icon icon={collapsed ? CaretUp : CaretDown} />
-          </button>
+        <ButtonGroup
+          className="bds-task-console__header-actions"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <IconButton
+            variant="ghost"
+            size="sm"
+            icon={<Icon icon={collapsed ? CaretUp : CaretDown} />}
+            label={collapsed ? 'Expand' : 'Collapse'}
+            onClick={toggleCollapse}
+          />
           {onDismiss && (
-            <button
-              type="button"
-              className="bds-task-console__btn"
-              onClick={(e) => { e.stopPropagation(); onDismiss(); }}
-              aria-label="Dismiss"
-            >
-              <Icon icon={X} />
-            </button>
+            <IconButton
+              variant="ghost"
+              size="sm"
+              icon={<Icon icon={X} />}
+              label="Dismiss"
+              onClick={onDismiss}
+            />
           )}
-        </div>
+        </ButtonGroup>
       </div>
 
       {/* ── Progress bar ───────────────────────────────────────── */}
       {!collapsed && items.length > 0 && (
-        <div className="bds-task-console__progress-track">
-          <div
-            className={bdsClass(
-              'bds-task-console__progress-fill',
-              failedCount > 0 && 'bds-task-console__progress-fill--error',
-            )}
-            style={{ width: `${((completedCount + failedCount) / items.length) * 100}%` }}
-          />
-        </div>
+        <ProgressBar
+          className={bdsClass(
+            'bds-task-console__progress',
+            failedCount > 0 && 'bds-task-console__progress--error',
+          )}
+          value={progressValue}
+          label="Task progress"
+        />
       )}
 
       {/* ── Item list ──────────────────────────────────────────── */}
@@ -194,7 +201,7 @@ export function TaskConsole({
   );
 
   if (typeof document === 'undefined') return null;
-  return createPortal(console, document.body);
+  return createPortal(consoleEl, document.body);
 }
 
 export default TaskConsole;

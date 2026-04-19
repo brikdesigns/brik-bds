@@ -100,8 +100,8 @@
 }
 
 .bds-tag--lg .bds-tag__icon {
-  width: 20px;
-  height: 20px;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
   font-size: var(--label-xl);
 }
 
