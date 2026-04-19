@@ -73,21 +73,34 @@ export interface VisualStyleExample {
   caption?: string;
 }
 
+/**
+ * Image URLs resolve to `.storybook/public/visual-styles/*.png` hosted at
+ * `https://storybook.brikdesigns.com/visual-styles/{file}`. Source artboards
+ * live in Paper `bds-theming` (file 01KPH6ANXVEPBJ4PAVB7V380JH).
+ *
+ * Bold + Editorial have no Paper artboard yet — their slots ship empty
+ * and get populated when those styles get dedicated hero references.
+ *
+ * See `.storybook/public/visual-styles/README.md` for the export drop-in
+ * convention (filenames + source artboard IDs).
+ */
+const IMG_BASE = 'https://storybook.brikdesigns.com/visual-styles';
+
 export const VISUAL_STYLE_EXAMPLES: readonly VisualStyleExample[] = [
-  { primaryStyle: 'Minimal',    modifierStyles: [], referenceImageUrl: '', referenceSiteUrl: 'https://leadify-template.webflow.io' },
+  { primaryStyle: 'Minimal',    modifierStyles: [], referenceImageUrl: `${IMG_BASE}/minimal.png`,    referenceSiteUrl: 'https://leadify-template.webflow.io' },
   { primaryStyle: 'Bold',       modifierStyles: [], referenceImageUrl: '' },
   { primaryStyle: 'Editorial',  modifierStyles: [], referenceImageUrl: '' },
-  { primaryStyle: 'Playful',    modifierStyles: [], referenceImageUrl: '', referenceSiteUrl: 'https://pizza-guy.webflow.io' },
-  { primaryStyle: 'Luxurious',  modifierStyles: [], referenceImageUrl: '', referenceSiteUrl: 'https://villabliss-wbs.webflow.io' },
-  { primaryStyle: 'Modern',     modifierStyles: [], referenceImageUrl: '', referenceSiteUrl: 'https://gradienttemplates.webflow.io' },
-  { primaryStyle: 'Classic',    modifierStyles: [], referenceImageUrl: '', caption: 'Editorial masthead tradition' },
-  { primaryStyle: 'Brutalist',  modifierStyles: [], referenceImageUrl: '', referenceSiteUrl: 'https://blacksmith-sbj.webflow.io' },
+  { primaryStyle: 'Playful',    modifierStyles: [], referenceImageUrl: `${IMG_BASE}/playful.png`,    referenceSiteUrl: 'https://pizza-guy.webflow.io' },
+  { primaryStyle: 'Luxurious',  modifierStyles: [], referenceImageUrl: `${IMG_BASE}/luxurious.png`,  referenceSiteUrl: 'https://villabliss-wbs.webflow.io' },
+  { primaryStyle: 'Modern',     modifierStyles: [], referenceImageUrl: `${IMG_BASE}/modern.png`,     referenceSiteUrl: 'https://gradienttemplates.webflow.io' },
+  { primaryStyle: 'Classic',    modifierStyles: [], referenceImageUrl: `${IMG_BASE}/classic.png`,    caption: 'Editorial masthead tradition' },
+  { primaryStyle: 'Brutalist',  modifierStyles: [], referenceImageUrl: `${IMG_BASE}/brutalist.png`,  referenceSiteUrl: 'https://blacksmith-sbj.webflow.io' },
   // Modifier-demo compositions from Paper bds-theming
-  { primaryStyle: 'Modern',     modifierStyles: ['Dark'],       referenceImageUrl: '' },
-  { primaryStyle: 'Brutalist',  modifierStyles: ['Light'],      referenceImageUrl: '' },
-  { primaryStyle: 'Minimal',    modifierStyles: ['Colorful'],   referenceImageUrl: '' },
-  { primaryStyle: 'Luxurious',  modifierStyles: ['Monochrome'], referenceImageUrl: '' },
-  { primaryStyle: 'Classic',    modifierStyles: ['Textural'],   referenceImageUrl: '' },
+  { primaryStyle: 'Modern',     modifierStyles: ['Dark'],       referenceImageUrl: `${IMG_BASE}/modern-dark.png`,       caption: 'Modern × Dark' },
+  { primaryStyle: 'Brutalist',  modifierStyles: ['Light'],      referenceImageUrl: `${IMG_BASE}/brutalist-light.png`,   caption: 'Brutalist × Light' },
+  { primaryStyle: 'Minimal',    modifierStyles: ['Colorful'],   referenceImageUrl: `${IMG_BASE}/minimal-colorful.png`,  caption: 'Minimal × Colorful' },
+  { primaryStyle: 'Luxurious',  modifierStyles: ['Monochrome'], referenceImageUrl: `${IMG_BASE}/luxurious-monochrome.png`, caption: 'Luxurious × Monochrome' },
+  { primaryStyle: 'Classic',    modifierStyles: ['Textural'],   referenceImageUrl: `${IMG_BASE}/classic-textural.png`,  caption: 'Classic × Textural' },
 ];
 
 /**
