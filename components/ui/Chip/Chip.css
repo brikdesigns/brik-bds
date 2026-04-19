@@ -44,7 +44,7 @@
 /* ─── Sizes ───────────────────────────────────────────────────── */
 
 .bds-chip--sm {
-  padding: var(--space-150) var(--padding-sm);
+  padding: var(--padding-tiny) var(--padding-sm);
   font-size: var(--label-tiny);
   gap: var(--gap-xs);
   height: 28px;

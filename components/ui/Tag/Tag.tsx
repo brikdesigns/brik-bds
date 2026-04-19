@@ -17,23 +17,34 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   icon?: ReactNode;
   /** Optional trailing icon (right) */
   trailingIcon?: ReactNode;
-  /** Show dismiss button and callback */
+  /**
+   * Show dismiss button and callback.
+   * @deprecated Tag is an indicator — non-interactive by design. For
+   *   removable pills (active filters, dismissible selections) use
+   *   `Chip` with `onRemove` instead. This prop will be removed once
+   *   portal/renew-pms/brikdesigns migrate their last callsites.
+   */
   onRemove?: () => void;
   /** Disabled state */
   disabled?: boolean;
 }
 
 /**
- * Tag — categorization label with optional icons and dismiss
+ * Tag — categorization label.
  *
  * Sizing scale is shared with Badge for side-by-side alignment.
+ *
+ * **Indicator, not action.** Tag is non-interactive by design — use it
+ * to label categories, classifications, or metadata. For interactive
+ * pills (filter selections, removable chips) use `Chip`. See the
+ * "Indicators vs Actions" section of Tag.mdx for the full decision
+ * tree.
  *
  * @example
  * ```tsx
  * <Tag>Category</Tag>
  * <Tag size="xs" icon={<Icon />} />
  * <Tag size="lg" icon={<Icon />}>With Icon</Tag>
- * <Tag onRemove={() => handleRemove()}>Removable</Tag>
  * ```
  */
 export function Tag({

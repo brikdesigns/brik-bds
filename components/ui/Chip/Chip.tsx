@@ -32,15 +32,24 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
 }
 
 /**
- * Chip — compact interactive element for filtering, selection, or input
+ * Chip — compact interactive pill for filtering, selection, or input.
  *
- * Pill-shaped with two variants (primary/secondary) and two appearances (dark/light).
+ * Pill-shaped with two variants (primary/secondary) and two appearances
+ * (dark/light).
+ *
+ * **Action, not indicator.** Chip always represents user-initiated
+ * state: filter toggles, selection chips, removable tokens, dropdown
+ * triggers. Render a Chip only when `onChipClick`, `onRemove`, or
+ * `showDropdown` is wired up. For static status / metadata labels use
+ * `Badge` (semantic status) or `Tag` (categorization). See the
+ * "Indicators vs Actions" section of Chip.mdx for the full decision
+ * tree.
  *
  * @example
  * ```tsx
- * <Chip label="Category" />
- * <Chip label="Selected" variant="primary" appearance="dark" />
- * <Chip label="Removable" onRemove={() => {}} />
+ * <Chip label="All statuses" showDropdown onChipClick={openMenu} />
+ * <Chip label="Status: Active" onRemove={() => removeFilter('status')} />
+ * <Chip label="Selected" variant="primary" appearance="dark" onChipClick={toggle} />
  * ```
  */
 export function Chip({
