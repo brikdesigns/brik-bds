@@ -772,6 +772,7 @@ function Sheet({
   saveDisabled,
   saveLoading,
   footer,
+  secondaryAction,
   tabs,
   activeTab: controlledTab,
   onTabChange
@@ -815,8 +816,18 @@ function Sheet({
   };
   const widthStyle = side !== "bottom" ? { width: width2 } : void 0;
   const activeTabContent = (_b = tabs == null ? void 0 : tabs.find((t) => t.id === activeTab)) == null ? void 0 : _b.content;
-  const resolvedFooter = (() => {
-    if (footer !== void 0) return footer;
+  const secondaryActionNode = secondaryAction && mode !== "edit" ? /* @__PURE__ */ jsxRuntime.jsx(
+    Button,
+    {
+      variant: "secondary",
+      onClick: secondaryAction.onClick,
+      disabled: secondaryAction.disabled,
+      loading: secondaryAction.loading,
+      iconBefore: secondaryAction.icon,
+      children: secondaryAction.label
+    }
+  ) : null;
+  const primaryActionsNode = (() => {
     if (mode === "edit" && onSave) {
       return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
         /* @__PURE__ */ jsxRuntime.jsx(Button, { variant: "ghost", onClick: onCancel ?? onClose, children: cancelLabel }),
@@ -839,6 +850,14 @@ function Sheet({
       ] });
     }
     return null;
+  })();
+  const resolvedFooter = (() => {
+    if (footer !== void 0) return footer;
+    if (!secondaryActionNode && !primaryActionsNode) return null;
+    return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet__footer-secondary", children: secondaryActionNode }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet__footer-primary", children: primaryActionsNode })
+    ] });
   })();
   const hasHeaderContent = title || subtitle || onBack || showCloseButton;
   const sheet = /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
@@ -951,6 +970,7 @@ function SheetStackRenderer({ renderFrame, width: width2 = "600px", globalFrameP
         closeLabel: config.closeLabel,
         saveDisabled: config.saveDisabled,
         saveLoading: config.saveLoading,
+        secondaryAction: config.secondaryAction,
         children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: frameClass, children: config.body }, topFrame.key)
       }
     )

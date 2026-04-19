@@ -8,7 +8,7 @@ import {
   useRef,
   type ReactNode,
 } from 'react';
-import type { SheetVariant, SheetTab, SheetMode } from '../ui/Sheet';
+import type { SheetVariant, SheetTab, SheetMode, SheetSecondaryAction } from '../ui/Sheet';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -77,6 +77,12 @@ export interface SheetConfig {
   closeLabel?: string;
   saveDisabled?: boolean;
   saveLoading?: boolean;
+  /**
+   * Optional left-aligned ancillary action rendered in the auto-footer
+   * alongside the mode-driven primary actions. Suppressed in edit mode.
+   * Ignored when a custom `footer` is supplied.
+   */
+  secondaryAction?: SheetSecondaryAction;
 }
 
 interface SheetConfigContextValue {
