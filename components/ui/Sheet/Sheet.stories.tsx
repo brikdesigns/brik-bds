@@ -344,6 +344,140 @@ export const ReadOnlyFloating: Story = {
   },
 };
 
+/* ─── Tabs (Details / Sources) ───────────────────────────────── */
+
+export const Tabs: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('details');
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>View with tabs</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Brand Language"
+          mode="read"
+          onEdit={() => alert('Switch to edit mode')}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          tabs={[
+            { id: 'details', label: 'Details', content: <ReadOnlyFields /> },
+            {
+              id: 'sources',
+              label: 'Sources',
+              content: (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+                  <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
+                    Provenance for this record — shows which upstream topics and enrichment runs wrote to these fields.
+                  </p>
+                  <ul style={{ margin: 0, paddingLeft: 'var(--padding-lg)' }}>
+                    <li>Brand Strategy · 2 days ago</li>
+                    <li>Manual Edit · 5 days ago</li>
+                  </ul>
+                </div>
+              ),
+            },
+          ]}
+        />
+      </>
+    );
+  },
+};
+
+/* ─── Secondary action (e.g. "Refresh Brief") ────────────────── */
+
+export const SecondaryAction: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+    const handleRefresh = () => {
+      setRefreshing(true);
+      setTimeout(() => setRefreshing(false), 900);
+    };
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>View with secondary action</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Strategic Brief"
+          subtitle="Last refreshed 2 days ago"
+          mode="read"
+          onEdit={() => alert('Switch to edit mode')}
+          secondaryAction={{
+            label: refreshing ? 'Refreshing…' : 'Refresh Brief',
+            onClick: handleRefresh,
+            loading: refreshing,
+          }}
+        >
+          <ReadOnlyFields />
+        </Sheet>
+      </>
+    );
+  },
+};
+
+/* ─── Tabs + Secondary action + Read/Edit toggle ─────────────── */
+
+export const TabsWithSecondaryAction: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    const [mode, setMode] = useState<'read' | 'edit'>('read');
+    const [saving, setSaving] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+    const [activeTab, setActiveTab] = useState('details');
+
+    const handleOpen = () => { setMode('read'); setActiveTab('details'); setOpen(true); };
+    const handleSave = () => {
+      setSaving(true);
+      setTimeout(() => { setSaving(false); setMode('read'); }, 700);
+    };
+    const handleRefresh = () => {
+      setRefreshing(true);
+      setTimeout(() => setRefreshing(false), 900);
+    };
+
+    return (
+      <>
+        <Button onClick={handleOpen}>Open full sheet</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Strategic Brief"
+          subtitle={mode === 'read' ? 'Active · Updated 2 days ago' : 'Editing brief'}
+          mode={mode}
+          onEdit={() => setMode('edit')}
+          onSave={handleSave}
+          onCancel={() => setMode('read')}
+          saveLoading={saving}
+          secondaryAction={{
+            label: refreshing ? 'Refreshing…' : 'Refresh Brief',
+            onClick: handleRefresh,
+            loading: refreshing,
+          }}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          tabs={mode === 'read' ? [
+            { id: 'details', label: 'Details', content: <ReadOnlyFields /> },
+            {
+              id: 'sources',
+              label: 'Sources',
+              content: (
+                <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
+                  Provenance timeline + linked records drill-in.
+                </p>
+              ),
+            },
+          ] : undefined}
+        >
+          {mode === 'edit' ? <EditFormFields /> : null}
+        </Sheet>
+      </>
+    );
+  },
+};
+
 /* ─── Patterns ───────────────────────────────────────────────── */
 
 export const Patterns: Story = {

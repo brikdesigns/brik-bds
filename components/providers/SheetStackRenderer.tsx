@@ -116,6 +116,7 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
         closeLabel={config.closeLabel}
         saveDisabled={config.saveDisabled}
         saveLoading={config.saveLoading}
+        secondaryAction={config.secondaryAction}
       >
         <div className={frameClass} key={topFrame.key}>
           {config.body}

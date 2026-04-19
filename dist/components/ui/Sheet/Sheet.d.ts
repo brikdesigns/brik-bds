@@ -8,6 +8,20 @@ export interface SheetTab {
 }
 export type SheetVariant = 'default' | 'floating';
 export type SheetMode = 'read' | 'edit';
+/**
+ * Ancillary action rendered on the left side of the auto-footer (e.g.
+ * "Refresh Brief", "Run Extraction"). Suppressed when `mode === 'edit'`
+ * to avoid ambiguity about what Save commits.
+ *
+ * Ignored when a custom `footer` is supplied — compose manually in that case.
+ */
+export interface SheetSecondaryAction {
+    label: string;
+    onClick: () => void;
+    icon?: ReactNode;
+    loading?: boolean;
+    disabled?: boolean;
+}
 export interface SheetProps {
     isOpen: boolean;
     onClose: () => void;
@@ -57,6 +71,12 @@ export interface SheetProps {
      * Use this for non-standard action sets.
      */
     footer?: ReactNode;
+    /**
+     * Optional left-aligned ancillary action rendered in the auto-footer
+     * alongside the mode-driven primary actions. Suppressed in edit mode.
+     * Ignored when a custom `footer` is supplied.
+     */
+    secondaryAction?: SheetSecondaryAction;
     /** Optional tabs rendered below the header. When provided, children is ignored. */
     tabs?: SheetTab[];
     /** Controlled active tab id (defaults to first tab) */
@@ -72,5 +92,5 @@ export interface SheetProps {
  * to switch into form state with Cancel / Save actions. Custom `footer` always
  * wins when supplied.
  */
-export declare function Sheet({ isOpen, onClose, children, side, title, subtitle, width, variant, closeOnBackdrop, closeOnEscape, showCloseButton, onBack, mode, onEdit, onSave, onCancel, editLabel, saveLabel, cancelLabel, closeLabel, saveDisabled, saveLoading, footer, tabs, activeTab: controlledTab, onTabChange, }: SheetProps): import("react").ReactPortal | null;
+export declare function Sheet({ isOpen, onClose, children, side, title, subtitle, width, variant, closeOnBackdrop, closeOnEscape, showCloseButton, onBack, mode, onEdit, onSave, onCancel, editLabel, saveLabel, cancelLabel, closeLabel, saveDisabled, saveLoading, footer, secondaryAction, tabs, activeTab: controlledTab, onTabChange, }: SheetProps): import("react").ReactPortal | null;
 export default Sheet;
