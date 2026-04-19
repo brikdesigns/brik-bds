@@ -671,10 +671,10 @@ const MagnifyingGlass = "ph:magnifying-glass";
 const MapPin = "ph:map-pin";
 const CloudArrowUp = "ph:cloud-arrow-up";
 const CheckCircle = "ph:check-circle";
+const Circle = "ph:circle";
 const WarningCircle = "ph:warning-circle";
 const Warning = "ph:warning";
 const Info = "ph:info";
-const Spinner$1 = "ph:spinner";
 const ArrowLeftBold = "ph:arrow-left-bold";
 const Pen = "ph:pencil";
 const Envelope = "ph:envelope";
@@ -27170,10 +27170,10 @@ function StatusIcon({ status }) {
     case "failed":
       return /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: WarningCircle, className: "bds-task-console__icon bds-task-console__icon--failed" });
     case "in_progress":
-      return /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: Spinner$1, className: "bds-task-console__icon bds-task-console__icon--in-progress" });
+      return /* @__PURE__ */ jsxRuntime.jsx(Spinner, { size: "sm", className: "bds-task-console__icon bds-task-console__icon--in-progress" });
     case "pending":
     default:
-      return /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-task-console__icon bds-task-console__icon--pending" });
+      return /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: Circle, className: "bds-task-console__icon bds-task-console__icon--pending" });
   }
 }
 function TaskConsole({
@@ -27194,6 +27194,7 @@ function TaskConsole({
   const failedCount = items.filter((i) => i.status === "failed").length;
   const allDone = items.length > 0 && completedCount + failedCount === items.length;
   const allSucceeded = allDone && failedCount === 0;
+  const progressValue = items.length > 0 ? (completedCount + failedCount) / items.length * 100 : 0;
   React.useEffect(() => {
     if (!allDone || autoDismissDelay === 0 || !onDismiss) return;
     const timer = setTimeout(onDismiss, autoDismissDelay);
@@ -27201,7 +27202,7 @@ function TaskConsole({
   }, [allDone, autoDismissDelay, onDismiss]);
   const toggleCollapse = React.useCallback(() => setCollapsed((c) => !c), []);
   if (!isOpen) return null;
-  const console2 = /* @__PURE__ */ jsxRuntime.jsxs(
+  const consoleEl = /* @__PURE__ */ jsxRuntime.jsxs(
     "div",
     {
       className: bdsClass(
@@ -27222,45 +27223,47 @@ function TaskConsole({
             /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-task-console__title", children: title }),
             subtitle && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-task-console__subtitle", children: subtitle })
           ] }),
-          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-task-console__header-actions", children: [
-            /* @__PURE__ */ jsxRuntime.jsx(
-              "button",
-              {
-                type: "button",
-                className: "bds-task-console__btn",
-                onClick: (e) => {
-                  e.stopPropagation();
-                  toggleCollapse();
-                },
-                "aria-label": collapsed ? "Expand" : "Collapse",
-                children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: collapsed ? CaretUp : CaretDown })
-              }
-            ),
-            onDismiss && /* @__PURE__ */ jsxRuntime.jsx(
-              "button",
-              {
-                type: "button",
-                className: "bds-task-console__btn",
-                onClick: (e) => {
-                  e.stopPropagation();
-                  onDismiss();
-                },
-                "aria-label": "Dismiss",
-                children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X })
-              }
-            )
-          ] })
+          /* @__PURE__ */ jsxRuntime.jsxs(
+            ButtonGroup,
+            {
+              className: "bds-task-console__header-actions",
+              onClick: (e) => e.stopPropagation(),
+              children: [
+                /* @__PURE__ */ jsxRuntime.jsx(
+                  IconButton,
+                  {
+                    variant: "ghost",
+                    size: "sm",
+                    icon: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: collapsed ? CaretUp : CaretDown }),
+                    label: collapsed ? "Expand" : "Collapse",
+                    onClick: toggleCollapse
+                  }
+                ),
+                onDismiss && /* @__PURE__ */ jsxRuntime.jsx(
+                  IconButton,
+                  {
+                    variant: "ghost",
+                    size: "sm",
+                    icon: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X }),
+                    label: "Dismiss",
+                    onClick: onDismiss
+                  }
+                )
+              ]
+            }
+          )
         ] }),
-        !collapsed && items.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-task-console__progress-track", children: /* @__PURE__ */ jsxRuntime.jsx(
-          "div",
+        !collapsed && items.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
+          ProgressBar,
           {
             className: bdsClass(
-              "bds-task-console__progress-fill",
-              failedCount > 0 && "bds-task-console__progress-fill--error"
+              "bds-task-console__progress",
+              failedCount > 0 && "bds-task-console__progress--error"
             ),
-            style: { width: `${(completedCount + failedCount) / items.length * 100}%` }
+            value: progressValue,
+            label: "Task progress"
           }
-        ) }),
+        ),
         !collapsed && /* @__PURE__ */ jsxRuntime.jsx("ul", { className: "bds-task-console__list", children: items.map((item) => /* @__PURE__ */ jsxRuntime.jsxs(
           "li",
           {
@@ -27293,7 +27296,7 @@ function TaskConsole({
     }
   );
   if (typeof document === "undefined") return null;
-  return ReactDOM.createPortal(console2, document.body);
+  return ReactDOM.createPortal(consoleEl, document.body);
 }
 const variantBadge = {
   success: { status: "positive", icon: CheckCircle },

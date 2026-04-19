@@ -1,7 +1,7 @@
 {
   "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
-  "bds_version": "0.5.0",
-  "generated_at": "2026-04-17T20:20:41.128Z",
+  "bds_version": "0.10.0",
+  "generated_at": "2026-04-18T18:15:14.622Z",
   "component_count": 76,
   "token_count": 426,
   "components": {
@@ -415,10 +415,9 @@
       "description": "Banner — full-width branded banner for announcements",
       "source_path": "components/ui/Banner/Banner.tsx",
       "tokens_used": [
-        "--background-on-color-dark",
         "--body-md",
         "--body-sm",
-        "--border-radius-sm",
+        "--border-radius-100",
         "--font-family-body",
         "--font-family-label",
         "--font-line-height-normal",
@@ -431,12 +430,12 @@
         "--gap-xs",
         "--label-md",
         "--label-sm",
-        "--padding-lg",
+        "--padding-huge",
+        "--padding-md",
         "--padding-tiny",
         "--surface-brand-primary",
         "--text-muted",
-        "--text-on-color-dark",
-        "--text-primary"
+        "--text-on-color-dark"
       ],
       "a11y": {
         "aria_attrs": [
@@ -592,6 +591,7 @@
         "--background-negative",
         "--background-negative-hover",
         "--background-negative-pressed",
+        "--background-on-color-dark",
         "--background-positive",
         "--background-positive-hover",
         "--background-positive-pressed",
@@ -637,6 +637,7 @@
         "--padding-md",
         "--padding-sm",
         "--padding-tiny",
+        "--surface-brand-primary",
         "--surface-inverse",
         "--text-accent-red",
         "--text-brand-primary",
