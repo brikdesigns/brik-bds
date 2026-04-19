@@ -106,6 +106,56 @@ A custom `footer` always wins over mode-driven auto-footer. Use it for non-stand
 
 ---
 
+## Body composition
+
+The Sheet body is a composition surface — but the blocks you compose from are locked. Inside a Sheet body, reach for the **sheet-body primitive set** first. Don't invent ad-hoc markup.
+
+| Primitive | Use for |
+|---|---|
+| [`SheetSection`](/?path=/docs/displays-sheet-body-sheet-section--docs) | Named section wrapper (uppercase heading + content). One per logical grouping of fields. |
+| [`Field`](/?path=/docs/displays-sheet-body-field--docs) | Label + value pair. Value can be text, tags, URLs, lists — any ReactNode. |
+| [`FieldGrid`](/?path=/docs/displays-sheet-body-field-grid--docs) | 2 / 3 / 4-column grid of Fields or Cards. Stat-tile rows. |
+| [`TagList`](/?path=/docs/displays-sheet-body-tag-list--docs) | Horizontal cluster of `<Tag>` elements inside a Field. |
+| [`BulletList`](/?path=/docs/displays-sheet-body-bullet-list--docs) | Short-item lists (anti-messages, proof points, approved CTAs). |
+| [`Card`](/?path=/docs/displays-card-card--docs) / [`CardList`](/?path=/docs/displays-card-card-list--docs) / [`CardDisplay`](/?path=/docs/displays-card-card-display--docs) | Entity rows (contacts, services, scraped pages, linked records). |
+| [`Table`](/?path=/docs/displays-table-table--docs) | Tabular data (strategy tables, typography rows, schedules). |
+| [`Accordion`](/?path=/docs/displays-accordion-accordion--docs) | Collapsible groups when a section has many rows. |
+| [`EmptyState`](/?path=/docs/components-feedback-emptystate--docs) | Whole-section "no data" treatment. Don't use per-row — `Field` has a lightweight inline empty built in. |
+
+**Rules**
+
+- Don't reach for raw `<h3>` / `<h4>` / `<table>` / `<ul>` inside a Sheet body. Each has a primitive that locks the type scale and spacing.
+- Don't import `detail.*` styles from a consumer project. Every scenario `detail.*` covered is expressed via the primitives above.
+- One `SheetSection` per logical grouping. Don't nest sections.
+
+```tsx
+<Sheet title="Brand Identity">
+  <SheetSection description="Birdwell & Mutlak presents a bold, editorial identity...">
+    {/* No heading = sheet lead paragraph */}
+  </SheetSection>
+
+  <SheetSection heading="Color Primitives">
+    <FieldGrid columns={4}>
+      <Field label="Gold">#c49a2f</Field>
+      <Field label="Gray">#b0b0b0</Field>
+      <Field label="White">#ffffff</Field>
+      <Field label="Black">#000000</Field>
+    </FieldGrid>
+  </SheetSection>
+
+  <SheetSection heading="Typography">
+    <Table columns={typographyCols} rows={typographyRows} />
+  </SheetSection>
+
+  <SheetSection heading="Mode Recommendations">
+    <Field label="Spacing">Comfortable</Field>
+    <Field label="Density">Relaxed</Field>
+  </SheetSection>
+</Sheet>
+```
+
+---
+
 ## When to use which treatment
 
 | Scenario | Variant | Footer |
