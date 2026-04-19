@@ -20,11 +20,17 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
     icon?: ReactNode;
 }
 /**
- * Badge — status indicator with semantic colors
+ * Badge — status indicator with semantic colors.
  *
  * Pill-shaped label for communicating status, category, or count.
  * Uses BDS system color tokens for consistent status semantics.
  * Sizing scale is shared with Tag for side-by-side alignment.
+ *
+ * **Indicator, not action.** Badge is non-interactive. Render it as a
+ * `<span>` reflecting state; never attach `onClick` or wrap it to
+ * navigate. For clickable pills use `Chip` (filters, selections) or
+ * `Button` / `LinkButton` (primary actions). See the "Indicators vs
+ * Actions" section of Badge.mdx for the full decision tree.
  *
  * @example
  * ```tsx

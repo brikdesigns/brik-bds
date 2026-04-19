@@ -19032,6 +19032,30 @@ function Breadcrumb({
     }
   );
 }
+function BulletList({
+  items,
+  marker = "disc",
+  density = "comfortable",
+  className,
+  style,
+  ...props
+}) {
+  const Element2 = marker === "decimal" ? "ol" : "ul";
+  return /* @__PURE__ */ jsx(
+    Element2,
+    {
+      className: bdsClass(
+        "bds-bullet-list",
+        `bds-bullet-list--marker-${marker}`,
+        `bds-bullet-list--density-${density}`,
+        className
+      ),
+      style,
+      ...props,
+      children: items.map((item, i) => /* @__PURE__ */ jsx("li", { className: "bds-bullet-list__item", children: item }, i))
+    }
+  );
+}
 function ButtonGroup({
   children,
   orientation = "horizontal",
@@ -24385,6 +24409,55 @@ function EmptyState({
     children
   ] });
 }
+function isEmpty(value2) {
+  return value2 == null || value2 === "" || value2 === false;
+}
+function Field({
+  label,
+  children,
+  layout = "stacked",
+  empty = "Not set",
+  className,
+  style,
+  ...props
+}) {
+  const showEmpty = isEmpty(children);
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: bdsClass("bds-field", `bds-field--${layout}`, className),
+      style,
+      ...props,
+      children: [
+        /* @__PURE__ */ jsx("span", { className: "bds-field__label", children: label }),
+        showEmpty ? /* @__PURE__ */ jsx("span", { className: "bds-field__empty", children: empty }) : /* @__PURE__ */ jsx("div", { className: "bds-field__value", children })
+      ]
+    }
+  );
+}
+function FieldGrid({
+  columns = 2,
+  gap = "xl",
+  className,
+  style,
+  children,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx(
+    "div",
+    {
+      className: bdsClass(
+        "bds-field-grid",
+        `bds-field-grid--cols-${columns}`,
+        `bds-field-grid--gap-${gap}`,
+        className
+      ),
+      style,
+      ...props,
+      children
+    }
+  );
+}
 function FileUploader({
   accept,
   multiple = false,
@@ -26219,6 +26292,33 @@ function ServiceTag({
     }
   );
 }
+function SheetSection({
+  heading,
+  description,
+  children,
+  spacing = "lg",
+  className,
+  style,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxs(
+    "section",
+    {
+      className: bdsClass(
+        "bds-sheet-section",
+        `bds-sheet-section--spacing-${spacing}`,
+        className
+      ),
+      style,
+      ...props,
+      children: [
+        heading && /* @__PURE__ */ jsx("h3", { className: "bds-sheet-section__heading", children: heading }),
+        description && /* @__PURE__ */ jsx("p", { className: "bds-sheet-section__description", children: description }),
+        children && /* @__PURE__ */ jsx("div", { className: "bds-sheet-section__content", children })
+      ]
+    }
+  );
+}
 function SidebarNavigation({
   logo,
   navItems,
@@ -26830,6 +26930,29 @@ function TableCell({
 }) {
   return /* @__PURE__ */ jsx("td", { className: bdsClass("bds-table-cell", className), style, ...props, children });
 }
+function TagList({
+  gap = "xs",
+  wrap = true,
+  className,
+  style,
+  children,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx(
+    "div",
+    {
+      className: bdsClass(
+        "bds-tag-list",
+        `bds-tag-list--gap-${gap}`,
+        wrap ? "bds-tag-list--wrap" : "bds-tag-list--nowrap",
+        className
+      ),
+      style,
+      ...props,
+      children
+    }
+  );
+}
 function pad(n) {
   return n.toString().padStart(2, "0");
 }
@@ -27387,6 +27510,7 @@ export {
   BoardColumn,
   BoardHeader,
   Breadcrumb,
+  BulletList,
   Button,
   ButtonGroup,
   Card,
@@ -27410,6 +27534,8 @@ export {
   Dot,
   EmailInput,
   EmptyState,
+  Field,
+  FieldGrid,
   FileUploader,
   FilterBar,
   FilterButton,
@@ -27442,6 +27568,7 @@ export {
   ServiceBadge,
   ServiceTag,
   Sheet,
+  SheetSection,
   SheetStackProvider,
   SheetStackRenderer,
   SidebarNavigation,
@@ -27460,6 +27587,7 @@ export {
   TableRow,
   TableSubheader,
   Tag,
+  TagList,
   TaskConsole,
   TextArea,
   TextInput,

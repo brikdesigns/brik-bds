@@ -2028,6 +2028,50 @@
 }
 }
 @layer bds-components {
+/* ─── BulletList ───────────────────────────────────────────────── */
+
+.bds-bullet-list {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  margin: 0;
+  padding-left: var(--padding-lg);
+}
+
+/* ─── Markers ───────────────────────────────────────────────── */
+
+.bds-bullet-list--marker-disc {
+  list-style-type: disc;
+}
+
+.bds-bullet-list--marker-decimal {
+  list-style-type: decimal;
+}
+
+.bds-bullet-list--marker-none {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+/* ─── Density ───────────────────────────────────────────────── */
+
+.bds-bullet-list--density-compact .bds-bullet-list__item + .bds-bullet-list__item {
+  margin-top: var(--gap-xs);
+}
+
+.bds-bullet-list--density-comfortable .bds-bullet-list__item + .bds-bullet-list__item {
+  margin-top: var(--gap-sm);
+}
+
+/* ─── Item — reset font-size in case legacy webflow.css li rules leak ── */
+
+.bds-bullet-list__item {
+  font-size: inherit;
+  color: inherit;
+}
+}
+@layer bds-components {
 /**
  * BDS ButtonGroup — groups related buttons together
  */
@@ -2678,7 +2722,7 @@
 /* ─── Sizes ───────────────────────────────────────────────────── */
 
 .bds-chip--sm {
-  padding: var(--space-150) var(--padding-sm);
+  padding: var(--padding-tiny) var(--padding-sm);
   font-size: var(--label-tiny);
   gap: var(--gap-xs);
   height: 28px;
@@ -3341,6 +3385,106 @@
   color: var(--text-primary);
   margin: 0;
   text-align: center;
+}
+}
+@layer bds-components {
+/* ─── Field ────────────────────────────────────────────────────── */
+
+.bds-field {
+  display: flex;
+  min-width: 0; /* allow flex/grid children to shrink */
+}
+
+.bds-field--stacked {
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.bds-field--inline {
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--gap-md);
+  justify-content: space-between;
+}
+
+/* ─── Label ───────────────────────────────────────────────── */
+
+.bds-field__label {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.bds-field--inline .bds-field__label {
+  flex-shrink: 0;
+}
+
+/* ─── Value ───────────────────────────────────────────────── */
+
+.bds-field__value {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  margin: 0;
+  min-width: 0;
+}
+
+.bds-field--inline .bds-field__value {
+  text-align: right;
+}
+
+/* ─── Empty state (inline) ──────────────────────────────── */
+
+.bds-field__empty {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.bds-field--inline .bds-field__empty {
+  text-align: right;
+}
+}
+@layer bds-components {
+/* ─── FieldGrid ────────────────────────────────────────────────── */
+
+.bds-field-grid {
+  display: grid;
+  text-align: left;
+}
+
+/* ─── Columns ───────────────────────────────────────────────── */
+
+.bds-field-grid--cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.bds-field-grid--cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.bds-field-grid--cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ─── Gaps ──────────────────────────────────────────────────── */
+
+.bds-field-grid--gap-md {
+  gap: var(--gap-md);
+}
+
+.bds-field-grid--gap-lg {
+  gap: var(--gap-lg);
+}
+
+.bds-field-grid--gap-xl {
+  gap: var(--gap-xl);
 }
 }
 @layer bds-components {
@@ -5549,6 +5693,61 @@
 .bds-service-tag--icon-lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); } /* bds-lint-ignore */
 }
 @layer bds-components {
+/* ─── SheetSection ─────────────────────────────────────────────── */
+
+.bds-sheet-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-sheet-section + .bds-sheet-section {
+  margin-top: var(--padding-lg);
+}
+
+.bds-sheet-section--spacing-lg + .bds-sheet-section {
+  margin-top: var(--padding-xl);
+}
+
+/* ─── Heading ───────────────────────────────────────────────── */
+
+.bds-sheet-section__heading {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* ─── Description ───────────────────────────────────────────── */
+
+.bds-sheet-section__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Content ───────────────────────────────────────────────── */
+
+.bds-sheet-section__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* Heading + content gap is tighter than content gap so the heading
+   reads as the label for the block below it. */
+.bds-sheet-section__heading + .bds-sheet-section__content,
+.bds-sheet-section__description + .bds-sheet-section__content {
+  margin-top: var(--gap-xs);
+}
+}
+@layer bds-components {
 /* ─── SidebarNavigation ──────────────────────────────────────── */
 
 .bds-sidebar-nav {
@@ -6169,6 +6368,39 @@
 /* Size: comfortable */
 .bds-table[data-size="comfortable"] .bds-table-cell {
   padding: var(--padding-xl) var(--padding-md);
+}
+}
+@layer bds-components {
+/* ─── TagList ──────────────────────────────────────────────────── */
+
+.bds-tag-list {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Wrap ──────────────────────────────────────────────────── */
+
+.bds-tag-list--wrap {
+  flex-wrap: wrap;
+}
+
+.bds-tag-list--nowrap {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* ─── Gap ───────────────────────────────────────────────────── */
+
+.bds-tag-list--gap-xs {
+  gap: var(--gap-xs);
+}
+
+.bds-tag-list--gap-sm {
+  gap: var(--gap-sm);
+}
+
+.bds-tag-list--gap-md {
+  gap: var(--gap-md);
 }
 }
 @layer bds-components {
