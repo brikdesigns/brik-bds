@@ -10,6 +10,7 @@ export declare const MagnifyingGlass = "ph:magnifying-glass";
 export declare const MapPin = "ph:map-pin";
 export declare const CloudArrowUp = "ph:cloud-arrow-up";
 export declare const CheckCircle = "ph:check-circle";
+export declare const Circle = "ph:circle";
 export declare const WarningCircle = "ph:warning-circle";
 export declare const Warning = "ph:warning";
 export declare const Info = "ph:info";

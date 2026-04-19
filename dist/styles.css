@@ -338,8 +338,8 @@
 }
 
 .bds-button--lg .bds-button__spinner-icon {
-  width: 20px;
-  height: 20px;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
 }
 
 .bds-button--xl .bds-button__spinner-icon {
@@ -414,7 +414,7 @@
 }
 
 .bds-icon-button--lg .bds-icon-button__icon {
-  font-size: 20px;
+  font-size: var(--icon-lg);
 }
 
 .bds-icon-button--xl .bds-icon-button__icon {
@@ -1145,8 +1145,8 @@
 }
 
 .bds-tag--lg .bds-tag__icon {
-  width: 20px;
-  height: 20px;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
   font-size: var(--label-xl);
 }
 
@@ -1354,8 +1354,8 @@
 }
 
 .bds-badge--lg .bds-badge__icon {
-  width: 20px;
-  height: 20px;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
   font-size: var(--label-xl);
 }
 
@@ -2735,8 +2735,8 @@
 }
 
 .bds-chip--lg .bds-chip__icon {
-  width: 20px;
-  height: 20px;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
   font-size: var(--label-xl);
 }
 
@@ -6385,9 +6385,6 @@
 /* ─── TaskConsole ─────────────────────────────────────────────── */
 
 .bds-task-console {
-  /* ─── Component-scoped override surface ── */
-  --task-console-btn-hover-bg: var(--state-hover-overlay);
-
   position: fixed;
   z-index: 9999;
   width: 360px; /* bds-lint-ignore — design constraint matching Google Drive widget */
@@ -6395,7 +6392,7 @@
   display: flex;
   flex-direction: column;
   background-color: var(--surface-primary);
-  border: var(--border-width-lg) solid var(--border-primary);
+  border: var(--border-width-sm) solid var(--border-primary);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-xl);
   overflow: hidden;
@@ -6420,7 +6417,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--padding-md) var(--padding-lg);
+  gap: var(--gap-md);
+  padding: var(--padding-sm) var(--padding-md) var(--padding-sm) var(--padding-lg);
   background-color: var(--surface-secondary);
   cursor: pointer;
   user-select: none;
@@ -6439,7 +6437,7 @@
 .bds-task-console__header-text {
   display: flex;
   flex-direction: column;
-  gap: 2px; /* bds-lint-ignore — tight spacing for subtitle */
+  gap: var(--gap-xs);
   min-width: 0;
   flex: 1;
 }
@@ -6464,53 +6462,24 @@
 }
 
 .bds-task-console__header-actions {
-  display: flex;
-  align-items: center;
   gap: var(--gap-xs);
   flex-shrink: 0;
-}
-
-/* ─── Header buttons ─────────────────────────────────────────── */
-
-.bds-task-console__btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px; /* bds-lint-ignore — icon button sizing */
-  height: 28px; /* bds-lint-ignore — icon button sizing */
-  background: none;
-  border: none;
-  border-radius: var(--border-radius-sm);
-  cursor: pointer;
-  color: var(--text-primary);
-  opacity: 0.6;
-  font-size: var(--icon-sm);
-  padding: 0;
-  transition: opacity var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out);
-}
-
-.bds-task-console__btn:hover {
-  opacity: 1;
-  background-color: var(--task-console-btn-hover-bg); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  flex-wrap: nowrap;
 }
 
 /* ─── Progress bar ───────────────────────────────────────────── */
 
-.bds-task-console__progress-track {
-  height: 3px; /* bds-lint-ignore — thin progress bar */
-  background-color: var(--border-primary);
+.bds-task-console .bds-task-console__progress {
+  border-radius: 0;
   flex-shrink: 0;
+  height: var(--space-100);
 }
 
-.bds-task-console__progress-fill {
-  height: 100%;
-  background-color: var(--background-status-info);
-  transition: width var(--duration-400) var(--ease-out);
-  border-radius: 0 2px 2px 0; /* bds-lint-ignore — progress bar cap */
+.bds-task-console .bds-task-console__progress .bds-progress-bar__fill {
+  border-radius: 0;
 }
 
-.bds-task-console__progress-fill--error {
+.bds-task-console__progress--error .bds-progress-bar__fill {
   background-color: var(--background-negative);
 }
 
@@ -6538,10 +6507,6 @@
   border-bottom: none;
 }
 
-.bds-task-console__item--in_progress {
-  background-color: var(--surface-status-info);
-}
-
 .bds-task-console__item--failed {
   background-color: var(--surface-negative);
 }
@@ -6551,7 +6516,7 @@
 .bds-task-console__item-content {
   display: flex;
   flex-direction: column;
-  gap: 2px; /* bds-lint-ignore — tight spacing */
+  gap: var(--gap-xs);
   min-width: 0;
   flex: 1;
 }
@@ -6567,8 +6532,14 @@
   text-overflow: ellipsis;
 }
 
-.bds-task-console__item--completed .bds-task-console__item-label {
+.bds-task-console__item--completed .bds-task-console__item-label,
+.bds-task-console__item--pending .bds-task-console__item-label {
   color: var(--text-muted);
+}
+
+.bds-task-console__item--in_progress .bds-task-console__item-label {
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-primary);
 }
 
 .bds-task-console__item-link {
@@ -6576,7 +6547,7 @@
   font-size: var(--body-sm);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--font-line-height-normal);
-  color: var(--text-status-info);
+  color: var(--text-brand-primary);
   text-decoration: none;
   cursor: pointer;
 }
@@ -6598,7 +6569,9 @@
 
 .bds-task-console__icon {
   flex-shrink: 0;
-  font-size: var(--icon-sm);
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  font-size: var(--icon-lg);
 }
 
 .bds-task-console__icon--completed {
@@ -6609,17 +6582,18 @@
   color: var(--text-negative);
 }
 
-.bds-task-console__icon--in-progress {
-  color: var(--text-status-info);
+/* Spinner overrides — size up to match the other 20px icons and lighten the
+   3/4 track (default --border-primary reads dark on white surfaces). The
+   leading quadrant keeps the brand accent. */
+.bds-task-console .bds-task-console__icon--in-progress {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  border-color: var(--surface-muted);
+  border-top-color: var(--border-brand-primary);
 }
 
 .bds-task-console__icon--pending {
-  display: inline-block;
-  width: var(--icon-sm);
-  height: var(--icon-sm);
-  border-radius: var(--border-radius-pill);
-  border: var(--border-width-lg) solid var(--border-primary);
-  box-sizing: border-box;
+  color: var(--text-muted);
 }
 }
 @layer bds-components {
