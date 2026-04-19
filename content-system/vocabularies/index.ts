@@ -12,8 +12,11 @@ export {
 
 export {
   VISUAL_STYLE_VALUES,
+  VISUAL_STYLE_METADATA,
   isVisualStyle,
+  getVisualStyleMetadata,
   type VisualStyle,
+  type VisualStyleMetadata,
 } from './visual-style';
 
 export {
