@@ -5,7 +5,7 @@ import {
   SemanticTypographyTable,
   FontWeightShowcase,
 } from './_components';
-import { fontSizeScale, fontWeights, semanticTypography } from '../../tokens';
+import { fontSizeScale, fontWeights } from '../../tokens';
 
 <Meta title="Foundations/Design Tokens/Typography" />
 
@@ -17,10 +17,10 @@ Typography tokens control font families, sizes, weights, and line heights. Each 
 
 <FontFamilyShowcase
   families={[
-    { name: 'Display', cssVar: '--font-family-display', value: semanticTypography['font-family--display'] },
-    { name: 'Heading', cssVar: '--font-family-heading', value: semanticTypography['font-family--heading'] },
-    { name: 'Body', cssVar: '--font-family-body', value: semanticTypography['font-family--body'] },
-    { name: 'Label', cssVar: '--font-family-label', value: semanticTypography['font-family--label'] },
+    { name: 'Display', cssVar: '--font-family-display' },
+    { name: 'Heading', cssVar: '--font-family-heading' },
+    { name: 'Body', cssVar: '--font-family-body' },
+    { name: 'Label', cssVar: '--font-family-label' },
   ]}
 />
 
@@ -28,23 +28,79 @@ Typography tokens control font families, sizes, weights, and line heights. Each 
 
 ### Heading sizes
 
-<SemanticTypographyTable title="Headings" tokens={semanticTypography} category="heading" />
+<SemanticTypographyTable
+  title="Headings"
+  category="heading"
+  tokens={[
+    'heading-tiny',
+    'heading-sm',
+    'heading-md',
+    'heading-lg',
+    'heading-xl',
+    'heading-xxl',
+    'heading-huge',
+  ]}
+/>
 
 ### Body sizes
 
-<SemanticTypographyTable title="Body" tokens={semanticTypography} category="body" />
+<SemanticTypographyTable
+  title="Body"
+  category="body"
+  tokens={[
+    'body-tiny',
+    'body-xs',
+    'body-sm',
+    'body-md',
+    'body-lg',
+    'body-xl',
+    'body-huge',
+  ]}
+/>
 
 ### Label sizes
 
-<SemanticTypographyTable title="Labels" tokens={semanticTypography} category="label" />
+<SemanticTypographyTable
+  title="Labels"
+  category="label"
+  tokens={[
+    'label-tiny',
+    'label-xs',
+    'label-sm',
+    'label-md',
+    'label-lg',
+    'label-xl',
+  ]}
+/>
 
 ### Display sizes
 
-<SemanticTypographyTable title="Display" tokens={semanticTypography} category="display" />
+<SemanticTypographyTable
+  title="Display"
+  category="display"
+  tokens={[
+    'display-sm',
+    'display-md',
+    'display-lg',
+    'display-xl',
+  ]}
+/>
 
 ### Icon sizes
 
-<SemanticTypographyTable title="Icons" tokens={semanticTypography} category="icon" />
+<SemanticTypographyTable
+  title="Icons"
+  category="icon"
+  tokens={[
+    'icon-tiny',
+    'icon-xs',
+    'icon-sm',
+    'icon-md',
+    'icon-lg',
+    'icon-xl',
+    'icon-huge',
+  ]}
+/>
 
 ## Font size scale
 

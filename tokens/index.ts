@@ -451,54 +451,6 @@ export const fontLineHeights = {
 } as const;
 
 /**
- * Semantic color tokens (default theme values)
- *
- * @deprecated These reference Webflow-format variable names (--grayscale--, --_themes---).
- * Do NOT use these in components or new code. Use CSS custom properties from
- * figma-tokens.css directly (--text-primary, --background-brand-primary, etc.)
- * or import from @/lib/tokens in consuming projects.
- *
- * Retained for legacy Storybook compatibility only.
- */
-export const semanticColors = {
-  "border--secondary": "var(--grayscale--light)",
-  "surface--nav": "var(--grayscale--white)",
-  "background--brand-primary": "var(--_themes---blue-green--blue-light)",
-  "text--inverse": "var(--grayscale--white)",
-  "text--on-color-dark": "var(--grayscale--white)",
-  "text--on-color-light": "var(--grayscale--black)",
-  "border--brand": "var(--_themes---blue-green--blue-light)",
-  "background--primary": "var(--grayscale--white)",
-  "border--inverse": "var(--grayscale--white)",
-  "text--primary": "var(--grayscale--darkest)",
-  "text--brand": "var(--_themes---blue-green--blue-light)",
-  "surface--primary": "var(--grayscale--white)",
-  "border--primary": "var(--grayscale--dark)",
-  "surface--secondary": "var(--grayscale--lightest)",
-  "page--primary": "var(--grayscale--white)",
-  "text--muted": "var(--grayscale--dark)",
-  "surface--brand-primary": "var(--_themes---blue-green--blue-light)",
-  "border--input": "var(--grayscale--light)",
-  "border--muted": "var(--grayscale--lighter)",
-  "border--on-color": "white",
-  "surface--brand-secondary": "var(--_themes---blue-green--green)",
-  "text--secondary": "var(--grayscale--darker)",
-  "background--secondary": "var(--grayscale--lightest)",
-  "theme--accent": "var(--_themes---blue-green--green)",
-  "theme--tertiary": "var(--_themes---blue-green--blue-dark)",
-  "theme--secondary": "var(--_themes---blue-green--blue-lighter)",
-  "theme--primary": "var(--_themes---blue-green--blue-light)",
-  "page--brand": "var(--_themes---blue-green--blue-light)",
-  "background--brand-secondary": "white",
-  "background--inverse": "var(--grayscale--white)",
-  "background--input": "var(--grayscale--white)",
-  "background--image": "#17171799",
-  "background--image-brand": "var(--_themes---blue-green--blue-light)",
-  "page--secondary": "var(--grayscale--lighter)",
-  "theme--fourth": "white"
-} as const;
-
-/**
  * Semantic space tokens (default values)
  * Used by Storybook Spacing.mdx to render the semantic spacing scale.
  * Maps to SD single-dash --space-* variables (NOT the legacy --space-- double-dash format).
@@ -524,43 +476,3 @@ export const semanticSpace = {
   "input": "var(--space-200)"
 } as const;
 
-/**
- * Semantic typography tokens (default values)
- *
- * @deprecated Font family values here reflect an old Webflow theme configuration
- * and do not match the current BDS token stack (Poppins/Avenir/Century Schoolbook).
- * Do NOT use these in components. Use --font-family-heading/body/label/display from
- * figma-tokens.css, or import font.family.* from @/lib/tokens in consuming projects.
- *
- * Retained for legacy Storybook compatibility only.
- */
-export const semanticTypography = {
-  "font-family--label": "\"Open Sans\", sans-serif",
-  "body--sm": "var(--font-size--75)",
-  "label--md-base": "var(--font-size--100)",
-  "font-family--body": "\"Open Sans\", sans-serif",
-  "body--md-base": "var(--font-size--100)",
-  "font-family--heading": "\"Droid Sans\", sans-serif",
-  "heading--xxx-large": "var(--font-size--1200)",
-  "heading--large": "var(--font-size--700)",
-  "label--lg": "var(--font-size--200)",
-  "label--xl": "var(--font-size--300)",
-  "label--sm": "var(--font-size--75)",
-  "body--xl": "var(--font-size--300)",
-  "font-family--display": "\"Droid Sans\", sans-serif",
-  "display--large": "var(--font-size--1400)",
-  "display--medium": "var(--font-size--1500)",
-  "display--small": "var(--font-size--1600)",
-  "heading--xx-large": "var(--font-size--1000)",
-  "heading--x-large": "var(--font-size--900)",
-  "heading--medium": "var(--font-size--500)",
-  "heading--small": "var(--font-size--300)",
-  "body--lg": "var(--font-size--200)",
-  "heading--tiny": "var(--font-size--100)",
-  "font-family--icon": "\"Apple Symbols\", \"Segoe UI Symbol\", sans-serif",
-  "body--tiny": "var(--font-size--25)",
-  "body--xs": "var(--font-size--50)",
-  "icon--small": "var(--font-size--75)",
-  "icon--medium-base": "var(--font-size--100)",
-  "icon--large": "var(--font-size--200)"
-} as const;

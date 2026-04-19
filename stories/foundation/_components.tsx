@@ -305,7 +305,7 @@ export function TypographyScale({ scale, prefix }: TypographyScaleProps) {
 interface FontFamilyDef {
   name: string;
   cssVar: string;
-  value: string;
+  value?: string;
 }
 
 interface FontFamilyShowcaseProps {
@@ -319,7 +319,7 @@ export function FontFamilyShowcase({ families }: FontFamilyShowcaseProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', marginBottom: 'var(--padding-lg)' }}>
       {families.map((f) => {
-        const liveValue = resolved[f.cssVar] || f.value;
+        const liveValue = resolved[f.cssVar] || f.value || '';
         return (
           <div
             key={f.cssVar}
@@ -369,16 +369,17 @@ export function FontFamilyShowcase({ families }: FontFamilyShowcaseProps) {
 // ---------------------------------------------------------------------------
 
 interface SemanticTypographyTableProps {
-  title: string;
-  tokens: Record<string, string>;
-  category: string;
+  title?: string;
+  tokens: readonly string[];
+  category: 'heading' | 'body' | 'label' | 'display' | 'icon';
 }
 
 export function SemanticTypographyTable({ tokens, category }: SemanticTypographyTableProps) {
-  const entries = Object.entries(tokens).filter(([key]) => key.startsWith(`${category}--`) || key.startsWith(`${category}-`));
-  if (entries.length === 0) return null;
+  const cssVars = tokens.map((t) => `--${t}`);
+  const resolved = useComputedVars(cssVars);
 
-  // Determine font family var for this category
+  if (tokens.length === 0) return null;
+
   const fontFamilyVar = category === 'icon'
     ? '--font-family-icon'
     : `--font-family-${category === 'body' || category === 'label' ? category : 'heading'}`;
@@ -386,11 +387,12 @@ export function SemanticTypographyTable({ tokens, category }: SemanticTypography
   return (
     <div style={{ marginBottom: 'var(--padding-lg)' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-        {entries.map(([key, refValue]) => {
-          const cssVar = `--${key}`;
+        {tokens.map((token) => {
+          const cssVar = `--${token}`;
+          const liveValue = resolved[cssVar] || '';
           return (
             <div
-              key={key}
+              key={token}
               style={{
                 display: 'grid',
                 gridTemplateColumns: '160px 160px 1fr',
@@ -401,7 +403,7 @@ export function SemanticTypographyTable({ tokens, category }: SemanticTypography
               }}
             >
               <span style={tokenLabel}>{cssVar}</span>
-              <span style={valueLabel}>{refValue}</span>
+              <span style={valueLabel}>{liveValue}</span>
               <span
                 style={{
                   fontSize: `var(${cssVar})`,
