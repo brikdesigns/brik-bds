@@ -338,8 +338,8 @@
 }
 
 .bds-button--lg .bds-button__spinner-icon {
-  width: 20px;
-  height: 20px;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
 }
 
 .bds-button--xl .bds-button__spinner-icon {
@@ -414,7 +414,7 @@
 }
 
 .bds-icon-button--lg .bds-icon-button__icon {
-  font-size: 20px;
+  font-size: var(--icon-lg);
 }
 
 .bds-icon-button--xl .bds-icon-button__icon {
