@@ -19050,6 +19050,30 @@ function Breadcrumb({
     }
   );
 }
+function BulletList({
+  items,
+  marker = "disc",
+  density = "comfortable",
+  className,
+  style,
+  ...props
+}) {
+  const Element2 = marker === "decimal" ? "ol" : "ul";
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    Element2,
+    {
+      className: bdsClass(
+        "bds-bullet-list",
+        `bds-bullet-list--marker-${marker}`,
+        `bds-bullet-list--density-${density}`,
+        className
+      ),
+      style,
+      ...props,
+      children: items.map((item, i) => /* @__PURE__ */ jsxRuntime.jsx("li", { className: "bds-bullet-list__item", children: item }, i))
+    }
+  );
+}
 function ButtonGroup({
   children,
   orientation = "horizontal",
@@ -24403,6 +24427,55 @@ function EmptyState({
     children
   ] });
 }
+function isEmpty(value2) {
+  return value2 == null || value2 === "" || value2 === false;
+}
+function Field({
+  label,
+  children,
+  layout = "stacked",
+  empty = "Not set",
+  className,
+  style,
+  ...props
+}) {
+  const showEmpty = isEmpty(children);
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    "div",
+    {
+      className: bdsClass("bds-field", `bds-field--${layout}`, className),
+      style,
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-field__label", children: label }),
+        showEmpty ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-field__empty", children: empty }) : /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-field__value", children })
+      ]
+    }
+  );
+}
+function FieldGrid({
+  columns = 2,
+  gap = "xl",
+  className,
+  style,
+  children,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      className: bdsClass(
+        "bds-field-grid",
+        `bds-field-grid--cols-${columns}`,
+        `bds-field-grid--gap-${gap}`,
+        className
+      ),
+      style,
+      ...props,
+      children
+    }
+  );
+}
 function FileUploader({
   accept,
   multiple = false,
@@ -26237,6 +26310,33 @@ function ServiceTag({
     }
   );
 }
+function SheetSection({
+  heading,
+  description,
+  children,
+  spacing = "lg",
+  className,
+  style,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    "section",
+    {
+      className: bdsClass(
+        "bds-sheet-section",
+        `bds-sheet-section--spacing-${spacing}`,
+        className
+      ),
+      style,
+      ...props,
+      children: [
+        heading && /* @__PURE__ */ jsxRuntime.jsx("h3", { className: "bds-sheet-section__heading", children: heading }),
+        description && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-sheet-section__description", children: description }),
+        children && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet-section__content", children })
+      ]
+    }
+  );
+}
 function SidebarNavigation({
   logo,
   navItems,
@@ -26848,6 +26948,29 @@ function TableCell({
 }) {
   return /* @__PURE__ */ jsxRuntime.jsx("td", { className: bdsClass("bds-table-cell", className), style, ...props, children });
 }
+function TagList({
+  gap = "xs",
+  wrap = true,
+  className,
+  style,
+  children,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      className: bdsClass(
+        "bds-tag-list",
+        `bds-tag-list--gap-${gap}`,
+        wrap ? "bds-tag-list--wrap" : "bds-tag-list--nowrap",
+        className
+      ),
+      style,
+      ...props,
+      children
+    }
+  );
+}
 function pad(n) {
   return n.toString().padStart(2, "0");
 }
@@ -27404,6 +27527,7 @@ exports.BoardCard = BoardCard;
 exports.BoardColumn = BoardColumn;
 exports.BoardHeader = BoardHeader;
 exports.Breadcrumb = Breadcrumb;
+exports.BulletList = BulletList;
 exports.Button = Button;
 exports.ButtonGroup = ButtonGroup;
 exports.Card = Card;
@@ -27427,6 +27551,8 @@ exports.Divider = Divider;
 exports.Dot = Dot;
 exports.EmailInput = EmailInput;
 exports.EmptyState = EmptyState;
+exports.Field = Field;
+exports.FieldGrid = FieldGrid;
 exports.FileUploader = FileUploader;
 exports.FilterBar = FilterBar;
 exports.FilterButton = FilterButton;
@@ -27459,6 +27585,7 @@ exports.Select = Select;
 exports.ServiceBadge = ServiceBadge;
 exports.ServiceTag = ServiceTag;
 exports.Sheet = Sheet;
+exports.SheetSection = SheetSection;
 exports.SheetStackProvider = SheetStackProvider;
 exports.SheetStackRenderer = SheetStackRenderer;
 exports.SidebarNavigation = SidebarNavigation;
@@ -27477,6 +27604,7 @@ exports.TableHeader = TableHeader;
 exports.TableRow = TableRow;
 exports.TableSubheader = TableSubheader;
 exports.Tag = Tag;
+exports.TagList = TagList;
 exports.TaskConsole = TaskConsole;
 exports.TextArea = TextArea;
 exports.TextInput = TextInput;
