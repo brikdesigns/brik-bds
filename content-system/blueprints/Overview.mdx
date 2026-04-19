@@ -10,7 +10,10 @@ import {
   normalizeBlueprintLibrary,
 } from './index';
 
-<Meta title="Content System/Blueprints/Overview" />
+<Meta
+  title="Foundations/Content System/Blueprints/Overview"
+  parameters={{ docs: { toc: { headingSelector: 'h2' } } }}
+/>
 
 # Blueprint Library
 
@@ -112,7 +115,9 @@ Which section types have which moods covered. Cell = blueprint count. Gaps are o
 
 ---
 
-## Library â€” grouped by section type
+## Library
+
+Grouped by section type. Expand any blueprint for moods, industries, layout spec, and CSS hints.
 
 {SECTION_TYPE_VALUES.map(section => {
   const entries = library.blueprints.filter(b => b.section_type === section);
@@ -175,5 +180,5 @@ Blueprint edits flow **through BDS**. Portal admin edits (if kept) are drafts â€
 ## Related
 
 - [Architecture (GitHub)](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/ARCHITECTURE.md)
-- [Content System Overview](?path=/docs/content-system-overview--docs)
-- [Voices Overview](?path=/docs/content-system-voices-overview--docs)
+- [Content System Overview](?path=/docs/foundations-content-system-overview--docs)
+- [Voices Overview](?path=/docs/foundations-content-system-voices-overview--docs)

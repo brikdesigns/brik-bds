@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 import { smallBusiness } from './small-business';
 
-<Meta title="Content System/Industries/Small Business (General)" />
+<Meta title="Foundations/Content System/Industries/Small Business (General)" />
 
 # Small Business (General)
 
@@ -9,7 +9,7 @@ import { smallBusiness } from './small-business';
 
 Catch-all baseline for clients who don't yet fit a defined Brik sub-industry. Used as `DEFAULT_INDUSTRY_SLUG` by the resolver when no dedicated pack matches.
 
-Structured data lives in [`small-business.ts`](?path=/docs/content-system-industries-small-business--docs). Promotion rules at the bottom of this page govern when to graduate a vertical out of this pack.
+Structured data lives in [`small-business.ts`](?path=/docs/foundations-content-system-industries-small-business--docs). Promotion rules at the bottom of this page govern when to graduate a vertical out of this pack.
 
 ---
 
@@ -114,7 +114,7 @@ Graduate a sub-industry to its own reference pack when **any** of the following 
 
 When graduating:
 
-1. Add the new slug to [`vocabularies/industry.ts`](?path=/docs/content-system-vocabularies--docs).
+1. Add the new slug to [`vocabularies/industry.ts`](?path=/docs/foundations-content-system-vocabularies--docs).
 2. Create `{new-slug}.ts` (IndustryPack) + `{new-slug}.mdx` (narrative) in `content-system/industries/`.
 3. Backfill existing clients in the portal by updating `company_profiles.industry_slug`.
 4. Bump this pack's `version` and log the graduation in the changelog section of this file.
@@ -123,5 +123,5 @@ When graduating:
 
 ## Related
 
-- [Dental pack](?path=/docs/content-system-industries-dental--docs) — first graduated vertical, reference for pack structure
-- [Vocabularies](?path=/docs/content-system-vocabularies--docs) — locked enums
+- [Dental pack](?path=/docs/foundations-content-system-industries-dental--docs) — first graduated vertical, reference for pack structure
+- [Vocabularies](?path=/docs/foundations-content-system-vocabularies--docs) — locked enums
