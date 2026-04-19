@@ -14,7 +14,7 @@ The portal captures brand identity on three axes the client picks themselves:
 
 - `Personality` (13) — what the brand *is*
 - `Voice` (8) — how the brand *speaks*
-- `VisualStyle` (11) — the aesthetic direction
+- `VisualStyle` (13) — the aesthetic direction
 
 Blueprints, by contrast, are tagged for *matching* — answering the question "which layouts fit this brand?" Historically that surface used two different tags:
 
@@ -66,7 +66,7 @@ Defined in [`content-system/blueprints/bridges.ts`](../content-system/blueprints
 
 | Mood | VisualStyle |
 |---|---|
-| `bold` | *(none)* |
+| `bold` | `Bold` |
 | `minimal` | `Minimal` |
 | `warm` | *(none)* |
 | `corporate` | `Classic` |
