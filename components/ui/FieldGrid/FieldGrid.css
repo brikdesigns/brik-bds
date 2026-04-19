@@ -1,0 +1,36 @@
+@layer bds-components {
+/* ─── FieldGrid ────────────────────────────────────────────────── */
+
+.bds-field-grid {
+  display: grid;
+  text-align: left;
+}
+
+/* ─── Columns ───────────────────────────────────────────────── */
+
+.bds-field-grid--cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.bds-field-grid--cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.bds-field-grid--cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ─── Gaps ──────────────────────────────────────────────────── */
+
+.bds-field-grid--gap-md {
+  gap: var(--gap-md);
+}
+
+.bds-field-grid--gap-lg {
+  gap: var(--gap-lg);
+}
+
+.bds-field-grid--gap-xl {
+  gap: var(--gap-xl);
+}
+}

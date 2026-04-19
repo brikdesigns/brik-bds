@@ -1,0 +1,44 @@
+@layer bds-components {
+/* ─── BulletList ───────────────────────────────────────────────── */
+
+.bds-bullet-list {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  margin: 0;
+  padding-left: var(--padding-lg);
+}
+
+/* ─── Markers ───────────────────────────────────────────────── */
+
+.bds-bullet-list--marker-disc {
+  list-style-type: disc;
+}
+
+.bds-bullet-list--marker-decimal {
+  list-style-type: decimal;
+}
+
+.bds-bullet-list--marker-none {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+/* ─── Density ───────────────────────────────────────────────── */
+
+.bds-bullet-list--density-compact .bds-bullet-list__item + .bds-bullet-list__item {
+  margin-top: var(--gap-xs);
+}
+
+.bds-bullet-list--density-comfortable .bds-bullet-list__item + .bds-bullet-list__item {
+  margin-top: var(--gap-sm);
+}
+
+/* ─── Item — reset font-size in case legacy webflow.css li rules leak ── */
+
+.bds-bullet-list__item {
+  font-size: inherit;
+  color: inherit;
+}
+}
