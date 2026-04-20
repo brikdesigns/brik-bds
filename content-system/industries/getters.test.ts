@@ -8,7 +8,10 @@ import {
   getIndustryProcedures,
   getIndustryAmenities,
   getIndustriesForParent,
+  getIndustryInsurancePlans,
+  getIndustryFinancing,
 } from './getters';
+import { PAYMENT_METHOD_VALUES, isPaymentMethod } from '../vocabularies';
 
 // ── getIndustryServices ──────────────────────────────────────────────────────
 
@@ -84,14 +87,21 @@ describe('getIndustryPaymentTypes', () => {
 // ── getIndustryInsuranceProviders ────────────────────────────────────────────
 
 describe('getIndustryInsuranceProviders', () => {
-  it('returns a populated list for dental', () => {
+  it('returns exactly the 10 locked dental carriers', () => {
     const providers = getIndustryInsuranceProviders('dental');
-    expect(providers.length).toBeGreaterThanOrEqual(10);
-    expect(providers).toContain('Delta Dental');
-    expect(providers).toContain('Aetna Dental');
-    expect(providers).toContain('MetLife Dental');
-    expect(providers).toContain('Cigna Dental');
-    expect(providers).toContain('Blue Cross Blue Shield');
+    expect(providers).toHaveLength(10);
+    expect(providers).toEqual([
+      'Aetna',
+      'Anthem',
+      'Blue Cross Blue Shield',
+      'Cigna',
+      'Delta Dental',
+      'Guardian',
+      'Humana',
+      'MetLife',
+      'Principal',
+      'UnitedHealthcare',
+    ]);
   });
 
   it('returns empty array for real-estate-rv-mhc (insurance not applicable)', () => {
@@ -207,5 +217,90 @@ describe('getIndustriesForParent', () => {
 
   it('returns empty array for the other parent (no graduated packs)', () => {
     expect(getIndustriesForParent('other')).toEqual([]);
+  });
+});
+
+// ── getIndustryInsurancePlans ────────────────────────────────────────────────
+
+describe('getIndustryInsurancePlans', () => {
+  it('returns exactly the 4 locked dental plan types', () => {
+    const plans = getIndustryInsurancePlans('dental');
+    expect(plans).toEqual([
+      'Out-of-Network PPO',
+      'Fee-for-Service Only',
+      'Medicaid',
+      'Medicare',
+    ]);
+  });
+
+  it('returns empty array when pack has no insurancePlans', () => {
+    expect(getIndustryInsurancePlans('real-estate-rv-mhc')).toEqual([]);
+    expect(getIndustryInsurancePlans('small-business')).toEqual([]);
+  });
+
+  it('falls back to small-business (empty) for null / undefined', () => {
+    expect(getIndustryInsurancePlans(null)).toEqual([]);
+    expect(getIndustryInsurancePlans(undefined)).toEqual([]);
+  });
+
+  it('returns a mutable copy — mutations do not affect the source pack', () => {
+    const plans = getIndustryInsurancePlans('dental');
+    plans.push('__mutation_test__');
+    expect(getIndustryInsurancePlans('dental')).not.toContain('__mutation_test__');
+  });
+});
+
+// ── getIndustryFinancing ─────────────────────────────────────────────────────
+
+describe('getIndustryFinancing', () => {
+  it('returns exactly the 5 locked dental financing products', () => {
+    const financing = getIndustryFinancing('dental');
+    expect(financing).toEqual([
+      'CareCredit',
+      'Cherry Finance',
+      'Sunbit',
+      'LendingClub',
+      'In-House Financing',
+    ]);
+  });
+
+  it('returns empty array when pack has no financing catalog', () => {
+    expect(getIndustryFinancing('real-estate-rv-mhc')).toEqual([]);
+    expect(getIndustryFinancing('small-business')).toEqual([]);
+  });
+
+  it('falls back to small-business (empty) for null / undefined', () => {
+    expect(getIndustryFinancing(null)).toEqual([]);
+    expect(getIndustryFinancing(undefined)).toEqual([]);
+  });
+});
+
+// ── PAYMENT_METHOD_VALUES (global vocabulary) ────────────────────────────────
+
+describe('PAYMENT_METHOD_VALUES', () => {
+  it('contains exactly the 14 locked global payment methods', () => {
+    expect(PAYMENT_METHOD_VALUES).toEqual([
+      'Cash',
+      'Check',
+      'Debit',
+      'Visa',
+      'Mastercard',
+      'Amex',
+      'Discover',
+      'Apple Pay',
+      'Google Pay',
+      'ACH/Bank Transfer',
+      'Venmo',
+      'Zelle',
+      'CareCredit',
+      'HSA/FSA',
+    ]);
+  });
+
+  it('isPaymentMethod guards membership correctly', () => {
+    expect(isPaymentMethod('Cash')).toBe(true);
+    expect(isPaymentMethod('CareCredit')).toBe(true);
+    expect(isPaymentMethod('Bitcoin')).toBe(false);
+    expect(isPaymentMethod('Delta Dental')).toBe(false);
   });
 });

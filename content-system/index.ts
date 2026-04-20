@@ -28,6 +28,8 @@ export {
   getIndustryProcedures,
   getIndustryAmenities,
   getIndustriesForParent,
+  getIndustryInsurancePlans,
+  getIndustryFinancing,
 } from './industries';
 export {
   voicePatterns,

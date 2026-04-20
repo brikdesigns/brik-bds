@@ -31,4 +31,6 @@ export {
   getIndustryProcedures,
   getIndustryAmenities,
   getIndustriesForParent,
+  getIndustryInsurancePlans,
+  getIndustryFinancing,
 } from './getters';
