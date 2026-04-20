@@ -24,6 +24,10 @@ export {
   getIndustryServices,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
+  getIndustryConditions,
+  getIndustryProcedures,
+  getIndustryAmenities,
+  getIndustriesForParent,
 } from './industries';
 export {
   voicePatterns,

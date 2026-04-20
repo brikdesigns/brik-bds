@@ -24,7 +24,10 @@ export {
   INDUSTRY_SLUGS,
   DEFAULT_INDUSTRY_SLUG,
   isIndustrySlug,
+  PARENT_INDUSTRY_SLUGS,
+  isParentIndustrySlug,
   type IndustrySlug,
+  type ParentIndustrySlug,
 } from './industry';
 
 export {

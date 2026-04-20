@@ -4,6 +4,10 @@ import {
   getIndustryServices,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
+  getIndustryConditions,
+  getIndustryProcedures,
+  getIndustryAmenities,
+  getIndustriesForParent,
 } from './getters';
 
 // ── getIndustryServices ──────────────────────────────────────────────────────
@@ -108,5 +112,100 @@ describe('getIndustryInsuranceProviders', () => {
     const original = getIndustryInsuranceProviders('dental');
     providers.push('__mutation_test__');
     expect(getIndustryInsuranceProviders('dental')).toEqual(original);
+  });
+});
+
+// ── getIndustryConditions ────────────────────────────────────────────────────
+
+describe('getIndustryConditions', () => {
+  it('returns dental conditions', () => {
+    const conditions = getIndustryConditions('dental');
+    expect(conditions.length).toBeGreaterThanOrEqual(10);
+    expect(conditions).toContain('Cavity');
+    expect(conditions).toContain('Gum Disease');
+    expect(conditions).toContain('TMJ Disorder');
+  });
+
+  it('returns empty array for real-estate-rv-mhc (no healthcare catalog)', () => {
+    expect(getIndustryConditions('real-estate-rv-mhc')).toEqual([]);
+  });
+
+  it('returns empty array for small-business (no catalog)', () => {
+    expect(getIndustryConditions('small-business')).toEqual([]);
+  });
+
+  it('falls back to small-business (empty) for null / undefined', () => {
+    expect(getIndustryConditions(null)).toEqual([]);
+    expect(getIndustryConditions(undefined)).toEqual([]);
+  });
+});
+
+// ── getIndustryProcedures ────────────────────────────────────────────────────
+
+describe('getIndustryProcedures', () => {
+  it('returns dental procedures', () => {
+    const procedures = getIndustryProcedures('dental');
+    expect(procedures.length).toBeGreaterThanOrEqual(15);
+    expect(procedures).toContain('Composite Filling');
+    expect(procedures).toContain('Single-Tooth Implant');
+    expect(procedures).toContain('Root Canal (Molar)');
+  });
+
+  it('returns empty array for non-healthcare industries', () => {
+    expect(getIndustryProcedures('real-estate-rv-mhc')).toEqual([]);
+    expect(getIndustryProcedures('small-business')).toEqual([]);
+  });
+
+  it('falls back to small-business (empty) for null / undefined', () => {
+    expect(getIndustryProcedures(null)).toEqual([]);
+    expect(getIndustryProcedures(undefined)).toEqual([]);
+  });
+});
+
+// ── getIndustryAmenities ─────────────────────────────────────────────────────
+
+describe('getIndustryAmenities', () => {
+  it('returns amenities for real-estate-rv-mhc', () => {
+    const amenities = getIndustryAmenities('real-estate-rv-mhc');
+    expect(amenities.length).toBeGreaterThanOrEqual(30);
+    expect(amenities).toContain('Pool');
+    expect(amenities).toContain('Full Hookup (Electric + Water + Sewer)');
+    expect(amenities).toContain('Gated Access');
+  });
+
+  it('returns empty array for non-hospitality industries', () => {
+    expect(getIndustryAmenities('dental')).toEqual([]);
+    expect(getIndustryAmenities('small-business')).toEqual([]);
+  });
+
+  it('falls back to small-business (empty) for null / undefined', () => {
+    expect(getIndustryAmenities(null)).toEqual([]);
+    expect(getIndustryAmenities(undefined)).toEqual([]);
+  });
+});
+
+// ── getIndustriesForParent ───────────────────────────────────────────────────
+
+describe('getIndustriesForParent', () => {
+  it('returns dental under the medical parent', () => {
+    const packs = getIndustriesForParent('medical');
+    expect(packs.map((p) => p.slug)).toContain('dental');
+    expect(packs).toHaveLength(1);
+  });
+
+  it('returns real-estate-rv-mhc under the real-estate parent', () => {
+    const packs = getIndustriesForParent('real-estate');
+    expect(packs.map((p) => p.slug)).toContain('real-estate-rv-mhc');
+    expect(packs).toHaveLength(1);
+  });
+
+  it('returns small-business under its self-named parent', () => {
+    const packs = getIndustriesForParent('small-business');
+    expect(packs.map((p) => p.slug)).toContain('small-business');
+    expect(packs).toHaveLength(1);
+  });
+
+  it('returns empty array for the other parent (no graduated packs)', () => {
+    expect(getIndustriesForParent('other')).toEqual([]);
   });
 });
