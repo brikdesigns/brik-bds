@@ -38,8 +38,17 @@ export interface SheetProps {
   children?: ReactNode;
   side?: SheetSide;
   title?: ReactNode;
-  /** Optional subtitle rendered under the title */
+  /**
+   * Eyebrow label rendered above the title in `text-muted`. Use for short
+   * categorical context like entity type or parent record (e.g. "Company",
+   * "Strategic Brief").
+   */
   subtitle?: ReactNode;
+  /**
+   * Long-form secondary text rendered under the title. Use for record state,
+   * timestamps, or descriptive context (e.g. "Active · Updated 2 days ago").
+   */
+  description?: ReactNode;
   /** Width for left/right sheets (default: 400px) */
   width?: string;
   /**
@@ -110,6 +119,7 @@ export function Sheet({
   side = 'right',
   title,
   subtitle,
+  description,
   width = '400px',
   variant = 'default',
   closeOnBackdrop = true,
@@ -236,7 +246,7 @@ export function Sheet({
     );
   })();
 
-  const hasHeaderContent = title || subtitle || onBack || showCloseButton;
+  const hasHeaderContent = title || subtitle || description || onBack || showCloseButton;
 
   const sheet = (
     <>
@@ -262,8 +272,9 @@ export function Sheet({
                   </button>
                 )}
                 <div className="bds-sheet__titles">
+                  {subtitle && <span className="bds-sheet__subtitle">{subtitle}</span>}
                   {title && <h2 className="bds-sheet__title">{title}</h2>}
-                  {subtitle && <p className="bds-sheet__subtitle">{subtitle}</p>}
+                  {description && <p className="bds-sheet__description">{description}</p>}
                 </div>
               </div>
               {showCloseButton && (

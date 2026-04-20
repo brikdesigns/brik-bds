@@ -51,8 +51,10 @@ const SheetStackContext = createContext<SheetStackContextValue | undefined>(unde
 /** Configuration set by headless sheet components via useConfigureSheet */
 export interface SheetConfig {
   title?: ReactNode;
-  /** Subtitle rendered under the title */
+  /** Eyebrow label rendered above the title (text-muted, uppercase). */
   subtitle?: ReactNode;
+  /** Long-form secondary text rendered under the title. */
+  description?: ReactNode;
   tabs?: SheetTab[];
   activeTab?: string;
   onTabChange?: (id: string) => void;
