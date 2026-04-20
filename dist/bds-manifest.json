@@ -1,7 +1,7 @@
 {
   "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
-  "bds_version": "0.16.0",
-  "generated_at": "2026-04-20T00:21:11.623Z",
+  "bds_version": "0.18.0",
+  "generated_at": "2026-04-20T12:09:10.654Z",
   "component_count": 82,
   "token_count": 426,
   "components": {
@@ -164,13 +164,21 @@
       "source_path": "components/ui/AddableEntryList/AddableEntryList.tsx",
       "tokens_used": [
         "--background-muted",
+        "--background-primary",
+        "--body-lg",
+        "--body-md",
         "--body-sm",
         "--body-xs",
+        "--border-brand-primary",
         "--border-focus",
         "--border-muted",
+        "--border-primary",
+        "--border-radius-lg",
         "--border-radius-md",
         "--border-radius-sm",
         "--border-width-md",
+        "--duration-fast",
+        "--ease-out",
         "--font-family-body",
         "--font-family-label",
         "--font-line-height-normal",
@@ -181,18 +189,34 @@
         "--gap-sm",
         "--gap-tiny",
         "--gap-xl",
+        "--gap-xs",
         "--padding-md",
+        "--padding-sm",
+        "--padding-tiny",
+        "--shadow-lg",
+        "--surface-brand-primary",
+        "--surface-secondary",
         "--text-muted",
         "--text-primary",
         "--text-secondary"
       ],
       "a11y": {
         "aria_attrs": [
-          "aria-label"
+          "aria-activedescendant",
+          "aria-autocomplete",
+          "aria-controls",
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-label",
+          "aria-live",
+          "aria-selected"
         ],
         "roles": [
+          "combobox",
           "list",
-          "listitem"
+          "listbox",
+          "listitem",
+          "option"
         ],
         "manages_focus": true,
         "has_label_prop": true,
