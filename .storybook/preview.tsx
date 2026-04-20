@@ -302,18 +302,33 @@ const preview: Preview = {
       storySort: {
         order: [
           'Overview',
-          ['Welcome', 'ThemeSwitcher', 'Health Dashboard', 'Theme Compliance', 'Token Coverage'],
+          [
+            'Welcome',
+            'Theming',
+            ['Client Theming', 'Image Mood', 'Blueprints', '*'],
+            'ThemeSwitcher',
+            'Health Dashboard',
+            'Theme Compliance',
+            'Token Coverage',
+          ],
           'Foundations',
           [
             'Design Tokens',
             ['Overview', 'Client Theming', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size'],
             'Assets',
-            'Content System',
+            'Content',
             [
               'Overview',
               'Industries',
               'Voices',
-              'Blueprints',
+              '*',
+            ],
+            'Motion',
+            [
+              'Overview',
+              'Tiers',
+              'Effects',
+              'Vocabulary',
               '*',
             ],
             '*',
