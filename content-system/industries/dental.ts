@@ -13,10 +13,11 @@ import type { IndustryPack } from '../schema';
  */
 export const dental: IndustryPack = {
   slug: 'dental',
+  parentIndustry: 'medical',
   displayName: 'Dental',
-  version: '1.2.0',
+  version: '1.3.0',
   reviewCadence: 'quarterly',
-  lastReviewed: '2026-04-19',
+  lastReviewed: '2026-04-20',
 
   affinities: {
     personality: ['Professional', 'Warm', 'Approachable', 'Refined', 'Modern'],
@@ -90,6 +91,47 @@ export const dental: IndustryPack = {
     { slug: 'sedation', displayName: 'Sedation Dentistry', category: 'anxiety', aliases: ['nitrous', 'oral sedation', 'iv sedation', 'laughing gas'] },
     { slug: 'emergency', displayName: 'Emergency Dental Care', category: 'emergency', aliases: ['dental emergency', 'urgent care', 'same-day'] },
     { slug: 'tmj', displayName: 'TMJ & Bite Therapy', category: 'specialty', aliases: ['tmj', 'tmd', 'bruxism', 'nightguard'] },
+  ],
+
+  conditionsCatalog: [
+    { slug: 'cavity', displayName: 'Cavity', category: 'decay', aliases: ['caries', 'dental caries'] },
+    { slug: 'tooth-decay', displayName: 'Tooth Decay', category: 'decay', aliases: ['cavities', 'decay', 'rot'] },
+    { slug: 'toothache', displayName: 'Toothache', category: 'pain', aliases: ['tooth pain', 'dental pain'] },
+    { slug: 'chipped-tooth', displayName: 'Chipped Tooth', category: 'trauma', aliases: ['tooth chip', 'broken tooth edge'] },
+    { slug: 'cracked-tooth', displayName: 'Cracked Tooth', category: 'trauma', aliases: ['tooth fracture', 'fractured tooth', 'broken tooth'] },
+    { slug: 'gingivitis', displayName: 'Gingivitis', category: 'periodontal', aliases: ['bleeding gums', 'early gum disease', 'gum inflammation'] },
+    { slug: 'gum-disease', displayName: 'Gum Disease', category: 'periodontal', aliases: ['periodontitis', 'periodontal disease', 'advanced gum disease'] },
+    { slug: 'loose-teeth', displayName: 'Loose Teeth', category: 'periodontal', aliases: ['tooth mobility', 'shifting teeth'] },
+    { slug: 'missing-teeth', displayName: 'Missing Teeth', category: 'tooth-loss', aliases: ['tooth gaps', 'edentulous'] },
+    { slug: 'tooth-loss', displayName: 'Tooth Loss', category: 'tooth-loss', aliases: ['lost teeth', 'edentulism'] },
+    { slug: 'misaligned-teeth', displayName: 'Misaligned Teeth', category: 'orthodontic', aliases: ['crooked teeth', 'crowding', 'spacing', 'malocclusion', 'bad bite'] },
+    { slug: 'bruxism', displayName: 'Grinding (Bruxism)', category: 'functional', aliases: ['teeth grinding', 'clenching', 'night grinding'] },
+    { slug: 'jaw-pain', displayName: 'Jaw Pain', category: 'functional', aliases: ['jaw soreness', 'jaw ache'] },
+    { slug: 'tmj-disorder', displayName: 'TMJ Disorder', category: 'functional', aliases: ['tmj', 'tmd', 'jaw disorder', 'tmj syndrome'] },
+    { slug: 'tooth-discoloration', displayName: 'Tooth Discoloration', category: 'cosmetic', aliases: ['yellow teeth', 'staining', 'discolored teeth', 'dull smile'] },
+    { slug: 'bad-breath', displayName: 'Bad Breath', category: 'oral-health', aliases: ['halitosis', 'chronic bad breath'] },
+  ],
+
+  proceduresCatalog: [
+    { slug: 'composite-filling', displayName: 'Composite Filling', category: 'restorative', aliases: ['tooth-colored filling', 'white filling', 'bonded filling'] },
+    { slug: 'amalgam-filling', displayName: 'Amalgam Filling', category: 'restorative', aliases: ['silver filling', 'metal filling'] },
+    { slug: 'ceramic-crown', displayName: 'Ceramic Crown', category: 'restorative', aliases: ['porcelain crown', 'zirconia crown', 'all-ceramic crown'] },
+    { slug: 'gold-crown', displayName: 'Gold Crown', category: 'restorative', aliases: ['metal crown', 'full-cast crown'] },
+    { slug: 'single-tooth-implant', displayName: 'Single-Tooth Implant', category: 'surgical', aliases: ['implant', 'single implant', 'endosteal implant'] },
+    { slug: 'all-on-4-implants', displayName: 'All-on-4 Implants', category: 'surgical', aliases: ['all on four', 'full-arch implants', 'teeth in a day'] },
+    { slug: 'bone-graft', displayName: 'Bone Graft', category: 'surgical', aliases: ['bone grafting', 'ridge augmentation', 'alveolar graft'] },
+    { slug: 'sinus-lift', displayName: 'Sinus Lift', category: 'surgical', aliases: ['sinus augmentation', 'sinus graft', 'maxillary sinus elevation'] },
+    { slug: 'extraction-simple', displayName: 'Extraction (Simple)', category: 'surgical', aliases: ['simple extraction', 'routine extraction'] },
+    { slug: 'extraction-surgical', displayName: 'Extraction (Surgical)', category: 'surgical', aliases: ['surgical extraction', 'impacted extraction', 'wisdom tooth removal'] },
+    { slug: 'root-canal-anterior', displayName: 'Root Canal (Anterior)', category: 'endodontic', aliases: ['front tooth root canal', 'anterior endo'] },
+    { slug: 'root-canal-molar', displayName: 'Root Canal (Molar)', category: 'endodontic', aliases: ['back tooth root canal', 'molar endo', 'multi-canal root canal'] },
+    { slug: 'invisalign-treatment', displayName: 'Invisalign Treatment', category: 'orthodontic', aliases: ['clear aligner treatment', 'aligner therapy'] },
+    { slug: 'traditional-braces', displayName: 'Traditional Braces', category: 'orthodontic', aliases: ['metal braces', 'brackets and wires', 'fixed braces'] },
+    { slug: 'teeth-whitening-session', displayName: 'Teeth Whitening Session', category: 'cosmetic', aliases: ['in-office whitening', 'bleaching session', 'zoom whitening'] },
+    { slug: 'porcelain-veneer-placement', displayName: 'Porcelain Veneer Placement', category: 'cosmetic', aliases: ['veneer placement', 'veneer prep', 'veneer bonding'] },
+    { slug: 'deep-cleaning-srp', displayName: 'Deep Cleaning (SRP)', category: 'preventive', aliases: ['scaling and root planing', 'srp', 'periodontal therapy'] },
+    { slug: 'fluoride-application', displayName: 'Fluoride Application', category: 'preventive', aliases: ['fluoride treatment', 'topical fluoride', 'fluoride varnish'] },
+    { slug: 'sealant-application', displayName: 'Sealant Application', category: 'preventive', aliases: ['dental sealants', 'pit and fissure sealants'] },
   ],
 
   vocabulary: {
