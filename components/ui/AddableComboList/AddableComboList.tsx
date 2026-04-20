@@ -1,14 +1,13 @@
 import {
   useRef,
   useState,
-  useId,
   useCallback,
-  type KeyboardEvent,
 } from 'react';
 import { Icon } from '@iconify/react';
 import { bdsClass } from '../../utils';
 import { Button, type ButtonSize } from '../Button';
 import { Tag, type TagSize } from '../Tag';
+import { useSuggestionFilter } from '../shared/useSuggestionFilter';
 import './AddableComboList.css';
 
 export type AddableComboListSize = 'sm' | 'md' | 'lg';
@@ -87,147 +86,55 @@ export function AddableComboList({
   className,
 }: AddableComboListProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [query, setQuery] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [flashDupe, setFlashDupe] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const listboxRef = useRef<HTMLUListElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const comboId = useId();
-  const listboxId = `${comboId}-listbox`;
-
   const atLimit = typeof maxEntries === 'number' && values.length >= maxEntries;
-  const selectedSet = new Set(values.map((v) => v.toLowerCase()));
 
-  // Filter suggestions: case-insensitive contains, exclude already-selected
-  const filtered = suggestions.filter(
-    (s) =>
-      !selectedSet.has(s.toLowerCase()) &&
-      s.toLowerCase().includes(query.toLowerCase().trim()),
-  );
-
-  const openList = () => {
-    setIsOpen(true);
-    setActiveIndex(-1);
-  };
-
-  const closeList = () => {
-    setIsOpen(false);
-    setActiveIndex(-1);
-  };
-
-  const reveal = () => {
-    setQuery('');
-    setIsEditing(true);
-    setIsOpen(false);
-    requestAnimationFrame(() => inputRef.current?.focus());
-  };
-
-  const cancel = useCallback(() => {
-    setQuery('');
-    setIsEditing(false);
-    closeList();
-  }, []);
-
-  const triggerDupeFlash = () => {
+  const triggerDupeFlash = useCallback(() => {
     setFlashDupe(true);
     setTimeout(() => setFlashDupe(false), 600);
-  };
+  }, []);
 
-  const commit = useCallback(
-    (value: string) => {
-      const trimmed = value.trim();
-      if (!trimmed) return;
-
-      // Strict mode: must be in suggestions list
-      if (strict && !suggestions.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
-        return;
-      }
-
-      // Dedupe: case-insensitive
-      if (selectedSet.has(trimmed.toLowerCase())) {
-        triggerDupeFlash();
-        return;
-      }
-
-      onChange([...values, trimmed]);
-      setQuery('');
-      closeList();
-      requestAnimationFrame(() => inputRef.current?.focus());
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values, onChange, strict, suggestions, selectedSet],
-  );
+  const cancel = useCallback(() => {
+    setIsEditing(false);
+    combo.reset();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const remove = (index: number) => {
     onChange(values.filter((_, i) => i !== index));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setQuery(val);
-    if (val.trim()) {
-      openList();
-    } else {
-      closeList();
-    }
-    setActiveIndex(-1);
-  };
+  const combo = useSuggestionFilter({
+    suggestions,
+    selectedValues: values,
+    strict,
+    onCommit: (value) => {
+      onChange([...values, value]);
+      requestAnimationFrame(() => inputRef.current?.focus());
+    },
+    onCancel: cancel,
+    onDuplicate: triggerDupeFlash,
+  });
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    switch (e.key) {
-      case 'ArrowDown': {
-        e.preventDefault();
-        if (!isOpen && filtered.length > 0) openList();
-        setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
-        break;
-      }
-      case 'ArrowUp': {
-        e.preventDefault();
-        setActiveIndex((prev) => Math.max(prev - 1, -1));
-        break;
-      }
-      case 'Enter': {
-        e.preventDefault();
-        if (activeIndex >= 0 && filtered[activeIndex]) {
-          commit(filtered[activeIndex]);
-        } else {
-          commit(query);
-        }
-        break;
-      }
-      case 'Escape': {
-        e.preventDefault();
-        if (isOpen) {
-          closeList();
-        } else {
-          cancel();
-        }
-        break;
-      }
-      case 'Backspace': {
-        if (query === '' && values.length > 0) {
-          remove(values.length - 1);
-        }
-        break;
-      }
-    }
+  const reveal = () => {
+    combo.reset();
+    setIsEditing(true);
+    requestAnimationFrame(() => inputRef.current?.focus());
   };
 
   // Close dropdown on outside click
   const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     if (!containerRef.current?.contains(e.relatedTarget as Node)) {
-      closeList();
-      if (!query.trim()) cancel();
+      combo.closeList();
+      if (!combo.query.trim()) cancel();
     }
   };
 
   const showEmpty = values.length === 0 && !isEditing && emptyLabel;
-  const activeDescendant =
-    isOpen && activeIndex >= 0 ? `${comboId}-option-${activeIndex}` : undefined;
 
   return (
     <div className={bdsClass('bds-addable-combo-list', className)}>
@@ -270,12 +177,12 @@ export function AddableComboList({
             <div className="bds-addable-combo-list__input-wrap" style={{ position: 'relative' }}>
               <input
                 ref={inputRef}
-                id={comboId}
+                id={combo.comboId}
                 role="combobox"
-                aria-expanded={isOpen}
+                aria-expanded={combo.isOpen}
                 aria-haspopup="listbox"
-                aria-controls={listboxId}
-                aria-activedescendant={activeDescendant}
+                aria-controls={combo.listboxId}
+                aria-activedescendant={combo.activeDescendant}
                 aria-label={label ? `Add ${label}` : 'Add item'}
                 aria-autocomplete="list"
                 autoComplete="off"
@@ -283,37 +190,37 @@ export function AddableComboList({
                   'bds-addable-combo-list__input',
                   `bds-addable-combo-list__input--${size}`,
                 )}
-                value={query}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
+                value={combo.query}
+                onChange={combo.handleInputChange}
+                onKeyDown={combo.handleKeyDown}
                 onFocus={() => {
-                  if (query.trim() && filtered.length > 0) openList();
+                  if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
                 }}
                 placeholder={placeholder}
               />
 
-              {isOpen && filtered.length > 0 && (
+              {combo.isOpen && combo.filtered.length > 0 && (
                 <ul
                   ref={listboxRef}
-                  id={listboxId}
+                  id={combo.listboxId}
                   role="listbox"
                   aria-label={label ? `${label} suggestions` : 'Suggestions'}
                   className="bds-addable-combo-list__dropdown"
                 >
-                  {filtered.map((suggestion, idx) => (
+                  {combo.filtered.map((suggestion, idx) => (
                     <li
                       key={suggestion}
-                      id={`${comboId}-option-${idx}`}
+                      id={`${combo.comboId}-option-${idx}`}
                       role="option"
-                      aria-selected={idx === activeIndex}
+                      aria-selected={idx === combo.activeIndex}
                       className={bdsClass(
                         'bds-addable-combo-list__option',
-                        idx === activeIndex && 'bds-addable-combo-list__option--active',
+                        idx === combo.activeIndex && 'bds-addable-combo-list__option--active',
                       )}
                       onMouseDown={(e) => {
                         // Prevent blur from firing before click
                         e.preventDefault();
-                        commit(suggestion);
+                        combo.commitValue(suggestion);
                       }}
                     >
                       {suggestion}
@@ -328,10 +235,10 @@ export function AddableComboList({
               variant="primary"
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                if (activeIndex >= 0 && filtered[activeIndex]) {
-                  commit(filtered[activeIndex]);
+                if (combo.activeIndex >= 0 && combo.filtered[combo.activeIndex]) {
+                  combo.commitValue(combo.filtered[combo.activeIndex]);
                 } else {
-                  commit(query);
+                  combo.commitValue(combo.query);
                 }
               }}
               aria-label={addLabel}
@@ -347,7 +254,7 @@ export function AddableComboList({
               Cancel
             </Button>
           </div>
-          {strict && query.trim() && !suggestions.some((s) => s.toLowerCase() === query.trim().toLowerCase()) && (
+          {strict && combo.query.trim() && !suggestions.some((s) => s.toLowerCase() === combo.query.trim().toLowerCase()) && (
             <span className="bds-addable-combo-list__strict-hint" aria-live="polite">
               Only suggestions can be added in strict mode.
             </span>

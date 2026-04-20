@@ -107,3 +107,125 @@
   line-height: var(--font-line-height-normal);
   color: var(--text-muted);
 }
+
+/* ─── Primary combo wrapper (suggestion-backed mode) ─────────── */
+
+.bds-addable-entry-list__primary-combo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+/* Label above the combobox input — mirrors BDS TextInput label style */
+.bds-addable-entry-list__input-label {
+  font-family: var(--font-family-label);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+/* ─── Native combobox input (styled to match TextInput) ─────── */
+
+.bds-addable-entry-list__primary-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-family-body);
+  color: var(--text-primary);
+  background-color: var(--background-primary);
+  border: var(--border-width-md) solid var(--border-primary);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.bds-addable-entry-list__primary-input::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-addable-entry-list__primary-input:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 3px var(--surface-brand-primary);
+}
+
+/* Sizes — match TextInput */
+.bds-addable-entry-list__primary-input--sm {
+  padding: var(--padding-tiny) var(--padding-sm);
+  font-size: var(--body-sm);
+  height: 32px;
+}
+
+.bds-addable-entry-list__primary-input--md {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--body-md);
+  height: 40px;
+}
+
+.bds-addable-entry-list__primary-input--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--body-lg);
+  height: 48px;
+}
+
+/* ─── Dropdown ──────────────────────────────────────────────── */
+
+@keyframes bds-entry-dropdown-enter {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.bds-addable-entry-list__dropdown {
+  position: absolute;
+  top: calc(100% + var(--gap-xs));
+  left: 0;
+  right: 0;
+  z-index: 200;
+  list-style: none;
+  margin: 0;
+  padding: var(--padding-sm);
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-height: 240px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  animation: bds-entry-dropdown-enter var(--duration-fast) var(--ease-out);
+  transform-origin: top center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-addable-entry-list__dropdown {
+    animation: none;
+  }
+}
+
+/* ─── Option ─────────────────────────────────────────────────── */
+
+.bds-addable-entry-list__option {
+  padding: var(--padding-tiny) var(--padding-sm);
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.bds-addable-entry-list__option:hover,
+.bds-addable-entry-list__option--active {
+  background-color: var(--surface-secondary);
+}
+
+/* ─── Strict hint ────────────────────────────────────────────── */
+
+.bds-addable-entry-list__strict-hint {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  color: var(--text-muted);
+}

@@ -61,6 +61,9 @@ export * from './SearchInput';
 export * from './SegmentedControl';
 export * from './Select';
 export * from './ServiceBadge';
+// Internal shared hooks (not part of the public package surface — barrel
+// export required by the component-completeness pre-commit check)
+export * from './shared';
 export * from './Sheet';
 export * from './SheetSection';
 export * from './SidebarNavigation';
