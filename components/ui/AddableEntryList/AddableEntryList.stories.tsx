@@ -228,6 +228,37 @@ export const PrimaryOnly: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+export const WithEmptyDescriptionLabel: Story = {
+  name: 'Empty description fallback',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When `emptyDescriptionLabel` is provided, committed entries with no secondary show a muted italic placeholder instead of collapsing to a bare title. ' +
+          'Matches the "title + body with fallback" pattern used by service catalog views.',
+      },
+    },
+  },
+  args: {
+    label: 'Services',
+    primaryLabel: 'Name',
+    secondaryLabel: 'Description',
+    primaryPlaceholder: 'e.g. Dental cleaning',
+    secondaryPlaceholder: 'What this service covers',
+    addLabel: 'Add Service',
+    emptyDescriptionLabel: 'No description set',
+    entries: [
+      { primary: 'Cleanings including periodontal care (gum care) and oral cancer screenings', secondary: '' },
+      {
+        primary: 'Cosmetic dentistry',
+        secondary: 'Veneers, whitening, bonding — focused on aesthetic outcomes, not function.',
+      },
+    ],
+    onChange: fn(),
+  },
+  render: (args) => <Controlled {...args} />,
+};
+
 export const Variants: Story = {
   render: () => (
     <div style={{ width: 520 }}>

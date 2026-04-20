@@ -23,15 +23,15 @@
   display: flex;
   align-items: flex-start;
   gap: var(--gap-sm);
-  padding: var(--padding-md);
-  border: var(--border-width-md) solid var(--border-muted);
+  padding: var(--padding-sm);
+  border: var(--border-width-md) solid var(--border-primary);
   border-radius: var(--border-radius-md);
 }
 
 .bds-addable-entry-list__item-content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-tiny);
+  gap: var(--gap-xs);
   flex: 1 1 auto;
   min-width: 0;
 }
@@ -45,9 +45,15 @@
 
 .bds-addable-entry-list__item-secondary {
   font-family: var(--font-family-body);
+  font-size: var(--body-sm);
   color: var(--text-secondary);
   word-break: break-word;
   white-space: pre-wrap;
+}
+
+.bds-addable-entry-list__item-secondary--empty {
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 .bds-addable-entry-list__remove {
@@ -90,8 +96,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-sm);
-  padding: var(--padding-md);
-  border: var(--border-width-md) solid var(--border-muted);
+  padding: var(--padding-sm);
+  border: var(--border-width-md) solid var(--border-primary);
   border-radius: var(--border-radius-md);
 }
 
@@ -114,6 +120,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-xs);
+  width: 100%;
+}
+
+.bds-addable-entry-list__primary-combo-field {
+  position: relative;
+  width: 100%;
 }
 
 /* Label above the combobox input — mirrors BDS TextInput label style */
