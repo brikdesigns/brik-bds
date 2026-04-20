@@ -5,9 +5,11 @@ import * as Stories from './AddableTextList.stories';
 
 # Addable text list
 
-A list of text values with a reveal-on-click add pattern. The input is hidden until the user clicks the "Add New" button; pressing **Enter** commits the value and re-focuses the input for rapid entry, **Escape** cancels. Existing values render as removable tags.
+A list of **single-line, unstructured** text values with a reveal-on-click add pattern. The input is hidden until the user clicks the "Add New" button; pressing **Enter** commits the value and re-focuses the input for rapid entry, **Escape** cancels. Existing values render as removable tags.
 
-Use for lightweight list capture where a full multi-select is overkill (e.g. services offered, payment types, back-office tools). Designed to be swapped for a MultiSelect later without changing data shape.
+Use for lightweight list capture where each row is one short label (services offered, tags, back-office tools). Designed to be swapped for a MultiSelect later without changing data shape.
+
+> **Not for title + description pairs.** If each row needs a headline and a supporting note, reach for [`AddableEntryList`](?path=/docs/components-form-addable-entry-list--overview). In development, this component console-warns when any value contains structural separators (`—`, `–`, `:`, newline, tab) so the wrong choice gets caught at the source.
 
 ---
 
@@ -33,6 +35,18 @@ Sizes, empty/helper/disabled states, and item limit.
 - **Escape** or **blur on empty** cancels and hides the input.
 - Duplicates are blocked case-insensitively unless `allowDuplicates` is set.
 - When `maxItems` is reached, the Add button is hidden.
+
+## When to use which Addable\* list
+
+Three siblings cover the full add/remove spectrum. Pick by row shape and vocabulary:
+
+| Pick | When | Render |
+| ---- | ---- | ------ |
+| [`AddableTextList`](?path=/docs/components-form-addable-text-list--overview) | Each row is **one short, unstructured value**, no fixed vocabulary (services, tags, back-office tools). | Removable tag per value. |
+| [`AddableComboList`](?path=/docs/components-form-addable-combo-list--overview) | Each row is **one value from a known vocabulary** (BCS getter, locked enum) with optional free-form fallback. | Removable tag per value + combobox input. |
+| [`AddableEntryList`](?path=/docs/components-form-addable-entry-list--overview) | Each row needs a **primary value and a secondary note** (competitor URL + notes, service + description, reference site + why). | Card per entry with primary heading + secondary body. |
+
+If the row needs **three or more structured fields** (e.g. competitor / gap / copy implication), none of these fit — build a local "frame card" pattern; promote to BDS only after a second consumer appears.
 
 ## Props
 

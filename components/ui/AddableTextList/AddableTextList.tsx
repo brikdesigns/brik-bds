@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Icon } from '@iconify/react';
 import { bdsClass } from '../../utils';
 import { Button, type ButtonSize } from '../Button';
@@ -39,6 +39,23 @@ const TAG_SIZE: Record<AddableTextListSize, TagSize> = { sm: 'sm', md: 'md', lg:
 const BUTTON_SIZE: Record<AddableTextListSize, ButtonSize> = { sm: 'sm', md: 'md', lg: 'lg' };
 const INPUT_SIZE: Record<AddableTextListSize, TextInputSize> = { sm: 'sm', md: 'md', lg: 'lg' };
 
+// Structural separators that suggest a caller is trying to cram a title +
+// description into a single flat tag — AddableEntryList is the right tool.
+// See the "When to use which" matrix in the MDX docs.
+const STRUCTURED_CONTENT_PATTERN = /[\n\t]|\s[—–]\s|:\s/;
+
+const warnedValues = new Set<string>();
+function warnStructuredContent(value: string, label?: string) {
+  if (warnedValues.has(value)) return;
+  if (!STRUCTURED_CONTENT_PATTERN.test(value)) return;
+  warnedValues.add(value);
+  console.warn(
+    `[BDS AddableTextList${label ? ` (${label})` : ''}] Value contains structured separators ` +
+      `("${value}") — AddableTextList renders a single flat tag. ` +
+      `Use AddableEntryList for title + description pairs.`,
+  );
+}
+
 /**
  * AddableTextList — list of text values with a reveal-on-click add pattern.
  *
@@ -74,6 +91,10 @@ export function AddableTextList({
   const [draft, setDraft] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    values.forEach((v) => warnStructuredContent(v, label));
+  }, [values, label]);
+
   const atLimit = typeof maxItems === 'number' && values.length >= maxItems;
 
   const reveal = () => {
@@ -97,6 +118,7 @@ export function AddableTextList({
       cancel();
       return;
     }
+    warnStructuredContent(trimmed, label);
     onChange([...values, trimmed]);
     setDraft('');
     requestAnimationFrame(() => inputRef.current?.focus());
