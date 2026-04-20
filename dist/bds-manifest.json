@@ -1,7 +1,7 @@
 {
   "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
-  "bds_version": "0.18.2",
-  "generated_at": "2026-04-20T14:22:09.348Z",
+  "bds_version": "0.19.0",
+  "generated_at": "2026-04-20T18:29:20.748Z",
   "component_count": 82,
   "token_count": 426,
   "components": {
@@ -1262,13 +1262,13 @@
       "tokens_used": [
         "--background-brand-primary",
         "--background-negative",
+        "--background-neutral",
         "--background-positive",
         "--background-status-info",
         "--background-warning",
         "--body-md",
         "--body-xs",
         "--border-radius-pill",
-        "--color-grayscale-lighter",
         "--font-family-body",
         "--font-family-label",
         "--font-line-height-tight",
@@ -1282,9 +1282,9 @@
         "--padding-sm",
         "--padding-tiny",
         "--space-50",
-        "--text-inverse",
         "--text-muted",
-        "--text-primary"
+        "--text-on-color-dark",
+        "--text-on-color-light"
       ],
       "a11y": {
         "aria_attrs": [
@@ -2914,6 +2914,7 @@
         "--heading-md",
         "--icon-md",
         "--label-sm",
+        "--label-xs",
         "--padding-lg",
         "--padding-sm",
         "--padding-xl",

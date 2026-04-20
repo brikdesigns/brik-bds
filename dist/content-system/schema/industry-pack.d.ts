@@ -1,4 +1,4 @@
-import type { IndustrySlug, Personality, Voice, VisualStyle } from '../vocabularies';
+import type { IndustrySlug, ParentIndustrySlug, Personality, Voice, VisualStyle } from '../vocabularies';
 /**
  * IndustryPack — the structured data half of an industry reference.
  *
@@ -16,6 +16,12 @@ import type { IndustrySlug, Personality, Voice, VisualStyle } from '../vocabular
 export interface IndustryPack {
     /** Canonical slug — must appear in INDUSTRY_SLUGS registry. */
     slug: IndustrySlug;
+    /**
+     * Parent industry bucket this pack belongs to — mirrors the portal's
+     * `companies.industry` top-level taxonomy so portal dropdowns can filter
+     * sub-industries by parent. Must be one of PARENT_INDUSTRY_SLUGS.
+     */
+    parentIndustry: ParentIndustrySlug;
     /** Human-readable name used in portal UI and generated briefs. */
     displayName: string;
     /** Semver. Bump on material content change; minor for additions, major for schema breaks. */
@@ -38,6 +44,27 @@ export interface IndustryPack {
     pageArchetypes: readonly PageArchetype[];
     /** Canonical service taxonomy used to seed the portal services picker and copy. */
     servicesCatalog: readonly ServiceEntry[];
+    /**
+     * Patient-facing conditions treated — structured symptom/diagnosis vocabulary
+     * for healthcare verticals. Drives symptom-aware SEO, content generation,
+     * and the Intel tab's Conditions Treated combobox. Omit for non-healthcare
+     * industries.
+     */
+    conditionsCatalog?: readonly ServiceEntry[];
+    /**
+     * Procedure vocabulary — structured procedure-level taxonomy (as distinct
+     * from bundled services). Drives service-detail pages, CMS procedure
+     * entries, and the Intel tab's Procedures Performed combobox. Omit for
+     * industries where procedure-level granularity is not applicable.
+     */
+    proceduresCatalog?: readonly ServiceEntry[];
+    /**
+     * Amenities / features catalog — structured facility-feature taxonomy for
+     * hospitality, real-estate, and venue industries. Drives the Intel tab's
+     * Amenities combobox, feature-list page sections, and local-SEO schema.
+     * Omit for industries where amenities are not applicable.
+     */
+    amenitiesCatalog?: readonly ServiceEntry[];
     /** Preferred terminology and terms to avoid (regulatory, positioning, or style). */
     vocabulary: {
         preferred: readonly string[];
