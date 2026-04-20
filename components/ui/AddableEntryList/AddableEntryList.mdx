@@ -42,12 +42,17 @@ Sizes, empty/helper/disabled states, and item limit.
 - When `maxItems` is reached, the Add button is hidden.
 - Entries are read-only once added — remove to replace.
 
-## When to use this vs. `AddableTextList`
+## When to use which Addable\* list
 
-| Pick | When |
-| ---- | ---- |
-| `AddableTextList` | Each row is a single short value (service name, payment type, tag). |
-| `AddableEntryList` | Each row needs a primary value **and** a secondary note or description. |
+Three siblings cover the full add/remove spectrum. Pick by row shape and vocabulary:
+
+| Pick | When | Render |
+| ---- | ---- | ------ |
+| [`AddableTextList`](?path=/docs/components-form-addable-text-list--overview) | Each row is **one short, unstructured value**, no fixed vocabulary. | Removable tag per value. |
+| [`AddableComboList`](?path=/docs/components-form-addable-combo-list--overview) | Each row is **one value from a known vocabulary** (BCS getter, locked enum) with optional free-form fallback. | Removable tag per value + combobox input. |
+| `AddableEntryList` | Each row needs a **primary value and a secondary note** (competitor URL + notes, service + description, reference site + why). | Card per entry with primary heading + secondary body. |
+
+If the row needs **three or more structured fields** (e.g. competitor / gap / copy implication), none of these fit — build a local "frame card" pattern; promote to BDS only after a second consumer appears.
 
 ## Props
 

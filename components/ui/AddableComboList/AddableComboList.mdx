@@ -66,6 +66,18 @@ When `maxEntries` is reached, the add button is hidden.
 - Tags: `role="list"` / `role="listitem"` with accessible labels
 - Screen reader announce on add/remove via `aria-live` on the tag container
 
+## When to use which Addable\* list
+
+Three siblings cover the full add/remove spectrum. Pick by row shape and vocabulary:
+
+| Pick | When | Render |
+| ---- | ---- | ------ |
+| [`AddableTextList`](?path=/docs/components-form-addable-text-list--overview) | Each row is **one short, unstructured value**, no fixed vocabulary. | Removable tag per value. |
+| `AddableComboList` | Each row is **one value from a known vocabulary** (BCS getter, locked enum) with optional free-form fallback. | Removable tag per value + combobox input. |
+| [`AddableEntryList`](?path=/docs/components-form-addable-entry-list--overview) | Each row needs a **primary value and a secondary note** (competitor URL + notes, service + description, reference site + why). | Card per entry with primary heading + secondary body. |
+
+If the row needs **three or more structured fields**, none of these fit — build a local "frame card" pattern; promote to BDS only after a second consumer appears.
+
 ## Props
 
 <ArgTypes of={Stories} />
