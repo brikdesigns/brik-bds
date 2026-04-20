@@ -104,7 +104,7 @@
 /* Subtitle eyebrow — short categorical context rendered above the title. */
 .bds-sheet__subtitle {
   font-family: var(--font-family-label);
-  font-size: var(--label-sm);
+  font-size: var(--label-xs);
   font-weight: var(--font-weight-semi-bold);
   line-height: var(--font-line-height-tight);
   color: var(--text-muted);
