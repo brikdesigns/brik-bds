@@ -16,7 +16,15 @@
 export * from './vocabularies';
 export * from './schema';
 export * from './blueprints';
-export { industryPacks, dental, realEstateRvMhc, smallBusiness } from './industries';
+export {
+  industryPacks,
+  dental,
+  realEstateRvMhc,
+  smallBusiness,
+  getIndustryServices,
+  getIndustryPaymentTypes,
+  getIndustryInsuranceProviders,
+} from './industries';
 export {
   voicePatterns,
   approachable,

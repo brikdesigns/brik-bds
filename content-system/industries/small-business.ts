@@ -14,9 +14,9 @@ import type { IndustryPack } from '../schema';
 export const smallBusiness: IndustryPack = {
   slug: 'small-business',
   displayName: 'Small Business (General)',
-  version: '1.0.0',
+  version: '1.1.0',
   reviewCadence: 'quarterly',
-  lastReviewed: '2026-04-01',
+  lastReviewed: '2026-04-19',
 
   affinities: {
     personality: ['Professional', 'Approachable', 'Warm', 'Modern'],
@@ -275,4 +275,40 @@ export const smallBusiness: IndustryPack = {
       weakness: 'Doesn\'t work for complex, urgent, or high-stakes needs.',
     },
   ],
+
+  // ── Billing / intake vocabularies ──────────────────────────────────────────
+  // Feeds suggestion-driven comboboxes in the portal Intel tab (Billing sheet).
+  // Flat string arrays — suggestion seeds, not locked enums.
+  //
+  // The catch-all pack keeps these intentionally broad. Graduate a vertical
+  // to its own pack when specificity here feels inadequate for 3+ clients.
+
+  services: [
+    'Consulting',
+    'Coaching',
+    'Strategy',
+    'Implementation',
+    'Training',
+    'Support / Maintenance',
+    'Custom Project Work',
+  ],
+
+  paymentTypes: [
+    'Cash',
+    'Credit Card',
+    'ACH / Bank Transfer',
+    'Check',
+    'PayPal',
+    'Venmo for Business',
+    'Stripe',
+    'Square',
+    'Invoice / Net 30',
+    'Apple Pay',
+    'Google Pay',
+  ],
+
+  // Not applicable for the generic small-business baseline. Individual
+  // verticals that require insurance (health, legal, financial) should be
+  // promoted to dedicated packs where insurance arrays are meaningful.
+  insuranceProviders: [],
 };

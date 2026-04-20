@@ -23,3 +23,4 @@ export const industryPacks: Record<IndustrySlug, IndustryPack> = {
 };
 
 export { dental, realEstateRvMhc, smallBusiness };
+export { getIndustryServices, getIndustryPaymentTypes, getIndustryInsuranceProviders } from './getters';

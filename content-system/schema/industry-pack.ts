@@ -93,6 +93,22 @@ export interface IndustryPack {
    * Brik has a defensible POV that should surface in briefs.
    */
   strategicConsiderations?: readonly StrategicConsideration[];
+
+  /**
+   * Billing / intake vocabularies — feed suggestion-driven comboboxes in
+   * the portal's Intel tab (Billing sheet, PR B1).
+   *
+   * These are flat string arrays intentionally — they are suggestion seeds,
+   * not locked enums. Clients can enter free-text values that don't appear here.
+   *
+   * - `services`           Common service/offering names for this vertical.
+   * - `paymentTypes`       Accepted payment methods and financing mechanisms.
+   * - `insuranceProviders` Relevant insurance carriers. Empty array for industries
+   *                        where insurance is not a factor.
+   */
+  services: readonly string[];
+  paymentTypes: readonly string[];
+  insuranceProviders: readonly string[];
 }
 
 export type Quarter = 'Q1' | 'Q2' | 'Q3' | 'Q4';
