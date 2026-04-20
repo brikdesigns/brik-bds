@@ -1071,6 +1071,318 @@ function ActivityTimeline({ events, className = "" }) {
     ] }, idx);
   }) });
 }
+function Tag({
+  children,
+  size: size2 = "md",
+  icon,
+  trailingIcon,
+  onRemove,
+  disabled = false,
+  className,
+  style,
+  ...props
+}) {
+  const isIconOnly = size2 === "xs";
+  const classes = bdsClass(
+    "bds-tag",
+    `bds-tag--${size2}`,
+    disabled && "bds-tag--disabled",
+    className
+  );
+  return /* @__PURE__ */ jsxRuntime.jsxs("span", { className: classes, style, ...props, children: [
+    icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: icon }),
+    !isIconOnly && children,
+    !isIconOnly && trailingIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: trailingIcon }),
+    !isIconOnly && onRemove && !disabled && /* @__PURE__ */ jsxRuntime.jsx(
+      "button",
+      {
+        type: "button",
+        onClick: onRemove,
+        className: "bds-tag__remove bds-tag__icon",
+        "aria-label": "Remove",
+        children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X })
+      }
+    )
+  ] });
+}
+const TAG_SIZE$1 = { sm: "sm", md: "md", lg: "md" };
+const BUTTON_SIZE$2 = { sm: "sm", md: "md", lg: "lg" };
+function AddableComboList({
+  values,
+  onChange,
+  suggestions,
+  placeholder,
+  addLabel = "Add",
+  removeLabel = "Remove",
+  emptyLabel = "Nothing added yet.",
+  helperText,
+  disabled = false,
+  maxEntries,
+  strict = false,
+  label,
+  size: size2 = "md",
+  className
+}) {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [activeIndex, setActiveIndex] = React.useState(-1);
+  const [flashDupe, setFlashDupe] = React.useState(false);
+  const inputRef = React.useRef(null);
+  const listboxRef = React.useRef(null);
+  const containerRef = React.useRef(null);
+  const comboId = React.useId();
+  const listboxId = `${comboId}-listbox`;
+  const atLimit = typeof maxEntries === "number" && values.length >= maxEntries;
+  const selectedSet = new Set(values.map((v) => v.toLowerCase()));
+  const filtered = suggestions.filter(
+    (s) => !selectedSet.has(s.toLowerCase()) && s.toLowerCase().includes(query.toLowerCase().trim())
+  );
+  const openList = () => {
+    setIsOpen(true);
+    setActiveIndex(-1);
+  };
+  const closeList = () => {
+    setIsOpen(false);
+    setActiveIndex(-1);
+  };
+  const reveal = () => {
+    setQuery("");
+    setIsEditing(true);
+    setIsOpen(false);
+    requestAnimationFrame(() => {
+      var _a;
+      return (_a = inputRef.current) == null ? void 0 : _a.focus();
+    });
+  };
+  const cancel = React.useCallback(() => {
+    setQuery("");
+    setIsEditing(false);
+    closeList();
+  }, []);
+  const triggerDupeFlash = () => {
+    setFlashDupe(true);
+    setTimeout(() => setFlashDupe(false), 600);
+  };
+  const commit = React.useCallback(
+    (value2) => {
+      const trimmed = value2.trim();
+      if (!trimmed) return;
+      if (strict && !suggestions.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
+        return;
+      }
+      if (selectedSet.has(trimmed.toLowerCase())) {
+        triggerDupeFlash();
+        return;
+      }
+      onChange([...values, trimmed]);
+      setQuery("");
+      closeList();
+      requestAnimationFrame(() => {
+        var _a;
+        return (_a = inputRef.current) == null ? void 0 : _a.focus();
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [values, onChange, strict, suggestions, selectedSet]
+  );
+  const remove = (index2) => {
+    onChange(values.filter((_, i) => i !== index2));
+  };
+  const handleInputChange = (e) => {
+    const val2 = e.target.value;
+    setQuery(val2);
+    if (val2.trim()) {
+      openList();
+    } else {
+      closeList();
+    }
+    setActiveIndex(-1);
+  };
+  const handleKeyDown = (e) => {
+    switch (e.key) {
+      case "ArrowDown": {
+        e.preventDefault();
+        if (!isOpen && filtered.length > 0) openList();
+        setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
+        break;
+      }
+      case "ArrowUp": {
+        e.preventDefault();
+        setActiveIndex((prev) => Math.max(prev - 1, -1));
+        break;
+      }
+      case "Enter": {
+        e.preventDefault();
+        if (activeIndex >= 0 && filtered[activeIndex]) {
+          commit(filtered[activeIndex]);
+        } else {
+          commit(query);
+        }
+        break;
+      }
+      case "Escape": {
+        e.preventDefault();
+        if (isOpen) {
+          closeList();
+        } else {
+          cancel();
+        }
+        break;
+      }
+      case "Backspace": {
+        if (query === "" && values.length > 0) {
+          remove(values.length - 1);
+        }
+        break;
+      }
+    }
+  };
+  const handleBlur = (e) => {
+    var _a;
+    if (!((_a = containerRef.current) == null ? void 0 : _a.contains(e.relatedTarget))) {
+      closeList();
+      if (!query.trim()) cancel();
+    }
+  };
+  const showEmpty = values.length === 0 && !isEditing && emptyLabel;
+  const activeDescendant = isOpen && activeIndex >= 0 ? `${comboId}-option-${activeIndex}` : void 0;
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-addable-combo-list", className), children: [
+    label && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-combo-list__label", children: label }),
+    values.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
+      "div",
+      {
+        className: bdsClass(
+          "bds-addable-combo-list__tags",
+          flashDupe && "bds-addable-combo-list__tags--flash"
+        ),
+        role: "list",
+        "aria-label": label ? `${label} values` : "Selected values",
+        children: values.map((value2, index2) => /* @__PURE__ */ jsxRuntime.jsx(
+          Tag,
+          {
+            size: TAG_SIZE$1[size2],
+            onRemove: disabled ? void 0 : () => remove(index2),
+            role: "listitem",
+            "aria-label": `${value2}${!disabled ? `, ${removeLabel}` : ""}`,
+            children: value2
+          },
+          `${index2}-${value2}`
+        ))
+      }
+    ),
+    showEmpty && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-combo-list__empty", children: emptyLabel }),
+    !disabled && isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsxs(
+      "div",
+      {
+        ref: containerRef,
+        className: "bds-addable-combo-list__combobox",
+        onBlur: handleBlur,
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-combo-list__input-row", children: [
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-combo-list__input-wrap", style: { position: "relative" }, children: [
+              /* @__PURE__ */ jsxRuntime.jsx(
+                "input",
+                {
+                  ref: inputRef,
+                  id: comboId,
+                  role: "combobox",
+                  "aria-expanded": isOpen,
+                  "aria-haspopup": "listbox",
+                  "aria-controls": listboxId,
+                  "aria-activedescendant": activeDescendant,
+                  "aria-label": label ? `Add ${label}` : "Add item",
+                  "aria-autocomplete": "list",
+                  autoComplete: "off",
+                  className: bdsClass(
+                    "bds-addable-combo-list__input",
+                    `bds-addable-combo-list__input--${size2}`
+                  ),
+                  value: query,
+                  onChange: handleInputChange,
+                  onKeyDown: handleKeyDown,
+                  onFocus: () => {
+                    if (query.trim() && filtered.length > 0) openList();
+                  },
+                  placeholder
+                }
+              ),
+              isOpen && filtered.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
+                "ul",
+                {
+                  ref: listboxRef,
+                  id: listboxId,
+                  role: "listbox",
+                  "aria-label": label ? `${label} suggestions` : "Suggestions",
+                  className: "bds-addable-combo-list__dropdown",
+                  children: filtered.map((suggestion, idx) => /* @__PURE__ */ jsxRuntime.jsx(
+                    "li",
+                    {
+                      id: `${comboId}-option-${idx}`,
+                      role: "option",
+                      "aria-selected": idx === activeIndex,
+                      className: bdsClass(
+                        "bds-addable-combo-list__option",
+                        idx === activeIndex && "bds-addable-combo-list__option--active"
+                      ),
+                      onMouseDown: (e) => {
+                        e.preventDefault();
+                        commit(suggestion);
+                      },
+                      children: suggestion
+                    },
+                    suggestion
+                  ))
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsx(
+              Button,
+              {
+                size: BUTTON_SIZE$2[size2],
+                variant: "primary",
+                onMouseDown: (e) => e.preventDefault(),
+                onClick: () => {
+                  if (activeIndex >= 0 && filtered[activeIndex]) {
+                    commit(filtered[activeIndex]);
+                  } else {
+                    commit(query);
+                  }
+                },
+                "aria-label": addLabel,
+                children: addLabel
+              }
+            ),
+            /* @__PURE__ */ jsxRuntime.jsx(
+              Button,
+              {
+                size: BUTTON_SIZE$2[size2],
+                variant: "ghost",
+                onMouseDown: (e) => e.preventDefault(),
+                onClick: cancel,
+                children: "Cancel"
+              }
+            )
+          ] }),
+          strict && query.trim() && !suggestions.some((s) => s.toLowerCase() === query.trim().toLowerCase()) && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-combo-list__strict-hint", "aria-live": "polite", children: "Only suggestions can be added in strict mode." })
+        ]
+      }
+    ),
+    !disabled && !isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsxs(
+      Button,
+      {
+        size: BUTTON_SIZE$2[size2],
+        variant: "outline",
+        onClick: reveal,
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:plus" }),
+          addLabel
+        ]
+      }
+    ) }),
+    helperText && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-combo-list__helper", children: helperText })
+  ] });
+}
 const wrapperStyles$4 = {
   display: "flex",
   flexDirection: "column",
@@ -1513,40 +1825,6 @@ function AddableEntryList({
       }
     ) }),
     helperText && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__helper", children: helperText })
-  ] });
-}
-function Tag({
-  children,
-  size: size2 = "md",
-  icon,
-  trailingIcon,
-  onRemove,
-  disabled = false,
-  className,
-  style,
-  ...props
-}) {
-  const isIconOnly = size2 === "xs";
-  const classes = bdsClass(
-    "bds-tag",
-    `bds-tag--${size2}`,
-    disabled && "bds-tag--disabled",
-    className
-  );
-  return /* @__PURE__ */ jsxRuntime.jsxs("span", { className: classes, style, ...props, children: [
-    icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: icon }),
-    !isIconOnly && children,
-    !isIconOnly && trailingIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-tag__icon", children: trailingIcon }),
-    !isIconOnly && onRemove && !disabled && /* @__PURE__ */ jsxRuntime.jsx(
-      "button",
-      {
-        type: "button",
-        onClick: onRemove,
-        className: "bds-tag__remove bds-tag__icon",
-        "aria-label": "Remove",
-        children: /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: X })
-      }
-    )
   ] });
 }
 const TAG_SIZE = { sm: "sm", md: "md", lg: "md" };
@@ -27514,6 +27792,7 @@ function Tooltip({
 }
 exports.Accordion = Accordion;
 exports.ActivityTimeline = ActivityTimeline;
+exports.AddableComboList = AddableComboList;
 exports.AddableEntryList = AddableEntryList;
 exports.AddableTextList = AddableTextList;
 exports.AddressInput = AddressInput;

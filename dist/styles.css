@@ -884,6 +884,326 @@
 } /* end @layer bds-components */
 @layer bds-components {
 /**
+ * BDS Tag — Categorization label with optional icons and dismiss
+ *
+ * Naming: .bds-tag, .bds-tag--{size}, .bds-tag__{element}
+ *
+ * Sizing scale is shared with Badge for side-by-side alignment.
+ */
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-tag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
+  color: var(--text-primary);
+  background-color: var(--background-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: default;
+  user-select: none;
+  overflow: clip;
+  transition: background-color var(--duration-normal) var(--ease-out);
+  box-sizing: border-box;
+}
+
+/* ─── Sizes (shared scale with Badge) ────────────────────────── */
+
+.bds-tag--xs {
+  /* bds-lint-ignore — 24px icon-only tag matches shared indicator spec */
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: var(--border-radius-sm);
+  justify-content: center;
+  gap: 0;
+}
+
+.bds-tag--sm {
+  padding: var(--padding-tiny) var(--padding-sm);
+  gap: var(--gap-xs);
+  font-size: var(--label-tiny);
+  height: 28px;
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-tag--md {
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-sm);
+  font-size: var(--label-sm);
+  height: 32px;
+  border-radius: var(--border-radius-md);
+}
+
+.bds-tag--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-md);
+  font-size: var(--label-md);
+  height: 40px;
+  border-radius: var(--border-radius-md);
+}
+
+/* ─── Disabled ────────────────────────────────────────────────── */
+
+.bds-tag--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Icon Wrapper (shared sizing with Badge) ────────────────── */
+
+.bds-tag__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Icon font-size matches container so the glyph fills the box */
+.bds-tag--xs .bds-tag__icon {
+  font-size: var(--icon-xs);
+}
+
+.bds-tag--sm .bds-tag__icon {
+  width: 14px;
+  height: 14px;
+  font-size: var(--icon-xs);
+}
+
+.bds-tag--md .bds-tag__icon {
+  width: 16px;
+  height: 16px;
+  font-size: var(--icon-sm);
+}
+
+.bds-tag--lg .bds-tag__icon {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  font-size: var(--label-xl);
+}
+
+/* ─── Remove Button ───────────────────────────────────────────── */
+
+.bds-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.bds-tag__remove:hover {
+  opacity: 0.7;
+}
+}
+@layer bds-components {
+/**
+ * BDS AddableComboList — suggestion-driven combobox for tag-style multi-select
+ *
+ * Naming: .bds-addable-combo-list, .bds-addable-combo-list__{element}
+ *
+ * Shares the tag surface tokens with AddableTextList. The dropdown mirrors
+ * the Menu floating panel tokens (background-primary, shadow-lg, border-radius-lg).
+ */
+
+/* ─── Root ────────────────────────────────────────────────── */
+
+.bds-addable-combo-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  width: 100%;
+}
+
+/* ─── Label ───────────────────────────────────────────────── */
+
+.bds-addable-combo-list__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+/* ─── Tag row ─────────────────────────────────────────────── */
+
+.bds-addable-combo-list__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  align-items: center;
+}
+
+@keyframes bds-combo-flash {
+  0%   { outline: 2px solid transparent; }
+  25%  { outline: 2px solid var(--border-brand-primary); }
+  75%  { outline: 2px solid var(--border-brand-primary); }
+  100% { outline: 2px solid transparent; }
+}
+
+.bds-addable-combo-list__tags--flash {
+  border-radius: var(--border-radius-sm);
+  animation: bds-combo-flash 0.6s var(--ease-out);
+}
+
+/* ─── Empty state ─────────────────────────────────────────── */
+
+.bds-addable-combo-list__empty {
+  font-family: var(--font-family-body);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ─── Combobox wrapper ────────────────────────────────────── */
+
+.bds-addable-combo-list__combobox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+/* ─── Input row ───────────────────────────────────────────── */
+
+.bds-addable-combo-list__input-row {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.bds-addable-combo-list__input-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ─── Native input (styled to match TextInput) ────────────── */
+
+.bds-addable-combo-list__input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-family-body);
+  color: var(--text-primary);
+  background-color: var(--background-primary);
+  border: var(--border-width-md) solid var(--border-primary);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.bds-addable-combo-list__input::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-addable-combo-list__input:focus {
+  border-color: var(--border-brand-primary);
+  box-shadow: 0 0 0 3px var(--surface-brand-primary);
+}
+
+/* Sizes — match TextInput */
+.bds-addable-combo-list__input--sm {
+  padding: var(--padding-tiny) var(--padding-sm);
+  font-size: var(--body-sm);
+  height: 32px;
+}
+
+.bds-addable-combo-list__input--md {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--body-md);
+  height: 40px;
+}
+
+.bds-addable-combo-list__input--lg {
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--body-lg);
+  height: 48px;
+}
+
+/* ─── Dropdown ─────────────────────────────────────────────── */
+
+@keyframes bds-combo-dropdown-enter {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.bds-addable-combo-list__dropdown {
+  position: absolute;
+  top: calc(100% + var(--gap-xs));
+  left: 0;
+  right: 0;
+  z-index: 200;
+  list-style: none;
+  margin: 0;
+  padding: var(--padding-sm);
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-height: 240px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  animation: bds-combo-dropdown-enter var(--duration-fast) var(--ease-out);
+  transform-origin: top center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-addable-combo-list__dropdown {
+    animation: none;
+  }
+}
+
+/* ─── Option ─────────────────────────────────────────────── */
+
+.bds-addable-combo-list__option {
+  padding: var(--padding-tiny) var(--padding-sm);
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.bds-addable-combo-list__option:hover,
+.bds-addable-combo-list__option--active {
+  background-color: var(--surface-secondary);
+}
+
+/* ─── Strict hint ────────────────────────────────────────── */
+
+.bds-addable-combo-list__strict-hint {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  color: var(--text-muted);
+}
+
+/* ─── Helper text ────────────────────────────────────────── */
+
+.bds-addable-combo-list__helper {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+}
+@layer bds-components {
+/**
  * BDS TextInput Interactive States
  *
  * Token reference:
@@ -1065,132 +1385,6 @@
   font-size: var(--body-sm);
   line-height: var(--font-line-height-normal);
   color: var(--text-muted);
-}
-@layer bds-components {
-/**
- * BDS Tag — Categorization label with optional icons and dismiss
- *
- * Naming: .bds-tag, .bds-tag--{size}, .bds-tag__{element}
- *
- * Sizing scale is shared with Badge for side-by-side alignment.
- */
-
-/* ─── Base ────────────────────────────────────────────────────── */
-
-.bds-tag {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
-  line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
-  color: var(--text-primary);
-  background-color: var(--background-secondary);
-  text-decoration: none;
-  white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  cursor: default;
-  user-select: none;
-  overflow: clip;
-  transition: background-color var(--duration-normal) var(--ease-out);
-  box-sizing: border-box;
-}
-
-/* ─── Sizes (shared scale with Badge) ────────────────────────── */
-
-.bds-tag--xs {
-  /* bds-lint-ignore — 24px icon-only tag matches shared indicator spec */
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border-radius: var(--border-radius-sm);
-  justify-content: center;
-  gap: 0;
-}
-
-.bds-tag--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
-  gap: var(--gap-xs);
-  font-size: var(--label-tiny);
-  height: 28px;
-  border-radius: var(--border-radius-sm);
-}
-
-.bds-tag--md {
-  padding: var(--padding-sm) var(--padding-md);
-  gap: var(--gap-sm);
-  font-size: var(--label-sm);
-  height: 32px;
-  border-radius: var(--border-radius-md);
-}
-
-.bds-tag--lg {
-  padding: var(--padding-sm) var(--padding-md);
-  gap: var(--gap-md);
-  font-size: var(--label-md);
-  height: 40px;
-  border-radius: var(--border-radius-md);
-}
-
-/* ─── Disabled ────────────────────────────────────────────────── */
-
-.bds-tag--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ─── Icon Wrapper (shared sizing with Badge) ────────────────── */
-
-.bds-tag__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* Icon font-size matches container so the glyph fills the box */
-.bds-tag--xs .bds-tag__icon {
-  font-size: var(--icon-xs);
-}
-
-.bds-tag--sm .bds-tag__icon {
-  width: 14px;
-  height: 14px;
-  font-size: var(--icon-xs);
-}
-
-.bds-tag--md .bds-tag__icon {
-  width: 16px;
-  height: 16px;
-  font-size: var(--icon-sm);
-}
-
-.bds-tag--lg .bds-tag__icon {
-  width: var(--icon-lg);
-  height: var(--icon-lg);
-  font-size: var(--label-xl);
-}
-
-/* ─── Remove Button ───────────────────────────────────────────── */
-
-.bds-tag__remove {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: inherit;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-.bds-tag__remove:hover {
-  opacity: 0.7;
-}
 }
 .bds-addable-text-list {
   display: flex;
