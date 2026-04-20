@@ -13,7 +13,7 @@ export const dental = {
     slug: 'dental',
     parentIndustry: 'medical',
     displayName: 'Dental',
-    version: '1.3.0',
+    version: '1.4.0',
     reviewCadence: 'quarterly',
     lastReviewed: '2026-04-20',
     affinities: {
@@ -413,27 +413,46 @@ export const dental = {
         'Apple Pay',
         'Google Pay',
     ],
+    // Locked carrier vocabulary — the 10 dental insurance companies a practice
+    // explicitly accepts. Consumed by the portal's Insurance Providers MultiSelect
+    // with zero free-text. Changed from 20 suggestion seeds (pre-0.20.0) to 10
+    // locked carriers to match the sales-team canonical intake list; legacy
+    // non-matching values in company_profiles.insurance_providers are dropped
+    // on first save in the portal (soft-migration pattern).
     insuranceProviders: [
-        'Delta Dental',
-        'Blue Cross Blue Shield',
-        'Cigna Dental',
-        'Aetna Dental',
-        'MetLife Dental',
-        'United Concordia',
-        'Humana Dental',
-        'Guardian Dental',
-        'Principal Financial',
-        'Ameritas',
-        'Sun Life Financial',
+        'Aetna',
         'Anthem',
-        'UnitedHealthcare Dental',
-        'Assurant Dental',
-        'Renaissance Dental',
-        'Dental Select',
-        'DentaQuest (Medicaid/CHIP)',
-        'Liberty Dental (Medicaid/CHIP)',
-        'TRICARE Dental',
-        'Federal Employees Dental (FEDVIP)',
+        'Blue Cross Blue Shield',
+        'Cigna',
+        'Delta Dental',
+        'Guardian',
+        'Humana',
+        'MetLife',
+        'Principal',
+        'UnitedHealthcare',
+    ],
+    // Locked plan/program vocabulary — insurance modalities and government
+    // programs distinct from the individual carriers above. Separated from
+    // `insuranceProviders` so practices can answer "which carriers?" and
+    // "which plan postures?" independently; posture data also informs the
+    // financial_model inference downstream.
+    insurancePlans: [
+        'Out-of-Network PPO',
+        'Fee-for-Service Only',
+        'Medicaid',
+        'Medicare',
+    ],
+    // Locked financing-product vocabulary — structured financing programs
+    // a practice offers to patients, distinct from point-of-sale payment
+    // methods. CareCredit appears here AND in the global PAYMENT_METHOD_VALUES
+    // intentionally: as a financing product (this list) and as a payment
+    // method clients swipe at checkout (global list).
+    financing: [
+        'CareCredit',
+        'Cherry Finance',
+        'Sunbit',
+        'LendingClub',
+        'In-House Financing',
     ],
 };
 //# sourceMappingURL=dental.js.map
