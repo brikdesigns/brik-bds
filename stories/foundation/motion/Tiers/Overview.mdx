@@ -1,0 +1,65 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { TierBadge } from '../_components/tiers-components';
+
+<Meta title="Foundations/Motion/Tiers/Overview" />
+
+# Motion Tiers
+
+Three tiers, each additive. A tier decision is made once per engagement at design audit — it is not changed per component or per page section.
+
+## Tier comparison
+
+<table>
+  <thead>
+    <tr><th>Tier</th><th>Files required</th><th>Use when</th><th>Load cost</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><TierBadge tier="lightweight" /></td>
+      <td><code>tokens/animations.css</code> + <code>tokens/motion-classes.css</code> + <code>css/animations.css</code> + a scroll observer snippet</td>
+      <td>Default for every mockup. Fade/slide reveals, hover micro-interactions, stagger.</td>
+      <td>~8 KB CSS, no JS library</td>
+    </tr>
+    <tr>
+      <td><TierBadge tier="gsap" /></td>
+      <td>Above + GSAP CDN (<code>gsap</code> + <code>ScrollTrigger</code> + optionally <code>SplitText</code>)</td>
+      <td>Design calls for scroll pinning, scrubbing, horizontal scroll panels, text splitting.</td>
+      <td>~120 KB JS (CDN-cached)</td>
+    </tr>
+    <tr>
+      <td><TierBadge tier="premium" /></td>
+      <td>Above + <code>css/premium-effects.css</code> + <code>js/premium-scroll.js</code></td>
+      <td>Design calls for atmosphere: hero sequences, background morphs, grain, glass, magnetic buttons, video scrub.</td>
+      <td>~140 KB JS + ~25 KB CSS</td>
+    </tr>
+  </tbody>
+</table>
+
+## Decision tree
+
+Read through these questions in order. Stop at the first match.
+
+1. **Does the design mention scroll scrubbing, pinning, horizontal scroll panels, or letter-by-letter text splitting?**
+   → GSAP tier. These effects require ScrollTrigger or SplitText — they cannot be replicated with CSS transitions.
+
+2. **Does the design reference atmosphere words: grain, film texture, glass, frosted, magnetic cursor, video scrub, hero sequence, color morph?**
+   → Premium tier. These require `premium-effects.css` and `premium-scroll.js`.
+
+3. **Everything else — fade reveals, slide-up on scroll, hover lifts, stagger entrances?**
+   → Lightweight. Default. Most client sites live here.
+
+The tiers are not a quality ladder. A well-composed Lightweight site can be more effective than a Premium site that reaches for effects without purpose. The tier selection reflects *what the design needs*, not the ambition level of the build.
+
+## Per-tier pages
+
+Each tier's page shows the exact files to load, the CSS/JS patterns specific to that tier, and the live demos of effects that belong there.
+
+- [Lightweight](?path=/docs/foundations-motion-tiers-lightweight--docs) — fade/slide/stagger, scroll IntersectionObserver, CSS hover
+- [GSAP](?path=/docs/foundations-motion-tiers-gsap--docs) — pinning, scrubbing, horizontal scroll, SplitText
+- [Premium](?path=/docs/foundations-motion-tiers-premium--docs) — grain, glass, magnetic buttons, hero sequences, video scrub
+
+## Tier ambiguity note
+
+**Clip-path reveals** (circle, curtain, wipe, rise, diagonal, diamond) are implemented in `css/animations.css` and triggered with `.is-visible` via IntersectionObserver — making them Lightweight in file dependency. However, they produce a cinematic effect more commonly associated with Premium-feeling sites. They are classified here as **Lightweight** because they carry no JS library dependency. If the design audit calls for them on a GSAP or Premium site, they compose cleanly with both.
+
+**Stagger patterns** are Lightweight when driven by `animation-delay` via `.bds-stagger-*` classes. They become GSAP when driven by `gsap.from()` with a `stagger` parameter — the latter allows dynamic stagger values, reversed sequences, and from/to ranges that CSS delay cannot express. Pick based on whether you need runtime control, not visual outcome.

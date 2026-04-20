@@ -1,0 +1,130 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { TierBadge, CodeSnippet } from '../_components/tiers-components';
+import { AnimationDemo, ClipRevealDemo, EffectGrid } from '../_components/effects-components';
+
+<Meta title="Foundations/Motion/Effects/Scroll Reveals" />
+
+# Scroll Reveals <TierBadge tier="lightweight" />
+
+All scroll reveal effects are in `css/animations.css` and triggered by toggling `.is-visible` on the element when it enters the viewport. The trigger mechanism is a plain IntersectionObserver — no library required.
+
+See [Lightweight tier](?path=/docs/foundations-motion-tiers-lightweight--docs) for the observer snippet and full import order.
+
+## Clip-path reveals
+
+Cinematic unveils for images and section containers. Each class defines a `clip-path` starting state and transitions to `clip-path: none` when `.is-visible` is applied.
+
+<EffectGrid columns={3}>
+  <AnimationDemo label="Circle" height={180}>
+    <ClipRevealDemo type="circle" />
+  </AnimationDemo>
+  <AnimationDemo label="Curtain" height={180}>
+    <ClipRevealDemo type="curtain" />
+  </AnimationDemo>
+  <AnimationDemo label="Wipe" height={180}>
+    <ClipRevealDemo type="wipe" />
+  </AnimationDemo>
+</EffectGrid>
+
+<EffectGrid columns={3}>
+  <AnimationDemo label="Rise" height={180}>
+    <ClipRevealDemo type="rise" />
+  </AnimationDemo>
+  <AnimationDemo label="Diagonal" height={180}>
+    <ClipRevealDemo type="diagonal" />
+  </AnimationDemo>
+  <AnimationDemo label="Diamond" height={180}>
+    <ClipRevealDemo type="diamond" />
+  </AnimationDemo>
+</EffectGrid>
+
+<CodeSnippet code={`<!-- Circle expand from center -->
+<div class="clip-circle-reveal" data-reveal>
+  <img src="photo.jpg" alt="...">
+</div>
+
+<!-- Curtain drops from top -->
+<div class="clip-curtain-reveal" data-reveal>
+  <img src="hero.jpg" alt="...">
+</div>
+
+<!-- Horizontal wipe left to right -->
+<div class="clip-wipe-reveal" data-reveal>
+  <img src="interior.jpg" alt="...">
+</div>
+
+<!-- Rise from bottom -->
+<div class="clip-rise-reveal" data-reveal>
+  <img src="portrait.jpg" alt="...">
+</div>
+
+<!-- Diagonal sweep -->
+<div class="clip-diagonal-reveal" data-reveal>
+  <img src="building.jpg" alt="...">
+</div>
+
+<!-- Diamond expand from center -->
+<div class="clip-diamond-reveal" data-reveal>
+  <img src="award.jpg" alt="...">
+</div>`} />
+
+## Fade and slide reveals
+
+Standard scroll entrance classes for text, cards, and content blocks.
+
+<EffectGrid columns={2}>
+  <AnimationDemo label="Fade Up" height={120}>
+    <div style={{ textAlign: 'center' }}>
+      <code style={{ fontSize: 12 }}>.animate-fade-up</code>
+      <div style={{ fontSize: 12, marginTop: 6, color: 'var(--text-secondary)' }}>opacity + translateY(20px→0)</div>
+    </div>
+  </AnimationDemo>
+  <AnimationDemo label="Fade Down" height={120}>
+    <div style={{ textAlign: 'center' }}>
+      <code style={{ fontSize: 12 }}>.animate-fade-down</code>
+      <div style={{ fontSize: 12, marginTop: 6, color: 'var(--text-secondary)' }}>opacity + translateY(-20px→0)</div>
+    </div>
+  </AnimationDemo>
+  <AnimationDemo label="Fade Left" height={120}>
+    <div style={{ textAlign: 'center' }}>
+      <code style={{ fontSize: 12 }}>.animate-fade-left</code>
+      <div style={{ fontSize: 12, marginTop: 6, color: 'var(--text-secondary)' }}>opacity + translateX(-20px→0)</div>
+    </div>
+  </AnimationDemo>
+  <AnimationDemo label="Fade Right" height={120}>
+    <div style={{ textAlign: 'center' }}>
+      <code style={{ fontSize: 12 }}>.animate-fade-right</code>
+      <div style={{ fontSize: 12, marginTop: 6, color: 'var(--text-secondary)' }}>opacity + translateX(20px→0)</div>
+    </div>
+  </AnimationDemo>
+</EffectGrid>
+
+<CodeSnippet code={`<h2 class="animate-fade-up" data-reveal>Section heading</h2>
+<p class="animate-fade-up" data-reveal>Body text underneath</p>
+<img class="animate-fade-left" data-reveal src="photo.jpg" alt="...">`} />
+
+## Stagger pattern
+
+Apply `data-reveal-stagger` to a parent and the observer script applies staggered delays to direct children.
+
+<CodeSnippet code={`<div data-reveal-stagger>
+  <div class="card">Card 1</div>
+  <div class="card">Card 2</div>
+  <div class="card">Card 3</div>
+</div>`} />
+
+For dynamic stagger (item count unknown at build time), use GSAP `ScrollTrigger.batch()`. See [GSAP tier](?path=/docs/foundations-motion-tiers-gsap--docs).
+
+## Parallax
+
+Apply `.parallax-element` to an element with a `data-parallax-speed` attribute (range `0.05–0.25`, lower is subtler). The parallax helper in `css/animations.css` translates the element proportionally to scroll position on the next animation frame.
+
+<CodeSnippet code={`<div class="parallax-element" data-parallax-speed="0.1">
+  <img src="background.jpg" alt="...">
+</div>`} />
+
+## Related
+
+- [Lightweight Tier](?path=/docs/foundations-motion-tiers-lightweight--docs)
+- [Hover Effects](?path=/docs/foundations-motion-effects-hover--docs)
+- [GSAP Tier (for scroll-scrubbed reveals)](?path=/docs/foundations-motion-tiers-gsap--docs)

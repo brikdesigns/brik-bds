@@ -1,0 +1,65 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { TierBadge, CodeSnippet } from '../_components/tiers-components';
+import { TextEffectDemo, EffectGrid } from '../_components/effects-components';
+
+<Meta title="Foundations/Motion/Effects/Typography" />
+
+# Typography Effects <TierBadge tier="lightweight" />
+
+CSS text decoration classes in `css/animations.css`. These apply to heading elements only — paired with `--font-family-heading` and heading-scale sizes. Never apply to body copy or labels.
+
+## Effect demos
+
+<EffectGrid columns={2}>
+  <TextEffectDemo className="text-gradient" label="Gradient Text" />
+  <TextEffectDemo className="text-gradient--brand" label="Brand Gradient" />
+  <TextEffectDemo className="text-stroke" label="Stroke Text" />
+  <TextEffectDemo className="text-glow" label="Glowing Text" dark />
+  <TextEffectDemo className="text-highlight" label="Highlighted" />
+  <TextEffectDemo className="text-stroke--thick" label="Thick Stroke" />
+</EffectGrid>
+
+## Class reference
+
+<CodeSnippet code={`<!-- Gradient fill — left-to-right in brand colors -->
+<h1 class="text-gradient">Gradient heading</h1>
+
+<!-- Brand-specific gradient (uses --background-brand-primary and secondary) -->
+<h2 class="text-gradient--brand">Brand gradient</h2>
+
+<!-- Outlined text — transparent fill, stroked border -->
+<h1 class="text-stroke">Outlined heading</h1>
+<h1 class="text-stroke--thick">Thick stroke heading</h1>
+
+<!-- Glow — best on dark backgrounds -->
+<h2 class="text-glow">Glowing heading</h2>
+
+<!-- Animated highlight — grows in on .is-visible -->
+<span class="text-highlight" data-reveal>Highlighted phrase</span>`} />
+
+| Class | Effect | Background needed |
+|---|---|---|
+| `.text-gradient` | Linear gradient fill via `-webkit-background-clip: text` | Any |
+| `.text-gradient--brand` | Same, uses `--background-brand-primary` + secondary | Any |
+| `.text-stroke` | Transparent fill + 1px outline | Light preferred |
+| `.text-stroke--thick` | Transparent fill + 2px outline | Light preferred |
+| `.text-glow` | Drop shadow in brand color | Dark required |
+| `.text-highlight` | Animated background-color grow on scroll | Any |
+
+## Notes
+
+**`.text-highlight`** uses `background-image: linear-gradient()` growing via `background-size` from `0% 100%` to `100% 100%`. It requires `.is-visible` — add `data-reveal` so the observer triggers it on scroll.
+
+**`.text-glow`** works best on dark section backgrounds (`section-dark`). On light backgrounds the shadow becomes muddy. Test with the Font Audit theme in the Storybook toolbar to verify heading font family is correct — gradient-clip only works if `-webkit-background-clip: text` applies to a heading-family element.
+
+## GSAP text splitting <TierBadge tier="gsap" />
+
+For letter-by-letter or word-by-word animated reveals, use GSAP SplitText instead of CSS classes. See [GSAP Tier](?path=/docs/foundations-motion-tiers-gsap--docs) for the splitting pattern.
+
+The CSS classes above and GSAP SplitText are composable — you can apply `.text-gradient` to a heading and also split it with SplitText. The gradient applies to each character span GSAP creates.
+
+## Related
+
+- [Scroll Reveals](?path=/docs/foundations-motion-effects-scroll-reveals--docs)
+- [GSAP Tier](?path=/docs/foundations-motion-tiers-gsap--docs)
+- [Lightweight Tier](?path=/docs/foundations-motion-tiers-lightweight--docs)
