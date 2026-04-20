@@ -114,7 +114,7 @@ export function scoreBlueprintForProfile(
  * blueprints fall out instead of padding the tail.
  *
  * Weighting rationale — see `SHORTLIST_WEIGHTS`. The JSDoc on the
- * [Storybook Overview page](https://brikstorybook.netlify.app/?path=/docs/foundations-content-system-blueprints-overview--docs)
+ * [Storybook Overview page](https://brikstorybook.netlify.app/?path=/docs/overview-theming-blueprints--docs)
  * explains how the portal wires this into the mockup generator seed.
  *
  * Sort is stable for equal scores: the earlier entry in the input
