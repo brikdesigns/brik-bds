@@ -314,7 +314,7 @@ const preview: Preview = {
           'Foundations',
           [
             'Design Tokens',
-            ['Overview', 'Client Theming', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size'],
+            ['Overview', 'Client Theming', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size', 'Motion'],
             'Assets',
             'Content',
             [
