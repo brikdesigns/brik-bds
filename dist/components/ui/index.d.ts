@@ -60,6 +60,7 @@ export * from './SearchInput';
 export * from './SegmentedControl';
 export * from './Select';
 export * from './ServiceBadge';
+export * from './shared';
 export * from './Sheet';
 export * from './SheetSection';
 export * from './SidebarNavigation';
