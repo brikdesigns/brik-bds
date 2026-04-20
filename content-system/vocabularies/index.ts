@@ -41,3 +41,9 @@ export {
   isImageMood,
   type ImageMood,
 } from './image-mood';
+
+export {
+  PAYMENT_METHOD_VALUES,
+  isPaymentMethod,
+  type PaymentMethod,
+} from './payment-method';
