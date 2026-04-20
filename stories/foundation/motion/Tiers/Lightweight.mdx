@@ -1,0 +1,195 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { TierBadge, CodeSnippet } from '../_components/tiers-components';
+import { AnimationDemo, ClipRevealDemo, HoverDemo, EffectGrid, SectionThemeDemo } from '../_components/effects-components';
+
+<Meta title="Foundations/Motion/Tiers/Lightweight" />
+
+# Lightweight Tier <TierBadge tier="lightweight" />
+
+No JavaScript library. Every effect in this tier runs on CSS transitions, CSS animations using the BDS keyframe library, and a minimal IntersectionObserver snippet to toggle `.is-visible`. This is the default for all mockups.
+
+## Files to load
+
+```html
+<!-- 1. Token layer — durations, easings, keyframes -->
+<link rel="stylesheet" href="tokens/animations.css">
+
+<!-- 2. Motion utility classes — .bds-enter-*, .bds-anim-*, .bds-stagger-* -->
+<link rel="stylesheet" href="tokens/motion-classes.css">
+
+<!-- 3. Scroll reveal classes, hover effects, section theming, typography -->
+<link rel="stylesheet" href="css/animations.css">
+```
+
+## Scroll observer — minimal snippet
+
+All `.is-visible`-triggered classes (reveals, text highlights) need an IntersectionObserver to apply the class when the element enters the viewport. The Lightweight tier does not include a bundled JS file — add this inline or in a small module:
+
+<CodeSnippet code={`// Trigger .is-visible when elements enter the viewport
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target); // fire once
+      }
+    });
+  },
+  { threshold: 0.15 }
+);
+
+document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));`} />
+
+Mark elements with `data-reveal`:
+```html
+<div class="animate-fade-up" data-reveal>Content enters here</div>
+<div class="clip-rise-reveal" data-reveal>
+  <img src="photo.jpg" alt="...">
+</div>
+```
+
+## Entrance animations
+
+The token-layer utility classes apply named keyframes with BDS duration tokens. They animate once on mount — ideal for page-load sequences or component entry.
+
+<EffectGrid columns={3}>
+  <div style={{ padding: '24px', backgroundColor: 'var(--surface-secondary)', borderRadius: 'var(--border-radius-md)', textAlign: 'center', fontSize: 13 }}>
+    <code>.bds-enter-fade</code>
+    <div style={{ fontSize: 12, marginTop: 4, color: 'var(--text-secondary)' }}>opacity + scale(0.98→1)</div>
+  </div>
+  <div style={{ padding: '24px', backgroundColor: 'var(--surface-secondary)', borderRadius: 'var(--border-radius-md)', textAlign: 'center', fontSize: 13 }}>
+    <code>.bds-enter-slide-up</code>
+    <div style={{ fontSize: 12, marginTop: 4, color: 'var(--text-secondary)' }}>translateY(8px→0) + fade</div>
+  </div>
+  <div style={{ padding: '24px', backgroundColor: 'var(--surface-secondary)', borderRadius: 'var(--border-radius-md)', textAlign: 'center', fontSize: 13 }}>
+    <code>.bds-enter-pop</code>
+    <div style={{ fontSize: 12, marginTop: 4, color: 'var(--text-secondary)' }}>scale(0→1) with spring overshoot</div>
+  </div>
+</EffectGrid>
+
+## Scroll-triggered reveals
+
+Add the class + `data-reveal` attribute. The IntersectionObserver snippet above applies `.is-visible` when the element enters the viewport.
+
+<EffectGrid columns={3}>
+  <AnimationDemo label="Fade Up" height={140}>
+    <div style={{ textAlign: 'center' }}>
+      <code style={{ fontSize: 12 }}>.animate-fade-up</code>
+      <div style={{ fontSize: 13, marginTop: 8, color: 'var(--text-secondary)' }}>Most common reveal</div>
+    </div>
+  </AnimationDemo>
+  <AnimationDemo label="Fade Down" height={140}>
+    <div style={{ textAlign: 'center' }}>
+      <code style={{ fontSize: 12 }}>.animate-fade-down</code>
+      <div style={{ fontSize: 13, marginTop: 8, color: 'var(--text-secondary)' }}>For above-the-fold drops</div>
+    </div>
+  </AnimationDemo>
+  <AnimationDemo label="Fade Left" height={140}>
+    <div style={{ textAlign: 'center' }}>
+      <code style={{ fontSize: 12 }}>.animate-fade-left</code>
+      <div style={{ fontSize: 13, marginTop: 8, color: 'var(--text-secondary)' }}>Horizontal entrance</div>
+    </div>
+  </AnimationDemo>
+</EffectGrid>
+
+## Stagger patterns
+
+Combine entrance classes with stagger helpers for sequential list reveals.
+
+<CodeSnippet code={`<ul>
+  <li class="bds-enter-fade bds-stagger-1">First item</li>
+  <li class="bds-enter-fade bds-stagger-2">Second item</li>
+  <li class="bds-enter-fade bds-stagger-3">Third item</li>
+</ul>`} />
+
+Six stagger delays available: `.bds-stagger-1` through `.bds-stagger-6`. Values come from `--stagger-1` through `--stagger-6` tokens in `animations.css`. For dynamic stagger (unknown item count, reversed sequences), see the [GSAP tier](?path=/docs/foundations-motion-tiers-gsap--docs).
+
+## Clip-path reveals
+
+Cinematic image and section unveils. Implemented in CSS — no library dependency.
+
+<EffectGrid columns={3}>
+  <AnimationDemo label="Circle" height={180}>
+    <ClipRevealDemo type="circle" />
+  </AnimationDemo>
+  <AnimationDemo label="Curtain" height={180}>
+    <ClipRevealDemo type="curtain" />
+  </AnimationDemo>
+  <AnimationDemo label="Wipe" height={180}>
+    <ClipRevealDemo type="wipe" />
+  </AnimationDemo>
+</EffectGrid>
+
+<EffectGrid columns={3}>
+  <AnimationDemo label="Rise" height={180}>
+    <ClipRevealDemo type="rise" />
+  </AnimationDemo>
+  <AnimationDemo label="Diagonal" height={180}>
+    <ClipRevealDemo type="diagonal" />
+  </AnimationDemo>
+  <AnimationDemo label="Diamond" height={180}>
+    <ClipRevealDemo type="diamond" />
+  </AnimationDemo>
+</EffectGrid>
+
+<CodeSnippet code={`<div class="clip-circle-reveal" data-reveal>
+  <img src="photo.jpg" alt="...">
+</div>
+
+<div class="clip-curtain-reveal" data-reveal>
+  <img src="hero.jpg" alt="...">
+</div>`} />
+
+See [Scroll Reveals](?path=/docs/foundations-motion-effects-scroll-reveals--docs) for the full effect reference.
+
+## Hover effects
+
+CSS-only micro-interactions. No JS required.
+
+<EffectGrid columns={3}>
+  <HoverDemo className="hover-lift" label=".hover-lift" />
+  <HoverDemo className="hover-scale" label=".hover-scale" />
+  <HoverDemo className="hover-glow" label=".hover-glow" />
+</EffectGrid>
+
+<EffectGrid columns={3}>
+  <HoverDemo className="hover-dim" label=".hover-dim" />
+  <HoverDemo className="hover-underline" label=".hover-underline" />
+  <HoverDemo className="hover-lift click-press" label=".hover-lift.click-press" />
+</EffectGrid>
+
+See [Hover Effects](?path=/docs/foundations-motion-effects-hover--docs) for magnetic and cursor-trail variants (those require Premium JS).
+
+## Section theming
+
+Section color presets. Combine with grain, glass, and dividers.
+
+<EffectGrid columns={2}>
+  <SectionThemeDemo className="section-dark" label="Dark background" />
+  <SectionThemeDemo className="section-light" label="Light background" />
+  <SectionThemeDemo className="section-warm" label="Warm/cream background" />
+  <SectionThemeDemo className="section-brand" label="Brand primary background" />
+</EffectGrid>
+
+## Attention animations
+
+Draw the eye to a changed state without motion sickness risk. These loop continuously or fire on a single event.
+
+<CodeSnippet code={`<!-- Notification dot that breathes -->
+<span class="bds-anim-pulse">3</span>
+
+<!-- Bell shake on new message -->
+<svg class="bds-anim-shake">...</svg>
+
+<!-- Loading spinner -->
+<div class="bds-anim-spin">...</div>`} />
+
+## Reduced motion
+
+`tokens/animations.css` includes a `prefers-reduced-motion` override that disables all animations and transitions for users who have enabled this OS preference. No additional work needed.
+
+## Related
+
+- [Tiers Overview](?path=/docs/foundations-motion-tiers-overview--docs)
+- [Scroll Reveals (full demo set)](?path=/docs/foundations-motion-effects-scroll-reveals--docs)
+- [Hover Effects](?path=/docs/foundations-motion-effects-hover--docs)

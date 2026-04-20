@@ -1,0 +1,93 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { ANIMATION_TIER_VALUES } from '../../../../content-system/vocabularies/animation-tier';
+
+<Meta title="Foundations/Motion/Vocabulary/Animation Tier" />
+
+# Animation Tier
+
+The `animation_tier` field captured in the client portal's Visual Direction intel topic. It is a single-select — the client picks exactly one. The tier carries forward from onboarding through design preflight into every mockup variant.
+
+This value is the **source of truth** for which motion tier a mockup worker is allowed to use. It is imported from `content-system/vocabularies/animation-tier.ts` and consumed by the portal via `company_profiles.animation_tier` (migration 00127). Never hardcode these values in consumer code — import `ANIMATION_TIER_VALUES` from this source.
+
+## Values
+
+<table>
+  <thead>
+    <tr>
+      <th>Value</th>
+      <th>Motion Tier</th>
+      <th>What it unlocks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>subtle</code></td>
+      <td><strong>Lightweight</strong></td>
+      <td>
+        <code>.fade-up</code> IntersectionObserver only. No GSAP. No premium effects.
+        Transitions exist but do not call attention to themselves. Appropriate for
+        professional services, law, healthcare contexts where motion confidence is low.
+      </td>
+    </tr>
+    <tr>
+      <td><code>moderate</code></td>
+      <td><strong>GSAP</strong></td>
+      <td>
+        Fade-ups, SplitText hero H1, stat counters, hover lifts, CSS animated gradient.
+        Motion is present and intentional but not the lead design element.
+        Appropriate for most service businesses and small practices.
+      </td>
+    </tr>
+    <tr>
+      <td><code>expressive</code></td>
+      <td><strong>Premium</strong></td>
+      <td>
+        SplitText, ScrollTrigger parallax, staggered card entrances, Granim.js gradient,
+        Lenis smooth scroll. Motion is a design material, not a finishing coat.
+        Appropriate for clients who reference brands like Daylight Computer or Legend.xyz.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Programmatic access
+
+```ts
+import {
+  ANIMATION_TIER_VALUES,
+  type AnimationTier,
+  isAnimationTier,
+} from '@brikdesigns/bds/content-system';
+
+// The 3 valid values at runtime
+console.log(ANIMATION_TIER_VALUES); // ['subtle', 'moderate', 'expressive']
+
+// Type-safe guard
+function resolveMotionConfig(tier: string) {
+  if (!isAnimationTier(tier)) throw new Error(`Unknown tier: ${tier}`);
+  // tier is narrowed to AnimationTier here
+}
+```
+
+The portal reads `company_profiles.animation_tier` (type `text`, constrained by app-level validation to `ANIMATION_TIER_VALUES`). The mockup worker's `resolveAnimationTierNote()` resolver reads this field and decides:
+
+- Which CDN libraries to include in the mockup `head`
+- Which BDS CSS files to reference
+- Which effect classes Claude is permitted to generate in the mockup HTML
+
+**Drift warning:** if the tier values here and the portal's intake form get out of sync, clients pick a value that silently resolves to nothing in the worker. `isAnimationTier()` is the runtime guard — use it at the API boundary before persisting.
+
+## Tier-to-page cross-reference
+
+Each value maps directly to a tier documentation page:
+
+- `subtle` → [Lightweight Tier](?path=/docs/foundations-motion-tiers-lightweight--docs)
+- `moderate` → [GSAP Tier](?path=/docs/foundations-motion-tiers-gsap--docs)
+- `expressive` → [Premium Tier](?path=/docs/foundations-motion-tiers-premium--docs)
+
+## Related
+
+- [Image Mood](?path=/docs/foundations-motion-vocabulary-image-mood--docs)
+- [Tiers Overview](?path=/docs/foundations-motion-tiers-overview--docs)
+- [Motion Overview](?path=/docs/foundations-motion-overview--docs)
+- [Content System Overview](?path=/docs/foundations-content-system-overview--docs)
