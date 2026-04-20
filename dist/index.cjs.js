@@ -1726,6 +1726,7 @@ function AddableEntryList({
   addLabel = "Add New",
   removeLabel = "Remove entry",
   emptyLabel,
+  emptyDescriptionLabel,
   size: size2 = "md",
   disabled = false,
   maxItems,
@@ -1846,7 +1847,16 @@ function AddableEntryList({
         children: [
           /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__item-content", children: [
             /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__item-primary", children: entry.primary }),
-            entry.secondary && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__item-secondary", children: entry.secondary })
+            entry.secondary ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__item-secondary", children: entry.secondary }) : emptyDescriptionLabel ? /* @__PURE__ */ jsxRuntime.jsx(
+              "span",
+              {
+                className: bdsClass(
+                  "bds-addable-entry-list__item-secondary",
+                  "bds-addable-entry-list__item-secondary--empty"
+                ),
+                children: emptyDescriptionLabel
+              }
+            ) : null
           ] }),
           !disabled && /* @__PURE__ */ jsxRuntime.jsx(
             "button",
@@ -1881,7 +1891,7 @@ function AddableEntryList({
                   children: primaryLabel
                 }
               ),
-              /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { position: "relative" }, children: [
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__primary-combo-field", children: [
                 /* @__PURE__ */ jsxRuntime.jsx(
                   "input",
                   {
@@ -2013,6 +2023,16 @@ function AddableEntryList({
 const TAG_SIZE = { sm: "sm", md: "md", lg: "md" };
 const BUTTON_SIZE = { sm: "sm", md: "md", lg: "lg" };
 const INPUT_SIZE = { sm: "sm", md: "md", lg: "lg" };
+const STRUCTURED_CONTENT_PATTERN = /[\n\t]|\s[—–]\s|:\s/;
+const warnedValues = /* @__PURE__ */ new Set();
+function warnStructuredContent(value2, label) {
+  if (warnedValues.has(value2)) return;
+  if (!STRUCTURED_CONTENT_PATTERN.test(value2)) return;
+  warnedValues.add(value2);
+  console.warn(
+    `[BDS AddableTextList${label ? ` (${label})` : ""}] Value contains structured separators ("${value2}") — AddableTextList renders a single flat tag. Use AddableEntryList for title + description pairs.`
+  );
+}
 function AddableTextList({
   values,
   onChange,
@@ -2030,6 +2050,9 @@ function AddableTextList({
   const [isEditing, setIsEditing] = React.useState(false);
   const [draft, setDraft] = React.useState("");
   const inputRef = React.useRef(null);
+  React.useEffect(() => {
+    values.forEach((v) => warnStructuredContent(v, label));
+  }, [values, label]);
   const atLimit = typeof maxItems === "number" && values.length >= maxItems;
   const reveal = () => {
     setDraft("");
@@ -2053,6 +2076,7 @@ function AddableTextList({
       cancel();
       return;
     }
+    warnStructuredContent(trimmed, label);
     onChange([...values, trimmed]);
     setDraft("");
     requestAnimationFrame(() => {
