@@ -103,20 +103,46 @@ export interface IndustryPack {
      */
     strategicConsiderations?: readonly StrategicConsideration[];
     /**
-     * Billing / intake vocabularies — feed suggestion-driven comboboxes in
-     * the portal's Intel tab (Billing sheet, PR B1).
+     * Billing / intake vocabularies — feed the portal's Intel tab Billing sheet.
      *
-     * These are flat string arrays intentionally — they are suggestion seeds,
-     * not locked enums. Clients can enter free-text values that don't appear here.
+     * The two shapes split along validation posture:
      *
-     * - `services`           Common service/offering names for this vertical.
-     * - `paymentTypes`       Accepted payment methods and financing mechanisms.
-     * - `insuranceProviders` Relevant insurance carriers. Empty array for industries
-     *                        where insurance is not a factor.
+     * - `services` and `paymentTypes` remain **suggestion seeds** — flat string
+     *   arrays rendered in AddableComboList comboboxes, free-text-extendable.
+     * - `insuranceProviders`, `insurancePlans`, and `financing` are **locked
+     *   vocabularies** — rendered in MultiSelect dropdowns with zero free-text.
+     *   The portal filters any legacy non-matching values on first read
+     *   (soft-migration pattern, same as brand taxonomy rollout).
+     *
+     * Fields:
+     *
+     * - `services`           Suggestion seeds — common service/offering names
+     *                        for this vertical (free-text-extendable).
+     * - `paymentTypes`       Suggestion seeds — industry-specific payment +
+     *                        financing mechanisms (free-text-extendable).
+     *                        NOTE: for the global, locked 14 payment methods
+     *                        shared across all industries, import
+     *                        PAYMENT_METHOD_VALUES from vocabularies/.
+     * - `insuranceProviders` Locked carrier vocabulary — insurance companies
+     *                        (e.g. Aetna, Cigna) this industry meaningfully
+     *                        interacts with. Empty array for verticals where
+     *                        insurance is not a factor.
+     * - `insurancePlans`     Locked plan/program vocabulary — insurance
+     *                        modalities and government programs distinct from
+     *                        carriers (e.g. Medicaid, Out-of-Network PPO,
+     *                        Fee-for-Service Only). Populated when the industry
+     *                        has meaningful plan-type granularity beyond carrier.
+     * - `financing`          Locked financing-product vocabulary — structured
+     *                        financing products the business offers to
+     *                        patients/residents (e.g. CareCredit plan, Sunbit,
+     *                        Owner Financing). Distinct from point-of-sale
+     *                        payment methods; populated per vertical.
      */
     services: readonly string[];
     paymentTypes: readonly string[];
     insuranceProviders: readonly string[];
+    insurancePlans?: readonly string[];
+    financing?: readonly string[];
 }
 export type Quarter = 'Q1' | 'Q2' | 'Q3' | 'Q4';
 export interface PageArchetype {

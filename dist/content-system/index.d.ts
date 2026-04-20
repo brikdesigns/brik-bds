@@ -15,6 +15,6 @@
 export * from './vocabularies';
 export * from './schema';
 export * from './blueprints';
-export { industryPacks, dental, realEstateRvMhc, smallBusiness, getIndustryServices, getIndustryPaymentTypes, getIndustryInsuranceProviders, getIndustryConditions, getIndustryProcedures, getIndustryAmenities, getIndustriesForParent, } from './industries';
+export { industryPacks, dental, realEstateRvMhc, smallBusiness, getIndustryServices, getIndustryPaymentTypes, getIndustryInsuranceProviders, getIndustryConditions, getIndustryProcedures, getIndustryAmenities, getIndustriesForParent, getIndustryInsurancePlans, getIndustryFinancing, } from './industries';
 export { voicePatterns, approachable, authoritative, conversational, direct, empathetic, expert, poetic, witty, } from './voices';
 //# sourceMappingURL=index.d.ts.map

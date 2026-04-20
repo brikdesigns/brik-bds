@@ -88,4 +88,33 @@ export function getIndustryAmenities(slug) {
 export function getIndustriesForParent(parentSlug) {
     return Object.values(industryPacks).filter((pack) => pack.parentIndustry === parentSlug);
 }
+/**
+ * Returns the locked insurance plan / program vocabulary for the given
+ * industry (e.g. Medicaid, Out-of-Network PPO for dental). Returns an
+ * empty array when the pack does not define plan-level granularity.
+ * Falls back to `small-business` (empty) when slug is unknown.
+ *
+ * Consumed by the portal's Insurance Plans MultiSelect as a locked
+ * vocabulary (zero free-text). Distinct from `getIndustryInsuranceProviders`,
+ * which returns the carrier list (Aetna, Cigna, etc.).
+ */
+export function getIndustryInsurancePlans(slug) {
+    const pack = resolvePack(slug);
+    return pack.insurancePlans ? [...pack.insurancePlans] : [];
+}
+/**
+ * Returns the locked financing-product vocabulary for the given industry
+ * (e.g. CareCredit, Cherry Finance for dental). Returns an empty array
+ * when the pack does not define a financing catalog.
+ * Falls back to `small-business` (empty) when slug is unknown.
+ *
+ * Consumed by the portal's Financing MultiSelect as a locked vocabulary.
+ * Distinct from the global PAYMENT_METHOD_VALUES (point-of-sale methods):
+ * financing products are structured payment programs the business offers
+ * to patients/residents, not methods they collect payment through.
+ */
+export function getIndustryFinancing(slug) {
+    const pack = resolvePack(slug);
+    return pack.financing ? [...pack.financing] : [];
+}
 //# sourceMappingURL=getters.js.map
