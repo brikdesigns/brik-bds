@@ -121,6 +121,7 @@
   --background-status-info:           var(--color-system-blue);
   --background-status-info-subtle:    var(--color-system-blue-light);
   --background-status-neutral:        var(--color-system-neutral-light);
+  --background-neutral:               var(--color-system-neutral-light); /* sibling to --background-positive/negative/warning — use for neutral/gray semantic surfaces. */
   --background-status-purple:         var(--color-system-purple);
   --background-status-orange:         var(--color-system-orange);
   --text-status-info:                 var(--color-system-blue);
