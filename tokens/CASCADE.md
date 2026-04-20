@@ -14,10 +14,11 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 3. `figma-dark-corrections.css` — manual overrides for known-wrong Figma dark values
 4. `theme-brand-brik.css` — Brik brand overrides (scoped to `.theme-brand-brik` class)
 5. `gap-fills.css` — manual tokens not yet in Figma
+6. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
 
 **Not bundled:** `bridge.css` (opt-in via separate export), `font-audit.css`
-(Storybook-only), `animations.css`, `motion-classes.css`, `storybook-themes.ts`,
-`index.ts`.
+(Storybook-only), `motion-classes.css` (opt-in utility classes — consumers import
+directly if they want them), `storybook-themes.ts`, `index.ts`.
 
 ## Dark-mode selector contract
 
