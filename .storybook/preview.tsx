@@ -18,11 +18,13 @@ import { FeedbackWidget } from './FeedbackWidget';
 // 2. Gap-fills (manual tokens not yet in Figma)
 // 3. Brik Brand theme (light + dark)
 // 4. Font Audit tool (client-sim theme for font-family validation)
-// 5. Storybook overrides (Base mode spacing, UI fixes)
+// 5. BDS shared keyframe library (bds-spin, bds-pulse, bds-pop, etc.)
+// 6. Storybook overrides (Base mode spacing, UI fixes)
 import '../tokens/figma-tokens.css';
 import '../tokens/gap-fills.css';
 import '../tokens/theme-brand-brik.css';
 import '../tokens/font-audit.css';
+import '../tokens/animations.css';
 import '../css/animations.css';
 import '../css/premium-effects.css';
 import './storybook-overrides.css';
