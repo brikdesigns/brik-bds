@@ -47,7 +47,7 @@ const barBase: CSSProperties = {
 
 const barVariantStyles: Record<TabBarVariant, CSSProperties> = {
   text: { ...barBase, gap: 'var(--gap-xl)' },
-  tab: { ...barBase, gap: 0, borderBottom: 'var(--border-width-md) solid var(--border-secondary)' },
+  tab: { ...barBase, gap: 0, borderBottom: 'var(--border-width-xl) solid var(--border-secondary)' },
   box: { ...barBase, gap: 0 },
 };
 
@@ -84,15 +84,12 @@ function getTextStyles(active: boolean, onColor: boolean): CSSProperties {
 }
 
 function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
-  /* Active tab uses border-width-xl (3px) for a prominent indicator.
-     Inactive tabs use border-width-md (1px) baseline. */
+  /* All tabs use border-width-xl (3px) for a consistent baseline.
+     Active tabs use brand color; inactive tabs use transparent so the container's
+     xl baseline border shows through unchanged. Prevents thickness mismatch. */
   const borderColor = onColor
-    ? 'var(--border-on-color-dark)'
-    : active
-      ? 'var(--border-brand-primary)'
-      : 'var(--border-secondary)';
-
-  const borderWidth = active ? 'var(--border-width-xl)' : 'var(--border-width-md)';
+    ? active ? 'var(--border-on-color-dark)' : 'transparent'
+    : active ? 'var(--border-brand-primary)' : 'transparent';
 
   const textColor = onColor
     ? 'var(--text-on-color-dark)'
@@ -103,9 +100,9 @@ function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
   return {
     ...tabBase,
     color: textColor,
-    backgroundColor: onColor ? 'transparent' : 'var(--background-primary)',
+    backgroundColor: 'transparent',
     padding: 'var(--padding-lg)',
-    borderBottom: `${borderWidth} solid ${borderColor}`,
+    borderBottom: `var(--border-width-xl) solid ${borderColor}`,
     opacity: onColor && !active ? 0.6 : 1,
   };
 }
