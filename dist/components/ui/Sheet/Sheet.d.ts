@@ -28,8 +28,17 @@ export interface SheetProps {
     children?: ReactNode;
     side?: SheetSide;
     title?: ReactNode;
-    /** Optional subtitle rendered under the title */
+    /**
+     * Eyebrow label rendered above the title in `text-muted`. Use for short
+     * categorical context like entity type or parent record (e.g. "Company",
+     * "Strategic Brief").
+     */
     subtitle?: ReactNode;
+    /**
+     * Long-form secondary text rendered under the title. Use for record state,
+     * timestamps, or descriptive context (e.g. "Active · Updated 2 days ago").
+     */
+    description?: ReactNode;
     /** Width for left/right sheets (default: 400px) */
     width?: string;
     /**
@@ -92,5 +101,5 @@ export interface SheetProps {
  * to switch into form state with Cancel / Save actions. Custom `footer` always
  * wins when supplied.
  */
-export declare function Sheet({ isOpen, onClose, children, side, title, subtitle, width, variant, closeOnBackdrop, closeOnEscape, showCloseButton, onBack, mode, onEdit, onSave, onCancel, editLabel, saveLabel, cancelLabel, closeLabel, saveDisabled, saveLoading, footer, secondaryAction, tabs, activeTab: controlledTab, onTabChange, }: SheetProps): import("react").ReactPortal | null;
+export declare function Sheet({ isOpen, onClose, children, side, title, subtitle, description, width, variant, closeOnBackdrop, closeOnEscape, showCloseButton, onBack, mode, onEdit, onSave, onCancel, editLabel, saveLabel, cancelLabel, closeLabel, saveDisabled, saveLoading, footer, secondaryAction, tabs, activeTab: controlledTab, onTabChange, }: SheetProps): import("react").ReactPortal | null;
 export default Sheet;
