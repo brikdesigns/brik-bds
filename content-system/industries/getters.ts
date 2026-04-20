@@ -1,4 +1,5 @@
-import type { IndustrySlug } from '../vocabularies';
+import type { IndustryPack } from '../schema';
+import type { IndustrySlug, ParentIndustrySlug } from '../vocabularies';
 import { industryPacks } from './index';
 import { smallBusiness } from './small-business';
 
@@ -10,9 +11,9 @@ import { smallBusiness } from './small-business';
  * the `small-business` pack when the slug is null, undefined, or does not
  * match any registered pack.
  *
- * These are consumed by suggestion-driven comboboxes in the portal Intel tab
- * (Billing sheet, PR B1). The arrays are suggestion seeds, not locked enums —
- * clients can always enter free-text values that don't appear here.
+ * These are consumed by suggestion-driven comboboxes in the portal Intel tab.
+ * The arrays are suggestion seeds, not locked enums — clients can always
+ * enter free-text values that don't appear here.
  */
 
 function resolvePack(slug: IndustrySlug | null | undefined) {
@@ -44,4 +45,56 @@ export function getIndustryPaymentTypes(slug: IndustrySlug | null | undefined): 
  */
 export function getIndustryInsuranceProviders(slug: IndustrySlug | null | undefined): string[] {
   return [...resolvePack(slug).insuranceProviders];
+}
+
+/**
+ * Returns patient-facing conditions treated for the given industry, as a flat
+ * array of display names from the pack's conditionsCatalog. Returns an empty
+ * array when the pack does not define conditions (non-healthcare verticals).
+ * Falls back to `small-business` (empty array) when slug is unknown.
+ *
+ * For structured access to slugs, aliases, or categories, import the pack
+ * directly and read `pack.conditionsCatalog`.
+ */
+export function getIndustryConditions(slug: IndustrySlug | null | undefined): string[] {
+  const pack = resolvePack(slug);
+  return pack.conditionsCatalog ? pack.conditionsCatalog.map((entry) => entry.displayName) : [];
+}
+
+/**
+ * Returns procedure-level vocabulary for the given industry, as a flat array
+ * of display names from the pack's proceduresCatalog. Returns an empty array
+ * when the pack does not define procedures.
+ * Falls back to `small-business` (empty array) when slug is unknown.
+ *
+ * For structured access to slugs, aliases, or categories, import the pack
+ * directly and read `pack.proceduresCatalog`.
+ */
+export function getIndustryProcedures(slug: IndustrySlug | null | undefined): string[] {
+  const pack = resolvePack(slug);
+  return pack.proceduresCatalog ? pack.proceduresCatalog.map((entry) => entry.displayName) : [];
+}
+
+/**
+ * Returns facility amenities/features for the given industry, as a flat array
+ * of display names from the pack's amenitiesCatalog. Returns an empty array
+ * when the pack does not define amenities (non-hospitality verticals).
+ * Falls back to `small-business` (empty array) when slug is unknown.
+ *
+ * For structured access to slugs, aliases, or categories, import the pack
+ * directly and read `pack.amenitiesCatalog`.
+ */
+export function getIndustryAmenities(slug: IndustrySlug | null | undefined): string[] {
+  const pack = resolvePack(slug);
+  return pack.amenitiesCatalog ? pack.amenitiesCatalog.map((entry) => entry.displayName) : [];
+}
+
+/**
+ * Returns every industry pack whose `parentIndustry` matches the given
+ * parent slug. Drives portal UI that filters sub-industries by parent
+ * bucket. Returns an empty array when no packs match (valid for parents
+ * like `other` that have no graduated sub-packs).
+ */
+export function getIndustriesForParent(parentSlug: ParentIndustrySlug): IndustryPack[] {
+  return Object.values(industryPacks).filter((pack) => pack.parentIndustry === parentSlug);
 }

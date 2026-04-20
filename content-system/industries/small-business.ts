@@ -13,10 +13,11 @@ import type { IndustryPack } from '../schema';
  */
 export const smallBusiness: IndustryPack = {
   slug: 'small-business',
+  parentIndustry: 'small-business',
   displayName: 'Small Business (General)',
-  version: '1.1.0',
+  version: '1.2.0',
   reviewCadence: 'quarterly',
-  lastReviewed: '2026-04-19',
+  lastReviewed: '2026-04-20',
 
   affinities: {
     personality: ['Professional', 'Approachable', 'Warm', 'Modern'],
