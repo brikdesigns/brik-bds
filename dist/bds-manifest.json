@@ -1,7 +1,7 @@
 {
   "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
-  "bds_version": "0.20.0",
-  "generated_at": "2026-04-20T19:03:43.268Z",
+  "bds_version": "0.21.0",
+  "generated_at": "2026-04-20T20:32:24.902Z",
   "component_count": 82,
   "token_count": 426,
   "components": {
@@ -171,7 +171,6 @@
         "--body-xs",
         "--border-brand-primary",
         "--border-focus",
-        "--border-muted",
         "--border-primary",
         "--border-radius-lg",
         "--border-radius-md",
@@ -187,7 +186,6 @@
         "--gap-lg",
         "--gap-md",
         "--gap-sm",
-        "--gap-tiny",
         "--gap-xl",
         "--gap-xs",
         "--padding-md",

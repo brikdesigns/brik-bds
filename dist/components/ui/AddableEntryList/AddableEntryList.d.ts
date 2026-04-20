@@ -32,6 +32,13 @@ export interface AddableEntryListProps {
     removeLabel?: string;
     /** Text shown when list is empty (and form is not revealed) */
     emptyLabel?: string;
+    /**
+     * Text rendered in place of the secondary value for committed items where
+     * `secondary` is empty. When omitted, the secondary slot is collapsed and
+     * nothing is shown — preserves backward behavior for consumers that never
+     * need the fallback.
+     */
+    emptyDescriptionLabel?: string;
     /** Size for input, textarea, and buttons */
     size?: AddableEntryListSize;
     /** Hide all controls */
@@ -98,5 +105,5 @@ export interface AddableEntryListProps {
  * />
  * ```
  */
-export declare function AddableEntryList({ entries, onChange, label, helperText, primaryLabel, secondaryLabel, primaryPlaceholder, secondaryPlaceholder, addLabel, removeLabel, emptyLabel, size, disabled, maxItems, secondaryRows, className, allowDuplicates, primarySuggestions, primaryStrict, }: AddableEntryListProps): import("react/jsx-runtime").JSX.Element;
+export declare function AddableEntryList({ entries, onChange, label, helperText, primaryLabel, secondaryLabel, primaryPlaceholder, secondaryPlaceholder, addLabel, removeLabel, emptyLabel, emptyDescriptionLabel, size, disabled, maxItems, secondaryRows, className, allowDuplicates, primarySuggestions, primaryStrict, }: AddableEntryListProps): import("react/jsx-runtime").JSX.Element;
 export default AddableEntryList;
