@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SheetSection } from './SheetSection';
 
 const meta: Meta<typeof SheetSection> = {
-  title: 'Displays/Sheet Body/sheet-section',
+  title: 'Displays/Sheet/sheet-section',
   component: SheetSection,
   parameters: { layout: 'padded' },
   argTypes: {

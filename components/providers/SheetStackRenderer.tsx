@@ -98,6 +98,7 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
         onClose={closeAll}
         title={resolvedTitle}
         subtitle={config.subtitle}
+        description={config.description}
         onBack={isDeep ? back : undefined}
         width={width}
         variant={topFrame.variant}

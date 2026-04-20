@@ -3,9 +3,10 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Sheet } from './Sheet';
 import { Button } from '../Button';
 import { TextInput } from '../TextInput';
+import { Field } from '../Field';
 
 const meta: Meta<typeof Sheet> = {
-  title: 'Displays/Overlay/sheet',
+  title: 'Displays/Sheet/sheet',
   component: Sheet,
   parameters: { layout: 'centered' },
   argTypes: {
@@ -14,6 +15,7 @@ const meta: Meta<typeof Sheet> = {
     mode: { control: 'select', options: [undefined, 'read', 'edit'] },
     title: { control: 'text' },
     subtitle: { control: 'text' },
+    description: { control: 'text' },
     width: { control: 'text' },
     closeOnBackdrop: { control: 'boolean' },
     closeOnEscape: { control: 'boolean' },
@@ -55,21 +57,10 @@ const SampleContent = () => (
 
 const ReadOnlyFields = () => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-    {[
-      { label: 'Company', value: 'Brik Designs' },
-      { label: 'Owner', value: 'Nick Stanerson' },
-      { label: 'Industry', value: 'Design & Engineering' },
-      { label: 'Status', value: 'Active' },
-    ].map((field) => (
-      <div key={field.label} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xs)' }}>
-        <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          {field.label}
-        </span>
-        <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-primary)' }}>
-          {field.value}
-        </span>
-      </div>
-    ))}
+    <Field label="Company">Brik Designs</Field>
+    <Field label="Owner">Nick Stanerson</Field>
+    <Field label="Industry">Design & Engineering</Field>
+    <Field label="Status">Active</Field>
   </div>
 );
 
@@ -101,7 +92,7 @@ export const Playground: Story = {
     onClose: () => {},
     children: null,
     title: 'Details',
-    subtitle: 'Metadata for this company record',
+    description: 'Metadata for this company record',
     side: 'right',
     width: '400px',
   },
@@ -191,15 +182,46 @@ export const Header: Story = {
           </div>
         </Row>
 
-        <SectionLabel>Title + subtitle</SectionLabel>
+        <SectionLabel>Title + description</SectionLabel>
+        <Row>
+          <div>
+            <Button onClick={() => open('description')}>Open</Button>
+            <Sheet
+              isOpen={openId === 'description'}
+              onClose={close}
+              title="Company details"
+              description="Metadata for this company record"
+            >
+              <SampleContent />
+            </Sheet>
+          </div>
+        </Row>
+
+        <SectionLabel>Title + subtitle (eyebrow)</SectionLabel>
         <Row>
           <div>
             <Button onClick={() => open('subtitle')}>Open</Button>
             <Sheet
               isOpen={openId === 'subtitle'}
               onClose={close}
-              title="Company details"
-              subtitle="Metadata for this company record"
+              subtitle="Company"
+              title="Brik Designs"
+            >
+              <SampleContent />
+            </Sheet>
+          </div>
+        </Row>
+
+        <SectionLabel>Subtitle + Title + description</SectionLabel>
+        <Row>
+          <div>
+            <Button onClick={() => open('full')}>Open</Button>
+            <Sheet
+              isOpen={openId === 'full'}
+              onClose={close}
+              subtitle="Company"
+              title="Brik Designs"
+              description="Active · Updated 2 days ago"
             >
               <SampleContent />
             </Sheet>
@@ -214,7 +236,7 @@ export const Header: Story = {
               isOpen={openId === 'back'}
               onClose={close}
               title="Contact"
-              subtitle="Opened from Company details"
+              description="Opened from Company details"
               onBack={close}
             >
               <SampleContent />
@@ -237,8 +259,34 @@ export const ReadMode: Story = {
         <Sheet
           isOpen={open}
           onClose={() => setOpen(false)}
+          subtitle="Company"
           title="Brik Designs"
-          subtitle="Active · Updated 2 days ago"
+          description="Active · Updated 2 days ago"
+          mode="read"
+          onEdit={() => alert('Switch to edit mode')}
+        >
+          <ReadOnlyFields />
+        </Sheet>
+      </>
+    );
+  },
+};
+
+/* ─── Read mode floating — no backdrop, rounded, elevated ────── */
+
+export const ReadModeFloating: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>View company</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          variant="floating"
+          subtitle="Company"
+          title="Brik Designs"
+          description="Active · Updated 2 days ago"
           mode="read"
           onEdit={() => alert('Switch to edit mode')}
         >
@@ -269,7 +317,7 @@ export const EditMode: Story = {
           isOpen={open}
           onClose={() => setOpen(false)}
           title="Edit company"
-          subtitle="Update record details"
+          description="Update record details"
           mode="edit"
           onSave={handleSave}
           saveLoading={saving}
@@ -307,8 +355,9 @@ export const ReadEditToggle: Story = {
         <Sheet
           isOpen={open}
           onClose={() => setOpen(false)}
+          subtitle="Company"
           title="Brik Designs"
-          subtitle={mode === 'read' ? 'Active · Updated 2 days ago' : 'Editing record'}
+          description={mode === 'read' ? 'Active · Updated 2 days ago' : 'Editing record'}
           mode={mode}
           onEdit={() => setMode('edit')}
           onSave={handleSave}
@@ -334,7 +383,7 @@ export const ReadOnlyFloating: Story = {
           isOpen={open}
           onClose={() => setOpen(false)}
           title="Quick info"
-          subtitle="Read-only — no CTA needed"
+          description="Read-only — no CTA needed"
           variant="floating"
         >
           <SampleContent />
@@ -402,7 +451,7 @@ export const SecondaryAction: Story = {
           isOpen={open}
           onClose={() => setOpen(false)}
           title="Strategic Brief"
-          subtitle="Last refreshed 2 days ago"
+          description="Last refreshed 2 days ago"
           mode="read"
           onEdit={() => alert('Switch to edit mode')}
           secondaryAction={{
@@ -445,7 +494,7 @@ export const TabsWithSecondaryAction: Story = {
           isOpen={open}
           onClose={() => setOpen(false)}
           title="Strategic Brief"
-          subtitle={mode === 'read' ? 'Active · Updated 2 days ago' : 'Editing brief'}
+          description={mode === 'read' ? 'Active · Updated 2 days ago' : 'Editing brief'}
           mode={mode}
           onEdit={() => setMode('edit')}
           onSave={handleSave}
