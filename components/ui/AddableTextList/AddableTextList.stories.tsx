@@ -140,6 +140,29 @@ export const DuplicateBlocked: Story = {
   },
 };
 
+export const AntiPatternStructuredContent: Story = {
+  name: 'Anti-pattern — structured content in tags',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Do not do this. When values contain title + description pairs (separators `—`, `:`, newlines), each row collapses into a single unreadable tag. ' +
+          'Open the browser console — the component warns on any value matching the structured-content pattern and points at AddableEntryList. ' +
+          'This story exists to make the wrong choice visible, not to endorse it.',
+      },
+    },
+  },
+  args: {
+    label: 'Services (WRONG — use AddableEntryList)',
+    values: [
+      'Molar endodontics — explicitly phased out, do not feature',
+      'Cancellation policy: 24-hour window',
+    ],
+    onChange: fn(),
+  },
+  render: (args) => <Controlled {...args} />,
+};
+
 export const Variants: Story = {
   render: () => (
     <div style={{ width: 480 }}>
