@@ -33,6 +33,17 @@ export default defineConfig({
           include: ['content-system/**/*.test.ts'],
         },
       },
+      {
+        extends: true,
+        test: {
+          name: 'components',
+          environment: 'node',
+          include: ['components/**/*.test.ts'],
+          deps: {
+            inline: ['react', 'react-dom', '@testing-library/react'],
+          },
+        },
+      },
     ],
   },
 });
