@@ -4,7 +4,7 @@
  * Called by: npm run build:lib (as the final step)
  *
  * Produces:
- *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + figma-dark-corrections.css + theme-brand-brik.css + gap-fills.css concatenated
+ *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + figma-dark-corrections.css + theme-brand-brik.css + gap-fills.css + animations.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
  */
 const fs = require('fs');
@@ -63,7 +63,13 @@ if (fs.existsSync(themeBrandBrikPath)) {
   console.log('  ✓ Including Brik brand theme');
 }
 
-fs.writeFileSync(path.join(DIST_DIR, 'tokens.css'), header + figmaTokens + darkTokens + darkCorrections + themeBrandBrik + '\n\n' + gapFills);
+// Shared keyframe library — required for any component using bds-spin, bds-pulse, bds-pop, etc.
+const animations = fs.readFileSync(path.join(TOKENS_DIR, 'animations.css'), 'utf8');
+
+fs.writeFileSync(
+  path.join(DIST_DIR, 'tokens.css'),
+  header + figmaTokens + darkTokens + darkCorrections + themeBrandBrik + '\n\n' + gapFills + '\n\n' + animations,
+);
 console.log('  ✓ dist/tokens.css');
 
 // Copy bridge.css
