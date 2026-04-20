@@ -30,35 +30,6 @@ const codeBlock: CSSProperties = {
   border: '1px solid var(--border-muted)',
 };
 
-const badgeStyle: CSSProperties = {
-  display: 'inline-block',
-  fontSize: 11,
-  fontWeight: 600,
-  padding: '2px 8px',
-  borderRadius: 999,
-  textTransform: 'uppercase',
-  letterSpacing: '0.05em',
-};
-
-// ---------------------------------------------------------------------------
-// TierBadge — shows which tier an effect belongs to
-// ---------------------------------------------------------------------------
-
-export function TierBadge({ tier }: { tier: 'css' | 'gsap' | 'premium' }) {
-  const colors = {
-    css: { bg: 'var(--background-brand-secondary)', color: '#fff' },
-    gsap: { bg: 'var(--background-brand-primary)', color: '#fff' },
-    premium: { bg: '#7c3aed', color: '#fff' },
-  };
-  const labels = { css: 'CSS Only', gsap: 'GSAP', premium: 'Premium JS' };
-
-  return (
-    <span style={{ ...badgeStyle, backgroundColor: colors[tier].bg, color: colors[tier].color }}>
-      {labels[tier]}
-    </span>
-  );
-}
-
 // ---------------------------------------------------------------------------
 // AnimationDemo — wrapper that replays animation on click
 // ---------------------------------------------------------------------------
@@ -119,7 +90,26 @@ export function AnimationDemo({
 }
 
 // ---------------------------------------------------------------------------
-// ClipRevealDemo — demonstrates clip-path reveals
+// EffectGrid — responsive grid of demo tiles
+// ---------------------------------------------------------------------------
+
+export function EffectGrid({ children, columns = 2 }: { children: ReactNode; columns?: number }) {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gap: 16,
+        marginBottom: 24,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// ClipRevealDemo — demonstrates clip-path reveal classes
 // ---------------------------------------------------------------------------
 
 export function ClipRevealDemo({ type }: { type: string }) {
@@ -152,7 +142,7 @@ export function ClipRevealDemo({ type }: { type: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// GrainDemo — shows grain overlay variants
+// GrainDemo — grain overlay variants
 // ---------------------------------------------------------------------------
 
 export function GrainDemo({ variant = '' }: { variant?: string }) {
@@ -247,7 +237,7 @@ export function TextEffectDemo({ className, label, dark = false }: { className: 
 }
 
 // ---------------------------------------------------------------------------
-// HoverDemo — interactive hover effects
+// HoverDemo — interactive hover effect cards
 // ---------------------------------------------------------------------------
 
 export function HoverDemo({ className, label }: { className: string; label: string }) {
@@ -328,25 +318,6 @@ export function SectionThemeDemo({ className, label }: { className: string; labe
     >
       <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 4 }}>.{className}</div>
       <div style={{ fontSize: 13, opacity: 0.7 }}>{label}</div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// EffectGrid — grid of demos
-// ---------------------------------------------------------------------------
-
-export function EffectGrid({ children, columns = 2 }: { children: ReactNode; columns?: number }) {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        gap: 16,
-        marginBottom: 24,
-      }}
-    >
-      {children}
     </div>
   );
 }
