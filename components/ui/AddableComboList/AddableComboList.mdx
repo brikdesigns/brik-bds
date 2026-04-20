@@ -1,0 +1,71 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './AddableComboList.stories';
+
+<Meta of={Stories} />
+
+# Addable combo list
+
+A suggestion-driven combobox for tag-style multi-select with free-form fallback.
+
+Typing filters the suggestion list (case-insensitive contains match). Users can pick from suggestions via keyboard or click, or type a free-form value and press **Enter** (unless `strict` is true). Already-selected suggestions are hidden from the dropdown. Duplicate entries are rejected with a brief visual flash.
+
+Use for intake fields where a vocabulary exists but editors may need custom entries — e.g. services offered, payment types, insurance providers wired from BCS `getIndustryServices` / `getIndustryPaymentTypes` / `getIndustryInsuranceProviders`.
+
+---
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Pre-populated
+
+<Canvas of={Stories.PrePopulated} />
+
+## Strict mode
+
+When `strict` is true, only suggestions can be added. Free-form entries are silently rejected and a hint is shown while the typed value doesn't match any suggestion.
+
+<Canvas of={Stories.StrictMode} />
+
+## With helper text
+
+<Canvas of={Stories.WithHelperText} />
+
+## Disabled
+
+Read-only chip rendering for view-mode sheets. No input or remove controls are rendered.
+
+<Canvas of={Stories.Disabled} />
+
+## Max entries hit
+
+When `maxEntries` is reached, the add button is hidden.
+
+<Canvas of={Stories.MaxEntriesHit} />
+
+---
+
+## Behavior
+
+- **Typing** filters `suggestions` (case-insensitive contains) and opens the dropdown.
+- **ArrowDown / ArrowUp** cycle through dropdown options.
+- **Enter** with a highlighted suggestion commits it; Enter with no highlight commits the raw typed string (unless `strict`).
+- **Esc** closes the dropdown (first press) or cancels the input (second press).
+- **Backspace** on an empty input removes the last tag.
+- **Click suggestion** to add. Click outside closes.
+- **Dedupe**: duplicate entries (case-insensitive trim compare) trigger a brief flash outline and are not added.
+- **Already-selected suggestions** are hidden from the dropdown.
+- **`strict: true`**: free-form Enter is blocked; only suggestion matches commit.
+- **`disabled`**: renders tags without input or remove controls.
+- **`maxEntries`**: hides the add button when the cap is reached.
+
+## Accessibility
+
+- Input: `role="combobox"`, `aria-expanded`, `aria-haspopup="listbox"`, `aria-activedescendant`
+- Dropdown: `role="listbox"` with `role="option"` items and `aria-selected`
+- Tags: `role="list"` / `role="listitem"` with accessible labels
+- Screen reader announce on add/remove via `aria-live` on the tag container
+
+## Props
+
+<ArgTypes of={Stories} />
