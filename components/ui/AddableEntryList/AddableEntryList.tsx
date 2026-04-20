@@ -42,6 +42,13 @@ export interface AddableEntryListProps {
   removeLabel?: string;
   /** Text shown when list is empty (and form is not revealed) */
   emptyLabel?: string;
+  /**
+   * Text rendered in place of the secondary value for committed items where
+   * `secondary` is empty. When omitted, the secondary slot is collapsed and
+   * nothing is shown — preserves backward behavior for consumers that never
+   * need the fallback.
+   */
+  emptyDescriptionLabel?: string;
   /** Size for input, textarea, and buttons */
   size?: AddableEntryListSize;
   /** Hide all controls */
@@ -125,6 +132,7 @@ export function AddableEntryList({
   addLabel = 'Add New',
   removeLabel = 'Remove entry',
   emptyLabel,
+  emptyDescriptionLabel,
   size = 'md',
   disabled = false,
   maxItems,
@@ -271,9 +279,18 @@ export function AddableEntryList({
             >
               <div className="bds-addable-entry-list__item-content">
                 <span className="bds-addable-entry-list__item-primary">{entry.primary}</span>
-                {entry.secondary && (
+                {entry.secondary ? (
                   <span className="bds-addable-entry-list__item-secondary">{entry.secondary}</span>
-                )}
+                ) : emptyDescriptionLabel ? (
+                  <span
+                    className={bdsClass(
+                      'bds-addable-entry-list__item-secondary',
+                      'bds-addable-entry-list__item-secondary--empty',
+                    )}
+                  >
+                    {emptyDescriptionLabel}
+                  </span>
+                ) : null}
               </div>
               {!disabled && (
                 <button
@@ -311,7 +328,7 @@ export function AddableEntryList({
                   {primaryLabel}
                 </label>
               )}
-              <div style={{ position: 'relative' }}>
+              <div className="bds-addable-entry-list__primary-combo-field">
                 <input
                   ref={primaryInputRef}
                   id={combo.comboId}
