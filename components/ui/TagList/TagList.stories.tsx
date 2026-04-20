@@ -4,7 +4,7 @@ import { Tag } from '../Tag';
 import { Field } from '../Field';
 
 const meta: Meta<typeof TagList> = {
-  title: 'Displays/Sheet Body/tag-list',
+  title: 'Displays/Sheet/tag-list',
   component: TagList,
   parameters: { layout: 'padded' },
   argTypes: {

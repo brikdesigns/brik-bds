@@ -4,7 +4,7 @@ import { Field } from '../Field';
 import { Card } from '../Card';
 
 const meta: Meta<typeof FieldGrid> = {
-  title: 'Displays/Sheet Body/field-grid',
+  title: 'Displays/Sheet/field-grid',
   component: FieldGrid,
   parameters: { layout: 'padded' },
   argTypes: {

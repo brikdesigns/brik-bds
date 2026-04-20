@@ -32,11 +32,12 @@ Right, left, bottom, wide, and no-title configurations.
 
 ## Header
 
-The header composes `title`, `subtitle`, and an optional `onBack` button for nested flows.
+The header composes an optional `subtitle` eyebrow, the `title`, an optional `description`, and an optional `onBack` button for nested flows.
 
 <Canvas of={Stories.Header} />
 
-- Use **`subtitle`** for record state, timestamps, or short context.
+- Use **`subtitle`** for short categorical context (entity type, parent record). Renders above the title in uppercase `text-muted`.
+- Use **`description`** for record state, timestamps, or a one-line summary. Renders below the title in `text-secondary`.
 - Use **`onBack`** when a sheet is pushed on top of another sheet (e.g. a related-entity drilldown). Pair with your sheet stack controller.
 - The close icon uses the Phosphor **bold** weight so it reads at a glance.
 
@@ -67,6 +68,12 @@ This mirrors the renew-pms convention. `brik-client-portal` should adopt the sam
 Pure read content that doesn't require an action can skip the backdrop and render as a floating popover with `variant="floating"`. Skip the footer entirely.
 
 <Canvas of={Stories.ReadOnlyFloating} />
+
+## Read mode floating
+
+Read mode with `variant="floating"` — the sheet sits on the page without a backdrop, but the footer still renders `[Close] [Edit]`. Use when the surrounding page should remain legible while the detail view is open (e.g. inline drill-in from a table row).
+
+<Canvas of={Stories.ReadModeFloating} />
 
 ## Tabs
 
@@ -108,15 +115,15 @@ A custom `footer` always wins over mode-driven auto-footer. Use it for non-stand
 
 ## Body composition
 
-The Sheet body is a composition surface — but the blocks you compose from are locked. Inside a Sheet body, reach for the **sheet-body primitive set** first. Don't invent ad-hoc markup.
+The Sheet body is a composition surface — but the blocks you compose from are locked. Inside a Sheet body, reach for the **sheet primitive set** first. Don't invent ad-hoc markup.
 
 | Primitive | Use for |
 |---|---|
-| [`SheetSection`](/?path=/docs/displays-sheet-body-sheet-section--docs) | Named section wrapper (uppercase heading + content). One per logical grouping of fields. |
-| [`Field`](/?path=/docs/displays-sheet-body-field--docs) | Label + value pair. Value can be text, tags, URLs, lists — any ReactNode. |
-| [`FieldGrid`](/?path=/docs/displays-sheet-body-field-grid--docs) | 2 / 3 / 4-column grid of Fields or Cards. Stat-tile rows. |
-| [`TagList`](/?path=/docs/displays-sheet-body-tag-list--docs) | Horizontal cluster of `<Tag>` elements inside a Field. |
-| [`BulletList`](/?path=/docs/displays-sheet-body-bullet-list--docs) | Short-item lists (anti-messages, proof points, approved CTAs). |
+| [`SheetSection`](/?path=/docs/displays-sheet-sheet-section--docs) | Named section wrapper (uppercase heading + content). One per logical grouping of fields. |
+| [`Field`](/?path=/docs/displays-sheet-field--docs) | Label + value pair. Value can be text, tags, URLs, lists — any ReactNode. |
+| [`FieldGrid`](/?path=/docs/displays-sheet-field-grid--docs) | 2 / 3 / 4-column grid of Fields or Cards. Stat-tile rows. |
+| [`TagList`](/?path=/docs/displays-sheet-tag-list--docs) | Horizontal cluster of `<Tag>` elements inside a Field. |
+| [`BulletList`](/?path=/docs/displays-sheet-bullet-list--docs) | Short-item lists (anti-messages, proof points, approved CTAs). |
 | [`Card`](/?path=/docs/displays-card-card--docs) / [`CardList`](/?path=/docs/displays-card-card-list--docs) / [`CardDisplay`](/?path=/docs/displays-card-card-display--docs) | Entity rows (contacts, services, scraped pages, linked records). |
 | [`Table`](/?path=/docs/displays-table-table--docs) | Tabular data (strategy tables, typography rows, schedules). |
 | [`Accordion`](/?path=/docs/displays-accordion-accordion--docs) | Collapsible groups when a section has many rows. |
@@ -195,8 +202,9 @@ function CompanySheet() {
     <Sheet
       isOpen={open}
       onClose={() => setOpen(false)}
+      subtitle="Company"
       title="Brik Designs"
-      subtitle="Active · Updated 2 days ago"
+      description="Active · Updated 2 days ago"
       mode={mode}
       onEdit={() => setMode('edit')}
       onSave={async () => { await save(); setMode('read'); }}

@@ -4,7 +4,7 @@ import { Tag } from '../Tag';
 import { EmptyState } from '../EmptyState';
 
 const meta: Meta<typeof Field> = {
-  title: 'Displays/Sheet Body/field',
+  title: 'Displays/Sheet/field',
   component: Field,
   parameters: { layout: 'padded' },
   argTypes: {
