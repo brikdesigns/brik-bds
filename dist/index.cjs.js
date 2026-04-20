@@ -755,6 +755,7 @@ function Sheet({
   side = "right",
   title,
   subtitle,
+  description,
   width: width2 = "400px",
   variant = "default",
   closeOnBackdrop = true,
@@ -859,7 +860,7 @@ function Sheet({
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet__footer-primary", children: primaryActionsNode })
     ] });
   })();
-  const hasHeaderContent = title || subtitle || onBack || showCloseButton;
+  const hasHeaderContent = title || subtitle || description || onBack || showCloseButton;
   const sheet = /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     !isFloating && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-sheet-backdrop", onClick: handleBackdropClick }),
     /* @__PURE__ */ jsxRuntime.jsxs(
@@ -884,8 +885,9 @@ function Sheet({
                   }
                 ),
                 /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-sheet__titles", children: [
+                  subtitle && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-sheet__subtitle", children: subtitle }),
                   title && /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "bds-sheet__title", children: title }),
-                  subtitle && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-sheet__subtitle", children: subtitle })
+                  description && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "bds-sheet__description", children: description })
                 ] })
               ] }),
               showCloseButton && /* @__PURE__ */ jsxRuntime.jsx(
@@ -952,6 +954,7 @@ function SheetStackRenderer({ renderFrame, width: width2 = "600px", globalFrameP
         onClose: closeAll,
         title: resolvedTitle,
         subtitle: config.subtitle,
+        description: config.description,
         onBack: isDeep ? back : void 0,
         width: width2,
         variant: topFrame.variant,
