@@ -44,6 +44,16 @@ export interface AddableEntryListProps {
     className?: string;
     /** Block duplicates by primary value (case-insensitive) */
     allowDuplicates?: boolean;
+    /**
+     * Suggestion set for the primary (name) field. Filtered by typed query;
+     * free-form entries still allowed. When omitted, primary is a plain text input.
+     */
+    primarySuggestions?: string[];
+    /**
+     * When true, primary field rejects free-form entries outside primarySuggestions.
+     * Default false. Has no effect when primarySuggestions is omitted.
+     */
+    primaryStrict?: boolean;
 }
 /**
  * AddableEntryList — the text + textarea sibling of `AddableTextList`.
@@ -58,6 +68,10 @@ export interface AddableEntryListProps {
  * + notes, line item + description, team member + role, and so on.
  * Consumers map their domain shape at the boundary.
  *
+ * Pass `primarySuggestions` to enable a combobox dropdown on the primary field
+ * (same behaviour as AddableComboList). Existing consumers that pass no
+ * `primarySuggestions` render identically to before.
+ *
  * @example
  * ```tsx
  * <AddableEntryList
@@ -70,6 +84,19 @@ export interface AddableEntryListProps {
  *   removeLabel="Remove competitor"
  * />
  * ```
+ *
+ * @example With suggestions (dental services):
+ * ```tsx
+ * <AddableEntryList
+ *   label="Services"
+ *   entries={services}
+ *   onChange={setServices}
+ *   primarySuggestions={getIndustryServices(industrySlug)}
+ *   primaryPlaceholder="Search or add a service…"
+ *   secondaryPlaceholder="Brief description of this service"
+ *   addLabel="Add Service"
+ * />
+ * ```
  */
-export declare function AddableEntryList({ entries, onChange, label, helperText, primaryLabel, secondaryLabel, primaryPlaceholder, secondaryPlaceholder, addLabel, removeLabel, emptyLabel, size, disabled, maxItems, secondaryRows, className, allowDuplicates, }: AddableEntryListProps): import("react/jsx-runtime").JSX.Element;
+export declare function AddableEntryList({ entries, onChange, label, helperText, primaryLabel, secondaryLabel, primaryPlaceholder, secondaryPlaceholder, addLabel, removeLabel, emptyLabel, size, disabled, maxItems, secondaryRows, className, allowDuplicates, primarySuggestions, primaryStrict, }: AddableEntryListProps): import("react/jsx-runtime").JSX.Element;
 export default AddableEntryList;

@@ -1105,6 +1105,133 @@ function Tag({
     )
   ] });
 }
+function useSuggestionFilter({
+  suggestions,
+  selectedValues,
+  strict = false,
+  onCommit,
+  onCancel,
+  onStrictReject,
+  onDuplicate,
+  onPrimaryCommitted
+}) {
+  const [query, setQuery] = React.useState("");
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [activeIndex, setActiveIndex] = React.useState(-1);
+  const comboId = React.useId();
+  const listboxId = `${comboId}-listbox`;
+  const selectedSet = new Set(selectedValues.map((v) => v.toLowerCase()));
+  const filtered = suggestions.filter(
+    (s) => !selectedSet.has(s.toLowerCase()) && s.toLowerCase().includes(query.toLowerCase().trim())
+  );
+  const openList = React.useCallback(() => {
+    setIsOpen(true);
+    setActiveIndex(-1);
+  }, []);
+  const closeList = React.useCallback(() => {
+    setIsOpen(false);
+    setActiveIndex(-1);
+  }, []);
+  const reset = React.useCallback(() => {
+    setQuery("");
+    setIsOpen(false);
+    setActiveIndex(-1);
+  }, []);
+  const commitValue = React.useCallback(
+    (value2) => {
+      const trimmed = value2.trim();
+      if (!trimmed) return;
+      if (strict && !suggestions.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
+        onStrictReject == null ? void 0 : onStrictReject();
+        return;
+      }
+      if (selectedSet.has(trimmed.toLowerCase())) {
+        onDuplicate == null ? void 0 : onDuplicate();
+        return;
+      }
+      onCommit(trimmed);
+      setQuery("");
+      setIsOpen(false);
+      setActiveIndex(-1);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [suggestions, strict, onCommit, onStrictReject, onDuplicate, selectedSet]
+  );
+  const handleInputChange = React.useCallback((e) => {
+    const val2 = e.target.value;
+    setQuery(val2);
+    setActiveIndex(-1);
+    if (val2.trim()) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, []);
+  const handleKeyDown = React.useCallback(
+    (e) => {
+      switch (e.key) {
+        case "ArrowDown": {
+          e.preventDefault();
+          if (!isOpen && filtered.length > 0) {
+            setIsOpen(true);
+            setActiveIndex(0);
+          } else {
+            setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
+          }
+          break;
+        }
+        case "ArrowUp": {
+          e.preventDefault();
+          setActiveIndex((prev) => Math.max(prev - 1, -1));
+          break;
+        }
+        case "Enter": {
+          e.preventDefault();
+          if (activeIndex >= 0 && filtered[activeIndex]) {
+            const suggestion = filtered[activeIndex];
+            commitValue(suggestion);
+            onPrimaryCommitted == null ? void 0 : onPrimaryCommitted();
+          } else {
+            if (strict) {
+              onStrictReject == null ? void 0 : onStrictReject();
+            } else {
+              commitValue(query);
+              onPrimaryCommitted == null ? void 0 : onPrimaryCommitted();
+            }
+          }
+          break;
+        }
+        case "Escape": {
+          e.preventDefault();
+          if (isOpen) {
+            closeList();
+          } else {
+            onCancel();
+          }
+          break;
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isOpen, filtered, activeIndex, query, strict, commitValue, onPrimaryCommitted, onCancel, closeList]
+  );
+  const activeDescendant = isOpen && activeIndex >= 0 ? `${comboId}-option-${activeIndex}` : void 0;
+  return {
+    query,
+    isOpen,
+    activeIndex,
+    filtered,
+    comboId,
+    listboxId,
+    activeDescendant,
+    handleInputChange,
+    handleKeyDown,
+    openList,
+    closeList,
+    reset,
+    commitValue
+  };
+}
 const TAG_SIZE$1 = { sm: "sm", md: "md", lg: "md" };
 const BUTTON_SIZE$2 = { sm: "sm", md: "md", lg: "lg" };
 function AddableComboList({
@@ -1124,129 +1251,52 @@ function AddableComboList({
   className
 }) {
   const [isEditing, setIsEditing] = React.useState(false);
-  const [query, setQuery] = React.useState("");
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [activeIndex, setActiveIndex] = React.useState(-1);
   const [flashDupe, setFlashDupe] = React.useState(false);
   const inputRef = React.useRef(null);
   const listboxRef = React.useRef(null);
   const containerRef = React.useRef(null);
-  const comboId = React.useId();
-  const listboxId = `${comboId}-listbox`;
   const atLimit = typeof maxEntries === "number" && values.length >= maxEntries;
-  const selectedSet = new Set(values.map((v) => v.toLowerCase()));
-  const filtered = suggestions.filter(
-    (s) => !selectedSet.has(s.toLowerCase()) && s.toLowerCase().includes(query.toLowerCase().trim())
-  );
-  const openList = () => {
-    setIsOpen(true);
-    setActiveIndex(-1);
-  };
-  const closeList = () => {
-    setIsOpen(false);
-    setActiveIndex(-1);
-  };
-  const reveal = () => {
-    setQuery("");
-    setIsEditing(true);
-    setIsOpen(false);
-    requestAnimationFrame(() => {
-      var _a;
-      return (_a = inputRef.current) == null ? void 0 : _a.focus();
-    });
-  };
-  const cancel = React.useCallback(() => {
-    setQuery("");
-    setIsEditing(false);
-    closeList();
-  }, []);
-  const triggerDupeFlash = () => {
+  const triggerDupeFlash = React.useCallback(() => {
     setFlashDupe(true);
     setTimeout(() => setFlashDupe(false), 600);
+  }, []);
+  const cancel = React.useCallback(() => {
+    setIsEditing(false);
+    combo.reset();
+  }, []);
+  const remove = (index2) => {
+    onChange(values.filter((_, i) => i !== index2));
   };
-  const commit = React.useCallback(
-    (value2) => {
-      const trimmed = value2.trim();
-      if (!trimmed) return;
-      if (strict && !suggestions.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
-        return;
-      }
-      if (selectedSet.has(trimmed.toLowerCase())) {
-        triggerDupeFlash();
-        return;
-      }
-      onChange([...values, trimmed]);
-      setQuery("");
-      closeList();
+  const combo = useSuggestionFilter({
+    suggestions,
+    selectedValues: values,
+    strict,
+    onCommit: (value2) => {
+      onChange([...values, value2]);
       requestAnimationFrame(() => {
         var _a;
         return (_a = inputRef.current) == null ? void 0 : _a.focus();
       });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values, onChange, strict, suggestions, selectedSet]
-  );
-  const remove = (index2) => {
-    onChange(values.filter((_, i) => i !== index2));
-  };
-  const handleInputChange = (e) => {
-    const val2 = e.target.value;
-    setQuery(val2);
-    if (val2.trim()) {
-      openList();
-    } else {
-      closeList();
-    }
-    setActiveIndex(-1);
-  };
-  const handleKeyDown = (e) => {
-    switch (e.key) {
-      case "ArrowDown": {
-        e.preventDefault();
-        if (!isOpen && filtered.length > 0) openList();
-        setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
-        break;
-      }
-      case "ArrowUp": {
-        e.preventDefault();
-        setActiveIndex((prev) => Math.max(prev - 1, -1));
-        break;
-      }
-      case "Enter": {
-        e.preventDefault();
-        if (activeIndex >= 0 && filtered[activeIndex]) {
-          commit(filtered[activeIndex]);
-        } else {
-          commit(query);
-        }
-        break;
-      }
-      case "Escape": {
-        e.preventDefault();
-        if (isOpen) {
-          closeList();
-        } else {
-          cancel();
-        }
-        break;
-      }
-      case "Backspace": {
-        if (query === "" && values.length > 0) {
-          remove(values.length - 1);
-        }
-        break;
-      }
-    }
+    onCancel: cancel,
+    onDuplicate: triggerDupeFlash
+  });
+  const reveal = () => {
+    combo.reset();
+    setIsEditing(true);
+    requestAnimationFrame(() => {
+      var _a;
+      return (_a = inputRef.current) == null ? void 0 : _a.focus();
+    });
   };
   const handleBlur = (e) => {
     var _a;
     if (!((_a = containerRef.current) == null ? void 0 : _a.contains(e.relatedTarget))) {
-      closeList();
-      if (!query.trim()) cancel();
+      combo.closeList();
+      if (!combo.query.trim()) cancel();
     }
   };
   const showEmpty = values.length === 0 && !isEditing && emptyLabel;
-  const activeDescendant = isOpen && activeIndex >= 0 ? `${comboId}-option-${activeIndex}` : void 0;
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-addable-combo-list", className), children: [
     label && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-combo-list__label", children: label }),
     values.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
@@ -1285,12 +1335,12 @@ function AddableComboList({
                 "input",
                 {
                   ref: inputRef,
-                  id: comboId,
+                  id: combo.comboId,
                   role: "combobox",
-                  "aria-expanded": isOpen,
+                  "aria-expanded": combo.isOpen,
                   "aria-haspopup": "listbox",
-                  "aria-controls": listboxId,
-                  "aria-activedescendant": activeDescendant,
+                  "aria-controls": combo.listboxId,
+                  "aria-activedescendant": combo.activeDescendant,
                   "aria-label": label ? `Add ${label}` : "Add item",
                   "aria-autocomplete": "list",
                   autoComplete: "off",
@@ -1298,36 +1348,36 @@ function AddableComboList({
                     "bds-addable-combo-list__input",
                     `bds-addable-combo-list__input--${size2}`
                   ),
-                  value: query,
-                  onChange: handleInputChange,
-                  onKeyDown: handleKeyDown,
+                  value: combo.query,
+                  onChange: combo.handleInputChange,
+                  onKeyDown: combo.handleKeyDown,
                   onFocus: () => {
-                    if (query.trim() && filtered.length > 0) openList();
+                    if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
                   },
                   placeholder
                 }
               ),
-              isOpen && filtered.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
+              combo.isOpen && combo.filtered.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
                 "ul",
                 {
                   ref: listboxRef,
-                  id: listboxId,
+                  id: combo.listboxId,
                   role: "listbox",
                   "aria-label": label ? `${label} suggestions` : "Suggestions",
                   className: "bds-addable-combo-list__dropdown",
-                  children: filtered.map((suggestion, idx) => /* @__PURE__ */ jsxRuntime.jsx(
+                  children: combo.filtered.map((suggestion, idx) => /* @__PURE__ */ jsxRuntime.jsx(
                     "li",
                     {
-                      id: `${comboId}-option-${idx}`,
+                      id: `${combo.comboId}-option-${idx}`,
                       role: "option",
-                      "aria-selected": idx === activeIndex,
+                      "aria-selected": idx === combo.activeIndex,
                       className: bdsClass(
                         "bds-addable-combo-list__option",
-                        idx === activeIndex && "bds-addable-combo-list__option--active"
+                        idx === combo.activeIndex && "bds-addable-combo-list__option--active"
                       ),
                       onMouseDown: (e) => {
                         e.preventDefault();
-                        commit(suggestion);
+                        combo.commitValue(suggestion);
                       },
                       children: suggestion
                     },
@@ -1343,10 +1393,10 @@ function AddableComboList({
                 variant: "primary",
                 onMouseDown: (e) => e.preventDefault(),
                 onClick: () => {
-                  if (activeIndex >= 0 && filtered[activeIndex]) {
-                    commit(filtered[activeIndex]);
+                  if (combo.activeIndex >= 0 && combo.filtered[combo.activeIndex]) {
+                    combo.commitValue(combo.filtered[combo.activeIndex]);
                   } else {
-                    commit(query);
+                    combo.commitValue(combo.query);
                   }
                 },
                 "aria-label": addLabel,
@@ -1364,7 +1414,7 @@ function AddableComboList({
               }
             )
           ] }),
-          strict && query.trim() && !suggestions.some((s) => s.toLowerCase() === query.trim().toLowerCase()) && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-combo-list__strict-hint", "aria-live": "polite", children: "Only suggestions can be added in strict mode." })
+          strict && combo.query.trim() && !suggestions.some((s) => s.toLowerCase() === combo.query.trim().toLowerCase()) && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-combo-list__strict-hint", "aria-live": "polite", children: "Only suggestions can be added in strict mode." })
         ]
       }
     ),
@@ -1678,26 +1728,29 @@ function AddableEntryList({
   maxItems,
   secondaryRows = 2,
   className,
-  allowDuplicates = false
+  allowDuplicates = false,
+  primarySuggestions,
+  primaryStrict = false
 }) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [primaryDraft, setPrimaryDraft] = React.useState("");
   const [secondaryDraft, setSecondaryDraft] = React.useState("");
-  const inputRef = React.useRef(null);
-  const atLimit = typeof maxItems === "number" && entries.length >= maxItems;
-  const reveal = () => {
-    setPrimaryDraft("");
-    setSecondaryDraft("");
-    setIsEditing(true);
-    requestAnimationFrame(() => {
-      var _a;
-      return (_a = inputRef.current) == null ? void 0 : _a.focus();
-    });
+  const primaryInputRef = React.useRef(null);
+  const secondaryWrapRef = React.useRef(null);
+  const comboContainerRef = React.useRef(null);
+  const focusSecondary = () => {
+    var _a;
+    const ta = (_a = secondaryWrapRef.current) == null ? void 0 : _a.querySelector("textarea");
+    ta == null ? void 0 : ta.focus();
   };
+  const hasSuggestions = Array.isArray(primarySuggestions) && primarySuggestions.length > 0;
+  const atLimit = typeof maxItems === "number" && entries.length >= maxItems;
+  const existingPrimaries = entries.map((e) => e.primary);
   const cancel = () => {
     setPrimaryDraft("");
     setSecondaryDraft("");
     setIsEditing(false);
+    combo.reset();
   };
   const commit = () => {
     const trimmedPrimary = primaryDraft.trim();
@@ -1706,6 +1759,15 @@ function AddableEntryList({
       cancel();
       return;
     }
+    if (hasSuggestions && primaryStrict) {
+      const inList = primarySuggestions.some(
+        (s) => s.toLowerCase() === trimmedPrimary.toLowerCase()
+      );
+      if (!inList) {
+        cancel();
+        return;
+      }
+    }
     if (!allowDuplicates && entries.some((e) => e.primary.toLowerCase() === trimmedPrimary.toLowerCase())) {
       cancel();
       return;
@@ -1713,18 +1775,55 @@ function AddableEntryList({
     onChange([...entries, { primary: trimmedPrimary, secondary: trimmedSecondary }]);
     setPrimaryDraft("");
     setSecondaryDraft("");
+    combo.reset();
     requestAnimationFrame(() => {
       var _a;
-      return (_a = inputRef.current) == null ? void 0 : _a.focus();
+      return (_a = primaryInputRef.current) == null ? void 0 : _a.focus();
+    });
+  };
+  const reveal = () => {
+    setPrimaryDraft("");
+    setSecondaryDraft("");
+    setIsEditing(true);
+    requestAnimationFrame(() => {
+      var _a;
+      return (_a = primaryInputRef.current) == null ? void 0 : _a.focus();
     });
   };
   const remove = (index2) => {
     onChange(entries.filter((_, i) => i !== index2));
   };
-  const handlePrimaryKey = (e) => {
+  const combo = useSuggestionFilter({
+    suggestions: primarySuggestions ?? [],
+    // When allowDuplicates, don't hide already-used primaries from the dropdown
+    selectedValues: allowDuplicates ? [] : existingPrimaries,
+    strict: primaryStrict,
+    onCommit: (value2) => {
+      setPrimaryDraft(value2);
+      requestAnimationFrame(() => focusSecondary());
+    },
+    onCancel: cancel
+  });
+  const handlePlainPrimaryKey = (e) => {
     if (e.key === "Escape") {
       e.preventDefault();
       cancel();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      requestAnimationFrame(() => focusSecondary());
+    }
+  };
+  const handleComboPrimaryChange = (e) => {
+    setPrimaryDraft(e.target.value);
+    combo.handleInputChange(e);
+  };
+  const handleComboPrimaryKey = (e) => {
+    combo.handleKeyDown(e);
+  };
+  const handleComboBlur = (e) => {
+    var _a;
+    if (!((_a = comboContainerRef.current) == null ? void 0 : _a.contains(e.relatedTarget))) {
+      combo.closeList();
     }
   };
   const handleSecondaryKey = (e) => {
@@ -1762,21 +1861,102 @@ function AddableEntryList({
     )) }),
     showEmpty && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__empty", children: emptyLabel }),
     !disabled && isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__form", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(
-        TextInput,
-        {
-          ref: inputRef,
-          size: INPUT_SIZE$1[size2],
-          label: primaryLabel,
-          value: primaryDraft,
-          onChange: (e) => setPrimaryDraft(e.target.value),
-          onKeyDown: handlePrimaryKey,
-          placeholder: primaryPlaceholder,
-          "aria-label": primaryLabel ?? (label ? `Add ${label}` : "New entry"),
-          fullWidth: true
-        }
+      hasSuggestions ? (
+        /* Combobox-backed primary */
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "div",
+          {
+            ref: comboContainerRef,
+            className: "bds-addable-entry-list__primary-combo",
+            onBlur: handleComboBlur,
+            children: [
+              primaryLabel && /* @__PURE__ */ jsxRuntime.jsx(
+                "label",
+                {
+                  htmlFor: combo.comboId,
+                  className: "bds-addable-entry-list__input-label",
+                  children: primaryLabel
+                }
+              ),
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { position: "relative" }, children: [
+                /* @__PURE__ */ jsxRuntime.jsx(
+                  "input",
+                  {
+                    ref: primaryInputRef,
+                    id: combo.comboId,
+                    role: "combobox",
+                    "aria-expanded": combo.isOpen,
+                    "aria-haspopup": "listbox",
+                    "aria-controls": combo.listboxId,
+                    "aria-activedescendant": combo.activeDescendant,
+                    "aria-label": primaryLabel ?? (label ? `Add ${label}` : "New entry"),
+                    "aria-autocomplete": "list",
+                    autoComplete: "off",
+                    className: bdsClass(
+                      "bds-addable-entry-list__primary-input",
+                      `bds-addable-entry-list__primary-input--${size2}`
+                    ),
+                    value: primaryDraft,
+                    onChange: handleComboPrimaryChange,
+                    onKeyDown: handleComboPrimaryKey,
+                    onFocus: () => {
+                      if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
+                    },
+                    placeholder: primaryPlaceholder
+                  }
+                ),
+                combo.isOpen && combo.filtered.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
+                  "ul",
+                  {
+                    id: combo.listboxId,
+                    role: "listbox",
+                    "aria-label": primaryLabel ? `${primaryLabel} suggestions` : "Suggestions",
+                    className: "bds-addable-entry-list__dropdown",
+                    children: combo.filtered.map((suggestion, idx) => /* @__PURE__ */ jsxRuntime.jsx(
+                      "li",
+                      {
+                        id: `${combo.comboId}-option-${idx}`,
+                        role: "option",
+                        "aria-selected": idx === combo.activeIndex,
+                        className: bdsClass(
+                          "bds-addable-entry-list__option",
+                          idx === combo.activeIndex && "bds-addable-entry-list__option--active"
+                        ),
+                        onMouseDown: (e) => {
+                          e.preventDefault();
+                          combo.commitValue(suggestion);
+                        },
+                        children: suggestion
+                      },
+                      suggestion
+                    ))
+                  }
+                )
+              ] }),
+              primaryStrict && primaryDraft.trim() && !primarySuggestions.some(
+                (s) => s.toLowerCase() === primaryDraft.trim().toLowerCase()
+              ) && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__strict-hint", "aria-live": "polite", children: "Only suggestions can be added in strict mode." })
+            ]
+          }
+        )
+      ) : (
+        /* Plain text primary */
+        /* @__PURE__ */ jsxRuntime.jsx(
+          TextInput,
+          {
+            ref: primaryInputRef,
+            size: INPUT_SIZE$1[size2],
+            label: primaryLabel,
+            value: primaryDraft,
+            onChange: (e) => setPrimaryDraft(e.target.value),
+            onKeyDown: handlePlainPrimaryKey,
+            placeholder: primaryPlaceholder,
+            "aria-label": primaryLabel ?? (label ? `Add ${label}` : "New entry"),
+            fullWidth: true
+          }
+        )
       ),
-      /* @__PURE__ */ jsxRuntime.jsx(
+      /* @__PURE__ */ jsxRuntime.jsx("div", { ref: secondaryWrapRef, children: /* @__PURE__ */ jsxRuntime.jsx(
         TextArea,
         {
           size: TEXTAREA_SIZE[size2],
@@ -1788,7 +1968,7 @@ function AddableEntryList({
           rows: secondaryRows,
           fullWidth: true
         }
-      ),
+      ) }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__form-actions", children: [
         /* @__PURE__ */ jsxRuntime.jsx(
           Button,
@@ -27921,6 +28101,7 @@ exports.themePalettes = themePalettes;
 exports.useConfigureSheet = useConfigureSheet;
 exports.useSheetConfig = useSheetConfig;
 exports.useSheetStack = useSheetStack;
+exports.useSuggestionFilter = useSuggestionFilter;
 exports.useTheme = useTheme;
 exports.yellow = yellow;
 //# sourceMappingURL=index.cjs.js.map
