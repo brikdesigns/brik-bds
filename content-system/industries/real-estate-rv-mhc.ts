@@ -18,9 +18,9 @@ import type { IndustryPack } from '../schema';
 export const realEstateRvMhc: IndustryPack = {
   slug: 'real-estate-rv-mhc',
   displayName: 'Real Estate — RV Parks & MHC',
-  version: '1.0.0',
+  version: '1.1.0',
   reviewCadence: 'quarterly',
-  lastReviewed: '2026-04-01',
+  lastReviewed: '2026-04-19',
 
   affinities: {
     personality: ['Approachable', 'Warm', 'Professional', 'Modern', 'Bold'],
@@ -357,4 +357,64 @@ export const realEstateRvMhc: IndustryPack = {
       weakness: 'Bottom-of-market positioning; not a substitute for full-service parks.',
     },
   ],
+
+  // ── Billing / intake vocabularies ──────────────────────────────────────────
+  // Feeds suggestion-driven comboboxes in the portal Intel tab (Billing sheet).
+  // Flat string arrays — suggestion seeds, not locked enums.
+
+  services: [
+    // RV park — site types
+    'Nightly RV Sites',
+    'Weekly RV Sites',
+    'Monthly RV Sites',
+    'Seasonal RV Sites',
+    'Full-Hookup Sites (FHU)',
+    'Electric-Only Sites',
+    'Dry Camping / Primitive Sites',
+    'Pull-Through Sites',
+    'Back-In Sites',
+    'Big-Rig Friendly Sites (40+ ft)',
+    // RV park — lodging
+    'Cabin Rentals',
+    'Park Model Rentals',
+    // RV park — amenities / add-ons
+    'Wi-Fi / Internet Access',
+    'Laundry Facilities',
+    'Bathhouse / Restroom Facilities',
+    'Pool & Recreation Access',
+    'Dog Park',
+    'Mail & Package Service',
+    // MHC — core
+    'Manufactured Home Lot Rental',
+    'Manufactured Home Sales (Park-Owned)',
+    'Manufactured Home Resales (Resident-Owned)',
+    'Home Placement Services',
+    // MHC — community
+    'Clubhouse & Community Events',
+    'On-Site Management',
+    'Utilities Pass-Through (Water / Sewer / Trash)',
+    'Storage Unit Rental',
+  ],
+
+  paymentTypes: [
+    'Cash',
+    'Check',
+    'ACH / Bank Transfer',
+    'Visa / Mastercard / Discover',
+    'American Express',
+    'Online Rent Payment Portal',
+    'Money Order',
+    'Owner / Seller Financing',
+    'Chattel Loan (through lender)',
+    'Conventional Mortgage (land + home)',
+    'FHA Title I Loan',
+    'VA Loan',
+    'Apple Pay',
+    'Google Pay',
+  ],
+
+  // Insurance is not a factor for RV park or MHC operators in the context
+  // of their billing relationship with guests/residents. Individual guest
+  // travel insurance or resident homeowner insurance is handled privately.
+  insuranceProviders: [],
 };

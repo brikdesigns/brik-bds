@@ -14,9 +14,9 @@ import type { IndustryPack } from '../schema';
 export const dental: IndustryPack = {
   slug: 'dental',
   displayName: 'Dental',
-  version: '1.1.0',
+  version: '1.2.0',
   reviewCadence: 'quarterly',
-  lastReviewed: '2026-04-01',
+  lastReviewed: '2026-04-19',
 
   affinities: {
     personality: ['Professional', 'Warm', 'Approachable', 'Refined', 'Modern'],
@@ -311,5 +311,106 @@ export const dental: IndustryPack = {
       summary: 'PPO write-offs commonly consume 20–40% of potential production. FFS transition is the single highest-leverage long-term business decision for established independents. Prerequisites: 1500+ active patients, 90%+ hygiene reappt, 50%+ case acceptance, membership plan ready, 12–24 month owner runway.',
       appliesWhen: ['established-independent', 'ppo-heavy', 'owner-has-long-runway'],
     },
+  ],
+
+  // ── Billing / intake vocabularies ──────────────────────────────────────────
+  // Feeds suggestion-driven comboboxes in the portal Intel tab (Billing sheet).
+  // Flat string arrays — suggestion seeds, not locked enums.
+
+  services: [
+    // Preventive
+    'Preventive Care / Cleaning',
+    'Deep Cleaning (Scaling & Root Planing)',
+    'Periodontal Maintenance',
+    // Restorative
+    'Fillings (Composite)',
+    'Fillings (Amalgam)',
+    'Crowns',
+    'Bridges',
+    'Inlays & Onlays',
+    'Dentures (Full & Partial)',
+    'Implant-Supported Dentures',
+    // Endodontics
+    'Root Canal Therapy',
+    // Cosmetic
+    'Teeth Whitening',
+    'Porcelain Veneers',
+    'Dental Bonding',
+    'Smile Makeover',
+    // Orthodontics
+    'Invisalign / Clear Aligners',
+    'Traditional Braces',
+    'ClearCorrect',
+    // Implants
+    'Dental Implants',
+    'All-on-4 Implants',
+    'Full Mouth Reconstruction',
+    // Surgical
+    'Tooth Extractions',
+    'Wisdom Tooth Removal',
+    'Oral Surgery',
+    // Pediatric
+    'Pediatric Dentistry',
+    'Sealants',
+    'Fluoride Treatment',
+    // Specialty / other
+    'Sedation Dentistry',
+    'Emergency Dental Care',
+    'TMJ / Bite Therapy',
+    'Night Guards / Bruxism',
+    'Sleep Apnea Oral Appliances',
+    'Gum Grafting',
+    'Bone Grafting',
+    'Laser Dentistry',
+  ],
+
+  paymentTypes: [
+    // Third-party financing
+    'CareCredit',
+    'Sunbit',
+    'LendingClub Patient Solutions',
+    'Alphaeon Credit',
+    'Cherry',
+    // Insurance
+    'Dental Insurance (In-Network)',
+    'Dental Insurance (Out-of-Network)',
+    // HSA / FSA
+    'HSA (Health Savings Account)',
+    'FSA (Flexible Spending Account)',
+    // In-house
+    'In-House Membership Plan',
+    'In-House Payment Plan',
+    // Standard payment
+    'Visa / Mastercard / Discover',
+    'American Express',
+    'Cash',
+    'Check',
+    'ACH / Bank Transfer',
+    // Digital
+    'Apple Pay',
+    'Google Pay',
+  ],
+
+  insuranceProviders: [
+    'Delta Dental',
+    'Blue Cross Blue Shield',
+    'Cigna Dental',
+    'Aetna Dental',
+    'MetLife Dental',
+    'United Concordia',
+    'Humana Dental',
+    'Guardian Dental',
+    'Principal Financial',
+    'Ameritas',
+    'Sun Life Financial',
+    'Anthem',
+    'UnitedHealthcare Dental',
+    'Assurant Dental',
+    'Renaissance Dental',
+    'Dental Select',
+    'DentaQuest (Medicaid/CHIP)',
+    'Liberty Dental (Medicaid/CHIP)',
+    'TRICARE Dental',
+    'Federal Employees Dental (FEDVIP)',
   ],
 };
