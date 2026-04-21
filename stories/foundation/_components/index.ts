@@ -19,3 +19,4 @@ export {
   UtilityClassTable,
   StaggerDemo,
 } from './MotionTokenDemos';
+export { NavigationIASpec } from './NavigationIASpec';

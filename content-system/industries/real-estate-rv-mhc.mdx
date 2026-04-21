@@ -1,5 +1,6 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 import { realEstateRvMhc } from './real-estate-rv-mhc';
+import { NavigationIASpec } from '../../stories/foundation/_components';
 
 <Meta title="Content/Industries/Real Estate" />
 
@@ -125,7 +126,20 @@ NAP consistency across all platforms is critical given these directories cross-r
   </tbody>
 </table>
 
-## 9. Future — Brik Strategic POV
+## 9. Navigation IA
+
+Default site-header shape for RV parks + manufactured housing communities. Uses
+the `utility-first` archetype — the top bar is a task surface, not a branding
+surface. Primary CTA ("Find a Site") leads; mega-menu groups the community
+catalog by community type so prospects can filter before they land.
+
+Mobile drawer is `slide-left-panel` (not fullscreen overlay) because users
+arrive in search mode and don't want a full-screen modal interrupt between
+filter + listing + amenity steps.
+
+<NavigationIASpec industry="Real Estate" ia={realEstateRvMhc.navigationIA} />
+
+## 10. Future — Brik Strategic POV
 
 Not yet populated. This pack has no `strategicConsiderations` entries because Brik does not yet have a defensible POV backed by client outcomes in this vertical. As the client portfolio grows, add sections for topics like:
 
