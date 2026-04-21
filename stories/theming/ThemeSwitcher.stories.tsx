@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useGlobals } from 'storybook/preview-api';
-import { themeMetadata, ThemeNumber } from '../tokens';
+import { themeMetadata, ThemeNumber } from '../../tokens';
 
 /**
  * ThemeSwitcher Demo
@@ -292,7 +292,7 @@ function ThemePreview({ themeNum, isActive }: { themeNum: ThemeNumber; isActive:
 }
 
 const meta: Meta<typeof ThemeDemo> = {
-  title: 'Overview/Theming/Theme Switcher',
+  title: 'Theming/Theme Switcher',
   component: ThemeDemo,
   parameters: {
     layout: 'fullscreen',
