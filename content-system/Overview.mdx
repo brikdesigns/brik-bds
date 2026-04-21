@@ -28,12 +28,16 @@ content-system/
 ├── industries/            Industry packs — data + narrative
 │   ├── dental.ts  + .mdx
 │   └── small-business.ts  + .mdx
-└── voices/                Voice patterns — 8 VoicePattern files + blender spec
+├── voices/                Voice patterns — 8 VoicePattern files + blender spec
+└── compliance/            Canonical compliance standards — markdown + MDX companion
+    └── healthcare-ada.md  Brik Healthcare Accessibility & Compliance Standards
 ```
 
 Each industry pack is two co-located files: a `.ts` file exporting the typed `IndustryPack` data, and an `.mdx` narrative that renders in this Storybook. Both describe the same industry — keep them in sync.
 
 Voice patterns are lighter weight — one `.ts` file per voice trait, plus a single [Voices Overview](?path=/docs/foundations-content-voices-overview--docs) page that renders all 8 side-by-side for comparison.
+
+Compliance docs are plain markdown that ships with the package so consumer repos can reference the canonical path at `node_modules/@brikdesigns/bds/content-system/compliance/{name}.md`. Each doc has a short Storybook MDX companion under **Compliance** for browsing; edit the `.md` as source of truth.
 
 ## The three axes
 

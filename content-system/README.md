@@ -11,8 +11,19 @@ content-system/
 ├── vocabularies/    Locked enums — portal imports these directly
 ├── schema/          TypeScript types for pack authoring
 ├── industries/      Industry packs ({slug}.ts + {slug}.mdx pairs)
-└── voices/          Voice patterns (8 traits — rules, examples, pairings)
+├── voices/          Voice patterns (8 traits — rules, examples, pairings)
+└── compliance/      Canonical compliance standards (markdown + MDX)
 ```
+
+## Compliance docs
+
+`compliance/*.md` files are the canonical source of truth for regulatory standards that apply across consumer repos (HIPAA, ADA Title III, Section 1557, etc.). They ship with the package via the `files` entry in `package.json`, so consumers can reach them at `node_modules/@brikdesigns/bds/content-system/compliance/{name}.md`.
+
+Each compliance doc pairs with a short Storybook MDX companion under **Foundations / Content / Compliance** for browsing. Edit the `.md` as source of truth; the MDX is a navigational summary.
+
+Current docs:
+
+- `healthcare-ada.md` — Brik Healthcare Accessibility & Compliance Standards (canonical as of 2026-04-21)
 
 ## Locked enums
 
