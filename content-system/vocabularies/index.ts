@@ -47,3 +47,21 @@ export {
   isPaymentMethod,
   type PaymentMethod,
 } from './payment-method';
+
+export {
+  NAV_ARCHETYPE_VALUES,
+  isNavArchetype,
+  type NavArchetype,
+} from './nav-archetype';
+
+export {
+  SCROLL_BEHAVIOR_VALUES,
+  isScrollBehavior,
+  type ScrollBehavior,
+} from './scroll-behavior';
+
+export {
+  DRAWER_PATTERN_VALUES,
+  isDrawerPattern,
+  type DrawerPattern,
+} from './drawer-pattern';

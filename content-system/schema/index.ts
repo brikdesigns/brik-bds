@@ -9,6 +9,14 @@ export type {
   CompetitorArchetype,
   StrategicConsideration,
   Quarter,
+  NavigationIA,
+  NavigationLink,
+  NavigationUtility,
+  NavigationCTA,
+  ServicesMegaMenu,
+  ServicesMegaMenuCategory,
+  ServicesMegaMenuItem,
+  ServicesMegaMenuFeature,
 } from './industry-pack';
 
 export type {

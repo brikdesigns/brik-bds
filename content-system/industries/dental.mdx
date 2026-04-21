@@ -1,5 +1,6 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 import { dental } from './dental';
+import { NavigationIASpec } from '../../stories/foundation/_components/index';
 
 <Meta title="Content/Industries/Dental" />
 
@@ -86,7 +87,22 @@ Independent practices skew warmer and more conversational; cosmetic boutiques sk
   </tbody>
 </table>
 
-## 9. Brik Strategic POV
+## 9. Navigation IA
+
+Default site-header shape for dental. Drives the BDS `<SiteHeader>` component in
+`@brikdesigns/bds/blueprints-astro` when consumer sites (e.g. Birdwell & Mutlak)
+build. Clients can override any field per-engagement in the portal Intel tab, but
+the pack default represents Brik's curated recommendation for the vertical.
+
+Design intent: keep the top bar quiet (4 primary links, not 6) and route service
+discovery through a grouped mega-menu so cosmetic + restorative + comfort live in
+separate columns rather than a flat list. The frosted-glass-past-80 scroll
+behavior lets hero photography breathe at first load without sacrificing
+return-navigation reach.
+
+<NavigationIASpec industry="Dental" ia={dental.navigationIA} />
+
+## 10. Brik Strategic POV
 
 Three considerations that differentiate Brik's dental strategy. These are not generic industry facts — they reflect Brik's POV and should surface in briefs where applicable.
 
