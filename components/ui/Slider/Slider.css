@@ -1,7 +1,16 @@
 @layer bds-components {
-/* Slider CSS — needed for pseudo-elements (::-webkit-slider-thumb, etc.) */
-/* --bds-slider-track-height, --bds-slider-thumb-size, --bds-slider-percent are component-local
-   custom properties set by Slider.tsx. The --bds-* prefix marks them as non-global. */
+/*
+ * Slider CSS — needed for pseudo-elements (::-webkit-slider-thumb, etc.).
+ *
+ * --bds-slider-track-height, --bds-slider-thumb-size, --bds-slider-percent
+ * are component-local custom properties set by Slider.tsx. The --bds-*
+ * prefix marks them as non-global.
+ *
+ * @token-exempt — the thumb shadow (line 8) uses a custom rgba(0,0,0,0.1)
+ * deliberately lighter than --shadow-sm; already annotated
+ * `bds-lint-ignore — promote to Figma`. Remove this exemption once the
+ * value ships as a Figma token.
+ */
 
 /* ─── Component-scoped override surface ── */
 .bds-slider {

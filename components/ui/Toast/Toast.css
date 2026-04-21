@@ -1,5 +1,12 @@
 @layer bds-components {
-/* ─── Toast ──────────────────────────────────────────────────── */
+/*
+ * Toast — inline notification with custom spread shadow.
+ *
+ * @token-exempt — the shadow (line 6) uses rgba(0,0,0,0.24) with a 4px
+ * spread, a unique combination no BDS shadow token provides; already
+ * annotated `bds-lint-ignore — promote to Figma`. Remove this exemption
+ * once the spread-shadow variant ships as a Figma token.
+ */
 
 .bds-toast {
   /* ─── Component-scoped override surface ── */
