@@ -1,0 +1,39 @@
+/**
+ * clean-bright atmosphere
+ *
+ * Pure-white, zero-atmosphere layer. Sister to minimal-clinical but
+ * with an even stricter "no effects" posture — intended for SaaS/tech/
+ * startup sites where the brand lives in typography, imagery, and
+ * color accents, and any atmospheric layer would compete with those
+ * primary design tools.
+ *
+ * Difference vs minimal-clinical: clean-bright is specifically for
+ * product/tech marketing, whereas minimal-clinical is for healthcare/
+ * legal trust surfaces. Both are "no CSS effects" — they differ in
+ * semantic intent so the portal UI can offer the right one per vertical
+ * without verbal overloading.
+ *
+ * Same observation: the body of this atmosphere is deliberately tiny
+ * by design. Keep it that way.
+ */
+
+:root {
+  --surface-primary:        #ffffff;
+  --surface-secondary:      #ffffff;
+  --surface-card:           #ffffff;
+  --background-primary:     #ffffff;
+  --background-secondary:   #ffffff;
+  --background-tertiary:    #ffffff;
+  --background-input:       #ffffff;
+  --color-surface-card:     #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-recessed: #ffffff;
+}
+
+body {
+  background: #ffffff;
+}
+
+/* data-ambient / data-edge / data-spotlight are inert — the clean-bright
+   brief is that effects belong in the component library, not the
+   atmosphere. */

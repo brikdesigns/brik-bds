@@ -1,0 +1,69 @@
+/**
+ * organic-textured atmosphere
+ *
+ * Warm-cream textured-paper treatment. Sits between warm-soft (quieter,
+ * wellness-coded) and editorial-luxury (dramatic, dark). Intended for
+ * MUA / organic beauty / artisan / natural-products brands where the
+ * brand evokes tactile materiality without going cinematic.
+ *
+ * Design posture:
+ *   - Warm cream base (#f5efe6) — a step warmer than warm-soft
+ *   - SVG grain at 40% opacity with sepia multiply (richer texture
+ *     than warm-soft's 15%, but applied to light surfaces so it reads
+ *     as paper rather than gritty)
+ *   - Subtle earth-tone radial tint (terracotta at 4%) in bottom-right
+ *   - No vignettes, no orbs, no motion
+ *
+ * The grain is the distinguishing move — at 40% sepia-multiply it
+ * gives surfaces a tactile, recycled-paper feel that reads as
+ * artisan/organic/natural rather than flat digital.
+ */
+
+:root {
+  --color-cream-paper: #f5efe6;
+
+  --surface-primary:        var(--color-cream-paper);
+  --surface-secondary:      var(--color-cream-paper);
+  --surface-card:           #ffffff;
+  --background-primary:     var(--color-cream-paper);
+  --background-secondary:   var(--color-cream-paper);
+  --background-tertiary:    #ffffff;
+  --background-input:       #ffffff;
+  --color-surface-card:     #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-recessed: var(--color-cream-paper);
+
+  --ambient-terracotta:     rgba(180, 120, 90, 0.04);
+}
+
+body {
+  background: var(--color-cream-paper);
+}
+
+/* Subtle earth-tone radial in the bottom-right — warms the lower
+   viewport without announcing itself. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 90% 100%, var(--ambient-terracotta), transparent 60%);
+}
+body > * { position: relative; z-index: 1; }
+
+/* Richer grain — 40% opacity + sepia multiply. Reads as paper. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.40;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.45  0 0 0 0 0.35  0 0 0 0.22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* data-ambient / data-spotlight are inert here — grain + tint do the
+   atmospheric work. */

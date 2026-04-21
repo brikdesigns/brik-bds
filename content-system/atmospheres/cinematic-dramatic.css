@@ -1,0 +1,153 @@
+/**
+ * cinematic-dramatic atmosphere
+ *
+ * Dark-theatrical treatment. Deeper navy-black base than editorial-luxury,
+ * with an aurora-drift gradient at the top of the viewport and a conic
+ * rotating spotlight behind hero sections. Leans theatrical rather than
+ * quiet — fit for legal/agency/finance/dark-mode SaaS verticals where
+ * the brand moment matters more than hushed editorial restraint.
+ *
+ * Differences from editorial-luxury:
+ *   - Darker base (#060612 vs #08080a) with a violet-black tint
+ *   - Aurora-drift gradient (cool/warm dual-tone) instead of gold orbs
+ *   - Conic rotating spotlight (38s period) behind hero
+ *   - No film grain (heavier atmosphere is already doing the work)
+ *   - Section-edge vignettes kept for "page-turn" continuity
+ *
+ * Performance: aurora drift is a single animated @property gradient
+ * (42s period, no transforms). Conic spotlight is one fixed element
+ * with a rotate animation. Honors prefers-reduced-motion.
+ */
+
+@property --aurora-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+:root {
+  --color-ink: #060612;
+
+  --surface-primary:        var(--color-ink);
+  --surface-secondary:      var(--color-ink);
+  --surface-card:           var(--color-ink);
+  --background-primary:     var(--color-ink);
+  --background-secondary:   var(--color-ink);
+  --background-tertiary:    var(--color-ink);
+  --background-input:       var(--color-ink);
+  --color-surface-card:     var(--color-ink);
+  --color-surface-elevated: var(--color-ink);
+  --color-surface-recessed: var(--color-ink);
+  --color-black:            var(--color-ink);
+
+  --ambient-cool:           rgba(80, 110, 170, 0.10);
+  --ambient-warm:           rgba(212, 175, 110, 0.08);
+  --ambient-violet:         rgba(140, 90, 200, 0.06);
+}
+
+body {
+  background: var(--color-ink);
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Aurora drift — animated radial pair that slowly migrates along the
+ * top of the viewport. Uses @property for actual gradient interpolation
+ * (unlike plain CSS vars which can't animate gradient positions).
+ * ─────────────────────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at var(--aurora-x) 20%, var(--ambient-cool), transparent 60%),
+    radial-gradient(ellipse 60% 40% at calc(100% - var(--aurora-x)) 80%, var(--ambient-warm), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 50% 100%, var(--ambient-violet), transparent 70%);
+  animation: cinematic-aurora-drift 42s ease-in-out infinite alternate;
+}
+body > * { position: relative; z-index: 1; }
+
+@keyframes cinematic-aurora-drift {
+  to { --aurora-x: 70%; }
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Per-section atmosphere — data-ambient drives placement.
+ * ─────────────────────────────────────────────────────────────────── */
+section[data-ambient] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+section[data-ambient] > * { position: relative; z-index: 2; }
+
+/* Conic rotating spotlight — dramatic klieg-light feel above hero. */
+section[data-ambient="spotlight"] {
+  overflow: hidden;
+}
+section[data-ambient="spotlight"]::before {
+  content: '';
+  position: absolute;
+  inset: -20% 0 auto 0;
+  height: 120vh;
+  z-index: 0;
+  pointer-events: none;
+  background: conic-gradient(
+    from 180deg at 50% 0%,
+    transparent 0deg,
+    var(--ambient-cool) 90deg,
+    var(--ambient-warm) 180deg,
+    transparent 270deg
+  );
+  mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, #000 30%, transparent 75%);
+  filter: blur(80px);
+  animation: cinematic-klieg-drift 38s linear infinite;
+}
+
+@keyframes cinematic-klieg-drift {
+  to { transform: rotate(1turn); }
+}
+
+/* Centered glow — for non-hero dramatic sections. */
+section[data-ambient="center"]::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 720px;
+  height: 720px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle, var(--ambient-cool) 0%, transparent 70%);
+}
+
+/* Section-edge vignettes (same as editorial-luxury). */
+section[data-edge]::before,
+section[data-edge]::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 80px;
+  z-index: 3;
+  pointer-events: none;
+}
+section[data-edge]::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--color-ink), transparent);
+}
+section[data-edge]::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--color-ink), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  section[data-ambient="spotlight"]::before {
+    animation: none !important;
+  }
+}

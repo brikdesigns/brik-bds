@@ -17,6 +17,11 @@ export * from './vocabularies';
 export * from './schema';
 export * from './blueprints';
 export {
+  ATMOSPHERE_MANIFEST,
+  getAtmosphereImportPath,
+  type AtmosphereManifestEntry,
+} from './atmospheres';
+export {
   industryPacks,
   dental,
   realEstateRvMhc,
