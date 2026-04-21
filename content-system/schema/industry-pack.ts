@@ -183,6 +183,104 @@ export interface IndustryPack {
    * 4 links, no mega-menu).
    */
   navigationIA?: NavigationIA;
+
+  /**
+   * Industry-specific site audit — URL patterns + structured-fact extractors
+   * that turn a crawl of the client's existing website into fields downstream
+   * consumers can reason about programmatically (rather than LLM-paraphrasing
+   * free-text scrape results every time).
+   *
+   * The portal runs universal extractors (services_offered, key_messages,
+   * proof_points, social_links, tagline, value_proposition, target_audience)
+   * on every audit regardless of industry. When a client's `industry_slug`
+   * resolves to a pack with `siteAudit` defined, the pack's extractors run
+   * in addition and land structured facts on industry-specific columns on
+   * `company_profiles`.
+   *
+   * Example (dental): membership-plan tier extraction — turn
+   * `/membership-plan-1` into structured
+   * `{ tier, monthly_price, inclusions[], enrollment_cta }` records the
+   * `/membership` page generator can render verbatim instead of
+   * paraphrasing.
+   *
+   * Leave unset for industries without pack-specific audit logic —
+   * universal extractors still run.
+   */
+  siteAudit?: IndustryPackSiteAudit;
+}
+
+// ─── Site audit contract ────────────────────────────────────────────────
+//
+// The industry pack declares which URL patterns it cares about and a set of
+// named structured-fact extractors. The portal's website-audits worker
+// resolves the pack by the client's industry_slug, routes matching scraped
+// pages through the named extractors, and lands the result on
+// company_profiles columns that downstream consumers (generate-content,
+// preflight, decision-log) can read as canonical facts.
+//
+// Execution model:
+//   1. Universal extractors run first (tagline, services, messaging, proofs).
+//   2. For each page in the crawl:
+//        - test `pagePatterns` against the URL/path/title
+//        - for matches, invoke the corresponding extractor
+//   3. Extractor output is validated (the pack declares target field shapes)
+//      and merged into the profile via enrichProfile(source: 'website_audit').
+//
+// Extractor implementations live in the same pack file (dental.ts, etc.) —
+// kept close to the industry narrative so reviewers see both the logic and
+// the rationale in one place.
+
+/** Rule for matching a scraped page to an extractor. */
+export interface PagePattern {
+  /** Stable identifier used in `siteAudit.extractors[].handles`. */
+  key: string;
+  /**
+   * Match rules. All array entries are OR'd; an object with multiple keys
+   * AND's the keys. At least one of (urlContains | pathMatches | titleMatches)
+   * must match for the page to route to the handler. Patterns are
+   * case-insensitive.
+   */
+  urlContains?: readonly string[];
+  pathMatches?: readonly string[];
+  titleMatches?: readonly string[];
+  /** Human-readable description of what this pattern targets. */
+  description: string;
+}
+
+/**
+ * A named extractor that pulls structured facts out of one or more scraped
+ * pages. The pack declares the output shape inline; the portal validates
+ * the extractor's return value against `outputFields` before persisting.
+ */
+export interface SiteAuditExtractor {
+  /** Stable identifier used in decision-log entries. */
+  key: string;
+  /** Human-readable label used in admin UI + docs. */
+  label: string;
+  /** Short description of what the extractor lands on the profile. */
+  description: string;
+  /** Page-pattern keys whose matched pages feed this extractor. */
+  handles: readonly string[];
+  /**
+   * The `company_profiles` columns this extractor writes to, keyed by
+   * field name. Values describe the expected shape. The portal's
+   * enrichProfile allowlist must permit `source: 'website_audit'` to
+   * write each field listed here.
+   */
+  outputFields: readonly string[];
+}
+
+export interface IndustryPackSiteAudit {
+  /** URL / path / title patterns used to route pages to extractors. */
+  pagePatterns: readonly PagePattern[];
+  /** Industry-specific extractors that run in addition to universal ones. */
+  extractors: readonly SiteAuditExtractor[];
+  /**
+   * Pack-declared schemas for structured fields. Keys match
+   * `company_profiles` columns; values document the expected shape.
+   * The portal uses these to validate extractor output before persisting.
+   */
+  fieldSchemas: Record<string, string>;
 }
 
 export interface NavigationIA {
