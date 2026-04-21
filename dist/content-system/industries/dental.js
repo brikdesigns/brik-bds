@@ -454,5 +454,159 @@ export const dental = {
         'LendingClub',
         'In-House Financing',
     ],
+    // Navigation IA — the dental archetype is `editorial-transparent`:
+    // hero photography breathes at first load, header becomes frosted-glass
+    // past 80px scroll. Services mega-menu groups the catalog by treatment
+    // category (Cosmetic / Restorative & Preventive / Comfort & Support)
+    // + a featured "new patient" card that directs to the first-visit
+    // landing page — dental's primary conversion surface.
+    //
+    // Primary link count kept tight at 4 to resist the "stale + bloated"
+    // failure mode observed on generic dental template sites. Utility
+    // cluster leads with phone (still the #1 booking channel for dental)
+    // and a solid Book CTA.
+    navigationIA: {
+        archetype: 'editorial-transparent',
+        primaryLinkCount: 4,
+        primaryLinks: [
+            { label: 'Services', href: '/services' },
+            { label: 'About', href: '/about' },
+            { label: 'Smile Gallery', href: '/smile-gallery' },
+            { label: 'Financing', href: '/financing' },
+        ],
+        servicesMegaMenu: {
+            triggerLabel: 'Services',
+            columns: 4,
+            categories: [
+                {
+                    heading: 'Cosmetic',
+                    items: [
+                        { label: 'Porcelain veneers', href: '/services/veneers', note: 'Custom-crafted restorations' },
+                        { label: 'Cosmetic dentistry', href: '/services/cosmetic-dentistry', note: 'Whitening, bonding, smile design' },
+                        { label: 'Teeth whitening', href: '/services/whitening', note: 'In-office + take-home systems' },
+                    ],
+                },
+                {
+                    heading: 'Restorative & Preventive',
+                    items: [
+                        { label: 'Restorative dentistry', href: '/services/restorative-dentistry', note: 'Crowns, bridges, full-mouth rehab' },
+                        { label: 'Preventive care', href: '/services/preventive-care', note: 'Cleanings, exams, family care' },
+                        { label: 'Dentures', href: '/services/dentures', note: 'Custom-fit, natural look' },
+                    ],
+                },
+                {
+                    heading: 'Comfort & Support',
+                    items: [
+                        { label: 'Sedation dentistry', href: '/services/sedation-dentistry', note: 'Nitrous oxide available' },
+                        { label: 'Your first visit', href: '/first-visit', note: '90 minutes, no surprises' },
+                        { label: 'Membership', href: '/membership', note: 'In-house care plan' },
+                    ],
+                },
+            ],
+            featured: {
+                eyebrow: 'New patient?',
+                heading: '90 minutes with the doctor you choose',
+                body: 'Choose your doctor when you book. Both doctors are accepting new patients.',
+                ctaLabel: 'Request your first visit',
+                ctaHref: '/contact',
+            },
+        },
+        utility: {
+            showPhone: true,
+            primaryCTA: { label: 'Book', href: '/contact', variant: 'solid' },
+        },
+        scrollBehavior: 'transparent-top-frosted-past-80',
+        mobileDrawer: 'fullscreen-overlay',
+    },
+    // ── Site Audit extractors ─────────────────────────────────────────────
+    //
+    // Dental is the first industry to ship structured site-audit extraction
+    // beyond the universal scrape. Four dental-specific facts surface from a
+    // live site that the universal extractors collapse into free text:
+    //
+    //   1. Membership plan tiers — name, monthly price, inclusions, enrollment
+    //      CTA. Turns /membership-plan-1 into data the /membership page
+    //      generator can render verbatim instead of paraphrasing.
+    //   2. Insurance accepted — the actual carrier list the practice names
+    //      publicly, not just "we accept most major insurance."
+    //   3. New patient offers — live promos, complimentary consults, free
+    //      X-ray offers — the conversion-critical copy the hero needs to
+    //      honor or explicitly replace.
+    //   4. Appointment systems — booking integrations (Zocdoc, LocalMed,
+    //      custom forms) the content generator should reference correctly
+    //      rather than invent a generic "Book online" CTA.
+    //
+    // Portal implementation: src/lib/website-audits/industry-packs/dental.ts
+    // reads the patterns below to route scraped pages into the corresponding
+    // extractors, then writes structured output to the listed profile columns.
+    siteAudit: {
+        pagePatterns: [
+            {
+                key: 'membership_plan',
+                description: 'In-house membership plan page — tier listing with pricing.',
+                urlContains: ['membership', 'dental-plan', 'savings-plan', 'in-house-plan'],
+                pathMatches: ['/membership', '/membership-plan', '/dental-savings-plan', '/care-plan'],
+                titleMatches: ['membership plan', 'dental savings', 'in-house plan', 'care plan'],
+            },
+            {
+                key: 'insurance',
+                description: 'Insurance information page — accepted carriers and plan details.',
+                urlContains: ['insurance', 'financing', 'payment-options'],
+                pathMatches: ['/insurance', '/insurance-accepted', '/financing', '/payment-options'],
+                titleMatches: ['insurance', 'financing', 'payment options', 'accepted insurance'],
+            },
+            {
+                key: 'new_patients',
+                description: 'New patient welcome / offers page — current promos and first-visit flow.',
+                urlContains: ['new-patient', 'first-visit', 'welcome', 'special', 'offer'],
+                pathMatches: ['/new-patients', '/first-visit', '/welcome', '/specials', '/offers'],
+                titleMatches: ['new patient', 'first visit', 'welcome', 'special offer', 'current promotion'],
+            },
+            {
+                key: 'contact_or_homepage',
+                description: 'Homepage + contact page — where appointment-system references surface.',
+                pathMatches: ['/', '/contact', '/contact-us', '/book', '/schedule', '/appointments'],
+                titleMatches: ['contact', 'book', 'schedule', 'appointment'],
+            },
+        ],
+        extractors: [
+            {
+                key: 'membership_plans',
+                label: 'Membership plan tiers',
+                description: 'Structured tier inventory — tier name, monthly price, included services, enrollment CTA.',
+                handles: ['membership_plan'],
+                outputFields: ['membership_plans', 'has_membership_plan'],
+            },
+            {
+                key: 'insurance_accepted',
+                label: 'Accepted insurance carriers',
+                description: 'Explicit carrier list the practice publishes — used to populate insurance_providers verbatim.',
+                handles: ['insurance'],
+                outputFields: ['insurance_providers', 'insurance_plans'],
+            },
+            {
+                key: 'new_patient_offers',
+                label: 'New patient offers + first-visit flow',
+                description: 'Live promos (free consult, complimentary X-ray, new patient specials) plus the first-visit experience description.',
+                handles: ['new_patients'],
+                outputFields: ['new_patient_offers'],
+            },
+            {
+                key: 'appointment_systems',
+                label: 'Appointment booking integrations',
+                description: 'Third-party booking systems referenced on contact / homepage (Zocdoc, LocalMed, Weave, NexHealth, custom forms).',
+                handles: ['contact_or_homepage'],
+                outputFields: ['appointment_systems'],
+            },
+        ],
+        fieldSchemas: {
+            membership_plans: 'Array<{ tier: string; monthly_price_cents: number | null; annual_price_cents: number | null; included_services: string[]; enrollment_cta: string | null; source_url: string }>',
+            has_membership_plan: '{ status: "active" | "in_development" | "planned" | "none"; notes: string | null }',
+            insurance_providers: 'string[] — carrier names (e.g. "Delta Dental", "Aetna", "Cigna"). Verbatim from the site.',
+            insurance_plans: 'string[] — plan/program names distinct from carriers (e.g. "Medicaid", "PPO", "Out-of-Network").',
+            new_patient_offers: 'Array<{ offer: string; first_visit_duration_minutes: number | null; source_url: string }>',
+            appointment_systems: 'string[] — integration names (e.g. "Zocdoc", "LocalMed", "Weave", "custom web form").',
+        },
+    },
 };
 //# sourceMappingURL=dental.js.map

@@ -1,7 +1,7 @@
 {
   "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
-  "bds_version": "0.22.0",
-  "generated_at": "2026-04-21T15:12:56.781Z",
+  "bds_version": "0.24.0",
+  "generated_at": "2026-04-21T21:21:00.436Z",
   "component_count": 82,
   "token_count": 426,
   "components": {
