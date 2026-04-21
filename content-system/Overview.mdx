@@ -3,7 +3,7 @@ import { PERSONALITY_VALUES, VOICE_VALUES, VISUAL_STYLE_VALUES, INDUSTRY_SLUGS }
 import { industryPacks } from './industries';
 import { voicePatterns } from './voices';
 
-<Meta title="Foundations/Content/Overview" />
+<Meta title="Content/Overview" />
 
 # Brik Content System (BCS)
 
@@ -35,7 +35,7 @@ content-system/
 
 Each industry pack is two co-located files: a `.ts` file exporting the typed `IndustryPack` data, and an `.mdx` narrative that renders in this Storybook. Both describe the same industry — keep them in sync.
 
-Voice patterns are lighter weight — one `.ts` file per voice trait, plus a single [Voices Overview](?path=/docs/foundations-content-voices-overview--docs) page that renders all 8 side-by-side for comparison.
+Voice patterns are lighter weight — one `.ts` file per voice trait, plus a single [Voices Overview](?path=/docs/content-voices-overview--docs) page that renders all 8 side-by-side for comparison.
 
 Compliance docs are plain markdown that ships with the package so consumer repos can reference the canonical path at `node_modules/@brikdesigns/bds/content-system/compliance/{name}.md`. Each doc has a short Storybook MDX companion under **Compliance** for browsing; edit the `.md` as source of truth.
 
@@ -53,7 +53,7 @@ Clients pick up to 3 in each axis. Overlap across axes (e.g. "Approachable" in P
 
 ## Voice patterns
 
-{VOICE_VALUES.length} canonical voices, {Object.keys(voicePatterns).length} patterns authored. Browse the [Voices Overview](?path=/docs/foundations-content-voices-overview--docs) to see all 8 side-by-side with examples.
+{VOICE_VALUES.length} canonical voices, {Object.keys(voicePatterns).length} patterns authored. Browse the [Voices Overview](?path=/docs/content-voices-overview--docs) to see all 8 side-by-side with examples.
 
 <table>
   <thead><tr><th>Voice</th><th>Summary</th></tr></thead>
@@ -133,7 +133,7 @@ Same cascade pattern as token theming: **client > industry > baseline**.
 
 ## Authoring an industry pack
 
-1. Add the slug to [`vocabularies/industry.ts`](?path=/docs/foundations-content-vocabularies--docs).
+1. Add the slug to [`vocabularies/industry.ts`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/vocabularies/industry.ts).
 2. Create `industries/{slug}.ts` — typed `IndustryPack` data. Use dental.ts as a model for structure depth.
 3. Create `industries/{slug}.mdx` — narrative companion. Use dental.mdx as a model for sections.
 4. Add to the registry in `industries/index.ts`.
@@ -151,6 +151,6 @@ Same cascade pattern as token theming: **client > industry > baseline**.
 
 ## Related
 
-- [Industries index](?path=/docs/foundations-content-industries-dental--docs)
+- [Industries index](?path=/docs/content-industries-dental--docs)
 - [Design Tokens overview](?path=/docs/foundations-design-tokens-overview--docs)
-- [Client Themes](?path=/docs/foundations-design-tokens-client-themes--docs)
+- [Client Theming](?path=/docs/overview-theming-client-theming--docs)
