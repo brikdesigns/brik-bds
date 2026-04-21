@@ -1,0 +1,46 @@
+name: Sync staging to main
+
+# Fast-forwards the `staging` branch to match `main` on every push to main.
+# Keeps staging.storybook.brikdesigns.com aligned with production so a pre-
+# release preview can be cut at any time by just visiting the staging URL.
+#
+# Why this exists: before 2026-04-21, staging was updated manually via direct
+# pushes. Mid-March the team migrated to PR-to-main workflow; staging stopped
+# getting updated and drifted 304 commits behind main over ~4 weeks. This
+# workflow prevents that from happening again.
+#
+# Failure modes intentionally NOT masked:
+# - If someone pushes to staging out-of-band, the ff push here will fail
+#   (non-fast-forward). That's the desired signal — we want to know about
+#   divergence, not silently clobber it. Fix: investigate the staging push,
+#   then either delete those commits or promote them to a proper PR.
+
+on:
+  push:
+    branches:
+      - main
+
+# Only one sync at a time; newer pushes cancel in-flight older runs.
+concurrency:
+  group: sync-staging
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Fast-forward staging to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Plain push (no --force) — this is a fast-forward by design. If it
+          # fails, staging has out-of-band commits that need human triage.
+          git push origin HEAD:refs/heads/staging
