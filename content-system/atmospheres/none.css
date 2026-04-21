@@ -1,0 +1,13 @@
+/**
+ * none atmosphere — explicit no-op.
+ *
+ * Fallback when `atmosphere` on company_profiles is null or explicitly
+ * set to 'none'. Emits no CSS. The consumer site gets pure theme tokens
+ * with no additional decoration.
+ *
+ * This file exists so the lookup is total — any valid atmosphere slug
+ * resolves to a file. Portal's generate-theme-css.ts can safely emit
+ * an @import without branching on "is atmosphere set?".
+ */
+
+/* No rules. */
