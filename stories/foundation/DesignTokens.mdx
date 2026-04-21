@@ -33,43 +33,25 @@ Client portals, SaaS apps, and marketing sites use a **2-tier** model:
 
 **The key rule:** token names are fixed in Tier 1. Only values change in Tier 2. A component written against `--background-brand-primary` works for every client brand with zero code changes.
 
-## BDS Theming — website template layer (separate from client work)
-
-BDS also ships a **BDS Theming** layer (`website-themes.css`) that contains 8 pre-built brand configurations. This is a **separate product effort** — a website template theme library, not part of the client project architecture.
-
-```
-website-themes.css  →  .body.theme-1 through .body.theme-8
-                       Each block overrides semantic color + font-family tokens
-```
-
-This layer is used in:
-- **Storybook** — the toolbar theme switcher demos all 8 configurations
-- **Website template product** (future) — pre-built brand themes for site builds
-
-**Client projects do not import website-themes.css.** They define their own Tier 2 via `theme-{client}.css`.
-
 ## CSS import cascade
 
-### Client projects (portals, SaaS, marketing sites)
+Client projects and Storybook load tokens in the same order:
 
 ```css
-/* 1. Generated token values (primitives + semantic) */
+/* 1. Generated values — light mode (never edit) */
 @import '../brik-bds/tokens/figma-tokens.css';
 
-/* 2. Gap-fill tokens not yet in Figma/SD */
+/* 2. Generated values — dark mode, scoped to [data-theme="dark"] */
+@import '../brik-bds/tokens/figma-tokens-dark.css';
+
+/* 3. Gap-fill tokens not yet in Figma */
 @import '../brik-bds/tokens/gap-fills.css';
 
 /* 4. Client brand — same token names, different values */
 @import './styles/theme-{client}.css';
 ```
 
-### Storybook / website template work
-
-```css
-@import '../tokens/figma-tokens.css';
-@import '../tokens/gap-fills.css';
-@import '../tokens/website-themes.css';  /* adds .body.theme-N blocks */
-```
+For the theming system as a whole — Brik's three built-in themes, the override matrix, and how to author a client brand — see [Theming Overview](?path=/docs/theming-overview--docs).
 
 ## Token types: primitives vs semantic
 
@@ -164,18 +146,6 @@ Figma is the only place tokens are edited. The pipeline is:
 
 **Rule:** never manually edit `tokens/figma-tokens.css`. It is generated on every sync. Use `tokens/gap-fills.css` for gap-fill tokens that aren't in Figma yet.
 
-## Client theming
-
-A client brand is a single CSS file (~12–27 token overrides). No components change. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for the full cascade, override tiers, known gaps, and font-only override patterns.
-
-**Validate with ★ Font Audit:** Switch to `★ Font Audit` in the Storybook toolbar. It assigns Georgia/Verdana/Courier New to heading/body/label families — any component using the wrong `--font-family-*` token becomes immediately visible.
-
-## BDS Theming — website template themes
-
-BDS ships 8 pre-built brand configurations as website template themes. Switch between them using the paintbrush icon in the toolbar above. These themes are **not** part of the client project architecture — they are a separate product layer for template-driven site work.
-
-Each theme overrides semantic color and font-family tokens only — spacing, shadows, radius, and component structure are theme-invariant. See [Client Theming](?path=/docs/foundations-design-tokens-client-theming--docs) for how to build a custom client theme on top of the 2-tier foundation.
-
 ## Current token inventory
 
 417 tokens across all collections. Browse each category:
@@ -229,13 +199,14 @@ Each theme overrides semantic color and font-family tokens only — spacing, sha
       <td>Durations, easings, keyframes, utility classes</td>
       <td>{'--duration-* --ease-* --stagger-*'}</td>
     </tr>
-    <tr>
-      <td><a href="?path=/docs/foundations-design-tokens-client-theming--docs">Client Theming</a></td>
-      <td>How to configure a client brand (Tier 2)</td>
-      <td>Cascade, overrides, known gaps</td>
-    </tr>
   </tbody>
 </table>
+
+## Theming
+
+A client brand is a single CSS file (~12–27 token overrides) that redefines semantic tokens. Components never change. See [Theming Overview](?path=/docs/theming-overview--docs) for the 2-tier architecture, [Client Themes](?path=/docs/theming-client-themes--docs) for the override matrix and minimal template, and [Theme Switcher](?path=/docs/theming-theme-switcher--docs) to test themes live.
+
+**Validate with Client Sim:** Switch to `Client Sim` in the Storybook toolbar. It assigns Georgia/Verdana/Courier New to heading/body/label families — any component using the wrong `--font-family-*` token becomes immediately visible.
 
 ## Adding a new token
 
@@ -271,9 +242,8 @@ style={{ color: 'var(--text-primary)' }}
 import { color } from '@/lib/tokens';
 style={{ color: color.text.primary }}
 
-/* ❌ Never import website-themes.css in a client project */
-@import '../brik-bds/tokens/website-themes.css';
-/* ✅ Client projects only need gap-fills.css + their own theme */
-@import '../brik-bds/tokens/gap-fills.css';
-@import './styles/theme-{client}.css';
+/* ❌ Never hand-author dark-mode overrides */
+[data-theme="dark"] { --background-primary: #111; }
+/* ✅ Dark mode ships generated from Figma — import figma-tokens-dark.css */
+@import '../brik-bds/tokens/figma-tokens-dark.css';
 ```
