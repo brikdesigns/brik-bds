@@ -322,6 +322,7 @@ const preview: Preview = {
             'Client Themes',
             'Theme Switcher',
             'Blueprints',
+            'Contrast Compliance',
             '*',
           ],
           'Motion',
