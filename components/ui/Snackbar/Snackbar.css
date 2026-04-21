@@ -1,5 +1,12 @@
 @layer bds-components {
-/* ─── Snackbar ───────────────────────────────────────────────── */
+/*
+ * Snackbar — toast-like floating notification at the page edge.
+ *
+ * @token-exempt — the shadow (line 6) uses rgba(0,0,0,0.2), a stronger
+ * alpha than --shadow-lg; already annotated
+ * `bds-lint-ignore — promote to Figma`. Remove this exemption once the
+ * stronger-alpha shadow ships as a Figma token.
+ */
 
 .bds-snackbar {
   /* ─── Component-scoped override surface ── */

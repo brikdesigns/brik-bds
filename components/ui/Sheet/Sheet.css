@@ -1,6 +1,13 @@
 @layer bds-components {
-/* ─── Sheet ──────────────────────────────────────────────────── */
-/* Overlay treatment aligned with Modal (2026-03-20)            */
+/*
+ * Sheet — overlay treatment aligned with Modal (2026-03-20).
+ *
+ * @token-exempt — the floating variant uses a custom multi-layer rgba
+ * shadow (line 36) that has no BDS token equivalent: two stacked
+ * rgba(0,0,0, 0.12 + 0.08) layers produce the floating-panel depth that
+ * no single --shadow-* token reproduces. Promote to Figma as
+ * --shadow-floating and remove this exemption once published.
+ */
 
 .bds-sheet-backdrop {
   position: fixed;

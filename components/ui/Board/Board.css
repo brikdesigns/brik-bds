@@ -1,5 +1,12 @@
 @layer bds-components {
-/* Board — Kanban-style horizontal board layout */
+/*
+ * Board — Kanban-style horizontal board layout.
+ *
+ * @token-exempt — the raw #fff values (card-check icon border) are var()
+ * fallbacks for --text-on-color-dark. They activate only if the token
+ * pipeline fails (stylesheet race, consumer missing BDS), matching the
+ * defensive pattern in portal's global-error.tsx. Not a migration candidate.
+ */
 
 /* ─── Board container ─────────────────────────────────── */
 
