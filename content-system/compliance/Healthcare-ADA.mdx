@@ -1,0 +1,79 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Content/Compliance/Healthcare ADA" />
+
+# Healthcare Accessibility & Compliance Standards
+
+**Status:** Canonical — promoted to BDS 2026-04-21.
+**Scope:** Marketing sites AND product portals for healthcare clients.
+**Owner:** Nick Stanerson (`nick@brikdesigns.com`).
+
+The full canonical standards live alongside this page in [`healthcare-ada.md`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/compliance/healthcare-ada.md). That file ships with BDS (`node_modules/@brikdesigns/bds/content-system/compliance/healthcare-ada.md`) and is what every consumer repo's `CLAUDE.md` points to under its **Compliance Profile** section.
+
+This page is a shortcut for browsing the rules from Storybook.
+
+---
+
+## When does this apply?
+
+Default for any Brik healthcare client: **HIPAA + ADA Title III**. Confirm Medicare/Medicaid status before assuming **Section 1557** applies — it significantly expands notice requirements.
+
+| Regime | Trigger | What it requires |
+|---|---|---|
+| **ADA Title III** | Public accommodation open to patients | WCAG 2.1 AA, Accessibility Statement, auxiliary aids |
+| **HIPAA** | Covered entity handling PHI | Privacy Policy, Notice of Privacy Practices, PHI encryption |
+| **Section 1557** | Receives federal financial assistance | Notice of Nondiscrimination, taglines in top 15 state languages, Civil Rights Coordinator |
+| **Section 504** | Same as 1557 | Mirrors 1557 |
+
+Record the regime answers in each consumer repo's `CLAUDE.md` under a **Compliance Profile** section.
+
+---
+
+## Non-negotiable technical floor
+
+- **WCAG 2.1 AA on every page** — marketing and portal, same floor, no AAA bump
+- **Lighthouse a11y ≥ 95** on every published page
+- **axe-core CI check** — blocks merge on `serious` or `critical`, warn-only for `moderate`/`minor`
+- **Manual keyboard + VoiceOver pass** before any new flow ships
+- **Quarterly audit** on every live client site; annual refresh of Accessibility Statement audit date
+
+---
+
+## Component-level rules (enforced in BDS)
+
+These graduate from "good practice" to TypeScript-required as the a11y-props rollout lands:
+
+- `Button` — requires accessible text (children or `aria-label`)
+- `IconLink` — requires `aria-label`
+- `Modal` — requires `ariaLabelledBy` + `ariaDescribedBy`, focus trap, focus return
+- `FormField` — requires `label` prop
+- `Image` — requires `alt` prop (empty string allowed only for decorative)
+
+---
+
+## Rollout order
+
+See Step 7 of [`healthcare-ada.md`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/compliance/healthcare-ada.md#step-7--rollout-order) for the current schedule. Rough shape:
+
+1. ✓ TNCLD legal pages adopted
+2. ✓ This doc promoted to BDS
+3. Compliance Profile sections in each portal repo's `CLAUDE.md` + axe-core CI pilot in `brik-client-portal`
+4. a11y-required props on 5 BDS components (one PR each)
+5. axe-core CI ported to remaining portals
+6. Accessibility Preferences panel in the shared portal layer
+7. Full portal audits against these standards
+
+---
+
+## Reading the full document
+
+Open [`healthcare-ada.md`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/compliance/healthcare-ada.md) for:
+
+- Step 1 — client classification questions
+- Step 2 — required content (statements, notices, taglines)
+- Step 3 — technical standards (marketing + portal)
+- Step 4 — audit cadence
+- Step 5 — per-build documentation deliverables
+- Step 6 — portal integration plan (CLAUDE.md, CI, component props, preferences panel, legal routes)
+- Step 7 — rollout order
+- Decisions log
