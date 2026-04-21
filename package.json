@@ -18,13 +18,15 @@
     },
     "./blueprints": "./blueprints/blueprint-library.json",
     "./blueprints/library.json": "./blueprints/blueprint-library.json",
+    "./content-system/compliance/healthcare-ada.md": "./content-system/compliance/healthcare-ada.md",
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
     "./bridge.css": "./dist/bridge.css"
   },
   "files": [
     "dist",
-    "blueprints/blueprint-library.json"
+    "blueprints/blueprint-library.json",
+    "content-system/compliance/*.md"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
