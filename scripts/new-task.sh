@@ -36,6 +36,37 @@ BASE_BRANCH="main"
 PROJECT_ROOT="$(git rev-parse --show-toplevel)"
 WORKTREE_BASE="$(dirname "$PROJECT_ROOT")/brik-bds-worktrees"
 
+# ── Must run from the primary worktree on main ──
+# Running new-task.sh from inside another task worktree creates nested state
+# that breaks the one-worktree-per-task contract. The primary worktree is
+# also the one place main is meant to live — if it's on a task branch,
+# something else already broke.
+PRIMARY_PATH="$(git worktree list --porcelain | awk '/^worktree /{print $2; exit}')"
+if [ "$PROJECT_ROOT" != "$PRIMARY_PATH" ]; then
+  echo -e "${RED}Error: new-task.sh must be run from the primary worktree.${NC}"
+  echo ""
+  echo "  Here:    $PROJECT_ROOT"
+  echo "  Primary: $PRIMARY_PATH"
+  echo ""
+  echo "  cd into the primary worktree first:"
+  echo "    cd $PRIMARY_PATH && ./scripts/new-task.sh $*"
+  exit 1
+fi
+
+PRIMARY_BRANCH="$(git -C "$PRIMARY_PATH" branch --show-current || echo '(detached)')"
+if [ "$PRIMARY_BRANCH" != "main" ]; then
+  echo -e "${RED}Error: primary worktree is on '${PRIMARY_BRANCH}', not 'main'.${NC}"
+  echo ""
+  echo "  The primary worktree at $PRIMARY_PATH must stay on main."
+  echo "  Task work lives in ../brik-bds-worktrees/{slug} — never in the primary."
+  echo ""
+  echo "  To fix:"
+  echo "    cd $PRIMARY_PATH"
+  echo "    git status             # inspect any uncommitted work"
+  echo "    git switch main        # return to main"
+  exit 1
+fi
+
 # ── Parse flags ──
 while [[ $# -gt 0 ]]; do
   case "$1" in
