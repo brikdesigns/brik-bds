@@ -1,3 +1,3 @@
-export type { IndustryPack, PageArchetype, ServiceEntry, VocabularyAvoid, SeasonalWindow, RegulatoryNote, CustomerPainPoint, CompetitorArchetype, StrategicConsideration, Quarter, } from './industry-pack';
+export type { IndustryPack, PageArchetype, ServiceEntry, VocabularyAvoid, SeasonalWindow, RegulatoryNote, CustomerPainPoint, CompetitorArchetype, StrategicConsideration, Quarter, NavigationIA, NavigationLink, NavigationUtility, NavigationCTA, ServicesMegaMenu, ServicesMegaMenuCategory, ServicesMegaMenuItem, ServicesMegaMenuFeature, IndustryPackSiteAudit, PagePattern, SiteAuditExtractor, } from './industry-pack';
 export type { VoicePattern, VoiceRules, VoiceExamples, VoiceExample, } from './voice-pattern';
 //# sourceMappingURL=index.d.ts.map
