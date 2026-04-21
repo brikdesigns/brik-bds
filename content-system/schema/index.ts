@@ -17,6 +17,9 @@ export type {
   ServicesMegaMenuCategory,
   ServicesMegaMenuItem,
   ServicesMegaMenuFeature,
+  IndustryPackSiteAudit,
+  PagePattern,
+  SiteAuditExtractor,
 } from './industry-pack';
 
 export type {
