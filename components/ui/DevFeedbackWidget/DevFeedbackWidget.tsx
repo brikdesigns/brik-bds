@@ -23,6 +23,12 @@ import { createPortal } from 'react-dom';
  *
  * Integrates with the Brik DevBar (`window.BrikDevBar`) when present,
  * falling back to a standalone FAB otherwise.
+ *
+ * @token-exempt — the inlined BDS object below holds raw hex values on
+ * purpose: this widget is a dev overlay that must render consistently even
+ * when the host's stylesheet has failed to load or is mid-swap. Referencing
+ * BDS tokens here would defeat the stability guarantee. If you're adding a
+ * new host-surface component, use tokens instead.
  */
 
 // ── Brand tokens (inlined — widget is a dev overlay, not consumer surface) ──
