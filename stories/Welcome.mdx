@@ -4,7 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Brik Design System
 
-BDS provides themed React components powered by CSS custom properties. All components adapt automatically across 9 bundled themes — switch using the paintbrush icon in the toolbar above.
+BDS provides themed React components powered by CSS custom properties. Switch between the three built-in themes — Brik, Brik Dark, and Client Sim — using the paintbrush icon in the toolbar above.
 
 Alongside the visual system, the **Brik Content System (BCS)** lives in this repo as the content-vocabulary peer: industry packs, voice patterns, and locked enums that pair with the visual tokens to power the portal's design + copy resolver.
 
@@ -30,9 +30,10 @@ The content-vocabulary peer to the visual tokens. Paired with BDS to drive end-t
 
 | Category | Description |
 |----------|-------------|
-| [Overview](?path=/docs/foundations-content-overview--docs) | BCS architecture, vocabulary lock, phase roadmap, consumer examples |
-| [Industries](?path=/docs/foundations-content-industries-dental--docs) | Dental, Real Estate (RV/MHC), Small Business — structured packs with affinities, page archetypes, services, seasonality, regulatory |
-| [Voices](?path=/docs/foundations-content-voices-overview--docs) | All 8 voice patterns side-by-side with rules, examples, and pairing guidance |
+| [Overview](?path=/docs/content-overview--docs) | BCS architecture, vocabulary lock, phase roadmap, consumer examples |
+| [Industries](?path=/docs/content-industries-dental--docs) | Dental, Real Estate (RV/MHC), Small Business — structured packs with affinities, page archetypes, services, seasonality, regulatory |
+| [Voices](?path=/docs/content-voices-overview--docs) | All 8 voice patterns side-by-side with rules, examples, and pairing guidance |
+| [Vocabularies — Image Mood](?path=/docs/content-vocabularies-image-mood--docs) | Locked enum driving stock image composition — editorial, clinical, lifestyle, etc. |
 
 ## Token system
 
@@ -71,7 +72,7 @@ Components use CSS custom properties from the Style Dictionary token pipeline:
 
 | Control | What it does |
 |---------|--------------|
-| Paintbrush | Switch between the 9 built-in BDS themes. Every component and doc page updates in real time. |
+| Paintbrush | Switch between the 3 built-in themes — Brik, Brik Dark, Client Sim. Every component and doc page updates in real time. |
 | Base Font | Set the root font size (14-20px). Scales all rem-based spacing and type tokens. |
 | Animations | Toggle CSS animations and transitions on/off across all stories. |
 | Font Audit | QA diagnostic theme. Assigns Georgia to heading, Verdana to body, Courier New to label. Exposes `--font-family-*` token misuse before a client theme does. |
