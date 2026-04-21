@@ -72,13 +72,29 @@ npm run typecheck
 # Scanner lives at ~/.claude/skills/anti-slop/ (global install). If it's
 # missing (fresh machine, CI), the helper gracefully skips — pre-commit
 # never breaks for infra reasons.
+#
+# Build artifacts (dist/) are excluded: Vite bundles third-party deps
+# (Radix, React) whose minified output contains legitimate empty-catch
+# patterns. Scanning them flags CRITICAL false positives on release commits.
+# Release PRs stage only dist/ + package.json, so when every scanner-eligible
+# staged file lives under dist/, the scan is skipped. Feature commits still
+# scan normally.
 ANTI_SLOP_CHECK="$HOME/.claude/skills/anti-slop/brik-rules/check-staged.sh"
 if [ -x "$ANTI_SLOP_CHECK" ]; then
-  echo "🔍 Running anti-slop CRITICAL scan on staged files..."
-  if ! "$ANTI_SLOP_CHECK" critical; then
-    echo "   Silent-failure + hallucinated-import findings block commits."
-    echo "   Fix the listed lines, or justify inline with a logger/throw."
-    echo "   To bypass (not recommended): git commit --no-verify"
-    exit 1
+  NON_DIST_STAGED=$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null \
+    | grep -E '\.(ts|tsx|js|jsx|mjs|cjs|css|scss|py)$' \
+    | grep -v '^dist/' \
+    || true)
+
+  if [ -z "$NON_DIST_STAGED" ]; then
+    echo "🔍 Anti-slop scan skipped — only build artifacts (dist/) staged."
+  else
+    echo "🔍 Running anti-slop CRITICAL scan on staged files..."
+    if ! "$ANTI_SLOP_CHECK" critical; then
+      echo "   Silent-failure + hallucinated-import findings block commits."
+      echo "   Fix the listed lines, or justify inline with a logger/throw."
+      echo "   To bypass (not recommended): git commit --no-verify"
+      exit 1
+    fi
   fi
 fi

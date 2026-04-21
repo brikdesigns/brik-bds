@@ -27210,7 +27210,7 @@ const barBase = {
 };
 const barVariantStyles = {
   text: { ...barBase, gap: "var(--gap-xl)" },
-  tab: { ...barBase, gap: 0, borderBottom: "var(--border-width-md) solid var(--border-secondary)" },
+  tab: { ...barBase, gap: 0, borderBottom: "var(--border-width-xl) solid var(--border-secondary)" },
   box: { ...barBase, gap: 0 }
 };
 const tabBase = {
@@ -27240,15 +27240,14 @@ function getTextStyles(active2, onColor) {
   };
 }
 function getTabStyles(active2, onColor) {
-  const borderColor = onColor ? "var(--border-on-color-dark)" : active2 ? "var(--border-brand-primary)" : "var(--border-secondary)";
-  const borderWidth = active2 ? "var(--border-width-xl)" : "var(--border-width-md)";
+  const borderColor = onColor ? active2 ? "var(--border-on-color-dark)" : "transparent" : active2 ? "var(--border-brand-primary)" : "transparent";
   const textColor = onColor ? "var(--text-on-color-dark)" : active2 ? "var(--text-primary)" : "var(--text-secondary)";
   return {
     ...tabBase,
     color: textColor,
-    backgroundColor: onColor ? "transparent" : "var(--background-primary)",
+    backgroundColor: "transparent",
     padding: "var(--padding-lg)",
-    borderBottom: `${borderWidth} solid ${borderColor}`,
+    borderBottom: `var(--border-width-xl) solid ${borderColor}`,
     opacity: onColor && !active2 ? 0.6 : 1
   };
 }
