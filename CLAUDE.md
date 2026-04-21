@@ -4,7 +4,7 @@ This is the **source of truth** for the Brik Design System React components.
 
 ## STOP — Worktree Rules (Non-Negotiable)
 
-**The primary worktree at `/Documents/GitHub/brik/brik-bds` stays on `main`.** Task work always lives in a dedicated worktree under `../brik-bds-worktrees/{slug}`. Never `git switch` the primary worktree to a `task/*` branch — it cross-contaminates work between concurrent agents. See the 2026-04-21 Phase B incident ([PR #169](https://github.com/brikdesigns/brik-bds/pull/169) commentary) for what happens when this rule is broken.
+**The primary worktree at `/Documents/GitHub/brik/brik-bds` stays on a base branch (`main`, or `staging` for pre-launch repos).** Task work always lives in a dedicated worktree under `../brik-bds-worktrees/{slug}`. Never `git switch` the primary worktree to a `task/*` branch — it cross-contaminates work between concurrent agents. See the 2026-04-21 Phase B incident ([PR #169](https://github.com/brikdesigns/brik-bds/pull/169) commentary) for what happens when this rule is broken.
 
 **How to start a task:**
 
