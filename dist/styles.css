@@ -423,8 +423,15 @@
 
 }
 @layer bds-components {
-/* ─── Sheet ──────────────────────────────────────────────────── */
-/* Overlay treatment aligned with Modal (2026-03-20)            */
+/*
+ * Sheet — overlay treatment aligned with Modal (2026-03-20).
+ *
+ * @token-exempt — the floating variant uses a custom multi-layer rgba
+ * shadow (line 36) that has no BDS token equivalent: two stacked
+ * rgba(0,0,0, 0.12 + 0.08) layers produce the floating-panel depth that
+ * no single --shadow-* token reproduces. Promote to Figma as
+ * --shadow-floating and remove this exemption once published.
+ */
 
 .bds-sheet-backdrop {
   position: fixed;
@@ -1928,7 +1935,14 @@
 .bds-avatar__status--away    { background-color: var(--background-presence-away); }
 }
 @layer bds-components {
-/* Board — Kanban-style horizontal board layout */
+/*
+ * Board — Kanban-style horizontal board layout.
+ *
+ * @token-exempt — the raw #fff values (card-check icon border) are var()
+ * fallbacks for --text-on-color-dark. They activate only if the token
+ * pipeline fails (stylesheet race, consumer missing BDS), matching the
+ * defensive pattern in portal's global-error.tsx. Not a migration candidate.
+ */
 
 /* ─── Board container ─────────────────────────────────── */
 
@@ -6221,9 +6235,18 @@
 }
 }
 @layer bds-components {
-/* Slider CSS — needed for pseudo-elements (::-webkit-slider-thumb, etc.) */
-/* --bds-slider-track-height, --bds-slider-thumb-size, --bds-slider-percent are component-local
-   custom properties set by Slider.tsx. The --bds-* prefix marks them as non-global. */
+/*
+ * Slider CSS — needed for pseudo-elements (::-webkit-slider-thumb, etc.).
+ *
+ * --bds-slider-track-height, --bds-slider-thumb-size, --bds-slider-percent
+ * are component-local custom properties set by Slider.tsx. The --bds-*
+ * prefix marks them as non-global.
+ *
+ * @token-exempt — the thumb shadow (line 8) uses a custom rgba(0,0,0,0.1)
+ * deliberately lighter than --shadow-sm; already annotated
+ * `bds-lint-ignore — promote to Figma`. Remove this exemption once the
+ * value ships as a Figma token.
+ */
 
 /* ─── Component-scoped override surface ── */
 .bds-slider {
@@ -6313,7 +6336,14 @@
 }
 }
 @layer bds-components {
-/* ─── Snackbar ───────────────────────────────────────────────── */
+/*
+ * Snackbar — toast-like floating notification at the page edge.
+ *
+ * @token-exempt — the shadow (line 6) uses rgba(0,0,0,0.2), a stronger
+ * alpha than --shadow-lg; already annotated
+ * `bds-lint-ignore — promote to Figma`. Remove this exemption once the
+ * stronger-alpha shadow ships as a Figma token.
+ */
 
 .bds-snackbar {
   /* ─── Component-scoped override surface ── */
@@ -7200,7 +7230,14 @@
 }
 }
 @layer bds-components {
-/* ─── Toast ──────────────────────────────────────────────────── */
+/*
+ * Toast — inline notification with custom spread shadow.
+ *
+ * @token-exempt — the shadow (line 6) uses rgba(0,0,0,0.24) with a 4px
+ * spread, a unique combination no BDS shadow token provides; already
+ * annotated `bds-lint-ignore — promote to Figma`. Remove this exemption
+ * once the spread-shadow variant ships as a Figma token.
+ */
 
 .bds-toast {
   /* ─── Component-scoped override surface ── */

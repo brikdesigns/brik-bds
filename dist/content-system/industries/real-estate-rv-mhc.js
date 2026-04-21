@@ -450,5 +450,67 @@ export const realEstateRvMhc = {
     // of their billing relationship with guests/residents. Individual guest
     // travel insurance or resident homeowner insurance is handled privately.
     insuranceProviders: [],
+    // Navigation IA — `utility-first` archetype: always-solid header, primary
+    // task ("Find a Site") leads the utility cluster. Mega-menu groups the
+    // community catalog by type (RV / MHC / Vacation Rental) so prospects
+    // can filter before they land.
+    //
+    // Mobile uses `slide-left-panel` — users are in task mode (filtering
+    // listings, checking amenities); they don't want a full-screen modal
+    // interrupt between steps.
+    navigationIA: {
+        archetype: 'utility-first',
+        primaryLinkCount: 5,
+        primaryLinks: [
+            { label: 'Communities', href: '/communities' },
+            { label: 'Amenities', href: '/amenities' },
+            { label: 'Rates', href: '/rates' },
+            { label: 'About', href: '/about' },
+            { label: 'Contact', href: '/contact' },
+        ],
+        servicesMegaMenu: {
+            triggerLabel: 'Communities',
+            columns: 3,
+            categories: [
+                {
+                    heading: 'RV Parks',
+                    items: [
+                        { label: 'All RV parks', href: '/rv-parks' },
+                        { label: 'Seasonal sites', href: '/rv-parks/seasonal', note: 'Weekly + monthly stays' },
+                        { label: 'Premium sites', href: '/rv-parks/premium', note: 'Pull-through, full hookup' },
+                    ],
+                },
+                {
+                    heading: 'Mobile Home Communities',
+                    items: [
+                        { label: 'All communities', href: '/mhc' },
+                        { label: 'Homes for sale', href: '/mhc/homes-for-sale' },
+                        { label: 'Lot rental', href: '/mhc/lot-rental' },
+                    ],
+                },
+                {
+                    heading: 'Vacation Rentals',
+                    items: [
+                        { label: 'Cabins', href: '/vacation-rentals/cabins' },
+                        { label: 'Glamping', href: '/vacation-rentals/glamping' },
+                        { label: 'Group bookings', href: '/vacation-rentals/groups' },
+                    ],
+                },
+            ],
+            featured: {
+                eyebrow: 'New here?',
+                heading: 'Find your site in under a minute',
+                body: "Tell us the dates + site type; we'll surface availability across all communities.",
+                ctaLabel: 'Check availability',
+                ctaHref: '/find-a-site',
+            },
+        },
+        utility: {
+            showPhone: true,
+            primaryCTA: { label: 'Find a Site', href: '/find-a-site', variant: 'solid' },
+        },
+        scrollBehavior: 'sticky-solid',
+        mobileDrawer: 'slide-left-panel',
+    },
 };
 //# sourceMappingURL=real-estate-rv-mhc.js.map
