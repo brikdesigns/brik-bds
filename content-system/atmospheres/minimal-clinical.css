@@ -1,0 +1,40 @@
+/**
+ * minimal-clinical atmosphere
+ *
+ * Pure-white, zero-effect layer. No vignettes, no grain, no orbs, no
+ * backdrop blurs. Trust comes from type, spacing, and precision —
+ * not atmosphere.
+ *
+ * Fit: healthcare practices not aiming luxury, legal where gravitas
+ * matters more than editorial warmth, SaaS/tech with a minimal
+ * aesthetic, utility-focused marketing.
+ *
+ * This atmosphere is deliberately tiny. The point is to establish the
+ * shared attribute vocabulary (theme_mode=light + atmosphere=minimal-
+ * clinical) without layering anything visually. Consumer sites pick
+ * this when they want a theme with no additional decoration.
+ */
+
+:root {
+  /* Pure whites, no surface shifts. */
+  --surface-primary:        #ffffff;
+  --surface-secondary:      #ffffff;
+  --surface-card:           #ffffff;
+  --background-primary:     #ffffff;
+  --background-secondary:   #ffffff;
+  --background-tertiary:    #ffffff;
+  --background-input:       #ffffff;
+  --color-surface-card:     #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-recessed: #ffffff;
+}
+
+body {
+  background: #ffffff;
+}
+
+/* No effects layer. data-ambient / data-edge / data-spotlight attributes
+   on sections/cards are simply inert under this atmosphere — they don't
+   render anything. Keeps the attribute contract consistent so the same
+   component markup works across all atmospheres without conditional
+   rendering. */

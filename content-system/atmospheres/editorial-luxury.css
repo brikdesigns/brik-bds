@@ -1,0 +1,241 @@
+/**
+ * editorial-luxury atmosphere
+ *
+ * Dark-luxury editorial treatment. Originally developed for Birdwell &
+ * Mutlak Dentistry (2026-04-21). Reference implementation lives in
+ * web/birdwell-mutlak at the time of extraction (delete local
+ * brand-overrides.css once the client profile picks this atmosphere).
+ *
+ * Design posture:
+ *   - Pure near-black (#08080a) surfaces — not #000 (avoids DPR banding)
+ *   - Atmospheric gold radial orbs, blurred 120px, at 9–14% opacity
+ *   - SVG Perlin film grain at 32% opacity, mix-blend overlay
+ *   - Cursor-tracking spotlight on interactive cards
+ *   - Section-edge vignettes for "page-turn" feel
+ *   - All motion gated by prefers-reduced-motion
+ *
+ * Cost: one fixed <body::before> GPU layer for the base vignette, one
+ * fixed <body::after> for grain. Per-section orbs are lazy — only when
+ * a section declares `data-ambient="..."`. Cursor spotlights only on
+ * elements with `data-spotlight`.
+ *
+ * Import order: goes AFTER the per-client theme CSS (so it inherits
+ * the client's --color-gold) and AFTER the consumer site's local
+ * stylesheet (so its surface tokens win over gray fallbacks).
+ *
+ * Consumer integration: the portal's generate-theme-css.ts appends an
+ * @import referencing this file into the stored theme artifact. The
+ * consumer Astro site pulls theme → atmosphere cascades automatically
+ * with no per-client CSS.
+ */
+
+:root {
+  /* NEAR-black, not pure #000 — avoids DPR gradient banding. */
+  --color-ink: #08080a;
+
+  /* Collapse all surfaces onto the editorial near-black. */
+  --surface-primary:        var(--color-ink);
+  --surface-secondary:      var(--color-ink);
+  --surface-card:           var(--color-ink);
+  --background-primary:     var(--color-ink);
+  --background-secondary:   var(--color-ink);
+  --background-tertiary:    var(--color-ink);
+  --background-input:       var(--color-ink);
+  --color-surface-card:     var(--color-ink);
+  --color-surface-elevated: var(--color-ink);
+  --color-surface-recessed: var(--color-ink);
+  --color-black:            var(--color-ink);
+
+  /* Ambient gold values used by the atmospheric utility classes. Pulls
+     from the client's --color-gold / --background-brand-primary so the
+     atmosphere takes on each client's brand hue without edits here. */
+  --ambient-gold:           rgba(196, 154, 47, 0.09);
+  --ambient-gold-strong:    rgba(196, 154, 47, 0.14);
+  --ambient-cool:           rgba(60, 80, 120, 0.08);
+}
+
+body {
+  background: var(--color-ink);
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Base atmosphere — dual-axis radial vignette on <body>.
+ * Single cheap GPU layer. Prevents flat-black "content box" feel.
+ * ─────────────────────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 0%,   rgba(196, 154, 47, 0.07), transparent 55%),
+    radial-gradient(ellipse 100% 80% at 85% 100%, rgba(140, 90, 50, 0.04), transparent 60%);
+}
+body > * { position: relative; z-index: 1; }
+
+/* ───────────────────────────────────────────────────────────────────
+ * SVG Perlin grain — the "air" in the room. 32% opacity, mix-blend
+ * overlay so it disappears on very dark regions but builds texture on
+ * mid-tones. Inline data URL = zero extra network request.
+ * ─────────────────────────────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.28 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Per-section atmosphere — data-ambient attribute drives placement.
+ *
+ *   <section data-ambient="top-right">  → gold orb top-right
+ *   <section data-ambient="top-left">   → gold orb top-left
+ *   <section data-ambient="split">      → dual gold orbs L + R
+ *   <section data-ambient="center">     → centered radial glow
+ *   <section data-ambient="bottom">     → bottom ellipse
+ *   <section data-ambient="depth">      → z-stacked far-cool + near-warm
+ * ─────────────────────────────────────────────────────────────────── */
+section[data-ambient] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+section[data-ambient] > * { position: relative; z-index: 2; }
+section[data-ambient]::before,
+section[data-ambient]::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(120px);
+}
+
+section[data-ambient="top-right"]::before {
+  top: -15%;
+  right: -10%;
+  width: 560px;
+  height: 560px;
+  background: radial-gradient(circle, var(--ambient-gold-strong) 0%, transparent 60%);
+}
+section[data-ambient="top-left"]::before {
+  top: -15%;
+  left: -10%;
+  width: 560px;
+  height: 560px;
+  background: radial-gradient(circle, var(--ambient-gold-strong) 0%, transparent 60%);
+}
+section[data-ambient="split"]::before {
+  top: 20%;
+  left: -15%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, var(--ambient-gold) 0%, transparent 60%);
+}
+section[data-ambient="split"]::after {
+  bottom: 20%;
+  right: -15%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, var(--ambient-gold) 0%, transparent 60%);
+}
+section[data-ambient="center"]::before {
+  top: 50%;
+  left: 50%;
+  width: 720px;
+  height: 720px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--ambient-gold) 0%, transparent 70%);
+}
+section[data-ambient="bottom"]::before {
+  bottom: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 600px;
+  background: radial-gradient(ellipse, var(--ambient-gold) 0%, transparent 60%);
+  border-radius: 50%;
+}
+section[data-ambient="depth"]::before {
+  top: -20%;
+  left: -10%;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--ambient-cool), transparent 70%);
+}
+section[data-ambient="depth"]::after {
+  bottom: -10%;
+  right: -5%;
+  width: 40vw;
+  height: 40vw;
+  border-radius: 50%;
+  filter: blur(60px);
+  background: radial-gradient(closest-side, var(--ambient-gold-strong), transparent 70%);
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Section-edge vignettes — "page-turn" feel between sections.
+ * Applied to sections with `data-edge` attribute.
+ * ─────────────────────────────────────────────────────────────────── */
+section[data-edge]::before,
+section[data-edge]::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 80px;
+  z-index: 3;
+  pointer-events: none;
+}
+section[data-edge]::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--color-ink), transparent);
+}
+section[data-edge]::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--color-ink), transparent);
+}
+
+/* ───────────────────────────────────────────────────────────────────
+ * Card-level cursor-tracking spotlight — `data-spotlight` attribute.
+ * Requires a pointer-tracking script that sets --mx / --my CSS vars
+ * on the target element. See BaseLayout.astro in the Birdwell site
+ * for the reference implementation.
+ * ─────────────────────────────────────────────────────────────────── */
+[data-spotlight] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+[data-spotlight]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    500px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(196, 154, 47, 0.10),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+[data-spotlight]:hover::after { opacity: 1; }
+
+/* Honor reduced-motion — drop the animated atmospheric transitions. */
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after,
+  section[data-ambient]::before,
+  section[data-ambient]::after,
+  [data-spotlight]::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

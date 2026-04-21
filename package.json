@@ -19,6 +19,13 @@
     "./blueprints": "./blueprints/blueprint-library.json",
     "./blueprints/library.json": "./blueprints/blueprint-library.json",
     "./content-system/compliance/healthcare-ada.md": "./content-system/compliance/healthcare-ada.md",
+    "./atmospheres/editorial-luxury.css":  "./content-system/atmospheres/editorial-luxury.css",
+    "./atmospheres/cinematic-dramatic.css": "./content-system/atmospheres/cinematic-dramatic.css",
+    "./atmospheres/minimal-clinical.css":  "./content-system/atmospheres/minimal-clinical.css",
+    "./atmospheres/warm-soft.css":          "./content-system/atmospheres/warm-soft.css",
+    "./atmospheres/clean-bright.css":       "./content-system/atmospheres/clean-bright.css",
+    "./atmospheres/organic-textured.css":  "./content-system/atmospheres/organic-textured.css",
+    "./atmospheres/none.css":               "./content-system/atmospheres/none.css",
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
     "./bridge.css": "./dist/bridge.css"
@@ -26,7 +33,8 @@
   "files": [
     "dist",
     "blueprints/blueprint-library.json",
-    "content-system/compliance/*.md"
+    "content-system/compliance/*.md",
+    "content-system/atmospheres/*.css"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
