@@ -2,13 +2,13 @@ import { Meta } from '@storybook/addon-docs/blocks';
 import { TierBadge, CodeSnippet } from '../_components/tiers-components';
 import { AnimationDemo, ClipRevealDemo, EffectGrid } from '../_components/effects-components';
 
-<Meta title="Foundations/Motion/Effects/Scroll Reveals" />
+<Meta title="Motion/Effects/Scroll Reveals" />
 
 # Scroll Reveals <TierBadge tier="lightweight" />
 
 All scroll reveal effects are in `css/animations.css` and triggered by toggling `.is-visible` on the element when it enters the viewport. The trigger mechanism is a plain IntersectionObserver — no library required.
 
-See [Lightweight tier](?path=/docs/foundations-motion-tiers-lightweight--docs) for the observer snippet and full import order.
+See [Lightweight tier](?path=/docs/motion-tiers-lightweight--docs) for the observer snippet and full import order.
 
 ## Clip-path reveals
 
@@ -113,7 +113,7 @@ Apply `data-reveal-stagger` to a parent and the observer script applies staggere
   <div class="card">Card 3</div>
 </div>`} />
 
-For dynamic stagger (item count unknown at build time), use GSAP `ScrollTrigger.batch()`. See [GSAP tier](?path=/docs/foundations-motion-tiers-gsap--docs).
+For dynamic stagger (item count unknown at build time), use GSAP `ScrollTrigger.batch()`. See [GSAP tier](?path=/docs/motion-tiers-gsap--docs).
 
 ## Parallax
 
@@ -125,6 +125,6 @@ Apply `.parallax-element` to an element with a `data-parallax-speed` attribute (
 
 ## Related
 
-- [Lightweight Tier](?path=/docs/foundations-motion-tiers-lightweight--docs)
-- [Hover Effects](?path=/docs/foundations-motion-effects-hover--docs)
-- [GSAP Tier (for scroll-scrubbed reveals)](?path=/docs/foundations-motion-tiers-gsap--docs)
+- [Lightweight Tier](?path=/docs/motion-tiers-lightweight--docs)
+- [Hover Effects](?path=/docs/motion-effects-hover--docs)
+- [GSAP Tier (for scroll-scrubbed reveals)](?path=/docs/motion-tiers-gsap--docs)
