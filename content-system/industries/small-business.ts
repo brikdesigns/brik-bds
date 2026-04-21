@@ -312,4 +312,26 @@ export const smallBusiness: IndustryPack = {
   // verticals that require insurance (health, legal, financial) should be
   // promoted to dedicated packs where insurance arrays are meaningful.
   insuranceProviders: [],
+
+  // Navigation IA — `editorial-transparent` is the generic baseline.
+  // 4 primary links, no mega-menu (small businesses rarely need grouped
+  // catalogs), reveal-on-scroll keeps chrome out of the way during
+  // content consumption. Dedicated verticals that need a mega-menu
+  // should graduate to their own pack (see dental for the template).
+  navigationIA: {
+    archetype: 'editorial-transparent',
+    primaryLinkCount: 4,
+    primaryLinks: [
+      { label: 'About', href: '/about' },
+      { label: 'Services', href: '/services' },
+      { label: 'Work', href: '/work' },
+      { label: 'Contact', href: '/contact' },
+    ],
+    utility: {
+      showPhone: true,
+      primaryCTA: { label: 'Get in Touch', href: '/contact', variant: 'solid' },
+    },
+    scrollBehavior: 'reveal-on-scroll',
+    mobileDrawer: 'fullscreen-overlay',
+  },
 };

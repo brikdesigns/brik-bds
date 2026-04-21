@@ -4,6 +4,9 @@ import type {
   Personality,
   Voice,
   VisualStyle,
+  NavArchetype,
+  ScrollBehavior,
+  DrawerPattern,
 } from '../vocabularies';
 
 /**
@@ -166,6 +169,93 @@ export interface IndustryPack {
   insuranceProviders: readonly string[];
   insurancePlans?: readonly string[];
   financing?: readonly string[];
+
+  /**
+   * Navigation IA defaults — the site-header archetype this industry ships.
+   *
+   * The BDS `<SiteHeader>` component (in `@brikdesigns/bds/blueprints-astro`)
+   * reads this to render the correct shape at build time. Clients can
+   * override any field per-engagement via the portal Intel tab, but the
+   * pack's defaults represent Brik's curated recommendation for the
+   * vertical's audience.
+   *
+   * Leave unset to get the `small-business` fallback (editorial-transparent,
+   * 4 links, no mega-menu).
+   */
+  navigationIA?: NavigationIA;
+}
+
+export interface NavigationIA {
+  /** Overall archetype — see NAV_ARCHETYPE_VALUES for semantics. */
+  archetype: NavArchetype;
+  /**
+   * Number of primary links the header surfaces (excluding the logo and
+   * the utility cluster). Research target: 3-5. Higher counts produce
+   * "bloated" feeling at the top of the page.
+   */
+  primaryLinkCount: number;
+  /** Default primary link slots — clients override per-engagement. */
+  primaryLinks: readonly NavigationLink[];
+  /** Optional Services / Practice Areas / Specialties mega-menu spec. */
+  servicesMegaMenu?: ServicesMegaMenu;
+  /** Utility cluster spec — phone + primary CTA + optional secondary login. */
+  utility: NavigationUtility;
+  /** How the header responds to scroll. */
+  scrollBehavior: ScrollBehavior;
+  /** Mobile drawer shape. */
+  mobileDrawer: DrawerPattern;
+}
+
+export interface NavigationLink {
+  label: string;
+  href: string;
+}
+
+export interface ServicesMegaMenu {
+  /** The trigger label shown in the primary nav row. */
+  triggerLabel: string;
+  /** Number of columns in the mega-menu grid. Typically 3-4. */
+  columns: number;
+  /** Grouped categories — each category renders one column. */
+  categories: readonly ServicesMegaMenuCategory[];
+  /** Optional featured card anchored to the rightmost column. */
+  featured?: ServicesMegaMenuFeature;
+}
+
+export interface ServicesMegaMenuCategory {
+  heading: string;
+  items: readonly ServicesMegaMenuItem[];
+}
+
+export interface ServicesMegaMenuItem {
+  label: string;
+  href: string;
+  /** One-line descriptor shown under the label on hover / focus. */
+  note?: string;
+}
+
+export interface ServicesMegaMenuFeature {
+  eyebrow: string;
+  heading: string;
+  body: string;
+  ctaLabel: string;
+  ctaHref: string;
+}
+
+export interface NavigationUtility {
+  /** Render a click-to-call phone link in the utility cluster. */
+  showPhone: boolean;
+  /** Primary CTA — the conversion action the vertical is optimizing for. */
+  primaryCTA: NavigationCTA;
+  /** Optional secondary CTA (e.g. patient login, member portal). */
+  secondaryCTA?: NavigationCTA;
+}
+
+export interface NavigationCTA {
+  label: string;
+  href: string;
+  /** Visual treatment — drives the button variant in `<SiteHeader>`. */
+  variant: 'solid' | 'ghost' | 'link';
 }
 
 export type Quarter = 'Q1' | 'Q2' | 'Q3' | 'Q4';
