@@ -476,4 +476,69 @@ export const dental: IndustryPack = {
     'LendingClub',
     'In-House Financing',
   ],
+
+  // Navigation IA — the dental archetype is `editorial-transparent`:
+  // hero photography breathes at first load, header becomes frosted-glass
+  // past 80px scroll. Services mega-menu groups the catalog by treatment
+  // category (Cosmetic / Restorative & Preventive / Comfort & Support)
+  // + a featured "new patient" card that directs to the first-visit
+  // landing page — dental's primary conversion surface.
+  //
+  // Primary link count kept tight at 4 to resist the "stale + bloated"
+  // failure mode observed on generic dental template sites. Utility
+  // cluster leads with phone (still the #1 booking channel for dental)
+  // and a solid Book CTA.
+  navigationIA: {
+    archetype: 'editorial-transparent',
+    primaryLinkCount: 4,
+    primaryLinks: [
+      { label: 'Services', href: '/services' },
+      { label: 'About', href: '/about' },
+      { label: 'Smile Gallery', href: '/smile-gallery' },
+      { label: 'Financing', href: '/financing' },
+    ],
+    servicesMegaMenu: {
+      triggerLabel: 'Services',
+      columns: 4,
+      categories: [
+        {
+          heading: 'Cosmetic',
+          items: [
+            { label: 'Porcelain veneers', href: '/services/veneers', note: 'Custom-crafted restorations' },
+            { label: 'Cosmetic dentistry', href: '/services/cosmetic-dentistry', note: 'Whitening, bonding, smile design' },
+            { label: 'Teeth whitening', href: '/services/whitening', note: 'In-office + take-home systems' },
+          ],
+        },
+        {
+          heading: 'Restorative & Preventive',
+          items: [
+            { label: 'Restorative dentistry', href: '/services/restorative-dentistry', note: 'Crowns, bridges, full-mouth rehab' },
+            { label: 'Preventive care', href: '/services/preventive-care', note: 'Cleanings, exams, family care' },
+            { label: 'Dentures', href: '/services/dentures', note: 'Custom-fit, natural look' },
+          ],
+        },
+        {
+          heading: 'Comfort & Support',
+          items: [
+            { label: 'Sedation dentistry', href: '/services/sedation-dentistry', note: 'Nitrous oxide available' },
+            { label: 'Your first visit', href: '/first-visit', note: '90 minutes, no surprises' },
+            { label: 'Membership', href: '/membership', note: 'In-house care plan' },
+          ],
+        },
+      ],
+      featured: {
+        eyebrow: 'New patient?',
+        heading: '90 minutes with the doctor you choose',
+        body: 'Choose your doctor when you book. Both doctors are accepting new patients.',
+        ctaLabel: 'Request your first visit',
+        ctaHref: '/contact',
+      },
+    },
+    utility: {
+      showPhone: true,
+      primaryCTA: { label: 'Book', href: '/contact', variant: 'solid' },
+    },
+    scrollBehavior: 'transparent-top-frosted-past-80',
+    mobileDrawer: 'fullscreen-overlay',
+  },
 };
