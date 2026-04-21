@@ -199,7 +199,7 @@ Proposed sequence (weeks, not days — each requires review):
 
 1. ✓ **Completed 2026-04-20:** Adopted on TNCLD. Updated Accessibility Statement + other legal pages published.
 2. ✓ **Completed 2026-04-21:** Promoted this doc to `brik/brik-bds/content-system/compliance/healthcare-ada.md`. BDS package version bumped; consumers sync on next `npm update`.
-3. **Week of 2026-05-04:** Add Compliance Profile section to each portal repo's CLAUDE.md. Wire axe-core CI into `brik-client-portal` as pilot.
+3. ✓ **Partial — 2026-04-21:** Compliance Profile sections landed in `brik-client-portal`, `renew-pms`, and `freedom-client-portal` CLAUDE.mds (portal + renew-pms bumped to `@brikdesigns/bds@0.22.0`; freedom scoped to property-management compliance — ADA Title III, FHA, conditional §504). **Remaining:** wire axe-core CI into `brik-client-portal` as pilot. **Open question:** confirm Freedom Property Management's HUD-subsidized housing status to finalize §504 applicability.
 4. **Week of 2026-05-11:** Extend the 5 BDS components with required a11y props. One PR per component, merged into BDS main, consumers update on their normal cadence.
 5. **Week of 2026-05-18:** Port axe-core CI setup from `brik-client-portal` to `renew-pms` and `freedom-client-portal`.
 6. **Week of 2026-06-01:** Build the Accessibility Preferences panel in the shared portal layer.
