@@ -94,15 +94,17 @@ Blueprints live alongside theming because they make the same kind of decision �
 
 Before a client brand goes live, test it in Storybook. Three checks:
 
-1. **Contrast.** Open [Contrast Compliance](?path=/docs/theming-contrast-compliance--docs) — it probes all three built-in themes and reports WCAG AA pass/fail across the six pairs that matter most (body on page, body on surface, brand text on page, inverse on brand fill, muted, secondary). Client themes should be added to that probe when they ship.
+1. **Contrast.** Open [Contrast Compliance](?path=/docs/overview-health-contrast-compliance--docs) — it probes all three built-in themes and reports WCAG AA pass/fail across the six pairs that matter most (body on page, body on surface, brand text on page, inverse on brand fill, muted, secondary). Client themes should be added to that probe when they ship.
 2. **Font-family correctness.** Switch to **Client Sim** in the toolbar. Any component using the wrong `--font-family-*` token (e.g. a heading using `--font-family-body`) becomes immediately visible because the three families are assigned distinct typefaces.
 3. **Interaction states.** Hover every primary button. If the hover state stays Poppy red after a brand change, the client theme is missing `--background-brand-primary-hover`.
 
 ## Related
 
-- [Theme Switcher](?path=/docs/theming-theme-switcher--docs) — live demo, toolbar controls, per-token inspection
+- [Theme Switcher](?path=/docs/overview-theme-switcher--docs) — live demo, toolbar controls, per-token inspection
 - [Client Themes](?path=/docs/theming-client-themes--docs) — override matrix, minimal `theme-{client}.css` template, interaction-state rules
-- [Contrast Compliance](?path=/docs/theming-contrast-compliance--docs) — WCAG AA validation for the 3 built-in themes
+- [Atmospheres](?path=/docs/theming-atmospheres--docs) — CSS layers that sit on top of a client's theme to set visual character
+- [Navigation Archetypes](?path=/docs/theming-navigation-archetypes--docs) — locked site-header patterns each industry pack selects from
+- [Contrast Compliance](?path=/docs/overview-health-contrast-compliance--docs) — WCAG AA validation for the 3 built-in themes
 - [Blueprints](?path=/docs/theming-blueprints--docs) — layout + mood catalogue that pairs with theme tokens
 - [Design Tokens](?path=/docs/foundations-design-tokens-overview--docs) — the token inventory that theming overrides
 - [Content System](?path=/docs/content-overview--docs) — the content-vocabulary peer that feeds blueprint selection
