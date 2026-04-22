@@ -55,6 +55,13 @@ export {
 } from './nav-archetype';
 
 export {
+  FOOTER_ARCHETYPE_VALUES,
+  isFooterArchetype,
+  DEFAULT_FOOTER_ARCHETYPE,
+  type FooterArchetype,
+} from './footer-archetype';
+
+export {
   SCROLL_BEHAVIOR_VALUES,
   isScrollBehavior,
   type ScrollBehavior,
