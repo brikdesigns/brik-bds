@@ -75,6 +75,38 @@ export function getIndustryPainPoints(slug) {
     }));
 }
 /**
+ * Returns the SEO keyword catalog for the given industry, merged from
+ * `keywordBank.primary` (brand/category) and `keywordBank.serviceLevel`
+ * (service/procedure). Each entry carries a `tier` flag. Falls back to
+ * the `small-business` pack when slug is unknown. Duplicate slugs
+ * across the two tiers are dropped — `primary` wins first.
+ *
+ * Stream C canary #3: SEO keywords as BCS-seeded client intel. Clients
+ * pick the industry keywords they want to target + add long-tails as
+ * custom entries. Downstream site-structure work consumes the picked
+ * slugs to seed page H1s and meta descriptions.
+ */
+export function getIndustryKeywords(slug) {
+    const pack = resolvePack(slug);
+    const out = [];
+    const seen = new Set();
+    for (const kw of pack.keywordBank.primary) {
+        const s = toSlug(kw);
+        if (seen.has(s))
+            continue;
+        seen.add(s);
+        out.push({ slug: s, displayName: kw, tier: 'primary' });
+    }
+    for (const kw of pack.keywordBank.serviceLevel) {
+        const s = toSlug(kw);
+        if (seen.has(s))
+            continue;
+        seen.add(s);
+        out.push({ slug: s, displayName: kw, tier: 'service-level' });
+    }
+    return out;
+}
+/**
  * Returns accepted payment methods and financing mechanisms for the given
  * industry. Falls back to `small-business` payment types when slug is unknown.
  */

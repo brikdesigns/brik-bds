@@ -19,5 +19,5 @@ export const industryPacks = {
     'small-business': smallBusiness,
 };
 export { dental, realEstateRvMhc, smallBusiness };
-export { getIndustryServices, getIndustryServicesCatalog, getIndustryPainPoints, getIndustryPaymentTypes, getIndustryInsuranceProviders, getIndustryConditions, getIndustryProcedures, getIndustryAmenities, getIndustriesForParent, getIndustryInsurancePlans, getIndustryFinancing, } from './getters';
+export { getIndustryServices, getIndustryServicesCatalog, getIndustryPainPoints, getIndustryKeywords, getIndustryPaymentTypes, getIndustryInsuranceProviders, getIndustryConditions, getIndustryProcedures, getIndustryAmenities, getIndustriesForParent, getIndustryInsurancePlans, getIndustryFinancing, } from './getters';
 //# sourceMappingURL=index.js.map
