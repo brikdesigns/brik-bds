@@ -1,0 +1,155 @@
+---
+/**
+ * about_story_split — 2-column narrative section. Label + heading +
+ * body on the left; a single pull-quote or supporting callout on the
+ * right. The story blueprint for "who we are" moments on home pages
+ * and about pages.
+ *
+ * Contract: BlueprintProps.
+ *   - section.heading    — section heading (h2)
+ *   - section.subheading — eyebrow (optional)
+ *   - section.body       — the narrative (REQUIRED by content gen)
+ *   - section.items[0]   — optional pull-quote:
+ *                            item.title = attribution (role/name)
+ *                            item.description = the quote
+ *
+ * required_facts: []. Section-driven.
+ *
+ * CSS custom properties:
+ *   --bp-about-story-split-padding-y
+ *   --bp-about-story-split-bg             (default: var(--page-primary))
+ *   --bp-about-story-split-heading-color  (default: var(--text-primary))
+ *   --bp-about-story-split-body-color     (default: var(--text-secondary))
+ *   --bp-about-story-split-quote-accent   (default: var(--border-brand-primary))
+ *
+ * a11y: h2 + aria-labelledby. Pull-quote uses semantic blockquote +
+ * cite. Reading order: narrative first (left column), supporting
+ * callout second (right) — matches DOM order on every viewport.
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+const headingId = `bp-about-story-split-${section.sectionKey}-h`;
+const callout = section.items[0];
+---
+
+<section
+  class="bp-about-story-split"
+  aria-labelledby={headingId}
+  data-blueprint-key="about_story_split"
+>
+  <div class="bp-about-story-split__container">
+    <div class="bp-about-story-split__narrative">
+      {section.subheading && (
+        <p class="bp-about-story-split__eyebrow">{section.subheading}</p>
+      )}
+      <h2 id={headingId} class="bp-about-story-split__heading">{section.heading}</h2>
+      {section.body && (
+        <p class="bp-about-story-split__body">{section.body}</p>
+      )}
+    </div>
+
+    {callout && (
+      <aside class="bp-about-story-split__callout">
+        <blockquote class="bp-about-story-split__quote">
+          <p class="bp-about-story-split__quote-text">{callout.description}</p>
+          <cite class="bp-about-story-split__quote-cite">{callout.title}</cite>
+        </blockquote>
+      </aside>
+    )}
+  </div>
+</section>
+
+<style>
+  .bp-about-story-split {
+    background: var(--bp-about-story-split-bg, var(--page-primary));
+    padding-block: var(
+      --bp-about-story-split-padding-y,
+      clamp(var(--space-3xl), 7vw, var(--space-5xl))
+    );
+  }
+
+  .bp-about-story-split__container {
+    max-width: var(--size-container-xl, 1280px);
+    margin-inline: auto;
+    padding-inline: var(--space-xl);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+
+  @media (min-width: 768px) {
+    .bp-about-story-split__container {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--space-3xl);
+      align-items: start;
+    }
+  }
+
+  .bp-about-story-split__narrative {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .bp-about-story-split__eyebrow {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-brand-primary);
+  }
+
+  .bp-about-story-split__heading {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--font-size-600), 3.5vw, var(--font-size-900));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--bp-about-story-split-heading-color, var(--text-primary));
+  }
+
+  .bp-about-story-split__body {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-400);
+    line-height: var(--line-height-relaxed);
+    color: var(--bp-about-story-split-body-color, var(--text-secondary));
+    max-width: 65ch;
+  }
+
+  .bp-about-story-split__callout {
+    padding: var(--space-lg);
+    border-left: 2px solid var(--bp-about-story-split-quote-accent, var(--border-brand-primary));
+    background: var(--surface-secondary);
+  }
+
+  .bp-about-story-split__quote {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .bp-about-story-split__quote-text {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-500);
+    font-style: normal;
+    line-height: var(--line-height-relaxed);
+    color: var(--text-primary);
+  }
+
+  .bp-about-story-split__quote-cite {
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-style: normal;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+</style>

@@ -1,0 +1,141 @@
+---
+/**
+ * stats_dark_bar — horizontal row of proof-point stats on a dark
+ * surface. Each item renders as { value, label } — item.title carries
+ * the large number/string, item.description the caption underneath.
+ *
+ * Intentionally dark-surfaced (uses a surface-inverse token by
+ * default) so this blueprint is visually distinct from the
+ * adjacent body of the page and reads as a weighty proof moment.
+ *
+ * Contract: BlueprintProps.
+ *   - section.heading (optional, rendered as visually-hidden label
+ *     for the stats region to give assistive tech a name)
+ *   - section.items[] — REQUIRED shape, each: { title, description }
+ *     title = the number/string, description = the caption
+ *
+ * required_facts: []. Section-driven.
+ *
+ * CSS custom properties:
+ *   --bp-stats-dark-bar-padding-y
+ *   --bp-stats-dark-bar-bg        (default: var(--surface-inverse))
+ *   --bp-stats-dark-bar-value-color   (default: var(--text-on-inverse))
+ *   --bp-stats-dark-bar-label-color   (default: var(--text-muted-on-inverse))
+ *   --bp-stats-dark-bar-divider       (default: var(--border-secondary))
+ *
+ * a11y: semantic list (ul/li). If section.heading present, wired via
+ * aria-labelledby; if absent, aria-label fallback. Numbers are
+ * content, not decoration — readable by screen readers.
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+
+const headingId = `bp-stats-dark-bar-${section.sectionKey}-h`;
+const hasHeading = Boolean(section.heading);
+const items = section.items;
+---
+
+<section
+  class="bp-stats-dark-bar"
+  aria-labelledby={hasHeading ? headingId : undefined}
+  aria-label={!hasHeading ? 'Key stats' : undefined}
+  data-blueprint-key="stats_dark_bar"
+>
+  <div class="bp-stats-dark-bar__container">
+    {hasHeading && (
+      <h2 id={headingId} class="bp-stats-dark-bar__sr-heading">{section.heading}</h2>
+    )}
+    <ul class="bp-stats-dark-bar__list" role="list">
+      {items.map((item) => (
+        <li class="bp-stats-dark-bar__item">
+          <span class="bp-stats-dark-bar__value">{item.title}</span>
+          <span class="bp-stats-dark-bar__label">{item.description}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .bp-stats-dark-bar {
+    background: var(--bp-stats-dark-bar-bg, var(--surface-inverse, var(--color-black)));
+    padding-block: var(
+      --bp-stats-dark-bar-padding-y,
+      clamp(var(--space-xl), 5vw, var(--space-3xl))
+    );
+  }
+
+  .bp-stats-dark-bar__container {
+    max-width: var(--size-container-xl, 1280px);
+    margin-inline: auto;
+    padding-inline: var(--space-xl);
+  }
+
+  .bp-stats-dark-bar__sr-heading {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .bp-stats-dark-bar__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 640px) {
+    .bp-stats-dark-bar__list {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+  }
+
+  .bp-stats-dark-bar__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    padding-block: var(--space-sm);
+    border-left: 1px solid var(--bp-stats-dark-bar-divider, var(--border-secondary));
+    padding-left: var(--space-md);
+  }
+
+  @media (max-width: 639px) {
+    .bp-stats-dark-bar__item {
+      border-left: none;
+      border-top: 1px solid var(--bp-stats-dark-bar-divider, var(--border-secondary));
+      padding-top: var(--space-md);
+      padding-left: 0;
+    }
+    .bp-stats-dark-bar__item:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+  }
+
+  .bp-stats-dark-bar__value {
+    font-family: var(--font-family-display, var(--font-family-heading));
+    font-size: clamp(var(--font-size-700), 4vw, var(--font-size-900));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--bp-stats-dark-bar-value-color, var(--text-on-inverse, var(--color-white)));
+  }
+
+  .bp-stats-dark-bar__label {
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bp-stats-dark-bar-label-color, var(--text-muted-on-inverse, var(--color-gray-light)));
+  }
+</style>
