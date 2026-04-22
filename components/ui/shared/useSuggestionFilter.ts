@@ -29,6 +29,11 @@ export interface UseSuggestionFilterOptions {
    * free-form and stays in primary (AddableComboList style).
    */
   onPrimaryCommitted?: () => void;
+  /**
+   * Called when Backspace is pressed while the query is empty — consumers
+   * wire this to "remove the last selected tag" (see AddableComboList).
+   */
+  onBackspaceEmpty?: () => void;
 }
 
 export interface UseSuggestionFilterReturn {
@@ -86,6 +91,7 @@ export function useSuggestionFilter({
   onStrictReject,
   onDuplicate,
   onPrimaryCommitted,
+  onBackspaceEmpty,
 }: UseSuggestionFilterOptions): UseSuggestionFilterReturn {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -201,10 +207,18 @@ export function useSuggestionFilter({
           }
           break;
         }
+        case 'Backspace': {
+          // Empty-input backspace removes the last selected tag (if consumer opts in).
+          // Don't preventDefault — when the query has content, native deletion must run.
+          if (query.length === 0) {
+            onBackspaceEmpty?.();
+          }
+          break;
+        }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isOpen, filtered, activeIndex, query, strict, commitValue, onPrimaryCommitted, onCancel, closeList],
+    [isOpen, filtered, activeIndex, query, strict, commitValue, onPrimaryCommitted, onCancel, closeList, onBackspaceEmpty],
   );
 
   const activeDescendant =

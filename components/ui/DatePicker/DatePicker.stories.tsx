@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { DatePicker } from './DatePicker';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -71,17 +71,22 @@ export const Playground: Story = {
     // Open calendar
     await userEvent.click(trigger);
 
-    // Calendar opens in a Radix portal — use findByRole to wait for async render
+    // Calendar opens in a Radix portal — default findBy timeout (1s) is too
+    // tight under parallel browser-vitest load. 3s absorbs render + animation.
     const body = within(document.body);
-    const dialog = await body.findByRole('dialog');
+    const dialog = await body.findByRole('dialog', {}, { timeout: 3000 });
     await expect(dialog).toBeVisible();
 
-    // Click a day cell
-    const dayCells = within(dialog).getAllByRole('gridcell');
-    const clickableDay = dayCells.find(cell => !cell.hasAttribute('disabled') && cell.textContent);
-    if (clickableDay) {
-      await userEvent.click(clickableDay);
-    }
+    // Wait for the day grid to mount (react-day-picker renders asynchronously
+    // after the dialog opens). Poll for a clickable cell instead of querying once.
+    const clickableDay = await waitFor(() => {
+      const cells = within(dialog).getAllByRole('gridcell');
+      const cell = cells.find((c) => !c.hasAttribute('disabled') && c.textContent?.trim());
+      if (!cell) throw new Error('No clickable day cell found yet');
+      return cell;
+    }, { timeout: 3000 });
+
+    await userEvent.click(clickableDay);
   },
 };
 

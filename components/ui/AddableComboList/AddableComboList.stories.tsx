@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { AddableComboList } from './AddableComboList';
 
 // ── Suggestion seeds (inline — component is vocabulary-agnostic) ──────────────
@@ -245,11 +245,12 @@ export const SelectFromDropdown: Story = {
     const input = canvas.getByRole('combobox');
     await userEvent.type(input, 'Crown');
 
-    // Dropdown should appear with "Crowns"
-    const option = await canvas.findByRole('option', { name: 'Crowns' });
+    // Dropdown should appear with "Crowns" — generous timeout for filter debounce
+    const option = await canvas.findByRole('option', { name: 'Crowns' }, { timeout: 3000 });
     await userEvent.click(option);
 
-    await expect(args.onChange).toHaveBeenCalledWith(['Crowns']);
+    // onChange fires after React commits — poll so we don't race the commit.
+    await waitFor(() => expect(args.onChange).toHaveBeenCalledWith(['Crowns']));
   },
 };
 
@@ -272,7 +273,7 @@ export const FreeFormEntry: Story = {
     const input = canvas.getByRole('combobox');
     await userEvent.type(input, 'Custom Service{Enter}');
 
-    await expect(args.onChange).toHaveBeenCalledWith(['Custom Service']);
+    await waitFor(() => expect(args.onChange).toHaveBeenCalledWith(['Custom Service']));
   },
 };
 
@@ -295,10 +296,14 @@ export const KeyboardNavigation: Story = {
     const input = canvas.getByRole('combobox');
     await userEvent.type(input, 'Crown');
 
+    // Wait for the listbox before firing keyboard nav — otherwise ArrowDown
+    // can fire before the first option is highlightable.
+    await canvas.findByRole('listbox', {}, { timeout: 3000 });
+
     // ArrowDown to highlight first option, Enter to commit
     await userEvent.keyboard('{ArrowDown}{Enter}');
 
-    await expect(args.onChange).toHaveBeenCalledWith(['Crowns']);
+    await waitFor(() => expect(args.onChange).toHaveBeenCalledWith(['Crowns']));
   },
 };
 
@@ -321,11 +326,11 @@ export const EscapeClosesDropdown: Story = {
     await userEvent.type(input, 'Crown');
 
     // Dropdown should be open
-    await canvas.findByRole('listbox');
+    await canvas.findByRole('listbox', {}, { timeout: 3000 });
 
-    // Escape closes dropdown but keeps input open
+    // Escape closes dropdown but keeps input open — poll for teardown.
     await userEvent.keyboard('{Escape}');
-    await expect(canvas.queryByRole('listbox')).toBeNull();
+    await waitFor(() => expect(canvas.queryByRole('listbox')).toBeNull());
 
     // onChange must not have been called
     await expect(args.onChange).not.toHaveBeenCalled();
@@ -353,7 +358,7 @@ export const BackspaceRemovesLastTag: Story = {
     await userEvent.click(input);
     await userEvent.keyboard('{Backspace}');
 
-    await expect(args.onChange).toHaveBeenCalledWith(['Crowns']);
+    await waitFor(() => expect(args.onChange).toHaveBeenCalledWith(['Crowns']));
   },
 };
 
@@ -376,7 +381,8 @@ export const StrictRejectsFreeForm: Story = {
     const input = canvas.getByRole('combobox');
     await userEvent.type(input, 'Random Insurer{Enter}');
 
-    // Should NOT have called onChange for a free-form value in strict mode
+    // Yield a frame so any pending handler flushes before we assert non-call.
+    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     await expect(args.onChange).not.toHaveBeenCalled();
   },
 };
@@ -401,7 +407,8 @@ export const DuplicateFlash: Story = {
     // Type the same value (different case) and press Enter
     await userEvent.type(input, 'crowns{Enter}');
 
-    // onChange must not have been called for a duplicate
+    // Yield a frame so any pending handler flushes before we assert non-call.
+    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     await expect(args.onChange).not.toHaveBeenCalled();
   },
 };

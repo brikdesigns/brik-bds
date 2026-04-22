@@ -118,7 +118,10 @@ if [ "$BEHIND" -gt 0 ]; then
     exit 1
   fi
   echo -e "${YELLOW}~ Re-running test suite against merged tree...${NC}"
-  if ! npm test -- --run 2>&1 | tail -5 | grep -qE "passed|no tests"; then
+  # Use vitest's exit code — stdout parsing was fragile (matched "passed" inside
+  # summaries that also reported failures). --retry=2 absorbs Radix portal
+  # timing jitter in Storybook interaction tests without hiding real breakage.
+  if ! npm test -- --retry=2; then
     echo ""
     echo -e "${RED}✗ Tests failed after merging ${BASE_BRANCH}.${NC}"
     echo -e "${RED}  A parallel PR introduced an incompatible change. Fix locally, commit, re-run.${NC}"

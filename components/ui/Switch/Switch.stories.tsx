@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within, fn } from 'storybook/test';
+import { expect, userEvent, waitFor, within, fn } from 'storybook/test';
 import { Switch } from './Switch';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -52,12 +52,14 @@ export const Playground: Story = {
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
+    // The Switch's input is visually hidden (opacity:0/width:0 — standard a11y
+    // pattern so the track+knob UI is what users see), so toBeVisible() never
+    // passes on it. getByRole('switch') itself asserts it's in the DOM.
     const toggle = canvas.getByRole('switch');
 
-    await expect(toggle).toBeVisible();
     await expect(toggle).not.toBeChecked();
     await userEvent.click(toggle);
-    await expect(args.onChange).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(args.onChange).toHaveBeenCalledTimes(1));
   },
 };
 
@@ -71,6 +73,8 @@ export const InteractionTest: Story = {
 
     await expect(toggle).toBeDisabled();
     await userEvent.click(toggle);
+    // Event handlers can fire on a micro-tick; wait a frame before asserting negative.
+    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     await expect(args.onChange).not.toHaveBeenCalled();
   },
 };

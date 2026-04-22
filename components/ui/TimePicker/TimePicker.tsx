@@ -290,11 +290,10 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(
               sideOffset={4}
               align="start"
               className="bds-time-picker__popover"
+              aria-label="Choose time"
             >
               <div
                 className="bds-time-picker__columns"
-                role="dialog"
-                aria-label="Choose time"
               >
                 <ScrollColumn
                   items={hours}

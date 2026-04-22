@@ -118,6 +118,9 @@ export function AddableComboList({
     },
     onCancel: cancel,
     onDuplicate: triggerDupeFlash,
+    onBackspaceEmpty: () => {
+      if (values.length > 0) onChange(values.slice(0, -1));
+    },
   });
 
   const reveal = () => {
