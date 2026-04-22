@@ -17,9 +17,13 @@
       "import": "./dist/content-system/index.js"
     },
     "./blueprints-astro": {
-      "types": "./dist/content-system/blueprints/astro/index.d.ts",
-      "import": "./dist/content-system/blueprints/astro/index.js",
-      "default": "./dist/content-system/blueprints/astro/index.js"
+      "types": "./content-system/blueprints/astro/index.ts",
+      "import": "./content-system/blueprints/astro/index.ts",
+      "default": "./content-system/blueprints/astro/index.ts"
+    },
+    "./blueprints-astro/types": {
+      "types": "./dist/content-system/blueprints/astro/types.d.ts",
+      "import": "./dist/content-system/blueprints/astro/types.js"
     },
     "./blueprints-astro/*.astro": "./content-system/blueprints/astro/*.astro",
     "./blueprints": "./blueprints/blueprint-library.json",
@@ -41,7 +45,8 @@
     "blueprints/blueprint-library.json",
     "content-system/compliance/*.md",
     "content-system/atmospheres/*.css",
-    "content-system/blueprints/astro/**/*.astro"
+    "content-system/blueprints/astro/**/*.astro",
+    "content-system/blueprints/astro/index.ts"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -70,7 +75,9 @@
     "style-dictionary": "^5.3.1",
     "typescript": "^5.5.0",
     "vite": "^6.0.0",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.2",
+    "@axe-core/playwright": "^4.10.0",
+    "axe-core": "^4.10.0"
   },
   "peerDependencies": {
     "@iconify/react": ">=5.0.0",

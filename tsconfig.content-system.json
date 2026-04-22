@@ -16,5 +16,13 @@
     "skipLibCheck": true
   },
   "include": ["content-system/**/*.ts"],
-  "exclude": ["node_modules", "dist", "**/*.mdx", "**/*.stories.ts", "**/*.stories.tsx", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.mdx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    "**/*.test.ts",
+    "content-system/blueprints/astro/index.ts"
+  ]
 }
