@@ -46,8 +46,12 @@
     "content-system/compliance/*.md",
     "content-system/atmospheres/*.css",
     "content-system/blueprints/astro/**/*.astro",
-    "content-system/blueprints/astro/index.ts"
+    "content-system/blueprints/astro/index.ts",
+    "scripts/bds-find.mjs"
   ],
+  "bin": {
+    "bds-find": "scripts/bds-find.mjs"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
@@ -111,6 +115,7 @@
     "build:lib": "vite build --config vite.config.lib.ts && npm run build:types && npm run build:content-system && npm run build:dist-tokens && npm run build:inspector-manifest",
     "build:content-system": "tsc --project tsconfig.content-system.json",
     "build:inspector-manifest": "node scripts/build-inspector-manifest.mjs",
+    "bds:find": "node scripts/bds-find.mjs",
     "build:types": "tsc --project tsconfig.build.json",
     "build:dist-tokens": "node scripts/build-dist-tokens.js",
     "chromatic": "npx chromatic --project-token=chpt_c16ee79525f408c",
