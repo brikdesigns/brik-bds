@@ -7,6 +7,7 @@ import type {
   NavArchetype,
   ScrollBehavior,
   DrawerPattern,
+  FooterArchetype,
 } from '../vocabularies';
 
 /**
@@ -183,6 +184,21 @@ export interface IndustryPack {
    * 4 links, no mega-menu).
    */
   navigationIA?: NavigationIA;
+
+  /**
+   * Footer archetype — the canonical footer shape this industry ships.
+   *
+   * Parallel to `navigationIA` — a locked-vocabulary decision that tells
+   * the BDS `<SiteFooter>` component (shipping in v0.2 of
+   * `@brikdesigns/bds/blueprints-astro`) which footer pattern to render.
+   * Clients override per-engagement via `company_profiles.footer_archetype`
+   * once that column lands with the render surface.
+   *
+   * Leave unset to get `DEFAULT_FOOTER_ARCHETYPE` (`four_col_directory`).
+   * See `content-system/vocabularies/footer-archetype.ts` for the locked
+   * values and when to pick each.
+   */
+  footerArchetype?: FooterArchetype;
 
   /**
    * Industry-specific site audit — URL patterns + structured-fact extractors

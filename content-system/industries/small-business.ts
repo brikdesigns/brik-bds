@@ -313,6 +313,13 @@ export const smallBusiness: IndustryPack = {
   // promoted to dedicated packs where insurance arrays are meaningful.
   insuranceProviders: [],
 
+  // Footer archetype — `four_col_directory` is the sensible default
+  // for most small-business verticals. Enough structure to surface
+  // contact + hours + secondary links without over-weighting any one
+  // concern. Verticals with unique footer needs (wellness, anxiety-
+  // sensitive audiences) should graduate to their own pack.
+  footerArchetype: 'four_col_directory',
+
   // Navigation IA — `editorial-transparent` is the generic baseline.
   // 4 primary links, no mega-menu (small businesses rarely need grouped
   // catalogs), reveal-on-scroll keeps chrome out of the way during
