@@ -1,0 +1,42 @@
+name: Consumer Drift Alarm
+
+# Phase 1: informational only — this workflow never fails, even when consumers
+# are significantly behind. The output surfaces in the job summary so Nick can
+# spot drift during his release flow. See scripts/check-drift.mjs for details.
+#
+# Triggers:
+#   - After every BDS release (tag push matching bds-*)
+#   - Weekly schedule (catches drift accumulating between releases)
+#   - Manual via workflow_dispatch
+
+on:
+  push:
+    tags:
+      - 'bds-*'
+  schedule:
+    - cron: '0 13 * * 1'  # Monday 09:00 ET (13:00 UTC)
+  workflow_dispatch:
+
+jobs:
+  check-drift:
+    name: Check consumer drift
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout brik-bds
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history — needed to count commits from older submodule SHAs
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check consumer drift
+        env:
+          # Requires a PAT with read access to the consumer repos.
+          # Default GITHUB_TOKEN can't cross repos; see README for setup.
+          GH_TOKEN: ${{ secrets.CONSUMER_DRIFT_TOKEN || github.token }}
+        run: node scripts/check-drift.mjs
