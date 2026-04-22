@@ -144,6 +144,7 @@ import {
   TestimonialsFeaturedLarge,
   CtaSplitContact,
   CtaDarkCentered,
+  SiteHeader,
 } from '@brikdesigns/bds/blueprints-astro';
 
 const mode: ResolvedThemeMode = 'dark';
@@ -311,6 +312,18 @@ const ctaDarkProps: BlueprintProps = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
+    <SiteHeader
+      archetype={theme.navigationArchetype}
+      brandName={clientFacts.brandName}
+      phone={clientFacts.phone}
+      navItems={[
+        { label: 'Services', href: '/services' },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' },
+      ]}
+      primaryCta={{ label: 'Book a call', href: '/contact' }}
+      currentPath="/services"
+    />
     <main>
       <HeroSplit6040 {...heroSplitProps} />
       <StatsDarkBar {...statsProps} />
@@ -393,6 +406,101 @@ const ctaDarkProps: BlueprintProps = {
 `,
 );
 
+// Dispatcher page fixture — exercises <BlueprintDispatcher> end-to-end.
+// Includes 8 known sections (covering every v0.1 component) + 1
+// UNKNOWN section with blueprintKey='hero_centered_gradient' (valid
+// library key but no Astro component yet). The unknown falls through
+// to BlueprintFallback which emits the data-blueprint-unknown-key
+// attribute that CI greps for.
+//
+// Important: the 8 known sections include two hero blueprints. On a
+// dispatcher page we accept the resulting 2× h1 situation — this is
+// a test fixture proving the DISPATCHER resolves keys, not a proof
+// of real-site composition. The "exactly one h1" contract applies to
+// real scaffolded pages, which the scaffold task enforces via pack
+// compositions (each pack's home/interior picks exactly one hero).
+writeFileSync(
+  join(scratch, 'src/pages/dispatched.astro'),
+  `---
+import type { BlueprintSection, ClientFacts, ResolvedTheme, KnownBlueprintKey } from '@brikdesigns/bds/blueprints-astro';
+import { BlueprintDispatcher } from '@brikdesigns/bds/blueprints-astro';
+
+const theme: ResolvedTheme = {
+  themeMode: 'dark',
+  atmosphere: 'editorial-luxury',
+  navigationArchetype: 'editorial-transparent',
+  footerArchetype: 'four_col_directory',
+};
+
+const clientFacts: ClientFacts = {
+  brandName: 'Dispatcher Proving',
+  tagline: null,
+  valueProposition: null,
+  services: [],
+  phone: '+1-615-555-0100',
+  email: 'hello@example.com',
+  address: null,
+  hours: [],
+  heroImageUrl: 'https://example.com/hero.webp',
+  logoUrl: null,
+  logoVariants: {},
+};
+
+function sec(blueprintKey: string, overrides: Partial<BlueprintSection> & { sectionKey: string }): BlueprintSection {
+  return {
+    sectionKey: overrides.sectionKey,
+    sectionType: overrides.sectionType ?? 'content_block',
+    heading: overrides.heading ?? null,
+    subheading: overrides.subheading ?? null,
+    body: overrides.body ?? null,
+    items: overrides.items ?? [],
+    cta: overrides.cta ?? null,
+    visualNotes: {
+      blueprintKey: blueprintKey as KnownBlueprintKey,
+      moodKeywords: [],
+      layoutBlueprint: 'test',
+      imageOpportunity: null,
+      animationSuggestion: null,
+      illustrationOpportunity: null,
+    },
+  };
+}
+
+const sections: BlueprintSection[] = [
+  sec('hero_interior_minimal', { sectionKey: 'd_hero', sectionType: 'hero', heading: 'Dispatcher proving', body: 'Reads visualNotes.blueprintKey per section.' }),
+  sec('stats_dark_bar', { sectionKey: 'd_stats', sectionType: 'stats', items: [
+    { title: '8', description: 'Blueprints shipped' },
+    { title: '25', description: 'Library total' },
+  ] }),
+  sec('services_detail_two_column', { sectionKey: 'd_services', sectionType: 'services', heading: 'What\\'s in v0.1', items: [
+    { title: 'Hero split 60/40', description: 'Text left, image right.' },
+    { title: 'Stats dark bar', description: 'Proof points on dark.' },
+  ] }),
+  sec('about_story_split', { sectionKey: 'd_about', sectionType: 'features', heading: 'How it works', body: 'Single prop shape; registry-driven dispatch.', items: [] }),
+  sec('testimonials_featured_large', { sectionKey: 'd_test', sectionType: 'testimonials', items: [
+    { title: 'Scaffold task · soon', description: 'When the portal scaffold runs, it emits <BlueprintDispatcher sections={...} /> on every page.' },
+  ] }),
+  sec('cta_split_contact', { sectionKey: 'd_cta_split', sectionType: 'cta', heading: 'Reach out', body: 'Split CTA exercising phone + email.', cta: { label: 'Contact', url: '/contact' } }),
+  // Unknown key — falls through to BlueprintFallback.
+  sec('hero_centered_gradient' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', heading: 'Not shipped yet' }),
+  sec('cta_dark_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', heading: 'End of proof', cta: { label: 'Home', url: '/' } }),
+];
+---
+<html lang="en">
+  <head>
+    <title>BDS dispatcher verify</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <main>
+      <BlueprintDispatcher sections={sections} clientFacts={clientFacts} theme={theme} />
+    </main>
+  </body>
+</html>
+`,
+);
+
 // ── 6. Install ────────────────────────────────────────────────────
 log.step('Installing scratch deps (astro@5 + packed BDS tarball)');
 run('npm install --no-audit --no-fund --prefer-offline', { cwd: scratch });
@@ -422,15 +530,16 @@ try {
 }
 
 // ── 9. Rendered-HTML assertions ──────────────────────────────────
-log.step('Asserting rendered HTML markers (home + interior pages)');
+log.step('Asserting rendered HTML markers (home + interior + dispatched)');
 const homeHtmlPath = resolve(scratch, 'dist/index.html');
 const interiorHtmlPath = resolve(scratch, 'dist/interior/index.html');
+const dispatchedHtmlPath = resolve(scratch, 'dist/dispatched/index.html');
 const homeHtml = readFileSync(homeHtmlPath, 'utf8');
 const interiorHtml = readFileSync(interiorHtmlPath, 'utf8');
-const bothHtml = homeHtml + '\n' + interiorHtml;
+const dispatchedHtml = readFileSync(dispatchedHtmlPath, 'utf8');
 
 const assertions = [
-  // Every shipped blueprint's marker present (across both pages)
+  // Every shipped blueprint's marker present across direct-import pages
   { name: 'hero_split_60_40 marker (home)',         pass: homeHtml.includes('data-blueprint-key="hero_split_60_40"') },
   { name: 'stats_dark_bar marker (home)',           pass: homeHtml.includes('data-blueprint-key="stats_dark_bar"') },
   { name: 'services_detail_two_column marker (home)',pass: homeHtml.includes('data-blueprint-key="services_detail_two_column"') },
@@ -451,6 +560,32 @@ const assertions = [
   { name: 'cta_split_contact mailto:',              pass: homeHtml.includes('href="mailto:hello@example.com"') },
   { name: 'interior hero heading rendered',         pass: interiorHtml.includes('What we do') },
   { name: 'cta_dark_centered CTA rendered',         pass: interiorHtml.includes('Book a call') },
+
+  // SiteHeader assertions (home)
+  { name: 'SiteHeader archetype marker',            pass: homeHtml.includes('data-nav-archetype="editorial-transparent"') },
+  { name: 'SiteHeader brand text rendered',         pass: homeHtml.includes('>Verify Scratch<') },
+  { name: 'SiteHeader nav landmark present',        pass: /<nav[^>]*\bbp-site-header__nav\b[^>]*aria-label="Primary"/.test(homeHtml) || /<nav[^>]*aria-label="Primary"[^>]*\bbp-site-header__nav\b/.test(homeHtml) },
+  { name: 'SiteHeader aria-current on active link', pass: homeHtml.includes('aria-current="page"') && homeHtml.includes('href="/services"') },
+  { name: 'SiteHeader phone tel: link',             pass: homeHtml.includes('class="bp-site-header__phone"') && homeHtml.includes('tel:+16155550100') },
+  { name: 'SiteHeader hamburger button',            pass: homeHtml.includes('aria-expanded="false"') && homeHtml.includes('aria-controls="bp-site-header-drawer"') },
+
+  // Dispatcher assertions (dispatched page)
+  { name: 'dispatcher: all 7 known sections rendered', pass:
+      dispatchedHtml.includes('data-blueprint-key="hero_interior_minimal"') &&
+      dispatchedHtml.includes('data-blueprint-key="stats_dark_bar"') &&
+      dispatchedHtml.includes('data-blueprint-key="services_detail_two_column"') &&
+      dispatchedHtml.includes('data-blueprint-key="about_story_split"') &&
+      dispatchedHtml.includes('data-blueprint-key="testimonials_featured_large"') &&
+      dispatchedHtml.includes('data-blueprint-key="cta_split_contact"') &&
+      dispatchedHtml.includes('data-blueprint-key="cta_dark_centered"')
+  },
+  { name: 'dispatcher: unknown key falls through to fallback', pass:
+      dispatchedHtml.includes('data-blueprint-key="__fallback__"') &&
+      dispatchedHtml.includes('data-blueprint-unknown-key="hero_centered_gradient"')
+  },
+  { name: 'dispatcher: fallback stub text visible', pass:
+      dispatchedHtml.includes('Blueprint not yet shipped')
+  },
 
   // Cross-blueprint contract checks
   { name: 'home: no data-content-needed stubs (all facts provided)', pass: !homeHtml.includes('data-content-needed=') },
@@ -484,8 +619,9 @@ try {
   const page = await context.newPage();
 
   const pagesToScan = [
-    { label: 'home',     path: homeHtmlPath },
-    { label: 'interior', path: interiorHtmlPath },
+    { label: 'home',       path: homeHtmlPath },
+    { label: 'interior',   path: interiorHtmlPath },
+    { label: 'dispatched', path: dispatchedHtmlPath },
   ];
   let totalPasses = 0;
   const allViolations = [];
@@ -544,6 +680,10 @@ const expectedFiles = [
   'content-system/blueprints/astro/TestimonialsFeaturedLarge.astro',
   'content-system/blueprints/astro/CtaSplitContact.astro',
   'content-system/blueprints/astro/CtaDarkCentered.astro',
+  // Dispatch surface (PR #7)
+  'content-system/blueprints/astro/BlueprintDispatcher.astro',
+  'content-system/blueprints/astro/BlueprintFallback.astro',
+  'content-system/blueprints/astro/SiteHeader.astro',
 ];
 
 let allPresent = true;

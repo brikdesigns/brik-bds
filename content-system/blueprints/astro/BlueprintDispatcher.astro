@@ -1,0 +1,97 @@
+---
+/**
+ * BlueprintDispatcher — reads `section.visualNotes.blueprintKey` for
+ * each section in the array and renders the corresponding Astro
+ * component. Unknown keys render `<BlueprintFallback>`.
+ *
+ * This is the ONE component a client Astro page imports to render a
+ * page body. No per-page if/else, no per-blueprint imports in client
+ * repos. The scaffold task emits pages as:
+ *
+ *   <BlueprintDispatcher sections={page.sections}
+ *                        clientFacts={...}
+ *                        theme={...} />
+ *
+ * BLUEPRINT_REGISTRY is a static object — adding a new blueprint =
+ * one import + one registry entry here + one export in index.ts.
+ * The dispatcher's shape never changes.
+ *
+ * ## Contract
+ *
+ *   Props:
+ *     - sections      — ordered array of BlueprintSection
+ *     - clientFacts   — passed through to every blueprint
+ *     - theme         — passed through to every blueprint
+ *
+ *   Behavior:
+ *     - section.visualNotes.blueprintKey ∈ BLUEPRINT_REGISTRY →
+ *         renders the matching component with full BlueprintProps
+ *     - section.visualNotes.blueprintKey ∉ BLUEPRINT_REGISTRY →
+ *         renders BlueprintFallback (which emits a
+ *         data-blueprint-unknown-key attribute for CI grep)
+ *     - section.visualNotes is null →
+ *         same as unknown — falls back
+ *
+ * ## v0.1 registry (8 blueprints)
+ *
+ * Every key listed here has a corresponding component file in this
+ * folder and a re-export in index.ts. When PR #6 or later adds a new
+ * component, update this registry in the same PR.
+ *
+ *   hero_split_60_40              → HeroSplit6040.astro
+ *   hero_interior_minimal         → HeroInteriorMinimal.astro
+ *   stats_dark_bar                → StatsDarkBar.astro
+ *   services_detail_two_column    → ServicesDetailTwoColumn.astro
+ *   about_story_split             → AboutStorySplit.astro
+ *   testimonials_featured_large   → TestimonialsFeaturedLarge.astro
+ *   cta_split_contact             → CtaSplitContact.astro
+ *   cta_dark_centered             → CtaDarkCentered.astro
+ *
+ * The 17 keys in blueprint-library.json without a component here
+ * (hero_centered_gradient, hero_fullbleed_photo, etc.) fall through
+ * to BlueprintFallback — expected during the incremental v0.1 → v1.0
+ * ramp. Each new component PR removes one fallback case.
+ */
+import type { BlueprintSection, ClientFacts, ResolvedTheme } from './types';
+
+import HeroSplit6040 from './HeroSplit6040.astro';
+import HeroInteriorMinimal from './HeroInteriorMinimal.astro';
+import StatsDarkBar from './StatsDarkBar.astro';
+import ServicesDetailTwoColumn from './ServicesDetailTwoColumn.astro';
+import AboutStorySplit from './AboutStorySplit.astro';
+import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
+import CtaSplitContact from './CtaSplitContact.astro';
+import CtaDarkCentered from './CtaDarkCentered.astro';
+import BlueprintFallback from './BlueprintFallback.astro';
+
+// The registry. Key order doesn't matter; lookup is by key. Every
+// entry's component accepts `BlueprintProps` — enforced by the
+// barrel's re-export types.
+const BLUEPRINT_REGISTRY = {
+  hero_split_60_40: HeroSplit6040,
+  hero_interior_minimal: HeroInteriorMinimal,
+  stats_dark_bar: StatsDarkBar,
+  services_detail_two_column: ServicesDetailTwoColumn,
+  about_story_split: AboutStorySplit,
+  testimonials_featured_large: TestimonialsFeaturedLarge,
+  cta_split_contact: CtaSplitContact,
+  cta_dark_centered: CtaDarkCentered,
+} as const;
+
+interface Props {
+  sections: readonly BlueprintSection[];
+  clientFacts: ClientFacts;
+  theme: ResolvedTheme;
+}
+
+const { sections, clientFacts, theme } = Astro.props;
+---
+
+{sections.map((section) => {
+  const key = section.visualNotes?.blueprintKey;
+  const Component =
+    key && key in BLUEPRINT_REGISTRY
+      ? BLUEPRINT_REGISTRY[key as keyof typeof BLUEPRINT_REGISTRY]
+      : BlueprintFallback;
+  return <Component section={section} clientFacts={clientFacts} theme={theme} />;
+})}
