@@ -459,3 +459,4 @@ export declare const semanticSpace: {
     readonly button: "var(--space-200)";
     readonly input: "var(--space-200)";
 };
+export { type ThemeSpec, BUILT_IN_THEMES, registerClientTheme, getAllThemes, } from './theme-registry';
