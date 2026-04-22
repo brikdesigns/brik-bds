@@ -23,6 +23,41 @@ function _interopNamespaceDefault(e) {
 }
 const React__namespace = /* @__PURE__ */ _interopNamespaceDefault(React);
 const ReactDOM__namespace = /* @__PURE__ */ _interopNamespaceDefault(ReactDOM);
+const BUILT_IN_THEMES = [
+  {
+    key: "brik",
+    name: "Brik",
+    description: "Default brand — poppy on white, light mode",
+    bodyClasses: ["body", "theme-brand-brik"],
+    dataTheme: "light"
+  },
+  {
+    key: "brik-dark",
+    name: "Brik Dark",
+    description: "Default brand — poppy on near-black, dark mode",
+    bodyClasses: ["body", "theme-brand-brik"],
+    dataTheme: "dark"
+  },
+  {
+    key: "client-sim",
+    name: "Client Sim",
+    description: "Font-audit theme — Georgia / Verdana / Courier New to expose family misuse",
+    bodyClasses: ["body", "theme-brand-brik", "theme-client-sim"],
+    dataTheme: "light"
+  }
+];
+const registeredClientThemes = [];
+function registerClientTheme(spec) {
+  const existingIndex = registeredClientThemes.findIndex((t) => t.key === spec.key);
+  if (existingIndex >= 0) {
+    registeredClientThemes[existingIndex] = spec;
+    return;
+  }
+  registeredClientThemes.push(spec);
+}
+function getAllThemes() {
+  return [...BUILT_IN_THEMES, ...registeredClientThemes];
+}
 const defaultTheme = {
   themeNumber: "brik",
   colorMode: "light",
@@ -26935,6 +26970,82 @@ function SheetSection({
     }
   );
 }
+function SheetSectionTitle({
+  level = "h3",
+  className,
+  children,
+  ...props
+}) {
+  const Tag2 = level;
+  return /* @__PURE__ */ jsxRuntime.jsx(Tag2, { className: bdsClass("bds-sheet-section-title", className), ...props, children });
+}
+function SheetFieldLabel({
+  htmlFor,
+  className,
+  children,
+  ...props
+}) {
+  if (htmlFor) {
+    const labelProps = props;
+    return /* @__PURE__ */ jsxRuntime.jsx(
+      "label",
+      {
+        htmlFor,
+        className: bdsClass("bds-sheet-field-label", className),
+        ...labelProps,
+        children
+      }
+    );
+  }
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "span",
+    {
+      className: bdsClass("bds-sheet-field-label", className),
+      ...props,
+      children
+    }
+  );
+}
+function SheetFieldValue({
+  empty = "Not set",
+  className,
+  children,
+  ...props
+}) {
+  const isEmpty2 = children === null || children === void 0 || children === "";
+  if (isEmpty2 && empty === null) return null;
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      className: bdsClass(
+        "bds-sheet-field-value",
+        isEmpty2 && "bds-sheet-field-value--empty",
+        className
+      ),
+      ...props,
+      children: isEmpty2 ? empty : children
+    }
+  );
+}
+function SheetHelperText({
+  tone = "neutral",
+  className,
+  children,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "span",
+    {
+      className: bdsClass(
+        "bds-sheet-helper-text",
+        tone === "error" && "bds-sheet-helper-text--error",
+        className
+      ),
+      ...props,
+      children
+    }
+  );
+}
 function SidebarNavigation({
   logo,
   navItems,
@@ -28117,6 +28228,7 @@ exports.AddressInput = AddressInput;
 exports.AlertBanner = AlertBanner;
 exports.AnimatedIcon = AnimatedIcon;
 exports.Avatar = Avatar;
+exports.BUILT_IN_THEMES = BUILT_IN_THEMES;
 exports.Badge = Badge;
 exports.Banner = Banner;
 exports.Board = Board;
@@ -28183,7 +28295,11 @@ exports.Select = Select;
 exports.ServiceBadge = ServiceBadge;
 exports.ServiceTag = ServiceTag;
 exports.Sheet = Sheet;
+exports.SheetFieldLabel = SheetFieldLabel;
+exports.SheetFieldValue = SheetFieldValue;
+exports.SheetHelperText = SheetHelperText;
 exports.SheetSection = SheetSection;
+exports.SheetSectionTitle = SheetSectionTitle;
 exports.SheetStackProvider = SheetStackProvider;
 exports.SheetStackRenderer = SheetStackRenderer;
 exports.SidebarNavigation = SidebarNavigation;
@@ -28219,6 +28335,7 @@ exports.defaultTheme = defaultTheme;
 exports.fontLineHeights = fontLineHeights;
 exports.fontSizeScale = fontSizeScale;
 exports.fontWeights = fontWeights;
+exports.getAllThemes = getAllThemes;
 exports.getServiceIconPath = getServiceIconPath;
 exports.getThemeClasses = getThemeClasses;
 exports.grayscale = grayscale;
@@ -28228,6 +28345,7 @@ exports.orange = orange;
 exports.pink = pink;
 exports.poppy = poppy;
 exports.purple = purple;
+exports.registerClientTheme = registerClientTheme;
 exports.semanticSpace = semanticSpace;
 exports.serviceIconOverrides = serviceIconOverrides;
 exports.shadowBlurScale = shadowBlurScale;

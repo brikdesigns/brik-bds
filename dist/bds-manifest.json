@@ -1,8 +1,8 @@
 {
   "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
-  "bds_version": "0.25.0",
-  "generated_at": "2026-04-22T01:27:30.504Z",
-  "component_count": 83,
+  "bds_version": "0.26.0",
+  "generated_at": "2026-04-22T02:00:16.441Z",
+  "component_count": 84,
   "token_count": 426,
   "components": {
     "bds-accordion": {
@@ -2996,6 +2996,52 @@
         "--text-muted",
         "--text-primary",
         "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-sheet-typography": {
+      "name": "SheetTypography",
+      "class_prefix": "bds-sheet-typography",
+      "storybook_url": "/?path=/story/components-sheet-typography--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "",
+      "source_path": "components/ui/SheetTypography/SheetTypography.tsx",
+      "tokens_used": [
+        "--background-primary",
+        "--body-md",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--heading-sm",
+        "--label-sm",
+        "--label-xs",
+        "--padding-sm",
+        "--padding-xl",
+        "--text-accent-red",
+        "--text-muted",
+        "--text-primary"
       ],
       "a11y": {
         "aria_attrs": [],

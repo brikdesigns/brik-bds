@@ -64,6 +64,7 @@ export * from './ServiceBadge';
 export * from './shared';
 export * from './Sheet';
 export * from './SheetSection';
+export * from './SheetTypography';
 export * from './SidebarNavigation';
 export * from './Skeleton';
 export * from './Slider';
