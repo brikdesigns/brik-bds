@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState, type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DashboardFrame, DashboardSection } from '../_components/DashboardFrame';
+import { DashboardFrame, DashboardSection } from './_components/DashboardFrame';
 import { contrastRatio } from './_components/wcag-contrast';
 
 // ─── Themes under test ──────────────────────────────────────────────
@@ -343,7 +343,7 @@ function ContrastComplianceDashboard() {
 // ─── Meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof ContrastComplianceDashboard> = {
-  title: 'Theming/Contrast Compliance',
+  title: 'Overview/Health/Contrast Compliance',
   component: ContrastComplianceDashboard,
   parameters: { layout: 'fullscreen' },
 };
