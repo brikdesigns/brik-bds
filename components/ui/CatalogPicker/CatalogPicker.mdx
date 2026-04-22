@@ -1,0 +1,106 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './CatalogPicker.stories';
+
+<Meta of={Stories} />
+
+# CatalogPicker
+
+Industry-aware multi-pick input. Renders a reference catalog (e.g. the BCS industry pack's `servicesCatalog`) as suggestion-backed suggestions and normalizes every picked entry with a stable slug plus `source: 'catalog' | 'custom'` attribution.
+
+---
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Empty state
+
+<Canvas of={Stories.Empty} />
+
+## Mixed sources
+
+The picker tags each entry by origin — catalog picks and custom additions live together in the same output array.
+
+<Canvas of={Stories.MixedSources} />
+
+## Strict (catalog-only)
+
+`strict` rejects free-text names that don't match any catalog `displayName` or alias. Use for locked vocabularies.
+
+<Canvas of={Stories.StrictCatalogOnly} />
+
+## Different industry
+
+Same component, different catalog. The picker is vocabulary-agnostic.
+
+<Canvas of={Stories.DifferentIndustry} />
+
+## Variants
+
+<Canvas of={Stories.Variants} />
+
+## Disabled
+
+<Canvas of={Stories.Disabled} />
+
+## Patterns
+
+<Canvas of={Stories.Patterns} />
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { CatalogPicker } from '@brikdesigns/bds';
+import { getIndustryServicesCatalog } from '@brikdesigns/bds/content-system';
+
+const catalog = getIndustryServicesCatalog(company.industry_slug);
+
+<CatalogPicker
+  label="Services Offered"
+  catalog={catalog}
+  value={services}
+  onChange={setServices}
+  searchPlaceholder="Search or add a service…"
+  descriptionPlaceholder="What makes this service unique here?"
+  addLabel="Add Service"
+  emptyDescriptionLabel="No description set"
+/>;
+```
+
+---
+
+## Source attribution
+
+Every picked entry carries `source: 'catalog' | 'custom'`:
+
+- **`catalog`** — matched the catalog by exact `displayName` or alias (case-insensitive). The picker assigns the catalog entry's canonical `slug`.
+- **`custom`** — no catalog match. The picker derives a kebab-case slug from the typed `displayName`. If that slug collides with an existing one, `-2`, `-3`, ... are appended until unique.
+
+Consumers persist the full array as a single JSONB column (e.g. `company_profiles.services_offered`). Downstream content generation reads the structure without having to re-derive provenance.
+
+---
+
+## When to use
+
+- Any client-intel field where the industry pack seeds defaults the client can extend (services, pain points, competitor archetypes, keyword banks).
+- Fields where provenance matters — when the difference between "this came from our industry default" and "this is client-specific" changes downstream behavior (copy generation, mockup content, competitive analysis framing).
+
+## When NOT to use
+
+- **Locked vocabularies** with no custom escape — use `<MultiSelect>` with the catalog as its options. Example: insurance plans, financing products.
+- **Flat string picks with no description** — use `<AddableComboList>` (lighter, no textarea overhead). Example: preferred terms, keywords.
+- **Structured entries with fixed fields other than description** (URL + notes, name + role) — use `<AddableEntryList>` directly; you don't need catalog wiring.
+
+---
+
+## Tokens
+
+All spacing, color, typography, and border-radius come from the token system. Most visuals inherit from `<AddableEntryList>` — the wrapper adds a `.bds-catalog-picker` hook for consumer overrides and a reserved surface for future source-attribution badges.

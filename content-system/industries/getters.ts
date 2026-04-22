@@ -1,4 +1,4 @@
-import type { IndustryPack } from '../schema';
+import type { IndustryPack, ServiceEntry } from '../schema';
 import type { IndustrySlug, ParentIndustrySlug } from '../vocabularies';
 import { industryPacks } from './index';
 import { smallBusiness } from './small-business';
@@ -27,6 +27,22 @@ function resolvePack(slug: IndustrySlug | null | undefined) {
  */
 export function getIndustryServices(slug: IndustrySlug | null | undefined): string[] {
   return [...resolvePack(slug).services];
+}
+
+/**
+ * Returns the structured services catalog for the given industry — each entry
+ * carries slug, displayName, aliases, category, and optional regulatoryNote.
+ * Falls back to the `small-business` pack's catalog when slug is unknown.
+ *
+ * Distinct from `getIndustryServices` (flat string array of suggestion seeds).
+ * Consumers that need slug-level attribution or alias matching (e.g. the
+ * portal's `<CatalogPicker>` wiring for `services_offered`) read from this
+ * getter; UIs that only need a suggestion dropdown keep using the flat one.
+ */
+export function getIndustryServicesCatalog(
+  slug: IndustrySlug | null | undefined,
+): readonly ServiceEntry[] {
+  return resolvePack(slug).servicesCatalog;
 }
 
 /**
