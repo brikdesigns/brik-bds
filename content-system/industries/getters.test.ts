@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 
 import {
   getIndustryServices,
+  getIndustryServicesCatalog,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
   getIndustryConditions,
@@ -50,6 +51,40 @@ describe('getIndustryServices', () => {
     const original = getIndustryServices('dental');
     services.push('__mutation_test__');
     expect(getIndustryServices('dental')).toEqual(original);
+  });
+});
+
+// ── getIndustryServicesCatalog ───────────────────────────────────────────────
+
+describe('getIndustryServicesCatalog', () => {
+  it('returns structured ServiceEntry objects for dental, with slug + aliases', () => {
+    const catalog = getIndustryServicesCatalog('dental');
+    expect(catalog.length).toBeGreaterThanOrEqual(10);
+    const implants = catalog.find((e) => e.slug === 'implants');
+    expect(implants).toBeDefined();
+    expect(implants?.displayName).toBe('Dental Implants');
+    expect(Array.isArray(implants?.aliases)).toBe(true);
+    expect(implants?.aliases).toContain('implant');
+  });
+
+  it('returns structured entries for real-estate-rv-mhc', () => {
+    const catalog = getIndustryServicesCatalog('real-estate-rv-mhc');
+    expect(catalog.length).toBeGreaterThan(0);
+    catalog.forEach((entry) => {
+      expect(entry.slug).toBeTruthy();
+      expect(entry.displayName).toBeTruthy();
+    });
+  });
+
+  it('falls back to small-business catalog for null / undefined / unknown', () => {
+    const baseline = getIndustryServicesCatalog('small-business');
+    expect(getIndustryServicesCatalog(null)).toEqual(baseline);
+    expect(getIndustryServicesCatalog(undefined)).toEqual(baseline);
+  });
+
+  it('every entry has a unique slug within a pack', () => {
+    const slugs = getIndustryServicesCatalog('dental').map((e) => e.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
   });
 });
 

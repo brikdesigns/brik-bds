@@ -27,6 +27,7 @@ export {
   realEstateRvMhc,
   smallBusiness,
   getIndustryServices,
+  getIndustryServicesCatalog,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
   getIndustryConditions,
