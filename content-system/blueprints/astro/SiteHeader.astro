@@ -1,0 +1,405 @@
+---
+/**
+ * SiteHeader — the BDS site-header component. Dispatches on the
+ * `archetype` prop to render one of the locked navigation archetypes
+ * from the vocabulary (`NAV_ARCHETYPE_VALUES`).
+ *
+ * v0.1 implements ONE archetype in full: `editorial-transparent`.
+ * This is the default for both the `small-business` pack (which Vale
+ * resolves to) and the `dental` pack. Every other archetype value
+ * currently renders the editorial-transparent markup with a
+ * `data-unimplemented-archetype="<value>"` attribute on the header,
+ * which CI can grep for in client repos whose pack picks a not-yet-
+ * implemented archetype. Future PRs fill in the render paths for
+ * `utility-first`, `service-centric`, `portfolio-minimal`, `calm-flat`.
+ *
+ * This is NOT a blueprint — SiteHeader takes direct site-shell props,
+ * not BlueprintProps. It lives in `@brikdesigns/bds/blueprints-astro`
+ * alongside the blueprints because that package is the package every
+ * client Astro site imports for shell + sections.
+ *
+ * ## Props
+ *
+ *   archetype       — ResolvedNavArchetype (v0.1: only
+ *                     'editorial-transparent' fully implemented)
+ *   brandName       — site brand label (rendered as the logo text fallback)
+ *   logoUrl         — optional logo image URL (when null, brandName is rendered as text)
+ *   phone           — optional phone number (rendered in utility cluster)
+ *   navItems        — array of { label, href } for primary nav links
+ *   primaryCta      — optional { label, href } for the header CTA button
+ *   currentPath     — optional — when set, the matching navItem gets
+ *                     `aria-current="page"` for AT
+ *
+ * ## editorial-transparent archetype
+ *
+ *   Layout at ≥768px: [logo] [primary nav links, centered] [phone + CTA]
+ *   Layout at  <768px: [logo] [hamburger button + mobile drawer markup]
+ *   Scroll:  transparent over hero at top, frosted glass past 80px
+ *            (behavior added by scaffold layout JS; this component
+ *            emits the markup + CSS custom properties the JS hooks
+ *            into).
+ *   Drawer:  fullscreen-overlay (mobile) — expressed via data-
+ *            attributes + CSS; the actual open/close toggle ships
+ *            with the scaffold layout JS.
+ *
+ * ## a11y
+ *
+ *   - `<nav aria-label="Primary">` landmark.
+ *   - Logo/brand is the first focusable element (logical tab order).
+ *   - `aria-current="page"` on the active link.
+ *   - Phone link uses `tel:` scheme with sanitized digits.
+ *   - Mobile hamburger button has `aria-label`, `aria-expanded`,
+ *     and `aria-controls` pointing at the drawer markup.
+ *   - Focus-visible ring on every interactive surface.
+ */
+import type { ResolvedNavArchetype } from './types';
+
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  archetype: ResolvedNavArchetype;
+  brandName: string;
+  logoUrl?: string | null;
+  phone?: string | null;
+  navItems: readonly NavItem[];
+  primaryCta?: { label: string; href: string } | null;
+  currentPath?: string | null;
+}
+
+const {
+  archetype,
+  brandName,
+  logoUrl = null,
+  phone = null,
+  navItems,
+  primaryCta = null,
+  currentPath = null,
+} = Astro.props;
+
+const IMPLEMENTED_ARCHETYPES = ['editorial-transparent'] as const;
+const isImplemented = (IMPLEMENTED_ARCHETYPES as readonly string[]).includes(archetype);
+
+const phoneHref = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
+
+function isCurrent(href: string): boolean {
+  if (!currentPath) return false;
+  // Exact match OR (section match: current starts with href + '/')
+  if (currentPath === href) return true;
+  if (href !== '/' && currentPath.startsWith(href + '/')) return true;
+  return false;
+}
+---
+
+<header
+  class:list={[
+    'bp-site-header',
+    `bp-site-header--${archetype}`,
+  ]}
+  data-nav-archetype={archetype}
+  data-unimplemented-archetype={isImplemented ? undefined : archetype}
+>
+  <div class="bp-site-header__container">
+    <a class="bp-site-header__brand" href="/" aria-label={`${brandName} home`}>
+      {logoUrl ? (
+        <img src={logoUrl} alt={brandName} class="bp-site-header__logo-image" />
+      ) : (
+        <span class="bp-site-header__brand-text">{brandName}</span>
+      )}
+    </a>
+
+    <nav class="bp-site-header__nav" aria-label="Primary">
+      <ul class="bp-site-header__nav-list" role="list">
+        {navItems.map((item) => {
+          const current = isCurrent(item.href);
+          return (
+            <li class="bp-site-header__nav-item">
+              <a
+                href={item.href}
+                class="bp-site-header__nav-link"
+                aria-current={current ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    <div class="bp-site-header__actions">
+      {phoneHref && (
+        <a href={phoneHref} class="bp-site-header__phone">
+          <span class="bp-site-header__phone-label" aria-hidden="true">Call</span>
+          <span class="bp-site-header__phone-value">{phone}</span>
+        </a>
+      )}
+      {primaryCta && (
+        <a href={primaryCta.href} class="bp-site-header__cta">{primaryCta.label}</a>
+      )}
+    </div>
+
+    <button
+      type="button"
+      class="bp-site-header__hamburger"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="bp-site-header-drawer"
+      data-bp-site-header-toggle="open"
+    >
+      <span class="bp-site-header__hamburger-bar" aria-hidden="true"></span>
+      <span class="bp-site-header__hamburger-bar" aria-hidden="true"></span>
+      <span class="bp-site-header__hamburger-bar" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <!-- Drawer is `inert` when closed — the hamburger's click handler
+       (shipped with the scaffold layout JS) removes `inert` and sets
+       aria-expanded="true" on the hamburger. `inert` is preferred over
+       aria-hidden here because it subsumes both the accessibility tree
+       hiding AND focus removal in one attribute — axe flags drawers
+       that are aria-hidden with focusable children. -->
+  <div
+    id="bp-site-header-drawer"
+    class="bp-site-header__drawer"
+    inert
+    data-bp-site-header-drawer
+  >
+    <nav class="bp-site-header__drawer-nav" aria-label="Primary mobile">
+      <ul class="bp-site-header__drawer-list" role="list">
+        {navItems.map((item) => (
+          <li class="bp-site-header__drawer-item">
+            <a href={item.href} class="bp-site-header__drawer-link">{item.label}</a>
+          </li>
+        ))}
+      </ul>
+      <div class="bp-site-header__drawer-actions">
+        {phoneHref && (
+          <a href={phoneHref} class="bp-site-header__drawer-phone">{phone}</a>
+        )}
+        {primaryCta && (
+          <a href={primaryCta.href} class="bp-site-header__drawer-cta">{primaryCta.label}</a>
+        )}
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* editorial-transparent — v0.1's single implemented archetype. When
+   * new archetypes ship, they add sibling `.bp-site-header--<archetype>`
+   * blocks below. The base `.bp-site-header` shape stays archetype-
+   * neutral; each archetype block tweaks layout + scroll behavior. */
+
+  .bp-site-header {
+    /* Per-client tuning */
+    --bp-site-header-bg: var(--surface-navigation, transparent);
+    --bp-site-header-text-color: var(--text-primary);
+    --bp-site-header-cta-bg: var(--background-brand-primary);
+    --bp-site-header-cta-color: var(--text-on-brand-primary, var(--text-inverse));
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bp-site-header-bg);
+    padding-block: var(--space-md);
+  }
+
+  .bp-site-header__container {
+    max-width: var(--size-container-xl, 1280px);
+    margin-inline: auto;
+    padding-inline: var(--space-xl);
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .bp-site-header__brand {
+    color: var(--bp-site-header-text-color);
+    text-decoration: none;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-500);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1;
+  }
+
+  .bp-site-header__brand:focus-visible {
+    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline-offset: 4px;
+  }
+
+  .bp-site-header__logo-image {
+    display: block;
+    height: 32px;
+    width: auto;
+  }
+
+  .bp-site-header__nav {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .bp-site-header__nav {
+      display: block;
+      justify-self: center;
+    }
+  }
+
+  .bp-site-header__nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--space-lg);
+  }
+
+  .bp-site-header__nav-link {
+    color: var(--bp-site-header-text-color);
+    text-decoration: none;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-300);
+    font-weight: var(--font-weight-medium);
+    padding: var(--space-xs) 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 120ms ease-out;
+  }
+
+  .bp-site-header__nav-link:hover,
+  .bp-site-header__nav-link[aria-current='page'] {
+    border-bottom-color: var(--border-brand-primary);
+  }
+
+  .bp-site-header__nav-link:focus-visible {
+    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline-offset: 4px;
+  }
+
+  .bp-site-header__actions {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .bp-site-header__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+  }
+
+  .bp-site-header__phone {
+    color: var(--bp-site-header-text-color);
+    text-decoration: none;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-300);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .bp-site-header__phone-label {
+    display: none;
+  }
+
+  .bp-site-header__phone:focus-visible {
+    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__cta {
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bp-site-header-cta-bg);
+    color: var(--bp-site-header-cta-color);
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-300);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    transition: background 120ms ease-out;
+  }
+
+  .bp-site-header__cta:hover {
+    background: var(--background-brand-primary-hover, var(--background-brand-primary));
+  }
+
+  .bp-site-header__cta:focus-visible {
+    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    justify-self: end;
+  }
+
+  @media (min-width: 768px) {
+    .bp-site-header__hamburger {
+      display: none;
+    }
+  }
+
+  .bp-site-header__hamburger:focus-visible {
+    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__hamburger-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--bp-site-header-text-color);
+    margin-inline: auto;
+  }
+
+  /* Drawer: hidden by default on all viewports. The scaffold layout's
+   * header JS removes the `inert` attribute + flips aria-expanded on
+   * the hamburger when the drawer opens. Using `inert` (not
+   * aria-hidden) keeps the drawer out of the accessibility tree AND
+   * removes its links from the tab order while closed. */
+  .bp-site-header__drawer {
+    position: fixed;
+    inset: 0;
+    background: var(--bp-site-header-bg);
+    padding: var(--space-2xl);
+    display: none;
+  }
+
+  .bp-site-header__drawer:not([inert]) {
+    display: block;
+  }
+
+  .bp-site-header__drawer-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .bp-site-header__drawer-link,
+  .bp-site-header__drawer-phone,
+  .bp-site-header__drawer-cta {
+    color: var(--bp-site-header-text-color);
+    text-decoration: none;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-600);
+    display: block;
+  }
+
+  .bp-site-header__drawer-actions {
+    margin-top: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+</style>

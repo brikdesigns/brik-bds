@@ -1,0 +1,226 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import library from '../../blueprints/blueprint-library.json';
+import { docTable, docTh, docTd, docTdMono } from '../foundation/_components/docTableStyles';
+
+<Meta title="Theming/Blueprints Astro Package" />
+
+# `@brikdesigns/bds/blueprints-astro`
+
+The Astro render surface the Theming tenet has always pointed at.
+Each blueprint key in [`blueprint-library.json`](?path=/docs/theming-blueprints--docs)
+that has a shipped Astro component is exported from this package;
+consumer Astro sites import the components directly or dispatch by
+key via `<BlueprintDispatcher>`.
+
+See [BLUEPRINTS-ASTRO-PACKAGE.md](https://github.com/brikdesigns/brik-bds/blob/main/docs/BLUEPRINTS-ASTRO-PACKAGE.md)
+for the architecture contract, versioning policy, and scale-at-100-clients
+deployment topology.
+
+---
+
+## Package exports
+
+```astro
+---
+// Consumer Astro page — the intended import shape.
+import {
+  SiteHeader,
+  BlueprintDispatcher,
+  // Individual blueprints if you want direct imports:
+  HeroSplit6040,
+  // Types:
+  type BlueprintProps,
+  type ClientFacts,
+  type ResolvedTheme,
+} from '@brikdesigns/bds/blueprints-astro';
+---
+<SiteHeader archetype={...} brandName={...} navItems={[...]} />
+<main>
+  <BlueprintDispatcher sections={page.sections}
+                       clientFacts={clientFacts}
+                       theme={theme} />
+</main>
+```
+
+Types-only entry for contexts without the Astro runtime (e.g. the
+portal's scaffold task that plans compositions):
+
+```ts
+import type { BlueprintSection, KnownBlueprintKey }
+  from '@brikdesigns/bds/blueprints-astro/types';
+```
+
+---
+
+## Dispatch surface (v0.1)
+
+<table style={docTable}>
+  <thead>
+    <tr>
+      <th style={docTh}>Component</th>
+      <th style={docTh}>Purpose</th>
+      <th style={docTh}>Props shape</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={docTdMono}>&lt;BlueprintDispatcher&gt;</td>
+      <td style={docTd}>Reads <code>visualNotes.blueprintKey</code> per section and renders the matching component. Unknown keys fall through to BlueprintFallback.</td>
+      <td style={docTdMono}>{`{ sections, clientFacts, theme }`}</td>
+    </tr>
+    <tr>
+      <td style={docTdMono}>&lt;BlueprintFallback&gt;</td>
+      <td style={docTd}>Loud visible stub for unknown blueprint keys. Emits <code>data-blueprint-unknown-key</code> — CI greps client-repo builds for this attribute.</td>
+      <td style={docTdMono}>BlueprintProps</td>
+    </tr>
+    <tr>
+      <td style={docTdMono}>&lt;SiteHeader&gt;</td>
+      <td style={docTd}>Site-shell nav. Dispatches on the navigation archetype prop. v0.1 fully implements <code>editorial-transparent</code>; other archetypes render with a <code>data-unimplemented-archetype</code> attribute.</td>
+      <td style={docTdMono}>{`{ archetype, brandName, navItems, phone?, primaryCta?, currentPath? }`}</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Shipped blueprints (v0.1)
+
+Eight components — the set needed for Vale's first scaffold run via
+the small-business pack. Each follows the same `BlueprintProps` contract
+(`section` + `clientFacts` + `theme`). See [Blueprints](?path=/docs/theming-blueprints--docs)
+for the canonical library metadata (moods, industries, layout spec).
+
+<table style={docTable}>
+  <thead>
+    <tr>
+      <th style={docTh}>Component</th>
+      <th style={docTh}>Library key</th>
+      <th style={docTh}>Section type</th>
+      <th style={docTh}>required_facts</th>
+    </tr>
+  </thead>
+  <tbody>
+    {[
+      'hero_split_60_40',
+      'hero_interior_minimal',
+      'stats_dark_bar',
+      'services_detail_two_column',
+      'about_story_split',
+      'testimonials_featured_large',
+      'cta_split_contact',
+      'cta_dark_centered',
+    ].map((key) => {
+      const bp = library.blueprints.find(b => b.key === key);
+      const component = key
+        .split('_')
+        .map((w) => w === '60' ? '60' : w === '40' ? '40' : w.charAt(0).toUpperCase() + w.slice(1))
+        .join('');
+      return (
+        <tr key={key}>
+          <td style={docTdMono}>&lt;{component}&gt;</td>
+          <td style={docTdMono}>{key}</td>
+          <td style={docTdMono}>{bp?.section_type}</td>
+          <td style={docTdMono}>
+            {bp?.required_facts?.length ? bp.required_facts.join(' · ') : '(none)'}
+          </td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table>
+
+### Not yet shipped
+
+17 of the 25 library keys don't have a component here yet. They render
+`<BlueprintFallback>` when the dispatcher encounters them — expected
+during the v0.1 → v1.0 incremental ramp. Each follow-up PR adds one
+or more components and removes its key from the fallback case.
+
+<details>
+<summary>Unshipped keys ({library.blueprints.length - 8})</summary>
+<ul>
+{library.blueprints
+  .filter((b) => ![
+    'hero_split_60_40', 'hero_interior_minimal', 'stats_dark_bar',
+    'services_detail_two_column', 'about_story_split',
+    'testimonials_featured_large', 'cta_split_contact', 'cta_dark_centered',
+  ].includes(b.key))
+  .map((b) => <li key={b.key}><code>{b.key}</code> — {b.section_type}</li>)}
+</ul>
+</details>
+
+---
+
+## Contract per blueprint
+
+Every blueprint component accepts **the same props shape**:
+
+```ts
+interface BlueprintProps {
+  section: BlueprintSection;      // content: heading, body, items, cta, visualNotes
+  clientFacts: ClientFacts;       // per-client: brandName, phone, heroImageUrl, etc.
+  theme: ResolvedTheme;           // archetypes + atmosphere + theme mode
+}
+```
+
+This uniformity is deliberate — the dispatcher is trivial (one lookup,
+one pass-through), every blueprint's surface is identical for
+authoring/review, and per-client customization happens through
+`ClientFacts` + CSS custom properties (not per-component props).
+
+### Per-client CSS overrides
+
+Each blueprint exposes documented CSS custom properties for per-client
+tuning — for example:
+
+```
+.bp-hero-split-60-40 {
+  --bp-hero-split-eyebrow-color: ...;
+  --bp-hero-split-accent-line: ...;
+  --bp-hero-split-image-radius: ...;
+  /* ... more, see each component's header comment */
+}
+```
+
+Per-client overrides MUST live in the client repo's
+`src/styles/client-overrides.css` with a `/* BDS-ISSUE: <url> */`
+comment on the preceding line. CI in each client repo enforces the
+comment requirement. See [spec §6.3](https://github.com/brikdesigns/brik-bds/blob/main/docs/BLUEPRINTS-ASTRO-PACKAGE.md#63-client-overridescss-escape-hatch--ci-gated-not-review-gated)
+for rationale.
+
+### Non-hallucinatable content
+
+Blueprints with `required_facts` render a visible
+`data-content-needed="<field>"` stub when the fact is null at render
+time — CI grep blocks publish. This is defense-in-depth; the portal's
+`dev_scaffold_site` task preflights `required_facts` before generating
+the client repo, so a missing fact should never reach the build stage.
+
+---
+
+## Verification
+
+The package has a dedicated verification script at
+[`scripts/verify-blueprints-astro-exports.mjs`](https://github.com/brikdesigns/brik-bds/blob/main/scripts/verify-blueprints-astro-exports.mjs)
+that runs on every BDS pre-push:
+
+1. Packs a tarball matching a real publish.
+2. Creates a scratch Astro 5 project, installs the tarball.
+3. `astro check` — type + import resolver.
+4. `astro build` — SSR render to static HTML.
+5. Asserts rendered HTML markers per blueprint.
+6. `@axe-core/playwright` scan against every built page (WCAG 2.1 AA).
+7. Confirms all expected files shipped in the tarball.
+
+Any failure blocks the PR. This is the enforcement behind the "no slop,
+no unfinished work" mandate for this package.
+
+---
+
+## Related
+
+- [Blueprints library](?path=/docs/theming-blueprints--docs) — canonical metadata (moods, industries, layout specs)
+- [Navigation archetypes](?path=/docs/theming-navigation-archetypes--docs) — vocabulary the SiteHeader dispatches on
+- [Footer archetypes](?path=/docs/theming-footer-archetypes--docs) — sibling vocabulary (SiteFooter lands in v0.2)
+- [Atmospheres](?path=/docs/theming-atmospheres--docs) — ambient CSS layer composed by the scaffold task
+- [Package spec (GitHub)](https://github.com/brikdesigns/brik-bds/blob/main/docs/BLUEPRINTS-ASTRO-PACKAGE.md)

@@ -1,0 +1,104 @@
+---
+/**
+ * BlueprintFallback — renders when BlueprintDispatcher encounters a
+ * `visualNotes.blueprintKey` that is not in BLUEPRINT_REGISTRY.
+ *
+ * This is a loud, visible stub by design — zero-sized or silent
+ * fallbacks defeat the whole point of the scaffold-task preflight
+ * (spec §2.4). Two signals for different audiences:
+ *
+ *   1. `data-blueprint-unknown-key={key}` attribute on the wrapper.
+ *      CI greps for `data-blueprint-unknown-key=` in every client
+ *      repo's built `dist/` and blocks publish.
+ *
+ *   2. A visible dashed-border card showing the missing key and
+ *      section metadata. Reviewers opening the page in dev see the
+ *      gap; they don't have to inspect the HTML to find it.
+ *
+ * Contract: BlueprintProps (same shape as every blueprint). Reads
+ * `section.visualNotes.blueprintKey` to report what was unmatched.
+ * Falls back to `null` in the attribute when blueprintKey itself is
+ * missing — still renders the visible stub.
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+const unknownKey = section.visualNotes?.blueprintKey ?? null;
+const attrValue = unknownKey ?? '__null__';
+---
+
+<section
+  class="bp-fallback"
+  data-blueprint-key="__fallback__"
+  data-blueprint-unknown-key={attrValue}
+  aria-label="Blueprint not yet shipped"
+>
+  <div class="bp-fallback__container">
+    <p class="bp-fallback__label">Blueprint not yet shipped</p>
+    <p class="bp-fallback__key">
+      Key: <code>{unknownKey ?? '(none — section has no blueprintKey)'}</code>
+    </p>
+    <p class="bp-fallback__meta">
+      Section: <code>{section.sectionKey}</code> · Type: <code>{section.sectionType}</code>
+    </p>
+    <p class="bp-fallback__hint">
+      CI will block publish on any client repo whose built
+      <code>dist/</code> contains <code>data-blueprint-unknown-key=</code>.
+      Add a component for this key in
+      <code>@brikdesigns/bds/blueprints-astro</code> and bump the
+      package version, or remove the key from the content.
+    </p>
+  </div>
+</section>
+
+<style>
+  .bp-fallback {
+    padding: var(--space-xl) var(--space-lg);
+    background: var(--surface-secondary, #f5f5f5);
+    border: 2px dashed var(--border-secondary, #c0c0c0);
+    margin-block: var(--space-md);
+  }
+
+  .bp-fallback__container {
+    max-width: var(--size-container-md, 960px);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .bp-fallback__label {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .bp-fallback__key,
+  .bp-fallback__meta,
+  .bp-fallback__hint {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-300);
+    line-height: var(--line-height-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .bp-fallback__hint {
+    font-size: var(--font-size-200);
+    max-width: 72ch;
+  }
+
+  .bp-fallback code {
+    font-family: var(--font-family-mono, monospace);
+    font-size: 0.9em;
+    padding: 0 var(--space-2xs);
+    background: var(--surface-primary, #ffffff);
+    border-radius: var(--border-radius-xs, 2px);
+  }
+</style>
