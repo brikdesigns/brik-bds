@@ -4,6 +4,7 @@ import {
   getIndustryServices,
   getIndustryServicesCatalog,
   getIndustryPainPoints,
+  getIndustryKeywords,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
   getIndustryConditions,
@@ -125,6 +126,45 @@ describe('getIndustryPainPoints', () => {
 
   it('every entry has a unique slug within a pack', () => {
     const slugs = getIndustryPainPoints('dental').map((e) => e.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+  });
+});
+
+// ── getIndustryKeywords ──────────────────────────────────────────────────────
+
+describe('getIndustryKeywords', () => {
+  it('returns merged primary + service-level keywords for dental', () => {
+    const keywords = getIndustryKeywords('dental');
+    expect(keywords.length).toBeGreaterThan(5);
+    const primary = keywords.filter((k) => k.tier === 'primary');
+    const serviceLevel = keywords.filter((k) => k.tier === 'service-level');
+    expect(primary.length).toBeGreaterThan(0);
+    expect(serviceLevel.length).toBeGreaterThan(0);
+  });
+
+  it('every entry is CatalogPicker-shaped (slug + displayName + tier)', () => {
+    const keywords = getIndustryKeywords('dental');
+    keywords.forEach((kw) => {
+      expect(kw.slug).toBeTruthy();
+      expect(kw.slug).toMatch(/^[a-z0-9-]+$/);
+      expect(kw.displayName).toBeTruthy();
+      expect(['primary', 'service-level']).toContain(kw.tier);
+    });
+  });
+
+  it('returns keywords for real-estate-rv-mhc', () => {
+    const keywords = getIndustryKeywords('real-estate-rv-mhc');
+    expect(keywords.length).toBeGreaterThan(0);
+  });
+
+  it('falls back to small-business for null / undefined / unknown', () => {
+    const baseline = getIndustryKeywords('small-business');
+    expect(getIndustryKeywords(null)).toEqual(baseline);
+    expect(getIndustryKeywords(undefined)).toEqual(baseline);
+  });
+
+  it('deduplicates slugs across primary and service-level tiers', () => {
+    const slugs = getIndustryKeywords('dental').map((e) => e.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 });
