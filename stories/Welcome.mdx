@@ -4,11 +4,22 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Brik Design System
 
-BDS provides themed React components powered by CSS custom properties. Switch between the three built-in themes — Brik, Brik Dark, and Client Sim — using the paintbrush icon in the toolbar above, or open the [Theme Switcher](?path=/docs/overview-theme-switcher--docs) to inspect tokens per theme.
+BDS is four tenets in one repository, published as a single versioned package. Each tenet is an independent vocabulary the portal, mockup generators, and client sites consume to ship work that looks and reads like Brik without anyone having to re-decide the basics every project.
 
-Alongside the visual system, the **Brik Content System (BCS)** lives in this repo as the content-vocabulary peer: industry packs, voice patterns, and locked enums that pair with the visual tokens to power the portal's design + copy resolver.
+Switch between built-in themes — Brik, Brik Dark, and Client Sim — using the paintbrush icon in the toolbar above, or open the [Theme Switcher](?path=/docs/overview-theme-switcher--docs) to inspect tokens per theme. Validate a theme before shipping via [Contrast Compliance](?path=/docs/overview-health-contrast-compliance--docs).
 
-## Foundation
+## The four tenets
+
+| Tenet | Answers | Ships |
+|---|---|---|
+| **[Foundation](?path=/docs/foundations-design-tokens-overview--docs)** | *"What color, size, type?"* | Design tokens, scales, primitives |
+| **[Theming](?path=/docs/theming-overview--docs)** | *"What brand, mood, shape?"* | Tokens + atmospheres + navigation archetypes + blueprints |
+| **[Motion](?path=/docs/motion-overview--docs)** | *"How does it feel to move?"* | Three-tier animation system — CSS reveals → GSAP scroll → premium effects |
+| **[Content](?path=/docs/content-overview--docs)** | *"What does it say, for whom?"* | Industry packs, voice patterns, locked vocabularies |
+
+Each tenet evolves on its own cadence but intentionally cross-links at the edges — e.g. an industry pack declares a default atmosphere and navigation archetype, so the Content tenet drives defaults for the Theming tenet that the client brand then optionally overrides.
+
+## Foundation — the visual atoms
 
 Design tokens are the atomic visual decisions that power BDS. Every component references tokens — never raw values.
 
@@ -22,9 +33,30 @@ Design tokens are the atomic visual decisions that power BDS. Every component re
 | [Border Width](?path=/docs/foundations-design-tokens-border-width--docs) | Width scale and semantic widths |
 | [Shadow](?path=/docs/foundations-design-tokens-shadow--docs) | Blur, spread, and elevation scale |
 | [Size](?path=/docs/foundations-design-tokens-size--docs) | Size scale, breakpoints, container widths |
-| [Motion System](?path=/docs/motion-overview--docs) | Three-tier system: CSS reveals, GSAP scroll, premium effects. Includes tier decision tree, per-effect demos, and vocabulary pages for Animation Tier + Image Mood. |
 
-## Content System
+## Theming — the multi-tenant instrument
+
+Theming composes four orthogonal layers. Each is a decision a client can override independently of the rest.
+
+| Layer | Decides | Where it lives |
+|---|---|---|
+| [Tokens](?path=/docs/theming-client-themes--docs) | Color, type, spacing values per brand | `theme-{client}.css` in the consumer repo |
+| [Atmospheres](?path=/docs/theming-atmospheres--docs) | Ambient mood — grain, glow, vignettes | CSS overlay from `@brikdesigns/bds/atmospheres/{slug}.css` |
+| [Navigation Archetypes](?path=/docs/theming-navigation-archetypes--docs) | Site-header shape + scroll/drawer behavior | Industry pack → BDS `<SiteHeader>` render |
+| [Blueprints](?path=/docs/theming-blueprints--docs) | Section composition + mood tagging | Authored in BDS, tagged per industry + mood |
+
+Full architecture: [Theming Overview](?path=/docs/theming-overview--docs).
+
+## Motion — the three-tier system
+
+| Category | Description |
+|---|---|
+| [Overview](?path=/docs/motion-overview--docs) | When to use each tier, the decision tree, and the tier ladder |
+| [Tiers](?path=/docs/motion-tiers-overview--docs) | Lightweight, GSAP, Premium — trade-offs per tier |
+| [Effects](?path=/docs/motion-effects-hover--docs) | Per-effect demos: Hover, Scroll Reveals, Typography, Overlays, Video |
+| [Vocabulary](?path=/docs/motion-vocabulary-animation-tier--docs) | Animation Tier locked enum — the portal-writable axis |
+
+## Content — the vocabulary peer
 
 The content-vocabulary peer to the visual tokens. Paired with BDS to drive end-to-end mockup generation in Claude Design (Paper).
 
@@ -35,7 +67,19 @@ The content-vocabulary peer to the visual tokens. Paired with BDS to drive end-t
 | [Voices](?path=/docs/content-voices-overview--docs) | All 8 voice patterns side-by-side with rules, examples, and pairing guidance |
 | [Vocabularies — Image Mood](?path=/docs/content-vocabularies-image-mood--docs) | Locked enum driving stock image composition — editorial, clinical, lifestyle, etc. |
 
-## Token system
+## Components
+
+| Category | Components |
+|----------|------------|
+| **Action** | Button, IconButton, TextLink |
+| **Form** | TextInput, TextArea, Select, AddressInput, SearchInput |
+| **Control** | Checkbox, Radio, Switch, FilterButton |
+| **Indicator** | Badge, Tag, Dot, Counter, Avatar |
+| **Feedback** | Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner, Tooltip |
+| **Structure** | Card, CardControl, Table, Modal, Accordion, Menu, PageHeader, DatePicker |
+| **Navigation** | TabBar, Breadcrumb, Pagination, SidebarNavigation |
+
+## Token system — the naming contract
 
 Components use CSS custom properties from the Style Dictionary token pipeline:
 
@@ -55,18 +99,6 @@ Components use CSS custom properties from the Style Dictionary token pipeline:
 - `--font-family-heading` — heading font family
 - `--padding-lg` — large spacing value
 - `--border-radius-md` — button/card corner radius
-
-## Components
-
-| Category | Components |
-|----------|------------|
-| **Action** | Button, IconButton, TextLink |
-| **Form** | TextInput, TextArea, Select, AddressInput, SearchInput |
-| **Control** | Checkbox, Radio, Switch, FilterButton |
-| **Indicator** | Badge, Tag, Dot, Counter, Avatar |
-| **Feedback** | Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner, Tooltip |
-| **Structure** | Card, CardControl, Table, Modal, Accordion, Menu, PageHeader, DatePicker |
-| **Navigation** | TabBar, Breadcrumb, Pagination, SidebarNavigation |
 
 ## Toolbar reference
 
