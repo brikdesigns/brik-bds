@@ -21,6 +21,7 @@ export {
   getAtmosphereImportPath,
   type AtmosphereManifestEntry,
 } from './atmospheres';
+export type { IndustryPainPointEntry } from './industries';
 export {
   industryPacks,
   dental,
@@ -28,6 +29,7 @@ export {
   smallBusiness,
   getIndustryServices,
   getIndustryServicesCatalog,
+  getIndustryPainPoints,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
   getIndustryConditions,
