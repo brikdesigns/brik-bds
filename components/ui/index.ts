@@ -18,6 +18,7 @@ export * from './Calendar';
 export * from './ButtonGroup';
 export * from './Card';
 export * from './CardControl';
+export * from './CatalogPicker';
 export * from './CardDisplay';
 export * from './CardFeature';
 export * from './CardList';
