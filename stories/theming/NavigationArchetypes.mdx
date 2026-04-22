@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import * as NavigationArchetypesStories from './NavigationArchetypes.stories';
 import {
   NAV_ARCHETYPE_VALUES,
   SCROLL_BEHAVIOR_VALUES,
@@ -10,7 +11,10 @@ import { smallBusiness } from '../../content-system/industries/small-business';
 import { NavigationIASpec } from '../foundation/_components';
 import { docTable, docTh, docTd, docTdMono } from '../foundation/_components/docTableStyles';
 
-<Meta title="Theming/Navigation Archetypes" />
+{/* Attach this MDX as the docs page for NavigationArchetypes.stories.tsx.
+    Title comes from the stories meta ("Theming/Navigation Archetypes") so
+    the per-archetype stories render as variants of the same sidebar node. */}
+<Meta of={NavigationArchetypesStories} />
 
 # Navigation Archetypes
 
