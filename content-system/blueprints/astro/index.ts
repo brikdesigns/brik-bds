@@ -12,8 +12,8 @@
  *   HeroSplit6040 (shipped PR #5).
  *   HeroInteriorMinimal, StatsDarkBar, ServicesDetailTwoColumn,
  *     AboutStorySplit, TestimonialsFeaturedLarge, CtaSplitContact,
- *     CtaDarkCentered (this PR).
- *   SiteHeader, BlueprintDispatcher, BlueprintFallback (PR #7).
+ *     CtaDarkCentered (shipped PR #6).
+ *   SiteHeader, BlueprintDispatcher, BlueprintFallback (this PR).
  *
  * Consumer-side type resolution: Astro projects inherit
  * `declare module '*.astro'` from Astro's tsconfig presets — no
@@ -54,3 +54,16 @@ export { default as AboutStorySplit }           from './AboutStorySplit.astro';
 export { default as TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge.astro';
 export { default as CtaSplitContact }           from './CtaSplitContact.astro';
 export { default as CtaDarkCentered }           from './CtaDarkCentered.astro';
+
+// ── Dispatch surface ────────────────────────────────────────────
+// <BlueprintDispatcher> is the primary consumer entrypoint — client
+// pages render a whole page body with a single component call, reading
+// `visualNotes.blueprintKey` on each section to select the matching
+// component from BLUEPRINT_REGISTRY. <BlueprintFallback> handles
+// unknown keys with a loud visible stub + a CI-greppable data
+// attribute. <SiteHeader> is the site-shell nav component — not a
+// blueprint, but lives in this package because every client Astro
+// site imports it alongside the blueprints.
+export { default as BlueprintDispatcher } from './BlueprintDispatcher.astro';
+export { default as BlueprintFallback }   from './BlueprintFallback.astro';
+export { default as SiteHeader }          from './SiteHeader.astro';
