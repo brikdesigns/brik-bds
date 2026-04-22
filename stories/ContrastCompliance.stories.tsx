@@ -2,40 +2,11 @@ import { useLayoutEffect, useState, type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DashboardFrame, DashboardSection } from './_components/DashboardFrame';
 import { contrastRatio } from './_components/wcag-contrast';
+import { getAllThemes } from '../tokens/theme-registry';
 
-// ─── Themes under test ──────────────────────────────────────────────
-
-interface ThemeSpec {
-  key: string;
-  name: string;
-  description: string;
-  bodyClasses: string[];
-  dataTheme: 'light' | 'dark';
-}
-
-const THEMES: ThemeSpec[] = [
-  {
-    key: 'brik',
-    name: 'Brik',
-    description: 'Default brand — poppy on white, light mode',
-    bodyClasses: ['body', 'theme-brand-brik'],
-    dataTheme: 'light',
-  },
-  {
-    key: 'brik-dark',
-    name: 'Brik Dark',
-    description: 'Default brand — poppy on near-black, dark mode',
-    bodyClasses: ['body', 'theme-brand-brik'],
-    dataTheme: 'dark',
-  },
-  {
-    key: 'client-sim',
-    name: 'Client Sim',
-    description: 'Font-audit theme — Georgia / Verdana / Courier New to expose family misuse',
-    bodyClasses: ['body', 'theme-brand-brik', 'theme-client-sim'],
-    dataTheme: 'light',
-  },
-];
+// Themes under test come from the registry — BDS ships 3 built-ins, and
+// consumer Storybooks can extend the probe via `registerClientTheme()`
+// from `tokens/theme-registry`. No hand-editing this file per new client.
 
 // ─── Contrast pairs to evaluate ─────────────────────────────────────
 
@@ -89,7 +60,7 @@ function probeThemes(): ThemeResult[] {
 
   const results: ThemeResult[] = [];
 
-  for (const theme of THEMES) {
+  for (const theme of getAllThemes()) {
     body.className = '';
     for (const c of theme.bodyClasses) body.classList.add(c);
     html.setAttribute('data-theme', theme.dataTheme);
@@ -345,7 +316,21 @@ function ContrastComplianceDashboard() {
 const meta: Meta<typeof ContrastComplianceDashboard> = {
   title: 'Overview/Health/Contrast Compliance',
   component: ContrastComplianceDashboard,
-  parameters: { layout: 'fullscreen' },
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component:
+          'WCAG AA contrast audit across every theme in the BDS theme registry. ' +
+          "By default that's the 3 built-ins (Brik, Brik Dark, Client Sim); " +
+          'consumer Storybooks add their own client themes by calling ' +
+          '`registerClientTheme({...})` from `@brikdesigns/bds` in their ' +
+          '`.storybook/preview.ts` (alongside the theme CSS import). Once ' +
+          'registered, the client theme enters this audit automatically — no ' +
+          'hand-edit of this file per new brand.',
+      },
+    },
+  },
 };
 
 export default meta;

@@ -476,3 +476,12 @@ export const semanticSpace = {
   "input": "var(--space-200)"
 } as const;
 
+// Theme registry — consumer entry point for adding client themes to the
+// Contrast Compliance audit (and future multi-theme probes). See
+// ./theme-registry for usage.
+export {
+  type ThemeSpec,
+  BUILT_IN_THEMES,
+  registerClientTheme,
+  getAllThemes,
+} from './theme-registry';
