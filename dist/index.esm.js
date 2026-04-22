@@ -5,6 +5,41 @@ import React__default, { createContext, useState, useEffect, useCallback, useCon
 import * as ReactDOM from "react-dom";
 import ReactDOM__default, { createPortal } from "react-dom";
 import { Icon } from "@iconify/react";
+const BUILT_IN_THEMES = [
+  {
+    key: "brik",
+    name: "Brik",
+    description: "Default brand — poppy on white, light mode",
+    bodyClasses: ["body", "theme-brand-brik"],
+    dataTheme: "light"
+  },
+  {
+    key: "brik-dark",
+    name: "Brik Dark",
+    description: "Default brand — poppy on near-black, dark mode",
+    bodyClasses: ["body", "theme-brand-brik"],
+    dataTheme: "dark"
+  },
+  {
+    key: "client-sim",
+    name: "Client Sim",
+    description: "Font-audit theme — Georgia / Verdana / Courier New to expose family misuse",
+    bodyClasses: ["body", "theme-brand-brik", "theme-client-sim"],
+    dataTheme: "light"
+  }
+];
+const registeredClientThemes = [];
+function registerClientTheme(spec) {
+  const existingIndex = registeredClientThemes.findIndex((t) => t.key === spec.key);
+  if (existingIndex >= 0) {
+    registeredClientThemes[existingIndex] = spec;
+    return;
+  }
+  registeredClientThemes.push(spec);
+}
+function getAllThemes() {
+  return [...BUILT_IN_THEMES, ...registeredClientThemes];
+}
 const defaultTheme = {
   themeNumber: "brik",
   colorMode: "light",
@@ -26917,6 +26952,82 @@ function SheetSection({
     }
   );
 }
+function SheetSectionTitle({
+  level = "h3",
+  className,
+  children,
+  ...props
+}) {
+  const Tag2 = level;
+  return /* @__PURE__ */ jsx(Tag2, { className: bdsClass("bds-sheet-section-title", className), ...props, children });
+}
+function SheetFieldLabel({
+  htmlFor,
+  className,
+  children,
+  ...props
+}) {
+  if (htmlFor) {
+    const labelProps = props;
+    return /* @__PURE__ */ jsx(
+      "label",
+      {
+        htmlFor,
+        className: bdsClass("bds-sheet-field-label", className),
+        ...labelProps,
+        children
+      }
+    );
+  }
+  return /* @__PURE__ */ jsx(
+    "span",
+    {
+      className: bdsClass("bds-sheet-field-label", className),
+      ...props,
+      children
+    }
+  );
+}
+function SheetFieldValue({
+  empty = "Not set",
+  className,
+  children,
+  ...props
+}) {
+  const isEmpty2 = children === null || children === void 0 || children === "";
+  if (isEmpty2 && empty === null) return null;
+  return /* @__PURE__ */ jsx(
+    "div",
+    {
+      className: bdsClass(
+        "bds-sheet-field-value",
+        isEmpty2 && "bds-sheet-field-value--empty",
+        className
+      ),
+      ...props,
+      children: isEmpty2 ? empty : children
+    }
+  );
+}
+function SheetHelperText({
+  tone = "neutral",
+  className,
+  children,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx(
+    "span",
+    {
+      className: bdsClass(
+        "bds-sheet-helper-text",
+        tone === "error" && "bds-sheet-helper-text--error",
+        className
+      ),
+      ...props,
+      children
+    }
+  );
+}
 function SidebarNavigation({
   logo,
   navItems,
@@ -28100,6 +28211,7 @@ export {
   AlertBanner,
   AnimatedIcon,
   Avatar,
+  BUILT_IN_THEMES,
   Badge,
   Banner,
   Board,
@@ -28166,7 +28278,11 @@ export {
   ServiceBadge,
   ServiceTag,
   Sheet,
+  SheetFieldLabel,
+  SheetFieldValue,
+  SheetHelperText,
   SheetSection,
+  SheetSectionTitle,
   SheetStackProvider,
   SheetStackRenderer,
   SidebarNavigation,
@@ -28202,6 +28318,7 @@ export {
   fontLineHeights,
   fontSizeScale,
   fontWeights,
+  getAllThemes,
   getServiceIconPath,
   getThemeClasses,
   grayscale,
@@ -28211,6 +28328,7 @@ export {
   pink,
   poppy,
   purple,
+  registerClientTheme,
   semanticSpace,
   serviceIconOverrides,
   shadowBlurScale,
