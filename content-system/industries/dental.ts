@@ -483,6 +483,81 @@ export const dental: IndustryPack = {
   // sit prominently alongside the directory + visit columns.
   footerArchetype: 'legal_heavy',
 
+  // Page compositions — the sequence of section blueprints per page
+  // archetype. Dental's compositions reference the full v1 blueprint
+  // library; sections whose Astro components haven't shipped yet will
+  // render `<BlueprintFallback>` at scaffold time — they land as
+  // follow-up PRs after v0.1. Pack-owned sequence is authoritative;
+  // content gen fills slots per the source-of-truth discipline.
+  pageCompositions: {
+    home: {
+      pageArchetype: 'home',
+      sections: [
+        'hero_fullbleed_photo',
+        'services_detail_two_column',
+        'about_story_split',
+        'testimonials_featured_large',
+        'cta_dark_centered',
+      ],
+    },
+    'meet-the-doctor': {
+      pageArchetype: 'meet-the-doctor',
+      sections: [
+        'hero_interior_minimal',
+        'team_bio_grid',
+        'about_story_split',
+        'cta_split_contact',
+      ],
+    },
+    'services-overview': {
+      pageArchetype: 'services-overview',
+      sections: [
+        'hero_interior_minimal',
+        'services_detail_two_column',
+        'faq_accordion_grouped',
+        'cta_dark_centered',
+      ],
+    },
+    'insurance-accepted': {
+      pageArchetype: 'insurance-accepted',
+      sections: [
+        'hero_interior_minimal',
+        'features_alternating_split',
+        'faq_accordion_grouped',
+        'cta_split_contact',
+      ],
+    },
+    'membership-plan': {
+      pageArchetype: 'membership-plan',
+      sections: [
+        'hero_interior_minimal',
+        'features_alternating_split',
+        'cta_dark_centered',
+      ],
+    },
+    'new-patient': {
+      pageArchetype: 'new-patient',
+      sections: [
+        'hero_interior_minimal',
+        'features_3col_icon_grid',
+        'faq_accordion_grouped',
+        'cta_split_contact',
+      ],
+    },
+    'before-after': {
+      pageArchetype: 'before-after',
+      sections: [
+        'hero_interior_minimal',
+        'gallery_masonry_3col',
+        'cta_split_contact',
+      ],
+    },
+    contact: {
+      pageArchetype: 'contact',
+      sections: ['hero_interior_minimal', 'contact_form_split'],
+    },
+  },
+
   // Navigation IA — the dental archetype is `editorial-transparent`:
   // hero photography breathes at first load, header becomes frosted-glass
   // past 80px scroll. Services mega-menu groups the catalog by treatment
