@@ -1878,7 +1878,7 @@ function AddableEntryList({
               Button,
               {
                 size: BUTTON_SIZE$1[size2],
-                variant: "ghost",
+                variant: "secondary",
                 onClick: () => remove(index2),
                 "aria-label": removeLabel,
                 children: "Remove"

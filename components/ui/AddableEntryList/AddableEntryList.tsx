@@ -284,7 +284,7 @@ export function AddableEntryList({
                 <span className="bds-addable-entry-list__row-index">#{index + 1}</span>
                 <Button
                   size={BUTTON_SIZE[size]}
-                  variant="ghost"
+                  variant="secondary"
                   onClick={() => remove(index)}
                   aria-label={removeLabel}
                 >
