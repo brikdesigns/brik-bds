@@ -27,6 +27,11 @@ export interface UseSuggestionFilterOptions {
      * free-form and stays in primary (AddableComboList style).
      */
     onPrimaryCommitted?: () => void;
+    /**
+     * Called when Backspace is pressed while the query is empty — consumers
+     * wire this to "remove the last selected tag" (see AddableComboList).
+     */
+    onBackspaceEmpty?: () => void;
 }
 export interface UseSuggestionFilterReturn {
     /** Controlled query value for the input. */
@@ -73,4 +78,4 @@ export interface UseSuggestionFilterReturn {
  * - Rendering the `<ul>` dropdown when isOpen && filtered.length > 0
  * - Managing the ref on the input (for focus management)
  */
-export declare function useSuggestionFilter({ suggestions, selectedValues, strict, onCommit, onCancel, onStrictReject, onDuplicate, onPrimaryCommitted, }: UseSuggestionFilterOptions): UseSuggestionFilterReturn;
+export declare function useSuggestionFilter({ suggestions, selectedValues, strict, onCommit, onCancel, onStrictReject, onDuplicate, onPrimaryCommitted, onBackspaceEmpty, }: UseSuggestionFilterOptions): UseSuggestionFilterReturn;
