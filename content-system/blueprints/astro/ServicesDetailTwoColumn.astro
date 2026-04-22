@@ -1,0 +1,149 @@
+---
+/**
+ * services_detail_two_column — service listing with a 2-column grid of
+ * { title, description } items. Used on home pages as a services
+ * overview and on services-index pages as the canonical grid.
+ *
+ * Contract: BlueprintProps.
+ *   - section.heading    — section heading (h2)
+ *   - section.subheading — optional eyebrow
+ *   - section.body       — optional intro paragraph
+ *   - section.items[]    — REQUIRED, each { title, description }
+ *
+ * required_facts: []. Section-driven.
+ *
+ * CSS custom properties:
+ *   --bp-services-two-col-padding-y
+ *   --bp-services-two-col-bg           (default: var(--page-primary))
+ *   --bp-services-two-col-heading-color (default: var(--text-primary))
+ *   --bp-services-two-col-item-title-color (default: var(--text-primary))
+ *   --bp-services-two-col-item-desc-color  (default: var(--text-secondary))
+ *
+ * a11y: h2 + aria-labelledby. Services list is a role="list" ul so AT
+ * treats it as a list. Each item's title is an h3 nested under the h2,
+ * preserving heading hierarchy.
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+const headingId = `bp-services-two-col-${section.sectionKey}-h`;
+---
+
+<section
+  class="bp-services-two-col"
+  aria-labelledby={headingId}
+  data-blueprint-key="services_detail_two_column"
+>
+  <div class="bp-services-two-col__container">
+    <header class="bp-services-two-col__header">
+      {section.subheading && (
+        <p class="bp-services-two-col__eyebrow">{section.subheading}</p>
+      )}
+      <h2 id={headingId} class="bp-services-two-col__heading">{section.heading}</h2>
+      {section.body && (
+        <p class="bp-services-two-col__lead">{section.body}</p>
+      )}
+    </header>
+
+    <ul class="bp-services-two-col__list" role="list">
+      {section.items.map((item) => (
+        <li class="bp-services-two-col__item">
+          <h3 class="bp-services-two-col__item-title">{item.title}</h3>
+          <p class="bp-services-two-col__item-desc">{item.description}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .bp-services-two-col {
+    background: var(--bp-services-two-col-bg, var(--page-primary));
+    padding-block: var(
+      --bp-services-two-col-padding-y,
+      clamp(var(--space-3xl), 7vw, var(--space-5xl))
+    );
+  }
+
+  .bp-services-two-col__container {
+    max-width: var(--size-container-xl, 1280px);
+    margin-inline: auto;
+    padding-inline: var(--space-xl);
+  }
+
+  .bp-services-two-col__header {
+    max-width: 72ch;
+    margin-bottom: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .bp-services-two-col__eyebrow {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-brand-primary);
+  }
+
+  .bp-services-two-col__heading {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--font-size-600), 3.5vw, var(--font-size-900));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--bp-services-two-col-heading-color, var(--text-primary));
+  }
+
+  .bp-services-two-col__lead {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-400);
+    line-height: var(--line-height-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .bp-services-two-col__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 768px) {
+    .bp-services-two-col__list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-2xl) var(--space-3xl);
+    }
+  }
+
+  .bp-services-two-col__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .bp-services-two-col__item-title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-500);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--bp-services-two-col-item-title-color, var(--text-primary));
+  }
+
+  .bp-services-two-col__item-desc {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-300);
+    line-height: var(--line-height-relaxed);
+    color: var(--bp-services-two-col-item-desc-color, var(--text-secondary));
+  }
+</style>
