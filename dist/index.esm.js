@@ -1098,7 +1098,8 @@ function useSuggestionFilter({
   onCancel,
   onStrictReject,
   onDuplicate,
-  onPrimaryCommitted
+  onPrimaryCommitted,
+  onBackspaceEmpty
 }) {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -1195,10 +1196,16 @@ function useSuggestionFilter({
           }
           break;
         }
+        case "Backspace": {
+          if (query.length === 0) {
+            onBackspaceEmpty == null ? void 0 : onBackspaceEmpty();
+          }
+          break;
+        }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isOpen, filtered, activeIndex, query, strict, commitValue, onPrimaryCommitted, onCancel, closeList]
+    [isOpen, filtered, activeIndex, query, strict, commitValue, onPrimaryCommitted, onCancel, closeList, onBackspaceEmpty]
   );
   const activeDescendant = isOpen && activeIndex >= 0 ? `${comboId}-option-${activeIndex}` : void 0;
   return {
@@ -1264,7 +1271,10 @@ function AddableComboList({
       });
     },
     onCancel: cancel,
-    onDuplicate: triggerDupeFlash
+    onDuplicate: triggerDupeFlash,
+    onBackspaceEmpty: () => {
+      if (values.length > 0) onChange(values.slice(0, -1));
+    }
   });
   const reveal = () => {
     combo.reset();
@@ -24288,8 +24298,6 @@ function Calendar({
     {
       className: "bds-date-picker__calendar",
       onKeyDown: handleKeyDown,
-      role: "dialog",
-      "aria-label": "Choose date",
       children: [
         /* @__PURE__ */ jsxs("div", { className: "bds-date-picker__calendar-header", children: [
           /* @__PURE__ */ jsx(
@@ -24438,6 +24446,7 @@ const DatePicker = forwardRef(
                 sideOffset: 4,
                 align: "start",
                 style: { outline: "none" },
+                "aria-label": "Choose date",
                 children: /* @__PURE__ */ jsx(
                   Calendar,
                   {
@@ -27729,12 +27738,11 @@ const TimePicker = forwardRef(
                 sideOffset: 4,
                 align: "start",
                 className: "bds-time-picker__popover",
+                "aria-label": "Choose time",
                 children: /* @__PURE__ */ jsxs(
                   "div",
                   {
                     className: "bds-time-picker__columns",
-                    role: "dialog",
-                    "aria-label": "Choose time",
                     children: [
                       /* @__PURE__ */ jsx(
                         ScrollColumn,
