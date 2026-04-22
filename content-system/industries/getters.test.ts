@@ -5,6 +5,8 @@ import {
   getIndustryServicesCatalog,
   getIndustryPainPoints,
   getIndustryKeywords,
+  getIndustryCtaApproved,
+  getIndustryCtaRejected,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
   getIndustryConditions,
@@ -166,6 +168,56 @@ describe('getIndustryKeywords', () => {
   it('deduplicates slugs across primary and service-level tiers', () => {
     const slugs = getIndustryKeywords('dental').map((e) => e.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
+  });
+});
+
+// ── getIndustryCtaApproved ───────────────────────────────────────────────────
+
+describe('getIndustryCtaApproved', () => {
+  it('returns CatalogPicker-shaped approved CTA defaults for dental', () => {
+    const entries = getIndustryCtaApproved('dental');
+    expect(entries.length).toBeGreaterThan(0);
+    entries.forEach((e) => {
+      expect(e.slug).toBeTruthy();
+      expect(e.slug).toMatch(/^[a-z0-9-]+$/);
+      expect(e.displayName).toBeTruthy();
+    });
+  });
+
+  it('preserves original CTA text as displayName (e.g. "Request Your Consultation")', () => {
+    const entries = getIndustryCtaApproved('dental');
+    const names = entries.map((e) => e.displayName);
+    expect(names.some((n) => n.toLowerCase().includes('consultation'))).toBe(true);
+  });
+
+  it('falls back to small-business CTAs for null / undefined / unknown', () => {
+    const baseline = getIndustryCtaApproved('small-business');
+    expect(getIndustryCtaApproved(null)).toEqual(baseline);
+    expect(getIndustryCtaApproved(undefined)).toEqual(baseline);
+  });
+
+  it('every entry has a unique slug within a pack', () => {
+    const slugs = getIndustryCtaApproved('dental').map((e) => e.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+  });
+});
+
+// ── getIndustryCtaRejected ───────────────────────────────────────────────────
+
+describe('getIndustryCtaRejected', () => {
+  it('returns CatalogPicker-shaped rejected CTA defaults', () => {
+    const entries = getIndustryCtaRejected('dental');
+    expect(entries.length).toBeGreaterThan(0);
+    entries.forEach((e) => {
+      expect(e.slug).toBeTruthy();
+      expect(e.displayName).toBeTruthy();
+    });
+  });
+
+  it('falls back to small-business rejections for null / undefined', () => {
+    const baseline = getIndustryCtaRejected('small-business');
+    expect(getIndustryCtaRejected(null)).toEqual(baseline);
+    expect(getIndustryCtaRejected(undefined)).toEqual(baseline);
   });
 });
 

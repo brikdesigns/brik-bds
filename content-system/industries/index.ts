@@ -23,12 +23,18 @@ export const industryPacks: Record<IndustrySlug, IndustryPack> = {
 };
 
 export { dental, realEstateRvMhc, smallBusiness };
-export type { IndustryPainPointEntry, IndustryKeywordEntry } from './getters';
+export type {
+  IndustryPainPointEntry,
+  IndustryKeywordEntry,
+  IndustryCtaEntry,
+} from './getters';
 export {
   getIndustryServices,
   getIndustryServicesCatalog,
   getIndustryPainPoints,
   getIndustryKeywords,
+  getIndustryCtaApproved,
+  getIndustryCtaRejected,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
   getIndustryConditions,

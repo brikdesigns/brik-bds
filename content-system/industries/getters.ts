@@ -154,6 +154,50 @@ export function getIndustryKeywords(
 }
 
 /**
+ * One CTA-defaults entry shaped for `<CatalogPicker>`. Same structural
+ * shape as every other Stream C getter's output — `{ slug, displayName,
+ * aliases? }` — so consumers wire uniformly.
+ */
+export interface IndustryCtaEntry {
+  slug: string;
+  displayName: string;
+  aliases?: readonly string[];
+}
+
+/**
+ * Returns the "approved" CTA defaults for the given industry. These are
+ * the spoken-form CTAs the industry typically converts on — used as seed
+ * options in the Brand Identity sheet's CTA Language section. Clients
+ * pick from these + can add custom variants with source='custom'.
+ *
+ * Pairs with `getIndustryCtaRejected` — together they form the
+ * Approved/Rejected split the existing `cta_language` column already
+ * tracks on `company_profiles`.
+ */
+export function getIndustryCtaApproved(
+  slug: IndustrySlug | null | undefined,
+): readonly IndustryCtaEntry[] {
+  return resolvePack(slug).ctaDefaults.approved.map((cta) => ({
+    slug: toSlug(cta),
+    displayName: cta,
+  }));
+}
+
+/**
+ * Returns the "rejected" CTA defaults for the given industry — phrasing
+ * that demonstrably underperforms or signals the wrong tone. Drives the
+ * client-side rejection list in the Brand Identity sheet.
+ */
+export function getIndustryCtaRejected(
+  slug: IndustrySlug | null | undefined,
+): readonly IndustryCtaEntry[] {
+  return resolvePack(slug).ctaDefaults.rejected.map((cta) => ({
+    slug: toSlug(cta),
+    displayName: cta,
+  }));
+}
+
+/**
  * Returns accepted payment methods and financing mechanisms for the given
  * industry. Falls back to `small-business` payment types when slug is unknown.
  */
