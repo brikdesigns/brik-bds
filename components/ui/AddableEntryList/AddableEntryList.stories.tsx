@@ -64,6 +64,7 @@ const meta: Meta<typeof AddableEntryList> = {
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    primaryInputType: { control: 'select', options: ['text', 'url'] },
     label: { control: 'text' },
     addLabel: { control: 'text' },
     primaryPlaceholder: { control: 'text' },
@@ -88,7 +89,7 @@ type Story = StoryObj<typeof AddableEntryList>;
 const Controlled = (args: React.ComponentProps<typeof AddableEntryList>) => {
   const [entries, setEntries] = useState<AddableEntry[]>(args.entries ?? []);
   return (
-    <div style={{ width: 480 }}>
+    <div style={{ width: 520 }}>
       <AddableEntryList
         {...args}
         entries={entries}
@@ -104,12 +105,14 @@ const Controlled = (args: React.ComponentProps<typeof AddableEntryList>) => {
 // ── Stories ───────────────────────────────────────────────────────────────────
 
 /**
- * Default playground — Competitors (no suggestions). Identical to today's
- * consumer usage. Primary is a plain text input. Regression baseline.
+ * Default playground — Competitors. URL primary + notes, inline-editable rows.
+ * Each entry renders with its own TextInput + TextArea + Remove button; the
+ * Add button appends a new empty row.
  */
 export const Playground: Story = {
   args: {
     label: 'Competitors',
+    primaryInputType: 'url',
     primaryLabel: 'URL',
     primaryPlaceholder: 'https://competitor.com',
     secondaryLabel: 'Notes',
@@ -127,8 +130,74 @@ export const Playground: Story = {
 };
 
 /**
+ * Read mode — URL primary renders as a clickable anchor; secondary renders
+ * with `--body-md`. Titles use `--label-md`. No remove buttons, no Add.
+ */
+export const ReadModeUrl: Story = {
+  name: 'Read mode — URL primary',
+  args: {
+    label: 'Competitors',
+    primaryInputType: 'url',
+    disabled: true,
+    entries: [
+      { primary: 'https://carr.us', secondary: "Healthcare-specific but less boutique — clients don't work directly with leadership" },
+      { primary: 'https://hbre.com', secondary: 'Nashville-based, healthcare-focused, well-respected firm — Brandon (new team member) came from there' },
+      { primary: 'https://www.sagemontre.com', secondary: 'Boutique-ish firm with medical office building listings, good healthy competition — used as photography style reference (sagemontre.com/team)' },
+    ],
+    onChange: fn(),
+  },
+  render: (args) => <Controlled {...args} />,
+};
+
+/**
+ * Read mode — text primary (not a link). Primary uses `--label-md`; secondary
+ * uses `--body-md`.
+ */
+export const ReadModeText: Story = {
+  name: 'Read mode — text primary',
+  args: {
+    label: 'Line Items',
+    primaryInputType: 'text',
+    disabled: true,
+    entries: [
+      { primary: 'Logo design', secondary: 'Primary mark + lockup + responsive variants.' },
+      { primary: 'Brand guidelines', secondary: '12-page PDF including color, typography, and voice.' },
+    ],
+    onChange: fn(),
+  },
+  render: (args) => <Controlled {...args} />,
+};
+
+/**
+ * Text primary (inline-editable). Same UX as Playground but with a plain
+ * text input instead of a URL input.
+ */
+export const InlineEditText: Story = {
+  name: 'Inline edit — text primary',
+  args: {
+    label: 'Line Items',
+    primaryInputType: 'text',
+    primaryLabel: 'Item',
+    secondaryLabel: 'Description',
+    primaryPlaceholder: 'e.g. Logo design',
+    secondaryPlaceholder: 'Optional description',
+    addLabel: 'Add Line Item',
+    removeLabel: 'Remove line item',
+    entries: [
+      { primary: 'Logo design', secondary: '' },
+      { primary: 'Brand guidelines', secondary: '12-page PDF including color, typography, and voice.' },
+    ],
+    onChange: fn(),
+  },
+  render: (args) => <Controlled {...args} />,
+};
+
+/**
  * Primary with suggestions — dental services vocabulary.
  * Type "cr" to see "Crowns" appear. Enter commits and moves focus to description.
+ *
+ * Suggestion mode preserves the reveal-form flow (existing entries render as
+ * read-only cards; Add opens a staging form).
  */
 export const PrimaryWithSuggestions: Story = {
   name: 'Primary With Suggestions',
@@ -172,30 +241,10 @@ export const PrimaryStrictWithSuggestions: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
-/**
- * No suggestions (regression) — no primarySuggestions passed.
- * Render must be identical to today's Competitors / Reference Sites usage.
- */
-export const NoSuggestions: Story = {
-  name: 'No Suggestions (Regression)',
-  args: {
-    label: 'Reference Sites',
-    primaryLabel: 'URL',
-    primaryPlaceholder: 'https://example.com',
-    secondaryLabel: 'Notes',
-    secondaryPlaceholder: 'Why this site is a reference',
-    addLabel: 'Add Reference',
-    removeLabel: 'Remove reference',
-    emptyLabel: 'No reference sites added yet.',
-    entries: [],
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
 export const Empty: Story = {
   args: {
     label: 'Reference Sites',
+    primaryInputType: 'url',
     primaryLabel: 'URL',
     primaryPlaceholder: 'https://example.com',
     secondaryLabel: 'Notes',
@@ -204,48 +253,25 @@ export const Empty: Story = {
     removeLabel: 'Remove reference',
     emptyLabel: 'No reference sites added yet.',
     entries: [],
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-export const PrimaryOnly: Story = {
-  name: 'Secondary Optional',
-  args: {
-    label: 'Line Items',
-    primaryLabel: 'Item',
-    secondaryLabel: 'Description',
-    primaryPlaceholder: 'e.g. Logo design',
-    secondaryPlaceholder: 'Optional description',
-    addLabel: 'Add Line Item',
-    removeLabel: 'Remove line item',
-    entries: [
-      { primary: 'Logo design', secondary: '' },
-      { primary: 'Brand guidelines', secondary: '12-page PDF including color, typography, and voice.' },
-    ],
     onChange: fn(),
   },
   render: (args) => <Controlled {...args} />,
 };
 
 export const WithEmptyDescriptionLabel: Story = {
-  name: 'Empty description fallback',
+  name: 'Empty description fallback (read mode)',
   parameters: {
     docs: {
       description: {
         story:
-          'When `emptyDescriptionLabel` is provided, committed entries with no secondary show a muted italic placeholder instead of collapsing to a bare title. ' +
+          'When `emptyDescriptionLabel` is provided, read-mode entries with no secondary show a muted italic placeholder instead of collapsing to a bare title. ' +
           'Matches the "title + body with fallback" pattern used by service catalog views.',
       },
     },
   },
   args: {
     label: 'Services',
-    primaryLabel: 'Name',
-    secondaryLabel: 'Description',
-    primaryPlaceholder: 'e.g. Dental cleaning',
-    secondaryPlaceholder: 'What this service covers',
-    addLabel: 'Add Service',
+    disabled: true,
     emptyDescriptionLabel: 'No description set',
     entries: [
       { primary: 'Cleanings including periodontal care (gum care) and oral cancer screenings', secondary: '' },
@@ -261,18 +287,54 @@ export const WithEmptyDescriptionLabel: Story = {
 
 export const Variants: Story = {
   render: () => (
-    <div style={{ width: 520 }}>
+    <div style={{ width: 560 }}>
       <Stack>
         <div>
-          <SectionLabel>Sizes</SectionLabel>
+          <SectionLabel>Modes</SectionLabel>
+          <Stack gap="var(--gap-lg)">
+            <Controlled
+              label="Edit mode — URL primary"
+              primaryInputType="url"
+              primaryLabel="URL"
+              secondaryLabel="Notes"
+              primaryPlaceholder="https://example.com"
+              secondaryPlaceholder="Why this site is a reference"
+              addLabel="Add Reference"
+              removeLabel="Remove reference"
+              entries={[{ primary: 'https://acme.com', secondary: 'Direct competitor' }]}
+              onChange={() => {}}
+            />
+            <Controlled
+              label="Read mode — URL primary"
+              primaryInputType="url"
+              disabled
+              entries={[
+                { primary: 'https://acme.com', secondary: 'Direct competitor — stronger brand.' },
+                { primary: 'https://widgets.io', secondary: 'Adjacent market; watch for expansion.' },
+              ]}
+              onChange={() => {}}
+            />
+            <Controlled
+              label="Read mode — text primary"
+              disabled
+              entries={[
+                { primary: 'Logo design', secondary: 'Primary mark + lockup' },
+                { primary: 'Brand guidelines', secondary: '12-page PDF' },
+              ]}
+              onChange={() => {}}
+            />
+          </Stack>
+        </div>
+
+        <div>
+          <SectionLabel>Sizes (edit mode)</SectionLabel>
           <Stack gap="var(--gap-lg)">
             <Controlled
               label="Small"
               size="sm"
+              primaryInputType="url"
               primaryLabel="URL"
               secondaryLabel="Notes"
-              primaryPlaceholder="https://example.com"
-              secondaryPlaceholder="Notes"
               addLabel="Add"
               removeLabel="Remove entry"
               entries={[{ primary: 'https://acme.com', secondary: 'Direct competitor' }]}
@@ -281,10 +343,9 @@ export const Variants: Story = {
             <Controlled
               label="Medium (default)"
               size="md"
+              primaryInputType="url"
               primaryLabel="URL"
               secondaryLabel="Notes"
-              primaryPlaceholder="https://example.com"
-              secondaryPlaceholder="Notes"
               addLabel="Add"
               removeLabel="Remove entry"
               entries={[
@@ -296,10 +357,9 @@ export const Variants: Story = {
             <Controlled
               label="Large"
               size="lg"
+              primaryInputType="url"
               primaryLabel="URL"
               secondaryLabel="Notes"
-              primaryPlaceholder="https://example.com"
-              secondaryPlaceholder="Notes"
               addLabel="Add"
               removeLabel="Remove entry"
               entries={[{ primary: 'https://acme.com', secondary: 'Direct competitor' }]}
@@ -320,23 +380,13 @@ export const Variants: Story = {
             />
             <Controlled
               label="With helper text"
-              helperText="Escape cancels the form; Save keeps it open for rapid entry."
+              helperText="Each row saves in place; Add appends a new entry."
+              primaryInputType="url"
               primaryLabel="URL"
               secondaryLabel="Notes"
               addLabel="Add Competitor"
               removeLabel="Remove competitor"
               entries={[{ primary: 'https://acme.com', secondary: 'Direct competitor' }]}
-              onChange={() => {}}
-            />
-            <Controlled
-              label="Disabled"
-              disabled
-              addLabel="Add Competitor"
-              removeLabel="Remove competitor"
-              entries={[
-                { primary: 'https://acme.com', secondary: 'Direct competitor' },
-                { primary: 'https://widgets.io', secondary: 'Adjacent market' },
-              ]}
               onChange={() => {}}
             />
             <Controlled
@@ -356,7 +406,7 @@ export const Variants: Story = {
         </div>
 
         <div>
-          <SectionLabel>Suggestion Modes</SectionLabel>
+          <SectionLabel>Suggestion Modes (reveal-form preserved)</SectionLabel>
           <Stack gap="var(--gap-lg)">
             <Controlled
               label="With Suggestions (free-form allowed)"
@@ -394,10 +444,15 @@ export const Variants: Story = {
 
 // ── Interaction stories ───────────────────────────────────────────────────────
 
-export const AddAnEntry: Story = {
-  name: 'Interaction — add an entry (no suggestions)',
+/**
+ * Plain mode — clicking Add appends an empty row; onChange fires with the
+ * appended entry. Typing into a field patches that row via onChange.
+ */
+export const AddAndEditRow: Story = {
+  name: 'Interaction — add appends empty row',
   args: {
     label: 'Competitors',
+    primaryInputType: 'url',
     primaryLabel: 'URL',
     primaryPlaceholder: 'https://competitor.com',
     secondaryLabel: 'Notes',
@@ -414,25 +469,18 @@ export const AddAnEntry: Story = {
     const addButton = canvas.getByRole('button', { name: /add competitor/i });
     await userEvent.click(addButton);
 
-    const urlInput = await canvas.findByLabelText('URL');
-    await userEvent.type(urlInput, 'https://newrival.com');
-
-    const notesInput = await canvas.findByLabelText('Notes');
-    await userEvent.type(notesInput, 'Newly funded, aggressive go-to-market');
-
-    await userEvent.click(canvas.getByRole('button', { name: /^add$/i }));
-
     await expect(args.onChange).toHaveBeenCalledWith([
       { primary: 'https://acme.com', secondary: 'Direct competitor' },
-      { primary: 'https://newrival.com', secondary: 'Newly funded, aggressive go-to-market' },
+      { primary: '', secondary: '' },
     ]);
   },
 };
 
 export const RemoveAnEntry: Story = {
-  name: 'Interaction — remove an entry',
+  name: 'Interaction — remove an entry (plain mode)',
   args: {
     label: 'Competitors',
+    primaryInputType: 'url',
     addLabel: 'Add Competitor',
     removeLabel: 'Remove competitor',
     entries: [
@@ -454,36 +502,37 @@ export const RemoveAnEntry: Story = {
   },
 };
 
-export const DuplicateBlocked: Story = {
-  name: 'Interaction — duplicates blocked (case-insensitive)',
+/**
+ * Read mode — URL primary renders as an anchor pointing to the URL.
+ */
+export const ReadModeUrlIsAnchor: Story = {
+  name: 'Interaction — read mode URL primary is an anchor',
   args: {
     label: 'Competitors',
-    primaryLabel: 'URL',
-    secondaryLabel: 'Notes',
-    addLabel: 'Add Competitor',
-    removeLabel: 'Remove competitor',
-    entries: [{ primary: 'https://acme.com', secondary: 'Direct competitor' }],
+    primaryInputType: 'url',
+    disabled: true,
+    entries: [
+      { primary: 'https://acme.com', secondary: 'Direct competitor' },
+    ],
     onChange: fn(),
   },
   render: (args) => <Controlled {...args} />,
-  play: async ({ canvasElement, args }) => {
+  play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: /add competitor/i }));
-
-    const urlInput = await canvas.findByLabelText('URL');
-    await userEvent.type(urlInput, 'HTTPS://ACME.COM');
-
-    await userEvent.click(canvas.getByRole('button', { name: /^add$/i }));
-    await expect(args.onChange).not.toHaveBeenCalled();
+    const link = canvas.getByRole('link', { name: /https:\/\/acme\.com/i });
+    await expect(link).toHaveAttribute('href', 'https://acme.com');
+    await expect(link).toHaveAttribute('target', '_blank');
   },
 };
+
+// ── Suggestion mode interactions (preserved) ──────────────────────────────────
 
 /**
  * Keyboard flow — Arrow + Enter in primary commits suggestion and moves focus
  * to the secondary textarea. This is the core two-field keyboard UX for Services.
  */
 export const KeyboardFlowSuggestion: Story = {
-  name: 'Interaction — keyboard: Arrow + Enter commits suggestion, focuses secondary',
+  name: 'Interaction — suggestion keyboard: Arrow + Enter commits, focuses secondary',
   args: {
     label: 'Services',
     primaryLabel: 'Service Name',
@@ -500,28 +549,20 @@ export const KeyboardFlowSuggestion: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
 
-    // Open the form
     await userEvent.click(canvas.getByRole('button', { name: /add service/i }));
 
-    // Primary combobox should be present
     const primary = canvas.getByRole('combobox');
     await userEvent.type(primary, 'cr');
 
-    // Dropdown should appear with "Crowns"
     const option = await canvas.findByRole('option', { name: 'Crowns' });
     await expect(option).toBeInTheDocument();
 
-    // ArrowDown highlights Crowns, Enter commits it
     await userEvent.keyboard('{ArrowDown}{Enter}');
-
-    // Primary input should now show "Crowns"
     await expect(primary).toHaveValue('Crowns');
 
-    // Secondary textarea should have received focus
     const secondary = canvas.getByLabelText('Description');
     await expect(secondary).toHaveFocus();
 
-    // Complete the entry
     await userEvent.type(secondary, 'Porcelain caps to restore damaged teeth');
     await userEvent.click(canvas.getByRole('button', { name: /^add$/i }));
 
@@ -556,21 +597,15 @@ export const StrictRejectsFreeForm: Story = {
     await userEvent.click(canvas.getByRole('button', { name: /add service/i }));
 
     const primary = canvas.getByRole('combobox');
-    // Type something that is not in the suggestions list — strict hint appears
     await userEvent.type(primary, 'Custom Free-Form Service');
 
-    // Strict hint should be visible
     await expect(canvas.getByText(/only suggestions can be added/i)).toBeInTheDocument();
 
-    // Press Enter — should be rejected
     await userEvent.keyboard('{Enter}');
     await expect(args.onChange).not.toHaveBeenCalled();
   },
 };
 
-/**
- * Click-to-select from dropdown (non-keyboard path).
- */
 export const ClickSelectFromDropdown: Story = {
   name: 'Interaction — click to select suggestion from dropdown',
   args: {
@@ -597,18 +632,13 @@ export const ClickSelectFromDropdown: Story = {
     const option = await canvas.findByRole('option', { name: 'Crowns' });
     await userEvent.click(option);
 
-    // Primary should be set to the suggestion
     await expect(primary).toHaveValue('Crowns');
 
-    // Secondary should have focus
     const secondary = canvas.getByLabelText('Description');
     await expect(secondary).toHaveFocus();
   },
 };
 
-/**
- * Escape closes dropdown without committing or cancelling the form.
- */
 export const EscapeClosesDropdown: Story = {
   name: 'Interaction — Escape closes dropdown, keeps form open',
   args: {
@@ -632,17 +662,12 @@ export const EscapeClosesDropdown: Story = {
     const primary = canvas.getByRole('combobox');
     await userEvent.type(primary, 'Crown');
 
-    // Dropdown opens
     await canvas.findByRole('listbox');
 
-    // Escape closes the dropdown but keeps the form open
     await userEvent.keyboard('{Escape}');
     await expect(canvas.queryByRole('listbox')).toBeNull();
 
-    // Primary input still visible — form is still open
     await expect(primary).toBeInTheDocument();
-
-    // No commit
     await expect(args.onChange).not.toHaveBeenCalled();
   },
 };
