@@ -141,8 +141,6 @@ function Calendar({
     <div
       className="bds-date-picker__calendar"
       onKeyDown={handleKeyDown}
-      role="dialog"
-      aria-label="Choose date"
     >
       {/* Header: month/year nav */}
       <div className="bds-date-picker__calendar-header">
@@ -321,6 +319,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
               sideOffset={4}
               align="start"
               style={{ outline: 'none' }}
+              aria-label="Choose date"
             >
               <Calendar
                 value={value}
