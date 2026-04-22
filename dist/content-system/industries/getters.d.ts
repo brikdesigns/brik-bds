@@ -17,6 +17,35 @@ export declare function getIndustryServices(slug: IndustrySlug | null | undefine
  */
 export declare function getIndustryServicesCatalog(slug: IndustrySlug | null | undefined): readonly ServiceEntry[];
 /**
+ * One pain-point entry shaped for the portal's `<CatalogPicker>`.
+ *
+ * The pack's `customerPainPoints[]` has a richer shape (`summary`,
+ * optional `segment`, optional `detail`) — this getter flattens it to
+ * the minimal `{ slug, displayName }` that CatalogPicker expects so
+ * consumers can pass the result directly without writing an adapter.
+ * Call the pack's `customerPainPoints` member directly when you need
+ * segment + detail.
+ */
+export interface IndustryPainPointEntry {
+    slug: string;
+    displayName: string;
+    aliases?: readonly string[];
+}
+/**
+ * Returns the customer-pain-point catalog for the given industry, shaped
+ * for the portal's `<CatalogPicker>`. Each entry carries a stable slug
+ * derived from the pack's `summary` field plus the `summary` itself as
+ * `displayName`. Falls back to the `small-business` pack when slug is
+ * unknown.
+ *
+ * Pain points are client-intel that industry intel seeds — Brik has
+ * learned a durable set of verticalized frictions (dental: cost anxiety,
+ * insurance confusion, trust deficit; real-estate: reservation
+ * confusion, hookup details, rig-size limits) and each client picks
+ * from those, plus their own observed frictions as custom entries.
+ */
+export declare function getIndustryPainPoints(slug: IndustrySlug | null | undefined): readonly IndustryPainPointEntry[];
+/**
  * Returns accepted payment methods and financing mechanisms for the given
  * industry. Falls back to `small-business` payment types when slug is unknown.
  */

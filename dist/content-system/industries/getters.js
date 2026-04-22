@@ -38,6 +38,43 @@ export function getIndustryServicesCatalog(slug) {
     return resolvePack(slug).servicesCatalog;
 }
 /**
+ * Slugify a free-text string for use as a stable identifier. Lowercase,
+ * collapse non-alphanumerics to `-`, trim leading/trailing dashes, cap
+ * at 40 chars so CustomerPainPoint's long summaries don't produce
+ * unreadable slugs.
+ */
+function toSlug(raw) {
+    const base = raw
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 40)
+        .replace(/-$/, '');
+    return base || 'custom';
+}
+/**
+ * Returns the customer-pain-point catalog for the given industry, shaped
+ * for the portal's `<CatalogPicker>`. Each entry carries a stable slug
+ * derived from the pack's `summary` field plus the `summary` itself as
+ * `displayName`. Falls back to the `small-business` pack when slug is
+ * unknown.
+ *
+ * Pain points are client-intel that industry intel seeds — Brik has
+ * learned a durable set of verticalized frictions (dental: cost anxiety,
+ * insurance confusion, trust deficit; real-estate: reservation
+ * confusion, hookup details, rig-size limits) and each client picks
+ * from those, plus their own observed frictions as custom entries.
+ */
+export function getIndustryPainPoints(slug) {
+    const pack = resolvePack(slug);
+    return pack.customerPainPoints.map((pp) => ({
+        slug: toSlug(pp.summary),
+        displayName: pp.summary,
+    }));
+}
+/**
  * Returns accepted payment methods and financing mechanisms for the given
  * industry. Falls back to `small-business` payment types when slug is unknown.
  */
