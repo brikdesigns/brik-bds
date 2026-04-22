@@ -306,8 +306,9 @@ const preview: Preview = {
           'Overview',
           [
             'Welcome',
+            'Theme Switcher',
             'Health',
-            ['Health Dashboard', 'Token Coverage'],
+            ['Health Dashboard', 'Token Coverage', 'Contrast Compliance'],
           ],
           'Foundations',
           [
@@ -320,9 +321,9 @@ const preview: Preview = {
           [
             'Overview',
             'Client Themes',
-            'Theme Switcher',
+            'Atmospheres',
+            'Navigation Archetypes',
             'Blueprints',
-            'Contrast Compliance',
             '*',
           ],
           'Motion',
