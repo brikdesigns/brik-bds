@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import {
   getIndustryServices,
   getIndustryServicesCatalog,
+  getIndustryPainPoints,
   getIndustryPaymentTypes,
   getIndustryInsuranceProviders,
   getIndustryConditions,
@@ -84,6 +85,46 @@ describe('getIndustryServicesCatalog', () => {
 
   it('every entry has a unique slug within a pack', () => {
     const slugs = getIndustryServicesCatalog('dental').map((e) => e.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+  });
+});
+
+// ── getIndustryPainPoints ────────────────────────────────────────────────────
+
+describe('getIndustryPainPoints', () => {
+  it('returns CatalogPicker-shaped entries for dental', () => {
+    const painPoints = getIndustryPainPoints('dental');
+    expect(painPoints.length).toBeGreaterThanOrEqual(5);
+    painPoints.forEach((pp) => {
+      expect(pp.slug).toBeTruthy();
+      expect(pp.displayName).toBeTruthy();
+      // Slug should be lowercase-kebab and capped at 40 chars so long
+      // summaries still produce stable identifiers.
+      expect(pp.slug).toMatch(/^[a-z0-9-]+$/);
+      expect(pp.slug.length).toBeLessThanOrEqual(40);
+    });
+  });
+
+  it('displayName is the raw summary (preserves detail clauses)', () => {
+    const painPoints = getIndustryPainPoints('dental');
+    const costAnxiety = painPoints.find((pp) => pp.slug.startsWith('cost-anxiety'));
+    expect(costAnxiety).toBeDefined();
+    expect(costAnxiety?.displayName).toContain('Cost anxiety');
+  });
+
+  it('returns pain points for real-estate-rv-mhc', () => {
+    const painPoints = getIndustryPainPoints('real-estate-rv-mhc');
+    expect(painPoints.length).toBeGreaterThan(0);
+  });
+
+  it('falls back to small-business pain points for null / undefined / unknown', () => {
+    const baseline = getIndustryPainPoints('small-business');
+    expect(getIndustryPainPoints(null)).toEqual(baseline);
+    expect(getIndustryPainPoints(undefined)).toEqual(baseline);
+  });
+
+  it('every entry has a unique slug within a pack', () => {
+    const slugs = getIndustryPainPoints('dental').map((e) => e.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 });
