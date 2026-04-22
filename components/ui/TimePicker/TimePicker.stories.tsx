@@ -74,9 +74,10 @@ export const Playground: Story = {
     // Open time picker
     await userEvent.click(trigger);
 
-    // Popover opens in a Radix portal
+    // Popover opens in a Radix portal — default findBy timeout (1s) is too
+    // tight under parallel browser-vitest load. 3s absorbs render + animation.
     const body = within(document.body);
-    const dialog = await body.findByRole('dialog');
+    const dialog = await body.findByRole('dialog', {}, { timeout: 3000 });
     await expect(dialog).toBeVisible();
   },
 };
