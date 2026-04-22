@@ -1,16 +1,28 @@
 /**
  * `@brikdesigns/bds/blueprints-astro` — public surface.
  *
- * v0.1 scope (see docs/BLUEPRINTS-ASTRO-PACKAGE.md §2.1):
- *   Contract types (this PR).
- *   <SiteHeader>, <BlueprintDispatcher>, <BlueprintFallback> (later PR).
- *   8 blueprint components (later PRs).
+ * This barrel ships as SOURCE (not compiled). Astro resolves it at
+ * consumer build time — the `.astro` re-exports below can't be
+ * TypeScript-compiled through tsc, so this file is explicitly excluded
+ * from tsconfig.content-system.json's include path. See
+ * docs/BLUEPRINTS-ASTRO-PACKAGE.md §2.7 for the packaging rationale.
  *
- * Contract types ship first so consumers + downstream tooling
- * (portal, scaffold task, verification scripts) can resolve the shape
- * before any component exists.
+ * v0.1 scope (see spec §2.1):
+ *   Contract types (shipped PR #2).
+ *   HeroSplit6040 (this PR).
+ *   StatsDarkBar, ServicesDetailTwoColumn, AboutStorySplit,
+ *     TestimonialsFeaturedLarge, CtaSplitContact, CtaDarkCentered,
+ *     HeroInteriorMinimal (PR #6).
+ *   SiteHeader, BlueprintDispatcher, BlueprintFallback (PR #7).
+ *
+ * Consumer-side type resolution: Astro projects inherit
+ * `declare module '*.astro'` from Astro's tsconfig presets — no
+ * consumer-side configuration required. Types standalone are also
+ * importable at `@brikdesigns/bds/blueprints-astro/types` (compiled
+ * to dist) for contexts that don't need the Astro runtime.
  */
 
+// ── Contract types ──────────────────────────────────────────────
 export type {
   KnownBlueprintKey,
   BlueprintSection,
@@ -22,3 +34,10 @@ export type {
   ResolvedTheme,
   BlueprintProps,
 } from './types';
+
+// ── Blueprint components ───────────────────────────────────────
+// Each blueprint key in `blueprints/blueprint-library.json` that has
+// a shipped Astro component is re-exported here. The
+// BlueprintDispatcher (PR #7) imports from this barrel to dispatch
+// by `visualNotes.blueprintKey`.
+export { default as HeroSplit6040 } from './HeroSplit6040.astro';

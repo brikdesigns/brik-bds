@@ -1,0 +1,265 @@
+---
+/**
+ * hero_split_60_40 — 60/40 split hero. Content left, photography right,
+ * subtle gold accent line anchoring the seam. First visible element on
+ * most home pages for verticals where the hero image must breathe
+ * alongside a strong headline.
+ *
+ * See blueprints/blueprint-library.json for canonical metadata
+ * (moods, industries, layout_spec, css_hints). This component IS the
+ * implementation of that spec.
+ *
+ * ── Contract ─────────────────────────────────────────────────────
+ * Props: BlueprintProps (universal across every blueprint).
+ *   - section.heading           — h1 text (REQUIRED by content gen)
+ *   - section.subheading        — eyebrow above h1 (optional)
+ *   - section.body              — lead paragraph under h1 (optional)
+ *   - section.cta               — primary CTA (label + url) (optional)
+ *   - section.visualNotes.blueprintKey === 'hero_split_60_40'
+ *   - clientFacts.heroImageUrl  — REQUIRED. See required_facts in library.
+ *
+ * ── required_facts ───────────────────────────────────────────────
+ * ['hero_image_url']. If clientFacts.heroImageUrl is null the right
+ * column renders the non-hallucinatable `data-content-needed` stub —
+ * CI grep on `dist/` for `data-content-needed=` blocks publish (see
+ * spec §2.4).
+ *
+ * ── CSS custom properties (per-client override surface) ──────────
+ * Expose the tunable surfaces as properties on this component. Client
+ * overrides live ONLY in `src/styles/client-overrides.css` with the
+ * required `BDS-ISSUE:` comment per spec §6.3.
+ *   --bp-hero-split-padding-y         (default: clamp block)
+ *   --bp-hero-split-bg                (default: var(--page-primary))
+ *   --bp-hero-split-headline-color    (default: var(--text-primary))
+ *   --bp-hero-split-eyebrow-color     (default: var(--text-brand-primary))
+ *   --bp-hero-split-lead-color        (default: var(--text-secondary))
+ *   --bp-hero-split-accent-line       (default: var(--border-brand-primary))
+ *   --bp-hero-split-image-radius      (default: var(--border-radius-lg))
+ *
+ * ── a11y (WCAG 2.1 AA) ───────────────────────────────────────────
+ * - Heading is h1 (hero blueprints own the page's singular h1).
+ * - aria-labelledby on the section element wires the landmark to the h1 id.
+ * - Eyebrow is prose, not a heading — avoids double-h2 shadowing.
+ * - Image alt: empty-string decorative default per Birdwell intel #40.
+ * - Keyboard: CTA is an anchor with :focus-visible ring via
+ *   --color-focus-ring gap-fill token.
+ * - Reduced motion: no animations declared — this blueprint is static.
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section, clientFacts } = Astro.props;
+
+const headingId = `bp-hero-split-${section.sectionKey}-h`;
+const eyebrow = section.subheading;
+const headline = section.heading ?? '';
+const lead = section.body;
+const cta = section.cta;
+const heroImage = clientFacts.heroImageUrl;
+
+// Decorative-default alt per Birdwell intel #40 — hero images paired
+// with a strong h1 are typically decorative in an a11y sense (the
+// heading conveys meaning; the image is atmospheric). A future
+// BlueprintSection.imageAlt field can override this per-page when a
+// hero image is genuinely informational. Until that field exists in
+// the shared contract, empty string ("decorative") is the safer
+// default — assistive tech skips, screen-reader users hear the h1
+// instead.
+const imageAlt = '';
+---
+
+<section
+  class="bp-hero-split-60-40"
+  aria-labelledby={headingId}
+  data-blueprint-key="hero_split_60_40"
+>
+  <div class="bp-hero-split-60-40__container">
+    <div class="bp-hero-split-60-40__content">
+      {eyebrow && <p class="bp-hero-split-60-40__eyebrow">{eyebrow}</p>}
+      <h1 id={headingId} class="bp-hero-split-60-40__headline">{headline}</h1>
+      {lead && <p class="bp-hero-split-60-40__lead">{lead}</p>}
+      {cta && (
+        <a href={cta.url} class="bp-hero-split-60-40__cta">
+          {cta.label}
+        </a>
+      )}
+    </div>
+
+    {heroImage ? (
+      <div class="bp-hero-split-60-40__media">
+        <img
+          src={heroImage}
+          alt={imageAlt}
+          width="960"
+          height="1200"
+          loading="eager"
+          decoding="async"
+          class="bp-hero-split-60-40__image"
+        />
+      </div>
+    ) : (
+      <div
+        class="bp-hero-split-60-40__missing"
+        data-content-needed="hero_image_url"
+        role="presentation"
+      >
+        <p class="bp-hero-split-60-40__missing-label">
+          Hero image missing for this client.
+        </p>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .bp-hero-split-60-40 {
+    /* Tokens + CSS custom properties — per-client override surface.
+     * Never reference raw hex/px here. Always resolve through tokens. */
+    background: var(--bp-hero-split-bg, var(--page-primary));
+    padding-block: var(
+      --bp-hero-split-padding-y,
+      clamp(var(--space-3xl), 8vw, var(--space-5xl))
+    );
+  }
+
+  .bp-hero-split-60-40__container {
+    /* Matches the nav's .container width — scaffold's SiteShell shares
+     * the same container convention so everything on the page stays
+     * aligned. Content column sits flush with the nav logo. */
+    max-width: var(--size-container-xl, 1280px);
+    margin-inline: auto;
+    padding-inline: var(--space-xl);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  /* 60/40 split kicks in at 768px+. Below, stack vertically. */
+  @media (min-width: 768px) {
+    .bp-hero-split-60-40__container {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--space-3xl);
+    }
+  }
+
+  .bp-hero-split-60-40__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .bp-hero-split-60-40__eyebrow {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bp-hero-split-eyebrow-color, var(--text-brand-primary));
+  }
+
+  .bp-hero-split-60-40__headline {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(
+      var(--font-size-800),
+      5vw,
+      var(--font-size-1100)
+    );
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--bp-hero-split-headline-color, var(--text-primary));
+
+    /* Gold accent underline — the "subtle gold accent line" from the
+     * canonical layout_spec. Scoped so it only shows on desktop +
+     * respects the tokenized border color. */
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .bp-hero-split-60-40__headline::after {
+      content: '';
+      display: block;
+      width: 3rem;
+      height: 2px;
+      margin-top: var(--space-lg);
+      background: var(--bp-hero-split-accent-line, var(--border-brand-primary));
+    }
+  }
+
+  .bp-hero-split-60-40__lead {
+    margin: var(--space-sm) 0 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-400);
+    line-height: var(--line-height-relaxed);
+    color: var(--bp-hero-split-lead-color, var(--text-secondary));
+    max-width: 55ch;
+  }
+
+  .bp-hero-split-60-40__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-lg);
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--background-brand-primary);
+    color: var(--text-on-brand-primary, var(--text-inverse));
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-300);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    align-self: flex-start;
+    transition: background 120ms ease-out;
+  }
+
+  .bp-hero-split-60-40__cta:hover {
+    background: var(
+      --background-brand-primary-hover,
+      var(--background-brand-primary)
+    );
+  }
+
+  .bp-hero-split-60-40__cta:focus-visible {
+    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-hero-split-60-40__media {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--bp-hero-split-image-radius, var(--border-radius-lg));
+  }
+
+  .bp-hero-split-60-40__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Non-hallucinatable content stub — visible in rendered HTML, grepped
+   * by CI (`dist/**` for data-content-needed=*) to block publish when
+   * a required client fact is missing. Styled loud so reviewers see
+   * it, not invisibly zero-sized. */
+  .bp-hero-split-60-40__missing {
+    aspect-ratio: 4 / 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+    background: var(--surface-secondary, var(--color-gray-light));
+    border: 2px dashed var(--border-secondary, var(--color-gray-medium));
+    border-radius: var(--bp-hero-split-image-radius, var(--border-radius-lg));
+  }
+
+  .bp-hero-split-60-40__missing-label {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-300);
+    color: var(--text-muted, var(--color-gray-dark));
+    text-align: center;
+  }
+</style>
