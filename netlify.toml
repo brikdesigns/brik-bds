@@ -22,3 +22,47 @@
   [headers.values]
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
+
+# Cache policy — prevent the "Failed to fetch dynamically imported module"
+# error caused by stale chunk hashes.
+#
+# Storybook's Vite build emits content-hashed chunks under /assets/*.js (and
+# .css, etc). The hash is part of the filename, so the URL is stable for a
+# given content and changes on every deploy. Those are safe to cache forever.
+#
+# But index.html, iframe.html, and index.json reference those hashed URLs by
+# name. If a browser holds a stale HTML/JSON that points at a hash Netlify
+# has already evicted, the next dynamic import 404s. Every page-load must
+# revalidate these entry points so the chunk URLs it references are fresh.
+#
+# Bonus: the `assets/` globs also cover woff2 + images, which are hashed too.
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/iframe.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/index.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/project.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/sb-*/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
