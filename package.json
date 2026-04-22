@@ -16,6 +16,12 @@
       "types": "./dist/content-system/index.d.ts",
       "import": "./dist/content-system/index.js"
     },
+    "./blueprints-astro": {
+      "types": "./dist/content-system/blueprints/astro/index.d.ts",
+      "import": "./dist/content-system/blueprints/astro/index.js",
+      "default": "./dist/content-system/blueprints/astro/index.js"
+    },
+    "./blueprints-astro/*.astro": "./content-system/blueprints/astro/*.astro",
     "./blueprints": "./blueprints/blueprint-library.json",
     "./blueprints/library.json": "./blueprints/blueprint-library.json",
     "./content-system/compliance/healthcare-ada.md": "./content-system/compliance/healthcare-ada.md",
@@ -34,7 +40,8 @@
     "dist",
     "blueprints/blueprint-library.json",
     "content-system/compliance/*.md",
-    "content-system/atmospheres/*.css"
+    "content-system/atmospheres/*.css",
+    "content-system/blueprints/astro/**/*.astro"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -107,7 +114,8 @@
     "populate-notion": "node scripts/populate-notion-tokens.js",
     "propagate": "bash scripts/propagate.sh",
     "propagate:dry": "bash scripts/propagate.sh --dry-run",
-    "prepare": "husky"
+    "prepare": "husky",
+    "verify:blueprints-astro": "node scripts/verify-blueprints-astro-exports.mjs"
   },
   "keywords": [
     "brik",
