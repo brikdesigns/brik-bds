@@ -1,0 +1,117 @@
+---
+/**
+ * testimonials_featured_large — one large, featured testimonial
+ * centered on the page. Quote-first treatment; attribution below.
+ * Used when a single client story carries disproportionate weight
+ * (anchor case study, lead industry testimonial).
+ *
+ * Contract: BlueprintProps.
+ *   - section.heading    — section label (h2, often "What clients say")
+ *   - section.items[0]   — REQUIRED, the featured testimonial:
+ *                            item.title       = attribution line
+ *                                               (name · role · company)
+ *                            item.description = the quote
+ *
+ * required_facts: []. Section-driven.
+ *
+ * CSS custom properties:
+ *   --bp-testimonials-featured-padding-y
+ *   --bp-testimonials-featured-bg         (default: var(--surface-primary))
+ *   --bp-testimonials-featured-quote-color (default: var(--text-primary))
+ *   --bp-testimonials-featured-cite-color  (default: var(--text-secondary))
+ *   --bp-testimonials-featured-mark-color  (default: var(--text-brand-primary))
+ *
+ * a11y: h2 + aria-labelledby, semantic blockquote + cite. Decorative
+ * quote mark uses aria-hidden so AT doesn't announce it.
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+const headingId = `bp-testimonials-featured-${section.sectionKey}-h`;
+const featured = section.items[0];
+---
+
+<section
+  class="bp-testimonials-featured"
+  aria-labelledby={headingId}
+  data-blueprint-key="testimonials_featured_large"
+>
+  <div class="bp-testimonials-featured__container">
+    <h2 id={headingId} class="bp-testimonials-featured__sr-heading">
+      {section.heading ?? 'Featured testimonial'}
+    </h2>
+
+    {featured && (
+      <blockquote class="bp-testimonials-featured__quote">
+        <span class="bp-testimonials-featured__mark" aria-hidden="true">&ldquo;</span>
+        <p class="bp-testimonials-featured__quote-text">{featured.description}</p>
+        <cite class="bp-testimonials-featured__cite">{featured.title}</cite>
+      </blockquote>
+    )}
+  </div>
+</section>
+
+<style>
+  .bp-testimonials-featured {
+    background: var(--bp-testimonials-featured-bg, var(--surface-primary));
+    padding-block: var(
+      --bp-testimonials-featured-padding-y,
+      clamp(var(--space-3xl), 7vw, var(--space-5xl))
+    );
+  }
+
+  .bp-testimonials-featured__container {
+    max-width: var(--size-container-md, 960px);
+    margin-inline: auto;
+    padding-inline: var(--space-xl);
+    text-align: center;
+  }
+
+  .bp-testimonials-featured__sr-heading {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .bp-testimonials-featured__quote {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .bp-testimonials-featured__mark {
+    font-family: var(--font-family-display, var(--font-family-heading));
+    font-size: clamp(var(--font-size-1000), 8vw, var(--font-size-1200));
+    line-height: 1;
+    color: var(--bp-testimonials-featured-mark-color, var(--text-brand-primary));
+  }
+
+  .bp-testimonials-featured__quote-text {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--font-size-500), 2.5vw, var(--font-size-700));
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-relaxed);
+    color: var(--bp-testimonials-featured-quote-color, var(--text-primary));
+    max-width: 60ch;
+  }
+
+  .bp-testimonials-featured__cite {
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-300);
+    font-style: normal;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bp-testimonials-featured-cite-color, var(--text-secondary));
+  }
+</style>

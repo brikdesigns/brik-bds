@@ -9,10 +9,10 @@
  *
  * v0.1 scope (see spec §2.1):
  *   Contract types (shipped PR #2).
- *   HeroSplit6040 (this PR).
- *   StatsDarkBar, ServicesDetailTwoColumn, AboutStorySplit,
- *     TestimonialsFeaturedLarge, CtaSplitContact, CtaDarkCentered,
- *     HeroInteriorMinimal (PR #6).
+ *   HeroSplit6040 (shipped PR #5).
+ *   HeroInteriorMinimal, StatsDarkBar, ServicesDetailTwoColumn,
+ *     AboutStorySplit, TestimonialsFeaturedLarge, CtaSplitContact,
+ *     CtaDarkCentered (this PR).
  *   SiteHeader, BlueprintDispatcher, BlueprintFallback (PR #7).
  *
  * Consumer-side type resolution: Astro projects inherit
@@ -40,4 +40,17 @@ export type {
 // a shipped Astro component is re-exported here. The
 // BlueprintDispatcher (PR #7) imports from this barrel to dispatch
 // by `visualNotes.blueprintKey`.
-export { default as HeroSplit6040 } from './HeroSplit6040.astro';
+//
+// v0.1 ships 8 blueprints — the set needed for Vale's first scaffold
+// run. Small-business's `home` composition uses HeroSplit6040 +
+// StatsDarkBar + ServicesDetailTwoColumn + AboutStorySplit +
+// TestimonialsFeaturedLarge + CtaSplitContact. Interior pages use
+// HeroInteriorMinimal + CtaDarkCentered.
+export { default as HeroSplit6040 }             from './HeroSplit6040.astro';
+export { default as HeroInteriorMinimal }       from './HeroInteriorMinimal.astro';
+export { default as StatsDarkBar }              from './StatsDarkBar.astro';
+export { default as ServicesDetailTwoColumn }   from './ServicesDetailTwoColumn.astro';
+export { default as AboutStorySplit }           from './AboutStorySplit.astro';
+export { default as TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge.astro';
+export { default as CtaSplitContact }           from './CtaSplitContact.astro';
+export { default as CtaDarkCentered }           from './CtaDarkCentered.astro';
