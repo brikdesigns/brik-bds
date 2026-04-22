@@ -1778,8 +1778,171 @@ function AddableEntryList({
   secondaryRows = 2,
   className,
   allowDuplicates = false,
+  primaryInputType = "text",
   primarySuggestions,
   primaryStrict = false
+}) {
+  const hasSuggestions = Array.isArray(primarySuggestions) && primarySuggestions.length > 0;
+  const atLimit = typeof maxItems === "number" && entries.length >= maxItems;
+  if (disabled) {
+    const showEmpty2 = entries.length === 0 && emptyLabel;
+    return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-addable-entry-list", "bds-addable-entry-list--read", className), children: [
+      label && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__label", children: label }),
+      entries.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-addable-entry-list__read-items", role: "list", children: entries.map((entry, index2) => /* @__PURE__ */ jsxRuntime.jsxs(
+        "div",
+        {
+          className: "bds-addable-entry-list__read-item",
+          role: "listitem",
+          children: [
+            primaryInputType === "url" && entry.primary ? /* @__PURE__ */ jsxRuntime.jsx(
+              "a",
+              {
+                href: entry.primary,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: bdsClass(
+                  "bds-addable-entry-list__read-primary",
+                  "bds-addable-entry-list__read-primary--url"
+                ),
+                children: entry.primary
+              }
+            ) : /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__read-primary", children: entry.primary }),
+            entry.secondary ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__read-secondary", children: entry.secondary }) : emptyDescriptionLabel ? /* @__PURE__ */ jsxRuntime.jsx(
+              "span",
+              {
+                className: bdsClass(
+                  "bds-addable-entry-list__read-secondary",
+                  "bds-addable-entry-list__read-secondary--empty"
+                ),
+                children: emptyDescriptionLabel
+              }
+            ) : null
+          ]
+        },
+        `${index2}-${entry.primary}`
+      )) }),
+      showEmpty2 && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__empty", children: emptyLabel }),
+      helperText && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__helper", children: helperText })
+    ] });
+  }
+  if (hasSuggestions) {
+    return /* @__PURE__ */ jsxRuntime.jsx(
+      SuggestionModeEdit,
+      {
+        entries,
+        onChange,
+        label,
+        helperText,
+        primaryLabel,
+        secondaryLabel,
+        primaryPlaceholder,
+        secondaryPlaceholder,
+        addLabel,
+        removeLabel,
+        emptyLabel,
+        emptyDescriptionLabel,
+        size: size2,
+        atLimit,
+        secondaryRows,
+        className,
+        allowDuplicates,
+        primarySuggestions,
+        primaryStrict
+      }
+    );
+  }
+  const update = (index2, patch) => {
+    onChange(entries.map((e, i) => i === index2 ? { ...e, ...patch } : e));
+  };
+  const remove = (index2) => {
+    onChange(entries.filter((_, i) => i !== index2));
+  };
+  const append = () => {
+    onChange([...entries, { primary: "", secondary: "" }]);
+  };
+  const showEmpty = entries.length === 0 && emptyLabel;
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: bdsClass("bds-addable-entry-list", className), children: [
+    label && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__label", children: label }),
+    entries.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bds-addable-entry-list__rows", role: "list", children: entries.map((entry, index2) => /* @__PURE__ */ jsxRuntime.jsxs(
+      "div",
+      {
+        className: "bds-addable-entry-list__row",
+        role: "listitem",
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__row-header", children: [
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "bds-addable-entry-list__row-index", children: [
+              "#",
+              index2 + 1
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsx(
+              Button,
+              {
+                size: BUTTON_SIZE$1[size2],
+                variant: "ghost",
+                onClick: () => remove(index2),
+                "aria-label": removeLabel,
+                children: "Remove"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntime.jsx(
+            TextInput,
+            {
+              size: INPUT_SIZE$1[size2],
+              label: primaryLabel,
+              type: primaryInputType,
+              inputMode: primaryInputType === "url" ? "url" : void 0,
+              autoComplete: primaryInputType === "url" ? "url" : void 0,
+              value: entry.primary,
+              onChange: (e) => update(index2, { primary: e.target.value }),
+              placeholder: primaryPlaceholder,
+              fullWidth: true
+            }
+          ),
+          /* @__PURE__ */ jsxRuntime.jsx(
+            TextArea,
+            {
+              size: TEXTAREA_SIZE[size2],
+              label: secondaryLabel,
+              value: entry.secondary,
+              onChange: (e) => update(index2, { secondary: e.target.value }),
+              placeholder: secondaryPlaceholder,
+              rows: secondaryRows,
+              fullWidth: true
+            }
+          )
+        ]
+      },
+      index2
+    )) }),
+    showEmpty && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__empty", children: emptyLabel }),
+    !atLimit && /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsxs(Button, { size: BUTTON_SIZE$1[size2], variant: "outline", onClick: append, children: [
+      /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:plus" }),
+      addLabel
+    ] }) }),
+    helperText && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__helper", children: helperText })
+  ] });
+}
+function SuggestionModeEdit({
+  entries,
+  onChange,
+  label,
+  helperText,
+  primaryLabel,
+  secondaryLabel,
+  primaryPlaceholder,
+  secondaryPlaceholder,
+  addLabel,
+  removeLabel,
+  emptyLabel,
+  emptyDescriptionLabel,
+  size: size2,
+  atLimit,
+  secondaryRows,
+  className,
+  allowDuplicates,
+  primarySuggestions,
+  primaryStrict
 }) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [primaryDraft, setPrimaryDraft] = React.useState("");
@@ -1792,8 +1955,6 @@ function AddableEntryList({
     const ta = (_a = secondaryWrapRef.current) == null ? void 0 : _a.querySelector("textarea");
     ta == null ? void 0 : ta.focus();
   };
-  const hasSuggestions = Array.isArray(primarySuggestions) && primarySuggestions.length > 0;
-  const atLimit = typeof maxItems === "number" && entries.length >= maxItems;
   const existingPrimaries = entries.map((e) => e.primary);
   const cancel = () => {
     setPrimaryDraft("");
@@ -1808,7 +1969,7 @@ function AddableEntryList({
       cancel();
       return;
     }
-    if (hasSuggestions && primaryStrict) {
+    if (primaryStrict) {
       const inList = primarySuggestions.some(
         (s) => s.toLowerCase() === trimmedPrimary.toLowerCase()
       );
@@ -1843,8 +2004,7 @@ function AddableEntryList({
     onChange(entries.filter((_, i) => i !== index2));
   };
   const combo = useSuggestionFilter({
-    suggestions: primarySuggestions ?? [],
-    // When allowDuplicates, don't hide already-used primaries from the dropdown
+    suggestions: primarySuggestions,
     selectedValues: allowDuplicates ? [] : existingPrimaries,
     strict: primaryStrict,
     onCommit: (value2) => {
@@ -1853,15 +2013,6 @@ function AddableEntryList({
     },
     onCancel: cancel
   });
-  const handlePlainPrimaryKey = (e) => {
-    if (e.key === "Escape") {
-      e.preventDefault();
-      cancel();
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      requestAnimationFrame(() => focusSecondary());
-    }
-  };
   const handleComboPrimaryChange = (e) => {
     setPrimaryDraft(e.target.value);
     combo.handleInputChange(e);
@@ -1903,7 +2054,7 @@ function AddableEntryList({
               }
             ) : null
           ] }),
-          !disabled && /* @__PURE__ */ jsxRuntime.jsx(
+          /* @__PURE__ */ jsxRuntime.jsx(
             "button",
             {
               type: "button",
@@ -1918,101 +2069,82 @@ function AddableEntryList({
       `${index2}-${entry.primary}`
     )) }),
     showEmpty && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__empty", children: emptyLabel }),
-    !disabled && isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__form", children: [
-      hasSuggestions ? (
-        /* Combobox-backed primary */
-        /* @__PURE__ */ jsxRuntime.jsxs(
-          "div",
-          {
-            ref: comboContainerRef,
-            className: "bds-addable-entry-list__primary-combo",
-            onBlur: handleComboBlur,
-            children: [
-              primaryLabel && /* @__PURE__ */ jsxRuntime.jsx(
-                "label",
+    isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__form", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs(
+        "div",
+        {
+          ref: comboContainerRef,
+          className: "bds-addable-entry-list__primary-combo",
+          onBlur: handleComboBlur,
+          children: [
+            primaryLabel && /* @__PURE__ */ jsxRuntime.jsx(
+              "label",
+              {
+                htmlFor: combo.comboId,
+                className: "bds-addable-entry-list__input-label",
+                children: primaryLabel
+              }
+            ),
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__primary-combo-field", children: [
+              /* @__PURE__ */ jsxRuntime.jsx(
+                "input",
                 {
-                  htmlFor: combo.comboId,
-                  className: "bds-addable-entry-list__input-label",
-                  children: primaryLabel
+                  ref: primaryInputRef,
+                  id: combo.comboId,
+                  role: "combobox",
+                  "aria-expanded": combo.isOpen,
+                  "aria-haspopup": "listbox",
+                  "aria-controls": combo.listboxId,
+                  "aria-activedescendant": combo.activeDescendant,
+                  "aria-label": primaryLabel ?? (label ? `Add ${label}` : "New entry"),
+                  "aria-autocomplete": "list",
+                  autoComplete: "off",
+                  className: bdsClass(
+                    "bds-addable-entry-list__primary-input",
+                    `bds-addable-entry-list__primary-input--${size2}`
+                  ),
+                  value: primaryDraft,
+                  onChange: handleComboPrimaryChange,
+                  onKeyDown: handleComboPrimaryKey,
+                  onFocus: () => {
+                    if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
+                  },
+                  placeholder: primaryPlaceholder
                 }
               ),
-              /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bds-addable-entry-list__primary-combo-field", children: [
-                /* @__PURE__ */ jsxRuntime.jsx(
-                  "input",
-                  {
-                    ref: primaryInputRef,
-                    id: combo.comboId,
-                    role: "combobox",
-                    "aria-expanded": combo.isOpen,
-                    "aria-haspopup": "listbox",
-                    "aria-controls": combo.listboxId,
-                    "aria-activedescendant": combo.activeDescendant,
-                    "aria-label": primaryLabel ?? (label ? `Add ${label}` : "New entry"),
-                    "aria-autocomplete": "list",
-                    autoComplete: "off",
-                    className: bdsClass(
-                      "bds-addable-entry-list__primary-input",
-                      `bds-addable-entry-list__primary-input--${size2}`
-                    ),
-                    value: primaryDraft,
-                    onChange: handleComboPrimaryChange,
-                    onKeyDown: handleComboPrimaryKey,
-                    onFocus: () => {
-                      if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
-                    },
-                    placeholder: primaryPlaceholder
-                  }
-                ),
-                combo.isOpen && combo.filtered.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
-                  "ul",
-                  {
-                    id: combo.listboxId,
-                    role: "listbox",
-                    "aria-label": primaryLabel ? `${primaryLabel} suggestions` : "Suggestions",
-                    className: "bds-addable-entry-list__dropdown",
-                    children: combo.filtered.map((suggestion, idx) => /* @__PURE__ */ jsxRuntime.jsx(
-                      "li",
-                      {
-                        id: `${combo.comboId}-option-${idx}`,
-                        role: "option",
-                        "aria-selected": idx === combo.activeIndex,
-                        className: bdsClass(
-                          "bds-addable-entry-list__option",
-                          idx === combo.activeIndex && "bds-addable-entry-list__option--active"
-                        ),
-                        onMouseDown: (e) => {
-                          e.preventDefault();
-                          combo.commitValue(suggestion);
-                        },
-                        children: suggestion
+              combo.isOpen && combo.filtered.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
+                "ul",
+                {
+                  id: combo.listboxId,
+                  role: "listbox",
+                  "aria-label": primaryLabel ? `${primaryLabel} suggestions` : "Suggestions",
+                  className: "bds-addable-entry-list__dropdown",
+                  children: combo.filtered.map((suggestion, idx) => /* @__PURE__ */ jsxRuntime.jsx(
+                    "li",
+                    {
+                      id: `${combo.comboId}-option-${idx}`,
+                      role: "option",
+                      "aria-selected": idx === combo.activeIndex,
+                      className: bdsClass(
+                        "bds-addable-entry-list__option",
+                        idx === combo.activeIndex && "bds-addable-entry-list__option--active"
+                      ),
+                      onMouseDown: (e) => {
+                        e.preventDefault();
+                        combo.commitValue(suggestion);
                       },
-                      suggestion
-                    ))
-                  }
-                )
-              ] }),
-              primaryStrict && primaryDraft.trim() && !primarySuggestions.some(
-                (s) => s.toLowerCase() === primaryDraft.trim().toLowerCase()
-              ) && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__strict-hint", "aria-live": "polite", children: "Only suggestions can be added in strict mode." })
-            ]
-          }
-        )
-      ) : (
-        /* Plain text primary */
-        /* @__PURE__ */ jsxRuntime.jsx(
-          TextInput,
-          {
-            ref: primaryInputRef,
-            size: INPUT_SIZE$1[size2],
-            label: primaryLabel,
-            value: primaryDraft,
-            onChange: (e) => setPrimaryDraft(e.target.value),
-            onKeyDown: handlePlainPrimaryKey,
-            placeholder: primaryPlaceholder,
-            "aria-label": primaryLabel ?? (label ? `Add ${label}` : "New entry"),
-            fullWidth: true
-          }
-        )
+                      children: suggestion
+                    },
+                    suggestion
+                  ))
+                }
+              )
+            ] }),
+            primaryStrict && primaryDraft.trim() && !primarySuggestions.some(
+              (s) => s.toLowerCase() === primaryDraft.trim().toLowerCase()
+            ) && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__strict-hint", "aria-live": "polite", children: "Only suggestions can be added in strict mode." })
+          ]
+        }
       ),
       /* @__PURE__ */ jsxRuntime.jsx("div", { ref: secondaryWrapRef, children: /* @__PURE__ */ jsxRuntime.jsx(
         TextArea,
@@ -2050,18 +2182,10 @@ function AddableEntryList({
         )
       ] })
     ] }),
-    !disabled && !isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsxs(
-      Button,
-      {
-        size: BUTTON_SIZE$1[size2],
-        variant: "outline",
-        onClick: reveal,
-        children: [
-          /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:plus" }),
-          addLabel
-        ]
-      }
-    ) }),
+    !isEditing && !atLimit && /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsxs(Button, { size: BUTTON_SIZE$1[size2], variant: "outline", onClick: reveal, children: [
+      /* @__PURE__ */ jsxRuntime.jsx(react.Icon, { icon: "ph:plus" }),
+      addLabel
+    ] }) }),
     helperText && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bds-addable-entry-list__helper", children: helperText })
   ] });
 }
