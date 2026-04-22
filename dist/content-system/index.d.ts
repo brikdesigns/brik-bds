@@ -16,7 +16,7 @@ export * from './vocabularies';
 export * from './schema';
 export * from './blueprints';
 export { ATMOSPHERE_MANIFEST, getAtmosphereImportPath, type AtmosphereManifestEntry, } from './atmospheres';
-export type { IndustryPainPointEntry } from './industries';
-export { industryPacks, dental, realEstateRvMhc, smallBusiness, getIndustryServices, getIndustryServicesCatalog, getIndustryPainPoints, getIndustryPaymentTypes, getIndustryInsuranceProviders, getIndustryConditions, getIndustryProcedures, getIndustryAmenities, getIndustriesForParent, getIndustryInsurancePlans, getIndustryFinancing, } from './industries';
+export type { IndustryPainPointEntry, IndustryKeywordEntry } from './industries';
+export { industryPacks, dental, realEstateRvMhc, smallBusiness, getIndustryServices, getIndustryServicesCatalog, getIndustryPainPoints, getIndustryKeywords, getIndustryPaymentTypes, getIndustryInsuranceProviders, getIndustryConditions, getIndustryProcedures, getIndustryAmenities, getIndustriesForParent, getIndustryInsurancePlans, getIndustryFinancing, } from './industries';
 export { voicePatterns, approachable, authoritative, conversational, direct, empathetic, expert, poetic, witty, } from './voices';
 //# sourceMappingURL=index.d.ts.map

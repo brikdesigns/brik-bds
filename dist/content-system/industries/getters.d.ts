@@ -46,6 +46,36 @@ export interface IndustryPainPointEntry {
  */
 export declare function getIndustryPainPoints(slug: IndustrySlug | null | undefined): readonly IndustryPainPointEntry[];
 /**
+ * One keyword entry shaped for the portal's `<CatalogPicker>`. Same
+ * structural shape as IndustryPainPointEntry / ServiceEntry — every
+ * Stream C getter normalizes to `{ slug, displayName, aliases? }` so
+ * consumers wire through CatalogPicker uniformly.
+ *
+ * `tier` flags whether the entry came from `keywordBank.primary`
+ * (brand/category-level) or `keywordBank.serviceLevel` (service- or
+ * procedure-level). Consumers can regroup by tier when surfacing picks
+ * in read-only views.
+ */
+export interface IndustryKeywordEntry {
+    slug: string;
+    displayName: string;
+    aliases?: readonly string[];
+    tier: 'primary' | 'service-level';
+}
+/**
+ * Returns the SEO keyword catalog for the given industry, merged from
+ * `keywordBank.primary` (brand/category) and `keywordBank.serviceLevel`
+ * (service/procedure). Each entry carries a `tier` flag. Falls back to
+ * the `small-business` pack when slug is unknown. Duplicate slugs
+ * across the two tiers are dropped — `primary` wins first.
+ *
+ * Stream C canary #3: SEO keywords as BCS-seeded client intel. Clients
+ * pick the industry keywords they want to target + add long-tails as
+ * custom entries. Downstream site-structure work consumes the picked
+ * slugs to seed page H1s and meta descriptions.
+ */
+export declare function getIndustryKeywords(slug: IndustrySlug | null | undefined): readonly IndustryKeywordEntry[];
+/**
  * Returns accepted payment methods and financing mechanisms for the given
  * industry. Falls back to `small-business` payment types when slug is unknown.
  */

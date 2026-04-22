@@ -17,6 +17,6 @@ import { smallBusiness } from './small-business';
  */
 export declare const industryPacks: Record<IndustrySlug, IndustryPack>;
 export { dental, realEstateRvMhc, smallBusiness };
-export type { IndustryPainPointEntry } from './getters';
-export { getIndustryServices, getIndustryServicesCatalog, getIndustryPainPoints, getIndustryPaymentTypes, getIndustryInsuranceProviders, getIndustryConditions, getIndustryProcedures, getIndustryAmenities, getIndustriesForParent, getIndustryInsurancePlans, getIndustryFinancing, } from './getters';
+export type { IndustryPainPointEntry, IndustryKeywordEntry } from './getters';
+export { getIndustryServices, getIndustryServicesCatalog, getIndustryPainPoints, getIndustryKeywords, getIndustryPaymentTypes, getIndustryInsuranceProviders, getIndustryConditions, getIndustryProcedures, getIndustryAmenities, getIndustriesForParent, getIndustryInsurancePlans, getIndustryFinancing, } from './getters';
 //# sourceMappingURL=index.d.ts.map
