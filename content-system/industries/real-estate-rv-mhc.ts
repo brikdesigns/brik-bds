@@ -480,6 +480,13 @@ export const realEstateRvMhc: IndustryPack = {
   // Mobile uses `slide-left-panel` — users are in task mode (filtering
   // listings, checking amenities); they don't want a full-screen modal
   // interrupt between steps.
+
+  // Footer archetype — property directories carry enough content to
+  // justify `four_col_directory` (brand · communities · resources ·
+  // visit). No specific compliance burden beyond standard real-estate
+  // disclosures; those sit in a trimmed bottom-bar legal section.
+  footerArchetype: 'four_col_directory',
+
   navigationIA: {
     archetype: 'utility-first',
     primaryLinkCount: 5,

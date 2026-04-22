@@ -477,6 +477,12 @@ export const dental: IndustryPack = {
     'In-House Financing',
   ],
 
+  // Footer archetype — dental practices are healthcare providers, so
+  // the footer leads with HIPAA/privacy compliance. `legal_heavy`
+  // ensures Privacy Officer contact + Notice of Privacy Practices link
+  // sit prominently alongside the directory + visit columns.
+  footerArchetype: 'legal_heavy',
+
   // Navigation IA — the dental archetype is `editorial-transparent`:
   // hero photography breathes at first load, header becomes frosted-glass
   // past 80px scroll. Services mega-menu groups the catalog by treatment
