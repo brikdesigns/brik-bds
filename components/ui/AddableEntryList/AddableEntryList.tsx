@@ -19,10 +19,12 @@ export interface AddableEntry {
   secondary: string;
 }
 
+export type AddableEntryPrimaryInputType = 'text' | 'url';
+
 export interface AddableEntryListProps {
   /** Current list of entries */
   entries: AddableEntry[];
-  /** Called when entries change (add / remove) */
+  /** Called when entries change (add / edit / remove) */
   onChange: (next: AddableEntry[]) => void;
   /** Optional field label */
   label?: string;
@@ -36,22 +38,24 @@ export interface AddableEntryListProps {
   primaryPlaceholder?: string;
   /** Placeholder for the secondary textarea */
   secondaryPlaceholder?: string;
-  /** Text on the reveal button */
+  /** Text on the reveal / append button */
   addLabel?: string;
   /** Accessible label for the remove button on each entry */
   removeLabel?: string;
   /** Text shown when list is empty (and form is not revealed) */
   emptyLabel?: string;
   /**
-   * Text rendered in place of the secondary value for committed items where
-   * `secondary` is empty. When omitted, the secondary slot is collapsed and
-   * nothing is shown — preserves backward behavior for consumers that never
-   * need the fallback.
+   * Text rendered in place of the secondary value in read mode when
+   * `secondary` is empty. When omitted, the secondary slot is collapsed
+   * and nothing is shown.
    */
   emptyDescriptionLabel?: string;
   /** Size for input, textarea, and buttons */
   size?: AddableEntryListSize;
-  /** Hide all controls */
+  /**
+   * When true, renders in read-only mode (token-backed typography, no
+   * inputs, no remove buttons). Use for view/disabled states.
+   */
   disabled?: boolean;
   /** Maximum number of entries */
   maxItems?: number;
@@ -62,8 +66,19 @@ export interface AddableEntryListProps {
   /** Block duplicates by primary value (case-insensitive) */
   allowDuplicates?: boolean;
   /**
+   * Input type for the primary field. 'text' (default) renders a standard
+   * TextInput. 'url' renders a URL input with `type="url"`, URL-friendly
+   * autocomplete, and read-mode anchors.
+   */
+  primaryInputType?: AddableEntryPrimaryInputType;
+  /**
    * Suggestion set for the primary (name) field. Filtered by typed query;
-   * free-form entries still allowed. When omitted, primary is a plain text input.
+   * free-form entries still allowed. When omitted, primary is a plain text
+   * input and entries are inline-editable per row.
+   *
+   * When provided, primary becomes a combobox and the component preserves
+   * the reveal-form flow: existing entries render as read-only cards
+   * (vocabulary-locked primary), "Add" reveals a single staging form.
    */
   primarySuggestions?: string[];
   /**
@@ -80,26 +95,35 @@ const TEXTAREA_SIZE: Record<AddableEntryListSize, TextAreaSize> = { sm: 'sm', md
 /**
  * AddableEntryList — the text + textarea sibling of `AddableTextList`.
  *
- * Existing entries render as read-only cards with a remove button.
- * Clicking "Add New" reveals a form with a TextInput (primary) and
- * TextArea (secondary). Save commits the entry and keeps the form open
- * for rapid entry; Cancel closes it.
+ * Two modes of operation:
  *
- * The entry shape is deliberately generic (`{ primary, secondary }`) so
- * a single BDS component serves competitor URLs + notes, reference sites
- * + notes, line item + description, team member + role, and so on.
- * Consumers map their domain shape at the boundary.
+ * **Plain mode** (no `primarySuggestions`). Each entry is inline-editable:
+ * a TextInput (primary) and TextArea (secondary) per row, with a "Remove"
+ * button. The Add button appends a new empty row. Use for competitor URLs
+ * + notes, reference site + why, line item + description.
  *
- * Pass `primarySuggestions` to enable a combobox dropdown on the primary field
- * (same behaviour as AddableComboList). Existing consumers that pass no
- * `primarySuggestions` render identically to before.
+ * **Suggestion mode** (with `primarySuggestions`). Preserves the reveal-form
+ * flow — existing entries render as read-only cards with an x-icon remove,
+ * and the Add button reveals a staging form with a combobox-backed primary.
+ * Use for vocabulary-locked lists (services from a catalog, etc.).
  *
- * @example
+ * **Read mode** (`disabled`). Both modes collapse to token-backed typography
+ * (primary: `--label-md`; secondary: `--body-md`). If `primaryInputType` is
+ * `'url'`, the primary renders as a clickable anchor.
+ *
+ * The entry shape is deliberately generic (`{ primary, secondary }`) so a
+ * single BDS component serves competitors, reference sites, line items,
+ * team roles, and more. Consumers map their domain shape at the boundary.
+ *
+ * @example Competitors — URL input + notes, inline-editable
  * ```tsx
  * <AddableEntryList
  *   label="Competitors"
  *   entries={competitors}
  *   onChange={setCompetitors}
+ *   primaryInputType="url"
+ *   primaryLabel="URL"
+ *   secondaryLabel="Notes"
  *   primaryPlaceholder="https://competitor.com"
  *   secondaryPlaceholder="Competitive positioning, strengths, relevance..."
  *   addLabel="Add Competitor"
@@ -107,7 +131,7 @@ const TEXTAREA_SIZE: Record<AddableEntryListSize, TextAreaSize> = { sm: 'sm', md
  * />
  * ```
  *
- * @example With suggestions (dental services):
+ * @example Services — suggestion-backed primary
  * ```tsx
  * <AddableEntryList
  *   label="Services"
@@ -115,7 +139,6 @@ const TEXTAREA_SIZE: Record<AddableEntryListSize, TextAreaSize> = { sm: 'sm', md
  *   onChange={setServices}
  *   primarySuggestions={getIndustryServices(industrySlug)}
  *   primaryPlaceholder="Search or add a service…"
- *   secondaryPlaceholder="Brief description of this service"
  *   addLabel="Add Service"
  * />
  * ```
@@ -139,15 +162,226 @@ export function AddableEntryList({
   secondaryRows = 2,
   className,
   allowDuplicates = false,
+  primaryInputType = 'text',
   primarySuggestions,
   primaryStrict = false,
 }: AddableEntryListProps) {
+  const hasSuggestions = Array.isArray(primarySuggestions) && primarySuggestions.length > 0;
+  const atLimit = typeof maxItems === 'number' && entries.length >= maxItems;
+
+  // ── Read mode ───────────────────────────────────────────────────────────────
+  // Token-backed typography, no inputs, no remove, no add. URL primary renders
+  // as a clickable anchor.
+  if (disabled) {
+    const showEmpty = entries.length === 0 && emptyLabel;
+    return (
+      <div className={bdsClass('bds-addable-entry-list', 'bds-addable-entry-list--read', className)}>
+        {label && <span className="bds-addable-entry-list__label">{label}</span>}
+        {entries.length > 0 && (
+          <div className="bds-addable-entry-list__read-items" role="list">
+            {entries.map((entry, index) => (
+              <div
+                key={`${index}-${entry.primary}`}
+                className="bds-addable-entry-list__read-item"
+                role="listitem"
+              >
+                {primaryInputType === 'url' && entry.primary ? (
+                  <a
+                    href={entry.primary}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={bdsClass(
+                      'bds-addable-entry-list__read-primary',
+                      'bds-addable-entry-list__read-primary--url',
+                    )}
+                  >
+                    {entry.primary}
+                  </a>
+                ) : (
+                  <span className="bds-addable-entry-list__read-primary">{entry.primary}</span>
+                )}
+                {entry.secondary ? (
+                  <span className="bds-addable-entry-list__read-secondary">{entry.secondary}</span>
+                ) : emptyDescriptionLabel ? (
+                  <span
+                    className={bdsClass(
+                      'bds-addable-entry-list__read-secondary',
+                      'bds-addable-entry-list__read-secondary--empty',
+                    )}
+                  >
+                    {emptyDescriptionLabel}
+                  </span>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        )}
+        {showEmpty && <span className="bds-addable-entry-list__empty">{emptyLabel}</span>}
+        {helperText && <span className="bds-addable-entry-list__helper">{helperText}</span>}
+      </div>
+    );
+  }
+
+  // ── Suggestion mode ─────────────────────────────────────────────────────────
+  // Preserves the reveal-form flow: read-only existing cards + staging form.
+  if (hasSuggestions) {
+    return (
+      <SuggestionModeEdit
+        entries={entries}
+        onChange={onChange}
+        label={label}
+        helperText={helperText}
+        primaryLabel={primaryLabel}
+        secondaryLabel={secondaryLabel}
+        primaryPlaceholder={primaryPlaceholder}
+        secondaryPlaceholder={secondaryPlaceholder}
+        addLabel={addLabel}
+        removeLabel={removeLabel}
+        emptyLabel={emptyLabel}
+        emptyDescriptionLabel={emptyDescriptionLabel}
+        size={size}
+        atLimit={atLimit}
+        secondaryRows={secondaryRows}
+        className={className}
+        allowDuplicates={allowDuplicates}
+        primarySuggestions={primarySuggestions!}
+        primaryStrict={primaryStrict}
+      />
+    );
+  }
+
+  // ── Plain inline-edit mode ──────────────────────────────────────────────────
+  // Each entry is a numbered row: TextInput (primary) + TextArea (secondary)
+  // + text "Remove" button. Add button appends an empty row.
+
+  const update = (index: number, patch: Partial<AddableEntry>) => {
+    onChange(entries.map((e, i) => (i === index ? { ...e, ...patch } : e)));
+  };
+
+  const remove = (index: number) => {
+    onChange(entries.filter((_, i) => i !== index));
+  };
+
+  const append = () => {
+    onChange([...entries, { primary: '', secondary: '' }]);
+  };
+
+  const showEmpty = entries.length === 0 && emptyLabel;
+
+  return (
+    <div className={bdsClass('bds-addable-entry-list', className)}>
+      {label && <span className="bds-addable-entry-list__label">{label}</span>}
+
+      {entries.length > 0 && (
+        <div className="bds-addable-entry-list__rows" role="list">
+          {entries.map((entry, index) => (
+            <div
+              key={index}
+              className="bds-addable-entry-list__row"
+              role="listitem"
+            >
+              <div className="bds-addable-entry-list__row-header">
+                <span className="bds-addable-entry-list__row-index">#{index + 1}</span>
+                <Button
+                  size={BUTTON_SIZE[size]}
+                  variant="ghost"
+                  onClick={() => remove(index)}
+                  aria-label={removeLabel}
+                >
+                  Remove
+                </Button>
+              </div>
+              <TextInput
+                size={INPUT_SIZE[size]}
+                label={primaryLabel}
+                type={primaryInputType}
+                inputMode={primaryInputType === 'url' ? 'url' : undefined}
+                autoComplete={primaryInputType === 'url' ? 'url' : undefined}
+                value={entry.primary}
+                onChange={(e) => update(index, { primary: e.target.value })}
+                placeholder={primaryPlaceholder}
+                fullWidth
+              />
+              <TextArea
+                size={TEXTAREA_SIZE[size]}
+                label={secondaryLabel}
+                value={entry.secondary}
+                onChange={(e) => update(index, { secondary: e.target.value })}
+                placeholder={secondaryPlaceholder}
+                rows={secondaryRows}
+                fullWidth
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showEmpty && <span className="bds-addable-entry-list__empty">{emptyLabel}</span>}
+
+      {!atLimit && (
+        <div>
+          <Button size={BUTTON_SIZE[size]} variant="outline" onClick={append}>
+            <Icon icon="ph:plus" />
+            {addLabel}
+          </Button>
+        </div>
+      )}
+
+      {helperText && <span className="bds-addable-entry-list__helper">{helperText}</span>}
+    </div>
+  );
+}
+
+// ── Suggestion mode (preserved from previous behavior) ────────────────────────
+
+interface SuggestionModeEditProps {
+  entries: AddableEntry[];
+  onChange: (next: AddableEntry[]) => void;
+  label?: string;
+  helperText?: string;
+  primaryLabel?: string;
+  secondaryLabel?: string;
+  primaryPlaceholder?: string;
+  secondaryPlaceholder?: string;
+  addLabel: string;
+  removeLabel: string;
+  emptyLabel?: string;
+  emptyDescriptionLabel?: string;
+  size: AddableEntryListSize;
+  atLimit: boolean;
+  secondaryRows: number;
+  className?: string;
+  allowDuplicates: boolean;
+  primarySuggestions: string[];
+  primaryStrict: boolean;
+}
+
+function SuggestionModeEdit({
+  entries,
+  onChange,
+  label,
+  helperText,
+  primaryLabel,
+  secondaryLabel,
+  primaryPlaceholder,
+  secondaryPlaceholder,
+  addLabel,
+  removeLabel,
+  emptyLabel,
+  emptyDescriptionLabel,
+  size,
+  atLimit,
+  secondaryRows,
+  className,
+  allowDuplicates,
+  primarySuggestions,
+  primaryStrict,
+}: SuggestionModeEditProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [primaryDraft, setPrimaryDraft] = useState('');
   const [secondaryDraft, setSecondaryDraft] = useState('');
 
   const primaryInputRef = useRef<HTMLInputElement>(null);
-  // TextArea does not forward a ref; use a wrapper div to locate the textarea via DOM
   const secondaryWrapRef = useRef<HTMLDivElement>(null);
   const comboContainerRef = useRef<HTMLDivElement>(null);
 
@@ -156,11 +390,8 @@ export function AddableEntryList({
     ta?.focus();
   };
 
-  const hasSuggestions = Array.isArray(primarySuggestions) && primarySuggestions.length > 0;
-  const atLimit = typeof maxItems === 'number' && entries.length >= maxItems;
   const existingPrimaries = entries.map((e) => e.primary);
 
-  // ── Cancel ───────────────────────────────────────────────────────────────────
   const cancel = () => {
     setPrimaryDraft('');
     setSecondaryDraft('');
@@ -168,7 +399,6 @@ export function AddableEntryList({
     combo.reset();
   };
 
-  // ── Commit ───────────────────────────────────────────────────────────────────
   const commit = () => {
     const trimmedPrimary = primaryDraft.trim();
     const trimmedSecondary = secondaryDraft.trim();
@@ -176,9 +406,8 @@ export function AddableEntryList({
       cancel();
       return;
     }
-    // Strict mode: reject if not in suggestions
-    if (hasSuggestions && primaryStrict) {
-      const inList = primarySuggestions!.some(
+    if (primaryStrict) {
+      const inList = primarySuggestions.some(
         (s) => s.toLowerCase() === trimmedPrimary.toLowerCase(),
       );
       if (!inList) {
@@ -197,7 +426,6 @@ export function AddableEntryList({
     requestAnimationFrame(() => primaryInputRef.current?.focus());
   };
 
-  // ── Reveal ───────────────────────────────────────────────────────────────────
   const reveal = () => {
     setPrimaryDraft('');
     setSecondaryDraft('');
@@ -209,34 +437,17 @@ export function AddableEntryList({
     onChange(entries.filter((_, i) => i !== index));
   };
 
-  // ── Combobox hook (active when primarySuggestions provided) ─────────────────
   const combo = useSuggestionFilter({
-    suggestions: primarySuggestions ?? [],
-    // When allowDuplicates, don't hide already-used primaries from the dropdown
+    suggestions: primarySuggestions,
     selectedValues: allowDuplicates ? [] : existingPrimaries,
     strict: primaryStrict,
     onCommit: (value) => {
-      // Suggestion committed from dropdown — push to draft, move focus to secondary
       setPrimaryDraft(value);
       requestAnimationFrame(() => focusSecondary());
     },
     onCancel: cancel,
   });
 
-  // ── Primary field handlers ───────────────────────────────────────────────────
-
-  // Plain mode: Enter moves focus to secondary; Escape cancels
-  const handlePlainPrimaryKey = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      cancel();
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      requestAnimationFrame(() => focusSecondary());
-    }
-  };
-
-  // Combo mode: mirror typed value to primaryDraft, delegate keys to hook
   const handleComboPrimaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrimaryDraft(e.target.value);
     combo.handleInputChange(e);
@@ -246,14 +457,12 @@ export function AddableEntryList({
     combo.handleKeyDown(e);
   };
 
-  // Close dropdown on outside click
   const handleComboBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     if (!comboContainerRef.current?.contains(e.relatedTarget as Node)) {
       combo.closeList();
     }
   };
 
-  // Secondary field: Escape cancels
   const handleSecondaryKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Escape') {
       e.preventDefault();
@@ -262,8 +471,6 @@ export function AddableEntryList({
   };
 
   const showEmpty = entries.length === 0 && !isEditing && emptyLabel;
-
-  // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
     <div className={bdsClass('bds-addable-entry-list', className)}>
@@ -292,16 +499,14 @@ export function AddableEntryList({
                   </span>
                 ) : null}
               </div>
-              {!disabled && (
-                <button
-                  type="button"
-                  className="bds-addable-entry-list__remove"
-                  onClick={() => remove(index)}
-                  aria-label={removeLabel}
-                >
-                  <Icon icon="ph:x" />
-                </button>
-              )}
+              <button
+                type="button"
+                className="bds-addable-entry-list__remove"
+                onClick={() => remove(index)}
+                aria-label={removeLabel}
+              >
+                <Icon icon="ph:x" />
+              </button>
             </div>
           ))}
         </div>
@@ -309,103 +514,83 @@ export function AddableEntryList({
 
       {showEmpty && <span className="bds-addable-entry-list__empty">{emptyLabel}</span>}
 
-      {!disabled && isEditing && !atLimit && (
+      {isEditing && !atLimit && (
         <div className="bds-addable-entry-list__form">
-
-          {/* ── Primary field ── */}
-          {hasSuggestions ? (
-            /* Combobox-backed primary */
-            <div
-              ref={comboContainerRef}
-              className="bds-addable-entry-list__primary-combo"
-              onBlur={handleComboBlur}
-            >
-              {primaryLabel && (
-                <label
-                  htmlFor={combo.comboId}
-                  className="bds-addable-entry-list__input-label"
-                >
-                  {primaryLabel}
-                </label>
-              )}
-              <div className="bds-addable-entry-list__primary-combo-field">
-                <input
-                  ref={primaryInputRef}
-                  id={combo.comboId}
-                  role="combobox"
-                  aria-expanded={combo.isOpen}
-                  aria-haspopup="listbox"
-                  aria-controls={combo.listboxId}
-                  aria-activedescendant={combo.activeDescendant}
-                  aria-label={primaryLabel ?? (label ? `Add ${label}` : 'New entry')}
-                  aria-autocomplete="list"
-                  autoComplete="off"
-                  className={bdsClass(
-                    'bds-addable-entry-list__primary-input',
-                    `bds-addable-entry-list__primary-input--${size}`,
-                  )}
-                  value={primaryDraft}
-                  onChange={handleComboPrimaryChange}
-                  onKeyDown={handleComboPrimaryKey}
-                  onFocus={() => {
-                    if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
-                  }}
-                  placeholder={primaryPlaceholder}
-                />
-
-                {combo.isOpen && combo.filtered.length > 0 && (
-                  <ul
-                    id={combo.listboxId}
-                    role="listbox"
-                    aria-label={primaryLabel ? `${primaryLabel} suggestions` : 'Suggestions'}
-                    className="bds-addable-entry-list__dropdown"
-                  >
-                    {combo.filtered.map((suggestion, idx) => (
-                      <li
-                        key={suggestion}
-                        id={`${combo.comboId}-option-${idx}`}
-                        role="option"
-                        aria-selected={idx === combo.activeIndex}
-                        className={bdsClass(
-                          'bds-addable-entry-list__option',
-                          idx === combo.activeIndex && 'bds-addable-entry-list__option--active',
-                        )}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          // commitValue calls onCommit which sets primaryDraft + moves focus
-                          combo.commitValue(suggestion);
-                        }}
-                      >
-                        {suggestion}
-                      </li>
-                    ))}
-                  </ul>
+          <div
+            ref={comboContainerRef}
+            className="bds-addable-entry-list__primary-combo"
+            onBlur={handleComboBlur}
+          >
+            {primaryLabel && (
+              <label
+                htmlFor={combo.comboId}
+                className="bds-addable-entry-list__input-label"
+              >
+                {primaryLabel}
+              </label>
+            )}
+            <div className="bds-addable-entry-list__primary-combo-field">
+              <input
+                ref={primaryInputRef}
+                id={combo.comboId}
+                role="combobox"
+                aria-expanded={combo.isOpen}
+                aria-haspopup="listbox"
+                aria-controls={combo.listboxId}
+                aria-activedescendant={combo.activeDescendant}
+                aria-label={primaryLabel ?? (label ? `Add ${label}` : 'New entry')}
+                aria-autocomplete="list"
+                autoComplete="off"
+                className={bdsClass(
+                  'bds-addable-entry-list__primary-input',
+                  `bds-addable-entry-list__primary-input--${size}`,
                 )}
-              </div>
-              {primaryStrict && primaryDraft.trim() && !primarySuggestions!.some(
-                (s) => s.toLowerCase() === primaryDraft.trim().toLowerCase(),
-              ) && (
-                <span className="bds-addable-entry-list__strict-hint" aria-live="polite">
-                  Only suggestions can be added in strict mode.
-                </span>
+                value={primaryDraft}
+                onChange={handleComboPrimaryChange}
+                onKeyDown={handleComboPrimaryKey}
+                onFocus={() => {
+                  if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
+                }}
+                placeholder={primaryPlaceholder}
+              />
+
+              {combo.isOpen && combo.filtered.length > 0 && (
+                <ul
+                  id={combo.listboxId}
+                  role="listbox"
+                  aria-label={primaryLabel ? `${primaryLabel} suggestions` : 'Suggestions'}
+                  className="bds-addable-entry-list__dropdown"
+                >
+                  {combo.filtered.map((suggestion, idx) => (
+                    <li
+                      key={suggestion}
+                      id={`${combo.comboId}-option-${idx}`}
+                      role="option"
+                      aria-selected={idx === combo.activeIndex}
+                      className={bdsClass(
+                        'bds-addable-entry-list__option',
+                        idx === combo.activeIndex && 'bds-addable-entry-list__option--active',
+                      )}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        combo.commitValue(suggestion);
+                      }}
+                    >
+                      {suggestion}
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
-          ) : (
-            /* Plain text primary */
-            <TextInput
-              ref={primaryInputRef}
-              size={INPUT_SIZE[size]}
-              label={primaryLabel}
-              value={primaryDraft}
-              onChange={(e) => setPrimaryDraft(e.target.value)}
-              onKeyDown={handlePlainPrimaryKey}
-              placeholder={primaryPlaceholder}
-              aria-label={primaryLabel ?? (label ? `Add ${label}` : 'New entry')}
-              fullWidth
-            />
-          )}
+            {primaryStrict && primaryDraft.trim() && !primarySuggestions.some(
+              (s) => s.toLowerCase() === primaryDraft.trim().toLowerCase(),
+            ) && (
+              <span className="bds-addable-entry-list__strict-hint" aria-live="polite">
+                Only suggestions can be added in strict mode.
+              </span>
+            )}
+          </div>
 
-          {/* ── Secondary field ── */}
           <div ref={secondaryWrapRef}>
             <TextArea
               size={TEXTAREA_SIZE[size]}
@@ -440,13 +625,9 @@ export function AddableEntryList({
         </div>
       )}
 
-      {!disabled && !isEditing && !atLimit && (
+      {!isEditing && !atLimit && (
         <div>
-          <Button
-            size={BUTTON_SIZE[size]}
-            variant="outline"
-            onClick={reveal}
-          >
+          <Button size={BUTTON_SIZE[size]} variant="outline" onClick={reveal}>
             <Icon icon="ph:plus" />
             {addLabel}
           </Button>

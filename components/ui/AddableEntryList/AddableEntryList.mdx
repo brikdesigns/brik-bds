@@ -5,29 +5,56 @@ import * as Stories from './AddableEntryList.stories';
 
 # Addable entry list
 
-The text + textarea sibling of [`AddableTextList`](?path=/docs/components-form-addable-text-list--overview). Existing entries render as read-only cards with a remove button. Clicking "Add" reveals a form with a text input (primary) and textarea (secondary). **Save** commits the entry and keeps the form open for rapid entry; **Escape** cancels.
+The text + textarea sibling of [`AddableTextList`](?path=/docs/components-form-addable-text-list--overview). Use for lists where each row needs a headline value + context: competitor URL + notes, reference site + why, line item + description, team member + role.
 
-Use for lists where each row needs a headline value + context (competitor URL + notes, reference site + why, line item + description, team member + role). The entry shape is intentionally generic so a single BDS component serves all of these — map your domain shape to `{ primary, secondary }` at the boundary.
+The entry shape is intentionally generic (`{ primary, secondary }`) so a single BDS component serves all of these — map your domain shape at the boundary.
 
 ---
 
-## Playground
+## Modes
+
+**Plain mode** (no `primarySuggestions`). Each entry is inline-editable: a primary input + secondary textarea + "Remove" button per row. The Add button appends a new empty row. This is the default and the right choice for free-form lists (competitors, reference sites, line items).
+
+**Suggestion mode** (with `primarySuggestions`). Preserves the reveal-form flow — existing entries render as read-only cards with an x-icon remove, and the Add button reveals a staging combobox. Use for vocabulary-locked lists (services from a catalog, etc.) where the primary is picked from a known set.
+
+**Read mode** (`disabled`). Both plain and suggestion modes collapse to token-backed typography: primary uses `--label-md`, secondary uses `--body-md`. When `primaryInputType="url"`, the primary renders as a clickable anchor.
+
+## Primary input type
+
+Set `primaryInputType` to match the data:
+
+- `'text'` (default) — plain text input; read mode renders as static text.
+- `'url'` — `type="url"` input with URL autocomplete; read mode renders as a clickable anchor with brand color and underline.
+
+---
+
+## Playground (edit mode — URL primary)
 
 <Canvas of={Stories.Playground} />
+
+## Read mode — URL primary
+
+<Canvas of={Stories.ReadModeUrl} />
+
+## Read mode — text primary
+
+<Canvas of={Stories.ReadModeText} />
+
+## Inline edit — text primary
+
+<Canvas of={Stories.InlineEditText} />
 
 ## Empty state
 
 <Canvas of={Stories.Empty} />
 
-## Secondary is optional
+## Empty description fallback (read mode)
 
-The `secondary` field can be left blank — the rendered card only shows it when present.
-
-<Canvas of={Stories.PrimaryOnly} />
+<Canvas of={Stories.WithEmptyDescriptionLabel} />
 
 ## Variants
 
-Sizes, empty/helper/disabled states, and item limit.
+Modes, sizes, and states.
 
 <Canvas of={Stories.Variants} />
 
@@ -35,12 +62,21 @@ Sizes, empty/helper/disabled states, and item limit.
 
 ## Behavior
 
-- **Save** commits the entry (primary trimmed, secondary trimmed) and keeps the form open for rapid entry.
-- **Escape** cancels and hides the form.
-- **Primary is required**; empty-primary submissions are silently dropped.
-- Duplicates are blocked case-insensitively on the primary value unless `allowDuplicates` is set.
+### Plain mode
+
+- **Add** appends an empty `{ primary: '', secondary: '' }` row; onChange fires with the appended entry.
+- Typing into any field patches that row's primary or secondary via onChange.
+- **Remove** drops the row immediately.
 - When `maxItems` is reached, the Add button is hidden.
-- Entries are read-only once added — remove to replace.
+
+### Suggestion mode
+
+- **Add** reveals a staging form with a combobox-backed primary (filtered by typed query).
+- Arrow + Enter commits a highlighted suggestion, moves focus to the secondary textarea.
+- **Save** commits the staged entry and keeps the form open for rapid entry.
+- **Escape** cancels the staging form.
+- Duplicates are blocked case-insensitively unless `allowDuplicates` is set.
+- With `primaryStrict`, free-form entries outside the suggestion list are rejected.
 
 ## When to use which Addable\* list
 
@@ -49,8 +85,8 @@ Three siblings cover the full add/remove spectrum. Pick by row shape and vocabul
 | Pick | When | Render |
 | ---- | ---- | ------ |
 | [`AddableTextList`](?path=/docs/components-form-addable-text-list--overview) | Each row is **one short, unstructured value**, no fixed vocabulary. | Removable tag per value. |
-| [`AddableComboList`](?path=/docs/components-form-addable-combo-list--overview) | Each row is **one value from a known vocabulary** (BCS getter, locked enum) with optional free-form fallback. | Removable tag per value + combobox input. |
-| `AddableEntryList` | Each row needs a **primary value and a secondary note** (competitor URL + notes, service + description, reference site + why). | Card per entry with primary heading + secondary body. |
+| [`AddableComboList`](?path=/docs/components-form-addable-combo-list--overview) | Each row is **one value from a known vocabulary** with optional free-form fallback. | Removable tag per value + combobox input. |
+| `AddableEntryList` | Each row needs a **primary value and a secondary note** (competitor URL + notes, service + description, reference site + why). | Inline-editable rows in plain mode; read-only cards in suggestion mode. |
 
 If the row needs **three or more structured fields** (e.g. competitor / gap / copy implication), none of these fit — build a local "frame card" pattern; promote to BDS only after a second consumer appears.
 
