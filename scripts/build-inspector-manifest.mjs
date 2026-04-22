@@ -191,6 +191,14 @@ function buildComponents() {
       source_path: `components/ui/${pascalName}/${pascalName}.tsx`,
       tokens_used: extractTokensUsed(dir),
       a11y: extractA11ySignals(dir, pascalName),
+      // Semantic fields — consumed by scripts/bds-find.mjs for discoverability.
+      // Hand-authored in inspector-overrides.json; absent by default.
+      // See docs/adrs/ADR-001-bds-find.md for the schema rationale.
+      category: override.category ?? null,
+      tags: override.tags ?? [],
+      use_cases: override.use_cases ?? [],
+      theming_contract: override.theming_contract ?? null,
+      composes: override.composes ?? [],
     };
   }
   return components;
