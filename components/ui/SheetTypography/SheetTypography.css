@@ -1,0 +1,73 @@
+/* SheetTypography — four locked text primitives for Sheet-context content.
+ *
+ * Every tier is bound to a semantic token. Consumers that want different
+ * typography are either (a) not in a Sheet context — use <Field> or page
+ * primitives — or (b) exceptional and should pass `className` + their own
+ * styles as a conscious override.
+ *
+ * See docs/LAYOUT-CONTEXTS.md for the rules these styles enforce:
+ *   1. Label tier is always smaller than heading tier.
+ *   2. Heading family only for `--heading-*`; body / label families otherwise.
+ *   7. Title Case for headings and labels (capitalize transform).
+ */
+
+/* ── SheetSectionTitle ──────────────────────────────────────────── */
+
+.bds-sheet-section-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ── SheetFieldLabel ────────────────────────────────────────────── */
+
+.bds-sheet-field-label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-muted);
+  text-transform: capitalize;
+  margin: 0;
+  /* Block-level default so labels stack above values without consumer wrapping. */
+  display: block;
+}
+
+/* ── SheetFieldValue ────────────────────────────────────────────── */
+
+.bds-sheet-field-value {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  margin: 0;
+  /* Preserve explicit line breaks in values like multi-line addresses or
+   * pasted lists, without letting a long string blow out the sheet width. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.bds-sheet-field-value--empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── SheetHelperText ────────────────────────────────────────────── */
+
+.bds-sheet-helper-text {
+  font-family: var(--font-family-label);
+  font-size: var(--label-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  margin: 0;
+  display: block;
+}
+
+.bds-sheet-helper-text--error {
+  color: var(--text-accent-red);
+}
