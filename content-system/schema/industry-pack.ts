@@ -201,6 +201,33 @@ export interface IndustryPack {
   footerArchetype?: FooterArchetype;
 
   /**
+   * Page compositions — how each page-type this industry ships is
+   * assembled from section blueprints. Keyed by a page-type slug that
+   * matches an entry in `pageArchetypes`.
+   *
+   * **Source-of-truth discipline** (see docs/BLUEPRINTS-ASTRO-PACKAGE.md
+   * §4.1): the pack owns composition. Content generation fills slots
+   * inside the declared sequence; it does not choose blueprints. The
+   * `visualNotes.blueprintKey` emitted by content workers is retained
+   * as a drift-detection hint — if content gen disagrees with the
+   * pack, the scaffold task logs a `source='composition_drift'` row on
+   * `enrichment_log` but the pack's decision wins at render time.
+   *
+   * A client may override composition per-page via
+   * `company_profiles.page_compositions` (JSONB). Override precedence:
+   *   1. `company_profiles.page_compositions[pageType]` (client override)
+   *   2. `pack.pageCompositions[pageType]`              (pack default)
+   *   3. Fallback: the dispatcher renders whatever sections content
+   *      provides, picking components by `visualNotes.blueprintKey`
+   *      (or `<BlueprintFallback>` for unknown keys).
+   *
+   * Leave unset for industries whose pages are fully client-driven.
+   * Dental, real-estate, and small-business packs all declare
+   * compositions for the page types they enumerate in `pageArchetypes`.
+   */
+  pageCompositions?: Record<string, PageComposition>;
+
+  /**
    * Industry-specific site audit — URL patterns + structured-fact extractors
    * that turn a crawl of the client's existing website into fields downstream
    * consumers can reason about programmatically (rather than LLM-paraphrasing
@@ -387,6 +414,51 @@ export interface PageArchetype {
    */
   blueprintDefaults?: readonly string[];
   description?: string;
+}
+
+/**
+ * PageComposition — the ordered sequence of section blueprints that
+ * compose a page of a given type. Sibling to `PageArchetype`:
+ * PageArchetype declares the page exists + is required; PageComposition
+ * declares how it's built.
+ *
+ * See docs/BLUEPRINTS-ASTRO-PACKAGE.md §4 for the full contract,
+ * including resolver precedence (client override > pack default >
+ * dispatcher-reads-content-hints) and the drift-detection rule
+ * against content-gen's `visualNotes.blueprintKey` hints.
+ *
+ * Every `sections` entry MUST be a valid `Blueprint.key` in
+ * `blueprints/blueprint-library.json`. A typecheck-time constraint
+ * would require importing BlueprintKey here and generating it from
+ * the JSON — for now, consistency is enforced at validator time by
+ * the scaffold task's preflight. Adding a typecheck lint is a
+ * follow-up (see Appendix A of the spec).
+ */
+export interface PageComposition {
+  /**
+   * The page archetype this composition renders — must match a slug
+   * present in `pageArchetypes` on the same pack. Scaffold task
+   * validates this at generation time.
+   */
+  pageArchetype: string;
+  /**
+   * Ordered list of blueprint keys. Order determines render sequence.
+   * Keys reference `Blueprint.key` entries in
+   * `blueprints/blueprint-library.json`.
+   */
+  sections: readonly string[];
+  /**
+   * Optional per-page nav archetype override. Rare — a landing page
+   * might use a stripped-down nav while the rest of the site uses
+   * the pack default.
+   */
+  navArchetype?: NavArchetype;
+  /**
+   * Optional per-page footer archetype override. Same rationale as
+   * navArchetype — only use when a page type genuinely requires a
+   * different footer shape than the pack default.
+   */
+  footerArchetype?: FooterArchetype;
 }
 
 export interface ServiceEntry {

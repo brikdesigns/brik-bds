@@ -320,6 +320,78 @@ export const smallBusiness: IndustryPack = {
   // sensitive audiences) should graduate to their own pack.
   footerArchetype: 'four_col_directory',
 
+  // Page compositions — every page archetype this pack ships pairs
+  // with a sequence of section blueprints. Small-business is the
+  // fallback pack, so compositions stick to the blueprint set that
+  // ships in `@brikdesigns/bds/blueprints-astro@0.1.x` (hero_split_60_40,
+  // stats_dark_bar, services_detail_two_column, about_story_split,
+  // testimonials_featured_large, cta_split_contact, cta_dark_centered,
+  // hero_interior_minimal). This guarantees a zero-fallback render for
+  // any v0.1 client using this pack — notably Vale Partners at launch.
+  //
+  // Dedicated verticals graduating to their own pack can reference any
+  // blueprint key, since their render comes later (once more components
+  // ship). The pack's composition becomes the authoritative sequence;
+  // content generation fills slots rather than choosing blueprints.
+  pageCompositions: {
+    home: {
+      pageArchetype: 'home',
+      sections: [
+        'hero_split_60_40',
+        'stats_dark_bar',
+        'services_detail_two_column',
+        'about_story_split',
+        'testimonials_featured_large',
+        'cta_split_contact',
+      ],
+    },
+    about: {
+      pageArchetype: 'about',
+      sections: [
+        'hero_interior_minimal',
+        'about_story_split',
+        'stats_dark_bar',
+        'cta_dark_centered',
+      ],
+    },
+    services: {
+      pageArchetype: 'services',
+      sections: [
+        'hero_interior_minimal',
+        'services_detail_two_column',
+        'cta_dark_centered',
+      ],
+    },
+    contact: {
+      pageArchetype: 'contact',
+      sections: ['hero_interior_minimal', 'cta_split_contact'],
+    },
+    testimonials: {
+      pageArchetype: 'testimonials',
+      sections: [
+        'hero_interior_minimal',
+        'testimonials_featured_large',
+        'cta_dark_centered',
+      ],
+    },
+    pricing: {
+      pageArchetype: 'pricing',
+      sections: [
+        'hero_interior_minimal',
+        'services_detail_two_column',
+        'cta_dark_centered',
+      ],
+    },
+    'service-areas': {
+      pageArchetype: 'service-areas',
+      sections: [
+        'hero_interior_minimal',
+        'about_story_split',
+        'cta_dark_centered',
+      ],
+    },
+  },
+
   // Navigation IA — `editorial-transparent` is the generic baseline.
   // 4 primary links, no mega-menu (small businesses rarely need grouped
   // catalogs), reveal-on-scroll keeps chrome out of the way during

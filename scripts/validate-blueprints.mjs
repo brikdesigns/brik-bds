@@ -105,6 +105,22 @@ function validateBlueprint(bp, issues) {
     push('last_reviewed', `Invalid ISO date "${bp.last_reviewed}".`);
   }
 
+  // required_facts — see docs/BLUEPRINTS-ASTRO-PACKAGE.md §2.4.
+  // Must be present (empty array if none) so the scaffold-task
+  // preflight has an unambiguous contract for every blueprint.
+  if (!Array.isArray(bp.required_facts)) {
+    push(
+      'required_facts',
+      'Must be an array of snake_case client-fact identifiers (empty array if none required).',
+    );
+  } else {
+    for (const f of bp.required_facts) {
+      if (typeof f !== 'string' || !KEY_PATTERN.test(f)) {
+        push('required_facts', `Invalid required_fact "${f}" — must be snake_case lowercase.`);
+      }
+    }
+  }
+
   for (const field of PROJECTION_FIELDS) {
     if (bp[field] !== undefined) {
       push(field, `Projection field "${field}" is derived — remove from source JSON.`);

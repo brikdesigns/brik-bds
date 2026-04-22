@@ -67,6 +67,34 @@ export interface Blueprint {
   pattern_spec?: string;
   js_snippet?: string;
 
+  // ── Content contract ──────────────────────────────────────────
+  /**
+   * Per-client facts this blueprint requires to render its canonical
+   * shape. Entries are snake_case identifiers matching optional fields
+   * on `ClientFacts` (from `@brikdesigns/bds/blueprints-astro`) — e.g.
+   * `hero_image_url`, `phone`, `email`, `address`, `hours`.
+   *
+   * The portal `dev_scaffold_site` task preflights the content bundle
+   * against this list before emitting a client Astro repo — if a
+   * required fact is null for any page that uses this blueprint, the
+   * task fails with a structured error and the repo is not generated.
+   * See docs/BLUEPRINTS-ASTRO-PACKAGE.md §2.4.
+   *
+   * An empty array means "no client-fact requirements" — the blueprint
+   * renders fully from `section` content alone (heading, body, items,
+   * cta). Most blueprints fall in this bucket; only hero-with-image,
+   * contact, and CTA-with-contact-channels genuinely require client
+   * facts today.
+   *
+   * Field names are snake_case to match `company_profiles` columns
+   * directly. The scaffold task projects snake_case → ClientFacts
+   * (which uses camelCase for canonical fields + an index signature
+   * for extras). Extending this list is cheap — add the field to
+   * `ClientFacts` (or rely on the index signature), list the key here,
+   * bump the blueprint's version, update `last_reviewed`.
+   */
+  required_facts: readonly string[];
+
   // ── Metadata ──────────────────────────────────────────────────
   /** Where the pattern was captured from — "Framer - Buildaxa", "Vale demo", etc. */
   source?: string;
@@ -178,6 +206,27 @@ export function validateBlueprint(bp: Blueprint): ValidationResult {
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(bp.last_reviewed ?? '')) {
     push('last_reviewed', `Invalid ISO date "${bp.last_reviewed}".`);
+  }
+
+  // required_facts MUST be present (even if empty). An undefined array
+  // means an author forgot to declare the contract — which would let
+  // the scaffold-task preflight silently pass blueprints with missing
+  // client-facts. Empty array is the correct signal for "no required
+  // facts," not omission.
+  if (!Array.isArray(bp.required_facts)) {
+    push(
+      'required_facts',
+      'Must be an array of snake_case client-fact identifiers (empty array if none required).',
+    );
+  } else {
+    for (const f of bp.required_facts) {
+      if (typeof f !== 'string' || !/^[a-z][a-z0-9_]*$/.test(f)) {
+        push(
+          'required_facts',
+          `Invalid required_fact "${f}" — must be snake_case lowercase string.`,
+        );
+      }
+    }
   }
 
   return { ok: issues.length === 0, issues };

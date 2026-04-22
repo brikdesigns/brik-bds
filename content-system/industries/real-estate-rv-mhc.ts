@@ -487,6 +487,86 @@ export const realEstateRvMhc: IndustryPack = {
   // disclosures; those sit in a trimmed bottom-bar legal section.
   footerArchetype: 'four_col_directory',
 
+  // Page compositions — real-estate RV/MHC sites are task-heavy
+  // (browse → filter → reserve), so compositions prioritize gallery +
+  // utility patterns. Several sections (gallery_masonry_3col,
+  // features_alternating_split) fall back to `<BlueprintFallback>`
+  // until their Astro components ship post-v0.1.
+  pageCompositions: {
+    home: {
+      pageArchetype: 'home',
+      sections: [
+        'hero_fullbleed_photo',
+        'stats_dark_bar',
+        'services_detail_two_column',
+        'testimonials_3col_cards',
+        'cta_split_contact',
+      ],
+    },
+    'sites-availability': {
+      pageArchetype: 'sites-availability',
+      sections: [
+        'hero_interior_minimal',
+        'gallery_masonry_3col',
+        'cta_split_contact',
+      ],
+    },
+    amenities: {
+      pageArchetype: 'amenities',
+      sections: [
+        'hero_interior_minimal',
+        'features_3col_icon_grid',
+        'gallery_masonry_3col',
+        'cta_dark_centered',
+      ],
+    },
+    'rules-policies': {
+      pageArchetype: 'rules-policies',
+      sections: [
+        'hero_interior_minimal',
+        'content_legal_centered',
+        'cta_dark_centered',
+      ],
+    },
+    reservations: {
+      pageArchetype: 'reservations',
+      sections: [
+        'hero_interior_minimal',
+        'features_alternating_split',
+        'cta_split_contact',
+      ],
+    },
+    'homes-for-sale': {
+      pageArchetype: 'homes-for-sale',
+      sections: [
+        'hero_interior_minimal',
+        'gallery_masonry_3col',
+        'cta_split_contact',
+      ],
+    },
+    'lease-info': {
+      pageArchetype: 'lease-info',
+      sections: [
+        'hero_interior_minimal',
+        'faq_accordion_grouped',
+        'cta_split_contact',
+      ],
+    },
+    community: {
+      pageArchetype: 'community',
+      sections: [
+        'hero_interior_minimal',
+        'gallery_masonry_3col',
+        'about_story_split',
+        'cta_dark_centered',
+      ],
+    },
+    contact: {
+      pageArchetype: 'contact',
+      sections: ['hero_interior_minimal', 'contact_form_split'],
+    },
+  },
+
   navigationIA: {
     archetype: 'utility-first',
     primaryLinkCount: 5,
