@@ -1,8 +1,8 @@
 {
   "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
-  "bds_version": "0.24.1",
-  "generated_at": "2026-04-21T21:34:46.458Z",
-  "component_count": 82,
+  "bds_version": "0.25.0",
+  "generated_at": "2026-04-22T01:13:06.550Z",
+  "component_count": 83,
   "token_count": 426,
   "components": {
     "bds-accordion": {
@@ -1099,6 +1099,32 @@
         ],
         "manages_focus": false,
         "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      }
+    },
+    "bds-catalog-picker": {
+      "name": "CatalogPicker",
+      "class_prefix": "bds-catalog-picker",
+      "storybook_url": "/?path=/story/components-catalog-picker--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "A single entry in a reference catalog (e.g. industry services, pain points,",
+      "source_path": "components/ui/CatalogPicker/CatalogPicker.tsx",
+      "tokens_used": [
+        "--font-family-label",
+        "--gap-md",
+        "--gap-xl",
+        "--label-xs",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
       }

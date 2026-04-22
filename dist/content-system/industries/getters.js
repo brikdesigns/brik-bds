@@ -25,6 +25,19 @@ export function getIndustryServices(slug) {
     return [...resolvePack(slug).services];
 }
 /**
+ * Returns the structured services catalog for the given industry — each entry
+ * carries slug, displayName, aliases, category, and optional regulatoryNote.
+ * Falls back to the `small-business` pack's catalog when slug is unknown.
+ *
+ * Distinct from `getIndustryServices` (flat string array of suggestion seeds).
+ * Consumers that need slug-level attribution or alias matching (e.g. the
+ * portal's `<CatalogPicker>` wiring for `services_offered`) read from this
+ * getter; UIs that only need a suggestion dropdown keep using the flat one.
+ */
+export function getIndustryServicesCatalog(slug) {
+    return resolvePack(slug).servicesCatalog;
+}
+/**
  * Returns accepted payment methods and financing mechanisms for the given
  * industry. Falls back to `small-business` payment types when slug is unknown.
  */

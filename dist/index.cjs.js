@@ -19664,6 +19664,110 @@ function CardControl({
     }
   );
 }
+function slugify(raw) {
+  const base = raw.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  return base || `custom-${Date.now()}`;
+}
+function uniqueSlug(base, taken) {
+  if (!taken.has(base)) return base;
+  let i = 2;
+  while (taken.has(`${base}-${i}`)) i += 1;
+  return `${base}-${i}`;
+}
+function matchCatalogEntry(query, catalog) {
+  var _a;
+  const q = query.trim().toLowerCase();
+  if (!q) return null;
+  for (const entry of catalog) {
+    if (entry.displayName.toLowerCase() === q) return entry;
+    if ((_a = entry.aliases) == null ? void 0 : _a.some((a) => a.toLowerCase() === q)) return entry;
+  }
+  return null;
+}
+function CatalogPicker({
+  catalog,
+  value: value2,
+  onChange,
+  label,
+  helperText,
+  searchPlaceholder,
+  descriptionPlaceholder,
+  addLabel = "Add New",
+  removeLabel = "Remove entry",
+  emptyLabel,
+  emptyDescriptionLabel,
+  size: size2 = "md",
+  disabled = false,
+  strict = false,
+  maxItems,
+  descriptionRows = 2,
+  className
+}) {
+  const entries = React.useMemo(
+    () => value2.map((v) => ({ primary: v.displayName, secondary: v.description ?? "" })),
+    [value2]
+  );
+  const suggestions = React.useMemo(() => {
+    const pickedSlugs = new Set(value2.map((v) => v.slug));
+    return catalog.filter((entry) => !pickedSlugs.has(entry.slug)).map((entry) => entry.displayName);
+  }, [catalog, value2]);
+  const handleChange = React.useCallback(
+    (next) => {
+      const byPrimary = new Map(value2.map((v) => [v.displayName.toLowerCase(), v]));
+      const takenSlugs = new Set(catalog.map((e) => e.slug));
+      value2.forEach((v) => takenSlugs.add(v.slug));
+      const result = next.map((entry) => {
+        const existing = byPrimary.get(entry.primary.toLowerCase());
+        if (existing) {
+          return {
+            ...existing,
+            description: entry.secondary || void 0
+          };
+        }
+        const match = matchCatalogEntry(entry.primary, catalog);
+        if (match) {
+          return {
+            slug: match.slug,
+            displayName: match.displayName,
+            description: entry.secondary || void 0,
+            source: "catalog"
+          };
+        }
+        const slug = uniqueSlug(slugify(entry.primary), takenSlugs);
+        takenSlugs.add(slug);
+        return {
+          slug,
+          displayName: entry.primary,
+          description: entry.secondary || void 0,
+          source: "custom"
+        };
+      });
+      onChange(result);
+    },
+    [catalog, value2, onChange]
+  );
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: bdsClass("bds-catalog-picker", className), children: /* @__PURE__ */ jsxRuntime.jsx(
+    AddableEntryList,
+    {
+      label,
+      helperText,
+      entries,
+      onChange: handleChange,
+      primarySuggestions: suggestions,
+      primaryStrict: strict,
+      primaryPlaceholder: searchPlaceholder,
+      secondaryPlaceholder: descriptionPlaceholder,
+      addLabel,
+      removeLabel,
+      emptyLabel,
+      emptyDescriptionLabel,
+      size: size2,
+      disabled,
+      maxItems,
+      secondaryRows: descriptionRows
+    }
+  ) });
+}
 function CardDisplay({
   imageSrc,
   imageAlt = "",
@@ -28025,6 +28129,7 @@ exports.CardList = CardList;
 exports.CardSummary = CardSummary;
 exports.CardTestimonial = CardTestimonial;
 exports.CardTitle = CardTitle;
+exports.CatalogPicker = CatalogPicker;
 exports.Checkbox = Checkbox;
 exports.Chip = Chip;
 exports.CollapsibleCard = CollapsibleCard;

@@ -2673,6 +2673,16 @@
   flex-shrink: 0;
 }
 }
+/* CatalogPicker — thin wrapper around AddableEntryList.
+ * Most visual styling lives on the inner AddableEntryList primitive.
+ * The wrapper class is reserved as a hook for consumer overrides and
+ * future features (e.g. source-attribution badges per picked entry).
+ */
+.bds-catalog-picker {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 @layer bds-components {
 /* ─── CardDisplay ────────────────────────────────────────────── */
 
