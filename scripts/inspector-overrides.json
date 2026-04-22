@@ -1,10 +1,21 @@
 {
-  "$comment": "Hand-edited overrides for the BDS inspector manifest. Anything not listed here defaults to { status: 'stable' }. Edit when a component ships experimental / gets deprecated / needs a custom description.",
+  "$comment": "Hand-edited overrides for the BDS inspector manifest AND the bds-find CLI. Anything not listed here defaults to { status: 'stable' } and empty semantic fields. Semantic fields (category, tags, use_cases, theming_contract, composes) are consumed by scripts/bds-find.mjs for agent discoverability. See docs/adrs/ADR-001-bds-find.md.",
   "components": {
     "DevFeedbackWidget": {
       "status": "stable",
       "introduced_in": "0.5.0",
-      "description": "Dev-only feedback widget. Registers into the Brik DevBar; renders a 2x2 type selector + textarea; submits to /api/feedback."
+      "description": "Dev-only feedback widget. Registers into the Brik DevBar; renders a 2x2 type selector + textarea; submits to /api/feedback.",
+      "category": "overlays",
+      "tags": ["feedback", "dev-tool", "internal"],
+      "use_cases": [
+        "collect inline feedback during development or staging",
+        "capture bugs, UX issues, or copy suggestions without leaving the page"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography"],
+        "fixed": ["submit-behavior", "widget-registration"]
+      },
+      "composes": ["Button", "TextArea"]
     },
     "Accordion": {
       "introduced_in": "0.1.3"
@@ -22,7 +33,18 @@
       "introduced_in": "0.1.3"
     },
     "AlertBanner": {
-      "introduced_in": "0.1.3"
+      "introduced_in": "0.1.3",
+      "category": "feedback",
+      "tags": ["alert", "banner", "notification", "warning", "error", "info"],
+      "use_cases": [
+        "inline warning, error, or informational notice",
+        "persistent top-of-page announcement",
+        "form validation summary"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography", "radius"],
+        "fixed": ["variant-semantics"]
+      }
     },
     "AnimatedIcon": {
       "introduced_in": "0.1.3"
@@ -43,7 +65,18 @@
       "introduced_in": "0.1.3"
     },
     "Button": {
-      "introduced_in": "0.1.3"
+      "introduced_in": "0.1.3",
+      "category": "actions",
+      "tags": ["button", "action", "submit", "cta", "primary", "secondary"],
+      "use_cases": [
+        "primary or secondary call-to-action",
+        "form submit or cancel",
+        "any clickable action with label"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography", "radius", "elevation"],
+        "fixed": ["variant-semantics", "disabled-behavior", "keyboard-nav"]
+      }
     },
     "ButtonGroup": {
       "introduced_in": "0.1.3"
@@ -52,7 +85,18 @@
       "introduced_in": "0.1.3"
     },
     "Card": {
-      "introduced_in": "0.1.3"
+      "introduced_in": "0.1.3",
+      "category": "layout",
+      "tags": ["card", "container", "surface", "panel"],
+      "use_cases": [
+        "grouped content block with subtle elevation",
+        "list item, tile, or dashboard widget frame",
+        "any semantically-related content with visual separation"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography", "radius", "elevation"],
+        "fixed": ["surface-semantics"]
+      }
     },
     "CardControl": {
       "introduced_in": "0.1.3"
@@ -85,7 +129,19 @@
       "introduced_in": "0.1.3"
     },
     "Dialog": {
-      "introduced_in": "0.1.3"
+      "introduced_in": "0.1.3",
+      "category": "overlays",
+      "tags": ["dialog", "modal", "confirm", "popup", "overlay"],
+      "use_cases": [
+        "confirm a destructive action",
+        "focused task requiring user attention",
+        "form inside a modal overlay"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography", "radius", "elevation"],
+        "fixed": ["focus-trap", "escape-to-close", "backdrop-click-behavior", "aria-labeling"]
+      },
+      "composes": ["Button"]
     },
     "Divider": {
       "introduced_in": "0.1.3"
@@ -115,7 +171,20 @@
       "introduced_in": "0.1.3"
     },
     "Form": {
-      "introduced_in": "0.1.3"
+      "introduced_in": "0.18.0",
+      "category": "inputs",
+      "tags": ["form", "submit", "validation", "contact", "feedback", "survey"],
+      "use_cases": [
+        "contact form",
+        "feedback form",
+        "multi-field input block with submit",
+        "any user-facing form with validation"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography"],
+        "fixed": ["validation-behavior", "error-display", "keyboard-nav", "submit-flow"]
+      },
+      "composes": ["TextInput", "TextArea", "Select", "Button", "AlertBanner"]
     },
     "Icons": {
       "introduced_in": "0.1.3"
@@ -172,7 +241,18 @@
       "introduced_in": "0.1.3"
     },
     "Select": {
-      "introduced_in": "0.1.3"
+      "introduced_in": "0.1.3",
+      "category": "inputs",
+      "tags": ["input", "select", "dropdown", "picker", "choose", "options"],
+      "use_cases": [
+        "single-option selection from a known list",
+        "category or industry picker",
+        "any choice among a fixed set of values"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography", "radius"],
+        "fixed": ["keyboard-nav", "focus-trap-menu", "aria-listbox"]
+      }
     },
     "ServiceBadge": {
       "introduced_in": "0.1.3"
@@ -214,10 +294,32 @@
       "introduced_in": "0.1.3"
     },
     "TextArea": {
-      "introduced_in": "0.1.3"
+      "introduced_in": "0.1.3",
+      "category": "inputs",
+      "tags": ["input", "textarea", "multi-line", "field", "long-text"],
+      "use_cases": [
+        "multi-line text input",
+        "comments, descriptions, messages",
+        "feedback or support request body"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography", "radius"],
+        "fixed": ["focus-ring", "error-state", "disabled-state", "resize-behavior"]
+      }
     },
     "TextInput": {
-      "introduced_in": "0.1.3"
+      "introduced_in": "0.1.3",
+      "category": "inputs",
+      "tags": ["input", "text", "field", "single-line"],
+      "use_cases": [
+        "single-line text input",
+        "email, name, phone, URL field",
+        "any labeled single-line string capture"
+      ],
+      "theming_contract": {
+        "themeable": ["colors", "spacing", "typography", "radius"],
+        "fixed": ["focus-ring", "error-state", "disabled-state"]
+      }
     },
     "TextLink": {
       "introduced_in": "0.1.3"
