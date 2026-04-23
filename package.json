@@ -1,6 +1,6 @@
 {
   "name": "@brikdesigns/bds",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "description": "Brik Design System \u2014 React components, Figma-synced tokens, and Content System (BCS) vocabulary",
   "private": false,
   "main": "dist/index.cjs.js",

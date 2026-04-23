@@ -1,0 +1,157 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as DataSectionStories from '../../components/ui/DataSection/DataSection.stories';
+
+<Meta title="Patterns/Read-Mode Page" />
+
+# Read-Mode Page
+
+A page layout archetype for surfaces that **primarily display read-only data** with per-section edit affordances. Client profile Overview, engagement detail, company settings, onboarding summaries — anywhere the default user task is *looking at data*, and editing is a secondary action.
+
+This page pattern composes four BDS components:
+
+1. **`PageHeader`** — page-level `<h1>`, breadcrumbs, metadata.
+2. **`DataSection`** — one per logical group (Identity, Location, Contact, …). Title + actions slot + body.
+3. **`FieldGrid`** — grid wrapper inside each section. 2/3/4 columns.
+4. **`Field`** — one label + value pair. Value can be text, a `<BulletList>`, a paragraph, or any `ReactNode`.
+
+---
+
+## Canonical composition
+
+<Canvas of={DataSectionStories.ReadModePage} />
+
+---
+
+## Two edit conventions
+
+BDS supports two distinct conventions for moving from read to edit. **Neither is wrong — they solve different problems.** Pick one per feature with intent; don't mix them on the same page.
+
+### Convention A — Sheet overlay
+
+Clicking an action opens a `Sheet` overlay; editing happens in the sheet. The page stays in read-mode.
+
+**Use when:**
+- The page is the user's primary navigation context and interrupting it with form state would lose their place.
+- A single section touches many fields (>6–8), or the edit form is tall enough that modal focus is a feature.
+- Data is contextual to a parent record (client profile, engagement) and users drill into one section at a time.
+
+**How the toggle works:**
+- On the `DataSection`, render a `<ButtonGroup>` with `[View]` and `[Edit]` in the `actions` slot.
+- `[View]` opens the sheet in view mode. `[Edit]` opens the sheet in edit mode.
+- Inside the sheet, a **second** `<ButtonGroup>` in the sheet header toggles between view and edit. The user can flip modes without closing the sheet.
+- The sheet header renders the same `[View]`/`[Edit]` `ButtonGroup`, preserving the vocabulary.
+- Footer buttons follow the mode: `[Close]` in view, `[Cancel]` / `[Save]` in edit.
+
+```tsx
+<DataSection
+  title="Identity"
+  actions={
+    <ButtonGroup>
+      <Button size="sm" variant="secondary" onClick={() => openSheet('identity', { mode: 'view' })}>
+        View
+      </Button>
+      <Button size="sm" variant="secondary" onClick={() => openSheet('identity', { mode: 'edit' })}>
+        Edit
+      </Button>
+    </ButtonGroup>
+  }
+>
+  <FieldGrid columns={2}>
+    <Field label="Business Name">{client.name}</Field>
+    <Field label="Industry">{client.industry}</Field>
+    {/* … */}
+  </FieldGrid>
+</DataSection>
+```
+
+Inside the sheet, `useEditableSheetConfig()` wires the header toggle and footer:
+
+```tsx
+const { mode, footer, headerActions } = useEditableSheetConfig({
+  initialMode: options.mode,
+  onSave: handleSave,
+});
+
+return (
+  <Sheet title="Identity" subtitle="Public-facing name and core identifiers." headerActions={headerActions}>
+    {mode === 'view' ? <IdentityView data={data} /> : <IdentityForm data={data} />}
+    {footer}
+  </Sheet>
+);
+```
+
+### Convention B — Inline edit
+
+Clicking `[Edit]` swaps the `DataSection` body in place. The fields become form inputs in the same grid. The page retains focus.
+
+**Use when:**
+- A section is short (≤4–6 fields) and the user is likely to edit many sections in a single session.
+- The parent page has no side-panel real estate (narrow layout) or opening a sheet would feel heavier than the edit warrants.
+- The content is inherently inline (toggles, selects, single-line strings) and form state is trivial.
+
+**How the toggle works:**
+- On the `DataSection`, render a `<ButtonGroup>` with `[View]` and `[Edit]` in `actions`.
+- `[Edit]` swaps the section body from `<FieldGrid>` + `<Field>` to the same grid of form inputs.
+- In edit mode, the `actions` slot replaces the `[View]`/`[Edit]` toggle with `[Cancel]` / `[Save]`.
+- Section title and subtitle do not change — only the body and the actions slot.
+
+```tsx
+const [mode, setMode] = useState<'view' | 'edit'>('view');
+
+<DataSection
+  title="Identity"
+  actions={
+    mode === 'view' ? (
+      <ButtonGroup>
+        <Button size="sm" variant="secondary">View</Button>
+        <Button size="sm" variant="secondary" onClick={() => setMode('edit')}>Edit</Button>
+      </ButtonGroup>
+    ) : (
+      <ButtonGroup>
+        <Button size="sm" variant="secondary" onClick={() => setMode('view')}>Cancel</Button>
+        <Button size="sm" variant="primary" onClick={handleSave}>Save</Button>
+      </ButtonGroup>
+    )
+  }
+>
+  {mode === 'view' ? (
+    <FieldGrid columns={2}>
+      <Field label="Business Name">{client.name}</Field>
+      <Field label="Industry">{client.industry}</Field>
+    </FieldGrid>
+  ) : (
+    <FieldGrid columns={2}>
+      <TextInput label="Business Name" defaultValue={client.name} />
+      <Select label="Industry" defaultValue={client.industry} options={…} />
+    </FieldGrid>
+  )}
+</DataSection>
+```
+
+---
+
+## Dos
+
+- **Stack `DataSection`s vertically** on the page. Spacing between them is owned by the component (`spacing="md"` or `"lg"`). Don't wrap them in flex columns with ad-hoc gaps.
+- **Use `FieldGrid` inside every section.** Even a single pair should live in a `FieldGrid` — the baseline alignment and column template are the point.
+- **Let `Field` handle empty values.** Passing `null` or an empty string renders the "Not set" fallback; don't hand-roll placeholder text.
+- **Use `Field` for paragraphs and lists.** A "paragraph-label" is a usage of `Field` with a `<p>` or `<BulletList>` as its value. Do not build `ParagraphField` / `ListField` — they're redundant.
+- **Match title tier to outline position.** `<h2>` is the default. A nested `DataSection` (rare) uses `titleAs="h3"`.
+
+## Don'ts
+
+- **Don't mix both conventions on the same page.** Pick A or B per feature; inconsistency is worse than either pure choice.
+- **Don't use `SheetSection` on a page.** `SheetSection` has an uppercase label heading appropriate inside a sheet — on a page, use `DataSection`.
+- **Don't put a raw `<h2>` with inline styles in place of `DataSection`.** That reintroduces the pattern this component replaces.
+- **Don't add a "Save" button to a sheet-overlay page.** In Convention A, the page never edits — the sheet does. The page's `ButtonGroup` only routes to modes.
+- **Don't rename the actions slot.** It's always `actions` — even when its only contents are routing buttons, not literal actions.
+
+---
+
+## Related
+
+- [`DataSection`](?path=/docs/displays-data-data-section--docs) — the component this pattern composes.
+- [`FieldGrid`](?path=/docs/displays-field-field-grid--docs) — grid wrapper.
+- [`Field`](?path=/docs/displays-field-field--docs) — label + value primitive.
+- [`SheetSection`](?path=/docs/displays-sheet-sheet-section--docs) — sheet-side analog.
+- [Foundations → Vocabulary](?path=/docs/foundations-vocabulary--docs) — the words that describe these parts.
