@@ -7,13 +7,19 @@
   gap: var(--gap-md);
 }
 
-/* Vertical rhythm between consecutive sections on the same page. */
+/* Vertical rhythm + divider between consecutive sections on the same page.
+   On an outline page each DataSection is a peer of its siblings — the divider
+   is the page's structural separator, not decoration. Matches the token
+   treatment used by <Divider />. */
 .bds-data-section + .bds-data-section {
   margin-top: var(--padding-lg);
+  padding-top: var(--padding-lg);
+  border-top: var(--border-width-sm) solid var(--border-muted);
 }
 
 .bds-data-section--spacing-lg + .bds-data-section {
   margin-top: var(--padding-xl);
+  padding-top: var(--padding-xl);
 }
 
 /* ─── Header ───────────────────────────────────────────────────── */
