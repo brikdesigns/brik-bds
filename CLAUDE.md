@@ -361,6 +361,19 @@ These rules apply to every BCS authoring or consumption task — same weight as 
 
 See [content-system/README.md](content-system/README.md) and the Storybook **Content System / Overview** page for the full authoring guide.
 
+## LLM stack (applies to every consumer that imports this CLAUDE.md)
+
+Because this file is `@`-imported by `brik-client-portal/CLAUDE.md`, `renew-pms/CLAUDE.md`, `freedom-client-portal/CLAUDE.md`, and `brikdesigns/CLAUDE.md`, the rule lives here so it's visible in every downstream agent session.
+
+**Every Claude call in a Brik product goes through `@brikdesigns/claude-client`** (TypeScript primary, `brik_claude_client` Python twin). Not the raw `@anthropic-ai/sdk`. The shared client handles Helicone proxy routing, retries, prompt caching, and `CallMetadata` for per-service `workflow_type` tags.
+
+- **Canonical rules:** `~/Documents/GitHub/CLAUDE.md` (cross-repo doc, source of truth at [`brik-llm/CLAUDE-CROSS-REPO.md`](../brik-llm/CLAUDE-CROSS-REPO.md)).
+- **Reasoning architecture:** [ADR-001](../brik-llm/software/docs/adr/ADR-001-llm-enrichment-architecture.md) — Claude + pgvector RAG + optional specialist LoRA.
+- **Module boundary:** [ADR-002](../brik-llm/software/docs/adr/ADR-002-module-boundaries.md) names `@brikdesigns/claude-client` a **platform dependency**, not a module. Consumers import it; nobody extends it.
+- **Mini infra scope:** [ADR-003](../brik-llm/software/docs/adr/ADR-003-mini-llm-infrastructure-scope.md) — the Mac Mini hosts LLM infrastructure (dev sandbox, embedding host, eval runner, future PHI redaction), never production reasoning.
+
+BDS (this repo) is the design-system half of Brik's LLM knowledge substrate — once ADR-001 Phase 2 lands, component docs + content-system (industries, vocabularies, voices, atmospheres) get ingested into pgvector so every `withBrikContext()`-enriched Claude call in a consumer app can retrieve against BDS directly.
+
 ## Token PR Checklist
 
 Run before raising any PR touching a token file, theme file, or component CSS:
