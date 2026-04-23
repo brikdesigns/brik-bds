@@ -1,36 +1,44 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useGlobals } from 'storybook/preview-api';
 import type { Atmosphere } from '../../content-system/vocabularies/atmosphere';
 import { ATMOSPHERE_MANIFEST } from '../../content-system/atmospheres';
 import { AtmospherePreview, type PreviewTheme } from '../foundation/_components/AtmospherePreview';
 
-// Atmosphere CSS is loaded by the iframe via ?url imports — one import per
-// slug, mapped by slug so the story can resolve the right asset URL.
-import editorialLuxuryUrl    from '../../content-system/atmospheres/editorial-luxury.css?url';
-import cinematicDramaticUrl  from '../../content-system/atmospheres/cinematic-dramatic.css?url';
-import minimalClinicalUrl    from '../../content-system/atmospheres/minimal-clinical.css?url';
-import warmSoftUrl           from '../../content-system/atmospheres/warm-soft.css?url';
-import cleanBrightUrl        from '../../content-system/atmospheres/clean-bright.css?url';
-import organicTexturedUrl    from '../../content-system/atmospheres/organic-textured.css?url';
-import noneUrl               from '../../content-system/atmospheres/none.css?url';
-
+// Atmosphere CSS is resolved per slug so the iframe preview can load
+// the correct asset at runtime. Using `new URL(path, import.meta.url)`
+// — Vite handles this as an asset reference and emits the same hashed
+// URL at build time that a `?url` import would produce. Chose this
+// shape over `?url` imports because the anti-slop scanner's import
+// resolver doesn't strip query-string suffixes and flags the `?url`
+// paths as unresolvable (pre-existing false positive from PR #188).
 const atmosphereCssMap: Record<Atmosphere, string> = {
-  'editorial-luxury': editorialLuxuryUrl,
-  'cinematic-dramatic': cinematicDramaticUrl,
-  'minimal-clinical': minimalClinicalUrl,
-  'warm-soft': warmSoftUrl,
-  'clean-bright': cleanBrightUrl,
-  'organic-textured': organicTexturedUrl,
-  'none': noneUrl,
+  'editorial-luxury': new URL('../../content-system/atmospheres/editorial-luxury.css', import.meta.url).href,
+  'cinematic-dramatic': new URL('../../content-system/atmospheres/cinematic-dramatic.css', import.meta.url).href,
+  'minimal-clinical': new URL('../../content-system/atmospheres/minimal-clinical.css', import.meta.url).href,
+  'warm-soft': new URL('../../content-system/atmospheres/warm-soft.css', import.meta.url).href,
+  'clean-bright': new URL('../../content-system/atmospheres/clean-bright.css', import.meta.url).href,
+  'organic-textured': new URL('../../content-system/atmospheres/organic-textured.css', import.meta.url).href,
+  'none': new URL('../../content-system/atmospheres/none.css', import.meta.url).href,
 };
 
 interface AtmosphereStoryArgs {
   atmosphere: Atmosphere;
 }
 
-function AtmosphereStoryRender({ atmosphere }: AtmosphereStoryArgs) {
-  const [globals] = useGlobals();
-  const themeNumber = (globals.themeNumber || 'brik') as PreviewTheme;
+interface AtmosphereStoryRenderProps extends AtmosphereStoryArgs {
+  themeNumber: PreviewTheme;
+}
+
+/**
+ * Pure render — no hooks. Reads themeNumber via the Storybook story
+ * `context.globals` arg (see meta.render below) instead of the
+ * `useGlobals()` hook. The hook approach tripped
+ * @storybook/addon-vitest's hook-order guard — a Storybook-internal
+ * conditional caller that's stable in the Storybook app shell but
+ * not in the vitest-browser test harness. context.globals is a
+ * plain object passed by Storybook's story runner and works in both
+ * environments identically.
+ */
+function AtmosphereStoryRender({ atmosphere, themeNumber }: AtmosphereStoryRenderProps) {
   return (
     <div style={{ padding: 'var(--padding-lg)' }}>
       <AtmospherePreview
@@ -58,7 +66,12 @@ const meta: Meta<AtmosphereStoryArgs> = {
       },
     },
   },
-  render: (args) => <AtmosphereStoryRender atmosphere={args.atmosphere} />,
+  render: (args, { globals }) => (
+    <AtmosphereStoryRender
+      atmosphere={args.atmosphere}
+      themeNumber={(globals.themeNumber ?? 'brik') as PreviewTheme}
+    />
+  ),
 };
 
 export default meta;
