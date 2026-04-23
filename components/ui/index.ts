@@ -27,6 +27,7 @@ export * from './Checkbox';
 export * from './Chip';
 export * from './CollapsibleCard';
 export * from './Counter';
+export * from './DataSection';
 export * from './DatePicker';
 export * from './DevFeedbackWidget';
 export * from './Dialog';
