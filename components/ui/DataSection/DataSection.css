@@ -1,0 +1,72 @@
+@layer bds-components {
+/* ─── DataSection ──────────────────────────────────────────────── */
+
+.bds-data-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+/* Vertical rhythm between consecutive sections on the same page. */
+.bds-data-section + .bds-data-section {
+  margin-top: var(--padding-lg);
+}
+
+.bds-data-section--spacing-lg + .bds-data-section {
+  margin-top: var(--padding-xl);
+}
+
+/* ─── Header ───────────────────────────────────────────────────── */
+
+.bds-data-section__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+}
+
+.bds-data-section__titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+/* Title — heading-tier typography. Semantic element is `h2` by default (see
+   `titleAs` prop). The BEM class names the role; the HTML tag is semantic. */
+.bds-data-section__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-data-section__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Action slot — flush-right, does not shrink under long titles. */
+.bds-data-section__actions {
+  flex-shrink: 0;
+}
+
+/* ─── Content ──────────────────────────────────────────────────── */
+
+.bds-data-section__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* Header → content gap is tighter than between content blocks so the header
+   visually groups with its data. */
+.bds-data-section__header + .bds-data-section__content {
+  margin-top: var(--gap-sm);
+}
+}
