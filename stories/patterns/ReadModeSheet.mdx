@@ -1,0 +1,188 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SheetSectionStories from '../../components/ui/SheetSection/SheetSection.stories';
+
+<Meta title="Patterns/Read-Mode Sheet" />
+
+# Read-Mode Sheet
+
+The narrow-view sibling of [Patterns / Read-Mode Page](?path=/docs/patterns-read-mode-page--docs). Where a page surfaces an entire record at once, a sheet surfaces **one facet** of it — a focused slice with its own view + edit lifecycle.
+
+This pattern composes four primitives:
+
+1. **`Sheet`** — the overlay frame (title, subtitle, header actions, footer, body).
+2. **`SheetSection`** — named block *inside* the sheet body. Uppercase `<h3>` label heading.
+3. **`FieldGrid`** — grid wrapper for Fields inside each SheetSection.
+4. **`Field`** — one label + value pair. Value can be text, a `<BulletList>`, a paragraph, anything.
+
+`DataSection` is **not** used inside a sheet. `SheetSection` and `DataSection` are siblings — one per context.
+
+---
+
+## Canonical composition
+
+<Canvas of={SheetSectionStories.Patterns} />
+
+The three `SheetSection`s in the example above demonstrate:
+
+- **Lead paragraph** (description only, no heading) — establishes context at the top of the sheet.
+- **Named section with swatches** — an uppercase label heading + flexible body content.
+- **Named sections with typography / mode content** — multiple peers separated by the built-in inter-section rhythm.
+
+None of these stacks use a raw `<h3>`, a custom "SectionHeading" wrapper, or inline margin-top. That discipline is load-bearing — the moment a sheet reaches for its own spacing or heading style, every other sheet drifts.
+
+---
+
+## Two edit conventions (mirror of Read-Mode Page)
+
+### Convention A — In-sheet `[View]` / `[Edit]` toggle
+
+The sheet opens in whichever mode the user clicked into (typically from a `DataSection` on the parent page), and a `[View]` / `[Edit]` `<ButtonGroup>` in the sheet header flips between modes without closing.
+
+**Use when:**
+- Read-first traffic — users open the sheet to look at something; editing is the secondary path.
+- The record has a meaningful read-mode (formatted values, links, pills) that's richer than the form.
+- You want the page-side `DataSection` entry to honor the user's intent (clicked View = view; clicked Edit = edit).
+
+**Shape:**
+
+```tsx
+import { Sheet, SheetSection, FieldGrid, Field, ButtonGroup, Button } from '@brikdesigns/bds';
+
+// Consumer wires useEditableSheetConfig (or an equivalent) from the parent product.
+const { mode, headerActions, footer } = useEditableSheetConfig({ initialMode });
+
+return (
+  <Sheet title="Identity" subtitle="Company" headerActions={headerActions}>
+    {mode === 'view' ? (
+      <>
+        <SheetSection heading="Entity">
+          <FieldGrid columns={2}>
+            <Field label="Business Name">{company.name}</Field>
+            <Field label="Legal Name">{company.legalName}</Field>
+            <Field label="DBA">{company.dba}</Field>
+            <Field label="Year Founded">{company.yearFounded}</Field>
+          </FieldGrid>
+        </SheetSection>
+        <SheetSection heading="Classification">
+          <FieldGrid columns={2}>
+            <Field label="Industry">{company.industry}</Field>
+            <Field label="Sub-Industry">{company.subIndustry}</Field>
+          </FieldGrid>
+        </SheetSection>
+      </>
+    ) : (
+      <EditForm>{/* mirror inputs in same SheetSections */}</EditForm>
+    )}
+    {footer}
+  </Sheet>
+);
+```
+
+Footer auto-renders `[Close]` / `[Edit]` in view mode and `[Cancel]` / `[Save]` in edit mode.
+
+### Convention B — Sheet is edit-only
+
+The sheet always opens in edit mode. No `[View]` / `[Edit]` toggle. No read-mode rendering inside the sheet.
+
+**Use when:**
+- The read-mode view on the parent page is already sufficient (e.g., the `DataSection` on the Overview tab shows every field the user needs to see).
+- Editing is the only reason to open the sheet.
+- The form is short (1–3 fields) and a mode toggle is more friction than value.
+
+**Shape:**
+
+```tsx
+return (
+  <Sheet title="Notes" subtitle="Company">
+    <SheetSection heading="Internal notes">
+      <TextArea label="Notes" fullWidth rows={10} value={notes} onChange={handleChange} />
+    </SheetSection>
+  </Sheet>
+);
+```
+
+The page-side entry in this case is a single `<Button>` in the `DataSection.actions` slot, not a `<ButtonGroup>`.
+
+---
+
+## Typography rules — what goes in a sheet
+
+`SheetSection` owns all section-level typography. Do not introduce alternatives.
+
+| Role | Primitive | Renders | Notes |
+|---|---|---|---|
+| Sheet title | `Sheet.title` prop | `<h2>` | Configured via `useConfigureSheet`. One per sheet. |
+| Sheet subtitle | `Sheet.subtitle` prop | `<p>` | Small, muted, above the title. |
+| Section heading (inside sheet body) | `SheetSection.heading` prop | `<h3 class="bds-sheet-section__heading">` (uppercase label style) | The only section heading inside a sheet body. |
+| Section description | `SheetSection.description` prop | `<p class="bds-sheet-section__description">` | Optional lead paragraph under the heading. |
+| Field label | `Field.label` prop (or standalone `SheetFieldLabel` when the field shape won't fit) | `<span class="bds-field__label">` or `<label>` when `htmlFor` provided | Short, compact text. |
+| Field value | `Field` children (or standalone `SheetFieldValue` when Field won't fit) | `<div class="bds-field__value">` | Accepts any `ReactNode`. Empty renders "Not set". |
+| Paragraph / list value | `Field` children — a `<p>` or `<BulletList>` | As-children | No separate "ParagraphField" or "ListField" — `Field` does both. |
+
+### Don't
+
+- **Don't use a raw `<h3>` / `<h4>` inside a sheet.** `SheetSection.heading` is the only section heading.
+- **Don't wrap `SheetSection` in a custom "SectionHeading + SheetDivider" combo.** The divider is implicit; the heading lives on `SheetSection`.
+- **Don't pass `heading` to a `SheetSection` *and* also render a `SheetSectionTitle` inside it.** Pick one — usually the prop.
+
+### The standalone typography primitives (`SheetSectionTitle`, `SheetFieldLabel`, `SheetFieldValue`)
+
+These exist as **escape hatches** for layouts that `SheetSection` + `Field` can't express — rare cases like two-column comparison rows, side-by-side before/after pairs, or a custom header row in a report sheet. If you're using them to rebuild what `SheetSection` + `Field` already do, you're re-paving the drift this pattern is meant to retire.
+
+When you do reach for them, the rule: **match the BEM + HTML element that `SheetSection` / `Field` would have produced**, so the visual treatment stays consistent.
+
+---
+
+## Section gap rhythm — owned by `SheetSection`
+
+The vertical gap between consecutive sections is `SheetSection`'s concern. Do not override with inline `marginTop`, custom flex gaps, or spacer `<div>`s.
+
+```css
+/* What SheetSection already does internally */
+.bds-sheet-section + .bds-sheet-section { margin-top: var(--padding-lg); }
+.bds-sheet-section--spacing-lg + .bds-sheet-section { margin-top: var(--padding-xl); }
+```
+
+If a sheet needs tighter or looser rhythm, tune the `spacing` prop (`md` or `lg`). If the prop space isn't sufficient, that's a signal to broaden `SheetSection` — not to inline-override at the call site.
+
+---
+
+## Sheet vs Page — how to pick
+
+| Choose **Read-Mode Page** (`DataSection`) when… | Choose **Read-Mode Sheet** (`SheetSection`) when… |
+|---|---|
+| The user's primary task is scanning a whole record | The user's primary task is drilling into one facet |
+| Navigation context is valuable and a modal would lose it | The parent page stays useful while the overlay is open |
+| Every section is roughly equally important | One section is the focus; others are in the sheet because they're long |
+| Editing happens on many sections in a session | Editing is occasional and per-section |
+
+Both compose the same atomic primitives (`FieldGrid`, `Field`, `BulletList`). The wrapper (`DataSection` vs `SheetSection`) is the decision. Pick the wrapper that matches the context.
+
+---
+
+## Dos
+
+- **Use `Sheet` + `SheetSection` + `FieldGrid` + `Field` for every read-mode sheet.** Atomic pieces compose; custom wrappers drift.
+- **Let `useEditableSheetConfig` own the footer** in Convention A. Never hand-roll `[Close]` / `[Cancel]` / `[Save]` in the sheet body.
+- **Trust `Field`'s empty state.** `null` / `undefined` / `''` renders "Not set" automatically.
+- **Match the sheet header's toggle vocabulary to the page-side `DataSection.actions`** — both show `[View]` / `[Edit]`, so the user's model is consistent across layers.
+
+## Don'ts
+
+- **Don't invent a custom `SectionHeading` component.** `SheetSection.heading` is the entire API.
+- **Don't build a `ParagraphField` or `ListField`.** `Field` accepts any `ReactNode` value; paragraph-label and list-label are *usages*, not components. (See the [Vocabulary](?path=/docs/foundations-vocabulary--docs) doc.)
+- **Don't use `DataSection` inside a sheet.** It's page-scoped and carries page-tier title typography that will overwhelm the narrow view.
+- **Don't place a `<Divider />` between `SheetSection`s.** The inter-section rhythm is built in.
+- **Don't hide the `SheetSection` heading behind `heading=""` or a blank prop to get a "headingless" look.** Use `<SheetSection description={...}>` or `<SheetSection>{content}</SheetSection>` instead — both legitimate.
+
+---
+
+## Related
+
+- [`Sheet`](?path=/docs/displays-overlay-sheet--docs) — the overlay frame.
+- [`SheetSection`](?path=/docs/displays-sheet-sheet-section--docs) — the canonical section primitive.
+- [`Field`](?path=/docs/displays-field-field--docs) — label + value pair used inside and outside sheets.
+- [`FieldGrid`](?path=/docs/displays-field-field-grid--docs) — grid wrapper.
+- [`SheetTypography`](?path=/docs/displays-sheet-sheet-typography--docs) — standalone typography primitives (escape hatches).
+- [Patterns / Read-Mode Page](?path=/docs/patterns-read-mode-page--docs) — the page-wide sibling of this pattern.
+- [Foundations / Vocabulary](?path=/docs/foundations-vocabulary--docs) — the words that describe the parts.
