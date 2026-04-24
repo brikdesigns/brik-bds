@@ -38,7 +38,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
 // ── Storybook meta ───────────────────────────────────────────────────────────
 
 const meta: Meta = {
-  title: 'Components/Typography/sheet-typography',
+  title: 'Displays/Sheet/sheet-typography',
   parameters: { layout: 'centered' },
 };
 
