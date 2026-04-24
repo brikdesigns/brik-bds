@@ -9,6 +9,25 @@
  * - --text-muted (placeholder color)
  */
 
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-text-area__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: capitalize;
+}
+
+.bds-text-area__label--sm { font-size: var(--label-sm); }
+.bds-text-area__label--md { font-size: var(--label-md); }
+.bds-text-area__label--lg { font-size: var(--label-lg); }
+
+.bds-text-area__label--error {
+  color: var(--text-negative);
+}
+
+/* ─── Textarea field ─────────────────────────────────────────── */
+
 .bds-text-area-field::placeholder {
   color: var(--text-muted);
 }
