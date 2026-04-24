@@ -16,6 +16,10 @@ const meta: Meta<typeof Tag> = {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg'],
     },
+    appearance: {
+      control: 'select',
+      options: ['solid', 'subtle'],
+    },
     disabled: { control: 'boolean' },
     onRemove: { action: 'removed' },
   },
@@ -69,6 +73,15 @@ export const Variants: Story = {
           <Tag size="sm">Small</Tag>
           <Tag size="md">Medium</Tag>
           <Tag size="lg">Large</Tag>
+        </Row>
+      </div>
+      <div>
+        <SectionLabel>Appearance</SectionLabel>
+        <Row>
+          <Tag appearance="solid">Solid (default)</Tag>
+          <Tag appearance="subtle">Subtle</Tag>
+          <Tag appearance="solid" icon={<Icon icon="ph:tag" />}>Solid + icon</Tag>
+          <Tag appearance="subtle" icon={<Icon icon="ph:tag" />}>Subtle + icon</Tag>
         </Row>
       </div>
       <div>
