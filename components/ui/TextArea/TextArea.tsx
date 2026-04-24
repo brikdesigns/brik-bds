@@ -51,39 +51,23 @@ const wrapperStyles: CSSProperties = {
 };
 
 /**
- * Label base styles matching TextInput pattern
- *
- * Token reference:
- * - --font-family-label
- * - --font-weight-semi-bold = 600
- * - --font-line-height-tight
- */
-const labelBaseStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  textTransform: 'capitalize' as const,
-};
-
-/**
  * Size-variant styles — matches TextInput exactly
  *
  * Figma specs:
  * - sm: label 14px, body 14px
  * - md: label 16px, body 16px
  * - lg: label 18px, body 18px
+ *
+ * Label typography is driven by `.bds-text-area__label--{size}` in TextArea.css.
  */
-const sizeStyles: Record<TextAreaSize, { label: CSSProperties; textarea: CSSProperties }> = {
+const sizeStyles: Record<TextAreaSize, { textarea: CSSProperties }> = {
   sm: {
-    label: { fontSize: 'var(--label-sm)' },
     textarea: { fontSize: 'var(--body-sm)' },
   },
   md: {
-    label: { fontSize: 'var(--label-md)' },
     textarea: { fontSize: 'var(--body-md)' },
   },
   lg: {
-    label: { fontSize: 'var(--label-lg)' },
     textarea: { fontSize: 'var(--body-lg)' },
   },
 };
@@ -196,11 +180,11 @@ export function TextArea({
       {label && (
         <label
           htmlFor={inputId}
-          style={{
-            ...labelBaseStyles,
-            ...sizeStyle.label,
-            ...(hasError ? { color: 'var(--text-negative)' } : {}),
-          }}
+          className={bdsClass(
+            'bds-text-area__label',
+            `bds-text-area__label--${size}`,
+            hasError && 'bds-text-area__label--error',
+          )}
         >
           {label}
         </label>

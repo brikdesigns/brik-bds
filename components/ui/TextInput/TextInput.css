@@ -9,6 +9,25 @@
  * - --text-muted (placeholder color)
  */
 
+/* ─── Label ──────────────────────────────────────────────────── */
+
+.bds-text-input__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  text-transform: capitalize;
+}
+
+.bds-text-input__label--sm { font-size: var(--label-sm); }
+.bds-text-input__label--md { font-size: var(--label-md); }
+.bds-text-input__label--lg { font-size: var(--label-lg); }
+
+.bds-text-input__label--error {
+  color: var(--text-negative);
+}
+
+/* ─── Input field ────────────────────────────────────────────── */
+
 .bds-text-input-field {
   /* ─── Component-scoped override surface ── */
   --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
