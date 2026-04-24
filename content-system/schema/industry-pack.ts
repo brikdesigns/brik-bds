@@ -115,6 +115,40 @@ export interface IndustryPack {
   /** Regulatory notes that shape copy and design decisions. */
   regulatory: readonly RegulatoryNote[];
 
+  /**
+   * Compliance profile — applicable regulatory regimes + required legal
+   * pages + visible-surface requirements for this vertical.
+   *
+   * Sibling to `regulatory` with a different job: `regulatory` shapes
+   * copy and collateral ("you can't say 'specialist' unless board-certified");
+   * `compliance` gates which legal pages, footer links, and audit cadence
+   * a client site in this industry must ship.
+   *
+   * Consumers:
+   *   - Content generation (generate-content-page-worker): refuses to
+   *     complete a build if `requiredLegalPages` are absent from the
+   *     scaffolded site structure.
+   *   - Preflight (`design_preflight`): surfaces missing compliance pages
+   *     as fail-loud errors before any mockup work begins.
+   *   - Site generators (Astro blueprints): wire `requiredFooterLinks`
+   *     into the footer archetype automatically.
+   *
+   * Per-client refinement lives in `company_profiles.compliance_profile`
+   * (JSONB) — a client that *doesn't* receive federal funds drops
+   * `section_1557` from the inherited pack defaults. The pack's
+   * `regimes` are the ceiling of what's possible for the vertical, not
+   * a floor — and `ada_title_iii` is always included for anything
+   * serving the public.
+   *
+   * Canonical rules for healthcare clients live in
+   * `content-system/compliance/healthcare-ada.md` — this field is the
+   * machine-readable shape of what that doc mandates.
+   *
+   * Omit for industries without structured compliance requirements
+   * (small-business, hospitality outside of healthcare-adjacent).
+   */
+  compliance?: IndustryCompliance;
+
   /** Pain points of the end customer/patient/tenant — informs empathy in copy. */
   customerPainPoints: readonly CustomerPainPoint[];
 
@@ -503,6 +537,107 @@ export interface RegulatoryNote {
   /** How this regulation constrains copy, design, or collateral. */
   implication: string;
   scope?: 'federal' | 'state' | 'local' | 'industry';
+}
+
+/**
+ * Regulatory regimes that can apply to a client site.
+ *
+ * The pack's defaults declare the *maximum* set for the industry; a
+ * per-client `company_profiles.compliance_profile` refines down based
+ * on the client's facts (e.g. accepts Medicare → `section_1557` kept;
+ * private-pay only → dropped). `ada_title_iii` is always included for
+ * any site that serves the public.
+ */
+export type ComplianceRegime =
+  /** ADA Title III — public accommodations (nearly every in-person business). */
+  | 'ada_title_iii'
+  /** HIPAA Privacy + Security Rules — covered entities and business associates. */
+  | 'hipaa'
+  /** Section 1557 of ACA — recipients of federal financial assistance (Medicare, Medicaid, HHS grants). */
+  | 'section_1557'
+  /** Section 504 Rehabilitation Act — same federal-funds trigger as 1557. */
+  | 'section_504'
+  /** Fair Housing Act — housing providers, property managers, landlords. */
+  | 'fha'
+  /** State dental board advertising rules — dentistry-specific. */
+  | 'state_dental_board'
+  /** State medical board advertising rules — medical practices outside dentistry. */
+  | 'state_medical_board';
+
+/**
+ * A legal page the industry requires on every client site.
+ *
+ * `slug` maps 1:1 to the client site's URL path (`/legal/{slug}`). The
+ * content generation pipeline creates a page stub when the client's
+ * engagement is scaffolded; the canonical doc at
+ * `content-system/compliance/healthcare-ada.md` owns the copy templates.
+ *
+ * `regime` ties the page to the regulatory requirement that mandates it
+ * — so per-client refinement (e.g. dropping `section_1557`) automatically
+ * removes the pages that were only required by that regime.
+ */
+export interface RequiredLegalPage {
+  /** URL slug — page renders at `/legal/{slug}`. */
+  slug: string;
+  /** Human-readable title used in footer links, page H1, and sitemap. */
+  displayName: string;
+  /** The regime that mandates this page — if the regime drops, the page drops. */
+  regime: ComplianceRegime;
+  /** Short description of what the page covers — surfaces in audit logs. */
+  description: string;
+  /** True if content generation must block completion when this page is absent. */
+  blocksSiteCompletion: boolean;
+}
+
+/**
+ * Structured compliance profile for an industry.
+ *
+ * This is the machine-readable shape of the rules documented in
+ * `content-system/compliance/healthcare-ada.md`. Content generation,
+ * preflight, and the Astro blueprint layer all consume this to keep
+ * compliance cooked into the pipeline rather than relying on human
+ * QA to catch missing pages.
+ */
+export interface IndustryCompliance {
+  /**
+   * Regulatory regimes that *may* apply to clients in this industry.
+   * Includes the full maximum set; per-client refinement happens in
+   * `company_profiles.compliance_profile`.
+   */
+  regimes: readonly ComplianceRegime[];
+  /**
+   * Legal pages the industry mandates on every client site (modulo
+   * per-client regime refinement). Each entry maps to a route at
+   * `/legal/{slug}` on the generated site.
+   */
+  requiredLegalPages: readonly RequiredLegalPage[];
+  /**
+   * Additional footer link slugs the site footer must include beyond
+   * the industry's standard `footerArchetype`. Typical healthcare
+   * values: `['accessibility', 'notice-of-privacy-practices',
+   * 'notice-of-nondiscrimination']`. Slugs match `requiredLegalPages[].slug`.
+   */
+  requiredFooterLinks?: readonly string[];
+  /**
+   * Audit cadence override. Most industries default to quarterly per the
+   * canonical doc; set this only if the vertical has a stricter or
+   * looser requirement than the default.
+   */
+  auditCadence?: 'monthly' | 'quarterly' | 'biannual' | 'annual';
+  /**
+   * Pointer to the canonical compliance reference for this industry.
+   * Default for healthcare verticals:
+   * `@brikdesigns/bds/content-system/compliance/healthcare-ada.md`.
+   * Allows non-healthcare verticals (e.g. property management) to
+   * point at their own canonical doc when one lands.
+   */
+  canonicalDocPath?: string;
+  /**
+   * Optional free-text notes that explain vertical-specific nuance
+   * beyond what the canonical doc covers. Surfaces in decision-log
+   * entries when a pack's compliance profile is consulted.
+   */
+  notes?: string;
 }
 
 export interface CustomerPainPoint {
