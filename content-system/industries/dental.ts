@@ -15,9 +15,9 @@ export const dental: IndustryPack = {
   slug: 'dental',
   parentIndustry: 'medical',
   displayName: 'Dental',
-  version: '1.4.0',
+  version: '1.5.0',
   reviewCadence: 'quarterly',
-  lastReviewed: '2026-04-20',
+  lastReviewed: '2026-04-24',
 
   affinities: {
     personality: ['Professional', 'Warm', 'Approachable', 'Refined', 'Modern'],
@@ -287,6 +287,54 @@ export const dental: IndustryPack = {
       scope: 'state',
     },
   ],
+
+  compliance: {
+    // ADA Title III and HIPAA are the default floor for any dental practice.
+    // Section 1557 + 504 are refined per-client in company_profiles.compliance_profile
+    // based on whether the practice accepts Medicare/Medicaid.
+    regimes: ['ada_title_iii', 'hipaa', 'section_1557', 'section_504', 'state_dental_board'],
+    requiredLegalPages: [
+      {
+        slug: 'accessibility',
+        displayName: 'Accessibility Statement',
+        regime: 'ada_title_iii',
+        description: 'WCAG 2.1 AA commitment, last-audited date, auxiliary aids, TTY/711, named Accessibility Coordinator, grievance procedure.',
+        blocksSiteCompletion: true,
+      },
+      {
+        slug: 'privacy-policy',
+        displayName: 'Privacy Policy',
+        regime: 'hipaa',
+        description: 'Website privacy policy — governs data collection on the site itself; HIPAA-aware but distinct from the NPP.',
+        blocksSiteCompletion: true,
+      },
+      {
+        slug: 'notice-of-privacy-practices',
+        displayName: 'Notice of Privacy Practices',
+        regime: 'hipaa',
+        description: 'HIPAA-mandated patient-facing document per 45 CFR § 164.520. Named Privacy Officer required.',
+        blocksSiteCompletion: true,
+      },
+      {
+        slug: 'notice-of-nondiscrimination',
+        displayName: 'Notice of Nondiscrimination',
+        regime: 'section_1557',
+        description: 'Conspicuously placed notice + language-assistance taglines in the top 15 languages spoken in the state. Required for federal-funds recipients.',
+        blocksSiteCompletion: true,
+      },
+      {
+        slug: 'terms',
+        displayName: 'Terms of Use',
+        regime: 'ada_title_iii',
+        description: 'Site terms of use — paired with Privacy Policy in the footer.',
+        blocksSiteCompletion: false,
+      },
+    ],
+    requiredFooterLinks: ['accessibility', 'notice-of-privacy-practices', 'privacy-policy'],
+    auditCadence: 'quarterly',
+    canonicalDocPath: '@brikdesigns/bds/content-system/compliance/healthcare-ada.md',
+    notes: 'Dental practices have elevated ADA lawsuit exposure relative to other small-business verticals (UsableNet 2023 data). Accessibility Statement audit date must never go >12 months stale — it is the #1 signal to plaintiff\'s counsel that the compliance posture is active vs. decorative. Section 1557 + 504 drop from the per-client profile if the practice is private-pay-only (no Medicare/Medicaid).',
+  },
 
   customerPainPoints: [
     { summary: 'Cost anxiety — fear of surprise bills, sticker shock on crowns/implants/ortho.', detail: 'Pricing opacity drives bounce; transparent price ranges and financing options reduce friction.' },
