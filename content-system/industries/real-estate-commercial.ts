@@ -39,7 +39,9 @@ export const realEstateCommercial: IndustryPack = {
       slug: 'home',
       displayName: 'Home',
       required: true,
-      blueprintDefaults: ['hero_split_60_40', 'services_numbered_accordion', 'stats_dark_bar', 'testimonials_featured_large', 'cta_dark_centered'],
+      // Stats intentionally absent — render only when content generation
+      // emits a sectionType: 'stats' section. See issue #217.
+      blueprintDefaults: ['hero_split_60_40', 'services_numbered_accordion', 'testimonials_featured_large', 'cta_dark_centered'],
       description: 'Lead with authority and segmentation. The homepage must orient three different audiences (Healthcare / Land / Investors) without making any feel secondary. The hero introduces the broker; the navigation is the segmentation mechanism.',
     },
     {
@@ -60,8 +62,10 @@ export const realEstateCommercial: IndustryPack = {
       slug: 'investors',
       displayName: 'Investor Services',
       required: true,
-      blueprintDefaults: ['hero_interior_minimal', 'stats_dark_bar', 'services_detail_two_column', 'process_grid_4step_numbered', 'cta_dark_centered'],
-      description: 'Medical office buildings and Nashville-market investment. Capital-markets-literate tone — returns-focused, deal-flow-aware. Stats section earns credibility before asking for a meeting.',
+      // Investor pages benefit from stats, but only when the broker has
+      // real deal volume / portfolio numbers. Content generation decides.
+      blueprintDefaults: ['hero_interior_minimal', 'services_detail_two_column', 'process_grid_4step_numbered', 'cta_dark_centered'],
+      description: 'Medical office buildings and Nashville-market investment. Capital-markets-literate tone — returns-focused, deal-flow-aware. If the broker has portfolio stats worth leading with, content generation will emit a stats section; otherwise the page leans on process + CTA for credibility.',
     },
     {
       slug: 'about',
@@ -514,7 +518,6 @@ export const realEstateCommercial: IndustryPack = {
       sections: [
         'hero_split_60_40',
         'services_numbered_accordion',
-        'stats_dark_bar',
         'testimonials_featured_large',
         'cta_dark_centered',
       ],
@@ -542,7 +545,6 @@ export const realEstateCommercial: IndustryPack = {
       pageArchetype: 'investors',
       sections: [
         'hero_interior_minimal',
-        'stats_dark_bar',
         'services_detail_two_column',
         'process_grid_4step_numbered',
         'cta_dark_centered',

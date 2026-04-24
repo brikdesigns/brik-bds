@@ -34,8 +34,10 @@ export const realEstateRvMhc: IndustryPack = {
       slug: 'home',
       displayName: 'Home',
       required: true,
-      blueprintDefaults: ['hero_fullbleed_photo', 'services_detail_two_column', 'stats_dark_bar', 'cta_split_contact'],
-      description: 'Lead with a hero photo of the property — drone/aerial or amenity-forward. Trust signals (years in operation, number of sites, rating) pair well here.',
+      // Stats intentionally absent — render only when content generation
+      // emits a sectionType: 'stats' section. See issue #217.
+      blueprintDefaults: ['hero_fullbleed_photo', 'services_detail_two_column', 'cta_split_contact'],
+      description: 'Lead with a hero photo of the property — drone/aerial or amenity-forward. Trust signals (years in operation, number of sites, rating) pair well here when the client has real numbers to show.',
     },
     {
       slug: 'sites-availability',
@@ -497,7 +499,6 @@ export const realEstateRvMhc: IndustryPack = {
       pageArchetype: 'home',
       sections: [
         'hero_fullbleed_photo',
-        'stats_dark_bar',
         'services_detail_two_column',
         'testimonials_3col_cards',
         'cta_split_contact',

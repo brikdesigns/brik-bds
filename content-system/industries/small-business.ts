@@ -324,10 +324,12 @@ export const smallBusiness: IndustryPack = {
   // with a sequence of section blueprints. Small-business is the
   // fallback pack, so compositions stick to the blueprint set that
   // ships in `@brikdesigns/bds/blueprints-astro@0.1.x` (hero_split_60_40,
-  // stats_dark_bar, services_detail_two_column, about_story_split,
-  // testimonials_featured_large, cta_split_contact, cta_dark_centered,
-  // hero_interior_minimal). This guarantees a zero-fallback render for
-  // any v0.1 client using this pack — notably Vale Partners at launch.
+  // services_detail_two_column, about_story_split, testimonials_featured_large,
+  // cta_split_contact, cta_dark_centered, hero_interior_minimal). This
+  // guarantees a zero-fallback render for any v0.1 client using this pack.
+  //
+  // Stats are intentionally NOT in any composition — render only when
+  // content generation emits a sectionType: 'stats' section. See #217.
   //
   // Dedicated verticals graduating to their own pack can reference any
   // blueprint key, since their render comes later (once more components
@@ -338,7 +340,6 @@ export const smallBusiness: IndustryPack = {
       pageArchetype: 'home',
       sections: [
         'hero_split_60_40',
-        'stats_dark_bar',
         'services_detail_two_column',
         'about_story_split',
         'testimonials_featured_large',
@@ -350,7 +351,6 @@ export const smallBusiness: IndustryPack = {
       sections: [
         'hero_interior_minimal',
         'about_story_split',
-        'stats_dark_bar',
         'cta_dark_centered',
       ],
     },

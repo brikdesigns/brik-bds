@@ -30,7 +30,10 @@ export const dental: IndustryPack = {
       slug: 'home',
       displayName: 'Home',
       required: true,
-      blueprintDefaults: ['hero_split_60_40', 'services_detail_two_column', 'stats_centered_light', 'testimonials_3col_cards', 'cta_split_contact'],
+      // Stats intentionally absent — render only when content generation
+      // emits a sectionType: 'stats' section (i.e. the practice has real
+      // numbers worth leading with). See issue #217.
+      blueprintDefaults: ['hero_split_60_40', 'services_detail_two_column', 'testimonials_3col_cards', 'cta_split_contact'],
     },
     {
       slug: 'meet-the-doctor',
