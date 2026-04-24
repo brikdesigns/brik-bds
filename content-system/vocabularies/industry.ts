@@ -20,6 +20,7 @@
 export const INDUSTRY_SLUGS = [
   'dental',
   'real-estate-rv-mhc',
+  'real-estate-commercial',
   'small-business',
 ] as const;
 
