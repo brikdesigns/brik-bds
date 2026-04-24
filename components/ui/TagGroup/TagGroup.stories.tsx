@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TagList } from './TagList';
+import { TagGroup } from './TagGroup';
 import { Tag } from '../Tag';
 import { Field } from '../Field';
 
-const meta: Meta<typeof TagList> = {
-  title: 'Displays/Sheet/tag-list',
-  component: TagList,
+const meta: Meta<typeof TagGroup> = {
+  title: 'Components/Indicator/tag-group',
+  component: TagGroup,
   parameters: { layout: 'padded' },
   argTypes: {
     gap: { control: 'select', options: ['xs', 'sm', 'md'] },
@@ -14,7 +14,7 @@ const meta: Meta<typeof TagList> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof TagList>;
+type Story = StoryObj<typeof TagGroup>;
 
 const Frame = ({ width = '360px', children }: { width?: string; children: React.ReactNode }) => (
   <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
@@ -31,12 +31,12 @@ export const Playground: Story = {
   },
   render: (args) => (
     <Frame>
-      <TagList {...args}>
+      <TagGroup {...args}>
         <Tag size="sm">Cosmetic</Tag>
         <Tag size="sm">General</Tag>
         <Tag size="sm">Implants</Tag>
         <Tag size="sm">Invisalign</Tag>
-      </TagList>
+      </TagGroup>
     </Frame>
   ),
 };
@@ -47,23 +47,23 @@ export const Gaps: Story = {
   render: () => (
     <Frame>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
-        <TagList gap="xs">
+        <TagGroup gap="xs">
           <Tag size="sm">xs gap</Tag>
           <Tag size="sm">tight</Tag>
           <Tag size="sm">cluster</Tag>
-        </TagList>
+        </TagGroup>
 
-        <TagList gap="sm">
+        <TagGroup gap="sm">
           <Tag size="sm">sm gap</Tag>
           <Tag size="sm">standard</Tag>
           <Tag size="sm">list</Tag>
-        </TagList>
+        </TagGroup>
 
-        <TagList gap="md">
+        <TagGroup gap="md">
           <Tag size="md">md gap</Tag>
           <Tag size="md">roomy</Tag>
           <Tag size="md">display</Tag>
-        </TagList>
+        </TagGroup>
       </div>
     </Frame>
   ),
@@ -75,13 +75,13 @@ export const InsideField: Story = {
   render: () => (
     <Frame>
       <Field label="Services offered">
-        <TagList>
+        <TagGroup>
           <Tag size="sm">Cosmetic</Tag>
           <Tag size="sm">General</Tag>
           <Tag size="sm">Implants</Tag>
           <Tag size="sm">Invisalign</Tag>
           <Tag size="sm">Whitening</Tag>
-        </TagList>
+        </TagGroup>
       </Field>
     </Frame>
   ),
@@ -94,27 +94,27 @@ export const Patterns: Story = {
     <Frame>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
         <Field label="Industries">
-          <TagList>
+          <TagGroup>
             <Tag size="sm">Dental</Tag>
             <Tag size="sm">Medical</Tag>
             <Tag size="sm">Legal</Tag>
-          </TagList>
+          </TagGroup>
         </Field>
 
         <Field label="Voice traits">
-          <TagList>
+          <TagGroup>
             <Tag size="sm">Warm</Tag>
             <Tag size="sm">Authoritative</Tag>
             <Tag size="sm">Clear</Tag>
-          </TagList>
+          </TagGroup>
         </Field>
 
         <Field label="Brand personality">
-          <TagList>
+          <TagGroup>
             <Tag size="sm">Sophisticated</Tag>
             <Tag size="sm">Approachable</Tag>
             <Tag size="sm">Trustworthy</Tag>
-          </TagList>
+          </TagGroup>
         </Field>
       </div>
     </Frame>

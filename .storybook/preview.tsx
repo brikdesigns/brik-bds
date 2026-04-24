@@ -369,7 +369,6 @@ const preview: Preview = {
               'field',
               'field-grid',
               'bullet-list',
-              'tag-list',
               'Read-Mode Sheet',
               '*',
             ],

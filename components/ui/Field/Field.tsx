@@ -7,7 +7,7 @@ export type FieldLayout = 'stacked' | 'inline';
 export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Field label — rendered above (stacked) or beside (inline) the value. */
   label: string;
-  /** Value content — text, <TagList>, <BulletList>, <a>, or any ReactNode. */
+  /** Value content — text, <TagGroup>, <BulletList>, <a>, or any ReactNode. */
   children?: ReactNode;
   /** Stacked = label above value (default). Inline = label / value on one row. */
   layout?: FieldLayout;

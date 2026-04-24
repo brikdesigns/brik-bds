@@ -1,33 +1,33 @@
 @layer bds-components {
-/* ─── TagList ──────────────────────────────────────────────────── */
+/* ─── TagGroup ──────────────────────────────────────────────────── */
 
-.bds-tag-list {
+.bds-tag-group {
   display: flex;
   align-items: center;
 }
 
 /* ─── Wrap ──────────────────────────────────────────────────── */
 
-.bds-tag-list--wrap {
+.bds-tag-group--wrap {
   flex-wrap: wrap;
 }
 
-.bds-tag-list--nowrap {
+.bds-tag-group--nowrap {
   flex-wrap: nowrap;
   overflow: hidden;
 }
 
 /* ─── Gap ───────────────────────────────────────────────────── */
 
-.bds-tag-list--gap-xs {
+.bds-tag-group--gap-xs {
   gap: var(--gap-xs);
 }
 
-.bds-tag-list--gap-sm {
+.bds-tag-group--gap-sm {
   gap: var(--gap-sm);
 }
 
-.bds-tag-list--gap-md {
+.bds-tag-group--gap-md {
   gap: var(--gap-md);
 }
 }
