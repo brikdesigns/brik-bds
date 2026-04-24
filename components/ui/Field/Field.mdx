@@ -44,7 +44,7 @@ When an entire section has no data (vs. one missing field), pass an `<EmptyState
 
 ## Value types
 
-`children` accepts any ReactNode — text, `<TagList>` / `<Tag>` groups, `<a>` links, `<BulletList>`, or compound content.
+`children` accepts any ReactNode — text, `<TagGroup>` / `<Tag>` groups, `<a>` links, `<BulletList>`, or compound content.
 
 <Canvas of={Stories.ValueTypes} />
 
@@ -70,7 +70,7 @@ Typical sheet-body field stack with mixed filled and empty values.
 ## Usage
 
 ```tsx
-import { Field, FieldGrid, TagList, Tag, BulletList } from '@brikdesigns/bds';
+import { Field, FieldGrid, TagGroup, Tag, BulletList } from '@brikdesigns/bds';
 
 // Single stacked field
 <Field label="Status">Active</Field>
@@ -83,10 +83,10 @@ import { Field, FieldGrid, TagList, Tag, BulletList } from '@brikdesigns/bds';
 
 // Value with tags
 <Field label="Services">
-  <TagList>
+  <TagGroup>
     <Tag size="sm">Cosmetic</Tag>
     <Tag size="sm">Implants</Tag>
-  </TagList>
+  </TagGroup>
 </Field>
 
 // Value with a bullet list

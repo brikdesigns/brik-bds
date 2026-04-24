@@ -79,7 +79,7 @@ export * from './Switch';
 export * from './TabBar';
 export * from './Table';
 export * from './Tag';
-export * from './TagList';
+export * from './TagGroup';
 export * from './TextArea';
 export * from './TextInput';
 export * from './TimePicker';
