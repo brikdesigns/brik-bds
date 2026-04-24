@@ -21,6 +21,8 @@
 
 **Consumer integration:** A short "Compliance Profile" section in each consumer repo's `CLAUDE.md` points to this document. Project-specific overrides go in the project's CLAUDE.md; the canonical rules stay here.
 
+**Companion policy — accessibility overlays:** Brik does not install UserWay, AccessiBe, EqualWeb, or any other accessibility overlay widget on client sites. The full position and the first-party alternative path (Accessibility Preferences panel, dated Accessibility Statement, axe-core CI) are documented in [`accessibility-overlays.md`](./accessibility-overlays.md) and formalized in [ADR-002](../../docs/adrs/ADR-002-accessibility-overlays.md). Read that doc before entertaining any client ask for a widget-based compliance signal.
+
 ---
 
 ## Step 1 — Classify the client
