@@ -20,6 +20,9 @@ export type {
   IndustryPackSiteAudit,
   PagePattern,
   SiteAuditExtractor,
+  ComplianceRegime,
+  RequiredLegalPage,
+  IndustryCompliance,
 } from './industry-pack';
 
 export type {
