@@ -5,17 +5,26 @@ import { bdsClass } from '../../utils';
 import './Chip.css';
 
 export type ChipSize = 'sm' | 'md' | 'lg';
+
+/** Chip hierarchy variant — how much attention the chip commands in a cluster. */
 export type ChipVariant = 'primary' | 'secondary';
-export type ChipAppearance = 'dark' | 'light' | 'solid';
+
+/**
+ * Chip fill appearance — shared axis with Badge (`solid | subtle`) and
+ * Tag (`solid | subtle`). Chip supports the two filled-vs-outlined values.
+ * - `solid`   — filled background, no border.
+ * - `outline` — transparent background with a border in the variant color.
+ */
+export type ChipAppearance = 'solid' | 'outline';
 
 export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Chip label text */
   label: string;
   /** Size variant */
   size?: ChipSize;
-  /** Color variant */
+  /** Hierarchy variant — primary (emphasized) or secondary (neutral). */
   variant?: ChipVariant;
-  /** Filled (dark) or outlined (light) appearance */
+  /** Fill appearance — solid (filled) or outline (transparent + border). */
   appearance?: ChipAppearance;
   /** Optional leading icon */
   icon?: ReactNode;
@@ -35,7 +44,7 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
  * Chip — compact interactive pill for filtering, selection, or input.
  *
  * Pill-shaped with two variants (primary/secondary) and two appearances
- * (dark/light).
+ * (solid/outline).
  *
  * **Action, not indicator.** Chip always represents user-initiated
  * state: filter toggles, selection chips, removable tokens, dropdown
@@ -49,14 +58,14 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
  * ```tsx
  * <Chip label="All statuses" showDropdown onChipClick={openMenu} />
  * <Chip label="Status: Active" onRemove={() => removeFilter('status')} />
- * <Chip label="Selected" variant="primary" appearance="dark" onChipClick={toggle} />
+ * <Chip label="Selected" variant="primary" appearance="solid" onChipClick={toggle} />
  * ```
  */
 export function Chip({
   label,
   size = 'md',
   variant = 'secondary',
-  appearance = 'dark',
+  appearance = 'solid',
   icon,
   avatar,
   showDropdown = false,

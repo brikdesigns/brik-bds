@@ -20,9 +20,9 @@ const meta: Meta<typeof Badge> = {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg'],
     },
-    variant: {
+    appearance: {
       control: 'select',
-      options: ['dark', 'light'],
+      options: ['solid', 'subtle'],
     },
   },
 };
@@ -60,43 +60,43 @@ const statuses = ['positive', 'warning', 'error', 'info', 'progress'] as const;
    ═══════════════════════════════════════════════════════════════ */
 
 export const Playground: Story = {
-  args: { children: 'New', status: 'info', size: 'md', variant: 'dark' },
+  args: { children: 'New', status: 'info', size: 'md', appearance: 'solid' },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Dark and light styles × all statuses × all sizes
+   2. VARIANTS — Solid and subtle appearances × all statuses × all sizes
    ═══════════════════════════════════════════════════════════════ */
 
 export const Variants: Story = {
   render: () => (
     <Stack>
-      {/* Dark variant */}
+      {/* Solid appearance */}
       <div>
-        <SectionLabel>Dark (default)</SectionLabel>
+        <SectionLabel>Solid (default)</SectionLabel>
         <Stack gap="var(--gap-lg)">
           {(['sm', 'md', 'lg'] as const).map((size) => (
             <Row key={size}>
               {statuses.map((s) => (
-                <Badge key={s} size={size} status={s} variant="dark">{s}</Badge>
+                <Badge key={s} size={size} status={s} appearance="solid">{s}</Badge>
               ))}
             </Row>
           ))}
         </Stack>
       </div>
-      {/* Light variant */}
+      {/* Subtle appearance */}
       <div>
-        <SectionLabel>Light</SectionLabel>
+        <SectionLabel>Subtle</SectionLabel>
         <Stack gap="var(--gap-lg)">
           {(['sm', 'md', 'lg'] as const).map((size) => (
             <Row key={size}>
               {statuses.map((s) => (
-                <Badge key={s} size={size} status={s} variant="light">{s}</Badge>
+                <Badge key={s} size={size} status={s} appearance="subtle">{s}</Badge>
               ))}
             </Row>
           ))}
         </Stack>
       </div>
-      {/* xs icon-only — both variants */}
+      {/* xs icon-only — both appearances */}
       <div>
         <SectionLabel>xs icon-only</SectionLabel>
         <Stack gap="var(--gap-lg)">
@@ -108,11 +108,11 @@ export const Variants: Story = {
             <Badge size="xs" status="progress" icon={<Icon icon="ph:arrows-clockwise" />} />
           </Row>
           <Row>
-            <Badge size="xs" status="positive" variant="light" icon={<Icon icon="ph:check" />} />
-            <Badge size="xs" status="warning" variant="light" icon={<Icon icon="ph:warning" />} />
-            <Badge size="xs" status="error" variant="light" icon={<Icon icon="ph:x-circle" />} />
-            <Badge size="xs" status="info" variant="light" icon={<Icon icon="ph:info" />} />
-            <Badge size="xs" status="progress" variant="light" icon={<Icon icon="ph:arrows-clockwise" />} />
+            <Badge size="xs" status="positive" appearance="subtle" icon={<Icon icon="ph:check" />} />
+            <Badge size="xs" status="warning" appearance="subtle" icon={<Icon icon="ph:warning" />} />
+            <Badge size="xs" status="error" appearance="subtle" icon={<Icon icon="ph:x-circle" />} />
+            <Badge size="xs" status="info" appearance="subtle" icon={<Icon icon="ph:info" />} />
+            <Badge size="xs" status="progress" appearance="subtle" icon={<Icon icon="ph:arrows-clockwise" />} />
           </Row>
         </Stack>
       </div>
@@ -128,7 +128,7 @@ export const Icons: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>Dark with icons</SectionLabel>
+        <SectionLabel>Solid with icons</SectionLabel>
         <Row>
           <Badge status="positive" icon={<Icon icon="ph:check" />}>Done</Badge>
           <Badge status="error" icon={<Icon icon="ph:warning-circle" />}>Canceled</Badge>
@@ -138,13 +138,13 @@ export const Icons: Story = {
         </Row>
       </div>
       <div>
-        <SectionLabel>Light with icons</SectionLabel>
+        <SectionLabel>Subtle with icons</SectionLabel>
         <Row>
-          <Badge status="positive" variant="light" icon={<Icon icon="ph:check" />}>Done</Badge>
-          <Badge status="error" variant="light" icon={<Icon icon="ph:warning-circle" />}>Canceled</Badge>
-          <Badge status="progress" variant="light" icon={<Icon icon="ph:spinner" />}>In Progress</Badge>
-          <Badge status="info" variant="light" icon={<Icon icon="ph:info" />}>Neutral</Badge>
-          <Badge status="warning" variant="light" icon={<Icon icon="ph:warning" />}>Needs Attention</Badge>
+          <Badge status="positive" appearance="subtle" icon={<Icon icon="ph:check" />}>Done</Badge>
+          <Badge status="error" appearance="subtle" icon={<Icon icon="ph:warning-circle" />}>Canceled</Badge>
+          <Badge status="progress" appearance="subtle" icon={<Icon icon="ph:spinner" />}>In Progress</Badge>
+          <Badge status="info" appearance="subtle" icon={<Icon icon="ph:info" />}>Neutral</Badge>
+          <Badge status="warning" appearance="subtle" icon={<Icon icon="ph:warning" />}>Needs Attention</Badge>
         </Row>
       </div>
       <div>
@@ -210,7 +210,7 @@ export const Patterns: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>Content status (dark)</SectionLabel>
+        <SectionLabel>Content status (solid)</SectionLabel>
         <Stack gap="var(--gap-lg)">
           {([
             { status: 'positive' as const, label: 'Published', desc: 'Article is live and visible' },
@@ -228,7 +228,7 @@ export const Patterns: Story = {
         </Stack>
       </div>
       <div>
-        <SectionLabel>Content status (light)</SectionLabel>
+        <SectionLabel>Content status (subtle)</SectionLabel>
         <Stack gap="var(--gap-lg)">
           {([
             { status: 'positive' as const, label: 'Published', desc: 'Article is live and visible' },
@@ -236,8 +236,8 @@ export const Patterns: Story = {
             { status: 'warning' as const, label: 'Draft', desc: 'Saved but not published' },
             { status: 'error' as const, label: 'Archived', desc: 'Has been removed' },
           ]).map(({ status, label, desc }) => (
-            <div key={`${status}-light`} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-              <Badge status={status} variant="light">{label}</Badge>
+            <div key={`${status}-subtle`} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
+              <Badge status={status} appearance="subtle">{label}</Badge>
               <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
                 {desc}
               </span>

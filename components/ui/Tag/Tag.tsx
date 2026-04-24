@@ -7,12 +7,22 @@ import './Tag.css';
 /** Tag size variants — shared scale with Badge */
 export type TagSize = 'xs' | 'sm' | 'md' | 'lg';
 
+/**
+ * Tag fill appearance — shared axis with Badge (`solid | subtle`) and
+ * Chip (`solid | outline`). Tag supports the two pastel-capable values.
+ * - `solid`  — neutral filled background (current default styling).
+ * - `subtle` — transparent background with a hairline border.
+ */
+export type TagAppearance = 'solid' | 'subtle';
+
 /** Tag component props */
 export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   /** Tag label content (optional for xs/icon-only size) */
   children?: ReactNode;
   /** Size variant — xs is icon-only (no text) */
   size?: TagSize;
+  /** Fill appearance — solid (neutral fill) or subtle (transparent + border). */
+  appearance?: TagAppearance;
   /** Optional leading icon (left) — required for xs size */
   icon?: ReactNode;
   /** Optional trailing icon (right) */
@@ -45,11 +55,13 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  * <Tag>Category</Tag>
  * <Tag size="xs" icon={<Icon />} />
  * <Tag size="lg" icon={<Icon />}>With Icon</Tag>
+ * <Tag appearance="subtle">Outlined</Tag>
  * ```
  */
 export function Tag({
   children,
   size = 'md',
+  appearance = 'solid',
   icon,
   trailingIcon,
   onRemove,
@@ -63,6 +75,7 @@ export function Tag({
   const classes = bdsClass(
     'bds-tag',
     `bds-tag--${size}`,
+    `bds-tag--${appearance}`,
     disabled && 'bds-tag--disabled',
     className
   );

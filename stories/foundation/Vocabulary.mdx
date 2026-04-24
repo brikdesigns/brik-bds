@@ -141,3 +141,62 @@ Quick reference. HTML element shown first — it is the load-bearing fact.
 | `<div>` | Slots, containers, wrappers | `__actions`, `__content`, `__header`, `__titles` |
 
 Screen readers walk `<h*>` elements to build the outline. Every `<h*>` decision is an a11y decision. Don't reach for `<h3>` because it "looks right" — use outline position.
+
+---
+
+## Axes — shared prop vocabulary across components
+
+Components with overlapping visual concerns share the same prop names and values. A prop is an **axis** when more than one component exposes it — the axis names belong to the system, not any single component.
+
+| Axis | Values | Meaning | Components |
+|---|---|---|---|
+| `size` | `xs` · `sm` · `md` · `lg` | Physical dimensions on a shared scale (e.g. Badge + Tag + Chip align by height at every tier). | Badge, Tag, Chip, Badge­Group, Tag­Group, Button, IconButton, Field, Sheet, most form controls |
+| `status` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | Semantic value judgment — which system color tier applies. Indicator-only. | Badge, AlertBanner, Dot |
+| `variant` (hierarchy) | `primary` · `secondary` | How much attention the element commands inside a cluster. Not a fill style. | Chip, Button |
+| `appearance` (fill) | `solid` · `subtle` · `outline` | How the shape is filled vs. bordered. Each component supports the subset that has a real visual meaning. | Badge (`solid` / `subtle`), Chip (`solid` / `outline`), Tag (`solid` / `subtle`) |
+
+### The rule
+
+> `variant` describes **hierarchy**. `appearance` describes **fill**. Never conflate them — a chip can be both `variant="primary"` and `appearance="outline"`, and the combination is meaningful.
+
+### Why `solid | subtle | outline` (not `dark | light`)
+
+The older `dark | light` vocabulary was ambiguous with dark-mode theming — `--dark` could mean either "saturated fill" or "variant used on dark themes." `solid | subtle | outline` names the *fill form* explicitly and never collides with the theme axis:
+
+- **`solid`** — filled background, typically saturated or neutral.
+- **`subtle`** — filled with a pastel or tinted background, lower emphasis.
+- **`outline`** — transparent background, visible border.
+
+### Axis coverage matrix
+
+| Component | `variant` | `appearance` values | `status` | Notes |
+|---|---|---|---|---|
+| Badge | — | `solid` (default) · `subtle` | required axis | Outline never made sense for status indicators — low contrast. |
+| Tag | — | `solid` (default) · `subtle` | — | Neutral categorization — no status axis. |
+| Chip | `primary` · `secondary` | `solid` (default) · `outline` | — | Two axes: hierarchy (variant) × fill (appearance). |
+
+Adding a new pill component? Reuse the axis names above. Don't invent `kind`, `style`, `flavor`, etc. — the axes exist so a reader knows what to expect.
+
+---
+
+## Elements — no unclassed wrappers
+
+The element/BEM table above lists which HTML elements each role maps to. The implicit rule is that **every element in a BDS component tree carries a role name** — either a `bds-*` class (when the element belongs to the system) or a `data-*` attribute (when the consumer needs to override something). A `<div>` with no class and no role is drift: it tells the next reader nothing about why the element exists.
+
+### The rule
+
+> Every element in a BDS component tree names its role. Bare `<div>` with no class, no role, no reason to exist is drift — replace it with the correct BEM slot (`__content`, `__actions`, `__header`, etc.) or remove it.
+
+**Acceptable unclassed elements:**
+
+- Short-lived rendering helpers inside a Storybook story file (they don't ship).
+- Children passed in by the consumer (`{children}`) — the consumer owns those names.
+- Fragments (`<>...</>`) — no wrapper exists.
+
+**Not acceptable:**
+
+- `<div>` wrapping a component's output because "it needs a flex container" — name the slot.
+- `<span>` around an icon + label pair — use `__icon` / `__label`.
+- `<div className={classes}>` where `classes` is empty or conditionally empty — ship the class or don't ship the wrapper.
+
+This is a discipline rule, not a build-time lint (yet). If a wrapper is ambiguous about its role, add a BEM class with the role name before you add any CSS.
