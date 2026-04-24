@@ -13,6 +13,12 @@
         "hooks": [
           { "type": "command", "command": ".claude/hooks/worktree-check.sh" }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/secret-capture-guard.sh" }
+        ]
       }
     ],
     "PostToolUse": [
