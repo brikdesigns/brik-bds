@@ -39,7 +39,7 @@ export interface DataSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
  * The title is a real heading node in the page outline — default `<h2>`,
  * rendered with heading-tier typography. It is NOT an uppercase label.
  *
- * @see Patterns/Read-Mode Page — composition with FieldGrid + Field + ButtonGroup.
+ * @see Displays/Form/Read-Mode Page — composition with FieldGrid + Field + ButtonGroup.
  */
 export function DataSection({
   title,
