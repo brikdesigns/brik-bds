@@ -1,0 +1,62 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './BadgeGroup.stories';
+
+<Meta of={Stories} />
+
+# BadgeGroup
+
+Horizontal cluster of `<Badge>` elements with locked spacing. The indicator-family sibling of `TagGroup` — same API shape, different child.
+
+Use when you need to display multiple status indicators side by side — integration health rows, payment state summaries, tag-like badges on an entity row.
+
+---
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Gaps
+
+Three locked gap sizes — `xs` for tight clusters, `sm` for standard lists, `md` for roomy displays.
+
+<Canvas of={Stories.Gaps} />
+
+## Inside a Field
+
+Badge clusters work well as `Field` values when multiple statuses need to be shown at once — e.g. the health of several integrations on one line.
+
+<Canvas of={Stories.InsideField} />
+
+## Variant mix
+
+Compare dark and light Badge variants inside the same group container. Pick one variant per cluster for visual consistency — BadgeGroup does not enforce this at the API level.
+
+<Canvas of={Stories.VariantMix} />
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { BadgeGroup, Badge, Field } from '@brikdesigns/bds';
+
+<Field label="Integrations health">
+  <BadgeGroup>
+    <Badge status="positive" size="sm">Helicone</Badge>
+    <Badge status="positive" size="sm">Supabase</Badge>
+    <Badge status="warning" size="sm">Stripe</Badge>
+  </BadgeGroup>
+</Field>
+```
+
+## Rules
+
+- **Don't wrap a single Badge.** If there's only one, just use `<Badge>` directly inside the Field.
+- **Use `Badge` children, not arbitrary nodes.** BadgeGroup locks spacing for Badge's specific footprint; other content will misalign.
+- **Pair with `TagGroup`, not against it.** Use `TagGroup` for labels (category, filter, attribute). Use `BadgeGroup` for status indicators (live/active/paid). Both share the same API.

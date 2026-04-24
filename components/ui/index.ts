@@ -9,6 +9,7 @@ export * from './AnimatedIcon';
 export * from './AlertBanner';
 export * from './Avatar';
 export * from './Badge';
+export * from './BadgeGroup';
 export * from './Board';
 export * from './Banner';
 export * from './Breadcrumb';

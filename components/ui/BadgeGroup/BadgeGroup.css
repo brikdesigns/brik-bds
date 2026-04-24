@@ -1,0 +1,33 @@
+@layer bds-components {
+/* ─── BadgeGroup ──────────────────────────────────────────────── */
+
+.bds-badge-group {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Wrap ──────────────────────────────────────────────────── */
+
+.bds-badge-group--wrap {
+  flex-wrap: wrap;
+}
+
+.bds-badge-group--nowrap {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* ─── Gap ───────────────────────────────────────────────────── */
+
+.bds-badge-group--gap-xs {
+  gap: var(--gap-xs);
+}
+
+.bds-badge-group--gap-sm {
+  gap: var(--gap-sm);
+}
+
+.bds-badge-group--gap-md {
+  gap: var(--gap-md);
+}
+}
