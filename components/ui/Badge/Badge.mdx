@@ -5,7 +5,7 @@ import * as Stories from './Badge.stories';
 
 # Badge
 
-Status indicators and labels for displaying contextual information. Badges use semantic system colors to communicate status at a glance, with dark (saturated) and light (pastel) visual variants.
+Status indicators and labels for displaying contextual information. Badges use semantic system colors to communicate status at a glance, with `solid` (saturated bg) and `subtle` (pastel bg) appearance values.
 
 ---
 
@@ -32,7 +32,7 @@ Use the Controls panel to explore all props interactively.
 
 ## Variants
 
-Five status variants across four sizes, each available in dark and light styles. The `xs` size renders a compact icon-only badge.
+Five status variants across four sizes, each available in `solid` and `subtle` appearances. The `xs` size renders a compact icon-only badge.
 
 <Canvas of={Stories.Variants} />
 
@@ -44,14 +44,14 @@ Five status variants across four sizes, each available in dark and light styles.
 - **`info`** — Neutral. Informational, neutral notifications.
 - **`progress`** — Blue. In-progress states, active processes.
 
-**Appearance:**
+**Appearance:** (shared axis with Chip and Tag — see [Vocabulary › Axes](/?path=/docs/foundations-vocabulary--overview))
 
-- **`dark`** (default) — High emphasis, standalone badges, dark backgrounds.
-- **`light`** — Lower emphasis, inline with content, table cells, cards.
+- **`solid`** (default) — High emphasis, standalone badges, dark backgrounds.
+- **`subtle`** — Lower emphasis pastel fill, inline with content, table cells, cards.
 
 ## Icons
 
-Badges can include a leading icon alongside text, shown in both dark and light variants.
+Badges can include a leading icon alongside text, shown in both `solid` and `subtle` appearances.
 
 <Canvas of={Stories.Icons} />
 
@@ -74,14 +74,14 @@ Real-world compositions for common badge use cases.
 ```tsx
 import { Badge } from '@brik/bds';
 
-// Dark variant (default)
+// Solid appearance (default)
 <Badge status="positive">Done</Badge>
 <Badge status="warning">Needs Attention</Badge>
 <Badge status="error">Canceled</Badge>
 
-// Light variant
-<Badge status="positive" variant="light">Done</Badge>
-<Badge status="progress" variant="light">In Progress</Badge>
+// Subtle appearance (pastel fill)
+<Badge status="positive" appearance="subtle">Done</Badge>
+<Badge status="progress" appearance="subtle">In Progress</Badge>
 
 // With icon
 <Badge status="positive" icon={<Icon icon="ph:check" />}>

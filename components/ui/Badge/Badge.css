@@ -88,66 +88,66 @@
   font-size: var(--label-xl);
 }
 
-/* ─── Status × Dark (default) ─────────────────────────────────── */
+/* ─── Status × Solid (default, saturated bg) ─────────────────── */
 
-.bds-badge--dark.bds-badge--positive {
+.bds-badge--solid.bds-badge--positive {
   background-color: var(--background-positive);
   color: var(--text-on-color-dark);
 }
 
-.bds-badge--dark.bds-badge--warning {
+.bds-badge--solid.bds-badge--warning {
   background-color: var(--background-warning);
   color: var(--text-status-neutral);
 }
 
-.bds-badge--dark.bds-badge--error {
+.bds-badge--solid.bds-badge--error {
   background-color: var(--background-negative);
   color: var(--text-on-color-dark);
 }
 
-.bds-badge--dark.bds-badge--info {
+.bds-badge--solid.bds-badge--info {
   background-color: var(--background-status-neutral);
   color: var(--text-status-neutral);
 }
 
-.bds-badge--dark.bds-badge--progress {
+.bds-badge--solid.bds-badge--progress {
   background-color: var(--background-status-info);
   color: var(--text-on-color-dark);
 }
 
-.bds-badge--dark.bds-badge--brand {
+.bds-badge--solid.bds-badge--brand {
   background-color: var(--background-brand-primary);
   color: var(--text-on-color-dark);
 }
 
-/* ─── Status × Light (pastel bg, saturated text) ─────────────── */
+/* ─── Status × Subtle (pastel bg, saturated text) ────────────── */
 
-.bds-badge--light.bds-badge--positive {
+.bds-badge--subtle.bds-badge--positive {
   background-color: var(--background-status-success-subtle);
   color: var(--text-positive);
 }
 
-.bds-badge--light.bds-badge--warning {
+.bds-badge--subtle.bds-badge--warning {
   background-color: var(--background-status-warning-subtle);
   color: var(--text-status-neutral);
 }
 
-.bds-badge--light.bds-badge--error {
+.bds-badge--subtle.bds-badge--error {
   background-color: var(--background-status-error-subtle);
   color: var(--text-negative);
 }
 
-.bds-badge--light.bds-badge--info {
+.bds-badge--subtle.bds-badge--info {
   background-color: var(--background-status-neutral);
   color: var(--text-status-neutral);
 }
 
-.bds-badge--light.bds-badge--progress {
+.bds-badge--subtle.bds-badge--progress {
   background-color: var(--background-status-info-subtle);
   color: var(--text-status-info);
 }
 
-.bds-badge--light.bds-badge--brand {
+.bds-badge--subtle.bds-badge--brand {
   background-color: var(--background-brand-secondary);
   color: var(--text-brand-primary);
 }

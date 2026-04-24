@@ -8,8 +8,13 @@ export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress'
 /** Badge size variants — shared scale with Tag */
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 
-/** Badge visual style — dark (saturated bg) or light (pastel bg) */
-export type BadgeVariant = 'dark' | 'light';
+/**
+ * Badge fill appearance — shared axis with Chip (`solid | outline`) and
+ * Tag (`solid | subtle`). Badge supports the two pastel-capable values.
+ * - `solid`  — saturated status-color background, high emphasis.
+ * - `subtle` — pastel status-color background, saturated text, lower emphasis.
+ */
+export type BadgeAppearance = 'solid' | 'subtle';
 
 /** Badge component props */
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -17,8 +22,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   status?: BadgeStatus;
   /** Size variant — xs is icon-only (no text) */
   size?: BadgeSize;
-  /** Visual style — dark uses saturated bg, light uses pastel bg */
-  variant?: BadgeVariant;
+  /** Fill appearance — solid (saturated bg) or subtle (pastel bg). */
+  appearance?: BadgeAppearance;
   /** Children content (optional for xs/icon-only size) */
   children?: ReactNode;
   /** Optional icon before text (required for xs size) */
@@ -41,14 +46,14 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
  * @example
  * ```tsx
  * <Badge status="positive">Success</Badge>
- * <Badge status="warning" size="sm">Pending</Badge>
+ * <Badge status="warning" size="sm" appearance="subtle">Pending</Badge>
  * <Badge status="error" size="lg">Failed</Badge>
  * ```
  */
 export function Badge({
   status = 'info',
   size = 'md',
-  variant = 'dark',
+  appearance = 'solid',
   children,
   icon,
   className,
@@ -61,7 +66,7 @@ export function Badge({
     'bds-badge',
     `bds-badge--${status}`,
     `bds-badge--${size}`,
-    `bds-badge--${variant}`,
+    `bds-badge--${appearance}`,
     className
   );
 

@@ -86,27 +86,28 @@ export const InsideField: Story = {
   ),
 };
 
-/* ─── 4. Variant mix ─────────────────────────────────────────── */
+/* ─── 4. Appearance mix ──────────────────────────────────────── */
 
 export const VariantMix: Story = {
+  name: 'Appearance mix',
   render: () => (
     <Frame width="480px">
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-        <Field label="Dark variants">
+        <Field label="Solid appearance">
           <BadgeGroup>
-            <Badge status="positive" size="sm" variant="dark">Paid</Badge>
-            <Badge status="warning" size="sm" variant="dark">Overdue</Badge>
-            <Badge status="error" size="sm" variant="dark">Failed</Badge>
-            <Badge status="info" size="sm" variant="dark">Scheduled</Badge>
+            <Badge status="positive" size="sm" appearance="solid">Paid</Badge>
+            <Badge status="warning" size="sm" appearance="solid">Overdue</Badge>
+            <Badge status="error" size="sm" appearance="solid">Failed</Badge>
+            <Badge status="info" size="sm" appearance="solid">Scheduled</Badge>
           </BadgeGroup>
         </Field>
 
-        <Field label="Light variants">
+        <Field label="Subtle appearance">
           <BadgeGroup>
-            <Badge status="positive" size="sm" variant="light">Paid</Badge>
-            <Badge status="warning" size="sm" variant="light">Overdue</Badge>
-            <Badge status="error" size="sm" variant="light">Failed</Badge>
-            <Badge status="info" size="sm" variant="light">Scheduled</Badge>
+            <Badge status="positive" size="sm" appearance="subtle">Paid</Badge>
+            <Badge status="warning" size="sm" appearance="subtle">Overdue</Badge>
+            <Badge status="error" size="sm" appearance="subtle">Failed</Badge>
+            <Badge status="info" size="sm" appearance="subtle">Scheduled</Badge>
           </BadgeGroup>
         </Field>
       </div>

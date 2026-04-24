@@ -66,28 +66,23 @@
 
 /* ─── Variant + Appearance ────────────────────────────────────── */
 
-.bds-chip--primary-dark {
-  background-color: var(--background-inverse);
-  color: var(--text-inverse);
-}
-
-.bds-chip--primary-light {
-  background-color: transparent;
-  color: var(--text-brand-primary);
-  border: var(--border-width-md) solid var(--border-brand-primary);
-}
-
 .bds-chip--primary-solid {
   background-color: var(--background-inverse);
   color: var(--text-inverse);
 }
 
-.bds-chip--secondary-dark {
+.bds-chip--primary-outline {
+  background-color: transparent;
+  color: var(--text-brand-primary);
+  border: var(--border-width-md) solid var(--border-brand-primary);
+}
+
+.bds-chip--secondary-solid {
   background-color: var(--background-secondary);
   color: var(--text-primary);
 }
 
-.bds-chip--secondary-light {
+.bds-chip--secondary-outline {
   background-color: var(--background-primary);
   color: var(--text-primary);
   border: var(--border-width-md) solid var(--border-secondary);
