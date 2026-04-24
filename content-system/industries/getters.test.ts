@@ -15,8 +15,10 @@ import {
   getIndustriesForParent,
   getIndustryInsurancePlans,
   getIndustryFinancing,
-} from './getters';
+  industryPacks,
+} from './index';
 import { PAYMENT_METHOD_VALUES, isPaymentMethod } from '../vocabularies';
+import { realEstateCommercial } from './real-estate-commercial';
 
 // ── getIndustryServices ──────────────────────────────────────────────────────
 
@@ -34,6 +36,14 @@ describe('getIndustryServices', () => {
     expect(services.length).toBeGreaterThanOrEqual(15);
     expect(services).toContain('Nightly RV Sites');
     expect(services).toContain('Manufactured Home Lot Rental');
+  });
+
+  it('returns real-estate-commercial services for the commercial slug', () => {
+    const services = getIndustryServices('real-estate-commercial');
+    expect(services.length).toBeGreaterThanOrEqual(10);
+    expect(services).toContain('Healthcare Tenant Representation');
+    expect(services).toContain('1031 Exchange Advisory');
+    expect(services).toContain('Land Sales (Agricultural)');
   });
 
   it('returns small-business services for the small-business slug', () => {
@@ -80,6 +90,20 @@ describe('getIndustryServicesCatalog', () => {
     });
   });
 
+  it('returns structured entries for real-estate-commercial with 3 service-line categories', () => {
+    const catalog = getIndustryServicesCatalog('real-estate-commercial');
+    expect(catalog.length).toBeGreaterThan(0);
+    // Verify the three audience verticals are represented
+    const categories = [...new Set(catalog.map((e) => e.category))].filter(Boolean);
+    expect(categories).toContain('healthcare');
+    expect(categories).toContain('land');
+    expect(categories).toContain('investors');
+    catalog.forEach((entry) => {
+      expect(entry.slug).toBeTruthy();
+      expect(entry.displayName).toBeTruthy();
+    });
+  });
+
   it('falls back to small-business catalog for null / undefined / unknown', () => {
     const baseline = getIndustryServicesCatalog('small-business');
     expect(getIndustryServicesCatalog(null)).toEqual(baseline);
@@ -120,6 +144,17 @@ describe('getIndustryPainPoints', () => {
     expect(painPoints.length).toBeGreaterThan(0);
   });
 
+  it('returns pain points for real-estate-commercial covering all 3 segments', () => {
+    const painPoints = getIndustryPainPoints('real-estate-commercial');
+    expect(painPoints.length).toBeGreaterThanOrEqual(3);
+    // All three audience segments should be represented
+    const segments = painPoints.map((pp) => pp.slug);
+    expect(segments.length).toBeGreaterThan(0);
+    // Spot-check: a healthcare pain point should be present
+    const hasHealthcare = painPoints.some((pp) => pp.displayName.toLowerCase().includes('practice') || pp.displayName.toLowerCase().includes('location'));
+    expect(hasHealthcare).toBe(true);
+  });
+
   it('falls back to small-business pain points for null / undefined / unknown', () => {
     const baseline = getIndustryPainPoints('small-business');
     expect(getIndustryPainPoints(null)).toEqual(baseline);
@@ -157,6 +192,13 @@ describe('getIndustryKeywords', () => {
   it('returns keywords for real-estate-rv-mhc', () => {
     const keywords = getIndustryKeywords('real-estate-rv-mhc');
     expect(keywords.length).toBeGreaterThan(0);
+  });
+
+  it('returns keywords for real-estate-commercial', () => {
+    const keywords = getIndustryKeywords('real-estate-commercial');
+    expect(keywords.length).toBeGreaterThan(0);
+    const primary = keywords.filter((k) => k.tier === 'primary');
+    expect(primary.length).toBeGreaterThan(0);
   });
 
   it('falls back to small-business for null / undefined / unknown', () => {
@@ -371,10 +413,12 @@ describe('getIndustriesForParent', () => {
     expect(packs).toHaveLength(1);
   });
 
-  it('returns real-estate-rv-mhc under the real-estate parent', () => {
+  it('returns real-estate-rv-mhc and real-estate-commercial under the real-estate parent', () => {
     const packs = getIndustriesForParent('real-estate');
-    expect(packs.map((p) => p.slug)).toContain('real-estate-rv-mhc');
-    expect(packs).toHaveLength(1);
+    const slugs = packs.map((p) => p.slug);
+    expect(slugs).toContain('real-estate-rv-mhc');
+    expect(slugs).toContain('real-estate-commercial');
+    expect(packs).toHaveLength(2);
   });
 
   it('returns small-business under its self-named parent', () => {
@@ -470,5 +514,63 @@ describe('PAYMENT_METHOD_VALUES', () => {
     expect(isPaymentMethod('CareCredit')).toBe(true);
     expect(isPaymentMethod('Bitcoin')).toBe(false);
     expect(isPaymentMethod('Delta Dental')).toBe(false);
+  });
+});
+
+// ── real-estate-commercial pack — structural assertions ──────────────────────
+
+describe('real-estate-commercial pack', () => {
+  it('resolves from the registry', () => {
+    expect(industryPacks['real-estate-commercial']).toBeDefined();
+    expect(industryPacks['real-estate-commercial'].slug).toBe('real-estate-commercial');
+  });
+
+  it('has exactly 3 service-line segments in servicesCatalog categories', () => {
+    const categories = [...new Set(realEstateCommercial.servicesCatalog.map((e) => e.category))].filter(Boolean);
+    expect(categories).toContain('healthcare');
+    expect(categories).toContain('land');
+    expect(categories).toContain('investors');
+  });
+
+  it('has navigationIA defined', () => {
+    expect(realEstateCommercial.navigationIA).toBeDefined();
+  });
+
+  it('navigationIA has a 3-column mega-menu', () => {
+    const megaMenu = realEstateCommercial.navigationIA?.servicesMegaMenu;
+    expect(megaMenu).toBeDefined();
+    expect(megaMenu?.columns).toBe(3);
+    expect(megaMenu?.categories).toHaveLength(3);
+  });
+
+  it('navigationIA has audienceAccents and audienceIcons arrays parallel to columns', () => {
+    const ia = realEstateCommercial.navigationIA;
+    expect(ia?.audienceAccents).toBeDefined();
+    expect(ia?.audienceIcons).toBeDefined();
+    expect(ia?.audienceAccents).toHaveLength(3);
+    expect(ia?.audienceIcons).toHaveLength(3);
+  });
+
+  it('parent industry is real-estate', () => {
+    expect(realEstateCommercial.parentIndustry).toBe('real-estate');
+  });
+
+  it('has no insuranceProviders (not applicable)', () => {
+    expect(realEstateCommercial.insuranceProviders).toEqual([]);
+  });
+
+  it('has all required page archetype slugs including 3 audience pathways', () => {
+    const slugs = realEstateCommercial.pageArchetypes.map((a) => a.slug);
+    expect(slugs).toContain('healthcare');
+    expect(slugs).toContain('land');
+    expect(slugs).toContain('investors');
+    expect(slugs).toContain('home');
+    expect(slugs).toContain('contact');
+  });
+
+  it('getIndustriesForParent returns real-estate-commercial under real-estate', () => {
+    const packs = getIndustriesForParent('real-estate');
+    const slugs = packs.map((p) => p.slug);
+    expect(slugs).toContain('real-estate-commercial');
   });
 });

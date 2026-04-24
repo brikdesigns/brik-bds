@@ -2,6 +2,7 @@ import type { IndustryPack } from '../schema';
 import type { IndustrySlug } from '../vocabularies';
 import { dental } from './dental';
 import { realEstateRvMhc } from './real-estate-rv-mhc';
+import { realEstateCommercial } from './real-estate-commercial';
 import { smallBusiness } from './small-business';
 
 /**
@@ -19,10 +20,11 @@ import { smallBusiness } from './small-business';
 export const industryPacks: Record<IndustrySlug, IndustryPack> = {
   'dental': dental,
   'real-estate-rv-mhc': realEstateRvMhc,
+  'real-estate-commercial': realEstateCommercial,
   'small-business': smallBusiness,
 };
 
-export { dental, realEstateRvMhc, smallBusiness };
+export { dental, realEstateRvMhc, realEstateCommercial, smallBusiness };
 export type {
   IndustryPainPointEntry,
   IndustryKeywordEntry,

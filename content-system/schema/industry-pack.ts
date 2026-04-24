@@ -345,6 +345,20 @@ export interface NavigationIA {
   scrollBehavior: ScrollBehavior;
   /** Mobile drawer shape. */
   mobileDrawer: DrawerPattern;
+  /**
+   * Optional per-column accent color slot — lets audience pathways in a
+   * mega-menu render with distinct color cues. Array is parallel to
+   * `servicesMegaMenu.categories` (index i = column i). Token names or
+   * raw hex; consumers should resolve against the client theme.
+   * Present on packs that use a multi-audience pathway mega-menu pattern.
+   */
+  audienceAccents?: string[];
+  /**
+   * Optional per-column icon slot (icon id / slug) for audience pathways
+   * in a mega-menu. Array parallel to `servicesMegaMenu.categories`
+   * (index i = column i). Icon slugs should map to the BDS icon vocabulary.
+   */
+  audienceIcons?: string[];
 }
 
 export interface NavigationLink {
