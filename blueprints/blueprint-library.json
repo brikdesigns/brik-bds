@@ -667,6 +667,83 @@
       "version": "1.0.0",
       "last_reviewed": "2026-04-18",
       "required_facts": []
+    },
+    {
+      "_comment": "TODO (BDS-PACK-ADD-001): Astro component stubbed — layout declared for pack composition reference only. Build the ServicesNumberedAccordion.astro component in a dedicated session.",
+      "key": "services_numbered_accordion",
+      "name": "Services Numbered Accordion",
+      "section_type": "services",
+      "industries": [
+        "universal",
+        "real_estate",
+        "healthcare",
+        "legal",
+        "corporate"
+      ],
+      "moods": [
+        "professional",
+        "trustworthy",
+        "corporate",
+        "modern"
+      ],
+      "layout_spec": "Numbered list of services rendered as an accordion. Each row shows a large ordinal number (80–100px, ultra-light weight, brand accent color), the service name (H3, 20px, heading font), and a one-line descriptor. Clicking a row expands a panel containing a 2–3 sentence description plus optional sub-items or a CTA link. Numbers remain visible when expanded. Max 6–8 items to avoid scroll fatigue. Background: surface-secondary. Used for professional-services and commercial real-estate verticals where a feature-grid feels too casual.",
+      "source": "Vale Partners commercial real-estate — audience pathway pattern",
+      "tier": "internal",
+      "is_active": false,
+      "version": "0.1.0",
+      "last_reviewed": "2026-04-23",
+      "required_facts": []
+    },
+    {
+      "_comment": "TODO (BDS-PACK-ADD-001): Astro component stubbed — layout declared for pack composition reference only. Build the ProcessGrid4StepNumbered.astro component in a dedicated session.",
+      "key": "process_grid_4step_numbered",
+      "name": "Process Grid — 4-Step Numbered",
+      "section_type": "features",
+      "industries": [
+        "universal",
+        "real_estate",
+        "legal",
+        "corporate",
+        "finance"
+      ],
+      "moods": [
+        "professional",
+        "trustworthy",
+        "corporate",
+        "modern"
+      ],
+      "layout_spec": "Four-column grid explaining a process in ordered steps. Each cell contains: a large step number (1–4, 56–64px, bold, brand accent), a short step title (H4, 16px, heading font), and a 2-sentence body description (14px, body font, muted color). Optional divider arrows between cells on desktop (hidden on mobile). Background: surface-primary or brand-dark for contrast. No images in cells — numbers carry the visual weight. Used for commercial transactions, brokerage processes, or any trust-building sequence. Collapses to 2×2 on tablet, single column on mobile.",
+      "source": "Vale Partners commercial real-estate — transaction process pattern",
+      "tier": "internal",
+      "is_active": false,
+      "version": "0.1.0",
+      "last_reviewed": "2026-04-23",
+      "required_facts": []
+    },
+    {
+      "_comment": "TODO (BDS-PACK-ADD-001): Astro component stubbed — layout declared for pack composition reference only. Build the NavMegaAudiencePathways.astro component in a dedicated session.",
+      "key": "nav_mega_audience_pathways",
+      "name": "Mega Nav — Audience Pathways",
+      "section_type": "nav",
+      "industries": [
+        "real_estate",
+        "healthcare",
+        "legal",
+        "corporate"
+      ],
+      "moods": [
+        "professional",
+        "corporate",
+        "trustworthy",
+        "modern"
+      ],
+      "layout_spec": "3-column mega-menu drop-down triggered from a primary nav link. Each column represents a distinct audience pathway (e.g. Healthcare / Land / Investors for commercial real-estate; can generalize to any 3-audience vertical). Column header is the audience label (14px uppercase, letter-spacing 0.08em, brand accent color). Below the header: 3–5 deep-link items, each with a label (15px, heading font) and an optional one-line note (13px, muted). Each column carries a distinct accent color token from `audienceAccents[]` and an optional icon from `audienceIcons[]` displayed beside the column header. Mega-menu opens on hover/focus of the trigger; closes on Esc or click-outside. Mobile: collapses to accordion — one expand per audience. No featured card in this variant (audience pathways are the feature).",
+      "source": "Vale Partners commercial real-estate — 3-audience navigation pattern",
+      "tier": "internal",
+      "is_active": false,
+      "version": "0.1.0",
+      "last_reviewed": "2026-04-23",
+      "required_facts": []
     }
   ]
 }

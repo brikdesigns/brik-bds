@@ -1,0 +1,91 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { realEstateCommercial } from './real-estate-commercial';
+import { NavigationIASpec } from '../../stories/foundation/_components';
+
+<Meta title="Content/Industries/Real Estate Commercial" />
+
+# Real Estate — Commercial Brokerage
+
+**Version:** {realEstateCommercial.version}  •  **Last reviewed:** {realEstateCommercial.lastReviewed}  •  **Review cadence:** {realEstateCommercial.reviewCadence}
+
+Structured data lives in [`real-estate-commercial.ts`](?path=/docs/content-industries-real-estate-commercial--docs). This page is the narrative companion.
+
+This pack covers **boutique commercial real-estate brokerages** serving three co-equal audience verticals:
+- **Healthcare professionals** (dental, veterinary, optometry) — primary revenue driver
+- **Commercial investors** (medical office buildings, Nashville hub) — co-equal revenue driver
+- **Land buyers** (Middle Tennessee residential, agricultural, hunting) — secondary driver
+
+Graduated from `small-business` because this vertical requires a 3-column audience-pathway mega-menu — the structural navigation pattern the small-business pack explicitly flags as a promotion trigger.
+
+---
+
+## 1. Industry Overview
+
+Boutique commercial real-estate brokerages differentiate on specialization and broker continuity — not scale. The principal broker is the advisor for every deal from introduction through closing, including build-out coordination and lease renewal. This is the structural moat against national firms that rotate junior associates onto smaller accounts.
+
+The three-segment model means one brokerage serves clients who might otherwise need three separate relationships: a healthcare real-estate specialist, a land broker, and a commercial investment advisor.
+
+## 2. Default Affinities
+
+| Axis | Affinities |
+|---|---|
+| **Personality** | {realEstateCommercial.affinities.personality.join(' · ')} |
+| **Voice** | {realEstateCommercial.affinities.voice.join(' · ')} |
+| **Visual Style** | {realEstateCommercial.affinities.visualStyle.join(' · ')} |
+
+## 3. Audience Segments
+
+### Healthcare Professionals
+
+Tone: "Clinical precision meets warm guidance. More specific than other verticals — these readers are educated professionals who expect competence. Confident without being condescending. Acknowledge that real estate isn't their expertise and that's exactly why specialized representation matters."
+
+Primary pain points:
+- First practice location decision — high stakes, unfamiliar process
+- Second location timing — when to expand, where to expand
+- Buy vs. lease decision for long-term practice planning
+- Build-out complexity — equipment, layout, timeline coordination
+- Understanding lease terms that affect practice profitability
+- Finding space that supports patient acquisition goals
+
+Key vocabulary: operatory, build-out, tenant improvement allowance, TI, demographic analysis, patient flow, equipment requirements, lease negotiation, practice location, second location, medical office space
+
+### Land Buyers (Middle Tennessee)
+
+Tone: local-knowledge-forward, practical, place-specific. Buyers want to know the broker has walked the land, not just listed it.
+
+Segments: residential homesites, agricultural/row-crop tracts, hunting and recreational (timber, creek bottom, wildlife corridors).
+
+### Commercial Investors
+
+Tone: capital-markets-literate, deal-flow-aware, returns-focused. These clients know the vocabulary (cap rate, NOI, NNN) — use it without explaining it.
+
+Focus: medical office buildings (MOBs), Nashville-market commercial assets, 1031 exchange advisory, off-market deal sourcing.
+
+## 4. Navigation IA — Audience-Pathway Mega-Menu
+
+{realEstateCommercial.navigationIA && (
+  <NavigationIASpec ia={realEstateCommercial.navigationIA} />
+)}
+
+The `audienceAccents` and `audienceIcons` arrays on the `navigationIA` field power per-column visual differentiation in the `nav_mega_audience_pathways` blueprint:
+
+- Column 0 (Healthcare): accent `var(--color-moss-dark)`, icon `ph:stethoscope`
+- Column 1 (Land): accent `var(--color-olive-light)`, icon `ph:tree`
+- Column 2 (Investors): accent `var(--color-gold-light)`, icon `ph:chart-line-up`
+
+## 5. Blueprint Stubs
+
+Three blueprint keys are declared for this pack and registered in `blueprints/blueprint-library.json` with `is_active: false`. Astro components are pending (tracked as TODO BDS-PACK-ADD-001):
+
+- `services_numbered_accordion` — numbered service list as accordion; used on home and audience pathway pages
+- `process_grid_4step_numbered` — 4-step numbered process grid; used on healthcare and investors pages
+- `nav_mega_audience_pathways` — 3-column audience mega-menu with per-column accent + icon
+
+## 6. Graduation Rationale
+
+From the `small-business` pack: *"Verticals that demand a mega-menu should graduate to their own pack."* Vale Partners requires a 3-column audience-pathway mega-menu as a structural navigation requirement — this is the textbook graduation case the small-business pack describes.
+
+Additional graduation signals:
+- Distinct vocabulary, tone, and pain points per segment (healthcare / land / investors) that diverge meaningfully from small-business defaults
+- Regulatory obligations (TREC, Tennessee CON law, agricultural disclosures) specific to this vertical
+- Seasonal patterns driven by healthcare practice cycles, land-buyer seasons, and 1031 exchange deadlines — not a generic small-business calendar
