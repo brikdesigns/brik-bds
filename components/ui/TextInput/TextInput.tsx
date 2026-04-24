@@ -41,21 +41,6 @@ const wrapperStyles: CSSProperties = {
 };
 
 /**
- * Label base styles using BDS tokens
- *
- * Token reference:
- * - --font-family-label (label font)
- * - --font-weight-semi-bold = 600 (SemiBold per Figma)
- * - --font-line-height-tight = 100% (compact label line-height)
- */
-const labelBaseStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  textTransform: 'capitalize' as const,
-};
-
-/**
  * Field wrapper styles — positions icons relative to input
  */
 const fieldWrapperStyles: CSSProperties = {
@@ -132,17 +117,14 @@ const helperBaseStyles: CSSProperties = {
  * - md: label 16px, body 16px
  * - lg: label 18px, body 18px
  */
-const sizeStyles: Record<TextInputSize, { label: CSSProperties; input: CSSProperties }> = {
+const sizeStyles: Record<TextInputSize, { input: CSSProperties }> = {
   sm: {
-    label: { fontSize: 'var(--label-sm)' },
     input: { fontSize: 'var(--body-sm)', height: '32px' },
   },
   md: {
-    label: { fontSize: 'var(--label-md)' },
     input: { fontSize: 'var(--body-md)', height: '40px' },
   },
   lg: {
-    label: { fontSize: 'var(--label-lg)' },
     input: { fontSize: 'var(--body-lg)', height: '48px' },
   },
 };
@@ -201,11 +183,11 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            style={{
-              ...labelBaseStyles,
-              ...sizeStyle.label,
-              ...(hasError ? { color: 'var(--text-negative)' } : {}),
-            }}
+            className={bdsClass(
+              'bds-text-input__label',
+              `bds-text-input__label--${size}`,
+              hasError && 'bds-text-input__label--error',
+            )}
           >
             {label}
           </label>
