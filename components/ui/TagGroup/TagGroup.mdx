@@ -1,9 +1,9 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
-import * as Stories from './TagList.stories';
+import * as Stories from './TagGroup.stories';
 
 <Meta of={Stories} />
 
-# TagList
+# TagGroup
 
 Horizontal cluster of `<Tag>` elements with locked spacing. Replaces the `<div style={{ display: 'flex', gap, flexWrap }}>` wrapper that had grown around tag arrays across the portal.
 
@@ -44,18 +44,18 @@ Several fields each rendering a tag cluster — the recurring "brand personality
 ## Usage
 
 ```tsx
-import { TagList, Tag, Field } from '@brikdesigns/bds';
+import { TagGroup, Tag, Field } from '@brikdesigns/bds';
 
 <Field label="Services offered">
-  <TagList>
+  <TagGroup>
     <Tag size="sm">Cosmetic</Tag>
     <Tag size="sm">General</Tag>
     <Tag size="sm">Implants</Tag>
-  </TagList>
+  </TagGroup>
 </Field>
 ```
 
 ## Rules
 
 - **Don't wrap a single Tag.** If there's only one, just use `<Tag>` directly inside the Field.
-- **Use `Tag` children, not arbitrary nodes.** TagList locks spacing for Tag's specific footprint; other content will misalign.
+- **Use `Tag` children, not arbitrary nodes.** TagGroup locks spacing for Tag's specific footprint; other content will misalign.

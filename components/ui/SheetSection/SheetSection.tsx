@@ -9,7 +9,7 @@ export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'ti
   heading?: string;
   /** Optional lead paragraph rendered under the heading. */
   description?: ReactNode;
-  /** Section content — Field, FieldGrid, Card, CardList, Table, TagList, BulletList, etc. */
+  /** Section content — Field, FieldGrid, Card, CardList, Table, TagGroup, BulletList, etc. */
   children?: ReactNode;
   /** Vertical rhythm between this section and the next. Default `lg`. */
   spacing?: SheetSectionSpacing;
