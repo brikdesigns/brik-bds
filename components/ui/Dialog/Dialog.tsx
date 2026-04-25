@@ -6,15 +6,25 @@ import './Dialog.css';
 export type DialogVariant = 'default' | 'destructive';
 
 export interface DialogProps {
+  /** Whether the dialog is rendered. Returns `null` when false. */
   isOpen: boolean;
+  /** Called on backdrop click, Escape key, or the Cancel button. Caller is responsible for setting `isOpen` to false. */
   onClose: () => void;
+  /** Heading text rendered in the dialog. Required for accessible labelling. */
   title: string;
+  /** Body paragraph rendered under the title. Ignored when `children` is supplied. */
   description?: string;
+  /** Custom body content. Replaces `description` when provided. */
   children?: ReactNode;
+  /** Label for the primary action button. Default `"Confirm"`. */
   confirmLabel?: string;
+  /** Label for the secondary cancel button. Default `"Cancel"`. */
   cancelLabel?: string;
+  /** Called when the primary action is clicked. Caller is responsible for closing the dialog (typically by toggling `isOpen`). */
   onConfirm?: () => void;
+  /** Visual variant. `default` uses the brand-primary confirm button; `destructive` switches it to the destructive treatment for delete-style confirmations. */
   variant?: DialogVariant;
+  /** Close when the backdrop is clicked. Default `true`. */
   closeOnBackdrop?: boolean;
 }
 
