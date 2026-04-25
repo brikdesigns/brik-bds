@@ -4,12 +4,13 @@ import { Banner } from './Banner';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Banner> = {
-  title: 'Components/Feedback/marketing-banner',
+  title: 'Components/Feedback/banner',
   component: Banner,
   parameters: { layout: 'padded' },
   argTypes: {
     title: { control: 'text' },
     description: { control: 'text' },
+    tone: { control: 'select', options: ['announcement', 'warning', 'error', 'information'] },
   },
 };
 
@@ -49,7 +50,7 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => (
     <Stack>
-      <SectionLabel>With action</SectionLabel>
+      <SectionLabel>Announcement (default — brand surface)</SectionLabel>
       <Banner
         title="Limited time offer"
         description="Save 20% on all plans this month"
@@ -64,6 +65,51 @@ export const Variants: Story = {
         title="Cookie notice"
         description="We use cookies to improve your experience"
         action={<BannerAction>Accept</BannerAction>}
+        onDismiss={() => {}}
+      />
+    </Stack>
+  ),
+};
+
+/* ─── Tones (replaces AlertBanner) ───────────────────────────── */
+
+/**
+ * The status tones — `warning`, `error`, `information` — replace the
+ * legacy `AlertBanner` component (per ADR-004 §3). Same shape as the
+ * announcement tone, with a leading status Badge and an `alert` ARIA
+ * role for assistive tech.
+ */
+export const Tones: Story = {
+  render: () => (
+    <Stack>
+      <SectionLabel>Information</SectionLabel>
+      <Banner
+        tone="information"
+        title="Heads up"
+        description="Your trial period ends in 7 days. Upgrade to keep access."
+        action={<Button size="sm">Upgrade</Button>}
+      />
+
+      <SectionLabel>Warning</SectionLabel>
+      <Banner
+        tone="warning"
+        title="Slow connection detected"
+        description="Some features may take longer to respond."
+      />
+
+      <SectionLabel>Error</SectionLabel>
+      <Banner
+        tone="error"
+        title="Sync failed"
+        description="We couldn't reach the server. Check your connection and try again."
+        action={<Button size="sm" variant="secondary">Retry</Button>}
+      />
+
+      <SectionLabel>Status banner with dismiss</SectionLabel>
+      <Banner
+        tone="information"
+        title="What&apos;s new in v2.0"
+        description="Auto-saving drafts, faster search, and dark mode."
         onDismiss={() => {}}
       />
     </Stack>
