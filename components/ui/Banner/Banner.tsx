@@ -50,6 +50,8 @@ const STATUS_BADGE: Record<Exclude<BannerTone, 'announcement'>, 'warning' | 'err
  *   leading status Badge icon and primary text. Renders with `role="alert"`.
  *   Replaces the legacy `AlertBanner` component (per ADR-004 §3 — same
  *   shape, different presets = one component with a tone prop).
+ *
+ * @summary Full-width banner — announcement or status tones
  */
 export function Banner({
   title,

@@ -60,6 +60,8 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
  * <Chip label="Status: Active" onRemove={() => removeFilter('status')} />
  * <Chip label="Selected" variant="primary" appearance="solid" onChipClick={toggle} />
  * ```
+ *
+ * @summary Compact interactive pill for filtering or selection
  */
 export function Chip({
   label,

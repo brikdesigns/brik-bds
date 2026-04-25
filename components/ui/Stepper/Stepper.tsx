@@ -59,6 +59,8 @@ const sizeConfig: Record<StepperSize, {
  * Figma: bds-stepper (node 26432:14777)
  * - Two icon buttons (- / +) flanking a numeric display
  * - Respects min/max bounds
+ *
+ * @summary Numeric input with increment/decrement buttons
  */
 export function Stepper({
   value,

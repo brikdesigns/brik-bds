@@ -17,6 +17,8 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
 
 /**
  * Checkbox — themed checkbox with label text.
+ *
+ * @summary Themed checkbox with adjacent label
  */
 export function Checkbox({
   label,

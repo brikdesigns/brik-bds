@@ -111,6 +111,8 @@ const boxSizeMap: Record<ServiceBadgeSize, number> = { sm: 20, md: 28, lg: 40 };
  * // Migration: replace ServiceBadge with ServiceTag
  * // Old: <ServiceBadge category="brand" serviceName="Brand Identity Bundle" size="lg" />
  * // New: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
+ *
+ * @summary Brik service category icon (deprecated — use ServiceTag)
  */
 export function ServiceBadge({
   category,

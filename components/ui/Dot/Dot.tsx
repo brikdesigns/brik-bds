@@ -22,6 +22,8 @@ export interface DotProps extends HTMLAttributes<HTMLSpanElement> {
  * <Dot status="positive" />
  * <Dot status="error" size="lg" />
  * ```
+ *
+ * @summary Small status indicator circle
  */
 export function Dot({
   status = 'default',

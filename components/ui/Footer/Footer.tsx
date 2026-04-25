@@ -52,6 +52,8 @@ export type FooterVariant = 'default' | 'brand';
  *   copyright="2026 Brik Designs. All rights reserved."
  * />
  * ```
+ *
+ * @summary Page footer with link columns and brand block
  */
 export function Footer({
   logo,

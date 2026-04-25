@@ -38,6 +38,8 @@ export interface FilterToggleProps
  *   onToggle={() => setShowArchived((prev) => !prev)}
  * />
  * ```
+ *
+ * @summary Binary on/off filter pill for filter bars
  */
 export function FilterToggle({
   label,

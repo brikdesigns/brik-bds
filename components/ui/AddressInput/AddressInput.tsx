@@ -271,6 +271,8 @@ const suggestionDescriptionStyles: CSSProperties = {
  *   onSuggestionSelect={(s) => console.log(s)}
  * />
  * ```
+ *
+ * @summary Location input with autocomplete suggestions
  */
 export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
   (

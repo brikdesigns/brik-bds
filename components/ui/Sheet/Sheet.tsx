@@ -123,6 +123,8 @@ export interface SheetProps {
  * exposes a primary Edit action in the footer. Pass `mode="edit"` with `onSave`
  * to switch into form state with Cancel / Save actions. Custom `footer` always
  * wins when supplied.
+ *
+ * @summary Sliding panel overlay for contextual content
  */
 export function Sheet({
   isOpen,

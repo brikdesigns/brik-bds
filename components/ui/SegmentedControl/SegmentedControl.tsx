@@ -107,6 +107,8 @@ const activeSegmentStyles: CSSProperties = {
  *   ]}
  * />
  * ```
+ *
+ * @summary Toggle between mutually-exclusive views or modes
  */
 export function SegmentedControl({
   items,

@@ -71,6 +71,9 @@ export interface DevFeedbackWidgetProps {
 }
 
 // ── Component ───────────────────────────────────────────────────────────
+/**
+ * @summary Floating dev-only feedback capture widget
+ */
 export function DevFeedbackWidget({
   endpoint = '/api/feedback',
   contextLabel = 'Page',

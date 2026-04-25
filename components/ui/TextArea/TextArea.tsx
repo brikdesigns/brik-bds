@@ -137,6 +137,8 @@ const textareaDisabledStyles: CSSProperties = {
  * <TextArea label="Description" error="Required" rows={3} fullWidth />
  * <TextArea placeholder="Comments" rows={6} resize="none" />
  * ```
+ *
+ * @summary Themed multi-line text input with label/helper/error
  */
 export function TextArea({
   size = 'md',

@@ -86,6 +86,8 @@ const EyeClosedIcon = () => (
  * <PasswordInput label="Password" size="sm" helperText="Must be at least 8 characters" />
  * <PasswordInput label="Password" error="Password is required" fullWidth />
  * ```
+ *
+ * @summary TextInput with show/hide password toggle
  */
 export const PasswordInput = ({
   id,

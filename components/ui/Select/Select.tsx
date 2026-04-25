@@ -50,6 +50,8 @@ function isOptionGroup(opt: SelectOption | SelectOptionGroup): opt is SelectOpti
 
 /**
  * Select — themed select dropdown with label, helper text, and error state.
+ *
+ * @summary Themed native select with label, helper, error
  */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   (

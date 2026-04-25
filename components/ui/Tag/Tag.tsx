@@ -57,6 +57,8 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  * <Tag size="lg" icon={<Icon />}>With Icon</Tag>
  * <Tag appearance="subtle">Outlined</Tag>
  * ```
+ *
+ * @summary Categorization label for content
  */
 export function Tag({
   children,
