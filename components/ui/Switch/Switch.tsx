@@ -34,6 +34,8 @@ const sizes = {
  *
  * Track/knob dimensions are size-dependent (runtime-calculated inline styles).
  * Colors and typography are in Switch.css.
+ *
+ * @summary Toggle control for binary on/off states
  */
 export function Switch({
   label,

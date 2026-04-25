@@ -30,6 +30,8 @@ const variantBadge: Record<Exclude<ToastVariant, 'default'>, { status: 'positive
  *
  * The surface NEVER changes color — only the badge communicates
  * success, error, warning, or info status.
+ *
+ * @summary White-surface notification with optional Badge
  */
 export function Toast({
   title,

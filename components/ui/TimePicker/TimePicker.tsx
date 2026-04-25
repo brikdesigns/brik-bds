@@ -157,6 +157,8 @@ function ScrollColumn({
  * <TimePicker size="md" label="End Time" value="14:30" minuteStep={5} />
  * <TimePicker size="lg" label="Appointment" use24Hour error="Time is required" />
  * ```
+ *
+ * @summary Themed time picker (12h/24h, configurable step)
  */
 export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(
   (

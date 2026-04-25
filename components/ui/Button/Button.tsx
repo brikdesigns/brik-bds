@@ -98,6 +98,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * <Button variant="danger" size="md">Delete account</Button>
  * <Button variant="outline" iconAfter={<ArrowRight />}>Continue</Button>
  * ```
+ *
+ * @summary Primary action component with variants and sizes
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (

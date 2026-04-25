@@ -24,6 +24,8 @@ export interface ProgressBarProps extends Omit<HTMLAttributes<HTMLDivElement>, '
  * ```tsx
  * <ProgressBar value={35} label="Upload progress" />
  * ```
+ *
+ * @summary Themed linear progress indicator
  */
 export function ProgressBar({
   value,

@@ -22,6 +22,9 @@ export interface BoardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
+/**
+ * @summary Horizontal kanban container of BoardColumns
+ */
 export function Board({ children, className, style, ...props }: BoardProps) {
   return (
     <div

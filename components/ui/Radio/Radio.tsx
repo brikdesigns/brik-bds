@@ -36,6 +36,8 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * <Radio name="plan" value="pro" label="Pro Plan" checked />
  * <Radio name="plan" value="enterprise" label="Enterprise" disabled />
  * ```
+ *
+ * @summary Themed radio button (single-select group member)
  */
 export function Radio({
   label,

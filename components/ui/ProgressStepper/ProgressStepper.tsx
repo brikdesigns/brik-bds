@@ -102,6 +102,8 @@ function getStepStatus(index: number, activeStep: number): StepStatus {
  *   onStepClick={setStep}
  * />
  * ```
+ *
+ * @summary Multi-step progress indicator (numbered or dots)
  */
 export function ProgressStepper(props: ProgressStepperProps) {
   if (props.variant === 'dots') {

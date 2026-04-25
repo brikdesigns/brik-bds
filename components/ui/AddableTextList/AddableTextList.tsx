@@ -72,6 +72,8 @@ function warnStructuredContent(value: string, label?: string) {
  *   placeholder="e.g. Dental cleaning"
  * />
  * ```
+ *
+ * @summary Reveal-on-click list of single-line text entries
  */
 export function AddableTextList({
   values,

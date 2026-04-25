@@ -94,6 +94,8 @@ export function MenuItem({ item, isActive, className, style, ...props }: MenuIte
  *   />
  * </div>
  * ```
+ *
+ * @summary Dropdown menu with items and keyboard nav
  */
 export function Menu({
   items,

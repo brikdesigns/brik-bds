@@ -23,6 +23,8 @@ const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
 
 /**
  * Breadcrumb — navigation breadcrumb trail with separator variants.
+ *
+ * @summary Navigation breadcrumb trail with separator variants
  */
 export function Breadcrumb({
   items,

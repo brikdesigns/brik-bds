@@ -91,6 +91,8 @@ export interface NotificationListProps {
  *   onItemClick={(n) => console.log(n.id)}
  * />
  * ```
+ *
+ * @summary Scrollable list of notification items
  */
 export function NotificationList({
   notifications,
