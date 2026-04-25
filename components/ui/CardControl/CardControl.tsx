@@ -15,6 +15,23 @@ export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * CardControl — settings control card with badge, title, description, and action.
+ *
+ * @deprecated Use `<Card preset="control">` instead. Same prop names, same
+ * layout, same visual treatment. Slated for deletion in a future major
+ * version once the 1 portal consumer migrates.
+ *
+ * Migration:
+ * ```tsx
+ * // before
+ * <CardControl title="Email notifications" description="Send weekly digest"
+ *   action={<Switch />} actionAlign="top" />
+ *
+ * // after
+ * <Card preset="control" title="Email notifications" description="Send weekly digest"
+ *   action={<Switch />} actionAlign="top" />
+ * ```
+ *
+ * Tracked under ADR-004 — see docs/adrs/ADR-004-component-bloat-guardrails.md.
  */
 export function CardControl({
   title,

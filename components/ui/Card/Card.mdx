@@ -25,6 +25,24 @@ All visual variants, padding sizes, interactive, and link modes.
 - **`brand`** — Primary-color border for emphasis
 - **`elevated`** — Shadow for visual prominence
 
+## Control preset
+
+`preset="control"` collapses the legacy `CardControl` component into Card as a locked-down settings/control layout (per [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md)). Renders: leading badge + (title + description) on the left, action slot on the right.
+
+<Canvas of={Stories.ControlPreset} />
+
+```tsx
+<Card
+  preset="control"
+  badge={<Badge status="positive">On</Badge>}
+  title="Email notifications"
+  description="Send a weekly digest to your inbox."
+  action={<Button variant="outline" size="sm">Configure</Button>}
+/>
+```
+
+The standalone `CardControl` component is `@deprecated` and slated for deletion in a future major version. Migrate to `Card preset="control"` — same prop names, same behavior. See [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md).
+
 ## Patterns
 
 Real-world usage: service grids and feature cards with actions.

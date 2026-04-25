@@ -71,4 +71,63 @@
   margin-top: auto;
   padding-top: var(--padding-sm);
 }
+
+/* ─── Preset: control ─────────────────────────────────────────── */
+/* Settings/control card layout — replaces the legacy CardControl
+ * component. Badge + (title + description) on the left, action on the
+ * right. Surface uses primary background + muted border + small shadow
+ * regardless of `variant` (variant is ignored for this preset). */
+
+.bds-card--preset-control {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--padding-xl);
+  padding: var(--padding-xl);
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-muted);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.bds-card--preset-control-action-center { align-items: center; }
+.bds-card--preset-control-action-top    { align-items: flex-start; }
+
+.bds-card__preset-control-content {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-lg);
+  flex: 1;
+  min-width: 0;
+}
+
+.bds-card__preset-control-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.bds-card__preset-control-title {
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-card__preset-control-description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.bds-card__preset-control-action {
+  flex-shrink: 0;
+}
 }
