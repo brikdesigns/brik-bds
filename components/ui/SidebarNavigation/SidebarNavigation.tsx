@@ -10,9 +10,13 @@ export interface SidebarNavItem {
 }
 
 export interface SidebarNavigationProps {
+  /** Logo node rendered at the top of the sidebar (typically a brand mark or `<img>`). */
   logo: ReactNode;
+  /** Primary navigation items. Each renders as an anchor with an optional icon and active state. */
   navItems: SidebarNavItem[];
+  /** Optional content rendered above the user section (e.g. settings link, theme toggle). */
   footerActions?: ReactNode;
+  /** Bottom section with user identity / account controls (e.g. avatar + email + sign-out). */
   userSection?: ReactNode;
   /** Custom width (default: 260px) — runtime-configurable, stays inline */
   width?: string;
