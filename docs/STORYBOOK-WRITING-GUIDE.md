@@ -57,6 +57,74 @@ duplicate.
 import test helpers from `storybook/test` (not `@storybook/test`). Keep
 stories minimal — only what's needed to demonstrate behavior.
 
+## MCP Discipline (mandatory for BDS)
+
+The MCP `get-documentation` tool returns "the summary, if present, or the
+first 60 characters of the description." Every component and every story
+exposed via MCP needs a JSDoc `@summary` so agents in consumer repos
+(portal, renew-pms, brikdesigns) get high-signal answers.
+
+### Component + story summaries
+
+```tsx
+/**
+ * Banner conveys page-level status. Use sparingly — one banner per region.
+ * @summary Page-level status banner with tone variants
+ */
+export const Banner = ...
+
+export const Critical: Story = {
+  /** Failed-submit error after server validation rejection.
+   *  @summary Server-side validation failure */
+  args: { tone: 'critical', ... }
+};
+```
+
+Required on every component export and every story export. The summary
+should answer "what scenario does this represent" in under 60 characters.
+
+### Single concept per story
+
+Never combine two prop axes in one story. Write `Sizes` and `Variants` as
+separate stories — never `SizesAndVariants`. If a story name needs "and"
+to describe it, split it.
+
+### Deprecated stories must hide from agents
+
+When a component is deprecated (`@deprecated` JSDoc), the same PR adds
+`tags: ['!manifest']` to the meta. Otherwise agents in consumer repos
+keep recommending it via `list-all-documentation`.
+
+```tsx
+const meta = {
+  component: AlertBanner,
+  tags: ['!manifest'],  // deprecated — hide from MCP discovery
+} satisfies Meta<typeof AlertBanner>;
+```
+
+### Args over render — strict priority
+
+`args` first. Use `render` only when args can't express the case
+(multi-component composition, hook usage). Hooks in stories are an
+advanced fallback per Storybook's own docs — not a default tool.
+
+### Args composition for blueprints + page stories
+
+Page-level and blueprint stories compose from leaf-component stories'
+args, never re-author data:
+
+```tsx
+export const LandingPage: Story = {
+  args: {
+    hero: Hero.Default.args,
+    pricing: PricingTable.ThreeTier.args,
+    cta: CTABand.Primary.args,
+  },
+};
+```
+
+Keeps blueprint stories from drifting from leaf truth.
+
 ## Storybook 9 Essential Changes for Story Writing
 
 ### Package Consolidation
