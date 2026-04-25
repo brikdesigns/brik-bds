@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardList } from './CardList';
 import { Card, CardTitle, CardDescription, CardFooter } from '../Card/Card';
-import { CardDisplay } from '../CardDisplay';
-import { CardFeature } from '../CardFeature';
 import { CardTestimonial } from '../CardTestimonial';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
@@ -95,29 +93,6 @@ export const Vertical: Story = {
         </CardList>
       </div>
 
-      <SectionLabel>Vertical — CardFeature</SectionLabel>
-      <div style={{ width: 480 }}>
-        <CardList orientation="vertical" gap="md">
-          <CardFeature
-            icon="★"
-            title="Token-driven design"
-            description="Every color, spacing, and type value references a single source of truth."
-            align="left"
-          />
-          <CardFeature
-            icon="◆"
-            title="Accessible by default"
-            description="Radix primitives and ARIA patterns are built into every interactive component."
-            align="left"
-          />
-          <CardFeature
-            icon="●"
-            title="Themeable"
-            description="Swap a single theme file to rebrand without touching components."
-            align="left"
-          />
-        </CardList>
-      </div>
     </Stack>
   ),
 };
@@ -153,31 +128,6 @@ export const Horizontal: Story = {
             <Button variant="outline" size="sm">Learn more</Button>
           </CardFooter>
         </Card>
-      </CardList>
-
-      <SectionLabel>Horizontal — CardDisplay</SectionLabel>
-      <CardList orientation="horizontal" gap="lg">
-        <CardDisplay
-          title="Bloom Cafe"
-          description="Full rebrand and e-commerce launch for a specialty coffee shop."
-          imageSrc="https://placehold.co/640x360/EEEEEE/111111?text=Bloom+Cafe"
-          imageAlt="Bloom Cafe case study"
-          action={<Button variant="outline" size="sm">View case study</Button>}
-        />
-        <CardDisplay
-          title="Apex Corp"
-          description="Conversion-focused marketing site that tripled qualified leads."
-          imageSrc="https://placehold.co/640x360/EEEEEE/111111?text=Apex+Corp"
-          imageAlt="Apex Corp case study"
-          action={<Button variant="outline" size="sm">View case study</Button>}
-        />
-        <CardDisplay
-          title="Greenfield"
-          description="Internal ops portal that replaced five spreadsheets."
-          imageSrc="https://placehold.co/640x360/EEEEEE/111111?text=Greenfield"
-          imageAlt="Greenfield case study"
-          action={<Button variant="outline" size="sm">View case study</Button>}
-        />
       </CardList>
 
       <SectionLabel>Horizontal — CardTestimonial (brand + outlined)</SectionLabel>
