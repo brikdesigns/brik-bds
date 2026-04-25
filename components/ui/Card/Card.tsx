@@ -4,8 +4,15 @@ import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
-export type CardPreset = 'control';
+export type CardPreset = 'control' | 'summary';
 export type CardControlActionAlign = 'center' | 'top';
+export type CardSummaryType = 'numeric' | 'price';
+
+export interface CardSummaryTextLink {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+}
 
 interface CardBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /**
@@ -52,7 +59,40 @@ interface CardControlPresetProps extends CardBaseProps {
   actionAlign?: CardControlActionAlign;
 }
 
-export type CardProps = CardDefaultProps | CardControlPresetProps;
+interface CardSummaryPresetProps extends CardBaseProps {
+  /**
+   * Summary preset — compact metric/stat card with label, large value, and
+   * optional text link. Replaces the legacy `CardSummary` component (per
+   * ADR-004 §"Resolve the existing instances").
+   */
+  preset: 'summary';
+  /** Stat label rendered above the value */
+  label: string;
+  /**
+   * Stat value. Numbers are formatted via `Intl.NumberFormat` based on
+   * `type`; strings render verbatim.
+   */
+  value: string | number;
+  /**
+   * Number formatting:
+   * - `numeric` (default): locale-formatted integer (e.g. 1,234)
+   * - `price`: USD currency (e.g. $1,234.50)
+   * Ignored when `value` is a string.
+   */
+  type?: CardSummaryType;
+  /** Optional secondary action rendered to the right of the value */
+  textLink?: CardSummaryTextLink;
+}
+
+export type CardProps = CardDefaultProps | CardControlPresetProps | CardSummaryPresetProps;
+
+function formatSummaryValue(value: string | number, type: CardSummaryType): string {
+  if (typeof value === 'string') return value;
+  if (type === 'price') {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+  }
+  return value.toLocaleString();
+}
 
 /**
  * Card — flexible content container.
@@ -65,6 +105,9 @@ export type CardProps = CardDefaultProps | CardControlPresetProps;
  * - **`preset="control"`** — settings/control card with locked-down
  *   badge + title + description + action layout. Replaces the legacy
  *   `CardControl` component.
+ * - **`preset="summary"`** — compact metric/stat card with label,
+ *   large value, and optional text link. Replaces the legacy
+ *   `CardSummary` component.
  *
  * @example Default
  * ```tsx
@@ -84,10 +127,24 @@ export type CardProps = CardDefaultProps | CardControlPresetProps;
  *   action={<Switch checked={enabled} onChange={setEnabled} />}
  * />
  * ```
+ *
+ * @example Summary preset
+ * ```tsx
+ * <Card
+ *   preset="summary"
+ *   label="Total revenue"
+ *   value={48250.75}
+ *   type="price"
+ *   textLink={{ label: 'Details', href: '/revenue' }}
+ * />
+ * ```
  */
 export function Card(props: CardProps) {
   if (props.preset === 'control') {
     return renderControlPreset(props);
+  }
+  if (props.preset === 'summary') {
+    return renderSummaryPreset(props);
   }
   return renderDefault(props);
 }
@@ -157,6 +214,55 @@ function renderControlPreset({
         </div>
       </div>
       {action && <div className="bds-card__preset-control-action">{action}</div>}
+    </div>
+  );
+}
+
+function renderSummaryPreset({
+  label,
+  value,
+  type = 'numeric',
+  textLink,
+  className,
+  style,
+  preset: _preset,
+  ...rest
+}: CardSummaryPresetProps) {
+  const formatted = formatSummaryValue(value, type);
+
+  return (
+    <div
+      className={bdsClass('bds-card', 'bds-card--preset-summary', className)}
+      style={style}
+      {...rest}
+    >
+      <div className="bds-card__preset-summary-inner">
+        <div className="bds-card__preset-summary-content">
+          <p className="bds-card__preset-summary-label">{label}</p>
+          <p className="bds-card__preset-summary-value">{formatted}</p>
+        </div>
+        {textLink && (
+          <div className="bds-card__preset-summary-link-area">
+            {textLink.href ? (
+              <a
+                href={textLink.href}
+                className="bds-card__preset-summary-link"
+                onClick={textLink.onClick}
+              >
+                {textLink.label}
+              </a>
+            ) : (
+              <button
+                type="button"
+                className="bds-card__preset-summary-link"
+                onClick={textLink.onClick}
+              >
+                {textLink.label}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
