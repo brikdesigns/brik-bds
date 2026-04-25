@@ -116,4 +116,45 @@
   flex-wrap: wrap;
   flex-shrink: 0;
 }
+
+/* ─── Preset: confirm ────────────────────────────────────────── */
+/* Compact alertdialog layout — replaces the legacy Dialog component.
+ * No header bar; title + description + auto-rendered footer share one
+ * padded surface. */
+
+/* bds-lint-ignore — design-spec max-width for confirmation dialogs */
+.bds-modal--preset-confirm {
+  max-width: 440px;
+  padding: var(--padding-xl);
+  gap: var(--gap-lg);
+  overflow: visible;
+}
+
+@media (min-width: 768px) {
+  .bds-modal--preset-confirm { min-width: 0; }
+}
+
+.bds-modal__confirm-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-modal__confirm-description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.bds-modal__confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-md);
+  flex-wrap: wrap;
+}
 }
