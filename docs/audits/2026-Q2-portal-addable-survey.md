@@ -139,3 +139,14 @@ If the ADR accepts the new primitive, BDS implementation + portal migration foll
 If the ADR rejects (defers), document the rationale in the audit doc's "Rejected recommendations" section like #5 Snackbar and #6 Menu/Popover were.
 
 Either way, PR 3 starts with the ADR — not code.
+
+## Decisions logged 2026-04-25
+
+User resolved the four open questions:
+
+1. **Multi-field-row primitive — yes** (Option A). New BDS component `AddableFieldRowList`. Tracked in [ADR-005](../adrs/ADR-005-addable-field-row-list.md).
+2. **Remove icon — `ph:dash-circle`** (not `ph:x`). Semantic distinction: `ph:dash-circle` reads as "remove from list" (subtract), `ph:x` reads as "dismiss selection" (close). `Tag.onRemove` keeps `ph:x` since it's a dismiss-selection use case. PR #250's per-row `ph:x` choice for the existing Addable family per-row remove will be re-standardized to `ph:dash-circle` as a follow-up to ADR-005.
+3. **Competitors-sheet "frames" — collapse** into the new primitive. No special-case carve-out.
+4. **Migration scope** — three sheets: software-sheet (Phone System / Other Tools), listing-sheet (holiday hours), competitors-sheet (frames).
+
+These decisions feed directly into ADR-005's API sketch + migration plan.
