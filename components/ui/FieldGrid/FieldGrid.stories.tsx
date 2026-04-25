@@ -4,7 +4,7 @@ import { Field } from '../Field';
 import { Card } from '../Card';
 
 const meta: Meta<typeof FieldGrid> = {
-  title: 'Displays/Form/field-grid',
+  title: 'Components/Form/field-grid',
   component: FieldGrid,
   parameters: { layout: 'padded' },
   argTypes: {
