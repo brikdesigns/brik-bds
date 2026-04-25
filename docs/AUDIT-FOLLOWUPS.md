@@ -127,31 +127,25 @@ templates, not lint rules.
 
 ---
 
-### 3. Track D — non-conforming components (low ROI)
+### 3. Track D — non-conforming components — closed 2026-04-25
 
-**Status:** Not started. The three components listed below don't follow the
-`<Name>/<Name>.tsx` shape, so [`scripts/lint-jsdoc.js`](../scripts/lint-jsdoc.js)
-skips them automatically and the JSDoc audit script lists them as
-"_missing file_".
+**Status:** Done. The three components are now handled explicitly by
+[`scripts/lint-jsdoc.js`](../scripts/lint-jsdoc.js) instead of being
+silently skipped via the missing-file path:
 
-**Components:**
+- `Calendar` — `EXEMPT_COMPONENTS` entry. `index.ts` documents it as
+  "placeholder, component not yet implemented" — no React export to summarize.
+- `Icons` — `EXEMPT_COMPONENTS` entry. `index.ts` documents it as
+  "reference page only, no exported component" — Storybook docs only.
+- `SheetTypography` — `MULTI_EXPORT` entry listing the four sub-components
+  (`SheetSectionTitle`, `SheetFieldLabel`, `SheetFieldValue`, `SheetHelperText`).
+  The linter scans each sub-component file individually for rules 1 + 2,
+  and an `@summary` line was added to each.
 
-| Component | Why it's non-conforming | Hint for the pass |
-|---|---|---|
-| `Calendar` | No top-level `Calendar.tsx`; rendering is split across sub-files. | Pick the canonical component to receive the `@summary` (probably the one re-exported from `index.ts`) and document. |
-| `Icons` | Module of icon constants, not a single React component. | Audit doesn't really apply — consider exempting via an inline note in the linter's skip-list comment. |
-| `SheetTypography` | Covers four sub-components (`SheetSectionTitle`, `SheetFieldLabel`, `SheetFieldValue`, `SheetHelperText`) — meta has no `component:` line. | Add `@summary` to each sub-component export. The story file already has a `surface-product` tag. |
-
-**Pickup details:**
-
-- Run `node /tmp/jsdoc-audit.mjs $(pwd)` to confirm these three are still
-  the only "_missing_" rows.
-- Decide for each: skip (Icons), document the canonical export (Calendar),
-  document each sub-component (SheetTypography).
-- Consider extending the linter's component-export detection to handle these
-  shapes, then remove them from the implicit skip-list.
-- This is purely cosmetic completionism — consumer agents don't typically pull
-  these. Don't prioritize.
+**Behavior change:** the linter no longer silently skips when `<Name>.tsx`
+is missing — it errors with "expected component file not found (not in
+EXEMPT_COMPONENTS or MULTI_EXPORT)". Adding a new non-conforming component
+now requires an explicit decision about which set it belongs in.
 
 ---
 

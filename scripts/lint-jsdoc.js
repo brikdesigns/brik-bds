@@ -17,9 +17,12 @@
  *   4. Every story file's `meta` has one of `surface-web`, `surface-product`,
  *      or `surface-shared` in its `tags` array.
  *
- * Components that don't follow the `<Name>/<Name>.tsx` shape (currently
- * Calendar, Icons, SheetTypography) are skipped automatically — they're
- * tracked separately as Track D of the JSDoc audit.
+ * Two categories of non-conforming components are handled explicitly:
+ *   - `EXEMPT_COMPONENTS` — Storybook reference pages with no real React
+ *     export (Calendar, Icons). Skipped without error.
+ *   - `MULTI_EXPORT` — directories whose `index.ts` re-exports several
+ *     named sub-components instead of a single `<Name>.tsx` (SheetTypography).
+ *     Each sub-component file is checked individually for rules 1 + 2.
  *
  * Usage:
  *   node scripts/lint-jsdoc.js          # check everything, exit 1 on any violation
@@ -71,9 +74,44 @@ const componentDirs = fs
   .map((d) => d.name)
   .filter((n) => n !== 'shared');
 
-for (const name of componentDirs) {
-  const file = path.join(COMPONENTS_DIR, name, `${name}.tsx`);
-  if (!fs.existsSync(file)) continue; // Calendar / Icons / SheetTypography
+// Storybook reference pages — no exported React component, nothing to check.
+const EXEMPT_COMPONENTS = new Set([
+  'Calendar', // index.ts: "Calendar — placeholder, component not yet implemented"
+  'Icons', // index.ts: "Icons — reference page only, no exported component"
+]);
+
+// Directories whose `index.ts` re-exports several named sub-components.
+// For these, we scan each sub-component file individually instead of looking
+// for a single `<Name>.tsx`.
+const MULTI_EXPORT = {
+  SheetTypography: ['SheetSectionTitle', 'SheetFieldLabel', 'SheetFieldValue', 'SheetHelperText'],
+};
+
+// Build the (file, exportName) scan tasks.
+const scanTasks = [];
+for (const dirName of componentDirs) {
+  if (EXEMPT_COMPONENTS.has(dirName)) continue;
+  const subs = MULTI_EXPORT[dirName];
+  if (subs) {
+    for (const subName of subs) {
+      scanTasks.push({
+        file: path.join(COMPONENTS_DIR, dirName, `${subName}.tsx`),
+        name: subName,
+      });
+    }
+    continue;
+  }
+  scanTasks.push({
+    file: path.join(COMPONENTS_DIR, dirName, `${dirName}.tsx`),
+    name: dirName,
+  });
+}
+
+for (const { file, name } of scanTasks) {
+  if (!fs.existsSync(file)) {
+    errors.push(`${path.relative(ROOT, file)}: expected component file not found (not in EXEMPT_COMPONENTS or MULTI_EXPORT)`);
+    continue;
+  }
   const src = fs.readFileSync(file, 'utf8');
   const lines = src.split('\n');
 
