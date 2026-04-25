@@ -72,7 +72,7 @@ function StatusIcon({ status }: { status: TaskItemStatus }) {
  * of task items with real-time status updates. Inspired by Google Drive's
  * upload progress widget.
  *
- * Category: Feedback (alongside Toast, Snackbar)
+ * Category: Feedback (alongside Toast)
  */
 export function TaskConsole({
   title,
