@@ -285,7 +285,7 @@ export function AddableEntryList({
                 <IconButton
                   size={BUTTON_SIZE[size]}
                   variant="ghost"
-                  icon={<Icon icon="ph:x" />}
+                  icon={<Icon icon="ph:dash-circle" />}
                   label={removeLabel}
                   onClick={() => remove(index)}
                 />
@@ -501,7 +501,7 @@ function SuggestionModeEdit({
               <IconButton
                 size={BUTTON_SIZE[size]}
                 variant="ghost"
-                icon={<Icon icon="ph:x" />}
+                icon={<Icon icon="ph:dash-circle" />}
                 label={removeLabel}
                 onClick={() => remove(index)}
               />
