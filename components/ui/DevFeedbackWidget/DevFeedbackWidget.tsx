@@ -53,32 +53,8 @@ const FEEDBACK_TYPES = [
 ] as const;
 
 // ── DevBar integration types ────────────────────────────────────────────
-/** Single source of truth for DevBar types. Portal's BrikDevBar loader
- *  imports these rather than redeclaring, to avoid global Window collisions. */
-export interface DevBarSlotDef {
-  id: string;
-  label: string;
-  icon: string;
-  order?: number;
-  badge?: string | number | null;
-  onActivate?: (api: DevBarApi) => void;
-  onDeactivate?: (api: DevBarApi) => void;
-}
-export interface DevBarApi {
-  register: (def: DevBarSlotDef) => DevBarApi;
-  unregister: (id: string) => void;
-  setBadge: (id: string, value: string | number | null) => void;
-  setActive: (id: string, active: boolean) => void;
-  isRegistered: (id: string) => boolean;
-  getBarRect: () => DOMRect | null;
-  getSlotRect: (id: string) => DOMRect | null;
-}
-declare global {
-  interface Window {
-    BrikDevBar?: DevBarApi;
-    BrikDevBarQueue?: DevBarSlotDef[];
-  }
-}
+// Types live in BrikDevBar — imported here to avoid duplicate declarations.
+import type { DevBarSlotDef } from '../BrikDevBar';
 
 // ── Public props ────────────────────────────────────────────────────────
 export interface DevFeedbackWidgetProps {
