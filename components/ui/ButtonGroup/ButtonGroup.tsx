@@ -5,7 +5,9 @@ import './ButtonGroup.css';
 export type ButtonGroupOrientation = 'horizontal' | 'vertical';
 
 export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
+  /** `Button` (or `IconButton`) elements to group. */
   children: ReactNode;
+  /** Stack direction. Default `horizontal`. */
   orientation?: ButtonGroupOrientation;
   /** When true, buttons stretch to fill the container equally */
   fullWidth?: boolean;

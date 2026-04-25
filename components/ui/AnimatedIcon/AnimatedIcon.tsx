@@ -16,6 +16,7 @@ export interface AnimatedIconProps {
   loop?: boolean;
   /** aria-label for accessibility */
   label?: string;
+  /** Optional CSS class names appended to the wrapping `<span>`. */
   className?: string;
 }
 
