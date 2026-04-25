@@ -8,13 +8,19 @@ export interface MetadataItem {
 }
 
 export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  /** Page title — rendered as the H1. */
   title: string;
+  /** Optional subtitle paragraph rendered under the title. */
   subtitle?: string;
   /** Badge displayed to the left of the title (e.g. ServiceBadge) */
   badge?: ReactNode;
+  /** Breadcrumb element (typically a `Breadcrumb` component) rendered above the title row. */
   breadcrumbs?: ReactNode;
+  /** Right-aligned action element(s) (primary `Button`, dropdown menu, etc.). */
   actions?: ReactNode;
+  /** Optional `TabBar` (or equivalent) rendered at the bottom of the header — page-level navigation. */
   tabs?: ReactNode;
+  /** Key/value pairs rendered below the title row (e.g. Owner, Status, Updated). */
   metadata?: MetadataItem[];
   /** Summary content (e.g. stat cards) rendered between metadata and tabs. */
   stats?: ReactNode;

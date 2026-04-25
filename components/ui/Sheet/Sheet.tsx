@@ -33,10 +33,15 @@ export interface SheetSecondaryAction {
 }
 
 export interface SheetProps {
+  /** Whether the sheet is rendered. Returns `null` when false (no animation; pair with `closeOnBackdrop` / `closeOnEscape` for dismissal UX). */
   isOpen: boolean;
+  /** Called when the sheet should close — fired by backdrop click, Escape key, the close button, and the auto-footer Cancel/Close actions. */
   onClose: () => void;
+  /** Body content rendered in the sheet. Ignored when `tabs` is provided (tabs render their own content). */
   children?: ReactNode;
+  /** Edge the sheet anchors to. Default `right`. `bottom` becomes a full-width drawer. */
   side?: SheetSide;
+  /** Heading rendered as `<h2>` in the sheet header. */
   title?: ReactNode;
   /**
    * Eyebrow label rendered above the title in `text-muted`. Use for short
@@ -57,8 +62,11 @@ export interface SheetProps {
    * - `floating` — rounded floating panel with elevation, no backdrop (read-only detail views)
    */
   variant?: SheetVariant;
+  /** Close when the backdrop is clicked. Default `true`. Has no effect when `variant="floating"` (no backdrop). */
   closeOnBackdrop?: boolean;
+  /** Close on `Escape` keypress. Default `true`. */
   closeOnEscape?: boolean;
+  /** Render the X close button in the header. Default `true`. Disable when the sheet has its own dismissal UX. */
   showCloseButton?: boolean;
   /**
    * When set, renders a back button in the header for nested sheet navigation.
@@ -77,9 +85,13 @@ export interface SheetProps {
   onSave?: () => void;
   /** Triggered from the secondary action in edit mode. Falls back to `onClose`. */
   onCancel?: () => void;
+  /** Label for the auto-rendered Edit button when `mode="read"`. Default `"Edit"`. */
   editLabel?: string;
+  /** Label for the auto-rendered Save button when `mode="edit"`. Default `"Save"`. */
   saveLabel?: string;
+  /** Label for the auto-rendered Cancel button when `mode="edit"`. Default `"Cancel"`. */
   cancelLabel?: string;
+  /** Label for the auto-rendered Close button when `mode="read"` (no `onEdit`) or as the dismissal verb in the auto-footer. Default `"Close"`. */
   closeLabel?: string;
   /** Disable the save button (e.g. while form is invalid) */
   saveDisabled?: boolean;

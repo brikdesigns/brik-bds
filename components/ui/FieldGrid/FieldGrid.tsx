@@ -10,6 +10,7 @@ export interface FieldGridProps extends HTMLAttributes<HTMLDivElement> {
   columns?: FieldGridColumns;
   /** Gap between cells. Default `xl` (matches existing portal field grids). */
   gap?: FieldGridGap;
+  /** Cells to lay out side by side — typically `Field` components, but works for any equal-weight content. */
   children?: ReactNode;
 }
 

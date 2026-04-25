@@ -18,6 +18,7 @@ import './Board.css';
  * ```
  */
 export interface BoardProps extends HTMLAttributes<HTMLDivElement> {
+  /** `BoardColumn` elements. Columns flex equally and respect their min/max widths. */
   children: ReactNode;
 }
 
