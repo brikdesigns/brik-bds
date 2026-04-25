@@ -108,7 +108,7 @@ Plus the bloat already booked in [ADR-003](../adrs/ADR-003-addable-list-family.m
 - `Skeleton` — content placeholder shimmer. No overlap.
 - `Spinner` — rotating loader. No overlap with Skeleton (loader vs placeholder).
 - `Badge` — already consolidated with Chip/Tag in [PR #229](https://github.com/brikdesigns/brik-bds/pull/229). Out of scope.
-- `ServiceBadge` — domain-specific (Brik service-category icon). The `mode` prop is `@deprecated` ([ServiceBadge.tsx:7](../../components/ui/ServiceBadge/ServiceBadge.tsx#L7)) pointing to `ServiceTag`. The component itself isn't deprecated, but the deprecation note hints that `ServiceTag variant="icon"` may already cover its visual. **Flag as REVIEW** — confirm whether ServiceBadge has any callers that ServiceTag can't serve; if not, retire it.
+- `ServiceBadge` — domain-specific (Brik service-category icon). The `mode` prop is `@deprecated` ([ServiceBadge.tsx:7](../../components/ui/ServiceBadge/ServiceBadge.tsx#L7)) pointing to `ServiceTag`. **Reviewed 2026-04-24** — component-level `@deprecated` JSDoc added; ServiceTag's `variant="icon"` fully covers the use case. Full deletion queued (blocked on shared utility extraction; see punch-list item #8).
 
 ## Prioritized punch-list
 
@@ -124,8 +124,8 @@ Ordered by leverage × low-risk-first:
     - **7a.** ~~CardDisplay + CardFeature deletion (zero consumers)~~ — completed in PR #241.
     - **7b.** CardControl → Card variant — 1 portal consumer; small additive PR + 1-file portal migration.
     - **7c.** CardSummary → Card variant — 12 portal consumers; full additive-deprecate-migrate-delete cycle.
-8. **`ServiceBadge` REVIEW** — verify ServiceTag coverage before retiring.
-9. **`CardList` REVIEW** — assess demotion to CSS utility class vs keeping as layout primitive.
+8. ~~**`ServiceBadge` REVIEW** — verify ServiceTag coverage before retiring.~~ **Reviewed 2026-04-24** — ServiceTag fully covers ServiceBadge via `variant="icon"` (ServiceTag's own docstring already says "replaces ServiceBadge"). Both have zero external consumers. Component-level `@deprecated` JSDoc updated; full deletion queued as `task/bds-service-badge-deletion` (blocked on extracting shared `categoryConfig` + `getServiceIconPath` utilities from ServiceBadge.tsx into a shared module that ServiceTag can continue to import).
+9. ~~**`CardList` REVIEW** — assess demotion to CSS utility class vs keeping as layout primitive.~~ **Reviewed 2026-04-24** — Keep as-is. CardList is 51 LOC + 59 LOC CSS that provides a discoverable, semantic-list (`<ul>` + `<li>`) layout for the common "stack of cards" pattern. Zero external consumers today, but BDS has no general layout primitives (no Stack/Cluster/Box) — CardList fills the closest equivalent. **Future watch:** if BDS introduces general layout primitives, revisit whether CardList becomes redundant. For now: honest, justified.
 
 Each numbered item should be its own task branch + PR (per CLAUDE.md scope rule: "one concern per PR").
 
