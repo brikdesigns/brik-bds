@@ -27,6 +27,25 @@ function formatValue(value: string | number, type: CardSummaryType): string {
 
 /**
  * CardSummary — compact metric/stat card with label, large value, and optional text link.
+ *
+ * @deprecated Use `<Card preset="summary">` instead. Same prop names
+ * (`label`, `value`, `type`, `textLink`), same layout, same number
+ * formatting (currency for `type="price"`, locale-formatted otherwise).
+ * Slated for deletion in a future major version once the 12 portal
+ * consumers migrate.
+ *
+ * Migration:
+ * ```tsx
+ * // before
+ * <CardSummary label="Revenue" value={48250.75} type="price"
+ *   textLink={{ label: 'Details', href: '/revenue' }} />
+ *
+ * // after
+ * <Card preset="summary" label="Revenue" value={48250.75} type="price"
+ *   textLink={{ label: 'Details', href: '/revenue' }} />
+ * ```
+ *
+ * Tracked under ADR-004 — see docs/adrs/ADR-004-component-bloat-guardrails.md.
  */
 export function CardSummary({
   label,

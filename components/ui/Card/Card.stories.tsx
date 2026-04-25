@@ -148,6 +148,62 @@ export const ControlPreset = () => (
   </Stack>
 );
 
+/* ─── Summary preset ─────────────────────────────────────────── */
+
+/**
+ * `preset="summary"` — compact metric/stat card with label, large value,
+ * and optional text link. Replaces the legacy `CardSummary` component
+ * (per ADR-004).
+ *
+ * `value` accepts a string or number. Numbers are formatted via
+ * `Intl.NumberFormat` based on `type`:
+ * - `numeric` (default): locale integer formatting (e.g. 1,234)
+ * - `price`: USD currency (e.g. $48,250.75)
+ */
+export const SummaryPreset = () => (
+  <Stack>
+    <SectionLabel>Numeric — with text link</SectionLabel>
+    <div style={{ width: 320 }}>
+      <Card
+        preset="summary"
+        label="Active companies"
+        value={42}
+        textLink={{ label: 'View all', href: '#' }}
+      />
+    </div>
+
+    <SectionLabel>Price — formatted as USD currency</SectionLabel>
+    <div style={{ width: 320 }}>
+      <Card
+        preset="summary"
+        label="Q1 revenue"
+        value={48250.75}
+        type="price"
+        textLink={{ label: 'Details', href: '#' }}
+      />
+    </div>
+
+    <SectionLabel>String value (no formatting)</SectionLabel>
+    <div style={{ width: 320 }}>
+      <Card
+        preset="summary"
+        label="Plan"
+        value="Pro Annual"
+      />
+    </div>
+
+    <SectionLabel>Button-style link (no href)</SectionLabel>
+    <div style={{ width: 320 }}>
+      <Card
+        preset="summary"
+        label="Pending tasks"
+        value={7}
+        textLink={{ label: 'Review', onClick: () => {} }}
+      />
+    </div>
+  </Stack>
+);
+
 /* ─── Patterns ───────────────────────────────────────────────── */
 
 export const Patterns: Story = {
