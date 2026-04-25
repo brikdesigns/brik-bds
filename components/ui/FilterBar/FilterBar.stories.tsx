@@ -56,6 +56,7 @@ type Story = StoryObj<typeof meta>;
    1. DEFAULT — No filter applied; counter in neutral state
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Default rendering */
 export const Default: Story = {
   args: {
     title: 'Companies',
@@ -75,6 +76,7 @@ export const Default: Story = {
    2. FILTERED — Filter active; counter switches to brand + Clear button
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Filtered */
 export const Filtered: Story = {
   args: {
     title: 'Companies',
@@ -100,6 +102,7 @@ export const Filtered: Story = {
    3. NO TITLE — Counter leads when title is omitted
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary No title */
 export const NoTitle: Story = {
   args: {
     total: rows.length,
@@ -118,6 +121,7 @@ export const NoTitle: Story = {
    4. NO CLEAR — onClear omitted so no button appears when filtered
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary No clear */
 export const NoClear: Story = {
   args: {
     title: 'Companies',
@@ -136,6 +140,7 @@ export const NoClear: Story = {
    5. INTERACTIVE — Full table + filter wiring
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive */
 export const Interactive: Story = {
   args: {
     title: 'Companies',

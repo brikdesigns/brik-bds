@@ -36,6 +36,7 @@ const Stack = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     orientation: 'vertical',
@@ -64,6 +65,7 @@ export const Playground: Story = {
 
 /* ─── Vertical layout ────────────────────────────────────────── */
 
+/** @summary Vertical */
 export const Vertical: Story = {
   render: () => (
     <Stack>
@@ -100,6 +102,7 @@ export const Vertical: Story = {
 
 /* ─── Horizontal layout ──────────────────────────────────────── */
 
+/** @summary Horizontal */
 export const Horizontal: Story = {
   render: () => (
     <Stack>
@@ -161,6 +164,7 @@ export const Horizontal: Story = {
 
 /* ─── Fit content ────────────────────────────────────────────── */
 
+/** @summary Horizontal fit content */
 export const HorizontalFitContent: Story = {
   render: () => (
     <Stack>
@@ -185,6 +189,7 @@ export const HorizontalFitContent: Story = {
 
 /* ─── Gap scale ──────────────────────────────────────────────── */
 
+/** @summary Gap scale */
 export const GapScale: Story = {
   render: () => (
     <Stack>

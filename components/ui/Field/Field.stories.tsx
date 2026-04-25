@@ -32,6 +32,7 @@ const Stack = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── 1. Playground ──────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Status',
@@ -47,6 +48,7 @@ export const Playground: Story = {
 
 /* ─── 2. Variants ────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Frame>
@@ -62,6 +64,7 @@ export const Variants: Story = {
 
 /* ─── 3. Inline layout ──────────────────────────────────────── */
 
+/** @summary Inline layout */
 export const InlineLayout: Story = {
   render: () => (
     <Frame>
@@ -77,6 +80,7 @@ export const InlineLayout: Story = {
 
 /* ─── 4. Empty states ────────────────────────────────────────── */
 
+/** @summary Empty states */
 export const EmptyStates: Story = {
   render: () => (
     <Frame>
@@ -92,6 +96,7 @@ export const EmptyStates: Story = {
 
 /* ─── 5. Section-level empty override ────────────────────────── */
 
+/** @summary Section level empty */
 export const SectionLevelEmpty: Story = {
   render: () => (
     <Frame width="480px">
@@ -110,6 +115,7 @@ export const SectionLevelEmpty: Story = {
 
 /* ─── 6. Value types — text, tags, URL, list ────────────────── */
 
+/** @summary Value types */
 export const ValueTypes: Story = {
   render: () => (
     <Frame>
@@ -145,6 +151,7 @@ export const ValueTypes: Story = {
 
 /* ─── 7. Patterns — multi-field row ─────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Frame width="480px">

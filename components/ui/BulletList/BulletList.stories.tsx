@@ -24,6 +24,7 @@ const Frame = ({ width = '360px', children }: { width?: string; children: React.
 
 /* ─── 1. Playground ──────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     items: [
@@ -43,6 +44,7 @@ export const Playground: Story = {
 
 /* ─── 2. Markers ─────────────────────────────────────────────── */
 
+/** @summary Marker style variations */
 export const Markers: Story = {
   render: () => (
     <Frame>
@@ -66,6 +68,7 @@ export const Markers: Story = {
 
 /* ─── 3. Density ─────────────────────────────────────────────── */
 
+/** @summary Density variations */
 export const Density: Story = {
   render: () => (
     <Frame>
@@ -85,6 +88,7 @@ export const Density: Story = {
 
 /* ─── 4. Inside a Field ──────────────────────────────────────── */
 
+/** @summary Inside field */
 export const InsideField: Story = {
   render: () => (
     <Frame>
@@ -103,6 +107,7 @@ export const InsideField: Story = {
 
 /* ─── 5. Patterns ────────────────────────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Frame>

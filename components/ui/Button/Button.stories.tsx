@@ -100,6 +100,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: { variant: 'primary', size: 'md', children: 'Button', onClick: fn() },
   play: async ({ canvasElement, args }) => {
@@ -112,7 +113,10 @@ export const Playground: Story = {
   },
 };
 
-/** Interaction test: disabled and loading states block click */
+/**
+ * Interaction test: disabled and loading states block click
+ * @summary Play-function interaction test
+ */
 export const InteractionTest: Story = {
   args: { variant: 'primary', size: 'md', children: 'Submit', disabled: true, onClick: fn() },
   play: async ({ canvasElement, args }) => {
@@ -129,6 +133,7 @@ export const InteractionTest: Story = {
    2. VARIANTS — All variants × all sizes in one grid
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -175,6 +180,7 @@ export const Variants: Story = {
    3. ICONS — Icon slots across all sizes
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary With icon */
 export const Icons: Story = {
   render: () => (
     <Stack>
@@ -205,6 +211,7 @@ export const Icons: Story = {
    4. STATES — Hover, focus, disabled, loading across all variants
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Component state variants */
 export const States: Story = {
   parameters: {
     docs: {
@@ -245,6 +252,7 @@ export const States: Story = {
    5. LOADING — Interactive toggle demo
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Loading state */
 export const Loading: Story = {
   parameters: {
     docs: {
@@ -273,6 +281,7 @@ export const Loading: Story = {
    6. LINK BUTTON — Navigation styled as button
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Link */
 export const Link: Story = {
   name: 'LinkButton',
   render: () => (
@@ -295,6 +304,7 @@ export const Link: Story = {
    7. ICON BUTTON — Icon-only with accessible label
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Icon only */
 export const IconOnly: Story = {
   name: 'IconButton',
   render: () => (
@@ -346,6 +356,7 @@ export const IconOnly: Story = {
    8. PATTERNS — Real-world compositions
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   name: 'Patterns',
   parameters: {

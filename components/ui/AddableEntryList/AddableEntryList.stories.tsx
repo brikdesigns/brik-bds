@@ -109,6 +109,8 @@ const Controlled = (args: React.ComponentProps<typeof AddableEntryList>) => {
  * Default playground — Competitors. URL primary + notes, inline-editable rows.
  * Each entry renders with its own TextInput + TextArea + Remove button; the
  * Add button appends a new empty row.
+ *
+ * @summary Interactive playground for prop tweaking
  */
 export const Playground: Story = {
   args: {
@@ -133,6 +135,8 @@ export const Playground: Story = {
 /**
  * Read mode — URL primary renders as a clickable anchor; secondary renders
  * with `--body-md`. Titles use `--label-md`. No remove buttons, no Add.
+ *
+ * @summary Read mode url
  */
 export const ReadModeUrl: Story = {
   name: 'Read mode — URL primary',
@@ -153,6 +157,8 @@ export const ReadModeUrl: Story = {
 /**
  * Read mode — text primary (not a link). Primary uses `--label-md`; secondary
  * uses `--body-md`.
+ *
+ * @summary Read mode text
  */
 export const ReadModeText: Story = {
   name: 'Read mode — text primary',
@@ -172,6 +178,8 @@ export const ReadModeText: Story = {
 /**
  * Text primary (inline-editable). Same UX as Playground but with a plain
  * text input instead of a URL input.
+ *
+ * @summary Inline edit text
  */
 export const InlineEditText: Story = {
   name: 'Inline edit — text primary',
@@ -199,6 +207,8 @@ export const InlineEditText: Story = {
  *
  * Suggestion mode preserves the reveal-form flow (existing entries render as
  * read-only cards; Add opens a staging form).
+ *
+ * @summary Primary with suggestions
  */
 export const PrimaryWithSuggestions: Story = {
   name: 'Primary With Suggestions',
@@ -223,6 +233,8 @@ export const PrimaryWithSuggestions: Story = {
 /**
  * Primary strict — only listed services can be added.
  * Typing a non-matching string shows the strict hint and blocks commit.
+ *
+ * @summary Primary strict with suggestions
  */
 export const PrimaryStrictWithSuggestions: Story = {
   name: 'Primary Strict With Suggestions',
@@ -242,6 +254,7 @@ export const PrimaryStrictWithSuggestions: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+/** @summary Empty state */
 export const Empty: Story = {
   args: {
     label: 'Reference Sites',
@@ -259,6 +272,7 @@ export const Empty: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+/** @summary With empty description label */
 export const WithEmptyDescriptionLabel: Story = {
   name: 'Empty description fallback (read mode)',
   parameters: {
@@ -286,6 +300,7 @@ export const WithEmptyDescriptionLabel: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <div style={{ width: 560 }}>
@@ -448,6 +463,8 @@ export const Variants: Story = {
 /**
  * Plain mode — clicking Add appends an empty row; onChange fires with the
  * appended entry. Typing into a field patches that row via onChange.
+ *
+ * @summary Add and edit row
  */
 export const AddAndEditRow: Story = {
   name: 'Interaction — add appends empty row',
@@ -477,6 +494,7 @@ export const AddAndEditRow: Story = {
   },
 };
 
+/** @summary Remove an entry */
 export const RemoveAnEntry: Story = {
   name: 'Interaction — remove an entry (plain mode)',
   args: {
@@ -505,6 +523,8 @@ export const RemoveAnEntry: Story = {
 
 /**
  * Read mode — URL primary renders as an anchor pointing to the URL.
+ *
+ * @summary Read mode url is anchor
  */
 export const ReadModeUrlIsAnchor: Story = {
   name: 'Interaction — read mode URL primary is an anchor',
@@ -531,6 +551,8 @@ export const ReadModeUrlIsAnchor: Story = {
 /**
  * Keyboard flow — Arrow + Enter in primary commits suggestion and moves focus
  * to the secondary textarea. This is the core two-field keyboard UX for Services.
+ *
+ * @summary Keyboard flow suggestion
  */
 export const KeyboardFlowSuggestion: Story = {
   name: 'Interaction — suggestion keyboard: Arrow + Enter commits, focuses secondary',
@@ -575,6 +597,8 @@ export const KeyboardFlowSuggestion: Story = {
 
 /**
  * Strict mode — typing a non-matching string blocks commit.
+ *
+ * @summary Strict rejects free form
  */
 export const StrictRejectsFreeForm: Story = {
   name: 'Interaction — strict mode rejects free-form entry',
@@ -607,6 +631,7 @@ export const StrictRejectsFreeForm: Story = {
   },
 };
 
+/** @summary Click select from dropdown */
 export const ClickSelectFromDropdown: Story = {
   name: 'Interaction — click to select suggestion from dropdown',
   args: {
@@ -640,6 +665,7 @@ export const ClickSelectFromDropdown: Story = {
   },
 };
 
+/** @summary Escape closes dropdown */
 export const EscapeClosesDropdown: Story = {
   name: 'Interaction — Escape closes dropdown, keeps form open',
   args: {

@@ -54,6 +54,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   render: (args) => (
     <div style={{ width: 400 }}>
@@ -75,6 +76,7 @@ export const Playground: Story = {
    2. VARIANTS — Layouts, states, gap sizes
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Row gap="var(--padding-xl)">
@@ -143,6 +145,7 @@ export const Variants: Story = {
    3. PATTERNS — Interactive form with validation
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     function FeedbackForm() {

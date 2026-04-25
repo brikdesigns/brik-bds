@@ -79,6 +79,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     content: sampleContent,
@@ -92,6 +93,7 @@ export const Playground: Story = {
    2. VARIANTS — Placements, trigger modes
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -132,6 +134,7 @@ export const Variants: Story = {
    3. PATTERNS — Rich content popover
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Stack>

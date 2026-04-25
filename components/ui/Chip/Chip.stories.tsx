@@ -59,6 +59,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Chip',
@@ -71,6 +72,7 @@ export const Playground: Story = {
    2. VARIANTS — All combinations in one view
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -107,6 +109,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world usage
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   name: 'Patterns',
   render: () => (

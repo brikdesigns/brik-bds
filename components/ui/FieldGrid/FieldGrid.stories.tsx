@@ -25,6 +25,7 @@ const Frame = ({ width = '540px', children }: { width?: string; children: React.
 
 /* ─── 1. Playground ──────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     columns: 2,
@@ -44,6 +45,7 @@ export const Playground: Story = {
 
 /* ─── 2. Columns ─────────────────────────────────────────────── */
 
+/** @summary Columns */
 export const Columns: Story = {
   render: () => (
     <Frame>
@@ -72,6 +74,7 @@ export const Columns: Story = {
 
 /* ─── 3. Stat tiles — Cards in a FieldGrid ───────────────────── */
 
+/** @summary Stat tiles */
 export const StatTiles: Story = {
   render: () => (
     <Frame>
@@ -92,6 +95,7 @@ export const StatTiles: Story = {
 
 /* ─── 4. Patterns — mixed with SheetSection ─────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Frame width="520px">

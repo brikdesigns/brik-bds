@@ -53,8 +53,15 @@ if [ -n "$STAGED_TSX" ] || [ -n "$STAGED_CSS" ]; then
   node scripts/lint-tokens.js --errors-only \
     ${STAGED_TSX:+--files $STAGED_TSX} \
     ${STAGED_CSS:+--css-files $STAGED_CSS}
+
+  # JSDoc / story-metadata gate. Whole-repo scan (fast) — fires only when a
+  # component or story TSX is staged so we don't pay the cost on token-only
+  # commits. Enforces @summary on every component + story export and a
+  # surface-* tag on every story meta. See scripts/lint-jsdoc.js.
+  echo "Running JSDoc lint..."
+  node scripts/lint-jsdoc.js
 else
-  echo "No staged component files — skipping token lint."
+  echo "No staged component files — skipping token + JSDoc lint."
 fi
 
 # Typecheck always runs (fast, catches real errors)

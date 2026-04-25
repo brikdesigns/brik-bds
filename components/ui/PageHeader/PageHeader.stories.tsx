@@ -63,6 +63,7 @@ type Story = StoryObj<typeof PageHeader>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     title: 'My Account',
@@ -81,6 +82,7 @@ export const Playground: Story = {
    2. VARIANTS — Different slot combinations
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => {
     const tabs = useInteractiveTabs(['Active', 'Latest', 'Product', 'Design System', 'Marketing']);
@@ -207,6 +209,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world compositions
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     const reportTabs = useInteractiveTabs(['Overview', 'Revenue', 'Engagement', 'Retention']);

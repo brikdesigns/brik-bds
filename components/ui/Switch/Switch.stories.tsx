@@ -44,6 +44,7 @@ type Story = StoryObj<typeof Switch>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   args: {
@@ -64,7 +65,10 @@ export const Playground: Story = {
   },
 };
 
-/** Interaction test: disabled switch blocks toggle */
+/**
+ * Interaction test: disabled switch blocks toggle
+ * @summary Play-function interaction test
+ */
 export const InteractionTest: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   args: { label: 'Locked setting', size: 'lg', disabled: true, onChange: fn() },
@@ -84,6 +88,7 @@ export const InteractionTest: Story = {
    2. VARIANTS — Sizes, states, and controlled behavior
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack gap="var(--gap-huge)">
@@ -123,6 +128,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world compositions
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     const [notifications, setNotifications] = useState(true);

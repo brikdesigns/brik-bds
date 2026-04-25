@@ -25,6 +25,7 @@ const SAMPLE_NOTIFICATIONS: NotificationItemData[] = [
 
 /* ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Item */
 export const Item: Story = {
   render: () => (
     <div style={{ width: 360 }}>
@@ -36,6 +37,7 @@ export const Item: Story = {
   ),
 };
 
+/** @summary Item read */
 export const ItemRead: Story = {
   render: () => (
     <div style={{ width: 360 }}>
@@ -47,6 +49,7 @@ export const ItemRead: Story = {
   ),
 };
 
+/** @summary List */
 export const List: Story = {
   render: () => (
     <div style={{ width: 360 }}>
@@ -58,6 +61,7 @@ export const List: Story = {
   ),
 };
 
+/** @summary List empty */
 export const ListEmpty: Story = {
   render: () => (
     <div style={{ width: 360 }}>
@@ -66,6 +70,7 @@ export const ListEmpty: Story = {
   ),
 };
 
+/** @summary Popover */
 export const Popover: Story = {
   render: () => {
     const [notifications, setNotifications] = useState(SAMPLE_NOTIFICATIONS);
@@ -92,6 +97,7 @@ export const Popover: Story = {
   },
 };
 
+/** @summary Popover empty */
 export const PopoverEmpty: Story = {
   render: () => (
     <NotificationPopover
