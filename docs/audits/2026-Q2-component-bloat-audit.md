@@ -24,12 +24,12 @@ Plus the bloat already booked in [ADR-003](../adrs/ADR-003-addable-list-family.m
 
 **Hard cuts (forks-as-components, fold into `Card` with `variant=`):**
 
-| Component | Evidence | Fold into |
-|---|---|---|
-| `CardSummary` | [Card/CardSummary.tsx](../../components/ui/Card/CardSummary.tsx) — 85% CSS overlap with `Card`. Fixed template (label + large-value + optional link) plus `formatValue()` helper. No use of Card's subcomponent slots. | `<Card variant="summary" formatValue="price\|numeric" />` |
-| `CardControl` | [CardControl.tsx](../../components/ui/CardControl/CardControl.tsx) — same base flex/border/padding-xl/surface as Card. Fixed layout (badge + title/description left, action right). No Card subcomponent reuse. | `<Card variant="control" />` |
-| `CardDisplay` | [CardDisplay.tsx](../../components/ui/CardDisplay/CardDisplay.tsx) — ~80% CSS overlap. Fixed image-header + content-body template. | `<Card variant="display" image={...} />` |
-| `CardFeature` | [CardFeature.tsx](../../components/ui/CardFeature/CardFeature.tsx) — ~75% CSS overlap. Fixed icon + title/description + action with `align` control. | `<Card variant="feature" icon={...} align="left\|center" />` |
+| Component | Evidence | Fold into | Status |
+|---|---|---|---|
+| `CardSummary` | 85% CSS overlap with `Card`. Fixed template (label + large-value + optional link) plus `formatValue()` helper. No use of Card's subcomponent slots. | `<Card variant="summary" formatValue="price\|numeric" />` | 12 portal consumers — pending #7c |
+| `CardControl` | [CardControl.tsx](../../components/ui/CardControl/CardControl.tsx) — same base flex/border/padding-xl/surface as Card. Fixed layout (badge + title/description left, action right). No Card subcomponent reuse. | `<Card variant="control" />` | 1 portal consumer — pending #7b |
+| `CardDisplay` | ~80% CSS overlap. Fixed image-header + content-body template. | `<Card variant="display" image={...} />` | **Deleted in PR #241** (zero consumers) |
+| `CardFeature` | ~75% CSS overlap. Fixed icon + title/description + action with `align` control. | `<Card variant="feature" icon={...} align="left\|center" />` | **Deleted in PR #241** (zero consumers) |
 
 **Honest:**
 
@@ -120,7 +120,10 @@ Ordered by leverage × low-risk-first:
 4. **Feedback `AlertBanner` ↔ `Banner` merge** — combine on `tone` prop. Slightly more surface-area than #3 but mechanically similar.
 5. **Feedback `Snackbar` ↔ `Toast` merge** — needs care with portal lifecycle and auto-dismiss interaction; do after #4 sets the precedent.
 6. ~~**Overlay `Menu` → `Popover preset="menu"`** — Menu's hardcoded item rendering needs to become a slot. Larger refactor than #3.~~ **Rejected** — see "Rejected recommendations" section. Different patterns, not forks.
-7. **Card variant consolidation** — biggest scope (4 component cuts). Card already has subcomponents (`CardTitle`, `CardDescription`, `CardFooter`); the `variant=` prop family gives `CardSummary`/`CardControl`/`CardDisplay`/`CardFeature` shapes. Largest portal-coordination cost — these are likely heavily consumed.
+7. **Card variant consolidation** — biggest scope. Split into sub-tasks during execution based on consumer footprint:
+    - **7a.** ~~CardDisplay + CardFeature deletion (zero consumers)~~ — completed in PR #241.
+    - **7b.** CardControl → Card variant — 1 portal consumer; small additive PR + 1-file portal migration.
+    - **7c.** CardSummary → Card variant — 12 portal consumers; full additive-deprecate-migrate-delete cycle.
 8. **`ServiceBadge` REVIEW** — verify ServiceTag coverage before retiring.
 9. **`CardList` REVIEW** — assess demotion to CSS utility class vs keeping as layout primitive.
 
