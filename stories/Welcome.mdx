@@ -6,7 +6,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 BDS is four tenets in one repository, published as a single versioned package. Each tenet is an independent vocabulary the portal, mockup generators, and client sites consume to ship work that looks and reads like Brik without anyone having to re-decide the basics every project.
 
-Switch between built-in themes — Brik, Brik Dark, and Client Sim — using the paintbrush icon in the toolbar above, or open the [Theme Switcher](?path=/docs/overview-theme-switcher--docs) to inspect tokens per theme. Validate a theme before shipping via [Contrast Compliance](?path=/docs/overview-health-contrast-compliance--docs).
+Switch between built-in themes — Brik, Brik Dark, and Client Sim — using the paintbrush icon in the toolbar above, or open the [Theme Switcher](?path=/docs/theming-theme-switcher--docs) to inspect tokens per theme. Validate a theme before shipping via [Contrast Compliance](?path=/docs/overview-health-contrast-compliance--docs).
 
 ## The four tenets
 
@@ -40,10 +40,10 @@ Theming composes four orthogonal layers. Each is a decision a client can overrid
 
 | Layer | Decides | Where it lives |
 |---|---|---|
-| [Tokens](?path=/docs/theming-client-themes--docs) | Color, type, spacing values per brand | `theme-{client}.css` in the consumer repo |
-| [Atmospheres](?path=/docs/theming-atmospheres--docs) | Ambient mood — grain, glow, vignettes | CSS overlay from `@brikdesigns/bds/atmospheres/{slug}.css` |
-| [Navigation Archetypes](?path=/docs/theming-navigation-archetypes--docs) | Site-header shape + scroll/drawer behavior | Industry pack → BDS `<SiteHeader>` render |
-| [Blueprints](?path=/docs/theming-blueprints--docs) | Section composition + mood tagging | Authored in BDS, tagged per industry + mood |
+| [Tokens](?path=/docs/theming-layers-client-themes--docs) | Color, type, spacing values per brand | `theme-{client}.css` in the consumer repo |
+| [Atmospheres](?path=/docs/theming-layers-atmospheres--docs) | Ambient mood — grain, glow, vignettes | CSS overlay from `@brikdesigns/bds/atmospheres/{slug}.css` |
+| [Navigation Archetypes](?path=/docs/theming-layers-navigation-archetypes--docs) | Site-header shape + scroll/drawer behavior | Industry pack → BDS `<SiteHeader>` render |
+| [Blueprints](?path=/docs/theming-layers-blueprints--docs) | Section composition + mood tagging | Authored in BDS, tagged per industry + mood |
 
 Full architecture: [Theming Overview](?path=/docs/theming-overview--docs).
 

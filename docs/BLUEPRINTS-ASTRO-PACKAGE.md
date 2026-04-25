@@ -624,7 +624,7 @@ Three doc surfaces today, each backed by a distinct local source, publishing to 
 
 **What SHOULD publish once the package ships:**
 
-1. **Consumer-facing blueprint catalog** → new Storybook story at [stories/theming/BlueprintsAstroPackage.mdx](../stories/theming/BlueprintsAstroPackage.mdx) → publishes to `storybook.brikdesigns.com/?path=/docs/theming-blueprints-astro-package--overview`. Lists exported components, their props, iframed previews per blueprint, Paper artboard links.
+1. **Consumer-facing blueprint catalog** → new Storybook story at [stories/theming/BlueprintsAstroPackage.mdx](../stories/theming/BlueprintsAstroPackage.mdx) → publishes to `storybook.brikdesigns.com/?path=/docs/theming-layers-blueprints--docs`. Lists exported components, their props, iframed previews per blueprint, Paper artboard links.
 2. **Portal engineering reference for `dev_scaffold_site`** → new portal doc at [content/docs/site-scaffold-task.mdx](../../../product/brik-client-portal/content/docs/site-scaffold-task.mdx) → publishes to `staging.portal.brikdesigns.com/docs/site-scaffold-task`. Admin-facing: inputs, failure modes, how to re-run.
 3. **This spec is referenced from Storybook, not duplicated.** [stories/theming/Overview.mdx](../stories/theming/Overview.mdx) gets a "Deep dive: Astro render surface" link pointing to the GitHub URL of this file. Low cost, high signal.
 
