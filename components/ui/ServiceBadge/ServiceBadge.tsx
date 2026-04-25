@@ -96,7 +96,13 @@ const iconScaleMap: Record<ServiceBadgeSize, number> = { sm: 0.55, md: 0.6, lg: 
 const boxSizeMap: Record<ServiceBadgeSize, number> = { sm: 20, md: 28, lg: 40 };
 
 /**
- * @deprecated Use `ServiceTag variant="icon"` instead. ServiceBadge is kept for backwards compatibility only.
+ * @deprecated Use `ServiceTag variant="icon"` instead. ServiceBadge has zero
+ * external consumers (verified during 2026-Q2 component bloat audit) and is
+ * slated for deletion in a future major version.
+ *
+ * Full deletion is blocked on extracting `categoryConfig` and
+ * `getServiceIconPath` (currently exported from this file and consumed by
+ * `ServiceTag`) into a shared utility module. Tracked as a follow-up task.
  *
  * ServiceBadge — icon-only colored square badge for a Brik service category.
  * The `mode="label"` prop is no longer supported; use `ServiceTag` for text labels.
