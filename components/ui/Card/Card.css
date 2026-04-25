@@ -130,4 +130,79 @@
 .bds-card__preset-control-action {
   flex-shrink: 0;
 }
+
+/* ─── Preset: summary ─────────────────────────────────────────── */
+/* Compact metric/stat card layout — replaces the legacy CardSummary
+ * component. Label (top) + large value (bottom) + optional secondary
+ * link to the right. Surface uses primary background + muted border;
+ * `variant` is ignored for this preset. */
+
+.bds-card--preset-summary {
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.bds-card__preset-summary-inner {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: flex-start;
+  padding: var(--padding-lg);
+}
+
+.bds-card__preset-summary-content {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.bds-card__preset-summary-label {
+  font-family: var(--font-family-body);
+  font-size: var(--body-lg);
+  color: var(--text-secondary);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.bds-card__preset-summary-value {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+.bds-card__preset-summary-link-area {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+.bds-card__preset-summary-link {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--text-brand-primary);
+  line-height: var(--font-line-height-tight);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: center;
+}
+
+.bds-card__preset-summary-link:hover {
+  text-decoration: underline;
+}
 }
