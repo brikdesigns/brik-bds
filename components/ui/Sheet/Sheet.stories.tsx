@@ -76,6 +76,7 @@ const EditFormFields = ({ onChange }: { onChange?: (k: string, v: string) => voi
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   render: (args) => {
     const [open, setOpen] = useState(false);
@@ -101,6 +102,7 @@ export const Playground: Story = {
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => {
     const [openId, setOpenId] = useState<string | null>(null);
@@ -165,6 +167,7 @@ export const Variants: Story = {
 
 /* ─── Header (title, subtitle, back button) ──────────────────── */
 
+/** @summary Header */
 export const Header: Story = {
   render: () => {
     const [openId, setOpenId] = useState<string | null>(null);
@@ -251,6 +254,7 @@ export const Header: Story = {
 
 /* ─── Read mode — footer renders [Close] [Edit] ──────────────── */
 
+/** @summary Read mode */
 export const ReadMode: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -275,6 +279,7 @@ export const ReadMode: Story = {
 
 /* ─── Read mode floating — no backdrop, rounded, elevated ────── */
 
+/** @summary Read mode floating */
 export const ReadModeFloating: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -300,6 +305,7 @@ export const ReadModeFloating: Story = {
 
 /* ─── Edit mode — footer renders [Cancel] [Save] ─────────────── */
 
+/** @summary Edit mode */
 export const EditMode: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -332,6 +338,7 @@ export const EditMode: Story = {
 
 /* ─── Read ↔ Edit toggle — the canonical pattern ─────────────── */
 
+/** @summary Read edit toggle */
 export const ReadEditToggle: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -374,6 +381,7 @@ export const ReadEditToggle: Story = {
 
 /* ─── Read-only floating (popover, no footer) ────────────────── */
 
+/** @summary Read only floating */
 export const ReadOnlyFloating: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -396,6 +404,7 @@ export const ReadOnlyFloating: Story = {
 
 /* ─── Tabs (Details / Sources) ───────────────────────────────── */
 
+/** @summary Tabs */
 export const Tabs: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -437,6 +446,7 @@ export const Tabs: Story = {
 
 /* ─── Secondary action (e.g. "Refresh Brief") ────────────────── */
 
+/** @summary Secondary action */
 export const SecondaryAction: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -470,6 +480,7 @@ export const SecondaryAction: Story = {
 
 /* ─── Tabs + Secondary action + Read/Edit toggle ─────────────── */
 
+/** @summary Tabs with secondary action */
 export const TabsWithSecondaryAction: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -530,6 +541,7 @@ export const TabsWithSecondaryAction: Story = {
 
 /* ─── Patterns ───────────────────────────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     const [openId, setOpenId] = useState<string | null>(null);

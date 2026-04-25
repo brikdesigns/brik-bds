@@ -39,6 +39,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Drag and drop files here',
@@ -51,6 +52,7 @@ export const Playground: Story = {
    2. VARIANTS — States: default, size limit, error, disabled
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
   render: () => (
@@ -98,6 +100,7 @@ export const Variants: Story = {
    3. PATTERNS — Interactive with file list
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
   render: () => {

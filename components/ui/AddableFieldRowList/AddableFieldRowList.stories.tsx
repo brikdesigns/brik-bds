@@ -33,6 +33,7 @@ const CATEGORY_OPTIONS = [
   { value: 'other', label: 'Other Tools' },
 ];
 
+/** @summary Phone system */
 export const PhoneSystem: Story = {
   name: 'Phone System (3 fields)',
   render: () => {
@@ -92,6 +93,7 @@ interface Holiday {
   closed: boolean;
 }
 
+/** @summary Holiday hours */
 export const HolidayHours: Story = {
   name: 'Holiday hours (cross-field disabling)',
   render: () => {
@@ -154,6 +156,7 @@ interface CompetitiveFrame {
   copyImplication: string;
 }
 
+/** @summary Competitive frames */
 export const CompetitiveFrames: Story = {
   name: 'Competitive Positioning (3 textareas)',
   render: () => {
@@ -217,6 +220,7 @@ interface SimpleNote {
   text: string;
 }
 
+/** @summary Empty and max items */
 export const EmptyAndMaxItems: Story = {
   name: 'Empty state + maxItems',
   render: () => {

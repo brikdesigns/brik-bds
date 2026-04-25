@@ -52,6 +52,7 @@ const MOCK_HEADERS = [
   },
 ];
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   render: () => (
     <Board style={{ height: '500px' }}>
@@ -71,6 +72,7 @@ export const Playground: Story = {
   ),
 };
 
+/** @summary Single column */
 export const SingleColumn: Story = {
   render: () => (
     <Board style={{ height: '400px', maxWidth: '400px' }}>
@@ -82,6 +84,7 @@ export const SingleColumn: Story = {
   ),
 };
 
+/** @summary With avatars */
 export const WithAvatars: Story = {
   render: () => (
     <Board style={{ height: '400px' }}>
@@ -109,6 +112,7 @@ export const WithAvatars: Story = {
   ),
 };
 
+/** @summary Empty column */
 export const EmptyColumn: Story = {
   render: () => (
     <Board style={{ height: '300px' }}>
@@ -164,10 +168,12 @@ function InteractiveCards() {
   );
 }
 
+/** @summary Task cards */
 export const TaskCards: Story = {
   render: () => <InteractiveCards />,
 };
 
+/** @summary Card accent colors */
 export const CardAccentColors: Story = {
   name: 'Card — Accent Colors',
   render: () => (
@@ -209,6 +215,7 @@ export const CardAccentColors: Story = {
 
 // ─── Full board (headers + cards) ────────────────────────────────────────────
 
+/** @summary Full board */
 export const FullBoard: Story = {
   name: 'Full Board — Headers + Cards',
   render: () => (
@@ -405,6 +412,7 @@ function FullBoardViewExample() {
   );
 }
 
+/** @summary Full board view */
 export const FullBoardView: Story = {
   name: 'Full Board View',
   render: () => <FullBoardViewExample />,

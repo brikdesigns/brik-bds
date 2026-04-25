@@ -51,6 +51,7 @@ type Story = StoryObj<typeof Accordion>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     items: faqItems,
@@ -62,6 +63,7 @@ export const Playground: Story = {
    2. VARIANTS — Behavior modes, pre-opened, and rich content
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack gap="var(--gap-huge)">
@@ -116,6 +118,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world compositions
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Stack gap="var(--gap-huge)">

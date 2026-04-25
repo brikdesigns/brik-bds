@@ -72,6 +72,7 @@ type Story = StoryObj<typeof Select>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     placeholder: 'Select one...',
@@ -95,6 +96,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, icons, states, groups
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack gap="var(--gap-huge)">
@@ -168,6 +170,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world compositions
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Stack gap="var(--gap-huge)">

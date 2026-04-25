@@ -60,6 +60,7 @@ const statuses = ['positive', 'warning', 'error', 'info', 'progress'] as const;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: { children: 'New', status: 'info', size: 'md', appearance: 'solid' },
 };
@@ -68,6 +69,7 @@ export const Playground: Story = {
    2. VARIANTS — Solid and subtle appearances × all statuses × all sizes
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -125,6 +127,7 @@ export const Variants: Story = {
    3. ICONS — Badges with leading icons
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary With icon */
 export const Icons: Story = {
   render: () => (
     <Stack>
@@ -177,6 +180,7 @@ export const Icons: Story = {
    4. ALIGNMENT — Side-by-side with Tag at every size
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Alignment options */
 export const Alignment: Story = {
   name: 'Badge + Tag alignment',
   render: () => (
@@ -206,6 +210,7 @@ export const Alignment: Story = {
    5. PATTERNS — Real-world usage
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   name: 'Patterns',
   render: () => (

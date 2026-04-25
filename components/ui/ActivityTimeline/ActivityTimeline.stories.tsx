@@ -14,6 +14,7 @@ type Story = StoryObj<typeof ActivityTimeline>;
 
 /* ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Default rendering */
 export const Default: Story = {
   render: () => (
     <div style={{ width: 380 }}>
@@ -26,6 +27,7 @@ export const Default: Story = {
   ),
 };
 
+/** @summary Task lifecycle */
 export const TaskLifecycle: Story = {
   render: () => (
     <div style={{ width: 380 }}>
@@ -40,6 +42,7 @@ export const TaskLifecycle: Story = {
   ),
 };
 
+/** @summary Single event */
 export const SingleEvent: Story = {
   render: () => (
     <div style={{ width: 380 }}>
@@ -50,6 +53,7 @@ export const SingleEvent: Story = {
   ),
 };
 
+/** @summary Resolved */
 export const Resolved: Story = {
   render: () => (
     <div style={{ width: 380 }}>

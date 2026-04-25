@@ -129,6 +129,7 @@ const allServices: Record<ServiceCategory, { serviceName: string; label: string 
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     category: 'marketing',
@@ -143,6 +144,7 @@ export const Playground: Story = {
    2. VARIANTS — All display variants × all categories × sizes
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -243,6 +245,7 @@ export const Variants: Story = {
    3. ALL SERVICES — Complete icon-text catalog by category
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All services */
 export const AllServices: Story = {
   name: 'All services (icon-text)',
   parameters: { layout: 'padded' },
@@ -277,6 +280,7 @@ export const AllServices: Story = {
    4. ALL SERVICES — Complete icon catalog by category
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All services icon */
 export const AllServicesIcon: Story = {
   name: 'All services (icon)',
   parameters: { layout: 'padded' },
@@ -311,6 +315,7 @@ export const AllServicesIcon: Story = {
    5. PATTERNS — Real-world usage contexts
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   parameters: { layout: 'padded' },
   render: () => (

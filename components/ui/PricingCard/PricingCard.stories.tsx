@@ -56,6 +56,7 @@ const commonFeatures = [
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     title: 'Professional',
@@ -71,6 +72,7 @@ export const Playground: Story = {
    2. VARIANTS — Highlighted, free tier, no features
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   decorators: [(Story) => <div style={{ width: 900 }}><Story /></div>],
   render: () => (
@@ -125,6 +127,7 @@ export const Variants: Story = {
    3. PATTERNS — Pricing grid (3-tier layout)
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   decorators: [(Story) => <div style={{ maxWidth: 1000 }}><Story /></div>],
   render: () => (

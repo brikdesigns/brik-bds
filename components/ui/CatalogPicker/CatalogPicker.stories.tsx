@@ -138,6 +138,8 @@ const Controlled = (args: React.ComponentProps<typeof CatalogPicker>) => {
  * Default — dental services catalog with two pre-picked catalog entries.
  * Demonstrates the canonical shape: every picked entry carries slug +
  * displayName + source. Matches what the portal billing sheet will render.
+ *
+ * @summary Interactive playground for prop tweaking
  */
 export const Playground: Story = {
   args: {
@@ -171,6 +173,8 @@ export const Playground: Story = {
 /**
  * Empty state — no picked entries, form closed. User sees the Add button
  * and the empty label. First interaction target for new client onboarding.
+ *
+ * @summary Empty state
  */
 export const Empty: Story = {
   args: {
@@ -184,6 +188,8 @@ export const Empty: Story = {
  * Mixed sources — catalog picks rendered alongside a user-added custom
  * service. Demonstrates that source attribution is automatic and that
  * custom entries get a derived slug (no collision with catalog slugs).
+ *
+ * @summary Mixed sources
  */
 export const MixedSources: Story = {
   name: 'Mixed Catalog + Custom',
@@ -212,6 +218,8 @@ export const MixedSources: Story = {
  * free-text name that doesn't match any catalog displayName or alias is
  * silently rejected. Use for locked vocabularies (insurance plans,
  * financing products) where custom entries aren't valid.
+ *
+ * @summary Strict catalog only
  */
 export const StrictCatalogOnly: Story = {
   name: 'Strict (No Custom)',
@@ -238,6 +246,8 @@ export const StrictCatalogOnly: Story = {
  * Alternate catalog — real-estate amenities. Same component, different
  * vocabulary. Demonstrates that the picker is vocabulary-agnostic as long
  * as the catalog conforms to CatalogEntry shape.
+ *
+ * @summary Different industry
  */
 export const DifferentIndustry: Story = {
   name: 'Real-Estate Amenities',
@@ -265,6 +275,8 @@ export const DifferentIndustry: Story = {
  * Size variants — tiny, medium, and large controls. Verifies that every
  * tier of the size scale renders coherently. Same catalog + same picks
  * across all three so the visual delta is pure typography/spacing.
+ *
+ * @summary All variants side by side
  */
 export const Variants: Story = {
   render: () => (
@@ -323,6 +335,8 @@ export const Variants: Story = {
 /**
  * Disabled — read-only render. Remove buttons and the Add button are
  * hidden. Used in the portal when a non-admin views intel sheets.
+ *
+ * @summary Disabled state
  */
 export const Disabled: Story = {
   args: {
@@ -336,6 +350,8 @@ export const Disabled: Story = {
  * Interaction — picks a catalog entry by typing an alias, types a
  * description, commits. Verifies the alias-match path (`source: 'catalog'`)
  * and that the commit clears the form for rapid entry.
+ *
+ * @summary Alias match commits as catalog
  */
 export const AliasMatchCommitsAsCatalog: Story = {
   name: 'Alias Match → source=catalog',
@@ -370,6 +386,8 @@ export const AliasMatchCommitsAsCatalog: Story = {
 /**
  * Interaction — types a free-text name that doesn't match any catalog
  * entry. Commits as `source: 'custom'` with a derived slug.
+ *
+ * @summary Free text commits as custom
  */
 export const FreeTextCommitsAsCustom: Story = {
   name: 'Free Text → source=custom',
@@ -404,6 +422,8 @@ export const FreeTextCommitsAsCustom: Story = {
  * Patterns — how the picker reads inside a portal-style intel sheet.
  * Demonstrates the consumer pattern: wrap in a sheet section with a
  * field label outside the component, let the picker own its own dropdown.
+ *
+ * @summary Common usage patterns
  */
 export const Patterns: Story = {
   render: () => (

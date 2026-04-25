@@ -51,6 +51,7 @@ type Story = StoryObj<typeof DatePicker>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   args: {
@@ -95,6 +96,7 @@ export const Playground: Story = {
    2. DEFAULT — No label, clean trigger
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Default rendering */
 export const Default: Story = {
   render: () => {
     const [value, setValue] = useState<Date | null>(null);
@@ -114,6 +116,7 @@ export const Default: Story = {
    3. WITH LABEL — Label + helper text
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary With label */
 export const WithLabel: Story = {
   render: () => {
     const [value, setValue] = useState<Date | null>(null);
@@ -136,6 +139,7 @@ export const WithLabel: Story = {
    4. WITH ERROR — Error state
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary With error */
 export const WithError: Story = {
   render: () => {
     const [value, setValue] = useState<Date | null>(null);
@@ -158,6 +162,7 @@ export const WithError: Story = {
    5. SMALL — sm size variant
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Small */
 export const Small: Story = {
   render: () => {
     const [value, setValue] = useState<Date | null>(null);
@@ -180,6 +185,7 @@ export const Small: Story = {
    6. LARGE — lg size variant
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Large */
 export const Large: Story = {
   render: () => {
     const [value, setValue] = useState<Date | null>(null);
@@ -202,6 +208,7 @@ export const Large: Story = {
    7. MIN/MAX DATE — Constrained date range
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Min max date */
 export const MinMaxDate: Story = {
   render: () => {
     const [value, setValue] = useState<Date | null>(null);
@@ -230,6 +237,7 @@ export const MinMaxDate: Story = {
    8. DISABLED — Disabled state
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Disabled state */
 export const Disabled: Story = {
   render: () => (
     <div style={{ width: 280 }}>
@@ -247,6 +255,7 @@ export const Disabled: Story = {
    9. FULL WIDTH — Stretches to container
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Full width */
 export const FullWidth: Story = {
   render: () => {
     const [value, setValue] = useState<Date | null>(null);
@@ -269,6 +278,7 @@ export const FullWidth: Story = {
    10. VARIANTS — All sizes and states at a glance
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => {
     const [sm, setSm] = useState<Date | null>(null);

@@ -40,6 +40,7 @@ const Row = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     variant: 'outlined',
@@ -61,6 +62,7 @@ export const Playground: Story = {
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -207,6 +209,7 @@ export const SummaryPreset = () => (
 
 /* ─── Patterns ───────────────────────────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Stack>

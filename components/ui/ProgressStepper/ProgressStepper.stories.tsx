@@ -27,6 +27,7 @@ const onboardingSteps: ProgressStep[] = [
   { label: 'Review & confirm', description: 'Review your selections' },
 ];
 
+/** @summary Default rendering */
 export const Default: Story = {
   args: {
     steps: proposalSteps,
@@ -34,6 +35,7 @@ export const Default: Story = {
   },
 };
 
+/** @summary With descriptions */
 export const WithDescriptions: Story = {
   args: {
     steps: onboardingSteps,
@@ -41,6 +43,7 @@ export const WithDescriptions: Story = {
   },
 };
 
+/** @summary First step */
 export const FirstStep: Story = {
   args: {
     steps: proposalSteps,
@@ -48,6 +51,7 @@ export const FirstStep: Story = {
   },
 };
 
+/** @summary Last step */
 export const LastStep: Story = {
   args: {
     steps: proposalSteps,
@@ -55,6 +59,7 @@ export const LastStep: Story = {
   },
 };
 
+/** @summary All complete */
 export const AllComplete: Story = {
   args: {
     steps: proposalSteps,
@@ -62,6 +67,7 @@ export const AllComplete: Story = {
   },
 };
 
+/** @summary Small size */
 export const SmallSize: Story = {
   args: {
     steps: proposalSteps,
@@ -119,6 +125,8 @@ export const LinearMode = () => {
 /**
  * Compact horizontal dot indicator. Use on mobile, in carousels, or as a
  * minimal alternative when label text is redundant with the page heading.
+ *
+ * @summary Dots variant
  */
 export const DotsVariant: Story = {
   args: {

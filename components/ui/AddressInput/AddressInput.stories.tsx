@@ -60,6 +60,7 @@ type Story = StoryObj<typeof AddressInput>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Address',
@@ -71,6 +72,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, labels, static suggestions
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -103,6 +105,7 @@ export const Variants: Story = {
    3. PATTERNS — Interactive autocomplete
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: function InteractivePattern() {
     const [value, setValue] = useState('');

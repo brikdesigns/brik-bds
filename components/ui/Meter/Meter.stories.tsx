@@ -50,6 +50,7 @@ export default meta;
 type Story = StoryObj<typeof Meter>;
 
 // Status variants
+/** @summary Pass */
 export const Pass: Story = {
   args: {
     value: 6,
@@ -59,6 +60,7 @@ export const Pass: Story = {
   },
 };
 
+/** @summary Fair */
 export const Fair: Story = {
   args: {
     value: 4,
@@ -68,6 +70,7 @@ export const Fair: Story = {
   },
 };
 
+/** @summary Fail */
 export const Fail: Story = {
   args: {
     value: 1,
@@ -77,6 +80,7 @@ export const Fail: Story = {
   },
 };
 
+/** @summary Neutral */
 export const Neutral: Story = {
   args: {
     value: 0,
@@ -87,6 +91,7 @@ export const Neutral: Story = {
 };
 
 // Size variants
+/** @summary Small */
 export const Small: Story = {
   args: {
     value: 6,
@@ -97,6 +102,7 @@ export const Small: Story = {
   },
 };
 
+/** @summary Large */
 export const Large: Story = {
   args: {
     value: 6,
@@ -108,6 +114,7 @@ export const Large: Story = {
 };
 
 // Without value display
+/** @summary No value */
 export const NoValue: Story = {
   args: {
     value: 3,
@@ -119,6 +126,7 @@ export const NoValue: Story = {
 };
 
 // Custom formatter
+/** @summary Custom formatter */
 export const CustomFormatter: Story = {
   args: {
     value: 85,
@@ -130,6 +138,7 @@ export const CustomFormatter: Story = {
 };
 
 // Label position variants
+/** @summary Label above */
 export const LabelAbove: Story = {
   args: {
     value: 6,
@@ -140,6 +149,7 @@ export const LabelAbove: Story = {
   },
 };
 
+/** @summary Label below */
 export const LabelBelow: Story = {
   args: {
     value: 6,
@@ -151,6 +161,7 @@ export const LabelBelow: Story = {
 };
 
 // Label position comparison
+/** @summary Label position comparison */
 export const LabelPositionComparison: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 48, width: 600 }}>
@@ -167,6 +178,7 @@ export const LabelPositionComparison: Story = {
 };
 
 // All statuses side by side
+/** @summary All statuses */
 export const AllStatuses: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>

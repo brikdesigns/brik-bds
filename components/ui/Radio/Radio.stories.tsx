@@ -42,6 +42,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Option 1',
@@ -54,6 +55,7 @@ export const Playground: Story = {
    2. VARIANTS — States: default, checked, disabled
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   args: { label: 'Option', name: 'variants', value: 'v' },
   render: () => (
@@ -84,6 +86,7 @@ export const Variants: Story = {
    3. PATTERNS — Plan selection + theme selection
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   args: { label: 'Option', name: 'patterns', value: 'p' },
   render: () => {

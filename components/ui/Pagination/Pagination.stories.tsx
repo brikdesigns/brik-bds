@@ -53,6 +53,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   render: (args) => {
     const [page, setPage] = useState(args.currentPage);
@@ -70,6 +71,7 @@ export const Playground: Story = {
    2. VARIANTS — Positions, few pages, single page
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   args: { currentPage: 5, totalPages: 20, onChange: () => {} },
   render: () => {
@@ -112,6 +114,7 @@ export const Variants: Story = {
    3. PATTERNS — Table pagination
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   args: { currentPage: 1, totalPages: 12, onChange: () => {} },
   render: () => {

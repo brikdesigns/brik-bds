@@ -40,6 +40,7 @@ const Row = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     quote: 'Square has completely transformed how we handle payments. The analytics alone have helped us grow 40% this year.',
@@ -53,6 +54,7 @@ export const Playground: Story = {
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -111,6 +113,7 @@ export const Variants: Story = {
 
 /* ─── Patterns ───────────────────────────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Stack>

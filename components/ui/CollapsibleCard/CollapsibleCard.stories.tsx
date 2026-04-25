@@ -43,6 +43,7 @@ type Story = StoryObj<typeof CollapsibleCard>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     sectionLabel: 'Section 01',
@@ -56,6 +57,7 @@ export const Playground: Story = {
    2. VARIANTS — States, with/without section label, rich content
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   args: {
     title: 'Overview',
@@ -125,6 +127,7 @@ export const Variants: Story = {
    3. PATTERNS — Proposal sections (accordion layout)
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   args: {
     title: 'Overview',

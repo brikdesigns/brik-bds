@@ -74,6 +74,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Category',
@@ -86,6 +87,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, states, text-only
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   args: { label: 'Category', options: categoryOptions },
   render: () => (
@@ -120,6 +122,7 @@ export const Variants: Story = {
    3. PATTERNS — Interactive filter bar
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   args: { label: 'Category', options: categoryOptions },
   render: () => {

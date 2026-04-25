@@ -42,6 +42,7 @@ const Row = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   render: (args) => {
     const [open, setOpen] = useState(false);
@@ -70,6 +71,7 @@ export const Playground: Story = {
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => {
     const [openId, setOpenId] = useState<string | null>(null);
@@ -141,6 +143,7 @@ export const Variants: Story = {
 
 /* ─── Patterns ───────────────────────────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     const [openId, setOpenId] = useState<string | null>(null);

@@ -46,6 +46,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   render: (args) => {
     const [value, setValue] = useState(50);
@@ -68,6 +69,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, custom range, disabled
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => {
     function SizeDemo() {
@@ -119,6 +121,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world usage
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     function AudioSettings() {

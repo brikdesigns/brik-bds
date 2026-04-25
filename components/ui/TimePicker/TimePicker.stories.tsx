@@ -53,6 +53,7 @@ type Story = StoryObj<typeof TimePicker>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   args: {
@@ -87,6 +88,7 @@ export const Playground: Story = {
    2. DEFAULT — 12-hour format
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Default rendering */
 export const Default: Story = {
   render: () => {
     const [value, setValue] = useState('09:00');
@@ -106,6 +108,7 @@ export const Default: Story = {
    3. WITH LABEL — Label + helper text
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary With label */
 export const WithLabel: Story = {
   render: () => {
     const [value, setValue] = useState('09:00');
@@ -128,6 +131,7 @@ export const WithLabel: Story = {
    4. WITH ERROR — Error state
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary With error */
 export const WithError: Story = {
   render: () => {
     const [value, setValue] = useState('09:00');
@@ -150,6 +154,7 @@ export const WithError: Story = {
    5. 24-HOUR FORMAT
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Twenty four hour */
 export const TwentyFourHour: Story = {
   render: () => {
     const [value, setValue] = useState('14:30');
@@ -171,6 +176,7 @@ export const TwentyFourHour: Story = {
    6. MINUTE STEP — 5-minute intervals
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Minute step */
 export const MinuteStep: Story = {
   render: () => {
     const [value, setValue] = useState('09:00');
@@ -193,6 +199,7 @@ export const MinuteStep: Story = {
    7. MINUTE STEP 15 — Quarter-hour intervals
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Quarter hour */
 export const QuarterHour: Story = {
   render: () => {
     const [value, setValue] = useState('09:00');
@@ -215,6 +222,7 @@ export const QuarterHour: Story = {
    8. DISABLED
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Disabled state */
 export const Disabled: Story = {
   render: () => (
     <div style={{ width: 280 }}>
@@ -232,6 +240,7 @@ export const Disabled: Story = {
    9. VARIANTS — All sizes and states at a glance
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => {
     const [sm, setSm] = useState('09:00');

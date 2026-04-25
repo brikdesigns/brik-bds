@@ -25,6 +25,7 @@ export default meta;
 type Story = StoryObj<typeof TextLink>;
 
 // Basic link
+/** @summary Default rendering */
 export const Default: Story = {
   args: {
     href: '#',
@@ -33,6 +34,7 @@ export const Default: Story = {
 };
 
 // Small link
+/** @summary Small */
 export const Small: Story = {
   args: {
     href: '#',
@@ -42,6 +44,7 @@ export const Small: Story = {
 };
 
 // External link
+/** @summary External */
 export const External: Story = {
   args: {
     href: 'https://example.com',
@@ -52,6 +55,7 @@ export const External: Story = {
 };
 
 // Link in context
+/** @summary In paragraph */
 export const InParagraph: Story = {
   parameters: {
     docs: {
@@ -81,6 +85,7 @@ export const InParagraph: Story = {
 };
 
 // Navigation links
+/** @summary Navigation links */
 export const NavigationLinks: Story = {
   parameters: {
     docs: {
@@ -105,6 +110,7 @@ export const NavigationLinks: Story = {
 };
 
 // All sizes
+/** @summary All sizes */
 export const AllSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>

@@ -58,6 +58,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     count: 5,
@@ -70,6 +71,7 @@ export const Playground: Story = {
    2. VARIANTS — All statuses × all sizes + max overflow
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => {
     const statuses = ['success', 'error', 'warning', 'neutral', 'progress', 'brand'] as const;
@@ -103,6 +105,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world usage
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   name: 'Patterns',
   render: () => (

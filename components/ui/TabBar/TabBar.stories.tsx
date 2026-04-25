@@ -78,6 +78,7 @@ type Story = StoryObj<typeof TabBar>;
 
 const tabClickHandler = fn();
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     variant: 'tab',
@@ -104,6 +105,7 @@ export const Playground: Story = {
    2. VARIANTS — All variants, on-color, disabled, few tabs
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -161,6 +163,7 @@ export const Variants: Story = {
    3. PATTERNS — Page header with tab navigation
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     function SettingsPage() {

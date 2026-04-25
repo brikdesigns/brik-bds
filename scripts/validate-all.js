@@ -21,6 +21,7 @@ const NC = '\x1b[0m';
 
 const steps = [
   { name: 'Token Lint', cmd: 'node scripts/lint-tokens.js --errors-only' },
+  { name: 'JSDoc Lint', cmd: 'node scripts/lint-jsdoc.js' },
   { name: 'Grid Audit', cmd: 'node scripts/audit-grid.js --summary' },
   { name: 'Theme Compliance', cmd: 'node scripts/validate-themes.js' },
   { name: 'Blueprint Library', cmd: 'node scripts/validate-blueprints.mjs' },

@@ -46,6 +46,7 @@ type Story = StoryObj<typeof Checkbox>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Accept terms and conditions',
@@ -56,6 +57,7 @@ export const Playground: Story = {
    2. VARIANTS — States grid
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -88,6 +90,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world compositions
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Stack gap="var(--gap-huge)">

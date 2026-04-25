@@ -56,6 +56,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: { children: 'Tag', size: 'md' },
 };
@@ -64,6 +65,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, icons, states in one view
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -121,6 +123,7 @@ export const Variants: Story = {
    3. ALIGNMENT — Side-by-side with Badge at every size
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Alignment options */
 export const Alignment: Story = {
   name: 'Badge + Tag alignment',
   render: () => (
@@ -150,6 +153,7 @@ export const Alignment: Story = {
    4. PATTERNS — Real-world usage
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   name: 'Patterns',
   render: () => (

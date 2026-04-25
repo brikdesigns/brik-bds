@@ -33,6 +33,7 @@ const Stack = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Total',
@@ -44,6 +45,7 @@ export const Playground: Story = {
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -70,6 +72,7 @@ export const Variants: Story = {
 
 /* ─── Patterns ───────────────────────────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   decorators: [(Story) => <div style={{ width: 1000 }}><Story /></div>],
   render: () => (

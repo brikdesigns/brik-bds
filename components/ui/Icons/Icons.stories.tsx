@@ -76,6 +76,7 @@ type Story = StoryObj<typeof IconsReference>;
    1. OVERVIEW — Package info, setup
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Setup and configuration overview */
 export const Setup: Story = {
   name: 'Setup',
   render: () => (
@@ -138,6 +139,7 @@ import { Check, X, Info } from 'components/icons';
    2. SYSTEM — Feedback, status, and alert icons
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary System */
 export const System: Story = {
   name: 'System',
   render: () => (
@@ -169,6 +171,7 @@ export const System: Story = {
    3. NAVIGATION — Arrows, carets, menus
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Navigation */
 export const Navigation: Story = {
   name: 'Navigation',
   render: () => (
@@ -207,6 +210,7 @@ export const Navigation: Story = {
    4. ACTIONS — CRUD, search, sort, share
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Actions */
 export const Actions: Story = {
   name: 'Actions',
   render: () => (
@@ -247,6 +251,7 @@ export const Actions: Story = {
    5. OBJECTS — People, places, content, data
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Objects */
 export const Objects: Story = {
   name: 'Objects',
   render: () => (
@@ -304,6 +309,7 @@ export const Objects: Story = {
    6. DOMAIN — Industry, feature, and branding icons
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Domain */
 export const Domain: Story = {
   name: 'Domain',
   render: () => (
@@ -341,6 +347,7 @@ export const Domain: Story = {
    7. SIZING — Scale reference
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Sizing */
 export const Sizing: Story = {
   name: 'Sizing',
   render: () => (

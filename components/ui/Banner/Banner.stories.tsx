@@ -38,6 +38,7 @@ const BannerAction = ({ children }: { children: string }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     title: 'Title goes here',
@@ -48,6 +49,7 @@ export const Playground: Story = {
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -79,6 +81,8 @@ export const Variants: Story = {
  * legacy `AlertBanner` component (per ADR-004 §3). Same shape as the
  * announcement tone, with a leading status Badge and an `alert` ARIA
  * role for assistive tech.
+ *
+ * @summary Tone variations
  */
 export const Tones: Story = {
   render: () => (
@@ -119,6 +123,7 @@ export const Tones: Story = {
 
 /* ─── Patterns ───────────────────────────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   name: 'Patterns',
   render: () => {

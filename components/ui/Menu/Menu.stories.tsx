@@ -65,6 +65,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Static open menu for Controls panel
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     items: sampleItems,
@@ -78,6 +79,7 @@ export const Playground: Story = {
    2. VARIANTS — With icons, text-only, active item, disabled
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   args: { items: sampleItems, isOpen: true, onClose: () => {} },
   render: () => (
@@ -125,6 +127,7 @@ export const Variants: Story = {
    3. PATTERNS — FilterButton trigger + Button trigger
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   args: { items: sampleItems, isOpen: true, onClose: () => {} },
   render: () => {

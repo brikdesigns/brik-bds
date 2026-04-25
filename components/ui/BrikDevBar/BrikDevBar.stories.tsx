@@ -206,11 +206,13 @@ function ApiRow({ label, value }: { label: string; value: boolean }) {
 
 // ── Stories ──────────────────────────────────────────────────────────────────
 
+/** @summary With slots */
 export const WithSlots: Story = {
   name: 'With Registered Slots',
   render: () => <DevBarWithSlots />,
 };
 
+/** @summary Imperative api */
 export const ImperativeApi: Story = {
   name: 'Imperative API (useDevBarApi)',
   render: () => <DevBarApiDemo />,
