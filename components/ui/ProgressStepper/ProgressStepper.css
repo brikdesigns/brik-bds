@@ -2,17 +2,27 @@
 /**
  * BDS ProgressStepper — Class-based styles
  *
- * Vertical step progression indicator with complete/active/upcoming states.
+ * Two visual variants share the same component:
+ *   - 'steps' (default): vertical labeled stepper with circles + connectors
+ *   - 'dots': compact horizontal dot row (active dot stretches wider)
+ *
  * Token references use the BDS semantic token layer (never primitives).
  *
- * Naming: BEM-lite — .bds-progress-stepper, .bds-progress-stepper__circle
+ * Naming: BEM-lite — .bds-progress-stepper, .bds-progress-stepper__circle,
+ * .bds-progress-stepper__dot, .bds-progress-stepper--variant-{steps,dots}
  */
 
 /* ─── Container ──────────────────────────────────────────────── */
 
-.bds-progress-stepper {
+.bds-progress-stepper--variant-steps {
   display: flex;
   flex-direction: column;
+}
+
+.bds-progress-stepper--variant-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ─── Step row ───────────────────────────────────────────────── */
@@ -145,6 +155,39 @@
 
 .bds-progress-stepper__connector--incomplete {
   background-color: var(--border-secondary);
+}
+
+/* ─── Dots variant ───────────────────────────────────────────── */
+
+.bds-progress-stepper__dot {
+  border-radius: var(--border-radius-sm);
+  border: none;
+  transition: all var(--duration-normal) var(--ease-out);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.bds-progress-stepper__dot--active {
+  background-color: var(--background-brand-primary);
+  opacity: 1;
+}
+
+.bds-progress-stepper__dot--complete {
+  background-color: var(--background-brand-primary);
+  opacity: 0.5;
+}
+
+.bds-progress-stepper__dot--inactive {
+  background-color: var(--border-secondary);
+  opacity: 1;
+}
+
+.bds-progress-stepper__dot--clickable {
+  cursor: pointer;
+}
+
+.bds-progress-stepper__dot--non-clickable {
+  cursor: default;
 }
 
 } /* end @layer bds-components */
