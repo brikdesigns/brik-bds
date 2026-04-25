@@ -12,9 +12,9 @@
 | Card | 8 | 4 | −4 |
 | Form input variants | 5 | 3 | −2 |
 | Feedback / alert | 8 | 6 | −2 |
-| Overlay | 5 | 3 | −2 |
+| Overlay | 5 | 4 | −1 (Dialog only; Menu/Popover merge rejected) |
 | Stepper + indicator | 9 | 8 | −1 |
-| **Total surveyed** | **35** | **24** | **−11** |
+| **Total surveyed** | **35** | **25** | **−10** |
 
 Plus the bloat already booked in [ADR-003](../adrs/ADR-003-addable-list-family.md) (Addable*: −1) and [ADR-004](../adrs/ADR-004-component-bloat-guardrails.md) §"Resolve the existing instances" (SheetTypography fold-in: −4; SheetSection.heading vs SheetSectionTitle dedupe: 0 net but tier consolidation), the full forward path retires **~16 BDS components** — roughly a 19% reduction off the current 84-component surface.
 
@@ -86,7 +86,7 @@ Plus the bloat already booked in [ADR-003](../adrs/ADR-003-addable-list-family.m
 **Hard cuts:**
 
 - `Dialog` ↔ `Modal` — Dialog replicates Modal's escape/portal/body-overflow/backdrop logic line-for-line ([Dialog.tsx:38-52](../../components/ui/Dialog/Dialog.tsx#L38-L52) vs [Modal.tsx:38-52](../../components/ui/Modal/Modal.tsx#L38-L52)). Dialog hardcodes `closeOnEscape=true`, `closeOnBackdrop=true`, `showCloseButton=false` and a fixed title + description + confirm/cancel button structure. Same axes (backdrop + focus-trap + centered). **Consolidate into `Modal`** with `preset="confirm"` that supplies the locked-down configuration and the title/description/action button shape.
-- `Menu` ↔ `Popover` — Menu duplicates Popover's absolute positioning + click-outside + Escape pattern. Hardcoded to click trigger only, no placement control, hardcoded item rendering. CSS is functionally identical ([Menu.css:18-30](../../components/ui/Menu/Menu.css#L18-L30) vs [Popover.css:17-27](../../components/ui/Popover/Popover.css#L17-L27)). **Consolidate into `Popover`** with `preset="menu"` and an `items?: MenuItem[]` slot.
+- ~~`Menu` ↔ `Popover` — Menu duplicates Popover's absolute positioning + click-outside + Escape pattern. Hardcoded to click trigger only, no placement control, hardcoded item rendering. CSS is functionally identical ([Menu.css:18-30](../../components/ui/Menu/Menu.css#L18-L30) vs [Popover.css:17-27](../../components/ui/Popover/Popover.css#L17-L27)). **Consolidate into `Popover`** with `preset="menu"` and an `items?: MenuItem[]` slot.~~ **Rejected 2026-04-24** — see "Rejected recommendations" section below.
 
 **Honest:**
 
@@ -119,12 +119,35 @@ Ordered by leverage × low-risk-first:
 3. **Overlay `Dialog` → `Modal preset="confirm"`** — well-bounded merge. Modal already has all the required props; Dialog is purely a constraint-set wrapper.
 4. **Feedback `AlertBanner` ↔ `Banner` merge** — combine on `tone` prop. Slightly more surface-area than #3 but mechanically similar.
 5. **Feedback `Snackbar` ↔ `Toast` merge** — needs care with portal lifecycle and auto-dismiss interaction; do after #4 sets the precedent.
-6. **Overlay `Menu` → `Popover preset="menu"`** — Menu's hardcoded item rendering needs to become a slot. Larger refactor than #3.
+6. ~~**Overlay `Menu` → `Popover preset="menu"`** — Menu's hardcoded item rendering needs to become a slot. Larger refactor than #3.~~ **Rejected** — see "Rejected recommendations" section. Different patterns, not forks.
 7. **Card variant consolidation** — biggest scope (4 component cuts). Card already has subcomponents (`CardTitle`, `CardDescription`, `CardFooter`); the `variant=` prop family gives `CardSummary`/`CardControl`/`CardDisplay`/`CardFeature` shapes. Largest portal-coordination cost — these are likely heavily consumed.
 8. **`ServiceBadge` REVIEW** — verify ServiceTag coverage before retiring.
 9. **`CardList` REVIEW** — assess demotion to CSS utility class vs keeping as layout primitive.
 
 Each numbered item should be its own task branch + PR (per CLAUDE.md scope rule: "one concern per PR").
+
+## Rejected recommendations
+
+After consumer-impact review during execution, two original audit recommendations were overridden:
+
+### #5 Snackbar ↔ Toast merge — **rejected, deleted instead** (PR #238)
+
+The audit recommended merging Snackbar into Toast with `{ isPortal, position, autoDismissMs, statusSurface, showBadge }` props. On execution, Snackbar had **zero consumers**. Adding three orthogonal behavioral flags to Toast for zero current benefit was prop-bag bloat — exactly what ADR-004 §3 forbids. Outcome: deleted Snackbar entirely. If floating + auto-dismissing notifications are needed later, build a dedicated `Toaster` manager component (Sonner / react-hot-toast pattern) rather than overloading Toast.
+
+### #6 Menu → Popover preset — **rejected outright**
+
+The audit identified ~25 lines of shared mechanics (click-outside + Escape + absolute positioning) and suggested folding Menu into Popover via `<Popover preset="menu" items={...} />`. After deeper review:
+
+- Menu and Popover serve **two well-known design system patterns**, not the same pattern with different presets:
+  - Menu = items-array dropdown (ARIA `role="menu"`, items have `role="menuitem"`) — the Material UI Menu / Radix DropdownMenu pattern
+  - Popover = anchored content panel (ARIA `role="dialog"`) — the Radix Popover pattern
+- API shapes are intentionally different: Menu takes `items: MenuItemData[]` with external trigger management; Popover takes `content: ReactNode` with internal trigger as `children`. Forcing a merge would force one of them into the other's pattern.
+- **Menu has 7 active renew-pms consumers** all using the items-array pattern. Migrating them to `<Popover preset="menu" items>` would replace a clean items-based API with a less ergonomic content-slot API across 7 files.
+- Per ADR-004 §"Audit gate" question — *"What would happen if this lived inside an existing component as a variant?"* — the honest answer is: 7 callers get a worse API and Popover's content-slot abstraction gets polluted with menu-specific knowledge.
+
+The shared mechanics could be extracted into a `useFloatingPanel` internal hook in a small future cleanup, but that's not worth a dedicated PR. Both components stay as separate public exports.
+
+**Lesson for future audits**: shared internal mechanics ≠ same component. If two components encode different *patterns* (different ARIA semantics, different DX conventions), they're honest siblings, not forks.
 
 ## Out of scope (already booked)
 
