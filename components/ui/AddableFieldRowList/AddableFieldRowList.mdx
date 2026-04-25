@@ -12,9 +12,9 @@ Distinct from the rest of the addable family:
 | Component | Item shape |
 |---|---|
 | [`MultiSelect`](/?path=/docs/components-form-multi-select--docs) | Selected enum values rendered as Tags |
-| [`AddableTextList`](/?path=/docs/displays-form-addable-text-list--docs) | Single string per item (free-form) |
-| [`AddableComboList`](/?path=/docs/displays-form-addable-combo-list--docs) | Single string per item, suggestion-driven |
-| [`AddableEntryList`](/?path=/docs/displays-form-addable-entry-list--docs) | Title + description card |
+| [`AddableTextList`](/?path=/docs/components-addables-addable-text-list--docs) | Single string per item (free-form) |
+| [`AddableComboList`](/?path=/docs/components-addables-addable-combo-list--docs) | Single string per item, suggestion-driven |
+| [`AddableEntryList`](/?path=/docs/components-addables-addable-entry-list--docs) | Title + description card |
 | **`AddableFieldRowList`** | **Arbitrary multi-field row** |
 
 Per [ADR-005](../../docs/adrs/ADR-005-addable-field-row-list.md). Replaces three hand-rolled patterns identified in the [2026-Q2 portal addable survey](../../docs/audits/2026-Q2-portal-addable-survey.md).
@@ -128,6 +128,6 @@ interface Tool {
 
 ## When NOT to use
 
-- Single-string-per-item — use [`AddableTextList`](/?path=/docs/displays-form-addable-text-list--docs) or [`AddableComboList`](/?path=/docs/displays-form-addable-combo-list--docs)
-- Title + description per item — use [`AddableEntryList`](/?path=/docs/displays-form-addable-entry-list--docs)
+- Single-string-per-item — use [`AddableTextList`](/?path=/docs/components-addables-addable-text-list--docs) or [`AddableComboList`](/?path=/docs/components-addables-addable-combo-list--docs)
+- Title + description per item — use [`AddableEntryList`](/?path=/docs/components-addables-addable-entry-list--docs)
 - Pick from a fixed enum — use [`MultiSelect`](/?path=/docs/components-form-multi-select--docs) (renders Tags)

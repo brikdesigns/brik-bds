@@ -7,7 +7,7 @@ import { Select } from '../Select';
 import { Checkbox } from '../Checkbox';
 
 const meta: Meta<typeof AddableFieldRowList> = {
-  title: 'Displays/Form/addable-field-row-list',
+  title: 'Components/Addables/addable-field-row-list',
   component: AddableFieldRowList,
   parameters: { layout: 'padded' },
 };

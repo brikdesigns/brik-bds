@@ -23,7 +23,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 );
 
 const meta: Meta<typeof AddableTextList> = {
-  title: 'Displays/Form/addable-text-list',
+  title: 'Components/Addables/addable-text-list',
   component: AddableTextList,
   parameters: { layout: 'centered' },
   argTypes: {
