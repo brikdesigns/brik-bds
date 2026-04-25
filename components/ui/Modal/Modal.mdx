@@ -27,6 +27,36 @@ Size variants, scrolling content, and no close button.
 - **`xl`** — Extra large, data-heavy views
 - **`full`** — Full screen
 
+## Confirm preset
+
+`preset="confirm"` collapses the legacy `Dialog` component into Modal as a compact `alertdialog` shape with auto-rendered confirm/cancel buttons. Use `confirmVariant="destructive"` for delete-type actions.
+
+The preset:
+- sets `role="alertdialog"` and a tighter 440px width
+- hides the X close button (footer is the dismissal surface)
+- auto-renders Cancel / Confirm buttons from `confirmLabel` / `cancelLabel` / `onConfirm`
+- supports `confirmVariant: 'primary' | 'destructive'` for destructive flows
+- accepts `confirmDisabled` and `confirmLoading` for in-flight requests
+
+Pass a custom `footer` to override the auto-rendered actions while keeping the rest of the preset.
+
+<Canvas of={Stories.ConfirmPreset} />
+
+```tsx
+<Modal
+  isOpen={open}
+  onClose={close}
+  preset="confirm"
+  title="Delete this item?"
+  description="This action cannot be undone."
+  confirmLabel="Delete"
+  confirmVariant="destructive"
+  onConfirm={handleDelete}
+/>
+```
+
+The standalone `Dialog` component is `@deprecated` and slated for deletion in a future major version. Migrate to `Modal preset="confirm"` — same prop names, same behavior. See [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md).
+
 ## Patterns
 
 Confirm delete and form in modal.

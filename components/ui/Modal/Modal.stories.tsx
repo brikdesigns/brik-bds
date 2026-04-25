@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { useState } from 'react';
 import { Modal } from './Modal';
@@ -17,7 +17,6 @@ const meta: Meta<typeof Modal> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
 /* ─── Layout helpers ─────────────────────────────────────────── */
 
@@ -41,16 +40,17 @@ const Row = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
-export const Playground: Story = {
-  render: (args) => {
+export const Playground = {
+  render: () => {
     const [isOpen, setIsOpen] = useState(false);
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open modal</Button>
         <Modal
-          {...args}
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
+          title="Title goes here"
+          size="md"
           footer={
             <>
               <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
@@ -63,14 +63,7 @@ export const Playground: Story = {
       </>
     );
   },
-  args: {
-    isOpen: false,
-    onClose: () => {},
-    children: null,
-    title: 'Title goes here',
-    size: 'md',
-  },
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement);
     const trigger = canvas.getByRole('button', { name: 'Open modal' });
 
@@ -89,8 +82,7 @@ export const Playground: Story = {
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
-export const Variants: Story = {
-  render: () => {
+export const Variants = () => {
     const [openId, setOpenId] = useState<string | null>(null);
     const open = (id: string) => setOpenId(id);
     const close = () => setOpenId(null);
@@ -156,13 +148,63 @@ export const Variants: Story = {
         </Row>
       </Stack>
     );
-  },
+};
+
+/* ─── Confirm preset ─────────────────────────────────────────── */
+
+/**
+ * `preset="confirm"` — compact alertdialog with auto-rendered confirm/cancel
+ * footer. Replaces the legacy `Dialog` component (per ADR-004).
+ *
+ * Use `confirmVariant="destructive"` for delete-type actions; the confirm
+ * button switches to the danger color while keeping the same shape.
+ */
+export const ConfirmPreset = () => {
+    const [openId, setOpenId] = useState<string | null>(null);
+    const open = (id: string) => setOpenId(id);
+    const close = () => setOpenId(null);
+
+    return (
+      <Stack>
+        <SectionLabel>Default confirm</SectionLabel>
+        <Row>
+          <div>
+            <Button onClick={() => open('default')}>Confirm action</Button>
+            <Modal
+              isOpen={openId === 'default'}
+              onClose={close}
+              preset="confirm"
+              title="Save changes?"
+              description="Your edits will be applied to the live record."
+              confirmLabel="Save"
+              onConfirm={close}
+            />
+          </div>
+        </Row>
+
+        <SectionLabel>Destructive confirm</SectionLabel>
+        <Row>
+          <div>
+            <Button variant="destructive" onClick={() => open('destructive')}>Delete item</Button>
+            <Modal
+              isOpen={openId === 'destructive'}
+              onClose={close}
+              preset="confirm"
+              title="Delete this item?"
+              description="This action cannot be undone."
+              confirmLabel="Delete"
+              confirmVariant="destructive"
+              onConfirm={close}
+            />
+          </div>
+        </Row>
+      </Stack>
+    );
 };
 
 /* ─── Patterns ───────────────────────────────────────────────── */
 
-export const Patterns: Story = {
-  render: () => {
+export const Patterns = () => {
     const [openId, setOpenId] = useState<string | null>(null);
     const open = (id: string) => setOpenId(id);
     const close = () => setOpenId(null);
@@ -219,5 +261,4 @@ export const Patterns: Story = {
         </Row>
       </Stack>
     );
-  },
 };
