@@ -39,6 +39,7 @@ const ViewEditToggle = () => (
 
 /* ─── 1. Playground ──────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     title: 'Identity',
@@ -62,6 +63,7 @@ export const Playground: Story = {
 
 /* ─── 2. Variants ────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Frame>
@@ -102,6 +104,7 @@ export const Variants: Story = {
 
 /* ─── 3. Patterns ────────────────────────────────────────────── */
 
+/** @summary Read mode page */
 export const ReadModePage: Story = {
   name: 'Pattern — Read-Mode Page',
   render: () => (
@@ -153,6 +156,7 @@ export const ReadModePage: Story = {
 
 /* ─── 4. Vocabulary demo — what the parts are called ───────── */
 
+/** @summary Anatomy vocabulary */
 export const AnatomyVocabulary: Story = {
   name: 'Anatomy — vocabulary',
   render: () => (

@@ -50,6 +50,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Show Archived',
@@ -76,6 +77,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, states
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   args: { label: 'Toggle', active: false, onToggle: () => {} },
   render: () => (
@@ -117,6 +119,7 @@ const roleOptions = [
   { id: 'viewer', label: 'Viewer' },
 ];
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   args: { label: 'Toggle', active: false, onToggle: () => {} },
   render: () => {

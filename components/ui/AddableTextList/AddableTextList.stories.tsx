@@ -59,6 +59,7 @@ const Controlled = (args: React.ComponentProps<typeof AddableTextList>) => {
   );
 };
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Services Offered',
@@ -71,6 +72,7 @@ export const Playground: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+/** @summary Empty state */
 export const Empty: Story = {
   args: {
     label: 'Back-Office Tools',
@@ -83,6 +85,7 @@ export const Empty: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+/** @summary Add an entry */
 export const AddAnEntry: Story = {
   name: 'Interaction — add an entry',
   args: {
@@ -108,6 +111,7 @@ export const AddAnEntry: Story = {
   },
 };
 
+/** @summary Remove an entry */
 export const RemoveAnEntry: Story = {
   name: 'Interaction — remove an entry',
   args: {
@@ -124,6 +128,7 @@ export const RemoveAnEntry: Story = {
   },
 };
 
+/** @summary Duplicate blocked */
 export const DuplicateBlocked: Story = {
   name: 'Interaction — duplicates blocked (case-insensitive)',
   args: {
@@ -141,6 +146,7 @@ export const DuplicateBlocked: Story = {
   },
 };
 
+/** @summary Anti pattern structured content */
 export const AntiPatternStructuredContent: Story = {
   name: 'Anti-pattern — structured content in tags',
   parameters: {
@@ -164,6 +170,7 @@ export const AntiPatternStructuredContent: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <div style={{ width: 480 }}>

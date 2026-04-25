@@ -69,6 +69,7 @@ const skillOptions = [
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Service lines',
@@ -81,6 +82,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, pre-selected, disabled, error
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   args: { options: serviceOptions },
   render: () => {
@@ -123,6 +125,7 @@ export const Variants: Story = {
    3. PATTERNS — Form with multi-select fields
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   args: { options: serviceOptions },
   render: () => {

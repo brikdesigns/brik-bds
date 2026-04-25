@@ -25,6 +25,7 @@ const Frame = ({ width = '360px', children }: { width?: string; children: React.
 
 /* ─── 1. Playground ──────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     gap: 'xs',
@@ -44,6 +45,7 @@ export const Playground: Story = {
 
 /* ─── 2. Gaps ────────────────────────────────────────────────── */
 
+/** @summary Gaps */
 export const Gaps: Story = {
   render: () => (
     <Frame>
@@ -72,6 +74,7 @@ export const Gaps: Story = {
 
 /* ─── 3. Inside a Field ──────────────────────────────────────── */
 
+/** @summary Inside field */
 export const InsideField: Story = {
   render: () => (
     <Frame>
@@ -89,6 +92,7 @@ export const InsideField: Story = {
 
 /* ─── 4. Appearance mix ──────────────────────────────────────── */
 
+/** @summary Variant mix */
 export const VariantMix: Story = {
   name: 'Appearance mix',
   render: () => (

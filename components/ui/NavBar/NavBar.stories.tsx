@@ -59,6 +59,7 @@ type Story = StoryObj<typeof meta>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     logo: <LogoPlaceholder />,
@@ -71,6 +72,7 @@ export const Playground: Story = {
    2. VARIANTS — Links only, multiple actions, minimal, sticky
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -114,6 +116,7 @@ export const Variants: Story = {
    3. PATTERNS — Sticky nav with scrollable content
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <div>

@@ -58,6 +58,7 @@ const fileUploads: TaskConsoleItem[] = [
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     title: 'Generating 14 pages',
@@ -71,6 +72,7 @@ export const Playground: Story = {
 
 /* ─── States ─────────────────────────────────────────────────── */
 
+/** @summary Component state variants */
 export const States: Story = {
   name: 'States',
   render: () => (
@@ -87,6 +89,7 @@ export const States: Story = {
   ),
 };
 
+/** @summary All completed */
 export const AllCompleted: Story = {
   name: 'All completed',
   render: () => (
@@ -102,6 +105,7 @@ export const AllCompleted: Story = {
   ),
 };
 
+/** @summary With errors */
 export const WithErrors: Story = {
   name: 'With errors',
   render: () => (
@@ -126,6 +130,7 @@ export const WithErrors: Story = {
   ),
 };
 
+/** @summary File upload style */
 export const FileUploadStyle: Story = {
   name: 'File upload style',
   render: () => (
@@ -142,6 +147,7 @@ export const FileUploadStyle: Story = {
   ),
 };
 
+/** @summary Collapsed */
 export const Collapsed: Story = {
   name: 'Collapsed',
   render: () => (
@@ -161,6 +167,7 @@ export const Collapsed: Story = {
 
 /* ─── Interactive demo ───────────────────────────────────────── */
 
+/** @summary Live simulation */
 export const LiveSimulation: Story = {
   name: 'Live simulation',
   render: () => {

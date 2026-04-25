@@ -124,6 +124,8 @@ const Controlled = (args: React.ComponentProps<typeof AddableComboList>) => {
 /**
  * Default — dental services vocabulary, no pre-selected values.
  * Click "Add" then type to filter, or press Enter for a free-form entry.
+ *
+ * @summary Default rendering
  */
 export const Default: Story = {
   name: 'Default',
@@ -142,6 +144,8 @@ export const Default: Story = {
 /**
  * Pre-populated — dental payment types with some values already selected.
  * Already-selected options are hidden from the dropdown.
+ *
+ * @summary Pre populated
  */
 export const PrePopulated: Story = {
   name: 'Pre-Populated',
@@ -159,6 +163,8 @@ export const PrePopulated: Story = {
 /**
  * Strict mode — insurance providers only.
  * Free-form entries are rejected; only listed providers can be added.
+ *
+ * @summary Strict mode
  */
 export const StrictMode: Story = {
   name: 'Strict Mode',
@@ -176,6 +182,8 @@ export const StrictMode: Story = {
 
 /**
  * With helper text — shows the optional line beneath the list.
+ *
+ * @summary With helper text
  */
 export const WithHelperText: Story = {
   name: 'With Helper Text',
@@ -194,6 +202,8 @@ export const WithHelperText: Story = {
 /**
  * Disabled — read-only chip rendering for view-mode sheets.
  * No input or remove controls are rendered.
+ *
+ * @summary Disabled state
  */
 export const Disabled: Story = {
   name: 'Disabled',
@@ -209,6 +219,8 @@ export const Disabled: Story = {
 
 /**
  * MaxEntries hit — values at the cap; input is hidden.
+ *
+ * @summary Max entries hit
  */
 export const MaxEntriesHit: Story = {
   name: 'Max Entries Hit',
@@ -225,6 +237,7 @@ export const MaxEntriesHit: Story = {
 
 // ── Interaction stories ───────────────────────────────────────────────────────
 
+/** @summary Select from dropdown */
 export const SelectFromDropdown: Story = {
   name: 'Interaction — select from dropdown',
   args: {
@@ -255,6 +268,7 @@ export const SelectFromDropdown: Story = {
   },
 };
 
+/** @summary Free form entry */
 export const FreeFormEntry: Story = {
   name: 'Interaction — free-form entry',
   args: {
@@ -278,6 +292,7 @@ export const FreeFormEntry: Story = {
   },
 };
 
+/** @summary Keyboard navigation */
 export const KeyboardNavigation: Story = {
   name: 'Interaction — keyboard navigation',
   args: {
@@ -308,6 +323,7 @@ export const KeyboardNavigation: Story = {
   },
 };
 
+/** @summary Escape closes dropdown */
 export const EscapeClosesDropdown: Story = {
   name: 'Interaction — Escape closes dropdown',
   args: {
@@ -338,6 +354,7 @@ export const EscapeClosesDropdown: Story = {
   },
 };
 
+/** @summary Backspace removes last tag */
 export const BackspaceRemovesLastTag: Story = {
   name: 'Interaction — Backspace on empty removes last tag',
   args: {
@@ -363,6 +380,7 @@ export const BackspaceRemovesLastTag: Story = {
   },
 };
 
+/** @summary Strict rejects free form */
 export const StrictRejectsFreeForm: Story = {
   name: 'Interaction — strict mode rejects free-form',
   args: {
@@ -388,6 +406,7 @@ export const StrictRejectsFreeForm: Story = {
   },
 };
 
+/** @summary Duplicate flash */
 export const DuplicateFlash: Story = {
   name: 'Interaction — duplicate rejected',
   args: {

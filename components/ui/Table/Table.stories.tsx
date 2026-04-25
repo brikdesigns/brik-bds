@@ -89,6 +89,7 @@ type Story = StoryObj<typeof Table>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: { striped: false, size: 'default' },
   render: (args) => (
@@ -121,6 +122,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, striped, sortable, cell types
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => {
     const services = [
@@ -455,6 +457,7 @@ export const Variants: Story = {
    3. PATTERNS — Full-featured composite table
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     const categories = ['Design', 'Development', 'Marketing', 'Strategy', 'Operations'];

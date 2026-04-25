@@ -52,6 +52,8 @@ type Story = StoryObj;
  * Section title — sits at the top of each SheetSection. Heading family,
  * `--heading-sm`, semibold, primary text. No uppercase transform — distinct
  * from the legacy `<SheetSection heading="..." />` treatment.
+ *
+ * @summary Section title
  */
 export const SectionTitle: Story = {
   render: () => (
@@ -65,6 +67,8 @@ export const SectionTitle: Story = {
  * Field label — sits one tier below SheetSectionTitle. Label family,
  * `--label-sm`, semibold, muted text, Title Case. Block-level so values
  * stack below without wrapping.
+ *
+ * @summary Field label
  */
 export const FieldLabel: Story = {
   render: () => (
@@ -77,6 +81,8 @@ export const FieldLabel: Story = {
 /**
  * Field value — read-mode display below a field label. Body family,
  * `--body-md`, regular weight, primary text, preserves whitespace.
+ *
+ * @summary Field value
  */
 export const FieldValue: Story = {
   render: () => (
@@ -91,6 +97,8 @@ export const FieldValue: Story = {
 /**
  * Field value — empty state. When `children` is null/undefined/empty, the
  * fallback renders muted + italic. Pass `empty={null}` to suppress entirely.
+ *
+ * @summary Field value empty
  */
 export const FieldValueEmpty: Story = {
   name: 'FieldValue — Empty',
@@ -107,6 +115,8 @@ export const FieldValueEmpty: Story = {
 /**
  * Helper text — neutral. Muted caption under a field, smaller than field
  * label so it never competes for attention.
+ *
+ * @summary Helper text
  */
 export const HelperText: Story = {
   render: () => (
@@ -122,6 +132,8 @@ export const HelperText: Story = {
 
 /**
  * Helper text — error tone. For validation messages under an input.
+ *
+ * @summary Helper text error
  */
 export const HelperTextError: Story = {
   name: 'HelperText — Error',
@@ -144,6 +156,8 @@ export const HelperTextError: Story = {
  * than field labels, labels smaller than values, helper text smallest.
  * This is the hierarchy the portal audit flagged as inverted in 9 of 31
  * sheets prior to this PR.
+ *
+ * @summary Full section
  */
 export const FullSection: Story = {
   name: 'Full Section — Composition',
@@ -175,6 +189,8 @@ export const FullSection: Story = {
  * Two sections stacked. No divider between them — the `--heading-sm`
  * weight of each section title is enough visual separation. This is the
  * no-dividers rule from docs/LAYOUT-CONTEXTS.md.
+ *
+ * @summary Stacked sections
  */
 export const StackedSections: Story = {
   name: 'Stacked Sections — No Dividers',
@@ -206,6 +222,8 @@ export const StackedSections: Story = {
  * Label-with-input — demonstrates the `htmlFor` prop. When the label is
  * programmatically associated with an input, the primitive renders as
  * `<label>` for screen-reader accessibility; otherwise as `<span>`.
+ *
+ * @summary Label with input
  */
 export const LabelWithInput: Story = {
   name: 'FieldLabel — With htmlFor',
@@ -236,6 +254,8 @@ export const LabelWithInput: Story = {
  * All four primitives rendered at the same visual level so the tier
  * hierarchy is obvious at a glance. Use this story for regression review
  * after any typography-token change.
+ *
+ * @summary Tier hierarchy
  */
 export const TierHierarchy: Story = {
   name: 'Tier Hierarchy — Visual Reference',

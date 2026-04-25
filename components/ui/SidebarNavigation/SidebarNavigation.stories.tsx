@@ -84,6 +84,7 @@ type Story = StoryObj<typeof SidebarNavigation>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     logo: <BrikLogo />,
@@ -98,6 +99,7 @@ export const Playground: Story = {
    2. VARIANTS — Different configurations
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 'var(--padding-xl)', height: '600px' }}>
@@ -140,6 +142,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world compositions
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <div style={{ display: 'flex', height: '100vh' }}>

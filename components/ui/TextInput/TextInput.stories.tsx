@@ -53,6 +53,7 @@ type Story = StoryObj<typeof TextInput>;
    1. PLAYGROUND — Args-based, use Controls panel to explore
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   args: {
     label: 'Email address',
@@ -75,6 +76,7 @@ export const Playground: Story = {
    2. VARIANTS — Sizes, states, icons, and types
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <div style={{ width: 480 }}>
@@ -130,6 +132,7 @@ export const Variants: Story = {
    3. PATTERNS — Real-world form layouts
    ═══════════════════════════════════════════════════════════════ */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Row gap="var(--padding-xl)">

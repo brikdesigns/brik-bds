@@ -20,4 +20,5 @@ const meta: Meta<typeof CalendarPlaceholder> = {
 export default meta;
 type Story = StoryObj<typeof CalendarPlaceholder>;
 
+/** @summary Placeholder */
 export const Placeholder: Story = {};

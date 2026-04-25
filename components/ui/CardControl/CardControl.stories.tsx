@@ -37,6 +37,7 @@ const Stack = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
+/** @summary Interactive playground for prop tweaking */
 export const Playground: Story = {
   render: (args) => {
     const [checked, setChecked] = useState(true);
@@ -57,6 +58,7 @@ export const Playground: Story = {
 
 /* ─── Action alignment ───────────────────────────────────────── */
 
+/** @summary Action alignment */
 export const ActionAlignment: Story = {
   render: () => (
     <Stack>
@@ -91,6 +93,7 @@ export const ActionAlignment: Story = {
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
+/** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (
     <Stack>
@@ -137,6 +140,7 @@ export const Variants: Story = {
 
 /* ─── Patterns ───────────────────────────────────────────────── */
 
+/** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => {
     const [notifications, setNotifications] = useState(true);
@@ -170,6 +174,7 @@ export const Patterns: Story = {
 
 /* ─── Toggle switch panel ────────────────────────────────────── */
 
+/** @summary Toggle switch panel */
 export const ToggleSwitchPanel: Story = {
   render: () => {
     const [email, setEmail] = useState(true);
