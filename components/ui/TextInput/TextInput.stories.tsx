@@ -113,9 +113,11 @@ export const Variants: Story = {
           <SectionLabel>Input types</SectionLabel>
           <Stack gap="var(--gap-lg)">
             <TextInput label="Text" type="text" placeholder="Plain text" fullWidth />
-            <TextInput label="Email" type="email" placeholder="email@example.com" fullWidth />
+            <TextInput label="Email" type="email" placeholder="email@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
             <TextInput label="Password" type="password" placeholder="••••••••" fullWidth />
             <TextInput label="Number" type="number" placeholder="0" fullWidth />
+            <TextInput label="Search" type="search" defaultValue="bds component" iconBefore={<Icon icon="ph:magnifying-glass" />} fullWidth />
+            <TextInput label="URL" type="url" placeholder="https://example.com" fullWidth />
           </Stack>
         </div>
       </Stack>
