@@ -14,6 +14,8 @@ export interface SheetFieldLabelProps
 }
 
 /**
+ * @summary Field label above a Sheet value or input
+ *
  * Field label inside a Sheet body. Sits one tier below `<SheetSectionTitle>`
  * — label family, `--label-sm`, semibold, muted text, Title Case transform.
  * Use above `<SheetFieldValue>` in read mode, or above a `<TextInput>` /

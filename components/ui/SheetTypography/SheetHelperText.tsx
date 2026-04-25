@@ -13,6 +13,8 @@ export interface SheetHelperTextProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
+ * @summary Helper or error text below a Sheet field
+ *
  * Small hint or error text in a Sheet body. Label family, `--label-xs`,
  * regular weight, muted text. Always smaller than `<SheetFieldLabel>`, so
  * the reading order is preserved: section title → field label → value →
