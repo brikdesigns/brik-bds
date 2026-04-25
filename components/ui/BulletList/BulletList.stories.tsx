@@ -3,7 +3,7 @@ import { BulletList } from './BulletList';
 import { Field } from '../Field';
 
 const meta: Meta<typeof BulletList> = {
-  title: 'Displays/Sheet/bullet-list',
+  title: 'Components/List/bullet-list',
   component: BulletList,
   parameters: { layout: 'padded' },
   argTypes: {
