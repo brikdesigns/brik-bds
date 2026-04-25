@@ -169,27 +169,29 @@ The MCP addon (`@storybook/addon-mcp`) exposes the full BDS component library as
 
 **Addon vitest** (`@storybook/addon-vitest`) is also installed for the test feedback loop.
 
-### Chromatic (visual testing + hosted Storybook)
+### Chromatic (visual testing + hosted MCP)
 
-BDS Storybook is published to **Chromatic** for visual regression testing and hosted browsing.
+BDS Storybook is published to **Chromatic** — both for visual regression testing and as the canonical Storybook MCP endpoint that consumer-repo Claude sessions query.
 
 - **App ID:** `69b8918cac3056b39424d5d3`
-- **Published URL:** https://69b8918cac3056b39424d5d3-jtcwcnhshz.chromatic.com/
+- **Stable URL (use this everywhere):** https://main--69b8918cac3056b39424d5d3.chromatic.com/
 - **Dashboard:** https://www.chromatic.com/builds?appId=69b8918cac3056b39424d5d3
+
+⚠ **Never commit a per-build URL** (e.g. `<appid>-<random>.chromatic.com`) — those freeze on the build that produced them and silently rot. The `main--` branch alias above always tracks the latest build on `main`.
+
+The stable URL serves:
+- `/mcp` — live `addon-mcp` server (the endpoint consumer agents query)
+- `/index.json` — story index, including all `surface-*` tags
+- `/manifests/components.json` + `/manifests/components.html` — the components manifest from `experimentalComponentsManifest`
+
+The Netlify deploy at `storybook.brikdesigns.com` is browseable but does **not** serve `/mcp` (static build only). Agent MCP queries must use the Chromatic stable URL.
 
 **Publish manually:**
 ```bash
 npm run chromatic
 ```
 
-**What Chromatic does:**
-- Snapshots every story on every publish (226 snapshots across 63 components)
-- Visual diff detection — flags pixel-level changes between builds
-- Hosted Storybook URL that stays current (no Netlify deploy needed)
-
-**When to publish:** After any component CSS or story changes are committed. Run `npm run chromatic` before pushing to get a visual diff you can review.
-
-**Netlify deploys still exist** (`deploy:staging`, `deploy:prod`) but Chromatic is the primary visual review tool.
+**When to publish:** After any component CSS or story changes are committed. Consumer agents query the published Chromatic build, not your local Storybook — unpublished changes won't reach them. Visual diffs flag pixel-level regressions between builds.
 
 ## Paper — Pre-implementation design
 
