@@ -38,6 +38,7 @@ const mockSuggestions: AddressSuggestion[] = [
 const meta: Meta<typeof AddressInput> = {
   title: 'Components/Input/address-input',
   component: AddressInput,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

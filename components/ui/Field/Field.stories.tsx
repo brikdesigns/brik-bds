@@ -6,6 +6,7 @@ import { EmptyState } from '../EmptyState';
 const meta: Meta<typeof Field> = {
   title: 'Components/Form/field',
   component: Field,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     label: { control: 'text' },

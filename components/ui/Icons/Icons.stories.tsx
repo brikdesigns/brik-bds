@@ -62,6 +62,7 @@ const IconsReference = () => <div />;
 const meta: Meta<typeof IconsReference> = {
   title: 'Foundations/Assets/icons',
   component: IconsReference,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'padded',
     docs: { toc: true },

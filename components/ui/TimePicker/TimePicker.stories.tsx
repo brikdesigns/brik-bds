@@ -31,6 +31,7 @@ const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNod
 const meta: Meta<typeof TimePicker> = {
   title: 'Components/Form/time-picker',
   component: TimePicker,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

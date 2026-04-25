@@ -10,6 +10,7 @@ import { Badge } from '../Badge';
 const meta: Meta<typeof Board> = {
   title: 'Displays/Board/board',
   component: Board,
+  tags: ['surface-product'],
   parameters: {
     layout: 'padded',
   },

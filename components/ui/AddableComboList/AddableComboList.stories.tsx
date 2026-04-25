@@ -83,6 +83,7 @@ const DENTAL_INSURANCE = [
 const meta: Meta<typeof AddableComboList> = {
   title: 'Components/Addables/addable-combo-list',
   component: AddableComboList,
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

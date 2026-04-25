@@ -6,6 +6,7 @@ import type { DevBarSlotDef } from './BrikDevBar';
 const meta: Meta<typeof BrikDevBar> = {
   title: 'Dev Tools/BrikDevBar',
   component: BrikDevBar,
+  tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },
 };
 

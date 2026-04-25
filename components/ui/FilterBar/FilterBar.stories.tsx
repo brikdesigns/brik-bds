@@ -38,6 +38,7 @@ const statusOptions = [
 const meta = {
   title: 'Components/Action/filter-bar',
   component: FilterBar,
+  tags: ['surface-product'],
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

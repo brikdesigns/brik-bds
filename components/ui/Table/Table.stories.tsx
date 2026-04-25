@@ -74,6 +74,7 @@ const statusLabel = (s: string) =>
 const meta: Meta<typeof Table> = {
   title: 'Displays/Table/table',
   component: Table,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     striped: { control: 'boolean' },

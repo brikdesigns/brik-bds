@@ -6,6 +6,7 @@ import { Avatar } from './Avatar';
 const meta: Meta<typeof Avatar> = {
   title: 'Foundations/Assets/avatar',
   component: Avatar,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
   },

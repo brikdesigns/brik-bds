@@ -4,6 +4,7 @@ import { EmptyState } from './EmptyState';
 const meta: Meta<typeof EmptyState> = {
   title: 'Components/Feedback/empty-state',
   component: EmptyState,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     title: { control: 'text' },

@@ -30,6 +30,7 @@ const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNod
 const meta: Meta<typeof Checkbox> = {
   title: 'Components/Form/checkbox',
   component: Checkbox,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     label: { control: 'text' },

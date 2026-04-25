@@ -6,6 +6,7 @@ import { Badge } from '../Badge';
 const meta: Meta<typeof Card> = {
   title: 'Displays/Card/card',
   component: Card,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     variant: { control: 'select', options: ['outlined', 'brand', 'elevated'] },

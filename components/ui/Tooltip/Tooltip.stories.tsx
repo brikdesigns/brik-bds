@@ -31,6 +31,7 @@ const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; g
 const meta: Meta<typeof Tooltip> = {
   title: 'Components/Feedback/tooltip',
   component: Tooltip,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   decorators: [
     (Story) => (

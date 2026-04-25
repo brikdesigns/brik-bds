@@ -55,6 +55,7 @@ const groupedOptions = [
 const meta: Meta<typeof Select> = {
   title: 'Components/Form/select',
   component: Select,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     placeholder: { control: 'text' },

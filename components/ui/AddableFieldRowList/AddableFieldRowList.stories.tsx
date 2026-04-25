@@ -9,6 +9,7 @@ import { Checkbox } from '../Checkbox';
 const meta: Meta<typeof AddableFieldRowList> = {
   title: 'Components/Addables/addable-field-row-list',
   component: AddableFieldRowList,
+  tags: ['surface-product'],
   parameters: { layout: 'padded' },
 };
 
