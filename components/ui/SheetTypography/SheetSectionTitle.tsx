@@ -12,6 +12,8 @@ export interface SheetSectionTitleProps extends HTMLAttributes<HTMLHeadingElemen
 }
 
 /**
+ * @summary Section heading inside a Sheet body
+ *
  * Top-of-section heading inside a Sheet body. Locks to the Sheet-context
  * section-heading tier — heading family, `--heading-sm`, semibold, primary
  * text, no uppercase transform. Always renders larger than `<SheetFieldLabel>`

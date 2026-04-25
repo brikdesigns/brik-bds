@@ -12,6 +12,8 @@ export interface SheetFieldValueProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
+ * @summary Read-mode display of a field value in a Sheet
+ *
  * Read-mode display of a field value inside a Sheet body. Body family,
  * `--body-md`, regular weight, primary text, preserves whitespace so
  * multi-line values render correctly. Pair with `<SheetFieldLabel>` above.
