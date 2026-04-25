@@ -85,3 +85,31 @@ import { TextInput } from '@brik/bds';
   iconBefore={<Icon icon="ph:envelope" />}
 />
 ```
+
+## Email, search, URL — use `type=` + `iconBefore`
+
+The previous `EmailInput` and `SearchInput` components have been removed (see [ADR-004](../docs/adrs/ADR-004-component-bloat-guardrails.md)). They were 5–10 line wrappers that set a `type=` and rendered a leading icon. Use TextInput directly:
+
+```tsx
+import { Envelope, MagnifyingGlass } from '@brik/bds/icons';
+
+// Email — replaces <EmailInput />
+<TextInput
+  label="Email"
+  type="email"
+  autoComplete="email"
+  iconBefore={<Icon icon={Envelope} />}
+  placeholder="you@example.com"
+/>
+
+// Search — replaces <SearchInput />
+// `type="search"` automatically renders the native clear button
+// (styled to match BDS via TextInput.css).
+<TextInput
+  type="search"
+  iconBefore={<Icon icon={MagnifyingGlass} />}
+  placeholder="Search..."
+/>
+```
+
+For password inputs with show/hide toggle behavior, use the dedicated [`PasswordInput`](?path=/docs/components-form-password-input--docs) — that component carries real load-bearing UX (toggle state, eye icons, password-manager hooks) and isn't a wrapper.
