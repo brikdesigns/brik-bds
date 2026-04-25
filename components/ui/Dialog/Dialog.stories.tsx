@@ -6,6 +6,7 @@ import { Button } from '../Button';
 const meta: Meta<typeof Dialog> = {
   title: 'Displays/Overlay/dialog',
   component: Dialog,
+  tags: ['!manifest'], // deprecated — hide from MCP discovery (use Modal preset="confirm")
   parameters: { layout: 'centered' },
   argTypes: {
     variant: { control: 'select', options: ['default', 'destructive'] },
