@@ -19,7 +19,10 @@ export * from './blueprints';
 export {
   ATMOSPHERE_MANIFEST,
   getAtmosphereImportPath,
+  getAtmosphereSafePairings,
   type AtmosphereManifestEntry,
+  type SafePairing,
+  type SurfaceProfile,
 } from './atmospheres';
 export type {
   IndustryPainPointEntry,
