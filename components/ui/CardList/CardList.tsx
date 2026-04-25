@@ -18,6 +18,8 @@ export interface CardListProps extends HTMLAttributes<HTMLUListElement> {
 
 /**
  * CardList — layout wrapper that stacks card components vertically or horizontally.
+ *
+ * @summary Stack of cards (vertical or horizontal)
  */
 export function CardList({
   orientation = 'vertical',

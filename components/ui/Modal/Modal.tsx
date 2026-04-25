@@ -107,6 +107,8 @@ export type ModalProps = ModalDefaultProps | ModalConfirmPresetProps;
  *   onConfirm={handleDelete}
  * />
  * ```
+ *
+ * @summary Portal-rendered overlay with backdrop and escape
  */
 export function Modal(props: ModalProps) {
   const {

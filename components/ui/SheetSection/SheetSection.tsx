@@ -23,6 +23,8 @@ export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'ti
  * raw `<h3>` + `detail.sectionHeading` patterns.
  *
  * Composes inside `<Sheet>` — one section per logical grouping of fields.
+ *
+ * @summary Named block wrapper for content inside a Sheet body
  */
 export function SheetSection({
   heading,

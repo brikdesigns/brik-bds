@@ -142,6 +142,8 @@ const TEXTAREA_SIZE: Record<AddableEntryListSize, TextAreaSize> = { sm: 'sm', md
  *   addLabel="Add Service"
  * />
  * ```
+ *
+ * @summary Add-edit list of label+text entry rows
  */
 export function AddableEntryList({
   entries,

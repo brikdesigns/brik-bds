@@ -46,6 +46,8 @@ export interface NavBarProps extends HTMLAttributes<HTMLElement> {
  *   actions={<Button size="sm">Get Started</Button>}
  * />
  * ```
+ *
+ * @summary Horizontal top navigation bar with brand and links
  */
 export function NavBar({
   logo,

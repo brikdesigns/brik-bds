@@ -70,6 +70,8 @@ const INPUT_SIZE: Record<AddableComboListSize, TextInputSize> = { sm: 'sm', md: 
  *   placeholder="Search or add a service…"
  * />
  * ```
+ *
+ * @summary Suggestion-driven combobox tag input (multi-select)
  */
 export function AddableComboList({
   values,

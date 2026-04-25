@@ -43,6 +43,8 @@ export interface PricingCardProps extends HTMLAttributes<HTMLDivElement> {
  *   highlighted
  * />
  * ```
+ *
+ * @summary Pricing tier card with feature list
  */
 export function PricingCard({
   title,

@@ -31,6 +31,8 @@ export interface AnimatedIconProps {
  * import checkAnimation from '@/animations/checkbox.json';
  * <AnimatedIcon animationData={checkAnimation} trigger="once" size={32} label="Completed" />
  * ```
+ *
+ * @summary Lottie wrapper for animated icon states
  */
 export function AnimatedIcon({
   animationData,

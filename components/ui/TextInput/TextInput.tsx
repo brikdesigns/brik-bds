@@ -141,6 +141,8 @@ const sizeStyles: Record<TextInputSize, { input: CSSProperties }> = {
  * <TextInput size="md" label="Password" type="password" helperText="Must be at least 8 characters" />
  * <TextInput size="lg" label="Search" error="Required field" />
  * ```
+ *
+ * @summary Themed single-line text input with label/helper/error
  */
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (

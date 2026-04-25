@@ -62,6 +62,8 @@ declare global {
  * Render this once in your DevTools layout (or any high-level layout component).
  * Both scripts must be present in the app's public/ directory — see the sync
  * script at brik-llm/scripts/brik-dev-tool/sync-downstream.sh.
+ *
+ * @summary Dev-only inspection bar (loads devbar/inspect scripts)
  */
 export function BrikDevBar() {
   useEffect(() => {

@@ -19,6 +19,8 @@ export interface TagGroupProps extends HTMLAttributes<HTMLDivElement> {
  * Replaces ad-hoc `<div style={{ display: 'flex', gap, flexWrap }}>`
  * wrappers around tag arrays. Use as a Field value, inside a table cell,
  * or standalone inside a SheetSection.
+ *
+ * @summary Horizontal cluster of Tags with locked spacing
  */
 export function TagGroup({
   gap = 'xs',

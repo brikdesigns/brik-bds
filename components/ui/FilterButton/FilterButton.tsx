@@ -66,6 +66,8 @@ export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 
  *   ]}
  * />
  * ```
+ *
+ * @summary Dropdown filter trigger for filter bars
  */
 export function FilterButton({
   label,

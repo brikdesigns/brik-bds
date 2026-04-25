@@ -54,6 +54,8 @@ const iconMap: Record<AlertBannerVariant, string> = {
  * ```
  *
  * Tracked under ADR-004 — see docs/adrs/ADR-004-component-bloat-guardrails.md.
+ *
+ * @summary Status banner (deprecated — use Banner)
  */
 export function AlertBanner({
   title,

@@ -164,6 +164,8 @@ const styleBuilders: Record<TabBarVariant, (active: boolean, onColor: boolean) =
  *   ]}
  * />
  * ```
+ *
+ * @summary Horizontal tab navigation with active indicator
  */
 export function TabBar({
   items,

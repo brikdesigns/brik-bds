@@ -32,6 +32,8 @@ export interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
  * <TextLink href="/about">Learn More</TextLink>
  * <TextLink href="/contact" size="small">Contact Us</TextLink>
  * ```
+ *
+ * @summary Themed inline link with size + variant options
  */
 export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
   (

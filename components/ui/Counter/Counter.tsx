@@ -24,6 +24,8 @@ export interface CounterProps extends HTMLAttributes<HTMLSpanElement> {
  * <Counter count={5} status="success" />
  * <Counter count={150} max={99} status="error" size="lg" />
  * ```
+ *
+ * @summary Numeric count indicator with status colors
  */
 export function Counter({
   count,

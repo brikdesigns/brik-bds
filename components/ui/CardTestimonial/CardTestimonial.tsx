@@ -20,6 +20,8 @@ export interface CardTestimonialProps extends HTMLAttributes<HTMLElement> {
 
 /**
  * CardTestimonial — customer testimonial card with quote, attribution, and stars.
+ *
+ * @summary Customer testimonial card with quote and stars
  */
 export function CardTestimonial({
   quote,

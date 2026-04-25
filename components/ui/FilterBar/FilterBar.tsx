@@ -46,6 +46,8 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
  *   <FilterButton label="Status" value={statusFilter} onChange={setStatusFilter} options={...} />
  * </FilterBar>
  * ```
+ *
+ * @summary Heading + counter + filter controls row for list views
  */
 export function FilterBar({
   total,

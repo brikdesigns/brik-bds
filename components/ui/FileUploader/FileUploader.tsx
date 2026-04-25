@@ -43,6 +43,8 @@ export interface FileUploaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 
  *   onChange={(files) => console.log(files)}
  * />
  * ```
+ *
+ * @summary Drag-and-drop file upload zone with progress
  */
 export function FileUploader({
   accept,

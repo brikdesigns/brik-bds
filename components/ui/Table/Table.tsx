@@ -30,6 +30,8 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
  * Size is propagated via `data-size` attribute on the table element.
  * CSS uses `[data-size]` selectors for cell padding, eliminating the
  * need for React context.
+ *
+ * @summary Themed data table with striped + size variants
  */
 export function Table({
   striped = false,

@@ -21,6 +21,8 @@ export interface DividerProps extends HTMLAttributes<HTMLHRElement> {
  * <Divider spacing="lg" />
  * <Divider orientation="vertical" />
  * ```
+ *
+ * @summary Visual separator line for content sections
  */
 export function Divider({
   orientation = 'horizontal',

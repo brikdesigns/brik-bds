@@ -56,6 +56,8 @@ function defaultFormatter(value: number, max: number): string {
  * <Meter value={3} max={10} status="warning" label="Fair" size="lg" />
  * <Meter value={1} max={5} status="error" label="Fail" showValue={false} />
  * ```
+ *
+ * @summary Horizontal gauge bar for scores and ratings
  */
 export function Meter({
   value,

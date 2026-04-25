@@ -21,6 +21,8 @@ export interface BadgeGroupProps extends HTMLAttributes<HTMLDivElement> {
  * or standalone inside a SheetSection.
  *
  * Sibling of `TagGroup` — same API shape, different child indicator.
+ *
+ * @summary Horizontal cluster of Badges with locked spacing
  */
 export function BadgeGroup({
   gap = 'xs',

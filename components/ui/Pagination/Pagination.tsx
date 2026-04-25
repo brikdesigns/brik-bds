@@ -91,6 +91,8 @@ function getPageNumbers(
  *   position="center"
  * />
  * ```
+ *
+ * @summary Page-navigation controls with page numbers
  */
 export function Pagination({
   currentPage,

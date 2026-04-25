@@ -34,6 +34,8 @@ function getInitials(name: string): string {
  * <Avatar src="/user.jpg" alt="John Doe" />
  * <Avatar name="John Doe" size="lg" status="online" />
  * ```
+ *
+ * @summary Profile image with initials fallback + status dot
  */
 export function Avatar({
   src,

@@ -20,6 +20,8 @@ export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 't
  *
  * Displays a centered title, optional description, and optional
  * action button within a bordered surface container.
+ *
+ * @summary Empty/zero-state messaging with optional action
  */
 export function EmptyState({
   title,

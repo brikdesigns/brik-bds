@@ -83,6 +83,8 @@ export interface MultiSelectProps {
  *   onChange={setSelected}
  * />
  * ```
+ *
+ * @summary Themed multi-select dropdown with chip values
  */
 export function MultiSelect({
   options,

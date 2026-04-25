@@ -23,6 +23,8 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
  *   <Button variant="ghost">Cancel</Button>
  * </ButtonGroup>
  * ```
+ *
+ * @summary Group related Buttons (orientation + full-width)
  */
 export function ButtonGroup({
   children,

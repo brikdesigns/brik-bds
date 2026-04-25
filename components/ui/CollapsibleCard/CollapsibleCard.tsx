@@ -50,6 +50,8 @@ export interface CollapsibleCardProps extends HTMLAttributes<HTMLDivElement> {
  *   <p>Content goes here</p>
  * </CollapsibleCard>
  * ```
+ *
+ * @summary Card with expand/collapse content section
  */
 export function CollapsibleCard({
   sectionLabel,

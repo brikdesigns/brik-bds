@@ -48,6 +48,8 @@ export interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
  *   <TextArea label="Message" placeholder="How can we help?" />
  * </Form>
  * ```
+ *
+ * @summary Form container with layout and inline messaging
  */
 export function Form({
   children,

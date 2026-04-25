@@ -13,6 +13,8 @@ export interface SpinnerProps extends HTMLAttributes<HTMLDivElement> {
  * Spinner — circular loading indicator with CSS animation
  *
  * Uses BDS tokens for colors and follows the existing animation pattern.
+ *
+ * @summary Circular loading indicator with CSS animation
  */
 export function Spinner({
   size = 'sm',

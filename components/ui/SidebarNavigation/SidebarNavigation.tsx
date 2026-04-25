@@ -26,6 +26,8 @@ export interface SidebarNavigationProps {
  * SidebarNavigation — fixed sidebar with logo, nav items, footer, and user section.
  *
  * Width is a runtime prop passed via inline style.
+ *
+ * @summary Fixed app sidebar — logo, nav, footer, user
  */
 export function SidebarNavigation({
   logo,

@@ -42,6 +42,8 @@ export interface TooltipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'cont
  *   <span>?</span>
  * </Tooltip>
  * ```
+ *
+ * @summary Themed hover tooltip anchored to a trigger element
  */
 export function Tooltip({
   content,

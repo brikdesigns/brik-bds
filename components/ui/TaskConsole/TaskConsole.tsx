@@ -73,6 +73,8 @@ function StatusIcon({ status }: { status: TaskItemStatus }) {
  * upload progress widget.
  *
  * Category: Feedback (alongside Toast)
+ *
+ * @summary Floating progress overlay for long-running operations
  */
 export function TaskConsole({
   title,

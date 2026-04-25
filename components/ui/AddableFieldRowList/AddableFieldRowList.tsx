@@ -126,6 +126,8 @@ const BUTTON_SIZE: Record<AddableFieldRowListSize, ButtonSize> = {
  *   )}
  * </AddableFieldRowList>
  * ```
+ *
+ * @summary Add-edit list of multi-field rows
  */
 export function AddableFieldRowList<T>({
   values,

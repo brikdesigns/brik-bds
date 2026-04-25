@@ -30,6 +30,8 @@ function isEmpty(value: ReactNode): boolean {
  * The single biggest win over ad-hoc markup: one API covers text,
  * tags, URLs, bullet lists, and empty states. Locks label typography,
  * value spacing, and the "Not set" empty treatment.
+ *
+ * @summary Read-mode label + value pair for use inside a Sheet
  */
 export function Field({
   label,

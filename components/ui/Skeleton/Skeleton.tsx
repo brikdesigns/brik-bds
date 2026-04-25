@@ -22,6 +22,8 @@ export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
  * <Skeleton variant="circular" width={48} height={48} />
  * <Skeleton variant="rectangular" width="300px" height="200px" />
  * ```
+ *
+ * @summary Loading placeholder with shimmer animation
  */
 export function Skeleton({
   variant = 'text',

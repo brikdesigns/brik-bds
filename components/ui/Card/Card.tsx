@@ -138,6 +138,8 @@ function formatSummaryValue(value: string | number, type: CardSummaryType): stri
  *   textLink={{ label: 'Details', href: '/revenue' }}
  * />
  * ```
+ *
+ * @summary Flexible content container with presets
  */
 export function Card(props: CardProps) {
   if (props.preset === 'control') {

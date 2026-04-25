@@ -28,6 +28,8 @@ export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
  * 2026-04-24 — CardControl stays as a first-class component. The
  * 2026-Q2 audit's recommendation to retire it is logged but not in
  * effect; see docs/audits/2026-Q2-component-bloat-audit.md.
+ *
+ * @summary Settings card — title, description, badge, action
  */
 export function CardControl({
   title,

@@ -151,6 +151,8 @@ function matchCatalogEntry(
  *   emptyDescriptionLabel="No description set"
  * />
  * ```
+ *
+ * @summary Industry-aware multi-pick input with custom escape
  */
 export function CatalogPicker({
   catalog,

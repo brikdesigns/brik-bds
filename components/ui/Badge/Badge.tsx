@@ -49,6 +49,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
  * <Badge status="warning" size="sm" appearance="subtle">Pending</Badge>
  * <Badge status="error" size="lg">Failed</Badge>
  * ```
+ *
+ * @summary Status indicator with semantic tones and sizes
  */
 export function Badge({
   status = 'info',

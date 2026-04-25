@@ -64,6 +64,8 @@ function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
 
 /**
  * Accordion — collapsible content sections with plus/minus icons.
+ *
+ * @summary Collapsible content sections with single/multi-open
  */
 export function Accordion({
   items,

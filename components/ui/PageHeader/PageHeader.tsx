@@ -34,6 +34,8 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, stats, and tabs.
+ *
+ * @summary Page-level header — title, breadcrumbs, actions, tabs
  */
 export function PageHeader({
   title,

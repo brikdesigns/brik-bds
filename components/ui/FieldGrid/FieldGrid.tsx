@@ -21,6 +21,8 @@ export interface FieldGridProps extends HTMLAttributes<HTMLDivElement> {
  * pattern scattered across portal sheets. Primary use: pair `Field`
  * components in a stacked sheet body. Also works for `Card`, `Tag`,
  * or any equal-weight row of content.
+ *
+ * @summary Equal-column grid for laying out Fields side by side
  */
 export function FieldGrid({
   columns = 2,

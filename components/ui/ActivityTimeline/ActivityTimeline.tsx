@@ -43,6 +43,8 @@ export interface ActivityTimelineProps {
  *   { icon: <Icon icon="ph:check-circle" />, label: 'Completed', timestamp: 'Apr 13, 2026' },
  * ]} />
  * ```
+ *
+ * @summary Vertical timeline of dated events
  */
 export function ActivityTimeline({ events, className = '' }: ActivityTimelineProps) {
   if (events.length === 0) return null;

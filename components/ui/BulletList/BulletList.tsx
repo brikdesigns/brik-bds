@@ -21,6 +21,8 @@ export interface BulletListProps extends Omit<HTMLAttributes<HTMLUListElement>, 
  * pattern used across sheets for anti-messages, proof points, brand
  * rules, and other short-item lists. Pass `marker="decimal"` for
  * numbered lists; the underlying element switches to `<ol>` automatically.
+ *
+ * @summary Structured list of short text items with markers
  */
 export function BulletList({
   items,

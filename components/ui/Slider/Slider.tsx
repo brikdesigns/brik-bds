@@ -128,6 +128,8 @@ const valueStyles: CSSProperties = {
  *   showValue
  * />
  * ```
+ *
+ * @summary Themed range input with track and thumb
  */
 export function Slider({
   value,

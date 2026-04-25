@@ -51,6 +51,8 @@ export interface DialogProps {
  * ```
  *
  * Tracked under ADR-004 — see docs/adrs/ADR-004-component-bloat-guardrails.md.
+ *
+ * @summary Confirm dialog (deprecated — use Modal preset=confirm)
  */
 export function Dialog({
   isOpen,

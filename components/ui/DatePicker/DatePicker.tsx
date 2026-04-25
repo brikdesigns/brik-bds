@@ -235,6 +235,8 @@ function Calendar({
  * <DatePicker size="md" label="Due date" helperText="Task must be completed by this date" />
  * <DatePicker size="lg" label="Appointment" error="Date is required" />
  * ```
+ *
+ * @summary Themed date picker (Radix Popover + calendar grid)
  */
 export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
   (

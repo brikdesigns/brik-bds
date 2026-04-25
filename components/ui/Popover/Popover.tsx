@@ -32,6 +32,8 @@ export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, 'cont
  *
  * Supports click or hover triggering, 4 placements, and controlled/uncontrolled modes.
  * Uses click-outside pattern from Menu and positioning from Tooltip.
+ *
+ * @summary Floating content panel anchored to a trigger
  */
 export function Popover({
   children,
