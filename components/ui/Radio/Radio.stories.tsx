@@ -31,6 +31,7 @@ const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; g
 const meta = {
   title: 'Components/Form/radio',
   component: Radio,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
 } satisfies Meta<typeof Radio>;
 

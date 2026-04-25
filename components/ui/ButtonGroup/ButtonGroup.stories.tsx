@@ -7,6 +7,7 @@ import { Button } from '../Button';
 const meta: Meta<typeof ButtonGroup> = {
   title: 'Components/Action/button-group',
   component: ButtonGroup,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
   },

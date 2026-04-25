@@ -4,6 +4,7 @@ import { Meter } from './Meter';
 const meta: Meta<typeof Meter> = {
   title: 'Displays/Charts/meter',
   component: Meter,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
   },

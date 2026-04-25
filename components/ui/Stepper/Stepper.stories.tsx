@@ -31,6 +31,7 @@ const Row = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; g
 const meta: Meta<typeof Stepper> = {
   title: 'Components/Control/stepper',
   component: Stepper,
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

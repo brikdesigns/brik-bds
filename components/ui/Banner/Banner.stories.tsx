@@ -6,6 +6,7 @@ import { Button } from '../Button';
 const meta: Meta<typeof Banner> = {
   title: 'Components/Feedback/banner',
   component: Banner,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     title: { control: 'text' },

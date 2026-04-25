@@ -9,6 +9,7 @@ import { Button } from '../Button';
 const meta: Meta<typeof CardControl> = {
   title: 'Displays/Card/card-control',
   component: CardControl,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     title: { control: 'text' },

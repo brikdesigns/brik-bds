@@ -4,6 +4,7 @@ import { CardSummary } from './CardSummary';
 const meta: Meta<typeof CardSummary> = {
   title: 'Displays/Card/card-summary',
   component: CardSummary,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     type: { control: 'select', options: ['numeric', 'price'] },

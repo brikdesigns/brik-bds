@@ -6,6 +6,7 @@ import { Dot } from './Dot';
 const meta: Meta<typeof Dot> = {
   title: 'Components/Indicator/dot',
   component: Dot,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
   },

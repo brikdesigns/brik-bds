@@ -39,6 +39,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
 
 const meta: Meta = {
   title: 'Displays/Sheet/sheet-typography',
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
 };
 

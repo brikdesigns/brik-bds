@@ -4,6 +4,7 @@ import { TextLink } from './TextLink';
 const meta: Meta<typeof TextLink> = {
   title: 'Components/Action/text-link',
   component: TextLink,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
   },

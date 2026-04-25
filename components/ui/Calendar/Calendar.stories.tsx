@@ -14,7 +14,7 @@ const CalendarPlaceholder = () => (
 const meta: Meta<typeof CalendarPlaceholder> = {
   title: 'Displays/Calendar/calendar',
   component: CalendarPlaceholder,
-  tags: ['wip'],
+  tags: ['wip', 'surface-shared'],
 };
 
 export default meta;

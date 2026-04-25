@@ -26,6 +26,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 const meta: Meta<typeof PasswordInput> = {
   title: 'Components/Input/password-input',
   component: PasswordInput,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   decorators: [(Story) => <div style={{ width: 320 }}><Story /></div>],
   argTypes: {

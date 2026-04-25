@@ -6,6 +6,7 @@ import { Skeleton } from './Skeleton';
 const meta: Meta<typeof Skeleton> = {
   title: 'Components/Indicator/skeleton',
   component: Skeleton,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'padded',
   },

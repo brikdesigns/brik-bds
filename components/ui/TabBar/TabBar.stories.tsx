@@ -61,6 +61,7 @@ function InteractiveTabBar({
 const meta: Meta<typeof TabBar> = {
   title: 'Navigation/Secondary/tab-bar',
   component: TabBar,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     variant: { control: 'select', options: ['text', 'tab', 'box'] },

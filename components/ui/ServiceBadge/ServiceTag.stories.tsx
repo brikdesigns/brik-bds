@@ -8,6 +8,7 @@ import type { ServiceCategory } from './ServiceBadge';
 const meta: Meta<typeof ServiceTag> = {
   title: 'Components/Indicator/service-tag',
   component: ServiceTag,
+  tags: ['surface-web'],
   parameters: {
     layout: 'centered',
   },

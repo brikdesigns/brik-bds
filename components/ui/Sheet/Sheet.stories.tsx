@@ -8,6 +8,7 @@ import { Field } from '../Field';
 const meta: Meta<typeof Sheet> = {
   title: 'Displays/Sheet/sheet',
   component: Sheet,
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
     side: { control: 'select', options: ['right', 'left', 'bottom'] },

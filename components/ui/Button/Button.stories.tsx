@@ -11,6 +11,7 @@ import { IconButton } from './IconButton';
 const meta: Meta<typeof Button> = {
   title: 'Components/Action/button',
   component: Button,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
   },

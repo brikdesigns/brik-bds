@@ -25,6 +25,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 const meta: Meta<typeof AddableTextList> = {
   title: 'Components/Addables/addable-text-list',
   component: AddableTextList,
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
