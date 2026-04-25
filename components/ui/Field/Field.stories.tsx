@@ -4,7 +4,7 @@ import { Tag } from '../Tag';
 import { EmptyState } from '../EmptyState';
 
 const meta: Meta<typeof Field> = {
-  title: 'Displays/Form/field',
+  title: 'Components/Form/field',
   component: Field,
   parameters: { layout: 'padded' },
   argTypes: {
