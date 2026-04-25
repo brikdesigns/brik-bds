@@ -5,9 +5,13 @@ import './CardControl.css';
 export type CardControlActionAlign = 'center' | 'top';
 
 export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
+  /** Setting / control name shown as the primary text. */
   title: string;
+  /** Optional supporting copy displayed below the title. */
   description?: string;
+  /** Optional leading element (typically a `Badge` or icon) rendered before the text block. */
   badge?: ReactNode;
+  /** Trailing action element (typically a `Switch`, `Button`, or link). */
   action?: ReactNode;
   /** Vertical alignment of the action slot. `top` anchors the CTA to the upper-right corner. */
   actionAlign?: CardControlActionAlign;

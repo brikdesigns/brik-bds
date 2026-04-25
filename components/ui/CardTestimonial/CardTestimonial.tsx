@@ -6,10 +6,15 @@ import './CardTestimonial.css';
 export type CardTestimonialVariant = 'brand' | 'outlined';
 
 export interface CardTestimonialProps extends HTMLAttributes<HTMLElement> {
+  /** Testimonial body — the customer's quote. Rendered inside a `<blockquote>`. */
   quote: string;
+  /** Person attribution rendered under the quote (typically full name). */
   authorName: string;
+  /** Job title / company / context displayed beneath the author name. */
   authorRole?: string;
+  /** Optional 1–5 star rating rendered as filled stars at the bottom. */
   rating?: 1 | 2 | 3 | 4 | 5;
+  /** Visual variant. `brand` (default) uses the brand-tinted card surface; `outlined` swaps to a neutral surface with a border. */
   variant?: CardTestimonialVariant;
 }
 

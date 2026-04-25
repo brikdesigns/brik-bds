@@ -14,10 +14,13 @@ import './Table.css';
 export type TableSize = 'default' | 'comfortable';
 
 export interface TableProps extends HTMLAttributes<HTMLTableElement> {
+  /** Apply alternating row backgrounds for readability on dense tables. Default `false`. */
   striped?: boolean;
+  /** Row density. `default` is the standard scale; `comfortable` adds extra cell padding for dense data tables. */
   size?: TableSize;
   /** Remove left padding on first cell, right padding on last cell */
   flush?: boolean;
+  /** Table content — typically `TableHead` and `TableBody` from this same module. */
   children: ReactNode;
 }
 

@@ -18,17 +18,29 @@ export interface SelectOptionGroup {
 export type SelectSize = 'sm' | 'md' | 'lg';
 
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
+  /** Flat options or grouped option groups. Mix freely — entries with an `options` key render as `<optgroup>`, others as `<option>`. */
   options: (SelectOption | SelectOptionGroup)[];
+  /** Empty-value option text shown when no selection has been made. Renders as a placeholder-styled first option. */
   placeholder?: string;
+  /** Controlled selection. Pair with `onChange` — uncontrolled callers use `defaultValue`. */
   value?: string;
+  /** Initial selection for uncontrolled use. */
   defaultValue?: string;
+  /** Disable the select and apply muted styling. */
   disabled?: boolean;
+  /** Size variant. Default `md`; `sm` and `lg` adjust padding and font size. */
   size?: SelectSize;
+  /** Visible label rendered above the select. Auto-wires `htmlFor`/`id` for accessibility. */
   label?: string;
+  /** Small text shown below the select. Hidden when `error` is present. */
   helperText?: string;
+  /** Error message. Sets `aria-invalid` and replaces `helperText`. */
   error?: string;
+  /** Stretch the wrapper to its container width. Default `true`. */
   fullWidth?: boolean;
+  /** Optional leading icon rendered inside the select field (left of the value). */
   icon?: ReactNode;
+  /** Native change handler — receives the change event. */
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 

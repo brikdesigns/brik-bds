@@ -6,10 +6,13 @@ export type CardListOrientation = 'vertical' | 'horizontal';
 export type CardListGap = 'sm' | 'md' | 'lg' | 'xl';
 
 export interface CardListProps extends HTMLAttributes<HTMLUListElement> {
+  /** Stacking direction. `vertical` (default) for column lists, `horizontal` for rows. */
   orientation?: CardListOrientation;
+  /** Spacing between items. Default `md`. */
   gap?: CardListGap;
   /** Horizontal only — when true, items size to their content instead of filling equal columns */
   fitContent?: boolean;
+  /** Child cards. Each is wrapped in an `<li>` automatically. */
   children: ReactNode;
 }
 

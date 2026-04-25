@@ -16,10 +16,15 @@ export interface AccordionItemData {
 }
 
 export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
+  /** Sections to render. Each item supplies its own `id`, `title`, and `content`. */
   items: AccordionItemData[];
+  /** Whether multiple sections can be open at once. Default `false` (single-open accordion — opening a new section closes the previous one). */
   allowMultiple?: boolean;
+  /** Controlled open ids. When provided, internal state is ignored and `onOpenChange` is the only way state advances. */
   openItems?: string[];
+  /** Called with the next array of open ids whenever a section toggles. Required for controlled use. */
   onOpenChange?: (openItems: string[]) => void;
+  /** Initial open ids when uncontrolled. Default `[]` (all closed). */
   defaultOpenItems?: string[];
 }
 

@@ -10,7 +10,9 @@ export interface BreadcrumbItem {
 export type BreadcrumbSeparator = 'slash' | 'chevron';
 
 export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
+  /** Crumb trail in order. The last item is rendered as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set. */
   items: BreadcrumbItem[];
+  /** Visual separator between crumbs. Default `slash` (`/`); `chevron` renders `›`. */
   separator?: BreadcrumbSeparator;
 }
 
