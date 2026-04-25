@@ -33,7 +33,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Form> = {
-  title: 'Displays/Form/form',
+  title: 'Components/Form/form',
   component: Form,
   parameters: { layout: 'centered' },
   argTypes: {
