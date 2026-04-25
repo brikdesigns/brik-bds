@@ -70,52 +70,60 @@ consumer agent doesn't actually use it. This is the integration test.
 
 ---
 
-### 2. Story exemplar audit (medium ROI, ~half-day for full pass)
+### 2. Story exemplar audit — closed 2026-04-25 (no action needed)
 
-**Status:** Not started. Track A/B/C made every story discoverable; this
-ensures the discoverable stories are good *examples*.
+**Status:** Audit complete. **Zero hard failures.** The hypothesized "components
+have only synthetic axis stories" failure mode does not exist in the codebase.
+The `Patterns` story slot is consistently used as the realistic-context
+exemplar (Banner, Accordion, Tooltip, Field, FieldGrid, Counter, Breadcrumb,
+ButtonGroup, Skeleton, Spinner, Checkbox, Chip, Popover, BulletList, NavBar,
+PasswordInput, FilterButton, etc. — every Patterns story sampled rendered the
+component inside named UX scenarios with believable data, not axis sweeps).
 
-**Goal:** Identify components whose stories are all synthetic axis explorations
-(`Playground`, `Variants`, `States`, `Sizes`, `Tones`) and lack at least one
-"realistic context" story that shows how the component is actually used.
-The MCP `get-documentation` tool returns story snippets verbatim — synthetic-
-only stories teach the agent to write synthetic-only code.
+**Audit results (82 components, 363 stories):**
 
-**Audit-first approach:** write a script in `/tmp/story-exemplar-audit.mjs`
-that, for each component:
+| Bucket | Count |
+| --- | --- |
+| Components with zero scenario stories | **0** |
+| Components with mixed synthetic + scenario | 56 |
+| Components with all scenario stories | 23 |
+| Components with no story file | 2 |
+| Stories classified as scenario | 269 / 363 (74%) |
 
-1. Reads all stories in `<Name>.stories.tsx`.
-2. Categorizes each as either:
-   - **Synthetic** — name matches `/^(Playground|Variants|States|Sizes|Tones|Patterns|Density|Markers|Alignment|InteractionTest|Default|Empty|Disabled|Loading|Icons)$/`.
-   - **Scenario** — anything else, OR any story whose body composes multiple
-     components / uses a non-trivial `render` function.
-3. Reports components whose stories are 100% synthetic.
+**Two acknowledged exemptions** (no story file, intentional):
 
-Run the audit, share the output, then fix in chunks (probably split by
-surface-tag, like Track A — product first since portal is closest).
+- `AnimatedIcon` — coverage lives under `Icon` stories.
+- `DevFeedbackWidget` — internal dev tooling.
 
-**Pickup details:**
+**The doc's original synthetic-name regex was stale** — it included `Patterns`,
+which made the naive audit flag 24 components. After spot-checking those
+(Accordion FAQ section, Tooltip icon-button toolbar, Breadcrumb page-header
+context, ButtonGroup dialog actions, Counter notification counts, etc.), the
+team's convention is clear: `Patterns` IS the realistic-context slot.
+Removing it from the regex collapses the failure list to zero.
 
-- Reference: existing audit pattern at `/tmp/jsdoc-audit.mjs` (the script that
-  drove Tracks A–C). Same structure works here.
-- Realistic-context examples already in the repo to model after: `Banner`'s
-  `Patterns` story, `CardList`'s composition stories, anything with a
-  multi-component `render`.
-- For each component flagged, write one realistic story that shows the
-  component in a believable consumer-app context (e.g. `EditCustomerSheet` for
-  `Sheet`, `TaskListEntry` for `AddableEntryList`, etc.). Keep it short —
-  exemplars need to be readable, not exhaustive.
-- The CI guard at `scripts/lint-jsdoc.js` doesn't enforce this; consider
-  adding a heuristic check (e.g. "every component has at least one story
-  whose body is more than N lines / uses `render` / composes >1 BDS
-  component") but be careful — false positives would block legitimate
-  primitive-component PRs.
+**Methodology refinements** baked into the audit script:
 
-**Why this matters:** When `get-documentation` returns example JSX, the agent
-copies that pattern. If every example is `<Button variant="primary">Action</Button>`
-with no surrounding context, the agent generates UI that's syntactically valid
-but compositionally awkward. Realistic stories compound the value of the rest
-of the audit.
+1. **Structural helpers excluded** from "composes other components" count —
+   `Stack`, `Row`, `Grid`, `Box`, `Flex`, `SectionLabel`, `Spacer`, `Container`,
+   `Icon`, `AnimatedIcon`, `Fragment`, `Suspense`. A Variants grid using
+   `<Stack>` + `<SectionLabel>` is still synthetic, not scenario.
+2. **`Patterns` removed from synthetic name regex** — the codebase convention
+   has overridden the doc's original list.
+3. **Realistic copy density signal** — count distinct multi-word strings >20
+   chars with lowercase content; ≥3 promotes a synthetic-named story to
+   scenario. Catches the few cases where a story uses a synthetic name
+   (e.g. `States`, `Variants`) but renders realistic UX content.
+
+**Script location:** `/tmp/story-exemplar-audit.mjs` (one-off, not committed —
+matches the precedent set by `/tmp/jsdoc-audit.mjs` for Tracks A–C). Re-run
+with: `node /tmp/story-exemplar-audit.mjs $(pwd)`.
+
+**Why no CI guard:** the heuristic is too soft to gate PRs. The realistic-copy
+density rule has tunable thresholds and would false-positive on legitimate
+primitive-component stories where short labels are accurate. The convention
+(every component has a `Patterns` story) is socially enforced via story-file
+templates, not lint rules.
 
 ---
 
