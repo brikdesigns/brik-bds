@@ -71,7 +71,6 @@ export * from './SheetTypography';
 export * from './SidebarNavigation';
 export * from './Skeleton';
 export * from './Slider';
-export * from './Snackbar';
 export * from './Spinner';
 export * from './Stepper';
 export * from './Switch';
