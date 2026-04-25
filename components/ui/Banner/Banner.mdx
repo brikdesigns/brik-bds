@@ -3,9 +3,12 @@ import * as Stories from './Banner.stories';
 
 <Meta of={Stories} />
 
-# Marketing banner
+# Banner
 
-Full-width branded banner for announcements, promotions, and site-wide notices. Uses brand-primary background with inverse text.
+Full-width contextual banner. One component covers two visual modes via the `tone` prop:
+
+- **`tone="announcement"`** (default) — brand-primary surface with inverse text. Use for marketing notices, promotions, and site-wide announcements.
+- **`tone="warning" | "error" | "information"`** — secondary surface with a leading status Badge and `role="alert"`. Replaces the legacy `AlertBanner` component (per [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md)).
 
 ---
 
@@ -15,11 +18,17 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Announcement variants
 
-Action, title-only, and dismissible configurations.
+Action, title-only, and dismissible configurations on the brand surface.
 
 <Canvas of={Stories.Variants} />
+
+## Status tones
+
+Information / warning / error tones with leading status Badge.
+
+<Canvas of={Stories.Tones} />
 
 ## Patterns
 
@@ -40,10 +49,21 @@ Real-world usage: announcements and dismissible notices.
 ```tsx
 import { Banner, Button } from '@brik/bds';
 
+// Announcement
 <Banner
   title="New feature"
   description="Check out our latest update"
   action={<Button variant="secondary" size="sm">Learn more</Button>}
   onDismiss={() => setVisible(false)}
 />
+
+// Status alert (replaces AlertBanner)
+<Banner
+  tone="warning"
+  title="Heads up"
+  description="Your trial ends in 7 days."
+  action={<Button size="sm">Upgrade</Button>}
+/>
 ```
+
+The standalone `AlertBanner` component is `@deprecated` and slated for deletion in a future major version. Migrate `<AlertBanner variant="warning">` to `<Banner tone="warning">` — same shape, same Badge, same surface.

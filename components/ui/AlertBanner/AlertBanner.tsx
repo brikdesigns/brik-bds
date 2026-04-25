@@ -35,6 +35,25 @@ const iconMap: Record<AlertBannerVariant, string> = {
  *
  * Uses a secondary surface background with an icon-only Badge,
  * title, description, and optional action button.
+ *
+ * @deprecated Use `<Banner tone="warning|error|information">` instead.
+ * Same shape, same visual treatment, with `tone="information"` covering
+ * the previous `variant="information"` default. The consolidated Banner
+ * component also supports `onDismiss` for a close button. Slated for
+ * deletion in a future major version once consumers migrate.
+ *
+ * Migration:
+ * ```tsx
+ * // before
+ * <AlertBanner variant="warning" title="Heads up" description="..."
+ *   action={<Button>Review</Button>} />
+ *
+ * // after
+ * <Banner tone="warning" title="Heads up" description="..."
+ *   action={<Button>Review</Button>} />
+ * ```
+ *
+ * Tracked under ADR-004 — see docs/adrs/ADR-004-component-bloat-guardrails.md.
  */
 export function AlertBanner({
   title,

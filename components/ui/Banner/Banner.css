@@ -1,5 +1,5 @@
 @layer bds-components {
-/* ─── Banner ─────────────────────────────────────────────────── */
+/* ─── Banner — base layout (shared across tones) ──────────────── */
 
 .bds-banner {
   display: flex;
@@ -7,15 +7,21 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--gap-lg);
-  background-color: var(--surface-brand-primary);
-  color: var(--text-on-color-dark);
-  padding: var(--padding-md) var(--padding-huge);
-  border-radius: var(--border-radius-100);
   width: 100%;
   box-sizing: border-box;
 }
 
-/* ─── Content — title stacked above description ────────────────── */
+/* ─── Inner — optional leading badge + content ───────────────── */
+
+.bds-banner__inner {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* ─── Content — title stacked above description ───────────────── */
 
 .bds-banner__content {
   display: flex;
@@ -23,6 +29,7 @@
   align-items: flex-start;
   gap: var(--gap-xs);
   min-width: 0;
+  flex: 1 1 0;
 }
 
 /* ─── Title ──────────────────────────────────────────────────── */
@@ -70,5 +77,40 @@
 
 .bds-banner__close:hover {
   opacity: 1;
+}
+
+/* ─── Tone: announcement (brand-primary surface) ──────────────── */
+
+.bds-banner--tone-announcement {
+  background-color: var(--surface-brand-primary);
+  color: var(--text-on-color-dark);
+  padding: var(--padding-md) var(--padding-huge);
+  border-radius: var(--border-radius-100);
+}
+
+/* ─── Tones: warning / error / information (status surfaces) ──── */
+/* Replaces the legacy AlertBanner styling. Secondary surface, primary
+ * text, leading Badge icon. Wider stack gap matches the alert hierarchy. */
+
+.bds-banner--tone-warning,
+.bds-banner--tone-error,
+.bds-banner--tone-information {
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-sm);
+  align-items: flex-start;
+}
+
+.bds-banner--tone-warning .bds-banner__inner,
+.bds-banner--tone-error .bds-banner__inner,
+.bds-banner--tone-information .bds-banner__inner {
+  align-items: flex-start;
+}
+
+.bds-banner--tone-warning .bds-banner__content,
+.bds-banner--tone-error .bds-banner__content,
+.bds-banner--tone-information .bds-banner__content {
+  gap: var(--gap-sm);
 }
 }
