@@ -102,6 +102,52 @@ export const Variants: Story = {
   ),
 };
 
+/* ─── Control preset ─────────────────────────────────────────── */
+
+/**
+ * `preset="control"` — locked-down settings/control card layout.
+ * Replaces the legacy `CardControl` component (per ADR-004).
+ *
+ * Renders: leading badge + (title + description) on the left, action
+ * slot on the right. Use `actionAlign="top"` to anchor the action to
+ * the upper-right corner instead of the vertical midline.
+ */
+export const ControlPreset = () => (
+  <Stack>
+    <SectionLabel>Default — center-aligned action</SectionLabel>
+    <div style={{ width: 560 }}>
+      <Card
+        preset="control"
+        badge={<Badge status="positive">On</Badge>}
+        title="Email notifications"
+        description="Send a weekly digest to your inbox."
+        action={<Button variant="outline" size="sm">Configure</Button>}
+      />
+    </div>
+
+    <SectionLabel>Top-aligned action</SectionLabel>
+    <div style={{ width: 560 }}>
+      <Card
+        preset="control"
+        actionAlign="top"
+        badge={<Badge status="warning">Off</Badge>}
+        title="Two-factor authentication"
+        description="Add a second layer of security by requiring a code from your phone when signing in. Strongly recommended for accounts with admin access."
+        action={<Button variant="primary" size="sm">Enable</Button>}
+      />
+    </div>
+
+    <SectionLabel>No badge, no action</SectionLabel>
+    <div style={{ width: 560 }}>
+      <Card
+        preset="control"
+        title="Account name"
+        description="The display name shown to your team and on shared documents."
+      />
+    </div>
+  </Stack>
+);
+
 /* ─── Patterns ───────────────────────────────────────────────── */
 
 export const Patterns: Story = {
