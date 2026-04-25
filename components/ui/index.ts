@@ -56,7 +56,6 @@ export * from './PasswordInput';
 export * from './Popover';
 export * from './PricingCard';
 export * from './ProgressBar';
-export * from './ProgressDots';
 export * from './ProgressStepper';
 export * from './Radio';
 export * from './SegmentedControl';

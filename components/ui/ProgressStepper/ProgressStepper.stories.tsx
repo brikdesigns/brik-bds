@@ -116,6 +116,40 @@ export const LinearMode = () => {
 };
 
 /**
+ * Compact horizontal dot indicator. Use on mobile, in carousels, or as a
+ * minimal alternative when label text is redundant with the page heading.
+ */
+export const DotsVariant: Story = {
+  args: {
+    variant: 'dots',
+    count: 5,
+    activeStep: 2,
+  },
+};
+
+/**
+ * Dots variant honors the same `linear` mode as the steps variant —
+ * only completed dots are clickable.
+ */
+export const DotsLinear = () => {
+  const [active, setActive] = useState(2);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)', alignItems: 'center' }}>
+      <ProgressStepper
+        variant="dots"
+        count={5}
+        activeStep={active}
+        linear
+        onStepClick={setActive}
+      />
+      <p style={{ fontSize: 'var(--body-sm)', color: 'var(--text-muted)', margin: 0 }}>
+        Step {active + 1} of 5 — only completed dots are clickable.
+      </p>
+    </div>
+  );
+};
+
+/**
  * Non-linear mode (default) allows free navigation to any step.
  */
 export const Interactive = () => {

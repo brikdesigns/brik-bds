@@ -5,7 +5,9 @@ import * as Stories from './ProgressStepper.stories';
 
 # Progress stepper
 
-Labeled step indicator showing progress through a multi-step process. Use for checkout flows, setup wizards, and multi-page forms where users need to see their position and progress.
+Step indicator with two visual variants — `steps` (vertical, labeled) and `dots` (horizontal, compact). Both share the same `activeStep`, `linear`, and `onStepClick` model. Use for checkout flows, setup wizards, and multi-page forms.
+
+The `dots` variant replaces the previous standalone `ProgressDots` component (deleted per [ADR-004 §3](../../docs/adrs/ADR-004-component-bloat-guardrails.md) — same shape, same logic, different layout = one component with a variant prop, not two components).
 
 ---
 
@@ -36,6 +38,16 @@ Add description text to each step for additional context.
 Compact stepper for constrained layouts.
 
 <Canvas of={Stories.SmallSize} />
+
+## Dots variant
+
+Compact horizontal dot indicator. The active dot stretches wider; completed dots are dimmed; upcoming dots are muted. No label text — pair with a page heading or step counter.
+
+<Canvas of={Stories.DotsVariant} />
+
+### Dots with linear mode
+
+<Canvas of={Stories.DotsLinear} />
 
 ## Linear mode
 
@@ -80,6 +92,14 @@ import { ProgressStepper } from '@brik/bds';
     { label: 'Confirm', description: 'Review and submit' },
   ]}
   activeStep={0}
+  onStepClick={(step) => setStep(step)}
+/>
+
+// Dots variant — compact horizontal indicator
+<ProgressStepper
+  variant="dots"
+  count={5}
+  activeStep={2}
   onStepClick={(step) => setStep(step)}
 />
 ```
