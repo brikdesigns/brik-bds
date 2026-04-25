@@ -22,6 +22,25 @@ export interface DialogProps {
  * Dialog — focused confirmation overlay for user decisions.
  *
  * Simpler than Modal — intended for confirm/cancel flows.
+ *
+ * @deprecated Use `<Modal preset="confirm">` instead. Same behavior, same
+ * API (title, description, confirmLabel, cancelLabel, onConfirm), with
+ * `confirmVariant="destructive"` covering this component's `variant="destructive"`.
+ * Slated for deletion in a future major version once consumers migrate.
+ *
+ * Migration:
+ * ```tsx
+ * // before
+ * <Dialog isOpen={open} onClose={close} title="Delete?" description="..."
+ *   confirmLabel="Delete" onConfirm={handleDelete} variant="destructive" />
+ *
+ * // after
+ * <Modal isOpen={open} onClose={close} preset="confirm" title="Delete?"
+ *   description="..." confirmLabel="Delete" onConfirm={handleDelete}
+ *   confirmVariant="destructive" />
+ * ```
+ *
+ * Tracked under ADR-004 — see docs/adrs/ADR-004-component-bloat-guardrails.md.
  */
 export function Dialog({
   isOpen,
