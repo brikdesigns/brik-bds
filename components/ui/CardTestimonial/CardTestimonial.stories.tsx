@@ -4,6 +4,7 @@ import { CardTestimonial } from './CardTestimonial';
 const meta: Meta<typeof CardTestimonial> = {
   title: 'Displays/Card/card-testimonial',
   component: CardTestimonial,
+  tags: ['surface-web'],
   parameters: { layout: 'centered' },
   argTypes: {
     variant: { control: 'select', options: ['brand', 'outlined'] },

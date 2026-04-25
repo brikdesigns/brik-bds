@@ -56,6 +56,7 @@ const tagOptions = [
 const meta = {
   title: 'Components/Action/filter-button',
   component: FilterButton,
+  tags: ['surface-product'],
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

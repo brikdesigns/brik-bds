@@ -51,6 +51,7 @@ const sampleContent = (
 const meta: Meta<typeof Popover> = {
   title: 'Displays/Overlay/popover',
   component: Popover,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   decorators: [
     (Story) => (

@@ -56,6 +56,7 @@ function InteractiveSegmentedControl({
 const meta: Meta<typeof SegmentedControl> = {
   title: 'Components/Control/segmented-control',
   component: SegmentedControl,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

@@ -7,6 +7,7 @@ import { Button } from '../Button';
 const meta: Meta<typeof Modal> = {
   title: 'Displays/Overlay/modal',
   component: Modal,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg', 'xl', 'full'] },

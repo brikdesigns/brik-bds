@@ -27,6 +27,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 const meta: Meta<typeof Slider> = {
   title: 'Components/Control/slider',
   component: Slider,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

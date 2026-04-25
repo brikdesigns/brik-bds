@@ -6,6 +6,7 @@ import type { NotificationItemData } from './NotificationList';
 const meta: Meta<typeof NotificationList> = {
   title: 'Displays/Notifications/notification-list',
   component: NotificationList,
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
 };
 

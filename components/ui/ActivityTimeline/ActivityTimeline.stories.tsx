@@ -5,6 +5,7 @@ import { ActivityTimeline } from './ActivityTimeline';
 const meta: Meta<typeof ActivityTimeline> = {
   title: 'Displays/Timeline/activity-timeline',
   component: ActivityTimeline,
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
 };
 

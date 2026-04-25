@@ -32,6 +32,7 @@ const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; g
 const meta = {
   title: 'Components/Action/filter-toggle',
   component: FilterToggle,
+  tags: ['surface-product'],
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

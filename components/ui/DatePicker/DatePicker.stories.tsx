@@ -31,6 +31,7 @@ const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNod
 const meta: Meta<typeof DatePicker> = {
   title: 'Components/Form/date-picker',
   component: DatePicker,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

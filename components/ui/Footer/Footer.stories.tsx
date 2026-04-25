@@ -75,6 +75,7 @@ const socialLinks = (
 const meta: Meta<typeof Footer> = {
   title: 'Navigation/Primary/footer',
   component: Footer,
+  tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
     variant: { control: 'select', options: ['default', 'brand'] },

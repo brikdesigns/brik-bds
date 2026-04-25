@@ -6,6 +6,7 @@ import { Button } from '../Button';
 const meta: Meta<typeof TaskConsole> = {
   title: 'Components/Feedback/task-console',
   component: TaskConsole,
+  tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
     position: { control: 'select', options: ['bottom-right', 'bottom-left'] },

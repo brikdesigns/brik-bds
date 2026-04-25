@@ -4,6 +4,7 @@ import { Spinner } from './Spinner';
 const meta: Meta<typeof Spinner> = {
   title: 'Components/Indicator/spinner',
   component: Spinner,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'lg'] },

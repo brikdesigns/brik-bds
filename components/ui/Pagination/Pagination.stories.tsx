@@ -27,6 +27,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 const meta = {
   title: 'Components/Control/pagination',
   component: Pagination,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     position: {

@@ -5,7 +5,7 @@ import { Button } from '../Button';
 const meta: Meta<typeof AlertBanner> = {
   title: 'Components/Feedback/alert-banner',
   component: AlertBanner,
-  tags: ['!manifest'], // deprecated — hide from MCP discovery (use Banner)
+  tags: ['!manifest', 'surface-shared'], // deprecated — hide from MCP discovery (use Banner)
   parameters: { layout: 'padded' },
   argTypes: {
     title: { control: 'text' },

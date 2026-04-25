@@ -5,6 +5,7 @@ import { ProgressStepper, type ProgressStep } from './ProgressStepper';
 const meta: Meta<typeof ProgressStepper> = {
   title: 'Navigation/Stepper/progress-stepper',
   component: ProgressStepper,
+  tags: ['surface-product'],
   parameters: {
     layout: 'padded',
   },

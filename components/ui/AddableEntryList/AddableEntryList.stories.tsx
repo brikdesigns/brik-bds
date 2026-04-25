@@ -61,6 +61,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 const meta: Meta<typeof AddableEntryList> = {
   title: 'Components/Addables/addable-entry-list',
   component: AddableEntryList,
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

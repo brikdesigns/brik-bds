@@ -6,6 +6,7 @@ import { Field } from '../Field';
 const meta: Meta<typeof TagGroup> = {
   title: 'Components/Indicator/tag-group',
   component: TagGroup,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     gap: { control: 'select', options: ['xs', 'sm', 'md'] },

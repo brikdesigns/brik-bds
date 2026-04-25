@@ -8,6 +8,7 @@ import { Tag } from '../Tag/Tag';
 const meta: Meta<typeof Badge> = {
   title: 'Components/Indicator/badge',
   component: Badge,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
   },

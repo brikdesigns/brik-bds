@@ -5,6 +5,7 @@ import { Field } from '../Field';
 const meta: Meta<typeof BulletList> = {
   title: 'Components/List/bullet-list',
   component: BulletList,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     marker: { control: 'select', options: ['disc', 'decimal', 'none'] },

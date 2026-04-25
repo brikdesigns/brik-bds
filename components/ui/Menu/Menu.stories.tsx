@@ -47,6 +47,7 @@ const filterOptions = sampleItems.map((item) => ({
 const meta = {
   title: 'Navigation/Menu/menu',
   component: Menu,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   decorators: [
     (Story) => (

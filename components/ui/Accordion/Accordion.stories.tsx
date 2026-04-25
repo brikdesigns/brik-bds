@@ -37,6 +37,7 @@ const faqItems = [
 const meta: Meta<typeof Accordion> = {
   title: 'Displays/Accordion/accordion',
   component: Accordion,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     allowMultiple: { control: 'boolean', description: 'Allow multiple items open simultaneously' },

@@ -6,6 +6,7 @@ import { Card } from '../Card';
 const meta: Meta<typeof FieldGrid> = {
   title: 'Components/Form/field-grid',
   component: FieldGrid,
+  tags: ['surface-product'],
   parameters: { layout: 'padded' },
   argTypes: {
     columns: { control: 'select', options: [2, 3, 4] },

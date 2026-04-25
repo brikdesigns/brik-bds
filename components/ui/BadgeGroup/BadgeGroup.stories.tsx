@@ -6,6 +6,7 @@ import { Field } from '../Field';
 const meta: Meta<typeof BadgeGroup> = {
   title: 'Components/Indicator/badge-group',
   component: BadgeGroup,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
     gap: { control: 'select', options: ['xs', 'sm', 'md'] },

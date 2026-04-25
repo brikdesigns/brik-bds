@@ -4,6 +4,7 @@ import { SheetSection } from './SheetSection';
 const meta: Meta<typeof SheetSection> = {
   title: 'Displays/Sheet/sheet-section',
   component: SheetSection,
+  tags: ['surface-product'],
   parameters: { layout: 'padded' },
   argTypes: {
     heading: { control: 'text' },

@@ -27,6 +27,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 const meta: Meta<typeof MultiSelect> = {
   title: 'Components/Form/multi-select',
   component: MultiSelect,
+  tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   decorators: [(Story) => <div style={{ maxWidth: 480 }}><Story /></div>],
   argTypes: {

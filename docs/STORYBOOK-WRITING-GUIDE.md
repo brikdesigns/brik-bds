@@ -89,6 +89,42 @@ Never combine two prop axes in one story. Write `Sizes` and `Variants` as
 separate stories — never `SizesAndVariants`. If a story name needs "and"
 to describe it, split it.
 
+### Surface taxonomy — every story declares one
+
+Every component story carries exactly one surface tag in its meta:
+
+| Tag | Meaning | Examples |
+| --- | --- | --- |
+| `surface-web` | Marketing / site surfaces — brikdesigns.com and Webflow client sites | `Footer`, `NavBar`, `PricingCard`, `CardTestimonial`, `ServiceBadge` |
+| `surface-product` | Product app surfaces — `brik-client-portal`, `renew-pms`, `freedom-client-portal` | `AddableEntryList`, `FieldGrid`, `FilterBar`, `Sheet`, `SidebarNavigation`, `BrikDevBar` |
+| `surface-shared` | Used in both contexts (the default for primitives) | `Button`, `Badge`, `Field`, `Modal`, `Toast` |
+
+```tsx
+const meta: Meta<typeof Button> = {
+  title: 'Components/Action/button',
+  component: Button,
+  tags: ['surface-shared'],
+  // …
+};
+```
+
+**Why this exists.** Agents querying `list-all-documentation` via the
+Storybook MCP get every BDS component back with no signal about which
+surface it belongs on. Without this tag, an agent building a portal
+dashboard can pattern-match on `PricingCard` (a marketing component) or
+suggest `FilterBar` on a brikdesigns.com landing page. The surface tag
+lets the agent — and the consumer-repo `CLAUDE.md` system prompts —
+filter to relevant primitives only.
+
+**Reclassifying.** If a `surface-shared` component starts being used
+heavily on one surface only, leave it `shared`. Move it to a specific
+surface only when the component's *API* assumes that surface (e.g. a
+component that requires a marketing-only prop or a product-only context
+provider). Surface is about API affordance, not adoption count.
+
+**New components default to `surface-shared`** unless you can name a
+specific reason it can't render on the other surface.
+
 ### Deprecated stories must hide from agents
 
 When a component is deprecated (`@deprecated` JSDoc), the same PR adds

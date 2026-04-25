@@ -7,6 +7,7 @@ import { Chip } from './Chip';
 const meta: Meta<typeof Chip> = {
   title: 'Components/Indicator/chip',
   component: Chip,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
   },

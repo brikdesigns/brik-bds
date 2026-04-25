@@ -6,6 +6,7 @@ import { Divider } from './Divider';
 const meta: Meta<typeof Divider> = {
   title: 'Components/Structure/divider',
   component: Divider,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'padded',
   },

@@ -93,6 +93,7 @@ const SectionLabel = ({ children }: { children: string }) => (
 const meta: Meta<typeof CatalogPicker> = {
   title: 'Components/Form/catalog-picker',
   component: CatalogPicker,
+  tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

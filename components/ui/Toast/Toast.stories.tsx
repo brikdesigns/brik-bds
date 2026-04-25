@@ -6,6 +6,7 @@ import { Button } from '../Button';
 const meta: Meta<typeof Toast> = {
   title: 'Components/Feedback/toast',
   component: Toast,
+  tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
     title: { control: 'text' },
