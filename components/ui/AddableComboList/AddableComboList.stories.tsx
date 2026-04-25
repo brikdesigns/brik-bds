@@ -81,7 +81,7 @@ const DENTAL_INSURANCE = [
 // ── Storybook meta ────────────────────────────────────────────────────────────
 
 const meta: Meta<typeof AddableComboList> = {
-  title: 'Components/Form/addable-combo-list',
+  title: 'Displays/Form/addable-combo-list',
   component: AddableComboList,
   parameters: { layout: 'centered' },
   argTypes: {

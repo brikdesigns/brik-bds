@@ -1,7 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
 import { Icon } from '@iconify/react';
 import { bdsClass } from '../../utils';
-import { Button, type ButtonSize } from '../Button';
+import { Button, IconButton, type ButtonSize } from '../Button';
 import { TextInput, type TextInputSize } from '../TextInput';
 import { TextArea, type TextAreaSize } from '../TextArea';
 import { useSuggestionFilter } from '../shared/useSuggestionFilter';
@@ -282,14 +282,13 @@ export function AddableEntryList({
             >
               <div className="bds-addable-entry-list__row-header">
                 <span className="bds-addable-entry-list__row-index">#{index + 1}</span>
-                <Button
+                <IconButton
                   size={BUTTON_SIZE[size]}
-                  variant="secondary"
+                  variant="ghost"
+                  icon={<Icon icon="ph:x" />}
+                  label={removeLabel}
                   onClick={() => remove(index)}
-                  aria-label={removeLabel}
-                >
-                  Remove
-                </Button>
+                />
               </div>
               <TextInput
                 size={INPUT_SIZE[size]}
@@ -499,14 +498,13 @@ function SuggestionModeEdit({
                   </span>
                 ) : null}
               </div>
-              <button
-                type="button"
-                className="bds-addable-entry-list__remove"
+              <IconButton
+                size={BUTTON_SIZE[size]}
+                variant="ghost"
+                icon={<Icon icon="ph:x" />}
+                label={removeLabel}
                 onClick={() => remove(index)}
-                aria-label={removeLabel}
-              >
-                <Icon icon="ph:x" />
-              </button>
+              />
             </div>
           ))}
         </div>
@@ -521,18 +519,12 @@ function SuggestionModeEdit({
             className="bds-addable-entry-list__primary-combo"
             onBlur={handleComboBlur}
           >
-            {primaryLabel && (
-              <label
-                htmlFor={combo.comboId}
-                className="bds-addable-entry-list__input-label"
-              >
-                {primaryLabel}
-              </label>
-            )}
             <div className="bds-addable-entry-list__primary-combo-field">
-              <input
+              <TextInput
                 ref={primaryInputRef}
                 id={combo.comboId}
+                size={INPUT_SIZE[size]}
+                label={primaryLabel}
                 role="combobox"
                 aria-expanded={combo.isOpen}
                 aria-haspopup="listbox"
@@ -541,10 +533,6 @@ function SuggestionModeEdit({
                 aria-label={primaryLabel ?? (label ? `Add ${label}` : 'New entry')}
                 aria-autocomplete="list"
                 autoComplete="off"
-                className={bdsClass(
-                  'bds-addable-entry-list__primary-input',
-                  `bds-addable-entry-list__primary-input--${size}`,
-                )}
                 value={primaryDraft}
                 onChange={handleComboPrimaryChange}
                 onKeyDown={handleComboPrimaryKey}
@@ -552,6 +540,7 @@ function SuggestionModeEdit({
                   if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
                 }}
                 placeholder={primaryPlaceholder}
+                fullWidth
               />
 
               {combo.isOpen && combo.filtered.length > 0 && (

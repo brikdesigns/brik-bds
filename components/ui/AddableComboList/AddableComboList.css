@@ -78,51 +78,6 @@
   min-width: 0;
 }
 
-/* ─── Native input (styled to match TextInput) ────────────── */
-
-.bds-addable-combo-list__input {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  font-family: var(--font-family-body);
-  color: var(--text-primary);
-  background-color: var(--background-primary);
-  border: var(--border-width-md) solid var(--border-primary);
-  border-radius: var(--border-radius-md);
-  outline: none;
-  transition:
-    border-color var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
-}
-
-.bds-addable-combo-list__input::placeholder {
-  color: var(--text-muted);
-}
-
-.bds-addable-combo-list__input:focus {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 3px var(--surface-brand-primary);
-}
-
-/* Sizes — match TextInput */
-.bds-addable-combo-list__input--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
-  font-size: var(--body-sm);
-  height: 32px;
-}
-
-.bds-addable-combo-list__input--md {
-  padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--body-md);
-  height: 40px;
-}
-
-.bds-addable-combo-list__input--lg {
-  padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--body-lg);
-  height: 48px;
-}
-
 /* ─── Dropdown ─────────────────────────────────────────────── */
 
 @keyframes bds-combo-dropdown-enter {

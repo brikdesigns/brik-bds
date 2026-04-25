@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react';
 import { bdsClass } from '../../utils';
 import { Button, type ButtonSize } from '../Button';
 import { Tag, type TagSize } from '../Tag';
+import { TextInput, type TextInputSize } from '../TextInput';
 import { useSuggestionFilter } from '../shared/useSuggestionFilter';
 import './AddableComboList.css';
 
@@ -45,6 +46,7 @@ export interface AddableComboListProps {
 
 const TAG_SIZE: Record<AddableComboListSize, TagSize> = { sm: 'sm', md: 'md', lg: 'md' };
 const BUTTON_SIZE: Record<AddableComboListSize, ButtonSize> = { sm: 'sm', md: 'md', lg: 'lg' };
+const INPUT_SIZE: Record<AddableComboListSize, TextInputSize> = { sm: 'sm', md: 'md', lg: 'lg' };
 
 /**
  * AddableComboList — suggestion-driven combobox for tag-style multi-select
@@ -178,9 +180,10 @@ export function AddableComboList({
         >
           <div className="bds-addable-combo-list__input-row">
             <div className="bds-addable-combo-list__input-wrap" style={{ position: 'relative' }}>
-              <input
+              <TextInput
                 ref={inputRef}
                 id={combo.comboId}
+                size={INPUT_SIZE[size]}
                 role="combobox"
                 aria-expanded={combo.isOpen}
                 aria-haspopup="listbox"
@@ -189,10 +192,6 @@ export function AddableComboList({
                 aria-label={label ? `Add ${label}` : 'Add item'}
                 aria-autocomplete="list"
                 autoComplete="off"
-                className={bdsClass(
-                  'bds-addable-combo-list__input',
-                  `bds-addable-combo-list__input--${size}`,
-                )}
                 value={combo.query}
                 onChange={combo.handleInputChange}
                 onKeyDown={combo.handleKeyDown}
@@ -200,6 +199,7 @@ export function AddableComboList({
                   if (combo.query.trim() && combo.filtered.length > 0) combo.openList();
                 }}
                 placeholder={placeholder}
+                fullWidth
               />
 
               {combo.isOpen && combo.filtered.length > 0 && (
