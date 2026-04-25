@@ -59,7 +59,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 // ── Storybook meta ────────────────────────────────────────────────────────────
 
 const meta: Meta<typeof AddableEntryList> = {
-  title: 'Components/Form/addable-entry-list',
+  title: 'Displays/Form/addable-entry-list',
   component: AddableEntryList,
   parameters: { layout: 'centered' },
   argTypes: {
