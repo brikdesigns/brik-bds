@@ -3,14 +3,18 @@
 /**
  * BDS JSDoc / story-metadata linter.
  *
- * Enforces three rules so consumer-repo Storybook MCP queries get authored
+ * Enforces four rules so consumer-repo Storybook MCP queries get authored
  * answers instead of regex-extracted fragments:
  *
  *   1. Every component's main export has a preceding JSDoc containing
  *      `@summary` (matched against `components/ui/<Name>/<Name>.tsx`).
- *   2. Every `export const Name: Story` in a `*.stories.tsx` file has a
+ *   2. Every public field in a `<Name>Props` interface has a preceding
+ *      JSDoc description. Fields inherited from extended types (e.g.
+ *      `extends HTMLAttributes<...>`) don't appear in the body and aren't
+ *      flagged.
+ *   3. Every `export const Name: Story` in a `*.stories.tsx` file has a
  *      preceding JSDoc containing `@summary`.
- *   3. Every story file's `meta` has one of `surface-web`, `surface-product`,
+ *   4. Every story file's `meta` has one of `surface-web`, `surface-product`,
  *      or `surface-shared` in its `tags` array.
  *
  * Components that don't follow the `<Name>/<Name>.tsx` shape (currently
@@ -91,9 +95,68 @@ for (const name of componentDirs) {
   if (!jsdoc || !/@summary\b/.test(jsdoc)) {
     errors.push(`${path.relative(ROOT, file)}:${exportLine + 1}: \`${name}\` export is missing \`@summary\` JSDoc`);
   }
+
+  // ── Rule 2: every field in <Name>Props has a JSDoc description ──
+  const propsRe = new RegExp(`^(export\\s+)?interface\\s+${name}Props\\b[^{]*\\{`);
+  let propsStart = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (propsRe.test(lines[i])) {
+      propsStart = i;
+      break;
+    }
+  }
+  if (propsStart === -1) continue; // No Props interface — many primitives are prop-less; that's fine.
+
+  // Find matching closing brace via depth tracking.
+  let depth = 0;
+  let propsEnd = -1;
+  for (let i = propsStart; i < lines.length; i++) {
+    for (const ch of lines[i]) {
+      if (ch === '{') depth++;
+      else if (ch === '}') {
+        depth--;
+        if (depth === 0) {
+          propsEnd = i;
+          break;
+        }
+      }
+    }
+    if (propsEnd >= 0) break;
+  }
+  if (propsEnd === -1) continue;
+
+  // Walk fields. A field is a line at brace-depth 1 inside the interface that
+  // matches `name?: type`. Skip lines at deeper nesting (record types, inline
+  // object literals) and skip pure comment lines.
+  let nested = 0;
+  const propLineRe = /^\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\??\s*:\s*[^=]/;
+  const indexSigRe = /^\s*\[[a-zA-Z_$][a-zA-Z0-9_$]*\s*:/; // `[key: string]: any` — not a named prop
+  for (let i = propsStart + 1; i < propsEnd; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    if (nested > 0) {
+      for (const ch of line) {
+        if (ch === '{') nested++;
+        else if (ch === '}') nested--;
+      }
+      continue;
+    }
+    const m = line.match(propLineRe);
+    if (m && !trimmed.startsWith('//') && !trimmed.startsWith('*') && !indexSigRe.test(line)) {
+      const propName = m[1];
+      const fieldJsdoc = precedingJsdoc(lines, i);
+      if (!fieldJsdoc) {
+        errors.push(`${path.relative(ROOT, file)}:${i + 1}: \`${name}Props.${propName}\` is missing JSDoc description`);
+      }
+    }
+    for (const ch of line) {
+      if (ch === '{') nested++;
+      else if (ch === '}') nested = Math.max(0, nested - 1);
+    }
+  }
 }
 
-// ── Rule 2 + 3: stories ────────────────────────────────────────
+// ── Rule 3 + 4: stories ────────────────────────────────────────
 
 function findStoryFiles(dir) {
   const found = [];
@@ -112,7 +175,7 @@ for (const file of storyFiles) {
   const lines = src.split('\n');
   const rel = path.relative(ROOT, file);
 
-  // Rule 3: meta has a surface-* tag.
+  // Rule 4: meta has a surface-* tag.
   // Find the meta declaration block and inspect its tags array.
   // We accept: `const meta:`...`= {` (with optional `:` type annotation) or
   //            `const meta = { ... } satisfies Meta<...>;`
@@ -138,7 +201,7 @@ for (const file of storyFiles) {
     }
   }
 
-  // Rule 2: every Story export has @summary.
+  // Rule 3: every Story export has @summary.
   const storyRe = /^\s*export\s+const\s+([A-Za-z0-9_]+)\s*:\s*Story\b/;
   for (let i = 0; i < lines.length; i++) {
     const m = lines[i].match(storyRe);
@@ -154,7 +217,7 @@ for (const file of storyFiles) {
 // ── Report ────────────────────────────────────────────────────
 
 if (errors.length === 0) {
-  console.log('✓ JSDoc lint clean — every component + story export has @summary, every story meta has a surface-* tag.');
+  console.log('✓ JSDoc lint clean — every component + story export has @summary, every prop has a description, every story meta has a surface-* tag.');
   process.exit(0);
 }
 
@@ -162,6 +225,7 @@ console.error(`✗ JSDoc lint found ${errors.length} violation(s):\n`);
 for (const e of errors) console.error('  ' + e);
 console.error(`\n  Fix tips:`);
 console.error(`    - Component @summary: add a JSDoc with \`@summary <≤60 chars>\` above the main export.`);
+console.error(`    - Prop JSDoc: add a one-line \`/** description */\` above each field in the Props interface.`);
 console.error(`    - Story @summary: add \`/** @summary <description> */\` above each \`export const Foo: Story\`.`);
 console.error(`    - Surface tag: add one of 'surface-web' | 'surface-product' | 'surface-shared' to the meta.tags array.`);
 console.error(`    - See docs/STORYBOOK-WRITING-GUIDE.md → "MCP Discipline" + "Surface taxonomy" for the convention.`);
