@@ -27,7 +27,7 @@ Plus the bloat already booked in [ADR-003](../adrs/ADR-003-addable-list-family.m
 | Component | Evidence | Fold into | Status |
 |---|---|---|---|
 | `CardSummary` | 85% CSS overlap with `Card`. Fixed template (label + large-value + optional link) plus `formatValue()` helper. No use of Card's subcomponent slots. | `<Card variant="summary" formatValue="price\|numeric" />` | 12 portal consumers — pending #7c |
-| `CardControl` | [CardControl.tsx](../../components/ui/CardControl/CardControl.tsx) — same base flex/border/padding-xl/surface as Card. Fixed layout (badge + title/description left, action right). No Card subcomponent reuse. | `<Card variant="control" />` | 1 portal consumer — pending #7b |
+| `CardControl` | [CardControl.tsx](../../components/ui/CardControl/CardControl.tsx) — same base flex/border/padding-xl/surface as Card. Fixed layout (badge + title/description left, action right). No Card subcomponent reuse. | `<Card variant="control" />` | **Kept 2026-04-24** by user decision — Card preset added (PR #244) for new uses, but CardControl stays as a first-class component for current and future settings/control surfaces. |
 | `CardDisplay` | ~80% CSS overlap. Fixed image-header + content-body template. | `<Card variant="display" image={...} />` | **Deleted in PR #241** (zero consumers) |
 | `CardFeature` | ~75% CSS overlap. Fixed icon + title/description + action with `align` control. | `<Card variant="feature" icon={...} align="left\|center" />` | **Deleted in PR #241** (zero consumers) |
 
@@ -122,7 +122,7 @@ Ordered by leverage × low-risk-first:
 6. ~~**Overlay `Menu` → `Popover preset="menu"`** — Menu's hardcoded item rendering needs to become a slot. Larger refactor than #3.~~ **Rejected** — see "Rejected recommendations" section. Different patterns, not forks.
 7. **Card variant consolidation** — biggest scope. Split into sub-tasks during execution based on consumer footprint:
     - **7a.** ~~CardDisplay + CardFeature deletion (zero consumers)~~ — completed in PR #241.
-    - **7b.** CardControl → Card variant — 1 portal consumer; small additive PR + 1-file portal migration.
+    - ~~**7b.** CardControl → Card variant — 1 portal consumer; small additive PR + 1-file portal migration.~~ **Card preset added (PR #244) but CardControl kept** — user decision 2026-04-24 to preserve CardControl as a first-class component. Both APIs supported; deprecation reversed.
     - **7c.** CardSummary → Card variant — 12 portal consumers; full additive-deprecate-migrate-delete cycle.
 8. **`ServiceBadge` REVIEW** — verify ServiceTag coverage before retiring.
 9. **`CardList` REVIEW** — assess demotion to CSS utility class vs keeping as layout primitive.
@@ -136,6 +136,12 @@ After consumer-impact review during execution, two original audit recommendation
 ### #5 Snackbar ↔ Toast merge — **rejected, deleted instead** (PR #238)
 
 The audit recommended merging Snackbar into Toast with `{ isPortal, position, autoDismissMs, statusSurface, showBadge }` props. On execution, Snackbar had **zero consumers**. Adding three orthogonal behavioral flags to Toast for zero current benefit was prop-bag bloat — exactly what ADR-004 §3 forbids. Outcome: deleted Snackbar entirely. If floating + auto-dismissing notifications are needed later, build a dedicated `Toaster` manager component (Sonner / react-hot-toast pattern) rather than overloading Toast.
+
+### #7b CardControl deletion — **reversed after Card preset added**
+
+PR #244 added `<Card preset="control">` and marked CardControl `@deprecated` ahead of a planned consumer migration + deletion cycle. On 2026-04-24 the user reversed the deprecation: *"hold off on cardcontrol as there may be a need for that in the future."* Both APIs ship in v0.39.0 — Card preset for new uses, CardControl for existing and future settings/control surfaces. The `@deprecated` JSDoc on CardControl was removed in PR #248.
+
+This is a soft no-op for the audit: the bloat-reduction case for folding CardControl into Card was real (~70% CSS overlap), but the operator decision is to keep optionality. If at a future audit pass CardControl is genuinely unused, revisit.
 
 ### #6 Menu → Popover preset — **rejected outright**
 

@@ -41,7 +41,7 @@ All visual variants, padding sizes, interactive, and link modes.
 />
 ```
 
-The standalone `CardControl` component is `@deprecated` and slated for deletion in a future major version. Migrate to `Card preset="control"` — same prop names, same behavior. See [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md).
+Both `<Card preset="control">` and the standalone `<CardControl>` ship as first-class APIs in v0.39.0 — pick whichever fits the call site. The audit recommended folding CardControl into Card; the user reversed that decision 2026-04-24 to preserve optionality. See [audit doc](../../docs/audits/2026-Q2-component-bloat-audit.md).
 
 ## Summary preset
 
