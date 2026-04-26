@@ -1,0 +1,102 @@
+---
+title: Toast
+description: White-surface notification with an optional colored Badge icon. The surface stays neutral; only the badge communicates status.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Toast is the ephemeral confirmation surface. Use for short-lived "this just happened" messages — saved, copied, queued, retrying. The surface stays neutral white; only the leading Badge changes color to communicate success / error / warning / info.
+
+For persistent state alerts, use [Banner](/docs/components/banner). For hover-only help, use [Tooltip](/docs/components/tooltip).
+
+## Use it for
+
+- Save / publish / delete confirmations after a user action
+- "Copied to clipboard" feedback
+- Queued / scheduled / retrying status pings
+- Any sub-second-to-few-seconds confirmation that the user can dismiss when ready
+
+## Import
+
+```tsx
+import { Toast } from '@brikdesigns/bds';
+```
+
+## Variants
+
+Five variants — `default` (no badge) plus four status badges.
+
+```tsx
+<Toast title="Just so you know" variant="default" />
+<Toast title="Saved" description="Settings updated." variant="success" />
+<Toast title="Couldn't save" description="Try again." variant="error" />
+<Toast title="Almost there" description="Trial ends tomorrow." variant="warning" />
+<Toast title="Heads up" description="Maintenance scheduled." variant="info" />
+```
+
+- **`default`** — No badge, no icon. Plain text confirmation.
+- **`success`** — Positive badge, `circle-check` icon.
+- **`error`** — Error badge, `circle-exclamation` icon.
+- **`warning`** — Warning badge, `triangle-exclamation` icon.
+- **`info`** — Info badge, `circle-info` icon.
+
+### Title-only
+
+`description` is optional. For one-line confirmations the title alone reads cleaner.
+
+```tsx
+<Toast title="Saved" variant="success" onDismiss={() => hide()} />
+```
+
+### Non-dismissible
+
+Omit `onDismiss` and the close button is hidden. Use for self-dismissing toast queues controlled by a parent provider.
+
+```tsx
+<Toast title="Saved" variant="success" />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use Toast for persistent state.** Toasts are ephemeral by convention — users assume they'll go away. Trial-expires warnings, system-degraded notices, and "trial ends in 7 days" callouts belong in [Banner](/docs/components/banner) where they stay visible.
+</Callout>
+
+- **Don't use Toast for required user input.** Toasts dismiss; if the user must respond, use a [Banner](/docs/components/banner) or modal.
+- **Don't stack 5 Toasts.** A queue of 2-3 is fine; longer queues are noisy. Aggregate ("3 changes saved").
+
+## Accessibility
+
+- Renders a `<div role="status" aria-live="polite">` so screen readers announce the toast on render without interrupting current speech.
+- For destructive or critical messages, escalate to `role="alert"` (`aria-live="assertive"`) — but prefer Banner for those, since Toast's auto-dismiss conflicts with critical content.
+- Dismiss button carries `aria-label="Dismiss notification"`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `ReactNode` *(required)* | — |
+| `description` | `ReactNode` | — |
+| `variant` | `'default' \| 'success' \| 'error' \| 'warning' \| 'info'` | `'default'` |
+| `onDismiss` | `() => void` | — |
+
+Plus all standard `<div>` HTML attributes (excluding `title`).
+
+## CSS Override API
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--toast-shadow` | `0px 4px 12px 4px rgba(0,0,0,0.24)` | Elevation shadow |
+
+```css
+.side-panel {
+  --toast-shadow: 0px 2px 8px rgba(0, 0, 0, 0.12);
+}
+```
+
+## Related
+
+- [Banner](/docs/components/banner) — persistent sibling
+- [Tooltip](/docs/components/tooltip) — hover-revealed sibling
+- [Badge](/docs/components/badge) — the status badge rendered inside Toast
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-feedback-toast--overview)**
