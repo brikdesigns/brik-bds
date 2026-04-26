@@ -19,6 +19,17 @@
     "skeleton",
     "spinner",
     "tag",
-    "tag-group"
+    "tag-group",
+    "---Form / Inputs---",
+    "text-input",
+    "text-area",
+    "password-input",
+    "address-input",
+    "select",
+    "multi-select",
+    "date-picker",
+    "time-picker",
+    "checkbox",
+    "radio"
   ]
 }
