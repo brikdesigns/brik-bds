@@ -87,6 +87,13 @@
     "calendar",
     "activity-timeline",
     "meter",
-    "notification-list"
+    "notification-list",
+    "---Assets + utilities---",
+    "avatar",
+    "icons",
+    "footer",
+    "page-header",
+    "bullet-list",
+    "task-console"
   ]
 }

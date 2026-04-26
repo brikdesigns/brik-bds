@@ -1,0 +1,118 @@
+---
+title: Avatar
+description: User profile image with automatic initials fallback. Four sizes and four presence states.
+---
+
+Avatar renders a user's profile photo, falling back to generated initials when no image is available. Four sizes plus optional presence indicators (online / busy / away / offline).
+
+## Use it for
+
+- User identity in cards, comments, and lists
+- Profile headers and account settings
+- Stacked avatar groups (team rosters, comment threads)
+- Anywhere a person needs visual identification
+
+For non-person entities (companies, projects), use [Card](/docs/components/card) with a logo or [Icons](/docs/components/icons). For status without identity, use [Dot](/docs/components/dot).
+
+## Import
+
+```tsx
+import { Avatar } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### With image
+
+```tsx
+<Avatar src="/users/alice.jpg" alt="Alice Chen" name="Alice Chen" />
+```
+
+`alt` is the accessible name for the image. `name` provides the initials fallback if the image fails to load.
+
+### Initials fallback
+
+When `src` is omitted (or fails to load), Avatar generates initials from `name`.
+
+```tsx
+<Avatar name="Alice Chen" />        {/* AC */}
+<Avatar name="John Doe" />          {/* JD */}
+<Avatar name="Maria Lopez Garcia" />  {/* ML */}
+```
+
+### Sizes
+
+| Size | Diameter | Use |
+|---|---|---|
+| `sm` | 32px | Compact lists, inline mentions |
+| `md` (default) | 40px | Cards, comments |
+| `lg` | 48px | Profile headers, featured users, [Board](/docs/components/board) |
+| `xl` | 64px | Hero profiles, account settings |
+
+### Presence status
+
+`status` adds a colored dot in the bottom-right corner.
+
+```tsx
+<Avatar name="Alice" status="online" />
+<Avatar name="Bob" status="away" />
+<Avatar name="Charlie" status="busy" />
+<Avatar name="Diana" status="offline" />
+```
+
+| Status | Color |
+|---|---|
+| `online` | Green |
+| `away` | Yellow |
+| `busy` | Red |
+| `offline` | Gray |
+
+## Pattern: stacked avatar group
+
+Negative-margin stack for "10 people commented" indicators.
+
+```tsx
+<div style={{ display: 'flex' }}>
+  {users.slice(0, 4).map((u, i) => (
+    <Avatar
+      key={u.id}
+      src={u.avatar}
+      name={u.name}
+      style={{ marginLeft: i === 0 ? 0 : -8, border: '2px solid white' }}
+    />
+  ))}
+  {users.length > 4 && (
+    <Avatar name={`+${users.length - 4}`} style={{ marginLeft: -8 }} />
+  )}
+</div>
+```
+
+## When *not* to use
+
+- **Don't use Avatar for non-person identity.** Companies, projects, or rooms have their own visual languages — use [Card](/docs/components/card) with a logo or [Icons](/docs/components/icons).
+- **Don't use Avatar without `name` or `alt`.** Both serve as accessible labels — without them, screen readers announce nothing useful.
+
+## Accessibility
+
+- Renders a `<div>` with the image inside. The image's `alt` becomes the accessible name.
+- Initials fallback inherits the `name` for accessibility (`aria-label`).
+- Status indicator carries `aria-label="Online"` (etc.) so screen readers announce the state.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `src` | `string` | — |
+| `alt` | `string` | — |
+| `name` | `string` | — |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
+| `status` | `'online' \| 'offline' \| 'busy' \| 'away'` | — |
+
+Plus standard `<div>` HTML attributes.
+
+## Related
+
+- [Board → BoardHeader](/docs/components/board) — uses Avatar internally
+- [Dot](/docs/components/dot) — status without identity
+- [Icons](/docs/components/icons) — for non-person identity
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/foundations-assets-avatar--overview)**
