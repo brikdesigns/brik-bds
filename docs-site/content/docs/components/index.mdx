@@ -15,7 +15,7 @@ BDS components are organized by **job**, not by visual type. The same taxonomy b
 | **Feedback** | Banner, Toast, Tooltip, EmptyState, ProgressBar (AlertBanner deprecated → Banner) |
 | **Control** | Switch, Slider, Stepper, ProgressStepper, Pagination, SegmentedControl, FileUploader |
 | **Addable** | AddableTextList, AddableComboList, AddableEntryList, AddableFieldRowList |
-| **Structure** | Card, Divider, Accordion |
+| **Structure** | Card, Divider, Accordion (Card family CardControl, CardList, etc. still under Displays) |
 
 ## Documented here
 
@@ -113,9 +113,19 @@ Add / remove list primitives. Pick by row shape — single string, vocabulary-ba
   <Card title="Addable field row list" href="/docs/components/addable-field-row-list" description="Multi-field row with type-safe data via render-prop. 2+ structured fields per row." />
 </Cards>
 
+### Structure
+
+Content containers and separators. Card has two locked-down presets (control + summary) on top of the default flexible mode.
+
+<Cards>
+  <Card title="Card" href="/docs/components/card" description="Flexible content container. Default + control preset + summary preset. Composable with CardTitle / CardDescription / CardFooter." />
+  <Card title="Divider" href="/docs/components/divider" description="Visual separator. Horizontal or vertical, four spacing scales." />
+  <Card title="Accordion" href="/docs/components/accordion" description="Collapsible content sections. Single-open default, optional multi-open mode." />
+</Cards>
+
 ## Still in Storybook
 
-The remaining ~9 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Structure, Navigation, and Displays.
+The remaining components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for **Card family** (CardControl, CardList, CardTestimonial, CollapsibleCard, PricingCard), **Navigation** (TabBar, Breadcrumb, SidebarNavigation, Menu), and **Displays** sub-categories (Cards, Overlays, Notifications, Sheets, Table, Timeline, Calendar, Board, Charts).
 
 ## Page template
 
