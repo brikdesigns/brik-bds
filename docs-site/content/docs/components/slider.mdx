@@ -1,0 +1,115 @@
+---
+title: Slider
+description: Range input. Drag-to-select a numeric value across a continuous range.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Slider is a continuous-range input — drag the thumb to pick a value. Use for settings where approximate selection is fine and the user benefits from seeing where they are on a scale (volume, brightness, price filter).
+
+For exact discrete values, use [Stepper](/docs/components/stepper). For known-set picks, use [Select](/docs/components/select).
+
+## Use it for
+
+- Volume / brightness / opacity controls
+- Price-range filters in search UI
+- Audio scrubbers and timeline scrubbers
+- Any setting where the user thinks "make it about this much" rather than "exactly N"
+
+## Import
+
+```tsx
+import { Slider } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Sizes
+
+- **`sm`** — 4px track, 16px thumb. Compact settings.
+- **`md`** — 6px track, 20px thumb. Default.
+- **`lg`** — 8px track, 24px thumb. Prominent controls.
+
+### Default
+
+```tsx
+import { useState } from 'react';
+const [value, setValue] = useState(50);
+
+<Slider label="Volume" value={value} onChange={setValue} showValue />
+```
+
+### Custom range and step
+
+`min`, `max`, and `step` constrain the value space. Use for non-percentage scales.
+
+```tsx
+<Slider
+  label="Price"
+  value={value}
+  onChange={setValue}
+  min={0}
+  max={1000}
+  step={50}
+  size="lg"
+  showValue
+/>
+```
+
+### Show value
+
+`showValue` renders the current value next to the label.
+
+```tsx
+<Slider label="Brightness" value={75} onChange={setValue} showValue />
+```
+
+## When *not* to use
+
+- **Don't use Slider for exact integer counts.** Quantity selectors belong in [Stepper](/docs/components/stepper) — typing "5" is faster than dragging to "5".
+- **Don't use Slider for ≤4 discrete values.** Use [SegmentedControl](/docs/components/segmented-control) — visible options beat hidden positions.
+- **Don't use Slider without a visible value indicator.** Without `showValue` or an external readout, users can't confirm the exact pick.
+
+<Callout type="warn">
+  **Slider is approximate by design.** If exact-value entry matters (currency, units), pair Slider with a [TextInput](/docs/components/text-input) showing the exact value, or skip Slider entirely.
+</Callout>
+
+## Accessibility
+
+- Renders a real `<input type="range">` — keyboard arrows nudge the value, `Home`/`End` jump to min/max.
+- `label` auto-wires `htmlFor`/`id`. Pair with `aria-label` if you skip the visible label.
+- The current value is announced via `aria-valuenow` (set automatically from `value`).
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` / `defaultValue` | `number` | — |
+| `min` | `number` | `0` |
+| `max` | `number` | `100` |
+| `step` | `number` | `1` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `label` | `string` | — |
+| `showValue` | `boolean` | `false` |
+| `disabled` | `boolean` | `false` |
+| `onChange` | `(value: number) => void` | — |
+
+Plus all standard `<input>` HTML attributes (excluding `type`, `size`, native `onChange`).
+
+## CSS Override API
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--slider-thumb-shadow` | `0 2px 4px rgba(0,0,0,0.1)` | Drop shadow on the thumb |
+
+```css
+.settings-panel {
+  --slider-thumb-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+```
+
+## Related
+
+- [Stepper](/docs/components/stepper) — discrete-value sibling
+- [SegmentedControl](/docs/components/segmented-control) — for ≤4 values
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-control-slider--overview)**

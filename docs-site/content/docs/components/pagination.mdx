@@ -1,0 +1,112 @@
+---
+title: Pagination
+description: Page navigation controls. Previous / next arrows, page numbers, ellipsis for large counts.
+---
+
+Pagination renders page-navigation controls under tables, lists, and search results. Supports left / center / right alignment and configurable sibling counts.
+
+For multi-step flow indicators, use [ProgressStepper](/docs/components/progress-stepper) — Pagination is for browsing a paginated dataset.
+
+## Use it for
+
+- Tables and lists with paged data
+- Search results with multiple pages
+- Long content split into chapters / sections
+- Anywhere the user can move backward and forward through known-count pages
+
+## Import
+
+```tsx
+import { Pagination } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+const [page, setPage] = useState(1);
+
+<Pagination
+  currentPage={page}
+  totalPages={80}
+  onChange={setPage}
+/>
+```
+
+### Alignment
+
+`position` controls horizontal alignment. Choose based on container layout — `center` for full-width tables, `right` for sidebars, `left` for left-aligned lists.
+
+```tsx
+<Pagination currentPage={page} totalPages={80} onChange={setPage} position="left" />
+<Pagination currentPage={page} totalPages={80} onChange={setPage} position="center" />
+<Pagination currentPage={page} totalPages={80} onChange={setPage} position="right" />
+```
+
+### Sibling count
+
+`siblingCount` controls how many page numbers show on each side of the current page (default 1). Increase for wider containers; decrease for compact ones.
+
+```tsx
+<Pagination
+  currentPage={page}
+  totalPages={80}
+  onChange={setPage}
+  siblingCount={2}
+/>
+```
+
+### Few pages
+
+When `totalPages` is small, all pages render — no ellipsis needed.
+
+```tsx
+<Pagination currentPage={2} totalPages={5} onChange={setPage} />
+```
+
+## Pattern: pagination + result count
+
+Standard table footer pattern — count on the left, controls on the right.
+
+```tsx
+<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <span>{`Showing ${start}–${end} of ${total}`}</span>
+  <Pagination
+    currentPage={page}
+    totalPages={Math.ceil(total / pageSize)}
+    onChange={setPage}
+  />
+</div>
+```
+
+## When *not* to use
+
+- **Don't use Pagination for infinite-scroll lists.** Pagination implies discrete pages with stable URLs. For continuous loading, use a "Load more" button or true infinite scroll.
+- **Don't use Pagination for ≤2 pages.** Single-page or two-page sets read as visual noise — drop the control entirely or show the result count alone.
+- **Don't use Pagination as a navigation primitive.** Page numbers don't carry context like links do. For navigation between sections of an app, use TabBar or links.
+
+## Accessibility
+
+- Renders a `<nav>` with `aria-label="Pagination"`.
+- Each page button is a real `<button>` with `aria-current="page"` on the active one.
+- Previous / Next buttons carry `aria-label`s and disable on the first/last page.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `currentPage` | `number` (1-indexed) *(required)* | — |
+| `totalPages` | `number` *(required)* | — |
+| `onChange` | `(page: number) => void` *(required)* | — |
+| `position` | `'left' \| 'center' \| 'right'` | `'center'` |
+| `siblingCount` | `number` | `1` |
+
+Plus standard `<nav>` HTML attributes (excluding native `onChange`).
+
+## Related
+
+- [ProgressStepper](/docs/components/progress-stepper) — flow progress, not page navigation
+- [Stepper](/docs/components/stepper) — numeric +/− input, different component
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-control-pagination--overview)**
