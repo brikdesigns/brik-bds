@@ -30,6 +30,11 @@
     "date-picker",
     "time-picker",
     "checkbox",
-    "radio"
+    "radio",
+    "---Form / Structure---",
+    "field",
+    "field-grid",
+    "form",
+    "catalog-picker"
   ]
 }
