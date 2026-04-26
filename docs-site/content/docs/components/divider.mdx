@@ -1,0 +1,77 @@
+---
+title: Divider
+description: Visual separator for content sections. Horizontal or vertical, four spacing scales.
+---
+
+Divider is a simple visual separator. Horizontal by default; switch to vertical for inline toolbars and breadcrumbs.
+
+For grouping content into discrete blocks, use [Card](/docs/components/card) — that's the explicit boundary. Use Divider for in-flow separation where a card would be too heavy.
+
+## Use it for
+
+- Section breaks within a long form
+- Toolbar separators between command groups
+- Inline separators between metadata pieces ("John Doe · jdoe@example.com")
+- Settings panel divisions
+
+## Import
+
+```tsx
+import { Divider } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Horizontal (default)
+
+```tsx
+<Divider />
+<Divider spacing="lg" />
+```
+
+### Vertical (inline)
+
+Pair with `display: flex` on the parent so the line shows up correctly.
+
+```tsx
+<div style={{ display: 'flex', alignItems: 'center' }}>
+  <span>Left</span>
+  <Divider orientation="vertical" spacing="md" />
+  <span>Right</span>
+</div>
+```
+
+### Spacing
+
+Four scales for the margin around the line.
+
+| Spacing | Value | Use case |
+|---|---|---|
+| `none` | 0px | Tight separators, table rows |
+| `sm` | 12px | Compact spacing |
+| `md` (default) | 16px | Default breathing room |
+| `lg` | 24px | Section-level separation |
+
+## When *not* to use
+
+- **Don't use Divider as a content boundary.** If two areas should *feel* separate (different responsibilities, different content types), use [Card](/docs/components/card) — explicit borders read better than thin lines.
+- **Don't use Divider with no surrounding content.** A line floating alone is visual noise.
+
+## Accessibility
+
+- Renders a real `<hr>` element (or visually-hidden role for vertical orientation).
+- Carries `role="separator"` and `aria-orientation` matching the orientation prop.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `spacing` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
+
+Plus all standard `<hr>` HTML attributes.
+
+## Related
+
+- [Card](/docs/components/card) — for explicit content boundaries
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-structure-divider--overview)**

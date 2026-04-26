@@ -55,6 +55,10 @@
     "addable-text-list",
     "addable-combo-list",
     "addable-entry-list",
-    "addable-field-row-list"
+    "addable-field-row-list",
+    "---Structure---",
+    "card",
+    "divider",
+    "accordion"
   ]
 }
