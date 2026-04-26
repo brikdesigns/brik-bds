@@ -1,0 +1,173 @@
+---
+title: Sheet typography
+description: Four locked text primitives for Sheet body content. Bind to one tier each — readers can't render a label larger than its section heading.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Sheet typography is **four primitives** for Sheet-context content. Each binds to one typography tier defined in [LAYOUT-CONTEXTS.md](https://github.com/brikdesigns/brik-bds/blob/main/docs/LAYOUT-CONTEXTS.md). Consumers that use these primitives **cannot render a label larger than its section heading** — the common bug this family exists to prevent.
+
+| Primitive | Tier | Use |
+|---|---|---|
+| `<SheetSectionTitle>` | `--heading-sm` | Top of each Sheet body section. Renders as `<h3>` by default. |
+| `<SheetFieldLabel>` | `--label-sm` | Field label. Smaller than the section title (tier rule). |
+| `<SheetFieldValue>` | `--body-md` | Read-mode value display. Auto empty-state handling. |
+| `<SheetHelperText>` | `--label-xs` | Caption / error text. Always smallest tier. |
+
+## Use them for
+
+- Modernizing a Sheet body that still uses the legacy `detail.*` style presets from `@/lib/styles`
+- New Sheet bodies where `<SheetSection heading=...>` + `<Field label=...>` doesn't fit (custom layouts, mixed inline content)
+- Anywhere you need text-tier guarantees beyond what raw HTML provides
+
+For most Sheet bodies, [SheetSection](/docs/components/sheet-section) + [Field](/docs/components/field) is sufficient. Reach for these primitives when you need direct text control inside or alongside those wrappers.
+
+## Import
+
+```tsx
+import {
+  SheetSectionTitle,
+  SheetFieldLabel,
+  SheetFieldValue,
+  SheetHelperText,
+} from '@brikdesigns/bds';
+```
+
+## Tier hierarchy
+
+The four tiers stack from largest to smallest:
+
+```
+SheetSectionTitle    --heading-sm   semibold  primary  no transform
+SheetFieldLabel      --label-sm     semibold  muted    Title Case
+SheetFieldValue      --body-md      regular   primary  preserves whitespace
+SheetHelperText      --label-xs     regular   muted    (or red when tone="error")
+```
+
+The tier order is **non-bypassable** — a `<SheetFieldLabel>` cannot render larger than a `<SheetSectionTitle>` because the tokens lock the sizes.
+
+## SheetSectionTitle
+
+Top of each section. Renders as `<h3>` by default (below the Sheet's own `<h2>` title); pass `level="h2"` / `"h4"` to adjust the outline.
+
+```tsx
+<SheetSectionTitle>CTA Language</SheetSectionTitle>
+
+<SheetSectionTitle level="h4">Tagline variations</SheetSectionTitle>
+```
+
+Distinct from:
+- `<Sheet title="...">` — the top-level sheet title at `--heading-md`
+- `<SheetSection heading="...">` — legacy `--label-sm` uppercase eyebrow treatment; kept for existing consumers but new sheets should use `<SheetSectionTitle>`
+
+## SheetFieldLabel
+
+Label for a single field. Renders as `<label>` when `htmlFor` is provided so screen readers associate it with its input; `<span>` otherwise.
+
+```tsx
+<SheetFieldLabel htmlFor="tagline-input">Tagline</SheetFieldLabel>
+<input id="tagline-input" type="text" />
+```
+
+```tsx
+<SheetFieldLabel>Approved CTAs</SheetFieldLabel>
+<SheetFieldValue>Book a Consultation · Start Your Smile Journey</SheetFieldValue>
+```
+
+## SheetFieldValue
+
+Read-mode display of a field value. Handles empty state automatically — pass `null` or an empty string and the primitive renders the `empty` fallback (defaults to `"Not set"`). Pass `empty={null}` to suppress entirely.
+
+```tsx
+<SheetFieldValue>Brik Designs</SheetFieldValue>
+
+<SheetFieldValue empty="Independent">{value}</SheetFieldValue>
+
+<SheetFieldValue empty={null}>{value}</SheetFieldValue>
+```
+
+## SheetHelperText
+
+Caption or error text under a field. Always the smallest tier so it never competes with the label or value.
+
+```tsx
+<SheetHelperText>Shown under the hero headline on the homepage.</SheetHelperText>
+
+<SheetHelperText tone="error">Required field.</SheetHelperText>
+```
+
+## Composition
+
+Full section using all four primitives:
+
+```tsx
+<SheetSectionTitle>CTA Language</SheetSectionTitle>
+
+<SheetFieldLabel htmlFor="tagline-input">Tagline</SheetFieldLabel>
+<input id="tagline-input" type="text" />
+<SheetHelperText>Shown under the hero headline.</SheetHelperText>
+
+<SheetFieldLabel>Approved CTAs</SheetFieldLabel>
+<SheetFieldValue>Book a Consultation · Start Your Smile Journey</SheetFieldValue>
+
+<SheetFieldLabel>Anti-messages</SheetFieldLabel>
+<SheetFieldValue empty="None defined">{antiMessages}</SheetFieldValue>
+```
+
+## Migration from portal `detail.*` presets
+
+Portal's `src/lib/styles.ts` still exports the legacy `detail.*` style presets (`detail.label`, `detail.value`, `detail.sectionHeading`, `detail.fieldHeading`, `detail.subHeading`, `detail.sectionLabel`). The 2026-Q2 canary audit counted 197 uses of `detail.label` + `detail.value` alone.
+
+Direct replacements:
+
+| Legacy preset | Replacement |
+|---|---|
+| `detail.sectionHeading` | `<SheetSectionTitle>` |
+| `detail.fieldHeading` | `<SheetSectionTitle level="h4">` (or `<SheetFieldLabel>` if it's really a field label, not a subsection) |
+| `detail.label` | `<SheetFieldLabel>` |
+| `detail.value` | `<SheetFieldValue>` |
+| `detail.empty` | `<SheetFieldValue empty="...">` (empty prop instead of separate branch) |
+| `detail.subHeading` | No direct replacement — uppercase eyebrow is retired per the layout-contexts doc; use `<SheetSectionTitle level="h4">` for subsection hierarchy |
+
+Migration is incremental — the portal presets keep working until every consumer has moved.
+
+<Callout type="info">
+  **Tokens used:** `--heading-sm`, `--label-sm`, `--label-xs`, `--body-md` for typography. `--font-family-heading`, `--font-family-label`, `--font-family-body` for families. `--font-weight-semi-bold` / `--font-weight-regular` for weight. `--text-primary` / `--text-muted` / `--text-accent-red` for color. `--font-line-height-snug` / `--font-line-height-tight` / `--font-line-height-normal` for line height.
+</Callout>
+
+## API
+
+### SheetSectionTitle
+
+| Prop | Type | Default |
+|---|---|---|
+| `level` | `'h2' \| 'h3' \| 'h4'` | `'h3'` |
+| `children` | `ReactNode` *(required)* | — |
+
+### SheetFieldLabel
+
+| Prop | Type | Default |
+|---|---|---|
+| `htmlFor` | `string` | — |
+| `children` | `ReactNode` *(required)* | — |
+
+### SheetFieldValue
+
+| Prop | Type | Default |
+|---|---|---|
+| `empty` | `ReactNode \| null` | `'Not set'` |
+| `children` | `ReactNode` | — |
+
+### SheetHelperText
+
+| Prop | Type | Default |
+|---|---|---|
+| `tone` | `'default' \| 'error'` | `'default'` |
+| `children` | `ReactNode` *(required)* | — |
+
+## Related
+
+- [Sheet](/docs/components/sheet) — parent context
+- [SheetSection](/docs/components/sheet-section) — wrapper that uses these primitives internally
+- [Field](/docs/components/field) — high-level label+value primitive (uses these under the hood)
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-sheet-sheet-typography--overview)**
