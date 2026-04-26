@@ -1,0 +1,218 @@
+---
+title: Sheet
+description: Sliding panel anchored to a screen edge. Read / edit modes, tabs, secondary action, floating variant.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Sheet is the canonical detail-view panel — slides in from a screen edge for record views, edit workflows, and secondary content that shouldn't replace the current page. Mode-driven footer (Read / Edit) auto-renders the right action set; pass tabs for provenance/history surfaces; pair with [SheetSection](/docs/components/sheet-section) and the [Sheet typography primitives](/docs/components/sheet-typography) for a locked-down body composition.
+
+## Use it for
+
+- Record detail views (company profile, project brief, contact card)
+- Edit workflows that compose multi-section forms
+- Drilldowns from table rows or dashboard tiles
+- Anywhere a [Modal](/docs/components/modal) would feel too interruptive but the content needs more space than a [Popover](/docs/components/popover)
+
+## Import
+
+```tsx
+import { Sheet, SheetSection } from '@brikdesigns/bds';
+```
+
+## Modes
+
+Sheet has two modes that map to the most common UX pattern across the product suite:
+
+- **`read`** — view-only display. Footer (when shown) renders `[Close] [Edit]`.
+- **`edit`** — active form state. Footer renders `[Cancel] [Save]`.
+
+The canonical pattern: open in `read`, click Edit to switch to `edit`, Save / Cancel returns to `read`. Mirrors the renew-pms convention.
+
+```tsx
+import { useState } from 'react';
+
+function CompanySheet() {
+  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<'read' | 'edit'>('read');
+
+  return (
+    <Sheet
+      isOpen={open}
+      onClose={() => setOpen(false)}
+      subtitle="Company"
+      title="Brik Designs"
+      description="Active · Updated 2 days ago"
+      mode={mode}
+      onEdit={() => setMode('edit')}
+      onSave={async () => { await save(); setMode('read'); }}
+      onCancel={() => setMode('read')}
+    >
+      {mode === 'read' ? <ReadOnlyFields /> : <EditFormFields />}
+    </Sheet>
+  );
+}
+```
+
+<Callout type="warn">
+  **Don't put Edit as a button in the body.** Use `mode="read"` + `onEdit` so it surfaces in the auto-footer where users expect primary actions.
+</Callout>
+
+## Header
+
+The header composes four optional pieces:
+
+- **`subtitle`** — uppercase eyebrow above the title (entity type, parent record). Renders in `text-muted`.
+- **`title`** — main heading, rendered as `<h2>`.
+- **`description`** — long-form secondary text below the title (record state, timestamps).
+- **`onBack`** — back button for nested sheet navigation. Pair with your sheet stack controller.
+
+```tsx
+<Sheet
+  subtitle="Strategic Brief"
+  title="Birdwell & Mutlak"
+  description="Draft · Last edited 3 days ago"
+  onBack={popSheet}
+>
+  ...
+</Sheet>
+```
+
+## Sides
+
+- **`right`** (default) — slides from right edge
+- **`left`** — for navigation or sidebar panels
+- **`bottom`** — full-width drawer, mobile-friendly
+
+```tsx
+<Sheet side="bottom">...</Sheet>
+```
+
+## Variants
+
+- **`default`** — full-height overlay with backdrop (forms, edit workflows)
+- **`floating`** — rounded floating panel with elevation, no backdrop (read-only detail views, inline drill-ins from a table row)
+
+```tsx
+<Sheet variant="floating" mode="read" onEdit={...}>...</Sheet>
+```
+
+## Tabs
+
+Tabs render below the header. When `tabs` is supplied, `children` is ignored — each tab supplies its own content. Use for separating Details from Sources / History / Activity.
+
+```tsx
+<Sheet
+  title="Birdwell & Mutlak"
+  tabs={[
+    { id: 'details', label: 'Details', content: <DetailsTab /> },
+    { id: 'sources', label: 'Sources', content: <SourcesTab /> },
+    { id: 'history', label: 'History', content: <HistoryTab /> },
+  ]}
+  activeTab={tab}
+  onTabChange={setTab}
+/>
+```
+
+Keep the first tab's id stable (e.g. `'details'`) — it's the default active tab when `activeTab` is uncontrolled.
+
+## Secondary action
+
+For ancillary actions next to the primary Edit / Save (e.g. *Refresh Brief*, *Run Extraction*), pass `secondaryAction` instead of composing a custom footer.
+
+```tsx
+<Sheet
+  mode="read"
+  onEdit={() => setMode('edit')}
+  secondaryAction={{
+    label: 'Refresh brief',
+    onClick: handleRefresh,
+    iconBefore: <RefreshIcon />,
+  }}
+>
+  ...
+</Sheet>
+```
+
+Behavior:
+
+- **Read mode** — renders `[Secondary] . . . [Close] [Edit]`
+- **Edit mode** — secondary action is suppressed (Save's commit surface stays unambiguous)
+- **Custom `footer`** — wins over `secondaryAction`
+
+## Body composition
+
+Inside a Sheet body, reach for the **sheet primitive set** first. Don't invent ad-hoc markup.
+
+| Primitive | Use for |
+|---|---|
+| [SheetSection](/docs/components/sheet-section) | Named section wrapper. One per logical grouping. |
+| [Field](/docs/components/field) | Label + value pair. |
+| [FieldGrid](/docs/components/field-grid) | 2/3/4-column grid of Fields or Cards. |
+| [TagGroup](/docs/components/tag-group) | Tag clusters inside a Field. |
+| [BulletList](/docs/components/bullet-list) | Short-item lists. |
+| [Card](/docs/components/card) / [CardList](/docs/components/card-list) | Entity rows. |
+| [Table](/docs/components/table) | Tabular data. |
+| [Accordion](/docs/components/accordion) | Collapsible groups when a section has many rows. |
+| [EmptyState](/docs/components/empty-state) | Whole-section "no data" treatment. |
+
+Don't reach for raw `<h3>` / `<table>` / `<ul>` inside a Sheet body — each has a primitive that locks the type scale and spacing. Use the [Sheet typography primitives](/docs/components/sheet-typography) for inline labels and values.
+
+## When to use which treatment
+
+| Scenario | Variant | Footer |
+|---|---|---|
+| Read-only metadata, no CTA | `floating` | none |
+| Read detail with edit capability | `default`, `mode="read"` + `onEdit` | `[Close] [Edit]` (auto) |
+| Active form / edit workflow | `default`, `mode="edit"` + `onSave` | `[Cancel] [Save]` (auto) |
+| Read + ancillary action | `mode="read"` + `onEdit` + `secondaryAction` | `[Refresh] . . . [Close] [Edit]` |
+| Record with provenance / history | any mode + `tabs` | mode-driven |
+| Non-standard action set | any | custom `footer` |
+
+## When *not* to use
+
+- **Don't use Sheet for short confirmations.** Use [Modal preset="confirm"](/docs/components/modal#confirm-preset).
+- **Don't use Sheet without a clear reason to leave the page.** If the content fits inline, render it on the page directly.
+- **Don't nest Sheets visually.** Use `onBack` push-stack navigation — Sheets stack semantically, not visually.
+
+## Accessibility
+
+- Renders `role="dialog"` with `aria-labelledby` linking the title.
+- Focus trap inside the sheet; focus returns to the trigger on close.
+- `Escape` closes (default `closeOnEscape={true}`); backdrop click closes (default `closeOnBackdrop={true}` — no effect on `floating` variant since there's no backdrop).
+- Auto-footer Save button announces `aria-busy` while `saveLoading={true}`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `isOpen` | `boolean` *(required)* | — |
+| `onClose` | `() => void` *(required)* | — |
+| `children` | `ReactNode` | — |
+| `side` | `'right' \| 'left' \| 'bottom'` | `'right'` |
+| `title` | `ReactNode` | — |
+| `subtitle` | `ReactNode` | — |
+| `description` | `ReactNode` | — |
+| `width` | `string` | `'400px'` |
+| `variant` | `'default' \| 'floating'` | `'default'` |
+| `closeOnBackdrop` | `boolean` | `true` |
+| `closeOnEscape` | `boolean` | `true` |
+| `showCloseButton` | `boolean` | `true` |
+| `onBack` | `() => void` | — |
+| `mode` | `'read' \| 'edit'` | — |
+| `onEdit` / `onSave` / `onCancel` | `() => void` | — |
+| `editLabel` / `saveLabel` / `cancelLabel` / `closeLabel` | `string` | label defaults |
+| `saveDisabled` / `saveLoading` | `boolean` | `false` |
+| `footer` | `ReactNode` (overrides auto-footer) | — |
+| `secondaryAction` | `SheetSecondaryAction` | — |
+| `tabs` | `SheetTab[]` | — |
+| `activeTab` | `string` (controlled) | first tab id |
+| `onTabChange` | `(tabId: string) => void` | — |
+
+## Related
+
+- [SheetSection](/docs/components/sheet-section) — body section wrapper
+- [Sheet typography](/docs/components/sheet-typography) — locked text primitives for sheet bodies
+- [Modal](/docs/components/modal) — interrupting-overlay alternative
+- [Popover](/docs/components/popover) — anchored-floating alternative
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-sheet-sheet--overview)**

@@ -1,0 +1,136 @@
+---
+title: Modal
+description: Portal-rendered dialog overlay with backdrop, escape key, and scroll lock. Five sizes plus a confirm preset.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Modal is the canonical dialog overlay. Portal-rendered (escapes the source DOM), backdrop with optional click-to-close, Escape key dismissal, scroll lock on the underlying page. Five sizes plus a `preset="confirm"` for destructive/confirmation flows.
+
+## Use it for
+
+- Focused tasks (forms, multi-step flows)
+- Confirmations and destructive-action prompts (`preset="confirm"`)
+- Any modal interaction where the user needs to commit or cancel before continuing
+
+For sliding panels anchored to a screen edge (detail views, edit workflows), use [Sheet](/docs/components/sheet). For floating content panels anchored to a trigger, use [Popover](/docs/components/popover).
+
+## Import
+
+```tsx
+import { Modal } from '@brikdesigns/bds';
+```
+
+## Default mode
+
+```tsx
+import { useState } from 'react';
+const [open, setOpen] = useState(false);
+
+<Modal
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  title="Edit profile"
+  footer={
+    <>
+      <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+      <Button variant="primary" onClick={handleSave}>Save</Button>
+    </>
+  }
+>
+  <p>Form content here…</p>
+</Modal>
+```
+
+### Sizes
+
+| Size | Use case |
+|---|---|
+| `sm` | Compact messages, simple confirms |
+| `md` (default) | Standard dialogs |
+| `lg` | Extended content |
+| `xl` | Data-heavy views |
+| `full` | Full-screen takeover |
+
+## Confirm preset
+
+`preset="confirm"` collapses the legacy [Dialog](/docs/components/dialog) component into Modal. Sets `role="alertdialog"`, locks to a tighter 440px width, hides the X close button, and auto-renders Cancel / Confirm buttons.
+
+```tsx
+<Modal
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  preset="confirm"
+  title="Delete this item?"
+  description="This action cannot be undone."
+  confirmLabel="Delete"
+  confirmVariant="destructive"
+  onConfirm={handleDelete}
+/>
+```
+
+### Confirm preset props
+
+- `confirmLabel` / `cancelLabel` — button labels (defaults: "Confirm" / "Cancel")
+- `confirmVariant` — `'primary'` (default) or `'destructive'` for delete-style actions
+- `confirmDisabled` — disables the confirm button (e.g. while form is invalid)
+- `confirmLoading` — shows loading state on the confirm button (in-flight request)
+- `onConfirm` — called when the user confirms
+
+Pass a custom `footer` to override the auto-rendered actions while keeping the rest of the preset.
+
+<Callout type="warn">
+  **The standalone `Dialog` component is `@deprecated`** and slated for deletion in a future major version. Migrate to `Modal preset="confirm"` — same prop names, same behavior. See [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
+</Callout>
+
+## When *not* to use
+
+- **Don't use Modal for persistent state.** Modals interrupt the user. For background notifications, use [Toast](/docs/components/toast). For persistent alerts, use [Banner](/docs/components/banner).
+- **Don't use Modal for ephemeral hover content.** Use [Tooltip](/docs/components/tooltip) or [Popover](/docs/components/popover).
+- **Don't nest Modals.** Modal-on-modal indicates a flow problem. Refactor as a single multi-step Modal or as a [Sheet](/docs/components/sheet) push-stack.
+- **Don't put navigation in a Modal.** Modals are for *committing* — back-out flows belong on the page itself.
+
+## Accessibility
+
+- Renders `role="dialog"` (or `alertdialog` for confirm preset) with `aria-labelledby` linking the title.
+- Focus trap inside the modal — `Tab` cycles within, focus returns to the trigger on close.
+- `Escape` closes (auto). Backdrop click closes by default; opt out via `closeOnBackdrop={false}`.
+- Body scroll is locked while the modal is open.
+
+## API
+
+### Default mode
+
+| Prop | Type | Default |
+|---|---|---|
+| `isOpen` | `boolean` *(required)* | — |
+| `onClose` | `() => void` *(required)* | — |
+| `title` | `string` | — |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'` | `'md'` |
+| `children` | `ReactNode` | — |
+| `footer` | `ReactNode` | — |
+| `closeOnBackdrop` | `boolean` | `true` |
+| `closeOnEscape` | `boolean` | `true` |
+| `showCloseButton` | `boolean` | `true` |
+
+### Confirm preset
+
+| Prop | Type | Default |
+|---|---|---|
+| `preset` | `'confirm'` *(required)* | — |
+| `title` | `string` *(required)* | — |
+| `description` | `string` | — |
+| `confirmLabel` | `string` | `'Confirm'` |
+| `cancelLabel` | `string` | `'Cancel'` |
+| `confirmVariant` | `'primary' \| 'destructive'` | `'primary'` |
+| `confirmDisabled` | `boolean` | `false` |
+| `confirmLoading` | `boolean` | `false` |
+| `onConfirm` | `() => void` | — |
+
+## Related
+
+- [Dialog](/docs/components/dialog) *(deprecated)* — migrate to `Modal preset="confirm"`
+- [Sheet](/docs/components/sheet) — sliding panel alternative
+- [Popover](/docs/components/popover) — anchored-to-trigger alternative
+- [Banner](/docs/components/banner) — persistent state alerts
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-overlay-modal--overview)**

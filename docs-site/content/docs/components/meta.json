@@ -71,6 +71,14 @@
     "card-list",
     "card-testimonial",
     "collapsible-card",
-    "pricing-card"
+    "pricing-card",
+    "---Overlays---",
+    "modal",
+    "dialog",
+    "popover",
+    "---Sheets---",
+    "sheet",
+    "sheet-section",
+    "sheet-typography"
   ]
 }

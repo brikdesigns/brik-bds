@@ -1,0 +1,77 @@
+---
+title: Dialog
+description: DEPRECATED — use Modal preset="confirm" instead.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="error">
+  **Dialog is deprecated.** Migrate to [`Modal preset="confirm"`](/docs/components/modal#confirm-preset). This component is slated for deletion in a future major version per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
+</Callout>
+
+## Migration
+
+Same shape, same defaults, same destructive flow — just renamed under Modal.
+
+```tsx
+// Before
+<Dialog
+  isOpen={open}
+  onClose={close}
+  title="Save changes?"
+  description="You have unsaved changes."
+  confirmLabel="Save"
+  onConfirm={handleSave}
+/>
+
+// After
+<Modal
+  isOpen={open}
+  onClose={close}
+  preset="confirm"
+  title="Save changes?"
+  description="You have unsaved changes."
+  confirmLabel="Save"
+  onConfirm={handleSave}
+/>
+```
+
+| Dialog prop | Modal preset="confirm" prop |
+|---|---|
+| `isOpen` | `isOpen` |
+| `onClose` | `onClose` |
+| `title` | `title` |
+| `description` | `description` |
+| `confirmLabel` | `confirmLabel` |
+| `cancelLabel` | `cancelLabel` |
+| `onConfirm` | `onConfirm` |
+| `variant="destructive"` | `confirmVariant="destructive"` |
+| `closeOnBackdrop` | `closeOnBackdrop` |
+
+The Modal preset adds `confirmDisabled` and `confirmLoading` props for in-flight requests, which Dialog never had.
+
+## Why the consolidation
+
+Dialog and Modal were two visually similar components doing the same job — modal overlay with confirm/cancel. Per ADR-004 component-bloat guardrails, two components with ≥70% overlap collapse into one with a prop. The result: [Modal](/docs/components/modal) with `preset="confirm"`.
+
+## Existing Dialog shape (frozen)
+
+For reference while migrating. New code should not use this component.
+
+| Prop | Type | Default |
+|---|---|---|
+| `isOpen` | `boolean` *(required)* | — |
+| `onClose` | `() => void` *(required)* | — |
+| `title` | `string` *(required)* | — |
+| `description` | `string` | — |
+| `children` | `ReactNode` | — |
+| `confirmLabel` | `string` | `'Confirm'` |
+| `cancelLabel` | `string` | `'Cancel'` |
+| `onConfirm` | `() => void` | — |
+| `variant` | `'default' \| 'destructive'` | `'default'` |
+| `closeOnBackdrop` | `boolean` | `true` |
+
+## Related
+
+- [Modal](/docs/components/modal) — the canonical replacement
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-overlay-dialog--overview)** *(legacy)*
