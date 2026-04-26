@@ -1,0 +1,126 @@
+---
+title: Field
+description: Label + value pair for read-mode display inside Sheets. One API covers text, tags, links, lists, and empty states.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Field is the most important primitive in the sheet body set. One component replaces four legacy patterns (`FieldPair`, `TextValue`, `SmartTextValue`, raw label/value markup) that were drifting across portal sheets. Use it anywhere a labeled value renders in a read-mode view.
+
+## Use it for
+
+- Sheet body rows showing a labeled value (Status, Owner, Industry, etc.)
+- Stat lines on cards (Scraped · 8, Failed · 12)
+- Any "label + value" pair where the value is read-only (not editable in this view)
+- Empty-state placeholders when a value isn't set ("Not set" muted text by default)
+
+For editable variants, fields belong inside [Form](/docs/components/form) with the appropriate input — Field is read-mode only.
+
+## Import
+
+```tsx
+import { Field } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Stacked (default)
+
+Label above value. Default for sheet body rows where the value needs full width.
+
+```tsx
+<Field label="Status">Active</Field>
+<Field label="Industry">Dental — General Practice</Field>
+```
+
+### Inline
+
+Label left, value right-aligned. Compact stat row pattern — `Status · Active`, `Scraped · 8`.
+
+```tsx
+<Field layout="inline" label="Scraped">8</Field>
+<Field layout="inline" label="Status">Active</Field>
+```
+
+### Empty states
+
+When `children` is `null`, `undefined`, or empty string, Field renders an inline muted "Not set" by default.
+
+```tsx
+// Default: shows "Not set"
+<Field label="Owner" />
+
+// Custom empty message
+<Field label="Parent organization" empty="Independent" />
+```
+
+For a section-level empty state (the whole section has no data, not just one field), pass an `<EmptyState />` into `empty`. Use sparingly — one full bordered treatment per section at most.
+
+```tsx
+<Field
+  label="Recent activity"
+  empty={<EmptyState title="No activity yet" />}
+/>
+```
+
+### Value types
+
+`children` accepts any ReactNode — text, [TagGroup](/docs/components/tag-group)/[Tag](/docs/components/tag), `<a>` / [TextLink](/docs/components/text-link), `<BulletList>`, or compound content.
+
+```tsx
+// With tags
+<Field label="Services">
+  <TagGroup>
+    <Tag size="sm">Cosmetic</Tag>
+    <Tag size="sm">Implants</Tag>
+  </TagGroup>
+</Field>
+
+// With a link
+<Field label="Website">
+  <a href="https://example.com">example.com</a>
+</Field>
+
+// With a bullet list
+<Field label="Anti-messages">
+  <BulletList items={['No price-first', 'No corporate-clinic']} />
+</Field>
+
+// Inside a FieldGrid for side-by-side layout
+<FieldGrid columns={2}>
+  <Field label="Owner">Nick Stanerson</Field>
+  <Field label="Location">Thompson Station, TN</Field>
+</FieldGrid>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't style the value inline.** If a value needs tag treatment, use [Tag](/docs/components/tag). If it needs a link, use [TextLink](/docs/components/text-link). If it needs a list, use `<BulletList>`. Never reach for raw `color` or `text-transform` on a Field child — that drifts the visual language.
+</Callout>
+
+- **Don't nest Fields.** A value is a value. If you need sub-structure, it belongs in a new SheetSection.
+- **Don't use Field for editable forms.** Field is read-mode. For input, use [TextInput](/docs/components/text-input) (etc.) inside a [Form](/docs/components/form).
+
+## Accessibility
+
+- Renders a `<div>` with the label as a `<dt>`-equivalent label and the value as the `<dd>`-equivalent.
+- For a true `<dl>` semantic, wrap a list of Fields in a `<dl>` element manually — Field doesn't enforce parent shape.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `string` *(required)* | — |
+| `children` | `ReactNode` | — |
+| `layout` | `'stacked' \| 'inline'` | `'stacked'` |
+| `empty` | `ReactNode` | `'Not set'` |
+
+Plus all standard `<div>` HTML attributes (excluding `children`).
+
+## Related
+
+- [FieldGrid](/docs/components/field-grid) — equal-column wrapper for laying Fields out side by side
+- [Form](/docs/components/form) — editable counterpart with title/description/footer
+- [TagGroup](/docs/components/tag-group) — common Field child for tagged values
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-field--overview)**

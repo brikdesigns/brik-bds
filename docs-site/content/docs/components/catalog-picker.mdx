@@ -1,0 +1,157 @@
+---
+title: Catalog picker
+description: Industry-aware multi-pick with source attribution. Catalog picks + free-text additions, all stably slugged.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+CatalogPicker is the right primitive when an industry pack seeds defaults that the client can extend. It renders a reference catalog (e.g. the BCS dental industry pack's `servicesCatalog`) as suggestions, accepts free-text additions, and stamps every entry with a stable slug + `source: 'catalog' | 'custom'` attribution.
+
+## Use it for
+
+- Any client-intel field where the [industry pack](/docs/content-system/industries) seeds defaults the client can extend (services offered, pain points, competitor archetypes, keyword banks)
+- Fields where **provenance matters** — the difference between "this came from our industry default" and "this is client-specific" changes downstream behavior (copy generation, mockup content, competitive analysis framing)
+- Multi-pick controls where each entry needs a description alongside the name
+
+For locked vocabularies (no custom escape), use [MultiSelect](/docs/components/multi-select). For flat string picks without descriptions, use AddableComboList. For structured entries with fields other than description (URL + notes, name + role), use AddableEntryList directly.
+
+## Import
+
+```tsx
+import { CatalogPicker } from '@brikdesigns/bds';
+import { getIndustryServicesCatalog } from '@brikdesigns/bds/content-system';
+```
+
+## Variants
+
+### Default
+
+```tsx
+const catalog = getIndustryServicesCatalog(company.industry_slug);
+
+<CatalogPicker
+  label="Services Offered"
+  catalog={catalog}
+  value={services}
+  onChange={setServices}
+  searchPlaceholder="Search or add a service…"
+  descriptionPlaceholder="What makes this service unique here?"
+  addLabel="Add Service"
+  emptyDescriptionLabel="No description set"
+/>
+```
+
+### Strict (catalog-only)
+
+`strict` rejects free-text names that don't match a catalog `displayName` or alias. Use for locked vocabularies that still benefit from the catalog's metadata + description-per-entry shape.
+
+```tsx
+<CatalogPicker
+  label="Insurance accepted"
+  catalog={insuranceCatalog}
+  value={insurances}
+  onChange={setInsurances}
+  strict
+/>
+```
+
+### Different industry, same component
+
+The picker is vocabulary-agnostic — pass any catalog matching the `CatalogEntry` shape. Real estate, dental, commercial — same picker, different `catalog` prop.
+
+```tsx
+<CatalogPicker
+  label="Property types"
+  catalog={getIndustryPropertyTypesCatalog('real-estate-rv-mhc')}
+  value={propertyTypes}
+  onChange={setPropertyTypes}
+/>
+```
+
+### Sizes
+
+`sm`, `md` (default), `lg` — matching the AddableEntryList scale.
+
+### Disabled
+
+```tsx
+<CatalogPicker disabled value={services} onChange={() => {}} catalog={catalog} />
+```
+
+## Source attribution
+
+Every picked entry carries `source: 'catalog' | 'custom'`:
+
+- **`catalog`** — matched the catalog by exact `displayName` or alias (case-insensitive). The picker assigns the catalog entry's canonical `slug`.
+- **`custom`** — no catalog match. The picker derives a kebab-case slug from the typed `displayName`. If that slug collides with an existing one, `-2`, `-3`, … append until unique.
+
+Consumers persist the full array as a single JSONB column (e.g. `company_profiles.services_offered`). Downstream content generation reads the structure without re-deriving provenance every time.
+
+```ts
+// What the picker emits via onChange
+[
+  { source: 'catalog', slug: 'cosmetic-veneers', displayName: 'Veneers', description: 'Composite + porcelain' },
+  { source: 'custom', slug: 'in-house-membership', displayName: 'In-house membership plan', description: 'No PPO routing' },
+]
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use CatalogPicker for locked vocabularies with no custom escape.** That's [MultiSelect](/docs/components/multi-select)'s job — pass the catalog as `options`. CatalogPicker's value is the *escape hatch* for free-text additions; if you don't want one, use the simpler component.
+</Callout>
+
+- **Don't use for flat string picks** with no description. The description textarea adds vertical weight that's wasted on tag-only inputs — use AddableComboList.
+- **Don't use for structured entries** with fields other than description (URL + notes, name + role). Use AddableEntryList directly; you don't need catalog wiring.
+
+## Accessibility
+
+- The search input is a real `<input>` — keyboard, autocomplete, screen reader behaviors all platform.
+- Each picked entry has a labeled remove button (`removeLabel` prop, defaults to `Remove {name}`).
+- Description textareas autosize and announce row counts.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `catalog` | `readonly CatalogEntry[]` *(required)* | — |
+| `value` | `readonly PickedCatalogEntry[]` *(required)* | — |
+| `onChange` | `(next: PickedCatalogEntry[]) => void` *(required)* | — |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `searchPlaceholder` | `string` | — |
+| `descriptionPlaceholder` | `string` | — |
+| `addLabel` | `string` | `'Add'` |
+| `removeLabel` | `string` | auto |
+| `emptyLabel` | `string` | — |
+| `emptyDescriptionLabel` | `string` | `'No description'` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+| `strict` | `boolean` | `false` |
+| `maxItems` | `number` | — |
+| `descriptionRows` | `number` | `2` |
+| `className` | `string` | — |
+
+### CatalogEntry / PickedCatalogEntry shapes
+
+```ts
+interface CatalogEntry {
+  slug: string;
+  displayName: string;
+  aliases?: string[];
+  description?: string;
+}
+
+interface PickedCatalogEntry {
+  source: 'catalog' | 'custom';
+  slug: string;
+  displayName: string;
+  description?: string;
+}
+```
+
+## Related
+
+- [MultiSelect](/docs/components/multi-select) — locked-vocabulary alternative
+- [Industries](/docs/content-system/industries) — where the catalogs come from
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-catalog-picker--overview)**
