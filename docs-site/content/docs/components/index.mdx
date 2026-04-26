@@ -10,7 +10,7 @@ BDS components are organized by **job**, not by visual type. The same taxonomy b
 | Group | Examples |
 |---|---|
 | **Action** | Button, IconButton, LinkButton, ButtonGroup, FilterBar, FilterButton, FilterToggle, TextLink |
-| **Form** | Field, TextInput, Select, MultiSelect, DatePicker, Form, FieldGrid |
+| **Form** | TextInput, TextArea, PasswordInput, AddressInput, Select, MultiSelect, DatePicker, TimePicker, Checkbox, Radio, Field, FieldGrid, Form |
 | **Indicator** | Badge, Chip, Tag, Counter, Dot, Spinner, Skeleton, BadgeGroup, TagGroup, ServiceBadge |
 | **Feedback** | AlertBanner, Toast, Tooltip, EmptyState, ProgressBar |
 | **Control** | Switch, Slider, Stepper, Pagination, SegmentedControl, FileUploader |
@@ -47,9 +47,37 @@ The indicator family — read-only state communication. For interactive pills, u
   <Card title="Tag group" href="/docs/components/tag-group" description="Horizontal cluster of Tag elements with locked spacing." />
 </Cards>
 
+### Form / Inputs
+
+The 10 input controls of the Form group.
+
+<Cards>
+  <Card title="Text input" href="/docs/components/text-input" description="Single-line input. Labels, helpers, errors, icons, sizes, any input type." />
+  <Card title="Text area" href="/docs/components/text-area" description="Multi-line input with configurable rows and resize behavior." />
+  <Card title="Password input" href="/docs/components/password-input" description="Text input with show/hide visibility toggle." />
+  <Card title="Address input" href="/docs/components/address-input" description="Location input with leading icon and autocomplete suggestions." />
+  <Card title="Select" href="/docs/components/select" description="Single-select dropdown. Flat or grouped options, optional leading icon." />
+  <Card title="Multi-select" href="/docs/components/multi-select" description="Multi-pick dropdown — selected items render as removable Tag chips." />
+  <Card title="Date picker" href="/docs/components/date-picker" description="Calendar popover for date selection. Returns a real Date object." />
+  <Card title="Time picker" href="/docs/components/time-picker" description="Hour/minute popover. AM/PM or 24-hour display, value always HH:mm." />
+  <Card title="Checkbox" href="/docs/components/checkbox" description="Boolean selection with a label. Controlled or uncontrolled." />
+  <Card title="Radio" href="/docs/components/radio" description="Single-select from a mutually exclusive group. Group by shared name." />
+</Cards>
+
+### Form / Structure
+
+The container, layout, and curated-multi-pick layer of the Form group. Closes out Form.
+
+<Cards>
+  <Card title="Field" href="/docs/components/field" description="Label + value pair for read-mode display. One API covers text, tags, links, lists, and empty states." />
+  <Card title="Field grid" href="/docs/components/field-grid" description="Equal-column grid (2/3/4) for laying Fields side by side. Replaces ad-hoc inline grids." />
+  <Card title="Form" href="/docs/components/form" description="Editable container with title/description/error/success/footer. Vertical or horizontal layout." />
+  <Card title="Catalog picker" href="/docs/components/catalog-picker" description="Industry-aware multi-pick with source attribution (catalog vs custom)." />
+</Cards>
+
 ## Still in Storybook
 
-The remaining ~40 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Form, Feedback, Control, Addable, Structure, Navigation, and Displays.
+The remaining ~26 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Feedback, Control, Addable, Structure, Navigation, and Displays.
 
 ## Page template
 

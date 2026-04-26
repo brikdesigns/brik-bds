@@ -1,0 +1,110 @@
+---
+title: Checkbox
+description: Boolean selection with a label. Controlled or uncontrolled.
+---
+
+Checkbox is a themed boolean toggle with required label text. Use for true/false choices — terms acceptance, opt-in flags, individual feature toggles in a settings list. For multiple-of-many selection from a fixed list, group multiple Checkboxes; for single-of-many, use [Radio](/docs/components/radio).
+
+## Use it for
+
+- Terms-of-service / privacy-policy acceptance
+- Individual feature flags ("Email notifications," "SMS notifications")
+- Multiple-from-a-list selections (with several Checkboxes grouped together)
+- "Don't show this again" persistent dismissals
+
+For status toggling (on/off settings), use [Switch](https://storybook.brikdesigns.com/?path=/docs/components-control-switch--overview) — it carries the right semantic for "this preference is now active" vs "I am picking this option."
+
+## Import
+
+```tsx
+import { Checkbox } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Uncontrolled
+
+```tsx
+<Checkbox label="Accept terms" defaultChecked />
+```
+
+### Controlled
+
+```tsx
+import { useState } from 'react';
+
+const [enabled, setEnabled] = useState(false);
+
+<Checkbox
+  label="Enable notifications"
+  checked={enabled}
+  onChange={(e) => setEnabled(e.target.checked)}
+/>
+```
+
+### Disabled
+
+```tsx
+<Checkbox label="Required" disabled defaultChecked />
+```
+
+## Pattern: Checkbox group
+
+For "pick multiple from a known list," render a group of Checkboxes — each independently controlled.
+
+```tsx
+const [prefs, setPrefs] = useState({
+  email: true,
+  sms: false,
+  push: true,
+});
+
+<>
+  <Checkbox
+    label="Email"
+    checked={prefs.email}
+    onChange={(e) => setPrefs({ ...prefs, email: e.target.checked })}
+  />
+  <Checkbox
+    label="SMS"
+    checked={prefs.sms}
+    onChange={(e) => setPrefs({ ...prefs, sms: e.target.checked })}
+  />
+  <Checkbox
+    label="Push"
+    checked={prefs.push}
+    onChange={(e) => setPrefs({ ...prefs, push: e.target.checked })}
+  />
+</>
+```
+
+## When *not* to use
+
+- **Don't use Checkbox for on/off preferences.** Use [Switch](https://storybook.brikdesigns.com/?path=/docs/components-control-switch--overview) — the affordance is correct for "now active" semantics.
+- **Don't use Checkbox for single-of-many.** Use [Radio](/docs/components/radio).
+- **Don't use Checkbox for ≥10 options.** Use [MultiSelect](/docs/components/multi-select) — a vertical list of 10+ Checkboxes is unscannable.
+
+## Accessibility
+
+- Renders a real `<input type="checkbox">` — keyboard `Space` toggles, focus ring is platform native.
+- The `label` prop auto-wires the `<label>` element so clicking the label toggles the input.
+- For Checkbox groups, wrap in a `<fieldset>` with a `<legend>` to surface the group's name.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `ReactNode` *(required)* | — |
+| `checked` | `boolean` | — |
+| `defaultChecked` | `boolean` | — |
+| `disabled` | `boolean` | `false` |
+| `onChange` | `(e: ChangeEvent<HTMLInputElement>) => void` | — |
+
+Plus all standard `<input>` HTML attributes (excluding `type`).
+
+## Related
+
+- [Radio](/docs/components/radio) — single-of-many sibling
+- [MultiSelect](/docs/components/multi-select) — better for ≥10 options
+- [Switch](https://storybook.brikdesigns.com/?path=/docs/components-control-switch--overview) — for on/off preferences
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-checkbox--overview)**

@@ -1,0 +1,142 @@
+---
+title: Text input
+description: Single-line text input. Labels, helper text, error states, icons, sizes, and any input type.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+TextInput is the workhorse single-line input. It renders a real `<input>` and supports any HTML input type (`text`, `email`, `search`, `url`, `tel`, `number`, etc.). For multi-line, use [TextArea](/docs/components/text-area). For passwords specifically, use [PasswordInput](/docs/components/password-input) — it adds the show/hide toggle.
+
+## Use it for
+
+- Any single-line text entry (name, email, search, URL, phone, number)
+- Inline form fields with labels, helpers, and error states
+- Search bars (use `type="search"` + `iconBefore` — no separate SearchInput component)
+- Email fields (use `type="email"` + `autoComplete="email"` + envelope icon)
+
+## Import
+
+```tsx
+import { TextInput } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Sizes
+
+<ComponentPreview code={`<BDS.TextInput size="sm" placeholder="Small" />
+<BDS.TextInput size="md" placeholder="Medium (default)" />
+<BDS.TextInput size="lg" placeholder="Large" />`}>
+  <BDS.TextInput size="sm" placeholder="Small" />
+  <BDS.TextInput size="md" placeholder="Medium (default)" />
+  <BDS.TextInput size="lg" placeholder="Large" />
+</ComponentPreview>
+
+- **`sm`** — 14px text. Compact forms, dense table-row editing.
+- **`md`** — 16px text. Default for most product UI.
+- **`lg`** — 18px text. Prominent inputs, marketing forms, hero search.
+
+### With label and helper
+
+```tsx
+<TextInput
+  label="Email"
+  type="email"
+  placeholder="you@example.com"
+  helperText="We'll never share your email"
+  fullWidth
+/>
+```
+
+### Error state
+
+```tsx
+<TextInput
+  label="Email"
+  type="email"
+  error="Please enter a valid email address"
+  fullWidth
+/>
+```
+
+### With icons
+
+`iconBefore` for leading icons (search, email, location), `iconAfter` for trailing affordances.
+
+```tsx
+<TextInput
+  label="Search"
+  type="search"
+  placeholder="Search..."
+  iconBefore={<MagnifyingGlassIcon />}
+/>
+```
+
+## Email, search, URL — no wrapper components
+
+The previous `EmailInput` and `SearchInput` wrappers were removed per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md). They were 5–10 line shims that only set `type=` and a leading icon. Use TextInput directly:
+
+```tsx
+// Email — replaces <EmailInput />
+<TextInput
+  label="Email"
+  type="email"
+  autoComplete="email"
+  iconBefore={<Icon icon="ph:envelope" />}
+  placeholder="you@example.com"
+/>
+
+// Search — replaces <SearchInput />
+// type="search" automatically renders the native clear button (BDS-styled).
+<TextInput
+  type="search"
+  iconBefore={<Icon icon="ph:magnifying-glass" />}
+  placeholder="Search..."
+/>
+```
+
+## When *not* to use
+
+- **Don't use TextInput for passwords.** Use [PasswordInput](/docs/components/password-input) — the show/hide toggle is real, load-bearing UX.
+- **Don't use TextInput for multi-line.** Use [TextArea](/docs/components/text-area).
+- **Don't use TextInput for known-set choices.** If users pick from a known list, use [Select](/docs/components/select) (single) or [MultiSelect](/docs/components/multi-select) (multi).
+
+## Accessibility
+
+- Renders a real `<input>` — keyboard, focus ring, autofill, password manager hooks all platform-native.
+- `label` auto-wires `htmlFor`/`id`. If you don't pass `label`, supply `aria-label` or wrap in your own `<label>`.
+- `error` sets `aria-invalid` and links the message via `aria-describedby`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `error` | `string` | — |
+| `fullWidth` | `boolean` | `false` |
+| `iconBefore` | `ReactNode` | — |
+| `iconAfter` | `ReactNode` | — |
+
+Plus all standard `<input>` HTML attributes (excluding the `size` HTML attribute, which TextInput overrides for the size variant).
+
+## CSS Override API
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--text-input-focus-ring-width` | `1px` | Width of the focus ring shadow spread |
+
+```css
+.high-contrast-form {
+  --text-input-focus-ring-width: 2px;
+}
+```
+
+## Related
+
+- [TextArea](/docs/components/text-area) — multi-line sibling
+- [PasswordInput](/docs/components/password-input) — adds show/hide toggle
+- [AddressInput](/docs/components/address-input) — adds autocomplete suggestions
+- [Field](https://storybook.brikdesigns.com/?path=/docs/components-form-field--overview) — wrapper for label/helper/error layout
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-text-input--overview)**

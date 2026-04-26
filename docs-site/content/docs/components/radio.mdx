@@ -1,0 +1,97 @@
+---
+title: Radio
+description: Single selection from mutually exclusive options. Group by shared name.
+---
+
+Radio is a themed radio button with required label text. Group radios by their shared `name` prop — only one radio per group can be selected. Use for "pick exactly one" decisions among a small fixed set.
+
+## Use it for
+
+- Plan / tier selection on signup
+- Theme picker (Light / Dark / System)
+- Mutually exclusive settings (Layout: Compact / Comfortable / Spacious)
+- Fixed-set choices with ≤5 options
+
+For ≥6 options, use [Select](/docs/components/select). For boolean (single yes/no), use [Checkbox](/docs/components/checkbox) or [Switch](https://storybook.brikdesigns.com/?path=/docs/components-control-switch--overview).
+
+## Import
+
+```tsx
+import { Radio } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Basic group
+
+Same `name` ties radios into a group. Only one can be checked at a time.
+
+```tsx
+<Radio name="plan" value="basic" label="Basic Plan" />
+<Radio name="plan" value="pro" label="Pro Plan" defaultChecked />
+<Radio name="plan" value="enterprise" label="Enterprise Plan" />
+```
+
+### Controlled group
+
+Track selection in parent state; switch the `checked` derivation per radio.
+
+```tsx
+import { useState } from 'react';
+
+const [selected, setSelected] = useState('pro');
+
+<Radio
+  name="plan"
+  value="basic"
+  label="Basic Plan"
+  checked={selected === 'basic'}
+  onChange={(e) => setSelected(e.target.value)}
+/>
+<Radio
+  name="plan"
+  value="pro"
+  label="Pro Plan"
+  checked={selected === 'pro'}
+  onChange={(e) => setSelected(e.target.value)}
+/>
+```
+
+### Disabled
+
+```tsx
+<Radio name="plan" value="enterprise" label="Enterprise (contact sales)" disabled />
+```
+
+## When *not* to use
+
+- **Don't use Radio for ≥6 options.** A vertical list of radios is unscannable. Use [Select](/docs/components/select).
+- **Don't use Radio for boolean.** "Yes / No" with two radios is awkward; use a [Checkbox](/docs/components/checkbox) for opt-in or [Switch](https://storybook.brikdesigns.com/?path=/docs/components-control-switch--overview) for a setting.
+- **Don't forget `name`.** Radios without a shared `name` aren't grouped — multiple can be selected, defeating the entire control.
+
+## Accessibility
+
+- Renders a real `<input type="radio">` — keyboard arrow keys move focus and selection within a group, `Tab` moves between groups.
+- The `label` prop auto-wires the `<label>` so clicking the label selects the radio.
+- Wrap a Radio group in a `<fieldset>` with a `<legend>` to surface the group's purpose ("Choose a plan").
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `ReactNode` *(required)* | — |
+| `name` | `string` *(required)* | — |
+| `value` | `string` *(required)* | — |
+| `checked` | `boolean` | — |
+| `defaultChecked` | `boolean` | — |
+| `disabled` | `boolean` | `false` |
+| `onChange` | `(e: ChangeEvent<HTMLInputElement>) => void` | — |
+
+Plus all standard `<input>` HTML attributes (excluding `type`).
+
+## Related
+
+- [Checkbox](/docs/components/checkbox) — multiple-of-many sibling
+- [Select](/docs/components/select) — better for ≥6 options
+- [SegmentedControl](https://storybook.brikdesigns.com/?path=/docs/components-control-segmented-control--overview) — horizontal alternative for ≤4 short-label options
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-radio--overview)**

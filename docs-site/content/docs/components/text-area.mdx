@@ -1,0 +1,111 @@
+---
+title: Text area
+description: Multi-line text input with configurable rows, resize behavior, and size variants.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+TextArea is the multi-line sibling of [TextInput](/docs/components/text-input). Use for longer-form text entry — comments, descriptions, messages, notes, anything that needs more than one line.
+
+## Use it for
+
+- Comments and reviews
+- Description fields on records (project descriptions, bio, notes)
+- Message composition
+- Free-form text where users may type more than ~60 characters
+
+## Import
+
+```tsx
+import { TextArea } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Sizes
+
+```tsx
+<TextArea size="sm" placeholder="Small" rows={3} />
+<TextArea size="md" placeholder="Medium (default)" rows={4} />
+<TextArea size="lg" placeholder="Large" rows={5} />
+```
+
+- **`sm`** — 14px text. Inline editing, dense forms.
+- **`md`** — 16px text. Default.
+- **`lg`** — 18px text. Prominent input contexts.
+
+### With label and helper
+
+```tsx
+<TextArea
+  label="Notes"
+  placeholder="Anything we should know?"
+  helperText="Maximum 500 characters"
+  rows={4}
+  fullWidth
+/>
+```
+
+### Error state
+
+```tsx
+<TextArea
+  label="Description"
+  error="This field is required"
+  rows={3}
+  fullWidth
+/>
+```
+
+### Resize modes
+
+Default is `vertical` — users can drag the bottom-right handle to make it taller. Use `none` for fixed-size cells.
+
+```tsx
+<TextArea placeholder="Fixed size" rows={4} resize="none" />
+<TextArea placeholder="Resize horizontally" resize="horizontal" />
+<TextArea placeholder="Resize both" resize="both" />
+```
+
+| Mode | Effect |
+|---|---|
+| `vertical` (default) | Height only |
+| `none` | Fixed dimensions |
+| `both` | Width and height |
+| `horizontal` | Width only |
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use TextArea for short text.** If the field will rarely exceed one line, use [TextInput](/docs/components/text-input) — the visual weight of a multi-line area implies the user *should* type more, which is a UX nudge.
+</Callout>
+
+- **Don't use TextArea for known-set choices.** Multi-select belongs in [MultiSelect](/docs/components/multi-select).
+- **Don't disable resize without good reason.** Users with verbose content benefit from being able to expand the area; the default `vertical` is almost always right.
+
+## Accessibility
+
+- Renders a real `<textarea>` — keyboard, scroll, native resize handle all platform.
+- `label` auto-wires `htmlFor`/`id`. If you don't pass `label`, supply `aria-label`.
+- `error` sets `aria-invalid` and links the message.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `rows` | `number` | `4` |
+| `resize` | `'none' \| 'both' \| 'horizontal' \| 'vertical'` | `'vertical'` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `error` | `string` | — |
+| `fullWidth` | `boolean` | `false` |
+| `value` / `defaultValue` / `onChange` | controlled / uncontrolled standard | — |
+
+Plus all standard `<textarea>` HTML attributes.
+
+## Related
+
+- [TextInput](/docs/components/text-input) — single-line sibling
+- [Field](https://storybook.brikdesigns.com/?path=/docs/components-form-field--overview) — wrapper for label/helper/error layout
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-text-area--overview)**
