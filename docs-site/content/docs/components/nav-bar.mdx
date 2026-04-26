@@ -1,0 +1,116 @@
+---
+title: Nav bar
+description: Top-level navigation bar with logo, links, and action buttons. Optional sticky positioning.
+---
+
+NavBar is the canonical top-bar navigation for marketing sites and product landing pages. Logo on the left, links in the middle, action buttons on the right. Optional `sticky` for scroll-persistent nav.
+
+For app shell navigation with many items, use [SidebarNavigation](/docs/components/sidebar-navigation). For section navigation within a page, use [TabBar](/docs/components/tab-bar).
+
+## Use it for
+
+- Marketing site top nav (Features / Pricing / About + Get Started CTA)
+- Product landing page navigation
+- Content sites (blogs, docs sites)
+- Any layout where horizontal top-bar nav fits the audience expectation
+
+## Import
+
+```tsx
+import { NavBar } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+<NavBar
+  logo={<img src="/logo.svg" alt="Acme" />}
+  links={[
+    { label: 'Features', href: '/features', active: true },
+    { label: 'Pricing', href: '/pricing' },
+    { label: 'About', href: '/about' },
+  ]}
+  actions={<Button size="sm">Get started</Button>}
+/>
+```
+
+### Sticky
+
+`sticky` keeps the nav at the top of the viewport as the user scrolls.
+
+```tsx
+<NavBar
+  logo={<Logo />}
+  links={links}
+  actions={<Button>Sign in</Button>}
+  sticky
+/>
+```
+
+### Links only
+
+Both `links` and `actions` are optional. Logo-only is valid for very minimal layouts.
+
+```tsx
+<NavBar logo={<Logo />} />
+```
+
+### Multiple actions
+
+`actions` is a ReactNode — pass a fragment for multiple CTAs.
+
+```tsx
+<NavBar
+  logo={<Logo />}
+  links={links}
+  actions={
+    <>
+      <Button variant="ghost" size="sm">Sign in</Button>
+      <Button size="sm">Get started</Button>
+    </>
+  }
+/>
+```
+
+## When *not* to use
+
+- **Don't use NavBar for app chrome.** App shells with many sections should use [SidebarNavigation](/docs/components/sidebar-navigation) — top-bar nav with 8+ items wraps awkwardly.
+- **Don't use NavBar for in-page section nav.** Use [TabBar](/docs/components/tab-bar).
+- **Don't pair NavBar + SidebarNavigation as primary nav.** Pick one. Combining them makes "primary" ambiguous.
+
+## Accessibility
+
+- Renders a `<nav aria-label="Primary">` element.
+- Each link is a real `<a>`. Active link carries `aria-current="page"`.
+- Mobile responsive: at narrow widths, links collapse to a hamburger menu (handled internally — no special prop needed).
+- Sticky positioning preserves keyboard navigation; focus rings remain visible above sticky chrome.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `logo` | `ReactNode` *(required)* | — |
+| `links` | `NavBarLink[]` | — |
+| `actions` | `ReactNode` | — |
+| `sticky` | `boolean` | `false` |
+
+Plus standard `<header>` / `<nav>` HTML attributes.
+
+### NavBarLink
+
+```ts
+interface NavBarLink {
+  label: ReactNode;
+  href: string;
+  active?: boolean;
+}
+```
+
+## Related
+
+- [SidebarNavigation](/docs/components/sidebar-navigation) — vertical app-shell alternative
+- [TabBar](/docs/components/tab-bar) — section nav within the main content area
+- [Breadcrumb](/docs/components/breadcrumb) — hierarchical position
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-primary-nav-bar--overview)**

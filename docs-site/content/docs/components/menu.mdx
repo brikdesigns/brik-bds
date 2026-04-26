@@ -1,0 +1,149 @@
+---
+title: Menu
+description: Floating dropdown panel for navigation and action menus. Outside-click and Escape dismissal built in.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Menu is a floating dropdown panel anchored to a trigger element. Use for action menus on row context (Edit / Duplicate / Delete), filter menus, and small navigation popovers.
+
+## Use it for
+
+- Per-row action menus on tables and lists
+- Overflow / "more options" buttons
+- Filter selection menus inside a [FilterButton](/docs/components/filter-button) pattern
+- Small navigation popovers (5-10 destinations)
+
+For a drop-down option picker tied to form state, use [Select](/docs/components/select) or [FilterButton](/docs/components/filter-button) — those handle their own state. Menu is for cases where the consumer owns open state and the menu is purely presentational.
+
+## Import
+
+```tsx
+import { Menu } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Basic
+
+The consumer owns `isOpen` state and provides `onClose`. Menu auto-closes on outside click and Escape.
+
+```tsx
+import { useState } from 'react';
+
+const [open, setOpen] = useState(false);
+
+<div style={{ position: 'relative' }}>
+  <Button onClick={() => setOpen(!open)}>Options</Button>
+  <Menu
+    isOpen={open}
+    onClose={() => setOpen(false)}
+    items={[
+      { id: '1', label: 'Edit', onClick: handleEdit },
+      { id: '2', label: 'Duplicate', onClick: handleDuplicate },
+      { id: '3', label: 'Delete', onClick: handleDelete },
+    ]}
+    style={{ top: '100%', left: 0 }}
+  />
+</div>
+```
+
+### With icons
+
+```tsx
+<Menu
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  items={[
+    { id: '1', label: 'Edit', icon: <EditIcon />, onClick: handleEdit },
+    { id: '2', label: 'Delete', icon: <TrashIcon />, onClick: handleDelete },
+  ]}
+/>
+```
+
+### Active item highlight
+
+`activeId` highlights the currently selected item — useful when Menu doubles as a "current view" indicator.
+
+```tsx
+<Menu
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  activeId="grid"
+  items={[
+    { id: 'grid', label: 'Grid view' },
+    { id: 'list', label: 'List view' },
+    { id: 'board', label: 'Board view' },
+  ]}
+/>
+```
+
+### Disabled item
+
+```tsx
+<Menu
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  items={[
+    { id: 'edit', label: 'Edit' },
+    { id: 'archive', label: 'Archive (Pro plan)', disabled: true },
+  ]}
+/>
+```
+
+## Positioning
+
+Menu doesn't position itself — the consumer applies CSS to place it relative to the trigger. The standard pattern: parent has `position: relative`, Menu has `position: absolute` (default) with `top` / `left` (or `right`) set inline.
+
+```tsx
+<Menu isOpen={open} onClose={onClose} items={items} style={{ top: '100%', right: 0 }} />
+```
+
+For more sophisticated positioning (collision detection, viewport-aware flips), use a Popover-based solution like [DatePicker](/docs/components/date-picker)'s underlying pattern.
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use Menu where Select fits.** If the menu drives form state, use [Select](/docs/components/select) — it owns its open/close state and integrates with forms. Menu is for *presentational* dropdowns where the consumer manages everything.
+</Callout>
+
+- **Don't use Menu for 1-2 items.** Wrap a Button or a [Tooltip](/docs/components/tooltip)-revealed action instead.
+- **Don't use Menu without a trigger.** It's anchored to something — a button, an icon, a row's overflow control. A floating menu without an obvious source is confusing.
+
+## Accessibility
+
+- Menu carries `role="menu"`; each item is `role="menuitem"`.
+- The trigger should set `aria-haspopup="menu"` and `aria-expanded` to reflect Menu state.
+- Keyboard arrows move between items; `Enter` activates; `Escape` closes (auto-handled).
+- Outside click closes — auto-handled.
+- Focus trap: focus moves into the menu on open; closing returns focus to the trigger.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `MenuItemData[]` *(required)* | — |
+| `isOpen` | `boolean` *(required)* | — |
+| `onClose` | `() => void` *(required)* | — |
+| `activeId` | `string` | — |
+
+Plus standard `<div>` HTML attributes (excluding `children`).
+
+### MenuItemData
+
+```ts
+interface MenuItemData {
+  id: string;
+  label: ReactNode;
+  icon?: ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+}
+```
+
+## Related
+
+- [Select](/docs/components/select) — form-state dropdown
+- [FilterButton](/docs/components/filter-button) — filter dropdown with its own state machine
+- [Tooltip](/docs/components/tooltip) — hover-revealed contextual help
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-menu-menu--overview)**

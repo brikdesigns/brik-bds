@@ -1,0 +1,136 @@
+---
+title: Tab bar
+description: Horizontal tab navigation. Three style variants, on-color mode for dark backgrounds.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+TabBar is for **navigating between sections of a page** — Settings tabs, profile-page sections, content-filter tabs. For switching content in-place inside a single panel, use [SegmentedControl](/docs/components/segmented-control).
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'TabBar',
+      whenToUse: 'Page-level navigation between sections (Settings → Account / Billing / Security).',
+      whenNotToUse: 'In-panel content switcher — that\'s SegmentedControl.',
+      code: `<TabBar items={...} variant="tab" />`,
+    },
+    {
+      title: 'SegmentedControl',
+      whenToUse: 'Switch content in-place inside a single panel (Grid / List, Monthly / Yearly).',
+      whenNotToUse: 'Page navigation with section URLs — use TabBar.',
+      code: `<SegmentedControl items={...} />`,
+    },
+    {
+      title: 'Breadcrumb',
+      whenToUse: 'Show position in a hierarchical structure.',
+      whenNotToUse: 'Sibling navigation — use TabBar.',
+      code: `<Breadcrumb items={...} />`,
+    },
+  ]}
+/>
+
+## Use it for
+
+- Settings page sub-section navigation
+- Profile page sections (Overview / Activity / Connections)
+- Content filter tabs (All / Active / Archived)
+- Any flat sibling-section navigation where each tab corresponds to a distinct view
+
+## Import
+
+```tsx
+import { TabBar } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### `tab` — underline (default for app navigation)
+
+```tsx
+<TabBar
+  variant="tab"
+  items={[
+    { label: 'Overview', active: true, onClick: () => setTab('overview') },
+    { label: 'Billing', onClick: () => setTab('billing') },
+    { label: 'Security', onClick: () => setTab('security') },
+  ]}
+/>
+```
+
+### `text` — minimal
+
+Plain labels with brand color for active tab. Use in tight headers where the underline would crowd.
+
+```tsx
+<TabBar variant="text" items={items} />
+```
+
+### `box` — filled
+
+Filled background for active, bordered for inactive. Use for content filters where the active state needs strong visual weight.
+
+```tsx
+<TabBar variant="box" items={items} />
+```
+
+### On-color (dark backgrounds)
+
+`onColor` switches text and border colors to on-color-dark tokens for legibility against brand or dark surfaces.
+
+```tsx
+<TabBar variant="text" onColor items={items} />
+```
+
+### Disabled tabs
+
+Set `disabled: true` on individual items.
+
+```tsx
+<TabBar items={[
+  { label: 'Overview', active: true },
+  { label: 'Billing' },
+  { label: 'Security', disabled: true },
+]} />
+```
+
+## When *not* to use
+
+- **Don't use TabBar for in-panel content switching.** Use [SegmentedControl](/docs/components/segmented-control) — different visual treatment, different navigation model.
+- **Don't use TabBar for hierarchical navigation.** Use [Breadcrumb](/docs/components/breadcrumb).
+- **Don't put more than ~6 tabs in a row.** Long tab strips wrap awkwardly. Switch to [SidebarNavigation](/docs/components/sidebar-navigation) for vertical nav with more items.
+
+## Accessibility
+
+- Renders a `<div role="tablist">` with each tab as `<button role="tab">`.
+- Active tab carries `aria-selected="true"`.
+- Keyboard arrow keys move focus between tabs (left/right or up/down per orientation).
+- Disabled tabs use `aria-disabled` and skip in keyboard nav.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `TabItem[]` *(required)* | — |
+| `variant` | `'text' \| 'tab' \| 'box'` | `'tab'` |
+| `onColor` | `boolean` | `false` |
+
+Plus standard `<div>` HTML attributes.
+
+### TabItem
+
+```ts
+interface TabItem {
+  label: ReactNode;
+  active?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+}
+```
+
+## Related
+
+- [SegmentedControl](/docs/components/segmented-control) — in-panel content switcher
+- [Breadcrumb](/docs/components/breadcrumb) — hierarchical position
+- [SidebarNavigation](/docs/components/sidebar-navigation) — vertical nav for many items
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-secondary-tab-bar--overview)**
