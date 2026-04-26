@@ -1,0 +1,33 @@
+---
+title: Industries
+description: Per-vertical packs of pain points, seasonality, regulation, voice affinities, and audit extractors.
+---
+
+Industry packs answer the question "what does this vertical actually care about?" so strategy docs, mockups, and content generation start from the right baseline instead of generic small-business filler.
+
+Each pack ships:
+
+- **Default affinities** — personality, voice, and visual-style starting picks for clients in this vertical
+- **Pain points + seasonality + regulation** — the operational facts a writer or strategist needs
+- **Listings requirements** — directories that matter, plus conditional ones (e.g. insurance carriers)
+- **Site audit extractors** — pack-specific scrapers that turn a client's existing site into structured facts
+- **Brik strategic POV** — the vertical-specific opinions that differentiate Brik's recommendations
+
+## Available packs
+
+| Slug | Status | Notes |
+|---|---|---|
+| [`dental`](/docs/content-system/industries/dental) | Production | The reference pack — most fleshed out |
+| `real-estate-rv-mhc` | Production | RV / manufactured home community sales |
+| `real-estate-commercial` | Production | Commercial real estate brokerage |
+| `small-business` | Catch-all default | `DEFAULT_INDUSTRY_SLUG` — graduates verticals out |
+
+## Adding a new pack
+
+See [Contribution](/docs/contribution) for the full flow. The short version:
+
+1. Add the slug to `INDUSTRY_SLUGS` in `vocabularies/industry.ts`
+2. Create `industries/{slug}.ts` (typed `IndustryPack` data) and `{slug}.mdx` (narrative)
+3. Register the pack in `industries/index.ts`
+4. Run `npm run build:content-system` to validate types
+5. If the pack defines `siteAudit` extractors, wire matching portal-side code in `src/lib/website-audits/industry-packs/<slug>.ts`

@@ -1,0 +1,41 @@
+---
+title: The Cascade
+description: How BDS tokens layer from Figma foundations to client themes.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BDS uses a three-layer cascade. Each layer is a single CSS file imported in order.
+
+## The three layers
+
+1. **Foundations** (`figma-tokens.css`) — auto-generated from Figma variables. Never hand-edit.
+2. **Gap-fills** (`gap-fills.css`) — interaction-state tokens (hover, pressed) that haven't graduated to Figma yet.
+3. **Client theme** (`theme-{client}.css`) — per-project overrides for brand color, typography, atmosphere.
+
+<Callout type="warn">
+  **Never write raw `var()` strings inline.** Always go through `@/lib/tokens` and `@/lib/styles`. The cascade is a contract — bypassing it leaks brand drift into components.
+</Callout>
+
+## Why this order
+
+Foundations define the full token vocabulary. Gap-fills add what Figma can't yet express. Client themes override semantic tokens (e.g. `--text-brand`) without touching the underlying scales (`--color-orange-500`). A component that reads `--text-brand` automatically picks up whichever client is active.
+
+## What each layer can change
+
+| Layer | Can override |
+|---|---|
+| Foundations | Nothing — it's the source |
+| Gap-fills | Interaction states only |
+| Client theme | Semantic tokens (text, background, border, brand) |
+| Atmospheres | Mood layer (warm-soft, editorial-luxury, etc.) — applied as a class |
+
+## Where this is enforced
+
+The `lint-tokens` script (`npm run lint-tokens`) catches:
+
+- Hex values in component CSS
+- `var()` references to tokens that don't exist
+- Tokens used outside their semantic category (e.g. `--text-*` on a `background-color`)
+
+Run it locally before pushing; CI runs it on every PR.

@@ -1,0 +1,14 @@
+{
+  "title": "Primitives",
+  "pages": [
+    "index",
+    "color",
+    "typography",
+    "spacing",
+    "size",
+    "border-radius",
+    "border-width",
+    "shadow",
+    "motion"
+  ]
+}

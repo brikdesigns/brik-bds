@@ -1,0 +1,95 @@
+---
+title: Button group
+description: Groups related buttons into a single visual unit. Use for action sets where buttons share context.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+A ButtonGroup wraps two or more `<Button>` (or `<IconButton>`) elements into a connected cluster. Use it when the buttons are siblings in the same decision — the surrounding container makes the grouping explicit.
+
+## Use it for
+
+- Save / Cancel pairs in dialogs and form footers
+- Confirm / Discard pairs in destructive flows
+- Sign up / Log in stacks on auth screens
+- Toolbar action clusters where buttons act together
+
+## Import
+
+```tsx
+import { ButtonGroup, Button } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Horizontal (default)
+
+<ComponentPreview code={`<BDS.ButtonGroup>
+  <BDS.Button variant="primary">Save</BDS.Button>
+  <BDS.Button variant="outline">Cancel</BDS.Button>
+</BDS.ButtonGroup>`}>
+  <BDS.ButtonGroup>
+    <BDS.Button variant="primary">Save</BDS.Button>
+    <BDS.Button variant="outline">Cancel</BDS.Button>
+  </BDS.ButtonGroup>
+</ComponentPreview>
+
+### Vertical
+
+Stack buttons in a column. Pair with `fullWidth` on each button for stacked auth screens.
+
+<ComponentPreview code={`<BDS.ButtonGroup orientation="vertical">
+  <BDS.Button variant="primary" fullWidth>Sign up</BDS.Button>
+  <BDS.Button variant="outline" fullWidth>Log in</BDS.Button>
+</BDS.ButtonGroup>`}>
+  <BDS.ButtonGroup orientation="vertical">
+    <BDS.Button variant="primary" fullWidth>Sign up</BDS.Button>
+    <BDS.Button variant="outline" fullWidth>Log in</BDS.Button>
+  </BDS.ButtonGroup>
+</ComponentPreview>
+
+### Full width
+
+`fullWidth` on the group stretches each child equally. Use in narrow contexts (sheets, sidebars).
+
+<ComponentPreview code={`<BDS.ButtonGroup fullWidth>
+  <BDS.Button variant="primary">Save</BDS.Button>
+  <BDS.Button variant="outline">Cancel</BDS.Button>
+</BDS.ButtonGroup>`}>
+  <BDS.ButtonGroup fullWidth>
+    <BDS.Button variant="primary">Save</BDS.Button>
+    <BDS.Button variant="outline">Cancel</BDS.Button>
+  </BDS.ButtonGroup>
+</ComponentPreview>
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use ButtonGroup for unrelated actions.** It's a semantic group — readers infer that the buttons share context. Two unrelated CTAs in the same row look the same visually but break expectations.
+</Callout>
+
+- **Don't put more than 3 buttons in a group.** A "toolbar" of 5 unrelated actions is a different pattern — use spacing, not grouping.
+- **Don't mix sizes inside a group.** All buttons should share the same `size`. Mixed sizes break the rhythm.
+
+## Accessibility
+
+- Renders a plain `<div>` container. Each child Button keeps its own keyboard semantics.
+- Tab order follows DOM order — for vertical groups, primary actions should appear first in source.
+- No `role="group"` is added by default; if the group represents a single ARIA group (e.g. radiogroup-like behavior), wrap in your own labeled `<fieldset>` or `<div role="group" aria-labelledby="...">`.
+
+## API
+
+### ButtonGroup
+
+| Prop | Type | Default |
+|---|---|---|
+| `children` | `ReactNode` *(required)* | — |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `fullWidth` | `boolean` | `false` |
+
+Plus all standard `<div>` HTML attributes.
+
+## Related
+
+- [Button](/docs/components/button) — the primary child component
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-action-button-group--overview)** — live variants and patterns

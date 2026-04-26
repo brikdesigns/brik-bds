@@ -1,0 +1,121 @@
+---
+title: Brik Design System
+description: Four tenets in one repository, published as a single versioned package.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BDS is four tenets in one repository, shipped as a single versioned package. Each tenet is an independent vocabulary the portal, mockup generators, and client sites consume to ship work that looks and reads like Brik without anyone having to re-decide the basics every project.
+
+This site is the **guidance layer**. For live prop exploration and visual variants, [Storybook](https://storybook.brikdesigns.com) stays the playground.
+
+## The four tenets
+
+| Tenet | Answers | Ships |
+|---|---|---|
+| [**Foundation**](/docs/primitives) | *"What color, size, type?"* | Design tokens, scales, primitives |
+| [**Theming**](/docs/getting-started/cascade) | *"What brand, mood, shape?"* | Tokens + atmospheres + navigation archetypes + blueprints |
+| [**Motion**](/docs/primitives/motion) | *"How does it feel to move?"* | Three-tier animation system — CSS reveals → GSAP scroll → premium effects |
+| [**Content**](/docs/content-system) | *"What does it say, for whom?"* | Industry packs, voice patterns, locked vocabularies |
+
+Each tenet evolves on its own cadence but cross-links at the edges. An industry pack declares a default atmosphere and navigation archetype, so the Content tenet drives defaults for the Theming tenet that the client brand then optionally overrides.
+
+## Where to start
+
+<Cards>
+  <Card title="Getting Started" href="/docs/getting-started" description="Install BDS, wire the cascade, and read the rules." />
+  <Card title="Primitives" href="/docs/primitives" description="Tokens — color, type, spacing, motion, the design language." />
+  <Card title="Components" href="/docs/components" description="React building blocks. One job each, composable, themeable." />
+  <Card title="Patterns" href="/docs/patterns" description="Cross-component recipes for forms, empty states, page templates." />
+  <Card title="Content System" href="/docs/content-system" description="Industries, voices, atmospheres — the vocabulary peer to tokens." />
+  <Card title="Contribution" href="/docs/contribution" description="How to add or change BDS components, tokens, and packs." />
+</Cards>
+
+## Foundation — the visual atoms
+
+Design tokens are the atomic visual decisions that power BDS. Every component references tokens — never raw values.
+
+| Category | Page |
+|---|---|
+| Color | [Primitives → Color](/docs/primitives/color) |
+| Typography | [Primitives → Typography](/docs/primitives/typography) |
+| Spacing | [Primitives → Spacing](/docs/primitives/spacing) |
+| Motion | [Primitives → Motion](/docs/primitives/motion) |
+
+Border radius, border width, shadow, and size scales are documented in Storybook today and migrate here next.
+
+## Theming — the multi-tenant instrument
+
+Theming composes four orthogonal layers. Each is a decision a client can override independently of the rest.
+
+| Layer | Decides | Where it lives |
+|---|---|---|
+| Tokens | Color, type, spacing values per brand | `theme-{client}.css` in the consumer repo |
+| Atmospheres | Ambient mood — grain, glow, vignettes | [`@brikdesigns/bds/atmospheres/{slug}.css`](/docs/content-system/atmospheres) |
+| Navigation Archetypes | Site-header shape + scroll/drawer behavior | Industry pack → BDS `<SiteHeader>` |
+| Blueprints | Section composition + mood tagging | Authored in BDS, tagged per industry + mood |
+
+## Motion — the three-tier system
+
+| Tier | Use for |
+|---|---|
+| **Lightweight** | Reveals, hovers, transitions — pure CSS, no JS |
+| **GSAP** | Scroll-driven sequences, complex orchestration |
+| **Premium** | Cinematic moments — typography flourishes, video overlays |
+
+See [Primitives → Motion](/docs/primitives/motion) for the decision tree and per-tier specs.
+
+## Content — the vocabulary peer
+
+The content-vocabulary peer to the visual tokens. Paired with BDS to drive end-to-end mockup generation and structured strategy documents.
+
+| Category | Page |
+|---|---|
+| Overview | [Content System](/docs/content-system) |
+| Industries | [Content System → Industries](/docs/content-system/industries) |
+| Voices | [Content System → Voices](/docs/content-system/voices) |
+| Atmospheres | [Content System → Atmospheres](/docs/content-system/atmospheres) |
+
+## Components
+
+| Group | Components |
+|---|---|
+| **Action** | Button, IconButton, LinkButton, ButtonGroup, FilterBar |
+| **Form** | Field, TextInput, Select, MultiSelect, DatePicker, Form, FieldGrid |
+| **Indicator** | Badge, Chip, Tag, Counter, Spinner, Skeleton |
+| **Feedback** | AlertBanner, Toast, Tooltip, EmptyState, ProgressBar |
+| **Control** | Switch, Slider, Stepper, Pagination, SegmentedControl, FileUploader |
+| **Addable** | AddableTagList, AddableEntryList, AddableFieldRowList |
+| **Structure** | Card, Divider, Accordion |
+
+See [Components](/docs/components) for the full index.
+
+## Token system — the naming contract
+
+Components use CSS custom properties from the Style Dictionary token pipeline:
+
+```text
+--[category]-[type]-[variant]
+```
+
+**Primitives** — raw scale values, never used directly in components:
+
+```css
+--space-400;             /* 16px */
+--font-size-700;         /* 32px */
+--color-grayscale-darkest; /* #333 */
+```
+
+**Semantic** — purpose-bound aliases, always use these in components:
+
+```css
+--background-brand-primary; /* brand background color */
+--font-family-heading;      /* heading font family */
+--padding-lg;               /* large spacing value */
+--border-radius-md;         /* button/card corner radius */
+```
+
+<Callout type="warn">
+  **Never write raw `var()` strings inline in app code.** Import from `@/lib/tokens` and `@/lib/styles` in consumer projects. The cascade is a contract — bypassing it leaks brand drift into components.
+</Callout>

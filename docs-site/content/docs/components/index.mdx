@@ -1,0 +1,41 @@
+---
+title: Components
+description: Building blocks. One job each, composable, themeable.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+
+BDS components are organized by **job**, not by visual type. The same taxonomy backs Storybook's sidebar.
+
+| Group | Examples |
+|---|---|
+| **Action** | Button, IconButton, LinkButton, ButtonGroup, FilterBar, FilterButton, FilterToggle, TextLink |
+| **Form** | Field, TextInput, Select, MultiSelect, DatePicker, Form, FieldGrid |
+| **Indicator** | Badge, Chip, Tag, Counter, Spinner, Skeleton |
+| **Feedback** | AlertBanner, Toast, Tooltip, EmptyState, ProgressBar |
+| **Control** | Switch, Slider, Stepper, Pagination, SegmentedControl, FileUploader |
+| **Addable** | AddableTagList, AddableEntryList, AddableFieldRowList |
+| **Structure** | Card, Divider, Accordion |
+
+## Documented here
+
+### Action
+
+<Cards>
+  <Card title="Button" href="/docs/components/button" description="Trigger an action. Twelve variants, five sizes; LinkButton + IconButton sub-components." />
+  <Card title="Button group" href="/docs/components/button-group" description="Group related buttons into a connected cluster. Horizontal or vertical stacking." />
+  <Card title="Filter bar" href="/docs/components/filter-bar" description="Heading + counter + filter controls row for list and table views." />
+  <Card title="Filter button" href="/docs/components/filter-button" description="Pill-shaped dropdown filter trigger. Single-select with click-to-clear." />
+  <Card title="Filter toggle" href="/docs/components/filter-toggle" description="Boolean filter trigger — on/off, no dropdown." />
+  <Card title="Text link" href="/docs/components/text-link" description="Styled anchor for inline navigation and footer links." />
+</Cards>
+
+## Still in Storybook
+
+The remaining ~50 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for every other group: Form, Indicator, Feedback, Control, Addable, Structure, Navigation.
+
+## Page template
+
+Every component page on this site follows the same structure. See [Contribution → Page templates](/docs/contribution/page-templates) for the full reference. Short version: *Use it for / Import / Anatomy / Variants / When (not) to use / Accessibility / API / Related*.
+
+[Button](/docs/components/button) is the canonical example — new pages should match its structure section-by-section.

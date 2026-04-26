@@ -1,0 +1,38 @@
+---
+title: Border radius
+description: Corner-rounding tokens — from sharp (0px) to pill (999px) to fully circular.
+---
+
+import { borderRadiusScale } from '@bds-tokens';
+
+Border radius tokens control corner rounding across components. The system supports modes from sharp (0px) to pill (999px), with `circle` reserved for fully circular elements (avatars, dots).
+
+## Radius scale (primitives)
+
+<BorderRadiusPreview scale={borderRadiusScale} prefix="--border-radius" />
+
+## Semantic radius tokens
+
+| Token | CSS Variable | Description |
+|---|---|---|
+| None | `--border-radius-none` | No rounding (0px) |
+| Small | `--border-radius-sm` | Subtle rounding |
+| Medium | `--border-radius-md` | Default component radius |
+| Large | `--border-radius-lg` | Prominent rounding |
+| Pill | `--border-radius-pill` | Maximum rounding (999px) |
+
+## Radius modes
+
+Figma uses border-radius modes to drive the overall shape feel of a theme.
+
+| Mode | Effect | Use case |
+|---|---|---|
+| Sharp | All radii near 0 | Corporate, minimal |
+| Soft | Moderate radii | Default, balanced |
+| Round | Generous radii | Friendly, modern |
+| Pill | Maximum radii (999px) | Buttons, tags |
+
+## Related
+
+- [Border width](/docs/primitives/border-width) — pairs with radius for component framing
+- [Shadow](/docs/primitives/shadow) — elevation that complements radius choices

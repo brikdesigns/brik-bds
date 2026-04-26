@@ -1,0 +1,28 @@
+---
+title: Framework Guides
+description: Adopting BDS in Next.js, Astro, and Webflow consumers.
+---
+
+Per-framework setup notes. Pick yours.
+
+## Next.js (App Router)
+
+The recommended consumer pattern. See `brik-client-portal` and `renew-pms` for reference implementations.
+
+- Token cascade goes in `app/globals.css`.
+- Fonts load via `next/font` — BDS doesn't ship fonts.
+- Components are imported from `@brikdesigns/bds` directly; no client wrapper required.
+
+## Astro
+
+The marketing-site pattern. See `brikdesigns.com` and exported `web/_newclient` template.
+
+- Token cascade in the global stylesheet.
+- BDS ships **Astro blueprints** at `@brikdesigns/bds/blueprints-astro` for hero, footer, contact form, and other page sections that are slow to recompose by hand.
+- Use `@brikdesigns/bds/atmospheres/{name}.css` to apply a mood layer to a page.
+
+## Webflow (legacy clients)
+
+For clients still on Webflow. Token names match the design system — `--text-primary`, `--background-brand-primary`, etc. — so guidance from this site applies.
+
+The Webflow CSS layer is partially synced from BDS via the Designer Bridge but is not the source of truth. Token-rename migrations are tracked in the BDS rename log.

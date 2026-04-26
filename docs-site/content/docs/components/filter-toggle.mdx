@@ -1,0 +1,79 @@
+---
+title: Filter toggle
+description: Boolean filter trigger — on/off, no dropdown.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+FilterToggle is a pill-shaped button that flips a single boolean filter on or off. Switches to the active (brand) style when on. Use it for filters that don't need a dropdown — "Show archived," "Only mine," "Has membership plan."
+
+## Use it for
+
+- Boolean filters inside a [FilterBar](/docs/components/filter-bar)
+- Filters that don't need a value picker (just "applied vs not applied")
+- Quick toggles where the filter name itself describes the criterion
+
+For filters with 3+ options, use [FilterButton](/docs/components/filter-button).
+
+## Import
+
+```tsx
+import { FilterToggle } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+const [showArchived, setShowArchived] = useState(false);
+
+<FilterToggle
+  label="Show archived"
+  active={showArchived}
+  onToggle={() => setShowArchived((v) => !v)}
+/>
+```
+
+### Sizes
+
+Three sizes — `sm`, `md` (default), `lg`. Match the size of surrounding controls.
+
+## Active state
+
+The `active` prop drives the brand-active style. The component is fully controlled — clicking calls `onToggle`, and the parent decides what to do (typically flip a state boolean).
+
+<Callout type="info">
+  **`onToggle` receives no argument** — it's a "flip" callback, not a "set value" callback. The parent owns the truth of `active`.
+</Callout>
+
+## When *not* to use
+
+- **Don't use for filters with 3+ options.** Use [FilterButton](/docs/components/filter-button).
+- **Don't use as a primary action.** It's a *filter* control — the visual treatment is intentionally lighter than a real button. For "apply" or "save," use [Button](/docs/components/button).
+
+## Accessibility
+
+- Renders a `<button>` with `aria-pressed` reflecting the `active` state.
+- Keyboard `Enter`/`Space` toggles, just like a regular button.
+- The label is the accessible name.
+
+## API
+
+### FilterToggle
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `string` *(required)* | — |
+| `active` | `boolean` *(required)* | — |
+| `onToggle` | `() => void` *(required)* | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+
+Plus all standard `<button>` HTML attributes (excluding `onChange`).
+
+## Related
+
+- [FilterBar](/docs/components/filter-bar) — the parent container
+- [FilterButton](/docs/components/filter-button) — multi-option alternative
+- [Switch](https://storybook.brikdesigns.com/?path=/docs/components-control-switch--overview) — for non-filter boolean toggles (settings, preferences)
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-action-filter-toggle--overview)**

@@ -1,0 +1,107 @@
+---
+title: Filter button
+description: Dropdown filter trigger for filter bars. Single-select with click-to-clear.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+FilterButton is a pill-shaped dropdown trigger that opens a single-select list. Switches to an active (brand) style when a value is selected. Click a selected item again to clear.
+
+## Use it for
+
+- Single-axis dropdown filters inside a [FilterBar](/docs/components/filter-bar)
+- Categorical filters with 3–15 options (longer lists belong in a Select with search)
+- Filters that should show a clear "active vs not" state visually
+
+For boolean on/off filters, use [FilterToggle](/docs/components/filter-toggle) instead.
+
+## Import
+
+```tsx
+import { FilterButton } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+const [category, setCategory] = useState<string | undefined>();
+
+<FilterButton
+  label="Category"
+  value={category}
+  onChange={setCategory}
+  options={[
+    { id: 'design', label: 'Brand design' },
+    { id: 'marketing', label: 'Marketing' },
+  ]}
+/>
+```
+
+### With icons
+
+Each option can include an `icon` for visual reinforcement.
+
+```tsx
+<FilterButton
+  label="Category"
+  value={category}
+  onChange={setCategory}
+  options={[
+    { id: 'design', label: 'Brand design', icon: <CrownIcon /> },
+    { id: 'marketing', label: 'Marketing', icon: <BullhornIcon /> },
+  ]}
+/>
+```
+
+### Sizes
+
+Three sizes — `sm`, `md` (default), `lg`. Match the size of surrounding controls.
+
+## Active state
+
+When `value` is set, the button switches to the brand-active style. Click the active option in the dropdown again to clear (the `onChange` callback receives `undefined`).
+
+<Callout type="info">
+  **The active state is driven by `value`, not internal state.** Always pair with controlled state in the parent — FilterButton is purely presentational.
+</Callout>
+
+## When *not* to use
+
+- **Don't use for boolean filters.** Use [FilterToggle](/docs/components/filter-toggle) — it has the right semantics and shape.
+- **Don't use for multi-select.** This component is single-select only. For multi-select, use a checkbox menu inside a Popover or a [MultiSelect](https://storybook.brikdesigns.com/?path=/docs/components-form-multi-select--overview).
+
+## Accessibility
+
+- The trigger is a real `<button>`. Keyboard `Enter`/`Space` opens the dropdown.
+- Active state is announced via `aria-pressed`.
+- Selected option in the dropdown carries `aria-selected="true"`.
+
+## API
+
+### FilterButton
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `string` *(required)* | — |
+| `options` | `FilterButtonOption[]` *(required)* | — |
+| `value` | `string` | — |
+| `onChange` | `(value: string \| undefined) => void` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+
+### FilterButtonOption
+
+```ts
+interface FilterButtonOption {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+}
+```
+
+## Related
+
+- [FilterBar](/docs/components/filter-bar) — the parent container
+- [FilterToggle](/docs/components/filter-toggle) — boolean alternative
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-action-filter-button--overview)**

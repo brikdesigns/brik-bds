@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+/* Scan project files + Fumadocs UI dist (required so all fd-* utilities resolve). */
+@source "../app/**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
+@source "../content/**/*.{md,mdx}";
+@source "../lib/**/*.{ts,tsx}";
+@source "../node_modules/fumadocs-ui/dist/**/*.js";
+
+/* BDS token cascade — same order as consuming projects.
+ * Foundations → gap-fills → (client theme would slot here in real consumers).
+ * Live <ComponentPreview> blocks pick these up automatically. */
+@import '../../tokens/figma-tokens.css';
+@import '../../tokens/figma-tokens-dark.css';
+@import '../../tokens/gap-fills.css';
+@import '../../tokens/animations.css';
+@import '../../tokens/motion-classes.css';
+
+/* The docs site itself uses BDS tokens for branded surfaces (preview frames,
+ * code examples, callouts) so guidance and live demos stay visually coherent. */
+:root {
+  --docs-preview-bg: var(--surface-default, #ffffff);
+  --docs-preview-border: var(--border-default, #e5e5e5);
+  --docs-preview-radius: var(--radius-md, 8px);
+}

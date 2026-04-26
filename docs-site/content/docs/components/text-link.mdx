@@ -1,0 +1,97 @@
+---
+title: Text link
+description: Styled anchor element for navigation and inline text links.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+TextLink is a styled `<a>` element with size variants and hover effects. Use it inside paragraphs, navigation menus, and any context where a Button would be too heavy.
+
+## Use it for
+
+- Links inside body copy
+- Horizontal navigation menus
+- Footer links and breadcrumb segments
+- "Read more" / "Learn more" links that don't deserve a button
+
+For an action that looks like a button but navigates to a URL, use [LinkButton](/docs/components/button#linkbutton).
+
+## Import
+
+```tsx
+import { TextLink } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+<ComponentPreview code={`<BDS.TextLink href="#">Learn more</BDS.TextLink>`}>
+  <BDS.TextLink href="#">Learn more</BDS.TextLink>
+</ComponentPreview>
+
+### Small
+
+For compact contexts — table rows, footer columns, breadcrumbs.
+
+<ComponentPreview code={`<BDS.TextLink href="#" size="small">View details</BDS.TextLink>`}>
+  <BDS.TextLink href="#" size="small">View details</BDS.TextLink>
+</ComponentPreview>
+
+### External link
+
+Open in a new tab with proper security attributes. Always use `rel="noopener noreferrer"` with `target="_blank"`.
+
+```tsx
+<TextLink
+  href="https://example.com"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Visit external site
+</TextLink>
+```
+
+### With icons
+
+`iconBefore` and `iconAfter` work the same as Button. A trailing arrow is the canonical "external" affordance.
+
+```tsx
+<TextLink href="https://example.com" iconAfter={<ExternalLinkIcon />}>
+  Read on GitHub
+</TextLink>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't style a Button as a TextLink.** If the action navigates, use TextLink (or LinkButton if it needs button emphasis). If the action stays on the page, use Button. Mixing the semantics breaks right-click and keyboard navigation.
+</Callout>
+
+- **Don't use TextLink for primary actions.** It's the lowest-emphasis link surface. Primary actions belong on a Button or LinkButton.
+- **Don't underline non-link text** to mimic TextLink. Underlines on non-anchor text confuse screen readers.
+
+## Accessibility
+
+- Renders a real `<a>`. Keyboard, focus ring, and right-click context menu come from the platform.
+- The accessible name is the visible text. Avoid generic labels like "click here" or "more" — use the destination as the label ("Read the cascade rules", not "Read more").
+- For external links opening in new tabs, include `rel="noopener noreferrer"` to prevent the destination from accessing the source page's `window`.
+
+## API
+
+### TextLink
+
+| Prop | Type | Default |
+|---|---|---|
+| `children` | `ReactNode` *(required)* | — |
+| `href` | `string` | — |
+| `size` | `'default' \| 'small'` | `'default'` |
+| `iconBefore` | `ReactNode` | — |
+| `iconAfter` | `ReactNode` | — |
+
+Plus all standard `<a>` HTML attributes.
+
+## Related
+
+- [Button → LinkButton](/docs/components/button#linkbutton) — anchor styled as a button
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-action-text-link--overview)**

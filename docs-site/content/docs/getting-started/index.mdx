@@ -1,0 +1,23 @@
+---
+title: Introduction
+description: How BDS is organized and what to expect from this site.
+---
+
+BDS ships three things on a single npm package: **tokens** (design language), **components** (React building blocks), and **content vocabulary** (industries, voices, atmospheres — the BCS layer).
+
+Consumers import from `@brikdesigns/bds`. There is no submodule, no copy-paste — components and tokens stay in lockstep across products.
+
+## How this site is organized
+
+- **Foundations** — the rules everything else inherits from. Tokens, typography, spacing, motion.
+- **Building** — patterns for composing pages, components for the building blocks, hooks for behavior, utilities for one-offs.
+- **Working with BDS** — contribution rules, release flow, deprecation policy.
+
+## How this site relates to Storybook
+
+| Surface | Job |
+|---|---|
+| **This site** | When-to-use, anatomy, do/don't, accessibility, design rationale |
+| **Storybook** | Live prop exploration, every visual variant, copy-paste code |
+
+If you can answer your question with "what does this look like with `size=lg`," go to Storybook. If you're asking "should I use Button or LinkButton here," stay here.
