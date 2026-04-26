@@ -1,0 +1,167 @@
+---
+title: Card
+description: Flexible content container with composable subcomponents and two locked-down presets (control + summary).
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Card is the canonical content-grouping container. Three rendering modes:
+
+- **Default** — flexible container, compose with `CardTitle` / `CardDescription` / `CardFooter` subcomponents.
+- **`preset="control"`** — locked-down settings/control layout (badge + title + description + action). Replaces the legacy `CardControl` component per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
+- **`preset="summary"`** — compact metric/stat layout (label + large value + optional link). Replaces the deprecated `CardSummary` component.
+
+## Use it for
+
+- Service grids, feature cards, and content blocks (default mode)
+- Settings panels with title + description + toggle/action (`preset="control"`)
+- Dashboard stat tiles ($48K Q1 revenue, 142 active users) (`preset="summary"`)
+- Any grouped-content surface where consistent border/padding/shadow matter
+
+For a horizontal stack of card-like rows, use [FieldGrid](/docs/components/field-grid) wrapping Cards. For loading-state placeholders, use [Skeleton](/docs/components/skeleton) `variant="rectangular"`.
+
+## Import
+
+```tsx
+import { Card, CardTitle, CardDescription, CardFooter } from '@brikdesigns/bds';
+```
+
+## Default mode
+
+Compose freely with the Title / Description / Footer subcomponents.
+
+```tsx
+<Card variant="outlined" padding="md">
+  <CardTitle>Title</CardTitle>
+  <CardDescription>Description text goes here.</CardDescription>
+  <CardFooter>
+    <Button variant="primary" size="sm">Action</Button>
+  </CardFooter>
+</Card>
+```
+
+### Variants
+
+- **`outlined`** (default) — Subtle secondary border.
+- **`brand`** — Primary-color border for emphasis.
+- **`elevated`** — Shadow for visual prominence.
+
+### Padding
+
+`none`, `sm`, `md` (default), `lg`. Match content density.
+
+### Interactive + link
+
+`interactive` adds hover affordance. `href` renders as an `<a>` so the whole card becomes a link.
+
+```tsx
+<Card variant="elevated" interactive>
+  Hover me
+</Card>
+
+<Card href="/articles/foo" interactive>
+  Whole card is a link
+</Card>
+```
+
+## Control preset
+
+`preset="control"` is the canonical settings-row card. Locked layout: leading badge + (title + description) on the left, action slot on the right.
+
+```tsx
+<Card
+  preset="control"
+  badge={<Badge status="positive">On</Badge>}
+  title="Email notifications"
+  description="Send a weekly digest to your inbox."
+  action={<Button variant="outline" size="sm">Configure</Button>}
+/>
+```
+
+`actionAlign` controls vertical alignment of the action slot — `center` (default) or `top` (anchors to the upper-right when descriptions are tall).
+
+<Callout type="info">
+  **Both `<Card preset="control">` and standalone `<CardControl>` ship as first-class APIs in v0.39.0+.** The 2026-Q2 audit recommended folding CardControl into Card; the user reversed that decision 2026-04-24 to preserve optionality at the call site. Pick whichever reads cleaner in context. See the [audit doc](https://github.com/brikdesigns/brik-bds/blob/main/docs/audits/2026-Q2-component-bloat-audit.md).
+</Callout>
+
+## Summary preset
+
+`preset="summary"` is the compact stat tile. Label on top, large numeric value below, optional text link.
+
+```tsx
+<Card
+  preset="summary"
+  label="Q1 revenue"
+  value={48250.75}
+  type="price"
+  textLink={{ label: 'Details', href: '/revenue' }}
+/>
+```
+
+### Number formatting
+
+- **`type="numeric"`** (default) — locale-formatted integer (`1,234`).
+- **`type="price"`** — USD currency (`$1,234.50`).
+- String values render verbatim regardless of `type`.
+
+<Callout type="warn">
+  **The standalone `CardSummary` component is `@deprecated`** and slated for deletion in a future major version. Migrate to `Card preset="summary"` — same prop names, same number formatting, same layout. See [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
+</Callout>
+
+## When *not* to use
+
+- **Don't use Card for inline content blocks.** Cards imply discrete grouping; for paragraphs and section dividers, use prose + [Divider](/docs/components/divider).
+- **Don't use Card for tables.** Use a table component when rows share columns. Cards are for self-contained groupings.
+- **Don't reach for the default mode when `preset="control"` or `preset="summary"` fits.** The presets carry locked-down semantics that propagate consistently across screens.
+
+## Accessibility
+
+- Default Card renders a `<div>`; with `href`, it renders an `<a>` with full anchor semantics (right-click, keyboard, screen-reader link role).
+- `interactive` without `href` adds `role="button"` only when `onClick` is also passed; otherwise it's a non-interactive hover affordance.
+- Title becomes an `<h3>` semantic by default in the Title subcomponent — adjust the surrounding heading hierarchy accordingly.
+
+## API
+
+### Default mode
+
+| Prop | Type | Default |
+|---|---|---|
+| `variant` | `'outlined' \| 'brand' \| 'elevated'` | `'outlined'` |
+| `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
+| `interactive` | `boolean` | `false` |
+| `href` | `string` | — |
+| `children` | `ReactNode` *(required)* | — |
+
+### Control preset
+
+| Prop | Type | Default |
+|---|---|---|
+| `preset` | `'control'` *(required)* | — |
+| `title` | `string` *(required)* | — |
+| `description` | `string` | — |
+| `badge` | `ReactNode` | — |
+| `action` | `ReactNode` | — |
+| `actionAlign` | `'center' \| 'top'` | `'center'` |
+
+### Summary preset
+
+| Prop | Type | Default |
+|---|---|---|
+| `preset` | `'summary'` *(required)* | — |
+| `label` | `string` *(required)* | — |
+| `value` | `string \| number` *(required)* | — |
+| `type` | `'numeric' \| 'price'` | `'numeric'` |
+| `textLink` | `{ label: string; href: string }` | — |
+
+All modes accept standard `<div>` HTML attributes (excluding `title`, which is repurposed in the control preset).
+
+## Related
+
+- [CardControl](https://storybook.brikdesigns.com/?path=/docs/displays-card-card-control--overview) — sibling settings-card component (still in Storybook)
+- [CardList](https://storybook.brikdesigns.com/?path=/docs/displays-card-card-list--overview) — list-of-cards composition (Storybook)
+- [CardTestimonial](https://storybook.brikdesigns.com/?path=/docs/displays-card-card-testimonial--overview) — testimonial layout (Storybook)
+- [CollapsibleCard](https://storybook.brikdesigns.com/?path=/docs/displays-card-collapsible-card--overview) — Card + Accordion mash-up (Storybook)
+- [PricingCard](https://storybook.brikdesigns.com/?path=/docs/displays-card-pricing-card--overview) — pricing tier card (Storybook)
+- [Divider](/docs/components/divider) — for non-card section separators
+- [FieldGrid](/docs/components/field-grid) — equal-column wrapper for stat tiles
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-card-card--overview)**

@@ -1,0 +1,138 @@
+---
+title: Accordion
+description: Collapsible content sections. Single-open by default, optional multi-open mode.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Accordion renders a list of expandable sections. Each item has a title trigger and a content area. Use for FAQ pages, settings panels, and any place where content density would overwhelm if shown all at once.
+
+## Use it for
+
+- FAQ sections
+- Settings panels with collapsible groups
+- Long-form content split into navigable sections
+- Help docs where the user picks what to expand
+- Any list of related items where most users only need one or two at a time
+
+## Import
+
+```tsx
+import { Accordion } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default (single-open)
+
+Only one item open at a time. Opening a new item auto-closes the previous one.
+
+```tsx
+<Accordion
+  items={[
+    { id: '1', title: 'What services do you offer?', content: 'Brand design, marketing, product, web.' },
+    { id: '2', title: 'How long does a project take?', content: '2–12 weeks depending on scope.' },
+    { id: '3', title: 'Do you offer ongoing retainers?', content: 'Yes, monthly retainers available.' },
+  ]}
+/>
+```
+
+### Allow multiple open
+
+```tsx
+<Accordion items={items} allowMultiple />
+```
+
+### Pre-opened
+
+```tsx
+<Accordion items={items} defaultOpenItems={['1', '3']} />
+```
+
+### Controlled
+
+Hold open state in the parent for full control over which items are expanded.
+
+```tsx
+import { useState } from 'react';
+
+const [openIds, setOpenIds] = useState<string[]>(['1']);
+
+<Accordion
+  items={items}
+  openItems={openIds}
+  onOpenChange={setOpenIds}
+/>
+```
+
+When `openItems` is provided, internal state is ignored — `onOpenChange` is the only way state advances.
+
+### Rich content
+
+`content` accepts any ReactNode — paragraphs, lists, links, even nested components.
+
+```tsx
+<Accordion
+  items={[
+    {
+      id: '1',
+      title: 'How do I get started?',
+      content: (
+        <>
+          <p>Read the <a href="/docs/getting-started">Getting Started</a> guide first.</p>
+          <ul>
+            <li>Install the package</li>
+            <li>Wire the cascade</li>
+            <li>Import a component</li>
+          </ul>
+        </>
+      ),
+    },
+  ]}
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use Accordion to hide critical content.** Anything below the fold of an Accordion has a real chance of being missed. If the content is required reading, surface it directly — use Accordion only for things users *can choose* to expand.
+</Callout>
+
+- **Don't use Accordion for ≤2 items.** Two collapsible rows reads as visual noise. Just show both.
+- **Don't use Accordion for navigation.** It's content disclosure, not nav. Use TabBar / SidebarNavigation for app navigation.
+- **Don't nest Accordions deeply.** One level of nesting is acceptable; two becomes hard to follow.
+
+## Accessibility
+
+- Each item's title is a real `<button>` with `aria-expanded` reflecting open/closed state.
+- The content panel uses `role="region"` linked via `aria-labelledby` to the title button.
+- Keyboard `Enter` / `Space` toggles, `Tab` moves between items.
+- Focus stays on the trigger after toggling — no focus jumping into expanded content unless the user navigates there.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `AccordionItemData[]` *(required)* | — |
+| `allowMultiple` | `boolean` | `false` |
+| `openItems` | `string[]` (controlled) | — |
+| `onOpenChange` | `(openItems: string[]) => void` | — |
+| `defaultOpenItems` | `string[]` | `[]` |
+
+Plus all standard `<div>` HTML attributes.
+
+### AccordionItemData
+
+```ts
+interface AccordionItemData {
+  id: string;
+  title: ReactNode;
+  content: ReactNode;
+}
+```
+
+## Related
+
+- [CollapsibleCard](https://storybook.brikdesigns.com/?path=/docs/displays-card-collapsible-card--overview) — Card + Accordion mash-up (Storybook)
+- [Tooltip](/docs/components/tooltip) — for short hover-revealed content
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-accordion-accordion--overview)**
