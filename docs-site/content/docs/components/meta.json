@@ -79,6 +79,14 @@
     "---Sheets---",
     "sheet",
     "sheet-section",
-    "sheet-typography"
+    "sheet-typography",
+    "---Data displays---",
+    "table",
+    "data-section",
+    "board",
+    "calendar",
+    "activity-timeline",
+    "meter",
+    "notification-list"
   ]
 }

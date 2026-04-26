@@ -1,0 +1,33 @@
+---
+title: Calendar
+description: Date-based display for scheduling and event views. Currently in development.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  **Calendar is a work-in-progress placeholder.** The component is not yet implemented in BDS — only the directory + skeleton stories exist. New code should not depend on Calendar's API; it will change before stable release.
+</Callout>
+
+Calendar is reserved for date-based display surfaces — month / week / day views, event grids, scheduling overlays. Tracking placeholder so consumers don't reach for raw HTML calendar implementations while the proper component is being designed.
+
+## Until Calendar ships
+
+For date *picking*, use [DatePicker](/docs/components/date-picker) — it's implemented and stable.
+
+For event lists chronologically, use [ActivityTimeline](/docs/components/activity-timeline) (implemented).
+
+For board-style scheduling (per-shift staff coverage), use [Board](/docs/components/board).
+
+## Status
+
+| Status | Notes |
+|---|---|
+| **WIP** | Component not implemented — placeholder only. |
+
+## Related
+
+- [DatePicker](/docs/components/date-picker) — for date picking
+- [ActivityTimeline](/docs/components/activity-timeline) — chronological events
+- [Board](/docs/components/board) — column-based scheduling
+- **[Storybook placeholder](https://storybook.brikdesigns.com/?path=/docs/displays-calendar-calendar--overview)**

@@ -1,0 +1,79 @@
+---
+title: Activity timeline
+description: Vertical chronological list of events. Top-to-bottom newest-first display for activity feeds.
+---
+
+ActivityTimeline renders a chronological list of events as a vertical timeline — activity feeds, audit logs, change history. Each event is rendered top-to-bottom in chronological order (newest first by convention).
+
+## Use it for
+
+- Activity feeds on user / company / project records
+- Audit logs of state changes
+- Change history (e.g. "Status changed from Pending to Active")
+- Comment threads with timestamps
+
+For non-chronological grouped items, use [Board](/docs/components/board). For tabular activity, use [Table](/docs/components/table).
+
+## Import
+
+```tsx
+import { ActivityTimeline } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { ActivityTimeline } from '@brikdesigns/bds';
+
+const events = [
+  {
+    id: '1',
+    timestamp: '2 minutes ago',
+    actor: 'Sarah Chen',
+    action: 'updated',
+    target: 'Brand Identity',
+  },
+  {
+    id: '2',
+    timestamp: '1 hour ago',
+    actor: 'Marcus Lee',
+    action: 'commented on',
+    target: 'Project Brief',
+  },
+  // ...
+];
+
+<ActivityTimeline events={events} />
+```
+
+### Custom event content
+
+The exact fields and rendering of each event are determined by the `TimelineEvent` shape. Pass any structure your data layer provides.
+
+## When *not* to use
+
+- **Don't use ActivityTimeline for short lists** (≤3 events) — a plain list reads more cleanly without the timeline marker.
+- **Don't use ActivityTimeline for unstructured comments.** A comment thread with replies and reactions is its own pattern; timeline is for atomic events.
+- **Don't use ActivityTimeline as a feed of unrelated content.** Each event should share an actor + action + target shape.
+
+## Accessibility
+
+- Renders an `<ol>` with each event as `<li>` — semantically a chronological list.
+- Each event's timestamp uses `<time>` for proper screen reader announcement.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `events` | `TimelineEvent[]` *(required)* | — |
+| `className` | `string` | — |
+
+The `TimelineEvent` shape is defined alongside the component — typically `{ id, timestamp, actor, action, target }` with optional metadata fields.
+
+## Related
+
+- [Board](/docs/components/board) — non-chronological grouped alternative
+- [Table](/docs/components/table) — tabular activity log
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-timeline-activity-timeline--overview)**

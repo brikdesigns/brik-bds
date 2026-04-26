@@ -1,0 +1,116 @@
+---
+title: Meter
+description: Visual gauge for a value within a known range. Status colors, three sizes, label position.
+---
+
+Meter is a gauge primitive — a value within a known range, rendered as a horizontal bar with status color and optional label. Use for scores, completion rates, performance metrics, and health indicators.
+
+## Use it for
+
+- Score displays (compliance score, health score)
+- Performance metrics (page-speed, contrast ratio)
+- Completion percentages on multi-criteria evaluations
+- Health indicators (battery, capacity)
+
+For task progress that updates over time, use [ProgressBar](/docs/components/progress-bar) — it's percent-only and process-oriented; Meter is value-within-range and judgment-oriented.
+
+## Import
+
+```tsx
+import { Meter } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Status colors
+
+Four status colors map to fill colors via system tokens.
+
+```tsx
+<Meter value={6} max={7} status="positive" label="Pass" />
+<Meter value={4} max={7} status="warning" label="Fair" />
+<Meter value={2} max={7} status="error" label="Fail" />
+<Meter value={5} max={7} status="neutral" />
+```
+
+| Status | Use |
+|---|---|
+| `positive` | Meets threshold (green) |
+| `warning` | Borderline value (yellow) |
+| `error` | Below acceptable range (red) |
+| `neutral` | No judgment applied (gray) |
+
+### Sizes
+
+Three sizes for different layout contexts.
+
+| Size | Bar height | Use |
+|---|---|---|
+| `sm` | 8px | Compact metric strips |
+| `md` (default) | 12px | Standard cards and rows |
+| `lg` | 16px | Prominent dashboard tiles |
+
+### Label position
+
+`above` or `below` (default).
+
+```tsx
+<Meter value={82} max={100} label="Score" labelPosition="above" />
+<Meter value={82} max={100} label="Score" labelPosition="below" />
+```
+
+### Custom value formatter
+
+By default, Meter renders the value as `{value}/{max}`. Use `valueFormatter` to format differently — percentages, currency, custom strings.
+
+```tsx
+<Meter
+  value={0.73}
+  max={1}
+  status="warning"
+  label="Completion"
+  valueFormatter={(v) => `${Math.round(v * 100)}%`}
+/>
+```
+
+### Without value label
+
+Set `showValue={false}` to hide the displayed value.
+
+```tsx
+<Meter value={45} max={100} status="warning" showValue={false} />
+```
+
+## When *not* to use
+
+- **Don't use Meter for measurable task progress.** Use [ProgressBar](/docs/components/progress-bar) — process-oriented (percent done) reads differently from judgment-oriented (value-within-range).
+- **Don't use Meter for binary states.** Active/inactive is a [Badge](/docs/components/badge); on/off is a [Switch](/docs/components/switch).
+- **Don't use Meter for time-series data.** It's a single-value gauge — for trends use a chart.
+
+## Accessibility
+
+- Renders a `<div role="meter">` with `aria-valuenow`, `aria-valuemin="0"`, `aria-valuemax`.
+- The label (when provided) becomes the accessible name via `aria-labelledby`.
+- Status is communicated via color and via the label/value text — never color alone.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `number` *(required)* | — |
+| `max` | `number` *(required)* | — |
+| `status` | `'positive' \| 'warning' \| 'error' \| 'neutral'` | `'neutral'` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `label` | `string` | — |
+| `showValue` | `boolean` | `true` |
+| `valueFormatter` | `(value: number, max: number) => string` | renders as `{value}/{max}` |
+| `labelPosition` | `'above' \| 'below'` | `'below'` |
+
+Plus standard `<div>` HTML attributes (excluding `children`).
+
+## Related
+
+- [ProgressBar](/docs/components/progress-bar) — task-progress sibling
+- [Badge](/docs/components/badge) — discrete status
+- [Counter](/docs/components/counter) — discrete numeric
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-charts-meter--overview)**

@@ -1,0 +1,211 @@
+---
+title: Table
+description: Data table with composable subcomponents. Sorting, selection, striped rows, size variants.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Table is a composable data-display primitive. The container plus six subcomponents (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`) handle the structural HTML; the consumer composes cells with whatever content the row needs — text, badges, links, action buttons.
+
+## Use it for
+
+- Tabular records with consistent columns (users, projects, invoices)
+- Sortable lists where the user picks a column to order by
+- Comparison tables on settings or pricing pages
+- Any "rows of structured data" where columns share semantics across rows
+
+For card-like rows where each entry is its own self-contained block, use [CardList](/docs/components/card-list). For settings panels with action-per-row, use [CardControl](/docs/components/card-control).
+
+## Import
+
+```tsx
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Sizes
+
+```tsx
+<Table size="default">...</Table>      {/* compact, dense data */}
+<Table size="comfortable">...</Table>  {/* generous padding, 72px cell height */}
+```
+
+### Striped
+
+Alternating row backgrounds for readability on dense tables.
+
+```tsx
+<Table striped>...</Table>
+```
+
+### Flush
+
+`flush` removes the left padding on the first cell and right padding on the last — use when the table aligns to a container's edge with no internal padding.
+
+```tsx
+<Table flush>...</Table>
+```
+
+### Sortable headers
+
+`TableHead` accepts `sortable` and `sortDirection`. The consumer owns the click handler and sort state.
+
+```tsx
+<TableHead sortable sortDirection="asc" onClick={() => sortBy('name')}>
+  Name
+</TableHead>
+```
+
+### Selected rows
+
+`TableRow` accepts a `selected` boolean for highlight styling.
+
+```tsx
+<TableRow selected>
+  <TableCell>Active row</TableCell>
+</TableRow>
+```
+
+## Cell pattern standards
+
+These patterns recur often enough to standardize. Don't reach for raw `<a>` or `<button>` inside a TableCell — use the BDS components below.
+
+### Action buttons
+
+Use **`size="sm"`** for all buttons inside cells.
+
+```tsx
+{/* Text button */}
+<Button variant="primary" size="sm">View</Button>
+
+{/* Icon buttons — always IconButton, never raw <button> */}
+<IconButton variant="primary" size="sm" icon={<EditIcon />} label="Edit" />
+<IconButton variant="danger" size="sm" icon={<TrashIcon />} label="Delete" />
+```
+
+Common icon-button variants for table actions:
+
+| Variant | Use |
+|---|---|
+| `primary` | Primary action (edit, open) |
+| `secondary` | Neutral (download, copy) |
+| `ghost` | Low emphasis (overflow menu) |
+| `danger` | Destructive (delete, remove) |
+
+### Text links
+
+Use **`<TextLink size="small">`** for in-cell navigation. Never use raw `<a>` or full-size text links.
+
+```tsx
+<TextLink href="/profile/123" size="small">View profile</TextLink>
+
+<TextLink href="#" size="small" iconAfter={<ExternalLinkIcon />}>
+  Open
+</TextLink>
+```
+
+**Text link vs button:**
+
+- **TextLink** — navigation that takes you somewhere (View profile, Open document)
+- **Button** — actions that change state (Approve, Assign, Archive)
+
+### Tooltip indicators
+
+Wrap info icons in a [Tooltip](/docs/components/tooltip) so they reveal context on hover/focus. Use `cursor: help` to signal interactivity.
+
+```tsx
+<Tooltip content="Primary contact email" placement="top">
+  <span style={{ cursor: 'help' }}>
+    <Icon icon="ph:info" />
+  </span>
+</Tooltip>
+```
+
+### Icon-left cells
+
+Pair a 24px icon with text using `gap: var(--gap-xs)`.
+
+```tsx
+<span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
+  <Icon icon="ph:palette" />
+  Design
+</span>
+```
+
+## When *not* to use
+
+- **Don't use Table for self-contained card grids.** Cards belong in [CardList](/docs/components/card-list).
+- **Don't use Table for settings rows.** Use [CardControl](/docs/components/card-control) — locked layout for badge + title + description + action.
+- **Don't use Table for narrow mobile views.** Tables don't gracefully wrap; consider a card-list layout for mobile-first data.
+
+## Accessibility
+
+- Renders real `<table>` / `<thead>` / `<tbody>` / `<tr>` / `<th>` / `<td>` — semantics are platform-native.
+- Sortable headers carry `aria-sort` reflecting the current sort direction.
+- Selected rows use `aria-selected`.
+- Action buttons in cells are real buttons — keyboard, focus, screen reader announce normally.
+
+## API
+
+### Table
+
+| Prop | Type | Default |
+|---|---|---|
+| `striped` | `boolean` | `false` |
+| `size` | `'default' \| 'comfortable'` | `'default'` |
+| `flush` | `boolean` | `false` |
+| `children` | `ReactNode` *(required)* | — |
+
+Plus standard `<table>` HTML attributes.
+
+### Subcomponents
+
+| Component | Element | Notable props |
+|---|---|---|
+| `TableHeader` | `<thead>` | — |
+| `TableBody` | `<tbody>` | — |
+| `TableRow` | `<tr>` | `selected: boolean` |
+| `TableHead` | `<th>` | `sortable: boolean`, `sortDirection: 'asc' \| 'desc'` |
+| `TableCell` | `<td>` | — |
+
+All subcomponents accept their respective HTML attributes.
+
+## Usage
+
+```tsx
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@brikdesigns/bds';
+import { Badge, Button, IconButton, TextLink } from '@brikdesigns/bds';
+
+<Table striped size="comfortable">
+  <TableHeader>
+    <TableRow>
+      <TableHead sortable sortDirection="asc">Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead>Profile</TableHead>
+      <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Alice Chen</TableCell>
+      <TableCell>alice@example.com</TableCell>
+      <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
+      <TableCell><TextLink href="#" size="small">View profile</TextLink></TableCell>
+      <TableCell style={{ textAlign: 'right' }}>
+        <IconButton variant="primary" size="sm" icon={<EditIcon />} label="Edit" />
+        <IconButton variant="danger" size="sm" icon={<TrashIcon />} label="Delete" />
+      </TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+## Related
+
+- [CardList](/docs/components/card-list) — card grid alternative
+- [CardControl](/docs/components/card-control) — settings-row pattern
+- [Pagination](/docs/components/pagination) — pair below large tables
+- [Badge](/docs/components/badge) / [Tag](/docs/components/tag) — common cell content
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-table-table--overview)**
