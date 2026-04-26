@@ -1,0 +1,123 @@
+---
+title: Collapsible card
+description: Expandable section in a card shell. Section label + title header, click to reveal content.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+CollapsibleCard combines [Accordion](/docs/components/accordion)'s expand/collapse behavior with [Card](/docs/components/card)'s container styling. Use for FAQs and proposal sections that benefit from both individual emphasis and progressive disclosure.
+
+For tight FAQ lists where individual cards would be visual overhead, use [Accordion](/docs/components/accordion) directly. For non-collapsible card content, use [Card](/docs/components/card).
+
+## Use it for
+
+- Long-form proposal sections (Section 01 / Section 02 / Section 03)
+- FAQ entries that need standalone visual weight
+- Settings groups inside dashboards
+- Stacked content blocks where each is meaningful enough to be its own surface
+
+## Import
+
+```tsx
+import { CollapsibleCard } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default — uncontrolled
+
+Click the header to toggle. Internal state.
+
+```tsx
+<CollapsibleCard
+  sectionLabel="Section 01"
+  title="Overview and Goals"
+>
+  <p>Content goes here…</p>
+</CollapsibleCard>
+```
+
+### Initially open
+
+```tsx
+<CollapsibleCard title="Settings" defaultOpen>
+  <p>Settings content…</p>
+</CollapsibleCard>
+```
+
+### Controlled
+
+When you need parent control over expansion (e.g. accordion-style "only one open" coordination across multiple cards).
+
+```tsx
+import { useState } from 'react';
+
+const [open, setOpen] = useState(false);
+
+<CollapsibleCard
+  title="Pricing"
+  isOpen={open}
+  onOpenChange={setOpen}
+>
+  <p>Pricing details…</p>
+</CollapsibleCard>
+```
+
+### Without section label
+
+`sectionLabel` is optional. Drop it for FAQ-style cards where numbered sections aren't meaningful.
+
+```tsx
+<CollapsibleCard title="Do you offer discounts for nonprofits?">
+  <p>Yes — 20% off all annual plans for verified 501(c)(3) organizations.</p>
+</CollapsibleCard>
+```
+
+### Header actions
+
+`headerActions` accepts ReactNode rendered next to the toggle — useful for per-card edit / share / dismiss buttons.
+
+```tsx
+<CollapsibleCard
+  title="Project brief"
+  headerActions={<IconButton icon={<EditIcon />} label="Edit brief" />}
+>
+  <p>...</p>
+</CollapsibleCard>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use CollapsibleCard for tight FAQ stacks** — use [Accordion](/docs/components/accordion). The card surface adds visual weight that gets noisy when 6+ stacked items each have their own border.
+</Callout>
+
+- **Don't use CollapsibleCard when content shouldn't be hidden.** If users need to see the content to make a decision, render it directly in a [Card](/docs/components/card) without the collapse.
+- **Don't use CollapsibleCard for navigation.** It's content disclosure, not navigation. Use [TabBar](/docs/components/tab-bar) / [SidebarNavigation](/docs/components/sidebar-navigation) for navigation.
+
+## Accessibility
+
+- The header is a real `<button>` with `aria-expanded` reflecting open/closed state.
+- The content panel uses `role="region"` linked via `aria-labelledby` to the header.
+- Keyboard `Enter` / `Space` toggles. Focus stays on the header after toggling.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` *(required)* | — |
+| `children` | `ReactNode` *(required)* | — |
+| `sectionLabel` | `string` | — |
+| `isOpen` | `boolean` (controlled) | — |
+| `onOpenChange` | `(isOpen: boolean) => void` | — |
+| `defaultOpen` | `boolean` | `false` |
+| `headerActions` | `ReactNode` | — |
+
+Plus standard `<div>` HTML attributes.
+
+## Related
+
+- [Accordion](/docs/components/accordion) — for tight FAQ stacks
+- [Card](/docs/components/card) — non-collapsible card sibling
+- [CardList](/docs/components/card-list) — wrapper for stacking multiple CollapsibleCards
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-card-collapsible-card--overview)**

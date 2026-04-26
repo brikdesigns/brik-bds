@@ -1,0 +1,150 @@
+---
+title: Pricing card
+description: Pricing tier display — title, price, features list, action. Optional highlighted state for the recommended plan.
+---
+
+PricingCard renders a single pricing tier — title, price + period, description, feature bullets, and call-to-action. Pair multiple in a [CardList](/docs/components/card-list) for the canonical 2-3-tier pricing grid.
+
+## Use it for
+
+- Pricing pages on marketing sites
+- Plan comparison tables in product apps
+- Free-vs-paid tier callouts
+- Pricing inside sales proposals or quotes
+
+## Import
+
+```tsx
+import { PricingCard } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Standard
+
+```tsx
+<PricingCard
+  title="Professional"
+  price="$49"
+  period="/month"
+  description="For growing businesses."
+  features={[
+    'Unlimited projects',
+    'Priority support',
+    'Custom branding',
+    'Advanced analytics',
+  ]}
+  action={<Button variant="primary" fullWidth>Get started</Button>}
+/>
+```
+
+### Highlighted (recommended plan)
+
+`highlighted` flags the plan as the recommended option — typically the middle tier in a 3-up grid. Pair with a `badge` for explicit attention.
+
+```tsx
+<PricingCard
+  title="Professional"
+  price="$49"
+  period="/month"
+  badge={<Badge>Most popular</Badge>}
+  features={features}
+  action={<Button variant="primary" fullWidth>Get started</Button>}
+  highlighted
+/>
+```
+
+### Free tier
+
+Use a string for `price` — it's not parsed.
+
+```tsx
+<PricingCard
+  title="Starter"
+  price="Free"
+  description="For solo creators and side projects."
+  features={['1 project', 'Community support']}
+  action={<Button variant="outline" fullWidth>Start free</Button>}
+/>
+```
+
+### One-time pricing
+
+```tsx
+<PricingCard
+  title="Lifetime"
+  price="$199"
+  period="one-time"
+  description="Pay once, use forever."
+  features={['All current and future features']}
+  action={<Button variant="primary" fullWidth>Buy now</Button>}
+/>
+```
+
+## Pattern: 3-tier pricing grid
+
+The canonical layout — three plans side by side, middle tier highlighted.
+
+```tsx
+<CardList orientation="horizontal" gap="lg">
+  <PricingCard
+    title="Starter"
+    price="Free"
+    features={['1 project', 'Community support']}
+    action={<Button variant="outline" fullWidth>Start free</Button>}
+  />
+
+  <PricingCard
+    title="Professional"
+    price="$49"
+    period="/month"
+    badge={<Badge>Most popular</Badge>}
+    features={['Unlimited projects', 'Priority support', 'Advanced analytics']}
+    action={<Button variant="primary" fullWidth>Get started</Button>}
+    highlighted
+  />
+
+  <PricingCard
+    title="Enterprise"
+    price="Custom"
+    description="Tailored for your team."
+    features={['Everything in Professional', 'SSO + SAML', 'Dedicated CSM']}
+    action={<Button variant="outline" fullWidth>Contact sales</Button>}
+  />
+</CardList>
+```
+
+## When *not* to use
+
+- **Don't use PricingCard for non-pricing content.** It's a specialized layout — use [Card](/docs/components/card) for general-purpose grouping.
+- **Don't highlight more than one plan.** "Recommended" should be unambiguous; multiple highlights defeat the visual cue.
+- **Don't use PricingCard for ≥5 tiers.** The pricing-grid pattern breaks down past 4 columns. Use a comparison Table instead.
+
+## Accessibility
+
+- Renders a real `<article>` with the tier title as a heading.
+- Features list renders as `<ul>` with proper semantics.
+- The action element keeps its own button/link semantics.
+- Highlighted state is communicated visually + via `aria-label` ("Recommended plan: Professional").
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` *(required)* | — |
+| `price` | `string` *(required)* | — |
+| `period` | `string` | — |
+| `description` | `string` | — |
+| `features` | `string[]` | — |
+| `action` | `ReactNode` | — |
+| `badge` | `ReactNode` | — |
+| `highlighted` | `boolean` | `false` |
+
+Plus standard `<div>` HTML attributes.
+
+## Related
+
+- [Card](/docs/components/card) — flexible-content alternative
+- [CardList](/docs/components/card-list) — for the multi-tier grid layout
+- [Badge](/docs/components/badge) — common `badge` content ("Most popular")
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-card-pricing-card--overview)**

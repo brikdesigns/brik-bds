@@ -1,0 +1,103 @@
+---
+title: Card list
+description: Layout wrapper for stacking cards vertically or horizontally. Locks gap and equal-column distribution.
+---
+
+CardList is a thin layout primitive that wraps any card-shaped child ([Card](/docs/components/card), [CardControl](/docs/components/card-control), [CardTestimonial](/docs/components/card-testimonial), [CollapsibleCard](/docs/components/collapsible-card), [PricingCard](/docs/components/pricing-card)) in a column or row. Handles gap, equal-column distribution, and wrapping so the card components themselves stay layout-agnostic.
+
+For mixed equal-weight content (Cards + Tags + Fields side-by-side), use [FieldGrid](/docs/components/field-grid) instead — it's the same layout primitive but with stricter equal-cell semantics.
+
+## Use it for
+
+- Settings panels stacking multiple [CardControl](/docs/components/card-control)s vertically
+- Feature/service grids using horizontal Card columns
+- Pricing-tier rows with [PricingCard](/docs/components/pricing-card)s side by side
+- Testimonial walls with [CardTestimonial](/docs/components/card-testimonial)s
+
+## Import
+
+```tsx
+import { CardList } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Vertical (default)
+
+Stacks cards top-to-bottom at full width. Default orientation for feeds and settings lists.
+
+```tsx
+<CardList gap="md">
+  <Card>...</Card>
+  <Card>...</Card>
+  <Card>...</Card>
+</CardList>
+```
+
+### Horizontal
+
+Lays cards out in a row with equal-width columns. Wraps to a new line on narrow viewports.
+
+```tsx
+<CardList orientation="horizontal" gap="lg">
+  <Card variant="outlined" padding="lg">
+    <CardTitle>Design</CardTitle>
+    <CardDescription>Brand and identity.</CardDescription>
+  </Card>
+  <Card variant="outlined" padding="lg">
+    <CardTitle>Development</CardTitle>
+    <CardDescription>Product engineering.</CardDescription>
+  </Card>
+</CardList>
+```
+
+### Horizontal — fit content
+
+When each card declares its own width (e.g. a scrollable carousel of products), set `fitContent` so items size to their children instead of stretching to fill equal columns.
+
+```tsx
+<CardList orientation="horizontal" gap="md" fitContent>
+  <Card style={{ width: 240 }}>...</Card>
+  <Card style={{ width: 240 }}>...</Card>
+</CardList>
+```
+
+### Gap scale
+
+Four sizes — `sm`, `md` (default), `lg`, `xl`. Match the visual density of the surrounding context.
+
+```tsx
+<CardList gap="sm">...</CardList>   /* tight settings rows */
+<CardList gap="md">...</CardList>   /* default */
+<CardList gap="lg">...</CardList>   /* breathing room */
+<CardList gap="xl">...</CardList>   /* hero/feature grids */
+```
+
+## When *not* to use
+
+- **Don't use CardList for non-card children.** It expects card-shaped layout — single column-fill or equal columns. Free-form children misalign.
+- **Don't use CardList for tabular data.** Use a Table when columns share semantics. CardList is for grouping, not structured data.
+- **Don't nest CardLists deeply.** One level is fine; two becomes hard to reason about. If you need a complex grid, build it directly with CSS Grid.
+
+## Accessibility
+
+- Renders a `<ul>` with each child wrapped in `<li>` automatically.
+- Screen readers announce the list and item count, which is appropriate semantics for grouped cards.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `gap` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
+| `fitContent` | `boolean` (horizontal only) | `false` |
+| `children` | `ReactNode` *(required)* | — |
+
+Plus standard `<ul>` HTML attributes.
+
+## Related
+
+- [Card](/docs/components/card) — most common child
+- [CardControl](/docs/components/card-control), [CardTestimonial](/docs/components/card-testimonial), [CollapsibleCard](/docs/components/collapsible-card), [PricingCard](/docs/components/pricing-card) — other card-family children
+- [FieldGrid](/docs/components/field-grid) — alternative for read-mode Field rows
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-card-card-list--overview)**

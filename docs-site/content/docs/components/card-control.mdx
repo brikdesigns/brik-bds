@@ -1,0 +1,124 @@
+---
+title: Card control
+description: Settings control card — badge + title + description + action. Standalone alternative to Card preset="control".
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+CardControl is a locked-down settings-row card. Leading badge or icon, title + description in the middle, action (Switch / Button / link) on the right. Use for notification toggles, feature flags, and any settings panel where each row's affordance matters.
+
+<Callout type="info">
+  **Both `<CardControl>` and `<Card preset="control">` ship as first-class APIs in v0.39.0+.** The 2026-Q2 audit recommended folding CardControl into Card; the user reversed that decision 2026-04-24 to preserve optionality at the call site. Pick whichever reads cleaner — same shape, same Badge slot, same action alignment behavior. See [Card](/docs/components/card) for the preset version.
+</Callout>
+
+## Use it for
+
+- Settings rows ("Email notifications" + Switch on/off)
+- Feature flag toggles in admin panels
+- Status/state displays where a badge + name + value+action layout fits
+- Stacks of these in a [CardList](/docs/components/card-list) for full settings panels
+
+For a flexible-content card, use [Card](/docs/components/card) default mode. For stat tiles, use [Card preset="summary"](/docs/components/card#summary-preset).
+
+## Import
+
+```tsx
+import { CardControl } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+<CardControl
+  title="Notifications"
+  description="Receive email notifications for updates"
+  badge={<Badge size="xs" status="positive" icon={<CheckIcon />} />}
+  action={<Switch checked={enabled} onChange={handleChange} />}
+/>
+```
+
+### Action types
+
+`action` accepts any ReactNode — Switch, Button, link, or compound content.
+
+```tsx
+<CardControl
+  title="Two-factor authentication"
+  description="Required for admin accounts"
+  action={<Button variant="outline" size="sm">Set up</Button>}
+/>
+
+<CardControl
+  title="API access"
+  description="Generate tokens for integrations"
+  action={<TextLink href="/settings/api">Manage</TextLink>}
+/>
+```
+
+### Action alignment
+
+Use `actionAlign="top"` when the description wraps to multiple lines — anchors the action to the upper-right corner instead of the vertical center.
+
+```tsx
+<CardControl
+  title="Storage"
+  description="You're using 8.2 GB of your 10 GB plan. Upgrade for more or clean up old assets to make space."
+  action={<Button size="sm">Upgrade</Button>}
+  actionAlign="top"
+/>
+```
+
+## Pattern: settings panel
+
+Stack CardControls inside a [CardList](/docs/components/card-list) with `gap="sm"` for a clean settings-page layout.
+
+```tsx
+<CardList gap="sm">
+  <CardControl
+    title="Email notifications"
+    description="Daily digest"
+    action={<Switch checked={email} onChange={(e) => setEmail(e.target.checked)} />}
+  />
+  <CardControl
+    title="SMS notifications"
+    description="Urgent alerts only"
+    action={<Switch checked={sms} onChange={(e) => setSms(e.target.checked)} />}
+  />
+  <CardControl
+    title="Slack integration"
+    description="Connect a workspace"
+    action={<Button variant="outline" size="sm">Connect</Button>}
+  />
+</CardList>
+```
+
+## When *not* to use
+
+- **Don't use CardControl for free-form content.** Use [Card](/docs/components/card) default mode — CardControl's locked layout doesn't accept arbitrary children.
+- **Don't use CardControl when the action isn't always present.** A row without an action reads as broken in this layout.
+
+## Accessibility
+
+- Renders a `<div>`. The action element keeps its own semantics (Switch is a switch, Button is a button).
+- For full accessibility, the action element should pair with the title via `aria-labelledby` on the action — most often automatic for Switch when a label is provided.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` *(required)* | — |
+| `description` | `string` | — |
+| `badge` | `ReactNode` | — |
+| `action` | `ReactNode` | — |
+| `actionAlign` | `'center' \| 'top'` | `'center'` |
+
+Plus standard `<div>` HTML attributes.
+
+## Related
+
+- [Card](/docs/components/card) — flexible-content sibling. `Card preset="control"` is API-equivalent to CardControl.
+- [CardList](/docs/components/card-list) — wrapper for stacking multiple CardControls
+- [Switch](/docs/components/switch) — most common `action` content
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-card-card-control--overview)**

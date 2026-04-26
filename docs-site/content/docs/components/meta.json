@@ -65,6 +65,12 @@
     "sidebar-navigation",
     "tab-bar",
     "breadcrumb",
-    "menu"
+    "menu",
+    "---Card family---",
+    "card-control",
+    "card-list",
+    "card-testimonial",
+    "collapsible-card",
+    "pricing-card"
   ]
 }
