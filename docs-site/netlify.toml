@@ -52,3 +52,10 @@
   for = "/_next/data/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# ── Plugins ───────────────────────────────────────────────────────
+# @netlify/plugin-nextjs handles the Next.js App Router runtime —
+# without it, Netlify dumps the raw `.next/` build output and every
+# route 404s.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
