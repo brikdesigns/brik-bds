@@ -1,0 +1,145 @@
+---
+title: Icons
+description: Iconify + Phosphor icon reference. Inline SVGs via @iconify/react, no CDN calls.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BDS uses [Phosphor](https://phosphoricons.com/) icons via [`@iconify/react`](https://iconify.design/docs/icon-components/react/). Icons render as inline SVGs — no CDN, no flash-of-unstyled-icon, no bundle bloat from importing all icons.
+
+## Setup
+
+| Package | Purpose |
+|---|---|
+| `@iconify/react` | Renders any Iconify icon as a React `<Icon>` component |
+| `@iconify-json/ph` | Phosphor icon data (bundled for offline / SSR) |
+
+BDS registers the Phosphor collection at startup in `.storybook/preview.tsx` via `addCollection()`. No CDN calls needed.
+
+## Use it for
+
+- Inline icons in buttons, badges, tooltips, fields
+- Decorative icons in cards and headers
+- Status / state markers paired with text
+- Anywhere a small (≤ 32px) glyph carries meaning
+
+For larger illustrations and brand marks, use a static SVG asset directly. For non-icon visual primitives ([ServiceBadge](/docs/components/service-badge), avatar fallbacks), use the dedicated component.
+
+## Import
+
+```tsx
+import { Icon } from '@iconify/react';
+```
+
+For BDS-internal usage, prefer the named constants in `components/icons.ts`:
+
+```tsx
+import { Star } from '@brikdesigns/bds/icons';
+
+<Icon icon={Star} />
+```
+
+## Usage
+
+### Direct string reference
+
+The `icon` prop accepts a `collection:name` string. Phosphor icons use the `ph:` prefix.
+
+```tsx
+<Icon icon="ph:star-fill" />
+<Icon icon="ph:check" />
+<Icon icon="ph:x-circle" />
+```
+
+Find available icons at [phosphoricons.com](https://phosphoricons.com/).
+
+### BDS icon constants
+
+For commonly-used icons in BDS components, prefer the named constants — protects against typos and centralizes the icon vocabulary.
+
+```tsx
+import { Star, Check, XCircle } from '@brikdesigns/bds/icons';
+
+<Icon icon={Star} />
+<Icon icon={Check} />
+<Icon icon={XCircle} />
+```
+
+Constants follow the pattern `export const Name = 'ph:icon-name'`.
+
+### Sizing
+
+Iconify icons inherit `font-size` from their parent or accept explicit `width` / `height` props.
+
+```tsx
+{/* Inherits parent font-size — recommended */}
+<span style={{ fontSize: 24 }}>
+  <Icon icon="ph:star-fill" />
+</span>
+
+{/* Explicit size */}
+<Icon icon="ph:star-fill" width={24} height={24} />
+```
+
+For inline icons inside text, use `1em` sizing so the icon scales with the surrounding text:
+
+```tsx
+<button>
+  <Icon icon="ph:plus" style={{ fontSize: '1em' }} />
+  Add item
+</button>
+```
+
+## Phosphor weights
+
+Phosphor provides six weights per icon. BDS primarily uses the regular and fill variants.
+
+| Weight | Suffix | Use |
+|---|---|---|
+| Regular | `ph:name` | Default. Most contexts. |
+| Bold | `ph:name-bold` | Emphasis, IconButton labels at sm size |
+| Fill | `ph:name-fill` | Active/selected states, status badges |
+| Light | `ph:name-light` | Decorative or quiet contexts |
+| Thin | `ph:name-thin` | Rare; very specific design intent |
+| Duotone | `ph:name-duotone` | Empty states, illustrations |
+
+```tsx
+<Icon icon="ph:star" />          {/* outline, default weight */}
+<Icon icon="ph:star-fill" />     {/* solid */}
+<Icon icon="ph:star-bold" />     {/* heavier outline */}
+```
+
+## Adding icons to BDS
+
+1. Find the icon name at [phosphoricons.com](https://phosphoricons.com/) — copy the kebab-case name.
+2. Add a named constant to `components/icons.ts` using the `ph:icon-name` format.
+3. (Optional) Add the icon to a category in the Storybook stories so other contributors can find it.
+
+```ts
+// components/icons.ts
+export const Heart = 'ph:heart';
+export const HeartFill = 'ph:heart-fill';
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use raw SVG inline.** Iconify provides 200,000+ icons across multiple collections — you almost never need a one-off SVG. If the design calls for a non-Phosphor icon, evaluate whether a Phosphor alternative is acceptable before committing a custom asset.
+</Callout>
+
+- **Don't use Icons for brand marks.** Logos and brand-specific illustrations are static SVG assets, not icon-system components.
+- **Don't use Icons without semantic context.** An icon-only button needs an `aria-label`; an icon next to text doesn't.
+
+## Accessibility
+
+- Iconify icons render `<svg aria-hidden="true">` by default — appropriate for decorative use next to text.
+- For icon-only triggers (icon-only buttons), pair with [IconButton](/docs/components/button#iconbutton) which adds the required `aria-label`.
+- For meaningful icons that aren't paired with text, set `aria-label` directly on the surrounding element.
+
+## Related
+
+- [IconButton](/docs/components/button#iconbutton) — accessible wrapper for icon-only buttons
+- [Avatar](/docs/components/avatar) — for person identity
+- [ServiceBadge](/docs/components/service-badge) — for Brik service-line icons
+- **[Storybook icon catalog](https://storybook.brikdesigns.com/?path=/docs/foundations-assets-icons--overview)**
+- **External**: [phosphoricons.com](https://phosphoricons.com/) — find icon names

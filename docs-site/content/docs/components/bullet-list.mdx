@@ -1,0 +1,137 @@
+---
+title: Bullet list
+description: Structured short-item list. Replaces raw <ul> with locked spacing and three marker styles.
+---
+
+BulletList is a thin wrapper for short-item lists — anti-messages, proof points, approved CTAs, brand rules. Replaces the raw `<ul style={{ margin: 0, paddingLeft, listStyleType }}>` pattern that grew across portal sheets.
+
+Pass `marker="decimal"` for numbered lists; the underlying element switches to `<ol>` automatically.
+
+## Use it for
+
+- Short bullet items inside a [Field](/docs/components/field) value
+- Numbered process / step lists where order matters
+- Anti-messages and approved-CTA lists in brand sheets
+- Brand rules, proof points, or any short-text catalogue
+
+For multi-paragraph content, render `<p>` tags directly. For longer-form list items with descriptions, use [AddableEntryList](/docs/components/addable-entry-list) (editable) or [Field](/docs/components/field) with composed children.
+
+## Import
+
+```tsx
+import { BulletList } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default (disc marker)
+
+```tsx
+<BulletList
+  items={[
+    'No price-first positioning',
+    'No corporate-clinic language',
+    'No "best in class" superlatives',
+  ]}
+/>
+```
+
+### Numbered (decimal marker)
+
+```tsx
+<BulletList
+  marker="decimal"
+  items={[
+    'Identify the canonical token',
+    'Replace inline values with var() references',
+    'Run lint-tokens to verify no drift',
+  ]}
+/>
+```
+
+### No marker
+
+For list-shaped content that doesn't need the visual bullet (e.g. service catalog).
+
+```tsx
+<BulletList
+  marker="none"
+  items={[
+    'Brand identity design',
+    'Marketing strategy',
+    'Web development',
+  ]}
+/>
+```
+
+### Density
+
+`compact` for tight stat-like lists, `comfortable` (default) for content lists.
+
+```tsx
+<BulletList density="compact" items={['Item one', 'Item two']} />
+<BulletList density="comfortable" items={['Item one', 'Item two']} />
+```
+
+## Pattern: inside a Field
+
+The canonical use — a [Field](/docs/components/field) value expressed as a short bullet list.
+
+```tsx
+<Field label="Anti-messages">
+  <BulletList items={[
+    'No price-first positioning',
+    'No corporate-clinic language',
+  ]} />
+</Field>
+```
+
+## Pattern: brand rules in a Sheet
+
+Stack BulletList inside [SheetSection](/docs/components/sheet-section) for sheet-body brand-rule content.
+
+```tsx
+<SheetSection heading="Approved CTAs">
+  <BulletList items={[
+    'Book a Consultation',
+    'Start Your Smile Journey',
+    'Schedule Your Visit',
+  ]} />
+</SheetSection>
+
+<SheetSection heading="Anti-messages">
+  <BulletList items={[
+    'No corporate-clinic language',
+    'No "industry-leading" superlatives',
+    'No comparison to competitors by name',
+  ]} />
+</SheetSection>
+```
+
+## Rules
+
+- **Use `items` prop, not `<li>` children.** Keeps call sites short and prevents accidental markup drift.
+- **Don't use BulletList for long prose.** If items run multi-paragraph, you want [SheetSection](/docs/components/sheet-section) with `<p>` children, or [AddableEntryList](/docs/components/addable-entry-list) for primary+description rows.
+
+## Accessibility
+
+- Renders a real `<ul>` (or `<ol>` for `marker="decimal"`) — semantically a list.
+- `marker="none"` removes the visual bullet but keeps the list semantics for screen readers.
+- Each item is a `<li>` regardless of marker style.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `ReactNode[]` *(required)* | — |
+| `marker` | `'disc' \| 'decimal' \| 'none'` | `'disc'` |
+| `density` | `'compact' \| 'comfortable'` | `'comfortable'` |
+
+Plus standard `<ul>` HTML attributes (excluding `children`).
+
+## Related
+
+- [Field](/docs/components/field) — most common parent container
+- [SheetSection](/docs/components/sheet-section) — for stacking BulletLists inside sheet bodies
+- [AddableEntryList](/docs/components/addable-entry-list) — editable primary+description list
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-list-bullet-list--overview)**

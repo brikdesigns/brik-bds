@@ -1,0 +1,180 @@
+---
+title: Footer
+description: Site-wide footer with logo, navigation columns, social links, and copyright. Default and brand variants.
+---
+
+Footer is the canonical site-wide footer for marketing sites and product landing pages. Logo + tagline on the left, navigation columns in the middle, copyright + social on the bottom bar. Pairs with [NavBar](/docs/components/nav-bar) at the top of the page.
+
+## Use it for
+
+- Marketing site footers (Features / Pricing / About / Legal columns)
+- Product landing page footers
+- Any layout where horizontal column-based navigation rounds out the page
+- Sites that need consistent branding + legal copy on every page
+
+For app shell footers (where users persist on the page), use a custom layout — Footer is for marketing/content sites where the user has reached the end of the page.
+
+## Import
+
+```tsx
+import { Footer } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+Primary background with a top border. The standard treatment for most sites.
+
+```tsx
+<Footer
+  logo={<img src="/logo.svg" alt="Acme" />}
+  tagline="Building better products."
+  columns={[
+    {
+      heading: 'Product',
+      links: [
+        { label: 'Features', href: '/features' },
+        { label: 'Pricing', href: '/pricing' },
+      ],
+    },
+    {
+      heading: 'Company',
+      links: [
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' },
+      ],
+    },
+  ]}
+  copyright="© 2026 Acme Inc."
+/>
+```
+
+### Brand
+
+Brand-colored background with inverse text. Use for marketing pages where the footer is part of the brand expression rather than a quiet wrap-up.
+
+```tsx
+<Footer
+  variant="brand"
+  logo={<Logo />}
+  columns={[...]}
+  copyright="© 2026 Acme Inc."
+/>
+```
+
+### Social links
+
+`socialLinks` accepts ReactNode — typically a row of [IconButton](/docs/components/button#iconbutton)s linking to social profiles.
+
+```tsx
+<Footer
+  logo={<Logo />}
+  columns={[...]}
+  socialLinks={
+    <>
+      <IconButton icon={<TwitterIcon />} label="Twitter" variant="ghost" />
+      <IconButton icon={<LinkedInIcon />} label="LinkedIn" variant="ghost" />
+      <IconButton icon={<GitHubIcon />} label="GitHub" variant="ghost" />
+    </>
+  }
+  copyright="© 2026 Acme Inc."
+/>
+```
+
+### Minimal
+
+`logo`, `tagline`, `columns`, `copyright`, and `socialLinks` are all optional. A minimal footer is just a logo + copyright.
+
+```tsx
+<Footer
+  logo={<Logo />}
+  copyright="© 2026 Acme Inc."
+/>
+```
+
+## Pattern: full marketing footer
+
+The canonical 4-column layout — Product, Resources, Company, Legal.
+
+```tsx
+<Footer
+  logo={<img src="/logo.svg" alt="Brik" />}
+  tagline="Design + content systems for healthcare practices."
+  columns={[
+    {
+      heading: 'Services',
+      links: [
+        { label: 'Brand Design', href: '/services/brand' },
+        { label: 'Marketing', href: '/services/marketing' },
+        { label: 'Content', href: '/services/content' },
+      ],
+    },
+    {
+      heading: 'Resources',
+      links: [
+        { label: 'Blog', href: '/blog' },
+        { label: 'Case studies', href: '/case-studies' },
+        { label: 'Documentation', href: 'https://docs.brikdesigns.com' },
+      ],
+    },
+    {
+      heading: 'Company',
+      links: [
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' },
+        { label: 'Careers', href: '/careers' },
+      ],
+    },
+    {
+      heading: 'Legal',
+      links: [
+        { label: 'Privacy', href: '/privacy' },
+        { label: 'Terms', href: '/terms' },
+      ],
+    },
+  ]}
+  socialLinks={socialIcons}
+  copyright="© 2026 Brik Designs LLC."
+/>
+```
+
+## When *not* to use
+
+- **Don't use Footer for product app shells.** App-shell footers (with copyright + version + status) are a different pattern — render directly in the layout, not via this component.
+- **Don't pair Footer with another footer-like surface.** One footer per page; if you need a sticky CTA strip above it, that's a different pattern.
+
+## Accessibility
+
+- Renders a `<footer>` landmark.
+- Each column heading is an `<h3>` (or `<h4>` depending on context).
+- Links are real `<a>` elements with full anchor semantics.
+- Social link [IconButton](/docs/components/button#iconbutton)s carry `aria-label` (required) for screen-reader announcement.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `logo` | `ReactNode` | — |
+| `tagline` | `string` | — |
+| `columns` | `FooterColumn[]` | — |
+| `copyright` | `string` | — |
+| `socialLinks` | `ReactNode` | — |
+| `variant` | `'default' \| 'brand'` | `'default'` |
+
+Plus standard `<footer>` HTML attributes.
+
+### FooterColumn
+
+```ts
+interface FooterColumn {
+  heading: string;
+  links: { label: string; href: string }[];
+}
+```
+
+## Related
+
+- [NavBar](/docs/components/nav-bar) — top-of-page partner
+- [TextLink](/docs/components/text-link) — alternative to FooterColumn for inline link lists
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-primary-footer--overview)**
