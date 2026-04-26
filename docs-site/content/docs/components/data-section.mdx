@@ -1,0 +1,170 @@
+---
+title: Data section
+description: Page-side wrapper for a titled block of read-mode data. Pairs heading + subtitle + actions slot.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+DataSection is the page analog to [SheetSection](/docs/components/sheet-section). Where SheetSection uses an uppercase label heading appropriate inside a sheet, **DataSection uses a real section title in the page outline**. Pairs a heading-tier title with optional subtitle + actions slot (typically a `[View]/[Edit]` toggle), then yields the body to whatever composes inside — usually a `<FieldGrid>` of `<Field>`s.
+
+## Use it for
+
+- Read-mode page sections on detail views (Identity / Brand / Services / Locations on a company page)
+- Settings page sections with a per-section View/Edit toggle
+- Any page-level grouping where the section title is part of the page outline
+
+For Sheet body sections, use [SheetSection](/docs/components/sheet-section). For tabular data inside a section, compose a [Table](/docs/components/table) inside DataSection's body.
+
+## Import
+
+```tsx
+import { DataSection } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Title only
+
+```tsx
+<DataSection title="Identity">
+  <FieldGrid columns={2}>
+    <Field label="Business Name">Brik Designs</Field>
+    <Field label="Industry">Design Services</Field>
+  </FieldGrid>
+</DataSection>
+```
+
+### Title + subtitle
+
+```tsx
+<DataSection
+  title="Brand Voice"
+  subtitle="Confident, direct, occasionally playful. Never corporate."
+>
+  <Field label="Approved CTAs">
+    <BulletList items={['Book a consultation', 'Start your project']} />
+  </Field>
+</DataSection>
+```
+
+### With actions
+
+The canonical Read-Mode Page composition — each section has a `[View] [Edit]` button group in the actions slot.
+
+```tsx
+<DataSection
+  title="Identity"
+  actions={
+    <ButtonGroup>
+      <Button size="sm" variant="secondary" onClick={openInViewMode}>View</Button>
+      <Button size="sm" variant="secondary" onClick={openInEditMode}>Edit</Button>
+    </ButtonGroup>
+  }
+>
+  <FieldGrid columns={2}>
+    <Field label="Business Name">{client.name}</Field>
+    <Field label="Industry">{client.industry}</Field>
+    <Field label="Care Philosophy">
+      <p>{client.carePhilosophy}</p>
+    </Field>
+    <Field label="Secondary Categories">
+      <BulletList items={client.secondaryCategories} />
+    </Field>
+  </FieldGrid>
+</DataSection>
+```
+
+### Single-button actions
+
+```tsx
+<DataSection
+  title="Linked Accounts"
+  actions={<Button size="sm" variant="primary">Connect</Button>}
+>
+  ...
+</DataSection>
+```
+
+### Title element override
+
+Default `title` renders as `<h2>` — the common case is one DataSection sibling of the page's `<h1>`. Use `titleAs="h3"` only when nested under an existing `<h2>`.
+
+```tsx
+<DataSection title="Service line health" titleAs="h3">
+  ...
+</DataSection>
+```
+
+## Pattern: read-mode page
+
+Consecutive DataSections show a divider automatically — the sibling combinator handles it. Don't place a `<Divider />` between DataSections manually.
+
+```tsx
+<DataSection title="Identity" actions={<ViewEditToggle ... />}>
+  <FieldGrid columns={2}>
+    <Field label="Business Name">{client.name}</Field>
+    <Field label="Industry">{client.industry}</Field>
+  </FieldGrid>
+</DataSection>
+
+<DataSection title="Locations" actions={<ViewEditToggle ... />}>
+  <FieldGrid columns={3}>
+    {locations.map((l) => <Field key={l.id} label={l.name}>{l.address}</Field>)}
+  </FieldGrid>
+</DataSection>
+
+<DataSection title="Services" actions={<ViewEditToggle ... />}>
+  <FieldGrid columns={2}>
+    <Field label="Care Philosophy">
+      <p>{client.carePhilosophy}</p>
+    </Field>
+    <Field label="Secondary Categories">
+      <BulletList items={client.secondaryCategories} />
+    </Field>
+  </FieldGrid>
+</DataSection>
+```
+
+## Rules
+
+<Callout type="warn">
+  **Don't use DataSection inside a Sheet.** Use [SheetSection](/docs/components/sheet-section) there — the two are siblings, not substitutes. DataSection's title is part of the page outline; SheetSection's heading is an uppercase label inside the sheet.
+</Callout>
+
+- **`title` is a real heading.** Default `<h2>`. It IS part of the page outline. Use `titleAs="h3"` only when nested under an `<h2>`.
+- **Title ≠ heading.** The BEM class is `__title` (role); the HTML element (`h2` / `h3`) is picked by outline position, not by the class name.
+- **`actions` is a slot, not a label.** Put a `<ButtonGroup>` or `<Button>` in it.
+- **Don't nest DataSection inside DataSection.** Use [Field](/docs/components/field) or [FieldGrid](/docs/components/field-grid) inside one section instead.
+- **Empty per-field content is a Field concern.** [Field](/docs/components/field) renders "Not set" inline when its children are empty — don't hand-roll a placeholder inside DataSection.
+
+## When *not* to use
+
+- **Don't use DataSection for non-page-level sections** — the heading is part of the page outline; misuse pollutes the outline.
+- **Don't use DataSection without a title.** The component's job is "titled section" — if you need a wrapper without title semantics, use a plain `<section>` or [Card](/docs/components/card).
+
+## Accessibility
+
+- Renders a `<section>` with the title as `<h2>` (or `<h3>`) — proper landmark + outline.
+- Subtitle renders as a `<p>` directly below the heading.
+- Actions slot keeps its own semantics (Button is a button, link is a link).
+- Auto-divider between consecutive sections is `border-top: var(--border-width-sm) solid var(--border-muted)` — visual only, not announced.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` | — |
+| `subtitle` | `ReactNode` | — |
+| `actions` | `ReactNode` | — |
+| `children` | `ReactNode` | — |
+| `spacing` | `'md' \| 'lg'` | `'lg'` |
+| `titleAs` | `'h2' \| 'h3'` | `'h2'` |
+
+Plus standard `<section>` HTML attributes (excluding `title`).
+
+## Related
+
+- [SheetSection](/docs/components/sheet-section) — Sheet-context sibling
+- [Field](/docs/components/field) / [FieldGrid](/docs/components/field-grid) — common content
+- [ButtonGroup](/docs/components/button-group) — for the actions slot
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-data-data-section--overview)**

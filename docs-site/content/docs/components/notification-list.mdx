@@ -1,0 +1,124 @@
+---
+title: Notification list
+description: Vertical list of clickable notification items with empty state.
+---
+
+NotificationList renders a stack of notification entries — for in-app inbox panels, header dropdowns, and notification centers. Each item is clickable; the consumer owns the click handling.
+
+## Use it for
+
+- Header notification dropdown ("3 unread" → click bell → list)
+- Dedicated notification center pages
+- Per-record activity inboxes
+- Any vertical list of clickable status items with empty state
+
+For chronological activity feeds, use [ActivityTimeline](/docs/components/activity-timeline). For floating temporary notifications, use [Toast](/docs/components/toast). For persistent alert banners, use [Banner](/docs/components/banner).
+
+## Import
+
+```tsx
+import { NotificationList } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { NotificationList } from '@brikdesigns/bds';
+
+const notifications = [
+  { id: '1', title: 'New comment on Project Alpha', timestamp: '2m ago', read: false },
+  { id: '2', title: 'Brand brief approved', timestamp: '1h ago', read: false },
+  { id: '3', title: 'Welcome to Brik', timestamp: '2d ago', read: true },
+];
+
+<NotificationList
+  notifications={notifications}
+  onItemClick={(notification) => navigate(notification.url)}
+/>
+```
+
+### Empty state
+
+Pass `emptyMessage` to customize the empty fallback. When `notifications` is empty, the list renders the message in place of the item stack.
+
+```tsx
+<NotificationList
+  notifications={[]}
+  emptyMessage="You're all caught up — no new notifications."
+/>
+```
+
+### Custom click handling
+
+The `onItemClick` callback receives the full notification item. The consumer decides what to do — navigate, mark read, dismiss, etc.
+
+```tsx
+<NotificationList
+  notifications={notifications}
+  onItemClick={(item) => {
+    markAsRead(item.id);
+    navigate(item.url);
+  }}
+/>
+```
+
+## Pattern: dropdown panel
+
+The canonical header-bell pattern. Pair NotificationList inside a [Popover](/docs/components/popover) or floating [Sheet](/docs/components/sheet) `variant="floating"`.
+
+```tsx
+import { useState } from 'react';
+import { Popover, IconButton, NotificationList, Counter } from '@brikdesigns/bds';
+
+const [open, setOpen] = useState(false);
+const unreadCount = notifications.filter((n) => !n.read).length;
+
+<Popover
+  isOpen={open}
+  onOpenChange={setOpen}
+  content={
+    <NotificationList
+      notifications={notifications}
+      onItemClick={handleClick}
+      emptyMessage="No notifications"
+    />
+  }
+>
+  <IconButton icon={<BellIcon />} label="Notifications">
+    {unreadCount > 0 && <Counter count={unreadCount} status="brand" size="xs" />}
+  </IconButton>
+</Popover>
+```
+
+## When *not* to use
+
+- **Don't use NotificationList for ephemeral toasts.** Use [Toast](/docs/components/toast) — temporary, auto-dismiss.
+- **Don't use NotificationList for chronological activity feeds.** Use [ActivityTimeline](/docs/components/activity-timeline) — explicitly time-ordered with timestamps as a primary affordance.
+- **Don't use NotificationList for persistent alerts.** Use [Banner](/docs/components/banner) for site-wide notices.
+
+## Accessibility
+
+- Renders an `<ul>` with each notification as a clickable `<li>`.
+- Each item has a focus ring and Enter/Space activation when interactive.
+- Empty state is rendered as plain text — no special semantics.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `notifications` | `NotificationItemData[]` *(required)* | — |
+| `onItemClick` | `(notification: NotificationItemData) => void` | — |
+| `emptyMessage` | `string` | `'No notifications'` |
+| `className` | `string` | — |
+
+The `NotificationItemData` shape is defined alongside the component — typically `{ id, title, timestamp, read }` plus consumer-specific metadata.
+
+## Related
+
+- [Toast](/docs/components/toast) — ephemeral sibling
+- [Banner](/docs/components/banner) — persistent-alert sibling
+- [ActivityTimeline](/docs/components/activity-timeline) — chronological alternative
+- [Popover](/docs/components/popover) — common parent for the bell-dropdown pattern
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-notifications-notification-list--overview)**

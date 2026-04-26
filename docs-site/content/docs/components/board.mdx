@@ -1,0 +1,192 @@
+---
+title: Board
+description: Kanban-style board layout. Horizontal columns of grouped items with avatar + progress.
+---
+
+Board is a composite layout for displaying grouped items in horizontal columns — task management, staff overviews, any workflow that benefits from a column-based view. It composes existing BDS primitives ([Avatar](/docs/components/avatar), [ProgressBar](/docs/components/progress-bar)) into a reusable layout pattern without introducing new visual atoms.
+
+## Use it for
+
+- Task / project boards (To do / In progress / Done)
+- Staff schedule overviews (per-shift availability)
+- Pipeline views (Lead / Qualified / Proposal / Won)
+- Status-based workflows where horizontal columns map to states
+
+For row-based data, use [Table](/docs/components/table). For card grids without column groupings, use [CardList](/docs/components/card-list) `orientation="horizontal"`.
+
+## Import
+
+```tsx
+import { Board, BoardColumn, BoardHeader } from '@brikdesigns/bds';
+```
+
+## Anatomy
+
+Three composable components:
+
+| Component | Role |
+|---|---|
+| `Board` | Outer horizontal-scroll container. |
+| `BoardColumn` | Vertical lane with title, count, and item stack. |
+| `BoardHeader` | Card with avatar / name / subtitle / optional progress. Composes Avatar + ProgressBar. |
+
+## Variants
+
+### Default
+
+```tsx
+<Board>
+  <BoardColumn title="Opening" count={2}>
+    <BoardHeader
+      name="Cassidy Moore"
+      subtitle="Dental Hygienist"
+      avatarSrc="/cassidy.jpg"
+      progress={37}
+    />
+    <BoardHeader
+      name="Alex Rivera"
+      subtitle="Receptionist"
+      progress={62}
+    />
+  </BoardColumn>
+
+  <BoardColumn title="Mid-shift" count={3}>
+    {/* ... */}
+  </BoardColumn>
+
+  <BoardColumn title="Closing" count={1}>
+    {/* ... */}
+  </BoardColumn>
+</Board>
+```
+
+### Single column
+
+A board can render a single column for focused views.
+
+```tsx
+<Board>
+  <BoardColumn title="Today's roster" count={5}>
+    <BoardHeader name="..." />
+    <BoardHeader name="..." />
+  </BoardColumn>
+</Board>
+```
+
+### Avatar fallback
+
+`BoardHeader` accepts an `avatarSrc` prop. When omitted, [Avatar](/docs/components/avatar) falls back to initials generated from the `name`.
+
+```tsx
+<BoardHeader name="Cassidy Moore" subtitle="Hygienist" />
+{/* Avatar shows "CM" */}
+
+<BoardHeader name="Alex Rivera" subtitle="Receptionist" avatarSrc="/alex.jpg" />
+{/* Avatar shows the photo */}
+```
+
+### Empty column
+
+Columns gracefully handle zero items.
+
+```tsx
+<BoardColumn title="Closing" count={0}>
+  {/* No headers — column renders the title and an empty state */}
+</BoardColumn>
+```
+
+### Header actions
+
+`BoardColumn` accepts `headerAction` for buttons or menus in the column header (typically an "+ Add" or overflow menu).
+
+```tsx
+<BoardColumn
+  title="Opening"
+  count={2}
+  headerAction={<IconButton icon={<PlusIcon />} label="Add to Opening" size="sm" variant="ghost" />}
+>
+  ...
+</BoardColumn>
+```
+
+### Children inside BoardHeader
+
+`BoardHeader` accepts children for additional per-card content (badges, action buttons, task counts).
+
+```tsx
+<BoardHeader name="Cassidy Moore" subtitle="Hygienist" progress={37}>
+  <Badge size="sm" status="warning">Late start</Badge>
+</BoardHeader>
+```
+
+## Design decisions
+
+- **Horizontal scroll** — `scroll-snap-type: x proximity` snaps to column boundaries on mobile and trackpad.
+- **Flexible columns** — Each column flexes between `280px` min and `400px` max — responsive without media queries.
+- **Avatar size** locked to `lg` (48px) per the Figma spec.
+- **Progress bar alignment** — left-padded past the avatar width so the bar visually aligns with text, not avatar.
+
+## When *not* to use
+
+- **Don't use Board for tabular data.** Use [Table](/docs/components/table).
+- **Don't use Board with >5 columns.** Horizontal scroll with 6+ columns becomes unusable on most screens. Split into multiple boards or switch to a list view.
+- **Don't use BoardHeader for non-person entities** without considering the avatar's semantics. Avatar fallback uses initials of the `name` — fine for people, awkward for "Project Alpha."
+
+## Accessibility
+
+- Board renders a `<div role="region">` with `aria-label` describing the board.
+- Each `BoardColumn` is a `<section>` with the title as a heading.
+- `BoardHeader` cards are real `<div>`s — wrap in `<a>` or pass `onClick` to make them interactive.
+- Progress bars carry `aria-valuenow` for screen-reader announcement.
+
+## API
+
+### Board
+
+| Prop | Type | Default |
+|---|---|---|
+| `children` | `ReactNode` (BoardColumns) *(required)* | — |
+
+### BoardColumn
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` *(required)* | — |
+| `count` | `number` | — |
+| `headerAction` | `ReactNode` | — |
+| `children` | `ReactNode` (BoardHeaders) | — |
+
+### BoardHeader
+
+| Prop | Type | Default |
+|---|---|---|
+| `name` | `string` *(required)* | — |
+| `subtitle` | `string` | — |
+| `avatarSrc` | `string` | — |
+| `progress` | `number` (0–100) | — |
+| `progressLabel` | `string` (a11y) | — |
+| `children` | `ReactNode` | — |
+
+## CSS Override API
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--bds-board-card-accent` | `var(--border-primary)` | Left border accent per card |
+| `--board-card-hover-translate-y` | `-1px` | Upward lift on card hover |
+
+```css
+.priority-column .bds-board-card {
+  --bds-board-card-accent: var(--background-status-error);
+}
+
+.compact-board {
+  --board-card-hover-translate-y: 0;
+}
+```
+
+## Related
+
+- [Avatar](/docs/components/avatar) — used inside BoardHeader
+- [ProgressBar](/docs/components/progress-bar) — used inside BoardHeader
+- [Table](/docs/components/table) — row-based alternative
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-board-board--overview)**
