@@ -1,0 +1,102 @@
+---
+title: Breadcrumb
+description: Navigation trail showing current page location within a hierarchy.
+---
+
+Breadcrumb shows where the user is in a hierarchical structure — Home → Products → Design System → Button. Each crumb (except the last) is a link back up the tree; the last is plain text marked as the current page.
+
+For sibling navigation between sections, use [TabBar](/docs/components/tab-bar). For flat top-level nav, use [NavBar](/docs/components/nav-bar) or [SidebarNavigation](/docs/components/sidebar-navigation).
+
+## Use it for
+
+- Page headers in apps with hierarchical navigation
+- Settings page section position
+- Documentation site current-location markers
+- Any place users benefit from "where am I" + "how do I go up"
+
+## Import
+
+```tsx
+import { Breadcrumb } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Slash separator (default)
+
+```tsx
+<Breadcrumb
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'Design System' },
+  ]}
+/>
+```
+
+### Chevron separator
+
+```tsx
+<Breadcrumb
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Settings', href: '/settings' },
+    { label: 'Profile' },
+  ]}
+  separator="chevron"
+/>
+```
+
+### Deep nesting
+
+For 5+ level hierarchies, consider truncating with an ellipsis or root-only fallback — Breadcrumb itself doesn't auto-truncate; the consumer trims `items` before passing.
+
+```tsx
+<Breadcrumb
+  items={[
+    { label: 'Home', href: '/' },
+    { label: '…', href: '/clients' },
+    { label: 'Acme Co', href: '/clients/acme' },
+    { label: 'Engagements', href: '/clients/acme/engagements' },
+    { label: 'Brand Refresh' },
+  ]}
+/>
+```
+
+## When *not* to use
+
+- **Don't use Breadcrumb when there's no hierarchy.** Single-level apps don't benefit — drop the trail entirely.
+- **Don't use Breadcrumb as primary navigation.** It's a contextual aid, not a nav bar. Use [NavBar](/docs/components/nav-bar) / [SidebarNavigation](/docs/components/sidebar-navigation) for primary nav.
+- **Don't make the last item a link.** It represents the current page; clicking it would reload to itself.
+
+## Accessibility
+
+- Renders a `<nav aria-label="Breadcrumb">` element.
+- The last item carries `aria-current="page"` and renders as plain text — not a link.
+- Earlier items render as `<a>` when `href` is set.
+- Separators are decorative (`aria-hidden`).
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `BreadcrumbItem[]` *(required)* | — |
+| `separator` | `'slash' \| 'chevron'` | `'slash'` |
+
+Plus standard `<nav>` HTML attributes.
+
+### BreadcrumbItem
+
+```ts
+interface BreadcrumbItem {
+  label: ReactNode;
+  href?: string;
+}
+```
+
+## Related
+
+- [TabBar](/docs/components/tab-bar) — sibling-section navigation
+- [NavBar](/docs/components/nav-bar) — top-level primary nav
+- [SidebarNavigation](/docs/components/sidebar-navigation) — vertical primary nav
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-secondary-breadcrumb--overview)**
