@@ -1,0 +1,124 @@
+---
+title: Popover
+description: Floating content panel anchored to a trigger. Click or hover trigger, four placements, controlled or uncontrolled.
+---
+
+Popover is a floating content panel anchored to a trigger element. More flexible than [Tooltip](/docs/components/tooltip) (rich content allowed, focusable interactive children) but less heavy than [Modal](/docs/components/modal) (no backdrop, no scroll lock, dismisses on outside click).
+
+## Use it for
+
+- Notification settings and inline preferences
+- Inline action panels ("More options")
+- Form-aware help (when a Tooltip's plain text isn't enough)
+- Anything that needs more than a Tooltip but less than a Modal
+
+For brief hover-revealed text, use [Tooltip](/docs/components/tooltip). For dropdown-style action menus, use [Menu](/docs/components/menu). For backdrop-modal flows, use [Modal](/docs/components/modal).
+
+## Import
+
+```tsx
+import { Popover } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Click trigger (default)
+
+```tsx
+<Popover content={<p>Additional details here.</p>}>
+  <button>More info</button>
+</Popover>
+```
+
+### Hover trigger
+
+For richer-than-tooltip help that still reveals on hover.
+
+```tsx
+<Popover
+  content={<p>Tooltip-style content with more detail.</p>}
+  trigger="hover"
+  placement="top"
+>
+  <span>Hover me</span>
+</Popover>
+```
+
+### Placements
+
+`top`, `bottom`, `left`, `right`. Pick based on the trigger's surroundings — top is safest for inline elements; bottom is safest for headers/toolbars.
+
+```tsx
+<Popover content={...} placement="top">...</Popover>
+<Popover content={...} placement="right">...</Popover>
+```
+
+### Controlled
+
+For programmatic open/close (e.g. opening from a parent state machine).
+
+```tsx
+import { useState } from 'react';
+const [open, setOpen] = useState(false);
+
+<Popover
+  content={<NotificationSettings />}
+  isOpen={open}
+  onOpenChange={setOpen}
+>
+  <Button>Settings</Button>
+</Popover>
+```
+
+### Rich content
+
+`content` accepts any ReactNode — paragraphs, forms, action menus.
+
+```tsx
+<Popover
+  content={
+    <>
+      <h4>Notification preferences</h4>
+      <Switch label="Email" defaultChecked />
+      <Switch label="SMS" />
+      <Button size="sm" variant="primary">Save</Button>
+    </>
+  }
+>
+  <Button>Settings</Button>
+</Popover>
+```
+
+## When *not* to use
+
+- **Don't use Popover for plain-text hover help.** Use [Tooltip](/docs/components/tooltip) — lighter shape, semantically correct.
+- **Don't use Popover for action menus.** Use [Menu](/docs/components/menu) — handles dismiss-on-action and focus management for menu semantics.
+- **Don't use Popover for required confirmations.** Modal/Dialog flows are for "you must commit"; Popover dismisses on outside click and could be missed.
+- **Don't put navigation inside a Popover.** Popover dismisses easily; nav clicks should reach their target reliably.
+
+## Accessibility
+
+- The trigger receives `aria-haspopup="dialog"` and `aria-expanded` reflecting Popover state.
+- Content panel uses `role="dialog"` with `aria-labelledby` (or `aria-label` if no obvious label).
+- Click outside or `Escape` dismisses (auto).
+- Focus moves into the popover on open with click trigger; stays on trigger with hover trigger.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `children` | `ReactNode` *(required, the trigger)* | — |
+| `content` | `ReactNode` *(required)* | — |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'bottom'` |
+| `trigger` | `'click' \| 'hover'` | `'click'` |
+| `isOpen` | `boolean` (controlled) | — |
+| `onOpenChange` | `(open: boolean) => void` | — |
+
+Plus standard `<div>` HTML attributes (excluding `content`).
+
+## Related
+
+- [Tooltip](/docs/components/tooltip) — plain-text hover help
+- [Menu](/docs/components/menu) — action menu sibling
+- [Modal](/docs/components/modal) — backdrop-modal alternative
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-overlay-popover--overview)**
