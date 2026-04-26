@@ -13,7 +13,7 @@ BDS components are organized by **job**, not by visual type. The same taxonomy b
 | **Form** | TextInput, TextArea, PasswordInput, AddressInput, Select, MultiSelect, DatePicker, TimePicker, Checkbox, Radio, Field, FieldGrid, Form |
 | **Indicator** | Badge, Chip, Tag, Counter, Dot, Spinner, Skeleton, BadgeGroup, TagGroup, ServiceBadge |
 | **Feedback** | Banner, Toast, Tooltip, EmptyState, ProgressBar (AlertBanner deprecated → Banner) |
-| **Control** | Switch, Slider, Stepper, Pagination, SegmentedControl, FileUploader |
+| **Control** | Switch, Slider, Stepper, ProgressStepper, Pagination, SegmentedControl, FileUploader |
 | **Addable** | AddableTagList, AddableEntryList, AddableFieldRowList |
 | **Structure** | Card, Divider, Accordion |
 
@@ -88,9 +88,23 @@ User feedback surfaces — banners, toasts, tooltips, empty states, progress bar
   <Card title="Progress bar" href="/docs/components/progress-bar" description="Visual indicator of measurable completion. Use for uploads, multi-step forms, batch jobs." />
 </Cards>
 
+### Control
+
+Toggles, sliders, steppers, paginators, and the file uploader.
+
+<Cards>
+  <Card title="Switch" href="/docs/components/switch" description="Binary on/off toggle. Three sizes, controlled or uncontrolled." />
+  <Card title="Slider" href="/docs/components/slider" description="Continuous-range input. Drag-to-select numeric values." />
+  <Card title="Stepper" href="/docs/components/stepper" description="Numeric input with +/− buttons. Discrete steps, exact values." />
+  <Card title="Progress stepper" href="/docs/components/progress-stepper" description="Multi-step flow indicator. Steps (labeled) or dots (compact) variant." />
+  <Card title="Pagination" href="/docs/components/pagination" description="Page navigation with prev/next + numbers + ellipsis." />
+  <Card title="Segmented control" href="/docs/components/segmented-control" description="Pill-shaped switcher for 2-5 mutually exclusive views." />
+  <Card title="File uploader" href="/docs/components/file-uploader" description="Drag-and-drop file upload zone with click-to-browse fallback." />
+</Cards>
+
 ## Still in Storybook
 
-The remaining ~20 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Control, Addable, Structure, Navigation, and Displays.
+The remaining ~13 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Addable, Structure, Navigation, and Displays.
 
 ## Page template
 

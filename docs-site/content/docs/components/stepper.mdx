@@ -1,0 +1,91 @@
+---
+title: Stepper
+description: Numeric input with increment / decrement buttons. Discrete steps, exact values.
+---
+
+Stepper is a numeric input with `−` / `+` buttons. Use for quantity selectors, count adjusters, and any setting that increments in discrete units. For continuous-range "about this much" selection, use [Slider](/docs/components/slider).
+
+Note: this is **not** the same as [ProgressStepper](/docs/components/progress-stepper) — that's the multi-step wizard indicator.
+
+## Use it for
+
+- Quantity selectors (cart items, user-count picker)
+- Discrete-step adjusters (font size, padding overrides)
+- Pagination by-N controls (page size)
+- Any field where the user thinks "exactly N" and N changes by a known step
+
+## Import
+
+```tsx
+import { Stepper } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+const [count, setCount] = useState(1);
+
+<Stepper value={count} onChange={setCount} />
+```
+
+### Bounds and custom step
+
+`min`, `max`, and `step` constrain and quantize the value.
+
+```tsx
+<Stepper
+  value={count}
+  onChange={setCount}
+  min={0}
+  max={100}
+  step={5}
+  size="lg"
+/>
+```
+
+### Sizes
+
+`sm`, `md` (default), `lg` — match TextInput sizes for inline placement next to other form controls.
+
+### Disabled
+
+```tsx
+<Stepper value={5} onChange={() => {}} disabled />
+```
+
+## When *not* to use
+
+- **Don't use Stepper for continuous values.** Use [Slider](/docs/components/slider).
+- **Don't use Stepper for large ranges** (e.g. 1–10,000). The button-clicks-per-change ratio gets unusable. Use [TextInput](/docs/components/text-input) with `type="number"`.
+- **Don't use Stepper for non-numeric stepping.** "Tier: Bronze / Silver / Gold" is [SegmentedControl](/docs/components/segmented-control) territory.
+
+## Accessibility
+
+- Renders a `<div>` containing an `<input type="number">` plus two `<button>`s.
+- The buttons carry `aria-label="Decrement"` / `aria-label="Increment"`.
+- Keyboard arrows on the input itself increment/decrement (native number-input behavior).
+- `min` and `max` map to `aria-valuemin` / `aria-valuemax`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `number` *(required)* | — |
+| `onChange` | `(value: number) => void` *(required)* | — |
+| `min` | `number` | `0` |
+| `max` | `number` | — |
+| `step` | `number` | `1` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+
+Plus all standard `<div>` HTML attributes (excluding native `onChange`).
+
+## Related
+
+- [Slider](/docs/components/slider) — continuous-range sibling
+- [TextInput](/docs/components/text-input) `type="number"` — for large ranges
+- [ProgressStepper](/docs/components/progress-stepper) — multi-step wizard indicator (different component)
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-control-stepper--overview)**

@@ -1,0 +1,100 @@
+---
+title: Switch
+description: Toggle control for binary on/off states. The right shape for "is this feature active?"
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Switch is the on/off control. Use it for settings and preferences where the user is **enabling or disabling something**, not picking from a list. For "I am picking this option" semantics, use [Checkbox](/docs/components/checkbox); for one-of-many exclusive choice, use [Radio](/docs/components/radio).
+
+## Use it for
+
+- Settings toggles ("Email notifications", "Dark mode", "Auto-save")
+- Feature flags exposed to users
+- Inline on/off controls inside table rows
+- Anywhere the affordance "this preference is now active" matters more than "I am selecting this option"
+
+## Import
+
+```tsx
+import { Switch } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Sizes
+
+```tsx
+<Switch label="Compact panel toggle" size="sm" />
+<Switch label="Standard form toggle" size="md" />
+<Switch label="Page-level setting" size="lg" />
+```
+
+- **`sm`** — 28×16. Compact settings panels, dense rows.
+- **`md`** — 32×18. Default for most form controls.
+- **`lg`** — 56×32. Primary settings, feature toggles, prominent placements.
+
+### Uncontrolled
+
+```tsx
+<Switch label="Enable feature" defaultChecked />
+```
+
+### Controlled
+
+```tsx
+import { useState } from 'react';
+
+const [darkMode, setDarkMode] = useState(false);
+
+<Switch
+  label="Dark mode"
+  checked={darkMode}
+  onChange={(e) => setDarkMode(e.target.checked)}
+/>
+```
+
+### Without label
+
+For label-on-the-side patterns where the surrounding row carries the name.
+
+```tsx
+<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <span>Email notifications</span>
+  <Switch checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
+</div>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use Switch for "I am picking this option" semantics.** Settings panels are Switch territory. Form options the user is *choosing* (terms acceptance, opt-in flags) are [Checkbox](/docs/components/checkbox). The visual shape carries semantic meaning — switching them confuses the read.
+</Callout>
+
+- **Don't use Switch for one-of-many.** Use [Radio](/docs/components/radio) (vertical) or [SegmentedControl](/docs/components/segmented-control) (horizontal).
+- **Don't use Switch in form submissions.** Switches usually trigger immediate state change (auto-save). Form submits batch state — use Checkbox if the change applies on submit.
+
+## Accessibility
+
+- Renders a real `<input type="checkbox">` with `role="switch"` and the platform-correct `aria-checked` semantics.
+- Keyboard `Space` toggles, just like a checkbox.
+- Pair with a visible label (preferred) or `aria-label` if the surrounding row provides the name.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `ReactNode` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `checked` / `defaultChecked` | `boolean` | — |
+| `disabled` | `boolean` | `false` |
+| `onChange` | `(e: ChangeEvent<HTMLInputElement>) => void` | — |
+
+Plus all standard `<input>` HTML attributes (excluding `type` and the HTML `size` attribute).
+
+## Related
+
+- [Checkbox](/docs/components/checkbox) — picking-an-option sibling
+- [Radio](/docs/components/radio) — single-of-many sibling
+- [SegmentedControl](/docs/components/segmented-control) — horizontal one-of-many
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-control-switch--overview)**
