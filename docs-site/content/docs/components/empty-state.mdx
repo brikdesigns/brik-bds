@@ -1,0 +1,101 @@
+---
+title: Empty state
+description: Placeholder for screens with no data. Title, description, optional action — guides users toward the next step.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+EmptyState fills a list, table, or section that has no content. Use it to explain *why* the area is empty and *what to do next* — never leave a blank panel.
+
+For per-row empties (a single missing value inside a [Field](/docs/components/field)), use Field's built-in `empty` prop instead — EmptyState's full bordered treatment is too heavy for a single row.
+
+## Use it for
+
+- "No projects yet" / "Inbox zero" first-time-user states
+- "No results" after a search returns nothing
+- Empty tables / lists / dashboards
+- Permission-denied or "you don't have access" placeholders
+
+## Import
+
+```tsx
+import { EmptyState } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### With action
+
+The most common form — a primary action button to seed the empty state.
+
+```tsx
+<EmptyState
+  title="No projects yet"
+  description="Create your first project to get started."
+  buttonProps={{ children: 'Create project', onClick: handleCreate }}
+/>
+```
+
+### Informational only
+
+When there's no action to recommend (e.g. waiting for someone else, or search-no-results).
+
+```tsx
+<EmptyState
+  title="No results found"
+  description="Try adjusting your search or filters."
+/>
+```
+
+### Custom content
+
+Replace the default button slot with `children` for non-Button actions (links, multiple buttons, illustrations).
+
+```tsx
+<EmptyState title="Connect an integration">
+  <ButtonGroup>
+    <Button variant="primary">Connect Stripe</Button>
+    <Button variant="outline">Connect Square</Button>
+  </ButtonGroup>
+</EmptyState>
+```
+
+### Title-only
+
+When even a description would be excess noise.
+
+```tsx
+<EmptyState title="Nothing here yet" />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use EmptyState inside Field rows.** Use Field's `empty` prop ("Not set" or a custom string) — the full EmptyState card is for whole sections, not single values.
+</Callout>
+
+- **Don't use EmptyState during loading.** Loading is a different state — use [Skeleton](/docs/components/skeleton) for layout-preserving placeholders. EmptyState is for *resolved-with-no-data*.
+- **Don't show a blank panel.** If a section has no data, you owe the user an EmptyState. A literal blank screen reads as broken.
+
+## Accessibility
+
+- Renders a `<div>` with the title as a heading. Use sensible heading hierarchy in the surrounding page.
+- The optional action button gets full Button accessibility (keyboard, focus, aria).
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` *(required)* | — |
+| `description` | `string` | — |
+| `buttonProps` | `Pick<ButtonProps, 'children' \| 'onClick' \| 'iconBefore' \| 'iconAfter'>` | — |
+| `children` | `ReactNode` (replaces button) | — |
+
+Plus all standard `<div>` HTML attributes (excluding `title`).
+
+## Related
+
+- [Field](/docs/components/field) — has a built-in inline empty for single rows
+- [Skeleton](/docs/components/skeleton) — for *loading*, not *empty*
+- [Button](/docs/components/button) — the action affordance
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-feedback-empty-state--overview)**

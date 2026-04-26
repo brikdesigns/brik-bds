@@ -35,6 +35,13 @@
     "field",
     "field-grid",
     "form",
-    "catalog-picker"
+    "catalog-picker",
+    "---Feedback---",
+    "banner",
+    "alert-banner",
+    "toast",
+    "tooltip",
+    "empty-state",
+    "progress-bar"
   ]
 }

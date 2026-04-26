@@ -1,0 +1,95 @@
+---
+title: Progress bar
+description: Visual indicator of completion. Use for measurable tasks — uploads, multi-step forms, batch operations.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+ProgressBar shows how far along a measurable task is. Use it whenever you can answer "what % done?" — file uploads, multi-step forms, batch syncs, scrape progress. For unmeasurable loading, use [Spinner](/docs/components/spinner).
+
+## Use it for
+
+- File upload progress
+- Multi-step form completion (Step 2 of 5)
+- Batch operation progress (12 of 50 records processed)
+- Scrape / sync / migration jobs with known totals
+
+## Import
+
+```tsx
+import { ProgressBar } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`value` is a number 0–100.
+
+```tsx
+<ProgressBar value={35} label="Upload progress" />
+```
+
+### Empty / partial / full
+
+```tsx
+<ProgressBar value={0} label="Not started" />
+<ProgressBar value={50} label="Halfway" />
+<ProgressBar value={100} label="Complete" />
+```
+
+### Custom fill color
+
+`fillColor` overrides the brand-primary default. Use for status-coded progress (red for "deletion in progress", green for "import complete").
+
+```tsx
+<ProgressBar value={75} label="Migration progress" fillColor="var(--background-positive)" />
+```
+
+## Pattern: animated progress
+
+Drive `value` from state for live progress updates. Pair with a label that includes the actual count for accessibility.
+
+```tsx
+import { useState, useEffect } from 'react';
+
+const [progress, setProgress] = useState(0);
+
+useEffect(() => {
+  const id = setInterval(() => setProgress((p) => Math.min(p + 10, 100)), 500);
+  return () => clearInterval(id);
+}, []);
+
+<ProgressBar value={progress} label={`Upload progress: ${progress}%`} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use ProgressBar for unmeasurable loading.** If you can't compute a percentage ("waiting on server"), use [Spinner](/docs/components/spinner) instead. A fake "indeterminate" progress bar is worse than honest indeterminate-spinner UX.
+</Callout>
+
+- **Don't use ProgressBar for boolean done/not-done states.** That's a [Badge](/docs/components/badge) (Active / Failed) or [Counter](/docs/components/counter) ("3 of 5").
+- **Don't show a ProgressBar that doesn't move.** A frozen progress bar is broken UX — if the value won't update for >5s, switch to a Spinner with a message.
+
+## Accessibility
+
+- Renders a `<div>` with `role="progressbar"`, `aria-valuenow`, `aria-valuemin="0"`, `aria-valuemax="100"`.
+- **Always pass `label`** — it becomes the accessible name. Screen readers without it get "progress bar 35" with no context.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `number` (0–100) *(required)* | — |
+| `label` | `string` | — |
+| `fillColor` | `string` | `var(--background-brand-primary)` |
+
+Plus all standard `<div>` HTML attributes (excluding `role`, which ProgressBar locks to `progressbar`).
+
+## Related
+
+- [Spinner](/docs/components/spinner) — for indeterminate loading
+- [Skeleton](/docs/components/skeleton) — layout-preserving loading placeholder
+- [Counter](/docs/components/counter) — for discrete numeric progress ("3 of 5")
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-feedback-progress-bar--overview)**

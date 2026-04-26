@@ -1,0 +1,106 @@
+---
+title: Tooltip
+description: Contextual help on hover or focus. Four placements with arrow indicator.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Tooltip wraps a trigger element and reveals a small contextual message on hover or keyboard focus. Use for icon-button labels, field-help hints, and keyboard shortcut indicators — anywhere the trigger doesn't carry enough context on its own.
+
+For persistent guidance, use [Field](/docs/components/field) helper text. For ephemeral confirmations, use [Toast](/docs/components/toast).
+
+## Use it for
+
+- Icon-only button labels ("Edit", "Archive", "Delete") — paired with the visible icon
+- Keyboard shortcut hints on toolbar buttons (`⌘K`, `⌘S`, etc.)
+- Truncated text full content on hover
+- Brief field-help that doesn't deserve a full helper-text line
+
+## Import
+
+```tsx
+import { Tooltip } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+<Tooltip content="This is helpful information">
+  <button>Hover me</button>
+</Tooltip>
+```
+
+### Placement
+
+Four positions — `top` (default), `bottom`, `left`, `right`. Pick based on the trigger's surroundings; `top` is safest for buttons in toolbars.
+
+```tsx
+<Tooltip content="Appears above" placement="top">
+  <button>...</button>
+</Tooltip>
+
+<Tooltip content="Appears below" placement="bottom">
+  <button>...</button>
+</Tooltip>
+```
+
+### With delay
+
+`delay` (ms) adds a hover-intent debounce so brushing-past triggers don't pop tooltips. Default 0 (instant).
+
+```tsx
+<Tooltip content="After 500ms hover" delay={500}>
+  <button>...</button>
+</Tooltip>
+```
+
+### Pattern: icon button toolbar
+
+The canonical pattern. Each IconButton's `label` becomes both the `aria-label` (always read) and the tooltip content (visible on hover).
+
+```tsx
+import { Tooltip, IconButton } from '@brikdesigns/bds';
+
+<Tooltip content="Edit item">
+  <IconButton icon={<EditIcon />} label="Edit item" />
+</Tooltip>
+
+<Tooltip content="Archive item">
+  <IconButton icon={<ArchiveIcon />} label="Archive item" />
+</Tooltip>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't put critical info only in a Tooltip.** Keyboard-only users can't hover, and screen-reader users may not get the tooltip at all. Tooltip is *supplementary* — the trigger should still convey the action, with the tooltip as a hint.
+</Callout>
+
+- **Don't put long text in a Tooltip.** Three lines max. For longer guidance, use a Popover or Banner.
+- **Don't use Tooltip for form-error messages.** Use the input's `error` prop — error state is too important to hide behind hover.
+- **Don't nest interactive content in a Tooltip.** No links, no buttons. Tooltips dismiss when the user moves the cursor away; they can't reach interactive content reliably.
+
+## Accessibility
+
+- Tooltip content is announced via `aria-describedby` linking the trigger to the tooltip element.
+- Triggers reveal the tooltip on `focus` (keyboard) as well as `hover` (pointer).
+- `Esc` dismisses an open tooltip.
+- The trigger's own accessible name (label, `aria-label`, etc.) is unchanged — Tooltip doesn't replace it.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `content` | `ReactNode` *(required)* | — |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
+| `delay` | `number` (ms) | `0` |
+| `children` | `ReactNode` *(required, the trigger)* | — |
+
+## Related
+
+- [IconButton](/docs/components/button#iconbutton) — common Tooltip trigger
+- [Banner](/docs/components/banner) — persistent alternative
+- [Toast](/docs/components/toast) — ephemeral alternative
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-feedback-tooltip--overview)**
