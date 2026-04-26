@@ -1,0 +1,144 @@
+---
+title: Chip
+description: Compact interactive pill for filtering, selection, and removable tokens.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Chip is the **action** sibling of [Badge](/docs/components/badge) and [Tag](/docs/components/tag). Always interactive. Render a Chip only when `onChipClick`, `onRemove`, or `showDropdown` is wired up — a Chip with no handler is a bug.
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'Chip',
+      preview: <BDS.Chip label="Status: Active" />,
+      whenToUse: 'Compact pill *after* a filter choice is made, multi-select tokens, secondary toggle pills.',
+      whenNotToUse: 'Render with no handler — use Badge or Tag.',
+      code: `<Chip label="Active" onRemove={...} />`,
+    },
+    {
+      title: 'FilterButton',
+      preview: <BDS.FilterButton label="Status" options={[]} />,
+      whenToUse: 'Dropdown trigger inside a FilterBar — encapsulates dropdown state.',
+      whenNotToUse: 'Show selections after picking — those are Chips.',
+      code: `<FilterButton label="Status" options={...} />`,
+    },
+    {
+      title: 'Button',
+      preview: <BDS.Button size="sm">Save</BDS.Button>,
+      whenToUse: 'Primary CTAs, form submits, primary workflows.',
+      whenNotToUse: 'Compact filter pills — use Chip.',
+      code: `<Button>Save</Button>`,
+    },
+  ]}
+/>
+
+## Use it for
+
+- Active filter pills with a dismiss X ("Status: Active" × — clear that filter)
+- Multi-select tokens — selected categories rendered as removable pills
+- Filter dropdown triggers ("All statuses" with a chevron)
+- Compact toggleable pills inside facet sidebars
+
+## Import
+
+```tsx
+import { Chip } from '@brikdesigns/bds';
+```
+
+## Variants
+
+Two variants × two appearances. Match the chip's role:
+
+- **`secondary` + `solid`** — Default filter chip. High contrast.
+- **`secondary` + `outline`** — Softer filter chip. Transparent + neutral border.
+- **`primary` + `solid`** — Active/selected filter. Brand emphasis.
+- **`primary` + `outline`** — Active filter with lower brand emphasis.
+
+```tsx
+<Chip label="Design" variant="secondary" appearance="solid" />
+<Chip label="Design" variant="primary" appearance="outline" />
+```
+
+## Common shapes
+
+### Removable filter chip
+
+```tsx
+<Chip label="Status: Active" onRemove={() => clearFilter('status')} />
+```
+
+### Filter dropdown trigger
+
+```tsx
+<Chip
+  label="All statuses"
+  icon={<FilterIcon />}
+  showDropdown
+  onChipClick={() => openMenu()}
+/>
+```
+
+### With avatar
+
+```tsx
+<Chip label="Sarah Chen" avatar={<Avatar src={...} />} />
+```
+
+### Disabled
+
+```tsx
+<Chip label="Archived" disabled />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Chip is always interactive.** A read-only pill is a [Badge](/docs/components/badge) (status) or [Tag](/docs/components/tag) (category). Rendering a Chip with no handler implies clickability that doesn't exist.
+</Callout>
+
+- **Don't duplicate FilterButton.** If you're inside a `FilterBar` opening a dropdown, use FilterButton — it handles the state machine. Chip is for what comes *after* the choice.
+- **Don't use Chip for primary CTAs.** It's compact by design. Form submits and primary workflows belong on a [Button](/docs/components/button).
+
+## Accessibility
+
+- Renders a `<button>` when interactive. Keyboard `Enter`/`Space` activates.
+- `onRemove` adds a separate dismiss button with its own accessible name (`aria-label="Remove {label}"`).
+- `showDropdown` adds `aria-haspopup="listbox"` to the chip body.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `string` *(required)* | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `variant` | `'primary' \| 'secondary'` | `'secondary'` |
+| `appearance` | `'solid' \| 'outline'` | `'solid'` |
+| `icon` | `ReactNode` | — |
+| `avatar` | `ReactNode` | — |
+| `showDropdown` | `boolean` | `false` |
+| `onRemove` | `() => void` | — |
+| `onChipClick` | `() => void` | — |
+| `disabled` | `boolean` | `false` |
+
+## CSS Override API
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--chip-hover-overlay` | `var(--state-hover-overlay)` | Inset overlay color on hover |
+| `--chip-pressed-overlay` | `var(--state-pressed-overlay)` | Inset overlay color on press |
+
+```css
+.filter-bar {
+  --chip-hover-overlay: rgba(0, 0, 0, 0.08);
+  --chip-pressed-overlay: rgba(0, 0, 0, 0.14);
+}
+```
+
+## Related
+
+- [Badge](/docs/components/badge) — read-only status sibling
+- [Tag](/docs/components/tag) — read-only categorization sibling
+- [FilterButton](/docs/components/filter-button) — dropdown trigger inside FilterBar
+- [Button](/docs/components/button) — primary action shape
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-chip--overview)**

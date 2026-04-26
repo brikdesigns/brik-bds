@@ -1,0 +1,96 @@
+---
+title: Badge group
+description: Horizontal cluster of Badge elements with locked spacing.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BadgeGroup is the indicator-family sibling of [TagGroup](/docs/components/tag-group). Same API shape, different child. Use it when multiple status indicators sit side by side — integration health rows, payment-state summaries, multi-status entity rows.
+
+## Use it for
+
+- Multiple statuses on one entity (Helicone Active, Stripe Pending, Supabase Active)
+- Integration health rows where each service has its own status
+- Compact status clusters inside a `Field` or table cell
+
+For categorical labels (industry, segment), use [TagGroup](/docs/components/tag-group).
+
+## Import
+
+```tsx
+import { BadgeGroup, Badge } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+<ComponentPreview code={`<BDS.BadgeGroup>
+  <BDS.Badge status="positive" size="sm">Helicone</BDS.Badge>
+  <BDS.Badge status="positive" size="sm">Supabase</BDS.Badge>
+  <BDS.Badge status="warning" size="sm">Stripe</BDS.Badge>
+</BDS.BadgeGroup>`}>
+  <BDS.BadgeGroup>
+    <BDS.Badge status="positive" size="sm">Helicone</BDS.Badge>
+    <BDS.Badge status="positive" size="sm">Supabase</BDS.Badge>
+    <BDS.Badge status="warning" size="sm">Stripe</BDS.Badge>
+  </BDS.BadgeGroup>
+</ComponentPreview>
+
+### Gap sizes
+
+Three locked gaps — `xs` (default, tight), `sm` (standard), `md` (roomy).
+
+<ComponentPreview code={`<BDS.BadgeGroup gap="md">
+  <BDS.Badge status="positive" size="sm">Active</BDS.Badge>
+  <BDS.Badge status="info" size="sm">Verified</BDS.Badge>
+</BDS.BadgeGroup>`}>
+  <BDS.BadgeGroup gap="md">
+    <BDS.Badge status="positive" size="sm">Active</BDS.Badge>
+    <BDS.Badge status="info" size="sm">Verified</BDS.Badge>
+  </BDS.BadgeGroup>
+</ComponentPreview>
+
+## Pattern: inside a Field
+
+The canonical use — a `Field` value expressed as a status cluster.
+
+```tsx
+import { BadgeGroup, Badge, Field } from '@brikdesigns/bds';
+
+<Field label="Integrations health">
+  <BadgeGroup>
+    <Badge status="positive" size="sm">Helicone</Badge>
+    <Badge status="positive" size="sm">Supabase</Badge>
+    <Badge status="warning" size="sm">Stripe</Badge>
+  </BadgeGroup>
+</Field>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't wrap a single Badge.** If there's only one, render `<Badge>` directly. The group container adds no value at count=1 and just adds DOM noise.
+</Callout>
+
+- **Don't use non-Badge children.** BadgeGroup locks spacing for Badge's specific footprint; arbitrary nodes (Buttons, Tags, raw text) misalign.
+- **Don't mix `solid` and `subtle` appearances inside one group.** BadgeGroup doesn't enforce this at the API, but it reads as inconsistent — pick one appearance per cluster.
+
+## Accessibility
+
+- Renders a plain `<div>` container. Each Badge keeps its own semantics.
+- No `role` or `aria-label` is added — if the group represents a labeled set (e.g. "Integrations"), surface that label via the parent `<Field>` or a heading.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `gap` | `'xs' \| 'sm' \| 'md'` | `'xs'` |
+| `wrap` | `boolean` | `true` |
+| `children` | `ReactNode` | — |
+
+## Related
+
+- [Badge](/docs/components/badge) — the child component
+- [TagGroup](/docs/components/tag-group) — categorical sibling
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-badge-group--overview)**

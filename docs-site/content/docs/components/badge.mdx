@@ -1,0 +1,140 @@
+---
+title: Badge
+description: Status indicators and labels. Non-interactive — for displaying state, never for triggering actions.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Badge displays contextual status. It uses semantic system colors to communicate state at a glance, with `solid` (saturated) and `subtle` (pastel) appearances for different surface contexts.
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'Badge',
+      preview: <BDS.Badge status="positive">Done</BDS.Badge>,
+      whenToUse: 'Read-only status with a value judgment (good/bad/waiting). Published, Active, Failed.',
+      whenNotToUse: 'Wire onClick — Badge is an indicator, not an action.',
+      code: `<Badge status="positive">Done</Badge>`,
+    },
+    {
+      title: 'Tag',
+      preview: <BDS.Tag>Cosmetic</BDS.Tag>,
+      whenToUse: 'Neutral categorization without a value judgment. Industry, segment, owner, size.',
+      whenNotToUse: 'Use for status — that\'s Badge.',
+      code: `<Tag>Cosmetic</Tag>`,
+    },
+    {
+      title: 'Chip',
+      preview: <BDS.Chip label="Status: Active" />,
+      whenToUse: 'Interactive pill — filter selections, removable tokens, multi-select.',
+      whenNotToUse: 'Render with no handler — that\'s Badge or Tag.',
+      code: `<Chip label="Active" onRemove={...} />`,
+    },
+  ]}
+/>
+
+## Use it for
+
+- A record's status (Published, Draft, In Review, Archived)
+- Pipeline state (Pending, Processing, Completed, Failed)
+- Categorical states with a value judgment (Healthy/Warning/Critical)
+
+For neutral categorization without a status meaning, use [Tag](/docs/components/tag). For interactive pills, use [Chip](/docs/components/chip).
+
+## Import
+
+```tsx
+import { Badge } from '@brikdesigns/bds';
+```
+
+## Variants
+
+Six status colors across four sizes, each available in `solid` and `subtle` appearances.
+
+### Status colors
+
+<ComponentPreview code={`<BDS.Badge status="positive">Done</BDS.Badge>
+<BDS.Badge status="warning">Pending</BDS.Badge>
+<BDS.Badge status="error">Failed</BDS.Badge>
+<BDS.Badge status="info">Note</BDS.Badge>
+<BDS.Badge status="progress">In progress</BDS.Badge>
+<BDS.Badge status="brand">Featured</BDS.Badge>`}>
+  <BDS.Badge status="positive">Done</BDS.Badge>
+  <BDS.Badge status="warning">Pending</BDS.Badge>
+  <BDS.Badge status="error">Failed</BDS.Badge>
+  <BDS.Badge status="info">Note</BDS.Badge>
+  <BDS.Badge status="progress">In progress</BDS.Badge>
+  <BDS.Badge status="brand">Featured</BDS.Badge>
+</ComponentPreview>
+
+### Subtle appearance
+
+Lower-emphasis pastel fill. Use inline with content, in table cells, on cards — anywhere `solid` would over-emphasize.
+
+<ComponentPreview code={`<BDS.Badge status="positive" appearance="subtle">Done</BDS.Badge>
+<BDS.Badge status="progress" appearance="subtle">In progress</BDS.Badge>`}>
+  <BDS.Badge status="positive" appearance="subtle">Done</BDS.Badge>
+  <BDS.Badge status="progress" appearance="subtle">In progress</BDS.Badge>
+</ComponentPreview>
+
+### Sizes
+
+Four sizes — `xs` is icon-only (no text), `sm` `md` `lg` carry text.
+
+<ComponentPreview code={`<BDS.Badge size="sm" status="positive">Done</BDS.Badge>
+<BDS.Badge size="md" status="positive">Done</BDS.Badge>
+<BDS.Badge size="lg" status="positive">Done</BDS.Badge>`}>
+  <BDS.Badge size="sm" status="positive">Done</BDS.Badge>
+  <BDS.Badge size="md" status="positive">Done</BDS.Badge>
+  <BDS.Badge size="lg" status="positive">Done</BDS.Badge>
+</ComponentPreview>
+
+### With icon
+
+Pass `icon` for a leading visual. Required when `size="xs"` (icon-only).
+
+```tsx
+<Badge status="positive" icon={<CheckIcon />}>Done</Badge>
+<Badge size="xs" status="error" icon={<XCircleIcon />} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Badge is read-only.** Never wire `onClick`, never wrap in a `<Link>`, never trigger behavior. Reading "Active" is different from clicking "Active to filter" — the latter is a [Chip](/docs/components/chip).
+</Callout>
+
+- **Don't pick `brand` for routine status.** It draws the eye like a CTA. Reserve for genuinely-featured states.
+- **Don't mix `solid` and `subtle` appearances in the same cluster.** Pick one per row for visual coherence.
+
+## Accessibility
+
+- Renders a `<span>` — non-interactive by default.
+- The text content is the accessible name. For icon-only (`xs`), pass `aria-label`.
+- Status is communicated via color *and* text — never color alone.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `status` | `'positive' \| 'warning' \| 'error' \| 'info' \| 'progress' \| 'brand'` | — |
+| `size` | `'xs' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
+| `appearance` | `'solid' \| 'subtle'` | `'solid'` |
+| `icon` | `ReactNode` | — |
+| `children` | `ReactNode` | — |
+
+## Tokens
+
+- `--color-system-green` / `--color-system-green-light` — Positive
+- `--color-system-red` / `--color-system-red-light` — Error
+- `--color-system-yellow` / `--color-system-yellow-light` — Warning
+- `--color-system-blue` / `--color-system-blue-light` — Progress
+- `--color-system-neutral` / `--color-system-neutral-light` — Info
+
+## Related
+
+- [Tag](/docs/components/tag) — neutral categorization sibling
+- [Chip](/docs/components/chip) — interactive sibling
+- [BadgeGroup](/docs/components/badge-group) — multi-badge cluster
+- [Dot](/docs/components/dot) — minimal status indicator
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-badge--overview)**

@@ -1,0 +1,95 @@
+---
+title: Dot
+description: Small status indicator circles. Color-coded state, no text.
+---
+
+Dot is the most minimal status indicator — a colored circle with no text. Use it inline next to a label, in a status list, or as a presence indicator. When you want status with text, use [Badge](/docs/components/badge).
+
+## Use it for
+
+- Online/offline presence indicators next to user names
+- Status lists where the row label provides the context ("Helicone •" + "Stripe •")
+- Compact status indicators in dense table cells
+- Activity feeds where the dot pulses to indicate live state
+
+## Import
+
+```tsx
+import { Dot } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Status colors
+
+<ComponentPreview code={`<BDS.Dot status="default" />
+<BDS.Dot status="positive" />
+<BDS.Dot status="warning" />
+<BDS.Dot status="error" />
+<BDS.Dot status="info" />
+<BDS.Dot status="neutral" />`}>
+  <BDS.Dot status="default" />
+  <BDS.Dot status="positive" />
+  <BDS.Dot status="warning" />
+  <BDS.Dot status="error" />
+  <BDS.Dot status="info" />
+  <BDS.Dot status="neutral" />
+</ComponentPreview>
+
+- **`default`** — Brand primary. General-purpose indicator.
+- **`positive`** — Online, success, operational.
+- **`warning`** — Away, attention needed.
+- **`error`** — Offline, failure, outage.
+- **`info`** — Informational, in-progress.
+- **`neutral`** — Inactive, disabled.
+
+### Sizes
+
+<ComponentPreview code={`<BDS.Dot size="sm" status="positive" />
+<BDS.Dot size="md" status="positive" />
+<BDS.Dot size="lg" status="positive" />`}>
+  <BDS.Dot size="sm" status="positive" />
+  <BDS.Dot size="md" status="positive" />
+  <BDS.Dot size="lg" status="positive" />
+</ComponentPreview>
+
+### Pulse
+
+Use `pulse` for active/running states — a continuously running process, a live feed, an in-progress sync.
+
+```tsx
+<Dot status="positive" pulse />
+```
+
+## Pattern: inline with label
+
+```tsx
+<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+  <Dot status="positive" />
+  <span>Online</span>
+</div>
+```
+
+## When *not* to use
+
+- **Don't rely on color alone to convey status.** Always pair with a text label (visible or `aria-label`). Color-only state is inaccessible.
+- **Don't use Dot when a value is meaningful.** "5 unread" is a [Counter](/docs/components/counter), not a Dot.
+
+## Accessibility
+
+- Renders a `<span>`. Pair with a visible text label or pass `aria-label` on the parent container.
+- Status is communicated via color *and* text — never color alone.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `status` | `'default' \| 'positive' \| 'warning' \| 'error' \| 'info' \| 'neutral'` | `'default'` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `pulse` | `boolean` | `false` |
+
+## Related
+
+- [Badge](/docs/components/badge) — status with text
+- [Counter](/docs/components/counter) — numeric status
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-dot--overview)**

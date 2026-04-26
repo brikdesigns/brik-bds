@@ -1,0 +1,97 @@
+---
+title: Tag group
+description: Horizontal cluster of Tag elements with locked spacing.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+TagGroup is a thin wrapper that locks spacing for a cluster of [Tag](/docs/components/tag) elements. Replaces the ad-hoc `<div style={{ display: 'flex', gap, flexWrap }}>` that grew around tag arrays across the portal.
+
+Use it as a `Field` value, inside a table cell, or standalone inside a `SheetSection`. For status clusters, use [BadgeGroup](/docs/components/badge-group) — same shape, different child.
+
+## Use it for
+
+- Industry / vertical / segment lists on company rows
+- Brand personality / voice / style traits on profile sheets
+- Service category clusters
+- Any read-only multi-tag display
+
+## Import
+
+```tsx
+import { TagGroup, Tag } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+<ComponentPreview code={`<BDS.TagGroup>
+  <BDS.Tag size="sm">Cosmetic</BDS.Tag>
+  <BDS.Tag size="sm">General</BDS.Tag>
+  <BDS.Tag size="sm">Implants</BDS.Tag>
+</BDS.TagGroup>`}>
+  <BDS.TagGroup>
+    <BDS.Tag size="sm">Cosmetic</BDS.Tag>
+    <BDS.Tag size="sm">General</BDS.Tag>
+    <BDS.Tag size="sm">Implants</BDS.Tag>
+  </BDS.TagGroup>
+</ComponentPreview>
+
+### Gap sizes
+
+Three locked gaps — `xs` (default, tight), `sm` (standard), `md` (roomy).
+
+<ComponentPreview code={`<BDS.TagGroup gap="md">
+  <BDS.Tag size="sm">Dental</BDS.Tag>
+  <BDS.Tag size="sm">Healthcare</BDS.Tag>
+</BDS.TagGroup>`}>
+  <BDS.TagGroup gap="md">
+    <BDS.Tag size="sm">Dental</BDS.Tag>
+    <BDS.Tag size="sm">Healthcare</BDS.Tag>
+  </BDS.TagGroup>
+</ComponentPreview>
+
+## Pattern: inside a Field
+
+The canonical use — a `Field` value expressed as tagged categories.
+
+```tsx
+import { TagGroup, Tag, Field } from '@brikdesigns/bds';
+
+<Field label="Services offered">
+  <TagGroup>
+    <Tag size="sm">Cosmetic</Tag>
+    <Tag size="sm">General</Tag>
+    <Tag size="sm">Implants</Tag>
+  </TagGroup>
+</Field>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't wrap a single Tag.** If there's only one, render `<Tag>` directly. The group container adds nothing at count=1.
+</Callout>
+
+- **Don't use non-Tag children.** TagGroup locks spacing for Tag's specific footprint — arbitrary nodes (Buttons, Badges, raw text) misalign.
+- **Don't use TagGroup for status clusters.** Use [BadgeGroup](/docs/components/badge-group) — same API, different child.
+
+## Accessibility
+
+- Renders a plain `<div>` container. Each Tag keeps its own semantics.
+- No `role` or `aria-label` is added — surface the group's label via the parent `<Field>` or a heading.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `gap` | `'xs' \| 'sm' \| 'md'` | `'xs'` |
+| `wrap` | `boolean` | `true` |
+| `children` | `ReactNode` | — |
+
+## Related
+
+- [Tag](/docs/components/tag) — the child component
+- [BadgeGroup](/docs/components/badge-group) — status sibling
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-tag-group--overview)**

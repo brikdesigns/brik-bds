@@ -11,7 +11,7 @@ BDS components are organized by **job**, not by visual type. The same taxonomy b
 |---|---|
 | **Action** | Button, IconButton, LinkButton, ButtonGroup, FilterBar, FilterButton, FilterToggle, TextLink |
 | **Form** | Field, TextInput, Select, MultiSelect, DatePicker, Form, FieldGrid |
-| **Indicator** | Badge, Chip, Tag, Counter, Spinner, Skeleton |
+| **Indicator** | Badge, Chip, Tag, Counter, Dot, Spinner, Skeleton, BadgeGroup, TagGroup, ServiceBadge |
 | **Feedback** | AlertBanner, Toast, Tooltip, EmptyState, ProgressBar |
 | **Control** | Switch, Slider, Stepper, Pagination, SegmentedControl, FileUploader |
 | **Addable** | AddableTagList, AddableEntryList, AddableFieldRowList |
@@ -30,9 +30,26 @@ BDS components are organized by **job**, not by visual type. The same taxonomy b
   <Card title="Text link" href="/docs/components/text-link" description="Styled anchor for inline navigation and footer links." />
 </Cards>
 
+### Indicator
+
+The indicator family — read-only state communication. For interactive pills, use [Chip](/docs/components/chip) (Action group sibling).
+
+<Cards>
+  <Card title="Badge" href="/docs/components/badge" description="Status indicators with semantic colors. Read-only, six statuses, four sizes." />
+  <Card title="Badge group" href="/docs/components/badge-group" description="Horizontal cluster of Badge elements with locked spacing." />
+  <Card title="Chip" href="/docs/components/chip" description="Interactive pill for filtering, selection, removable tokens. Always wired up." />
+  <Card title="Counter" href="/docs/components/counter" description="Numeric count with status colors. Notification badges, item quantities." />
+  <Card title="Dot" href="/docs/components/dot" description="Minimal status circles. Six statuses, three sizes, optional pulse." />
+  <Card title="Service badge" href="/docs/components/service-badge" description="Icon-only badge for Brik service categories." />
+  <Card title="Skeleton" href="/docs/components/skeleton" description="Loading-state placeholder shapes. Text, circular, rectangular." />
+  <Card title="Spinner" href="/docs/components/spinner" description="Circular loading indicator. Inline and container sizes." />
+  <Card title="Tag" href="/docs/components/tag" description="Neutral categorization labels. Read-only, four sizes, two appearances." />
+  <Card title="Tag group" href="/docs/components/tag-group" description="Horizontal cluster of Tag elements with locked spacing." />
+</Cards>
+
 ## Still in Storybook
 
-The remaining ~50 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for every other group: Form, Indicator, Feedback, Control, Addable, Structure, Navigation.
+The remaining ~40 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Form, Feedback, Control, Addable, Structure, Navigation, and Displays.
 
 ## Page template
 

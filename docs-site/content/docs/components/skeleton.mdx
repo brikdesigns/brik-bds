@@ -1,0 +1,88 @@
+---
+title: Skeleton
+description: Content placeholder with shimmer animation for loading states.
+---
+
+Skeleton renders a low-emphasis placeholder shape while content loads. It maintains layout (so the page doesn't jump when the real content arrives) and reduces perceived load time.
+
+## Use it for
+
+- Initial loading of a list, card, or section while data fetches
+- Image placeholders during upload or fetch
+- Text-line placeholders inside loading article previews
+- Skeleton screens that mirror the final content's shape
+
+For inline button or icon loading, use [Spinner](/docs/components/spinner).
+
+## Import
+
+```tsx
+import { Skeleton } from '@brikdesigns/bds';
+```
+
+## Variants
+
+Three shape variants matching the most common loading targets.
+
+### Text
+
+100% width, `1em` height. Use for text line placeholders.
+
+```tsx
+<Skeleton variant="text" width="200px" />
+<Skeleton variant="text" />
+```
+
+### Circular
+
+Circle. Use for avatar and circular icon placeholders.
+
+```tsx
+<Skeleton variant="circular" width={48} height={48} />
+```
+
+### Rectangular
+
+Rectangle. Use for image, card, and section placeholders.
+
+```tsx
+<Skeleton variant="rectangular" width="300px" height="200px" />
+```
+
+## Pattern: skeleton card
+
+Mirror the final content's shape — avatar, two text lines, image.
+
+```tsx
+<div style={{ display: 'flex', gap: 12 }}>
+  <Skeleton variant="circular" width={48} height={48} />
+  <div style={{ flex: 1 }}>
+    <Skeleton variant="text" width="60%" />
+    <Skeleton variant="text" width="40%" />
+  </div>
+</div>
+<Skeleton variant="rectangular" width="100%" height={200} />
+```
+
+## When *not* to use
+
+- **Don't use Skeleton for short-lived loading.** Sub-300ms loads finish before the user sees the skeleton — they read as a flash. Use [Spinner](/docs/components/spinner) inline or no indicator at all.
+- **Don't use Skeleton in places the final content might be empty.** "No results" is a different state than "loading"; use [EmptyState](https://storybook.brikdesigns.com/?path=/docs/components-feedback-empty-state--overview) once the load resolves.
+
+## Accessibility
+
+- Renders a `<div>` with `aria-busy="true"` and `role="status"` — screen readers announce loading.
+- The shimmer animation respects `prefers-reduced-motion`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `variant` | `'text' \| 'circular' \| 'rectangular'` | `'text'` |
+| `width` | `string \| number` | `'100%'` (text/rectangular) |
+| `height` | `string \| number` | `'1em'` (text), `40` (circular), `140` (rectangular) |
+
+## Related
+
+- [Spinner](/docs/components/spinner) — inline loading indicator
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-skeleton--overview)**

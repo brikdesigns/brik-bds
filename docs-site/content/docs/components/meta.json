@@ -8,6 +8,17 @@
     "filter-bar",
     "filter-button",
     "filter-toggle",
-    "text-link"
+    "text-link",
+    "---Indicator---",
+    "badge",
+    "badge-group",
+    "chip",
+    "counter",
+    "dot",
+    "service-badge",
+    "skeleton",
+    "spinner",
+    "tag",
+    "tag-group"
   ]
 }
