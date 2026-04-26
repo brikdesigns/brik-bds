@@ -1,0 +1,135 @@
+---
+title: Sidebar navigation
+description: Fixed-position vertical sidebar with logo, navigation items, footer actions, and user section.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+SidebarNavigation is the canonical app shell sidebar. Fixed position, vertical layout, four labeled regions (logo, nav items, footer actions, user section). Use for apps with persistent navigation that benefits from being always-visible.
+
+For top-bar navigation in marketing sites, use [NavBar](/docs/components/nav-bar). For tab-style section navigation within a page, use [TabBar](/docs/components/tab-bar).
+
+## Use it for
+
+- Application chrome where navigation should always be visible
+- Settings shells with many sections
+- Dashboards with primary + secondary + utility sections
+- Any layout where ≥5 nav items would overflow a horizontal NavBar
+
+## Import
+
+```tsx
+import { SidebarNavigation } from '@brikdesigns/bds';
+```
+
+## Anatomy
+
+The sidebar has four labeled regions, top to bottom:
+
+1. **Logo** *(required)* — branding mark or wordmark
+2. **Nav items** *(required)* — primary navigation links with optional icons and active state
+3. **Footer actions** *(optional)* — secondary actions (settings, theme toggle, help)
+4. **User section** *(optional)* — account chip with avatar / email / sign-out
+
+## Variants
+
+### Default
+
+```tsx
+<SidebarNavigation
+  logo={<img src="/logo.svg" alt="Brand" />}
+  navItems={[
+    { label: 'Dashboard', href: '/dashboard', active: true },
+    { label: 'Projects', href: '/projects' },
+    { label: 'Settings', href: '/settings' },
+  ]}
+/>
+```
+
+### With icons
+
+Each nav item accepts an `icon` rendered before the label.
+
+```tsx
+<SidebarNavigation
+  logo={<Logo />}
+  navItems={[
+    { label: 'Dashboard', href: '/dashboard', icon: <DashboardIcon />, active: true },
+    { label: 'Projects', href: '/projects', icon: <FolderIcon /> },
+    { label: 'Settings', href: '/settings', icon: <CogIcon /> },
+  ]}
+/>
+```
+
+### With footer actions and user section
+
+```tsx
+<SidebarNavigation
+  logo={<Logo />}
+  navItems={navItems}
+  footerActions={
+    <Button variant="primary" size="sm" fullWidth>New project</Button>
+  }
+  userSection={
+    <div>
+      <Avatar src={user.avatarUrl} />
+      <span>{user.email}</span>
+      <Button variant="ghost" size="sm">Sign out</Button>
+    </div>
+  }
+/>
+```
+
+### Custom width
+
+Default is `260px`. Override for compact (icon-only) or wide layouts.
+
+```tsx
+<SidebarNavigation logo={<Logo />} navItems={items} width="320px" />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use SidebarNavigation for marketing sites.** Use [NavBar](/docs/components/nav-bar) — top-bar nav matches what visitors expect on a website. Sidebars are for apps where users spend extended time.
+</Callout>
+
+- **Don't use SidebarNavigation for ≤3 nav items.** Use [NavBar](/docs/components/nav-bar) — a tall sidebar with 2 items reads as wasted space.
+- **Don't pair SidebarNavigation with NavBar in the same layout.** Pick one primary nav surface; secondary nav goes inside the main content area as TabBar / Breadcrumb.
+
+## Accessibility
+
+- Renders a `<nav aria-label="Primary">` region.
+- Each nav item is a real `<a>` (or `<button>` if `onClick` instead of `href`).
+- Active item carries `aria-current="page"`.
+- Keyboard navigation follows DOM order — Tab moves between regions.
+- The user section's avatar accepts an `alt` text via the underlying Avatar component.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `logo` | `ReactNode` *(required)* | — |
+| `navItems` | `SidebarNavItem[]` *(required)* | — |
+| `footerActions` | `ReactNode` | — |
+| `userSection` | `ReactNode` | — |
+| `width` | `string` (CSS length) | `'260px'` |
+
+### SidebarNavItem
+
+```ts
+interface SidebarNavItem {
+  label: ReactNode;
+  href?: string;
+  icon?: ReactNode;
+  active?: boolean;
+  onClick?: () => void;
+}
+```
+
+## Related
+
+- [NavBar](/docs/components/nav-bar) — top-bar alternative for marketing sites
+- [TabBar](/docs/components/tab-bar) — secondary section navigation inside the main content area
+- [Breadcrumb](/docs/components/breadcrumb) — hierarchical position within a section
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-primary-sidebar-navigation--overview)**

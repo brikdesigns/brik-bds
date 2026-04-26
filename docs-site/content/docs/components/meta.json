@@ -59,6 +59,12 @@
     "---Structure---",
     "card",
     "divider",
-    "accordion"
+    "accordion",
+    "---Navigation---",
+    "nav-bar",
+    "sidebar-navigation",
+    "tab-bar",
+    "breadcrumb",
+    "menu"
   ]
 }
