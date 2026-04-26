@@ -1,4 +1,13 @@
 {
   "title": "Components",
-  "pages": ["index", "button"]
+  "pages": [
+    "index",
+    "---Action---",
+    "button",
+    "button-group",
+    "filter-bar",
+    "filter-button",
+    "filter-toggle",
+    "text-link"
+  ]
 }
