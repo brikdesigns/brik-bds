@@ -1,0 +1,55 @@
+---
+title: Content System
+description: The vocabulary peer to BDS — industries, voices, atmospheres, and locked enums.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The Brik Content System (BCS) is the **content-vocabulary peer** to the visual token system. Same cascade pattern as tokens, but for copy instead of colors. Lives in `content-system/` in the BDS repo and ships from the same npm package via a second entry point.
+
+```ts
+import {
+  industryPacks,
+  voicePatterns,
+  PERSONALITY_VALUES,
+  VOICE_VALUES,
+  VISUAL_STYLE_VALUES,
+  DEFAULT_INDUSTRY_SLUG,
+  type IndustryPack,
+  type VoicePattern,
+} from '@brikdesigns/bds/content-system';
+```
+
+## What's in here
+
+| Section | Answers |
+|---|---|
+| [Industries](/docs/content-system/industries) | "What does this vertical care about? What's seasonal, regulated, or competitive?" |
+| [Voices](/docs/content-system/voices) | "How does this client sound? Direct, warm, witty, refined?" |
+| [Atmospheres](/docs/content-system/atmospheres) | "What mood does this brand sit in? Editorial-luxury, warm-soft, minimal-clinical?" |
+
+## How the cascade works
+
+Same shape as tokens: **industry defaults → client overrides win**.
+
+When a strategy doc, mockup, or page generates for a client, the BCS resolver:
+
+1. Loads the industry pack for `company_profile.industry_slug` (defaults to `small-business`)
+2. Layers on the client's voice picks, atmosphere selection, and copy overrides
+3. Returns a single resolved view that automations + content workers consume
+
+Client overrides on `cta_language`, `anti_messages`, and `naming_conventions` always win over industry seeds. Empty client fields fall through to the industry default.
+
+<Callout type="warn">
+  **Locked enums are the source of truth.** `PERSONALITY_VALUES`, `VOICE_VALUES`, `VISUAL_STYLE_VALUES`, and `INDUSTRY_SLUGS` are exported from BCS and imported by the portal. Never hardcode these values in consumer code; never drift them between repos.
+</Callout>
+
+## Pack lifecycle
+
+Every pack carries a `version`, `reviewCadence`, and `lastReviewed` field. Bump version on content change. Update `lastReviewed` when you confirm accuracy on a review pass — even with no changes. The catch-all `small-business` pack graduates a new vertical out when:
+
+- Brik has 3+ clients in it, OR
+- Seasonality / regulation / terminology diverges meaningfully from `small-business`, OR
+- Strategy docs repeat 60%+
+
+See [Industries → Dental](/docs/content-system/industries/dental) for a fully-fleshed reference pack.

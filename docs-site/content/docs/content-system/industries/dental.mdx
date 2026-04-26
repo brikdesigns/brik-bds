@@ -1,0 +1,206 @@
+---
+title: Dental
+description: High-trust, local-first healthcare. The reference industry pack — most fleshed-out structure of any vertical.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { dental } from '@brikdesigns/bds/content-system';
+
+**Version:** {dental.version}  ·  **Last reviewed:** {dental.lastReviewed}  ·  **Review cadence:** {dental.reviewCadence}
+
+Static reference. Automations consume this when generating strategy documents. Never injected into client briefs as client-specific fact — always layer through the resolver so client overrides win.
+
+Structured data lives in [`content-system/industries/dental.ts`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/industries/dental.ts). This page is the narrative companion. Keep them in sync.
+
+---
+
+## 1. Industry Overview
+
+Dental is a high-trust, local-first professional healthcare category. Patients choose providers based on proximity, insurance acceptance, and reputation signals more than price. The market is bifurcating between independent and small-group practices competing on patient experience, and DSO-backed practices competing on scale, convenience, and marketing spend.
+
+Patient acquisition is expensive and slow. Lifetime value is high — a single retained family can generate **$15K–$40K+** over a decade. This asymmetry is why retention nearly always outperforms acquisition spend for established practices.
+
+## 2. Default Affinities
+
+When a client hasn't yet picked traits in the portal, these are the pack's starting affinities. Clients always override.
+
+| Axis | Affinities (first = strongest) |
+|---|---|
+| **Personality** | {dental.affinities.personality.join(' · ')} |
+| **Voice** | {dental.affinities.voice.join(' · ')} |
+| **Visual Style** | {dental.affinities.visualStyle.join(' · ')} |
+
+Independent practices skew warmer and more conversational; cosmetic boutiques skew more Refined + Modern; pediatric practices skew Playful + Approachable. The pack defaults aim at the median general-practice independent.
+
+## 3. Common Patient Pain Points
+
+- **Cost anxiety** — surprise bills, unclear coverage, sticker shock on crowns/implants/ortho
+- **Dental anxiety** — ~36% of adults report moderate-to-severe dental fear; top reason for avoidance
+- **Insurance confusion** — PPO vs HMO vs FFS, in-network vs out, annual maximums
+- **Trust deficit** — suspicion of over-treatment ("do I really need this crown?")
+- **Scheduling friction** — long new-patient waits, inflexible hours for working parents
+- **Continuity of care** — patients stay for years; hygienist/dentist turnover triggers churn
+- **Cosmetic hesitation** — 3–12 month shopping cycles for veneers, Invisalign, implants
+
+## 4. Seasonality
+
+| Quarter | Intent | Focus |
+|---|---|---|
+| **Q1 (Jan–Mar)** | high | Insurance reset surge. Highest-intent window. New-patient calls peak. |
+| **Q2 (Apr–Jun)** | medium | Tax refunds drive cosmetic/elective inquiries. Long shopping cycles start. |
+| **Q3 (Jul–Aug)** | high | Pediatric + ortho surge during summer break. Adult cosmetic dips. |
+| **Q4 (Nov–Dec)** | high | Use-it-or-lose-it benefits push. Best campaign ROI of year for insurance practices. |
+
+## 5. Competitive Landscape
+
+- **Independent solo/small-group** — relationship, community ties, owner-dentist continuity
+- **DSO-backed** (Heartland, Pacific Dental, Aspen, Smile Brands, MB2) — ad spend, extended hours, standardized experience
+- **Specialty** (ortho, endo, perio, oral surgery, pediatric, prosthodontics) — referral-driven, board-certified authority
+- **Cosmetic / boutique** — design-forward, concierge, premium pricing, Instagram-native
+- **Budget / insurance-heavy** — high-volume, Medicaid/HMO, compete on access
+- **DTC aligner disruptors** — Invisalign, ClearCorrect (SmileDirectClub's collapse slowed but didn't stop this)
+
+## 6. Listings Requirements
+
+**Required:** Google Business Profile (primary category "Dentist" or specialty variant), Bing Places, Apple Business Connect, Facebook, Yelp, Healthgrades, Zocdoc.
+
+**Conditional** (insurance-accepting practices only): Delta Dental, MetLife, Cigna, Aetna, Humana provider finders — verify annually.
+
+<Callout type="warn">
+  **NPI must match across all listings.** Mismatch hurts trust and insurance routing.
+</Callout>
+
+## 7. Regulatory Summary
+
+- **HIPAA** — patient photos, reviews, testimonials require written authorization; responses to reviews cannot confirm patient status
+- **State dental boards** — vary by state; common restrictions on "best," "#1," "specialist" (unless board-certified), "painless"
+- **Before/after photos** — require signed release; most states require "individual results vary" disclaimer
+- **ADA specialty recognition** — only 12 specialties are ADA-recognized; "cosmetic dentist" and "implant dentist" are NOT specialties
+- **ADA/WCAG 2.1 AA** — healthcare sites are frequent ADA-lawsuit targets; compliance is non-negotiable
+
+## 8. Vocabulary — Avoid
+
+<table>
+  <thead>
+    <tr><th>Term</th><th>Why</th></tr>
+  </thead>
+  <tbody>
+    {dental.vocabulary.avoid.map((v, i) => (
+      <tr key={i}>
+        <td><strong>{v.term}</strong></td>
+        <td>{v.reason}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## 9. Navigation IA
+
+Default site-header shape for dental. Drives the BDS `<SiteHeader>` component in `@brikdesigns/bds/blueprints-astro` when consumer sites build. Clients can override any field per-engagement in the portal Intel tab, but the pack default represents Brik's curated recommendation for the vertical.
+
+Design intent: keep the top bar quiet (4 primary links, not 6) and route service discovery through a grouped mega-menu so cosmetic + restorative + comfort live in separate columns rather than a flat list. The frosted-glass-past-80 scroll behavior lets hero photography breathe at first load without sacrificing return-navigation reach.
+
+```ts
+// dental.navigationIA shape, from content-system/industries/dental.ts
+{
+  "primaryLinks": [/* 4 links */],
+  "megaMenu": { /* services grouped by column */ },
+  "scrollBehavior": "frosted-past-80",
+  "ctaSlot": { /* primary CTA placement */ }
+}
+```
+
+> The `<NavigationIASpec>` visualization that renders this in Storybook will be ported to Fumadocs as a custom MDX component. Until then, the structured shape lives in `dental.navigationIA`.
+
+## 10. Brik Strategic POV
+
+Three considerations that differentiate Brik's dental strategy. These are not generic industry facts — they reflect Brik's POV and should surface in briefs where applicable.
+
+### Retention Economics
+
+New-patient CAC ($200–$500+) vastly exceeds reactivation/case-close cost (under $10). A 1% hygiene reappt improvement on a ~2,000 active-patient practice produces $40–60K+/yr. A 5% case-acceptance gain can match 75–150 new patients in revenue.
+
+<Callout type="info">
+  **Stabilize retention before recommending acquisition.**
+</Callout>
+
+Brik audits: Total Active Patients, Unscheduled Active, New Patients (Last Month), Total Lost (Last Month), Hygiene Reappt %, Case Acceptance %, Production/Visit, No-Show Rate, Hyg/Dr Visit ratio, Email/Cell capture, ASAP List.
+
+### Independent vs DSO
+
+Independents should not out-spend DSOs. Structural moats: continuity of care, clinical autonomy, slower more personal experience, community embeddedness, owner-dentist visibility, decision speed, referral velocity.
+
+**Messaging posture:** continuity, ownership, community, clinical integrity. Avoid corporate gloss. *"Your dentist. Not a corporation."* — the emotional posture, not the literal words.
+
+### FFS Transition
+
+PPO write-offs commonly consume 20–40% of potential production. Transitioning toward FFS is typically the single highest-leverage long-term business decision for an established independent.
+
+**Prerequisites:** ~1,500+ active patients, hygiene reappt >90%, case acceptance >50%, healthy review presence, membership plan ready ($350–$500/yr covering 2 cleanings + exams + X-rays + 15–20% off treatment), owner-dentist with 3+ years of runway.
+
+Three transition patterns:
+
+1. **Selective drop** — lowest-paying PPOs first
+2. **Full FFS** — all-at-once
+3. **Hybrid / grandfather** — honor existing; FFS for new patients only
+
+---
+
+## 11. Site Audit Extractors
+
+When the portal audits a dental client's existing website, four pack-specific extractors run in addition to the universal ones (services, key messages, proof points, social links). Each turns live-site content into structured facts the content + preflight workers can reason about programmatically, rather than re-paraphrasing free text every run.
+
+### Page patterns
+
+The pack declares URL / path / title patterns that route scraped pages to the right extractor:
+
+| Pattern | Matches | Feeds extractor |
+|---|---|---|
+| `membership_plan` | `/membership`, `/membership-plan*`, `/dental-savings-plan`, `/care-plan` · titles containing "membership plan", "dental savings", "care plan" | `membership_plans` |
+| `insurance` | `/insurance`, `/insurance-accepted`, `/financing`, `/payment-options` · titles containing "insurance", "financing", "accepted insurance" | `insurance_accepted` |
+| `new_patients` | `/new-patients`, `/first-visit`, `/welcome`, `/specials`, `/offers` · titles containing "new patient", "first visit", "special offer" | `new_patient_offers` |
+| `contact_or_homepage` | `/`, `/contact*`, `/book`, `/schedule`, `/appointments` · titles containing "book", "schedule", "appointment" | `appointment_systems` |
+
+Matches are case-insensitive. Multiple patterns can match a single page; each matched page routes to every applicable extractor.
+
+### Structured extractors
+
+| Extractor | Writes to `company_profiles` | Shape |
+|---|---|---|
+| **`membership_plans`** | `membership_plans[]`, `has_membership_plan` | `{ tier, monthly_price_cents, annual_price_cents, included_services[], enrollment_cta, source_url }` |
+| **`insurance_accepted`** | `insurance_providers[]`, `insurance_plans[]` | Verbatim carrier names (Delta Dental, Aetna, Cigna) + plan/program names distinct from carriers (Medicaid, PPO, Out-of-Network) |
+| **`new_patient_offers`** | `new_patient_offers[]` | `{ offer, first_visit_duration_minutes, source_url }` |
+| **`appointment_systems`** | `appointment_systems[]` | Integration names (Zocdoc, LocalMed, Weave, NexHealth, "custom web form") |
+
+### Why these four
+
+- **Membership plans** — the most-missed dental fact. Content generators writing `/membership` copy must name tiers + prices verbatim; the paraphrase "plans starting at $X" reads as made-up. Birdwell's `/membership-plan-1` was the validation case that drove this work.
+- **Insurance accepted** — dental clients publish carrier lists specifically because patients filter on them. *"We accept most major insurance"* is marketing hedging; the actual carrier list is conversion-critical.
+- **New patient offers** — live promos on the existing site are load-bearing on the hero. A redesign that drops them silently breaks conversion copy clients are actively tracking.
+- **Appointment systems** — if the client has LocalMed or Weave wired up, the CTA must route there, not to a generic contact form. Misrouted CTAs are a common regression on template-based rebuilds.
+
+### Portal integration
+
+The portal's `website-audits` worker resolves this pack via `company_profiles.industry_slug === 'dental'`, invokes each matched extractor, validates output against the `fieldSchemas` shapes above, and enriches the profile with `source: 'website_audit'`. Generate-content for dental clients then renders the structured facts verbatim (no LLM paraphrasing on these fields).
+
+Structured fields are also stamped to the `design_decisions` log with `source: 'website_audit'` so re-runs can see what was extracted last time and diff against the current run.
+
+### Adding extractors to a new industry
+
+1. Implement `siteAudit: IndustryPackSiteAudit` on the pack's `.ts` file
+2. Declare `pagePatterns` — URL / path / title rules that route scraped pages to extractors
+3. List the extractors + the `company_profiles` columns they write to. Populate `fieldSchemas` with shape descriptions for each column
+4. Add portal-side migration for any new columns; extend `enrichProfile` allowlist for `website_audit` to cover them
+5. Implement the actual extraction logic in `src/lib/website-audits/industry-packs/<slug>.ts` on the portal side
+6. Document the extractors here in the pack's `.mdx` under "Site Audit Extractors"
+
+Consumers without `siteAudit` defined (the `small-business` fallback) run universal extractors only.
+
+---
+
+## Related
+
+- [Content System overview](/docs/content-system)
+- [Industries index](/docs/content-system/industries)
+- [Atmospheres](/docs/content-system/atmospheres) — the mood layer dental defaults to
+- [Voices](/docs/content-system/voices) — voice patterns the dental affinities point to

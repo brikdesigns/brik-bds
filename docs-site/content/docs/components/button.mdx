@@ -1,9 +1,15 @@
 ---
 title: Button
-description: Trigger an action. The most common interactive element in the system.
+description: Trigger an event or action. The button family includes three components for different semantic needs.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+
+The button family is three components for three semantic needs:
+
+- **`Button`** — renders a `<button>`. Use for actions that stay on the page (submit, open dialog, confirm).
+- **`LinkButton`** — renders an `<a>`. Use when the action navigates to a URL.
+- **`IconButton`** — renders a `<button>` with an icon and required `aria-label`. Use when there's no visible text label.
 
 ## Use it for
 
@@ -17,26 +23,26 @@ If the action navigates somewhere, use **LinkButton** instead. If the trigger is
 ## Import
 
 ```tsx
-import { Button } from '@brikdesigns/bds';
+import { Button, LinkButton, IconButton } from '@brikdesigns/bds';
 ```
 
 ## Anatomy
 
-A Button is a labelled hit target with an optional leading or trailing icon. The label drives the implicit accessible name.
+A Button is a labelled hit target with optional icons before or after the text.
 
-```
-┌──────────────────────────────────┐
-│  [icon]   Label   [icon]         │
-└──────────────────────────────────┘
-   ↑         ↑          ↑
-   leading   text node  trailing
+```text
+┌─────────────────────────────────┐
+│  [iconBefore]  Label  [iconAfter]
+└─────────────────────────────────┘
+        ↑          ↑          ↑
+     leading    text node   trailing
 ```
 
 ## Variants
 
 Twelve variants. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
 
-### Primary actions
+### Standard variants
 
 <ComponentPreview code={`<BDS.Button variant="primary">Save</BDS.Button>
 <BDS.Button variant="outline">Cancel</BDS.Button>
@@ -48,7 +54,12 @@ Twelve variants. Pick by **action emphasis** and **destructive intent**, not by 
   <BDS.Button variant="ghost">Tertiary</BDS.Button>
 </ComponentPreview>
 
-### Destructive actions
+- **`primary`** — Main call-to-action. One per section.
+- **`outline`** — Secondary emphasis. Alternative to primary.
+- **`secondary`** — Tertiary/subtle. Supporting actions.
+- **`ghost`** — Minimal emphasis. Navigation, repeated actions.
+
+### Destructive variants
 
 Three flavors of destructive map onto the same emphasis ladder as primary actions.
 
@@ -59,6 +70,10 @@ Three flavors of destructive map onto the same emphasis ladder as primary action
   <BDS.Button variant="danger-outline">Delete</BDS.Button>
   <BDS.Button variant="danger-ghost">Delete</BDS.Button>
 </ComponentPreview>
+
+- **`danger`** — Destructive primary action (delete, remove).
+- **`danger-outline`** — Destructive with less emphasis.
+- **`danger-ghost`** — Destructive, minimal emphasis (inline delete).
 
 ### State variants
 
@@ -86,52 +101,156 @@ Five sizes. `md` is the default. Use `sm` only inside dense surfaces (table rows
   <BDS.Button size="xl">XL</BDS.Button>
 </ComponentPreview>
 
+## Icons
+
+Use `iconBefore` and `iconAfter` props. Icons should use `1em` sizing to scale with the button's font size.
+
+```tsx
+<Button iconBefore={<PlusIcon />}>Add item</Button>
+<Button iconAfter={<ArrowRightIcon />}>Continue</Button>
+<Button iconBefore={<DownloadIcon />} variant="outline">
+  Export CSV
+</Button>
+```
+
+## Loading
+
+The `loading` prop replaces button content with a spinner while preserving button width. The button is automatically disabled during loading.
+
+```tsx
+<Button loading variant="primary">
+  Saving...
+</Button>
+```
+
+## LinkButton
+
+An `<a>` element styled as a button. Use when the action navigates to a URL. The `href` prop is required.
+
+```tsx
+import { LinkButton } from '@brikdesigns/bds';
+
+<LinkButton href="/docs" variant="outline">
+  Read docs
+</LinkButton>
+
+<LinkButton
+  href="https://github.com/brikdesigns/brik-bds"
+  target="_blank"
+  rel="noopener"
+  iconAfter={<ExternalLinkIcon />}
+>
+  GitHub
+</LinkButton>
+```
+
+## IconButton
+
+An icon-only button with a **required** `label` prop for accessibility. The label becomes the button's `aria-label`.
+
+```tsx
+import { IconButton } from '@brikdesigns/bds';
+
+<IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />
+<IconButton icon={<TrashIcon />} label="Delete item" variant="danger-ghost" />
+```
+
+<Callout type="warn">
+  **Don't downgrade emphasis when converting Button → IconButton.** A primary action stays a primary action. The 2026-04 IconButton-ghost regression came from agents converting `<Button variant="primary">` into `<IconButton variant="ghost">`. Match the emphasis level, always.
+</Callout>
+
 ## When to use
 
 | Situation | Component |
 |---|---|
 | Action that stays on the page (Save, Submit, Open dialog) | **Button** |
-| Action that navigates to a new URL | [LinkButton](/docs/components/link-button) |
-| Single-icon trigger with no visible label | [IconButton](/docs/components/icon-button) |
-| Toggle on/off | [Switch](/docs/components/switch) |
-| One-of-many selection | [SegmentedControl](/docs/components/segmented-control) |
+| Action that navigates to a new URL | **LinkButton** |
+| Single-icon trigger with no visible label | **IconButton** |
+| Toggle on/off | [Switch](/docs/components) |
+| One-of-many selection | [SegmentedControl](/docs/components) |
 
 ## When *not* to use
 
-<Callout type="warn">
-**Don't downgrade emphasis when converting Button → IconButton.** A primary action stays a primary action. The 2026-04 IconButton-ghost regression came from agents converting `<Button variant="primary">` into `<IconButton variant="ghost">`. Match the emphasis level, always.
-</Callout>
-
 - **Don't use `ghost` for the only action on a page.** Ghost is the lowest emphasis tier — it should appear alongside a higher-emphasis sibling.
 - **Don't stack two `primary` buttons next to each other.** Only one primary action per surface.
+- **Don't use Button for navigation.** If clicking takes the user to a new URL, use LinkButton so right-click + keyboard navigation work correctly.
 
 ## Accessibility
 
-- Renders a real `<button>` element. Keyboard navigation, focus ring, and `Enter`/`Space` activation come from the platform.
-- Accessible name comes from the label. If you must hide the visual label (rare — use IconButton instead), pass `aria-label`.
+- Renders a real `<button>` element. Keyboard navigation, focus ring, and `Enter` / `Space` activation come from the platform.
+- Accessible name comes from the visible label. For IconButton, `label` becomes `aria-label`.
 - Disabled state uses the `disabled` attribute, which removes it from the tab order. For "blocked but explainable" actions, prefer keeping it focusable and showing a tooltip.
+- Loading state announces via `aria-busy` and disables interaction without removing focus.
 
 ## API
 
-The full prop reference (with auto-extracted TypeScript types and live controls) lives in [Storybook → Components/Action/Button](https://storybook.brikdesigns.com/?path=/docs/components-action-button--docs).
+The full prop reference (with auto-extracted TypeScript types and live controls) lives in [Storybook → Components/Action/Button](https://storybook.brikdesigns.com/?path=/docs/components-action-button--overview). Summary below.
+
+### Button
 
 | Prop | Type | Default |
 |---|---|---|
 | `variant` | `ButtonVariant` | `'primary'` |
 | `size` | `ButtonSize` | `'md'` |
-| `leadingIcon` | `ReactNode` | — |
-| `trailingIcon` | `ReactNode` | — |
+| `iconBefore` | `ReactNode` | — |
+| `iconAfter` | `ReactNode` | — |
 | `loading` | `boolean` | `false` |
 | `fullWidth` | `boolean` | `false` |
 | `disabled` | `boolean` | `false` |
 
-`ButtonVariant` = `primary | outline | secondary | ghost | inverse | on-color | danger | danger-outline | danger-ghost | destructive | positive | selected`
+### LinkButton
 
-`ButtonSize` = `tiny | sm | md | lg | xl`
+| Prop | Type | Default |
+|---|---|---|
+| `href` | `string` *(required)* | — |
+| `variant` | `ButtonVariant` | `'primary'` |
+| `size` | `ButtonSize` | `'md'` |
+| `iconBefore` | `ReactNode` | — |
+| `iconAfter` | `ReactNode` | — |
+| `fullWidth` | `boolean` | `false` |
+
+### IconButton
+
+| Prop | Type | Default |
+|---|---|---|
+| `icon` | `ReactNode` *(required)* | — |
+| `label` | `string` *(required)* | — |
+| `variant` | `ButtonVariant` | `'ghost'` |
+| `size` | `ButtonSize` | `'md'` |
+| `loading` | `boolean` | `false` |
+
+### Type unions
+
+```ts
+type ButtonVariant =
+  | 'primary' | 'outline' | 'secondary' | 'ghost'
+  | 'inverse' | 'on-color'
+  | 'danger' | 'danger-outline' | 'danger-ghost' | 'destructive'
+  | 'positive' | 'selected';
+
+type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
+```
+
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-button`. Set these on a wrapping element or directly on the button to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--button-active-translate-y` | `1px` | Downward shift on `:active` press |
+| `--button-focus-outline-width` | `2px` | Focus ring stroke width |
+| `--button-focus-outline-offset` | `2px` | Gap between button edge and focus ring |
+
+```css
+/* Example: flatten press effect in a toolbar context */
+.my-toolbar {
+  --button-active-translate-y: 0;
+  --button-focus-outline-width: 3px;
+}
+```
 
 ## Related
 
-- [LinkButton](/docs/components/link-button) — same shape, renders an `<a>`
-- [IconButton](/docs/components/icon-button) — single-icon trigger
-- [ButtonGroup](/docs/components/button-group) — connected button cluster
-- [Forms pattern](/docs/patterns#forms) — Save/Cancel placement, submit-state handling
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-action-button--overview)** — every variant × size × state, live controls
+- [Forms pattern](/docs/patterns) — Save/Cancel placement, submit-state handling
+- [Components index](/docs/components) — full component catalog
