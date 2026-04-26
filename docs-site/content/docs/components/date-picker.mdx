@@ -1,0 +1,107 @@
+---
+title: Date picker
+description: Date selection with a calendar popover. Min/max date constraints, controlled value as a Date object.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+DatePicker is a Radix-Popover-backed date selector. The trigger is a TextInput-shaped field; the popover renders a calendar grid for selection. Returns a real `Date` object, not a string.
+
+## Use it for
+
+- Single-date selection on forms (start date, due date, scheduled-for)
+- Filtering by date in dashboards (with `minDate` / `maxDate` constraints)
+- Any field where the user picks one specific calendar day
+
+For a time-of-day picker, use [TimePicker](/docs/components/time-picker). Date *and* time pickers should be paired side by side rather than combined into one component.
+
+## Import
+
+```tsx
+import { DatePicker } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+
+const [date, setDate] = useState<Date | null>(null);
+
+<DatePicker
+  label="Start date"
+  value={date}
+  onChange={setDate}
+  placeholder="Pick a date"
+/>
+```
+
+### With constraints
+
+`minDate` / `maxDate` clamp the selectable range. Out-of-range days render disabled in the popover.
+
+```tsx
+<DatePicker
+  label="Available date"
+  value={date}
+  onChange={setDate}
+  minDate={new Date()}
+  maxDate={addMonths(new Date(), 6)}
+/>
+```
+
+### Sizes
+
+`sm`, `md` (default), `lg` — match TextInput sizes.
+
+### Error state
+
+```tsx
+<DatePicker
+  label="Due date"
+  error="Pick a date in the future"
+  value={date}
+  onChange={setDate}
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use DatePicker for date *ranges*.** Pair two DatePickers (`from` + `to`) and validate that `from <= to` in the parent. A combined range picker isn't part of BDS yet — adding one would be a separate component proposal.
+</Callout>
+
+- **Don't use DatePicker for time-only selection.** Use [TimePicker](/docs/components/time-picker).
+- **Don't use DatePicker for known months/days only** (e.g. picking a birthday year). A pair of [Select](/docs/components/select)s is faster for fields where the calendar UI is overkill.
+
+## Accessibility
+
+- The trigger is a real `<input>` — keyboard access, focus ring, screen-reader labels match TextInput.
+- The calendar popover uses Radix Popover under the hood — focus trap, `Esc` to dismiss, click-outside to close.
+- Selected date announces via `aria-live` on the trigger.
+- `label` auto-wires `htmlFor`/`id`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `Date \| null` | — |
+| `onChange` | `(date: Date \| null) => void` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `error` | `string` | — |
+| `placeholder` | `string` | — |
+| `fullWidth` | `boolean` | `false` |
+| `disabled` | `boolean` | `false` |
+| `minDate` | `Date` | — |
+| `maxDate` | `Date` | — |
+| `id` | `string` | auto |
+
+## Related
+
+- [TimePicker](/docs/components/time-picker) — pair with DatePicker for date-and-time entry
+- [TextInput](/docs/components/text-input) — base trigger shape
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-date-picker--overview)**

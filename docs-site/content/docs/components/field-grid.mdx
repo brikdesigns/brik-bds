@@ -1,0 +1,94 @@
+---
+title: Field grid
+description: Equal-column grid for laying out Field components side by side. Replaces ad-hoc inline grid templates.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+FieldGrid is a layout primitive for placing equal-weight cells side by side. Replaces the inline `display: grid; gridTemplateColumns: '1fr 1fr'` pattern that grew across portal sheets.
+
+The primary case is wrapping multiple [Field](/docs/components/field) components, but it accepts any equal-weight children — Cards, Tags, stat tiles.
+
+## Use it for
+
+- 2-column entity detail rows (Owner / Location, Industry / Subindustry)
+- 3- or 4-tile stat rows (Source / Scraped / Failed / Total)
+- Any side-by-side layout where the cells should be equal width
+
+For variable-width or 5+ column layouts, FieldGrid is the wrong primitive — use a Table.
+
+## Import
+
+```tsx
+import { FieldGrid, Field } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Columns
+
+Three locked column counts — `2` (default), `3`, `4`. No custom column templates: if you need something else, you're composing the wrong primitive.
+
+```tsx
+<FieldGrid columns={2}>
+  <Field label="Owner">Nick Stanerson</Field>
+  <Field label="Status">Active</Field>
+</FieldGrid>
+
+<FieldGrid columns={3}>
+  <Field label="Source">birdwelldentist.com</Field>
+  <Field label="Scraped">8</Field>
+  <Field label="Failed">12</Field>
+</FieldGrid>
+```
+
+### Gap sizes
+
+Three gaps — `md`, `lg`, `xl` (default). `xl` matches existing portal field grids.
+
+```tsx
+<FieldGrid columns={2} gap="md">
+  ...
+</FieldGrid>
+```
+
+### Stat tiles
+
+Wrapping each grid cell in `<Card variant="outlined">` gives you the canonical stat-tile pattern (e.g. Content Scrape's SOURCE / SCRAPED / FAILED tiles).
+
+```tsx
+<FieldGrid columns={3} gap="md">
+  <Card variant="outlined"><Field label="Source">birdwelldentist.com</Field></Card>
+  <Card variant="outlined"><Field label="Scraped">8</Field></Card>
+  <Card variant="outlined"><Field label="Failed">12</Field></Card>
+</FieldGrid>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **No custom columns.** If you need 5 cells or variable widths, you're reaching for the wrong primitive — use a Table.
+</Callout>
+
+- **All children must be equal-weight.** Don't mix a tall Card with a single-line Field in the same grid — that breaks the visual rhythm.
+- **Don't nest FieldGrids.** If you need a 4-column outer grid with 2-column inner cells, you're describing a Table.
+
+## Accessibility
+
+- Renders a `<div>` with `display: grid`. Children retain their own semantics — wrapping Fields in FieldGrid doesn't change their accessibility tree.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `columns` | `2 \| 3 \| 4` | `2` |
+| `gap` | `'md' \| 'lg' \| 'xl'` | `'xl'` |
+| `children` | `ReactNode` | — |
+
+Plus all standard `<div>` HTML attributes.
+
+## Related
+
+- [Field](/docs/components/field) — the canonical child
+- [Card](https://storybook.brikdesigns.com/?path=/docs/displays-cards-card--overview) — wrap each cell to get stat-tile styling
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-field-grid--overview)**

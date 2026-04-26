@@ -1,0 +1,153 @@
+---
+title: Select
+description: Single-select dropdown with options, placeholder, optional leading icon, and grouped options.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Select is a native `<select>` styled to match BDS. Use for single-select choice from a known list. For multi-select, use [MultiSelect](/docs/components/multi-select). For filtering inside a FilterBar, use [FilterButton](/docs/components/filter-button).
+
+## Use it for
+
+- Country, state, currency, language pickers
+- Plan / tier / category selection
+- Sort-by controls
+- Any single-pick from a fixed enumeration
+
+## Import
+
+```tsx
+import { Select } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+<Select
+  placeholder="Select one..."
+  options={[
+    { label: 'First', value: 'first' },
+    { label: 'Second', value: 'second' },
+  ]}
+/>
+```
+
+### With label, icon, and helper
+
+```tsx
+<Select
+  label="Company"
+  placeholder="Select company..."
+  helperText="Pick the parent organization"
+  icon={<BuildingsIcon />}
+  options={options}
+  fullWidth
+/>
+```
+
+### Grouped options
+
+Pass an array mixing `SelectOption` (a single option) and `SelectOptionGroup` (a group with a `label` and nested `options`). Groups render as `<optgroup>`.
+
+```tsx
+<Select
+  label="Location"
+  placeholder="Select city..."
+  options={[
+    {
+      label: 'US',
+      options: [
+        { label: 'New York', value: 'nyc' },
+        { label: 'San Francisco', value: 'sfo' },
+      ],
+    },
+    {
+      label: 'Europe',
+      options: [
+        { label: 'London', value: 'lon' },
+        { label: 'Berlin', value: 'ber' },
+      ],
+    },
+  ]}
+/>
+```
+
+### Sizes
+
+`sm`, `md` (default), `lg` — match TextInput sizes.
+
+### Error state
+
+```tsx
+<Select label="Plan" error="Please select a plan" options={planOptions} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use Select for filter-bar dropdowns.** Use [FilterButton](/docs/components/filter-button) — it carries the right semantics and visual treatment for filter context.
+</Callout>
+
+- **Don't use Select for multi-select.** Use [MultiSelect](/docs/components/multi-select).
+- **Don't use Select for >50 options.** The native dropdown becomes unusable. Use a search-driven combobox pattern instead.
+- **Don't use Select for ≤3 options.** Use [Radio](/docs/components/radio) (vertical) or [SegmentedControl](https://storybook.brikdesigns.com/?path=/docs/components-control-segmented-control--overview) (horizontal) — both surface choices visibly.
+
+## Accessibility
+
+- Renders a real `<select>` — keyboard navigation (arrows, type-to-find), platform native-listbox UI.
+- `label` auto-wires `htmlFor`/`id`.
+- `error` sets `aria-invalid` and replaces `helperText` with the error message.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `options` | `(SelectOption \| SelectOptionGroup)[]` *(required)* | — |
+| `placeholder` | `string` | — |
+| `value` / `defaultValue` | `string` | — |
+| `onChange` | `(e: ChangeEvent<HTMLSelectElement>) => void` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `error` | `string` | — |
+| `fullWidth` | `boolean` | `true` |
+| `icon` | `ReactNode` | — |
+| `disabled` | `boolean` | `false` |
+
+### Option shapes
+
+```ts
+interface SelectOption {
+  label: string;
+  value: string;
+  disabled?: boolean;
+}
+
+interface SelectOptionGroup {
+  label: string;
+  options: SelectOption[];
+}
+```
+
+## CSS Override API
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--select-chevron-color` | `var(--text-muted)` | Chevron icon color |
+| `--select-icon-color` | `var(--text-muted)` | Leading icon color |
+
+```css
+.branded-form {
+  --select-chevron-color: var(--text-brand-primary);
+  --select-icon-color: var(--text-brand-primary);
+}
+```
+
+## Related
+
+- [MultiSelect](/docs/components/multi-select) — multi-pick sibling
+- [FilterButton](/docs/components/filter-button) — dropdown for filter bars
+- [Radio](/docs/components/radio) — alternative for ≤5 options
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-select--overview)**

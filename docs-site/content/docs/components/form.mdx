@@ -1,0 +1,122 @@
+---
+title: Form
+description: Structured form container with title, description, error/success states, and footer actions.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Form is the editable counterpart to [Field](/docs/components/field). It renders a real `<form>` with consistent spacing, optional title/description/footer slots, and form-level error or success messaging. Use it whenever you have more than one input that should submit together.
+
+## Use it for
+
+- Multi-input editable views (contact forms, settings panels, intake flows)
+- Any view where Save / Cancel are explicit actions, not auto-save
+- Forms that need a title / description / submit-state pattern out of the box
+
+For a single-input quick edit, you don't need Form — just render the input directly. For read-mode display, use [Field](/docs/components/field).
+
+## Import
+
+```tsx
+import { Form } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { Form, TextInput, TextArea, Button } from '@brikdesigns/bds';
+
+<Form
+  title="Contact us"
+  description="We'll get back to you within 24 hours."
+  onSubmit={handleSubmit}
+  footer={<Button type="submit">Send message</Button>}
+>
+  <TextInput label="Name" placeholder="Your name" fullWidth />
+  <TextInput label="Email" type="email" placeholder="you@example.com" fullWidth />
+  <TextArea label="Message" placeholder="How can we help?" fullWidth />
+</Form>
+```
+
+### Layout
+
+`vertical` (default) stacks fields. `horizontal` lays them side by side for compact forms.
+
+```tsx
+<Form layout="horizontal" {...props}>
+  <TextInput label="First" />
+  <TextInput label="Last" />
+</Form>
+```
+
+### Gap sizes
+
+| Size | Gap value |
+|---|---|
+| `sm` | `--gap-md` (8px) |
+| `md` (default) | `--gap-lg` (16px) |
+| `lg` | `--gap-xl` (24px) |
+
+```tsx
+<Form gap="lg" {...props}>...</Form>
+```
+
+### Form-level error
+
+```tsx
+<Form
+  error="Couldn't save. Try again in a moment."
+  onSubmit={handleSubmit}
+  footer={<Button type="submit">Save</Button>}
+>
+  ...
+</Form>
+```
+
+### Form-level success
+
+```tsx
+<Form
+  success="Saved. Settings updated."
+  onSubmit={handleSubmit}
+  footer={<Button type="submit">Save</Button>}
+>
+  ...
+</Form>
+```
+
+## When *not* to use
+
+- **Don't use Form for read-mode display.** Use [Field](/docs/components/field) + [FieldGrid](/docs/components/field-grid).
+- **Don't use Form for inline edit-in-place.** Single-field inline editing doesn't need a `<form>` wrapper. Use the input directly with controlled state.
+- **Don't put navigation actions in `footer`.** Footer is for submit/cancel of *this form's data*. "Back to dashboard" goes in the parent layout.
+
+## Accessibility
+
+- Renders a real `<form>` element. Browser handles `Enter` to submit, autofocus, autofill correctly.
+- `title` becomes a heading inside the form. Use a sensible heading hierarchy in the surrounding page (typically `<h1>` outside, this becomes `<h2>` inside).
+- `error` and `success` messages are announced via `aria-live="polite"` so screen readers pick up async submit feedback.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `children` | `ReactNode` *(required)* | — |
+| `layout` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `gap` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `title` | `string` | — |
+| `description` | `string` | — |
+| `error` | `string` | — |
+| `success` | `string` | — |
+| `footer` | `ReactNode` | — |
+
+Plus all standard `<form>` HTML attributes (including `onSubmit`, `action`, `method`, etc.).
+
+## Related
+
+- [Field](/docs/components/field) — read-mode counterpart
+- [FieldGrid](/docs/components/field-grid) — equal-column layout for read-mode
+- All Form Inputs ([TextInput](/docs/components/text-input), [Select](/docs/components/select), [Checkbox](/docs/components/checkbox), etc.) — typical Form children
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-form--overview)**

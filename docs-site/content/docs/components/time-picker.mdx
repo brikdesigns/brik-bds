@@ -1,0 +1,119 @@
+---
+title: Time picker
+description: Time-of-day selection with hour/minute controls. AM/PM or 24-hour display.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+TimePicker is a TextInput-shaped trigger with a popover for hour/minute selection. Value is always exchanged as a `HH:mm` string in 24-hour format — display switches with `use24Hour`, but the underlying value stays normalized.
+
+## Use it for
+
+- Time-of-day selection on forms (appointment slot, opening hours, alarm)
+- Pair with [DatePicker](/docs/components/date-picker) for date-and-time entry
+- Recurring schedules where the hour/minute matters
+
+## Import
+
+```tsx
+import { TimePicker } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default (12-hour AM/PM display)
+
+```tsx
+import { useState } from 'react';
+
+const [time, setTime] = useState('09:00');
+
+<TimePicker
+  label="Start time"
+  value={time}
+  onChange={setTime}
+  placeholder="Pick a time"
+/>
+```
+
+The displayed value is "9:00 AM" but `time` state holds `"09:00"`.
+
+### 24-hour display
+
+```tsx
+<TimePicker
+  label="Start time"
+  value={time}
+  onChange={setTime}
+  use24Hour
+/>
+```
+
+Now displays "09:00" / "21:30". The `value` exchange format is unchanged — it's always 24-hour `HH:mm`.
+
+### Minute step
+
+`minuteStep` constrains selectable minutes. Use 5, 15, or 30 for slot-based scheduling.
+
+```tsx
+<TimePicker
+  label="Appointment slot"
+  value={time}
+  onChange={setTime}
+  minuteStep={15}
+/>
+```
+
+### Sizes
+
+`sm`, `md` (default), `lg`.
+
+### Error state
+
+```tsx
+<TimePicker
+  label="Open at"
+  error="Open time must be before close time"
+  value={time}
+  onChange={setTime}
+/>
+```
+
+## When *not* to use
+
+- **Don't use TimePicker for date selection.** Use [DatePicker](/docs/components/date-picker).
+- **Don't use TimePicker for duration entry.** Duration ("30 minutes") is different semantically from time-of-day ("at 9:30 AM"). For durations, use a [Select](/docs/components/select) of preset values or two number inputs.
+- **Don't combine date + time into a custom component.** Pair DatePicker + TimePicker side by side — that's the BDS pattern.
+
+<Callout type="info">
+  **Value format is always 24-hour `HH:mm`.** Even with `use24Hour={false}`, the string passed to `onChange` is normalized — you don't need to parse AM/PM. The `use24Hour` flag is purely a display-layer concern.
+</Callout>
+
+## Accessibility
+
+- The trigger is a real `<input>` — keyboard, focus, screen-reader behaviors match TextInput.
+- Hour/minute selection in the popover uses arrow keys + type-to-find.
+- Selected time announces via `aria-live` on the trigger.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `string` (HH:mm 24h) | — |
+| `onChange` | `(value: string) => void` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `error` | `string` | — |
+| `placeholder` | `string` | — |
+| `fullWidth` | `boolean` | `false` |
+| `disabled` | `boolean` | `false` |
+| `minuteStep` | `number` | `1` |
+| `use24Hour` | `boolean` | `false` |
+| `id` | `string` | auto |
+
+## Related
+
+- [DatePicker](/docs/components/date-picker) — pair for date-and-time
+- [TextInput](/docs/components/text-input) — base trigger shape
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-time-picker--overview)**

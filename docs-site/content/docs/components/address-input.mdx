@@ -1,0 +1,99 @@
+---
+title: Address input
+description: Location text input with a leading map-pin icon and an autocomplete suggestion dropdown.
+---
+
+AddressInput is a TextInput specialized for location entry. It carries a built-in location icon and supports an autocomplete suggestion dropdown driven by the parent's data fetch.
+
+## Use it for
+
+- Office, business, or property address fields on a profile or company record
+- Location-based search where suggestions come from a geocoding API (Mapbox, Google Places)
+- Any free-form location entry that benefits from address autocomplete
+
+For arbitrary text without geocoding, use [TextInput](/docs/components/text-input).
+
+## Import
+
+```tsx
+import { AddressInput, type AddressSuggestion } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Sizes
+
+Two sizes — `md` (default) and `sm`. Use `sm` in dense rows or sidebars.
+
+```tsx
+<AddressInput label="Address" placeholder="Enter location" />
+<AddressInput label="Address" size="sm" placeholder="Enter location" />
+```
+
+## Pattern: with autocomplete
+
+The parent owns the suggestion fetch. Pass results as `suggestions` and handle selection via `onSuggestionSelect`.
+
+```tsx
+import { AddressInput, type AddressSuggestion } from '@brikdesigns/bds';
+import { useState } from 'react';
+
+const [value, setValue] = useState('');
+const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
+
+<AddressInput
+  label="Address"
+  value={value}
+  onChange={(e) => {
+    setValue(e.target.value);
+    fetchSuggestions(e.target.value).then(setSuggestions);
+  }}
+  suggestions={suggestions}
+  onSuggestionSelect={(s) => {
+    setValue(s.label);
+    setSuggestions([]);
+  }}
+  placeholder="Enter location"
+  fullWidth
+/>
+```
+
+Debounce the `fetchSuggestions` call upstream — typing fires `onChange` on every keystroke, which would hammer the geocoding API.
+
+## When *not* to use
+
+- **Don't use AddressInput for parsed-address fields.** If the form needs separate Street / City / State / Zip fields, use multiple [TextInput](/docs/components/text-input)s + a [Select](/docs/components/select) for State.
+- **Don't fake suggestions.** The dropdown implies a real autocomplete; without one, prefer plain TextInput so the icon doesn't make a promise the form can't keep.
+
+## Accessibility
+
+- Renders an `<input>` with the location icon as a decorative leading affordance (`aria-hidden`).
+- The suggestion list uses `role="listbox"`; selected suggestions are announced via `aria-activedescendant`.
+- Keyboard: `↓`/`↑` navigates suggestions, `Enter` selects, `Esc` dismisses.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `size` | `'sm' \| 'md'` | `'md'` |
+| `label` | `string` | — |
+| `fullWidth` | `boolean` | `false` |
+| `suggestions` | `AddressSuggestion[]` | — |
+| `onSuggestionSelect` | `(s: AddressSuggestion) => void` | — |
+
+Plus all standard `<input>` HTML attributes (excluding `size` and `type`).
+
+### AddressSuggestion shape
+
+```ts
+interface AddressSuggestion {
+  id: string;
+  label: string;
+  // Plus whatever your geocoder returns (lat/lng, place_id, etc.)
+}
+```
+
+## Related
+
+- [TextInput](/docs/components/text-input) — base text-input behavior
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-address-input--overview)**

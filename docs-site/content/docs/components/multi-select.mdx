@@ -1,0 +1,104 @@
+---
+title: Multi-select
+description: Select dropdown that supports multiple selections, with picked items rendered as removable Tag chips.
+---
+
+MultiSelect composes [Select](/docs/components/select) + [Tag](/docs/components/tag): pick from a dropdown, selected items render below as removable Tag chips. Use whenever a user can pick more than one option from a known set.
+
+## Use it for
+
+- Service category selection (Brand Design + Marketing + Content)
+- Tag/label assignment on a record
+- Multi-region or multi-tenant scoping
+- Any "pick N from M" choice with a visible-set affordance
+
+For single-pick, use [Select](/docs/components/select). For free-form tag entry where users type new values, use [AddableTagList](https://storybook.brikdesigns.com/?path=/docs/components-addable-addable-tag-list--overview).
+
+## Import
+
+```tsx
+import { MultiSelect } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+
+const [selected, setSelected] = useState<string[]>([]);
+
+<MultiSelect
+  label="Services"
+  placeholder="Select services..."
+  options={[
+    { label: 'Brand Design', value: 'brand' },
+    { label: 'Marketing', value: 'marketing' },
+    { label: 'Product Design', value: 'product' },
+  ]}
+  value={selected}
+  onChange={setSelected}
+/>
+```
+
+### Sizes
+
+```tsx
+<MultiSelect size="sm" {...props} />
+<MultiSelect size="md" {...props} />
+<MultiSelect size="lg" {...props} />
+```
+
+### Error state
+
+```tsx
+<MultiSelect
+  label="Required services"
+  error="Please select at least one"
+  options={options}
+  value={selected}
+  onChange={setSelected}
+/>
+```
+
+### Tag size override
+
+By default selected-item tags match the dropdown size. Override with `tagSize` for a tighter pill cluster.
+
+```tsx
+<MultiSelect size="md" tagSize="sm" {...props} />
+```
+
+## When *not* to use
+
+- **Don't use MultiSelect for ≤3 options.** Use [Checkbox](/docs/components/checkbox) groups — the choices are visible at all times.
+- **Don't use MultiSelect when users need to enter new tags.** Free-form tag entry belongs in [AddableTagList](https://storybook.brikdesigns.com/?path=/docs/components-addable-addable-tag-list--overview).
+
+## Accessibility
+
+- Renders a `<select multiple>` (visually hidden) plus the rendered Tag list. Keyboard navigation matches the native multi-select.
+- Each selected Tag carries a `Remove {label}` accessible name on its dismiss button.
+- `aria-invalid` on the underlying select when `error` is present.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `options` | `MultiSelectOption[]` *(required)* | — |
+| `value` / `defaultValue` | `string[]` | — |
+| `onChange` | `(values: string[]) => void` | — |
+| `placeholder` | `string` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `tagSize` | `'sm' \| 'md' \| 'lg'` | matches `size` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `error` | `string` | — |
+| `disabled` | `boolean` | `false` |
+| `fullWidth` | `boolean` | `true` |
+
+## Related
+
+- [Select](/docs/components/select) — single-pick sibling
+- [Tag](/docs/components/tag) — the chip rendered for each selection
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-multi-select--overview)**
