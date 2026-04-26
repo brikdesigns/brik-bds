@@ -1,0 +1,128 @@
+---
+title: Typography
+description: Font families, the type scale, weights, and the semantic role rule.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { fontSizeScale, fontWeights } from '@bds-tokens';
+
+Typography tokens control font families, sizes, weights, and line heights. Each theme can override font families — switching themes refreshes the live previews on this page.
+
+<Callout type="warn">
+  **Font family must match the element's semantic role.** Heading/title elements → `--font-family-heading`. Label/badge/tag/button/caption → `--font-family-label`. Body copy → `--font-family-body`. BDS defaults all three to the same family during development, so misuse only surfaces when a client theme assigns distinct typefaces — by which point the violation has shipped.
+</Callout>
+
+## Font families
+
+<FontFamilyShowcase
+  families={[
+    { name: 'Display', cssVar: '--font-family-display' },
+    { name: 'Heading', cssVar: '--font-family-heading' },
+    { name: 'Body', cssVar: '--font-family-body' },
+    { name: 'Label', cssVar: '--font-family-label' },
+  ]}
+/>
+
+## Semantic typography
+
+These are the tokens components actually use. Each row renders the sample at its actual size — comparing a heading-md to a body-md is a hover-and-look operation, not a math operation.
+
+### Heading sizes
+
+The heading scale starts at 18px (`--heading-tiny`). 16px territory is body and label.
+
+<SemanticTypographyTable
+  title="Headings"
+  tokens={[
+    'heading-tiny',
+    'heading-sm',
+    'heading-md',
+    'heading-lg',
+    'heading-xl',
+    'heading-xxl',
+    'heading-huge',
+  ]}
+/>
+
+### Body sizes
+
+<SemanticTypographyTable
+  title="Body"
+  tokens={[
+    'body-tiny',
+    'body-xs',
+    'body-sm',
+    'body-md',
+    'body-lg',
+    'body-xl',
+    'body-huge',
+  ]}
+/>
+
+### Label sizes
+
+<SemanticTypographyTable
+  title="Labels"
+  tokens={[
+    'label-tiny',
+    'label-xs',
+    'label-sm',
+    'label-md',
+    'label-lg',
+    'label-xl',
+  ]}
+/>
+
+### Display sizes
+
+<SemanticTypographyTable
+  title="Display"
+  tokens={[
+    'display-sm',
+    'display-md',
+    'display-lg',
+    'display-xl',
+  ]}
+/>
+
+### Icon sizes
+
+Icon sizing tokens used by IconButton and inline icons.
+
+<SemanticTypographyTable
+  title="Icons"
+  tokens={[
+    'icon-tiny',
+    'icon-xs',
+    'icon-sm',
+    'icon-md',
+    'icon-lg',
+    'icon-xl',
+    'icon-huge',
+  ]}
+/>
+
+## Font size scale (primitives)
+
+Primitive scale from 10px to 515px. Components reference these only through the semantic tokens above.
+
+<TypographyScale scale={fontSizeScale} prefix="--font-size" />
+
+## Font weights
+
+<FontWeightShowcase weights={fontWeights} />
+
+## Line heights
+
+| Token | Value |
+|---|---|
+| `--font-line-height-tight` | 100% |
+| `--font-line-height-snug` | 125% |
+| `--font-line-height-normal` | 150% |
+| `--font-line-height-175` | 175% |
+| `--font-line-height-200` | 200% |
+
+## Related
+
+- [Color tokens](/docs/primitives/color) — pair text-* tokens with semantic backgrounds
+- [Spacing tokens](/docs/primitives/spacing) — the rhythm typography sits on

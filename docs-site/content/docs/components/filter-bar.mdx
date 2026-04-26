@@ -1,0 +1,137 @@
+---
+title: Filter bar
+description: Heading + count + filter-controls row for list and table views.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+FilterBar is the standard heading-and-controls strip above lists and tables. It renders a `heading-sm` title and a Counter on the left, filter children on the right, and an optional ghost "Clear filters" button that appears when any filter is active.
+
+Pairs naturally with [FilterButton](/docs/components/filter-button) (dropdown filters) and [FilterToggle](/docs/components/filter-toggle) (boolean toggle filters) for the control children.
+
+## Use it for
+
+- The header of a list, table, or grid view
+- Anywhere the user filters down a known total (`total` and `filtered` counts both surface)
+- Persistent filters that stay visible while the data changes underneath
+
+## Import
+
+```tsx
+import { FilterBar, FilterButton, FilterToggle } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+No filter applied — counter stays neutral and the Clear button is hidden.
+
+```tsx
+<FilterBar
+  title="Engagements"
+  total={42}
+  filtered={42}
+  label="engagements"
+>
+  <FilterButton label="Status" options={[...]} value={status} onChange={setStatus} />
+</FilterBar>
+```
+
+### Filtered
+
+When `filtered < total`, the counter switches to its `brand` style (configurable via `activeStatus`) and, if `onClear` is provided, a ghost Clear button appears after the controls.
+
+```tsx
+<FilterBar
+  title="Engagements"
+  total={42}
+  filtered={8}
+  label="engagements"
+  onClear={() => clearAllFilters()}
+>
+  <FilterButton ... />
+</FilterBar>
+```
+
+### No title
+
+The title is optional. When omitted the counter leads the row.
+
+### No clear callback
+
+Omit `onClear` to suppress the Clear button entirely — useful for table views that don't support bulk-clearing all filters at once.
+
+## Pattern: interactive filter bar
+
+Real-world wiring: local state holds filter values, `filtered.length` feeds the counter, and `onClear` resets all filters.
+
+```tsx
+import { FilterBar, FilterButton } from '@brikdesigns/bds';
+import { useState, useMemo } from 'react';
+
+function EngagementsTable({ rows }) {
+  const [status, setStatus] = useState<string | undefined>();
+
+  const filtered = useMemo(
+    () => (status ? rows.filter((r) => r.status === status) : rows),
+    [rows, status],
+  );
+
+  return (
+    <FilterBar
+      title="Engagements"
+      total={rows.length}
+      filtered={filtered.length}
+      label="engagements"
+      onClear={() => setStatus(undefined)}
+    >
+      <FilterButton
+        label="Status"
+        value={status}
+        onChange={setStatus}
+        options={[
+          { id: 'active', label: 'Active' },
+          { id: 'pending', label: 'Pending' },
+        ]}
+      />
+    </FilterBar>
+  );
+}
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't show a FilterBar with no filters.** If the view has no filterable axes, the header should be a regular `<h2>` + counter, not a FilterBar. The empty controls slot reads as a styling mistake.
+</Callout>
+
+## Accessibility
+
+- The title renders as an `<h2>` — ensure the surrounding page uses a sensible heading hierarchy (typically `<h1>` on the page and `<h2>` per table).
+- The container carries an `aria-label` (falls back to `"{title} filter bar"` or `"{label} filter bar"`).
+- The counter announces `"Count: {n}"` via `aria-label`.
+
+## API
+
+### FilterBar
+
+| Prop | Type | Default |
+|---|---|---|
+| `total` | `number` *(required)* | — |
+| `filtered` | `number` *(required)* | — |
+| `label` | `string` *(required)* | — |
+| `children` | `ReactNode` *(required)* | — |
+| `title` | `ReactNode` | — |
+| `activeStatus` | `CounterStatus` | `'brand'` |
+| `onClear` | `() => void` | — |
+| `clearLabel` | `string` | `'Clear filters'` |
+
+Plus all standard `<div>` HTML attributes (excluding `title`).
+
+## Related
+
+- [FilterButton](/docs/components/filter-button) — dropdown control children
+- [FilterToggle](/docs/components/filter-toggle) — boolean control children
+- [Counter](https://storybook.brikdesigns.com/?path=/docs/components-indicator-counter--overview) — the counter primitive used by the bar
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-action-filter-bar--overview)**

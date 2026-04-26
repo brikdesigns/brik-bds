@@ -1,0 +1,249 @@
+---
+title: Page templates
+description: The standard shape for every docs page. Read before authoring or migrating content.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Every page in this site follows one of three templates depending on what it documents. Templates are not arbitrary — they exist so agents and humans can find what they need at the same place on every page, and so cross-page navigation feels coherent.
+
+<Callout type="warn">
+  **Don't invent new page shapes.** If your page doesn't fit a template here, propose a template change in `docs-site/content/docs/contribution/page-templates.mdx` and update *every* page using that template in the same PR. The cost of two ad-hoc structures is a lot more than the cost of one rigid one.
+</Callout>
+
+## Frontmatter (required on every page)
+
+```yaml
+---
+title: Button
+description: Trigger an event or action. The button family includes three components for different semantic needs.
+---
+```
+
+Both `title` and `description` are required. The description renders below the page title in `<DocsDescription>`. Keep it under 140 characters and write it as a complete sentence — it doubles as the meta description.
+
+## Templates
+
+### Component page
+
+For pages under `/docs/components/`. The shape:
+
+```text
+1. One-line summary (no heading — opens the page)
+2. <ComparisonGrid> — only if there are sibling components to disambiguate (e.g. Button vs LinkButton vs IconButton)
+3. ## Use it for          — concrete situations, bullet list
+4. ## Import              — copy-paste import line
+5. ## Anatomy             — <ComponentAnatomy> with numbered parts
+6. ## Variants            — <EmphasisLadder> for ordered ladders, <ComponentPreview> for state/style families
+7. ## Sizes               — <ComponentPreview> grid of every size
+8. ## Other variant axes   — Icons, Loading, Full width, etc. — one ## per axis
+9. ## Sub-components       — LinkButton, IconButton, etc. each get their own ##
+10. ## When *not* to use   — bulleted "Don't" rules
+11. ## Accessibility       — keyboard, focus, aria, screen-reader behavior
+12. ## API                 — props tables (one ### per component); Storybook deep-link for full ArgTypes
+13. ## CSS Override API    — only if the component exposes scoped vars
+14. ## Related             — cross-links to playground, patterns, sibling components
+```
+
+[Button](/docs/components/button) is the reference implementation. New component pages should match its structure section-by-section.
+
+### Primitive page
+
+For pages under `/docs/primitives/`. The shape:
+
+```text
+1. One-line summary (no heading — opens the page)
+2. <Callout> — the most-broken rule for this primitive (e.g. "never use --text-* on a background")
+3. ## {Group}             — viz block per token group; e.g. Page and surface, Background, Text, Border
+4. ## Status / States     — interaction or status-state tokens if applicable
+5. ## Primitives          — <PaletteGrid>, <SpacingScale>, <BorderRadiusPreview>, etc. — raw scale below the semantic groups
+6. ## Modes               — only if the primitive has Figma "modes" (e.g. spacing has Base/Spacious)
+7. ## Related             — sibling primitive pages
+```
+
+[Color](/docs/primitives/color) and [Spacing](/docs/primitives/spacing) are reference implementations.
+
+### Content-system page
+
+For pages under `/docs/content-system/industries/`, `/voices/`, `/atmospheres/`. The shape:
+
+```text
+1. <MetadataStrip> — Version · Last reviewed · Cadence (required for industry packs and voice patterns)
+2. One-line summary
+3. ## 1. Overview
+4. ## 2. Default affinities (industries) or Tone profile (voices)
+5. ## 3. Pain points or Use cases
+6. ## 4. Seasonality (industries only)
+7. ## 5. Competitive landscape (industries only)
+8. ## 6. Listings requirements (industries only)
+9. ## 7. Regulatory summary (industries only)
+10. ## 8. Vocabulary — Avoid (HTML <table> — needs JSX .map() over pack data)
+11. ## 9. Navigation IA (industries only)
+12. ## 10. Brik Strategic POV (industries only)
+13. ## 11. Site Audit Extractors (industries only — only if the pack defines siteAudit)
+14. ## Related
+```
+
+[Industries → Dental](/docs/content-system/industries/dental) is the reference. Numbering the sections is intentional — it lets section-2 tables of contents read as a checklist.
+
+## Building blocks
+
+Components registered in `lib/mdx-components.tsx` are available in any `.mdx` without an explicit import.
+
+### Universal blocks
+
+- **`<ComponentPreview code={...}>`** — live render + Code tab + copy. Pass JSX as children, the source string as `code`.
+- **`<EmphasisLadder caption rungs={[...]}>`** — ordered variant ladder, top = strongest. Each rung is `{ label, example, use }`.
+- **`<ComparisonGrid items={[...]}>`** — three-column "X vs Y vs Z" decision grid. Each item is `{ title, preview, whenToUse, whenNotToUse?, code? }`.
+- **`<ComponentAnatomy parts={[...]}>`** — preview left, numbered parts right. Each part is `{ number, name, description, required? }`. Children render as the live preview.
+- **`<MetadataStrip items={[...]}>`** — page-header label/value strip. Each item is `{ label, value }`.
+
+### Foundation viz blocks
+
+Used on primitive pages.
+
+- **`<ColorGrid colors={[...]} columns={N}>`** — live click-to-copy swatches.
+- **`<PaletteGrid title palette prefix columns>`** — static hex swatches for primitive scales.
+- **`<SpacingScale title scale prefix>`** / **`<SemanticSpacing title tokens varPrefix>`**
+- **`<TypographyScale title scale prefix>`** / **`<FontFamilyShowcase families={[...]}>`** / **`<SemanticTypographyTable title tokens={[...]}>`** / **`<FontWeightShowcase weights={...}>`**
+- **`<BorderRadiusPreview title scale prefix>`** / **`<BorderWidthPreview title scale prefix>`** / **`<ShadowScale title scale prefix label>`**
+
+### Live BDS components
+
+Imported globally as a namespace.
+
+```mdx
+<ComponentPreview code={`<BDS.Button variant="primary">Save</BDS.Button>`}>
+  <BDS.Button variant="primary">Save</BDS.Button>
+</ComponentPreview>
+```
+
+Always namespaced as `BDS.*` to avoid collisions with HTML primitives like `<Card>`, `<Tabs>`, `<Switch>`.
+
+### Fumadocs primitives
+
+Imported per page as needed.
+
+```tsx
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Cards, Card } from 'fumadocs-ui/components/card';
+```
+
+## Conventions
+
+### Code blocks
+
+Always tag the language. Use the canonical tag for the content type — `tsx` for TypeScript JSX, `ts` for plain TypeScript, `css` for CSS, `bash` for shell, `text` for plain text or ASCII art, `json` for JSON, `yaml` for YAML.
+
+````md
+```tsx
+<Button variant="primary">Save</Button>
+```
+````
+
+Never use unlabelled fences (\`\`\` alone) — they break syntax highlighting and can break the rehype pipeline.
+
+### Callouts
+
+Three types only.
+
+```mdx
+<Callout type="info">For principles, framing, context.</Callout>
+<Callout type="warn">For "don'ts" — cascade violations, scope creep, broken patterns.</Callout>
+<Callout type="error">For "this will break production" — security, data loss, accessibility lawsuits.</Callout>
+```
+
+Don't introduce other types. Don't nest callouts. Don't put more than 2-3 sentences inside one — if the callout grows, it should be a paragraph or its own section.
+
+### Tables
+
+Use markdown tables for static reference data:
+
+```md
+| Token | CSS Variable | Default |
+|---|---|---|
+| Small | `--shadow-sm` | `0px 2px 4px rgba(0,0,0,0.06)` |
+```
+
+Use HTML `<table>` only when you need JSX `.map()` over runtime data:
+
+```mdx
+<table>
+  <thead><tr><th>Term</th><th>Why</th></tr></thead>
+  <tbody>
+    {dental.vocabulary.avoid.map((v, i) => (
+      <tr key={i}><td><strong>{v.term}</strong></td><td>{v.reason}</td></tr>
+    ))}
+  </tbody>
+</table>
+```
+
+JSX expressions inside markdown table syntax don't get re-parsed at runtime — `{x.map(() => '\| col \|').join('\\n')}` renders as literal text, not a table.
+
+### Headings
+
+H1 is the page title (driven by frontmatter — never write `# ` in the body). H2 for sections, H3 for sub-sections. Don't go below H4.
+
+### Internal links
+
+Always absolute paths starting with `/docs/`. Never relative paths.
+
+```md
+✓  [Cascade rules](/docs/getting-started/cascade)
+✗  [Cascade rules](../getting-started/cascade)
+```
+
+### External links to Storybook
+
+Always full URLs, never short paths. They survive Fumadocs path renames.
+
+```md
+✓  [Storybook → Button](https://storybook.brikdesigns.com/?path=/docs/components-action-button--overview)
+✗  Some shortened or relative path
+```
+
+### Tabs (for multi-step or platform-specific content)
+
+Always blank lines around code blocks inside `<Tab>` — MDX needs the whitespace to parse correctly. (When showing nested code fences in your own page, wrap the outer fence in **four** backticks; otherwise the inner three-backtick fence closes the outer prematurely.)
+
+````mdx
+<Tabs items={['npm', 'pnpm', 'bun']}>
+
+<Tab value="npm">
+
+```bash
+npm install @brikdesigns/bds
+```
+
+</Tab>
+
+<Tab value="pnpm">
+
+```bash
+pnpm add @brikdesigns/bds
+```
+
+</Tab>
+
+</Tabs>
+````
+
+## How this site relates to Storybook
+
+| Surface | Job |
+|---|---|
+| **This site** | When-to-use, anatomy, do/don't, accessibility, design rationale |
+| **Storybook** | Live prop exploration, every visual variant, copy-paste code |
+
+If a page would be 80% prop tables with one prose paragraph at the top, it belongs in Storybook only — link out, don't migrate. If a page would be 80% prose with one code snippet, it belongs here.
+
+## Adding a new page
+
+1. Pick the template (component, primitive, content-system).
+2. Drop a new `.mdx` file in the right folder under `content/docs/`.
+3. Add the slug to the parent folder's `meta.json` `pages` array.
+4. Run `npm run build` from `docs-site/` to verify it compiles.
+5. Reload the dev server (Turbopack picks up new files automatically).
+
+The page renders at `/docs/{folder}/{slug}` once the meta.json knows about it.

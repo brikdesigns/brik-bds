@@ -1,0 +1,49 @@
+---
+title: Shadow
+description: Elevation through blur, spread, and composed semantic shadow tokens.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { shadowBlurScale, shadowSpreadScale } from '@bds-tokens';
+
+Shadow tokens define elevation through blur, spread, and offset values. The granular primitives compose into ready-to-use semantic shadows.
+
+<Callout type="warn">
+  **Use composed semantic shadows in component CSS** — `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-xl`. Never compose raw blur and spread values yourself; the semantic tokens are tuned together for consistent perceived elevation.
+</Callout>
+
+## Composed shadow tokens
+
+Ready-to-use `box-shadow` values defined in `tokens/gap-fills.css`. These are what components reference.
+
+| Token | CSS Variable | Value | Use case |
+|---|---|---|---|
+| Small | `--shadow-sm` | `0px 2px 4px 0px rgba(0,0,0,0.06)` | Subtle cards, inputs |
+| Medium | `--shadow-md` | `0px 4px 12px 0px rgba(0,0,0,0.12)` | Cards, panels |
+| Large | `--shadow-lg` | `0px 4px 16px 0px rgba(0,0,0,0.12)` | Dropdowns, popovers |
+| Extra large | `--shadow-xl` | `0px 8px 24px 4px rgba(0,0,0,0.20)` | Modals, dialogs |
+
+### Overlay
+
+| Token | CSS Variable | Value |
+|---|---|---|
+| Overlay | `--background-overlay` | `rgba(0, 0, 0, 0.4)` |
+
+Used for modal backdrops and drawer overlays.
+
+## Shadow blur scale (primitives)
+
+Controls the softness/diffusion of shadows.
+
+<ShadowScale scale={shadowBlurScale} prefix="--shadow-blur" label="blur" />
+
+## Shadow spread scale (primitives)
+
+Controls how far a shadow extends outward.
+
+<ShadowScale scale={shadowSpreadScale} prefix="--shadow-spread" label="spread" />
+
+## Related
+
+- [Border radius](/docs/primitives/border-radius) — radius and elevation read together at the component edge
+- [Color tokens](/docs/primitives/color) — surface tokens shadows sit on
