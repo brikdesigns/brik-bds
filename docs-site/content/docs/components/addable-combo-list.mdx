@@ -1,0 +1,154 @@
+---
+title: Addable combo list
+description: Suggestion-driven combobox for tag-style multi-select with free-form fallback.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+AddableComboList is the vocabulary-backed sibling of [AddableTextList](/docs/components/addable-text-list). Typing filters a known suggestion list (case-insensitive contains match); users can pick from suggestions via keyboard/click, or type a free-form value and press **Enter** (unless `strict`).
+
+Use for intake fields where a vocabulary exists but editors may need custom entries — services offered, payment types, insurance providers wired from BCS getters like `getIndustryServices`.
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'AddableComboList',
+      whenToUse: 'Vocabulary-backed picks with optional free-form fallback. BCS getters, locked enums.',
+      whenNotToUse: 'No vocabulary — use AddableTextList.',
+      code: `<AddableComboList suggestions={...} />`,
+    },
+    {
+      title: 'AddableTextList',
+      whenToUse: 'Free-form one-string-per-row entry, no vocabulary.',
+      whenNotToUse: 'Vocabulary exists — use ComboList for autocomplete.',
+      code: `<AddableTextList values={...} />`,
+    },
+    {
+      title: 'MultiSelect',
+      whenToUse: 'Locked vocabulary, no free-form. Renders as Tag chips.',
+      whenNotToUse: 'Need free-form fallback — use ComboList with strict=false.',
+      code: `<MultiSelect options={...} />`,
+    },
+  ]}
+/>
+
+## Use it for
+
+- Services from a BCS catalog with the option to add custom ones
+- Payment types / insurance providers where the industry pack seeds defaults but clients may add specifics
+- Tag entry against a recent-tags suggestion list
+
+## Import
+
+```tsx
+import { AddableComboList } from '@brikdesigns/bds';
+import { getIndustryServices } from '@brikdesigns/bds/content-system';
+```
+
+## Variants
+
+### Default — vocabulary-backed
+
+```tsx
+import { useState } from 'react';
+const [values, setValues] = useState<string[]>([]);
+const services = getIndustryServices(company.industry_slug);
+
+<AddableComboList
+  label="Services offered"
+  values={values}
+  onChange={setValues}
+  suggestions={services}
+  placeholder="Type or pick a service…"
+/>
+```
+
+### Strict mode — vocabulary-only
+
+When `strict` is true, only suggestions can be added. Free-form `Enter` is blocked and a hint shows while the typed value doesn't match any suggestion.
+
+```tsx
+<AddableComboList
+  label="Insurance accepted"
+  values={values}
+  onChange={setValues}
+  suggestions={INSURANCE_PROVIDERS}
+  strict
+/>
+```
+
+### Sizes
+
+`sm`, `md` (default), `lg`.
+
+### Disabled
+
+Renders tags without input or remove controls.
+
+```tsx
+<AddableComboList values={values} onChange={() => {}} suggestions={[]} disabled />
+```
+
+### Max entries
+
+When `maxEntries` is reached, the add button is hidden.
+
+```tsx
+<AddableComboList
+  values={values}
+  onChange={setValues}
+  suggestions={services}
+  maxEntries={5}
+/>
+```
+
+## Behavior
+
+- **Typing** filters `suggestions` (case-insensitive contains) and opens the dropdown.
+- **Arrow keys** cycle through dropdown options.
+- **Enter** with a highlighted suggestion commits it; Enter with no highlight commits the raw typed string (unless `strict`).
+- **Esc** closes the dropdown (first press) or cancels the input (second press).
+- **Backspace** on empty input removes the last tag.
+- **Already-selected suggestions** are hidden from the dropdown.
+- Duplicates trigger a brief flash outline and are not added.
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use AddableComboList when there's no vocabulary.** Free-form-only is [AddableTextList](/docs/components/addable-text-list)'s job — the combobox dropdown adds visual weight that goes nowhere without suggestions.
+</Callout>
+
+- **Don't use for locked vocabularies with no free-form escape.** Use [MultiSelect](/docs/components/multi-select) — same Tag-chip output, simpler for users (just pick).
+- **Don't use for description-bearing entries.** Each row is one short string. Title + description belongs in [AddableEntryList](/docs/components/addable-entry-list).
+
+## Accessibility
+
+- Input: `role="combobox"`, `aria-expanded`, `aria-haspopup="listbox"`, `aria-activedescendant`
+- Dropdown: `role="listbox"` with `role="option"` items and `aria-selected`
+- Tags: `role="list"` / `role="listitem"` with accessible labels
+- Screen reader announce on add/remove via `aria-live` on the tag container
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `values` | `string[]` *(required)* | — |
+| `onChange` | `(next: string[]) => void` *(required)* | — |
+| `suggestions` | `string[]` *(required)* | — |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `placeholder` | `string` | — |
+| `addLabel` | `string` | `'Add'` |
+| `removeLabel` | `string` | `'Remove'` |
+| `emptyLabel` | `string` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+| `maxEntries` | `number` | unlimited |
+| `strict` | `boolean` | `false` |
+
+## Related
+
+- [AddableTextList](/docs/components/addable-text-list) — free-form sibling
+- [AddableEntryList](/docs/components/addable-entry-list) — title+description sibling
+- [MultiSelect](/docs/components/multi-select) — locked-vocabulary alternative
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-addable-combo-list--overview)**

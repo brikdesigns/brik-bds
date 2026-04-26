@@ -1,0 +1,229 @@
+---
+title: Addable field row list
+description: Multi-field row collection. Each row carries 2+ structured fields with type-safe row data.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+AddableFieldRowList is the most flexible primitive in the addable family. Each row holds 2+ structured fields — `Name + Purpose + Category`, `open time + close time + closed-checkbox`. Field types vary freely (TextInput, Select, Checkbox, TextArea) and row data stays type-safe via a generic.
+
+Per [ADR-005](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-005-addable-field-row-list.md). Replaces three hand-rolled patterns identified in the [2026-Q2 portal addable survey](https://github.com/brikdesigns/brik-bds/blob/main/docs/audits/2026-Q2-portal-addable-survey.md).
+
+## Use it for
+
+- Phone systems / Other tools (Name + Purpose + Category)
+- Holiday hours (Date + Open time + Close time + Closed checkbox)
+- Competitive positioning (3 TextArea fields per row)
+- Office locations (Address + Hours + Phone)
+- Any list where each item has 2+ structured fields and field types vary
+
+## Import
+
+```tsx
+import { AddableFieldRowList, TextInput, Select } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Phone System (TextInput + TextInput + Select)
+
+The canonical 3-field row. The `columns` prop sets the grid template; the primitive auto-appends an `auto` track for the per-row remove button.
+
+```tsx
+import { useState } from 'react';
+
+interface Tool {
+  name: string;
+  purpose: string;
+  category: 'phone' | 'crm' | 'other';
+}
+
+const [tools, setTools] = useState<Tool[]>([]);
+
+<AddableFieldRowList<Tool>
+  label="Tools"
+  values={tools}
+  onChange={setTools}
+  newRow={() => ({ name: '', purpose: '', category: 'other' })}
+  columns="1fr 1fr 160px"
+  addLabel="Add tool"
+  removeLabel="Remove tool"
+>
+  {({ row, update }) => (
+    <>
+      <TextInput
+        value={row.name}
+        onChange={(e) => update({ name: e.target.value })}
+      />
+      <TextInput
+        value={row.purpose}
+        onChange={(e) => update({ purpose: e.target.value })}
+      />
+      <Select
+        options={CATEGORY_OPTIONS}
+        value={row.category}
+        onChange={(e) => update({ category: e.target.value as Tool['category'] })}
+      />
+    </>
+  )}
+</AddableFieldRowList>
+```
+
+### Holiday hours (cross-field disabling)
+
+The render-prop API supports cross-field interactions naturally — read `row.closed` and conditionally set `disabled` on the time inputs. No special primitive support needed.
+
+```tsx
+interface HolidayRow {
+  date: string;
+  open: string;
+  close: string;
+  closed: boolean;
+}
+
+<AddableFieldRowList<HolidayRow>
+  values={holidays}
+  onChange={setHolidays}
+  newRow={() => ({ date: '', open: '09:00', close: '17:00', closed: false })}
+  columns="1fr 120px 120px auto"
+>
+  {({ row, update }) => (
+    <>
+      <TextInput value={row.date} onChange={(e) => update({ date: e.target.value })} />
+      <TextInput
+        type="time"
+        value={row.open}
+        onChange={(e) => update({ open: e.target.value })}
+        disabled={row.closed}
+      />
+      <TextInput
+        type="time"
+        value={row.close}
+        onChange={(e) => update({ close: e.target.value })}
+        disabled={row.closed}
+      />
+      <Checkbox
+        label="Closed"
+        checked={row.closed}
+        onChange={(e) => update({ closed: e.target.checked })}
+      />
+    </>
+  )}
+</AddableFieldRowList>
+```
+
+### Three TextAreas (Competitive positioning)
+
+Same primitive, taller content. Three TextArea fields per row in a `1fr 1fr 1fr` grid.
+
+```tsx
+<AddableFieldRowList<CompetitiveFrame>
+  values={frames}
+  onChange={setFrames}
+  newRow={() => ({ competitor: '', gap: '', copyImplication: '' })}
+  columns="1fr 1fr 1fr"
+>
+  {({ row, update }) => (
+    <>
+      <TextArea value={row.competitor} onChange={(e) => update({ competitor: e.target.value })} rows={3} />
+      <TextArea value={row.gap} onChange={(e) => update({ gap: e.target.value })} rows={3} />
+      <TextArea value={row.copyImplication} onChange={(e) => update({ copyImplication: e.target.value })} rows={3} />
+    </>
+  )}
+</AddableFieldRowList>
+```
+
+### Empty + maxItems
+
+When `values.length === 0`, `emptyLabel` shows in place of the row list. When `values.length >= maxItems`, the Add button hides automatically.
+
+```tsx
+<AddableFieldRowList
+  values={tools}
+  onChange={setTools}
+  newRow={() => ({ ... })}
+  emptyLabel="No tools added yet."
+  maxItems={10}
+>
+  {({ row, update }) => /* fields */}
+</AddableFieldRowList>
+```
+
+## Render-prop context
+
+The `children` render-prop receives `{ row, index, update }`:
+
+- **`row: T`** — current row data, typed via the generic `<T>` parameter
+- **`index: number`** — zero-indexed row position
+- **`update: (patch: Partial<T>) => void`** — patches the row, merging into current values
+
+## `columns` prop
+
+CSS `grid-template-columns` value for the field columns. The primitive appends an `auto` track for the per-row remove button automatically.
+
+```tsx
+columns="1fr 1fr 160px"   // 2 flexible + 1 fixed-width
+columns="1fr 1fr 1fr"     // 3 equal columns
+columns="1fr"             // single full-width field
+```
+
+## Remove icon semantics
+
+Per-row remove uses `IconButton variant="ghost"` with `ph:dash-circle`. The icon choice carries a deliberate semantic distinction (per ADR-005):
+
+| Icon | Component | Meaning |
+|---|---|---|
+| `ph:dash-circle` | AddableFieldRowList (this) | **remove from list** (subtract) |
+| `ph:x` | [Tag](/docs/components/tag) `onRemove` | **dismiss selection** (close) |
+| `ph:trash-fill` | Page-level destructive actions | **delete record** (permanent) |
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use AddableFieldRowList for single-string-per-item.** Use [AddableTextList](/docs/components/addable-text-list) (free-form) or [AddableComboList](/docs/components/addable-combo-list) (vocabulary). The render-prop overhead is wasted on a single field.
+</Callout>
+
+- **Don't use for title + description.** Use [AddableEntryList](/docs/components/addable-entry-list).
+- **Don't use for picking from a fixed enum.** Use [MultiSelect](/docs/components/multi-select) — renders as Tag chips, simpler than a row grid.
+
+## Accessibility
+
+- Each row is a `<div role="group">` with the field label as an `aria-labelledby` reference.
+- Per-row remove button uses the `removeLabel` prop as its accessible name.
+- The Add button is a real `<button>` with the `addLabel` prop as its name.
+- Type-safe row data via the generic doesn't affect runtime — all ARIA wiring is unchanged.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `values` | `T[]` *(required)* | — |
+| `onChange` | `(next: T[]) => void` *(required)* | — |
+| `newRow` | `() => T` *(required)* | — |
+| `children` | `(ctx: AddableFieldRowContext<T>) => ReactNode` *(required)* | — |
+| `columns` | `string` (CSS grid template) | `'1fr'` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `emptyLabel` | `string` | — |
+| `addLabel` | `string` | `'Add row'` |
+| `removeLabel` | `string` | `'Remove row'` |
+| `maxItems` | `number` | unlimited |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+
+### AddableFieldRowContext shape
+
+```ts
+interface AddableFieldRowContext<T> {
+  row: T;
+  index: number;
+  update: (patch: Partial<T>) => void;
+}
+```
+
+## Related
+
+- [AddableTextList](/docs/components/addable-text-list) — single string per row
+- [AddableComboList](/docs/components/addable-combo-list) — vocabulary single string
+- [AddableEntryList](/docs/components/addable-entry-list) — primary + secondary
+- [MultiSelect](/docs/components/multi-select) — locked enum, Tag chip output
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-addable-field-row-list--overview)**
