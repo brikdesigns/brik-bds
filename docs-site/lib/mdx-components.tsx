@@ -1,6 +1,10 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import { ComponentPreview } from '@/components/component-preview';
+import { EmphasisLadder } from '@/components/mdx/emphasis-ladder';
+import { ComparisonGrid } from '@/components/mdx/comparison-grid';
+import { ComponentAnatomy } from '@/components/mdx/component-anatomy';
+import { MetadataStrip } from '@/components/mdx/metadata-strip';
 import * as BDS from '@brikdesigns/bds';
 
 /**
@@ -10,11 +14,18 @@ import * as BDS from '@brikdesigns/bds';
  * Pattern: BDS components are spread under `BDS.*` so authors write
  * `<BDS.Button>...` in MDX. This keeps the component namespace explicit and
  * avoids name collisions with HTML primitives (e.g. <Card>, <Tabs>).
+ *
+ * Visual building blocks live under `@/components/mdx/` and are registered
+ * unprefixed so they read naturally in MDX prose.
  */
 export function getMDXComponents(extra?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
     ComponentPreview,
+    EmphasisLadder,
+    ComparisonGrid,
+    ComponentAnatomy,
+    MetadataStrip,
     // The BDS namespace export includes hooks (useTheme) alongside components.
     // MDX's component-map type rejects that mix; cast since MDX only ever calls
     // the JSX entries (`<BDS.Button>`), never the hooks.

@@ -6,7 +6,13 @@ description: High-trust, local-first healthcare. The reference industry pack —
 import { Callout } from 'fumadocs-ui/components/callout';
 import { dental } from '@brikdesigns/bds/content-system';
 
-**Version:** {dental.version}  ·  **Last reviewed:** {dental.lastReviewed}  ·  **Review cadence:** {dental.reviewCadence}
+<MetadataStrip
+  items={[
+    { label: 'Version', value: dental.version },
+    { label: 'Last reviewed', value: dental.lastReviewed },
+    { label: 'Cadence', value: dental.reviewCadence },
+  ]}
+/>
 
 Static reference. Automations consume this when generating strategy documents. Never injected into client briefs as client-specific fact — always layer through the resolver so client overrides win.
 

@@ -5,11 +5,33 @@ description: Trigger an event or action. The button family includes three compon
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-The button family is three components for three semantic needs:
+The button family is three components for three semantic needs. Pick the right one before you reach for variants — the wrong shell semantically can't be fixed with styling.
 
-- **`Button`** — renders a `<button>`. Use for actions that stay on the page (submit, open dialog, confirm).
-- **`LinkButton`** — renders an `<a>`. Use when the action navigates to a URL.
-- **`IconButton`** — renders a `<button>` with an icon and required `aria-label`. Use when there's no visible text label.
+<ComparisonGrid
+  items={[
+    {
+      title: 'Button',
+      preview: <BDS.Button variant="primary">Save</BDS.Button>,
+      whenToUse: 'The action stays on this page (submit, open dialog, confirm).',
+      whenNotToUse: 'Use it for navigation — right-click and keyboard nav break.',
+      code: `<Button>Save</Button>`,
+    },
+    {
+      title: 'LinkButton',
+      preview: <BDS.LinkButton href="#" variant="outline">Read docs</BDS.LinkButton>,
+      whenToUse: 'The action navigates to a URL. Renders an `<a>` element.',
+      whenNotToUse: "Wrap a Button in a link — that breaks accessibility.",
+      code: `<LinkButton href="/docs">…</LinkButton>`,
+    },
+    {
+      title: 'IconButton',
+      preview: <BDS.IconButton icon={<span>×</span>} label="Close" variant="ghost" />,
+      whenToUse: "There's no visible text label. Single-icon trigger.",
+      whenNotToUse: "Downgrade emphasis when converting from Button — keep the variant.",
+      code: `<IconButton icon={…} label="Close" />`,
+    },
+  ]}
+/>
 
 ## Use it for
 
@@ -17,8 +39,6 @@ The button family is three components for three semantic needs:
 - Confirming or cancelling a destructive operation
 - Opening a sheet, dialog, or popover
 - Triggering an immediate, synchronous action
-
-If the action navigates somewhere, use **LinkButton** instead. If the trigger is a single icon (no label), use **IconButton**.
 
 ## Import
 
@@ -28,56 +48,81 @@ import { Button, LinkButton, IconButton } from '@brikdesigns/bds';
 
 ## Anatomy
 
-A Button is a labelled hit target with optional icons before or after the text.
-
-```text
-┌─────────────────────────────────┐
-│  [iconBefore]  Label  [iconAfter]
-└─────────────────────────────────┘
-        ↑          ↑          ↑
-     leading    text node   trailing
-```
+<ComponentAnatomy
+  parts={[
+    { number: 1, name: 'Container', description: 'The hit target. Sets size, padding, focus ring, and base variant styles.' },
+    { number: 2, name: 'Leading icon', description: 'Optional icon before the label. Use 1em sizing to scale with text.' },
+    { number: 3, name: 'Label', description: 'The accessible name of the button. Required for Button and LinkButton.', required: true },
+    { number: 4, name: 'Trailing icon', description: 'Optional icon after the label. Common for "Continue →" or external-link affordances.' },
+  ]}
+>
+  <BDS.Button variant="primary" size="lg">
+    <span style={{ opacity: 0.5 }}>◉</span>
+    &nbsp;Save changes&nbsp;
+    <span style={{ opacity: 0.5 }}>→</span>
+  </BDS.Button>
+</ComponentAnatomy>
 
 ## Variants
 
 Twelve variants. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
 
-### Standard variants
+### Standard ladder
 
-<ComponentPreview code={`<BDS.Button variant="primary">Save</BDS.Button>
-<BDS.Button variant="outline">Cancel</BDS.Button>
-<BDS.Button variant="secondary">Secondary</BDS.Button>
-<BDS.Button variant="ghost">Tertiary</BDS.Button>`}>
-  <BDS.Button variant="primary">Save</BDS.Button>
-  <BDS.Button variant="outline">Cancel</BDS.Button>
-  <BDS.Button variant="secondary">Secondary</BDS.Button>
-  <BDS.Button variant="ghost">Tertiary</BDS.Button>
-</ComponentPreview>
+<EmphasisLadder
+  caption="highest emphasis → lowest"
+  rungs={[
+    {
+      label: 'primary',
+      example: <BDS.Button variant="primary">Save</BDS.Button>,
+      use: 'Main call-to-action. One per section.',
+    },
+    {
+      label: 'outline',
+      example: <BDS.Button variant="outline">Cancel</BDS.Button>,
+      use: 'Secondary emphasis. The "alongside primary" choice.',
+    },
+    {
+      label: 'secondary',
+      example: <BDS.Button variant="secondary">Learn more</BDS.Button>,
+      use: 'Tertiary, subtle. Supporting actions that don\'t compete.',
+    },
+    {
+      label: 'ghost',
+      example: <BDS.Button variant="ghost">Skip</BDS.Button>,
+      use: 'Minimal emphasis. Repeated actions, navigation, dismiss.',
+    },
+  ]}
+/>
 
-- **`primary`** — Main call-to-action. One per section.
-- **`outline`** — Secondary emphasis. Alternative to primary.
-- **`secondary`** — Tertiary/subtle. Supporting actions.
-- **`ghost`** — Minimal emphasis. Navigation, repeated actions.
+### Destructive ladder
 
-### Destructive variants
+Three flavors of destructive map onto the same ladder.
 
-Three flavors of destructive map onto the same emphasis ladder as primary actions.
-
-<ComponentPreview code={`<BDS.Button variant="danger">Delete</BDS.Button>
-<BDS.Button variant="danger-outline">Delete</BDS.Button>
-<BDS.Button variant="danger-ghost">Delete</BDS.Button>`}>
-  <BDS.Button variant="danger">Delete</BDS.Button>
-  <BDS.Button variant="danger-outline">Delete</BDS.Button>
-  <BDS.Button variant="danger-ghost">Delete</BDS.Button>
-</ComponentPreview>
-
-- **`danger`** — Destructive primary action (delete, remove).
-- **`danger-outline`** — Destructive with less emphasis.
-- **`danger-ghost`** — Destructive, minimal emphasis (inline delete).
+<EmphasisLadder
+  caption="highest emphasis → lowest"
+  rungs={[
+    {
+      label: 'danger',
+      example: <BDS.Button variant="danger">Delete project</BDS.Button>,
+      use: 'Primary destructive action — confirm dialogs, delete-and-go flows.',
+    },
+    {
+      label: 'danger-outline',
+      example: <BDS.Button variant="danger-outline">Delete</BDS.Button>,
+      use: 'Destructive with less emphasis. Pairs with a non-destructive primary.',
+    },
+    {
+      label: 'danger-ghost',
+      example: <BDS.Button variant="danger-ghost">Remove</BDS.Button>,
+      use: 'Inline delete in lists, table rows, repeated remove affordances.',
+    },
+  ]}
+/>
 
 ### State variants
 
-`positive` confirms a completed action. `selected` indicates a button is currently the active option in a group. `inverse` and `on-color` are for placement on dark or branded surfaces.
+`positive` confirms a completed action. `selected` indicates the active option in a group. `inverse` and `on-color` are for placement on dark or branded surfaces.
 
 <ComponentPreview code={`<BDS.Button variant="positive">Saved</BDS.Button>
 <BDS.Button variant="selected">Selected</BDS.Button>`}>
@@ -158,16 +203,6 @@ import { IconButton } from '@brikdesigns/bds';
 <Callout type="warn">
   **Don't downgrade emphasis when converting Button → IconButton.** A primary action stays a primary action. The 2026-04 IconButton-ghost regression came from agents converting `<Button variant="primary">` into `<IconButton variant="ghost">`. Match the emphasis level, always.
 </Callout>
-
-## When to use
-
-| Situation | Component |
-|---|---|
-| Action that stays on the page (Save, Submit, Open dialog) | **Button** |
-| Action that navigates to a new URL | **LinkButton** |
-| Single-icon trigger with no visible label | **IconButton** |
-| Toggle on/off | [Switch](/docs/components) |
-| One-of-many selection | [SegmentedControl](/docs/components) |
 
 ## When *not* to use
 
