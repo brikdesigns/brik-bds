@@ -1,12 +1,86 @@
 ---
 title: Spacing
-description: The 4-point grid, scale tokens, and semantic spacing roles.
+description: The 4-point grid, semantic padding and gap tokens, and the primitive scale.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { spaceScale, semanticSpace } from '@bds-tokens';
 
-> Stub page — port from `stories/foundation/Spacing.mdx`.
+Spacing tokens control padding, margins, and gaps. BDS uses two spacing modes — **Base** (compact, used in product apps) and **Spacious** (expanded, used in marketing sites).
 
 <Callout type="warn">
-  All spacing values must be multiples of 4px. The `lint-tokens:grid` script blocks PRs that violate this.
+  **All spacing values must be multiples of 4px.** The 4-point grid is enforced by `npm run lint-tokens:grid`, which blocks PRs that introduce off-grid values. This holds across every consuming project.
 </Callout>
+
+## Semantic padding tokens
+
+Purpose-bound spacing used in components. These values change between Base and Spacious modes.
+
+<SemanticSpacing
+  title="Padding"
+  tokens={{
+    'padding-none': semanticSpace['none'],
+    'padding-tiny': semanticSpace['tiny'],
+    'padding-xs': semanticSpace['xs'],
+    'padding-sm': semanticSpace['sm'],
+    'padding-md': semanticSpace['md'],
+    'padding-lg': semanticSpace['lg'],
+    'padding-xl': semanticSpace['xl'],
+    'padding-huge': semanticSpace['huge'],
+  }}
+  varPrefix="--padding"
+/>
+
+## Semantic gap tokens
+
+Gap tokens for `flex` and `grid` layouts. Typically smaller than the equivalent padding tokens.
+
+<SemanticSpacing
+  title="Gap"
+  tokens={{
+    'gap-none': semanticSpace['gap--none'],
+    'gap-tiny': semanticSpace['gap--tiny'],
+    'gap-xs': semanticSpace['gap--xs'],
+    'gap-sm': semanticSpace['gap--sm'],
+    'gap-md': semanticSpace['gap--md'],
+    'gap-lg': semanticSpace['gap--lg'],
+    'gap-xl': semanticSpace['gap--xl'],
+    'gap-huge': semanticSpace['gap--huge'],
+  }}
+  varPrefix="--gap"
+/>
+
+## Component spacing
+
+Dedicated spacing tokens for specific component types.
+
+| Token | CSS Variable | Maps to |
+|---|---|---|
+| Button | `--padding-button` | `var(--space-200)` |
+| Input | `--padding-input` | `var(--space-200)` |
+
+## Spacing modes
+
+| Token | Base mode | Spacious mode |
+|---|---|---|
+| `--padding-tiny` | 8px | 24px |
+| `--padding-xs` | 10px | 24px |
+| `--padding-sm` | 12px | 24px |
+| `--padding-md` | 16px | 32px |
+| `--padding-lg` | 24px | 52px |
+| `--padding-xl` | 32px | 52px |
+| `--padding-huge` | 48px | 88px |
+
+Product apps default to Base mode. Marketing sites apply Spacious via `.body` class.
+
+## Space scale (primitives)
+
+The raw spacing scale from 0 to 176px. Semantic tokens reference these steps.
+
+<SpacingScale scale={spaceScale} prefix="--space" />
+
+## Related
+
+- [Cascade rules](/docs/getting-started/cascade) — how layers interact
+- [Color tokens](/docs/primitives/color) — semantic surface tokens that pair with these spacings
+- [Typography tokens](/docs/primitives/typography) — type scale for content within these spaces

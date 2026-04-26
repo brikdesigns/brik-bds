@@ -29,6 +29,9 @@
       "@bds-src/*": [
         "../components/*"
       ],
+      "@bds-tokens": [
+        "../tokens/index"
+      ],
       "@bds-tokens/*": [
         "../tokens/*"
       ]

@@ -3,8 +3,55 @@ title: Primitives
 description: Tokens — the design language every BDS component reads from.
 ---
 
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
 BDS primitives are a flat token vocabulary covering color, typography, spacing, motion, radius, shadow, and border. They're authored in Figma, exported via Tokens Studio, transformed by Style Dictionary, and shipped as `@brikdesigns/bds/tokens.css`.
 
-Pages in this section explain each primitive group: what tokens exist, what they mean semantically, and the rules for using them outside their category (don't).
+Each page below explains one primitive group: what tokens exist, what they mean semantically, and the rules for using them outside their category (don't).
 
-> **Token source of truth lives in Figma.** This site documents what's available and how to use it. To add a new token, edit Figma first.
+<Callout type="warn">
+  **Token source of truth lives in Figma.** This site documents what's available and how to use it. To add a new token, edit Figma first — don't add it to CSS directly.
+</Callout>
+
+## Documented here
+
+<Cards>
+  <Card title="Color" href="/docs/primitives/color" description="Semantic color roles + interaction states + status + the primitive palettes." />
+  <Card title="Typography" href="/docs/primitives/typography" description="Font families, the type scale, weights, line heights, and the semantic role rule." />
+  <Card title="Spacing" href="/docs/primitives/spacing" description="The 4-point grid, semantic padding and gap tokens, the primitive space scale." />
+  <Card title="Motion" href="/docs/primitives/motion" description="Duration, easing, keyframes, and the three-tier motion system." />
+</Cards>
+
+## Still in Storybook
+
+These foundation pages haven't been migrated yet. Until they land here, view them in Storybook and treat the contents as canonical.
+
+| Token group | Where |
+|---|---|
+| Border radius | [Storybook → Border Radius](https://storybook.brikdesigns.com/?path=/docs/foundations-design-tokens-border-radius--docs) |
+| Border width | [Storybook → Border Width](https://storybook.brikdesigns.com/?path=/docs/foundations-design-tokens-border-width--docs) |
+| Shadow | [Storybook → Shadow](https://storybook.brikdesigns.com/?path=/docs/foundations-design-tokens-shadow--docs) |
+| Size | [Storybook → Size](https://storybook.brikdesigns.com/?path=/docs/foundations-design-tokens-size--docs) |
+| Naming conventions | [Storybook → Naming Conventions](https://storybook.brikdesigns.com/?path=/docs/foundations-design-tokens-naming-conventions--docs) |
+
+## How tokens flow into your app
+
+```text
+Figma Variables
+      ↓
+design-tokens/tokens-studio.json    (build input)
+      ↓
+Style Dictionary
+      ↓
+tokens/figma-tokens.css             (auto-generated)
+tokens/figma-tokens-dark.css        (auto-generated, dark mode)
+tokens/gap-fills.css                (manual, interaction states)
+      ↓
+Consumer projects:
+  @import '@brikdesigns/bds/tokens.css';
+  @import './styles/theme-{client}.css';
+  @import '@brikdesigns/bds/styles.css';
+```
+
+See [the cascade rules](/docs/getting-started/cascade) for how the three layers interact.

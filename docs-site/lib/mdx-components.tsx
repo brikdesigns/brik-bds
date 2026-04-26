@@ -5,6 +5,17 @@ import { EmphasisLadder } from '@/components/mdx/emphasis-ladder';
 import { ComparisonGrid } from '@/components/mdx/comparison-grid';
 import { ComponentAnatomy } from '@/components/mdx/component-anatomy';
 import { MetadataStrip } from '@/components/mdx/metadata-strip';
+import { ColorGrid, PaletteGrid } from '@/components/mdx/foundation/color-grid';
+import {
+  SpacingScale,
+  SemanticSpacing,
+} from '@/components/mdx/foundation/spacing-scale';
+import {
+  TypographyScale,
+  FontFamilyShowcase,
+  SemanticTypographyTable,
+  FontWeightShowcase,
+} from '@/components/mdx/foundation/typography-scale';
 import * as BDS from '@brikdesigns/bds';
 
 /**
@@ -17,6 +28,9 @@ import * as BDS from '@brikdesigns/bds';
  *
  * Visual building blocks live under `@/components/mdx/` and are registered
  * unprefixed so they read naturally in MDX prose.
+ *
+ * Foundation viz components (ColorGrid, SpacingScale, etc.) are ported from
+ * the Storybook foundation/_components and used on Primitives pages.
  */
 export function getMDXComponents(extra?: MDXComponents): MDXComponents {
   return {
@@ -26,6 +40,14 @@ export function getMDXComponents(extra?: MDXComponents): MDXComponents {
     ComparisonGrid,
     ComponentAnatomy,
     MetadataStrip,
+    ColorGrid,
+    PaletteGrid,
+    SpacingScale,
+    SemanticSpacing,
+    TypographyScale,
+    FontFamilyShowcase,
+    SemanticTypographyTable,
+    FontWeightShowcase,
     // The BDS namespace export includes hooks (useTheme) alongside components.
     // MDX's component-map type rejects that mix; cast since MDX only ever calls
     // the JSX entries (`<BDS.Button>`), never the hooks.
