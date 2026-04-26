@@ -1,0 +1,50 @@
+---
+title: Alert banner
+description: DEPRECATED — use Banner with tone instead.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="error">
+  **AlertBanner is deprecated.** Migrate to [`Banner`](/docs/components/banner) with the appropriate `tone` prop. This component is slated for deletion in a future major version per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
+</Callout>
+
+## Migration
+
+Same shape, same Badge, same surface — just renamed under Banner.
+
+```tsx
+// Before
+<AlertBanner variant="warning" title="Trial ends in 7 days" />
+
+// After
+<Banner tone="warning" title="Trial ends in 7 days" />
+```
+
+| AlertBanner variant | Banner tone |
+|---|---|
+| `information` | `information` |
+| `warning` | `warning` |
+| `error` | `error` |
+
+The `title`, `description`, and `action` props are unchanged. Banner additionally supports `onDismiss` (close button) and `tone="announcement"` (brand-primary surface, the default — for marketing notices distinct from status alerts).
+
+## Why the consolidation
+
+AlertBanner and the legacy "marketing announcement banner" pattern were two visually similar components doing the same job at different surfaces. Per ADR-004 component-bloat guardrails, two components ≥ 70% overlap collapse into one with a prop. The result: [Banner](/docs/components/banner) with `tone={announcement | warning | error | information}`.
+
+## Existing AlertBanner shape (frozen)
+
+For reference while migrating. New code should not use this component.
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `ReactNode` *(required)* | — |
+| `description` | `ReactNode` | — |
+| `variant` | `'warning' \| 'error' \| 'information'` | `'information'` |
+| `action` | `ReactNode` | — |
+
+## Related
+
+- [Banner](/docs/components/banner) — the canonical replacement
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-feedback-alert-banner--overview)** *(legacy)*

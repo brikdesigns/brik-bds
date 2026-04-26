@@ -12,7 +12,7 @@ BDS components are organized by **job**, not by visual type. The same taxonomy b
 | **Action** | Button, IconButton, LinkButton, ButtonGroup, FilterBar, FilterButton, FilterToggle, TextLink |
 | **Form** | TextInput, TextArea, PasswordInput, AddressInput, Select, MultiSelect, DatePicker, TimePicker, Checkbox, Radio, Field, FieldGrid, Form |
 | **Indicator** | Badge, Chip, Tag, Counter, Dot, Spinner, Skeleton, BadgeGroup, TagGroup, ServiceBadge |
-| **Feedback** | AlertBanner, Toast, Tooltip, EmptyState, ProgressBar |
+| **Feedback** | Banner, Toast, Tooltip, EmptyState, ProgressBar (AlertBanner deprecated → Banner) |
 | **Control** | Switch, Slider, Stepper, Pagination, SegmentedControl, FileUploader |
 | **Addable** | AddableTagList, AddableEntryList, AddableFieldRowList |
 | **Structure** | Card, Divider, Accordion |
@@ -75,9 +75,22 @@ The container, layout, and curated-multi-pick layer of the Form group. Closes ou
   <Card title="Catalog picker" href="/docs/components/catalog-picker" description="Industry-aware multi-pick with source attribution (catalog vs custom)." />
 </Cards>
 
+### Feedback
+
+User feedback surfaces — banners, toasts, tooltips, empty states, progress bars.
+
+<Cards>
+  <Card title="Banner" href="/docs/components/banner" description="Full-width contextual banner. Announcement (brand surface) or status tones (replaces AlertBanner)." />
+  <Card title="Alert banner" href="/docs/components/alert-banner" description="DEPRECATED — migrate to Banner with tone." />
+  <Card title="Toast" href="/docs/components/toast" description="Ephemeral white-surface notification. Optional colored Badge for status." />
+  <Card title="Tooltip" href="/docs/components/tooltip" description="Hover/focus contextual help. Four placements with arrow indicator." />
+  <Card title="Empty state" href="/docs/components/empty-state" description="No-data placeholder with title, description, optional action." />
+  <Card title="Progress bar" href="/docs/components/progress-bar" description="Visual indicator of measurable completion. Use for uploads, multi-step forms, batch jobs." />
+</Cards>
+
 ## Still in Storybook
 
-The remaining ~26 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Feedback, Control, Addable, Structure, Navigation, and Displays.
+The remaining ~20 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Control, Addable, Structure, Navigation, and Displays.
 
 ## Page template
 

@@ -1,0 +1,153 @@
+---
+title: Banner
+description: Full-width contextual banner. One component covers announcements (brand surface) and status alerts (tone surface).
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Banner is the canonical full-width banner component. The `tone` prop switches between two visual modes: **announcement** (brand-primary surface, marketing notices) and **status** (secondary surface + leading status Badge, replaces the deprecated AlertBanner).
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'Banner',
+      preview: <BDS.Banner title="New feature" tone="announcement" />,
+      whenToUse: 'Persistent, dismissible, full-width — site-wide announcements, tone-coded alerts that need to stay visible.',
+      whenNotToUse: 'For ephemeral confirmation — that\'s Toast.',
+      code: `<Banner title="..." tone="warning" />`,
+    },
+    {
+      title: 'Toast',
+      preview: <BDS.Toast title="Saved" variant="success" />,
+      whenToUse: 'Ephemeral confirmation that auto-dismisses. Save success, error retry, copied-to-clipboard.',
+      whenNotToUse: 'Persistent state — user might miss it.',
+      code: `<Toast title="..." variant="success" />`,
+    },
+    {
+      title: 'Tooltip',
+      preview: <BDS.Tooltip content="On hover"><span>?</span></BDS.Tooltip>,
+      whenToUse: 'Hover-revealed contextual help. Icon button labels, keyboard shortcut hints.',
+      whenNotToUse: 'Critical info — keyboard users without hover may miss it.',
+      code: `<Tooltip content="..."><Trigger /></Tooltip>`,
+    },
+  ]}
+/>
+
+## Use it for
+
+- Site-wide marketing announcements (brand-primary surface, default tone)
+- Persistent status alerts that need to stay visible (`tone="warning|error|information"`)
+- Trial-expires / quota-exceeded / system-degraded warnings
+- Maintenance windows, deployment notices
+
+For ephemeral confirmations that auto-dismiss, use [Toast](/docs/components/toast). For hover-only help, use [Tooltip](/docs/components/tooltip).
+
+## Import
+
+```tsx
+import { Banner } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Announcement (default)
+
+Brand-primary surface with inverse text. The marketing-notice mode.
+
+```tsx
+<Banner
+  title="New feature available"
+  description="Check out our latest update — it's live now."
+  action={<Button variant="secondary" size="sm">Learn more</Button>}
+  onDismiss={() => setVisible(false)}
+/>
+```
+
+### Status tones
+
+`information`, `warning`, `error` render on a secondary surface with a leading status Badge and `role="alert"` for assistive tech. **Replaces the deprecated AlertBanner** — same shape, same Badge, same surface.
+
+```tsx
+<Banner
+  tone="warning"
+  title="Trial ends in 7 days"
+  description="Upgrade to keep access to all features."
+  action={<Button size="sm">Upgrade</Button>}
+/>
+
+<Banner
+  tone="error"
+  title="Deployment failed"
+  description="Build #4291 hit an unrecoverable error. Logs attached."
+/>
+
+<Banner
+  tone="information"
+  title="Maintenance window"
+  description="System will be unavailable Saturday 2-4am UTC."
+/>
+```
+
+### Dismissible
+
+Pass `onDismiss` to render a close button. Common with announcements.
+
+```tsx
+<Banner
+  title="Welcome back"
+  onDismiss={() => setVisible(false)}
+/>
+```
+
+### Title-only
+
+`description` is optional — title-only banners work for short messages.
+
+```tsx
+<Banner title="System updates tonight at 11pm UTC" tone="information" />
+```
+
+## When *not* to use
+
+- **Don't use Banner for short-lived confirmations** ("Saved", "Copied"). Those are [Toast](/docs/components/toast)s.
+- **Don't stack multiple Banners.** A second Banner stack reads as visual noise. Pick the highest-priority message and surface it; queue others.
+- **Don't put navigation actions in Banner.** Use it for "this state needs your attention," not "here's a link to somewhere else."
+
+## Accessibility
+
+- Tone-coded banners (`warning|error|information`) get `role="alert"` so assistive tech announces them on render.
+- Announcement banners (default) render as a generic landmark.
+- The leading Badge uses an `aria-hidden` icon plus the tone-implicit semantics — title text carries the meaning.
+- `onDismiss` adds a button with `aria-label="Dismiss"`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `ReactNode` *(required)* | — |
+| `description` | `ReactNode` | — |
+| `tone` | `'announcement' \| 'warning' \| 'error' \| 'information'` | `'announcement'` |
+| `action` | `ReactNode` | — |
+| `onDismiss` | `() => void` | — |
+
+Plus all standard `<div>` HTML attributes (excluding `title`).
+
+## Migration from AlertBanner
+
+[AlertBanner](/docs/components/alert-banner) is `@deprecated` and slated for deletion. Same shape, same Badge, same secondary surface — just renamed under Banner.
+
+```tsx
+// Before
+<AlertBanner variant="warning" title="..." description="..." />
+
+// After
+<Banner tone="warning" title="..." description="..." />
+```
+
+## Related
+
+- [Toast](/docs/components/toast) — ephemeral sibling
+- [Tooltip](/docs/components/tooltip) — hover-revealed sibling
+- [EmptyState](/docs/components/empty-state) — for when a section has no data
+- [AlertBanner](/docs/components/alert-banner) *(deprecated)* — migrate to `<Banner tone="...">`
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-feedback-banner--overview)**
