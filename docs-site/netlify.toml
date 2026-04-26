@@ -1,0 +1,54 @@
+# Netlify config for design.brikdesigns.com (BDS docs site).
+#
+# This file is consumed when the Netlify site has its base directory set to
+# `docs-site/` (configured in the Netlify site settings, not in this file).
+# The repo's root netlify.toml is owned by storybook.brikdesigns.com — they
+# are two separate Netlify sites pointing at the same GitHub repo.
+#
+# Workflow:
+#   main     → design.brikdesigns.com           (production)
+#   staging  → staging.design.brikdesigns.com   (staging)
+
+[build]
+  # Build runs in docs-site/ (the base directory).
+  # We need BDS root dist/ built before the docs-site Next.js build because
+  # docs-site has `"@brikdesigns/bds": "file:.."` and Next imports component
+  # source through the BDS package exports.
+  command = "cd .. && npm install --ignore-scripts --no-audit --no-fund && npm run build:lib && cd docs-site && npm install --ignore-scripts --no-audit --no-fund && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # --ignore-scripts skips husky postinstall (the BDS root postinstall fails
+  # under Netlify because it can't find husky in this hermetic install).
+  NPM_FLAGS = "--ignore-scripts --no-audit --no-fund"
+
+# ── Branch deploys ────────────────────────────────────────────────
+# main → production (design.brikdesigns.com)
+# staging → branch deploy (staging.design.brikdesigns.com)
+
+[context.staging]
+  command = "cd .. && npm install --ignore-scripts --no-audit --no-fund && npm run build:lib && cd docs-site && npm install --ignore-scripts --no-audit --no-fund && npm run build"
+
+[context.deploy-preview]
+  command = "cd .. && npm install --ignore-scripts --no-audit --no-fund && npm run build:lib && cd docs-site && npm install --ignore-scripts --no-audit --no-fund && npm run build"
+
+# ── Headers ───────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Next.js static assets are content-hashed — cache forever.
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Generated MDX manifest — revalidate every load so chunk references stay fresh.
+[[headers]]
+  for = "/_next/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
