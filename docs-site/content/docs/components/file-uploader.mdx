@@ -1,0 +1,127 @@
+---
+title: File uploader
+description: Drag-and-drop file upload zone with click-to-browse fallback. Type filtering, size limits, multi-file support.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+FileUploader is a drag-and-drop drop zone with click-to-browse fallback. Use anywhere users need to upload one or more files — avatar selection, document uploads, image galleries, CSV imports.
+
+## Use it for
+
+- Document upload (PDF, DOCX, CSV imports)
+- Image uploads (avatars, gallery, before/after photos)
+- Multi-file batch uploads
+- Any field where the user supplies a file from their device
+
+## Import
+
+```tsx
+import { FileUploader } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+<FileUploader
+  accept=".pdf,.jpg,.png"
+  helperText="PDF, JPG, or PNG up to 10MB"
+  onChange={(files) => handleFiles(files)}
+/>
+```
+
+### Multiple files with size limit
+
+```tsx
+<FileUploader
+  accept="image/*"
+  multiple
+  maxSize={5 * 1024 * 1024}
+  label="Upload images"
+  helperText="Select one or more images (5MB max)"
+  onChange={(files) => handleFiles(files)}
+/>
+```
+
+### Error state
+
+Surface validation errors (size exceeded, wrong type, server rejection) inline.
+
+```tsx
+<FileUploader
+  accept=".pdf"
+  error="File must be a PDF"
+  onChange={(files) => handleFiles(files)}
+/>
+```
+
+### Disabled
+
+```tsx
+<FileUploader disabled label="Upload" />
+```
+
+## Pattern: with file list display
+
+FileUploader handles selection. Rendering the picked-files list afterward is the parent's responsibility — typically a list with each file's name, size, and a remove button.
+
+```tsx
+import { useState } from 'react';
+const [files, setFiles] = useState<File[]>([]);
+
+<>
+  <FileUploader
+    accept="image/*"
+    multiple
+    onChange={(picked) => setFiles((prev) => [...prev, ...picked])}
+  />
+  <ul>
+    {files.map((f, i) => (
+      <li key={i}>
+        {f.name} — {Math.round(f.size / 1024)}KB
+        <button onClick={() => setFiles(files.filter((_, j) => j !== i))}>
+          Remove
+        </button>
+      </li>
+    ))}
+  </ul>
+</>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use FileUploader for camera/scan capture.** Native `<input type="file" capture="user">` is for photo capture from a device camera. FileUploader doesn't expose `capture` — for camera-first flows, use a plain input or extend the component.
+</Callout>
+
+- **Don't use FileUploader for paste-from-clipboard.** Clipboard image paste is a different interaction — wire it on the surrounding container.
+- **Don't use FileUploader without `accept`.** Letting users upload arbitrary file types invites server-side validation work that should happen client-side first.
+
+## Accessibility
+
+- The drop zone is a real `<button>` — keyboard `Enter`/`Space` opens the file picker.
+- Drag-over state is announced via `aria-busy` on the zone during drop.
+- `error` sets `aria-invalid` and links to the message via `aria-describedby`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `accept` | `string` (e.g. `'.pdf,.jpg'` or `'image/*'`) | — |
+| `multiple` | `boolean` | `false` |
+| `maxSize` | `number` (bytes) | — |
+| `disabled` | `boolean` | `false` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `error` | `string` | — |
+| `onChange` | `(files: File[]) => void` | — |
+
+Plus standard `<div>` HTML attributes (excluding native `onChange`).
+
+## Related
+
+- [TextInput](/docs/components/text-input) — for non-file form fields
+- [ProgressBar](/docs/components/progress-bar) — pair with FileUploader for upload-progress feedback
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-control-file-uploader--overview)**

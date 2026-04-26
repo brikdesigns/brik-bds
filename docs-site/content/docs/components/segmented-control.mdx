@@ -1,0 +1,150 @@
+---
+title: Segmented control
+description: Pill-shaped toggle for switching between mutually exclusive views or modes.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+SegmentedControl is a horizontal pill switcher for **mutually exclusive views in the same panel** — Grid / List, Monthly / Yearly, This Week / This Month. Unlike TabBar (which navigates between page sections), SegmentedControl swaps content in-place.
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'SegmentedControl',
+      preview: <BDS.SegmentedControl items={[{label: 'Grid', value: 'grid'}, {label: 'List', value: 'list'}]} value="grid" />,
+      whenToUse: 'Toggle between 2-5 views in the same panel. Inline, compact, mutually exclusive.',
+      whenNotToUse: 'Page-level navigation — that\'s TabBar.',
+      code: `<SegmentedControl items={...} />`,
+    },
+    {
+      title: 'Switch',
+      preview: <BDS.Switch label="On" defaultChecked />,
+      whenToUse: 'Binary on/off setting. Settings panels, feature flags.',
+      whenNotToUse: '3+ options — use SegmentedControl.',
+      code: `<Switch label="..." />`,
+    },
+    {
+      title: 'Select',
+      preview: <BDS.Select options={[{label:'A', value:'a'},{label:'B',value:'b'}]} />,
+      whenToUse: 'One-of-many from a longer list (6+ options).',
+      whenNotToUse: '≤5 options that fit horizontally — use SegmentedControl.',
+      code: `<Select options={...} />`,
+    },
+  ]}
+/>
+
+## Use it for
+
+- View switchers (Grid / List / Calendar)
+- Pricing toggles (Monthly / Yearly)
+- Date range selectors (Today / This Week / This Month)
+- Mode pickers in tool panels (Edit / Preview)
+
+## Import
+
+```tsx
+import { SegmentedControl } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+const [view, setView] = useState('grid');
+
+<SegmentedControl
+  value={view}
+  onChange={setView}
+  items={[
+    { label: 'Grid', value: 'grid' },
+    { label: 'List', value: 'list' },
+  ]}
+/>
+```
+
+### Sizes
+
+- **`sm`** — compact toolbars, dense UI
+- **`md`** — default for forms and panels
+- **`lg`** — prominent page-level toggles
+
+### Full-width
+
+```tsx
+<SegmentedControl
+  value={period}
+  onChange={setPeriod}
+  size="lg"
+  fullWidth
+  items={[
+    { label: 'Monthly', value: 'monthly' },
+    { label: 'Yearly', value: 'yearly' },
+  ]}
+/>
+```
+
+### Many segments
+
+SegmentedControl tolerates up to ~5 segments before the labels feel cramped. Beyond that, switch to [Select](/docs/components/select).
+
+```tsx
+<SegmentedControl
+  value={range}
+  onChange={setRange}
+  items={[
+    { label: 'Today', value: 'today' },
+    { label: 'Week', value: 'week' },
+    { label: 'Month', value: 'month' },
+    { label: 'Quarter', value: 'quarter' },
+    { label: 'Year', value: 'year' },
+  ]}
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use SegmentedControl for page-level navigation.** TabBar carries the right semantic for "navigate to a different section"; SegmentedControl is for "swap content in place." The visual treatments are similar; the navigation model is not.
+</Callout>
+
+- **Don't use SegmentedControl for >5 options.** Long pills wrap or truncate. Use [Select](/docs/components/select).
+- **Don't use SegmentedControl for binary on/off.** Use [Switch](/docs/components/switch) — the affordance is correct.
+- **Don't pair with conflicting selection state.** SegmentedControl is single-select; for multi-select toggles use a Checkbox group or [MultiSelect](/docs/components/multi-select).
+
+## Accessibility
+
+- Renders a `<div role="tablist">` with each segment as `<button role="tab">`.
+- The selected segment carries `aria-selected="true"`; unselected carry `false`.
+- Keyboard arrows move selection between segments.
+- Items can carry their own `aria-label` for icon-only segments.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `SegmentItem[]` *(required)* | — |
+| `value` | `string` | — |
+| `onChange` | `(value: string) => void` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `fullWidth` | `boolean` | `false` |
+| `disabled` | `boolean` | `false` |
+
+### SegmentItem
+
+```ts
+interface SegmentItem {
+  label: ReactNode;
+  value: string;
+  disabled?: boolean;
+}
+```
+
+## Related
+
+- [Switch](/docs/components/switch) — binary on/off
+- [Radio](/docs/components/radio) — vertical one-of-many
+- [Select](/docs/components/select) — for >5 options
+- TabBar — page-level navigation (in Storybook)
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-control-segmented-control--overview)**

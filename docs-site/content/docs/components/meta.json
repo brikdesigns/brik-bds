@@ -42,6 +42,14 @@
     "toast",
     "tooltip",
     "empty-state",
-    "progress-bar"
+    "progress-bar",
+    "---Control---",
+    "switch",
+    "slider",
+    "stepper",
+    "progress-stepper",
+    "pagination",
+    "segmented-control",
+    "file-uploader"
   ]
 }
