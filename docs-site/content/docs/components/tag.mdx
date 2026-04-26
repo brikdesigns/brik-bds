@@ -1,0 +1,119 @@
+---
+title: Tag
+description: Categorization labels. Non-interactive — for what a record *is*, not what a user can *do*.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Tag is the indicator-family sibling of [Badge](/docs/components/badge) and [Chip](/docs/components/chip). Use it to label *what a record is* — its industry, segment, owner, size, or any other neutral category. Tag is read-only.
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'Tag',
+      preview: <BDS.Tag>Cosmetic</BDS.Tag>,
+      whenToUse: 'Neutral categorization. Industry, owner, segment, size — facts that have no value judgment.',
+      whenNotToUse: 'Use it as a status indicator — that\'s Badge.',
+      code: `<Tag>Cosmetic</Tag>`,
+    },
+    {
+      title: 'Badge',
+      preview: <BDS.Badge status="positive">Active</BDS.Badge>,
+      whenToUse: 'Status with a value judgment (good/bad/waiting). Active, Failed, In review.',
+      whenNotToUse: 'Use for neutral categorization — that\'s Tag.',
+      code: `<Badge status="positive">Active</Badge>`,
+    },
+    {
+      title: 'Chip',
+      preview: <BDS.Chip label="Cosmetic" />,
+      whenToUse: 'Interactive pill — toggleable filter, dismissible selection, dropdown trigger.',
+      whenNotToUse: 'Render with no handler — that\'s Tag.',
+      code: `<Chip label="Cosmetic" onRemove={...} />`,
+    },
+  ]}
+/>
+
+## Use it for
+
+- Industry, segment, vertical labels (Dental, Real Estate, Cosmetic)
+- Owner attribution chips on rows
+- Categorical metadata that doesn't carry a status meaning
+- Non-interactive labels that need consistent visual treatment
+
+## Import
+
+```tsx
+import { Tag } from '@brikdesigns/bds';
+```
+
+## Variants
+
+Four sizes (`xs` is icon-only) and two appearances.
+
+### Sizes
+
+<ComponentPreview code={`<BDS.Tag size="sm">Small</BDS.Tag>
+<BDS.Tag size="md">Medium</BDS.Tag>
+<BDS.Tag size="lg">Large</BDS.Tag>`}>
+  <BDS.Tag size="sm">Small</BDS.Tag>
+  <BDS.Tag size="md">Medium</BDS.Tag>
+  <BDS.Tag size="lg">Large</BDS.Tag>
+</ComponentPreview>
+
+### Appearances
+
+`solid` (default) is neutral filled. `subtle` is transparent with a hairline border — lower visual weight when Tags sit on a colored surface.
+
+```tsx
+<Tag appearance="solid">Cosmetic</Tag>
+<Tag appearance="subtle">Cosmetic</Tag>
+```
+
+### With icons
+
+Pass `icon` (left) or `trailingIcon` (right). Icon is **required** when `size="xs"` (icon-only).
+
+```tsx
+<Tag icon={<CertificateIcon />}>Featured</Tag>
+<Tag trailingIcon={<XCircleIcon />}>Dismiss</Tag>
+<Tag size="xs" icon={<CrownIcon />} />
+```
+
+### Disabled
+
+```tsx
+<Tag disabled>Archived</Tag>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Tag is read-only.** Never wire `onClick`, never wrap in a `<Link>`, never trigger behavior. The `onRemove` prop exists for backward compat but is **deprecated** — migrate removable pills to [Chip](/docs/components/chip).
+</Callout>
+
+- **Don't use Tag for status with a value judgment.** "Active" / "Failed" / "Pending" are [Badge](/docs/components/badge).
+- **Don't use Tag for interactive pills.** Filter toggles, dismissible selections, dropdown triggers are [Chip](/docs/components/chip).
+
+## Accessibility
+
+- Renders a `<span>` — non-interactive by default.
+- Text content is the accessible name. For `xs` (icon-only), pass `aria-label`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `size` | `'xs' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
+| `appearance` | `'solid' \| 'subtle'` | `'solid'` |
+| `icon` | `ReactNode` | — |
+| `trailingIcon` | `ReactNode` | — |
+| `disabled` | `boolean` | `false` |
+| `children` | `ReactNode` | — |
+| ~~`onRemove`~~ | ~~`() => void`~~ | *(deprecated — use Chip)* |
+
+## Related
+
+- [Badge](/docs/components/badge) — status sibling
+- [Chip](/docs/components/chip) — interactive sibling
+- [TagGroup](/docs/components/tag-group) — multi-tag cluster
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-tag--overview)**

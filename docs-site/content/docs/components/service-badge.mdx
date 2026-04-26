@@ -1,0 +1,70 @@
+---
+title: Service badge
+description: Icon-only badge for service categories. Resolves a category-specific icon SVG.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+ServiceBadge renders a category icon for a Brik service line — design, marketing, content, etc. Used in dashboard tiles, service-line indicators on entity rows, and anywhere a category needs a visual marker.
+
+<Callout type="warn">
+  **`mode` is deprecated** and ignored — ServiceBadge is icon-only going forward. For text-or-icon-text variants, use the in-progress `ServiceTag` component.
+</Callout>
+
+## Use it for
+
+- Visual marker for a service category (Brand Design, Marketing, Content)
+- Dashboard tiles that need a recognizable category icon
+- Sidebar entries grouped by service line
+
+## Import
+
+```tsx
+import { ServiceBadge } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Sizes
+
+Three sizes — `sm` for inline, `md` for default, `lg` for tile-style placement.
+
+```tsx
+<ServiceBadge category="design" size="sm" />
+<ServiceBadge category="design" size="md" />
+<ServiceBadge category="design" size="lg" />
+```
+
+### With service name
+
+Pass `serviceName` to resolve a specific service icon (within a category) when the generic category icon is too generic.
+
+```tsx
+<ServiceBadge category="design" serviceName="brand-identity" />
+<ServiceBadge category="content" serviceName="seo-strategy" />
+```
+
+## When *not* to use
+
+- **Don't use ServiceBadge for non-service categories.** It's tied to the Brik service taxonomy. For generic category labels, use [Tag](/docs/components/tag).
+- **Don't use it as a primary action.** It's an indicator — the icon doesn't carry click semantics.
+- **Don't pass `mode`.** The prop is deprecated and ignored. Use the in-progress `ServiceTag` if you need text or icon-text variants.
+
+## Accessibility
+
+- Renders a `<div>` with the icon SVG. Pass an `aria-label` or wrap in a labeled container — the icon alone isn't a sufficient accessible name.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `category` | `ServiceCategory` *(required)* | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `serviceName` | `string` | — |
+| ~~`mode`~~ | ~~`'badge' \| 'label'`~~ | *(deprecated, ignored)* |
+
+## Related
+
+- [Tag](/docs/components/tag) — generic categorization
+- [Badge](/docs/components/badge) — status indicator
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-service-badge--overview)**

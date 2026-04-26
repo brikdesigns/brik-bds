@@ -1,0 +1,97 @@
+---
+title: Counter
+description: Numeric count indicator with status colors. Pill-shaped badge for notifications and quantities.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Counter shows a number with a status color. Use for notification counts, item quantities, step indicators, and anywhere you'd want "8" or "3" or "99+" with a hint of urgency or progress baked into the color.
+
+## Use it for
+
+- Notification badges on icons and tabs
+- Item quantities in cart/inbox/queue indicators
+- Step counters in multi-step flows
+- Any `{n}`-of-something indicator that benefits from a status color
+
+For boolean status (no count, just "Active" / "Failed"), use [Badge](/docs/components/badge).
+
+## Import
+
+```tsx
+import { Counter } from '@brikdesigns/bds';
+```
+
+## Variants
+
+Six status colors across four sizes.
+
+### Status colors
+
+<ComponentPreview code={`<BDS.Counter count={5} status="success" />
+<BDS.Counter count={3} status="error" />
+<BDS.Counter count={2} status="warning" />
+<BDS.Counter count={7} status="progress" />
+<BDS.Counter count={4} status="brand" />
+<BDS.Counter count={9} status="neutral" />`}>
+  <BDS.Counter count={5} status="success" />
+  <BDS.Counter count={3} status="error" />
+  <BDS.Counter count={2} status="warning" />
+  <BDS.Counter count={7} status="progress" />
+  <BDS.Counter count={4} status="brand" />
+  <BDS.Counter count={9} status="neutral" />
+</ComponentPreview>
+
+- **`success`** — Completed items, positive counts
+- **`error`** — Error counts, alert counts
+- **`warning`** — Pending items, attention needed
+- **`progress`** — In-progress items
+- **`brand`** — General counts, notification badges
+- **`neutral`** — Inactive, disabled counts
+
+### Sizes
+
+<ComponentPreview code={`<BDS.Counter count={3} size="xs" status="error" />
+<BDS.Counter count={3} size="sm" status="error" />
+<BDS.Counter count={3} size="md" status="error" />
+<BDS.Counter count={3} size="lg" status="error" />`}>
+  <BDS.Counter count={3} size="xs" status="error" />
+  <BDS.Counter count={3} size="sm" status="error" />
+  <BDS.Counter count={3} size="md" status="error" />
+  <BDS.Counter count={3} size="lg" status="error" />
+</ComponentPreview>
+
+### Max overflow
+
+Use `max` to cap the displayed value. Anything over renders as `{max}+`.
+
+<ComponentPreview code={`<BDS.Counter count={150} max={99} status="brand" />
+<BDS.Counter count={9} max={99} status="brand" />`}>
+  <BDS.Counter count={150} max={99} status="brand" />
+  <BDS.Counter count={9} max={99} status="brand" />
+</ComponentPreview>
+
+## When *not* to use
+
+- **Don't use Counter for boolean status.** "Active" or "Failed" with no count is a [Badge](/docs/components/badge).
+- **Don't use Counter for non-integer values.** It renders the value as-is; decimals and formatted values (currency, percentages) belong in regular text.
+
+## Accessibility
+
+- Renders a `<span>` with the count as text content — read naturally by screen readers.
+- For Counters used as notification badges on icons, pair with an `aria-label` on the parent button: `<button aria-label="Inbox, 5 unread"><Inbox /><Counter count={5} /></button>`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `count` | `number` *(required)* | — |
+| `status` | `'success' \| 'error' \| 'warning' \| 'neutral' \| 'progress' \| 'brand'` | `'brand'` |
+| `size` | `'xs' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
+| `max` | `number` | — |
+
+## Related
+
+- [Badge](/docs/components/badge) — non-numeric status sibling
+- [Dot](/docs/components/dot) — minimal status indicator
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-counter--overview)**
