@@ -1,0 +1,115 @@
+---
+title: Card testimonial
+description: Customer testimonial card — quote, attribution, optional star rating. Brand or outlined variant.
+---
+
+CardTestimonial renders a customer quote in a card layout. Brand variant for marketing surfaces (colored background), outlined variant for in-app contexts (neutral surface with border).
+
+## Use it for
+
+- Marketing testimonial walls
+- Trust indicators on landing pages and pricing pages
+- Customer story callouts
+- Case-study card grids inside [CardList](/docs/components/card-list)
+
+For free-form quotes inside body copy, use a `<blockquote>` directly — CardTestimonial is for displayed-as-card placement.
+
+## Import
+
+```tsx
+import { CardTestimonial } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Brand (default)
+
+Colored background with inverse text. The marketing-page default.
+
+```tsx
+<CardTestimonial
+  quote="Amazing service and results — turnaround was faster than promised."
+  authorName="Sarah Chen"
+  authorRole="Owner, Bloom Cafe"
+  rating={5}
+/>
+```
+
+### Outlined
+
+Neutral surface with a border. Use in app contexts where the brand variant would over-emphasize.
+
+```tsx
+<CardTestimonial
+  variant="outlined"
+  quote="The redesign tripled our conversion rate."
+  authorName="Marcus Lee"
+  authorRole="CMO, Northwind"
+  rating={5}
+/>
+```
+
+### Without rating
+
+Star rating is optional. Drop it for product-line testimonials where stars don't apply.
+
+```tsx
+<CardTestimonial
+  quote="They get our brand voice better than we do."
+  authorName="Priya Patel"
+  authorRole="VP Product, Lumen"
+/>
+```
+
+### Minimal attribution
+
+`authorRole` is optional. Use for community/user testimonials where context isn't load-bearing.
+
+```tsx
+<CardTestimonial
+  quote="Best dental cleaning I've ever had."
+  authorName="J. Morrison"
+/>
+```
+
+## Pattern: testimonial wall
+
+Mix variants in a [CardList](/docs/components/card-list) grid for a visually varied wall.
+
+```tsx
+<CardList orientation="horizontal" gap="lg">
+  <CardTestimonial variant="brand" quote="..." authorName="..." rating={5} />
+  <CardTestimonial variant="outlined" quote="..." authorName="..." rating={5} />
+  <CardTestimonial variant="brand" quote="..." authorName="..." />
+</CardList>
+```
+
+## When *not* to use
+
+- **Don't use CardTestimonial for non-testimonial content.** Press mentions, awards, or other social proof are different patterns — use [Card](/docs/components/card) default mode with appropriate composition.
+- **Don't fake testimonials.** Real attribution matters for trust; fake or composite quotes erode credibility when discovered.
+- **Don't truncate quotes silently.** If a quote is too long, edit it to fit (with the customer's permission) or use a [Card](/docs/components/card) with explicit quote-and-link-to-full pattern.
+
+## Accessibility
+
+- Renders the quote inside a `<blockquote>` with proper semantics.
+- Star rating uses filled/empty SVG icons with `aria-label="Rated {n} out of 5"`.
+- Author and role render as `<cite>` with the role as `<span>`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `quote` | `string` *(required)* | — |
+| `authorName` | `string` *(required)* | — |
+| `authorRole` | `string` | — |
+| `rating` | `1 \| 2 \| 3 \| 4 \| 5` | — |
+| `variant` | `'brand' \| 'outlined'` | `'brand'` |
+
+Plus standard `<article>` / `<div>` HTML attributes.
+
+## Related
+
+- [Card](/docs/components/card) — flexible content alternative
+- [CardList](/docs/components/card-list) — for grids of testimonials
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/displays-card-card-testimonial--overview)**
