@@ -1,0 +1,89 @@
+---
+title: Spinner
+description: Circular loading indicator with animated rotation. Inline and container variants.
+---
+
+Spinner is a small spinning circle for short-lived loading states — a button mid-submit, an inline data fetch, a centered container loader. For longer loads where layout matters, use [Skeleton](/docs/components/skeleton).
+
+## Use it for
+
+- Loading state inside a button while a form submits
+- Inline indicator next to a label ("Loading…")
+- Centered container loader for full-page or panel-level loading
+- Any sub-second to few-second wait where Skeleton would be overkill
+
+## Import
+
+```tsx
+import { Spinner } from '@brikdesigns/bds';
+```
+
+## Variants
+
+Two sizes — `sm` for inline, `lg` for container.
+
+<ComponentPreview code={`<BDS.Spinner size="sm" />
+<BDS.Spinner size="lg" />`}>
+  <BDS.Spinner size="sm" />
+  <BDS.Spinner size="lg" />
+</ComponentPreview>
+
+- **`sm`** — 16×16px. Inline use, button loading states.
+- **`lg`** — 48×48px. Container loading, full-page loading.
+
+## Pattern: button loading
+
+Most Buttons accept a `loading` prop directly — use that. Spinner is for cases where the loading indicator lives outside a Button.
+
+```tsx
+<div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+  <Spinner size="sm" />
+  <span>Loading data…</span>
+</div>
+```
+
+## Pattern: container loading
+
+```tsx
+<div style={{ display: 'flex', justifyContent: 'center', padding: 64 }}>
+  <Spinner size="lg" />
+</div>
+```
+
+## Custom colors
+
+Spinner inherits theme color by default. To override (e.g. on a dark-brand background where the default would be invisible):
+
+```tsx
+<Spinner
+  size="sm"
+  style={{
+    borderColor: 'rgba(255,255,255,0.3)',
+    borderTopColor: 'white',
+  }}
+/>
+```
+
+## When *not* to use
+
+- **Don't use Spinner for loads over ~3 seconds.** The user has no sense of progress. Use [Skeleton](/docs/components/skeleton) (preserves layout) or a `<ProgressBar>` if you can estimate completion.
+- **Don't put Spinner in a button without `loading`.** Use the Button's built-in loading prop — it handles disable, width preservation, and accessibility.
+
+## Accessibility
+
+- Renders a `<div>` with `role="status"` and `aria-label="Loading"`.
+- Respects `prefers-reduced-motion` — pauses the rotation animation.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `size` | `'sm' \| 'lg'` | `'sm'` |
+
+Plus all standard `<div>` HTML attributes.
+
+## Related
+
+- [Skeleton](/docs/components/skeleton) — layout-preserving loading
+- [Button](/docs/components/button) — built-in `loading` prop
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-indicator-spinner--overview)**

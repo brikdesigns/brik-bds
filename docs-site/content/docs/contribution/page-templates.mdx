@@ -181,6 +181,20 @@ Use HTML `<table>` only when you need JSX `.map()` over runtime data:
 
 JSX expressions inside markdown table syntax don't get re-parsed at runtime — `{x.map(() => '\| col \|').join('\\n')}` renders as literal text, not a table.
 
+### Curly braces in prose
+
+MDX evaluates `{anything}` as a JSX expression — even inside plain text. Writing `"{n}-of-something"` in a bullet means MDX tries to read a variable called `n` and crashes the build with `ReferenceError: n is not defined`.
+
+Two ways to escape:
+
+```md
+✓  Wrap in backticks: `{n}`-of-something
+✓  Use HTML entity: &#123;n&#125;-of-something
+✗  Bare braces: {n}-of-something — crashes prerender
+```
+
+This bites hardest in feature-prop-shape descriptions and template-literal-style copy. When in doubt, backticks.
+
 ### Headings
 
 H1 is the page title (driven by frontmatter — never write `# ` in the body). H2 for sections, H3 for sub-sections. Don't go below H4.
