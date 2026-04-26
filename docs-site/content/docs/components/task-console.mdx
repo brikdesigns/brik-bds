@@ -1,0 +1,146 @@
+---
+title: Task console
+description: Floating progress console for long-running batch operations. Per-item state, auto-dismiss, position-pinned.
+---
+
+TaskConsole is the floating progress panel for long-running multi-item operations — generating 14 pages, syncing 32 records, processing a CSV upload. Pins to a screen corner, shows per-item completion state, and auto-dismisses when all items finish.
+
+For ephemeral confirmations, use [Toast](/docs/components/toast). For persistent banners, use [Banner](/docs/components/banner). For single-task progress, use [ProgressBar](/docs/components/progress-bar).
+
+## Use it for
+
+- Batch generation jobs ("Generating 14 pages")
+- Multi-record sync or import operations
+- Long-running content scrapes or audits
+- Any background task that produces multiple discrete sub-results the user benefits from seeing as they complete
+
+## Import
+
+```tsx
+import { TaskConsole } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+The console accepts a list of `items`, each with its own state. As items complete, the console updates in real-time.
+
+```tsx
+import { useState } from 'react';
+
+const [items, setItems] = useState([
+  { id: '1', label: 'Generating /home', status: 'pending' },
+  { id: '2', label: 'Generating /about', status: 'pending' },
+  { id: '3', label: 'Generating /contact', status: 'pending' },
+]);
+
+<TaskConsole
+  isOpen={isRunning}
+  title="Generating 14 pages"
+  subtitle="Less than a minute left"
+  items={items}
+  onDismiss={() => setIsRunning(false)}
+/>
+```
+
+### Position
+
+Pin to the bottom-right (default) or bottom-left.
+
+```tsx
+<TaskConsole position="bottom-left" {...props} />
+<TaskConsole position="bottom-right" {...props} />
+```
+
+### Default collapsed
+
+Start the console minimized. The user can expand to see per-item state.
+
+```tsx
+<TaskConsole defaultCollapsed {...props} />
+```
+
+### Auto-dismiss
+
+Set `autoDismissDelay` (ms) to auto-close the console after all items complete. `0` disables auto-dismiss (user dismisses manually).
+
+```tsx
+<TaskConsole autoDismissDelay={3000} {...props} />
+```
+
+## Pattern: live batch generation
+
+The canonical pattern — open the console on job start, update items as each completes, auto-dismiss at the end.
+
+```tsx
+async function generatePages(slugs: string[]) {
+  const items = slugs.map((slug) => ({
+    id: slug,
+    label: `Generating /${slug}`,
+    status: 'pending' as const,
+  }));
+
+  setConsoleState({ isOpen: true, items });
+
+  for (const slug of slugs) {
+    setConsoleState((prev) => ({
+      ...prev,
+      items: prev.items.map((i) =>
+        i.id === slug ? { ...i, status: 'in-progress' } : i
+      ),
+    }));
+
+    await generatePage(slug);
+
+    setConsoleState((prev) => ({
+      ...prev,
+      items: prev.items.map((i) =>
+        i.id === slug ? { ...i, status: 'complete' } : i
+      ),
+    }));
+  }
+}
+
+<TaskConsole
+  isOpen={consoleState.isOpen}
+  title={`Generating ${slugs.length} pages`}
+  items={consoleState.items}
+  autoDismissDelay={3000}
+  onDismiss={() => setConsoleState({ isOpen: false, items: [] })}
+/>
+```
+
+## When *not* to use
+
+- **Don't use TaskConsole for single-task progress.** Use [ProgressBar](/docs/components/progress-bar) — it's the right shape for "one task, % complete."
+- **Don't use TaskConsole for instantaneous operations.** If a job completes in under 1 second, the console flashes uselessly. Use [Toast](/docs/components/toast) for the completion confirmation.
+- **Don't run multiple TaskConsoles simultaneously.** Pin one at a time; queue subsequent operations or aggregate them in one console.
+
+## Accessibility
+
+- Renders a `<div role="status" aria-live="polite">` so screen readers announce progress without interrupting current speech.
+- Per-item state changes are announced as items move from pending → in-progress → complete.
+- The collapse / dismiss buttons carry `aria-label`s.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `ReactNode` *(required)* | — |
+| `items` | `TaskConsoleItem[]` *(required)* | — |
+| `isOpen` | `boolean` | `true` |
+| `position` | `'bottom-right' \| 'bottom-left'` | `'bottom-right'` |
+| `onDismiss` | `() => void` | — |
+| `defaultCollapsed` | `boolean` | `false` |
+| `autoDismissDelay` | `number` (ms) | `0` (no auto-dismiss) |
+| `subtitle` | `ReactNode` | — |
+
+The `TaskConsoleItem` shape is defined alongside the component — typically `{ id, label, status: 'pending' \| 'in-progress' \| 'complete' \| 'error' }`.
+
+## Related
+
+- [ProgressBar](/docs/components/progress-bar) — single-task alternative
+- [Toast](/docs/components/toast) — short-confirmation alternative
+- [NotificationList](/docs/components/notification-list) — for completed-task review after the fact
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-feedback-task-console--overview)**

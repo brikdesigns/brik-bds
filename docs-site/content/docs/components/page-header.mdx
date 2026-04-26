@@ -1,0 +1,225 @@
+---
+title: Page header
+description: Composable page-level header. Title + subtitle + breadcrumbs + actions + tabs + metadata + stats.
+---
+
+PageHeader is the standard page-top header — composes [Breadcrumb](/docs/components/breadcrumb), [Button](/docs/components/button), [TabBar](/docs/components/tab-bar), and a metadata grid into one component. Inherits background from parent context (no surface of its own), so it works on pages with any background.
+
+## Use it for
+
+- Detail page headers (company / project / record pages)
+- Section headers that need breadcrumbs + page title + primary action
+- Dashboards with metadata + stat tiles + tab navigation
+- Any page where the top region groups identity + navigation + primary CTA
+
+For Sheet headers (inside a `<Sheet>`), the [Sheet](/docs/components/sheet) component composes its own — don't reach for PageHeader inside a Sheet body.
+
+## Import
+
+```tsx
+import { PageHeader } from '@brikdesigns/bds';
+```
+
+## Anatomy
+
+PageHeader has six optional regions plus a required title. From top to bottom:
+
+1. **`breadcrumbs`** — [Breadcrumb](/docs/components/breadcrumb) above the title row
+2. **`badge`** + **`title`** — service icon (left) + page H1
+3. **`subtitle`** — supporting paragraph under the title
+4. **`actions`** — right-aligned action buttons (typically a [Button](/docs/components/button) or [ButtonGroup](/docs/components/button-group))
+5. **`metadata`** — built-in key/value grid (Owner, Status, Updated)
+6. **`stats`** — summary content (e.g. stat-tile [Card preset="summary"](/docs/components/card#summary-preset) grid)
+7. **`tabs`** — [TabBar](/docs/components/tab-bar) for in-page section nav
+
+## Variants
+
+### Title only
+
+```tsx
+<PageHeader title="Dashboard" />
+```
+
+### Title + subtitle
+
+```tsx
+<PageHeader
+  title="My account"
+  subtitle="Manage your membership plan and billing."
+/>
+```
+
+### With breadcrumbs and actions
+
+```tsx
+<PageHeader
+  title="Birdwell & Mutlak"
+  breadcrumbs={
+    <Breadcrumb items={[
+      { label: 'Clients', href: '/clients' },
+      { label: 'Birdwell & Mutlak' },
+    ]} />
+  }
+  actions={<Button variant="primary">Edit</Button>}
+/>
+```
+
+### With service badge
+
+[ServiceBadge](/docs/components/service-badge) renders to the left of the title for service-line pages.
+
+```tsx
+<PageHeader
+  title="Website Design"
+  subtitle="Custom web development and design."
+  badge={<ServiceBadge category="marketing" serviceName="Custom Web Development" size="lg" />}
+  actions={<Button variant="primary">Edit Service</Button>}
+/>
+```
+
+### With metadata
+
+`metadata` is a built-in key/value grid for page-level facts.
+
+```tsx
+<PageHeader
+  title="Brand Refresh"
+  metadata={[
+    { label: 'Owner', value: 'Sarah Chen' },
+    { label: 'Status', value: <Badge status="positive">Active</Badge> },
+    { label: 'Updated', value: '2 days ago' },
+  ]}
+/>
+```
+
+### With stats
+
+`stats` renders summary content between metadata and tabs — typically a row of stat tiles.
+
+```tsx
+<PageHeader
+  title="Q1 Performance"
+  stats={
+    <CardList orientation="horizontal" gap="md">
+      <Card preset="summary" label="Revenue" value={48250.75} type="price" />
+      <Card preset="summary" label="New clients" value={12} />
+      <Card preset="summary" label="Projects" value={34} />
+    </CardList>
+  }
+/>
+```
+
+### With tabs
+
+```tsx
+<PageHeader
+  title="My Account"
+  subtitle="Manage your membership plan."
+  tabs={
+    <TabBar items={[
+      { label: 'Overview', active: true },
+      { label: 'Billing' },
+      { label: 'Security' },
+    ]} />
+  }
+/>
+```
+
+### Sizes
+
+`size` controls the title scale. Default `lg`.
+
+```tsx
+<PageHeader title="Compact dashboard header" size="sm" />
+<PageHeader title="Standard page header" size="md" />
+<PageHeader title="Hero detail page" size="lg" />
+```
+
+### Flush layout
+
+`flush` removes horizontal padding for layouts that provide their own.
+
+```tsx
+<PageHeader title="..." flush />
+```
+
+## Pattern: full company detail page
+
+The canonical layout — breadcrumb + service badge + title + actions + metadata + tabs.
+
+```tsx
+<PageHeader
+  title="Birdwell & Mutlak"
+  subtitle="Active client · Dental"
+  breadcrumbs={
+    <Breadcrumb items={[
+      { label: 'Clients', href: '/clients' },
+      { label: 'Birdwell & Mutlak' },
+    ]} />
+  }
+  badge={<ServiceBadge category="dental" size="lg" />}
+  actions={<ButtonGroup>
+    <Button variant="ghost">Archive</Button>
+    <Button variant="primary">Edit</Button>
+  </ButtonGroup>}
+  metadata={[
+    { label: 'Owner', value: 'Nick Stanerson' },
+    { label: 'Industry', value: 'Dental' },
+    { label: 'Updated', value: '3 days ago' },
+  ]}
+  tabs={
+    <TabBar items={[
+      { label: 'Brand', active: true },
+      { label: 'Services' },
+      { label: 'Locations' },
+      { label: 'Activity' },
+    ]} />
+  }
+/>
+```
+
+## When *not* to use
+
+- **Don't use PageHeader inside a Sheet.** Use [Sheet](/docs/components/sheet)'s built-in header instead — different shape, different semantics.
+- **Don't use PageHeader without a `title`.** It's required and serves as the page H1; without it, the page outline breaks.
+- **Don't put complex JSX in `metadata` values.** Metadata is for short pinned facts. For richer per-section content, use [DataSection](/docs/components/data-section).
+
+## Accessibility
+
+- Renders a real `<header>` landmark.
+- The title is the page's `<h1>` — only one PageHeader per page.
+- Breadcrumb, TabBar, and action elements keep their own semantics.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` *(required)* | — |
+| `subtitle` | `string` | — |
+| `badge` | `ReactNode` | — |
+| `breadcrumbs` | `ReactNode` | — |
+| `actions` | `ReactNode` | — |
+| `tabs` | `ReactNode` | — |
+| `metadata` | `MetadataItem[]` | — |
+| `stats` | `ReactNode` | — |
+| `showDivider` | `boolean` | `true` |
+| `flush` | `boolean` | `false` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'lg'` |
+
+### MetadataItem
+
+```ts
+interface MetadataItem {
+  label: string;
+  value: ReactNode;
+}
+```
+
+## Related
+
+- [Breadcrumb](/docs/components/breadcrumb) — common breadcrumbs prop content
+- [TabBar](/docs/components/tab-bar) — common tabs prop content
+- [ServiceBadge](/docs/components/service-badge) — common badge prop content
+- [DataSection](/docs/components/data-section) — for body sections below the header
+- [Sheet](/docs/components/sheet) — has its own header for in-Sheet contexts
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-secondary-page-header--overview)**

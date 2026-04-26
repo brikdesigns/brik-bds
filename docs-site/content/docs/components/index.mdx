@@ -182,9 +182,29 @@ Tables, kanban boards, calendars, timelines, gauges, and notification lists. The
   <Card title="Notification list" href="/docs/components/notification-list" description="Vertical list of clickable notification items with empty state." />
 </Cards>
 
-## Still in Storybook
+### Assets + utilities
 
-The remaining ~6 components haven't migrated yet — Avatar, Icons (Foundations/Assets), Footer, PageHeader (Navigation), BulletList (Components/List), and TaskConsole (Components/Feedback). They live in different categories than Displays and will land in a final misc cleanup PR.
+Identity primitives, icon reference, page-level chrome, list and console utilities. The long tail that lives outside the main component categories.
+
+<Cards>
+  <Card title="Avatar" href="/docs/components/avatar" description="User profile image with initials fallback. Four sizes, four presence states." />
+  <Card title="Icons" href="/docs/components/icons" description="Iconify + Phosphor icon reference. Inline SVGs, no CDN, six weights per icon." />
+  <Card title="Footer" href="/docs/components/footer" description="Site-wide footer with logo, columns, social links, copyright. Default + brand variants." />
+  <Card title="Page header" href="/docs/components/page-header" description="Composable page-level header. Title + breadcrumbs + actions + tabs + metadata + stats." />
+  <Card title="Bullet list" href="/docs/components/bullet-list" description="Structured short-item list. disc / decimal / none markers, two density modes." />
+  <Card title="Task console" href="/docs/components/task-console" description="Floating progress console for long-running batch operations. Per-item state, auto-dismiss." />
+</Cards>
+
+## Migration complete ✅
+
+Every shipped BDS component has a docs page. The migration from Storybook MDX to design.brikdesigns.com is done. Storybook becomes the playground for live prop exploration; this site is the canonical guidance surface.
+
+Remaining work tracked separately:
+
+- **Motion foundation port** (the deferred big lift in the Foundations section)
+- **Industry packs** for the Content System (Real Estate RV/MHC, Real Estate Commercial, Small Business)
+- **Voice patterns** (×8) and **Atmospheres** (×7) for the Content System
+- **Netlify deploy** + `design.brikdesigns.com` DNS
 
 ## Page template
 
