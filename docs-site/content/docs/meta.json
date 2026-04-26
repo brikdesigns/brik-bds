@@ -1,0 +1,16 @@
+{
+  "title": "Brik Design System",
+  "pages": [
+    "index",
+    "---Foundations---",
+    "getting-started",
+    "primitives",
+    "---Building---",
+    "patterns",
+    "components",
+    "hooks",
+    "utilities",
+    "---Working with BDS---",
+    "contribution"
+  ]
+}

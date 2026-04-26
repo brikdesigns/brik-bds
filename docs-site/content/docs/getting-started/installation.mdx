@@ -1,0 +1,64 @@
+---
+title: Installation
+description: Add BDS to a Next.js, Astro, or Webflow consumer.
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+## Install the package
+
+<Tabs items={['npm', 'pnpm', 'bun']}>
+
+<Tab value="npm">
+
+```bash
+npm install @brikdesigns/bds
+```
+
+</Tab>
+
+<Tab value="pnpm">
+
+```bash
+pnpm add @brikdesigns/bds
+```
+
+</Tab>
+
+<Tab value="bun">
+
+```bash
+bun add @brikdesigns/bds
+```
+
+</Tab>
+
+</Tabs>
+
+## Wire the token cascade
+
+In your global stylesheet (`globals.css`, `app.css`, etc.) import in this order:
+
+```css
+@import '@brikdesigns/bds/tokens.css';
+@import './styles/theme-{client}.css'; /* your client's theme overrides */
+@import '@brikdesigns/bds/styles.css';
+```
+
+Order matters. Foundation tokens load first, the client theme overrides semantic tokens, component CSS reads whatever is current.
+
+## Import a component
+
+```tsx
+import { Button } from '@brikdesigns/bds';
+
+export function Example() {
+  return <Button variant="primary">Save</Button>;
+}
+```
+
+That's it. No provider required for components — they read tokens from the cascade above.
+
+## Next: read the cascade rules
+
+The [cascade rules page](/docs/getting-started/cascade) explains the three-layer architecture (foundations → gap-fills → client theme) and why it exists.

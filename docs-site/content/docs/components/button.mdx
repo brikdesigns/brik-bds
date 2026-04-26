@@ -1,0 +1,137 @@
+---
+title: Button
+description: Trigger an action. The most common interactive element in the system.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Use it for
+
+- Submitting a form
+- Confirming or cancelling a destructive operation
+- Opening a sheet, dialog, or popover
+- Triggering an immediate, synchronous action
+
+If the action navigates somewhere, use **LinkButton** instead. If the trigger is a single icon (no label), use **IconButton**.
+
+## Import
+
+```tsx
+import { Button } from '@brikdesigns/bds';
+```
+
+## Anatomy
+
+A Button is a labelled hit target with an optional leading or trailing icon. The label drives the implicit accessible name.
+
+```
+┌──────────────────────────────────┐
+│  [icon]   Label   [icon]         │
+└──────────────────────────────────┘
+   ↑         ↑          ↑
+   leading   text node  trailing
+```
+
+## Variants
+
+Twelve variants. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
+
+### Primary actions
+
+<ComponentPreview code={`<BDS.Button variant="primary">Save</BDS.Button>
+<BDS.Button variant="outline">Cancel</BDS.Button>
+<BDS.Button variant="secondary">Secondary</BDS.Button>
+<BDS.Button variant="ghost">Tertiary</BDS.Button>`}>
+  <BDS.Button variant="primary">Save</BDS.Button>
+  <BDS.Button variant="outline">Cancel</BDS.Button>
+  <BDS.Button variant="secondary">Secondary</BDS.Button>
+  <BDS.Button variant="ghost">Tertiary</BDS.Button>
+</ComponentPreview>
+
+### Destructive actions
+
+Three flavors of destructive map onto the same emphasis ladder as primary actions.
+
+<ComponentPreview code={`<BDS.Button variant="danger">Delete</BDS.Button>
+<BDS.Button variant="danger-outline">Delete</BDS.Button>
+<BDS.Button variant="danger-ghost">Delete</BDS.Button>`}>
+  <BDS.Button variant="danger">Delete</BDS.Button>
+  <BDS.Button variant="danger-outline">Delete</BDS.Button>
+  <BDS.Button variant="danger-ghost">Delete</BDS.Button>
+</ComponentPreview>
+
+### State variants
+
+`positive` confirms a completed action. `selected` indicates a button is currently the active option in a group. `inverse` and `on-color` are for placement on dark or branded surfaces.
+
+<ComponentPreview code={`<BDS.Button variant="positive">Saved</BDS.Button>
+<BDS.Button variant="selected">Selected</BDS.Button>`}>
+  <BDS.Button variant="positive">Saved</BDS.Button>
+  <BDS.Button variant="selected">Selected</BDS.Button>
+</ComponentPreview>
+
+## Sizes
+
+Five sizes. `md` is the default. Use `sm` only inside dense surfaces (table rows, popovers); use `lg`/`xl` for primary CTAs on landing pages.
+
+<ComponentPreview code={`<BDS.Button size="tiny">Tiny</BDS.Button>
+<BDS.Button size="sm">Small</BDS.Button>
+<BDS.Button size="md">Medium</BDS.Button>
+<BDS.Button size="lg">Large</BDS.Button>
+<BDS.Button size="xl">XL</BDS.Button>`}>
+  <BDS.Button size="tiny">Tiny</BDS.Button>
+  <BDS.Button size="sm">Small</BDS.Button>
+  <BDS.Button size="md">Medium</BDS.Button>
+  <BDS.Button size="lg">Large</BDS.Button>
+  <BDS.Button size="xl">XL</BDS.Button>
+</ComponentPreview>
+
+## When to use
+
+| Situation | Component |
+|---|---|
+| Action that stays on the page (Save, Submit, Open dialog) | **Button** |
+| Action that navigates to a new URL | [LinkButton](/docs/components/link-button) |
+| Single-icon trigger with no visible label | [IconButton](/docs/components/icon-button) |
+| Toggle on/off | [Switch](/docs/components/switch) |
+| One-of-many selection | [SegmentedControl](/docs/components/segmented-control) |
+
+## When *not* to use
+
+<Callout type="warn">
+**Don't downgrade emphasis when converting Button → IconButton.** A primary action stays a primary action. The 2026-04 IconButton-ghost regression came from agents converting `<Button variant="primary">` into `<IconButton variant="ghost">`. Match the emphasis level, always.
+</Callout>
+
+- **Don't use `ghost` for the only action on a page.** Ghost is the lowest emphasis tier — it should appear alongside a higher-emphasis sibling.
+- **Don't stack two `primary` buttons next to each other.** Only one primary action per surface.
+
+## Accessibility
+
+- Renders a real `<button>` element. Keyboard navigation, focus ring, and `Enter`/`Space` activation come from the platform.
+- Accessible name comes from the label. If you must hide the visual label (rare — use IconButton instead), pass `aria-label`.
+- Disabled state uses the `disabled` attribute, which removes it from the tab order. For "blocked but explainable" actions, prefer keeping it focusable and showing a tooltip.
+
+## API
+
+The full prop reference (with auto-extracted TypeScript types and live controls) lives in [Storybook → Components/Action/Button](https://storybook.brikdesigns.com/?path=/docs/components-action-button--docs).
+
+| Prop | Type | Default |
+|---|---|---|
+| `variant` | `ButtonVariant` | `'primary'` |
+| `size` | `ButtonSize` | `'md'` |
+| `leadingIcon` | `ReactNode` | — |
+| `trailingIcon` | `ReactNode` | — |
+| `loading` | `boolean` | `false` |
+| `fullWidth` | `boolean` | `false` |
+| `disabled` | `boolean` | `false` |
+
+`ButtonVariant` = `primary | outline | secondary | ghost | inverse | on-color | danger | danger-outline | danger-ghost | destructive | positive | selected`
+
+`ButtonSize` = `tiny | sm | md | lg | xl`
+
+## Related
+
+- [LinkButton](/docs/components/link-button) — same shape, renders an `<a>`
+- [IconButton](/docs/components/icon-button) — single-icon trigger
+- [ButtonGroup](/docs/components/button-group) — connected button cluster
+- [Forms pattern](/docs/patterns#forms) — Save/Cancel placement, submit-state handling
