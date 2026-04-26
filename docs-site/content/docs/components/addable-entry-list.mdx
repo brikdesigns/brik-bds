@@ -1,0 +1,179 @@
+---
+title: Addable entry list
+description: Title + description sibling. Each row carries a primary value and a secondary note.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+AddableEntryList is the text + textarea sibling of [AddableTextList](/docs/components/addable-text-list). Use for lists where each row needs a headline value plus context — competitor URL + notes, reference site + why, line item + description, team member + role.
+
+The entry shape is intentionally generic (`{ primary, secondary }`) so a single component serves all of these. Map your domain shape at the boundary.
+
+## Use it for
+
+- Competitor list (URL + notes)
+- Reference sites (URL + why we like it)
+- Service catalog entries (name + description)
+- Line items (label + amount/description)
+- Team member rosters (name + role)
+
+For free-form one-string-per-row, use [AddableTextList](/docs/components/addable-text-list). For ≥3 structured fields, use [AddableFieldRowList](/docs/components/addable-field-row-list).
+
+## Import
+
+```tsx
+import { AddableEntryList } from '@brikdesigns/bds';
+```
+
+## Modes
+
+AddableEntryList has three rendering modes driven by props:
+
+### Plain mode
+
+No `primarySuggestions`. Each entry is **inline-editable**: a primary input + secondary textarea + Remove button per row. The Add button appends a new empty row. Default and the right choice for free-form lists (competitors, reference sites, line items).
+
+```tsx
+import { useState } from 'react';
+
+const [entries, setEntries] = useState<{ primary: string; secondary: string }[]>([]);
+
+<AddableEntryList
+  label="Competitors"
+  primaryLabel="URL"
+  secondaryLabel="Notes"
+  primaryInputType="url"
+  primaryPlaceholder="https://"
+  secondaryPlaceholder="What stands out?"
+  entries={entries}
+  onChange={setEntries}
+/>
+```
+
+### Suggestion mode
+
+With `primarySuggestions`. Preserves the reveal-form flow — existing entries render as **read-only cards** with an x-icon remove. Add reveals a staging combobox. Use for vocabulary-locked lists (services from a catalog).
+
+```tsx
+const services = getIndustryServices(company.industry_slug);
+
+<AddableEntryList
+  label="Services offered"
+  primaryLabel="Service"
+  secondaryLabel="What makes this unique here?"
+  primarySuggestions={services}
+  entries={entries}
+  onChange={setEntries}
+/>
+```
+
+With `primaryStrict`, free-form entries outside the suggestion list are rejected. For full BCS-aware multi-pick with `source: 'catalog' | 'custom'` attribution, use [CatalogPicker](/docs/components/catalog-picker) — it wraps AddableEntryList with extra metadata.
+
+### Read mode
+
+`disabled={true}` collapses both modes to **token-backed typography**: primary uses `--label-md`, secondary uses `--body-md`. When `primaryInputType="url"`, the primary renders as a clickable anchor.
+
+```tsx
+<AddableEntryList
+  entries={entries}
+  onChange={() => {}}
+  primaryInputType="url"
+  emptyDescriptionLabel="No description"
+  disabled
+/>
+```
+
+## Primary input type
+
+| Value | Behavior | Read-mode render |
+|---|---|---|
+| `'text'` (default) | Plain text input | Static text |
+| `'url'` | `type="url"` + URL autocomplete | Clickable anchor with brand color + underline |
+
+## Empty description fallback
+
+When `emptyDescriptionLabel` is set, read-mode rows with empty `secondary` show that fallback text instead of collapsing the slot. Useful when consistent row heights matter.
+
+```tsx
+<AddableEntryList
+  entries={entries}
+  onChange={() => {}}
+  emptyDescriptionLabel="No description set"
+  disabled
+/>
+```
+
+## Behavior
+
+### Plain mode
+
+- **Add** appends an empty `{ primary: '', secondary: '' }` row.
+- Typing into any field patches that row's primary or secondary via `onChange`.
+- **Remove** drops the row immediately.
+- When `maxItems` is reached, the Add button hides.
+
+### Suggestion mode
+
+- **Add** reveals a staging form with a combobox-backed primary (filtered by typed query).
+- **Arrow + Enter** commits a highlighted suggestion, moves focus to the secondary textarea.
+- **Save** commits the staged entry and keeps the form open for rapid entry.
+- **Esc** cancels the staging form.
+- Duplicates blocked case-insensitively unless `allowDuplicates`.
+- With `primaryStrict`, free-form entries outside `primarySuggestions` are rejected.
+
+## When *not* to use
+
+<Callout type="warn">
+  **For free-form one-string-per-row, use AddableTextList.** AddableEntryList's textarea is wasted vertical space when there's no description to enter. AddableTextList console-warns when values contain `—`, `–`, `:`, newline, or tab to catch mis-pickings at the source.
+</Callout>
+
+- **Don't use for ≥3 structured fields.** Use [AddableFieldRowList](/docs/components/addable-field-row-list).
+- **Don't use for locked vocabularies with provenance tracking.** Use [CatalogPicker](/docs/components/catalog-picker) — it wraps this component with `source: 'catalog' | 'custom'` and stable slug derivation.
+
+## Accessibility
+
+- Plain mode: each row is a labeled fieldset with two real inputs. Tab order moves through primary → secondary → remove.
+- Suggestion mode: combobox + textarea, both with proper ARIA. Read-only cards have `aria-label` on the remove button.
+- Read mode: primary anchors get `target` / `rel` defaults preserving security on external URLs.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `entries` | `AddableEntry[]` *(required)* | — |
+| `onChange` | `(next: AddableEntry[]) => void` *(required)* | — |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `primaryLabel` | `string` | — |
+| `secondaryLabel` | `string` | — |
+| `primaryPlaceholder` | `string` | — |
+| `secondaryPlaceholder` | `string` | — |
+| `primaryInputType` | `'text' \| 'url'` | `'text'` |
+| `primarySuggestions` | `string[]` | — |
+| `primaryStrict` | `boolean` | `false` |
+| `addLabel` | `string` | — |
+| `removeLabel` | `string` | — |
+| `emptyLabel` | `string` | — |
+| `emptyDescriptionLabel` | `string` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+| `maxItems` | `number` | unlimited |
+| `secondaryRows` | `number` | `2` |
+| `allowDuplicates` | `boolean` | `false` |
+
+### AddableEntry shape
+
+```ts
+interface AddableEntry {
+  primary: string;
+  secondary: string;
+}
+```
+
+## Related
+
+- [AddableTextList](/docs/components/addable-text-list) — free-form one-string sibling
+- [AddableComboList](/docs/components/addable-combo-list) — vocabulary one-string sibling
+- [AddableFieldRowList](/docs/components/addable-field-row-list) — multi-field sibling
+- [CatalogPicker](/docs/components/catalog-picker) — wraps AddableEntryList with source attribution
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-addable-entry-list--overview)**
