@@ -50,6 +50,11 @@
     "progress-stepper",
     "pagination",
     "segmented-control",
-    "file-uploader"
+    "file-uploader",
+    "---Addable---",
+    "addable-text-list",
+    "addable-combo-list",
+    "addable-entry-list",
+    "addable-field-row-list"
   ]
 }

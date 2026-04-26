@@ -14,7 +14,7 @@ BDS components are organized by **job**, not by visual type. The same taxonomy b
 | **Indicator** | Badge, Chip, Tag, Counter, Dot, Spinner, Skeleton, BadgeGroup, TagGroup, ServiceBadge |
 | **Feedback** | Banner, Toast, Tooltip, EmptyState, ProgressBar (AlertBanner deprecated → Banner) |
 | **Control** | Switch, Slider, Stepper, ProgressStepper, Pagination, SegmentedControl, FileUploader |
-| **Addable** | AddableTagList, AddableEntryList, AddableFieldRowList |
+| **Addable** | AddableTextList, AddableComboList, AddableEntryList, AddableFieldRowList |
 | **Structure** | Card, Divider, Accordion |
 
 ## Documented here
@@ -102,9 +102,20 @@ Toggles, sliders, steppers, paginators, and the file uploader.
   <Card title="File uploader" href="/docs/components/file-uploader" description="Drag-and-drop file upload zone with click-to-browse fallback." />
 </Cards>
 
+### Addable
+
+Add / remove list primitives. Pick by row shape — single string, vocabulary-backed string, primary+secondary, or arbitrary multi-field rows.
+
+<Cards>
+  <Card title="Addable text list" href="/docs/components/addable-text-list" description="Single short string per row. Free-form, no vocabulary. Reveal-on-click input." />
+  <Card title="Addable combo list" href="/docs/components/addable-combo-list" description="Single string per row, picked from a known vocabulary with optional free-form fallback." />
+  <Card title="Addable entry list" href="/docs/components/addable-entry-list" description="Primary + secondary per row. Plain inline-edit, suggestion-mode, or read-mode." />
+  <Card title="Addable field row list" href="/docs/components/addable-field-row-list" description="Multi-field row with type-safe data via render-prop. 2+ structured fields per row." />
+</Cards>
+
 ## Still in Storybook
 
-The remaining ~13 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Addable, Structure, Navigation, and Displays.
+The remaining ~9 components haven't migrated yet. Until they land here, [Storybook → Components](https://storybook.brikdesigns.com/?path=/docs/overview-welcome--overview) is the canonical reference for Structure, Navigation, and Displays.
 
 ## Page template
 

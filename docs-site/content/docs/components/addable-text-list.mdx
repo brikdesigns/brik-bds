@@ -1,0 +1,141 @@
+---
+title: Addable text list
+description: Reveal-on-click input for capturing a list of single-line, unstructured text values.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+AddableTextList is the lightest primitive in the addable family. Each row is one short string — services offered, tags, back-office tools. The input is hidden until the user clicks **Add New**, then **Enter** commits and re-focuses for rapid entry, **Escape** cancels.
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'AddableTextList',
+      whenToUse: 'One short, unstructured string per row. No vocabulary.',
+      whenNotToUse: 'Vocabulary or structure — use a sibling.',
+      code: `<AddableTextList values={...} onChange={...} />`,
+    },
+    {
+      title: 'AddableComboList',
+      whenToUse: 'One string per row, picked from a known vocabulary (with optional free-form fallback).',
+      whenNotToUse: 'No vocabulary — use AddableTextList.',
+      code: `<AddableComboList suggestions={...} />`,
+    },
+    {
+      title: 'AddableEntryList',
+      whenToUse: 'Each row needs a primary + secondary (URL + notes, name + description).',
+      whenNotToUse: 'Single value — use TextList/ComboList.',
+      code: `<AddableEntryList entries={...} />`,
+    },
+  ]}
+/>
+
+For 2+ structured fields per row, use [AddableFieldRowList](/docs/components/addable-field-row-list).
+
+## Use it for
+
+- Services offered (free-form, no catalog)
+- Tags / labels on a record
+- Back-office tools, integrations the user types from memory
+- Any short-string list where capture speed matters more than structure
+
+## Import
+
+```tsx
+import { AddableTextList } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+const [values, setValues] = useState<string[]>([]);
+
+<AddableTextList
+  label="Services offered"
+  values={values}
+  onChange={setValues}
+  placeholder="Add a service…"
+  addLabel="Add service"
+/>
+```
+
+### With helper text + max items
+
+```tsx
+<AddableTextList
+  label="Back-office tools"
+  helperText="Up to 5 tools — CRM, billing, scheduling, etc."
+  values={values}
+  onChange={setValues}
+  maxItems={5}
+/>
+```
+
+### Sizes
+
+`sm`, `md` (default), `lg` — match TextInput sizes for inline placement.
+
+### Disabled (read-only)
+
+Renders tags without input or remove controls.
+
+```tsx
+<AddableTextList values={values} onChange={() => {}} disabled />
+```
+
+### Allow duplicates
+
+By default duplicates are blocked case-insensitively. Set `allowDuplicates` if dupes are meaningful (e.g. quantity-by-repeat patterns).
+
+```tsx
+<AddableTextList values={values} onChange={setValues} allowDuplicates />
+```
+
+## Behavior
+
+- **Enter** commits the trimmed value and keeps the input open for the next entry.
+- **Escape** or **blur on empty** cancels and hides the input.
+- Duplicates are blocked case-insensitively unless `allowDuplicates` is set.
+- When `maxItems` is reached, the Add button is hidden.
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use AddableTextList for title + description pairs.** This component console-warns in dev when any value contains structural separators (`—`, `–`, `:`, newline, tab) — that's the signal you reached for the wrong primitive. Use [AddableEntryList](/docs/components/addable-entry-list).
+</Callout>
+
+- **Don't use AddableTextList when a vocabulary exists.** If the values come from a BCS getter or locked enum, use [AddableComboList](/docs/components/addable-combo-list) — users get autocomplete and you get consistent values.
+- **Don't use AddableTextList for ≥3 structured fields.** Use [AddableFieldRowList](/docs/components/addable-field-row-list).
+
+## Accessibility
+
+- Each tag is a `<li>` with a labeled remove button (`removeLabel`, defaults to "Remove").
+- Reveal input has `role="textbox"` with platform-native autocomplete.
+- The Add button is a real `<button>` — keyboard, focus, all platform.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `values` | `string[]` *(required)* | — |
+| `onChange` | `(next: string[]) => void` *(required)* | — |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `placeholder` | `string` | — |
+| `addLabel` | `string` | `'Add'` |
+| `emptyLabel` | `string` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+| `maxItems` | `number` | unlimited |
+| `allowDuplicates` | `boolean` | `false` |
+
+## Related
+
+- [AddableComboList](/docs/components/addable-combo-list) — vocabulary-backed sibling
+- [AddableEntryList](/docs/components/addable-entry-list) — primary + secondary sibling
+- [AddableFieldRowList](/docs/components/addable-field-row-list) — multi-field sibling
+- [Tag](/docs/components/tag) — the chip rendered for each value
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-form-addable-text-list--overview)**
