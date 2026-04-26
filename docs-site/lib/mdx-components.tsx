@@ -16,6 +16,11 @@ import {
   SemanticTypographyTable,
   FontWeightShowcase,
 } from '@/components/mdx/foundation/typography-scale';
+import {
+  BorderRadiusPreview,
+  BorderWidthPreview,
+  ShadowScale,
+} from '@/components/mdx/foundation/radius-shadow';
 import * as BDS from '@brikdesigns/bds';
 
 /**
@@ -48,6 +53,9 @@ export function getMDXComponents(extra?: MDXComponents): MDXComponents {
     FontFamilyShowcase,
     SemanticTypographyTable,
     FontWeightShowcase,
+    BorderRadiusPreview,
+    BorderWidthPreview,
+    ShadowScale,
     // The BDS namespace export includes hooks (useTheme) alongside components.
     // MDX's component-map type rejects that mix; cast since MDX only ever calls
     // the JSX entries (`<BDS.Button>`), never the hooks.

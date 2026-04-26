@@ -1,0 +1,36 @@
+---
+title: Border width
+description: Line thickness for borders, dividers, and outlines.
+---
+
+import { borderWidthScale } from '@bds-tokens';
+
+Border width tokens control line thickness for borders, dividers, and outlines.
+
+## Width scale (primitives)
+
+<BorderWidthPreview scale={borderWidthScale} prefix="--border-width" />
+
+## Semantic width tokens
+
+| Token | CSS Variable | Description |
+|---|---|---|
+| None | `--border-width-none` | No border (0px) |
+| Small | `--border-width-sm` | Subtle hairline |
+| Medium | `--border-width-md` | Default visible border |
+| Large | `--border-width-lg` | Prominent border (1px) |
+
+## Width modes
+
+Figma uses border-width modes for overall border density at a theme level.
+
+| Mode | Effect |
+|---|---|
+| Thin | Minimal borders |
+| Default | Standard borders |
+| Thick | Prominent borders |
+
+## Related
+
+- [Border radius](/docs/primitives/border-radius) — pairs with width for component framing
+- [Color → Border tokens](/docs/primitives/color#border) — semantic border-color tokens
