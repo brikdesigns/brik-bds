@@ -1,0 +1,95 @@
+---
+title: Atmospheres
+description: Layer 2 of the theming cascade — CSS overlays that establish visual character (editorial-luxury, cinematic, warm-soft, and more) without duplicating CSS per client.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Atmospheres are **CSS layers** that sit on top of a client's theme to establish visual character — dark-luxury-editorial, soft-wellness, clean-clinical, etc. — without duplicating CSS per client. They're orthogonal to the navigation archetype and the blueprint library: atmospheres decorate surfaces, archetypes structure the header, blueprints compose sections.
+
+The portal's theme generator reads `company_profiles.atmosphere` at extraction time and emits an `@import` into the stored theme artifact pointing at `@brikdesigns/bds/atmospheres/{slug}.css`. The consumer Astro site fetches one theme artifact at build; the atmosphere cascades automatically.
+
+## How atmospheres compose with themes
+
+| Axis | Where it's set | What it controls |
+|---|---|---|
+| **Theme tokens** | `design_token_extraction` task reads `company_profiles.color_primitives` + `typography` | Brand palette, fonts, spacing, border-radius |
+| **Theme mode** | `company_profiles.theme_mode` (light / dark) | Whether text is dark-on-light or light-on-dark |
+| **Atmosphere** | `company_profiles.atmosphere` (this vocab) | Ambient layer — vignettes, grain, orbs, spotlights |
+| **Navigation IA** | `pack.navigationIA` (industry default) + portal overrides | Header archetype + scroll + mobile drawer |
+| **Blueprints** | Per-section, per-page (forthcoming) | Layout primitives |
+
+Each axis is an independent decision. A dental practice might pick `theme_mode: dark` + `atmosphere: editorial-luxury` + `navigation: editorial-transparent`; a wellness studio might pick `theme_mode: light` + `atmosphere: warm-soft` + `navigation: calm-flat`. The portal Intel tab is the single admin surface to set all four.
+
+## Vocabulary
+
+The locked enum lives in `content-system/vocabularies/atmosphere.ts`.
+
+| Slug | Theme mode | Natural fit |
+|---|---|---|
+| `editorial-luxury` | dark | dental · med-aesthetic · luxury hospitality |
+| `cinematic-dramatic` | dark | legal · agency · finance · dark-mode SaaS |
+| `minimal-clinical` | light | healthcare (non-luxury) · legal · minimal SaaS |
+| `warm-soft` | light | wellness · therapy · mental-health · recovery |
+| `clean-bright` | light | SaaS · tech · productivity |
+| `organic-textured` | light | MUA · organic beauty · artisan · natural products |
+| `none` | (any) | explicit no-op — fallback when atmosphere is null |
+
+<Callout type="info">
+  **Live previews are in Storybook.** Each atmosphere renders on the same compact composite (hero + services grid + CTA) so you can compare treatments side by side. The previews are iframed to isolate atmosphere `:root` / `body` rules and load the CSS verbatim from `content-system/atmospheres/`.
+
+  See **Theming → Atmospheres** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com). Native `<AtmospherePreview>` blocks land in this site in a follow-up.
+</Callout>
+
+## Per-atmosphere reference
+
+### editorial-luxury
+
+The quiet-luxury dark treatment developed for Birdwell & Mutlak Dentistry. Pure near-black (`#08080a`) surfaces so DPR gradient banding doesn't appear; gold radial orbs driven by `data-ambient` attributes on sections; SVG Perlin film grain at 32% opacity with `mix-blend-mode: overlay`; cursor-tracking spotlight on elements with `data-spotlight`. Honors reduced-motion.
+
+### cinematic-dramatic
+
+Theatrical dark — deeper navy-black (`#060612`) with an aurora-drift gradient at the top of the viewport (42s cycle, animated via `@property` interpolation) and a conic rotating spotlight on sections marked `data-ambient="spotlight"`. No grain. Heavier atmosphere is already doing the work. Fit for legal / agency / finance / dark-mode SaaS.
+
+### minimal-clinical
+
+Pure white, zero atmospheric effects. Trust comes from typography and precision, not atmosphere. Intentionally small — picks the attribute vocabulary without layering anything visually. Healthcare practices that aren't aiming luxury, legal where gravitas matters more than editorial warmth, minimal SaaS.
+
+### warm-soft
+
+Warm ivory (`#fbf7f0`) base with a single quiet rose vignette in the top-left corner and subtle paper-grade grain at 15% opacity. No motion, no spotlights, no depth orbs — anxiety-sensitive audiences (wellness, therapy, mental health, recovery) shouldn't see cinematic flourish.
+
+### clean-bright
+
+Pure white with zero CSS effects. Brand lives entirely in typography, imagery, and color accents. Sister to `minimal-clinical` — same visual posture, different semantic intent (SaaS/tech vs healthcare/legal).
+
+### organic-textured
+
+Warm cream (`#f5efe6`) base with SVG Perlin grain at 40% opacity applied with `mix-blend-mode: multiply` — the sepia-texture feel of recycled paper. Subtle earth-tone radial tint in the bottom-right. Fit for MUA / organic beauty / artisan / natural-products brands.
+
+### none
+
+Explicit no-op. Emits no rules. Fallback when `company_profiles.atmosphere` is null or a client doesn't want an atmospheric layer. Exists so the portal's theme generator can unconditionally emit an `@import` without branching.
+
+## How to pick
+
+When building a new client site:
+
+1. **Read `company_profiles.theme_mode`** (light | dark). If unset, default from `pack.affinities.visualStyle[0]` — `Dark` → dark, anything else → light.
+2. **Read `company_profiles.atmosphere`**. If unset, use the natural pairing from `ATMOSPHERE_THEME_MODE`:
+   - dark + dental / med-aesthetic → `editorial-luxury`
+   - dark + legal / agency → `cinematic-dramatic`
+   - light + wellness / therapy → `warm-soft`
+   - light + healthcare (non-luxury) → `minimal-clinical`
+   - light + SaaS / tech → `clean-bright`
+   - light + MUA / beauty → `organic-textured`
+3. **The portal theme generator** emits the `@import` into the stored theme CSS; consumer sites pull the theme at build time and the atmosphere cascades automatically. No per-client atmosphere CSS in the consumer repo.
+4. **Extending the vocabulary**: new atmospheres go through the BDS PR process — add the slug to `ATMOSPHERE_VALUES`, write a CSS file in `content-system/atmospheres/`, add a manifest entry, extend the `package.json` exports, and add a preview block to this page. Don't invent atmospheres per client; graduate them.
+
+## Related
+
+- [Theming Overview](/docs/theming) — the four-layer cascade in context
+- [Client Themes](/docs/theming/client-themes) — Layer 1, the brand-token override layer below the atmosphere
+- [Navigation Archetypes](/docs/theming/navigation-archetypes) — sibling vocabulary for site-header patterns
+- [Blueprints](/docs/theming/blueprints) — page-layout vocabulary (separate axis from atmosphere)
+- [Content System / Industries](/docs/content-system/industries) — industry packs declare default atmospheres

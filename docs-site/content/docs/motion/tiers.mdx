@@ -1,0 +1,71 @@
+---
+title: Tiers
+description: Lightweight, GSAP, and Premium — when to escalate. Each tier is additive; load only what your design calls for.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The Motion system has three tiers. They're additive — Lightweight is the floor, GSAP escalates to scroll choreography, Premium adds cinematic atmosphere. The tier decision belongs at design time, not implementation time.
+
+## Decision tree
+
+| Question | Answer | Tier |
+|---|---|---|
+| Does the design audit specify scroll-pinning, scrub-linked animation, horizontal scroll panels, or letter-by-letter SplitText? | Yes | **GSAP** (or Premium) |
+| Does the design call for animated grain, glassmorphism, magnetic cursor, hero entrance sequences, or video scrubbing? | Yes | **Premium** |
+| Otherwise | — | **Lightweight** |
+
+Lightweight is the floor every mockup ships with. Don't escalate without a design audit reason — over-engineering motion adds weight, jank surface, and maintenance cost without proportional value.
+
+## Lightweight
+
+Pure CSS. No JavaScript library dependency. Built from `tokens/animations.css` + `tokens/motion-classes.css` + `css/animations.css`.
+
+**What it does:**
+
+- Scroll-triggered reveals via the `.is-visible` class — set by an IntersectionObserver in the consumer site (or by GSAP if loaded). The CSS rules for entrance states live in `css/animations.css`.
+- Hover micro-interactions: lift, scale, color shift.
+- Stagger patterns: `.bds-stagger-1` through `.bds-stagger-6` for sequential reveals.
+- Token-bound durations and easings via `--duration-*` and `--ease-*`.
+
+**Ships immediately, runs in every browser, imposes no load-time cost.** If the design audit doesn't specify motion, you're here.
+
+## GSAP
+
+Adds scroll choreography. Requires a GSAP CDN import and ~50 KB of JS. Only load when the design explicitly needs it.
+
+**What it adds:**
+
+- Scroll-pinned sections (`ScrollTrigger.create({ pin: true })`).
+- Scrub-linked animations — element progress driven by scroll position.
+- Horizontal scroll panels.
+- SplitText / letter-by-letter typography reveals (paid plugin).
+- Numeric counters that increment on scroll.
+
+**When to use:** the design audit explicitly calls for scroll choreography, OR a hero needs a sequence that can't be expressed in CSS keyframes alone.
+
+**Avoid:** loading GSAP "just in case." Treat it as a budget — every scroll-pin you add is one the user has to scroll past.
+
+## Premium
+
+The full stack — atmosphere effects that GSAP alone doesn't cover. Depends on `premium-effects.css` + `premium-scroll.js`, which depend on GSAP.
+
+**What it adds:**
+
+- Animated film grain overlays (Premium tier of [Atmospheres](/docs/theming/atmospheres)).
+- Glassmorphism panels (backdrop-filter blur, contextual transparency).
+- Magnetic cursor buttons.
+- Hero entrance sequences with multi-element choreography.
+- Scroll-scrubbed video backgrounds.
+
+**When to use:** the design calls for cinematic moments — typically luxury, editorial, or agency sites. Verify the client's content + photography quality justifies the atmosphere; premium effects on weak content amplify weakness.
+
+<Callout type="info">
+  **Live demos are in Storybook.** Tier comparison + per-tier examples render in **Motion → Tiers**. See [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
+</Callout>
+
+## Related
+
+- [Motion Overview](/docs/motion) — the three-tier philosophy
+- [Effects](/docs/motion/effects) — implementation patterns by category
+- [Atmospheres](/docs/theming/atmospheres) — Premium-tier visual layer

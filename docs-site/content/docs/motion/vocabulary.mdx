@@ -1,0 +1,39 @@
+---
+title: Vocabulary
+description: Animation Tier and Image Mood — locked enums the portal captures and the motion worker reads.
+---
+
+Two locked enums pair the Motion system to the client portal. When a client's animation tier or image mood is captured during onboarding, it carries forward into every mockup variant — the motion worker reads the tier to decide which libraries to load and which effects Claude is allowed to generate.
+
+## Animation Tier
+
+Single-select. Stored on `company_profiles.animation_tier`.
+
+| Value | Meaning |
+|---|---|
+| `subtle` | Lightweight only. Hover micro-interactions + fade-up reveals. No GSAP. |
+| `moderate` | Lightweight + GSAP. Scroll-pinning allowed; SplitText optional. No premium overlays. |
+| `expressive` | Full stack — Lightweight + GSAP + Premium. Grain, glass, magnetic, video scrub. |
+
+The motion worker reads this value at scaffold time and emits the appropriate `<script>` + `<link>` tags into the consumer Astro site. A `subtle` site will not receive `gsap.min.js` even if a blueprint hints at scroll-pinning — the blueprint falls back to a non-pinned variant.
+
+## Image Mood
+
+Multi-select 1–3. Stored on `company_profiles.image_moods` (`text[]`).
+
+| Value | Connotation |
+|---|---|
+| `bright` | Open, energetic, high-key |
+| `cinematic` | High contrast, dramatic light, narrative |
+| `editorial` | Magazine-grade composition, refined |
+| `clinical` | Precise, sterile, trustworthy |
+| `warm` | Soft palette, sun-kissed, approachable |
+| `organic` | Natural texture, earthy, hand-crafted |
+
+Image mood drives photography selection (when sourcing stock) and informs which atmosphere is the natural pairing — `cinematic` → `cinematic-dramatic`, `warm` → `warm-soft`, etc.
+
+## Related
+
+- [Motion Overview](/docs/motion) — the three-tier philosophy
+- [Tiers](/docs/motion/tiers) — what each tier ships
+- [Atmospheres](/docs/theming/atmospheres) — image mood pairs with atmosphere choice

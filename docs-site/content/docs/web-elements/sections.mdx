@@ -1,0 +1,45 @@
+---
+title: Sections
+description: Repeatable composed blocks — hero, testimonials, contact, pricing, FAQ, CTA. Tagged by atmosphere + industry, copyable as Astro/Webflow markup.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  **Status: roadmap.** First batch in scoping — Hero (4 variants), Testimonials (3 variants), Contact, Pricing, FAQ, CTA strip.
+</Callout>
+
+Sections are the highest-leverage piece of Web Elements. They are **named, composed page blocks** that pair a specific layout with content slots and atmosphere affinity — a Brik mockup generator can pick a Section for a client by reading the industry pack's blueprint affinities and the client's atmosphere choice.
+
+This page is a peer to [Theming → Blueprints](/docs/theming/blueprints): Blueprints are the canonical authored catalog (the JSON spec); Sections are the rendered HTML for non-React contexts.
+
+## Categories
+
+| Category | First batch |
+|---|---|
+| **Hero** | Split 60/40 · Centered editorial · Image-left/text-right · Full-bleed video |
+| **Testimonials** | Featured single · 3-column grid · Carousel with avatars |
+| **Contact** | Form + map split · Multi-channel grid · Inline single-line |
+| **Pricing** | 3-tier comparison · Featured-tier callout · Toggle (monthly/annual) |
+| **FAQ** | Accordion grouped · 2-column inline · Searchable |
+| **CTA strip** | Centered banner · Split with image · Dark band closer |
+| **Value Prop** | 3-up icon grid · Stat band · Feature splash |
+
+## How a Section pulls together
+
+Every Section is the composition of:
+
+- A **layout shell** (grid, flex, table for emails) — encoded in CSS
+- One or more **BDS components** for the interactive parts (Button, Card, Field)
+- **Content slots** named after Content System fields — `heading`, `body`, `cta_label`, `testimonial_quote`, `service_items[]`
+- **Atmosphere affinity** — which atmospheres the Section composes well with (some Sections have grain dependencies; minimal-clinical wouldn't fit)
+- **Industry tags** — which industry packs declare this Section as a default
+
+When a client mockup is generated, the resolver walks: industry pack → atmosphere → client overrides → list of allowed Sections → composition.
+
+## Related
+
+- [Theming → Blueprints](/docs/theming/blueprints) — the canonical authored catalog
+- [Web Elements Overview](/docs/web-elements) — surface roadmap
+- [Atmospheres](/docs/theming/atmospheres) — Section affinities reference these
+- [Content System / Industries](/docs/content-system/industries) — packs declare default Sections

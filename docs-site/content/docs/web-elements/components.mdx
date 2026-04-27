@@ -1,0 +1,45 @@
+---
+title: Web Components (HTML/CSS)
+description: Framework-agnostic HTML/CSS counterparts to product Components — semantic markup with BDS class names, ready for Astro and Webflow.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  **Status: roadmap.** First batch in scoping — Button, Card, Field primitives, Tag, Badge.
+</Callout>
+
+The HTML/CSS surface of BDS components. While [product Components](/docs/components) are React with `onClick` handlers, Web Components are semantic HTML with BDS class names — the same `.bds-button`, `.bds-card`, `.bds-field` rules from `dist/styles.css`, but composed as static markup that Astro sites and Webflow projects can drop in directly.
+
+## Pattern
+
+A product Button:
+
+```tsx
+<Button variant="primary" size="md" onClick={handleClick}>Get started</Button>
+```
+
+The Web Element counterpart:
+
+```html
+<a href="/start" class="bds-button bds-button--primary bds-button--md">
+  Get started
+</a>
+```
+
+Same CSS. Same brand tokens. Same hover/active states. Different semantics — a website button is an `<a>` with `href`, not a JS-driven `<button>`.
+
+## What lands here
+
+When the catalog ships, each entry will document:
+
+- **Anatomy** — the HTML structure and required classes
+- **Variants** — visual variations (primary / secondary / ghost, sizes, etc.)
+- **Composition** — how it nests inside Sections (hero CTAs, card link-wraps, testimonial avatars)
+- **Astro / Webflow snippets** — copy-paste markup for both consumer pipelines
+
+## Related
+
+- [Web Elements Overview](/docs/web-elements) — surface roadmap
+- [Components (React)](/docs/components) — product counterparts
+- [Sections](/docs/web-elements/sections) — composed blocks built on these primitives

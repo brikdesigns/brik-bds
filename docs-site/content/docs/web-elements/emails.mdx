@@ -1,0 +1,52 @@
+---
+title: Email Modules
+description: Table-based, bulletproof email building blocks — Foundation-tokenized, dark-mode-safe, client-themable.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  **Status: roadmap.** First batch in scoping — Header, Hero, Article, Button, CTA card, Footer.
+</Callout>
+
+Email Modules are the third render target of BDS — alongside React Components and HTML/CSS Web Components. Same brand tokens, same atmosphere palette, same voice; different rendering rules.
+
+## Why a dedicated surface
+
+Email rendering is constrained:
+
+- **Table-based layout** — Outlook still requires nested tables for multi-column layouts.
+- **Inline styles** — many clients strip `<style>` blocks; rules must be inlined per element.
+- **Limited CSS** — no flexbox/grid in some clients, no custom properties in most legacy clients, no JavaScript.
+- **Dark-mode safety** — Outlook + iOS Mail have differing dark-mode strategies; tokens must resolve to safe defaults.
+
+Email Modules encode these constraints once. The Foundation tier (color, type, spacing tokens) drives the inline styles; the per-client theme inlines the brand override values; atmospheres do **not** apply (no SVG grain, no backdrop-filter — email clients can't render them).
+
+## Module shape
+
+Each module ships as:
+
+- **MJML or Maizzle source** — declarative markup that compiles to inlined-style HTML
+- **Token mapping** — which Foundation tokens resolve to which inline style values
+- **Render contract** — what content slots the module exposes (e.g. `headline`, `body`, `cta_label`, `cta_url`, `image_url`)
+
+The compile pipeline is the email equivalent of the Astro build for sites — same tokens in, tested rendering out, consumer email tools pull the compiled HTML.
+
+## What lands
+
+| Module | Purpose |
+|---|---|
+| **Header** | Logo + minimal nav (text links) |
+| **Hero** | Headline + subhead + CTA + optional image |
+| **Article** | Heading + body + secondary CTA — newsletter / drip patterns |
+| **Button** | Bulletproof Outlook-safe button (table-cell padding, VML fallback) |
+| **CTA Card** | Card-style closer with heading + body + button |
+| **Footer** | Address block, unsubscribe link, social icons |
+
+Atmospheres do not apply, but **theme tokens do**. Each module renders with the client's `--background-brand-primary`, font families, etc., compiled to inline values at send time.
+
+## Related
+
+- [Web Elements Overview](/docs/web-elements) — surface roadmap
+- [Foundation / Primitives](/docs/primitives) — tokens that drive email rendering
+- [Client Themes](/docs/theming/client-themes) — the override layer that customizes per-client email appearance

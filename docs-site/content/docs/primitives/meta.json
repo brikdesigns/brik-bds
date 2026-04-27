@@ -8,7 +8,6 @@
     "size",
     "border-radius",
     "border-width",
-    "shadow",
-    "motion"
+    "shadow"
   ]
 }
