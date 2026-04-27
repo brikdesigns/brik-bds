@@ -1,0 +1,183 @@
+---
+title: GSAP
+description: Adds scroll choreography — pinning, scrubbing, horizontal scroll, SplitText. Loads when the design needs runtime control on top of CSS effects.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Add GSAP when the design calls for scroll pinning, scroll-scrubbed animations, horizontal scroll panels, or text splitting. Everything from the [Lightweight tier](/docs/motion/tiers/lightweight) still applies — GSAP adds runtime control on top of CSS effects.
+
+## Files to load
+
+```html
+<!-- 1–3. All Lightweight files -->
+<link rel="stylesheet" href="tokens/animations.css">
+<link rel="stylesheet" href="tokens/motion-classes.css">
+<link rel="stylesheet" href="css/animations.css">
+
+<!-- 4. GSAP core + ScrollTrigger via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+<!-- Optional: SplitText for text splitting -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
+```
+
+GSAP loads from CDN and is typically cached across sites. The plugin files are ~20–40 KB each. Register `ScrollTrigger` before use:
+
+```js
+gsap.registerPlugin(ScrollTrigger);
+// If using SplitText:
+gsap.registerPlugin(ScrollTrigger, SplitText);
+```
+
+## Pinned scroll sections
+
+A pinned section stays fixed in the viewport while the page scrolls through it. Content inside animates in sync with scroll progress.
+
+```js
+gsap.to('.pinned-content', {
+  x: '-200%',
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '.pinned-section',
+    pin: true,
+    scrub: 1,
+    end: '+=300%',
+  },
+});
+```
+
+```html
+<section class="pinned-section">
+  <div class="pinned-content">
+    <div class="panel">Step 1</div>
+    <div class="panel">Step 2</div>
+    <div class="panel">Step 3</div>
+  </div>
+</section>
+```
+
+## Scroll-scrubbed animations
+
+Scrub ties an animation's playhead directly to scroll position. The animation does not play on its own — it is driven frame-by-frame by the user's scroll.
+
+```js
+gsap.from('.hero-image', {
+  scale: 1.2,
+  opacity: 0,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '.hero',
+    start: 'top top',
+    end: 'bottom center',
+    scrub: true,
+  },
+});
+```
+
+- **`scrub: true`** — locks to scroll position (no lag).
+- **`scrub: 1`** — adds 1-second smoothing (recommended for image / scale effects).
+
+## Horizontal scroll
+
+A horizontal scroll panel scrolls its children horizontally while the user scrolls vertically. Works by pinning the container and translating its children.
+
+```js
+const panels = gsap.utils.toArray('.h-panel');
+
+gsap.to(panels, {
+  xPercent: -100 * (panels.length - 1),
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '.h-scroll-container',
+    pin: true,
+    scrub: 1,
+    snap: 1 / (panels.length - 1),
+    end: () => '+=' + document.querySelector('.h-scroll-container').offsetWidth,
+  },
+});
+```
+
+```html
+<div class="h-scroll-container">
+  <div class="h-panels-track">
+    <div class="h-panel">Services</div>
+    <div class="h-panel">Portfolio</div>
+    <div class="h-panel">Team</div>
+  </div>
+</div>
+```
+
+## Text splitting
+
+SplitText breaks heading text into individual characters, words, or lines for animated reveal effects. Letters fly in, words fade up staggered, lines rise from behind a clip mask.
+
+```js
+// Split a heading into characters
+const split = new SplitText('.hero-headline', { type: 'chars,words' });
+
+gsap.from(split.chars, {
+  opacity: 0,
+  y: 40,
+  stagger: 0.03,
+  duration: 0.6,
+  ease: 'power3.out',
+  scrollTrigger: {
+    trigger: '.hero-headline',
+    start: 'top 80%',
+  },
+});
+```
+
+<Callout type="info">
+  **Accessibility:** SplitText wraps each character in a `span`. Screen readers still read the original text because GSAP preserves the parent element's text content. Add `aria-label` on the parent if the visual split creates ambiguity.
+</Callout>
+
+## Stagger with GSAP
+
+CSS stagger helpers (`.bds-stagger-1` through `6`) work for static item counts. Use GSAP when:
+
+- Item count is dynamic (from a data source)
+- You need the stagger to reverse on exit
+- You need `from()` semantics (items start below, stagger up in order)
+- You need a non-linear stagger (grid, random, ease-applied stagger)
+
+```js
+// Dynamic stagger on all matching elements
+gsap.from('.card', {
+  opacity: 0,
+  y: 24,
+  stagger: 0.08,
+  duration: 0.5,
+  ease: 'power2.out',
+  scrollTrigger: {
+    trigger: '.card-grid',
+    start: 'top 75%',
+  },
+});
+```
+
+## Batch reveals
+
+`ScrollTrigger.batch` reveals multiple elements as they enter the viewport — more performant than one ScrollTrigger per element for large lists.
+
+```js
+ScrollTrigger.batch('.reveal-item', {
+  onEnter: (elements) =>
+    gsap.to(elements, {
+      opacity: 1,
+      y: 0,
+      stagger: 0.1,
+      duration: 0.6,
+      ease: 'power2.out',
+    }),
+  start: 'top 85%',
+});
+```
+
+## Related
+
+- [Lightweight Tier](/docs/motion/tiers/lightweight)
+- [Premium Tier](/docs/motion/tiers/premium)
+- [Tiers Overview + Decision Tree](/docs/motion/tiers)
