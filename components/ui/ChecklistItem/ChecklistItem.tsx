@@ -1,5 +1,6 @@
 import { forwardRef, type LabelHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
+import '../CompletionToggle/CompletionToggle.css';
 import './ChecklistItem.css';
 
 export interface ChecklistItemProps
