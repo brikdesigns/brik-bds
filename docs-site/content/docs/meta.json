@@ -2,24 +2,16 @@
   "title": "Brik Design System",
   "pages": [
     "index",
-    "---Foundation---",
     "getting-started",
     "primitives",
-    "---Theming---",
     "theming",
-    "---Motion---",
     "motion",
-    "---Content System---",
     "content-system",
-    "---Components---",
     "components",
+    "web-elements",
     "hooks",
     "utilities",
-    "---Web Elements---",
-    "web-elements",
-    "---Patterns---",
     "patterns",
-    "---Working with BDS---",
     "contribution"
   ]
 }
