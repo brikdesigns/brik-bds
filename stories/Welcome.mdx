@@ -2,109 +2,54 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Overview/Welcome" />
 
-# Brik Design System
+# Brik Design System — Storybook
 
-BDS is four tenets in one repository, published as a single versioned package. Each tenet is an independent vocabulary the portal, mockup generators, and client sites consume to ship work that looks and reads like Brik without anyone having to re-decide the basics every project.
+This Storybook is the **live playground** for BDS components — every story renders the actual component with controls, ARIA, and theme switching. It's the canonical surface for:
 
-Switch between built-in themes — Brik, Brik Dark, and Client Sim — using the paintbrush icon in the toolbar above, or open the [Theme Switcher](?path=/docs/theming-theme-switcher--docs) to inspect tokens per theme. Validate a theme before shipping via [Contrast Compliance](?path=/docs/overview-health-contrast-compliance--docs).
+- Live component playground (every `*.stories.tsx`)
+- Visual regression (Chromatic)
+- Component MCP endpoint (consumer agents query `/mcp` against `https://main--69b8918cac3056b39424d5d3.chromatic.com/`)
+- Dev tools (Theme Switcher, Health Dashboard, Contrast Compliance, Token Coverage)
 
-## The four tenets
+## Looking for guidance, not playground?
 
-| Tenet | Answers | Ships |
-|---|---|---|
-| **[Foundation](?path=/docs/foundations-design-tokens-overview--docs)** | *"What color, size, type?"* | Design tokens, scales, primitives |
-| **[Theming](?path=/docs/theming-overview--docs)** | *"What brand, mood, shape?"* | Tokens + atmospheres + navigation archetypes + blueprints |
-| **[Motion](?path=/docs/motion-overview--docs)** | *"How does it feel to move?"* | Three-tier animation system — CSS reveals → GSAP scroll → premium effects |
-| **[Content](?path=/docs/content-overview--docs)** | *"What does it say, for whom?"* | Industry packs, voice patterns, locked vocabularies |
+**The narrative documentation lives at [design.brikdesigns.com](https://design.brikdesigns.com).** Foundation tokens, Theming, Motion, Content System, and per-component usage docs all moved there. This Storybook is no longer the documentation surface.
 
-Each tenet evolves on its own cadence but intentionally cross-links at the edges — e.g. an industry pack declares a default atmosphere and navigation archetype, so the Content tenet drives defaults for the Theming tenet that the client brand then optionally overrides.
-
-## Foundation — the visual atoms
-
-Design tokens are the atomic visual decisions that power BDS. Every component references tokens — never raw values.
-
-| Category | Description |
-|----------|-------------|
-| [Design Tokens](?path=/docs/foundations-design-tokens-overview--docs) | Architecture overview, three-tier hierarchy, naming convention, multi-platform outputs |
-| [Color](?path=/docs/foundations-design-tokens-color--docs) | Grayscale, theme palettes, semantic color roles (background, text, surface, border) |
-| [Typography](?path=/docs/foundations-design-tokens-typography--docs) | Font families, sizes, weights, line heights, composite type tokens |
-| [Spacing](?path=/docs/foundations-design-tokens-spacing--docs) | Space and gap scales, semantic padding tokens |
-| [Border Radius](?path=/docs/foundations-design-tokens-border-radius--docs) | Radius scale and semantic sizes |
-| [Border Width](?path=/docs/foundations-design-tokens-border-width--docs) | Width scale and semantic widths |
-| [Shadow](?path=/docs/foundations-design-tokens-shadow--docs) | Blur, spread, and elevation scale |
-| [Size](?path=/docs/foundations-design-tokens-size--docs) | Size scale, breakpoints, container widths |
-
-## Theming — the multi-tenant instrument
-
-Theming composes four orthogonal layers. Each is a decision a client can override independently of the rest.
-
-| Layer | Decides | Where it lives |
-|---|---|---|
-| [Tokens](?path=/docs/theming-layers-client-themes--docs) | Color, type, spacing values per brand | `theme-{client}.css` in the consumer repo |
-| [Atmospheres](?path=/docs/theming-layers-atmospheres--docs) | Ambient mood — grain, glow, vignettes | CSS overlay from `@brikdesigns/bds/atmospheres/{slug}.css` |
-| [Navigation Archetypes](?path=/docs/theming-layers-navigation-archetypes--docs) | Site-header shape + scroll/drawer behavior | Industry pack → BDS `<SiteHeader>` render |
-| [Blueprints](?path=/docs/theming-layers-blueprints--docs) | Section composition + mood tagging | Authored in BDS, tagged per industry + mood |
-
-Full architecture: [Theming Overview](?path=/docs/theming-overview--docs).
-
-## Motion — the three-tier system
-
-| Category | Description |
+| What you want | Where it lives |
 |---|---|
-| [Overview](?path=/docs/motion-overview--docs) | When to use each tier, the decision tree, and the tier ladder |
-| [Tiers](?path=/docs/motion-tiers-overview--docs) | Lightweight, GSAP, Premium — trade-offs per tier |
-| [Effects](?path=/docs/motion-effects-hover--docs) | Per-effect demos: Hover, Scroll Reveals, Typography, Overlays, Video |
-| [Vocabulary](?path=/docs/motion-vocabulary-animation-tier--docs) | Animation Tier locked enum — the portal-writable axis |
+| Token reference (color, type, spacing, shadow, radius, motion) | [design.brikdesigns.com/docs/primitives](https://design.brikdesigns.com/docs/primitives) |
+| Naming conventions vocabulary (title vs heading, label family, axes) | [design.brikdesigns.com/docs/primitives/naming-conventions](https://design.brikdesigns.com/docs/primitives/naming-conventions) |
+| Theming — atmospheres, archetypes, blueprints | [design.brikdesigns.com/docs/theming](https://design.brikdesigns.com/docs/theming) |
+| Motion — Lightweight / GSAP / Premium tiers + per-effect deep-dives | [design.brikdesigns.com/docs/motion](https://design.brikdesigns.com/docs/motion) |
+| Content System — industries, voices, vocabularies | [design.brikdesigns.com/docs/content-system](https://design.brikdesigns.com/docs/content-system) |
+| Component anatomy + props + usage prose | [design.brikdesigns.com/docs/components](https://design.brikdesigns.com/docs/components) |
 
-## Content — the vocabulary peer
+## What still lives here
 
-The content-vocabulary peer to the visual tokens. Paired with BDS to drive end-to-end mockup generation in Claude Design (Paper).
+- **Components.** Every `Components/*` story in the sidebar — Button, Card, Sheet, Form, etc. Click into any of them for the live playground.
+- **Theme Switcher.** Use the paintbrush icon in the toolbar above to switch between Brik (light), Brik Dark, and Client Sim. The Client Sim theme assigns Georgia / Verdana / Courier New to heading / body / label families to expose font-family token misuse before a client theme reveals it.
+- **Theme Switcher inspector** — open the [Theme Switcher](?path=/docs/theming-theme-switcher--docs) page for per-token inspection.
+- **Contrast Compliance** — WCAG AA pair probe across the three built-in themes. Open via [Contrast Compliance](?path=/docs/overview-health-contrast-compliance--docs).
+- **Health Dashboard** — coverage, audit signals.
+- **Token Coverage** — utilization map across every token category.
 
-| Category | Description |
-|----------|-------------|
-| [Overview](?path=/docs/content-overview--docs) | BCS architecture, vocabulary lock, phase roadmap, consumer examples |
-| [Industries](?path=/docs/content-industries-dental--docs) | Dental, Real Estate (RV/MHC), Small Business — structured packs with affinities, page archetypes, services, seasonality, regulatory |
-| [Voices](?path=/docs/content-voices-overview--docs) | All 8 voice patterns side-by-side with rules, examples, and pairing guidance |
-| [Vocabularies — Image Mood](?path=/docs/content-vocabularies-image-mood--docs) | Locked enum driving stock image composition — editorial, clinical, lifestyle, etc. |
+## Architecture
 
-## Components
+BDS ships as a single package: `@brikdesigns/bds`. Consumers import:
 
-| Category | Components |
-|----------|------------|
-| **Action** | Button, IconButton, TextLink |
-| **Form** | TextInput, TextArea, Select, AddressInput, PasswordInput |
-| **Control** | Checkbox, Radio, Switch, FilterButton |
-| **Indicator** | Badge, Tag, Dot, Counter, Avatar |
-| **Feedback** | Spinner, Skeleton, ProgressBar, Toast, AlertBanner, Banner, Tooltip |
-| **Structure** | Card, CardControl, Table, Modal, Accordion, Menu, PageHeader, DatePicker |
-| **Navigation** | TabBar, Breadcrumb, Pagination, SidebarNavigation |
-
-## Token system — the naming contract
-
-Components use CSS custom properties from the Style Dictionary token pipeline:
-
-```
---[category]-[type]-[variant]
+```ts
+import { Button, Card, Sheet, /* … */ } from '@brikdesigns/bds';
 ```
 
-**Primitives** — raw scale values, never used directly in components:
+Plus the two CSS entry points:
 
-- `--space-400` — 16px
-- `--font-size-700` — 32px
-- `--color-grayscale-darkest` — #333
+```css
+@import '@brikdesigns/bds/tokens.css';   /* full token cascade */
+@import '@brikdesigns/bds/styles.css';   /* component CSS bundle */
+```
 
-**Semantic** — purpose-bound aliases, always use these in components:
+For the full architecture (two-tier theming, four-layer composition, the LLM substrate role), see [design.brikdesigns.com](https://design.brikdesigns.com).
 
-- `--background-brand-primary` — brand background color
-- `--font-family-heading` — heading font family
-- `--padding-lg` — large spacing value
-- `--border-radius-md` — button/card corner radius
+## Why this split?
 
-## Toolbar reference
-
-| Control | What it does |
-|---------|--------------|
-| Paintbrush | Switch between the 3 built-in themes — Brik, Brik Dark, Client Sim. Every component and doc page updates in real time. |
-| Base Font | Set the root font size (14-20px). Scales all rem-based spacing and type tokens. |
-| Animations | Toggle CSS animations and transitions on/off across all stories. |
-| Font Audit | QA diagnostic theme. Assigns Georgia to heading, Verdana to body, Courier New to label. Exposes `--font-family-*` token misuse before a client theme does. |
+Storybook is excellent at one job: rendering live, interactive components with controls. Trying to also be a long-form documentation site stretched it past its strengths — narrative pages, deep cross-linking, and search are what fumadocs at `design.brikdesigns.com` is built for. Each tool now does what it's good at.
