@@ -1,0 +1,68 @@
+---
+title: Web Elements
+description: Framework-agnostic HTML/CSS components, repeatable section blueprints, and email modules — built once in BDS, retheme per client, render via Astro/Webflow/email pipelines.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Cards, Card } from 'fumadocs-ui/components/card';
+
+Web Elements is the website-and-email surface of BDS. While [Components](/docs/components) ship React building blocks for product apps (portal, renew-pms), Web Elements ships **HTML / CSS counterparts and composed sections** that consumer Astro sites, Webflow projects, and email templates pull in.
+
+<Callout type="warn">
+  **Status: roadmap.** This section currently scaffolds the structure; the catalog itself is being authored. The intent is documented here so consuming sites and email pipelines can plan against the contract.
+</Callout>
+
+## Why a separate surface?
+
+The same Foundation tokens and Theming layers drive both product and websites — but the *primitives* differ. A product `<Button>` is a React component with `onClick`. A website button is an `<a class="bds-button">` with semantic `href`. An email button is a table-cell-based bulletproof button with inline styles. Same brand, same tokens, three render targets.
+
+Splitting Web Elements out gives consumer sites a single place to find:
+
+- HTML/CSS primitives that mirror the React components when the semantics differ
+- **Sections** — composed, repeatable blocks like hero, testimonials, pricing, FAQ, contact, value-prop strips
+- **Email Modules** — table-based, dark-mode-safe, client-themable email building blocks
+
+All three sub-surfaces share the BDS Foundation cascade and inherit per-client theming via `theme-{client}.css` and atmosphere overlays.
+
+## Sub-surfaces
+
+<Cards>
+  <Card title="Components (HTML/CSS)" href="/docs/web-elements/components" description="Framework-agnostic counterparts to product Components — Button, Card, Field, etc., as semantic HTML with BDS class names." />
+  <Card title="Sections" href="/docs/web-elements/sections" description="Repeatable composed blocks — hero variants, testimonials, contact, pricing, FAQ, CTA strips. Tagged by atmosphere + industry, copyable as Astro/Webflow markup." />
+  <Card title="Email Modules" href="/docs/web-elements/emails" description="Table-based, bulletproof email building blocks — header, hero, article, CTA, footer. Foundation-tokenized; dark-mode safe." />
+</Cards>
+
+## How this composes with the rest of the system
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│  Foundation        — shared across product, websites, emails             │
+│  (tokens, naming, assets — single source of truth)                       │
+├──────────────────────────────────────────────────────────────────────────┤
+│  Theming           — drives website + email per-client divergence        │
+│  Motion            — primarily websites; product uses Lightweight tier   │
+│  Content System    — vocabularies feed both product copy + website copy  │
+├──────────────────────────────────────────────────────────────────────────┤
+│  Components (React)        Web Elements (HTML/CSS · Sections · Emails)   │
+│  ↳ portal, renew-pms       ↳ client websites, email campaigns            │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+The Sections layer is the highest-leverage piece. A client onboarding flow declares industry pack + atmosphere + voice; Sections encode the composition patterns (hero archetype × atmosphere × content slots) that the AI mockup generator picks from. An email campaign for the same client reuses the same brand tokens, same atmosphere palette, same voice — re-rendered into table-based email modules.
+
+## Roadmap
+
+| Surface | First batch | Status |
+|---|---|---|
+| **Components (HTML/CSS)** | Button, Card, Field primitives, Tag, Badge | Scoping |
+| **Sections** | Hero (4 variants), Testimonials (3 variants), Contact, Pricing, FAQ, CTA strip | Scoping |
+| **Email Modules** | Header, Hero, Article, Button, CTA card, Footer | Scoping |
+
+This page will track per-batch progress as authoring lands. The Sections layer in particular pairs tightly with [Theming → Blueprints](/docs/theming/blueprints) — Blueprints are the catalog of named compositions, Sections are the rendered HTML of those compositions for non-React contexts.
+
+## Related
+
+- [Theming](/docs/theming) — atmosphere overlays + archetypes that drive Web Elements rendering
+- [Components](/docs/components) — React product surface; counterparts to many Web Elements primitives
+- [Motion](/docs/motion) — motion tier governs which Section variants are allowed
+- [Content System / Industries](/docs/content-system/industries) — industry packs declare default Section affinities
