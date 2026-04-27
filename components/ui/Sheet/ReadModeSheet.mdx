@@ -170,7 +170,7 @@ Both compose the same atomic primitives (`FieldGrid`, `Field`, `BulletList`). Th
 ## Don'ts
 
 - **Don't invent a custom `SectionHeading` component.** `SheetSection.heading` is the entire API.
-- **Don't build a `ParagraphField` or `ListField`.** `Field` accepts any `ReactNode` value; paragraph-label and list-label are *usages*, not components. (See the [Vocabulary](?path=/docs/foundations-vocabulary--docs) doc.)
+- **Don't build a `ParagraphField` or `ListField`.** `Field` accepts any `ReactNode` value; paragraph-label and list-label are *usages*, not components. (See the [Vocabulary](https://design.brikdesigns.com/docs/primitives/naming-conventions) doc.)
 - **Don't use `DataSection` inside a sheet.** It's page-scoped and carries page-tier title typography that will overwhelm the narrow view.
 - **Don't place a `<Divider />` between `SheetSection`s.** The inter-section rhythm is built in.
 - **Don't hide the `SheetSection` heading behind `heading=""` or a blank prop to get a "headingless" look.** Use `<SheetSection description={...}>` or `<SheetSection>{content}</SheetSection>` instead — both legitimate.
@@ -185,4 +185,4 @@ Both compose the same atomic primitives (`FieldGrid`, `Field`, `BulletList`). Th
 - [`FieldGrid`](?path=/docs/displays-field-field-grid--docs) — grid wrapper.
 - [`SheetTypography`](?path=/docs/displays-sheet-sheet-typography--docs) — standalone typography primitives (escape hatches).
 - [Displays / Form / Read-Mode Page](?path=/docs/displays-form-read-mode-page--docs) — the page-wide sibling of this pattern.
-- [Foundations / Vocabulary](?path=/docs/foundations-vocabulary--docs) — the words that describe the parts.
+- [Foundations / Vocabulary](https://design.brikdesigns.com/docs/primitives/naming-conventions) — the words that describe the parts.
