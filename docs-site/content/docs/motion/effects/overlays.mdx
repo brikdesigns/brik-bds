@@ -1,0 +1,94 @@
+---
+title: Overlays
+description: Atmosphere overlays — film grain and glassmorphism. ::after pseudo-elements; no additional DOM nodes required. Premium tier.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Atmosphere overlays in `css/premium-effects.css`. Film grain adds tactile texture. Glassmorphism creates depth for floating UI panels. Both use `::after` pseudo-elements — no additional DOM nodes required.
+
+## Grain
+
+Film grain adds analogue texture to sections. The `::after` pseudo-element applies a tiling noise texture at low opacity. Use it on hero sections, dark sections, and feature blocks to add character.
+
+```html
+<!-- Standard grain (4% opacity) — use on light or mid-tone sections -->
+<section class="grain-overlay">
+  Content
+</section>
+
+<!-- Heavy grain (8% opacity) — use on dark sections where texture needs to read -->
+<section class="grain-overlay grain-overlay--heavy">
+  Dark content
+</section>
+
+<!-- Light grain (2% opacity) — subtle, for warm or pastel backgrounds -->
+<section class="grain-overlay grain-overlay--light">
+  Light content
+</section>
+
+<!-- Animated grain — texture shifts each frame, heightens the film-like feel -->
+<section class="grain-overlay grain-overlay--animated">
+  Hero
+</section>
+```
+
+<Callout type="warn">
+  **Performance:** `.grain-overlay--animated` triggers a continuous CSS animation. Use sparingly — one animated grain section per page is the maximum. Prefer the static variant on interior sections.
+</Callout>
+
+**Stacking:** `grain-overlay` sets `position: relative` and the grain lives on `::after` with `pointer-events: none`. Content inside renders above the grain automatically via z-index.
+
+## Glassmorphism
+
+Frosted glass panels using `backdrop-filter: blur()`. Three variants — default, light, and dark — for different background luminance levels.
+
+```html
+<!-- Default glass — 50% white background, 8px blur -->
+<div class="glass">
+  <p>Frosted glass card</p>
+</div>
+
+<!-- Light glass — 70% white background, suited for light backgrounds -->
+<div class="glass--light">
+  <p>Light glass panel</p>
+</div>
+
+<!-- Dark glass — 40% black background, suited for dark sections -->
+<div class="glass--dark">
+  <p>Dark glass panel</p>
+</div>
+
+<!-- Glass card — combines blur, border-radius, and subtle border -->
+<div class="glass-card">
+  <h3>Feature</h3>
+  <p>Description</p>
+</div>
+```
+
+**Browser support:** `backdrop-filter` is supported in all modern browsers. It has no effect (but does not break layout) in Firefox when `layout.css.backdrop-filter.enabled` is disabled. Add a solid fallback background to `.glass` elements via CSS custom properties if Firefox support is required.
+
+<Callout type="warn">
+  **Stacking context:** `backdrop-filter` creates a new stacking context and compositing layer. Avoid nesting glass elements — the inner `backdrop-filter` blurs the outer glass layer, not the background content, producing unexpected results.
+</Callout>
+
+## Combining overlays
+
+Grain and glass compose. A dark glass nav panel with grain texture reads as premium without additional elements:
+
+```html
+<nav class="glass--dark grain-overlay grain-overlay--light">
+  Navigation links
+</nav>
+```
+
+<Callout type="info">
+  **Live demos are in Storybook.** Each grain and glass variant renders an interactive comparison. See **Motion → Effects → Overlays** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
+</Callout>
+
+## Related
+
+- [Video Backgrounds](/docs/motion/effects/video)
+- [Premium Tier](/docs/motion/tiers/premium)
+- [Atmospheres](/docs/theming/atmospheres) — Premium overlays compose into atmosphere CSS files
+- [Motion Overview](/docs/motion)

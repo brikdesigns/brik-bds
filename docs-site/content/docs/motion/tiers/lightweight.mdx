@@ -1,0 +1,157 @@
+---
+title: Lightweight
+description: No JavaScript library. Pure CSS animations + a minimal IntersectionObserver. The default for every mockup.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+No JavaScript library. Every effect in this tier runs on CSS transitions, CSS animations using the BDS keyframe library, and a minimal IntersectionObserver snippet to toggle `.is-visible`. This is the default for all mockups.
+
+## Files to load
+
+```html
+<!-- 1. Token layer — durations, easings, keyframes -->
+<link rel="stylesheet" href="tokens/animations.css">
+
+<!-- 2. Motion utility classes — .bds-enter-*, .bds-anim-*, .bds-stagger-* -->
+<link rel="stylesheet" href="tokens/motion-classes.css">
+
+<!-- 3. Scroll reveal classes, hover effects, section theming, typography -->
+<link rel="stylesheet" href="css/animations.css">
+```
+
+## Scroll observer — minimal snippet
+
+All `.is-visible`-triggered classes (reveals, text highlights) need an IntersectionObserver to apply the class when the element enters the viewport. The Lightweight tier does not include a bundled JS file — add this inline or in a small module:
+
+```js
+// Trigger .is-visible when elements enter the viewport
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target); // fire once
+      }
+    });
+  },
+  { threshold: 0.15 }
+);
+
+document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
+```
+
+Mark elements with `data-reveal`:
+
+```html
+<div class="animate-fade-up" data-reveal>Content enters here</div>
+<div class="clip-rise-reveal" data-reveal>
+  <img src="photo.jpg" alt="...">
+</div>
+```
+
+## Entrance animations
+
+The token-layer utility classes apply named keyframes with BDS duration tokens. They animate once on mount — ideal for page-load sequences or component entry.
+
+| Class | Effect |
+|---|---|
+| `.bds-enter-fade` | opacity + scale(0.98 → 1) |
+| `.bds-enter-slide-up` | translateY(8px → 0) + fade |
+| `.bds-enter-pop` | scale(0 → 1) with spring overshoot |
+
+## Scroll-triggered reveals
+
+Add the class + `data-reveal` attribute. The IntersectionObserver snippet above applies `.is-visible` when the element enters the viewport.
+
+| Class | Effect |
+|---|---|
+| `.animate-fade-up` | Most common reveal — opacity + translateY(20px → 0) |
+| `.animate-fade-down` | For above-the-fold drops — opacity + translateY(-20px → 0) |
+| `.animate-fade-left` | Horizontal entrance — opacity + translateX(-20px → 0) |
+| `.animate-fade-right` | opacity + translateX(20px → 0) |
+
+## Stagger patterns
+
+Combine entrance classes with stagger helpers for sequential list reveals.
+
+```html
+<ul>
+  <li class="bds-enter-fade bds-stagger-1">First item</li>
+  <li class="bds-enter-fade bds-stagger-2">Second item</li>
+  <li class="bds-enter-fade bds-stagger-3">Third item</li>
+</ul>
+```
+
+Six stagger delays available: `.bds-stagger-1` through `.bds-stagger-6`. Values come from `--stagger-1` through `--stagger-6` tokens in `animations.css`. For dynamic stagger (unknown item count, reversed sequences), see the [GSAP tier](/docs/motion/tiers/gsap).
+
+## Clip-path reveals
+
+Cinematic image and section unveils. Implemented in CSS — no library dependency.
+
+```html
+<div class="clip-circle-reveal" data-reveal>
+  <img src="photo.jpg" alt="...">
+</div>
+
+<div class="clip-curtain-reveal" data-reveal>
+  <img src="hero.jpg" alt="...">
+</div>
+```
+
+Six variants: `clip-circle-reveal`, `clip-curtain-reveal`, `clip-wipe-reveal`, `clip-rise-reveal`, `clip-diagonal-reveal`, `clip-diamond-reveal`. See [Scroll Reveals](/docs/motion/effects/scroll-reveals) for the full effect reference.
+
+## Hover effects
+
+CSS-only micro-interactions. No JS required.
+
+| Class | Effect | Typical use |
+|---|---|---|
+| `.hover-lift` | `translateY(-4px)` + subtle shadow increase | Buttons, CTAs |
+| `.hover-scale` | `scale(1.03)` | Cards, image tiles |
+| `.hover-glow` | Box shadow glow in brand color | Accent buttons, badges |
+| `.hover-dim` | `opacity: 0.75` | Image overlays, nav items |
+| `.hover-underline` | Animated underline grows from left | Text links |
+| `.click-press` | `scale(0.97)` on `:active` | Pair with `.hover-lift` on buttons |
+
+See [Hover Effects](/docs/motion/effects/hover) for magnetic and cursor-trail variants (those require Premium JS).
+
+## Section theming
+
+Section color presets. Combine with grain, glass, and dividers.
+
+| Class | Background |
+|---|---|
+| `.section-dark` | Dark background |
+| `.section-light` | Light background |
+| `.section-warm` | Warm / cream background |
+| `.section-brand` | Brand primary background |
+
+## Attention animations
+
+Draw the eye to a changed state without motion sickness risk. These loop continuously or fire on a single event.
+
+```html
+<!-- Notification dot that breathes -->
+<span class="bds-anim-pulse">3</span>
+
+<!-- Bell shake on new message -->
+<svg class="bds-anim-shake">...</svg>
+
+<!-- Loading spinner -->
+<div class="bds-anim-spin">...</div>
+```
+
+## Reduced motion
+
+`tokens/animations.css` includes a `prefers-reduced-motion` override that disables all animations and transitions for users who have enabled this OS preference. No additional work needed.
+
+<Callout type="info">
+  **Live demos are in Storybook.** Each effect renders an interactive example. See **Motion → Tiers → Lightweight** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
+</Callout>
+
+## Related
+
+- [Tiers Overview](/docs/motion/tiers) — when to escalate
+- [Scroll Reveals — full reference](/docs/motion/effects/scroll-reveals)
+- [Hover Effects](/docs/motion/effects/hover)

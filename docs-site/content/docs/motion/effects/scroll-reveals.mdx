@@ -1,0 +1,106 @@
+---
+title: Scroll Reveals
+description: Clip-path reveals, fade and slide entrances, stagger patterns, parallax. CSS + IntersectionObserver — Lightweight tier.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+All scroll reveal effects are in `css/animations.css` and triggered by toggling `.is-visible` on the element when it enters the viewport. The trigger mechanism is a plain IntersectionObserver — no library required.
+
+See [Lightweight tier](/docs/motion/tiers/lightweight) for the observer snippet and full import order.
+
+## Clip-path reveals
+
+Cinematic unveils for images and section containers. Each class defines a `clip-path` starting state and transitions to `clip-path: none` when `.is-visible` is applied.
+
+| Class | Effect |
+|---|---|
+| `.clip-circle-reveal` | Circle expand from center |
+| `.clip-curtain-reveal` | Curtain drops from top |
+| `.clip-wipe-reveal` | Horizontal wipe left to right |
+| `.clip-rise-reveal` | Rise from bottom |
+| `.clip-diagonal-reveal` | Diagonal sweep |
+| `.clip-diamond-reveal` | Diamond expand from center |
+
+```html
+<!-- Circle expand from center -->
+<div class="clip-circle-reveal" data-reveal>
+  <img src="photo.jpg" alt="...">
+</div>
+
+<!-- Curtain drops from top -->
+<div class="clip-curtain-reveal" data-reveal>
+  <img src="hero.jpg" alt="...">
+</div>
+
+<!-- Horizontal wipe left to right -->
+<div class="clip-wipe-reveal" data-reveal>
+  <img src="interior.jpg" alt="...">
+</div>
+
+<!-- Rise from bottom -->
+<div class="clip-rise-reveal" data-reveal>
+  <img src="portrait.jpg" alt="...">
+</div>
+
+<!-- Diagonal sweep -->
+<div class="clip-diagonal-reveal" data-reveal>
+  <img src="building.jpg" alt="...">
+</div>
+
+<!-- Diamond expand from center -->
+<div class="clip-diamond-reveal" data-reveal>
+  <img src="award.jpg" alt="...">
+</div>
+```
+
+## Fade and slide reveals
+
+Standard scroll entrance classes for text, cards, and content blocks.
+
+| Class | Effect |
+|---|---|
+| `.animate-fade-up` | opacity + `translateY(20px → 0)` |
+| `.animate-fade-down` | opacity + `translateY(-20px → 0)` |
+| `.animate-fade-left` | opacity + `translateX(-20px → 0)` |
+| `.animate-fade-right` | opacity + `translateX(20px → 0)` |
+
+```html
+<h2 class="animate-fade-up" data-reveal>Section heading</h2>
+<p class="animate-fade-up" data-reveal>Body text underneath</p>
+<img class="animate-fade-left" data-reveal src="photo.jpg" alt="...">
+```
+
+## Stagger pattern
+
+Apply `data-reveal-stagger` to a parent and the observer script applies staggered delays to direct children.
+
+```html
+<div data-reveal-stagger>
+  <div class="card">Card 1</div>
+  <div class="card">Card 2</div>
+  <div class="card">Card 3</div>
+</div>
+```
+
+For dynamic stagger (item count unknown at build time), use GSAP `ScrollTrigger.batch()`. See [GSAP tier](/docs/motion/tiers/gsap).
+
+## Parallax
+
+Apply `.parallax-element` to an element with a `data-parallax-speed` attribute (range `0.05–0.25`, lower is subtler). The parallax helper in `css/animations.css` translates the element proportionally to scroll position on the next animation frame.
+
+```html
+<div class="parallax-element" data-parallax-speed="0.1">
+  <img src="background.jpg" alt="...">
+</div>
+```
+
+<Callout type="info">
+  **Live demos are in Storybook.** All six clip-path reveals + the four fade/slide variants render interactive examples. See **Motion → Effects → Scroll Reveals** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
+</Callout>
+
+## Related
+
+- [Lightweight Tier](/docs/motion/tiers/lightweight) — the observer snippet + import order
+- [Hover Effects](/docs/motion/effects/hover)
+- [GSAP Tier — for scroll-scrubbed reveals](/docs/motion/tiers/gsap)
