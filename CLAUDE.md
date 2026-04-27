@@ -2,6 +2,23 @@
 
 This is the **source of truth** for the Brik Design System React components.
 
+## STOP — Canonical Token Registry (Non-Negotiable)
+
+> **Canonical names live at:** [https://design.brikdesigns.com/docs/primitives/color](https://design.brikdesigns.com/docs/primitives/color)
+>
+> **Mirrored in code:** `dist/tokens.css` (the live allowlist).
+
+Every `--text-*`, `--surface-*`, `--background-*`, and semantic `--border-*` token name in any Brik repo (BDS, portal, renew-pms, brikdesigns, client sites) MUST exist in this registry. Inventing parallel taxonomies is **not allowed** — that's the failure mode that produced `--surface-paper`, `--text-on-ink`, `--text-on-paper-soft`, etc. in portal #512 / #553 (rolled back 2026-04-27).
+
+**Specific bans:**
+- No new `--text-on-{surface}` names beyond `--text-on-color-dark` and `--text-on-color-light`. For tier modifiers on body text, use `--text-primary` / `--text-secondary` / `--text-muted` directly.
+- No `--surface-paper`, `--surface-ink`, `--surface-accent-*`. Use `--surface-primary` / `--surface-secondary` / `--surface-inverse` / `--surface-overlay`. The atmosphere CSS layer redefines these — it doesn't add parallel names.
+- No tier modifiers (`-soft`, `-link`, `-hover`) glued onto `text-on-*` names.
+
+**If you need a new semantic token:** add it to the registry first (Figma → `tokens-studio.json` → `npm run build:sd-figma` → emitted in `tokens/figma-tokens.css`). Never ship an inline alias as a "temporary fix."
+
+**Automated guardrail:** consumer repos run `scripts/token-audit.sh --canonical-only` (portal already has it; gates pre-commit + CI). If you're adding a token to the BDS registry, the consumer audit picks it up automatically on the next install.
+
 ## STOP — Worktree Rules (Non-Negotiable)
 
 **The primary worktree at `/Documents/GitHub/brik/brik-bds` stays on `main`.** Task work always lives in a dedicated worktree under `../brik-bds-worktrees/{slug}`. Never `git switch` the primary worktree to a `task/*` branch — it cross-contaminates work between concurrent agents. See the 2026-04-21 Phase B incident ([PR #169](https://github.com/brikdesigns/brik-bds/pull/169) commentary) for what happens when this rule is broken.
