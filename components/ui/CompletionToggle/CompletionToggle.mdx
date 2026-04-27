@@ -1,0 +1,72 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './CompletionToggle.stories';
+
+<Meta of={Stories} />
+
+# CompletionToggle
+
+Circular completion control. The atomic primitive for representing the **complete / not complete** state on a discrete unit of work — a task, a checklist item, a clinical step. Renders as a `<button>` so it can stand alone as a click target in card chrome.
+
+**Distinct from `Checkbox`.** Checkbox is rectangular and intended for form selections (multi-select filter, "I agree to terms"). CompletionToggle is circular and intended for completion-state on units of work. The visual difference matches the semantic difference; reach for the right one based on what the box represents — a *selection* (square) vs. a *completion* (circle).
+
+For row-style use where the entire row is the click target (label + circle, like a sub-task row inside a sheet), use `ChecklistItem` — it pairs this control's visual with a native `<label>` + `<input>` for proper form semantics and full-row click target.
+
+---
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+<Canvas of={Stories.Variants} />
+
+- **Unchecked** — Empty circle with neutral border
+- **Checked** — Brand-primary fill with white checkmark
+- **Disabled** — Reduced opacity, no interaction (use during async save or for read-only items)
+
+## Patterns
+
+<Canvas of={Stories.Patterns} />
+
+- **Card chrome** — Used as a self-contained toggle on a task card. The toggle is the click target; the rest of the card is something else (e.g. opens the task sheet).
+- **Inline list** — Stand-alone toggles next to label text. For full-row click targets, use `ChecklistItem` instead of composing manually.
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { CompletionToggle } from '@brikdesigns/bds';
+
+// Controlled
+<CompletionToggle
+  checked={task.completed}
+  onCheckedChange={(next) => mark(task.id, next)}
+/>
+
+// Disabled (e.g. while save is in flight)
+<CompletionToggle
+  checked={task.completed}
+  onCheckedChange={...}
+  disabled={saving}
+/>
+```
+
+## When to use
+
+- Task cards with a "mark complete" affordance
+- Standalone "is this done" toggles outside a list context
+- Anywhere `<input type="checkbox">` would be semantically wrong because the value isn't a *selection* but a *completion*
+
+## When not to use
+
+- Form selections / multi-select / "I agree to terms" → use `Checkbox`
+- Clinical attestation / sign-off with initials + timestamp → wait for the dedicated attestation primitive
+- Full-row click target with label inside a list → use `ChecklistItem`

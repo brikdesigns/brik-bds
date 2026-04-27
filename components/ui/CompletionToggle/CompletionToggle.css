@@ -1,0 +1,57 @@
+@layer bds-components {
+  /* ─── CompletionToggle ──────────────────────────────────────────
+     Circular completion control. Same visual is reused inside
+     ChecklistItem (applied to a <span>) and inside BoardCard
+     (applied to the internal toggle button).
+
+     Distinct from Checkbox — Checkbox is rectangular and used for
+     form selections; CompletionToggle is circular and used for
+     completion-state on discrete units of work.
+  ───────────────────────────────────────────────────────────────── */
+
+  .bds-completion-toggle {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-circle);
+    border: var(--border-width-md) solid var(--border-input);
+    background-color: var(--background-input);
+    cursor: pointer;
+    padding: 0;
+    transition:
+      background-color var(--duration-normal) var(--ease-out),
+      border-color var(--duration-normal) var(--ease-out);
+  }
+
+  .bds-completion-toggle:hover {
+    border-color: var(--border-primary);
+  }
+
+  .bds-completion-toggle:focus-visible {
+    outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+    outline-offset: 2px;
+  }
+
+  .bds-completion-toggle--checked {
+    background-color: var(--background-brand-primary);
+    border-color: var(--background-brand-primary);
+  }
+
+  .bds-completion-toggle--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* CSS-only checkmark — no icon font dependency */
+  .bds-completion-toggle__icon {
+    display: block;
+    border-left: 2px solid var(--text-on-color-dark, #fff);
+    border-bottom: 2px solid var(--text-on-color-dark, #fff);
+    transform: rotate(-45deg) translate(1px, -1px);
+    width: 10px;
+    height: 6px;
+  }
+}
