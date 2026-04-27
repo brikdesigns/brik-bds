@@ -1,20 +1,151 @@
 ---
 title: Design Tokens
-description: Tokens — the design language every BDS component reads from.
+description: The single source of truth for every visual decision — color, type, spacing, radius, shadow, motion. Authored in Figma, exported via Tokens Studio, transformed by Style Dictionary, shipped as @brikdesigns/bds/tokens.css.
 ---
 
 import { Cards, Card } from 'fumadocs-ui/components/card';
 import { Callout } from 'fumadocs-ui/components/callout';
 
-BDS primitives are a flat token vocabulary covering color, typography, spacing, motion, radius, shadow, and border. They're authored in Figma, exported via Tokens Studio, transformed by Style Dictionary, and shipped as `@brikdesigns/bds/tokens.css`.
-
-Each page below explains one primitive group: what tokens exist, what they mean semantically, and the rules for using them outside their category (don't).
+Design tokens are the single source of truth for every visual decision in the Brik ecosystem — color, type, spacing, radius, shadow, motion. A token gives a value a name and a purpose. Components never reference raw values; they reference tokens. This means a component built once works correctly across every Brik client without touching its code.
 
 <Callout type="warn">
   **Token source of truth lives in Figma.** This site documents what's available and how to use it. To add a new token, edit Figma first — don't add it to CSS directly.
 </Callout>
 
-## Foundations
+## Two-tier architecture (client projects)
+
+Client portals, SaaS apps, and marketing sites use a **2-tier** model:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  TIER 1 — BDS Foundations  (brik-bds, never edited by consumers)        │
+│                                                                         │
+│  figma-tokens.css  — SD-generated primitives + semantic tokens          │
+│  gap-fills.css     — gap-fill tokens not yet promoted to Figma          │
+│                                                                         │
+│  --color-poppy-light  --space-400  --background-brand-primary           │
+│  --background-status-error  --icon-md  --shadow-sm                      │
+└──────────────────────────────┬──────────────────────────────────────────┘
+                               │  CSS cascade (client globals.css)
+┌──────────────────────────────▼──────────────────────────────────────────┐
+│  TIER 2 — Client Theme  (theme-{client}.css in consuming project)       │
+│                                                                         │
+│  Same semantic token names as Tier 1, different values for this brand.  │
+│  One file per client. Cascade wins. Components are untouched.           │
+│                                                                         │
+│  :root { --background-brand-primary: #2563EB; --font-family-heading: …} │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**The key rule:** token names are fixed in Tier 1. Only values change in Tier 2. A component written against `--background-brand-primary` works for every client brand with zero code changes.
+
+## CSS import cascade
+
+Client projects load tokens in the same order:
+
+```css
+/* 1. Generated tokens (light + dark + Brik defaults) */
+@import '@brikdesigns/bds/tokens.css';
+
+/* 2. Client brand — same token names, different values */
+@import './styles/theme-{client}.css';
+
+/* 3. Component CSS bundle */
+@import '@brikdesigns/bds/styles.css';
+```
+
+For the theming system as a whole — Brik's three built-in themes, the override matrix, and how to author a client brand — see [Theming](/docs/theming).
+
+## Token types: primitives vs semantic
+
+| Type | Purpose | Example | Used in |
+|------|---------|---------|---------|
+| **Primitive** | Raw scale value — the number or color itself | `--color-poppy-light: #e35335` | Never in components |
+| **Semantic** | Purpose-bound alias pointing to a primitive | `--background-brand-primary: var(--color-poppy-light)` | Components, always |
+
+Primitives define the palette. Semantics define the intent. Components only know intent.
+
+```css
+/* ✅ Correct — semantic, works across all themes */
+.bds-button { background: var(--background-brand-primary); }
+
+/* ❌ Wrong — hardcoded, breaks in every non-default theme */
+.bds-button { background: #e35335; }
+
+/* ❌ Wrong — primitive, breaks the abstraction */
+.bds-button { background: var(--color-poppy-light); }
+```
+
+## Naming convention
+
+```
+--[category]-[role]-[variant]
+```
+
+| Category | Pattern | Examples |
+|---|---|---|
+| Background | `--background-{role}` | `--background-brand-primary`, `--background-primary-hover`, `--background-info` |
+| Text | `--text-{role}` | `--text-primary`, `--text-brand-primary`, `--text-info` |
+| Surface | `--surface-{role}` | `--surface-primary`, `--surface-secondary`, `--surface-info` |
+| Border | `--border-{role}` | `--border-primary`, `--border-brand-primary`, `--border-info` |
+| Page | `--page-{role}` | `--page-primary`, `--page-secondary` |
+| Font family | `--font-family-{role}` | `--font-family-heading`, `--font-family-body`, `--font-family-label` |
+| Typography | `--{style}-{size}` | `--heading-lg`, `--body-md`, `--label-sm` |
+| Spacing | `--padding-{size}`, `--gap-{size}` | `--padding-lg`, `--gap-md` |
+| Border radius | `--border-radius-{size}` | `--border-radius-sm`, `--border-radius-md` |
+| Shadow | `--shadow-{size}` | `--shadow-sm`, `--shadow-lg` |
+| Scale step | `--{category}-{index}` | `--space-400`, `--font-size-700`, `--color-grayscale-dark` |
+
+Full vocabulary rules — title vs heading, label family, axes, no-unclassed-wrappers — in [Naming Conventions](/docs/primitives/naming-conventions).
+
+## Figma variable collections → CSS output
+
+Figma organises variables into named collections. Each collection has modes. Style Dictionary flattens the active mode of each collection into `figma-tokens.css`.
+
+| Figma collection | Active mode | What it generates |
+|---|---|---|
+| `primitives` | `value` | Raw scale: `--color-poppy-*`, `--space-*`, `--font-size-*`, `--border-radius-*`, `--shadow-blur-*` |
+| `color` | `light` / `dark` | Semantic roles: `--background-*`, `--text-*`, `--surface-*`, `--border-*`, `--page-*` |
+| `typography` | `default` | Composite tokens: `--heading-lg`, `--body-md`, `--label-sm`, `--font-family-*` |
+| `spacing` | `default` | `--padding-*`, `--gap-*` |
+| `border-radius` | `soft` | `--border-radius-sm/md/lg` |
+| `border-width` | `default` | `--border-width-sm/md/lg` |
+| `elevation` | `subtle` | `--shadow-sm/md/lg/xl`, `--blur-radius-*` |
+| `breakpoint` | `default` | `--breakpoint-web/tablet/mobile` |
+
+**Light vs dark mode:** `figma-tokens.css` uses the `light` mode of the `color` collection. `figma-tokens-dark.css` uses the `dark` mode. Both files use identical variable names — consuming projects import dark after light, and the browser applies whichever matches `[data-theme="dark"]`.
+
+## Style Dictionary pipeline
+
+Figma is the only place tokens are edited. The pipeline:
+
+```
+1. Designer edits variables in Figma (Foundations file)
+         ↓
+2. Agent runs pull-variables.js with channel ID
+   → /tmp/figma-vars.json  (raw Figma variable data)
+         ↓
+3. node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build
+   → patches design-tokens/tokens-studio.json (W3C DTCG format)
+   → runs npm run build:all-tokens
+         ↓
+4. scripts/flatten-tokens-studio.js
+   → design-tokens/tokens-figma.json  (flattened, mode-resolved)
+         ↓
+5. Style Dictionary
+   → tokens/figma-tokens.css          ← Tier 1, imported by all projects
+   → tokens/figma-tokens-dark.css     ← dark mode variant
+   → build/figma/js/tokens.mjs        ← JS / TypeScript
+   → build/figma/swift/*.swift        ← iOS
+```
+
+<Callout type="warn">
+  Never manually edit `tokens/figma-tokens.css`. It is generated on every sync. Use `tokens/gap-fills.css` for gap-fill tokens that aren't in Figma yet.
+</Callout>
+
+## Browse the token categories
+
+417 tokens across all collections. Each page below explains one primitive group: what tokens exist, what they mean semantically, and the rules for using them outside their category (don't).
 
 <Cards>
   <Card title="Color" href="/docs/primitives/color" description="Semantic color roles + interaction states + status + the primitive palettes." />
@@ -24,36 +155,51 @@ Each page below explains one primitive group: what tokens exist, what they mean 
   <Card title="Border radius" href="/docs/primitives/border-radius" description="Corner rounding from sharp (0) to pill (999) to fully circular." />
   <Card title="Border width" href="/docs/primitives/border-width" description="Line thickness for borders, dividers, and outlines." />
   <Card title="Shadow" href="/docs/primitives/shadow" description="Elevation tokens — composed semantic shadows + primitive blur/spread scales." />
-  <Card title="Motion" href="/docs/primitives/motion" description="Duration, easing, keyframes, and the three-tier motion system." />
+  <Card title="Naming Conventions" href="/docs/primitives/naming-conventions" description="The vocabulary that keeps the system tight — title vs heading, label family, axes." />
 </Cards>
 
-## Still in Storybook
+## Theming
 
-These foundation pages haven't been migrated yet. Until they land here, view them in Storybook and treat the contents as canonical.
+A client brand is a single CSS file (~12–27 token overrides) that redefines semantic tokens. Components never change. See [Theming](/docs/theming) for the four-layer cascade, [Client Themes](/docs/theming/client-themes) for the override matrix and minimal template, and [Atmospheres](/docs/theming/atmospheres) for the visual character layer.
 
-| Page | Where |
-|---|---|
-| Motion (full) | [Storybook → Motion](https://storybook.brikdesigns.com/?path=/docs/motion-overview--docs) — overview, tiers, effects, vocabulary |
-| Naming Conventions | [Storybook → Naming Conventions](https://storybook.brikdesigns.com/?path=/docs/foundations-design-tokens-naming-conventions--docs) |
-| Design Tokens overview | [Storybook → Design Tokens](https://storybook.brikdesigns.com/?path=/docs/foundations-design-tokens-overview--docs) |
+**Validate with Client Sim:** Switch to `Client Sim` in the Storybook toolbar. It assigns Georgia / Verdana / Courier New to heading / body / label families — any component using the wrong `--font-family-*` token becomes immediately visible.
 
-## How tokens flow into your app
+## Adding a new token
 
-```text
-Figma Variables
-      ↓
-design-tokens/tokens-studio.json    (build input)
-      ↓
-Style Dictionary
-      ↓
-tokens/figma-tokens.css             (auto-generated)
-tokens/figma-tokens-dark.css        (auto-generated, dark mode)
-tokens/gap-fills.css                (manual, interaction states)
-      ↓
-Consumer projects:
-  @import '@brikdesigns/bds/tokens.css';
-  @import './styles/theme-{client}.css';
-  @import '@brikdesigns/bds/styles.css';
+**Always start in Figma — never in CSS.**
+
+1. Add the variable to the correct collection in the Figma Foundations file
+2. Connect Claude with the Figma dev plugin (provide channel ID)
+3. Run the sync: `bun scripts/pull-variables.js <channel> > /tmp/vars.json && node scripts/sync-figma-mcp.js /tmp/vars.json --build`
+4. Verify the token appears in `tokens/figma-tokens.css`
+5. Add it to the consuming project's `src/lib/tokens.ts` export map
+
+**Exception:** tokens that aren't ready for Figma yet go in `tokens/gap-fills.css` with a `TODO: promote to Figma` comment.
+
+## What NOT to do
+
+```css
+/* ❌ Never use a primitive in a component */
+.card { color: var(--color-grayscale-darkest); }
+/* ✅ Use the semantic alias */
+.card { color: var(--text-primary); }
+
+/* ❌ Never hardcode a value */
+.button { background: #e35335; }
+/* ✅ Use the semantic token */
+.button { background: var(--background-brand-primary); }
+
+/* ❌ Never edit figma-tokens.css manually */
+/* ✅ Edit in Figma → run sync → regenerates automatically */
+
+/* ❌ Never skip the TypeScript layer in consuming projects */
+style={{ color: 'var(--text-primary)' }}
+/* ✅ Import from the token map */
+import { color } from '@/lib/tokens';
+style={{ color: color.text.primary }}
+
+/* ❌ Never hand-author dark-mode overrides */
+[data-theme="dark"] { --background-primary: #111; }
+/* ✅ Dark mode ships generated from Figma — bundled into @brikdesigns/bds/tokens.css */
+@import '@brikdesigns/bds/tokens.css';
 ```
-
-See [the cascade rules](/docs/getting-started/cascade) for how the three layers interact.
