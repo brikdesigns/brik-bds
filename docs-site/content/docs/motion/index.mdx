@@ -1,0 +1,64 @@
+---
+title: Motion System
+description: A three-tier motion system. Lightweight CSS reveals → GSAP scroll choreography → Premium cinematic effects. Every tier is additive — load only what your design calls for.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Cards, Card } from 'fumadocs-ui/components/card';
+
+BDS provides a three-tier motion system. Every tier is additive — load only what your design calls for. A subtle blog post needs one CSS file. A premium hero sequence needs the full stack. The tier decision belongs at design time, not implementation time.
+
+Motion answers the same question as tokens: *what are the constraints?* Without a shared vocabulary, every developer invents their own easing curves, every designer picks their own durations, and no two pages feel like they came from the same studio. The Motion system fixes that.
+
+<Callout type="info">
+  **Audience:** primarily websites (Astro, Webflow). Product surfaces (React) consume the lightweight tier (token-driven CSS animations) but rarely escalate to GSAP or Premium — those are website concerns.
+</Callout>
+
+## The three-tier philosophy
+
+**Lightweight** runs on every mockup by default. It is pure CSS: scroll-triggered reveals via `.is-visible`, hover micro-interactions, stagger patterns. No JavaScript library dependency. Ships immediately, runs in every browser, imposes no load-time cost. If the design audit says nothing specific about motion, you are here.
+
+**GSAP** enters when the design calls for scroll choreography: pinned sections, scrub-linked animations, horizontal scroll panels, or SplitText letter-by-letter reveals. GSAP requires a CDN import and adds measurable weight — only load it when the design explicitly needs it. Scroll-pinning on a content page that doesn't benefit from it is over-engineering, not craft.
+
+**Premium** handles atmosphere effects that GSAP alone does not cover: animated film grain, glassmorphism panels, magnetic cursor buttons, hero entrance sequences, and video scrubbing. Premium depends on `premium-effects.css` and `premium-scroll.js`, which in turn depend on GSAP. It is the full stack.
+
+The cascade is not about quality — a Lightweight site can be beautifully crafted. It is about necessity. Escalate only when the design audit specifically calls for the effect.
+
+## File layout and import order
+
+Load files in this order. Each layer depends on the one before it.
+
+| File | Layer | Required for |
+|---|---|---|
+| `tokens/animations.css` | Token | All tiers — defines `--duration-*`, `--ease-*`, `--stagger-*` custom properties and named keyframes (`bds-fade-in`, `bds-slide-up`, etc.) |
+| `tokens/motion-classes.css` | Token | All tiers — composable utility classes (`.bds-enter-fade`, `.bds-anim-pulse`, `.bds-stagger-1` through `.bds-stagger-6`) built from the token layer |
+| `css/animations.css` | Lightweight | Scroll reveal classes (`.animate-fade-up`, clip-path reveals), hover effects, parallax helpers, section theming, typography effects |
+| `css/premium-effects.css` | Premium (CSS) | Grain overlays, glassmorphism, video backgrounds, advanced typography, magnetic cursor styles |
+| `js/premium-scroll.js` | Premium (JS) | IntersectionObserver orchestration + GSAP glue: hero sequences, background morphs, counters, scroll-scrubbed video, scroll-activated tabs |
+
+**iOS consumers:** `build/figma/swift/BDSMotion.swift` exports the duration and easing tokens as Swift constants for UIKit / SwiftUI animation use.
+
+## Vocabulary
+
+Two locked enums pair the Motion system to the client portal. When a client's animation tier or image mood is captured during onboarding, it carries forward into every mockup variant — the motion worker reads the tier to decide which libraries to load and which effects Claude is allowed to generate.
+
+- **Animation Tier** — `subtle · moderate · expressive` (single-select)
+- **Image Mood** — 6 values, multi-select 1–3
+
+## Explore
+
+<Cards>
+  <Card title="Tiers" href="/docs/motion/tiers" description="Lightweight, GSAP, and Premium — when to use each." />
+  <Card title="Effects" href="/docs/motion/effects" description="Hover, scroll reveals, overlays, typography, video — the implementation patterns within each tier." />
+  <Card title="Vocabulary" href="/docs/motion/vocabulary" description="Animation Tier and Image Mood — locked enums the portal captures and the motion worker reads." />
+</Cards>
+
+<Callout type="info">
+  **Live demos are in Storybook.** Each tier and effect has interactive examples — see **Motion** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com). Native demo components in this site land in a follow-up.
+</Callout>
+
+## Related
+
+- [Primitives](/docs/primitives) — the `--duration-*` and `--ease-*` motion tokens live here
+- [Theming](/docs/theming) — the orthogonal theming tenet
+- [Content System](/docs/content-system) — vocabularies that pair with the motion tier

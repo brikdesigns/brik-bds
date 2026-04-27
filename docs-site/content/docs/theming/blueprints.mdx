@@ -1,0 +1,184 @@
+---
+title: Blueprints
+description: Layer 4 of the theming cascade — named layout + interaction patterns that ground AI mockup generation with concrete structural constraints.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Named layout + interaction patterns that ground AI mockup generation with concrete structural constraints. **BDS owns the canonical data**; portal `design_blueprints` is a downstream seed.
+
+See [`blueprints/ARCHITECTURE.md`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/ARCHITECTURE.md) for the two-taxonomy model, bridge rules, and v1 / v2 coexistence.
+
+<Callout type="info">
+  **Live library catalog is in Storybook.** The full enumerated list of blueprint entries — with moods, industries, layout spec, CSS hints, version, last-reviewed dates — is rendered dynamically from `blueprints/blueprint-library.json`. See **Theming → Blueprints** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com). Native rendering of the library JSON in this site lands in a follow-up.
+</Callout>
+
+## Two taxonomies
+
+Authors hand-write match tags (`moods`, `industries`). Client-axis projections (`personality`, `visual_style`, `industry_slugs`) are derived at load time via the bridges — never stored in source JSON, never authored by hand.
+
+### Mood → Personality
+
+| Mood | Personality projection |
+|---|---|
+| `editorial` | Sophisticated · Refined · Composed |
+| `clinical` | Trustworthy · Precise · Reliable |
+| `warm` | Approachable · Empathetic · Welcoming |
+| `bold` | Confident · Energetic · Direct |
+| `quiet` | Calm · Considered · Restrained |
+| `playful` | Friendly · Optimistic · Light |
+
+### Mood → Visual Style
+
+| Mood | Visual Style projection |
+|---|---|
+| `editorial` | Refined · Spacious |
+| `clinical` | Minimal · Geometric |
+| `warm` | Soft · Organic |
+| `bold` | Dark · High-contrast |
+| `quiet` | Soft · Minimal |
+| `playful` | (no visual-style constraint) |
+
+### Industry tag → Industry pack slug
+
+| Tag | Pack slug |
+|---|---|
+| `dental` | `dental` |
+| `real_estate` | `real-estate-rv-mhc` |
+| `wellness` | `small-business` (until graduated) |
+| `legal` | `small-business` (until graduated) |
+| `universal` | *universal sentinel — no pack lookup* |
+
+## Coverage
+
+The library tracks coverage across section types × moods. Cells with `0` are gaps — opportunities to author. The full matrix renders in Storybook from live JSON.
+
+The shipped section types include: `hero` · `services` · `about` · `stats` · `testimonials` · `cta` · `gallery` · `process` · `team` · `pricing` · `faq` · `contact`.
+
+## Implementation — `@brikdesigns/bds/blueprints-astro`
+
+The Astro render surface the Theming tenet has always pointed at. Each blueprint key with a shipped Astro component is exported from this package; consumer Astro sites import the components directly or dispatch by key via `<BlueprintDispatcher>`.
+
+See [BLUEPRINTS-ASTRO-PACKAGE.md](https://github.com/brikdesigns/brik-bds/blob/main/docs/BLUEPRINTS-ASTRO-PACKAGE.md) for the architecture contract, versioning policy, and scale-at-100-clients deployment topology.
+
+### Package exports
+
+```astro
+---
+// Consumer Astro page — the intended import shape.
+import {
+  SiteHeader,
+  BlueprintDispatcher,
+  // Individual blueprints if you want direct imports:
+  HeroSplit6040,
+  // Types:
+  type BlueprintProps,
+  type ClientFacts,
+  type ResolvedTheme,
+} from '@brikdesigns/bds/blueprints-astro';
+---
+<SiteHeader archetype={...} brandName={...} navItems={[...]} />
+<main>
+  <BlueprintDispatcher sections={page.sections}
+                       clientFacts={clientFacts}
+                       theme={theme} />
+</main>
+```
+
+Types-only entry for contexts without the Astro runtime (e.g. the portal's scaffold task that plans compositions):
+
+```ts
+import type { BlueprintSection, KnownBlueprintKey }
+  from '@brikdesigns/bds/blueprints-astro/types';
+```
+
+### Dispatch surface (v0.1)
+
+| Component | Purpose | Props shape |
+|---|---|---|
+| `<BlueprintDispatcher>` | Reads `visualNotes.blueprintKey` per section and renders the matching component. Unknown keys fall through to `<BlueprintFallback>`. | `{ sections, clientFacts, theme }` |
+| `<BlueprintFallback>` | Loud visible stub for unknown blueprint keys. Emits `data-blueprint-unknown-key` — CI greps client-repo builds for this attribute. | `BlueprintProps` |
+| `<SiteHeader>` | Site-shell nav. Dispatches on the navigation archetype prop. v0.1 fully implements `editorial-transparent`; other archetypes render with a `data-unimplemented-archetype` attribute. | `{ archetype, brandName, navItems, phone?, primaryCta?, currentPath? }` |
+
+### Shipped blueprints (v0.1)
+
+Eight components — the set needed for Vale's first scaffold run via the small-business pack. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`).
+
+| Component | Library key | Section type |
+|---|---|---|
+| `<HeroSplit6040>` | `hero_split_60_40` | `hero` |
+| `<HeroInteriorMinimal>` | `hero_interior_minimal` | `hero` |
+| `<StatsDarkBar>` | `stats_dark_bar` | `stats` |
+| `<ServicesDetailTwoColumn>` | `services_detail_two_column` | `services` |
+| `<AboutStorySplit>` | `about_story_split` | `about` |
+| `<TestimonialsFeaturedLarge>` | `testimonials_featured_large` | `testimonials` |
+| `<CtaSplitContact>` | `cta_split_contact` | `cta` |
+| `<CtaDarkCentered>` | `cta_dark_centered` | `cta` |
+
+Unshipped keys render `<BlueprintFallback>` when the dispatcher encounters them — expected during the v0.1 → v1.0 incremental ramp. Each follow-up PR adds one or more components and removes its key from the fallback case.
+
+### Contract per blueprint
+
+Every blueprint component accepts **the same props shape**:
+
+```ts
+interface BlueprintProps {
+  section: BlueprintSection;      // content: heading, body, items, cta, visualNotes
+  clientFacts: ClientFacts;       // per-client: brandName, phone, heroImageUrl, etc.
+  theme: ResolvedTheme;           // archetypes + atmosphere + theme mode
+}
+```
+
+This uniformity is deliberate — the dispatcher is trivial (one lookup, one pass-through), every blueprint's surface is identical for authoring / review, and per-client customization happens through `ClientFacts` + CSS custom properties (not per-component props).
+
+### Per-client CSS overrides
+
+Each blueprint exposes documented CSS custom properties for per-client tuning — for example:
+
+```css
+.bp-hero-split-60-40 {
+  --bp-hero-split-eyebrow-color: ...;
+  --bp-hero-split-accent-line: ...;
+  --bp-hero-split-image-radius: ...;
+  /* ... more, see each component's header comment */
+}
+```
+
+Per-client overrides MUST live in the client repo's `src/styles/client-overrides.css` with a `/* BDS-ISSUE: <url> */` comment on the preceding line. CI in each client repo enforces the comment requirement. See [spec §6.3](https://github.com/brikdesigns/brik-bds/blob/main/docs/BLUEPRINTS-ASTRO-PACKAGE.md#63-client-overridescss-escape-hatch--ci-gated-not-review-gated) for rationale.
+
+### Non-hallucinatable content
+
+Blueprints with `required_facts` render a visible `data-content-needed="<field>"` stub when the fact is null at render time — CI grep blocks publish. This is defense-in-depth; the portal's `dev_scaffold_site` task preflights `required_facts` before generating the client repo, so a missing fact should never reach the build stage.
+
+### Verification
+
+The package has a dedicated verification script at [`scripts/verify-blueprints-astro-exports.mjs`](https://github.com/brikdesigns/brik-bds/blob/main/scripts/verify-blueprints-astro-exports.mjs) that runs on every BDS pre-push:
+
+1. Packs a tarball matching a real publish.
+2. Creates a scratch Astro 5 project, installs the tarball.
+3. `astro check` — type + import resolver.
+4. `astro build` — SSR render to static HTML.
+5. Asserts rendered HTML markers per blueprint.
+6. `@axe-core/playwright` scan against every built page (WCAG 2.1 AA).
+7. Confirms all expected files shipped in the tarball.
+
+Any failure blocks the PR.
+
+## Authoring
+
+Blueprint edits flow **through BDS**. Portal admin edits (if kept) are drafts — landed changes flow back through a BDS PR. Full rules in [Architecture](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/ARCHITECTURE.md).
+
+1. Edit `blueprints/blueprint-library.json` on a task branch.
+2. Run `npm run validate:blueprints` (also runs as part of `npm run validate`).
+3. Bump `version` on the affected blueprint(s) and the library envelope if the set changes. Update `last_reviewed` on confirmed-accurate passes.
+4. Open a PR. Bridge edits, schema changes, and data additions stay separate.
+5. After merge: publish the new BDS version and regenerate the portal seed migration via `npx tsx scripts/generate-blueprint-seed.mts` in `brik-client-portal`.
+
+## Related
+
+- [Theming Overview](/docs/theming) — the four-layer cascade in context
+- [Atmospheres](/docs/theming/atmospheres) — orthogonal CSS overlay layer
+- [Navigation Archetypes](/docs/theming/navigation-archetypes) — site-header patterns
+- [Footer Archetypes](/docs/theming/footer-archetypes) — site-footer patterns
+- [Architecture (GitHub)](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/ARCHITECTURE.md)
+- [Content System](/docs/content-system) — industry packs declare blueprint affinities

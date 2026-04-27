@@ -10,9 +10,11 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="theme-brand-brik" suppressHydrationWarning>
       <body>
-        <RootProvider>{children}</RootProvider>
+        <RootProvider theme={{ attribute: ['class', 'data-theme'] }}>
+          {children}
+        </RootProvider>
       </body>
     </html>
   );

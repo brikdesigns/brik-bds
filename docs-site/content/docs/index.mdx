@@ -15,8 +15,8 @@ This site is the **guidance layer**. For live prop exploration and visual varian
 | Tenet | Answers | Ships |
 |---|---|---|
 | [**Foundation**](/docs/primitives) | *"What color, size, type?"* | Design tokens, scales, primitives |
-| [**Theming**](/docs/getting-started/cascade) | *"What brand, mood, shape?"* | Tokens + atmospheres + navigation archetypes + blueprints |
-| [**Motion**](/docs/primitives/motion) | *"How does it feel to move?"* | Three-tier animation system — CSS reveals → GSAP scroll → premium effects |
+| [**Theming**](/docs/theming) | *"What brand, mood, shape?"* | Tokens + atmospheres + navigation archetypes + blueprints |
+| [**Motion**](/docs/motion) | *"How does it feel to move?"* | Three-tier animation system — CSS reveals → GSAP scroll → premium effects |
 | [**Content**](/docs/content-system) | *"What does it say, for whom?"* | Industry packs, voice patterns, locked vocabularies |
 
 Each tenet evolves on its own cadence but cross-links at the edges. An industry pack declares a default atmosphere and navigation archetype, so the Content tenet drives defaults for the Theming tenet that the client brand then optionally overrides.
@@ -25,11 +25,13 @@ Each tenet evolves on its own cadence but cross-links at the edges. An industry 
 
 <Cards>
   <Card title="Getting Started" href="/docs/getting-started" description="Install BDS, wire the cascade, and read the rules." />
-  <Card title="Primitives" href="/docs/primitives" description="Tokens — color, type, spacing, motion, the design language." />
-  <Card title="Components" href="/docs/components" description="React building blocks. One job each, composable, themeable." />
+  <Card title="Foundation / Primitives" href="/docs/primitives" description="Tokens — color, type, spacing, the shared design language." />
+  <Card title="Theming" href="/docs/theming" description="Atmospheres, archetypes, blueprints — the multi-tenant instrument." />
+  <Card title="Motion" href="/docs/motion" description="Three-tier animation system — Lightweight, GSAP, Premium." />
+  <Card title="Content System" href="/docs/content-system" description="Industries, voices, vocabularies — the vocabulary peer to tokens." />
+  <Card title="Components" href="/docs/components" description="React product surface. One job each, composable, themeable." />
+  <Card title="Web Elements" href="/docs/web-elements" description="HTML/CSS components, sections, and email modules for websites." />
   <Card title="Patterns" href="/docs/patterns" description="Cross-component recipes for forms, empty states, page templates." />
-  <Card title="Content System" href="/docs/content-system" description="Industries, voices, atmospheres — the vocabulary peer to tokens." />
-  <Card title="Contribution" href="/docs/contribution" description="How to add or change BDS components, tokens, and packs." />
 </Cards>
 
 ## Foundation — the visual atoms
@@ -51,10 +53,10 @@ Theming composes four orthogonal layers. Each is a decision a client can overrid
 
 | Layer | Decides | Where it lives |
 |---|---|---|
-| Tokens | Color, type, spacing values per brand | `theme-{client}.css` in the consumer repo |
-| Atmospheres | Ambient mood — grain, glow, vignettes | [`@brikdesigns/bds/atmospheres/{slug}.css`](/docs/content-system/atmospheres) |
-| Navigation Archetypes | Site-header shape + scroll/drawer behavior | Industry pack → BDS `<SiteHeader>` |
-| Blueprints | Section composition + mood tagging | Authored in BDS, tagged per industry + mood |
+| Tokens | Color, type, spacing values per brand | [`theme-{client}.css`](/docs/theming/client-themes) in the consumer repo |
+| Atmospheres | Ambient mood — grain, glow, vignettes | [`@brikdesigns/bds/atmospheres/{slug}.css`](/docs/theming/atmospheres) |
+| Navigation Archetypes | Site-header shape + scroll/drawer behavior | [Industry pack → BDS `<SiteHeader>`](/docs/theming/navigation-archetypes) |
+| Blueprints | Section composition + mood tagging | [Authored in BDS, tagged per industry + mood](/docs/theming/blueprints) |
 
 ## Motion — the three-tier system
 
@@ -64,7 +66,7 @@ Theming composes four orthogonal layers. Each is a decision a client can overrid
 | **GSAP** | Scroll-driven sequences, complex orchestration |
 | **Premium** | Cinematic moments — typography flourishes, video overlays |
 
-See [Primitives → Motion](/docs/primitives/motion) for the decision tree and per-tier specs.
+See [Motion](/docs/motion) for the decision tree and per-tier specs.
 
 ## Content — the vocabulary peer
 
@@ -75,7 +77,7 @@ The content-vocabulary peer to the visual tokens. Paired with BDS to drive end-t
 | Overview | [Content System](/docs/content-system) |
 | Industries | [Content System → Industries](/docs/content-system/industries) |
 | Voices | [Content System → Voices](/docs/content-system/voices) |
-| Atmospheres | [Content System → Atmospheres](/docs/content-system/atmospheres) |
+| Atmospheres | [Theming → Atmospheres](/docs/theming/atmospheres) |
 
 ## Components
 

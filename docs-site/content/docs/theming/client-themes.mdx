@@ -1,0 +1,153 @@
+---
+title: Client Themes
+description: Layer 1 of the theming cascade — per-client semantic token overrides. Override matrix, minimal theme-{client}.css template, and interaction-state rules.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BDS ships 3 built-in themes. Each theme overrides a curated set of semantic color and typography tokens while leaving primitives and spacing untouched. The 8 numbered website template themes (`theme-1` through `theme-8`) have moved to the `brik/brik-website-themes` repo and are not part of the client project architecture.
+
+## How themes work
+
+Brand themes use a class on `<body>` plus the `data-theme` attribute on `<html>`. The `ThemeProvider` component manages both automatically.
+
+```tsx
+// In your layout or app root:
+<ThemeProvider initialTheme={{ themeNumber: 'brik-dark' }}>
+  <App />
+</ThemeProvider>
+```
+
+Under the hood:
+
+- `ThemeProvider` adds `theme-brand-brik` to `<body>` and sets `data-theme="dark"` (or `"light"`) on `<html>`.
+- CSS selectors like `.theme-brand-brik[data-theme="dark"] { … }` override the semantic tokens for that theme.
+- Brik's theme blocks live in `tokens/theme-brand-brik.css` (bundled into `dist/tokens.css`); the client-sim block lives in `tokens/font-audit.css`.
+
+See [`tokens/CASCADE.md`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md) for the full load order.
+
+## Built-in themes
+
+| Selector | Description |
+|----------|-------------|
+| `.theme-brand-brik[data-theme="light"]` (or no `data-theme`) | Brik brand — poppy red, Poppins on white |
+| `.theme-brand-brik[data-theme="dark"]` | Brik brand, dark mode — poppy red on near-black |
+| `.theme-brand-brik.theme-client-sim` | Font audit tool — Georgia / Verdana / Courier New exposes semantic font-family misuse |
+
+Use the paintbrush icon in the Storybook toolbar to switch themes in real time.
+
+## Token cascade
+
+The full cascade order in a consuming project's `globals.css` (order matters):
+
+```css
+/* 1. Generated tokens (light + dark) plus Brik defaults */
+@import '@brikdesigns/bds/tokens.css';
+
+/* 2. Client brand overrides */
+@import './styles/theme-{client}.css';
+
+/* 3. Component CSS bundle */
+@import '@brikdesigns/bds/styles.css';
+```
+
+`tokens.css` bundles figma-tokens + figma-tokens-dark + figma-dark-corrections + theme-brand-brik + animations + motion-classes. Style Dictionary regenerates the figma layer; never edit those files manually. `gap-fills.css` (also bundled) holds interaction states, status tokens, and other semantics not yet promoted to Figma.
+
+## What each theme overrides
+
+Each `.body.theme-{name}` block overrides a fixed set of **semantic color tokens** — the same tokens documented in [Primitives → Color](/docs/primitives/color). These include:
+
+- `--background-brand-primary`, `--background-brand-secondary`
+- `--text-primary`, `--text-secondary`, `--text-muted`, `--text-brand-primary`
+- `--surface-primary`, `--surface-secondary`, `--surface-navigation`, `--surface-brand-primary`
+- `--border-primary`, `--border-secondary`, `--border-brand-primary`
+- `--page-primary`, `--page-brand-primary`
+
+<Callout type="info">
+  `--surface-nav` is a deprecated alias for `--surface-navigation`. Both resolve to the same value. Prefer `--surface-navigation` in new client overrides.
+</Callout>
+
+**Typography tokens** are not overridden by `data-theme="light"` vs `data-theme="dark"` — both share the Brik font stack. The `theme-client-sim` class demonstrates font family overrides only.
+
+**Spacing tokens** are not theme-controlled — spacing comes from the Base/Spacious mode set on `.body`, not from theme classes.
+
+## Adding a custom client brand
+
+Create a `theme-{client}.css` file in the consuming project and add it as the final import in `globals.css` (after the BDS cascade above). Override any semantic tokens at `:root` level:
+
+```css
+/* theme-acme.css — all that's needed for a full rebrand */
+:root {
+  /* Required — brand identity */
+  --background-brand-primary:         #2563EB;
+  --text-brand-primary:               #2563EB;
+  --border-brand-primary:             #2563EB;
+  --surface-brand-primary:            #EFF6FF;
+
+  /* Required if overriding brand-primary — interaction states */
+  --background-brand-primary-hover:   #1D4ED8;
+  --background-brand-primary-pressed: #1E40AF;
+
+  /* Recommended — surfaces and page */
+  --page-primary:                     #F8FAFC;
+  --surface-primary:                  #FFFFFF;
+  --surface-secondary:                #F1F5F9;
+
+  /* Optional — custom fonts */
+  --font-family-heading:              'Neue Haas Grotesk', sans-serif;
+  --font-family-body:                 'Inter', sans-serif;
+  --font-family-label:                'Inter', sans-serif;
+}
+```
+
+No `.body.theme-{name}` class needed — the `:root` block wins via cascade order.
+
+## Overridability matrix
+
+Not every token is meant to vary per brand. Use the table to decide what to put in a client `theme-{client}.css`.
+
+| Token group | Per-client override? | Notes |
+|---|---|---|
+| Brand colors (`--background-brand-primary`, `--text-brand-primary`, `--surface-brand-primary`, `--border-brand-primary`) | **Required** | Core brand identity. |
+| Interaction states (`--background-brand-primary-hover`, `--background-brand-primary-pressed`) | **Required if brand colors change** | Defined at `:root` in `gap-fills.css` — not inside theme blocks. If you change brand without overriding these, hover/press keep the default Poppy tint. |
+| Surfaces + page (`--surface-primary`, `--surface-secondary`, `--page-primary`) | **Recommended** | Tune neutrals to the brand. |
+| Fonts (`--font-family-heading`, `--font-family-body`, `--font-family-label`) | **Optional** | See "Typography-only client override" below. |
+| Canonical status (`--background/surface/text/border-positive/negative/warning`) | **Yes** | First-class Figma variables. Override if the brand red/green/yellow clashes with the default. |
+| Extended status (`--background-status-info/neutral/purple/orange`) | **No** | Gap-fills using system colors with universal semantic meaning. |
+| Presence (`--background-presence-online/away/busy/offline`) | **No — intentionally frozen** | Shared chat/status semantics across products. |
+| Shadows + overlay (`--shadow-sm`..`--shadow-xl`, `--background-overlay`) | **No** | Hardcoded `rgba()` values; not expected to vary per brand. |
+
+### Interaction-state override example
+
+```css
+:root {
+  --background-brand-primary:         #2563EB;
+  --background-brand-primary-hover:   #1D4ED8;   /* must set manually */
+  --background-brand-primary-pressed: #1E40AF;   /* must set manually */
+}
+```
+
+### Status token naming
+
+Canonical names are `--background/surface/text/border-positive/negative/warning` (Figma-aligned). The older `--*-status-*` names (`--background-status-error`, `--text-status-success`, etc.) are deprecated backward-compat aliases — migrate to the canonical names.
+
+## Typography-only client override
+
+To override fonts without changing any colors:
+
+```css
+:root {
+  --font-family-heading: 'Playfair Display', serif;
+  --font-family-body:    'Source Sans 3', sans-serif;
+  --font-family-label:   'Source Sans 3', sans-serif;
+  --font-family-display: 'Playfair Display', serif;
+}
+```
+
+This is exactly what `.body.theme-client-sim` demonstrates in the toolbar.
+
+## Related
+
+- [Theming Overview](/docs/theming) — the four-layer cascade in context
+- [Atmospheres](/docs/theming/atmospheres) — Layer 2 CSS overlays
+- [Primitives → Color](/docs/primitives/color) — the semantic tokens this layer overrides

@@ -1,0 +1,11 @@
+{
+  "title": "Theming",
+  "pages": [
+    "index",
+    "client-themes",
+    "atmospheres",
+    "navigation-archetypes",
+    "footer-archetypes",
+    "blueprints"
+  ]
+}

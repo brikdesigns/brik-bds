@@ -1,0 +1,99 @@
+---
+title: Navigation Archetypes
+description: Layer 3 of the theming cascade — the locked vocabulary of site-header patterns. Each industry pack declares a default archetype rendered by the BDS <SiteHeader> component.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The locked vocabulary of site-header patterns Brik builds from. Each industry pack declares a default archetype in its `navigationIA` field; consumer sites (e.g. Birdwell & Mutlak) render the shape at build time via the BDS `<SiteHeader>` component in `@brikdesigns/bds/blueprints-astro`.
+
+Archetypes are **layout-level decisions**, not styling — they describe how many primary links appear, whether a mega-menu is exposed, where the utility cluster sits, and how the header responds to scroll. Styling is inherited from the client theme + atmosphere.
+
+Treat archetype selection as a **pack default** — clients can override per engagement in the portal Intel tab, but the default represents Brik's curated recommendation. If a client wants something outside the vocabulary, either (a) graduate their vertical to its own pack, or (b) extend this vocabulary with a new canonical archetype and document it here.
+
+## Vocabularies
+
+Three locked enums drive archetype selection. Source in `content-system/vocabularies/`.
+
+| Vocabulary | Values |
+|---|---|
+| `NAV_ARCHETYPE_VALUES` | `editorial-transparent` · `utility-first` · `service-centric` · `portfolio-minimal` · `calm-flat` |
+| `SCROLL_BEHAVIOR_VALUES` | `transparent-top-frosted-past-80` · `sticky-solid` · `reveal-on-scroll` · `hide-on-scroll-down` · `always-solid` |
+| `DRAWER_PATTERN_VALUES` | `fullscreen-overlay` · `slide-left-panel` · `slide-right-panel` · `bottom-sheet` |
+
+## Decision matrix — archetype by industry
+
+The canonical starting point. Agents picking an archetype for a new client should match the vertical first; if no pack exists yet, fall back to the `small-business` baseline until the vertical graduates.
+
+| Industry | Archetype | Links | Mega-menu | Scroll | Mobile |
+|---|---|---|---|---|---|
+| **Dental** | `editorial-transparent` | 4 | Services · 4-col | `transparent-top-frosted-past-80` | `fullscreen-overlay` |
+| **Real Estate (RV / MHC)** | `utility-first` | 5 | Communities · 3-col | `sticky-solid` | `slide-left-panel` |
+| **Small Business (general)** | `editorial-transparent` | 4 | None | `reveal-on-scroll` | `fullscreen-overlay` |
+
+## Archetype semantics
+
+What each archetype is **for** — audience assumptions, conversion intent, and when to pick it vs. its neighbors.
+
+### `editorial-transparent`
+
+4 primary links + Services mega-menu + utility cluster (phone + primary CTA). Nav is transparent over the hero at page-load, frosted glass past 80px scroll, hides on scroll-down past 120px.
+
+**Fit:** luxury dental, med-aesthetic, editorial hospitality — verticals where hero photography must breathe at first load and the header is a secondary surface during browsing.
+
+**Avoid when:** users land in task mode (search, filter, compare). An always-solid nav serves them better.
+
+### `utility-first`
+
+5 primary links + task-oriented mega-menu + utility cluster with the primary conversion action leading (e.g. "Find a Site", "Schedule a Tour", "Free Consultation"). Always-solid background — never hides, never goes transparent. The top bar is a task surface, not a branding surface.
+
+**Fit:** real-estate / RV / MHC directories, multi-practice legal, SaaS with deep product catalogs.
+
+**Avoid when:** the brand moment matters more than the task (luxury, editorial).
+
+### `service-centric`
+
+5 primary links + a prominent mega-menu on Services / Practice Areas / Specialties — the mega-menu IS the product discovery surface. 2-column internal layout: categories on the left, featured practitioner / case card on the right.
+
+**Fit:** legal multi-practice, specialty medical groups, agencies with a productized service catalog.
+
+**Avoid when:** service catalog is small (under 6 items). A flat nav does the job.
+
+### `portfolio-minimal`
+
+3–4 primary links, no dropdowns, text-only serif treatment with wide tracking. Hide-on-scroll-down, reveal-on-scroll-up. Utility cluster is minimal — often just an IG icon and a ghost "Inquire" link.
+
+**Fit:** MUA, photographers, wedding vendors, creative portfolios.
+
+**Avoid when:** the site has more than one conversion path (book vs. contact vs. shop).
+
+### `calm-flat`
+
+3–4 primary links, NO dropdowns — anxiety-sensitive audiences (wellness, mental health, therapy) don't hover-explore. Always solid at low contrast. Single warm CTA — "Book Session" — no secondary actions competing.
+
+**Fit:** wellness, mental health, therapy, recovery, palliative care.
+
+**Avoid when:** the audience is in research / comparison mode — they'll need a mega-menu to survey options.
+
+<Callout type="info">
+  **Live previews are in Storybook.** Each industry pack renders its seeded `navigationIA` via the `<NavigationIASpec>` block. See **Theming → Navigation Archetypes** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
+</Callout>
+
+## How to pick
+
+When you're building a new client's site:
+
+1. **Read their `industry_slug`** from `company_profiles`.
+2. **Look up the pack** via `getPackByIndustrySlug(industry_slug)` from `@brikdesigns/bds/content-system`.
+3. **Read `pack.navigationIA`** — that's the default. If absent, fall back to `smallBusiness.navigationIA`.
+4. **Check the portal Intel tab** — admin may have overridden fields per-client. Overrides win.
+5. **Pass the resolved `NavigationIA` to `<SiteHeader>`** when that component ships in `@brikdesigns/bds/blueprints-astro`.
+
+Until the Astro blueprint component lands, client Astro sites can hand-roll their header and treat this pack data as the spec. The Birdwell & Mutlak site is the reference implementation of `editorial-transparent` — see `web/birdwell-mutlak/src/components/Nav.astro`.
+
+## Related
+
+- [Theming Overview](/docs/theming) — the four-layer cascade in context
+- [Footer Archetypes](/docs/theming/footer-archetypes) — sibling vocabulary, paired but independent
+- [Blueprints](/docs/theming/blueprints) — page-layout patterns
+- [Content System / Industries](/docs/content-system/industries) — packs declare default archetypes
