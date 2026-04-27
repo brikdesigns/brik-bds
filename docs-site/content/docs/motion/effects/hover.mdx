@@ -1,0 +1,81 @@
+---
+title: Hover Effects
+description: Micro-interactions for buttons, cards, and links. CSS hover classes are Lightweight. Magnetic cursor and cursor trail require Premium JS.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Micro-interactions for buttons, cards, and links. CSS-only effects are in `css/animations.css` — no JS. Magnetic cursor and cursor trail effects require the [Premium tier](/docs/motion/tiers/premium).
+
+## CSS hover classes (Lightweight tier)
+
+Apply to any interactive element. All transitions use BDS duration and easing tokens.
+
+```html
+<!-- Button lifts on hover, presses down on click -->
+<a href="/book" class="hover-lift click-press">Book Now</a>
+
+<!-- Card scales slightly on hover -->
+<div class="card hover-scale">Portfolio item</div>
+
+<!-- Link gets an animated underline -->
+<a href="/about" class="hover-underline">About us</a>
+
+<!-- Image dims on hover (for overlay text) -->
+<div class="hover-dim">
+  <img src="photo.jpg" alt="...">
+</div>
+```
+
+| Class | Effect | Typical use |
+|---|---|---|
+| `.hover-lift` | `translateY(-4px)` + subtle shadow increase | Buttons, CTAs |
+| `.hover-scale` | `scale(1.03)` | Cards, image tiles |
+| `.hover-glow` | Box shadow glow in brand color | Accent buttons, badges |
+| `.hover-dim` | `opacity: 0.75` | Image overlays, nav items |
+| `.hover-underline` | Animated underline grows from left | Text links |
+| `.click-press` | `scale(0.97)` on `:active` | Pair with `.hover-lift` on buttons |
+
+## Magnetic cursor buttons (Premium tier)
+
+Buttons attract the cursor within a defined radius, creating a tactile feel. Requires `premium-scroll.js`.
+
+```html
+<!-- Default strength (0.4) -->
+<a href="/book" class="magnetic" data-premium-magnetic>Book Now</a>
+
+<!-- Stronger pull -->
+<button class="magnetic" data-premium-magnetic data-magnetic-strength="0.7">
+  Get Started
+</button>
+
+<!-- Initialize in your script -->
+<script>BrikPremium.init();</script>
+```
+
+<Callout type="warn">
+  Magnetic effects are best on **isolated primary CTAs** — do not apply to every button on the page. The effect draws attention to the element; overuse neutralizes it.
+</Callout>
+
+## Cursor trail (Premium tier)
+
+A custom cursor dot that trails the mouse with a spring feel. Enabled globally by the `cursor-trail` class on the body.
+
+```html
+<!-- Enable on body or a scoped container -->
+<body class="cursor-trail">
+  ...
+</body>
+```
+
+Exclude specific elements from the trail with `data-cursor-default` — useful for text inputs and selects where the system cursor should display normally.
+
+<Callout type="info">
+  **Live demos are in Storybook.** Each hover class renders an interactive example with hover state. See **Motion → Effects → Hover** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
+</Callout>
+
+## Related
+
+- [Scroll Reveals](/docs/motion/effects/scroll-reveals)
+- [Premium Tier](/docs/motion/tiers/premium)
+- [Lightweight Tier](/docs/motion/tiers/lightweight)

@@ -1,0 +1,32 @@
+---
+title: Effect categories
+description: Implementation patterns by category — hover, scroll reveals, overlays, typography, video. Each category lives in a specific tier (Lightweight, GSAP, or Premium).
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+
+The five effect categories the Motion system covers. Each has reference implementations across the appropriate tier — `css/animations.css` (Lightweight), `css/premium-effects.css` (Premium CSS), or `js/premium-scroll.js` (Premium JS).
+
+<Cards>
+  <Card title="Hover" href="/docs/motion/effects/hover" description="Lift, scale, glow, dim, animated underline. CSS-only micro-interactions. Magnetic + cursor-trail variants require Premium JS." />
+  <Card title="Scroll Reveals" href="/docs/motion/effects/scroll-reveals" description="Clip-path reveals, fade/slide entrances, stagger patterns, parallax. CSS + IntersectionObserver." />
+  <Card title="Overlays" href="/docs/motion/effects/overlays" description="Atmosphere effects — film grain, glassmorphism. ::after pseudo-elements, no extra DOM nodes." />
+  <Card title="Typography" href="/docs/motion/effects/typography" description="Gradient fill, stroke, glow, animated highlight. Heading-level only — never on body or labels." />
+  <Card title="Video" href="/docs/motion/effects/video" description="Full-bleed video backgrounds with overlay variants. Scroll-scrubbed video lives in Premium." />
+</Cards>
+
+## Tier mapping
+
+| Effect category | Default tier | Premium-only sub-features |
+|---|---|---|
+| Hover | Lightweight | Magnetic cursor, cursor trail |
+| Scroll Reveals | Lightweight | Scroll-scrubbed reveals (GSAP) |
+| Overlays | Premium | (entire category — `premium-effects.css`) |
+| Typography | Lightweight | Letter-by-letter SplitText (GSAP) |
+| Video | Premium | Scroll-scrubbed video (Premium JS) |
+
+## Related
+
+- [Tiers Overview](/docs/motion/tiers) — when to escalate
+- [Motion Overview](/docs/motion) — the three-tier philosophy
+- [Atmospheres](/docs/theming/atmospheres) — Premium overlays compose into atmospheres

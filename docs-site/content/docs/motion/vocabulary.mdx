@@ -1,21 +1,62 @@
 ---
 title: Vocabulary
-description: Animation Tier and Image Mood — locked enums the portal captures and the motion worker reads.
+description: Animation Tier and Image Mood — locked enums the portal captures, the source of truth for which motion tier a mockup worker is allowed to use.
 ---
+
+import { Callout } from 'fumadocs-ui/components/callout';
 
 Two locked enums pair the Motion system to the client portal. When a client's animation tier or image mood is captured during onboarding, it carries forward into every mockup variant — the motion worker reads the tier to decide which libraries to load and which effects Claude is allowed to generate.
 
 ## Animation Tier
 
-Single-select. Stored on `company_profiles.animation_tier`.
+The `animation_tier` field captured in the client portal's Visual Direction intel topic. It is a **single-select** — the client picks exactly one. The tier carries forward from onboarding through design preflight into every mockup variant.
 
-| Value | Meaning |
-|---|---|
-| `subtle` | Lightweight only. Hover micro-interactions + fade-up reveals. No GSAP. |
-| `moderate` | Lightweight + GSAP. Scroll-pinning allowed; SplitText optional. No premium overlays. |
-| `expressive` | Full stack — Lightweight + GSAP + Premium. Grain, glass, magnetic, video scrub. |
+This value is the **source of truth** for which motion tier a mockup worker is allowed to use. It is imported from `content-system/vocabularies/animation-tier.ts` and consumed by the portal via `company_profiles.animation_tier` (migration 00127). Never hardcode these values in consumer code — import `ANIMATION_TIER_VALUES` from this source.
 
-The motion worker reads this value at scaffold time and emits the appropriate `<script>` + `<link>` tags into the consumer Astro site. A `subtle` site will not receive `gsap.min.js` even if a blueprint hints at scroll-pinning — the blueprint falls back to a non-pinned variant.
+### Values
+
+| Value | Motion Tier | What it unlocks |
+|---|---|---|
+| `subtle` | **Lightweight** | `.fade-up` IntersectionObserver only. No GSAP. No premium effects. Transitions exist but do not call attention to themselves. Appropriate for professional services, law, healthcare contexts where motion confidence is low. |
+| `moderate` | **GSAP** | Fade-ups, SplitText hero H1, stat counters, hover lifts, CSS animated gradient. Motion is present and intentional but not the lead design element. Appropriate for most service businesses and small practices. |
+| `expressive` | **Premium** | SplitText, ScrollTrigger parallax, staggered card entrances, Granim.js gradient, Lenis smooth scroll. Motion is a design material, not a finishing coat. Appropriate for clients who reference brands like Daylight Computer or Legend.xyz. |
+
+### Programmatic access
+
+```ts
+import {
+  ANIMATION_TIER_VALUES,
+  type AnimationTier,
+  isAnimationTier,
+} from '@brikdesigns/bds/content-system';
+
+// The 3 valid values at runtime
+console.log(ANIMATION_TIER_VALUES); // ['subtle', 'moderate', 'expressive']
+
+// Type-safe guard
+function resolveMotionConfig(tier: string) {
+  if (!isAnimationTier(tier)) throw new Error(`Unknown tier: ${tier}`);
+  // tier is narrowed to AnimationTier here
+}
+```
+
+The portal reads `company_profiles.animation_tier` (type `text`, constrained by app-level validation to `ANIMATION_TIER_VALUES`). The mockup worker's `resolveAnimationTierNote()` resolver reads this field and decides:
+
+- Which CDN libraries to include in the mockup `head`
+- Which BDS CSS files to reference
+- Which effect classes Claude is permitted to generate in the mockup HTML
+
+<Callout type="warn">
+  **Drift warning:** if the tier values here and the portal's intake form get out of sync, clients pick a value that silently resolves to nothing in the worker. `isAnimationTier()` is the runtime guard — use it at the API boundary before persisting.
+</Callout>
+
+### Tier-to-page cross-reference
+
+Each value maps directly to a tier documentation page:
+
+- `subtle` → [Lightweight Tier](/docs/motion/tiers/lightweight)
+- `moderate` → [GSAP Tier](/docs/motion/tiers/gsap)
+- `expressive` → [Premium Tier](/docs/motion/tiers/premium)
 
 ## Image Mood
 
@@ -36,4 +77,5 @@ Image mood drives photography selection (when sourcing stock) and informs which 
 
 - [Motion Overview](/docs/motion) — the three-tier philosophy
 - [Tiers](/docs/motion/tiers) — what each tier ships
+- [Content System](/docs/content-system) — the vocabulary peer to tokens
 - [Atmospheres](/docs/theming/atmospheres) — image mood pairs with atmosphere choice

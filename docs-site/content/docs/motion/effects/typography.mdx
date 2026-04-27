@@ -1,0 +1,64 @@
+---
+title: Typography Effects
+description: Gradient fill, stroke, glow, animated highlight. Heading-level only — never apply to body copy or labels.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+CSS text decoration classes in `css/animations.css`. These apply to heading elements only — paired with `--font-family-heading` and heading-scale sizes. Never apply to body copy or labels.
+
+## Class reference
+
+```html
+<!-- Gradient fill — left-to-right in brand colors -->
+<h1 class="text-gradient">Gradient heading</h1>
+
+<!-- Brand-specific gradient (uses --background-brand-primary and secondary) -->
+<h2 class="text-gradient--brand">Brand gradient</h2>
+
+<!-- Outlined text — transparent fill, stroked border -->
+<h1 class="text-stroke">Outlined heading</h1>
+<h1 class="text-stroke--thick">Thick stroke heading</h1>
+
+<!-- Glow — best on dark backgrounds -->
+<h2 class="text-glow">Glowing heading</h2>
+
+<!-- Animated highlight — grows in on .is-visible -->
+<span class="text-highlight" data-reveal>Highlighted phrase</span>
+```
+
+| Class | Effect | Background needed |
+|---|---|---|
+| `.text-gradient` | Linear gradient fill via `-webkit-background-clip: text` | Any |
+| `.text-gradient--brand` | Same, uses `--background-brand-primary` + secondary | Any |
+| `.text-stroke` | Transparent fill + 1px outline | Light preferred |
+| `.text-stroke--thick` | Transparent fill + 2px outline | Light preferred |
+| `.text-glow` | Drop shadow in brand color | Dark required |
+| `.text-highlight` | Animated background-color grow on scroll | Any |
+
+## Notes
+
+**`.text-highlight`** uses `background-image: linear-gradient()` growing via `background-size` from `0% 100%` to `100% 100%`. It requires `.is-visible` — add `data-reveal` so the observer triggers it on scroll.
+
+**`.text-glow`** works best on dark section backgrounds (`section-dark`). On light backgrounds the shadow becomes muddy.
+
+<Callout type="info">
+  **Validate font family.** Test with the Font Audit theme in the Storybook toolbar to verify heading font family is correct — gradient-clip only works if `-webkit-background-clip: text` applies to a heading-family element.
+</Callout>
+
+## GSAP text splitting (GSAP tier)
+
+For letter-by-letter or word-by-word animated reveals, use GSAP SplitText instead of CSS classes. See [GSAP Tier](/docs/motion/tiers/gsap) for the splitting pattern.
+
+The CSS classes above and GSAP SplitText are composable — you can apply `.text-gradient` to a heading and also split it with SplitText. The gradient applies to each character span GSAP creates.
+
+<Callout type="info">
+  **Live demos are in Storybook.** Each text effect renders an interactive example. See **Motion → Effects → Typography** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
+</Callout>
+
+## Related
+
+- [Scroll Reveals](/docs/motion/effects/scroll-reveals)
+- [GSAP Tier](/docs/motion/tiers/gsap) — for letter-level SplitText
+- [Lightweight Tier](/docs/motion/tiers/lightweight)
+- [Primitives → Typography](/docs/primitives/typography) — heading scale + font-family rule
