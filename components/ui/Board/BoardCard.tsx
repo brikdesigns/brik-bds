@@ -1,5 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
+import { CompletionToggle } from '../CompletionToggle';
 
 /**
  * BoardCard — A task card within a BoardColumn.
@@ -7,6 +8,10 @@ import { bdsClass } from '../../utils';
  * Renders a task with title, subtitle, completion toggle, and a
  * tags slot. The left border color indicates category (department,
  * status, etc.) — set via `accentColor`.
+ *
+ * The completion toggle delegates to `<CompletionToggle>`, the BDS
+ * primitive for circular completion controls. Same visual is reused
+ * by `<ChecklistItem>` for row-style completion lists.
  *
  * @example
  * ```tsx
@@ -70,18 +75,11 @@ export function BoardCard({
           {subtitle && <p className="bds-board-card__subtitle">{subtitle}</p>}
         </div>
         {onCheckedChange && (
-          <button
-            type="button"
-            className={bdsClass(
-              'bds-board-card__check',
-              checked && 'bds-board-card__check--checked'
-            )}
-            onClick={(e) => { e.stopPropagation(); onCheckedChange(!checked); }}
-            aria-label={checked ? 'Mark incomplete' : 'Mark complete'}
-            aria-pressed={checked}
-          >
-            {checked && <span className="bds-board-card__check-icon" />}
-          </button>
+          <CompletionToggle
+            className="bds-board-card__check"
+            checked={checked}
+            onCheckedChange={onCheckedChange}
+          />
         )}
       </div>
 
