@@ -1,0 +1,93 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as Stories from './InteractiveListItem.stories';
+
+<Meta of={Stories} />
+
+# InteractiveListItem
+
+Clickable horizontal row composed of leading + (title + subtitle) + trailing slots. The whole row is the click target — single `<button>` for native a11y (focus ring, `Space` / `Enter` activation, `disabled`).
+
+Use when a list row drills into something — clicking a member opens their profile, clicking an activity item opens the related task, clicking a persona switches the dev session.
+
+**Distinct from `CardControl`.** `CardControl` is a settings card whose **trailing action** (Switch / Button / link) is the click target — the card itself is *not* interactive. `InteractiveListItem` is the inverse — the **whole row** is interactive, the trailing slot is decorative (a Tag, Badge, progress block, or caret indicator). If you need both — a row that drills in AND a switch in the trailing — you have a UX conflict; pick one click target.
+
+---
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+<Canvas of={Stories.Variants} />
+
+- **Title only** — minimal row, just leading + title
+- **Title + subtitle** — adds a single-line subtitle (string or simple ReactNode)
+- **Full row** — leading + title + subtitle + trailing
+- **Disabled** — muted styling, no interaction, no hover/active
+
+## Patterns
+
+<Canvas of={Stories.Patterns} />
+
+An activity feed inside a sheet. Each row drills into the related request. The subtitle slot here is a `ReactNode` carrying multi-line metadata: the first line is text (submitter · timestamp), the second line is a row of inline `<Badge>`s. The trailing slot shows a caret indicator.
+
+---
+
+## Props
+
+<ArgTypes of={Stories} />
+
+---
+
+## Usage
+
+```tsx
+import { InteractiveListItem } from '@brikdesigns/bds';
+
+<InteractiveListItem
+  leading={<UserAvatar name={member.name} size="md" />}
+  title={member.name}
+  subtitle={`${member.role} · ${member.department}`}
+  trailing={<Badge status="info">New hire</Badge>}
+  onClick={() => openProfile(member.id)}
+/>
+```
+
+### Multi-line subtitle with badges
+
+When the subtitle needs structured content (timestamps, status badges, multiple lines), pass a `ReactNode`:
+
+```tsx
+<InteractiveListItem
+  leading={<StatusIcon resolved={req.resolved} />}
+  title={req.title}
+  subtitle={
+    <>
+      <span>{req.submitter} · {timeAgo(req.created_at)}</span>
+      <span style={{ display: 'flex', gap: 'var(--gap-sm)' }}>
+        <StatusBadge status={req.status} size="xs" />
+        <PriorityBadge priority={req.urgency} size="xs" />
+      </span>
+    </>
+  }
+  trailing={<Icon icon="ph:caret-right" />}
+  onClick={() => openRequest(req.id)}
+/>
+```
+
+The component applies muted body-text styling to the subtitle wrapper but consumer elements (`<StatusBadge>`, `<PriorityBadge>`) preserve their own visual identity.
+
+## When to use
+
+- "Drill into" rows — clicking a member opens their profile sheet
+- Activity feeds — clicking an item opens the related task / request
+- Persona / mode switchers — clicking a persona swaps the dev session
+- Any row pattern with a leading visual + primary text + optional secondary + optional trailing badge/indicator
+
+## When not to use
+
+- Settings cards with a Switch / Button as the action target → use `CardControl` (or `Card preset="control"`)
+- Form selections / multi-select → use `Checkbox` or `MenuItem`
+- Completion-state toggle rows → use `ChecklistItem`
+- Two-cell key-value rows in a read-mode field list → use `ReadOnlyField` (in renew-pms)
