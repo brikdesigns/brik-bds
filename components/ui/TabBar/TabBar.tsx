@@ -17,7 +17,7 @@ export interface TabItem {
 }
 
 /** Visual variant matching Figma spec */
-export type TabBarVariant = 'text' | 'tab' | 'box';
+export type TabBarVariant = 'text' | 'text-underline' | 'tab' | 'box';
 
 /**
  * TabBar component props
@@ -47,6 +47,7 @@ const barBase: CSSProperties = {
 
 const barVariantStyles: Record<TabBarVariant, CSSProperties> = {
   text: { ...barBase, gap: 'var(--gap-xl)' },
+  'text-underline': { ...barBase, gap: 'var(--gap-xl)' },
   tab: { ...barBase, gap: 0, borderBottom: 'var(--border-width-xl) solid var(--border-secondary)' },
   box: { ...barBase, gap: 0 },
 };
@@ -80,6 +81,31 @@ function getTextStyles(active: boolean, onColor: boolean): CSSProperties {
   return {
     ...tabBase,
     color: active ? 'var(--text-brand-primary)' : 'var(--text-secondary)',
+  };
+}
+
+function getTextUnderlineStyles(active: boolean, onColor: boolean): CSSProperties {
+  /* `text-underline` = `text` color behavior + per-tab brand-color underline.
+     No container border (unlike `tab`) and no horizontal padding — gap-xl
+     between tabs comes from the bar container. Used by app-level page
+     headers that want the brand-active text emphasis AND an underline. */
+  const borderWidth = 'var(--border-width-md)';
+  if (onColor) {
+    const borderColor = active ? 'var(--border-on-color-dark)' : 'transparent';
+    return {
+      ...tabBase,
+      color: 'var(--text-on-color-dark)',
+      opacity: active ? 1 : 0.6,
+      borderBottom: `${borderWidth} solid ${borderColor}`,
+      paddingBottom: 'var(--padding-sm)',
+    };
+  }
+  const borderColor = active ? 'var(--border-brand-primary)' : 'transparent';
+  return {
+    ...tabBase,
+    color: active ? 'var(--text-brand-primary)' : 'var(--text-secondary)',
+    borderBottom: `${borderWidth} solid ${borderColor}`,
+    paddingBottom: 'var(--padding-sm)',
   };
 }
 
@@ -139,6 +165,7 @@ function getBoxStyles(active: boolean, onColor: boolean): CSSProperties {
 
 const styleBuilders: Record<TabBarVariant, (active: boolean, onColor: boolean) => CSSProperties> = {
   text: getTextStyles,
+  'text-underline': getTextUnderlineStyles,
   tab: getTabStyles,
   box: getBoxStyles,
 };
@@ -146,9 +173,10 @@ const styleBuilders: Record<TabBarVariant, (active: boolean, onColor: boolean) =
 /**
  * TabBar — BDS horizontal tab navigation
  *
- * Three visual variants matching Figma:
- * - **text** (default): plain text links with brand color for active
- * - **tab**: underline indicator with bottom border
+ * Four visual variants:
+ * - **text** (default): plain text links with brand color for active; no indicator
+ * - **text-underline**: text variant + per-tab brand-color underline below the active tab
+ * - **tab**: bottom-border bar with neutral active color and brand-color underline
  * - **box**: filled background for active, bordered for inactive
  *
  * Use `onColor` for placement on dark/brand backgrounds.

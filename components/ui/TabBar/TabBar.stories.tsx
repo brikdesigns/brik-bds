@@ -35,7 +35,7 @@ function InteractiveTabBar({
   labels = tabLabels,
   disabledIndices = [],
 }: {
-  variant?: 'text' | 'tab' | 'box';
+  variant?: 'text' | 'text-underline' | 'tab' | 'box';
   onColor?: boolean;
   labels?: string[];
   disabledIndices?: number[];
@@ -64,7 +64,7 @@ const meta: Meta<typeof TabBar> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    variant: { control: 'select', options: ['text', 'tab', 'box'] },
+    variant: { control: 'select', options: ['text', 'text-underline', 'tab', 'box'] },
     onColor: { control: 'boolean' },
   },
 };
@@ -109,10 +109,15 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => (
     <Stack>
-      {/* All three variants */}
+      {/* All four variants */}
       <div>
         <SectionLabel>Text</SectionLabel>
         <InteractiveTabBar variant="text" />
+      </div>
+
+      <div>
+        <SectionLabel>Text — underline</SectionLabel>
+        <InteractiveTabBar variant="text-underline" />
       </div>
 
       <div>
@@ -133,6 +138,15 @@ export const Variants: Story = {
       }}>
         <SectionLabel>Text — on color</SectionLabel>
         <InteractiveTabBar variant="text" onColor />
+      </div>
+
+      <div style={{
+        backgroundColor: 'var(--background-brand-primary)',
+        padding: 'var(--padding-xl)',
+        borderRadius: 'var(--border-radius-md)',
+      }}>
+        <SectionLabel>Text underline — on color</SectionLabel>
+        <InteractiveTabBar variant="text-underline" onColor />
       </div>
 
       <div style={{
