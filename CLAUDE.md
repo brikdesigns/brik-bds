@@ -123,6 +123,20 @@ These rules apply in every project that imports BDS tokens (portal, renew-pms, b
    git commit -m "Update brik-bds submodule"
    ```
 
+## Releasing to GitHub Packages
+
+Consumer repos pull `@brikdesigns/bds` from GitHub Packages. Publishing is triggered by **pushing a version tag** — the `Release` workflow at [`.github/workflows/release.yml`](.github/workflows/release.yml) handles validation + `npm publish`.
+
+```bash
+# After landing your changes on main and bumping `package.json`:
+git tag v0.46.0 && git push origin v0.46.0
+
+# Or in one step inside a release PR:
+npm version minor -m 'chore(release): %s' && git push && git push --tags
+```
+
+Full flow + re-run guidance: [`docs/RELEASE.md`](docs/RELEASE.md).
+
 ## Figma Variables Sync
 
 **One method: Dev plugin + WebSocket relay → sync script → Style Dictionary.**
