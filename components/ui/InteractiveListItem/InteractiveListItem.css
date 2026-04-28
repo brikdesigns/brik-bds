@@ -1,0 +1,103 @@
+@layer bds-components {
+  /* ─── InteractiveListItem ───────────────────────────────────────
+     Clickable horizontal row: leading + (title + subtitle) + trailing.
+     The whole row is a <button> — single click target, native focus,
+     native Space/Enter.
+
+     Distinct from CardControl (which is a settings card whose trailing
+     action is the click target, not the card). Use this when the row
+     itself drills into something.
+  ───────────────────────────────────────────────────────────────── */
+
+  .bds-interactive-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+    width: 100%;
+    padding: var(--padding-md) var(--padding-lg);
+    background: none;
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .bds-interactive-list-item:hover:not(:disabled) {
+    background-color: var(--surface-secondary);
+  }
+
+  .bds-interactive-list-item:active:not(:disabled) {
+    transform: scale(0.99);
+  }
+
+  .bds-interactive-list-item:focus-visible {
+    outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+    outline-offset: 2px;
+  }
+
+  .bds-interactive-list-item--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ─── Leading slot ─────────────────────────────────────────────
+     Fixed-size (whatever consumer renders), doesn't shrink. */
+
+  .bds-interactive-list-item__leading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ─── Text block (title + subtitle) ──────────────────────────── */
+
+  .bds-interactive-list-item__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tiny);
+    min-width: 0;
+    flex: 1;
+  }
+
+  .bds-interactive-list-item__title {
+    font-family: var(--font-family-label);
+    font-size: var(--label-md);
+    font-weight: var(--font-weight-semi-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+    /* Truncate single-line titles — but allow wrap if consumer needs it */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bds-interactive-list-item__subtitle {
+    /* ReactNode — consumer controls structure (string / multi-line / inline badges).
+       Default styling is muted body text; consumer's own elements (StatusBadge,
+       PriorityBadge, etc.) preserve their own styling within. */
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tiny);
+    font-family: var(--font-family-body);
+    font-size: var(--body-xs);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-secondary);
+  }
+
+  /* ─── Trailing slot ─────────────────────────────────────────────
+     Fixed-size, doesn't shrink. */
+
+  .bds-interactive-list-item__trailing {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    flex-shrink: 0;
+    color: var(--text-secondary);
+  }
+}
