@@ -97,9 +97,9 @@ export const Patterns: Story = {
       <div>
         <SectionLabel>Change password form</SectionLabel>
         <Stack gap="var(--gap-lg)">
-          <PasswordInput label="Current password" placeholder="Enter current password" fullWidth />
-          <PasswordInput label="New password" placeholder="Enter new password" helperText="Must be at least 8 characters" fullWidth />
-          <PasswordInput label="Confirm password" placeholder="Re-enter new password" fullWidth />
+          <PasswordInput label="Current password" name="current-password" autoComplete="current-password" placeholder="Enter current password" fullWidth />
+          <PasswordInput label="New password" name="new-password" autoComplete="new-password" placeholder="Enter new password" helperText="Must be at least 8 characters" fullWidth />
+          <PasswordInput label="Confirm password" name="confirm-password" autoComplete="new-password" placeholder="Re-enter new password" fullWidth />
         </Stack>
       </div>
     </Stack>

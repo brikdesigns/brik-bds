@@ -1,4 +1,4 @@
-import { forwardRef, type InputHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { forwardRef, useId, type InputHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
 import { bdsClass } from '../../utils';
 import './TextInput.css';
 
@@ -161,9 +161,18 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     },
     ref
   ) => {
-    const inputId = id || `input-${Math.random().toString(36).substring(2, 11)}`;
+    const generatedId = useId();
+    const inputId = id || `input-${generatedId}`;
     const hasError = Boolean(error);
     const sizeStyle = sizeStyles[size];
+
+    // Suppress 1Password / LastPass prompts on non-credential text fields.
+    // A field is treated as credential-adjacent when its `type` signals
+    // username/password intent OR the consumer set any `autoComplete` value
+    // (an explicit signal of intent — including `off`).
+    const { type, autoComplete } = props;
+    const isCredentialField =
+      type === 'email' || type === 'password' || autoComplete !== undefined;
 
     const inputStyles: CSSProperties = {
       ...inputBaseStyles,
@@ -203,8 +212,8 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           )}
 
           <input
-            data-1p-ignore=""
-            data-lpignore="true"
+            data-1p-ignore={isCredentialField ? undefined : ''}
+            data-lpignore={isCredentialField ? undefined : 'true'}
             ref={ref}
             id={inputId}
             className="bds-text-input-field"

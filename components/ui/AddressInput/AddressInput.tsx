@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  useId,
   type InputHTMLAttributes,
   type ReactNode,
   type CSSProperties,
@@ -293,8 +294,8 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
   ) => {
     const [isFocused, setIsFocused] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const inputId =
-      id || (label ? `address-${Math.random().toString(36).substring(2, 11)}` : undefined);
+    const generatedId = useId();
+    const inputId = id || (label ? `address-${generatedId}` : undefined);
 
     const showDropdown = isFocused && suggestions.length > 0;
 
