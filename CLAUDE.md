@@ -86,6 +86,7 @@ These rules apply in every project that imports BDS tokens (portal, renew-pms, b
 7. **Never hand-write dark mode overrides.** Dark mode is auto-generated from Figma's `color/dark` mode. Consumer projects import `figma-tokens-dark.css`, never write `[data-theme="dark"]` blocks.
 8. **Single-source components.** Never duplicate a form, view, or interactive component across routes. Build one shared component with context props. If it exists in BDS, use BDS — don't rebuild locally.
 9. **Check Storybook before building custom UI.** Query `list-all-documentation` and `get-documentation` via Storybook MCP first. If a BDS component covers the need, use it. Fix at consumer level before editing BDS CSS.
+10. **Brik internal service tokens stay in Brik internal apps.** `--background-service-*`, `--text-service-*`, `--services--yellow-light`, etc. categorize Brik's internal service lines (brand, marketing, information, product, service) and must NOT appear in client-product token files (renew-pms, freedom-client-portal, future products). Client products have their own domain-specific color systems (e.g., dental department colors); omit the `color.service` block from their `tokens.ts`. If you see service tokens in a client repo, flag and remove.
 
 ## Repository Architecture
 
