@@ -1,0 +1,102 @@
+name: Release
+
+# Publishes @brikdesigns/bds to GitHub Packages on tag push.
+#
+# Until 2026-04-28 the publish was a manual `npm publish` from a maintainer's
+# laptop. Two recent BDS releases (0.43.0, 0.45.0) were missed at first
+# because the maintainer assumed the merge had published — see PR #74 / #77
+# coordination notes in renew-pms. Tagging is the explicit gesture; this
+# workflow turns the tag into the publish.
+#
+# Trigger: push of a tag matching `v*.*.*`. The expected flow on a release PR is:
+#   1. Bump `version` in `package.json` as part of the change PR.
+#   2. After PR merges to main: `git tag v0.46.0 && git push origin v0.46.0`
+#      (or `npm version <patch|minor|major>` to bump+tag in one step before PR).
+#   3. This workflow validates that `package.json` matches the tag, runs the
+#      same `npm run validate` that pre-commit runs, and publishes.
+#
+# Re-runnable: a failed publish can be re-triggered via workflow_dispatch with
+# the same version string. The `concurrency` block does NOT cancel in-flight
+# runs — half-published packages are worse than a queued duplicate.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (must match package.json — e.g. 0.46.0)"
+        required: true
+        type: string
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js (with GitHub Packages registry)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@brikdesigns"
+          cache: "npm"
+
+      - name: Resolve target version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            REF="${GITHUB_REF#refs/tags/v}"
+          else
+            REF="${{ github.event.inputs.version }}"
+            REF="${REF#v}"
+          fi
+          PKG=$(node -p "require('./package.json').version")
+          echo "tag=$REF" >> "$GITHUB_OUTPUT"
+          echo "pkg=$PKG" >> "$GITHUB_OUTPUT"
+          echo "Tag/input version: $REF"
+          echo "package.json:      $PKG"
+          if [ "$PKG" != "$REF" ]; then
+            echo "::error::package.json version ($PKG) does not match tag/input ($REF). Bump package.json before tagging."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate (lint-tokens errors-only + jsdoc + blueprints + typecheck)
+        # Skip `build-storybook` from the full `validate` script — Chromatic
+        # has its own workflow and rerunning it here adds ~3 min per release
+        # for no gain. The `prepublishOnly` script (rm -rf dist + build:lib)
+        # runs as part of `npm publish` and is the publish-blocking build.
+        run: |
+          node scripts/lint-tokens.js --errors-only
+          npm run lint-jsdoc
+          npm run validate:blueprints
+          npm run typecheck
+
+      - name: Publish to GitHub Packages
+        run: npm publish --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "## Released @brikdesigns/bds@${{ steps.version.outputs.pkg }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Consumers (portal, renew-pms, brikdesigns) can now bump:" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "npm install @brikdesigns/bds@${{ steps.version.outputs.pkg }}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
