@@ -2,6 +2,8 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import './InteractiveListItem.css';
 
+export type InteractiveListItemSize = 'sm' | 'md';
+
 export interface InteractiveListItemProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'title'> {
   /**
@@ -22,6 +24,15 @@ export interface InteractiveListItemProps
    * block, or caret indicator. Fixed width; doesn't shrink.
    */
   trailing?: ReactNode;
+  /**
+   * Row size. Default `md` — full sheets and panels. Use `sm` for
+   * narrow contexts like DevBar slot panels, popovers, or any
+   * container narrower than ~360px where the default padding crowds
+   * the text column. Both variants step through the BDS semantic
+   * spacing scale, so they compose with the global Base/Spacious
+   * spacing modes.
+   */
+  size?: InteractiveListItemSize;
   /** Disable the row. Applies muted styling and blocks click. */
   disabled?: boolean;
 }
@@ -62,6 +73,7 @@ export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveList
       title,
       subtitle,
       trailing,
+      size = 'md',
       disabled = false,
       className,
       onClick,
@@ -75,6 +87,7 @@ export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveList
         type="button"
         className={bdsClass(
           'bds-interactive-list-item',
+          `bds-interactive-list-item--${size}`,
           disabled && 'bds-interactive-list-item--disabled',
           className,
         )}

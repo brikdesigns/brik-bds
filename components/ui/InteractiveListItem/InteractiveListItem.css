@@ -12,9 +12,7 @@
   .bds-interactive-list-item {
     display: flex;
     align-items: center;
-    gap: var(--gap-md);
     width: 100%;
-    padding: var(--padding-md) var(--padding-lg);
     background: none;
     border: none;
     border-radius: var(--border-radius-md);
@@ -25,6 +23,23 @@
     transition:
       background-color var(--duration-fast) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
+  }
+
+  /* ─── Size variants ────────────────────────────────────────────
+     Both step through the BDS semantic spacing scale so they
+     compose with the global Base/Spacious spacing modes.
+     - md (default): full sheets and panels.
+     - sm: narrow contexts (DevBar slot panels, popovers) where the
+       default padding crowds the text column. */
+
+  .bds-interactive-list-item--md {
+    gap: var(--gap-md);
+    padding: var(--padding-md) var(--padding-lg);
+  }
+
+  .bds-interactive-list-item--sm {
+    gap: var(--gap-sm);
+    padding: var(--padding-sm) var(--padding-md);
   }
 
   .bds-interactive-list-item:hover:not(:disabled) {
