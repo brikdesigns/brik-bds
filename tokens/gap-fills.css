@@ -209,6 +209,23 @@
   --background-service-service-secondary: var(--services--orange-dark);
   --text-service-service: var(--services--orange-dark);
 
+  /* ── Border-width semantic aliases (mode-catalog names) ──
+     The borderWidth mode catalog (websites/shared/MODE-ARCHITECTURE.md) names
+     picks "thin / standard / bold". Without aliases at these names, client
+     theme files invent --border-width-default and friends (see brik-bds#302
+     and brik-llm#52). Adding them as canonical removes that invention pressure.
+
+     Values mirror the standard mode's effective widths: thin=1px, standard=2px,
+     bold=3px. These are FIXED-VALUE aliases — when a client picks a different
+     borderWidth mode, the modulation should happen on --border-width-sm/md/lg,
+     not here. (borderWidth modes are documented but not yet implemented in BDS
+     CSS overrides — see MODE-ARCHITECTURE.md.)
+
+     Promote to Figma when borderWidth mode overrides are wired into theme CSS. */
+  --border-width-thin:     1px;
+  --border-width-standard: 2px;
+  --border-width-bold:     3px;
+
   /* ── Interaction state overlays (gap-fill — add to Figma when interaction tokens land) */
   --state-hover-overlay: rgba(0, 0, 0, 0.04); /* bds-lint-ignore — rgba overlay, no token equivalent */
   --state-pressed-overlay: rgba(0, 0, 0, 0.08); /* bds-lint-ignore — rgba overlay, no token equivalent */
