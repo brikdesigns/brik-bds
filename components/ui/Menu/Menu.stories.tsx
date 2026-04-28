@@ -134,6 +134,7 @@ export const Patterns: Story = {
     function MenuPatterns() {
       const [filterValue, setFilterValue] = useState<string | undefined>();
       const [actionOpen, setActionOpen] = useState(false);
+      const [addOpen, setAddOpen] = useState(false);
 
       return (
         <Stack>
@@ -163,6 +164,25 @@ export const Patterns: Story = {
                   { id: '4', label: 'Delete', disabled: true },
                 ]}
                 style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <SectionLabel>Add menu — items with description</SectionLabel>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <Button variant="primary" onClick={() => setAddOpen(!addOpen)}>
+                + Add Task
+              </Button>
+              <Menu
+                isOpen={addOpen}
+                onClose={() => setAddOpen(false)}
+                items={[
+                  { id: 'checklist', label: 'Checklist', description: 'Recurring to-do lists', onClick: () => setAddOpen(false) },
+                  { id: 'procedure', label: 'Procedure', description: 'Step-by-step workflows', onClick: () => setAddOpen(false) },
+                  { id: 'compliance', label: 'Compliance', description: 'Regulatory & safety tasks', onClick: () => setAddOpen(false) },
+                ]}
+                style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)', minWidth: 280 }}
               />
             </div>
           </div>
