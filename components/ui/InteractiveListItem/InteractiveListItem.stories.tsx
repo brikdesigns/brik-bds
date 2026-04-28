@@ -39,6 +39,7 @@ const meta: Meta<typeof InteractiveListItem> = {
   parameters: { layout: 'centered' },
   argTypes: {
     title: { control: 'text' },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
     disabled: { control: 'boolean' },
   },
 };
@@ -106,6 +107,57 @@ export const Variants: Story = {
         />
       </Stack>
     </div>
+  ),
+};
+
+/** @summary Size variants — `md` (default) and `sm` (narrow panels) */
+export const Sizes: Story = {
+  render: () => (
+    <Stack gap="var(--gap-lg)">
+      <div>
+        <SectionLabel>md (default) — full sheets and panels</SectionLabel>
+        <div style={{ width: 480 }}>
+          <InteractiveListItem
+            leading={<Avatar name="Emily Rivera" size="md" />}
+            title="Emily Rivera"
+            subtitle="Hygienist · 2 years"
+            trailing={<Badge status="info">New hire</Badge>}
+            onClick={() => {}}
+          />
+        </div>
+      </div>
+      <div>
+        <SectionLabel>sm — narrow panels (DevBar slot, popovers)</SectionLabel>
+        <div style={{ width: 280 }}>
+          <Stack gap="0">
+            <InteractiveListItem
+              size="sm"
+              leading={<Avatar name="Brik Admin" size="sm" />}
+              title="brik_admin"
+              subtitle="platform · admin"
+              trailing={<Badge status="info" size="xs">PLATFORM</Badge>}
+              onClick={() => {}}
+            />
+            <InteractiveListItem
+              size="sm"
+              leading={<Avatar name="Jordan Tran" size="sm" />}
+              title="manager · proficient"
+              subtitle="Practice manager"
+              trailing={<Badge size="xs">MANAGER</Badge>}
+              onClick={() => {}}
+            />
+            <InteractiveListItem
+              size="sm"
+              leading={<Avatar name="Rachel Foster" size="sm" />}
+              title="Rachel Foster"
+              subtitle="staff · proficient · frontdesk"
+              trailing={<Badge size="xs">STAFF</Badge>}
+              onClick={() => {}}
+            />
+          </Stack>
+        </div>
+      </div>
+    </Stack>
   ),
 };
 
