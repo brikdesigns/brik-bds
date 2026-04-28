@@ -47,7 +47,7 @@ export function ComponentAnatomy({ children, parts }: ComponentAnatomyProps) {
               className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
               style={{
                 background: 'var(--background-brand-primary, #111827)',
-                color: 'var(--text-on-brand, #ffffff)',
+                color: 'var(--text-on-color-dark, #ffffff)',
               }}
             >
               {part.number}

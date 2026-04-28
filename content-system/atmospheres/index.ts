@@ -101,14 +101,41 @@ export interface AtmosphereManifestEntry {
 // inverse-text-on-ink contract). Inline-extending these in a manifest
 // entry stays correct — the runtime sees a SafePairing[] either way.
 
-/** Pairings every theme emits regardless of atmosphere — the BDS baseline. */
-const BASELINE_BRAND_PAIRINGS: SafePairing[] = [
-  { fg: '--text-on-brand', bg: '--background-brand-primary',
-    context: 'Brand-filled buttons / pills (default state).' },
-  { fg: '--text-on-brand', bg: '--background-brand-primary-hover',
-    context: 'Brand-filled buttons / pills (hover state).' },
-  { fg: '--text-on-brand', bg: '--background-brand-primary-pressed',
-    context: 'Brand-filled buttons / pills (pressed state).' },
+// Brand-fill button pairings split by themeMode. The brand-fill background
+// is the saturated brand color in every theme, but the canonical text token
+// that contrasts against it depends on theme dominance:
+//
+//   - Light-themed atmospheres pair brand fill with `--text-on-color-dark`
+//     (the canonical "light text designed for dark colored fills"). The
+//     portal theme generator's light-dominant branch overrides this token to
+//     a brand-resolved light neutral.
+//   - Dark-themed atmospheres pair brand fill with `--text-on-color-light`
+//     (the canonical "dark text designed for light colored fills"). The
+//     portal theme generator's dark-dominant branch overrides this token to
+//     a brand-resolved dark neutral.
+//
+// `--text-on-brand` was retired in this release (brik-bds#299) — the
+// canonical taxonomy `--text-on-color-{dark,light}` already covers the
+// contract; the theme generator does the brand-luminance resolution.
+
+/** Brand-fill pairings for light-themed atmospheres. */
+const BASELINE_BRAND_PAIRINGS_LIGHT_THEME: SafePairing[] = [
+  { fg: '--text-on-color-dark', bg: '--background-brand-primary',
+    context: 'Brand-filled buttons / pills (default state) on a light page.' },
+  { fg: '--text-on-color-dark', bg: '--background-brand-primary-hover',
+    context: 'Brand-filled buttons / pills (hover state) on a light page.' },
+  { fg: '--text-on-color-dark', bg: '--background-brand-primary-pressed',
+    context: 'Brand-filled buttons / pills (pressed state) on a light page.' },
+];
+
+/** Brand-fill pairings for dark-themed atmospheres. */
+const BASELINE_BRAND_PAIRINGS_DARK_THEME: SafePairing[] = [
+  { fg: '--text-on-color-light', bg: '--background-brand-primary',
+    context: 'Brand-filled buttons / pills (default state) on a dark page.' },
+  { fg: '--text-on-color-light', bg: '--background-brand-primary-hover',
+    context: 'Brand-filled buttons / pills (hover state) on a dark page.' },
+  { fg: '--text-on-color-light', bg: '--background-brand-primary-pressed',
+    context: 'Brand-filled buttons / pills (pressed state) on a dark page.' },
 ];
 
 /** Pairings for light-dominant atmospheres (paper-on-X, X-on-paper). */
@@ -145,7 +172,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     blurb: 'Pure near-black + gold orbs + film grain. Quiet-luxury dark treatment.',
     naturalFit: ['luxury dental', 'med-aesthetic', 'editorial hospitality'],
     surfaceProfile: 'single-tone-dark',
-    safePairings: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS],
+    safePairings: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_DARK_THEME],
   },
   'cinematic-dramatic': {
     slug: 'cinematic-dramatic',
@@ -154,7 +181,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     blurb: 'Deep navy-black + aurora drift + conic spotlight. Theatrical dark.',
     naturalFit: ['legal', 'agency', 'finance', 'dark-mode SaaS'],
     surfaceProfile: 'single-tone-dark',
-    safePairings: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS],
+    safePairings: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_DARK_THEME],
   },
   'minimal-clinical': {
     slug: 'minimal-clinical',
@@ -166,7 +193,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     // strip — both surface modes need to render legibly inside the
     // same page. The theme generator emits both surface tokens.
     surfaceProfile: 'dual-mode',
-    safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS],
+    safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
   },
   'warm-soft': {
     slug: 'warm-soft',
@@ -175,7 +202,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     blurb: 'Warm ivory + quiet rose vignette + minimal grain. Anxiety-safe.',
     naturalFit: ['wellness', 'therapy', 'mental health', 'recovery'],
     surfaceProfile: 'single-tone-light',
-    safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS],
+    safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
   },
   'clean-bright': {
     slug: 'clean-bright',
@@ -184,7 +211,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     blurb: 'Pure white. No effects. Brand lives in type and imagery.',
     naturalFit: ['SaaS', 'tech', 'startups', 'utility marketing'],
     surfaceProfile: 'single-tone-light',
-    safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS],
+    safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
   },
   'organic-textured': {
     slug: 'organic-textured',
@@ -193,7 +220,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     blurb: 'Warm cream + sepia grain + earth-tone tint. Tactile paper feel.',
     naturalFit: ['MUA', 'organic beauty', 'artisan', 'natural products'],
     surfaceProfile: 'single-tone-light',
-    safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS],
+    safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
   },
   'none': {
     slug: 'none',
