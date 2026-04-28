@@ -23,9 +23,26 @@ With icons, text-only with disabled item, and active item highlight.
 
 ## Patterns
 
-Real-world usage: `FilterButton` trigger and `Button` trigger with action menu.
+Real-world usage: `FilterButton` trigger, `Button` trigger with action menu, and an "Add" menu where each item has a label + description (the 2-line `MenuItemData.description` variant).
 
 <Canvas of={Stories.Patterns} />
+
+### Items with description
+
+Pass `description?: string` on a `MenuItemData` to render a second-line description below the label. Used for "what does this option do?" affordance — common in "Add new ___" menus where each option is a different kind of thing (e.g. *Checklist — Recurring to-do lists*, *Procedure — Step-by-step workflows*).
+
+```tsx
+<Menu
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  items={[
+    { id: 'checklist', label: 'Checklist', description: 'Recurring to-do lists', onClick: ... },
+    { id: 'procedure', label: 'Procedure', description: 'Step-by-step workflows', onClick: ... },
+  ]}
+/>
+```
+
+When `description` is absent, the item renders as a single-line label (existing behavior, unchanged).
 
 ---
 

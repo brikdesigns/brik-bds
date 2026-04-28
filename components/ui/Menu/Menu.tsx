@@ -16,6 +16,11 @@ export interface MenuItemData {
   id: string;
   /** Display label */
   label: string;
+  /**
+   * Optional secondary description rendered below the label as a
+   * second line. When omitted, the item is single-line.
+   */
+  description?: string;
   /** Optional icon before the label */
   icon?: ReactNode;
   /** Disabled state */
@@ -52,6 +57,7 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
  * MenuItem - Single menu option (exported for direct use)
  */
 export function MenuItem({ item, isActive, className, style, ...props }: MenuItemProps) {
+  const hasDescription = !!item.description;
   return (
     <button
       type="button"
@@ -62,13 +68,19 @@ export function MenuItem({ item, isActive, className, style, ...props }: MenuIte
         'bds-menu__item',
         isActive && 'bds-menu__item--active',
         item.disabled && 'bds-menu__item--disabled',
+        hasDescription && 'bds-menu__item--with-description',
         className,
       )}
       style={style}
       {...props}
     >
       {item.icon && <span className="bds-menu__icon">{item.icon}</span>}
-      <span>{item.label}</span>
+      <span className="bds-menu__text">
+        <span className="bds-menu__label">{item.label}</span>
+        {hasDescription && (
+          <span className="bds-menu__description">{item.description}</span>
+        )}
+      </span>
     </button>
   );
 }

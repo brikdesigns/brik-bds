@@ -86,4 +86,38 @@
   color: var(--text-primary);
   flex-shrink: 0;
 }
+
+/* ─── Text block (label + optional description) ─────── */
+
+.bds-menu__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-tiny);
+  min-width: 0;
+  flex: 1;
+}
+
+.bds-menu__label {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: var(--font-line-height-tight);
+  color: inherit;
+}
+
+.bds-menu__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  text-transform: none;
+}
+
+/* When description is present, align icon to the top of the text
+   block so it sits with the label rather than centering between
+   label + description, and bump padding for breathing room. */
+.bds-menu__item--with-description {
+  align-items: flex-start;
+  padding: var(--padding-sm);
+}
 }
