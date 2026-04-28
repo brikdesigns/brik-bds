@@ -151,8 +151,8 @@ export const Patterns: Story = {
       <div style={{ width: 320 }}>
         <SectionLabel>Login form</SectionLabel>
         <Stack gap="var(--gap-lg)">
-          <TextInput label="Email" type="email" placeholder="you@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
-          <TextInput label="Password" type="password" placeholder="••••••••" iconBefore={<Icon icon="ph:lock" />} fullWidth />
+          <TextInput label="Email" type="email" name="email" autoComplete="username" placeholder="you@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
+          <TextInput label="Password" type="password" name="password" autoComplete="current-password" placeholder="••••••••" iconBefore={<Icon icon="ph:lock" />} fullWidth />
         </Stack>
       </div>
     </Row>
