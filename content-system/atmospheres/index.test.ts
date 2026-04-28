@@ -70,16 +70,38 @@ describe('ATMOSPHERE_MANIFEST', () => {
     }
   });
 
-  it('light-mode atmospheres include the brand-fill button pairings', () => {
+  it('light-mode atmospheres pair brand fill with --text-on-color-dark', () => {
     const lights = ATMOSPHERE_VALUES.filter(
       (a) => ATMOSPHERE_MANIFEST[a].themeMode === 'light',
     );
     for (const slug of lights) {
       const pairings = ATMOSPHERE_MANIFEST[slug].safePairings;
       const hasBrandHover = pairings.some(
-        (p) => p.fg === '--text-on-brand' && p.bg === '--background-brand-primary-hover',
+        (p) => p.fg === '--text-on-color-dark' && p.bg === '--background-brand-primary-hover',
       );
       expect(hasBrandHover).toBe(true);
+    }
+  });
+
+  it('dark-mode atmospheres pair brand fill with --text-on-color-light', () => {
+    const darks = ATMOSPHERE_VALUES.filter(
+      (a) => ATMOSPHERE_MANIFEST[a].themeMode === 'dark',
+    );
+    for (const slug of darks) {
+      const pairings = ATMOSPHERE_MANIFEST[slug].safePairings;
+      const hasBrandHover = pairings.some(
+        (p) => p.fg === '--text-on-color-light' && p.bg === '--background-brand-primary-hover',
+      );
+      expect(hasBrandHover).toBe(true);
+    }
+  });
+
+  it('does not reference the retired --text-on-brand alias', () => {
+    for (const atmosphere of ATMOSPHERE_VALUES) {
+      for (const pair of ATMOSPHERE_MANIFEST[atmosphere].safePairings) {
+        expect(pair.fg).not.toBe('--text-on-brand');
+        expect(pair.bg).not.toBe('--text-on-brand');
+      }
     }
   });
 
