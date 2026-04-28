@@ -1,4 +1,4 @@
-import { type TextareaHTMLAttributes, type CSSProperties } from 'react';
+import { useId, type TextareaHTMLAttributes, type CSSProperties } from 'react';
 import { bdsClass } from '../../utils';
 import './TextArea.css';
 
@@ -158,7 +158,8 @@ export function TextArea({
   style,
   ...props
 }: TextAreaProps) {
-  const inputId = id || (label ? `textarea-${Math.random().toString(36).substring(2, 11)}` : undefined);
+  const generatedId = useId();
+  const inputId = id || (label ? `textarea-${generatedId}` : undefined);
   const hasError = Boolean(error);
   const sizeStyle = sizeStyles[size];
 
