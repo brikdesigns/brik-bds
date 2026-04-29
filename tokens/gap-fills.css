@@ -68,6 +68,24 @@
   --color-system-green-surface: var(--color-system-green-light);
   --color-system-blue-surface:  var(--color-system-blue-light);
 
+  /* System color semantic aliases — canonical app-meaning names ──
+     Sit alongside the color-name primitives (--color-system-red/green/yellow/
+     blue). Apps consume the meaning (`error`, `success`) rather than the
+     paint (`red`, `green`) so brand themes can override per-context without
+     touching every callsite. Consumers may override the right-hand side
+     per-theme (e.g. portal sets --color-system-link to a brand-blue, dark
+     mode shifts it lighter). Backed by Style Dictionary primitives, NOT by
+     hex literals — keep the alias chain intact so theme overrides flow.
+
+     Promoted from per-app theme files (portal `theme-brik.css`,
+     `theme-brik-portal.css`, `public/themes/theme-renew.css`) where these
+     names existed as parallel taxonomy. Adding them here makes them
+     canonical so portal's --color-* audit gate (PR #TBD) lands clean. */
+  --color-system-error:   var(--color-system-red);
+  --color-system-success: var(--color-system-green);
+  --color-system-warning: var(--color-system-yellow);
+  --color-system-link:    var(--color-system-blue);
+
   /* ── Slider Component Variables ──
      CSS custom properties set dynamically by the Slider component via JS.
      Defined here so the linter knows they are intentional component vars. */
