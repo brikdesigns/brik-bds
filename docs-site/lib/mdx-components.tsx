@@ -21,6 +21,18 @@ import {
   BorderWidthPreview,
   ShadowScale,
 } from '@/components/mdx/foundation/radius-shadow';
+import { TierBadge } from '@/components/mdx/motion/tier-badge';
+import {
+  EffectGrid,
+  AnimationDemo,
+  ClipRevealDemo,
+  GrainDemo,
+  GlassDemo,
+  TextEffectDemo,
+  HoverDemo,
+  VideoDemo,
+  SectionThemeDemo,
+} from '@/components/mdx/motion/effect-demos';
 import * as BDS from '@brikdesigns/bds';
 
 /**
@@ -56,6 +68,16 @@ export function getMDXComponents(extra?: MDXComponents): MDXComponents {
     BorderRadiusPreview,
     BorderWidthPreview,
     ShadowScale,
+    TierBadge,
+    EffectGrid,
+    AnimationDemo,
+    ClipRevealDemo,
+    GrainDemo,
+    GlassDemo,
+    TextEffectDemo,
+    HoverDemo,
+    VideoDemo,
+    SectionThemeDemo,
     // The BDS namespace export includes hooks (useTheme) alongside components.
     // MDX's component-map type rejects that mix; cast since MDX only ever calls
     // the JSX entries (`<BDS.Button>`), never the hooks.
