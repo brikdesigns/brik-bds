@@ -12,8 +12,10 @@ Structured data lives in [`real-estate-commercial.ts`](?path=/docs/content-indus
 
 This pack covers **boutique commercial real-estate brokerages** serving three co-equal audience verticals:
 - **Healthcare professionals** (dental, veterinary, optometry) — primary revenue driver
-- **Commercial investors** (medical office buildings, Nashville hub) — co-equal revenue driver
+- **Commercial clients** (retail, food service, professional services, fitness, banks, car washes) — co-equal revenue driver
 - **Land buyers** (Middle Tennessee residential, agricultural, hunting) — secondary driver
+
+The `commercial` segment is the broader business-tenant audience — businesses looking for the right space, market, and lease terms to support how they operate and grow. It is **not** a capital-allocator / investor audience: MOB acquisition, 1031 exchanges, and cap-rate framing are explicitly excluded by this pack. Owner-occupant building purchases for any segment (e.g. a healthcare professional buying their practice building) are bundled into that segment's services rather than split into a separate investor pillar.
 
 Graduated from `small-business` because this vertical requires a 3-column audience-pathway mega-menu — the structural navigation pattern the small-business pack explicitly flags as a promotion trigger.
 
@@ -23,7 +25,7 @@ Graduated from `small-business` because this vertical requires a 3-column audien
 
 Boutique commercial real-estate brokerages differentiate on specialization and broker continuity — not scale. The principal broker is the advisor for every deal from introduction through closing, including build-out coordination and lease renewal. This is the structural moat against national firms that rotate junior associates onto smaller accounts.
 
-The three-segment model means one brokerage serves clients who might otherwise need three separate relationships: a healthcare real-estate specialist, a land broker, and a commercial investment advisor.
+The three-segment model means one brokerage serves clients who might otherwise need three separate relationships: a healthcare real-estate specialist, a land broker, and a commercial-tenant broker.
 
 ## 2. Default Affinities
 
@@ -55,11 +57,13 @@ Tone: local-knowledge-forward, practical, place-specific. Buyers want to know th
 
 Segments: residential homesites, agricultural/row-crop tracts, hunting and recreational (timber, creek bottom, wildlife corridors).
 
-### Commercial Investors
+### Commercial Clients
 
-Tone: capital-markets-literate, deal-flow-aware, returns-focused. These clients know the vocabulary (cap rate, NOI, NNN) — use it without explaining it.
+Tone: operationally fluent, business-owner-respectful, focused on the levers that affect the business — foot traffic, co-tenancy, build-out, lease structure (CAM, exclusivity, escalation, percentage rent). These clients are running businesses; the broker's job is to find a space and lease terms that protect their margins and support growth.
 
-Focus: medical office buildings (MOBs), Nashville-market commercial assets, 1031 exchange advisory, off-market deal sourcing.
+Focus: retail, restaurants, fitness studios, professional service offices (attorneys, accountants), banks, car washes, and similar tenant categories. Owner-occupant building purchases (often via SBA 504) and multi-site expansion strategy are also in scope.
+
+This is **not** an investor audience. The pack explicitly excludes capital-markets framing — MOB acquisition, 1031 exchanges, cap-rate-driven deal sourcing are out of scope. Where a commercial client buys their own building, framing is owner-occupant economics (SBA 504, build-out cost recovery, fixed occupancy cost), not investment returns.
 
 ## 4. Navigation IA — Audience-Pathway Mega-Menu
 
@@ -71,14 +75,14 @@ The `audienceAccents` and `audienceIcons` arrays on the `navigationIA` field pow
 
 - Column 0 (Healthcare): accent `var(--color-moss-dark)`, icon `ph:stethoscope`
 - Column 1 (Land): accent `var(--color-olive-light)`, icon `ph:tree`
-- Column 2 (Investors): accent `var(--color-gold-light)`, icon `ph:chart-line-up`
+- Column 2 (Commercial): accent `var(--color-gold-light)`, icon `ph:storefront`
 
 ## 5. Blueprint Stubs
 
 Three blueprint keys are declared for this pack and registered in `blueprints/blueprint-library.json` with `is_active: false`. Astro components are pending (tracked as TODO BDS-PACK-ADD-001):
 
 - `services_numbered_accordion` — numbered service list as accordion; used on home and audience pathway pages
-- `process_grid_4step_numbered` — 4-step numbered process grid; used on healthcare and investors pages
+- `process_grid_4step_numbered` — 4-step numbered process grid; used on healthcare and commercial pages
 - `nav_mega_audience_pathways` — 3-column audience mega-menu with per-column accent + icon
 
 ## 6. Graduation Rationale
@@ -86,6 +90,6 @@ Three blueprint keys are declared for this pack and registered in `blueprints/bl
 From the `small-business` pack: *"Verticals that demand a mega-menu should graduate to their own pack."* Vale Partners requires a 3-column audience-pathway mega-menu as a structural navigation requirement — this is the textbook graduation case the small-business pack describes.
 
 Additional graduation signals:
-- Distinct vocabulary, tone, and pain points per segment (healthcare / land / investors) that diverge meaningfully from small-business defaults
-- Regulatory obligations (TREC, Tennessee CON law, agricultural disclosures) specific to this vertical
-- Seasonal patterns driven by healthcare practice cycles, land-buyer seasons, and 1031 exchange deadlines — not a generic small-business calendar
+- Distinct vocabulary, tone, and pain points per segment (healthcare / land / commercial) that diverge meaningfully from small-business defaults
+- Regulatory obligations (TREC, Tennessee CON law, agricultural disclosures, truth-in-advertising for property value claims) specific to this vertical
+- Seasonal patterns driven by healthcare practice cycles, land-buyer seasons, and commercial lease-renewal windows — not a generic small-business calendar
