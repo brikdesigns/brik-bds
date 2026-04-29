@@ -6,8 +6,14 @@ import { BulletList } from '../BulletList';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
 
+/**
+ * DataSection — read-mode page section with title, optional subtitle, action
+ * slot, and a content body. Use to group `Field`/`FieldGrid` clusters under a
+ * heading on read-mode entity pages.
+ * @summary Page section for read-mode field groups
+ */
 const meta: Meta<typeof DataSection> = {
-  title: 'Displays/Data/data-section',
+  title: 'Components/Container/data-section',
   component: DataSection,
   parameters: { layout: 'padded' },
   argTypes: {
@@ -59,20 +65,30 @@ export const Playground: Story = {
   ),
 };
 
-/* ─── 2. Variants ────────────────────────────────────────────── */
+/* ─── Header shapes ──────────────────────────────────────────── */
 
-export const Variants: Story = {
+/** Title only — minimal header.
+ *  @summary Title-only header */
+export const TitleOnly: Story = {
   render: () => (
     <Frame>
-      <DataSection title="Title only" actions={<ViewEditToggle />}>
+      <DataSection title="Identity" actions={<ViewEditToggle />}>
         <FieldGrid columns={2}>
           <Field label="Business Name">Vale Partners</Field>
           <Field label="Industry">Professional Services</Field>
         </FieldGrid>
       </DataSection>
+    </Frame>
+  ),
+};
 
+/** Title + subtitle — secondary line for context.
+ *  @summary Title with subtitle */
+export const WithSubtitle: Story = {
+  render: () => (
+    <Frame>
       <DataSection
-        title="Title + subtitle"
+        title="Identity"
         subtitle="Public-facing name and core identifiers."
         actions={<ViewEditToggle />}
       >
@@ -81,15 +97,31 @@ export const Variants: Story = {
           <Field label="Industry">Professional Services</Field>
         </FieldGrid>
       </DataSection>
+    </Frame>
+  ),
+};
 
-      <DataSection title="No actions">
+/** No actions — header without trailing action slot.
+ *  @summary Header without actions */
+export const NoActions: Story = {
+  render: () => (
+    <Frame>
+      <DataSection title="Identity">
         <FieldGrid columns={2}>
           <Field label="Business Name">Vale Partners</Field>
           <Field label="Industry">Professional Services</Field>
         </FieldGrid>
       </DataSection>
+    </Frame>
+  ),
+};
 
-      <DataSection title="Single button in actions" actions={<Button size="sm" variant="secondary">Edit</Button>}>
+/** Single-button action — common shape when only "Edit" is needed.
+ *  @summary Single-button action slot */
+export const SingleButtonAction: Story = {
+  render: () => (
+    <Frame>
+      <DataSection title="Identity" actions={<Button size="sm" variant="secondary">Edit</Button>}>
         <FieldGrid columns={2}>
           <Field label="Business Name">Vale Partners</Field>
           <Field label="Industry">Professional Services</Field>

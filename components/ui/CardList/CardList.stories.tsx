@@ -5,8 +5,13 @@ import { CardTestimonial } from '../CardTestimonial';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
 
+/**
+ * CardList — vertical or horizontal layout container for `Card` children with
+ * locked spacing. Replaces ad-hoc `display: flex` wrappers around card arrays.
+ * @summary Vertical/horizontal Card layout container
+ */
 const meta: Meta<typeof CardList> = {
-  title: 'Displays/Card/card-list',
+  title: 'Components/Card/card-list',
   component: CardList,
   parameters: { layout: 'padded' },
   argTypes: {

@@ -3,51 +3,38 @@ import * as Stories from './AlertBanner.stories';
 
 <Meta of={Stories} />
 
-# Alert banner
+# Alert banner — deprecated
 
-Contextual banner for important messages requiring user attention. Uses a secondary surface background with an icon-only `Badge`, title, description, and optional action.
+> **This component is deprecated.** Use `<Banner tone="warning|error|information">` instead. Same shape, same Badge, same surface. The consolidated `Banner` also supports `onDismiss` for a close button. See [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md) §3.
+
+This page exists for migration reference only. New code should not import `AlertBanner`.
 
 ---
 
-## Playground
+## Migration
 
-Use the Controls panel to explore all props interactively.
+```tsx
+// Before
+<AlertBanner variant="warning" title="Heads up" description="..." />
+
+// After
+<Banner tone="warning" title="Heads up" description="..." />
+```
+
+The `variant` prop maps 1:1 to `tone`:
+
+- `variant="information"` → `tone="information"`
+- `variant="warning"` → `tone="warning"`
+- `variant="error"` → `tone="error"`
+
+---
+
+## Playground (reference)
 
 <Canvas of={Stories.Playground} />
-
-## Variants
-
-All alert variants with badge icons, plus title-only usage.
-
-<Canvas of={Stories.Variants} />
-
-- **`information`** — `circle-info` icon, neutral gray
-- **`warning`** — `triangle-exclamation` icon, yellow
-- **`error`** — `triangle-exclamation` icon, red
-
-## Patterns
-
-Real-world usage: maintenance notices, error recovery, and informational alerts.
-
-<Canvas of={Stories.Patterns} />
 
 ---
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { AlertBanner, Button } from '@brik/bds';
-
-<AlertBanner
-  variant="information"
-  title="Update available"
-  description="A new version is ready to install"
-  action={<Button variant="primary" size="sm">Update now</Button>}
-/>
-```

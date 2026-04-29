@@ -15,15 +15,16 @@ The page analog to `<SheetSection>`. Where `SheetSection` uses an uppercase labe
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Header shapes
 
-Title only, title + subtitle, no actions, and a single-button actions slot.
+<Canvas of={Stories.TitleOnly} />
+<Canvas of={Stories.WithSubtitle} />
+<Canvas of={Stories.NoActions} />
+<Canvas of={Stories.SingleButtonAction} />
 
-<Canvas of={Stories.Variants} />
+## Read-mode page
 
-## Patterns
-
-The canonical Read-Mode Page composition — several `DataSection`s stacked on a page, each with a `[View]`/`[Edit]` `ButtonGroup` in the actions slot. The third section shows `Field` consuming a paragraph and a `BulletList` as its value — no separate `ParagraphField` or `ListField` component is needed; `Field` accepts any `ReactNode`.
+The canonical composition — several `DataSection`s stacked on a page, each with a `[View]`/`[Edit]` `ButtonGroup` in the actions slot. The third section shows `Field` consuming a paragraph and a `BulletList` as its value — no separate `ParagraphField` or `ListField` component is needed.
 
 <Canvas of={Stories.ReadModePage} />
 

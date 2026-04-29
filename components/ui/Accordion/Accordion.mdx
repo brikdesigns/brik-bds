@@ -15,22 +15,20 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Behavior modes
 
-Behavior modes, pre-opened items, and rich content.
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.SingleOpen} />
+<Canvas of={Stories.MultiOpen} />
 
 - **Single open** — Only one item open at a time (default)
 - **Multiple open** — `allowMultiple` allows simultaneous open items
 - **Default open** — `defaultOpenItems` sets initially expanded items
-- **Rich content** — Content supports any React node
 
-## Patterns
+## Rich content
 
-Real-world usage: FAQ sections and settings panels.
+`content` accepts any React node — ordered lists, multi-paragraph copy, embedded components.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.RichContent} />
 
 ---
 

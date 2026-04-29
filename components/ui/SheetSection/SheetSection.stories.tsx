@@ -1,10 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SheetSection } from './SheetSection';
 
+/**
+ * SheetSection — named section wrapper for use inside a Sheet body. Pairs an
+ * uppercase heading with content and locks vertical rhythm between sections.
+ * @summary Named section wrapper for sheet bodies
+ */
 const meta: Meta<typeof SheetSection> = {
-  title: 'Displays/Sheet/sheet-section',
+  title: 'Components/Container/sheet-section',
   component: SheetSection,
   parameters: { layout: 'padded' },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '480px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     heading: { control: 'text' },
     description: { control: 'text' },
@@ -15,8 +27,6 @@ const meta: Meta<typeof SheetSection> = {
 export default meta;
 type Story = StoryObj<typeof SheetSection>;
 
-/* ─── Story helpers ──────────────────────────────────────────── */
-
 const bodyText: React.CSSProperties = {
   fontFamily: 'var(--font-family-body)',
   fontSize: 'var(--body-md)', // bds-lint-ignore
@@ -24,87 +34,57 @@ const bodyText: React.CSSProperties = {
   margin: 0,
 };
 
-const Frame = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ width: '480px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
-    {children}
-  </div>
-);
-
-/* ─── 1. Playground ──────────────────────────────────────────── */
-
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
+  args: { heading: 'Color Primitives', spacing: 'lg' },
+  render: (args) => (
+    <SheetSection {...args}>
+      <p style={bodyText}>Section content renders here.</p>
+    </SheetSection>
+  ),
+};
+
+/** Heading + content — most common shape.
+ *  @summary Heading with content */
+export const HeadingWithContent: Story = {
+  args: { heading: 'Positioning' },
+  render: (args) => (
+    <SheetSection {...args}>
+      <p style={bodyText}>A heading with content, no description.</p>
+    </SheetSection>
+  ),
+};
+
+/** Heading + description + content — adds a lead paragraph under the heading.
+ *  @summary Heading with description */
+export const HeadingWithDescription: Story = {
   args: {
-    heading: 'Color Primitives',
-    description: undefined,
-    spacing: 'lg',
+    heading: 'Brand Identity',
+    description: 'Birdwell & Mutlak Dentistry presents a bold, editorial identity anchored in a warm gold palette paired with neutral grays.',
   },
   render: (args) => (
-    <Frame>
-      <SheetSection {...args}>
-        <p style={bodyText}>Section content renders here.</p>
-      </SheetSection>
-    </Frame>
+    <SheetSection {...args}>
+      <p style={bodyText}>A heading with both description and content.</p>
+    </SheetSection>
   ),
 };
 
-/* ─── 2. Variants ────────────────────────────────────────────── */
-
-export const Variants: Story = {
-  render: () => (
-    <Frame>
-      <SheetSection heading="Positioning">
-        <p style={bodyText}>A heading with content, no description.</p>
-      </SheetSection>
-
-      <SheetSection
-        heading="Brand Identity"
-        description="Birdwell & Mutlak Dentistry presents a bold, editorial identity anchored in a warm gold palette paired with neutral grays."
-      >
-        <p style={bodyText}>A heading with both description and content.</p>
-      </SheetSection>
-
-      <SheetSection description="An intro paragraph with no heading — use for sheet-level lead copy.">
-        <p style={bodyText}>Sections without a heading skip the uppercase label entirely.</p>
-      </SheetSection>
-
-      <SheetSection heading="Standalone heading" />
-    </Frame>
+/** Description-only — used for sheet-level lead copy. No uppercase heading is rendered.
+ *  @summary Lead paragraph (no heading) */
+export const DescriptionOnly: Story = {
+  args: {
+    description: 'An intro paragraph with no heading — use for sheet-level lead copy.',
+  },
+  render: (args) => (
+    <SheetSection {...args}>
+      <p style={bodyText}>Sections without a heading skip the uppercase label entirely.</p>
+    </SheetSection>
   ),
 };
 
-/* ─── 3. Patterns ────────────────────────────────────────────── */
-
-export const Patterns: Story = {
-  render: () => (
-    <Frame>
-      <SheetSection description="This sheet documents the foundational brand identity, typography, and mode preferences.">
-        {null}
-      </SheetSection>
-
-      <SheetSection heading="Color Primitives">
-        <div style={{ display: 'flex', gap: 'var(--gap-lg)' }}>
-          {['#c49a2f', '#b0b0b0', '#ffffff', '#000000'].map((hex) => (
-            <div
-              key={hex}
-              style={{
-                width: 40,
-                height: 40,
-                background: hex,
-                borderRadius: 'var(--border-radius-circle)',
-                border: '1px solid var(--border-secondary)',
-              }}
-            />
-          ))}
-        </div>
-      </SheetSection>
-
-      <SheetSection heading="Typography">
-        <p style={bodyText}>Typography table renders here.</p>
-      </SheetSection>
-
-      <SheetSection heading="Mode Recommendations">
-        <p style={bodyText}>Mode recommendations render here.</p>
-      </SheetSection>
-    </Frame>
-  ),
+/** Heading-only — placeholder for sections that haven't been populated yet.
+ *  @summary Heading without content */
+export const HeadingOnly: Story = {
+  args: { heading: 'Standalone heading' },
 };

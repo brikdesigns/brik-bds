@@ -1,11 +1,11 @@
 import { Meta, Canvas } from '@storybook/addon-docs/blocks';
 import * as SheetSectionStories from '../SheetSection/SheetSection.stories';
 
-<Meta title="Displays/Sheet/Read-Mode Sheet" />
+<Meta title="Components/Container/Read-Mode Sheet" />
 
 # Read-Mode Sheet
 
-The narrow-view sibling of [Displays / Form / Read-Mode Page](?path=/docs/displays-form-read-mode-page--docs). Where a page surfaces an entire record at once, a sheet surfaces **one facet** of it — a focused slice with its own view + edit lifecycle.
+The narrow-view sibling of [Components / Form / Read-Mode Page](?path=/docs/components-form-read-mode-page--docs). Where a page surfaces an entire record at once, a sheet surfaces **one facet** of it — a focused slice with its own view + edit lifecycle.
 
 This pattern composes four primitives:
 
@@ -20,15 +20,15 @@ This pattern composes four primitives:
 
 ## Canonical composition
 
-<Canvas of={SheetSectionStories.Patterns} />
+<Canvas of={SheetSectionStories.HeadingWithDescription} />
+<Canvas of={SheetSectionStories.HeadingWithContent} />
 
-The three `SheetSection`s in the example above demonstrate:
+The two `SheetSection` shapes shown above demonstrate the canonical sheet body composition:
 
-- **Lead paragraph** (description only, no heading) — establishes context at the top of the sheet.
-- **Named section with swatches** — an uppercase label heading + flexible body content.
-- **Named sections with typography / mode content** — multiple peers separated by the built-in inter-section rhythm.
+- **Heading + description** — establishes context with a labeled lead.
+- **Heading + content** — an uppercase label heading + flexible body content (Field, FieldGrid, Tag, etc.).
 
-None of these stacks use a raw `<h3>`, a custom "SectionHeading" wrapper, or inline margin-top. That discipline is load-bearing — the moment a sheet reaches for its own spacing or heading style, every other sheet drifts.
+Multiple peers stack with built-in inter-section rhythm — no raw `<h3>`, no "SectionHeading" wrapper, no inline margin-top. That discipline is load-bearing — the moment a sheet reaches for its own spacing or heading style, every other sheet drifts.
 
 ---
 
@@ -179,10 +179,9 @@ Both compose the same atomic primitives (`FieldGrid`, `Field`, `BulletList`). Th
 
 ## Related
 
-- [`Sheet`](?path=/docs/displays-overlay-sheet--docs) — the overlay frame.
-- [`SheetSection`](?path=/docs/displays-sheet-sheet-section--docs) — the canonical section primitive.
-- [`Field`](?path=/docs/displays-field-field--docs) — label + value pair used inside and outside sheets.
-- [`FieldGrid`](?path=/docs/displays-field-field-grid--docs) — grid wrapper.
-- [`SheetTypography`](?path=/docs/displays-sheet-sheet-typography--docs) — standalone typography primitives (escape hatches).
-- [Displays / Form / Read-Mode Page](?path=/docs/displays-form-read-mode-page--docs) — the page-wide sibling of this pattern.
+- [`Sheet`](?path=/docs/components-container-sheet--docs) — the overlay frame.
+- [`SheetSection`](?path=/docs/components-container-sheet-section--docs) — the canonical section primitive.
+- [`Field`](?path=/docs/components-form-field--docs) — label + value pair used inside and outside sheets.
+- [`FieldGrid`](?path=/docs/components-form-field-grid--docs) — grid wrapper.
+- [`SheetTypography`](?path=/docs/displays-sheet-sheet-typography--docs) — standalone typography primitives (escape hatches; SheetTypography stays in `Displays/` until the ADR-004 follow-up lands).
 - [Foundations / Vocabulary](?path=/docs/foundations-vocabulary--docs) — the words that describe the parts.

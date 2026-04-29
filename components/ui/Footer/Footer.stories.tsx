@@ -1,27 +1,22 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Footer } from './Footer';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/**
+ * Footer — site footer with optional logo, tagline, link columns, copyright,
+ * and social-link slot. Two surface variants (`default` / `brand`).
+ * @summary Site footer with link columns
+ */
+const meta: Meta<typeof Footer> = {
+  title: 'Components/Navigation/footer',
+  component: Footer,
+  parameters: { layout: 'fullscreen' },
+  argTypes: {
+    variant: { control: 'select', options: ['default', 'brand'] },
+  },
+} satisfies Meta<typeof Footer>;
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Shared Data ─────────────────────────────────────────────── */
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 const sampleColumns = [
   {
@@ -70,122 +65,61 @@ const socialLinks = (
   </>
 );
 
-/* ─── Meta ────────────────────────────────────────────────────── */
-
-const meta: Meta<typeof Footer> = {
-  title: 'Navigation/Primary/footer',
-  component: Footer,
-  parameters: { layout: 'fullscreen' },
-  argTypes: {
-    variant: { control: 'select', options: ['default', 'brand'] },
-  },
-} satisfies Meta<typeof Footer>;
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
   args: {
     logo: <LogoPlaceholder />,
     tagline: 'Building better digital experiences for small businesses.',
     columns: sampleColumns,
-    copyright: '\u00A9 2026 Brik Designs. All rights reserved.',
+    copyright: '© 2026 Brik Designs. All rights reserved.',
     variant: 'default',
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Default, brand, with social, minimal
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Variant axis ───────────────────────────────────────────── */
 
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Default</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          tagline="Building better digital experiences for small businesses."
-          columns={sampleColumns}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Brand</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          tagline="Building better digital experiences for small businesses."
-          columns={sampleColumns}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-          variant="brand"
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With social links</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          columns={sampleColumns}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-          socialLinks={socialLinks}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Minimal (copyright only)</SectionLabel>
-        <Footer copyright={'\u00A9 2026 Brik Designs. All rights reserved.'} />
-      </div>
-    </Stack>
-  ),
+/** Default surface — neutral background.
+ *  @summary Default footer */
+export const Default: Story = {
+  args: {
+    logo: <LogoPlaceholder />,
+    tagline: 'Building better digital experiences for small businesses.',
+    columns: sampleColumns,
+    copyright: '© 2026 Brik Designs. All rights reserved.',
+    variant: 'default',
+  },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Full marketing page footer
-   ═══════════════════════════════════════════════════════════════ */
+/** Brand surface — brand-primary background with inverse text.
+ *  @summary Brand-surface footer */
+export const Brand: Story = {
+  args: {
+    logo: <LogoPlaceholder />,
+    tagline: 'Building better digital experiences for small businesses.',
+    columns: sampleColumns,
+    copyright: '© 2026 Brik Designs. All rights reserved.',
+    variant: 'brand',
+  },
+};
 
-export const Patterns: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Marketing site footer</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          tagline="Modern websites and digital systems for growing businesses."
-          columns={[
-            {
-              heading: 'Services',
-              links: [
-                { label: 'Web Design', href: '#' },
-                { label: 'Development', href: '#' },
-                { label: 'SEO', href: '#' },
-                { label: 'Consulting', href: '#' },
-              ],
-            },
-            {
-              heading: 'Resources',
-              links: [
-                { label: 'Blog', href: '#' },
-                { label: 'Case Studies', href: '#' },
-                { label: 'Documentation', href: '#' },
-              ],
-            },
-            {
-              heading: 'Legal',
-              links: [
-                { label: 'Privacy Policy', href: '#' },
-                { label: 'Terms of Service', href: '#' },
-              ],
-            },
-          ]}
-          copyright={'\u00A9 2026 Brik Designs LLC. All rights reserved.'}
-          socialLinks={socialLinks}
-        />
-      </div>
-    </Stack>
-  ),
+/* ─── Content shapes ─────────────────────────────────────────── */
+
+/** With social links — adds the social slot beside the copyright row.
+ *  @summary Footer with social links */
+export const WithSocialLinks: Story = {
+  args: {
+    logo: <LogoPlaceholder />,
+    columns: sampleColumns,
+    copyright: '© 2026 Brik Designs. All rights reserved.',
+    socialLinks,
+  },
+};
+
+/** Minimal — copyright only. Use for app footers (vs. marketing footers).
+ *  @summary Minimal footer (copyright only) */
+export const Minimal: Story = {
+  args: {
+    copyright: '© 2026 Brik Designs. All rights reserved.',
+  },
 };

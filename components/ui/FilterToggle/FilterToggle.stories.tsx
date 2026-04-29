@@ -1,34 +1,13 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FilterToggle } from './FilterToggle';
-import { FilterButton } from '../FilterButton/FilterButton';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'flex-start' }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────── */
-
+/**
+ * FilterToggle — single-state on/off pill for filter bars. Pairs with
+ * `FilterButton` (single-select dropdown). Use when the filter is a binary
+ * predicate, not a list selection.
+ * @summary On/off pill toggle for filter bars
+ */
 const meta = {
   title: 'Components/Action/filter-toggle',
   component: FilterToggle,
@@ -45,19 +24,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-lg)', alignItems: 'flex-start' }}>{children}</div>
+);
 
+/** Args-driven sandbox — wraps in `useState` so the toggle is interactive.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
-  args: {
-    label: 'Show Archived',
-    active: false,
-    onToggle: () => {},
-    size: 'md',
-  },
+  args: { label: 'Show archived', active: false, onToggle: () => {}, size: 'md' },
   render: (args) => {
-    function Toggle() {
+    const Toggle = () => {
       const [active, setActive] = useState(args.active);
       return (
         <FilterToggle
@@ -66,82 +42,32 @@ export const Playground: Story = {
           onToggle={() => setActive((prev) => !prev)}
         />
       );
-    }
+    };
     return <Toggle />;
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, states
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Variants: Story = {
-  args: { label: 'Toggle', active: false, onToggle: () => {} },
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Sizes — inactive</SectionLabel>
-        <Row>
-          <FilterToggle label="Small" active={false} onToggle={() => {}} size="sm" />
-          <FilterToggle label="Medium" active={false} onToggle={() => {}} size="md" />
-          <FilterToggle label="Large" active={false} onToggle={() => {}} size="lg" />
-        </Row>
-      </div>
-
-      <div>
-        <SectionLabel>Sizes — active</SectionLabel>
-        <Row>
-          <FilterToggle label="Small" active onToggle={() => {}} size="sm" />
-          <FilterToggle label="Medium" active onToggle={() => {}} size="md" />
-          <FilterToggle label="Large" active onToggle={() => {}} size="lg" />
-        </Row>
-      </div>
-    </Stack>
-  ),
+/** Inactive state — default off appearance.
+ *  @summary Inactive toggle */
+export const Inactive: Story = {
+  args: { label: 'Show archived', active: false, onToggle: () => {} },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Mixed filter bar with FilterButton + FilterToggle
-   ═══════════════════════════════════════════════════════════════ */
+/** Active state — brand-color highlight when on.
+ *  @summary Active toggle */
+export const Active: Story = {
+  args: { label: 'Show archived', active: true, onToggle: () => {} },
+};
 
-const statusOptions = [
-  { id: 'active', label: 'Active' },
-  { id: 'inactive', label: 'Inactive' },
-  { id: 'pending', label: 'Pending' },
-];
-
-const roleOptions = [
-  { id: 'admin', label: 'Admin' },
-  { id: 'editor', label: 'Editor' },
-  { id: 'viewer', label: 'Viewer' },
-];
-
-export const Patterns: Story = {
-  args: { label: 'Toggle', active: false, onToggle: () => {} },
-  render: () => {
-    function FilterBar() {
-      const [status, setStatus] = useState<string | undefined>();
-      const [role, setRole] = useState<string | undefined>();
-      const [primaryOnly, setPrimaryOnly] = useState(false);
-
-      return (
-        <Stack>
-          <div>
-            <SectionLabel>Filter bar — FilterButton + FilterToggle</SectionLabel>
-            <Row>
-              <FilterButton label="Status" options={statusOptions} value={status} onChange={setStatus} size="sm" />
-              <FilterToggle
-                label="Show Primary Contacts"
-                active={primaryOnly}
-                onToggle={() => setPrimaryOnly((prev) => !prev)}
-                size="sm"
-              />
-              <FilterButton label="Role" options={roleOptions} value={role} onChange={setRole} size="sm" />
-            </Row>
-          </div>
-        </Stack>
-      );
-    }
-    return <FilterBar />;
-  },
+/** All three sizes side-by-side. ADR-006 axis-gallery exception.
+ *  @summary All sizes rendered together */
+export const Sizes: Story = {
+  args: { label: 'Sizes', active: false, onToggle: () => {} },
+  render: () => (
+    <Row>
+      <FilterToggle label="Small" active={false} onToggle={() => {}} size="sm" />
+      <FilterToggle label="Medium" active={false} onToggle={() => {}} size="md" />
+      <FilterToggle label="Large" active={false} onToggle={() => {}} size="lg" />
+    </Row>
+  ),
 };

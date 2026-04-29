@@ -1,29 +1,12 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressBar } from './ProgressBar';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────── */
-
+/**
+ * ProgressBar — linear progress indicator from 0-100. Rendered with
+ * `role="progressbar"` for assistive tech.
+ * @summary Linear progress indicator (0-100)
+ */
 const meta: Meta<typeof ProgressBar> = {
   title: 'Components/Feedback/progress-bar',
   component: ProgressBar,
@@ -38,10 +21,8 @@ const meta: Meta<typeof ProgressBar> = {
 export default meta;
 type Story = StoryObj<typeof ProgressBar>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox. Use the value range slider to scrub progress.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
   args: {
     value: 35,
@@ -49,92 +30,33 @@ export const Playground: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Empty, partial, complete
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Empty (0%)</SectionLabel>
-        <ProgressBar value={0} label="Not started" />
-      </div>
-      <div>
-        <SectionLabel>Partial (35%)</SectionLabel>
-        <ProgressBar value={35} label="In progress" />
-      </div>
-      <div>
-        <SectionLabel>Half (50%)</SectionLabel>
-        <ProgressBar value={50} label="Halfway" />
-      </div>
-      <div>
-        <SectionLabel>Complete (100%)</SectionLabel>
-        <ProgressBar value={100} label="Complete" />
-      </div>
-    </Stack>
-  ),
+/** Empty state (0%). Confirms the bar renders with no fill.
+ *  @summary Empty progress bar */
+export const Empty: Story = {
+  args: { value: 0, label: 'Not started' },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Animated loading + step progress
-   ═══════════════════════════════════════════════════════════════ */
+/** Complete state (100%). Confirms the bar fills to its track.
+ *  @summary Completed progress bar */
+export const Complete: Story = {
+  args: { value: 100, label: 'Complete' },
+};
 
-export const Patterns: Story = {
+/** Animated progress — uses `useEffect` to drive the value, so `render` is required.
+ *  Demonstrates the bar handling continuous updates without re-mount jitter.
+ *  @summary Animated 0-100 loop */
+export const Animated: Story = {
   render: () => {
-    function ProgressPatterns() {
+    const Animator = () => {
       const [progress, setProgress] = useState(0);
-
       useEffect(() => {
         const timer = setInterval(() => {
           setProgress((prev) => (prev >= 100 ? 0 : prev + 1));
         }, 50);
         return () => clearInterval(timer);
       }, []);
-
-      const steps = [
-        { label: 'Account', complete: true },
-        { label: 'Profile', complete: true },
-        { label: 'Preferences', complete: false },
-        { label: 'Review', complete: false },
-        { label: 'Confirm', complete: false },
-      ];
-      const completedCount = steps.filter((s) => s.complete).length;
-      const stepProgress = (completedCount / steps.length) * 100;
-
-      return (
-        <Stack>
-          <div>
-            <SectionLabel>Animated loading</SectionLabel>
-            <ProgressBar value={progress} label="Loading" />
-            <p style={{
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'var(--body-sm)',
-              color: 'var(--text-secondary)',
-              marginTop: 'var(--gap-md)',
-            }}>
-              {progress}%
-            </p>
-          </div>
-
-          <div>
-            <SectionLabel>Multi-step form</SectionLabel>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'var(--body-sm)',
-              color: 'var(--text-secondary)',
-              marginBottom: 'var(--gap-md)',
-            }}>
-              <span>Step {completedCount} of {steps.length}</span>
-              <span>{Math.round(stepProgress)}%</span>
-            </div>
-            <ProgressBar value={stepProgress} label={`Step ${completedCount} of ${steps.length}`} />
-          </div>
-        </Stack>
-      );
-    }
-    return <ProgressPatterns />;
+      return <ProgressBar value={progress} label="Loading" />;
+    };
+    return <Animator />;
   },
 };

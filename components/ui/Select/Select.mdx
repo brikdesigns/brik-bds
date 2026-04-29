@@ -15,11 +15,18 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Sizes
 
-Sizes, icons, states, option groups, and width modes.
+<Canvas of={Stories.Small} />
+<Canvas of={Stories.Medium} />
+<Canvas of={Stories.Large} />
 
-<Canvas of={Stories.Variants} />
+## States
+
+<Canvas of={Stories.WithLabelAndIcon} />
+<Canvas of={Stories.WithDefaultValue} />
+<Canvas of={Stories.WithError} />
+<Canvas of={Stories.Disabled} />
 
 - **Default** — Light border (`--border-input`)
 - **Hover** — Darker border (`--border-primary`)
@@ -27,11 +34,9 @@ Sizes, icons, states, option groups, and width modes.
 - **Error** — Red border + ring (`--color-system-red`)
 - **Disabled** — 50% opacity
 
-## Patterns
+## Option groups
 
-Real-world usage: form layouts and constrained containers.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.OptionGroups} />
 
 ---
 

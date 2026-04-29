@@ -30,22 +30,32 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Appearances
 
-Sizes, appearances, icon positions, and states in one view.
+Shared axis with Badge and Chip — see [Vocabulary › Axes](/?path=/docs/foundations-vocabulary--overview).
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Solid} />
+<Canvas of={Stories.Subtle} />
 
-**Appearance** (shared axis with Badge and Chip — see [Vocabulary › Axes](/?path=/docs/foundations-vocabulary--overview)):
+- **`solid`** (default) — Neutral filled background.
+- **`subtle`** — Transparent background with a hairline border. Lower weight on colored surfaces.
 
-- **`solid`** (default) — Neutral filled background. Matches existing Tag styling.
-- **`subtle`** — Transparent background with a hairline border. Lower visual weight when Tags sit on a colored surface.
+## Sizes
 
-## Patterns
+<Canvas of={Stories.Sizes} />
 
-Real-world compositions for categorization and filtering.
+## Content shapes
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithLeadingIcon} />
+<Canvas of={Stories.WithTrailingIcon} />
+<Canvas of={Stories.Removable} />
+<Canvas of={Stories.Disabled} />
+
+## Aligned with Badge
+
+Tag and Badge share heights at every size — this story enforces that contract.
+
+<Canvas of={Stories.AlignedWithBadge} />
 
 ---
 

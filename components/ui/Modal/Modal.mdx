@@ -15,17 +15,22 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Sizes
 
-Size variants, scrolling content, and no close button.
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Small} />
+<Canvas of={Stories.Medium} />
+<Canvas of={Stories.Large} />
 
 - **`sm`** — Compact, simple messages
 - **`md`** — Default, standard dialogs
 - **`lg`** — Extended, complex content
 - **`xl`** — Extra large, data-heavy views
 - **`full`** — Full screen
+
+## Behavior shapes
+
+<Canvas of={Stories.ScrollingContent} />
+<Canvas of={Stories.NoCloseButton} />
 
 ## Confirm preset
 
@@ -41,6 +46,7 @@ The preset:
 Pass a custom `footer` to override the auto-rendered actions while keeping the rest of the preset.
 
 <Canvas of={Stories.ConfirmPreset} />
+<Canvas of={Stories.ConfirmPresetDestructive} />
 
 ```tsx
 <Modal
@@ -57,11 +63,9 @@ Pass a custom `footer` to override the auto-rendered actions while keeping the r
 
 The standalone `Dialog` component is `@deprecated` and slated for deletion in a future major version. Migrate to `Modal preset="confirm"` — same prop names, same behavior. See [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md).
 
-## Patterns
+## Composition
 
-Confirm delete and form in modal.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.FormInModal} />
 
 ---
 

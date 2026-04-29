@@ -1,30 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { TimePicker } from './TimePicker';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'flex-start' }}>{children}</div>
-);
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -227,68 +204,3 @@ export const Disabled: Story = {
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   9. VARIANTS — All sizes and states at a glance
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Variants: Story = {
-  render: () => {
-    const [sm, setSm] = useState('09:00');
-    const [md, setMd] = useState('14:30');
-    const [lg, setLg] = useState('17:00');
-    const [errVal, setErrVal] = useState('09:00');
-
-    return (
-      <div style={{ width: 480 }}>
-        <Stack>
-          {/* Sizes */}
-          <div>
-            <SectionLabel>Sizes</SectionLabel>
-            <Stack gap="var(--gap-lg)">
-              <TimePicker size="sm" label="Small (sm)" value={sm} onChange={setSm} fullWidth />
-              <TimePicker size="md" label="Medium (md) — default" value={md} onChange={setMd} fullWidth />
-              <TimePicker size="lg" label="Large (lg)" value={lg} onChange={setLg} fullWidth />
-            </Stack>
-          </div>
-
-          {/* States */}
-          <div>
-            <SectionLabel>States</SectionLabel>
-            <Stack gap="var(--gap-lg)">
-              <TimePicker label="Default" value="09:00" onChange={() => {}} fullWidth />
-              <TimePicker label="Helper text" value="09:00" helperText="Pick the best time" onChange={() => {}} fullWidth />
-              <TimePicker label="Error" error="Time is required" value={errVal} onChange={setErrVal} fullWidth />
-              <TimePicker label="Disabled" value="08:00" disabled fullWidth />
-            </Stack>
-          </div>
-
-          {/* Format */}
-          <div>
-            <SectionLabel>Format</SectionLabel>
-            <Row gap="var(--gap-lg)">
-              <div style={{ flex: 1 }}>
-                <TimePicker label="12-hour" value="14:30" onChange={() => {}} fullWidth />
-              </div>
-              <div style={{ flex: 1 }}>
-                <TimePicker label="24-hour" value="14:30" onChange={() => {}} use24Hour fullWidth />
-              </div>
-            </Row>
-          </div>
-
-          {/* Form context — Start/End pair */}
-          <div>
-            <SectionLabel>Form context — Start / End pair</SectionLabel>
-            <Row gap="var(--gap-lg)">
-              <div style={{ flex: 1 }}>
-                <TimePicker size="sm" label="Start Time" value="09:00" onChange={() => {}} fullWidth />
-              </div>
-              <div style={{ flex: 1 }}>
-                <TimePicker size="sm" label="End Time" value="10:00" onChange={() => {}} fullWidth />
-              </div>
-            </Row>
-          </div>
-        </Stack>
-      </div>
-    );
-  },
-};

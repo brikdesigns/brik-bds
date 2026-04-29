@@ -261,11 +261,11 @@ export const DifferentIndustry: Story = {
 };
 
 /**
- * Size variants — tiny, medium, and large controls. Verifies that every
- * tier of the size scale renders coherently. Same catalog + same picks
- * across all three so the visual delta is pure typography/spacing.
+ * All three sizes side-by-side. ADR-006 axis-gallery exception. Same
+ * catalog + same picks so the visual delta is pure typography/spacing.
+ * @summary All sizes rendered together
  */
-export const Variants: Story = {
+export const Sizes: Story = {
   render: () => (
     <Stack>
       <div>
@@ -399,49 +399,3 @@ export const FreeTextCommitsAsCustom: Story = {
   },
 };
 
-/**
- * Patterns — how the picker reads inside a portal-style intel sheet.
- * Demonstrates the consumer pattern: wrap in a sheet section with a
- * field label outside the component, let the picker own its own dropdown.
- */
-export const Patterns: Story = {
-  render: () => (
-    <div style={{ width: 520 }}>
-      <Stack>
-        <div>
-          <SectionLabel>Services & Billing</SectionLabel>
-          <CatalogPicker
-            label="Services Offered"
-            helperText="Picks from the industry catalog are tagged automatically. Custom additions are preserved with a derived slug."
-            catalog={DENTAL_SERVICES_CATALOG}
-            value={[
-              {
-                slug: 'dental-implants',
-                displayName: 'Dental Implants',
-                description: 'Permanent tooth replacement with crown or bridge attachment.',
-                source: 'catalog',
-              },
-              {
-                slug: 'invisalign',
-                displayName: 'Invisalign / Clear Aligners',
-                description: 'Diamond-tier certified provider (top 1%).',
-                source: 'catalog',
-              },
-              {
-                slug: 'airflow-polish',
-                displayName: 'AirFlow Polish',
-                description: 'Premium plaque removal using pressurized micro-particles.',
-                source: 'custom',
-              },
-            ]}
-            onChange={fn()}
-            addLabel="Add Service"
-            searchPlaceholder="Search or add a service…"
-            descriptionPlaceholder="What makes this service unique here?"
-            emptyDescriptionLabel="No description set"
-          />
-        </div>
-      </Stack>
-    </div>
-  ),
-};

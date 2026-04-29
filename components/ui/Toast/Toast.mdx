@@ -17,9 +17,13 @@ Use the Controls panel to explore all props interactively.
 
 ## Variants
 
-All status variants, title-only, and non-dismissible configurations.
+The five status variants share the same surface — only the leading Badge changes.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
+<Canvas of={Stories.Success} />
+<Canvas of={Stories.Error} />
+<Canvas of={Stories.Warning} />
+<Canvas of={Stories.Info} />
 
 - **`default`** — No badge, no icon
 - **`success`** — Positive badge, `circle-check` icon
@@ -27,11 +31,18 @@ All status variants, title-only, and non-dismissible configurations.
 - **`warning`** — Warning badge, `triangle-exclamation` icon
 - **`info`** — Info badge, `circle-info` icon
 
-## Patterns
+## Content shapes
 
-Real-world usage: interactive toggle, error context, and informational messages.
+Optional content modifications that compose with any variant.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.TitleOnly} />
+<Canvas of={Stories.NonDismissible} />
+
+## Interactive
+
+Show/hide pattern using `useState` — confirms the toast handles mount/unmount cleanly.
+
+<Canvas of={Stories.Interactive} />
 
 ---
 

@@ -3,10 +3,22 @@ import { Field } from './Field';
 import { Tag } from '../Tag';
 import { EmptyState } from '../EmptyState';
 
+/**
+ * Field — labeled value primitive for read-mode sheets and form layouts. Supports
+ * stacked or inline layout and a customizable empty-state slot.
+ * @summary Labeled value primitive
+ */
 const meta: Meta<typeof Field> = {
   title: 'Components/Form/field',
   component: Field,
   parameters: { layout: 'padded' },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '360px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     label: { control: 'text' },
     layout: { control: 'select', options: ['stacked', 'inline'] },
@@ -17,143 +29,119 @@ const meta: Meta<typeof Field> = {
 export default meta;
 type Story = StoryObj<typeof Field>;
 
-/* ─── Story helpers ──────────────────────────────────────────── */
-
-const Frame = ({ width = '360px', children }: { width?: string; children: React.ReactNode }) => (
-  <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
-    {children}
-  </div>
-);
-
 const Stack = ({ children }: { children: React.ReactNode }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>{children}</div>
 );
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
-
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
+  args: { label: 'Status', children: 'Active', layout: 'stacked' },
+};
+
+/* ─── Layout axis ────────────────────────────────────────────── */
+
+/** Stacked layout (default) — label above value. Most common shape.
+ *  @summary Stacked layout */
+export const Stacked: Story = {
+  args: { label: 'Status', children: 'Active', layout: 'stacked' },
+};
+
+/** Inline layout — label and value on the same row. Use for compact stat tiles
+ *  or read-mode rows where space is constrained.
+ *  @summary Inline layout */
+export const Inline: Story = {
+  args: { label: 'Status', children: 'Active', layout: 'inline' },
+};
+
+/* ─── Empty states ───────────────────────────────────────────── */
+
+/** Default empty state — Field renders the standard empty marker when there's no value.
+ *  @summary Default empty state */
+export const Empty: Story = {
+  args: { label: 'Notes' },
+};
+
+/** Custom empty string — `empty` prop overrides the default empty marker.
+ *  @summary Custom empty string */
+export const CustomEmpty: Story = {
+  args: { label: 'Custom empty', empty: 'No owner assigned' },
+};
+
+/** Section-level empty override — `empty` accepts any ReactNode. Use to embed
+ *  an EmptyState component when an entire section is empty.
+ *  @summary EmptyState as the empty slot */
+export const EmptyWithComponent: Story = {
   args: {
-    label: 'Status',
-    children: 'Active',
-    layout: 'stacked',
-  },
-  render: (args) => (
-    <Frame>
-      <Field {...args} />
-    </Frame>
-  ),
-};
-
-/* ─── 2. Variants ────────────────────────────────────────────── */
-
-export const Variants: Story = {
-  render: () => (
-    <Frame>
-      <Stack>
-        <Field label="Status">Active</Field>
-        <Field label="Owner">Nick Stanerson</Field>
-        <Field label="Industry">Design & Engineering</Field>
-        <Field label="Last updated">2 days ago</Field>
-      </Stack>
-    </Frame>
-  ),
-};
-
-/* ─── 3. Inline layout ──────────────────────────────────────── */
-
-export const InlineLayout: Story = {
-  render: () => (
-    <Frame>
-      <Stack>
-        <Field layout="inline" label="Status">Active</Field>
-        <Field layout="inline" label="Scraped">8</Field>
-        <Field layout="inline" label="Failed">12</Field>
-        <Field layout="inline" label="Last updated">2 days ago</Field>
-      </Stack>
-    </Frame>
-  ),
-};
-
-/* ─── 4. Empty states ────────────────────────────────────────── */
-
-export const EmptyStates: Story = {
-  render: () => (
-    <Frame>
-      <Stack>
-        <Field label="Status">Active</Field>
-        <Field label="Notes" />
-        <Field label="Tags">{null}</Field>
-        <Field label="Custom empty" empty="No owner assigned" />
-      </Stack>
-    </Frame>
-  ),
-};
-
-/* ─── 5. Section-level empty override ────────────────────────── */
-
-export const SectionLevelEmpty: Story = {
-  render: () => (
-    <Frame width="480px">
-      <Field
-        label="Contacts"
-        empty={
-          <EmptyState
-            title="No contacts yet"
-            description="Add a contact to associate people with this company."
-          />
-        }
+    label: 'Contacts',
+    empty: (
+      <EmptyState
+        title="No contacts yet"
+        description="Add a contact to associate people with this company."
       />
-    </Frame>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '480px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/* ─── Value-type recipes ─────────────────────────────────────── */
+
+/** Tag-list value — Field's children slot accepts any ReactNode. Common pattern
+ *  for service/category fields.
+ *  @summary Tag list as the field value */
+export const ValueAsTagList: Story = {
+  render: () => (
+    <Field label="Services">
+      <div style={{ display: 'flex', gap: 'var(--gap-xs)', flexWrap: 'wrap' }}>
+        <Tag size="sm">Cosmetic</Tag>
+        <Tag size="sm">General</Tag>
+        <Tag size="sm">Implants</Tag>
+      </div>
+    </Field>
   ),
 };
 
-/* ─── 6. Value types — text, tags, URL, list ────────────────── */
-
-export const ValueTypes: Story = {
+/** Linked URL value — anchor as the value, with brand color and external indicator.
+ *  @summary Anchor URL as the field value */
+export const ValueAsLink: Story = {
   render: () => (
-    <Frame>
-      <Stack>
-        <Field label="Name">Birdwell & Mutlak Dentistry</Field>
-
-        <Field label="Services">
-          <div style={{ display: 'flex', gap: 'var(--gap-xs)', flexWrap: 'wrap' }}>
-            <Tag size="sm">Cosmetic</Tag>
-            <Tag size="sm">General</Tag>
-            <Tag size="sm">Implants</Tag>
-          </div>
-        </Field>
-
-        <Field label="Website">
-          <a href="https://birdwelldentist.com" target="_blank" rel="noreferrer"
-             style={{ color: 'var(--text-brand-primary)', textDecoration: 'none' }}>
-            birdwelldentist.com ↗
-          </a>
-        </Field>
-
-        <Field label="Anti-messages">
-          <ul style={{ margin: 0, paddingLeft: 'var(--padding-lg)' }}>
-            <li>No price-first positioning</li>
-            <li>No corporate-clinic language</li>
-            <li>Avoid dental-industry jargon</li>
-          </ul>
-        </Field>
-      </Stack>
-    </Frame>
+    <Field label="Website">
+      <a
+        href="https://birdwelldentist.com"
+        target="_blank"
+        rel="noreferrer"
+        style={{ color: 'var(--text-brand-primary)', textDecoration: 'none' }}
+      >
+        birdwelldentist.com ↗
+      </a>
+    </Field>
   ),
 };
 
-/* ─── 7. Patterns — multi-field row ─────────────────────────── */
-
-export const Patterns: Story = {
+/** Multi-field stacked layout — multiple Fields composed in a Stack. The
+ *  canonical read-mode-sheet shape.
+ *  @summary Multiple fields stacked */
+export const MultiFieldStack: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ width: '480px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+        <Story />
+      </div>
+    ),
+  ],
   render: () => (
-    <Frame width="480px">
-      <Stack>
-        <Field label="Entity name">Birdwell & Mutlak, LLC</Field>
-        <Field label="Owner">Nick Stanerson</Field>
-        <Field label="Practice location">Thompson Station, TN</Field>
-        <Field label="Insurance accepted" />
-        <Field label="Parent organization" empty="Independent" />
-      </Stack>
-    </Frame>
+    <Stack>
+      <Field label="Entity name">Birdwell & Mutlak, LLC</Field>
+      <Field label="Owner">Nick Stanerson</Field>
+      <Field label="Practice location">Thompson Station, TN</Field>
+      <Field label="Insurance accepted" />
+      <Field label="Parent organization" empty="Independent" />
+    </Stack>
   ),
 };

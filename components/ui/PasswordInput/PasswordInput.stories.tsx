@@ -1,30 +1,14 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PasswordInput } from './PasswordInput';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────── */
-
+/**
+ * PasswordInput — masked text input with built-in show/hide toggle. Use for
+ * login, signup, and account-settings password fields. For other text inputs
+ * with a leading icon, use `TextInput` directly.
+ * @summary Masked text input with show/hide toggle
+ */
 const meta: Meta<typeof PasswordInput> = {
-  title: 'Components/Input/password-input',
+  title: 'Components/Form/password-input',
   component: PasswordInput,
   parameters: { layout: 'centered' },
   decorators: [(Story) => <div style={{ width: 320 }}><Story /></div>],
@@ -42,62 +26,53 @@ const meta: Meta<typeof PasswordInput> = {
 export default meta;
 type Story = StoryObj<typeof PasswordInput>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
+  args: { label: 'Password', placeholder: 'Enter password', fullWidth: true },
+};
+
+/* ─── Sizes ──────────────────────────────────────────────────── */
+
+/** Small (sm).
+ *  @summary Small size */
+export const Small: Story = {
+  args: { size: 'sm', label: 'Small', placeholder: 'Enter password', fullWidth: true },
+};
+
+/** Medium (md) — default size.
+ *  @summary Medium size (default) */
+export const Medium: Story = {
+  args: { size: 'md', label: 'Medium', placeholder: 'Enter password', fullWidth: true },
+};
+
+/** Large (lg).
+ *  @summary Large size */
+export const Large: Story = {
+  args: { size: 'lg', label: 'Large', placeholder: 'Enter password', fullWidth: true },
+};
+
+/* ─── States ─────────────────────────────────────────────────── */
+
+/** With helper text — typically used for password strength rules.
+ *  @summary With helper text */
+export const WithHelperText: Story = {
   args: {
-    label: 'Password',
+    label: 'New password',
     placeholder: 'Enter password',
+    helperText: 'Must be at least 8 characters',
+    fullWidth: true,
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, states
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Variants: Story = {
-  decorators: [(Story) => <div style={{ width: 400 }}><Story /></div>],
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Sizes</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <PasswordInput size="sm" label="Small" placeholder="Enter password" fullWidth />
-          <PasswordInput size="md" label="Medium" placeholder="Enter password" fullWidth />
-          <PasswordInput size="lg" label="Large" placeholder="Enter password" fullWidth />
-        </Stack>
-      </div>
-
-      <div>
-        <SectionLabel>States</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <PasswordInput label="With helper text" placeholder="Enter password" helperText="Must be at least 8 characters" fullWidth />
-          <PasswordInput label="With error" placeholder="Enter password" error="Password is required" fullWidth />
-          <PasswordInput label="Disabled" placeholder="Cannot edit" disabled fullWidth />
-        </Stack>
-      </div>
-    </Stack>
-  ),
+/** Error state.
+ *  @summary With error */
+export const WithError: Story = {
+  args: { label: 'Password', placeholder: 'Enter password', error: 'Password is required', fullWidth: true },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Login form
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Patterns: Story = {
-  decorators: [(Story) => <div style={{ width: 400 }}><Story /></div>],
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Change password form</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <PasswordInput label="Current password" placeholder="Enter current password" fullWidth />
-          <PasswordInput label="New password" placeholder="Enter new password" helperText="Must be at least 8 characters" fullWidth />
-          <PasswordInput label="Confirm password" placeholder="Re-enter new password" fullWidth />
-        </Stack>
-      </div>
-    </Stack>
-  ),
+/** Disabled.
+ *  @summary Disabled */
+export const Disabled: Story = {
+  args: { label: 'Disabled', placeholder: 'Cannot edit', disabled: true, fullWidth: true },
 };

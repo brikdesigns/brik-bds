@@ -12,7 +12,7 @@ const CalendarPlaceholder = () => (
 );
 
 const meta: Meta<typeof CalendarPlaceholder> = {
-  title: 'Displays/Calendar/calendar',
+  title: 'Components/Container/calendar',
   component: CalendarPlaceholder,
   tags: ['wip'],
 };

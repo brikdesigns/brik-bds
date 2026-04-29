@@ -3,55 +3,49 @@ import * as Stories from './Dialog.stories';
 
 <Meta of={Stories} />
 
-# Dialog
+# Dialog — deprecated
 
-Focused confirmation overlay for user decisions. Simpler than `Modal` — intended for confirm/cancel flows.
+> **This component is deprecated.** Use `<Modal preset="confirm">` instead. Same behavior, same API (`title`, `description`, `confirmLabel`, `cancelLabel`, `onConfirm`), with `confirmVariant="destructive"` covering this component's `variant="destructive"`.
+
+This page exists for migration reference only. New code should not import `Dialog`.
 
 ---
 
-## Playground
+## Migration
 
-Use the Controls panel to explore all props interactively.
+```tsx
+// Before
+<Dialog
+  isOpen={open}
+  onClose={close}
+  title="Delete item?"
+  description="This cannot be undone."
+  variant="destructive"
+  confirmLabel="Delete"
+  onConfirm={handleDelete}
+/>
+
+// After
+<Modal
+  preset="confirm"
+  isOpen={open}
+  onClose={close}
+  title="Delete item?"
+  description="This cannot be undone."
+  confirmVariant="destructive"
+  confirmLabel="Delete"
+  onConfirm={handleDelete}
+/>
+```
+
+---
+
+## Playground (reference)
 
 <Canvas of={Stories.Playground} />
-
-## Variants
-
-Default, destructive, and custom content modes.
-
-<Canvas of={Stories.Variants} />
-
-- **`default`** — Standard confirmation with primary action
-- **`destructive`** — Red action button for irreversible operations
-
-## Patterns
-
-Save-before-leaving and delete confirmation flows.
-
-<Canvas of={Stories.Patterns} />
 
 ---
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { Dialog } from '@brik/bds';
-import { useState } from 'react';
-
-const [isOpen, setIsOpen] = useState(false);
-
-<Dialog
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  title="Save changes?"
-  description="You have unsaved changes that will be lost."
-  confirmLabel="Save"
-  onConfirm={handleSave}
-/>
-```

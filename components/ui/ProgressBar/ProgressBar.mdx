@@ -15,17 +15,18 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## States
 
-Empty, partial, half, and complete states.
+The two endpoints of the progress range. Intermediate values render proportionally — use the Playground to scrub.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Empty} />
+<Canvas of={Stories.Complete} />
 
-## Patterns
+## Animated
 
-Real-world usage: animated loading indicator and multi-step form progress.
+Continuous updates from a `useEffect` driver — confirms the bar handles smooth value changes.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Animated} />
 
 ---
 

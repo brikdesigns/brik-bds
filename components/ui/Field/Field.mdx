@@ -15,49 +15,47 @@ This is the most important primitive in the sheet body set — it replaces four 
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Layouts
 
-Stacked layout — label above value — is the default. Use for sheet body rows where the value needs full width.
+<Canvas of={Stories.Stacked} />
+<Canvas of={Stories.Inline} />
 
-<Canvas of={Stories.Variants} />
-
-## Inline layout
-
-Label on the left, value right-aligned. Use for compact stat rows ("Status · Active", "Scraped · 8").
-
-<Canvas of={Stories.InlineLayout} />
+- **Stacked** (default) — label above value, full-width value.
+- **Inline** — label left, value right. Use for compact stat rows ("Status · Active", "Scraped · 8").
 
 ## Empty states
 
 When `children` is null, undefined, or empty string, `Field` renders an inline muted "Not set" string by default.
 
-<Canvas of={Stories.EmptyStates} />
+<Canvas of={Stories.Empty} />
+<Canvas of={Stories.CustomEmpty} />
 
-- Pass a string via `empty="..."` to customize the message per-field (e.g. "No owner assigned", "Independent").
+- Pass a string via `empty="..."` to customize the message per-field.
 - The default "Not set" covers the generic case.
 
 ## Section-level empty
 
-When an entire section has no data (vs. one missing field), pass an `<EmptyState>` into `empty`. Use the full bordered treatment sparingly — one per section at most.
+When an entire section has no data, pass an `<EmptyState>` into `empty`. Use the full bordered treatment sparingly — one per section at most.
 
-<Canvas of={Stories.SectionLevelEmpty} />
+<Canvas of={Stories.EmptyWithComponent} />
 
-## Value types
+## Value-type recipes
 
-`children` accepts any ReactNode — text, `<TagGroup>` / `<Tag>` groups, `<a>` links, `<BulletList>`, or compound content.
+`children` accepts any ReactNode — text, tags, links, lists, or compound content.
 
-<Canvas of={Stories.ValueTypes} />
+<Canvas of={Stories.ValueAsTagList} />
+<Canvas of={Stories.ValueAsLink} />
 
 Rules:
 
-- **Don't style the value inline.** If a value needs tag treatment, use `<Tag>`. If it needs a link, use `<a>` (or `<TextLink>`). If it needs a list, use `<BulletList>`. Never reach for raw `color` or `text-transform` on a Field child.
+- **Don't style the value inline.** If a value needs tag treatment, use `<Tag>`. If it needs a link, use `<a>` (or `<TextLink>`). If it needs a list, use `<BulletList>`.
 - **Don't nest Fields.** A value is a value — if you need sub-structure, it belongs in a new `SheetSection`.
 
-## Patterns
+## Multi-field stack
 
-Typical sheet-body field stack with mixed filled and empty values.
+The canonical read-mode-sheet shape — multiple Fields in a Stack with mixed filled and empty values.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.MultiFieldStack} />
 
 ---
 

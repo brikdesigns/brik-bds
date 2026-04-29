@@ -15,22 +15,31 @@ Use the Controls panel to toggle `striped` and `size` props.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Sizes and striping
 
-Size variants, striped rows, sortable headers, and all cell types: icon left, tooltip indicator, badge, tag, checkbox, data input, brand badge, actions, text link, and two-line layouts.
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
+<Canvas of={Stories.Comfortable} />
+<Canvas of={Stories.Striped} />
 
 - **`default`** — Compact padding for dense data
 - **`comfortable`** — Generous padding (72px cell height)
 
 Size is set on `Table` via `data-size` attribute. CSS selectors apply padding to all child `<th>` and `<td>` elements automatically — no React context needed.
 
-## Patterns
+## Header behaviors
 
-Full-featured composite table and striped comfortable layout.
+<Canvas of={Stories.SortableWithSelection} />
 
-<Canvas of={Stories.Patterns} />
+## Cell-content recipes
+
+`TableCell` accepts any ReactNode — these stories document the canonical content recipes used across the product surface.
+
+<Canvas of={Stories.IconLeftCells} />
+<Canvas of={Stories.TooltipIndicatorCells} />
+<Canvas of={Stories.ActionRowCells} />
+<Canvas of={Stories.TextLinkCells} />
+<Canvas of={Stories.EditableCells} />
+<Canvas of={Stories.TwoLineCells} />
 
 ---
 

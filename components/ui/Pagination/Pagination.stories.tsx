@@ -1,140 +1,75 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from './Pagination';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────── */
-
+/**
+ * Pagination — page navigation with prev/next, ellipsis, and current-page
+ * indicator. Controlled via `currentPage` + `onChange`. Three alignment positions.
+ * @summary Page navigation with ellipsis
+ */
 const meta = {
   title: 'Components/Control/pagination',
   component: Pagination,
   parameters: { layout: 'padded' },
   argTypes: {
-    position: {
-      control: 'select',
-      options: ['left', 'center', 'right'],
-    },
-    currentPage: {
-      control: { type: 'number', min: 1, max: 100 },
-    },
-    totalPages: {
-      control: { type: 'number', min: 1, max: 100 },
-    },
-    siblingCount: {
-      control: { type: 'number', min: 0, max: 3 },
-    },
+    position: { control: 'select', options: ['left', 'center', 'right'] },
+    currentPage: { control: { type: 'number', min: 1, max: 100 } },
+    totalPages: { control: { type: 'number', min: 1, max: 100 } },
+    siblingCount: { control: { type: 'number', min: 0, max: 3 } },
   },
 } satisfies Meta<typeof Pagination>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox — wraps with `useState` so paging is interactive.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
-  render: (args) => {
-    const [page, setPage] = useState(args.currentPage);
-    return <Pagination {...args} currentPage={page} onChange={setPage} />;
-  },
   args: {
     currentPage: 44,
     totalPages: 80,
     position: 'center',
     onChange: () => {},
   },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Positions, few pages, single page
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Variants: Story = {
-  args: { currentPage: 5, totalPages: 20, onChange: () => {} },
-  render: () => {
-    function PaginationVariants() {
-      const [left, setLeft] = useState(5);
-      const [center, setCenter] = useState(10);
-      const [right, setRight] = useState(15);
-      const [few, setFew] = useState(3);
-
-      return (
-        <Stack>
-          <div>
-            <SectionLabel>Left aligned</SectionLabel>
-            <Pagination currentPage={left} totalPages={20} position="left" onChange={setLeft} />
-          </div>
-          <div>
-            <SectionLabel>Center aligned</SectionLabel>
-            <Pagination currentPage={center} totalPages={20} position="center" onChange={setCenter} />
-          </div>
-          <div>
-            <SectionLabel>Right aligned</SectionLabel>
-            <Pagination currentPage={right} totalPages={20} position="right" onChange={setRight} />
-          </div>
-          <div>
-            <SectionLabel>Few pages (no ellipsis)</SectionLabel>
-            <Pagination currentPage={few} totalPages={5} position="center" onChange={setFew} />
-          </div>
-          <div>
-            <SectionLabel>Single page</SectionLabel>
-            <Pagination currentPage={1} totalPages={1} position="center" onChange={() => {}} />
-          </div>
-        </Stack>
-      );
-    }
-    return <PaginationVariants />;
+  render: (args) => {
+    const Demo = () => {
+      const [page, setPage] = useState(args.currentPage);
+      return <Pagination {...args} currentPage={page} onChange={setPage} />;
+    };
+    return <Demo />;
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Table pagination
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Position axis ──────────────────────────────────────────── */
 
-export const Patterns: Story = {
-  args: { currentPage: 1, totalPages: 12, onChange: () => {} },
-  render: () => {
-    function TablePagination() {
-      const [page, setPage] = useState(1);
-      const totalPages = 12;
-      const perPage = 10;
+/** Left-aligned position.
+ *  @summary Left-aligned pagination */
+export const Left: Story = {
+  args: { currentPage: 5, totalPages: 20, position: 'left', onChange: () => {} },
+};
 
-      return (
-        <div>
-          <SectionLabel>Table pagination</SectionLabel>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
-            textAlign: 'center',
-            marginBottom: 'var(--gap-md)',
-          }}>
-            Showing {(page - 1) * perPage + 1}–{Math.min(page * perPage, 120)} of 120 results
-          </div>
-          <Pagination currentPage={page} totalPages={totalPages} onChange={setPage} position="center" />
-        </div>
-      );
-    }
-    return <TablePagination />;
-  },
+/** Center-aligned position (default).
+ *  @summary Center-aligned pagination */
+export const Center: Story = {
+  args: { currentPage: 10, totalPages: 20, position: 'center', onChange: () => {} },
+};
+
+/** Right-aligned position.
+ *  @summary Right-aligned pagination */
+export const Right: Story = {
+  args: { currentPage: 15, totalPages: 20, position: 'right', onChange: () => {} },
+};
+
+/* ─── Page-count states ──────────────────────────────────────── */
+
+/** Few pages — no ellipsis needed.
+ *  @summary Pagination with no ellipsis */
+export const FewPages: Story = {
+  args: { currentPage: 3, totalPages: 5, position: 'center', onChange: () => {} },
+};
+
+/** Single page — confirms the disabled-prev/next state.
+ *  @summary Single-page pagination */
+export const SinglePage: Story = {
+  args: { currentPage: 1, totalPages: 1, position: 'center', onChange: () => {} },
 };

@@ -1,29 +1,29 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import { Select } from './Select';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/**
+ * Select — single-select dropdown rendered as a native `<select>` element.
+ * Supports flat options, grouped options, helper/error states, and three sizes.
+ * For richer multi-select use `MultiSelect`.
+ * @summary Native single-select dropdown
+ */
+const meta: Meta<typeof Select> = {
+  title: 'Components/Form/select',
+  component: Select,
+  parameters: { layout: 'padded' },
+  decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>],
+  argTypes: {
+    placeholder: { control: 'text' },
+    disabled: { control: 'boolean' },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    fullWidth: { control: 'boolean' },
+  },
+};
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Sample Data ─────────────────────────────────────────────── */
+export default meta;
+type Story = StoryObj<typeof Select>;
 
 const basicOptions = [
   { label: 'First choice', value: 'first' },
@@ -50,27 +50,8 @@ const groupedOptions = [
   },
 ];
 
-/* ─── Meta ────────────────────────────────────────────────────── */
-
-const meta: Meta<typeof Select> = {
-  title: 'Components/Form/select',
-  component: Select,
-  parameters: { layout: 'padded' },
-  argTypes: {
-    placeholder: { control: 'text' },
-    disabled: { control: 'boolean' },
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    fullWidth: { control: 'boolean' },
-  },
-};
-
-export default meta;
-type Story = StoryObj<typeof Select>;
-
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox. Includes a select-option interaction test.
+ *  @summary Live playground with interaction test */
 export const Playground: Story = {
   args: {
     placeholder: 'Select one...',
@@ -82,7 +63,6 @@ export const Playground: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const select = canvas.getByRole('combobox');
-
     await expect(select).toBeVisible();
     await userEvent.selectOptions(select, 'second');
     await expect(args.onChange).toHaveBeenCalled();
@@ -90,135 +70,80 @@ export const Playground: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, icons, states, groups
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Sizes ──────────────────────────────────────────────────── */
 
-export const Variants: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      <div>
-        <SectionLabel>Sizes</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Select size="sm" placeholder="Small" options={basicOptions} icon={<Icon icon="ph:tag" />} />
-          <Select size="md" placeholder="Medium" options={basicOptions} icon={<Icon icon="ph:tag" />} />
-          <Select size="lg" placeholder="Large" options={basicOptions} icon={<Icon icon="ph:tag" />} />
-        </Stack>
-      </div>
-
-      <div>
-        <SectionLabel>With icon and label</SectionLabel>
-        <Select
-          label="Company"
-          placeholder="Select company..."
-          options={[
-            { label: 'Acme Corp', value: 'acme' },
-            { label: 'Globex Inc', value: 'globex' },
-            { label: 'Initech', value: 'initech' },
-          ]}
-          icon={<Icon icon="ph:buildings" />}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With default value</SectionLabel>
-        <Select placeholder="Select one..." options={basicOptions} defaultValue="second" />
-      </div>
-
-      <div>
-        <SectionLabel>Disabled</SectionLabel>
-        <Select placeholder="Select one..." options={basicOptions} disabled />
-      </div>
-
-      <div>
-        <SectionLabel>Error state</SectionLabel>
-        <Select
-          label="Region"
-          placeholder="Select region..."
-          options={[
-            { label: 'North America', value: 'na' },
-            { label: 'Europe', value: 'eu' },
-            { label: 'Asia Pacific', value: 'apac' },
-          ]}
-          error="Please select a region"
-          icon={<Icon icon="ph:globe" />}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Option groups</SectionLabel>
-        <Select
-          label="Location"
-          placeholder="Select a city..."
-          options={groupedOptions}
-          icon={<Icon icon="ph:globe" />}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Compact (fullWidth=false)</SectionLabel>
-        <Select placeholder="Compact..." options={basicOptions} fullWidth={false} />
-      </div>
-    </Stack>
-  ),
+/** Small (sm).
+ *  @summary Small size */
+export const Small: Story = {
+  args: { size: 'sm', placeholder: 'Small', options: basicOptions, icon: <Icon icon="ph:tag" /> },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
+/** Medium (md) — default size.
+ *  @summary Medium size (default) */
+export const Medium: Story = {
+  args: { size: 'md', placeholder: 'Medium', options: basicOptions, icon: <Icon icon="ph:tag" /> },
+};
 
-export const Patterns: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      {/* Form layout */}
-      <div>
-        <SectionLabel>Form layout</SectionLabel>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--padding-lg)' }}>
-          <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-            <Select
-              label="Country"
-              placeholder="Select country..."
-              options={[
-                { label: 'United States', value: 'us' },
-                { label: 'Canada', value: 'ca' },
-                { label: 'United Kingdom', value: 'uk' },
-                { label: 'Australia', value: 'au' },
-              ]}
-              icon={<Icon icon="ph:globe" />}
-            />
-          </div>
-          <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-            <Select
-              label="Industry"
-              placeholder="Select industry..."
-              options={[
-                { label: 'Technology', value: 'tech' },
-                { label: 'Healthcare', value: 'healthcare' },
-                { label: 'Finance', value: 'finance' },
-                { label: 'Education', value: 'education' },
-              ]}
-              icon={<Icon icon="ph:buildings" />}
-            />
-          </div>
-        </div>
-      </div>
+/** Large (lg).
+ *  @summary Large size */
+export const Large: Story = {
+  args: { size: 'lg', placeholder: 'Large', options: basicOptions, icon: <Icon icon="ph:tag" /> },
+};
 
-      {/* Constrained width */}
-      <div>
-        <SectionLabel>Constrained container</SectionLabel>
-        <div style={{ maxWidth: '320px' }}>
-          <Select
-            label="Role"
-            placeholder="Select role..."
-            options={[
-              { label: 'Admin', value: 'admin' },
-              { label: 'Editor', value: 'editor' },
-              { label: 'Viewer', value: 'viewer' },
-            ]}
-            helperText="Choose the permission level for this user"
-          />
-        </div>
-      </div>
-    </Stack>
-  ),
+/* ─── States ─────────────────────────────────────────────────── */
+
+/** With label and leading icon — common form-field shape.
+ *  @summary Select with label and icon */
+export const WithLabelAndIcon: Story = {
+  args: {
+    label: 'Company',
+    placeholder: 'Select company...',
+    options: [
+      { label: 'Acme Corp', value: 'acme' },
+      { label: 'Globex Inc', value: 'globex' },
+      { label: 'Initech', value: 'initech' },
+    ],
+    icon: <Icon icon="ph:buildings" />,
+  },
+};
+
+/** With default value — pre-selected option.
+ *  @summary Select with default value */
+export const WithDefaultValue: Story = {
+  args: { placeholder: 'Select one...', options: basicOptions, defaultValue: 'second' },
+};
+
+/** Error state — `error` overrides the helper line.
+ *  @summary Select with error */
+export const WithError: Story = {
+  args: {
+    label: 'Region',
+    placeholder: 'Select region...',
+    options: [
+      { label: 'North America', value: 'na' },
+      { label: 'Europe', value: 'eu' },
+      { label: 'Asia Pacific', value: 'apac' },
+    ],
+    error: 'Please select a region',
+    icon: <Icon icon="ph:globe" />,
+  },
+};
+
+/** Disabled — non-interactive.
+ *  @summary Disabled select */
+export const Disabled: Story = {
+  args: { placeholder: 'Select one...', options: basicOptions, disabled: true },
+};
+
+/* ─── Content shapes ─────────────────────────────────────────── */
+
+/** Option groups — group options under headers using `{ label, options[] }`.
+ *  @summary Select with option groups */
+export const OptionGroups: Story = {
+  args: {
+    label: 'Location',
+    placeholder: 'Select a city...',
+    options: groupedOptions,
+    icon: <Icon icon="ph:globe" />,
+  },
 };

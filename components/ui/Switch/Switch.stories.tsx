@@ -1,29 +1,12 @@
-import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within, fn } from 'storybook/test';
 import { Switch } from './Switch';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────────────── */
-
+/**
+ * Switch — binary on/off toggle. Use for settings, feature flags, and any
+ * stateful toggle. Three sizes (`lg`/`md`/`sm`).
+ * @summary Binary on/off toggle
+ */
 const meta: Meta<typeof Switch> = {
   title: 'Components/Control/switch',
   component: Switch,
@@ -39,10 +22,12 @@ const meta: Meta<typeof Switch> = {
 export default meta;
 type Story = StoryObj<typeof Switch>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
+const Stack = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
+);
 
+/** Args-driven sandbox. Includes a click-fires-onChange interaction test.
+ *  @summary Live playground with interaction test */
 export const Playground: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   args: {
@@ -52,128 +37,76 @@ export const Playground: Story = {
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
-    // The Switch's input is visually hidden (opacity:0/width:0 — standard a11y
-    // pattern so the track+knob UI is what users see), so toBeVisible() never
-    // passes on it. getByRole('switch') itself asserts it's in the DOM.
     const toggle = canvas.getByRole('switch');
-
     await expect(toggle).not.toBeChecked();
     await userEvent.click(toggle);
     await waitFor(() => expect(args.onChange).toHaveBeenCalledTimes(1));
   },
 };
 
-/** Interaction test: disabled switch blocks toggle */
-export const InteractionTest: Story = {
+/** Disabled switches must not fire onChange. Asserts the contract.
+ *  @summary Interaction test: disabled blocks toggle */
+export const DisabledClickBlocked: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
   args: { label: 'Locked setting', size: 'lg', disabled: true, onChange: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const toggle = canvas.getByRole('switch');
-
     await expect(toggle).toBeDisabled();
     await userEvent.click(toggle);
-    // Event handlers can fire on a micro-tick; wait a frame before asserting negative.
     await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     await expect(args.onChange).not.toHaveBeenCalled();
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, states, and controlled behavior
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Sizes ──────────────────────────────────────────────────── */
 
-export const Variants: Story = {
+/** All three sizes — unchecked. ADR-006 axis-gallery exception.
+ *  @summary All sizes (unchecked) */
+export const Sizes: Story = {
   render: () => (
-    <Stack gap="var(--gap-huge)">
-      <div>
-        <SectionLabel>Sizes — unchecked</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Switch size="lg" label="Large (56x32)" />
-          <Switch size="md" label="Medium (32x18)" />
-          <Switch size="sm" label="Small (28x16)" />
-        </Stack>
-      </div>
-
-      <div>
-        <SectionLabel>Sizes — checked</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Switch size="lg" label="Large" defaultChecked />
-          <Switch size="md" label="Medium" defaultChecked />
-          <Switch size="sm" label="Small" defaultChecked />
-        </Stack>
-      </div>
-
-      <div>
-        <SectionLabel>States</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Switch label="Default" />
-          <Switch label="Checked" defaultChecked />
-          <Switch label="Disabled" disabled />
-          <Switch label="Disabled checked" disabled defaultChecked />
-          <Switch defaultChecked />
-        </Stack>
-      </div>
+    <Stack>
+      <Switch size="lg" label="Large (56x32)" />
+      <Switch size="md" label="Medium (32x18)" />
+      <Switch size="sm" label="Small (28x16)" />
     </Stack>
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
+/** All three sizes — checked. Confirms the on-state appearance at every size.
+ *  @summary All sizes (checked) */
+export const SizesChecked: Story = {
+  render: () => (
+    <Stack>
+      <Switch size="lg" label="Large" defaultChecked />
+      <Switch size="md" label="Medium" defaultChecked />
+      <Switch size="sm" label="Small" defaultChecked />
+    </Stack>
+  ),
+};
 
-export const Patterns: Story = {
-  render: () => {
-    const [notifications, setNotifications] = useState(true);
-    const [darkMode, setDarkMode] = useState(false);
-    const [analytics, setAnalytics] = useState(true);
+/* ─── States ─────────────────────────────────────────────────── */
 
-    return (
-      <Stack gap="var(--gap-huge)">
-        {/* Settings panel */}
-        <div style={{
-          width: '320px',
-          padding: 'var(--padding-lg)',
-          backgroundColor: 'var(--background-primary)',
-          border: 'var(--border-width-md) solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-lg)',
-        }}>
-          <SectionLabel>Preferences</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <Switch
-              label="Email notifications"
-              checked={notifications}
-              onChange={(e) => setNotifications(e.target.checked)}
-            />
-            <Switch
-              label="Dark mode"
-              checked={darkMode}
-              onChange={(e) => setDarkMode(e.target.checked)}
-            />
-            <Switch
-              label="Analytics tracking"
-              checked={analytics}
-              onChange={(e) => setAnalytics(e.target.checked)}
-            />
-          </Stack>
-        </div>
+/** Default state — off, enabled.
+ *  @summary Default switch */
+export const Default: Story = {
+  args: { label: 'Default' },
+};
 
-        {/* Compact editor settings */}
-        <div style={{
-          width: '240px',
-          padding: 'var(--padding-md)',
-          backgroundColor: 'var(--background-primary)',
-          border: 'var(--border-width-md) solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-lg)',
-        }}>
-          <SectionLabel>Editor settings</SectionLabel>
-          <Stack gap="var(--gap-md)">
-            <Switch size="sm" label="Auto-save" />
-            <Switch size="sm" label="Spell check" defaultChecked />
-            <Switch size="sm" label="Line numbers" defaultChecked />
-          </Stack>
-        </div>
-      </Stack>
-    );
-  },
+/** Checked — on state.
+ *  @summary Checked switch */
+export const Checked: Story = {
+  args: { label: 'Checked', defaultChecked: true },
+};
+
+/** Disabled — non-interactive, off.
+ *  @summary Disabled switch */
+export const Disabled: Story = {
+  args: { label: 'Disabled', disabled: true },
+};
+
+/** Disabled checked — non-interactive, on.
+ *  @summary Disabled checked switch */
+export const DisabledChecked: Story = {
+  args: { label: 'Disabled checked', disabled: true, defaultChecked: true },
 };

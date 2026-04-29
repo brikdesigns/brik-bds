@@ -1,37 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { DatePicker } from './DatePicker';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'flex-start' }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────────────── */
-
+/**
+ * DatePicker — date input with a Radix popover calendar. Supports min/max
+ * range, helper text, error state, and three sizes.
+ * @summary Date input with calendar popover
+ */
 const meta: Meta<typeof DatePicker> = {
   title: 'Components/Form/date-picker',
   component: DatePicker,
   parameters: { layout: 'centered' },
+  decorators: [(Story) => <div style={{ width: 280 }}><Story /></div>],
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     label: { control: 'text' },
@@ -46,39 +27,28 @@ const meta: Meta<typeof DatePicker> = {
 export default meta;
 type Story = StoryObj<typeof DatePicker>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox. Includes an interaction test that opens the calendar
+ *  and clicks the first available day.
+ *  @summary Live playground with interaction test */
 export const Playground: Story = {
   parameters: { chromatic: { disableSnapshot: true } },
-  args: {
-    placeholder: 'Select a date',
-    size: 'md',
-  },
+  args: { placeholder: 'Select a date', size: 'md' },
   render: (args) => {
-    const [value, setValue] = useState<Date | null>(null);
-    return (
-      <div style={{ width: 280 }}>
-        <DatePicker {...args} value={value} onChange={setValue} />
-      </div>
-    );
+    const Demo = () => {
+      const [value, setValue] = useState<Date | null>(null);
+      return <DatePicker {...args} value={value} onChange={setValue} />;
+    };
+    return <Demo />;
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const trigger = canvas.getByRole('button', { name: /select a date/i });
-
-    // Open calendar
     await userEvent.click(trigger);
 
-    // Calendar opens in a Radix portal — default findBy timeout (1s) is too
-    // tight under parallel browser-vitest load. 3s absorbs render + animation.
     const body = within(document.body);
     const dialog = await body.findByRole('dialog', {}, { timeout: 3000 });
     await expect(dialog).toBeVisible();
 
-    // Wait for the day grid to mount (react-day-picker renders asynchronously
-    // after the dialog opens). Poll for a clickable cell instead of querying once.
     const clickableDay = await waitFor(() => {
       const cells = within(dialog).getAllByRole('gridcell');
       const cell = cells.find((c) => !c.hasAttribute('disabled') && c.textContent?.trim());
@@ -90,231 +60,83 @@ export const Playground: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. DEFAULT — No label, clean trigger
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Default — no label, just a placeholder. The minimal shape.
+ *  @summary Default date picker */
 export const Default: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | null>(null);
-    return (
-      <div style={{ width: 280 }}>
-        <DatePicker
-          placeholder="Select a date"
-          value={value}
-          onChange={setValue}
-        />
-      </div>
-    );
-  },
+  args: { placeholder: 'Select a date' },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. WITH LABEL — Label + helper text
-   ═══════════════════════════════════════════════════════════════ */
-
+/** With label and helper text — the canonical form-field shape.
+ *  @summary Date picker with label and helper text */
 export const WithLabel: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | null>(null);
-    return (
-      <div style={{ width: 280 }}>
-        <DatePicker
-          label="Appointment date"
-          placeholder="Select a date"
-          helperText="Choose your preferred appointment time"
-          value={value}
-          onChange={setValue}
-          fullWidth
-        />
-      </div>
-    );
+  args: {
+    label: 'Appointment date',
+    placeholder: 'Select a date',
+    helperText: 'Choose your preferred appointment time',
+    fullWidth: true,
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   4. WITH ERROR — Error state
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Error state — `error` overrides the helper line.
+ *  @summary Date picker with error */
 export const WithError: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | null>(null);
-    return (
-      <div style={{ width: 280 }}>
-        <DatePicker
-          label="Due date"
-          placeholder="Select a date"
-          error="A due date is required"
-          value={value}
-          onChange={setValue}
-          fullWidth
-        />
-      </div>
-    );
+  args: {
+    label: 'Due date',
+    placeholder: 'Select a date',
+    error: 'A due date is required',
+    fullWidth: true,
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   5. SMALL — sm size variant
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Sizes ──────────────────────────────────────────────────── */
 
+/** Small size — compact form rows.
+ *  @summary Small size */
 export const Small: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | null>(null);
-    return (
-      <div style={{ width: 240 }}>
-        <DatePicker
-          size="sm"
-          label="Start date"
-          placeholder="Select a date"
-          value={value}
-          onChange={setValue}
-          fullWidth
-        />
-      </div>
-    );
-  },
+  args: { size: 'sm', label: 'Start date', placeholder: 'Select a date', fullWidth: true },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   6. LARGE — lg size variant
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Large size — prominent date selection (e.g. booking flows).
+ *  @summary Large size */
 export const Large: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | null>(null);
-    return (
-      <div style={{ width: 320 }}>
-        <DatePicker
-          size="lg"
-          label="End date"
-          placeholder="Select a date"
-          value={value}
-          onChange={setValue}
-          fullWidth
-        />
-      </div>
-    );
-  },
+  args: { size: 'lg', label: 'End date', placeholder: 'Select a date', fullWidth: true },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   7. MIN/MAX DATE — Constrained date range
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Range constraints ──────────────────────────────────────── */
 
+/** With `minDate` and `maxDate` — constrains the calendar to a date window.
+ *  @summary Constrained date range */
 export const MinMaxDate: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | null>(null);
+  args: {
+    label: 'Schedule date',
+    placeholder: 'Select a date',
+    helperText: 'Must be within the next 30 days',
+    fullWidth: true,
+  },
+  render: (args) => {
     const today = new Date();
     const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const maxDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
-
-    return (
-      <div style={{ width: 280 }}>
-        <DatePicker
-          label="Schedule date"
-          placeholder="Select a date"
-          helperText="Must be within the next 30 days"
-          minDate={minDate}
-          maxDate={maxDate}
-          value={value}
-          onChange={setValue}
-          fullWidth
-        />
-      </div>
-    );
+    return <DatePicker {...args} minDate={minDate} maxDate={maxDate} />;
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   8. DISABLED — Disabled state
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Layout ─────────────────────────────────────────────────── */
 
+/** Disabled — non-interactive trigger.
+ *  @summary Disabled date picker */
 export const Disabled: Story = {
-  render: () => (
-    <div style={{ width: 280 }}>
-      <DatePicker
-        label="Locked date"
-        placeholder="Not available"
-        disabled
-        fullWidth
-      />
-    </div>
-  ),
+  args: { label: 'Locked date', placeholder: 'Not available', disabled: true, fullWidth: true },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   9. FULL WIDTH — Stretches to container
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Full-width — trigger stretches to fill its container.
+ *  @summary Full-width date picker */
 export const FullWidth: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | null>(null);
-    return (
-      <div style={{ width: 480 }}>
-        <DatePicker
-          label="Project deadline"
-          placeholder="Select a date"
-          helperText="This date will be visible to all team members"
-          value={value}
-          onChange={setValue}
-          fullWidth
-        />
-      </div>
-    );
+  args: {
+    label: 'Project deadline',
+    placeholder: 'Select a date',
+    helperText: 'This date will be visible to all team members',
+    fullWidth: true,
   },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   10. VARIANTS — All sizes and states at a glance
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Variants: Story = {
-  render: () => {
-    const [sm, setSm] = useState<Date | null>(null);
-    const [md, setMd] = useState<Date | null>(null);
-    const [lg, setLg] = useState<Date | null>(null);
-    const [errVal, setErrVal] = useState<Date | null>(null);
-    const today = new Date();
-    const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-    return (
-      <div style={{ width: 480 }}>
-        <Stack>
-          {/* Sizes */}
-          <div>
-            <SectionLabel>Sizes</SectionLabel>
-            <Stack gap="var(--gap-lg)">
-              <DatePicker size="sm" label="Small (sm)" placeholder="Select a date" value={sm} onChange={setSm} fullWidth />
-              <DatePicker size="md" label="Medium (md)" placeholder="Select a date — default" value={md} onChange={setMd} fullWidth />
-              <DatePicker size="lg" label="Large (lg)" placeholder="Select a date" value={lg} onChange={setLg} fullWidth />
-            </Stack>
-          </div>
-
-          {/* States */}
-          <div>
-            <SectionLabel>States</SectionLabel>
-            <Stack gap="var(--gap-lg)">
-              <DatePicker label="Default" placeholder="Select a date" value={null} onChange={() => {}} fullWidth />
-              <DatePicker label="Helper text" placeholder="Select a date" helperText="Must be a future date" minDate={minDate} value={null} onChange={() => {}} fullWidth />
-              <DatePicker label="Error" placeholder="Select a date" error="A date is required" value={errVal} onChange={setErrVal} fullWidth />
-              <DatePicker label="Disabled" placeholder="Not available" disabled fullWidth />
-            </Stack>
-          </div>
-
-          {/* In a form context */}
-          <div>
-            <SectionLabel>Form context</SectionLabel>
-            <Row gap="var(--gap-lg)">
-              <div style={{ flex: 1 }}>
-                <DatePicker label="Start date" placeholder="Select" value={null} onChange={() => {}} fullWidth />
-              </div>
-              <div style={{ flex: 1 }}>
-                <DatePicker label="End date" placeholder="Select" value={null} onChange={() => {}} fullWidth />
-              </div>
-            </Row>
-          </div>
-        </Stack>
-      </div>
-    );
-  },
+  decorators: [(Story) => <div style={{ width: 480 }}><Story /></div>],
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PageHeader } from './PageHeader';
 import { Breadcrumb } from '../Breadcrumb';
@@ -7,26 +7,24 @@ import { Button } from '../Button';
 import { ServiceTag } from '../ServiceBadge';
 import { CardSummary } from '../Card';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/**
+ * PageHeader — top-of-page composition for entity/dashboard pages. Slots:
+ * `breadcrumbs`, `title`, `subtitle`, `badge`, `metadata`, `actions`, `stats`,
+ * `tabs`. Use whichever slots the page needs — all are optional.
+ * @summary Top-of-page header composition
+ */
+const meta: Meta<typeof PageHeader> = {
+  title: 'Components/Navigation/page-header',
+  component: PageHeader,
+  parameters: { layout: 'fullscreen' },
+  argTypes: {
+    title: { control: 'text' },
+    subtitle: { control: 'text' },
+  },
+};
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Helpers ─────────────────────────────────────────────────── */
+export default meta;
+type Story = StoryObj<typeof PageHeader>;
 
 function useInteractiveTabs(labels: string[]): TabItem[] {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -43,25 +41,8 @@ const sampleBreadcrumbs = [
   { label: 'Design System' },
 ];
 
-/* ─── Meta ────────────────────────────────────────────────────── */
-
-const meta: Meta<typeof PageHeader> = {
-  title: 'Navigation/Secondary/page-header',
-  component: PageHeader,
-  parameters: { layout: 'fullscreen' },
-  argTypes: {
-    title: { control: 'text' },
-    subtitle: { control: 'text' },
-  },
-};
-
-export default meta;
-type Story = StoryObj<typeof PageHeader>;
-
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
   args: {
     title: 'My Account',
@@ -76,197 +57,140 @@ export const Playground: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Different slot combinations
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Slot shapes ────────────────────────────────────────────── */
 
-export const Variants: Story = {
+/** Title only — minimal page header.
+ *  @summary Title only */
+export const TitleOnly: Story = {
+  args: { title: 'Dashboard' },
+};
+
+/** Title + subtitle — adds a context line below the title.
+ *  @summary Title with subtitle */
+export const TitleWithSubtitle: Story = {
+  args: { title: 'Team Members', subtitle: 'Manage your team and their permissions.' },
+};
+
+/** With breadcrumbs — adds page-position context above the title.
+ *  @summary Header with breadcrumbs */
+export const WithBreadcrumbs: Story = {
+  args: {
+    title: 'Design System',
+    subtitle: 'Components, tokens, and documentation.',
+    breadcrumbs: (
+      <Breadcrumb items={[
+        { label: 'Home', href: '#' },
+        { label: 'Products', href: '#' },
+        { label: 'Design System' },
+      ]} />
+    ),
+  },
+};
+
+/** With actions — primary + secondary CTAs in the header right slot.
+ *  @summary Header with action buttons */
+export const WithActions: Story = {
+  args: {
+    title: 'Settings',
+    subtitle: 'Configure your account preferences.',
+    actions: (
+      <>
+        <Button variant="primary">Save Changes</Button>
+        <Button variant="secondary">Cancel</Button>
+      </>
+    ),
+  },
+};
+
+/** With tabs — TabBar rendered below the header for sub-page navigation.
+ *  @summary Header with tab navigation */
+export const WithTabs: Story = {
   render: () => {
-    const tabs = useInteractiveTabs(['Active', 'Latest', 'Product', 'Design System', 'Marketing']);
-    const filterTabs = useInteractiveTabs(['All', 'Active', 'Archived']);
-
+    const tabs = useInteractiveTabs(['All', 'Active', 'Archived']);
     return (
-      <Stack gap="var(--gap-huge)">
-        <div>
-          <SectionLabel>Title only</SectionLabel>
-          <PageHeader title="Dashboard" />
-        </div>
-
-        <div>
-          <SectionLabel>Title + subtitle</SectionLabel>
-          <PageHeader title="Team Members" subtitle="Manage your team and their permissions." />
-        </div>
-
-        <div>
-          <SectionLabel>With breadcrumbs</SectionLabel>
-          <PageHeader
-            title="Design System"
-            subtitle="Components, tokens, and documentation."
-            breadcrumbs={
-              <Breadcrumb items={[
-                { label: 'Home', href: '#' },
-                { label: 'Products', href: '#' },
-                { label: 'Design System' },
-              ]} />
-            }
-          />
-        </div>
-
-        <div>
-          <SectionLabel>With actions</SectionLabel>
-          <PageHeader
-            title="Settings"
-            subtitle="Configure your account preferences."
-            actions={
-              <>
-                <Button variant="primary">Save Changes</Button>
-                <Button variant="secondary">Cancel</Button>
-              </>
-            }
-          />
-        </div>
-
-        <div>
-          <SectionLabel>With tabs</SectionLabel>
-          <PageHeader
-            title="Projects"
-            subtitle="Browse and manage all projects."
-            tabs={<TabBar variant="tab" items={filterTabs} />}
-          />
-        </div>
-
-        <div>
-          <SectionLabel>With badge + metadata</SectionLabel>
-          <PageHeader
-            title="Brand Design"
-            subtitle="Service details and billing info."
-            badge={<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />}
-            breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
-            actions={
-              <>
-                <Button variant="primary" size="sm">Primary Button</Button>
-                <Button variant="secondary" size="sm">Secondary Button</Button>
-              </>
-            }
-            metadata={[
-              { label: 'Category', value: 'Brand' },
-              { label: 'Billing', value: 'One-time' },
-              { label: 'Stripe Product', value: 'brand-design' },
-            ]}
-          />
-        </div>
-
-        <div>
-          <SectionLabel>With stats (summary cards above tabs)</SectionLabel>
-          <PageHeader
-            title="Acme Corp"
-            breadcrumbs={<Breadcrumb items={[
-              { label: 'Admin', href: '#' },
-              { label: 'Companies', href: '#' },
-              { label: 'Acme Corp' },
-            ]} />}
-            metadata={[
-              { label: 'Status', value: 'Active' },
-              { label: 'Type', value: 'Client' },
-              { label: 'Start Date', value: 'Jan 1, 2024' },
-            ]}
-            stats={
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--gap-lg)' }}>
-                <CardSummary label="Services" value={4} />
-                <CardSummary label="Projects" value={2} />
-                <CardSummary label="Open Invoices" value={1} />
-                <CardSummary label="Contacts" value={5} />
-              </div>
-            }
-            tabs={<TabBar variant="tab" items={filterTabs} />}
-          />
-        </div>
-
-        <div>
-          <SectionLabel>Full composition</SectionLabel>
-          <PageHeader
-            title="My Account"
-            subtitle="Manage your membership plan."
-            breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
-            actions={
-              <>
-                <Button variant="primary">Primary Button</Button>
-                <Button variant="secondary">Secondary Button</Button>
-              </>
-            }
-            tabs={<TabBar variant="tab" items={tabs} />}
-          />
-        </div>
-      </Stack>
+      <PageHeader
+        title="Projects"
+        subtitle="Browse and manage all projects."
+        tabs={<TabBar variant="tab" items={tabs} />}
+      />
     );
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
+/** With badge + metadata — service-detail-page shape.
+ *  @summary Header with badge and metadata */
+export const WithBadgeAndMetadata: Story = {
+  args: {
+    title: 'Brand Design',
+    subtitle: 'Service details and billing info.',
+    badge: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />,
+    breadcrumbs: <Breadcrumb items={sampleBreadcrumbs} />,
+    actions: (
+      <>
+        <Button variant="primary" size="sm">Primary Button</Button>
+        <Button variant="secondary" size="sm">Secondary Button</Button>
+      </>
+    ),
+    metadata: [
+      { label: 'Category', value: 'Brand' },
+      { label: 'Billing', value: 'One-time' },
+      { label: 'Stripe Product', value: 'brand-design' },
+    ],
+  },
+};
 
-export const Patterns: Story = {
+/** With stats — summary-card row above the tabs. Used on entity overview pages.
+ *  @summary Header with summary stats */
+export const WithStats: Story = {
   render: () => {
-    const reportTabs = useInteractiveTabs(['Overview', 'Revenue', 'Engagement', 'Retention']);
-
+    const filterTabs = useInteractiveTabs(['All', 'Active', 'Archived']);
     return (
-      <Stack gap="var(--gap-huge)">
-        {/* Service detail page */}
-        <div>
-          <SectionLabel>Service detail page</SectionLabel>
-          <PageHeader
-            title="Website Design"
-            subtitle="Custom web development and design service."
-            badge={<ServiceTag category="marketing" variant="icon" serviceName="Custom Standard Web Development and Design" size="lg" />}
-            breadcrumbs={
-              <Breadcrumb items={[
-                { label: 'Admin', href: '#' },
-                { label: 'Services', href: '#' },
-                { label: 'Website Design' },
-              ]} />
-            }
-            actions={<Button variant="primary" size="sm">Edit Service</Button>}
-            metadata={[
-              { label: 'Category', value: 'Marketing' },
-              { label: 'Billing', value: 'Monthly' },
-              { label: 'Status', value: 'Active' },
-            ]}
-          />
-        </div>
+      <PageHeader
+        title="Acme Corp"
+        breadcrumbs={
+          <Breadcrumb items={[
+            { label: 'Admin', href: '#' },
+            { label: 'Companies', href: '#' },
+            { label: 'Acme Corp' },
+          ]} />
+        }
+        metadata={[
+          { label: 'Status', value: 'Active' },
+          { label: 'Type', value: 'Client' },
+          { label: 'Start Date', value: 'Jan 1, 2024' },
+        ]}
+        stats={
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--gap-lg)' }}>
+            <CardSummary label="Services" value={4} />
+            <CardSummary label="Projects" value={2} />
+            <CardSummary label="Open Invoices" value={1} />
+            <CardSummary label="Contacts" value={5} />
+          </div>
+        }
+        tabs={<TabBar variant="tab" items={filterTabs} />}
+      />
+    );
+  },
+};
 
-        {/* Company detail page */}
-        <div>
-          <SectionLabel>Company detail page</SectionLabel>
-          <PageHeader
-            title="Acme Corp"
-            subtitle="Enterprise client since 2024"
-            breadcrumbs={
-              <Breadcrumb items={[
-                { label: 'Admin', href: '#' },
-                { label: 'Companies', href: '#' },
-                { label: 'Acme Corp' },
-              ]} />
-            }
-            actions={<Button variant="primary" size="sm">Edit Company</Button>}
-            metadata={[
-              { label: 'Status', value: 'Active' },
-              { label: 'Plan', value: 'Enterprise' },
-              { label: 'MRR', value: '$12,400' },
-            ]}
-          />
-        </div>
-
-        {/* Analytics dashboard */}
-        <div>
-          <SectionLabel>Analytics dashboard</SectionLabel>
-          <PageHeader
-            title="Analytics"
-            subtitle="Monitor key performance metrics."
-            tabs={<TabBar variant="tab" items={reportTabs} />}
-          />
-        </div>
-      </Stack>
+/** Full composition — every slot wired up. The kitchen-sink reference.
+ *  @summary Every slot wired up */
+export const FullComposition: Story = {
+  render: () => {
+    const tabs = useInteractiveTabs(['Active', 'Latest', 'Product', 'Design System', 'Marketing']);
+    return (
+      <PageHeader
+        title="My Account"
+        subtitle="Manage your membership plan."
+        breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
+        actions={
+          <>
+            <Button variant="primary">Primary Button</Button>
+            <Button variant="secondary">Secondary Button</Button>
+          </>
+        }
+        tabs={<TabBar variant="tab" items={tabs} />}
+      />
     );
   },
 };

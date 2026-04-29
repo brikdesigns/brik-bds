@@ -3,10 +3,19 @@ import { Card, CardTitle, CardDescription, CardFooter } from './Card';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
 
+/**
+ * Card — flexible container with three variants (`outlined`/`brand`/`elevated`),
+ * four padding sizes, and `interactive`/`href` modes. Sub-components: `CardTitle`,
+ * `CardDescription`, `CardFooter`. Two locked presets: `control` (settings tile)
+ * and `summary` (metric tile) — these replace the deprecated `CardControl` and
+ * `CardSummary` components.
+ * @summary Flexible container with variants and presets
+ */
 const meta: Meta<typeof Card> = {
-  title: 'Displays/Card/card',
+  title: 'Components/Card/card',
   component: Card,
   parameters: { layout: 'centered' },
+  decorators: [(Story) => <div style={{ width: 320 }}><Story /></div>],
   argTypes: {
     variant: { control: 'select', options: ['outlined', 'brand', 'elevated'] },
     padding: { control: 'select', options: ['none', 'sm', 'md', 'lg'] },
@@ -17,199 +26,208 @@ const meta: Meta<typeof Card> = {
 export default meta;
 type Story = StoryObj<typeof Card>;
 
-/* ─── Layout helpers ─────────────────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-    {children}
-  </span>
-);
-
 const Stack = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%' }}>
-    {children}
-  </div>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%' }}>{children}</div>
 );
 
 const Row = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap' }}>
-    {children}
-  </div>
+  <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap' }}>{children}</div>
 );
 
-/* ─── Playground ─────────────────────────────────────────────── */
+const sampleCardChildren = (
+  <>
+    <CardTitle>Card title</CardTitle>
+    <CardDescription>This is a basic card with some description text.</CardDescription>
+    <CardFooter>
+      <Button variant="primary" size="sm">Action</Button>
+    </CardFooter>
+  </>
+);
 
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
+  args: { variant: 'outlined', padding: 'md', children: sampleCardChildren },
+};
+
+/* ─── Variant axis ───────────────────────────────────────────── */
+
+/** Outlined (default) — bordered surface for read-mode displays.
+ *  @summary Outlined variant */
+export const Outlined: Story = {
+  args: { variant: 'outlined', padding: 'md', children: sampleCardChildren },
+};
+
+/** Brand — brand-tinted surface, used for promotional/featured tiles.
+ *  @summary Brand variant */
+export const Brand: Story = {
+  args: { variant: 'brand', padding: 'md', children: sampleCardChildren },
+};
+
+/** Elevated — drop-shadow surface for floating tiles.
+ *  @summary Elevated variant */
+export const Elevated: Story = {
+  args: { variant: 'elevated', padding: 'md', children: sampleCardChildren },
+};
+
+/* ─── Padding axis ───────────────────────────────────────────── */
+
+/** All four padding values side-by-side. ADR-006 axis-gallery exception.
+ *  @summary All padding values */
+export const Paddings: Story = {
+  decorators: [(Story) => <div style={{ width: 'auto' }}><Story /></div>],
+  render: () => (
+    <Row>
+      {(['none', 'sm', 'md', 'lg'] as const).map((p) => (
+        <Card key={p} variant="outlined" padding={p} style={{ width: 180 }}>
+          <CardTitle as="h4">{p}</CardTitle>
+        </Card>
+      ))}
+    </Row>
+  ),
+};
+
+/* ─── Interactive shapes ─────────────────────────────────────── */
+
+/** Interactive — hover affordance (cursor change, hover styling). Use for
+ *  cards that trigger an action on click.
+ *  @summary Interactive card with hover affordance */
+export const Interactive: Story = {
   args: {
     variant: 'outlined',
     padding: 'md',
+    interactive: true,
     children: (
       <>
-        <CardTitle>Card title</CardTitle>
-        <CardDescription>
-          This is a basic card with some description text.
-        </CardDescription>
-        <CardFooter>
-          <Button variant="primary" size="sm">Action</Button>
-        </CardFooter>
+        <Badge>New</Badge>
+        <CardTitle as="h4">Clickable card</CardTitle>
+        <CardDescription>Hover to see cursor change</CardDescription>
       </>
     ),
   },
-  decorators: [(Story) => <div style={{ width: 320 }}><Story /></div>],
 };
 
-/* ─── Variants ───────────────────────────────────────────────── */
-
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Variant: outlined / brand / elevated</SectionLabel>
-      <Row>
-        {(['outlined', 'brand', 'elevated'] as const).map((v) => (
-          <Card key={v} variant={v} padding="md" style={{ width: 220 }}>
-            <CardTitle as="h4">{v}</CardTitle>
-            <CardDescription>Card variant preview</CardDescription>
-          </Card>
-        ))}
-      </Row>
-
-      <SectionLabel>Padding: none / sm / md / lg</SectionLabel>
-      <Row>
-        {(['none', 'sm', 'md', 'lg'] as const).map((p) => (
-          <Card key={p} variant="outlined" padding={p} style={{ width: 180 }}>
-            <CardTitle as="h4">{p}</CardTitle>
-          </Card>
-        ))}
-      </Row>
-
-      <SectionLabel>Interactive</SectionLabel>
-      <Row>
-        <Card variant="outlined" padding="md" interactive style={{ width: 260 }}>
-          <Badge>New</Badge>
-          <CardTitle as="h4">Clickable card</CardTitle>
-          <CardDescription>Hover to see cursor change</CardDescription>
-        </Card>
-      </Row>
-
-      <SectionLabel>Link card</SectionLabel>
-      <Row>
-        <Card variant="outlined" padding="md" href="#" style={{ width: 260 }}>
-          <CardTitle as="h4">Link card</CardTitle>
-          <CardDescription>Renders as an anchor element</CardDescription>
-        </Card>
-      </Row>
-    </Stack>
-  ),
+/** Link card — passes `href` to render the card as an `<a>` element.
+ *  @summary Link card (renders as anchor) */
+export const LinkCard: Story = {
+  args: {
+    variant: 'outlined',
+    padding: 'md',
+    href: '#',
+    children: (
+      <>
+        <CardTitle as="h4">Link card</CardTitle>
+        <CardDescription>Renders as an anchor element</CardDescription>
+      </>
+    ),
+  },
 };
 
 /* ─── Control preset ─────────────────────────────────────────── */
 
 /**
- * `preset="control"` — locked-down settings/control card layout.
- * Replaces the legacy `CardControl` component (per ADR-004).
- *
- * Renders: leading badge + (title + description) on the left, action
- * slot on the right. Use `actionAlign="top"` to anchor the action to
- * the upper-right corner instead of the vertical midline.
+ * Control preset — locked-down settings tile layout. Renders leading badge +
+ * (title + description) on the left, action slot on the right. Replaces the
+ * deprecated `CardControl` component (per ADR-004 §3).
+ * @summary Settings tile (control preset)
  */
-export const ControlPreset = () => (
-  <Stack>
-    <SectionLabel>Default — center-aligned action</SectionLabel>
-    <div style={{ width: 560 }}>
-      <Card
-        preset="control"
-        badge={<Badge status="positive">On</Badge>}
-        title="Email notifications"
-        description="Send a weekly digest to your inbox."
-        action={<Button variant="outline" size="sm">Configure</Button>}
-      />
-    </div>
+export const ControlPreset: Story = {
+  decorators: [(Story) => <div style={{ width: 560 }}><Story /></div>],
+  args: {
+    preset: 'control',
+    badge: <Badge status="positive">On</Badge>,
+    title: 'Email notifications',
+    description: 'Send a weekly digest to your inbox.',
+    action: <Button variant="outline" size="sm">Configure</Button>,
+  } as React.ComponentProps<typeof Card>,
+};
 
-    <SectionLabel>Top-aligned action</SectionLabel>
-    <div style={{ width: 560 }}>
-      <Card
-        preset="control"
-        actionAlign="top"
-        badge={<Badge status="warning">Off</Badge>}
-        title="Two-factor authentication"
-        description="Add a second layer of security by requiring a code from your phone when signing in. Strongly recommended for accounts with admin access."
-        action={<Button variant="primary" size="sm">Enable</Button>}
-      />
-    </div>
+/** Control preset with `actionAlign="top"` — anchors the action to the upper
+ *  right corner instead of the vertical midline. Use when the description is
+ *  long enough that center-alignment looks awkward.
+ *  @summary Control preset with top-aligned action */
+export const ControlPresetTopAligned: Story = {
+  decorators: [(Story) => <div style={{ width: 560 }}><Story /></div>],
+  args: {
+    preset: 'control',
+    actionAlign: 'top',
+    badge: <Badge status="warning">Off</Badge>,
+    title: 'Two-factor authentication',
+    description: 'Add a second layer of security by requiring a code from your phone when signing in. Strongly recommended for accounts with admin access.',
+    action: <Button variant="primary" size="sm">Enable</Button>,
+  } as React.ComponentProps<typeof Card>,
+};
 
-    <SectionLabel>No badge, no action</SectionLabel>
-    <div style={{ width: 560 }}>
-      <Card
-        preset="control"
-        title="Account name"
-        description="The display name shown to your team and on shared documents."
-      />
-    </div>
-  </Stack>
-);
+/** Control preset with no badge or action — title + description only.
+ *  @summary Control preset minimal */
+export const ControlPresetMinimal: Story = {
+  decorators: [(Story) => <div style={{ width: 560 }}><Story /></div>],
+  args: {
+    preset: 'control',
+    title: 'Account name',
+    description: 'The display name shown to your team and on shared documents.',
+  } as React.ComponentProps<typeof Card>,
+};
 
 /* ─── Summary preset ─────────────────────────────────────────── */
 
 /**
- * `preset="summary"` — compact metric/stat card with label, large value,
- * and optional text link. Replaces the legacy `CardSummary` component
- * (per ADR-004).
- *
- * `value` accepts a string or number. Numbers are formatted via
- * `Intl.NumberFormat` based on `type`:
- * - `numeric` (default): locale integer formatting (e.g. 1,234)
- * - `price`: USD currency (e.g. $48,250.75)
+ * Summary preset — compact metric tile with label, large value, optional text
+ * link. Numbers are formatted via `Intl.NumberFormat` based on `type` (numeric
+ * → locale integer, price → USD currency). Replaces the deprecated `CardSummary`
+ * component (per ADR-004 §1).
+ * @summary Metric tile with formatted value (summary preset)
  */
-export const SummaryPreset = () => (
-  <Stack>
-    <SectionLabel>Numeric — with text link</SectionLabel>
-    <div style={{ width: 320 }}>
-      <Card
-        preset="summary"
-        label="Active companies"
-        value={42}
-        textLink={{ label: 'View all', href: '#' }}
-      />
-    </div>
+export const SummaryPreset: Story = {
+  args: {
+    preset: 'summary',
+    label: 'Active companies',
+    value: 42,
+    textLink: { label: 'View all', href: '#' },
+  } as React.ComponentProps<typeof Card>,
+};
 
-    <SectionLabel>Price — formatted as USD currency</SectionLabel>
-    <div style={{ width: 320 }}>
-      <Card
-        preset="summary"
-        label="Q1 revenue"
-        value={48250.75}
-        type="price"
-        textLink={{ label: 'Details', href: '#' }}
-      />
-    </div>
+/** Summary preset — `type="price"` formats the value as USD currency.
+ *  @summary Summary preset with price formatting */
+export const SummaryPresetPrice: Story = {
+  args: {
+    preset: 'summary',
+    label: 'Q1 revenue',
+    value: 48250.75,
+    type: 'price',
+    textLink: { label: 'Details', href: '#' },
+  } as React.ComponentProps<typeof Card>,
+};
 
-    <SectionLabel>String value (no formatting)</SectionLabel>
-    <div style={{ width: 320 }}>
-      <Card
-        preset="summary"
-        label="Plan"
-        value="Pro Annual"
-      />
-    </div>
+/** Summary preset — string `value` skips number formatting entirely.
+ *  @summary Summary preset with string value */
+export const SummaryPresetString: Story = {
+  args: {
+    preset: 'summary',
+    label: 'Plan',
+    value: 'Pro Annual',
+  } as React.ComponentProps<typeof Card>,
+};
 
-    <SectionLabel>Button-style link (no href)</SectionLabel>
-    <div style={{ width: 320 }}>
-      <Card
-        preset="summary"
-        label="Pending tasks"
-        value={7}
-        textLink={{ label: 'Review', onClick: () => {} }}
-      />
-    </div>
-  </Stack>
-);
+/** Summary preset — text link with `onClick` instead of `href` renders as a button.
+ *  @summary Summary preset with button-style link */
+export const SummaryPresetButtonLink: Story = {
+  args: {
+    preset: 'summary',
+    label: 'Pending tasks',
+    value: 7,
+    textLink: { label: 'Review', onClick: () => {} },
+  } as React.ComponentProps<typeof Card>,
+};
 
-/* ─── Patterns ───────────────────────────────────────────────── */
+/* ─── Composition recipes ────────────────────────────────────── */
 
-export const Patterns: Story = {
+/** Service-cards grid — common 3-column marketing recipe.
+ *  @summary 3-column service-cards grid */
+export const ServiceCardsGrid: Story = {
+  decorators: [(Story) => <div style={{ width: 'auto' }}><Story /></div>],
   render: () => (
     <Stack>
-      <SectionLabel>Service cards grid</SectionLabel>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--gap-lg)', maxWidth: 800 }}>
         {['Design', 'Development', 'Strategy'].map((title) => (
           <Card key={title} variant="outlined" padding="lg">
@@ -222,17 +240,6 @@ export const Patterns: Story = {
           </Card>
         ))}
       </div>
-
-      <SectionLabel>Feature card with action</SectionLabel>
-      <Card variant="elevated" padding="lg" style={{ maxWidth: 360 }}>
-        <CardTitle>Premium plan</CardTitle>
-        <CardDescription>
-          Everything in the free plan, plus advanced analytics and priority support.
-        </CardDescription>
-        <CardFooter>
-          <Button variant="primary" size="sm">Upgrade</Button>
-        </CardFooter>
-      </Card>
     </Stack>
   ),
 };

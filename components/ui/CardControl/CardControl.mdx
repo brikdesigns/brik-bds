@@ -15,25 +15,28 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Action shapes
 
-Switch actions, button actions, status badges, and minimal layout.
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.WithSwitch} />
+<Canvas of={Stories.WithButton} />
 
 ## Action alignment
 
 Use `actionAlign="top"` when the description wraps to multiple lines — the CTA anchors to the upper-right corner instead of drifting to the vertical center of the card.
 
-<Canvas of={Stories.ActionAlignment} />
+<Canvas of={Stories.ActionCentered} />
+<Canvas of={Stories.ActionTopAligned} />
 
-## Patterns
+## Status variants
 
-Settings panel with mixed action types.
+<Canvas of={Stories.ErrorStatus} />
+<Canvas of={Stories.WarningStatus} />
 
-<Canvas of={Stories.Patterns} />
+## Content shapes
 
-## Toggle switch panel
+<Canvas of={Stories.Minimal} />
+
+## Toggle-switch panel
 
 Multi-row notification panel using switches with top-aligned actions — a common settings-page layout.
 

@@ -1,38 +1,19 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import { TextInput } from './TextInput';
 import { Icon } from '@iconify/react';
+import { TextInput } from './TextInput';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'flex-start' }}>{children}</div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────────────── */
-
+/**
+ * TextInput — single-line text input with label, helper, error, optional
+ * leading/trailing icons, and three sizes. Renders as `<input>` with the
+ * configured `type` (text/email/password/number/tel/url/search).
+ * @summary Single-line text input
+ */
 const meta: Meta<typeof TextInput> = {
   title: 'Components/Form/text-input',
   component: TextInput,
   parameters: { layout: 'centered' },
+  decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>],
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     label: { control: 'text' },
@@ -41,28 +22,26 @@ const meta: Meta<typeof TextInput> = {
     error: { control: 'text' },
     fullWidth: { control: 'boolean' },
     disabled: { control: 'boolean' },
-    type: { control: 'select', options: ['text', 'email', 'password', 'number', 'tel', 'url'] },
+    type: { control: 'select', options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'] },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof TextInput>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox. Includes a typing interaction test.
+ *  @summary Live playground with interaction test */
 export const Playground: Story = {
   args: {
     label: 'Email address',
     placeholder: 'you@example.com',
     type: 'email',
     size: 'md',
+    fullWidth: true,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const input = canvas.getByRole('textbox');
-
     await expect(input).toBeVisible();
     await userEvent.clear(input);
     await userEvent.type(input, 'test@example.com');
@@ -70,87 +49,62 @@ export const Playground: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, states, icons, and types
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Sizes ──────────────────────────────────────────────────── */
 
-export const Variants: Story = {
-  render: () => (
-    <div style={{ width: 480 }}>
-      <Stack>
-        {/* Sizes */}
-        <div>
-          <SectionLabel>Sizes</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <TextInput size="sm" label="Small (sm)" placeholder="14px text" fullWidth />
-            <TextInput size="md" label="Medium (md)" placeholder="16px text — default" fullWidth />
-            <TextInput size="lg" label="Large (lg)" placeholder="18px text" fullWidth />
-          </Stack>
-        </div>
-
-        {/* States */}
-        <div>
-          <SectionLabel>States</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <TextInput label="Default" placeholder="Enter text..." fullWidth />
-            <TextInput label="Helper text" placeholder="Enter password" helperText="Must be at least 8 characters" type="password" fullWidth />
-            <TextInput label="Error" placeholder="you@example.com" error="Please enter a valid email" defaultValue="invalid-email" fullWidth />
-            <TextInput label="Disabled" placeholder="Cannot edit" disabled fullWidth />
-          </Stack>
-        </div>
-
-        {/* With icons */}
-        <div>
-          <SectionLabel>With icons</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <TextInput label="Icon before" placeholder="you@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
-            <TextInput label="Icon after" placeholder="Enter name" iconAfter={<Icon icon="ph:user" />} fullWidth />
-          </Stack>
-        </div>
-
-        {/* Input types */}
-        <div>
-          <SectionLabel>Input types</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <TextInput label="Text" type="text" placeholder="Plain text" fullWidth />
-            <TextInput label="Email" type="email" placeholder="email@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
-            <TextInput label="Password" type="password" placeholder="••••••••" fullWidth />
-            <TextInput label="Number" type="number" placeholder="0" fullWidth />
-            <TextInput label="Search" type="search" defaultValue="bds component" iconBefore={<Icon icon="ph:magnifying-glass" />} fullWidth />
-            <TextInput label="URL" type="url" placeholder="https://example.com" fullWidth />
-          </Stack>
-        </div>
-      </Stack>
-    </div>
-  ),
+/** Small (sm) — 14px text, dense form rows.
+ *  @summary Small size */
+export const Small: Story = {
+  args: { size: 'sm', label: 'Small (sm)', placeholder: '14px text', fullWidth: true },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world form layouts
-   ═══════════════════════════════════════════════════════════════ */
+/** Medium (md) — 16px text, default form size.
+ *  @summary Medium size (default) */
+export const Medium: Story = {
+  args: { size: 'md', label: 'Medium (md)', placeholder: '16px text — default', fullWidth: true },
+};
 
-export const Patterns: Story = {
-  render: () => (
-    <Row gap="var(--padding-xl)">
-      {/* Contact form */}
-      <div style={{ width: 350 }}>
-        <SectionLabel>Contact form</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <TextInput label="First name" placeholder="John" fullWidth />
-          <TextInput label="Last name" placeholder="Doe" fullWidth />
-          <TextInput label="Email" type="email" placeholder="john@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
-          <TextInput label="Phone" type="tel" placeholder="(555) 123-4567" helperText="We'll only contact you about your order" fullWidth />
-        </Stack>
-      </div>
+/** Large (lg) — 18px text, prominent inputs.
+ *  @summary Large size */
+export const Large: Story = {
+  args: { size: 'lg', label: 'Large (lg)', placeholder: '18px text', fullWidth: true },
+};
 
-      {/* Login form */}
-      <div style={{ width: 320 }}>
-        <SectionLabel>Login form</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <TextInput label="Email" type="email" placeholder="you@example.com" iconBefore={<Icon icon="ph:envelope" />} fullWidth />
-          <TextInput label="Password" type="password" placeholder="••••••••" iconBefore={<Icon icon="ph:lock" />} fullWidth />
-        </Stack>
-      </div>
-    </Row>
-  ),
+/* ─── States ─────────────────────────────────────────────────── */
+
+/** With helper text — clarifies expected input format.
+ *  @summary Input with helper text */
+export const WithHelperText: Story = {
+  args: { label: 'Password', placeholder: 'Enter password', helperText: 'Must be at least 8 characters', type: 'password', fullWidth: true },
+};
+
+/** Error state — `error` overrides the helper line.
+ *  @summary Input with error */
+export const WithError: Story = {
+  args: { label: 'Email', placeholder: 'you@example.com', error: 'Please enter a valid email', defaultValue: 'invalid-email', fullWidth: true },
+};
+
+/** Disabled — non-editable.
+ *  @summary Disabled input */
+export const Disabled: Story = {
+  args: { label: 'Disabled', placeholder: 'Cannot edit', disabled: true, fullWidth: true },
+};
+
+/* ─── Content shapes ─────────────────────────────────────────── */
+
+/** Leading icon — common for email/search/identity inputs.
+ *  @summary Input with leading icon */
+export const WithIconBefore: Story = {
+  args: { label: 'Email', placeholder: 'you@example.com', iconBefore: <Icon icon="ph:envelope" />, fullWidth: true },
+};
+
+/** Trailing icon — useful for inputs that resolve to a person/entity.
+ *  @summary Input with trailing icon */
+export const WithIconAfter: Story = {
+  args: { label: 'Username', placeholder: 'Enter name', iconAfter: <Icon icon="ph:user" />, fullWidth: true },
+};
+
+/** Search input — `type="search"` adds the native clear affordance.
+ *  @summary Search input */
+export const Search: Story = {
+  args: { label: 'Search', type: 'search', defaultValue: 'bds component', iconBefore: <Icon icon="ph:magnifying-glass" />, fullWidth: true },
 };

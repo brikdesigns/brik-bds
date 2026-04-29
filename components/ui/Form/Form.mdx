@@ -15,14 +15,13 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Layouts
 
-Error state, success state, and horizontal layout.
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Vertical} />
+<Canvas of={Stories.Horizontal} />
 
 - **`vertical`** — Fields stack vertically (default)
-- **`horizontal`** — Fields side by side for compact forms
+- **`horizontal`** — Fields side by side for compact filter/search forms
 
 Gap sizes:
 
@@ -30,11 +29,14 @@ Gap sizes:
 - **`md`** — `--gap-lg` (16px)
 - **`lg`** — `--gap-xl` (24px)
 
-## Patterns
+## Banner states
 
-Real-world usage: interactive feedback form with validation and submission.
+<Canvas of={Stories.WithError} />
+<Canvas of={Stories.WithSuccess} />
 
-<Canvas of={Stories.Patterns} />
+## Interactive validation
+
+<Canvas of={Stories.InteractiveValidation} />
 
 ---
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Board } from './Board';
 import { BoardColumn } from './BoardColumn';
 import { BoardHeader } from './BoardHeader';
@@ -7,8 +7,14 @@ import { BoardCard } from './BoardCard';
 import { Tag } from '../Tag';
 import { Badge } from '../Badge';
 
+/**
+ * Board — Kanban-style multi-column container with sticky headers and a card list.
+ * Compose with `BoardColumn`, `BoardHeader` (avatar + progress), and `BoardCard`
+ * (task tile with tags + checkbox).
+ * @summary Multi-column Kanban board container
+ */
 const meta: Meta<typeof Board> = {
-  title: 'Displays/Board/board',
+  title: 'Components/Container/board',
   component: Board,
   parameters: {
     layout: 'padded',

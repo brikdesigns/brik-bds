@@ -1,42 +1,16 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState, useCallback } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import { AddressInput, type AddressSuggestion } from './AddressInput';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Mock Data ───────────────────────────────────────────────── */
-
-const mockSuggestions: AddressSuggestion[] = [
-  { id: '1', label: '123 Main Street', description: 'Nashville, TN 37201', icon: <Icon icon="ph:house" /> },
-  { id: '2', label: '456 Broadway Ave', description: 'Nashville, TN 37203', icon: <Icon icon="ph:buildings" /> },
-  { id: '3', label: '789 Music Row', description: 'Nashville, TN 37212', icon: <Icon icon="ph:map-pin" /> },
-  { id: '4', label: '321 West End Ave', description: 'Nashville, TN 37205' },
-  { id: '5', label: '555 Demonbreun St', description: 'Nashville, TN 37203' },
-];
-
-/* ─── Meta ────────────────────────────────────────────────────── */
-
+/**
+ * AddressInput — text input with an optional suggestions dropdown for address
+ * autocomplete. Pass `suggestions` to render the dropdown; wire `onSuggestionSelect`
+ * to handle selection.
+ * @summary Address input with autocomplete suggestions
+ */
 const meta: Meta<typeof AddressInput> = {
-  title: 'Components/Input/address-input',
+  title: 'Components/Form/address-input',
   component: AddressInput,
   parameters: { layout: 'padded' },
   decorators: [
@@ -55,60 +29,55 @@ const meta: Meta<typeof AddressInput> = {
 export default meta;
 type Story = StoryObj<typeof AddressInput>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
+const mockSuggestions: AddressSuggestion[] = [
+  { id: '1', label: '123 Main Street', description: 'Nashville, TN 37201', icon: <Icon icon="ph:house" /> },
+  { id: '2', label: '456 Broadway Ave', description: 'Nashville, TN 37203', icon: <Icon icon="ph:buildings" /> },
+  { id: '3', label: '789 Music Row', description: 'Nashville, TN 37212', icon: <Icon icon="ph:map-pin" /> },
+  { id: '4', label: '321 West End Ave', description: 'Nashville, TN 37205' },
+  { id: '5', label: '555 Demonbreun St', description: 'Nashville, TN 37203' },
+];
 
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
+  args: { label: 'Address', placeholder: 'Enter address' },
+};
+
+/** Default size (md).
+ *  @summary Default size */
+export const Default: Story = {
+  args: { label: 'Address', placeholder: 'Enter address' },
+};
+
+/** Small size — used in compact form layouts.
+ *  @summary Small size */
+export const Small: Story = {
+  args: { label: 'Address', size: 'sm', placeholder: 'Enter address' },
+};
+
+/** With suggestions visible — pass a non-empty `suggestions` array to render
+ *  the dropdown. Use this story to inspect the dropdown styling and icon slot.
+ *  @summary Suggestions dropdown open */
+export const WithSuggestions: Story = {
   args: {
-    label: 'Address',
+    label: 'Location',
+    defaultValue: 'Nash',
+    suggestions: mockSuggestions.slice(0, 3),
+    onSuggestionSelect: (s) => console.log('Selected:', s),
     placeholder: 'Enter address',
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, labels, static suggestions
-   ═══════════════════════════════════════════════════════════════ */
+/** Interactive autocomplete — `useState` drives the value and filtered
+ *  suggestions list. Render is required for the controlled-state demo.
+ *  @summary Live autocomplete with filtering */
+export const InteractiveAutocomplete: Story = {
+  render: () => {
+    const Demo = () => {
+      const [value, setValue] = useState('');
+      const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
 
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      {/* Sizes */}
-      <div>
-        <SectionLabel>Sizes</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <AddressInput label="Medium (default)" placeholder="Enter address" fullWidth />
-          <AddressInput label="Small" size="sm" placeholder="Enter address" fullWidth />
-        </Stack>
-      </div>
-
-      {/* With suggestions visible */}
-      <div>
-        <SectionLabel>With suggestions dropdown</SectionLabel>
-        <AddressInput
-          label="Location"
-          defaultValue="Nash"
-          suggestions={mockSuggestions.slice(0, 3)}
-          onSuggestionSelect={(s) => console.log('Selected:', s)}
-          placeholder="Enter address"
-          fullWidth
-        />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Interactive autocomplete
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Patterns: Story = {
-  render: function InteractivePattern() {
-    const [value, setValue] = useState('');
-    const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
-
-    const handleChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
+      const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value;
         setValue(query);
         setSuggestions(
@@ -120,30 +89,25 @@ export const Patterns: Story = {
               )
             : [],
         );
-      },
-      [],
-    );
+      }, []);
 
-    const handleSelect = useCallback((suggestion: AddressSuggestion) => {
-      setValue(suggestion.label);
-      setSuggestions([]);
-    }, []);
+      const handleSelect = useCallback((suggestion: AddressSuggestion) => {
+        setValue(suggestion.label);
+        setSuggestions([]);
+      }, []);
 
-    return (
-      <Stack>
-        <div>
-          <SectionLabel>Interactive autocomplete</SectionLabel>
-          <AddressInput
-            label="Delivery address"
-            value={value}
-            onChange={handleChange}
-            suggestions={suggestions}
-            onSuggestionSelect={handleSelect}
-            placeholder="Start typing an address..."
-            fullWidth
-          />
-        </div>
-      </Stack>
-    );
+      return (
+        <AddressInput
+          label="Delivery address"
+          value={value}
+          onChange={handleChange}
+          suggestions={suggestions}
+          onSuggestionSelect={handleSelect}
+          placeholder="Start typing an address..."
+          fullWidth
+        />
+      );
+    };
+    return <Demo />;
   },
 };

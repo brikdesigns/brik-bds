@@ -17,19 +17,30 @@ Use the Controls panel to explore all props interactively.
 
 ## Variants
 
-All visual variants, padding sizes, interactive, and link modes.
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Outlined} />
+<Canvas of={Stories.Brand} />
+<Canvas of={Stories.Elevated} />
 
 - **`outlined`** — Subtle secondary border (default)
 - **`brand`** — Primary-color border for emphasis
 - **`elevated`** — Shadow for visual prominence
+
+## Padding
+
+<Canvas of={Stories.Paddings} />
+
+## Interactive shapes
+
+<Canvas of={Stories.Interactive} />
+<Canvas of={Stories.LinkCard} />
 
 ## Control preset
 
 `preset="control"` collapses the legacy `CardControl` component into Card as a locked-down settings/control layout (per [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md)). Renders: leading badge + (title + description) on the left, action slot on the right.
 
 <Canvas of={Stories.ControlPreset} />
+<Canvas of={Stories.ControlPresetTopAligned} />
+<Canvas of={Stories.ControlPresetMinimal} />
 
 ```tsx
 <Card
@@ -48,6 +59,9 @@ Both `<Card preset="control">` and the standalone `<CardControl>` ship as first-
 `preset="summary"` collapses the legacy `CardSummary` component into Card as a compact metric/stat layout (per [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md)). Renders: label (top) + large value (bottom) + optional text link to the right. Numeric values format as locale integers; pass `type="price"` for USD currency.
 
 <Canvas of={Stories.SummaryPreset} />
+<Canvas of={Stories.SummaryPresetPrice} />
+<Canvas of={Stories.SummaryPresetString} />
+<Canvas of={Stories.SummaryPresetButtonLink} />
 
 ```tsx
 <Card
@@ -61,11 +75,9 @@ Both `<Card preset="control">` and the standalone `<CardControl>` ship as first-
 
 The standalone `CardSummary` component is `@deprecated` and slated for deletion in a future major version. Migrate to `Card preset="summary"` — same prop names, same number formatting, same layout. See [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md).
 
-## Patterns
+## Composition recipes
 
-Real-world usage: service grids and feature cards with actions.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.ServiceCardsGrid} />
 
 ---
 

@@ -57,6 +57,50 @@ duplicate.
 import test helpers from `storybook/test` (not `@storybook/test`). Keep
 stories minimal — only what's needed to demonstrate behavior.
 
+## Story shape + sidebar taxonomy (BDS — see ADR-006)
+
+[ADR-006](./adrs/ADR-006-storybook-taxonomy-and-story-shape.md) is the
+load-bearing document for *what* a BDS story file looks like and *where*
+it lives in the sidebar. The summary:
+
+**Two story shapes per file. That's it.**
+
+1. **`Playground`** — args-driven sandbox. Controls work. One canonical instance.
+2. **One story per meaningful state** — args-driven, named by the state
+   (`Information`, `Warning`, `Error`, `Disabled`, `WithIcon`, etc.).
+
+Story names use the state directly (`Warning`, not `Variants > Warning`).
+The Storybook sidebar + autodocs page **is** the gallery — don't build a
+second gallery inside `render`.
+
+**Don't ship:**
+
+- `Variants` / `Tones` / `Patterns` gallery buckets inside a component file.
+- `render`-mode stories that stack multiple instances behind `<SectionLabel>`
+  rows for documentation purposes.
+- "And" in story names (`SizesAndVariants` splits).
+
+**Narrow exception:** axis-only galleries (`Sizes`, `Densities`, `Placements`)
+earn one story when comparison is the entire point, the autodocs page can't
+show it as clearly, AND it's a single axis (not a mix of axes). Never named
+`Variants` / `Patterns` / `Examples`.
+
+**Sidebar taxonomy:** four content top-levels — `Foundations`, `Components`,
+`Patterns`, `Theming` — plus `Overview` (design-system metadata) and
+`Deprecated` (sorts last, tagged `!manifest`). `Components/` uses one
+alphabetical subcategory layer: `Action`, `Addables`, `Card`, `Container`,
+`Control`, `Feedback`, `Form`, `Indicator`, `List`, `Navigation`, `Overlay`,
+`Structure`. See ADR-006 for the full member list per subcategory.
+
+**Reference examples:**
+
+- [`Banner.stories.tsx`](../components/ui/Banner/Banner.stories.tsx) — tone +
+  content-shape variants, args-only, no render galleries.
+- [`EmptyState.stories.tsx`](../components/ui/EmptyState/EmptyState.stories.tsx) —
+  content-shape variants, args-only.
+- [`Tooltip.stories.tsx`](../components/ui/Tooltip/Tooltip.stories.tsx) — uses
+  the axis-only gallery exception for `Placements`.
+
 ## MCP Discipline (mandatory for BDS)
 
 The MCP `get-documentation` tool returns "the summary, if present, or the

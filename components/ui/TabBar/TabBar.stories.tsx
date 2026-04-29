@@ -1,29 +1,25 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
 import { TabBar } from './TabBar';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/**
+ * TabBar — horizontal tab navigation. Three visual variants (`text` /
+ * `tab` / `box`) and an `onColor` mode for use over branded surfaces.
+ * @summary Horizontal tab navigation
+ */
+const meta: Meta<typeof TabBar> = {
+  title: 'Components/Navigation/tab-bar',
+  component: TabBar,
+  parameters: { layout: 'padded' },
+  argTypes: {
+    variant: { control: 'select', options: ['text', 'tab', 'box'] },
+    onColor: { control: 'boolean' },
+  },
+};
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Shared Data ─────────────────────────────────────────────── */
+export default meta;
+type Story = StoryObj<typeof TabBar>;
 
 const tabLabels = ['Active', 'Latest', 'Product', 'Design System', 'Marketing', 'Other'];
 const fewLabels = ['All', 'Active', 'Archived'];
@@ -41,7 +37,6 @@ function InteractiveTabBar({
   disabledIndices?: number[];
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
-
   return (
     <TabBar
       variant={variant}
@@ -56,27 +51,10 @@ function InteractiveTabBar({
   );
 }
 
-/* ─── Meta ────────────────────────────────────────────────────── */
-
-const meta: Meta<typeof TabBar> = {
-  title: 'Navigation/Secondary/tab-bar',
-  component: TabBar,
-  parameters: { layout: 'padded' },
-  argTypes: {
-    variant: { control: 'select', options: ['text', 'tab', 'box'] },
-    onColor: { control: 'boolean' },
-  },
-};
-
-export default meta;
-type Story = StoryObj<typeof TabBar>;
-
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
 const tabClickHandler = fn();
 
+/** Args-driven sandbox. Includes an interaction test that clicks the second tab.
+ *  @summary Live playground with interaction test */
 export const Playground: Story = {
   args: {
     variant: 'tab',
@@ -89,86 +67,96 @@ export const Playground: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const tabs = canvas.getAllByRole('tab');
-
     await expect(tabs).toHaveLength(3);
     await expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
-
-    // Click second tab
     await userEvent.click(tabs[1]);
     await expect(tabClickHandler).toHaveBeenCalled();
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — All variants, on-color, disabled, few tabs
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Variant axis ───────────────────────────────────────────── */
 
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      {/* All three variants */}
-      <div>
-        <SectionLabel>Text</SectionLabel>
-        <InteractiveTabBar variant="text" />
-      </div>
-
-      <div>
-        <SectionLabel>Tab</SectionLabel>
-        <InteractiveTabBar variant="tab" />
-      </div>
-
-      <div>
-        <SectionLabel>Box</SectionLabel>
-        <InteractiveTabBar variant="box" />
-      </div>
-
-      {/* On color */}
-      <div style={{
-        backgroundColor: 'var(--background-brand-primary)',
-        padding: 'var(--padding-xl)',
-        borderRadius: 'var(--border-radius-md)',
-      }}>
-        <SectionLabel>Text — on color</SectionLabel>
-        <InteractiveTabBar variant="text" onColor />
-      </div>
-
-      <div style={{
-        backgroundColor: 'var(--background-brand-primary)',
-        padding: 'var(--padding-xl)',
-        borderRadius: 'var(--border-radius-md)',
-      }}>
-        <SectionLabel>Tab — on color</SectionLabel>
-        <InteractiveTabBar variant="tab" onColor />
-      </div>
-
-      {/* Disabled tabs */}
-      <div>
-        <SectionLabel>Disabled — "Marketing" and "Other"</SectionLabel>
-        <InteractiveTabBar variant="tab" disabledIndices={[4, 5]} />
-      </div>
-
-      {/* Few tabs */}
-      <div>
-        <SectionLabel>Few tabs</SectionLabel>
-        <InteractiveTabBar variant="text" labels={fewLabels} />
-      </div>
-    </Stack>
-  ),
+/** Text variant — minimal, underline-only.
+ *  @summary Text variant */
+export const Text: Story = {
+  render: () => <InteractiveTabBar variant="text" />,
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Page header with tab navigation
-   ═══════════════════════════════════════════════════════════════ */
+/** Tab variant — bordered tabs with active-tab connector.
+ *  @summary Tab variant */
+export const Tab: Story = {
+  render: () => <InteractiveTabBar variant="tab" />,
+};
 
-export const Patterns: Story = {
+/** Box variant — pill/box-shaped active state. Used for filter rows.
+ *  @summary Box variant */
+export const Box: Story = {
+  render: () => <InteractiveTabBar variant="box" />,
+};
+
+/* ─── On-color modes ─────────────────────────────────────────── */
+
+/** Text variant on a brand surface — `onColor` adapts text/border to the
+ *  brand-primary background.
+ *  @summary Text on-color */
+export const TextOnColor: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{
+        backgroundColor: 'var(--background-brand-primary)',
+        padding: 'var(--padding-xl)',
+        borderRadius: 'var(--border-radius-md)',
+      }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: () => <InteractiveTabBar variant="text" onColor />,
+};
+
+/** Tab variant on a brand surface.
+ *  @summary Tab on-color */
+export const TabOnColor: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{
+        backgroundColor: 'var(--background-brand-primary)',
+        padding: 'var(--padding-xl)',
+        borderRadius: 'var(--border-radius-md)',
+      }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: () => <InteractiveTabBar variant="tab" onColor />,
+};
+
+/* ─── Content shapes ─────────────────────────────────────────── */
+
+/** Disabled tabs — `disabled: true` on individual items locks them out of
+ *  navigation while still rendering the label.
+ *  @summary TabBar with disabled tabs */
+export const WithDisabledTabs: Story = {
+  render: () => <InteractiveTabBar variant="tab" disabledIndices={[4, 5]} />,
+};
+
+/** Few tabs — confirms layout when the row has only 2-3 items.
+ *  @summary Few-tab TabBar */
+export const FewTabs: Story = {
+  render: () => <InteractiveTabBar variant="text" labels={fewLabels} />,
+};
+
+/* ─── Composition ────────────────────────────────────────────── */
+
+/** Settings-page navigation — `tab` variant with content area below.
+ *  @summary Settings-page tab navigation */
+export const SettingsPage: Story = {
   render: () => {
-    function SettingsPage() {
+    const Demo = () => {
       const [activeIndex, setActiveIndex] = useState(0);
       const tabs = ['General', 'Billing', 'Team', 'Integrations', 'Security'];
-
       return (
         <div>
-          <SectionLabel>Settings page navigation</SectionLabel>
           <div style={{ borderBottom: 'var(--border-width-md) solid var(--border-secondary)' }}>
             <TabBar
               variant="tab"
@@ -189,32 +177,7 @@ export const Patterns: Story = {
           </div>
         </div>
       );
-    }
-
-    function FilterTabs() {
-      const [activeIndex, setActiveIndex] = useState(0);
-      const filters = ['All', 'Active', 'Draft', 'Archived'];
-
-      return (
-        <div>
-          <SectionLabel>Content filter</SectionLabel>
-          <TabBar
-            variant="box"
-            items={filters.map((label, i) => ({
-              label,
-              active: i === activeIndex,
-              onClick: () => setActiveIndex(i),
-            }))}
-          />
-        </div>
-      );
-    }
-
-    return (
-      <Stack>
-        <SettingsPage />
-        <FilterTabs />
-      </Stack>
-    );
+    };
+    return <Demo />;
   },
 };

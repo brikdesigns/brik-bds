@@ -36,22 +36,26 @@ Use the Controls panel to explore all props interactively.
 
 ## Variants
 
-All variant, appearance, size, and state combinations.
+Two variants — primary for active/focal chips, secondary for default filter chips.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Secondary} />
+<Canvas of={Stories.Primary} />
 
-- **`secondary` + `solid`** — Default filter chip. High contrast fill.
-- **`secondary` + `outline`** — Softer filter chip. Transparent with neutral border.
-- **`primary` + `solid`** — Active/selected filter. Brand emphasis fill.
-- **`primary` + `outline`** — Active filter with lower-emphasis brand border.
+## Appearances
 
-**Appearance** is a shared axis across Badge/Chip/Tag — see [Vocabulary › Axes](/?path=/docs/foundations-vocabulary--overview).
+Solid is the default; outline works against busy surfaces. Shared axis with Badge/Tag — see [Vocabulary › Axes](/?path=/docs/foundations-vocabulary--overview).
 
-## Patterns
+<Canvas of={Stories.Solid} />
+<Canvas of={Stories.Outline} />
 
-Real-world compositions for filtering and selection.
+## Sizes
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Sizes} />
+
+## Behavior shapes
+
+<Canvas of={Stories.Removable} />
+<Canvas of={Stories.Disabled} />
 
 ---
 

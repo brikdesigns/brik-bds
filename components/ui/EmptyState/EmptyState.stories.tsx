@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EmptyState } from './EmptyState';
 
+/**
+ * EmptyState — feedback for empty content areas. Centered title + optional
+ * description + optional action button (or custom children) inside a bordered
+ * surface container.
+ * @summary Empty content placeholder with optional action
+ */
 const meta: Meta<typeof EmptyState> = {
   title: 'Components/Feedback/empty-state',
   component: EmptyState,
@@ -14,22 +20,10 @@ const meta: Meta<typeof EmptyState> = {
 export default meta;
 type Story = StoryObj<typeof EmptyState>;
 
-/* ─── Layout helpers ─────────────────────────────────────────── */
+/* ─── Sandbox ────────────────────────────────────────────────── */
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-    {children}
-  </span>
-);
-
-const Stack = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%', maxWidth: '500px' }}>
-    {children}
-  </div>
-);
-
-/* ─── Playground ─────────────────────────────────────────────── */
-
+/** Args-driven sandbox. Use Controls to explore title, description, and button.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
   args: {
     title: 'Title goes here',
@@ -38,62 +32,54 @@ export const Playground: Story = {
   },
 };
 
-/* ─── Variants ───────────────────────────────────────────────── */
+/* ─── Content shapes ─────────────────────────────────────────── */
 
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>With button</SectionLabel>
-      <EmptyState
-        title="No projects yet"
-        description="Create your first project to get started."
-        buttonProps={{ children: 'Create Project' }}
-      />
-
-      <SectionLabel>Without button</SectionLabel>
-      <EmptyState
-        title="No results found"
-        description="Try adjusting your search or filters."
-      />
-
-      <SectionLabel>Title only</SectionLabel>
-      <EmptyState title="No data available" />
-
-      <SectionLabel>Custom content</SectionLabel>
-      <EmptyState title="Upload your files" description="Drag and drop or click to browse.">
-        <div style={{ padding: 'var(--padding-md)', border: 'var(--border-width-sm) dashed var(--border-secondary)', borderRadius: 'var(--border-radius-md)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>
-          Drop files here
-        </div>
-      </EmptyState>
-    </Stack>
-  ),
+/** Default shape — title, description, and a primary action button.
+ *  @summary Empty state with primary CTA */
+export const WithButton: Story = {
+  args: {
+    title: 'No projects yet',
+    description: 'Create your first project to get started.',
+    buttonProps: { children: 'Create Project' },
+  },
 };
 
-/* ─── Patterns ───────────────────────────────────────────────── */
+/** Description-only — used when there's no recovery action (filtered results, etc.).
+ *  @summary Empty state without an action */
+export const WithoutButton: Story = {
+  args: {
+    title: 'No results found',
+    description: 'Try adjusting your search or filters.',
+  },
+};
 
-export const Patterns: Story = {
-  name: 'Patterns',
-  render: () => (
-    <Stack>
-      <SectionLabel>Inbox zero</SectionLabel>
-      <EmptyState
-        title="All caught up"
-        description="You have no unread messages. Check back later."
-      />
+/** Minimal shape — title only. Use sparingly; usually a description helps.
+ *  @summary Title-only empty state */
+export const TitleOnly: Story = {
+  args: {
+    title: 'No data available',
+  },
+};
 
-      <SectionLabel>First-time user</SectionLabel>
-      <EmptyState
-        title="Welcome to your dashboard"
-        description="Add your first company to start tracking opportunities."
-        buttonProps={{ children: 'Add company' }}
-      />
-
-      <SectionLabel>Search with no results</SectionLabel>
-      <EmptyState
-        title="No matches found"
-        description="Try different keywords or remove some filters."
-        buttonProps={{ children: 'Clear filters' }}
-      />
-    </Stack>
-  ),
+/** Custom children replace the default Button slot — drop zones, illustrations, etc.
+ *  @summary Empty state with custom content slot */
+export const WithCustomContent: Story = {
+  args: {
+    title: 'Upload your files',
+    description: 'Drag and drop or click to browse.',
+    children: (
+      <div
+        style={{
+          padding: 'var(--padding-md)',
+          border: 'var(--border-width-sm) dashed var(--border-secondary)',
+          borderRadius: 'var(--border-radius-md)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-sm)',
+          color: 'var(--text-muted)',
+        }}
+      >
+        Drop files here
+      </div>
+    ),
+  },
 };

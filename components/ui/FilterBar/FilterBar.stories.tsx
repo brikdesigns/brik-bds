@@ -35,6 +35,12 @@ const statusOptions = [
 
 /* ─── Meta ────────────────────────────────────────────── */
 
+/**
+ * FilterBar — title + filtered-count + filter triggers in one row. Wraps a
+ * cluster of `FilterButton` / `FilterToggle` children with a counter that
+ * flips to brand color when filters are active.
+ * @summary Filter row with counter and trigger cluster
+ */
 const meta = {
   title: 'Components/Action/filter-bar',
   component: FilterBar,
@@ -51,11 +57,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. DEFAULT — No filter applied; counter in neutral state
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Default: Story = {
+/** Default state — no filter applied; counter in neutral state.
+ *  @summary Default filter bar */
+export const Playground: Story = {
   args: {
     title: 'Companies',
     total: rows.length,
@@ -70,10 +74,9 @@ export const Default: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. FILTERED — Filter active; counter switches to brand + Clear button
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Filter active — counter switches to brand color and a Clear button appears.
+ *  Includes an interaction test that verifies onClear fires.
+ *  @summary Filter active with Clear button */
 export const Filtered: Story = {
   args: {
     title: 'Companies',

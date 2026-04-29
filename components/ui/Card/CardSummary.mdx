@@ -3,46 +3,32 @@ import * as Stories from './CardSummary.stories';
 
 <Meta of={Stories} />
 
-# Card summary
+# Card summary — deprecated
 
-Compact metric card for displaying a labeled value with an optional text link. Designed for dashboards, summaries, and stat displays.
+> **This component is deprecated.** Use `<Card preset="summary">` instead. Same prop names (`label`, `value`, `type`, `textLink`), same layout, same number formatting.
+
+This page exists for migration reference only. New code should not import `CardSummary`.
 
 ---
 
-## Playground
+## Migration
 
-Use the Controls panel to explore all props interactively.
+```tsx
+// Before
+<CardSummary label="Total" value={42} type="numeric" />
+
+// After
+<Card preset="summary" label="Total" value={42} type="numeric" />
+```
+
+---
+
+## Playground (reference)
 
 <Canvas of={Stories.Playground} />
-
-## Variants
-
-Numeric and price types, with and without text links, plus stacked layout.
-
-<Canvas of={Stories.Variants} />
-
-- **`numeric`** — Plain formatted number (default)
-- **`price`** — USD currency with dollar sign and decimals
-
-## Patterns
-
-Dashboard metrics grid with mixed types.
-
-<Canvas of={Stories.Patterns} />
 
 ---
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { CardSummary } from '@brik/bds';
-
-<CardSummary label="Total" value={42} />
-<CardSummary label="Revenue" value={48250.75} type="price" textLink={{ label: "Details", href: "/revenue" }} />
-```

@@ -1,30 +1,13 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumb } from './Breadcrumb';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────────────── */
-
+/**
+ * Breadcrumb — page-position navigation. Items render as links except the last
+ * (current page), which renders as plain text. Two separator styles.
+ * @summary Page-position breadcrumb navigation
+ */
 const meta: Meta<typeof Breadcrumb> = {
-  title: 'Navigation/Secondary/breadcrumb',
+  title: 'Components/Navigation/breadcrumb',
   component: Breadcrumb,
   parameters: { layout: 'padded' },
   argTypes: {
@@ -35,10 +18,8 @@ const meta: Meta<typeof Breadcrumb> = {
 export default meta;
 type Story = StoryObj<typeof Breadcrumb>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
   args: {
     items: [
@@ -50,113 +31,74 @@ export const Playground: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Separator styles, depths, single item
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Separator axis ─────────────────────────────────────────── */
 
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Slash separator (default)</SectionLabel>
-        <Breadcrumb
-          items={[
-            { label: 'Home', href: '#' },
-            { label: 'Products', href: '#' },
-            { label: 'Design System' },
-          ]}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Chevron separator</SectionLabel>
-        <Breadcrumb
-          separator="chevron"
-          items={[
-            { label: 'Home', href: '#' },
-            { label: 'Products', href: '#' },
-            { label: 'Design System' },
-          ]}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Deep nesting</SectionLabel>
-        <Breadcrumb
-          items={[
-            { label: 'Home', href: '#' },
-            { label: 'Products', href: '#' },
-            { label: 'Design System', href: '#' },
-            { label: 'Components', href: '#' },
-            { label: 'Breadcrumb' },
-          ]}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Single item</SectionLabel>
-        <Breadcrumb items={[{ label: 'Dashboard' }]} />
-      </div>
-
-      <div>
-        <SectionLabel>On dark background</SectionLabel>
-        <div style={{ backgroundColor: 'var(--background-brand-primary)', padding: 'var(--padding-xl)', borderRadius: 'var(--border-radius-md)' }}>
-          <Breadcrumb
-            items={[
-              { label: 'Show All', href: '#' },
-              { label: 'Product', href: '#' },
-              { label: 'Design System' },
-            ]}
-          />
-        </div>
-      </div>
-    </Stack>
-  ),
+/** Slash separator (default).
+ *  @summary Slash separator */
+export const SlashSeparator: Story = {
+  args: {
+    separator: 'slash',
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Products', href: '#' },
+      { label: 'Design System' },
+    ],
+  },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
+/** Chevron separator.
+ *  @summary Chevron separator */
+export const ChevronSeparator: Story = {
+  args: {
+    separator: 'chevron',
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Products', href: '#' },
+      { label: 'Design System' },
+    ],
+  },
+};
 
-export const Patterns: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      {/* Page header breadcrumb */}
-      <div>
-        <SectionLabel>Page header context</SectionLabel>
-        <div style={{
-          padding: 'var(--padding-xl)',
-          borderBottom: 'var(--border-width-md) solid var(--border-secondary)',
-        }}>
-          <Breadcrumb
-            separator="chevron"
-            items={[
-              { label: 'Admin', href: '#' },
-              { label: 'Companies', href: '#' },
-              { label: 'Acme Corp' },
-            ]}
-          />
-          <h1 style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-lg)',
-            marginTop: 'var(--gap-lg)',
-          }}>
-            Acme Corp
-          </h1>
-        </div>
-      </div>
+/* ─── Depth shapes ───────────────────────────────────────────── */
 
-      {/* Settings path */}
-      <div>
-        <SectionLabel>Settings navigation</SectionLabel>
-        <Breadcrumb
-          items={[
-            { label: 'Settings', href: '#' },
-            { label: 'Integrations', href: '#' },
-            { label: 'Webflow API' },
-          ]}
-        />
+/** Deep nesting — five-level breadcrumb. Confirms wrap behavior at narrow widths.
+ *  @summary Deep-nesting breadcrumb */
+export const DeepNesting: Story = {
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Products', href: '#' },
+      { label: 'Design System', href: '#' },
+      { label: 'Components', href: '#' },
+      { label: 'Breadcrumb' },
+    ],
+  },
+};
+
+/** Single item — current page only. The breadcrumb still renders for layout
+ *  consistency.
+ *  @summary Single-item breadcrumb */
+export const SingleItem: Story = {
+  args: { items: [{ label: 'Dashboard' }] },
+};
+
+/* ─── Surface contexts ───────────────────────────────────────── */
+
+/** On dark background — confirms text contrast on a brand-primary surface.
+ *  @summary Breadcrumb on brand surface */
+export const OnDarkSurface: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ backgroundColor: 'var(--background-brand-primary)', padding: 'var(--padding-xl)', borderRadius: 'var(--border-radius-md)' }}>
+        <Story />
       </div>
-    </Stack>
-  ),
+    ),
+  ],
+  args: {
+    items: [
+      { label: 'Show All', href: '#' },
+      { label: 'Product', href: '#' },
+      { label: 'Design System' },
+    ],
+  },
 };

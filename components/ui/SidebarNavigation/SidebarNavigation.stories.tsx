@@ -2,21 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SidebarNavigation, type SidebarNavItem } from './SidebarNavigation';
 import { Button } from '../Button';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
 /* ─── Shared Assets ───────────────────────────────────────────── */
 
 const BrikLogo = () => (
@@ -70,8 +55,14 @@ const userSection = (
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
+/**
+ * SidebarNavigation — left-rail app navigation. Composes a logo, a vertical
+ * nav-item list, an optional footer action slot, and an optional user section.
+ * Width is configurable via `width`.
+ * @summary Left-rail app navigation
+ */
 const meta: Meta<typeof SidebarNavigation> = {
-  title: 'Navigation/Primary/sidebar-navigation',
+  title: 'Components/Navigation/sidebar-navigation',
   component: SidebarNavigation,
   parameters: { layout: 'fullscreen' },
 };
@@ -79,10 +70,8 @@ const meta: Meta<typeof SidebarNavigation> = {
 export default meta;
 type Story = StoryObj<typeof SidebarNavigation>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
   args: {
     logo: <BrikLogo />,
@@ -93,53 +82,37 @@ export const Playground: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Different configurations
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Content shapes ─────────────────────────────────────────── */
 
-export const Variants: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--padding-xl)', height: '600px' }}>
-      <div>
-        <SectionLabel>Default</SectionLabel>
-        <div style={{ position: 'relative', height: '100%' }}>
-          <SidebarNavigation logo={<BrikLogo />} navItems={sampleNavItems} />
-        </div>
-      </div>
-
-      <div>
-        <SectionLabel>With icons</SectionLabel>
-        <div style={{ position: 'relative', height: '100%' }}>
-          <SidebarNavigation logo={<BrikLogo />} navItems={iconNavItems} />
-        </div>
-      </div>
-
-      <div>
-        <SectionLabel>With user section</SectionLabel>
-        <div style={{ position: 'relative', height: '100%' }}>
-          <SidebarNavigation
-            logo={<BrikLogo />}
-            navItems={sampleNavItems}
-            userSection={userSection}
-          />
-        </div>
-      </div>
-
-      <div>
-        <SectionLabel>Custom width (200px)</SectionLabel>
-        <div style={{ position: 'relative', height: '100%' }}>
-          <SidebarNavigation logo={<BrikLogo />} navItems={sampleNavItems} width="200px" />
-        </div>
-      </div>
-    </div>
-  ),
+/** Default — text-only nav items.
+ *  @summary Default sidebar */
+export const Default: Story = {
+  args: { logo: <BrikLogo />, navItems: sampleNavItems },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
+/** With icons — `icon` prop on each nav item.
+ *  @summary Sidebar with icon nav items */
+export const WithIcons: Story = {
+  args: { logo: <BrikLogo />, navItems: iconNavItems },
+};
 
-export const Patterns: Story = {
+/** With user section — adds a footer-attached user identity block.
+ *  @summary Sidebar with user section */
+export const WithUserSection: Story = {
+  args: { logo: <BrikLogo />, navItems: sampleNavItems, userSection },
+};
+
+/** Custom width — `width="200px"` for a narrower rail.
+ *  @summary Narrow sidebar */
+export const NarrowWidth: Story = {
+  args: { logo: <BrikLogo />, navItems: sampleNavItems, width: '200px' },
+};
+
+/* ─── Composition ────────────────────────────────────────────── */
+
+/** Full app shell — sidebar + main content area. The canonical app-frame recipe.
+ *  @summary App shell with sidebar + main */
+export const AppShell: Story = {
   render: () => (
     <div style={{ display: 'flex', height: '100vh' }}>
       <SidebarNavigation

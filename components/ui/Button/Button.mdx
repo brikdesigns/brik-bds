@@ -15,9 +15,9 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants and sizes
+## Variants
 
-Seven variants across three sizes. Standard variants for general actions, danger variants for destructive actions.
+Nine variants split into brand (primary/outline/secondary/ghost/inverse/on-color) and system (selected/destructive/positive).
 
 <Canvas of={Stories.Variants} />
 
@@ -25,36 +25,34 @@ Seven variants across three sizes. Standard variants for general actions, danger
 - **`outline`** — Secondary emphasis. Alternative to primary.
 - **`secondary`** — Tertiary/subtle. Supporting actions.
 - **`ghost`** — Minimal emphasis. Navigation, repeated actions.
-- **`danger`** — Destructive primary action (delete, remove).
-- **`danger-outline`** — Destructive with less emphasis.
-- **`danger-ghost`** — Destructive, minimal emphasis (inline delete).
+- **`inverse`** — High-contrast for dark surfaces.
+- **`on-color`** — High-contrast for branded surfaces.
+- **`destructive`** — Destructive primary action (delete, remove).
+- **`positive`** — Affirmative semantic action.
+- **`selected`** — Active/selected toggle state.
 
-## Icons
+## Sizes
 
-Use `iconBefore` and `iconAfter` props. Icons should use `1em` sizing to scale with the button.
+<Canvas of={Stories.Sizes} />
 
-<Canvas of={Stories.Icons} />
+## Content shapes
 
-## Interactive states
+<Canvas of={Stories.WithIconBefore} />
+<Canvas of={Stories.WithIconAfter} />
 
-Hover, focus, active, disabled, and loading states. Each variant has custom hover behavior.
+## States
 
-<Canvas of={Stories.States} />
-
-## Loading
-
-Spinner replaces content while preserving button width. Button is disabled during loading.
-
+<Canvas of={Stories.Disabled} />
 <Canvas of={Stories.Loading} />
 
 ## LinkButton
 
 An `<a>` element styled as a button. Use when the action navigates to a URL. The `href` prop is required.
 
-<Canvas of={Stories.Link} />
+<Canvas of={Stories.LinkButtonShowcase} />
 
 ```tsx
-import { LinkButton } from '@brik/bds';
+import { LinkButton } from '@brikdesigns/bds';
 
 <LinkButton href="/docs" variant="outline">Read docs</LinkButton>
 ```
@@ -63,20 +61,14 @@ import { LinkButton } from '@brik/bds';
 
 An icon-only button with a required `label` prop for accessibility.
 
-<Canvas of={Stories.IconOnly} />
+<Canvas of={Stories.IconButtonShowcase} />
 
 ```tsx
-import { IconButton } from '@brik/bds';
+import { IconButton } from '@brikdesigns/bds';
 
 <IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />
-<IconButton icon={<TrashIcon />} label="Delete item" variant="danger-ghost" />
+<IconButton icon={<TrashIcon />} label="Delete item" variant="destructive" />
 ```
-
-## Patterns
-
-Real-world compositions for common button use cases.
-
-<Canvas of={Stories.Patterns} />
 
 ---
 

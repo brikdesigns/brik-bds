@@ -15,9 +15,9 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Slot shapes
 
-All slot combinations: title only, subtitle, breadcrumbs, actions, tabs, metadata, and full composition.
+Each slot is independent — use whichever ones the page needs.
 
 - **`badge`** — `ServiceTag variant="icon"` icon badge left of title (service pages)
 - **`breadcrumbs`** — `Breadcrumb` navigation trail above title
@@ -26,13 +26,19 @@ All slot combinations: title only, subtitle, breadcrumbs, actions, tabs, metadat
 - **`stats`** — summary content (e.g. `CardSummary` grid) rendered between metadata and tabs
 - **`tabs`** — `TabBar` tab navigation below stats
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.TitleOnly} />
+<Canvas of={Stories.TitleWithSubtitle} />
+<Canvas of={Stories.WithBreadcrumbs} />
+<Canvas of={Stories.WithActions} />
+<Canvas of={Stories.WithTabs} />
+<Canvas of={Stories.WithBadgeAndMetadata} />
+<Canvas of={Stories.WithStats} />
 
-## Patterns
+## Full composition
 
-Real-world usage: company detail pages and analytics dashboards.
+Every slot wired up — the kitchen-sink reference.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.FullComposition} />
 
 ---
 

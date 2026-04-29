@@ -30,13 +30,11 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Statuses
 
-Five status variants across four sizes, each available in `solid` and `subtle` appearances. The `xs` size renders a compact icon-only badge.
+Five status values share the same shape — only color and (sometimes) icon change.
 
-<Canvas of={Stories.Variants} />
-
-**Status colors:**
+<Canvas of={Stories.Statuses} />
 
 - **`positive`** — Green. Success, completed actions.
 - **`warning`** — Yellow. Cautionary states, pending actions.
@@ -44,22 +42,28 @@ Five status variants across four sizes, each available in `solid` and `subtle` a
 - **`info`** — Neutral. Informational, neutral notifications.
 - **`progress`** — Blue. In-progress states, active processes.
 
-**Appearance:** (shared axis with Chip and Tag — see [Vocabulary › Axes](/?path=/docs/foundations-vocabulary--overview))
+## Appearances
 
-- **`solid`** (default) — High emphasis, standalone badges, dark backgrounds.
-- **`subtle`** — Lower emphasis pastel fill, inline with content, table cells, cards.
+Solid is the default; subtle is the pastel-fill alternate. Shared axis with Chip and Tag — see [Vocabulary › Axes](/?path=/docs/foundations-vocabulary--overview).
 
-## Icons
+<Canvas of={Stories.Subtle} />
 
-Badges can include a leading icon alongside text, shown in both `solid` and `subtle` appearances.
+## Sizes
 
-<Canvas of={Stories.Icons} />
+Four sizes — `xs` is icon-only.
 
-## Patterns
+<Canvas of={Stories.Sizes} />
 
-Real-world compositions for common badge use cases.
+## Content shapes
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithIcon} />
+<Canvas of={Stories.IconOnly} />
+
+## Aligned with Tag
+
+Badge and Tag share heights at every size — this story enforces that contract.
+
+<Canvas of={Stories.AlignedWithTag} />
 
 ---
 

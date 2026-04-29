@@ -1,51 +1,16 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import { Menu } from './Menu';
-import { FilterButton } from '../FilterButton';
 import { Button } from '../Button';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Shared Data ─────────────────────────────────────── */
-
-const sampleItems = [
-  { id: '1', label: 'Brand design', icon: <Icon icon="ph:palette" />, onClick: () => {} },
-  { id: '2', label: 'Marketing design', icon: <Icon icon="ph:megaphone" />, onClick: () => {} },
-  { id: '3', label: 'Product design', icon: <Icon icon="ph:package" />, onClick: () => {} },
-  { id: '4', label: 'Back office design', icon: <Icon icon="ph:wrench" />, onClick: () => {} },
-  { id: '5', label: 'Information design', icon: <Icon icon="ph:info" />, onClick: () => {} },
-  { id: '6', label: 'Templates', icon: <Icon icon="ph:stack" />, onClick: () => {} },
-];
-
-const filterOptions = sampleItems.map((item) => ({
-  id: item.id,
-  label: item.label,
-  icon: item.icon,
-}));
-
-/* ─── Meta ────────────────────────────────────────────── */
-
+/**
+ * Menu — dropdown action list. Composes with `FilterButton` (single-select) or
+ * `Button` (action menu). Supports icons, active highlight, and disabled items.
+ * @summary Dropdown action list
+ */
 const meta = {
-  title: 'Navigation/Menu/menu',
+  title: 'Components/Navigation/menu',
   component: Menu,
   parameters: { layout: 'centered' },
   decorators: [
@@ -60,10 +25,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Static open menu for Controls panel
-   ═══════════════════════════════════════════════════════════════ */
+const sampleItems = [
+  { id: '1', label: 'Brand design', icon: <Icon icon="ph:palette" />, onClick: () => {} },
+  { id: '2', label: 'Marketing design', icon: <Icon icon="ph:megaphone" />, onClick: () => {} },
+  { id: '3', label: 'Product design', icon: <Icon icon="ph:package" />, onClick: () => {} },
+  { id: '4', label: 'Back office design', icon: <Icon icon="ph:wrench" />, onClick: () => {} },
+  { id: '5', label: 'Information design', icon: <Icon icon="ph:info" />, onClick: () => {} },
+  { id: '6', label: 'Templates', icon: <Icon icon="ph:stack" />, onClick: () => {} },
+];
 
+/** Args-driven sandbox. The menu is forced open with `isOpen` so Controls
+ *  can edit the items array.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
   args: {
     items: sampleItems,
@@ -73,98 +46,80 @@ export const Playground: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — With icons, text-only, active item, disabled
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Content shapes ─────────────────────────────────────────── */
 
-export const Variants: Story = {
-  args: { items: sampleItems, isOpen: true, onClose: () => {} },
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>With icons</SectionLabel>
-        <Menu
-          isOpen
-          onClose={() => {}}
-          items={sampleItems}
-          style={{ position: 'relative' }}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Text-only with disabled item</SectionLabel>
-        <Menu
-          isOpen
-          onClose={() => {}}
-          items={[
-            { id: '1', label: 'Edit', onClick: () => {} },
-            { id: '2', label: 'Duplicate', onClick: () => {} },
-            { id: '3', label: 'Archive', onClick: () => {} },
-            { id: '4', label: 'Delete', disabled: true },
-          ]}
-          style={{ position: 'relative' }}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With active item</SectionLabel>
-        <Menu
-          isOpen
-          onClose={() => {}}
-          items={sampleItems}
-          activeId="2"
-          style={{ position: 'relative' }}
-        />
-      </div>
-    </Stack>
-  ),
+/** With icons — leading icon for each item.
+ *  @summary Menu with icons */
+export const WithIcons: Story = {
+  args: {
+    isOpen: true,
+    onClose: () => {},
+    items: sampleItems,
+    style: { position: 'relative' },
+  },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — FilterButton trigger + Button trigger
-   ═══════════════════════════════════════════════════════════════ */
+/** Text-only with one disabled item — minimal action menu.
+ *  @summary Text-only menu with disabled item */
+export const TextOnlyWithDisabled: Story = {
+  args: {
+    isOpen: true,
+    onClose: () => {},
+    items: [
+      { id: '1', label: 'Edit', onClick: () => {} },
+      { id: '2', label: 'Duplicate', onClick: () => {} },
+      { id: '3', label: 'Archive', onClick: () => {} },
+      { id: '4', label: 'Delete', disabled: true },
+    ],
+    style: { position: 'relative' },
+  },
+};
 
-export const Patterns: Story = {
-  args: { items: sampleItems, isOpen: true, onClose: () => {} },
+/** With active highlight — `activeId` marks the currently-selected item.
+ *  @summary Menu with active item */
+export const WithActiveItem: Story = {
+  args: {
+    isOpen: true,
+    onClose: () => {},
+    items: sampleItems,
+    activeId: '2',
+    style: { position: 'relative' },
+  },
+};
+
+/* ─── Interactive ────────────────────────────────────────────── */
+
+/** Button-triggered action menu — `useState` controls open state. The canonical
+ *  "row actions" recipe (Edit / Duplicate / Archive / Delete).
+ *  @summary Button trigger with action menu */
+export const ButtonTrigger: Story = {
+  args: {
+    isOpen: true,
+    onClose: () => {},
+    items: [],
+  },
   render: () => {
-    function MenuPatterns() {
-      const [filterValue, setFilterValue] = useState<string | undefined>();
-      const [actionOpen, setActionOpen] = useState(false);
-
+    const Demo = () => {
+      const [open, setOpen] = useState(false);
       return (
-        <Stack>
-          <div>
-            <SectionLabel>FilterButton trigger</SectionLabel>
-            <FilterButton
-              label="Services"
-              value={filterValue}
-              onChange={setFilterValue}
-              options={filterOptions}
-            />
-          </div>
-
-          <div>
-            <SectionLabel>Button trigger with actions</SectionLabel>
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-              <Button variant="outline" onClick={() => setActionOpen(!actionOpen)}>
-                Actions
-              </Button>
-              <Menu
-                isOpen={actionOpen}
-                onClose={() => setActionOpen(false)}
-                items={[
-                  { id: '1', label: 'Edit', onClick: () => setActionOpen(false) },
-                  { id: '2', label: 'Duplicate', onClick: () => setActionOpen(false) },
-                  { id: '3', label: 'Archive', onClick: () => setActionOpen(false) },
-                  { id: '4', label: 'Delete', disabled: true },
-                ]}
-                style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
-              />
-            </div>
-          </div>
-        </Stack>
+        <div style={{ position: 'relative', display: 'inline-block' }}>
+          <Button variant="outline" onClick={() => setOpen(!open)}>
+            Actions
+          </Button>
+          <Menu
+            isOpen={open}
+            onClose={() => setOpen(false)}
+            items={[
+              { id: '1', label: 'Edit', onClick: () => setOpen(false) },
+              { id: '2', label: 'Duplicate', onClick: () => setOpen(false) },
+              { id: '3', label: 'Archive', onClick: () => setOpen(false) },
+              { id: '4', label: 'Delete', disabled: true },
+            ]}
+            style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
+          />
+        </div>
       );
-    }
-    return <MenuPatterns />;
+    };
+    return <Demo />;
   },
 };

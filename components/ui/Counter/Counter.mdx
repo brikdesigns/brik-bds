@@ -15,11 +15,9 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Statuses
 
-All statuses across all sizes, plus max overflow behavior.
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Statuses} />
 
 - **`success`** -- Completed items, positive counts.
 - **`error`** -- Error counts, alerts.
@@ -28,11 +26,15 @@ All statuses across all sizes, plus max overflow behavior.
 - **`progress`** -- In-progress items.
 - **`brand`** -- General counts, notifications.
 
-## Patterns
+## Sizes
 
-Real-world notification count compositions.
+<Canvas of={Stories.Sizes} />
 
-<Canvas of={Stories.Patterns} />
+## Max overflow
+
+`max` caps the displayed count when the actual value would otherwise overflow the badge.
+
+<Canvas of={Stories.MaxOverflow} />
 
 ---
 

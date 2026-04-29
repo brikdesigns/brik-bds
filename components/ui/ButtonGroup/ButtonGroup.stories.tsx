@@ -2,19 +2,17 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ButtonGroup } from './ButtonGroup';
 import { Button } from '../Button';
 
-/* ─── Meta ────────────────────────────────────────────────────── */
-
+/**
+ * ButtonGroup — horizontal or vertical cluster of `<Button>` elements with
+ * locked spacing. Replaces ad-hoc flex containers when grouping actions.
+ * @summary Cluster of Buttons with locked spacing
+ */
 const meta: Meta<typeof ButtonGroup> = {
   title: 'Components/Action/button-group',
   component: ButtonGroup,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    orientation: {
-      control: 'select',
-      options: ['horizontal', 'vertical'],
-    },
+    orientation: { control: 'select', options: ['horizontal', 'vertical'] },
     fullWidth: { control: 'boolean' },
   },
 };
@@ -22,29 +20,8 @@ const meta: Meta<typeof ButtonGroup> = {
 export default meta;
 type Story = StoryObj<typeof ButtonGroup>;
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
   render: (args) => (
     <ButtonGroup {...args}>
@@ -54,79 +31,38 @@ export const Playground: Story = {
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Orientations, widths, sizes
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Variants: Story = {
+/** Default horizontal orientation — most common shape.
+ *  @summary Horizontal button group */
+export const Horizontal: Story = {
   render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Horizontal (default)</SectionLabel>
-        <ButtonGroup>
-          <Button variant="primary">Save</Button>
-          <Button variant="outline">Preview</Button>
-          <Button variant="ghost">Cancel</Button>
-        </ButtonGroup>
-      </div>
-      <div>
-        <SectionLabel>Vertical</SectionLabel>
-        <ButtonGroup orientation="vertical">
-          <Button variant="primary" fullWidth>Sign up</Button>
-          <Button variant="outline" fullWidth>Log in</Button>
-        </ButtonGroup>
-      </div>
-      <div>
-        <SectionLabel>Full width</SectionLabel>
-        <div style={{ width: 400 }}>
-          <ButtonGroup fullWidth>
-            <Button variant="primary" fullWidth>Confirm</Button>
-            <Button variant="secondary" fullWidth>Cancel</Button>
-          </ButtonGroup>
-        </div>
-      </div>
-      <div>
-        <SectionLabel>Small buttons</SectionLabel>
-        <ButtonGroup>
-          <Button variant="primary" size="sm">Accept</Button>
-          <Button variant="ghost" size="sm">Decline</Button>
-        </ButtonGroup>
-      </div>
-    </Stack>
+    <ButtonGroup>
+      <Button variant="primary">Save</Button>
+      <Button variant="outline">Preview</Button>
+      <Button variant="ghost">Cancel</Button>
+    </ButtonGroup>
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world usage
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Patterns: Story = {
-  name: 'Patterns',
+/** Vertical orientation — stacked buttons, often used for auth screens.
+ *  @summary Vertical button group */
+export const Vertical: Story = {
   render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Dialog actions</SectionLabel>
-        <ButtonGroup>
-          <Button variant="ghost">Cancel</Button>
-          <Button variant="primary">Save changes</Button>
-        </ButtonGroup>
-      </div>
-      <div>
-        <SectionLabel>Destructive confirmation</SectionLabel>
-        <ButtonGroup>
-          <Button variant="ghost">Keep</Button>
-          <Button variant="danger">Delete project</Button>
-        </ButtonGroup>
-      </div>
-      <div>
-        <SectionLabel>Form footer</SectionLabel>
-        <div style={{ width: 400 }}>
-          <ButtonGroup fullWidth>
-            <Button variant="secondary" fullWidth>Back</Button>
-            <Button variant="primary" fullWidth>Continue</Button>
-          </ButtonGroup>
-        </div>
-      </div>
-    </Stack>
+    <ButtonGroup orientation="vertical">
+      <Button variant="primary" fullWidth>Sign up</Button>
+      <Button variant="outline" fullWidth>Log in</Button>
+    </ButtonGroup>
+  ),
+};
+
+/** Full-width — children stretch to the container width. Common in form footers.
+ *  @summary Full-width button group */
+export const FullWidth: Story = {
+  render: () => (
+    <div style={{ width: 400 }}>
+      <ButtonGroup fullWidth>
+        <Button variant="primary" fullWidth>Confirm</Button>
+        <Button variant="secondary" fullWidth>Cancel</Button>
+      </ButtonGroup>
+    </div>
   ),
 };

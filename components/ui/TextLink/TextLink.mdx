@@ -5,41 +5,28 @@ import * as Stories from './TextLink.stories';
 
 # TextLink
 
-Styled anchor element with size variants and hover effects. Use for navigation and inline text links throughout the interface.
+Inline anchor styled with the BDS link tokens. Use for navigation inside body copy and "learn more" / "view details" affordances.
 
 ---
 
-## Overview
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Sizes
 
 <Canvas of={Stories.Default} />
-
-## Variants
-
-### Small
-
-Smaller link size for compact contexts.
-
 <Canvas of={Stories.Small} />
 
-### External Link
-
-Open links in new tabs with proper security attributes.
+## External link
 
 <Canvas of={Stories.External} />
 
-## Usage Examples
+## In paragraph
 
-### In Paragraph
-
-Links within body text.
+Inline link in body copy — confirms line-height and baseline alignment.
 
 <Canvas of={Stories.InParagraph} />
-
-### Navigation Links
-
-Horizontal navigation menu.
-
-<Canvas of={Stories.NavigationLinks} />
 
 ---
 
@@ -52,13 +39,13 @@ Horizontal navigation menu.
 ## Usage
 
 ```tsx
-import { TextLink } from '@brik/bds';
+import { TextLink } from '@brikdesigns/bds';
 
 // Default link
-<TextLink href="/about">Learn More</TextLink>
+<TextLink href="/about">Learn more</TextLink>
 
 // Small link
-<TextLink href="/details" size="small">View Details</TextLink>
+<TextLink href="/details" size="small">View details</TextLink>
 
 // External link
 <TextLink
@@ -66,6 +53,6 @@ import { TextLink } from '@brik/bds';
   target="_blank"
   rel="noopener noreferrer"
 >
-  Visit Website
+  Visit website
 </TextLink>
 ```

@@ -1,9 +1,16 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressStepper, type ProgressStep } from './ProgressStepper';
 
+/**
+ * ProgressStepper — multi-step progress indicator for wizards, onboarding flows,
+ * and proposal sections. Two visual variants share the same `activeStep` /
+ * `linear` / `onStepClick` model: full-label rail and compact dots. Distinct
+ * from `Stepper` (the numeric +/- input).
+ * @summary Multi-step wizard progress indicator
+ */
 const meta: Meta<typeof ProgressStepper> = {
-  title: 'Navigation/Stepper/progress-stepper',
+  title: 'Components/Navigation/progress-stepper',
   component: ProgressStepper,
   parameters: {
     layout: 'padded',

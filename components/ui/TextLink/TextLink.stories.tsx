@@ -1,68 +1,57 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TextLink } from './TextLink';
 
+/**
+ * TextLink — inline anchor styled with the BDS link tokens. Use for navigation
+ * inside body copy and for "learn more" / "view details" affordances.
+ * @summary Inline styled anchor
+ */
 const meta: Meta<typeof TextLink> = {
   title: 'Components/Action/text-link',
   component: TextLink,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['default', 'small'],
-      description: 'Size variant',
-    },
-    href: {
-      control: 'text',
-      description: 'Link destination',
-    },
+    size: { control: 'select', options: ['default', 'small'] },
+    href: { control: 'text' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof TextLink>;
 
-// Basic link
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
+export const Playground: Story = {
+  args: { href: '#', children: 'Learn more' },
+};
+
+/** Default size — body-text-aligned link.
+ *  @summary Default size */
 export const Default: Story = {
-  args: {
-    href: '#',
-    children: 'Learn More',
-  },
+  args: { href: '#', children: 'Learn more' },
 };
 
-// Small link
+/** Small size — for dense rows and compact lists.
+ *  @summary Small size */
 export const Small: Story = {
-  args: {
-    href: '#',
-    size: 'small',
-    children: 'View Details',
-  },
+  args: { href: '#', size: 'small', children: 'View details' },
 };
 
-// External link
+/** External link — typically pairs with `target="_blank"` + `rel="noopener noreferrer"`.
+ *  @summary External link with target=_blank */
 export const External: Story = {
   args: {
     href: 'https://example.com',
     target: '_blank',
     rel: 'noopener noreferrer',
-    children: 'Visit Website',
+    children: 'Visit website',
   },
 };
 
-// Link in context
+/** TextLink inline in body copy — confirms the link inherits paragraph
+ *  line-height and aligns with surrounding text.
+ *  @summary Inline link in a paragraph */
 export const InParagraph: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<p>
-  Our team specializes in web design and development.{' '}
-  <TextLink href="#">Learn more about our services</TextLink> or{' '}
-  <TextLink href="#">contact us</TextLink> to get started.
-</p>`,
-      },
-    },
-  },
   render: () => (
     <p
       style={{
@@ -76,39 +65,5 @@ export const InParagraph: Story = {
       <TextLink href="#">Learn more about our services</TextLink> or{' '}
       <TextLink href="#">contact us</TextLink> to get started.
     </p>
-  ),
-};
-
-// Navigation links
-export const NavigationLinks: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<nav>
-  <TextLink href="#">Home</TextLink>
-  <TextLink href="#">About</TextLink>
-  <TextLink href="#">Services</TextLink>
-  <TextLink href="#">Contact</TextLink>
-</nav>`,
-      },
-    },
-  },
-  render: () => (
-    <nav style={{ display: 'flex', gap: 'var(--gap-xl)' }}>
-      <TextLink href="#">Home</TextLink>
-      <TextLink href="#">About</TextLink>
-      <TextLink href="#">Services</TextLink>
-      <TextLink href="#">Contact</TextLink>
-    </nav>
-  ),
-};
-
-// All sizes
-export const AllSizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
-      <TextLink href="#">Default Link</TextLink>
-      <TextLink href="#" size="small">Small Link</TextLink>
-    </div>
   ),
 };

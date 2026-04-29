@@ -1,58 +1,13 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import { FilterButton } from './FilterButton';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'flex-start' }}>{children}</div>
-);
-
-/* ─── Shared Data ─────────────────────────────────────── */
-
-const categoryOptions = [
-  { id: 'brand', label: 'Brand design', icon: <Icon icon="ph:crown" /> },
-  { id: 'marketing', label: 'Marketing design', icon: <Icon icon="ph:megaphone" /> },
-  { id: 'product', label: 'Product design', icon: <Icon icon="ph:device-mobile" /> },
-  { id: 'service', label: 'Back office design', icon: <Icon icon="ph:gear" /> },
-  { id: 'information', label: 'Information design', icon: <Icon icon="ph:chalkboard-teacher" /> },
-  { id: 'templates', label: 'Templates', icon: <Icon icon="ph:copy" /> },
-];
-
-const regionOptions = [
-  { id: 'na', label: 'North America', icon: <Icon icon="ph:globe" /> },
-  { id: 'eu', label: 'Europe', icon: <Icon icon="ph:globe" /> },
-  { id: 'apac', label: 'Asia Pacific', icon: <Icon icon="ph:globe" /> },
-];
-
-const tagOptions = [
-  { id: 'new', label: 'New' },
-  { id: 'popular', label: 'Popular' },
-  { id: 'featured', label: 'Featured' },
-  { id: 'archived', label: 'Archived' },
-];
-
-/* ─── Meta ────────────────────────────────────────────── */
-
+/**
+ * FilterButton — single-select dropdown trigger for filter bars. Clicking opens
+ * a popover with options; selecting a value highlights the trigger.
+ * @summary Single-select filter dropdown trigger
+ */
 const meta = {
   title: 'Components/Action/filter-button',
   component: FilterButton,
@@ -69,77 +24,74 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
+const categoryOptions = [
+  { id: 'brand', label: 'Brand design', icon: <Icon icon="ph:crown" /> },
+  { id: 'marketing', label: 'Marketing design', icon: <Icon icon="ph:megaphone" /> },
+  { id: 'product', label: 'Product design', icon: <Icon icon="ph:device-mobile" /> },
+  { id: 'service', label: 'Back office design', icon: <Icon icon="ph:gear" /> },
+  { id: 'information', label: 'Information design', icon: <Icon icon="ph:chalkboard-teacher" /> },
+  { id: 'templates', label: 'Templates', icon: <Icon icon="ph:copy" /> },
+];
 
+const tagOptions = [
+  { id: 'new', label: 'New' },
+  { id: 'popular', label: 'Popular' },
+  { id: 'featured', label: 'Featured' },
+  { id: 'archived', label: 'Archived' },
+];
+
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-lg)', alignItems: 'flex-start' }}>{children}</div>
+);
+
+/** Args-driven sandbox.
+ *  @summary Live playground with all controls */
 export const Playground: Story = {
-  args: {
-    label: 'Category',
-    options: categoryOptions,
-    size: 'md',
-  },
+  args: { label: 'Category', options: categoryOptions, size: 'md' },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, states, text-only
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Variants: Story = {
+/** All three sizes side-by-side. ADR-006 axis-gallery exception.
+ *  @summary All sizes rendered together */
+export const Sizes: Story = {
   args: { label: 'Category', options: categoryOptions },
   render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Sizes</SectionLabel>
-        <Row>
-          <FilterButton label="Small" options={categoryOptions} size="sm" />
-          <FilterButton label="Medium" options={categoryOptions} size="md" />
-          <FilterButton label="Large" options={categoryOptions} size="lg" />
-        </Row>
-      </div>
-
-      <div>
-        <SectionLabel>Active (value selected)</SectionLabel>
-        <Row>
-          <FilterButton label="Category" options={categoryOptions} value="brand" size="sm" />
-          <FilterButton label="Category" options={categoryOptions} value="marketing" size="md" />
-          <FilterButton label="Category" options={categoryOptions} value="product" size="lg" />
-        </Row>
-      </div>
-
-      <div>
-        <SectionLabel>Text-only options (no icons)</SectionLabel>
-        <FilterButton label="Status" options={tagOptions} />
-      </div>
-    </Stack>
+    <Row>
+      <FilterButton label="Small" options={categoryOptions} size="sm" />
+      <FilterButton label="Medium" options={categoryOptions} size="md" />
+      <FilterButton label="Large" options={categoryOptions} size="lg" />
+    </Row>
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Interactive filter bar
-   ═══════════════════════════════════════════════════════════════ */
+/** Active state — `value` is set, trigger highlights with the brand color.
+ *  @summary Filter button with active selection */
+export const Active: Story = {
+  args: { label: 'Category', options: categoryOptions, value: 'brand' },
+};
 
-export const Patterns: Story = {
+/** Text-only options — no icons, simpler list.
+ *  @summary Filter button with text-only options */
+export const TextOnlyOptions: Story = {
+  args: { label: 'Status', options: tagOptions },
+};
+
+/** Interactive — `useState` drives the value. Render is required for the
+ *  controlled-state demo.
+ *  @summary Interactive controlled filter button */
+export const Interactive: Story = {
   args: { label: 'Category', options: categoryOptions },
   render: () => {
-    function FilterBar() {
-      const [cat, setCat] = useState<string | undefined>();
-      const [reg, setReg] = useState<string | undefined>();
-      const [tag, setTag] = useState<string | undefined>();
-
+    const Demo = () => {
+      const [value, setValue] = useState<string | undefined>();
       return (
-        <Stack>
-          <div>
-            <SectionLabel>Filter bar</SectionLabel>
-            <Row>
-              <FilterButton label="Category" options={categoryOptions} value={cat} onChange={setCat} />
-              <FilterButton label="Region" options={regionOptions} value={reg} onChange={setReg} />
-              <FilterButton label="Status" options={tagOptions} value={tag} onChange={setTag} />
-            </Row>
-          </div>
-        </Stack>
+        <FilterButton
+          label="Category"
+          options={categoryOptions}
+          value={value}
+          onChange={setValue}
+        />
       );
-    }
-    return <FilterBar />;
+    };
+    return <Demo />;
   },
 };

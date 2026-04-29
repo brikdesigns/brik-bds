@@ -1,28 +1,23 @@
-import React from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
-import { useState } from 'react';
 import { Button } from './Button';
 import { LinkButton } from './LinkButton';
 import { IconButton } from './IconButton';
 
-/* ─── Meta ────────────────────────────────────────────────────── */
-
+/**
+ * Button — primary action element. Nine visual variants split into brand
+ * (primary, outline, secondary, ghost, inverse, on-color) and system
+ * (selected, destructive, positive). Five sizes (`tiny`/`sm`/`md`/`lg`/`xl`).
+ * @summary Primary action element with variant and size axes
+ */
 const meta: Meta<typeof Button> = {
   title: 'Components/Action/button',
   component: Button,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
-    variant: {
-      control: 'select',
-      options: ['primary', 'outline', 'secondary', 'ghost', 'inverse', 'on-color', 'destructive', 'positive', 'selected'],
-    },
-    size: {
-      control: 'select',
-      options: ['tiny', 'sm', 'md', 'lg', 'xl'],
-    },
+    variant: { control: 'select', options: ['primary', 'outline', 'secondary', 'ghost', 'inverse', 'on-color', 'destructive', 'positive', 'selected'] },
+    size: { control: 'select', options: ['tiny', 'sm', 'md', 'lg', 'xl'] },
     fullWidth: { control: 'boolean' },
     disabled: { control: 'boolean' },
     loading: { control: 'boolean' },
@@ -32,7 +27,7 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-/* ─── Inline SVG Icons ────────────────────────────────────────── */
+/* ─── Inline icons (story-only) ──────────────────────────────── */
 
 const ArrowRight = () => (
   <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -72,210 +67,135 @@ const Edit = () => (
   </svg>
 );
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ display: 'flex', gap: 'var(--padding-sm)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
 );
 
-const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
-);
+/* ─── Sandbox ────────────────────────────────────────────────── */
 
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
-   ═══════════════════════════════════════════════════════════════ */
-
+/** Args-driven sandbox. Includes a basic click-fires-onClick interaction test.
+ *  @summary Live playground with interaction test */
 export const Playground: Story = {
   args: { variant: 'primary', size: 'md', children: 'Button', onClick: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByRole('button', { name: 'Button' });
-
     await expect(button).toBeVisible();
     await userEvent.click(button);
     await expect(args.onClick).toHaveBeenCalledTimes(1);
   },
 };
 
-/** Interaction test: disabled and loading states block click */
-export const InteractionTest: Story = {
+/** Disabled buttons must not fire onClick. Asserts the contract.
+ *  @summary Interaction test: disabled blocks click */
+export const DisabledClickBlocked: Story = {
   args: { variant: 'primary', size: 'md', children: 'Submit', disabled: true, onClick: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByRole('button', { name: 'Submit' });
-
     await expect(button).toBeDisabled();
     await userEvent.click(button);
     await expect(args.onClick).not.toHaveBeenCalled();
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — All variants × all sizes in one grid
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Axis galleries (ADR-006 exception) ─────────────────────── */
 
+/** All nine variants side-by-side at one size. ADR-006 axis-gallery exception.
+ *  @summary All variants rendered together */
 export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Brand buttons (UI hierarchy)</SectionLabel>
-      {(['primary', 'secondary', 'outline', 'ghost', 'inverse', 'on-color'] as const).map((variant) => {
-        const surfaceStyle =
-          variant === 'inverse'
-            ? { background: 'var(--surface-inverse)', padding: 'var(--padding-md)', borderRadius: 'var(--border-radius-md)' }
-            : variant === 'on-color'
-              ? { background: 'var(--surface-brand-primary)', padding: 'var(--padding-md)', borderRadius: 'var(--border-radius-md)' }
-              : undefined;
-        return (
-          <div key={variant} style={surfaceStyle}>
-            <SectionLabel>{variant}</SectionLabel>
-            <Row>
-              <Button variant={variant} size="tiny">Tiny</Button>
-              <Button variant={variant} size="sm">Small</Button>
-              <Button variant={variant} size="md">Medium</Button>
-              <Button variant={variant} size="lg">Large</Button>
-              <Button variant={variant} size="xl">X-Large</Button>
-            </Row>
-          </div>
-        );
-      })}
-
-      <SectionLabel>System buttons (semantic actions)</SectionLabel>
-      {(['selected', 'destructive', 'positive'] as const).map((variant) => (
-        <div key={variant}>
-          <SectionLabel>{variant}</SectionLabel>
-          <Row>
-            <Button variant={variant} size="tiny">Tiny</Button>
-            <Button variant={variant} size="sm">Small</Button>
-            <Button variant={variant} size="md">Medium</Button>
-            <Button variant={variant} size="lg">Large</Button>
-            <Button variant={variant} size="xl">X-Large</Button>
-          </Row>
-        </div>
-      ))}
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. ICONS — Icon slots across all sizes
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Icons: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Icon positions</SectionLabel>
+  render: () => {
+    const brandVariants = ['primary', 'outline', 'secondary', 'ghost'] as const;
+    const inverseVariant = 'inverse' as const;
+    const onColorVariant = 'on-color' as const;
+    const systemVariants = ['selected', 'destructive', 'positive'] as const;
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
         <Row>
-          <Button variant="primary" iconAfter={<ArrowRight />}>Get started</Button>
-          <Button variant="outline" iconBefore={<Plus />}>Add item</Button>
-          <Button variant="secondary" iconAfter={<Download />}>Download</Button>
-          <Button variant="ghost" iconBefore={<Plus />}>New</Button>
+          {brandVariants.map((v) => <Button key={v} variant={v} size="md">{v}</Button>)}
+        </Row>
+        <div style={{ background: 'var(--surface-inverse)', padding: 'var(--padding-md)', borderRadius: 'var(--border-radius-md)' }}>
+          <Button variant={inverseVariant} size="md">{inverseVariant}</Button>
+        </div>
+        <div style={{ background: 'var(--surface-brand-primary)', padding: 'var(--padding-md)', borderRadius: 'var(--border-radius-md)' }}>
+          <Button variant={onColorVariant} size="md">{onColorVariant}</Button>
+        </div>
+        <Row>
+          {systemVariants.map((v) => <Button key={v} variant={v} size="md">{v}</Button>)}
         </Row>
       </div>
-      {(['tiny', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
-        <div key={size}>
-          <SectionLabel>{size}</SectionLabel>
-          <Row>
-            <Button variant="primary" size={size} iconBefore={<Plus />}>Create</Button>
-            <Button variant="outline" size={size} iconAfter={<ArrowRight />}>Continue</Button>
-            <Button variant="ghost" size={size} iconBefore={<Download />}>Export</Button>
-          </Row>
-        </div>
-      ))}
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. STATES — Hover, focus, disabled, loading across all variants
-   ═══════════════════════════════════════════════════════════════ */
-
-export const States: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Hover, click, and tab through to see all interactive states.',
-      },
-    },
-  },
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr 1fr 1fr 1fr',
-        gap: 'var(--gap-lg) var(--gap-xl)',
-        alignItems: 'center',
-      }}>
-        <div />
-        <SectionLabel>Default</SectionLabel>
-        <SectionLabel>Hover / Focus</SectionLabel>
-        <SectionLabel>Disabled</SectionLabel>
-        <SectionLabel>Loading</SectionLabel>
-
-        {(['primary', 'outline', 'secondary', 'ghost', 'inverse', 'on-color', 'destructive', 'positive', 'selected'] as const).map((variant) => (
-          <React.Fragment key={variant}>
-            <SectionLabel>{variant}</SectionLabel>
-            <Button variant={variant} size="md">Button</Button>
-            <Button variant={variant} size="md">Hover me</Button>
-            <Button variant={variant} size="md" disabled>Disabled</Button>
-            <Button variant={variant} size="md" loading>Loading</Button>
-          </React.Fragment>
-        ))}
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   5. LOADING — Interactive toggle demo
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Loading: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Click to simulate an async action. Spinner replaces text while preserving button width.',
-      },
-    },
-  },
-  render: () => {
-    const [loading, setLoading] = useState(false);
-    const handleClick = () => {
-      setLoading(true);
-      setTimeout(() => setLoading(false), 2000);
-    };
-    return (
-      <Row gap="var(--gap-lg)">
-        <Button variant="primary" loading={loading} onClick={handleClick}>Save Changes</Button>
-        <Button variant="outline" loading={loading} onClick={handleClick}>Save Changes</Button>
-        <Button variant="destructive" loading={loading} onClick={handleClick}>Delete</Button>
-      </Row>
     );
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   6. LINK BUTTON — Navigation styled as button
-   ═══════════════════════════════════════════════════════════════ */
+/** All five sizes side-by-side at one variant. ADR-006 axis-gallery exception.
+ *  @summary All sizes rendered together */
+export const Sizes: Story = {
+  render: () => (
+    <Row>
+      <Button variant="primary" size="tiny">Tiny</Button>
+      <Button variant="primary" size="sm">Small</Button>
+      <Button variant="primary" size="md">Medium</Button>
+      <Button variant="primary" size="lg">Large</Button>
+      <Button variant="primary" size="xl">X-Large</Button>
+    </Row>
+  ),
+};
 
-export const Link: Story = {
+/* ─── Content shapes ─────────────────────────────────────────── */
+
+/** Leading icon — common for "create"/"add" actions.
+ *  @summary Button with leading icon */
+export const WithIconBefore: Story = {
+  args: { variant: 'outline', children: 'Add item', iconBefore: <Plus /> },
+};
+
+/** Trailing icon — common for "next"/"continue" actions.
+ *  @summary Button with trailing icon */
+export const WithIconAfter: Story = {
+  args: { variant: 'primary', children: 'Get started', iconAfter: <ArrowRight /> },
+};
+
+/* ─── States ─────────────────────────────────────────────────── */
+
+/** Disabled state.
+ *  @summary Disabled button */
+export const Disabled: Story = {
+  args: { variant: 'primary', children: 'Submit', disabled: true },
+};
+
+/** Loading state with `useState` toggle — clicks trigger a 2s simulated async
+ *  action. Spinner replaces text while preserving button width.
+ *  @summary Interactive loading toggle */
+export const Loading: Story = {
+  render: () => {
+    const Demo = () => {
+      const [loading, setLoading] = useState(false);
+      const handleClick = () => {
+        setLoading(true);
+        setTimeout(() => setLoading(false), 2000);
+      };
+      return (
+        <Row>
+          <Button variant="primary" loading={loading} onClick={handleClick}>Save changes</Button>
+          <Button variant="outline" loading={loading} onClick={handleClick}>Save changes</Button>
+          <Button variant="destructive" loading={loading} onClick={handleClick}>Delete</Button>
+        </Row>
+      );
+    };
+    return <Demo />;
+  },
+};
+
+/* ─── Sibling components ─────────────────────────────────────── */
+
+/** LinkButton — the `<a>`-rendered sibling of Button. Same variants and sizes.
+ *  Use when the action is navigation (has `href`) instead of a click handler.
+ *  @summary LinkButton sibling — anchor with Button styling */
+export const LinkButtonShowcase: Story = {
   name: 'LinkButton',
   render: () => (
-    <Stack>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
       <Row>
         <LinkButton href="#" variant="primary">Get started</LinkButton>
         <LinkButton href="#" variant="outline">Documentation</LinkButton>
@@ -283,138 +203,35 @@ export const Link: Story = {
       </Row>
       <Row>
         <LinkButton href="#" variant="primary" iconAfter={<ArrowRight />}>Sign up</LinkButton>
-        <LinkButton href="#" variant="outline" iconAfter={<ArrowRight />}>View docs</LinkButton>
         <LinkButton href="#" variant="ghost" iconBefore={<Download />}>Download PDF</LinkButton>
       </Row>
-    </Stack>
+    </div>
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   7. ICON BUTTON — Icon-only with accessible label
-   ═══════════════════════════════════════════════════════════════ */
-
-export const IconOnly: Story = {
+/** IconButton — the icon-only sibling of Button. Requires `label` for accessibility.
+ *  @summary IconButton sibling — icon-only with accessible label */
+export const IconButtonShowcase: Story = {
   name: 'IconButton',
   render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Brand variants</SectionLabel>
-        <Row>
-          <IconButton icon={<Plus />} label="Add" variant="primary" />
-          <IconButton icon={<Edit />} label="Edit" variant="secondary" />
-          <IconButton icon={<Download />} label="Download" variant="outline" />
-          <IconButton icon={<Close />} label="Close" variant="ghost" />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>System variants</SectionLabel>
-        <Row>
-          <IconButton icon={<Plus />} label="Selected" variant="selected" />
-          <IconButton icon={<Trash />} label="Delete" variant="destructive" />
-          <IconButton icon={<Plus />} label="Approve" variant="positive" />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>All sizes (primary)</SectionLabel>
-        <Row>
-          <IconButton icon={<Plus />} label="Add" variant="primary" size="tiny" />
-          <IconButton icon={<Plus />} label="Add" variant="primary" size="sm" />
-          <IconButton icon={<Plus />} label="Add" variant="primary" size="md" />
-          <IconButton icon={<Plus />} label="Add" variant="primary" size="lg" />
-          <IconButton icon={<Plus />} label="Add" variant="primary" size="xl" />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>All sizes (system)</SectionLabel>
-        <Row>
-          {(['selected', 'destructive', 'positive'] as const).map((variant) => (
-            <Row key={variant} gap="var(--gap-xs)">
-              {(['tiny', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
-                <IconButton key={`${variant}-${size}`} icon={variant === 'destructive' ? <Trash /> : <Plus />} label={variant} variant={variant} size={size} />
-              ))}
-            </Row>
-          ))}
-        </Row>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   8. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-export const Patterns: Story = {
-  name: 'Patterns',
-  parameters: {
-    docs: {
-      description: {
-        story: 'Real-world button compositions: confirmation dialogs, inline delete, and mixed actions.',
-      },
-    },
-  },
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      {/* Confirmation dialog */}
-      <div>
-        <SectionLabel>Confirmation dialog</SectionLabel>
-        <div style={{
-          padding: 'var(--padding-lg)',
-          border: 'var(--border-width-sm) solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-md)',
-          maxWidth: '400px',
-        }}>
-          <div style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm)',
-            marginBottom: 'var(--gap-sm)',
-          }}>
-            Delete project?
-          </div>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
-            marginBottom: 'var(--gap-xl)',
-          }}>
-            This action cannot be undone. All data will be permanently removed.
-          </div>
-          <Row>
-            <Button variant="destructive">Delete project</Button>
-            <Button variant="ghost">Cancel</Button>
-          </Row>
-        </div>
-      </div>
-
-      {/* Inline delete */}
-      <div>
-        <SectionLabel>Inline delete</SectionLabel>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: 'var(--padding-md)',
-          border: 'var(--border-width-sm) solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-md)',
-          maxWidth: '400px',
-        }}>
-          <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)' }}>
-            document-final-v2.pdf
-          </span>
-          <IconButton icon={<Trash />} label="Delete file" variant="destructive" size="sm" />
-        </div>
-      </div>
-
-      {/* Action bar */}
-      <div>
-        <SectionLabel>Action bar</SectionLabel>
-        <Row gap="var(--gap-lg)">
-          <Button variant="primary" iconAfter={<ArrowRight />}>Continue</Button>
-          <Button variant="outline">Save draft</Button>
-          <Button variant="destructive">Discard</Button>
-        </Row>
-      </div>
-    </Stack>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+      <Row>
+        <IconButton icon={<Plus />} label="Add" variant="primary" />
+        <IconButton icon={<Edit />} label="Edit" variant="secondary" />
+        <IconButton icon={<Download />} label="Download" variant="outline" />
+        <IconButton icon={<Close />} label="Close" variant="ghost" />
+      </Row>
+      <Row>
+        <IconButton icon={<Trash />} label="Delete" variant="destructive" />
+        <IconButton icon={<Plus />} label="Approve" variant="positive" />
+      </Row>
+      <Row>
+        <IconButton icon={<Plus />} label="Add" size="tiny" />
+        <IconButton icon={<Plus />} label="Add" size="sm" />
+        <IconButton icon={<Plus />} label="Add" size="md" />
+        <IconButton icon={<Plus />} label="Add" size="lg" />
+        <IconButton icon={<Plus />} label="Add" size="xl" />
+      </Row>
+    </div>
   ),
 };

@@ -5,64 +5,37 @@ import * as Stories from './Meter.stories';
 
 # Meter
 
-Visual gauge for displaying a value within a known range. Use for scores, completion rates, performance metrics, and health indicators.
+Single-value horizontal gauge with status colors. Use for compliance scores, completion rates, performance metrics, and health indicators.
 
 ---
 
-## Overview
+## Playground
 
-<Canvas of={Stories.AllStatuses} />
+<Canvas of={Stories.Playground} />
 
 ## Statuses
 
-### Pass
-Green indicator for values meeting the threshold.
+Four status values share the same shape — only fill color changes.
+
 <Canvas of={Stories.Pass} />
-
-### Fair
-Yellow indicator for borderline values.
 <Canvas of={Stories.Fair} />
-
-### Fail
-Red indicator for values below acceptable range.
 <Canvas of={Stories.Fail} />
-
-### Neutral
-Gray indicator when no judgment is applied.
 <Canvas of={Stories.Neutral} />
 
 ## Sizes
 
-Three sizes for different layout contexts.
+<Canvas of={Stories.Sizes} />
 
-### Small
-<Canvas of={Stories.Small} />
+## Content shapes
 
-### Medium (default)
-<Canvas of={Stories.Pass} />
-
-### Large
-<Canvas of={Stories.Large} />
-
-## Label position
-
-### Above
-<Canvas of={Stories.LabelAbove} />
-
-### Below
-<Canvas of={Stories.LabelBelow} />
-
-### Comparison
-<Canvas of={Stories.LabelPositionComparison} />
-
-## Variations
-
-### Without value label
 <Canvas of={Stories.NoValue} />
-
-### Custom formatter
-Format the displayed value with a custom function.
 <Canvas of={Stories.CustomFormatter} />
+
+## Label positions
+
+Side-by-side comparison of `labelPosition` values.
+
+<Canvas of={Stories.LabelPositions} />
 
 ---
 
@@ -75,7 +48,7 @@ Format the displayed value with a custom function.
 ## Usage
 
 ```tsx
-import { Meter } from '@brik/bds';
+import { Meter } from '@brikdesigns/bds';
 
 // Basic meter
 <Meter value={82} max={100} status="positive" label="Score" />
@@ -86,7 +59,7 @@ import { Meter } from '@brik/bds';
   max={1}
   status="warning"
   label="Completion"
-  formatter={(v) => `${Math.round(v * 100)}%`}
+  valueFormatter={(v, max) => `${Math.round((v / max) * 100)}%`}
 />
 
 // Small size, label below

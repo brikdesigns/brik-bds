@@ -18,23 +18,21 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Announcement variants
+## Tones
 
-Action, title-only, and dismissible configurations on the brand surface.
+Four tones share one component. The default `announcement` tone renders on the brand surface with `role="banner"`; the three status tones (`information`, `warning`, `error`) render with a leading status Badge and `role="alert"`.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Announcement} />
+<Canvas of={Stories.Information} />
+<Canvas of={Stories.Warning} />
+<Canvas of={Stories.Error} />
 
-## Status tones
+## Content shapes
 
-Information / warning / error tones with leading status Badge.
+Optional content modifications that compose with any tone.
 
-<Canvas of={Stories.Tones} />
-
-## Patterns
-
-Real-world usage: announcements and dismissible notices.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.TitleOnly} />
+<Canvas of={Stories.Dismissible} />
 
 ---
 

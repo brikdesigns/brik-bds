@@ -20,21 +20,30 @@ Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
-## Variants
+## Sides
 
-Right, left, bottom, wide, and no-title configurations.
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Right} />
+<Canvas of={Stories.Left} />
+<Canvas of={Stories.Bottom} />
 
 - **`right`** — Default, slides from right edge
 - **`left`** — Navigation or sidebar panels
 - **`bottom`** — Mobile-friendly bottom sheet
 
+## Width and chrome
+
+<Canvas of={Stories.Wide} />
+<Canvas of={Stories.NoTitle} />
+
 ## Header
 
 The header composes an optional `subtitle` eyebrow, the `title`, an optional `description`, and an optional `onBack` button for nested flows.
 
-<Canvas of={Stories.Header} />
+<Canvas of={Stories.TitleOnly} />
+<Canvas of={Stories.TitleWithDescription} />
+<Canvas of={Stories.TitleWithEyebrow} />
+<Canvas of={Stories.FullHeader} />
+<Canvas of={Stories.WithBackButton} />
 
 - Use **`subtitle`** for short categorical context (entity type, parent record). Renders above the title in uppercase `text-muted`.
 - Use **`description`** for record state, timestamps, or a one-line summary. Renders below the title in `text-secondary`.
@@ -103,13 +112,7 @@ The full Phase 3+ sheet: tabs in the header, a secondary action in the footer, a
 
 <Canvas of={Stories.TabsWithSecondaryAction} />
 
-## Patterns
-
-Custom footer (overrides mode) and mobile bottom sheet.
-
-<Canvas of={Stories.Patterns} />
-
-A custom `footer` always wins over mode-driven auto-footer. Use it for non-standard action sets (e.g. Archive / Cancel / Save).
+A custom `footer` always wins over mode-driven auto-footer. Use it for non-standard action sets (e.g. Archive / Cancel / Save). The mobile bottom-sheet shape is shown above under [Sides › Bottom](#sides).
 
 ---
 
@@ -119,15 +122,15 @@ The Sheet body is a composition surface — but the blocks you compose from are 
 
 | Primitive | Use for |
 |---|---|
-| [`SheetSection`](/?path=/docs/displays-sheet-sheet-section--docs) | Named section wrapper (uppercase heading + content). One per logical grouping of fields. |
-| [`Field`](/?path=/docs/displays-sheet-field--docs) | Label + value pair. Value can be text, tags, URLs, lists — any ReactNode. |
-| [`FieldGrid`](/?path=/docs/displays-sheet-field-grid--docs) | 2 / 3 / 4-column grid of Fields or Cards. Stat-tile rows. |
+| [`SheetSection`](/?path=/docs/components-container-sheet-section--docs) | Named section wrapper (uppercase heading + content). One per logical grouping of fields. |
+| [`Field`](/?path=/docs/components-form-field--docs) | Label + value pair. Value can be text, tags, URLs, lists — any ReactNode. |
+| [`FieldGrid`](/?path=/docs/components-form-field-grid--docs) | 2 / 3 / 4-column grid of Fields or Cards. Stat-tile rows. |
 | [`TagGroup`](/?path=/docs/components-indicator-tag-group--docs) | Horizontal cluster of `<Tag>` elements inside a Field. |
-| [`BulletList`](/?path=/docs/displays-sheet-bullet-list--docs) | Short-item lists (anti-messages, proof points, approved CTAs). |
-| [`Card`](/?path=/docs/displays-card-card--docs) / [`CardList`](/?path=/docs/displays-card-card-list--docs) | Entity rows (contacts, services, scraped pages, linked records). |
-| [`Table`](/?path=/docs/displays-table-table--docs) | Tabular data (strategy tables, typography rows, schedules). |
-| [`Accordion`](/?path=/docs/displays-accordion-accordion--docs) | Collapsible groups when a section has many rows. |
-| [`EmptyState`](/?path=/docs/components-feedback-emptystate--docs) | Whole-section "no data" treatment. Don't use per-row — `Field` has a lightweight inline empty built in. |
+| [`BulletList`](/?path=/docs/components-list-bullet-list--docs) | Short-item lists (anti-messages, proof points, approved CTAs). |
+| [`Card`](/?path=/docs/components-card-card--docs) / [`CardList`](/?path=/docs/components-card-card-list--docs) | Entity rows (contacts, services, scraped pages, linked records). |
+| [`Table`](/?path=/docs/components-container-table--docs) | Tabular data (strategy tables, typography rows, schedules). |
+| [`Accordion`](/?path=/docs/components-container-accordion--docs) | Collapsible groups when a section has many rows. |
+| [`EmptyState`](/?path=/docs/components-feedback-empty-state--docs) | Whole-section "no data" treatment. Don't use per-row — `Field` has a lightweight inline empty built in. |
 
 **Rules**
 
