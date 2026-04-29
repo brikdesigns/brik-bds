@@ -115,6 +115,21 @@
   --surface-status-success:           var(--surface-positive);
   --surface-status-warning:           var(--surface-warning);
 
+  /* ── Forward-facing alias: hyperlink semantic ──
+     Figma defines this as `text/text-link` (node 22846-1906), backed by
+     `theme/blue/blue-light` → resolved to --brand-primary. Style Dictionary
+     emits the path-joined name `--text-text-link` (prefix `text` + token
+     `text-link` joined by `-`), which is awkward at consumer sites. This
+     alias gives consumers a clean canonical name while preserving the alias
+     chain — per-theme --brand-primary overrides still flow through.
+
+     ⚠️ Use ONLY for interactive hyperlinks (text that does something on
+     click). Categorically distinct from --background-info / --text-info
+     (static informational status, neutral/gray) and --background-status-info
+     (informational signal, blue). See the BDS Vocabulary docs and the
+     comment at line 118 for the info-family distinction. */
+  --text-link: var(--text-text-link);
+
   /* ── Info / Neutral / Purple / Orange status tokens (no Figma equivalent) ──
      Note: Figma's --background-info / --text-info / --surface-info map to system/neutral (gray),
      NOT blue. These blue "info" status tokens are a separate concept — keep as gap-fills. */
