@@ -5,17 +5,26 @@ import type { IndustryPack } from '../schema';
  *
  * Graduated from `small-business` because boutique commercial real-estate
  * brokerages require a 3-column audience-pathway mega-menu (one column per
- * audience vertical: Healthcare / Land / Investors) — a structural navigation
+ * audience vertical: Healthcare / Land / Commercial) — a structural navigation
  * pattern the small-business pack explicitly flags as a graduation trigger.
  *
  * Primary reference client: Vale Partners (Middle Tennessee boutique CRE
- * brokerage). Intel seeded from `company_profiles.audience_strategy` for
- * company_id = 2b7f5cdb-3ead-41d3-9bd4-e5f33b7ea106 (staging DB).
+ * brokerage). Intel seeded from `company_profiles` (value_proposition +
+ * strategic_summary) for company_id = 2b7f5cdb-3ead-41d3-9bd4-e5f33b7ea106
+ * (staging DB).
  *
  * Three co-equal service-line segments:
  *   1. Healthcare professionals (dental, veterinary, optometry) — primary revenue driver
- *   2. Commercial investors (medical office buildings, Nashville hub) — co-equal revenue
+ *   2. Commercial clients (retail, food service, professional services, fitness, banks, car washes) — co-equal revenue driver
  *   3. Land buyers (Middle Tennessee residential, agricultural, hunting) — secondary driver
+ *
+ * The `commercial` segment is the broader business-tenant audience: owners
+ * looking for the right space, market, and lease terms to support how they
+ * operate and grow. It is NOT a capital-allocator / investor audience —
+ * MOB acquisition / 1031 / cap-rate framing is excluded by design. Where a
+ * boutique broker handles owner-occupant purchases for any segment, those
+ * are bundled into that segment's services (e.g. Practice Building Acquisition
+ * under healthcare).
  *
  * Narrative body lives in ./real-estate-commercial.mdx.
  */
@@ -23,9 +32,9 @@ export const realEstateCommercial: IndustryPack = {
   slug: 'real-estate-commercial',
   parentIndustry: 'real-estate',
   displayName: 'Real Estate — Commercial Brokerage',
-  version: '1.0.0',
+  version: '1.1.0',
   reviewCadence: 'quarterly',
-  lastReviewed: '2026-04-23',
+  lastReviewed: '2026-04-29',
 
   affinities: {
     personality: ['Professional', 'Refined', 'Authoritative', 'Trustworthy', 'Bold'],
@@ -42,7 +51,7 @@ export const realEstateCommercial: IndustryPack = {
       // Stats intentionally absent — render only when content generation
       // emits a sectionType: 'stats' section. See issue #217.
       blueprintDefaults: ['hero_split_60_40', 'services_numbered_accordion', 'testimonials_featured_large', 'cta_dark_centered'],
-      description: 'Lead with authority and segmentation. The homepage must orient three different audiences (Healthcare / Land / Investors) without making any feel secondary. The hero introduces the broker; the navigation is the segmentation mechanism.',
+      description: 'Lead with authority and segmentation. The homepage must orient three different audiences (Healthcare / Land / Commercial) without making any feel secondary. The hero introduces the broker; the navigation is the segmentation mechanism.',
     },
     {
       slug: 'healthcare',
@@ -59,13 +68,14 @@ export const realEstateCommercial: IndustryPack = {
       description: 'Middle Tennessee land: residential, agricultural, hunting. Local-knowledge-forward. Place-specific photography is essential — buyers want to feel the land before they call.',
     },
     {
-      slug: 'investors',
-      displayName: 'Investor Services',
+      slug: 'commercial',
+      displayName: 'Commercial Real Estate',
       required: true,
-      // Investor pages benefit from stats, but only when the broker has
-      // real deal volume / portfolio numbers. Content generation decides.
+      // Commercial pages benefit from stats only when the broker has
+      // representative deal volume / square-footage placed numbers.
+      // Content generation decides.
       blueprintDefaults: ['hero_interior_minimal', 'services_detail_two_column', 'process_grid_4step_numbered', 'cta_dark_centered'],
-      description: 'Medical office buildings and Nashville-market investment. Capital-markets-literate tone — returns-focused, deal-flow-aware. If the broker has portfolio stats worth leading with, content generation will emit a stats section; otherwise the page leans on process + CTA for credibility.',
+      description: 'Businesses looking for the right space, market, and lease terms — retail, food service, professional services, fitness, banks, car washes, and other owner-occupant or tenant categories outside healthcare. Tone is operationally fluent: foot traffic, co-tenancy, build-out, and lease structure (CAM, exclusivity, escalation) are the levers, not cap rates. Page leans on process + a relevant proof point. NEVER frame this audience as "investors" or center capital-markets language — that is a different audience this pack does not serve.',
     },
     {
       slug: 'about',
@@ -79,7 +89,7 @@ export const realEstateCommercial: IndustryPack = {
       displayName: 'Current Listings',
       required: false,
       blueprintDefaults: ['hero_interior_minimal', 'services_detail_two_column', 'cta_split_contact'],
-      description: 'Active inventory. Segment by audience where possible (healthcare spaces / land / investment). IDX or manual listing cards.',
+      description: 'Active inventory. Segment by audience where possible (healthcare spaces / land / commercial). IDX or manual listing cards.',
     },
     {
       slug: 'contact',
@@ -103,11 +113,13 @@ export const realEstateCommercial: IndustryPack = {
     { slug: 'agricultural-land', displayName: 'Agricultural Land', category: 'land', aliases: ['farm land', 'farmland', 'agriculture', 'row crop'] },
     { slug: 'hunting-land', displayName: 'Hunting & Recreational Land', category: 'land', aliases: ['hunting tract', 'recreational property', 'timber land'] },
     { slug: 'residential-land', displayName: 'Residential Development Land', category: 'land', aliases: ['residential land', 'development site', 'building lots'] },
-    // Investors
-    { slug: 'medical-office-investment', displayName: 'Medical Office Building (MOB) Acquisition', category: 'investors', aliases: ['MOB', 'medical office building', 'healthcare investment'] },
-    { slug: 'commercial-investment', displayName: 'Commercial Investment Property', category: 'investors', aliases: ['commercial investment', 'NNN', 'net lease', 'commercial income property'] },
-    { slug: 'investment-disposition', displayName: 'Investment Property Disposition', category: 'investors', aliases: ['sale', 'disposition', 'exit strategy'] },
-    { slug: '1031-exchange', displayName: '1031 Exchange Advisory', category: 'investors', aliases: ['1031', 'like-kind exchange', 'tax-deferred exchange'] },
+    // Commercial
+    { slug: 'commercial-tenant-rep', displayName: 'Commercial Tenant Representation', category: 'commercial', aliases: ['tenant rep', 'commercial space', 'business location search'] },
+    { slug: 'retail-site-selection', displayName: 'Retail & Restaurant Site Selection', category: 'commercial', aliases: ['retail site selection', 'restaurant location', 'foot traffic analysis', 'trade area'] },
+    { slug: 'commercial-lease-negotiation', displayName: 'Commercial Lease Negotiation', category: 'commercial', aliases: ['lease negotiation', 'CAM negotiation', 'co-tenancy', 'TI negotiation'] },
+    { slug: 'commercial-buyer-rep', displayName: 'Commercial Property Buyer Representation', category: 'commercial', aliases: ['buyer rep', 'owner-occupant purchase', 'commercial acquisition'] },
+    { slug: 'business-relocation', displayName: 'Business Relocation', category: 'commercial', aliases: ['relocation', 'move', 'space transition'] },
+    { slug: 'multi-site-expansion', displayName: 'Multi-Site Expansion Strategy', category: 'commercial', aliases: ['second location', 'expansion', 'multi-site', 'rollout'] },
   ],
 
   // ── Vocabulary ──────────────────────────────────────────────────────
@@ -122,10 +134,12 @@ export const realEstateCommercial: IndustryPack = {
       'acreage', 'tract', 'farm land', 'timberland', 'recreational property', 'hunting lease',
       'Middle Tennessee', 'agricultural land', 'road frontage', 'creek bottom', 'hardwood',
       'row crop', 'pasture', 'platted subdivision',
-      // Investor segment
-      'cap rate', 'NOI', 'net operating income', 'NNN', 'triple net', 'medical office building',
-      'MOB', 'deal flow', 'acquisition', 'disposition', '1031 exchange', 'cash-on-cash return',
-      'value-add', 'hold period', 'basis', 'Nashville market', 'MTSU corridor',
+      // Commercial segment
+      'foot traffic', 'drive time', 'trade area', 'demographic analysis', 'co-tenancy',
+      'anchor tenant', 'exclusivity clause', 'escalation clause', 'CAM', 'common area maintenance',
+      'base rent', 'percentage rent', 'gross lease', 'NNN', 'triple net', 'full-service lease',
+      'parking ratio', 'signage rights', 'retail frontage', 'rent abatement', 'white box',
+      'vanilla shell', 'owner-occupant', 'SBA 504', 'visibility', 'daily traffic count',
       // General brokerage
       'boutique brokerage', 'exclusive representation', 'off-market', 'due diligence',
       'letter of intent', 'LOI', 'purchase agreement',
@@ -134,7 +148,7 @@ export const realEstateCommercial: IndustryPack = {
       { term: 'we do it all', reason: 'Boutique positioning requires specialization language, not generalist claims.' },
       { term: 'one-stop shop', reason: 'Undermines the specialized-expertise positioning that differentiates a boutique from big-box brokerages.' },
       { term: 'affordable', reason: 'Commercial real-estate clients are not price-shopping; positions the broker as low-tier rather than high-expertise.' },
-      { term: 'cheap', reason: 'Same as affordable — damages credibility with professional and investor audiences.' },
+      { term: 'cheap', reason: 'Same as affordable — damages credibility with professional and business-owner audiences.' },
       { term: 'guaranteed returns', reason: 'Real estate investment carries market risk; guaranteeing returns is a regulatory violation (FINRA/SEC context) and misleading.' },
       { term: 'free consultation', reason: 'Devalues professional services. Use "complimentary discovery call" or "no-obligation conversation."' },
     ],
@@ -165,23 +179,23 @@ export const realEstateCommercial: IndustryPack = {
   seasonality: {
     Q1: {
       intent: 'medium',
-      focus: ['budget-cycle-close', 'q1-planning', 'tax-deferred-exchange-deadlines'],
-      notes: 'Jan–Mar: new fiscal year budget cycles activate for practice expansions. Healthcare practices finalizing location decisions before mid-year build-out targets. Investor 1031 exchange deadlines can spike Q1 acquisition urgency.',
+      focus: ['budget-cycle-close', 'q1-planning', 'commercial-lease-renewal-windows'],
+      notes: 'Jan–Mar: new fiscal year budget cycles activate for business expansions and practice expansions. Healthcare practices and commercial businesses finalizing location decisions before mid-year build-out targets. Many commercial leases renew at calendar year-end, so Q1 sees relocation searches accelerate.',
     },
     Q2: {
       intent: 'high',
-      focus: ['spring-land-listing-peak', 'healthcare-lease-cycle', 'deal-flow-build'],
-      notes: 'Apr–Jun: peak listing season for land (buyers active post-tax-season). Healthcare lease cycles often conclude Q2 for practices targeting Q3–Q4 move-ins. Nashville market activity typically peaks in spring.',
+      focus: ['spring-land-listing-peak', 'healthcare-lease-cycle', 'commercial-build-out-window'],
+      notes: 'Apr–Jun: peak listing season for land (buyers active post-tax-season). Healthcare and commercial lease cycles often conclude Q2 for businesses targeting Q3–Q4 move-ins. Nashville market activity typically peaks in spring.',
     },
     Q3: {
       intent: 'high',
-      focus: ['summer-land-activity', 'healthcare-build-out-planning', 'investor-acquisition-push'],
-      notes: 'Jul–Sep: active land-buyer season (hunting-land buyers planning fall season, agricultural buyers pre-harvest). Healthcare practices contracting for spaces with Q4 or early-next-year build-outs. Investment acquisition push before year-end.',
+      focus: ['summer-land-activity', 'healthcare-build-out-planning', 'commercial-q4-opening-prep'],
+      notes: 'Jul–Sep: active land-buyer season (hunting-land buyers planning fall season, agricultural buyers pre-harvest). Healthcare practices and commercial businesses contracting for spaces with Q4 or early-next-year build-outs and openings.',
     },
     Q4: {
       intent: 'high',
-      focus: ['year-end-tax-planning', 'hunting-land-peak', '1031-exchange-urgency'],
-      notes: 'Oct–Dec: hunting/recreational land at peak demand (hunting season). 1031 exchange identification and closing deadlines drive investor urgency. Healthcare: slower deal-making but strong pipeline-building for Q1.',
+      focus: ['year-end-tax-planning', 'hunting-land-peak', 'commercial-renewal-pressure'],
+      notes: 'Oct–Dec: hunting/recreational land at peak demand (hunting season). Commercial tenants with year-end lease expirations drive renewal-or-relocation decisions. Healthcare: slower deal-making but strong pipeline-building for Q1.',
     },
   },
 
@@ -193,8 +207,9 @@ export const realEstateCommercial: IndustryPack = {
       'medical office space for lease {city}',
       'dental office space {city}',
       'land for sale Middle Tennessee',
-      'commercial property {city}',
-      'medical office building Nashville',
+      'retail space for lease {city}',
+      'restaurant space for lease {city}',
+      'commercial space for lease {city}',
       'boutique commercial real estate',
     ],
     serviceLevel: [
@@ -203,8 +218,9 @@ export const realEstateCommercial: IndustryPack = {
       'medical office tenant representation',
       'hunting land Middle Tennessee',
       'agricultural land Tennessee',
-      'medical office building acquisition',
-      '1031 exchange commercial real estate',
+      'commercial tenant representation {city}',
+      'retail site selection {city}',
+      'restaurant site selection {city}',
       'practice location site selection',
     ],
   },
@@ -252,9 +268,9 @@ export const realEstateCommercial: IndustryPack = {
       scope: 'state',
     },
     {
-      topic: 'Truth in Advertising — Investment Returns',
-      summary: 'FTC and state law prohibit misleading claims about investment performance.',
-      implication: 'Copy for investor services must not guarantee returns, imply guaranteed appreciation, or cite past performance without appropriate risk disclaimers.',
+      topic: 'Truth in Advertising — Property Value Claims',
+      summary: 'FTC and state law prohibit misleading claims about property appreciation, returns, or financial outcomes.',
+      implication: 'Copy that references owner-occupant property purchases, build-out cost recovery, or long-term real-estate value must avoid guaranteeing returns, implying guaranteed appreciation, or citing past performance without appropriate risk disclaimers.',
       scope: 'federal',
     },
     {
@@ -321,21 +337,31 @@ export const realEstateCommercial: IndustryPack = {
       segment: 'land',
       detail: 'Easements, landlocked parcels, flood plain classifications, and road frontage details are not always clear in online listings. Buyers need a broker who surfaces these proactively rather than letting them surface in due diligence.',
     },
-    // Investor segment
+    // Commercial segment
     {
-      summary: 'Finding off-market medical office and commercial deals before they hit LoopNet',
-      segment: 'investors',
-      detail: 'Institutional buyers monitor LoopNet; boutique investors often find the best returns before listings are public. Broker relationships and local market access are the differentiator here.',
+      summary: 'Finding a location with the right foot traffic and demographics for the business model',
+      segment: 'commercial',
+      detail: 'Retail, restaurant, fitness, and other foot-traffic-dependent businesses live or die by site selection. Daily traffic count, trade-area demographics, and visibility from primary roads matter more than the lease rate. A broker who runs the demographic analysis before showing space saves the business from a bad-location lease.',
     },
     {
-      summary: 'Understanding Nashville sub-market dynamics for CRE investment',
-      segment: 'investors',
-      detail: 'The Nashville MSA has distinct sub-markets with different cap rates, demand drivers, and growth trajectories. Investors who rely on national benchmarks miss local nuance.',
+      summary: 'Negotiating commercial lease terms that protect business margins',
+      segment: 'commercial',
+      detail: 'Operating expense pass-throughs, CAM caps, percentage rent thresholds, exclusivity clauses, and rent escalation directly affect business P&L. Most business owners have not negotiated more than one or two leases and lack the leverage that an experienced broker brings to the table.',
     },
     {
-      summary: '1031 exchange timing pressure — identification deadlines and replacement property scarcity',
-      segment: 'investors',
-      detail: '45-day identification and 180-day closing windows create extreme time pressure. Brokers who can surface replacement candidates quickly — especially in tight markets — are worth paying for.',
+      summary: 'Coordinating build-out timeline against opening date and TI allowance',
+      segment: 'commercial',
+      detail: 'Permits, contractors, equipment installation, and inspections all stack against the opening date. Tenant improvement allowance negotiations and build-out responsibility (landlord vs. tenant) shape both timeline and budget. A broker who has run dozens of build-outs anticipates the bottlenecks.',
+    },
+    {
+      summary: 'Buy vs. lease decision for owner-occupant businesses',
+      segment: 'commercial',
+      detail: 'Established businesses with stable revenue often face the question of buying their own building (often via SBA 504) versus continuing to lease. The decision is part real-estate, part business-finance, and part tax strategy — and benefits from a broker who has walked clients through both paths.',
+    },
+    {
+      summary: 'Co-tenancy and neighbor-mix decisions that affect business outcomes',
+      segment: 'commercial',
+      detail: 'For retail and food service, the businesses next door drive or kill traffic. Co-tenancy clauses, anchor-tenant departures, and shopping-center vacancy trajectory all shape the long-term value of a lease. A broker who reads the center, not just the deal, surfaces these signals.',
     },
   ],
 
@@ -361,7 +387,7 @@ export const realEstateCommercial: IndustryPack = {
       name: 'Healthcare-only national RE firms',
       examples: ['HREA (Healthcare Real Estate Advisors)', 'Transwestern Healthcare'],
       moat: 'Deep healthcare specialization, national footprint.',
-      weakness: 'No land or general investment capability; boutique clients who also own land or want diversified portfolio advice need a second broker relationship.',
+      weakness: 'No land or general commercial capability; boutique clients with multi-asset needs (e.g. a healthcare professional who also owns retail property or land) need a second broker relationship.',
     },
     {
       name: 'Land-only brokerages and auctions',
@@ -388,8 +414,8 @@ export const realEstateCommercial: IndustryPack = {
     {
       slug: 'multi-segment-portfolio',
       title: 'The Single-Broker Advantage Across Asset Classes',
-      summary: 'A healthcare professional who also owns investment properties or land benefits from a broker who can serve all three needs. This reduces friction (one relationship, consistent advice) and positions the brokerage as a long-term partner rather than a transaction vendor.',
-      appliesWhen: ['client has multiple asset class interests', 'client has mentioned land ownership alongside practice real estate needs'],
+      summary: 'A healthcare professional who also owns or operates a commercial business, or who has land interests, benefits from a broker who can serve all three needs. This reduces friction (one relationship, consistent advice) and positions the brokerage as a long-term partner rather than a transaction vendor.',
+      appliesWhen: ['client has multiple asset class interests', 'client has mentioned land ownership alongside practice real estate needs', 'client operates additional businesses beyond a healthcare practice'],
     },
   ],
 
@@ -407,11 +433,12 @@ export const realEstateCommercial: IndustryPack = {
     'Land Sales (Agricultural)',
     'Land Sales (Hunting & Recreational)',
     'Land Buyer Representation',
-    'Medical Office Building Acquisition',
-    'Commercial Investment Property',
-    'Investment Property Disposition',
-    '1031 Exchange Advisory',
-    'Off-Market Deal Sourcing',
+    'Commercial Tenant Representation',
+    'Retail & Restaurant Site Selection',
+    'Commercial Lease Negotiation',
+    'Commercial Property Buyer Representation',
+    'Business Relocation',
+    'Multi-Site Expansion Strategy',
   ],
 
   paymentTypes: [
@@ -433,7 +460,7 @@ export const realEstateCommercial: IndustryPack = {
   //
   // This is the graduation trigger from small-business: a boutique commercial
   // RE brokerage with three co-equal audience verticals (Healthcare / Land /
-  // Investors) requires a structured audience-pathway mega-menu. The small-
+  // Commercial) requires a structured audience-pathway mega-menu. The small-
   // business pack explicitly notes this pattern as a graduation condition.
   //
   // Each column represents one audience. `audienceAccents` and `audienceIcons`
@@ -477,19 +504,19 @@ export const realEstateCommercial: IndustryPack = {
           ],
         },
         {
-          heading: 'Investors',
+          heading: 'Commercial',
           items: [
-            { label: 'Medical office buildings', href: '/services/investors/medical-office', note: 'MOB acquisition + disposition' },
-            { label: 'Commercial acquisition', href: '/services/investors/commercial', note: 'NNN + value-add opportunities' },
-            { label: '1031 exchange', href: '/services/investors/1031-exchange', note: 'Identification + replacement within deadlines' },
-            { label: 'Off-market deal sourcing', href: '/services/investors/off-market', note: 'Before it hits LoopNet' },
+            { label: 'Tenant representation', href: '/services/commercial/tenant-rep', note: 'Find the right space for the business' },
+            { label: 'Retail & restaurant site selection', href: '/services/commercial/site-selection', note: 'Foot traffic + trade-area analysis' },
+            { label: 'Lease negotiation', href: '/services/commercial/lease-negotiation', note: 'CAM, exclusivity, escalation, TI allowance' },
+            { label: 'Buyer representation', href: '/services/commercial/buyer-rep', note: 'Owner-occupant purchase advisory' },
           ],
         },
       ],
       featured: {
         eyebrow: 'Not sure where to start?',
         heading: 'Tell us what you\'re trying to accomplish',
-        body: 'Whether you\'re finding your first practice location, buying land, or building a portfolio — a 20-minute call sets the direction.',
+        body: 'Whether you\'re finding your first practice location, buying land, or moving your business into the right space — a 20-minute call sets the direction.',
         ctaLabel: 'Schedule a discovery call',
         ctaHref: '/contact',
       },
@@ -501,12 +528,12 @@ export const realEstateCommercial: IndustryPack = {
     scrollBehavior: 'transparent-top-frosted-past-80',
     mobileDrawer: 'slide-left-panel',
     // Per-column audience accent colors — parallel to servicesMegaMenu.categories.
-    // Index 0 = Healthcare, 1 = Land, 2 = Investors.
+    // Index 0 = Healthcare, 1 = Land, 2 = Commercial.
     // Values reference Vale's palette primitives; consumer theme resolves these.
     audienceAccents: ['var(--color-moss-dark)', 'var(--color-olive-light)', 'var(--color-gold-light)'],
     // Per-column icon slugs — parallel to servicesMegaMenu.categories.
     // Icons pulled from BDS icon vocabulary (Phosphor icon set).
-    audienceIcons: ['ph:stethoscope', 'ph:tree', 'ph:chart-line-up'],
+    audienceIcons: ['ph:stethoscope', 'ph:tree', 'ph:storefront'],
   },
 
   footerArchetype: 'four_col_directory',
@@ -541,8 +568,8 @@ export const realEstateCommercial: IndustryPack = {
         'cta_split_contact',
       ],
     },
-    investors: {
-      pageArchetype: 'investors',
+    commercial: {
+      pageArchetype: 'commercial',
       sections: [
         'hero_interior_minimal',
         'services_detail_two_column',

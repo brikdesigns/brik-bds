@@ -42,7 +42,7 @@ describe('getIndustryServices', () => {
     const services = getIndustryServices('real-estate-commercial');
     expect(services.length).toBeGreaterThanOrEqual(10);
     expect(services).toContain('Healthcare Tenant Representation');
-    expect(services).toContain('1031 Exchange Advisory');
+    expect(services).toContain('Commercial Tenant Representation');
     expect(services).toContain('Land Sales (Agricultural)');
   });
 
@@ -93,11 +93,11 @@ describe('getIndustryServicesCatalog', () => {
   it('returns structured entries for real-estate-commercial with 3 service-line categories', () => {
     const catalog = getIndustryServicesCatalog('real-estate-commercial');
     expect(catalog.length).toBeGreaterThan(0);
-    // Verify the three audience verticals are represented
+    // Verify the three audience verticals are represented (Healthcare / Land / Commercial)
     const categories = [...new Set(catalog.map((e) => e.category))].filter(Boolean);
     expect(categories).toContain('healthcare');
     expect(categories).toContain('land');
-    expect(categories).toContain('investors');
+    expect(categories).toContain('commercial');
     catalog.forEach((entry) => {
       expect(entry.slug).toBeTruthy();
       expect(entry.displayName).toBeTruthy();
@@ -529,7 +529,7 @@ describe('real-estate-commercial pack', () => {
     const categories = [...new Set(realEstateCommercial.servicesCatalog.map((e) => e.category))].filter(Boolean);
     expect(categories).toContain('healthcare');
     expect(categories).toContain('land');
-    expect(categories).toContain('investors');
+    expect(categories).toContain('commercial');
   });
 
   it('has navigationIA defined', () => {
@@ -563,7 +563,7 @@ describe('real-estate-commercial pack', () => {
     const slugs = realEstateCommercial.pageArchetypes.map((a) => a.slug);
     expect(slugs).toContain('healthcare');
     expect(slugs).toContain('land');
-    expect(slugs).toContain('investors');
+    expect(slugs).toContain('commercial');
     expect(slugs).toContain('home');
     expect(slugs).toContain('contact');
   });
