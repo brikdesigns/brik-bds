@@ -143,6 +143,50 @@ Online/offline indicator tokens used by Avatar and Dot components.
   columns={4}
 />
 
+## Tonal scale + interaction state
+
+Two orthogonal axes. Don't mix them.
+
+**Primitives carry tone.** Every primitive emits the Figma 6-stop scale: `lightest`, `lighter`, `light`, `dark`, `darker`, `darkest`. The unsuffixed variable (`--{slug}-{color}`) aliases the `light` step.
+
+```css
+/* Per-client primitive emission, one row per Figma stop */
+--vale-partners-navy:            #95afd4;  /* base = light */
+--vale-partners-navy-lightest:   #e7effb;
+--vale-partners-navy-lighter:    #d1dff4;
+--vale-partners-navy-light:      #95afd4;
+--vale-partners-navy-dark:       #5f7697;
+--vale-partners-navy-darker:     #1c3252;
+--vale-partners-navy-darkest:    #111720;
+```
+
+**Semantic aliases carry state.** Interaction-state names (`-hover`, `-pressed`, `-active`, `-disabled`) live on canonical aliases like `--background-brand-primary-hover` — never on primitives. Each state alias **references** a tonal stop:
+
+```css
+--background-brand-primary:         var(--vale-partners-olive);          /* base */
+--background-brand-primary-hover:   var(--vale-partners-olive-lighter);  /* one stop up */
+--background-brand-primary-pressed: var(--vale-partners-olive-dark);     /* one stop down */
+```
+
+<Callout type="warn">
+  **Figma is source of truth for primitive naming.** When a CSS suffix doesn't match a Figma stop name, the system has drifted. Primitives never carry interaction-state names (`-hover`, `-pressed`); those belong on canonical aliases that *reference* a tonal stop.
+</Callout>
+
+### Deprecated suffix aliases
+
+Pre-2026-Q2, the portal token generator emitted state-named suffixes on primitives — `--{slug}-{color}-subtle/-hover/-pressed/-deep/-deepest`. These are now **deprecation aliases** that point at their Figma-named counterparts via `var()`:
+
+```css
+/* Deprecated — emitted only for backward compatibility */
+--vale-partners-navy-subtle:   var(--vale-partners-navy-lightest);
+--vale-partners-navy-hover:    var(--vale-partners-navy-lighter);
+--vale-partners-navy-pressed:  var(--vale-partners-navy-dark);
+--vale-partners-navy-deep:     var(--vale-partners-navy-darker);
+--vale-partners-navy-deepest:  var(--vale-partners-navy-darkest);
+```
+
+**Targeted retirement: ≥ 2026-Q3.** New consumer code MUST use the Figma-named tonal stops. Existing references migrate at consumer-repo pace; track via cross-repo grep.
+
 ## Primitives
 
 Raw color scales from the Figma Brand Kit. **Components reference these via semantic tokens — never directly.** The primitives change rarely; the semantic mappings change per theme.
