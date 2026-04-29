@@ -39,7 +39,13 @@
 
   .bds-interactive-list-item--sm {
     gap: var(--gap-sm);
-    padding: var(--padding-sm) var(--padding-md);
+    padding: var(--padding-sm);
+  }
+
+  /* `sm` is for narrow contexts (DevBar slot panels, popovers) — the
+     default `--label-md` title crowds these layouts and reads as oversized. */
+  .bds-interactive-list-item--sm .bds-interactive-list-item__title {
+    font-size: var(--label-sm);
   }
 
   .bds-interactive-list-item:hover:not(:disabled) {
