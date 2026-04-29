@@ -4,12 +4,19 @@ description: Atmosphere overlays — film grain and glassmorphism. ::after pseud
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-Atmosphere overlays in `css/premium-effects.css`. Film grain adds tactile texture. Glassmorphism creates depth for floating UI panels. Both use `::after` pseudo-elements — no additional DOM nodes required.
+<TierBadge tier="premium" /> Atmosphere overlays in `css/premium-effects.css`. Film grain adds tactile texture. Glassmorphism creates depth for floating UI panels. Both use `::after` pseudo-elements — no additional DOM nodes required.
 
 ## Grain
 
 Film grain adds analogue texture to sections. The `::after` pseudo-element applies a tiling noise texture at low opacity. Use it on hero sections, dark sections, and feature blocks to add character.
+
+<EffectGrid columns={3}>
+  <GrainDemo />
+  <GrainDemo variant="heavy" />
+  <GrainDemo variant="light" />
+</EffectGrid>
 
 ```html
 <!-- Standard grain (4% opacity) — use on light or mid-tone sections -->
@@ -42,6 +49,12 @@ Film grain adds analogue texture to sections. The `::after` pseudo-element appli
 ## Glassmorphism
 
 Frosted glass panels using `backdrop-filter: blur()`. Three variants — default, light, and dark — for different background luminance levels.
+
+<EffectGrid columns={3}>
+  <GlassDemo />
+  <GlassDemo variant="light" />
+  <GlassDemo variant="dark" />
+</EffectGrid>
 
 ```html
 <!-- Default glass — 50% white background, 8px blur -->
@@ -81,10 +94,6 @@ Grain and glass compose. A dark glass nav panel with grain texture reads as prem
   Navigation links
 </nav>
 ```
-
-<Callout type="info">
-  **Live demos are in Storybook.** Each grain and glass variant renders an interactive comparison. See **Motion → Effects → Overlays** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
-</Callout>
 
 ## Related
 
