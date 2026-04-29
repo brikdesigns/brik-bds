@@ -4,8 +4,18 @@ description: Gradient fill, stroke, glow, animated highlight. Heading-level only
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-CSS text decoration classes in `css/animations.css`. These apply to heading elements only — paired with `--font-family-heading` and heading-scale sizes. Never apply to body copy or labels.
+<TierBadge tier="lightweight" /> CSS text decoration classes in `css/animations.css`. These apply to heading elements only — paired with `--font-family-heading` and heading-scale sizes. Never apply to body copy or labels.
+
+<EffectGrid columns={2}>
+  <TextEffectDemo className="text-gradient" label="Gradient Text" />
+  <TextEffectDemo className="text-gradient--brand" label="Brand Gradient" />
+  <TextEffectDemo className="text-stroke" label="Stroke Text" />
+  <TextEffectDemo className="text-glow" label="Glowing Text" dark />
+  <TextEffectDemo className="text-highlight" label="Highlighted" />
+  <TextEffectDemo className="text-stroke--thick" label="Thick Stroke" />
+</EffectGrid>
 
 ## Class reference
 
@@ -46,15 +56,11 @@ CSS text decoration classes in `css/animations.css`. These apply to heading elem
   **Validate font family.** Test with the Font Audit theme in the Storybook toolbar to verify heading font family is correct — gradient-clip only works if `-webkit-background-clip: text` applies to a heading-family element.
 </Callout>
 
-## GSAP text splitting (GSAP tier)
+## GSAP text splitting <TierBadge tier="gsap" />
 
 For letter-by-letter or word-by-word animated reveals, use GSAP SplitText instead of CSS classes. See [GSAP Tier](/docs/motion/tiers/gsap) for the splitting pattern.
 
 The CSS classes above and GSAP SplitText are composable — you can apply `.text-gradient` to a heading and also split it with SplitText. The gradient applies to each character span GSAP creates.
-
-<Callout type="info">
-  **Live demos are in Storybook.** Each text effect renders an interactive example. See **Motion → Effects → Typography** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
-</Callout>
 
 ## Related
 

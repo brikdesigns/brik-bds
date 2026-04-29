@@ -4,8 +4,9 @@ description: Atmosphere effects — grain, glass, magnetic cursor, hero sequence
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-Premium effects handle atmosphere — the qualitative texture that separates a premium website from a well-styled one. Film grain, glassmorphism, magnetic cursor buttons, orchestrated hero sequences, and scroll-scrubbed video all live here. Premium builds on both [Lightweight](/docs/motion/tiers/lightweight) and [GSAP](/docs/motion/tiers/gsap).
+<TierBadge tier="premium" /> Premium effects handle atmosphere — the qualitative texture that separates a premium website from a well-styled one. Film grain, glassmorphism, magnetic cursor buttons, orchestrated hero sequences, and scroll-scrubbed video all live here. Premium builds on both [Lightweight](/docs/motion/tiers/lightweight) and [GSAP](/docs/motion/tiers/gsap).
 
 ## Files to load
 
@@ -28,6 +29,12 @@ See [Overlays](/docs/motion/effects/overlays) for the full grain and glass refer
 
 ### Grain overlays
 
+<EffectGrid columns={3}>
+  <GrainDemo />
+  <GrainDemo variant="heavy" />
+  <GrainDemo variant="light" />
+</EffectGrid>
+
 ```html
 <!-- Standard grain (4% opacity) -->
 <section class="grain-overlay">Content</section>
@@ -40,6 +47,12 @@ See [Overlays](/docs/motion/effects/overlays) for the full grain and glass refer
 ```
 
 ### Glassmorphism
+
+<EffectGrid columns={3}>
+  <GlassDemo />
+  <GlassDemo variant="light" />
+  <GlassDemo variant="dark" />
+</EffectGrid>
 
 ```html
 <div class="glass">Default frosted glass</div>
@@ -151,10 +164,6 @@ Signature compositions mapped to design references. See `ANIMATION-REFERENCE.md`
 | **Legend.xyz** | `section-dark`, `glass-card`, `text-gradient`, `data-scroll-batch`, `divider-gradient`, `cursor-spotlight`, `hover-glow` |
 | **Luxury / Law** | `grain-overlay--light`, `ken-burns--slow`, `clip-curtain-reveal`, `morph-light-to-dark`, `text-stroke`, `glass--light` nav |
 | **Modern Medical** | `video-bg--gradient` hero, `data-premium-hero`, `data-premium-counter`, `image-reveal`, `section-warm`, `text-highlight` |
-
-<Callout type="info">
-  **Live demos are in Storybook.** Each effect category renders interactive examples. See **Motion → Tiers → Premium** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
-</Callout>
 
 ## Related
 

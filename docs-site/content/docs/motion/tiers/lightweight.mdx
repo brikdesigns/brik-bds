@@ -4,8 +4,9 @@ description: No JavaScript library. Pure CSS animations + a minimal Intersection
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-No JavaScript library. Every effect in this tier runs on CSS transitions, CSS animations using the BDS keyframe library, and a minimal IntersectionObserver snippet to toggle `.is-visible`. This is the default for all mockups.
+<TierBadge tier="lightweight" /> No JavaScript library. Every effect in this tier runs on CSS transitions, CSS animations using the BDS keyframe library, and a minimal IntersectionObserver snippet to toggle `.is-visible`. This is the default for all mockups.
 
 ## Files to load
 
@@ -99,7 +100,18 @@ Cinematic image and section unveils. Implemented in CSS — no library dependenc
 </div>
 ```
 
-Six variants: `clip-circle-reveal`, `clip-curtain-reveal`, `clip-wipe-reveal`, `clip-rise-reveal`, `clip-diagonal-reveal`, `clip-diamond-reveal`. See [Scroll Reveals](/docs/motion/effects/scroll-reveals) for the full effect reference.
+Six variants: `clip-circle-reveal`, `clip-curtain-reveal`, `clip-wipe-reveal`, `clip-rise-reveal`, `clip-diagonal-reveal`, `clip-diamond-reveal`.
+
+<EffectGrid columns={3}>
+  <ClipRevealDemo type="circle" />
+  <ClipRevealDemo type="curtain" />
+  <ClipRevealDemo type="wipe" />
+  <ClipRevealDemo type="rise" />
+  <ClipRevealDemo type="diagonal" />
+  <ClipRevealDemo type="diamond" />
+</EffectGrid>
+
+See [Scroll Reveals](/docs/motion/effects/scroll-reveals) for the full effect reference.
 
 ## Hover effects
 
@@ -114,6 +126,15 @@ CSS-only micro-interactions. No JS required.
 | `.hover-underline` | Animated underline grows from left | Text links |
 | `.click-press` | `scale(0.97)` on `:active` | Pair with `.hover-lift` on buttons |
 
+<EffectGrid columns={3}>
+  <HoverDemo className="hover-lift" label=".hover-lift" />
+  <HoverDemo className="hover-scale" label=".hover-scale" />
+  <HoverDemo className="hover-glow" label=".hover-glow" />
+  <HoverDemo className="hover-dim" label=".hover-dim" />
+  <HoverDemo className="hover-underline" label=".hover-underline" />
+  <HoverDemo className="hover-lift click-press" label=".hover-lift.click-press" />
+</EffectGrid>
+
 See [Hover Effects](/docs/motion/effects/hover) for magnetic and cursor-trail variants (those require Premium JS).
 
 ## Section theming
@@ -126,6 +147,13 @@ Section color presets. Combine with grain, glass, and dividers.
 | `.section-light` | Light background |
 | `.section-warm` | Warm / cream background |
 | `.section-brand` | Brand primary background |
+
+<EffectGrid columns={2}>
+  <SectionThemeDemo className="section-dark" label="Dark background" />
+  <SectionThemeDemo className="section-light" label="Light background" />
+  <SectionThemeDemo className="section-warm" label="Warm/cream background" />
+  <SectionThemeDemo className="section-brand" label="Brand primary background" />
+</EffectGrid>
 
 ## Attention animations
 
@@ -145,10 +173,6 @@ Draw the eye to a changed state without motion sickness risk. These loop continu
 ## Reduced motion
 
 `tokens/animations.css` includes a `prefers-reduced-motion` override that disables all animations and transitions for users who have enabled this OS preference. No additional work needed.
-
-<Callout type="info">
-  **Live demos are in Storybook.** Each effect renders an interactive example. See **Motion → Tiers → Lightweight** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
-</Callout>
 
 ## Related
 

@@ -4,8 +4,9 @@ description: Clip-path reveals, fade and slide entrances, stagger patterns, para
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-All scroll reveal effects are in `css/animations.css` and triggered by toggling `.is-visible` on the element when it enters the viewport. The trigger mechanism is a plain IntersectionObserver — no library required.
+<TierBadge tier="lightweight" /> All scroll reveal effects are in `css/animations.css` and triggered by toggling `.is-visible` on the element when it enters the viewport. The trigger mechanism is a plain IntersectionObserver — no library required.
 
 See [Lightweight tier](/docs/motion/tiers/lightweight) for the observer snippet and full import order.
 
@@ -21,6 +22,15 @@ Cinematic unveils for images and section containers. Each class defines a `clip-
 | `.clip-rise-reveal` | Rise from bottom |
 | `.clip-diagonal-reveal` | Diagonal sweep |
 | `.clip-diamond-reveal` | Diamond expand from center |
+
+<EffectGrid columns={3}>
+  <ClipRevealDemo type="circle" />
+  <ClipRevealDemo type="curtain" />
+  <ClipRevealDemo type="wipe" />
+  <ClipRevealDemo type="rise" />
+  <ClipRevealDemo type="diagonal" />
+  <ClipRevealDemo type="diamond" />
+</EffectGrid>
 
 ```html
 <!-- Circle expand from center -->
@@ -94,10 +104,6 @@ Apply `.parallax-element` to an element with a `data-parallax-speed` attribute (
   <img src="background.jpg" alt="...">
 </div>
 ```
-
-<Callout type="info">
-  **Live demos are in Storybook.** All six clip-path reveals + the four fade/slide variants render interactive examples. See **Motion → Effects → Scroll Reveals** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
-</Callout>
 
 ## Related
 

@@ -4,12 +4,22 @@ description: Micro-interactions for buttons, cards, and links. CSS hover classes
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
 Micro-interactions for buttons, cards, and links. CSS-only effects are in `css/animations.css` — no JS. Magnetic cursor and cursor trail effects require the [Premium tier](/docs/motion/tiers/premium).
 
-## CSS hover classes (Lightweight tier)
+## CSS hover classes <TierBadge tier="lightweight" />
 
 Apply to any interactive element. All transitions use BDS duration and easing tokens.
+
+<EffectGrid columns={3}>
+  <HoverDemo className="hover-lift" label=".hover-lift" />
+  <HoverDemo className="hover-scale" label=".hover-scale" />
+  <HoverDemo className="hover-glow" label=".hover-glow" />
+  <HoverDemo className="hover-dim" label=".hover-dim" />
+  <HoverDemo className="hover-underline" label=".hover-underline" />
+  <HoverDemo className="hover-lift click-press" label=".hover-lift.click-press" />
+</EffectGrid>
 
 ```html
 <!-- Button lifts on hover, presses down on click -->
@@ -36,7 +46,7 @@ Apply to any interactive element. All transitions use BDS duration and easing to
 | `.hover-underline` | Animated underline grows from left | Text links |
 | `.click-press` | `scale(0.97)` on `:active` | Pair with `.hover-lift` on buttons |
 
-## Magnetic cursor buttons (Premium tier)
+## Magnetic cursor buttons <TierBadge tier="premium" />
 
 Buttons attract the cursor within a defined radius, creating a tactile feel. Requires `premium-scroll.js`.
 
@@ -57,7 +67,7 @@ Buttons attract the cursor within a defined radius, creating a tactile feel. Req
   Magnetic effects are best on **isolated primary CTAs** — do not apply to every button on the page. The effect draws attention to the element; overuse neutralizes it.
 </Callout>
 
-## Cursor trail (Premium tier)
+## Cursor trail <TierBadge tier="premium" />
 
 A custom cursor dot that trails the mouse with a spring feel. Enabled globally by the `cursor-trail` class on the body.
 
@@ -69,10 +79,6 @@ A custom cursor dot that trails the mouse with a spring feel. Enabled globally b
 ```
 
 Exclude specific elements from the trail with `data-cursor-default` — useful for text inputs and selects where the system cursor should display normally.
-
-<Callout type="info">
-  **Live demos are in Storybook.** Each hover class renders an interactive example with hover state. See **Motion → Effects → Hover** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
-</Callout>
 
 ## Related
 

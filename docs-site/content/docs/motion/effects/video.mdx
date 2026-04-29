@@ -4,8 +4,9 @@ description: Full-bleed video sections with configurable overlay darkness. Premi
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-Full-bleed video sections with configurable overlay darkness. The CSS classes live in `css/premium-effects.css`. Video backgrounds carry performance cost — use only in hero sections, never in below-the-fold cards.
+<TierBadge tier="premium" /> Full-bleed video sections with configurable overlay darkness. The CSS classes live in `css/premium-effects.css`. Video backgrounds carry performance cost — use only in hero sections, never in below-the-fold cards.
 
 ## Overlay variants
 
@@ -15,6 +16,13 @@ Full-bleed video sections with configurable overlay darkness. The CSS classes li
 | `.video-bg--light` | 20% dark | High-contrast footage with pale backgrounds |
 | `.video-bg--heavy` | 65% dark | Dark-theme sections needing strong text contrast |
 | `.video-bg--gradient` | Top-to-bottom gradient | Prefer gradient over flat overlays for editorial look |
+
+<EffectGrid columns={2}>
+  <VideoDemo />
+  <VideoDemo variant="light" />
+  <VideoDemo variant="heavy" />
+  <VideoDemo variant="gradient" />
+</EffectGrid>
 
 ## Implementation
 
@@ -47,13 +55,9 @@ Full-bleed video sections with configurable overlay darkness. The CSS classes li
 - **Preload behavior:** `preload="none"` (default) defers the video download until play begins. `preload="metadata"` loads the poster frame and duration only. `preload="auto"` loads the full file on page load — avoid for below-the-fold or conditional sections.
 - **Poster image:** add `poster="hero-poster.jpg"` to display a still frame while the video loads. Without it, some browsers show a black rectangle.
 
-## Scroll-scrubbed video (Premium JS)
+## Scroll-scrubbed video <TierBadge tier="premium" />
 
 Video playback tied to scroll position — user scrolls to advance the video frame-by-frame. Requires `premium-scroll.js` and GSAP. See [Premium tier](/docs/motion/tiers/premium) for the implementation pattern.
-
-<Callout type="info">
-  **Live demos are in Storybook.** Each overlay variant renders with sample footage. See **Motion → Effects → Video** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com).
-</Callout>
 
 ## Related
 
