@@ -35,41 +35,51 @@ The locked enum lives in `content-system/vocabularies/atmosphere.ts`.
 | `organic-textured` | light | MUA · organic beauty · artisan · natural products |
 | `none` | (any) | explicit no-op — fallback when atmosphere is null |
 
-<Callout type="info">
-  **Live previews are in Storybook.** Each atmosphere renders on the same compact composite (hero + services grid + CTA) so you can compare treatments side by side. The previews are iframed to isolate atmosphere `:root` / `body` rules and load the CSS verbatim from `content-system/atmospheres/`.
-
-  See **Theming → Atmospheres** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com). Native `<AtmospherePreview>` blocks land in this site in a follow-up.
-</Callout>
-
 ## Per-atmosphere reference
+
+Each atmosphere renders on the same compact composite (hero + services grid + CTA) so you can compare treatments side by side. Previews are iframed to isolate atmosphere `:root` / `body` rules from the docs shell — the atmosphere CSS loads verbatim from `@brikdesigns/bds/content-system/atmospheres/{slug}.css`.
 
 ### editorial-luxury
 
-The quiet-luxury dark treatment developed for Birdwell & Mutlak Dentistry. Pure near-black (`#08080a`) surfaces so DPR gradient banding doesn't appear; gold radial orbs driven by `data-ambient` attributes on sections; SVG Perlin film grain at 32% opacity with `mix-blend-mode: overlay`; cursor-tracking spotlight on elements with `data-spotlight`. Honors reduced-motion.
+The quiet-luxury dark treatment developed for Birdwell & Mutlak Dentistry. Pure near-black surfaces so DPR gradient banding doesn't appear; gold radial orbs driven by `data-ambient` attributes on sections; SVG Perlin film grain at 32% opacity with `mix-blend-mode: overlay`; cursor-tracking spotlight on elements with `data-spotlight`. Honors reduced-motion.
+
+<AtmospherePreview atmosphere="editorial-luxury" />
 
 ### cinematic-dramatic
 
-Theatrical dark — deeper navy-black (`#060612`) with an aurora-drift gradient at the top of the viewport (42s cycle, animated via `@property` interpolation) and a conic rotating spotlight on sections marked `data-ambient="spotlight"`. No grain. Heavier atmosphere is already doing the work. Fit for legal / agency / finance / dark-mode SaaS.
+Theatrical dark — deeper navy-black with an aurora-drift gradient at the top of the viewport (42s cycle, animated via `@property` interpolation) and a conic rotating spotlight on sections marked `data-ambient="spotlight"`. No grain. Heavier atmosphere is already doing the work. Fit for legal / agency / finance / dark-mode SaaS.
+
+<AtmospherePreview atmosphere="cinematic-dramatic" />
 
 ### minimal-clinical
 
 Pure white, zero atmospheric effects. Trust comes from typography and precision, not atmosphere. Intentionally small — picks the attribute vocabulary without layering anything visually. Healthcare practices that aren't aiming luxury, legal where gravitas matters more than editorial warmth, minimal SaaS.
 
+<AtmospherePreview atmosphere="minimal-clinical" />
+
 ### warm-soft
 
-Warm ivory (`#fbf7f0`) base with a single quiet rose vignette in the top-left corner and subtle paper-grade grain at 15% opacity. No motion, no spotlights, no depth orbs — anxiety-sensitive audiences (wellness, therapy, mental health, recovery) shouldn't see cinematic flourish.
+Warm ivory base with a single quiet rose vignette in the top-left corner and subtle paper-grade grain at 15% opacity. No motion, no spotlights, no depth orbs — anxiety-sensitive audiences (wellness, therapy, mental health, recovery) shouldn't see cinematic flourish.
+
+<AtmospherePreview atmosphere="warm-soft" />
 
 ### clean-bright
 
 Pure white with zero CSS effects. Brand lives entirely in typography, imagery, and color accents. Sister to `minimal-clinical` — same visual posture, different semantic intent (SaaS/tech vs healthcare/legal).
 
+<AtmospherePreview atmosphere="clean-bright" />
+
 ### organic-textured
 
-Warm cream (`#f5efe6`) base with SVG Perlin grain at 40% opacity applied with `mix-blend-mode: multiply` — the sepia-texture feel of recycled paper. Subtle earth-tone radial tint in the bottom-right. Fit for MUA / organic beauty / artisan / natural-products brands.
+Warm cream base with SVG Perlin grain at 40% opacity applied with `mix-blend-mode: multiply` — the sepia-texture feel of recycled paper. Subtle earth-tone radial tint in the bottom-right. Fit for MUA / organic beauty / artisan / natural-products brands.
+
+<AtmospherePreview atmosphere="organic-textured" />
 
 ### none
 
 Explicit no-op. Emits no rules. Fallback when `company_profiles.atmosphere` is null or a client doesn't want an atmospheric layer. Exists so the portal's theme generator can unconditionally emit an `@import` without branching.
+
+<AtmospherePreview atmosphere="none" />
 
 ## How to pick
 
