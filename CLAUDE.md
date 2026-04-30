@@ -214,7 +214,7 @@ BDS Storybook is published to **Chromatic** — both for visual regression testi
 The stable URL serves:
 - `/mcp` — live `addon-mcp` server (the endpoint consumer agents query)
 - `/index.json` — story index, including all `surface-*` tags
-- `/manifests/components.json` + `/manifests/components.html` — the components manifest from `experimentalComponentsManifest`
+- `/manifests/components.json` + `/manifests/components.html` — the components manifest from `componentsManifest`
 
 The Netlify deploy at `storybook.brikdesigns.com` is browseable but does **not** serve `/mcp` (static build only). Agent MCP queries must use the Chromatic stable URL.
 
