@@ -13,8 +13,9 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 2. `figma-tokens-dark.css` — auto-generated dark-mode tokens (`:root[data-theme="dark"]`)
 3. `figma-dark-corrections.css` — manual overrides for known-wrong Figma dark values
 4. `theme-brand-brik.css` — Brik brand overrides (scoped to `.theme-brand-brik` class)
-5. `gap-fills.css` — manual tokens not yet in Figma
-6. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
+5. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|bold"]`)
+6. `gap-fills.css` — manual tokens not yet in Figma
+7. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
 
 **Not bundled:** `bridge.css` (opt-in via separate export), `font-audit.css`
 (Storybook-only), `motion-classes.css` (opt-in utility classes — consumers import
@@ -39,6 +40,7 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 | Fix a value that came out of Figma wrong | `figma-dark-corrections.css` (dark) or a new `figma-corrections.css` (light — doesn't exist yet, add when needed) |
 | Add a semantic token Figma doesn't export | `gap-fills.css` |
 | Adjust Brik's brand colors / fonts | `theme-brand-brik.css` — consumers get these automatically when they apply `.theme-brand-brik` to `<body>` |
+| Wire a non-color mode pick (Thin/Bold/Compact/Round/etc.) into CSS overrides | `modes-{category}.css` (only `modes-borderwidth.css` exists today; add `modes-spacing.css`, `modes-radius.css`, etc. as each mode is wired) |
 | Add a Webflow-facing alias | `bridge.css` (deprecated layer) |
 | Touch an auto-generated file | Don't. Fix in Figma and re-pull, or add an override in a manual file. |
 
@@ -54,6 +56,7 @@ place for a correction is a manual file bundled AFTER the auto-generated ones.
 
 - `figma-dark-corrections.css` — known-wrong dark values
 - `theme-brand-brik.css` — Brik brand overrides (class-scoped, bundled into dist)
+- `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth]`-scoped, bundled into dist)
 - `gap-fills.css` — tokens Figma doesn't export yet
 - `bridge.css` — legacy Webflow aliases (deprecated, opt-in only)
 - `font-audit.css`, `animations.css`, `motion-classes.css` — Storybook/component-level
