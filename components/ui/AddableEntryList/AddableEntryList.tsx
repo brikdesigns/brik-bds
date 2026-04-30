@@ -444,7 +444,10 @@ function SuggestionModeEdit({
     strict: primaryStrict,
     onCommit: (value) => {
       setPrimaryDraft(value);
-      requestAnimationFrame(() => focusSecondary());
+      // Sync focus is safe here: the secondary textarea is unconditionally
+      // mounted while isEditing is true, so the ref is already populated.
+      // Deferring via rAF makes interaction-test focus assertions racy.
+      focusSecondary();
     },
     onCancel: cancel,
   });
