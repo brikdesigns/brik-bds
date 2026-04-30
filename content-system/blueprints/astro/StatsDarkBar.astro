@@ -19,8 +19,8 @@
  * CSS custom properties:
  *   --bp-stats-dark-bar-padding-y
  *   --bp-stats-dark-bar-bg        (default: var(--surface-inverse))
- *   --bp-stats-dark-bar-value-color   (default: var(--text-on-inverse))
- *   --bp-stats-dark-bar-label-color   (default: var(--text-muted-on-inverse))
+ *   --bp-stats-dark-bar-value-color   (default: var(--text-inverse))
+ *   --bp-stats-dark-bar-label-color   (default: var(--text-inverse))
  *   --bp-stats-dark-bar-divider       (default: var(--border-secondary))
  *
  * a11y: semantic list (ul/li). If section.heading present, wired via
@@ -61,7 +61,7 @@ const items = section.items;
 
 <style>
   .bp-stats-dark-bar {
-    background: var(--bp-stats-dark-bar-bg, var(--surface-inverse, var(--color-black)));
+    background: var(--bp-stats-dark-bar-bg, var(--surface-inverse, var(--color-grayscale-black)));
     padding-block: var(
       --bp-stats-dark-bar-padding-y,
       clamp(var(--space-xl), 5vw, var(--space-3xl))
@@ -128,7 +128,7 @@ const items = section.items;
     font-size: clamp(var(--font-size-700), 4vw, var(--font-size-900));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bp-stats-dark-bar-value-color, var(--text-on-inverse, var(--color-white)));
+    color: var(--bp-stats-dark-bar-value-color, var(--text-inverse, var(--color-grayscale-white)));
   }
 
   .bp-stats-dark-bar__label {
@@ -136,6 +136,6 @@ const items = section.items;
     font-size: var(--font-size-200);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--bp-stats-dark-bar-label-color, var(--text-muted-on-inverse, var(--color-gray-light)));
+    color: var(--bp-stats-dark-bar-label-color, var(--text-inverse, var(--color-grayscale-lightest)));
   }
 </style>
