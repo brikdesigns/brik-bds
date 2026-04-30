@@ -42,7 +42,7 @@
  * - Eyebrow is prose, not a heading — avoids double-h2 shadowing.
  * - Image alt: empty-string decorative default per Birdwell intel #40.
  * - Keyboard: CTA is an anchor with :focus-visible ring via
- *   --color-focus-ring gap-fill token.
+ *   the canonical --border-focus token.
  * - Reduced motion: no animations declared — this blueprint is static.
  */
 import type { BlueprintProps } from './types';
@@ -205,7 +205,7 @@ const imageAlt = '';
     margin-top: var(--space-lg);
     padding: var(--space-sm) var(--space-lg);
     background: var(--background-brand-primary);
-    color: var(--text-on-brand-primary, var(--text-inverse));
+    color: var(--text-on-color-dark, var(--text-inverse));
     font-family: var(--font-family-label);
     font-size: var(--font-size-300);
     font-weight: var(--font-weight-semibold);
@@ -223,7 +223,7 @@ const imageAlt = '';
   }
 
   .bp-hero-split-60-40__cta:focus-visible {
-    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 2px;
   }
 
@@ -250,8 +250,8 @@ const imageAlt = '';
     align-items: center;
     justify-content: center;
     padding: var(--space-xl);
-    background: var(--surface-secondary, var(--color-gray-light));
-    border: 2px dashed var(--border-secondary, var(--color-gray-medium));
+    background: var(--surface-secondary, var(--color-grayscale-lightest));
+    border: 2px dashed var(--border-secondary, var(--color-grayscale-lighter));
     border-radius: var(--bp-hero-split-image-radius, var(--border-radius-lg));
   }
 
@@ -259,7 +259,7 @@ const imageAlt = '';
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--font-size-300);
-    color: var(--text-muted, var(--color-gray-dark));
+    color: var(--text-muted, var(--color-grayscale-dark));
     text-align: center;
   }
 </style>

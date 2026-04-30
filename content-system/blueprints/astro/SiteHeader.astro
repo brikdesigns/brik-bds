@@ -198,7 +198,7 @@ function isCurrent(href: string): boolean {
     --bp-site-header-bg: var(--surface-navigation, transparent);
     --bp-site-header-text-color: var(--text-primary);
     --bp-site-header-cta-bg: var(--background-brand-primary);
-    --bp-site-header-cta-color: var(--text-on-brand-primary, var(--text-inverse));
+    --bp-site-header-cta-color: var(--text-on-color-dark, var(--text-inverse));
 
     position: sticky;
     top: 0;
@@ -227,7 +227,7 @@ function isCurrent(href: string): boolean {
   }
 
   .bp-site-header__brand:focus-visible {
-    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 4px;
   }
 
@@ -273,7 +273,7 @@ function isCurrent(href: string): boolean {
   }
 
   .bp-site-header__nav-link:focus-visible {
-    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 4px;
   }
 
@@ -302,7 +302,7 @@ function isCurrent(href: string): boolean {
   }
 
   .bp-site-header__phone:focus-visible {
-    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 2px;
   }
 
@@ -323,7 +323,7 @@ function isCurrent(href: string): boolean {
   }
 
   .bp-site-header__cta:focus-visible {
-    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 2px;
   }
 
@@ -348,7 +348,7 @@ function isCurrent(href: string): boolean {
   }
 
   .bp-site-header__hamburger:focus-visible {
-    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 2px;
   }
 
