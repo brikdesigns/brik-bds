@@ -38,7 +38,7 @@ const config: StorybookConfig = {
   },
   features: {
     experimentalCodeExamples: true,
-    experimentalComponentsManifest: true,
+    componentsManifest: true,
   },
   docs: {
     defaultName: 'Overview',
