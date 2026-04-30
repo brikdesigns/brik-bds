@@ -15,10 +15,10 @@
  * CSS custom properties:
  *   --bp-cta-dark-centered-padding-y
  *   --bp-cta-dark-centered-bg              (default: var(--surface-inverse))
- *   --bp-cta-dark-centered-heading-color   (default: var(--text-on-inverse))
- *   --bp-cta-dark-centered-body-color      (default: var(--text-muted-on-inverse))
+ *   --bp-cta-dark-centered-heading-color   (default: var(--text-inverse))
+ *   --bp-cta-dark-centered-body-color      (default: var(--text-inverse))
  *   --bp-cta-dark-centered-cta-bg          (default: var(--background-brand-primary))
- *   --bp-cta-dark-centered-cta-color       (default: var(--text-on-brand-primary))
+ *   --bp-cta-dark-centered-cta-color       (default: var(--text-on-color-dark))
  *
  * a11y: h2 + aria-labelledby. Center-aligned but reading order is
  * natural (heading → body → CTA). CTA uses :focus-visible ring with
@@ -50,7 +50,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
 
 <style>
   .bp-cta-dark-centered {
-    background: var(--bp-cta-dark-centered-bg, var(--surface-inverse, var(--color-black)));
+    background: var(--bp-cta-dark-centered-bg, var(--surface-inverse, var(--color-grayscale-black)));
     padding-block: var(
       --bp-cta-dark-centered-padding-y,
       clamp(var(--space-3xl), 8vw, var(--space-5xl))
@@ -74,7 +74,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
     font-size: clamp(var(--font-size-700), 4vw, var(--font-size-1000));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bp-cta-dark-centered-heading-color, var(--text-on-inverse, var(--color-white)));
+    color: var(--bp-cta-dark-centered-heading-color, var(--text-inverse, var(--color-grayscale-white)));
   }
 
   .bp-cta-dark-centered__body {
@@ -82,7 +82,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
     font-family: var(--font-family-body);
     font-size: var(--font-size-400);
     line-height: var(--line-height-relaxed);
-    color: var(--bp-cta-dark-centered-body-color, var(--text-muted-on-inverse, var(--color-gray-light)));
+    color: var(--bp-cta-dark-centered-body-color, var(--text-inverse, var(--color-grayscale-lightest)));
     max-width: 55ch;
   }
 
@@ -92,7 +92,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
     margin-top: var(--space-md);
     padding: var(--space-sm) var(--space-xl);
     background: var(--bp-cta-dark-centered-cta-bg, var(--background-brand-primary));
-    color: var(--bp-cta-dark-centered-cta-color, var(--text-on-brand-primary, var(--text-inverse)));
+    color: var(--bp-cta-dark-centered-cta-color, var(--text-on-color-dark, var(--text-inverse)));
     font-family: var(--font-family-label);
     font-size: var(--font-size-300);
     font-weight: var(--font-weight-semibold);
@@ -106,7 +106,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
   }
 
   .bp-cta-dark-centered__cta:focus-visible {
-    outline: 2px solid var(--color-focus-ring, var(--background-brand-primary));
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 2px;
   }
 </style>
