@@ -1,6 +1,181 @@
 ---
 title: Hooks
-description: React hooks shipped with BDS for behavior reuse.
+description: React hooks shipped from @brikdesigns/bds for theme access, sheet stack management, suggestion-filter behavior, and the dev-bar API.
 ---
 
-> Placeholder. BDS currently exposes a small set of behavior hooks (focus management, popover positioning via Radix, theme detection). Pages here will document each.
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BDS ships seven React hooks — three context-bound (theme + sheet stack), one for combobox filter behavior, two for the BrikDevBar slot API, and one headless-config helper for sheet view authoring. All are exported from the package root.
+
+```ts
+import {
+  useTheme,
+  useSheetStack,
+  useConfigureSheet,
+  useSheetConfig,
+  useSuggestionFilter,
+  useDevBarSlot,
+  useDevBarApi,
+} from '@brikdesigns/bds';
+```
+
+<Callout type="info">
+  **Hooks belong in the consumer's component tree, not in MDX or server components.** Wrap the relevant subtree in `<ThemeProvider>` or `<SheetStackProvider>` (or both — they're independent) and call the hooks from React components below.
+</Callout>
+
+## `useTheme` — read + set the active theme
+
+Returns the active theme number, label, dark-mode flag, and a setter that updates the body class + `<html data-theme>` attribute. Persists the choice in `localStorage` under the `bds-theme` key.
+
+```ts
+function useTheme(): {
+  themeNumber: ThemeNumber;            // 1–8 + 'brik' / 'brik-dark' / 'client-sim'
+  setThemeNumber: (n: ThemeNumber) => void;
+  themeClasses: string;                // class list to apply on body
+  theme: BDSThemeConfig;               // full config object
+  themeName: string;
+  themeDescription: string;
+  isDark: boolean;
+}
+```
+
+**When to use:** anywhere you need to read the active theme (gating dark-only effects, swapping iconography, building a theme-switcher UI). Must be called from a descendant of `<ThemeProvider>`.
+
+```tsx
+import { ThemeProvider, useTheme } from '@brikdesigns/bds';
+
+function ThemeSwitcher() {
+  const { themeNumber, setThemeNumber, isDark } = useTheme();
+  return (
+    <button onClick={() => setThemeNumber(isDark ? 'brik' : 'brik-dark')}>
+      {isDark ? 'Light' : 'Dark'}
+    </button>
+  );
+}
+```
+
+## `useSheetStack` — read + control the sheet navigation stack
+
+Returns the current sheet stack, open/exit state, and methods to push, pop, open fresh, and close all. Stack semantics let related sheets drill into one another (open `client-detail` → push `notes-list` → push `note-edit`) and animate back/forward together.
+
+```ts
+function useSheetStack(): {
+  stack: SheetFrame[];                          // last = topmost
+  isOpen: boolean;                              // any sheet open
+  isExiting: boolean;                           // topmost animating out
+  direction: 'forward' | 'back';                // current transition
+  openSheet: (type, props, opts?) => void;      // clear + open one
+  pushSheet: (type, props, opts?) => void;      // drill into
+  back: () => void;                             // pop topmost (animated)
+  closeAll: () => void;                         // close immediately
+}
+```
+
+**When to use:** triggering sheet flows from outside the sheet (a "View Notes" button on a card opens the Notes sheet; a "Save" inside a sheet triggers `back()` to return to the parent). Must be a descendant of `<SheetStackProvider>`.
+
+```tsx
+const { pushSheet, back } = useSheetStack();
+
+// Drill in
+<button onClick={() => pushSheet('note-edit', { noteId: '123' }, { variant: 'detail', title: 'Edit Note' })}>
+  Edit
+</button>
+
+// Return
+<button onClick={back}>Back</button>
+```
+
+## `useConfigureSheet` — register a headless sheet config
+
+Returns a setter that registers a `SheetConfig` for the current sheet view. Sheet view components call this on mount to declare their title, subtitle, actions, and tabs without rendering chrome themselves — the parent `<Sheet>` reads the config and renders the chrome.
+
+```ts
+function useConfigureSheet(): (config: SheetConfig) => void;
+```
+
+**When to use:** authoring a sheet view that should expose its title + actions + tabs to the surrounding `<Sheet>` shell. The "headless mode" pattern keeps view files focused on body content.
+
+```tsx
+function ClientDetailSheet({ clientId }) {
+  const configureSheet = useConfigureSheet();
+  useEffect(() => {
+    configureSheet({
+      title: 'Client Detail',
+      actions: [{ label: 'Edit', onClick: handleEdit }],
+      tabs: [{ id: 'overview', label: 'Overview' }, { id: 'notes', label: 'Notes' }],
+    });
+  }, [configureSheet]);
+  return <ClientBody clientId={clientId} />;
+}
+```
+
+## `useSheetConfig` — read the current sheet's headless config
+
+Reads back what `useConfigureSheet` wrote. Used by the `<Sheet>` shell internally; rarely needed in view code.
+
+```ts
+function useSheetConfig(): SheetConfig;
+```
+
+## `useSuggestionFilter` — combobox / typeahead filter behavior
+
+Encapsulates the filter logic shared across `AddableTagList`, `AddableComboList`, `AddableEntryList`, and any custom typeahead. Handles input state, suggestion filtering, keyboard navigation, strict-mode rejection, duplicate detection, primary-vs-secondary commit semantics, and backspace-on-empty deletion.
+
+```ts
+function useSuggestionFilter(options: {
+  suggestions: string[];
+  selectedValues: string[];
+  strict?: boolean;                   // reject inputs not in suggestions
+  onCommit: (value: string) => void;
+  onCancel?: () => void;
+  onStrictReject?: (value: string) => void;
+  onDuplicate?: (value: string) => void;
+  onPrimaryCommitted?: () => void;    // for entry lists with name + secondary fields
+  onBackspaceEmpty?: () => void;      // delete last selected on backspace-when-empty
+}): UseSuggestionFilterReturn;
+```
+
+**When to use:** building any combobox, typeahead, or tag-input that needs the same filter + commit + delete semantics the Addable family uses. Saves authoring ~150 lines of custom state per consumer.
+
+The full prop / return shape is documented in source — see [`components/ui/shared/useSuggestionFilter.ts`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/shared/useSuggestionFilter.ts).
+
+## `useDevBarSlot` — register a slot in the BrikDevBar
+
+Lets a feature flag, env switch, or debug widget mount itself into the dev toolbar without owning the toolbar layout. The dev bar reads registered slots and renders them in declared order.
+
+```ts
+function useDevBarSlot(def: DevBarSlotDef | null): void;
+```
+
+**When to use:** product apps wiring `BrikDevBar` for development. Each slot calls this once on mount with its definition; passing `null` unregisters.
+
+## `useDevBarApi` — read the BrikDevBar API
+
+Returns the dev bar's API (or `null` if no `<BrikDevBar>` is mounted) — used by slots that need to programmatically open the bar, focus a slot, or query other registered slots.
+
+```ts
+function useDevBarApi(): DevBarApi | null;
+```
+
+Most consumer code uses `useDevBarSlot` only; `useDevBarApi` is for the internals.
+
+## Hooks vs components
+
+Three of the seven (`useTheme`, `useSheetStack`, `useConfigureSheet` / `useSheetConfig`) are paired with components — `<ThemeProvider>`, `<SheetStackProvider>`, `<Sheet>` — and only work inside that component's subtree. The provider components belong at app-root level; the hooks are how downstream views read or write the shared state.
+
+The remaining four (`useSuggestionFilter`, `useDevBarSlot`, `useDevBarApi`) don't require a provider — they're behavior helpers paired with specific components (Addable family, BrikDevBar) and can be called anywhere those components mount.
+
+## Adding a new hook
+
+The bar for shipping a new hook from BDS is:
+
+1. **It's used by ≥ 2 components** in the BDS codebase (or has an obvious second consumer in a product app).
+2. **It encapsulates a non-trivial behavior contract** — keyboard handling, focus management, multi-step state — that consumers would otherwise re-implement and drift on.
+3. **It pairs with components, not raw DOM manipulation.** Hooks that wrap a `useEffect` over `document.body` belong in the component using them, not the package surface.
+
+Hooks that don't clear all three bars stay private to their component file (`components/ui/{Component}/use{Behavior}.ts`) and are not exported from `components/ui/{Component}/index.ts`.
+
+## Related
+
+- [Components](/docs/components) — the components these hooks pair with
+- [Theming → Client Themes](/docs/theming/client-themes) — what `useTheme` exposes is the brand layer
