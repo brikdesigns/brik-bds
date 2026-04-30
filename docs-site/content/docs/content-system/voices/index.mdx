@@ -1,6 +1,159 @@
 ---
 title: Voices
-description: The eight voice patterns — how a brand sounds in copy, with rules and pairings.
+description: The 8 canonical voice traits captured in the client portal. Each pattern defines structured writing rules the resolver blends at runtime when a client picks multiple voices.
 ---
 
-> Stub page — port from `content-system/voices/Overview.mdx` and the per-voice `.ts` files. Each of the 8 voices needs its own page covering: rules, do/don't examples, pairing guidance, and which industries it pairs naturally with.
+import { Callout } from 'fumadocs-ui/components/callout';
+import { VOICE_VALUES, voicePatterns } from '@brikdesigns/bds/content-system';
+
+The eight canonical voice traits captured in the client portal. Each pattern defines structured writing rules — sentence length, contractions, perspective, hedging, imperatives, rhetorical questions, figurative language — the resolver blends at runtime when a client picks multiple voices.
+
+Clients pick **up to 3 voices**. The blender weights the first pick highest, second in the middle, third as a softening influence. Rules compose — e.g. `Direct` + `Empathetic` produces shorter sentences than pure `Empathetic` but warmer framing than pure `Direct`.
+
+<Callout type="info">
+  **Voice patterns compose compositionally, not via lookup table.** Each voice defines structured rules. Don't try to enumerate all 336 combinations — the blender reads the per-voice rules and merges with first-pick-60 / second-30 / third-10 weighting.
+</Callout>
+
+## Rule summary
+
+How each voice behaves on the structural axes. Use this to predict what a blend will feel like before rendering copy.
+
+<table>
+  <thead>
+    <tr>
+      <th>Voice</th>
+      <th>Avg sentence</th>
+      <th>Contractions</th>
+      <th>Perspective</th>
+      <th>Hedging</th>
+      <th>Imperatives</th>
+      <th>Rhetorical Q</th>
+      <th>Figurative</th>
+    </tr>
+  </thead>
+  <tbody>
+    {VOICE_VALUES.map((v) => {
+      const r = voicePatterns[v].rules;
+      return (
+        <tr key={v}>
+          <td><strong>{v}</strong></td>
+          <td>{r.sentenceLength.avg} ({r.sentenceLength.range[0]}–{r.sentenceLength.range[1]})</td>
+          <td>{r.contractions}</td>
+          <td>{r.perspective}</td>
+          <td>{r.hedging}</td>
+          <td>{r.imperatives}</td>
+          <td>{r.rhetoricalQuestions}</td>
+          <td>{r.figurativeLanguage}</td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table>
+
+## Pairings
+
+Which voices reinforce each other vs create productive tension. Tensions aren't forbidden — they're where craft lives. A `Direct` + `Empathetic` blend produces copy that is both brief and warm (think: *"We know this is hard. Here's what to do next."*).
+
+<table>
+  <thead>
+    <tr>
+      <th>Voice</th>
+      <th>Reinforces</th>
+      <th>Tensions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {VOICE_VALUES.map((v) => {
+      const p = voicePatterns[v].pairings;
+      return (
+        <tr key={v}>
+          <td><strong>{v}</strong></td>
+          <td>{p.reinforces.length > 0 ? p.reinforces.join(', ') : '—'}</td>
+          <td>{p.tensions.length > 0 ? p.tensions.join(', ') : '—'}</td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table>
+
+## Blender rules (resolver-side)
+
+The blender lives in the portal resolver. The spec it follows:
+
+1. **First pick carries 60% weight, second 30%, third 10%** when rules conflict.
+2. **Numeric rules (sentence length) average with weights.** `Direct(10)` + `Empathetic(14)` + `Poetic(18)`, weighted 60/30/10, resolves to ~12 words avg.
+3. **Categorical rules resolve by majority vote** with the first pick breaking ties. `Direct`("avoid" hedging) + `Empathetic`("neutral") + `Poetic`("neutral") → hedging stays "avoid" because Direct holds.
+4. **Perspective is first-pick-wins** unless blended voices all agree on another.
+5. **Signature patterns and avoids are unioned, not averaged** — you inherit every voice's guardrails.
+6. **Pairing tensions are surfaced, not filtered.** The resolver notes "Direct × Poetic is a tension blend" in the output so downstream generators know to handle it carefully.
+
+## Examples by voice
+
+Each voice renders the same surface types differently. Read across surfaces (Hero / CTA / Paragraph / Microcopy) to feel how the voice expresses itself; read across voices to feel the same surface shift register.
+
+{VOICE_VALUES.map((v) => {
+  const p = voicePatterns[v];
+  return (
+    <section key={v} style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid var(--border-muted)' }}>
+      <h3>{v}</h3>
+      <p style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>{p.summary}</p>
+
+      <h4>Hero</h4>
+      <blockquote style={{ fontSize: '1.1em', margin: '8px 0', paddingLeft: 16, borderLeft: '3px solid var(--border-brand-primary)' }}>
+        {p.examples.hero.copy}
+      </blockquote>
+      {p.examples.hero.notes && (
+        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>→ {p.examples.hero.notes}</p>
+      )}
+
+      <h4>CTA</h4>
+      <p><code>{p.examples.cta.copy}</code></p>
+      {p.examples.cta.notes && (
+        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>→ {p.examples.cta.notes}</p>
+      )}
+
+      <h4>Paragraph</h4>
+      <blockquote style={{ margin: '8px 0', paddingLeft: 16, borderLeft: '3px solid var(--border-brand-primary)' }}>
+        {p.examples.paragraph.copy}
+      </blockquote>
+      {p.examples.paragraph.notes && (
+        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>→ {p.examples.paragraph.notes}</p>
+      )}
+
+      {p.examples.microcopy && (
+        <>
+          <h4>Microcopy</h4>
+          <p><code>{p.examples.microcopy.copy}</code></p>
+          {p.examples.microcopy.notes && (
+            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>→ {p.examples.microcopy.notes}</p>
+          )}
+        </>
+      )}
+
+      <h4>Signature patterns</h4>
+      <ul>
+        {p.signaturePatterns.map((s, i) => <li key={i}>{s}</li>)}
+      </ul>
+
+      <h4>Avoid</h4>
+      <ul>
+        {p.avoid.map((s, i) => <li key={i}>{s}</li>)}
+      </ul>
+    </section>
+  );
+})}
+
+## Authoring or evolving a voice
+
+Voices are locked enums in `content-system/vocabularies/voice.ts` — adding or removing one is a breaking change for every consumer. Evolving an existing voice is the lower-risk path:
+
+1. Edit the voice's `.ts` file in `content-system/voices/{slug}.ts` — adjust rules, examples, signature patterns, avoids, or pairings.
+2. Bump `version` (semver patch for example tweaks; minor for rule shifts).
+3. Update `lastReviewed` to today's date.
+4. Run `npm run build:content-system` to validate the type contract.
+5. The `Record<Voice, VoicePattern>` shape in `voicePatterns` ensures every voice in `VOICE_VALUES` has a matching pattern at typecheck time.
+
+## Related
+
+- [Industries](/docs/content-system/industries) — each pack declares default voice affinities; clients override
+- [Content System overview](/docs/content-system) — how voices fit alongside personality + visual style + atmosphere
