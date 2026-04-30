@@ -60,18 +60,63 @@ Each value maps directly to a tier documentation page:
 
 ## Image Mood
 
-Multi-select 1–3. Stored on `company_profiles.image_moods` (`text[]`).
+The `image_mood` field captured in the client portal's Visual Direction intel topic. **Multi-select 1–3** — a brand often blends moods (e.g. `editorial × clinical` for a luxury medical practice, or `lifestyle × documentary` for real estate). Stored on `company_profiles.image_mood` (`text[]`, migration 00127).
 
-| Value | Connotation |
+This vocabulary is distinct from `VISUAL_STYLE_VALUES` — visual style describes overall aesthetic (typographic, structural), image mood describes how imagery is composed and lit. It is imported from `content-system/vocabularies/image-mood.ts` and consumed by the portal via `client-facts.imageMoods` (the field that downstream services read). Never hardcode these values in consumer code — import `IMAGE_MOOD_VALUES` from this source.
+
+### Values
+
+| Value | Connotation | Typical fit |
+|---|---|---|
+| `editorial` | Magazine-styled, composed, aspirational | Luxury hospitality, high-end services, design-forward brands |
+| `clinical` | Clean, precise, sterile | Medical, dental, legal, pharmaceutical |
+| `photojournalistic` | Candid, moment-in-time, real events | Editorial publications, event-driven brands, agencies |
+| `lifestyle` | People in context, warm, aspirational daily life | Real estate, wellness, hospitality, consumer brands |
+| `abstract` | Non-representational, textural, artistic | Tech, creative agencies, brands de-emphasizing literal imagery |
+| `documentary` | Unposed, real, environmental portraiture | Nonprofits, healthcare with authenticity focus, MHC/RV / housing |
+
+### Programmatic access
+
+```ts
+import {
+  IMAGE_MOOD_VALUES,
+  type ImageMood,
+  isImageMood,
+} from '@brikdesigns/bds/content-system';
+
+// The 6 valid values at runtime
+console.log(IMAGE_MOOD_VALUES);
+// ['editorial', 'clinical', 'photojournalistic', 'lifestyle', 'abstract', 'documentary']
+
+// Type-safe guard
+function tagStockAsset(mood: string) {
+  if (!isImageMood(mood)) throw new Error(`Unknown mood: ${mood}`);
+  // mood is narrowed to ImageMood here
+}
+```
+
+The portal reads `company_profiles.image_mood` (type `text[]`) and exposes it to:
+
+- The mockup generator's image prompts
+- The stock-asset picker (which photos to source)
+- The design preflight (image-approach validation)
+
+<Callout type="warn">
+  **Drift warning:** if the values here and the portal's intake form get out of sync, clients pick a value that silently resolves to nothing in downstream image-direction logic. `isImageMood()` is the runtime guard — use it at the API boundary before persisting, and at any free-text ingestion point (e.g. stock-asset library tags) before storing.
+</Callout>
+
+### Mood-to-atmosphere natural pairings
+
+Image mood pairs with [atmosphere choice](/docs/theming/atmospheres) — each atmosphere reinforces a mood without locking it. These are *suggestions*, not constraints; clients can mix:
+
+| Image mood | Natural atmosphere pairing |
 |---|---|
-| `bright` | Open, energetic, high-key |
-| `cinematic` | High contrast, dramatic light, narrative |
-| `editorial` | Magazine-grade composition, refined |
-| `clinical` | Precise, sterile, trustworthy |
-| `warm` | Soft palette, sun-kissed, approachable |
-| `organic` | Natural texture, earthy, hand-crafted |
-
-Image mood drives photography selection (when sourcing stock) and informs which atmosphere is the natural pairing — `cinematic` → `cinematic-dramatic`, `warm` → `warm-soft`, etc.
+| `editorial` | `editorial-luxury` |
+| `clinical` | `minimal-clinical` |
+| `lifestyle` | `warm-soft` |
+| `documentary` | `clean-bright` or `none` |
+| `photojournalistic` | atmosphere-agnostic (leans `none` or `clean-bright`) |
+| `abstract` | atmosphere-agnostic (often pairs with `cinematic-dramatic` for theatrical brands) |
 
 ## Related
 
