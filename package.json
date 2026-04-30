@@ -1,6 +1,6 @@
 {
   "name": "@brikdesigns/bds",
-  "version": "0.50.0",
+  "version": "0.51.0",
   "description": "Brik Design System — React components, Figma-synced tokens, and Content System (BCS) vocabulary",
   "private": false,
   "main": "dist/index.cjs.js",
@@ -38,7 +38,12 @@
     "./atmospheres/none.css": "./content-system/atmospheres/none.css",
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
-    "./bridge.css": "./dist/bridge.css"
+    "./bridge.css": "./dist/bridge.css",
+    "./canonical-check": {
+      "types": "./scripts/canonical-check.d.ts",
+      "import": "./scripts/canonical-check.mjs",
+      "default": "./scripts/canonical-check.mjs"
+    }
   },
   "files": [
     "dist",
@@ -47,10 +52,13 @@
     "content-system/atmospheres/*.css",
     "content-system/blueprints/astro/**/*.astro",
     "content-system/blueprints/astro/index.ts",
-    "scripts/bds-find.mjs"
+    "scripts/bds-find.mjs",
+    "scripts/canonical-check.mjs",
+    "scripts/canonical-check.d.ts"
   ],
   "bin": {
-    "bds-find": "scripts/bds-find.mjs"
+    "bds-find": "scripts/bds-find.mjs",
+    "canonical-check": "scripts/canonical-check.mjs"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -117,6 +125,8 @@
     "build:content-system": "tsc --project tsconfig.content-system.json",
     "build:inspector-manifest": "node scripts/build-inspector-manifest.mjs",
     "bds:find": "node scripts/bds-find.mjs",
+    "canonical-check": "node scripts/canonical-check.mjs --allowlist dist/tokens.css components",
+    "canonical-check:report": "node scripts/canonical-check.mjs --allowlist dist/tokens.css --format md components content-system stories || true",
     "build:types": "tsc --project tsconfig.build.json",
     "build:dist-tokens": "node scripts/build-dist-tokens.js",
     "chromatic": "npx chromatic --project-token=chpt_c16ee79525f408c",
