@@ -33,6 +33,7 @@ export {
   industryPacks,
   dental,
   realEstateRvMhc,
+  realEstateCommercial,
   smallBusiness,
   getIndustryServices,
   getIndustryServicesCatalog,
