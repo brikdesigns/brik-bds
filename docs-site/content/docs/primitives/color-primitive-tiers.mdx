@@ -1,0 +1,84 @@
+---
+title: Color primitive tiers
+description: The brand-tier vocabulary that decides which canonical token slots a color primitive resolves into. Pinned to a BDS export so consumers cannot ship speculative tier values.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+`tier` is the closed enum that tags a brand color primitive with the canonical token slot it drives. The portal theme generator reads it (`generate-theme-css.ts` → `findPrimitiveByTier`) to decide which primitive maps to `--background-brand-primary`, `--text-brand-primary`, and friends. Drift here is what produced the canonical-token rollback of 2026-04-27 — a closed vocabulary, exported from BDS, is the guardrail.
+
+This vocabulary is the **single source of truth** for tier values. It is exported from `content-system/vocabularies/color-primitive-tier.ts` and consumed by the portal's `resolve-theme.ts`. Never hardcode these values in consumer code — import `COLOR_PRIMITIVE_TIERS` from `@brikdesigns/bds/content-system`.
+
+## Tier vocabulary
+
+| Tier | Drives | Constraints |
+|---|---|---|
+| `primary` | Chromatic brand identity. Resolves into `--background-brand-primary`, `--surface-brand-primary`, `--text-brand-primary`, `--border-brand-primary`, `--text-link`. | Must be the brand identity color. Tag exactly one primitive. |
+| `secondary` | Supporting brand color. Drives `--background-brand-secondary`, `--surface-brand-secondary` when present. | Tag-only today; no automatic mapping beyond the brand-secondary slots. |
+| `tertiary` | Third-tier brand color. | Tag-only today. No automatic mapping. |
+| `accent` | Non-primary chromatic colors. | Tag-only today. No automatic mapping. |
+| `neutral` | Gray ramp source. Drives gray-ramp neutral resolution. | Tagged on the brand's gray primitive. **Never** the white or black primitive. |
+| `brand-fill` | AA-safe variant of `primary` used for filled brand surfaces and brand-colored text — `--background-brand-primary`, `--text-brand-primary`. | Specify when `primary` fails AA contrast against the paper/white surface. Pair with the underlying `primary` — `brand-fill` is the contrast-safe twin, not a replacement. |
+
+### Why `brand-fill` exists
+
+When the brand identity color does not meet AA contrast on a white surface, the theme generator needs a darker variant for the slots that *must* be readable (filled brand backgrounds carrying text, brand-colored copy on a body surface). Vale Partners' olive `#698339` is 3.4:1 on white — fails AA. Their olive-deep `#3d4c23` is 9.0:1 — passes. Tagging the deep variant `brand-fill` lets the generator pick it for text/fill slots while `primary` continues to drive accents and decoration.
+
+## Anti-patterns
+
+<Callout type="error">
+  **`paper` / `ink` as brand-tinted neutrals.** Pushing brand-tinted primitives (Vale's cream, moss-deepest) into canonical neutral slots like `--surface-primary` or `--text-primary` violates the BDS taxonomy where neutral tokens resolve from neutral primitives. Shipped in portal [#576](https://github.com/brikdesigns/brik-client-portal/pull/576), reverted in [#577](https://github.com/brikdesigns/brik-client-portal/pull/577). **The fix is to redefine the brand's white or black primitive hex value**, not to introduce a new tier.
+</Callout>
+
+<Callout type="error">
+  **`brand-fill` without an underlying `primary`.** `brand-fill` is the contrast-safe twin of `primary` — it presupposes the existence of a `primary` to be safe against. Every `brand-fill` definition should pair with a `primary` definition on the related primitive. Tag both, not only the dark one.
+</Callout>
+
+<Callout type="error">
+  **Speculative tiers.** Adding a tier value because "the brand has 11 primitives and 3 already have tiers, so X needs one too." A tier exists only when its target token slot exists in canonical [tokens.css](/docs/primitives/color). If your brand has chromatic primitives that don't fit `primary` / `secondary` / `tertiary` / `accent` / `brand-fill`, leave them untagged — they emit as palette vars only.
+</Callout>
+
+## Decision tree
+
+Walk this top-down for each primitive in a brand:
+
+1. **Is it a neutral (white, black, or gray)?**
+   - White or black → **no tier**. Redefine the neutral primitive's hex value if you need a tinted body neutral. Do not add a `paper` or `ink` tier.
+   - Gray → tag `neutral` (the ramp source).
+2. **Is it the brand identity color?** → tag `primary`.
+3. **Is it the AA-safe text/fill twin of `primary`?** (i.e., `primary` fails AA on white but this variant passes.) → tag `brand-fill`.
+4. **Is it a designated supporting color the brand calls out as second-tier?** → tag `secondary`. Otherwise leave untagged.
+5. **Else** → **no tier**. The primitive is exposed as a palette var (`--{slug}-{name}`) and is available for ad-hoc reference, but does not resolve into any canonical slot.
+
+The default answer is **no tier**. Only tag a primitive when it has a canonical slot it must drive.
+
+## Programmatic access
+
+```ts
+import {
+  COLOR_PRIMITIVE_TIERS,
+  type ColorPrimitiveTier,
+  isColorPrimitiveTier,
+} from '@brikdesigns/bds/content-system';
+
+// The 6 valid tier values at runtime
+console.log(COLOR_PRIMITIVE_TIERS);
+// ['primary', 'secondary', 'tertiary', 'accent', 'neutral', 'brand-fill']
+
+// Type-safe guard at the API boundary
+function tagPrimitive(tier: string) {
+  if (!isColorPrimitiveTier(tier)) {
+    throw new Error(`Unknown tier: ${tier}. Add it to BDS first.`);
+  }
+  // tier is narrowed to ColorPrimitiveTier here
+}
+```
+
+<Callout type="warn">
+  **Drift warning.** Until the portal's `resolve-theme.ts` migrates to import `ColorPrimitiveTier` from BDS, the type lives in two places. Adding a tier value to one without the other lets a speculative value through — the contract gate is closed only when both sides reference this export.
+</Callout>
+
+## Related
+
+- [Color](/docs/primitives/color) — the canonical token registry that tier values resolve into
+- [Cascade rules](/docs/getting-started/cascade) — three-layer architecture (BDS foundations → gap-fills → client theme)

@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "color",
+    "color-primitive-tiers",
     "typography",
     "spacing",
     "size",
