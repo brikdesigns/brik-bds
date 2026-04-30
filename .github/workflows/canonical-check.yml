@@ -1,0 +1,52 @@
+name: Canonical Token Check
+
+# Enforces BDS's canonical token registry on every PR and on every push to
+# main. Fails the build if any source file references a `--text-*`,
+# `--surface-*`, `--background-*`, semantic `--border-*`, or `--color-*`
+# name that isn't defined in `dist/tokens.css`.
+#
+# Why this is a CI gate (not just pre-push):
+#   - Pre-push runs `validate:full` locally but does NOT include
+#     `canonical-check` — see package.json scripts.
+#   - Cloud-agent commits (OpenClaw, scheduled routines) bypass local hooks
+#     entirely.
+#   - PRs from forks or fresh clones may not have husky installed.
+# This workflow is the cross-machine guarantee that no drift lands on main.
+#
+# Source of truth: https://design.brikdesigns.com/docs/primitives/color
+# Issue: brikdesigns/brik-bds#300
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  canonical-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # canonical-check parses the allowlist from `dist/tokens.css`, which is
+      # gitignored. `build:dist-tokens` is the cheap path — concatenates the
+      # already-built figma-tokens.css + dark + corrections + brand + gap-fills.
+      # Avoids the full `build:lib` (Vite + tsc) which would add ~30s for no
+      # extra coverage.
+      - name: Build dist tokens (canonical allowlist source)
+        run: npm run build:dist-tokens
+
+      - name: Canonical token check
+        run: npm run canonical-check
