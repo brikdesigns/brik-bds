@@ -35,6 +35,7 @@ import {
 } from '@/components/mdx/motion/effect-demos';
 import { AtmospherePreview } from '@/components/mdx/theming/atmosphere-preview';
 import { NavigationIASpec } from '@/components/mdx/theming/navigation-ia-spec';
+import { BlueprintLibrary } from '@/components/mdx/theming/blueprint-library';
 import * as BDS from '@brikdesigns/bds';
 
 /**
@@ -82,6 +83,7 @@ export function getMDXComponents(extra?: MDXComponents): MDXComponents {
     SectionThemeDemo,
     AtmospherePreview,
     NavigationIASpec,
+    BlueprintLibrary,
     // The BDS namespace export includes hooks (useTheme) alongside components.
     // MDX's component-map type rejects that mix; cast since MDX only ever calls
     // the JSX entries (`<BDS.Button>`), never the hooks.

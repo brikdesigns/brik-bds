@@ -9,10 +9,6 @@ Named layout + interaction patterns that ground AI mockup generation with concre
 
 See [`blueprints/ARCHITECTURE.md`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/ARCHITECTURE.md) for the two-taxonomy model, bridge rules, and v1 / v2 coexistence.
 
-<Callout type="info">
-  **Live library catalog is in Storybook.** The full enumerated list of blueprint entries — with moods, industries, layout spec, CSS hints, version, last-reviewed dates — is rendered dynamically from `blueprints/blueprint-library.json`. See **Theming → Blueprints** in [storybook.brikdesigns.com](https://storybook.brikdesigns.com). Native rendering of the library JSON in this site lands in a follow-up.
-</Callout>
-
 ## Two taxonomies
 
 Authors hand-write match tags (`moods`, `industries`). Client-axis projections (`personality`, `visual_style`, `industry_slugs`) are derived at load time via the bridges — never stored in source JSON, never authored by hand.
@@ -49,11 +45,11 @@ Authors hand-write match tags (`moods`, `industries`). Client-axis projections (
 | `legal` | `small-business` (until graduated) |
 | `universal` | *universal sentinel — no pack lookup* |
 
-## Coverage
+## Catalog
 
-The library tracks coverage across section types × moods. Cells with `0` are gaps — opportunities to author. The full matrix renders in Storybook from live JSON.
+The full enumerated library — every blueprint with moods, industries, layout spec, CSS hints, version, last-reviewed dates — rendered live from `@brikdesigns/bds/blueprints/library.json`. Coverage matrix shows section type × mood density at a glance; cells with `·` are gaps to author.
 
-The shipped section types include: `hero` · `services` · `about` · `stats` · `testimonials` · `cta` · `gallery` · `process` · `team` · `pricing` · `faq` · `contact`.
+<BlueprintLibrary />
 
 ## Implementation — `@brikdesigns/bds/blueprints-astro`
 
