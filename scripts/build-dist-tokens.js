@@ -63,12 +63,20 @@ if (fs.existsSync(themeBrandBrikPath)) {
   console.log('  ✓ Including Brik brand theme');
 }
 
+// Non-color mode overrides (currently borderWidth; future: spacing, radius, elevation, motion)
+const modesBorderWidthPath = path.join(TOKENS_DIR, 'modes-borderwidth.css');
+let modesBorderWidth = '';
+if (fs.existsSync(modesBorderWidthPath)) {
+  modesBorderWidth = '\n\n' + fs.readFileSync(modesBorderWidthPath, 'utf8');
+  console.log('  ✓ Including borderWidth mode overrides');
+}
+
 // Shared keyframe library — required for any component using bds-spin, bds-pulse, bds-pop, etc.
 const animations = fs.readFileSync(path.join(TOKENS_DIR, 'animations.css'), 'utf8');
 
 fs.writeFileSync(
   path.join(DIST_DIR, 'tokens.css'),
-  header + figmaTokens + darkTokens + darkCorrections + themeBrandBrik + '\n\n' + gapFills + '\n\n' + animations,
+  header + figmaTokens + darkTokens + darkCorrections + themeBrandBrik + modesBorderWidth + '\n\n' + gapFills + '\n\n' + animations,
 );
 console.log('  ✓ dist/tokens.css');
 
