@@ -1,16 +1,141 @@
 ---
 title: Patterns
-description: Cross-component recipes — how multiple BDS pieces compose into common product moments.
+description: Cross-component recipes — how multiple BDS pieces compose into the product moments that show up in every Brik build.
 ---
 
-Patterns answer the question "I'm building X, what does BDS recommend?" Each pattern is a reusable composition with a recommended structure, the components it uses, and notes on accessibility and edge cases.
+import { Callout } from 'fumadocs-ui/components/callout';
 
-## Planned patterns
+Patterns answer the question "I'm building X — what does BDS recommend?" Each pattern is a reusable composition: which BDS components to reach for, the shape they take, and the accessibility + edge-case notes that don't fit on a single component page.
 
-- **Forms** — single-column, multi-step wizard, inline edit, sheet-driven edit
-- **Empty states** — no data, error, permission denied, search no-results
-- **Page templates** — dashboard shell, settings page, list-detail, two-pane editor
-- **Navigation** — primary nav, sidebar, breadcrumbs, pagination
-- **Notifications** — toast, banner, inline alert, modal confirmation
+Patterns are recipes, not new components. If a recipe gets used in 3+ places without meaningful variation, it graduates to a real component (see [Utilities → Adopt / Extend / Graduate](/docs/utilities#adopt--extend--graduate)).
 
-> Patterns are the next major content fill-in. Most are documented partially in `stories/foundation/theming/Blueprints.mdx` and the Recipes section of Storybook — both should consolidate here.
+## Forms
+
+The single most-built pattern across portal, renew-pms, and brikdesigns. BDS ships the full vocabulary — `<Form>`, `<Field>`, `<FieldGrid>`, the input primitives, plus the Addable family for tag/entry inputs.
+
+**Composition:**
+
+```tsx
+<Form onSubmit={handleSubmit}>
+  <FieldGrid columns={2}>
+    <Field label="First name" required>
+      <Input name="firstName" />
+    </Field>
+    <Field label="Last name" required>
+      <Input name="lastName" />
+    </Field>
+    <Field label="Role" helper="Used for in-product permissions">
+      <Select name="role" options={roles} />
+    </Field>
+    <Field label="Tags">
+      <AddableTagList suggestions={tagSuggestions} />
+    </Field>
+  </FieldGrid>
+  <ButtonGroup>
+    <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+    <Button variant="primary" type="submit">Save</Button>
+  </ButtonGroup>
+</Form>
+```
+
+**Variants Brik builds repeatedly:**
+
+| Variant | When to use | Composition note |
+| --- | --- | --- |
+| **Single-column** | Onboarding, simple settings | `<FieldGrid columns={1}>` — drop the grid for under 4 fields |
+| **Two-column** | Profile / company / address forms | `<FieldGrid columns={2}>` — required fields top-left first |
+| **Sheet-driven edit** | Editing one record from a list | Wrap in `<Sheet>` with the [`useSheetStack`](/docs/hooks#usesheetstack--read--control-the-sheet-navigation-stack) hook for back/save flow |
+| **Multi-step wizard** | Onboarding, contracts | Tabs in the sheet config (see [Hooks → useConfigureSheet](/docs/hooks#useconfiguresheet--register-a-headless-sheet-config)) |
+
+**Accessibility:**
+
+- Every input lives inside a `<Field>` — the label association is automatic.
+- Required fields use the `required` prop on `<Field>`, not `*` characters in the label.
+- Errors surface via the `error` prop on `<Field>`, not as inline `<p>` siblings — placement + ARIA wiring is owned by `<Field>`.
+
+## Empty states
+
+The shape an app takes when there's no data, the user lacks permission, search returns nothing, or a request errors. BDS ships `<EmptyState>` for the canonical case — patterns below show when to reach for it vs. extend.
+
+**Canonical:**
+
+```tsx
+<EmptyState
+  icon={<InboxIcon />}
+  title="No clients yet"
+  description="Add your first client to start tracking projects."
+  action={<Button variant="primary" onClick={openNewClient}>Add client</Button>}
+/>
+```
+
+**Four shapes that recur:**
+
+| Shape | When | What changes |
+| --- | --- | --- |
+| **No data** | First run, fresh table | Primary action that creates the first record |
+| **No results** | Search / filter returned nothing | Secondary action: "Clear filters" — never a primary CTA |
+| **Permission denied** | RLS or role gate | No action — explain *why*, link to admin/owner contact |
+| **Error** | Fetch failed, network issue | Secondary action: "Retry" — keep the chrome around it (don't blank the page) |
+
+<Callout type="warn">
+  **Don't blank a page on error.** Render the empty state inside the existing layout chrome (sidebar + header still visible). Replacing the whole route with a white error screen erases the user's mental map.
+</Callout>
+
+## Page templates
+
+Three templates cover roughly 95% of the product surface. Treat them as a starting frame, not a constraint — every page in the portal and renew-pms is one of these.
+
+| Template | Used for | BDS components |
+| --- | --- | --- |
+| **List + Detail Sheet** | Index pages where rows drill into a sheet (clients, contracts, leads) | `<Table>` or `<CardList>` + `<Sheet>` + `<SheetStackProvider>` |
+| **Settings Shell** | Multi-section settings, profile, company config | `<SidebarNavigation>` + `<Sheet>` for sub-edits |
+| **Dashboard Shell** | Landing pages, overview screens | `<Card>` grid + `<EmptyState>` per cell when data missing |
+
+**Layout chrome lives once, at app root** — `<NavBar>` + `<SidebarNavigation>` + `<BrikDevBar>` (dev only). Templates render *inside* that chrome via Next.js layout files. Don't re-mount the chrome inside a route.
+
+## Navigation
+
+Three navigation surfaces, three components — keep them straight. They are not interchangeable.
+
+| Surface | Component | When |
+| --- | --- | --- |
+| **Top app bar** | `<NavBar>` | Global brand + primary destinations + user menu |
+| **Section sidebar** | `<SidebarNavigation>` | Within an app section (Settings, Admin) — collapsible groups |
+| **Within-page** | `<Breadcrumb>` + `<Pagination>` | Position + page-by-page traversal |
+
+**Breadcrumbs** appear in detail views where the user drilled in (`Clients › Acme › Contracts › #4821`). They do **not** appear in flat lists or top-level pages — that creates noise.
+
+**Pagination** is for paged data. For infinite scroll or load-more, use the relevant data-loading pattern (not in this doc).
+
+**Mobile nav** collapses the top bar into a hamburger and the sidebar into a `<Sheet>` (default variant) — the sheet stack handles the drawer animation; the route layout decides when to mount it.
+
+## Notifications
+
+Four notification surfaces — match severity and persistence to the pattern, not the other way around.
+
+| Pattern | Component | Persistence | When |
+| --- | --- | --- | --- |
+| **Toast** | `<Toast>` | Auto-dismiss (5s) | Confirmation of a user action ("Saved", "Copied") |
+| **Banner** | `<Banner>` | Until dismissed by user | System-wide state (maintenance window, plan limit) |
+| **Inline alert** | `<AlertBanner>` | Until resolved | Page-scoped state (form error, validation) |
+| **Modal confirmation** | `<Sheet variant="floating">` with confirm + cancel actions | Until decided | Destructive actions (delete, discard, sign-out) |
+
+**Severity colors** come from semantic surface tokens — `--surface-success`, `--surface-warning`, `--surface-danger`, `--surface-info`. Each notification component reads them automatically; you don't pick a hex.
+
+**Don't double-notify.** A toast + banner + inline alert all firing for the same event is a bug, not thoroughness. Pick one surface based on persistence: ephemeral (toast), session (banner), page (inline alert), gate (modal).
+
+## Adding a pattern here
+
+The bar for adding a new pattern doc is:
+
+1. **It's been built ≥ 3 times** across Brik repos with the same shape — recipes that have only happened once belong in the consumer's notes.
+2. **It composes existing BDS components** — if the recipe needs a brand-new component, build the component first, then document the recipe.
+3. **It has decisions worth writing down** — accessibility wiring, severity choice, mobile collapse rules. A pattern with no decisions is just example code.
+
+Patterns that don't clear all three bars stay in the consumer codebase as-is.
+
+## Related
+
+- [Components](/docs/components) — the building blocks every pattern composes
+- [Hooks](/docs/hooks) — `useSheetStack` and `useConfigureSheet` power the sheet-driven recipes here
+- [Theming → Blueprints](/docs/theming/blueprints) — full-page layout primitives (different layer — patterns compose components, blueprints compose sections)
