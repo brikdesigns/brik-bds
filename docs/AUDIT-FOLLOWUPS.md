@@ -9,7 +9,7 @@ this one, weeks later) can resume without context.
 Six merged BDS PRs (#261, #262, #263, #264, #265, #266) plus four consumer-repo
 CLAUDE.md updates. Net effect:
 
-- `experimentalComponentsManifest: true` enabled in [.storybook/main.ts](../.storybook/main.ts).
+- `componentsManifest: true` enabled in [.storybook/main.ts](../.storybook/main.ts) (graduated from `experimentalComponentsManifest` in Storybook 10.3).
 - Stable Chromatic permalink — `https://main--69b8918cac3056b39424d5d3.chromatic.com/` —
   serves `/mcp`, `/index.json`, `/manifests/components.json`. Per-build URLs
   (`<appid>-<random>.chromatic.com`) freeze on the build that produced them and
