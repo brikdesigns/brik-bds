@@ -22,7 +22,7 @@ const BDS_HEAD_SHA = sh('git rev-parse HEAD').slice(0, 7);
 
 const SUBMODULE_CONSUMERS = [
   { name: 'brik-llm',    repo: 'brikdesigns/brik-llm',       submodulePath: 'foundations/brik-bds' },
-  { name: 'brikdesigns', repo: 'brikdesigns/brik-marketing', submodulePath: 'brik-bds' },
+  { name: 'brikdesigns', repo: 'brikdesigns/brikdesigns', submodulePath: 'brik-bds' },
 ];
 
 const NPM_CONSUMERS = [
