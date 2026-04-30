@@ -82,3 +82,9 @@ export {
   type ThemeMode,
   ATMOSPHERE_THEME_MODE,
 } from './atmosphere';
+
+export {
+  COLOR_PRIMITIVE_TIERS,
+  isColorPrimitiveTier,
+  type ColorPrimitiveTier,
+} from './color-primitive-tier';
