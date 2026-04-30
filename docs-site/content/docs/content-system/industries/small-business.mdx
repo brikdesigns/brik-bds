@@ -1,0 +1,233 @@
+---
+title: Small Business (General)
+description: The catch-all baseline. The default industry pack used when a client's vertical has not yet been matched to a dedicated pack.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { smallBusiness } from '@brikdesigns/bds/content-system';
+
+<MetadataStrip
+  items={[
+    { label: 'Version', value: smallBusiness.version },
+    { label: 'Last reviewed', value: smallBusiness.lastReviewed },
+    { label: 'Cadence', value: smallBusiness.reviewCadence },
+  ]}
+/>
+
+The default industry pack — `DEFAULT_INDUSTRY_SLUG`. Any client whose vertical hasn't been matched to a dedicated pack inherits this one. Promote a vertical out of `small-business` when Brik has 3+ clients in it OR seasonality / regulation / terminology diverges meaningfully OR strategy docs repeat 60%+ across engagements.
+
+Structured data lives in [`content-system/industries/small-business.ts`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/industries/small-business.ts). This page is the narrative companion. Keep them in sync.
+
+---
+
+## 1. Industry Overview
+
+"Small business" is not a vertical — it's a fallback. The pack covers the surface area that's true for *most* service-based small businesses regardless of industry: a local-first audience, a thin marketing budget, a license-and-insurance regulatory floor, and conversion economics dominated by review velocity, response time, and repeat-customer LTV.
+
+When a client onboards into Brik without a vertical match, this pack supplies the defaults. Clients always override during the Intel tab. The pack's job is to be **broadly safe** — to avoid suggesting things that would mislead any specific vertical — rather than to be optimal for any one of them. The moment specificity hurts (e.g., a wellness studio inheriting "Get a Free Quote" CTAs that read transactional, not therapeutic), graduate the vertical to its own pack.
+
+## 2. Default Affinities
+
+When a client hasn't yet picked traits in the portal, these are the pack's starting affinities. Clients always override.
+
+| Axis | Affinities (first = strongest) |
+|---|---|
+| **Personality** | {smallBusiness.affinities.personality.join(' · ')} |
+| **Voice** | {smallBusiness.affinities.voice.join(' · ')} |
+| **Visual Style** | {smallBusiness.affinities.visualStyle.join(' · ')} |
+
+The defaults aim at the median professional service business — confident enough to feel competent, warm enough to feel approachable, modern enough to not look outdated. Verticals that need a different posture (luxury beauty, anxiety-sensitive wellness, gravitas-heavy legal) consistently override these and are good candidates for graduation.
+
+## 3. Common Customer Pain Points
+
+Cross-vertical patterns that reliably show up regardless of what the small business actually does.
+
+<ul>
+  {smallBusiness.customerPainPoints.map((p, i) => (
+    <li key={i}>{p.summary}</li>
+  ))}
+</ul>
+
+The first three (trust / pricing opacity / scheduling friction) are the conversion bottlenecks for nearly every service business. Sites that don't address them in the hero+services+contact triangle typically underperform on lead quality regardless of traffic volume.
+
+## 4. Seasonality
+
+Cross-vertical seasonality patterns. Specific verticals override (dental Q1 surge, wellness Q1 + Q4, restaurants Q2 + Q4, etc.) — these defaults are the median.
+
+| Quarter | Intent | Focus | Notes |
+|---|---|---|---|
+| **Q1 (Jan–Mar)** | medium | Tax-refund services, new-year fitness | Tax refund window (late Feb–Apr) lifts discretionary services. January surges fitness / wellness. Home services quiet until spring. |
+| **Q2 (Apr–Jun)** | high | Home services, outdoor, events | Spring / summer ramp for home services, landscaping, weddings, events. Highest-intent quarter for the average vertical. |
+| **Q3 (Jul–Aug)** | medium | Back-to-school, family services | Back-to-school affects family-facing verticals. Peak for outdoor / seasonal services. |
+| **Q4 (Nov–Dec)** | high | Holiday retail, year-end deductible spend | Holiday push Oct–Dec. Professional services slow late December. Year-end deductible spend on services for tax-aware clients. |
+
+## 5. Competitive Landscape
+
+Six recurring competitor types, with the moats and weaknesses Brik clients can lean on or against.
+
+<ul>
+  {smallBusiness.competitiveLandscape.map((c, i) => (
+    <li key={i}>
+      <strong>{c.name}</strong>
+      {c.examples && c.examples.length > 0 && (
+        <> ({c.examples.join(', ')})</>
+      )}
+      {' — '}<em>moat:</em> {c.moat}{' '}
+      {c.weakness && (
+        <><em>· weakness:</em> {c.weakness}</>
+      )}
+    </li>
+  ))}
+</ul>
+
+The pack's strategic default: **lean on what aggregators commoditize away** — relationship, accountability, quality, and local embeddedness. The same logic that distinguishes an independent dental practice from a DSO applies cross-vertical against Yelp / Thumbtack / Angi / DoorDash and the franchise / chain wave.
+
+## 6. Listings Requirements
+
+**Required** (every small business): Google Business Profile, Bing Places, Apple Business Connect, Facebook Business Page.
+
+**Optional** (most benefit, none mandatory): Yelp, Better Business Bureau, Nextdoor.
+
+**Conditional** — vertical-specific aggregators that materially affect discovery. Match to vertical at intake; populate only when the client lives in that lane.
+
+| Vertical | Conditional listings |
+|---|---|
+| Home services | Angi · Thumbtack · HomeAdvisor · Porch · Nextdoor |
+| Restaurants | Yelp · TripAdvisor · OpenTable · Resy · DoorDash · Uber Eats · Google Food Menu |
+| Legal / financial | Avvo · Justia · FindLaw · Super Lawyers · NAPFA |
+| Medical / wellness | Healthgrades · Zocdoc · Vitals |
+| Beauty | Vagaro · Booksy · StyleSeat · Fresha |
+| Fitness | ClassPass · Mindbody |
+| Real estate | Zillow · Realtor.com · Redfin · Trulia |
+
+<Callout type="warn">
+  **NAP consistency is non-negotiable.** Name, Address, Phone must match exactly across every listing. Citation parity is a primary local-SEO signal; mismatch hurts the map pack rank and creates routing confusion for callers.
+</Callout>
+
+## 7. Regulatory Summary
+
+Eight regulatory areas every small-business engagement must clear. Industry-specific licensing (HIPAA, GLBA, state bar, board) layers on top — when a vertical's regulatory profile gets specific enough that this list under-serves it, that's a graduation trigger.
+
+| Topic | Scope | What it requires |
+|---|---|---|
+| Business licensing | State / local | Current licenses surfaced where required (footer, About). |
+| FTC advertising rules | Federal | No unsubstantiated "best / #1 / leading." Disclose paid relationships and affiliate links. |
+| FTC Endorsement Guides (2023 update) | Federal | Testimonials reflect typical results. Compensated reviews disclosed. Fake reviews carry civil penalties. |
+| CAN-SPAM | Federal | Email marketing must include physical address + working unsubscribe (honored within 10 days). |
+| TCPA | Federal | SMS / call marketing requires explicit consent. Per-message fines on violation. |
+| ADA / WCAG 2.1 AA | Federal | Small businesses are frequent ADA-lawsuit targets. Compliance is non-negotiable on every Brik site. |
+| CCPA + state privacy laws | State | Privacy policy + cookie consent. Right-to-delete and opt-out mechanisms required in covered states. |
+| Industry-specific licensing | Industry | HIPAA, GLBA, state bar, contractor / cosmetology / RE boards. Cross-check at intake; graduate when it gets thick. |
+
+## 8. Vocabulary — Avoid
+
+Cross-industry guardrails. The term itself isn't always banned — the unsubstantiated claim is. "Best" with FTC-substantiated data is fine; "best" as a generic header is risky.
+
+<table>
+  <thead>
+    <tr><th>Term</th><th>Why</th></tr>
+  </thead>
+  <tbody>
+    {smallBusiness.vocabulary.avoid.map((v, i) => (
+      <tr key={i}>
+        <td><strong>{v.term}</strong></td>
+        <td>{v.reason}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## 9. CTA Defaults
+
+Approved (mockup generators pick from these unless a client override exists):
+
+<ul>
+  {smallBusiness.ctaDefaults.approved.map((c, i) => <li key={i}><code>{c}</code></li>)}
+</ul>
+
+Rejected (never auto-generated; require explicit client opt-in to use):
+
+<ul>
+  {smallBusiness.ctaDefaults.rejected.map((c, i) => <li key={i}><code>{c}</code></li>)}
+</ul>
+
+The rejected list isn't about taste — `Click Here` and `Submit` are accessibility regressions (link / button labels with no semantic meaning); `Buy Now` is wrong for service businesses where there's no transactional purchase.
+
+## 10. Page Compositions
+
+Every required page archetype maps to a specific sequence of section blueprints from `@brikdesigns/bds/blueprints-astro`. Small-business sticks to the v0.1 shipped blueprint set so consumer scaffolds render with zero fallback components.
+
+| Page | Blueprint sequence |
+|---|---|
+| **Home** | `hero_split_60_40` → `services_detail_two_column` → `about_story_split` → `testimonials_featured_large` → `cta_split_contact` |
+| **About** | `hero_interior_minimal` → `about_story_split` → `cta_dark_centered` |
+| **Services** | `hero_interior_minimal` → `services_detail_two_column` → `cta_dark_centered` |
+| **Contact** | `hero_interior_minimal` → `cta_split_contact` |
+| **Testimonials** | `hero_interior_minimal` → `testimonials_featured_large` → `cta_dark_centered` |
+| **Pricing** | `hero_interior_minimal` → `services_detail_two_column` → `cta_dark_centered` |
+| **Service Areas** | `hero_interior_minimal` → `about_story_split` → `cta_dark_centered` |
+
+`Stats` sections are intentionally NOT in any composition by default — they render only when content generation emits a `sectionType: 'stats'` section explicitly. (See [PR #217](https://github.com/brikdesigns/brik-bds/issues/217) for the rationale.)
+
+## 11. Navigation IA
+
+Default site-header shape for the catch-all.
+
+| Field | Value |
+|---|---|
+| **Archetype** | `editorial-transparent` |
+| **Primary links** | About · Services · Work · Contact |
+| **Mega-menu** | None — small businesses rarely have a service catalog deep enough to warrant grouped exposure |
+| **Utility** | Phone visible · solid "Get in Touch" CTA |
+| **Scroll** | `reveal-on-scroll` — chrome stays out of the way during content consumption |
+| **Mobile** | `fullscreen-overlay` |
+
+Footer archetype: **`four_col_directory`** — enough structure to surface contact + hours + secondary links without over-weighting any one concern. Verticals with unique footer needs (compliance-heavy healthcare, anxiety-sensitive wellness) graduate to their own pack with a `legal_heavy` or `cta_focused` footer.
+
+## 12. Brik Strategic POV
+
+Three things that distinguish a Brik small-business engagement from a templated build, and that the pack defaults are designed to support.
+
+### Treat the catch-all as a deferral, not a destination
+
+A client living in `small-business` for more than a quarter or two is usually a sign that their vertical *should* graduate. The pack's defaults are calibrated to be safe across many verticals, which means they're optimal for none of them. Watch for:
+
+- **3+ clients in the same vertical** — graduate
+- **Strategy docs repeating 60%+ across engagements** — graduate
+- **Seasonality / regulation / terminology that diverges** from the catch-all defaults in ways the resolver can't paper over — graduate
+
+Graduation is cheap relative to the cost of the catch-all underserving a real vertical. See `dental` and `real-estate-rv-mhc` for the model — both started in this pack and earned their own.
+
+### Response time is the highest-leverage lever before redesign
+
+Most small businesses lose more revenue to slow response than to bad websites. A 5-minute response is roughly 100x more likely to qualify a lead than a 30-minute one ([Harvard Business Review study](https://hbr.org/2011/03/the-short-life-of-online-sales-leads)). Before recommending a redesign, audit:
+
+- How leads are received (form → email? text? phone-only?)
+- Who responds and within what window
+- What the after-hours fallback is
+
+Almost every Brik intake surfaces a fixable response-time problem. Designing the new site without addressing it leaves measurable revenue on the table.
+
+### Reviews are the trust signal
+
+Cross-vertical, **review velocity + diversity + response rate** consistently outperform brand-spend on conversion. The pack's vocabulary preferred list bakes this in (`review velocity`, `review diversity`, `response rate`). Default into reputation management as Brik's recommended add-on for every engagement that doesn't already have a system.
+
+<Callout type="warn">
+  **Never design review-gating systems.** FTC's 2023 endorsement-guide update + Google's TOS both explicitly prohibit filtering reviews by sentiment before publishing. The pack's vocabulary lists `review gating` as an avoid term for this reason. Any "happy reviews go to Google, unhappy ones come to us" workflow is non-compliant — flag and replace at intake.
+</Callout>
+
+## Site audit extractors — none
+
+The catch-all pack does not declare `siteAudit` extractors. Consumers running through `small-business` get the universal extractors only (services, key messages, proof points, social links). Verticals that benefit from structured field capture (membership plans, insurance accepted, appointment systems for dental; lot listings, amenities for real-estate-rv-mhc) are graduation candidates — adding a vertical's extractors is one of the highest-value things a dedicated pack ships.
+
+See [Dental → Site Audit Extractors](/docs/content-system/industries/dental#11-site-audit-extractors) for the canonical pattern.
+
+---
+
+## Related
+
+- [Content System overview](/docs/content-system)
+- [Industries index](/docs/content-system/industries)
+- [Dental industry pack](/docs/content-system/industries/dental) — reference for what graduation buys
+- [Atmospheres](/docs/theming/atmospheres) — small-business defaults to `clean-bright` (light + SaaS-leaning verticals) or `minimal-clinical` (light + service-business verticals)
+- [Voices](/docs/content-system/voices) — voice patterns the affinities point to
