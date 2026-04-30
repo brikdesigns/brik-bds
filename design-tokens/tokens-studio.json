@@ -3165,6 +3165,24 @@
             "ALL_SCOPES"
           ]
         }
+      },
+      "primary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lightest}"
+      },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
       }
     },
     "text": {
@@ -3766,7 +3784,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darker}",
+        "$value": "{color.grayscale.dark}",
         "$description": "Secondary button hover (dark mode)"
       },
       "secondary-pressed": {
@@ -3776,7 +3794,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}",
+        "$value": "{color.grayscale.darker}",
         "$description": "Secondary button pressed (dark mode)"
       },
       "subtle-hover": {
@@ -3833,6 +3851,24 @@
             "ALL_SCOPES"
           ]
         }
+      },
+      "primary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
+      },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darker}"
       }
     },
     "text": {

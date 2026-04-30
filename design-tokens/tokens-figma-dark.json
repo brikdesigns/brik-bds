@@ -1494,12 +1494,12 @@
       "$type": "color"
     },
     "secondary-hover": {
-      "$value": "{color.grayscale.darker}",
+      "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Secondary button hover (dark mode)"
     },
     "secondary-pressed": {
-      "$value": "{color.grayscale.dark}",
+      "$value": "{color.grayscale.darker}",
       "$type": "color",
       "$description": "Secondary button pressed (dark mode)"
     },
@@ -1526,6 +1526,14 @@
     },
     "muted": {
       "$value": "{color.grayscale.darkest}",
+      "$type": "color"
+    },
+    "primary-hover": {
+      "$value": "{color.grayscale.darkest}",
+      "$type": "color"
+    },
+    "primary-pressed": {
+      "$value": "{color.grayscale.darker}",
       "$type": "color"
     }
   },
