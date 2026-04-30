@@ -25,6 +25,9 @@ const steps = [
   { name: 'Grid Audit', cmd: 'node scripts/audit-grid.js --summary' },
   { name: 'Theme Compliance', cmd: 'node scripts/validate-themes.js' },
   { name: 'Blueprint Library', cmd: 'node scripts/validate-blueprints.mjs' },
+  // Canonical-check requires dist/tokens.css. Ensure it's built before scanning.
+  // The build is fast (~1s) and idempotent, so re-running has near-zero cost.
+  { name: 'Canonical Tokens', cmd: 'npm run build:dist-tokens >/dev/null && npm run canonical-check' },
   { name: 'TypeScript', cmd: 'npm run typecheck' },
   { name: 'Storybook Build', cmd: 'npm run build-storybook' },
 ];
