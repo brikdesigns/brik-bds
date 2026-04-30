@@ -1,0 +1,54 @@
+/**
+ * BDS borderWidth Mode Overrides
+ *
+ * Loaded by: bundled into dist/tokens.css after theme-brand-brik.css,
+ * before gap-fills.css. See tokens/CASCADE.md for the full load order.
+ *
+ * Wires the "Thin" and "Bold" picks from brand-kit-modes.json's borderWidth
+ * mode catalog. Without this file, every consumer gets Figma's Standard
+ * values regardless of mode pick — clients fill out the manifest and
+ * nothing happens visually. See brik-bds#313 (this PR) and brik-llm#52
+ * (data-quality drift surfaced by the gap).
+ *
+ * Selector contract: `[data-mode-borderwidth="thin|bold"]` on :root (html).
+ * Parallels the existing `[data-theme="dark"]` mechanism so consumers have
+ * one mode-switch convention. Standard is the default — no override needed
+ * (Figma's --border-width-* values stand).
+ *
+ * Values per websites/shared/MODE-ARCHITECTURE.md (in brik-llm). The fixed
+ * semantic aliases --border-width-{thin,standard,bold} (gap-fills.css)
+ * intentionally stay invariant — those are reference points; the modulation
+ * lives here on --border-width-{sm,md,lg}.
+ *
+ * Note: Figma currently exports Standard sm/md/lg = 0.5px/1px/2px, while
+ * MODE-ARCHITECTURE.md prescribes 1px/2px/3px. Reconciling Figma's Standard
+ * to match the spec table is tracked separately. Once Figma is updated and
+ * re-pulled, the Thin/Bold steps below will read as one tier of difference
+ * from Standard at every size, as the spec intends.
+ */
+
+/* ─── Thin ─────────────────────────────────────────────────────
+   One step thinner than Standard at md and lg; sm matches because
+   sub-pixel rendering below 1px is unreliable across browsers. */
+[data-mode-borderwidth="thin"] {
+  --border-width-sm: 1px;
+  --border-width-md: 1px;
+  --border-width-lg: 2px;
+}
+
+/* ─── Bold ─────────────────────────────────────────────────────
+   One step bolder than Standard at every size. */
+[data-mode-borderwidth="bold"] {
+  --border-width-sm: 2px;
+  --border-width-md: 3px;
+  --border-width-lg: 4px;
+}
+
+/* ─── Dark-mode parity ─────────────────────────────────────────
+   Borders don't change weight in dark mode by themselves — but if a
+   downstream consumer sets [data-theme="dark"] AND [data-mode-borderwidth]
+   together, both selectors apply at the same specificity. The mode picks
+   above already use border-width units that are theme-agnostic, so no
+   dark-mode override block is needed. If border-width semantics ever
+   diverge by theme, add a `:root[data-theme="dark"][data-mode-borderwidth=…]`
+   block here following the figma-tokens-dark.css convention. */
