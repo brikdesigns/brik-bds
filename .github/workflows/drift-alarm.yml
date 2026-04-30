@@ -25,12 +25,12 @@ jobs:
       contents: read
     steps:
       - name: Checkout brik-bds
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0  # Full history — needed to count commits from older submodule SHAs
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
 
