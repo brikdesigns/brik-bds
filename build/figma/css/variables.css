@@ -352,6 +352,8 @@
   --surface-negative: var(--color-system-red-light);
   --surface-warning: var(--color-system-yellow-light);
   --surface-muted: var(--color-grayscale-lightest);
+  --surface-primary-hover: var(--color-grayscale-lightest);
+  --surface-primary-pressed: var(--color-grayscale-lighter);
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
   --text-inverse: var(--color-grayscale-white);

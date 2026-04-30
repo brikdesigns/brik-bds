@@ -33,14 +33,16 @@
   --surface-secondary: var(--color-grayscale-darker);
   --surface-inverse: var(--color-grayscale-white);
   --surface-overlay: var(--color-grayscale-black);
-  --surface-secondary-hover: var(--color-grayscale-darker); /** Secondary button hover (dark mode) */
-  --surface-secondary-pressed: var(--color-grayscale-dark); /** Secondary button pressed (dark mode) */
+  --surface-secondary-hover: var(--color-grayscale-dark); /** Secondary button hover (dark mode) */
+  --surface-secondary-pressed: var(--color-grayscale-darker); /** Secondary button pressed (dark mode) */
   --surface-subtle-hover: var(--color-grayscale-darkest); /** Ghost and outline hover (dark mode) */
   --surface-info: var(--color-system-neutral-light);
   --surface-positive: var(--color-system-green-light);
   --surface-negative: var(--color-system-red-light);
   --surface-warning: var(--color-system-yellow-light);
   --surface-muted: var(--color-grayscale-darkest);
+  --surface-primary-hover: var(--color-grayscale-darkest);
+  --surface-primary-pressed: var(--color-grayscale-darker);
   --text-primary: var(--color-grayscale-lightest);
   --text-secondary: var(--color-grayscale-light);
   --text-inverse: var(--color-grayscale-black);
