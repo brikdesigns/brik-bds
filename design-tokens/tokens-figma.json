@@ -1527,6 +1527,14 @@
     "muted": {
       "$value": "{color.grayscale.lightest}",
       "$type": "color"
+    },
+    "primary-hover": {
+      "$value": "{color.grayscale.lightest}",
+      "$type": "color"
+    },
+    "primary-pressed": {
+      "$value": "{color.grayscale.lighter}",
+      "$type": "color"
     }
   },
   "text": {

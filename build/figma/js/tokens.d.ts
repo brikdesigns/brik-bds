@@ -375,6 +375,8 @@ export const surfacePositive: string;
 export const surfaceNegative: string;
 export const surfaceWarning: string;
 export const surfaceMuted: string;
+export const surfacePrimaryHover: string;
+export const surfacePrimaryPressed: string;
 export const textPrimary: string;
 export const textSecondary: string;
 export const textBrandPrimary: string;
