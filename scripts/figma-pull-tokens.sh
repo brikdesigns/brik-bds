@@ -25,8 +25,21 @@ set -euo pipefail
 # ── Paths ────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BDS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-TOOLS_DIR="/Users/nickstanerson/Documents/GitHub/brik/_tools/claude-talk-to-figma-mcp"
-PULL_SCRIPT="$TOOLS_DIR/scripts/pull-variables.js"
+# _vendor/ lives at the brik/ root: parent of brik-bds (primary) or grandparent of
+# brik-bds-worktrees/{slug} (task worktree). Resolve both cases. Override with
+# BRIK_TOOLS_DIR if running from a non-standard layout.
+if [[ -n "${BRIK_TOOLS_DIR:-}" ]]; then
+  TOOLS_DIR="$BRIK_TOOLS_DIR"
+elif [[ -d "$BDS_ROOT/../_vendor/claude-talk-to-figma-mcp" ]]; then
+  TOOLS_DIR="$(cd "$BDS_ROOT/../_vendor/claude-talk-to-figma-mcp" && pwd)"
+elif [[ -d "$BDS_ROOT/../../_vendor/claude-talk-to-figma-mcp" ]]; then
+  TOOLS_DIR="$(cd "$BDS_ROOT/../../_vendor/claude-talk-to-figma-mcp" && pwd)"
+else
+  echo "ERROR: cannot locate _vendor/claude-talk-to-figma-mcp from $BDS_ROOT" >&2
+  echo "       set BRIK_TOOLS_DIR to the absolute path explicitly" >&2
+  exit 1
+fi
+PULL_SCRIPT="$BDS_ROOT/scripts/pull-variables.js"
 SYNC_SCRIPT="$BDS_ROOT/scripts/sync-figma-mcp.js"
 RELAY_SCRIPT="$TOOLS_DIR/src/socket.ts"
 CHANNEL_FILE="$HOME/.figma-channel"
