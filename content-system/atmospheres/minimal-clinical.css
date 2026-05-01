@@ -19,14 +19,10 @@
   /* Pure whites, no surface shifts. */
   --surface-primary:        #ffffff;
   --surface-secondary:      #ffffff;
-  --surface-card:           #ffffff;
   --background-primary:     #ffffff;
   --background-secondary:   #ffffff;
   --background-tertiary:    #ffffff;
   --background-input:       #ffffff;
-  --color-surface-card:     #ffffff;
-  --color-surface-elevated: #ffffff;
-  --color-surface-recessed: #ffffff;
 }
 
 body {

@@ -144,7 +144,7 @@ const LIGHT_TONE_PAIRINGS: SafePairing[] = [
   { fg: '--text-primary', bg: '--background-secondary', context: 'Body copy on alternating elevated surface.' },
   { fg: '--text-secondary', bg: '--background-primary', context: 'Secondary copy on light surface.' },
   { fg: '--text-muted', bg: '--background-primary', context: 'Captions / metadata on light surface.' },
-  { fg: '--text-brand', bg: '--background-primary', context: 'Brand-tinted heading or accent on light surface.' },
+  { fg: '--text-brand-primary', bg: '--background-primary', context: 'Brand-tinted heading or accent on light surface.' },
   { fg: '--text-inverse', bg: '--background-inverse', context: 'Inverse block (dark CTA strip on a light page).' },
 ];
 
@@ -158,7 +158,7 @@ const DARK_TONE_PAIRINGS: SafePairing[] = [
   // on near-black sits at ~4.06:1 by the generator's default emission,
   // and the portal preflight catches that. Atmospheres that fix it
   // override the muted token themselves; until then, omit from safe.
-  { fg: '--text-brand', bg: '--background-primary', context: 'Brand accent text on dark surface.' },
+  { fg: '--text-brand-primary', bg: '--background-primary', context: 'Brand accent text on dark surface.' },
   { fg: '--text-inverse', bg: '--background-inverse', context: 'Inverse block (light strip inside the dark page).' },
 ];
 

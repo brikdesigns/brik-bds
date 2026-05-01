@@ -125,7 +125,7 @@
     "build:content-system": "tsc --project tsconfig.content-system.json",
     "build:inspector-manifest": "node scripts/build-inspector-manifest.mjs",
     "bds:find": "node scripts/bds-find.mjs",
-    "canonical-check": "node scripts/canonical-check.mjs --allowlist dist/tokens.css components content-system/blueprints",
+    "canonical-check": "node scripts/canonical-check.mjs --allowlist dist/tokens.css components content-system/blueprints content-system/atmospheres",
     "canonical-check:report": "node scripts/canonical-check.mjs --allowlist dist/tokens.css --format md components content-system stories || true",
     "build:types": "tsc --project tsconfig.build.json",
     "build:dist-tokens": "node scripts/build-dist-tokens.js",
