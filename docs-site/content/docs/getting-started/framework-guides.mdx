@@ -12,6 +12,7 @@ The recommended consumer pattern. See `brik-client-portal` and `renew-pms` for r
 - Token cascade goes in `app/globals.css`.
 - Fonts load via `next/font` — BDS doesn't ship fonts.
 - Components are imported from `@brikdesigns/bds` directly; no client wrapper required.
+- Use `<ThemeProvider>` to manage `data-theme` (light/dark) and the `theme-brand-brik` body class. See [Client Themes → How themes work](/docs/theming/client-themes#how-themes-work).
 
 ## Astro
 
@@ -19,7 +20,8 @@ The marketing-site pattern. See `brikdesigns.com` and exported `web/_newclient` 
 
 - Token cascade in the global stylesheet.
 - BDS ships **Astro blueprints** at `@brikdesigns/bds/blueprints-astro` for hero, footer, contact form, and other page sections that are slow to recompose by hand.
-- Use `@brikdesigns/bds/atmospheres/{name}.css` to apply a mood layer to a page.
+- Use `@brikdesigns/bds/atmospheres/{name}.css` to apply a decoration overlay (vignettes, grain, orbs) to a page. Atmospheres are decoration-only — they do NOT override theme tokens. See [Atmospheres](/docs/theming/atmospheres).
+- Set theme + mode switches on `<html>` directly: `<html data-theme="dark" data-mode-borderwidth="bold">`. Full table in [The Cascade → Switches](/docs/getting-started/cascade#switches--html-attributes).
 
 ## Webflow (legacy clients)
 
