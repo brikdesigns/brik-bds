@@ -102,6 +102,126 @@ Create a `theme-{client}.css` file in the consuming project and add it as the fi
 
 No `.body.theme-{name}` class needed — the `:root` block wins via cascade order.
 
+## Per-audience (or service-line) scope binding
+
+Some client sites carry **multiple brand colors at once** — Vale Partners has three audience verticals (Healthcare, Land, Commercial), each with its own brand hue; brikdesigns.com has service lines (Marketing, Back-Office, Product) that each need a different accent. The pattern below binds canonical brand tokens once per scope so components keep referencing the same canonical names while the page expresses N brand colors simultaneously.
+
+### The pattern
+
+Re-bind `--background-brand-primary`, `--text-brand-primary`, `--border-brand-primary` (and their hover/pressed states) inside a CSS attribute selector. Components stay scope-blind — they keep reading the canonical token. Each subtree the attribute selects gets its own value resolved.
+
+```css
+/* theme-vale.css — primitives, then canonical bindings, then scoped overrides */
+
+:root {
+  /* Brand primitives — one ramp per client hue, follows the Figma 6-stop rail
+     (lightest, lighter, light, dark, darker, darkest). Documented in
+     /docs/primitives/color → "Tonal scale + interaction state". */
+  --vale-partners-olive:           #698339;
+  --vale-partners-olive-lightest:  #e8edd9;
+  --vale-partners-olive-lighter:   #c2d09a;
+  --vale-partners-olive-light:     #a3b66f;
+  --vale-partners-olive-dark:      #4f6429;
+  --vale-partners-olive-darker:    #3d4c23;
+  --vale-partners-olive-darkest:   #2a3318;
+
+  --vale-partners-gold:            #c49a2f;
+  --vale-partners-gold-lightest:   #f4ecd2;
+  /* …rest of the gold ramp… */
+
+  --vale-partners-navy:            #95afd4;
+  --vale-partners-navy-darker:     #1c3252;
+  /* …rest of the navy ramp… */
+
+  /* Default brand binding (no audience selected) — components fall back here. */
+  --background-brand-primary:         var(--vale-partners-navy-darker);
+  --text-brand-primary:               var(--vale-partners-navy-darker);
+  --border-brand-primary:             var(--vale-partners-navy-darker);
+}
+
+/* Audience scopes — each one re-binds the canonical brand tokens inside its
+   subtree. Adding a fourth audience is one more block; nothing else changes. */
+[data-audience='healthcare'] {
+  --background-brand-primary:         var(--vale-partners-olive);
+  --text-brand-primary:               var(--vale-partners-olive-darker);
+  --border-brand-primary:             var(--vale-partners-olive);
+  --background-brand-primary-hover:   var(--vale-partners-olive-dark);
+  --background-brand-primary-pressed: var(--vale-partners-olive-darker);
+}
+
+[data-audience='land'] {
+  --background-brand-primary:         var(--vale-partners-gold);
+  --text-brand-primary:               var(--vale-partners-gold);
+  --border-brand-primary:             var(--vale-partners-gold);
+  --background-brand-primary-hover:   var(--vale-partners-gold-dark);
+  --background-brand-primary-pressed: var(--vale-partners-gold-darker);
+}
+
+[data-audience='commercial'] {
+  --background-brand-primary:         var(--vale-partners-navy-darker);
+  --text-brand-primary:               var(--vale-partners-navy-darker);
+  --border-brand-primary:             var(--vale-partners-navy-darker);
+  --background-brand-primary-hover:   var(--vale-partners-navy-dark);
+  --background-brand-primary-pressed: var(--vale-partners-navy-darkest);
+}
+```
+
+### Why the same page can show all three audiences at once
+
+CSS custom properties scope to the element they're set on and cascade into every descendant. Three audience blocks side-by-side on a homepage are three independent subtrees — each resolves `--background-brand-primary` to its own value:
+
+```html
+<section class="services-grid">
+  <article data-audience="healthcare">
+    <h3 style="color: var(--text-brand-primary)">Healthcare</h3>     <!-- olive -->
+    <button style="background: var(--background-brand-primary)">Explore</button>
+  </article>
+  <article data-audience="land">
+    <h3 style="color: var(--text-brand-primary)">Land</h3>            <!-- gold -->
+    <button style="background: var(--background-brand-primary)">Explore</button>
+  </article>
+  <article data-audience="commercial">
+    <h3 style="color: var(--text-brand-primary)">Commercial</h3>      <!-- navy -->
+    <button style="background: var(--background-brand-primary)">Explore</button>
+  </article>
+</section>
+```
+
+Same component, three brand identities, one canonical token. No conditional rendering, no per-audience component variants. The whole page (`<html data-audience="commercial">`) or one column (`<article data-audience="commercial">`) can carry the scope — the cascade handles both.
+
+### Choosing the attribute name
+
+Use a name that matches the semantic axis the site is organized by. The mechanism is identical; only the vocabulary differs.
+
+| Site | Attribute | Scopes |
+|---|---|---|
+| Vale Partners | `data-audience` | `healthcare`, `land`, `commercial` |
+| brikdesigns.com | `data-service` | `marketing`, `back-office`, `product` |
+| Healthcare network | `data-department` | `cardiology`, `pediatrics`, `oncology` |
+
+Pick one per site and document it in the client's `theme-{client}.css`. Don't mix attribute names within a single site — it makes the cascade harder to predict.
+
+### Connection to BCS industry packs
+
+Industry packs in `@brikdesigns/bds/content-system` express the semantic vocabulary, not the colors. Categories that drive audience pathways carry an `audienceId`:
+
+```ts
+// real-estate-commercial.ts (excerpt)
+servicesMegaMenu: {
+  categories: [
+    { audienceId: 'healthcare', heading: 'Healthcare', icon: 'ph:stethoscope', items: [...] },
+    { audienceId: 'land',       heading: 'Land',       icon: 'ph:tree',        items: [...] },
+    { audienceId: 'commercial', heading: 'Commercial', icon: 'ph:storefront',  items: [...] },
+  ],
+}
+```
+
+The blueprint that renders this menu binds each `audienceId` to a `[data-audience=X]` attribute on the rendered column; the client theme above does the rest. **Pack data carries no color decisions** — visual binding is exclusively a client-theme concern. Sites without per-audience theming (the default) render every column in the same canonical brand color; content structure stays intact, no visual loss.
+
+<Callout type="warn">
+  **Don't add `--background-{role}-primary` (e.g. `--background-land-primary`) to canonical.** Canonical is brand-agnostic and stays small. Audience semantics belong in the scope selector, not in the token name. The pattern above is what gives the system its scale property — adding a client or audience is one CSS block, never a new canonical token.
+</Callout>
+
 ## Overridability matrix
 
 Not every token is meant to vary per brand. Use the table to decide what to put in a client `theme-{client}.css`.
