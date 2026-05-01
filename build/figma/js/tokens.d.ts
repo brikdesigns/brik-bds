@@ -377,6 +377,10 @@ export const surfaceWarning: string;
 export const surfaceMuted: string;
 export const surfacePrimaryHover: string;
 export const surfacePrimaryPressed: string;
+/** Primary surface hover */
+export const surfaceBrandPrimaryHover: string;
+/** Primary surface pressed */
+export const surfaceBrandPrimaryPressed: string;
 export const textPrimary: string;
 export const textSecondary: string;
 export const textBrandPrimary: string;

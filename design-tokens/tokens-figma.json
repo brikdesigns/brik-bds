@@ -1535,6 +1535,16 @@
     "primary-pressed": {
       "$value": "{color.grayscale.lighter}",
       "$type": "color"
+    },
+    "brand-primary-hover": {
+      "$value": "{color.poppy.dark}",
+      "$type": "color",
+      "$description": "Primary surface hover"
+    },
+    "brand-primary-pressed": {
+      "$value": "{color.poppy.darker}",
+      "$type": "color",
+      "$description": "Primary surface pressed"
     }
   },
   "text": {

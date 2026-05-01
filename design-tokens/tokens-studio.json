@@ -3183,6 +3183,26 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.lighter}"
+      },
+      "brand-primary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.dark}",
+        "$description": "Primary surface hover"
+      },
+      "brand-primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.darker}",
+        "$description": "Primary surface pressed"
       }
     },
     "text": {
@@ -3869,6 +3889,26 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darker}"
+      },
+      "brand-primary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.lighter}",
+        "$description": "Primary surface hover (dark mode)"
+      },
+      "brand-primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.lightest}",
+        "$description": "Primary surface pressed (dark mode)"
       }
     },
     "text": {

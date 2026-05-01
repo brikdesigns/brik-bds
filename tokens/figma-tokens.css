@@ -354,6 +354,8 @@
   --surface-muted: var(--color-grayscale-lightest);
   --surface-primary-hover: var(--color-grayscale-lightest);
   --surface-primary-pressed: var(--color-grayscale-lighter);
+  --surface-brand-primary-hover: var(--color-poppy-dark); /** Primary surface hover */
+  --surface-brand-primary-pressed: var(--color-poppy-darker); /** Primary surface pressed */
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
   --text-inverse: var(--color-grayscale-white);

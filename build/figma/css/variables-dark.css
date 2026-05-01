@@ -43,6 +43,8 @@
   --surface-muted: var(--color-grayscale-darkest);
   --surface-primary-hover: var(--color-grayscale-darkest);
   --surface-primary-pressed: var(--color-grayscale-darker);
+  --surface-brand-primary-hover: var(--color-poppy-lighter); /** Primary surface hover (dark mode) */
+  --surface-brand-primary-pressed: var(--color-poppy-lightest); /** Primary surface pressed (dark mode) */
   --text-primary: var(--color-grayscale-lightest);
   --text-secondary: var(--color-grayscale-light);
   --text-inverse: var(--color-grayscale-black);

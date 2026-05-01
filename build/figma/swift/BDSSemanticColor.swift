@@ -46,6 +46,8 @@ public enum BDSSemanticColor {
     public static let surfaceMuted = Color(red: 0.9490, green: 0.9490, blue: 0.9490)
     public static let surfacePrimaryHover = Color(red: 0.9490, green: 0.9490, blue: 0.9490)
     public static let surfacePrimaryPressed = Color(red: 0.8784, green: 0.8784, blue: 0.8784)
+    public static let surfaceBrandPrimaryHover = Color(red: 0.6902, green: 0.2078, blue: 0.1059) /// Primary surface hover
+    public static let surfaceBrandPrimaryPressed = Color(red: 0.4902, green: 0.1137, blue: 0.0353) /// Primary surface pressed
     public static let textPrimary = Color(red: 0.2000, green: 0.2000, blue: 0.2000)
     public static let textSecondary = Color(red: 0.5098, green: 0.5098, blue: 0.5098)
     public static let textBrandPrimary = Color(red: 0.8902, green: 0.3255, blue: 0.2078)
