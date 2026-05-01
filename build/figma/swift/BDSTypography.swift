@@ -17,9 +17,9 @@ public enum BDSTypography {
     public static let headingLg: CGFloat = 28.5
     public static let headingXl: CGFloat = 32
     public static let headingXxl: CGFloat = 36
-    public static let headingMd: CGFloat = 22.5
-    public static let headingTiny: CGFloat = 18
-    public static let headingSm: CGFloat = 20
+    public static let headingMd: CGFloat = 25.3
+    public static let headingTiny: CGFloat = 20
+    public static let headingSm: CGFloat = 22.5
     public static let headingHuge: CGFloat = 40.5
     public static let labelTiny: CGFloat = 10.26
     public static let labelMd: CGFloat = 16
