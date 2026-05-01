@@ -36,6 +36,14 @@ const meta: Meta<typeof Meter> = {
       options: ['above', 'below'],
       description: 'Position label/value above or below the bar',
     },
+    valueSuffix: {
+      control: 'text',
+      description: 'Suffix after the value (default: " Score"). Pass "" to suppress.',
+    },
+    fillColor: {
+      control: 'color',
+      description: 'Override fill color. When set, `status` stops driving the bar color.',
+    },
   },
   decorators: [
     (Story) => (
@@ -186,6 +194,53 @@ export const AllStatuses: Story = {
       <Meter value={4} max={10} status="warning" label="Fair" />
       <Meter value={1} max={5} status="error" label="Fail" />
       <Meter value={0} max={7} status="neutral" label="Pending" />
+    </div>
+  ),
+};
+
+// Custom suffix
+/** @summary No suffix — plain X/Y for completion counters */
+export const NoSuffix: Story = {
+  args: {
+    value: 4,
+    max: 10,
+    status: 'warning',
+    label: 'Modules complete',
+    valueSuffix: '',
+  },
+};
+
+/** @summary Custom suffix */
+export const CustomSuffix: Story = {
+  args: {
+    value: 87,
+    max: 100,
+    status: 'positive',
+    label: 'Quiz',
+    valueSuffix: ' pts',
+  },
+};
+
+// Custom fill color (escape hatch)
+/** @summary Custom fill color */
+export const CustomFillColor: Story = {
+  args: {
+    value: 3,
+    max: 8,
+    label: 'Department A',
+    valueSuffix: '',
+    fillColor: '#7c5cff',
+  },
+};
+
+/** @summary Category-driven fills — multiple custom colors */
+export const CategoryFills: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
+      <Meter value={2} max={4} label="Management" valueSuffix="" fillColor="#7c5cff" />
+      <Meter value={5} max={6} label="Operations" valueSuffix="" fillColor="#22c55e" />
+      <Meter value={1} max={9} label="Finance" valueSuffix="" fillColor="#f59e0b" />
+      <Meter value={0} max={3} label="HR" valueSuffix="" fillColor="#06b6d4" />
     </div>
   ),
 };

@@ -39,6 +39,10 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   valueFormatter?: (value: number, max: number) => string;
   /** Position label/value above or below the bar (default: "below") */
   labelPosition?: MeterLabelPosition;
+  /** Suffix rendered after the value (default: " Score"). Pass "" to suppress. */
+  valueSuffix?: string;
+  /** Override the fill color. When set, `status` no longer drives the bar color (status is still used for ARIA semantics). Mirrors ProgressBar's `fillColor` escape hatch. */
+  fillColor?: string;
 }
 
 function defaultFormatter(value: number, max: number): string {
@@ -55,6 +59,12 @@ function defaultFormatter(value: number, max: number): string {
  * <Meter value={6} max={7} status="positive" label="Pass" />
  * <Meter value={3} max={10} status="warning" label="Fair" size="lg" />
  * <Meter value={1} max={5} status="error" label="Fail" showValue={false} />
+ *
+ * // Plain "X/Y" with no suffix (e.g. completion counters):
+ * <Meter value={4} max={10} valueSuffix="" />
+ *
+ * // Category-driven fill (e.g. per-department palette colors):
+ * <Meter value={3} max={8} valueSuffix="" fillColor={departmentColor.base} />
  * ```
  *
  * @summary Horizontal gauge bar for scores and ratings
@@ -68,6 +78,8 @@ export function Meter({
   showValue = true,
   valueFormatter = defaultFormatter,
   labelPosition = 'below',
+  valueSuffix = ' Score',
+  fillColor,
   className,
   style,
   ...rest
@@ -84,7 +96,9 @@ export function Meter({
       {showValue && (
         <div>
           <span className="bds-meter__value">{valueFormatter(value, max)}</span>
-          <span className="bds-meter__value-suffix"> Score</span>
+          {valueSuffix && (
+            <span className="bds-meter__value-suffix">{valueSuffix}</span>
+          )}
         </div>
       )}
     </>
@@ -93,8 +107,15 @@ export function Meter({
   const track = (
     <div className={bdsClass('bds-meter__track', `bds-meter__track--${size}`)}>
       <div
-        className={bdsClass('bds-meter__fill', `bds-meter__fill--${size}`, `bds-meter__fill--${status}`)}
-        style={{ width: `${percentage}%` }}
+        className={bdsClass(
+          'bds-meter__fill',
+          `bds-meter__fill--${size}`,
+          !fillColor && `bds-meter__fill--${status}`,
+        )}
+        style={{
+          width: `${percentage}%`,
+          ...(fillColor ? { backgroundColor: fillColor } : {}),
+        }}
       />
     </div>
   );
