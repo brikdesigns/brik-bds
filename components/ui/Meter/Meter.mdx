@@ -64,6 +64,26 @@ Three sizes for different layout contexts.
 Format the displayed value with a custom function.
 <Canvas of={Stories.CustomFormatter} />
 
+### Suffix
+
+The value defaults to a `" Score"` suffix to fit score-gauge contexts. Pass `valueSuffix=""` to drop it (e.g. completion counters), or any custom string (e.g. `" pts"`, `" mins"`).
+
+#### No suffix
+<Canvas of={Stories.NoSuffix} />
+
+#### Custom suffix
+<Canvas of={Stories.CustomSuffix} />
+
+### Custom fill color
+
+Pass `fillColor` to override the status-driven bar color. Useful for category-driven progress where the color comes from domain data (e.g. per-department palette colors) rather than a status semantic. Mirrors `ProgressBar`'s `fillColor` escape hatch. `status` is still used for ARIA semantics when set.
+
+#### Single custom color
+<Canvas of={Stories.CustomFillColor} />
+
+#### Category-driven fills
+<Canvas of={Stories.CategoryFills} />
+
 ---
 
 ## Props
@@ -91,4 +111,10 @@ import { Meter } from '@brik/bds';
 
 // Small size, label below
 <Meter value={45} max={100} size="sm" labelPosition="below" />
+
+// Plain X/Y counter — no suffix
+<Meter value={4} max={10} valueSuffix="" label="Modules complete" />
+
+// Category-driven fill (e.g. per-department palette)
+<Meter value={3} max={8} valueSuffix="" fillColor={departmentColor.base} />
 ```
