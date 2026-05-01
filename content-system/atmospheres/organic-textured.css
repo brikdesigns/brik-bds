@@ -20,24 +20,20 @@
  */
 
 :root {
-  --color-cream-paper: #f5efe6;
+  --atmosphere-cream-paper: #f5efe6;
 
-  --surface-primary:        var(--color-cream-paper);
-  --surface-secondary:      var(--color-cream-paper);
-  --surface-card:           #ffffff;
-  --background-primary:     var(--color-cream-paper);
-  --background-secondary:   var(--color-cream-paper);
+  --surface-primary:        var(--atmosphere-cream-paper);
+  --surface-secondary:      var(--atmosphere-cream-paper);
+  --background-primary:     var(--atmosphere-cream-paper);
+  --background-secondary:   var(--atmosphere-cream-paper);
   --background-tertiary:    #ffffff;
   --background-input:       #ffffff;
-  --color-surface-card:     #ffffff;
-  --color-surface-elevated: #ffffff;
-  --color-surface-recessed: var(--color-cream-paper);
 
   --ambient-terracotta:     rgba(180, 120, 90, 0.04);
 }
 
 body {
-  background: var(--color-cream-paper);
+  background: var(--atmosphere-cream-paper);
 }
 
 /* Subtle earth-tone radial in the bottom-right — warms the lower

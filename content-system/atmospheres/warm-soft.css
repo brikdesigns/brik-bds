@@ -16,24 +16,20 @@
  */
 
 :root {
-  --color-paper: #fbf7f0;
+  --atmosphere-paper: #fbf7f0;
 
-  --surface-primary:        var(--color-paper);
-  --surface-secondary:      var(--color-paper);
-  --surface-card:           #ffffff;           /* elevated white on cream */
-  --background-primary:     var(--color-paper);
-  --background-secondary:   var(--color-paper);
+  --surface-primary:        var(--atmosphere-paper);
+  --surface-secondary:      var(--atmosphere-paper);
+  --background-primary:     var(--atmosphere-paper);
+  --background-secondary:   var(--atmosphere-paper);
   --background-tertiary:    #ffffff;
   --background-input:       #ffffff;
-  --color-surface-card:     #ffffff;
-  --color-surface-elevated: #ffffff;
-  --color-surface-recessed: var(--color-paper);
 
   --ambient-rose:           rgba(210, 140, 130, 0.05);
 }
 
 body {
-  background: var(--color-paper);
+  background: var(--atmosphere-paper);
 }
 
 /* Single quiet top-left vignette. Warm without being cinematic. */
@@ -72,11 +68,11 @@ section[data-edge]::after {
 }
 section[data-edge]::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--color-paper), transparent);
+  background: linear-gradient(to bottom, var(--atmosphere-paper), transparent);
 }
 section[data-edge]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--color-paper), transparent);
+  background: linear-gradient(to top, var(--atmosphere-paper), transparent);
 }
 
 /* data-ambient / data-spotlight are inert in warm-soft — anxiety-

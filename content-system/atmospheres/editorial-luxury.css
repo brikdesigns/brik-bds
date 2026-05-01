@@ -31,20 +31,15 @@
 
 :root {
   /* NEAR-black, not pure #000 — avoids DPR gradient banding. */
-  --color-ink: #08080a;
+  --atmosphere-ink: #08080a;
 
   /* Collapse all surfaces onto the editorial near-black. */
-  --surface-primary:        var(--color-ink);
-  --surface-secondary:      var(--color-ink);
-  --surface-card:           var(--color-ink);
-  --background-primary:     var(--color-ink);
-  --background-secondary:   var(--color-ink);
-  --background-tertiary:    var(--color-ink);
-  --background-input:       var(--color-ink);
-  --color-surface-card:     var(--color-ink);
-  --color-surface-elevated: var(--color-ink);
-  --color-surface-recessed: var(--color-ink);
-  --color-black:            var(--color-ink);
+  --surface-primary:        var(--atmosphere-ink);
+  --surface-secondary:      var(--atmosphere-ink);
+  --background-primary:     var(--atmosphere-ink);
+  --background-secondary:   var(--atmosphere-ink);
+  --background-tertiary:    var(--atmosphere-ink);
+  --background-input:       var(--atmosphere-ink);
 
   /* Ambient gold values used by the atmospheric utility classes. Pulls
      from the client's --color-gold / --background-brand-primary so the
@@ -55,7 +50,7 @@
 }
 
 body {
-  background: var(--color-ink);
+  background: var(--atmosphere-ink);
 }
 
 /* ───────────────────────────────────────────────────────────────────
@@ -194,11 +189,11 @@ section[data-edge]::after {
 }
 section[data-edge]::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--color-ink), transparent);
+  background: linear-gradient(to bottom, var(--atmosphere-ink), transparent);
 }
 section[data-edge]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--color-ink), transparent);
+  background: linear-gradient(to top, var(--atmosphere-ink), transparent);
 }
 
 /* ───────────────────────────────────────────────────────────────────
