@@ -3368,6 +3368,26 @@
             "ALL_SCOPES"
           ]
         }
+      },
+      "secondary-inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.light}",
+        "$description": "Secondary text on inverse (theme-flipping) surfaces"
+      },
+      "muted-inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.dark}",
+        "$description": "Muted text on inverse (theme-flipping) surfaces"
       }
     },
     "border": {
@@ -4074,6 +4094,26 @@
             "ALL_SCOPES"
           ]
         }
+      },
+      "secondary-inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.dark}",
+        "$description": "Secondary text on inverse surface (dark mode)"
+      },
+      "muted-inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.light}",
+        "$description": "Muted text on inverse surface (dark mode)"
       }
     },
     "border": {

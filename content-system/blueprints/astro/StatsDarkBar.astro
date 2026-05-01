@@ -20,7 +20,7 @@
  *   --bp-stats-dark-bar-padding-y
  *   --bp-stats-dark-bar-bg        (default: var(--surface-inverse))
  *   --bp-stats-dark-bar-value-color   (default: var(--text-inverse))
- *   --bp-stats-dark-bar-label-color   (default: var(--text-inverse))
+ *   --bp-stats-dark-bar-label-color   (default: var(--text-secondary-inverse))
  *   --bp-stats-dark-bar-divider       (default: var(--border-secondary))
  *
  * a11y: semantic list (ul/li). If section.heading present, wired via
@@ -136,6 +136,6 @@ const items = section.items;
     font-size: var(--font-size-200);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--bp-stats-dark-bar-label-color, var(--text-inverse, var(--color-grayscale-lightest)));
+    color: var(--bp-stats-dark-bar-label-color, var(--text-secondary-inverse, var(--color-grayscale-lightest)));
   }
 </style>
