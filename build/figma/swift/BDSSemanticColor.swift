@@ -66,6 +66,8 @@ public enum BDSSemanticColor {
     public static let textPositive = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let textNegative = Color(red: 0.9216, green: 0.3412, blue: 0.3412)
     public static let textWarning = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
+    public static let textSecondaryInverse = Color(red: 0.7412, green: 0.7412, blue: 0.7412) /// Secondary text on inverse (theme-flipping) surfaces
+    public static let textMutedInverse = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Muted text on inverse (theme-flipping) surfaces
     public static let borderPrimary = Color(red: 0.8784, green: 0.8784, blue: 0.8784)
     public static let borderBrandPrimary = Color(red: 0.8902, green: 0.3255, blue: 0.2078)
     public static let borderOnColorDark = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
