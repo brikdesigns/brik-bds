@@ -172,6 +172,10 @@ Two orthogonal axes. Don't mix them.
   **Figma is source of truth for primitive naming.** When a CSS suffix doesn't match a Figma stop name, the system has drifted. Primitives never carry interaction-state names (`-hover`, `-pressed`); those belong on canonical aliases that *reference* a tonal stop.
 </Callout>
 
+### Re-binding canonical brand tokens per audience or service line
+
+When a client site needs multiple brand colors visible at the same time (Vale's three audience verticals, brikdesigns' service lines), don't add audience-specific names to canonical. Re-bind the same `--background-brand-primary` / `--text-brand-primary` / `--border-brand-primary` tokens inside `[data-audience=X]` (or `data-service`, `data-department`) scopes. Components keep referencing the canonical token; CSS custom-property scoping resolves the right value per subtree. Full pattern + Vale + brikdesigns examples: [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-or-service-line-scope-binding).
+
 ### Deprecated suffix aliases
 
 Pre-2026-Q2, the portal token generator emitted state-named suffixes on primitives — `--{slug}-{color}-subtle/-hover/-pressed/-deep/-deepest`. These are now **deprecation aliases** that point at their Figma-named counterparts via `var()`:
