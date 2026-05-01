@@ -71,11 +71,21 @@ This is **not** an investor audience. The pack explicitly excludes capital-marke
   <NavigationIASpec ia={realEstateCommercial.navigationIA} />
 )}
 
-The `audienceAccents` and `audienceIcons` arrays on the `navigationIA` field power per-column visual differentiation in the `nav_mega_audience_pathways` blueprint:
+Each category carries an `audienceId` and `icon` slug. The `nav_mega_audience_pathways` blueprint binds `audienceId` to a `[data-audience=X]` attribute on each rendered column so the consumer site's theme can re-bind canonical brand tokens (`--background-brand-primary`, `--text-brand-primary`, `--border-brand-primary`) per audience. BCS pack data carries no color decisions; visual binding is a client-theme concern.
 
-- Column 0 (Healthcare): accent `var(--color-moss-dark)`, icon `ph:stethoscope`
-- Column 1 (Land): accent `var(--color-olive-light)`, icon `ph:tree`
-- Column 2 (Commercial): accent `var(--color-gold-light)`, icon `ph:storefront`
+- Column 0: `audienceId: 'healthcare'`, icon `ph:stethoscope`
+- Column 1: `audienceId: 'land'`, icon `ph:tree`
+- Column 2: `audienceId: 'commercial'`, icon `ph:storefront`
+
+A consumer theme (e.g. Vale Partners) provides the visual differentiation:
+
+```css
+[data-audience=healthcare] { --background-brand-primary: var(--vale-partners-olive); }
+[data-audience=land]       { --background-brand-primary: var(--vale-partners-gold); }
+[data-audience=commercial] { --background-brand-primary: var(--vale-partners-navy-darker); }
+```
+
+Sites without per-audience theming render every column in the same canonical brand color — content structure intact, no visual loss.
 
 ## 5. Blueprint Stubs
 
