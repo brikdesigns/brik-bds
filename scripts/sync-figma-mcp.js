@@ -1,21 +1,42 @@
 #!/usr/bin/env node
 /**
- * Sync Figma variables into tokens-studio.json via MCP output.
+ * Sync Figma variables into tokens-studio.json.
  *
- * This script bridges the Figma MCP `get_variable_defs` output (flat key-value)
- * into the W3C DTCG structure used by our Style Dictionary pipeline.
+ * Reads the JSON dump produced by `bun scripts/pull-variables.js <channel-id>`
+ * (the dev plugin + WebSocket relay pipeline — the only reliable path on a
+ * Pro plan) and patches `design-tokens/tokens-studio.json` so the next
+ * Style Dictionary build emits the new values.
+ *
+ * Two input shapes are accepted:
+ *
+ *   1. pull-variables.js output (current pipeline)
+ *      { totalCollections, totalVariables,
+ *        collections: [{ name, modes: [{ name, modeId }] }],
+ *        variables: [{
+ *          id, name, resolvedType, collection, description, scopes,
+ *          valuesByMode: { <modeName>: <directValue> | { alias: "VariableID:..." } }
+ *        }] }
+ *
+ *   2. Legacy flat MCP-style map (kept for back-compat — one-shot dumps):
+ *      { "color/system/green-light": "#bef4d4", ... }
+ *
+ * For shape 1 (the supported pipeline):
+ *   - Each variable is routed into the `{collection}/{modeName}` top-level
+ *     set in tokens-studio.json (e.g. `color/light`, `color/dark`,
+ *     `border-radius/soft`, `primitives/value`).
+ *   - Alias values are resolved via an id→name map built from the dump and
+ *     written as Tokens Studio reference syntax: `{a.b.c}`.
+ *   - Every mode in `valuesByMode` is written; we never collapse to modes[0].
+ *   - Existing `$description` is preserved when the dump's description is
+ *     empty (the dump returns `""` for any variable without a Figma
+ *     description, so we never wipe an existing one).
  *
  * Usage:
- *   1. Claude calls `get_variable_defs` on the Figma Foundations file
- *   2. Claude writes the JSON result to a temp file
- *   3. This script patches tokens-studio.json with updated values
- *   4. Then runs `npm run build:sd-figma` to regenerate CSS/JS/Swift
- *
- *   node scripts/sync-figma-mcp.js <mcp-output.json> [--dry-run] [--build]
+ *   node scripts/sync-figma-mcp.js <pull-output.json> [--dry-run] [--build]
  *
  * Flags:
  *   --dry-run   Show what would change without writing
- *   --build     Run `npm run build:sd-figma` after patching
+ *   --build     Run `npm run build:all-tokens` after patching
  *
  * Zero dependencies — Node.js stdlib only.
  */
@@ -34,8 +55,8 @@ const runBuild = args.includes('--build');
 const inputFile = args.find(a => !a.startsWith('--'));
 
 if (!inputFile) {
-  console.error('Usage: node scripts/sync-figma-mcp.js <mcp-output.json> [--dry-run] [--build]');
-  console.error('  <mcp-output.json>  JSON file with get_variable_defs output');
+  console.error('Usage: node scripts/sync-figma-mcp.js <pull-output.json> [--dry-run] [--build]');
+  console.error('  <pull-output.json>  JSON file produced by `bun scripts/pull-variables.js`');
   process.exit(1);
 }
 
@@ -44,71 +65,38 @@ if (!inputFile) {
 const rawData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
 const tokensStudio = JSON.parse(fs.readFileSync(TOKENS_FILE, 'utf8'));
 
-// ─── Normalize input format ───────────────────────────────────────
-//
-// Two possible input formats:
-//
-// 1. Flat map (original MCP get_variable_defs format):
-//    { "color/system/green-light": "#bef4d4", ... }
-//
-// 2. pull-variables.js format (Figma WebSocket relay):
-//    { totalVariables: 359, collections: [...], variables: [{ id, name, resolvedType, collection, valuesByMode }] }
-//
-// Normalize format 2 → format 1 before patching.
+// ─── Helpers ─────────────────────────────────────────────────────
 
-let mcpData = rawData;
-
-if (Array.isArray(rawData.variables)) {
-  mcpData = {};
-  for (const v of rawData.variables) {
-    const modes = Object.entries(v.valuesByMode);
-    if (modes.length === 0) continue;
-    const [, modeValue] = modes[0];
-    // Only handle direct values (strings/numbers) — skip alias references
-    if (typeof modeValue === 'string' || typeof modeValue === 'number') {
-      mcpData[v.name] = modeValue;
-    }
+function inferTypeFromResolved(resolvedType, varName) {
+  // resolvedType is set by pull-variables.js (FLOAT / COLOR / STRING / BOOLEAN).
+  switch (resolvedType) {
+    case 'COLOR':   return 'color';
+    case 'FLOAT':   return 'number';
+    case 'BOOLEAN': return 'boolean';
+    case 'STRING':
+      return varName.startsWith('font-family/') ? 'fontFamily' : 'string';
+    default:
+      return 'string';
   }
 }
 
-// ─── Map MCP variable paths to tokens-studio.json structure ──────
-//
-// Flat map: { "color/system/green-light": "#bef4d4", ... }
-// tokens-studio.json has: { "primitives/value": { "color": { "system": { "green-light": { "$value": "#bef4d4" } } } } }
-//
-// Strategy:
-//   1. Parse the MCP key path (e.g., "color/system/green-light")
-//   2. Walk the tokens-studio.json "primitives/value" set to find matches
-//   3. Update $value if found, add new entry if not found
-//   4. Also check semantic sets (color/light, color/dark) for alias references
-
-const PRIMITIVES_KEY = 'primitives/value';
-
-// Known type inference from path prefix
-function inferType(varPath) {
+// Legacy path-prefix inference — only used by the back-compat flat-map shape
+// (no resolvedType available there).
+function inferTypeFromPath(varPath) {
   const first = varPath.split('/')[0];
-  const typeMap = {
-    'color': 'color',
-    'font-size': 'number',
-    'font-weight': 'number',
-    'font-family': 'fontFamily',
-    'font-line-height': 'number',
-    'space': 'number',
-    'size': 'number',
-    'border-radius': 'number',
-    'border-width': 'number',
-    'gap': 'number',
-    'padding': 'number',
-    'shadow-blur': 'number',
-    'shadow-offset': 'number',
-    'shadow-spread': 'number',
-    'duration': 'number',
-    'delay': 'number',
-  };
-  return typeMap[first] || 'color';
+  const numeric = new Set([
+    'font-size', 'font-weight', 'font-line-height',
+    'space', 'size', 'border-radius', 'border-width', 'gap', 'padding',
+    'shadow-blur', 'shadow-offset', 'shadow-spread',
+    'duration', 'delay',
+  ]);
+  if (first === 'color') return 'color';
+  if (first === 'font-family') return 'fontFamily';
+  if (numeric.has(first)) return 'number';
+  return 'color';
 }
 
-// Walk or create nested object path
+// Walk or create nested object path.
 function getOrCreate(obj, pathParts) {
   let current = obj;
   for (const part of pathParts) {
@@ -118,75 +106,251 @@ function getOrCreate(obj, pathParts) {
   return current;
 }
 
-// ─── Patch tokens ────────────────────────────────────────────────
+// Convert a Figma variable name ("color/grayscale/white") into a Tokens
+// Studio reference value ("{color.grayscale.white}").
+function toTokenRef(varName) {
+  return `{${varName.replace(/\//g, '.')}}`;
+}
 
-const changes = { updated: [], added: [], skipped: [] };
+// Resolve a single mode value into its tokens-studio.json $value.
+//   - Direct primitive (string | number) → as-is.
+//   - Alias object { alias: "VariableID:..." } → "{a.b.c}".
+//   - Anything else → null (caller decides to skip).
+function resolveValue(modeValue, idToName) {
+  if (typeof modeValue === 'string' || typeof modeValue === 'number') {
+    return modeValue;
+  }
+  if (modeValue && typeof modeValue === 'object' && typeof modeValue.alias === 'string') {
+    const targetName = idToName.get(modeValue.alias);
+    if (!targetName) return null; // dangling alias
+    return toTokenRef(targetName);
+  }
+  return null;
+}
 
-for (const [varPath, value] of Object.entries(mcpData)) {
-  const parts = varPath.split('/');
+// ─── Patch routine ───────────────────────────────────────────────
 
-  // Skip non-primitive values (Font composites, etc.)
-  if (typeof value === 'string' && value.startsWith('Font(')) {
-    changes.skipped.push(varPath);
-    continue;
+const changes = {
+  perSet: new Map(),         // setKey → { updated: [], added: [], skipped: [] }
+  unknownSets: new Set(),    // setKeys missing from tokens-studio.json
+  danglingAliases: [],       // { varName, mode, aliasId }
+  groupCollisions: [],       // { setKey, varPath } — leaf path conflicts with a group
+  totalUpdated: 0,
+  totalAdded: 0,
+  totalSkipped: 0,
+};
+
+function bucket(setKey) {
+  if (!changes.perSet.has(setKey)) {
+    changes.perSet.set(setKey, { updated: [], added: [], skipped: [] });
+  }
+  return changes.perSet.get(setKey);
+}
+
+function applyToSet(setKey, varName, $value, $type, $description, $extensions) {
+  const set = tokensStudio[setKey];
+  if (!set) {
+    changes.unknownSets.add(setKey);
+    return;
   }
 
-  // Navigate to the parent in primitives set
-  const primitives = tokensStudio[PRIMITIVES_KEY];
-  if (!primitives) {
-    console.error(`Token set "${PRIMITIVES_KEY}" not found in tokens-studio.json`);
-    process.exit(1);
-  }
-
+  const parts = varName.split('/');
   const parentPath = parts.slice(0, -1);
   const leafKey = parts[parts.length - 1];
-  const parent = getOrCreate(primitives, parentPath);
+  const parent = getOrCreate(set, parentPath);
 
-  if (parent[leafKey] && parent[leafKey].$value !== undefined) {
-    // Existing token — update value
-    const oldValue = parent[leafKey].$value;
-    if (oldValue !== value) {
-      parent[leafKey].$value = value;
-      changes.updated.push({ path: varPath, old: oldValue, new: value });
+  const existing = parent[leafKey];
+
+  if (existing && existing.$value !== undefined) {
+    // Existing leaf — diff and update only what changed.
+    //
+    // tokens-studio.json uses richer DTCG types (`dimension`, `fontWeight`,
+    // `lineHeight`, etc.) than what we can derive from Figma's coarse
+    // `resolvedType` (FLOAT / COLOR / STRING / BOOLEAN). Preserving the
+    // curated `$type` + `$extensions` is the safe default — only fill
+    // them in when missing. Same for `$description`: Figma returns "" for
+    // any variable without a description, so we never wipe an existing one.
+    const oldValue = existing.$value;
+    const fields = {};
+    if (existing.$value !== $value) fields.$value = $value;
+    if (existing.$type === undefined && $type) fields.$type = $type;
+    if (existing.$extensions === undefined && $extensions) fields.$extensions = $extensions;
+    if (existing.$description === undefined && $description) {
+      fields.$description = $description;
     }
-  } else if (parent[leafKey] && typeof parent[leafKey] === 'object' && parent[leafKey].$value === undefined) {
-    // It's a group node, not a leaf — skip
-    changes.skipped.push(varPath);
-  } else {
-    // New token — add it
-    parent[leafKey] = {
-      $extensions: { 'com.figma.scopes': ['ALL_SCOPES'] },
-      $type: inferType(varPath),
-      $value: value,
-    };
-    changes.added.push({ path: varPath, value });
+
+    if (Object.keys(fields).length === 0) {
+      // No-op — counted neither updated nor skipped.
+      return;
+    }
+
+    Object.assign(parent[leafKey], fields);
+    bucket(setKey).updated.push({
+      path: varName,
+      old: oldValue,
+      new: $value,
+      changedFields: Object.keys(fields),
+    });
+    changes.totalUpdated += 1;
+    return;
+  }
+
+  if (existing && typeof existing === 'object' && existing.$value === undefined) {
+    // Leaf path collides with an existing group node — skip with a warning.
+    changes.groupCollisions.push({ setKey, varPath: varName });
+    bucket(setKey).skipped.push({ path: varName, reason: 'group-collision' });
+    changes.totalSkipped += 1;
+    return;
+  }
+
+  // New leaf.
+  parent[leafKey] = {
+    $extensions: $extensions || { 'com.figma.scopes': ['ALL_SCOPES'] },
+    $type,
+    $value,
+  };
+  if ($description) parent[leafKey].$description = $description;
+  bucket(setKey).added.push({ path: varName, value: $value });
+  changes.totalAdded += 1;
+}
+
+// ─── Dispatch on input shape ─────────────────────────────────────
+
+const isPullShape = Array.isArray(rawData.variables) && Array.isArray(rawData.collections);
+
+if (isPullShape) {
+  // ─── Shape 1: pull-variables.js dump ─────────────────────────
+  const idToName = new Map(rawData.variables.map(v => [v.id, v.name]));
+
+  for (const v of rawData.variables) {
+    const $type = inferTypeFromResolved(v.resolvedType, v.name);
+    const $description = (v.description && v.description.length > 0) ? v.description : undefined;
+    const $extensions = (Array.isArray(v.scopes) && v.scopes.length > 0)
+      ? { 'com.figma.scopes': v.scopes.slice() }
+      : undefined;
+
+    for (const [modeName, modeValue] of Object.entries(v.valuesByMode || {})) {
+      const setKey = `${v.collection}/${modeName}`;
+      const $value = resolveValue(modeValue, idToName);
+
+      if ($value === null) {
+        if (modeValue && typeof modeValue === 'object' && typeof modeValue.alias === 'string') {
+          changes.danglingAliases.push({ varName: v.name, mode: modeName, aliasId: modeValue.alias });
+        }
+        bucket(setKey).skipped.push({ path: v.name, reason: 'unresolvable-value' });
+        changes.totalSkipped += 1;
+        continue;
+      }
+
+      applyToSet(setKey, v.name, $value, $type, $description, $extensions);
+    }
+  }
+} else {
+  // ─── Shape 2: legacy flat-map (one-shot dumps) ───────────────
+  // Routes everything into `primitives/value`. Used only for back-compat
+  // with manual `get_variable_defs` paste-ins; the supported pipeline is
+  // shape 1.
+  const flatMap = (typeof rawData === 'object' && !Array.isArray(rawData)) ? rawData : {};
+  for (const [varName, value] of Object.entries(flatMap)) {
+    if (typeof value === 'string' && value.startsWith('Font(')) {
+      bucket('primitives/value').skipped.push({ path: varName, reason: 'font-composite' });
+      changes.totalSkipped += 1;
+      continue;
+    }
+    if (typeof value !== 'string' && typeof value !== 'number') {
+      bucket('primitives/value').skipped.push({ path: varName, reason: 'non-primitive' });
+      changes.totalSkipped += 1;
+      continue;
+    }
+    applyToSet('primitives/value', varName, value, inferTypeFromPath(varName));
   }
 }
 
 // ─── Report ──────────────────────────────────────────────────────
 
-console.log('\n🔄 Figma MCP → tokens-studio.json sync\n');
+console.log('\n🔄 Figma → tokens-studio.json sync\n');
 
-if (changes.updated.length) {
-  console.log(`Updated (${changes.updated.length}):`);
-  for (const c of changes.updated) {
-    console.log(`  ${c.path}: ${c.old} → ${c.new}`);
+if (changes.unknownSets.size > 0) {
+  console.warn(`⚠️  ${changes.unknownSets.size} set(s) referenced by the dump are missing from tokens-studio.json:`);
+  for (const k of changes.unknownSets) console.warn(`     ${k}`);
+  console.warn('     Add them to $metadata.tokenSetOrder + create the set object before re-syncing.\n');
+}
+
+if (changes.danglingAliases.length > 0) {
+  console.warn(`⚠️  ${changes.danglingAliases.length} alias(es) reference variables that were not in the dump:`);
+  for (const d of changes.danglingAliases.slice(0, 10)) {
+    console.warn(`     ${d.varName} [${d.mode}] → ${d.aliasId}`);
+  }
+  if (changes.danglingAliases.length > 10) console.warn(`     …and ${changes.danglingAliases.length - 10} more`);
+  console.warn('');
+}
+
+if (changes.groupCollisions.length > 0) {
+  console.warn(`⚠️  ${changes.groupCollisions.length} variable path(s) collide with existing group nodes (skipped):`);
+  for (const g of changes.groupCollisions.slice(0, 10)) {
+    console.warn(`     ${g.setKey}  ${g.varPath}`);
+  }
+  console.warn('');
+}
+
+if (changes.perSet.size > 0) {
+  // Stable sort by tokenSetOrder when available, else alpha.
+  const order = (tokensStudio.$metadata && Array.isArray(tokensStudio.$metadata.tokenSetOrder))
+    ? tokensStudio.$metadata.tokenSetOrder
+    : null;
+  const setKeys = Array.from(changes.perSet.keys()).sort((a, b) => {
+    if (order) {
+      const ai = order.indexOf(a);
+      const bi = order.indexOf(b);
+      if (ai !== -1 && bi !== -1) return ai - bi;
+      if (ai !== -1) return -1;
+      if (bi !== -1) return 1;
+    }
+    return a.localeCompare(b);
+  });
+
+  console.log('Per-set summary:');
+  for (const setKey of setKeys) {
+    const c = changes.perSet.get(setKey);
+    const u = c.updated.length, a = c.added.length, s = c.skipped.length;
+    if (u + a + s === 0) continue;
+    console.log(`  ${setKey.padEnd(28)}  ${u} updated  ${a} added  ${s} skipped`);
+  }
+
+  // Detail sections — capped to keep output scannable on a large diff.
+  const SAMPLE = 25;
+  if (changes.totalUpdated > 0) {
+    console.log(`\nUpdated (${changes.totalUpdated}):`);
+    let shown = 0;
+    for (const setKey of setKeys) {
+      for (const c of changes.perSet.get(setKey).updated) {
+        if (shown >= SAMPLE) break;
+        console.log(`  [${setKey}] ${c.path}: ${c.old} → ${c.new}`);
+        shown += 1;
+      }
+      if (shown >= SAMPLE) break;
+    }
+    if (changes.totalUpdated > SAMPLE) console.log(`  …and ${changes.totalUpdated - SAMPLE} more`);
+  }
+
+  if (changes.totalAdded > 0) {
+    console.log(`\nAdded (${changes.totalAdded}):`);
+    let shown = 0;
+    for (const setKey of setKeys) {
+      for (const c of changes.perSet.get(setKey).added) {
+        if (shown >= SAMPLE) break;
+        console.log(`  [${setKey}] ${c.path}: ${c.value}`);
+        shown += 1;
+      }
+      if (shown >= SAMPLE) break;
+    }
+    if (changes.totalAdded > SAMPLE) console.log(`  …and ${changes.totalAdded - SAMPLE} more`);
   }
 }
 
-if (changes.added.length) {
-  console.log(`\nAdded (${changes.added.length}):`);
-  for (const c of changes.added) {
-    console.log(`  ${c.path}: ${c.value}`);
-  }
-}
-
-if (changes.skipped.length) {
-  console.log(`\nSkipped (${changes.skipped.length}): composites/groups`);
-}
-
-if (!changes.updated.length && !changes.added.length) {
+if (changes.totalUpdated === 0 && changes.totalAdded === 0) {
   console.log('No changes detected — tokens-studio.json is up to date.');
+  if (changes.totalSkipped > 0) console.log(`(${changes.totalSkipped} value(s) skipped — see warnings above.)`);
   process.exit(0);
 }
 
