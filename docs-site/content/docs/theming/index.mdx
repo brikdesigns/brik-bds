@@ -84,6 +84,10 @@ Not every token is meant to vary per brand. The rule of thumb: **tokens that car
 
 Full override matrix and the minimal `theme-{client}.css` template: [Client Themes](/docs/theming/client-themes).
 
+### Multi-brand within one client (scope-based binding)
+
+Some clients carry multiple brand colors at once — Vale Partners has three audience verticals, brikdesigns.com has service lines. Instead of inventing role-specific canonical tokens (`--background-land-primary`, etc.), the system re-binds the same canonical tokens inside `[data-audience=X]` / `[data-service=X]` scopes. Components stay scope-blind — they keep referencing `--background-brand-primary` — while the page expresses N brand colors simultaneously. Adding an audience is one CSS block; canonical never grows. Full pattern: [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-or-service-line-scope-binding).
+
 ## Layer 2 — Atmosphere
 
 An atmosphere is a **CSS overlay** that sits on top of the token layer to establish visual character — dark-luxury-editorial, soft-wellness, clean-clinical, etc. — without duplicating CSS per client. Atmospheres decorate surfaces (grain, glow, vignettes, spotlights); tokens decide the underlying values.
