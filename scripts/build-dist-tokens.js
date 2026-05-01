@@ -4,7 +4,7 @@
  * Called by: npm run build:lib (as the final step)
  *
  * Produces:
- *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + figma-dark-corrections.css + theme-brand-brik.css + gap-fills.css + animations.css concatenated
+ *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.css + modes-borderwidth.css + gap-fills.css + animations.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
  */
 const fs = require('fs');
@@ -47,14 +47,6 @@ if (fs.existsSync(darkTokensPath)) {
   console.log('  ⚠ No figma-tokens-dark.css found — run npm run build:sd-dark to generate');
 }
 
-// Post-Figma dark-mode corrections — overrides for values the Figma export gets wrong
-const darkCorrectionsPath = path.join(TOKENS_DIR, 'figma-dark-corrections.css');
-let darkCorrections = '';
-if (fs.existsSync(darkCorrectionsPath)) {
-  darkCorrections = '\n\n' + fs.readFileSync(darkCorrectionsPath, 'utf8');
-  console.log('  ✓ Including dark-mode corrections');
-}
-
 // Brik brand theme — applied when consumer sets .theme-brand-brik on <body>
 const themeBrandBrikPath = path.join(TOKENS_DIR, 'theme-brand-brik.css');
 let themeBrandBrik = '';
@@ -76,7 +68,7 @@ const animations = fs.readFileSync(path.join(TOKENS_DIR, 'animations.css'), 'utf
 
 fs.writeFileSync(
   path.join(DIST_DIR, 'tokens.css'),
-  header + figmaTokens + darkTokens + darkCorrections + themeBrandBrik + modesBorderWidth + '\n\n' + gapFills + '\n\n' + animations,
+  header + figmaTokens + darkTokens + themeBrandBrik + modesBorderWidth + '\n\n' + gapFills + '\n\n' + animations,
 );
 console.log('  ✓ dist/tokens.css');
 
