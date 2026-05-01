@@ -372,6 +372,8 @@
   --text-positive: var(--color-system-green);
   --text-negative: var(--color-system-red);
   --text-warning: var(--color-system-yellow);
+  --text-secondary-inverse: var(--color-grayscale-light); /** Secondary text on inverse (theme-flipping) surfaces */
+  --text-muted-inverse: var(--color-grayscale-dark); /** Muted text on inverse (theme-flipping) surfaces */
   --border-primary: var(--color-grayscale-lighter);
   --border-on-color-dark: var(--color-grayscale-white);
   --border-secondary: var(--color-grayscale-dark);

@@ -400,6 +400,10 @@ export const textInfo: string;
 export const textPositive: string;
 export const textNegative: string;
 export const textWarning: string;
+/** Secondary text on inverse (theme-flipping) surfaces */
+export const textSecondaryInverse: string;
+/** Muted text on inverse (theme-flipping) surfaces */
+export const textMutedInverse: string;
 export const borderPrimary: string;
 export const borderBrandPrimary: string;
 export const borderOnColorDark: string;
