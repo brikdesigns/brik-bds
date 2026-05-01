@@ -5,21 +5,23 @@
 :root[data-theme="dark"] {
   --page-primary: var(--color-grayscale-black);
   --page-secondary: var(--color-grayscale-darker);
+  --page-brand-primary: var(--theme-blue-blue-light);
   --page-inverse: var(--color-grayscale-white);
   --background-primary: var(--color-grayscale-black);
   --background-secondary: var(--color-grayscale-light);
-  --background-inverse: var(--color-grayscale-black);
+  --background-brand-primary: var(--theme-blue-blue-light);
+  --background-inverse: var(--color-grayscale-white);
   --background-accent-yellow: var(--color-system-yellow);
   --background-accent-blue: var(--color-system-blue);
   --background-accent-green: var(--color-system-green);
   --background-accent-purple: var(--color-system-purple);
   --background-accent-red: var(--color-system-red);
   --background-input: var(--color-grayscale-black);
-  --background-on-color-dark: var(--color-grayscale-black);
+  --background-on-color-dark: var(--color-grayscale-white);
   --background-muted: var(--color-grayscale-darker);
-  --background-on-color-light: var(--color-grayscale-white);
-  --background-brand-primary-hover: var(--color-poppy-lighter); /** Primary button hover background (dark mode) */
-  --background-brand-primary-pressed: var(--color-poppy-lightest); /** Primary button pressed background (dark mode) */
+  --background-on-color-light: var(--color-grayscale-black);
+  --background-brand-primary-hover: var(--theme-blue-blue-dark); /** Primary button hover background (dark mode) */
+  --background-brand-primary-pressed: var(--theme-blue-blue-light); /** Primary button pressed background (dark mode) */
   --background-disabled: var(--color-grayscale-darker); /** Disabled background (dark mode) */
   --background-info: var(--color-system-neutral);
   --background-primary-hover: var(--color-grayscale-darkest);
@@ -31,6 +33,7 @@
   --background-warning: var(--color-system-yellow);
   --surface-primary: var(--color-grayscale-black);
   --surface-secondary: var(--color-grayscale-darker);
+  --surface-brand-primary: var(--theme-blue-blue-light);
   --surface-inverse: var(--color-grayscale-white);
   --surface-overlay: var(--color-grayscale-black);
   --surface-secondary-hover: var(--color-grayscale-dark); /** Secondary button hover (dark mode) */
@@ -43,10 +46,11 @@
   --surface-muted: var(--color-grayscale-darkest);
   --surface-primary-hover: var(--color-grayscale-darkest);
   --surface-primary-pressed: var(--color-grayscale-darker);
-  --surface-brand-primary-hover: var(--color-poppy-lighter); /** Primary surface hover (dark mode) */
-  --surface-brand-primary-pressed: var(--color-poppy-lightest); /** Primary surface pressed (dark mode) */
+  --surface-brand-primary-hover: var(--theme-blue-blue-lighter); /** Primary surface hover (dark mode) */
+  --surface-brand-primary-pressed: var(--theme-blue-blue-light); /** Primary surface pressed (dark mode) */
   --text-primary: var(--color-grayscale-lightest);
   --text-secondary: var(--color-grayscale-light);
+  --text-brand-primary: var(--theme-blue-blue-light);
   --text-inverse: var(--color-grayscale-black);
   --text-accent-yellow: var(--color-system-yellow);
   --text-accent-blue: var(--color-system-blue);
@@ -55,6 +59,7 @@
   --text-accent-red: var(--color-system-red);
   --text-muted: var(--color-grayscale-dark);
   --text-on-color-dark: var(--color-grayscale-white);
+  --text-text-link: var(--theme-blue-blue-light);
   --text-on-color-light: var(--color-grayscale-black);
   --text-disabled: var(--color-grayscale-dark); /** Disabled text (dark mode) */
   --text-info: var(--color-system-neutral);
@@ -64,6 +69,7 @@
   --text-secondary-inverse: var(--color-grayscale-dark); /** Secondary text on inverse surface (dark mode) */
   --text-muted-inverse: var(--color-grayscale-light); /** Muted text on inverse surface (dark mode) */
   --border-primary: var(--color-grayscale-darker);
+  --border-brand-primary: var(--theme-blue-blue-light);
   --border-on-color-dark: var(--color-grayscale-black);
   --border-secondary: var(--color-grayscale-light);
   --border-muted: var(--color-grayscale-dark);
@@ -75,10 +81,4 @@
   --border-positive: var(--color-system-green);
   --border-negative: var(--color-system-red);
   --border-warning: var(--color-system-yellow);
-  --page-brand-primary: var(--brand-primary);
-  --background-brand-primary: var(--brand-primary);
-  --surface-brand-primary: var(--brand-primary);
-  --text-brand-primary: var(--brand-primary);
-  --text-text-link: var(--brand-primary);
-  --border-brand-primary: var(--brand-primary);
 }

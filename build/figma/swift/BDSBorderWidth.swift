@@ -10,10 +10,10 @@ public enum BDSBorderWidth {
     public static let borderWidth300: CGFloat = 4
     public static let borderWidth400: CGFloat = 5
     public static let borderWidth500: CGFloat = 6
-    public static let borderWidthSm: CGFloat = 0.5
-    public static let borderWidthMd: CGFloat = 1
-    public static let borderWidthXl: CGFloat = 3
-    public static let borderWidthLg: CGFloat = 2
-    public static let borderWidthHuge: CGFloat = 4
+    public static let borderWidthSm: CGFloat = 1
+    public static let borderWidthMd: CGFloat = 2
+    public static let borderWidthXl: CGFloat = 5
+    public static let borderWidthLg: CGFloat = 4
+    public static let borderWidthHuge: CGFloat = 6
     public static let borderWidthNone: CGFloat = 0
 }
