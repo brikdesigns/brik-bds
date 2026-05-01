@@ -3,15 +3,18 @@ title: Overview
 description: How BDS is organized and what to expect from this site.
 ---
 
-BDS ships three things on a single npm package: **tokens** (design language), **components** (React building blocks), and **content vocabulary** (industries, voices, atmospheres — the BCS layer).
+BDS ships three things on a single npm package: **tokens** (the design language), **components** (React building blocks), and **theming + content vocabulary** (atmospheres, layout archetypes, blueprints, industry packs, voices).
 
 Consumers import from `@brikdesigns/bds`. There is no submodule, no copy-paste — components and tokens stay in lockstep across products.
 
 ## How this site is organized
 
-- **Foundations** — the rules everything else inherits from. Tokens, typography, spacing, motion.
-- **Building** — patterns for composing pages, components for the building blocks, hooks for behavior, utilities for one-offs.
-- **Working with BDS** — contribution rules, release flow, deprecation policy.
+- **Primitives** — the design tokens everything inherits from. Color foundations (`--page-*`, `--surface-*`, `--background-*`, `--text-*`, `--border-*`), typography, spacing, radius, shadow, sizing.
+- **Theming** — the four layers that turn primitives into per-client visual identity. Tokens (Tier 2 client overrides), atmospheres (decoration overlays), layout archetypes (nav + footer), blueprints (section composition).
+- **Components** — React building blocks every product surface composes from.
+- **Content System** — industry packs, voice definitions, the BCS vocabulary that selects theming defaults.
+- **Motion** — the orthogonal motion tenet (CSS reveals, GSAP, premium effects).
+- **Contribution** — rules for adding to the system: PRs, releases, deprecation policy.
 
 ## How this site relates to Storybook
 
