@@ -543,12 +543,16 @@ describe('real-estate-commercial pack', () => {
     expect(megaMenu?.categories).toHaveLength(3);
   });
 
-  it('navigationIA has audienceAccents and audienceIcons arrays parallel to columns', () => {
-    const ia = realEstateCommercial.navigationIA;
-    expect(ia?.audienceAccents).toBeDefined();
-    expect(ia?.audienceIcons).toBeDefined();
-    expect(ia?.audienceAccents).toHaveLength(3);
-    expect(ia?.audienceIcons).toHaveLength(3);
+  it('mega-menu categories carry audienceId + icon for per-column theming', () => {
+    const categories = realEstateCommercial.navigationIA?.servicesMegaMenu?.categories;
+    expect(categories).toBeDefined();
+    expect(categories).toHaveLength(3);
+    expect(categories?.[0].audienceId).toBe('healthcare');
+    expect(categories?.[0].icon).toBe('ph:stethoscope');
+    expect(categories?.[1].audienceId).toBe('land');
+    expect(categories?.[1].icon).toBe('ph:tree');
+    expect(categories?.[2].audienceId).toBe('commercial');
+    expect(categories?.[2].icon).toBe('ph:storefront');
   });
 
   it('parent industry is real-estate', () => {

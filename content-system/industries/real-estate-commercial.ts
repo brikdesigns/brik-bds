@@ -463,10 +463,12 @@ export const realEstateCommercial: IndustryPack = {
   // Commercial) requires a structured audience-pathway mega-menu. The small-
   // business pack explicitly notes this pattern as a graduation condition.
   //
-  // Each column represents one audience. `audienceAccents` and `audienceIcons`
-  // are parallel to `servicesMegaMenu.categories` and enable the
-  // `nav_mega_audience_pathways` blueprint to render distinct color cues per
-  // column. Values map to Vale's palette primitives.
+  // Each column represents one audience. The `audienceId` on each category
+  // is the semantic role; consumer themes bind it to brand-color tokens via
+  // `[data-audience=X]` (or equivalent) scoped re-binding of canonical
+  // `--background-brand-primary` / `--text-brand-primary` / `--border-brand-primary`.
+  // BCS pack data carries no color decisions — visual binding is the client
+  // theme's responsibility.
   //
   // Archetype: `editorial-transparent` — the brokerage brand leads at first
   // load; the header solidifies on scroll. Primary link count is tight at 4
@@ -486,7 +488,9 @@ export const realEstateCommercial: IndustryPack = {
       columns: 3,
       categories: [
         {
+          audienceId: 'healthcare',
           heading: 'Healthcare',
+          icon: 'ph:stethoscope',
           items: [
             { label: 'Practice site selection', href: '/services/healthcare/site-selection', note: 'Demographic + patient-flow analysis' },
             { label: 'Lease negotiation', href: '/services/healthcare/lease-negotiation', note: 'TI allowance + favorable terms' },
@@ -495,7 +499,9 @@ export const realEstateCommercial: IndustryPack = {
           ],
         },
         {
+          audienceId: 'land',
           heading: 'Land',
+          icon: 'ph:tree',
           items: [
             { label: 'Residential land', href: '/services/land/residential', note: 'Middle Tennessee homesites' },
             { label: 'Agricultural land', href: '/services/land/agricultural', note: 'Farm + row-crop tracts' },
@@ -504,7 +510,9 @@ export const realEstateCommercial: IndustryPack = {
           ],
         },
         {
+          audienceId: 'commercial',
           heading: 'Commercial',
+          icon: 'ph:storefront',
           items: [
             { label: 'Tenant representation', href: '/services/commercial/tenant-rep', note: 'Find the right space for the business' },
             { label: 'Retail & restaurant site selection', href: '/services/commercial/site-selection', note: 'Foot traffic + trade-area analysis' },
@@ -527,13 +535,6 @@ export const realEstateCommercial: IndustryPack = {
     },
     scrollBehavior: 'transparent-top-frosted-past-80',
     mobileDrawer: 'slide-left-panel',
-    // Per-column audience accent colors — parallel to servicesMegaMenu.categories.
-    // Index 0 = Healthcare, 1 = Land, 2 = Commercial.
-    // Values reference Vale's palette primitives; consumer theme resolves these.
-    audienceAccents: ['var(--color-moss-dark)', 'var(--color-olive-light)', 'var(--color-gold-light)'],
-    // Per-column icon slugs — parallel to servicesMegaMenu.categories.
-    // Icons pulled from BDS icon vocabulary (Phosphor icon set).
-    audienceIcons: ['ph:stethoscope', 'ph:tree', 'ph:storefront'],
   },
 
   footerArchetype: 'four_col_directory',
