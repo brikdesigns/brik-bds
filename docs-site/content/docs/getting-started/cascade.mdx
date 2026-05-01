@@ -1,41 +1,136 @@
 ---
 title: The Cascade
-description: How BDS tokens layer from Figma foundations to client themes.
+description: How BDS layers theming — two-tier token cascade, four theming layers, and the modes axis.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-BDS uses a three-layer cascade. Each layer is a single CSS file imported in order.
+BDS theming layers across **two token tiers**, **four theming layers**, and **modes** as a separate axis. Components stay untouched as each layer composes a different decision.
 
-## The three layers
+## Two-tier token cascade
 
-1. **Foundations** (`figma-tokens.css`) — auto-generated from Figma variables. Never hand-edit.
-2. **Gap-fills** (`gap-fills.css`) — interaction-state tokens (hover, pressed) that haven't graduated to Figma yet.
-3. **Client theme** (`theme-{client}.css`) — per-project overrides for brand color, typography, atmosphere.
+Every consumer — portal, renew-pms, brikdesigns, each client site — loads tokens in the same order:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  TIER 1 — BDS Foundations  (never edited by consumers)                  │
+│                                                                         │
+│  Bundled into dist/tokens.css in this order:                            │
+│    figma-tokens.css       — auto-generated semantic + primitive (light) │
+│    figma-tokens-dark.css  — dark-mode overrides via [data-theme="dark"] │
+│    theme-brand-brik.css   — Brik's own brand defaults (.theme-brand-brik) │
+│    modes-borderwidth.css  — borderwidth mode picks ([data-mode-borderwidth]) │
+│    gap-fills.css          — tokens not yet in Figma                     │
+│    animations.css         — keyframe library                            │
+└──────────────────────────────┬──────────────────────────────────────────┘
+                               │  CSS cascade (consumer's globals.css)
+┌──────────────────────────────▼──────────────────────────────────────────┐
+│  TIER 2 — Client Theme  (theme-{client}.css in the consuming project)   │
+│                                                                         │
+│  Same semantic token names as Tier 1, different values for this brand.  │
+│  One file per client. Cascade wins. Components are untouched.           │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+Token names are fixed in Tier 1. Only values change in Tier 2. Full bundle order in [`tokens/CASCADE.md`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md).
+
+### What's inside Tier 1
+
+| File | Purpose | Editable? |
+|---|---|---|
+| `figma-tokens.css` | Auto-generated primitives + semantic tokens (light) | **No** — regenerated from Figma |
+| `figma-tokens-dark.css` | Dark-mode semantic overrides scoped to `[data-theme="dark"]` | **No** — regenerated from Figma |
+| `theme-brand-brik.css` | Brik's own brand colors / fonts (scoped to `.theme-brand-brik`) | Yes |
+| `modes-borderwidth.css` | Borderwidth mode picks via `[data-mode-borderwidth="thin\|bold"]` | Yes |
+| `gap-fills.css` | Any token not yet in Figma — extended status, presence, interaction states, etc. | Yes (with `TODO: promote to Figma` comment) |
+| `animations.css` | Shared keyframe library (`bds-spin`, `bds-pulse`, etc.) | Yes |
+
+### Tier 2 — what a client theme overrides
+
+The full overridability matrix lives in [Client Themes](/docs/theming/client-themes#overridability-matrix). Short version:
+
+| Token group | Per-client override? |
+|---|---|
+| Brand colors (`--background-brand-primary`, `--text-brand-primary`, `--surface-brand-primary`, `--border-brand-primary`) | **Required** |
+| Brand interaction states (`--background-brand-primary-hover/-pressed`) | **Required if brand colors change** |
+| Page + surfaces (`--page-primary`, `--surface-primary`, `--surface-secondary`) | **Recommended** |
+| Fonts (`--font-family-heading/body/label`) | **Optional** |
+| Status (`--background/surface/text/border-positive/negative/warning`) | **Yes** if brand red/green/yellow clashes |
+| Extended status / presence / shadows | **No** |
+
+## Theming is bigger than tokens
+
+The cascade above is **Layer 1** of the theming model. There are four layers total:
+
+| Layer | Decides | Lives in |
+|---|---|---|
+| **1. Tokens** | Color / type / spacing values | `theme-{client}.css` (Tier 2) |
+| **2. Atmosphere** | Ambient decoration — vignettes, grain, orbs, spotlights | `@brikdesigns/bds/atmospheres/{slug}.css` |
+| **3. Layout Archetypes** | Site-header + site-footer shape, scroll + drawer behavior | `<SiteHeader>` / `<SiteFooter>` from `@brikdesigns/bds/blueprints-astro` |
+| **4. Blueprints** | Section composition — hero / services / testimonials shapes | Authored in BDS, tagged by mood + industry |
+
+Layers are independent. A client redefines tokens, keeps the industry's default atmosphere, swaps to a non-default nav archetype, uses the same blueprints another client uses — nothing cross-couples.
 
 <Callout type="warn">
-  **Never write raw `var()` strings inline.** Always go through `@/lib/tokens` and `@/lib/styles`. The cascade is a contract — bypassing it leaks brand drift into components.
+  **Atmospheres decorate; tokens decide values.** Atmosphere CSS files MUST NOT override `--page-*`, `--surface-*`, `--background-*`, `--text-*`, or `--border-*` — those are theme-layer concerns. See [Theming Overview → Layer 2](/docs/theming#layer-2--atmosphere).
 </Callout>
 
-## Why this order
+Full deep-dive: [Theming Overview](/docs/theming).
 
-Foundations define the full token vocabulary. Gap-fills add what Figma can't yet express. Client themes override semantic tokens (e.g. `--text-brand`) without touching the underlying scales (`--color-orange-500`). A component that reads `--text-brand` automatically picks up whichever client is active.
+## Modes — orthogonal axis
 
-## What each layer can change
+Style Dictionary collections each have multiple modes (color: light/dark; borderwidth: thin/standard/bold; spacing: compact/default/comfortable/spacious; etc.). When a mode is **wired**, consumers can pick it via an attribute on `<html>`:
 
-| Layer | Can override |
-|---|---|
-| Foundations | Nothing — it's the source |
-| Gap-fills | Interaction states only |
-| Client theme | Semantic tokens (text, background, border, brand) |
-| Atmospheres | Mood layer (warm-soft, editorial-luxury, etc.) — applied as a class |
+```html
+<html data-theme="dark" data-mode-borderwidth="bold">
+```
+
+Each wired mode emits a `tokens/modes-{collection}.css` file scoped via `[data-mode-{collection}="value"]`. Today only `color` (via legacy `[data-theme]`) and `borderwidth` are wired. The other seven collections are dormant — see [#340](https://github.com/brikdesigns/brik-bds/issues/340) for the wiring plan.
+
+Modes vary token *values* on a system-wide axis any consumer can toggle. They are **not** a substitute for atmospheres (decoration) or for client themes (per-brand values).
+
+## Color foundations vocabulary
+
+The semantic color token families components reference, and the *only* names a Tier 2 client theme should override:
+
+| Family | Concept | Examples |
+|---|---|---|
+| `--page-*` | Page canvas (body fill) | `--page-primary`, `--page-secondary`, `--page-brand-primary` |
+| `--surface-*` | Surfaces resting on the page (cards, navs, panels) | `--surface-primary`, `--surface-secondary`, `--surface-brand-primary` |
+| `--background-*` | Interactive backgrounds (buttons, status fills, accents) | `--background-brand-primary`, `--background-positive`, `--background-input` |
+| `--text-*` | Type colors | `--text-primary`, `--text-brand-primary`, `--text-on-color-dark` |
+| `--border-*` | Edge colors | `--border-primary`, `--border-brand-primary`, `--border-input` |
+
+Full vocabulary at [Primitives → Color](/docs/primitives/color). The canonical registry is the live `dist/tokens.css` bundle.
+
+<Callout type="warn">
+  **Names not in the registry are not real.** Inventing a `--surface-paper`, `--text-on-ink`, or `-soft` / `-warm` modifier creates parallel taxonomy drift. If you need a new token, add it to BDS first via Figma → Tokens Studio → Style Dictionary. See [Primitives → Color](/docs/primitives/color).
+</Callout>
+
+## Switches — `<html>` attributes
+
+| Attribute | Values | Effect |
+|---|---|---|
+| `data-theme` | `light` (default) / `dark` | Switches color collection mode (legacy selector for the color mode) |
+| `data-mode-borderwidth` | `thin` / `bold` (omit for Standard) | Picks borderwidth mode |
+| `data-audience` / `data-service` / `data-department` | Per-site convention | Re-binds canonical brand tokens within the subtree (multi-brand client pattern — see [Client Themes → scope binding](/docs/theming/client-themes#per-audience-or-service-line-scope-binding)) |
+
+Storybook's paintbrush toolbar sets `data-theme` automatically. Product apps use `<ThemeProvider>`. Astro / Webflow / static consumers set the attribute manually on `<html>`.
 
 ## Where this is enforced
 
-The `lint-tokens` script (`npm run lint-tokens`) catches:
+| Gate | What it checks | Where |
+|---|---|---|
+| `scripts/lint-tokens.js` | Hex values in component CSS, nonexistent `var()` references, primitives used outside their semantic category | BDS pre-commit + CI (`npm run validate`) |
+| `scripts/canonical-check.mjs` | `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` token names exist in `dist/tokens.css` | BDS pre-commit + CI |
+| `@brikdesigns/bds/canonical-check` (consumer dep) | Same canonical-check engine published for consumer repos | Consumer pre-commit + CI via `token-audit.sh --canonical-only` |
 
-- Hex values in component CSS
-- `var()` references to tokens that don't exist
-- Tokens used outside their semantic category (e.g. `--text-*` on a `background-color`)
+Run BDS gates locally: `npm run validate`. Consumer gates: `./scripts/token-audit.sh --canonical-only`.
 
-Run it locally before pushing; CI runs it on every PR.
+## Related
+
+- [Theming Overview](/docs/theming) — the four-layer cascade in depth
+- [Client Themes](/docs/theming/client-themes) — Tier 2 override matrix + minimal template
+- [Atmospheres](/docs/theming/atmospheres) — Layer 2 decoration overlays
+- [Primitives → Color](/docs/primitives/color) — semantic color vocabulary
+- [`tokens/CASCADE.md`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md) — file-level decision tree

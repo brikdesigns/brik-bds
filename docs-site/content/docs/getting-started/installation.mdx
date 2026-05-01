@@ -45,7 +45,40 @@ In your global stylesheet (`globals.css`, `app.css`, etc.) import in this order:
 @import '@brikdesigns/bds/styles.css';
 ```
 
-Order matters. Foundation tokens load first, the client theme overrides semantic tokens, component CSS reads whatever is current.
+Order matters. Tier 1 tokens load first, the Tier 2 client theme overrides semantic tokens, component CSS reads whatever is current.
+
+## Theme + mode switches
+
+Set switches on `<html>` (or use `<ThemeProvider>` in React apps which manages them automatically):
+
+```html
+<html data-theme="dark" data-mode-borderwidth="bold">
+  <body class="theme-brand-brik">
+    <!-- ... -->
+  </body>
+</html>
+```
+
+| Switch | Values | Effect |
+|---|---|---|
+| `<body class="theme-brand-brik">` | — | Loads Brik's brand colors / fonts. Replace with your own client theme class if applicable. |
+| `<html data-theme>` | `light` (default) / `dark` | Color mode |
+| `<html data-mode-borderwidth>` | `thin` / `bold` (omit for Standard) | Borderwidth mode |
+
+See [The Cascade](/docs/getting-started/cascade) for the full switch table including audience scope binding for multi-brand sites.
+
+## Optional — atmosphere overlay
+
+Atmospheres add ambient decoration (vignettes, grain, orbs, spotlights) without overriding theme tokens. Import one after `tokens.css`:
+
+```css
+@import '@brikdesigns/bds/tokens.css';
+@import './styles/theme-{client}.css';
+@import '@brikdesigns/bds/atmospheres/minimal-clinical.css'; /* optional */
+@import '@brikdesigns/bds/styles.css';
+```
+
+Atmospheres are decoration-only — surface color comes from the theme layer. See [Atmospheres](/docs/theming/atmospheres).
 
 ## Import a component
 
@@ -61,4 +94,4 @@ That's it. No provider required for components — they read tokens from the cas
 
 ## Next: read the cascade rules
 
-The [cascade rules page](/docs/getting-started/cascade) explains the three-layer architecture (foundations → gap-fills → client theme) and why it exists.
+The [cascade rules page](/docs/getting-started/cascade) explains the two-tier × four-layer × modes architecture and why it exists.
