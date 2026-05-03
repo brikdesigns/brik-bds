@@ -29,6 +29,24 @@
   transform-origin: top center;
 }
 
+/* ─── Header (non-interactive label slot) ─────────────── */
+
+.bds-menu__header {
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-tiny) var(--padding-tiny) var(--padding-md);
+  border-bottom: 1px solid var(--border-muted);
+  margin-bottom: var(--gap-tiny);
+  font-family: var(--font-family-label);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
 /* ─── Menu item ───────────────────────────────────────── */
 
 .bds-menu__item {

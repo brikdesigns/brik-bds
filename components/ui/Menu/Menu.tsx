@@ -41,6 +41,13 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
   onClose: () => void;
   /** Currently active/selected item ID */
   activeId?: string;
+  /**
+   * Optional non-interactive header rendered above the items inside the menu
+   * panel — e.g. a practice name, user email, or filter group label. Sits
+   * inside the menu's outside-click ref so it does not close on press.
+   * Default styling applies via `bds-menu__header`; pass any node to override.
+   */
+  header?: ReactNode;
 }
 
 /**
@@ -114,6 +121,7 @@ export function Menu({
   isOpen,
   onClose,
   activeId,
+  header,
   className = '',
   style,
   ...props
@@ -159,6 +167,11 @@ export function Menu({
       style={style}
       {...props}
     >
+      {header != null && (
+        <div className="bds-menu__header" role="presentation">
+          {header}
+        </div>
+      )}
       {items.map((item) => (
         <MenuItem
           key={item.id}
