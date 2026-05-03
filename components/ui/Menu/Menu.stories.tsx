@@ -119,6 +119,44 @@ export const Variants: Story = {
           style={{ position: 'relative' }}
         />
       </div>
+
+      <div>
+        <SectionLabel>With header (string)</SectionLabel>
+        <Menu
+          isOpen
+          onClose={() => {}}
+          header="Northstar Dental"
+          items={[
+            { id: '1', label: 'Account settings', icon: <Icon icon="ph:gear" />, onClick: () => {} },
+            { id: '2', label: 'Switch practice', icon: <Icon icon="ph:swap" />, onClick: () => {} },
+            { id: '3', label: 'Sign out', icon: <Icon icon="ph:sign-out" />, onClick: () => {} },
+          ]}
+          style={{ position: 'relative' }}
+        />
+      </div>
+
+      <div>
+        <SectionLabel>With header (custom node)</SectionLabel>
+        <Menu
+          isOpen
+          onClose={() => {}}
+          header={
+            <>
+              <span style={{ fontFamily: 'var(--font-family-heading)', fontSize: 'var(--body-md)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)', textTransform: 'none', letterSpacing: 0 }}>
+                Dr. Sara Patel
+              </span>
+              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-regular)', color: 'var(--text-secondary)', textTransform: 'none', letterSpacing: 0 }}>
+                sara@northstardental.com
+              </span>
+            </>
+          }
+          items={[
+            { id: '1', label: 'Profile', icon: <Icon icon="ph:user" />, onClick: () => {} },
+            { id: '2', label: 'Sign out', icon: <Icon icon="ph:sign-out" />, onClick: () => {} },
+          ]}
+          style={{ position: 'relative' }}
+        />
+      </div>
     </Stack>
   ),
 };

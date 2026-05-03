@@ -27,6 +27,24 @@ Real-world usage: `FilterButton` trigger, `Button` trigger with action menu, and
 
 <Canvas of={Stories.Patterns} />
 
+### Header slot
+
+Pass `header?: ReactNode` to render a non-interactive label above the items inside the menu panel — practice name, user identity block, filter group label, etc. The header sits inside Menu's outside-click ref so pressing it does not close the menu.
+
+```tsx
+<Menu
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  header="Northstar Dental"
+  items={[
+    { id: 'settings', label: 'Account settings', onClick: ... },
+    { id: 'signout', label: 'Sign out', onClick: ... },
+  ]}
+/>
+```
+
+Default styling (`bds-menu__header` class) is uppercase label-style on `--text-secondary` with a subtle bottom border. Pass any `ReactNode` (multiple lines, mixed typography) to fully override the visual treatment.
+
 ### Items with description
 
 Pass `description?: string` on a `MenuItemData` to render a second-line description below the label. Used for "what does this option do?" affordance — common in "Add new ___" menus where each option is a different kind of thing (e.g. *Checklist — Recurring to-do lists*, *Procedure — Step-by-step workflows*).
