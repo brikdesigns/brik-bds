@@ -48,16 +48,17 @@
   max-width: 400px;
   scroll-snap-align: start;
   border-radius: var(--border-radius-200);
-  /* overflow: visible — allows tooltip bubbles to escape column bounds.
-     Clip is applied only when a background is present (see below). */
+  /* overflow: visible — card hover shadows, drag previews, and tooltip
+     bubbles need to escape the column bounds. Vertical scrolling lives
+     on `__items`; horizontal scrolling on the parent `<Board>`. The
+     earlier `[style*="background"] { overflow: clip }` rule clipped
+     child overflow when a column had a background — which broke shadow
+     hovers and drag previews. brik-bds#411. */
   overflow: visible;
 }
 
-/* When column has a background color, clip to rounded corners + add internal padding */
-.bds-board-column[style*="background"] {
-  overflow: clip;
-}
-
+/* When column has a background color, give child items breathing room
+   so cards aren't flush against the rounded corners of the column fill. */
 .bds-board-column[style*="background"] .bds-board-column__items {
   padding: 0 var(--padding-sm);
 }

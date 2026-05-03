@@ -22,7 +22,13 @@
   text-transform: capitalize;
   cursor: pointer;
   user-select: none;
-  border: none;
+  /* Reserve a transparent border on every Chip so solid + outline
+     variants share the same box dimensions. Toggling between
+     `primary-solid` (no visible border) and `secondary-outline` (2px
+     border) used to jump the layout by 2px on every edge. The outline
+     variants below override the border-color; solid variants keep it
+     transparent. brik-bds#414. */
+  border: var(--border-width-md) solid transparent;
   overflow: clip;
   transition: filter var(--duration-fast) var(--ease-out);
   box-sizing: border-box;
