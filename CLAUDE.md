@@ -8,7 +8,7 @@ This is the **source of truth** for the Brik Design System React components.
 >
 > **Mirrored in code:** `dist/tokens.css` (the live allowlist).
 
-Every `--text-*`, `--surface-*`, `--background-*`, and semantic `--border-*` token name in any Brik repo (BDS, portal, renew-pms, brikdesigns, client sites) MUST exist in this registry. Inventing parallel taxonomies is **not allowed** — that's the failure mode that produced `--surface-paper`, `--text-on-ink`, `--text-on-paper-soft`, etc. in portal #512 / #553 (rolled back 2026-04-27).
+Every `--text-*`, `--surface-*`, `--background-*`, semantic `--border-*`, and `--color-*` token name in any Brik repo (BDS, portal, renew-pms, brikdesigns, client sites) MUST exist in this registry. Inventing parallel taxonomies is **not allowed** — see [`canonical-token-drift-2026-04`](../brik-llm/software/docs/incidents/canonical-token-drift-2026-04.md) for the recurring pattern this prevents.
 
 **Specific bans:**
 - No new `--text-on-{surface}` names beyond `--text-on-color-dark` and `--text-on-color-light`. For tier modifiers on body text, use `--text-primary` / `--text-secondary` / `--text-muted` directly.
@@ -21,26 +21,9 @@ Every `--text-*`, `--surface-*`, `--background-*`, and semantic `--border-*` tok
 
 ## STOP — Worktree Rules (Non-Negotiable)
 
-**The primary worktree at `/Documents/GitHub/brik/brik-bds` stays on `main`.** Task work always lives in a dedicated worktree under `../brik-bds-worktrees/{slug}`. Never `git switch` the primary worktree to a `task/*` branch — it cross-contaminates work between concurrent agents. See the 2026-04-21 Phase B incident ([PR #169](https://github.com/brikdesigns/brik-bds/pull/169) commentary) for what happens when this rule is broken.
+**The primary worktree at `/Documents/GitHub/brik/brik-bds` stays on `main`.** Task work lives in `../brik-bds-worktrees/{slug}` — start one with `./scripts/new-task.sh {scope}-{name}`. The script refuses to run from anywhere but the primary on main, so this is enforced automatically. A SessionStart + PreToolUse hook (`.claude/hooks/worktree-check.sh`) warns on violations; set `BDS_WORKTREE_GUARD=strict` to block.
 
-**How to start a task:**
-
-```bash
-# From the primary worktree (on main), create an isolated worktree:
-./scripts/new-task.sh {scope}-{name}
-# e.g. ./scripts/new-task.sh bds-button-variants
-```
-
-The `new-task.sh` script refuses to run from anywhere but the primary on main, so this rule is enforced automatically.
-
-**If you discover the primary is on a task branch:**
-
-1. `cd /Users/nickstanerson/Documents/GitHub/brik/brik-bds`
-2. `git status` — inspect any uncommitted work
-3. If the work belongs to a real task, move it: `git worktree add ../brik-bds-worktrees/<slug> -b <existing-branch>` and stash/apply
-4. `git switch main`
-
-A SessionStart + PreToolUse hook (`.claude/hooks/worktree-check.sh`) warns on every session and edit when this rule is violated. Set `BDS_WORKTREE_GUARD=strict` in your environment to make it blocking.
+Why: concurrent agents on the same primary will cross-contaminate working trees. See [`docs/incidents/worktree-cross-contamination-2026-04-21.md`](docs/incidents/worktree-cross-contamination-2026-04-21.md) for the recovery procedure when the rule has been broken; full cross-repo rationale in [`~/Documents/GitHub/CLAUDE.md`](../../CLAUDE.md).
 
 ## STOP — Token Rules (Non-Negotiable)
 
@@ -203,27 +186,9 @@ The MCP addon (`@storybook/addon-mcp`) exposes the full BDS component library as
 
 ### Chromatic (visual testing + hosted MCP)
 
-BDS Storybook is published to **Chromatic** — both for visual regression testing and as the canonical Storybook MCP endpoint that consumer-repo Claude sessions query.
+BDS Storybook is published to Chromatic for visual regression testing and as the live Storybook MCP endpoint consumer-repo Claude sessions query. **Publish (`npm run chromatic`) after any component CSS or story changes are committed** — local Storybook isn't reachable from consumer agents.
 
-- **App ID:** `69b8918cac3056b39424d5d3`
-- **Stable URL (use this everywhere):** https://main--69b8918cac3056b39424d5d3.chromatic.com/
-- **Dashboard:** https://www.chromatic.com/builds?appId=69b8918cac3056b39424d5d3
-
-⚠ **Never commit a per-build URL** (e.g. `<appid>-<random>.chromatic.com`) — those freeze on the build that produced them and silently rot. The `main--` branch alias above always tracks the latest build on `main`.
-
-The stable URL serves:
-- `/mcp` — live `addon-mcp` server (the endpoint consumer agents query)
-- `/index.json` — story index, including all `surface-*` tags
-- `/manifests/components.json` + `/manifests/components.html` — the components manifest from `componentsManifest`
-
-The Netlify deploy at `storybook.brikdesigns.com` is browseable but does **not** serve `/mcp` (static build only). Agent MCP queries must use the Chromatic stable URL.
-
-**Publish manually:**
-```bash
-npm run chromatic
-```
-
-**When to publish:** After any component CSS or story changes are committed. Consumer agents query the published Chromatic build, not your local Storybook — unpublished changes won't reach them. Visual diffs flag pixel-level regressions between builds.
+URLs, App ID, and the per-build URL warning live in [`.claude/references/chromatic.md`](.claude/references/chromatic.md).
 
 ## Paper — Pre-implementation design
 
@@ -394,19 +359,6 @@ These rules apply to every BCS authoring or consumption task — same weight as 
 `tsconfig.content-system.json` is the scoped build config — keeps content-system compilation separate from the Vite lib build of components.
 
 See [content-system/README.md](content-system/README.md) and the Storybook **Content System / Overview** page for the full authoring guide.
-
-## LLM stack (applies to every consumer that imports this CLAUDE.md)
-
-Because this file is `@`-imported by `brik-client-portal/CLAUDE.md`, `renew-pms/CLAUDE.md`, `freedom-client-portal/CLAUDE.md`, and `brikdesigns/CLAUDE.md`, the rule lives here so it's visible in every downstream agent session.
-
-**Every Claude call in a Brik product goes through `@brikdesigns/claude-client`** (TypeScript primary, `brik_claude_client` Python twin). Not the raw `@anthropic-ai/sdk`. The shared client handles Helicone proxy routing, retries, prompt caching, and `CallMetadata` for per-service `workflow_type` tags.
-
-- **Canonical rules:** `~/Documents/GitHub/CLAUDE.md` (cross-repo doc, source of truth at [`brik-llm/CLAUDE-CROSS-REPO.md`](../brik-llm/CLAUDE-CROSS-REPO.md)).
-- **Reasoning architecture:** [ADR-001](../brik-llm/software/docs/adr/ADR-001-llm-enrichment-architecture.md) — Claude + pgvector RAG + optional specialist LoRA.
-- **Module boundary:** [ADR-002](../brik-llm/software/docs/adr/ADR-002-module-boundaries.md) names `@brikdesigns/claude-client` a **platform dependency**, not a module. Consumers import it; nobody extends it.
-- **Mini infra scope:** [ADR-003](../brik-llm/software/docs/adr/ADR-003-mini-llm-infrastructure-scope.md) — the Mac Mini hosts LLM infrastructure (dev sandbox, embedding host, eval runner, future PHI redaction), never production reasoning.
-
-BDS (this repo) is the design-system half of Brik's LLM knowledge substrate — once ADR-001 Phase 2 lands, component docs + content-system (industries, vocabularies, voices, atmospheres) get ingested into pgvector so every `withBrikContext()`-enriched Claude call in a consumer app can retrieve against BDS directly.
 
 ## Token PR Checklist
 
