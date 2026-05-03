@@ -98,11 +98,11 @@
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  border-top: var(--border-width-sm) solid var(--border-secondary);
-}
-
-.bds-page-header__metadata--no-divider {
-  border-top: none;
+  /* No internal divider — the page header has a single bottom border that
+     hands off to the body. Internal separators were creating a visual
+     "multiple borders at different widths" effect (the metadata row sits
+     inside the header's 80px horizontal padding, while the root border
+     spans the outer box). brik-bds#400. */
 }
 
 .bds-page-header__metadata-inner {
@@ -111,10 +111,6 @@
   align-items: flex-start;
   padding-top: var(--padding-xl);
   width: 100%;
-}
-
-.bds-page-header__metadata--no-divider .bds-page-header__metadata-inner {
-  padding-top: 0;
 }
 
 .bds-page-header__metadata-item {
