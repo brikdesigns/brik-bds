@@ -1,0 +1,96 @@
+@layer bds-components {
+/* ProgressCircle — circular progress indicator */
+
+/* ─── Container ───────────────────────────────────────── */
+
+.bds-progress-circle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── SVG (rotated so progress starts at 12 o'clock) ──── */
+
+.bds-progress-circle__svg {
+  transform: rotate(-90deg);
+}
+
+/* ─── Track ───────────────────────────────────────────── */
+
+.bds-progress-circle__track {
+  stroke: var(--background-muted);
+}
+
+/* ─── Fill ────────────────────────────────────────────── */
+
+.bds-progress-circle__fill {
+  stroke: var(--background-brand-primary);
+  transition:
+    stroke-dashoffset var(--duration-500) var(--ease-out),
+    stroke var(--duration-200) var(--ease-out);
+}
+
+.bds-progress-circle--positive .bds-progress-circle__fill {
+  stroke: var(--background-positive);
+}
+
+.bds-progress-circle--warning .bds-progress-circle__fill {
+  stroke: var(--background-warning);
+}
+
+.bds-progress-circle--negative .bds-progress-circle__fill {
+  stroke: var(--background-negative);
+}
+
+/* ─── Indeterminate spin ──────────────────────────────── */
+
+.bds-progress-circle--indeterminate .bds-progress-circle__svg {
+  animation: bds-progress-circle-spin var(--duration-600) linear infinite;
+}
+
+.bds-progress-circle--indeterminate .bds-progress-circle__fill {
+  transition: none;
+}
+
+@keyframes bds-progress-circle-spin {
+  from { transform: rotate(-90deg); }
+  to   { transform: rotate(270deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-progress-circle--indeterminate .bds-progress-circle__svg {
+    animation: none;
+  }
+  .bds-progress-circle__fill {
+    transition: none;
+  }
+}
+
+/* ─── Centered slot ───────────────────────────────────── */
+
+.bds-progress-circle__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  pointer-events: none;
+}
+
+.bds-progress-circle__center--sm {
+  font-size: var(--body-md);
+}
+
+.bds-progress-circle__center--md {
+  font-size: var(--heading-tiny);
+}
+
+.bds-progress-circle__center--lg {
+  font-size: var(--heading-sm);
+}
+}
