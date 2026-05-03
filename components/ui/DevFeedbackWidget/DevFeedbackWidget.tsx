@@ -22,7 +22,10 @@ import { createPortal } from 'react-dom';
  * renders identically regardless of the host's light/dark theme.
  *
  * Integrates with the Brik DevBar (`window.BrikDevBar`) when present,
- * falling back to a standalone FAB otherwise.
+ * falling back to a standalone FAB otherwise. Set the `variant` prop to
+ * `'slot'` or `'fab'` to assert the mode explicitly and skip the runtime
+ * detect — useful for product apps that want to swap modes via env gate
+ * without the FAB-flicker that 'auto' mode permits during DevBar load.
  *
  * @token-exempt — the inlined BDS object below holds raw hex values on
  * purpose: this widget is a dev overlay that must render consistently even
@@ -56,6 +59,18 @@ const FEEDBACK_TYPES = [
 // Types live in BrikDevBar — imported here to avoid duplicate declarations.
 import type { DevBarSlotDef } from '../BrikDevBar';
 
+/**
+ * Rendering variant.
+ * - `'auto'` (default) — runtime-detect `window.BrikDevBar`; render as a
+ *   slot when present, fall back to a standalone FAB. Backwards-compatible.
+ * - `'slot'` — assert slot mode. Register with BrikDevBar (queues if the
+ *   bar hasn't loaded yet) and never render the FAB. Logs a warning if no
+ *   DevBar appears within 2s.
+ * - `'fab'` — assert FAB mode. Skip the DevBar lookup entirely; render the
+ *   standalone floating button immediately.
+ */
+export type DevFeedbackVariant = 'auto' | 'slot' | 'fab';
+
 // ── Public props ────────────────────────────────────────────────────────
 export interface DevFeedbackWidgetProps {
   /** POST endpoint for feedback submissions. */
@@ -68,6 +83,8 @@ export interface DevFeedbackWidgetProps {
   fabPosition?: { bottom?: string; left?: string; right?: string };
   /** Additional payload fields sent with every submission. */
   extraPayload?: Record<string, unknown>;
+  /** Rendering variant — controls slot vs FAB explicitly. Defaults to `'auto'` (back-compat). */
+  variant?: DevFeedbackVariant;
 }
 
 // ── Component ───────────────────────────────────────────────────────────
@@ -80,6 +97,7 @@ export function DevFeedbackWidget({
   getContextValue,
   fabPosition = { bottom: '16px', left: '72px' },
   extraPayload,
+  variant = 'auto',
 }: DevFeedbackWidgetProps = {}) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string>('bug');
@@ -87,7 +105,11 @@ export function DevFeedbackWidget({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [contextValue, setContextValue] = useState('');
-  const [devBarPresent, setDevBarPresent] = useState(false);
+  // For variant='slot' we treat the DevBar as present from the start so
+  // the FAB never flashes while the bar is registering. For variant='fab'
+  // we keep it false (no DevBar lookup runs). Auto seeds false and lets
+  // runtime detection update it.
+  const [devBarPresent, setDevBarPresent] = useState(variant === 'slot');
   const panelRef = useRef<HTMLDivElement>(null);
   const fabRef = useRef<HTMLDivElement>(null);
 
@@ -141,8 +163,10 @@ export function DevFeedbackWidget({
     };
   }, [open]);
 
-  // Detect DevBar so we can hide the standalone FAB.
+  // Detect DevBar so we can hide the standalone FAB. Only runs in 'auto'
+  // mode — explicit variants short-circuit the polling.
   useEffect(() => {
+    if (variant !== 'auto') return;
     const check = () => {
       if (typeof window !== 'undefined' && window.BrikDevBar) {
         setDevBarPresent(true);
@@ -155,7 +179,7 @@ export function DevFeedbackWidget({
       clearInterval(iv);
       clearTimeout(stop);
     };
-  }, []);
+  }, [variant]);
 
   // Register the DevBar slot (queues if DevBar hasn't loaded yet).
   const slotDef = useMemo<DevBarSlotDef>(
@@ -172,6 +196,7 @@ export function DevFeedbackWidget({
   );
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (variant === 'fab') return;
     const tryRegister = () => {
       if (window.BrikDevBar) {
         window.BrikDevBar.register(slotDef);
@@ -189,13 +214,21 @@ export function DevFeedbackWidget({
     const iv = setInterval(() => {
       if (tryRegister()) clearInterval(iv);
     }, 100);
-    const stop = setTimeout(() => clearInterval(iv), 2000);
+    const stop = setTimeout(() => {
+      clearInterval(iv);
+      if (variant === 'slot' && !window.BrikDevBar) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          '[DevFeedbackWidget] variant="slot" but BrikDevBar did not appear within 2s — widget will not be reachable.',
+        );
+      }
+    }, 2000);
     return () => {
       clearInterval(iv);
       clearTimeout(stop);
       window.BrikDevBar?.unregister(slotDef.id);
     };
-  }, [slotDef]);
+  }, [slotDef, variant]);
 
   // Sync DevBar active state with our open state.
   useEffect(() => {
