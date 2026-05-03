@@ -44,11 +44,27 @@
   opacity: 0.5;
 }
 
-/* ── Tab variant ── */
+/* ── Tab variant ──
+   Bar baseline + per-tab indicator both live here (not inline) so that:
+   1. PageHeader can suppress its own root border when tabs are present via
+      `:has(.bds-page-header__tabs)` without inline-style specificity fights.
+   2. Width is consistent at `--border-width-sm` (1px) — chrome divider scale,
+      not the chunky xl scale this used to render at.
+*/
 
-/* Tabs overlap the container's baseline border so active indicator replaces it */
+.bds-tab-bar--tab {
+  border-bottom: var(--border-width-sm) solid var(--border-secondary);
+}
+
 .bds-tab-bar--tab .bds-tab-bar-item {
-  margin-bottom: calc(-1 * var(--border-width-xl));
+  border-bottom: var(--border-width-sm) solid transparent;
+  /* Negative margin overlays the item border onto the bar baseline so the
+     active indicator replaces (not stacks under) the divider segment. */
+  margin-bottom: calc(-1 * var(--border-width-sm));
+}
+
+.bds-tab-bar--tab .bds-tab-bar-item[aria-selected="true"] {
+  border-bottom-color: var(--border-brand-primary);
 }
 
 .bds-tab-bar--tab .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
@@ -61,6 +77,14 @@
 }
 
 /* ── Tab variant on-color ── */
+
+.bds-tab-bar--tab.bds-tab-bar--on-color {
+  border-bottom-color: var(--border-on-color-dark);
+}
+
+.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+  border-bottom-color: var(--border-on-color-dark);
+}
 
 .bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.8;

@@ -48,7 +48,10 @@ const barBase: CSSProperties = {
 const barVariantStyles: Record<TabBarVariant, CSSProperties> = {
   text: { ...barBase, gap: 'var(--gap-xl)' },
   'text-underline': { ...barBase, gap: 'var(--gap-xl)' },
-  tab: { ...barBase, gap: 0, borderBottom: 'var(--border-width-xl) solid var(--border-secondary)' },
+  // `tab` variant baseline border lives in TabBar.css so external CSS
+  // (e.g. PageHeader's `:has(.bds-page-header__tabs)` rule) can suppress
+  // it without fighting inline-style specificity.
+  tab: { ...barBase, gap: 0 },
   box: { ...barBase, gap: 0 },
 };
 
@@ -110,13 +113,10 @@ function getTextUnderlineStyles(active: boolean, onColor: boolean): CSSPropertie
 }
 
 function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
-  /* All tabs use border-width-xl (3px) for a consistent baseline.
-     Active tabs use brand color; inactive tabs use transparent so the container's
-     xl baseline border shows through unchanged. Prevents thickness mismatch. */
-  const borderColor = onColor
-    ? active ? 'var(--border-on-color-dark)' : 'transparent'
-    : active ? 'var(--border-brand-primary)' : 'transparent';
-
+  /* Color + opacity stay inline (per-state). The active/inactive border-bottom
+     and the negative-margin overlap onto the bar baseline live in TabBar.css
+     so external rules (e.g. PageHeader's tabs slot) can override widths via
+     normal CSS specificity instead of fighting inline shorthand. */
   const textColor = onColor
     ? 'var(--text-on-color-dark)'
     : active
@@ -128,7 +128,6 @@ function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
     color: textColor,
     backgroundColor: 'transparent',
     padding: 'var(--padding-lg)',
-    borderBottom: `var(--border-width-xl) solid ${borderColor}`,
     opacity: onColor && !active ? 0.6 : 1,
   };
 }
