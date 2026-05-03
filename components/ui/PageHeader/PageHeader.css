@@ -9,6 +9,15 @@
   justify-content: center;
   padding: var(--padding-xl) 80px; /* bds-lint-ignore — Figma page header spec */
   width: 100%;
+  /* Single 1px divider hands the page header off to the body. When the `tabs`
+     slot is filled, TabBar's own baseline takes over (suppressed below) so we
+     don't stack two borders. */
+  border-bottom: var(--border-width-sm) solid var(--border-secondary);
+}
+
+/* Suppress root divider when tabs are present — TabBar provides its baseline. */
+.bds-page-header:has(.bds-page-header__tabs) {
+  border-bottom: none;
 }
 
 .bds-page-header--flush {
@@ -140,15 +149,15 @@
   width: 100%;
 }
 
-/* ─── Tabs ───────────────────────────────────────────────────── */
+/* ─── Tabs ─────────────────────────────────────────────────────
+   The `tabs` slot is a passive container. The bottom divider when tabs are
+   present comes from TabBar's own `tab` variant baseline (`TabBar.css`).
+   The PageHeader root border above is suppressed via `:has()` to avoid the
+   double-border that the previous `__tabs { border-bottom }` declaration
+   created against TabBar's inline border (brik-bds#400).
+*/
 
 .bds-page-header__tabs {
   width: 100%;
-  border-bottom: var(--border-width-sm) solid var(--border-secondary);
-}
-
-.bds-page-header__tabs .bds-tab-bar--tab .bds-tab-bar-item {
-  border-bottom-width: var(--border-width-sm);
-  margin-bottom: calc(-1 * var(--border-width-sm));
 }
 }
