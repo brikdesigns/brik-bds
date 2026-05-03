@@ -24,8 +24,6 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   metadata?: MetadataItem[];
   /** Summary content (e.g. stat cards) rendered between metadata and tabs. */
   stats?: ReactNode;
-  /** Remove horizontal padding (for layouts that provide their own). Default: false */
-  flush?: boolean;
   /** Title scale. Default: 'lg' */
   size?: 'sm' | 'md' | 'lg';
 }
@@ -44,7 +42,6 @@ export function PageHeader({
   tabs,
   metadata,
   stats,
-  flush = false,
   size = 'lg',
   className,
   style,
@@ -52,7 +49,7 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <div
-      className={bdsClass('bds-page-header', flush && 'bds-page-header--flush', size !== 'lg' && `bds-page-header--${size}`, className)}
+      className={bdsClass('bds-page-header', size !== 'lg' && `bds-page-header--${size}`, className)}
       style={style}
       {...props}
     >
