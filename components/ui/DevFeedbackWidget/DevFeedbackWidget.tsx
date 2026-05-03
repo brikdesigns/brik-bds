@@ -302,10 +302,17 @@ export function DevFeedbackWidget({
     transition: 'background-color 0.15s ease, transform 0.15s ease',
   };
 
+  // Panel anchors to the same horizontal edge as the FAB so the open menu
+  // visually "grows" out of the trigger. Earlier code hardcoded
+  // `left: '16px'` and ignored `fabPosition`, which left the panel on the
+  // opposite edge whenever the FAB was pinned to `right` (e.g. renew-pms).
+  // Vertical offset = FAB bottom + FAB height (40px) + gap (8px) = 48px.
+  // brik-bds#415.
   const panelStyleBase: CSSProperties = {
     position: 'fixed',
-    bottom: '64px',
-    left: '16px',
+    bottom: `calc(${fabPosition.bottom ?? '16px'} + 48px)`,
+    left: fabPosition.right === undefined ? (fabPosition.left ?? '16px') : undefined,
+    right: fabPosition.right,
     zIndex: 9998,
     width: '320px',
     backgroundColor: BDS.white,

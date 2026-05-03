@@ -114,3 +114,26 @@ export const AutoWithoutDevBar: Story = {
     </Frame>
   ),
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   5. RIGHT-ANCHORED — FAB pinned bottom-right; panel tracks
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary FAB pinned bottom-right — open the panel and confirm it anchors to the right edge alongside the FAB. brik-bds#415. */
+export const FabPinnedRight: Story = {
+  render: () => (
+    <Frame>
+      <p>
+        FAB pinned to <code>bottom-right</code> via <code>fabPosition={'{ bottom: \'16px\', right: \'16px\' }'}</code>.
+        On click, the panel opens at the same right edge as the FAB so the menu visually grows out of the trigger.
+        Earlier behavior anchored the panel to <code>left: 16px</code> regardless of <code>fabPosition</code> — opposite edge of the FAB.
+      </p>
+      <DevFeedbackWidget
+        variant="fab"
+        endpoint="/api/feedback"
+        contextLabel="Page"
+        fabPosition={{ bottom: '16px', right: '16px' }}
+      />
+    </Frame>
+  ),
+};
