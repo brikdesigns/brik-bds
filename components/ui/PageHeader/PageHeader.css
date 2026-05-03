@@ -7,8 +7,9 @@
   gap: var(--gap-lg);
   align-items: flex-start;
   justify-content: center;
-  padding: var(--padding-xl) 80px; /* bds-lint-ignore — Figma page header spec */
   width: 100%;
+  /* No internal padding — the page header is a structural container.
+     Consumers control surrounding spacing via their own layout. */
   /* Single 1px divider hands the page header off to the body. When the `tabs`
      slot is filled, TabBar's own baseline takes over (suppressed below) so we
      don't stack two borders. */
@@ -18,11 +19,6 @@
 /* Suppress root divider when tabs are present — TabBar provides its baseline. */
 .bds-page-header:has(.bds-page-header__tabs) {
   border-bottom: none;
-}
-
-.bds-page-header--flush {
-  padding-left: 0;
-  padding-right: 0;
 }
 
 /* ─── Title row ──────────────────────────────────────────────── */
