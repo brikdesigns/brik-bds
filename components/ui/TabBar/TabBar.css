@@ -3,9 +3,14 @@
    Inline CSSProperties can't handle :hover/:active/:disabled,
    so these live in CSS. */
 
-/* ── Shared cursor + transition ── */
+/* ── Shared cursor + transition + UA reset ──
+   `border: 0` resets the user-agent <button> border (used to live inline in
+   `tabBase`, but inline `border: none` beats external CSS via specificity
+   and was killing the `tab` variant's active-state indicator). Per-variant
+   border rules below add what they need on top of this baseline. */
 
 .bds-tab-bar-item {
+  border: 0;
   transition: opacity var(--duration-fast) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out),

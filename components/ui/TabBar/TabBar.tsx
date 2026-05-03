@@ -55,7 +55,10 @@ const barVariantStyles: Record<TabBarVariant, CSSProperties> = {
   box: { ...barBase, gap: 0 },
 };
 
-/* ── Shared tab base ── */
+/* ── Shared tab base ──
+   Note: UA button border reset lives in `.bds-tab-bar-item` (CSS), NOT here.
+   Inline `border: 'none'` would beat any external `border-bottom` rule via
+   specificity — killing the `tab` variant's per-state active indicator. */
 
 const tabBase: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
@@ -66,7 +69,6 @@ const tabBase: CSSProperties = {
   whiteSpace: 'nowrap',
   cursor: 'pointer',
   background: 'none',
-  border: 'none',
   padding: 0,
   minWidth: 0,
 };
