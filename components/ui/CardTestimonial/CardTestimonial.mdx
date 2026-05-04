@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './CardTestimonial.stories';
 
 <Meta of={Stories} />
 
 # Card testimonial
 
+<ComponentLinks slug="card-testimonial" />
+
 Customer testimonial card with quote, attribution, and optional star rating. Supports brand (colored background) and outlined variants.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -30,23 +29,7 @@ Mixed variant testimonials in a grid layout.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { CardTestimonial } from '@brik/bds';
-
-<CardTestimonial
-  quote="Amazing service and results."
-  authorName="Sarah Chen"
-  authorRole="Owner, Bloom Cafe"
-  rating={5}
-/>
-```

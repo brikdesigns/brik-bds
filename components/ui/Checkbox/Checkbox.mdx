@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Checkbox.stories';
 
 <Meta of={Stories} />
 
 # Checkbox
 
+<ComponentLinks slug="checkbox" />
+
 Themed checkbox with label text for boolean selections. Supports controlled and uncontrolled modes.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -32,26 +31,7 @@ Real-world usage: notification preferences and terms acceptance.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Checkbox } from '@brik/bds';
-
-// Uncontrolled
-<Checkbox label="Accept terms" defaultChecked />
-
-// Controlled
-<Checkbox
-  label="Enable notifications"
-  checked={enabled}
-  onChange={(e) => setEnabled(e.target.checked)}
-/>
-```

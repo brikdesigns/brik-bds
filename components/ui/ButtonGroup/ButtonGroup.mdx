@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './ButtonGroup.stories';
 
 <Meta of={Stories} />
 
 # Button group
 
+<ComponentLinks slug="button-group" />
+
 Groups related buttons into a single visual unit. Use for action sets where buttons share context.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,28 +26,7 @@ Real-world usage: dialog actions, destructive confirmations, and form footers.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { ButtonGroup, Button } from '@brik/bds';
-
-// Horizontal group (default)
-<ButtonGroup>
-  <Button variant="primary">Save</Button>
-  <Button variant="secondary">Cancel</Button>
-</ButtonGroup>
-
-// Vertical group
-<ButtonGroup orientation="vertical">
-  <Button variant="primary" fullWidth>Sign up</Button>
-  <Button variant="outline" fullWidth>Log in</Button>
-</ButtonGroup>
-```

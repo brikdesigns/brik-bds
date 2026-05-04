@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Counter.stories';
 
 <Meta of={Stories} />
 
 # Counter
 
+<ComponentLinks slug="counter" />
+
 Numeric count indicator with status colors. Pill-shaped badge for notification counts, item quantities, and step indicators.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -34,25 +33,7 @@ Real-world notification count compositions.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Counter } from '@brik/bds';
-
-// Basic counter
-<Counter count={5} status="success" />
-
-// Sizes
-<Counter count={3} status="error" size="md" />
-
-// Max overflow
-<Counter count={150} max={99} status="progress" size="lg" />
-```

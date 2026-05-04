@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Divider.stories';
 
 <Meta of={Stories} />
 
 # Divider
 
+<ComponentLinks slug="divider" />
+
 Visual separator for content sections. Supports horizontal and vertical orientations with configurable spacing.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -32,29 +31,7 @@ Real-world usage: content sections and toolbar separators.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Divider } from '@brik/bds';
-
-// Basic horizontal divider
-<Divider />
-
-// With spacing
-<Divider spacing="lg" />
-
-// Vertical in a flex row
-<div style={{ display: 'flex', alignItems: 'center' }}>
-  <span>Left</span>
-  <Divider orientation="vertical" spacing="md" />
-  <span>Right</span>
-</div>
-```

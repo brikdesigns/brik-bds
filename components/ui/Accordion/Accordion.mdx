@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Accordion.stories';
 
 <Meta of={Stories} />
 
 # Accordion
 
+<ComponentLinks slug="accordion" />
+
 Collapsible content sections for FAQs, settings panels, and grouped information. Each item has a title trigger and expandable content area with plus/minus icons.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -32,30 +31,7 @@ Real-world usage: FAQ sections and settings panels.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Accordion } from '@brik/bds';
-
-// Basic FAQ
-<Accordion
-  items={[
-    { id: '1', title: 'Question one', content: 'Answer one' },
-    { id: '2', title: 'Question two', content: 'Answer two' },
-  ]}
-/>
-
-// Allow multiple open
-<Accordion items={items} allowMultiple defaultOpenItems={['1', '3']} />
-
-// Controlled
-<Accordion items={items} openItems={openIds} onOpenChange={setOpenIds} />
-```
