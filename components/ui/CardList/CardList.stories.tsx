@@ -187,6 +187,61 @@ export const HorizontalFitContent: Story = {
   ),
 };
 
+/* ─── Patterns ───────────────────────────────────────────────── */
+
+/** @summary Common usage patterns */
+export const Patterns: Story = {
+  render: () => (
+    <Stack>
+      <SectionLabel>Service grid (3-column horizontal)</SectionLabel>
+      <CardList orientation="horizontal" gap="lg">
+        <Card variant="outlined" padding="lg">
+          <Badge>Design</Badge>
+          <CardTitle>Brand identity</CardTitle>
+          <CardDescription>Logo, type, and tone — the foundation every campaign builds on.</CardDescription>
+          <CardFooter>
+            <Button variant="outline" size="sm">Learn more</Button>
+          </CardFooter>
+        </Card>
+        <Card variant="outlined" padding="lg">
+          <Badge>Build</Badge>
+          <CardTitle>Web development</CardTitle>
+          <CardDescription>Production sites built on the components your designers already know.</CardDescription>
+          <CardFooter>
+            <Button variant="outline" size="sm">Learn more</Button>
+          </CardFooter>
+        </Card>
+        <Card variant="outlined" padding="lg">
+          <Badge>Run</Badge>
+          <CardTitle>Ongoing partnership</CardTitle>
+          <CardDescription>Iterate after launch with a team that already knows your stack.</CardDescription>
+          <CardFooter>
+            <Button variant="outline" size="sm">Learn more</Button>
+          </CardFooter>
+        </Card>
+      </CardList>
+
+      <SectionLabel>Vertical news stack (in a sidebar)</SectionLabel>
+      <div style={{ width: 360 }}>
+        <CardList orientation="vertical" gap="md">
+          <Card variant="outlined" padding="md">
+            <CardTitle as="h4">Q1 review</CardTitle>
+            <CardDescription>What shipped, what slipped, and what's queued for Q2.</CardDescription>
+          </Card>
+          <Card variant="outlined" padding="md">
+            <CardTitle as="h4">New hires</CardTitle>
+            <CardDescription>Three engineers and a designer joined this month.</CardDescription>
+          </Card>
+          <Card variant="outlined" padding="md">
+            <CardTitle as="h4">Roadmap update</CardTitle>
+            <CardDescription>Two features promoted from Next to Now after customer feedback.</CardDescription>
+          </Card>
+        </CardList>
+      </div>
+    </Stack>
+  ),
+};
+
 /* ─── Gap scale ──────────────────────────────────────────────── */
 
 /** @summary Gap scale */
