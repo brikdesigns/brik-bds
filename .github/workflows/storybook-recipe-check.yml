@@ -1,0 +1,43 @@
+name: Storybook Recipe Check
+
+# Enforces ADR-007 (Storybook component page recipe) on every PR and on every
+# push to main. Fails the build if any `components/ui/*/*.mdx` file deviates
+# from the canonical Title → ComponentLinks → description → Playground →
+# Variants → Patterns → Props shape.
+#
+# Why this is a CI gate (not just pre-commit):
+#   - Pre-commit only runs when an MDX file is staged. CI catches regressions
+#     introduced by surrounding edits (story exports renamed, component dirs
+#     moved) that wouldn't trip the staged-file filter.
+#   - Cloud-agent commits (OpenClaw, scheduled routines) bypass local hooks.
+#   - PRs from forks or fresh clones may not have husky installed.
+#
+# Source of truth: docs/adrs/ADR-007-storybook-page-recipe.md
+# Lint script: scripts/lint-storybook-recipe.js
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  storybook-recipe-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Storybook recipe check
+        run: node scripts/lint-storybook-recipe.js --enforce
