@@ -1,13 +1,14 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './CollapsibleCard.stories';
 
 <Meta of={Stories} />
 
 # Collapsible card
 
-Expandable content section with a clickable header. Use for FAQs, settings panels, and long-form content that benefits from progressive disclosure.
+<ComponentLinks slug="collapsible-card" />
 
----
+Expandable content section with a clickable header. Use for FAQs, settings panels, and long-form content that benefits from progressive disclosure.
 
 ## Playground
 
@@ -25,32 +26,7 @@ Stacked proposal sections in an accordion-style layout.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { CollapsibleCard } from '@brik/bds';
-
-// Basic collapsible card
-<CollapsibleCard
-  sectionLabel="Section 01"
-  title="Overview and Goals"
->
-  <p>Content goes here...</p>
-</CollapsibleCard>
-
-// Initially open
-<CollapsibleCard
-  title="Settings"
-  defaultOpen
->
-  <p>Settings content...</p>
-</CollapsibleCard>
-```

@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Dot.stories';
 
 <Meta of={Stories} />
 
 # Dot
 
+<ComponentLinks slug="dot" />
+
 Small status indicator circles that communicate state through color. Available in six status variants and three sizes.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -34,29 +33,7 @@ Real-world compositions: status lists and activity feeds.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Dot } from '@brik/bds';
-
-// Basic status indicator
-<Dot status="positive" />
-
-// Different sizes
-<Dot size="sm" status="warning" />
-<Dot size="lg" status="error" />
-
-// With label
-<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-  <Dot status="positive" />
-  <span>Online</span>
-</div>
-```

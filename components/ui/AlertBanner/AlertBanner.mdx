@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './AlertBanner.stories';
 
 <Meta of={Stories} />
 
 # Alert banner
 
+<ComponentLinks slug="alert-banner" />
+
 Contextual banner for important messages requiring user attention. Uses a secondary surface background with an icon-only `Badge`, title, description, and optional action.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -31,23 +30,7 @@ Real-world usage: maintenance notices, error recovery, and informational alerts.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { AlertBanner, Button } from '@brik/bds';
-
-<AlertBanner
-  variant="information"
-  title="Update available"
-  description="A new version is ready to install"
-  action={<Button variant="primary" size="sm">Update now</Button>}
-/>
-```

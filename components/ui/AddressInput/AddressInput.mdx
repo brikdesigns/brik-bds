@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './AddressInput.stories';
 
 <Meta of={Stories} />
 
 # Address input
 
+<ComponentLinks slug="address-input" />
+
 Location text input with a location icon and autocomplete suggestion dropdown. Designed for forms that require address or location entry.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -30,36 +29,7 @@ Interactive autocomplete with simulated suggestions. Type in the field to filter
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { AddressInput, type AddressSuggestion } from '@brik/bds';
-import { useState } from 'react';
-
-const [value, setValue] = useState('');
-const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
-
-<AddressInput
-  label="Address"
-  value={value}
-  onChange={(e) => {
-    setValue(e.target.value);
-    fetchSuggestions(e.target.value).then(setSuggestions);
-  }}
-  suggestions={suggestions}
-  onSuggestionSelect={(s) => {
-    setValue(s.label);
-    setSuggestions([]);
-  }}
-  placeholder="Enter location"
-  fullWidth
-/>
-```

@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Avatar.stories';
 
 <Meta of={Stories} />
 
 # Avatar
 
+<ComponentLinks slug="avatar" />
+
 User profile images with automatic fallback to initials. Supports multiple sizes and optional status indicators for presence states.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -32,28 +31,7 @@ Real-world compositions: user lists and stacked avatar groups.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Avatar } from '@brik/bds';
-
-// Initials fallback
-<Avatar name="John Doe" />
-
-// With image
-<Avatar src="/user.jpg" alt="User avatar" name="John Doe" />
-
-// With status
-<Avatar name="Jane Smith" status="online" />
-
-// Different sizes
-<Avatar name="Bob Johnson" size="lg" />
-```
