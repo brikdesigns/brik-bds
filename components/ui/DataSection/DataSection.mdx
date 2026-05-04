@@ -1,15 +1,14 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './DataSection.stories';
 
 <Meta of={Stories} />
 
 # DataSection
 
-Page-side wrapper for a titled block of read-mode data. Pairs a heading-tier title with an optional subtitle and an actions slot (typically a `<ButtonGroup>` holding a `[View]`/`[Edit]` toggle), then yields the body to whatever composes inside — usually a `<FieldGrid>` of `<Field>`s.
+<ComponentLinks slug="data-section" />
 
-The page analog to `<SheetSection>`. Where `SheetSection` uses an uppercase label heading appropriate inside a sheet, `DataSection` uses a real section title in the page outline.
-
----
+Page-side wrapper for a titled block of read-mode data. Pairs a heading-tier title with an optional subtitle and an actions slot, then yields the body to whatever composes inside — usually a `<FieldGrid>` of `<Field>`s. The page analog to `<SheetSection>`.
 
 ## Playground
 
@@ -21,64 +20,16 @@ Title only, title + subtitle, no actions, and a single-button actions slot.
 
 <Canvas of={Stories.Variants} />
 
-## Patterns
-
-The canonical Read-Mode Page composition — several `DataSection`s stacked on a page, each with a `[View]`/`[Edit]` `ButtonGroup` in the actions slot. The third section shows `Field` consuming a paragraph and a `BulletList` as its value — no separate `ParagraphField` or `ListField` component is needed; `Field` accepts any `ReactNode`.
-
-<Canvas of={Stories.ReadModePage} />
-
-## Anatomy — vocabulary
+### Anatomy
 
 <Canvas of={Stories.AnatomyVocabulary} />
 
----
+## Patterns
+
+The canonical Read-Mode Page composition — several `DataSection`s stacked on a page, each with a `[View]`/`[Edit]` `ButtonGroup` in the actions slot.
+
+<Canvas of={Stories.ReadModePage} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import {
-  DataSection,
-  FieldGrid,
-  Field,
-  ButtonGroup,
-  Button,
-  BulletList,
-} from '@brikdesigns/bds';
-
-<DataSection
-  title="Identity"
-  actions={
-    <ButtonGroup>
-      <Button size="sm" variant="secondary" onClick={openInViewMode}>View</Button>
-      <Button size="sm" variant="secondary" onClick={openInEditMode}>Edit</Button>
-    </ButtonGroup>
-  }
->
-  <FieldGrid columns={2}>
-    <Field label="Business Name">{client.name}</Field>
-    <Field label="Industry">{client.industry}</Field>
-    <Field label="Care Philosophy">
-      <p>{client.carePhilosophy}</p>
-    </Field>
-    <Field label="Secondary Categories">
-      <BulletList items={client.secondaryCategories} />
-    </Field>
-  </FieldGrid>
-</DataSection>
-```
-
-## Rules
-
-- **Consecutive DataSections show a divider automatically.** The sibling combinator handles it — do not place a `<Divider />` between DataSections manually. Divider uses `--border-muted` at `--border-width-sm`, matching `<Divider />`.
-- **`title` is a real heading.** Default `<h2>` — it IS part of the page outline. Use `titleAs="h3"` only when nested under an existing `<h2>`.
-- **Title ≠ heading.** The BEM class is `__title` (role); the HTML element (`h2`/`h3`) is picked by outline position, not by the class name. See [Foundations → Vocabulary](?path=/docs/foundation-vocabulary--docs) for the layer distinction.
-- **`actions` is a slot, not a label.** Put a `<ButtonGroup>` or `<Button>` in it. The text on each button is a *button-label* conceptually, even though it passes as `children` today.
-- **Do not nest `DataSection` inside `DataSection`.** If you need internal sub-structure, use `Field` or `FieldGrid` inside the section.
-- **Do not use `DataSection` inside a Sheet.** Use `SheetSection` there — the two are siblings, not substitutes.
-- **Empty per-field content is a `Field` concern.** `Field` renders a "Not set" inline string when its children are empty; don't hand-roll a placeholder inside `DataSection`.

@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './CardControl.stories';
 
 <Meta of={Stories} />
 
 # Card control
 
-Settings control card with badge, title, description, and an action element. Used for toggles, configuration options, and status displays.
+<ComponentLinks slug="card-control" />
 
----
+Settings control card with badge, title, description, and an action slot. Used for toggles, configuration options, and status displays.
 
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -21,9 +20,9 @@ Switch actions, button actions, status badges, and minimal layout.
 
 <Canvas of={Stories.Variants} />
 
-## Action alignment
+### Action alignment
 
-Use `actionAlign="top"` when the description wraps to multiple lines — the CTA anchors to the upper-right corner instead of drifting to the vertical center of the card.
+Use `actionAlign="top"` when the description wraps to multiple lines — the CTA anchors to the upper-right corner instead of drifting to the vertical center.
 
 <Canvas of={Stories.ActionAlignment} />
 
@@ -33,29 +32,12 @@ Settings panel with mixed action types.
 
 <Canvas of={Stories.Patterns} />
 
-## Toggle switch panel
+### Toggle switch panel
 
 Multi-row notification panel using switches with top-aligned actions — a common settings-page layout.
 
 <Canvas of={Stories.ToggleSwitchPanel} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { CardControl, Badge, Switch, Button } from '@brik/bds';
-
-<CardControl
-  title="Notifications"
-  description="Receive email notifications for updates"
-  badge={<Badge size="xs" status="positive" icon={<CheckIcon />} />}
-  action={<Switch checked={enabled} onChange={handleChange} />}
-/>
-```

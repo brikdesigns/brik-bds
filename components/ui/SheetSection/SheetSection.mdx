@@ -1,15 +1,14 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './SheetSection.stories';
 
 <Meta of={Stories} />
 
 # SheetSection
 
+<ComponentLinks slug="sheet-section" />
+
 The named wrapper for a block of content inside a `<Sheet>` body. Pairs an uppercase section heading with its content and locks the vertical rhythm between sections.
-
-Replaces ad-hoc flex-column + raw `<h3>` + `detail.sectionHeading` patterns. Inside a Sheet body, `SheetSection` is the only structural wrapper you should need — compose `Field`, `FieldGrid`, `Card`, `CardList`, `Table`, `TagGroup`, or `BulletList` inside it.
-
----
 
 ## Playground
 
@@ -27,37 +26,6 @@ The canonical "Brand Identity" sheet layout — lead description followed by nam
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { Sheet, SheetSection, Field, FieldGrid } from '@brikdesigns/bds';
-
-<Sheet title="Brand Identity">
-  <SheetSection description="Birdwell & Mutlak presents a bold...">
-    {/* No heading = intro paragraph */}
-  </SheetSection>
-
-  <SheetSection heading="Color Primitives">
-    <FieldGrid columns={4}>
-      <Field label="Gold">#c49a2f</Field>
-      <Field label="Gray">#b0b0b0</Field>
-      <Field label="White">#ffffff</Field>
-      <Field label="Black">#000000</Field>
-    </FieldGrid>
-  </SheetSection>
-</Sheet>
-```
-
-## Rules
-
-- **Headings are uppercase labels**, not headings. They read as "this is the label for the block below."
-- **Don't nest `SheetSection` inside `SheetSection`.** If you need sub-structure, use `Field` or `FieldGrid` inside one section.
-- **No raw `<h3>` / `<h4>` inside a Sheet body.** Use `SheetSection heading=` or `Field label=`.
