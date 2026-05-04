@@ -1,33 +1,34 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './BulletList.stories';
 
 <Meta of={Stories} />
 
 # BulletList
 
-Structured list of short text items — anti-messages, proof points, approved CTAs, brand rules. Replaces the raw `<ul style={{ margin: 0, paddingLeft, listStyleType }}>` pattern used across sheets.
+<ComponentLinks slug="bullet-list" />
 
-Pass `marker="decimal"` for numbered lists; the underlying element switches to `<ol>` automatically.
-
----
+Structured list of short text items — anti-messages, proof points, approved CTAs, brand rules. Pass `marker="decimal"` for numbered lists; the element switches to `<ol>` automatically.
 
 ## Playground
 
 <Canvas of={Stories.Playground} />
 
-## Markers
+## Variants
+
+### Markers
 
 Three marker styles — `disc` (default), `decimal`, `none`.
 
 <Canvas of={Stories.Markers} />
 
-## Density
+### Density
 
 `compact` for tight stat-like lists, `comfortable` (default) for content lists.
 
 <Canvas of={Stories.Density} />
 
-## Inside a Field
+### Inside a Field
 
 The canonical use: a `Field` value expressed as a short bullet list.
 
@@ -39,36 +40,6 @@ Brand rules and proof-points across a sheet body.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { BulletList, Field } from '@brikdesigns/bds';
-
-<Field label="Anti-messages">
-  <BulletList
-    items={[
-      'No price-first positioning',
-      'No corporate-clinic language',
-    ]}
-  />
-</Field>
-
-// Numbered
-<BulletList
-  marker="decimal"
-  items={['First', 'Second', 'Third']}
-/>
-```
-
-## Rules
-
-- **Use `items` prop, not `<li>` children.** Keeps call sites short and prevents accidental markup drift.
-- **Don't use for long prose.** If items run multi-paragraph, you want `<BulletList>` nested inside a `SheetSection`, not standalone.
