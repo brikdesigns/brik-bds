@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Slider.stories';
 
 <Meta of={Stories} />
 
 # Slider
 
+<ComponentLinks slug="slider" />
+
 Range input for selecting a numeric value by dragging. Use for volume controls, price filters, and any setting where approximate selection is acceptable.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -31,13 +30,9 @@ Real-world usage: audio settings panel and budget filter.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
 
 ## CSS Override API
 
@@ -54,28 +49,3 @@ Component-scoped CSS variables exposed on `.bds-slider`. Set on a wrapping eleme
 }
 ```
 
----
-
-## Usage
-
-```tsx
-import { Slider } from '@brik/bds';
-import { useState } from 'react';
-
-const [value, setValue] = useState(50);
-
-// Basic slider
-<Slider label="Volume" value={value} onChange={setValue} showValue />
-
-// Custom range with step
-<Slider
-  label="Price"
-  value={value}
-  onChange={setValue}
-  min={0}
-  max={1000}
-  step={50}
-  size="lg"
-  showValue
-/>
-```

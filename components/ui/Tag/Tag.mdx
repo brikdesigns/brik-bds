@@ -1,32 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Tag.stories';
 
 <Meta of={Stories} />
 
 # Tag
 
+<ComponentLinks slug="tag" />
+
 Categorization labels for classifying records — industry, segment, owner, size. Available in three sizes (`sm`, `md`, `lg`) plus `xs` icon-only.
 
----
-
-## Indicators vs Actions
-
-Tag is an **indicator** — non-interactive. It labels *what a record is*, not *what a user can do*. Never wire `onClick`, never wrap in a link.
-
-| Family | Components | When to use |
-|---|---|---|
-| **Indicator** (display state) | `Badge`, `Tag`, `Dot`, `AlertBanner` | Labeling a record's status, category, or metadata. Read-only. |
-| **Action** (user-initiated) | `Button`, `LinkButton`, `IconButton`, `FilterButton`, `Chip` | Triggering navigation, mutation, filtering, or selection. |
-
-**Tag vs Badge:** Tag is neutral categorization (no status meaning). Badge carries a semantic status color (positive/warning/error/info/progress/brand). Industry=`Dental` → Tag. Status=`Active` → Badge.
-
-**Tag vs Chip:** If the pill is clickable — toggling a filter, dismissing an active filter, opening a dropdown — it's a Chip, not a Tag. Tag's `onRemove` prop is **deprecated** (see Props below) because it contradicts the indicator contract; migrate removable pills to Chip.
-
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -47,38 +31,7 @@ Real-world compositions for categorization and filtering.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Tag } from '@brik/bds';
-import { Icon } from '@iconify/react';
-
-// Basic tag
-<Tag>Category</Tag>
-
-// Sizes
-<Tag size="sm">Small</Tag>
-<Tag size="md">Medium</Tag>
-<Tag size="lg">Large</Tag>
-
-// Left icon
-<Tag icon={<Icon icon="ph:certificate" />}>Featured</Tag>
-
-// Right icon
-<Tag trailingIcon={<Icon icon="ph:x-circle" />}>Dismiss</Tag>
-
-// Removable tag — DEPRECATED (see "Indicators vs Actions" above).
-// Use Chip with onRemove for removable/interactive pills.
-<Tag onRemove={() => console.log('Removed')}>Filter</Tag>
-
-// Disabled tag
-<Tag disabled>Archived</Tag>
-```
