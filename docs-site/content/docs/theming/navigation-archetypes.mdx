@@ -75,6 +75,35 @@ What each archetype is **for** — audience assumptions, conversion intent, and 
 
 **Avoid when:** the audience is in research / comparison mode — they'll need a mega-menu to survey options.
 
+## Drawer patterns
+
+Mobile drawer is a separate axis from archetype — `DRAWER_PATTERN_VALUES` controls how the mobile menu surfaces, independent of the desktop nav shape. Each pattern has its own interaction contract; mixing pieces (e.g. taking the slide animation from one and the scroll model from another) is how the menu becomes janky.
+
+### `fullscreen-overlay`
+
+The default for `editorial-transparent` and `small-business`. The drawer takes over the **entire viewport** — it never renders as a bounded inner-scroll box, never lets the underlying page peek through, and never depends on `--nav-h` calculation timing.
+
+Interaction contract:
+
+- **Layout.** Fixed-position `inset: 0; height: 100dvh; z-index` above the nav bar. Three flex regions: header (logo + close X), scrollable body, sticky footer (utility cluster — Contact + phone). The body has its own padding so the last item is reachable above the sticky footer.
+- **Submenu disclosure.** Tapping a parent link opens its panel inline. No separate chevron toggle, no "first tap opens, second tap navigates" ambiguity. Parent pages are reachable two ways: the matching child card (when child === parent, e.g. About → "The Practice") or the "View all X →" link at the bottom of mega panels.
+- **Panel collapse.** Toggle the `hidden` attribute on the panel — not CSS-only `display: none`, not the `grid-template-rows: 0fr` accordion trick. Both fail in real browsers: the grid trick leaves implicit auto-height rows when the panel has multiple children (e.g. `<ul>` + "View all" link), and CSS-only collapse leaves tabbable links inside the a11y tree even when visually hidden.
+- **Scroll lock.** `body { overflow: hidden }` does not hold on iOS Safari — the documentElement still rubber-bands behind the overlay. Use position-fixing instead: store `window.scrollY`, set `body.style.position = 'fixed'; body.style.top = -scrollY + 'px'`, and restore via `window.scrollTo(0, scrollY)` on close.
+- **Smart-hide pause.** If the site uses `hide-on-scroll-down`, the smart-hide handler must bail while the menu is open (`document.body.classList.contains('nav-menu-open')`) so it can't fight the overlay.
+- **Viewport guard.** If the viewport crosses into ≥768px while the menu is open (orientation change on a tablet), auto-close. Otherwise the body stays scroll-locked while the desktop nav is in use.
+
+**Reference implementation:** `web/birdwell-mutlak/src/components/Nav.astro`.
+
+### `slide-left-panel` / `slide-right-panel`
+
+The drawer slides in from the named side, leaving a visible portion of the underlying page (typically a translucent scrim). Use when the underlying context still matters — task-mode interfaces (search, filter, compare) where the user wants the menu *and* their place on the page.
+
+The same scroll-lock + viewport-guard rules apply. The submenu disclosure model is open: a separate chevron toggle is acceptable here because the drawer width may not afford a full-width tappable parent link.
+
+### `bottom-sheet`
+
+The drawer rises from the bottom edge, typically capped at 60–80% of viewport height with a swipe-down handle. Use when the menu is a secondary navigation surface (e.g. a filter sheet on a listings page) and the primary nav is in a tab bar. Rare for marketing sites.
+
 ## Live pack previews
 
 Each current industry pack with its seeded `navigationIA` rendered as a structural mock + spec table.
