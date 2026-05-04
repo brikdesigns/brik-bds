@@ -1,57 +1,31 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Tooltip.stories';
 
 <Meta of={Stories} />
 
 # Tooltip
 
-Contextual information displayed on hover or focus. Supports four placement positions with arrow indicator.
+<ComponentLinks slug="tooltip" />
 
----
+Contextual information revealed on hover or focus. Four placements with arrow indicator.
 
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
 ## Variants
 
-All placements (`top`, `bottom`, `left`, `right`) and keyboard shortcut content.
+All four placements (`top`, `bottom`, `left`, `right`) plus a keyboard-shortcut example.
 
 <Canvas of={Stories.Variants} />
 
 ## Patterns
 
-Real-world usage: icon button toolbar with tooltips and form help text.
+Real-world usage: icon-button toolbar and form help text.
 
 <Canvas of={Stories.Patterns} />
-
----
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { Tooltip } from '@brik/bds';
-
-// Basic tooltip
-<Tooltip content="This is helpful information">
-  <button>Hover me</button>
-</Tooltip>
-
-// With placement
-<Tooltip content="Appears below" placement="bottom">
-  <button>Hover me</button>
-</Tooltip>
-
-// Icon button with tooltip
-<Tooltip content="Edit item">
-  <button aria-label="Edit">✏️</button>
-</Tooltip>
-```
