@@ -31,6 +31,22 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, stats, and tabs.
  *
+ * ## Tunable spacing
+ *
+ * Four component-scoped CSS variables on `.bds-page-header` let consumers
+ * adjust the internal rhythm without forking the component. Override at any
+ * cascade level (theme file, `globals.css`, `style` prop). Defaults preserve
+ * the lean 0.57.0 shape:
+ *
+ * - `--page-header-section-gap` (default `var(--gap-lg)` = 16px) — between
+ *   root sections (inner / metadata / stats / tabs).
+ * - `--page-header-content-gap` (default `var(--gap-sm)` = 6px) — between
+ *   the title-row and the subtitle.
+ * - `--page-header-actions-gap` (default `var(--gap-sm)` = 6px) — between
+ *   the content column (title + subtitle) and the actions column.
+ * - `--page-header-padding-bottom` (default `0`) — breathing room before the
+ *   bottom divider, useful when the divider sits flush against the title.
+ *
  * @summary Page-level header — title, breadcrumbs, actions, tabs
  */
 export function PageHeader({
