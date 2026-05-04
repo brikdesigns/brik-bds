@@ -110,6 +110,7 @@
     "lint-tokens": "node scripts/lint-tokens.js",
     "lint-tokens:grid": "node scripts/lint-tokens.js --check-grid",
     "lint-jsdoc": "node scripts/lint-jsdoc.js",
+    "lint-storybook-recipe": "node scripts/lint-storybook-recipe.js",
     "audit:grid": "node scripts/audit-grid.js",
     "health": "node scripts/health.js",
     "health:json": "node scripts/health.js --json",

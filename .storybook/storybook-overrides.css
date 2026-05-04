@@ -10,8 +10,33 @@
  *   Doubled IDs (#X#X) boost specificity above emotion's !important rules.
  * - Theme variables come from themes.css (.theme-X selectors on <body>).
  * - Dark mode uses [data-bds-dark="true"] on <body> for CSS branching.
- * - Code blocks use a consistent dark style (VS Code Dark+) regardless of theme.
+ * - Code blocks render dark in both themes (VS Code Dark+ palette).
+ *   Colors are sourced from the --sb-code-* CSS variables defined below
+ *   so changing the palette is one edit instead of forty.
  */
+
+/* ============================================
+   STORYBOOK-SCOPED CHROME TOKENS
+
+   These --sb-* variables are NOT canonical BDS tokens — they're scoped
+   to Storybook's docs chrome and live here, not in figma-tokens.css or
+   gap-fills.css. Per ADR-007 visual contract, code blocks must look
+   polished in every theme without theme-specific overrides; tokenizing
+   the palette is the first step toward that contract.
+   ============================================ */
+.sbdocs {
+  /* Code block surface — VS Code Dark+ background.
+     Same value in both light and dark themes. To go bichromatic in the
+     future, redefine inside body[data-bds-dark="true"] .sbdocs. */
+  --sb-code-block-bg: #1e1e1e;
+  --sb-code-block-text: #d4d4d4;
+  --sb-code-block-border: var(--border-muted, rgba(0, 0, 0, 0.12));
+
+  /* Triple-link header (ADR-007 ComponentLinks block) */
+  --sb-component-links-color: var(--text-muted);
+  --sb-component-links-hover: var(--text-brand-primary);
+  --sb-component-links-sep-color: var(--border-muted);
+}
 
 /* ============================================
    CODE BLOCK STYLING — Unified for all contexts
@@ -24,8 +49,8 @@
    Fallback class selector for pages outside #storybook-docs. */
 #storybook-docs#storybook-docs .docblock-source,
 .docblock-source {
-  background-color: #1e1e1e !important;
-  border: 1px solid var(--border-muted, rgba(0, 0, 0, 0.12)) !important;
+  background-color: var(--sb-code-block-bg) !important;
+  border: 1px solid var(--sb-code-block-border) !important;
   border-radius: 6px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
   margin: 16px 0 24px !important;
@@ -37,8 +62,8 @@
 #storybook-docs#storybook-docs .docblock-source pre.prismjs,
 .docblock-source pre,
 .docblock-source pre.prismjs {
-  background-color: #1e1e1e !important;
-  color: #d4d4d4 !important;
+  background-color: var(--sb-code-block-bg) !important;
+  color: var(--sb-code-block-text) !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
   font-size: 13px !important;
   line-height: 1.5 !important;
@@ -58,7 +83,7 @@
 pre code,
 pre[class*="language-"] code {
   background: transparent !important;
-  color: #d4d4d4 !important;
+  color: var(--sb-code-block-text) !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
   text-shadow: none !important;
   font-size: inherit !important;
@@ -76,8 +101,8 @@ pre,
 .docs-story pre,
 .sb-story pre,
 .prismjs {
-  background-color: #1e1e1e !important;
-  color: #d4d4d4 !important;
+  background-color: var(--sb-code-block-bg) !important;
+  color: var(--sb-code-block-text) !important;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
   border: none !important;
   border-radius: 0 !important;
@@ -92,8 +117,8 @@ pre,
    div[class^="css-"] that directly contains a pre block. */
 #storybook-docs#storybook-docs div[class^="css-"]:has(> pre),
 #storybook-docs#storybook-docs div[class^="css-"]:has(> .docblock-source) {
-  background-color: #1e1e1e !important;
-  border: 1px solid var(--border-muted, rgba(0, 0, 0, 0.12)) !important;
+  background-color: var(--sb-code-block-bg) !important;
+  border: 1px solid var(--sb-code-block-border) !important;
   border-radius: 6px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
   overflow: hidden !important;
@@ -505,11 +530,11 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
 .token.tag { color: #569cd6 !important; background: transparent !important; }
 .token.attr-name { color: #9cdcfe !important; background: transparent !important; }
 .token.attr-value { color: #ce9178 !important; background: transparent !important; }
-.token.punctuation { color: #d4d4d4 !important; background: transparent !important; }
+.token.punctuation { color: var(--sb-code-block-text) !important; background: transparent !important; }
 .token.string { color: #ce9178 !important; background: transparent !important; }
 .token.keyword { color: #c586c0 !important; background: transparent !important; }
 .token.function { color: #dcdcaa !important; background: transparent !important; }
-.token.operator { color: #d4d4d4 !important; background: transparent !important; }
+.token.operator { color: var(--sb-code-block-text) !important; background: transparent !important; }
 .token.comment { color: #6a9955 !important; background: transparent !important; }
 .token.number { color: #b5cea8 !important; background: transparent !important; }
 .token.boolean { color: #569cd6 !important; background: transparent !important; }
@@ -599,4 +624,42 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
   max-width: 980px !important;
   margin: 0 auto !important;
   padding-top: 32px !important;
+}
+
+/* ============================================
+   COMPONENT LINKS — Triple-link header (ADR-007)
+   Rendered by .storybook/blocks/ComponentLinks.tsx,
+   placed immediately after the H1 on every component page.
+   ============================================ */
+
+.sbdocs .sb-component-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: -8px 0 24px !important;
+  padding: 0;
+  font-family: var(--font-family-body, inherit);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.sbdocs .sb-component-links a {
+  color: var(--sb-component-links-color) !important;
+  text-decoration: none;
+  padding: 2px 0;
+  transition: color 150ms ease;
+}
+
+.sbdocs .sb-component-links a:hover,
+.sbdocs .sb-component-links a:focus-visible {
+  color: var(--sb-component-links-hover) !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sbdocs .sb-component-links__sep {
+  color: var(--sb-component-links-sep-color);
+  margin: 0 10px;
+  user-select: none;
 }
