@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Form.stories';
 
 <Meta of={Stories} />
 
 # Form
 
+<ComponentLinks slug="form" />
+
 Structured form container with layout control, error/success messaging, and consistent spacing. Wraps form fields with title, description, and footer actions.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -36,27 +35,7 @@ Real-world usage: interactive feedback form with validation and submission.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Form, TextInput, TextArea, Button } from '@brik/bds';
-
-<Form
-  title="Contact Us"
-  description="We'll get back to you within 24 hours."
-  onSubmit={handleSubmit}
-  footer={<Button type="submit">Send Message</Button>}
->
-  <TextInput label="Name" placeholder="Your name" fullWidth />
-  <TextInput label="Email" type="email" placeholder="you@example.com" fullWidth />
-  <TextArea label="Message" placeholder="How can we help?" fullWidth />
-</Form>
-```

@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Popover.stories';
 
 <Meta of={Stories} />
 
 # Popover
 
+<ComponentLinks slug="popover" />
+
 Floating content panel anchored to a trigger element. Supports click or hover triggering, four placements, and controlled/uncontrolled modes.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,30 +26,7 @@ Real-world usage: notification settings popover with form controls.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Popover } from '@brik/bds';
-
-// Click-triggered popover
-<Popover content={<p>Additional details here</p>}>
-  <button>More info</button>
-</Popover>
-
-// Hover-triggered, top placement
-<Popover
-  content={<p>Tooltip-style content</p>}
-  trigger="hover"
-  placement="top"
->
-  <span>Hover me</span>
-</Popover>
-```

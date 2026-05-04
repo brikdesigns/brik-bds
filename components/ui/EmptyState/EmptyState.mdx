@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './EmptyState.stories';
 
 <Meta of={Stories} />
 
 # Empty state
 
+<ComponentLinks slug="empty-state" />
+
 Placeholder for screens with no data. Use when a list, table, or page has no content to display, guiding users toward their next action.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,29 +26,7 @@ Real-world usage: inbox zero, first-time user, and search with no results.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { EmptyState } from '@brik/bds';
-
-// With action button
-<EmptyState
-  title="No projects yet"
-  description="Create your first project to get started."
-  buttonProps={{ children: 'Create Project', onClick: handleCreate }}
-/>
-
-// Informational only
-<EmptyState
-  title="No results found"
-  description="Try adjusting your search or filters."
-/>
-```

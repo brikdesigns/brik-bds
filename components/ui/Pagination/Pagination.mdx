@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Pagination.stories';
 
 <Meta of={Stories} />
 
 # Pagination
 
+<ComponentLinks slug="pagination" />
+
 Page navigation controls with previous/next arrows, page numbers, and ellipsis for large page counts. Supports left, center, and right alignment.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,25 +26,7 @@ Real-world usage: table pagination with result count.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Pagination } from '@brik/bds';
-
-const [page, setPage] = useState(1);
-
-<Pagination
-  currentPage={page}
-  totalPages={80}
-  onChange={setPage}
-  position="center"
-/>
-```
