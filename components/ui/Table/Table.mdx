@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Table.stories';
 
 <Meta of={Stories} />
 
 # Table
 
+<ComponentLinks slug="table" />
+
 Data table with composable sub-components. Supports sorting, selection, striped rows, size variants, and custom cell content.
 
----
-
 ## Playground
-
-Use the Controls panel to toggle `striped` and `size` props.
 
 <Canvas of={Stories.Playground} />
 
@@ -24,126 +23,12 @@ Size variants, striped rows, sortable headers, and all cell types: icon left, to
 - **`default`** — Compact padding for dense data
 - **`comfortable`** — Generous padding (72px cell height)
 
-Size is set on `Table` via `data-size` attribute. CSS selectors apply padding to all child `<th>` and `<td>` elements automatically — no React context needed.
-
 ## Patterns
 
 Full-featured composite table and striped comfortable layout.
 
 <Canvas of={Stories.Patterns} />
 
----
-
-## Cell Pattern Standards
-
-### Action buttons
-
-Use **`size="sm"`** for all buttons inside table cells — both text buttons and icon buttons.
-
-```tsx
-{/* Text button */}
-<Button variant="primary" size="sm">View</Button>
-
-{/* Icon buttons — always use the IconButton component, never raw <button> */}
-<IconButton variant="primary" size="sm" icon={<Icon icon="ph:pencil-simple" />} label="Edit" />
-<IconButton variant="danger" size="sm" icon={<Icon icon="ph:trash" />} label="Delete" />
-```
-
-Common icon button variants for table actions:
-- **`primary`** — Primary action (edit, open)
-- **`secondary`** — Neutral action (download, copy)
-- **`ghost`** — Low-emphasis action (overflow menu, more options)
-- **`danger`** — Destructive action (delete, remove)
-
-### Text links
-
-Use **`<TextLink size="small">`** for in-cell navigation. Never use raw `<a>` tags or full-size text links in table cells.
-
-```tsx
-{/* Standard text link */}
-<TextLink href="/profile/123" size="small">View profile</TextLink>
-
-{/* Text link with trailing icon (external link, open-in-new, etc.) */}
-<TextLink href="#" size="small" iconAfter={<Icon icon="ph:arrow-square-out" />}>
-  Open
-</TextLink>
-```
-
-**When to use text link vs. button:**
-- **TextLink** — Navigation that takes you somewhere (view profile, open document)
-- **Button** — Actions that change state (approve, assign, archive)
-
-### Tooltip indicators
-
-Wrap info icons in `<Tooltip>` so they reveal context on hover/focus. Use `cursor: help` to signal interactivity.
-
-```tsx
-<Tooltip content="Primary contact email" placement="top">
-  <span style={{ cursor: 'help' }}>
-    <Icon icon="ph:info" />
-  </span>
-</Tooltip>
-```
-
-### Icon-left cells
-
-Pair a 24px icon container with text using `gap: var(--gap-xs)`.
-
-```tsx
-<span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
-  <Icon icon="ph:palette" />
-  Design
-</span>
-```
-
----
-
-## Sub-components
-
-- **`Table`** — `<table>` container with `striped` and `size` props
-- **`TableHeader`** — `<thead>` header section wrapper
-- **`TableBody`** — `<tbody>` body section wrapper
-- **`TableRow`** — `<tr>` row with optional `selected` state
-- **`TableHead`** — `<th>` header cell with optional `sortable` / `sortDirection`
-- **`TableCell`** — `<td>` body cell for data
-
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@brik/bds';
-import { Badge, Button, IconButton } from '@brik/bds';
-import { TextLink } from '@brik/bds';
-import { Icon } from '@iconify/react';
-
-<Table striped size="comfortable">
-  <TableHeader>
-    <TableRow>
-      <TableHead sortable sortDirection="asc">Name</TableHead>
-      <TableHead>Email</TableHead>
-      <TableHead>Status</TableHead>
-      <TableHead>Profile</TableHead>
-      <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    <TableRow>
-      <TableCell>Alice Chen</TableCell>
-      <TableCell>alice@example.com</TableCell>
-      <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
-      <TableCell><TextLink href="#" size="small">View profile</TextLink></TableCell>
-      <TableCell style={{ textAlign: 'right' }}>
-        <IconButton variant="primary" size="sm" icon={<Icon icon="ph:pencil-simple" />} label="Edit" />
-        <IconButton variant="danger" size="sm" icon={<Icon icon="ph:trash" />} label="Delete" />
-      </TableCell>
-    </TableRow>
-  </TableBody>
-</Table>
-```
