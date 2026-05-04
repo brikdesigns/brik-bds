@@ -179,3 +179,46 @@
     background-color: var(--sb-app-bg, white) !important;
   }
 </style>
+
+<!--
+  Stale-chunk reload — recover from "Failed to fetch dynamically
+  imported module" errors caused by deploys that replace the hashed
+  chunk filenames a previously-loaded HTML page references. Mirrors
+  the listener in preview-head.html so both iframes self-heal.
+-->
+<script>
+  (function () {
+    var COOLDOWN_MS = 10000;
+    var STORAGE_KEY = 'sb-chunk-reload-at';
+
+    function shouldReload() {
+      try {
+        var last = parseInt(sessionStorage.getItem(STORAGE_KEY) || '0', 10);
+        if (Date.now() - last < COOLDOWN_MS) return false;
+        sessionStorage.setItem(STORAGE_KEY, String(Date.now()));
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function isChunkLoadError(msg) {
+      if (!msg) return false;
+      return /Failed to fetch dynamically imported module/.test(msg)
+          || /Importing a module script failed/.test(msg)
+          || /Failed to load module script/.test(msg);
+    }
+
+    window.addEventListener('vite:preloadError', function () {
+      if (shouldReload()) window.location.reload();
+    });
+
+    window.addEventListener('unhandledrejection', function (event) {
+      var reason = event && event.reason;
+      var msg = (reason && reason.message) || (typeof reason === 'string' ? reason : '');
+      if (isChunkLoadError(msg) && shouldReload()) {
+        window.location.reload();
+      }
+    });
+  })();
+</script>
