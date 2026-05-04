@@ -1,133 +1,43 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './AddableFieldRowList.stories';
 
 <Meta of={Stories} />
 
 # AddableFieldRowList
 
-Multi-field row collection primitive. Use when the user manages a list where each item has 2+ structured fields (e.g. Name + Purpose + Category, open time + close time + closed-checkbox).
+<ComponentLinks slug="addable-field-row-list" />
 
-Distinct from the rest of the addable family:
+User-managed list of multi-field rows. Render-prop API: consumer supplies the per-row inputs, the list locks the add/remove affordance, grid layout, and empty/max-items behavior. Replaces hand-rolled `display: grid` row tables across the portal.
 
-| Component | Item shape |
-|---|---|
-| [`MultiSelect`](/?path=/docs/components-form-multi-select--docs) | Selected enum values rendered as Tags |
-| [`AddableTextList`](/?path=/docs/components-addables-addable-text-list--docs) | Single string per item (free-form) |
-| [`AddableComboList`](/?path=/docs/components-addables-addable-combo-list--docs) | Single string per item, suggestion-driven |
-| [`AddableEntryList`](/?path=/docs/components-addables-addable-entry-list--docs) | Title + description card |
-| **`AddableFieldRowList`** | **Arbitrary multi-field row** |
+## Playground
 
-Per [ADR-005](../../docs/adrs/ADR-005-addable-field-row-list.md). Replaces three hand-rolled patterns identified in the [2026-Q2 portal addable survey](../../docs/audits/2026-Q2-portal-addable-survey.md).
+<Canvas of={Stories.Playground} />
 
----
+## Variants
 
-## Phone System
+Empty state and max-items state stacked.
 
-Three real-world fields: TextInput + TextInput + Select. Mirrors the Phone System / Other Tools section of the portal's Software sheet.
+<Canvas of={Stories.Variants} />
 
-<Canvas of={Stories.PhoneSystem} />
+## Patterns
 
-## Holiday hours (cross-field disabling)
+Three real-world row shapes — phone-system 3-field, holiday hours with cross-field disabling, and competitive frames with three textareas.
 
-The render-prop API supports cross-field interactions naturally — the consumer reads `row.closed` and conditionally sets `disabled` on the time inputs. No special primitive support needed.
+<Canvas of={Stories.Patterns} />
+
+### Holiday hours (cross-field disabling)
+
+Open / close TextInputs disable when the Closed checkbox is set. Demonstrates that the render-prop API supports cross-field interactions naturally.
 
 <Canvas of={Stories.HolidayHours} />
 
-## Competitive Positioning (3 TextAreas)
+### Competitive frames (3 TextAreas)
 
-Same primitive, taller content. Three TextArea fields per row in a `1fr 1fr 1fr` grid.
+Wider rows that compose three TextAreas — "competitor / gap / copy implication" — used in onboarding strategy sheets.
 
 <Canvas of={Stories.CompetitiveFrames} />
 
-## Empty state + maxItems
-
-When `values.length === 0`, the optional `emptyLabel` shows in place of the row list. When `values.length >= maxItems`, the Add button hides automatically.
-
-<Canvas of={Stories.EmptyAndMaxItems} />
-
----
-
-## API
-
-### Props
+## Props
 
 <ArgTypes of={Stories} />
-
-### Render-prop context
-
-The `children` render-prop receives `{ row, index, update }`:
-
-- **`row: T`** — current row data, typed via the generic `<T>` parameter
-- **`index: number`** — zero-indexed row position
-- **`update: (patch: Partial<T>) => void`** — patches the row, merging into current values
-
-### `columns` prop
-
-CSS `grid-template-columns` value for the field columns. The primitive automatically appends an `auto` track for the per-row remove `IconButton`.
-
-```tsx
-columns="1fr 1fr 160px"   // 2 flexible + 1 fixed-width
-columns="1fr 1fr 1fr"     // 3 equal columns
-columns="1fr"             // single full-width field
-```
-
-### Remove icon
-
-Per-row remove uses `IconButton variant="ghost"` with `ph:dash-circle`. The icon choice carries a semantic distinction (per ADR-005):
-
-- `ph:dash-circle` (this primitive) = **remove from list** (subtract)
-- `ph:x` ([Tag](/?path=/docs/components-indicator-tag--docs) `onRemove`) = **dismiss selection** (close)
-- `ph:trash-fill` (page-level destructive actions) = **delete record** (permanent)
-
----
-
-## Usage
-
-```tsx
-import { AddableFieldRowList, TextInput, Select } from '@brikdesigns/bds';
-
-interface Tool {
-  name: string;
-  purpose: string;
-  category: 'phone' | 'crm' | 'other';
-}
-
-<AddableFieldRowList<Tool>
-  values={tools}
-  onChange={setTools}
-  newRow={() => ({ name: '', purpose: '', category: 'other' })}
-  columns="1fr 1fr 160px"
-  addLabel="Add tool"
-  removeLabel="Remove tool"
->
-  {({ row, update }) => (
-    <>
-      <TextInput
-        value={row.name}
-        onChange={(e) => update({ name: e.target.value })}
-      />
-      <TextInput
-        value={row.purpose}
-        onChange={(e) => update({ purpose: e.target.value })}
-      />
-      <Select
-        options={CATEGORY_OPTIONS}
-        value={row.category}
-        onChange={(e) => update({ category: e.target.value as Tool['category'] })}
-      />
-    </>
-  )}
-</AddableFieldRowList>
-```
-
-## When to use
-
-- The user adds/removes a list of items where **each item has 2+ structured fields**
-- Field types may vary (TextInput, Select, Checkbox, TextArea, etc.) and you want type-safe row data
-- Cross-field interactions are needed (e.g. one field disables another)
-
-## When NOT to use
-
-- Single-string-per-item — use [`AddableTextList`](/?path=/docs/components-addables-addable-text-list--docs) or [`AddableComboList`](/?path=/docs/components-addables-addable-combo-list--docs)
-- Title + description per item — use [`AddableEntryList`](/?path=/docs/components-addables-addable-entry-list--docs)
-- Pick from a fixed enum — use [`MultiSelect`](/?path=/docs/components-form-multi-select--docs) (renders Tags)

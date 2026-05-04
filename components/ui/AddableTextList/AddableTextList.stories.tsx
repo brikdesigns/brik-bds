@@ -170,6 +170,44 @@ export const AntiPatternStructuredContent: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+/** @summary Common usage patterns */
+export const Patterns: Story = {
+  render: () => {
+    return (
+      <div style={{ width: 480 }}>
+        <Stack>
+          <Controlled
+            label="Anti-messages"
+            helperText="Phrases the brand will never use. Press Enter to add."
+            placeholder="e.g. price-first positioning"
+            values={[
+              'No price-first positioning',
+              'No corporate-clinic language',
+              'No fear-based messaging',
+            ]}
+            onChange={() => {}}
+          />
+          <Controlled
+            label="Approved CTAs"
+            helperText="Sanctioned button copy across the marketing site."
+            placeholder="e.g. Book a consultation"
+            values={['Book a consultation', 'Schedule a visit', 'Get started']}
+            onChange={() => {}}
+          />
+          <Controlled
+            label="Compliance-required disclaimers"
+            placeholder="Add a disclaimer"
+            maxItems={3}
+            values={['Results may vary']}
+            onChange={() => {}}
+            helperText="Capped at 3 — Add hides when full."
+          />
+        </Stack>
+      </div>
+    );
+  },
+};
+
 /** @summary All variants side by side */
 export const Variants: Story = {
   render: () => (

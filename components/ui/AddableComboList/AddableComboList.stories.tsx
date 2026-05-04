@@ -125,9 +125,9 @@ const Controlled = (args: React.ComponentProps<typeof AddableComboList>) => {
  * Default — dental services vocabulary, no pre-selected values.
  * Click "Add" then type to filter, or press Enter for a free-form entry.
  *
- * @summary Default rendering
+ * @summary Interactive playground for prop tweaking
  */
-export const Default: Story = {
+export const Playground: Story = {
   name: 'Default',
   args: {
     label: 'Services Offered',
@@ -233,6 +233,49 @@ export const MaxEntriesHit: Story = {
     onChange: fn(),
   },
   render: (args) => <Controlled {...args} />,
+};
+
+/**
+ * Patterns — three real intake fields stacked: services with a controlled
+ * vocabulary plus free-form fallback, payment types pre-populated, and
+ * a strict insurance picker that rejects free-form entries.
+ *
+ * @summary Common usage patterns
+ */
+export const Patterns: Story = {
+  render: () => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: 480 }}>
+        <Controlled
+          label="Services Offered"
+          suggestions={DENTAL_SERVICES}
+          values={['Preventive Care / Cleaning', 'Crowns']}
+          placeholder="Search or add a service…"
+          addLabel="Add Service"
+          helperText="Pick from the catalog or add a custom service."
+          onChange={() => {}}
+        />
+        <Controlled
+          label="Payment Types Accepted"
+          suggestions={DENTAL_PAYMENT_TYPES}
+          values={['CareCredit', 'Visa / Mastercard / Discover', 'Cash']}
+          placeholder="Search payment types…"
+          addLabel="Add Payment Type"
+          onChange={() => {}}
+        />
+        <Controlled
+          label="Insurance Networks"
+          suggestions={DENTAL_INSURANCE}
+          values={['Delta Dental', 'Blue Cross Blue Shield']}
+          strict
+          placeholder="Pick from the network list…"
+          addLabel="Add Network"
+          helperText="Strict — only accepted carriers from the catalog."
+          onChange={() => {}}
+        />
+      </div>
+    );
+  },
 };
 
 // ── Interaction stories ───────────────────────────────────────────────────────
