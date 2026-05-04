@@ -1,0 +1,22 @@
+name: Secret scan
+
+# Why: defense-in-depth for the secret-leak prevention layer shipped 2026-05-04
+# (renew-pms#258 hooks + brik-llm#193 follow-up). Pairs with the local
+# pre-commit gitleaks step added in this same PR.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
