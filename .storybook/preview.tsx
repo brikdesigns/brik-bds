@@ -378,6 +378,7 @@ const preview: Preview = {
             '*',
           ],
           '*',
+          'Deprecated',
         ],
       },
     },
