@@ -61,11 +61,13 @@
   border-bottom: var(--border-width-sm) solid var(--border-secondary);
 }
 
+/* Items reserve the active-indicator's width (--border-width-lg = 4px) as a
+   transparent border on every item — so toggling active doesn't shift layout.
+   Negative margin overlays the item border onto the bar baseline so the
+   active indicator replaces (not stacks under) the divider segment. */
 .bds-tab-bar--tab .bds-tab-bar-item {
-  border-bottom: var(--border-width-sm) solid transparent;
-  /* Negative margin overlays the item border onto the bar baseline so the
-     active indicator replaces (not stacks under) the divider segment. */
-  margin-bottom: calc(-1 * var(--border-width-sm));
+  border-bottom: var(--border-width-lg) solid transparent;
+  margin-bottom: calc(-1 * var(--border-width-lg));
 }
 
 .bds-tab-bar--tab .bds-tab-bar-item[aria-selected="true"] {
