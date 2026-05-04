@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './ProgressBar.stories';
 
 <Meta of={Stories} />
 
 # Progress bar
 
+<ComponentLinks slug="progress-bar" />
+
 Visual indicator showing completion progress. Use for file uploads, multi-step forms, loading states, and any task with measurable progress.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,24 +26,6 @@ Real-world usage: animated loading indicator and multi-step form progress.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { ProgressBar } from '@brik/bds';
-
-<ProgressBar value={35} label="Upload progress" />
-```
-
----
-
-## Accessibility
-
-The component uses `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax`. Provide a `label` prop for screen reader context.
