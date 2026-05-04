@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Dialog.stories';
 
 <Meta of={Stories} />
 
 # Dialog
 
+<ComponentLinks slug="dialog" />
+
 Focused confirmation overlay for user decisions. Simpler than `Modal` — intended for confirm/cancel flows.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -30,28 +29,7 @@ Save-before-leaving and delete confirmation flows.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Dialog } from '@brik/bds';
-import { useState } from 'react';
-
-const [isOpen, setIsOpen] = useState(false);
-
-<Dialog
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  title="Save changes?"
-  description="You have unsaved changes that will be lost."
-  confirmLabel="Save"
-  onConfirm={handleSave}
-/>
-```
