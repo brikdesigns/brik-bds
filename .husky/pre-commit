@@ -64,6 +64,15 @@ else
   echo "No staged component files — skipping token + JSDoc lint."
 fi
 
+# ── Storybook page recipe (ADR-007) ──
+# Whole-repo scan; fires only when a component MDX file is staged so
+# token-only or test-only commits don't pay the cost.
+STAGED_MDX=$(git diff --cached --name-only --diff-filter=ACM -- 'components/ui/**/*.mdx')
+if [ -n "$STAGED_MDX" ]; then
+  echo "Linting Storybook page recipe (ADR-007)..."
+  node scripts/lint-storybook-recipe.js --enforce
+fi
+
 # Typecheck always runs (fast, catches real errors)
 npm run typecheck
 
