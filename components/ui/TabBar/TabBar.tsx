@@ -51,7 +51,12 @@ const barVariantStyles: Record<TabBarVariant, CSSProperties> = {
   // `tab` variant baseline border lives in TabBar.css so external CSS
   // (e.g. PageHeader's `:has(.bds-page-header__tabs)` rule) can suppress
   // it without fighting inline-style specificity.
-  tab: { ...barBase, gap: 'var(--gap-md)' },
+  // align-items is flex-end so each item's bottom edge coincides with the
+  // bar's content-box bottom — required for the negative-margin overlap on
+  // `.bds-tab-bar-item` to actually cap the bar baseline. With the default
+  // `center` alignment items float mid-bar and the active indicator renders
+  // in a separate band below the baseline.
+  tab: { ...barBase, alignItems: 'flex-end', gap: 'var(--gap-xl)' },
   box: { ...barBase, gap: 'var(--gap-md)' },
 };
 
