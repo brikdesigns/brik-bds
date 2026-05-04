@@ -27,8 +27,8 @@ const onboardingSteps: ProgressStep[] = [
   { label: 'Review & confirm', description: 'Review your selections' },
 ];
 
-/** @summary Default rendering */
-export const Default: Story = {
+/** @summary Interactive playground for prop tweaking */
+export const Playground: Story = {
   args: {
     steps: proposalSteps,
     activeStep: 1,
@@ -159,9 +159,11 @@ export const DotsLinear = () => {
 };
 
 /**
+ * @summary Common usage patterns
+ *
  * Non-linear mode (default) allows free navigation to any step.
  */
-export const Interactive = () => {
+export const Patterns = () => {
   const [active, setActive] = useState(0);
 
   return (
