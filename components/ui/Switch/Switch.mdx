@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Switch.stories';
 
 <Meta of={Stories} />
 
 # Switch
 
+<ComponentLinks slug="switch" />
+
 Toggle control for binary on/off states. Available in three sizes with controlled and uncontrolled modes.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -31,26 +30,7 @@ Real-world usage: preferences panel and compact editor settings.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Switch } from '@brik/bds';
-
-// Uncontrolled
-<Switch label="Enable feature" size="lg" defaultChecked />
-
-// Controlled
-<Switch
-  label="Dark mode"
-  checked={darkMode}
-  onChange={(e) => setDarkMode(e.target.checked)}
-/>
-```

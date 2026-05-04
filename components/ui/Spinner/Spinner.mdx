@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Spinner.stories';
 
 <Meta of={Stories} />
 
 # Spinner
 
+<ComponentLinks slug="spinner" />
+
 Circular loading indicator with animated rotation. Theme-colored by default, adapts to current theme context.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -30,25 +29,7 @@ Real-world usage: loading buttons, centered containers, and loading text.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Spinner } from '@brik/bds';
-
-// Small spinner (default)
-<Spinner size="sm" />
-
-// Large spinner
-<Spinner size="lg" />
-
-// Custom colors for dark backgrounds
-<Spinner size="sm" style={{ borderColor: 'rgba(255,255,255,0.3)', borderTopColor: 'white' }} />
-```

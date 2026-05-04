@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Skeleton.stories';
 
 <Meta of={Stories} />
 
 # Skeleton
 
+<ComponentLinks slug="skeleton" />
+
 Content placeholder with shimmer animation for loading states. Maintains layout and reduces perceived load time.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -31,25 +30,7 @@ Real-world loading states: article cards and comment lists.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Skeleton } from '@brik/bds';
-
-// Text line
-<Skeleton variant="text" width="200px" />
-
-// Avatar placeholder
-<Skeleton variant="circular" width={48} height={48} />
-
-// Image placeholder
-<Skeleton variant="rectangular" width="300px" height="200px" />
-```

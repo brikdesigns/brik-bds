@@ -1,13 +1,14 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './PricingCard.stories';
 
 <Meta of={Stories} />
 
 # Pricing card
 
-A pricing tier display card with title, price, features list, and call-to-action. Supports a highlighted state for the recommended plan.
+<ComponentLinks slug="pricing-card" />
 
----
+A pricing tier display card with title, price, features list, and call-to-action. Supports a highlighted state for the recommended plan.
 
 ## Playground
 
@@ -25,39 +26,7 @@ Three-tier pricing grid — the typical side-by-side layout with the middle plan
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { PricingCard } from '@brik/bds';
-import { Badge } from '@brik/bds';
-import { Button } from '@brik/bds';
-
-// Standard pricing card
-<PricingCard
-  title="Professional"
-  price="$49"
-  period="/month"
-  description="For growing businesses."
-  features={['Unlimited projects', 'Priority support']}
-  action={<Button variant="primary" fullWidth>Get started</Button>}
-/>
-
-// Highlighted (recommended) plan
-<PricingCard
-  title="Professional"
-  price="$49"
-  period="/month"
-  badge={<Badge>Most popular</Badge>}
-  features={['Unlimited projects', 'Priority support']}
-  action={<Button variant="primary" fullWidth>Get started</Button>}
-  highlighted
-/>
-```

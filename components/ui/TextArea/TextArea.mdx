@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './TextArea.stories';
 
 <Meta of={Stories} />
 
 # Text area
 
+<ComponentLinks slug="text-area" />
+
 Multi-line text input with configurable rows, resize behavior, and size variants. Use for longer-form text entry like comments, descriptions, and messages.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -38,34 +37,7 @@ Real-world usage: feedback form and compact notes.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { TextArea } from '@brik/bds';
-
-// Basic textarea
-<TextArea placeholder="Enter your text here..." rows={4} />
-
-// With label and helper
-<TextArea
-  label="Notes"
-  placeholder="Enter your message..."
-  helperText="Maximum 500 characters"
-  rows={4}
-  fullWidth
-/>
-
-// Error state
-<TextArea label="Description" error="This field is required" rows={3} fullWidth />
-
-// No resize
-<TextArea placeholder="Fixed size" rows={4} resize="none" />
-```

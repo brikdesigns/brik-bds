@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './TabBar.stories';
 
 <Meta of={Stories} />
 
 # Tab bar
 
+<ComponentLinks slug="tab-bar" />
+
 Horizontal tab navigation with four style variants: text, text-underline, tab (bordered bar), and box (filled). Supports on-color backgrounds and disabled tabs.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -32,29 +31,7 @@ Real-world usage: settings page navigation and content filter tabs.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { TabBar } from '@brik/bds';
-
-// Basic tab bar
-<TabBar
-  variant="tab"
-  items={[
-    { label: 'Overview', active: true, onClick: () => setTab('overview') },
-    { label: 'Billing', onClick: () => setTab('billing') },
-    { label: 'Security', onClick: () => setTab('security') },
-  ]}
-/>
-
-// On dark background
-<TabBar variant="text" onColor items={[...]} />
-```
