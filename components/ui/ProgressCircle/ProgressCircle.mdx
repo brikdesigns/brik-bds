@@ -1,47 +1,48 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './ProgressCircle.stories';
 
 <Meta of={Stories} />
 
 # Progress circle
 
-Circular progress indicator. Third primitive in the Progress family alongside [`<ProgressBar>`](?path=/docs/components-feedback-progress-bar--docs) (linear) and [`<ProgressStepper>`](?path=/docs/components-feedback-progress-stepper--docs) (multi-step). Use for compact dashboards, completion meters, and any single-value progress display where a circle reads better than a bar.
+<ComponentLinks slug="progress-circle" />
 
----
+Circular progress indicator. Use for compact dashboards, completion meters, and any single-value progress display where a circle reads better than a bar.
 
 ## Playground
 
-Use the Controls panel to explore all props interactively.
-
 <Canvas of={Stories.Playground} />
 
-## Sizes
+## Variants
+
+### Sizes
 
 Three diameter presets — `sm` 64px, `md` 96px, `lg` 128px. All snap to the 4-point grid.
 
 <Canvas of={Stories.Sizes} />
 
-## Statuses
+### Statuses
 
 The `status` prop maps to canonical Brik status tokens — `default` brand fill, `positive`, `warning`, `negative`.
 
 <Canvas of={Stories.Statuses} />
 
-## Matrix
+### Matrix
 
 Every `size × status` combination.
 
 <Canvas of={Stories.Matrix} />
 
-## Custom center
+### Custom center
 
 The `showValue` prop accepts a `ReactNode` for arbitrary centered content — pair a percentage with a sub-label, or render a streak counter.
 
 <Canvas of={Stories.CustomCenter} />
 
-## Indeterminate
+### Indeterminate
 
-Set `indeterminate` for continuous spin when progress is unknown. Honors `prefers-reduced-motion` — spin halts when the user opts out.
+Set `indeterminate` for continuous spin when progress is unknown. Honors `prefers-reduced-motion`.
 
 <Canvas of={Stories.Indeterminate} />
 
@@ -51,53 +52,6 @@ Animated determinate fill plus a dashboard widget composing the percentage with 
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { ProgressCircle } from '@brikdesigns/bds';
-
-// Basic — percentage centered
-<ProgressCircle value={72} showValue label="Onboarding completion" />
-
-// Status fill
-<ProgressCircle value={100} status="positive" showValue />
-
-// Custom centered slot
-<ProgressCircle
-  value={68}
-  size="lg"
-  showValue={<div>...</div>}
-  label="Quarter progress"
-/>
-
-// Indeterminate spinner
-<ProgressCircle value={0} indeterminate label="Loading" />
-```
-
----
-
-## Accessibility
-
-- Renders `role="progressbar"` with `aria-valuenow` (omitted when `indeterminate`), `aria-valuemin=0`, `aria-valuemax=100`.
-- Pass a `label` prop — required for screen-reader context. The visual `showValue` content is `aria-hidden` via the inner SVG.
-- `aria-busy` is set on the indeterminate variant.
-- The continuous-spin animation respects `prefers-reduced-motion: reduce`.
-
----
-
-## When to use which Progress primitive
-
-| Need | Component |
-|------|-----------|
-| Single value, horizontal layout, narrow track | `<ProgressBar>` |
-| Single value, compact circular widget | `<ProgressCircle>` |
-| Multiple discrete steps with labels | `<ProgressStepper variant="steps">` |
-| Multiple steps, no labels (carousel, mobile) | `<ProgressStepper variant="dots">` |
