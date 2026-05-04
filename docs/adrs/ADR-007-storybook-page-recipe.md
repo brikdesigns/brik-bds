@@ -1,11 +1,11 @@
 # ADR-007 — Storybook component page recipe
 
-**Status:** Proposed
+**Status:** Accepted (2026-05-04)
 **Date:** 2026-05-04
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
-**Related:** ADR-006 (story taxonomy + shape, in flight on `task/storybook-shape-migration-wip`); [`docs/STORYBOOK-WRITING-GUIDE.md`](../STORYBOOK-WRITING-GUIDE.md); [`.storybook/CONTENT-GUIDE.md`](../../.storybook/CONTENT-GUIDE.md)
+**Related:** [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) (sidebar taxonomy + per-file story shape — the story-shape peer to this page-recipe ADR); [`docs/STORYBOOK-WRITING-GUIDE.md`](../STORYBOOK-WRITING-GUIDE.md); [`.storybook/CONTENT-GUIDE.md`](../../.storybook/CONTENT-GUIDE.md)
 
 ## Context
 
@@ -72,8 +72,8 @@ Define a normative **component page recipe** and codify it as ADR-007. New compo
 
 ```mdx
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './{Component}.stories';
-import { ComponentLinks } from '@/.storybook/blocks/ComponentLinks';
 
 <Meta of={Stories} />
 
@@ -211,17 +211,90 @@ Files outside `components/ui/` that exist as MDX in Storybook today:
 
 ## Implementation plan — phased, one PR per phase
 
-This ADR is one PR (this one). The actual rollout is sequenced:
+This ADR was one PR. The actual rollout was sequenced:
 
 **Phase 1 — `<ComponentLinks>` block + visual contract.** New `.storybook/blocks/ComponentLinks.tsx` rendering the triple-link header. Reduce `storybook-overrides.css` `!important`-soup where the visual contract conflicts. Replace hardcoded `#1e1e1e` code-block background with a token-driven approach. Verify against Client Sim theme. Single PR; no MDX touched yet.
 
 **Phase 2 — gold-standard reference component.** Migrate **Tooltip** to the full recipe end-to-end. Tooltip is chosen because it's the screenshot the user flagged as broken. PR includes the migrated MDX + verification screenshots in light + dark + Client Sim. This becomes the template for Phase 3.
 
-**Phase 3 — batch migration.** Convert remaining `components/ui/*/*.mdx` to the recipe. Suggested batches of 10–15 components per PR, organized by complexity (simple variants first, composite components last). Acceptance criterion below covers the Phase 3 contract.
+**Phase 3 — batch migration.** Convert remaining `components/ui/*/*.mdx` to the recipe. Batches of 9–12 components per PR, ordered by complexity (mechanical strips → narrative-cycle pages → authoring track).
 
-**Phase 4 — narrative stubs.** Replace the seven "Stub" files in the inventory above with one-line redirects. Single PR.
+**Phase 4 — close-out + lint enforcement.** Delete non-recipe-shape MDX (reference catalogs, components-not-yet-ready), wire the lint to `--enforce` in pre-commit + CI.
 
-**Phase 5 (deferred — separate ADR).** Stackblitz `additionalActions`, doctoc-style table-of-contents anchors, per-prop H3 expansion. None are load-bearing for the recipe; defer.
+**Phase 5 (deferred).** Stackblitz `additionalActions`, doctoc-style table-of-contents anchors, per-prop H3 expansion. None are load-bearing for the recipe; defer.
+
+## Implementation reality
+
+What shipped, in order, against the plan above:
+
+| PR | Phase | What |
+|---|---|---|
+| [#428](https://github.com/brikdesigns/brik-bds/pull/428) | 1 | ComponentLinks block, tokenized code-block colors, recipe lint script (informational) |
+| [#429](https://github.com/brikdesigns/brik-bds/pull/429) | 2 | Tooltip — gold standard |
+| [#430](https://github.com/brikdesigns/brik-bds/pull/430) | 3 batch 1 | 12 simplest pages (Accordion, AddressInput, AlertBanner, Avatar, Breadcrumb, ButtonGroup, CardTestimonial, Checkbox, CollapsibleCard, Counter, Divider, Dot) |
+| [#432](https://github.com/brikdesigns/brik-bds/pull/432) | 3 batch 2 | 12 more (Dialog, EmptyState, FileUploader, FilterButton, Footer, Form, Menu, MultiSelect, PageHeader, Pagination, PasswordInput, Popover) |
+| [#433](https://github.com/brikdesigns/brik-bds/pull/433) | 3 batch 3 | 12 (NavBar, PricingCard, Radio, SidebarNavigation, Skeleton, Spinner, Stepper, Switch, TabBar, TextArea, Toast, Select) |
+| [#434](https://github.com/brikdesigns/brik-bds/pull/434) | 3 batch 4 | 9 with broader banned-section strip (Slider, ChecklistItem, CompletionToggle, InteractiveListItem, SegmentedControl, TextInput, Tag, Chip, Badge) |
+| [#435](https://github.com/brikdesigns/brik-bds/pull/435) | 3 batch 5 | 6 narrative-cycle (Card, CardControl, DataSection, Field, Modal, SheetSection — H3 demotion) |
+| [#436](https://github.com/brikdesigns/brik-bds/pull/436) | 3 batch 6 | 4 deeper-narrative (ProgressBar, CatalogPicker, Sheet, Table) |
+| [#437](https://github.com/brikdesigns/brik-bds/pull/437) | 3 batch 7 | 6 needing rename + H3 demotion (Banner, BulletList, Button, FieldGrid, ProgressCircle, TagGroup) |
+| [#438](https://github.com/brikdesigns/brik-bds/pull/438) | 3 batch 8 | 3 via story-export rename (Board, FilterBar, TextLink) |
+| [#440](https://github.com/brikdesigns/brik-bds/pull/440) | 3 batch 9 | 4 with new Patterns stories authored (AddableEntryList, ProgressStepper, BadgeGroup, CardList) |
+| [#441](https://github.com/brikdesigns/brik-bds/pull/441) | 3 batch 10 | 4 with full restructure (AddableTextList, AddableComboList, Meter, AddableFieldRowList) |
+| [#444](https://github.com/brikdesigns/brik-bds/pull/444) | 4 close-out | Delete Icons.mdx, SheetTypography.mdx, Calendar.mdx (canonical content on docs-site or component not ready). Tracking issues [#442](https://github.com/brikdesigns/brik-bds/issues/442) (Calendar) + [#443](https://github.com/brikdesigns/brik-bds/issues/443) (Icons + SheetTypography parity audit). 100% recipe conformance reached. |
+| [#445](https://github.com/brikdesigns/brik-bds/pull/445) | 4 lint | `lint-storybook-recipe.js --enforce` wired into `.husky/pre-commit` + `.github/workflows/storybook-recipe-check.yml` |
+
+Final state: 73 of 76 component dirs carry recipe-conformant MDX (the other 3 either don't need an MDX page in Storybook or gate on component readiness — see #442 / #443). Lint runs on every PR and on every commit that stages a `components/ui/**/*.mdx` file.
+
+## Reconciliation with ADR-006
+
+ADR-006 (sidebar taxonomy + story shape, accepted 2026-04-26) was authored on a parallel timeline and addresses a different layer of the same surface. **Both ADRs apply.** The two-sentence summary of how they fit together:
+
+- **ADR-006** governs `*.stories.tsx` — what stories a component file exports and where it sits in the sidebar.
+- **ADR-007** governs `*.mdx` — the section structure of the docs page that renders alongside the stories.
+
+The collision risk reads from the section names. ADR-006 explicitly bans these as **story export names**: `Variants`, `Tones`, `Patterns`. ADR-007 requires `## Variants` and `## Patterns` as **MDX H2 sections**. Same words, different layers. Read carefully:
+
+| Layer | ADR-007 (MDX) | ADR-006 (stories.tsx) |
+|---|---|---|
+| `## Variants` H2 | **Required** section heading | n/a |
+| `## Patterns` H2 | **Required** section heading | n/a |
+| `export const Variants` | n/a | **Banned** |
+| `export const Tones` | n/a | **Banned** |
+| `export const Patterns` | n/a | **Banned** |
+| `export const Playground` | Referenced via `<Canvas of={Stories.Playground} />` | **Required** |
+| `export const Warning`, `Error`, etc. | Referenced via `<Canvas of={Stories.Warning} />` under `## Variants` H3 sub-section | **Required** (one per meaningful state) |
+
+A new component written under both ADRs looks like this:
+
+```tsx
+// {Component}.stories.tsx — ADR-006-conformant
+export const Playground = ...        // args-driven sandbox
+export const Warning = ...           // per-state, named after the state
+export const Error = ...
+export const Success = ...
+export const OnboardingChecklist = ...   // composition (irreducible — args can't express)
+```
+
+```mdx
+{/* {Component}.mdx — ADR-007-conformant */}
+## Variants
+### Warning
+<Canvas of={Stories.Warning} />
+### Error
+<Canvas of={Stories.Error} />
+### Success
+<Canvas of={Stories.Success} />
+
+## Patterns
+<Canvas of={Stories.OnboardingChecklist} />
+```
+
+Both ADRs satisfied. The recipe lint passes. The story-shape rule passes.
+
+**Existing files (the 73 migrated in Phase 3) are grandfathered.** They carry `Stories.Variants` / `Stories.Patterns` exports that ADR-006 bans for new files. ADR-006 §Migration explicitly waives retroactive cleanup of these — the truce is documented there. New components must not create new violations; existing components keep what Phase 3 produced until / unless someone opens a separate sweep.
+
+**Lint coverage.** ADR-007's recipe lint enforces the MDX side. ADR-006's story-shape lint (banning `Variants` / `Tones` / `Patterns` story exports in *new* files) is a candidate follow-up not yet wired up — see [ADR-006 §Enforcement](./ADR-006-storybook-taxonomy-and-story-shape.md#enforcement). If you write a new story file with a banned export name today, no script will stop you; PR review is the gate.
 
 ## Out of scope
 
