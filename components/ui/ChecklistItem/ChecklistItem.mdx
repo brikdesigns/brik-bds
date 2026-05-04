@@ -1,9 +1,12 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './ChecklistItem.stories';
 
 <Meta of={Stories} />
 
 # ChecklistItem
+
+<ComponentLinks slug="checklist-item" />
 
 Row-style completion control. Combines `CompletionToggle`'s circular visual with a native `<label>` + `<input type="checkbox">`, so the **entire row is the click target**. Native `Space` / `Enter` toggle for free; no manual `onKeyDown` needed.
 
@@ -12,8 +15,6 @@ When checked, the label gets `text-decoration: line-through` and a muted color, 
 **Distinct from `Checkbox`.** Same shape (label + box + click handler), different visual + semantics. Use `ChecklistItem` for completion-state on units of work — task checklists, clinical procedures, compliance checks. Use `Checkbox` for form selections — multi-select filters, "I agree to terms," settings toggles. The visual difference (circle vs. square) matches the semantic difference.
 
 For card chrome where the toggle stands alone (the rest of the card is a different click target), use `CompletionToggle` instead — `ChecklistItem` is specifically the row composition.
-
----
 
 ## Playground
 
@@ -33,44 +34,7 @@ For card chrome where the toggle stands alone (the rest of the card is a differe
 
 A daily-maintenance checklist inside a task sheet — the canonical use case in a clinical PMS. The completion bg + strikethrough makes done vs. not-done glanceable at the row level; the running `n of N completed` counter sits above the list.
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { ChecklistItem } from '@brikdesigns/bds';
-
-// Controlled
-<ChecklistItem
-  label="Restock surgical gloves"
-  checked={item.completed}
-  onCheckedChange={(next) => save(item.id, next)}
-/>
-
-// Disabled while save is in flight
-<ChecklistItem
-  label={item.label}
-  checked={item.completed}
-  onCheckedChange={...}
-  disabled={saving}
-/>
-```
-
-## When to use
-
-- Task checklist items inside a task sheet
-- Clinical procedure steps that staff complete in order
-- Compliance checks (regulatory + safety) that need to be marked done
-- Anywhere a discrete unit of work has a "done / not done" state and the entire row should be the click target
-
-## When not to use
-
-- Form selections / multi-select / "I agree to terms" → use `Checkbox`
-- Card-chrome toggle (e.g. mark-complete on a board card) → use `CompletionToggle`
-- Clinical attestation / sign-off requiring initials + timestamp → wait for the dedicated attestation primitive
