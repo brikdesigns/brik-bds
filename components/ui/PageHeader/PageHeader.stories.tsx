@@ -274,3 +274,65 @@ export const Patterns: Story = {
     );
   },
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   4. TUNABLE SPACING — component-scoped CSS variables
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * @summary Demonstrates the four CSS variables that tune internal rhythm —
+ * defaults vs a roomier override (matching renew-pms's tuning).
+ */
+export const TunableSpacing: Story = {
+  render: () => {
+    return (
+      <Stack gap="var(--gap-huge)">
+        {/* Defaults */}
+        <div>
+          <SectionLabel>Defaults — gap-sm content gap, 0 divider padding</SectionLabel>
+          <PageHeader
+            title="Default Header"
+            subtitle="Title↔subtitle gap = 6px (gap-sm). Subtitle sits flush above the divider."
+            actions={<Button variant="primary" size="sm">Action</Button>}
+          />
+        </div>
+
+        {/* Tuned for clinical density (renew-pms) */}
+        <div>
+          <SectionLabel>Tuned — wider content gap + divider breathing room</SectionLabel>
+          <PageHeader
+            title="Tuned Header"
+            subtitle="Title↔subtitle gap bumped to 12px; 16px breathing room before the divider."
+            actions={<Button variant="primary" size="sm">Action</Button>}
+            style={{
+              // bds-lint-ignore — component-scoped CSS variables, not design tokens
+              ['--page-header-content-gap' as string]: 'var(--padding-sm)',
+              ['--page-header-padding-bottom' as string]: 'var(--padding-md)',
+            }}
+          />
+        </div>
+
+        {/* Even roomier — shows the full knob set */}
+        <div>
+          <SectionLabel>Roomy — all four knobs at the higher end</SectionLabel>
+          <PageHeader
+            title="Roomy Header"
+            subtitle="Each gap stepped up one tier — useful for marketing-shaped pages with breathing room."
+            tabs={<TabBar variant="tab" items={[
+              { label: 'Overview', active: true, onClick: () => {} },
+              { label: 'Settings', active: false, onClick: () => {} },
+            ]} />}
+            actions={<Button variant="primary" size="sm">Action</Button>}
+            style={{
+              // bds-lint-ignore — component-scoped CSS variables, not design tokens
+              ['--page-header-section-gap' as string]: 'var(--gap-xl)',
+              ['--page-header-content-gap' as string]: 'var(--gap-md)',
+              ['--page-header-actions-gap' as string]: 'var(--gap-md)',
+              ['--page-header-padding-bottom' as string]: 'var(--padding-md)',
+            }}
+          />
+        </div>
+      </Stack>
+    );
+  },
+};

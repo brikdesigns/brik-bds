@@ -2,14 +2,22 @@
 /* ─── PageHeader ─────────────────────────────────────────────── */
 
 .bds-page-header {
+  /* ─── Component-scoped override surface ──────────────────────────
+     Consumers can tune these via cascade (theme file, globals.css, or
+     a per-instance style prop) to dial in the right rhythm without
+     forking the component. Defaults preserve the lean 0.57.0 shape. */
+  --page-header-section-gap: var(--gap-lg);     /* between root sections (inner/metadata/stats/tabs) */
+  --page-header-content-gap: var(--gap-sm);     /* between title-row and subtitle */
+  --page-header-actions-gap: var(--gap-sm);     /* between content column and actions column */
+  --page-header-padding-bottom: 0;              /* breathing room before the bottom divider */
+
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--page-header-section-gap); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  /* No internal padding — the page header is a structural container.
-     Consumers control surrounding spacing via their own layout. */
+  padding-bottom: var(--page-header-padding-bottom); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   /* Single 1px divider hands the page header off to the body. When the `tabs`
      slot is filled, TabBar's own baseline takes over (suppressed below) so we
      don't stack two borders. */
@@ -25,7 +33,7 @@
 
 .bds-page-header__inner {
   display: flex;
-  gap: var(--gap-sm);
+  gap: var(--page-header-actions-gap); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   align-items: flex-start;
   width: 100%;
 }
@@ -36,7 +44,7 @@
   display: flex;
   flex: 1 0 0;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--page-header-content-gap); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   align-items: flex-start;
   justify-content: center;
   min-width: 0;
