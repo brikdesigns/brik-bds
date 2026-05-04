@@ -174,6 +174,8 @@ The MCP addon (`@storybook/addon-mcp`) exposes the full BDS component library as
 
 **MCP unreachable?** If `get-storybook-story-instructions` fails (Storybook not running, connection refused), read the cached fallback at [`docs/STORYBOOK-WRITING-GUIDE.md`](docs/STORYBOOK-WRITING-GUIDE.md). This mirrors the MCP output and is kept in sync — if you call the MCP later and its content differs, update the cached file in the same PR.
 
+**Story shape + sidebar taxonomy:** see [ADR-006](docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) for the full rules. Two story shapes per file (`Playground` + one-story-per-state, args-driven); four sidebar top-levels (`Foundations` / `Components` / `Patterns` / `Theming` plus `Overview` and `Deprecated`). No `Variants` / `Tones` / `Patterns` gallery buckets inside component story files.
+
 ### Shared autostart helper
 
 [`scripts/ensure-storybook.sh`](scripts/ensure-storybook.sh) is the source of truth for the Storybook autostart logic used by every BDS-consumer's `session-guard.sh` hook (portal, renew-pms, brikdesigns). Each consumer pipes its Claude Code `tool_input` JSON into this helper on stdin; if the edit targets a UI file and Storybook isn't listening on `:6006`, the helper launches it in the background.
