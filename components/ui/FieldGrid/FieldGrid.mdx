@@ -1,29 +1,30 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './FieldGrid.stories';
 
 <Meta of={Stories} />
 
 # FieldGrid
 
-Equal-column grid for laying out `Field` components side by side. Replaces the inline `display: grid; gridTemplateColumns: '1fr 1fr'` pattern scattered across portal sheets.
+<ComponentLinks slug="field-grid" />
 
-Accepts any children — `Field` is the primary case, but `Card`, `Tag`, or any equal-weight row content works too (e.g. color-primitive swatches, stat tiles).
-
----
+Equal-column grid for laying out `Field` components side by side. Accepts any children — `Field` is the primary case, but `Card`, `Tag`, or any equal-weight row content works too.
 
 ## Playground
 
 <Canvas of={Stories.Playground} />
 
-## Columns
+## Variants
+
+### Columns
 
 `columns` locks to `2`, `3`, or `4`. No custom column templates — if you need something else, you're composing the wrong primitive.
 
 <Canvas of={Stories.Columns} />
 
-## Stat tiles
+### Stat tiles
 
-Wrapping each grid cell in a `<Card variant="outlined">` gives you the stat-tile pattern (e.g. Content Scrape's SOURCE / SCRAPED / FAILED tiles).
+Wrapping each grid cell in a `<Card variant="outlined">` produces the stat-tile pattern.
 
 <Canvas of={Stories.StatTiles} />
 
@@ -33,34 +34,6 @@ Typical 2-column entity detail grid.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { FieldGrid, Field, Card } from '@brikdesigns/bds';
-
-// 2-column field grid
-<FieldGrid>
-  <Field label="Owner">Nick Stanerson</Field>
-  <Field label="Status">Active</Field>
-</FieldGrid>
-
-// 3-column stat tiles
-<FieldGrid columns={3} gap="md">
-  <Card variant="outlined"><Field label="Scraped">8</Field></Card>
-  <Card variant="outlined"><Field label="Failed">12</Field></Card>
-  <Card variant="outlined"><Field label="Source">birdwelldentist.com</Field></Card>
-</FieldGrid>
-```
-
-## Rules
-
-- **No custom columns.** If you need 5 cells or variable widths, you're reaching for the wrong primitive — use `Table`.
-- **All children must be equal-weight.** Don't mix a tall card with a single-line Field in the same grid.

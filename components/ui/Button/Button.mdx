@@ -1,21 +1,20 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Button.stories';
 
 <Meta of={Stories} />
 
 # Button
 
-Triggers an event or action. The button family includes three components for different semantic needs.
+<ComponentLinks slug="button" />
 
----
+Triggers an event or action. The button family includes three components for different semantic needs: `Button` for in-page actions, `LinkButton` for URL navigation, `IconButton` for icon-only triggers.
 
 ## Playground
 
-Use the Controls panel to explore all props interactively.
-
 <Canvas of={Stories.Playground} />
 
-## Variants and sizes
+## Variants
 
 Seven variants across three sizes. Standard variants for general actions, danger variants for destructive actions.
 
@@ -29,48 +28,35 @@ Seven variants across three sizes. Standard variants for general actions, danger
 - **`danger-outline`** — Destructive with less emphasis.
 - **`danger-ghost`** — Destructive, minimal emphasis (inline delete).
 
-## Icons
+### Icons
 
 Use `iconBefore` and `iconAfter` props. Icons should use `1em` sizing to scale with the button.
 
 <Canvas of={Stories.Icons} />
 
-## Interactive states
+### Interactive states
 
 Hover, focus, active, disabled, and loading states. Each variant has custom hover behavior.
 
 <Canvas of={Stories.States} />
 
-## Loading
+### Loading
 
 Spinner replaces content while preserving button width. Button is disabled during loading.
 
 <Canvas of={Stories.Loading} />
 
-## LinkButton
+### LinkButton
 
-An `<a>` element styled as a button. Use when the action navigates to a URL. The `href` prop is required.
+An `<a>` element styled as a button. Use when the action navigates to a URL — `href` is required.
 
 <Canvas of={Stories.Link} />
 
-```tsx
-import { LinkButton } from '@brik/bds';
-
-<LinkButton href="/docs" variant="outline">Read docs</LinkButton>
-```
-
-## IconButton
+### IconButton
 
 An icon-only button with a required `label` prop for accessibility.
 
 <Canvas of={Stories.IconOnly} />
-
-```tsx
-import { IconButton } from '@brik/bds';
-
-<IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />
-<IconButton icon={<TrashIcon />} label="Delete item" variant="danger-ghost" />
-```
 
 ## Patterns
 
@@ -78,56 +64,13 @@ Real-world compositions for common button use cases.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
-
-### Button
 
 <ArgTypes of={Stories} />
 
-### LinkButton
-
-- **`href`** `string` *required* — Link destination.
-- **`variant`** `ButtonVariant` — Visual style variant. Default `'primary'`.
-- **`size`** `ButtonSize` — Button size. Default `'md'`.
-- **`fullWidth`** `boolean` — Full width. Default `false`.
-- **`iconBefore`** `ReactNode` — Icon before text.
-- **`iconAfter`** `ReactNode` — Icon after text.
-
-### IconButton
-
-- **`icon`** `ReactNode` *required* — The icon to render.
-- **`label`** `string` *required* — Accessible label (`aria-label`).
-- **`variant`** `ButtonVariant` — Visual style variant. Default `'ghost'`.
-- **`size`** `ButtonSize` — Button size. Default `'md'`.
-- **`loading`** `boolean` — Loading state. Default `false`.
-
----
-
-## Usage
-
-```tsx
-import { Button, LinkButton, IconButton } from '@brik/bds';
-
-// Standard action
-<Button variant="primary" size="md">Save changes</Button>
-
-// Navigation
-<LinkButton href="/docs" variant="outline">Documentation</LinkButton>
-
-// Icon-only
-<IconButton icon={<EditIcon />} label="Edit" variant="secondary" />
-
-// Destructive action
-<Button variant="danger">Delete project</Button>
-```
-
----
-
 ## CSS Override API
 
-Component-scoped CSS variables exposed on `.bds-button`. Set these on a wrapping element or directly on the button to override without touching BDS internals.
+Component-scoped CSS variables exposed on `.bds-button`. Set on a wrapping element or directly on the button to override without touching BDS internals.
 
 | Variable | Default | Controls |
 |---|---|---|

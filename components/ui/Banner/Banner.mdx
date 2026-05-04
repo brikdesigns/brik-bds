@@ -1,32 +1,28 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Banner.stories';
 
 <Meta of={Stories} />
 
 # Banner
 
-Full-width contextual banner. One component covers two visual modes via the `tone` prop:
+<ComponentLinks slug="banner" />
 
-- **`tone="announcement"`** (default) — brand-primary surface with inverse text. Use for marketing notices, promotions, and site-wide announcements.
-- **`tone="warning" | "error" | "information"`** — secondary surface with a leading status Badge and `role="alert"`. Replaces the legacy `AlertBanner` component (per [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md)).
-
----
+Full-width contextual banner. `tone="announcement"` (default) renders a brand-primary surface for marketing notices; `tone="warning" | "error" | "information"` renders a secondary surface with a leading status Badge and `role="alert"`.
 
 ## Playground
 
-Use the Controls panel to explore all props interactively.
-
 <Canvas of={Stories.Playground} />
 
-## Announcement variants
+## Variants
 
 Action, title-only, and dismissible configurations on the brand surface.
 
 <Canvas of={Stories.Variants} />
 
-## Status tones
+### Status tones
 
-Information / warning / error tones with leading status Badge.
+Information / warning / error tones with a leading status Badge.
 
 <Canvas of={Stories.Tones} />
 
@@ -36,34 +32,6 @@ Real-world usage: announcements and dismissible notices.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { Banner, Button } from '@brik/bds';
-
-// Announcement
-<Banner
-  title="New feature"
-  description="Check out our latest update"
-  action={<Button variant="secondary" size="sm">Learn more</Button>}
-  onDismiss={() => setVisible(false)}
-/>
-
-// Status alert (replaces AlertBanner)
-<Banner
-  tone="warning"
-  title="Heads up"
-  description="Your trial ends in 7 days."
-  action={<Button size="sm">Upgrade</Button>}
-/>
-```
-
-The standalone `AlertBanner` component is `@deprecated` and slated for deletion in a future major version. Migrate `<AlertBanner variant="warning">` to `<Banner tone="warning">` — same shape, same Badge, same surface.
