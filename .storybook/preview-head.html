@@ -18,3 +18,57 @@
 <!-- Brik DevBar — shared toolbar shell. Loaded here so it's available
      to FeedbackWidget (and future widgets) via window.BrikDevBar. -->
 <script src="/brik-devbar.js"></script>
+
+<!--
+  Stale-chunk reload — recover from "Failed to fetch dynamically
+  imported module" errors caused by deploys that replace the hashed
+  chunk filenames a previously-loaded HTML page references.
+
+  Two listeners:
+  - vite:preloadError — Vite's official signal for failed module
+    preload after a deploy.
+  - unhandledrejection — catches the runtime dynamic-import error
+    that fires after preload bypass (e.g. when navigating between
+    docs pages whose stories were loaded after the manifest staled).
+
+  Reload-loop guard: only reload if the previous reload was more
+  than 10 seconds ago. A real network issue won't be masked into
+  a refresh loop.
+-->
+<script>
+  (function () {
+    var COOLDOWN_MS = 10000;
+    var STORAGE_KEY = 'sb-chunk-reload-at';
+
+    function shouldReload() {
+      try {
+        var last = parseInt(sessionStorage.getItem(STORAGE_KEY) || '0', 10);
+        if (Date.now() - last < COOLDOWN_MS) return false;
+        sessionStorage.setItem(STORAGE_KEY, String(Date.now()));
+        return true;
+      } catch (_) {
+        // sessionStorage unavailable (private mode etc.) — bail without looping
+        return false;
+      }
+    }
+
+    function isChunkLoadError(msg) {
+      if (!msg) return false;
+      return /Failed to fetch dynamically imported module/.test(msg)
+          || /Importing a module script failed/.test(msg)
+          || /Failed to load module script/.test(msg);
+    }
+
+    window.addEventListener('vite:preloadError', function () {
+      if (shouldReload()) window.location.reload();
+    });
+
+    window.addEventListener('unhandledrejection', function (event) {
+      var reason = event && event.reason;
+      var msg = (reason && reason.message) || (typeof reason === 'string' ? reason : '');
+      if (isChunkLoadError(msg) && shouldReload()) {
+        window.location.reload();
+      }
+    });
+  })();
+</script>
