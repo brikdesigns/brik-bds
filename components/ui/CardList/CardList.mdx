@@ -1,65 +1,51 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './CardList.stories';
 
 <Meta of={Stories} />
 
 # CardList
 
-Layout wrapper that stacks any card component (`Card`, `CardTestimonial`, `PricingCard`, `CollapsibleCard`, etc.) in a vertical column or horizontal row. Handles gap, equal column distribution, and wrapping so the card components themselves stay layout-agnostic.
+<ComponentLinks slug="card-list" />
 
----
+Layout primitive for arrays of `Card`. Locks orientation, gap, and width-distribution rules so consumers don't reach for raw `display: grid`.
 
 ## Playground
 
 <Canvas of={Stories.Playground} />
 
-## Vertical
+## Variants
 
-Stacks cards top-to-bottom at full width. Use for feeds, settings lists, or any full-width content column.
+### Vertical
+
+Stacked layout — full-width cards in a column. Use for sidebars, news lists, and compact card stacks.
 
 <Canvas of={Stories.Vertical} />
 
-## Horizontal
+### Horizontal
 
-Lays cards out in a row with equal-width columns by default. Wraps to a new line on narrow viewports.
+Equal-column layout — each card stretches to fill its share of the row. Use for service grids, feature lists, and testimonial rows.
 
 <Canvas of={Stories.Horizontal} />
 
-## Horizontal — fit content
+### Horizontal — fit content
 
-Set `fitContent` when each card declares its own width (e.g. a scrollable product carousel). Items won't stretch to fill the row.
+`fitContent` lets cards size to their own intrinsic width instead of stretching equally.
 
 <Canvas of={Stories.HorizontalFitContent} />
 
-## Gap scale
+### Gap scale
+
+Four locked gap sizes — `sm`, `md`, `lg`, `xl`.
 
 <Canvas of={Stories.GapScale} />
 
----
+## Patterns
+
+Service grid and vertical news stack — recurring CardList compositions.
+
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { CardList, Card, CardTitle, CardDescription } from '@brik/bds';
-
-<CardList orientation="horizontal" gap="lg">
-  <Card variant="outlined" padding="lg">
-    <CardTitle>Design</CardTitle>
-    <CardDescription>Brand and identity.</CardDescription>
-  </Card>
-  <Card variant="outlined" padding="lg">
-    <CardTitle>Development</CardTitle>
-    <CardDescription>Product engineering.</CardDescription>
-  </Card>
-</CardList>
-```
-
-- `orientation` — `'vertical'` (default) or `'horizontal'`
-- `gap` — `'sm' | 'md' | 'lg' | 'xl'` (default `'md'`)
-- `fitContent` — horizontal only; when `true`, items size to their children instead of filling equal columns

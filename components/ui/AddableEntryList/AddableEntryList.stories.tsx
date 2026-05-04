@@ -208,9 +208,9 @@ export const InlineEditText: Story = {
  * Suggestion mode preserves the reveal-form flow (existing entries render as
  * read-only cards; Add opens a staging form).
  *
- * @summary Primary with suggestions
+ * @summary Common usage patterns
  */
-export const PrimaryWithSuggestions: Story = {
+export const Patterns: Story = {
   name: 'Primary With Suggestions',
   args: {
     label: 'Services',
