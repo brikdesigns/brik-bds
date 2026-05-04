@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './FileUploader.stories';
 
 <Meta of={Stories} />
 
 # File uploader
 
+<ComponentLinks slug="file-uploader" />
+
 Drag-and-drop file upload zone with click-to-browse fallback. Supports file type filtering, size limits, multiple files, and error states.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,33 +26,7 @@ Real-world usage: interactive uploader with file list display.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { FileUploader } from '@brik/bds';
-
-// Basic file uploader
-<FileUploader
-  accept=".pdf,.jpg,.png"
-  helperText="PDF, JPG, or PNG up to 10MB"
-  onChange={(files) => handleFiles(files)}
-/>
-
-// With size limit and multiple files
-<FileUploader
-  accept="image/*"
-  multiple
-  maxSize={5 * 1024 * 1024}
-  label="Upload images"
-  helperText="Select one or more images"
-  onChange={(files) => handleFiles(files)}
-/>
-```

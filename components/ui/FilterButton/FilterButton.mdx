@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './FilterButton.stories';
 
 <Meta of={Stories} />
 
 # Filter button
 
+<ComponentLinks slug="filter-button" />
+
 Dropdown filter trigger for filter bars. Displays a pill-shaped button with a chevron that opens a single-select dropdown. Switches to an active (brand) style when a value is selected. Click a selected item again to clear.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,28 +26,7 @@ Real-world usage: interactive filter bar with multiple `FilterButton` components
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { FilterButton } from '@brik/bds';
-
-const [category, setCategory] = useState<string | undefined>();
-
-<FilterButton
-  label="Category"
-  value={category}
-  onChange={setCategory}
-  options={[
-    { id: 'design', label: 'Brand design', icon: <CrownIcon /> },
-    { id: 'marketing', label: 'Marketing', icon: <BullhornIcon /> },
-  ]}
-/>
-```

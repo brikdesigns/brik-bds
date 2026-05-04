@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Menu.stories';
 
 <Meta of={Stories} />
 
 # Menu
 
+<ComponentLinks slug="menu" />
+
 Floating dropdown panel for navigation and action menus. Contains selectable items with optional icons. Closes on outside click or Escape key.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -62,32 +61,7 @@ Pass `description?: string` on a `MenuItemData` to render a second-line descript
 
 When `description` is absent, the item renders as a single-line label (existing behavior, unchanged).
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Menu } from '@brik/bds';
-import { Button } from '@brik/bds';
-
-const [open, setOpen] = useState(false);
-
-<div style={{ position: 'relative' }}>
-  <Button onClick={() => setOpen(!open)}>Options</Button>
-  <Menu
-    isOpen={open}
-    onClose={() => setOpen(false)}
-    items={[
-      { id: '1', label: 'Edit', icon: <EditIcon />, onClick: handleEdit },
-      { id: '2', label: 'Delete', onClick: handleDelete },
-    ]}
-    style={{ top: '100%', left: 0 }}
-  />
-</div>
-```

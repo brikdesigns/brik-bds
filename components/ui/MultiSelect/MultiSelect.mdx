@@ -1,13 +1,14 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './MultiSelect.stories';
 
 <Meta of={Stories} />
 
 # Multi-select
 
-A select dropdown that supports multiple selections. Selected items appear as removable `Tag` chips below the dropdown. Composes `Select` + `Tag`.
+<ComponentLinks slug="multi-select" />
 
----
+A select dropdown that supports multiple selections. Selected items appear as removable `Tag` chips below the dropdown. Composes `Select` + `Tag`.
 
 ## Playground
 
@@ -25,30 +26,7 @@ Project intake form with multiple multi-select fields.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { MultiSelect } from '@brik/bds';
-
-const [selected, setSelected] = useState<string[]>([]);
-
-<MultiSelect
-  label="Services"
-  placeholder="Select services..."
-  options={[
-    { label: 'Brand Design', value: 'brand' },
-    { label: 'Marketing', value: 'marketing' },
-    { label: 'Product Design', value: 'product' },
-  ]}
-  value={selected}
-  onChange={setSelected}
-/>
-```

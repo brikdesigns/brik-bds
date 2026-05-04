@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Footer.stories';
 
 <Meta of={Stories} />
 
 # Footer
 
+<ComponentLinks slug="footer" />
+
 Site-wide footer with logo, navigation columns, social links, and copyright. Supports default and brand color variants.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -30,38 +29,7 @@ Real-world usage: full marketing site footer with services, resources, legal col
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Footer } from '@brik/bds';
-
-<Footer
-  logo={<img src="/logo.svg" alt="Acme" />}
-  tagline="Building better products."
-  columns={[
-    {
-      heading: 'Product',
-      links: [
-        { label: 'Features', href: '/features' },
-        { label: 'Pricing', href: '/pricing' },
-      ],
-    },
-    {
-      heading: 'Company',
-      links: [
-        { label: 'About', href: '/about' },
-        { label: 'Contact', href: '/contact' },
-      ],
-    },
-  ]}
-  copyright="2026 Acme Inc."
-/>
-```

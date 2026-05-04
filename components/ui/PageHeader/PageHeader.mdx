@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './PageHeader.stories';
 
 <Meta of={Stories} />
 
 # Page header
 
+<ComponentLinks slug="page-header" />
+
 Composable page-level header that brings together BDS components: `Breadcrumb`, `Button`, and `TabBar`. No background — inherits from parent context.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -34,32 +33,7 @@ Real-world usage: company detail pages and analytics dashboards.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { PageHeader, Breadcrumb, TabBar, Button, ServiceTag } from '@brik/bds';
-
-// With service icon badge
-<PageHeader
-  title="Website Design"
-  subtitle="Custom web development and design."
-  badge={<ServiceTag category="marketing" variant="icon" serviceName="Custom Standard Web Development and Design" size="lg" />}
-  breadcrumbs={<Breadcrumb items={[{ label: 'Services', href: '/' }, { label: 'Website Design' }]} />}
-  actions={<Button variant="primary">Edit Service</Button>}
-/>
-
-// Without badge
-<PageHeader
-  title="My Account"
-  subtitle="Manage your membership plan."
-  tabs={<TabBar items={[{ label: 'Overview', active: true }, { label: 'Billing' }]} />}
-/>
-```
