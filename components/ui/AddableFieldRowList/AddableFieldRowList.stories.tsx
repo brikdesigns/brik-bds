@@ -16,9 +16,61 @@ const meta: Meta<typeof AddableFieldRowList> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* ─── Story 1: Phone System (3-text + Select) ─────────────────
+/* ─── Playground: simple two-text-field row ───────────────────
+ * Minimal shape — 2 text columns, no Select, no cross-field logic.
+ * Used as the "kick the tires" entry point on the docs page.
+ */
+
+interface Item {
+  label: string;
+  value: string;
+}
+
+/** @summary Interactive playground for prop tweaking */
+export const Playground: Story = {
+  render: () => {
+    const [items, setItems] = useState<Item[]>([
+      { label: 'Phone', value: '(615) 555-0100' },
+      { label: 'Email', value: 'hello@example.com' },
+    ]);
+
+    return (
+      <div style={{ width: 560 }}>
+        <AddableFieldRowList<Item>
+          label="Contact methods"
+          values={items}
+          onChange={setItems}
+          newRow={() => ({ label: '', value: '' })}
+          columns="1fr 1fr"
+          addLabel="Add contact"
+          removeLabel="Remove contact"
+          emptyLabel="No contact methods yet."
+        >
+          {({ row, update }) => (
+            <>
+              <TextInput
+                value={row.label}
+                onChange={(e) => update({ label: e.target.value })}
+                placeholder="e.g. Phone"
+                fullWidth
+              />
+              <TextInput
+                value={row.value}
+                onChange={(e) => update({ value: e.target.value })}
+                placeholder="e.g. (615) 555-0100"
+                fullWidth
+              />
+            </>
+          )}
+        </AddableFieldRowList>
+      </div>
+    );
+  },
+};
+
+/* ─── Patterns: phone-system-style 3-field row ────────────────
  * Mirrors onboarding-software-sheet.tsx — Name + Purpose + Category Select.
- * Demonstrates the typical multi-field row use case.
+ * The canonical multi-field row pattern across the portal.
  */
 
 interface Tool {
@@ -33,8 +85,8 @@ const CATEGORY_OPTIONS = [
   { value: 'other', label: 'Other Tools' },
 ];
 
-/** @summary Phone system */
-export const PhoneSystem: Story = {
+/** @summary Common usage patterns */
+export const Patterns: Story = {
   name: 'Phone System (3 fields)',
   render: () => {
     const [tools, setTools] = useState<Tool[]>([
@@ -220,8 +272,8 @@ interface SimpleNote {
   text: string;
 }
 
-/** @summary Empty and max items */
-export const EmptyAndMaxItems: Story = {
+/** @summary All variants side by side */
+export const Variants: Story = {
   name: 'Empty state + maxItems',
   render: () => {
     const [notes, setNotes] = useState<SimpleNote[]>([]);

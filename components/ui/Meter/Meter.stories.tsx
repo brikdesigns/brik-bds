@@ -57,6 +57,16 @@ const meta: Meta<typeof Meter> = {
 export default meta;
 type Story = StoryObj<typeof Meter>;
 
+/** @summary Interactive playground for prop tweaking */
+export const Playground: Story = {
+  args: {
+    value: 4,
+    max: 10,
+    status: 'warning',
+    label: 'Score',
+  },
+};
+
 // Status variants
 /** @summary Pass */
 export const Pass: Story = {
@@ -186,14 +196,40 @@ export const LabelPositionComparison: Story = {
 };
 
 // All statuses side by side
-/** @summary All statuses */
-export const AllStatuses: Story = {
+/** @summary All variants side by side */
+export const Variants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
       <Meter value={6} max={7} status="positive" label="Pass" />
       <Meter value={4} max={10} status="warning" label="Fair" />
       <Meter value={1} max={5} status="error" label="Fail" />
       <Meter value={0} max={7} status="neutral" label="Pending" />
+    </div>
+  ),
+};
+
+/** @summary Common usage patterns */
+export const Patterns: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--gap-xl)', width: 640 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+        <div style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
+          Onboarding completion
+        </div>
+        <Meter value={3} max={5} status="warning" label="Profile setup" />
+        <Meter value={5} max={5} status="positive" label="Verification" />
+        <Meter value={1} max={4} status="error" label="Billing" />
+        <Meter value={2} max={3} status="warning" label="Team invites" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+        <div style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
+          System health
+        </div>
+        <Meter value={98} max={100} status="positive" label="Uptime" valueSuffix="%" />
+        <Meter value={42} max={100} status="warning" label="Storage used" valueSuffix="%" />
+        <Meter value={87} max={100} status="warning" label="API rate limit" valueSuffix="%" />
+        <Meter value={12} max={100} status="positive" label="Error budget" valueSuffix="%" />
+      </div>
     </div>
   ),
 };
