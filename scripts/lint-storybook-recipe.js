@@ -33,6 +33,11 @@ const path = require('path');
 
 const REQUIRED_SECTIONS = ['## Playground', '## Variants', '## Patterns', '## Props'];
 
+// H2 sections that MUST contain at least one `<Canvas of=...>` somewhere in
+// their body (including H3 sub-sections). Props uses `<ArgTypes>` not
+// `<Canvas>` and is excluded.
+const SECTIONS_REQUIRING_CANVAS = ['## Playground', '## Variants', '## Patterns'];
+
 // Optional sections must, if present, follow `## Props` in this order.
 const OPTIONAL_SECTIONS_AFTER_PROPS = ['## CSS Override API', '## Notes'];
 
@@ -197,6 +202,64 @@ function lintFile(filePath) {
       });
     }
     lastLevel = h.level;
+  }
+
+  // Rule: required H2 sections must contain at least one `<Canvas` reference.
+  // Slices the file by H2 boundaries so a Canvas under a `### Sub-variant` H3
+  // counts toward its parent `## Variants` H2. Props is excluded — it uses
+  // `<ArgTypes>` not `<Canvas>`.
+  const h2Lines = h2s.map((h) => h.line);
+  function bodyOfH2(h2Line) {
+    // h2Line is 1-indexed; section spans from the line after the H2 to the line
+    // before the next H2 (or EOF).
+    const startIdx = h2Line; // skip the H2 line itself (lines is 0-indexed, h2Line is 1-indexed → next line = h2Line)
+    const nextH2Line = h2Lines.find((l) => l > h2Line);
+    const endIdxExclusive = nextH2Line ? nextH2Line - 1 : lines.length;
+    return lines.slice(startIdx, endIdxExclusive).join('\n');
+  }
+
+  for (const required of SECTIONS_REQUIRING_CANVAS) {
+    const h2 = h2s.find((h) => h.text === required);
+    if (!h2) continue; // already flagged by missing-required-section
+    const body = bodyOfH2(h2.line);
+    if (!/<Canvas\b/.test(body)) {
+      violations.push({
+        rule: 'missing-canvas',
+        message: `\`${required}\` has no \`<Canvas>\` block. Required sections must demo at least one story.`,
+        line: h2.line,
+      });
+    }
+  }
+
+  // Rule: every `<Canvas of={Stories.X}>` must reference a real export in the
+  // matching `*.stories.tsx`. Catches stale renames (story exports renamed
+  // without updating MDX) and typos.
+  const componentDir = path.dirname(filePath);
+  const componentName = path.basename(componentDir);
+  const storiesPath = path.join(componentDir, `${componentName}.stories.tsx`);
+  if (fs.existsSync(storiesPath)) {
+    const storiesContent = fs.readFileSync(storiesPath, 'utf8');
+    const exportNames = new Set();
+    const exportRe = /^export const ([A-Z][A-Za-z0-9_]*)\b/gm;
+    let m;
+    while ((m = exportRe.exec(storiesContent)) !== null) {
+      exportNames.add(m[1]);
+    }
+
+    const canvasRefRe = /<Canvas\s+of=\{Stories\.([A-Z][A-Za-z0-9_]*)\}/g;
+    let cm;
+    while ((cm = canvasRefRe.exec(content)) !== null) {
+      const ref = cm[1];
+      if (!exportNames.has(ref)) {
+        // Approximate the line by counting newlines up to the match index.
+        const line = content.slice(0, cm.index).split('\n').length;
+        violations.push({
+          rule: 'canvas-story-missing',
+          message: `\`<Canvas of={Stories.${ref}}>\` references no matching export in ${componentName}.stories.tsx`,
+          line,
+        });
+      }
+    }
   }
 
   return {
