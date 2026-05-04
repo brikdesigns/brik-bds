@@ -1,9 +1,11 @@
 <!--
   Manager Head — Immersive Storybook Theming
 
-  Two mechanisms work together:
-  1. manager.tsx sets --sb-* CSS custom properties on <body> (instant)
-  2. This CSS references those variables to style the full chrome
+  Single source of truth at runtime: --sb-* CSS custom properties on <body>,
+  written by manager.tsx on every globalsUpdated event. Storybook's emotion
+  theme is set ONCE at startup (also in manager.tsx, with themes.light or
+  themes.dark spread as the base) so chrome surfaces we don't override here
+  inherit sensible defaults instead of being fought.
 
   Fonts are loaded here because the manager frame is separate from preview.
 -->
@@ -48,9 +50,9 @@
     color: var(--sb-text-muted, #828282) !important;
   }
 
-  /* Sidebar group headings */
-  [class*="sidebar"] [class*="GroupHeading"],
-  [class*="sidebar"] [class*="heading"] {
+  /* Sidebar group headings — scope to the GroupHeading class only.
+     [class*="heading"] alone is too broad and matched unrelated elements. */
+  [class*="sidebar"] [class*="GroupHeading"] {
     color: var(--sb-text-muted, #828282) !important;
     font-family: var(--sb-font-base, sans-serif) !important;
   }
@@ -117,20 +119,15 @@
   }
 
   /* ============================================
-     DARK THEME — Additional overrides
-     Storybook's emotion CSS fights harder on dark,
-     so we use the data attribute for specificity.
+     DARK THEME — color-scheme + scrollbar
+     Borders are already on the --sb-border-color var, so the duplicate
+     border override is gone. Native form controls (focus rings, scrollbar
+     defaults) need color-scheme to render correctly in dark.
      ============================================ */
   body[data-bds-dark="true"] {
     color-scheme: dark;
   }
 
-  body[data-bds-dark="true"] [class*="sidebar"],
-  body[data-bds-dark="true"] .sb-bar {
-    border-color: var(--sb-border-color, #444) !important;
-  }
-
-  /* Dark mode scrollbar */
   body[data-bds-dark="true"] ::-webkit-scrollbar-track {
     background: var(--sb-app-bg, black);
   }
