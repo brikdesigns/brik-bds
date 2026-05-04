@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './NavBar.stories';
 
 <Meta of={Stories} />
 
 # Nav bar
 
+<ComponentLinks slug="nav-bar" />
+
 Top-level navigation bar with logo, links, and action buttons. Supports sticky positioning for scroll-persistent navigation.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,34 +26,7 @@ Real-world usage: sticky nav bar with scrollable page content.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { NavBar } from '@brik/bds';
-import { Button } from '@brik/bds';
-
-<NavBar
-  logo={<img src="/logo.svg" alt="Acme" />}
-  links={[
-    { label: 'Features', href: '/features', active: true },
-    { label: 'Pricing', href: '/pricing' },
-    { label: 'About', href: '/about' },
-  ]}
-  actions={<Button size="sm">Get Started</Button>}
-/>
-
-// Sticky nav bar
-<NavBar
-  logo={<img src="/logo.svg" alt="Acme" />}
-  links={[{ label: 'Home', href: '/' }]}
-  sticky
-/>
-```

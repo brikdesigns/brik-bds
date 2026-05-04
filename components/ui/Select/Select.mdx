@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Select.stories';
 
 <Meta of={Stories} />
 
 # Select
 
+<ComponentLinks slug="select" />
+
 Dropdown selection control with options, placeholder, optional leading icon, and size variants. Fills its container by default.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -33,13 +32,9 @@ Real-world usage: form layouts and constrained containers.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
 
 ## CSS Override API
 
@@ -58,38 +53,3 @@ Component-scoped CSS variables exposed on `.bds-select`. Set on a wrapping eleme
 }
 ```
 
----
-
-## Usage
-
-```tsx
-import { Select } from '@brik/bds';
-import { Icon } from '@iconify/react';
-
-// Basic select
-<Select
-  placeholder="Select one..."
-  options={[
-    { label: 'First', value: 'first' },
-    { label: 'Second', value: 'second' },
-  ]}
-/>
-
-// With icon and label
-<Select
-  label="Company"
-  placeholder="Select company..."
-  options={options}
-  icon={<Icon icon="ph:buildings" />}
-/>
-
-// Grouped options
-<Select
-  label="Location"
-  placeholder="Select city..."
-  options={[
-    { label: 'US', options: [{ label: 'NYC', value: 'ny' }] },
-    { label: 'Europe', options: [{ label: 'London', value: 'lon' }] },
-  ]}
-/>
-```

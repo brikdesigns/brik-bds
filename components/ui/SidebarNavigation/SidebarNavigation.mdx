@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './SidebarNavigation.stories';
 
 <Meta of={Stories} />
 
 # Sidebar navigation
 
+<ComponentLinks slug="sidebar-navigation" />
+
 Fixed-position sidebar with logo, navigation links, footer actions, and user section. Width is configurable via prop.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -32,28 +31,7 @@ Full application layout with sidebar and main content area.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { SidebarNavigation } from '@brik/bds';
-import { Button } from '@brik/bds';
-
-<SidebarNavigation
-  logo={<img src="/logo.svg" alt="Logo" />}
-  navItems={[
-    { label: 'Dashboard', href: '/dashboard', active: true },
-    { label: 'Projects', href: '/projects' },
-    { label: 'Settings', href: '/settings' },
-  ]}
-  footerActions={<Button variant="primary" size="sm" fullWidth>New Project</Button>}
-  width="260px"
-/>
-```

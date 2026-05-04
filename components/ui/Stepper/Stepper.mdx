@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Stepper.stories';
 
 <Meta of={Stories} />
 
 # Stepper
 
+<ComponentLinks slug="stepper" />
+
 Numeric input with increment and decrement buttons. Use for quantity selectors, pagination controls, and any setting that adjusts a number in discrete steps.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,32 +26,7 @@ Real-world usage: quantity selector and budget control with custom step.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Stepper } from '@brik/bds';
-import { useState } from 'react';
-
-const [count, setCount] = useState(1);
-
-// Basic stepper
-<Stepper value={count} onChange={setCount} />
-
-// With bounds and custom step
-<Stepper
-  value={count}
-  onChange={setCount}
-  min={0}
-  max={100}
-  step={5}
-  size="lg"
-/>
-```
