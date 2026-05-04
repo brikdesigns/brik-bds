@@ -51,8 +51,8 @@ const barVariantStyles: Record<TabBarVariant, CSSProperties> = {
   // `tab` variant baseline border lives in TabBar.css so external CSS
   // (e.g. PageHeader's `:has(.bds-page-header__tabs)` rule) can suppress
   // it without fighting inline-style specificity.
-  tab: { ...barBase, gap: 0 },
-  box: { ...barBase, gap: 0 },
+  tab: { ...barBase, gap: 'var(--gap-md)' },
+  box: { ...barBase, gap: 'var(--gap-md)' },
 };
 
 /* ── Shared tab base ──
