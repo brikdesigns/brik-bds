@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Card.stories';
 
 <Meta of={Stories} />
 
 # Card
 
-Flexible content container for grouping related information. Cards are composable using `CardTitle`, `CardDescription`, and `CardFooter` subcomponents.
+<ComponentLinks slug="card" />
 
----
+Flexible content container for grouping related information. Composable with `CardTitle`, `CardDescription`, and `CardFooter`. Supports two preset shapes — `control` and `summary` — that subsume the legacy `CardControl` and `CardSummary` components.
 
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -25,41 +24,17 @@ All visual variants, padding sizes, interactive, and link modes.
 - **`brand`** — Primary-color border for emphasis
 - **`elevated`** — Shadow for visual prominence
 
-## Control preset
+### Control preset
 
-`preset="control"` collapses the legacy `CardControl` component into Card as a locked-down settings/control layout (per [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md)). Renders: leading badge + (title + description) on the left, action slot on the right.
+`preset="control"` renders a settings/control row: leading badge + (title + description) on the left, action slot on the right.
 
 <Canvas of={Stories.ControlPreset} />
 
-```tsx
-<Card
-  preset="control"
-  badge={<Badge status="positive">On</Badge>}
-  title="Email notifications"
-  description="Send a weekly digest to your inbox."
-  action={<Button variant="outline" size="sm">Configure</Button>}
-/>
-```
+### Summary preset
 
-Both `<Card preset="control">` and the standalone `<CardControl>` ship as first-class APIs in v0.39.0 — pick whichever fits the call site. The audit recommended folding CardControl into Card; the user reversed that decision 2026-04-24 to preserve optionality. See [audit doc](../../docs/audits/2026-Q2-component-bloat-audit.md).
-
-## Summary preset
-
-`preset="summary"` collapses the legacy `CardSummary` component into Card as a compact metric/stat layout (per [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md)). Renders: label (top) + large value (bottom) + optional text link to the right. Numeric values format as locale integers; pass `type="price"` for USD currency.
+`preset="summary"` renders a compact metric layout: label on top, large value below, optional text link to the right. Numeric values format as locale integers; pass `type="price"` for USD currency.
 
 <Canvas of={Stories.SummaryPreset} />
-
-```tsx
-<Card
-  preset="summary"
-  label="Q1 revenue"
-  value={48250.75}
-  type="price"
-  textLink={{ label: 'Details', href: '/revenue' }}
-/>
-```
-
-The standalone `CardSummary` component is `@deprecated` and slated for deletion in a future major version. Migrate to `Card preset="summary"` — same prop names, same number formatting, same layout. See [ADR-004](../../docs/adrs/ADR-004-component-bloat-guardrails.md).
 
 ## Patterns
 
@@ -67,25 +42,6 @@ Real-world usage: service grids and feature cards with actions.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { Card, CardTitle, CardDescription, CardFooter } from '@brik/bds';
-import { Button } from '@brik/bds';
-
-<Card variant="outlined" padding="md">
-  <CardTitle>Title</CardTitle>
-  <CardDescription>Description text goes here.</CardDescription>
-  <CardFooter>
-    <Button variant="primary" size="sm">Action</Button>
-  </CardFooter>
-</Card>
-```
