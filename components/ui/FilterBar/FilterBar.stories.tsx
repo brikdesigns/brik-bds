@@ -53,11 +53,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. DEFAULT — No filter applied; counter in neutral state
+   1. PLAYGROUND — Args-based, no filter applied; counter neutral
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Default rendering */
-export const Default: Story = {
+/** @summary Interactive playground for prop tweaking */
+export const Playground: Story = {
   args: {
     title: 'Companies',
     total: rows.length,
@@ -137,11 +137,11 @@ export const NoClear: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   5. INTERACTIVE — Full table + filter wiring
+   5. PATTERNS — Full table + filter wiring (real-world composition)
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive */
-export const Interactive: Story = {
+/** @summary Common usage patterns */
+export const Patterns: Story = {
   args: {
     title: 'Companies',
     total: rows.length,

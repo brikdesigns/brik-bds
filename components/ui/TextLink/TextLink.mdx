@@ -1,71 +1,43 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './TextLink.stories';
 
 <Meta of={Stories} />
 
 # TextLink
 
-Styled anchor element with size variants and hover effects. Use for navigation and inline text links throughout the interface.
+<ComponentLinks slug="text-link" />
 
----
+Inline navigation link styled to match BDS typography. Two sizes (`default`, `small`); supports external-link semantics via `target` and `rel`.
 
-## Overview
+## Playground
 
-<Canvas of={Stories.Default} />
+<Canvas of={Stories.Playground} />
 
 ## Variants
 
-### Small
+Default and small sizes side by side.
 
-Smaller link size for compact contexts.
+<Canvas of={Stories.Variants} />
 
-<Canvas of={Stories.Small} />
+### External
 
-### External Link
-
-Open links in new tabs with proper security attributes.
+External-link target opens in a new tab. Pair with `rel="noopener noreferrer"`.
 
 <Canvas of={Stories.External} />
 
-## Usage Examples
+### In paragraph
 
-### In Paragraph
-
-Links within body text.
+Inline link rendering inside body copy.
 
 <Canvas of={Stories.InParagraph} />
 
-### Navigation Links
+## Patterns
 
-Horizontal navigation menu.
+Navigation row with multiple links.
 
-<Canvas of={Stories.NavigationLinks} />
-
----
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { TextLink } from '@brik/bds';
-
-// Default link
-<TextLink href="/about">Learn More</TextLink>
-
-// Small link
-<TextLink href="/details" size="small">View Details</TextLink>
-
-// External link
-<TextLink
-  href="https://example.com"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  Visit Website
-</TextLink>
-```

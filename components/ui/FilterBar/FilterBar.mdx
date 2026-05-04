@@ -1,94 +1,45 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './FilterBar.stories';
 
 <Meta of={Stories} />
 
-# Filter bar
+# FilterBar
 
-Shared heading + counter + filter-controls row for list/table views. Renders a `heading-sm` title and a `Counter` on the left, filter children on the right, and an optional ghost "Clear filters" button that appears when any filter is active.
+<ComponentLinks slug="filter-bar" />
 
-Pairs naturally with [FilterButton](/?path=/docs/components-action-filter-button--docs) and [FilterToggle](/?path=/docs/components-action-filter-toggle--docs) for the control children.
+Toolbar that pairs a result counter with one or more `FilterButton`s. Use above tables and lists to expose filtering controls plus a clear-all affordance.
 
----
+## Playground
 
-## Default
+<Canvas of={Stories.Playground} />
 
-No filter applied — counter stays neutral and the Clear button is hidden.
+## Variants
 
-<Canvas of={Stories.Default} />
+### Filtered state
 
-## Filtered
-
-When `filtered < total`, the counter switches to `brand` (configurable via `activeStatus`) and, if `onClear` is provided, a ghost Clear button appears after the controls.
+Counter shifts to the filtered result count when filters narrow the data.
 
 <Canvas of={Stories.Filtered} />
 
-## No title
+### No title
 
-The title is optional. When omitted the counter leads the row.
+Drop the title for compact toolbars where the surrounding context is enough.
 
 <Canvas of={Stories.NoTitle} />
 
-## No clear callback
+### Clear callback omitted
 
-Omit `onClear` to suppress the Clear button entirely — useful for table views that don't support bulk-clearing all filters at once.
+When `onClear` is not supplied, the clear-all affordance is suppressed.
 
 <Canvas of={Stories.NoClear} />
 
-## Interactive
+## Patterns
 
-Real-world wiring: local state holds filter values, `filtered.length` feeds the counter, and `onClear` resets all filters.
+Full table + filter wiring with state, filter changes, and the clear-all flow.
 
-<Canvas of={Stories.Interactive} />
-
----
+<Canvas of={Stories.Patterns} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { FilterBar, FilterButton } from '@brikdesigns/bds';
-import { useState, useMemo } from 'react';
-
-function EngagementsTable({ rows }) {
-  const [status, setStatus] = useState<string | undefined>();
-
-  const filtered = useMemo(
-    () => (status ? rows.filter((r) => r.status === status) : rows),
-    [rows, status],
-  );
-
-  return (
-    <FilterBar
-      title="Engagements"
-      total={rows.length}
-      filtered={filtered.length}
-      label="engagements"
-      onClear={() => setStatus(undefined)}
-    >
-      <FilterButton
-        label="Status"
-        value={status}
-        onChange={setStatus}
-        options={[
-          { id: 'active', label: 'Active' },
-          { id: 'pending', label: 'Pending' },
-        ]}
-      />
-    </FilterBar>
-  );
-}
-```
-
----
-
-## Accessibility
-
-- The title renders as an `<h2>` — ensure the surrounding page uses a sensible heading hierarchy (typically an `<h1>` on the page and `<h2>` per table).
-- The container carries an `aria-label` (falls back to `"{title} filter bar"` or `"{label} filter bar"`).
-- Counter announces `"Count: {n}"` via `aria-label`.
