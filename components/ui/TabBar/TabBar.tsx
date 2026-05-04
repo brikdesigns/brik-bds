@@ -118,18 +118,25 @@ function getTabStyles(active: boolean, onColor: boolean): CSSProperties {
   /* Color + opacity stay inline (per-state). The active/inactive border-bottom
      and the negative-margin overlap onto the bar baseline live in TabBar.css
      so external rules (e.g. PageHeader's tabs slot) can override widths via
-     normal CSS specificity instead of fighting inline shorthand. */
+     normal CSS specificity instead of fighting inline shorthand.
+
+     Padding shape: items have no horizontal padding (chunky 24px-each-side
+     was breaking the page-header rhythm); padding-bottom holds the breathing
+     room between text and the active indicator. Active text uses
+     `--text-brand-primary` so the active state reads as a brand affordance,
+     matching the brand-color underline. */
   const textColor = onColor
     ? 'var(--text-on-color-dark)'
     : active
-      ? 'var(--text-primary)'
+      ? 'var(--text-brand-primary)'
       : 'var(--text-secondary)';
 
   return {
     ...tabBase,
     color: textColor,
     backgroundColor: 'transparent',
-    padding: 'var(--padding-lg)',
+    padding: 0,
+    paddingBottom: 'var(--padding-sm)',
     opacity: onColor && !active ? 0.6 : 1,
   };
 }
