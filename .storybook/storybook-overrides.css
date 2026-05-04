@@ -168,46 +168,112 @@ code:not([class*="language-"]):not(pre code) {
 }
 
 /* ============================================
-   ACTION BAR — "Show code" / "Copy" buttons
-   Clean, minimal treatment. No floating cards,
-   no accent lines, no elevation.
+   ACTION BAR — "Show code" / "Copy" footer
+
+   Carbon-aligned. The action bar is a SIBLING of `.sbdocs-preview` in
+   the SB10 DOM (not a descendant — verified live), so to make it read
+   as an attached footer we treat the two elements as one card frame:
+
+     .sbdocs-preview            ← top: demo surface, no bottom border/radius
+     .sbdocs-preview-actions    ← bottom: footer surface, no top border/radius
+
+   The result is one continuous bordered container with the demo on top
+   and the action footer below, divided by a thin border-top.
+
+   DOM (Storybook 10):
+     .sbdocs-content
+       ├─ .sbdocs-preview            (the rendered story)
+       └─ .sbdocs-preview-actions    (the action bar — sibling)
+            ├─ button.docblock-code-toggle   ("Show code")
+            └─ button                        (Copy code, etc.)
    ============================================ */
 
-/* The ActionBar container at the bottom of Canvas previews —
-   let SB10 position it natively, just ensure clean styling. */
-#storybook-docs#storybook-docs .sbdocs-preview [class*="ActionBar"],
-#storybook-docs#storybook-docs .sbdocs-preview div:has(> button.docblock-code-toggle) {
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+/* Top half (already styled elsewhere as `.sbdocs-preview`) — strip the
+   bottom edge so the footer butts cleanly up against it. */
+#storybook-docs#storybook-docs .sbdocs-preview:has(+ .sbdocs-preview-actions:not(:empty)) {
+  margin-bottom: 0 !important;
+  border-bottom: none !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
-/* Show code / Hide code toggle button — muted text with breathing room */
+/* Bottom half — the attached footer. Right-aligned, visible surface,
+   matches the preview's frame on three sides + border-top divider. */
+#storybook-docs#storybook-docs .sbdocs-preview-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  margin: 0 0 24px !important;
+  padding: 0 !important;
+  background-color: var(--surface-secondary) !important;
+  border: 1px solid var(--border-secondary) !important;
+  border-top: 1px solid var(--border-secondary) !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+/* Hide the action bar when empty (some stories without source). */
+#storybook-docs#storybook-docs .sbdocs-preview-actions:empty {
+  display: none !important;
+}
+
+/* SB10 wraps action items in an inner div that defaults to width:100%,
+   which neutralises our justify-content: flex-end on the parent. Push
+   that wrapper to the right edge and let it shrink to its contents. */
+#storybook-docs#storybook-docs .sbdocs-preview-actions > * {
+  width: auto !important;
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+}
+
+/* Action button — proper button affordance, not faded text. */
+#storybook-docs#storybook-docs .sbdocs-preview-actions button,
 #storybook-docs#storybook-docs button.docblock-code-toggle,
 button.docblock-code-toggle {
-  background: none !important;
-  color: var(--text-muted) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: transparent !important;
+  color: var(--text-secondary) !important;
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
-  font-size: 12px !important;
-  padding: 8px 15px !important;
+  font-family: var(--font-family-body, sans-serif) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 10px 16px !important;
   margin: 0 !important;
+  opacity: 1 !important;
   cursor: pointer !important;
-  opacity: 0.6;
-  transition: opacity 150ms ease, color 150ms ease;
+  transition: color 150ms ease, background-color 150ms ease;
   text-decoration: none !important;
   outline: none !important;
 }
 
-#storybook-docs#storybook-docs button.docblock-code-toggle:hover,
-button.docblock-code-toggle:hover {
-  opacity: 1;
-  color: var(--text-brand-primary) !important;
+/* Vertical separator between adjacent buttons in the footer. */
+#storybook-docs#storybook-docs .sbdocs-preview-actions button + button {
+  border-left: 1px solid var(--border-secondary) !important;
 }
 
-/* Kill any pseudo-element accent lines on the toggle */
+#storybook-docs#storybook-docs .sbdocs-preview-actions button:hover,
+#storybook-docs#storybook-docs button.docblock-code-toggle:hover {
+  color: var(--text-brand-primary) !important;
+  background-color: var(--surface-subtle-hover, var(--surface-secondary)) !important;
+}
+
+#storybook-docs#storybook-docs .sbdocs-preview-actions button:focus-visible {
+  outline: 2px solid var(--text-brand-primary) !important;
+  outline-offset: -2px !important;
+}
+
+/* Kill any pseudo-element accent lines on the toggle. */
 button.docblock-code-toggle::before,
 button.docblock-code-toggle::after {
   display: none !important;
