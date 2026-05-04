@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Radio.stories';
 
 <Meta of={Stories} />
 
 # Radio
 
+<ComponentLinks slug="radio" />
+
 Single selection control for mutually exclusive options. Radio buttons are grouped by the `name` prop, allowing only one selection per group.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -27,31 +26,7 @@ Real-world usage: plan selection and theme selection groups.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Radio } from '@brik/bds';
-
-// Basic radio group
-<Radio name="plan" value="basic" label="Basic Plan" />
-<Radio name="plan" value="pro" label="Pro Plan" defaultChecked />
-
-// Controlled group
-const [selected, setSelected] = useState('pro');
-
-<Radio
-  name="plan"
-  value="basic"
-  label="Basic Plan"
-  checked={selected === 'basic'}
-  onChange={(e) => setSelected(e.target.value)}
-/>
-```

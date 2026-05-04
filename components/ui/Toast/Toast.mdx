@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Toast.stories';
 
 <Meta of={Stories} />
 
 # Toast
 
+<ComponentLinks slug="toast" />
+
 White surface notification with optional colored `Badge` icon indicating status. The surface never changes color — only the badge communicates success, error, warning, or info.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -33,13 +32,9 @@ Real-world usage: interactive toggle, error context, and informational messages.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
 
 ## CSS Override API
 
@@ -56,17 +51,3 @@ Component-scoped CSS variables exposed on `.bds-toast`. Set on a wrapping elemen
 }
 ```
 
----
-
-## Usage
-
-```tsx
-import { Toast } from '@brik/bds';
-
-<Toast
-  title="Changes saved"
-  description="Your settings have been updated"
-  variant="success"
-  onDismiss={() => setShowToast(false)}
-/>
-```
