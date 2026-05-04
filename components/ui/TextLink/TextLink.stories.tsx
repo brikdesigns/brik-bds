@@ -25,8 +25,8 @@ export default meta;
 type Story = StoryObj<typeof TextLink>;
 
 // Basic link
-/** @summary Default rendering */
-export const Default: Story = {
+/** @summary Interactive playground for prop tweaking */
+export const Playground: Story = {
   args: {
     href: '#',
     children: 'Learn More',
@@ -85,8 +85,8 @@ export const InParagraph: Story = {
 };
 
 // Navigation links
-/** @summary Navigation links */
-export const NavigationLinks: Story = {
+/** @summary Common usage patterns */
+export const Patterns: Story = {
   parameters: {
     docs: {
       source: {
@@ -109,9 +109,9 @@ export const NavigationLinks: Story = {
   ),
 };
 
-// All sizes
-/** @summary All sizes */
-export const AllSizes: Story = {
+// All variants in one view
+/** @summary All variants side by side */
+export const Variants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
       <TextLink href="#">Default Link</TextLink>

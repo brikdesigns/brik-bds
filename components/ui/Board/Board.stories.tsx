@@ -215,8 +215,8 @@ export const CardAccentColors: Story = {
 
 // ─── Full board (headers + cards) ────────────────────────────────────────────
 
-/** @summary Full board */
-export const FullBoard: Story = {
+/** @summary Common usage patterns */
+export const Patterns: Story = {
   name: 'Full Board — Headers + Cards',
   render: () => (
     <Board style={{ height: '700px' }}>
