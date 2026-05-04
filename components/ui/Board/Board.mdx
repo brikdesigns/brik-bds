@@ -1,148 +1,63 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Board.stories';
 
 <Meta of={Stories} />
 
 # Board
 
-A kanban-style board layout for displaying grouped items in horizontal columns. Designed for task management, staff overviews, and any workflow that benefits from a column-based view.
+<ComponentLinks slug="board" />
 
-Board is a **composite component** — it composes existing BDS primitives (`Avatar`, `ProgressBar`) into a reusable layout pattern without introducing new visual atoms.
-
----
-
-## Overview
-
-The Board system is composed of three components:
-
-- **`Board`** — Horizontal scroll container. Nests `BoardColumn` children.
-- **`BoardColumn`** — Vertical lane with a title, count, and item stack. Nests `BoardHeader` children.
-- **`BoardHeader`** — Card displaying an avatar, name, subtitle, and optional progress. Composes `Avatar` and `ProgressBar`.
-
----
+Kanban-style board container with columns, headers, and task cards. Composes from `BoardColumn`, `BoardHeader`, and `BoardCard`. Use for assignment views, queue dashboards, and any horizontally-grouped task layout.
 
 ## Playground
 
-Full board with four columns, initials-based avatars, and progress bars.
-
 <Canvas of={Stories.Playground} />
 
-## Single Column
+## Variants
 
-A board can render a single column for focused views.
+### Single column
+
+The simplest shape — one column with a header and cards.
 
 <Canvas of={Stories.SingleColumn} />
 
-## With Avatars
+### With avatars
 
-`BoardHeader` accepts an `avatarSrc` prop. When omitted, `Avatar` falls back to initials generated from the `name` prop.
+Headers can include an avatar for owner attribution.
 
 <Canvas of={Stories.WithAvatars} />
 
-## Empty Column
+### Empty column
 
-Columns gracefully handle zero items.
+Empty-state messaging when a column has no cards.
 
 <Canvas of={Stories.EmptyColumn} />
 
----
+### Task cards
 
-## Component API
+Cards support titles, subtitles, tags, and accent colors.
 
-### Board
+<Canvas of={Stories.TaskCards} />
 
-The outer container. Provides horizontal scrolling with `scroll-snap-type: x proximity`.
+### Card accent colors
+
+Use accent colors to communicate priority, category, or owner.
+
+<Canvas of={Stories.CardAccentColors} />
+
+## Patterns
+
+Full multi-column board with headers and assigned task cards.
+
+<Canvas of={Stories.Patterns} />
+
+### Interactive full board
+
+State-driven board where columns and cards respond to user actions.
+
+<Canvas of={Stories.FullBoardView} />
+
+## Props
 
 <ArgTypes of={Stories} />
-
-### BoardColumn
-
-A single vertical lane within the board.
-
-- **`title`** `string` — Column heading (rendered as uppercase label).
-- **`count`** `number` — Item count displayed beside the title.
-- **`headerAction`** `ReactNode` — Slot for buttons or menus in the column header.
-- **`children`** `ReactNode` — `BoardHeader` components.
-
-### BoardHeader
-
-A card representing a person, role, or entity with optional progress.
-
-- **`name`** `string` *required* — Display name. Also used for avatar initials fallback.
-- **`subtitle`** `string` — Secondary text (role, department).
-- **`avatarSrc`** `string` — Image URL for the avatar.
-- **`progress`** `number` — Value from 0–100. Omit to hide the progress bar.
-- **`progressLabel`** `string` — Screen reader label for the progress bar.
-- **`children`** `ReactNode` — Additional content rendered below the header.
-
----
-
-## Design Decisions
-
-- **Horizontal scroll** — `scroll-snap-type: x proximity` snaps to column boundaries on mobile and trackpad.
-- **Flexible columns** — Each column flexes equally between `280px` min and `400px` max, responsive without media queries.
-- **Progress bar alignment** — Left-padded past the avatar width so the bar visually aligns with the text, not the avatar.
-- **Avatar size** — Locked to `lg` (48px) per the Figma spec for board context.
-- **Content slot** — `BoardHeader` children slot allows extending with badges, action buttons, or task counts without modifying the component.
-
----
-
-## Usage
-
-```tsx
-import { Board, BoardColumn, BoardHeader } from '@bds/components/ui/Board';
-
-<Board>
-  <BoardColumn title="Opening" count={2}>
-    <BoardHeader
-      name="Cassidy Moore"
-      subtitle="Dental Hygienist"
-      avatarSrc="/cassidy.jpg"
-      progress={37}
-    />
-    <BoardHeader
-      name="Alex Rivera"
-      subtitle="Receptionist"
-      progress={62}
-    />
-  </BoardColumn>
-</Board>
-```
-
----
-
-## Tokens
-
-- `--gap-md` — Board column spacing
-- `--gap-sm` — Column item spacing, header internals
-- `--border-radius-200` — BoardHeader card corners
-- `--surface-primary` — BoardHeader background
-- `--text-primary` — Name text
-- `--text-secondary` — Column title, subtitle
-- `--background-brand-primary` — ProgressBar fill (via `ProgressBar`)
-- `--font-family-body` — Name, subtitle
-- `--font-family-label` — Column title
-- `--shadow-sm` — BoardHeader hover state
-
----
-
-## CSS Override API
-
-Component-scoped CSS variables exposed on `.bds-board-card`. Set on a wrapping element or column to override without touching BDS internals.
-
-| Variable | Default | Controls |
-|---|---|---|
-| `--bds-board-card-accent` | `var(--border-primary)` | Left border accent color per card |
-| `--board-card-hover-translate-y` | `-1px` | Upward lift on card hover |
-
-```css
-/* Example: brand-colored accent on priority cards */
-.priority-column .bds-board-card {
-  --bds-board-card-accent: var(--background-status-error);
-}
-
-/* Example: disable lift in a dense list view */
-.compact-board {
-  --board-card-hover-translate-y: 0;
-}
-```
