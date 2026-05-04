@@ -1,17 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './SegmentedControl.stories';
 
 <Meta of={Stories} />
 
 # Segmented control
 
+<ComponentLinks slug="segmented-control" />
+
 Pill-shaped toggle for switching between mutually exclusive views or modes. Unlike `TabBar` (page navigation), `SegmentedControl` switches content in-place.
 
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -31,49 +30,7 @@ Real-world usage: view switcher, pricing toggle, and date range selector.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { SegmentedControl } from '@brik/bds';
-import { useState } from 'react';
-
-const [view, setView] = useState('grid');
-
-<SegmentedControl
-  value={view}
-  onChange={setView}
-  items={[
-    { label: 'Grid', value: 'grid' },
-    { label: 'List', value: 'list' },
-  ]}
-/>
-
-// Full width with size
-<SegmentedControl
-  value={period}
-  onChange={setPeriod}
-  size="lg"
-  fullWidth
-  items={[
-    { label: 'Monthly', value: 'monthly' },
-    { label: 'Yearly', value: 'yearly' },
-  ]}
-/>
-```
-
----
-
-## When to use
-
-- **Toggle between 2-5 views in the same panel** — `SegmentedControl`
-- **Navigate between pages or sections** — `TabBar`
-- **Binary on/off toggle** — `Switch`
-- **Select from a long list** — `Select`

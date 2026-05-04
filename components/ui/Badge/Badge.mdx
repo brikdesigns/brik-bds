@@ -1,32 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Badge.stories';
 
 <Meta of={Stories} />
 
 # Badge
 
+<ComponentLinks slug="badge" />
+
 Status indicators and labels for displaying contextual information. Badges use semantic system colors to communicate status at a glance, with `solid` (saturated bg) and `subtle` (pastel bg) appearance values.
 
----
-
-## Indicators vs Actions
-
-Badge is an **indicator** — non-interactive. It reflects state (published, in review, archived). Never wire `onClick`, never wrap in a link, never use Badge to trigger behavior.
-
-| Family | Components | When to use |
-|---|---|---|
-| **Indicator** (display state) | `Badge`, `Tag`, `Dot`, `AlertBanner` | Labeling a record's status, category, or metadata. Read-only. |
-| **Action** (user-initiated) | `Button`, `LinkButton`, `IconButton`, `FilterButton`, `Chip` | Triggering navigation, mutation, filtering, or selection. |
-
-**Badge vs Tag:** Badge carries a semantic status color (positive/warning/error/info/progress/brand). Tag is categorical — no status meaning, neutral styling. Use Badge when the state has a value judgment (good/bad/waiting); use Tag when it doesn't (industry, size, owner).
-
-**Badge vs Chip:** If it's clickable, it's a Chip, not a Badge. "Status: Active" with a dismiss X on an active-filter row is a Chip (user can remove it). "Status: Active" in a read-only table cell is a Badge (just reflecting state).
-
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -61,43 +45,7 @@ Real-world compositions for common badge use cases.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
 
----
-
-## Usage
-
-```tsx
-import { Badge } from '@brik/bds';
-
-// Solid appearance (default)
-<Badge status="positive">Done</Badge>
-<Badge status="warning">Needs Attention</Badge>
-<Badge status="error">Canceled</Badge>
-
-// Subtle appearance (pastel fill)
-<Badge status="positive" appearance="subtle">Done</Badge>
-<Badge status="progress" appearance="subtle">In Progress</Badge>
-
-// With icon
-<Badge status="positive" icon={<Icon icon="ph:check" />}>
-  Done
-</Badge>
-
-// Icon-only (xs)
-<Badge size="xs" status="error" icon={<Icon icon="ph:x-circle" />} />
-```
-
----
-
-## Tokens
-
-- `--color-system-green` / `--color-system-green-light` — Positive status
-- `--color-system-red` / `--color-system-red-light` — Error status
-- `--color-system-yellow` / `--color-system-yellow-light` — Warning status
-- `--color-system-blue` / `--color-system-blue-light` — Progress status
-- `--color-system-neutral` / `--color-system-neutral-light` — Info status

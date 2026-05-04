@@ -1,36 +1,16 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Chip.stories';
 
 <Meta of={Stories} />
 
 # Chip
 
+<ComponentLinks slug="chip" />
+
 Compact interactive pill for filtering, selection, and removable tokens. Use for filter dropdown triggers, active-filter chips, and multi-select state.
 
----
-
-## Indicators vs Actions
-
-Chip is an **action** — always interactive. Render a Chip only when `onChipClick`, `onRemove`, or `showDropdown` is wired up. A Chip with no handler is a bug — use `Badge` (status) or `Tag` (category) instead.
-
-| Family | Components | When to use |
-|---|---|---|
-| **Indicator** (display state) | `Badge`, `Tag`, `Dot`, `AlertBanner` | Labeling a record's status, category, or metadata. Read-only. |
-| **Action** (user-initiated) | `Button`, `LinkButton`, `IconButton`, `FilterButton`, `Chip` | Triggering navigation, mutation, filtering, or selection. |
-
-**Chip vs FilterButton vs Button:**
-
-- `Button` — primary CTAs, form submits, primary workflows. Rectangular.
-- `FilterButton` — dropdown trigger inside a `FilterBar`. Encapsulates the dropdown state machine.
-- `Chip` — compact pill for filter selections *after* a choice is made ("Status: Active" with X), multi-select tokens, or secondary toggle pills. Pair with FilterButton, don't duplicate it.
-
-**Chip vs Badge / Tag:** If the pill is read-only — rendered from data, not clickable — use `Badge` (status) or `Tag` (category). "Published" in a read-only table cell is a Badge. "Published" as a toggleable filter in a facet sidebar is a Chip.
-
----
-
 ## Playground
-
-Use the Controls panel to explore all props interactively.
 
 <Canvas of={Stories.Playground} />
 
@@ -53,13 +33,9 @@ Real-world compositions for filtering and selection.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
 
 ## CSS Override API
 
@@ -78,25 +54,3 @@ Component-scoped CSS variables exposed on `.bds-chip`. Set on a wrapping element
 }
 ```
 
----
-
-## Usage
-
-```tsx
-import { Chip } from '@brik/bds';
-
-// Basic chip
-<Chip label="Design" />
-
-// Filter dropdown trigger
-<Chip label="All statuses" icon={<FilterIcon />} showDropdown onChipClick={() => openMenu()} />
-
-// Removable chip (active filter)
-<Chip label="Status: Active" onRemove={() => removeFilter('status')} />
-
-// Size, variant, and appearance
-<Chip label="Active" size="sm" variant="primary" appearance="outline" />
-
-// Disabled
-<Chip label="Archived" disabled />
-```
