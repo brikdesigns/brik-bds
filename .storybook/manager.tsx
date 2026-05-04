@@ -1,19 +1,24 @@
 import { addons } from 'storybook/manager-api';
-import { create } from 'storybook/theming';
+import { create, themes } from 'storybook/theming';
 import { storybookThemes, type StorybookThemeConfig } from '../tokens/storybook-themes';
 import type { ThemeNumber } from '../tokens';
 
 /**
  * Brik Design System — Manager Theming
  *
- * CSS custom properties on <body> handle all visual updates instantly.
- * manager-head.html references --sb-* variables to style sidebar,
- * toolbar, search inputs, and chrome elements.
+ * `addons.setConfig({ theme })` is called ONCE at startup (its intended
+ * use per the Storybook 10 docs and Theming 2.0 RFC). We do NOT re-call
+ * it on toolbar switches because that triggers a manager remount, which
+ * has shown up as transient "page failed to load" errors.
  *
- * addons.setConfig({ theme }) is called ONCE at startup (its intended
- * use). It is NOT called on theme switches — it triggers expensive
- * React re-renders of the entire manager UI (Storybook Theming 2.0
- * RFC confirms this is a startup-time API, not a runtime API).
+ * Runtime theme changes happen entirely via `--sb-*` CSS custom
+ * properties on `<body>` (see manager-head.html). Storybook's built-in
+ * `themes.light` / `themes.dark` are spread as the base of `create()`
+ * so chrome surfaces we don't override get sensible defaults instead
+ * of fighting emotion-injected styles.
+ *
+ * The brand logo is swapped on theme change by mutating the rendered
+ * <img> src directly — no setConfig needed.
  */
 
 const sharedBrand = {
@@ -24,11 +29,10 @@ const sharedBrand = {
   inputBorderRadius: 4,
 };
 
-/**
- * Apply CSS custom properties to the manager <body>.
- * manager-head.html references these --sb-* variables to style
- * sidebar, toolbar, and other chrome elements instantly.
- */
+function brandImageFor(base: 'light' | 'dark'): string {
+  return base === 'dark' ? '/brik-logo-white.svg' : '/brik-logo.svg';
+}
+
 function applyThemeVars(config: StorybookThemeConfig) {
   const s = document.body.style;
   s.setProperty('--sb-app-bg', config.appBg);
@@ -47,76 +51,54 @@ function applyThemeVars(config: StorybookThemeConfig) {
   s.setProperty('--sb-color-primary', config.colorPrimary);
   s.setProperty('--sb-color-secondary', config.colorSecondary);
   s.setProperty('--sb-font-base', config.fontBase);
-  // Dark mode flag for CSS selectors that need light/dark branching
   document.body.setAttribute('data-bds-dark', String(config.base === 'dark'));
+  document.body.setAttribute('data-bds-theme', config.base);
 }
 
-// Set initial theme — setConfig() at startup (its intended use)
-const initialConfig = storybookThemes['brik'];
-applyThemeVars(initialConfig);
+function swapBrandImage(base: 'light' | 'dark') {
+  const next = brandImageFor(base);
+  const img = document.querySelector<HTMLImageElement>(
+    `img[alt="${sharedBrand.brandTitle}"]`,
+  );
+  if (img && !img.src.endsWith(next)) img.src = next;
+}
+
+const initial = storybookThemes['brik'];
+applyThemeVars(initial);
+
 addons.setConfig({
   theme: create({
+    ...themes[initial.base],
     ...sharedBrand,
-    brandImage: '/brik-logo.svg',
-    base: initialConfig.base,
-    colorPrimary: initialConfig.colorPrimary,
-    colorSecondary: initialConfig.colorSecondary,
-    appBg: initialConfig.appBg,
-    appContentBg: initialConfig.appContentBg,
-    appPreviewBg: initialConfig.appPreviewBg,
-    appBorderColor: initialConfig.appBorderColor,
-    textColor: initialConfig.textColor,
-    textInverseColor: initialConfig.textInverseColor,
-    textMutedColor: initialConfig.textMutedColor,
-    barTextColor: initialConfig.barTextColor,
-    barSelectedColor: initialConfig.barSelectedColor,
-    barHoverColor: initialConfig.barHoverColor,
-    barBg: initialConfig.barBg,
-    inputBg: initialConfig.inputBg,
-    inputBorder: initialConfig.inputBorder,
-    inputTextColor: initialConfig.inputTextColor,
-    fontBase: initialConfig.fontBase,
+    brandImage: brandImageFor(initial.base),
+    base: initial.base,
+    colorPrimary: initial.colorPrimary,
+    colorSecondary: initial.colorSecondary,
+    appBg: initial.appBg,
+    appContentBg: initial.appContentBg,
+    appPreviewBg: initial.appPreviewBg,
+    appBorderColor: initial.appBorderColor,
+    textColor: initial.textColor,
+    textInverseColor: initial.textInverseColor,
+    textMutedColor: initial.textMutedColor,
+    barTextColor: initial.barTextColor,
+    barSelectedColor: initial.barSelectedColor,
+    barHoverColor: initial.barHoverColor,
+    barBg: initial.barBg,
+    inputBg: initial.inputBg,
+    inputBorder: initial.inputBorder,
+    inputTextColor: initial.inputTextColor,
+    fontBase: initial.fontBase,
   }),
 });
 
-// Listen for theme changes — update both CSS vars (instant visual) and
-// manager emotion theme (api.setOptions). This is the standard approach
-// used by storybook-dark-mode addon and major design systems.
 if (typeof window !== 'undefined') {
   const channel = addons.getChannel();
   channel.on('globalsUpdated', ({ globals }: { globals: Record<string, unknown> }) => {
     const themeNum = globals.themeNumber as string;
     const config = storybookThemes[themeNum as ThemeNumber];
-    if (config) {
-      // 1. CSS vars — instant visual update for sidebar/toolbar
-      applyThemeVars(config);
-
-      // 2. Emotion theme — updates all emotion-styled manager components
-      //    (tabs, panels, borders, etc. that CSS vars don't reach)
-      addons.setConfig({
-        theme: create({
-          ...sharedBrand,
-          brandImage: config.base === 'dark' ? '/brik-logo-white.svg' : '/brik-logo.svg',
-          base: config.base,
-          colorPrimary: config.colorPrimary,
-          colorSecondary: config.colorSecondary,
-          appBg: config.appBg,
-          appContentBg: config.appContentBg,
-          appPreviewBg: config.appPreviewBg,
-          appBorderColor: config.appBorderColor,
-          textColor: config.textColor,
-          textInverseColor: config.textInverseColor,
-          textMutedColor: config.textMutedColor,
-          barTextColor: config.barTextColor,
-          barSelectedColor: config.barSelectedColor,
-          barHoverColor: config.barHoverColor,
-          barBg: config.barBg,
-          inputBg: config.inputBg,
-          inputBorder: config.inputBorder,
-          inputTextColor: config.inputTextColor,
-          fontBase: config.fontBase,
-        }),
-      });
-    }
+    if (!config) return;
+    applyThemeVars(config);
+    swapBrandImage(config.base);
   });
 }
