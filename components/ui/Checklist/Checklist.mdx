@@ -1,20 +1,20 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
-import * as Stories from './ChecklistItem.stories';
+import * as Stories from './Checklist.stories';
 
 <Meta of={Stories} />
 
-# ChecklistItem
+# Checklist
 
-<ComponentLinks slug="checklist-item" />
+<ComponentLinks slug="checklist" />
 
 Row-style completion control. Combines `CompletionToggle`'s circular visual with a native `<label>` + `<input type="checkbox">`, so the **entire row is the click target**. Native `Space` / `Enter` toggle for free; no manual `onKeyDown` needed.
 
 When checked, the label gets `text-decoration: line-through` and a muted color, and the row gains a subtle completion background.
 
-**Distinct from `Checkbox`.** Same shape (label + box + click handler), different visual + semantics. Use `ChecklistItem` for completion-state on units of work — task checklists, clinical procedures, compliance checks. Use `Checkbox` for form selections — multi-select filters, "I agree to terms," settings toggles. The visual difference (circle vs. square) matches the semantic difference.
+**Distinct from `Checkbox`.** Same shape (label + box + click handler), different visual + semantics. Use `Checklist` for completion-state on units of work — task checklists, clinical procedures, compliance checks. Use `Checkbox` for form selections — multi-select filters, "I agree to terms," settings toggles. The visual difference (circle vs. square) matches the semantic difference.
 
-For card chrome where the toggle stands alone (the rest of the card is a different click target), use `CompletionToggle` instead — `ChecklistItem` is specifically the row composition.
+For card chrome where the toggle stands alone (the rest of the card is a different click target), use `CompletionToggle` instead — `Checklist` is specifically the row composition.
 
 ## Playground
 

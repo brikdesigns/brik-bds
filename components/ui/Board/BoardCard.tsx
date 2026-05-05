@@ -11,7 +11,7 @@ import { CompletionToggle } from '../CompletionToggle';
  *
  * The completion toggle delegates to `<CompletionToggle>`, the BDS
  * primitive for circular completion controls. Same visual is reused
- * by `<ChecklistItem>` for row-style completion lists.
+ * by `<Checklist>` for row-style completion lists.
  *
  * @example
  * ```tsx

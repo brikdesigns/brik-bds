@@ -36,14 +36,14 @@ The Storybook sidebar collapses to **four content top-levels** (`Foundations`, `
 | `Components/` subcategory | Members |
 | --- | --- |
 | **Action** | button, button-group, filter-bar, filter-button, filter-toggle, text-link |
-| **Addables** | addable-combo-list, addable-entry-list, addable-field-row-list, addable-text-list |
+| **Addables** | addable-combo-list, addable-entry-list, addable-field-row-list, addable-text-list, catalog-picker |
 | **Card** | card, card-control, card-list, card-testimonial, collapsible-card, pricing-card |
 | **Container** | accordion, board, calendar, data-section, sheet, sheet-section, table |
 | **Control** | file-uploader, pagination, segmented-control, slider, stepper, switch |
 | **Feedback** | banner, empty-state, progress-bar, task-console, toast, tooltip |
-| **Form** | address-input, catalog-picker, checkbox, date-picker, field, field-grid, form, multi-select, password-input, radio, select, text-area, text-input, time-picker |
+| **Form** | address-input, checkbox, completion-toggle, date-picker, field, field-grid, form, multi-select, password-input, radio, select, text-area, text-input, time-picker |
 | **Indicator** | badge, badge-group, chip, counter, dot, meter, service-tag, skeleton, spinner, tag, tag-group |
-| **List** | activity-timeline, bullet-list, notification-list |
+| **List** | activity-timeline, bullet-list, checklist, interactive-list-item, notification-list |
 | **Navigation** | breadcrumb, footer, menu, nav-bar, page-header, progress-stepper, sidebar-navigation, tab-bar |
 | **Overlay** | modal, popover |
 | **Structure** | divider |
@@ -183,3 +183,16 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 - New component story files reviewed against the two-shape model in PR review.
 - **Lint enforcement is page-recipe-scoped today** ([`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js), gated on pre-commit + CI per ADR-007). A complementary lint for the story-shape rule (no `Variants`/`Tones`/`Patterns` gallery exports) is a candidate follow-up but is **not** wired up by this ADR.
 - Existing files are not retroactively swept. See Migration above for why.
+
+## Amendments
+
+### 2026-05-05 — Taxonomy table top-up
+
+The Components table in Part A is amended:
+
+- **`catalog-picker`** moved from `Form` → `Addables`. The intent of `Addables` is "lists the user builds entry-by-entry" — `catalog-picker` matches that intent (catalog-driven entry selection). Keeping it in `Form` was an artifact of the original `Form/Input` consolidation in Phase 1.
+- **`checklist`** added to `List` (was `ChecklistItem` under `Form`). Component renamed from `ChecklistItem` → `Checklist` in the same change to match the table convention; `bds-checklist-item` CSS classes renamed to `bds-checklist`. Breaking change for any consumer importing `ChecklistItem` from `@brikdesigns/bds`.
+- **`interactive-list-item`** added to `List` (was `InteractiveListItem` under the now-removed `Components/Display/*` bucket). No rename; only the Storybook title moves.
+- **`completion-toggle`** added to `Form` (was missing from the original table). Stays in `Form` as the atomic primitive paired with `checklist` as the labeled-row composition, mirroring the `Checkbox` / `Radio` pattern of atomic primitives staying in `Form`.
+
+These are table top-ups, not structural changes — no new subcategories, just member reassignment. Lands alongside the Storybook title moves in [PR #_TBD_](https://github.com/brikdesigns/brik-bds/pulls).
