@@ -12,7 +12,7 @@ Circular completion control. The atomic primitive for representing the **complet
 
 **Distinct from `Checkbox`.** Checkbox is rectangular and intended for form selections (multi-select filter, "I agree to terms"). CompletionToggle is circular and intended for completion-state on units of work. The visual difference matches the semantic difference; reach for the right one based on what the box represents — a *selection* (square) vs. a *completion* (circle).
 
-For row-style use where the entire row is the click target (label + circle, like a sub-task row inside a sheet), use `ChecklistItem` — it pairs this control's visual with a native `<label>` + `<input>` for proper form semantics and full-row click target.
+For row-style use where the entire row is the click target (label + circle, like a sub-task row inside a sheet), use `Checklist` — it pairs this control's visual with a native `<label>` + `<input>` for proper form semantics and full-row click target.
 
 ## Playground
 
@@ -31,7 +31,7 @@ For row-style use where the entire row is the click target (label + circle, like
 <Canvas of={Stories.Patterns} />
 
 - **Card chrome** — Used as a self-contained toggle on a task card. The toggle is the click target; the rest of the card is something else (e.g. opens the task sheet).
-- **Inline list** — Stand-alone toggles next to label text. For full-row click targets, use `ChecklistItem` instead of composing manually.
+- **Inline list** — Stand-alone toggles next to label text. For full-row click targets, use `Checklist` instead of composing manually.
 
 ## Props
 

@@ -170,7 +170,7 @@ export const Patterns: Story = {
             }}
           >
             For row-wide click targets with completion state, prefer{' '}
-            <code>{'<ChecklistItem>'}</code> — it pairs this control with a native{' '}
+            <code>{'<Checklist>'}</code> — it pairs this control with a native{' '}
             <code>{'<label>'}</code> + <code>{'<input>'}</code>.
           </p>
         </div>

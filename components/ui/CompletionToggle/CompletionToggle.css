@@ -1,7 +1,7 @@
 @layer bds-components {
   /* ─── CompletionToggle ──────────────────────────────────────────
      Circular completion control. Same visual is reused inside
-     ChecklistItem (applied to a <span>) and inside BoardCard
+     Checklist (applied to a <span>) and inside BoardCard
      (applied to the internal toggle button).
 
      Distinct from Checkbox — Checkbox is rectangular and used for

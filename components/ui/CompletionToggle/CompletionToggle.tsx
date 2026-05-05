@@ -22,7 +22,7 @@ export interface CompletionToggleProps
  *
  * Renders as a `<button>` so it is a self-contained click target.
  * For row-style use where the entire row is the click target (label +
- * toggle), use `ChecklistItem` instead — it shares this control's
+ * toggle), use `Checklist` instead — it shares this control's
  * visual and pairs it with a native `<label>` + `<input>`.
  *
  * @example

@@ -1,9 +1,9 @@
 import { forwardRef, type LabelHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import '../CompletionToggle/CompletionToggle.css';
-import './ChecklistItem.css';
+import './Checklist.css';
 
-export interface ChecklistItemProps
+export interface ChecklistProps
   extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onChange'> {
   /** Item label — rendered next to the toggle. ReactNode so a marked-up label is supported. */
   label: ReactNode;
@@ -16,7 +16,7 @@ export interface ChecklistItemProps
 }
 
 /**
- * ChecklistItem — row-style completion control. Pairs `CompletionToggle`'s
+ * Checklist — row-style completion control. Pairs `CompletionToggle`'s
  * circular visual with a native `<label>` + `<input type="checkbox">` so
  * the **entire row** is the click target. Native `Space` / `Enter` toggle
  * for free; no manual `onKeyDown` needed.
@@ -31,7 +31,7 @@ export interface ChecklistItemProps
  *
  * @example
  * ```tsx
- * <ChecklistItem
+ * <Checklist
  *   label="Restock surgical gloves"
  *   checked={item.completed}
  *   onCheckedChange={(next) => save(item.id, next)}
@@ -41,7 +41,7 @@ export interface ChecklistItemProps
  *
  * @summary Completion-state row with circular toggle + label
  */
-export const ChecklistItem = forwardRef<HTMLLabelElement, ChecklistItemProps>(
+export const Checklist = forwardRef<HTMLLabelElement, ChecklistProps>(
   (
     {
       label,
@@ -57,16 +57,16 @@ export const ChecklistItem = forwardRef<HTMLLabelElement, ChecklistItemProps>(
       <label
         ref={ref}
         className={bdsClass(
-          'bds-checklist-item',
-          checked && 'bds-checklist-item--checked',
-          disabled && 'bds-checklist-item--disabled',
+          'bds-checklist',
+          checked && 'bds-checklist--checked',
+          disabled && 'bds-checklist--disabled',
           className,
         )}
         {...props}
       >
         <input
           type="checkbox"
-          className="bds-checklist-item__input"
+          className="bds-checklist__input"
           checked={checked}
           disabled={disabled}
           onChange={(e) => onCheckedChange(e.target.checked)}
@@ -76,18 +76,18 @@ export const ChecklistItem = forwardRef<HTMLLabelElement, ChecklistItemProps>(
             'bds-completion-toggle',
             checked && 'bds-completion-toggle--checked',
             disabled && 'bds-completion-toggle--disabled',
-            'bds-checklist-item__toggle',
+            'bds-checklist__toggle',
           )}
           aria-hidden="true"
         >
           {checked && <span className="bds-completion-toggle__icon" />}
         </span>
-        <span className="bds-checklist-item__label">{label}</span>
+        <span className="bds-checklist__label">{label}</span>
       </label>
     );
   },
 );
 
-ChecklistItem.displayName = 'ChecklistItem';
+Checklist.displayName = 'Checklist';
 
-export default ChecklistItem;
+export default Checklist;

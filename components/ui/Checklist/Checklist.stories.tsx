@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ChecklistItem } from './ChecklistItem';
+import { Checklist } from './Checklist';
 
 /* ─── Layout helpers (story-only) ────────────────────────────────── */
 
@@ -29,9 +29,9 @@ const Stack = ({
 
 /* ─── Meta ───────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof ChecklistItem> = {
-  title: 'Components/Form/ChecklistItem',
-  component: ChecklistItem,
+const meta: Meta<typeof Checklist> = {
+  title: 'Components/List/checklist',
+  component: Checklist,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
@@ -42,7 +42,7 @@ const meta: Meta<typeof ChecklistItem> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ChecklistItem>;
+type Story = StoryObj<typeof Checklist>;
 
 /* ═══════════════════════════════════════════════════════════════
    1. PLAYGROUND
@@ -59,7 +59,7 @@ export const Playground: Story = {
     const [checked, setChecked] = useState(args.checked);
     return (
       <div style={{ minWidth: 320 }}>
-        <ChecklistItem {...args} checked={checked} onCheckedChange={setChecked} />
+        <Checklist {...args} checked={checked} onCheckedChange={setChecked} />
       </div>
     );
   },
@@ -75,10 +75,10 @@ export const Variants: Story = {
     <div style={{ minWidth: 360 }}>
       <SectionLabel>States</SectionLabel>
       <Stack>
-        <ChecklistItem label="Unchecked" checked={false} onCheckedChange={() => {}} />
-        <ChecklistItem label="Checked" checked={true} onCheckedChange={() => {}} />
-        <ChecklistItem label="Disabled" checked={false} onCheckedChange={() => {}} disabled />
-        <ChecklistItem
+        <Checklist label="Unchecked" checked={false} onCheckedChange={() => {}} />
+        <Checklist label="Checked" checked={true} onCheckedChange={() => {}} />
+        <Checklist label="Disabled" checked={false} onCheckedChange={() => {}} disabled />
+        <Checklist
           label="Disabled checked"
           checked={true}
           onCheckedChange={() => {}}
@@ -143,7 +143,7 @@ export const Patterns: Story = {
         </div>
         <Stack>
           {items.map((item) => (
-            <ChecklistItem
+            <Checklist
               key={item.id}
               label={item.label}
               checked={item.checked}

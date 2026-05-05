@@ -25,7 +25,7 @@ export * from './CatalogPicker';
 export * from './CardList';
 export * from './CardTestimonial';
 export * from './Checkbox';
-export * from './ChecklistItem';
+export * from './Checklist';
 export * from './Chip';
 export * from './CollapsibleCard';
 export * from './CompletionToggle';

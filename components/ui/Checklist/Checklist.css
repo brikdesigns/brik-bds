@@ -1,5 +1,5 @@
 @layer bds-components {
-  /* ─── ChecklistItem ─────────────────────────────────────────────
+  /* ─── Checklist ─────────────────────────────────────────────
      Row-style completion control. The native <label> wraps the
      hidden <input>, the visual circle (.bds-completion-toggle), and
      the label text — so clicking anywhere on the row toggles the
@@ -10,7 +10,7 @@
      across the atomic and row primitives.
   ───────────────────────────────────────────────────────────────── */
 
-  .bds-checklist-item {
+  .bds-checklist {
     display: flex;
     align-items: center;
     gap: var(--gap-md);
@@ -22,31 +22,31 @@
     transition: background-color var(--duration-normal) var(--ease-out);
   }
 
-  .bds-checklist-item:hover {
+  .bds-checklist:hover {
     background-color: var(--surface-secondary-hover, var(--surface-secondary));
   }
 
-  .bds-checklist-item--checked {
+  .bds-checklist--checked {
     background-color: var(--surface-secondary);
   }
 
-  .bds-checklist-item--disabled {
+  .bds-checklist--disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
 
-  .bds-checklist-item--disabled:hover {
+  .bds-checklist--disabled:hover {
     background-color: transparent;
   }
 
-  .bds-checklist-item--disabled.bds-checklist-item--checked:hover {
+  .bds-checklist--disabled.bds-checklist--checked:hover {
     background-color: var(--surface-secondary);
   }
 
   /* Hide the native input — the <span class="bds-completion-toggle">
      is the visible control. Input remains in the tab order and
      receives keyboard events for native a11y. */
-  .bds-checklist-item__input {
+  .bds-checklist__input {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -60,19 +60,19 @@
 
   /* When the input is focused (keyboard nav), surface the focus ring
      on the visible toggle. */
-  .bds-checklist-item__input:focus-visible + .bds-checklist-item__toggle {
+  .bds-checklist__input:focus-visible + .bds-checklist__toggle {
     outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
     outline-offset: 2px;
   }
 
   /* Override CompletionToggle's default cursor — within a label, the
      parent owns the click target and the cursor should match. */
-  .bds-checklist-item__toggle {
+  .bds-checklist__toggle {
     cursor: inherit;
   }
 
   /* Label text */
-  .bds-checklist-item__label {
+  .bds-checklist__label {
     flex: 1;
     min-width: 0;
     font-family: var(--font-family-label);
@@ -83,7 +83,7 @@
     transition: color var(--duration-normal) var(--ease-out);
   }
 
-  .bds-checklist-item--checked .bds-checklist-item__label {
+  .bds-checklist--checked .bds-checklist__label {
     color: var(--text-muted);
     text-decoration: line-through;
   }
