@@ -130,7 +130,7 @@
     "canonical-check:report": "node scripts/canonical-check.mjs --allowlist dist/tokens.css --format md components content-system stories || true",
     "build:types": "tsc --project tsconfig.build.json",
     "build:dist-tokens": "node scripts/build-dist-tokens.js",
-    "chromatic": "npx chromatic --project-token=chpt_c16ee79525f408c",
+    "chromatic": "npx chromatic --project-token=${CHROMATIC_PROJECT_TOKEN:?CHROMATIC_PROJECT_TOKEN env var required — see .env.example}",
     "deploy:staging": "npm run build-storybook && npx netlify-cli deploy --dir=storybook-static",
     "deploy:prod": "npm run build-storybook && npx netlify-cli deploy --prod --dir=storybook-static",
     "sync:figma-mcp": "node scripts/sync-figma-mcp.js",
