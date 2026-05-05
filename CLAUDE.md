@@ -56,6 +56,20 @@ If a token doesn't exist in `figma-tokens.css` after the build, it needs to be a
 
 **Before editing ANY `tokens/*.css` file** — especially for a dark-mode fix — read [tokens/CASCADE.md](tokens/CASCADE.md) first. It documents which files ship in `dist/tokens.css` (reachable from consumers) vs which are Storybook-only, and the dark-mode selector contract. Editing the wrong file is a silent no-op for consumers.
 
+## Security — read the canonical 5 before any credential work
+
+> **Canonical doc set — five files, no more.** Read these before doing anything credential-related (rotating, fetching, env-setting, writing config). Do NOT create a sixth security md file in this repo.
+>
+> 1. **Human entry point:** [Notion — Security Best Practices](https://www.notion.so/Security-Best-Practices-35797d34ed2880b49446e2d93497a487)
+> 2. **Per-repo lookup:** [`brik-llm/operations/security/repo-token-map.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/repo-token-map.md) — every Brik repo's credentials → 1P entry
+> 3. **Per-secret destinations:** [`brik-llm/operations/security/auth-surfaces.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/auth-surfaces.md)
+> 4. **Rotation doctrine:** [`brik-llm/operations/security/when-to-rotate.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/when-to-rotate.md) — **HARD RULE: agents never initiate rotation; humans do.** Agents propose only on real-exposure triggers (chat paste, public repo, third-party leak) and propagate after the human-driven provider-side action.
+> 5. **Manual procedure per provider:** [`brik-llm/operations/macos/openclaw/runbooks/token-rotation.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/macos/openclaw/runbooks/token-rotation.md)
+>
+> Source-of-truth for every credential value: **1Password Development vault.** Never paste secrets into chat or commits. Reference 1P items by ID, not title. Update existing 1P entries, never create "FOO NEW" duplicates.
+>
+> **For brik-bds specifically:** the credentials this repo consumes (`FIGMA_ACCESS_TOKEN`, `NOTION_TOKEN`, `CHROMATIC_PROJECT_TOKEN`, `CONSUMER_DRIFT_TOKEN`, `BDS_NPM_PUBLISH_TOKEN`) are listed under `## brik-bds` in [`repo-token-map.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/repo-token-map.md#brik-bds).
+
 ## Token Discipline (ALL consuming projects)
 
 These rules apply in every project that imports BDS tokens (portal, renew-pms, brikdesigns, client sites).
