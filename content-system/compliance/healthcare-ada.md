@@ -21,6 +21,16 @@
 
 **Consumer integration:** A short "Compliance Profile" section in each consumer repo's `CLAUDE.md` points to this document. Project-specific overrides go in the project's CLAUDE.md; the canonical rules stay here.
 
+| Consumer repo | Compliance Profile section | a11y CI gate |
+|---|---|---|
+| [`brik-client-portal`](https://github.com/brikdesigns/brik-client-portal) | ✅ added 2026-05-05 | ✅ axe-core/playwright pilot on public routes |
+| [`renew-pms`](https://github.com/brikdesigns/renew-pms) | ✅ added 2026-05-05 | ⏭️ pending — adopt portal pattern per [brik-llm#130](https://github.com/brikdesigns/brik-llm/issues/130) phase 4.4 |
+| [`memphis-dental`](https://github.com/brikdesigns/memphis-dental) | ✅ added 2026-05-05 | ✅ on the gate ([brik-llm#190](https://github.com/brikdesigns/brik-llm/issues/190)) |
+| [`tncld`](https://github.com/brikdesigns/tncld) | ✅ pre-existing (updated to point at canonical) | n/a — Webflow not Astro |
+| [`birdwell-mutlak`](https://github.com/brikdesigns/birdwell-mutlak) | ⏭️ no CLAUDE.md yet | ✅ canonical reference impl |
+| [`vale-partners`](https://github.com/brikdesigns/vale-partners) | ⏭️ pending | ✅ on the gate |
+| [`freedom-client-portal`](https://github.com/brikdesigns/freedom-client-portal) | n/a | n/a — inactive product |
+
 **Companion policy — accessibility overlays:** Brik does not install UserWay, AccessiBe, EqualWeb, or any other accessibility overlay widget on client sites. The full position and the first-party alternative path (Accessibility Preferences panel, dated Accessibility Statement, axe-core CI) are documented in [`accessibility-overlays.md`](./accessibility-overlays.md) and formalized in [ADR-002](../../docs/adrs/ADR-002-accessibility-overlays.md). Read that doc before entertaining any client ask for a widget-based compliance signal.
 
 ---
