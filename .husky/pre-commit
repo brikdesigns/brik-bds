@@ -1,5 +1,24 @@
 #!/bin/sh
 
+# ── Secret scan (gitleaks) ──
+# Defense-in-depth for the secret-leak prevention layer (renew-pms#258 +
+# brik-llm#193). Runs gitleaks on the staged diff; blocks commits containing
+# patterns that match its built-in rules + any local .gitleaks.toml allowlist.
+# Graceful skip if gitleaks isn't installed (CI / fresh machine).
+if command -v gitleaks >/dev/null 2>&1; then
+  echo "🔍 Running gitleaks secret scan..."
+  config_arg=""
+  if [ -f .gitleaks.toml ]; then
+    config_arg="--config .gitleaks.toml"
+  fi
+  if ! gitleaks protect --staged --redact --no-banner --verbose $config_arg; then
+    echo ""
+    echo "   Secret detected in staged changes. Move the value to ~/.secrets/<name>.env"
+    echo "   and reference it via process.env.<NAME>. If false positive, add to .gitleaks.toml."
+    exit 1
+  fi
+fi
+
 # BDS Component Completeness Check
 BARREL="components/ui/index.ts"
 UI_DIR="components/ui"
