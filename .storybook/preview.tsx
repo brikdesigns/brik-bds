@@ -111,7 +111,7 @@ const ThemedDocsContainer: typeof DefaultDocsContainer = (props) => {
         .sbdocs-preview { border-color: var(--border-secondary) !important; background: var(--surface-primary) !important; }
         .docblock-argstable { border-color: var(--border-secondary) !important; }
         .docblock-argstable th, .docblock-argstable td { border-color: var(--border-muted) !important; color: var(--text-primary) !important; }
-        .docblock-argstable th { background: var(--surface-secondary) !important; }
+        .docblock-argstable th { background: var(--surface-primary) !important; }
         [class*="ActionBar"] button { color: var(--text-muted) !important; }
       `;
     } else {
@@ -182,7 +182,7 @@ const withTheme: Decorator = (Story, context) => {
         .sbdocs-preview { border-color: var(--border-secondary) !important; background: var(--surface-primary) !important; }
         .docblock-argstable { border-color: var(--border-secondary) !important; }
         .docblock-argstable th, .docblock-argstable td { border-color: var(--border-muted) !important; color: var(--text-primary) !important; }
-        .docblock-argstable th { background: var(--surface-secondary) !important; }
+        .docblock-argstable th { background: var(--surface-primary) !important; }
         [class*="ActionBar"] button { color: var(--text-muted) !important; }
       `;
     } else {

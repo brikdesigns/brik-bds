@@ -57,7 +57,7 @@
   overflow: hidden !important;
 }
 
-/* Pre blocks inside source containers */
+/* Pre blocks inside source containers — Carbon-aligned generous padding */
 #storybook-docs#storybook-docs .docblock-source pre,
 #storybook-docs#storybook-docs .docblock-source pre.prismjs,
 .docblock-source pre,
@@ -72,7 +72,7 @@
   box-shadow: none !important;
   text-shadow: none !important;
   margin: 0 !important;
-  padding: 16px 20px !important;
+  padding: 24px 32px !important;
   overflow-x: auto !important;
 }
 
@@ -109,7 +109,7 @@ pre,
   box-shadow: none !important;
   text-shadow: none !important;
   margin: 0 !important;
-  padding: 16px 20px !important;
+  padding: 24px 32px !important;
 }
 
 /* Emotion wrapper divs around source blocks — SB10 injects background/border
@@ -168,53 +168,45 @@ code:not([class*="language-"]):not(pre code) {
 }
 
 /* ============================================
-   ACTION BAR — "Show code" / "Copy" footer
+   ACTION BAR — Carbon-style overlay tabs
 
-   Carbon-aligned. The action bar is a SIBLING of `.sbdocs-preview` in
-   the SB10 DOM (not a descendant — verified live), so to make it read
-   as an attached footer we treat the two elements as one card frame:
+   The action bar (.sbdocs-preview-actions) is a SIBLING of .sbdocs-preview
+   in the SB10 DOM. Carbon's reference design floats these triggers as
+   small tab-style buttons inside the top-right corner of the preview
+   frame instead of a separate footer row.
 
-     .sbdocs-preview            ← top: demo surface, no bottom border/radius
-     .sbdocs-preview-actions    ← bottom: footer surface, no top border/radius
-
-   The result is one continuous bordered container with the demo on top
-   and the action footer below, divided by a thin border-top.
+   Approach: use :has() to make the immediate parent of the actions bar
+   `position: relative`, then absolutely position the actions inside that
+   parent so they overlay the top-right of the preview that precedes them.
 
    DOM (Storybook 10):
-     .sbdocs-content
-       ├─ .sbdocs-preview            (the rendered story)
-       └─ .sbdocs-preview-actions    (the action bar — sibling)
-            ├─ button.docblock-code-toggle   ("Show code")
-            └─ button                        (Copy code, etc.)
+     <wrapper>                    ← :has(> .sbdocs-preview-actions) → relative
+       .sbdocs-preview            ← in normal flow; takes its own padding
+       .sbdocs-preview-actions    ← absolute, anchored top-right of wrapper
    ============================================ */
 
-/* Top half (already styled elsewhere as `.sbdocs-preview`) — strip the
-   bottom edge so the footer butts cleanly up against it. */
-#storybook-docs#storybook-docs .sbdocs-preview:has(+ .sbdocs-preview-actions:not(:empty)) {
-  margin-bottom: 0 !important;
-  border-bottom: none !important;
-  border-bottom-left-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
+/* Action bar — pulled up via negative margin so it overlaps the
+   preview's bottom-right corner. Robust to DOM wrapper variation:
+   no :has() / no positioning context required.
 
-/* Bottom half — the attached footer. Right-aligned, visible surface,
-   matches the preview's frame on three sides + border-top divider. */
+   The math: the action row is ~38px tall. We pull it up by 52px so
+   its top sits ~14px above the preview's bottom edge (inside the
+   preview frame). margin-bottom: -22px recovers most of the flow
+   space so subsequent content doesn't float in the gap. */
 #storybook-docs#storybook-docs .sbdocs-preview-actions {
   display: flex !important;
   justify-content: flex-end !important;
-  align-items: stretch !important;
-  gap: 0 !important;
-  margin: 0 0 24px !important;
+  align-items: center !important;
+  gap: 4px !important;
+  margin: -52px 16px -22px 0 !important;
   padding: 0 !important;
-  background-color: var(--surface-secondary) !important;
-  border: 1px solid var(--border-secondary) !important;
-  border-top: 1px solid var(--border-secondary) !important;
-  border-top-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-left-radius: 6px !important;
-  border-bottom-right-radius: 6px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
   box-shadow: none !important;
-  overflow: hidden !important;
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 2;
 }
 
 /* Hide the action bar when empty (some stories without source). */
@@ -222,55 +214,51 @@ code:not([class*="language-"]):not(pre code) {
   display: none !important;
 }
 
-/* SB10 wraps action items in an inner div that defaults to width:100%,
-   which neutralises our justify-content: flex-end on the parent. Push
-   that wrapper to the right edge and let it shrink to its contents. */
+/* SB10 wraps action items in an inner div with width: 100% — strip that
+   so the inner row hugs its content. */
 #storybook-docs#storybook-docs .sbdocs-preview-actions > * {
   width: auto !important;
-  margin-left: auto !important;
+  margin: 0 !important;
   display: flex !important;
   align-items: stretch !important;
-  gap: 0 !important;
+  gap: 4px !important;
 }
 
-/* Action button — proper button affordance, not faded text. */
+/* Action tab — Carbon-style: solid surface, subtle border, small radius.
+   Sits on top of the preview's content, so it needs its own background. */
 #storybook-docs#storybook-docs .sbdocs-preview-actions button,
 #storybook-docs#storybook-docs button.docblock-code-toggle,
 button.docblock-code-toggle {
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
-  background: transparent !important;
+  background: var(--surface-secondary) !important;
   color: var(--text-secondary) !important;
-  border: none !important;
-  border-radius: 0 !important;
+  border: 1px solid var(--border-muted) !important;
+  border-radius: 4px !important;
   box-shadow: none !important;
   font-family: var(--font-family-body, sans-serif) !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
-  padding: 10px 16px !important;
+  padding: 6px 12px !important;
   margin: 0 !important;
   opacity: 1 !important;
   cursor: pointer !important;
-  transition: color 150ms ease, background-color 150ms ease;
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
   text-decoration: none !important;
   outline: none !important;
-}
-
-/* Vertical separator between adjacent buttons in the footer. */
-#storybook-docs#storybook-docs .sbdocs-preview-actions button + button {
-  border-left: 1px solid var(--border-secondary) !important;
 }
 
 #storybook-docs#storybook-docs .sbdocs-preview-actions button:hover,
 #storybook-docs#storybook-docs button.docblock-code-toggle:hover {
   color: var(--text-brand-primary) !important;
-  background-color: var(--surface-subtle-hover, var(--surface-secondary)) !important;
+  background-color: var(--surface-primary) !important;
+  border-color: var(--border-secondary) !important;
 }
 
 #storybook-docs#storybook-docs .sbdocs-preview-actions button:focus-visible {
   outline: 2px solid var(--text-brand-primary) !important;
-  outline-offset: -2px !important;
+  outline-offset: 2px !important;
 }
 
 /* Kill any pseudo-element accent lines on the toggle. */
@@ -407,13 +395,27 @@ div[class*="docs-story"] {
 /* Story preview container — the component demo box in docs.
    Take full control of background, border, and shadow away from emotion's
    getBlockBackgroundStyle(theme) — emotion injects after our CSS and wins
-   specificity battles. Token-based values auto-resolve per theme. */
+   specificity battles. Token-based values auto-resolve per theme.
+
+   Internal padding gives Carbon-style breathing room around the rendered
+   component so it doesn't touch the preview-block edges. */
 #storybook-docs#storybook-docs .sbdocs-preview {
   background: var(--surface-primary) !important;
   border-color: var(--border-secondary) !important;
   box-shadow: none !important;
   margin: 16px 0 24px !important;
+  padding: var(--padding-xl) !important;
   overflow: hidden !important;
+}
+
+/* Source code reveal inside preview — strip the parent padding so the
+   code block fills the bottom of the preview frame edge-to-edge. */
+#storybook-docs#storybook-docs .sbdocs-preview .docblock-source {
+  margin: var(--padding-xl) calc(-1 * var(--padding-xl)) calc(-1 * var(--padding-xl)) !important;
+  border-radius: 0 !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
 }
 
 /* Override centered layout in docs Canvas — prevent the tall
@@ -500,7 +502,7 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
 
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td,
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > th {
-  background: var(--surface-secondary) !important;
+  background: var(--surface-primary) !important;
   color: var(--text-primary) !important;
   border-color: var(--border-muted) !important;
 }
@@ -515,9 +517,9 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
   color: var(--text-brand-primary) !important;
 }
 
-/* Prop default value badges */
+/* Prop default value badges — secondary surface to pop against white cells */
 #storybook-docs#storybook-docs .docblock-argstable td code {
-  background-color: var(--surface-primary) !important;
+  background-color: var(--surface-secondary) !important;
   color: var(--text-primary) !important;
 }
 
