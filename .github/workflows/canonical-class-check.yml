@@ -1,0 +1,60 @@
+name: Canonical Class Check
+
+# Enforces BDS's canonical CSS-class layer on every PR and push to main.
+# Sibling of canonical-check.yml — that gate covers `--*` token names; this
+# one covers the component-class layer (`bds-button`, `bds-avatar`, etc.).
+#
+# Fails the build when:
+#   - A `bds-*` class is referenced that isn't published in dist/styles.css
+#     (invented variant)
+#   - A non-prefixed class root collides with a canonical primitive
+#     (e.g. `.button--primary` while BDS publishes `bds-button`)
+#   - A shorthand alias collides with canon (e.g. `.btn` aliases `bds-button`)
+#
+# Project-namespaced BEM blocks (`.team-card__portrait`, `.hero-section__inner`)
+# are NOT flagged — layout CSS stays project-local. The audit is precise about
+# the boundary between component primitives (BDS-owned) and layout (project).
+#
+# Why this is a CI gate (not just pre-push):
+#   - Pre-push runs `validate:full` locally but does not include the class
+#     check.
+#   - Cloud-agent commits (OpenClaw, scheduled routines) bypass local hooks
+#     entirely.
+#   - PRs from forks or fresh clones may not have husky installed.
+#
+# Source of truth: BDS dist/styles.css (component class layer).
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  canonical-class-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # canonical-class-check parses the allowlist from `dist/styles.css`,
+      # which is gitignored. Unlike the token-side allowlist (cheap to
+      # regenerate via `build:dist-tokens`), the component CSS only exists
+      # after the full lib build (Vite extracts each component's *.css).
+      # `build:lib` is the only path that emits dist/styles.css.
+      - name: Build dist (canonical class allowlist source)
+        run: npm run build:lib
+
+      - name: Canonical class check
+        run: npm run canonical-class-check

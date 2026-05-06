@@ -43,6 +43,11 @@
       "types": "./scripts/canonical-check.d.ts",
       "import": "./scripts/canonical-check.mjs",
       "default": "./scripts/canonical-check.mjs"
+    },
+    "./canonical-class-check": {
+      "types": "./scripts/canonical-class-check.d.ts",
+      "import": "./scripts/canonical-class-check.mjs",
+      "default": "./scripts/canonical-class-check.mjs"
     }
   },
   "files": [
@@ -54,11 +59,14 @@
     "content-system/blueprints/astro/index.ts",
     "scripts/bds-find.mjs",
     "scripts/canonical-check.mjs",
-    "scripts/canonical-check.d.ts"
+    "scripts/canonical-check.d.ts",
+    "scripts/canonical-class-check.mjs",
+    "scripts/canonical-class-check.d.ts"
   ],
   "bin": {
     "bds-find": "scripts/bds-find.mjs",
-    "canonical-check": "scripts/canonical-check.mjs"
+    "canonical-check": "scripts/canonical-check.mjs",
+    "canonical-class-check": "scripts/canonical-class-check.mjs"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -128,6 +136,8 @@
     "bds:find": "node scripts/bds-find.mjs",
     "canonical-check": "node scripts/canonical-check.mjs --allowlist dist/tokens.css components content-system/blueprints content-system/atmospheres content-system/industries",
     "canonical-check:report": "node scripts/canonical-check.mjs --allowlist dist/tokens.css --format md components content-system stories || true",
+    "canonical-class-check": "node scripts/canonical-class-check.mjs --allowlist dist/styles.css content-system/blueprints",
+    "canonical-class-check:report": "node scripts/canonical-class-check.mjs --allowlist dist/styles.css --format md content-system/blueprints stories || true",
     "build:types": "tsc --project tsconfig.build.json",
     "build:dist-tokens": "node scripts/build-dist-tokens.js",
     "chromatic": "npx chromatic --project-token=${CHROMATIC_PROJECT_TOKEN:?CHROMATIC_PROJECT_TOKEN env var required — see .env.example}",
