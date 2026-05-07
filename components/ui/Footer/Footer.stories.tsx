@@ -151,12 +151,92 @@ export const Variants: Story = {
    3. PATTERNS — Full marketing page footer
    ═══════════════════════════════════════════════════════════════ */
 
+/* \u2500\u2500\u2500 Marketing-pattern helpers \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
+
+const NewsletterSection = () => (
+  <div style={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 'var(--gap-md)',
+    textAlign: 'center',
+    padding: 'var(--padding-md) 0',
+  }}>
+    <h3 style={{
+      fontFamily: 'var(--font-family-heading)',
+      fontSize: 'var(--heading-md)',
+      fontWeight: 'var(--font-weight-bold)' as unknown as number,
+      margin: 0,
+      color: 'inherit',
+    }}>
+      Join our newsletter
+    </h3>
+    <p style={{
+      fontFamily: 'var(--font-family-body)',
+      fontSize: 'var(--body-sm)',
+      margin: 0,
+      opacity: 0.8,
+    }}>
+      Subscribe for updates, design tips, and case studies.
+    </p>
+    <input
+      type="email"
+      placeholder="you@example.com"
+      style={{
+        width: '320px',
+        maxWidth: '100%',
+        padding: 'var(--padding-sm)',
+        fontFamily: 'var(--font-family-body)',
+        fontSize: 'var(--body-sm)',
+        border: 'var(--border-width-sm) solid var(--border-secondary)',
+        borderRadius: 'var(--border-radius-sm)',
+      }}
+    />
+  </div>
+);
+
+const ContactBlock = () => (
+  <>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)', fontSize: 'var(--body-sm)' }}>
+      <span style={{ opacity: 0.6 }}>{'\u260E'}</span>
+      <span>(555) 123-4567</span>
+    </div>
+    <a
+      href="mailto:hello@example.com"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--gap-sm)',
+        fontSize: 'var(--body-sm)',
+        color: 'inherit',
+        textDecoration: 'none',
+      }}
+    >
+      <span style={{ opacity: 0.6 }}>{'\u2709'}</span>
+      <span>hello@example.com</span>
+    </a>
+  </>
+);
+
+const ServiceDot = ({ color }: { color: string }) => (
+  <span
+    aria-hidden="true"
+    style={{
+      display: 'inline-block',
+      width: 10,
+      height: 10,
+      borderRadius: '50%',
+      backgroundColor: color,
+    }}
+  />
+);
+
 /** @summary Common usage patterns */
 export const Patterns: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>Marketing site footer</SectionLabel>
+        <SectionLabel>Minimal marketing footer (legacy shape \u2014 no marketing slots)</SectionLabel>
         <Footer
           logo={<LogoPlaceholder />}
           tagline="Modern websites and digital systems for growing businesses."
@@ -188,6 +268,50 @@ export const Patterns: Story = {
           ]}
           copyright={'\u00A9 2026 Brik Designs LLC. All rights reserved.'}
           socialLinks={socialLinks}
+        />
+      </div>
+
+      <div>
+        <SectionLabel>Full marketing footer \u2014 newsletter + contact + badged columns + bottom links</SectionLabel>
+        <Footer
+          aboveTop={<NewsletterSection />}
+          logo={<LogoPlaceholder />}
+          tagline="We're a digital marketing and design agency."
+          brandExtra={<ContactBlock />}
+          columns={[
+            {
+              heading: 'Services',
+              links: [
+                { label: 'Brand Design', href: '#', adornment: <ServiceDot color="var(--services--yellow)" /> },
+                { label: 'Marketing Design', href: '#', adornment: <ServiceDot color="var(--services--green)" /> },
+                { label: 'Information Design', href: '#', adornment: <ServiceDot color="var(--services--blue)" /> },
+                { label: 'Product Design', href: '#', adornment: <ServiceDot color="var(--services--purple)" /> },
+                { label: 'Back Office Design', href: '#', adornment: <ServiceDot color="var(--services--orange)" /> },
+              ],
+            },
+            {
+              heading: 'About',
+              links: [
+                { label: 'Who We Are', href: '#' },
+                { label: 'What We Do', href: '#' },
+                { label: 'Customer Stories', href: '#' },
+              ],
+            },
+            {
+              heading: 'Follow Us',
+              links: [
+                { label: 'LinkedIn', href: '#' },
+                { label: 'Instagram', href: '#' },
+                { label: 'Facebook', href: '#' },
+              ],
+            },
+          ]}
+          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
+          bottomLinks={[
+            { label: 'Terms', href: '#' },
+            { label: 'Privacy policy', href: '#' },
+          ]}
+          socialLinks={<span>Made with {'\u2764\uFE0F'} in Palm Beach, FL</span>}
         />
       </div>
     </Stack>
