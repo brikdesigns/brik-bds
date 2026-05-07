@@ -68,7 +68,7 @@ export interface FooterProps extends HTMLAttributes<HTMLElement> {
 /**
  * Footer variant
  */
-export type FooterVariant = 'default' | 'brand';
+export type FooterVariant = 'default' | 'brand' | 'inverse';
 
 /**
  * Footer - BDS page footer with link columns

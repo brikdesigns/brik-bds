@@ -40,6 +40,10 @@
   background-color: var(--surface-brand-primary);
 }
 
+.bds-footer--inverse {
+  background-color: var(--surface-inverse);
+}
+
 /* ─── Top section: logo + columns ─────────────────────────────── */
 
 .bds-footer__top {
@@ -200,4 +204,13 @@
 .bds-footer--brand .bds-footer__bottom-link { color: var(--text-inverse); }
 .bds-footer--brand .bds-footer__bottom-sep { color: var(--text-inverse); }
 .bds-footer--brand .bds-footer__social { color: var(--text-inverse); }
+
+.bds-footer--inverse .bds-footer__heading { color: var(--text-on-color-dark); }
+.bds-footer--inverse .bds-footer__link { color: var(--text-on-color-dark); }
+.bds-footer--inverse .bds-footer__tagline { color: var(--text-on-color-dark); }
+.bds-footer--inverse .bds-footer__brand-extra { color: var(--text-on-color-dark); }
+.bds-footer--inverse .bds-footer__copyright { color: var(--text-on-color-dark); }
+.bds-footer--inverse .bds-footer__bottom-link { color: var(--text-on-color-dark); }
+.bds-footer--inverse .bds-footer__bottom-sep { color: var(--text-on-color-dark); }
+.bds-footer--inverse .bds-footer__social { color: var(--text-on-color-dark); }
 }

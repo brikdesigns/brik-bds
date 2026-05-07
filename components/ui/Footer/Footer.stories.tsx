@@ -78,7 +78,7 @@ const meta: Meta<typeof Footer> = {
   tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
-    variant: { control: 'select', options: ['default', 'brand'] },
+    variant: { control: 'select', options: ['default', 'brand', 'inverse'] },
   },
 } satisfies Meta<typeof Footer>;
 
@@ -126,6 +126,17 @@ export const Variants: Story = {
           columns={sampleColumns}
           copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
           variant="brand"
+        />
+      </div>
+
+      <div>
+        <SectionLabel>Inverse (dark surface \u2014 meets WCAG AA on body-sm)</SectionLabel>
+        <Footer
+          logo={<LogoPlaceholder />}
+          tagline="Building better digital experiences for small businesses."
+          columns={sampleColumns}
+          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
+          variant="inverse"
         />
       </div>
 
