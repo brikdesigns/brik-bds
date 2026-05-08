@@ -1,8 +1,9 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+---
+title: Healthcare ADA
+description: Brik's canonical accessibility & compliance standards for healthcare clients — HIPAA + ADA Title III + Section 1557, the technical floor, and BDS component-level rules.
+---
 
-<Meta title="Content/Compliance/Healthcare ADA" />
-
-# Healthcare Accessibility & Compliance Standards
+import { Callout } from 'fumadocs-ui/components/callout';
 
 **Status:** Canonical — promoted to BDS 2026-04-21.
 **Scope:** Marketing sites AND product portals for healthcare clients.
@@ -10,7 +11,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 The full canonical standards live alongside this page in [`healthcare-ada.md`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/compliance/healthcare-ada.md). That file ships with BDS (`node_modules/@brikdesigns/bds/content-system/compliance/healthcare-ada.md`) and is what every consumer repo's `CLAUDE.md` points to under its **Compliance Profile** section.
 
-This page is a shortcut for browsing the rules from Storybook.
+This page is the browse companion — same shape, web-readable, easier to cross-link.
 
 ---
 
@@ -37,17 +38,23 @@ Record the regime answers in each consumer repo's `CLAUDE.md` under a **Complian
 - **Manual keyboard + VoiceOver pass** before any new flow ships
 - **Quarterly audit** on every live client site; annual refresh of Accessibility Statement audit date
 
+<Callout type="warn">
+  **AA is the ceiling, not the floor.** Healthcare sites are frequent ADA-lawsuit targets — never silently bump to AAA without a decisions-log entry, and never partial-disable a rule whole-app (per-selector baselines only).
+</Callout>
+
 ---
 
 ## Component-level rules (enforced in BDS)
 
-These graduate from "good practice" to TypeScript-required as the a11y-props rollout lands:
+These graduate from "good practice" to TypeScript-required as the a11y-props rollout lands.
 
-- `Button` — requires accessible text (children or `aria-label`)
-- `IconLink` — requires `aria-label`
-- `Modal` — requires `ariaLabelledBy` + `ariaDescribedBy`, focus trap, focus return
-- `FormField` — requires `label` prop
-- `Image` — requires `alt` prop (empty string allowed only for decorative)
+| Component | Required prop |
+|---|---|
+| `Button` | accessible text — children or `aria-label` |
+| `IconLink` | `aria-label` |
+| `Modal` | `ariaLabelledBy` + `ariaDescribedBy`, focus trap, focus return |
+| `FormField` | `label` |
+| `Image` | `alt` (empty string allowed only for decorative imagery) |
 
 ---
 
@@ -77,3 +84,10 @@ Open [`healthcare-ada.md`](https://github.com/brikdesigns/brik-bds/blob/main/con
 - Step 6 — portal integration plan (CLAUDE.md, CI, component props, preferences panel, legal routes)
 - Step 7 — rollout order
 - Decisions log
+
+---
+
+## Related
+
+- [Content System overview](/docs/content-system)
+- Cross-repo `CLAUDE.md` Astro a11y CI gate ([brik-llm/websites/shared/CLIENT-ACCESSIBILITY-STANDARDS.md](https://github.com/brikdesigns/brik-llm/blob/main/websites/shared/CLIENT-ACCESSIBILITY-STANDARDS.md))
