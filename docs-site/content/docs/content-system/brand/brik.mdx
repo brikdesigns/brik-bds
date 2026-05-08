@@ -1,14 +1,17 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+---
+title: Brik Voice & Tone
+description: The voice/tone substrate Brik uses when speaking as Brik — marketing copy, internal docs, client communications, and anywhere Brik's own voice is the brand on the page.
+---
 
-<Meta title="Content/Brand/Brik" />
-
-# Brik Voice & Tone
+import { Callout } from 'fumadocs-ui/components/callout';
 
 The voice/tone substrate Brik uses when speaking as Brik — marketing site copy, internal docs, client communications, mockup placeholder content, anywhere Brik's own voice is the brand on the page.
 
-Distinct from the abstract VoicePattern catalog under [Content/Voices](?path=/docs/content-voices-overview--docs): those are voice *types* Brik can apply to any client (Direct, Approachable, Authoritative, etc.). This page is Brik's own meta-voice — the way the agency itself sounds.
+Distinct from the abstract VoicePattern catalog under [Voices](/docs/content-system/voices): those are voice *types* Brik can apply to any client (Direct, Approachable, Authoritative, etc.). This page is Brik's own meta-voice — the way the agency itself sounds.
 
-Source of truth for any Brik-internal Claude call (`brikdesigns.com` content, internal mockup copy, agency-side proposals). Retrieved as `source_type='brand-voice'`, `slug='brik'` via `withBrikContext()`.
+<Callout type="info">
+  **Source of truth for any Brik-internal Claude call** — `brikdesigns.com` content, internal mockup copy, agency-side proposals. Retrieved as `source_type='brand-voice'`, `slug='brik'` via `withBrikContext()`.
+</Callout>
 
 ## Positioning
 
@@ -36,7 +39,7 @@ Strategic and human. Honest about what fits and what doesn't.
 
 - **"Clear is kind"** — a core belief from Brené Brown that guides the brand. Plain language is a courtesy, not a compromise.
 - **Transparency is non-negotiable.** All pricing and service info is public on [brikdesigns.com/services](https://brikdesigns.com/services). Discovery calls are available, but never required — clients are in control.
-- **Brik is NOT salesy.** The vibe: "Here's what we offer. Here's what it costs. If we're a fit, amazing. If not, that's okay too."
+- **Brik is NOT salesy.** The vibe: *"Here's what we offer. Here's what it costs. If we're a fit, amazing. If not, that's okay too."*
 - **Clients are partners.** Trust gets built through clarity, consistency, and great work — not pressure or promises.
 - **Brik doesn't just make things pretty.** Brik simplifies the complex through intentional design.
 
@@ -69,14 +72,14 @@ The casual-but-smart family:
 
 Avoid in any Brik-produced copy:
 
-- Salesy urgency framing — *"Limited time"*, *"Don't miss out"*, *"Last chance"*
-- Vague aspiration without specifics — *"Transform your business"*, *"Unlock your potential"*
-- Jargon without translation — *"Synergize"*, *"Leverage"*, *"Optimize"* used in headline copy
-- Coy gating language — *"See if you qualify"*, *"Schedule your free strategy session"*
-- Inflated claims — *"Industry-leading"*, *"World-class"*, *"Best-in-class"*
-- *"We believe in…"* / *"We are committed to…"* filler
-- Pressure framing — *"You deserve better"*, *"Why settle for less"*
-- Generic empathy — *"We understand how hard it is to…"*
+- **Salesy urgency framing** — *"Limited time"*, *"Don't miss out"*, *"Last chance"*
+- **Vague aspiration without specifics** — *"Transform your business"*, *"Unlock your potential"*
+- **Jargon without translation** — *"Synergize"*, *"Leverage"*, *"Optimize"* used in headline copy
+- **Coy gating language** — *"See if you qualify"*, *"Schedule your free strategy session"*
+- **Inflated claims** — *"Industry-leading"*, *"World-class"*, *"Best-in-class"*
+- ***"We believe in…"*** / ***"We are committed to…"*** filler
+- **Pressure framing** — *"You deserve better"*, *"Why settle for less"*
+- **Generic empathy** — *"We understand how hard it is to…"*
 
 ## Recent Work Examples
 
@@ -92,8 +95,15 @@ Brik produces high-value, minimalist email content inspired by models like James
 
 ## When in Doubt
 
-Ask: would Abbey send this to a client she respects? If the sentence wouldn't survive that test, rewrite it.
+Ask: *would Abbey send this to a client she respects?* If the sentence wouldn't survive that test, rewrite it.
 
 ## Provenance
 
 Substantive content extracted from `BrikBot - Internal Marketing Content` (Notion `2f997d34ed288035a86ae02e946faac8`) — Brik's existing internal Claude prompt — with prompt framing stripped. The Notion page remains the source for the BrikBot Claude project assistant; this page is the canonical voice/tone substrate for retrieval and reference.
+
+---
+
+## Related
+
+- [Content System overview](/docs/content-system)
+- [Voices](/docs/content-system/voices) — abstract voice patterns Brik can apply to any client (distinct from this page, which is Brik's own meta-voice)
