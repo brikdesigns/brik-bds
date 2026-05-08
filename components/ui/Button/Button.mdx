@@ -16,53 +16,99 @@ Triggers an event or action. The button family includes three components for dif
 
 ## Variants
 
-Seven variants across three sizes. Standard variants for general actions, danger variants for destructive actions.
+Nine variants across two emphasis tiers — six **brand** variants (primary / outline / secondary / ghost / inverse / on-color) for general action hierarchy, and three **system** variants (selected / destructive / positive) for semantic action meaning. Plus state variants (disabled, loading) and composition variants (icon slots).
 
-<Canvas of={Stories.Variants} />
+### Primary
 
-- **`primary`** — Main call-to-action. One per section.
-- **`outline`** — Secondary emphasis. Alternative to primary.
-- **`secondary`** — Tertiary/subtle. Supporting actions.
-- **`ghost`** — Minimal emphasis. Navigation, repeated actions.
-- **`danger`** — Destructive primary action (delete, remove).
-- **`danger-outline`** — Destructive with less emphasis.
-- **`danger-ghost`** — Destructive, minimal emphasis (inline delete).
+<Canvas of={Stories.Primary} />
 
-### Icons
+### Outline
 
-Use `iconBefore` and `iconAfter` props. Icons should use `1em` sizing to scale with the button.
+<Canvas of={Stories.Outline} />
 
-<Canvas of={Stories.Icons} />
+### Secondary
 
-### Interactive states
+<Canvas of={Stories.Secondary} />
 
-Hover, focus, active, disabled, and loading states. Each variant has custom hover behavior.
+### Ghost
 
-<Canvas of={Stories.States} />
+<Canvas of={Stories.Ghost} />
+
+### Inverse
+
+<Canvas of={Stories.Inverse} />
+
+### OnColor
+
+<Canvas of={Stories.OnColor} />
+
+### Selected
+
+<Canvas of={Stories.Selected} />
+
+### Destructive
+
+<Canvas of={Stories.Destructive} />
+
+### Positive
+
+<Canvas of={Stories.Positive} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
 
 ### Loading
 
-Spinner replaces content while preserving button width. Button is disabled during loading.
-
 <Canvas of={Stories.Loading} />
+
+### With leading icon
+
+<Canvas of={Stories.WithIconBefore} />
+
+### With trailing icon
+
+<Canvas of={Stories.WithIconAfter} />
+
+### Sizes
+
+Side-by-side comparison of the five size tokens — qualifies as the ADR-006 axis-only gallery exception (one variant, size axis varied).
+
+<Canvas of={Stories.Sizes} />
 
 ### LinkButton
 
 An `<a>` element styled as a button. Use when the action navigates to a URL — `href` is required.
 
-<Canvas of={Stories.Link} />
+<Canvas of={Stories.LinkButtonShowcase} />
 
 ### IconButton
 
 An icon-only button with a required `label` prop for accessibility.
 
-<Canvas of={Stories.IconOnly} />
+<Canvas of={Stories.IconButtonShowcase} />
+
+### Loading toggle
+
+Click to simulate an async action. Render-mode demo because the toggle interaction can't be expressed with args alone.
+
+<Canvas of={Stories.LoadingToggle} />
 
 ## Patterns
 
-Real-world compositions for common button use cases.
+Three canonical compositions where Button does multi-component work alongside its siblings.
 
-<Canvas of={Stories.Patterns} />
+### Confirmation dialog
+
+<Canvas of={Stories.ConfirmationDialog} />
+
+### Inline delete
+
+<Canvas of={Stories.InlineDelete} />
+
+### Action bar
+
+<Canvas of={Stories.ActionBar} />
 
 ## Props
 

@@ -18,20 +18,6 @@ const meta: Meta<typeof Banner> = {
 export default meta;
 type Story = StoryObj<typeof Banner>;
 
-/* ─── Layout helpers ─────────────────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-    {children}
-  </span>
-);
-
-const Stack = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%' }}>
-    {children}
-  </div>
-);
-
 const BannerAction = ({ children }: { children: string }) => (
   <Button variant="on-color" size="md">{children}</Button>
 );
@@ -47,114 +33,103 @@ export const Playground: Story = {
   },
 };
 
-/* ─── Variants ───────────────────────────────────────────────── */
+/* ─── Variants — one story per meaningful state ──────────────── */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Announcement (default — brand surface)</SectionLabel>
-      <Banner
-        title="Limited time offer"
-        description="Save 20% on all plans this month"
-        action={<BannerAction>View plans</BannerAction>}
-      />
-
-      <SectionLabel>Title only</SectionLabel>
-      <Banner title="New feature available" />
-
-      <SectionLabel>Dismissible</SectionLabel>
-      <Banner
-        title="Cookie notice"
-        description="We use cookies to improve your experience"
-        action={<BannerAction>Accept</BannerAction>}
-        onDismiss={() => {}}
-      />
-    </Stack>
-  ),
+/** @summary Default announcement tone with title, description, and action */
+export const Announcement: Story = {
+  args: {
+    title: 'Limited time offer',
+    description: 'Save 20% on all plans this month',
+    action: <BannerAction>View plans</BannerAction>,
+  },
 };
 
-/* ─── Tones (replaces AlertBanner) ───────────────────────────── */
+/** @summary Announcement tone with only a title (no description, no action) */
+export const TitleOnly: Story = {
+  args: {
+    title: 'New feature available',
+  },
+};
+
+/** @summary Announcement tone with a dismiss affordance */
+export const Dismissible: Story = {
+  args: {
+    title: 'Cookie notice',
+    description: 'We use cookies to improve your experience',
+    action: <BannerAction>Accept</BannerAction>,
+    onDismiss: () => {},
+  },
+};
+
+/** @summary Information tone — neutral status with leading Badge and `role="alert"` */
+export const Information: Story = {
+  args: {
+    tone: 'information',
+    title: 'Heads up',
+    description: 'Your trial period ends in 7 days. Upgrade to keep access.',
+    action: <Button size="sm">Upgrade</Button>,
+  },
+};
+
+/** @summary Warning tone — caution status with leading Badge and `role="alert"` */
+export const Warning: Story = {
+  args: {
+    tone: 'warning',
+    title: 'Slow connection detected',
+    description: 'Some features may take longer to respond.',
+  },
+};
+
+/** @summary Error tone — failure status with leading Badge and `role="alert"` */
+export const Error: Story = {
+  args: {
+    tone: 'error',
+    title: 'Sync failed',
+    description: "We couldn't reach the server. Check your connection and try again.",
+    action: <Button size="sm" variant="secondary">Retry</Button>,
+  },
+};
+
+/* ─── Patterns — irreducible (hook usage) ────────────────────── */
 
 /**
- * The status tones — `warning`, `error`, `information` — replace the
- * legacy `AlertBanner` component (per ADR-004 §3). Same shape as the
- * announcement tone, with a leading status Badge and an `alert` ARIA
- * role for assistive tech.
+ * Dismissible banner wired up to local state — the canonical pattern for a
+ * notice the user can hide and recover. Uses `useState` so the hide / show
+ * cycle is demonstrable; render-mode is required because args alone can't
+ * express the controlled toggle.
  *
- * @summary Tone variations
+ * @summary Dismissible banner with a hide / show toggle
  */
-export const Tones: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Information</SectionLabel>
-      <Banner
-        tone="information"
-        title="Heads up"
-        description="Your trial period ends in 7 days. Upgrade to keep access."
-        action={<Button size="sm">Upgrade</Button>}
-      />
-
-      <SectionLabel>Warning</SectionLabel>
-      <Banner
-        tone="warning"
-        title="Slow connection detected"
-        description="Some features may take longer to respond."
-      />
-
-      <SectionLabel>Error</SectionLabel>
-      <Banner
-        tone="error"
-        title="Sync failed"
-        description="We couldn't reach the server. Check your connection and try again."
-        action={<Button size="sm" variant="secondary">Retry</Button>}
-      />
-
-      <SectionLabel>Status banner with dismiss</SectionLabel>
-      <Banner
-        tone="information"
-        title="What&apos;s new in v2.0"
-        description="Auto-saving drafts, faster search, and dark mode."
-        onDismiss={() => {}}
-      />
-    </Stack>
-  ),
-};
-
-/* ─── Patterns ───────────────────────────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Patterns',
+export const DismissibleWithToggle: Story = {
   render: () => {
     const [visible, setVisible] = useState(true);
 
-    return (
-      <Stack>
-        <SectionLabel>Announcement banner</SectionLabel>
-        <Banner
-          title="v2.0 is here"
-          description="Check out the new features and improvements"
-          action={<BannerAction>What&apos;s new</BannerAction>}
-        />
+    if (!visible) {
+      return (
+        <button
+          type="button"
+          onClick={() => setVisible(true)}
+          style={{
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-sm)',
+            color: 'var(--text-muted)',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            textDecoration: 'underline',
+          }}
+        >
+          Show banner again
+        </button>
+      );
+    }
 
-        <SectionLabel>Dismissible with toggle</SectionLabel>
-        {visible ? (
-          <Banner
-            title="Welcome back"
-            description="You have 3 unread notifications"
-            onDismiss={() => setVisible(false)}
-          />
-        ) : (
-          <button
-            type="button"
-            onClick={() => setVisible(true)}
-            style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
-          >
-            Show banner again
-          </button>
-        )}
-      </Stack>
+    return (
+      <Banner
+        title="Welcome back"
+        description="You have 3 unread notifications"
+        onDismiss={() => setVisible(false)}
+      />
     );
   },
 };

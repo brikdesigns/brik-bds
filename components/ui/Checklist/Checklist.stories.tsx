@@ -2,23 +2,6 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Checklist } from './Checklist';
 
-/* ─── Layout helpers (story-only) ────────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div
-    style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.05em',
-      marginBottom: 'var(--gap-md)',
-      color: 'var(--text-muted)',
-    }}
-  >
-    {children}
-  </div>
-);
-
 const Stack = ({
   children,
   gap = 'var(--gap-xs)',
@@ -45,7 +28,7 @@ export default meta;
 type Story = StoryObj<typeof Checklist>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND
+   PLAYGROUND
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
@@ -66,35 +49,43 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS
+   VARIANTS — one story per state
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All states side by side */
-export const Variants: Story = {
-  render: () => (
-    <div style={{ minWidth: 360 }}>
-      <SectionLabel>States</SectionLabel>
-      <Stack>
-        <Checklist label="Unchecked" checked={false} onCheckedChange={() => {}} />
-        <Checklist label="Checked" checked={true} onCheckedChange={() => {}} />
-        <Checklist label="Disabled" checked={false} onCheckedChange={() => {}} disabled />
-        <Checklist
-          label="Disabled checked"
-          checked={true}
-          onCheckedChange={() => {}}
-          disabled
-        />
-      </Stack>
-    </div>
-  ),
+/** @summary Unchecked — empty circle, primary label color */
+export const Unchecked: Story = {
+  args: { label: 'Restock surgical gloves', checked: false, onCheckedChange: () => {} },
+};
+
+/** @summary Checked — brand-primary fill, line-through label, subtle row bg */
+export const Checked: Story = {
+  args: { label: 'Restock surgical gloves', checked: true, onCheckedChange: () => {} },
+};
+
+/** @summary Disabled — locked + muted styling, useful during async save */
+export const Disabled: Story = {
+  args: { label: 'Restock surgical gloves', checked: false, onCheckedChange: () => {}, disabled: true },
+};
+
+/** @summary Disabled checked — completion state on a read-only item */
+export const DisabledChecked: Story = {
+  args: { label: 'Restock surgical gloves', checked: true, onCheckedChange: () => {}, disabled: true },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS
+   PATTERNS — irreducible (hook usage)
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Real-world: a daily-maintenance checklist inside a task sheet */
-export const Patterns: Story = {
+/**
+ * A daily-maintenance checklist inside a task sheet — the canonical use
+ * case in a clinical PMS. The completion bg + strikethrough makes done vs.
+ * not-done glanceable at the row level; the running `n of N completed`
+ * counter sits above the list. Render-mode is required because the
+ * checklist's value comes from the *interaction* between rows.
+ *
+ * @summary Daily-maintenance checklist with running completion counter
+ */
+export const DailyMaintenanceChecklist: Story = {
   render: () => {
     const [items, setItems] = useState<{ id: string; label: string; checked: boolean }[]>([
       { id: 'a', label: 'Check and refill hand sanitizer stations', checked: true },

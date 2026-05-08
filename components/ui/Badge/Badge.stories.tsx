@@ -31,20 +31,7 @@ const meta: Meta<typeof Badge> = {
 export default meta;
 type Story = StoryObj<typeof Badge>;
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
+/* ─── Layout helpers (story-only) ─────────────────────────────── */
 
 const Row = ({ children }: { children: React.ReactNode }) => (
   <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
@@ -54,10 +41,17 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
-const statuses = ['positive', 'warning', 'error', 'info', 'progress'] as const;
+const StatusRow = ({ children, label }: { children: React.ReactNode; label: string }) => (
+  <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
+    {children}
+    <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+      {label}
+    </span>
+  </div>
+);
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   PLAYGROUND
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
@@ -66,126 +60,116 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Solid and subtle appearances × all statuses × all sizes
+   VARIANTS — one story per status (solid appearance, md size)
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
+/** @summary Positive — confirmation status, e.g. published, approved, complete */
+export const Positive: Story = {
+  args: { status: 'positive', children: 'Done' },
+};
+
+/** @summary Warning — caution status, e.g. draft, needs attention */
+export const Warning: Story = {
+  args: { status: 'warning', children: 'Draft' },
+};
+
+/** @summary Error — failure status, e.g. failed, archived, blocked */
+export const Error: Story = {
+  args: { status: 'error', children: 'Failed' },
+};
+
+/** @summary Info — neutral informational status (default tone) */
+export const Info: Story = {
+  args: { status: 'info', children: 'New' },
+};
+
+/** @summary Progress — in-flight status, often paired with a spinner icon */
+export const Progress: Story = {
+  args: { status: 'progress', children: 'In Progress' },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   VARIANTS — appearance + size axes (axis-only galleries)
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Subtle appearance — softer surface, lower contrast. ADR-006 axis exception:
+ * one component, the appearance axis varied across all five statuses.
+ *
+ * @summary Subtle appearance across all statuses
+ */
+export const Subtle: Story = {
   render: () => (
-    <Stack>
-      {/* Solid appearance */}
-      <div>
-        <SectionLabel>Solid (default)</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          {(['sm', 'md', 'lg'] as const).map((size) => (
-            <Row key={size}>
-              {statuses.map((s) => (
-                <Badge key={s} size={size} status={s} appearance="solid">{s}</Badge>
-              ))}
-            </Row>
-          ))}
-        </Stack>
-      </div>
-      {/* Subtle appearance */}
-      <div>
-        <SectionLabel>Subtle</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          {(['sm', 'md', 'lg'] as const).map((size) => (
-            <Row key={size}>
-              {statuses.map((s) => (
-                <Badge key={s} size={size} status={s} appearance="subtle">{s}</Badge>
-              ))}
-            </Row>
-          ))}
-        </Stack>
-      </div>
-      {/* xs icon-only — both appearances */}
-      <div>
-        <SectionLabel>xs icon-only</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Row>
-            <Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />
-            <Badge size="xs" status="warning" icon={<Icon icon="ph:warning" />} />
-            <Badge size="xs" status="error" icon={<Icon icon="ph:x-circle" />} />
-            <Badge size="xs" status="info" icon={<Icon icon="ph:info" />} />
-            <Badge size="xs" status="progress" icon={<Icon icon="ph:arrows-clockwise" />} />
-          </Row>
-          <Row>
-            <Badge size="xs" status="positive" appearance="subtle" icon={<Icon icon="ph:check" />} />
-            <Badge size="xs" status="warning" appearance="subtle" icon={<Icon icon="ph:warning" />} />
-            <Badge size="xs" status="error" appearance="subtle" icon={<Icon icon="ph:x-circle" />} />
-            <Badge size="xs" status="info" appearance="subtle" icon={<Icon icon="ph:info" />} />
-            <Badge size="xs" status="progress" appearance="subtle" icon={<Icon icon="ph:arrows-clockwise" />} />
-          </Row>
-        </Stack>
-      </div>
-    </Stack>
+    <Row>
+      <Badge status="positive" appearance="subtle">Done</Badge>
+      <Badge status="warning" appearance="subtle">Draft</Badge>
+      <Badge status="error" appearance="subtle">Failed</Badge>
+      <Badge status="info" appearance="subtle">New</Badge>
+      <Badge status="progress" appearance="subtle">In Progress</Badge>
+    </Row>
+  ),
+};
+
+/**
+ * Sizes axis — the four size tokens (xs / sm / md / lg) on a single status.
+ * `xs` is icon-only by design — it's too small for legible text. Other sizes
+ * accept text or icon-prefixed text.
+ *
+ * @summary All four sizes side-by-side
+ */
+export const Sizes: Story = {
+  render: () => (
+    <Row>
+      <Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />
+      <Badge size="sm" status="positive">Small</Badge>
+      <Badge size="md" status="positive">Medium</Badge>
+      <Badge size="lg" status="positive">Large</Badge>
+    </Row>
   ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. ICONS — Badges with leading icons
+   VARIANTS — composition (icons)
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary With icon */
-export const Icons: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Solid with icons</SectionLabel>
-        <Row>
-          <Badge status="positive" icon={<Icon icon="ph:check" />}>Done</Badge>
-          <Badge status="error" icon={<Icon icon="ph:warning-circle" />}>Canceled</Badge>
-          <Badge status="progress" icon={<Icon icon="ph:spinner" />}>In Progress</Badge>
-          <Badge status="info" icon={<Icon icon="ph:info" />}>Neutral</Badge>
-          <Badge status="warning" icon={<Icon icon="ph:warning" />}>Needs Attention</Badge>
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Subtle with icons</SectionLabel>
-        <Row>
-          <Badge status="positive" appearance="subtle" icon={<Icon icon="ph:check" />}>Done</Badge>
-          <Badge status="error" appearance="subtle" icon={<Icon icon="ph:warning-circle" />}>Canceled</Badge>
-          <Badge status="progress" appearance="subtle" icon={<Icon icon="ph:spinner" />}>In Progress</Badge>
-          <Badge status="info" appearance="subtle" icon={<Icon icon="ph:info" />}>Neutral</Badge>
-          <Badge status="warning" appearance="subtle" icon={<Icon icon="ph:warning" />}>Needs Attention</Badge>
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Icons across sizes</SectionLabel>
-        {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-          <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center', marginBottom: 'var(--gap-md)' }}>
-            <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
-            {size === 'xs' ? (
-              <>
-                <Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />
-                <Badge size="xs" status="error" icon={<Icon icon="ph:x-circle" />} />
-                <Badge size="xs" status="progress" icon={<Icon icon="ph:arrows-clockwise" />} />
-              </>
-            ) : (
-              <>
-                <Badge size={size} status="positive" icon={<Icon icon="ph:check" />}>Done</Badge>
-                <Badge size={size} status="error" icon={<Icon icon="ph:x-circle" />}>Failed</Badge>
-                <Badge size={size} status="progress" icon={<Icon icon="ph:arrows-clockwise" />}>Running</Badge>
-              </>
-            )}
-          </div>
-        ))}
-      </div>
-    </Stack>
-  ),
+/** @summary Badge with a leading icon — tightens the semantic association */
+export const WithIcon: Story = {
+  args: {
+    status: 'positive',
+    children: 'Done',
+    icon: <Icon icon="ph:check" />,
+  },
+};
+
+/**
+ * Icon-only badge at `xs` — the only legible icon-only size. Useful in
+ * tight-packed lists where the icon alone communicates status.
+ *
+ * @summary Icon-only badge at xs size
+ */
+export const IconOnly: Story = {
+  args: {
+    size: 'xs',
+    status: 'positive',
+    icon: <Icon icon="ph:check" />,
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   4. ALIGNMENT — Side-by-side with Tag at every size
+   IRREDUCIBLE — sibling-component alignment showcase
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Alignment options */
-export const Alignment: Story = {
+/**
+ * Badge and Tag share the same height at every size tier. Render-mode is
+ * required because the value of the demo is the *cross-component* alignment
+ * — args alone can't render two different components in one story.
+ *
+ * @summary Badge + Tag pixel-aligned at every size
+ */
+export const BadgeTagAlignment: Story = {
   name: 'Badge + Tag alignment',
   render: () => (
     <Stack>
-      <SectionLabel>Badge and Tag share the same height at every size tier</SectionLabel>
       {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
         <Row key={size}>
           <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
@@ -207,50 +191,45 @@ export const Alignment: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   5. PATTERNS — Real-world usage
+   PATTERNS — real-world compositions
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Patterns',
+/** @summary Content lifecycle (solid) — published / in review / draft / archived */
+export const ContentStatusSolid: Story = {
   render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Content status (solid)</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          {([
-            { status: 'positive' as const, label: 'Published', desc: 'Article is live and visible' },
-            { status: 'progress' as const, label: 'In Review', desc: 'Being reviewed by editor' },
-            { status: 'warning' as const, label: 'Draft', desc: 'Saved but not published' },
-            { status: 'error' as const, label: 'Archived', desc: 'Has been removed' },
-          ]).map(({ status, label, desc }) => (
-            <div key={status} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-              <Badge status={status}>{label}</Badge>
-              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
-                {desc}
-              </span>
-            </div>
-          ))}
-        </Stack>
-      </div>
-      <div>
-        <SectionLabel>Content status (subtle)</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          {([
-            { status: 'positive' as const, label: 'Published', desc: 'Article is live and visible' },
-            { status: 'progress' as const, label: 'In Review', desc: 'Being reviewed by editor' },
-            { status: 'warning' as const, label: 'Draft', desc: 'Saved but not published' },
-            { status: 'error' as const, label: 'Archived', desc: 'Has been removed' },
-          ]).map(({ status, label, desc }) => (
-            <div key={`${status}-subtle`} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-              <Badge status={status} appearance="subtle">{label}</Badge>
-              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
-                {desc}
-              </span>
-            </div>
-          ))}
-        </Stack>
-      </div>
+    <Stack gap="var(--gap-lg)">
+      <StatusRow label="Article is live and visible">
+        <Badge status="positive">Published</Badge>
+      </StatusRow>
+      <StatusRow label="Being reviewed by editor">
+        <Badge status="progress">In Review</Badge>
+      </StatusRow>
+      <StatusRow label="Saved but not published">
+        <Badge status="warning">Draft</Badge>
+      </StatusRow>
+      <StatusRow label="Has been removed">
+        <Badge status="error">Archived</Badge>
+      </StatusRow>
+    </Stack>
+  ),
+};
+
+/** @summary Content lifecycle (subtle) — same shape, lower-contrast appearance */
+export const ContentStatusSubtle: Story = {
+  render: () => (
+    <Stack gap="var(--gap-lg)">
+      <StatusRow label="Article is live and visible">
+        <Badge status="positive" appearance="subtle">Published</Badge>
+      </StatusRow>
+      <StatusRow label="Being reviewed by editor">
+        <Badge status="progress" appearance="subtle">In Review</Badge>
+      </StatusRow>
+      <StatusRow label="Saved but not published">
+        <Badge status="warning" appearance="subtle">Draft</Badge>
+      </StatusRow>
+      <StatusRow label="Has been removed">
+        <Badge status="error" appearance="subtle">Archived</Badge>
+      </StatusRow>
     </Stack>
   ),
 };
