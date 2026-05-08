@@ -1,6 +1,6 @@
 # ADR-001 — `bds-find`: Component Discoverability for Consumer Agents
 
-**Status:** Proposed
+**Status:** Accepted (2026-05-08)
 **Date:** 2026-04-22
 **Supersedes:** —
 **Superseded by:** —

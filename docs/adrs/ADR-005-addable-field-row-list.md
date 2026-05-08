@@ -1,6 +1,6 @@
 # ADR-005 — AddableFieldRowList primitive
 
-**Status:** Proposed
+**Status:** Accepted (2026-05-08)
 **Date:** 2026-04-25
 **Supersedes:** —
 **Superseded by:** —
