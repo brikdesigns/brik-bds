@@ -1,8 +1,8 @@
 {
   "$schema": "https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json",
-  "bds_version": "0.10.0",
-  "generated_at": "2026-04-18T18:15:14.622Z",
-  "component_count": 76,
+  "bds_version": "0.41.0",
+  "generated_at": "2026-04-25T15:37:43.052Z",
+  "component_count": 82,
   "token_count": 426,
   "components": {
     "bds-accordion": {
@@ -47,7 +47,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-activity-timeline": {
       "name": "ActivityTimeline",
@@ -86,7 +91,75 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-addable-combo-list": {
+      "name": "AddableComboList",
+      "class_prefix": "bds-addable-combo-list",
+      "storybook_url": "/?path=/story/components-addable-combo-list--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "AddableComboList — suggestion-driven combobox for tag-style multi-select",
+      "source_path": "components/ui/AddableComboList/AddableComboList.tsx",
+      "tokens_used": [
+        "--background-primary",
+        "--body-md",
+        "--body-sm",
+        "--border-brand-primary",
+        "--border-radius-lg",
+        "--border-radius-sm",
+        "--duration-fast",
+        "--ease-out",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xs",
+        "--padding-sm",
+        "--padding-tiny",
+        "--shadow-lg",
+        "--surface-secondary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [
+          "aria-activedescendant",
+          "aria-autocomplete",
+          "aria-controls",
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-label",
+          "aria-live",
+          "aria-selected"
+        ],
+        "roles": [
+          "combobox",
+          "list",
+          "listbox",
+          "listitem",
+          "option"
+        ],
+        "manages_focus": true,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": true,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-addable-entry-list": {
       "name": "AddableEntryList",
@@ -99,14 +172,17 @@
       "description": "Generic entry shape. Consumers map their domain types",
       "source_path": "components/ui/AddableEntryList/AddableEntryList.tsx",
       "tokens_used": [
-        "--background-muted",
+        "--background-primary",
+        "--body-md",
         "--body-sm",
         "--body-xs",
-        "--border-focus",
-        "--border-muted",
+        "--border-primary",
+        "--border-radius-lg",
         "--border-radius-md",
         "--border-radius-sm",
         "--border-width-md",
+        "--duration-fast",
+        "--ease-out",
         "--font-family-body",
         "--font-family-label",
         "--font-line-height-normal",
@@ -115,26 +191,88 @@
         "--gap-lg",
         "--gap-md",
         "--gap-sm",
-        "--gap-tiny",
         "--gap-xl",
+        "--gap-xs",
+        "--label-md",
+        "--label-sm",
         "--padding-md",
+        "--padding-sm",
+        "--padding-tiny",
+        "--shadow-lg",
+        "--surface-secondary",
+        "--text-brand-primary",
         "--text-muted",
         "--text-primary",
         "--text-secondary"
       ],
       "a11y": {
         "aria_attrs": [
-          "aria-label"
+          "aria-activedescendant",
+          "aria-autocomplete",
+          "aria-controls",
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-label",
+          "aria-live",
+          "aria-selected"
         ],
         "roles": [
+          "combobox",
           "list",
-          "listitem"
+          "listbox",
+          "listitem",
+          "option"
         ],
         "manages_focus": true,
         "has_label_prop": true,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-addable-field-row-list": {
+      "name": "AddableFieldRowList",
+      "class_prefix": "bds-addable-field-row-list",
+      "storybook_url": "/?path=/story/components-addable-field-row-list--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Render context passed to the children render-prop on each row.",
+      "source_path": "components/ui/AddableFieldRowList/AddableFieldRowList.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [
+          "list",
+          "listitem"
+        ],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-addable-text-list": {
       "name": "AddableTextList",
@@ -173,7 +311,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-address-input": {
       "name": "AddressInput",
@@ -230,7 +373,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-alert-banner": {
       "name": "AlertBanner",
@@ -270,7 +418,33 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": "feedback",
+      "tags": [
+        "alert",
+        "banner",
+        "notification",
+        "warning",
+        "error",
+        "info"
+      ],
+      "use_cases": [
+        "inline warning, error, or informational notice",
+        "persistent top-of-page announcement",
+        "form validation summary"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography",
+          "radius"
+        ],
+        "fixed": [
+          "variant-semantics"
+        ]
+      },
+      "composes": []
     },
     "bds-animated-icon": {
       "name": "AnimatedIcon",
@@ -293,7 +467,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-avatar": {
       "name": "Avatar",
@@ -338,7 +517,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-badge": {
       "name": "Badge",
@@ -348,7 +532,7 @@
       "introduced_in": "0.1.3",
       "deprecated_in": null,
       "replaced_by": null,
-      "description": "Badge — status indicator with semantic colors",
+      "description": "Badge fill appearance — shared axis with Chip (`solid | outline`) and",
       "source_path": "components/ui/Badge/Badge.tsx",
       "tokens_used": [
         "--background-brand-primary",
@@ -377,6 +561,7 @@
         "--gap-sm",
         "--gap-xl",
         "--gap-xs",
+        "--icon-lg",
         "--icon-sm",
         "--icon-xs",
         "--label-md",
@@ -402,7 +587,45 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-badge-group": {
+      "name": "BadgeGroup",
+      "class_prefix": "bds-badge-group",
+      "storybook_url": "/?path=/story/components-badge-group--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "BadgeGroup — horizontal cluster of `<Badge>` elements with locked spacing.",
+      "source_path": "components/ui/BadgeGroup/BadgeGroup.tsx",
+      "tokens_used": [
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--padding-lg",
+        "--surface-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-banner": {
       "name": "Banner",
@@ -412,12 +635,13 @@
       "introduced_in": "0.1.3",
       "deprecated_in": null,
       "replaced_by": null,
-      "description": "Banner — full-width branded banner for announcements",
+      "description": "Visual tone:",
       "source_path": "components/ui/Banner/Banner.tsx",
       "tokens_used": [
         "--body-md",
         "--body-sm",
         "--border-radius-100",
+        "--border-radius-sm",
         "--font-family-body",
         "--font-family-label",
         "--font-line-height-normal",
@@ -426,29 +650,39 @@
         "--font-weight-semi-bold",
         "--gap-lg",
         "--gap-md",
+        "--gap-sm",
         "--gap-xl",
         "--gap-xs",
         "--label-md",
         "--label-sm",
         "--padding-huge",
+        "--padding-lg",
         "--padding-md",
         "--padding-tiny",
         "--surface-brand-primary",
+        "--surface-secondary",
         "--text-muted",
-        "--text-on-color-dark"
+        "--text-on-color-dark",
+        "--text-primary"
       ],
       "a11y": {
         "aria_attrs": [
           "aria-label"
         ],
         "roles": [
+          "alert",
           "banner"
         ],
         "manages_focus": false,
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-board": {
       "name": "Board",
@@ -524,7 +758,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-breadcrumb": {
       "name": "Breadcrumb",
@@ -569,7 +808,84 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-brik-dev-bar": {
+      "name": "BrikDevBar",
+      "class_prefix": "bds-brik-dev-bar",
+      "storybook_url": "/?path=/story/components-brik-dev-bar--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Brik DevBar — React bootstrap.",
+      "source_path": "components/ui/BrikDevBar/BrikDevBar.tsx",
+      "tokens_used": [
+        "--body-sm",
+        "--font-family-body",
+        "--font-family-label",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--label-sm",
+        "--padding-xl",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-bullet-list": {
+      "name": "BulletList",
+      "class_prefix": "bds-bullet-list",
+      "storybook_url": "/?path=/story/components-bullet-list--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "BulletList — structured list of short text items.",
+      "source_path": "components/ui/BulletList/BulletList.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--font-family-body",
+        "--font-line-height-normal",
+        "--gap-lg",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--padding-lg",
+        "--surface-primary",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-button": {
       "name": "Button",
@@ -628,6 +944,7 @@
         "--gap-xl",
         "--gap-xs",
         "--heading-sm",
+        "--icon-lg",
         "--label-lg",
         "--label-md",
         "--label-sm",
@@ -662,7 +979,36 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": "actions",
+      "tags": [
+        "button",
+        "action",
+        "submit",
+        "cta",
+        "primary",
+        "secondary"
+      ],
+      "use_cases": [
+        "primary or secondary call-to-action",
+        "form submit or cancel",
+        "any clickable action with label"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography",
+          "radius",
+          "elevation"
+        ],
+        "fixed": [
+          "variant-semantics",
+          "disabled-behavior",
+          "keyboard-nav"
+        ]
+      },
+      "composes": []
     },
     "bds-button-group": {
       "name": "ButtonGroup",
@@ -690,7 +1036,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-calendar": {
       "name": "Calendar",
@@ -714,7 +1065,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-card": {
       "name": "Card",
@@ -724,13 +1080,14 @@
       "introduced_in": "0.1.3",
       "deprecated_in": null,
       "replaced_by": null,
-      "description": "Card — flexible content container with variant styles",
+      "description": "Optional class name applied to the root element.",
       "source_path": "components/ui/Card/Card.tsx",
       "tokens_used": [
         "--body-lg",
         "--body-md",
         "--border-brand-primary",
         "--border-muted",
+        "--border-radius-lg",
         "--border-radius-md",
         "--border-secondary",
         "--border-width-md",
@@ -751,11 +1108,14 @@
         "--gap-xl",
         "--heading-md",
         "--heading-xl",
+        "--label-lg",
         "--label-sm",
         "--padding-lg",
         "--padding-md",
         "--padding-none",
         "--padding-sm",
+        "--padding-xl",
+        "--shadow-sm",
         "--surface-primary",
         "--text-brand-primary",
         "--text-muted",
@@ -766,10 +1126,35 @@
         "aria_attrs": [],
         "roles": [],
         "manages_focus": false,
-        "has_label_prop": false,
+        "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": "layout",
+      "tags": [
+        "card",
+        "container",
+        "surface",
+        "panel"
+      ],
+      "use_cases": [
+        "grouped content block with subtle elevation",
+        "list item, tile, or dashboard widget frame",
+        "any semantically-related content with visual separation"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography",
+          "radius",
+          "elevation"
+        ],
+        "fixed": [
+          "surface-semantics"
+        ]
+      },
+      "composes": []
     },
     "bds-card-control": {
       "name": "CardControl",
@@ -809,95 +1194,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
-    },
-    "bds-card-display": {
-      "name": "CardDisplay",
-      "class_prefix": "bds-card-display",
-      "storybook_url": "/?path=/story/components-card-display--primary",
-      "status": "stable",
-      "introduced_in": "0.1.3",
-      "deprecated_in": null,
-      "replaced_by": null,
-      "description": "CardDisplay — content display card with image, badge, title, description, and action.",
-      "source_path": "components/ui/CardDisplay/CardDisplay.tsx",
-      "tokens_used": [
-        "--body-sm",
-        "--border-radius-lg",
-        "--border-secondary",
-        "--border-width-md",
-        "--font-family-body",
-        "--font-family-heading",
-        "--font-family-label",
-        "--font-line-height-normal",
-        "--font-line-height-snug",
-        "--font-weight-bold",
-        "--font-weight-regular",
-        "--gap-lg",
-        "--gap-md",
-        "--gap-xl",
-        "--heading-sm",
-        "--label-sm",
-        "--padding-lg",
-        "--padding-md",
-        "--surface-primary",
-        "--text-muted",
-        "--text-primary",
-        "--text-secondary"
-      ],
-      "a11y": {
-        "aria_attrs": [],
-        "roles": [],
-        "manages_focus": false,
-        "has_label_prop": false,
-        "uses_keyboard_handlers": false,
-        "notes": []
-      }
-    },
-    "bds-card-feature": {
-      "name": "CardFeature",
-      "class_prefix": "bds-card-feature",
-      "storybook_url": "/?path=/story/components-card-feature--primary",
-      "status": "stable",
-      "introduced_in": "0.1.3",
-      "deprecated_in": null,
-      "replaced_by": null,
-      "description": "CardFeature — feature showcase card with icon, title, description, and action.",
-      "source_path": "components/ui/CardFeature/CardFeature.tsx",
-      "tokens_used": [
-        "--background-brand-primary",
-        "--body-lg",
-        "--body-sm",
-        "--border-radius-lg",
-        "--border-secondary",
-        "--border-width-md",
-        "--font-family-body",
-        "--font-family-heading",
-        "--font-family-label",
-        "--font-line-height-normal",
-        "--font-line-height-snug",
-        "--font-weight-bold",
-        "--font-weight-regular",
-        "--gap-lg",
-        "--gap-md",
-        "--gap-xl",
-        "--heading-sm",
-        "--label-sm",
-        "--padding-lg",
-        "--surface-primary",
-        "--text-muted",
-        "--text-on-color-dark",
-        "--text-primary",
-        "--text-secondary"
-      ],
-      "a11y": {
-        "aria_attrs": [],
-        "roles": [],
-        "manages_focus": false,
-        "has_label_prop": false,
-        "uses_keyboard_handlers": false,
-        "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-card-list": {
       "name": "CardList",
@@ -925,7 +1227,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-card-testimonial": {
       "name": "CardTestimonial",
@@ -982,7 +1289,43 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-catalog-picker": {
+      "name": "CatalogPicker",
+      "class_prefix": "bds-catalog-picker",
+      "storybook_url": "/?path=/story/components-catalog-picker--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "A single entry in a reference catalog (e.g. industry services, pain points,",
+      "source_path": "components/ui/CatalogPicker/CatalogPicker.tsx",
+      "tokens_used": [
+        "--font-family-label",
+        "--gap-md",
+        "--gap-xl",
+        "--label-xs",
+        "--text-muted"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-checkbox": {
       "name": "Checkbox",
@@ -1020,7 +1363,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-chip": {
       "name": "Chip",
@@ -1030,7 +1378,7 @@
       "introduced_in": "0.1.3",
       "deprecated_in": null,
       "replaced_by": null,
-      "description": "Chip — compact interactive element for filtering, selection, or input",
+      "description": "Chip fill appearance — shared axis with Badge (`solid | subtle`) and",
       "source_path": "components/ui/Chip/Chip.tsx",
       "tokens_used": [
         "--background-inverse",
@@ -1054,6 +1402,7 @@
         "--gap-sm",
         "--gap-xl",
         "--gap-xs",
+        "--icon-lg",
         "--icon-sm",
         "--label-md",
         "--label-sm",
@@ -1061,7 +1410,7 @@
         "--label-xl",
         "--padding-md",
         "--padding-sm",
-        "--space-150",
+        "--padding-tiny",
         "--state-disabled-opacity",
         "--state-focus",
         "--state-hover-overlay",
@@ -1080,7 +1429,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-collapsible-card": {
       "name": "CollapsibleCard",
@@ -1125,7 +1479,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-counter": {
       "name": "Counter",
@@ -1140,13 +1499,13 @@
       "tokens_used": [
         "--background-brand-primary",
         "--background-negative",
+        "--background-neutral",
         "--background-positive",
         "--background-status-info",
         "--background-warning",
         "--body-md",
         "--body-xs",
         "--border-radius-pill",
-        "--color-grayscale-lighter",
         "--font-family-body",
         "--font-family-label",
         "--font-line-height-tight",
@@ -1160,9 +1519,9 @@
         "--padding-sm",
         "--padding-tiny",
         "--space-50",
-        "--text-inverse",
         "--text-muted",
-        "--text-primary"
+        "--text-on-color-dark",
+        "--text-on-color-light"
       ],
       "a11y": {
         "aria_attrs": [
@@ -1173,7 +1532,57 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-data-section": {
+      "name": "DataSection",
+      "class_prefix": "bds-data-section",
+      "storybook_url": "/?path=/story/components-data-section--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Action slot rendered flush-right of the title row.",
+      "source_path": "components/ui/DataSection/DataSection.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--body-sm",
+        "--border-muted",
+        "--border-width-sm",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-semibold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xs",
+        "--heading-md",
+        "--padding-lg",
+        "--padding-xl",
+        "--surface-primary",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-date-picker": {
       "name": "DatePicker",
@@ -1234,7 +1643,6 @@
         ],
         "roles": [
           "alert",
-          "dialog",
           "grid",
           "gridcell"
         ],
@@ -1242,7 +1650,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-dev-feedback-widget": {
       "name": "DevFeedbackWidget",
@@ -1267,10 +1680,35 @@
           "radiogroup"
         ],
         "manages_focus": false,
-        "has_label_prop": true,
+        "has_label_prop": false,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": "overlays",
+      "tags": [
+        "feedback",
+        "dev-tool",
+        "internal"
+      ],
+      "use_cases": [
+        "collect inline feedback during development or staging",
+        "capture bugs, UX issues, or copy suggestions without leaving the page"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography"
+        ],
+        "fixed": [
+          "submit-behavior",
+          "widget-registration"
+        ]
+      },
+      "composes": [
+        "Button",
+        "TextArea"
+      ]
     },
     "bds-dialog": {
       "name": "Dialog",
@@ -1331,7 +1769,38 @@
         "notes": [
           "Must receive an aria-labelledby or aria-label. Focus trap lives in the component."
         ]
-      }
+      },
+      "category": "overlays",
+      "tags": [
+        "dialog",
+        "modal",
+        "confirm",
+        "popup",
+        "overlay"
+      ],
+      "use_cases": [
+        "confirm a destructive action",
+        "focused task requiring user attention",
+        "form inside a modal overlay"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography",
+          "radius",
+          "elevation"
+        ],
+        "fixed": [
+          "focus-trap",
+          "escape-to-close",
+          "backdrop-click-behavior",
+          "aria-labeling"
+        ]
+      },
+      "composes": [
+        "Button"
+      ]
     },
     "bds-divider": {
       "name": "Divider",
@@ -1371,7 +1840,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-dot": {
       "name": "Dot",
@@ -1420,34 +1894,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
-    },
-    "bds-email-input": {
-      "name": "EmailInput",
-      "class_prefix": "bds-email-input",
-      "storybook_url": "/?path=/story/components-email-input--primary",
-      "status": "stable",
-      "introduced_in": "0.1.3",
-      "deprecated_in": null,
-      "replaced_by": null,
-      "description": "EmailInput component props",
-      "source_path": "components/ui/EmailInput/EmailInput.tsx",
-      "tokens_used": [
-        "--body-xs",
-        "--font-family-label",
-        "--gap-lg",
-        "--gap-md",
-        "--gap-xl",
-        "--text-muted"
-      ],
-      "a11y": {
-        "aria_attrs": [],
-        "roles": [],
-        "manages_focus": false,
-        "has_label_prop": false,
-        "uses_keyboard_handlers": false,
-        "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-empty-state": {
       "name": "EmptyState",
@@ -1490,7 +1942,84 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-field": {
+      "name": "Field",
+      "class_prefix": "bds-field",
+      "storybook_url": "/?path=/story/components-field--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "Rendered when `children` is null / undefined / empty string.",
+      "source_path": "components/ui/Field/Field.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-tight",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xs",
+        "--label-md",
+        "--padding-lg",
+        "--surface-primary",
+        "--text-brand-primary",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": true,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-field-grid": {
+      "name": "FieldGrid",
+      "class_prefix": "bds-field-grid",
+      "storybook_url": "/?path=/story/components-field-grid--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "FieldGrid — equal-column grid for laying out Fields side by side.",
+      "source_path": "components/ui/FieldGrid/FieldGrid.tsx",
+      "tokens_used": [
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xl",
+        "--padding-lg",
+        "--surface-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-file-uploader": {
       "name": "FileUploader",
@@ -1542,7 +2071,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-filter-bar": {
       "name": "FilterBar",
@@ -1575,7 +2109,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-filter-button": {
       "name": "FilterButton",
@@ -1633,7 +2172,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-filter-toggle": {
       "name": "FilterToggle",
@@ -1675,7 +2219,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-footer": {
       "name": "Footer",
@@ -1726,14 +2275,19 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-form": {
       "name": "Form",
       "class_prefix": "bds-form",
       "storybook_url": "/?path=/story/components-form--primary",
       "status": "stable",
-      "introduced_in": "0.1.3",
+      "introduced_in": "0.18.0",
       "deprecated_in": null,
       "replaced_by": null,
       "description": "Form layout direction",
@@ -1773,7 +2327,42 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": "inputs",
+      "tags": [
+        "form",
+        "submit",
+        "validation",
+        "contact",
+        "feedback",
+        "survey"
+      ],
+      "use_cases": [
+        "contact form",
+        "feedback form",
+        "multi-field input block with submit",
+        "any user-facing form with validation"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography"
+        ],
+        "fixed": [
+          "validation-behavior",
+          "error-display",
+          "keyboard-nav",
+          "submit-flow"
+        ]
+      },
+      "composes": [
+        "TextInput",
+        "TextArea",
+        "Select",
+        "Button",
+        "AlertBanner"
+      ]
     },
     "bds-icons": {
       "name": "Icons",
@@ -1814,7 +2403,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-menu": {
       "name": "Menu",
@@ -1861,7 +2455,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-meter": {
       "name": "Meter",
@@ -1902,7 +2501,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-modal": {
       "name": "Modal",
@@ -1912,7 +2516,7 @@
       "introduced_in": "0.1.3",
       "deprecated_in": null,
       "replaced_by": null,
-      "description": "Modal — portal-rendered dialog with backdrop, escape key, and scroll lock.",
+      "description": "Default modal — flexible header / body / footer layout.",
       "source_path": "components/ui/Modal/Modal.tsx",
       "tokens_used": [
         "--background-overlay",
@@ -1937,6 +2541,7 @@
         "--gap-sm",
         "--gap-xl",
         "--heading-md",
+        "--heading-sm",
         "--icon-md",
         "--label-md",
         "--label-sm",
@@ -1947,14 +2552,18 @@
         "--state-focus",
         "--surface-primary",
         "--text-muted",
-        "--text-primary"
+        "--text-primary",
+        "--text-secondary"
       ],
       "a11y": {
         "aria_attrs": [
+          "aria-describedby",
           "aria-label",
+          "aria-labelledby",
           "aria-modal"
         ],
         "roles": [
+          "alertdialog",
           "dialog"
         ],
         "manages_focus": false,
@@ -1963,7 +2572,12 @@
         "notes": [
           "Must receive an aria-labelledby or aria-label. Focus trap lives in the component."
         ]
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-multi-select": {
       "name": "MultiSelect",
@@ -1991,7 +2605,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-nav-bar": {
       "name": "NavBar",
@@ -2037,7 +2656,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-notification-list": {
       "name": "NotificationList",
@@ -2088,7 +2712,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-page-header": {
       "name": "PageHeader",
@@ -2134,7 +2763,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-pagination": {
       "name": "Pagination",
@@ -2178,7 +2812,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-password-input": {
       "name": "PasswordInput",
@@ -2209,7 +2848,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-popover": {
       "name": "Popover",
@@ -2252,7 +2896,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-pricing-card": {
       "name": "PricingCard",
@@ -2304,7 +2953,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-progress-bar": {
       "name": "ProgressBar",
@@ -2346,50 +3000,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
-    },
-    "bds-progress-dots": {
-      "name": "ProgressDots",
-      "class_prefix": "bds-progress-dots",
-      "storybook_url": "/?path=/story/components-progress-dots--primary",
-      "status": "stable",
-      "introduced_in": "0.1.3",
-      "deprecated_in": null,
-      "replaced_by": null,
-      "description": "When true, only completed dots (before active) are clickable.",
-      "source_path": "components/ui/ProgressDots/ProgressDots.tsx",
-      "tokens_used": [
-        "--background-brand-primary",
-        "--body-sm",
-        "--body-xs",
-        "--border-radius-sm",
-        "--border-secondary",
-        "--duration-normal",
-        "--ease-out",
-        "--font-family-body",
-        "--font-family-label",
-        "--gap-lg",
-        "--gap-md",
-        "--gap-sm",
-        "--gap-xl",
-        "--text-muted",
-        "--text-secondary"
-      ],
-      "a11y": {
-        "aria_attrs": [
-          "aria-disabled",
-          "aria-label",
-          "aria-selected"
-        ],
-        "roles": [
-          "tab",
-          "tablist"
-        ],
-        "manages_focus": false,
-        "has_label_prop": false,
-        "uses_keyboard_handlers": false,
-        "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-progress-stepper": {
       "name": "ProgressStepper",
@@ -2407,8 +3023,11 @@
         "--body-sm",
         "--body-tiny",
         "--border-radius-md",
+        "--border-radius-sm",
         "--border-secondary",
         "--border-width-sm",
+        "--duration-normal",
+        "--ease-out",
         "--font-family-body",
         "--font-family-label",
         "--font-line-height-normal",
@@ -2435,17 +3054,25 @@
           "aria-current",
           "aria-disabled",
           "aria-hidden",
-          "aria-label"
+          "aria-label",
+          "aria-selected"
         ],
         "roles": [
           "list",
-          "listitem"
+          "listitem",
+          "tab",
+          "tablist"
         ],
         "manages_focus": false,
         "has_label_prop": true,
         "uses_keyboard_handlers": true,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-radio": {
       "name": "Radio",
@@ -2483,54 +3110,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
-    },
-    "bds-search-input": {
-      "name": "SearchInput",
-      "class_prefix": "bds-search-input",
-      "storybook_url": "/?path=/story/components-search-input--primary",
-      "status": "stable",
-      "introduced_in": "0.1.3",
-      "deprecated_in": null,
-      "replaced_by": null,
-      "description": "SearchInput size variants",
-      "source_path": "components/ui/SearchInput/SearchInput.tsx",
-      "tokens_used": [
-        "--background-input",
-        "--body-md",
-        "--body-sm",
-        "--body-xs",
-        "--border-brand-primary",
-        "--border-input",
-        "--border-primary",
-        "--border-radius-md",
-        "--border-width-md",
-        "--font-family-body",
-        "--font-family-label",
-        "--font-line-height-normal",
-        "--font-line-height-tight",
-        "--font-weight-regular",
-        "--font-weight-semi-bold",
-        "--gap-lg",
-        "--gap-md",
-        "--gap-sm",
-        "--gap-xl",
-        "--label-md",
-        "--label-sm",
-        "--padding-lg",
-        "--padding-sm",
-        "--padding-xs",
-        "--text-muted",
-        "--text-primary"
-      ],
-      "a11y": {
-        "aria_attrs": [],
-        "roles": [],
-        "manages_focus": false,
-        "has_label_prop": true,
-        "uses_keyboard_handlers": false,
-        "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-segmented-control": {
       "name": "SegmentedControl",
@@ -2581,7 +3166,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-select": {
       "name": "Select",
@@ -2642,7 +3232,35 @@
         "notes": [
           "Pair with a visible <label> via htmlFor + id, or supply aria-label when a visible label is intentionally omitted."
         ]
-      }
+      },
+      "category": "inputs",
+      "tags": [
+        "input",
+        "select",
+        "dropdown",
+        "picker",
+        "choose",
+        "options"
+      ],
+      "use_cases": [
+        "single-option selection from a known list",
+        "category or industry picker",
+        "any choice among a fixed set of values"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography",
+          "radius"
+        ],
+        "fixed": [
+          "keyboard-nav",
+          "focus-trap-menu",
+          "aria-listbox"
+        ]
+      },
+      "composes": []
     },
     "bds-service-badge": {
       "name": "ServiceBadge",
@@ -2693,7 +3311,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-sheet": {
       "name": "Sheet",
@@ -2703,7 +3326,7 @@
       "introduced_in": "0.1.3",
       "deprecated_in": null,
       "replaced_by": null,
-      "description": "Visual variant:",
+      "description": "Ancillary action rendered on the left side of the auto-footer (e.g.",
       "source_path": "components/ui/Sheet/Sheet.tsx",
       "tokens_used": [
         "--background-overlay",
@@ -2719,15 +3342,18 @@
         "--font-family-label",
         "--font-line-height-normal",
         "--font-line-height-snug",
+        "--font-line-height-tight",
         "--font-weight-bold",
         "--font-weight-semi-bold",
         "--gap-lg",
         "--gap-md",
+        "--gap-sm",
         "--gap-xl",
         "--gap-xs",
         "--heading-md",
         "--icon-md",
         "--label-sm",
+        "--label-xs",
         "--padding-lg",
         "--padding-sm",
         "--padding-xl",
@@ -2755,7 +3381,107 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-sheet-section": {
+      "name": "SheetSection",
+      "class_prefix": "bds-sheet-section",
+      "storybook_url": "/?path=/story/components-sheet-section--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "SheetSection — the named wrapper for a block inside a Sheet body.",
+      "source_path": "components/ui/SheetSection/SheetSection.tsx",
+      "tokens_used": [
+        "--body-md",
+        "--border-radius-circle",
+        "--border-secondary",
+        "--font-family-body",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-weight-medium",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-xs",
+        "--label-sm",
+        "--padding-lg",
+        "--padding-xl",
+        "--surface-primary",
+        "--text-muted",
+        "--text-primary",
+        "--text-secondary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-sheet-typography": {
+      "name": "SheetTypography",
+      "class_prefix": "bds-sheet-typography",
+      "storybook_url": "/?path=/story/components-sheet-typography--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "",
+      "source_path": "components/ui/SheetTypography/SheetTypography.tsx",
+      "tokens_used": [
+        "--background-primary",
+        "--body-md",
+        "--border-primary",
+        "--border-radius-md",
+        "--border-radius-sm",
+        "--border-width-md",
+        "--font-family-body",
+        "--font-family-heading",
+        "--font-family-label",
+        "--font-line-height-normal",
+        "--font-line-height-snug",
+        "--font-line-height-tight",
+        "--font-weight-regular",
+        "--font-weight-semi-bold",
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--heading-sm",
+        "--label-sm",
+        "--label-xs",
+        "--padding-sm",
+        "--padding-xl",
+        "--text-accent-red",
+        "--text-muted",
+        "--text-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-sidebar-navigation": {
       "name": "SidebarNavigation",
@@ -2807,7 +3533,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-skeleton": {
       "name": "Skeleton",
@@ -2848,7 +3579,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-slider": {
       "name": "Slider",
@@ -2891,58 +3627,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
-    },
-    "bds-snackbar": {
-      "name": "Snackbar",
-      "class_prefix": "bds-snackbar",
-      "storybook_url": "/?path=/story/components-snackbar--primary",
-      "status": "stable",
-      "introduced_in": "0.1.3",
-      "deprecated_in": null,
-      "replaced_by": null,
-      "description": "Snackbar — brief notification at screen edge via portal",
-      "source_path": "components/ui/Snackbar/Snackbar.tsx",
-      "tokens_used": [
-        "--background-inverse",
-        "--background-status-error",
-        "--background-status-orange",
-        "--background-status-success",
-        "--body-md",
-        "--body-sm",
-        "--border-radius-lg",
-        "--font-family-body",
-        "--font-family-label",
-        "--font-line-height-normal",
-        "--font-line-height-tight",
-        "--font-weight-regular",
-        "--gap-lg",
-        "--gap-md",
-        "--gap-sm",
-        "--gap-xl",
-        "--label-sm",
-        "--padding-lg",
-        "--padding-md",
-        "--snackbar-shadow",
-        "--text-brand-primary",
-        "--text-inverse",
-        "--text-muted",
-        "--text-on-color-dark",
-        "--text-on-color-light"
-      ],
-      "a11y": {
-        "aria_attrs": [
-          "aria-label",
-          "aria-live"
-        ],
-        "roles": [
-          "status"
-        ],
-        "manages_focus": false,
-        "has_label_prop": false,
-        "uses_keyboard_handlers": false,
-        "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-spinner": {
       "name": "Spinner",
@@ -2988,7 +3678,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-stepper": {
       "name": "Stepper",
@@ -3036,7 +3731,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-switch": {
       "name": "Switch",
@@ -3082,7 +3782,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-tab-bar": {
       "name": "TabBar",
@@ -3138,7 +3843,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-table": {
       "name": "Table",
@@ -3190,7 +3900,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-tag": {
       "name": "Tag",
@@ -3200,13 +3915,15 @@
       "introduced_in": "0.1.3",
       "deprecated_in": null,
       "replaced_by": null,
-      "description": "Tag — categorization label with optional icons and dismiss",
+      "description": "Tag fill appearance — shared axis with Badge (`solid | subtle`) and",
       "source_path": "components/ui/Tag/Tag.tsx",
       "tokens_used": [
         "--background-secondary",
         "--body-xs",
         "--border-radius-md",
         "--border-radius-sm",
+        "--border-secondary",
+        "--border-width-md",
         "--duration-normal",
         "--ease-out",
         "--font-family-label",
@@ -3215,6 +3932,7 @@
         "--gap-sm",
         "--gap-xl",
         "--gap-xs",
+        "--icon-lg",
         "--icon-sm",
         "--icon-xs",
         "--label-md",
@@ -3236,7 +3954,45 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
+    },
+    "bds-tag-group": {
+      "name": "TagGroup",
+      "class_prefix": "bds-tag-group",
+      "storybook_url": "/?path=/story/components-tag-group--primary",
+      "status": "stable",
+      "introduced_in": null,
+      "deprecated_in": null,
+      "replaced_by": null,
+      "description": "TagGroup — horizontal cluster of `<Tag>` elements with locked spacing.",
+      "source_path": "components/ui/TagGroup/TagGroup.tsx",
+      "tokens_used": [
+        "--gap-lg",
+        "--gap-md",
+        "--gap-sm",
+        "--gap-xl",
+        "--gap-xs",
+        "--padding-lg",
+        "--surface-primary"
+      ],
+      "a11y": {
+        "aria_attrs": [],
+        "roles": [],
+        "manages_focus": false,
+        "has_label_prop": false,
+        "uses_keyboard_handlers": false,
+        "notes": []
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-task-console": {
       "name": "TaskConsole",
@@ -3250,15 +4006,11 @@
       "source_path": "components/ui/TaskConsole/TaskConsole.tsx",
       "tokens_used": [
         "--background-negative",
-        "--background-status-info",
         "--body-sm",
+        "--border-brand-primary",
         "--border-primary",
         "--border-radius-lg",
-        "--border-radius-pill",
-        "--border-radius-sm",
-        "--border-width-lg",
         "--border-width-sm",
-        "--duration-400",
         "--duration-fast",
         "--ease-out",
         "--font-family-body",
@@ -3270,25 +4022,25 @@
         "--gap-md",
         "--gap-xl",
         "--gap-xs",
-        "--icon-sm",
+        "--icon-lg",
         "--label-md",
         "--label-sm",
         "--padding-lg",
         "--padding-md",
+        "--padding-sm",
         "--padding-xl",
         "--shadow-xl",
-        "--state-hover-overlay",
+        "--space-100",
+        "--surface-muted",
         "--surface-negative",
         "--surface-positive",
         "--surface-primary",
         "--surface-secondary",
-        "--surface-status-info",
-        "--task-console-btn-hover-bg",
+        "--text-brand-primary",
         "--text-muted",
         "--text-negative",
         "--text-positive",
-        "--text-primary",
-        "--text-status-info"
+        "--text-primary"
       ],
       "a11y": {
         "aria_attrs": [
@@ -3302,7 +4054,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-text-area": {
       "name": "TextArea",
@@ -3359,7 +4116,35 @@
         "notes": [
           "Pair with a visible <label> via htmlFor + id, or supply aria-label when a visible label is intentionally omitted."
         ]
-      }
+      },
+      "category": "inputs",
+      "tags": [
+        "input",
+        "textarea",
+        "multi-line",
+        "field",
+        "long-text"
+      ],
+      "use_cases": [
+        "multi-line text input",
+        "comments, descriptions, messages",
+        "feedback or support request body"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography",
+          "radius"
+        ],
+        "fixed": [
+          "focus-ring",
+          "error-state",
+          "disabled-state",
+          "resize-behavior"
+        ]
+      },
+      "composes": []
     },
     "bds-text-input": {
       "name": "TextInput",
@@ -3417,7 +4202,33 @@
         "notes": [
           "Pair with a visible <label> via htmlFor + id, or supply aria-label when a visible label is intentionally omitted."
         ]
-      }
+      },
+      "category": "inputs",
+      "tags": [
+        "input",
+        "text",
+        "field",
+        "single-line"
+      ],
+      "use_cases": [
+        "single-line text input",
+        "email, name, phone, URL field",
+        "any labeled single-line string capture"
+      ],
+      "theming_contract": {
+        "themeable": [
+          "colors",
+          "spacing",
+          "typography",
+          "radius"
+        ],
+        "fixed": [
+          "focus-ring",
+          "error-state",
+          "disabled-state"
+        ]
+      },
+      "composes": []
     },
     "bds-text-link": {
       "name": "TextLink",
@@ -3450,7 +4261,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-time-picker": {
       "name": "TimePicker",
@@ -3510,7 +4326,6 @@
         ],
         "roles": [
           "alert",
-          "dialog",
           "listbox",
           "option"
         ],
@@ -3518,7 +4333,12 @@
         "has_label_prop": true,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-toast": {
       "name": "Toast",
@@ -3565,7 +4385,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     },
     "bds-tooltip": {
       "name": "Tooltip",
@@ -3610,7 +4435,12 @@
         "has_label_prop": false,
         "uses_keyboard_handlers": false,
         "notes": []
-      }
+      },
+      "category": null,
+      "tags": [],
+      "use_cases": [],
+      "theming_contract": null,
+      "composes": []
     }
   },
   "tokens": {

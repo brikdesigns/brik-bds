@@ -67,8 +67,11 @@ sync_one "$WIDGETS/devbar.js"         "$RENEW_PUBLIC/brik-devbar.js"        "ren
 sync_one "$WIDGETS/inspect-widget.js" "$RENEW_PUBLIC/brik-inspect.js"       "renew-pms public/ brik-inspect.js"
 sync_one "$WIDGETS/events-widget.js"  "$RENEW_PUBLIC/brik-events-widget.js" "renew-pms public/ brik-events-widget.js"
 
-# BDS Storybook preview iframe
-BDS_STORYBOOK_PUBLIC="$BDS_PRIMARY/.storybook/public"
+# BDS Storybook preview iframe — write to the *current* checkout (worktree or
+# primary) so commits from a task worktree capture these files. Previously this
+# wrote to BDS_PRIMARY, which left the worktree's tree clean and caused
+# brik-bds#473 to miss tracking three of the four widget files.
+BDS_STORYBOOK_PUBLIC="$WORKTREE_ROOT/.storybook/public"
 sync_one "$WIDGETS/devbar.js"         "$BDS_STORYBOOK_PUBLIC/brik-devbar.js"        "bds storybook     brik-devbar.js"
 sync_one "$WIDGETS/inspect-widget.js" "$BDS_STORYBOOK_PUBLIC/brik-inspect.js"       "bds storybook     brik-inspect.js"
 sync_one "$WIDGETS/feedback-widget.js" "$BDS_STORYBOOK_PUBLIC/brik-feedback-widget.js" "bds storybook     brik-feedback-widget.js"
