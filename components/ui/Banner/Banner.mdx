@@ -16,21 +16,35 @@ Full-width contextual banner. `tone="announcement"` (default) renders a brand-pr
 
 ## Variants
 
-Action, title-only, and dismissible configurations on the brand surface.
+Each axis the component varies on — content shape, dismiss affordance, status tone — gets its own story so the autodocs page, sidebar deep-links, and Chromatic snapshots can each address one state at a time.
 
-<Canvas of={Stories.Variants} />
+### Announcement
 
-### Status tones
+<Canvas of={Stories.Announcement} />
 
-Information / warning / error tones with a leading status Badge.
+### Title only
 
-<Canvas of={Stories.Tones} />
+<Canvas of={Stories.TitleOnly} />
+
+### Dismissible
+
+<Canvas of={Stories.Dismissible} />
+
+### Information
+
+<Canvas of={Stories.Information} />
+
+### Warning
+
+<Canvas of={Stories.Warning} />
+
+### Error
+
+<Canvas of={Stories.Error} />
 
 ## Patterns
 
-Real-world usage: announcements and dismissible notices.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.DismissibleWithToggle} />
 
 ## Props
 
