@@ -2,6 +2,8 @@
 
 This is the **source of truth** for the Brik Design System React components.
 
+> **Cross-repo rules + canonical token registry + brik-secrets credential workflow** load via walk-up from `~/Documents/Github/CLAUDE.md`. For any credential operation (rotate, propagate, audit), use `brik-secrets <subcommand>` — never write a custom rotator. See `operations/security/bin/brik-secrets` in brik-llm.
+
 ## STOP — Canonical Token Registry (Non-Negotiable)
 
 > **Canonical names live at:** [https://design.brikdesigns.com/docs/primitives/color](https://design.brikdesigns.com/docs/primitives/color)
