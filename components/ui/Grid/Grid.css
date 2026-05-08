@@ -1,0 +1,61 @@
+@layer bds-components {
+/* ─── Grid — responsive CSS grid ─────────────────────────────── */
+
+.bds-grid {
+  display: grid;
+  min-width: 0;
+}
+
+/* ─── Fixed column counts ────────────────────────────────────── */
+
+.bds-grid--cols-1 { grid-template-columns: 1fr; }
+.bds-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
+.bds-grid--cols-3 { grid-template-columns: repeat(3, 1fr); }
+.bds-grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
+.bds-grid--cols-5 { grid-template-columns: repeat(5, 1fr); }
+.bds-grid--cols-6 { grid-template-columns: repeat(6, 1fr); }
+
+/* ─── Auto-sized columns ─────────────────────────────────────── */
+/* min-col-width is exposed as a CSS variable so consumers can
+   override per-instance via the `minColumnWidth` prop without
+   patching the component. */
+
+.bds-grid--auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--bds-grid-min-col-width, 240px), 100%), 1fr));
+}
+
+.bds-grid--auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--bds-grid-min-col-width, 240px), 100%), 1fr));
+}
+
+/* ─── Gap (BDS --gap-* tokens) ───────────────────────────────── */
+
+.bds-grid--gap-xs  { gap: var(--gap-xs); }
+.bds-grid--gap-sm  { gap: var(--gap-sm); }
+.bds-grid--gap-md  { gap: var(--gap-md); }
+.bds-grid--gap-lg  { gap: var(--gap-lg); }
+.bds-grid--gap-xl  { gap: var(--gap-xl); }
+
+/* ─── Responsive collapse for fixed columns ──────────────────── */
+/* Fixed column counts collapse predictably at narrow widths.
+   `auto-fit` / `auto-fill` reflow on their own and don't need this. */
+
+@media (max-width: 991px) {
+  .bds-grid--cols-3,
+  .bds-grid--cols-4,
+  .bds-grid--cols-5,
+  .bds-grid--cols-6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .bds-grid--cols-2,
+  .bds-grid--cols-3,
+  .bds-grid--cols-4,
+  .bds-grid--cols-5,
+  .bds-grid--cols-6 {
+    grid-template-columns: 1fr;
+  }
+}
+}

@@ -1,0 +1,40 @@
+@layer bds-components {
+/* ─── Stack — flex container ─────────────────────────────────── */
+
+.bds-stack {
+  display: flex;
+  min-width: 0; /* prevent flex blowout on overflowing children */
+}
+
+.bds-stack--vertical   { flex-direction: column; }
+.bds-stack--horizontal { flex-direction: row; }
+
+.bds-stack--wrap { flex-wrap: wrap; }
+
+/* ─── Gap (BDS --gap-* tokens) ───────────────────────────────── */
+
+.bds-stack--gap-tiny  { gap: var(--gap-tiny); }
+.bds-stack--gap-xs    { gap: var(--gap-xs); }
+.bds-stack--gap-sm    { gap: var(--gap-sm); }
+.bds-stack--gap-md    { gap: var(--gap-md); }
+.bds-stack--gap-lg    { gap: var(--gap-lg); }
+.bds-stack--gap-xl    { gap: var(--gap-xl); }
+.bds-stack--gap-huge  { gap: var(--gap-huge); }
+
+/* ─── Cross-axis alignment ───────────────────────────────────── */
+
+.bds-stack--align-start    { align-items: flex-start; }
+.bds-stack--align-center   { align-items: center; }
+.bds-stack--align-end      { align-items: flex-end; }
+.bds-stack--align-stretch  { align-items: stretch; }
+.bds-stack--align-baseline { align-items: baseline; }
+
+/* ─── Main-axis distribution ─────────────────────────────────── */
+
+.bds-stack--justify-start   { justify-content: flex-start; }
+.bds-stack--justify-center  { justify-content: center; }
+.bds-stack--justify-end     { justify-content: flex-end; }
+.bds-stack--justify-between { justify-content: space-between; }
+.bds-stack--justify-around  { justify-content: space-around; }
+.bds-stack--justify-evenly  { justify-content: space-evenly; }
+}
