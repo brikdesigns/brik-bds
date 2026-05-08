@@ -22,19 +22,32 @@ For card chrome where the toggle stands alone (the rest of the card is a differe
 
 ## Variants
 
-<Canvas of={Stories.Variants} />
+Each row state — empty / completed / locked / locked-and-completed — gets its own story so the autodocs page, sidebar deep-links, and Chromatic snapshots can each address one state at a time.
 
-- **Unchecked** — Empty circle, primary label color
-- **Checked** — Brand-primary fill on the circle, muted line-through label, subtle completion bg on the row
-- **Disabled** — Reduced row opacity, non-interactive (use during async save or for read-only items)
+### Unchecked
+
+<Canvas of={Stories.Unchecked} />
+
+### Checked
+
+<Canvas of={Stories.Checked} />
+
+### Disabled
+
+<Canvas of={Stories.Disabled} />
+
+### Disabled checked
+
+<Canvas of={Stories.DisabledChecked} />
 
 ## Patterns
 
-<Canvas of={Stories.Patterns} />
+### Daily-maintenance checklist
 
-A daily-maintenance checklist inside a task sheet — the canonical use case in a clinical PMS. The completion bg + strikethrough makes done vs. not-done glanceable at the row level; the running `n of N completed` counter sits above the list.
+A canonical clinical-PMS pattern — interactive list with running `n of N completed` counter. Render-mode demo because the checklist's value is the inter-row interaction.
+
+<Canvas of={Stories.DailyMaintenanceChecklist} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-

@@ -16,36 +16,66 @@ Status indicators and labels for displaying contextual information. Badges use s
 
 ## Variants
 
-Five status variants across four sizes, each available in `solid` and `subtle` appearances. The `xs` size renders a compact icon-only badge.
+The component varies on **status** (the semantic axis — five values), **appearance** (saturation tier), **size** (four tokens), and **content composition** (text-only, with-icon, icon-only).
 
-<Canvas of={Stories.Variants} />
+### Positive
 
-**Status colors:**
+<Canvas of={Stories.Positive} />
 
-- **`positive`** — Green. Success, completed actions.
-- **`warning`** — Yellow. Cautionary states, pending actions.
-- **`error`** — Red. Error states, failed actions.
-- **`info`** — Neutral. Informational, neutral notifications.
-- **`progress`** — Blue. In-progress states, active processes.
+### Warning
 
-**Appearance:** (shared axis with Chip and Tag — see [Vocabulary › Axes](https://design.brikdesigns.com/docs/primitives/naming-conventions))
+<Canvas of={Stories.Warning} />
 
-- **`solid`** (default) — High emphasis, standalone badges, dark backgrounds.
-- **`subtle`** — Lower emphasis pastel fill, inline with content, table cells, cards.
+### Error
 
-## Icons
+<Canvas of={Stories.Error} />
 
-Badges can include a leading icon alongside text, shown in both `solid` and `subtle` appearances.
+### Info
 
-<Canvas of={Stories.Icons} />
+<Canvas of={Stories.Info} />
+
+### Progress
+
+<Canvas of={Stories.Progress} />
+
+### Subtle appearance
+
+The lower-contrast appearance shown across all five statuses (axis-only gallery).
+
+<Canvas of={Stories.Subtle} />
+
+### Sizes
+
+Four size tokens at a single status. `xs` is icon-only by design — text doesn't fit legibly.
+
+<Canvas of={Stories.Sizes} />
+
+### With icon
+
+<Canvas of={Stories.WithIcon} />
+
+### Icon only
+
+<Canvas of={Stories.IconOnly} />
+
+### Badge + Tag alignment
+
+Badge and Tag share the same height at every size tier — useful when mixing them inline.
+
+<Canvas of={Stories.BadgeTagAlignment} />
 
 ## Patterns
 
-Real-world compositions for common badge use cases.
+Real-world compositions — the canonical content-lifecycle status sequence in two appearances.
 
-<Canvas of={Stories.Patterns} />
+### Content status (solid)
+
+<Canvas of={Stories.ContentStatusSolid} />
+
+### Content status (subtle)
+
+<Canvas of={Stories.ContentStatusSubtle} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
