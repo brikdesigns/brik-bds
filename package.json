@@ -148,6 +148,7 @@
     "populate-notion": "node scripts/populate-notion-tokens.js",
     "propagate": "bash scripts/propagate.sh",
     "propagate:dry": "bash scripts/propagate.sh --dry-run",
+    "sync:devbar-widgets": "bash scripts/sync-devbar-widgets.sh",
     "prepare": "husky || true",
     "prepublishOnly": "rm -rf dist && npm run build:lib",
     "verify:blueprints-astro": "node scripts/verify-blueprints-astro-exports.mjs"

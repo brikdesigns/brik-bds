@@ -12,7 +12,7 @@ import { useEffect, useRef } from 'react';
  * Brik Client Portal, and Renew PMS — that's the point: one visual source of
  * truth, identical across all Brik surfaces.
  *
- * Source: brik-llm/scripts/brik-dev-tool/widgets/devbar.js (synced via sync-downstream.sh)
+ * Source: ./widgets/devbar.js (canonical; synced via scripts/sync-devbar-widgets.sh)
  *
  * Promoted from brik-client-portal/src/components/BrikDevBar.tsx on 2026-04-25.
  * DevBarSlotDef + DevBarApi types moved here from DevFeedbackWidget.tsx
@@ -61,7 +61,7 @@ declare global {
  *
  * Render this once in your DevTools layout (or any high-level layout component).
  * Both scripts must be present in the app's public/ directory — see the sync
- * script at brik-llm/scripts/brik-dev-tool/sync-downstream.sh.
+ * script at brik-bds/scripts/sync-devbar-widgets.sh.
  *
  * @summary Dev-only inspection bar (loads devbar/inspect scripts)
  */
