@@ -1,9 +1,17 @@
 ---
 title: Overview
-description: The vocabulary peer to BDS — industries, voices, atmospheres, and locked enums.
+description: The vocabulary peer to BDS — industries, voices, atmospheres, brand, compliance, and locked enums.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import {
+  PERSONALITY_VALUES,
+  VOICE_VALUES,
+  VISUAL_STYLE_VALUES,
+  INDUSTRY_SLUGS,
+  industryPacks,
+  voicePatterns,
+} from '@brikdesigns/bds/content-system';
 
 The Brik Content System (BCS) is the **content-vocabulary peer** to the visual token system. Same cascade pattern as tokens, but for copy instead of colors. Lives in `content-system/` in the BDS repo and ships from the same npm package via a second entry point.
 
@@ -14,11 +22,38 @@ import {
   PERSONALITY_VALUES,
   VOICE_VALUES,
   VISUAL_STYLE_VALUES,
+  IMAGE_MOOD_VALUES,
   DEFAULT_INDUSTRY_SLUG,
   type IndustryPack,
   type VoicePattern,
 } from '@brikdesigns/bds/content-system';
 ```
+
+BDS answers *"what does the site look like?"* — tokens, components, blueprints, themes.
+BCS answers *"what does the site sound like, and for whom?"* — voice patterns, industry packs, service catalogs, regulatory constraints, brand vocabulary.
+
+Both live in the same repo because they're the same kind of artifact: a versioned vocabulary that many consumers depend on. Portal, mockup generators, content automations, and strategy workers all import from here.
+
+## Architecture
+
+```
+content-system/
+├── vocabularies/   Locked enums — single source of truth for portal axes
+│   ├── personality.ts     11 traits
+│   ├── voice.ts           8 traits
+│   ├── visual-style.ts    11 traits
+│   ├── image-mood.ts      6 photography moods
+│   └── industry.ts        slug registry
+├── schema/         TypeScript types for pack authoring
+├── industries/     Industry packs — data + narrative ({slug}.ts + .mdx)
+├── voices/         Voice patterns — 8 VoicePattern files + blender spec
+├── brand/          Brik's own meta-voice (agency voice/tone substrate)
+└── compliance/     Canonical compliance standards (markdown source of truth)
+```
+
+Each industry pack is two co-located files: a `.ts` file exporting the typed `IndustryPack` data, and an `.mdx` page that renders the narrative companion. Both describe the same industry — keep them in sync.
+
+Compliance docs are plain markdown that ships with the package so consumer repos can reference the canonical path at `node_modules/@brikdesigns/bds/content-system/compliance/{name}.md`. Each doc has a browse companion under [Compliance](/docs/content-system/compliance/healthcare-ada); edit the `.md` as source of truth.
 
 ## What's in here
 
@@ -26,7 +61,63 @@ import {
 |---|---|
 | [Industries](/docs/content-system/industries) | "What does this vertical care about? What's seasonal, regulated, or competitive?" |
 | [Voices](/docs/content-system/voices) | "How does this client sound? Direct, warm, witty, refined?" |
-| [Atmospheres](/docs/content-system/atmospheres) | "What mood does this brand sit in? Editorial-luxury, warm-soft, minimal-clinical?" |
+| [Atmospheres](/docs/theming/atmospheres) | "What mood does this brand sit in? Editorial-luxury, warm-soft, minimal-clinical?" |
+| [Brand](/docs/content-system/brand/brik) | Brik's own voice/tone substrate — distinct from the abstract Voices catalog |
+| [Compliance](/docs/content-system/compliance/healthcare-ada) | Canonical compliance standards (Healthcare ADA, etc.) |
+| [Vocabularies → Image Mood](/docs/content-system/vocabularies/image-mood) | Multi-select 1–3 photography moods feeding stock asset queries |
+
+## The three axes
+
+Captured in the client portal; imported from here so nothing drifts.
+
+| Axis | Count | Values |
+|---|---|---|
+| **Personality** | {PERSONALITY_VALUES.length} | {PERSONALITY_VALUES.join(' · ')} |
+| **Voice** | {VOICE_VALUES.length} | {VOICE_VALUES.join(' · ')} |
+| **Visual Style** | {VISUAL_STYLE_VALUES.length} | {VISUAL_STYLE_VALUES.join(' · ')} |
+
+Clients pick up to 3 in each axis. Overlap across axes (e.g. "Approachable" in Personality + Voice) is a strength signal the resolver weights higher.
+
+## Voice patterns
+
+{VOICE_VALUES.length} canonical voices, {Object.keys(voicePatterns).length} patterns authored. Browse the [Voices page](/docs/content-system/voices) to see all 8 side-by-side with examples.
+
+<table>
+  <thead><tr><th>Voice</th><th>Summary</th></tr></thead>
+  <tbody>
+    {VOICE_VALUES.map((v) => (
+      <tr key={v}><td><strong>{v}</strong></td><td>{voicePatterns[v].summary}</td></tr>
+    ))}
+  </tbody>
+</table>
+
+## Industry packs
+
+{INDUSTRY_SLUGS.length} registered slugs, {Object.keys(industryPacks).length} with full packs ported.
+
+<table>
+  <thead><tr><th>Slug</th><th>Display Name</th><th>Version</th><th>Last Reviewed</th></tr></thead>
+  <tbody>
+    {INDUSTRY_SLUGS.map((s) => {
+      const p = industryPacks[s];
+      return p ? (
+        <tr key={s}>
+          <td><code>{s}</code></td>
+          <td>{p.displayName}</td>
+          <td>{p.version}</td>
+          <td>{p.lastReviewed}</td>
+        </tr>
+      ) : (
+        <tr key={s}>
+          <td><code>{s}</code></td>
+          <td><em>(pending port)</em></td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table>
 
 ## How the cascade works
 
@@ -41,15 +132,111 @@ When a strategy doc, mockup, or page generates for a client, the BCS resolver:
 Client overrides on `cta_language`, `anti_messages`, and `naming_conventions` always win over industry seeds. Empty client fields fall through to the industry default.
 
 <Callout type="warn">
-  **Locked enums are the source of truth.** `PERSONALITY_VALUES`, `VOICE_VALUES`, `VISUAL_STYLE_VALUES`, and `INDUSTRY_SLUGS` are exported from BCS and imported by the portal. Never hardcode these values in consumer code; never drift them between repos.
+  **Locked enums are the source of truth.** `PERSONALITY_VALUES`, `VOICE_VALUES`, `VISUAL_STYLE_VALUES`, `IMAGE_MOOD_VALUES`, and `INDUSTRY_SLUGS` are exported from BCS and imported by the portal. Never hardcode these values in consumer code; never drift them between repos.
 </Callout>
+
+## How BCS feeds Theming
+
+Content and Theming are peer tenets that meet at one specific seam: **industry packs declare default theming decisions**. Each pack carries a default atmosphere and a default navigation archetype — the portal resolver applies these before the client-specific brand theme loads, and the client override wins only if set.
+
+```
+industry pack (BCS) ──▶ atmosphere default      ──▶ client override?
+                   └──▶ navigation archetype    ──▶ client override?
+                   └──▶ blueprint affinity tags ──▶ mockup generator picks
+```
+
+This keeps the multi-tenant flow short. A new dental client inherits the dental pack's editorial atmosphere and its navigation archetype automatically; their `theme-{client}.css` only adjusts what genuinely needs to change — brand color, typography, surface tints. The rest of the theming composition is already correct for the industry.
+
+See the [Theming Overview](/docs/theming) for how the four theming layers (tokens, atmosphere, navigation archetype, blueprint) compose, and drill into each layer via:
+
+- [Atmospheres](/docs/theming/atmospheres) — mood overlays, full vocabulary, per-atmosphere previews
+- [Navigation Archetypes](/docs/theming/navigation-archetypes) — site-header patterns with per-industry defaults
+- [Blueprints](/docs/theming/blueprints) — section composition tagged by mood + industry
+
+## How the portal uses BCS
+
+```ts
+// In the portal resolver:
+import {
+  industryPacks,
+  DEFAULT_INDUSTRY_SLUG,
+  type IndustrySlug,
+} from '@brikdesigns/bds/content-system';
+
+function resolveBrandLanguage(profile: CompanyProfile) {
+  const slug = (profile.industry_slug ?? DEFAULT_INDUSTRY_SLUG) as IndustrySlug;
+  const pack = industryPacks[slug];
+
+  return {
+    ctaLanguage: {
+      approved: dedupe([
+        ...profile.cta_language?.approved ?? [],  // client override wins
+        ...pack.ctaDefaults.approved,              // industry default fills gaps
+      ]),
+      rejected: dedupe([
+        ...profile.cta_language?.rejected ?? [],
+        ...pack.ctaDefaults.rejected,
+      ]),
+    },
+    vocabulary: {
+      preferred: pack.vocabulary.preferred,
+      avoid: [
+        ...pack.vocabulary.avoid,
+        ...profile.anti_messages.map((m) => ({ term: m, reason: 'client-specified' })),
+      ],
+    },
+    // ...page archetypes, services, regulatory, seasonality...
+  };
+}
+```
+
+Same cascade pattern as token theming: **client > industry > baseline**.
 
 ## Pack lifecycle
 
-Every pack carries a `version`, `reviewCadence`, and `lastReviewed` field. Bump version on content change. Update `lastReviewed` when you confirm accuracy on a review pass — even with no changes. The catch-all `small-business` pack graduates a new vertical out when:
+Every pack carries a `version`, `reviewCadence`, and `lastReviewed` field. Bump version on content change. Update `lastReviewed` when you confirm accuracy on a review pass — even with no changes.
 
-- Brik has 3+ clients in it, OR
-- Seasonality / regulation / terminology diverges meaningfully from `small-business`, OR
-- Strategy docs repeat 60%+
+The catch-all `small-business` pack graduates a new vertical out when **any** of the following is true:
+
+1. Brik has **3 or more active clients** in that vertical, OR
+2. The vertical has meaningfully different **seasonality, regulation, or terminology** from the catch-all, OR
+3. Strategy documents for that vertical are **materially the same 60%+ of the time**, signaling a repeatable pattern worth codifying.
 
 See [Industries → Dental](/docs/content-system/industries/dental) for a fully-fleshed reference pack.
+
+## Authoring an industry pack
+
+Either authoring net-new or graduating a vertical out of `small-business`:
+
+1. Add the slug to [`vocabularies/industry.ts`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/vocabularies/industry.ts) under `INDUSTRY_SLUGS`.
+2. Create [`industries/{slug}.ts`](https://github.com/brikdesigns/brik-bds/tree/main/content-system/industries) — typed `IndustryPack` data. Use [`dental.ts`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/industries/dental.ts) as a model for structure depth.
+3. Create `industries/{slug}.mdx` — narrative companion (this docs site auto-discovers it).
+4. Register the pack in [`industries/index.ts`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/industries/index.ts).
+5. Backfill existing clients in the portal by updating `company_profiles.industry_slug` (graduation only).
+6. Bump the source pack's `version` and set `lastReviewed` to today. Log the graduation in the changelog.
+7. Run `npm run build:content-system && npm run build-storybook` to validate. The `Record<IndustrySlug, IndustryPack>` type contract ensures every slug in `INDUSTRY_SLUGS` has a matching pack at typecheck time.
+
+Review cadence is quarterly by default. CI flags packs past their review date (future enhancement).
+
+## Phase roadmap
+
+- ✓ Phase 1 — Vocabulary lock + schema + first 3 industry packs
+- ✓ Phase 2 — 8 voice pattern files + blender spec
+- ☐ Phase 3 — Resolver in portal (`resolveBrandLanguage`, `resolveTheme`, `composeBlueprints`)
+- ☐ Phase 4 — Blueprint library materialized with Personality/Voice/VisualStyle tags
+- ☐ Phase 5 — Claude Design in Paper consuming resolved output
+- ☐ Phase 6 — Build script: `content-system.json` emit for non-TS consumers
+
+---
+
+## Related
+
+- [Industries](/docs/content-system/industries) — pack catalog
+- [Voices](/docs/content-system/voices) — voice patterns the resolver blends
+- [Brand](/docs/content-system/brand/brik) — Brik's own meta-voice
+- [Compliance → Healthcare ADA](/docs/content-system/compliance/healthcare-ada) — canonical accessibility standards
+- [Vocabularies → Image Mood](/docs/content-system/vocabularies/image-mood) — photography mood vocabulary
+- [Theming Overview](/docs/theming) — how the four theming layers compose and how BCS feeds them
+- [Atmospheres](/docs/theming/atmospheres) — mood overlay selected per industry pack
+- [Navigation Archetypes](/docs/theming/navigation-archetypes) — site-header pattern selected per industry pack
+- [Color primitives](/docs/primitives/color) — visual tokens that pair with these content vocabularies
