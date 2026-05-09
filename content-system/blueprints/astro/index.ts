@@ -51,6 +51,7 @@ export { default as HeroInteriorMinimal }       from './HeroInteriorMinimal.astr
 export { default as StatsDarkBar }              from './StatsDarkBar.astro';
 export { default as ServicesDetailTwoColumn }   from './ServicesDetailTwoColumn.astro';
 export { default as Services3ColCardGrid }      from './Services3ColCardGrid.astro';
+export { default as SupportPlanCalloutSplit }   from './SupportPlanCalloutSplit.astro';
 export { default as AboutStorySplit }           from './AboutStorySplit.astro';
 export { default as TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge.astro';
 export { default as CtaSplitContact }           from './CtaSplitContact.astro';
