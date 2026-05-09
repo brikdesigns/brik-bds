@@ -23,6 +23,7 @@
     "**/*.stories.ts",
     "**/*.stories.tsx",
     "**/*.test.ts",
-    "content-system/blueprints/astro/index.ts"
+    "content-system/blueprints/astro/index.ts",
+    "content-system/blueprints/react/**"
   ]
 }

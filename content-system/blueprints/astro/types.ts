@@ -25,6 +25,7 @@ export type KnownBlueprintKey =
   | 'hero_interior_minimal'
   | 'services_numbered_rows'
   | 'services_detail_two_column'
+  | 'services_3col_card_grid'
   | 'features_3col_icon_grid'
   | 'features_alternating_split'
   | 'features_bento_asymmetric'
@@ -63,6 +64,19 @@ export interface BlueprintSection {
   readonly items: readonly {
     readonly title: string;
     readonly description: string;
+    /**
+     * Optional per-item fields used by richer blueprints (e.g.
+     * `services_3col_card_grid`). Additive — existing blueprints that
+     * only consume `title` + `description` are unaffected. New
+     * blueprints requiring additional structured per-item data should
+     * add their fields here as `readonly ...?` rather than introducing
+     * a separate items shape.
+     */
+    readonly href?: string;
+    readonly imageUrl?: string;
+    /** ServiceCategory slug — see `ServiceTag` props in `@brikdesigns/bds`. */
+    readonly category?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
+    readonly hasOptions?: boolean;
   }[];
   readonly cta: {
     readonly label: string;

@@ -560,6 +560,31 @@
       "required_facts": []
     },
     {
+      "key": "services_3col_card_grid",
+      "name": "3-Column Service Card Grid",
+      "section_type": "services",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "corporate"
+      ],
+      "moods": [
+        "approachable",
+        "professional",
+        "modern",
+        "warm"
+      ],
+      "layout_spec": "Light background section. Centered section header (eyebrow optional + heading + optional one-line subhead). 3-column grid of service cards below. Each card: top image area (3:2 aspect) showing service-specific 3D illustration or photo on a light backdrop; below, a small ServiceTag (icon variant, accent color) + service name (heading/sm, 700 weight) + 1-2 sentence description (body/sm, on light) + 'Learn more' ghost-variant link-button. Optional 'Has Options' positive-status badge anchored top-right of card when the service exposes multiple offerings. Cards have rounded corners (border-radius-md), no border at rest, optional subtle hover lift. Grid gap is generous (24-28px). Collapses to 2-col at <992px, 1-col at <768px.",
+      "css_hints": ".services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-lg); } .service-card { background: var(--surface-primary); border-radius: var(--border-radius-md); overflow: hidden; position: relative; } .service-card__media { aspect-ratio: 3/2; background: var(--surface-secondary); } .service-card__body { padding: var(--padding-lg); display: flex; flex-direction: column; gap: var(--gap-md); } .service-card__has-options { position: absolute; top: var(--gap-md); right: var(--gap-md); }",
+      "source": "brikdesigns.com /services/{slug} index pages — service-line card grid pattern (PR #477 spec)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-05-09",
+      "required_facts": []
+    },
+    {
       "key": "contact_form_split",
       "name": "Contact — Form + Info Split",
       "section_type": "cta",

@@ -14,7 +14,9 @@
     "lib-entry.ts",
     "components/**/*",
     "tokens/index.ts",
-    "types/**/*"
+    "types/**/*",
+    "content-system/blueprints/react/**/*.ts",
+    "content-system/blueprints/react/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

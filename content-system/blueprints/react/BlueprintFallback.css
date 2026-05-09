@@ -1,0 +1,52 @@
+/*
+ * BlueprintFallback (React) — visible stub for an unknown blueprint
+ * key. Mirrors `../astro/BlueprintFallback.astro` styling 1:1.
+ */
+
+.bp-fallback {
+  padding: var(--padding-xl) var(--padding-lg);
+  background: var(--surface-secondary);
+  border: 2px dashed var(--border-secondary);
+  margin-block: var(--gap-md);
+}
+
+.bp-fallback__container {
+  max-width: 960px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bp-fallback__label {
+  margin: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.bp-fallback__key,
+.bp-fallback__meta,
+.bp-fallback__hint {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-300);
+  line-height: var(--font-line-height-relaxed);
+  color: var(--text-secondary);
+}
+
+.bp-fallback__hint {
+  font-size: var(--font-size-200);
+  max-width: 72ch;
+}
+
+.bp-fallback code {
+  font-family: var(--font-family-mono, ui-monospace, monospace);
+  font-size: 0.9em;
+  padding: 0 4px;
+  background: var(--surface-primary);
+  border-radius: 2px;
+}

@@ -671,11 +671,12 @@ const expectedFiles = [
   'dist/content-system/blueprints/astro/types.d.ts',
   // Barrel (source — excluded from tsc compile)
   'content-system/blueprints/astro/index.ts',
-  // Components (source, .astro) — all 8 v0.1 shipped blueprints
+  // Components (source, .astro) — v0.1 shipped blueprints + later additions
   'content-system/blueprints/astro/HeroSplit6040.astro',
   'content-system/blueprints/astro/HeroInteriorMinimal.astro',
   'content-system/blueprints/astro/StatsDarkBar.astro',
   'content-system/blueprints/astro/ServicesDetailTwoColumn.astro',
+  'content-system/blueprints/astro/Services3ColCardGrid.astro',
   'content-system/blueprints/astro/AboutStorySplit.astro',
   'content-system/blueprints/astro/TestimonialsFeaturedLarge.astro',
   'content-system/blueprints/astro/CtaSplitContact.astro',
