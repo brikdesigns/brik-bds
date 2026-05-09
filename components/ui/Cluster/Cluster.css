@@ -1,0 +1,32 @@
+@layer bds-components {
+/* ─── Cluster — wrapping inline flex ─────────────────────────── */
+
+.bds-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+/* ─── Gap (BDS --gap-* tokens) ───────────────────────────────── */
+
+.bds-cluster--gap-tiny { gap: var(--gap-tiny); }
+.bds-cluster--gap-xs   { gap: var(--gap-xs); }
+.bds-cluster--gap-sm   { gap: var(--gap-sm); }
+.bds-cluster--gap-md   { gap: var(--gap-md); }
+.bds-cluster--gap-lg   { gap: var(--gap-lg); }
+.bds-cluster--gap-xl   { gap: var(--gap-xl); }
+
+/* ─── Cross-axis alignment ───────────────────────────────────── */
+
+.bds-cluster--align-start    { align-items: flex-start; }
+.bds-cluster--align-center   { align-items: center; }
+.bds-cluster--align-end      { align-items: flex-end; }
+.bds-cluster--align-baseline { align-items: baseline; }
+
+/* ─── Main-axis distribution ─────────────────────────────────── */
+
+.bds-cluster--justify-start   { justify-content: flex-start; }
+.bds-cluster--justify-center  { justify-content: center; }
+.bds-cluster--justify-end     { justify-content: flex-end; }
+.bds-cluster--justify-between { justify-content: space-between; }
+}

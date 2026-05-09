@@ -1,0 +1,55 @@
+@layer bds-components {
+/* ─── Frame — aspect-ratio container ─────────────────────────── */
+
+.bds-frame {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  width: 100%;
+}
+
+/* ─── Named ratio presets ────────────────────────────────────── */
+
+.bds-frame--ratio-square    { aspect-ratio: 1 / 1; }
+.bds-frame--ratio-portrait  { aspect-ratio: 3 / 4; }
+.bds-frame--ratio-landscape { aspect-ratio: 4 / 3; }
+.bds-frame--ratio-wide      { aspect-ratio: 16 / 9; }
+.bds-frame--ratio-ultrawide { aspect-ratio: 21 / 9; }
+
+/* ─── Inner content fit ──────────────────────────────────────── */
+/* Applies to the first media descendant (img / video / svg). Authors who
+   need different behavior should style the inner element directly. */
+
+.bds-frame--fit-cover > img,
+.bds-frame--fit-cover > video,
+.bds-frame--fit-cover > svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bds-frame--fit-contain > img,
+.bds-frame--fit-contain > video,
+.bds-frame--fit-contain > svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.bds-frame--fit-fill > img,
+.bds-frame--fit-fill > video,
+.bds-frame--fit-fill > svg {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+}
+
+.bds-frame--fit-none > img,
+.bds-frame--fit-none > video,
+.bds-frame--fit-none > svg {
+  display: block;
+}
+}
