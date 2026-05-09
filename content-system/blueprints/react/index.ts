@@ -33,6 +33,7 @@ export type {
 
 // ── Blueprint renderers ─────────────────────────────────────────
 export { HeroSplit6040 } from './HeroSplit6040';
+export { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 export { HeroInteriorMinimal } from './HeroInteriorMinimal';
 export { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
 export { Services3ColCardGrid } from './Services3ColCardGrid';

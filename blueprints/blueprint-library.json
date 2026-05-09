@@ -33,6 +33,28 @@
       ]
     },
     {
+      "key": "hero_split_image_card_overlay",
+      "name": "Split Hero with Image Card + Price Overlay",
+      "section_type": "hero",
+      "industries": [
+        "universal"
+      ],
+      "moods": [
+        "approachable",
+        "modern",
+        "warm",
+        "trustworthy"
+      ],
+      "layout_spec": "Two-column 58/42 split on a soft audience-tinted background. Left column (vertical flex stack, gap-md): optional breadcrumb trail (3-5 items, brand-primary text color, '/' separators, last item aria-current=page); optional eyebrow label (uppercase, label-sm, primary text); h1 headline (display, weight bold); optional 1-3 line body paragraph (body-md, secondary text, max-width 55ch); optional single dark CTA button (small padding, dark background, white label — NOT a paired CTA group). Right column: white surface-primary card (radius-lg, soft shadow, padding-md) containing a 4:3 image-frame and an optional price overlay block underneath (label 'Starting at' / display price / brand-primary CTA button). Background tinting comes from `[data-audience='X'] { --background-brand-primary-soft: ... }` cascade declared by the consumer site — BDS ships the slot, not the values. Drives interior service-detail and similar 'page lives under a category' templates.",
+      "css_hints": "grid-template-columns: 58fr 42fr; gap: var(--gap-huge); .media-card { background: var(--surface-primary); border-radius: var(--border-radius-lg); padding: var(--padding-md); box-shadow: var(--shadow-md); } .image-frame { aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--border-radius-md); } [data-audience] { /* consumer-defined cascade */ }",
+      "source": "brikdesigns.com /service/{slug} pages — verified 2026-05-09 audit",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-05-09",
+      "required_facts": []
+    },
+    {
       "key": "hero_centered_gradient",
       "name": "Centered Hero on Gradient",
       "section_type": "hero",
