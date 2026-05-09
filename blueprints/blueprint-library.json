@@ -167,6 +167,31 @@
       "required_facts": []
     },
     {
+      "key": "features_3col_branded_dark",
+      "name": "3-Column Brand-Colored Card Grid on Dark",
+      "section_type": "features",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "corporate"
+      ],
+      "moods": [
+        "bold",
+        "modern",
+        "luxury",
+        "energetic"
+      ],
+      "layout_spec": "Dark section background (page-inverse). 3-column grid of cards, each filled with its own brand color via [data-audience='X'] scope binding (re-binds --background-brand-primary per card). Card layout: oversized illustration top (1:1 aspect, ~60-70% of card height, padded inside the brand color), then card body with high-contrast title (heading/sm, font-weight bold for AA on saturated bg), 1-sentence description (body/sm at 16px regular for large-text 3:1 threshold), and 'Learn more' affordance with arrow. Cards rounded-lg, full-bleed image at top, body padding generous. Section header centered above grid in light text on dark surface. Optional eyebrow above heading. Cards collapse to 2-col at <992px, 1-col at <768px. Each card establishes its own data-audience subtree binding so its --brand-primary cascades correctly per the BDS scope-binding pattern (consumer site defines [data-audience='X'] cascade rules).",
+      "css_hints": ".features-branded-dark { background: var(--page-inverse); padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge)); color: var(--text-on-color-dark); } .features-branded-dark__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-lg); } .features-branded-dark__card { background: var(--background-brand-primary); border-radius: var(--border-radius-lg); overflow: hidden; } .features-branded-dark__media { aspect-ratio: 1; padding: var(--padding-xl); display: flex; align-items: center; justify-content: center; } .features-branded-dark__body { padding: var(--padding-lg); display: flex; flex-direction: column; gap: var(--gap-md); }",
+      "source": "brikdesigns.com /services/{slug} 'Other Service Lines' cross-sell module (PR #477 spec)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-05-09",
+      "required_facts": []
+    },
+    {
       "key": "features_alternating_split",
       "name": "Alternating Content Splits",
       "section_type": "features",

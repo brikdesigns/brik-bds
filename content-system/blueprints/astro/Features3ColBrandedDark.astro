@@ -1,0 +1,320 @@
+---
+/**
+ * features_3col_branded_dark — dark section, 3-column grid of cards
+ * filled with per-card brand colors. Each card sets `data-audience` to
+ * re-bind `--brand-primary` for that subtree. Drives brikdesigns.com's
+ * "Other Service Lines" cross-sell module.
+ *
+ * Spec: blueprints/proposals/features_3col_branded_dark.md (PR #477).
+ *
+ * Contract: BlueprintProps.
+ *   - section.heading           — section heading (h2, light text on dark)
+ *   - section.subheading        — optional eyebrow text (uppercase)
+ *   - section.body              — optional one-line lead under heading
+ *   - section.items[]           — REQUIRED, each card (typically 3, supports 2-4)
+ *       - title                 — service-line name (h3)
+ *       - description           — 1-sentence body
+ *       - href                  — Learn more target
+ *       - imageUrl?             — top illustration src (omitted → blank brand block)
+ *       - imageAlt?             — alt text for the illustration
+ *       - audience              — REQUIRED — drives `data-audience` re-binding
+ *
+ * required_facts: []. Section-driven.
+ *
+ * ## Audience scope binding (consumer responsibility)
+ *
+ * Each card emits `data-audience={item.audience}`. Inside that subtree,
+ * `--brand-primary` and `--background-brand-primary` resolve to the
+ * audience's color — but ONLY if the consumer site defines the
+ * `[data-audience='X']` cascade rules per
+ * `docs/theming/client-themes#per-audience-or-service-line-scope-binding`.
+ * Without those rules, every card resolves to the global brand color
+ * (visually broken — three identical cards).
+ *
+ * BDS ships the pattern, not the values. brikdesigns.com defines its
+ * five service-line bindings (`brand` → yellow, `marketing` → green,
+ * `information` → blue, `product` → purple, `service` → orange) in its
+ * own globals.css.
+ *
+ * ## Renderer parity note
+ *
+ * Astro renderer uses HTML+CSS+tokens (matches existing blueprint
+ * pattern). React renderer composes BDS primitives. Both emit the same
+ * `data-audience` attributes so the consumer's cascade works in both
+ * contexts.
+ *
+ * CSS custom properties — variation API:
+ *   --bp-features-branded-dark-bg          (default: var(--page-inverse))
+ *   --bp-features-branded-dark-card-radius (default: var(--border-radius-lg))
+ *   --bp-features-branded-dark-gap         (default: var(--gap-lg))
+ *   --bp-features-branded-dark-image-pad   (default: var(--padding-xl))
+ *   --bp-features-branded-dark-hover-scale (default: 1.02 — set to 1 to disable)
+ *
+ * a11y: section uses h2 + aria-labelledby; cards are <ul role="list">
+ * of <li>; card title is h3 nested under section h2. Card title uses
+ * --font-weight-bold and 18px to clear AA on saturated brand backgrounds
+ * (white-on-poppy is 3.78:1 at 14px regular per BDS contrast burndown
+ * #40 — bold weight + size promotion gets it into compliant range).
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+const headingId = `bp-features-branded-dark-${section.sectionKey}-h`;
+---
+
+<section
+  class="bp-features-branded-dark"
+  data-blueprint-key="features_3col_branded_dark"
+  aria-labelledby={section.heading ? headingId : undefined}
+>
+  <div class="bp-features-branded-dark__container">
+    {(section.heading || section.subheading || section.body) && (
+      <header class="bp-features-branded-dark__header">
+        {section.subheading && (
+          <p class="bp-features-branded-dark__eyebrow">{section.subheading}</p>
+        )}
+        {section.heading && (
+          <h2 id={headingId} class="bp-features-branded-dark__heading">
+            {section.heading}
+          </h2>
+        )}
+        {section.body && (
+          <p class="bp-features-branded-dark__lead">{section.body}</p>
+        )}
+      </header>
+    )}
+
+    <ul class="bp-features-branded-dark__grid" role="list">
+      {section.items.map((item) => (
+        <li class="bp-features-branded-dark__item">
+          <article
+            class="bp-features-branded-dark__card"
+            data-audience={item.audience ?? undefined}
+          >
+            <a class="bp-features-branded-dark__card-link" href={item.href ?? '#'}>
+              <div class="bp-features-branded-dark__media">
+                {item.imageUrl ? (
+                  <img
+                    src={item.imageUrl}
+                    alt={item.imageAlt ?? ''}
+                    class="bp-features-branded-dark__image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span class="bp-features-branded-dark__image-fallback" aria-hidden="true" />
+                )}
+              </div>
+
+              <div class="bp-features-branded-dark__body">
+                <h3 class="bp-features-branded-dark__title">{item.title}</h3>
+                {item.description && (
+                  <p class="bp-features-branded-dark__description">{item.description}</p>
+                )}
+                <span class="bp-features-branded-dark__cta">
+                  Learn more
+                  <span aria-hidden="true" class="bp-features-branded-dark__cta-arrow">→</span>
+                </span>
+              </div>
+            </a>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .bp-features-branded-dark {
+    background: var(--bp-features-branded-dark-bg, var(--page-inverse));
+    padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
+    color: var(--text-on-color-dark);
+  }
+
+  .bp-features-branded-dark__container {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: var(--padding-lg);
+  }
+
+  /* ── Section header ─────────────────────────────────────────── */
+
+  .bp-features-branded-dark__header {
+    text-align: center;
+    max-width: 72ch;
+    margin-inline: auto;
+    margin-bottom: var(--padding-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-features-branded-dark__eyebrow {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-on-color-dark);
+    opacity: 0.85;
+  }
+
+  .bp-features-branded-dark__heading {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--font-size-600), 3.5vw, var(--font-size-900));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-on-color-dark);
+  }
+
+  .bp-features-branded-dark__lead {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-400);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--text-on-color-dark);
+    opacity: 0.85;
+  }
+
+  /* ── Card grid ──────────────────────────────────────────────── */
+
+  .bp-features-branded-dark__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bp-features-branded-dark-gap, var(--gap-lg));
+  }
+
+  @media (min-width: 768px) {
+    .bp-features-branded-dark__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    .bp-features-branded-dark__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .bp-features-branded-dark__item {
+    display: flex;
+  }
+
+  /* ── Card ───────────────────────────────────────────────────── */
+
+  .bp-features-branded-dark__card {
+    width: 100%;
+    background: var(--background-brand-primary);
+    border-radius: var(--bp-features-branded-dark-card-radius, var(--border-radius-lg));
+    overflow: hidden;
+    transform: translateY(0) scale(1);
+    transition:
+      transform 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      box-shadow 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .bp-features-branded-dark__card:hover {
+    transform: scale(var(--bp-features-branded-dark-hover-scale, 1.02));
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  .bp-features-branded-dark__card-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .bp-features-branded-dark__card-link:focus-visible {
+    outline: 3px solid var(--text-on-color-dark);
+    outline-offset: -3px;
+  }
+
+  /* ── Media (top illustration area) ──────────────────────────── */
+
+  .bp-features-branded-dark__media {
+    aspect-ratio: 1 / 1;
+    padding: var(--bp-features-branded-dark-image-pad, var(--padding-xl));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bp-features-branded-dark__image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .bp-features-branded-dark__image-fallback {
+    width: 60%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--text-on-color-dark);
+    opacity: 0.15;
+  }
+
+  /* ── Card body ──────────────────────────────────────────────── */
+
+  .bp-features-branded-dark__body {
+    padding: var(--padding-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    flex: 1 1 auto;
+  }
+
+  /* Bold weight + 18px size on title — the AA-clearing posture for
+   * white-on-poppy and similar saturated brand backgrounds. */
+  .bp-features-branded-dark__title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-500);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-on-color-dark);
+  }
+
+  /* 16px regular description — clears 3:1 at large-text threshold.
+   * If consumer atmospheres tighten the contrast budget below this, the
+   * fix is on the brand-color side, not here. */
+  .bp-features-branded-dark__description {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-400);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--text-on-color-dark);
+  }
+
+  .bp-features-branded-dark__cta {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-md);
+    color: var(--text-on-color-dark);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-300);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.4;
+  }
+
+  .bp-features-branded-dark__cta-arrow {
+    display: inline-block;
+    transition: transform 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .bp-features-branded-dark__card-link:hover .bp-features-branded-dark__cta-arrow,
+  .bp-features-branded-dark__card-link:focus-visible .bp-features-branded-dark__cta-arrow {
+    transform: translateX(4px);
+  }
+</style>

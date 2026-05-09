@@ -678,6 +678,7 @@ const expectedFiles = [
   'content-system/blueprints/astro/ServicesDetailTwoColumn.astro',
   'content-system/blueprints/astro/Services3ColCardGrid.astro',
   'content-system/blueprints/astro/SupportPlanCalloutSplit.astro',
+  'content-system/blueprints/astro/Features3ColBrandedDark.astro',
   'content-system/blueprints/astro/AboutStorySplit.astro',
   'content-system/blueprints/astro/TestimonialsFeaturedLarge.astro',
   'content-system/blueprints/astro/CtaSplitContact.astro',
