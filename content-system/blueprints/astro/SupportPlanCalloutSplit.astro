@@ -1,0 +1,293 @@
+---
+/**
+ * support_plan_callout_split — section header + two-column split with a
+ * marketing illustration scene on the left and a plan callout card on
+ * the right. Drives brikdesigns.com's "Monthly support services"
+ * cross-sell section on /services/{slug} pages.
+ *
+ * Spec: blueprints/proposals/support_plan_callout_split.md (PR #477).
+ *
+ * Contract: BlueprintProps.
+ *   - section.heading           — section heading (h2)
+ *   - section.subheading        — optional eyebrow text (uppercase)
+ *   - section.body              — optional one-line lead under heading
+ *   - section.items[0]          — REQUIRED — { title: plan name, description: plan description }
+ *   - section.cta               — REQUIRED — { label, url } for the plan CTA
+ *   - section.illustration      — optional structured scene; when omitted the card centers full-width
+ *
+ * required_facts: []. Section-driven.
+ *
+ * ## Renderer parity note
+ *
+ * The illustration block is rendered by emitting the same HTML +
+ * `bds-marketing-illustration__*` classes as the BDS
+ * `<MarketingIllustration>` React primitive. Consumers that import
+ * `@brikdesigns/bds/styles.css` (every BDS-using site) get the same
+ * tile slot positions, accent fills, and container-query sizing that
+ * the React renderer produces — no CSS duplication, no Astro island
+ * required.
+ *
+ * Avatar tiles render as plain `<img>` (no Avatar component) — Avatar
+ * adds an initials fallback ring that requires React state, which the
+ * Astro renderer omits in favor of a naive `<img>` with the same
+ * dimensions and border-radius. Visual difference is invisible at the
+ * sizes used in this scene.
+ *
+ * CSS custom properties — variation API:
+ *   --bp-support-plan-callout-bg          (default: var(--page-primary))
+ *   --bp-support-plan-callout-card-bg     (default: var(--surface-secondary))
+ *   --bp-support-plan-callout-card-radius (default: var(--border-radius-lg))
+ *   --bp-support-plan-callout-gap         (default: var(--gap-xl))
+ *   --bp-support-plan-callout-card-pad    (default: var(--padding-xl))
+ *
+ * a11y: section uses h2 + aria-labelledby; plan card has h3 nested
+ * under section h2; illustration is `role="img"` with aria-label
+ * synthesized from tile content. CTA passes AA at size="md" (16px
+ * label) — DO NOT downgrade to size="sm" on this surface.
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+const headingId = `bp-support-plan-callout-${section.sectionKey}-h`;
+const plan = section.items?.[0];
+const cta = section.cta;
+const illustration = section.illustration;
+const ratio = illustration?.ratio ?? 'square';
+const variant = illustration?.variant ?? 'persona-cluster';
+const tiles = illustration?.tiles ?? [];
+const ariaLabel = tiles
+  .map((t: any) => ('alt' in t ? t.alt : 'content' in t ? t.content : ''))
+  .filter(Boolean)
+  .join(', ');
+
+const hasIllustration = illustration && tiles.length > 0;
+---
+
+<section
+  class="bp-support-plan-callout"
+  data-blueprint-key="support_plan_callout_split"
+  data-has-illustration={hasIllustration ? 'true' : 'false'}
+  aria-labelledby={section.heading ? headingId : undefined}
+>
+  <div class="bp-support-plan-callout__container">
+    {(section.heading || section.subheading || section.body) && (
+      <header class="bp-support-plan-callout__header">
+        {section.subheading && (
+          <p class="bp-support-plan-callout__eyebrow">{section.subheading}</p>
+        )}
+        {section.heading && (
+          <h2 id={headingId} class="bp-support-plan-callout__heading">{section.heading}</h2>
+        )}
+        {section.body && (
+          <p class="bp-support-plan-callout__lead">{section.body}</p>
+        )}
+      </header>
+    )}
+
+    <div class="bp-support-plan-callout__split">
+      {hasIllustration && (
+        <div
+          class={`bds-marketing-illustration bds-marketing-illustration--${variant} bds-marketing-illustration--ratio-${ratio} bp-support-plan-callout__illustration`}
+          role="img"
+          aria-label={ariaLabel || undefined}
+        >
+          {tiles.map((tile: any, i: number) => {
+            const slotIndex = Math.min(i, 4);
+            const accentClass = tile.accent
+              ? ` bds-marketing-illustration__tile--accent-${tile.accent}`
+              : '';
+            const tileClass =
+              `bds-marketing-illustration__tile ` +
+              `bds-marketing-illustration__tile--${tile.kind} ` +
+              `bds-marketing-illustration__slot-${slotIndex}` +
+              accentClass;
+
+            if (tile.kind === 'avatar') {
+              return (
+                <div class={tileClass}>
+                  <img
+                    src={tile.src}
+                    alt={tile.alt}
+                    class="bds-marketing-illustration__photo"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              );
+            }
+            if (tile.kind === 'photo') {
+              return (
+                <div class={tileClass}>
+                  <img
+                    src={tile.src}
+                    alt={tile.alt}
+                    class="bds-marketing-illustration__photo"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              );
+            }
+            if (tile.kind === 'chat-bubble') {
+              return (
+                <div class={tileClass}>
+                  <div class="bds-marketing-illustration__chat-bubble">
+                    {tile.content}
+                  </div>
+                </div>
+              );
+            }
+            if (tile.kind === 'message') {
+              return (
+                <div class={tileClass}>
+                  <div class="bds-marketing-illustration__message">
+                    {tile.content && <span>{tile.content}</span>}
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <div class={tileClass}>
+                <div class="bds-marketing-illustration__shape" aria-hidden="true" />
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {plan && (
+        <article class="bp-support-plan-callout__card">
+          <h3 class="bp-support-plan-callout__plan-name">{plan.title}</h3>
+          {plan.description && (
+            <p class="bp-support-plan-callout__plan-description">{plan.description}</p>
+          )}
+          {cta && (
+            <a
+              class="bds-button bds-button--primary bds-button--md bp-support-plan-callout__cta"
+              href={cta.url}
+            >
+              <span class="bds-button__content">{cta.label}</span>
+            </a>
+          )}
+        </article>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .bp-support-plan-callout {
+    background: var(--bp-support-plan-callout-bg, var(--page-primary));
+    padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
+  }
+
+  .bp-support-plan-callout__container {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: var(--padding-lg);
+  }
+
+  /* ── Section header ─────────────────────────────────────────── */
+
+  .bp-support-plan-callout__header {
+    text-align: center;
+    max-width: 72ch;
+    margin-inline: auto;
+    margin-bottom: var(--padding-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-support-plan-callout__eyebrow {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-brand-primary);
+  }
+
+  .bp-support-plan-callout__heading {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--font-size-600), 3.5vw, var(--font-size-900));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bp-support-plan-callout__lead {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-400);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--text-primary);
+  }
+
+  /* ── Two-column split ───────────────────────────────────────── */
+
+  .bp-support-plan-callout__split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--bp-support-plan-callout-gap, var(--gap-xl));
+    align-items: center;
+  }
+
+  .bp-support-plan-callout[data-has-illustration='false']
+    .bp-support-plan-callout__split {
+    grid-template-columns: 1fr;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 991.98px) {
+    .bp-support-plan-callout__split {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Illustration first on mobile (matches Webflow source order). */
+  .bp-support-plan-callout__illustration {
+    order: 1;
+  }
+  .bp-support-plan-callout__card {
+    order: 2;
+  }
+
+  /* ── Plan card ──────────────────────────────────────────────── */
+
+  .bp-support-plan-callout__card {
+    background: var(--bp-support-plan-callout-card-bg, var(--surface-secondary));
+    border-radius: var(--bp-support-plan-callout-card-radius, var(--border-radius-lg));
+    padding: var(--bp-support-plan-callout-card-pad, var(--padding-xl));
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+  }
+
+  .bp-support-plan-callout__plan-name {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-500);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bp-support-plan-callout__plan-description {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-300);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--text-primary);
+  }
+
+  .bp-support-plan-callout__cta {
+    margin-top: var(--gap-md);
+  }
+</style>

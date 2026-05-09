@@ -41,6 +41,7 @@ export type {
 
 // ── Blueprint renderers ─────────────────────────────────────────
 export { Services3ColCardGrid } from './Services3ColCardGrid';
+export { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
 
 // ── Dispatch surface ────────────────────────────────────────────
 export { BlueprintDispatcher } from './BlueprintDispatcher';
