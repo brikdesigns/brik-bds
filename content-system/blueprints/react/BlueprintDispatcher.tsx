@@ -50,12 +50,14 @@ import type {
 } from '../astro/types';
 
 import { Services3ColCardGrid } from './Services3ColCardGrid';
+import { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
 import { BlueprintFallback } from './BlueprintFallback';
 
 const BLUEPRINT_REGISTRY: Partial<
   Record<KnownBlueprintKey, ComponentType<BlueprintProps>>
 > = {
   services_3col_card_grid: Services3ColCardGrid,
+  support_plan_callout_split: SupportPlanCalloutSplit,
 };
 
 interface Props {

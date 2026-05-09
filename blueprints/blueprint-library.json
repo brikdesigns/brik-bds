@@ -342,6 +342,31 @@
       "required_facts": []
     },
     {
+      "key": "support_plan_callout_split",
+      "name": "Support Plan Callout — Illustration + Plan Card Split",
+      "section_type": "cta",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "corporate"
+      ],
+      "moods": [
+        "approachable",
+        "warm",
+        "professional",
+        "trustworthy"
+      ],
+      "layout_spec": "Light section. Centered section header (heading + subhead) above. Below: two-column split, content-region (illustration block) left, plan card right. Illustration block: persona/scene composition with floating UI elements (chat bubble, message tile, optional photo) — composed via the BDS MarketingIllustration primitive (PR #484), NOT a baked image. Plan card: surface-secondary background, rounded-lg corners, padded generously. Card content: plan name (heading/sm), 2-sentence description (body/sm, on light), 'Learn more' primary CTA (size md). Two-column collapses to stacked at <992px (illustration goes above card on mobile). Section also supports an 'illustration-omitted' variant where the card centers max-width 720px.",
+      "css_hints": ".support-plan-callout { padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge)); background: var(--page-primary); } .support-plan-callout__split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-xl); align-items: center; } .support-plan-callout__card { background: var(--surface-secondary); border-radius: var(--border-radius-lg); padding: var(--padding-xl); display: flex; flex-direction: column; gap: var(--gap-md); align-items: flex-start; } @media (max-width: 991.98px) { .support-plan-callout__split { grid-template-columns: 1fr; } }",
+      "source": "brikdesigns.com /services/{slug} 'Monthly support services' cross-sell section (PR #477 spec)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-05-09",
+      "required_facts": []
+    },
+    {
       "key": "cta_split_contact",
       "name": "Split CTA with Contact",
       "section_type": "cta",
