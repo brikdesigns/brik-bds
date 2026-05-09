@@ -4,7 +4,7 @@
  * Called by: npm run build:lib (as the final step)
  *
  * Produces:
- *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.css + modes-borderwidth.css + gap-fills.css + animations.css concatenated
+ *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.css + modes-*.css + gap-fills.css + animations.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
  */
 const fs = require('fs');
@@ -55,12 +55,17 @@ if (fs.existsSync(themeBrandBrikPath)) {
   console.log('  ✓ Including Brik brand theme');
 }
 
-// Non-color mode overrides (currently borderWidth; future: spacing, radius, elevation, motion)
-const modesBorderWidthPath = path.join(TOKENS_DIR, 'modes-borderwidth.css');
-let modesBorderWidth = '';
-if (fs.existsSync(modesBorderWidthPath)) {
-  modesBorderWidth = '\n\n' + fs.readFileSync(modesBorderWidthPath, 'utf8');
-  console.log('  ✓ Including borderWidth mode overrides');
+// Non-color mode overrides — one block per wired collection (BDS #340).
+// Each block targets a distinct `[data-mode-{collection}]` attribute, so
+// concat order is cosmetic. Listed deterministically to keep dist diffs clean.
+const MODE_FILES = ['modes-borderwidth.css', 'modes-spacing.css'];
+let modeOverrides = '';
+for (const file of MODE_FILES) {
+  const p = path.join(TOKENS_DIR, file);
+  if (fs.existsSync(p)) {
+    modeOverrides += '\n\n' + fs.readFileSync(p, 'utf8');
+    console.log(`  ✓ Including ${file}`);
+  }
 }
 
 // Shared keyframe library — required for any component using bds-spin, bds-pulse, bds-pop, etc.
@@ -68,7 +73,7 @@ const animations = fs.readFileSync(path.join(TOKENS_DIR, 'animations.css'), 'utf
 
 fs.writeFileSync(
   path.join(DIST_DIR, 'tokens.css'),
-  header + figmaTokens + darkTokens + themeBrandBrik + modesBorderWidth + '\n\n' + gapFills + '\n\n' + animations,
+  header + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + '\n\n' + animations,
 );
 console.log('  ✓ dist/tokens.css');
 

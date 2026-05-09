@@ -13,8 +13,9 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 2. `figma-tokens-dark.css` — auto-generated dark-mode tokens (`:root[data-theme="dark"]`)
 3. `theme-brand-brik.css` — Brik brand overrides (scoped to `.theme-brand-brik` class)
 4. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|bold"]`)
-5. `gap-fills.css` — manual tokens not yet in Figma
-6. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
+5. `modes-spacing.css` — spacing density mode overrides (`[data-mode-spacing="compact|comfortable|spacious"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
+6. `gap-fills.css` — manual tokens not yet in Figma
+7. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
 
 **Not bundled:** `bridge.css` (opt-in via separate export), `font-audit.css`
 (Storybook-only), `motion-classes.css` (opt-in utility classes — consumers import
@@ -31,6 +32,41 @@ directly if they want them), `storybook-themes.ts`, `index.ts`.
 - Astro/Webflow/static consumers set it manually on `<html>`
 
 No consumer should toggle a `.dark` class — the attribute is the only switch.
+
+## Non-color mode contracts
+
+**One switch per orthogonal axis: `data-mode-{collection}` attribute on `<html>`** (or any subtree). Modes compose freely with `data-theme` and with each other; each block targets a distinct attribute, so applying multiple at once layers cleanly.
+
+| Collection | Attribute | Default (no attr) | Other values | Wired? |
+|---|---|---|---|---|
+| `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `bold` | ✅ `modes-borderwidth.css` |
+| `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ `modes-spacing.css` |
+| `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ⏳ pending #340 |
+| `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious` | ⏳ pending #340 |
+| `elevation` | `data-mode-elevation` | `subtle` | `flat`, `lifted`, `dramatic` | ⏳ pending #340 |
+| `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ pending #340 |
+| `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ pending #340 |
+
+### Setting a mode
+
+```html
+<!-- Static / Astro / Webflow -->
+<html data-mode-spacing="comfortable">
+
+<!-- React -->
+<html lang="en" data-mode-spacing={density}>
+
+<!-- Per-subtree (rare; see scope-binding pattern) -->
+<section data-mode-spacing="compact">…</section>
+```
+
+### Adding a new wired collection
+
+1. Update `scripts/generate-modes-css.mjs` `COLLECTIONS` registry with the collection's groups + token-name format.
+2. Run `npm run build:modes` — emits `tokens/modes-{collection}.css`.
+3. Add the new file to `MODE_FILES` in `scripts/build-dist-tokens.js`.
+4. Update this table.
+5. Add a Storybook density story showing the mode in action.
 
 ## Decision tree — where to put a change
 
