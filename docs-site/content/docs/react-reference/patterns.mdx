@@ -7,7 +7,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 Patterns answer the question "I'm building X — what does BDS recommend?" Each pattern is a reusable composition: which BDS components to reach for, the shape they take, and the accessibility + edge-case notes that don't fit on a single component page.
 
-Patterns are recipes, not new components. If a recipe gets used in 3+ places without meaningful variation, it graduates to a real component (see [Utilities → Adopt / Extend / Graduate](/docs/utilities#adopt--extend--graduate)).
+Patterns are recipes, not new components. If a recipe gets used in 3+ places without meaningful variation, it graduates to a real component (see [Utilities → Adopt / Extend / Graduate](/docs/react-reference/utilities#adopt--extend--graduate)).
 
 ## Forms
 
@@ -44,8 +44,8 @@ The single most-built pattern across portal, renew-pms, and brikdesigns. BDS shi
 | --- | --- | --- |
 | **Single-column** | Onboarding, simple settings | `<FieldGrid columns={1}>` — drop the grid for under 4 fields |
 | **Two-column** | Profile / company / address forms | `<FieldGrid columns={2}>` — required fields top-left first |
-| **Sheet-driven edit** | Editing one record from a list | Wrap in `<Sheet>` with the [`useSheetStack`](/docs/hooks#usesheetstack--read--control-the-sheet-navigation-stack) hook for back/save flow |
-| **Multi-step wizard** | Onboarding, contracts | Tabs in the sheet config (see [Hooks → useConfigureSheet](/docs/hooks#useconfiguresheet--register-a-headless-sheet-config)) |
+| **Sheet-driven edit** | Editing one record from a list | Wrap in `<Sheet>` with the [`useSheetStack`](/docs/react-reference/hooks#usesheetstack--read--control-the-sheet-navigation-stack) hook for back/save flow |
+| **Multi-step wizard** | Onboarding, contracts | Tabs in the sheet config (see [Hooks → useConfigureSheet](/docs/react-reference/hooks#useconfiguresheet--register-a-headless-sheet-config)) |
 
 **Accessibility:**
 
@@ -137,5 +137,5 @@ Patterns that don't clear all three bars stay in the consumer codebase as-is.
 ## Related
 
 - [Components](/docs/components) — the building blocks every pattern composes
-- [Hooks](/docs/hooks) — `useSheetStack` and `useConfigureSheet` power the sheet-driven recipes here
+- [Hooks](/docs/react-reference/hooks) — `useSheetStack` and `useConfigureSheet` power the sheet-driven recipes here
 - [Theming → Blueprints](/docs/theming/blueprints) — full-page layout primitives (different layer — patterns compose components, blueprints compose sections)
