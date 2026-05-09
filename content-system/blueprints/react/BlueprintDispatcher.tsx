@@ -51,13 +51,23 @@ import type {
 
 import { Services3ColCardGrid } from './Services3ColCardGrid';
 import { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
+import { HeroSplit6040 } from './HeroSplit6040';
+import { HeroInteriorMinimal } from './HeroInteriorMinimal';
+import { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
+import { AboutStorySplit } from './AboutStorySplit';
+import { CtaDarkCentered } from './CtaDarkCentered';
 import { BlueprintFallback } from './BlueprintFallback';
 
 const BLUEPRINT_REGISTRY: Partial<
   Record<KnownBlueprintKey, ComponentType<BlueprintProps>>
 > = {
+  hero_split_60_40: HeroSplit6040,
+  hero_interior_minimal: HeroInteriorMinimal,
+  services_detail_two_column: ServicesDetailTwoColumn,
   services_3col_card_grid: Services3ColCardGrid,
   support_plan_callout_split: SupportPlanCalloutSplit,
+  about_story_split: AboutStorySplit,
+  cta_dark_centered: CtaDarkCentered,
 };
 
 interface Props {
