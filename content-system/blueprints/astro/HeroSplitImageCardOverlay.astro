@@ -29,7 +29,7 @@
  * renders the non-hallucinatable `data-content-needed` stub.
  *
  * ── CSS custom properties (per-client override surface) ──────────
- *   --bp-hero-img-card-bg          (default: var(--background-brand-primary-soft, var(--page-secondary)))
+ *   --bp-hero-img-card-bg          (default: var(--page-brand-primary, var(--page-secondary)))
  *   --bp-hero-img-card-padding-y   (default: clamp block)
  *   --bp-hero-img-card-headline-color (default: var(--text-primary))
  *   --bp-hero-img-card-eyebrow-color  (default: var(--text-primary))
@@ -156,7 +156,7 @@ const priceCard = section.priceCard;
 
 <style>
   .bp-hero-img-card {
-    background: var(--bp-hero-img-card-bg, var(--background-brand-primary-soft, var(--page-secondary)));
+    background: var(--bp-hero-img-card-bg, var(--page-brand-primary, var(--page-secondary)));
     padding-block: var(
       --bp-hero-img-card-padding-y,
       clamp(var(--padding-xl), 6vw, var(--padding-huge))

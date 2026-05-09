@@ -13,23 +13,23 @@ import type { BlueprintProps } from '../astro/types';
  */
 const audienceCascadeStyles = `
 [data-audience='brand'] {
-  --background-brand-primary-soft: var(--theme-yellow-yellow-light);
+  --page-brand-primary: var(--theme-yellow-yellow-light);
   --text-brand-primary: var(--theme-yellow-yellow-dark);
 }
 [data-audience='marketing'] {
-  --background-brand-primary-soft: var(--theme-green-green-light);
+  --page-brand-primary: var(--theme-green-green-light);
   --text-brand-primary: var(--theme-green-green-dark);
 }
 [data-audience='information'] {
-  --background-brand-primary-soft: var(--theme-blue-blue-light);
+  --page-brand-primary: var(--theme-blue-blue-light);
   --text-brand-primary: var(--theme-blue-blue-dark);
 }
 [data-audience='product'] {
-  --background-brand-primary-soft: var(--theme-purple-purple-light);
+  --page-brand-primary: var(--theme-purple-purple-light);
   --text-brand-primary: var(--theme-purple-purple-dark);
 }
 [data-audience='service'] {
-  --background-brand-primary-soft: var(--theme-orange-orange-light);
+  --page-brand-primary: var(--theme-orange-orange-light);
   --text-brand-primary: var(--theme-orange-orange-dark);
 }
 `;

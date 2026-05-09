@@ -7,7 +7,7 @@
 .bp-hero-img-card {
   background: var(
     --bp-hero-img-card-bg,
-    var(--background-brand-primary-soft, var(--page-secondary))
+    var(--page-brand-primary, var(--page-secondary))
   );
   padding-block: var(
     --bp-hero-img-card-padding-y,
