@@ -34,6 +34,14 @@ Every consumer — portal, renew-pms, brikdesigns, each client site — loads to
 
 Token names are fixed in Tier 1. Only values change in Tier 2. Full bundle order in [`tokens/CASCADE.md`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md).
 
+<Callout type="warn">
+  **Do not import these CSS files** — deprecated or scoped to other surfaces:
+  - `overrides.css` — deprecated shim. Use `gap-fills.css` directly.
+  - `react-tokens.css` — deprecated, manually maintained, prone to drift.
+  - `webflow-tokens.css` — Webflow-only (circular refs, 8 theme blocks).
+  - `website-themes.css` — website template themes, not for app projects.
+</Callout>
+
 ### What's inside Tier 1
 
 | File | Purpose | Editable? |

@@ -60,6 +60,8 @@ export const poppins = Poppins({
 
 For the override matrix and a minimal `theme-{client}.css` template, see [Client Themes](/docs/theming/client-themes).
 
+Don't reach for `var(--text-primary)` directly in TSX — wrap tokens in typed primitives (`src/lib/tokens.ts` + `src/lib/styles.ts`) so editor autocomplete catches typos at write-time. Full pattern: [React Composition Layer](/docs/getting-started/react-composition).
+
 ### 4. Root layout
 
 The portal pattern: `next/font` body class, anti-FOUC theme-init script, and a thin `<BDSProvider>` wrapping `ThemeProvider` from `@brikdesigns/bds`.
