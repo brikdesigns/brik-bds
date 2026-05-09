@@ -28,6 +28,7 @@ export type KnownBlueprintKey =
   | 'services_3col_card_grid'
   | 'support_plan_callout_split'
   | 'features_3col_icon_grid'
+  | 'features_3col_branded_dark'
   | 'features_alternating_split'
   | 'features_bento_asymmetric'
   | 'about_story_split'
@@ -78,6 +79,19 @@ export interface BlueprintSection {
     /** ServiceCategory slug — see `ServiceTag` props in `@brikdesigns/bds`. */
     readonly category?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
     readonly hasOptions?: boolean;
+    /**
+     * Audience slug for `data-audience` scope binding. Re-binds canonical
+     * brand tokens (`--brand-primary`, `--background-brand-primary`,
+     * `--text-brand-primary`, `--border-brand-primary`) within the rendered
+     * card so each card can carry its own service-line color. Used by
+     * `features_3col_branded_dark`. The consumer site MUST define the
+     * `[data-audience='X'] { … }` cascade rules per the BDS scope-binding
+     * docs (`docs/theming/client-themes`); BDS ships the pattern, not the
+     * audience-specific values.
+     */
+    readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
+    /** Alt text for `imageUrl`. Defaults to empty (decorative) when omitted. */
+    readonly imageAlt?: string;
   }[];
   readonly cta: {
     readonly label: string;
