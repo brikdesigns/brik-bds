@@ -51,6 +51,7 @@ import type {
 
 import { Services3ColCardGrid } from './Services3ColCardGrid';
 import { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
+import { Features3ColBrandedDark } from './Features3ColBrandedDark';
 import { BlueprintFallback } from './BlueprintFallback';
 
 const BLUEPRINT_REGISTRY: Partial<
@@ -58,6 +59,7 @@ const BLUEPRINT_REGISTRY: Partial<
 > = {
   services_3col_card_grid: Services3ColCardGrid,
   support_plan_callout_split: SupportPlanCalloutSplit,
+  features_3col_branded_dark: Features3ColBrandedDark,
 };
 
 interface Props {
