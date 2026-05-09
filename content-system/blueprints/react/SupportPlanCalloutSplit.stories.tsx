@@ -94,7 +94,7 @@ const baseProps: BlueprintProps = {
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof SupportPlanCalloutSplit> = {
-  title: 'Blueprints/support_plan_callout_split',
+  title: 'Theming/Blueprints/support_plan_callout_split',
   component: SupportPlanCalloutSplit,
   tags: ['surface-web', 'surface-shared'],
   parameters: {

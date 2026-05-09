@@ -10,20 +10,12 @@
  *
  *   import {
  *     BlueprintDispatcher,
- *     Services3ColCardGrid,
+ *     HeroSplit6040,
+ *     ServicesDetailTwoColumn,
  *   } from '@brikdesigns/bds';
  *
  * Renderers ship through the main library bundle (Vite multi-export
  * via `lib-entry.ts`); no separate sub-path import is needed.
- *
- * ## v0.1 scope
- *
- *   Services3ColCardGrid (this PR — the brikdesigns.com
- *     /services/{slug} index-page driver).
- *
- * Subsequent renderers — HeroSplit6040, HeroInteriorMinimal,
- * ServicesDetailTwoColumn, CtaDarkCentered, AboutStorySplit,
- * SiteHeader, SiteFooter — ship in their own PRs (Workstream A).
  */
 
 // ── Contract types — re-exported from the framework-agnostic source ──
@@ -40,9 +32,14 @@ export type {
 } from '../astro/types';
 
 // ── Blueprint renderers ─────────────────────────────────────────
+export { HeroSplit6040 } from './HeroSplit6040';
+export { HeroInteriorMinimal } from './HeroInteriorMinimal';
+export { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
 export { Services3ColCardGrid } from './Services3ColCardGrid';
 export { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
 export { Features3ColBrandedDark } from './Features3ColBrandedDark';
+export { AboutStorySplit } from './AboutStorySplit';
+export { CtaDarkCentered } from './CtaDarkCentered';
 
 // ── Dispatch surface ────────────────────────────────────────────
 export { BlueprintDispatcher } from './BlueprintDispatcher';
