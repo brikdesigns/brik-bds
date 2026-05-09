@@ -1,6 +1,6 @@
 # BDS React Component Library
 
-This is the **source of truth** for the Brik Design System React components.
+This is the **source of truth** for the Brik Design System React components. Loaded into 6 consumer repos via `@import` from their own `CLAUDE.md` files — keep this file lean.
 
 > **Cross-repo rules + canonical token registry + brik-secrets credential workflow** load via walk-up from `~/Documents/Github/CLAUDE.md`. For any credential operation (rotate, propagate, audit), use `brik-secrets <subcommand>` — never write a custom rotator. See `operations/security/bin/brik-secrets` in brik-llm.
 
@@ -25,7 +25,7 @@ Every `--text-*`, `--surface-*`, `--background-*`, semantic `--border-*`, and `-
 
 **The primary worktree at `/Documents/GitHub/brik/brik-bds` stays on `main`.** Task work lives in `../brik-bds-worktrees/{slug}` — start one with `./scripts/new-task.sh {scope}-{name}`. The script refuses to run from anywhere but the primary on main, so this is enforced automatically. A SessionStart + PreToolUse hook (`.claude/hooks/worktree-check.sh`) warns on violations; set `BDS_WORKTREE_GUARD=strict` to block.
 
-Why: concurrent agents on the same primary will cross-contaminate working trees. See [`docs/incidents/worktree-cross-contamination-2026-04-21.md`](docs/incidents/worktree-cross-contamination-2026-04-21.md) for the recovery procedure when the rule has been broken; full cross-repo rationale in [`~/Documents/GitHub/CLAUDE.md`](../../CLAUDE.md).
+Why: concurrent agents on the same primary will cross-contaminate working trees. See [`docs/incidents/worktree-cross-contamination-2026-04-21.md`](docs/incidents/worktree-cross-contamination-2026-04-21.md) for the recovery procedure when the rule has been broken.
 
 ## STOP — Token Rules (Non-Negotiable)
 
@@ -44,48 +44,38 @@ node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build
 
 This updates `design-tokens/tokens-studio.json` → runs `build:sd-figma` → regenerates `tokens/figma-tokens.css` + JS + Swift.
 
-**Do NOT use REST API for variables** — `file_variables:read` scope is Enterprise-only, not available on Pro.
-**Do NOT use `mcp__claude_ai_Figma__get_variable_defs`** — returns screenshots, not variable data.
-**Do NOT use `mcp__figma-desktop__get_variable_defs`** — returns node-bound variables, not file-level collections.
+**Forbidden methods:** Figma REST API (`file_variables:read` is Enterprise-only), `mcp__claude_ai_Figma__get_variable_defs` (returns screenshots), `mcp__figma-desktop__get_variable_defs` (returns node-bound, not file-level). If the dev plugin isn't connected: ask the user to connect it OR export CSS from Figma UI.
 
-If the dev plugin isn't connected: ask the user to connect it OR export CSS from Figma UI. ONE clear ask.
+**Dark mode is generated, never written.** From Figma's `color/dark` mode via `npm run build:sd-dark` → `tokens/figma-tokens-dark.css`. Consumer projects import this file instead of writing `[data-theme="dark"]` blocks.
 
-If a token doesn't exist in `figma-tokens.css` after the build, it needs to be added in **Figma first**, not in CSS. The only exception is `tokens/gap-fills.css` which provides gap-fill tokens not yet in Figma.
-
-**NEVER hand-write dark mode token overrides in consuming projects.** Dark mode is generated from Figma's `color/dark` mode via `npm run build:sd-dark` → `tokens/figma-tokens-dark.css`. Consumer projects import this file instead of writing `[data-theme="dark"]` blocks.
-
-**Before writing ANY `var(--...)` reference**, verify the token exists in `tokens/figma-tokens.css` or `tokens/gap-fills.css`.
-
-**Before editing ANY `tokens/*.css` file** — especially for a dark-mode fix — read [tokens/CASCADE.md](tokens/CASCADE.md) first. It documents which files ship in `dist/tokens.css` (reachable from consumers) vs which are Storybook-only, and the dark-mode selector contract. Editing the wrong file is a silent no-op for consumers.
+**Before writing ANY `var(--...)` reference**, verify the token exists in `tokens/figma-tokens.css` or `tokens/gap-fills.css`. Before editing ANY `tokens/*.css` file — especially for a dark-mode fix — read [tokens/CASCADE.md](tokens/CASCADE.md) first. It documents which files ship in `dist/tokens.css` (reachable from consumers) vs which are Storybook-only.
 
 ## Security — read the canonical 5 before any credential work
 
-> **Canonical doc set — five files, no more.** Read these before doing anything credential-related (rotating, fetching, env-setting, writing config). Do NOT create a sixth security md file in this repo.
+> **Canonical doc set — five files, no more.** Do NOT create a sixth security md file in this repo.
 >
 > 1. **Human entry point:** [Notion — Security Best Practices](https://www.notion.so/Security-Best-Practices-35797d34ed2880b49446e2d93497a487)
-> 2. **Per-repo lookup:** [`brik-llm/operations/security/repo-token-map.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/repo-token-map.md) — every Brik repo's credentials → 1P entry
+> 2. **Per-repo lookup:** [`brik-llm/operations/security/repo-token-map.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/repo-token-map.md)
 > 3. **Per-secret destinations:** [`brik-llm/operations/security/auth-surfaces.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/auth-surfaces.md)
-> 4. **Rotation doctrine:** [`brik-llm/operations/security/when-to-rotate.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/when-to-rotate.md) — **HARD RULE: agents never initiate rotation; humans do.** Agents propose only on real-exposure triggers (chat paste, public repo, third-party leak) and propagate after the human-driven provider-side action.
+> 4. **Rotation doctrine:** [`brik-llm/operations/security/when-to-rotate.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/when-to-rotate.md) — **HARD RULE: agents never initiate rotation; humans do.**
 > 5. **Manual procedure per provider:** [`brik-llm/operations/macos/openclaw/runbooks/token-rotation.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/macos/openclaw/runbooks/token-rotation.md)
 >
-> Source-of-truth for every credential value: **1Password Development vault.** Never paste secrets into chat or commits. Reference 1P items by ID, not title. Update existing 1P entries, never create "FOO NEW" duplicates.
->
-> **For brik-bds specifically:** the credentials this repo consumes (`FIGMA_ACCESS_TOKEN`, `NOTION_TOKEN`, `CHROMATIC_PROJECT_TOKEN`, `CONSUMER_DRIFT_TOKEN`, `BDS_NPM_PUBLISH_TOKEN`) are listed under `## brik-bds` in [`repo-token-map.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/repo-token-map.md#brik-bds).
+> Source-of-truth for every credential value: **1Password Development vault.** Never paste secrets into chat or commits. For brik-bds specifically: credentials this repo consumes (`FIGMA_ACCESS_TOKEN`, `NOTION_TOKEN`, `CHROMATIC_PROJECT_TOKEN`, `CONSUMER_DRIFT_TOKEN`, `BDS_NPM_PUBLISH_TOKEN`) are listed under `## brik-bds` in [`repo-token-map.md`](https://github.com/brikdesigns/brik-llm/blob/main/operations/security/repo-token-map.md#brik-bds).
 
 ## Token Discipline (ALL consuming projects)
 
 These rules apply in every project that imports BDS tokens (portal, renew-pms, brikdesigns, client sites).
 
-1. **Three-layer architecture:** BDS foundations (figma-tokens.css) → interaction states (gap-fills.css) → client domain (theme-{client}.css). Never skip layers or write tokens outside this cascade.
-2. **Never use a token outside its semantic category.** `--text-*` is for text, `--background-*` is for backgrounds, `--border-*` is for borders. No `--text-primary` on a `background-color`. No `--border-*` as a fill.
-3. **All colors must be token references.** No hex values, no `filter` hacks, no `opacity` workarounds. If a semantic token doesn't exist, add it in Figma first (or `gap-fills.css` as a temporary bridge).
-4. **Before rewriting `:root` or any token file**, grep for all `var(--...)` usages across the project first. A removed token silently breaks every reference — no error, no visual.
-5. **When changing a background token**, immediately verify that the paired text and icon tokens still have sufficient contrast on that surface.
-6. **Never guess token values.** Every value must come from Figma data or explicit user input. If unsure, pull variables from Figma or ask.
-7. **Never hand-write dark mode overrides.** Dark mode is auto-generated from Figma's `color/dark` mode. Consumer projects import `figma-tokens-dark.css`, never write `[data-theme="dark"]` blocks.
-8. **Single-source components.** Never duplicate a form, view, or interactive component across routes. Build one shared component with context props. If it exists in BDS, use BDS — don't rebuild locally.
+1. **Three-layer architecture:** BDS foundations (`figma-tokens.css`) → interaction states (`gap-fills.css`) → client domain (`theme-{client}.css`). Never skip layers.
+2. **Never use a token outside its semantic category.** `--text-*` for text, `--background-*` for backgrounds, `--border-*` for borders. No cross-use.
+3. **All colors must be token references.** No hex values, no `filter` hacks, no `opacity` workarounds. Add the semantic token in Figma first (or `gap-fills.css` as a temporary bridge).
+4. **Before rewriting `:root` or any token file**, grep for all `var(--...)` usages. A removed token silently breaks every reference.
+5. **When changing a background token**, immediately verify paired text and icon tokens still have sufficient contrast.
+6. **Never guess token values.** Every value comes from Figma data or explicit user input. If unsure, pull variables from Figma or ask.
+7. **Never hand-write dark mode overrides.** Dark mode is auto-generated. Consumer projects import `figma-tokens-dark.css`, never write `[data-theme="dark"]` blocks.
+8. **Single-source components.** Never duplicate a form, view, or interactive component across routes. Build one shared component with context props.
 9. **Check Storybook before building custom UI.** Query `list-all-documentation` and `get-documentation` via Storybook MCP first. If a BDS component covers the need, use it. Fix at consumer level before editing BDS CSS.
-10. **Brik internal service tokens stay in Brik internal apps.** `--background-service-*`, `--text-service-*`, `--services--yellow-light`, etc. categorize Brik's internal service lines (brand, marketing, information, product, service) and must NOT appear in client-product token files (renew-pms, freedom-client-portal, future products). Client products have their own domain-specific color systems (e.g., dental department colors); omit the `color.service` block from their `tokens.ts`. If you see service tokens in a client repo, flag and remove.
+10. **Brik internal service tokens stay in Brik internal apps.** `--background-service-*`, `--text-service-*`, `--services--yellow-light`, etc. categorize Brik's internal service lines and must NOT appear in client-product token files. If you see service tokens in a client repo, flag and remove.
 
 ## Repository Architecture
 
@@ -95,389 +85,112 @@ These rules apply in every project that imports BDS tokens (portal, renew-pms, b
 └── brik-bds/                        ← THIS REPO (active development)
 ```
 
-**Development happens HERE**, not in the brik-llm submodule.
-
-## Key Paths
-
-| Path | Purpose |
-|------|---------|
-| `components/ui/` | React components (Button, Badge, Card, etc.) |
-| `components/providers/` | ThemeProvider context |
-| `.storybook/` | Storybook configuration |
-| `stories/` | Foundation Storybook docs (tokens, typography, color) |
-| `tokens/` | Token documentation and build scripts |
-| `design-tokens/` | Figma token definitions (Style Dictionary input) |
-| `content-system/` | **BCS** — content vocabulary (industries, voices, locked enums) |
-| `scripts/` | Build automation and linting |
-| `docs/` | Reference docs (token consumption, Figma architecture) |
+**Development happens HERE**, not in the brik-llm submodule. Editing the submodule directly causes sync issues — changes won't persist.
 
 ## Workflow
 
-1. **Develop** in this repo (`/Documents/GitHub/brik/brik-bds/`)
-2. **Commit and push** to GitHub
+1. **Develop** in this repo (`/Documents/GitHub/brik/brik-bds/`).
+2. **Commit and push** to GitHub.
 3. **Update submodule** in brik-llm when needed:
+
    ```bash
    cd /Users/nickstanerson/Documents/GitHub/brik/brik-llm
    git submodule update --remote foundations/brik-bds
-   git add foundations/brik-bds
-   git commit -m "Update brik-bds submodule"
+   git add foundations/brik-bds && git commit -m "Update brik-bds submodule"
    ```
 
 ## Releasing to GitHub Packages
 
-Consumer repos pull `@brikdesigns/bds` from GitHub Packages. Publishing is triggered by **pushing a version tag** — the `Release` workflow at [`.github/workflows/release.yml`](.github/workflows/release.yml) handles validation + `npm publish`.
+Consumer repos pull `@brikdesigns/bds` from GitHub Packages. Publishing is triggered by **pushing a version tag**; the `Release` workflow at [`.github/workflows/release.yml`](.github/workflows/release.yml) handles validation + `npm publish`. Full flow + re-run guidance in [`docs/RELEASE.md`](docs/RELEASE.md).
 
 ```bash
-# After landing your changes on main and bumping `package.json`:
+# After landing changes on main and bumping package.json:
 git tag v0.46.0 && git push origin v0.46.0
-
-# Or in one step inside a release PR:
-npm version minor -m 'chore(release): %s' && git push && git push --tags
-```
-
-Full flow + re-run guidance: [`docs/RELEASE.md`](docs/RELEASE.md).
-
-## Figma Variables Sync
-
-**One method: Dev plugin + WebSocket relay → sync script → Style Dictionary.**
-
-The Figma Desktop dev plugin communicates via WebSocket relay on port 3055. This is the only reliable method for reading file-level variable collections on a Pro plan.
-
-| Step | Who | What happens |
-| ---- | --- | ------------ |
-| 1 | User | Edits variables in Figma |
-| 2 | User/Agent | Says "pull latest tokens from Figma" |
-| 3 | Agent | Runs `bun scripts/pull-variables.js <channel-id> > /tmp/figma-vars.json` |
-| 4 | Agent | Runs `node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build` |
-| 5 | Auto | `tokens-studio.json` patched → `build:sd-figma` → `figma-tokens.css` regenerated |
-
-**Requires:** Figma Desktop open + dev plugin running + WebSocket relay on port 3055.
-**Foundations file key:** `Rkdc3SIWJUdgoAkeadgZZe`
-
-**Legacy methods (DO NOT USE):**
-
-- ~~`mcp__claude_ai_Figma__get_variable_defs`~~ — returns screenshots, not variable data
-- ~~`mcp__figma-desktop__get_variable_defs`~~ — returns node-bound variables, not file-level collections
-- ~~Figma REST API~~ — `file_variables:read` scope is Enterprise-only
-- ~~Tokens Studio plugin push~~ — replaced by dev plugin pipeline
-- ~~Manual Figma export + transform~~ — replaced by dev plugin pipeline
-
-Always pull before starting work:
-```bash
-git pull origin main
 ```
 
 ## Storybook
 
 ```bash
-npm run storybook
+npm run storybook   # http://localhost:6006
 ```
 
-Runs at http://localhost:6006. Theme switching available in toolbar.
+The MCP addon (`@storybook/addon-mcp`) exposes the BDS component library at `http://localhost:6006/mcp`. Consumer-repo Claude sessions query this endpoint for component specs (`list-all-documentation`, `get-documentation`, etc.) instead of reading source files.
 
-### Storybook MCP addon
+**MCP unreachable?** Read the cached fallback at [`docs/STORYBOOK-WRITING-GUIDE.md`](docs/STORYBOOK-WRITING-GUIDE.md). If MCP output later differs, update the cached file in the same PR.
 
-The MCP addon (`@storybook/addon-mcp`) exposes the full BDS component library as an MCP server. When Storybook is running, Claude Code can query structured component specs (props, types, defaults, usage examples from stories) instead of reading source files.
+**Story shape + sidebar taxonomy:** [ADR-006](docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md). Two story shapes per file (`Playground` + one-story-per-state, args-driven); four sidebar top-levels (`Foundations` / `Components` / `Patterns` / `Theming` plus `Overview` and `Deprecated`).
 
-**Tools available at `http://localhost:6006/mcp`:**
-- `list-all-documentation` — discover all components
-- `get-documentation` — full props and JSX examples for a component
-- `get-documentation-for-story` — docs for a specific story variant
-- `preview-stories` — live preview URLs for visual verification
-- `get-storybook-story-instructions` — patterns for writing stories
-
-**When building portal UI:** Start Storybook first. Claude will auto-query BDS components via MCP for correct prop usage.
-
-**MCP unreachable?** If `get-storybook-story-instructions` fails (Storybook not running, connection refused), read the cached fallback at [`docs/STORYBOOK-WRITING-GUIDE.md`](docs/STORYBOOK-WRITING-GUIDE.md). This mirrors the MCP output and is kept in sync — if you call the MCP later and its content differs, update the cached file in the same PR.
-
-**Story shape + sidebar taxonomy:** see [ADR-006](docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) for the full rules. Two story shapes per file (`Playground` + one-story-per-state, args-driven); four sidebar top-levels (`Foundations` / `Components` / `Patterns` / `Theming` plus `Overview` and `Deprecated`). No `Variants` / `Tones` / `Patterns` gallery buckets inside component story files.
-
-### Shared autostart helper
-
-[`scripts/ensure-storybook.sh`](scripts/ensure-storybook.sh) is the source of truth for the Storybook autostart logic used by every BDS-consumer's `session-guard.sh` hook (portal, renew-pms, brikdesigns). Each consumer pipes its Claude Code `tool_input` JSON into this helper on stdin; if the edit targets a UI file and Storybook isn't listening on `:6006`, the helper launches it in the background.
-
-**Why shared:** before this helper existed, each consumer carried a ~35-line copy of the autostart logic. Now the consumers have a 3-line invocation; changes to the autostart behavior happen here and propagate on next consumer commit.
-
-**Marker keying:** the helper reads `SESSION_GUARD_PARENT_PID` (exported by the caller) so all consumer hooks share one "already-fired" marker per Claude Code session. Without it, each hook would fire independently.
-
-**Addon vitest** (`@storybook/addon-vitest`) is also installed for the test feedback loop.
+**Shared autostart helper.** [`scripts/ensure-storybook.sh`](scripts/ensure-storybook.sh) is the source of truth for the Storybook autostart logic used by every BDS-consumer's `session-guard.sh` hook.
 
 ### Chromatic (visual testing + hosted MCP)
 
-BDS Storybook is published to Chromatic for visual regression testing and as the live Storybook MCP endpoint consumer-repo Claude sessions query. **Publish (`npm run chromatic`) after any component CSS or story changes are committed** — local Storybook isn't reachable from consumer agents.
-
-URLs, App ID, and the per-build URL warning live in [`.claude/references/chromatic.md`](.claude/references/chromatic.md).
+BDS Storybook is published to Chromatic for visual regression testing and as the live Storybook MCP endpoint consumer-repo Claude sessions query. **Publish (`npm run chromatic`) after any component CSS or story changes are committed** — local Storybook isn't reachable from consumer agents. URLs, App ID, and per-build URL warning in [`.claude/references/chromatic.md`](.claude/references/chromatic.md).
 
 ## Paper — Pre-implementation design
 
-For new or composite components, iterate in Paper before writing code. Paper (Claude Code's HTML canvas) renders real HTML/CSS instantly.
+For new or composite components, iterate in Paper before writing code. Paper renders real HTML/CSS instantly.
 
 **Rule:** Only BDS token names in Paper — `var(--text-primary)`, `var(--padding-lg)`, etc. Never raw values. Validate against `tokens/figma-tokens.css` before use.
 
-**When to use:** Complex new components, unclear interaction patterns, first-time BDS patterns.
-**When to skip:** Simple variants of existing components, clear Figma spec exists.
-
-See [docs/COMPONENT-PATTERNS.md](docs/COMPONENT-PATTERNS.md) → "Pre-implementation: Design in Paper" for the full workflow.
+**When to use:** Complex new components, unclear interaction patterns, first-time BDS patterns. **When to skip:** Simple variants of existing components, clear Figma spec exists. Full workflow in [docs/COMPONENT-PATTERNS.md](docs/COMPONENT-PATTERNS.md) → "Pre-implementation: Design in Paper".
 
 ## Radix UI primitives
 
-BDS uses [Radix UI](https://www.radix-ui.com/) primitives for complex interactive components that need accessibility foundations (focus trapping, keyboard nav, ARIA, portal rendering). Radix handles behavior; BDS owns all styling via CSS custom properties.
+BDS uses [Radix UI](https://www.radix-ui.com/) primitives for complex interactive components needing accessibility foundations (focus trapping, keyboard nav, ARIA, portal rendering). Radix handles behavior; BDS owns all styling via CSS custom properties.
 
-**Currently used:**
-- `@radix-ui/react-popover` — DatePicker
-
-**Pattern:** Install a single `@radix-ui/react-*` package per component need. Build the visual layer on BDS tokens. No shadcn/ui, no component library CSS variables.
+**Currently used:** `@radix-ui/react-popover` — DatePicker. Pattern: install one `@radix-ui/react-*` package per component need; build the visual layer on BDS tokens. No shadcn/ui, no component library CSS variables.
 
 ## Token System
 
-### Naming convention
+BDS components use **Figma single-dash** names (`--text-primary`, `--background-brand-primary`, `--padding-lg`). The legacy Webflow double-underscore prefix (`--_color---text--primary`) exists in `tokens/variables.css` for the Webflow platform — **do not use these in new code**.
 
-BDS components use **Figma single-dash** names (`--text-primary`, `--background-brand-primary`, `--padding-lg`). This is the only active convention.
+Build pipeline: `Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform outputs`. Full reference (commands, file taxonomy, adding-a-token flow) in [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md). Token rename history (audit log of CSS variable renames) in [docs/TOKEN-RENAMES.md](docs/TOKEN-RENAMES.md).
 
-The old Webflow double-underscore prefix (`--_color---text--primary`) exists in `tokens/variables.css` as a legacy internal mapping for the Webflow platform. **Do not use these in new code** — they are not the BDS token names.
+**Fonts are not loaded by BDS.** Consuming projects load their own font files. The `--font-family-*` tokens in `figma-tokens.css` reference families by name — it's the consumer's responsibility to ensure that font is actually available.
 
-### Token build pipeline
+### Spacing modes
 
-```
-Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform outputs
-```
-
-| Command | Input | Output |
-| --- | --- | --- |
-| `npm run build:sd-figma` | `design-tokens/tokens-studio.json` | `tokens/figma-tokens.css`, `build/figma/swift/*.swift`, `build/figma/js/tokens.mjs` |
-| `npm run build:sd-dark` | `design-tokens/tokens-studio.json` (color=dark mode) | `tokens/figma-tokens-dark.css` (scoped to `[data-theme="dark"]`) |
-| `npm run build:all-tokens` | Both of the above | Full rebuild (light + dark modes) |
-
-### Token files — which to use
-
-| File | Status | Use |
-| --- | --- | --- |
-| `tokens/figma-tokens.css` | **Active** (auto-generated) | Light mode tokens — import in all consuming projects |
-| `tokens/figma-tokens-dark.css` | **Active** (auto-generated) | Dark mode tokens — import after light in `globals.css` |
-| `tokens/gap-fills.css` | **Active** (manual) | Gap-fill tokens not yet in Figma — import in all consuming projects |
-| `tokens/theme-brik.css` | **Active** (manual) | Brik's own brand theme — imported in Storybook only. Client projects provide their own `theme-{client}.css`. |
-| `tokens/animations.css` | **Active** (manual) | Animation tokens (durations, easings) |
-| `tokens/motion-classes.css` | **Active** (manual) | Utility classes that compose animation tokens |
-| `tokens/bridge.css` | **Internal** | Compatibility aliases between legacy names and current tokens |
-| `tokens/font-audit.css` | **Dev-only** | Storybook audit overlay — do not import in consuming projects |
-| `tokens/storybook-themes.ts` | **Internal** | TypeScript map consumed by Storybook manager theme switcher |
-| `tokens/index.ts` | **Internal** | TS export surface for token names (used by components) |
-
-**Fonts are not loaded by BDS.** Consuming projects load their own font files (Google Fonts, Next.js font loader, etc.). The `--font-family-*` tokens in `figma-tokens.css` reference font families by name (e.g. `Poppins`) — it's the consumer's responsibility to ensure that font is actually available.
-
-### Adding a new token
-
-1. Add in Figma Variables
-2. Export via Tokens Studio → `design-tokens/tokens-studio.json`
-3. Run `npm run build:sd-figma` — updates `figma-tokens.css` automatically
-4. If the component CSS references it, consuming projects get it on next `npm run propagate`
-
-**Never manually add tokens to CSS files.** Style Dictionary is the single build path.
-
-See [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md) for complete reference.
-See [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) for the consumption pattern in app projects.
-
-## Spacing Modes
-
-Storybook uses **Base mode** (overridden in `storybook-overrides.css`).
-Webflow uses **Spacious mode** by default on `.body` class.
-
-| Token | Base | Spacious |
-|-------|------|----------|
-| `--_space---lg` | 16px | 52px |
+Storybook uses **Base mode** (overridden in `storybook-overrides.css`); Webflow uses **Spacious mode** by default on `.body`. Token deltas (e.g. `--_space---lg` is 16px Base / 52px Spacious) documented in [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md).
 
 ## Consuming tokens in app projects
 
-BDS uses a **2-tier architecture** for client projects:
+BDS uses a **2-tier architecture**: Tier 1 — BDS foundations (`figma-tokens.css` + `gap-fills.css`, never edit); Tier 2 — client theme (`theme-{client}.css` in the consuming project, overrides semantic tokens). Standard `globals.css` cascade and required consumer files (`src/lib/tokens.ts`, `src/lib/styles.ts`, `src/components/prose.tsx`, `.husky/pre-commit`) documented in [docs/CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md). Reference implementation: brik-client-portal.
 
-- **Tier 1 — BDS Foundations:** `figma-tokens.css` + `gap-fills.css` (submodule files, never edit)
-- **Tier 2 — Client Theme:** `theme-{client}.css` in the consuming project (overrides semantic tokens)
-
-Font loading is the consumer's responsibility (Google Fonts, Next.js font loader, etc.) — BDS no longer ships a `fonts.css`.
-
-**Standard globals.css cascade:**
-
-```css
-@import '../../brik-bds/tokens/figma-tokens.css';
-@import '../../brik-bds/tokens/gap-fills.css';
-@import './styles/theme-{client}.css';
-```
-
-**Key rule:** Never write raw CSS `var()` strings inline. Import from `@/lib/tokens` and `@/lib/styles`.
-
-See [CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) for the full consumption pattern.
-
-**Required files in every consuming project:**
-
-1. `src/lib/tokens.ts` - CSS var() mapping for TypeScript use
-2. `src/lib/styles.ts` - Composed CSSProperties presets
-3. `src/components/prose.tsx` - Shared markdown renderer
-4. `.husky/pre-commit` - Token compliance gate (blocks hardcoded px values)
-
-**Reference implementation:** brik-client-portal
+**Key rule:** Never write raw CSS `var()` strings inline in TS/TSX. Import from `@/lib/tokens` and `@/lib/styles`.
 
 ## Content System (BCS)
 
-BCS is the **content-vocabulary peer** to the token system. Lives at `content-system/` in this repo. Same cascade pattern as tokens, but for copy instead of visuals.
+BCS is the **content-vocabulary peer** to the token system, at `content-system/` in this repo. Same cascade pattern as tokens, but for copy. Shipped as a second npm entry point: `import { industryPacks, voicePatterns, PERSONALITY_VALUES, VOICE_VALUES, ... } from '@brikdesigns/bds/content-system';`.
 
-Shipped as a second npm entry point:
-
-```tsx
-import {
-  industryPacks,
-  voicePatterns,
-  PERSONALITY_VALUES,
-  VOICE_VALUES,
-  VISUAL_STYLE_VALUES,
-  DEFAULT_INDUSTRY_SLUG,
-  type IndustryPack,
-  type VoicePattern,
-} from '@brikdesigns/bds/content-system';
-```
-
-### Architecture
-
-```
-content-system/
-├── vocabularies/   Locked enums — Personality × 11, Voice × 8, Visual Style × 11, Industry slugs
-├── schema/         IndustryPack + VoicePattern TypeScript types
-├── industries/     {slug}.ts (data) + {slug}.mdx (narrative) pairs
-└── voices/         {slug}.ts per voice trait + Overview.mdx
-```
-
-Each industry or voice has its structured data in `.ts` and human narrative in `.mdx`. The MDX imports from the `.ts` so values render inline — single source of truth. Storybook renders the MDX; automations consume the TS.
+Architecture, build pipeline (`build:content-system` → `dist/content-system/`), and authoring guide in [content-system/README.md](content-system/README.md).
 
 ### BCS Discipline
 
 These rules apply to every BCS authoring or consumption task — same weight as the token rules above.
 
 1. **Locked enums are the single source of truth.** `PERSONALITY_VALUES`, `VOICE_VALUES`, `VISUAL_STYLE_VALUES`, `INDUSTRY_SLUGS` are exported from BCS and imported by the portal. Never hardcode these values in consumer code; never drift them between repos.
-2. **Industry slug registry + packs must stay in sync.** Adding a slug to `INDUSTRY_SLUGS` without a matching `industries/{slug}.ts` + `.mdx` fails typecheck via `Record<IndustrySlug, IndustryPack>`. Do not bypass with `as` assertions.
-3. **Versioning + review cadence are mandatory.** Every pack has `version`, `reviewCadence`, `lastReviewed`. Bump on content change (semver); update `lastReviewed` when you've confirmed accuracy on a review pass even without changes.
+2. **Industry slug registry + packs must stay in sync.** Adding a slug to `INDUSTRY_SLUGS` without a matching `industries/{slug}.ts` + `.mdx` fails typecheck. Do not bypass with `as` assertions.
+3. **Versioning + review cadence are mandatory.** Every pack has `version`, `reviewCadence`, `lastReviewed`. Bump on content change (semver); update `lastReviewed` after a review pass.
 4. **The catch-all graduates.** `small-business` is `DEFAULT_INDUSTRY_SLUG`. Graduate a vertical out when Brik has 3+ clients OR seasonality/regulation/terminology diverges meaningfully OR strategy docs repeat 60%+.
-5. **Voice patterns compose compositionally, not via lookup table.** Each voice defines structured rules. The portal resolver blends up to 3 picks with first-pick-60 / second-30 / third-10 weighting. Don't try to enumerate all 336 combinations.
-6. **Client overrides win over industry defaults.** Same cascade as tokens: `company_profile.cta_language` / `anti_messages` / `naming_conventions` override the industry pack. Fill-through where client data is empty.
+5. **Voice patterns compose compositionally, not via lookup table.** Each voice defines structured rules. The portal resolver blends up to 3 picks with first-pick-60 / second-30 / third-10 weighting.
+6. **Client overrides win over industry defaults.** Same cascade as tokens: `company_profile.cta_language` / `anti_messages` / `naming_conventions` override the industry pack.
 7. **No literal `<` in MDX copy.** MDX v3 parses `<` as a JSX tag opening. Use "under" or `&lt;` or wrap in backticks.
-
-### Authoring a new industry pack
-
-1. Add slug to `content-system/vocabularies/industry.ts` in `INDUSTRY_SLUGS`.
-2. Create `content-system/industries/{slug}.ts` — typed `IndustryPack` data. Use `dental.ts` as reference for maximum structure.
-3. Create `content-system/industries/{slug}.mdx` — narrative companion. Include `<Meta title="Content System/Industries/{DisplayName}" />`.
-4. Register the pack in `content-system/industries/index.ts`.
-5. Run `npm run build:content-system && npm run build-storybook` to validate.
-
-### BCS build pipeline
-
-| Command | Input | Output |
-| --- | --- | --- |
-| `npm run build:content-system` | `content-system/**/*.ts` | `dist/content-system/**/*.js` + `.d.ts` |
-| `npm run build:lib` (includes content-system) | Full repo | Publishable `dist/` |
-
-`tsconfig.content-system.json` is the scoped build config — keeps content-system compilation separate from the Vite lib build of components.
-
-See [content-system/README.md](content-system/README.md) and the Storybook **Content System / Overview** page for the full authoring guide.
 
 ## Token PR Checklist
 
 Run before raising any PR touching a token file, theme file, or component CSS:
 
 ```bash
-# From brik-bds root:
-./scripts/pr-checklist.sh
-
-# From a consuming project:
-./brik-bds/scripts/pr-checklist.sh
+./scripts/pr-checklist.sh                     # from brik-bds root
+./brik-bds/scripts/pr-checklist.sh            # from a consuming project
 ```
 
-Runs automated checks (lint-tokens, token-audit, Tier 2 hex scan) then prints the manual reviewer steps. See [docs/TOKEN-PR-CHECKLIST.md](docs/TOKEN-PR-CHECKLIST.md) for the full checklist and architecture reference.
+Runs lint-tokens, token-audit, Tier 2 hex scan, then prints manual reviewer steps. Full checklist in [docs/TOKEN-PR-CHECKLIST.md](docs/TOKEN-PR-CHECKLIST.md). **Scope rule:** one concern per PR — theme changes, component fixes, and submodule syncs are always separate PRs.
 
-**Scope rule:** one concern per PR — theme changes, component fixes, and submodule syncs are always separate PRs.
+## Quick reference
 
----
-
-## Don't Edit the Submodule
-
-The copy at `brik-llm/foundations/brik-bds/` is a git submodule.
-**Never edit files there directly.** Changes won't persist and cause sync issues.
+Common wrong-vs-right patterns (variant hierarchy, raw `var()` strings, hex literals, font family vs role, submodule edits) — re-read before any component or token-touching work: [docs/PATTERNS-WRONG-VS-RIGHT.md](docs/PATTERNS-WRONG-VS-RIGHT.md).
 
 ---
-
-## Token Rename History
-
-When Figma reorganizes variable groups, token names change. Log every rename here so consuming project CSS can be audited.
-
-| Date | Change | Old CSS name → New CSS name |
-|------|--------|-----------------------------|
-| 2026-04-02 | `--font-family-subtitle` promoted from `overrides.css` gap-fill to first-class Figma variable. Global fallback (`var(--font-family-label)`) removed from `overrides.css`. Per-theme blocks retain explicit overrides. **Requires Figma sync to land in `figma-tokens.css`.** | No rename — CSS variable name unchanged. |
-| 2026-04-02 | Removed `interaction/` group from `tokens-studio.json`; tokens now live in their semantic sub-groups. SD rebuild completed, `overrides.css` bridge aliases removed. | `--interaction-background-brand-primary-hover` → `--background-brand-primary-hover` |
-| | | `--interaction-background-brand-primary-pressed` → `--background-brand-primary-pressed` |
-| | | `--interaction-surface-secondary-hover` → `--surface-secondary-hover` |
-| | | `--interaction-surface-secondary-pressed` → `--surface-secondary-pressed` |
-| | | `--interaction-surface-subtle-hover` → `--surface-subtle-hover` |
-| | | `--interaction-background-disabled` → `--background-disabled` |
-| | | `--interaction-text-disabled` → `--text-disabled` |
-| | | `--interaction-border-disabled` → `--border-disabled` |
-| | Note: `--background-secondary-hover`, `--background-outline-hover` (and pressed variants) were dead aliases — never had backing tokens. Removed entirely. |
-
-**After any Figma sync that renames tokens:** run `node scripts/lint-tokens.js` against all component CSS files to catch stale references before committing.
-
----
-
-## Quick Reference — Wrong vs Right
-
-The most commonly broken patterns across all Brik projects.
-
-```tsx
-// ❌ WRONG: Ghost variant on a primary action
-<IconButton variant="ghost" icon={<Play />} label="Start" />
-// ✅ RIGHT: Preserve the action's hierarchy — primary action = primary variant
-<IconButton variant="primary" icon={<Play />} label="Start" />
-// Rule: Converting Button → IconButton doesn't change the action's importance.
-// ghost = low emphasis. primary = high emphasis. Match the original.
-
-// ❌ WRONG: Raw var() string in style prop
-style={{ color: 'var(--text-primary)', fontSize: '16px' }}
-// ✅ RIGHT: Import from the token layer
-import { color, font } from '@/lib/tokens';
-style={{ color: color.text.primary, fontSize: font.size.body.md }}
-
-// ❌ WRONG: Hardcoded hex color
-style={{ backgroundColor: '#E35335' }}
-// ✅ RIGHT: Always look up the semantic token — never assume
-style={{ backgroundColor: color.brand.primary }}
-// Note: grep globals.css first. Never assume what "primary" resolves to.
-
-// ❌ WRONG: Mixing font family with wrong size scale
-style={{ fontSize: font.size.body.md, fontFamily: font.family.heading }}
-// ✅ RIGHT: Use composed style presets
-import { text } from '@/lib/styles';
-style={text.body}  // family + size + lineHeight, always matched correctly
-
-// ❌ WRONG: Heading/title element using body font family
-.bds-card__name { font-family: var(--font-family-body); }
-// ✅ RIGHT: Semantic family matches element role
-.bds-card__name { font-family: var(--font-family-heading); }
-// Rule: Font family token MUST match the element's semantic role.
-//   Heading/title/name elements     → --font-family-heading
-//   Label/badge/tag/button/caption  → --font-family-label
-//   Body copy/description/paragraph → --font-family-body
-//
-// WHY THIS MATTERS: BDS defaults all three tokens to Poppins, so misuse is
-// invisible during BDS development. The violation surfaces only when a client
-// theme assigns distinct typefaces per family (e.g. Century Schoolbook for
-// heading, Avenir for body/label). Always validate component CSS with the
-// ★ Client Sim theme in Storybook — it assigns Georgia/Verdana/Courier New
-// to expose mismatches instantly before any client theme reveals them.
-//
-// HEADING SCALE STARTS AT 18px: --heading-tiny = font-size/200 = 18px.
-// font-size/100 (16px) is body/label territory. Never use it on a heading element.
-
-// ❌ WRONG: Editing the submodule directly
-// brik-client-portal/brik-bds/components/ui/Button/Button.css ← NEVER
-// ✅ RIGHT: Edit in standalone repo, sync to consumers
-// ~/Documents/GitHub/brik/brik-bds/ ← ALWAYS
-// Then: ./scripts/bds-sync.sh in each consuming project
-```
 
 All BDS-consuming projects load this file via `@import` in their CLAUDE.md.
