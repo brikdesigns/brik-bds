@@ -46,6 +46,7 @@ export { HeroInteriorMinimal } from './HeroInteriorMinimal';
 export { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
 export { Services3ColCardGrid } from './Services3ColCardGrid';
 export { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
+export { Features3ColBrandedDark } from './Features3ColBrandedDark';
 export { AboutStorySplit } from './AboutStorySplit';
 export { CtaDarkCentered } from './CtaDarkCentered';
 

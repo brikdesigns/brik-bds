@@ -51,6 +51,7 @@ import type {
 
 import { Services3ColCardGrid } from './Services3ColCardGrid';
 import { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
+import { Features3ColBrandedDark } from './Features3ColBrandedDark';
 import { HeroSplit6040 } from './HeroSplit6040';
 import { HeroInteriorMinimal } from './HeroInteriorMinimal';
 import { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
@@ -66,6 +67,7 @@ const BLUEPRINT_REGISTRY: Partial<
   services_detail_two_column: ServicesDetailTwoColumn,
   services_3col_card_grid: Services3ColCardGrid,
   support_plan_callout_split: SupportPlanCalloutSplit,
+  features_3col_branded_dark: Features3ColBrandedDark,
   about_story_split: AboutStorySplit,
   cta_dark_centered: CtaDarkCentered,
 };
