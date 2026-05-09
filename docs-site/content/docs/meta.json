@@ -9,9 +9,7 @@
     "content-system",
     "components",
     "web-elements",
-    "hooks",
-    "utilities",
-    "patterns",
+    "react-reference",
     "contribution"
   ]
 }

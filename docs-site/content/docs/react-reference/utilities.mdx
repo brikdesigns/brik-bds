@@ -213,7 +213,7 @@ A utility belongs in BDS only when:
 
 1. **It depends on the BDS source of truth** (component manifest, token registry, content-system enums) and would drift if forked.
 2. **It's used by ≥ 2 consumers** (or has an obvious second consumer in a product app).
-3. **It's stateless and side-effect-free** — no global runtime state, no DOM mutation. CLI scripts and pure functions only. Stateful behavior belongs in a [hook](/docs/hooks) paired with a component.
+3. **It's stateless and side-effect-free** — no global runtime state, no DOM mutation. CLI scripts and pure functions only. Stateful behavior belongs in a [hook](/docs/react-reference/hooks) paired with a component.
 
 Utilities that don't clear all three bars stay in the consumer.
 
@@ -222,4 +222,4 @@ Utilities that don't clear all three bars stay in the consumer.
 - [Primitives → Color](/docs/primitives/color) — canonical token registry that `@/lib/tokens` mirrors
 - [Theming → Atmospheres](/docs/theming/atmospheres) — the dark / atmosphere overlay system the build pipeline emits
 - [Components](/docs/components) — what `bds-find` searches against
-- [Hooks](/docs/hooks) — the stateful counterpart to these stateless utilities
+- [Hooks](/docs/react-reference/hooks) — the stateful counterpart to these stateless utilities
