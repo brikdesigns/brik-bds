@@ -12,19 +12,10 @@
  *     BlueprintDispatcher,
  *     HeroSplit6040,
  *     ServicesDetailTwoColumn,
- *     SiteHeader,
  *   } from '@brikdesigns/bds';
  *
  * Renderers ship through the main library bundle (Vite multi-export
  * via `lib-entry.ts`); no separate sub-path import is needed.
- *
- * ## Coverage vs the Astro twins
- *
- * Every blueprint shipped in `../astro/index.ts` (except the
- * to-be-net-new SiteFooter) has a React twin re-exported here.
- * `SiteHeader` is the site-shell nav component — site-shell, not a
- * blueprint, so it lives here but does NOT register in
- * BLUEPRINT_REGISTRY (takes its own props, not BlueprintProps).
  */
 
 // ── Contract types — re-exported from the framework-agnostic source ──
@@ -49,9 +40,6 @@ export { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
 export { Features3ColBrandedDark } from './Features3ColBrandedDark';
 export { AboutStorySplit } from './AboutStorySplit';
 export { CtaDarkCentered } from './CtaDarkCentered';
-
-// ── Site shell ─────────────────────────────────────────────────
-export { SiteHeader, type SiteHeaderProps } from './SiteHeader';
 
 // ── Dispatch surface ────────────────────────────────────────────
 export { BlueprintDispatcher } from './BlueprintDispatcher';

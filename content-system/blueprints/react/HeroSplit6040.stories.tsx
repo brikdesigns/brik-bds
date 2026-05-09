@@ -43,7 +43,7 @@ const section: BlueprintProps['section'] = {
 };
 
 const meta: Meta<typeof HeroSplit6040> = {
-  title: 'Blueprints/hero_split_60_40',
+  title: 'Theming/Blueprints/hero_split_60_40',
   component: HeroSplit6040,
   tags: ['surface-web', 'surface-shared'],
   parameters: { layout: 'fullscreen' },
