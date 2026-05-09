@@ -45,7 +45,7 @@ Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform out
 
 Two modes auto-generated: `tokens/figma-tokens.css` (light) and `tokens/figma-tokens-dark.css` (dark). Never hand-edit these — update Figma, then run `npm run build:sd-figma`.
 
-Client theming is a 2-tier cascade: BDS base tokens → `theme-{client}.css` override. See [docs/CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md).
+Client theming is a 2-tier cascade: BDS base tokens → `theme-{client}.css` override. See [The Cascade](https://design.brikdesigns.com/docs/getting-started/cascade).
 
 ## Content system cascade
 
@@ -106,7 +106,7 @@ BDS follows SemVer. Version bumps ship as `chore(release): vX.Y.Z` commits on `m
 
 - [CLAUDE.md](CLAUDE.md) — authoritative agent rules for BDS development
 - [content-system/README.md](content-system/README.md) — BCS authoring guide
-- [docs/CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) — token consumption in app projects
+- [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) — token consumption in app projects (typed primitives, style presets, `Prose` markdown renderer)
 - [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md) — full token reference
 - [Chromatic dashboard](https://www.chromatic.com/builds?appId=69b8918cac3056b39424d5d3) — visual regression builds
 

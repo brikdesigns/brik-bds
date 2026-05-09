@@ -57,7 +57,7 @@ import { font, color, space, gap, border } from '@/lib/tokens';
 import { text, heading, detail } from '@/lib/styles';
 ```
 
-See [docs/CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) for the full implementation pattern.
+See [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) for the full implementation pattern (typed primitives, style presets, `Prose` markdown renderer, pre-commit gate).
 
 ---
 
@@ -122,7 +122,7 @@ The `interaction/` group was fully removed. All tokens moved to their semantic s
 | Topic | File |
 |-------|------|
 | Full BDS development workflow | [CLAUDE.md](CLAUDE.md) |
-| Token consumption implementation | [docs/CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md) |
+| Token consumption implementation | [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) |
 | Component patterns & Paper workflow | [docs/COMPONENT-PATTERNS.md](docs/COMPONENT-PATTERNS.md) |
 | Token reference | [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md) |
 | PR checklist | [docs/TOKEN-PR-CHECKLIST.md](docs/TOKEN-PR-CHECKLIST.md) |

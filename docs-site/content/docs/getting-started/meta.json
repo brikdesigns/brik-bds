@@ -1,4 +1,4 @@
 {
   "title": "Getting Started",
-  "pages": ["index", "installation", "cascade", "framework-guides"]
+  "pages": ["index", "installation", "cascade", "framework-guides", "react-composition"]
 }

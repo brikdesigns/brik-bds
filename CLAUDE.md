@@ -154,7 +154,7 @@ Storybook uses **Base mode** (overridden in `storybook-overrides.css`); Webflow 
 
 ## Consuming tokens in app projects
 
-BDS uses a **2-tier architecture**: Tier 1 — BDS foundations (`figma-tokens.css` + `gap-fills.css`, never edit); Tier 2 — client theme (`theme-{client}.css` in the consuming project, overrides semantic tokens). Standard `globals.css` cascade and required consumer files (`src/lib/tokens.ts`, `src/lib/styles.ts`, `src/components/prose.tsx`, `.husky/pre-commit`) documented in [docs/CONSUMING-TOKENS.md](docs/CONSUMING-TOKENS.md). Reference implementation: brik-client-portal.
+BDS uses a **2-tier architecture**: Tier 1 — BDS foundations (`figma-tokens.css` + `gap-fills.css`, never edit); Tier 2 — client theme (`theme-{client}.css` in the consuming project, overrides semantic tokens). Cascade in [The Cascade](https://design.brikdesigns.com/docs/getting-started/cascade); React composition layer (`src/lib/tokens.ts`, `src/lib/styles.ts`, `src/components/prose.tsx`, `.husky/pre-commit`) in [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition). Reference implementation: brik-client-portal.
 
 **Key rule:** Never write raw CSS `var()` strings inline in TS/TSX. Import from `@/lib/tokens` and `@/lib/styles`.
 
