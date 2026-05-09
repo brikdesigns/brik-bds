@@ -13,6 +13,7 @@ The recommended consumer pattern. See `brik-client-portal` and `renew-pms` for r
 - Fonts load via `next/font` — BDS doesn't ship fonts.
 - Components are imported from `@brikdesigns/bds` directly; no client wrapper required.
 - Use `<ThemeProvider>` to manage `data-theme` (light/dark) and the `theme-brand-brik` body class. See [Client Themes → How themes work](/docs/theming/client-themes#how-themes-work).
+- Wrap tokens in a typed primitive layer (`src/lib/tokens.ts` / `styles.ts` + `Prose`). Pattern + pre-commit gate in [React Composition Layer](/docs/getting-started/react-composition).
 
 ## Astro
 
