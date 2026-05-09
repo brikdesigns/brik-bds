@@ -1,0 +1,180 @@
+/*
+ * Services3ColCardGrid — React renderer styles.
+ *
+ * The renderer composes BDS primitives (Card, Stack, Grid, Frame,
+ * ServiceTag, LinkButton, Badge) — these styles only handle:
+ *   - section-level container + padding + heading rhythm
+ *   - card overflow clipping for the top image (Card has no built-in
+ *     clipping, so we add it here)
+ *   - the `--bp-*` variation API
+ *
+ * No `--surface-*` / `--text-*` / `--border-*` overrides — those stay
+ * theme-layer per the cascade rules. Token naming follows the
+ * canonical registry; semantic spacing uses `--gap-*` / `--padding-*`
+ * (mode-spacing-aware once BDS issue #340 ships the dormant modes).
+ */
+
+.bp-services-grid {
+  background: var(--bp-services-grid-bg, var(--page-primary));
+  padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
+  padding-block-end: clamp(
+    var(--padding-huge),
+    9vw,
+    calc(var(--padding-huge) * 1.5)
+  );
+}
+
+.bp-services-grid__container {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--padding-lg);
+}
+
+/* ── Section header ────────────────────────────────────────────── */
+
+.bp-services-grid__header {
+  max-width: 72ch;
+  margin-bottom: var(--padding-xl);
+}
+
+.bp-services-grid__eyebrow {
+  margin: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-brand-primary);
+}
+
+.bp-services-grid__heading {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: clamp(var(--font-size-600), 3.5vw, var(--font-size-900));
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bp-services-grid__lead {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-400);
+  line-height: var(--font-line-height-relaxed);
+  color: var(--text-primary);
+}
+
+/* ── Card grid ─────────────────────────────────────────────────── */
+
+.bp-services-grid__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Override BDS Grid's default 3-column fixed shape for narrow viewports.
+ * The component renders as `display: grid` with 3 columns; we only need
+ * to add the responsive collapse since BDS Grid itself does not. */
+@media (max-width: 991.98px) {
+  .bp-services-grid__list.bp-services-grid__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767.98px) {
+  .bp-services-grid__list.bp-services-grid__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bp-services-grid__item {
+  display: flex;
+}
+
+/* ── Card overflow clip + variation API ─────────────────────────── */
+
+.bp-services-grid__card {
+  /* Card defaults to `border-radius: var(--border-radius-md)`. The
+   * variation API lets consumers swap that per-instance. */
+  border-radius: var(--bp-services-grid-card-radius, var(--border-radius-md));
+  background: var(--bp-services-grid-card-bg, var(--surface-primary));
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(0);
+  transition:
+    transform 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+    box-shadow 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+.bp-services-grid__card:hover {
+  transform: translateY(calc(var(--bp-services-grid-hover-lift, 0) * -4px));
+}
+
+/* ── Media wrapper (positioning context for has-options badge) ──── */
+
+.bp-services-grid__media-wrap {
+  position: relative;
+}
+
+.bp-services-grid__media {
+  background: var(--bp-services-grid-image-bg, var(--surface-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bp-services-grid__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bp-services-grid__media-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Scale the ServiceTag icon up visually inside the media area. */
+  transform: scale(2);
+  transform-origin: center;
+}
+
+/* ── Has-Options badge — anchored top-right of the media ───────── */
+
+.bp-services-grid__has-options {
+  position: absolute;
+  top: var(--gap-md);
+  right: var(--gap-md);
+  display: inline-flex;
+}
+
+/* ── Card body ─────────────────────────────────────────────────── */
+
+.bp-services-grid__body {
+  padding: var(--padding-lg);
+  flex: 1 1 auto;
+}
+
+.bp-services-grid__title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-500);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bp-services-grid__description {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-300);
+  line-height: var(--font-line-height-relaxed);
+  color: var(--text-primary);
+}
+
+.bp-services-grid__cta-row {
+  margin-top: auto;
+  /* Anchor the LinkButton to the bottom of the card body so all cards
+   * align horizontally regardless of description length. */
+}
