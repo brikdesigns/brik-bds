@@ -92,6 +92,20 @@ Atmosphere CSS files MUST NOT override `--surface-*`, `--text-*`, `--border-*` p
 
 ---
 
+## WCAG AA contrast — token guardrails
+
+The brikdesigns.com a11y CI surfaced two known BDS-level contrast tensions on `/services/brand/logo-design` that this blueprint must NOT inherit. Authoring discipline:
+
+| Region | Use | Don't use | Why |
+|---|---|---|---|
+| Card description body | `--text-primary` (passes AA on `--surface-primary`) | `--text-secondary` (#828282 → 3.84:1 on white at 14px, fails AA) | Body copy must clear AA — the gray-on-white tension is tracked in BDS [#40] burndown. |
+| Card "Learn more" link | `LinkButton variant="ghost"` size `md` (default 14px label) | `LinkButton variant="primary"` size `sm` on light backgrounds | White-on-poppy `#e35335` = 3.78:1 at 14px. Small primary buttons are an open BDS contrast issue. |
+| Section heading | `--text-primary` | — | Always passes. |
+| Optional eyebrow | `--text-brand-primary` on light bg | small (<14px) brand-primary on light | Brand-primary at body sizes passes; tiny eyebrow text needs review. |
+| Has Options badge | `Badge status="positive"` (uses `--background-positive` + `--text-on-positive`) | inline color overrides | BDS Badge is contrast-tested. |
+
+**Acceptance:** Storybook story renders zero new color-contrast violations against the brikdesigns axe baseline. If the surfaced tokens force a regression, **this blueprint is the wrong shape — redesign rather than baseline-bypass**.
+
 ## Mode awareness
 
 The blueprint's spacing should respond to the `data-mode-spacing` attribute (BDS issue #340 — currently dormant). Recommend wiring this blueprint with the spacing-mode tokens at author time so it lights up when the dormant modes ship:
