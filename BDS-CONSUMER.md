@@ -1,12 +1,14 @@
 # BDS Consumer Rules
 
-Rules for any project that imports brik-bds as a submodule (portal, renew-pms, brikdesigns). For BDS development itself, see [CLAUDE.md](CLAUDE.md).
+Rules for any project that imports `@brikdesigns/bds` (portal, renew-pms, brikdesigns.com). For BDS development itself, see [CLAUDE.md](CLAUDE.md). For the React composition layer (typed primitives, style presets, `Prose` markdown renderer), see [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition).
 
 ---
 
-## Submodule — Do Not Edit
+## Package — never the submodule
 
-The copy at `your-project/brik-bds/` is a git submodule. **Never edit files there directly.** Changes won't persist and cause sync issues. All BDS development happens in `~/Documents/GitHub/brik/brik-bds/`.
+BDS ships as the **`@brikdesigns/bds` npm package**. All active consumers (portal, renew-pms, brikdesigns.com) consume tokens and components via the package; the legacy git-submodule pattern is **deprecated**. If you find a project still importing `'../../brik-bds/tokens/figma-tokens.css'`, migrate it to `'@brikdesigns/bds/tokens.css'`.
+
+For BDS development itself, edit in `~/Documents/GitHub/brik/brik-bds/`, run `npm run build`, then bump consumer `package.json` versions to pull the change.
 
 ---
 
@@ -42,22 +44,24 @@ The copy at `your-project/brik-bds/` is a git submodule. **Never edit files ther
 
 ## Consuming Tokens in Code
 
-**Standard globals.css cascade:**
+**Standard globals.css cascade** (matches portal, renew-pms, brikdesigns.com):
 
 ```css
-@import '../../brik-bds/tokens/figma-tokens.css';
-@import '../../brik-bds/tokens/gap-fills.css';
+@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);
 @import './styles/theme-{client}.css';
+@import '@brikdesigns/bds/styles.css' layer(bds-components);
 ```
 
-**In components — never write raw `var()` strings.** Import from the token layer:
+Per-tier breakdown + atmosphere overlays in [The Cascade](https://design.brikdesigns.com/docs/getting-started/cascade).
+
+**In components — never write raw `var()` strings.** Import from the consumer-side typed-token layer:
 
 ```tsx
 import { font, color, space, gap, border } from '@/lib/tokens';
 import { text, heading, detail } from '@/lib/styles';
 ```
 
-See [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) for the full implementation pattern (typed primitives, style presets, `Prose` markdown renderer, pre-commit gate).
+Full pattern in [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) (typed primitives, style presets, `Prose` markdown renderer, pre-commit gate).
 
 ---
 
@@ -86,9 +90,10 @@ style={text.body}
 // RIGHT: Preserve action hierarchy — primary action = primary variant
 <IconButton variant="primary" icon={<Play />} label="Start" />
 
-// WRONG: Editing the submodule directly
-// brik-client-portal/brik-bds/components/ui/Button/Button.css
-// RIGHT: Edit in ~/Documents/GitHub/brik/brik-bds/, then bds-sync.sh
+// WRONG: Importing tokens via a relative submodule path (deprecated pattern)
+@import '../../brik-bds/tokens/figma-tokens.css';
+// RIGHT: Always go through the published npm package
+@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);
 ```
 
 **Font family must match element role:**
@@ -100,20 +105,7 @@ style={text.body}
 
 ## Token Rename History
 
-When Figma reorganizes variable groups, token names change. Check this before writing CSS.
-
-| Date | Old CSS name | New CSS name |
-|------|-------------|--------------|
-| 2026-04-02 | `--interaction-background-brand-primary-hover` | `--background-brand-primary-hover` |
-| 2026-04-02 | `--interaction-background-brand-primary-pressed` | `--background-brand-primary-pressed` |
-| 2026-04-02 | `--interaction-surface-secondary-hover` | `--surface-secondary-hover` |
-| 2026-04-02 | `--interaction-surface-secondary-pressed` | `--surface-secondary-pressed` |
-| 2026-04-02 | `--interaction-surface-subtle-hover` | `--surface-subtle-hover` |
-| 2026-04-02 | `--interaction-background-disabled` | `--background-disabled` |
-| 2026-04-02 | `--interaction-text-disabled` | `--text-disabled` |
-| 2026-04-02 | `--interaction-border-disabled` | `--border-disabled` |
-
-The `interaction/` group was fully removed. All tokens moved to their semantic sub-groups.
+Figma occasionally reorganizes variable groups, renaming the emitted CSS variables. Full audit log lives in [`docs/TOKEN-RENAMES.md`](docs/TOKEN-RENAMES.md) — check before writing CSS that targets old names.
 
 ---
 
