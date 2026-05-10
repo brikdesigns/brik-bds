@@ -8,7 +8,7 @@
  *   1. Primitive token usage (use semantic tokens instead)
  *   2. Hardcoded CSS values (use tokens)
  *   3. Unknown tokens (typos or non-existent variables)
- *   4. Spacing values not aligned to 4-point grid (see docs/GRID-SYSTEM.md)
+ *   4. Spacing values not aligned to 4-point grid (see https://design.brikdesigns.com/docs/primitives/spacing)
  *
  * Usage:
  *   node scripts/lint-tokens.js              # full report (errors + warnings)
@@ -62,7 +62,7 @@ const ALLOWED_PRIMITIVES = new Set([
 // Grid System Configuration (4-point base)
 // ---------------------------------------------------------------------------
 // Valid spacing values (in pixels). All must be multiples of 4.
-// See docs/GRID-SYSTEM.md for details.
+// See https://design.brikdesigns.com/docs/primitives/spacing for details.
 
 const VALID_SPACING_VALUES = {
   // Primitives: --space--[index]: [value]
@@ -764,7 +764,7 @@ function main() {
   const hasGridViolations = filtered.some(v => v.rule === 'grid-4pt');
   if (hasGridViolations) {
     console.log('  📐 Grid: BDS uses a 4-point grid. All spacing should be divisible by 4.');
-    console.log('     Exempt: 0, 1px, 2px (micro). See docs/GRID-SYSTEM.md\n');
+    console.log('     Exempt: 0, 1px, 2px (micro). See https://design.brikdesigns.com/docs/primitives/spacing\n');
   }
 
   process.exit(errorCount > 0 ? 1 : 0);
