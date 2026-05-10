@@ -12,49 +12,7 @@ Design tokens are the single source of truth for every visual decision in the Br
   **Token source of truth lives in Figma.** This site documents what's available and how to use it. To add a new token, edit Figma first — don't add it to CSS directly.
 </Callout>
 
-## Two-tier architecture (client projects)
-
-Client portals, SaaS apps, and marketing sites use a **2-tier** model:
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│  TIER 1 — BDS Foundations  (brik-bds, never edited by consumers)        │
-│                                                                         │
-│  figma-tokens.css  — SD-generated primitives + semantic tokens          │
-│  gap-fills.css     — gap-fill tokens not yet promoted to Figma          │
-│                                                                         │
-│  --color-poppy-light  --space-400  --background-brand-primary           │
-│  --background-status-error  --icon-md  --shadow-sm                      │
-└──────────────────────────────┬──────────────────────────────────────────┘
-                               │  CSS cascade (client globals.css)
-┌──────────────────────────────▼──────────────────────────────────────────┐
-│  TIER 2 — Client Theme  (theme-{client}.css in consuming project)       │
-│                                                                         │
-│  Same semantic token names as Tier 1, different values for this brand.  │
-│  One file per client. Cascade wins. Components are untouched.           │
-│                                                                         │
-│  :root { --background-brand-primary: #2563EB; --font-family-heading: …} │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-**The key rule:** token names are fixed in Tier 1. Only values change in Tier 2. A component written against `--background-brand-primary` works for every client brand with zero code changes.
-
-## CSS import cascade
-
-Client projects load tokens in the same order:
-
-```css
-/* 1. Generated tokens (light + dark + Brik defaults) */
-@import '@brikdesigns/bds/tokens.css';
-
-/* 2. Client brand — same token names, different values */
-@import './styles/theme-{client}.css';
-
-/* 3. Component CSS bundle */
-@import '@brikdesigns/bds/styles.css';
-```
-
-For the theming system as a whole — Brik's three built-in themes, the override matrix, and how to author a client brand — see [Theming](/docs/theming).
+Tokens load via a two-tier cascade — BDS canon first (`@brikdesigns/bds/tokens.css`), client brand override second (`theme-{client}.css`). Architecture, full import order, and the `<html>` switch table: [The Cascade](/docs/getting-started/cascade).
 
 ## Token types: primitives vs semantic
 
@@ -114,34 +72,6 @@ Figma organises variables into named collections. Each collection has modes. Sty
 | `breakpoint` | `default` | `--breakpoint-web/tablet/mobile` |
 
 **Light vs dark mode:** `figma-tokens.css` uses the `light` mode of the `color` collection. `figma-tokens-dark.css` uses the `dark` mode. Both files use identical variable names — consuming projects import dark after light, and the browser applies whichever matches `[data-theme="dark"]`.
-
-## Style Dictionary pipeline
-
-Figma is the only place tokens are edited. The pipeline:
-
-```
-1. Designer edits variables in Figma (Foundations file)
-         ↓
-2. Agent runs pull-variables.js with channel ID
-   → /tmp/figma-vars.json  (raw Figma variable data)
-         ↓
-3. node scripts/sync-figma-mcp.js /tmp/figma-vars.json --build
-   → patches design-tokens/tokens-studio.json (W3C DTCG format)
-   → runs npm run build:all-tokens
-         ↓
-4. scripts/flatten-tokens-studio.js
-   → design-tokens/tokens-figma.json  (flattened, mode-resolved)
-         ↓
-5. Style Dictionary
-   → tokens/figma-tokens.css          ← Tier 1, imported by all projects
-   → tokens/figma-tokens-dark.css     ← dark mode variant
-   → build/figma/js/tokens.mjs        ← JS / TypeScript
-   → build/figma/swift/*.swift        ← iOS
-```
-
-<Callout type="warn">
-  Never manually edit `tokens/figma-tokens.css`. It is generated on every sync. Use `tokens/gap-fills.css` for gap-fill tokens that aren't in Figma yet.
-</Callout>
 
 ## Browse the token categories
 
