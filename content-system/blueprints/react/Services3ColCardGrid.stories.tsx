@@ -2,33 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Services3ColCardGrid } from './Services3ColCardGrid';
 import type { BlueprintProps } from '../astro/types';
+import { baseTheme, baseClientFacts } from './_fixtures';
 
 /* ─── Fixtures ─────────────────────────────────────────────────── */
 
-const baseTheme: BlueprintProps['theme'] = {
-  themeMode: 'light',
-  atmosphere: 'none',
-  navigationArchetype: 'utility-first',
-  footerArchetype: 'four_col_directory',
-};
-
-const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
-  tagline: null,
-  valueProposition: null,
-  services: [],
-  phone: null,
-  email: null,
-  address: null,
-  hours: [],
-  heroImageUrl: null,
-  logoUrl: null,
-  logoVariants: {},
-};
-
 /**
  * "Information Design Services" fixture — six service cards modeled
- * on the brikdesigns.com /services/information page that drives this
+ * on the brikdesigns.com `/services/information` page that drives this
  * blueprint. Image URLs are placeholder; the production CMS supplies
  * Webflow-hosted illustrations.
  */
@@ -131,105 +111,15 @@ type Story = StoryObj<typeof Services3ColCardGrid>;
 
 /**
  * @summary Six "Information Design" service cards — the canonical fixture.
+ *
+ * Single Playground story per ADR-006: shape-only blueprint stories
+ * carry one canonical state, not a fan-out of content variations.
+ * Per-card affordances (`hasOptions`, missing `imageUrl`, accent
+ * `category`) are exercised by the leaf component stories
+ * (`Card.stories.tsx`, `ServiceTag.stories.tsx`, `Frame.stories.tsx`).
+ * Atmosphere variants are switched via the Theme Switcher addon —
+ * not encoded as separate stories.
  */
-export const Default: Story = {
+export const Playground: Story = {
   args: baseProps,
-};
-
-/**
- * @summary No images — falls back to oversized ServiceTag icon per card.
- *
- * Illustration assets are optional. When the CMS hasn't supplied an
- * image, the blueprint shows the ServiceTag icon (sized up) inside
- * the 3:2 frame so the grid keeps consistent rhythm.
- */
-export const NoImages: Story = {
-  args: {
-    ...baseProps,
-    section: {
-      ...informationServicesSection,
-      sectionKey: 'services-grid-no-images',
-      items: informationServicesSection.items.map((item) => ({
-        ...item,
-        imageUrl: undefined,
-      })),
-    },
-  },
-};
-
-/**
- * @summary One card flagged with `hasOptions` — "Has Options" badge anchors top-right.
- */
-export const HasOptions: Story = {
-  args: {
-    ...baseProps,
-    section: {
-      ...informationServicesSection,
-      sectionKey: 'services-grid-has-options',
-      items: informationServicesSection.items.slice(0, 3).map((item, idx) => ({
-        ...item,
-        hasOptions: idx === 1,
-      })),
-    },
-  },
-};
-
-/**
- * @summary Mixed service categories — verifies the per-category accent color axis.
- *
- * The brikdesigns.com /services/ index page mixes all five categories
- * (brand, marketing, information, product, service). The card body's
- * ServiceTag adapts its accent color via the BDS `category` prop.
- */
-export const MixedCategories: Story = {
-  args: {
-    ...baseProps,
-    section: {
-      ...informationServicesSection,
-      sectionKey: 'services-grid-mixed',
-      heading: 'All Services',
-      subheading: 'Brik Designs',
-      body: 'A category-spanning view — each card carries its service-line accent.',
-      items: [
-        {
-          title: 'Brand Identity Bundle',
-          description: 'Logo, type, color, and applications in one pass.',
-          href: '/services/brand/brand-identity-bundle',
-          imageUrl: 'https://placehold.co/480x320/fff4cc/5b4500?text=Brand',
-          category: 'brand',
-          hasOptions: true,
-        },
-        {
-          title: 'Web Design & Development',
-          description: 'Custom sites, content, and CMS — built for growth and easy edits.',
-          href: '/services/marketing/web-design-development',
-          imageUrl: 'https://placehold.co/480x320/d6f1da/1f5b2e?text=Marketing',
-          category: 'marketing',
-        },
-        {
-          title: 'Information Design',
-          description: 'Make complex information scannable and on-brand.',
-          href: '/services/information/information-design',
-          imageUrl: 'https://placehold.co/480x320/d6e4f5/1f3d70?text=Information',
-          category: 'information',
-        },
-      ],
-    },
-  },
-};
-
-/**
- * @summary Atmosphere overlay — `clean-bright`. Verifies blueprint surface tokens stay theme-layer.
- *
- * Renders the same default fixture but with `theme.atmosphere =
- * 'clean-bright'`. Use the Theme Switcher addon to swap atmospheres
- * — the blueprint must NOT redefine `--surface-*` / `--text-*` /
- * `--border-*` tokens; those stay theme-layer and atmosphere CSS
- * already overrides them.
- */
-export const AtmosphereCleanBright: Story = {
-  args: {
-    ...baseProps,
-    theme: { ...baseTheme, atmosphere: 'clean-bright' },
-  },
 };

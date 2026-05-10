@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Features3ColBrandedDark } from './Features3ColBrandedDark';
 import type { BlueprintProps } from '../astro/types';
+import { baseTheme, baseClientFacts } from './_fixtures';
 
 /* ─── Demo data-audience cascade ────────────────────────────────────
  *
@@ -45,26 +46,7 @@ const audienceCascadeStyles = `
 
 /* ─── Fixtures ─────────────────────────────────────────────────── */
 
-const baseTheme: BlueprintProps['theme'] = {
-  themeMode: 'dark',
-  atmosphere: 'none',
-  navigationArchetype: 'utility-first',
-  footerArchetype: 'four_col_directory',
-};
-
-const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
-  tagline: null,
-  valueProposition: null,
-  services: [],
-  phone: null,
-  email: null,
-  address: null,
-  hours: [],
-  heroImageUrl: null,
-  logoUrl: null,
-  logoVariants: {},
-};
+const darkTheme: BlueprintProps['theme'] = { ...baseTheme, themeMode: 'dark' };
 
 /**
  * "Other Service Lines" fixture — the brikdesigns.com cross-sell
@@ -111,7 +93,7 @@ const otherServiceLinesSection: BlueprintProps['section'] = {
 const baseProps: BlueprintProps = {
   section: otherServiceLinesSection,
   clientFacts: baseClientFacts,
-  theme: baseTheme,
+  theme: darkTheme,
 };
 
 /* ─── Decorator — injects the demo audience cascade ─────────────── */
@@ -149,33 +131,25 @@ type Story = StoryObj<typeof Features3ColBrandedDark>;
 /**
  * @summary Three cards — brand / marketing / back-office. The brikdesigns "Other Service Lines" fixture.
  */
-export const Default: Story = {
+export const Playground: Story = {
   args: baseProps,
 };
 
 /**
- * @summary Two cards — narrow grid, centers on desktop.
+ * @summary Wrapped — four+ cards force the grid to a second row.
+ *
+ * Distinct meaningful state from `Playground` because the row-wrap
+ * behavior at the desktop breakpoint is the layout property worth
+ * verifying. Per-card content variants (missing image, audience
+ * accent) are exercised by the leaf component stories, not duplicated
+ * here.
  */
-export const TwoCards: Story = {
+export const Wrapped: Story = {
   args: {
     ...baseProps,
     section: {
       ...otherServiceLinesSection,
-      sectionKey: 'features-branded-dark-2-cards',
-      items: otherServiceLinesSection.items.slice(0, 2),
-    },
-  },
-};
-
-/**
- * @summary Four cards — wraps to a second row at the desktop breakpoint.
- */
-export const FourCards: Story = {
-  args: {
-    ...baseProps,
-    section: {
-      ...otherServiceLinesSection,
-      sectionKey: 'features-branded-dark-4-cards',
+      sectionKey: 'features-branded-dark-wrapped',
       items: [
         ...otherServiceLinesSection.items,
         {
@@ -186,32 +160,5 @@ export const FourCards: Story = {
         },
       ],
     },
-  },
-};
-
-/**
- * @summary No images — falls back to oversized ServiceTag icon per card.
- */
-export const NoImages: Story = {
-  args: {
-    ...baseProps,
-    section: {
-      ...otherServiceLinesSection,
-      sectionKey: 'features-branded-dark-no-images',
-      items: otherServiceLinesSection.items.map((item) => ({
-        ...item,
-        imageUrl: undefined,
-      })),
-    },
-  },
-};
-
-/**
- * @summary Atmosphere overlay — `editorial-luxury` — verifies the dark surface stays compatible.
- */
-export const AtmosphereEditorialLuxury: Story = {
-  args: {
-    ...baseProps,
-    theme: { ...baseTheme, atmosphere: 'editorial-luxury' },
   },
 };
