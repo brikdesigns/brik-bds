@@ -479,7 +479,7 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
       line: lineNum,
       column: match.index + 1,
       message: `Unknown token "var(${tokenName})" — not found in token sources`,
-      suggestion: `Check TOKEN-REFERENCE.md or grep build/figma/css/variables.css for the correct name`,
+      suggestion: `Check the canonical registry at https://design.brikdesigns.com/docs/primitives or grep dist/tokens.css for the correct name`,
     });
   }
 

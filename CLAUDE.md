@@ -144,13 +144,13 @@ BDS uses [Radix UI](https://www.radix-ui.com/) primitives for complex interactiv
 
 BDS components use **Figma single-dash** names (`--text-primary`, `--background-brand-primary`, `--padding-lg`). The legacy Webflow double-underscore prefix (`--_color---text--primary`) exists in `tokens/variables.css` for the Webflow platform — **do not use these in new code**.
 
-Build pipeline: `Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform outputs`. Full reference (commands, file taxonomy, adding-a-token flow) in [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md). Token rename history (audit log of CSS variable renames) in [docs/TOKEN-RENAMES.md](docs/TOKEN-RENAMES.md).
+Build pipeline: `Figma Variables → Tokens Studio JSON → Style Dictionary → per-platform outputs`. Canonical token registry: [Primitives](https://design.brikdesigns.com/docs/primitives) (interactive, pulls live from `dist/tokens.css`). Token rename history (audit log of CSS variable renames) in [docs/TOKEN-RENAMES.md](docs/TOKEN-RENAMES.md).
 
 **Fonts are not loaded by BDS.** Consuming projects load their own font files. The `--font-family-*` tokens in `figma-tokens.css` reference families by name — it's the consumer's responsibility to ensure that font is actually available.
 
 ### Spacing modes
 
-Storybook uses **Base mode** (overridden in `storybook-overrides.css`); Webflow uses **Spacious mode** by default on `.body`. Token deltas (e.g. `--_space---lg` is 16px Base / 52px Spacious) documented in [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md).
+Three modes (`compact` / `comfortable` / `spacious`) modulate `--padding-*` and `--gap-*` tokens via `[data-mode-spacing="..."]` on `:root`. Default mode requires no attribute. Canonical mode values auto-generate at [`tokens/modes-spacing.css`](tokens/modes-spacing.css) — never hand-edit. Storybook overrides via `storybook-overrides.css`.
 
 ## Consuming tokens in app projects
 

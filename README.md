@@ -107,7 +107,7 @@ BDS follows SemVer. Version bumps ship as `chore(release): vX.Y.Z` commits on `m
 - [CLAUDE.md](CLAUDE.md) — authoritative agent rules for BDS development
 - [content-system/README.md](content-system/README.md) — BCS authoring guide
 - [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) — token consumption in app projects (typed primitives, style presets, `Prose` markdown renderer)
-- [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md) — full token reference
+- [Primitives](https://design.brikdesigns.com/docs/primitives) — full token reference (interactive, pulls live from `dist/tokens.css`)
 - [Chromatic dashboard](https://www.chromatic.com/builds?appId=69b8918cac3056b39424d5d3) — visual regression builds
 
 ## License

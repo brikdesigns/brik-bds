@@ -124,5 +124,5 @@ The `interaction/` group was fully removed. All tokens moved to their semantic s
 | Full BDS development workflow | [CLAUDE.md](CLAUDE.md) |
 | Token consumption implementation | [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) |
 | Component patterns & Paper workflow | [docs/COMPONENT-PATTERNS.md](docs/COMPONENT-PATTERNS.md) |
-| Token reference | [docs/TOKEN-REFERENCE.md](docs/TOKEN-REFERENCE.md) |
+| Token reference | [Primitives](https://design.brikdesigns.com/docs/primitives) — interactive, pulls live from `dist/tokens.css` |
 | PR checklist | [docs/TOKEN-PR-CHECKLIST.md](docs/TOKEN-PR-CHECKLIST.md) |
