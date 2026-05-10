@@ -4,8 +4,7 @@
     "index",
     "client-themes",
     "atmospheres",
-    "navigation-archetypes",
-    "footer-archetypes",
+    "layout-archetypes",
     "blueprints"
   ]
 }
