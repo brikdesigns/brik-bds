@@ -45,7 +45,7 @@ In your global stylesheet (`globals.css`, `app.css`, etc.) import in this order:
 @import '@brikdesigns/bds/styles.css';
 ```
 
-Order matters. Tier 1 tokens load first, the Tier 2 client theme overrides semantic tokens, component CSS reads whatever is current.
+Why this order and what each file contains: [The Cascade](/docs/getting-started/cascade).
 
 ## Theme + mode switches
 
@@ -92,6 +92,7 @@ export function Example() {
 
 That's it. No provider required for components — they read tokens from the cascade above.
 
-## Next: read the cascade rules
+## Next
 
-The [cascade rules page](/docs/getting-started/cascade) explains the two-tier × four-layer × modes architecture and why it exists.
+- [The Cascade](/docs/getting-started/cascade) — two-tier × four-layer × modes architecture and the full `<html>` switch table.
+- [Framework Guides](/docs/getting-started/framework-guides) — Next.js + Astro scaffolds with real working code.

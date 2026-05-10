@@ -25,47 +25,11 @@ Theming is a **tenet of the system alongside Foundation, Motion, and Content.** 
 
 Layers are independent. A client can redefine tokens, keep the industry's default atmosphere, swap to a non-default navigation archetype, and use the same blueprints another client uses — nothing cross-couples. Each layer has its own deep-dive page; the sections below summarize each and link out.
 
-## Layer 1 — Tokens (the two-tier architecture)
+## Layer 1 — Tokens
 
-Every consuming project — portal, renew-pms, brikdesigns, and each client site — loads tokens in the same cascade:
+Layer 1 is the token override. Every consuming project loads BDS canon first (`@brikdesigns/bds/tokens.css`), then the per-client theme override (`theme-{client}.css`) which redefines the same semantic token names with brand values. Components never change.
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│  TIER 1 — BDS Foundations  (never edited by consumers)                  │
-│                                                                         │
-│  figma-tokens.css       — primitives + semantic tokens from Figma       │
-│  figma-tokens-dark.css  — dark-mode overrides scoped to [data-theme=dark]│
-│  gap-fills.css          — tokens not yet promoted to Figma              │
-│                                                                         │
-│  --color-poppy-light  --space-400  --background-brand-primary           │
-└──────────────────────────────┬──────────────────────────────────────────┘
-                               │  CSS cascade (globals.css)
-┌──────────────────────────────▼──────────────────────────────────────────┐
-│  TIER 2 — Client Theme  (theme-{client}.css in the consuming project)   │
-│                                                                         │
-│  Same semantic token names as Tier 1, different values for this brand.  │
-│  One file per client. Cascade wins. Components are untouched.           │
-│                                                                         │
-│  :root { --background-brand-primary: #2563EB; --font-family-heading: …} │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-Token names are fixed in Tier 1. Only values change in Tier 2. A component written against `--background-brand-primary` works for every client brand with zero code changes.
-
-### CSS import cascade
-
-```css
-/* 1. Generated values — light + dark mode (never edit) */
-@import '@brikdesigns/bds/tokens.css';
-
-/* 2. Client brand — same token names, different values */
-@import './styles/theme-{client}.css';
-
-/* 3. Component CSS bundle */
-@import '@brikdesigns/bds/styles.css';
-```
-
-`tokens.css` bundles the full cascade — figma-tokens (light), figma-tokens-dark, gap-fills, animations, motion-classes, plus Brik's own brand defaults. Dark mode is **not** hand-authored in consumer repos — it comes from Figma's `color/dark` mode and applies automatically when `<html data-theme="dark">` is set.
+Full architecture, import order, and the `<html>` switch table: [The Cascade](/docs/getting-started/cascade).
 
 ### What a client brand overrides
 
