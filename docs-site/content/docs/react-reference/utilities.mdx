@@ -1,133 +1,15 @@
 ---
 title: Utilities
-description: Token-aware helpers for use in app code — the @/lib/tokens + @/lib/styles consumer pattern, the Style Dictionary build pipeline, and the bds-find component-discovery CLI.
+description: BDS-side tooling — the Style Dictionary build pipeline, the bds-find component-discovery CLI, and the Adopt / Extend / Graduate cascade.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-BDS ships visual + content tokens, but consumers don't reach for `var(--text-primary)` directly in TSX. Three utility surfaces sit between the raw token files and feature code:
+This page covers tooling that sits **inside BDS** — what BDS builds, ships, and exposes to consumers as command-line helpers and build outputs.
 
-1. **`@/lib/tokens`** — TypeScript map of every CSS variable, so editor autocomplete prevents typos.
-2. **`@/lib/styles`** — composed `CSSProperties` presets that pair font family + size + line-height correctly.
-3. **`bds-find`** — CLI that answers "does BDS already have a component for this?" before you build.
-
-The first two live **in each consumer repo** (BDS does not ship them — the registry is per-product). The third ships from the BDS package itself.
-
-## `@/lib/tokens` — TypeScript token map
-
-A flat object that mirrors `tokens/figma-tokens.css`. Every CSS variable is a value-side `var(--...)` string keyed under a semantic path.
-
-```ts
-// src/lib/tokens.ts (excerpt — every consumer ships their own copy)
-export const color = {
-  text: {
-    primary: 'var(--text-primary)',
-    secondary: 'var(--text-secondary)',
-    muted: 'var(--text-muted)',
-    inverse: 'var(--text-on-color-light)',
-  },
-  background: {
-    page: 'var(--background-page)',
-    brand: { primary: 'var(--background-brand-primary)' },
-  },
-  surface: {
-    primary: 'var(--surface-primary)',
-    secondary: 'var(--surface-secondary)',
-    inverse: 'var(--surface-inverse)',
-  },
-  border: { primary: 'var(--border-primary)' },
-} as const;
-
-export const font = {
-  family: {
-    heading: 'var(--font-family-heading)',
-    body: 'var(--font-family-body)',
-    label: 'var(--font-family-label)',
-  },
-  size: {
-    body: { sm: 'var(--font-size-100)', md: 'var(--font-size-200)' },
-    heading: { tiny: 'var(--heading-tiny)', sm: 'var(--heading-sm)' },
-  },
-} as const;
-
-export const space = {
-  sm: 'var(--padding-sm)',
-  md: 'var(--padding-md)',
-  lg: 'var(--padding-lg)',
-} as const;
-
-export const radius = { sm: 'var(--border-radius-sm)', md: 'var(--border-radius-md)' } as const;
-```
-
-**Why a TS map and not raw `var()` in JSX:** typos are silent. `style={{ color: 'var(--text-primry)' }}` produces no error, no warning — just an inherited color in production. `style={{ color: color.text.primry }}` is a TypeScript error at write time.
-
-```tsx
-// ❌ Wrong
-style={{ color: 'var(--text-primary)', fontSize: '16px' }}
-
-// ✅ Right
-import { color, font } from '@/lib/tokens';
-style={{ color: color.text.primary, fontSize: font.size.body.md }}
-```
-
-## `@/lib/styles` — composed presets
-
-Bundles font family + size + line-height + letter-spacing into pre-baked `CSSProperties` so callers can't mismatch family with the wrong scale.
-
-```ts
-// src/lib/styles.ts
-import type { CSSProperties } from 'react';
-import { color, font } from './tokens';
-
-export const text = {
-  body: {
-    fontFamily: font.family.body,
-    fontSize: font.size.body.md,
-    lineHeight: 'var(--line-height-body)',
-    color: color.text.primary,
-  } satisfies CSSProperties,
-  meta: {
-    fontFamily: font.family.label,
-    fontSize: font.size.body.sm,
-    color: color.text.muted,
-  } satisfies CSSProperties,
-} as const;
-
-export const heading = {
-  sm: {
-    fontFamily: font.family.heading,
-    fontSize: font.size.heading.sm,
-    lineHeight: 'var(--line-height-heading)',
-    color: color.text.primary,
-  } satisfies CSSProperties,
-} as const;
-```
-
-```tsx
-// ❌ Wrong — heading family with body size scale
-style={{ fontFamily: font.family.heading, fontSize: font.size.body.md }}
-
-// ✅ Right — one preset, family + size always paired correctly
-import { heading } from '@/lib/styles';
-style={heading.sm}
-```
-
-<Callout type="warn">
-  **Heading scale starts at 18px.** `--heading-tiny` = 18px. `font-size/100` = 16px is body/label territory — never use it on a heading element. The composed presets enforce this so you can't.
+<Callout type="info">
+  Looking for the consumer-side helpers (`@/lib/tokens`, `@/lib/styles`, the `Prose` markdown renderer, the pre-commit token-compliance hook)? Those live on every consumer repo and are documented in [React Composition Layer](/docs/getting-started/react-composition).
 </Callout>
-
-## Required consumer files
-
-Every product or marketing-site consumer ships these four files. The reference implementation is **brik-client-portal**.
-
-| File | Purpose |
-| --- | --- |
-| `src/lib/tokens.ts` | CSS `var()` mapping for TypeScript autocomplete. |
-| `src/lib/styles.ts` | Composed `CSSProperties` presets — `text.*`, `heading.*`, `meta`, `label`. |
-| `src/components/prose.tsx` | Shared markdown renderer — applies `text.body` + token-aware spacing to `<p>`, `<ul>`, `<h2>` etc. so MDX/CMS copy inherits BDS typography. |
-| `.husky/pre-commit` | Token compliance gate. Runs `scripts/token-audit.sh --canonical-only` to block hex literals + non-canonical token names from landing. |
-
-When starting a new consumer, copy these four files from the portal as the seed and adapt the token map to the consumer's needs (e.g. add domain-specific clusters under `color.department.*` or `color.service.*`).
 
 ## Style Dictionary build pipeline
 
@@ -207,7 +89,7 @@ bds-find form | jq '.matches[0]'
 
 ## Adding a utility
 
-The bar for shipping a new utility from BDS itself is high. Most "utility" needs belong in the **consumer's** lib layer (`@/lib/tokens`, `@/lib/styles`, helpers above those) — that keeps the BDS surface narrow.
+The bar for shipping a new utility from BDS itself is high. Most "utility" needs belong in the **consumer's** lib layer (see [React Composition Layer](/docs/getting-started/react-composition)) — that keeps the BDS surface narrow.
 
 A utility belongs in BDS only when:
 
@@ -219,7 +101,8 @@ Utilities that don't clear all three bars stay in the consumer.
 
 ## Related
 
-- [Primitives → Color](/docs/primitives/color) — canonical token registry that `@/lib/tokens` mirrors
-- [Theming → Atmospheres](/docs/theming/atmospheres) — the dark / atmosphere overlay system the build pipeline emits
+- [React Composition Layer](/docs/getting-started/react-composition) — consumer-side `@/lib/tokens` + `@/lib/styles` + `Prose` pattern
+- [Primitives → Color](/docs/primitives/color) — canonical token registry the build pipeline emits
+- [Theming → Atmospheres](/docs/theming/atmospheres) — the dark / atmosphere overlay system
 - [Components](/docs/components) — what `bds-find` searches against
 - [Hooks](/docs/react-reference/hooks) — the stateful counterpart to these stateless utilities
