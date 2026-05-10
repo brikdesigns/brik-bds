@@ -1,31 +1,331 @@
 ---
 title: Framework Guides
-description: Adopting BDS in Next.js, Astro, and Webflow consumers.
+description: Wire BDS into a Next.js product app or an Astro marketing site. Same tokens, same components, different render targets.
 ---
 
-Per-framework setup notes. Pick yours.
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+BDS ships one set of tokens, components, and theming primitives consumed by two first-class render targets:
+
+| Target | Used for | Reference repo |
+|---|---|---|
+| **Next.js (App Router)** | Product apps — portal, renew-pms | [`brik-client-portal`](https://github.com/brikdesigns/brik-client-portal) |
+| **Astro** | Client marketing sites | [`vale-partners`](https://github.com/brikdesigns/vale-partners) |
+
+Webflow is supported as a legacy surface only — see the [last section](#webflow-legacy).
+
+Read [Installation](/docs/getting-started/installation) first for the bare-minimum cascade. This page layers framework-specific concerns on top: fonts, theme provider, anti-FOUC, motion, multi-brand scope.
+
+---
 
 ## Next.js (App Router)
 
-The recommended consumer pattern. See `brik-client-portal` and `renew-pms` for reference implementations.
+Recommended for product apps that authenticate users, write to Supabase, and live behind a sign-in. Reference: [`brik-client-portal`](https://github.com/brikdesigns/brik-client-portal).
 
-- Token cascade goes in `app/globals.css`.
-- Fonts load via `next/font` — BDS doesn't ship fonts.
-- Components are imported from `@brikdesigns/bds` directly; no client wrapper required.
-- Use `<ThemeProvider>` to manage `data-theme` (light/dark) and the `theme-brand-brik` body class. See [Client Themes → How themes work](/docs/theming/client-themes#how-themes-work).
-- Wrap tokens in a typed primitive layer (`src/lib/tokens.ts` / `styles.ts` + `Prose`). Pattern + pre-commit gate in [React Composition Layer](/docs/getting-started/react-composition).
+### 1. Install
+
+```bash
+npm install @brikdesigns/bds
+```
+
+### 2. Fonts via `next/font`
+
+BDS does not ship fonts. Load them in `src/lib/fonts.ts` and expose CSS variables that the BDS `--font-family-*` tokens can consume:
+
+```ts
+// src/lib/fonts.ts
+import { Poppins } from 'next/font/google';
+
+export const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-poppins',
+  display: 'swap',
+});
+```
+
+### 3. Token cascade in `globals.css`
+
+```css
+/* src/app/globals.css */
+
+/* 1. BDS canon — never edit */
+@import '@brikdesigns/bds/tokens.css';
+@import '@brikdesigns/bds/styles.css';
+
+/* 2. Your brand override (this app's theme — same token names, brand values) */
+@import '../styles/theme-{client}.css';
+```
+
+For the override matrix and a minimal `theme-{client}.css` template, see [Client Themes](/docs/theming/client-themes).
+
+Don't reach for `var(--text-primary)` directly in TSX — wrap tokens in typed primitives (`src/lib/tokens.ts` + `src/lib/styles.ts`) so editor autocomplete catches typos at write-time. Full pattern: [React Composition Layer](/docs/getting-started/react-composition).
+
+### 4. Root layout
+
+The portal pattern: `next/font` body class, anti-FOUC theme-init script, and a thin `<BDSProvider>` wrapping `ThemeProvider` from `@brikdesigns/bds`.
+
+```tsx
+// src/app/layout.tsx
+import type { Metadata } from 'next';
+import { poppins } from '@/lib/fonts';
+import { BDSProvider } from '@/components/bds-provider';
+import './globals.css';
+
+export const metadata: Metadata = {
+  title: 'My App',
+  description: '...',
+};
+
+// Anti-FOUC — runs before first paint so dark mode doesn't flash.
+const themeInitScript = `
+(function() {
+  try {
+    var saved = localStorage.getItem('theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+  } catch (e) { /* private browsing — defaults are fine */ }
+})();
+`;
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body className={`body ${poppins.variable} ${poppins.className}`}>
+        <BDSProvider>{children}</BDSProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+```tsx
+// src/components/bds-provider.tsx
+'use client';
+
+import { ThemeProvider } from '@brikdesigns/bds';
+
+export function BDSProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider
+      initialTheme={{ themeNumber: 'brik' }}
+      persist={false}
+      applyToBody={false}
+    >
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+`applyToBody={false}` prevents `ThemeProvider` from setting a `theme-X` class on `<body>` — your app uses your own brand tokens, not the eight numbered web-store themes.
+
+### 5. Tailwind v3 bridge (only if Tailwind is installed)
+
+Tailwind v3's preflight outputs unlayered resets that beat BDS's `@layer bds-components` rules. If you use Tailwind, add this once in `globals.css`:
+
+```css
+/* Lets BDS components keep their layered styles even though Tailwind preflight is unlayered. */
+[class*="bds-"] {
+  all: revert-layer;
+}
+```
+
+Skip this block if you don't use Tailwind.
+
+### 6. Motion
+
+The lightweight tier (token-driven CSS animations) is automatically available. Product apps rarely escalate beyond it. See [Motion → Tiers](/docs/motion/tiers).
+
+### Common Next.js gotchas
+
+<Callout type="warn">
+  **Don't import BDS components into Server Components without a `'use client'` boundary.** Most BDS components carry React hooks. Wrap interactive UI in a client component (the `BDSProvider` is one).
+</Callout>
+
+<Callout type="warn">
+  **`metadata.themeColor` belongs on a per-route export**, not in `app/layout.tsx`'s `metadata` object — Next 15+ moves it to the `generateViewport` API.
+</Callout>
+
+---
 
 ## Astro
 
-The marketing-site pattern. See `brikdesigns.com` and exported `web/_newclient` template.
+Recommended for client marketing sites — landing pages, content pages, sectioned long-form. Reference: [`vale-partners`](https://github.com/brikdesigns/vale-partners) (real client site, multi-brand).
 
-- Token cascade in the global stylesheet.
-- BDS ships **Astro blueprints** at `@brikdesigns/bds/blueprints-astro` for hero, footer, contact form, and other page sections that are slow to recompose by hand.
-- Use `@brikdesigns/bds/atmospheres/{name}.css` to apply a decoration overlay (vignettes, grain, orbs) to a page. Atmospheres are decoration-only — they do NOT override theme tokens. See [Atmospheres](/docs/theming/atmospheres).
-- Set theme + mode switches on `<html>` directly: `<html data-theme="dark" data-mode-borderwidth="bold">`. Full table in [The Cascade → Switches](/docs/getting-started/cascade#switches--html-attributes).
+### 1. Install
 
-## Webflow (legacy clients)
+```bash
+npm install @brikdesigns/bds
+```
 
-For clients still on Webflow. Token names match the design system — `--text-primary`, `--background-brand-primary`, etc. — so guidance from this site applies.
+### 2. Astro config
 
-The Webflow CSS layer is partially synced from BDS via the Designer Bridge but is not the source of truth. Token-rename migrations are tracked in the BDS rename log.
+Minimal — BDS imposes no build plugins:
+
+```js
+// astro.config.mjs
+import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
+import icon from 'astro-icon';
+
+export default defineConfig({
+  site: 'https://example.com',
+  integrations: [sitemap(), icon()],
+});
+```
+
+### 3. Fonts via `<link>`
+
+Astro has no `next/font` analog. Load fonts with a preconnect + stylesheet `<link>` in your base layout's `<head>`. BDS `--font-family-*` tokens read from whatever family you load — pick the family in your `theme-client.css`.
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+```
+
+### 4. Base layout — token cascade as ESM imports
+
+Vite (Astro's bundler) lets you `import` CSS files. Order them so BDS canon loads first, then your client layer overrides:
+
+```astro
+---
+// src/layouts/BaseLayout.astro
+
+// Cascade: BDS canon → client layer.
+import '@brikdesigns/bds/tokens.css';
+import '@brikdesigns/bds/styles.css';
+import '../styles/global.css';
+import '../styles/theme-client.css';
+import '../styles/manual-overrides.css';
+import '../styles/animations.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+```
+
+### 5. Theme + mode switches on `<html>`
+
+Astro is HTML — there's no `ThemeProvider`. Set switches as attributes on the `<html>` element directly. Full attribute table in [The Cascade → Switches](/docs/getting-started/cascade#switches--html-attributes).
+
+```html
+<html lang="en" data-theme="dark" data-mode-borderwidth="bold">
+```
+
+For runtime theme toggles (user preference), add a small inline `<script>` in `<head>` that mirrors the Next.js anti-FOUC pattern.
+
+### 6. Multi-brand sites — `data-audience` scope binding
+
+Some clients carry multiple brand colors at once (Vale Partners has three audience verticals — healthcare, land, commercial). Re-bind the canonical brand tokens inside `[data-audience=X]` scopes; components stay scope-blind.
+
+```astro
+---
+const { pageAudience } = Astro.props;  // "healthcare" | "land" | "commercial"
+---
+<html lang="en" data-audience={pageAudience}>
+```
+
+```css
+/* src/styles/theme-client.css */
+[data-audience='healthcare'] {
+  --background-brand-primary: var(--vale-partners-navy);
+  --text-brand-primary: var(--vale-partners-navy-dark);
+}
+[data-audience='land'] {
+  --background-brand-primary: var(--vale-partners-olive);
+  --text-brand-primary: var(--vale-partners-olive-dark);
+}
+```
+
+Full pattern: [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-or-service-line-scope-binding).
+
+### 7. Atmospheres + Blueprints
+
+Astro is the primary consumer for the heavier theming layers:
+
+**Atmospheres** — decoration-only CSS overlays (grain, vignettes, orbs). Import one after `tokens.css`:
+
+```ts
+import '@brikdesigns/bds/atmospheres/minimal-clinical.css';
+```
+
+See [Atmospheres](/docs/theming/atmospheres).
+
+**Blueprints** — pre-composed `.astro` section templates (hero, services, testimonials). BDS ships them under `@brikdesigns/bds/blueprints-astro`:
+
+```astro
+---
+import Features3ColBrandedDark from '@brikdesigns/bds/blueprints-astro/Features3ColBrandedDark.astro';
+---
+
+<Features3ColBrandedDark
+  heading="Three things we do well"
+  features={[/* ... */]}
+/>
+```
+
+See [Blueprints](/docs/theming/blueprints) for the catalog and authoring rules.
+
+### 8. Motion
+
+Astro sites typically use the lightweight tier (CSS-only) plus Lenis for smooth scroll if the design audit calls for it. Escalation to GSAP / Premium is a per-client design decision. See [Motion](/docs/motion).
+
+### Common Astro gotchas
+
+<Callout type="warn">
+  **CSS custom properties resolve at use-time, not at definition time.** The `import` order in `BaseLayout.astro` controls *which `:root` declaration wins* — `theme-client.css` loaded last overrides BDS defaults. Don't try to "load styles.css after theme-client.css to make components pick up brand colors" — components reference `var(--background-brand-primary)` lazily; cascade resolves at render time.
+</Callout>
+
+<Callout type="warn">
+  **`<head>` font preconnects matter for Lighthouse.** Late font requests during a kinetic hero reveal flag CLS. Preconnect to `fonts.googleapis.com` and `fonts.gstatic.com` in every base layout — even on pages that don't use kinetic typography, since it's free.
+</Callout>
+
+---
+
+## Webflow (legacy)
+
+For clients still on Webflow only. New work goes Next.js or Astro.
+
+The Webflow CSS layer is partially synced from BDS via the Designer Bridge but is **not** the source of truth — token-rename migrations land in BDS first and propagate via the bridge on a manual cadence. Token names match the canonical registry (`--text-primary`, `--background-brand-primary`, etc.) so guidance on this site applies, with the caveat that Webflow's class-naming UI doesn't enforce BDS class conventions.
+
+For the per-token rename log and migration cadence, see the BDS releases changelog.
+
+---
+
+## Related
+
+- [Installation](/docs/getting-started/installation) — bare-minimum setup before framework-specific concerns
+- [The Cascade](/docs/getting-started/cascade) — token cascade architecture and the full `<html>` switch table
+- [Theming](/docs/theming) — four-layer theming model (tokens, atmospheres, archetypes, blueprints)
+- [Client Themes](/docs/theming/client-themes) — override matrix, minimal `theme-{client}.css` template, multi-brand scope binding
+- [Motion](/docs/motion) — three-tier motion system and when to escalate
