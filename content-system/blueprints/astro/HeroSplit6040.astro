@@ -80,8 +80,8 @@ const imageAlt = '';
       <h1 id={headingId} class="bp-hero-split-60-40__headline">{headline}</h1>
       {lead && <p class="bp-hero-split-60-40__lead">{lead}</p>}
       {cta && (
-        <a href={cta.url} class="bp-hero-split-60-40__cta">
-          {cta.label}
+        <a href={cta.url} class="bds-button bds-button--primary bds-button--md">
+          <span class="bds-button__content">{cta.label}</span>
         </a>
       )}
     </div>
