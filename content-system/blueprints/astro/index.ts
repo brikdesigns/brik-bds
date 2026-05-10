@@ -47,6 +47,7 @@ export type {
 // TestimonialsFeaturedLarge + CtaSplitContact. Interior pages use
 // HeroInteriorMinimal + CtaDarkCentered.
 export { default as HeroSplit6040 }             from './HeroSplit6040.astro';
+export { default as HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay.astro';
 export { default as HeroInteriorMinimal }       from './HeroInteriorMinimal.astro';
 export { default as StatsDarkBar }              from './StatsDarkBar.astro';
 export { default as ServicesDetailTwoColumn }   from './ServicesDetailTwoColumn.astro';

@@ -53,6 +53,7 @@ import { Services3ColCardGrid } from './Services3ColCardGrid';
 import { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
 import { Features3ColBrandedDark } from './Features3ColBrandedDark';
 import { HeroSplit6040 } from './HeroSplit6040';
+import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 import { HeroInteriorMinimal } from './HeroInteriorMinimal';
 import { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
 import { AboutStorySplit } from './AboutStorySplit';
@@ -63,6 +64,7 @@ const BLUEPRINT_REGISTRY: Partial<
   Record<KnownBlueprintKey, ComponentType<BlueprintProps>>
 > = {
   hero_split_60_40: HeroSplit6040,
+  hero_split_image_card_overlay: HeroSplitImageCardOverlay,
   hero_interior_minimal: HeroInteriorMinimal,
   services_detail_two_column: ServicesDetailTwoColumn,
   services_3col_card_grid: Services3ColCardGrid,

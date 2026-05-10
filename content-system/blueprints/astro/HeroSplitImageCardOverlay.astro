@@ -1,0 +1,380 @@
+---
+/**
+ * hero_split_image_card_overlay — interior-page hero with a split
+ * 58/42 layout. Left column carries the page's content trail
+ * (breadcrumb, eyebrow, h1, optional body, single CTA) on a soft
+ * audience-tinted background. Right column shows a white card with
+ * the page image and an optional price overlay (price label + price
+ * value + secondary CTA).
+ *
+ * Drives `/services/{cat}/{slug}` style pages — the pattern that
+ * surfaced as the failure zone where agents were inventing layouts
+ * (overproducing extra CTAs, hallucinating pricing fields) because
+ * no canonical blueprint covered the shape.
+ *
+ * ── Contract ─────────────────────────────────────────────────────
+ * Props: BlueprintProps (universal across every blueprint).
+ *   - section.heading              — h1 text (REQUIRED)
+ *   - section.subheading           — eyebrow above h1 (optional)
+ *   - section.body                 — lead paragraph (optional)
+ *   - section.cta                  — primary CTA (label + url) (optional)
+ *   - section.breadcrumb           — ordered trail (optional, 0-5 items typical)
+ *   - section.audience             — service-line slug for data-audience binding (optional)
+ *   - section.priceCard            — right-column image + optional price overlay (REQUIRED for canonical render)
+ *   - section.visualNotes.blueprintKey === 'hero_split_image_card_overlay'
+ *
+ * ── required_facts ───────────────────────────────────────────────
+ * None at the clientFacts level — this blueprint sources every visible
+ * field from the section. If `priceCard` is omitted, the right column
+ * renders the non-hallucinatable `data-content-needed` stub.
+ *
+ * ── CSS custom properties (per-client override surface) ──────────
+ *   --bp-hero-img-card-bg          (default: var(--page-brand-primary, var(--page-secondary)))
+ *   --bp-hero-img-card-padding-y   (default: clamp block)
+ *   --bp-hero-img-card-headline-color (default: var(--text-primary))
+ *   --bp-hero-img-card-eyebrow-color  (default: var(--text-primary))
+ *   --bp-hero-img-card-breadcrumb-color (default: var(--text-brand-primary))
+ *   --bp-hero-img-card-card-bg     (default: var(--surface-primary))
+ *   --bp-hero-img-card-radius      (default: var(--border-radius-lg))
+ *
+ * ── a11y (WCAG 2.1 AA) ───────────────────────────────────────────
+ * - Heading is h1 (hero blueprints own the page's singular h1).
+ * - aria-labelledby wires the section landmark to the h1 id.
+ * - Breadcrumb uses <nav aria-label="Breadcrumb"> with an ordered list
+ *   and aria-current="page" on the last (typically link-less) item.
+ * - Price overlay's "Starting at" label is presentational — visible
+ *   text reads naturally so no aria-label is needed.
+ * - Image alt: empty string (decorative) when omitted; consumer can
+ *   provide informational alt via section.priceCard.imageAlt.
+ */
+import type { BlueprintProps } from './types';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+
+const { breadcrumb = [], audience, priceCard } = section;
+const headingId = `bp-hero-img-card-${section.sectionKey}-h`;
+const eyebrow = section.subheading;
+const headline = section.heading ?? '';
+const lead = section.body;
+const cta = section.cta;
+---
+
+<section
+  class="bp-hero-img-card"
+  aria-labelledby={headingId}
+  data-blueprint-key="hero_split_image_card_overlay"
+  data-audience={audience}
+>
+  <div class="bp-hero-img-card__container">
+    <div class="bp-hero-img-card__content">
+      {breadcrumb.length > 0 && (
+        <nav class="bp-hero-img-card__breadcrumb" aria-label="Breadcrumb">
+          <ol class="bp-hero-img-card__breadcrumb-list">
+            {breadcrumb.map((item, idx) => {
+              const isLast = idx === breadcrumb.length - 1;
+              return (
+                <li class="bp-hero-img-card__breadcrumb-item">
+                  {item.href && !isLast ? (
+                    <a href={item.href} class="bp-hero-img-card__breadcrumb-link">
+                      {item.label}
+                    </a>
+                  ) : (
+                    <span
+                      class="bp-hero-img-card__breadcrumb-current"
+                      aria-current={isLast ? 'page' : undefined}
+                    >
+                      {item.label}
+                    </span>
+                  )}
+                  {!isLast && (
+                    <span class="bp-hero-img-card__breadcrumb-sep" aria-hidden="true">/</span>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      )}
+
+      {eyebrow && <p class="bp-hero-img-card__eyebrow">{eyebrow}</p>}
+
+      <h1 id={headingId} class="bp-hero-img-card__headline">{headline}</h1>
+
+      {lead && <p class="bp-hero-img-card__lead">{lead}</p>}
+
+      {cta && (
+        <a href={cta.url} class="bp-hero-img-card__cta">
+          {cta.label}
+        </a>
+      )}
+    </div>
+
+    {priceCard ? (
+      <aside class="bp-hero-img-card__media-card">
+        <div class="bp-hero-img-card__image-frame">
+          <img
+            src={priceCard.imageUrl}
+            alt={priceCard.imageAlt ?? ''}
+            loading="eager"
+            decoding="async"
+            class="bp-hero-img-card__image"
+          />
+        </div>
+        {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
+          <div class="bp-hero-img-card__price">
+            {priceCard.priceLabel && (
+              <p class="bp-hero-img-card__price-label">{priceCard.priceLabel}</p>
+            )}
+            {priceCard.price && (
+              <p class="bp-hero-img-card__price-value">{priceCard.price}</p>
+            )}
+            {priceCard.cta && (
+              <a href={priceCard.cta.url} class="bp-hero-img-card__price-cta">
+                {priceCard.cta.label}
+              </a>
+            )}
+          </div>
+        )}
+      </aside>
+    ) : (
+      <aside
+        class="bp-hero-img-card__missing"
+        data-content-needed="hero_image_url"
+        role="presentation"
+      >
+        <p class="bp-hero-img-card__missing-label">
+          Hero image card missing for this page.
+        </p>
+      </aside>
+    )}
+  </div>
+</section>
+
+<style>
+  .bp-hero-img-card {
+    background: var(--bp-hero-img-card-bg, var(--page-brand-primary, var(--page-secondary)));
+    padding-block: var(
+      --bp-hero-img-card-padding-y,
+      clamp(var(--padding-xl), 6vw, var(--padding-huge))
+    );
+  }
+
+  .bp-hero-img-card__container {
+    max-width: var(--size-container-xl, 1280px);
+    margin-inline: auto;
+    padding-inline: var(--padding-lg);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-xl);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .bp-hero-img-card__container {
+      grid-template-columns: 58fr 42fr;
+      gap: var(--gap-huge);
+    }
+  }
+
+  .bp-hero-img-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-hero-img-card__breadcrumb {
+    margin-bottom: var(--gap-sm);
+  }
+
+  .bp-hero-img-card__breadcrumb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-xs, 4px);
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-medium);
+    color: var(--bp-hero-img-card-breadcrumb-color, var(--text-brand-primary));
+  }
+
+  .bp-hero-img-card__breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs, 4px);
+  }
+
+  .bp-hero-img-card__breadcrumb-link {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 120ms ease-out;
+  }
+
+  .bp-hero-img-card__breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .bp-hero-img-card__breadcrumb-link:focus-visible {
+    outline: 2px solid var(--border-focus, currentColor);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .bp-hero-img-card__breadcrumb-current {
+    opacity: 0.7;
+  }
+
+  .bp-hero-img-card__breadcrumb-sep {
+    opacity: 0.5;
+  }
+
+  .bp-hero-img-card__eyebrow {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bp-hero-img-card-eyebrow-color, var(--text-primary));
+  }
+
+  .bp-hero-img-card__headline {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--font-size-700), 5vw, var(--font-size-1000));
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight, 1.05);
+    color: var(--bp-hero-img-card-headline-color, var(--text-primary));
+  }
+
+  .bp-hero-img-card__lead {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-300);
+    line-height: var(--line-height-relaxed, 1.5);
+    color: var(--text-primary);
+    max-width: 55ch;
+  }
+
+  .bp-hero-img-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    margin-top: var(--gap-sm);
+    padding: var(--padding-sm) var(--padding-lg);
+    background: var(--background-primary, var(--text-primary));
+    color: var(--text-on-color-dark, var(--text-inverse));
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-300);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    align-self: flex-start;
+    transition: opacity 120ms ease-out;
+  }
+
+  .bp-hero-img-card__cta:hover {
+    opacity: 0.92;
+  }
+
+  .bp-hero-img-card__cta:focus-visible {
+    outline: 2px solid var(--border-focus, currentColor);
+    outline-offset: 2px;
+  }
+
+  .bp-hero-img-card__media-card {
+    background: var(--bp-hero-img-card-card-bg, var(--surface-primary));
+    border-radius: var(--bp-hero-img-card-radius, var(--border-radius-lg));
+    padding: var(--padding-md);
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-hero-img-card__image-frame {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--border-radius-md);
+    background: var(--surface-secondary);
+  }
+
+  .bp-hero-img-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bp-hero-img-card__price {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    padding-inline: var(--padding-sm);
+  }
+
+  .bp-hero-img-card__price-label {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+  }
+
+  .bp-hero-img-card__price-value {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-600);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .bp-hero-img-card__price-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: var(--gap-xs);
+    padding: var(--padding-sm) var(--padding-lg);
+    background: var(--background-brand-primary);
+    color: var(--text-on-color-dark, var(--text-inverse));
+    font-family: var(--font-family-label);
+    font-size: var(--font-size-300);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    align-self: flex-start;
+    transition: opacity 120ms ease-out;
+  }
+
+  .bp-hero-img-card__price-cta:hover {
+    opacity: 0.92;
+  }
+
+  .bp-hero-img-card__price-cta:focus-visible {
+    outline: 2px solid var(--border-focus, currentColor);
+    outline-offset: 2px;
+  }
+
+  .bp-hero-img-card__missing {
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-xl);
+    background: var(--surface-secondary);
+    border: 2px dashed var(--border-secondary);
+    border-radius: var(--bp-hero-img-card-radius, var(--border-radius-lg));
+  }
+
+  .bp-hero-img-card__missing-label {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-300);
+    color: var(--text-secondary);
+    text-align: center;
+  }
+</style>
