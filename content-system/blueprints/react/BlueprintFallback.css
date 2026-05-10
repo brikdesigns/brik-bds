@@ -21,7 +21,7 @@
 .bp-fallback__label {
   margin: 0;
   font-family: var(--font-family-label);
-  font-size: var(--font-size-200);
+  font-size: var(--label-lg);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -33,13 +33,13 @@
 .bp-fallback__hint {
   margin: 0;
   font-family: var(--font-family-body);
-  font-size: var(--font-size-300);
+  font-size: var(--body-xl);
   line-height: var(--font-line-height-relaxed);
   color: var(--text-secondary);
 }
 
 .bp-fallback__hint {
-  font-size: var(--font-size-200);
+  font-size: var(--body-lg);
   max-width: 72ch;
 }
 
