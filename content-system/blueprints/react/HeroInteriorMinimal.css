@@ -1,10 +1,10 @@
 /*
  * HeroInteriorMinimal — React renderer styles.
+ * Mirrors `../astro/HeroInteriorMinimal.astro`.
  *
- * Mirrors `../astro/HeroInteriorMinimal.astro` visually. Token names
- * use canonical equivalents that actually resolve in dist/tokens.css
- * (the Astro source's `--space-xl` / `--line-height-tight` fall back
- * to browser defaults — broken-token fix is tracked separately).
+ * Per docs/COMPONENT-PATTERNS.md: CTA styling lives in `.bds-button`
+ * (LinkButton). This file owns ONLY layout + non-component text styles.
+ * Font sizes use semantic aliases.
  */
 
 .bp-hero-interior-minimal {
@@ -22,12 +22,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
+  align-items: flex-start;
 }
 
 .bp-hero-interior-minimal__eyebrow {
   margin: 0;
   font-family: var(--font-family-label);
-  font-size: var(--font-size-200);
+  font-size: var(--label-lg);
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -37,7 +38,7 @@
 .bp-hero-interior-minimal__headline {
   margin: 0;
   font-family: var(--font-family-heading);
-  font-size: clamp(var(--font-size-700), 4vw, var(--font-size-1000));
+  font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--bp-hero-interior-headline-color, var(--text-primary));
@@ -46,32 +47,7 @@
 .bp-hero-interior-minimal__lead {
   margin: 0;
   font-family: var(--font-family-body);
-  font-size: var(--font-size-400);
+  font-size: var(--heading-sm);
   line-height: var(--font-line-height-relaxed);
   color: var(--bp-hero-interior-lead-color, var(--text-primary));
-}
-
-.bp-hero-interior-minimal__cta {
-  display: inline-flex;
-  align-items: center;
-  margin-top: var(--gap-md);
-  padding: var(--gap-md) var(--padding-lg);
-  background: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
-  font-family: var(--font-family-label);
-  font-size: var(--font-size-300);
-  font-weight: var(--font-weight-semibold);
-  text-decoration: none;
-  border-radius: var(--border-radius-md);
-  align-self: flex-start;
-  transition: background 120ms ease-out;
-}
-
-.bp-hero-interior-minimal__cta:hover {
-  background: var(--background-brand-primary-hover, var(--background-brand-primary));
-}
-
-.bp-hero-interior-minimal__cta:focus-visible {
-  outline: 2px solid var(--border-focus, var(--background-brand-primary));
-  outline-offset: 2px;
 }

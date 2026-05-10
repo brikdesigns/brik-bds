@@ -1,9 +1,16 @@
 /*
  * HeroSplit6040 — React renderer styles. Mirrors
- * `../astro/HeroSplit6040.astro`. Uses canonical token names that
- * resolve in dist/tokens.css (Astro source's `--space-*` /
- * `--line-height-*` / `--size-container-xl` references silently fall
- * back to browser defaults — broken-token fix tracked separately).
+ * `../astro/HeroSplit6040.astro`.
+ *
+ * Per docs/COMPONENT-PATTERNS.md §"Compose primitives" + §"Tokens only":
+ *   - CTA styling lives in `.bds-button` (LinkButton).
+ *   - This file owns ONLY layout + non-component text styles.
+ *   - Font sizes use semantic aliases, never primitives.
+ *
+ * Canon gap: the headline clamp upper bound (font-size-1100, ~88px)
+ * has no semantic alias between heading-xxl (font-size-800) and
+ * display-sm (font-size-1400). Closest-fit semantic mapped below;
+ * a follow-up should add `--heading-3xl` to fill the gap.
  */
 
 .bp-hero-split-60-40 {
@@ -35,12 +42,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
+  align-items: flex-start;
 }
 
 .bp-hero-split-60-40__eyebrow {
   margin: 0;
   font-family: var(--font-family-label);
-  font-size: var(--font-size-200);
+  font-size: var(--label-lg);
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -50,7 +58,7 @@
 .bp-hero-split-60-40__headline {
   margin: 0;
   font-family: var(--font-family-heading);
-  font-size: clamp(var(--font-size-800), 5vw, var(--font-size-1100));
+  font-size: clamp(var(--heading-xxl), 5vw, var(--display-sm));
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--bp-hero-split-headline-color, var(--text-primary));
@@ -71,36 +79,10 @@
 .bp-hero-split-60-40__lead {
   margin: var(--gap-md) 0 0;
   font-family: var(--font-family-body);
-  font-size: var(--font-size-400);
+  font-size: var(--heading-sm);
   line-height: var(--font-line-height-relaxed);
   color: var(--bp-hero-split-lead-color, var(--text-primary));
   max-width: 55ch;
-}
-
-.bp-hero-split-60-40__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-md);
-  margin-top: var(--gap-lg);
-  padding: var(--gap-md) var(--padding-lg);
-  background: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
-  font-family: var(--font-family-label);
-  font-size: var(--font-size-300);
-  font-weight: var(--font-weight-semibold);
-  text-decoration: none;
-  border-radius: var(--border-radius-md);
-  align-self: flex-start;
-  transition: background 120ms ease-out;
-}
-
-.bp-hero-split-60-40__cta:hover {
-  background: var(--background-brand-primary-hover, var(--background-brand-primary));
-}
-
-.bp-hero-split-60-40__cta:focus-visible {
-  outline: 2px solid var(--border-focus, var(--background-brand-primary));
-  outline-offset: 2px;
 }
 
 .bp-hero-split-60-40__media {
@@ -131,7 +113,7 @@
 .bp-hero-split-60-40__missing-label {
   margin: 0;
   font-family: var(--font-family-body);
-  font-size: var(--font-size-300);
+  font-size: var(--body-xl);
   color: var(--text-secondary);
   text-align: center;
 }

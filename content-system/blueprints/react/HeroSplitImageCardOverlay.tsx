@@ -7,8 +7,16 @@
  *
  * Drives `/services/{cat}/{slug}` style pages.
  *
+ * Composes BDS primitives per docs/COMPONENT-PATTERNS.md
+ * §"Compose primitives — never reimplement them":
+ *   - Breadcrumb trail → `<Breadcrumb items={...} />`
+ *   - Left CTA → `<LinkButton variant="inverse">`
+ *   - Price-card CTA → `<LinkButton variant="primary">`
+ *
  * @summary Interior-page split hero with image card + optional price overlay.
  */
+import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
+import { LinkButton } from '../../../components/ui/Button/LinkButton';
 import type { BlueprintProps } from '../astro/types';
 import './HeroSplitImageCardOverlay.css';
 
@@ -32,40 +40,10 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
       <div className="bp-hero-img-card__container">
         <div className="bp-hero-img-card__content">
           {breadcrumb.length > 0 && (
-            <nav className="bp-hero-img-card__breadcrumb" aria-label="Breadcrumb">
-              <ol className="bp-hero-img-card__breadcrumb-list">
-                {breadcrumb.map((item, idx) => {
-                  const isLast = idx === breadcrumb.length - 1;
-                  return (
-                    <li
-                      key={`${item.label}-${idx}`}
-                      className="bp-hero-img-card__breadcrumb-item"
-                    >
-                      {item.href && !isLast ? (
-                        <a href={item.href} className="bp-hero-img-card__breadcrumb-link">
-                          {item.label}
-                        </a>
-                      ) : (
-                        <span
-                          className="bp-hero-img-card__breadcrumb-current"
-                          aria-current={isLast ? 'page' : undefined}
-                        >
-                          {item.label}
-                        </span>
-                      )}
-                      {!isLast && (
-                        <span
-                          className="bp-hero-img-card__breadcrumb-sep"
-                          aria-hidden="true"
-                        >
-                          /
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-            </nav>
+            <Breadcrumb
+              className="bp-hero-img-card__breadcrumb"
+              items={breadcrumb.map((item) => ({ label: item.label, href: item.href }))}
+            />
           )}
 
           {eyebrow && <p className="bp-hero-img-card__eyebrow">{eyebrow}</p>}
@@ -77,9 +55,9 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
           {lead && <p className="bp-hero-img-card__lead">{lead}</p>}
 
           {cta && (
-            <a href={cta.url} className="bp-hero-img-card__cta">
+            <LinkButton href={cta.url} variant="inverse" size="md">
               {cta.label}
-            </a>
+            </LinkButton>
           )}
         </div>
 
@@ -96,7 +74,7 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
             </div>
             {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
               <div className="bp-hero-img-card__price">
-                {priceCard.priceLabel && (
+                {priceCard.priceLabel && priceCard.price && (
                   <p className="bp-hero-img-card__price-label">
                     {priceCard.priceLabel}
                   </p>
@@ -105,12 +83,9 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
                   <p className="bp-hero-img-card__price-value">{priceCard.price}</p>
                 )}
                 {priceCard.cta && (
-                  <a
-                    href={priceCard.cta.url}
-                    className="bp-hero-img-card__price-cta"
-                  >
+                  <LinkButton href={priceCard.cta.url} variant="primary" size="sm">
                     {priceCard.cta.label}
-                  </a>
+                  </LinkButton>
                 )}
               </div>
             )}

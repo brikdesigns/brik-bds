@@ -116,6 +116,56 @@ All values come from semantic tokens. No hardcoded values, no primitives.
 Validate every token reference against `tokens/` before using it.
 
 
+## Compose primitives — never reimplement them
+
+Section blocks (blueprints) and BDS components MUST compose existing
+primitives instead of reimplementing them with raw HTML and custom CSS.
+The catalog only delivers consistency if everything goes through it.
+
+```tsx
+/* Correct — compose */
+import { LinkButton } from '../../components/ui/Button/LinkButton';
+import { Breadcrumb } from '../../components/ui/Breadcrumb/Breadcrumb';
+
+<Breadcrumb items={breadcrumb} />
+<LinkButton href={cta.url} variant="primary" size="md">
+  {cta.label}
+</LinkButton>
+```
+
+```tsx
+/* Wrong — raw HTML with custom classes */
+<nav className="bp-hero__breadcrumb">
+  <ol>{breadcrumb.map(...)}</ol>
+</nav>
+<a href={cta.url} className="bp-hero__cta">
+  {cta.label}
+</a>
+```
+
+```astro
+<!-- Astro: still composes BDS classes via the canonical button pattern -->
+<a href={cta.url} class="bds-button bds-button--primary bds-button--md">
+  <span class="bds-button__content">{cta.label}</span>
+</a>
+```
+
+**Why:** Existing-pattern in the codebase is not proof-of-correctness.
+Reimplementing primitives with custom classes:
+- breaks variant + size consistency (consumers can't switch a CTA to outline)
+- duplicates a11y handling (focus rings, keyboard nav, aria-current)
+- duplicates contrast / token logic (every blueprint re-derives the
+  same brand-on-page-bg contrast tradeoffs the Button component
+  already solved once)
+- causes story-shape drift (the BDS component story shows one shape,
+  the blueprint story shows a different shape rendered by raw HTML)
+
+**Before writing JSX** — query `bds-find` or the Storybook MCP to confirm
+which primitives exist. If a primitive doesn't exist that the blueprint
+needs, build the primitive first (separate PR) and consume it from the
+blueprint, not the other way around.
+
+
 ## Props
 
 Every component follows these conventions:

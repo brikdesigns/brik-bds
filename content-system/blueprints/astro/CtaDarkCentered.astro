@@ -43,7 +43,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
       <p class="bp-cta-dark-centered__body">{section.body}</p>
     )}
     {section.cta && (
-      <a href={section.cta.url} class="bp-cta-dark-centered__cta">{section.cta.label}</a>
+      <a href={section.cta.url} class="bds-button bds-button--primary bds-button--lg"><span class="bds-button__content">{section.cta.label}</span></a>
     )}
   </div>
 </section>
@@ -71,7 +71,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
   .bp-cta-dark-centered__heading {
     margin: 0;
     font-family: var(--font-family-heading);
-    font-size: clamp(var(--font-size-700), 4vw, var(--font-size-1000));
+    font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
     color: var(--bp-cta-dark-centered-heading-color, var(--text-inverse, var(--color-grayscale-white)));
@@ -80,7 +80,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
   .bp-cta-dark-centered__body {
     margin: 0;
     font-family: var(--font-family-body);
-    font-size: var(--font-size-400);
+    font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
     color: var(--bp-cta-dark-centered-body-color, var(--text-secondary-inverse, var(--color-grayscale-lightest)));
     max-width: 55ch;
@@ -94,7 +94,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
     background: var(--bp-cta-dark-centered-cta-bg, var(--background-brand-primary));
     color: var(--bp-cta-dark-centered-cta-color, var(--text-on-color-dark, var(--text-inverse)));
     font-family: var(--font-family-label);
-    font-size: var(--font-size-300);
+    font-size: var(--label-xl);
     font-weight: var(--font-weight-semibold);
     text-decoration: none;
     border-radius: var(--border-radius-md);
