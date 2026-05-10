@@ -111,7 +111,7 @@ const withAudienceCascade = (Story: () => JSX.Element) => (
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof HeroSplitImageCardOverlay> = {
-  title: 'Blueprints/hero_split_image_card_overlay',
+  title: 'Theming/Blueprints/hero_split_image_card_overlay',
   component: HeroSplitImageCardOverlay,
   tags: ['surface-web', 'surface-shared'],
   decorators: [withAudienceCascade],

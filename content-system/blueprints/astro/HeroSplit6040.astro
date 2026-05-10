@@ -80,8 +80,8 @@ const imageAlt = '';
       <h1 id={headingId} class="bp-hero-split-60-40__headline">{headline}</h1>
       {lead && <p class="bp-hero-split-60-40__lead">{lead}</p>}
       {cta && (
-        <a href={cta.url} class="bp-hero-split-60-40__cta">
-          {cta.label}
+        <a href={cta.url} class="bds-button bds-button--primary bds-button--md">
+          <span class="bds-button__content">{cta.label}</span>
         </a>
       )}
     </div>
@@ -153,7 +153,7 @@ const imageAlt = '';
   .bp-hero-split-60-40__eyebrow {
     margin: 0;
     font-family: var(--font-family-label);
-    font-size: var(--font-size-200);
+    font-size: var(--label-lg);
     font-weight: var(--font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -164,9 +164,9 @@ const imageAlt = '';
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(
-      var(--font-size-800),
+      var(--heading-xxl),
       5vw,
-      var(--font-size-1100)
+      var(--display-sm)
     );
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
@@ -192,7 +192,7 @@ const imageAlt = '';
   .bp-hero-split-60-40__lead {
     margin: var(--space-sm) 0 0;
     font-family: var(--font-family-body);
-    font-size: var(--font-size-400);
+    font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
     color: var(--bp-hero-split-lead-color, var(--text-secondary));
     max-width: 55ch;
@@ -207,7 +207,7 @@ const imageAlt = '';
     background: var(--background-brand-primary);
     color: var(--text-on-color-dark, var(--text-inverse));
     font-family: var(--font-family-label);
-    font-size: var(--font-size-300);
+    font-size: var(--label-xl);
     font-weight: var(--font-weight-semibold);
     text-decoration: none;
     border-radius: var(--border-radius-md);
@@ -258,7 +258,7 @@ const imageAlt = '';
   .bp-hero-split-60-40__missing-label {
     margin: 0;
     font-family: var(--font-family-body);
-    font-size: var(--font-size-300);
+    font-size: var(--body-xl);
     color: var(--text-muted, var(--color-grayscale-dark));
     text-align: center;
   }

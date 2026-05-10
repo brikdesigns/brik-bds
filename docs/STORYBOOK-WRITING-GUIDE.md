@@ -129,6 +129,31 @@ Never combine two prop axes in one story. Write `Sizes` and `Variants` as
 separate stories — never `SizesAndVariants`. If a story name needs "and"
 to describe it, split it.
 
+### Story title prefix — match the existing sidebar tree
+
+Before writing `title:` in a story meta, **read the sibling stories'
+titles in the same folder**. The sidebar tree is shared across all of
+Storybook; introducing a parallel top-level group fragments it.
+
+Canonical prefixes currently in use:
+
+| Folder | Title prefix |
+| --- | --- |
+| `components/ui/<Component>` | `Components/<Group>/<component>` (e.g. `Components/Action/button`) |
+| `content-system/blueprints/react/<Blueprint>` | `Theming/Blueprints/<blueprint_key>` |
+| Storybook recipes / docs | `Recipes/<Topic>` |
+
+```tsx
+/* Correct — matches existing sidebar tree */
+title: 'Theming/Blueprints/hero_split_image_card_overlay'
+
+/* Wrong — creates a parallel "Blueprints" top-level group */
+title: 'Blueprints/hero_split_image_card_overlay'
+```
+
+If you genuinely need a new top-level group (rare), update this table
+in the same PR so the convention stays canonical.
+
 ### Surface taxonomy — every story declares one
 
 Every component story carries exactly one surface tag in its meta:
