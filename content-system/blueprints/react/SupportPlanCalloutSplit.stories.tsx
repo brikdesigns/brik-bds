@@ -2,29 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
 import type { BlueprintProps } from '../astro/types';
+import { baseTheme, baseClientFacts } from './_fixtures';
 
 /* ─── Fixtures ─────────────────────────────────────────────────── */
-
-const baseTheme: BlueprintProps['theme'] = {
-  themeMode: 'light',
-  atmosphere: 'none',
-  navigationArchetype: 'utility-first',
-  footerArchetype: 'four_col_directory',
-};
-
-const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
-  tagline: null,
-  valueProposition: null,
-  services: [],
-  phone: null,
-  email: null,
-  address: null,
-  hours: [],
-  heroImageUrl: null,
-  logoUrl: null,
-  logoVariants: {},
-};
 
 /**
  * "Monthly support services" fixture — the brikdesigns.com cross-sell
@@ -116,15 +96,19 @@ type Story = StoryObj<typeof SupportPlanCalloutSplit>;
 /**
  * @summary Default split — persona-cluster scene + plan card.
  */
-export const Default: Story = {
+export const Playground: Story = {
   args: baseProps,
 };
 
 /**
- * @summary No illustration — plan card centers full-width (max 720px).
+ * @summary No illustration — plan card centers full-width.
  *
- * The blueprint supports an "illustration omitted" variant so consumers
- * can drop the cross-sell card on pages where the scene doesn't fit.
+ * Distinct meaningful state from `Playground`: the layout collapses
+ * from two-column split to a single centered card. Worth a separate
+ * story because the visual rhythm changes substantially. The
+ * "no header" / atmosphere variants are not separate stories —
+ * they're trivial prop differences exercised at the leaf-component
+ * stories or via the Theme Switcher addon.
  */
 export const NoIllustration: Story = {
   args: {
@@ -134,39 +118,5 @@ export const NoIllustration: Story = {
       sectionKey: 'support-plan-no-illustration',
       illustration: undefined,
     },
-  },
-};
-
-/**
- * @summary No section header — card + illustration stand alone.
- *
- * For consumers that want to slot this blueprint inside an already-
- * titled context (e.g. inside an existing services page section).
- */
-export const NoHeader: Story = {
-  args: {
-    ...baseProps,
-    section: {
-      ...supportSection,
-      sectionKey: 'support-plan-no-header',
-      heading: null,
-      subheading: null,
-      body: null,
-    },
-  },
-};
-
-/**
- * @summary Atmosphere overlay — `warm-soft`. Verifies blueprint surfaces stay theme-layer.
- *
- * Renders the same default fixture under the `warm-soft` atmosphere.
- * Use the Theme Switcher addon to compare. The blueprint must NOT
- * redefine `--surface-*` / `--text-*` / `--border-*` tokens; the
- * atmosphere CSS already handles those.
- */
-export const AtmosphereWarmSoft: Story = {
-  args: {
-    ...baseProps,
-    theme: { ...baseTheme, atmosphere: 'warm-soft' },
   },
 };
