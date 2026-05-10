@@ -19,6 +19,7 @@
  */
 export type KnownBlueprintKey =
   | 'hero_split_60_40'
+  | 'hero_split_image_card_overlay'
   | 'hero_centered_gradient'
   | 'hero_fullbleed_photo'
   | 'hero_dark_minimal'
@@ -97,6 +98,48 @@ export interface BlueprintSection {
     readonly label: string;
     readonly url: string;
   } | null;
+  /**
+   * Optional ordered breadcrumb trail. Used by interior-page hero
+   * blueprints (e.g. `hero_split_image_card_overlay`) where the hero
+   * carries the trail back to the parent index pages. The last item's
+   * `href` is conventionally omitted (current page) but blueprints
+   * must render gracefully whether it is or isn't.
+   *
+   * Additive, optional — existing blueprints that don't render a
+   * breadcrumb trail are unaffected.
+   */
+  readonly breadcrumb?: ReadonlyArray<{
+    readonly label: string;
+    readonly href?: string;
+  }>;
+  /**
+   * Audience slug for `data-audience` scope binding at the SECTION
+   * level (cf. `items[].audience`, which scopes per-card). Re-binds
+   * canonical brand tokens within the rendered section so the hero,
+   * background, and accents pick up the service-line color palette.
+   * Used by `hero_split_image_card_overlay`. Consumer site MUST define
+   * the `[data-audience='X'] { … }` cascade rules — BDS ships the
+   * pattern, not the audience-specific values.
+   *
+   * Additive, optional — blueprints that don't read this are unaffected.
+   */
+  readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
+  /**
+   * Optional price-card overlay payload for hero blueprints that show
+   * an image with a price/CTA card pinned to it (e.g.
+   * `hero_split_image_card_overlay`). Top-level slot rather than an
+   * `items` entry because the hero's right column is a single
+   * composition, not a repeating list.
+   *
+   * Additive, optional — non-hero blueprints ignore it.
+   */
+  readonly priceCard?: {
+    readonly imageUrl: string;
+    readonly imageAlt?: string;
+    readonly priceLabel?: string;
+    readonly price?: string;
+    readonly cta?: { readonly label: string; readonly url: string };
+  };
   /**
    * Optional structured illustration data for blueprints that compose a
    * decorative scene (e.g. `support_plan_callout_split`). Mirrors the
