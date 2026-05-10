@@ -161,11 +161,48 @@ const cta = section.cta;
 
 <style>
   .bp-hero-img-card {
-    background: var(--bp-hero-img-card-bg, var(--page-brand-primary, var(--page-secondary)));
+    background: var(--bp-hero-img-card-bg, var(--page-secondary));
     padding-block: var(
       --bp-hero-img-card-padding-y,
       clamp(var(--padding-xl), 6vw, var(--padding-huge))
     );
+  }
+
+  /* Audience cascade — canonical --*-service-{audience} tokens */
+  .bp-hero-img-card[data-audience='brand'] {
+    background: var(--background-service-brand);
+    --bp-hero-img-card-headline-color: var(--text-service-brand);
+    --text-brand-primary: var(--text-service-brand);
+    --background-inverse: var(--background-service-brand-secondary);
+    --text-on-color-light: var(--color-grayscale-white);
+  }
+  .bp-hero-img-card[data-audience='marketing'] {
+    background: var(--background-service-marketing);
+    --bp-hero-img-card-headline-color: var(--text-service-marketing);
+    --text-brand-primary: var(--text-service-marketing);
+    --background-inverse: var(--background-service-marketing-secondary);
+    --text-on-color-light: var(--color-grayscale-white);
+  }
+  .bp-hero-img-card[data-audience='information'] {
+    background: var(--background-service-information);
+    --bp-hero-img-card-headline-color: var(--text-service-information);
+    --text-brand-primary: var(--text-service-information);
+    --background-inverse: var(--background-service-information-secondary);
+    --text-on-color-light: var(--color-grayscale-white);
+  }
+  .bp-hero-img-card[data-audience='product'] {
+    background: var(--background-service-product);
+    --bp-hero-img-card-headline-color: var(--text-service-product);
+    --text-brand-primary: var(--text-service-product);
+    --background-inverse: var(--background-service-product-secondary);
+    --text-on-color-light: var(--color-grayscale-white);
+  }
+  .bp-hero-img-card[data-audience='service'] {
+    background: var(--background-service-service);
+    --bp-hero-img-card-headline-color: var(--text-service-service);
+    --text-brand-primary: var(--text-service-service);
+    --background-inverse: var(--background-service-service-secondary);
+    --text-on-color-light: var(--color-grayscale-white);
   }
 
   .bp-hero-img-card__container {
