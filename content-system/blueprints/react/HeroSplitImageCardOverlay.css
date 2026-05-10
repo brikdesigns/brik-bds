@@ -49,6 +49,13 @@
   margin-bottom: var(--gap-sm);
 }
 
+.bp-hero-img-card__icon {
+  display: block;
+  width: var(--bp-hero-img-card-icon-size, 2.5rem);
+  height: var(--bp-hero-img-card-icon-size, 2.5rem);
+  object-fit: contain;
+}
+
 .bp-hero-img-card__eyebrow {
   margin: 0;
   font-family: var(--font-family-label);

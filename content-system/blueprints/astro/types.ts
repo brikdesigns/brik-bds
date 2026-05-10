@@ -125,6 +125,19 @@ export interface BlueprintSection {
    */
   readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
   /**
+   * Optional eyebrow icon URL — an audience or category badge SVG/PNG
+   * rendered between the breadcrumb and the h1 in interior-page hero
+   * blueprints. Sourced from a category/service-line CMS row's badge
+   * column (e.g. `service_lines.primary_badge_url`).
+   *
+   * Renders as a plain `<img>` sized via `--bp-hero-img-card-icon-size`.
+   * Pair with `iconAlt` for an informational alt; default empty (decorative).
+   *
+   * Additive, optional — blueprints without an eyebrow icon slot ignore it.
+   */
+  readonly iconUrl?: string;
+  readonly iconAlt?: string;
+  /**
    * Optional price-card overlay payload for hero blueprints that show
    * an image with a price/CTA card pinned to it (e.g.
    * `hero_split_image_card_overlay`). Top-level slot rather than an
