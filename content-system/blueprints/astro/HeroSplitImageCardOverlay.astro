@@ -56,7 +56,7 @@ interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
 
-const { breadcrumb = [], audience, priceCard } = section;
+const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
 const headingId = `bp-hero-img-card-${section.sectionKey}-h`;
 const eyebrow = section.subheading;
 const headline = section.heading ?? '';
@@ -93,6 +93,16 @@ const cta = section.cta;
             );
           })}
         </nav>
+      )}
+
+      {iconUrl && (
+        <img
+          src={iconUrl}
+          alt={iconAlt ?? ''}
+          class="bp-hero-img-card__icon"
+          loading="eager"
+          decoding="async"
+        />
       )}
 
       {eyebrow && <p class="bp-hero-img-card__eyebrow">{eyebrow}</p>}
@@ -184,6 +194,13 @@ const cta = section.cta;
 
   .bp-hero-img-card__breadcrumb {
     margin-bottom: var(--gap-sm);
+  }
+
+  .bp-hero-img-card__icon {
+    display: block;
+    width: var(--bp-hero-img-card-icon-size, 2.5rem);
+    height: var(--bp-hero-img-card-icon-size, 2.5rem);
+    object-fit: contain;
   }
 
   .bp-hero-img-card__eyebrow {

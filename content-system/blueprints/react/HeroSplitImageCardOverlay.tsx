@@ -23,7 +23,7 @@ import './HeroSplitImageCardOverlay.css';
 interface Props extends BlueprintProps {}
 
 export function HeroSplitImageCardOverlay({ section }: Props) {
-  const { breadcrumb = [], audience, priceCard } = section;
+  const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
   const headingId = `bp-hero-img-card-${section.sectionKey}-h`;
   const eyebrow = section.subheading;
   const headline = section.heading ?? '';
@@ -43,6 +43,16 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
             <Breadcrumb
               className="bp-hero-img-card__breadcrumb"
               items={breadcrumb.map((item) => ({ label: item.label, href: item.href }))}
+            />
+          )}
+
+          {iconUrl && (
+            <img
+              src={iconUrl}
+              alt={iconAlt ?? ''}
+              className="bp-hero-img-card__icon"
+              loading="eager"
+              decoding="async"
             />
           )}
 
