@@ -15,14 +15,12 @@ import './HeroSplitImageCardOverlay.css';
 interface Props extends BlueprintProps {}
 
 export function HeroSplitImageCardOverlay({ section }: Props) {
+  const { breadcrumb = [], audience, priceCard } = section;
   const headingId = `bp-hero-img-card-${section.sectionKey}-h`;
   const eyebrow = section.subheading;
   const headline = section.heading ?? '';
   const lead = section.body;
   const cta = section.cta;
-  const breadcrumb = section.breadcrumb ?? [];
-  const audience = section.audience;
-  const priceCard = section.priceCard;
 
   return (
     <section
