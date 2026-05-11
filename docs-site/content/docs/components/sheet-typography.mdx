@@ -58,7 +58,7 @@ Top of each section. Renders as `<h3>` by default (below the Sheet's own `<h2>` 
 
 Distinct from:
 - `<Sheet title="...">` — the top-level sheet title at `--heading-md`
-- `<SheetSection heading="...">` — legacy `--label-sm` uppercase eyebrow treatment; kept for existing consumers but new sheets should use `<SheetSectionTitle>`
+- `<SheetSection heading="...">` — legacy `--label-sm` uppercase label-tier treatment (formerly described as "eyebrow" — banned synonym per [canon](https://design.brikdesigns.com/docs/primitives/naming-conventions#subtitle)); kept for existing consumers but new sheets should use `<SheetSectionTitle>`
 
 ## SheetFieldLabel
 
@@ -127,7 +127,7 @@ Direct replacements:
 | `detail.label` | `<SheetFieldLabel>` |
 | `detail.value` | `<SheetFieldValue>` |
 | `detail.empty` | `<SheetFieldValue empty="...">` (empty prop instead of separate branch) |
-| `detail.subHeading` | No direct replacement — uppercase eyebrow is retired per the layout-contexts doc; use `<SheetSectionTitle level="h4">` for subsection hierarchy |
+| `detail.subHeading` | No direct replacement — uppercase label-tier subtitle is retired per the layout-contexts doc; use `<SheetSectionTitle level="h4">` for subsection hierarchy |
 
 Migration is incremental — the portal presets keep working until every consumer has moved.
 
