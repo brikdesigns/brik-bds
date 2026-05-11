@@ -66,7 +66,7 @@ Narrower than a page, denser, title + sections + fields. `<Sheet>` owns the titl
 
 **Key inversion to kill:** section heading uses `--heading-sm` (heading family); field label uses `--label-sm` (label family). Different families, different sizes — field label is always **smaller** than section heading. If a sheet's labels look bigger than its section headings, the label-tier / heading-tier assignment is swapped. Fix the assignment, not the size.
 
-**SheetSection today uses `--label-sm` uppercase.** That treatment conflicts with the rule above — it's a label tier masquerading as a heading. Section headings become `--heading-sm` (heading family, not uppercase) in the new primitives. The uppercase label-tier treatment survives only as an explicit "eyebrow" pattern, not as a section heading.
+**SheetSection today uses `--label-sm` uppercase.** That treatment conflicts with the rule above — it's a label tier masquerading as a heading. Section headings become `--heading-sm` (heading family, not uppercase) in the new primitives. The uppercase label-tier treatment survives only as a context-specific styling of the `__subtitle` slot, not as a section heading. (BEM role is `__subtitle` per the [Naming Conventions canon](https://design.brikdesigns.com/docs/primitives/naming-conventions#subtitle) — "eyebrow" is a banned synonym.)
 
 ### Form
 
@@ -89,7 +89,7 @@ Compact summary of one entity, repeated in a grid. No section hierarchy — titl
 | Tier | Token | Family | Weight | When |
 |------|-------|--------|--------|------|
 | Card title | `--heading-tiny` | heading | semibold | Entity name or primary identifier |
-| Card eyebrow | `--label-xs` | label | semibold + uppercase | Optional — category, status label |
+| Card subtitle | `--label-xs` | label | semibold + uppercase | Optional — category, status label. BEM role: `__subtitle` ([canon](https://design.brikdesigns.com/docs/primitives/naming-conventions#subtitle)). The uppercase label-tier styling is a Card-context choice; the BEM name is the same `__subtitle` as PageHeader/Sheet/DataSection. |
 | Metadata label | `--label-sm` | label | regular | "Created" / "Owner" / etc. |
 | Metadata value | `--body-sm` | body | regular | Value beside a metadata label |
 | Supporting text | `--body-sm` | body | regular | One-line description |
@@ -177,7 +177,7 @@ Existing `<Card>` primitive extends with:
 
 ```
 <CardTitle>             → enforces --heading-tiny
-<CardEyebrow>           → enforces --label-xs + uppercase
+<CardSubtitle>          → enforces --label-xs + uppercase (BEM: __subtitle — canon bans `eyebrow`)
 <CardMetadata>          → paired label + value, locked tiers
 ```
 
