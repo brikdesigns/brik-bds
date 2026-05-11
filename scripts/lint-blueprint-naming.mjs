@@ -6,21 +6,26 @@
  * Enforces the rules in
  * `docs-site/content/docs/primitives/naming-conventions.mdx` against the
  * blueprints in `content-system/blueprints/{react,astro}/`. Catches the
- * five drift patterns that agents introduced in the first generation of
+ * drift patterns that agents introduced in the first generation of
  * blueprints:
  *
  *   1. Banned BEM slot suffixes (`__eyebrow`, `__headline`, `__heading`,
  *      `__hero-title`, `__page-heading`, `__body`) — translate to canon
  *      (`__subtitle`, `__title`, `__description`).
- *   2. Banned/invented `variant` axis values — must be `primary` or
- *      `secondary`.
- *   3. Hand-rolled markup that duplicates a BDS primitive
+ *   2. Hand-rolled markup that duplicates a BDS primitive
  *      (`<blockquote>` instead of CardTestimonial, hardcoded
  *      `aspect-ratio` instead of Frame).
- *   4. Unstable `aria-labelledby` ids that bake the layout name into the
+ *   3. Unstable `aria-labelledby` ids that bake the layout name into the
  *      a11y plumbing (`id="bp-{layout}-${key}-h"`).
- *   5. Blueprint .tsx files that import zero BDS components — almost
+ *   4. Blueprint .tsx files that import zero BDS components — almost
  *      always hand-rolled drift.
+ *
+ * NOTE: a `variant` axis check was removed once it produced false
+ * positives against legitimate per-component variants (ServiceTag's
+ * `icon`, LinkButton's `inverse`, Button's `ghost`, etc.). Canon's
+ * variant axis matrix is incomplete relative to what the components
+ * actually export — TypeScript is the authoritative gate until the
+ * matrix is reconciled.
  *
  * Usage:
  *   node scripts/lint-blueprint-naming.mjs              # scan all blueprints
@@ -58,9 +63,6 @@ const BANNED_SUFFIXES = {
   '__page-heading': '__title',
   '__body': '__description',
 };
-
-// `variant` axis is hierarchy — only these values are valid.
-const VALID_VARIANTS = new Set(['primary', 'secondary']);
 
 // BEM blocks where `__heading` is grandfathered (rename tracked separately).
 // Blueprints are NOT on this list — they must use `__title`.
@@ -134,25 +136,19 @@ function checkBannedSuffixes(file, errors) {
   }
 }
 
-function checkVariantValues(file, errors) {
-  if (!file.endsWith('.tsx') && !file.endsWith('.astro')) return;
-  const lines = readLines(file);
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    // Match `variant="foo"` literals only (skip dynamic `variant={...}`).
-    const m = line.match(/\bvariant=["']([^"']+)["']/);
-    if (m && !VALID_VARIANTS.has(m[1])) {
-      errors.push({
-        file,
-        line: i + 1,
-        severity: 'error',
-        rule: 'invented-variant',
-        message: `\`variant="${m[1]}"\` is not a canon value — must be \`primary\` or \`secondary\` (see naming-conventions.mdx#axes)`,
-        snippet: line.trim().slice(0, 120),
-      });
-    }
-  }
-}
+// NOTE: The `variant` axis check was removed in commit 3.
+//
+// Rationale: canon's axis matrix declares `variant ∈ {primary, secondary}`
+// for Chip and Button, but the real ButtonVariant type
+// (components/ui/Button/Button.tsx) ships 10+ values, and components like
+// ServiceTag and LinkButton legitimately expose their own variant
+// vocabularies. Until the canon's axis matrix is expanded to cover every
+// component that uses `variant`, the lint is the wrong layer to enforce
+// this — TypeScript already validates variant values against each
+// component's declared union type at the call site.
+//
+// When canon catches up, re-introduce a targeted check (e.g. only flag
+// `variant` on imports of `Chip`) — not a blanket `variant=*` regex.
 
 function checkUnstableIds(file, errors) {
   if (!file.endsWith('.tsx') && !file.endsWith('.astro')) return;
@@ -252,7 +248,6 @@ const findings = [];
 for (const file of files) {
   if (SKIP_FILES.has(path.basename(file))) continue;
   checkBannedSuffixes(file, findings);
-  checkVariantValues(file, findings);
   checkUnstableIds(file, findings);
   checkBlueprintComposition(file, findings);
   checkHardcodedAspectRatio(file, findings);
