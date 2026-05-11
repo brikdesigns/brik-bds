@@ -92,6 +92,22 @@ if [ -n "$STAGED_MDX" ]; then
   node scripts/lint-storybook-recipe.js --enforce
 fi
 
+# ── Blueprint naming lint ──
+# Scans staged blueprint files for banned BEM slot suffixes (__eyebrow,
+# __headline, __heading, __body), invented `variant` axis values,
+# hand-rolled markup that duplicates a BDS primitive, hardcoded
+# aspect-ratio in CSS, and unstable aria-labelledby ids. See
+# docs-site/content/docs/primitives/naming-conventions.mdx.
+#
+# Staged-only so the existing whole-repo violations (cleaned up in a
+# separate blueprint-refactor PR) don't block unrelated commits. Once a
+# blueprint is touched, the Boy Scout rule applies — leave it canon.
+STAGED_BLUEPRINTS=$(git diff --cached --name-only --diff-filter=ACM -- 'content-system/blueprints/**/*.tsx' 'content-system/blueprints/**/*.astro' 'content-system/blueprints/**/*.css')
+if [ -n "$STAGED_BLUEPRINTS" ]; then
+  echo "Linting staged blueprint naming..."
+  node scripts/lint-blueprint-naming.mjs --errors-only --files $STAGED_BLUEPRINTS
+fi
+
 # Typecheck always runs (fast, catches real errors)
 npm run typecheck
 
