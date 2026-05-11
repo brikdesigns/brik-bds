@@ -1,1 +1,1 @@
-export { Chip, type ChipProps, type ChipSize, type ChipVariant, type ChipAppearance } from './Chip';
+export { Chip, type ChipProps, type ChipSize, type ChipVariant } from './Chip';

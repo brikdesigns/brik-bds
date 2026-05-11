@@ -20,10 +20,6 @@ const meta: Meta<typeof Chip> = {
       control: 'select',
       options: ['primary', 'secondary'],
     },
-    appearance: {
-      control: 'select',
-      options: ['solid', 'outline'],
-    },
     showDropdown: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },
@@ -77,12 +73,10 @@ export const Variants: Story = {
   render: () => (
     <Stack>
       <div>
-        <SectionLabel>Variant + Appearance</SectionLabel>
+        <SectionLabel>Variants</SectionLabel>
         <Row>
-          <Chip label="Secondary Solid" variant="secondary" appearance="solid" icon={<Icon icon="ph:funnel" />} showDropdown />
-          <Chip label="Secondary Outline" variant="secondary" appearance="outline" icon={<Icon icon="ph:funnel" />} showDropdown />
-          <Chip label="Primary Solid" variant="primary" appearance="solid" icon={<Icon icon="ph:funnel" />} showDropdown />
-          <Chip label="Primary Outline" variant="primary" appearance="outline" icon={<Icon icon="ph:funnel" />} showDropdown />
+          <Chip label="Secondary" variant="secondary" icon={<Icon icon="ph:funnel" />} showDropdown />
+          <Chip label="Primary" variant="primary" icon={<Icon icon="ph:funnel" />} showDropdown />
         </Row>
       </div>
       <div>
@@ -117,7 +111,7 @@ export const Patterns: Story = {
       <div>
         <SectionLabel>Active filters</SectionLabel>
         <Row>
-          <Chip label="Status: Active" variant="primary" appearance="outline" onRemove={() => {}} />
+          <Chip label="Status: Active" variant="primary" onRemove={() => {}} />
           <Chip label="Category: Design" onRemove={() => {}} />
           <Chip label="Date: This week" onRemove={() => {}} />
         </Row>

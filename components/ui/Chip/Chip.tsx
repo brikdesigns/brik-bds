@@ -9,14 +9,6 @@ export type ChipSize = 'sm' | 'md' | 'lg';
 /** Chip hierarchy variant — how much attention the chip commands in a cluster. */
 export type ChipVariant = 'primary' | 'secondary';
 
-/**
- * Chip fill appearance — shared axis with Badge (`solid | subtle`) and
- * Tag (`solid | subtle`). Chip supports the two filled-vs-outlined values.
- * - `solid`   — filled background, no border.
- * - `outline` — transparent background with a border in the variant color.
- */
-export type ChipAppearance = 'solid' | 'outline';
-
 export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Chip label text */
   label: string;
@@ -24,8 +16,6 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
   size?: ChipSize;
   /** Hierarchy variant — primary (emphasized) or secondary (neutral). */
   variant?: ChipVariant;
-  /** Fill appearance — solid (filled) or outline (transparent + border). */
-  appearance?: ChipAppearance;
   /** Optional leading icon */
   icon?: ReactNode;
   /** Optional avatar element (rendered before label) */
@@ -43,8 +33,7 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
 /**
  * Chip — compact interactive pill for filtering, selection, or input.
  *
- * Pill-shaped with two variants (primary/secondary) and two appearances
- * (solid/outline).
+ * Pill-shaped with a single hierarchy axis (`primary` / `secondary`).
  *
  * **Action, not indicator.** Chip always represents user-initiated
  * state: filter toggles, selection chips, removable tokens, dropdown
@@ -58,7 +47,7 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
  * ```tsx
  * <Chip label="All statuses" showDropdown onChipClick={openMenu} />
  * <Chip label="Status: Active" onRemove={() => removeFilter('status')} />
- * <Chip label="Selected" variant="primary" appearance="solid" onChipClick={toggle} />
+ * <Chip label="Selected" variant="primary" onChipClick={toggle} />
  * ```
  *
  * @summary Compact interactive pill for filtering or selection
@@ -67,7 +56,6 @@ export function Chip({
   label,
   size = 'md',
   variant = 'secondary',
-  appearance = 'solid',
   icon,
   avatar,
   showDropdown = false,
@@ -80,7 +68,7 @@ export function Chip({
 }: ChipProps) {
   const classes = bdsClass(
     'bds-chip',
-    `bds-chip--${variant}-${appearance}`,
+    `bds-chip--${variant}`,
     `bds-chip--${size}`,
     disabled && 'bds-chip--disabled',
     className
