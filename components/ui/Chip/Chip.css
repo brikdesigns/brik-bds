@@ -2,7 +2,7 @@
 /**
  * BDS Chip — Interactive pill for filtering, selection, or input
  *
- * Naming: .bds-chip, .bds-chip--{variant}-{appearance}, .bds-chip--{size}
+ * Naming: .bds-chip, .bds-chip--{variant}, .bds-chip--{size}
  */
 
 /* ─── Base ────────────────────────────────────────────────────── */
@@ -22,12 +22,10 @@
   text-transform: capitalize;
   cursor: pointer;
   user-select: none;
-  /* Reserve a transparent border on every Chip so solid + outline
-     variants share the same box dimensions. Toggling between
-     `primary-solid` (no visible border) and `secondary-outline` (2px
-     border) used to jump the layout by 2px on every edge. The outline
-     variants below override the border-color; solid variants keep it
-     transparent. brik-bds#414. */
+  /* Transparent border preserved at chip's intrinsic box for visual
+     parity with neighboring outlined pill components (FilterButton,
+     etc.) in the same row — keeps box dimensions stable across mixed
+     pill clusters. */
   border: var(--border-width-md) solid transparent;
   overflow: clip;
   transition: filter var(--duration-fast) var(--ease-out);
@@ -70,28 +68,16 @@
   height: 40px;
 }
 
-/* ─── Variant + Appearance ────────────────────────────────────── */
+/* ─── Variants (hierarchy only) ───────────────────────────────── */
 
-.bds-chip--primary-solid {
+.bds-chip--primary {
   background-color: var(--background-inverse);
   color: var(--text-inverse);
 }
 
-.bds-chip--primary-outline {
-  background-color: transparent;
-  color: var(--text-brand-primary);
-  border: var(--border-width-md) solid var(--border-brand-primary);
-}
-
-.bds-chip--secondary-solid {
+.bds-chip--secondary {
   background-color: var(--background-secondary);
   color: var(--text-primary);
-}
-
-.bds-chip--secondary-outline {
-  background-color: var(--background-primary);
-  color: var(--text-primary);
-  border: var(--border-width-md) solid var(--border-secondary);
 }
 
 /* ─── Disabled ────────────────────────────────────────────────── */

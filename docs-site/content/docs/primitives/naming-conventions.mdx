@@ -202,11 +202,11 @@ Components with overlapping visual concerns share the same prop names and values
 | `size` | `xs` · `sm` · `md` · `lg` | Physical dimensions on a shared scale (e.g. Badge + Tag + Chip align by height at every tier). | Badge, Tag, Chip, BadgeGroup, TagGroup, Button, IconButton, Field, Sheet, most form controls |
 | `status` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | Semantic value judgment — which system color tier applies. Indicator-only. | Badge, AlertBanner, Dot |
 | `variant` (hierarchy) | `primary` · `secondary` | How much attention the element commands inside a cluster. Not a fill style. | Chip, Button |
-| `appearance` (fill) | `solid` · `subtle` · `outline` | How the shape is filled vs. bordered. Each component supports the subset that has a real visual meaning. | Badge (`solid` / `subtle`), Chip (`solid` / `outline`), Tag (`solid` / `subtle`) |
+| `appearance` (fill) | `solid` · `subtle` · `outline` | How the shape is filled vs. bordered. Each component supports the subset that has a real visual meaning. Read-only/indicator components only. | Badge (`solid` / `subtle`), Tag (`solid` / `subtle`) |
 
 ### The rule
 
-> `variant` describes **hierarchy**. `appearance` describes **fill**. Never conflate them — a chip can be both `variant="primary"` and `appearance="outline"`, and the combination is meaningful.
+> `variant` describes **hierarchy**. `appearance` describes **fill**. Never conflate them. **Interactive components (Chip, Button) use `variant` only** — emphasis is one axis, picked at the hierarchy. **Read-only indicators (Badge, Tag) use `appearance`** — they don't have a hierarchy to express, so fill form is the only relevant lever.
 
 ### Why `solid | subtle | outline` (not `dark | light`)
 
@@ -222,7 +222,7 @@ The older `dark | light` vocabulary was ambiguous with dark-mode theming — `--
 |---|---|---|---|---|
 | Badge | — | `solid` (default) · `subtle` | required axis | Outline never made sense for status indicators — low contrast. |
 | Tag | — | `solid` (default) · `subtle` | — | Neutral categorization — no status axis. |
-| Chip | `primary` · `secondary` | `solid` (default) · `outline` | — | Two axes: hierarchy (variant) × fill (appearance). |
+| Chip | `primary` · `secondary` | — | — | Single hierarchy axis. `appearance` was removed in v0.66 — Chip is interactive, so emphasis lives on `variant`. |
 
 Adding a new pill component? Reuse the axis names above. Don't invent `kind`, `style`, `flavor`, etc. — the axes exist so a reader knows what to expect.
 
