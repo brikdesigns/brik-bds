@@ -19,8 +19,14 @@ export const baseTheme: BlueprintProps['theme'] = {
   footerArchetype: 'four_col_directory',
 };
 
+/**
+ * Generic placeholder fixture. Blueprint stories are section-layout
+ * templates, not Brik content — the `Acme` brand name is the universal
+ * stand-in so a designer auditing a blueprint sees the template shape,
+ * not a specific client's voice.
+ */
 export const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
+  brandName: 'Acme',
   tagline: null,
   valueProposition: null,
   services: [],

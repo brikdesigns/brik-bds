@@ -11,7 +11,7 @@ const baseTheme: BlueprintProps['theme'] = {
 };
 
 const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
+  brandName: 'Acme',
   tagline: null,
   valueProposition: null,
   services: [],
@@ -27,9 +27,9 @@ const baseClientFacts: BlueprintProps['clientFacts'] = {
 const interiorSection: BlueprintProps['section'] = {
   sectionKey: 'hero-interior-default',
   sectionType: 'hero',
-  heading: 'Information Design',
-  subheading: 'Services',
-  body: 'Make complex information scannable, memorable, and beautifully on-brand.',
+  heading: 'Interior page headline.',
+  subheading: 'Section',
+  body: 'A short interior-page lead — one sentence of supporting copy that frames the page topic without competing with the headline.',
   cta: null,
   visualNotes: {
     blueprintKey: 'hero_interior_minimal',
@@ -63,7 +63,7 @@ export const WithCta: Story = {
     section: {
       ...interiorSection,
       sectionKey: 'hero-interior-with-cta',
-      cta: { label: 'See examples', url: '/work' },
+      cta: { label: 'See examples', url: '#' },
     },
     clientFacts: baseClientFacts,
     theme: baseTheme,
