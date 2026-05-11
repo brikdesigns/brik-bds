@@ -44,7 +44,7 @@ const baseTheme: BlueprintProps['theme'] = {
 };
 
 const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
+  brandName: 'Acme',
   tagline: null,
   valueProposition: null,
   services: [],
@@ -58,29 +58,30 @@ const baseClientFacts: BlueprintProps['clientFacts'] = {
 };
 
 /**
- * "Layout Design" fixture — the brikdesigns.com `/service/layout-design`
- * interior hero, used to validate the canonical shape captured in the
- * blueprint coverage audit (2026-05-09).
+ * Canonical interior-hero fixture — service-detail page shape with
+ * breadcrumb trail, audience-tinted background, and a price-overlay
+ * card on the right. The shape (not the content) is what the blueprint
+ * documents; consumer sites supply their own copy.
  */
-const layoutDesignSection: BlueprintProps['section'] = {
+const interiorHeroSection: BlueprintProps['section'] = {
   sectionKey: 'hero-img-card-default',
   sectionType: 'hero',
-  heading: 'Layout Design',
-  subheading: 'INFORMATION',
-  body: 'From single-page flyers and one-pagers to multi-page brochures and booklets, we design marketing materials that are clear, compelling, and built to convert—whether for print or digital use.',
-  cta: { label: 'View Details', url: '/service/layout-design' },
+  heading: 'Service detail headline.',
+  subheading: 'CATEGORY',
+  body: 'A short interior-hero paragraph describing what this page covers — typically two or three sentences of supporting context before the visitor reaches the deliverable cards or pricing.',
+  cta: { label: 'View details', url: '#' },
   breadcrumb: [
-    { label: 'All Services', href: '/services' },
-    { label: 'Information Design', href: '/service-lines/information-design' },
-    { label: 'Layout Design' },
+    { label: 'All services', href: '#' },
+    { label: 'Category', href: '#' },
+    { label: 'Service detail' },
   ],
   audience: 'information',
   priceCard: {
-    imageUrl: 'https://placehold.co/640x480/eaf1fb/1f3d70?text=Trifold',
+    imageUrl: 'https://placehold.co/640x480/eaf1fb/1f3d70?text=Deliverable',
     imageAlt: '',
     priceLabel: 'Starting at',
     price: '$249',
-    cta: { label: "Let's Talk", url: '/contact' },
+    cta: { label: 'Get in touch', url: '#contact' },
   },
   visualNotes: {
     blueprintKey: 'hero_split_image_card_overlay',
@@ -94,7 +95,7 @@ const layoutDesignSection: BlueprintProps['section'] = {
 };
 
 const baseProps: BlueprintProps = {
-  section: layoutDesignSection,
+  section: interiorHeroSection,
   clientFacts: baseClientFacts,
   theme: baseTheme,
 };
@@ -132,7 +133,7 @@ type Story = StoryObj<typeof HeroSplitImageCardOverlay>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Canonical interior service-page hero — Layout Design fixture.
+ * @summary Canonical interior service-page hero.
  */
 export const Playground: Story = {
   args: baseProps,

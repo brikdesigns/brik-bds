@@ -11,7 +11,7 @@ const baseTheme: BlueprintProps['theme'] = {
 };
 
 const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
+  brandName: 'Acme',
   tagline: null,
   valueProposition: null,
   services: [],
@@ -27,9 +27,9 @@ const baseClientFacts: BlueprintProps['clientFacts'] = {
 const section: BlueprintProps['section'] = {
   sectionKey: 'about-story-default',
   sectionType: 'content_block',
-  heading: 'A studio that compounds your design budget.',
+  heading: 'A story-led section that introduces the brand.',
   subheading: 'Who we are',
-  body: 'Brik Designs is a Tennessee studio that pairs strategic thinking with execution speed. Our retainer clients see compounding returns because every quarter builds on the last — brand, marketing, and operations design treated as one system, not three vendors.',
+  body: 'A short paragraph of about-copy that sets context for the visitor — who you are, what you do, and the posture you bring to the work. Long enough to set the type rhythm but short enough that a visitor will actually read it.',
   cta: null,
   visualNotes: {
     blueprintKey: 'about_story_split',
@@ -41,9 +41,9 @@ const section: BlueprintProps['section'] = {
   },
   items: [
     {
-      title: 'Aaron Stanerson, Founder',
+      title: 'Sample Quote, Role',
       description:
-        'Brik isn’t a design vendor — it’s a long-term partner that lives inside the metrics it’s trying to move.',
+        'A short pull-quote that reinforces the section narrative — typically two sentences attributed to a leader or customer.',
     },
   ],
 };

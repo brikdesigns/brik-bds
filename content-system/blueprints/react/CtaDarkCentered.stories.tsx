@@ -11,7 +11,7 @@ const baseTheme: BlueprintProps['theme'] = {
 };
 
 const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
+  brandName: 'Acme',
   tagline: null,
   valueProposition: null,
   services: [],
@@ -27,10 +27,10 @@ const baseClientFacts: BlueprintProps['clientFacts'] = {
 const section: BlueprintProps['section'] = {
   sectionKey: 'cta-dark-centered-default',
   sectionType: 'cta',
-  heading: 'Ready to make design a growth lever?',
+  heading: 'Ready to get started?',
   subheading: null,
-  body: 'Tell us about your business — we’ll send back a 24-hour assessment of where design is leaving value on the table.',
-  cta: { label: 'Start the conversation', url: '/contact' },
+  body: 'A closing prompt that earns the click — short, action-oriented, and specific to what the visitor gets after they tap the CTA.',
+  cta: { label: 'Get in touch', url: '#contact' },
   visualNotes: {
     blueprintKey: 'cta_dark_centered',
     moodKeywords: ['bold'],

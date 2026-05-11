@@ -8,9 +8,9 @@ import { baseTheme, baseClientFacts } from './_fixtures';
  *
  * BDS ships the scope-binding pattern but not audience-specific values
  * — those live in each consumer's globals.css. Storybook needs the
- * binding present somewhere so cards visualize in the right brand
- * colors. This `<style>` block mirrors what brikdesigns.com would
- * declare for its five service-line audiences.
+ * binding present somewhere so cards visualize in distinct brand
+ * colors. This `<style>` block is a representative example of what
+ * a consumer site would declare for its audience verticals.
  *
  * Per the cascade rules (`docs/theming/client-themes`), we re-bind
  * `--background-brand-primary` and the related brand-* tokens inside
@@ -49,49 +49,50 @@ const audienceCascadeStyles = `
 const darkTheme: BlueprintProps['theme'] = { ...baseTheme, themeMode: 'dark' };
 
 /**
- * "Other Service Lines" fixture — the brikdesigns.com cross-sell
- * module shown at the bottom of each /services/{slug} page. Three
- * cards in service-line-distinct brand colors.
+ * Three cards in audience-distinct brand colors — the canonical
+ * fixture for the dark 3-column features blueprint. The shape (three
+ * scope-bound cards on a dark section) is what the blueprint
+ * documents; consumer sites supply their own card content.
  */
-const otherServiceLinesSection: BlueprintProps['section'] = {
+const featuresSection: BlueprintProps['section'] = {
   sectionKey: 'features-branded-dark-default',
   sectionType: 'features',
-  heading: 'Other Service Lines',
+  heading: 'Featured capabilities',
   subheading: null,
-  body: 'A complete operating system for visual communication — explore the parts you haven’t yet.',
+  body: 'A short section subheading that frames the cards below — typically a cross-sell or capability roll-up.',
   cta: null,
   visualNotes: {
     blueprintKey: 'features_3col_branded_dark',
     moodKeywords: ['bold', 'modern'],
     layoutBlueprint: 'features_3col_branded_dark',
-    imageOpportunity: '3D illustration per service line',
+    imageOpportunity: 'illustration per card',
     animationSuggestion: null,
-    illustrationOpportunity: 'service-line scene per card',
+    illustrationOpportunity: 'scene per card',
   },
   items: [
     {
-      title: 'Brand',
-      description: 'Logo, identity, and brand systems that scale.',
-      href: '/services/brand',
+      title: 'Capability one',
+      description: 'A two-line card description that sets the type rhythm without competing with the title.',
+      href: '#',
       audience: 'brand',
     },
     {
-      title: 'Marketing',
-      description: 'Web, email, and social design tied to growth metrics.',
-      href: '/services/marketing',
+      title: 'Capability two',
+      description: 'A two-line card description that sets the type rhythm without competing with the title.',
+      href: '#',
       audience: 'marketing',
     },
     {
-      title: 'Back Office',
-      description: 'Operations design — SOPs, automation, internal tooling.',
-      href: '/services/back-office',
+      title: 'Capability three',
+      description: 'A two-line card description that sets the type rhythm without competing with the title.',
+      href: '#',
       audience: 'service',
     },
   ],
 };
 
 const baseProps: BlueprintProps = {
-  section: otherServiceLinesSection,
+  section: featuresSection,
   clientFacts: baseClientFacts,
   theme: darkTheme,
 };
@@ -117,7 +118,7 @@ const meta: Meta<typeof Features3ColBrandedDark> = {
     docs: {
       description: {
         component:
-          'Dark section with a 3-column grid of brand-colored cards. Each card emits `data-audience` to re-bind `--background-brand-primary` for that subtree per the BDS scope-binding pattern (`docs/theming/client-themes`). Stories include a demo cascade block that mirrors the brikdesigns.com five service-line bindings; consumer sites must declare an equivalent block. Card title uses bold weight + 18px, description 16px regular — the AA-clearing posture for white-on-saturated-brand backgrounds (BDS contrast burndown #40).',
+          'Dark section with a 3-column grid of brand-colored cards. Each card emits `data-audience` to re-bind `--background-brand-primary` for that subtree per the BDS scope-binding pattern (`docs/theming/client-themes`). Stories include a representative cascade block showing how a consumer site would declare per-audience bindings. Card title uses bold weight + 18px, description 16px regular — the AA-clearing posture for white-on-saturated-brand backgrounds (BDS contrast burndown #40).',
       },
     },
   },
@@ -129,7 +130,7 @@ type Story = StoryObj<typeof Features3ColBrandedDark>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Three cards — brand / marketing / back-office. The brikdesigns "Other Service Lines" fixture.
+ * @summary Three cards — the canonical 3-column features fixture.
  */
 export const Playground: Story = {
   args: baseProps,
@@ -148,14 +149,14 @@ export const Wrapped: Story = {
   args: {
     ...baseProps,
     section: {
-      ...otherServiceLinesSection,
+      ...featuresSection,
       sectionKey: 'features-branded-dark-wrapped',
       items: [
-        ...otherServiceLinesSection.items,
+        ...featuresSection.items,
         {
-          title: 'Information',
-          description: 'Make complex information scannable and on-brand.',
-          href: '/services/information',
+          title: 'Capability four',
+          description: 'A two-line card description that sets the type rhythm without competing with the title.',
+          href: '#',
           audience: 'information',
         },
       ],
