@@ -310,7 +310,7 @@ const preview: Preview = {
             'Health',
             ['Health Dashboard', 'Token Coverage', 'Contrast Compliance'],
           ],
-          'Foundations',
+          'Foundation',
           [
             'Design Tokens',
             ['Overview', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size', 'Motion'],
@@ -322,7 +322,8 @@ const preview: Preview = {
             'Overview',
             'Client Themes',
             'Atmospheres',
-            'Navigation Archetypes',
+            'Modes',
+            'Layout Archetypes',
             'Blueprints',
             '*',
           ],
@@ -334,7 +335,7 @@ const preview: Preview = {
             'Vocabulary',
             '*',
           ],
-          'Content',
+          'Content System',
           [
             'Overview',
             'Industries',
