@@ -95,7 +95,16 @@ const cta = section.cta;
         </nav>
       )}
 
-      {iconUrl && (
+      {/*
+        Eyebrow icon precedence (brik-bds#546):
+          1. iconUrl set → render raw <img> (legacy/decorative escape hatch)
+          2. audience set, no iconUrl → render canonical <ServiceTag variant="icon">
+             markup inline (Astro can't import the React component; it emits
+             the same `bds-service-tag*` classes so dist/styles.css renders
+             it identically)
+          3. neither → no eyebrow
+      */}
+      {iconUrl ? (
         <img
           src={iconUrl}
           alt={iconAlt ?? ''}
@@ -103,7 +112,13 @@ const cta = section.cta;
           loading="eager"
           decoding="async"
         />
-      )}
+      ) : audience ? (
+        <span
+          class={`bds-service-tag bds-service-tag--icon bds-service-tag--icon-lg bds-service-tag--${audience} bp-hero-img-card__icon`}
+          role="img"
+          aria-label={`${audience} category`}
+        />
+      ) : null}
 
       {eyebrow && <p class="bp-hero-img-card__eyebrow">{eyebrow}</p>}
 

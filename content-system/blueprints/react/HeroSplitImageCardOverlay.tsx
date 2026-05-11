@@ -17,6 +17,7 @@
  */
 import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
 import { LinkButton } from '../../../components/ui/Button/LinkButton';
+import { ServiceTag } from '../../../components/ui/ServiceBadge/ServiceTag';
 import type { BlueprintProps } from '../astro/types';
 import './HeroSplitImageCardOverlay.css';
 
@@ -46,7 +47,18 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
             />
           )}
 
-          {iconUrl && (
+          {/*
+           * Eyebrow icon precedence (brik-bds#546):
+           *   1. If `iconUrl` is provided, render the raw `<img>` (legacy /
+           *      decorative-image escape hatch).
+           *   2. Otherwise, if `audience` is set, render the canonical
+           *      `<ServiceTag>` for that audience — the design-system path.
+           *      Consumers stop supplying `iconUrl` for category badges; the
+           *      blueprint resolves the icon via BDS's service-token system,
+           *      keeping theme awareness intact.
+           *   3. If neither is set, no eyebrow renders.
+           */}
+          {iconUrl ? (
             <img
               src={iconUrl}
               alt={iconAlt ?? ''}
@@ -54,7 +66,14 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
               loading="eager"
               decoding="async"
             />
-          )}
+          ) : audience ? (
+            <ServiceTag
+              category={audience}
+              variant="icon"
+              size="lg"
+              className="bp-hero-img-card__icon"
+            />
+          ) : null}
 
           {eyebrow && <p className="bp-hero-img-card__eyebrow">{eyebrow}</p>}
 

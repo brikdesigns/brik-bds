@@ -125,12 +125,22 @@ export interface BlueprintSection {
    */
   readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
   /**
-   * Optional eyebrow icon URL — an audience or category badge SVG/PNG
-   * rendered between the breadcrumb and the h1 in interior-page hero
-   * blueprints. Sourced from a category/service-line CMS row's badge
-   * column (e.g. `service_lines.primary_badge_url`).
+   * Optional eyebrow icon URL — manual override for decorative, non-
+   * categorical images (campaign artwork, editorial illustrations).
    *
-   * Renders as a plain `<img>` sized via `--bp-hero-img-card-icon-size`.
+   * **Precedence (brik-bds#546):**
+   *   1. If `iconUrl` is set, render a raw `<img>` (this slot's legacy
+   *      contract — still respected for non-category eyebrows).
+   *   2. Otherwise, if `audience` is set, the blueprint renders a canonical
+   *      `<ServiceTag category={audience} variant="icon">` for the eyebrow
+   *      — the design-system path. Theme-aware, no consumer-side URL
+   *      computation needed.
+   *   3. Otherwise no eyebrow renders.
+   *
+   * Most service-detail pages can stop passing `iconUrl` entirely once
+   * `audience` is set. Keep `iconUrl` for cases where the visual is NOT a
+   * category indicator (e.g., a holiday campaign hero with a snowflake).
+   *
    * Pair with `iconAlt` for an informational alt; default empty (decorative).
    *
    * Additive, optional — blueprints without an eyebrow icon slot ignore it.
