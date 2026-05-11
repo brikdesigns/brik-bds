@@ -26,7 +26,7 @@
   text-align: center;
 }
 
-.bp-cta-dark-centered__heading {
+.bp-cta-dark-centered__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
@@ -35,7 +35,7 @@
   color: var(--bp-cta-dark-centered-heading-color, var(--text-on-color-dark));
 }
 
-.bp-cta-dark-centered__body {
+.bp-cta-dark-centered__description {
   margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);

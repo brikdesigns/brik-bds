@@ -57,7 +57,7 @@ interface Props extends BlueprintProps {}
 const { section } = Astro.props;
 
 const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
-const headingId = `bp-hero-img-card-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 const eyebrow = section.subheading;
 const headline = section.heading ?? '';
 const lead = section.body;
@@ -66,7 +66,7 @@ const cta = section.cta;
 
 <section
   class="bp-hero-img-card"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="hero_split_image_card_overlay"
   data-audience={audience}
 >
@@ -120,9 +120,9 @@ const cta = section.cta;
         />
       ) : null}
 
-      {eyebrow && <p class="bp-hero-img-card__eyebrow">{eyebrow}</p>}
+      {eyebrow && <p class="bp-hero-img-card__subtitle">{eyebrow}</p>}
 
-      <h1 id={headingId} class="bp-hero-img-card__headline">{headline}</h1>
+      <h1 id={titleId} class="bp-hero-img-card__title">{headline}</h1>
 
       {lead && <p class="bp-hero-img-card__lead">{lead}</p>}
 
@@ -255,7 +255,7 @@ const cta = section.cta;
     object-fit: contain;
   }
 
-  .bp-hero-img-card__eyebrow {
+  .bp-hero-img-card__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -265,7 +265,7 @@ const cta = section.cta;
     color: var(--bp-hero-img-card-eyebrow-color, var(--text-primary));
   }
 
-  .bp-hero-img-card__headline {
+  .bp-hero-img-card__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));

@@ -51,7 +51,7 @@ interface Props extends BlueprintProps {}
 
 const { section, clientFacts } = Astro.props;
 
-const headingId = `bp-hero-split-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 const eyebrow = section.subheading;
 const headline = section.heading ?? '';
 const lead = section.body;
@@ -71,13 +71,13 @@ const imageAlt = '';
 
 <section
   class="bp-hero-split-60-40"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="hero_split_60_40"
 >
   <div class="bp-hero-split-60-40__container">
     <div class="bp-hero-split-60-40__content">
-      {eyebrow && <p class="bp-hero-split-60-40__eyebrow">{eyebrow}</p>}
-      <h1 id={headingId} class="bp-hero-split-60-40__headline">{headline}</h1>
+      {eyebrow && <p class="bp-hero-split-60-40__subtitle">{eyebrow}</p>}
+      <h1 id={titleId} class="bp-hero-split-60-40__title">{headline}</h1>
       {lead && <p class="bp-hero-split-60-40__lead">{lead}</p>}
       {cta && (
         <a href={cta.url} class="bds-button bds-button--primary bds-button--md">
@@ -150,7 +150,7 @@ const imageAlt = '';
     gap: var(--space-md);
   }
 
-  .bp-hero-split-60-40__eyebrow {
+  .bp-hero-split-60-40__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -160,7 +160,7 @@ const imageAlt = '';
     color: var(--bp-hero-split-eyebrow-color, var(--text-brand-primary));
   }
 
-  .bp-hero-split-60-40__headline {
+  .bp-hero-split-60-40__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(
@@ -179,7 +179,7 @@ const imageAlt = '';
   }
 
   @media (min-width: 768px) {
-    .bp-hero-split-60-40__headline::after {
+    .bp-hero-split-60-40__title::after {
       content: '';
       display: block;
       width: 3rem;

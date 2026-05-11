@@ -27,7 +27,7 @@
   gap: var(--gap-md);
 }
 
-.bp-services-two-col__eyebrow {
+.bp-services-two-col__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -37,7 +37,7 @@
   color: var(--text-brand-primary);
 }
 
-.bp-services-two-col__heading {
+.bp-services-two-col__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));

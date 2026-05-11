@@ -50,7 +50,7 @@ import type { BlueprintProps } from './types';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const headingId = `bp-support-plan-callout-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 const plan = section.items?.[0];
 const cta = section.cta;
 const illustration = section.illustration;
@@ -69,16 +69,16 @@ const hasIllustration = illustration && tiles.length > 0;
   class="bp-support-plan-callout"
   data-blueprint-key="support_plan_callout_split"
   data-has-illustration={hasIllustration ? 'true' : 'false'}
-  aria-labelledby={section.heading ? headingId : undefined}
+  aria-labelledby={section.heading ? titleId : undefined}
 >
   <div class="bp-support-plan-callout__container">
     {(section.heading || section.subheading || section.body) && (
       <header class="bp-support-plan-callout__header">
         {section.subheading && (
-          <p class="bp-support-plan-callout__eyebrow">{section.subheading}</p>
+          <p class="bp-support-plan-callout__subtitle">{section.subheading}</p>
         )}
         {section.heading && (
-          <h2 id={headingId} class="bp-support-plan-callout__heading">{section.heading}</h2>
+          <h2 id={titleId} class="bp-support-plan-callout__title">{section.heading}</h2>
         )}
         {section.body && (
           <p class="bp-support-plan-callout__lead">{section.body}</p>
@@ -201,7 +201,7 @@ const hasIllustration = illustration && tiles.length > 0;
     gap: var(--gap-md);
   }
 
-  .bp-support-plan-callout__eyebrow {
+  .bp-support-plan-callout__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -211,7 +211,7 @@ const hasIllustration = illustration && tiles.length > 0;
     color: var(--text-brand-primary);
   }
 
-  .bp-support-plan-callout__heading {
+  .bp-support-plan-callout__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));

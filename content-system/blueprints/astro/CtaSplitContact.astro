@@ -34,21 +34,21 @@ import type { BlueprintProps } from './types';
 interface Props extends BlueprintProps {}
 
 const { section, clientFacts } = Astro.props;
-const headingId = `bp-cta-split-contact-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 const phone = clientFacts.phone;
 const email = clientFacts.email;
 ---
 
 <section
   class="bp-cta-split-contact"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="cta_split_contact"
 >
   <div class="bp-cta-split-contact__container">
     <div class="bp-cta-split-contact__message">
-      <h2 id={headingId} class="bp-cta-split-contact__heading">{section.heading}</h2>
+      <h2 id={titleId} class="bp-cta-split-contact__title">{section.heading}</h2>
       {section.body && (
-        <p class="bp-cta-split-contact__body">{section.body}</p>
+        <p class="bp-cta-split-contact__description">{section.body}</p>
       )}
       {section.cta && (
         <a href={section.cta.url} class="bds-button bds-button--primary bds-button--md"><span class="bds-button__content">{section.cta.label}</span></a>
@@ -115,7 +115,7 @@ const email = clientFacts.email;
     gap: var(--space-md);
   }
 
-  .bp-cta-split-contact__heading {
+  .bp-cta-split-contact__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
@@ -124,7 +124,7 @@ const email = clientFacts.email;
     color: var(--bp-cta-split-contact-heading-color, var(--text-primary));
   }
 
-  .bp-cta-split-contact__body {
+  .bp-cta-split-contact__description {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);

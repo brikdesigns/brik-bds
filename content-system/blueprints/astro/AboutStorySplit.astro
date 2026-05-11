@@ -31,23 +31,23 @@ import type { BlueprintProps } from './types';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const headingId = `bp-about-story-split-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 const callout = section.items[0];
 ---
 
 <section
   class="bp-about-story-split"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="about_story_split"
 >
   <div class="bp-about-story-split__container">
     <div class="bp-about-story-split__narrative">
       {section.subheading && (
-        <p class="bp-about-story-split__eyebrow">{section.subheading}</p>
+        <p class="bp-about-story-split__subtitle">{section.subheading}</p>
       )}
-      <h2 id={headingId} class="bp-about-story-split__heading">{section.heading}</h2>
+      <h2 id={titleId} class="bp-about-story-split__title">{section.heading}</h2>
       {section.body && (
-        <p class="bp-about-story-split__body">{section.body}</p>
+        <p class="bp-about-story-split__description">{section.body}</p>
       )}
     </div>
 
@@ -94,7 +94,7 @@ const callout = section.items[0];
     gap: var(--space-md);
   }
 
-  .bp-about-story-split__eyebrow {
+  .bp-about-story-split__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -104,7 +104,7 @@ const callout = section.items[0];
     color: var(--text-brand-primary);
   }
 
-  .bp-about-story-split__heading {
+  .bp-about-story-split__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
@@ -113,7 +113,7 @@ const callout = section.items[0];
     color: var(--bp-about-story-split-heading-color, var(--text-primary));
   }
 
-  .bp-about-story-split__body {
+  .bp-about-story-split__description {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);

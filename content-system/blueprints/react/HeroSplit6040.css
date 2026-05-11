@@ -45,7 +45,7 @@
   align-items: flex-start;
 }
 
-.bp-hero-split-60-40__eyebrow {
+.bp-hero-split-60-40__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -55,7 +55,7 @@
   color: var(--bp-hero-split-eyebrow-color, var(--text-brand-primary));
 }
 
-.bp-hero-split-60-40__headline {
+.bp-hero-split-60-40__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-xxl), 5vw, var(--display-sm));
@@ -66,7 +66,7 @@
 }
 
 @media (min-width: 768px) {
-  .bp-hero-split-60-40__headline::after {
+  .bp-hero-split-60-40__title::after {
     content: '';
     display: block;
     width: 3rem;

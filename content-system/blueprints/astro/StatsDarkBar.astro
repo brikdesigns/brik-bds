@@ -33,20 +33,20 @@ interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
 
-const headingId = `bp-stats-dark-bar-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 const hasHeading = Boolean(section.heading);
 const items = section.items;
 ---
 
 <section
   class="bp-stats-dark-bar"
-  aria-labelledby={hasHeading ? headingId : undefined}
+  aria-labelledby={hasHeading ? titleId : undefined}
   aria-label={!hasHeading ? 'Key stats' : undefined}
   data-blueprint-key="stats_dark_bar"
 >
   <div class="bp-stats-dark-bar__container">
     {hasHeading && (
-      <h2 id={headingId} class="bp-stats-dark-bar__sr-heading">{section.heading}</h2>
+      <h2 id={titleId} class="bp-stats-dark-bar__sr-heading">{section.heading}</h2>
     )}
     <ul class="bp-stats-dark-bar__list" role="list">
       {items.map((item) => (

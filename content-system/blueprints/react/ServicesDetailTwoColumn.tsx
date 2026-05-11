@@ -15,20 +15,20 @@ import './ServicesDetailTwoColumn.css';
 interface Props extends BlueprintProps {}
 
 export function ServicesDetailTwoColumn({ section }: Props) {
-  const headingId = `bp-services-two-col-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
 
   return (
     <section
       className="bp-services-two-col"
-      aria-labelledby={headingId}
+      aria-labelledby={titleId}
       data-blueprint-key="services_detail_two_column"
     >
       <div className="bp-services-two-col__container">
         <header className="bp-services-two-col__header">
           {section.subheading && (
-            <p className="bp-services-two-col__eyebrow">{section.subheading}</p>
+            <p className="bp-services-two-col__subtitle">{section.subheading}</p>
           )}
-          <h2 id={headingId} className="bp-services-two-col__heading">
+          <h2 id={titleId} className="bp-services-two-col__title">
             {section.heading}
           </h2>
           {section.body && (

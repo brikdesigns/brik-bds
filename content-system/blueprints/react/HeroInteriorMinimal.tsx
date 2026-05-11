@@ -23,7 +23,7 @@ import './HeroInteriorMinimal.css';
 interface Props extends BlueprintProps {}
 
 export function HeroInteriorMinimal({ section }: Props) {
-  const headingId = `bp-hero-interior-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
   const eyebrow = section.subheading;
   const headline = section.heading ?? '';
   const lead = section.body;
@@ -32,14 +32,14 @@ export function HeroInteriorMinimal({ section }: Props) {
   return (
     <section
       className="bp-hero-interior-minimal"
-      aria-labelledby={headingId}
+      aria-labelledby={titleId}
       data-blueprint-key="hero_interior_minimal"
     >
       <div className="bp-hero-interior-minimal__container">
         {eyebrow && (
-          <p className="bp-hero-interior-minimal__eyebrow">{eyebrow}</p>
+          <p className="bp-hero-interior-minimal__subtitle">{eyebrow}</p>
         )}
-        <h1 id={headingId} className="bp-hero-interior-minimal__headline">
+        <h1 id={titleId} className="bp-hero-interior-minimal__title">
           {headline}
         </h1>
         {lead && <p className="bp-hero-interior-minimal__lead">{lead}</p>}

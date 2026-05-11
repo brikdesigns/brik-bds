@@ -33,7 +33,7 @@
   margin-bottom: var(--padding-xl);
 }
 
-.bp-support-plan-callout__eyebrow {
+.bp-support-plan-callout__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -43,7 +43,7 @@
   color: var(--text-brand-primary);
 }
 
-.bp-support-plan-callout__heading {
+.bp-support-plan-callout__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));

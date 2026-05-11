@@ -25,7 +25,7 @@ interface Props extends BlueprintProps {}
 
 export function HeroSplitImageCardOverlay({ section }: Props) {
   const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
-  const headingId = `bp-hero-img-card-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
   const eyebrow = section.subheading;
   const headline = section.heading ?? '';
   const lead = section.body;
@@ -34,7 +34,7 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
   return (
     <section
       className="bp-hero-img-card"
-      aria-labelledby={headingId}
+      aria-labelledby={titleId}
       data-blueprint-key="hero_split_image_card_overlay"
       data-audience={audience}
     >
@@ -75,9 +75,9 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
             />
           ) : null}
 
-          {eyebrow && <p className="bp-hero-img-card__eyebrow">{eyebrow}</p>}
+          {eyebrow && <p className="bp-hero-img-card__subtitle">{eyebrow}</p>}
 
-          <h1 id={headingId} className="bp-hero-img-card__headline">
+          <h1 id={titleId} className="bp-hero-img-card__title">
             {headline}
           </h1>
 

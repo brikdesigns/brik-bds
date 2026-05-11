@@ -29,17 +29,17 @@ import type { BlueprintProps } from './types';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const headingId = `bp-testimonials-featured-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 const featured = section.items[0];
 ---
 
 <section
   class="bp-testimonials-featured"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="testimonials_featured_large"
 >
   <div class="bp-testimonials-featured__container">
-    <h2 id={headingId} class="bp-testimonials-featured__sr-heading">
+    <h2 id={titleId} class="bp-testimonials-featured__sr-heading">
       {section.heading ?? 'Featured testimonial'}
     </h2>
 

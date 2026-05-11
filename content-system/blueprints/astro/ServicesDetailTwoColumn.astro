@@ -28,20 +28,20 @@ import type { BlueprintProps } from './types';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const headingId = `bp-services-two-col-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 ---
 
 <section
   class="bp-services-two-col"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="services_detail_two_column"
 >
   <div class="bp-services-two-col__container">
     <header class="bp-services-two-col__header">
       {section.subheading && (
-        <p class="bp-services-two-col__eyebrow">{section.subheading}</p>
+        <p class="bp-services-two-col__subtitle">{section.subheading}</p>
       )}
-      <h2 id={headingId} class="bp-services-two-col__heading">{section.heading}</h2>
+      <h2 id={titleId} class="bp-services-two-col__title">{section.heading}</h2>
       {section.body && (
         <p class="bp-services-two-col__lead">{section.body}</p>
       )}
@@ -81,7 +81,7 @@ const headingId = `bp-services-two-col-${section.sectionKey}-h`;
     gap: var(--space-sm);
   }
 
-  .bp-services-two-col__eyebrow {
+  .bp-services-two-col__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -91,7 +91,7 @@ const headingId = `bp-services-two-col-${section.sectionKey}-h`;
     color: var(--text-brand-primary);
   }
 
-  .bp-services-two-col__heading {
+  .bp-services-two-col__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));

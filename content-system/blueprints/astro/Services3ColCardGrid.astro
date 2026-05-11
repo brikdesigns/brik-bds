@@ -54,7 +54,7 @@ import type { BlueprintProps } from './types';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const headingId = `bp-services-grid-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 
 const categoryLabels: Record<NonNullable<typeof section.items[number]['category']>, string> = {
   brand: 'Brand',
@@ -67,15 +67,15 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
 
 <section
   class="bp-services-grid"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="services_3col_card_grid"
 >
   <div class="bp-services-grid__container">
     <header class="bp-services-grid__header">
       {section.subheading && (
-        <p class="bp-services-grid__eyebrow">{section.subheading}</p>
+        <p class="bp-services-grid__subtitle">{section.subheading}</p>
       )}
-      <h2 id={headingId} class="bp-services-grid__heading">{section.heading}</h2>
+      <h2 id={titleId} class="bp-services-grid__title">{section.heading}</h2>
       {section.body && (
         <p class="bp-services-grid__lead">{section.body}</p>
       )}
@@ -112,7 +112,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
                 )}
               </div>
 
-              <div class="bp-services-grid__body">
+              <div class="bp-services-grid__description">
                 {categoryLabel && (
                   <p class="bp-services-grid__category-row">
                     <span class="bp-services-grid__category-pill">
@@ -164,7 +164,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
     gap: var(--gap-md);
   }
 
-  .bp-services-grid__eyebrow {
+  .bp-services-grid__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -174,7 +174,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
     color: var(--text-brand-primary);
   }
 
-  .bp-services-grid__heading {
+  .bp-services-grid__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
@@ -285,7 +285,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
 
   /* ── Card body ──────────────────────────────────────────────── */
 
-  .bp-services-grid__body {
+  .bp-services-grid__description {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);

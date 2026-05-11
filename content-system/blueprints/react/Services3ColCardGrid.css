@@ -37,7 +37,7 @@
   margin-bottom: var(--padding-xl);
 }
 
-.bp-services-grid__eyebrow {
+.bp-services-grid__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -47,7 +47,7 @@
   color: var(--text-brand-primary);
 }
 
-.bp-services-grid__heading {
+.bp-services-grid__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
@@ -151,7 +151,7 @@
 
 /* ── Card body ─────────────────────────────────────────────────── */
 
-.bp-services-grid__body {
+.bp-services-grid__description {
   padding: var(--padding-lg);
   flex: 1 1 auto;
 }
