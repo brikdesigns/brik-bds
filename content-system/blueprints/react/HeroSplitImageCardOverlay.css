@@ -106,7 +106,7 @@
   object-fit: contain;
 }
 
-.bp-hero-img-card__eyebrow {
+.bp-hero-img-card__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -116,7 +116,7 @@
   color: var(--bp-hero-img-card-eyebrow-color, var(--text-primary));
 }
 
-.bp-hero-img-card__headline {
+.bp-hero-img-card__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));

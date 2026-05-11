@@ -14,27 +14,27 @@ import './AboutStorySplit.css';
 interface Props extends BlueprintProps {}
 
 export function AboutStorySplit({ section }: Props) {
-  const headingId = `bp-about-story-split-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
   const callout = section.items[0];
 
   return (
     <section
       className="bp-about-story-split"
-      aria-labelledby={headingId}
+      aria-labelledby={titleId}
       data-blueprint-key="about_story_split"
     >
       <div className="bp-about-story-split__container">
         <div className="bp-about-story-split__narrative">
           {section.subheading && (
-            <p className="bp-about-story-split__eyebrow">
+            <p className="bp-about-story-split__subtitle">
               {section.subheading}
             </p>
           )}
-          <h2 id={headingId} className="bp-about-story-split__heading">
+          <h2 id={titleId} className="bp-about-story-split__title">
             {section.heading}
           </h2>
           {section.body && (
-            <p className="bp-about-story-split__body">{section.body}</p>
+            <p className="bp-about-story-split__description">{section.body}</p>
           )}
         </div>
 

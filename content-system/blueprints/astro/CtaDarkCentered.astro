@@ -29,18 +29,18 @@ import type { BlueprintProps } from './types';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 ---
 
 <section
   class="bp-cta-dark-centered"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="cta_dark_centered"
 >
   <div class="bp-cta-dark-centered__container">
-    <h2 id={headingId} class="bp-cta-dark-centered__heading">{section.heading}</h2>
+    <h2 id={titleId} class="bp-cta-dark-centered__title">{section.heading}</h2>
     {section.body && (
-      <p class="bp-cta-dark-centered__body">{section.body}</p>
+      <p class="bp-cta-dark-centered__description">{section.body}</p>
     )}
     {section.cta && (
       <a href={section.cta.url} class="bds-button bds-button--primary bds-button--lg"><span class="bds-button__content">{section.cta.label}</span></a>
@@ -68,7 +68,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
     text-align: center;
   }
 
-  .bp-cta-dark-centered__heading {
+  .bp-cta-dark-centered__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
@@ -77,7 +77,7 @@ const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
     color: var(--bp-cta-dark-centered-heading-color, var(--text-inverse, var(--color-grayscale-white)));
   }
 
-  .bp-cta-dark-centered__body {
+  .bp-cta-dark-centered__description {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);

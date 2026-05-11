@@ -61,22 +61,22 @@ import type { BlueprintProps } from './types';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const headingId = `bp-features-branded-dark-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 ---
 
 <section
   class="bp-features-branded-dark"
   data-blueprint-key="features_3col_branded_dark"
-  aria-labelledby={section.heading ? headingId : undefined}
+  aria-labelledby={section.heading ? titleId : undefined}
 >
   <div class="bp-features-branded-dark__container">
     {(section.heading || section.subheading || section.body) && (
       <header class="bp-features-branded-dark__header">
         {section.subheading && (
-          <p class="bp-features-branded-dark__eyebrow">{section.subheading}</p>
+          <p class="bp-features-branded-dark__subtitle">{section.subheading}</p>
         )}
         {section.heading && (
-          <h2 id={headingId} class="bp-features-branded-dark__heading">
+          <h2 id={titleId} class="bp-features-branded-dark__title">
             {section.heading}
           </h2>
         )}
@@ -108,7 +108,7 @@ const headingId = `bp-features-branded-dark-${section.sectionKey}-h`;
                 )}
               </div>
 
-              <div class="bp-features-branded-dark__body">
+              <div class="bp-features-branded-dark__description">
                 <h3 class="bp-features-branded-dark__title">{item.title}</h3>
                 {item.description && (
                   <p class="bp-features-branded-dark__description">{item.description}</p>
@@ -151,7 +151,7 @@ const headingId = `bp-features-branded-dark-${section.sectionKey}-h`;
     gap: var(--gap-md);
   }
 
-  .bp-features-branded-dark__eyebrow {
+  .bp-features-branded-dark__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -162,7 +162,7 @@ const headingId = `bp-features-branded-dark-${section.sectionKey}-h`;
     opacity: 0.85;
   }
 
-  .bp-features-branded-dark__heading {
+  .bp-features-branded-dark__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
@@ -266,7 +266,7 @@ const headingId = `bp-features-branded-dark-${section.sectionKey}-h`;
 
   /* ── Card body ──────────────────────────────────────────────── */
 
-  .bp-features-branded-dark__body {
+  .bp-features-branded-dark__description {
     padding: var(--padding-lg);
     display: flex;
     flex-direction: column;

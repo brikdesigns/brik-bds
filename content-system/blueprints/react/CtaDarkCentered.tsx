@@ -14,20 +14,20 @@ import './CtaDarkCentered.css';
 interface Props extends BlueprintProps {}
 
 export function CtaDarkCentered({ section }: Props) {
-  const headingId = `bp-cta-dark-centered-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
 
   return (
     <section
       className="bp-cta-dark-centered"
-      aria-labelledby={headingId}
+      aria-labelledby={titleId}
       data-blueprint-key="cta_dark_centered"
     >
       <div className="bp-cta-dark-centered__container">
-        <h2 id={headingId} className="bp-cta-dark-centered__heading">
+        <h2 id={titleId} className="bp-cta-dark-centered__title">
           {section.heading}
         </h2>
         {section.body && (
-          <p className="bp-cta-dark-centered__body">{section.body}</p>
+          <p className="bp-cta-dark-centered__description">{section.body}</p>
         )}
         {section.cta && (
           <LinkButton href={section.cta.url} variant="primary" size="lg">

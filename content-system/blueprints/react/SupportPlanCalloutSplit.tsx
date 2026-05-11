@@ -46,7 +46,7 @@ import './SupportPlanCalloutSplit.css';
 interface Props extends BlueprintProps {}
 
 export function SupportPlanCalloutSplit({ section }: Props) {
-  const headingId = `bp-support-plan-callout-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
   const plan = section.items?.[0];
   const cta = section.cta;
   const illustration = section.illustration;
@@ -58,7 +58,7 @@ export function SupportPlanCalloutSplit({ section }: Props) {
       className="bp-support-plan-callout"
       data-blueprint-key="support_plan_callout_split"
       data-has-illustration={hasIllustration ? 'true' : 'false'}
-      aria-labelledby={section.heading ? headingId : undefined}
+      aria-labelledby={section.heading ? titleId : undefined}
     >
       <div className="bp-support-plan-callout__container">
         {(section.heading || section.subheading || section.body) && (
@@ -68,14 +68,14 @@ export function SupportPlanCalloutSplit({ section }: Props) {
             className="bp-support-plan-callout__header"
           >
             {section.subheading && (
-              <p className="bp-support-plan-callout__eyebrow">
+              <p className="bp-support-plan-callout__subtitle">
                 {section.subheading}
               </p>
             )}
             {section.heading && (
               <h2
-                id={headingId}
-                className="bp-support-plan-callout__heading"
+                id={titleId}
+                className="bp-support-plan-callout__title"
               >
                 {section.heading}
               </h2>

@@ -66,12 +66,12 @@ interface Props extends BlueprintProps {}
  * ```
  */
 export function Services3ColCardGrid({ section }: Props) {
-  const headingId = `bp-services-grid-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
 
   return (
     <section
       className="bp-services-grid"
-      aria-labelledby={headingId}
+      aria-labelledby={titleId}
       data-blueprint-key="services_3col_card_grid"
     >
       <div className="bp-services-grid__container">
@@ -81,9 +81,9 @@ export function Services3ColCardGrid({ section }: Props) {
           className="bp-services-grid__header"
         >
           {section.subheading && (
-            <p className="bp-services-grid__eyebrow">{section.subheading}</p>
+            <p className="bp-services-grid__subtitle">{section.subheading}</p>
           )}
-          <h2 id={headingId} className="bp-services-grid__heading">
+          <h2 id={titleId} className="bp-services-grid__title">
             {section.heading}
           </h2>
           {section.body && (
@@ -150,7 +150,7 @@ export function Services3ColCardGrid({ section }: Props) {
 
                   <Stack
                     gap="md"
-                    className="bp-services-grid__body"
+                    className="bp-services-grid__description"
                   >
                     {category && (
                       <ServiceTag

@@ -16,7 +16,7 @@ import './HeroSplit6040.css';
 interface Props extends BlueprintProps {}
 
 export function HeroSplit6040({ section, clientFacts }: Props) {
-  const headingId = `bp-hero-split-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
   const eyebrow = section.subheading;
   const headline = section.heading ?? '';
   const lead = section.body;
@@ -26,15 +26,15 @@ export function HeroSplit6040({ section, clientFacts }: Props) {
   return (
     <section
       className="bp-hero-split-60-40"
-      aria-labelledby={headingId}
+      aria-labelledby={titleId}
       data-blueprint-key="hero_split_60_40"
     >
       <div className="bp-hero-split-60-40__container">
         <div className="bp-hero-split-60-40__content">
           {eyebrow && (
-            <p className="bp-hero-split-60-40__eyebrow">{eyebrow}</p>
+            <p className="bp-hero-split-60-40__subtitle">{eyebrow}</p>
           )}
-          <h1 id={headingId} className="bp-hero-split-60-40__headline">
+          <h1 id={titleId} className="bp-hero-split-60-40__title">
             {headline}
           </h1>
           {lead && <p className="bp-hero-split-60-40__lead">{lead}</p>}
