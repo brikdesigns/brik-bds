@@ -16,7 +16,13 @@ Triggers an event or action. The button family includes three components for dif
 
 ## Variants
 
-Nine variants across two emphasis tiers — six **brand** variants (primary / outline / secondary / ghost / inverse / on-color) for general action hierarchy, and three **system** variants (selected / destructive / positive) for semantic action meaning. Plus state variants (disabled, loading) and composition variants (icon slots).
+`ButtonVariant` ships **12 values** — 9 actively documented + 3 legacy aliases.
+
+- **6 brand variants** — `primary` / `outline` / `secondary` / `ghost` / `inverse` / `on-color`. General action hierarchy.
+- **3 system variants** — `destructive` / `positive` / `selected`. Semantic action meaning.
+- **3 legacy aliases** — `danger` / `danger-outline` / `danger-ghost`. Still supported, but prefer `destructive` (and the system ladder generally). No Storybook story exists for these — see [Legacy aliases](#legacy-aliases) below.
+
+Plus state variants (disabled, loading) and composition variants (icon slots).
 
 ### Primary
 
@@ -93,6 +99,32 @@ An icon-only button with a required `label` prop for accessibility.
 Click to simulate an async action. Render-mode demo because the toggle interaction can't be expressed with args alone.
 
 <Canvas of={Stories.LoadingToggle} />
+
+### Legacy aliases
+
+Three values in `ButtonVariant` ship without a dedicated story because they're aliases of `destructive` retained for back-compat:
+
+- `danger` → use `destructive` (identical visual, system-red fill)
+- `danger-outline` → use `destructive` with `outline` if you need lower emphasis; the alias remains for code that hasn't migrated
+- `danger-ghost` → use a ghost button styled as destructive; the alias remains for inline-delete code
+
+New code should pick from the documented 9 above. The aliases are TypeScript-valid but won't render anything different from their canonical sibling.
+
+## Type union
+
+The full `ButtonVariant` and `ButtonSize` contracts — the authoritative list of valid values:
+
+```ts
+type ButtonVariant =
+  | 'primary' | 'outline' | 'secondary' | 'ghost'
+  | 'inverse' | 'on-color'
+  | 'destructive' | 'positive' | 'selected'
+  | 'danger' | 'danger-outline' | 'danger-ghost'; // legacy aliases
+
+type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
+```
+
+This block mirrors `components/ui/Button/Button.tsx`. If it drifts from the source `.tsx`, the type is canonical — fix this doc.
 
 ## Patterns
 
