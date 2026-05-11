@@ -33,6 +33,21 @@ This distinction is especially load-bearing for titles and headings (below) — 
 
 Never pick the HTML tag by guessing from the BEM name. `<div class="bds-card__title">` and `<h3 class="bds-card__title">` are both valid — choose by outline intent.
 
+### Banned title aliases
+
+Translate these synonyms to `__title` before writing code — same discipline as the `eyebrow` → `subtitle` rule below.
+
+| Banned | Use instead |
+|---|---|
+| `__heading` | `__title` — `heading` is a token scale, not a BEM role |
+| `__headline` | `__title` |
+| `__header` (as text) | `__title` for the text; `__header` is acceptable only as a *container* slot (e.g. a `<header>` element holding title + actions) |
+| `__hero-title`, `__page-heading` | `__title` — the parent BEM block already says "hero" or "page" |
+
+### Legacy exception — `sheet-section__heading`
+
+`.bds-sheet-section__heading` predates this rule. It renders an uppercase label `<h3>` — a different *visual* role from a page/section title, even though the BEM name reads like a synonym. **Do not generalize from this exception.** New BEM names always use `__title` for the titled slot. The legacy class will be renamed under a separate PR; no consumer should rely on the `__heading` form.
+
 ## Subtitle
 
 The secondary line paired with a title. Always `subtitle`. Never `eyebrow`.
@@ -41,7 +56,7 @@ The secondary line paired with a title. Always `subtitle`. Never `eyebrow`.
 - Usage: `PageHeader`, `Sheet`, `SheetSection`, `BoardCard`, `DataSection`.
 - Rendered as: `<p>` by default.
 
-"Eyebrow" is a common term in marketing-site design systems. It is not a term in BDS. If a design spec uses it, translate to `subtitle` before writing code.
+"Eyebrow" is a common term in marketing-site design systems. It is not a term in BDS. Same applies to `kicker`, `overline`, and `pre-title` — all translate to `subtitle`. If a design spec uses one of these, translate before writing code.
 
 ## Description
 
@@ -52,6 +67,24 @@ Explanatory prose under a title or subtitle — longer and more neutral than a s
 - Rendered as: `<p>`.
 
 Use when a component needs a short paragraph of context below its title. Not a legal equivalent to subtitle — subtitle is visual chrome, description is content.
+
+### Never `__body`
+
+`body` is a **token scale** (`--body-md`, `--font-family-body`) — not a BEM role. Long prose under a title uses `__description`. Labeling a slot `__body` because the typography scale is `body-md` is the same category mistake as labeling a title slot `__heading` because the scale is `--heading-md`.
+
+## Pull-quotes, callouts, and banners — components, not BEM
+
+When a design has a quoted testimonial, an inline alert, or a highlighted aside, **the slot is a component, not a new BEM name**. Reach for the existing primitive before inventing `__callout` / `__pull-quote` / `__aside`.
+
+| Design element | BDS component | What you'd be inventing if you skipped it |
+|---|---|---|
+| Pull-quote with attribution | `CardTestimonial` | `<aside><blockquote><cite>` with bespoke `__quote` / `__quote-cite` / `__quote-text` BEM |
+| Inline alert / status callout | `AlertBanner` | `__alert` / `__notice` BEM |
+| Decorative full-bleed callout | `Banner` | `__banner` / `__callout-strip` BEM |
+| Highlighted plan or pricing tile | `Card`, `PricingCard` | `__plan-callout` / `__pricing-aside` BEM |
+| Aspect-locked image | `Frame` (`customRatio` or preset) | hardcoded `aspect-ratio` in CSS + bare `<img>` |
+
+There is no `Callout` component in BDS. If a design spec says "callout," translate to one of the rows above before writing markup.
 
 ## The label family
 
@@ -108,6 +141,41 @@ These are containers, not text. Different words because they have different resp
 | `Dialog` / `Modal` / `Sheet` | Overlay containers | Focused interactions |
 
 Don't reach for a `Card` when a `DataSection` is right. Cards are self-contained units in a grid; `DataSection` is one region of a larger page.
+
+## Blueprints — composition, not redefinition
+
+Blueprints (`content-system/blueprints/*`) are page-level layouts assembled from BDS primitives. The `bp-{layout-name}` namespace exists to distinguish layout-owned CSS from primitive CSS — it does **not** open a parallel naming vocabulary.
+
+### The rules
+
+1. **Slot suffixes follow the canon.** `bp-about-story-split__title`, `bp-hero-split-6040__subtitle`, `bp-cta-dark-centered__description`. Never `__heading`, `__headline`, `__eyebrow`, `__body`, `__quote` (use `CardTestimonial`), `__callout` (use `Banner`).
+2. **Compose, don't reimplement.** If a blueprint draws raw `<blockquote>` / `<img>` / `<aside>` markup that duplicates a primitive, import the primitive instead. A blueprint `.tsx` that imports zero from `components/ui/*` is almost always drift.
+3. **Use `Frame` for any aspect-locked image.** Never hardcode `aspect-ratio` in blueprint CSS — pass the ratio to `<Frame customRatio="..." />` or use a named preset (`square`, `portrait`, `landscape`, `wide`, `ultrawide`).
+4. **Variant values come from the canon axis matrix.** `variant ∈ {primary, secondary}`, `appearance ∈ {solid, subtle, outline}`. Don't invent `variant="persona-cluster"` or `variant="dark-centered"`.
+
+### What `bp-` prefixes are for
+
+- Layout-specific CSS that doesn't belong on the primitive (e.g. `bp-services-grid` setting its own grid template).
+- Container slots specific to the layout (`bp-hero-split-6040__media-column`).
+- Custom property overrides scoped to the layout (`--bp-about-story-split-bg`).
+
+What `bp-` prefixes are **not** for: renaming primitive roles. A title is a title.
+
+### Enforcement
+
+`scripts/lint-blueprint-naming.mjs` greps blueprint `.tsx` / `.astro` / `.css` for banned roles, banned axis values, hand-rolled markup that duplicates BDS primitives, and unstable `aria-labelledby` ids. Runs in `npm run validate` and pre-commit when blueprint files are staged.
+
+## Stable ids and `aria-labelledby`
+
+`id` values are part of the accessible name — they belong to the *role* of the element, not the *layout that contains it*. A title id baked with the layout name (`bp-about-story-split-default-h`) leaks layout into a11y plumbing and breaks when the layout is renamed.
+
+### The rule
+
+> Generate `id` from the BEM role plus a content-derived stable key — never the layout/blueprint name, and never a shape-suffix like `-h`.
+
+**Good:** `id={`title-${section.sectionKey}`}`, `id={`${section.sectionKey}-title`}`, or — when the role is unambiguous on the page — just `id={useId()}`.
+
+**Bad:** `id="bp-about-story-split-${section.sectionKey}-h"` — bakes both the layout name and a `-h` shape suffix that tells the reader nothing about role.
 
 ## Elements that render `<h*>` vs elements that don't
 
