@@ -11,7 +11,7 @@ const baseTheme: BlueprintProps['theme'] = {
 };
 
 const facts = (heroImageUrl: string | null): BlueprintProps['clientFacts'] => ({
-  brandName: 'Brik Designs',
+  brandName: 'Acme',
   tagline: null,
   valueProposition: null,
   services: [],
@@ -27,10 +27,10 @@ const facts = (heroImageUrl: string | null): BlueprintProps['clientFacts'] => ({
 const section: BlueprintProps['section'] = {
   sectionKey: 'hero-split-default',
   sectionType: 'hero',
-  heading: 'Strategic design that compounds.',
-  subheading: 'Brik Designs',
-  body: 'Brand systems, marketing, information design, and back-office tooling — under one roof.',
-  cta: { label: 'See our work', url: '/work' },
+  heading: 'A clear, compelling headline goes here.',
+  subheading: 'Acme',
+  body: 'One or two sentences of supporting copy — long enough to set the rhythm of body type next to the headline without overwhelming it.',
+  cta: { label: 'Learn more', url: '#' },
   visualNotes: {
     blueprintKey: 'hero_split_60_40',
     moodKeywords: ['professional', 'modern'],

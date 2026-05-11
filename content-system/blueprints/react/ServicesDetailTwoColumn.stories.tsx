@@ -11,7 +11,7 @@ const baseTheme: BlueprintProps['theme'] = {
 };
 
 const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Brik Designs',
+  brandName: 'Acme',
   tagline: null,
   valueProposition: null,
   services: [],
@@ -29,7 +29,7 @@ const section: BlueprintProps['section'] = {
   sectionType: 'services',
   heading: 'What we do',
   subheading: 'Services',
-  body: 'A complete operating system for visual communication — from brand to operations.',
+  body: 'A one-line section subheading that frames the service catalog below — short enough to scan, specific enough to set expectations.',
   cta: null,
   visualNotes: {
     blueprintKey: 'services_detail_two_column',
@@ -40,12 +40,12 @@ const section: BlueprintProps['section'] = {
     illustrationOpportunity: null,
   },
   items: [
-    { title: 'Brand', description: 'Identity systems that scale.' },
-    { title: 'Marketing', description: 'Web, email, and social that ties to growth.' },
-    { title: 'Information Design', description: 'Make complex data scannable and on-brand.' },
-    { title: 'Product', description: 'Interface design for the apps your business runs on.' },
-    { title: 'Back Office', description: 'Operations design — SOPs, automation, internal tools.' },
-    { title: 'Continuity Plans', description: 'Predictable monthly partnership for ongoing work.' },
+    { title: 'Service one', description: 'A one-line description of the first service offering.' },
+    { title: 'Service two', description: 'A one-line description of the second service offering.' },
+    { title: 'Service three', description: 'A one-line description of the third service offering.' },
+    { title: 'Service four', description: 'A one-line description of the fourth service offering.' },
+    { title: 'Service five', description: 'A one-line description of the fifth service offering.' },
+    { title: 'Service six', description: 'A one-line description of the sixth service offering.' },
   ],
 };
 
