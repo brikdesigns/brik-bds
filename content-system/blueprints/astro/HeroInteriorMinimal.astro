@@ -29,7 +29,7 @@ interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
 
-const headingId = `bp-hero-interior-${section.sectionKey}-h`;
+const titleId = `${section.sectionKey}-title`;
 const eyebrow = section.subheading;
 const headline = section.heading ?? '';
 const lead = section.body;
@@ -38,12 +38,12 @@ const cta = section.cta;
 
 <section
   class="bp-hero-interior-minimal"
-  aria-labelledby={headingId}
+  aria-labelledby={titleId}
   data-blueprint-key="hero_interior_minimal"
 >
   <div class="bp-hero-interior-minimal__container">
-    {eyebrow && <p class="bp-hero-interior-minimal__eyebrow">{eyebrow}</p>}
-    <h1 id={headingId} class="bp-hero-interior-minimal__headline">{headline}</h1>
+    {eyebrow && <p class="bp-hero-interior-minimal__subtitle">{eyebrow}</p>}
+    <h1 id={titleId} class="bp-hero-interior-minimal__title">{headline}</h1>
     {lead && <p class="bp-hero-interior-minimal__lead">{lead}</p>}
     {cta && (
       <a href={cta.url} class="bds-button bds-button--primary bds-button--md"><span class="bds-button__content">{cta.label}</span></a>
@@ -70,7 +70,7 @@ const cta = section.cta;
     max-width: 72ch;
   }
 
-  .bp-hero-interior-minimal__eyebrow {
+  .bp-hero-interior-minimal__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -80,7 +80,7 @@ const cta = section.cta;
     color: var(--bp-hero-interior-eyebrow-color, var(--text-brand-primary));
   }
 
-  .bp-hero-interior-minimal__headline {
+  .bp-hero-interior-minimal__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));

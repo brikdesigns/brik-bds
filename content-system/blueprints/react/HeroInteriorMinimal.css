@@ -25,7 +25,7 @@
   align-items: flex-start;
 }
 
-.bp-hero-interior-minimal__eyebrow {
+.bp-hero-interior-minimal__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -35,7 +35,7 @@
   color: var(--bp-hero-interior-eyebrow-color, var(--text-brand-primary));
 }
 
-.bp-hero-interior-minimal__headline {
+.bp-hero-interior-minimal__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));

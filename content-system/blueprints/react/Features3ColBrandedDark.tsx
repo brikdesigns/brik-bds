@@ -50,13 +50,13 @@ import './Features3ColBrandedDark.css';
 interface Props extends BlueprintProps {}
 
 export function Features3ColBrandedDark({ section }: Props) {
-  const headingId = `bp-features-branded-dark-${section.sectionKey}-h`;
+  const titleId = `${section.sectionKey}-title`;
 
   return (
     <section
       className="bp-features-branded-dark"
       data-blueprint-key="features_3col_branded_dark"
-      aria-labelledby={section.heading ? headingId : undefined}
+      aria-labelledby={section.heading ? titleId : undefined}
     >
       <div className="bp-features-branded-dark__container">
         {(section.heading || section.subheading || section.body) && (
@@ -66,14 +66,14 @@ export function Features3ColBrandedDark({ section }: Props) {
             className="bp-features-branded-dark__header"
           >
             {section.subheading && (
-              <p className="bp-features-branded-dark__eyebrow">
+              <p className="bp-features-branded-dark__subtitle">
                 {section.subheading}
               </p>
             )}
             {section.heading && (
               <h2
-                id={headingId}
-                className="bp-features-branded-dark__heading"
+                id={titleId}
+                className="bp-features-branded-dark__title"
               >
                 {section.heading}
               </h2>
@@ -131,7 +131,7 @@ export function Features3ColBrandedDark({ section }: Props) {
                       )}
                     </div>
 
-                    <div className="bp-features-branded-dark__body">
+                    <div className="bp-features-branded-dark__description">
                       <h3 className="bp-features-branded-dark__title">
                         {item.title}
                       </h3>

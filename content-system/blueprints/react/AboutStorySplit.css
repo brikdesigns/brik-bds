@@ -34,7 +34,7 @@
   gap: var(--gap-md);
 }
 
-.bp-about-story-split__eyebrow {
+.bp-about-story-split__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -44,7 +44,7 @@
   color: var(--text-brand-primary);
 }
 
-.bp-about-story-split__heading {
+.bp-about-story-split__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
@@ -53,7 +53,7 @@
   color: var(--bp-about-story-split-heading-color, var(--text-primary));
 }
 
-.bp-about-story-split__body {
+.bp-about-story-split__description {
   margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);

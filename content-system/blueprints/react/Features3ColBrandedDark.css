@@ -33,7 +33,7 @@
   align-items: center;
 }
 
-.bp-features-branded-dark__eyebrow {
+.bp-features-branded-dark__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -44,7 +44,7 @@
   opacity: 0.85;
 }
 
-.bp-features-branded-dark__heading {
+.bp-features-branded-dark__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
@@ -162,7 +162,7 @@
 
 /* ── Card body ─────────────────────────────────────────────────── */
 
-.bp-features-branded-dark__body {
+.bp-features-branded-dark__description {
   padding: var(--padding-lg);
   display: flex;
   flex-direction: column;
