@@ -16,16 +16,14 @@ Compact interactive pill for filtering, selection, and removable tokens. Use for
 
 ## Variants
 
-All variant, appearance, size, and state combinations.
+Single hierarchy axis — primary / secondary. Size and state combinations below.
 
 <Canvas of={Stories.Variants} />
 
-- **`secondary` + `solid`** — Default filter chip. High contrast fill.
-- **`secondary` + `outline`** — Softer filter chip. Transparent with neutral border.
-- **`primary` + `solid`** — Active/selected filter. Brand emphasis fill.
-- **`primary` + `outline`** — Active filter with lower-emphasis brand border.
+- **`secondary`** (default) — Neutral filter chip. The everyday filter pill.
+- **`primary`** — Emphasized chip. Active/selected filter, current state.
 
-**Appearance** is a shared axis across Badge/Chip/Tag — see [Vocabulary › Axes](https://design.brikdesigns.com/docs/primitives/naming-conventions).
+Chip is **interactive only** — appearance (`solid` / `outline`) was removed in v0.66 because it duplicated the hierarchy axis for an interactive component. Read-only fill variations live on [Badge](badge.mdx) and [Tag](tag.mdx).
 
 ## Patterns
 

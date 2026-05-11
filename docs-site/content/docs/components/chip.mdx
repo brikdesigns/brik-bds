@@ -48,17 +48,19 @@ import { Chip } from '@brikdesigns/bds';
 
 ## Variants
 
-Two variants × two appearances. Match the chip's role:
+Single hierarchy axis. Pick by role inside the cluster:
 
-- **`secondary` + `solid`** — Default filter chip. High contrast.
-- **`secondary` + `outline`** — Softer filter chip. Transparent + neutral border.
-- **`primary` + `solid`** — Active/selected filter. Brand emphasis.
-- **`primary` + `outline`** — Active filter with lower brand emphasis.
+- **`secondary`** (default) — Neutral filter chip. The everyday filter pill.
+- **`primary`** — Emphasized chip. Active/selected state, current filter.
 
 ```tsx
-<Chip label="Design" variant="secondary" appearance="solid" />
-<Chip label="Design" variant="primary" appearance="outline" />
+<Chip label="Design" variant="secondary" />
+<Chip label="Design" variant="primary" />
 ```
+
+<Callout type="info">
+  `appearance` (`solid` / `outline`) was removed in v0.66. Chip is interactive — its hierarchy axis (`variant`) is the only emphasis lever it needs. Fill variations on read-only pills live on [Badge](/docs/components/badge) and [Tag](/docs/components/tag), which keep the `appearance` axis.
+</Callout>
 
 ## Common shapes
 
@@ -113,7 +115,6 @@ Two variants × two appearances. Match the chip's role:
 | `label` | `string` *(required)* | — |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
 | `variant` | `'primary' \| 'secondary'` | `'secondary'` |
-| `appearance` | `'solid' \| 'outline'` | `'solid'` |
 | `icon` | `ReactNode` | — |
 | `avatar` | `ReactNode` | — |
 | `showDropdown` | `boolean` | `false` |
