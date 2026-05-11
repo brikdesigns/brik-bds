@@ -39,6 +39,7 @@ These compose: ADR-006 governs *story files* (where stories live, what shape); A
 |---|---|---|
 | [ADR-001](./ADR-001-bds-find.md) | **Accepted** (2026-05-08) | `bds-find` CLI + semantic manifest fields so consumer agents can discover BDS components instead of building local clones |
 | [ADR-002](./ADR-002-accessibility-overlays.md) | **Accepted** | Ban third-party accessibility overlay widgets — they harm the users they claim to help and increase ADA legal exposure |
+| [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) | **Accepted** (2026-05-11) | Naming canon flips from open banlist to closed allowlist — single `bds-` namespace, structural-only modifiers, slot vocabulary enumerated in `docs/SLOT-ALLOWLIST.md`. Stops the `__lead` / `__plan-name` drift mechanism at the source. |
 
 ## Status field — what each value means
 
