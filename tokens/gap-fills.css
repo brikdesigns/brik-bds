@@ -261,3 +261,48 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* symmetric — looping, continuous */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Dark-mode service-tag overrides
+ *
+ * The `--background-service-*` / `--text-service-*` tokens above are defined
+ * only in `:root` (light mode). In dark mode, a ServiceTag rendered against a
+ * dark page background needs the inverse contrast: dark tinted background +
+ * light foreground, instead of light tinted background + dark foreground.
+ *
+ * Flips per category:
+ *   bg:   --services--{color}       →  --services--{color}-dark
+ *   text: --services--{color}-dark  →  --services--{color}-light
+ *
+ * Surface and secondary variants follow the same inversion. The primitives
+ * already exist in the section above — this block just remaps the semantic
+ * tokens for dark consumers.
+ *
+ * Affects: every consumer of `<ServiceTag>` (brikdesigns, portal, renew-pms)
+ * when the page is in dark mode.
+ * ────────────────────────────────────────────────────────────────────────── */
+:root[data-theme="dark"] {
+  --background-service-marketing: var(--services--green-dark);
+  --background-service-marketing-secondary: var(--services--green);
+  --surface-service-marketing: var(--services--green-dark);
+  --text-service-marketing: var(--services--green-light);
+
+  --background-service-brand: var(--services--yellow-dark);
+  --background-service-brand-secondary: var(--services--yellow);
+  --surface-service-brand: var(--services--yellow-dark);
+  --text-service-brand: var(--services--yellow-light);
+
+  --background-service-information: var(--services--blue-dark);
+  --background-service-information-secondary: var(--services--blue);
+  --surface-service-information: var(--services--blue-dark);
+  --text-service-information: var(--services--blue-light);
+
+  --background-service-product: var(--services--purple-dark);
+  --background-service-product-secondary: var(--services--purple);
+  --surface-service-product: var(--services--purple-dark);
+  --text-service-product: var(--services--purple-light);
+
+  --background-service-service: var(--services--orange-dark);
+  --background-service-service-secondary: var(--services--orange);
+  --text-service-service: var(--services--orange-light);
+}
