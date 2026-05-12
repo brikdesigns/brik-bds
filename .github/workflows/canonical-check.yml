@@ -24,6 +24,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: canonical-check-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   canonical-check:
     runs-on: ubuntu-latest

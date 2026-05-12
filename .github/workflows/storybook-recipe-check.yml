@@ -23,6 +23,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: storybook-recipe-check-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   storybook-recipe-check:
     runs-on: ubuntu-latest
