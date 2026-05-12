@@ -86,6 +86,22 @@ Inline `style` is only acceptable for:
 .bds-{component}__{child}--{mod}    child modifier
 ```
 
+The `__{child}` slot suffix is **not free-form** — it must come from the closed allowlist. See the next section.
+
+## Naming canon — single source of truth
+
+This page covers component CSS *structure*. The vocabulary the structure uses — every legitimate `__slot` name, every modifier rule, every `bds-` namespace decision — lives in dedicated canon:
+
+| What | Canon source |
+|---|---|
+| BEM rules, `bds-` namespace, structural-only modifier rule, id generation, axes | [Naming Conventions](../docs-site/content/docs/primitives/naming-conventions.mdx) (also at [design.brikdesigns.com/docs/primitives/naming-conventions](https://design.brikdesigns.com/docs/primitives/naming-conventions)) |
+| Closed allowlist of every `__slot` name (the only valid suffixes) | [`docs/SLOT-ALLOWLIST.md`](./SLOT-ALLOWLIST.md) |
+| Why the system runs on a closed allowlist instead of a banlist | [`docs/adrs/ADR-008`](./adrs/ADR-008-naming-canon-closed-allowlist.md) |
+| Token taxonomy (`--text-*`, `--surface-*`, `--background-*`, semantic `--border-*`) | [Color tokens](../docs-site/content/docs/primitives/color.mdx) + [Spacing](../docs-site/content/docs/primitives/spacing.mdx) — `dist/tokens.css` is the live allowlist |
+
+**The rule:** when this doc and the canon disagree, the canon wins. Open a PR to align this doc.
+
+**For consumers** (portal, renew-pms, brikdesigns, freedom, web sites): the same canon applies. Don't invent local class naming conventions; import BDS components or follow `bds-` BEM and the slot allowlist for any new CSS.
 
 ## Tokens only
 
