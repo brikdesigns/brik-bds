@@ -34,6 +34,96 @@ The old open-banlist canon enumerated *banned* terms; agents invented new ones (
 3. If no existing slot fits, PR an entry into `SLOT-ALLOWLIST.md` with justification.
 4. Reviewer checks: would this slot work on more than one block? Is it generic (not layout-specific)? Is it structural (not visual)?
 
+## Composition layers
+
+A page in BDS is composed in five conceptual layers. Each layer has a single responsibility, a single vocabulary, and only knows about the layer below it.
+
+The layered model is **pedagogical** — it explains how to *think* about a page — and is intentionally non-binding on the BEM canon. Implementation continues to follow [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) (one block per blueprint family with structural modifiers, closed slot allowlist); the layers below describe how to *reason about* what those blocks express, not a new naming taxonomy.
+
+### The five layers
+
+| Layer | Responsibility | Vocabulary | Examples |
+|---|---|---|---|
+| **Section** | A page role with surrounding structure (vertical rhythm, container, background surface). | Page-level semantic | `Hero`, `Content`, `CTA` |
+| **Layout** | Pure composition primitive — how children are arranged. No styling beyond structure. | Composition | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
+| **Container (Display)** | A styled holder that composes blocks into a self-contained unit. Carries border / padding / elevation / radius. | Bounded unit | `Card`, `List`, `Form`, `Accordion`, `Tabs` |
+| **Block** | A composed content unit — a fixed slot shape filled with atoms. Reused both standalone and inside containers. | Slot + atoms | `ContentBlock`, `MediaBlock`, `ListItem`, `FormField`, `AccordionItem`, `Stat` |
+| **Component** | A single primitive atom. | One primitive | `Button`, `Input`, `Image`, `Badge`, `Icon`, `Heading` |
+
+### Where each layer lives in the codebase
+
+The layer model is conceptual; the directory layout follows ADR-008's primitive-vs-blueprint split.
+
+| Layer | Directory | Notes |
+|---|---|---|
+| Section | `content-system/blueprints/{react,astro}/` | The blueprint families per ADR-008 (`bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-support-plan`) play the Section role. |
+| Layout | `components/ui/` | Layout primitives (`Stack`, `Cluster`, `Grid`, `Split`, `Row`) ship as components; the "Layout" label is conceptual, not a separate directory. |
+| Container | `components/ui/` | `Card`, `Accordion`, `List`, etc. — alongside other primitives. |
+| Block | `components/ui/` | `Field`, `CardSummary`, etc. that fill container slots. |
+| Component | `components/ui/` | The atomic primitives. |
+
+### Decision rule — block vs container
+
+When you're not sure whether a new pattern is a block or a container, ask:
+
+> If the thing is described primarily by **how its children are styled and bounded** (border, elevation, padding, max-width), it's a **container**. If it's described by **what slots it offers and which atoms fill them** (heading, body, kicker, action), it's a **block**.
+
+`Card` passes "styled and bounded" → container. `ContentBlock` passes "slots and atoms" → block. The same test resolves new patterns as the system grows.
+
+### Card is a styled container; orientation comes from its layout child
+
+A Card encodes only its container styling (border, radius, padding, elevation). Orientation — stacked vs horizontal vs grid — comes from the **layout primitive** placed inside it, not from a Card variant.
+
+```tsx
+// ✅ Stacked card — Stack layout inside Card
+<Card>
+  <Stack>
+    <MediaBlock />
+    <ContentBlock />
+  </Stack>
+</Card>
+
+// ✅ Horizontal card — Split layout inside Card
+<Card>
+  <Split>
+    <MediaBlock />
+    <ContentBlock />
+  </Split>
+</Card>
+
+// ❌ Don't bake orientation into Card
+<Card variant="horizontal">...</Card>
+<Card layout="stacked">...</Card>
+```
+
+The same principle keeps you from inventing `CardImageLeft`, `CardStacked`, `CardHorizontal`, `CardImageRight` — these are all "Card + a layout child," not separate components.
+
+### Stat is a block
+
+`Stat` (value + label, two slots, no border styling of its own) is a **block**, not a container. The familiar "stat tile" look — a metric in a bordered box — is a Card containing a Stat:
+
+```tsx
+// Bordered stat tile — Card (container) holds Stat (block)
+<Card>
+  <Stat value="75%" label="of website credibility comes from design" />
+</Card>
+
+// Card with content + metric
+<Card>
+  <ContentBlock title="First impressions" body="..." />
+  <Stat value="0.05s" label="to make a first impression" />
+</Card>
+
+// Vertical list of stats with no container
+<Stack>
+  <Stat value="75%" label="..." />
+  <Stat value="42%" label="..." />
+  <Stat value="50%" label="..." />
+</Stack>
+```
+
+If you find yourself wanting a `StatCard` component, you're conflating block and container layers — write it as a Card containing a Stat instead.
+
 ## Title vs heading
 
 `title` and `heading` refer to the same typographic role at different layers. They are **not** substitutes for each other.
@@ -151,7 +241,7 @@ The datum paired with a label.
 
 ## Section vs card vs board
 
-These are containers, not text. Different words because they have different responsibilities.
+These are containers, not text. Different words because they have different responsibilities. See [Composition layers § Card is a styled container](#card-is-a-styled-container-orientation-comes-from-its-layout-child) for the model these names sit inside; this section is the implementation-level reference for which container to reach for.
 
 | Container | Purpose | When |
 |---|---|---|
@@ -165,7 +255,7 @@ Don't reach for a `Card` when a `DataSection` is right. Cards are self-contained
 
 ## Blueprints — composition, not redefinition
 
-Blueprints (`content-system/blueprints/*`) are page-level layouts assembled from BDS primitives. Per [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md), **blueprints use the same `bds-` namespace as primitives** — the `bp-` prefix is deprecated.
+Blueprints (`content-system/blueprints/*`) are page-level layouts assembled from BDS primitives — the [Section layer](#the-five-layers) of the composition model. Per [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md), **blueprints use the same `bds-` namespace as primitives** — the `bp-` prefix is deprecated.
 
 ### The rules
 
@@ -196,9 +286,20 @@ Blueprints (`content-system/blueprints/*`) are page-level layouts assembled from
 
 > Generate `id` from the BEM role plus a content-derived stable key — never the layout/blueprint name, and never a shape-suffix like `-h`.
 
-**Good:** `id={`title-${section.sectionKey}`}`, `id={`${section.sectionKey}-title`}`, or — when the role is unambiguous on the page — just `id={useId()}`.
+**Good:**
 
-**Bad:** `id="bp-about-story-split-${section.sectionKey}-h"` — bakes both the layout name and a `-h` shape suffix that tells the reader nothing about role.
+```tsx
+<h2 id={`title-${section.sectionKey}`}>...</h2>
+<h2 id={`${section.sectionKey}-title`}>...</h2>
+<h2 id={useId()}>...</h2>   {/* when the role is unambiguous on the page */}
+```
+
+**Bad:**
+
+```tsx
+<h2 id={`bp-about-story-split-${section.sectionKey}-h`}>...</h2>
+{/* bakes both the layout name and a `-h` shape suffix that tells the reader nothing about role */}
+```
 
 ## Elements that render `<h*>` vs elements that don't
 
@@ -249,6 +350,87 @@ The older `dark | light` vocabulary was ambiguous with dark-mode theming — `--
 
 Adding a new pill component? Reuse the axis names above. Don't invent `kind`, `style`, `flavor`, etc. — the axes exist so a reader knows what to expect.
 
+## Token name anatomy
+
+CSS custom properties in BDS follow one of three formulas depending on **what kind of token** they are. The token kind determines which formula applies, not the property family (`--text-*` vs `--surface-*`).
+
+### Three token kinds
+
+| Kind | Purpose | Formula | Examples |
+|---|---|---|---|
+| **Primitive** | A raw palette value. The atomic source for everything else. | `--<foundation>-<palette>-<shade>` | `--color-grayscale-white`, `--services--green-dark`, `--space-md` |
+| **Intent** | A semantic role. The default vocabulary for a generic theme. | `--<property>-<role>[-<modifier>][-<state>]` | `--text-primary`, `--surface-brand-primary`, `--surface-brand-primary-hover` |
+| **Scoped intent** | A themed semantic — intent within a named scope (service line, industry, etc.). | `--<property>-<scope>-<scope-value>[-<modifier>][-<state>]` | `--text-service-marketing`, `--surface-service-marketing`, `--text-service-marketing-on-dark` |
+
+Token files emit all three kinds. Most consumer code reaches for **intent** by default; **scoped intent** is for cases where a named scope (a service line, an industry pack, a partner-branded surface) overrides the default.
+
+### The two parallel formulas
+
+Intent and scoped-intent tokens use the same formula shape, with a `scope` segment + `scope-value` segment inserted for scoped intent:
+
+```
+Intent:        --<property>-<role>[-<modifier>][-<state>]
+               --text-primary
+               --surface-brand-primary-hover
+               --text-muted
+
+Scoped intent: --<property>-<scope>-<scope-value>[-<modifier>][-<state>]
+               --text-service-marketing
+               --surface-service-marketing-on-dark
+               --text-service-marketing-on-light
+```
+
+Two consequences:
+
+1. **Required segments are `property` + `role` (intent) or `property` + `scope` + `scope-value` (scoped intent).** Everything in `[ ]` is optional and added only when needed.
+2. **`scope` names a category of theming** (`service`, `industry`, `season`); **`scope-value` names the instance** (`marketing`, `healthcare`, `q4`). Scoped tokens *always* carry both segments so future scopes don't collide (`service-marketing` ≠ `industry-marketing`).
+
+### Modifier order — context replaces hierarchy
+
+Tokens carry up to two axes of modifier — hierarchy and context — but **scoped tokens never stack them**.
+
+- **Hierarchy** (`-primary`, `-secondary`, `-muted`, `-brand-primary`) answers "how much attention does this command?"
+- **Context** (`-on-dark`, `-on-light`) answers "what surface is this sitting on?"
+
+For generic intent tokens, the two are separate scales: `--text-primary` / `--text-secondary` / `--text-muted` are one family; `--text-on-color-dark` / `--text-on-color-light` are another. They don't combine in canon — you reach for one or the other.
+
+For scoped tokens, when a context variant is needed, the (text, surface) pairing carries emphasis implicitly — there's no need to also express hierarchy:
+
+```
+✅ --text-service-marketing                  paired with marketing surface; emphasis implicit
+✅ --text-service-marketing-on-dark          context only
+❌ --text-service-marketing-primary-on-dark  stacks hierarchy + context — don't
+❌ --text-service-marketing-secondary        preemptive hierarchy — see next section
+```
+
+If a scoped token needs to express both hierarchy and context, you've usually conflated two concerns. Reach for a generic intent token (`--text-muted`, `--text-secondary`) for the lower-emphasis cases — they work across themed surfaces.
+
+### When to add `-primary` / `-secondary` (and when not to)
+
+> Never preemptively. Add hierarchy modifiers only when a second emphasis level exists in the design, distinct from generic `--text-secondary` / `--text-muted`.
+
+This is the **single-level token set** rule. If `--text-service-marketing` is the only marketing-tinted text token, **don't suffix it `-primary`**. Adding `-primary` implies a `-secondary` exists; if it doesn't, the modifier is a lie and a future contributor will invent `--text-service-marketing-secondary` to fill the gap.
+
+The same rule applies to surfaces: `--surface-service-marketing` is the only marketing surface today — no `-primary` suffix. Add `-secondary` only when a deliberately designed alternate marketing surface exists.
+
+### Why scoped variants drop `-color-`
+
+Generic intent has `--text-on-color-dark` / `--text-on-color-light`. The `-color-` segment disambiguates "text used on a *colored* surface" from default text used on the neutral default surface.
+
+Scoped intent has `--text-service-marketing-on-dark` / `--text-service-marketing-on-light` — **no `-color-`**. The `service-marketing` segment already implies a colored context (you're inside a service-line theme), so `-color-` becomes redundant.
+
+```
+✅ --text-on-color-dark                    generic — needs -color- to disambiguate
+✅ --text-service-marketing-on-dark        scoped — service-marketing implies color
+❌ --text-service-marketing-on-color-dark  redundant
+```
+
+This keeps scoped names short and reinforces that scopes always operate on colored surfaces.
+
+<Callout type="info">
+  This section codifies the formula. The canonical token implementations are emitted by Style Dictionary from the design-tokens source — see [Design Tokens overview](/docs/primitives) and the brik-bds reconciliation issue [#563](https://github.com/brikdesigns/brik-bds/issues/563) for the current rollout state of the service-line token set.
+</Callout>
+
 ## Elements — no unclassed wrappers
 
 The element / BEM table above lists which HTML elements each role maps to. The implicit rule is that **every element in a BDS component tree carries a role name** — either a `bds-*` class (when the element belongs to the system) or a `data-*` attribute (when the consumer needs to override something). A `<div>` with no class and no role is drift: it tells the next reader nothing about why the element exists.
@@ -279,3 +461,5 @@ The element / BEM table above lists which HTML elements each role maps to. The i
 - [Color tokens](/docs/primitives/color) — semantic role categories
 - [Typography tokens](/docs/primitives/typography) — heading vs body vs label scales
 - [Components](/docs/components) — every component implements the axes above
+- [ADR-008 — Naming canon: closed allowlist](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) — implementation canon the composition layers sit on top of
+- [Theming layers vs. content vocabularies](https://github.com/brikdesigns/brik-bds/issues/536) — sibling docs work clarifying which names are theming vs. content vocabulary
