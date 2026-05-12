@@ -293,11 +293,11 @@ export const Patterns: Story = {
             {
               heading: 'Services',
               links: [
-                { label: 'Brand Design', href: '#', adornment: <ServiceDot color="var(--services--yellow)" /> },
-                { label: 'Marketing Design', href: '#', adornment: <ServiceDot color="var(--services--green)" /> },
-                { label: 'Information Design', href: '#', adornment: <ServiceDot color="var(--services--blue)" /> },
-                { label: 'Product Design', href: '#', adornment: <ServiceDot color="var(--services--purple)" /> },
-                { label: 'Back Office Design', href: '#', adornment: <ServiceDot color="var(--services--orange)" /> },
+                { label: 'Brand Design', href: '#', adornment: <ServiceDot color="var(--surface-service-brand)" /> },
+                { label: 'Marketing Design', href: '#', adornment: <ServiceDot color="var(--surface-service-marketing)" /> },
+                { label: 'Information Design', href: '#', adornment: <ServiceDot color="var(--surface-service-information)" /> },
+                { label: 'Product Design', href: '#', adornment: <ServiceDot color="var(--surface-service-product)" /> },
+                { label: 'Back Office Design', href: '#', adornment: <ServiceDot color="var(--surface-service-back-office)" /> },
               ],
             },
             {

@@ -421,7 +421,7 @@ export const Patterns: Story = {
                   fontFamily: 'var(--font-family-body)',
                   fontSize: 'var(--body-sm)', // bds-lint-ignore
                   color: 'var(--text-muted)',
-                }}>--services--{config.token}</span>
+                }}>--color-{config.token}-light</span>
               </div>
             );
           })}
