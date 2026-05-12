@@ -10,6 +10,10 @@ on:
       - 'design-tokens/**'
       - 'updates/**'
 
+concurrency:
+  group: chromatic-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   chromatic:
     runs-on: ubuntu-latest
