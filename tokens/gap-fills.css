@@ -219,16 +219,23 @@
    * § Token name anatomy. ADR-008 governs the wider BEM rule set.
    * ────────────────────────────────────────────────────────────────────── */
 
+  /* Background defaults use `-lighter` (pastel) to give AA-safe contrast with
+   * `-darkest` text across all 5 service lines (measured 2026-05-12).
+   * `-on-light` / `-on-dark` are mode-invariant context variants; `-inverse`
+   * is a mode-aware companion (the opposite tone of the default — used by
+   * blueprints like HeroSplitImageCardOverlay to set `--background-inverse`). */
+
   /* ── marketing (green) ── */
   --surface-service-marketing: var(--color-green-light);
   --surface-service-marketing-light: var(--color-green-lightest);
   --surface-service-marketing-dark: var(--color-green-darkest);
-  --background-service-marketing: var(--color-green-dark);
-  --background-service-marketing-on-light: var(--color-green-dark);
-  --background-service-marketing-on-dark: var(--color-green-light);
+  --background-service-marketing: var(--color-green-lighter);
+  --background-service-marketing-on-light: var(--color-green-darkest);
+  --background-service-marketing-on-dark: var(--color-green-lightest);
+  --background-service-marketing-inverse: var(--color-green-darkest);
   --border-service-marketing: var(--color-green-dark);
-  --border-service-marketing-on-light: var(--color-green-dark);
-  --border-service-marketing-on-dark: var(--color-green-light);
+  --border-service-marketing-on-light: var(--color-green-darkest);
+  --border-service-marketing-on-dark: var(--color-green-lightest);
   --text-service-marketing: var(--color-green-darkest);
   --text-service-marketing-on-light: var(--color-green-darkest);
   --text-service-marketing-on-dark: var(--color-green-lightest);
@@ -237,12 +244,13 @@
   --surface-service-brand: var(--color-yellow-light);
   --surface-service-brand-light: var(--color-yellow-lightest);
   --surface-service-brand-dark: var(--color-yellow-darkest);
-  --background-service-brand: var(--color-yellow-dark);
-  --background-service-brand-on-light: var(--color-yellow-dark);
-  --background-service-brand-on-dark: var(--color-yellow-light);
+  --background-service-brand: var(--color-yellow-lighter);
+  --background-service-brand-on-light: var(--color-yellow-darkest);
+  --background-service-brand-on-dark: var(--color-yellow-lightest);
+  --background-service-brand-inverse: var(--color-yellow-darkest);
   --border-service-brand: var(--color-yellow-dark);
-  --border-service-brand-on-light: var(--color-yellow-dark);
-  --border-service-brand-on-dark: var(--color-yellow-light);
+  --border-service-brand-on-light: var(--color-yellow-darkest);
+  --border-service-brand-on-dark: var(--color-yellow-lightest);
   --text-service-brand: var(--color-yellow-darkest);
   --text-service-brand-on-light: var(--color-yellow-darkest);
   --text-service-brand-on-dark: var(--color-yellow-lightest);
@@ -251,12 +259,13 @@
   --surface-service-information: var(--color-blue-light);
   --surface-service-information-light: var(--color-blue-lightest);
   --surface-service-information-dark: var(--color-blue-darkest);
-  --background-service-information: var(--color-blue-dark);
-  --background-service-information-on-light: var(--color-blue-dark);
-  --background-service-information-on-dark: var(--color-blue-light);
+  --background-service-information: var(--color-blue-lighter);
+  --background-service-information-on-light: var(--color-blue-darkest);
+  --background-service-information-on-dark: var(--color-blue-lightest);
+  --background-service-information-inverse: var(--color-blue-darkest);
   --border-service-information: var(--color-blue-dark);
-  --border-service-information-on-light: var(--color-blue-dark);
-  --border-service-information-on-dark: var(--color-blue-light);
+  --border-service-information-on-light: var(--color-blue-darkest);
+  --border-service-information-on-dark: var(--color-blue-lightest);
   --text-service-information: var(--color-blue-darkest);
   --text-service-information-on-light: var(--color-blue-darkest);
   --text-service-information-on-dark: var(--color-blue-lightest);
@@ -265,12 +274,13 @@
   --surface-service-product: var(--color-purple-light);
   --surface-service-product-light: var(--color-purple-lightest);
   --surface-service-product-dark: var(--color-purple-darkest);
-  --background-service-product: var(--color-purple-dark);
-  --background-service-product-on-light: var(--color-purple-dark);
-  --background-service-product-on-dark: var(--color-purple-light);
+  --background-service-product: var(--color-purple-lighter);
+  --background-service-product-on-light: var(--color-purple-darkest);
+  --background-service-product-on-dark: var(--color-purple-lightest);
+  --background-service-product-inverse: var(--color-purple-darkest);
   --border-service-product: var(--color-purple-dark);
-  --border-service-product-on-light: var(--color-purple-dark);
-  --border-service-product-on-dark: var(--color-purple-light);
+  --border-service-product-on-light: var(--color-purple-darkest);
+  --border-service-product-on-dark: var(--color-purple-lightest);
   --text-service-product: var(--color-purple-darkest);
   --text-service-product-on-light: var(--color-purple-darkest);
   --text-service-product-on-dark: var(--color-purple-lightest);
@@ -279,12 +289,13 @@
   --surface-service-back-office: var(--color-orange-light);
   --surface-service-back-office-light: var(--color-orange-lightest);
   --surface-service-back-office-dark: var(--color-orange-darkest);
-  --background-service-back-office: var(--color-orange-dark);
-  --background-service-back-office-on-light: var(--color-orange-dark);
-  --background-service-back-office-on-dark: var(--color-orange-light);
+  --background-service-back-office: var(--color-orange-lighter);
+  --background-service-back-office-on-light: var(--color-orange-darkest);
+  --background-service-back-office-on-dark: var(--color-orange-lightest);
+  --background-service-back-office-inverse: var(--color-orange-darkest);
   --border-service-back-office: var(--color-orange-dark);
-  --border-service-back-office-on-light: var(--color-orange-dark);
-  --border-service-back-office-on-dark: var(--color-orange-light);
+  --border-service-back-office-on-light: var(--color-orange-darkest);
+  --border-service-back-office-on-dark: var(--color-orange-lightest);
   --text-service-back-office: var(--color-orange-darkest);
   --text-service-back-office-on-light: var(--color-orange-darkest);
   --text-service-back-office-on-dark: var(--color-orange-lightest);
@@ -330,48 +341,55 @@
 /* ──────────────────────────────────────────────────────────────────────────
  * Dark-mode service-line overrides
  *
- * Only DEFAULT service tokens (no tone/context suffix) flip in dark mode.
- * Tone-suffix (`-light`, `-dark`) and context-suffix (`-on-light`, `-on-dark`)
- * variants are mode-invariant — they pin explicit values regardless of theme.
+ * Only DEFAULT service tokens (no tone/context suffix) plus `-inverse` flip
+ * in dark mode. Tone-suffix (`-light`, `-dark`) and context-suffix
+ * (`-on-light`, `-on-dark`) variants are mode-invariant — they pin explicit
+ * values regardless of theme.
  *
  * Default flip per service line:
- *   --surface-*    : light  → darkest
- *   --background-* : dark   → light    (component bg inverts against dark surface)
- *   --border-*     : dark   → light    (same as background)
- *   --text-*       : darkest → lightest
+ *   --surface-*           : light  → darkest   (page-aligned dark section)
+ *   --background-*        : lighter → darkest  (component bg goes deep saturated)
+ *   --background-*-inverse: darkest → lightest (mode-aware companion stays opposite)
+ *   --border-*            : dark   → lightest  (border becomes light against dark bg)
+ *   --text-*              : darkest → lightest (light text on dark bg)
  *
- * Affects: every consumer of <ServiceBadge>, <ServiceTag>,
- * <HeroSplitImageCardOverlay> service-themed sections, plus future surface/text
- * adoption when the consumer page is in dark mode.
+ * High-contrast pairings hold in both modes:
+ *   light: background=lighter + text=darkest    → AA-safe pastel/dark
+ *   dark:  background=darkest + text=lightest   → AA-safe deep/light
  * ────────────────────────────────────────────────────────────────────────── */
 :root[data-theme="dark"] {
   /* ── marketing (green) ── */
   --surface-service-marketing: var(--color-green-darkest);
-  --background-service-marketing: var(--color-green-light);
-  --border-service-marketing: var(--color-green-light);
+  --background-service-marketing: var(--color-green-darkest);
+  --background-service-marketing-inverse: var(--color-green-lightest);
+  --border-service-marketing: var(--color-green-lightest);
   --text-service-marketing: var(--color-green-lightest);
 
   /* ── brand (yellow) ── */
   --surface-service-brand: var(--color-yellow-darkest);
-  --background-service-brand: var(--color-yellow-light);
-  --border-service-brand: var(--color-yellow-light);
+  --background-service-brand: var(--color-yellow-darkest);
+  --background-service-brand-inverse: var(--color-yellow-lightest);
+  --border-service-brand: var(--color-yellow-lightest);
   --text-service-brand: var(--color-yellow-lightest);
 
   /* ── information (blue) ── */
   --surface-service-information: var(--color-blue-darkest);
-  --background-service-information: var(--color-blue-light);
-  --border-service-information: var(--color-blue-light);
+  --background-service-information: var(--color-blue-darkest);
+  --background-service-information-inverse: var(--color-blue-lightest);
+  --border-service-information: var(--color-blue-lightest);
   --text-service-information: var(--color-blue-lightest);
 
   /* ── product (purple) ── */
   --surface-service-product: var(--color-purple-darkest);
-  --background-service-product: var(--color-purple-light);
-  --border-service-product: var(--color-purple-light);
+  --background-service-product: var(--color-purple-darkest);
+  --background-service-product-inverse: var(--color-purple-lightest);
+  --border-service-product: var(--color-purple-lightest);
   --text-service-product: var(--color-purple-lightest);
 
   /* ── back-office (orange) ── */
   --surface-service-back-office: var(--color-orange-darkest);
-  --background-service-back-office: var(--color-orange-light);
-  --border-service-back-office: var(--color-orange-light);
+  --background-service-back-office: var(--color-orange-darkest);
+  --background-service-back-office-inverse: var(--color-orange-lightest);
+  --border-service-back-office: var(--color-orange-lightest);
   --text-service-back-office: var(--color-orange-lightest);
 }
