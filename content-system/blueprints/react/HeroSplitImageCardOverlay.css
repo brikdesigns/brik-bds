@@ -29,13 +29,17 @@
   );
 }
 
-/* ── Audience cascade — canonical --*-service-{audience} tokens ── */
+/* ── Audience cascade — canonical --*-service-{audience} tokens.
+ * Note: the `data-audience='service'` attribute value still reads "service"
+ * for component-API compat; the underlying tokens were renamed
+ * `service-service` → `service-back-office` in #563 (orange line — back office).
+ * `-secondary` → `-on-dark` is the context-axis rename from the same issue. */
 
 .bp-hero-img-card[data-audience='brand'] {
   background: var(--background-service-brand);
   --bp-hero-img-card-headline-color: var(--text-service-brand);
   --text-brand-primary: var(--text-service-brand);
-  --background-inverse: var(--background-service-brand-secondary);
+  --background-inverse: var(--background-service-brand-on-dark);
   --text-on-color-light: var(--color-grayscale-white);
 }
 
@@ -43,7 +47,7 @@
   background: var(--background-service-marketing);
   --bp-hero-img-card-headline-color: var(--text-service-marketing);
   --text-brand-primary: var(--text-service-marketing);
-  --background-inverse: var(--background-service-marketing-secondary);
+  --background-inverse: var(--background-service-marketing-on-dark);
   --text-on-color-light: var(--color-grayscale-white);
 }
 
@@ -51,7 +55,7 @@
   background: var(--background-service-information);
   --bp-hero-img-card-headline-color: var(--text-service-information);
   --text-brand-primary: var(--text-service-information);
-  --background-inverse: var(--background-service-information-secondary);
+  --background-inverse: var(--background-service-information-on-dark);
   --text-on-color-light: var(--color-grayscale-white);
 }
 
@@ -59,15 +63,15 @@
   background: var(--background-service-product);
   --bp-hero-img-card-headline-color: var(--text-service-product);
   --text-brand-primary: var(--text-service-product);
-  --background-inverse: var(--background-service-product-secondary);
+  --background-inverse: var(--background-service-product-on-dark);
   --text-on-color-light: var(--color-grayscale-white);
 }
 
 .bp-hero-img-card[data-audience='service'] {
-  background: var(--background-service-service);
-  --bp-hero-img-card-headline-color: var(--text-service-service);
-  --text-brand-primary: var(--text-service-service);
-  --background-inverse: var(--background-service-service-secondary);
+  background: var(--background-service-back-office);
+  --bp-hero-img-card-headline-color: var(--text-service-back-office);
+  --text-brand-primary: var(--text-service-back-office);
+  --background-inverse: var(--background-service-back-office-on-dark);
   --text-on-color-light: var(--color-grayscale-white);
 }
 
@@ -145,7 +149,7 @@
 }
 
 .bp-hero-img-card__image-frame {
-  aspect-ratio: 4 / 3;
+  /* aspect-ratio handled by <Frame ratio="landscape"> wrapper */
   overflow: hidden;
   border-radius: var(--border-radius-md);
   background: var(--surface-secondary);
@@ -184,7 +188,7 @@
 }
 
 .bp-hero-img-card__missing {
-  aspect-ratio: 4 / 3;
+  /* aspect-ratio handled by <Frame ratio="landscape"> wrapper */
   display: flex;
   align-items: center;
   justify-content: center;
