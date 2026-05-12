@@ -13,6 +13,27 @@ Every word below describes a **role** or a **slot**. It does not dictate the vis
 
 This distinction is especially load-bearing for titles and headings (below) — get it wrong and you render outline-invisible content that looks correct visually.
 
+## Closed allowlist — single source of truth
+
+Per [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md), the system runs on a **closed allowlist** of slot names. The allowlist lives in [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — a single file, organized by category, that enumerates every legitimate `__slot` suffix.
+
+### The rule
+
+> Every `bds-{block}__{slot}` class uses a slot name that appears in `SLOT-ALLOWLIST.md`. Anything else fails the lint.
+
+The sections below (Title, Subtitle, Description, the label family, …) explain *what each canonical slot means and when to use it*. They are reference; the allowlist is the contract. If the allowlist and these sections disagree, the allowlist wins — open a PR to align the prose.
+
+### Why closed
+
+The old open-banlist canon enumerated *banned* terms; agents invented new ones (`__lead`, `__quote-text`, `__plan-name`, `__hamburger-bar`) faster than the banlist grew. Closing the canon inverts the burden: the default is reject, new vocabulary requires a deliberate PR. See ADR-008 for the full reasoning and the 2026-05-11 inventory data that prompted the change.
+
+### Adding a slot
+
+1. Identify the role the slot expresses; pick the most generic word that fits.
+2. Grep the codebase for existing allowlist slots that already cover the role — **reuse before invent**.
+3. If no existing slot fits, PR an entry into `SLOT-ALLOWLIST.md` with justification.
+4. Reviewer checks: would this slot work on more than one block? Is it generic (not layout-specific)? Is it structural (not visual)?
+
 ## Title vs heading
 
 `title` and `heading` refer to the same typographic role at different layers. They are **not** substitutes for each other.
@@ -144,26 +165,28 @@ Don't reach for a `Card` when a `DataSection` is right. Cards are self-contained
 
 ## Blueprints — composition, not redefinition
 
-Blueprints (`content-system/blueprints/*`) are page-level layouts assembled from BDS primitives. The `bp-{layout-name}` namespace exists to distinguish layout-owned CSS from primitive CSS — it does **not** open a parallel naming vocabulary.
+Blueprints (`content-system/blueprints/*`) are page-level layouts assembled from BDS primitives. Per [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md), **blueprints use the same `bds-` namespace as primitives** — the `bp-` prefix is deprecated.
 
 ### The rules
 
-1. **Slot suffixes follow the canon.** `bp-about-story-split__title`, `bp-hero-split-6040__subtitle`, `bp-cta-dark-centered__description`. Never `__heading`, `__headline`, `__eyebrow`, `__body`, `__quote` (use `CardTestimonial`), `__callout` (use `Banner`).
-2. **Compose, don't reimplement.** If a blueprint draws raw `<blockquote>` / `<img>` / `<aside>` markup that duplicates a primitive, import the primitive instead. A blueprint `.tsx` that imports zero from `components/ui/*` is almost always drift.
-3. **Use `Frame` for any aspect-locked image.** Never hardcode `aspect-ratio` in blueprint CSS — pass the ratio to `<Frame customRatio="..." />` or use a named preset (`square`, `portrait`, `landscape`, `wide`, `ultrawide`).
-4. **Variant + appearance values come from the component's declared type.** Pass values that exist on the component's prop union (e.g. `ButtonVariant`, `ServiceTagVariant`). The hierarchy axis in [Axes](#axes--shared-prop-vocabulary-across-components) — `variant ∈ {primary, secondary}` — applies where canon explicitly enumerates it (Chip, Button base case); individual components legitimately extend their variant union beyond hierarchy (Button has `outline`, `ghost`, `inverse`, `danger`, etc.; ServiceTag has `text`, `icon`, `icon-text`). Don't invent values the component doesn't declare — `variant="persona-cluster"` is wrong because no component has it; `variant="ghost"` on Button is fine because the Button type ships it. TypeScript is the authoritative gate; the lint stays out of this until the canon axis matrix grows to cover every component.
+1. **Single namespace.** Every class uses `bds-`. The `bp-` prefix is deprecated; no new `bp-*` classes ship after ADR-008. Existing `bp-*` classes migrate during Phase D blueprint consolidation (one family per PR).
+2. **One block per blueprint family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-support-plan`. Each family is **one block** with structural modifiers (`bds-hero--split-image`), not N separate blueprints.
+3. **Slot names come from the closed allowlist.** Every `bds-{block}__{slot}` must use a slot listed in [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md). Anything else fails the lint (Phase C). To add a new slot, edit the allowlist file in its own PR.
+4. **Structural-only modifiers.** Modifier names describe *structure* (`--split-image`, `--two-column`, `--with-pricing-card`) — never appearance (`--dark`, `--centered`) or theme (`--inverse`, `--light`). A "dark centered" CTA themed light makes the name a lie; that's the failure mode the rule prevents.
+5. **Compose, don't reimplement.** If a blueprint draws raw `<blockquote>` / `<img>` / `<aside>` markup that duplicates a primitive, import the primitive instead. A blueprint `.tsx` that imports zero from `components/ui/*` is almost always drift.
+6. **Use `Frame` for any aspect-locked image.** Never hardcode `aspect-ratio` in blueprint CSS — pass the ratio to `<Frame customRatio="..." />` or use a named preset (`square`, `portrait`, `landscape`, `wide`, `ultrawide`).
+7. **Variant + appearance values come from the component's declared type.** Pass values that exist on the component's prop union (e.g. `ButtonVariant`, `ServiceTagVariant`). The hierarchy axis in [Axes](#axes--shared-prop-vocabulary-across-components) — `variant ∈ {primary, secondary}` — applies where canon explicitly enumerates it (Chip base case); individual components legitimately extend their variant union beyond hierarchy (Button has `outline`, `ghost`, `inverse`, `danger`, etc.; ServiceTag has `text`, `icon`, `icon-text`). Don't invent values the component doesn't declare; TypeScript is the authoritative gate.
 
-### What `bp-` prefixes are for
+### Migration status
 
-- Layout-specific CSS that doesn't belong on the primitive (e.g. `bp-services-grid` setting its own grid template).
-- Container slots specific to the layout (`bp-hero-split-6040__media-column`).
-- Custom property overrides scoped to the layout (`--bp-about-story-split-bg`).
-
-What `bp-` prefixes are **not** for: renaming primitive roles. A title is a title.
-
-### Enforcement
-
-`scripts/lint-blueprint-naming.mjs` greps blueprint `.tsx` / `.astro` / `.css` for banned roles, banned axis values, hand-rolled markup that duplicates BDS primitives, and unstable `aria-labelledby` ids. Runs in `npm run validate` and pre-commit when blueprint files are staged.
+| Status | What |
+|---|---|
+| Locked in canon | Rules 1–7 above (this section) |
+| Allowlist | [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — canonical slot list |
+| Lint | `scripts/lint-blueprint-naming.mjs` runs in pre-commit on staged blueprint files. **Phase C** flips it to allowlist mode (fails on any slot not in the allowlist). |
+| Code | Existing blueprints still ship `bp-*` classes — being migrated **Phase D**, one family per PR (hero → cta → services → features → about → support-plan). |
+| Consumers | `bp-*` overrides in consumer repos audited + migrated **Phase E**, coordinated with Phase D rollout. |
+| `bp-` deletion | After all consumers migrate, the deprecated prefix is dropped — **Phase F**. Until then, both prefixes coexist in the codebase. |
 
 ## Stable ids and `aria-labelledby`
 
