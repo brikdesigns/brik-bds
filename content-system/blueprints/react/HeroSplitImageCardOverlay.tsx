@@ -17,6 +17,7 @@
  */
 import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
 import { LinkButton } from '../../../components/ui/Button/LinkButton';
+import { Frame } from '../../../components/ui/Frame/Frame';
 import { ServiceTag } from '../../../components/ui/ServiceBadge/ServiceTag';
 import type { BlueprintProps } from '../astro/types';
 import './HeroSplitImageCardOverlay.css';
@@ -92,7 +93,7 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
 
         {priceCard ? (
           <aside className="bp-hero-img-card__media-card">
-            <div className="bp-hero-img-card__image-frame">
+            <Frame ratio="landscape" className="bp-hero-img-card__image-frame">
               <img
                 src={priceCard.imageUrl}
                 alt={priceCard.imageAlt ?? ''}
@@ -100,7 +101,7 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
                 decoding="async"
                 className="bp-hero-img-card__image"
               />
-            </div>
+            </Frame>
             {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
               <div className="bp-hero-img-card__price">
                 {priceCard.priceLabel && priceCard.price && (
@@ -120,7 +121,9 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
             )}
           </aside>
         ) : (
-          <aside
+          <Frame
+            ratio="landscape"
+            as="aside"
             className="bp-hero-img-card__missing"
             data-content-needed="hero_image_url"
             role="presentation"
@@ -128,7 +131,7 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
             <p className="bp-hero-img-card__missing-label">
               Hero image card missing for this page.
             </p>
-          </aside>
+          </Frame>
         )}
       </div>
     </section>
