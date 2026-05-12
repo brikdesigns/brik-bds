@@ -17,6 +17,10 @@ on:
     - cron: '0 13 * * 1'  # Monday 09:00 ET (13:00 UTC)
   workflow_dispatch:
 
+concurrency:
+  group: drift-alarm-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check-drift:
     name: Check consumer drift

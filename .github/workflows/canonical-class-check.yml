@@ -32,6 +32,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: canonical-class-check-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   canonical-class-check:
     runs-on: ubuntu-latest
