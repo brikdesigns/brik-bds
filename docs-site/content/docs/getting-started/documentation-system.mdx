@@ -1,0 +1,81 @@
+---
+title: Documentation system
+description: Mental model and tier table for where new knowledge lives at Brik, and how a session note matures into a published rule.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Brik's documentation isn't one surface. It's a layered system — CLAUDE.md files, skill files, standards, brik-rag, memory, Fumadocs, and Notion — each with a specific audience and load behavior. This page explains the mental model, the tier table, and the routing decision so contributors (human or agent) put new knowledge in the right place the first time.
+
+The canonical agent-facing version of this routing lives in the [`documentation-standards` skill](https://github.com/brikdesigns/brik-llm/blob/main/.claude/skills/documentation-standards/SKILL.md). This page is the human-readable companion — the same logic, reframed for someone browsing the docs without a Claude session open.
+
+## Mental model
+
+<Callout type="info">
+  **ADRs = decisions · Standards = rules in force · Skills = retrieval triggers · CLAUDE.md = invariants only**
+</Callout>
+
+Four artifact types, four jobs:
+
+- **ADRs** record *why* a choice was made and *when*. They are historical. You read an ADR to understand a constraint, not to follow a procedure.
+- **Standards** are the canonical rules in force *today* for a specific authoring domain — story shape, MDX recipe, component build, content standard. Long-form, prescriptive, retrieved on demand.
+- **Skills** are the loader. A skill lists edit-path triggers and tells the agent what to load when. The skill auto-fires on a matching file change and pulls the paired standard into context.
+- **CLAUDE.md** is the always-loaded floor. Only safety invariants and routing pointers — never long-form prose. Everything else gets pushed down into a skill or standard the agent loads on demand.
+
+The same fact never lives in two places. If a rule shows up in two artifacts, one is the source and the other points at it.
+
+## Tier architecture
+
+Information flows DOWN tiers, never UP. If a lower-tier item gets referenced across multiple sessions, promote it.
+
+| Tier | Location | Audience | Loaded | Content type |
+| --- | --- | --- | --- | --- |
+| 0 | [Cross-repo CLAUDE.md](https://github.com/brikdesigns/brik-llm/blob/main/CLAUDE-CROSS-REPO.md) | All agents in any Brik repo | Always (auto) | Safety rules, MCP routing, git/deploy rules |
+| 1 | [BDS CLAUDE.md](https://github.com/brikdesigns/brik-bds/blob/main/CLAUDE.md) | All BDS-consuming projects | Always (auto) | Token discipline, component rules, submodule protocol |
+| 2 | Project `CLAUDE.md` (repo root) | Agents in that project | Always (auto) | Tech stack, env vars, key commands, skill pointers |
+| 3 | User skill files (`~/.claude/skills/`) | Agents doing that domain work | On demand (via trigger) | Full workflows, decision trees, tool routing |
+| 3b | Project `.claude/{skills,references,standards}/` | Agents in that project doing that authoring | On demand (via pointer) | Three sibling artifacts — skills (workflows), references (deep dives), **standards (rulesets)** |
+| 3c | [brik-rag](https://github.com/brikdesigns/brik-rag) | Agents needing operational know-how | CLI query (`brik-rag query`) | Default destination for new operational content — runbooks, accumulated lessons, incident history |
+| 4 | Memory files (`.claude/projects/.../memory/`) | Agents in that project | Auto-surfaced via `MEMORY.md` | User-specific preferences, one-off project decisions |
+| 5 | Notion pages | Humans (stakeholders) | Never auto-loaded | Stakeholder-facing workflow docs, architecture notes, history |
+
+The standard + skill pairing pattern lives at Tier 3b. brik-bds is the live precedent — five paired files under [`.claude/standards/`](https://github.com/brikdesigns/brik-bds/tree/main/.claude/standards) and [`.claude/skills/`](https://github.com/brikdesigns/brik-bds/tree/main/.claude/skills): `component-build`, `fumadocs-content-standard`, `storybook-mdx-recipe`, `storybook-story-shape`, `storybook-toolbar-globals`. The skill auto-fires on the matching edit path; the standard holds the rules.
+
+## Where does new content live?
+
+Ask in order. First YES wins.
+
+| Question | YES → |
+| --- | --- |
+| Is it safety-critical (data loss, broken prod, wrong MCP)? | Tier 0 — cross-repo CLAUDE.md |
+| Is it about tokens, BDS components, or the design system? | Tier 1 — BDS CLAUDE.md |
+| Is it project-specific config (env, stack, commands)? | Tier 2 — project CLAUDE.md |
+| Is it a canonical ruleset for a specific authoring domain (story shape, MDX recipe, CSS rules, component build) — rules in force, not a workflow with steps? | Tier 3b — `.claude/standards/<name>.md` paired with a skill |
+| Is it a full workflow or decision tree an agent loads on a trigger? | Tier 3 — skill file in `~/.claude/skills/` |
+| Is it a project-specific deep dive (DB schema, API routes, repo-local env)? | Tier 3b — `.claude/references/<name>.md` |
+| Is it operational know-how — runbook narrative, ADR context, accumulated lesson, incident history? | Tier 3c — `brik-rag remember` |
+| Is it user-specific (personal preference, one-off project decision)? | Tier 4 — memory file |
+| Is it for stakeholders (what/why, not how)? | Tier 5 — Notion page, with procedure pointers |
+
+<Callout type="warn">
+  **Do not create fresh `feedback_*.md`, `lessons-*.md`, or `runbook-*.md` files in any repo.** Markdown is justified only when (a) CI-gated by a lint, (b) auto-loaded via the @import chain, or (c) a hard decision tree agents must consult without an in-session query. Everything else → brik-rag.
+</Callout>
+
+## Lifecycle — how content matures
+
+Most knowledge starts as a note in a session or a comment on a PR. It earns a more durable home as it proves recurring value:
+
+1. **Session note** — captured in a TodoWrite item or PR description. Disappears when the work ships.
+2. **Memory file** (Tier 4) — when the same preference or project context shows up across sessions, save it under `.claude/projects/.../memory/` so the next session has it.
+3. **brik-rag entry** (Tier 3c) — when the knowledge is operational (a procedure, an accumulated lesson, an incident postmortem) and applies across Brik work, push it to brik-rag via `brik-rag remember --workflow-type <topic>`.
+4. **Skill or standard** (Tier 3 / 3b) — when an agent should consult this knowledge automatically on a specific trigger (file edit, command, user phrase), promote it to a skill, optionally paired with a standard if there's a ruleset.
+5. **CLAUDE.md** (Tier 0–2) — only if the rule is a safety invariant the agent must never miss. One-line imperative or pointer, never long-form.
+6. **Fumadocs page** (this site) — when stakeholders need to read it without a Claude session.
+
+Promotion goes UP. Demotion goes DOWN. Duplication is a bug — when you promote content, the lower-tier copy should become a pointer or get deleted.
+
+## Issue and ADR conventions
+
+- **GitHub issues** — follow [`brik-llm/.claude/references/issue-style.md`](https://github.com/brikdesigns/brik-llm/blob/main/.claude/references/issue-style.md). Title under 70 chars; body has Why / Work / Acceptance / Blocked-by / Out-of-scope sections. Use `meta:umbrella` for tracking issues, native sub-issues for children.
+- **PRs and commits** — follow [`brik-llm/.claude/references/conventional-commits.md`](https://github.com/brikdesigns/brik-llm/blob/main/.claude/references/conventional-commits.md). One concern per PR; commit messages are conventional-commit format.
+- **ADRs** — under [`brik-bds/docs/adrs/`](https://github.com/brikdesigns/brik-bds/tree/main/docs/adrs). New ADR when the decision affects the contract between BDS and consumers, or locks an architectural choice with non-obvious tradeoffs. Number sequentially; mark superseded ADRs explicitly.

@@ -9,7 +9,6 @@
     "content-system",
     "components",
     "web-elements",
-    "react-reference",
-    "contribution"
+    "react-reference"
   ]
 }
