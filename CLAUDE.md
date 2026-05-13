@@ -25,7 +25,7 @@ This CLAUDE.md is `@import`-ed by every consumer of `@brikdesigns/bds` — the B
 
 ## Where deeper context lives
 
-- **Documentation system** (tier table, mental model, lifecycle, decision tree) → [`docs-site/content/docs/contribution/documentation-system.mdx`](docs-site/content/docs/contribution/documentation-system.mdx) — published at design.brikdesigns.com/docs/contribution/documentation-system
+- **Documentation system** (tier table, mental model, lifecycle, decision tree) → [`docs-site/content/docs/getting-started/documentation-system.mdx`](docs-site/content/docs/getting-started/documentation-system.mdx) — published at design.brikdesigns.com/docs/getting-started/documentation-system
 - **Token discipline** (3-layer architecture, semantic categories, service-token isolation) → `brik-rag query "token discipline"`
 - **Token PR checklist** → [`docs/TOKEN-PR-CHECKLIST.md`](docs/TOKEN-PR-CHECKLIST.md)
 - **Release procedure** → [`docs/RELEASE.md`](docs/RELEASE.md)
