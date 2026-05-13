@@ -1,0 +1,104 @@
+---
+/**
+ * CardGrid — generic section wrapper for any "header + grid of cards"
+ * layout. Astro twin of `../react/CardGrid.tsx`. Content-agnostic by
+ * design: serves services, blog posts, customer stories, property
+ * listings, team bios, support plans, etc.
+ *
+ * Per the alignment ritual on brik-bds#580, the original `Services`
+ * framing was content-coupled. `bds-card-grid` is the structural
+ * primitive; Astro consumers fill the default `<slot />` with whatever
+ * items belong in the grid.
+ *
+ * Slots used (all on docs/SLOT-ALLOWLIST.md):
+ *   bds-card-grid, __container, __header, __subtitle, __title, __description
+ *
+ * Token pairs — paired family ↔ size only:
+ *   subtitle    : --font-family-subtitle + --subtitle-lg + --text-transform-subtitle
+ *   title (h2)  : --font-family-heading  + clamp(--heading-lg, ..., --heading-huge)
+ *   description : --font-family-body     + --body-md
+ */
+export interface Props {
+  sectionKey: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+}
+
+const { sectionKey, title, subtitle, description } = Astro.props;
+const titleId = `${sectionKey}-title`;
+---
+
+<section
+  class="bds-card-grid"
+  aria-labelledby={titleId}
+  data-blueprint-key="card_grid"
+>
+  <div class="bds-card-grid__container">
+    <header class="bds-card-grid__header">
+      {subtitle && (
+        <p class="bds-card-grid__subtitle">{subtitle}</p>
+      )}
+      <h2 id={titleId} class="bds-card-grid__title">{title}</h2>
+      {description && (
+        <p class="bds-card-grid__description">{description}</p>
+      )}
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  /* Mirrors ../react/CardGrid.css — keep in sync until a unified CSS
+     distribution lands across the React + Astro twins. */
+
+  .bds-card-grid {
+    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
+    padding-block-end: clamp(
+      var(--padding-huge),
+      9vw,
+      calc(var(--padding-huge) * 1.5)
+    );
+  }
+
+  .bds-card-grid__container {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: var(--padding-lg);
+  }
+
+  .bds-card-grid__header {
+    max-width: 72ch;
+    margin-bottom: var(--padding-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bds-card-grid__subtitle {
+    margin: 0;
+    font-family: var(--font-family-subtitle);
+    font-size: var(--subtitle-lg);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--text-transform-subtitle, uppercase);
+    color: var(--text-brand-primary);
+  }
+
+  .bds-card-grid__title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
+    font-weight: var(--font-weight-semi-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bds-card-grid__description {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--body-md);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
+  }
+</style>

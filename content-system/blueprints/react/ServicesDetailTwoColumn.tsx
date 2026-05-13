@@ -1,56 +1,71 @@
 /**
- * ServicesDetailTwoColumn — React renderer. Twin of
- * `../astro/ServicesDetailTwoColumn.astro`. Service listing with a
- * 2-column grid of `{ title, description }` items. Used on home pages
- * as a services overview and on services-index pages as the canonical
- * grid.
+ * ServicesDetailTwoColumn — Phase D adapter (deprecated direct path).
  *
- * Contract: BlueprintProps.
+ * After brik-bds#580, the canonical primitive is `<CardGrid>` composed
+ * with consumer-supplied list content. This file remains as an adapter
+ * so the legacy `services_detail_two_column` blueprint key continues to
+ * dispatch through `BlueprintDispatcher` with the same section-data
+ * contract.
  *
- * @summary Services overview — 2-column grid of title/description rows.
+ * The 2-column list shape here doesn't use `<Card preset="display">` —
+ * these are plain title/description rows with no card surface. The
+ * typography pairs respect the family↔size rule:
+ *   title (h3)  — --font-family-heading + --heading-md
+ *   description — --font-family-body + --body-md
+ *
+ * @deprecated Use `<CardGrid>` directly with composed list children.
+ * @summary Legacy adapter — `<CardGrid>` + 2-col title/desc list.
  */
+import { type CSSProperties } from 'react';
+
+import { Grid, Stack } from '../../../components';
 import type { BlueprintProps } from '../astro/types';
-import './ServicesDetailTwoColumn.css';
+import { CardGrid } from './CardGrid';
 
 interface Props extends BlueprintProps {}
 
+const LIST_STYLE: CSSProperties = {
+  listStyle: 'none',
+  margin: 0,
+  padding: 0,
+};
+
+const TITLE_STYLE: CSSProperties = {
+  margin: 0,
+  fontFamily: 'var(--font-family-heading)',
+  fontSize: 'var(--heading-md)',
+  fontWeight: 'var(--font-weight-semi-bold)',
+  lineHeight: 'var(--font-line-height-tight)',
+  color: 'var(--text-primary)',
+};
+
+const DESC_STYLE: CSSProperties = {
+  margin: 0,
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-md)',
+  lineHeight: 'var(--font-line-height-normal)',
+  color: 'var(--text-primary)',
+};
+
 export function ServicesDetailTwoColumn({ section }: Props) {
-  const titleId = `${section.sectionKey}-title`;
-
   return (
-    <section
-      className="bp-services-two-col"
-      aria-labelledby={titleId}
-      data-blueprint-key="services_detail_two_column"
+    <CardGrid
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      description={section.body ?? undefined}
     >
-      <div className="bp-services-two-col__container">
-        <header className="bp-services-two-col__header">
-          {section.subheading && (
-            <p className="bp-services-two-col__subtitle">{section.subheading}</p>
-          )}
-          <h2 id={titleId} className="bp-services-two-col__title">
-            {section.heading}
-          </h2>
-          {section.body && (
-            <p className="bp-services-two-col__lead">{section.body}</p>
-          )}
-        </header>
-
-        <ul className="bp-services-two-col__list" role="list">
-          {section.items.map((item, idx) => (
-            <li
-              key={`${section.sectionKey}-${idx}`}
-              className="bp-services-two-col__item"
-            >
-              <h3 className="bp-services-two-col__item-title">{item.title}</h3>
-              <p className="bp-services-two-col__item-desc">
-                {item.description}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
+      <Grid as="ul" columns={2} gap="xl" role="list" style={LIST_STYLE}>
+        {section.items.map((item, idx) => (
+          <li key={`${section.sectionKey}-${idx}`}>
+            <Stack gap="sm">
+              <h3 style={TITLE_STYLE}>{item.title}</h3>
+              <p style={DESC_STYLE}>{item.description}</p>
+            </Stack>
+          </li>
+        ))}
+      </Grid>
+    </CardGrid>
   );
 }
 

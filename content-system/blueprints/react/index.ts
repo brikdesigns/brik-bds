@@ -32,6 +32,19 @@ export type {
 } from '../astro/types';
 
 // ── Blueprint renderers ─────────────────────────────────────────
+
+// Canonical primitives (post-brik-bds#580 alignment — generic, content-agnostic).
+// `<CardGrid>` is the section wrapper; consumers compose
+// `<Card preset="display">` items inside via `<Grid>`. Serves any
+// "header + grid of cards" layout — services, blog posts, customer
+// stories, property listings, team bios, support plans.
+export { CardGrid } from './CardGrid';
+export type { CardGridProps } from './CardGrid';
+
+// Legacy section-data adapters — preserve `BlueprintDispatcher` +
+// AI-render path compatibility. Internally compose `<CardGrid>` +
+// `<Card preset="display">`. Direct consumers should reach for those
+// primitives instead; these adapters retire in Phase E.
 export { HeroSplit6040 } from './HeroSplit6040';
 export { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 export { HeroInteriorMinimal } from './HeroInteriorMinimal';

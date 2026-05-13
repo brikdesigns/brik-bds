@@ -1,112 +1,48 @@
 ---
 /**
- * services_detail_two_column — service listing with a 2-column grid of
- * { title, description } items. Used on home pages as a services
- * overview and on services-index pages as the canonical grid.
+ * ServicesDetailTwoColumn — Phase D adapter (deprecated direct path).
  *
- * Contract: BlueprintProps.
- *   - section.heading    — section heading (h2)
- *   - section.subheading — optional eyebrow
- *   - section.body       — optional intro paragraph
- *   - section.items[]    — REQUIRED, each { title, description }
+ * After brik-bds#580, the canonical primitive is `<CardGrid>` composed
+ * with consumer-supplied list content. This file remains as an adapter
+ * so the legacy `services_detail_two_column` blueprint key continues
+ * to dispatch through `BlueprintDispatcher` with the same section-data
+ * contract.
  *
- * required_facts: []. Section-driven.
+ * Token pairs in the embedded CSS respect the family↔size discipline:
+ *   title (h3)  — --font-family-heading + --heading-md
+ *   description — --font-family-body + --body-md
  *
- * CSS custom properties:
- *   --bp-services-two-col-padding-y
- *   --bp-services-two-col-bg           (default: var(--page-primary))
- *   --bp-services-two-col-heading-color (default: var(--text-primary))
- *   --bp-services-two-col-item-title-color (default: var(--text-primary))
- *   --bp-services-two-col-item-desc-color  (default: var(--text-secondary))
- *
- * a11y: h2 + aria-labelledby. Services list is a role="list" ul so AT
- * treats it as a list. Each item's title is an h3 nested under the h2,
- * preserving heading hierarchy.
+ * @deprecated Use `<CardGrid>` directly with composed slot content.
+ * @summary Legacy adapter — `<CardGrid>` + 2-col title/desc list.
  */
 import type { BlueprintProps } from './types';
+import CardGrid from './CardGrid.astro';
 
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const titleId = `${section.sectionKey}-title`;
 ---
 
-<section
-  class="bp-services-two-col"
-  aria-labelledby={titleId}
-  data-blueprint-key="services_detail_two_column"
+<CardGrid
+  sectionKey={section.sectionKey}
+  title={section.heading ?? ''}
+  subtitle={section.subheading ?? undefined}
+  description={section.body ?? undefined}
 >
-  <div class="bp-services-two-col__container">
-    <header class="bp-services-two-col__header">
-      {section.subheading && (
-        <p class="bp-services-two-col__subtitle">{section.subheading}</p>
-      )}
-      <h2 id={titleId} class="bp-services-two-col__title">{section.heading}</h2>
-      {section.body && (
-        <p class="bp-services-two-col__lead">{section.body}</p>
-      )}
-    </header>
-
-    <ul class="bp-services-two-col__list" role="list">
-      {section.items.map((item) => (
-        <li class="bp-services-two-col__item">
-          <h3 class="bp-services-two-col__item-title">{item.title}</h3>
-          <p class="bp-services-two-col__item-desc">{item.description}</p>
-        </li>
-      ))}
-    </ul>
-  </div>
-</section>
+  <ul class="bp-services-two-col__list" role="list">
+    {section.items.map((item) => (
+      <li class="bp-services-two-col__item">
+        <h3 class="bp-services-two-col__item-title">{item.title}</h3>
+        <p class="bp-services-two-col__item-desc">{item.description}</p>
+      </li>
+    ))}
+  </ul>
+</CardGrid>
 
 <style>
-  .bp-services-two-col {
-    background: var(--bp-services-two-col-bg, var(--page-primary));
-    padding-block: var(
-      --bp-services-two-col-padding-y,
-      clamp(var(--space-3xl), 7vw, var(--space-5xl))
-    );
-  }
-
-  .bp-services-two-col__container {
-    max-width: var(--size-container-xl, 1280px);
-    margin-inline: auto;
-    padding-inline: var(--space-xl);
-  }
-
-  .bp-services-two-col__header {
-    max-width: 72ch;
-    margin-bottom: var(--space-2xl);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-  }
-
-  .bp-services-two-col__subtitle {
-    margin: 0;
-    font-family: var(--font-family-label);
-    font-size: var(--label-lg);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-brand-primary);
-  }
-
-  .bp-services-two-col__title {
-    margin: 0;
-    font-family: var(--font-family-heading);
-    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    color: var(--bp-services-two-col-heading-color, var(--text-primary));
-  }
-
-  .bp-services-two-col__lead {
-    margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--heading-sm);
-    line-height: var(--line-height-relaxed);
-    color: var(--text-secondary);
-  }
+  /* Scoped to this deprecated adapter — NOT part of the bds-card-grid
+     canon vocabulary. Goes away in Phase E. Token pairs respect the
+     family↔size discipline. */
 
   .bp-services-two-col__list {
     list-style: none;
@@ -114,36 +50,38 @@ const titleId = `${section.sectionKey}-title`;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    gap: var(--gap-xl);
   }
 
   @media (min-width: 768px) {
     .bp-services-two-col__list {
       grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-2xl) var(--space-3xl);
+      gap: var(--gap-xl) var(--gap-huge);
     }
   }
 
   .bp-services-two-col__item {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--gap-md);
   }
 
   .bp-services-two-col__item-title {
     margin: 0;
+    /* Pair: heading family + heading size. */
     font-family: var(--font-family-heading);
     font-size: var(--heading-md);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    color: var(--bp-services-two-col-item-title-color, var(--text-primary));
+    font-weight: var(--font-weight-semi-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
   }
 
   .bp-services-two-col__item-desc {
     margin: 0;
+    /* Pair: body family + body size. */
     font-family: var(--font-family-body);
-    font-size: var(--body-xl);
-    line-height: var(--line-height-relaxed);
-    color: var(--bp-services-two-col-item-desc-color, var(--text-secondary));
+    font-size: var(--body-md);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
   }
 </style>

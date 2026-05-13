@@ -4,7 +4,7 @@ import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
-export type CardPreset = 'control' | 'summary';
+export type CardPreset = 'control' | 'summary' | 'display';
 export type CardControlActionAlign = 'center' | 'top';
 export type CardSummaryType = 'numeric' | 'price';
 
@@ -84,7 +84,59 @@ interface CardSummaryPresetProps extends CardBaseProps {
   textLink?: CardSummaryTextLink;
 }
 
-export type CardProps = CardDefaultProps | CardControlPresetProps | CardSummaryPresetProps;
+interface CardDisplayPresetProps extends CardBaseProps {
+  /**
+   * Display preset — generic content card for any item rendered in a
+   * card grid (service, blog post, customer story, property listing,
+   * team bio, support plan). All affordances are optional + prop-toggled
+   * so a single primitive serves every content type. Used by the
+   * `bds-card-grid` blueprint.
+   */
+  preset: 'display';
+  /** Card heading. Renders as `<h3>` with `--font-family-heading` + `--heading-md`. */
+  title: string;
+  /**
+   * Body copy under the title. Renders as `<p>` with `--font-family-body` +
+   * `--body-md` (matched pair — never reach across families for size).
+   */
+  description?: string;
+  /**
+   * Top media slot. Pass a `<Frame>`-wrapped image (or any ReactNode) for
+   * the aspect-ratio-controlled top region. When omitted, the card
+   * renders without media.
+   */
+  image?: ReactNode;
+  /**
+   * Inline category indicator rendered above the title. Pass a
+   * `<ServiceTag>` for services, a `<Tag>` for blog categories, a date
+   * pill for stories, etc. Justified `flex-start` (does not stretch).
+   */
+  tag?: ReactNode;
+  /**
+   * Overlay badge anchored top-right of the image. Pass a `<Badge>` for
+   * status-style indicators ("Has Options", "Featured", "Sold").
+   * Renders only when `image` is also provided.
+   */
+  badge?: ReactNode;
+  /**
+   * Trailing action — typically a `<LinkButton>` or `<Button>`. Anchored
+   * to the bottom of the card body via `margin-top: auto` so multiple
+   * cards in a grid align their actions regardless of description length.
+   */
+  action?: ReactNode;
+  /**
+   * Render the card itself as an `<a>` when set — turns the whole card
+   * into a single clickable target. Use when `action` is not set and the
+   * card itself is the navigation affordance.
+   */
+  href?: string;
+}
+
+export type CardProps =
+  | CardDefaultProps
+  | CardControlPresetProps
+  | CardSummaryPresetProps
+  | CardDisplayPresetProps;
 
 function formatSummaryValue(value: string | number, type: CardSummaryType): string {
   if (typeof value === 'string') return value;
@@ -147,6 +199,9 @@ export function Card(props: CardProps) {
   }
   if (props.preset === 'summary') {
     return renderSummaryPreset(props);
+  }
+  if (props.preset === 'display') {
+    return renderDisplayPreset(props);
   }
   return renderDefault(props);
 }
@@ -265,6 +320,71 @@ function renderSummaryPreset({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function renderDisplayPreset({
+  title,
+  description,
+  image,
+  tag,
+  badge,
+  action,
+  href,
+  className,
+  style,
+  preset: _preset,
+  ...rest
+}: CardDisplayPresetProps) {
+  const classes = bdsClass(
+    'bds-card',
+    'bds-card--preset-display',
+    href && 'bds-card--link',
+    className,
+  );
+
+  const body = (
+    <>
+      {image && (
+        <div className="bds-card__preset-display-media">
+          {image}
+          {badge && (
+            <span className="bds-card__preset-display-badge">{badge}</span>
+          )}
+        </div>
+      )}
+      <div className="bds-card__preset-display-body">
+        {tag && (
+          <span className="bds-card__preset-display-tag">{tag}</span>
+        )}
+        <h3 className="bds-card__preset-display-title">{title}</h3>
+        {description && (
+          <p className="bds-card__preset-display-description">{description}</p>
+        )}
+        {action && (
+          <div className="bds-card__preset-display-action">{action}</div>
+        )}
+      </div>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={classes}
+        style={style}
+        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {body}
+      </a>
+    );
+  }
+
+  return (
+    <div className={classes} style={style} {...rest}>
+      {body}
     </div>
   );
 }
