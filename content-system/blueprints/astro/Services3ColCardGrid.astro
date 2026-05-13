@@ -260,13 +260,14 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
 
   .bp-services-grid__cta {
     /* Astro adapter "Learn more" — primary-button styling without the
-       React `<LinkButton variant="primary">` we'd use in the React adapter. */
+       React `<LinkButton variant="primary">` we'd use in the React adapter.
+       --text-on-color-dark = white (text on a dark/saturated background fill). */
     display: inline-flex;
     align-items: center;
     gap: var(--gap-sm);
     padding: var(--padding-sm) var(--padding-lg);
     background: var(--background-brand-primary);
-    color: var(--text-on-brand-primary, var(--text-on-color-light));
+    color: var(--text-on-color-dark);
     text-decoration: none;
     border-radius: var(--border-radius-sm);
     /* Pair: label family + label size. */
