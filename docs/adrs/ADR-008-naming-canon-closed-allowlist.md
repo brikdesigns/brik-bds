@@ -1,7 +1,10 @@
 # ADR-008 — Naming canon: closed allowlist, single namespace, structural-only modifiers
 
 **Status:** Accepted (2026-05-11)
+**Date:** 2026-05-11
 **Supersedes:** parts of [naming-conventions.mdx](../../docs-site/content/docs/primitives/naming-conventions.mdx) before this date
+**Superseded by:** —
+**Owner:** Nick Stanerson
 **Related:** ADR-004 (component bloat), PR #550 (canon doc patches), PR #552 (blueprint BEM rename), PR #554 (Chip appearance removal)
 
 ## Context
