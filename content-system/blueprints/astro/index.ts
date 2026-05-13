@@ -37,15 +37,14 @@ export type {
 
 // ── Blueprint components ───────────────────────────────────────
 // Each blueprint key in `blueprints/blueprint-library.json` that has
-// a shipped Astro component is re-exported here. The
-// BlueprintDispatcher (PR #7) imports from this barrel to dispatch
-// by `visualNotes.blueprintKey`.
+// a shipped Astro component is re-exported here.
 //
-// v0.1 ships 8 blueprints — the set needed for Vale's first scaffold
-// run. Small-business's `home` composition uses HeroSplit6040 +
-// StatsDarkBar + ServicesDetailTwoColumn + AboutStorySplit +
-// TestimonialsFeaturedLarge + CtaSplitContact. Interior pages use
-// HeroInteriorMinimal + CtaDarkCentered.
+// Canonical primitives (post-brik-bds#580 — generic, content-agnostic)
+// come first; legacy section-data adapters that wrap them follow.
+// Direct Astro consumers should reach for `<CardGrid>` with composed
+// slot content; the legacy adapters retire in Phase E.
+export { default as CardGrid }                  from './CardGrid.astro';
+
 export { default as HeroSplit6040 }             from './HeroSplit6040.astro';
 export { default as HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay.astro';
 export { default as HeroInteriorMinimal }       from './HeroInteriorMinimal.astro';
