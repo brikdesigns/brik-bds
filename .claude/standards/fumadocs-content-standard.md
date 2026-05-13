@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/docs-site/content/docs/**/*.mdx"
 retrieved-via: brik-rag query "fumadocs writing standard"
-last-verified: 2026-05-11
+last-verified: 2026-05-13
 ---
 
 # Fumadocs content standard
@@ -37,6 +37,27 @@ Ask in this order; first YES wins:
 | Does this fact already live on another page? | Cross-link with `[label](/docs/path)` — do not duplicate |
 
 If you add a new top-level dir under `content/docs/`, update `meta.json`. Do not rely on alphabetical fallback.
+
+## Section placement — where the page lives
+
+IA placement is a first-class decision, not an afterthought. The wrong section hides a page from the readers who would search for it.
+
+Before creating a new MDX page:
+
+1. **Audit every top-level section.** Read `content/docs/meta.json`, then read each section's `index.mdx`. You need to know what each section already covers before you can decide where your page belongs.
+2. **Ask the reader's question, not the author's.** "Where would someone with this question look?" beats "Which section name is closest to my topic?" — the same topic can sound right under multiple section names, but readers usually have one mental model.
+3. **Refuse to perpetuate stub sections.** If the candidate section's `index.mdx` says "hasn't migrated yet" or only links to one other page, the section is a smell. Propose moving the existing page elsewhere and deleting the section in the same PR. Empty-ish sections accumulate orphans.
+4. **Don't invent a new top-level section.** Adding to `content/docs/meta.json` should be rare and discussed first. The default is to fit into an existing section, even if the page feels like a new tenet.
+
+When moving or deleting a section in the same PR:
+
+- Run `grep -rn "/docs/<old-section>" docs-site/` — every match must be updated to the new path or removed.
+- Update the top-level `content/docs/meta.json` to remove the section.
+- Update any section-`index.mdx` page that enumerates the old section in its overview bullets.
+- Update `brik-bds/CLAUDE.md` "Where deeper context lives" rows whose URLs change.
+- The new section's `index.mdx` and `meta.json` need to know about the moved pages.
+
+A common failure mode is moving the file but leaving cross-page references broken — the build does not always catch this for absolute `/docs/...` links. Grep is the only safe sweep.
 
 ## Heading depth — `##` and `###` only
 
