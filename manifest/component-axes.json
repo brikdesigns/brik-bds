@@ -1,0 +1,399 @@
+{
+  "AddableComboList": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "AddableEntryList": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "AddableFieldRowList": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "AddableTextList": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "AddressInput": {
+    "size": [
+      "sm",
+      "md"
+    ]
+  },
+  "AlertBanner": {
+    "variant": [
+      "warning",
+      "error",
+      "information"
+    ]
+  },
+  "Avatar": {
+    "size": [
+      "sm",
+      "md",
+      "lg",
+      "xl"
+    ],
+    "status": [
+      "online",
+      "offline",
+      "busy",
+      "away"
+    ]
+  },
+  "Badge": {
+    "status": [
+      "positive",
+      "warning",
+      "error",
+      "info",
+      "progress",
+      "brand"
+    ],
+    "size": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "appearance": [
+      "solid",
+      "subtle"
+    ]
+  },
+  "Button": {
+    "variant": [
+      "primary",
+      "outline",
+      "secondary",
+      "ghost",
+      "inverse",
+      "on-color",
+      "danger",
+      "danger-outline",
+      "danger-ghost",
+      "destructive",
+      "positive",
+      "selected"
+    ],
+    "size": [
+      "tiny",
+      "sm",
+      "md",
+      "lg",
+      "xl"
+    ]
+  },
+  "Card": {
+    "variant": [
+      "outlined",
+      "brand",
+      "elevated"
+    ]
+  },
+  "CardTestimonial": {
+    "variant": [
+      "brand",
+      "outlined"
+    ]
+  },
+  "Chip": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "variant": [
+      "primary",
+      "secondary"
+    ]
+  },
+  "Counter": {
+    "status": [
+      "success",
+      "error",
+      "warning",
+      "neutral",
+      "progress",
+      "brand"
+    ],
+    "size": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "DatePicker": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "DevFeedbackWidget": {
+    "variant": [
+      "auto",
+      "slot",
+      "fab"
+    ]
+  },
+  "Dialog": {
+    "variant": [
+      "default",
+      "destructive"
+    ]
+  },
+  "Dot": {
+    "status": [
+      "default",
+      "positive",
+      "warning",
+      "error",
+      "info",
+      "neutral"
+    ],
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "FilterButton": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "FilterToggle": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "Footer": {
+    "variant": [
+      "default",
+      "brand",
+      "inverse"
+    ]
+  },
+  "InteractiveListItem": {
+    "size": [
+      "sm",
+      "md"
+    ]
+  },
+  "MarketingIllustration": {
+    "variant": [
+      "persona-cluster"
+    ]
+  },
+  "Meter": {
+    "status": [
+      "positive",
+      "warning",
+      "error",
+      "neutral"
+    ],
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "Modal": {
+    "size": [
+      "sm",
+      "md",
+      "lg",
+      "xl",
+      "full"
+    ],
+    "variant": [
+      "primary",
+      "destructive"
+    ]
+  },
+  "ProgressCircle": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "status": [
+      "default",
+      "positive",
+      "warning",
+      "negative"
+    ]
+  },
+  "ProgressStepper": {
+    "size": [
+      "sm",
+      "md"
+    ],
+    "variant": [
+      "steps",
+      "dots"
+    ],
+    "status": [
+      "complete",
+      "active",
+      "upcoming"
+    ]
+  },
+  "SegmentedControl": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "Select": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "ServiceBadge": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "ServiceTag": {
+    "variant": [
+      "text",
+      "icon-text",
+      "icon"
+    ]
+  },
+  "Sheet": {
+    "variant": [
+      "default",
+      "floating"
+    ]
+  },
+  "Skeleton": {
+    "variant": [
+      "text",
+      "circular",
+      "rectangular"
+    ]
+  },
+  "Slider": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "Spinner": {
+    "size": [
+      "sm",
+      "lg"
+    ]
+  },
+  "Stepper": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "Switch": {
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ]
+  },
+  "TabBar": {
+    "variant": [
+      "text",
+      "text-underline",
+      "tab",
+      "box"
+    ]
+  },
+  "Table": {
+    "size": [
+      "default",
+      "comfortable"
+    ]
+  },
+  "Tag": {
+    "size": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "appearance": [
+      "solid",
+      "subtle"
+    ]
+  },
+  "TaskConsole": {
+    "status": [
+      "pending",
+      "in_progress",
+      "completed",
+      "failed"
+    ]
+  },
+  "TextArea": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "TextInput": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "TextLink": {
+    "size": [
+      "default",
+      "small"
+    ]
+  },
+  "TimePicker": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "Toast": {
+    "variant": [
+      "default",
+      "success",
+      "error",
+      "warning",
+      "info"
+    ]
+  }
+}
