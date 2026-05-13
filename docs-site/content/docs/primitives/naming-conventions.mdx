@@ -342,7 +342,7 @@ The older `dark | light` vocabulary was ambiguous with dark-mode theming — `--
 
 ### Axis coverage matrix
 
-Source of truth for each union is the component's exported TypeScript type — the table below is derived from those types. When a row and the `.tsx` file disagree, the `.tsx` file wins; open a PR to re-sync this table.
+The **machine-readable source of truth** for every component's `variant`, `appearance`, `size`, and `status` values is [`manifest/component-axes.json`](https://github.com/brikdesigns/brik-bds/blob/main/manifest/component-axes.json) — auto-generated from exported TypeScript types via `npm run typegen:axes` (see [ADR-009](../../../../docs/adrs/ADR-009-typegen-component-axes.md)). The table below is derived from that manifest; when they disagree, the manifest wins.
 
 | Component | `variant` values | `appearance` | `size` values | `status` | Source |
 |---|---|---|---|---|---|
