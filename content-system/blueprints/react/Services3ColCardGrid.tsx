@@ -1,38 +1,20 @@
 /**
- * Services3ColCardGrid — React renderer for the
- * `services_3col_card_grid` blueprint. Composes BDS primitives
- * (`Card`, `ServiceTag`, `LinkButton`, `Badge`, `Stack`, `Grid`,
- * `Frame`) per the spec at
- * `blueprints/proposals/services_3col_card_grid.md`.
+ * Services3ColCardGrid — Phase D adapter (deprecated direct path).
  *
- * Drives brikdesigns.com service-line index pages (e.g.
- * `/services/information`). Astro twin lives at
- * `../astro/Services3ColCardGrid.astro` and ships a simplified visual
- * for non-React consumers — see that file's header for parity notes.
+ * After ADR-008 / brik-bds#580, the canonical primitive is `<Services>`
+ * (`./Services.tsx`) composed with `<Grid>` + `<Card>` children. This
+ * file remains as an adapter so the legacy `services_3col_card_grid`
+ * blueprint key continues to dispatch through `BlueprintDispatcher` with
+ * the same section-data contract that AI-generated pages expect — the
+ * adapter performs the section.items[] → composed-children translation
+ * internally.
  *
- * Contract: BlueprintProps. The same shape every blueprint renderer
- * accepts. Per-card data comes from `section.items[]`; richer fields
- * (`href`, `imageUrl`, `category`, `hasOptions`) are optional extensions
- * to the items shape and degrade cleanly when absent.
+ * New consumers should compose `<Services>` directly per the example in
+ * `Services.tsx`. This adapter is kept for backwards compatibility with
+ * the dispatcher path and industries-TS-files registry until Phase E.
  *
- * CSS custom properties — variation API:
- *   --bp-services-grid-bg            (default: var(--page-primary))
- *   --bp-services-grid-card-bg       (default: var(--surface-primary))
- *   --bp-services-grid-card-radius   (default: var(--border-radius-md))
- *   --bp-services-grid-gap           (default: var(--gap-lg))
- *   --bp-services-grid-image-bg      (default: var(--surface-secondary))
- *   --bp-services-grid-hover-lift    (default: 0 — set to 1 for lift)
- *
- * Atmosphere CSS files MUST NOT override `--surface-*`/`--text-*`/
- * `--border-*` per the cascade rules — those stay theme-layer.
- *
- * a11y: section is a `<section>` with aria-labelledby pointing at the
- * h2; cards are an unordered list with `role="list"` (CSS resets
- * sometimes strip role from styled `<ul>`); each card title is an h3.
- * Description copy uses `--text-primary` to clear AA at body sizes
- * (BDS contrast burndown #40).
- *
- * @summary 3-column service card grid with top illustration, badge, name, description, "Learn more".
+ * @deprecated Use `<Services>` directly with children composition.
+ * @summary Legacy adapter — composes `<Services>` + `<Grid>` + `<Card>`.
  */
 import { type CSSProperties } from 'react';
 
@@ -48,151 +30,128 @@ import {
 } from '../../../components';
 
 import type { BlueprintProps } from '../astro/types';
-import './Services3ColCardGrid.css';
+import { Services } from './Services';
 
 interface Props extends BlueprintProps {}
 
-/**
- * Services3ColCardGrid — 3-column service card grid blueprint renderer.
- *
- * Renders each `section.items[]` entry as a service card with optional
- * top image (3:2), service-line badge, h3 title, body description,
- * and ghost "Learn more" link. The "Has Options" pill anchors
- * top-right of the media when `item.hasOptions` is true.
- *
- * @example
- * ```tsx
- * <Services3ColCardGrid section={section} clientFacts={facts} theme={theme} />
- * ```
- */
-export function Services3ColCardGrid({ section }: Props) {
-  const titleId = `${section.sectionKey}-title`;
+const CARD_STYLE: CSSProperties = {
+  overflow: 'hidden',
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+};
 
-  return (
-    <section
-      className="bp-services-grid"
-      aria-labelledby={titleId}
-      data-blueprint-key="services_3col_card_grid"
-    >
-      <div className="bp-services-grid__container">
-        <Stack
-          as="header"
-          gap="md"
-          className="bp-services-grid__header"
-        >
-          {section.subheading && (
-            <p className="bp-services-grid__subtitle">{section.subheading}</p>
-          )}
-          <h2 id={titleId} className="bp-services-grid__title">
-            {section.heading}
-          </h2>
-          {section.body && (
-            <p className="bp-services-grid__lead">{section.body}</p>
-          )}
-        </Stack>
+const MEDIA_WRAP_STYLE: CSSProperties = {
+  position: 'relative',
+};
 
-        <Grid
-          as="ul"
-          columns={3}
-          gap="lg"
-          className="bp-services-grid__list"
-          role="list"
-        >
-          {section.items.map((item, idx) => {
-            const category = (item.category ?? null) as ServiceCategory | null;
-            return (
-              <li
-                key={`${section.sectionKey}-${idx}`}
-                className="bp-services-grid__item"
-              >
-                <Card
-                  variant="outlined"
-                  padding="none"
-                  className="bp-services-grid__card"
-                >
-                  <div className="bp-services-grid__media-wrap">
-                    <Frame
-                      customRatio="3 / 2"
-                      fit="cover"
-                      className="bp-services-grid__media"
-                    >
-                      {item.imageUrl ? (
-                        <img
-                          src={item.imageUrl}
-                          alt=""
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : (
-                        category && (
-                          <span
-                            className="bp-services-grid__media-fallback"
-                            aria-hidden="true"
-                          >
-                            <ServiceTag
-                              category={category}
-                              variant="icon"
-                              size="lg"
-                              serviceName={item.title}
-                            />
-                          </span>
-                        )
-                      )}
-                    </Frame>
-                    {item.hasOptions && (
-                      <span className="bp-services-grid__has-options">
-                        <Badge status="positive" size="sm" appearance="solid">
-                          Has Options
-                        </Badge>
-                      </span>
-                    )}
-                  </div>
+const HAS_OPTIONS_STYLE: CSSProperties = {
+  position: 'absolute',
+  top: 'var(--gap-md)',
+  right: 'var(--gap-md)',
+  display: 'inline-flex',
+};
 
-                  <Stack
-                    gap="md"
-                    className="bp-services-grid__description"
-                  >
-                    {category && (
-                      <ServiceTag
-                        category={category}
-                        variant="icon-text"
-                        size="sm"
-                        serviceName={item.title}
-                      />
-                    )}
-                    <h3 className="bp-services-grid__title">{item.title}</h3>
-                    {item.description && (
-                      <p className="bp-services-grid__description">
-                        {item.description}
-                      </p>
-                    )}
-                    {item.href && (
-                      <div className="bp-services-grid__cta-row">
-                        <LinkButton
-                          href={item.href}
-                          variant="ghost"
-                          size="sm"
-                          iconAfter={
-                            <span aria-hidden="true" style={ARROW_STYLE}>
-                              →
-                            </span>
-                          }
-                        >
-                          Learn more
-                        </LinkButton>
-                      </div>
-                    )}
-                  </Stack>
-                </Card>
-              </li>
-            );
-          })}
-        </Grid>
-      </div>
-    </section>
-  );
-}
+const DESCRIPTION_STYLE: CSSProperties = {
+  padding: 'var(--padding-lg)',
+  flex: '1 1 auto',
+};
+
+const CTA_ROW_STYLE: CSSProperties = {
+  marginTop: 'auto',
+};
 
 const ARROW_STYLE: CSSProperties = { display: 'inline-block' };
+
+export function Services3ColCardGrid({ section }: Props) {
+  return (
+    <Services
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      description={section.body ?? undefined}
+    >
+      <Grid
+        as="ul"
+        columns={3}
+        gap="lg"
+        role="list"
+        style={{ listStyle: 'none', margin: 0, padding: 0 }}
+      >
+        {section.items.map((item, idx) => {
+          const category = (item.category ?? null) as ServiceCategory | null;
+          return (
+            <li
+              key={`${section.sectionKey}-${idx}`}
+              style={{ display: 'flex' }}
+            >
+              <Card variant="outlined" padding="none" style={CARD_STYLE}>
+                <div style={MEDIA_WRAP_STYLE}>
+                  <Frame customRatio="3 / 2" fit="cover">
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.imageAlt ?? ''}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      category && (
+                        <span aria-hidden="true">
+                          <ServiceTag
+                            category={category}
+                            variant="icon"
+                            size="lg"
+                            serviceName={item.title}
+                          />
+                        </span>
+                      )
+                    )}
+                  </Frame>
+                  {item.hasOptions && (
+                    <span style={HAS_OPTIONS_STYLE}>
+                      <Badge status="positive" size="sm" appearance="solid">
+                        Has Options
+                      </Badge>
+                    </span>
+                  )}
+                </div>
+
+                <Stack gap="md" style={DESCRIPTION_STYLE}>
+                  {category && (
+                    <ServiceTag
+                      category={category}
+                      variant="icon-text"
+                      size="sm"
+                      serviceName={item.title}
+                    />
+                  )}
+                  <h3>{item.title}</h3>
+                  {item.description && <p>{item.description}</p>}
+                  {item.href && (
+                    <div style={CTA_ROW_STYLE}>
+                      <LinkButton
+                        href={item.href}
+                        variant="ghost"
+                        size="sm"
+                        iconAfter={
+                          <span aria-hidden="true" style={ARROW_STYLE}>
+                            →
+                          </span>
+                        }
+                      >
+                        Learn more
+                      </LinkButton>
+                    </div>
+                  )}
+                </Stack>
+              </Card>
+            </li>
+          );
+        })}
+      </Grid>
+    </Services>
+  );
+}
 
 export default Services3ColCardGrid;

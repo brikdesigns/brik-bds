@@ -1,0 +1,113 @@
+---
+/**
+ * Services — section wrapper for the bds-services blueprint family.
+ *
+ * Astro twin of `../react/Services.tsx`. Owns ONLY the section-level
+ * concerns (heading, container, padding rhythm, aria semantics). Item
+ * layout is consumer-composed via the default `<slot />` — Astro
+ * consumers fill it with their own grid + card markup (or import other
+ * `@brikdesigns/bds/blueprints-astro` primitives if they exist).
+ *
+ * Per ADR-008 Phase D consolidation (brik-bds#580). Replaces the
+ * legacy `Services3ColCardGrid.astro` and `ServicesDetailTwoColumn.astro`,
+ * which become thin adapters composing this component.
+ *
+ * Contract (children-composition):
+ *   Props:
+ *     - sectionKey  — stable section identifier (drives aria-labelledby)
+ *     - title       — section h2 text
+ *     - subtitle?   — optional eyebrow above the title
+ *     - description? — optional one-line lead under the title
+ *
+ *   Slot:
+ *     - default     — composed item content (typically a grid + cards)
+ *
+ * Slots used (all on docs/SLOT-ALLOWLIST.md):
+ *   bds-services, __container, __header, __subtitle, __title, __description
+ */
+export interface Props {
+  sectionKey: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+}
+
+const { sectionKey, title, subtitle, description } = Astro.props;
+const titleId = `${sectionKey}-title`;
+---
+
+<section
+  class="bds-services"
+  aria-labelledby={titleId}
+  data-blueprint-key="services"
+>
+  <div class="bds-services__container">
+    <header class="bds-services__header">
+      {subtitle && (
+        <p class="bds-services__subtitle">{subtitle}</p>
+      )}
+      <h2 id={titleId} class="bds-services__title">{title}</h2>
+      {description && (
+        <p class="bds-services__description">{description}</p>
+      )}
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  /*
+   * Embedded for Astro portability. Mirrors `../react/Services.css` —
+   * keep the two in sync until a unified CSS distribution lands.
+   */
+
+  .bds-services {
+    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
+    padding-block-end: clamp(
+      var(--padding-huge),
+      9vw,
+      calc(var(--padding-huge) * 1.5)
+    );
+  }
+
+  .bds-services__container {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: var(--padding-lg);
+  }
+
+  .bds-services__header {
+    max-width: 72ch;
+    margin-bottom: var(--padding-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bds-services__subtitle {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-brand-primary);
+  }
+
+  .bds-services__title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bds-services__description {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--heading-sm);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--text-primary);
+  }
+</style>

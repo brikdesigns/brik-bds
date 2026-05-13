@@ -1,60 +1,35 @@
 ---
 /**
- * services_3col_card_grid — 3-column service card grid with top
- * illustration, service-line badge, name, description, "Has Options"
- * indicator, and "Learn more" link. Drives the brikdesigns.com
- * service-line index pages (e.g. /services/information).
+ * Services3ColCardGrid — Phase D adapter (deprecated direct path).
  *
- * Spec: blueprints/proposals/services_3col_card_grid.md (PR #477).
+ * After ADR-008 / brik-bds#580, the canonical primitive is `<Services>`
+ * (`./Services.astro`) composed with consumer-supplied card markup.
+ * This file remains as an adapter so the legacy
+ * `services_3col_card_grid` blueprint key continues to dispatch through
+ * `BlueprintDispatcher` with the same section-data contract — the
+ * adapter performs the section.items[] → composed-slot translation
+ * internally.
  *
- * Contract: BlueprintProps.
- *   - section.heading            — section heading (h2)
- *   - section.subheading         — optional eyebrow text (uppercase)
- *   - section.body               — optional one-line lead under heading
- *   - section.items[]            — REQUIRED, each card
- *       - title                  — service name (h3)
- *       - description            — body copy
- *       - href?                  — Learn more target (omitted → no CTA)
- *       - imageUrl?              — top-image src (omitted → category label fallback)
- *       - category?              — ServiceCategory slug (drives accent color)
- *       - hasOptions?            — true → top-right "Has Options" pill
+ * Astro consumers can't import React primitives (Card, ServiceTag,
+ * LinkButton, Badge) — so the card markup remains the same hand-rolled
+ * HTML+CSS the legacy blueprint shipped, scoped to this adapter via
+ * Astro's `<style>` block. Visual rhythm + token usage are unchanged
+ * versus pre-consolidation.
  *
- * required_facts: []. Section-driven.
+ * The legacy `bp-services-grid-*` classes are preserved INSIDE this
+ * adapter's scoped style block. These are not canonical `bds-*` block
+ * vocabulary (ADR-008) — they're internal deprecated implementation
+ * that goes away in Phase E.
  *
- * ## Renderer parity note
- *
- * This Astro renderer is the simplified content-equivalent of the
- * canonical React renderer (Services3ColCardGrid.tsx). The React
- * version composes BDS primitives directly — ServiceTag (with
- * per-service icon resolution), Card, LinkButton, Badge, Frame, Stack,
- * Grid. Astro consumers don't pull React, so this version replaces the
- * ServiceTag glyph with a category-colored label and the BDS
- * components with hand-rolled HTML+CSS that consumes the same tokens.
- * Visual rhythm and a11y semantics are preserved; the React renderer
- * is canonical for pixel parity to brikdesigns.com Webflow.
- *
- * CSS custom properties — variation API per BDS convention:
- *   --bp-services-grid-bg            (default: var(--page-primary))
- *   --bp-services-grid-card-bg       (default: var(--surface-primary))
- *   --bp-services-grid-card-radius   (default: var(--border-radius-md))
- *   --bp-services-grid-gap           (default: var(--gap-lg))
- *   --bp-services-grid-image-bg      (default: var(--surface-secondary))
- *   --bp-services-grid-hover-lift    (default: 0 — opt in to translateY(-4px))
- *
- * Atmosphere CSS files MUST NOT override `--surface-*`/`--text-*`/
- * `--border-*` per the cascade rules — those stay theme-layer.
- *
- * a11y: section uses h2 + aria-labelledby; cards are <ul role="list">
- * of <li>; each card title is an <h3> nested under the section h2.
- * Description copy uses --text-primary (NOT --text-secondary) to clear
- * AA at 14–16px on light surfaces (BDS contrast burndown #40).
+ * @deprecated Use `<Services>` directly with composed slot content.
+ * @summary Legacy adapter — `<Services>` wrapping hand-rolled card HTML.
  */
 import type { BlueprintProps } from './types';
+import Services from './Services.astro';
 
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
-const titleId = `${section.sectionKey}-title`;
 
 const categoryLabels: Record<NonNullable<typeof section.items[number]['category']>, string> = {
   brand: 'Brand',
@@ -65,133 +40,74 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
 };
 ---
 
-<section
-  class="bp-services-grid"
-  aria-labelledby={titleId}
-  data-blueprint-key="services_3col_card_grid"
+<Services
+  sectionKey={section.sectionKey}
+  title={section.heading ?? ''}
+  subtitle={section.subheading ?? undefined}
+  description={section.body ?? undefined}
 >
-  <div class="bp-services-grid__container">
-    <header class="bp-services-grid__header">
-      {section.subheading && (
-        <p class="bp-services-grid__subtitle">{section.subheading}</p>
-      )}
-      <h2 id={titleId} class="bp-services-grid__title">{section.heading}</h2>
-      {section.body && (
-        <p class="bp-services-grid__lead">{section.body}</p>
-      )}
-    </header>
+  <ul class="bp-services-grid__list" role="list">
+    {section.items.map((item) => {
+      const category = item.category ?? null;
+      const categoryLabel = category ? categoryLabels[category] : null;
+      return (
+        <li class="bp-services-grid__item">
+          <article
+            class="bp-services-grid__card"
+            data-category={category ?? undefined}
+          >
+            <div class="bp-services-grid__media">
+              {item.imageUrl ? (
+                <img
+                  src={item.imageUrl}
+                  alt={item.imageAlt ?? ''}
+                  class="bp-services-grid__image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                categoryLabel && (
+                  <span class="bp-services-grid__media-fallback" aria-hidden="true">
+                    {categoryLabel}
+                  </span>
+                )
+              )}
+              {item.hasOptions && (
+                <span class="bp-services-grid__has-options">Has Options</span>
+              )}
+            </div>
 
-    <ul class="bp-services-grid__list" role="list">
-      {section.items.map((item) => {
-        const category = item.category ?? null;
-        const categoryLabel = category ? categoryLabels[category] : null;
-        return (
-          <li class="bp-services-grid__item">
-            <article
-              class="bp-services-grid__card"
-              data-category={category ?? undefined}
-            >
-              <div class="bp-services-grid__media">
-                {item.imageUrl ? (
-                  <img
-                    src={item.imageUrl}
-                    alt=""
-                    class="bp-services-grid__image"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : (
-                  categoryLabel && (
-                    <span class="bp-services-grid__media-fallback" aria-hidden="true">
-                      {categoryLabel}
-                    </span>
-                  )
-                )}
-                {item.hasOptions && (
-                  <span class="bp-services-grid__has-options">Has Options</span>
-                )}
-              </div>
-
-              <div class="bp-services-grid__description">
-                {categoryLabel && (
-                  <p class="bp-services-grid__category-row">
-                    <span class="bp-services-grid__category-pill">
-                      {categoryLabel}
-                    </span>
-                  </p>
-                )}
-                <h3 class="bp-services-grid__title">{item.title}</h3>
-                {item.description && (
-                  <p class="bp-services-grid__description">{item.description}</p>
-                )}
-                {item.href && (
-                  <p class="bp-services-grid__cta-row">
-                    <a class="bp-services-grid__cta" href={item.href}>
-                      Learn more
-                      <span aria-hidden="true" class="bp-services-grid__cta-arrow">→</span>
-                    </a>
-                  </p>
-                )}
-              </div>
-            </article>
-          </li>
-        );
-      })}
-    </ul>
-  </div>
-</section>
+            <div class="bp-services-grid__card-body">
+              {categoryLabel && (
+                <p class="bp-services-grid__category-row">
+                  <span class="bp-services-grid__category-pill">
+                    {categoryLabel}
+                  </span>
+                </p>
+              )}
+              <h3 class="bp-services-grid__card-title">{item.title}</h3>
+              {item.description && (
+                <p class="bp-services-grid__card-desc">{item.description}</p>
+              )}
+              {item.href && (
+                <p class="bp-services-grid__cta-row">
+                  <a class="bp-services-grid__cta" href={item.href}>
+                    Learn more
+                    <span aria-hidden="true" class="bp-services-grid__cta-arrow">→</span>
+                  </a>
+                </p>
+              )}
+            </div>
+          </article>
+        </li>
+      );
+    })}
+  </ul>
+</Services>
 
 <style>
-  .bp-services-grid {
-    background: var(--bp-services-grid-bg, var(--page-primary));
-    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
-    padding-block-end: clamp(var(--padding-huge), 9vw, calc(var(--padding-huge) * 1.5));
-  }
-
-  .bp-services-grid__container {
-    max-width: 1280px;
-    margin-inline: auto;
-    padding-inline: var(--padding-lg);
-  }
-
-  /* ── Section header ─────────────────────────────────────────── */
-
-  .bp-services-grid__header {
-    max-width: 72ch;
-    margin-bottom: var(--padding-xl);
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-md);
-  }
-
-  .bp-services-grid__subtitle {
-    margin: 0;
-    font-family: var(--font-family-label);
-    font-size: var(--label-lg);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-brand-primary);
-  }
-
-  .bp-services-grid__title {
-    margin: 0;
-    font-family: var(--font-family-heading);
-    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--font-line-height-tight);
-    color: var(--text-primary);
-  }
-
-  .bp-services-grid__lead {
-    margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--heading-sm);
-    line-height: var(--font-line-height-relaxed);
-    color: var(--text-primary);
-  }
-
-  /* ── Card grid ──────────────────────────────────────────────── */
+  /* Scoped to this deprecated adapter — NOT part of the bds-services
+     canon vocabulary. These styles go away with the adapter in Phase E. */
 
   .bp-services-grid__list {
     list-style: none;
@@ -199,7 +115,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--bp-services-grid-gap, var(--gap-lg));
+    gap: var(--gap-lg);
   }
 
   @media (min-width: 768px) {
@@ -218,32 +134,20 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
     display: flex;
   }
 
-  /* ── Card ───────────────────────────────────────────────────── */
-
   .bp-services-grid__card {
     position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
-    background: var(--bp-services-grid-card-bg, var(--surface-primary));
-    border-radius: var(--bp-services-grid-card-radius, var(--border-radius-md));
+    background: var(--surface-primary);
+    border-radius: var(--border-radius-md);
     overflow: hidden;
-    transform: translateY(0);
-    transition:
-      transform 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1)),
-      box-shadow 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
   }
-
-  .bp-services-grid__card:hover {
-    transform: translateY(calc(var(--bp-services-grid-hover-lift, 0) * -4px));
-  }
-
-  /* ── Media (top image area, 3:2) ────────────────────────────── */
 
   .bp-services-grid__media {
     position: relative;
     aspect-ratio: 3 / 2;
-    background: var(--bp-services-grid-image-bg, var(--surface-secondary));
+    background: var(--surface-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -266,8 +170,6 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
     letter-spacing: 0.02em;
   }
 
-  /* ── Has-Options badge (top-right of media) ─────────────────── */
-
   .bp-services-grid__has-options {
     position: absolute;
     top: var(--gap-md);
@@ -283,9 +185,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
     line-height: 1.2;
   }
 
-  /* ── Card body ──────────────────────────────────────────────── */
-
-  .bp-services-grid__description {
+  .bp-services-grid__card-body {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
@@ -333,7 +233,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
     color: var(--theme-orange-orange-dark, #663300);
   }
 
-  .bp-services-grid__title {
+  .bp-services-grid__card-title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: var(--heading-md);
@@ -342,7 +242,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
     color: var(--text-primary);
   }
 
-  .bp-services-grid__description {
+  .bp-services-grid__card-desc {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--body-xl);

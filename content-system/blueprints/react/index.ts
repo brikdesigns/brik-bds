@@ -32,6 +32,16 @@ export type {
 } from '../astro/types';
 
 // ── Blueprint renderers ─────────────────────────────────────────
+
+// Canonical primitives (post-ADR-008 — Phase D consolidation targets).
+// Consumers compose these directly with children for full generic reuse.
+export { Services } from './Services';
+export type { ServicesProps } from './Services';
+
+// Legacy section-data adapters — kept for BlueprintDispatcher + AI-render
+// path compatibility. Internally compose `<Services>` + children. Direct
+// consumers should reach for `<Services>` instead; these adapters are
+// scheduled to retire alongside the broader Phase E consumer migration.
 export { HeroSplit6040 } from './HeroSplit6040';
 export { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 export { HeroInteriorMinimal } from './HeroInteriorMinimal';

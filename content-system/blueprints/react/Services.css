@@ -1,0 +1,71 @@
+/*
+ * bds-services — section wrapper for the services blueprint family.
+ *
+ * Owns ONLY section-level styling: container, header rhythm, typography.
+ * Item layout (grid, columns, card shape) is consumer-composed via
+ * children — those styles live on the composed primitives (Grid, Card,
+ * Frame, ServiceTag, LinkButton) or on the consumer-supplied markup.
+ *
+ * Slots used (all on docs/SLOT-ALLOWLIST.md):
+ *   bds-services
+ *   bds-services__container
+ *   bds-services__header
+ *   bds-services__subtitle
+ *   bds-services__title
+ *   bds-services__description
+ *
+ * No `--surface-*` / `--text-*` / `--border-*` overrides — those stay
+ * theme-layer per the cascade rules. No `bp-*` legacy variation API
+ * (deprecated in ADR-008). Section background, when needed, is the
+ * inherited page surface.
+ */
+
+.bds-services {
+  padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
+  padding-block-end: clamp(
+    var(--padding-huge),
+    9vw,
+    calc(var(--padding-huge) * 1.5)
+  );
+}
+
+.bds-services__container {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--padding-lg);
+}
+
+.bds-services__header {
+  max-width: 72ch;
+  margin-bottom: var(--padding-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-services__subtitle {
+  margin: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-brand-primary);
+}
+
+.bds-services__title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bds-services__description {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--heading-sm);
+  line-height: var(--font-line-height-relaxed);
+  color: var(--text-primary);
+}
