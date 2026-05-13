@@ -323,14 +323,14 @@ Components with overlapping visual concerns share the same prop names and values
 
 | Axis | Values | Meaning | Components |
 |---|---|---|---|
-| `size` | `xs` · `sm` · `md` · `lg` | Physical dimensions on a shared scale (e.g. Badge + Tag + Chip align by height at every tier). | Badge, Tag, Chip, BadgeGroup, TagGroup, Button, IconButton, Field, Sheet, most form controls |
+| `size` | `xs` · `sm` · `md` · `lg` (indicators); `tiny` · `sm` · `md` · `lg` · `xl` (buttons) | Physical dimensions on a shared scale. Values differ by surface — see coverage matrix. | Badge, Tag, Chip, Button, IconButton, ServiceTag, Field, Sheet, most form controls |
 | `status` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | Semantic value judgment — which system color tier applies. Indicator-only. | Badge, AlertBanner, Dot |
-| `variant` (hierarchy) | `primary` · `secondary` | How much attention the element commands inside a cluster. Not a fill style. | Chip, Button |
+| `variant` | component-specific — see coverage matrix | Shared prop *name*; not a shared value set. For Chip it expresses hierarchy (`primary · secondary`); for Button it covers style intent (12 values); for ServiceTag it expresses layout (`text · icon-text · icon`). TypeScript is the gate — never pass a value the component's declared union doesn't include. | Chip, Button, IconButton, LinkButton, Card, ServiceTag |
 | `appearance` (fill) | `solid` · `subtle` · `outline` | How the shape is filled vs. bordered. Each component supports the subset that has a real visual meaning. Read-only/indicator components only. | Badge (`solid` / `subtle`), Tag (`solid` / `subtle`) |
 
 ### The rule
 
-> `variant` describes **hierarchy**. `appearance` describes **fill**. Never conflate them. **Interactive components (Chip, Button) use `variant` only** — emphasis is one axis, picked at the hierarchy. **Read-only indicators (Badge, Tag) use `appearance`** — they don't have a hierarchy to express, so fill form is the only relevant lever.
+> `appearance` describes **fill**. `variant` is the shared prop *name* — its meaning varies by component. For Chip it expresses hierarchy (`primary · secondary`). For Button it expresses style intent (12 values). Never cross the indicator / interactive boundary: **interactive components (Chip, Button) use `variant` only**; **read-only indicators (Badge, Tag) use `appearance`** — they have no hierarchy to express, so fill form is the only lever. Check the coverage matrix, not this rule summary, for the valid values for any given component.
 
 ### Why `solid | subtle | outline` (not `dark | light`)
 
@@ -342,11 +342,24 @@ The older `dark | light` vocabulary was ambiguous with dark-mode theming — `--
 
 ### Axis coverage matrix
 
-| Component | `variant` | `appearance` values | `status` | Notes |
-|---|---|---|---|---|
-| Badge | — | `solid` (default) · `subtle` | required axis | Outline never made sense for status indicators — low contrast. |
-| Tag | — | `solid` (default) · `subtle` | — | Neutral categorization — no status axis. |
-| Chip | `primary` · `secondary` | — | — | Single hierarchy axis. `appearance` was removed in v0.66 — Chip is interactive, so emphasis lives on `variant`. |
+Source of truth for each union is the component's exported TypeScript type — the table below is derived from those types. When a row and the `.tsx` file disagree, the `.tsx` file wins; open a PR to re-sync this table.
+
+| Component | `variant` values | `appearance` | `size` values | `status` | Source |
+|---|---|---|---|---|---|
+| Button | `primary` · `outline` · `secondary` · `ghost` · `inverse` · `on-color` · `danger` · `danger-outline` · `danger-ghost` · `destructive` · `positive` · `selected` | — | `tiny` · `sm` · `md` · `lg` · `xl` | — | [`Button.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Button/Button.tsx) |
+| LinkButton | shares `ButtonVariant` (all 12) | — | shares `ButtonSize` | — | [`LinkButton.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Button/LinkButton.tsx) |
+| IconButton | `primary` · `outline` · `secondary` · `ghost` (default) · `inverse` · `danger` · `danger-outline` · `danger-ghost` · `destructive` · `positive` · `selected` | — | shares `ButtonSize` | — | [`IconButton.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Button/IconButton.tsx) |
+| Chip | `primary` · `secondary` | — | `sm` · `md` · `lg` | — | [`Chip.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Chip/Chip.tsx) |
+| Card | `outlined` (default) · `brand` · `elevated` | — | — | — | [`Card.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Card/Card.tsx) |
+| ServiceTag | `text` (default) · `icon-text` · `icon` | — | `sm` · `md` · `lg` | — | [`ServiceTag.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/ServiceBadge/ServiceTag.tsx) |
+| Tag | — | `solid` (default) · `subtle` | `xs` · `sm` · `md` · `lg` | — | [`Tag.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Tag/Tag.tsx) |
+| Badge | — | `solid` (default) · `subtle` | `xs` · `sm` · `md` · `lg` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | [`Badge.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Badge/Badge.tsx) |
+
+**Notes:**
+- Chip `appearance` was removed in v0.66 — Chip is interactive, emphasis lives on `variant` only.
+- IconButton `variant` is an inline union (not re-exported as a named type); it aligns with `ButtonVariant` minus `on-color`.
+- Card `variant` encodes the border/elevation style of the container — not a hierarchy or fill axis. `CardPreset` (`control` · `summary` · `display`) governs layout configuration and is orthogonal to `variant`.
+- Badge `outline` appearance was excluded — low contrast for status indicators.
 
 Adding a new pill component? Reuse the axis names above. Don't invent `kind`, `style`, `flavor`, etc. — the axes exist so a reader knows what to expect.
 
