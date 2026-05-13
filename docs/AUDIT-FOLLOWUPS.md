@@ -16,8 +16,8 @@ CLAUDE.md updates. Net effect:
   must not be committed; see the warning in [`CLAUDE.md`](../CLAUDE.md) →
   "Chromatic (visual testing + hosted MCP)".
 - Surface taxonomy on every story (`surface-web` / `surface-product` /
-  `surface-shared`). Defined in [`STORYBOOK-WRITING-GUIDE.md`](./STORYBOOK-WRITING-GUIDE.md)
-  → "Surface taxonomy".
+  `surface-shared`). Defined in [`.claude/standards/storybook-story-shape.md`](../.claude/standards/storybook-story-shape.md)
+  → "MCP discipline → Exactly one surface tag in `meta.tags`".
 - Consumer-repo CLAUDE.md files (brik-client-portal, renew-pms,
   freedom-client-portal, brikdesigns) point at the stable Chromatic MCP and
   carry the surface-filter rule appropriate to the consumer.

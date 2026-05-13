@@ -5,7 +5,7 @@
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
-**Related:** [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) (sidebar taxonomy + per-file story shape — the story-shape peer to this page-recipe ADR); [`docs/STORYBOOK-WRITING-GUIDE.md`](../STORYBOOK-WRITING-GUIDE.md); [`.storybook/CONTENT-GUIDE.md`](../../.storybook/CONTENT-GUIDE.md)
+**Related:** [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) (sidebar taxonomy + per-file story shape — the story-shape peer to this page-recipe ADR); [ADR-010](./ADR-010-storybook-axes-of-information.md) (the story-vs-control matrix that complements this MDX recipe); [`.claude/standards/storybook-mdx-recipe.md`](../../.claude/standards/storybook-mdx-recipe.md) (the operational recipe — folds in the deleted-in-reorg `docs/STORYBOOK-WRITING-GUIDE.md` + `.storybook/CONTENT-GUIDE.md`)
 
 ## Context
 
@@ -18,8 +18,8 @@ Two layers underneath that complaint:
 
 Two existing files already define partial standards. **Both undercount:**
 
-- [`.storybook/CONTENT-GUIDE.md`](../../.storybook/CONTENT-GUIDE.md) — formatting rules (one H1, no dividers, no skipped headings). Read by humans, not enforced. Contradicted by every component MDX in `components/ui/` (all use `---` dividers).
-- [`docs/STORYBOOK-WRITING-GUIDE.md`](../STORYBOOK-WRITING-GUIDE.md) — *how* to write stories (cover variants, JSDoc summaries, `@summary` for MCP). Doesn't address page structure.
+- `.storybook/CONTENT-GUIDE.md` (deleted 2026-05-13 in the standards reorg; folded into [`.claude/standards/storybook-mdx-recipe.md`](../../.claude/standards/storybook-mdx-recipe.md)) — formatting rules (one H1, no dividers, no skipped headings). Read by humans, not enforced. Contradicted by every component MDX in `components/ui/` (all use `---` dividers).
+- `docs/STORYBOOK-WRITING-GUIDE.md` (deleted 2026-05-13; folded into [`.claude/standards/storybook-story-shape.md`](../../.claude/standards/storybook-story-shape.md)) — *how* to write stories (cover variants, JSDoc summaries, `@summary` for MCP). Doesn't address page structure.
 
 Neither defines the canonical page recipe — section names, section order, required-vs-optional sections, the visual contract for prose and code blocks.
 
@@ -66,55 +66,20 @@ Carbon explicitly does **not** duplicate usage-guideline or accessibility conten
 
 ## Decision
 
-Define a normative **component page recipe** and codify it as ADR-007. New component pages MUST conform; existing pages will be migrated in batches per the Implementation Plan below.
+Define a normative **component page recipe** and codify it as ADR-007. New component pages MUST conform; existing pages migrated in batches per the Implementation Plan below.
 
-### Recipe — required structure for every `components/ui/{Component}/{Component}.mdx`
+The **operational recipe** — required imports, the six-section shape (`Title → ComponentLinks → Description → Playground → Variants → Patterns → Props`), optional sections (`## CSS Override API`, `## Notes`), banned section list, callout vocabulary, foundation/dashboard page templates, stub pattern — lives in [`.claude/standards/storybook-mdx-recipe.md`](../../.claude/standards/storybook-mdx-recipe.md) and is auto-retrieved by the [`storybook-mdx-recipe`](../../.claude/skills/storybook-mdx-recipe/SKILL.md) skill at `*.mdx` edit time. The lint script [`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js) is the enforcement layer.
 
-```mdx
-import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
-import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
-import * as Stories from './{Component}.stories';
-
-<Meta of={Stories} />
-
-# {Component name}
-
-<ComponentLinks slug="{component-slug}" />
-
-One- or two-sentence description. What it does, not when to use it.
-
-## Playground
-
-<Canvas of={Stories.Playground} />
-
-## Variants
-
-{Optional 1–3 sentences framing what varies.}
-
-<Canvas of={Stories.Variants} />
-
-## Patterns
-
-{Optional 1–3 sentences framing the real-world compositions.}
-
-<Canvas of={Stories.Patterns} />
-
-## Props
-
-<ArgTypes of={Stories} />
-```
-
-That's the **canonical six-section shape**: Title → Links → Description → Playground → Variants → Patterns → Props. Optional eighth and ninth sections may follow `Props` in this fixed order:
-
-- `## CSS Override API` — table of component-scoped CSS variables, with one example. Required if the component exposes any.
-- `## Notes` — short call-outs (deprecations, browser caveats, peer-component pointers). Three or fewer items per page.
+This ADR governs the **decisions** that produced the recipe; the standard governs the operational details.
 
 ### Brik's adaptations of Carbon's shape
+
+The recipe is not Carbon's verbatim — it adopts the load-bearing parts (triple-link header, Variants section pattern, Stackblitz `additionalActions`) and drops the inconsistent or duplicative parts. The decisions:
 
 | Carbon | Brik | Why |
 |---|---|---|
 | Triple-link header (`Source \| Usage \| Accessibility`) | `<ComponentLinks slug="..." />` block rendering the same three links, generated from one prop | One-line authoring; one place to change the URL pattern when docs-site routing changes |
-| `## Table of Contents` (doctoc-managed) | Storybook 10's auto-TOC (already enabled in [`preview.tsx:394-397`](../../.storybook/preview.tsx)) | TOC is page chrome, not content. doctoc adds a commit-time dependency we don't need |
+| `## Table of Contents` (doctoc-managed) | Storybook 10's auto-TOC (already enabled in `.storybook/preview.tsx`) | TOC is page chrome, not content. doctoc adds a commit-time dependency we don't need |
 | `## Overview` (prose + first Canvas) | Description (free text after `<ComponentLinks>`) → `## Playground` | "Playground" is the term Brik already uses; "Overview" duplicates the page title |
 | Variant H3s with optional prose, no second-level grouping | Two H2s — `## Variants` (visual/state variants) + `## Patterns` (real-world compositions) | Brik's existing implicit shape, kept. Carbon flattens to one tier; Brik's two-tier helps a reader skim "show me all states" vs "show me how this is actually used" |
 | `## Component API` | `## Props` | Shorter, matches what authors already write |
@@ -123,48 +88,24 @@ That's the **canonical six-section shape**: Title → Links → Description → 
 | `## Feedback` boilerplate | Not in the recipe. The DevFeedbackWidget already covers this | Avoids 80 identical paragraphs |
 | Stackblitz `additionalActions` per Canvas | Not in the recipe (deferred) | Worthwhile but separate work — see Out of Scope |
 
-### Banned patterns
+### Visual contract — what the rendering layer guarantees
 
-These will be removed from existing pages and rejected in new pages:
-
-1. **No `---` dividers.** They're chrome that the typography contract should provide. Existing pages use them as fake section boundaries; H2 spacing (already `margin-top: 48px` per `storybook-overrides.css:548`) does this job.
-2. **No `## Usage` code-only section.** Today every page has one. It duplicates what `<Canvas>` already shows in source view, and the chosen import path drifts (`@brik/bds` vs `@brikdesigns/bds` is split roughly 60/40 across existing MDX). Keep one canonical import line in the description if needed; otherwise remove.
-3. **No `## When to use` / `## When NOT to use`.** Migrate to docs-site. CatalogPicker is the only current offender — it gets a stub-and-link.
-4. **No "Source attribution" or other deep-design narrative.** Same — docs-site.
-5. **No emoji in headings.** Already in CONTENT-GUIDE.md; reaffirmed.
-6. **No skipped heading levels.** H1 → H2 → H3, never H1 → H3. Already in CONTENT-GUIDE.md; reaffirmed.
-
-### Visual contract
-
-The recipe is content-shape; this is the **rendering contract** the authoring shape relies on. This ADR specifies the contract; implementation lands as a separate PR.
+The recipe is content-shape; the **rendering contract** is what `h1` / `h2` / `pre` / `<Canvas>` / `<ArgTypes>` are supposed to look like in light + dark + Client Sim themes. Authors write conformant MDX and trust the contract.
 
 | Element | Contract |
 |---|---|
 | `h1` | `--font-family-heading`, `--text-primary`, no underline, `margin-top: 0` |
-| `h2` | `--font-family-heading`, `--text-primary`, generous top margin (≥40px), no underline |
-| `h3` | `--font-family-heading`, `--text-primary`, smaller top margin (≥24px) |
+| `h2` | `--font-family-heading`, `--text-primary`, generous top margin (≥40 px), no underline |
+| `h3` | `--font-family-heading`, `--text-primary`, smaller top margin (≥24 px) |
 | `p`, `li` | `--font-family-body`, `--text-secondary`, line-height ≥1.6 |
-| `a` (in prose) | `--text-brand-primary`, underline-on-hover only, no color flash on theme switch |
+| `a` (prose) | `--text-brand-primary`, underline-on-hover only, no color flash on theme switch |
 | `code` (inline) | `--surface-secondary` background, monospace family, ≤0.875em sizing |
-| `pre` (block) | **Must look polished in BOTH light and dark themes.** Today every code block is hardcoded `#1e1e1e` regardless of theme ([`storybook-overrides.css:25-88`](../../.storybook/storybook-overrides.css)) — that's the "broken" the user sees. Replace with token-driven background that adapts: `--surface-code-block` (new gap-fill token, dark in both modes if the syntax-highlighting palette stays VS Code Dark+, or paired light/dark palettes if we go bichromatic). Implementation choice deferred to the follow-up PR; the *contract* is "code blocks render polished in every theme without theme-specific overrides." |
-| Code block copy/show-source buttons | Subtle, dark-on-dark, `--text-muted` resting + `--text-brand-primary` hover. Already mostly correct; verify under client-sim theme |
-| `<Canvas>` preview surface | `--surface-primary` background, `--border-secondary` border, generous internal padding. Matches today |
-| `<ArgTypes>` table | Token-driven (already correct) |
+| `pre` (block) | Must look polished in BOTH light and dark themes. Token-driven background that adapts (`--surface-code-block`) |
+| `<Canvas>` surface | `--surface-primary` background, `--border-secondary` border, generous internal padding |
+| `<ArgTypes>` table | Token-driven |
 | Tables (markdown) | Same border-radius and color treatment as ArgTypes for visual consistency |
 
-The contract is paired with **`--font-audit` smoke test discipline** (existing — toggle to Client Sim theme; if anything still uses Poppins, the contract is broken).
-
-### Callouts (MDX)
-
-Carbon uses italicized `_Note: …_` and nothing else. Brik adopts the same minimal vocabulary plus one structural primitive:
-
-```mdx
-> **Note** — One short sentence about a non-obvious behavior.
-
-> **Warning** — One short sentence about a footgun.
-```
-
-Both render through the `blockquote` chrome, styled per the Visual Contract. No admonition components, no toast components, no tip/info/danger/success matrix. If you need more, write a docs-site page.
+Paired with **`--font-audit` smoke test discipline** — toggle to Client Sim theme; if anything still uses Poppins, the contract is broken.
 
 ## Audit — current state of six representative Brik component pages
 
@@ -324,4 +265,4 @@ A page violates ADR-007 if any of the above fails. Phase 3 closes when 100% of `
 
 ---
 
-*Update cadence: this ADR is amended when the recipe materially changes (new required section, change in section order, change to the visual contract). Minor wording tweaks happen in `.storybook/CONTENT-GUIDE.md`, which becomes the human-readable mirror of this ADR. The lint script is the enforcement layer.*
+*Update cadence: this ADR is amended when the recipe materially changes (new required section, change in section order, change to the visual contract). Minor wording tweaks happen in [`.claude/standards/storybook-mdx-recipe.md`](../../.claude/standards/storybook-mdx-recipe.md), the operational standard auto-retrieved by the `storybook-mdx-recipe` skill on MDX edits. The lint script `scripts/lint-storybook-recipe.js` is the enforcement layer.*

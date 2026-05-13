@@ -2,7 +2,7 @@
 
 Typography and layout conventions per surface type. Consumers stop inventing per-sheet hierarchy; every page, sheet, form, and card reads the same.
 
-Companion to [`COMPONENT-PATTERNS.md`](./COMPONENT-PATTERNS.md) and the canonical [Primitives](https://design.brikdesigns.com/docs/primitives) registry. Every token referenced here is defined in [`tokens/figma-tokens.css`](../tokens/figma-tokens.css).
+Companion to [`.claude/standards/component-build.md`](../.claude/standards/component-build.md) and the canonical [Primitives](https://design.brikdesigns.com/docs/primitives) registry. Every token referenced here is defined in [`tokens/figma-tokens.css`](../tokens/figma-tokens.css).
 
 ---
 

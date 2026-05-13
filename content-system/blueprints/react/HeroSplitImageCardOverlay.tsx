@@ -7,7 +7,7 @@
  *
  * Drives `/services/{cat}/{slug}` style pages.
  *
- * Composes BDS primitives per docs/COMPONENT-PATTERNS.md
+ * Composes BDS primitives per .claude/standards/component-build.md
  * §"Compose primitives — never reimplement them":
  *   - Breadcrumb trail → `<Breadcrumb items={...} />`
  *   - Left CTA → `<LinkButton variant="inverse">`
