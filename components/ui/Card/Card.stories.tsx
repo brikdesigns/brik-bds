@@ -207,6 +207,67 @@ export const SummaryPreset = () => (
   </Stack>
 );
 
+/* ─── Preset: display ────────────────────────────────────────── */
+
+/**
+ * @summary Display preset — generic content card for `bds-card-grid`.
+ *
+ * Optional slot props (`image`, `tag`, `badge`, `title`, `description`,
+ * `action`) so a single primitive serves any content type — service,
+ * blog post, customer story, property listing, team bio, support plan.
+ * Stories below exercise each affordance combination.
+ */
+export const DisplayPresetAllAffordances: Story = {
+  name: 'Display: all affordances',
+  render: () => (
+    <div style={{ width: 320, display: 'flex' }}>
+      <Card
+        preset="display"
+        title="Service one"
+        description="A two-line card description that sets the type rhythm without trying to tell the whole story."
+        image={
+          <div style={{ aspectRatio: '3 / 2', background: 'var(--surface-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+            Image slot
+          </div>
+        }
+        tag={<Badge>Marketing</Badge>}
+        badge={<Badge status="positive">Has Options</Badge>}
+        action={<Button variant="primary" size="sm">Learn more</Button>}
+      />
+    </div>
+  ),
+};
+
+/** @summary Display: minimal — title-only, no image / tag / action. */
+export const DisplayPresetMinimal: Story = {
+  name: 'Display: minimal',
+  render: () => (
+    <div style={{ width: 320 }}>
+      <Card preset="display" title="Minimal card" description="Only title and description — every other affordance is toggleable." />
+    </div>
+  ),
+};
+
+/** @summary Display: clickable card — `href` turns the whole card into a link. */
+export const DisplayPresetClickable: Story = {
+  name: 'Display: clickable',
+  render: () => (
+    <div style={{ width: 320 }}>
+      <Card
+        preset="display"
+        href="#"
+        title="Whole-card link"
+        description="When href is set, the entire card becomes a single navigation target — use when there's no separate action."
+        image={
+          <div style={{ aspectRatio: '3 / 2', background: 'var(--surface-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+            Image slot
+          </div>
+        }
+      />
+    </div>
+  ),
+};
+
 /* ─── Patterns ───────────────────────────────────────────────── */
 
 /** @summary Common usage patterns */
