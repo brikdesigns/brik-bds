@@ -1,5 +1,13 @@
+/**
+ * Reference implementation for ADR-010 — see #587 Phase 2.
+ *
+ * This file is the gold-standard template Phase 3 mirrors when batch-
+ * migrating the remaining component story files. Five exports, every prop
+ * declared in `argTypes`. No `Disabled` / `Loading` / icon-slot stories —
+ * boolean states are Controls. Banner has no Q4 irreducible compositions,
+ * so no `## Patterns` story; recipe amendment tracked separately.
+ */
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
 import { Banner } from './Banner';
 import { Button } from '../Button';
 
@@ -9,9 +17,32 @@ const meta: Meta<typeof Banner> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    title: { control: 'text' },
-    description: { control: 'text' },
-    tone: { control: 'select', options: ['announcement', 'warning', 'error', 'information'] },
+    title: {
+      control: 'text',
+      description: 'Bold title text. Accepts ReactNode for inline composition.',
+    },
+    description: {
+      control: 'text',
+      description: 'Optional description rendered below the title.',
+    },
+    tone: {
+      control: 'select',
+      options: ['announcement', 'warning', 'error', 'information'],
+      description:
+        '`announcement` (default) = brand-primary surface, `role="banner"`. ' +
+        '`warning` / `error` / `information` = secondary surface with leading status Badge, `role="alert"`.',
+    },
+    action: {
+      control: false,
+      description:
+        'Optional ReactNode aligned right (typically a Button). Use `variant="on-color"` for announcement tone; default variants for status tones.',
+    },
+    onDismiss: {
+      action: 'dismissed',
+      description:
+        'Optional close handler. When provided, renders an × close button at the trailing edge. ' +
+        'Caller owns the visibility state — see the Dismissible pattern story.',
+    },
   },
 };
 
@@ -33,31 +64,14 @@ export const Playground: Story = {
   },
 };
 
-/* ─── Variants — one story per meaningful state ──────────────── */
+/* ─── Variants — one story per tone (Q3 semantic starting points) ─ */
 
-/** @summary Default announcement tone with title, description, and action */
+/** @summary Announcement tone — brand-primary surface for marketing notices */
 export const Announcement: Story = {
   args: {
     title: 'Limited time offer',
     description: 'Save 20% on all plans this month',
     action: <BannerAction>View plans</BannerAction>,
-  },
-};
-
-/** @summary Announcement tone with only a title (no description, no action) */
-export const TitleOnly: Story = {
-  args: {
-    title: 'New feature available',
-  },
-};
-
-/** @summary Announcement tone with a dismiss affordance */
-export const Dismissible: Story = {
-  args: {
-    title: 'Cookie notice',
-    description: 'We use cookies to improve your experience',
-    action: <BannerAction>Accept</BannerAction>,
-    onDismiss: () => {},
   },
 };
 
@@ -90,46 +104,3 @@ export const Error: Story = {
   },
 };
 
-/* ─── Patterns — irreducible (hook usage) ────────────────────── */
-
-/**
- * Dismissible banner wired up to local state — the canonical pattern for a
- * notice the user can hide and recover. Uses `useState` so the hide / show
- * cycle is demonstrable; render-mode is required because args alone can't
- * express the controlled toggle.
- *
- * @summary Dismissible banner with a hide / show toggle
- */
-export const DismissibleWithToggle: Story = {
-  render: () => {
-    const [visible, setVisible] = useState(true);
-
-    if (!visible) {
-      return (
-        <button
-          type="button"
-          onClick={() => setVisible(true)}
-          style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-muted)',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            textDecoration: 'underline',
-          }}
-        >
-          Show banner again
-        </button>
-      );
-    }
-
-    return (
-      <Banner
-        title="Welcome back"
-        description="You have 3 unread notifications"
-        onDismiss={() => setVisible(false)}
-      />
-    );
-  },
-};

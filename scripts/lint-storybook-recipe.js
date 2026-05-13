@@ -31,12 +31,19 @@ const path = require('path');
 // Recipe (mirror of ADR-007, Acceptance Criteria 1-9)
 // ---------------------------------------------------------------------------
 
-const REQUIRED_SECTIONS = ['## Playground', '## Variants', '## Patterns', '## Props'];
+const REQUIRED_SECTIONS = ['## Playground', '## Variants', '## Props'];
 
 // H2 sections that MUST contain at least one `<Canvas of=...>` somewhere in
 // their body (including H3 sub-sections). Props uses `<ArgTypes>` not
 // `<Canvas>` and is excluded.
-const SECTIONS_REQUIRING_CANVAS = ['## Playground', '## Variants', '## Patterns'];
+const SECTIONS_REQUIRING_CANVAS = ['## Playground', '## Variants'];
+
+// `## Patterns` is conditionally required — present only when the component
+// has Q4 (irreducible composition) or Q5 (play-only) stories per ADR-010.
+// When present it must contain a `<Canvas>`; when absent it produces no
+// violation. The position rule still applies (between Variants and Props).
+// See #608 for the matrix-vs-recipe reconciliation.
+const CONDITIONAL_SECTIONS_WITH_CANVAS = ['## Patterns'];
 
 // Optional sections must, if present, follow `## Props` in this order.
 const OPTIONAL_SECTIONS_AFTER_PROPS = ['## CSS Override API', '## Notes'];
@@ -164,6 +171,27 @@ function lintFile(filePath) {
     });
   }
 
+  // Rule: `## Patterns`, if present, sits between Variants and Props
+  const patternsIdx = h2Texts.indexOf('## Patterns');
+  const variantsIdx = h2Texts.indexOf('## Variants');
+  const propsIdxForPatterns = h2Texts.indexOf('## Props');
+  if (patternsIdx !== -1) {
+    if (variantsIdx !== -1 && patternsIdx < variantsIdx) {
+      violations.push({
+        rule: 'patterns-section-order',
+        message: '`## Patterns` must appear after `## Variants`',
+        line: h2s[patternsIdx].line,
+      });
+    }
+    if (propsIdxForPatterns !== -1 && patternsIdx > propsIdxForPatterns) {
+      violations.push({
+        rule: 'patterns-section-order',
+        message: '`## Patterns` must appear before `## Props`',
+        line: h2s[patternsIdx].line,
+      });
+    }
+  }
+
   // Rule: optional sections appear AFTER `## Props`
   const propsIdx = h2Texts.indexOf('## Props');
   if (propsIdx !== -1) {
@@ -218,14 +246,14 @@ function lintFile(filePath) {
     return lines.slice(startIdx, endIdxExclusive).join('\n');
   }
 
-  for (const required of SECTIONS_REQUIRING_CANVAS) {
+  for (const required of [...SECTIONS_REQUIRING_CANVAS, ...CONDITIONAL_SECTIONS_WITH_CANVAS]) {
     const h2 = h2s.find((h) => h.text === required);
-    if (!h2) continue; // already flagged by missing-required-section
+    if (!h2) continue; // required: already flagged by missing-required-section; conditional: absent is OK
     const body = bodyOfH2(h2.line);
     if (!/<Canvas\b/.test(body)) {
       violations.push({
         rule: 'missing-canvas',
-        message: `\`${required}\` has no \`<Canvas>\` block. Required sections must demo at least one story.`,
+        message: `\`${required}\` has no \`<Canvas>\` block. ${SECTIONS_REQUIRING_CANVAS.includes(required) ? 'Required sections' : 'Sections present in the file'} must demo at least one story.`,
         line: h2.line,
       });
     }
