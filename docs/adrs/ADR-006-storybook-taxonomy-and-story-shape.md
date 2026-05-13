@@ -67,43 +67,19 @@ The Storybook sidebar collapses to **four content top-levels** (`Foundations`, `
 
 ### Part B — Story shape: what's inside the file
 
-Every BDS component story file ships exactly two kinds of stories:
+The story-shape decision lives here at the high level; the operational rules + the story-vs-control matrix are codified separately:
 
-1. **`Playground`** — args-driven sandbox. Controls work. One canonical instance.
-2. **One story per meaningful state** — args-driven. Named by the state.
+- **Two story shapes per file** — `Playground` (args-driven sandbox) + one story per meaningful state, named directly (`Warning`, not `Variants > Warning`).
+- **No `Variants` / `Tones` / `Patterns` gallery buckets** inside a component file. They duplicate the sidebar, break Controls, and merge axes that should split.
+- **Narrow exception:** single-axis comparison galleries (`Sizes`, `Densities`, `Placements`) earn one dedicated story when side-by-side comparison is the entire point AND the autodocs page can't make the same comparison clear AND it's one axis, not a mix.
+- **`render` is for irreducible cases only** — multi-component composition or hook-driven state machines args can't express. Not for documentation galleries.
 
-"Meaningful state" — pick what changes behavior or appearance enough to matter:
+**For the full operational rules — including the story-vs-control matrix (Q1–Q5: toolbar global / argTypes-only / dedicated story / irreducible render / play-only), MCP discipline, surface-tag rules, banned-export list, Storybook 9 imports, and the pre-commit checklist — see:**
 
-- A value on a primary axis: `Information`, `Warning`, `Error`, `Announcement` (tone)
-- A behavior toggle: `Dismissible`, `WithAction`, `TitleOnly`
-- A composition: `WithIcon`, `WithCustomContent`
+- **[ADR-010 — Storybook axes of information](./ADR-010-storybook-axes-of-information.md)** — the story-vs-control matrix
+- **[`.claude/standards/storybook-story-shape.md`](../../.claude/standards/storybook-story-shape.md)** — the canonical ruleset (retrieved via brik-rag at edit time by the `storybook-story-shape` skill)
 
-Story names use the state directly (`Warning`, not `Variants > Warning`). The Storybook sidebar + autodocs page **is** the gallery. We don't build a second gallery inside `render`.
-
-### What not to ship
-
-1. **No `Variants` / `Tones` / `Patterns` gallery buckets inside a component file.** They duplicate the sidebar, break Controls, and merge axes that should split. (Note: `Patterns/` as a *top-level sidebar bucket* per Part A is different — that's for composite recipes across components, not a per-component gallery.)
-2. **No `render`-mode stories that stack multiple instances** behind `<SectionLabel>` rows for documentation purposes.
-3. **No "and" in story names** (already in the writing guide; restated). `SizesAndVariants` splits.
-
-### When a stacked-gallery story IS allowed (the exception)
-
-Comparison-only galleries earn a single dedicated story when **and only when** all three apply:
-
-1. **Side-by-side comparison is the entire point** (e.g., `Sizes` showing `xs/sm/md/lg/xl` of one component in one column).
-2. **The autodocs page can't make the same comparison clear** — sidebar order isn't enough.
-3. **It's one axis, not a mix** — a `Sizes` gallery is fine; a `Variants` gallery that combines size, tone, and content shape is not.
-
-Story is named after the axis (`Sizes`, `Densities`) — never `Variants` / `Patterns` / `Examples`.
-
-### `render` is for irreducible cases
-
-Per the existing writing guide, `render` is reserved for cases args can't express:
-
-- Multi-component composition with no natural single-component equivalent
-- Hook usage required by the demo (a controlled toggle pattern that's the only way to demonstrate the interaction)
-
-`render` used purely to lay out a documentation gallery is not an irreducible case.
+The decisions above govern; the standard is the operational expression. When the standard and this Part B disagree, the standard is the live truth — open a PR amending this ADR (or ADR-010) when a *decision* changes.
 
 ## Migration
 
@@ -178,10 +154,11 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Enforcement
 
-- ADR linked from [`docs/STORYBOOK-WRITING-GUIDE.md`](../STORYBOOK-WRITING-GUIDE.md) "Story shape + sidebar taxonomy" section.
-- BDS `CLAUDE.md` "Storybook" section carries a one-line pointer to this ADR.
-- New component story files reviewed against the two-shape model in PR review.
-- **Lint enforcement is page-recipe-scoped today** ([`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js), gated on pre-commit + CI per ADR-007). A complementary lint for the story-shape rule (no `Variants`/`Tones`/`Patterns` gallery exports) is a candidate follow-up but is **not** wired up by this ADR.
+- Operational ruleset lives in [`.claude/standards/storybook-story-shape.md`](../../.claude/standards/storybook-story-shape.md) and is auto-retrieved by the [`storybook-story-shape`](../../.claude/skills/storybook-story-shape/SKILL.md) skill on every `*.stories.tsx` edit.
+- [ADR-010](./ADR-010-storybook-axes-of-information.md) carries the story-vs-control matrix referenced by Part B above.
+- BDS `CLAUDE.md` "Storybook" section carries a one-line pointer to this ADR and to ADR-010.
+- New component story files reviewed against the two-shape model + matrix in PR review.
+- **Lint enforcement is page-recipe-scoped today** ([`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js), gated on pre-commit + CI per ADR-007). A complementary lint for the story-shape rule (no `Variants`/`Tones`/`Patterns` gallery exports) is tracked in [#569](https://github.com/brikdesigns/brik-bds/issues/569) and not yet wired.
 - Existing files are not retroactively swept. See Migration above for why.
 
 ## Amendments

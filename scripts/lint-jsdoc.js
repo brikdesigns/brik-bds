@@ -266,5 +266,5 @@ console.error(`    - Component @summary: add a JSDoc with \`@summary <≤60 char
 console.error(`    - Prop JSDoc: add a one-line \`/** description */\` above each field in the Props interface.`);
 console.error(`    - Story @summary: add \`/** @summary <description> */\` above each \`export const Foo: Story\`.`);
 console.error(`    - Surface tag: add one of 'surface-web' | 'surface-product' | 'surface-shared' to the meta.tags array.`);
-console.error(`    - See docs/STORYBOOK-WRITING-GUIDE.md → "MCP Discipline" + "Surface taxonomy" for the convention.`);
+console.error(`    - See .claude/standards/storybook-story-shape.md → "MCP discipline" for the convention.`);
 process.exit(1);
