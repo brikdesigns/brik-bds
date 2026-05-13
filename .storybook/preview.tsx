@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import type { Preview, Decorator } from '@storybook/react-vite';
 import { DocsContainer as DefaultDocsContainer } from '@storybook/addon-docs/blocks';
 import { create } from 'storybook/theming';
+import type { ViewportMap } from 'storybook/viewport';
 import type { ThemeNumber } from '../tokens';
 import { storybookThemes } from '../tokens/storybook-themes';
 
@@ -392,6 +393,13 @@ const preview: Preview = {
     layout: 'fullscreen',
     backgrounds: {
       disabled: true,
+    },
+    viewport: {
+      options: {
+        mobile: { name: 'Mobile', styles: { width: '375px', height: '667px' }, type: 'mobile' },
+        tablet: { name: 'Tablet', styles: { width: '768px', height: '1024px' }, type: 'tablet' },
+        desktop: { name: 'Desktop', styles: { width: '1280px', height: '800px' }, type: 'desktop' },
+      } satisfies ViewportMap,
     },
     docs: {
       toc: true,
