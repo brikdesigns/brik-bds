@@ -28,8 +28,10 @@ This CLAUDE.md is `@import`-ed by every consumer of `@brikdesigns/bds` — the B
 - **Token discipline** (3-layer architecture, semantic categories, service-token isolation) → `brik-rag query "token discipline"`
 - **Token PR checklist** → [`docs/TOKEN-PR-CHECKLIST.md`](docs/TOKEN-PR-CHECKLIST.md)
 - **Release procedure** → [`docs/RELEASE.md`](docs/RELEASE.md)
-- **Storybook + story shape** → [`docs/STORYBOOK-WRITING-GUIDE.md`](docs/STORYBOOK-WRITING-GUIDE.md) + [ADR-006](docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md)
-- **Component patterns + Paper** → [`docs/COMPONENT-PATTERNS.md`](docs/COMPONENT-PATTERNS.md)
+- **Component build rules** → [`.claude/standards/component-build.md`](.claude/standards/component-build.md) — auto-retrieved by the [`component-build`](.claude/skills/component-build/SKILL.md) skill on `components/ui/**/*.{tsx,css}` edits
+- **Storybook story shape** → [`.claude/standards/storybook-story-shape.md`](.claude/standards/storybook-story-shape.md) + [ADR-006](docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) (taxonomy + two-shape decision) + [ADR-010](docs/adrs/ADR-010-storybook-axes-of-information.md) (story-vs-control matrix) — auto-retrieved by [`storybook-story-shape`](.claude/skills/storybook-story-shape/SKILL.md) on `*.stories.tsx` edits
+- **Storybook MDX recipe** → [`.claude/standards/storybook-mdx-recipe.md`](.claude/standards/storybook-mdx-recipe.md) + [ADR-007](docs/adrs/ADR-007-storybook-page-recipe.md) — auto-retrieved by [`storybook-mdx-recipe`](.claude/skills/storybook-mdx-recipe/SKILL.md) on `*.mdx` edits; lint enforced via `scripts/lint-storybook-recipe.js`
+- **Storybook toolbar globals** → [`.claude/standards/storybook-toolbar-globals.md`](.claude/standards/storybook-toolbar-globals.md) — auto-retrieved by [`storybook-toolbar-globals`](.claude/skills/storybook-toolbar-globals/SKILL.md) on `.storybook/preview.tsx` / `main.ts` edits
 - **BCS authoring + discipline** → [`content-system/README.md`](content-system/README.md)
 - **Cascade + React composition** → [`tokens/CASCADE.md`](tokens/CASCADE.md) + design.brikdesigns.com docs
 - **ADRs** → [`docs/adrs/`](docs/adrs/) (component bloat, addable-list family, storybook taxonomy)
