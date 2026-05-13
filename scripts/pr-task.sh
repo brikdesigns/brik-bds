@@ -173,6 +173,9 @@ ${COMMIT_BULLETS}
 - [ ] \`npm run lint-tokens\` passes
 - [ ] Dark mode checked (if applicable)
 
+## Knowledge capture
+- [ ] Non-obvious decisions / learnings captured: \`brik-rag remember "<key insight>"\`
+
 Generated with [Claude Code](https://claude.ai/code)
 EOF
 )
@@ -190,6 +193,9 @@ echo "  $PR_URL"
 echo ""
 echo "  Branch:  $BRANCH → ${BASE_BRANCH}"
 echo "  Commits: $COMMITS_AHEAD ahead of ${BASE_BRANCH}"
+echo ""
+echo -e "  ${YELLOW}Knowledge capture:${NC} did anything non-obvious come up?"
+echo "    brik-rag remember \"<key insight from this task>\""
 echo ""
 
 # ── Worktree cleanup hint ──
