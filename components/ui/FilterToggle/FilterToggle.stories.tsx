@@ -24,6 +24,10 @@ const meta: Meta<typeof FilterToggle> = {
       control: 'boolean',
       description: 'Whether the filter is on. Seeds the in-story `useState`; click the pill in the canvas to flip it.',
     },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the pill and applies muted styling. Click events are blocked.',
+    },
     onToggle: {
       action: 'toggled',
       description: 'Called when the pill is clicked. Consumer flips the boolean externally — FilterToggle is fully controlled.',
@@ -46,6 +50,7 @@ export const Default: Story = {
   args: {
     label: 'Show archived',
     active: false,
+    disabled: false,
     size: 'md',
     onToggle: fn(),
   },
