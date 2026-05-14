@@ -16,17 +16,48 @@ const meta: Meta<typeof Button> = {
     layout: 'centered',
   },
   argTypes: {
+    children: {
+      control: 'text',
+      description: 'Button label. Accepts ReactNode for inline composition.',
+    },
     variant: {
       control: 'select',
       options: ['primary', 'outline', 'secondary', 'ghost', 'inverse', 'on-color', 'destructive', 'positive', 'selected'],
+      description:
+        'Brand hierarchy: `primary` → `outline` → `secondary` → `ghost`. ' +
+        '`inverse` for inverse surfaces; `on-color` for brand-primary surfaces. ' +
+        'System: `destructive`, `positive`, `selected`. ' +
+        'Legacy aliases (`danger`, `danger-outline`, `danger-ghost`) are TS-valid but prefer `destructive`.',
     },
     size: {
       control: 'select',
       options: ['tiny', 'sm', 'md', 'lg', 'xl'],
+      description: 'Size token on the 4-point grid. Default `md`.',
     },
-    fullWidth: { control: 'boolean' },
-    disabled: { control: 'boolean' },
-    loading: { control: 'boolean' },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Stretch to fill the container width.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the button — non-interactive, muted appearance, blocks `onClick`.',
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Async-pending state — spinner replaces label, width preserved, click blocked.',
+    },
+    iconBefore: {
+      control: false,
+      description: 'Optional leading icon node. Common for actions like Add / Download.',
+    },
+    iconAfter: {
+      control: false,
+      description: 'Optional trailing icon node. Common for forward-motion CTAs.',
+    },
+    onClick: {
+      action: 'clicked',
+      description: 'Click handler. Not invoked when `disabled` or `loading`.',
+    },
   },
 };
 
@@ -113,7 +144,8 @@ export const Playground: Story = {
 };
 
 /** @summary Interaction test — disabled blocks click */
-export const InteractionTest: Story = {
+export const InteractionTestDisabled: Story = {
+  tags: ['!manifest'],
   args: { variant: 'primary', size: 'md', children: 'Submit', disabled: true, onClick: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -181,28 +213,10 @@ export const Positive: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   VARIANTS — states + composition
+   AXIS-ONLY GALLERY (ADR-006 exception)
+   `disabled` / `loading` / `iconBefore` / `iconAfter` / `fullWidth`
+   collapsed to Controls per ADR-010 Q2.
    ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Disabled — locked, non-interactive, muted appearance */
-export const Disabled: Story = {
-  args: { variant: 'primary', size: 'md', children: 'Submit', disabled: true },
-};
-
-/** @summary Loading — async-pending state, spinner replaces text, width preserved */
-export const Loading: Story = {
-  args: { variant: 'primary', size: 'md', children: 'Save Changes', loading: true },
-};
-
-/** @summary With leading icon — icon precedes the label */
-export const WithIconBefore: Story = {
-  args: { variant: 'outline', size: 'md', children: 'Add item', iconBefore: <Plus /> },
-};
-
-/** @summary With trailing icon — icon follows the label, common for forward-motion CTAs */
-export const WithIconAfter: Story = {
-  args: { variant: 'primary', size: 'md', children: 'Get started', iconAfter: <ArrowRight /> },
-};
 
 /**
  * Sizes axis — qualifies as the ADR-006 §"axis-only gallery" exception:
