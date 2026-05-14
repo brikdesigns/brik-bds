@@ -1,52 +1,28 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { CompletionToggle } from './CompletionToggle';
 
-/* ─── Layout helpers (story-only) ────────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div
-    style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.05em',
-      marginBottom: 'var(--gap-md)',
-      color: 'var(--text-muted)',
-    }}
-  >
-    {children}
-  </div>
-);
-
-const Stack = ({
-  children,
-  gap = 'var(--gap-xl)',
-}: {
-  children: React.ReactNode;
-  gap?: string;
-}) => <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>;
-
-const Row = ({
-  children,
-  gap = 'var(--gap-lg)',
-}: {
-  children: React.ReactNode;
-  gap?: string;
-}) => (
-  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
-);
-
-/* ─── Meta ───────────────────────────────────────────────────────── */
+/* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof CompletionToggle> = {
-  title: 'Components/Form/CompletionToggle',
+  title: 'Components/Form/completion-toggle',
   component: CompletionToggle,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
-    checked: { control: 'boolean' },
-    disabled: { control: 'boolean' },
+    checked: {
+      control: 'boolean',
+      description: 'Current completion state. Seeds the in-story `useState` on initial render; click the toggle in the canvas to flip it interactively.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the toggle — non-interactive, muted appearance.',
+    },
+    onCheckedChange: {
+      action: 'checked-changed',
+      description: 'Called with the new boolean state when the toggle is clicked.',
+    },
   },
 };
 
@@ -54,11 +30,14 @@ export default meta;
 type Story = StoryObj<typeof CompletionToggle>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND
+   SINGLE — args-driven canonical instance. CompletionToggle is fully
+   controlled (no internal state), so the render wraps it with a
+   useState hook seeded from `args.checked`. Click the toggle in the
+   canvas to flip; the `disabled` Control locks it.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Circular completion toggle for task / item state */
+export const Single: Story = {
   args: {
     checked: false,
     disabled: false,
@@ -67,114 +46,74 @@ export const Playground: Story = {
     const [checked, setChecked] = useState(args.checked);
     return <CompletionToggle {...args} checked={checked} onCheckedChange={setChecked} />;
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole('button', { name: 'Mark complete' });
+
+    await expect(toggle).toBeVisible();
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+
+    // Round-trip the state: not-complete → complete → not-complete.
+    // aria-label flips to "Mark incomplete" while checked so the next
+    // canvas.getByRole query has to match the new accessible name.
+    await userEvent.click(toggle);
+    await expect(canvas.getByRole('button', { name: 'Mark incomplete' })).toHaveAttribute('aria-pressed', 'true');
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Mark incomplete' }));
+    await expect(canvas.getByRole('button', { name: 'Mark complete' })).toHaveAttribute('aria-pressed', 'false');
+
+    // Blur so the post-play canvas matches the canonical idle state.
+    (canvas.getByRole('button', { name: 'Mark complete' }) as HTMLElement).blur();
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS
+   ORIENTATION axis — Vertical / Horizontal group layouts per ADR-010
+   §components without a variant axis. CompletionToggle is icon-only
+   (no built-in label); consumers compose adjacent text via Checklist
+   for row-style use or wrap their own card chrome. The orientation
+   stories here show toggles in isolation so the spacing rhythm and
+   interactive behavior are clear without composition noise.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All states side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>States</SectionLabel>
-        <Row gap="var(--gap-xl)">
-          <CompletionToggle checked={false} onCheckedChange={() => {}} />
-          <CompletionToggle checked={true} onCheckedChange={() => {}} />
-          <CompletionToggle checked={false} onCheckedChange={() => {}} disabled />
-          <CompletionToggle checked={true} onCheckedChange={() => {}} disabled />
-        </Row>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Used as a standalone toggle on a card or as the click target inside a row composition */
-export const Patterns: Story = {
+/** @summary Vertical group — toggles stacked top-to-bottom */
+export const Vertical: Story = {
+  parameters: { layout: 'padded' },
   render: () => {
     const [items, setItems] = useState<Record<string, boolean>>({
       a: false,
       b: true,
       c: false,
+      d: false,
     });
     const toggle = (id: string) => setItems((prev) => ({ ...prev, [id]: !prev[id] }));
-
     return (
-      <Stack gap="var(--gap-huge)">
-        <div>
-          <SectionLabel>Card chrome (BoardCard pattern)</SectionLabel>
-          <div
-            style={{
-              maxWidth: '320px',
-              padding: 'var(--padding-lg)',
-              border: 'var(--border-width-md) solid var(--border-secondary)',
-              borderRadius: 'var(--border-radius-lg)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 'var(--gap-md)',
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'var(--font-family-body)',
-                fontSize: 'var(--body-md)',
-                color: 'var(--text-primary)',
-              }}
-            >
-              Patient check-in processing
-            </span>
-            <CompletionToggle checked={items.a} onCheckedChange={() => toggle('a')} />
-          </div>
-        </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+        {(['a', 'b', 'c', 'd'] as const).map((id) => (
+          <CompletionToggle key={id} checked={items[id]} onCheckedChange={() => toggle(id)} />
+        ))}
+      </div>
+    );
+  },
+};
 
-        <div>
-          <SectionLabel>Inline list of toggleable units</SectionLabel>
-          <Stack gap="var(--gap-md)">
-            <Row>
-              <CompletionToggle checked={items.b} onCheckedChange={() => toggle('b')} />
-              <span
-                style={{
-                  fontFamily: 'var(--font-family-body)',
-                  fontSize: 'var(--body-md)',
-                  color: 'var(--text-primary)',
-                }}
-              >
-                Restock surgical gloves
-              </span>
-            </Row>
-            <Row>
-              <CompletionToggle checked={items.c} onCheckedChange={() => toggle('c')} />
-              <span
-                style={{
-                  fontFamily: 'var(--font-family-body)',
-                  fontSize: 'var(--body-md)',
-                  color: 'var(--text-primary)',
-                }}
-              >
-                Sanitize workstations
-              </span>
-            </Row>
-          </Stack>
-          <p
-            style={{
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'var(--body-xs)',
-              color: 'var(--text-muted)',
-              marginTop: 'var(--gap-md)',
-            }}
-          >
-            For row-wide click targets with completion state, prefer{' '}
-            <code>{'<Checklist>'}</code> — it pairs this control with a native{' '}
-            <code>{'<label>'}</code> + <code>{'<input>'}</code>.
-          </p>
-        </div>
-      </Stack>
+/** @summary Horizontal group — toggles inline */
+export const Horizontal: Story = {
+  parameters: { layout: 'padded' },
+  render: () => {
+    const [items, setItems] = useState<Record<string, boolean>>({
+      a: true,
+      b: false,
+      c: false,
+      d: false,
+    });
+    const toggle = (id: string) => setItems((prev) => ({ ...prev, [id]: !prev[id] }));
+    return (
+      <div style={{ display: 'flex', flexDirection: 'row', gap: 'var(--gap-xl)', alignItems: 'center' }}>
+        {(['a', 'b', 'c', 'd'] as const).map((id) => (
+          <CompletionToggle key={id} checked={items[id]} onCheckedChange={() => toggle(id)} />
+        ))}
+      </div>
     );
   },
 };
