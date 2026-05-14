@@ -1,151 +1,65 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
 import { FilterToggle } from './FilterToggle';
-import { FilterButton } from '../FilterButton/FilterButton';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/* ─── Meta ────────────────────────────────────────────────────── */
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'flex-start' }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────── */
-
-const meta = {
+const meta: Meta<typeof FilterToggle> = {
   title: 'Components/Action/filter-toggle',
   component: FilterToggle,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
-  decorators: [
-    (Story) => (
-      <div style={{ minHeight: 120, padding: 'var(--padding-lg)', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
-        <Story />
-      </div>
-    ),
-  ],
-} satisfies Meta<typeof FilterToggle>;
+  argTypes: {
+    label: {
+      control: 'text',
+      description: 'Button label. Stays the same in both active and inactive states.',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Pill size — matches the FilterButton / Button scale (sm=32px, md=40px, lg=48px). Default `md`.',
+    },
+    active: {
+      control: 'boolean',
+      description: 'Whether the filter is on. Seeds the in-story `useState`; click the pill in the canvas to flip it.',
+    },
+    onToggle: {
+      action: 'toggled',
+      description: 'Called when the pill is clicked. Consumer flips the boolean externally — FilterToggle is fully controlled.',
+    },
+  },
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof FilterToggle>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — single canonical story per ADR-010 §components without
+   a variant axis. Render wraps with useState so the canvas is
+   interactive (FilterToggle is fully controlled, no internal state).
+   args.onToggle still fires for Actions panel logging.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Binary on/off filter pill */
+export const Default: Story = {
   args: {
-    label: 'Show Archived',
+    label: 'Show archived',
     active: false,
-    onToggle: () => {},
     size: 'md',
+    onToggle: fn(),
   },
   render: (args) => {
-    function Toggle() {
-      const [active, setActive] = useState(args.active);
-      return (
-        <FilterToggle
-          {...args}
-          active={active}
-          onToggle={() => setActive((prev) => !prev)}
-        />
-      );
-    }
-    return <Toggle />;
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, states
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  args: { label: 'Toggle', active: false, onToggle: () => {} },
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Sizes — inactive</SectionLabel>
-        <Row>
-          <FilterToggle label="Small" active={false} onToggle={() => {}} size="sm" />
-          <FilterToggle label="Medium" active={false} onToggle={() => {}} size="md" />
-          <FilterToggle label="Large" active={false} onToggle={() => {}} size="lg" />
-        </Row>
-      </div>
-
-      <div>
-        <SectionLabel>Sizes — active</SectionLabel>
-        <Row>
-          <FilterToggle label="Small" active onToggle={() => {}} size="sm" />
-          <FilterToggle label="Medium" active onToggle={() => {}} size="md" />
-          <FilterToggle label="Large" active onToggle={() => {}} size="lg" />
-        </Row>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Mixed filter bar with FilterButton + FilterToggle
-   ═══════════════════════════════════════════════════════════════ */
-
-const statusOptions = [
-  { id: 'active', label: 'Active' },
-  { id: 'inactive', label: 'Inactive' },
-  { id: 'pending', label: 'Pending' },
-];
-
-const roleOptions = [
-  { id: 'admin', label: 'Admin' },
-  { id: 'editor', label: 'Editor' },
-  { id: 'viewer', label: 'Viewer' },
-];
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  args: { label: 'Toggle', active: false, onToggle: () => {} },
-  render: () => {
-    function FilterBar() {
-      const [status, setStatus] = useState<string | undefined>();
-      const [role, setRole] = useState<string | undefined>();
-      const [primaryOnly, setPrimaryOnly] = useState(false);
-
-      return (
-        <Stack>
-          <div>
-            <SectionLabel>Filter bar — FilterButton + FilterToggle</SectionLabel>
-            <Row>
-              <FilterButton label="Status" options={statusOptions} value={status} onChange={setStatus} size="sm" />
-              <FilterToggle
-                label="Show Primary Contacts"
-                active={primaryOnly}
-                onToggle={() => setPrimaryOnly((prev) => !prev)}
-                size="sm"
-              />
-              <FilterButton label="Role" options={roleOptions} value={role} onChange={setRole} size="sm" />
-            </Row>
-          </div>
-        </Stack>
-      );
-    }
-    return <FilterBar />;
+    const [active, setActive] = useState(args.active);
+    return (
+      <FilterToggle
+        {...args}
+        active={active}
+        onToggle={() => {
+          setActive((prev) => !prev);
+          args.onToggle?.();
+        }}
+      />
+    );
   },
 };
