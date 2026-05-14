@@ -39,3 +39,5 @@ State behavior to exercise:
 > **Note** — The Default story embeds a `useState` + `useMemo` filter pipeline because FilterBar's defining behavior (filter → recount → clear-button-appears) requires real state. Consumers wire their own data source; the in-story hook is illustrative.
 
 > **Note** — FilterBar does not expose a `disabled` prop. Filter children manage their own disabled state (e.g., `<FilterButton disabled />` greys out an individual filter). When the entire bar should be locked, gate at the consumer level (omit the bar entirely or render a read-only summary instead).
+
+> **Note** — FilterBar is fluid (`width: 100%`) — it fills its container. The Default story constrains the canvas to 1200px to match a typical desktop list/table viewport. Consumers control width via their layout. **Responsive collapse for narrow viewports (mobile: overflow filter children into a "Filters" sheet/drawer) is a known future improvement, not currently implemented** — tracked separately.

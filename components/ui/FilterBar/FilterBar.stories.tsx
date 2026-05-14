@@ -35,7 +35,13 @@ const meta: Meta<typeof FilterBar> = {
   component: FilterBar,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
-  decorators: [(Story) => <div style={{ minHeight: 280 }}><Story /></div>],
+  decorators: [
+    // 1200px container matches a typical desktop list/table viewport — Table
+    // ships fluid (`width: 100%`) and FilterBar sits above it. The constraint
+    // is only on the story canvas, not the component itself; consumers
+    // control the width via their layout.
+    (Story) => <div style={{ width: '100%', maxWidth: 1200, minHeight: 280 }}><Story /></div>,
+  ],
   argTypes: {
     title: {
       control: 'text',
