@@ -8,28 +8,29 @@ import * as Stories from './AddressInput.stories';
 
 <ComponentLinks slug="address-input" />
 
-Location text input with a location icon and autocomplete suggestion dropdown. Designed for forms that require address or location entry.
+Location text input with a leading map-pin icon and an autocomplete suggestion dropdown. The component manages focus + dropdown visibility; the consumer owns the suggestions array and filtering logic. Visual treatment matches [`TextInput`](/?path=/docs/components-form-text-input--docs).
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes and suggestion dropdown.
+AddressInput has no semantic-variant axis — all variation (size, label, placeholder, fullWidth) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-- **`md`** — standard size, default
-- **`sm`** — compact for dense layouts
+<Canvas of={Stories.Default} />
 
-<Canvas of={Stories.Variants} />
+- **`sm`** — 32px height, 14px body
+- **`md`** — 40px height, 16px body (default)
 
-## Patterns
-
-Interactive autocomplete with simulated suggestions. Type in the field to filter results.
-
-<Canvas of={Stories.Patterns} />
+AddressInput only ships two sizes today (no `lg`).
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Note** — AddressInput specialization is justified per [ADR-010 amendment §2](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) because the suggestion dropdown is unique interactive behavior beyond `<TextInput type="text" />`. The consumer provides the `suggestions` array and the filter logic; the component owns the open/close state, click-outside dismissal, and Escape key handling.
+
+> **Note** — The Default story embeds a controlled `useState` + filter hook in its `render` so the autocomplete flow is exercisable without leaving Storybook. Real consumers wire their own data source (Google Places API, internal address service, etc.) — the in-story hook is illustrative, not a recommended implementation.
