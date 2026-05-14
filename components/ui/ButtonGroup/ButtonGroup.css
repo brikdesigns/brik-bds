@@ -1,20 +1,84 @@
 @layer bds-components {
 /**
  * BDS ButtonGroup — groups related buttons together
+ * Variants: spaced (default) | segmented
+ * Orientations: horizontal (default) | vertical
+ * Align: start | center | end | between
  */
 
 .bds-button-group {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-md);
   flex-wrap: wrap;
   box-sizing: border-box;
 }
+
+/* ─── Variant: spaced (default) ──────────────────────────────── */
+
+.bds-button-group--spaced {
+  gap: var(--gap-md);
+}
+
+/* ─── Variant: segmented — buttons share borders, no gap ─────── */
+
+.bds-button-group--segmented {
+  gap: 0;
+}
+
+/* Horizontal segmented: collapse adjacent borders + round only the
+   outer corners. Targets direct child buttons. */
+
+.bds-button-group--segmented:not(.bds-button-group--vertical) > *:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: calc(var(--border-width-sm) * -1);
+}
+
+.bds-button-group--segmented:not(.bds-button-group--vertical) > *:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Vertical segmented: same treatment on the vertical axis. */
+
+.bds-button-group--segmented.bds-button-group--vertical > *:not(:first-child) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: calc(var(--border-width-sm) * -1);
+}
+
+.bds-button-group--segmented.bds-button-group--vertical > *:not(:last-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* ─── Orientation: vertical ──────────────────────────────────── */
 
 .bds-button-group--vertical {
   flex-direction: column;
   align-items: stretch;
 }
+
+/* ─── Align: horizontal alignment (ignored when fullWidth=true) ─ */
+
+.bds-button-group--align-start {
+  justify-content: flex-start;
+}
+
+.bds-button-group--align-center {
+  justify-content: center;
+}
+
+.bds-button-group--align-end {
+  justify-content: flex-end;
+}
+
+.bds-button-group--align-between {
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ─── Full width ────────────────────────────────────────────── */
 
 .bds-button-group--full-width {
   width: 100%;

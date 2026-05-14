@@ -8,25 +8,44 @@ import * as Stories from './ButtonGroup.stories';
 
 <ComponentLinks slug="button-group" />
 
-Groups related buttons into a single visual unit. Use for action sets where buttons share context.
+Groups related [`Button`](/?path=/docs/components-action-button--docs) (or [`IconButton`](/?path=/docs/components-action-button--docs)) components into a single visual unit. Two layout treatments via `variant`: `spaced` (default) keeps a gap between buttons; `segmented` collapses adjacent borders into a single toolbar.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Spaced} />
 
 ## Variants
 
-Orientations, widths, and button sizes.
+Per [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md), `variant` is the Q3 layout axis for ButtonGroup — segmented vs spaced is a real layout shape difference, not just a prop tweak. Orientation, align, and fullWidth stay as Controls.
 
-<Canvas of={Stories.Variants} />
+### Spaced
+
+<Canvas of={Stories.Spaced} />
+
+Default layout — a gap (`var(--gap-md)`) between buttons. Canonical for form footers, dialog actions, and standard action sets.
+
+### Segmented
+
+<Canvas of={Stories.Segmented} />
+
+Buttons share borders into a single toolbar unit (no gap, rounded ends only). Use for view-mode toggles, time-range switchers, and similar mutually-exclusive option toolbars.
 
 ## Patterns
 
-Real-world usage: dialog actions, destructive confirmations, and form footers.
+### Action bar
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.ActionBar} />
+
+`align="between"` places the first child against the leading edge and the last child against the trailing edge — replaces the prior manual `<Row style={{ justifyContent: 'space-between' }}>` pattern from Button stories. **Closes [#617](https://github.com/brikdesigns/brik-bds/issues/617).**
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Note** — ButtonGroup does not expose its own `disabled` prop. Children manage their own state (e.g., `<Button disabled />` inside the group). Same pattern as [`FilterBar`](/?path=/docs/components-action-filter-bar--docs).
+
+> **Note** — `align` is ignored when `fullWidth: true`. Full-width groups always stretch children edge-to-edge regardless of alignment.
+
+> **Note** — Migrating from the old manual `Row + justify-content: space-between` ActionBar pattern: replace with `<ButtonGroup align="between">`. The segmented border math is handled automatically — don't add manual `border-radius` overrides.

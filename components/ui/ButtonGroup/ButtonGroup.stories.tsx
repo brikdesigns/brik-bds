@@ -8,129 +8,106 @@ const meta: Meta<typeof ButtonGroup> = {
   title: 'Components/Action/button-group',
   component: ButtonGroup,
   tags: ['surface-shared'],
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
+    variant: {
+      control: 'select',
+      options: ['spaced', 'segmented'],
+      description: 'Layout treatment. `spaced` (default) keeps a gap between buttons; `segmented` collapses borders into a toolbar unit.',
+    },
     orientation: {
       control: 'select',
       options: ['horizontal', 'vertical'],
+      description: 'Stack direction. Default `horizontal`.',
     },
-    fullWidth: { control: 'boolean' },
+    align: {
+      control: 'select',
+      options: ['start', 'center', 'end', 'between'],
+      description: 'Horizontal alignment within the container. `between` replaces the prior manual `ActionBar` flex pattern (first child left, last child right).',
+    },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Stretch buttons to fill container width equally.',
+    },
+    children: {
+      control: false,
+      description: 'Button / IconButton children. Story args render a canonical 2-3 button set.',
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof ButtonGroup>;
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   SPACED — default variant, gap between buttons. Canonical
+   action-set look used for form footers, dialog actions, etc.
+   Per ADR-010 §components without a variant axis, `variant` IS
+   the Q3 axis here (segmented vs spaced is a real layout shape
+   difference, not just a prop) — so per-variant stories ship.
+   Orientation + align + fullWidth stay as Controls.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Spaced — gap between buttons (default) */
+export const Spaced: Story = {
+  args: {
+    variant: 'spaced',
+    orientation: 'horizontal',
+    align: 'start',
+    fullWidth: false,
+  },
   render: (args) => (
     <ButtonGroup {...args}>
-      <Button variant="primary">Primary</Button>
-      <Button variant="secondary">Secondary</Button>
+      <Button variant="primary">Save</Button>
+      <Button variant="outline">Preview</Button>
+      <Button variant="ghost">Cancel</Button>
     </ButtonGroup>
   ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Orientations, widths, sizes
+   SEGMENTED — variant: 'segmented'. Buttons share borders into a
+   single toolbar unit. Common for view-mode toggles, time-range
+   switchers, segmented controls.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Horizontal (default)</SectionLabel>
-        <ButtonGroup>
-          <Button variant="primary">Save</Button>
-          <Button variant="outline">Preview</Button>
-          <Button variant="ghost">Cancel</Button>
-        </ButtonGroup>
-      </div>
-      <div>
-        <SectionLabel>Vertical</SectionLabel>
-        <ButtonGroup orientation="vertical">
-          <Button variant="primary" fullWidth>Sign up</Button>
-          <Button variant="outline" fullWidth>Log in</Button>
-        </ButtonGroup>
-      </div>
-      <div>
-        <SectionLabel>Full width</SectionLabel>
-        <div style={{ width: 400 }}>
-          <ButtonGroup fullWidth>
-            <Button variant="primary" fullWidth>Confirm</Button>
-            <Button variant="secondary" fullWidth>Cancel</Button>
-          </ButtonGroup>
-        </div>
-      </div>
-      <div>
-        <SectionLabel>Small buttons</SectionLabel>
-        <ButtonGroup>
-          <Button variant="primary" size="sm">Accept</Button>
-          <Button variant="ghost" size="sm">Decline</Button>
-        </ButtonGroup>
-      </div>
-    </Stack>
+/** @summary Segmented — shared borders, toolbar look */
+export const Segmented: Story = {
+  args: {
+    variant: 'segmented',
+    orientation: 'horizontal',
+    align: 'start',
+    fullWidth: false,
+  },
+  render: (args) => (
+    <ButtonGroup {...args}>
+      <Button variant="secondary">Day</Button>
+      <Button variant="secondary">Week</Button>
+      <Button variant="secondary">Month</Button>
+    </ButtonGroup>
   ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world usage
+   ACTION-BAR — `align: 'between'` replaces the prior manual flex
+   pattern from Button.mdx. Closes #617. Discard on the left,
+   primary CTA on the right.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Patterns',
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Dialog actions</SectionLabel>
-        <ButtonGroup>
-          <Button variant="ghost">Cancel</Button>
-          <Button variant="primary">Save changes</Button>
-        </ButtonGroup>
-      </div>
-      <div>
-        <SectionLabel>Destructive confirmation</SectionLabel>
-        <ButtonGroup>
-          <Button variant="ghost">Keep</Button>
-          <Button variant="danger">Delete project</Button>
-        </ButtonGroup>
-      </div>
-      <div>
-        <SectionLabel>Form footer</SectionLabel>
-        <div style={{ width: 400 }}>
-          <ButtonGroup fullWidth>
-            <Button variant="secondary" fullWidth>Back</Button>
-            <Button variant="primary" fullWidth>Continue</Button>
-          </ButtonGroup>
-        </div>
-      </div>
-    </Stack>
+/** @summary Action bar — discard left, primary right (align="between") */
+export const ActionBar: Story = {
+  parameters: { layout: 'padded' },
+  decorators: [(Story) => <div style={{ width: 480 }}><Story /></div>],
+  args: {
+    variant: 'spaced',
+    orientation: 'horizontal',
+    align: 'between',
+    fullWidth: false,
+  },
+  render: (args) => (
+    <ButtonGroup {...args}>
+      <Button variant="destructive">Discard</Button>
+      <Button variant="primary">Continue</Button>
+    </ButtonGroup>
   ),
 };
