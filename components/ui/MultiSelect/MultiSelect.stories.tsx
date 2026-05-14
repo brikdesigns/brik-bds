@@ -1,52 +1,11 @@
-import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import { Icon } from '@iconify/react';
-import { MultiSelect } from './MultiSelect';
+import { MultiSelect, type MultiSelectOption } from './MultiSelect';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/* ─── Sample data ─────────────────────────────────────────────── */
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Meta ────────────────────────────────────────────── */
-
-const meta: Meta<typeof MultiSelect> = {
-  title: 'Components/Form/multi-select',
-  component: MultiSelect,
-  tags: ['surface-shared'],
-  parameters: { layout: 'padded' },
-  decorators: [(Story) => <div style={{ maxWidth: 480 }}><Story /></div>],
-  argTypes: {
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    label: { control: 'text' },
-    placeholder: { control: 'text' },
-    helperText: { control: 'text' },
-    error: { control: 'text' },
-    disabled: { control: 'boolean' },
-    fullWidth: { control: 'boolean' },
-  },
-};
-
-export default meta;
-type Story = StoryObj<typeof MultiSelect>;
-
-/* ─── Shared data ─────────────────────────────────────── */
-
-const serviceOptions = [
+const serviceOptions: MultiSelectOption[] = [
   { label: 'Brand Design', value: 'brand', icon: <Icon icon="ph:paint-brush" /> },
   { label: 'Marketing', value: 'marketing', icon: <Icon icon="ph:megaphone" /> },
   { label: 'Information Design', value: 'information', icon: <Icon icon="ph:info" /> },
@@ -54,108 +13,95 @@ const serviceOptions = [
   { label: 'Service Design', value: 'service', icon: <Icon icon="ph:gear" /> },
 ];
 
-const skillOptions = [
-  { label: 'React', value: 'react' },
-  { label: 'TypeScript', value: 'typescript' },
-  { label: 'Next.js', value: 'nextjs' },
-  { label: 'Tailwind CSS', value: 'tailwind' },
-  { label: 'Figma', value: 'figma' },
-  { label: 'Node.js', value: 'nodejs' },
-  { label: 'PostgreSQL', value: 'postgres' },
-  { label: 'GraphQL', value: 'graphql' },
-];
+/* ─── Meta ────────────────────────────────────────────────────── */
+
+const meta: Meta<typeof MultiSelect> = {
+  title: 'Components/Form/multi-select',
+  component: MultiSelect,
+  tags: ['surface-shared'],
+  parameters: { layout: 'padded' },
+  decorators: [(Story) => <div style={{ width: 420 }}><Story /></div>],
+  argTypes: {
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size token (sm=32px, md=40px, lg=48px). Matches Select / TextInput scale. Default `md`.',
+    },
+    label: {
+      control: 'text',
+      description: 'Optional label rendered above the dropdown. Forwarded to the internal Select.',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder text shown in the dropdown when more options are available.',
+    },
+    helperText: {
+      control: 'text',
+      description: 'Hint text under the dropdown. Hidden when `error` is present.',
+    },
+    error: {
+      control: 'text',
+      description: 'Error message. Triggers `aria-invalid` on the internal Select.',
+    },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Stretch wrapper to its container width. Default `true`.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the dropdown and disables Tag remove buttons.',
+    },
+    tagSize: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Tag size for selected items. Defaults to matching the `size` prop.',
+    },
+    options: {
+      control: false,
+      description: 'Array of `MultiSelectOption` ({ label, value, icon? }). Set in code — Storybook Controls cannot render a complex array editor usefully.',
+    },
+    value: {
+      control: false,
+      description: 'Controlled selected values (array of `value` strings). Pair with `onChange`. Use `defaultValue` for uncontrolled.',
+    },
+    defaultValue: {
+      control: false,
+      description: 'Initial selected values for uncontrolled use.',
+    },
+    onChange: {
+      action: 'changed',
+      description: 'Called with the full updated array of selected values whenever the selection changes.',
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof MultiSelect>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — single canonical story per ADR-010 §components without
+   a variant axis. All variation (size, tagSize, error, disabled,
+   helper text, fullWidth) is exposed via Controls. Slot props
+   (options, value, defaultValue) are documented but set in code.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Multi-select dropdown with removable Tag chips */
+export const Default: Story = {
   args: {
     label: 'Service lines',
     placeholder: 'Select service lines...',
+    helperText: 'Choose all services that apply',
+    size: 'md',
+    fullWidth: true,
     options: serviceOptions,
+    defaultValue: ['brand', 'marketing'],
   },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, pre-selected, disabled, error
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  args: { options: serviceOptions },
-  render: () => {
-    const [smValues, setSmValues] = useState<string[]>(['brand']);
-    const [mdValues, setMdValues] = useState<string[]>(['brand', 'marketing']);
-    const [lgValues, setLgValues] = useState<string[]>(['brand', 'marketing', 'product']);
-    const [errorValues, setErrorValues] = useState<string[]>([]);
-
-    return (
-      <Stack>
-        <div>
-          <SectionLabel>Sizes</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <MultiSelect label="Small" size="sm" placeholder="Select..." options={serviceOptions} value={smValues} onChange={setSmValues} />
-            <MultiSelect label="Medium (default)" size="md" placeholder="Select..." options={serviceOptions} value={mdValues} onChange={setMdValues} />
-            <MultiSelect label="Large" size="lg" placeholder="Select..." options={serviceOptions} value={lgValues} onChange={setLgValues} />
-          </Stack>
-        </div>
-
-        <div>
-          <SectionLabel>States</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <MultiSelect label="Disabled" placeholder="Select..." options={serviceOptions} value={['brand', 'marketing']} disabled />
-            <MultiSelect
-              label="With error"
-              placeholder="Select at least one..."
-              options={serviceOptions}
-              value={errorValues}
-              onChange={setErrorValues}
-              error={errorValues.length === 0 ? 'Please select at least one service' : undefined}
-            />
-          </Stack>
-        </div>
-      </Stack>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Form with multi-select fields
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  args: { options: serviceOptions },
-  render: () => {
-    const [services, setServices] = useState<string[]>([]);
-    const [skills, setSkills] = useState<string[]>(['react', 'typescript']);
-
-    return (
-      <Stack>
-        <div>
-          <SectionLabel>Project intake form</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <MultiSelect
-              label="Service lines"
-              placeholder="Select service lines..."
-              options={serviceOptions}
-              value={services}
-              onChange={setServices}
-              helperText="Choose all services that apply"
-            />
-            <MultiSelect
-              label="Required skills"
-              placeholder="Add skills..."
-              options={skillOptions}
-              value={skills}
-              onChange={setSkills}
-              helperText="Select all that apply"
-            />
-          </Stack>
-        </div>
-      </Stack>
-    );
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const select = canvas.getByRole('combobox');
+    await expect(select).toBeVisible();
+    // Pre-selected Tag chips render below the Select — check the first one is visible.
+    await expect(canvas.getByText('Brand Design')).toBeVisible();
+    await expect(canvas.getByText('Marketing')).toBeVisible();
   },
 };
