@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
-import { Icon } from '@iconify/react';
-import { Select, type SelectProps, type SelectOption, type SelectOptionGroup } from './Select';
+import { Select, type SelectOption } from './Select';
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 
@@ -11,41 +10,9 @@ const flatOptions: SelectOption[] = [
   { label: 'Third choice', value: 'third' },
 ];
 
-const groupedOptions: SelectOptionGroup[] = [
-  {
-    label: 'United States',
-    options: [
-      { label: 'New York', value: 'ny' },
-      { label: 'San Francisco', value: 'sf' },
-      { label: 'Chicago', value: 'chi' },
-    ],
-  },
-  {
-    label: 'Europe',
-    options: [
-      { label: 'London', value: 'lon' },
-      { label: 'Paris', value: 'par' },
-      { label: 'Berlin', value: 'ber' },
-    ],
-  },
-];
-
-/* ─── Story-only args ─────────────────────────────────────────── */
-
-/**
- * Default story extends SelectProps with two story-only flags so the
- * Controls panel can swap the leading icon and the options shape
- * (flat vs grouped) without requiring the viewer to edit JSON arrays.
- * Excluded from the MDX `<ArgTypes>` block.
- */
-type DefaultArgs = SelectProps & {
-  showLeadingIcon?: boolean;
-  showOptionGroups?: boolean;
-};
-
 /* ─── Meta ────────────────────────────────────────────────────── */
 
-const meta: Meta<DefaultArgs> = {
+const meta: Meta<typeof Select> = {
   title: 'Components/Form/select',
   component: Select,
   tags: ['surface-shared'],
@@ -83,36 +50,27 @@ const meta: Meta<DefaultArgs> = {
     },
     icon: {
       control: false,
-      description: 'Optional leading icon node. Use `showLeadingIcon` Control in Storybook to toggle a sample tag icon.',
+      description: 'Optional leading icon node (ReactNode). Set in code; Storybook Controls cannot render JSX. Example: `<Icon icon="ph:tag" />`.',
     },
     options: {
       control: false,
-      description: 'Array of `SelectOption` (flat) or `SelectOptionGroup` (renders as `<optgroup>`). Mix freely. Use `showOptionGroups` Control in Storybook to swap sample data.',
+      description: 'Array of `SelectOption` (flat) or `SelectOptionGroup` (renders as `<optgroup>`). Mix freely. Set in code — Storybook Controls cannot render a complex array editor usefully.',
     },
     onChange: {
       action: 'changed',
       description: 'Native change handler — receives the change event.',
     },
-    showLeadingIcon: {
-      control: 'boolean',
-      description: 'Story-only — toggle a sample tag icon as `icon`.',
-      table: { category: 'Story-only' },
-    },
-    showOptionGroups: {
-      control: 'boolean',
-      description: 'Story-only — swap `options` between a flat list and `<optgroup>`-rendered groups.',
-      table: { category: 'Story-only' },
-    },
   },
 };
 
 export default meta;
-type Story = StoryObj<DefaultArgs>;
+type Story = StoryObj<typeof Select>;
 
 /* ═══════════════════════════════════════════════════════════════
    DEFAULT — single canonical story per ADR-010 §components without
-   a variant axis. All variation (size, icon, options shape, error,
-   disabled, helper text) is exposed via Controls.
+   a variant axis. All variation (size, error, disabled, helper,
+   fullWidth) is exposed via Controls. Slot props (icon, options)
+   are documented but set in code — see argType descriptions.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Themed native select with label/helper/error */
@@ -123,17 +81,8 @@ export const Default: Story = {
     size: 'md',
     fullWidth: true,
     options: flatOptions,
-    showLeadingIcon: false,
-    showOptionGroups: false,
     onChange: fn(),
   },
-  render: ({ showLeadingIcon, showOptionGroups, options, ...args }) => (
-    <Select
-      {...args}
-      icon={showLeadingIcon ? <Icon icon="ph:tag" /> : undefined}
-      options={showOptionGroups ? groupedOptions : options}
-    />
-  ),
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const select = canvas.getByRole('combobox');
