@@ -14,10 +14,22 @@
  *   - Component path    — components/ui/Button/Button.tsx
  *   - Story title       — meta.title literal (e.g. Components/Action/button)
  *   - Surface           — derived from meta.tags surface-* (shared/web/product/unknown)
- *   - Story exports     — count of `export const X (: Story)?` (excludes default meta)
+ *   - Story exports     — raw count of `export const X (: Story)?` (excludes default meta)
  *   - Deprecated        — meta.tags includes `!manifest`
- *   - ADR-010 risk      — computed: Story exports > 13 (Q2 collapse signal)
+ *   - ADR-010 risk      — computed: Q3-relevant export count > 13 (see below)
  *   - Last sync         — today (ISO date)
+ *
+ * ADR-010 risk metric (refined #613):
+ *   The raw export count over-counts Q4 (irreducible render-mode) and Q5
+ *   (`!manifest`-tagged interaction tests). Those are legitimate per the
+ *   matrix and don't represent Q2/Q3 inflation. We compute risk against
+ *   the *Q3-relevant* count instead:
+ *
+ *     q3RelevantExports = totalExports − renderModeExports − manifestHiddenExports
+ *
+ *   This makes the threshold a Q2/Q3 inflation gauge as ADR-010 intended:
+ *   "after migration: Playground + ~12 semantic variants + 1 axis-only = ~14
+ *   args-driven exports, with Q4 patterns layered on top per matrix."
  *
  * Coverage % fields (argTypes / @summary) deferred to a follow-up PR
  * because they need full TypeChecker prop-counting on the paired *.tsx
@@ -121,24 +133,60 @@ function extractMeta(sourceFile) {
 }
 
 /**
- * Counts exported story constants. Excludes the default export (meta).
- * A "story export" is any `export const X = …` at the top level.
+ * Walks exported story constants and classifies each by ADR-010 axis.
+ *
+ * Returns three counts:
+ *   - total            — every `export const X` (excludes default meta)
+ *   - renderMode       — story object has a `render:` property (Q4 irreducible
+ *                        OR ADR-006 axis-only gallery exception)
+ *   - manifestHidden   — story object has `tags: [..., '!manifest', ...]`
+ *                        (Q5 interaction test OR explicitly hidden from MCP)
+ *
+ * Q3-relevant count (used for risk) = total − renderMode − manifestHidden.
+ * Stories may match both renderMode and manifestHidden — they're counted in
+ * both buckets but only subtracted once (set semantics on the export name).
  */
-function countStoryExports(sourceFile) {
-  let count = 0;
+function analyzeStoryExports(sourceFile) {
+  const renderModeNames = new Set();
+  const manifestHiddenNames = new Set();
+  const allNames = new Set();
+
   ts.forEachChild(sourceFile, (node) => {
     if (!ts.isVariableStatement(node)) return;
     const isExported = (node.modifiers ?? []).some(
       (m) => m.kind === ts.SyntaxKind.ExportKeyword,
     );
     if (!isExported) return;
+
     for (const decl of node.declarationList.declarations) {
-      if (ts.isIdentifier(decl.name) && decl.name.text !== 'meta') {
-        count += 1;
+      if (!ts.isIdentifier(decl.name) || decl.name.text === 'meta') continue;
+      const exportName = decl.name.text;
+      allNames.add(exportName);
+
+      const initializer = unwrapAssertions(decl.initializer);
+      if (!initializer || !ts.isObjectLiteralExpression(initializer)) continue;
+
+      for (const prop of initializer.properties) {
+        if (!ts.isPropertyAssignment(prop) && !ts.isShorthandPropertyAssignment(prop)) continue;
+        if (!ts.isIdentifier(prop.name)) continue;
+
+        if (prop.name.text === 'render') {
+          renderModeNames.add(exportName);
+        } else if (prop.name.text === 'tags' && ts.isPropertyAssignment(prop)) {
+          const tags = getArrayStringLiterals(prop.initializer) ?? [];
+          if (tags.includes('!manifest')) manifestHiddenNames.add(exportName);
+        }
       }
     }
   });
-  return count;
+
+  const excluded = new Set([...renderModeNames, ...manifestHiddenNames]);
+  return {
+    total: allNames.size,
+    renderMode: renderModeNames.size,
+    manifestHidden: manifestHiddenNames.size,
+    q3Relevant: allNames.size - excluded.size,
+  };
 }
 
 function parseStoryFile(filePath) {
@@ -152,7 +200,7 @@ function parseStoryFile(filePath) {
   );
 
   const meta = extractMeta(sourceFile);
-  const storyExports = countStoryExports(sourceFile);
+  const exports = analyzeStoryExports(sourceFile);
 
   const surfaceTag = meta.tags.find((t) => SURFACE_TAGS.has(t));
   const surface = surfaceTag ? surfaceTag.replace('surface-', '') : 'unknown';
@@ -162,8 +210,11 @@ function parseStoryFile(filePath) {
     storyTitle: meta.title,
     surface,
     deprecated,
-    storyExports,
-    risk: storyExports > ADR_010_RISK_THRESHOLD,
+    storyExports: exports.total,
+    q3RelevantExports: exports.q3Relevant,
+    renderModeExports: exports.renderMode,
+    manifestHiddenExports: exports.manifestHidden,
+    risk: exports.q3Relevant > ADR_010_RISK_THRESHOLD,
     tags: meta.tags,
   };
 }
@@ -263,11 +314,12 @@ async function upsertRow(notion, row, existingId, today) {
 // ── Main ───────────────────────────────────────────────────────────────
 
 function logRowsTable(rows) {
-  const header = ['Name', 'Surface', 'Exports', 'Risk', 'Deprecated', 'Story title'];
+  const header = ['Name', 'Surface', 'Exports', 'Q3', 'Risk', 'Deprecated', 'Story title'];
   const cols = [header, ...rows.map((r) => [
     r.name,
     r.surface,
     String(r.storyExports),
+    String(r.q3RelevantExports),
     r.risk ? '⚠️ ' : '  ',
     r.deprecated ? 'yes' : '   ',
     r.storyTitle ?? '(no meta.title)',
