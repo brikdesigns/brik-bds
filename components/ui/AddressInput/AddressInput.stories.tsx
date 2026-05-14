@@ -1,29 +1,10 @@
-import React from 'react';
+import { useState, useCallback, type ChangeEvent } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState, useCallback } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import { AddressInput, type AddressSuggestion } from './AddressInput';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Mock Data ───────────────────────────────────────────────── */
+/* ─── Sample data ─────────────────────────────────────────────── */
 
 const mockSuggestions: AddressSuggestion[] = [
   { id: '1', label: '123 Main Street', description: 'Nashville, TN 37201', icon: <Icon icon="ph:house" /> },
@@ -42,14 +23,41 @@ const meta: Meta<typeof AddressInput> = {
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
-      <div style={{ minHeight: 360, maxWidth: 520, padding: 'var(--padding-lg)' }}>
+      <div style={{ minHeight: 360, width: 420 }}>
         <Story />
       </div>
     ),
   ],
-  args: { placeholder: 'Enter address', size: 'md', fullWidth: true },
   argTypes: {
-    size: { control: 'select', options: ['sm', 'md'] },
+    size: {
+      control: 'select',
+      options: ['sm', 'md'],
+      description: 'Size token (sm=32px, md=40px). AddressInput only supports two sizes today. Default `md`.',
+    },
+    label: {
+      control: 'text',
+      description: 'Optional label rendered above the field. Auto-wires `htmlFor`/`id`.',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder text shown when the field is empty.',
+    },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Stretch wrapper to its container width.',
+    },
+    suggestions: {
+      control: false,
+      description: 'Array of `AddressSuggestion` ({ id, label, description?, icon? }). Set in code — the Default story manages this via a hook in `render` to demonstrate the autocomplete flow.',
+    },
+    onSuggestionSelect: {
+      action: 'suggestion-selected',
+      description: 'Called when the user picks a suggestion from the dropdown. The component closes the dropdown automatically.',
+    },
+    onChange: {
+      action: 'changed',
+      description: 'Native change handler.',
+    },
   },
 };
 
@@ -57,76 +65,38 @@ export default meta;
 type Story = StoryObj<typeof AddressInput>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — single canonical story per ADR-010 §components without
+   a variant axis. The render function manages the suggestion-filter
+   hook internally because AddressInput's defining behavior (filter
+   suggestions as the user types) requires a controlled value + a
+   filtered suggestions array — args alone can't express it.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Location input with hook-driven autocomplete */
+export const Default: Story = {
   args: {
-    label: 'Address',
-    placeholder: 'Enter address',
+    label: 'Delivery address',
+    placeholder: 'Start typing an address...',
+    size: 'md',
+    fullWidth: true,
   },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, labels, static suggestions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      {/* Sizes */}
-      <div>
-        <SectionLabel>Sizes</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <AddressInput label="Medium (default)" placeholder="Enter address" fullWidth />
-          <AddressInput label="Small" size="sm" placeholder="Enter address" fullWidth />
-        </Stack>
-      </div>
-
-      {/* With suggestions visible */}
-      <div>
-        <SectionLabel>With suggestions dropdown</SectionLabel>
-        <AddressInput
-          label="Location"
-          defaultValue="Nash"
-          suggestions={mockSuggestions.slice(0, 3)}
-          onSuggestionSelect={(s) => console.log('Selected:', s)}
-          placeholder="Enter address"
-          fullWidth
-        />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Interactive autocomplete
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: function InteractivePattern() {
+  render: (args) => {
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
 
-    const handleChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        const query = e.target.value;
-        setValue(query);
-        setSuggestions(
-          query.length > 0
-            ? mockSuggestions.filter(
-                (s) =>
-                  s.label.toLowerCase().includes(query.toLowerCase()) ||
-                  s.description?.toLowerCase().includes(query.toLowerCase()),
-              )
-            : [],
-        );
-      },
-      [],
-    );
+    const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+      const query = e.target.value;
+      setValue(query);
+      setSuggestions(
+        query.length > 0
+          ? mockSuggestions.filter(
+              (s) =>
+                s.label.toLowerCase().includes(query.toLowerCase()) ||
+                s.description?.toLowerCase().includes(query.toLowerCase()),
+            )
+          : [],
+      );
+    }, []);
 
     const handleSelect = useCallback((suggestion: AddressSuggestion) => {
       setValue(suggestion.label);
@@ -134,20 +104,32 @@ export const Patterns: Story = {
     }, []);
 
     return (
-      <Stack>
-        <div>
-          <SectionLabel>Interactive autocomplete</SectionLabel>
-          <AddressInput
-            label="Delivery address"
-            value={value}
-            onChange={handleChange}
-            suggestions={suggestions}
-            onSuggestionSelect={handleSelect}
-            placeholder="Start typing an address..."
-            fullWidth
-          />
-        </div>
-      </Stack>
+      <AddressInput
+        {...args}
+        value={value}
+        onChange={handleChange}
+        suggestions={suggestions}
+        onSuggestionSelect={handleSelect}
+      />
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByLabelText('Delivery address') as HTMLInputElement;
+
+    await expect(input).toBeVisible();
+
+    // Type a partial query → suggestions filter live.
+    await userEvent.click(input);
+    await userEvent.type(input, 'Nash');
+    await expect(canvas.getByText('123 Main Street')).toBeVisible();
+
+    // Pick the first suggestion → input value updates, dropdown closes.
+    await userEvent.click(canvas.getByText('123 Main Street'));
+    await expect(input).toHaveValue('123 Main Street');
+
+    // Blur so the post-play canvas shows the canonical idle state
+    // (no focus ring, no open dropdown).
+    input.blur();
   },
 };
