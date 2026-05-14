@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
-import { Select, type SelectOption, type SelectOptionGroup } from './Select';
+import { Select, type SelectOption } from './Select';
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 
@@ -8,28 +8,6 @@ const flatOptions: SelectOption[] = [
   { label: 'First choice', value: 'first' },
   { label: 'Second choice', value: 'second' },
   { label: 'Third choice', value: 'third' },
-];
-
-// Grouped options exported as a named constant so consumers reading the
-// stories file can copy-paste it into their own code as a reference shape
-// for the `<optgroup>`-rendered form of the `options` prop.
-export const sampleGroupedOptions: SelectOptionGroup[] = [
-  {
-    label: 'United States',
-    options: [
-      { label: 'New York', value: 'ny' },
-      { label: 'San Francisco', value: 'sf' },
-      { label: 'Chicago', value: 'chi' },
-    ],
-  },
-  {
-    label: 'Europe',
-    options: [
-      { label: 'London', value: 'lon' },
-      { label: 'Paris', value: 'par' },
-      { label: 'Berlin', value: 'ber' },
-    ],
-  },
 ];
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -76,7 +54,7 @@ const meta: Meta<typeof Select> = {
     },
     options: {
       control: false,
-      description: 'Array of `SelectOption` (flat) or `SelectOptionGroup` (renders as `<optgroup>`). Mix freely. Set in code — see `sampleGroupedOptions` in the stories file for a reference grouped shape.',
+      description: 'Array of `SelectOption` (flat) or `SelectOptionGroup` (renders as `<optgroup>`). Mix freely. Set in code — Storybook Controls cannot render a complex array editor usefully.',
     },
     onChange: {
       action: 'changed',
