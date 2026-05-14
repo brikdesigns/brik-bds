@@ -1,144 +1,86 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { TextArea } from './TextArea';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'flex-start' }}>{children}</div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
-const meta = {
+const meta: Meta<typeof TextArea> = {
   title: 'Components/Form/text-area',
   component: TextArea,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
+  decorators: [(Story) => <div style={{ width: 420 }}><Story /></div>],
   argTypes: {
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    label: { control: 'text' },
-    placeholder: { control: 'text' },
-    helperText: { control: 'text' },
-    error: { control: 'text' },
-    rows: { control: 'number' },
-    fullWidth: { control: 'boolean' },
-    disabled: { control: 'boolean' },
-    resize: { control: 'select', options: ['none', 'both', 'horizontal', 'vertical'] },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size token (sm=14px body, md=16px body, lg=18px body). Default `md`.',
+    },
+    label: {
+      control: 'text',
+      description: 'Optional label rendered above the field. Auto-wires `htmlFor`/`id`.',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder text shown when the field is empty.',
+    },
+    helperText: {
+      control: 'text',
+      description: 'Hint text under the field. Hidden when `error` is present.',
+    },
+    error: {
+      control: 'text',
+      description: 'Error message. Triggers `aria-invalid` and replaces `helperText`.',
+    },
+    rows: {
+      control: { type: 'number', min: 1, max: 20, step: 1 },
+      description: 'Number of visible text rows. Default `4`.',
+    },
+    resize: {
+      control: 'select',
+      options: ['none', 'both', 'horizontal', 'vertical'],
+      description: 'CSS resize behavior. Default `vertical`. `disabled` forces `none`.',
+    },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Stretch to fill container width.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the field — non-interactive, muted appearance, resize disabled.',
+    },
+    onChange: {
+      action: 'changed',
+      description: 'Native change handler.',
+    },
   },
-} satisfies Meta<typeof TextArea>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof TextArea>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — single canonical story per ADR-010 §components without
+   a variant axis. All variation (size, rows, resize, error,
+   disabled, helper text) is exposed via Controls.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Themed multi-line text input with label/helper/error */
+export const Default: Story = {
   args: {
-    label: 'Notes',
+    label: 'Description',
     placeholder: 'Enter your text here...',
     rows: 4,
     size: 'md',
     fullWidth: true,
   },
-};
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textarea = canvas.getByRole('textbox');
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, states, resize modes
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <div style={{ width: 520 }}>
-      <Stack>
-        {/* Sizes */}
-        <div>
-          <SectionLabel>Sizes</SectionLabel>
-          <Row gap="var(--gap-lg)">
-            <div style={{ flex: 1 }}>
-              <TextArea size="sm" label="Small" placeholder="sm variant..." rows={3} fullWidth />
-            </div>
-            <div style={{ flex: 1 }}>
-              <TextArea size="md" label="Medium" placeholder="md variant..." rows={3} fullWidth />
-            </div>
-            <div style={{ flex: 1 }}>
-              <TextArea size="lg" label="Large" placeholder="lg variant..." rows={3} fullWidth />
-            </div>
-          </Row>
-        </div>
-
-        {/* States */}
-        <div>
-          <SectionLabel>States</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <TextArea label="Default" placeholder="Enter your message..." rows={3} fullWidth />
-            <TextArea label="With value" defaultValue="This is some default text that appears in the textarea." rows={3} fullWidth />
-            <TextArea label="Helper text" placeholder="Describe your needs..." helperText="Maximum 500 characters" rows={3} fullWidth />
-            <TextArea label="Error" placeholder="Required field" error="This field is required" rows={3} fullWidth />
-            <TextArea label="Disabled" placeholder="This field is disabled" disabled rows={3} fullWidth />
-          </Stack>
-        </div>
-
-        {/* Resize modes */}
-        <div>
-          <SectionLabel>Resize modes</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <TextArea label="Vertical (default)" placeholder="Resize vertically..." rows={3} resize="vertical" fullWidth />
-            <TextArea label="None" placeholder="Cannot be resized" rows={3} resize="none" fullWidth />
-            <TextArea label="Both" placeholder="Resize in any direction" rows={3} resize="both" fullWidth />
-          </Stack>
-        </div>
-      </Stack>
-    </div>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world form layouts
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Row gap="var(--padding-xl)">
-      {/* Feedback form */}
-      <div style={{ width: 400 }}>
-        <SectionLabel>Feedback form</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <TextArea label="Description" placeholder="Describe your needs..." rows={4} fullWidth />
-          <TextArea label="Additional information" placeholder="Any other details..." rows={4} fullWidth />
-        </Stack>
-      </div>
-
-      {/* Compact notes */}
-      <div style={{ width: 300 }}>
-        <SectionLabel>Compact notes</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <TextArea size="sm" label="Internal notes" placeholder="Add a note..." rows={3} resize="none" fullWidth />
-          <TextArea size="sm" label="Comments" placeholder="Share your feedback..." rows={6} fullWidth />
-        </Stack>
-      </div>
-    </Row>
-  ),
+    await expect(textarea).toBeVisible();
+    await userEvent.clear(textarea);
+    await userEvent.type(textarea, 'A short description.');
+    await expect(textarea).toHaveValue('A short description.');
+  },
 };

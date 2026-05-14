@@ -8,17 +8,17 @@ import * as Stories from './TextArea.stories';
 
 <ComponentLinks slug="text-area" />
 
-Multi-line text input with configurable rows, resize behavior, and size variants. Use for longer-form text entry like comments, descriptions, and messages.
+Themed multi-line text input with optional label, helper text, error state, and configurable rows / resize. Uses BDS semantic tokens for color, border, and typography — same visual contract as `TextInput`.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes, states, and resize modes.
+TextArea has no semantic-variant axis — all variation (size, rows, resize mode, error, disabled, helper text) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
 - **`sm`** — 14px text, compact forms
 - **`md`** — 16px text, default
@@ -31,13 +31,6 @@ Resize modes:
 - **`both`** — Width and height
 - **`horizontal`** — Width only
 
-## Patterns
-
-Real-world usage: feedback form and compact notes.
-
-<Canvas of={Stories.Patterns} />
-
 ## Props
 
 <ArgTypes of={Stories} />
-
