@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.{tsx,css}"
 retrieved-via: brik-rag query "component build standard"
-last-verified: 2026-05-13
+last-verified: 2026-05-14
 ---
 
 # Component build standard (BDS)
@@ -332,6 +332,46 @@ style={text.body}  // family + size + lineHeight matched correctly
 // ~/Documents/GitHub/brik/brik-bds/
 // Then: ./scripts/bds-sync.sh in each consuming project
 ```
+
+## Retiring a `@deprecated` component
+
+A `@deprecated` JSDoc tag is a *promise to remove the component*, not a permanent label. Without a retirement schedule, deprecated components ship banned-shape stories indefinitely — the AlertBanner case ([#605](https://github.com/brikdesigns/brik-bds/issues/605)) is the prototype: a `Variants` + `Patterns` story file lingered after the component was superseded by `<Banner tone="warning|error|information" />`, hidden from MCP via `tags: ['!manifest']` but still visible to humans in Storybook.
+
+Every deprecation moves through three stages:
+
+| Stage | When | What happens | What stays |
+|---|---|---|---|
+| **1. Deprecation lands** | A `@deprecated` JSDoc tag is added to the exported component | Story file gets `tags: ['!manifest']`; MDX `## Notes` adds *"Deprecated — use `<X>` instead. Stories will be retired in `vN.M`."*; file a retirement-tracker issue with the target version | Component continues to ship; consumers keep working |
+| **2. Stories retired** | **Two minor releases after Stage 1** (default; override via the JSDoc sentinel below) | Delete `Component.stories.tsx` + `Component.mdx`; PR references the tracker issue | `Component.tsx` + `Component.css` + `index.ts` export remain — consumers on the old API don't break |
+| **3. Component removed** | At the next **major** release | Delete the component directory; remove `index.ts` export; confirm consumer audit (portal / renew / web/{slug}) before merge | Tracker issue closes |
+
+### `@deprecated` JSDoc shape
+
+Every `@deprecated` tag must name the replacement and (optionally) override the default retirement schedule:
+
+```tsx
+/**
+ * @deprecated Use `<Banner tone="warning" />` instead.
+ *   Slated for retirement in v0.70 (current: v0.67).
+ */
+export function AlertBanner(...) { ... }
+```
+
+The sentinel `Slated for retirement in vN.M` parses cleanly for future linting (deferred — see #607). Omit it to accept the default (two minors after the tag was added).
+
+### Default schedule (N=2 minors)
+
+Two minor releases is the Carbon-aligned default — long enough for downstream consumers to migrate at a comfortable cadence, short enough that drift doesn't accumulate. Override with the JSDoc sentinel when:
+
+- A consumer has explicitly asked for more time (rare; capture the ask in the tracker issue)
+- The replacement isn't shipped yet (the deprecation is aspirational; pick a target after replacement lands)
+- The deprecation is part of a coordinated multi-component sweep (use one shared target across the sweep)
+
+### What this rule does NOT cover
+
+- Cross-repo deprecation policy for `content-system/blueprints/**` or BCS resolvers — separate concern.
+- Retroactive audit of currently-`@deprecated` components in `components/ui/**` — file individual retirement-tracker issues; this rule applies forward-only to new deprecations.
+- Enforcement (`lint-jsdoc.js` extension) — deferred; today the rule is enforced by review.
 
 ## Migration checklist — updating an existing component
 
