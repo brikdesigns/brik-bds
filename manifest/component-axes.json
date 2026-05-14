@@ -97,12 +97,6 @@
       "xl"
     ]
   },
-  "ButtonGroup": {
-    "variant": [
-      "spaced",
-      "segmented"
-    ]
-  },
   "Card": {
     "variant": [
       "outlined",

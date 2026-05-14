@@ -3,26 +3,19 @@ import { bdsClass } from '../../utils';
 import './ButtonGroup.css';
 
 export type ButtonGroupOrientation = 'horizontal' | 'vertical';
-export type ButtonGroupVariant = 'spaced' | 'segmented';
 export type ButtonGroupAlign = 'start' | 'center' | 'end' | 'between';
 
 export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** `Button` (or `IconButton`) elements to group. */
   children: ReactNode;
-  /**
-   * Layout treatment.
-   * - `spaced` (default) — buttons separated by a gap; standard action-set look
-   * - `segmented` — buttons share borders into a single toolbar unit (no gap, rounded ends only)
-   */
-  variant?: ButtonGroupVariant;
   /** Stack direction. Default `horizontal`. */
   orientation?: ButtonGroupOrientation;
   /**
    * Horizontal alignment of the group's children when not `fullWidth`.
-   * Replaces the prior `ActionBar` pattern's manual `justify-content`.
+   * Replaces the prior manual `justify-content` patterns for action rows.
    * - `start` (default) — left-aligned
    * - `center` — centered
-   * - `end` — right-aligned
+   * - `end` — right-aligned (canonical for modal / sheet action rows: primary far right, secondary to its left)
    * - `between` — first child left, last child right (`justify-content: space-between`)
    */
   align?: ButtonGroupAlign;
@@ -31,40 +24,42 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * ButtonGroup — groups related Button components together.
+ * ButtonGroup — groups related Button (or IconButton) components into
+ * a single visual unit with consistent spacing and alignment.
  *
- * Two layout treatments via `variant`: `spaced` (default — gap between
- * buttons) and `segmented` (shared borders, toolbar look). Use `align`
- * to place the group at start / center / end / between within its
- * container — this replaces the prior manual `ActionBar` flex pattern.
+ * `align` replaces the prior manual `justify-content` flex patterns
+ * for action rows. For mutually-exclusive option toolbars (Day / Week
+ * / Month) use [`SegmentedControl`](../SegmentedControl) instead — its
+ * shared-border treatment is the canonical home for that pattern.
  *
  * @example
  * ```tsx
- * // Default form-footer action set
+ * // Default form-footer action set (1 primary + 2 secondary)
  * <ButtonGroup>
  *   <Button variant="primary">Save</Button>
+ *   <Button variant="outline">Preview</Button>
  *   <Button variant="ghost">Cancel</Button>
  * </ButtonGroup>
  *
- * // Segmented toolbar
- * <ButtonGroup variant="segmented">
- *   <Button variant="secondary">Day</Button>
- *   <Button variant="secondary">Week</Button>
- *   <Button variant="secondary">Month</Button>
+ * // Modal / sheet action row — primary far right, secondary to its left
+ * <ButtonGroup align="end">
+ *   <Button variant="ghost">Cancel</Button>
+ *   <Button variant="primary">Save</Button>
  * </ButtonGroup>
  *
- * // ActionBar replacement (discard left, primary right)
- * <ButtonGroup align="between">
- *   <Button variant="destructive">Discard</Button>
- *   <Button variant="primary">Continue</Button>
+ * // IconButton toolbar (up to 4 actions)
+ * <ButtonGroup>
+ *   <IconButton icon={<Edit />} label="Edit" variant="ghost" />
+ *   <IconButton icon={<Copy />} label="Copy" variant="ghost" />
+ *   <IconButton icon={<Share />} label="Share" variant="ghost" />
+ *   <IconButton icon={<Trash />} label="Delete" variant="destructive" />
  * </ButtonGroup>
  * ```
  *
- * @summary Group related Buttons (variant + orientation + align)
+ * @summary Group related Buttons (orientation + align + fullWidth)
  */
 export function ButtonGroup({
   children,
-  variant = 'spaced',
   orientation = 'horizontal',
   align = 'start',
   fullWidth = false,
@@ -73,7 +68,6 @@ export function ButtonGroup({
 }: ButtonGroupProps) {
   const classes = bdsClass(
     'bds-button-group',
-    `bds-button-group--${variant}`,
     orientation === 'vertical' && 'bds-button-group--vertical',
     `bds-button-group--align-${align}`,
     fullWidth && 'bds-button-group--full-width',

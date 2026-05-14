@@ -8,35 +8,37 @@ import * as Stories from './ButtonGroup.stories';
 
 <ComponentLinks slug="button-group" />
 
-Groups related [`Button`](/?path=/docs/components-action-button--docs) (or [`IconButton`](/?path=/docs/components-action-button--docs)) components into a single visual unit. Two layout treatments via `variant`: `spaced` (default) keeps a gap between buttons; `segmented` collapses adjacent borders into a single toolbar.
+Groups related [`Button`](/?path=/docs/components-action-button--docs) or [`IconButton`](/?path=/docs/components-action-button--docs) components with consistent spacing and alignment. Use `align` to control placement within the container — replaces prior manual `<Row style={{ justifyContent: ... }}>` patterns.
+
+For mutually-exclusive option toolbars (Day / Week / Month), use [`SegmentedControl`](/?path=/docs/components-control-segmented-control--docs) instead — its shared-border treatment is the canonical home for that pattern.
 
 ## Playground
 
-<Canvas of={Stories.Spaced} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Per [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md), `variant` is the Q3 layout axis for ButtonGroup — segmented vs spaced is a real layout shape difference, not just a prop tweak. Orientation, align, and fullWidth stay as Controls.
+ButtonGroup has no semantic-variant prop — composition shapes are demonstrated via children + the `align` Control. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-### Spaced
+### Default
 
-<Canvas of={Stories.Spaced} />
+<Canvas of={Stories.Default} />
 
-Default layout — a gap (`var(--gap-md)`) between buttons. Canonical for form footers, dialog actions, and standard action sets.
+Canonical action set — one primary + two secondary buttons (`outline`, `ghost`). Default `align="start"` for form footers; toggle to `center` / `end` / `between` for different placement.
 
-### Segmented
+### Icon-button group
 
-<Canvas of={Stories.Segmented} />
+<Canvas of={Stories.IconButtonGroup} />
 
-Buttons share borders into a single toolbar unit (no gap, rounded ends only). Use for view-mode toggles, time-range switchers, and similar mutually-exclusive option toolbars.
+Inline toolbar of [`IconButton`](/?path=/docs/components-action-button--docs) children — up to 4 actions. Common for row / card chrome (edit, copy, share, delete). The final destructive variant signals an irreversible action.
 
 ## Patterns
 
-### Action bar
+### Action bar (modal / sheet)
 
 <Canvas of={Stories.ActionBar} />
 
-`align="between"` places the first child against the leading edge and the last child against the trailing edge — replaces the prior manual `<Row style={{ justifyContent: 'space-between' }}>` pattern from Button stories. **Closes [#617](https://github.com/brikdesigns/brik-bds/issues/617).**
+Modal and sheet bottom rows follow the platform convention: **primary action far right, secondary action to its left**. `align="end"` with `[Cancel, Save]` order achieves this — matches macOS HIG, Material, Carbon, and Brik's design library. **Closes [#617](https://github.com/brikdesigns/brik-bds/issues/617).**
 
 ## Props
 
@@ -48,4 +50,6 @@ Buttons share borders into a single toolbar unit (no gap, rounded ends only). Us
 
 > **Note** — `align` is ignored when `fullWidth: true`. Full-width groups always stretch children edge-to-edge regardless of alignment.
 
-> **Note** — Migrating from the old manual `Row + justify-content: space-between` ActionBar pattern: replace with `<ButtonGroup align="between">`. The segmented border math is handled automatically — don't add manual `border-radius` overrides.
+> **Note** — Migrating from the old manual `<Row style={{ justifyContent: 'space-between' }}>` ActionBar pattern: replace with `<ButtonGroup align="end">` for modal / sheet rows or `<ButtonGroup align="between">` for destructive-on-left + primary-on-right patterns.
+
+> **Note** — For mutually-exclusive segmented option toolbars (Day / Week / Month, View modes), reach for [`SegmentedControl`](/?path=/docs/components-control-segmented-control--docs) instead. ButtonGroup is for action sets and freeform toolbars where buttons are independent actions.
