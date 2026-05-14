@@ -41,6 +41,10 @@ const meta: Meta<typeof FilterButton> = {
       control: false,
       description: 'Controlled selected option id. Pair with `onChange`. Story uses internal `useState` for canvas interactivity.',
     },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the trigger, blocks dropdown open, applies muted styling.',
+    },
     onChange: {
       action: 'changed',
       description: 'Called with the new id when a selection is made, or `undefined` when the user clicks the active option to clear.',
@@ -65,6 +69,7 @@ export const Default: Story = {
     label: 'Category',
     options: categoryOptions,
     size: 'md',
+    disabled: false,
     onChange: fn(),
   },
   render: (args) => {
