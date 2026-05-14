@@ -1,6 +1,6 @@
 # ADR-010 — Storybook axes of information: story vs. control vs. toolbar
 
-**Status:** Accepted (2026-05-13)
+**Status:** Accepted (2026-05-13); Amended (2026-05-14 — Q3 axis clarification + Patterns/Forms relocation, driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618))
 **Date:** 2026-05-13
 **Supersedes:** Part of [ADR-006 §Part B](./ADR-006-storybook-taxonomy-and-story-shape.md) — operational decision about *which axis becomes a story* now lives here. ADR-006 retains the two-shape model.
 **Superseded by:** —
@@ -93,6 +93,39 @@ The Button story file is the named test case. **Before the audit: 22 exports.**
 | `Tiny` `Small` `Medium` `Large` `ExtraLarge` | Collapse into `Sizes` | Q2 — covered by the axis gallery |
 
 **After: ~13 exports** (Playground + 12 semantic variants + 1 `Sizes` axis gallery). Same coverage, ~40% fewer exports, every state navigable via Controls on every story.
+
+### Applied — components without a variant axis
+
+> **Amendment 2026-05-14** — clarifies Q3 for non-variant components and adds the
+> `Patterns/Forms/` relocation rule. Driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618).
+
+The Button example demonstrates the matrix when a component HAS a variant axis (Q3 stories = one-per-variant). The case that needed clarification: **components with no variant axis** (`Checkbox`, `Radio`, `TextInput`, `Select`, `TextArea`, `CompletionToggle`, etc.).
+
+For these, Q3 candidates collapse to one of three named axes — any other axis falls through to Q2 (Controls):
+
+| Q3 axis | When to split | Example |
+|---|---|---|
+| **Orientation** | Component arranges children differently along one axis | `Radio`: `Horizontal` + `Vertical` (radio group orientation) |
+| **Layout** | Multi-component arrangement that can't be a single prop | `ButtonGroup`: `Segmented` + `Spaced` |
+| **Distinct semantic variant** | Each variant has different ARIA role, leading icon, or contextual semantics | `Banner`: `Announcement` (`role="banner"`) vs `Information`/`Warning`/`Error` (`role="alert"` + Badge); `Toast` follows same logic |
+
+If none of the three apply, the file ships **one** `Default` story — interactive on first render, with all props as Controls. Carbon's [Checkbox page](https://react.carbondesignsystem.com/?path=/story/components-checkbox--default) is the named target shape.
+
+This closes the loophole where authors looked at `Checkbox` / `TextInput` and added per-state stories (`Checked`, `WithLabel`, `WithError`, `Disabled`) because the matrix's "semantic starting point" phrase was read permissively. Those are Q2 — Controls.
+
+### Multi-component compositions live in `Patterns/Forms/`
+
+> **Amendment 2026-05-14** — relocation rule for Form compositions.
+
+When a story demonstrates a composition of multiple primitives (a `ContactForm` with `TextInput` + `Select` + `Button`; a `LoginForm` with `TextInput` + `PasswordInput` + `Button`), the composition lives in `Patterns/Forms/<pattern>.stories.tsx`, **not** on the primitive's story file.
+
+Rationale:
+
+1. The composition is not a starting template for the primitive — it's a Form pattern that happens to use the primitive
+2. Co-locating with the primitive would duplicate the same composition across N primitive files (the `ContactForm` story would belong on `TextInput` AND `Select` AND `Button`)
+3. `Patterns/` is the reserved-but-empty sidebar group named in [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) — this populates it
+
+Scope: applies to compositions that combine **multiple distinct primitives**. A `Radio` group of multiple `Radio` instances showing orientation stays on the primitive (single-primitive composition demonstrating an Orientation axis per the table above).
 
 ### The five toolbar globals
 
