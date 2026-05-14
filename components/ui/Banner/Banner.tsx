@@ -1,6 +1,6 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
 import { Icon } from '@iconify/react';
-import { Warning, Info } from '../../icons';
+import { Warning, Info, XBold } from '../../icons';
 import { Badge } from '../Badge';
 import { bdsClass } from '../../utils';
 import './Banner.css';
@@ -98,7 +98,7 @@ export function Banner({
               aria-label="Dismiss banner"
               className="bds-banner__close"
             >
-              <i className="fa-solid fa-xmark" />
+              <Icon icon={XBold} />
             </button>
           )}
         </div>

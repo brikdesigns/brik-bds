@@ -84,7 +84,7 @@
 .bds-banner--tone-announcement {
   background-color: var(--surface-brand-primary);
   color: var(--text-on-color-dark);
-  padding: var(--padding-md) var(--padding-huge);
+  padding: var(--padding-md) var(--padding-lg);
   border-radius: var(--border-radius-100);
 }
 

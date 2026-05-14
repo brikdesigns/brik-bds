@@ -8,7 +8,7 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   variant?: 'primary' | 'outline' | 'secondary' | 'ghost' | 'inverse' | 'danger' | 'danger-outline' | 'danger-ghost' | 'destructive' | 'positive' | 'selected';
   /** Size of the button */
   size?: 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
-  /** The icon to render (ReactNode — SVG, FontAwesome, Lucide, etc.) */
+  /** The icon to render (ReactNode — typically `<Icon icon={...} />` from @iconify/react) */
   icon: ReactNode;
   /** Accessible label — required, announced by screen readers */
   label: string;

@@ -41,23 +41,49 @@ One- or two-sentence description. What it does, not when to use it.
 
 <Canvas of={Stories.Variants} />
 
-## Patterns
-
-{Optional 1–3 sentences framing the real-world compositions.}
-
-<Canvas of={Stories.Patterns} />
+{/* `## Patterns` — conditionally required, see below */}
 
 ## Props
 
 <ArgTypes of={Stories} />
 ```
 
-That's the **canonical six-section shape**: Title → Links → Description → Playground → Variants → Patterns → Props. Two optional sections may follow `Props` in this fixed order:
+That's the **canonical shape**: Title → Links → Description → Playground → Variants → (Patterns) → Props. Three sections can sit between Props and end-of-file, each fixed in position when present:
 
+- `## Patterns` — **conditionally required**. Include IFF the matching `*.stories.tsx` ships any Q4 (irreducible composition) or Q5 (`play`-only interaction) story per ADR-010. If the component has only Q3 semantic-variant stories, omit the section entirely. When present, it sits between `## Variants` and `## Props` and must contain at least one `<Canvas>`. **Never invent a Q4 story to make this section non-empty** — see [story-shape standard §Don't contrive Q4 stories to satisfy lint](./storybook-story-shape.md).
 - `## CSS Override API` — table of component-scoped CSS variables, with one example. Required if the component exposes any.
 - `## Notes` — short call-outs (deprecations, browser caveats, peer-component pointers). Three or fewer items per page.
 
 Nothing else. No `## Usage`, no `## When to use`, no `## Tokens`, no `## Source attribution`.
+
+### When `## Patterns` belongs in the file
+
+```mdx
+## Variants
+### Warning
+<Canvas of={Stories.Warning} />
+
+## Patterns
+<Canvas of={Stories.OnboardingChecklist} />   {/* Q4 — args can't express */}
+
+## Props
+```
+
+### When it doesn't
+
+```mdx
+## Variants
+### Announcement
+<Canvas of={Stories.Announcement} />
+### Information
+<Canvas of={Stories.Information} />
+
+{/* No ## Patterns — Banner has no Q4/Q5 stories; dismissibility is Q2 via onDismiss Control */}
+
+## Props
+```
+
+Banner is the gold-standard reference for the omit case (see [#605](https://github.com/brikdesigns/brik-bds/issues/605)).
 
 ## Why this shape — `<ComponentLinks>` as the connector
 
@@ -88,12 +114,12 @@ Carbon does the same split — `react.carbondesignsystem.com` (Storybook) vs `ca
 
 ## H2 section names vs story export names — same words, different layers
 
-This is the highest-friction collision in the system. ADR-006 bans `Variants` / `Tones` / `Patterns` as **story export names**. ADR-007 (this recipe) **requires** `## Variants` and `## Patterns` as **MDX H2 sections**.
+This is the highest-friction collision in the system. ADR-006 bans `Variants` / `Tones` / `Patterns` as **story export names**. ADR-007 (this recipe) **requires** `## Variants` as an **MDX H2 section** and treats `## Patterns` as **conditionally required** (present only when the component has Q4/Q5 stories).
 
 | Layer | This recipe (`*.mdx`) | [story-shape standard](./storybook-story-shape.md) (`*.stories.tsx`) |
 |---|---|---|
 | `## Variants` H2 | **Required** section heading | n/a |
-| `## Patterns` H2 | **Required** section heading | n/a |
+| `## Patterns` H2 | **Conditional** — include only when Q4/Q5 stories exist | n/a |
 | `export const Variants` | n/a | **Banned** |
 | `export const Tones` | n/a | **Banned** |
 | `export const Patterns` | n/a | **Banned** |
@@ -200,7 +226,7 @@ A page conforms when:
 1. Imports `Meta`, `Canvas`, `ArgTypes` from `@storybook/addon-docs/blocks`, imports `* as Stories`, imports `ComponentLinks`, contains `<Meta of={Stories} />`.
 2. The first heading is one `# {Component name}`. Nothing above it except the imports and `<Meta>`.
 3. Immediately after H1: `<ComponentLinks slug="..." />` then a 1–2 sentence description paragraph.
-4. Sections appear in this order, no omissions of required, no deviations from spelling: `## Playground` → `## Variants` → `## Patterns` → `## Props`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
+4. Required sections appear in this order, no omissions, no deviations from spelling: `## Playground` → `## Variants` → `## Props`. `## Patterns` is conditional — when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
 5. No `---` dividers anywhere in the file.
 6. No `## Usage`, `## When to use`, `## When NOT to use`, `## Source attribution`, `## Tokens`, or other narrative-bearing section.
 7. Every `<Canvas>` references a story exported from the matching `*.stories.tsx`.
