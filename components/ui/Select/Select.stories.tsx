@@ -1,37 +1,17 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
 import { Icon } from '@iconify/react';
-import { Select } from './Select';
+import { Select, type SelectProps, type SelectOption, type SelectOptionGroup } from './Select';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/* ─── Sample data ─────────────────────────────────────────────── */
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Sample Data ─────────────────────────────────────────────── */
-
-const basicOptions = [
+const flatOptions: SelectOption[] = [
   { label: 'First choice', value: 'first' },
   { label: 'Second choice', value: 'second' },
   { label: 'Third choice', value: 'third' },
 ];
 
-const groupedOptions = [
+const groupedOptions: SelectOptionGroup[] = [
   {
     label: 'United States',
     options: [
@@ -50,179 +30,117 @@ const groupedOptions = [
   },
 ];
 
+/* ─── Story-only args ─────────────────────────────────────────── */
+
+/**
+ * Default story extends SelectProps with two story-only flags so the
+ * Controls panel can swap the leading icon and the options shape
+ * (flat vs grouped) without requiring the viewer to edit JSON arrays.
+ * Excluded from the MDX `<ArgTypes>` block.
+ */
+type DefaultArgs = SelectProps & {
+  showLeadingIcon?: boolean;
+  showOptionGroups?: boolean;
+};
+
 /* ─── Meta ────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof Select> = {
+const meta: Meta<DefaultArgs> = {
   title: 'Components/Form/select',
   component: Select,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
+  decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>],
   argTypes: {
-    placeholder: { control: 'text' },
-    disabled: { control: 'boolean' },
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    fullWidth: { control: 'boolean' },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size token (sm=32px, md=40px, lg=48px). Default `md`.',
+    },
+    label: {
+      control: 'text',
+      description: 'Optional label rendered above the select. Auto-wires `htmlFor`/`id`.',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Empty-value option text shown when no selection has been made.',
+    },
+    helperText: {
+      control: 'text',
+      description: 'Hint text under the select. Hidden when `error` is present.',
+    },
+    error: {
+      control: 'text',
+      description: 'Error message. Triggers `aria-invalid` and replaces `helperText`.',
+    },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Stretch wrapper to its container width. Default `true`.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the select — non-interactive, muted appearance.',
+    },
+    icon: {
+      control: false,
+      description: 'Optional leading icon node. Use `showLeadingIcon` Control in Storybook to toggle a sample tag icon.',
+    },
+    options: {
+      control: false,
+      description: 'Array of `SelectOption` (flat) or `SelectOptionGroup` (renders as `<optgroup>`). Mix freely. Use `showOptionGroups` Control in Storybook to swap sample data.',
+    },
+    onChange: {
+      action: 'changed',
+      description: 'Native change handler — receives the change event.',
+    },
+    showLeadingIcon: {
+      control: 'boolean',
+      description: 'Story-only — toggle a sample tag icon as `icon`.',
+      table: { category: 'Story-only' },
+    },
+    showOptionGroups: {
+      control: 'boolean',
+      description: 'Story-only — swap `options` between a flat list and `<optgroup>`-rendered groups.',
+      table: { category: 'Story-only' },
+    },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Select>;
+type Story = StoryObj<DefaultArgs>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — single canonical story per ADR-010 §components without
+   a variant axis. All variation (size, icon, options shape, error,
+   disabled, helper text) is exposed via Controls.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Themed native select with label/helper/error */
+export const Default: Story = {
   args: {
-    placeholder: 'Select one...',
-    options: basicOptions,
     label: 'Choice',
+    placeholder: 'Select one...',
     size: 'md',
+    fullWidth: true,
+    options: flatOptions,
+    showLeadingIcon: false,
+    showOptionGroups: false,
     onChange: fn(),
   },
+  render: ({ showLeadingIcon, showOptionGroups, options, ...args }) => (
+    <Select
+      {...args}
+      icon={showLeadingIcon ? <Icon icon="ph:tag" /> : undefined}
+      options={showOptionGroups ? groupedOptions : options}
+    />
+  ),
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const select = canvas.getByRole('combobox');
 
     await expect(select).toBeVisible();
     await userEvent.selectOptions(select, 'second');
-    await expect(args.onChange).toHaveBeenCalled();
     await expect(select).toHaveValue('second');
+    await expect(args.onChange).toHaveBeenCalled();
   },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, icons, states, groups
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      <div>
-        <SectionLabel>Sizes</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Select size="sm" placeholder="Small" options={basicOptions} icon={<Icon icon="ph:tag" />} />
-          <Select size="md" placeholder="Medium" options={basicOptions} icon={<Icon icon="ph:tag" />} />
-          <Select size="lg" placeholder="Large" options={basicOptions} icon={<Icon icon="ph:tag" />} />
-        </Stack>
-      </div>
-
-      <div>
-        <SectionLabel>With icon and label</SectionLabel>
-        <Select
-          label="Company"
-          placeholder="Select company..."
-          options={[
-            { label: 'Acme Corp', value: 'acme' },
-            { label: 'Globex Inc', value: 'globex' },
-            { label: 'Initech', value: 'initech' },
-          ]}
-          icon={<Icon icon="ph:buildings" />}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With default value</SectionLabel>
-        <Select placeholder="Select one..." options={basicOptions} defaultValue="second" />
-      </div>
-
-      <div>
-        <SectionLabel>Disabled</SectionLabel>
-        <Select placeholder="Select one..." options={basicOptions} disabled />
-      </div>
-
-      <div>
-        <SectionLabel>Error state</SectionLabel>
-        <Select
-          label="Region"
-          placeholder="Select region..."
-          options={[
-            { label: 'North America', value: 'na' },
-            { label: 'Europe', value: 'eu' },
-            { label: 'Asia Pacific', value: 'apac' },
-          ]}
-          error="Please select a region"
-          icon={<Icon icon="ph:globe" />}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Option groups</SectionLabel>
-        <Select
-          label="Location"
-          placeholder="Select a city..."
-          options={groupedOptions}
-          icon={<Icon icon="ph:globe" />}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Compact (fullWidth=false)</SectionLabel>
-        <Select placeholder="Compact..." options={basicOptions} fullWidth={false} />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      {/* Form layout */}
-      <div>
-        <SectionLabel>Form layout</SectionLabel>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--padding-lg)' }}>
-          <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-            <Select
-              label="Country"
-              placeholder="Select country..."
-              options={[
-                { label: 'United States', value: 'us' },
-                { label: 'Canada', value: 'ca' },
-                { label: 'United Kingdom', value: 'uk' },
-                { label: 'Australia', value: 'au' },
-              ]}
-              icon={<Icon icon="ph:globe" />}
-            />
-          </div>
-          <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-            <Select
-              label="Industry"
-              placeholder="Select industry..."
-              options={[
-                { label: 'Technology', value: 'tech' },
-                { label: 'Healthcare', value: 'healthcare' },
-                { label: 'Finance', value: 'finance' },
-                { label: 'Education', value: 'education' },
-              ]}
-              icon={<Icon icon="ph:buildings" />}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Constrained width */}
-      <div>
-        <SectionLabel>Constrained container</SectionLabel>
-        <div style={{ maxWidth: '320px' }}>
-          <Select
-            label="Role"
-            placeholder="Select role..."
-            options={[
-              { label: 'Admin', value: 'admin' },
-              { label: 'Editor', value: 'editor' },
-              { label: 'Viewer', value: 'viewer' },
-            ]}
-            helperText="Choose the permission level for this user"
-          />
-        </div>
-      </div>
-    </Stack>
-  ),
 };

@@ -8,33 +8,33 @@ import * as Stories from './Select.stories';
 
 <ComponentLinks slug="select" />
 
-Dropdown selection control with options, placeholder, optional leading icon, and size variants. Fills its container by default.
+Themed native `<select>` dropdown with optional label, helper text, error state, and leading icon. Accepts either a flat `SelectOption[]` or a mixed array containing `SelectOptionGroup` entries that render as `<optgroup>`.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes, icons, states, option groups, and width modes.
+Select has no semantic-variant axis — all variation (size, icon, options shape, error, disabled, helper text, fullWidth) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
-- **Default** — Light border (`--border-input`)
-- **Hover** — Darker border (`--border-primary`)
-- **Focus** — Brand border + ring (`--border-brand-primary`)
-- **Error** — Red border + ring (`--color-system-red`)
-- **Disabled** — 50% opacity
+- **`sm`** — 32px height, 14px body
+- **`md`** — 40px height, 16px body (default)
+- **`lg`** — 48px height, 18px body
 
-## Patterns
+States exposed via Controls:
 
-Real-world usage: form layouts and constrained containers.
-
-<Canvas of={Stories.Patterns} />
+- **Default** — light input border
+- **Hover** — darker border via `--border-primary`
+- **Focus** — brand border + focus ring
+- **Error** — red border + ring (set `error` Control)
+- **Disabled** — 50% opacity, non-interactive
 
 ## Props
 
-<ArgTypes of={Stories} />
+<ArgTypes of={Stories} exclude={['showLeadingIcon', 'showOptionGroups']} />
 
 ## CSS Override API
 
@@ -52,4 +52,3 @@ Component-scoped CSS variables exposed on `.bds-select`. Set on a wrapping eleme
   --select-icon-color: var(--text-brand-primary);
 }
 ```
-
