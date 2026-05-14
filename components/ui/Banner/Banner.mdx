@@ -16,19 +16,11 @@ Full-width contextual banner. `tone="announcement"` (default) renders a brand-pr
 
 ## Variants
 
-Each axis the component varies on — content shape, dismiss affordance, status tone — gets its own story so the autodocs page, sidebar deep-links, and Chromatic snapshots can each address one state at a time.
+One story per `tone` — the semantic axis Banner varies on. Other props (`description`, `action`, `onDismiss`) are Controls on every story per [ADR-010](/?path=/docs/foundation-adrs-adr-010-storybook-axes-of-information--docs) Q2.
 
 ### Announcement
 
 <Canvas of={Stories.Announcement} />
-
-### Title only
-
-<Canvas of={Stories.TitleOnly} />
-
-### Dismissible
-
-<Canvas of={Stories.Dismissible} />
 
 ### Information
 
@@ -41,10 +33,6 @@ Each axis the component varies on — content shape, dismiss affordance, status 
 ### Error
 
 <Canvas of={Stories.Error} />
-
-## Patterns
-
-<Canvas of={Stories.DismissibleWithToggle} />
 
 ## Props
 

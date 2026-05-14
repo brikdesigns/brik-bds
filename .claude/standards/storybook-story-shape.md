@@ -113,6 +113,20 @@ Args first. `render` only when args genuinely can't express the case:
 
 `render` used to lay out a documentation gallery (with `<SectionLabel>` rows or `<Stack>` helpers) is **not** irreducible. Strip the helpers; split into args-driven stories.
 
+## Don't contrive Q4 stories to satisfy lint
+
+Q4 stories are **conditionally optional**. The matrix is the source of truth for what populates a file; the [MDX recipe](./storybook-mdx-recipe.md) must adapt to the matrix, not the reverse.
+
+If a component has no irreducible composition or hook-driven state that args genuinely can't express, **do not invent one** to satisfy a `## Patterns` recipe-lint requirement. Drop the Patterns section and accept any informational lint violation; the recipe is the layer to fix.
+
+| Tempting | Right |
+| --- | --- |
+| Add a dismiss-toggle story so `## Patterns` has content | Drop the story; dismissibility is Q2 (one `onDismiss` callback) and lives in Controls |
+| Wrap a single args-driven case in `render` to make it "feel like a pattern" | Use args; helpers are not Q4 |
+| Keep a legacy `Variants` render-mode gallery because removing it would empty `## Patterns` | Split into Q3 per-state stories; recipe issue is a separate fix |
+
+Reference: [#605](https://github.com/brikdesigns/brik-bds/issues/605) (Banner gold-standard surfaced this anti-pattern) → [#608](https://github.com/brikdesigns/brik-bds/issues/608) (recipe amendment to make `## Patterns` conditional).
+
 ## MCP discipline — mandatory
 
 The Storybook MCP server (`get-documentation`) is what agents in consumer repos (`brik-client-portal`, `renew-pms`, `freedom-client-portal`) hit to pick BDS primitives. Without `@summary` on every export and exactly one surface tag on every meta, agents get every component back as noise with no signal about applicability.
