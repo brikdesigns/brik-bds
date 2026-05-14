@@ -1,29 +1,6 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { Checkbox } from './Checkbox';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
-);
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -33,9 +10,26 @@ const meta: Meta<typeof Checkbox> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
-    label: { control: 'text' },
-    checked: { control: 'boolean' },
-    disabled: { control: 'boolean' },
+    label: {
+      control: 'text',
+      description: 'Visible text rendered next to the checkbox. Clicking the label toggles the input.',
+    },
+    checked: {
+      control: 'boolean',
+      description: 'Controlled checked state. Pair with `onChange`. For uncontrolled use, set `defaultChecked` instead.',
+    },
+    defaultChecked: {
+      control: 'boolean',
+      description: 'Initial checked state for uncontrolled use.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the input and applies muted styling.',
+    },
+    onChange: {
+      action: 'changed',
+      description: 'Called with the native change event when the checkbox toggles.',
+    },
   },
 };
 
@@ -43,80 +37,34 @@ export default meta;
 type Story = StoryObj<typeof Checkbox>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — single canonical story per ADR-010 §components without
+   a variant axis. `checked` and `disabled` are Q2 states exposed
+   via Controls; no per-state stories.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Themed checkbox with adjacent label */
+export const Default: Story = {
   args: {
     label: 'Accept terms and conditions',
+    defaultChecked: false,
+    disabled: false,
   },
-};
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByLabelText('Accept terms and conditions') as HTMLInputElement;
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — States grid
-   ═══════════════════════════════════════════════════════════════ */
+    await expect(checkbox).toBeVisible();
+    await expect(checkbox).not.toBeChecked();
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>States</SectionLabel>
-        <Stack gap="var(--gap-md)">
-          <Checkbox label="Unchecked" />
-          <Checkbox label="Checked" defaultChecked />
-          <Checkbox label="Disabled" disabled />
-          <Checkbox label="Disabled checked" disabled defaultChecked />
-        </Stack>
-      </div>
+    // Click to check, click again to uncheck — round-trip the state so
+    // the post-play canvas matches the unchecked initial state.
+    await userEvent.click(checkbox);
+    await expect(checkbox).toBeChecked();
 
-      <div>
-        <SectionLabel>Group</SectionLabel>
-        <Stack gap="var(--gap-md)">
-          <Checkbox label="Hero section" />
-          <Checkbox label="1-Column layout" />
-          <Checkbox label="2-Column layout" defaultChecked />
-          <Checkbox label="3-Column layout" />
-          <Checkbox label="CTA section" defaultChecked />
-          <Checkbox label="Navigation bar" />
-        </Stack>
-      </div>
-    </Stack>
-  ),
-};
+    await userEvent.click(checkbox);
+    await expect(checkbox).not.toBeChecked();
 
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      {/* Settings panel */}
-      <div style={{
-        maxWidth: '360px',
-        padding: 'var(--padding-lg)',
-        border: 'var(--border-width-md) solid var(--border-secondary)',
-        borderRadius: 'var(--border-radius-lg)',
-      }}>
-        <SectionLabel>Notification preferences</SectionLabel>
-        <Stack gap="var(--gap-md)">
-          <Checkbox label="Email notifications" defaultChecked />
-          <Checkbox label="Push notifications" defaultChecked />
-          <Checkbox label="SMS alerts" />
-          <Checkbox label="Weekly digest" defaultChecked />
-        </Stack>
-      </div>
-
-      {/* Terms acceptance */}
-      <div>
-        <SectionLabel>Terms acceptance</SectionLabel>
-        <Row gap="var(--gap-lg)">
-          <Checkbox label="I agree to the Terms of Service" />
-        </Row>
-      </div>
-    </Stack>
-  ),
+    // Blur so the post-play canvas doesn't show stale focus styling.
+    checkbox.blur();
+  },
 };

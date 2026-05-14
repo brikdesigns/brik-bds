@@ -8,30 +8,29 @@ import * as Stories from './Checkbox.stories';
 
 <ComponentLinks slug="checkbox" />
 
-Themed checkbox with label text for boolean selections. Supports controlled and uncontrolled modes.
+Themed checkbox for boolean selections. The label wraps the input so clicking the label toggles the checkbox. Supports controlled (`checked` + `onChange`) and uncontrolled (`defaultChecked`) modes.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-States and group layout.
+Checkbox has no semantic-variant axis — all variation (checked, disabled) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
-- **Unchecked** — Default state
-- **Checked** — Selected via `checked` or `defaultChecked`
-- **Disabled** — Reduced opacity, no interaction
-- **Disabled checked** — Locked in checked state
+State combinations:
 
-## Patterns
-
-Real-world usage: notification preferences and terms acceptance.
-
-<Canvas of={Stories.Patterns} />
+- **Unchecked** — default
+- **Checked** — set `defaultChecked` Control (or `checked` for controlled)
+- **Disabled** — set `disabled` Control
+- **Disabled + Checked** — both Controls on
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Note** — For task / item completion state (circular, distinct from form selection), use [`CompletionToggle`](/?path=/docs/components-form-completiontoggle--docs). Checkbox is rectangular and intended for form-style binary choices (terms, preferences, opt-ins).
