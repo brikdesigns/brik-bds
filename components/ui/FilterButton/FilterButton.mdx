@@ -8,25 +8,28 @@ import * as Stories from './FilterButton.stories';
 
 <ComponentLinks slug="filter-button" />
 
-Dropdown filter trigger for filter bars. Displays a pill-shaped button with a chevron that opens a single-select dropdown. Switches to an active (brand) style when a value is selected. Click a selected item again to clear.
+Pill-shaped dropdown trigger for filter bars. Click to open a single-select dropdown of options. Once an option is picked, the button switches to an active (brand-color) style and shows the option's label. Click the active button → click the same option again to clear the selection.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes (sm, md, lg), active state, and text-only options.
+FilterButton has no semantic-variant axis — all variation (size, label, active state via internal selection) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
-## Patterns
-
-Real-world usage: interactive filter bar with multiple `FilterButton` components.
-
-<Canvas of={Stories.Patterns} />
+- **`sm`** — 32px height, 14px body
+- **`md`** — 40px height, 16px body (default)
+- **`lg`** — 48px height, 18px body
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Note** — FilterButton manages its own open / close dropdown state internally. The consumer only manages the selected `value`. Click-outside dismissal and Escape handling are built in.
+
+> **Note** — For a row of multiple filter dropdowns, use [`FilterBar`](/?path=/docs/components-action-filter-bar--docs) which composes FilterButton with clear-all and title affordances.
