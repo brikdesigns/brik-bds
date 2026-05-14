@@ -1,6 +1,6 @@
 # ADR-010 — Storybook axes of information: story vs. control vs. toolbar
 
-**Status:** Accepted (2026-05-13); Amended (2026-05-14 — Q3 axis clarification + Patterns/Forms relocation, driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618))
+**Status:** Accepted (2026-05-13); Amended (2026-05-14 — Q3 axis clarification + Patterns/Forms relocation; 2026-05-14 §2 — input-component specialization rule, all driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618))
 **Date:** 2026-05-13
 **Supersedes:** Part of [ADR-006 §Part B](./ADR-006-storybook-taxonomy-and-story-shape.md) — operational decision about *which axis becomes a story* now lives here. ADR-006 retains the two-shape model.
 **Superseded by:** —
@@ -126,6 +126,36 @@ Rationale:
 3. `Patterns/` is the reserved-but-empty sidebar group named in [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) — this populates it
 
 Scope: applies to compositions that combine **multiple distinct primitives**. A `Radio` group of multiple `Radio` instances showing orientation stays on the primitive (single-primitive composition demonstrating an Orientation axis per the table above).
+
+### When does a specialized input deserve its own component?
+
+> **Amendment 2026-05-14 §2** — input-component specialization rule.
+> Driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618) Batch A
+> (TextInput / EmailInput / PhoneInput question).
+
+The matrix decides which AXIS becomes a story. This section decides which AXIS warrants a whole new component in `Components/Input/` vs. living as a `<TextInput type="..." iconBefore={...} />` usage pattern on the existing generic primitive.
+
+A specialized input component (`Components/Input/<Name>`) is justified IFF it has at least one of:
+
+1. **Unique interactive behavior** beyond the `type` attribute — visibility toggles, autocomplete dropdowns, debounced onChange, clear buttons
+2. **Format mask or input transformation** — auto-formatting (phone `(555) 123-4567`), increment / decrement steppers, currency rounding
+3. **Composed sub-controls** — country-code selector, currency selector, unit toggle
+
+If the only differences from `TextInput` are **defaults** (icon convention, `type` attribute, `autoComplete`), it's a **usage pattern**, not a component. The consumer sets those props inline; we don't ship a wrapper.
+
+| Specialized | Verdict | Rationale |
+|---|---|---|
+| `PasswordInput` (existing) | ✅ Keep | Visibility toggle is unique behavior |
+| `AddressInput` (existing) | ✅ Keep | Suggestion dropdown is unique behavior |
+| `PhoneInput` | 🟡 Future-scope | Format mask + country-code selector |
+| `NumberInput` | 🟡 Future-scope | Increment / decrement steppers |
+| `SearchInput` | 🟡 Future-scope | Clear button + debounced onChange |
+| `EmailInput` | ❌ Never | No unique behavior — just `type="email"` defaults |
+| `URLInput` | ❌ Never | Same as Email |
+
+Rationale: 5 specialized inputs that all wrap TextInput introduce drift risk (focus ring, error styling, sizing tokens diverging across siblings), maintenance overhead (every TextInput improvement propagated to N wrappers), and MCP discovery noise (agents disambiguating between TextInput and EmailInput when the only difference is a default). The bar for promotion has to be real behavior, not naming.
+
+The decision rule applies symmetrically to other primitive families — `Button` doesn't get `SaveButton` / `DeleteButton` wrappers because those are usage patterns of `variant` + `children`. The same logic applies here.
 
 ### The five toolbar globals
 
