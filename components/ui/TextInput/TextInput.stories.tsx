@@ -98,19 +98,19 @@ type Story = StoryObj<DefaultArgs>;
 /** @summary Themed text input with label/helper/error */
 export const Default: Story = {
   args: {
-    label: 'Email address',
-    placeholder: 'you@example.com',
-    type: 'email',
+    label: 'Full name',
+    placeholder: 'Enter your name',
+    type: 'text',
     size: 'md',
     fullWidth: true,
-    showLeadingIcon: true,
+    showLeadingIcon: false,
     showTrailingIcon: false,
   },
   render: ({ showLeadingIcon, showTrailingIcon, ...args }) => (
     <TextInput
       {...args}
-      iconBefore={showLeadingIcon ? <Icon icon="ph:envelope" /> : undefined}
-      iconAfter={showTrailingIcon ? <Icon icon="ph:lock" /> : undefined}
+      iconBefore={showLeadingIcon ? <Icon icon="ph:user" /> : undefined}
+      iconAfter={showTrailingIcon ? <Icon icon="ph:check-circle" /> : undefined}
     />
   ),
   play: async ({ canvasElement }) => {
@@ -119,8 +119,8 @@ export const Default: Story = {
 
     await expect(input).toBeVisible();
     await userEvent.clear(input);
-    await userEvent.type(input, 'test@example.com');
-    await expect(input).toHaveValue('test@example.com');
+    await userEvent.type(input, 'Jane Doe');
+    await expect(input).toHaveValue('Jane Doe');
   },
 };
 
