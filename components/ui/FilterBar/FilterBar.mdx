@@ -4,42 +4,40 @@ import * as Stories from './FilterBar.stories';
 
 <Meta of={Stories} />
 
-# FilterBar
+# Filter bar
 
 <ComponentLinks slug="filter-bar" />
 
-Toolbar that pairs a result counter with one or more `FilterButton`s. Use above tables and lists to expose filtering controls plus a clear-all affordance.
+Toolbar that pairs a result counter with one or more filter controls ([`FilterButton`](/?path=/docs/components-action-filter-button--docs), [`FilterToggle`](/?path=/docs/components-action-filter-toggle--docs), or any compatible child). Use above tables and lists to expose filtering plus a clear-all affordance.
+
+Layout: `[title] [counter] ... [filter children] [clear?]`
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-### Filtered state
+FilterBar has no semantic-variant axis — all variation (title presence, counter status, clear-button visibility, filter children) is exposed via Controls + the hook-driven Default story. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-Counter shifts to the filtered result count when filters narrow the data.
+<Canvas of={Stories.Default} />
 
-<Canvas of={Stories.Filtered} />
+State behavior to exercise:
 
-### No title
-
-Drop the title for compact toolbars where the surrounding context is enough.
-
-<Canvas of={Stories.NoTitle} />
-
-### Clear callback omitted
-
-When `onClear` is not supplied, the clear-all affordance is suppressed.
-
-<Canvas of={Stories.NoClear} />
-
-## Patterns
-
-Full table + filter wiring with state, filter changes, and the clear-all flow.
-
-<Canvas of={Stories.Patterns} />
+- **Filtered** — pick an Industry or toggle "Active only" → counter switches to `activeStatus` color and reflects the filtered count
+- **No title** — clear the `title` Control → bar collapses to counter + children
+- **Clear button visibility** — automatic: appears when `filtered < total` AND `onClear` is provided; suppressed otherwise
 
 ## Props
 
 <ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — FilterBar is the canonical host for compositions of [`FilterButton`](/?path=/docs/components-action-filter-button--docs) and [`FilterToggle`](/?path=/docs/components-action-filter-toggle--docs). Don't reach for a manual flex row in consumer code; use FilterBar so the counter, clear-button placement, and aria-label all stay consistent.
+
+> **Note** — The Default story embeds a `useState` + `useMemo` filter pipeline because FilterBar's defining behavior (filter → recount → clear-button-appears) requires real state. Consumers wire their own data source; the in-story hook is illustrative.
+
+> **Note** — FilterBar does not expose a `disabled` prop. Filter children manage their own disabled state (e.g., `<FilterButton disabled />` greys out an individual filter). When the entire bar should be locked, gate at the consumer level (omit the bar entirely or render a read-only summary instead).
+
+> **Note** — FilterBar is fluid (`width: 100%`) — it fills its container. The Default story constrains the canvas to 1200px to match a typical desktop list/table viewport. Consumers control width via their layout. **Responsive collapse for narrow viewports (mobile: overflow filter children into a "Filters" sheet/drawer) is a known future improvement, not currently implemented** — tracked separately.

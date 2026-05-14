@@ -1,11 +1,25 @@
 import { useState, useMemo } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn, expect } from 'storybook/test';
+import { fn } from 'storybook/test';
 import { FilterBar } from './FilterBar';
 import { FilterButton } from '../FilterButton';
 import { FilterToggle } from '../FilterToggle';
+import type { CounterStatus } from '../Counter';
 
-/* ─── Shared Fixtures ─────────────────────────────────── */
+/* ─── Counter status options for the activeStatus Control ───────
+   Mirrors `CounterStatus` from ../Counter exactly. The `satisfies`
+   cast catches drift if Counter adds / renames statuses.
+   ─────────────────────────────────────────────────────────────── */
+const counterStatusOptions = [
+  'brand',
+  'success',
+  'error',
+  'warning',
+  'progress',
+  'neutral',
+] satisfies CounterStatus[];
+
+/* ─── Sample data ─────────────────────────────────────────────── */
 
 type Row = { id: string; name: string; industry: string; status: 'active' | 'inactive' };
 
@@ -28,194 +42,120 @@ const industryOptions = [
   { id: 'creative', label: 'Creative' },
 ];
 
-const statusOptions = [
-  { id: 'active', label: 'Active' },
-  { id: 'inactive', label: 'Inactive' },
-];
+/* ─── Meta ────────────────────────────────────────────────────── */
 
-/* ─── Meta ────────────────────────────────────────────── */
-
-const meta = {
+const meta: Meta<typeof FilterBar> = {
   title: 'Components/Action/filter-bar',
   component: FilterBar,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
   decorators: [
-    (Story) => (
-      <div style={{ width: '100%', minHeight: 200, padding: 'var(--padding-lg)' }}>
-        <Story />
-      </div>
-    ),
+    // 1200px container matches a typical desktop list/table viewport — Table
+    // ships fluid (`width: 100%`) and FilterBar sits above it. The constraint
+    // is only on the story canvas, not the component itself; consumers
+    // control the width via their layout.
+    (Story) => <div style={{ width: '100%', maxWidth: 1200, minHeight: 280 }}><Story /></div>,
   ],
-} satisfies Meta<typeof FilterBar>;
+  argTypes: {
+    title: {
+      control: 'text',
+      description: 'Optional section heading rendered at heading-sm inline with the counter.',
+    },
+    label: {
+      control: 'text',
+      description: 'Plural entity label used in the aria-label fallback (e.g. "companies", "tasks").',
+    },
+    clearLabel: {
+      control: 'text',
+      description: 'Label for the clear button. Default `"Clear filters"`.',
+    },
+    activeStatus: {
+      control: 'select',
+      options: counterStatusOptions,
+      description:
+        'Counter status when a filter is active. Default `brand` — gives the count a brand-color pill while filtered. ' +
+        '`success` / `error` / `warning` / `progress` convey semantic meaning about the filtered set (e.g. error status when filtering to error rows). ' +
+        '**`neutral` defeats the active-state visual** — the counter becomes indistinguishable from the inactive state, so it\'s rarely the right choice but supported for API completeness.',
+    },
+    total: {
+      control: false,
+      description: 'Total count before filtering. Story drives this from `rows.length`.',
+    },
+    filtered: {
+      control: false,
+      description: 'Count after filtering. Story computes this from the hook-filtered subset.',
+    },
+    children: {
+      control: false,
+      description: 'FilterButton / FilterToggle children rendered to the right of the title + counter. Story injects industry + active-only filters.',
+    },
+    onClear: {
+      action: 'cleared',
+      description: 'Callback to clear all filters. When provided, a ghost "Clear filters" button appears while filtered < total.',
+    },
+  },
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof FilterBar>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, no filter applied; counter neutral
+   DEFAULT — full composition (bar + FilterButton + FilterToggle +
+   clear-all). Hook-driven because FilterBar's defining behavior is
+   interactive filtering with live counter updates. This is Q4
+   irreducible per ADR-010 — args alone can't express the filter →
+   recount → clear-button-appears cycle. The Default story IS the
+   canonical use case; no separate Patterns story needed.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Heading + counter + filter children + clear-all */
+export const Default: Story = {
   args: {
-    title: 'Companies',
-    total: rows.length,
-    filtered: rows.length,
-    label: 'companies',
-    children: (
-      <>
-        <FilterButton label="Industry" options={industryOptions} />
-        <FilterButton label="Status" options={statusOptions} />
-      </>
-    ),
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. FILTERED — Filter active; counter switches to brand + Clear button
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Filtered */
-export const Filtered: Story = {
-  args: {
-    title: 'Companies',
-    total: rows.length,
-    filtered: 3,
-    label: 'companies',
+    title: 'Engagements',
+    label: 'engagements',
+    clearLabel: 'Clear filters',
+    activeStatus: 'brand',
     onClear: fn(),
-    children: (
-      <>
-        <FilterButton label="Industry" options={industryOptions} value="saas" />
-        <FilterButton label="Status" options={statusOptions} />
-      </>
-    ),
   },
-  play: async ({ canvas, args }) => {
-    const clearBtn = await canvas.findByRole('button', { name: /clear filters/i });
-    await clearBtn.click();
-    await expect(args.onClear).toHaveBeenCalled();
-  },
-};
+  render: (args) => {
+    const [industry, setIndustry] = useState<string | undefined>(undefined);
+    const [activeOnly, setActiveOnly] = useState(false);
 
-/* ═══════════════════════════════════════════════════════════════
-   3. NO TITLE — Counter leads when title is omitted
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary No title */
-export const NoTitle: Story = {
-  args: {
-    total: rows.length,
-    filtered: rows.length,
-    label: 'companies',
-    children: (
-      <>
-        <FilterButton label="Industry" options={industryOptions} />
-        <FilterButton label="Status" options={statusOptions} />
-      </>
-    ),
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. NO CLEAR — onClear omitted so no button appears when filtered
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary No clear */
-export const NoClear: Story = {
-  args: {
-    title: 'Companies',
-    total: rows.length,
-    filtered: 2,
-    label: 'companies',
-    children: (
-      <>
-        <FilterButton label="Industry" options={industryOptions} value="legal" />
-      </>
-    ),
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   5. PATTERNS — Full table + filter wiring (real-world composition)
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  args: {
-    title: 'Companies',
-    total: rows.length,
-    filtered: rows.length,
-    label: 'companies',
-    children: null,
-  },
-  render: () => {
-    function Demo() {
-      const [industry, setIndustry] = useState<string | undefined>();
-      const [status, setStatus] = useState<string | undefined>();
-
-      const filtered = useMemo(() => {
-        return rows.filter((r) => {
+    const filteredRows = useMemo(
+      () =>
+        rows.filter((r) => {
           if (industry && r.industry !== industry) return false;
-          if (status && r.status !== status) return false;
+          if (activeOnly && r.status !== 'active') return false;
           return true;
-        });
-      }, [industry, status]);
+        }),
+      [industry, activeOnly],
+    );
 
-      const clearFilters = () => {
-        setIndustry(undefined);
-        setStatus(undefined);
-      };
+    const handleClear = () => {
+      setIndustry(undefined);
+      setActiveOnly(false);
+      args.onClear?.();
+    };
 
-      return (
-        <div>
-          <FilterBar
-            title="Companies"
-            total={rows.length}
-            filtered={filtered.length}
-            label="companies"
-            onClear={clearFilters}
-          >
-            <FilterButton
-              label="Industry"
-              options={industryOptions}
-              value={industry}
-              onChange={setIndustry}
-            />
-            <FilterButton
-              label="Status"
-              options={statusOptions}
-              value={status}
-              onChange={setStatus}
-            />
-            <FilterToggle
-              label="Active only"
-              active={status === 'active'}
-              onToggle={() => setStatus(status === 'active' ? undefined : 'active')}
-            />
-          </FilterBar>
-
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'left', padding: 'var(--padding-sm)', borderBottom: '1px solid var(--border-muted)' }}>Name</th>
-                <th style={{ textAlign: 'left', padding: 'var(--padding-sm)', borderBottom: '1px solid var(--border-muted)' }}>Industry</th>
-                <th style={{ textAlign: 'left', padding: 'var(--padding-sm)', borderBottom: '1px solid var(--border-muted)' }}>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((r) => (
-                <tr key={r.id}>
-                  <td style={{ padding: 'var(--padding-sm)', borderBottom: '1px solid var(--border-muted)' }}>{r.name}</td>
-                  <td style={{ padding: 'var(--padding-sm)', borderBottom: '1px solid var(--border-muted)', textTransform: 'capitalize' }}>{r.industry}</td>
-                  <td style={{ padding: 'var(--padding-sm)', borderBottom: '1px solid var(--border-muted)', textTransform: 'capitalize' }}>{r.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-    }
-    return <Demo />;
+    return (
+      <FilterBar
+        {...args}
+        total={rows.length}
+        filtered={filteredRows.length}
+        onClear={handleClear}
+      >
+        <FilterButton
+          label="Industry"
+          options={industryOptions}
+          value={industry}
+          onChange={setIndustry}
+        />
+        <FilterToggle
+          label="Active only"
+          active={activeOnly}
+          onToggle={() => setActiveOnly((prev) => !prev)}
+        />
+      </FilterBar>
+    );
   },
 };
