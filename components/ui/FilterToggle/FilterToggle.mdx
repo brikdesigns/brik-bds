@@ -1,0 +1,35 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './FilterToggle.stories';
+
+<Meta of={Stories} />
+
+# Filter toggle
+
+<ComponentLinks slug="filter-toggle" />
+
+Binary on / off filter pill. Visually cohesive with [`FilterButton`](/?path=/docs/components-action-filter-button--docs) but without a dropdown — clicking flips between active (brand) and inactive (secondary) states. Fully controlled; the consumer manages the boolean externally.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+FilterToggle has no semantic-variant axis — all variation (size, label, active state) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+
+<Canvas of={Stories.Default} />
+
+- **`sm`** — 32px height, 14px body
+- **`md`** — 40px height, 16px body (default)
+- **`lg`** — 48px height, 18px body
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — FilterToggle is fully controlled (no internal state). Consumers track the boolean externally (\`useState\`, store, URL param, etc.) and pass \`active\` + \`onToggle\` to receive update events.
+
+> **Note** — For a row composing multiple FilterButtons and FilterToggles together, use [`FilterBar`](/?path=/docs/components-action-filter-bar--docs). It bundles the title, clear-all affordance, and consistent spacing.

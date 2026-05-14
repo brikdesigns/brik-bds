@@ -20,6 +20,8 @@ export interface FilterToggleProps
   onToggle: () => void;
   /** Size variant (default: 'md') */
   size?: FilterToggleSize;
+  /** Disabled — locks the pill and applies muted styling. */
+  disabled?: boolean;
 }
 
 /**
@@ -46,6 +48,7 @@ export function FilterToggle({
   active,
   onToggle,
   size = 'md',
+  disabled = false,
   className = '',
   ...props
 }: FilterToggleProps) {
@@ -56,9 +59,11 @@ export function FilterToggle({
         'bds-filter-toggle',
         `bds-filter-toggle--${size}`,
         active && 'bds-filter-toggle--active',
+        disabled && 'bds-filter-toggle--disabled',
         className,
       )}
       aria-pressed={active}
+      disabled={disabled}
       onClick={onToggle}
       {...props}
     >

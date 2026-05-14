@@ -27,6 +27,16 @@
   color: var(--text-on-color-dark);
 }
 
+/* ─── Disabled state (overrides active) ───────────────── */
+
+.bds-filter-toggle:disabled,
+.bds-filter-toggle--disabled {
+  background-color: var(--background-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* ─── Size variants — matches FilterButton/Button height scale (4px grid, 8px steps) ─── */
 
 .bds-filter-toggle--sm {
