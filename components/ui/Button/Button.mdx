@@ -20,9 +20,9 @@ Triggers an event or action. The button family includes three components for dif
 
 - **6 brand variants** — `primary` / `outline` / `secondary` / `ghost` / `inverse` / `on-color`. General action hierarchy.
 - **3 system variants** — `destructive` / `positive` / `selected`. Semantic action meaning.
-- **3 legacy aliases** — `danger` / `danger-outline` / `danger-ghost`. Still supported, but prefer `destructive` (and the system ladder generally). No Storybook story exists for these — see [Legacy aliases](#legacy-aliases) below.
+- **3 legacy aliases** — `danger` / `danger-outline` / `danger-ghost`. Still supported, but prefer `destructive`. No Storybook story exists for these — see [Legacy aliases](#legacy-aliases) below.
 
-Plus state variants (disabled, loading) and composition variants (icon slots).
+State props (`disabled`, `loading`, `fullWidth`) and composition slots (`iconBefore`, `iconAfter`) are Controls in the Playground, not standalone stories — per ADR-010 Q2.
 
 ### Primary
 
@@ -60,27 +60,25 @@ Plus state variants (disabled, loading) and composition variants (icon slots).
 
 <Canvas of={Stories.Positive} />
 
-### Disabled
-
-<Canvas of={Stories.Disabled} />
-
-### Loading
-
-<Canvas of={Stories.Loading} />
-
-### With leading icon
-
-<Canvas of={Stories.WithIconBefore} />
-
-### With trailing icon
-
-<Canvas of={Stories.WithIconAfter} />
-
 ### Sizes
 
 Side-by-side comparison of the five size tokens — qualifies as the ADR-006 axis-only gallery exception (one variant, size axis varied).
 
 <Canvas of={Stories.Sizes} />
+
+### Legacy aliases
+
+Three values in `ButtonVariant` ship without a dedicated story because they're aliases of `destructive` retained for back-compat:
+
+- `danger` → use `destructive` (identical visual, system-red fill)
+- `danger-outline` → use `destructive` with `outline` if you need lower emphasis; the alias remains for code that hasn't migrated
+- `danger-ghost` → use a ghost button styled as destructive; the alias remains for inline-delete code
+
+New code should pick from the documented 9 above. The aliases are TypeScript-valid but won't render anything different from their canonical sibling.
+
+## Patterns
+
+Multi-component compositions and sibling-component showcases. Each is a Q4 irreducible render-mode story per ADR-010 — args alone can't express the composition or hook-driven state.
 
 ### LinkButton
 
@@ -99,36 +97,6 @@ An icon-only button with a required `label` prop for accessibility.
 Click to simulate an async action. Render-mode demo because the toggle interaction can't be expressed with args alone.
 
 <Canvas of={Stories.LoadingToggle} />
-
-### Legacy aliases
-
-Three values in `ButtonVariant` ship without a dedicated story because they're aliases of `destructive` retained for back-compat:
-
-- `danger` → use `destructive` (identical visual, system-red fill)
-- `danger-outline` → use `destructive` with `outline` if you need lower emphasis; the alias remains for code that hasn't migrated
-- `danger-ghost` → use a ghost button styled as destructive; the alias remains for inline-delete code
-
-New code should pick from the documented 9 above. The aliases are TypeScript-valid but won't render anything different from their canonical sibling.
-
-## Type union
-
-The full `ButtonVariant` and `ButtonSize` contracts — the authoritative list of valid values:
-
-```ts
-type ButtonVariant =
-  | 'primary' | 'outline' | 'secondary' | 'ghost'
-  | 'inverse' | 'on-color'
-  | 'destructive' | 'positive' | 'selected'
-  | 'danger' | 'danger-outline' | 'danger-ghost'; // legacy aliases
-
-type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
-```
-
-This block mirrors `components/ui/Button/Button.tsx`. If it drifts from the source `.tsx`, the type is canonical — fix this doc.
-
-## Patterns
-
-Three canonical compositions where Button does multi-component work alongside its siblings.
 
 ### Confirmation dialog
 
