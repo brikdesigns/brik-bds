@@ -8,25 +8,36 @@ import * as Stories from './Radio.stories';
 
 <ComponentLinks slug="radio" />
 
-Single selection control for mutually exclusive options. Radio buttons are grouped by the `name` prop, allowing only one selection per group.
+Single-selection control for mutually exclusive options. Radios sharing the same `name` prop form a group; the browser enforces selection-of-one natively. The canonical use is a group — single-radio usage is rare and almost always indicates a [`Checkbox`](/?path=/docs/components-form-checkbox--docs) should be used instead.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Single} />
 
 ## Variants
 
-States (default, checked, disabled) and horizontal layout.
+Radio varies along the **orientation** axis when grouped. Boolean state (`checked`, `disabled`) is exposed via Controls on the `Single` canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+### Single
 
-## Patterns
+<Canvas of={Stories.Single} />
 
-Real-world usage: plan selection and theme selection groups.
+### Vertical
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Vertical} />
+
+### Horizontal
+
+<Canvas of={Stories.Horizontal} />
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Note** — Group exclusivity is HTML-native: two `<Radio>` instances with the same `name` are mutually exclusive without needing React state. Use `defaultChecked` on one radio per group to set the initial selection.
+
+> **Note** — Group layouts use a plain flex container in the consumer. We do not ship a `RadioGroup` wrapper because there is no shared state or extra accessibility role to manage. Use `<div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>` (or equivalent layout primitive) and place individual `<Radio>` instances inside.
+
+> **Note** — For a single binary choice (terms acceptance, preferences toggle), use [`Checkbox`](/?path=/docs/components-form-checkbox--docs). Radio is for choosing one from a set.
