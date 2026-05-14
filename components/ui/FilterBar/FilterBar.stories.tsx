@@ -4,6 +4,20 @@ import { fn } from 'storybook/test';
 import { FilterBar } from './FilterBar';
 import { FilterButton } from '../FilterButton';
 import { FilterToggle } from '../FilterToggle';
+import type { CounterStatus } from '../Counter';
+
+/* ─── Counter status options for the activeStatus Control ───────
+   Mirrors `CounterStatus` from ../Counter exactly. The `satisfies`
+   cast catches drift if Counter adds / renames statuses.
+   ─────────────────────────────────────────────────────────────── */
+const counterStatusOptions = [
+  'brand',
+  'success',
+  'error',
+  'warning',
+  'progress',
+  'neutral',
+] satisfies CounterStatus[];
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 
@@ -57,8 +71,11 @@ const meta: Meta<typeof FilterBar> = {
     },
     activeStatus: {
       control: 'select',
-      options: ['brand', 'positive', 'warning', 'negative', 'neutral'],
-      description: 'Counter status when a filter is active. Default `brand` — gives the count a brand-color pill while filtered.',
+      options: counterStatusOptions,
+      description:
+        'Counter status when a filter is active. Default `brand` — gives the count a brand-color pill while filtered. ' +
+        '`success` / `error` / `warning` / `progress` convey semantic meaning about the filtered set (e.g. error status when filtering to error rows). ' +
+        '**`neutral` defeats the active-state visual** — the counter becomes indistinguishable from the inactive state, so it\'s rarely the right choice but supported for API completeness.',
     },
     total: {
       control: false,
