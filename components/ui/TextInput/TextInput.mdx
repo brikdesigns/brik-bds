@@ -8,17 +8,17 @@ import * as Stories from './TextInput.stories';
 
 <ComponentLinks slug="text-input" />
 
-Text input field for collecting user data. Supports labels, helper text, error states, icons, size variants, and multiple input types.
+Themed single-line text input with optional label, helper text, error state, and leading / trailing icons. Uses BDS semantic tokens for color, border, and typography.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes, states, icons, and input types.
+TextInput has no semantic-variant axis — all variation (size, type, error, disabled, icons, helper text) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
 - **`sm`** — 14px text, compact forms
 - **`md`** — 16px text, default
@@ -26,13 +26,19 @@ Sizes, states, icons, and input types.
 
 ## Patterns
 
-Real-world usage: contact form and login form layouts.
+> **Note** — These compositions relocate to `Patterns/Forms/` in Batch A wrap-up per [ADR-010 amendment 2026-05-14](../../../docs/adrs/ADR-010-storybook-axes-of-information.md). Parked here as Q4 stories until the new Patterns/Forms taxonomy is populated.
 
-<Canvas of={Stories.Patterns} />
+### Contact form
+
+<Canvas of={Stories.ContactForm} />
+
+### Login form
+
+<Canvas of={Stories.LoginForm} />
 
 ## Props
 
-<ArgTypes of={Stories} />
+<ArgTypes of={Stories} exclude={['showLeadingIcon', 'showTrailingIcon']} />
 
 ## CSS Override API
 
@@ -48,4 +54,3 @@ Component-scoped CSS variables exposed on `.bds-text-input-field`. Set on a wrap
   --text-input-focus-ring-width: 2px;
 }
 ```
-
