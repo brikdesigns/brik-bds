@@ -70,17 +70,23 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const input = canvas.getByLabelText('Password') as HTMLInputElement;
-    const toggle = canvas.getByRole('button', { name: 'Show password' });
 
     await expect(input).toBeVisible();
     await expect(input).toHaveAttribute('type', 'password');
 
-    await userEvent.type(input, 'hunter2');
-    await expect(input).toHaveValue('hunter2');
-
-    // Toggle reveals the password (type flips to 'text', button label updates).
-    await userEvent.click(toggle);
+    // Round-trip the visibility toggle: show → hide. The second click
+    // returns the component to its canonical idle state (type=password,
+    // "Show password" button visible) so the post-play snapshot matches
+    // what viewers expect on initial render.
+    await userEvent.click(canvas.getByRole('button', { name: 'Show password' }));
     await expect(input).toHaveAttribute('type', 'text');
-    await expect(canvas.getByRole('button', { name: 'Hide password' })).toBeVisible();
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Hide password' }));
+    await expect(input).toHaveAttribute('type', 'password');
+
+    // Blur the toggle so the canvas doesn't show stale focus styling
+    // after play completes. Without this, the trailing focus ring makes
+    // the eye icon look pre-selected when viewers open the story.
+    (canvas.getByRole('button', { name: 'Show password' }) as HTMLElement).blur();
   },
 };
