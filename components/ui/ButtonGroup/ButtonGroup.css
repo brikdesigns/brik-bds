@@ -1,20 +1,48 @@
 @layer bds-components {
 /**
  * BDS ButtonGroup — groups related buttons together
+ * Orientations: horizontal (default) | vertical
+ * Align: start | center | end | between
+ *
+ * For mutually-exclusive option toolbars (shared borders), use
+ * SegmentedControl instead — that's its canonical home.
  */
 
 .bds-button-group {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-md);
   flex-wrap: wrap;
+  gap: var(--gap-md);
   box-sizing: border-box;
 }
+
+/* ─── Orientation: vertical ──────────────────────────────────── */
 
 .bds-button-group--vertical {
   flex-direction: column;
   align-items: stretch;
 }
+
+/* ─── Align: horizontal alignment (ignored when fullWidth=true) ─ */
+
+.bds-button-group--align-start {
+  justify-content: flex-start;
+}
+
+.bds-button-group--align-center {
+  justify-content: center;
+}
+
+.bds-button-group--align-end {
+  justify-content: flex-end;
+}
+
+.bds-button-group--align-between {
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ─── Full width ────────────────────────────────────────────── */
 
 .bds-button-group--full-width {
   width: 100%;
