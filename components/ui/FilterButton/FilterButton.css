@@ -33,6 +33,16 @@
   color: var(--text-on-color-dark);
 }
 
+/* Disabled state — overrides active styling when both are set */
+
+.bds-filter-button__trigger:disabled,
+.bds-filter-button__trigger--disabled {
+  background-color: var(--background-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Size variants — height scale matches Button/IconButton (4px grid, 8px steps) */
 
 .bds-filter-button__trigger--sm {

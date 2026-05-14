@@ -42,6 +42,8 @@ export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   onChange?: (value: string | undefined) => void;
   /** Size of the trigger button (default: 'md') */
   size?: FilterButtonSize;
+  /** Disabled — locks the trigger, blocks dropdown open, applies muted styling. */
+  disabled?: boolean;
 }
 
 /**
@@ -75,6 +77,7 @@ export function FilterButton({
   value,
   onChange,
   size = 'md',
+  disabled = false,
   className = '',
   style,
   ...props
@@ -147,9 +150,11 @@ export function FilterButton({
           'bds-filter-button__trigger',
           `bds-filter-button__trigger--${size}`,
           isActive && 'bds-filter-button__trigger--active',
+          disabled && 'bds-filter-button__trigger--disabled',
         )}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        disabled={disabled}
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <span>{selectedOption?.label ?? label}</span>
