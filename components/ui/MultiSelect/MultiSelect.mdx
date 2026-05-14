@@ -8,25 +8,30 @@ import * as Stories from './MultiSelect.stories';
 
 <ComponentLinks slug="multi-select" />
 
-A select dropdown that supports multiple selections. Selected items appear as removable `Tag` chips below the dropdown. Composes `Select` + `Tag`.
+Multi-select dropdown that composes [`Select`](/?path=/docs/components-form-select--docs) for the picker and [`Tag`](/?path=/docs/components-indicator-tag--docs) for selected items. Picking an option adds a removable Tag chip below; selected options are filtered out of the dropdown until removed.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes, disabled state, and error validation.
+MultiSelect has no semantic-variant axis — all variation (size, tagSize, error, disabled, helper text, fullWidth) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
-## Patterns
+- **`sm`** — 32px Select + small Tag chips
+- **`md`** — 40px Select + medium Tag chips (default)
+- **`lg`** — 48px Select + large Tag chips
 
-Project intake form with multiple multi-select fields.
-
-<Canvas of={Stories.Patterns} />
+`tagSize` defaults to matching `size` but can be overridden independently.
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Note** — Selected options are filtered out of the dropdown until removed. When all options are selected, the placeholder switches to "All options selected" and the dropdown is auto-disabled.
+
+> **Note** — Composes `Select` and `Tag`. Visual treatment for both follows their respective gold-standard pages — fixes to either propagate here automatically.
