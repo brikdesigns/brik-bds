@@ -8,25 +8,48 @@ import * as Stories from './ButtonGroup.stories';
 
 <ComponentLinks slug="button-group" />
 
-Groups related buttons into a single visual unit. Use for action sets where buttons share context.
+Groups related [`Button`](/?path=/docs/components-action-button--docs) or [`IconButton`](/?path=/docs/components-action-button--docs) components with consistent spacing and alignment. Use `align` to control placement within the container — replaces prior manual `<Row style={{ justifyContent: ... }}>` patterns.
+
+For mutually-exclusive option toolbars (Day / Week / Month), use [`SegmentedControl`](/?path=/docs/components-control-segmented-control--docs) instead — its shared-border treatment is the canonical home for that pattern.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Orientations, widths, and button sizes.
+ButtonGroup has no semantic-variant prop — composition shapes are demonstrated via children + the `align` Control. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+### Default
+
+<Canvas of={Stories.Default} />
+
+Canonical action set — one primary + two secondary buttons (`outline`, `ghost`). Default `align="start"` for form footers; toggle to `center` / `end` / `between` for different placement.
+
+### Icon-button group
+
+<Canvas of={Stories.IconButtonGroup} />
+
+Inline toolbar of [`IconButton`](/?path=/docs/components-action-button--docs) children — up to 4 actions. Common for row / card chrome (edit, copy, share, delete). The final destructive variant signals an irreversible action.
 
 ## Patterns
 
-Real-world usage: dialog actions, destructive confirmations, and form footers.
+### Action bar (modal / sheet)
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.ActionBar} />
+
+Modal and sheet bottom rows follow the platform convention: **primary action far right, secondary action to its left**. `align="end"` with `[Cancel, Save]` order achieves this — matches macOS HIG, Material, Carbon, and Brik's design library. **Closes [#617](https://github.com/brikdesigns/brik-bds/issues/617).**
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Note** — ButtonGroup does not expose its own `disabled` prop. Children manage their own state (e.g., `<Button disabled />` inside the group). Same pattern as [`FilterBar`](/?path=/docs/components-action-filter-bar--docs).
+
+> **Note** — `align` is ignored when `fullWidth: true`. Full-width groups always stretch children edge-to-edge regardless of alignment.
+
+> **Note** — Migrating from the old manual `<Row style={{ justifyContent: 'space-between' }}>` ActionBar pattern: replace with `<ButtonGroup align="end">` for modal / sheet rows or `<ButtonGroup align="between">` for destructive-on-left + primary-on-right patterns.
+
+> **Note** — For mutually-exclusive segmented option toolbars (Day / Week / Month, View modes), reach for [`SegmentedControl`](/?path=/docs/components-control-segmented-control--docs) instead. ButtonGroup is for action sets and freeform toolbars where buttons are independent actions.

@@ -379,13 +379,3 @@ export const InlineDelete: Story = {
   ),
 };
 
-/** @summary Action bar — primary CTA + outline save + destructive discard */
-export const ActionBar: Story = {
-  render: () => (
-    <Row gap="var(--gap-lg)">
-      <Button variant="primary" iconAfter={<ArrowRight />}>Continue</Button>
-      <Button variant="outline">Save draft</Button>
-      <Button variant="destructive">Discard</Button>
-    </Row>
-  ),
-};
