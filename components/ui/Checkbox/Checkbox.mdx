@@ -8,24 +8,27 @@ import * as Stories from './Checkbox.stories';
 
 <ComponentLinks slug="checkbox" />
 
-Themed checkbox for boolean selections. The label wraps the input so clicking the label toggles the checkbox. Supports controlled (`checked` + `onChange`) and uncontrolled (`defaultChecked`) modes.
+Themed checkbox for boolean selections. The label wraps the input so clicking the label toggles the checkbox. Supports controlled (`checked` + `onChange`) and uncontrolled (`defaultChecked`) modes. Group layouts use plain flex containers — there is no `CheckboxGroup` wrapper.
 
 ## Playground
 
-<Canvas of={Stories.Default} />
+<Canvas of={Stories.Single} />
 
 ## Variants
 
-Checkbox has no semantic-variant axis — all variation (checked, disabled) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+Checkbox varies along the **orientation** axis when grouped. Boolean state (`checked`, `disabled`) is exposed via Controls on the `Single` canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Default} />
+### Single
 
-State combinations:
+<Canvas of={Stories.Single} />
 
-- **Unchecked** — default
-- **Checked** — set `defaultChecked` Control (or `checked` for controlled)
-- **Disabled** — set `disabled` Control
-- **Disabled + Checked** — both Controls on
+### Vertical
+
+<Canvas of={Stories.Vertical} />
+
+### Horizontal
+
+<Canvas of={Stories.Horizontal} />
 
 ## Props
 
@@ -34,3 +37,5 @@ State combinations:
 ## Notes
 
 > **Note** — For task / item completion state (circular, distinct from form selection), use [`CompletionToggle`](/?path=/docs/components-form-completiontoggle--docs). Checkbox is rectangular and intended for form-style binary choices (terms, preferences, opt-ins).
+
+> **Note** — Group layouts use a plain flex container in the consumer. We do not ship a `CheckboxGroup` wrapper because the group is purely layout — no shared state or accessibility roles to manage. Use `<div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>` (or equivalent layout primitive) and place individual `<Checkbox>` instances inside.
