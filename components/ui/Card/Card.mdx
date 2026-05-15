@@ -8,37 +8,37 @@ import * as Stories from './Card.stories';
 
 <ComponentLinks slug="card" />
 
-Flexible content container for grouping related information. Composable with `CardTitle`, `CardDescription`, and `CardFooter`. Supports two preset shapes — `control` and `summary` — that subsume the legacy `CardControl` and `CardSummary` components.
+Flexible content container. A single primitive serves four shapes via the `preset` discriminator: a default flexible content slot (no `preset`), and three locked-down layouts — `control`, `summary`, and `display` — that subsume the legacy `CardControl` and `CardSummary` components (per ADR-004).
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-All visual variants, padding sizes, interactive, and link modes.
-
-<Canvas of={Stories.Variants} />
-
-- **`outlined`** — Subtle secondary border (default)
-- **`brand`** — Primary-color border for emphasis
-- **`elevated`** — Shadow for visual prominence
+The `preset` prop selects the shape. Default (no `preset`) gives a flexible `children` slot composable with `CardTitle`, `CardDescription`, and `CardFooter`. Each preset locks the layout in exchange for a typed API.
 
 ### Control preset
 
-`preset="control"` renders a settings/control row: leading badge + (title + description) on the left, action slot on the right.
+`preset="control"` — settings/control row. Leading badge + (title + description) on the left, action on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
 
-<Canvas of={Stories.ControlPreset} />
+<Canvas of={Stories.Control} />
 
 ### Summary preset
 
-`preset="summary"` renders a compact metric layout: label on top, large value below, optional text link to the right. Numeric values format as locale integers; pass `type="price"` for USD currency.
+`preset="summary"` — compact metric with label, large value, and optional text link. Numeric `value` formats via `Intl.NumberFormat`; pass `type="price"` for USD currency. String values render verbatim.
 
-<Canvas of={Stories.SummaryPreset} />
+<Canvas of={Stories.Summary} />
+
+### Display preset
+
+`preset="display"` — generic content-grid card for `bds-card-grid`. All affordances (`image`, `tag`, `badge`, `action`, `href`) are optional slots so one primitive serves any content type — service, blog post, customer story, property listing, team bio.
+
+<Canvas of={Stories.Display} />
 
 ## Patterns
 
-Real-world usage: service grids and feature cards with actions.
+Real-world compositions: 3-up service grid and feature card with action.
 
 <Canvas of={Stories.Patterns} />
 
