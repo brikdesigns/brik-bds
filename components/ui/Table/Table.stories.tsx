@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './Table';
 import { Badge } from '../Badge';
 import { Tag } from '../Tag';
-import { Button, IconButton } from '../Button';
+import { Button } from '../Button';
 import { Checkbox } from '../Checkbox';
 import { TextInput } from '../TextInput';
 import { TextLink } from '../TextLink';
@@ -312,8 +312,8 @@ export const Variants: Story = {
                   <TableCell><Button variant="primary" size="sm">View</Button></TableCell>
                   <TableCell style={{ textAlign: 'right' }}>
                     <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
-                      <IconButton variant="primary" size="sm" icon={<Icon icon="ph:pencil-simple" />} label="Edit" />
-                      <IconButton variant="danger" size="sm" icon={<Icon icon="ph:trash" />} label="Delete" />
+                      <Button variant="primary" size="sm" icon={<Icon icon="ph:pencil-simple" />} label="Edit" />
+                      <Button variant="danger" size="sm" icon={<Icon icon="ph:trash" />} label="Delete" />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -500,10 +500,10 @@ export const Patterns: Story = {
                   <TableCell><Button variant="primary" size="sm">View</Button></TableCell>
                   <TableCell style={{ textAlign: 'right' }}>
                     <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
-                      <IconButton variant="primary" size="sm" icon={<Icon icon="ph:pencil-simple" />} label="Edit" />
-                      <IconButton variant="secondary" size="sm" icon={<Icon icon="ph:download-simple" />} label="Download" />
-                      <IconButton variant="ghost" size="sm" icon={<Icon icon="ph:dots-three-vertical" />} label="More options" />
-                      <IconButton variant="danger" size="sm" icon={<Icon icon="ph:trash" />} label="Delete" />
+                      <Button variant="primary" size="sm" icon={<Icon icon="ph:pencil-simple" />} label="Edit" />
+                      <Button variant="secondary" size="sm" icon={<Icon icon="ph:download-simple" />} label="Download" />
+                      <Button variant="ghost" size="sm" icon={<Icon icon="ph:dots-three-vertical" />} label="More options" />
+                      <Button variant="danger" size="sm" icon={<Icon icon="ph:trash" />} label="Delete" />
                     </div>
                   </TableCell>
                 </TableRow>

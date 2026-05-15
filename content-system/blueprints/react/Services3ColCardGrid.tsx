@@ -17,10 +17,10 @@
  */
 import {
   Badge,
+  Button,
   Card,
   Frame,
   Grid,
-  LinkButton,
   ServiceTag,
   type ServiceCategory,
 } from '../../../components';
@@ -96,9 +96,9 @@ export function Services3ColCardGrid({ section }: Props) {
                 }
                 action={
                   item.href ? (
-                    <LinkButton href={item.href} variant="primary" size="sm">
+                    <Button href={item.href} variant="primary" size="sm">
                       Learn more
-                    </LinkButton>
+                    </Button>
                   ) : undefined
                 }
               />

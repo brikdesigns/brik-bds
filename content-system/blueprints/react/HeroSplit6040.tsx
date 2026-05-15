@@ -9,7 +9,7 @@
  *
  * @summary 60/40 split hero — headline left, photo right.
  */
-import { LinkButton } from '../../../components/ui/Button/LinkButton';
+import { Button } from '../../../components/ui/Button';
 import type { BlueprintProps } from '../astro/types';
 import './HeroSplit6040.css';
 
@@ -39,9 +39,9 @@ export function HeroSplit6040({ section, clientFacts }: Props) {
           </h1>
           {lead && <p className="bp-hero-split-60-40__lead">{lead}</p>}
           {cta && (
-            <LinkButton href={cta.url} variant="primary" size="md">
+            <Button href={cta.url} variant="primary" size="md">
               {cta.label}
-            </LinkButton>
+            </Button>
           )}
         </div>
 
