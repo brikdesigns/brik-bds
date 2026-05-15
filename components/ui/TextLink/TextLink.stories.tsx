@@ -1,22 +1,46 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TextLink } from './TextLink';
 
+/* ─── Meta ────────────────────────────────────────────────────── */
+
 const meta: Meta<typeof TextLink> = {
   title: 'Components/Action/text-link',
   component: TextLink,
   tags: ['surface-shared'],
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   argTypes: {
     size: {
       control: 'select',
       options: ['default', 'small'],
-      description: 'Size variant',
+      description: 'Size variant. `default` is body-md; `small` is body-sm for tight contexts (footnotes, captions).',
     },
     href: {
       control: 'text',
-      description: 'Link destination',
+      description: 'Link destination. Any standard URL or anchor.',
+    },
+    children: {
+      control: 'text',
+      description: 'Link text. Accepts ReactNode for inline composition (e.g., inline icons).',
+    },
+    target: {
+      control: 'select',
+      options: ['_self', '_blank', '_parent', '_top'],
+      description:
+        'Anchor target. Pair `target="_blank"` with `rel="noopener noreferrer"` for security on external links.',
+    },
+    rel: {
+      control: 'text',
+      description:
+        'Anchor relationship. For external links, use `"noopener noreferrer"` to prevent tab-nabbing.',
+    },
+    iconBefore: {
+      control: false,
+      description: 'Optional leading icon node (e.g. `<Icon icon="ph:arrow-left" />`).',
+    },
+    iconAfter: {
+      control: false,
+      description:
+        'Optional trailing icon node. Common pattern for external links: `<Icon icon="ph:arrow-square-out" />`.',
     },
   },
 };
@@ -24,98 +48,47 @@ const meta: Meta<typeof TextLink> = {
 export default meta;
 type Story = StoryObj<typeof TextLink>;
 
-// Basic link
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/* ═══════════════════════════════════════════════════════════════
+   DEFAULT — single canonical story per ADR-010 §components without
+   a variant axis. Size is the only Q3-candidate prop (2 values:
+   default / small), exposed via Controls. External-link behavior
+   (target=_blank + rel) is set via standard anchor attribute Controls,
+   not a separate story — the component has no "external" variant.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Themed inline anchor link */
+export const Default: Story = {
   args: {
     href: '#',
-    children: 'Learn More',
+    size: 'default',
+    children: 'Learn more',
   },
 };
 
-// Small link
-/** @summary Small */
-export const Small: Story = {
-  args: {
-    href: '#',
-    size: 'small',
-    children: 'View Details',
-  },
-};
+/* ═══════════════════════════════════════════════════════════════
+   IN-PARAGRAPH — Q4 irreducible per ADR-010. Demonstrates how the
+   link visually integrates with flowing paragraph text (baseline
+   alignment, color contrast against body text, underline behavior).
+   Surrounding text is structural, not a component prop, so this
+   case can't be expressed via args alone.
+   ═══════════════════════════════════════════════════════════════ */
 
-// External link
-/** @summary External */
-export const External: Story = {
-  args: {
-    href: 'https://example.com',
-    target: '_blank',
-    rel: 'noopener noreferrer',
-    children: 'Visit Website',
-  },
-};
-
-// Link in context
-/** @summary In paragraph */
+/** @summary Link integrated with flowing paragraph text */
 export const InParagraph: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<p>
-  Our team specializes in web design and development.{' '}
-  <TextLink href="#">Learn more about our services</TextLink> or{' '}
-  <TextLink href="#">contact us</TextLink> to get started.
-</p>`,
-      },
-    },
-  },
+  parameters: { layout: 'padded' },
   render: () => (
     <p
       style={{
         fontFamily: 'var(--font-family-body)',
+        fontSize: 'var(--body-md)',
         color: 'var(--text-primary)',
-        maxWidth: '400px',
-        lineHeight: '1.6',
+        maxWidth: 480,
+        lineHeight: 'var(--font-line-height-normal)',
       }}
     >
       Our team specializes in web design and development.{' '}
       <TextLink href="#">Learn more about our services</TextLink> or{' '}
       <TextLink href="#">contact us</TextLink> to get started.
     </p>
-  ),
-};
-
-// Navigation links
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  parameters: {
-    docs: {
-      source: {
-        code: `<nav>
-  <TextLink href="#">Home</TextLink>
-  <TextLink href="#">About</TextLink>
-  <TextLink href="#">Services</TextLink>
-  <TextLink href="#">Contact</TextLink>
-</nav>`,
-      },
-    },
-  },
-  render: () => (
-    <nav style={{ display: 'flex', gap: 'var(--gap-xl)' }}>
-      <TextLink href="#">Home</TextLink>
-      <TextLink href="#">About</TextLink>
-      <TextLink href="#">Services</TextLink>
-      <TextLink href="#">Contact</TextLink>
-    </nav>
-  ),
-};
-
-// All variants in one view
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
-      <TextLink href="#">Default Link</TextLink>
-      <TextLink href="#" size="small">Small Link</TextLink>
-    </div>
   ),
 };

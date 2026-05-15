@@ -4,40 +4,39 @@ import * as Stories from './TextLink.stories';
 
 <Meta of={Stories} />
 
-# TextLink
+# Text link
 
 <ComponentLinks slug="text-link" />
 
-Inline navigation link styled to match BDS typography. Two sizes (`default`, `small`); supports external-link semantics via `target` and `rel`.
+Themed inline anchor link styled to match BDS body typography. Muted text color that transitions to brand color on hover. Two sizes (`default`, `small`); accepts standard `<a>` attributes (`href`, `target`, `rel`) and optional leading / trailing icon slots.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Default and small sizes side by side.
+TextLink has no semantic-variant axis on the component — size is the only Q3-candidate prop (2 values) and is exposed via Controls. External-link behavior is set via standard anchor Controls (`target`, `rel`), not a separate story. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
-### External
-
-External-link target opens in a new tab. Pair with `rel="noopener noreferrer"`.
-
-<Canvas of={Stories.External} />
-
-### In paragraph
-
-Inline link rendering inside body copy.
-
-<Canvas of={Stories.InParagraph} />
+- **`default`** — body-md (16px)
+- **`small`** — body-sm (14px), for footnotes / captions
 
 ## Patterns
 
-Navigation row with multiple links.
+### In paragraph
 
-<Canvas of={Stories.Patterns} />
+Demonstrates how the link visually integrates with flowing paragraph text. Surrounding body text is structural composition, not a component prop, so this case is irreducible (Q4) per [ADR-010](../../../docs/adrs/ADR-010-storybook-axes-of-information.md).
+
+<Canvas of={Stories.InParagraph} />
 
 ## Props
 
 <ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — For external links, set `target="_blank"` **and** `rel="noopener noreferrer"` together. The component doesn't add these automatically — the security pair is the consumer's responsibility. The Storybook Controls expose both for inline testing.
+
+> **Note** — **No `disabled` state today.** TextLink is an `<a>` element; HTML `disabled` doesn't apply to anchors. The accessible pattern is `aria-disabled="true"` + remove `href` + muted styling — not currently implemented. Tracked separately; consumers needing a disabled link should render plain text (or a [`Button variant="ghost"`](/?path=/docs/components-action-button--docs)) instead.
