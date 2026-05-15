@@ -2,7 +2,6 @@ import { type CSSProperties, type HTMLAttributes, type ReactNode } from 'react';
 import { Icon } from '@iconify/react';
 import { bdsClass } from '../../utils';
 import { Button, type ButtonSize } from '../Button';
-import { IconButton } from '../Button';
 import './AddableFieldRowList.css';
 
 export type AddableFieldRowListSize = 'sm' | 'md' | 'lg';
@@ -189,7 +188,7 @@ export function AddableFieldRowList<T>({
                 index,
                 update: (patch) => update(index, patch),
               })}
-              <IconButton
+              <Button
                 size={BUTTON_SIZE[size]}
                 variant="ghost"
                 icon={<Icon icon="ph:dash-circle" />}
