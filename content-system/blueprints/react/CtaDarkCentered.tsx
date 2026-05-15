@@ -7,7 +7,7 @@
  *
  * @summary Closing CTA on dark surface, centered.
  */
-import { LinkButton } from '../../../components/ui/Button/LinkButton';
+import { Button } from '../../../components/ui/Button';
 import type { BlueprintProps } from '../astro/types';
 import './CtaDarkCentered.css';
 
@@ -30,9 +30,9 @@ export function CtaDarkCentered({ section }: Props) {
           <p className="bp-cta-dark-centered__description">{section.body}</p>
         )}
         {section.cta && (
-          <LinkButton href={section.cta.url} variant="primary" size="lg">
+          <Button href={section.cta.url} variant="primary" size="lg">
             {section.cta.label}
-          </LinkButton>
+          </Button>
         )}
       </div>
     </section>

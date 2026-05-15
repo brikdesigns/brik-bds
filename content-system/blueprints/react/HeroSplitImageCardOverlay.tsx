@@ -10,13 +10,13 @@
  * Composes BDS primitives per .claude/standards/component-build.md
  * §"Compose primitives — never reimplement them":
  *   - Breadcrumb trail → `<Breadcrumb items={...} />`
- *   - Left CTA → `<LinkButton variant="inverse">`
- *   - Price-card CTA → `<LinkButton variant="primary">`
+ *   - Left CTA → `<Button variant="inverse">`
+ *   - Price-card CTA → `<Button variant="primary">`
  *
  * @summary Interior-page split hero with image card + optional price overlay.
  */
 import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
-import { LinkButton } from '../../../components/ui/Button/LinkButton';
+import { Button } from '../../../components/ui/Button';
 import { Frame } from '../../../components/ui/Frame/Frame';
 import { ServiceTag } from '../../../components/ui/ServiceBadge/ServiceTag';
 import type { BlueprintProps } from '../astro/types';
@@ -85,9 +85,9 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
           {lead && <p className="bp-hero-img-card__lead">{lead}</p>}
 
           {cta && (
-            <LinkButton href={cta.url} variant="inverse" size="md">
+            <Button href={cta.url} variant="inverse" size="md">
               {cta.label}
-            </LinkButton>
+            </Button>
           )}
         </div>
 
@@ -113,9 +113,9 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
                   <p className="bp-hero-img-card__price-value">{priceCard.price}</p>
                 )}
                 {priceCard.cta && (
-                  <LinkButton href={priceCard.cta.url} variant="primary" size="sm">
+                  <Button href={priceCard.cta.url} variant="primary" size="sm">
                     {priceCard.cta.label}
-                  </LinkButton>
+                  </Button>
                 )}
               </div>
             )}

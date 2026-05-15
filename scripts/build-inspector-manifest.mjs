@@ -131,7 +131,7 @@ function extractA11ySignals(componentDir, pascalName) {
     signals.manages_focus = true;
   }
 
-  // Label prop (a common Brik/BDS pattern — e.g. IconButton requires label).
+  // Label prop (required for icon-only Button — `<Button icon={...} label="..." />`).
   if (/\blabel\??:\s*string/i.test(src) || /label:\s*ReactNode/i.test(src)) {
     signals.has_label_prop = true;
   }
@@ -142,10 +142,7 @@ function extractA11ySignals(componentDir, pascalName) {
   }
 
   // Known components that require specific a11y wiring — surface a note so
-  // the inspect panel can nudge the consumer ("IconButton: label prop is required").
-  if (pascalName === 'IconButton') {
-    signals.notes.push('Requires a `label` prop — becomes aria-label on the button.');
-  }
+  // the inspect panel can nudge the consumer.
   if (pascalName === 'Dialog' || pascalName === 'Modal') {
     signals.notes.push('Must receive an aria-labelledby or aria-label. Focus trap lives in the component.');
   }

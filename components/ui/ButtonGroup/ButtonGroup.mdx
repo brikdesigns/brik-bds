@@ -8,7 +8,7 @@ import * as Stories from './ButtonGroup.stories';
 
 <ComponentLinks slug="button-group" />
 
-Groups related [`Button`](/?path=/docs/components-action-button--docs) or [`IconButton`](/?path=/docs/components-action-button--docs) components with consistent spacing and alignment. Use `align` to control placement within the container — replaces prior manual `<Row style={{ justifyContent: ... }}>` patterns.
+Groups related [`Button`](/?path=/docs/components-action-button--docs) components (text or icon-only) with consistent spacing and alignment. Use `align` to control placement within the container — replaces prior manual `<Row style={{ justifyContent: ... }}>` patterns.
 
 For mutually-exclusive option toolbars (Day / Week / Month), use [`SegmentedControl`](/?path=/docs/components-control-segmented-control--docs) instead — its shared-border treatment is the canonical home for that pattern.
 
@@ -30,7 +30,7 @@ Canonical action set — one primary + two secondary buttons (`outline`, `ghost`
 
 <Canvas of={Stories.IconButtonGroup} />
 
-Inline toolbar of [`IconButton`](/?path=/docs/components-action-button--docs) children — up to 4 actions. Common for row / card chrome (edit, copy, share, delete). The final destructive variant signals an irreversible action.
+Inline toolbar of icon-only [`Button`](/?path=/docs/components-action-button--docs) children (`<Button icon={...} label="..." />`) — up to 4 actions. Common for row / card chrome (edit, copy, share, delete). The final destructive variant signals an irreversible action.
 
 ## Patterns
 

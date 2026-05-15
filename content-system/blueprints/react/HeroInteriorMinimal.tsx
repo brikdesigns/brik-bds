@@ -16,7 +16,7 @@
  *
  * @summary Interior page hero — eyebrow + h1 + optional lead, no image.
  */
-import { LinkButton } from '../../../components/ui/Button/LinkButton';
+import { Button } from '../../../components/ui/Button';
 import type { BlueprintProps } from '../astro/types';
 import './HeroInteriorMinimal.css';
 
@@ -44,9 +44,9 @@ export function HeroInteriorMinimal({ section }: Props) {
         </h1>
         {lead && <p className="bp-hero-interior-minimal__lead">{lead}</p>}
         {cta && (
-          <LinkButton href={cta.url} variant="primary" size="md">
+          <Button href={cta.url} variant="primary" size="md">
             {cta.label}
-          </LinkButton>
+          </Button>
         )}
       </div>
     </section>
