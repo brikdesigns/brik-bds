@@ -128,6 +128,32 @@ if (Array.isArray(rawData.variables)) {
   }
 }
 
+// ─── Deny-list: drop Figma variables we do not want in the codebase ──
+// BDS migrated icon rendering to Iconify (SVG-based). Font Awesome glyph
+// fonts are no longer supported. The Brand Kit Figma still defines
+// font-family/icon-* and typography/icon-* variables for legacy reasons;
+// filtering them here keeps the codebase free of FA references without
+// requiring a Figma cleanup pass.
+//
+// Add entries (exact names, post-sanitize) to drop additional tokens.
+const FIGMA_NAME_DENYLIST = new Set([
+  'font-family/icon',
+  'font-family/logo',
+  'font-family/icon-brands',
+  'typography/icon',
+  'typography/logo',
+]);
+
+if (Array.isArray(rawData.variables)) {
+  const beforeCount = rawData.variables.length;
+  rawData.variables = rawData.variables.filter((v) => !FIGMA_NAME_DENYLIST.has(v.name));
+  rawData.totalVariables = rawData.variables.length;
+  const dropped = beforeCount - rawData.variables.length;
+  if (dropped > 0) {
+    console.log(`Deny-list filtered ${dropped} variable(s): ${[...FIGMA_NAME_DENYLIST].join(', ')}`);
+  }
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────
 
 function inferTypeFromResolved(resolvedType, varName) {
