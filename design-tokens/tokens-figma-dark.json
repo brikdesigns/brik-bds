@@ -10,22 +10,22 @@
         "$type": "color"
       },
       "darkest": {
-        "$value": "#333333",
+        "$value": "#1b1b1b",
         "$type": "color",
         "$description": "Primary Text on Light Backgrounds"
       },
       "darker": {
-        "$value": "#4f4f4f",
+        "$value": "#333333",
         "$type": "color",
         "$description": "Secondary Text / Icons"
       },
       "dark": {
-        "$value": "#828282",
+        "$value": "#5a5a5a",
         "$type": "color",
         "$description": "Placeholder Text / Tertiary Content"
       },
       "light": {
-        "$value": "#bdbdbd",
+        "$value": "#828282",
         "$type": "color",
         "$description": "Secondary Borders / Muted UI"
       },
@@ -494,6 +494,10 @@
     },
     "system": {
       "$value": "Courier New",
+      "$type": "fontFamily"
+    },
+    "icon-brands": {
+      "$value": "Font Awesome 6 Brands",
       "$type": "fontFamily"
     }
   },

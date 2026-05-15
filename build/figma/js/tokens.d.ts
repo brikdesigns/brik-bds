@@ -131,6 +131,7 @@ export const fontFamilySubtitle: string;
 export const fontFamilyIcon: string;
 export const fontFamilyLogo: string;
 export const fontFamilySystem: string;
+export const fontFamilyIconBrands: string;
 export const easingEaseIn: string;
 export const easingEaseOut: string;
 export const delay0: string;

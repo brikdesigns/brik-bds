@@ -5,10 +5,10 @@
 :root {
   --color-grayscale-white: #ffffff;
   --color-grayscale-black: #000000;
-  --color-grayscale-darkest: #333333; /** Primary Text on Light Backgrounds */
-  --color-grayscale-darker: #4f4f4f; /** Secondary Text / Icons */
-  --color-grayscale-dark: #828282; /** Placeholder Text / Tertiary Content */
-  --color-grayscale-light: #bdbdbd; /** Secondary Borders / Muted UI */
+  --color-grayscale-darkest: #1b1b1b; /** Primary Text on Light Backgrounds */
+  --color-grayscale-darker: #333333; /** Secondary Text / Icons */
+  --color-grayscale-dark: #5a5a5a; /** Placeholder Text / Tertiary Content */
+  --color-grayscale-light: #828282; /** Secondary Borders / Muted UI */
   --color-grayscale-lighter: #e0e0e0; /** Borders / Disabled Text */
   --color-grayscale-lightest: #f2f2f2; /** Light Background / UI Elements */
   --color-poppy-lightest: #ffefeb; /** Subtle tints / hover backgrounds */
@@ -109,6 +109,7 @@
   --font-family-icon: Font Awesome 6 Pro;
   --font-family-logo: Font Awesome 6 Brands;
   --font-family-system: 'Courier New';
+  --font-family-icon-brands: 'Font Awesome 6 Brands';
   --easing-ease-in: String value;
   --easing-ease-out: String value;
   --delay-0: 0ms;

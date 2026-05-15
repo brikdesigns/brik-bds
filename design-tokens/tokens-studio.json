@@ -37,7 +37,7 @@
             }
           },
           "$type": "color",
-          "$value": "#333333",
+          "$value": "#1b1b1b",
           "$description": "Primary Text on Light Backgrounds"
         },
         "darker": {
@@ -50,7 +50,7 @@
             }
           },
           "$type": "color",
-          "$value": "#4f4f4f",
+          "$value": "#333333",
           "$description": "Secondary Text / Icons"
         },
         "dark": {
@@ -60,7 +60,7 @@
             ]
           },
           "$type": "color",
-          "$value": "#828282",
+          "$value": "#5a5a5a",
           "$description": "Placeholder Text / Tertiary Content"
         },
         "light": {
@@ -73,7 +73,7 @@
             }
           },
           "$type": "color",
-          "$value": "#bdbdbd",
+          "$value": "#828282",
           "$description": "Secondary Borders / Muted UI"
         },
         "lighter": {
@@ -1067,6 +1067,15 @@
         },
         "$type": "fontFamily",
         "$value": "Courier New"
+      },
+      "icon-brands": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "fontFamily",
+        "$value": "Font Awesome 6 Brands"
       }
     },
     "easing": {

@@ -106,6 +106,28 @@ if (
   rawData.totalVariables = flatVariables.length;
 }
 
+// ─── Normalize variable names (strip Figma annotations) ────────────
+// Figma uses suffix annotations like ` [base]` to mark canonical-step
+// variables in a scale (e.g. `color/poppy/light [base]` is the base of
+// the poppy scale; siblings are `lighter`, `lightest`, `dark`, `darker`,
+// `darkest`). The bracket-annotation is design-system metadata, not part
+// of the token's identity — and the characters break CSS-variable
+// generation. Strip them here so downstream tooling (tokens-studio.json,
+// Style Dictionary, dist/tokens.css) all use the clean name.
+//
+// The annotation stays in Figma as the source-of-truth marker.
+function sanitizeFigmaName(name) {
+  if (typeof name !== 'string') return name;
+  // Strip ` [anything]` suffix at end of path segments.
+  return name.replace(/ \[[^\]]+\]/g, '');
+}
+
+if (Array.isArray(rawData.variables)) {
+  for (const v of rawData.variables) {
+    v.name = sanitizeFigmaName(v.name);
+  }
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────
 
 function inferTypeFromResolved(resolvedType, varName) {

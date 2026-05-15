@@ -11,6 +11,7 @@ public enum BDSFontFamily {
     public static let fontFamilyIcon = "Font Awesome 6 Pro"
     public static let fontFamilyLogo = "Font Awesome 6 Brands"
     public static let fontFamilySystem = "'Courier New'"
+    public static let fontFamilyIconBrands = "'Font Awesome 6 Brands'"
     public static let logo = Color(red: 0, green: 0, blue: 0)
     public static let icon = Color(red: 0, green: 0, blue: 0)
 }
