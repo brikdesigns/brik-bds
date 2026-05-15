@@ -1,30 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { TimePicker } from './TimePicker';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'flex-start' }}>{children}</div>
-);
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -34,15 +11,48 @@ const meta: Meta<typeof TimePicker> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    label: { control: 'text' },
-    placeholder: { control: 'text' },
-    helperText: { control: 'text' },
-    error: { control: 'text' },
-    fullWidth: { control: 'boolean' },
-    disabled: { control: 'boolean' },
-    minuteStep: { control: 'number' },
-    use24Hour: { control: 'boolean' },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description:
+        'Trigger height — matches the BDS form-input scale (`sm`=32px, `md`=40px, `lg`=48px). Default `md`.',
+    },
+    label: {
+      control: 'text',
+      description:
+        'Optional label rendered above the trigger. Wired to the trigger via `htmlFor` so clicking the label focuses the trigger.',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Trigger placeholder when no time is selected. Default `Select time`.',
+    },
+    helperText: {
+      control: 'text',
+      description: 'Helper text rendered below the trigger when no `error` is set.',
+    },
+    error: {
+      control: 'text',
+      description:
+        'Error message — non-empty value triggers error styling, announces via `role="alert"`, and suppresses `helperText`.',
+    },
+    minuteStep: {
+      control: 'number',
+      description:
+        'Minute increment for the minute column. Use `5` for 5-minute, `15` for quarter-hour, `30` for half-hour blocks. Default `1`.',
+    },
+    use24Hour: {
+      control: 'boolean',
+      description:
+        'Render the picker in 24-hour mode (hours 00–23, no AM/PM column). Default `false` (12-hour with AM/PM).',
+    },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Stretches the trigger to fill its container.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the trigger — non-interactive, muted appearance, popover does not open.',
+    },
   },
 };
 
@@ -50,19 +60,22 @@ export default meta;
 type Story = StoryObj<typeof TimePicker>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — single canonical story per ADR-010 §components without
+   a variant axis. Render wraps TimePicker in `useState` so the canvas
+   is fully interactive (TimePicker is controlled). The play function
+   exercises the Radix Popover portal mount.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
-  parameters: { chromatic: { disableSnapshot: true } },
+/** @summary Themed time picker with Radix Popover scroll columns */
+export const Default: Story = {
   args: {
-    placeholder: 'Select time',
     size: 'md',
-    value: '09:00',
+    placeholder: 'Select time',
+    minuteStep: 1,
+    use24Hour: false,
   },
   render: (args) => {
-    const [value, setValue] = useState(args.value ?? '09:00');
+    const [value, setValue] = useState('09:00');
     return (
       <div style={{ width: 280 }}>
         <TimePicker {...args} value={value} onChange={setValue} />
@@ -81,224 +94,5 @@ export const Playground: Story = {
     const body = within(document.body);
     const dialog = await body.findByRole('dialog', {}, { timeout: 3000 });
     await expect(dialog).toBeVisible();
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. DEFAULT — 12-hour format
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Default rendering */
-export const Default: Story = {
-  render: () => {
-    const [value, setValue] = useState('09:00');
-    return (
-      <div style={{ width: 280 }}>
-        <TimePicker
-          placeholder="Select time"
-          value={value}
-          onChange={setValue}
-        />
-      </div>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. WITH LABEL — Label + helper text
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary With label */
-export const WithLabel: Story = {
-  render: () => {
-    const [value, setValue] = useState('09:00');
-    return (
-      <div style={{ width: 280 }}>
-        <TimePicker
-          label="Start Time"
-          placeholder="Select time"
-          helperText="Appointment will be scheduled at this time"
-          value={value}
-          onChange={setValue}
-          fullWidth
-        />
-      </div>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. WITH ERROR — Error state
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary With error */
-export const WithError: Story = {
-  render: () => {
-    const [value, setValue] = useState('09:00');
-    return (
-      <div style={{ width: 280 }}>
-        <TimePicker
-          label="End Time"
-          placeholder="Select time"
-          error="End time must be after start time"
-          value={value}
-          onChange={setValue}
-          fullWidth
-        />
-      </div>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   5. 24-HOUR FORMAT
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Twenty four hour */
-export const TwentyFourHour: Story = {
-  render: () => {
-    const [value, setValue] = useState('14:30');
-    return (
-      <div style={{ width: 280 }}>
-        <TimePicker
-          label="Time (24h)"
-          value={value}
-          onChange={setValue}
-          use24Hour
-          fullWidth
-        />
-      </div>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   6. MINUTE STEP — 5-minute intervals
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Minute step */
-export const MinuteStep: Story = {
-  render: () => {
-    const [value, setValue] = useState('09:00');
-    return (
-      <div style={{ width: 280 }}>
-        <TimePicker
-          label="Appointment Time"
-          helperText="Available in 5-minute intervals"
-          value={value}
-          onChange={setValue}
-          minuteStep={5}
-          fullWidth
-        />
-      </div>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   7. MINUTE STEP 15 — Quarter-hour intervals
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Quarter hour */
-export const QuarterHour: Story = {
-  render: () => {
-    const [value, setValue] = useState('09:00');
-    return (
-      <div style={{ width: 280 }}>
-        <TimePicker
-          label="Meeting Time"
-          helperText="15-minute blocks"
-          value={value}
-          onChange={setValue}
-          minuteStep={15}
-          fullWidth
-        />
-      </div>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   8. DISABLED
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Disabled state */
-export const Disabled: Story = {
-  render: () => (
-    <div style={{ width: 280 }}>
-      <TimePicker
-        label="Locked Time"
-        value="08:00"
-        disabled
-        fullWidth
-      />
-    </div>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   9. VARIANTS — All sizes and states at a glance
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => {
-    const [sm, setSm] = useState('09:00');
-    const [md, setMd] = useState('14:30');
-    const [lg, setLg] = useState('17:00');
-    const [errVal, setErrVal] = useState('09:00');
-
-    return (
-      <div style={{ width: 480 }}>
-        <Stack>
-          {/* Sizes */}
-          <div>
-            <SectionLabel>Sizes</SectionLabel>
-            <Stack gap="var(--gap-lg)">
-              <TimePicker size="sm" label="Small (sm)" value={sm} onChange={setSm} fullWidth />
-              <TimePicker size="md" label="Medium (md) — default" value={md} onChange={setMd} fullWidth />
-              <TimePicker size="lg" label="Large (lg)" value={lg} onChange={setLg} fullWidth />
-            </Stack>
-          </div>
-
-          {/* States */}
-          <div>
-            <SectionLabel>States</SectionLabel>
-            <Stack gap="var(--gap-lg)">
-              <TimePicker label="Default" value="09:00" onChange={() => {}} fullWidth />
-              <TimePicker label="Helper text" value="09:00" helperText="Pick the best time" onChange={() => {}} fullWidth />
-              <TimePicker label="Error" error="Time is required" value={errVal} onChange={setErrVal} fullWidth />
-              <TimePicker label="Disabled" value="08:00" disabled fullWidth />
-            </Stack>
-          </div>
-
-          {/* Format */}
-          <div>
-            <SectionLabel>Format</SectionLabel>
-            <Row gap="var(--gap-lg)">
-              <div style={{ flex: 1 }}>
-                <TimePicker label="12-hour" value="14:30" onChange={() => {}} fullWidth />
-              </div>
-              <div style={{ flex: 1 }}>
-                <TimePicker label="24-hour" value="14:30" onChange={() => {}} use24Hour fullWidth />
-              </div>
-            </Row>
-          </div>
-
-          {/* Form context — Start/End pair */}
-          <div>
-            <SectionLabel>Form context — Start / End pair</SectionLabel>
-            <Row gap="var(--gap-lg)">
-              <div style={{ flex: 1 }}>
-                <TimePicker size="sm" label="Start Time" value="09:00" onChange={() => {}} fullWidth />
-              </div>
-              <div style={{ flex: 1 }}>
-                <TimePicker size="sm" label="End Time" value="10:00" onChange={() => {}} fullWidth />
-              </div>
-            </Row>
-          </div>
-        </Stack>
-      </div>
-    );
   },
 };
