@@ -82,12 +82,11 @@
       "ghost",
       "inverse",
       "on-color",
-      "danger",
-      "danger-outline",
-      "danger-ghost",
       "destructive",
       "positive",
-      "selected"
+      "danger",
+      "danger-outline",
+      "danger-ghost"
     ],
     "size": [
       "tiny",

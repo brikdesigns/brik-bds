@@ -1,85 +1,55 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
-import { bdsClass } from '../../utils';
-import './Button.css';
+import { Button, type ButtonVariant, type ButtonSize } from './Button';
 
-/** IconButton props — label is required for accessibility */
+/**
+ * IconButton props — label is required for accessibility.
+ *
+ * @deprecated Prefer `<Button icon={...} label="..." />` directly. IconButton
+ * is retained as a thin wrapper around the unified Button API for backward
+ * compatibility and will be removed in a future major version.
+ */
 export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** Visual style variant */
-  variant?: 'primary' | 'outline' | 'secondary' | 'ghost' | 'inverse' | 'danger' | 'danger-outline' | 'danger-ghost' | 'destructive' | 'positive' | 'selected';
+  variant?: ButtonVariant;
   /** Size of the button */
-  size?: 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
-  /** The icon to render (ReactNode — typically `<Icon icon={...} />` from @iconify/react) */
+  size?: ButtonSize;
+  /** The icon to render */
   icon: ReactNode;
   /** Accessible label — required, announced by screen readers */
   label: string;
   /** Loading state — shows spinner and disables interaction */
   loading?: boolean;
+  /** Selected state — modifier on top of variant */
+  selected?: boolean;
 }
 
 /**
- * IconButton — icon-only button with required accessible label
+ * IconButton — icon-only button with required accessible label.
  *
- * Use this for actions represented by an icon alone (close, edit, delete, etc.).
- * The `label` prop is required and maps to `aria-label`.
+ * @deprecated Use `<Button icon={...} label="..." />` directly. The unified
+ * Button API enforces the same `label`-required constraint via a discriminated
+ * union and supports all the same variants/sizes. IconButton currently
+ * delegates to `<Button>` and will be removed in a future major version.
  *
- * @example
- * ```tsx
- * <IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />
- * <IconButton icon={<TrashIcon />} label="Delete item" variant="danger-ghost" />
- * <IconButton icon={<EditIcon />} label="Edit" variant="secondary" size="sm" />
- * ```
+ * @summary Deprecated icon-only button wrapper — delegates to Button
  */
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  (
-    {
-      variant = 'ghost',
-      size = 'md',
-      icon,
-      label,
-      loading = false,
-      className,
-      disabled,
-      style,
-      ...props
-    },
-    ref
-  ) => {
-    const isDisabled = disabled || loading;
-
-    const classes = bdsClass(
-      'bds-button',
-      'bds-icon-button',
-      `bds-button--${variant}`,
-      `bds-icon-button--${size}`,
-      loading && 'bds-button--loading',
-      className
-    );
-
-    return (
-      <button
-        ref={ref}
-        className={classes}
-        style={style}
-        disabled={isDisabled}
-        aria-label={label}
-        aria-busy={loading || undefined}
-        {...props}
-      >
-        <span
-          className={bdsClass('bds-icon-button__icon', loading && 'bds-button__content--hidden')}
-          aria-hidden="true"
-        >
-          {icon}
-        </span>
-        {loading && (
-          <span className="bds-button__spinner" role="status" aria-label="Loading">
-            <span className="bds-button__spinner-icon" />
-          </span>
-        )}
-      </button>
-    );
-  }
-);
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
+  { icon, label, variant, size, loading, selected, ...rest },
+  ref,
+) {
+  return (
+    <Button
+      ref={ref}
+      icon={icon}
+      label={label}
+      variant={variant}
+      size={size}
+      loading={loading}
+      selected={selected}
+      {...rest}
+    />
+  );
+});
 
 IconButton.displayName = 'IconButton';
 

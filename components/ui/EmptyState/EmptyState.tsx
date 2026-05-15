@@ -1,7 +1,10 @@
-import { type HTMLAttributes, type ReactNode } from 'react';
+import {
+  type HTMLAttributes,
+  type MouseEventHandler,
+  type ReactNode,
+} from 'react';
 import { bdsClass } from '../../utils';
 import { Button } from '../Button';
-import type { ButtonProps } from '../Button';
 import './EmptyState.css';
 
 export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -10,7 +13,12 @@ export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 't
   /** Optional description below the title */
   description?: string;
   /** Optional button props — renders a primary Button when provided */
-  buttonProps?: Pick<ButtonProps, 'children' | 'onClick' | 'iconBefore' | 'iconAfter'>;
+  buttonProps?: {
+    children: ReactNode;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
+    iconBefore?: ReactNode;
+    iconAfter?: ReactNode;
+  };
   /** Optional custom content below the text (replaces button) */
   children?: ReactNode;
 }

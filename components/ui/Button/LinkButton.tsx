@@ -1,72 +1,62 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
-import { composeButtonClasses, type ButtonVariant, type ButtonSize } from './Button';
-import './Button.css';
+import { Button, type ButtonVariant, type ButtonSize } from './Button';
 
-/** LinkButton props — href is required */
+/**
+ * LinkButton props — href is required.
+ *
+ * @deprecated Prefer `<Button href="..." />` directly. LinkButton is retained
+ * as a thin wrapper around the unified Button API for backward compatibility
+ * and will be removed in a future major version.
+ */
 export interface LinkButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Visual style variant */
   variant?: ButtonVariant;
   /** Size of the button */
   size?: ButtonSize;
-  /** Full width */
+  /** Stretch to fill container width */
   fullWidth?: boolean;
   /** Link destination (required) */
   href: string;
   /** Button content */
   children: ReactNode;
-  /** Optional icon before text */
+  /** Optional leading icon */
   iconBefore?: ReactNode;
-  /** Optional icon after text */
+  /** Optional trailing icon */
   iconAfter?: ReactNode;
+  /** Selected state — modifier on top of variant */
+  selected?: boolean;
 }
 
 /**
- * LinkButton — a link (`<a>`) styled as a button
+ * LinkButton — a link (`<a>`) styled as a button.
  *
- * Use this instead of Button when the action navigates to a URL.
- * The `href` prop is required — TypeScript enforces this.
+ * @deprecated Use `<Button href="..." />` directly. The unified Button API
+ * renders as `<a>` when `href` is set, and `<button>` otherwise — same DOM
+ * output, single import. LinkButton currently delegates to `<Button>` and
+ * will be removed in a future major version.
  *
- * @example
- * ```tsx
- * <LinkButton href="/docs" variant="outline">Read docs</LinkButton>
- * <LinkButton href="/signup" variant="primary" size="lg">Get started</LinkButton>
- * ```
+ * @summary Deprecated anchor-styled button wrapper — delegates to Button
  */
-export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      fullWidth = false,
-      href,
-      children,
-      iconBefore,
-      iconAfter,
-      className,
-      style,
-      ...props
-    },
-    ref
-  ) => {
-    const classes = composeButtonClasses({ variant, size, fullWidth, className });
-
-    return (
-      <a
-        ref={ref}
-        href={href}
-        className={classes}
-        style={style}
-        {...props}
-      >
-        <span className="bds-button__content">
-          {iconBefore}
-          {children}
-          {iconAfter}
-        </span>
-      </a>
-    );
-  }
-);
+export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(function LinkButton(
+  { href, children, variant, size, fullWidth, iconBefore, iconAfter, selected, ...rest },
+  ref,
+) {
+  return (
+    <Button
+      ref={ref}
+      href={href}
+      variant={variant}
+      size={size}
+      fullWidth={fullWidth}
+      iconBefore={iconBefore}
+      iconAfter={iconAfter}
+      selected={selected}
+      {...rest}
+    >
+      {children}
+    </Button>
+  );
+});
 
 LinkButton.displayName = 'LinkButton';
 

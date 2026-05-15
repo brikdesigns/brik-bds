@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
 import { CaretDown, CaretUp, X, CheckCircle, Circle, WarningCircle } from '../../icons';
 import { bdsClass } from '../../utils';
-import { IconButton } from '../Button/IconButton';
+import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
 import { ProgressBar } from '../ProgressBar';
 import { Spinner } from '../Spinner';
@@ -135,7 +135,7 @@ export function TaskConsole({
           className="bds-task-console__header-actions"
           onClick={(e) => e.stopPropagation()}
         >
-          <IconButton
+          <Button
             variant="ghost"
             size="sm"
             icon={<Icon icon={collapsed ? CaretUp : CaretDown} />}
@@ -143,7 +143,7 @@ export function TaskConsole({
             onClick={toggleCollapse}
           />
           {onDismiss && (
-            <IconButton
+            <Button
               variant="ghost"
               size="sm"
               icon={<Icon icon={X} />}
