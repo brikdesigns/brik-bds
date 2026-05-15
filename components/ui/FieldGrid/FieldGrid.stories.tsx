@@ -3,6 +3,10 @@ import { FieldGrid } from './FieldGrid';
 import { Field } from '../Field';
 import { Card } from '../Card';
 
+/**
+ * FieldGrid — equal-column grid for laying out Fields side by side.
+ * @summary Equal-column grid for laying out Fields side by side
+ */
 const meta: Meta<typeof FieldGrid> = {
   title: 'Displays/Sheet/field-grid',
   component: FieldGrid,
@@ -23,10 +27,8 @@ const Frame = ({ width = '540px', children }: { width?: string; children: React.
   </div>
 );
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
-
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Canonical FieldGrid — flip Controls to change columns + gap */
+export const Default: Story = {
   args: {
     columns: 2,
     gap: 'xl',
@@ -43,38 +45,7 @@ export const Playground: Story = {
   ),
 };
 
-/* ─── 2. Columns ─────────────────────────────────────────────── */
-
-/** @summary Columns */
-export const Columns: Story = {
-  render: () => (
-    <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
-        <FieldGrid columns={2}>
-          <Field label="Owner">Nick Stanerson</Field>
-          <Field label="Status">Active</Field>
-        </FieldGrid>
-
-        <FieldGrid columns={3}>
-          <Field label="Source" layout="inline">birdwelldentist.com</Field>
-          <Field label="Scraped" layout="inline">8</Field>
-          <Field label="Failed" layout="inline">12</Field>
-        </FieldGrid>
-
-        <FieldGrid columns={4}>
-          <Field label="Gold">#c49a2f</Field>
-          <Field label="Gray">#b0b0b0</Field>
-          <Field label="White">#ffffff</Field>
-          <Field label="Black">#000000</Field>
-        </FieldGrid>
-      </div>
-    </Frame>
-  ),
-};
-
-/* ─── 3. Stat tiles — Cards in a FieldGrid ───────────────────── */
-
-/** @summary Stat tiles */
+/** @summary Card-wrapped cells produce the stat-tile pattern */
 export const StatTiles: Story = {
   render: () => (
     <Frame>
@@ -88,24 +59,6 @@ export const StatTiles: Story = {
         <Card variant="outlined">
           <Field label="Failed">12</Field>
         </Card>
-      </FieldGrid>
-    </Frame>
-  ),
-};
-
-/* ─── 4. Patterns — mixed with SheetSection ─────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Frame width="520px">
-      <FieldGrid columns={2}>
-        <Field label="Entity name">Birdwell & Mutlak, LLC</Field>
-        <Field label="Founded">2014</Field>
-        <Field label="Owner">Nick Stanerson</Field>
-        <Field label="Parent" empty="Independent" />
-        <Field label="Primary location">Thompson Station, TN</Field>
-        <Field label="Locations">3</Field>
       </FieldGrid>
     </Frame>
   ),

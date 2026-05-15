@@ -12,27 +12,24 @@ Equal-column grid for laying out `Field` components side by side. Accepts any ch
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-### Columns
+FieldGrid has no semantic-variant axis — all variation (column count, gap size) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-`columns` locks to `2`, `3`, or `4`. No custom column templates — if you need something else, you're composing the wrong primitive.
+<Canvas of={Stories.Default} />
 
-<Canvas of={Stories.Columns} />
-
-### Stat tiles
-
-Wrapping each grid cell in a `<Card variant="outlined">` produces the stat-tile pattern.
-
-<Canvas of={Stories.StatTiles} />
+- **`columns`** — `2` (default), `3`, or `4`. No custom column templates; if you need something else, you're composing the wrong primitive.
+- **`gap`** — `md` / `lg` / `xl` (default). Matches the inter-cell spacing scale used across portal sheets.
 
 ## Patterns
 
-Typical 2-column entity detail grid.
+### Stat tiles
 
-<Canvas of={Stories.Patterns} />
+Wrapping each grid cell in a `<Card variant="outlined">` produces the stat-tile pattern — typical for source/scraped/failed dashboards inside a sheet.
+
+<Canvas of={Stories.StatTiles} />
 
 ## Props
 
