@@ -301,12 +301,14 @@ export const IconButtonShowcase: Story = {
 
 /**
  * Loading state wired up to local state — click to simulate an async
- * action. Spinner replaces text while preserving button width. Render-mode
- * is required because args alone can't express the click-to-toggle interaction.
+ * action. Spinner replaces text while preserving button width. Play-only
+ * regression demo; the canonical loading docs are the Playground `loading`
+ * control.
  *
- * @summary Loading toggle — interactive demo
+ * @summary Loading toggle — play-only interaction demo
  */
 export const LoadingToggle: Story = {
+  tags: ['!manifest'],
   render: () => {
     const [loading, setLoading] = useState(false);
     const handleClick = () => {
@@ -321,61 +323,5 @@ export const LoadingToggle: Story = {
       </Row>
     );
   },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   PATTERNS — real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Confirmation dialog — destructive primary + ghost cancel */
-export const ConfirmationDialog: Story = {
-  render: () => (
-    <div style={{
-      padding: 'var(--padding-lg)',
-      border: 'var(--border-width-sm) solid var(--border-secondary)',
-      borderRadius: 'var(--border-radius-md)',
-      maxWidth: '400px',
-    }}>
-      <div style={{
-        fontFamily: 'var(--font-family-heading)',
-        fontSize: 'var(--heading-sm)',
-        marginBottom: 'var(--gap-sm)',
-      }}>
-        Delete project?
-      </div>
-      <div style={{
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-sm)',
-        color: 'var(--text-secondary)',
-        marginBottom: 'var(--gap-xl)',
-      }}>
-        This action cannot be undone. All data will be permanently removed.
-      </div>
-      <Row>
-        <Button variant="destructive">Delete project</Button>
-        <Button variant="ghost">Cancel</Button>
-      </Row>
-    </div>
-  ),
-};
-
-/** @summary Inline delete — file row with trailing destructive IconButton */
-export const InlineDelete: Story = {
-  render: () => (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: 'var(--padding-md)',
-      border: 'var(--border-width-sm) solid var(--border-secondary)',
-      borderRadius: 'var(--border-radius-md)',
-      maxWidth: '400px',
-    }}>
-      <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)' }}>
-        document-final-v2.pdf
-      </span>
-      <IconButton icon={<Trash />} label="Delete file" variant="destructive" size="sm" />
-    </div>
-  ),
 };
 
