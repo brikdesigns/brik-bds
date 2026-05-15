@@ -37,7 +37,7 @@
             }
           },
           "$type": "color",
-          "$value": "#333333",
+          "$value": "#1b1b1b",
           "$description": "Primary Text on Light Backgrounds"
         },
         "darker": {
@@ -50,7 +50,7 @@
             }
           },
           "$type": "color",
-          "$value": "#4f4f4f",
+          "$value": "#333333",
           "$description": "Secondary Text / Icons"
         },
         "dark": {
@@ -60,7 +60,7 @@
             ]
           },
           "$type": "color",
-          "$value": "#828282",
+          "$value": "#5a5a5a",
           "$description": "Placeholder Text / Tertiary Content"
         },
         "light": {
@@ -73,7 +73,7 @@
             }
           },
           "$type": "color",
-          "$value": "#bdbdbd",
+          "$value": "#828282",
           "$description": "Secondary Borders / Muted UI"
         },
         "lighter": {
@@ -1040,24 +1040,6 @@
         },
         "$type": "text",
         "$value": "Poppins"
-      },
-      "icon": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "text",
-        "$value": "Font Awesome 6 Pro"
-      },
-      "logo": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "text",
-        "$value": "Font Awesome 6 Brands"
       },
       "system": {
         "$extensions": {
@@ -2615,24 +2597,6 @@
         "$type": "dimension",
         "$value": 16
       }
-    },
-    "logo": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "color",
-      "$value": "Font Awesome Brand"
-    },
-    "icon": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "color",
-      "$value": "Font Awesome Solid"
     },
     "web": {
       "$extensions": {
@@ -4235,46 +4199,6 @@
           ]
         }
       }
-    }
-  },
-  "icon/solid": {
-    "logo": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "text",
-      "$value": "Font Awesome Brand"
-    },
-    "icon": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "text",
-      "$value": "Font Awesome Solid"
-    }
-  },
-  "icon/outline": {
-    "logo": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "text",
-      "$value": "Font Awesome Brand"
-    },
-    "icon": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "text",
-      "$value": "Font Awesome Outline"
     }
   },
   "border-radius/sharp": {
@@ -6883,8 +6807,6 @@
       "primitives/value",
       "color/light",
       "color/dark",
-      "icon/solid",
-      "icon/outline",
       "border-radius/sharp",
       "border-radius/soft",
       "border-radius/round",

@@ -36,15 +36,6 @@
             "semantic": true
           }
         }
-      },
-      "icon": {
-        "$value": "\"Font Awesome 6 Pro Solid 900\", Arial, sans-serif",
-        "$type": "fontFamily",
-        "$extensions": {
-          "com.brikdesigns.bds": {
-            "semantic": true
-          }
-        }
       }
     },
     "body": {
