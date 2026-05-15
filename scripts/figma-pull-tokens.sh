@@ -120,8 +120,15 @@ while [[ $ATTEMPT -lt $MAX_RETRIES ]]; do
   ATTEMPT=$((ATTEMPT + 1))
 
   if bun "$PULL_SCRIPT" "$CHANNEL" > "$OUTPUT_FILE" 2>/tmp/figma-pull-err.log; then
-    # Validate output is real JSON with variables
-    VAR_COUNT=$(node -e "const d=require('$OUTPUT_FILE'); console.log(d.totalVariables || d.variables?.length || 0)" 2>/dev/null || echo "0")
+    # Validate output is real JSON with variables. Plugin's `get_variables`
+    # returns variables nested per collection (`collections[].variables[]`),
+    # so count from there as well as the legacy top-level `variables[]`.
+    VAR_COUNT=$(node -e "
+      const d = require('$OUTPUT_FILE');
+      const flat = d.totalVariables || d.variables?.length;
+      const nested = d.collections?.reduce((sum, c) => sum + (c.variables?.length || 0), 0);
+      console.log(flat || nested || 0);
+    " 2>/dev/null || echo "0")
     if [[ "$VAR_COUNT" -gt 0 ]]; then
       ok "Pulled $VAR_COUNT variables → $OUTPUT_FILE"
       break
@@ -150,45 +157,16 @@ while [[ $ATTEMPT -lt $MAX_RETRIES ]]; do
   fi
 done
 
-# ── 5. Transform to sync-figma-mcp format ────────────────────
-# The pull-variables.js output has { variables: [...] } with valuesByMode
-# The sync-figma-mcp.js expects flat { "path/key": "value" } format
-# Transform here.
+# ── 5. Sync to tokens-studio.json + rebuild ───────────────────
+# `sync-figma-mcp.js` natively handles the plugin's nested-collections
+# response shape (with VARIABLE_ALIAS objects and RGBA color values), so
+# pipe the raw pull output directly — no flatten step needed.
 
-log "Transforming to token format..."
-
-FLAT_FILE="/tmp/figma-vars-flat-$(date +%Y%m%d-%H%M%S).json"
-
-node -e "
-const data = require('$OUTPUT_FILE');
-const flat = {};
-
-for (const v of (data.variables || [])) {
-  // Use the variable name path (e.g., 'color/system/green-light')
-  const key = v.name.replace(/\\//g, '/');
-
-  // Use first mode value (usually 'Value' for primitives, 'Light' for semantics)
-  const modes = v.valuesByMode || {};
-  const modeNames = Object.keys(modes);
-  const val = modes[modeNames[0]];
-
-  if (val !== undefined && val !== null) {
-    flat[key] = typeof val === 'object' ? JSON.stringify(val) : String(val);
-  }
-}
-
-require('fs').writeFileSync('$FLAT_FILE', JSON.stringify(flat, null, 2));
-console.log(Object.keys(flat).length + ' tokens flattened');
-" || fail "Transform failed"
-
-ok "Flattened → $FLAT_FILE"
-
-# ── 6. Sync to tokens-studio.json + rebuild ───────────────────
 log "Syncing to tokens-studio.json and rebuilding..."
 
 cd "$BDS_ROOT"
 
-if node "$SYNC_SCRIPT" "$FLAT_FILE" --build 2>&1; then
+if node "$SYNC_SCRIPT" "$OUTPUT_FILE" --build 2>&1; then
   ok "Token sync + build complete"
 else
   warn "Sync completed with warnings (check output above)"

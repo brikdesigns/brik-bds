@@ -111,6 +111,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "dev": "bash scripts/start-figma-relay.sh && npm run storybook",
     "prestorybook": "node scripts/build-health-data.js",
     "storybook": "storybook dev -p 6006",
     "prebuild-storybook": "node scripts/build-health-data.js",
