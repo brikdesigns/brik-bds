@@ -1,0 +1,37 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './DatePicker.stories';
+
+<Meta of={Stories} />
+
+# Date picker
+
+<ComponentLinks slug="date-picker" />
+
+Themed date picker for forms — a trigger button that opens a calendar popover for single-date selection. Built on [Radix Popover](https://www.radix-ui.com/primitives/docs/components/popover) for portal + focus-management behavior; BDS owns the visual layer (trigger styling, day grid, hover / selected / today states). Fully controlled — the consumer manages the `value` externally and receives updates via `onChange`.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+DatePicker has no semantic-variant axis — all variation (size, label, helper text, error, min/max constraints, disabled state) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+
+<Canvas of={Stories.Default} />
+
+- **`sm`** — 32px trigger height, 14px body
+- **`md`** — 40px trigger height, 16px body (default)
+- **`lg`** — 48px trigger height, 18px body
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — DatePicker is fully controlled. Consumers track the selected `Date | null` externally (`useState`, form library, store, URL param) and pass `value` + `onChange` to receive update events. There is no internal value state.
+
+> **Note** — `minDate` / `maxDate` constrain which days are clickable in the grid. The constraint is inclusive at day-granularity (time-of-day on the boundary dates is ignored). Days outside the range render with `disabled` styling and ignore click events.
+
+> **Note** — The error state is announced via `role="alert"` on the helper text and `aria-invalid="true"` on the trigger. Setting `error` to a non-empty string also suppresses `helperText` so the two never co-render.
