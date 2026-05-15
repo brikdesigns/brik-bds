@@ -3,6 +3,10 @@ import { Field } from './Field';
 import { Tag } from '../Tag';
 import { EmptyState } from '../EmptyState';
 
+/**
+ * Field — read-mode label + value pair for Sheet body rows.
+ * @summary Read-mode label + value pair for Sheet body rows
+ */
 const meta: Meta<typeof Field> = {
   title: 'Components/Form/field',
   component: Field,
@@ -10,6 +14,7 @@ const meta: Meta<typeof Field> = {
   parameters: { layout: 'padded' },
   argTypes: {
     label: { control: 'text' },
+    children: { control: 'text' },
     layout: { control: 'select', options: ['stacked', 'inline'] },
     empty: { control: 'text' },
   },
@@ -18,22 +23,14 @@ const meta: Meta<typeof Field> = {
 export default meta;
 type Story = StoryObj<typeof Field>;
 
-/* ─── Story helpers ──────────────────────────────────────────── */
-
 const Frame = ({ width = '360px', children }: { width?: string; children: React.ReactNode }) => (
   <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
     {children}
   </div>
 );
 
-const Stack = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>{children}</div>
-);
-
-/* ─── 1. Playground ──────────────────────────────────────────── */
-
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Canonical Field — flip Controls to explore layout + empty fallbacks */
+export const Default: Story = {
   args: {
     label: 'Status',
     children: 'Active',
@@ -46,58 +43,8 @@ export const Playground: Story = {
   ),
 };
 
-/* ─── 2. Variants ────────────────────────────────────────────── */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Frame>
-      <Stack>
-        <Field label="Status">Active</Field>
-        <Field label="Owner">Nick Stanerson</Field>
-        <Field label="Industry">Design & Engineering</Field>
-        <Field label="Last updated">2 days ago</Field>
-      </Stack>
-    </Frame>
-  ),
-};
-
-/* ─── 3. Inline layout ──────────────────────────────────────── */
-
-/** @summary Inline layout */
-export const InlineLayout: Story = {
-  render: () => (
-    <Frame>
-      <Stack>
-        <Field layout="inline" label="Status">Active</Field>
-        <Field layout="inline" label="Scraped">8</Field>
-        <Field layout="inline" label="Failed">12</Field>
-        <Field layout="inline" label="Last updated">2 days ago</Field>
-      </Stack>
-    </Frame>
-  ),
-};
-
-/* ─── 4. Empty states ────────────────────────────────────────── */
-
-/** @summary Empty states */
-export const EmptyStates: Story = {
-  render: () => (
-    <Frame>
-      <Stack>
-        <Field label="Status">Active</Field>
-        <Field label="Notes" />
-        <Field label="Tags">{null}</Field>
-        <Field label="Custom empty" empty="No owner assigned" />
-      </Stack>
-    </Frame>
-  ),
-};
-
-/* ─── 5. Section-level empty override ────────────────────────── */
-
-/** @summary Section level empty */
-export const SectionLevelEmpty: Story = {
+/** @summary EmptyState composed into the `empty` slot for section-level empties */
+export const WithCompositeEmpty: Story = {
   render: () => (
     <Frame width="480px">
       <Field
@@ -113,13 +60,11 @@ export const SectionLevelEmpty: Story = {
   ),
 };
 
-/* ─── 6. Value types — text, tags, URL, list ────────────────── */
-
-/** @summary Value types */
-export const ValueTypes: Story = {
+/** @summary `children` accepts text, Tag groups, anchors, or bullet lists */
+export const WithRichValue: Story = {
   render: () => (
     <Frame>
-      <Stack>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
         <Field label="Name">Birdwell & Mutlak Dentistry</Field>
 
         <Field label="Services">
@@ -131,8 +76,12 @@ export const ValueTypes: Story = {
         </Field>
 
         <Field label="Website">
-          <a href="https://birdwelldentist.com" target="_blank" rel="noreferrer"
-             style={{ color: 'var(--text-brand-primary)', textDecoration: 'none' }}>
+          <a
+            href="https://birdwelldentist.com"
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: 'var(--text-brand-primary)', textDecoration: 'none' }}
+          >
             birdwelldentist.com ↗
           </a>
         </Field>
@@ -144,24 +93,7 @@ export const ValueTypes: Story = {
             <li>Avoid dental-industry jargon</li>
           </ul>
         </Field>
-      </Stack>
-    </Frame>
-  ),
-};
-
-/* ─── 7. Patterns — multi-field row ─────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Frame width="480px">
-      <Stack>
-        <Field label="Entity name">Birdwell & Mutlak, LLC</Field>
-        <Field label="Owner">Nick Stanerson</Field>
-        <Field label="Practice location">Thompson Station, TN</Field>
-        <Field label="Insurance accepted" />
-        <Field label="Parent organization" empty="Independent" />
-      </Stack>
+      </div>
     </Frame>
   ),
 };

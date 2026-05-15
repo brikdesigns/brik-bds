@@ -8,47 +8,34 @@ import * as Stories from './Field.stories';
 
 <ComponentLinks slug="field" />
 
-Label + value pair for read-mode display inside a Sheet. One API covers text, tags, URLs, bullet lists, and empty states.
+Read-mode label + value pair for Sheet body rows. One API covers text, tags, URLs, bullet lists, and empty states.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Stacked layout — label above value — is the default. Use for sheet body rows where the value needs full width.
+Field has no semantic-variant axis — all variation (label, value content, layout, empty fallback) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
-### Inline layout
-
-Label on the left, value right-aligned. Use for compact stat rows ("Status · Active", "Scraped · 8").
-
-<Canvas of={Stories.InlineLayout} />
-
-### Empty states
-
-When `children` is null, undefined, or empty string, `Field` renders an inline muted "Not set" string by default. Pass `empty="..."` to customize the message per-field.
-
-<Canvas of={Stories.EmptyStates} />
-
-### Section-level empty
-
-When an entire section has no data (vs. one missing field), pass an `<EmptyState>` into `empty`. Use the full bordered treatment sparingly — one per section at most.
-
-<Canvas of={Stories.SectionLevelEmpty} />
-
-### Value types
-
-`children` accepts any ReactNode — text, `<TagGroup>` / `<Tag>` groups, `<a>` links, `<BulletList>`, or compound content.
-
-<Canvas of={Stories.ValueTypes} />
+- **`stacked`** — label above value (default). Full-width value content; use for sheet body rows.
+- **`inline`** — label / value on one row. Use for compact stat rows ("Status · Active", "Scraped · 8").
 
 ## Patterns
 
-Typical sheet-body field stack with mixed filled and empty values.
+### Composite empty
 
-<Canvas of={Stories.Patterns} />
+When an entire section has no data (vs. one missing field), pass an `<EmptyState>` into `empty`. Use the full bordered treatment sparingly — one per section at most.
+
+<Canvas of={Stories.WithCompositeEmpty} />
+
+### Rich value composition
+
+`children` accepts any ReactNode — text, `<Tag>` groups, `<a>` links, bullet lists, or compound content.
+
+<Canvas of={Stories.WithRichValue} />
 
 ## Props
 
