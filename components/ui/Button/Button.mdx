@@ -8,89 +8,58 @@ import * as Stories from './Button.stories';
 
 <ComponentLinks slug="button" />
 
-Triggers an event or action. The button family includes three components for different semantic needs: `Button` for in-page actions, `LinkButton` for URL navigation, `IconButton` for icon-only triggers.
+Triggers an event or action. A single unified component covering four render shapes via discriminated unions:
+
+- **Text button** — `<Button>Save</Button>` (default)
+- **Text link** — `<Button href="/docs">Read docs</Button>` (renders `<a>`)
+- **Icon-only** — `<Button icon={<X/>} label="Close" />` (`label` required)
+- **Icon link** — `<Button icon={<X/>} label="Open" href="/x" />`
+
+`IconButton` and `LinkButton` remain available as `@deprecated` thin wrappers around `Button` for backward compatibility — prefer the unified API in new code.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-`ButtonVariant` ships **12 values** — 9 actively documented + 3 legacy aliases.
+`ButtonVariant` ships **11 values** — 8 actively documented + 3 legacy aliases. Per ADR-010 §components-without-a-variant-axis, Button variants are pure hierarchy/color (no `role` / icon / context semantic differences) — they collapse to a single `variant` Control on the Playground rather than per-variant stories. Mirrors Carbon's Button (single `Default` with `kind` Control).
+
+<Canvas of={Stories.Default} />
 
 - **6 brand variants** — `primary` / `outline` / `secondary` / `ghost` / `inverse` / `on-color`. General action hierarchy.
-- **3 system variants** — `destructive` / `positive` / `selected`. Semantic action meaning.
-- **3 legacy aliases** — `danger` / `danger-outline` / `danger-ghost`. Still supported, but prefer `destructive`. No Storybook story exists for these — see [Legacy aliases](#legacy-aliases) below.
+- **2 system variants** — `destructive` / `positive`. Semantic action meaning.
+- **3 legacy aliases** — `danger` / `danger-outline` / `danger-ghost`. Still supported, but prefer `destructive`. See [Legacy aliases](#legacy-aliases) below.
 
-State props (`disabled`, `loading`, `fullWidth`) and composition slots (`iconBefore`, `iconAfter`) are Controls in the Playground, not standalone stories — per ADR-010 Q2.
+State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slots (`iconBefore`, `iconAfter`) are also Controls in the Playground, not standalone stories — per ADR-010 Q2.
 
-### Primary
-
-<Canvas of={Stories.Primary} />
-
-### Outline
-
-<Canvas of={Stories.Outline} />
-
-### Secondary
-
-<Canvas of={Stories.Secondary} />
-
-### Ghost
-
-<Canvas of={Stories.Ghost} />
-
-### Inverse
-
-<Canvas of={Stories.Inverse} />
-
-### OnColor
-
-<Canvas of={Stories.OnColor} />
-
-### Selected
-
-<Canvas of={Stories.Selected} />
-
-### Destructive
-
-<Canvas of={Stories.Destructive} />
-
-### Positive
-
-<Canvas of={Stories.Positive} />
-
-### Sizes
-
-Side-by-side comparison of the five size tokens — qualifies as the ADR-006 axis-only gallery exception (one variant, size axis varied).
-
-<Canvas of={Stories.Sizes} />
+> **Note** — `selected` was previously a member of `ButtonVariant`; it is now a boolean state prop that layers on top of any variant. See [#615](https://github.com/brikdesigns/brik-bds/issues/615) for context.
 
 ### Legacy aliases
 
-Three values in `ButtonVariant` ship without a dedicated story because they're aliases of `destructive` retained for back-compat:
+Three values in `ButtonVariant` ship without dedicated documentation because they're aliases of `destructive` retained for back-compat:
 
 - `danger` → use `destructive` (identical visual, system-red fill)
 - `danger-outline` → use `destructive` with `outline` if you need lower emphasis; the alias remains for code that hasn't migrated
 - `danger-ghost` → use a ghost button styled as destructive; the alias remains for inline-delete code
 
-New code should pick from the documented 9 above. The aliases are TypeScript-valid but won't render anything different from their canonical sibling.
+New code should pick from the documented 8 above. The aliases are TypeScript-valid but won't render anything different from their canonical sibling.
 
-## Patterns
+## Modes
 
-Multi-component compositions and sibling-component showcases. Each is a Q4 irreducible render-mode story per ADR-010 — args alone can't express the composition or hook-driven state.
+Visual reference for the discriminated-union branches. The Playground exposes `icon` and `href` as Controls — these stories provide static at-a-glance galleries.
 
-### LinkButton
+### IconOnly
 
-An `<a>` element styled as a button. Use when the action navigates to a URL — `href` is required.
+<Canvas of={Stories.IconOnly} />
 
-<Canvas of={Stories.LinkButtonShowcase} />
+Icon-only mode requires `label` (announced by screen readers; the icon span is `aria-hidden`). Uses the same variant + size scale as text mode — only the content shape differs.
 
-### IconButton
+### AsLink
 
-An icon-only button with a required `label` prop for accessibility.
+<Canvas of={Stories.AsLink} />
 
-<Canvas of={Stories.IconButtonShowcase} />
+Setting `href` renders the component as `<a>` instead of `<button>`. Same visual styling, semantically a link.
 
 ## Props
 

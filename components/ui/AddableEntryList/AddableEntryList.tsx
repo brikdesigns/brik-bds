@@ -1,7 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
 import { Icon } from '@iconify/react';
 import { bdsClass } from '../../utils';
-import { Button, IconButton, type ButtonSize } from '../Button';
+import { Button, type ButtonSize } from '../Button';
 import { TextInput, type TextInputSize } from '../TextInput';
 import { TextArea, type TextAreaSize } from '../TextArea';
 import { useSuggestionFilter } from '../shared/useSuggestionFilter';
@@ -284,7 +284,7 @@ export function AddableEntryList({
             >
               <div className="bds-addable-entry-list__row-header">
                 <span className="bds-addable-entry-list__row-index">#{index + 1}</span>
-                <IconButton
+                <Button
                   size={BUTTON_SIZE[size]}
                   variant="ghost"
                   icon={<Icon icon="ph:dash-circle" />}
@@ -503,7 +503,7 @@ function SuggestionModeEdit({
                   </span>
                 ) : null}
               </div>
-              <IconButton
+              <Button
                 size={BUTTON_SIZE[size]}
                 variant="ghost"
                 icon={<Icon icon="ph:dash-circle" />}
