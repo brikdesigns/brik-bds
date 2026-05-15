@@ -106,6 +106,54 @@ if (
   rawData.totalVariables = flatVariables.length;
 }
 
+// ─── Normalize variable names (strip Figma annotations) ────────────
+// Figma uses suffix annotations like ` [base]` to mark canonical-step
+// variables in a scale (e.g. `color/poppy/light [base]` is the base of
+// the poppy scale; siblings are `lighter`, `lightest`, `dark`, `darker`,
+// `darkest`). The bracket-annotation is design-system metadata, not part
+// of the token's identity — and the characters break CSS-variable
+// generation. Strip them here so downstream tooling (tokens-studio.json,
+// Style Dictionary, dist/tokens.css) all use the clean name.
+//
+// The annotation stays in Figma as the source-of-truth marker.
+function sanitizeFigmaName(name) {
+  if (typeof name !== 'string') return name;
+  // Strip ` [anything]` suffix at end of path segments.
+  return name.replace(/ \[[^\]]+\]/g, '');
+}
+
+if (Array.isArray(rawData.variables)) {
+  for (const v of rawData.variables) {
+    v.name = sanitizeFigmaName(v.name);
+  }
+}
+
+// ─── Deny-list: drop Figma variables we do not want in the codebase ──
+// BDS migrated icon rendering to Iconify (SVG-based). Font Awesome glyph
+// fonts are no longer supported. The Brand Kit Figma still defines
+// font-family/icon-* and typography/icon-* variables for legacy reasons;
+// filtering them here keeps the codebase free of FA references without
+// requiring a Figma cleanup pass.
+//
+// Add entries (exact names, post-sanitize) to drop additional tokens.
+const FIGMA_NAME_DENYLIST = new Set([
+  'font-family/icon',
+  'font-family/logo',
+  'font-family/icon-brands',
+  'typography/icon',
+  'typography/logo',
+]);
+
+if (Array.isArray(rawData.variables)) {
+  const beforeCount = rawData.variables.length;
+  rawData.variables = rawData.variables.filter((v) => !FIGMA_NAME_DENYLIST.has(v.name));
+  rawData.totalVariables = rawData.variables.length;
+  const dropped = beforeCount - rawData.variables.length;
+  if (dropped > 0) {
+    console.log(`Deny-list filtered ${dropped} variable(s): ${[...FIGMA_NAME_DENYLIST].join(', ')}`);
+  }
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────
 
 function inferTypeFromResolved(resolvedType, varName) {

@@ -10,22 +10,22 @@
         "$type": "color"
       },
       "darkest": {
-        "$value": "#333333",
+        "$value": "#1b1b1b",
         "$type": "color",
         "$description": "Primary Text on Light Backgrounds"
       },
       "darker": {
-        "$value": "#4f4f4f",
+        "$value": "#333333",
         "$type": "color",
         "$description": "Secondary Text / Icons"
       },
       "dark": {
-        "$value": "#828282",
+        "$value": "#5a5a5a",
         "$type": "color",
         "$description": "Placeholder Text / Tertiary Content"
       },
       "light": {
-        "$value": "#bdbdbd",
+        "$value": "#828282",
         "$type": "color",
         "$description": "Secondary Borders / Muted UI"
       },
@@ -482,14 +482,6 @@
     },
     "subtitle": {
       "$value": "Poppins",
-      "$type": "text"
-    },
-    "icon": {
-      "$value": "Font Awesome 6 Pro",
-      "$type": "text"
-    },
-    "logo": {
-      "$value": "Font Awesome 6 Brands",
       "$type": "text"
     },
     "system": {
@@ -1239,50 +1231,6 @@
       "$type": "dimension"
     }
   },
-  "logo": {
-    "$value": "Font Awesome Brand",
-    "$type": "color"
-  },
-  "icon": {
-    "$value": "Font Awesome Solid",
-    "$type": "color",
-    "logo": {
-      "$value": "Font Awesome Brand",
-      "$type": "text"
-    },
-    "icon": {
-      "$value": "Font Awesome Solid",
-      "$type": "text"
-    },
-    "tiny": {
-      "$value": "{font-size.50}",
-      "$type": "number"
-    },
-    "xs": {
-      "$value": "{font-size.75}",
-      "$type": "number"
-    },
-    "md": {
-      "$value": "{font-size.200}",
-      "$type": "number"
-    },
-    "sm": {
-      "$value": "{font-size.100}",
-      "$type": "number"
-    },
-    "lg": {
-      "$value": "{font-size.300}",
-      "$type": "number"
-    },
-    "xl": {
-      "$value": "{font-size.400}",
-      "$type": "number"
-    },
-    "huge": {
-      "$value": "{font-size.500}",
-      "$type": "number"
-    }
-  },
   "web": {
     "$value": 1200,
     "$type": "color"
@@ -1844,6 +1792,36 @@
     },
     "huge": {
       "$value": "{font-size.900}",
+      "$type": "number"
+    }
+  },
+  "icon": {
+    "tiny": {
+      "$value": "{font-size.50}",
+      "$type": "number"
+    },
+    "xs": {
+      "$value": "{font-size.75}",
+      "$type": "number"
+    },
+    "md": {
+      "$value": "{font-size.200}",
+      "$type": "number"
+    },
+    "sm": {
+      "$value": "{font-size.100}",
+      "$type": "number"
+    },
+    "lg": {
+      "$value": "{font-size.300}",
+      "$type": "number"
+    },
+    "xl": {
+      "$value": "{font-size.400}",
+      "$type": "number"
+    },
+    "huge": {
+      "$value": "{font-size.500}",
       "$type": "number"
     }
   },
