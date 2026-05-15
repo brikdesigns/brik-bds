@@ -12,30 +12,24 @@ Structured form container with layout control, error/success messaging, and cons
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Error state, success state, and horizontal layout.
+Form has no semantic-variant axis — all variation (layout, gap, title, description, error, success) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
-- **`vertical`** — Fields stack vertically (default)
-- **`horizontal`** — Fields side by side for compact forms
-
-Gap sizes:
-
-- **`sm`** — `--gap-md` (8px)
-- **`md`** — `--gap-lg` (16px)
-- **`lg`** — `--gap-xl` (24px)
-
-## Patterns
-
-Real-world usage: interactive feedback form with validation and submission.
-
-<Canvas of={Stories.Patterns} />
+- **`layout`** — `vertical` (default) stacks fields; `horizontal` lays them out inline (use with the search-form pattern below).
+- **`gap`** — `sm` / `md` (default) / `lg`. Controls the vertical rhythm between fields.
+- **`title` / `description`** — optional header pair; the title renders as an `h3`, description as a `p` underneath.
+- **`error` / `success`** — inline form-level messaging announced via `role="alert"` / `role="status"`. Pass at most one.
+- **`footer`** — typically a submit `<Button>`; can hold a button group for submit + cancel.
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Note** — Multi-primitive compositions that *use* Form (feedback forms, search bars, login screens) live in [`Patterns/Forms/`](?path=/docs/patterns-forms-feedback-form--docs), not on this page. Per [#618](https://github.com/brikdesigns/brik-bds/issues/618) and the ADR-010 amendment, primitive story files demonstrate the primitive itself; multi-component compositions live alongside their siblings (ContactForm, LoginForm, SignUpForm, FeedbackForm, SearchForm).
