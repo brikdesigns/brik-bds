@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.stories.tsx, **/content-system/blueprints/**/*.stories.tsx, **/stories/**/*.stories.tsx"
 retrieved-via: brik-rag query "storybook story shape standard"
-last-verified: 2026-05-13
+last-verified: 2026-05-15
 ---
 
 # Storybook story-shape standard (BDS)
@@ -184,34 +184,59 @@ Same tag applies to `InteractionTest…` stories (Q5 from the matrix) so they do
 
 Never combine two prop axes in one story. Write `Sizes` and `Variants` as separate stories — never `SizesAndVariants`. If a story name needs "and" to describe it, split it.
 
-## Sidebar taxonomy — four content top-levels
+## Sidebar taxonomy — preview.tsx is the source of truth
 
-`Foundations` / `Components` / `Patterns` / `Theming`, plus `Overview` (kept separate) and `Deprecated` (sorts last, tagged `!manifest`). `Components/` uses a single alphabetical subcategory layer:
+**Canon-on-paper has drifted from canon-in-fact.** ADR-006 and prior versions of this section described four content top-levels (`Foundations` / `Components` / `Patterns` / `Theming`); the live `.storybook/preview.tsx` `parameters.options.storySort.order` array is the actual sidebar order Storybook renders. Read it before authoring a `title:` — the two disagree today and `preview.tsx` wins.
+
+**Live storySort order** (see [`.storybook/preview.tsx`](../../.storybook/preview.tsx) `storySort.order`):
 
 ```
-Action  Addables  Card  Container  Control  Feedback
-Form  Indicator  List  Navigation  Overlay  Structure
+Overview → Foundation → Theming → Motion → Content System →
+Components → Navigation → Displays → * (catch-all) → Deprecated
 ```
 
-**Before writing `title:` in a story meta, read the sibling stories' titles in the same folder.** The sidebar tree is shared across all of Storybook — introducing a parallel top-level group (`Blueprints/...` instead of `Theming/Blueprints/...`) fragments it.
+Each top-level has an inner subcategory order. The key ones for component authors:
+
+| Top-level | Subcategories (in order) |
+|---|---|
+| `Components/` | `Action`, `Form`, `Input`, `Control`, `Indicator`, `Feedback`, `Structure` |
+| `Navigation/` | `Primary`, `Secondary`, `Stepper` |
+| `Displays/` | `Card`, `Accordion`, `Table`, `Sheet`, `Form`, `Overlay` |
+| `Displays/Sheet/` | `sheet`, `sheet-section`, `sheet-typography`, `field`, `field-grid`, `bullet-list`, `Read-Mode Sheet` |
+| `Displays/Form/` | `form`, `Read-Mode Page` |
+| `Theming/` | `Overview`, `Client Themes`, `Atmospheres`, `Modes`, `Layout Archetypes`, `Blueprints` |
+
+**Components vs Displays — the API-affordance line.** `Components/` holds atomic input primitives (the things a user types into / clicks on — `Button`, `Checkbox`, `TextInput`, `Select`). `Displays/` holds composition primitives that *render* data (the things that wrap, group, or read-mode display — `Card`, `Sheet`, `Field`, `Form` composer, `Table`). When in doubt, ask: "does this primitive accept input, or does it lay out something else?" Input → `Components/`; layout/read-mode → `Displays/`.
+
+**Phantom top-levels — slated for cleanup.** Two prefixes show up in the sidebar today that are *not* in `storySort.order` and fall into the `*` catch-all bucket:
+
+- `Patterns/` — created by [#637](https://github.com/brikdesigns/brik-bds/pull/637) (Patterns/Forms taxonomy). The compositions are correct work; the `Patterns/` top-level itself was added without amending `storySort.order` and reads as a phantom group. Cleanup is part of the planned top-level rationalization (post-#618 component cleanup).
+- `Dev Tools/` — used by some dashboard / interactive tooling stories. Same shape — phantom group, scheduled for cleanup.
+
+**Do not freelance a new top-level.** If your work needs one, surface the gap — adding a top-level requires updating `storySort.order` in `preview.tsx` and amending [ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md), not just a `title:` string.
 
 Canonical prefixes:
 
-| Folder | Title prefix |
+| Folder / file | Title prefix |
 |---|---|
-| `components/ui/<Component>` | `Components/<Group>/<component>` (e.g. `Components/Action/button`) |
+| `components/ui/<Component>` (input primitive) | `Components/<Subcategory>/<component>` (e.g. `Components/Action/button`) |
+| `components/ui/<Component>` (display / composer / read-mode) | `Displays/<Subcategory>/<component>` (e.g. `Displays/Sheet/field`, `Displays/Form/form`) |
 | `content-system/blueprints/react/<Blueprint>` | `Theming/Blueprints/<blueprint_key>` |
+| `stories/patterns/forms/<Pattern>` | `Patterns/Forms/<Pattern>` (phantom top-level — see note above) |
 | Storybook recipes / docs | `Recipes/<Topic>` |
 
 ```tsx
-/* Right — matches existing sidebar tree */
+/* Right — matches existing sidebar tree + preview.tsx storySort */
+title: 'Displays/Sheet/field'
+title: 'Components/Action/button'
 title: 'Theming/Blueprints/hero_split_image_card_overlay'
 
-/* Wrong — creates a parallel "Blueprints" top-level group */
+/* Wrong — creates a parallel top-level group not in storySort.order */
 title: 'Blueprints/hero_split_image_card_overlay'
+title: 'Form/field'
 ```
 
-Full member list per subcategory lives in [ADR-006 Part A](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md). Query brik-rag (`storybook sidebar taxonomy`) or open the ADR.
+**Before writing `title:` in a story meta, read the sibling stories' titles in the same folder** AND verify the prefix appears in `.storybook/preview.tsx` `storySort.order`. The lint catches missing `<Canvas>` references but does not yet catch off-tree title prefixes.
 
 ## Args composition — blueprints + page stories
 
