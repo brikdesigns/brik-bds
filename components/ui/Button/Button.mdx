@@ -23,51 +23,21 @@ Triggers an event or action. A single unified component covering four render sha
 
 ## Variants
 
-`ButtonVariant` ships **11 values** — 8 actively documented + 3 legacy aliases.
+`ButtonVariant` ships **11 values** — 8 actively documented + 3 legacy aliases. Per ADR-010 §components-without-a-variant-axis, Button variants are pure hierarchy/color (no `role` / icon / context semantic differences) — they collapse to a single `variant` Control on the Playground rather than per-variant stories. Mirrors Carbon's Button (single `Default` with `kind` Control).
+
+<Canvas of={Stories.Default} />
 
 - **6 brand variants** — `primary` / `outline` / `secondary` / `ghost` / `inverse` / `on-color`. General action hierarchy.
 - **2 system variants** — `destructive` / `positive`. Semantic action meaning.
 - **3 legacy aliases** — `danger` / `danger-outline` / `danger-ghost`. Still supported, but prefer `destructive`. See [Legacy aliases](#legacy-aliases) below.
 
-State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slots (`iconBefore`, `iconAfter`) are Controls in the Playground, not standalone stories — per ADR-010 Q2.
+State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slots (`iconBefore`, `iconAfter`) are also Controls in the Playground, not standalone stories — per ADR-010 Q2.
 
 > **Note** — `selected` was previously a member of `ButtonVariant`; it is now a boolean state prop that layers on top of any variant. See [#615](https://github.com/brikdesigns/brik-bds/issues/615) for context.
 
-### Primary
-
-<Canvas of={Stories.Primary} />
-
-### Outline
-
-<Canvas of={Stories.Outline} />
-
-### Secondary
-
-<Canvas of={Stories.Secondary} />
-
-### Ghost
-
-<Canvas of={Stories.Ghost} />
-
-### Inverse
-
-<Canvas of={Stories.Inverse} />
-
-### OnColor
-
-<Canvas of={Stories.OnColor} />
-
-### Destructive
-
-<Canvas of={Stories.Destructive} />
-
-### Positive
-
-<Canvas of={Stories.Positive} />
-
 ### Legacy aliases
 
-Three values in `ButtonVariant` ship without a dedicated story because they're aliases of `destructive` retained for back-compat:
+Three values in `ButtonVariant` ship without dedicated documentation because they're aliases of `destructive` retained for back-compat:
 
 - `danger` → use `destructive` (identical visual, system-red fill)
 - `danger-outline` → use `destructive` with `outline` if you need lower emphasis; the alias remains for code that hasn't migrated

@@ -131,30 +131,6 @@ const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNod
   <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
 );
 
-const InverseSurface = ({ children }: { children: React.ReactNode }) => (
-  <div
-    style={{
-      background: 'var(--surface-inverse)',
-      padding: 'var(--padding-md)',
-      borderRadius: 'var(--border-radius-md)',
-    }}
-  >
-    {children}
-  </div>
-);
-
-const BrandSurface = ({ children }: { children: React.ReactNode }) => (
-  <div
-    style={{
-      background: 'var(--surface-brand-primary)',
-      padding: 'var(--padding-md)',
-      borderRadius: 'var(--border-radius-md)',
-    }}
-  >
-    {children}
-  </div>
-);
-
 /* ═══════════════════════════════════════════════════════════════
    DEFAULT — single canonical story per ADR-010 Q5. Args-driven
    interactive Button, all props exposed as Controls (incl. icon /
@@ -181,69 +157,11 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   VARIANTS — brand hierarchy
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Primary — highest emphasis brand action */
-export const Primary: Story = {
-  args: { variant: 'primary', size: 'md', children: 'Get started' },
-};
-
-/** @summary Outline — secondary emphasis with brand-color outline */
-export const Outline: Story = {
-  args: { variant: 'outline', size: 'md', children: 'Learn more' },
-};
-
-/** @summary Secondary — neutral emphasis on secondary surface */
-export const Secondary: Story = {
-  args: { variant: 'secondary', size: 'md', children: 'Save draft' },
-};
-
-/** @summary Ghost — lowest emphasis, no surface, no border */
-export const Ghost: Story = {
-  args: { variant: 'ghost', size: 'md', children: 'Cancel' },
-};
-
-/** @summary Inverse — designed for use on inverse / dark surfaces */
-export const Inverse: Story = {
-  args: { variant: 'inverse', size: 'md', children: 'Continue' },
-  decorators: [
-    (StoryFn) => (
-      <InverseSurface>
-        <StoryFn />
-      </InverseSurface>
-    ),
-  ],
-};
-
-/** @summary OnColor — designed for use on brand-primary surfaces */
-export const OnColor: Story = {
-  args: { variant: 'on-color', size: 'md', children: 'Sign up' },
-  decorators: [
-    (StoryFn) => (
-      <BrandSurface>
-        <StoryFn />
-      </BrandSurface>
-    ),
-  ],
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   VARIANTS — system / semantic actions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Destructive — irreversible actions like delete or discard */
-export const Destructive: Story = {
-  args: { variant: 'destructive', size: 'md', children: 'Delete project' },
-};
-
-/** @summary Positive — confirmation of a beneficial action */
-export const Positive: Story = {
-  args: { variant: 'positive', size: 'md', children: 'Approve' },
-};
-
-/* ═══════════════════════════════════════════════════════════════
    MODES — discriminated-union showcase stories (Q4 irreducible)
+   Per ADR-010 framework: variant is a Control, not separate stories.
+   Button variants are pure hierarchy/color — no semantic role / icon /
+   context differences — so the Q-tree collapses to Controls. Mirrors
+   Carbon's Button (single `Default` with `kind` Control).
    ═══════════════════════════════════════════════════════════════ */
 
 /**
