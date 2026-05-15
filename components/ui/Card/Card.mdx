@@ -10,6 +10,8 @@ import * as Stories from './Card.stories';
 
 Flexible content container. A single primitive serves four shapes via the `preset` discriminator: a default flexible content slot (no `preset`), and three locked-down layouts — `control`, `summary`, and `display` — that subsume the legacy `CardControl` and `CardSummary` components (per ADR-004).
 
+> **Note** — Multi-card compositions (service grids, feature grids, blog rolls) live in the [`Card Grid`](?path=/docs/theming-blueprints-card-grid--docs) blueprint, not on this page. This page documents the Card primitive itself.
+
 ## Playground
 
 <Canvas of={Stories.Default} />
@@ -35,12 +37,6 @@ The `preset` prop selects the shape. Default (no `preset`) gives a flexible `chi
 `preset="display"` — generic content-grid card for `bds-card-grid`. All affordances (`image`, `tag`, `badge`, `action`, `href`) are optional slots so one primitive serves any content type — service, blog post, customer story, property listing, team bio.
 
 <Canvas of={Stories.Display} />
-
-## Patterns
-
-Real-world compositions: 3-up service grid and feature card with action.
-
-<Canvas of={Stories.Patterns} />
 
 ## Props
 
