@@ -1,0 +1,41 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './TimePicker.stories';
+
+<Meta of={Stories} />
+
+# Time picker
+
+<ComponentLinks slug="time-picker" />
+
+Themed time picker for forms — a trigger button that opens a popover with hour / minute / period scroll columns. Built on [Radix Popover](https://www.radix-ui.com/primitives/docs/components/popover) for portal + focus-management behavior; BDS owns the visual layer (trigger styling, scroll columns, selected-cell state). Fully controlled — the consumer manages the `value` externally and receives updates via `onChange`.
+
+Values are exchanged in **24-hour `HH:mm` format** (e.g. `"14:30"`) regardless of whether the picker displays 12-hour or 24-hour. The `use24Hour` prop only changes the display + column rendering.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+TimePicker has no semantic-variant axis — all variation (size, label, helper text, error, minute step, 12h/24h, disabled state) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+
+<Canvas of={Stories.Default} />
+
+- **`sm`** — 32px trigger height, 14px body
+- **`md`** — 40px trigger height, 16px body (default)
+- **`lg`** — 48px trigger height, 18px body
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — TimePicker is fully controlled. Consumers track the selected time string externally (`useState`, form library, store, URL param) and pass `value` + `onChange` to receive update events. There is no internal value state.
+
+> **Note** — `value` and `onChange` always use 24-hour `HH:mm` format. The `use24Hour` prop controls display only; storing the value as 24h means the underlying data shape stays consistent whether the user has 12h or 24h preference.
+
+> **Note** — `minuteStep` constrains the minute column to multiples of the given value. Common choices: `5` for 5-minute intervals, `15` for quarter-hour blocks, `30` for half-hour appointments. The default `1` allows every minute.
+
+> **Note** — The error state is announced via `role="alert"` on the helper text and `aria-invalid="true"` on the trigger. Setting `error` to a non-empty string also suppresses `helperText` so the two never co-render.
