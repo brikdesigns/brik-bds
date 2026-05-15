@@ -65,6 +65,47 @@ if (!inputFile) {
 const rawData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
 const tokensStudio = JSON.parse(fs.readFileSync(TOKENS_FILE, 'utf8'));
 
+// ─── Normalize: handle the current plugin output shape ─────────────
+// The Claude-Talk-to-Figma plugin's `get_variables` returns variables nested
+// per-collection (`collections[].variables[]`) and uses modeId-keyed values.
+// Older versions of this script expected a flat top-level `variables[]` with
+// each variable carrying its `collection` name and modeName-keyed values.
+// Normalize the nested shape to the flat shape so the downstream patch
+// routine doesn't have to know which version produced the dump.
+if (
+  !Array.isArray(rawData.variables) &&
+  Array.isArray(rawData.collections) &&
+  rawData.collections.some((c) => Array.isArray(c.variables))
+) {
+  const flatVariables = [];
+  for (const col of rawData.collections) {
+    if (!Array.isArray(col.variables)) continue;
+    // Build a modeId → modeName lookup once per collection so we can rekey
+    // each variable's valuesByMode to the human-readable mode name (which is
+    // what tokens-studio.json sets are keyed by, e.g. `color/light`).
+    const modeIdToName = new Map((col.modes || []).map((m) => [m.modeId, m.name]));
+    for (const v of col.variables) {
+      const valuesByModeName = {};
+      for (const [modeId, modeValue] of Object.entries(v.valuesByMode || {})) {
+        const modeName = modeIdToName.get(modeId) || modeId;
+        valuesByModeName[modeName] = modeValue;
+      }
+      flatVariables.push({
+        id: v.id,
+        name: v.name,
+        resolvedType: v.resolvedType,
+        collection: col.name,
+        valuesByMode: valuesByModeName,
+        description: v.description || '',
+        scopes: v.scopes || [],
+      });
+    }
+  }
+  rawData.variables = flatVariables;
+  rawData.totalCollections = rawData.collections.length;
+  rawData.totalVariables = flatVariables.length;
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────
 
 function inferTypeFromResolved(resolvedType, varName) {
@@ -112,18 +153,51 @@ function toTokenRef(varName) {
   return `{${varName.replace(/\//g, '.')}}`;
 }
 
+// Convert Figma's normalized RGBA (0-1 floats) into a CSS hex string.
+// Alpha is included only when < 1 (8-char hex); fully opaque colors stay 6-char.
+function rgbaToHex({ r, g, b, a }) {
+  const to255 = (x) => Math.round(Math.max(0, Math.min(1, x)) * 255);
+  const hex = [to255(r), to255(g), to255(b)]
+    .map((n) => n.toString(16).padStart(2, '0'))
+    .join('');
+  if (typeof a === 'number' && a < 1) {
+    return '#' + hex + to255(a).toString(16).padStart(2, '0');
+  }
+  return '#' + hex;
+}
+
 // Resolve a single mode value into its tokens-studio.json $value.
 //   - Direct primitive (string | number) → as-is.
-//   - Alias object { alias: "VariableID:..." } → "{a.b.c}".
+//   - RGBA color object { r, g, b, a } → hex string (#rrggbb or #rrggbbaa).
+//   - Alias object → "{a.b.c}". Two shapes accepted, in this order:
+//       (a) Current plugin: { type: 'VARIABLE_ALIAS', id: 'VariableID:...' }
+//       (b) Legacy:         { alias: 'VariableID:...' }
 //   - Anything else → null (caller decides to skip).
 function resolveValue(modeValue, idToName) {
   if (typeof modeValue === 'string' || typeof modeValue === 'number') {
     return modeValue;
   }
-  if (modeValue && typeof modeValue === 'object' && typeof modeValue.alias === 'string') {
-    const targetName = idToName.get(modeValue.alias);
-    if (!targetName) return null; // dangling alias
-    return toTokenRef(targetName);
+  if (modeValue && typeof modeValue === 'object') {
+    // Alias — current plugin shape ({ type, id }) takes precedence
+    if (modeValue.type === 'VARIABLE_ALIAS' && typeof modeValue.id === 'string') {
+      const targetName = idToName.get(modeValue.id);
+      if (!targetName) return null; // dangling alias
+      return toTokenRef(targetName);
+    }
+    // Alias — legacy shape ({ alias: 'VariableID:...' })
+    if (typeof modeValue.alias === 'string') {
+      const targetName = idToName.get(modeValue.alias);
+      if (!targetName) return null;
+      return toTokenRef(targetName);
+    }
+    // RGBA color from Figma Variables API
+    if (
+      typeof modeValue.r === 'number' &&
+      typeof modeValue.g === 'number' &&
+      typeof modeValue.b === 'number'
+    ) {
+      return rgbaToHex(modeValue);
+    }
   }
   return null;
 }
