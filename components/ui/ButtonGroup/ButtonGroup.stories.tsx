@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ButtonGroup } from './ButtonGroup';
-import { Button, IconButton } from '../Button';
+import { Button } from '../Button';
 
 /* ─── Story-only icons ────────────────────────────────────────── */
 
@@ -101,10 +101,10 @@ export const IconButtonGroup: Story = {
   },
   render: (args) => (
     <ButtonGroup {...args}>
-      <IconButton icon={<Edit />} label="Edit" variant="ghost" />
-      <IconButton icon={<Copy />} label="Copy" variant="ghost" />
-      <IconButton icon={<Share />} label="Share" variant="ghost" />
-      <IconButton icon={<Trash />} label="Delete" variant="destructive" />
+      <Button icon={<Edit />} label="Edit" variant="ghost" />
+      <Button icon={<Copy />} label="Copy" variant="ghost" />
+      <Button icon={<Share />} label="Share" variant="ghost" />
+      <Button icon={<Trash />} label="Delete" variant="destructive" />
     </ButtonGroup>
   ),
 };

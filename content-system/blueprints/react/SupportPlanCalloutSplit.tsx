@@ -33,8 +33,8 @@
  * @summary Section header + illustration + plan-callout card split.
  */
 import {
+  Button,
   Card,
-  LinkButton,
   MarketingIllustration,
   Stack,
   type IllustrationTile,
@@ -112,14 +112,14 @@ export function SupportPlanCalloutSplit({ section }: Props) {
                   </p>
                 )}
                 {cta && (
-                  <LinkButton
+                  <Button
                     href={cta.url}
                     variant="primary"
                     size="md"
                     className="bp-support-plan-callout__cta"
                   >
                     {cta.label}
-                  </LinkButton>
+                  </Button>
                 )}
               </Stack>
             </Card>
