@@ -381,6 +381,8 @@ const preview: Preview = {
             'Overlay',
             '*',
           ],
+          'Tools',
+          ['brik-dev-bar', 'dev-feedback-widget', 'widgets', '*'],
           '*',
           'Deprecated',
         ],
