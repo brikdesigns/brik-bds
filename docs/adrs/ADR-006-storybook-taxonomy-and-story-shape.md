@@ -1,6 +1,6 @@
 # ADR-006 — Storybook Taxonomy + Story Shape
 
-**Status:** Accepted (2026-04-26)
+**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments)
 **Date:** 2026-04-26
 **Supersedes:** —
 **Superseded by:** —
@@ -14,7 +14,7 @@ Two parallel cleanups landed on the same set of files at the same time:
 1. **Taxonomy migration (Phase 1, merged):** PRs [#257](https://github.com/brikdesigns/brik-bds/pull/257), [#258](https://github.com/brikdesigns/brik-bds/pull/258), [#259](https://github.com/brikdesigns/brik-bds/pull/259) moved Form / Field / FieldGrid / Addable* under `Components/Form/*` and `Components/Addables/*`. The current Storybook sidebar mixes three top-level buckets — `Components/` (most primitives), `Displays/` (Card, Sheet, Modal, Table, Calendar, Accordion, Timeline, etc.), `Foundations/` (Avatar, Icons), plus `Theming/` and `Overview/` from the `stories/` dir.
 2. **Story-shape audit (this ADR):** A 2026-04-26 review of `Banner.stories.tsx` and `EmptyState.stories.tsx` surfaced a copy-pasted file shape that defeats Storybook's primitives:
 
-   ```
+   ```text
    Playground       — args + controls
    Variants         — render() stacking 3-5 examples
    Tones            — render() stacking the tone axis
@@ -31,39 +31,32 @@ Two parallel rules. Story files must satisfy both at merge time.
 
 ### Part A — Taxonomy: where stories live in the sidebar
 
-The Storybook sidebar collapses to **four content top-levels** (`Foundations`, `Components`, `Patterns`, `Theming`) plus `Overview` (kept separate) and `Deprecated` (sorts last). `Components/` uses a single, alphabetical subcategory layer:
+> **Amended 2026-05-16.** The subcategory layer inside `Components/` is abolished and replaced by six flat top-level buckets defined by composition role. See the 2026-05-16 amendment entry and [#629](https://github.com/brikdesigns/brik-bds/issues/629). The `preview.tsx` `storySort.order` is updated in the rename sweep PRs (gated on #618 wrap), not in this amendment.
 
-| `Components/` subcategory | Members |
-| --- | --- |
-| **Action** | button, button-group, filter-bar, filter-button, filter-toggle, text-link |
-| **Addables** | addable-combo-list, addable-entry-list, addable-field-row-list, addable-text-list, catalog-picker |
-| **Card** | card, card-control, card-list, card-testimonial, collapsible-card, pricing-card |
-| **Container** | accordion, board, calendar, data-section, sheet, sheet-section, table |
-| **Control** | file-uploader, pagination, segmented-control, slider, stepper, switch |
-| **Feedback** | banner, empty-state, progress-bar, task-console, toast, tooltip |
-| **Form** | address-input, checkbox, completion-toggle, date-picker, field, field-grid, form, multi-select, password-input, radio, select, text-area, text-input, time-picker |
-| **Indicator** | badge, badge-group, chip, counter, dot, meter, service-tag, skeleton, spinner, tag, tag-group |
-| **List** | activity-timeline, bullet-list, checklist, interactive-list-item, notification-list |
-| **Navigation** | breadcrumb, footer, menu, nav-bar, page-header, progress-stepper, sidebar-navigation, tab-bar |
-| **Overlay** | modal, popover |
-| **Structure** | divider |
+The Storybook sidebar uses **six flat component top-levels** plus the unchanged structural ones. No subcategory layer inside any bucket.
 
-**Other top-levels:**
+| Bucket | Role | Members |
+| --- | --- | --- |
+| **`Components/`** | Single atomic primitive | button, button-group, filter-button, filter-toggle, filter-bar, text-link, address-input, password-input, text-input, text-area, select, multi-select, checkbox, radio, completion-toggle, switch, segmented-control, stepper, file-uploader, pagination, badge, badge-group, chip, tag, tag-group, dot, counter, spinner, progress-bar, progress-circle, avatar, banner, empty-state, toast, tooltip, icons, marketing-illustration, divider, meter, service-tag, skeleton, modal, popover |
+| **`Containers/`** | Styled holder composing blocks into a bounded unit (own border/padding/elevation/radius) | card, collapsible-card, pricing-card, card-summary, card-testimonial, card-list, form, accordion, sheet, sheet-section, table, menu, notification-list, data-section, activity-timeline, calendar, task-console, board, addable-combo-list, addable-entry-list, addable-field-row-list, addable-text-list, catalog-picker |
+| **`Blocks/`** | Fixed slot shape filled with atoms — used standalone and inside Containers | field, field-grid, date-picker, time-picker, bullet-list, checklist, interactive-list-item |
+| **`Layouts/`** | Pure composition primitive — arrangement only, no styling beyond structure | stack, cluster, grid, frame, row, split |
+| **`Sections/`** | Full-page composed region | nav-bar, footer, sidebar-navigation, breadcrumb, progress-stepper, page-header, tab-bar |
+| **`Tools/`** | Dev/internal utilities | brik-dev-bar, dev-feedback-widget |
 
-- **`Foundations/`** — design tokens, color, typography, icons, avatars (`Foundations/Assets/*`).
-- **`Patterns/`** — composite recipes that use multiple components together. Forward-looking; populated as recipes are documented. Sub-bucket `Patterns/Pages/*` reserved for full-page `ship-*` blueprints.
+**Unchanged top-levels:**
+
+- **`Foundation/`** — design tokens, color, typography, icons, avatars.
+- **`Patterns/`** — composite recipes that use multiple components together. Sub-bucket `Patterns/Forms/*` for form compositions; `Patterns/Pages/*` reserved for full-page blueprints.
 - **`Theming/`** — theme switcher, atmosphere layers, navigation archetypes.
-- **`Overview/`** — design-system metadata: Welcome, Health Dashboard, Token Coverage, Contrast Compliance. Kept separate (not folded into Foundations).
-- **`Deprecated/`** — components or component-states retained only for migration reference. Sorted last via `storySort` config. Tagged `['!manifest']` so MCP discovery skips them.
+- **`Overview/`** — design-system metadata: Welcome, Health Dashboard, Token Coverage, Contrast Compliance.
+- **`Deprecated/`** — retained only for migration reference. Sorted last. Tagged `['!manifest']` so MCP discovery skips them.
 
-**Removed from the sidebar:**
+**Eliminated groups (as of the rename sweeps):**
 
-- **`Displays/`** — dropped. Card, Sheet, Modal, Popover, Table, Calendar, Accordion, Board, Timeline, Charts (Meter), Notifications, Data — all relocated to subcategories under `Components/`. The `Displays`/`Components` split implied a behavioral category that didn't exist.
-- **`Components/Input/`** — folded into `Components/Form/`. The two-component bucket (AddressInput, PasswordInput) didn't justify its own subcategory.
-- **`Navigation/Primary`, `Navigation/Secondary`, `Navigation/Stepper`, `Navigation/Menu`** — collapsed into a flat `Components/Navigation/*`. The sub-buckets weren't load-bearing.
-- **`ship-*` blueprints** — when introduced, they go under `Patterns/Pages/<name>`, not `Components/`.
-
-**SheetTypography exception:** stays at `Displays/Sheet/sheet-typography` until [ADR-004](./ADR-004-component-bloat-guardrails.md) §1 lands the Field-tier consolidation. That work touches portal sheets, not just BDS, so this audit deliberately skipped it.
+- **`Components/<subcategory>/`** — the subcategory layer (`Action`, `Form`, `Input`, `Control`, etc.) is removed; atoms go directly to `Components/<component>`.
+- **`Navigation/`** — `nav-bar`, `footer`, `sidebar-navigation`, `breadcrumb`, `progress-stepper` → `Sections/`.
+- **`Displays/`** — bounded holders → `Containers/`; slot-shaped blocks → `Blocks/`; remaining atoms → `Components/`.
 
 ### Part B — Story shape: what's inside the file
 
@@ -95,12 +88,13 @@ Decision: ADR-007 wins on file content because it's already merged and lint-enfo
 
 ### Forward rule
 
-**New component story files** — written after this ADR is accepted — use the new taxonomy + two-shape model from day one:
+**New component story files** — written after this ADR is accepted — use the amended taxonomy + two-shape model from day one:
 
-- Title goes under `Components/<subcategory>/*` per the table in Part A.
+- Title goes under `<Bucket>/<component>` using the flat bucket table in Part A (e.g. `Components/button`, `Containers/card`, `Blocks/field`).
+- No subcategory layer (`Components/Action/button` is the old style — superseded).
 - File contains `Playground` (args + controls) plus one args-driven story per meaningful state.
 - No `Variants` / `Tones` / `Patterns` gallery buckets.
-- Deprecated components move to `Deprecated/<subcategory>/*` with `tags: ['!manifest']`.
+- Deprecated components move to `Deprecated/<component>` with `tags: ['!manifest']`.
 - Axis-only galleries (`Sizes`, `Placements`) only when the narrow exception applies.
 
 ### Existing files
@@ -172,4 +166,26 @@ The Components table in Part A is amended:
 - **`interactive-list-item`** added to `List` (was `InteractiveListItem` under the now-removed `Components/Display/*` bucket). No rename; only the Storybook title moves.
 - **`completion-toggle`** added to `Form` (was missing from the original table). Stays in `Form` as the atomic primitive paired with `checklist` as the labeled-row composition, mirroring the `Checkbox` / `Radio` pattern of atomic primitives staying in `Form`.
 
-These are table top-ups, not structural changes — no new subcategories, just member reassignment. Lands alongside the Storybook title moves in [PR #_TBD_](https://github.com/brikdesigns/brik-bds/pulls).
+These are table top-ups, not structural changes — no new subcategories, just member reassignment. Lands alongside the Storybook title moves in a follow-on PR.
+
+### 2026-05-16 — Part A: 6-bucket flat taxonomy (#629)
+
+The `Components/<subcategory>/` layer, `Navigation/`, and `Displays/` top-levels are abolished. All component stories move to one of six flat top-level buckets defined by composition role.
+
+**Decision driver:** subcategories under `Components/` (Action, Form, Indicator, Navigation, etc.) added depth without clarity — the split was inherited, not designed. `Displays/` vs `Components/` implied a behavioral category that wasn't real. Carbon, Material, and Chakra all use flat-ish top-level taxonomies for the same reason.
+
+**Open member questions resolved (2026-05-15 mapping session):**
+
+| Question | Resolution | Reasoning |
+| --- | --- | --- |
+| `Form` — Container or Component? | **Container** | Styled holder composing Field blocks — own border/padding/elevation |
+| `Field` / `FieldGrid` — Block or Container? | **Block** | Fixed slot shape filled with atoms |
+| `Addable*` family — Container or Block? | **Container** | Own border + padding + elevation around a composed list |
+| `FilterBar` — Block or Container? | **Component** (sub-judgment) | Composed row, no own bounded surface today |
+| `ButtonGroup` — Block or Container? | **Component** | Compound primitive, not a slot-shape Block |
+| `NavBar`, `Footer`, `SidebarNavigation` — Section or Component? | **Section** | Page-level composed regions with surrounding structure |
+| Sub-categories within top-levels | **Flat** | Reduces clicks; defer sub-folders unless a bucket exceeds ~30 items |
+| `Theming/` (Blueprints) | **Parallel top-level** — unchanged | Foundation work, not component |
+| `Foundations/` | **Unchanged** | Same reasoning |
+
+**`preview.tsx` update:** `storySort.order` is updated in the rename sweep PRs (one per bucket, tracked in [#629](https://github.com/brikdesigns/brik-bds/issues/629)) after [#618](https://github.com/brikdesigns/brik-bds/issues/618) wraps. Existing `meta.title:` strings keep their current values during the migration window; new stories use the flat bucket path from this date forward.
