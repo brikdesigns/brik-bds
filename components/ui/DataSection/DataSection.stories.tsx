@@ -7,7 +7,7 @@ import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
 
 const meta: Meta<typeof DataSection> = {
-  title: 'Displays/Data/data-section',
+  title: 'Containers/data-section',
   component: DataSection,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },

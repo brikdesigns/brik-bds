@@ -6,7 +6,7 @@ import { TextInput } from '../TextInput';
 import { Field } from '../Field';
 
 const meta: Meta<typeof Sheet> = {
-  title: 'Displays/Sheet/sheet',
+  title: 'Containers/sheet',
   component: Sheet,
   tags: ['surface-product'],
   parameters: { layout: 'centered' },

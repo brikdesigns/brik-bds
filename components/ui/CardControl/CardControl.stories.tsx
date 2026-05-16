@@ -7,7 +7,7 @@ import { Switch } from '../Switch';
 import { Button } from '../Button';
 
 const meta: Meta<typeof CardControl> = {
-  title: 'Displays/Card/card-control',
+  title: 'Containers/card-control',
   component: CardControl,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

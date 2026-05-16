@@ -26,7 +26,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof PricingCard> = {
-  title: 'Displays/Card/pricing-card',
+  title: 'Containers/pricing-card',
   component: PricingCard,
   tags: ['surface-web'],
   parameters: { layout: 'centered' },

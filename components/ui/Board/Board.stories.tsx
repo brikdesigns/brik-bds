@@ -8,7 +8,7 @@ import { Tag } from '../Tag';
 import { Badge } from '../Badge';
 
 const meta: Meta<typeof Board> = {
-  title: 'Displays/Board/board',
+  title: 'Containers/board',
   component: Board,
   tags: ['surface-product'],
   parameters: {

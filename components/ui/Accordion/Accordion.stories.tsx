@@ -35,7 +35,7 @@ const faqItems = [
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Accordion> = {
-  title: 'Displays/Accordion/accordion',
+  title: 'Containers/accordion',
   component: Accordion,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

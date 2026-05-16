@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardSummary } from './CardSummary';
 
 const meta: Meta<typeof CardSummary> = {
-  title: 'Displays/Card/card-summary',
+  title: 'Containers/card-summary',
   component: CardSummary,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

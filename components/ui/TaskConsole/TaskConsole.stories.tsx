@@ -4,7 +4,7 @@ import { TaskConsole, type TaskConsoleItem } from './TaskConsole';
 import { Button } from '../Button';
 
 const meta: Meta<typeof TaskConsole> = {
-  title: 'Components/Feedback/task-console',
+  title: 'Containers/task-console',
   component: TaskConsole,
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },

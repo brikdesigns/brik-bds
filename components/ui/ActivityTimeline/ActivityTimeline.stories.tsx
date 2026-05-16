@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { ActivityTimeline } from './ActivityTimeline';
 
 const meta: Meta<typeof ActivityTimeline> = {
-  title: 'Displays/Timeline/activity-timeline',
+  title: 'Containers/activity-timeline',
   component: ActivityTimeline,
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
