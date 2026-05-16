@@ -15,25 +15,39 @@ Authors hand-write match tags (`moods`, `industries`). Client-axis projections (
 
 ### Mood → Personality
 
+Derived by `MOOD_TO_PERSONALITY` in `content-system/blueprints/bridges.ts` — never hand-authored on blueprints.
+
 | Mood | Personality projection |
 |---|---|
-| `editorial` | Sophisticated · Refined · Composed |
-| `clinical` | Trustworthy · Precise · Reliable |
-| `warm` | Approachable · Empathetic · Welcoming |
-| `bold` | Confident · Energetic · Direct |
-| `quiet` | Calm · Considered · Restrained |
-| `playful` | Friendly · Optimistic · Light |
+| `bold` | Bold |
+| `minimal` | Minimal |
+| `warm` | Warm |
+| `corporate` | Corporate |
+| `playful` | Playful |
+| `luxury` | Luxury · Refined |
+| `trustworthy` | Trustworthy |
+| `energetic` | Energetic |
+| `professional` | Professional |
+| `modern` | Modern |
+| `approachable` | Approachable |
 
 ### Mood → Visual Style
 
+Derived by `MOOD_TO_VISUAL_STYLE` in `content-system/blueprints/bridges.ts`. Moods with no visual correlate (`warm`, `trustworthy`, `professional`, `approachable`) project to an empty set — explicit, not a gap.
+
 | Mood | Visual Style projection |
 |---|---|
-| `editorial` | Refined · Spacious |
-| `clinical` | Minimal · Geometric |
-| `warm` | Soft · Organic |
-| `bold` | Dark · High-contrast |
-| `quiet` | Soft · Minimal |
-| `playful` | (no visual-style constraint) |
+| `bold` | Bold |
+| `minimal` | Minimal |
+| `warm` | — |
+| `corporate` | Classic |
+| `playful` | Playful |
+| `luxury` | Luxurious |
+| `trustworthy` | — |
+| `energetic` | Colorful |
+| `professional` | — |
+| `modern` | Modern |
+| `approachable` | — |
 
 ### Industry tag → Industry pack slug
 
