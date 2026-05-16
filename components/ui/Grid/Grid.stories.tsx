@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Grid } from './Grid';
 
 const meta: Meta<typeof Grid> = {
-  title: 'Components/Layout/grid',
+  title: 'Layouts/grid',
   component: Grid,
   tags: ['surface-shared'],
   parameters: {
