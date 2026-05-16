@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: 'Theming/Modes/Spacing',
+  title: 'Deprecated/spacing-modes',
   tags: ['surface-shared'],
   parameters: {
     layout: 'fullscreen',
