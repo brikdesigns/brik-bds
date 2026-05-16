@@ -1,0 +1,57 @@
+name: Docs Site Build
+
+# Runs `next build` against docs-site/ on every PR that touches docs-site/**
+# and on every push to main. Catches MDX parse errors, broken imports, and
+# prerender failures before they land — replicating the gap that let the
+# ADR-008 MDX bug (nested backticks) reach main undetected in May 2026.
+#
+# Trigger path is docs-site/** only; changes outside that path don't need
+# a full Next.js build.
+#
+# Issue: brikdesigns/brik-bds#567
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs-site/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs-site/**'
+
+concurrency:
+  group: docs-site-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs-site-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # BDS lib must be built before docs-site prebuild runs (ensure-bds-dist.mjs
+      # checks for dist/content-system/index.js). Building it here avoids a
+      # redundant check + subprocess spawn inside the prebuild hook.
+      - name: Install BDS root dependencies
+        run: npm ci
+
+      - name: Build BDS lib
+        run: npm run build:lib
+
+      - name: Install docs-site dependencies
+        working-directory: docs-site
+        run: npm ci
+
+      - name: Build docs-site
+        working-directory: docs-site
+        run: npm run build
