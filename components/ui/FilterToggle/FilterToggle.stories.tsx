@@ -6,7 +6,7 @@ import { FilterToggle } from './FilterToggle';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof FilterToggle> = {
-  title: 'Components/Action/filter-toggle',
+  title: 'Components/filter-toggle',
   component: FilterToggle,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },

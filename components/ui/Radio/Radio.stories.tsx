@@ -5,7 +5,7 @@ import { Radio } from './Radio';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Radio> = {
-  title: 'Components/Form/radio',
+  title: 'Components/radio',
   component: Radio,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

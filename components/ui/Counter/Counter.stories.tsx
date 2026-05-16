@@ -4,7 +4,7 @@ import { Counter } from './Counter';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Counter> = {
-  title: 'Components/Indicator/counter',
+  title: 'Components/counter',
   component: Counter,
   tags: ['surface-shared'],
   parameters: {

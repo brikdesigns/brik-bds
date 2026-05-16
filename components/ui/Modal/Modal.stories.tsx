@@ -5,7 +5,7 @@ import { Modal } from './Modal';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Modal> = {
-  title: 'Displays/Overlay/modal',
+  title: 'Components/modal',
   component: Modal,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

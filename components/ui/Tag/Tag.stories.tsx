@@ -6,7 +6,7 @@ import { Badge } from '../Badge/Badge';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Tag> = {
-  title: 'Components/Indicator/tag',
+  title: 'Components/tag',
   component: Tag,
   tags: ['surface-shared'],
   parameters: {

@@ -6,7 +6,7 @@ import { Tag } from '../Tag/Tag';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Badge> = {
-  title: 'Components/Indicator/badge',
+  title: 'Components/badge',
   component: Badge,
   tags: ['surface-shared'],
   parameters: {

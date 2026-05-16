@@ -25,7 +25,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Switch> = {
-  title: 'Components/Control/switch',
+  title: 'Components/switch',
   component: Switch,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

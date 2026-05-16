@@ -4,7 +4,7 @@ import { Badge } from '../Badge';
 import { Field } from '../Field';
 
 const meta: Meta<typeof BadgeGroup> = {
-  title: 'Components/Indicator/badge-group',
+  title: 'Components/badge-group',
   component: BadgeGroup,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

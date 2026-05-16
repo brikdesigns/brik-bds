@@ -4,7 +4,7 @@ import { Avatar } from './Avatar';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Avatar> = {
-  title: 'Components/Assets/avatar',
+  title: 'Components/avatar',
   component: Avatar,
   tags: ['surface-shared'],
   parameters: {

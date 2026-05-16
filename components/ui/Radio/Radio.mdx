@@ -8,7 +8,7 @@ import * as Stories from './Radio.stories';
 
 <ComponentLinks slug="radio" />
 
-Single-selection control for mutually exclusive options. Radios sharing the same `name` prop form a group; the browser enforces selection-of-one natively. The canonical use is a group — single-radio usage is rare and almost always indicates a [`Checkbox`](/?path=/docs/components-form-checkbox--docs) should be used instead.
+Single-selection control for mutually exclusive options. Radios sharing the same `name` prop form a group; the browser enforces selection-of-one natively. The canonical use is a group — single-radio usage is rare and almost always indicates a [`Checkbox`](/?path=/docs/components-checkbox--docs) should be used instead.
 
 ## Playground
 
@@ -40,4 +40,4 @@ Radio varies along the **orientation** axis when grouped. Boolean state (`checke
 
 > **Note** — Group layouts use a plain flex container in the consumer. We do not ship a `RadioGroup` wrapper because there is no shared state or extra accessibility role to manage. Use `<div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>` (or equivalent layout primitive) and place individual `<Radio>` instances inside.
 
-> **Note** — For a single binary choice (terms acceptance, preferences toggle), use [`Checkbox`](/?path=/docs/components-form-checkbox--docs). Radio is for choosing one from a set.
+> **Note** — For a single binary choice (terms acceptance, preferences toggle), use [`Checkbox`](/?path=/docs/components-checkbox--docs). Radio is for choosing one from a set.

@@ -5,7 +5,7 @@ import { TextArea } from './TextArea';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof TextArea> = {
-  title: 'Components/Form/text-area',
+  title: 'Components/text-area',
   component: TextArea,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

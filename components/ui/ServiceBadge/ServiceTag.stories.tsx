@@ -6,7 +6,7 @@ import type { ServiceCategory } from './ServiceBadge';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof ServiceTag> = {
-  title: 'Components/Indicator/service-tag',
+  title: 'Components/service-tag',
   component: ServiceTag,
   tags: ['surface-web'],
   parameters: {

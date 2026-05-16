@@ -20,7 +20,7 @@ type DefaultArgs = TextInputProps & {
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<DefaultArgs> = {
-  title: 'Components/Form/text-input',
+  title: 'Components/text-input',
   component: TextInput,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

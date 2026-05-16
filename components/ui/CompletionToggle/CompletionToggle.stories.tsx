@@ -6,7 +6,7 @@ import { CompletionToggle } from './CompletionToggle';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof CompletionToggle> = {
-  title: 'Components/Form/completion-toggle',
+  title: 'Components/completion-toggle',
   component: CompletionToggle,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

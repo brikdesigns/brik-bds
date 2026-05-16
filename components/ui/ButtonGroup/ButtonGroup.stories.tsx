@@ -33,7 +33,7 @@ const Trash = () => (
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof ButtonGroup> = {
-  title: 'Components/Action/button-group',
+  title: 'Components/button-group',
   component: ButtonGroup,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

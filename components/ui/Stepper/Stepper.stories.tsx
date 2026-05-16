@@ -29,7 +29,7 @@ const Row = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; g
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof Stepper> = {
-  title: 'Components/Control/stepper',
+  title: 'Components/stepper',
   component: Stepper,
   tags: ['surface-product'],
   parameters: { layout: 'centered' },

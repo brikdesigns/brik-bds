@@ -4,7 +4,7 @@ import { Divider } from './Divider';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Divider> = {
-  title: 'Components/Structure/divider',
+  title: 'Components/divider',
   component: Divider,
   tags: ['surface-shared'],
   parameters: {

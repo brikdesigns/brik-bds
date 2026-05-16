@@ -5,7 +5,7 @@ import { Checkbox } from './Checkbox';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Checkbox> = {
-  title: 'Components/Form/checkbox',
+  title: 'Components/checkbox',
   component: Checkbox,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

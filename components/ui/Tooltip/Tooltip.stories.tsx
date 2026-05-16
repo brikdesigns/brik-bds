@@ -29,7 +29,7 @@ const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; g
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof Tooltip> = {
-  title: 'Components/Feedback/tooltip',
+  title: 'Components/tooltip',
   component: Tooltip,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

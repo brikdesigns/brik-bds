@@ -54,7 +54,7 @@ function InteractiveSegmentedControl({
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof SegmentedControl> = {
-  title: 'Components/Control/segmented-control',
+  title: 'Components/segmented-control',
   component: SegmentedControl,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

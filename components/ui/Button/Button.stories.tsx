@@ -6,7 +6,7 @@ import { Button } from './Button';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Action/button',
+  title: 'Components/button',
   component: Button,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

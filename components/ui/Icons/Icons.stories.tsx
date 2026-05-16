@@ -60,7 +60,7 @@ const IconsReference = () => <div />;
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof IconsReference> = {
-  title: 'Components/Assets/icons',
+  title: 'Components/icons',
   component: IconsReference,
   tags: ['surface-shared'],
   parameters: {

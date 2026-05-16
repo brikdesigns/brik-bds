@@ -25,7 +25,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof FileUploader> = {
-  title: 'Components/Control/file-uploader',
+  title: 'Components/file-uploader',
   component: FileUploader,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

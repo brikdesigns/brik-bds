@@ -5,7 +5,7 @@ import { Chip } from './Chip';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Chip> = {
-  title: 'Components/Indicator/chip',
+  title: 'Components/chip',
   component: Chip,
   tags: ['surface-shared'],
   parameters: {

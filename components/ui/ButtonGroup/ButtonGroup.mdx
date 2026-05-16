@@ -8,9 +8,9 @@ import * as Stories from './ButtonGroup.stories';
 
 <ComponentLinks slug="button-group" />
 
-Groups related [`Button`](/?path=/docs/components-action-button--docs) components (text or icon-only) with consistent spacing and alignment. Use `align` to control placement within the container — replaces prior manual `<Row style={{ justifyContent: ... }}>` patterns.
+Groups related [`Button`](/?path=/docs/components-button--docs) components (text or icon-only) with consistent spacing and alignment. Use `align` to control placement within the container — replaces prior manual `<Row style={{ justifyContent: ... }}>` patterns.
 
-For mutually-exclusive option toolbars (Day / Week / Month), use [`SegmentedControl`](/?path=/docs/components-control-segmented-control--docs) instead — its shared-border treatment is the canonical home for that pattern.
+For mutually-exclusive option toolbars (Day / Week / Month), use [`SegmentedControl`](/?path=/docs/components-segmented-control--docs) instead — its shared-border treatment is the canonical home for that pattern.
 
 ## Playground
 
@@ -30,7 +30,7 @@ Canonical action set — one primary + two secondary buttons (`outline`, `ghost`
 
 <Canvas of={Stories.IconButtonGroup} />
 
-Inline toolbar of icon-only [`Button`](/?path=/docs/components-action-button--docs) children (`<Button icon={...} label="..." />`) — up to 4 actions. Common for row / card chrome (edit, copy, share, delete). The final destructive variant signals an irreversible action.
+Inline toolbar of icon-only [`Button`](/?path=/docs/components-button--docs) children (`<Button icon={...} label="..." />`) — up to 4 actions. Common for row / card chrome (edit, copy, share, delete). The final destructive variant signals an irreversible action.
 
 ## Patterns
 
@@ -46,10 +46,10 @@ Modal and sheet bottom rows follow the platform convention: **primary action far
 
 ## Notes
 
-> **Note** — ButtonGroup does not expose its own `disabled` prop. Children manage their own state (e.g., `<Button disabled />` inside the group). Same pattern as [`FilterBar`](/?path=/docs/components-action-filter-bar--docs).
+> **Note** — ButtonGroup does not expose its own `disabled` prop. Children manage their own state (e.g., `<Button disabled />` inside the group). Same pattern as [`FilterBar`](/?path=/docs/components-filter-bar--docs).
 
 > **Note** — `align` is ignored when `fullWidth: true`. Full-width groups always stretch children edge-to-edge regardless of alignment.
 
 > **Note** — Migrating from the old manual `<Row style={{ justifyContent: 'space-between' }}>` ActionBar pattern: replace with `<ButtonGroup align="end">` for modal / sheet rows or `<ButtonGroup align="between">` for destructive-on-left + primary-on-right patterns.
 
-> **Note** — For mutually-exclusive segmented option toolbars (Day / Week / Month, View modes), reach for [`SegmentedControl`](/?path=/docs/components-control-segmented-control--docs) instead. ButtonGroup is for action sets and freeform toolbars where buttons are independent actions.
+> **Note** — For mutually-exclusive segmented option toolbars (Day / Week / Month, View modes), reach for [`SegmentedControl`](/?path=/docs/components-segmented-control--docs) instead. ButtonGroup is for action sets and freeform toolbars where buttons are independent actions.
