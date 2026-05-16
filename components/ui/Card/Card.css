@@ -281,4 +281,12 @@
    * regardless of description length. */
   margin-top: auto;
 }
+
+/* Prevent a direct Badge child from stretching to card width.
+ * preset-display uses absolute-positioned .bds-card__preset-display-badge
+ * and inline-flex .bds-card__preset-display-tag — both already sized correctly.
+ * This rule covers Badge placed directly inside a default or outlined Card. */
+.bds-card > .bds-badge {
+  align-self: flex-start;
+}
 }
