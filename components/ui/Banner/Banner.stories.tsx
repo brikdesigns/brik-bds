@@ -12,7 +12,7 @@ import { Banner } from './Banner';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Banner> = {
-  title: 'Components/Feedback/banner',
+  title: 'Components/banner',
   component: Banner,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

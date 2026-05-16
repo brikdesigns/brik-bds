@@ -8,7 +8,7 @@ import * as Stories from './FilterToggle.stories';
 
 <ComponentLinks slug="filter-toggle" />
 
-Binary on / off filter pill. Visually cohesive with [`FilterButton`](/?path=/docs/components-action-filter-button--docs) but without a dropdown — clicking flips between active (brand) and inactive (secondary) states. Fully controlled; the consumer manages the boolean externally.
+Binary on / off filter pill. Visually cohesive with [`FilterButton`](/?path=/docs/components-filter-button--docs) but without a dropdown — clicking flips between active (brand) and inactive (secondary) states. Fully controlled; the consumer manages the boolean externally.
 
 ## Playground
 
@@ -32,4 +32,4 @@ FilterToggle has no semantic-variant axis — all variation (size, label, active
 
 > **Note** — FilterToggle is fully controlled (no internal state). Consumers track the boolean externally (\`useState\`, store, URL param, etc.) and pass \`active\` + \`onToggle\` to receive update events.
 
-> **Note** — For a row composing multiple FilterButtons and FilterToggles together, use [`FilterBar`](/?path=/docs/components-action-filter-bar--docs). It bundles the title, clear-all affordance, and consistent spacing.
+> **Note** — For a row composing multiple FilterButtons and FilterToggles together, use [`FilterBar`](/?path=/docs/components-filter-bar--docs). It bundles the title, clear-all affordance, and consistent spacing.

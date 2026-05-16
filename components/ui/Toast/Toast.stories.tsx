@@ -4,7 +4,7 @@ import { Toast } from './Toast';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Toast> = {
-  title: 'Components/Feedback/toast',
+  title: 'Components/toast',
   component: Toast,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

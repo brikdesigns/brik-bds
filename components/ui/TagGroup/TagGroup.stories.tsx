@@ -4,7 +4,7 @@ import { Tag } from '../Tag';
 import { Field } from '../Field';
 
 const meta: Meta<typeof TagGroup> = {
-  title: 'Components/Indicator/tag-group',
+  title: 'Components/tag-group',
   component: TagGroup,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
