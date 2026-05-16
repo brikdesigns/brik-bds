@@ -356,6 +356,8 @@ const preview: Preview = {
             'Structure',
             '*',
           ],
+          'Layouts',
+          ['stack', 'cluster', 'grid', 'frame', '*'],
           'Navigation',
           ['Primary', 'Secondary', 'Stepper', '*'],
           'Displays',

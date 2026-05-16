@@ -4,7 +4,7 @@ import { Stack } from './Stack';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Stack> = {
-  title: 'Components/Layout/stack',
+  title: 'Layouts/stack',
   component: Stack,
   tags: ['surface-shared'],
   parameters: {
