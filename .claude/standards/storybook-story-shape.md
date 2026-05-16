@@ -184,59 +184,64 @@ Same tag applies to `InteractionTest…` stories (Q5 from the matrix) so they do
 
 Never combine two prop axes in one story. Write `Sizes` and `Variants` as separate stories — never `SizesAndVariants`. If a story name needs "and" to describe it, split it.
 
-## Sidebar taxonomy — preview.tsx is the source of truth
+## Sidebar taxonomy
 
-**Canon-on-paper has drifted from canon-in-fact.** ADR-006 and prior versions of this section described four content top-levels (`Foundations` / `Components` / `Patterns` / `Theming`); the live `.storybook/preview.tsx` `parameters.options.storySort.order` array is the actual sidebar order Storybook renders. Read it before authoring a `title:` — the two disagree today and `preview.tsx` wins.
+**[ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) (amended 2026-05-16, [#629](https://github.com/brikdesigns/brik-bds/issues/629)) defines a 6-bucket flat taxonomy.** The rename sweep PRs that make `preview.tsx` match are gated on [#618](https://github.com/brikdesigns/brik-bds/issues/618) wrapping.
 
-**Live storySort order** (see [`.storybook/preview.tsx`](../../.storybook/preview.tsx) `storySort.order`):
+**Migration window rule:** existing stories keep their current `title:` strings until the rename sweep touches their file. New stories use the flat bucket path from 2026-05-16 forward.
 
-```
+**Target storySort order** (post-rename sweeps):
+
+```text
 Overview → Foundation → Theming → Motion → Content System →
-Components → Navigation → Displays → * (catch-all) → Deprecated
+Components → Containers → Blocks → Layouts → Sections → Tools → * (catch-all) → Deprecated
 ```
 
-Each top-level has an inner subcategory order. The key ones for component authors:
+**No subcategory layer.** Stories sit at `<Bucket>/<component>` — not `<Bucket>/<Subcategory>/<component>`.
 
-| Top-level | Subcategories (in order) |
-|---|---|
-| `Components/` | `Action`, `Form`, `Input`, `Control`, `Indicator`, `Feedback`, `Structure` |
-| `Navigation/` | `Primary`, `Secondary`, `Stepper` |
-| `Displays/` | `Card`, `Accordion`, `Table`, `Sheet`, `Form`, `Overlay` |
-| `Displays/Sheet/` | `sheet`, `sheet-section`, `sheet-typography`, `field`, `field-grid`, `bullet-list`, `Read-Mode Sheet` |
-| `Displays/Form/` | `form`, `Read-Mode Page` |
-| `Theming/` | `Overview`, `Client Themes`, `Atmospheres`, `Modes`, `Layout Archetypes`, `Blueprints` |
+**Bucket definitions:**
 
-**Components vs Displays — the API-affordance line.** `Components/` holds atomic input primitives (the things a user types into / clicks on — `Button`, `Checkbox`, `TextInput`, `Select`). `Displays/` holds composition primitives that *render* data (the things that wrap, group, or read-mode display — `Card`, `Sheet`, `Field`, `Form` composer, `Table`). When in doubt, ask: "does this primitive accept input, or does it lay out something else?" Input → `Components/`; layout/read-mode → `Displays/`.
+| Bucket | Role | Example members |
+| --- | --- | --- |
+| `Components/` | Single atomic primitive | button, badge, checkbox, banner, text-input |
+| `Containers/` | Bounded holder with own border/padding/elevation | card, form, accordion, sheet, table |
+| `Blocks/` | Fixed slot shape filled with atoms | field, field-grid, date-picker |
+| `Layouts/` | Pure arrangement — no styling beyond structure | stack, cluster, grid, frame, row, split |
+| `Sections/` | Full-page composed region | nav-bar, footer, sidebar-navigation |
+| `Tools/` | Dev/internal utilities | brik-dev-bar |
 
-**Phantom top-levels — slated for cleanup.** Two prefixes show up in the sidebar today that are *not* in `storySort.order` and fall into the `*` catch-all bucket:
+**Unchanged top-levels:** `Overview/`, `Foundation/`, `Theming/`, `Motion/`, `Content System/`, `Patterns/`, `Deprecated/`.
 
-- `Patterns/` — created by [#637](https://github.com/brikdesigns/brik-bds/pull/637) (Patterns/Forms taxonomy). The compositions are correct work; the `Patterns/` top-level itself was added without amending `storySort.order` and reads as a phantom group. Cleanup is part of the planned top-level rationalization (post-#618 component cleanup).
-- `Dev Tools/` — used by some dashboard / interactive tooling stories. Same shape — phantom group, scheduled for cleanup.
-
-**Do not freelance a new top-level.** If your work needs one, surface the gap — adding a top-level requires updating `storySort.order` in `preview.tsx` and amending [ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md), not just a `title:` string.
-
-Canonical prefixes:
+**Canonical prefixes:**
 
 | Folder / file | Title prefix |
-|---|---|
-| `components/ui/<Component>` (input primitive) | `Components/<Subcategory>/<component>` (e.g. `Components/Action/button`) |
-| `components/ui/<Component>` (display / composer / read-mode) | `Displays/<Subcategory>/<component>` (e.g. `Displays/Sheet/field`, `Displays/Form/form`) |
+| --- | --- |
+| `components/ui/<Component>` (atomic primitive) | `Components/<component>` (e.g. `Components/button`) |
+| `components/ui/<Component>` (bounded holder) | `Containers/<component>` (e.g. `Containers/card`) |
+| `components/ui/<Component>` (slot + atoms) | `Blocks/<component>` (e.g. `Blocks/field`) |
+| `components/ui/<Component>` (arrangement only) | `Layouts/<component>` (e.g. `Layouts/stack`) |
+| `components/ui/<Component>` (page-level region) | `Sections/<component>` (e.g. `Sections/nav-bar`) |
+| `stories/dev-tools/<Tool>` | `Tools/<tool>` |
 | `content-system/blueprints/react/<Blueprint>` | `Theming/Blueprints/<blueprint_key>` |
-| `stories/patterns/forms/<Pattern>` | `Patterns/Forms/<Pattern>` (phantom top-level — see note above) |
-| Storybook recipes / docs | `Recipes/<Topic>` |
+| `stories/patterns/<Pattern>` | `Patterns/<Pattern>` |
 
 ```tsx
-/* Right — matches existing sidebar tree + preview.tsx storySort */
-title: 'Displays/Sheet/field'
-title: 'Components/Action/button'
+/* Right — flat bucket path, no subcategory layer */
+title: 'Components/button'
+title: 'Containers/card'
+title: 'Blocks/field'
+title: 'Sections/nav-bar'
 title: 'Theming/Blueprints/hero_split_image_card_overlay'
 
-/* Wrong — creates a parallel top-level group not in storySort.order */
-title: 'Blueprints/hero_split_image_card_overlay'
-title: 'Form/field'
+/* Wrong — old subcategory style (superseded by ADR-006 amendment 2026-05-16) */
+title: 'Components/Action/button'
+title: 'Displays/Sheet/field'
+title: 'Navigation/Primary/nav-bar'
 ```
 
-**Before writing `title:` in a story meta, read the sibling stories' titles in the same folder** AND verify the prefix appears in `.storybook/preview.tsx` `storySort.order`. The lint catches missing `<Canvas>` references but does not yet catch off-tree title prefixes.
+**Do not freelance a new top-level.** Adding one requires updating `storySort.order` in `preview.tsx` and amending [ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) — not just a `title:` string.
+
+**Before writing `title:` in a new story**, check the bucket table above. If the component's bucket is ambiguous, open the question in [#629](https://github.com/brikdesigns/brik-bds/issues/629) before committing.
 
 ## Args composition — blueprints + page stories
 
