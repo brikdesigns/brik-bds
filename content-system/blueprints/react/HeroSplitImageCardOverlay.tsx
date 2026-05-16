@@ -18,13 +18,16 @@
 import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
 import { Button } from '../../../components/ui/Button';
 import { Frame } from '../../../components/ui/Frame/Frame';
+import type { FrameRatio } from '../../../components/ui/Frame/Frame';
 import { ServiceTag } from '../../../components/ui/ServiceBadge/ServiceTag';
 import type { BlueprintProps } from '../astro/types';
 import './HeroSplitImageCardOverlay.css';
 
-interface Props extends BlueprintProps {}
+interface Props extends BlueprintProps {
+  imageRatio?: FrameRatio;
+}
 
-export function HeroSplitImageCardOverlay({ section }: Props) {
+export function HeroSplitImageCardOverlay({ section, imageRatio = 'landscape' }: Props) {
   const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
   const titleId = `${section.sectionKey}-title`;
   const eyebrow = section.subheading;
@@ -93,7 +96,7 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
 
         {priceCard ? (
           <aside className="bp-hero-img-card__media-card">
-            <Frame ratio="landscape" className="bp-hero-img-card__image-frame">
+            <Frame ratio={imageRatio} className="bp-hero-img-card__image-frame">
               <img
                 src={priceCard.imageUrl}
                 alt={priceCard.imageAlt ?? ''}
@@ -122,7 +125,7 @@ export function HeroSplitImageCardOverlay({ section }: Props) {
           </aside>
         ) : (
           <Frame
-            ratio="landscape"
+            ratio={imageRatio}
             as="aside"
             className="bp-hero-img-card__missing"
             data-content-needed="hero_image_url"
