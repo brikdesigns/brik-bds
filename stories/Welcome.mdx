@@ -2,54 +2,46 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Overview/Welcome" />
 
-# Brik Design System — Storybook
+# Brik Design System
 
-This Storybook is the **live playground** for BDS components — every story renders the actual component with controls, ARIA, and theme switching. It's the canonical surface for:
+The live component playground. Every story renders the actual component with interactive controls, theme switching, and Chromatic baselines.
 
-- Live component playground (every `*.stories.tsx`)
-- Visual regression (Chromatic)
-- Component MCP endpoint (consumer agents query `/mcp` against `https://main--69b8918cac3056b39424d5d3.chromatic.com/`)
-- Dev tools (Theme Switcher, Health Dashboard, Contrast Compliance, Token Coverage)
+Narrative docs, usage guides, and API reference live at **[design.brikdesigns.com](https://design.brikdesigns.com)**.
 
-## Looking for guidance, not playground?
+---
 
-**The narrative documentation lives at [design.brikdesigns.com](https://design.brikdesigns.com).** Foundation tokens, Theming, Motion, Content System, and per-component usage docs all moved there. This Storybook is no longer the documentation surface.
+## Sidebar
 
-| What you want | Where it lives |
+| Section | What's inside |
 |---|---|
-| Token reference (color, type, spacing, shadow, radius, motion) | [design.brikdesigns.com/docs/primitives](https://design.brikdesigns.com/docs/primitives) |
-| Naming conventions vocabulary (title vs heading, label family, axes) | [design.brikdesigns.com/docs/primitives/naming-conventions](https://design.brikdesigns.com/docs/primitives/naming-conventions) |
-| Theming — atmospheres, archetypes, blueprints | [design.brikdesigns.com/docs/theming](https://design.brikdesigns.com/docs/theming) |
-| Motion — Lightweight / GSAP / Premium tiers + per-effect deep-dives | [design.brikdesigns.com/docs/motion](https://design.brikdesigns.com/docs/motion) |
-| Content System — industries, voices, vocabularies | [design.brikdesigns.com/docs/content-system](https://design.brikdesigns.com/docs/content-system) |
-| Component anatomy + props + usage prose | [design.brikdesigns.com/docs/components](https://design.brikdesigns.com/docs/components) |
+| **Components** | Atomic UI — buttons, inputs, badges, indicators, overlays |
+| **Containers** | Bounded compositions — cards, sheets, tables, dialogs, forms |
+| **Blocks** | Slot + atom combos — field, field-grid, date/time pickers, lists |
+| **Layouts** | Arrangement primitives — stack, cluster, grid, frame |
+| **Sections** | Page regions — nav, footer, breadcrumb, blueprints |
+| **Foundation** | Tokens + atmospheres |
+| **Content System** | Industries, voices, vocabularies |
+| **Tools** | Theme switcher, health dashboard, contrast audit, token coverage |
 
-## What still lives here
+---
 
-- **Components.** Every `Components/*` story in the sidebar — Button, Card, Sheet, Form, etc. Click into any of them for the live playground.
-- **Theme Switcher.** Use the paintbrush icon in the toolbar above to switch between Brik (light), Brik Dark, and Client Sim. The Client Sim theme assigns Georgia / Verdana / Courier New to heading / body / label families to expose font-family token misuse before a client theme reveals it.
-- **Theme Switcher inspector** — open the [Theme Switcher](?path=/docs/overview-theme-switcher--docs) page for per-token inspection.
-- **Contrast Compliance** — WCAG AA pair probe across the three built-in themes. Open via [Contrast Compliance](?path=/docs/overview-health-contrast-compliance--docs).
-- **Health Dashboard** — coverage, audit signals.
-- **Token Coverage** — utilization map across every token category.
+## Docs site
 
-## Architecture
+- [Primitives](https://design.brikdesigns.com/docs/primitives) — tokens: color, type, spacing, shadow, motion
+- [Theming](https://design.brikdesigns.com/docs/theming) — client themes, atmospheres, cascade
+- [Motion](https://design.brikdesigns.com/docs/motion) — animation tiers and per-effect guides
+- [Content System](https://design.brikdesigns.com/docs/content-system) — industries, voices, vocabularies
+- [Components](https://design.brikdesigns.com/docs/components) — anatomy, props, usage
 
-BDS ships as a single package: `@brikdesigns/bds`. Consumers import:
+---
+
+## Install
 
 ```ts
-import { Button, Card, Sheet, /* … */ } from '@brikdesigns/bds';
+import { Button, Card, Sheet } from '@brikdesigns/bds';
 ```
-
-Plus the two CSS entry points:
 
 ```css
-@import '@brikdesigns/bds/tokens.css';   /* full token cascade */
-@import '@brikdesigns/bds/styles.css';   /* component CSS bundle */
+@import '@brikdesigns/bds/tokens.css';
+@import '@brikdesigns/bds/styles.css';
 ```
-
-For the full architecture (two-tier theming, four-layer composition, the LLM substrate role), see [design.brikdesigns.com](https://design.brikdesigns.com).
-
-## Why this split?
-
-Storybook is excellent at one job: rendering live, interactive components with controls. Trying to also be a long-form documentation site stretched it past its strengths — narrative pages, deep cross-linking, and search are what fumadocs at `design.brikdesigns.com` is built for. Each tool now does what it's good at.
