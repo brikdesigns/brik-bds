@@ -72,7 +72,7 @@ const statusLabel = (s: string) =>
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Table> = {
-  title: 'Displays/Table/table',
+  title: 'Containers/table',
   component: Table,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

@@ -6,7 +6,7 @@ import { Button } from '../Button';
 import { Badge } from '../Badge';
 
 const meta: Meta<typeof CardList> = {
-  title: 'Displays/Card/card-list',
+  title: 'Containers/card-list',
   component: CardList,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

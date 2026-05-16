@@ -4,7 +4,7 @@ import { NotificationItem, NotificationList, NotificationPopover } from './Notif
 import type { NotificationItemData } from './NotificationList';
 
 const meta: Meta<typeof NotificationList> = {
-  title: 'Displays/Notifications/notification-list',
+  title: 'Containers/notification-list',
   component: NotificationList,
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
