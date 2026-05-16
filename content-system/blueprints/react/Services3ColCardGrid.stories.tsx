@@ -90,7 +90,7 @@ const baseProps: BlueprintProps = {
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Services3ColCardGrid> = {
-  title: 'Theming/Blueprints/services_3col_card_grid',
+  title: 'Sections/Blueprints/services_3col_card_grid',
   component: Services3ColCardGrid,
   tags: ['surface-web', 'surface-shared'],
   parameters: {

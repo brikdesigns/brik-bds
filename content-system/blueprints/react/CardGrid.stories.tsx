@@ -4,7 +4,7 @@ import { Badge, Button, Card, Frame, Grid, ServiceTag, Stack } from '../../../co
 import { CardGrid } from './CardGrid';
 
 const meta: Meta<typeof CardGrid> = {
-  title: 'Theming/Blueprints/card_grid',
+  title: 'Sections/Blueprints/card_grid',
   component: CardGrid,
   tags: ['surface-web', 'surface-shared'],
   parameters: {

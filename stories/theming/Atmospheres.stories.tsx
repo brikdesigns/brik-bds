@@ -52,7 +52,7 @@ function AtmosphereStoryRender({ atmosphere, themeNumber }: AtmosphereStoryRende
 }
 
 const meta: Meta<AtmosphereStoryArgs> = {
-  title: 'Theming/Atmospheres',
+  title: 'Foundation/Atmospheres',
   parameters: {
     layout: 'fullscreen',
     docs: {
