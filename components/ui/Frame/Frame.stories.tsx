@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Frame } from './Frame';
 
 const meta: Meta<typeof Frame> = {
-  title: 'Components/Layout/frame',
+  title: 'Layouts/frame',
   component: Frame,
   tags: ['surface-shared'],
   parameters: {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Cluster } from './Cluster';
 
 const meta: Meta<typeof Cluster> = {
-  title: 'Components/Layout/cluster',
+  title: 'Layouts/cluster',
   component: Cluster,
   tags: ['surface-shared'],
   parameters: {
