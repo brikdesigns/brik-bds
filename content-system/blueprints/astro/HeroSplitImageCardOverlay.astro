@@ -52,9 +52,21 @@
  */
 import type { BlueprintProps } from './types';
 
-interface Props extends BlueprintProps {}
+type FrameRatio = 'square' | 'portrait' | 'landscape' | 'wide' | 'ultrawide';
 
-const { section } = Astro.props;
+const RATIO_ASPECT: Record<FrameRatio, string> = {
+  square: '1 / 1',
+  portrait: '3 / 4',
+  landscape: '4 / 3',
+  wide: '16 / 9',
+  ultrawide: '21 / 9',
+};
+
+interface Props extends BlueprintProps {
+  imageRatio?: FrameRatio;
+}
+
+const { section, imageRatio = 'landscape' } = Astro.props;
 
 const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
 const titleId = `${section.sectionKey}-title`;
@@ -135,7 +147,10 @@ const cta = section.cta;
 
     {priceCard ? (
       <aside class="bp-hero-img-card__media-card">
-        <div class="bp-hero-img-card__image-frame">
+        <div
+          class="bp-hero-img-card__image-frame"
+          style={imageRatio !== 'landscape' ? `--_bp-image-ratio: ${RATIO_ASPECT[imageRatio]}` : undefined}
+        >
           <img
             src={priceCard.imageUrl}
             alt={priceCard.imageAlt ?? ''}
@@ -165,6 +180,7 @@ const cta = section.cta;
         class="bp-hero-img-card__missing"
         data-content-needed="hero_image_url"
         role="presentation"
+        style={imageRatio !== 'landscape' ? `--_bp-image-ratio: ${RATIO_ASPECT[imageRatio]}` : undefined}
       >
         <p class="bp-hero-img-card__missing-label">
           Hero image card missing for this page.
@@ -299,7 +315,7 @@ const cta = section.cta;
   }
 
   .bp-hero-img-card__image-frame {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: var(--_bp-image-ratio, 4 / 3);
     overflow: hidden;
     border-radius: var(--border-radius-md);
     background: var(--surface-secondary);
@@ -338,7 +354,7 @@ const cta = section.cta;
   }
 
   .bp-hero-img-card__missing {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: var(--_bp-image-ratio, 4 / 3);
     display: flex;
     align-items: center;
     justify-content: center;
