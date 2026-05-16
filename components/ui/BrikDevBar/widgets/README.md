@@ -17,7 +17,7 @@ Edit here, run `npm run sync:devbar-widgets`, commit the diffs in each affected 
 
 ## Storybook
 
-Each widget has a story under `Dev Tools/widgets/*` exercising its bootstrap path. The `BrikDevBar` shell story (one level up) shows two slots registered via `useDevBarSlot` — that pattern is the React side.
+Each widget has a story under `Tools/widgets/*` exercising its bootstrap path. The `Tools/brik-dev-bar` shell story shows two slots registered via `useDevBarSlot` — that pattern is the React side.
 
 ## Adding a new widget
 

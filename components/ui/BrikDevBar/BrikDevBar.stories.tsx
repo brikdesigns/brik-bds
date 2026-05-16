@@ -4,7 +4,7 @@ import { BrikDevBar, useDevBarSlot, useDevBarApi } from './BrikDevBar';
 import type { DevBarSlotDef } from './BrikDevBar';
 
 const meta: Meta<typeof BrikDevBar> = {
-  title: 'Dev Tools/BrikDevBar',
+  title: 'Tools/brik-dev-bar',
   component: BrikDevBar,
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },

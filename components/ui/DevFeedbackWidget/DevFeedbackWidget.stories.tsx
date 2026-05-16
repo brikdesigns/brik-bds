@@ -21,7 +21,7 @@ const Frame = ({ children }: { children: React.ReactNode }) => (
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof DevFeedbackWidget> = {
-  title: 'Dev Tools/DevFeedbackWidget',
+  title: 'Tools/dev-feedback-widget',
   component: DevFeedbackWidget,
   tags: ['surface-product', 'surface-shared'],
   parameters: { layout: 'fullscreen' },

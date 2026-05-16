@@ -22,7 +22,7 @@ import { BrikDevBar } from '../BrikDevBar';
  *   4. localStorage `brik-inspect-enabled=1` persists across sessions.
  */
 const meta: Meta = {
-  title: 'Dev Tools/widgets/Inspect',
+  title: 'Tools/widgets/inspect',
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },
 };
