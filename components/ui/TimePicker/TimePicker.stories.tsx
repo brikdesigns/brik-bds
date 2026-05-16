@@ -6,7 +6,7 @@ import { TimePicker } from './TimePicker';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof TimePicker> = {
-  title: 'Components/Form/time-picker',
+  title: 'Blocks/time-picker',
   component: TimePicker,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

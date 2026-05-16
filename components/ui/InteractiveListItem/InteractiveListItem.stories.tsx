@@ -33,7 +33,7 @@ const Stack = ({
 /* ─── Meta ───────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof InteractiveListItem> = {
-  title: 'Components/List/interactive-list-item',
+  title: 'Blocks/interactive-list-item',
   component: InteractiveListItem,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
