@@ -39,4 +39,4 @@ Demonstrates how the link visually integrates with flowing paragraph text. Surro
 
 > **Note** — For external links, set `target="_blank"` **and** `rel="noopener noreferrer"` together. The component doesn't add these automatically — the security pair is the consumer's responsibility. The Storybook Controls expose both for inline testing.
 
-> **Note** — **No `disabled` state today.** TextLink is an `<a>` element; HTML `disabled` doesn't apply to anchors. The accessible pattern is `aria-disabled="true"` + remove `href` + muted styling — not currently implemented. Tracked separately; consumers needing a disabled link should render plain text (or a [`Button variant="ghost"`](/?path=/docs/components-action-button--docs)) instead.
+> **Note** — **No `disabled` state today.** TextLink is an `<a>` element; HTML `disabled` doesn't apply to anchors. The accessible pattern is `aria-disabled="true"` + remove `href` + muted styling — not currently implemented. Tracked separately; consumers needing a disabled link should render plain text (or a [`Button variant="ghost"`](/?path=/docs/components-button--docs)) instead.

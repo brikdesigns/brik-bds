@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MarketingIllustration } from './MarketingIllustration';
 
 const meta: Meta<typeof MarketingIllustration> = {
-  title: 'Components/Marketing/marketing-illustration',
+  title: 'Components/marketing-illustration',
   component: MarketingIllustration,
   tags: ['surface-web'],
   parameters: {

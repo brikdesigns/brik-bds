@@ -13,7 +13,7 @@ const flatOptions: SelectOption[] = [
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Select> = {
-  title: 'Components/Form/select',
+  title: 'Components/select',
   component: Select,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

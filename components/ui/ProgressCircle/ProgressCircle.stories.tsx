@@ -30,7 +30,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof ProgressCircle> = {
-  title: 'Components/Feedback/progress-circle',
+  title: 'Components/progress-circle',
   component: ProgressCircle,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

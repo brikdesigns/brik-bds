@@ -16,7 +16,7 @@ const serviceOptions: MultiSelectOption[] = [
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof MultiSelect> = {
-  title: 'Components/Form/multi-select',
+  title: 'Components/multi-select',
   component: MultiSelect,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

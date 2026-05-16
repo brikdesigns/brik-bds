@@ -18,7 +18,7 @@ const categoryOptions: FilterButtonOption[] = [
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof FilterButton> = {
-  title: 'Components/Action/filter-button',
+  title: 'Components/filter-button',
   component: FilterButton,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },

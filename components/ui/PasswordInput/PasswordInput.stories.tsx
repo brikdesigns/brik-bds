@@ -5,7 +5,7 @@ import { PasswordInput } from './PasswordInput';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof PasswordInput> = {
-  title: 'Components/Input/password-input',
+  title: 'Components/password-input',
   component: PasswordInput,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

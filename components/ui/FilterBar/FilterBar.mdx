@@ -8,7 +8,7 @@ import * as Stories from './FilterBar.stories';
 
 <ComponentLinks slug="filter-bar" />
 
-Toolbar that pairs a result counter with one or more filter controls ([`FilterButton`](/?path=/docs/components-action-filter-button--docs), [`FilterToggle`](/?path=/docs/components-action-filter-toggle--docs), or any compatible child). Use above tables and lists to expose filtering plus a clear-all affordance.
+Toolbar that pairs a result counter with one or more filter controls ([`FilterButton`](/?path=/docs/components-filter-button--docs), [`FilterToggle`](/?path=/docs/components-filter-toggle--docs), or any compatible child). Use above tables and lists to expose filtering plus a clear-all affordance.
 
 Layout: `[title] [counter] ... [filter children] [clear?]`
 
@@ -34,7 +34,7 @@ State behavior to exercise:
 
 ## Notes
 
-> **Note** — FilterBar is the canonical host for compositions of [`FilterButton`](/?path=/docs/components-action-filter-button--docs) and [`FilterToggle`](/?path=/docs/components-action-filter-toggle--docs). Don't reach for a manual flex row in consumer code; use FilterBar so the counter, clear-button placement, and aria-label all stay consistent.
+> **Note** — FilterBar is the canonical host for compositions of [`FilterButton`](/?path=/docs/components-filter-button--docs) and [`FilterToggle`](/?path=/docs/components-filter-toggle--docs). Don't reach for a manual flex row in consumer code; use FilterBar so the counter, clear-button placement, and aria-label all stay consistent.
 
 > **Note** — The Default story embeds a `useState` + `useMemo` filter pipeline because FilterBar's defining behavior (filter → recount → clear-button-appears) requires real state. Consumers wire their own data source; the in-story hook is illustrative.
 

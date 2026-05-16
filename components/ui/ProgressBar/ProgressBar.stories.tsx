@@ -25,7 +25,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof ProgressBar> = {
-  title: 'Components/Feedback/progress-bar',
+  title: 'Components/progress-bar',
   component: ProgressBar,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

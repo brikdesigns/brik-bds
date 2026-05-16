@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Meter } from './Meter';
 
 const meta: Meta<typeof Meter> = {
-  title: 'Displays/Charts/meter',
+  title: 'Components/meter',
   component: Meter,
   tags: ['surface-shared'],
   parameters: {

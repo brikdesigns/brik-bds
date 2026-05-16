@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EmptyState } from './EmptyState';
 
 const meta: Meta<typeof EmptyState> = {
-  title: 'Components/Feedback/empty-state',
+  title: 'Components/empty-state',
   component: EmptyState,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

@@ -45,7 +45,7 @@ const industryOptions = [
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof FilterBar> = {
-  title: 'Components/Action/filter-bar',
+  title: 'Components/filter-bar',
   component: FilterBar,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
