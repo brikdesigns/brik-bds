@@ -46,7 +46,7 @@ const LogoPlaceholder = () => (
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof NavBar> = {
-  title: 'Navigation/Primary/nav-bar',
+  title: 'Sections/nav-bar',
   component: NavBar,
   tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },

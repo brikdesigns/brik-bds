@@ -46,7 +46,7 @@ const sampleBreadcrumbs = [
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof PageHeader> = {
-  title: 'Navigation/Secondary/page-header',
+  title: 'Sections/page-header',
   component: PageHeader,
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },
