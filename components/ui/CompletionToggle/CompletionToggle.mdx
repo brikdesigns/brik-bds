@@ -10,7 +10,7 @@ import * as Stories from './CompletionToggle.stories';
 
 Circular icon-only toggle for marking a discrete unit of work complete or incomplete. Renders as a `<button>` so it's a self-contained click target with native keyboard support (`Space` / `Enter`).
 
-Use for task cards, completion lists, board-card chrome — anywhere a binary "complete / not complete" state lives on its own. For row-style use where an adjacent label is also the click target, use [`Checklist`](/?path=/docs/components-list-checklist--docs).
+Use for task cards, completion lists, board-card chrome — anywhere a binary "complete / not complete" state lives on its own. For row-style use where an adjacent label is also the click target, use [`Checklist`](/?path=/docs/blocks-checklist--docs).
 
 ## Playground
 
@@ -38,7 +38,7 @@ CompletionToggle varies along the **orientation** axis when grouped. Boolean sta
 
 ## Notes
 
-> **Note** — CompletionToggle is icon-only by design. For row-style use with an adjacent label as the click target, use [`Checklist`](/?path=/docs/components-list-checklist--docs) — same visual, paired with a native `<label>` + `<input>`.
+> **Note** — CompletionToggle is icon-only by design. For row-style use with an adjacent label as the click target, use [`Checklist`](/?path=/docs/blocks-checklist--docs) — same visual, paired with a native `<label>` + `<input>`.
 
 > **Note** — CompletionToggle is fully controlled. Consumers manage the `checked` state externally (typically in a task store or row state) and pass `onCheckedChange` to receive updates. The Storybook canvas wraps it with `useState` for interactive demo purposes.
 
