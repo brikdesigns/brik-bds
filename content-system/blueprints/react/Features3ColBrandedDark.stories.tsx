@@ -109,7 +109,7 @@ const withAudienceCascade = (Story: () => JSX.Element) => (
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Features3ColBrandedDark> = {
-  title: 'Theming/Blueprints/features_3col_branded_dark',
+  title: 'Sections/Blueprints/features_3col_branded_dark',
   component: Features3ColBrandedDark,
   tags: ['surface-web', 'surface-shared'],
   decorators: [withAudienceCascade],

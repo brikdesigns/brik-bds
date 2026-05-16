@@ -43,7 +43,7 @@ const section: BlueprintProps['section'] = {
 };
 
 const meta: Meta<typeof CtaDarkCentered> = {
-  title: 'Theming/Blueprints/cta_dark_centered',
+  title: 'Sections/Blueprints/cta_dark_centered',
   component: CtaDarkCentered,
   tags: ['surface-web', 'surface-shared'],
   parameters: { layout: 'fullscreen' },

@@ -8,7 +8,7 @@ import { Button } from '../../../components/ui/Button';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: 'Patterns/Forms/contact-form',
+  title: 'Containers/contact-form',
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
 };

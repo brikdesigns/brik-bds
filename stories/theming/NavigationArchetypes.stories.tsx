@@ -117,7 +117,7 @@ function ArchetypeStoryRender({ archetype }: ArchetypeStoryArgs) {
 }
 
 const meta: Meta<ArchetypeStoryArgs> = {
-  title: 'Theming/Layout Archetypes',
+  title: 'Sections/navigation-archetypes',
   parameters: {
     layout: 'fullscreen',
     docs: {
