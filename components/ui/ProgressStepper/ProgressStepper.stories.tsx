@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ProgressStepper, type ProgressStep } from './ProgressStepper';
 
 const meta: Meta<typeof ProgressStepper> = {
-  title: 'Navigation/Stepper/progress-stepper',
+  title: 'Sections/progress-stepper',
   component: ProgressStepper,
   tags: ['surface-product'],
   parameters: {

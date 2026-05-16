@@ -59,7 +59,7 @@ function InteractiveTabBar({
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof TabBar> = {
-  title: 'Navigation/Secondary/tab-bar',
+  title: 'Sections/tab-bar',
   component: TabBar,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

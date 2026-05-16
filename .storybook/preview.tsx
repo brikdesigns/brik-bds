@@ -358,8 +358,10 @@ const preview: Preview = {
           ],
           'Layouts',
           ['stack', 'cluster', 'grid', 'frame', '*'],
+          'Sections',
+          ['nav-bar', 'footer', 'sidebar-navigation', 'breadcrumb', 'page-header', 'tab-bar', 'progress-stepper', '*'],
           'Navigation',
-          ['Primary', 'Secondary', 'Stepper', '*'],
+          ['Menu', '*'],
           'Displays',
           [
             'Card',

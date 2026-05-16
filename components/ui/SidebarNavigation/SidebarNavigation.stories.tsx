@@ -71,7 +71,7 @@ const userSection = (
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof SidebarNavigation> = {
-  title: 'Navigation/Primary/sidebar-navigation',
+  title: 'Sections/sidebar-navigation',
   component: SidebarNavigation,
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },
