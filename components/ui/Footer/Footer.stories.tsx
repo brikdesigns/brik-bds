@@ -73,7 +73,7 @@ const socialLinks = (
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Footer> = {
-  title: 'Navigation/Primary/footer',
+  title: 'Sections/footer',
   component: Footer,
   tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },

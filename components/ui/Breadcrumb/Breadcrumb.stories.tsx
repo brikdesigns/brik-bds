@@ -24,7 +24,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Breadcrumb> = {
-  title: 'Navigation/Secondary/breadcrumb',
+  title: 'Sections/breadcrumb',
   component: Breadcrumb,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
