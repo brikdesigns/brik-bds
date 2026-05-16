@@ -8,7 +8,7 @@ import { Card } from '../Card';
  * @summary Equal-column grid for laying out Fields side by side
  */
 const meta: Meta<typeof FieldGrid> = {
-  title: 'Displays/Sheet/field-grid',
+  title: 'Blocks/field-grid',
   component: FieldGrid,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },

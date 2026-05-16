@@ -13,7 +13,7 @@ const Stack = ({
 /* ─── Meta ───────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Checklist> = {
-  title: 'Components/List/checklist',
+  title: 'Blocks/checklist',
   component: Checklist,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
