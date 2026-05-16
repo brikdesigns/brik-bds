@@ -24,7 +24,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof CollapsibleCard> = {
-  title: 'Displays/Card/collapsible-card',
+  title: 'Containers/collapsible-card',
   component: CollapsibleCard,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

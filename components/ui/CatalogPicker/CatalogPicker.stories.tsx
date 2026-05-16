@@ -91,7 +91,7 @@ const SectionLabel = ({ children }: { children: string }) => (
 // ── Storybook meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof CatalogPicker> = {
-  title: 'Components/Addables/catalog-picker',
+  title: 'Containers/catalog-picker',
   component: CatalogPicker,
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
