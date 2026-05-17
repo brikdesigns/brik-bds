@@ -1,0 +1,26 @@
+@layer bds-components {
+/* SearchInput — suppress native webkit cancel button (replaced by our clear button) */
+.bds-text-input-field[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* SearchInput — clear button */
+
+.bds-search-input__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: var(--icon-sm);
+  line-height: 1;
+}
+
+.bds-search-input__clear:hover {
+  color: var(--text-primary);
+}
+}
