@@ -138,6 +138,7 @@
     "build:content-system": "tsc --project tsconfig.content-system.json",
     "build:inspector-manifest": "node scripts/build-inspector-manifest.mjs",
     "bds:find": "node scripts/bds-find.mjs",
+    "bcs-vocab-check": "node scripts/bcs-vocab-check.mjs",
     "canonical-check": "node scripts/canonical-check.mjs --allowlist dist/tokens.css components content-system/blueprints content-system/atmospheres content-system/industries",
     "canonical-check:report": "node scripts/canonical-check.mjs --allowlist dist/tokens.css --format md components content-system stories || true",
     "canonical-class-check": "node scripts/canonical-class-check.mjs --allowlist dist/styles.css content-system/blueprints",
