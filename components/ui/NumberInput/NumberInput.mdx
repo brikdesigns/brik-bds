@@ -1,0 +1,37 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './NumberInput.stories';
+
+<Meta of={Stories} />
+
+# Number input
+
+<ComponentLinks slug="number-input" />
+
+Numeric input with BDS-styled increment / decrement steppers. Hides the native browser spinners and replaces them with caret buttons that respect `min`, `max`, and `step`. Wraps [`TextInput`](/?path=/docs/components-text-input--docs) and inherits all its props except `type` (forced to `"number"`) and `iconAfter` (reserved for the steppers).
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+NumberInput has no semantic-variant axis — all variation (size, min/max/step, error, disabled, helper text, fullWidth) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+
+<Canvas of={Stories.Default} />
+
+- **`sm`** — 32px height, 14px body
+- **`md`** — 40px height, 16px body (default)
+- **`lg`** — 48px height, 18px body
+
+The stepper buttons are always present. Clicking increment / decrement fires `onChange` with the new value, so controlled and uncontrolled modes both work identically.
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — NumberInput specialization is justified per [ADR-004 §Amendment 2026-05-17](../../../docs/adrs/ADR-004-component-bloat-guardrails.md): steppers are distinct interactive behavior beyond `type="number"`. For plain text, email, tel, or url inputs use [`TextInput`](/?path=/docs/components-text-input--docs) directly.
+
+> **Note** — All `TextInput` updates (focus ring, error styling, sizing tokens) propagate here automatically. `type` and `iconAfter` are reserved by `NumberInput`; everything else passes through.
