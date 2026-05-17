@@ -1,35 +1,24 @@
 /**
  * warm-soft atmosphere
  *
- * Warm-ivory light-mode treatment for wellness/therapy/recovery
- * verticals. Anxiety-sensitive audiences don't want motion or
- * cinematic flourish — this atmosphere is the opposite of
- * cinematic-dramatic: one quiet vignette, minimal grain, zero orbs
- * or spotlights.
+ * Quiet decoration layer for wellness/therapy/recovery verticals.
+ * Anxiety-sensitive audiences don't want motion or cinematic flourish —
+ * this atmosphere is the opposite of cinematic-dramatic: one quiet
+ * vignette, minimal grain, zero orbs or spotlights.
  *
  * Design posture:
- *   - Warm ivory base (#fbf7f0) — cream, not bright white
  *   - Single top-left radial vignette in rose/terracotta at 5% opacity
  *   - Subtle grain at 15% opacity (barely-there warmth, not texture)
  *   - No depth orbs, no cursor spotlights, no aurora
- *   - Section-edge vignettes optional (soft fade, not cut)
+ *   - Section-edge vignettes optional (soft fade into the page color)
+ *
+ * Surface colors are set by the brand theme layer. The section-edge
+ * fades reference var(--page-primary) so they self-relativize against
+ * whatever surface color the theme layer resolves.
  */
 
 :root {
-  --atmosphere-paper: #fbf7f0;
-
-  --surface-primary:        var(--atmosphere-paper);
-  --surface-secondary:      var(--atmosphere-paper);
-  --background-primary:     var(--atmosphere-paper);
-  --background-secondary:   var(--atmosphere-paper);
-  --background-tertiary:    #ffffff;
-  --background-input:       #ffffff;
-
-  --ambient-rose:           rgba(210, 140, 130, 0.05);
-}
-
-body {
-  background: var(--atmosphere-paper);
+  --ambient-rose: rgba(210, 140, 130, 0.05);
 }
 
 /* Single quiet top-left vignette. Warm without being cinematic. */
@@ -56,7 +45,7 @@ body::after {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.6  0 0 0 0 0.5  0 0 0 0 0.4  0 0 0 0.20 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
-/* Section-edge soft fades — gentler than editorial-luxury's hard vignette. */
+/* Section-edge soft fades — fade into the theme's page color, not a hardcoded value. */
 section[data-edge]::before,
 section[data-edge]::after {
   content: '';
@@ -68,11 +57,11 @@ section[data-edge]::after {
 }
 section[data-edge]::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--atmosphere-paper), transparent);
+  background: linear-gradient(to bottom, var(--page-primary), transparent);
 }
 section[data-edge]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--atmosphere-paper), transparent);
+  background: linear-gradient(to top, var(--page-primary), transparent);
 }
 
 /* data-ambient / data-spotlight are inert in warm-soft — anxiety-

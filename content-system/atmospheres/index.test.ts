@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { describe, it, expect } from 'vitest';
 import {
   ATMOSPHERE_MANIFEST,
@@ -143,4 +144,51 @@ describe('getAtmosphereSafePairings', () => {
   it('returns an empty array for `none`', () => {
     expect(getAtmosphereSafePairings('none')).toEqual([]);
   });
+});
+
+// ── Architecture compliance gate ────────────────────────────────────
+//
+// Atmospheres must NEVER override color-foundation tokens. These tests
+// are the hard regression gate added in brik-bds#369.
+//
+// CSS files are loaded via import.meta.glob (Vite/Vitest feature) so
+// no @types/node is required.
+
+const CSS_MODULES = import.meta.glob<string>('./*.css', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+describe('Atmosphere CSS — color-foundation compliance (brik-bds#369)', () => {
+  it('finds at least 6 CSS files to validate', () => {
+    expect(Object.keys(CSS_MODULES).length).toBeGreaterThanOrEqual(6);
+  });
+
+  for (const [filePath, content] of Object.entries(CSS_MODULES)) {
+    const file = filePath.replace(/^\.\//, '');
+
+    it(`${file}: does not declare color-foundation tokens`, () => {
+      // Match property declarations of the banned semantic categories.
+      const BANNED = /--(page|surface|background|text|border)-[a-z]/;
+      const violations = content
+        .split('\n')
+        .map((line, i) => ({ line: line.trim(), num: i + 1 }))
+        .filter(({ line }) => {
+          const match = line.match(/^(--[a-z][a-zA-Z0-9-]*):/);
+          return match != null && BANNED.test(match[1]);
+        });
+      expect(violations).toEqual([]);
+    });
+
+    it(`${file}: does not set a top-level body{} rule`, () => {
+      const hasBodyBlock = /^\s*body\s*\{/m.test(content);
+      expect(hasBodyBlock).toBe(false);
+    });
+
+    it(`${file}: does not use retired --atmosphere-paper/ink local vars`, () => {
+      const hasRetiredVar = /--atmosphere-(paper|cream-paper|ink)/.test(content);
+      expect(hasRetiredVar).toBe(false);
+    });
+  }
 });

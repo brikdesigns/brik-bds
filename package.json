@@ -39,6 +39,7 @@
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
     "./bridge.css": "./dist/bridge.css",
+    "./page-base.css": "./dist/page-base.css",
     "./canonical-check": {
       "types": "./scripts/canonical-check.d.ts",
       "import": "./scripts/canonical-check.mjs",

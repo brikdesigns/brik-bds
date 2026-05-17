@@ -1,39 +1,26 @@
 /**
  * organic-textured atmosphere
  *
- * Warm-cream textured-paper treatment. Sits between warm-soft (quieter,
+ * Textured-paper decoration layer. Sits between warm-soft (quieter,
  * wellness-coded) and editorial-luxury (dramatic, dark). Intended for
  * MUA / organic beauty / artisan / natural-products brands where the
  * brand evokes tactile materiality without going cinematic.
  *
  * Design posture:
- *   - Warm cream base (#f5efe6) — a step warmer than warm-soft
  *   - SVG grain at 40% opacity with sepia multiply (richer texture
  *     than warm-soft's 15%, but applied to light surfaces so it reads
  *     as paper rather than gritty)
  *   - Subtle earth-tone radial tint (terracotta at 4%) in bottom-right
  *   - No vignettes, no orbs, no motion
  *
- * The grain is the distinguishing move — at 40% sepia-multiply it
- * gives surfaces a tactile, recycled-paper feel that reads as
- * artisan/organic/natural rather than flat digital.
+ * Surface colors are set by the brand theme layer. The grain is the
+ * distinguishing move — at 40% sepia-multiply it gives surfaces a
+ * tactile, recycled-paper feel that reads as artisan/organic/natural
+ * rather than flat digital.
  */
 
 :root {
-  --atmosphere-cream-paper: #f5efe6;
-
-  --surface-primary:        var(--atmosphere-cream-paper);
-  --surface-secondary:      var(--atmosphere-cream-paper);
-  --background-primary:     var(--atmosphere-cream-paper);
-  --background-secondary:   var(--atmosphere-cream-paper);
-  --background-tertiary:    #ffffff;
-  --background-input:       #ffffff;
-
-  --ambient-terracotta:     rgba(180, 120, 90, 0.04);
-}
-
-body {
-  background: var(--atmosphere-cream-paper);
+  --ambient-terracotta: rgba(180, 120, 90, 0.04);
 }
 
 /* Subtle earth-tone radial in the bottom-right — warms the lower
