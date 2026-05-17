@@ -68,4 +68,28 @@
 .bds-field--inline .bds-field__empty {
   text-align: right;
 }
+
+/* ─── Compact tier ──────────────────────────────────────── */
+
+/* Compact swaps the label to --label-sm, matching SheetFieldLabel.
+   Use inside dense Sheet layouts (replaces SheetFieldLabel/SheetFieldValue). */
+.bds-field--compact .bds-field__label {
+  font-size: var(--label-sm);
+}
+
+/* ─── Helper slot ───────────────────────────────────────── */
+
+.bds-field__helper {
+  font-family: var(--font-family-label);
+  font-size: var(--label-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+  margin: 0;
+  display: block;
+}
+
+.bds-field__helper--error {
+  color: var(--text-accent-red);
+}
 }

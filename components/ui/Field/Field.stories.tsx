@@ -16,7 +16,10 @@ const meta: Meta<typeof Field> = {
     label: { control: 'text' },
     children: { control: 'text' },
     layout: { control: 'select', options: ['stacked', 'inline'] },
+    tier: { control: 'select', options: ['standard', 'compact'] },
     empty: { control: 'text' },
+    helper: { control: 'text' },
+    helperTone: { control: 'select', options: ['neutral', 'error'] },
   },
 };
 
@@ -56,6 +59,24 @@ export const WithCompositeEmpty: Story = {
           />
         }
       />
+    </Frame>
+  ),
+};
+
+/** @summary `tier="compact"` replaces SheetFieldLabel + SheetFieldValue pairs */
+export const CompactTier: Story = {
+  render: () => (
+    <Frame>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+        <Field label="Status" tier="compact">Active</Field>
+        <Field label="Notes" tier="compact" empty="—">
+          Multi-line value that wraps across lines is preserved correctly.
+        </Field>
+        <Field label="Phone" tier="compact" helper="Primary contact number">
+          (555) 867-5309
+        </Field>
+        <Field label="Insurance" tier="compact" helper="Required field" helperTone="error" />
+      </div>
     </Frame>
   ),
 };

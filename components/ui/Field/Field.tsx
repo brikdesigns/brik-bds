@@ -3,6 +3,8 @@ import { bdsClass } from '../../utils';
 import './Field.css';
 
 export type FieldLayout = 'stacked' | 'inline';
+export type FieldTier = 'standard' | 'compact';
+export type FieldHelperTone = 'neutral' | 'error';
 
 export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Field label — rendered above (stacked) or beside (inline) the value. */
@@ -12,12 +14,22 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   /** Stacked = label above value (default). Inline = label / value on one row. */
   layout?: FieldLayout;
   /**
+   * Typography tier. `standard` = `--label-md` label (default, matches edit-mode controls).
+   * `compact` = `--label-sm` label — use inside dense Sheet layouts where
+   * `SheetFieldLabel` was previously required.
+   */
+  tier?: FieldTier;
+  /**
    * Rendered when `children` is null / undefined / empty string.
    * Defaults to the inline muted string "Not set".
    * Pass `<EmptyState />` when a whole section is empty and a larger
    * treatment is warranted — prefer inline text for per-row empties.
    */
   empty?: ReactNode;
+  /** Helper or validation text rendered below the value. */
+  helper?: ReactNode;
+  /** Tone for the helper slot. `neutral` = muted gray (default). `error` = red. */
+  helperTone?: FieldHelperTone;
 }
 
 function isEmpty(value: ReactNode): boolean {
@@ -31,13 +43,20 @@ function isEmpty(value: ReactNode): boolean {
  * tags, URLs, bullet lists, and empty states. Locks label typography,
  * value spacing, and the "Not set" empty treatment.
  *
+ * Use `tier="compact"` inside dense Sheet layouts (replaces `SheetFieldLabel` /
+ * `SheetFieldValue`). Use `helper` + `helperTone` for validation or hint text
+ * (replaces `SheetHelperText`).
+ *
  * @summary Read-mode label + value pair for use inside a Sheet
  */
 export function Field({
   label,
   children,
   layout = 'stacked',
+  tier = 'standard',
   empty = 'Not set',
+  helper,
+  helperTone = 'neutral',
   className,
   style,
   ...props
@@ -46,7 +65,12 @@ export function Field({
 
   return (
     <div
-      className={bdsClass('bds-field', `bds-field--${layout}`, className)}
+      className={bdsClass(
+        'bds-field',
+        `bds-field--${layout}`,
+        tier === 'compact' && 'bds-field--compact',
+        className,
+      )}
       style={style}
       {...props}
     >
@@ -55,6 +79,16 @@ export function Field({
         <span className="bds-field__empty">{empty}</span>
       ) : (
         <div className="bds-field__value">{children}</div>
+      )}
+      {helper != null && (
+        <span
+          className={bdsClass(
+            'bds-field__helper',
+            helperTone === 'error' && 'bds-field__helper--error',
+          )}
+        >
+          {helper}
+        </span>
       )}
     </div>
   );
