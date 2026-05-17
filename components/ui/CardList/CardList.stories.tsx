@@ -1,12 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardList } from './CardList';
 import { Card, CardTitle, CardDescription, CardFooter } from '../Card/Card';
-import { CardTestimonial } from '../CardTestimonial';
 import { Button } from '../Button';
-import { Badge } from '../Badge';
 
 const meta: Meta<typeof CardList> = {
-  title: 'Containers/card-list',
+  title: 'Layouts/card-list',
   component: CardList,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
@@ -20,24 +18,13 @@ const meta: Meta<typeof CardList> = {
 export default meta;
 type Story = StoryObj<typeof CardList>;
 
-/* ─── Layout helpers ─────────────────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-    {children}
-  </span>
-);
-
-const Stack = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%', maxWidth: 1100 }}>
-    {children}
-  </div>
-);
-
-/* ─── Playground ─────────────────────────────────────────────── */
-
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Layout wrapper for arrays of cards. Toggle `orientation`, `gap`, and
+ * `fitContent` via Controls to exercise the full layout surface.
+ *
+ * @summary Stack of cards — orientation, gap, and fitContent via Controls
+ */
+export const Default: Story = {
   args: {
     orientation: 'vertical',
     gap: 'md',
@@ -49,210 +36,36 @@ export const Playground: Story = {
         <Card variant="outlined" padding="md">
           <CardTitle as="h4">Card one</CardTitle>
           <CardDescription>Short description for the first card in the list.</CardDescription>
+          <CardFooter><Button variant="outline" size="sm">View</Button></CardFooter>
         </Card>
         <Card variant="outlined" padding="md">
           <CardTitle as="h4">Card two</CardTitle>
           <CardDescription>Short description for the second card in the list.</CardDescription>
+          <CardFooter><Button variant="outline" size="sm">View</Button></CardFooter>
         </Card>
         <Card variant="outlined" padding="md">
           <CardTitle as="h4">Card three</CardTitle>
           <CardDescription>Short description for the third card in the list.</CardDescription>
+          <CardFooter><Button variant="outline" size="sm">View</Button></CardFooter>
         </Card>
       </CardList>
     </div>
   ),
 };
 
-/* ─── Vertical layout ────────────────────────────────────────── */
-
-/** @summary Vertical */
-export const Vertical: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Vertical — generic Card</SectionLabel>
-      <div style={{ width: 480 }}>
-        <CardList orientation="vertical" gap="md">
-          <Card variant="outlined" padding="md">
-            <CardTitle as="h4">Quarterly report</CardTitle>
-            <CardDescription>Summary of Q1 performance across all channels.</CardDescription>
-            <CardFooter>
-              <Button variant="outline" size="sm">View</Button>
-            </CardFooter>
-          </Card>
-          <Card variant="outlined" padding="md">
-            <CardTitle as="h4">Team update</CardTitle>
-            <CardDescription>New hires, role changes, and milestones this month.</CardDescription>
-            <CardFooter>
-              <Button variant="outline" size="sm">View</Button>
-            </CardFooter>
-          </Card>
-          <Card variant="outlined" padding="md">
-            <CardTitle as="h4">Product roadmap</CardTitle>
-            <CardDescription>Upcoming features planned for the next two quarters.</CardDescription>
-            <CardFooter>
-              <Button variant="outline" size="sm">View</Button>
-            </CardFooter>
-          </Card>
-        </CardList>
-      </div>
-
-    </Stack>
-  ),
-};
-
-/* ─── Horizontal layout ──────────────────────────────────────── */
-
-/** @summary Horizontal */
-export const Horizontal: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Horizontal — equal columns (default)</SectionLabel>
-      <CardList orientation="horizontal" gap="lg">
-        <Card variant="outlined" padding="lg">
-          <Badge>Design</Badge>
-          <CardTitle>Design</CardTitle>
-          <CardDescription>Brand, identity, and design systems.</CardDescription>
-          <CardFooter>
-            <Button variant="outline" size="sm">Learn more</Button>
-          </CardFooter>
-        </Card>
-        <Card variant="outlined" padding="lg">
-          <Badge>Development</Badge>
-          <CardTitle>Development</CardTitle>
-          <CardDescription>Full-stack product engineering.</CardDescription>
-          <CardFooter>
-            <Button variant="outline" size="sm">Learn more</Button>
-          </CardFooter>
-        </Card>
-        <Card variant="outlined" padding="lg">
-          <Badge>Strategy</Badge>
-          <CardTitle>Strategy</CardTitle>
-          <CardDescription>Roadmapping and growth operations.</CardDescription>
-          <CardFooter>
-            <Button variant="outline" size="sm">Learn more</Button>
-          </CardFooter>
-        </Card>
-      </CardList>
-
-      <SectionLabel>Horizontal — CardTestimonial (brand + outlined)</SectionLabel>
-      <CardList orientation="horizontal" gap="lg">
-        <CardTestimonial
-          variant="brand"
-          quote="Square has completely transformed how we handle payments. The analytics alone have helped us grow 40% this year."
-          authorName="Sarah Chen"
-          authorRole="Owner, Bloom Cafe"
-          rating={5}
-        />
-        <CardTestimonial
-          variant="outlined"
-          quote="Professional, responsive, and creative. Our new site has driven 3x more leads."
-          authorName="Marcus Johnson"
-          authorRole="Marketing Director, Apex Corp"
-          rating={5}
-        />
-        <CardTestimonial
-          variant="brand"
-          quote="Working with this team felt like an extension of our own company."
-          authorName="Emily Rodriguez"
-          authorRole="CEO, Greenfield Digital"
-          rating={4}
-        />
-      </CardList>
-    </Stack>
-  ),
-};
-
-/* ─── Fit content ────────────────────────────────────────────── */
-
-/** @summary Horizontal fit content */
-export const HorizontalFitContent: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Horizontal — fitContent (items size to own width)</SectionLabel>
-      <CardList orientation="horizontal" gap="md" fitContent>
-        <Card variant="outlined" padding="md" style={{ width: 200 }}>
-          <CardTitle as="h4">200px</CardTitle>
-          <CardDescription>Fixed width card.</CardDescription>
-        </Card>
-        <Card variant="outlined" padding="md" style={{ width: 280 }}>
-          <CardTitle as="h4">280px</CardTitle>
-          <CardDescription>Different fixed width.</CardDescription>
-        </Card>
-        <Card variant="outlined" padding="md" style={{ width: 160 }}>
-          <CardTitle as="h4">160px</CardTitle>
-          <CardDescription>Narrowest card.</CardDescription>
-        </Card>
-      </CardList>
-    </Stack>
-  ),
-};
-
-/* ─── Patterns ───────────────────────────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Service grid (3-column horizontal)</SectionLabel>
-      <CardList orientation="horizontal" gap="lg">
-        <Card variant="outlined" padding="lg">
-          <Badge>Design</Badge>
-          <CardTitle>Brand identity</CardTitle>
-          <CardDescription>Logo, type, and tone — the foundation every campaign builds on.</CardDescription>
-          <CardFooter>
-            <Button variant="outline" size="sm">Learn more</Button>
-          </CardFooter>
-        </Card>
-        <Card variant="outlined" padding="lg">
-          <Badge>Build</Badge>
-          <CardTitle>Web development</CardTitle>
-          <CardDescription>Production sites built on the components your designers already know.</CardDescription>
-          <CardFooter>
-            <Button variant="outline" size="sm">Learn more</Button>
-          </CardFooter>
-        </Card>
-        <Card variant="outlined" padding="lg">
-          <Badge>Run</Badge>
-          <CardTitle>Ongoing partnership</CardTitle>
-          <CardDescription>Iterate after launch with a team that already knows your stack.</CardDescription>
-          <CardFooter>
-            <Button variant="outline" size="sm">Learn more</Button>
-          </CardFooter>
-        </Card>
-      </CardList>
-
-      <SectionLabel>Vertical news stack (in a sidebar)</SectionLabel>
-      <div style={{ width: 360 }}>
-        <CardList orientation="vertical" gap="md">
-          <Card variant="outlined" padding="md">
-            <CardTitle as="h4">Q1 review</CardTitle>
-            <CardDescription>What shipped, what slipped, and what's queued for Q2.</CardDescription>
-          </Card>
-          <Card variant="outlined" padding="md">
-            <CardTitle as="h4">New hires</CardTitle>
-            <CardDescription>Three engineers and a designer joined this month.</CardDescription>
-          </Card>
-          <Card variant="outlined" padding="md">
-            <CardTitle as="h4">Roadmap update</CardTitle>
-            <CardDescription>Two features promoted from Next to Now after customer feedback.</CardDescription>
-          </Card>
-        </CardList>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ─── Gap scale ──────────────────────────────────────────────── */
-
-/** @summary Gap scale */
+/**
+ * All four gap values side by side — `sm`, `md`, `lg`, `xl`.
+ *
+ * @summary Gap scale — sm / md / lg / xl
+ */
 export const GapScale: Story = {
   render: () => (
-    <Stack>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', maxWidth: 720 }}>
       {(['sm', 'md', 'lg', 'xl'] as const).map((g) => (
         <div key={g}>
-          <SectionLabel>{`gap = ${g}`}</SectionLabel>
+          <p style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--gap-sm)' }}>{`gap = ${g}`}</p>
           <CardList orientation="horizontal" gap={g}>
-            {[1, 2, 3, 4].map((n) => (
+            {[1, 2, 3].map((n) => (
               <Card key={n} variant="outlined" padding="md">
                 <CardTitle as="h4">{`Card ${n}`}</CardTitle>
               </Card>
@@ -260,6 +73,6 @@ export const GapScale: Story = {
           </CardList>
         </div>
       ))}
-    </Stack>
+    </div>
   ),
 };

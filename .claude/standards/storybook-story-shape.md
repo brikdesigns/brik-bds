@@ -6,6 +6,7 @@ scope: brik-bds
 applies-to: "**/components/ui/**/*.stories.tsx, **/content-system/blueprints/**/*.stories.tsx, **/stories/**/*.stories.tsx"
 retrieved-via: brik-rag query "storybook story shape standard"
 last-verified: 2026-05-17
+last-updated: 2026-05-17
 ---
 
 # Storybook story-shape standard (BDS)
@@ -103,6 +104,37 @@ A comparison gallery earns **one** dedicated story when **and only when** all th
 3. It's one axis, not a mix — `Sizes` is fine; `Sizes-and-tones` is not.
 
 Story is named after the axis (`Sizes`, `Densities`, `Placements`) — **never** `Variants` / `Patterns` / `Examples`.
+
+## Multi-preset Container pattern
+
+A Container built with a `preset` discriminator (a string union that selects between locked-down layouts) gets **one story per preset value** in the **base component's stories file**. Each preset is a Q3 story — a semantic starting template agents and developers reach for directly.
+
+**Where stories live:** all preset stories live in `ComponentA.stories.tsx`. If a preset was originally shipped as a standalone component (e.g. `CardControl` → `Card preset="control"`), its story consolidates into the base component's file when the standalone is deprecated.
+
+**Diagnostic:** if a standalone component is fully expressible as `<ComponentA preset="b" ... />` with no behavioral difference, its story belongs in `ComponentA.stories.tsx`. A separate `ComponentB.stories.tsx` for a preset is legacy — consolidate when touching that file.
+
+**Surface-tag conflict:** if a preset component has a narrower surface tag than the base (e.g. a `surface-web`-only component inside a `surface-shared` base), use story-level `tags` to scope that story:
+
+```tsx
+export const Pricing: Story = {
+  tags: ['surface-web'],  // narrower than meta.tags — web-only
+  ...
+};
+```
+
+**Card as the canonical reference** (all stories in `Card.stories.tsx`):
+
+| Story | What it shows | Source |
+| --- | --- | --- |
+| `Default` | Flexible `children` slot, variant + padding Controls | `Card` (no preset) |
+| `Control` | Settings row: badge + title + description + action | `Card preset="control"` |
+| `Summary` | Compact metric/stat card | `Card preset="summary"` |
+| `Display` | Content card for `bds-card-grid` | `Card preset="display"` |
+| `Pricing` | Web-only pricing tier with feature list | `PricingCard` (story consolidated; component file stays for `surface-web` CSS isolation) |
+
+**Wrong-layer check:** before classifying a component as `Containers/`, ask: does it carry its own visual surface (`border` / `background` / `padding` / `elevation`)? If not, it is a **`Layouts/`** component (pure arrangement, no surface). `CardList` (a `<ul>` spacing wrapper) is `Layouts/`, not `Containers/`.
+
+**Name-layer check:** "Card" in a component name implies Container-layer ancestry. If the component is actually an interaction primitive (`CollapsibleCard` — no `bds-card` class) or a semantic quotation block (`CardTestimonial` — `<figure>/<blockquote>`), the "Card" prefix is wrong. File a rename issue (#701, #702); do not propagate the misnomer in new story files.
 
 ## `render` is for irreducible cases only
 
@@ -359,6 +391,7 @@ If you find yourself wanting to "clean up" an existing file's `export const Vari
 
 ## Pre-commit agent checklist
 
+0. **Check for preset consolidation.** If the component being storied is marked `@deprecated` and superseded by a `preset` on another component, its story belongs in the parent component's stories file — not a new `Component.stories.tsx`. See `## Multi-preset Container pattern`.
 1. **Read three sibling story files** in the same `components/ui/<Subcategory>/` folder. Match their `title:` prefix, surface tag, and overall shape.
 2. **Verify the two-shape model** — file exports `Default` plus one story per meaningful state. No `Variants` / `Tones` / `Patterns` story exports (in new files).
 3. **Apply the matrix** — boolean / icon-slot states are Controls, not stories. Toolbar-global axes (theme/density/viewport/locale/motion) are never stories.
