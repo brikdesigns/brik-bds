@@ -49,9 +49,9 @@ const meta: Meta<DefaultArgs> = {
     },
     type: {
       control: 'select',
-      options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
+      options: ['text', 'email', 'tel', 'url'],
       description:
-        'HTML input type. `email` / `password` and any explicit `autoComplete` value suppress 1Password / LastPass prompts.',
+        'HTML input type. These four share an identical UX contract — `type` is a browser hint for autocomplete and keyboard. For specialised types use the dedicated component: `PasswordInput` (show/hide toggle), `SearchInput` (search affordance + clear button), `NumberInput` (steppers).',
     },
     fullWidth: {
       control: 'boolean',
