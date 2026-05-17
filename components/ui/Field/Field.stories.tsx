@@ -63,7 +63,7 @@ export const WithCompositeEmpty: Story = {
   ),
 };
 
-/** @summary `tier="compact"` replaces SheetFieldLabel + SheetFieldValue pairs */
+/** @summary `tier="compact"` for dense Sheet label + value pairs */
 export const CompactTier: Story = {
   render: () => (
     <Frame>
