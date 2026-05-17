@@ -83,3 +83,44 @@ A component-bloat audit runs at least twice yearly (next: 2026-Q4) to retroactiv
 - Component-bloat audit follow-up project (tracked in memory) executes the first retroactive pass
 - PR review check (manual for now; can be partially automated via a CI step that fails when a `components/ui/*` PR description is missing the four audit-gate answers — separate task)
 - Periodic audit cadence: twice yearly minimum
+
+---
+
+## Amendment 2026-05-17 — Component purpose test
+
+**Problem:** The >70% overlap rule (§3 above) was written to prevent trivial wrappers. Applied alone it can incorrectly kill components with genuine distinct UX purpose. The 2026-04-24 consolidation of `SearchInput` into `TextInput` misapplied the rule this way: `SearchInput` shared CSS with `TextInput` but had a distinct UX contract (search affordance, clear-button interaction, `role="search"`, different semantic identity). Overlap is a necessary check, not a sufficient one.
+
+### Purpose test — precedes the overlap test
+
+Ask this question first: **would a designer or developer reach for this by name because it has a distinct UX contract?**
+
+If yes, it is a component regardless of code overlap. If no, apply the overlap rule and the three-uses test.
+
+This establishes three tiers:
+
+| Tier | Definition | Story implication |
+| --- | --- | --- |
+| **Component** | Standalone purpose + recognizable identity. Reached for by name. Has its own Storybook entry, MDX page, and public export. | One or more stories in its own directory |
+| **Variant** | A distinct contextual expression of a component that carries its own semantic signal — own color logic, icon convention, or behavioral expectation. A designer would choose it intentionally in a wireframe. | Dedicated story (ADR-010 Q3) |
+| **Control / Prop** | Customization within a variant that does not change the component's identity or contextual meaning. | `argTypes` only (ADR-010 Q2) |
+
+**Toast as the canonical example:**
+
+- `Toast` — component (standalone notification surface)
+- `Toast` with `tone="destructive"` — variant / story (own icon + color logic; a designer picks it deliberately)
+- `Toast` with `showActions={false}` — control (does not change Toast's identity)
+
+### Corrected input taxonomy
+
+The 2026-04-24 consolidation of `EmailInput` was correct (5-line wrapper, no UX distinction). The consolidation of `SearchInput` was not.
+
+| Component | Verdict | Reasoning |
+| --- | --- | --- |
+| `TextInput` | ✅ Core primitive | text, email, url — identical UX contract; `type` is a browser hint, not a UX distinction |
+| `SearchInput` | ✅ Own component | Distinct UX: search affordance, clear-button interaction, `role="search"`, different semantic identity |
+| `NumberInput` | ✅ Own component | Distinct UX: steppers, `min`/`max`/`step`, format constraint |
+| `PhoneInput` | 🟡 Future-scope | Format mask + country-code selector will justify it; do not ship a wrapper-only version |
+| `EmailInput` | ❌ Removed correctly | `type="email"` is a browser autocomplete hint; no UX distinction from `TextInput` |
+| `URLInput` | ❌ Never ship | Same reasoning as `EmailInput` |
+
+Restoration of `SearchInput` and addition of `NumberInput` as first-class components is tracked separately.
