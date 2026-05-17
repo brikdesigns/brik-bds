@@ -183,6 +183,58 @@ import { Breadcrumb } from '../../components/ui/Breadcrumb/Breadcrumb';
 
 **Before writing JSX**, query `bds-find` or the Storybook MCP to confirm which primitives exist. If a primitive doesn't exist that the blueprint needs, build the primitive first (separate PR) and consume it from the blueprint, not the other way around.
 
+## Icons in components
+
+### Always use `<Icon>` — never inline SVGs
+
+BDS uses [Phosphor icons](https://phosphoricons.com/) via `@iconify/react`. Named constants live in [`components/icons.ts`](../../components/icons.ts).
+
+```tsx
+/* Right — named constant + Icon component */
+import { Icon } from '@iconify/react';
+import { X, Eye, EyeSlash, MagnifyingGlass } from '../../icons';
+
+<Icon icon={X} />
+<Icon icon={showPassword ? EyeSlash : Eye} />
+
+/* Wrong — inline SVG when an icons.ts constant exists */
+const XIcon = () => <svg width="14" height="14">...</svg>;
+
+/* Wrong — raw Iconify string, not from icons.ts */
+<Icon icon="ph:x" />
+```
+
+**Why:** inline SVGs hardcode their own dimensions via `width`/`height` attributes and bypass the font-size sizing system. They also duplicate an icon that's already tested and bundled.
+
+**Before writing any icon SVG inline**, check `components/icons.ts`. If the icon you need isn't there, add it to `icons.ts` as a named constant — don't embed the SVG.
+
+### Size icons via `font-size` — never `width`/`height`
+
+`<Icon>` renders as an inline SVG that scales with the CSS `font-size` of its parent. Set `font-size` on the button or wrapper, not `width`/`height` on the icon element.
+
+```css
+/* Right — font-size on the parent button */
+.bds-search-input__clear {
+  font-size: var(--icon-sm); /* 16px — scales the Icon inside */
+}
+
+/* Wrong — hardcoded dimensions on the icon itself */
+<Icon icon={X} width={14} height={14} />
+```
+
+### Canonical icon sizes for controls (4px grid)
+
+Icons inside form controls and action buttons must be on the 4px grid. Use `font-size` on the parent wrapper.
+
+| Control height | Icon size | CSS value |
+| --- | --- | --- |
+| `sm` — 32px | 12px | `font-size: 12px` |
+| `md` — 40px | 16px | `font-size: var(--icon-sm)` |
+| `lg` — 48px | 16px | `font-size: var(--icon-sm)` |
+| Standalone / header | 20px | `font-size: var(--icon-lg)` |
+
+**Avoid `--icon-xs` (≈14px) and `--icon-md` (18px)** — both are off the 4px grid. Use 12, 16, or 20 instead.
+
 ## Props — canonical shape
 
 ```
