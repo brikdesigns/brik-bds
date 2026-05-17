@@ -62,6 +62,7 @@ export * from './NotificationList';
 export * from './PageHeader';
 export * from './Pagination';
 export * from './PasswordInput';
+export * from './SearchInput';
 export * from './Popover';
 export * from './PricingCard';
 export * from './ProgressBar';
