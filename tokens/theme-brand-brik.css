@@ -41,6 +41,8 @@
   --background-primary: var(--color-grayscale-white);
   --background-secondary: var(--color-grayscale-lightest);
   --background-secondary-hover: var(--color-grayscale-lighter);
+  /* Mirrors dark-mode value; Button :active hardcodes white text → needs ≥AA. */
+  --background-secondary-pressed: var(--color-grayscale-darker);
   --background-inverse: var(--color-grayscale-darkest);
   --background-input: var(--color-grayscale-white);
   --background-image: #17171799;
