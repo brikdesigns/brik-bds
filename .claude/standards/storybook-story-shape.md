@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.stories.tsx, **/content-system/blueprints/**/*.stories.tsx, **/stories/**/*.stories.tsx"
 retrieved-via: brik-rag query "storybook story shape standard"
-last-verified: 2026-05-15
+last-verified: 2026-05-17
 ---
 
 # Storybook story-shape standard (BDS)
@@ -25,14 +25,14 @@ ADR-006 is *what* a file looks like; ADR-010 is *what populates it*. This standa
 
 Every BDS component story file ships exactly two kinds of stories:
 
-1. **`Playground`** — args-driven sandbox. Controls work. One canonical instance.
+1. **`Default`** — args-driven sandbox. Controls work. One canonical instance.
 2. **One story per meaningful state** — args-driven, named by the state.
 
 "Meaningful state" passes ADR-010 Q3: a value an agent would reach for as a *starting template*. Boolean toggles (`disabled`, `loading`, `fullWidth`) and icon-slot variations are Controls on every variant story, not standalone stories.
 
 ```tsx
 // ✅ ADR-006 + ADR-010 conformant
-export const Playground: Story = { args: { tone: 'information', ... } };
+export const Default: Story = { args: { tone: 'information', ... } };
 export const Information: Story = { args: { tone: 'information', ... } };
 export const Warning: Story = { args: { tone: 'warning', ... } };
 export const Error: Story = { args: { tone: 'error', ... } };
@@ -79,7 +79,7 @@ Description is required when the prop name doesn't already say it. Explicit `opt
 
 ```tsx
 // In Component.stories.tsx — story exports use state names
-export const Playground: Story = ...
+export const Default: Story = ...
 export const Warning: Story = ...
 export const OnboardingChecklist: Story = ...
 ```
@@ -360,7 +360,7 @@ If you find yourself wanting to "clean up" an existing file's `export const Vari
 ## Pre-commit agent checklist
 
 1. **Read three sibling story files** in the same `components/ui/<Subcategory>/` folder. Match their `title:` prefix, surface tag, and overall shape.
-2. **Verify the two-shape model** — file exports `Playground` plus one story per meaningful state. No `Variants` / `Tones` / `Patterns` story exports (in new files).
+2. **Verify the two-shape model** — file exports `Default` plus one story per meaningful state. No `Variants` / `Tones` / `Patterns` story exports (in new files).
 3. **Apply the matrix** — boolean / icon-slot states are Controls, not stories. Toolbar-global axes (theme/density/viewport/locale/motion) are never stories.
 4. **Verify every export has an `@summary` JSDoc** under 60 characters.
 5. **Verify `meta.tags` has exactly one of** `surface-web` / `surface-product` / `surface-shared`.
