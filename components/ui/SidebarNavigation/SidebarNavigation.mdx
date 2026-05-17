@@ -8,30 +8,20 @@ import * as Stories from './SidebarNavigation.stories';
 
 <ComponentLinks slug="sidebar-navigation" />
 
-Fixed-position sidebar with logo, navigation links, footer actions, and user section. Width is configurable via prop.
+Fixed-position primary sidebar with logo, nav items (`NavItem` internally), footer slot, and profile slot. Toggle `collapsed` for icon-only mode — pair with `SubNavigation` for a two-column app shell.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+Toggle `collapsed`, `showProfile`, `showFooterActions`, or override `width` in the Controls panel to explore states.
+
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Default, with icons, with user section, and custom width configurations.
+### Default
 
-- **`logo`** (required) — top section with branding
-- **`navItems`** (required) — navigation links with active state
-- **`footerActions`** — bottom actions (buttons, links)
-- **`user`** — user info at very bottom
-
-<Canvas of={Stories.Variants} />
-
-## Patterns
-
-Full application layout with sidebar and main content area.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Default} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
