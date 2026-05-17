@@ -49,27 +49,12 @@ const BUTTON_SIZE: Record<AddableComboListSize, ButtonSize> = { sm: 'sm', md: 'm
 const INPUT_SIZE: Record<AddableComboListSize, TextInputSize> = { sm: 'sm', md: 'md', lg: 'lg' };
 
 /**
- * AddableComboList — suggestion-driven combobox for tag-style multi-select
- * with free-form fallback.
- *
- * Typing filters the suggestion list (case-insensitive contains match). Users
- * can pick from suggestions via keyboard or click, or type a free-form value
- * and press Enter (unless `strict` is true). Already-selected suggestions are
- * hidden from the dropdown. Duplicates are rejected with a brief visual flash.
- *
- * Vocabulary-agnostic — the portal wires in BCS getters via the `suggestions`
- * prop; the component does not import from content-system.
- *
- * @example
- * ```tsx
- * <AddableComboList
- *   label="Services Offered"
- *   values={services}
- *   onChange={setServices}
- *   suggestions={getIndustryServices(industrySlug)}
- *   placeholder="Search or add a service…"
- * />
- * ```
+ * @deprecated Use `<AddableTagList suggestions={...} />` instead (ADR-003).
+ * `AddableTagList` covers both plain text lists and suggestion-backed
+ * combobox lists with a single API. Direct replacement:
+ * `<AddableComboList values={v} onChange={o} suggestions={s} />` →
+ * `<AddableTagList values={v} onChange={o} suggestions={s} />`
+ * Note: `maxEntries` was renamed to `maxItems`.
  *
  * @summary Suggestion-driven combobox tag input (multi-select)
  */

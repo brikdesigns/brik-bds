@@ -57,21 +57,11 @@ function warnStructuredContent(value: string, label?: string) {
 }
 
 /**
- * AddableTextList — list of text values with a reveal-on-click add pattern.
- *
- * The input is hidden until the user clicks the "Add new" button. Pressing
- * Enter commits the value, Escape cancels. Existing values render as
- * removable Tags.
- *
- * @example
- * ```tsx
- * <AddableTextList
- *   label="Services Offered"
- *   values={services}
- *   onChange={setServices}
- *   placeholder="e.g. Dental cleaning"
- * />
- * ```
+ * @deprecated Use `<AddableTagList />` instead (ADR-003).
+ * `AddableTagList` covers both plain text lists and suggestion-backed
+ * combobox lists with a single API. Direct replacement:
+ * `<AddableTextList values={v} onChange={o} />` →
+ * `<AddableTagList values={v} onChange={o} />`
  *
  * @summary Reveal-on-click list of single-line text entries
  */

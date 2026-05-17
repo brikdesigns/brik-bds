@@ -20,6 +20,13 @@
       "lg"
     ]
   },
+  "AddableTagList": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
   "AddableTextList": {
     "size": [
       "sm",
