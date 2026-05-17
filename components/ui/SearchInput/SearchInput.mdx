@@ -1,0 +1,39 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './SearchInput.stories';
+
+<Meta of={Stories} />
+
+# Search input
+
+<ComponentLinks slug="search-input" />
+
+Search field with a magnifying glass icon and a clear button that appears when the field has a value. Wraps [`TextInput`](/?path=/docs/components-text-input--docs) and inherits all its props except `type` (forced to `"search"`), `iconBefore` (reserved for the magnifying glass), and `iconAfter` (reserved for the clear button).
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+SearchInput has no semantic-variant axis — all variation (size, error, disabled, helper text, fullWidth) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+
+<Canvas of={Stories.Default} />
+
+- **`sm`** — 32px height, 14px body
+- **`md`** — 40px height, 16px body (default)
+- **`lg`** — 48px height, 18px body
+
+The clear button appears automatically when the field has a value and disappears when cleared. The play function above demonstrates the full type → clear cycle.
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — SearchInput specialization is justified per [ADR-004 §Amendment 2026-05-17](../../../docs/adrs/ADR-004-component-bloat-guardrails.md): search has a distinct UX contract (search affordance, controlled clear-button interaction) that makes it a component a designer reaches for by name, not a `TextInput` usage pattern.
+
+> **Note** — For controlled usage, wire `value` + `onChange` + `onClear` together. `onClear` fires when the ✕ button is clicked; in controlled mode it is your responsibility to reset `value` to `''`.
+
+> **Note** — All `TextInput` updates (focus ring, error styling, sizing tokens) propagate here automatically. `type`, `iconBefore`, and `iconAfter` are reserved by `SearchInput`; everything else passes through.
