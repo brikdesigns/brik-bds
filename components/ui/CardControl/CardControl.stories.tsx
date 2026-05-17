@@ -12,9 +12,27 @@ const meta: Meta<typeof CardControl> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    title: { control: 'text' },
-    description: { control: 'text' },
-    actionAlign: { control: 'inline-radio', options: ['center', 'top'] },
+    title: {
+      control: 'text',
+      description: 'Control label shown as the primary text.',
+    },
+    description: {
+      control: 'text',
+      description: 'Optional supporting copy displayed below the title.',
+    },
+    actionAlign: {
+      control: 'inline-radio',
+      options: ['center', 'top'],
+      description: '`center` (default) aligns the action to the vertical midline; `top` anchors it to the upper-right corner — use for long descriptions.',
+    },
+    badge: {
+      control: false,
+      description: 'Optional leading element (typically a `<Badge>` with a status icon) rendered before the text block.',
+    },
+    action: {
+      control: false,
+      description: 'Trailing action element — typically a `<Switch>`, `<Button>`, or link.',
+    },
   },
 };
 
@@ -37,7 +55,7 @@ const Stack = ({ children }: { children: React.ReactNode }) => (
 
 /* ─── Playground ─────────────────────────────────────────────── */
 
-/** @summary Interactive playground for prop tweaking */
+/** @summary Interactive sandbox — Switch action wired via local state (Q4) */
 export const Playground: Story = {
   render: (args) => {
     const [checked, setChecked] = useState(true);
@@ -58,7 +76,13 @@ export const Playground: Story = {
 
 /* ─── Action alignment ───────────────────────────────────────── */
 
-/** @summary Action alignment */
+/**
+ * `actionAlign="center"` vs `actionAlign="top"` — use `top` when the
+ * description wraps to multiple lines so the CTA anchors to the upper-right
+ * corner rather than drifting to the vertical center.
+ *
+ * @summary actionAlign — center vs top alignment
+ */
 export const ActionAlignment: Story = {
   render: () => (
     <Stack>
@@ -91,64 +115,22 @@ export const ActionAlignment: Story = {
   ),
 };
 
-/* ─── Variants ───────────────────────────────────────────────── */
+/* ─── Patterns (Q4 — stateful compositions) ─────────────────── */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>With switch action</SectionLabel>
-      <CardControl
-        title="Notifications"
-        description="Receive email notifications for updates"
-        badge={<Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />}
-        action={<Switch checked onChange={() => {}} />}
-      />
-
-      <SectionLabel>With button action</SectionLabel>
-      <CardControl
-        title="Security Settings"
-        description="Configure two-factor authentication"
-        badge={<Badge size="xs" status="info" icon={<Icon icon="ph:shield-check" />} />}
-        action={<Button variant="outline" size="sm">Configure</Button>}
-      />
-
-      <SectionLabel>Error status</SectionLabel>
-      <CardControl
-        title="Connection Failed"
-        description="Unable to reach the API server"
-        badge={<Badge size="xs" status="error" icon={<Icon icon="ph:x-circle" />} />}
-        action={<Button variant="primary" size="sm">Retry</Button>}
-      />
-
-      <SectionLabel>Warning status</SectionLabel>
-      <CardControl
-        title="Storage Almost Full"
-        description="You have used 90% of your available storage"
-        badge={<Badge size="xs" status="warning" icon={<Icon icon="ph:warning" />} />}
-        action={<Button variant="outline" size="sm">Upgrade</Button>}
-      />
-
-      <SectionLabel>Minimal (no badge or description)</SectionLabel>
-      <CardControl
-        title="Auto-save"
-        action={<Switch checked={false} onChange={() => {}} />}
-      />
-    </Stack>
-  ),
-};
-
-/* ─── Patterns ───────────────────────────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
+/**
+ * Three settings rows with mixed action types (Switch + Button) wired
+ * via local state. The stateful Switch action requires hook-driven state
+ * that args can't express.
+ *
+ * @summary Settings panel — mixed actions, live state
+ */
+export const SettingsPanel: Story = {
   render: () => {
     const [notifications, setNotifications] = useState(true);
     const [darkMode, setDarkMode] = useState(false);
 
     return (
       <Stack>
-        <SectionLabel>Settings panel</SectionLabel>
         <CardControl
           title="Notifications"
           description="Receive email notifications for updates"
@@ -174,7 +156,12 @@ export const Patterns: Story = {
 
 /* ─── Toggle switch panel ────────────────────────────────────── */
 
-/** @summary Toggle switch panel */
+/**
+ * Multi-row notification panel using `actionAlign="top"` switches — a common
+ * settings-page layout where each row is independently toggled.
+ *
+ * @summary Notification preferences — multi-row toggle panel
+ */
 export const ToggleSwitchPanel: Story = {
   render: () => {
     const [email, setEmail] = useState(true);
@@ -184,7 +171,6 @@ export const ToggleSwitchPanel: Story = {
 
     return (
       <Stack>
-        <SectionLabel>Notification preferences — multi-row toggle panel</SectionLabel>
         <CardControl
           actionAlign="top"
           title="Email updates"

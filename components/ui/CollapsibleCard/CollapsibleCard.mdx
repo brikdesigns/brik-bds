@@ -8,7 +8,7 @@ import * as Stories from './CollapsibleCard.stories';
 
 <ComponentLinks slug="collapsible-card" />
 
-Expandable content section with a clickable header. Use for FAQs, settings panels, and long-form content that benefits from progressive disclosure.
+Expandable content section with a clickable header. Use for FAQs, settings panels, and long-form content that benefits from progressive disclosure. `defaultOpen` controls the initial state; pass `open` + `onOpenChange` for fully controlled usage.
 
 ## Playground
 
@@ -16,17 +16,26 @@ Expandable content section with a clickable header. Use for FAQs, settings panel
 
 ## Variants
 
-Collapsed, expanded, without section label, and with rich content.
+### Default open
 
-<Canvas of={Stories.Variants} />
+`defaultOpen={true}` — starts expanded. Use when the section content is immediately relevant and collapsing is secondary.
+
+<Canvas of={Stories.DefaultOpen} />
 
 ## Patterns
 
-Stacked proposal sections in an accordion-style layout.
+### Rich content
 
-<Canvas of={Stories.Patterns} />
+Demonstrates the `children` slot with nested headings and lists — content too structured to express as a plain string.
+
+<Canvas of={Stories.WithRichContent} />
+
+### Proposal sections
+
+Four numbered sections stacked as an accordion. The primary production use case — each section collapses independently.
+
+<Canvas of={Stories.ProposalSections} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-

@@ -3,46 +3,14 @@ import * as Stories from './CardSummary.stories';
 
 <Meta of={Stories} />
 
-# Card summary
+# Card summary *(deprecated)*
 
-Compact metric card for displaying a labeled value with an optional text link. Designed for dashboards, summaries, and stat displays.
-
----
+> **Deprecated.** Use `<Card preset="summary">` instead — same props (`label`, `value`, `type`, `textLink`), same layout, same number formatting. See the [Card](?path=/docs/containers-card--docs) page for the canonical implementation.
 
 ## Playground
 
-Use the Controls panel to explore all props interactively.
-
 <Canvas of={Stories.Playground} />
-
-## Variants
-
-Numeric and price types, with and without text links, plus stacked layout.
-
-<Canvas of={Stories.Variants} />
-
-- **`numeric`** — Plain formatted number (default)
-- **`price`** — USD currency with dollar sign and decimals
-
-## Patterns
-
-Dashboard metrics grid with mixed types.
-
-<Canvas of={Stories.Patterns} />
-
----
 
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { CardSummary } from '@brik/bds';
-
-<CardSummary label="Total" value={42} />
-<CardSummary label="Revenue" value={48250.75} type="price" textLink={{ label: "Details", href: "/revenue" }} />
-```

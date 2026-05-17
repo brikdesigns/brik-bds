@@ -44,7 +44,7 @@ type Story = StoryObj<typeof Card>;
  *
  * @summary Flexible content slot — composable subcomponents
  */
-export const Default: Story = {
+export const Playground: Story = {
   args: {
     variant: 'outlined',
     padding: 'md',

@@ -8,7 +8,7 @@ import * as Stories from './CardControl.stories';
 
 <ComponentLinks slug="card-control" />
 
-Settings control card with badge, title, description, and an action slot. Used for toggles, configuration options, and status displays.
+Settings control card with badge, title, description, and an action slot. Used for toggles, configuration options, and status displays. Also available as `<Card preset="control">` — same layout, different API entry point.
 
 ## Playground
 
@@ -16,25 +16,23 @@ Settings control card with badge, title, description, and an action slot. Used f
 
 ## Variants
 
-Switch actions, button actions, status badges, and minimal layout.
-
-<Canvas of={Stories.Variants} />
-
 ### Action alignment
 
-Use `actionAlign="top"` when the description wraps to multiple lines — the CTA anchors to the upper-right corner instead of drifting to the vertical center.
+`actionAlign="center"` (default) aligns the action to the vertical midline. Use `actionAlign="top"` when the description wraps to multiple lines so the CTA anchors to the upper-right corner.
 
 <Canvas of={Stories.ActionAlignment} />
 
 ## Patterns
 
-Settings panel with mixed action types.
+### Settings panel
 
-<Canvas of={Stories.Patterns} />
+Mixed action types (Switch + Button) wired with live state — the typical settings section with independently toggleable rows.
+
+<Canvas of={Stories.SettingsPanel} />
 
 ### Toggle switch panel
 
-Multi-row notification panel using switches with top-aligned actions — a common settings-page layout.
+Multi-row notification panel with `actionAlign="top"` — each row is independently toggled via a Switch.
 
 <Canvas of={Stories.ToggleSwitchPanel} />
 

@@ -8,7 +8,7 @@ import * as Stories from './CardTestimonial.stories';
 
 <ComponentLinks slug="card-testimonial" />
 
-Customer testimonial card with quote, attribution, and optional star rating. Supports brand (colored background) and outlined variants.
+Customer testimonial card with quote, attribution, and optional star rating. Supports brand (colored background) and outlined variants. Toggle `rating` to 0 via Controls to hide the star row.
 
 ## Playground
 
@@ -16,20 +16,26 @@ Customer testimonial card with quote, attribution, and optional star rating. Sup
 
 ## Variants
 
-Brand, outlined, without rating, and minimal attribution.
+### Brand
 
-<Canvas of={Stories.Variants} />
+`variant="brand"` — colored background with inverse text. Default. Use on marketing pages against a white or light-gray section background.
 
-- **`brand`** — Colored background with inverse text (default)
-- **`outlined`** — Light background with border
+<Canvas of={Stories.Brand} />
+
+### Outlined
+
+`variant="outlined"` — light background with border. Use when the section background conflicts with the brand-colored card.
+
+<Canvas of={Stories.Outlined} />
 
 ## Patterns
 
-Mixed variant testimonials in a grid layout.
+### Testimonials grid
 
-<Canvas of={Stories.Patterns} />
+Three testimonials in a responsive grid — the canonical social-proof section layout mixing brand and outlined variants.
+
+<Canvas of={Stories.TestimonialsGrid} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
