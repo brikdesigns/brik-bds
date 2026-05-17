@@ -61,6 +61,7 @@ export * from './NavItem';
 export * from './NotificationList';
 export * from './PageHeader';
 export * from './Pagination';
+export * from './NumberInput';
 export * from './PasswordInput';
 export * from './SearchInput';
 export * from './Popover';

@@ -1,0 +1,45 @@
+@layer bds-components {
+/* NumberInput — hide native browser spinners */
+.bds-text-input-field[type="number"]::-webkit-outer-spin-button,
+.bds-text-input-field[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.bds-text-input-field[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* NumberInput — stepper column */
+.bds-number-input__steppers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.bds-number-input__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1;
+  height: 50%;
+}
+
+.bds-number-input__step:hover {
+  color: var(--text-primary);
+}
+
+.bds-number-input__step:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+}
