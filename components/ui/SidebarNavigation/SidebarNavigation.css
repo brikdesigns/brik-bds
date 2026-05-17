@@ -13,6 +13,15 @@
   z-index: 10;
 }
 
+.bds-sidebar-nav--sticky {
+  position: sticky;
+  top: 0;
+  left: auto;
+  bottom: auto;
+  height: 100vh;
+  flex-shrink: 0;
+}
+
 /* ─── Logo ───────────────────────────────────────────────────── */
 
 .bds-sidebar-nav__logo {
@@ -26,51 +35,35 @@
   flex: 1;
   padding: 16px 12px; /* bds-lint-ignore — Figma sidebar spec */
   overflow-y: auto;
-}
-
-/* ─── Nav item ───────────────────────────────────────────────── */
-
-.bds-sidebar-nav__item {
   display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+/* ─── Collapsed mode ─────────────────────────────────────────── */
+
+.bds-sidebar-nav--collapsed .bds-sidebar-nav__logo {
+  padding: 24px 12px 20px; /* bds-lint-ignore — collapsed logo padding */
+  display: flex;
+  justify-content: center;
+}
+
+.bds-sidebar-nav--collapsed .bds-sidebar-nav__nav {
+  padding: 16px 8px; /* bds-lint-ignore — collapsed nav padding */
+}
+
+.bds-sidebar-nav--collapsed .bds-sidebar-nav__footer {
+  padding: 12px 8px; /* bds-lint-ignore — collapsed footer padding */
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--gap-md); /* bds-lint-ignore — Figma spec 12px, nearest token 8px */
-  padding: 10px 12px; /* bds-lint-ignore — Figma nav item padding */
-  border-radius: var(--border-radius-md); /* bds-lint-ignore — Figma spec 6px, nearest token 4px */
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--text-secondary);
-  background-color: transparent;
-  text-decoration: none;
-  text-transform: capitalize;
-  margin-bottom: var(--gap-sm);
-  transition: background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
-  cursor: pointer;
+  gap: var(--gap-md);
 }
 
-.bds-sidebar-nav__item:hover {
-  background-color: var(--page-secondary);
-}
-
-.bds-sidebar-nav__item--active {
-  font-weight: var(--font-weight-semi-bold);
-  color: var(--text-primary);
-  background-color: var(--page-secondary);
-}
-
-/* ─── Indicator dot ──────────────────────────────────────────── */
-
-.bds-sidebar-nav__indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--border-radius-sm);
-  background-color: var(--border-secondary);
-  flex-shrink: 0;
-}
-
-.bds-sidebar-nav__indicator--active {
-  background-color: var(--background-brand-primary);
+.bds-sidebar-nav--collapsed .bds-sidebar-nav__profile {
+  padding: 16px 8px; /* bds-lint-ignore — collapsed profile padding */
+  display: flex;
+  justify-content: center;
 }
 
 /* ─── Footer ─────────────────────────────────────────────────── */
@@ -80,9 +73,9 @@
   border-top: var(--border-width-md) solid var(--border-secondary);
 }
 
-/* ─── User section ───────────────────────────────────────────── */
+/* ─── Profile section ────────────────────────────────────────── */
 
-.bds-sidebar-nav__user {
+.bds-sidebar-nav__profile {
   padding: 16px 24px; /* bds-lint-ignore — Figma sidebar spec */
   border-top: var(--border-width-md) solid var(--border-secondary);
 }

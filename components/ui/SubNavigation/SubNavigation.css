@@ -1,0 +1,37 @@
+@layer bds-components {
+/* ─── SubNavigation ──────────────────────────────────────────── */
+
+.bds-subnav {
+  background-color: var(--surface-primary);
+  border-right: var(--border-width-md) solid var(--border-secondary);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+
+.bds-subnav__header {
+  padding: 24px 16px 16px; /* bds-lint-ignore — Figma sub-nav header spec */
+  border-bottom: var(--border-width-md) solid var(--border-secondary);
+}
+
+/* ─── Nav section ────────────────────────────────────────────── */
+
+.bds-subnav__nav {
+  flex: 1;
+  padding: 16px 8px; /* bds-lint-ignore — Figma sub-nav padding */
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+
+.bds-subnav__footer {
+  padding: 16px; /* bds-lint-ignore — Figma sub-nav footer spec */
+  border-top: var(--border-width-md) solid var(--border-secondary);
+}
+}
