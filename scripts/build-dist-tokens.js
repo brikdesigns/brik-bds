@@ -82,4 +82,19 @@ const bridge = fs.readFileSync(path.join(TOKENS_DIR, 'bridge.css'), 'utf8');
 fs.writeFileSync(path.join(DIST_DIR, 'bridge.css'), bridge);
 console.log('  ✓ dist/bridge.css');
 
+// Write page-base.css — opt-in body reset that wires html/body background
+// to var(--page-primary). Import AFTER tokens.css and BEFORE any atmosphere
+// CSS so the cascade reads: tokens → page-base → atmosphere decoration.
+const pageBase = [
+  '/* @brikdesigns/bds — Page base styles (opt-in) */',
+  '/* Import after tokens.css and before any atmosphere CSS. */',
+  'html, body {',
+  '  background: var(--page-primary);',
+  '  color: var(--text-primary);',
+  '}',
+  '',
+].join('\n');
+fs.writeFileSync(path.join(DIST_DIR, 'page-base.css'), pageBase);
+console.log('  ✓ dist/page-base.css');
+
 console.log('Token CSS build complete.');

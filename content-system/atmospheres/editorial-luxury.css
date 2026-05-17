@@ -1,21 +1,26 @@
 /**
  * editorial-luxury atmosphere
  *
- * Dark-luxury editorial treatment. Originally developed for Birdwell &
- * Mutlak Dentistry (2026-04-21). Reference implementation lives in
- * web/birdwell-mutlak at the time of extraction (delete local
+ * Dark-luxury editorial decoration layer. Originally developed for
+ * Birdwell & Mutlak Dentistry (2026-04-21). Reference implementation
+ * lives in web/birdwell-mutlak at the time of extraction (delete local
  * brand-overrides.css once the client profile picks this atmosphere).
  *
  * Design posture:
- *   - Pure near-black (#08080a) surfaces — not #000 (avoids DPR banding)
  *   - Atmospheric gold radial orbs, blurred 120px, at 9–14% opacity
  *   - SVG Perlin film grain at 32% opacity, mix-blend overlay
  *   - Cursor-tracking spotlight on interactive cards
- *   - Section-edge vignettes for "page-turn" feel
+ *   - Section-edge vignettes for "page-turn" feel (fade into page color)
  *   - All motion gated by prefers-reduced-motion
  *
- * Cost: one fixed <body::before> GPU layer for the base vignette, one
- * fixed <body::after> for grain. Per-section orbs are lazy — only when
+ * Surface colors are set by the brand theme layer (dist/tokens.css +
+ * the client's theme CSS). The near-black page color (#08080a, not pure
+ * #000 — avoids DPR gradient banding) is emitted by the dark-dominant
+ * theme as var(--page-primary). Section-edge fades reference that token
+ * so they self-relativize with no hardcoded values here.
+ *
+ * Cost: one fixed body::before GPU layer for the base vignette, one
+ * fixed body::after for grain. Per-section orbs are lazy — only when
  * a section declares `data-ambient="..."`. Cursor spotlights only on
  * elements with `data-spotlight`.
  *
@@ -30,27 +35,12 @@
  */
 
 :root {
-  /* NEAR-black, not pure #000 — avoids DPR gradient banding. */
-  --atmosphere-ink: #08080a;
-
-  /* Collapse all surfaces onto the editorial near-black. */
-  --surface-primary:        var(--atmosphere-ink);
-  --surface-secondary:      var(--atmosphere-ink);
-  --background-primary:     var(--atmosphere-ink);
-  --background-secondary:   var(--atmosphere-ink);
-  --background-tertiary:    var(--atmosphere-ink);
-  --background-input:       var(--atmosphere-ink);
-
   /* Ambient gold values used by the atmospheric utility classes. Pulls
      from the client's --color-gold / --background-brand-primary so the
      atmosphere takes on each client's brand hue without edits here. */
-  --ambient-gold:           rgba(196, 154, 47, 0.09);
-  --ambient-gold-strong:    rgba(196, 154, 47, 0.14);
-  --ambient-cool:           rgba(60, 80, 120, 0.08);
-}
-
-body {
-  background: var(--atmosphere-ink);
+  --ambient-gold:        rgba(196, 154, 47, 0.09);
+  --ambient-gold-strong: rgba(196, 154, 47, 0.14);
+  --ambient-cool:        rgba(60, 80, 120, 0.08);
 }
 
 /* ───────────────────────────────────────────────────────────────────
@@ -176,7 +166,8 @@ section[data-ambient="depth"]::after {
 
 /* ───────────────────────────────────────────────────────────────────
  * Section-edge vignettes — "page-turn" feel between sections.
- * Applied to sections with `data-edge` attribute.
+ * Applied to sections with `data-edge` attribute. Fades into the
+ * theme-resolved page color so no hardcoded value is needed here.
  * ─────────────────────────────────────────────────────────────────── */
 section[data-edge]::before,
 section[data-edge]::after {
@@ -189,11 +180,11 @@ section[data-edge]::after {
 }
 section[data-edge]::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--atmosphere-ink), transparent);
+  background: linear-gradient(to bottom, var(--page-primary), transparent);
 }
 section[data-edge]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--atmosphere-ink), transparent);
+  background: linear-gradient(to top, var(--page-primary), transparent);
 }
 
 /* ───────────────────────────────────────────────────────────────────

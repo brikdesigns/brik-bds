@@ -10,8 +10,8 @@
  *   - Know which BDS-contract token pairings the atmosphere guarantees
  *     pass WCAG AA when the theme generator's output is layered with
  *     this atmosphere.
- *   - Decide which surface tokens (paper / accent-dark / both) the
- *     theme generator should emit alongside the atmosphere CSS.
+ *   - Understand the decoration posture the atmosphere is tuned for
+ *     (light-dominant, dark-dominant, or neutral).
  *
  * CSS files live as siblings and are exported through the package
  * exports field in package.json under `./atmospheres/*.css`.
@@ -20,9 +20,11 @@
  *   - `safePairings` — every atmosphere declares the foreground/background
  *     token pairs it expects to render. The portal preflight stops
  *     hard-coding an inline list; it reads this instead.
- *   - `surfaceProfile` — declares whether this atmosphere collapses
- *     surfaces to a single tone (`single-tone-light` / `single-tone-dark`)
- *     or supports both light + dark surface emission (`dual-mode`).
+ *   - `surfaceProfile` — declares the decoration posture the atmosphere
+ *     is tuned for (light-dominant / dark-dominant / neutral).
+ *     Atmospheres do NOT override color-foundation tokens — surface
+ *     colors come from the brand theme layer (dist/tokens.css + client
+ *     theme CSS). See brik-bds#369.
  */
 
 import type { Atmosphere } from '../vocabularies/atmosphere';
@@ -44,21 +46,24 @@ export interface SafePairing {
 }
 
 /**
- * Surface emission posture for an atmosphere. The portal theme generator
- * (W2) consumes this to decide which surface tokens to emit alongside the
- * atmosphere CSS:
+ * Decoration posture for an atmosphere — indicates what surface-tone
+ * character the atmosphere's decorative overlays are tuned for. This
+ * does NOT mean the atmosphere sets surface colors; surface colors come
+ * from the brand theme layer. The posture helps the portal and docs
+ * present the right context when pairing an atmosphere with a theme.
  *
- *   - `single-tone-light` — atmosphere collapses surfaces to a paper /
- *     ivory base (e.g. warm-soft, organic-textured). Generator emits
- *     `--surface-paper`, `--surface-paper-elevated`, `--text-on-paper`.
- *   - `single-tone-dark` — atmosphere collapses surfaces to ink / deep
- *     accent (e.g. editorial-luxury, cinematic-dramatic). Generator emits
- *     `--surface-accent-dark`, `--surface-accent-warm`, `--text-on-ink`.
- *   - `dual-mode` — atmosphere supports both light and dark surfaces
- *     within the same page (e.g. minimal-clinical's paper hero with dark
- *     CTA strip). Generator emits both sets.
- *   - `passthrough` — atmosphere is `none` or zero-effects; generator
- *     emits whatever the brand palette implies, no atmosphere overrides.
+ *   - `single-tone-light` — decoration tuned for a light-dominant page
+ *     (e.g. warm-soft, organic-textured). Grain and tints work best on
+ *     light surfaces; orbs would read as inverted on dark.
+ *   - `single-tone-dark` — decoration tuned for a dark-dominant page
+ *     (e.g. editorial-luxury, cinematic-dramatic). Gold orbs and film
+ *     grain overlay a dark page; glow reads against near-black.
+ *   - `dual-mode` — decoration is neutral enough to support both light
+ *     and dark surface zones on the same page (e.g. minimal-clinical's
+ *     plain hero with a dark CTA strip). No decoration is added; the
+ *     value exists to tell the portal both modes are valid.
+ *   - `passthrough` — atmosphere is `none` or zero-effects; no
+ *     decoration posture implied.
  */
 export type SurfaceProfile =
   | 'single-tone-light'
@@ -75,9 +80,10 @@ export interface AtmosphereManifestEntry {
   /** Short industries/verticals that naturally fit this atmosphere. */
   naturalFit: readonly string[];
   /**
-   * Surface emission posture — see SurfaceProfile docstring.
-   * The portal theme generator uses this to decide which surface tokens
-   * to emit alongside the atmosphere CSS.
+   * Decoration posture — see SurfaceProfile docstring. Indicates what
+   * surface-tone character this atmosphere's decorative overlays are
+   * tuned for. Does not drive surface token emission; surface colors
+   * come from the brand theme layer.
    */
   surfaceProfile: SurfaceProfile;
   /**
@@ -98,7 +104,7 @@ export interface AtmosphereManifestEntry {
 //
 // Centralized so multiple atmospheres can share a posture without
 // drifting (e.g. all single-tone-dark atmospheres share the same
-// inverse-text-on-ink contract). Inline-extending these in a manifest
+// dark-page contrast contract). Inline-extending these in a manifest
 // entry stays correct — the runtime sees a SafePairing[] either way.
 
 // Brand-fill button pairings split by themeMode. The brand-fill background
@@ -138,7 +144,7 @@ const BASELINE_BRAND_PAIRINGS_DARK_THEME: SafePairing[] = [
     context: 'Brand-filled buttons / pills (pressed state) on a dark page.' },
 ];
 
-/** Pairings for light-dominant atmospheres (paper-on-X, X-on-paper). */
+/** Pairings for light-dominant atmospheres. */
 const LIGHT_TONE_PAIRINGS: SafePairing[] = [
   { fg: '--text-primary', bg: '--background-primary', context: 'Body copy on the dominant light surface.' },
   { fg: '--text-primary', bg: '--background-secondary', context: 'Body copy on alternating elevated surface.' },
@@ -148,7 +154,7 @@ const LIGHT_TONE_PAIRINGS: SafePairing[] = [
   { fg: '--text-inverse', bg: '--background-inverse', context: 'Inverse block (dark CTA strip on a light page).' },
 ];
 
-/** Pairings for dark-dominant atmospheres (light text on ink). */
+/** Pairings for dark-dominant atmospheres. */
 const DARK_TONE_PAIRINGS: SafePairing[] = [
   { fg: '--text-primary', bg: '--background-primary', context: 'Body copy on the dominant dark surface.' },
   { fg: '--text-primary', bg: '--background-secondary', context: 'Body copy on the next-lightest dark surface.' },
@@ -169,7 +175,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'editorial-luxury',
     cssPath: '@brikdesigns/bds/atmospheres/editorial-luxury.css',
     themeMode: 'dark',
-    blurb: 'Pure near-black + gold orbs + film grain. Quiet-luxury dark treatment.',
+    blurb: 'Gold orbs + film grain overlay. Quiet-luxury dark decoration.',
     naturalFit: ['luxury dental', 'med-aesthetic', 'editorial hospitality'],
     surfaceProfile: 'single-tone-dark',
     safePairings: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_DARK_THEME],
@@ -178,7 +184,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'cinematic-dramatic',
     cssPath: '@brikdesigns/bds/atmospheres/cinematic-dramatic.css',
     themeMode: 'dark',
-    blurb: 'Deep navy-black + aurora drift + conic spotlight. Theatrical dark.',
+    blurb: 'Aurora drift + conic spotlight. Theatrical dark decoration.',
     naturalFit: ['legal', 'agency', 'finance', 'dark-mode SaaS'],
     surfaceProfile: 'single-tone-dark',
     safePairings: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_DARK_THEME],
@@ -189,9 +195,9 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     themeMode: 'light',
     blurb: 'Pure white, zero atmospheric effects. Trust via precision.',
     naturalFit: ['non-luxury healthcare', 'legal (gravitas)', 'minimal SaaS'],
-    // Minimal-clinical commonly pairs a paper hero with a dark CTA
+    // Minimal-clinical commonly pairs a light hero with a dark CTA
     // strip — both surface modes need to render legibly inside the
-    // same page. The theme generator emits both surface tokens.
+    // same page. No atmosphere decoration; theme layer decides both.
     surfaceProfile: 'dual-mode',
     safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
   },
@@ -199,7 +205,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'warm-soft',
     cssPath: '@brikdesigns/bds/atmospheres/warm-soft.css',
     themeMode: 'light',
-    blurb: 'Warm ivory + quiet rose vignette + minimal grain. Anxiety-safe.',
+    blurb: 'Quiet rose vignette + minimal grain. Anxiety-safe light decoration.',
     naturalFit: ['wellness', 'therapy', 'mental health', 'recovery'],
     surfaceProfile: 'single-tone-light',
     safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
@@ -217,7 +223,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'organic-textured',
     cssPath: '@brikdesigns/bds/atmospheres/organic-textured.css',
     themeMode: 'light',
-    blurb: 'Warm cream + sepia grain + earth-tone tint. Tactile paper feel.',
+    blurb: 'Sepia grain + earth-tone radial tint. Tactile paper-texture decoration.',
     naturalFit: ['MUA', 'organic beauty', 'artisan', 'natural products'],
     surfaceProfile: 'single-tone-light',
     safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
