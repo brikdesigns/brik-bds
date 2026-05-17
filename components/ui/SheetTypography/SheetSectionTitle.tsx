@@ -12,19 +12,12 @@ export interface SheetSectionTitleProps extends HTMLAttributes<HTMLHeadingElemen
 }
 
 /**
+ * @deprecated Use `<SheetSection heading="..." />` instead.
+ * `SheetSection.heading` now uses the same `--heading-sm` semibold tier;
+ * the legacy uppercase `--label-sm` treatment has been retired. Pass
+ * `headingLevel` to `SheetSection` when you need an element other than `h3`.
+ *
  * @summary Section heading inside a Sheet body
- *
- * Top-of-section heading inside a Sheet body. Locks to the Sheet-context
- * section-heading tier — heading family, `--heading-sm`, semibold, primary
- * text, no uppercase transform. Always renders larger than `<SheetFieldLabel>`
- * so the label-larger-than-heading inversion flagged in the 2026-04-22
- * portal audit can't recur.
- *
- * Distinct from `<SheetSection heading="...">` — which uses the legacy
- * `--label-sm` uppercase treatment — and from `<Sheet title="...">`, which
- * owns the top-level sheet title at `--heading-md`.
- *
- * @see docs/LAYOUT-CONTEXTS.md for the typography-tier rules.
  */
 export function SheetSectionTitle({
   level = 'h3',

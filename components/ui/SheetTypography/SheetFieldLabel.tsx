@@ -14,18 +14,12 @@ export interface SheetFieldLabelProps
 }
 
 /**
+ * @deprecated Use `<Field tier="compact" label="..." />` for read-mode
+ * label + value pairs. For standalone labels above form controls, pass
+ * `label` directly to the control (TextInput, Select, etc.) — they
+ * render their own accessible label element.
+ *
  * @summary Field label above a Sheet value or input
- *
- * Field label inside a Sheet body. Sits one tier below `<SheetSectionTitle>`
- * — label family, `--label-sm`, semibold, muted text, Title Case transform.
- * Use above `<SheetFieldValue>` in read mode, or above a `<TextInput>` /
- * `<CatalogPicker>` / other editor in edit mode.
- *
- * Renders as `<label>` when `htmlFor` is provided so screen readers can
- * associate it with the input; falls back to `<span>` for read-only
- * displays where no input exists.
- *
- * @see docs/LAYOUT-CONTEXTS.md for the typography-tier rules.
  */
 export function SheetFieldLabel({
   htmlFor,

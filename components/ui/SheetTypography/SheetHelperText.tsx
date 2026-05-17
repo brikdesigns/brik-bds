@@ -13,19 +13,10 @@ export interface SheetHelperTextProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
+ * @deprecated Use `<Field helper="..." helperTone="error" />` instead.
+ * The `tone` prop maps to `Field.helperTone`.
+ *
  * @summary Helper or error text below a Sheet field
- *
- * Small hint or error text in a Sheet body. Label family, `--label-xs`,
- * regular weight, muted text. Always smaller than `<SheetFieldLabel>`, so
- * the reading order is preserved: section title → field label → value →
- * helper.
- *
- * Use for:
- *   - Helper captions ("Comma-separated list")
- *   - Validation errors (`tone="error"`)
- *   - Per-field provenance chips ("Seeded from industry pack")
- *
- * @see docs/LAYOUT-CONTEXTS.md for the typography-tier rules.
  */
 export function SheetHelperText({
   tone = 'neutral',
