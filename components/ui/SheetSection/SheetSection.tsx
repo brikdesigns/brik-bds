@@ -3,10 +3,16 @@ import { bdsClass } from '../../utils';
 import './SheetSection.css';
 
 export type SheetSectionSpacing = 'md' | 'lg';
+export type SheetSectionHeadingLevel = 'h2' | 'h3' | 'h4';
 
 export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
-  /** Uppercase section label. Omit for intro / description-only sections. */
+  /** Section heading text. Omit for intro / description-only sections. */
   heading?: string;
+  /**
+   * Render level for the heading element. Defaults to `h3` so the Sheet's
+   * own `<h2>` title keeps outline hierarchy intact.
+   */
+  headingLevel?: SheetSectionHeadingLevel;
   /** Optional lead paragraph rendered under the heading. */
   description?: ReactNode;
   /** Section content — Field, FieldGrid, Card, CardList, Table, TagGroup, BulletList, etc. */
@@ -18,9 +24,10 @@ export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'ti
 /**
  * SheetSection — the named wrapper for a block inside a Sheet body.
  *
- * Pairs an uppercase section heading with its content and locks the
- * vertical rhythm between sections. Replaces ad-hoc flex-column +
- * raw `<h3>` + `detail.sectionHeading` patterns.
+ * Pairs a section heading with its content and locks the vertical rhythm
+ * between sections. The heading uses the `--heading-sm` semibold tier —
+ * always larger than Field labels so the label-above-heading inversion
+ * cannot recur (supersedes the legacy uppercase `--label-sm` treatment).
  *
  * Composes inside `<Sheet>` — one section per logical grouping of fields.
  *
@@ -28,6 +35,7 @@ export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'ti
  */
 export function SheetSection({
   heading,
+  headingLevel = 'h3',
   description,
   children,
   spacing = 'lg',
@@ -35,6 +43,7 @@ export function SheetSection({
   style,
   ...props
 }: SheetSectionProps) {
+  const HeadingTag = headingLevel;
   return (
     <section
       className={bdsClass(
@@ -45,7 +54,7 @@ export function SheetSection({
       style={style}
       {...props}
     >
-      {heading && <h3 className="bds-sheet-section__heading">{heading}</h3>}
+      {heading && <HeadingTag className="bds-sheet-section__heading">{heading}</HeadingTag>}
       {description && <p className="bds-sheet-section__description">{description}</p>}
       {children && <div className="bds-sheet-section__content">{children}</div>}
     </section>

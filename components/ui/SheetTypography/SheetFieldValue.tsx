@@ -12,17 +12,10 @@ export interface SheetFieldValueProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
+ * @deprecated Use `<Field tier="compact" label="..." />` instead — pass
+ * the value as children. The `empty` prop maps to `Field.empty`.
+ *
  * @summary Read-mode display of a field value in a Sheet
- *
- * Read-mode display of a field value inside a Sheet body. Body family,
- * `--body-md`, regular weight, primary text, preserves whitespace so
- * multi-line values render correctly. Pair with `<SheetFieldLabel>` above.
- *
- * When the value is empty (null, undefined, or an empty string), renders
- * the `empty` prop instead — muted, italic — so missing fields read
- * consistently across every sheet without per-consumer placeholder logic.
- *
- * @see docs/LAYOUT-CONTEXTS.md for the typography-tier rules.
  */
 export function SheetFieldValue({
   empty = 'Not set',
