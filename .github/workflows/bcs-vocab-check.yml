@@ -1,0 +1,57 @@
+name: BCS Vocabulary Check
+
+# Fails when any docs-site MDX file references a BCS vocabulary value
+# (Mood, Personality, VisualStyle, Voice, Atmosphere, NavArchetype,
+# FooterArchetype) that is not present in the corresponding locked enum
+# from content-system/vocabularies/.
+#
+# This is the durable gate against the vocabulary-drift class of bug:
+#   #350 image-mood drift, #354 atmosphere parallel-taxonomy,
+#   #370 getting-started drift, #533 blueprints.mdx fabricated vocab tables.
+# Each fix was a one-shot; this gate prevents recurrence.
+#
+# Triggers on any change to MDX docs OR vocabulary source files — either
+# can introduce drift.
+#
+# Issue: brikdesigns/brik-bds#534
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs-site/content/docs/**'
+      - 'content-system/vocabularies/**'
+      - 'content-system/blueprints/vocabularies.ts'
+      - 'scripts/bcs-vocab-check.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs-site/content/docs/**'
+      - 'content-system/vocabularies/**'
+      - 'content-system/blueprints/vocabularies.ts'
+      - 'scripts/bcs-vocab-check.mjs'
+
+concurrency:
+  group: bcs-vocab-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bcs-vocab-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: BCS vocabulary check
+        run: npm run bcs-vocab-check
