@@ -35,6 +35,39 @@ Use Paper (Claude Code's HTML canvas) to iterate visually before writing `.tsx` 
 <div style="padding: 24px; color: #1a1a1a; border: 1px solid #e0e0e0;">
 ```
 
+## Component vs variant vs control — decide this first
+
+Before writing any code, place the thing you are building in one of three tiers. The tier determines where it lives, what it exports, and how it appears in Storybook.
+
+### The three tiers
+
+| Tier | Definition | Where it lives | Storybook shape |
+| --- | --- | --- | --- |
+| **Component** | Standalone purpose + recognizable identity. A designer or developer reaches for it by name because it has a distinct UX contract. | `components/ui/ComponentName/` — own directory, MDX, public export | One or more stories in its own file |
+| **Variant** | A distinct contextual expression of a component that carries its own semantic signal: own color logic, icon convention, or behavioral expectation. A designer would choose it intentionally in a wireframe. | Same directory as its component | Dedicated story (ADR-010 Q3) |
+| **Control / Prop** | Customization within a variant that does not change the component's identity or contextual meaning. | A prop or `argTypes` entry | `argTypes` only — never a story |
+
+### Decision questions
+
+1. **Would a designer or developer reach for this by name?** If yes → it is a component.
+2. **Does it carry a semantic signal a designer would choose deliberately** (own icon, own color logic, distinct behavioral expectation)? If yes → it is a variant (story). If no → it is a control.
+3. **Does it share >70% of props or CSS with an existing primitive?** If yes and the purpose test above did not already justify a component → extend the primitive with a prop instead.
+
+### Examples
+
+| Thing | Tier | Reasoning |
+| --- | --- | --- |
+| `Toast` | Component | Standalone notification surface; reached for by name |
+| `Toast` `tone="destructive"` | Variant / story | Own icon + color logic; designer picks it deliberately |
+| `Toast` `showActions={false}` | Control | Does not change Toast's identity |
+| `TextInput` | Component | Core text-entry primitive |
+| `TextInput` on-dark | Variant / story | Borderless visual contract for dark surfaces; designer chooses it intentionally |
+| `TextInput` `size="lg"` | Control | Does not change TextInput's identity |
+| `SearchInput` | Component | Distinct search affordance, clear-button interaction, `role="search"` — its own UX contract |
+| `EmailInput` | ❌ Not a component | `type="email"` is a browser hint; no UX distinction from `TextInput` |
+
+See [ADR-004 §Amendment 2026-05-17](../../docs/adrs/ADR-004-component-bloat-guardrails.md) for the full purpose-test rationale and the corrected input taxonomy.
+
 ## File structure
 
 ```
@@ -81,7 +114,7 @@ Inline `style` is acceptable only for:
 **The `__slot` suffix is not free-form.** It must come from the closed allowlist in [`docs/SLOT-ALLOWLIST.md`](../../docs/SLOT-ALLOWLIST.md). Inventing a new slot name fails the lint. See [ADR-008](../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) for the rationale.
 
 | What | Canon source |
-|---|---|
+| --- | --- |
 | BEM rules, `bds-` namespace, structural-only modifier rule, id generation | [Naming Conventions](../../docs-site/content/docs/primitives/naming-conventions.mdx) |
 | Closed allowlist of every `__slot` name | [`docs/SLOT-ALLOWLIST.md`](../../docs/SLOT-ALLOWLIST.md) |
 | Why the system runs on a closed allowlist instead of a banlist | [ADR-008](../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) |
@@ -340,7 +373,7 @@ A `@deprecated` JSDoc tag is a *promise to remove the component*, not a permanen
 Every deprecation moves through three stages:
 
 | Stage | When | What happens | What stays |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **1. Deprecation lands** | A `@deprecated` JSDoc tag is added to the exported component | Story file gets `tags: ['!manifest']`; MDX `## Notes` adds *"Deprecated — use `<X>` instead. Stories will be retired in `vN.M`."*; file a retirement-tracker issue with the target version | Component continues to ship; consumers keep working |
 | **2. Stories retired** | **Two minor releases after Stage 1** (default; override via the JSDoc sentinel below) | Delete `Component.stories.tsx` + `Component.mdx`; PR references the tracker issue | `Component.tsx` + `Component.css` + `index.ts` export remain — consumers on the old API don't break |
 | **3. Component removed** | At the next **major** release | Delete the component directory; remove `index.ts` export; confirm consumer audit (portal / renew / web/{slug}) before merge | Tracker issue closes |
