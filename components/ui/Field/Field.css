@@ -71,8 +71,7 @@
 
 /* ─── Compact tier ──────────────────────────────────────── */
 
-/* Compact swaps the label to --label-sm, matching SheetFieldLabel.
-   Use inside dense Sheet layouts (replaces SheetFieldLabel/SheetFieldValue). */
+/* Compact swaps the label to --label-sm for dense Sheet layouts. */
 .bds-field--compact .bds-field__label {
   font-size: var(--label-sm);
 }

@@ -15,8 +15,7 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   layout?: FieldLayout;
   /**
    * Typography tier. `standard` = `--label-md` label (default, matches edit-mode controls).
-   * `compact` = `--label-sm` label — use inside dense Sheet layouts where
-   * `SheetFieldLabel` was previously required.
+   * `compact` = `--label-sm` label — use inside dense Sheet layouts.
    */
   tier?: FieldTier;
   /**
@@ -43,9 +42,8 @@ function isEmpty(value: ReactNode): boolean {
  * tags, URLs, bullet lists, and empty states. Locks label typography,
  * value spacing, and the "Not set" empty treatment.
  *
- * Use `tier="compact"` inside dense Sheet layouts (replaces `SheetFieldLabel` /
- * `SheetFieldValue`). Use `helper` + `helperTone` for validation or hint text
- * (replaces `SheetHelperText`).
+ * Use `tier="compact"` inside dense Sheet layouts. Use `helper` + `helperTone`
+ * for validation or hint text below the value.
  *
  * @summary Read-mode label + value pair for use inside a Sheet
  */

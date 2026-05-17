@@ -115,21 +115,14 @@ The page-side entry in this case is a single `<Button>` in the `DataSection.acti
 | Sheet subtitle | `Sheet.subtitle` prop | `<p>` | Small, muted, above the title. |
 | Section heading (inside sheet body) | `SheetSection.heading` prop | `<h3 class="bds-sheet-section__heading">` (uppercase label style) | The only section heading inside a sheet body. |
 | Section description | `SheetSection.description` prop | `<p class="bds-sheet-section__description">` | Optional lead paragraph under the heading. |
-| Field label | `Field.label` prop (or standalone `SheetFieldLabel` when the field shape won't fit) | `<span class="bds-field__label">` or `<label>` when `htmlFor` provided | Short, compact text. |
-| Field value | `Field` children (or standalone `SheetFieldValue` when Field won't fit) | `<div class="bds-field__value">` | Accepts any `ReactNode`. Empty renders "Not set". |
+| Field label | `Field.label` prop | `<span class="bds-field__label">` or `<label>` when `htmlFor` provided | Short, compact text. |
+| Field value | `Field` children | `<div class="bds-field__value">` | Accepts any `ReactNode`. Empty renders "Not set". |
 | Paragraph / list value | `Field` children — a `<p>` or `<BulletList>` | As-children | No separate "ParagraphField" or "ListField" — `Field` does both. |
 
 ### Don't
 
 - **Don't use a raw `<h3>` / `<h4>` inside a sheet.** `SheetSection.heading` is the only section heading.
 - **Don't wrap `SheetSection` in a custom "SectionHeading + SheetDivider" combo.** The divider is implicit; the heading lives on `SheetSection`.
-- **Don't pass `heading` to a `SheetSection` *and* also render a `SheetSectionTitle` inside it.** Pick one — usually the prop.
-
-### The standalone typography primitives (`SheetSectionTitle`, `SheetFieldLabel`, `SheetFieldValue`)
-
-These exist as **escape hatches** for layouts that `SheetSection` + `Field` can't express — rare cases like two-column comparison rows, side-by-side before/after pairs, or a custom header row in a report sheet. If you're using them to rebuild what `SheetSection` + `Field` already do, you're re-paving the drift this pattern is meant to retire.
-
-When you do reach for them, the rule: **match the BEM + HTML element that `SheetSection` / `Field` would have produced**, so the visual treatment stays consistent.
 
 ---
 
@@ -183,6 +176,5 @@ Both compose the same atomic primitives (`FieldGrid`, `Field`, `BulletList`). Th
 - [`SheetSection`](?path=/docs/containers-sheet-section--docs) — the canonical section primitive.
 - [`Field`](?path=/docs/blocks-field--docs) — label + value pair used inside and outside sheets.
 - [`FieldGrid`](?path=/docs/blocks-field-grid--docs) — grid wrapper.
-- [`SheetTypography`](?path=/docs/displays-sheet-sheet-typography--docs) — standalone typography primitives (escape hatches).
 - [Read-Mode Page](?path=/docs/containers-read-mode-page--docs) — the page-wide sibling of this pattern.
 - [Foundations / Vocabulary](https://design.brikdesigns.com/docs/primitives/naming-conventions) — the words that describe the parts.
