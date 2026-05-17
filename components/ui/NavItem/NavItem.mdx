@@ -1,0 +1,27 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './NavItem.stories';
+
+<Meta of={Stories} />
+
+# Nav item
+
+<ComponentLinks slug="nav-item" />
+
+Atomic navigation link with hover / active / disabled states. The building block for `SidebarNavigation` and `SubNavigation` — use it standalone when composing custom navigation surfaces.
+
+## Playground
+
+Toggle `active`, `disabled`, `iconOnly`, or remove `icon` from the Controls panel to explore states.
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<ArgTypes of={Stories} />

@@ -1,0 +1,35 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './SubNavigation.stories';
+
+<Meta of={Stories} />
+
+# Sub navigation
+
+<ComponentLinks slug="sub-navigation" />
+
+Second-column nav for app shells that pair a collapsed primary `SidebarNavigation` with a section-specific sub-nav. Internally renders `NavItem` per entry. For a single-sidebar shell, use `SidebarNavigation` directly.
+
+## Playground
+
+Toggle `showHeader`, `showFooter`, or override `width` in the Controls panel.
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+## Patterns
+
+### Two-column shell
+
+Collapsed primary `SidebarNavigation` + `SubNavigation` + main.
+
+<Canvas of={Stories.TwoColumnShell} />
+
+## Props
+
+<ArgTypes of={Stories} />
