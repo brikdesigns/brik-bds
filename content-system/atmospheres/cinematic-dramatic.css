@@ -1,18 +1,23 @@
 /**
  * cinematic-dramatic atmosphere
  *
- * Dark-theatrical treatment. Deeper navy-black base than editorial-luxury,
- * with an aurora-drift gradient at the top of the viewport and a conic
- * rotating spotlight behind hero sections. Leans theatrical rather than
- * quiet — fit for legal/agency/finance/dark-mode SaaS verticals where
- * the brand moment matters more than hushed editorial restraint.
+ * Dark-theatrical decoration layer. Deeper navy-black than editorial-
+ * luxury, with an aurora-drift gradient at the top of the viewport and
+ * a conic rotating spotlight behind hero sections. Leans theatrical
+ * rather than quiet — fit for legal/agency/finance/dark-mode SaaS
+ * verticals where the brand moment matters more than hushed editorial
+ * restraint.
  *
  * Differences from editorial-luxury:
- *   - Darker base (#060612 vs #08080a) with a violet-black tint
+ *   - Deeper violet-black theme posture vs editorial's near-black
  *   - Aurora-drift gradient (cool/warm dual-tone) instead of gold orbs
  *   - Conic rotating spotlight (38s period) behind hero
  *   - No film grain (heavier atmosphere is already doing the work)
  *   - Section-edge vignettes kept for "page-turn" continuity
+ *
+ * Surface colors are set by the brand theme layer (dist/tokens.css +
+ * the client's theme CSS). Section-edge fades reference var(--page-primary)
+ * so they self-relativize with no hardcoded values here.
  *
  * Performance: aurora drift is a single animated @property gradient
  * (42s period, no transforms). Conic spotlight is one fixed element
@@ -26,22 +31,9 @@
 }
 
 :root {
-  --atmosphere-ink: #060612;
-
-  --surface-primary:        var(--atmosphere-ink);
-  --surface-secondary:      var(--atmosphere-ink);
-  --background-primary:     var(--atmosphere-ink);
-  --background-secondary:   var(--atmosphere-ink);
-  --background-tertiary:    var(--atmosphere-ink);
-  --background-input:       var(--atmosphere-ink);
-
-  --ambient-cool:           rgba(80, 110, 170, 0.10);
-  --ambient-warm:           rgba(212, 175, 110, 0.08);
-  --ambient-violet:         rgba(140, 90, 200, 0.06);
-}
-
-body {
-  background: var(--atmosphere-ink);
+  --ambient-cool:   rgba(80, 110, 170, 0.10);
+  --ambient-warm:   rgba(212, 175, 110, 0.08);
+  --ambient-violet: rgba(140, 90, 200, 0.06);
 }
 
 /* ───────────────────────────────────────────────────────────────────
@@ -121,7 +113,7 @@ section[data-ambient="center"]::before {
   background: radial-gradient(circle, var(--ambient-cool) 0%, transparent 70%);
 }
 
-/* Section-edge vignettes (same as editorial-luxury). */
+/* Section-edge vignettes — fade into the theme-resolved page color. */
 section[data-edge]::before,
 section[data-edge]::after {
   content: '';
@@ -133,11 +125,11 @@ section[data-edge]::after {
 }
 section[data-edge]::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--atmosphere-ink), transparent);
+  background: linear-gradient(to bottom, var(--page-primary), transparent);
 }
 section[data-edge]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--atmosphere-ink), transparent);
+  background: linear-gradient(to top, var(--page-primary), transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
