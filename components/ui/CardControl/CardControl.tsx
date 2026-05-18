@@ -2,8 +2,10 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import './CardControl.css';
 
+/** @deprecated Use `Card preset="control"` instead — see #657. */
 export type CardControlActionAlign = 'center' | 'top';
 
+/** @deprecated Use `Card preset="control"` instead — see #657. */
 export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
   /** Setting / control name shown as the primary text. */
   title: string;
@@ -18,16 +20,9 @@ export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * CardControl — settings control card with badge, title, description, and action.
- *
- * Equivalent to `<Card preset="control">` (added in v0.39.0). Both APIs are
- * supported and ship the same layout / visual treatment; pick whichever
- * fits the call site.
- *
- * The earlier deprecation marker (PR #244) was reversed by user decision
- * 2026-04-24 — CardControl stays as a first-class component. The
- * 2026-Q2 audit's recommendation to retire it is logged but not in
- * effect; see docs/audits/2026-Q2-component-bloat-audit.md.
+ * @deprecated Use `<Card preset="control">` instead. `CardControl` is kept
+ * during the migration window and will be removed in a future major version
+ * once the one consumer (brik-client-portal) migrates (see #657).
  *
  * @summary Settings card — title, description, badge, action
  */
