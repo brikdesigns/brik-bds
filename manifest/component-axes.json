@@ -40,13 +40,6 @@
       "md"
     ]
   },
-  "AlertBanner": {
-    "variant": [
-      "warning",
-      "error",
-      "information"
-    ]
-  },
   "Avatar": {
     "size": [
       "sm",

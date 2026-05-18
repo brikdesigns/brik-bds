@@ -8,7 +8,6 @@ export * from './AddableTagList';
 export * from './AddableTextList';
 export * from './AddressInput';
 export * from './AnimatedIcon';
-export * from './AlertBanner';
 export * from './Avatar';
 export * from './Badge';
 export * from './BadgeGroup';

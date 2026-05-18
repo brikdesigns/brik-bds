@@ -117,7 +117,7 @@ Four notification surfaces — match severity and persistence to the pattern, no
 | --- | --- | --- | --- |
 | **Toast** | `<Toast>` | Auto-dismiss (5s) | Confirmation of a user action ("Saved", "Copied") |
 | **Banner** | `<Banner>` | Until dismissed by user | System-wide state (maintenance window, plan limit) |
-| **Inline alert** | `<AlertBanner>` | Until resolved | Page-scoped state (form error, validation) |
+| **Inline alert** | `<Banner tone="warning\|error\|information">` | Until resolved | Page-scoped state (form error, validation) |
 | **Modal confirmation** | `<Sheet variant="floating">` with confirm + cancel actions | Until decided | Destructive actions (delete, discard, sign-out) |
 
 **Severity colors** come from semantic surface tokens — `--surface-success`, `--surface-warning`, `--surface-danger`, `--surface-info`. Each notification component reads them automatically; you don't pick a hex.
