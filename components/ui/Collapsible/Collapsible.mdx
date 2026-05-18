@@ -1,0 +1,31 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Collapsible.stories';
+
+<Meta of={Stories} />
+
+# Collapsible
+
+<ComponentLinks slug="collapsible" />
+
+Progressive disclosure primitive — expandable content section with a clickable header (section label, title, and +/− toggle). Use for proposal sections, settings panels, FAQs, or any content that benefits from reveal-on-demand.
+
+Wraps `@radix-ui/react-collapsible` for correct `aria-expanded`, keyboard handling (Enter / Space), and focus management. BDS owns the visual surface and slot layout.
+
+## Playground
+
+Toggle `defaultOpen` and `sectionLabel` via Controls to explore the args-driven surface.
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Controlled mode
+
+Use `isOpen` + `onOpenChange` when parent state must drive the transition — for example, "expand all" / "collapse all" controls, wizard steps, or accordion groups. Uncontrolled (`defaultOpen`) is the default and covers most use cases.
+
+<Canvas of={Stories.Controlled} />
+
+## Props
+
+<ArgTypes of={Stories} />
