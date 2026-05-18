@@ -12,7 +12,7 @@
  * v1 fields (minimal-core per #603 scoping):
  *   - Name              — component dir name (e.g. Button)
  *   - Component path    — components/ui/Button/Button.tsx
- *   - Story title       — meta.title literal (e.g. Components/Action/button)
+ *   - Story title       — meta.title literal (e.g. Components/button, Containers/card; post-#629 flat taxonomy)
  *   - Surface           — derived from meta.tags surface-* (shared/web/product/unknown)
  *   - Story exports     — raw count of `export const X (: Story)?` (excludes default meta)
  *   - Deprecated        — meta.tags includes `!manifest`
