@@ -48,12 +48,81 @@ function toClassPrefix(pascalName) {
 }
 
 /**
- * Storybook story-id convention: "components-{kebab}--primary" (we assume a
- * Primary story exists; if not, the URL still opens Storybook's search).
+ * Build a Storybook story ID from the component's `*.stories.tsx`:
+ *
+ *   1. Parse `meta.title` → "Containers/card" or "Components/button"
+ *   2. Slugify (lowercase, spaces → hyphens) → "containers-card"
+ *   3. Pick the story slug:
+ *      a. If a `<PascalName>.mdx` page exists → use `--overview`
+ *         (Storybook 10 autodocs slug per `.storybook/main.ts`
+ *         `docs.defaultName: 'Overview'` — opens the MDX docs view).
+ *      b. Else fall back to the first canonical story export — prefer
+ *         `Default` (ADR-010 §3 amendment), then legacy `Playground`,
+ *         then the first `export const X` declared in the file.
+ *
+ * The MDX docs view is preferred (rich landing page embedding all stories
+ * + prose docs), but components without an MDX page need a real story
+ * slug instead — `--overview` only resolves when autodocs generated it.
+ *
+ * `brik-inspect.js` validates each emitted URL against the live Storybook
+ * `/index.json` before rendering the link (see loadStorybookIndex), so a
+ * miss degrades gracefully — but the manifest should still be right.
+ *
+ * Fallback when the stories file can't be parsed: a kebab pascalName with
+ * a `components-` prefix + `--overview` slug. Surface in the build log.
  */
-function storybookStoryId(pascalName) {
-  const kebab = pascalName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-  return `components-${kebab}--primary`;
+function storybookStoryId(pascalName, componentDir) {
+  const fallback = (() => {
+    const kebab = pascalName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+    return `components-${kebab}--overview`;
+  })();
+
+  const storiesPath = join(componentDir, `${pascalName}.stories.tsx`);
+  if (!existsSync(storiesPath)) return fallback;
+  const src = readFileSync(storiesPath, 'utf8');
+
+  // meta.title — match `title: '<bucket>/<slug>'` at the top of the file.
+  // Restricting to a path-shaped value (contains a `/`) avoids picking up
+  // object-literal `title:` keys inside `args` data.
+  const titleMatch = src.match(/^\s*title:\s*['"]([A-Z][^'"\n]*\/[^'"\n]+)['"]/m);
+  if (!titleMatch) return fallback;
+
+  const metaTitle = titleMatch[1];
+  const lastSlash = metaTitle.lastIndexOf('/');
+  const bucketPath = metaTitle.slice(0, lastSlash);
+  const componentSlug = metaTitle.slice(lastSlash + 1);
+
+  // Storybook slugifies: camelCase → kebab, lowercase, spaces and slashes →
+  // hyphens, drop other punctuation. The camelCase split is what turns
+  // `WithSlots` → `with-slots` (matches Storybook's story-id derivation).
+  const slugify = (s) =>
+    s
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .toLowerCase()
+      .replace(/[\s/]+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+
+  const idPrefix = `${slugify(bucketPath)}-${slugify(componentSlug)}`;
+
+  // Prefer the autodocs `--overview` slug when an MDX page exists. Storybook
+  // generates the autodocs entry from the MDX presence, so absent-MDX means
+  // absent-overview.
+  const mdxPath = join(componentDir, `${pascalName}.mdx`);
+  if (existsSync(mdxPath)) return `${idPrefix}--overview`;
+
+  // Else find the first canonical story export. Prefer Default (canonical
+  // per ADR-010 §3) → Playground (legacy) → first export in source order.
+  if (/^export const Default\b/m.test(src)) return `${idPrefix}--default`;
+  if (/^export const Playground\b/m.test(src)) return `${idPrefix}--playground`;
+
+  const firstExportMatch = src.match(/^export const ([A-Z][A-Za-z0-9_]*)\b/m);
+  if (firstExportMatch) {
+    return `${idPrefix}--${slugify(firstExportMatch[1])}`;
+  }
+
+  return `${idPrefix}--overview`;
 }
 
 /**
@@ -179,7 +248,7 @@ function buildComponents() {
     components[prefix] = {
       name: pascalName,
       class_prefix: prefix,
-      storybook_url: `/?path=/story/${storybookStoryId(pascalName)}`,
+      storybook_url: `/?path=/story/${storybookStoryId(pascalName, dir)}`,
       status: override.status ?? 'stable',
       introduced_in: override.introduced_in ?? null,
       deprecated_in: override.deprecated_in ?? null,
