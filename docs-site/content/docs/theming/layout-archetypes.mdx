@@ -1,11 +1,11 @@
 ---
 title: Layout Archetypes
-description: Layer 3 — locked vocabularies for site-header and site-footer patterns. Paired but independent.
+description: The Layout Archetypes Theming Dimension — locked vocabularies for site-header and site-footer patterns. Paired but independent.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Layer 3 of the theming cascade covers **site chrome shape** — the header at the top of every page and the footer at the bottom. Two sibling vocabularies, paired but orthogonal: a client can pick `editorial-transparent` nav with `legal_heavy` footer, or `utility-first` nav with `cta_focused` footer, or any other combination.
+The Layout Archetypes Dimension covers **site chrome shape** — the header at the top of every page and the footer at the bottom. Two sibling vocabularies, paired but orthogonal: a client can pick `editorial-transparent` nav with `legal_heavy` footer, or `utility-first` nav with `cta_focused` footer, or any other combination. One of the four [Theming Dimensions](/docs/theming).
 
 Each industry pack declares a default for both in its `navigationIA` and `footerArchetype` fields. Consumer sites render the shapes at build time via the BDS `<SiteHeader>` and `<SiteFooter>` components from `@brikdesigns/bds/blueprints-astro`.
 

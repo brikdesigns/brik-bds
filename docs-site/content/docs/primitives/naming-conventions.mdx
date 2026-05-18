@@ -468,6 +468,21 @@ The element / BEM table above lists which HTML elements each role maps to. The i
   This is a discipline rule, not a build-time lint (yet). If a wrapper is ambiguous about its role, add a BEM class with the role name before you add any CSS.
 </Callout>
 
+## Tag vs Badge — nouns vs verbs
+
+A common confusion: when to use a `Tag` component vs a `Badge`. The distinction is **what the element labels**, not how it looks.
+
+| Element | Shape | Token source | Purpose | Examples |
+|---|---|---|---|---|
+| **Tag** | Soft rounded (`--border-radius-sm`) | Service-line / domain tokens (`--background-service-marketing`, etc.) | **Nouns** — categories, labels, classifications | "Clinical", "Front Desk", "OSHA", "Marketing" |
+| **Badge** | Pill (`--border-radius-pill`) | Status tokens (`--background-positive`, `--background-warning`, etc.) | **Verbs / states** — statuses, outcomes, transient states | "Active", "New", "Completed", "Pending" |
+
+The grammatical test resolves edge cases: if the label answers *what kind is this thing?* → Tag. If it answers *what state is this thing in?* → Badge.
+
+<Callout type="warn">
+  **Don't mix the token sources.** A Tag that uses status tokens (`--background-positive`) reads as a state when it should read as a category. A Badge that uses service-line tokens (`--background-service-marketing`) reads as a category when it should read as a state. The wrong combination obscures meaning even if the colors "look fine."
+</Callout>
+
 ## Related
 
 - [Design Tokens overview](/docs/primitives) — the architecture these names sit inside

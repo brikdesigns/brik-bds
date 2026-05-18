@@ -3,6 +3,19 @@
 Canonical reference for what each file in `tokens/` does, where it loads,
 and how to decide where a change belongs.
 
+## Vocabulary
+
+This doc uses the locked BDS token vocabulary (see [Token Anatomy](../docs-site/content/docs/primitives/token-anatomy.mdx) for the full disambiguation map):
+
+- **Library** — the logical source of token definitions (Foundations Library / [Client] Brand Kit Library). Today: Figma files managed via Tokens Studio.
+- **Layer** — a CSS `@layer` in the cascade (`bds-tokens` / `bds-components` / `client-theme` / `client-overrides`). Where a token's *value* lands at runtime.
+- **Tier** — a token's abstraction level (Raw / Primitive / Semantic / Component). Independent from Layer.
+- **Mode** — an orthogonal axis varying token values (color light/dark, borderwidth thin/standard/bold, etc.).
+- **Theming Dimension** — composable subsystem of the Theming Tenet (Tokens / Atmospheres / Layout / Blueprints).
+- **Tenet** — system pillar (Foundation / Theming / Motion / Content).
+
+**Older docs called the BDS-bundle vs client-theme split "Tier 1 / Tier 2".** That nomenclature is retired — "Tier" now refers exclusively to token abstraction (Raw/Primitive/Semantic/Component). The runtime cascade is described as CSS Layers.
+
 ## What ships to consumers
 
 `dist/tokens.css` is the bundle shipped to downstream consumers (portal,

@@ -2,7 +2,9 @@
   "title": "Foundation",
   "pages": [
     "index",
+    "token-anatomy",
     "color",
+    "interaction-states",
     "typography",
     "spacing",
     "size",

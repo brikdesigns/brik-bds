@@ -9,13 +9,17 @@ Consumers import from `@brikdesigns/bds`. There is no submodule, no copy-paste �
 
 ## How this site is organized
 
-- **Primitives** — the design tokens everything inherits from. Color foundations (`--page-*`, `--surface-*`, `--background-*`, `--text-*`, `--border-*`), typography, spacing, radius, shadow, sizing.
-- **Theming** — the four layers that turn primitives into per-client visual identity. Tokens (Tier 2 client overrides), atmospheres (decoration overlays), layout archetypes (nav + footer), blueprints (section composition).
-- **Components** — React building blocks every product surface composes from.
+BDS has four **Tenets**: Foundation, Theming, Motion, Content. Each gets its own section here:
+
+- **Primitives (Foundation)** — universal token canon: color foundations (`--page-*`, `--surface-*`, `--background-*`, `--text-*`, `--border-*`), typography, spacing, radius, shadow, sizing. Start with [Token Anatomy](/docs/primitives/token-anatomy) for the six-concept vocabulary every other page builds on.
+- **Theming** — composing per-client brand identity across four [Theming Dimensions](/docs/theming): Tokens (brand overrides via `theme-{client}.css` in `@layer client-theme`), Atmospheres (decoration overlays), Layout Archetypes (nav + footer), Blueprints (section composition).
+- **Motion** — animation tokens + behaviors (CSS reveals, GSAP, premium effects).
 - **Content System** — industry packs, voice definitions, the BCS vocabulary that selects theming defaults.
-- **Motion** — the orthogonal motion tenet (CSS reveals, GSAP, premium effects).
-- **Documentation system** — the tier model and lifecycle behind how BDS is documented (read before contributing docs changes).
+- **Components** — React building blocks every product surface composes from.
+- **Documentation system** — how BDS is documented (read before contributing docs changes).
 - **Page templates** — the standard shape every docs page follows.
+
+New to the token system? Read [Token Anatomy](/docs/primitives/token-anatomy) and [Library Architecture](/docs/getting-started/figma-library-architecture) first — they lock the vocabulary every other section uses.
 
 ## How this site relates to Storybook
 

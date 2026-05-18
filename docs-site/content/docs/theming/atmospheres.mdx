@@ -1,16 +1,16 @@
 ---
 title: Atmospheres
-description: Layer 2 of the theming cascade — CSS decoration overlays that establish visual character (editorial-luxury, cinematic, warm-soft, and more) without duplicating CSS per client.
+description: The Atmospheres Theming Dimension — CSS decoration overlays that establish visual character (editorial-luxury, cinematic, warm-soft, and more) without duplicating CSS per client.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Atmospheres are **CSS decoration layers** that sit on top of a client's theme to establish visual character — dark-luxury-editorial, soft-wellness, clean-clinical, etc. — without duplicating CSS per client. They're orthogonal to the navigation archetype and the blueprint library: atmospheres decorate surfaces, archetypes structure the header, blueprints compose sections.
+Atmospheres are **CSS decoration overlays** that sit on top of a client's Tokens Dimension to establish visual character — dark-luxury-editorial, soft-wellness, clean-clinical, etc. — without duplicating CSS per client. One of the four [Theming Dimensions](/docs/theming), orthogonal to Tokens, Layout Archetypes, and Blueprints.
 
 The portal's theme generator reads `company_profiles.atmosphere` at extraction time and emits an `@import` into the stored theme artifact pointing at `@brikdesigns/bds/atmospheres/{slug}.css`. The consumer Astro site fetches one theme artifact at build; the atmosphere cascades automatically.
 
 <Callout type="info">
-**Atmospheres are decoration only.** They add vignettes, grain, orbs, and spotlights — they do not set surface colors. Background and text colors come from the brand theme layer (`dist/tokens.css` + the client's `theme-{slug}.css`). Import `@brikdesigns/bds/page-base.css` after tokens to wire `html/body` background to `var(--page-primary)` before any atmosphere loads.
+**Atmospheres are decoration only.** They add vignettes, grain, orbs, and spotlights — they do not set surface colors. Background and text colors come from the Tokens Dimension (`dist/tokens.css` + the client's `theme-{slug}.css` in `@layer client-theme`). Import `@brikdesigns/bds/page-base.css` after tokens to wire `html/body` background to `var(--page-primary)` before any atmosphere loads.
 </Callout>
 
 ## How atmospheres compose with themes
@@ -103,7 +103,7 @@ When building a new client site:
 ## Related
 
 - [Theming Overview](/docs/theming) — the four-layer cascade in context
-- [Client Themes](/docs/theming/client-themes) — Layer 1, the brand-token override layer below the atmosphere
+- [Client Themes](/docs/theming/client-themes) — the Tokens Dimension below the atmosphere
 - [Layout Archetypes](/docs/theming/layout-archetypes) — site-header and site-footer pattern vocabularies
 - [Blueprints](/docs/theming/blueprints) — page-layout vocabulary (separate axis from atmosphere)
 - [Content System / Industries](/docs/content-system/industries) — industry packs declare default atmospheres

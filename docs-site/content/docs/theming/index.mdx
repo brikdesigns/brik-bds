@@ -1,33 +1,37 @@
 ---
 title: Theming
-description: Compose per-client brand identity across four orthogonal layers.
+description: Compose per-client brand identity across four orthogonal Theming Dimensions — Tokens, Atmospheres, Layout, Blueprints.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Cards, Card } from 'fumadocs-ui/components/card';
 
-Theming is how a single component library renders as a different brand for every client. BDS answers *"what is this thing and how does it behave?"* in components; the Theming tenet answers *"what does it look like for this brand?"* Clients never change components — they change theming decisions, composed across four orthogonal layers.
+Theming is how a single component library renders as a different brand for every client. BDS answers *"what is this thing and how does it behave?"* in components; the Theming **Tenet** answers *"what does it look like for this brand?"* Clients never change components — they change theming decisions, composed across four orthogonal **Theming Dimensions**.
 
-Theming is a **tenet of the system alongside Foundation, Motion, and Content.** If design tokens are the atoms, theming is the instrument that plays them in a different key.
+Theming is one of four **Tenets** of the system: Foundation, Theming, Motion, Content. If design tokens are the atoms, theming is the instrument that plays them in a different key.
 
 <Callout type="info">
   **Audience:** primarily websites (Astro, Webflow) and any product surface that needs per-client branding. Foundation tokens are shared across product and websites; theming is where the per-client divergence happens.
 </Callout>
 
-## The four theming layers
+## The four Theming Dimensions
 
-| Layer | Decides | Lives in | Override per client? |
+| Dimension | Decides | Lives in | Override per client? |
 |---|---|---|---|
-| **1. Tokens** | Color, type, spacing values | `theme-{client}.css` | Required |
-| **2. Atmosphere** | Ambient mood — grain, glow, vignettes, surface treatments | `@brikdesigns/bds/atmospheres/{slug}.css` | Optional — industry default can win |
-| **3. Layout Archetypes** | Site-header *and* site-footer shape, plus scroll + drawer behavior | `<SiteHeader>` and `<SiteFooter>` from `@brikdesigns/bds/blueprints-astro` | Optional — industry default can win |
-| **4. Blueprint** | Section composition — how a hero / services / testimonials slot is built | Authored in BDS, tagged by mood + industry | Authored centrally; clients pick |
+| **Tokens** | Color, type, spacing values | `theme-{client}.css` (`@layer client-theme`) | Required |
+| **Atmospheres** | Ambient mood — grain, glow, vignettes, surface treatments | `@brikdesigns/bds/atmospheres/{slug}.css` | Optional — industry default can win |
+| **Layout Archetypes** | Site-header *and* site-footer shape, plus scroll + drawer behavior | `<SiteHeader>` and `<SiteFooter>` from `@brikdesigns/bds/blueprints-astro` | Optional — industry default can win |
+| **Blueprints** | Section composition — how a hero / services / testimonials slot is built | Authored in BDS, tagged by mood + industry | Authored centrally; clients pick |
 
-Layers are independent. A client can redefine tokens, keep the industry's default atmosphere, swap to a non-default navigation archetype, and use the same blueprints another client uses — nothing cross-couples. Each layer has its own deep-dive page; the sections below summarize each and link out.
+Dimensions are independent. A client can redefine tokens, keep the industry's default atmosphere, swap to a non-default navigation archetype, and use the same blueprints another client uses — nothing cross-couples. Each Dimension has its own deep-dive page; the sections below summarize each and link out.
 
-## Layer 1 — Tokens
+<Callout type="warn">
+  **"Dimension" not "Layer".** Older docs called these four "Layers" — confusing because CSS `@layer` is also called Layer (the `bds-tokens` / `client-theme` cascade). They're distinct concepts: a Theming Dimension is a *what to decide*; a CSS Layer is a *where the decision's CSS lands*. See [Token Anatomy](/docs/primitives/token-anatomy) for the full six-concept disambiguation.
+</Callout>
 
-Layer 1 is the token override. Every consuming project loads BDS canon first (`@brikdesigns/bds/tokens.css`), then the per-client theme override (`theme-{client}.css`) which redefines the same semantic token names with brand values. Components never change.
+## Tokens Dimension
+
+The Tokens Dimension is the brand-value override. Every consuming project loads BDS canon first (`@brikdesigns/bds/tokens.css` — Foundations Library + Brik Brand Kit), then the per-client theme override (`theme-{client}.css`) in `@layer client-theme` which redefines the same semantic token names with brand values. Components never change.
 
 Full architecture, import order, and the `<html>` switch table: [The Cascade](/docs/getting-started/cascade).
 
@@ -52,15 +56,15 @@ Full override matrix and the minimal `theme-{client}.css` template: [Client Them
 
 Some clients carry multiple brand colors at once — Vale Partners has three audience verticals, brikdesigns.com has service lines. Instead of inventing role-specific canonical tokens (`--background-land-primary`, etc.), the system re-binds the same canonical tokens inside `[data-audience=X]` / `[data-service=X]` scopes. Components stay scope-blind — they keep referencing `--background-brand-primary` — while the page expresses N brand colors simultaneously. Adding an audience is one CSS block; canonical never grows. Full pattern: [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-or-service-line-scope-binding).
 
-## Layer 2 — Atmosphere
+## Atmospheres Dimension
 
-An atmosphere is a **CSS overlay** that sits on top of the token layer to establish visual character — dark-luxury-editorial, soft-wellness, clean-clinical, etc. — without duplicating CSS per client. Atmospheres decorate surfaces (grain, glow, vignettes, spotlights); tokens decide the underlying values.
+An atmosphere is a **CSS overlay** that sits on top of the Tokens Dimension to establish visual character — dark-luxury-editorial, soft-wellness, clean-clinical, etc. — without duplicating CSS per client. Atmospheres decorate surfaces (grain, glow, vignettes, spotlights); tokens decide the underlying values.
 
 Industry packs declare a default atmosphere. A client site fetches a single theme artifact at build; the atmosphere cascades automatically. Clients can override the pack default by setting `company_profiles.atmosphere` in the portal.
 
 Full vocabulary, previews per atmosphere, and composition rules: [Atmospheres](/docs/theming/atmospheres).
 
-## Layer 3 — Layout Archetypes (Navigation + Footer)
+## Layout Archetypes Dimension
 
 The locked sets of site-header and site-footer patterns Brik builds from — e.g. nav: `editorial-transparent`, `sidebar-rail`, `glass-floating`; footer: `directory`, `cta-anchored`, `compliance-heavy`. Each industry pack declares a default archetype for both; consumer sites render the shapes via the BDS `<SiteHeader>` and `<SiteFooter>` components at build time.
 
@@ -68,11 +72,11 @@ Nav and footer are sibling vocabularies — paired but independent. They are ort
 
 Full vocabularies, scroll + drawer behavior options, and per-industry defaults: [Layout Archetypes](/docs/theming/layout-archetypes). *(Footer is v0.1 — `<SiteFooter>` render lands in blueprints-astro v0.2.)*
 
-## Layer 4 — Blueprint
+## Blueprints Dimension
 
 Tokens answer *how does it look.* Blueprints answer *how is it composed.* A blueprint is a named layout + interaction pattern (e.g. `hero_editorial`, `services_clinical_grid`) that constrains how a section is built — structural slots, mood tags, industry tags, CSS hints. Blueprints are the layer AI mockup generators use to ground their output: they pick blueprints by mood and industry, then apply the active theme's tokens to render.
 
-Blueprints live alongside theming because they make the same kind of decision — a structural one that varies per brand and content direction. Authoring rules, mood → personality and mood → visual style bridges, and the full coverage matrix: [Blueprints](/docs/theming/blueprints).
+Blueprints sit inside the Theming Tenet because they make the same kind of decision as the other three Dimensions — a structural one that varies per brand and content direction. Authoring rules, mood → personality and mood → visual style bridges, and the full coverage matrix: [Blueprints](/docs/theming/blueprints).
 
 ## Brik's built-in themes
 
@@ -106,13 +110,13 @@ Before a client brand goes live, test it in Storybook. Three checks:
 2. **Font-family correctness.** Switch to **Client Sim** in the toolbar. Any component using the wrong `--font-family-*` token (e.g. a heading using `--font-family-body`) becomes immediately visible because the three families are assigned distinct typefaces.
 3. **Interaction states.** Hover every primary button. If the hover state stays Poppy red after a brand change, the client theme is missing `--background-brand-primary-hover`.
 
-## Explore the layers
+## Explore the Theming Dimensions
 
 <Cards>
-  <Card title="Client Themes" href="/docs/theming/client-themes" description="Layer 1 — override matrix and minimal theme-{client}.css template." />
-  <Card title="Atmospheres" href="/docs/theming/atmospheres" description="Layer 2 — CSS overlays for editorial-luxury, cinematic, warm-soft, and more." />
-  <Card title="Layout Archetypes" href="/docs/theming/layout-archetypes" description="Layer 3 — site-header and site-footer patterns, scroll + drawer behavior." />
-  <Card title="Blueprints" href="/docs/theming/blueprints" description="Layer 4 — section composition tagged by mood + industry." />
+  <Card title="Client Themes" href="/docs/theming/client-themes" description="Tokens Dimension — override matrix and minimal theme-{client}.css template." />
+  <Card title="Atmospheres" href="/docs/theming/atmospheres" description="Atmospheres Dimension — CSS overlays for editorial-luxury, cinematic, warm-soft, and more." />
+  <Card title="Layout Archetypes" href="/docs/theming/layout-archetypes" description="Layout Archetypes Dimension — site-header and site-footer patterns, scroll + drawer behavior." />
+  <Card title="Blueprints" href="/docs/theming/blueprints" description="Blueprints Dimension — section composition tagged by mood + industry." />
 </Cards>
 
 ## Related
