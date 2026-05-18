@@ -19,7 +19,7 @@ import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
 import { Button } from '../../../components/ui/Button';
 import { Frame } from '../../../components/ui/Frame/Frame';
 import type { FrameRatio } from '../../../components/ui/Frame/Frame';
-import { ServiceTag } from '../../../components/ui/ServiceBadge/ServiceTag';
+import { ServiceTag } from '../../../components/ui/ServiceTag/ServiceTag';
 import type { BlueprintProps } from '../astro/types';
 import './HeroSplitImageCardOverlay.css';
 
