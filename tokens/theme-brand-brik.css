@@ -35,13 +35,13 @@
   /* AA fix: white-on-poppy-light = 3.78:1 fails AA on the primary button surface.
      Shift base to poppy-dark (6.23:1) and the state pair one step deeper to keep
      interaction feedback. Mirrors the call brikdesigns shipped locally in #219. */
-  --surface-brand-primary: #b0351b;
+  --surface-brand-primary: var(--color-poppy-dark);
   --surface-brand-primary-hover: var(--color-poppy-darker);
   --surface-brand-primary-pressed: var(--color-poppy-darkest);
   --surface-brand-secondary: #f1f0ec;
   --surface-nav: var(--color-grayscale-white);
   /* Background */
-  --background-brand-primary: #b0351b;
+  --background-brand-primary: var(--color-poppy-dark);
   --background-brand-primary-hover: var(--color-poppy-darker);
   --background-brand-primary-pressed: var(--color-poppy-darkest);
   --background-brand-secondary: #f1f0ec;
@@ -100,7 +100,7 @@
   /* AA fix: base matches light mode (poppy-dark, 6.23:1 white-on-surface).
      Dark-mode state pair brightens on interaction — matches the existing
      --background-brand-primary-hover/-pressed pattern below. */
-  --surface-brand-primary: #b0351b;
+  --surface-brand-primary: var(--color-poppy-dark);
   --surface-brand-primary-hover: var(--color-poppy-lighter);
   --surface-brand-primary-pressed: var(--color-poppy-lightest);
   --surface-brand-secondary: var(--color-grayscale-darkest);
@@ -108,7 +108,7 @@
   --surface-muted: var(--color-grayscale-darkest);
   --surface-overlay: var(--color-grayscale-black);
   /* Background */
-  --background-brand-primary: #b0351b;
+  --background-brand-primary: var(--color-poppy-dark);
   --background-brand-secondary: var(--color-grayscale-darkest);
   --background-primary: var(--color-grayscale-black);
   --background-secondary: var(--color-grayscale-light);
