@@ -8,7 +8,7 @@ import * as Stories from './Sheet.stories';
 
 <ComponentLinks slug="sheet" />
 
-Sliding panel overlay anchored to a screen edge. Use for detail views, forms, and secondary content. Two modes — `read` (view) and `edit` (form) — drive the auto-footer (`[Close] [Edit]` vs `[Cancel] [Save]`).
+Sliding panel overlay anchored to a screen edge. Use for detail views, forms, and secondary content. Two modes — `read` (view) and `edit` (form) — drive the auto-footer (`[Close] [View details] [Edit]` vs `[Cancel] [Save]`). `[View details]` is conditional on `viewDetailsAction`; omit it when the sheet has no corresponding read page (e.g. `plans`).
 
 ## Playground
 
@@ -32,9 +32,15 @@ The header composes an optional `subtitle` eyebrow, the `title`, an optional `de
 
 ### Read mode
 
-Read mode displays data. When `onEdit` is supplied, the footer auto-renders `[Close] [Edit]`.
+Read mode displays data. When `onEdit` is supplied, the footer auto-renders `[Close] [Edit]`. Add `viewDetailsAction` to insert a `[View details]` button between them — the canonical pattern for sheet+page hybrid tables that navigate to a full read page.
 
 <Canvas of={Stories.ReadMode} />
+
+### Read mode + View details + Edit (sheet+page hybrid)
+
+Sheet+page hybrid tables (services, offerings, service_lines, industry_pages) surface three actions in the read-mode footer: `[Close]` · `[View details]` (navigates to the read page) · `[Edit]` (navigates to the edit page). Use `editTarget="page"` to signal that `onEdit` performs navigation rather than flipping to in-place edit mode.
+
+<Canvas of={Stories.ReadEditWithViewDetails} />
 
 ### Edit mode
 

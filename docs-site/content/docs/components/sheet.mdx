@@ -24,10 +24,34 @@ import { Sheet, SheetSection } from '@brikdesigns/bds';
 
 Sheet has two modes that map to the most common UX pattern across the product suite:
 
-- **`read`** — view-only display. Footer (when shown) renders `[Close] [Edit]`.
+- **`read`** — view-only display. Footer (when shown) renders `[Close] [View details] [Edit]`. `[View details]` is conditional on `viewDetailsAction` — omit when the sheet has no corresponding full read page (e.g. `plans`).
 - **`edit`** — active form state. Footer renders `[Cancel] [Save]`.
 
 The canonical pattern: open in `read`, click Edit to switch to `edit`, Save / Cancel returns to `read`. Mirrors the renew-pms convention.
+
+### View details + edit target
+
+Sheet+page hybrid tables surface three read-mode actions: `[Close]` · `[View details]` (navigates to the read page) · `[Edit]` (navigates to the edit page). Use `editTarget="page"` to signal that `onEdit` performs navigation rather than flipping the sheet to in-place edit mode (`editTarget="inline"`, the default, is the `plans` pattern).
+
+```tsx
+<Sheet
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  subtitle="Service"
+  title="Brand Identity Bundle"
+  mode="read"
+  editTarget="page"
+  viewDetailsAction={{
+    label: 'View details',
+    href: `/settings/services/${slug}`,
+  }}
+  onEdit={() => router.push(`/settings/services/${slug}/edit`)}
+>
+  <ServiceSnapshot />
+</Sheet>
+```
+
+`viewDetailsAction.href` renders the button as a semantic `<a>` (Button's native anchor mode). Provide `onClick` instead when navigation runs through a router helper.
 
 ```tsx
 import { useState } from 'react';
@@ -200,6 +224,8 @@ Don't reach for raw `<h3>` / `<table>` / `<ul>` inside a Sheet body — each has
 | `showCloseButton` | `boolean` | `true` |
 | `onBack` | `() => void` | — |
 | `mode` | `'read' \| 'edit'` | — |
+| `editTarget` | `'inline' \| 'page'` | `'inline'` |
+| `viewDetailsAction` | `SheetViewDetailsAction` | — |
 | `onEdit` / `onSave` / `onCancel` | `() => void` | — |
 | `editLabel` / `saveLabel` / `cancelLabel` / `closeLabel` | `string` | label defaults |
 | `saveDisabled` / `saveLoading` | `boolean` | `false` |

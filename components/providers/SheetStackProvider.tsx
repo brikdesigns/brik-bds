@@ -8,7 +8,14 @@ import {
   useRef,
   type ReactNode,
 } from 'react';
-import type { SheetVariant, SheetTab, SheetMode, SheetSecondaryAction } from '../ui/Sheet';
+import type {
+  SheetVariant,
+  SheetTab,
+  SheetMode,
+  SheetEditTarget,
+  SheetSecondaryAction,
+  SheetViewDetailsAction,
+} from '../ui/Sheet';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -66,11 +73,16 @@ export interface SheetConfig {
   body?: ReactNode;
   /**
    * Sheet mode — drives auto-footer when no custom `footer` is set.
-   * - `read` with `onEdit` → `[Close] [Edit]`
+   * - `read` with `onEdit` → `[Close] [View details] [Edit]`
+   *   (View details slot is conditional on `viewDetailsAction`)
    * - `edit` with `onSave` → `[Cancel] [Save]`
    */
   mode?: SheetMode;
   onEdit?: () => void;
+  /** See {@link SheetEditTarget}. Default `'inline'`. */
+  editTarget?: SheetEditTarget;
+  /** See {@link SheetViewDetailsAction}. */
+  viewDetailsAction?: SheetViewDetailsAction;
   onSave?: () => void;
   onCancel?: () => void;
   editLabel?: string;

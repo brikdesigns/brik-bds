@@ -1,1 +1,11 @@
-export { Sheet, type SheetProps, type SheetSide, type SheetTab, type SheetVariant, type SheetMode, type SheetSecondaryAction } from './Sheet';
+export {
+  Sheet,
+  type SheetProps,
+  type SheetSide,
+  type SheetTab,
+  type SheetVariant,
+  type SheetMode,
+  type SheetEditTarget,
+  type SheetSecondaryAction,
+  type SheetViewDetailsAction,
+} from './Sheet';

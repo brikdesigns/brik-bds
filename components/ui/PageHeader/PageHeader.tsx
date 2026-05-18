@@ -1,4 +1,8 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
+import { Icon } from '@iconify/react';
+import { Pen } from '../../icons';
+import { Button } from '../Button';
+import { ButtonGroup } from '../ButtonGroup';
 import { bdsClass } from '../../utils';
 import './PageHeader.css';
 
@@ -6,6 +10,21 @@ export interface MetadataItem {
   label: string;
   value: ReactNode;
 }
+
+/**
+ * Bimodal page state, symmetric with {@link import('../Sheet').SheetMode `SheetMode`}.
+ *
+ * - `read` — the page renders read-only content; auto-renders `[Edit]`
+ *   in `actions` when `onEdit` is provided.
+ * - `edit` — the page renders a form; auto-renders `[Cancel] [Save]`
+ *   ButtonGroup in `actions` when `onSave` is provided.
+ *
+ * An explicit `actions` prop always wins over mode-driven actions
+ * (mirrors `Sheet`'s `footer` override).
+ *
+ * When `mode` is unset, `PageHeader` behaves as before — no breaking change.
+ */
+export type PageHeaderMode = 'read' | 'edit';
 
 export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Page title — rendered as the H1. */
@@ -16,7 +35,10 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   badge?: ReactNode;
   /** Breadcrumb element (typically a `Breadcrumb` component) rendered above the title row. */
   breadcrumbs?: ReactNode;
-  /** Right-aligned action element(s) (primary `Button`, dropdown menu, etc.). */
+  /**
+   * Right-aligned action element(s) (primary `Button`, dropdown menu, etc.).
+   * When set, overrides any mode-driven auto-actions.
+   */
   actions?: ReactNode;
   /** Optional `TabBar` (or equivalent) rendered at the bottom of the header — page-level navigation. */
   tabs?: ReactNode;
@@ -26,6 +48,27 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   stats?: ReactNode;
   /** Title scale. Default: 'lg' */
   size?: 'sm' | 'md' | 'lg';
+  /**
+   * Bimodal page state. Drives auto-rendered `actions` when no explicit
+   * `actions` slot is provided. See {@link PageHeaderMode}.
+   */
+  mode?: PageHeaderMode;
+  /** Navigation handler in read mode. Wires the auto-rendered `[Edit]` button. */
+  onEdit?: () => void;
+  /** Submit handler in edit mode. Wires the auto-rendered `[Save]` button. */
+  onSave?: () => void;
+  /** Discard handler in edit mode. Wires the auto-rendered `[Cancel]` button. */
+  onCancel?: () => void;
+  /** Show loading state on the auto-rendered `[Save]` button. */
+  saveLoading?: boolean;
+  /** Disable the auto-rendered `[Save]` button (e.g. while form is invalid). */
+  saveDisabled?: boolean;
+  /** Label for the auto-rendered `[Edit]` button. Default `"Edit"`. */
+  editLabel?: string;
+  /** Label for the auto-rendered `[Save]` button. Default `"Save"`. */
+  saveLabel?: string;
+  /** Label for the auto-rendered `[Cancel]` button. Default `"Cancel"`. */
+  cancelLabel?: string;
 }
 
 /**
@@ -59,14 +102,60 @@ export function PageHeader({
   metadata,
   stats,
   size = 'lg',
+  mode,
+  onEdit,
+  onSave,
+  onCancel,
+  saveLoading,
+  saveDisabled,
+  editLabel = 'Edit',
+  saveLabel = 'Save',
+  cancelLabel = 'Cancel',
   className,
   style,
   ...props
 }: PageHeaderProps) {
+  // Explicit `actions` wins; otherwise compose mode-driven actions.
+  // `mode='read'` + `onEdit` → `[Edit]` (primary, pen icon).
+  // `mode='edit'` + (onSave || onCancel) → `[Cancel] [Save]` ButtonGroup.
+  const resolvedActions: ReactNode = (() => {
+    if (actions !== undefined) return actions;
+    if (mode === 'read' && onEdit) {
+      return (
+        <Button variant="primary" onClick={onEdit} iconBefore={<Icon icon={Pen} />}>
+          {editLabel}
+        </Button>
+      );
+    }
+    if (mode === 'edit' && (onSave || onCancel)) {
+      return (
+        <ButtonGroup align="end">
+          {onCancel && (
+            <Button variant="ghost" onClick={onCancel}>
+              {cancelLabel}
+            </Button>
+          )}
+          {onSave && (
+            <Button
+              variant="primary"
+              onClick={onSave}
+              disabled={saveDisabled}
+              loading={saveLoading}
+            >
+              {saveLabel}
+            </Button>
+          )}
+        </ButtonGroup>
+      );
+    }
+    return null;
+  })();
+
   return (
     <div
       className={bdsClass('bds-page-header', size !== 'lg' && `bds-page-header--${size}`, className)}
       style={style}
+      data-mode={mode}
       {...props}
     >
       {breadcrumbs}
@@ -79,7 +168,7 @@ export function PageHeader({
           </div>
           {subtitle && <p className="bds-page-header__subtitle">{subtitle}</p>}
         </div>
-        {actions && <div className="bds-page-header__actions">{actions}</div>}
+        {resolvedActions && <div className="bds-page-header__actions">{resolvedActions}</div>}
       </div>
 
       {metadata && metadata.length > 0 && (

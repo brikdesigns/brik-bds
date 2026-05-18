@@ -18,6 +18,23 @@ export type SheetVariant = 'default' | 'floating';
 export type SheetMode = 'read' | 'edit';
 
 /**
+ * Where the `[Edit]` button in the read-mode footer takes the user.
+ *
+ * - `inline` (default) — flips this sheet to `mode='edit'`; consumer
+ *   wires `onEdit` to set local state. Used by sheet-only tables
+ *   (e.g. `plans`).
+ * - `page` — `[Edit]` navigates to the record's edit page; consumer
+ *   wires `onEdit` to perform the navigation (e.g. `router.push('/edit')`).
+ *   Used by sheet+page hybrid tables (services, offerings, service_lines,
+ *   industry_pages).
+ *
+ * Semantic-only today — `onEdit` is invoked the same way in both targets.
+ * Forward-compatible: future revisions may render the button as a
+ * semantic `<a>` when `editTarget='page'` and an href is available.
+ */
+export type SheetEditTarget = 'inline' | 'page';
+
+/**
  * Ancillary action rendered on the left side of the auto-footer (e.g.
  * "Refresh Brief", "Run Extraction"). Suppressed when `mode === 'edit'`
  * to avoid ambiguity about what Save commits.
@@ -30,6 +47,25 @@ export interface SheetSecondaryAction {
   icon?: ReactNode;
   loading?: boolean;
   disabled?: boolean;
+}
+
+/**
+ * Navigation-to-read-page action rendered in the read-mode footer between
+ * `[Close]` and `[Edit]`. Distinct from `secondaryAction` (which is for
+ * true ancillary actions like Archive, Duplicate, Refresh).
+ *
+ * Provide `href` to render as a semantic link (`<a>` with button styling);
+ * provide `onClick` for handler-only navigation. If both are set, `href`
+ * wins (the button renders as an anchor and `onClick` fires on activation).
+ * Omit when the table has no corresponding read page (e.g. `plans`).
+ */
+export interface SheetViewDetailsAction {
+  /** Default `"View details"`. */
+  label?: string;
+  /** Navigation target. When set, the button renders as an `<a>`. */
+  href?: string;
+  /** Click handler. Required when `href` is not provided. */
+  onClick?: () => void;
 }
 
 export interface SheetProps {
@@ -75,12 +111,25 @@ export interface SheetProps {
   /**
    * Sheet mode. When set, the footer auto-renders mode-appropriate actions
    * unless a custom `footer` is provided.
-   * - `read` with `onEdit` → renders `[Close] [Edit]` (primary Edit)
+   * - `read` with `onEdit` → renders `[Close] [View details] [Edit]`
+   *   (View details slot is conditional on `viewDetailsAction`)
    * - `edit` → renders `[Cancel] [Save]` (primary Save)
    */
   mode?: SheetMode;
   /** Triggered from the primary action in read mode (switch to edit) */
   onEdit?: () => void;
+  /**
+   * Where `[Edit]` takes the user. Default `'inline'` (flip the sheet to
+   * edit mode). Use `'page'` when consumer routes to a separate edit page.
+   * See {@link SheetEditTarget}.
+   */
+  editTarget?: SheetEditTarget;
+  /**
+   * Navigation-to-read-page action surfaced in the read-mode footer between
+   * `[Close]` and `[Edit]`. Omit when the table has no corresponding read
+   * page (e.g. `plans`). See {@link SheetViewDetailsAction}.
+   */
+  viewDetailsAction?: SheetViewDetailsAction;
   /** Triggered from the primary action in edit mode (commit changes) */
   onSave?: () => void;
   /** Triggered from the secondary action in edit mode. Falls back to `onClose`. */
@@ -142,6 +191,8 @@ export function Sheet({
   onBack,
   mode,
   onEdit,
+  editTarget = 'inline',
+  viewDetailsAction,
   onSave,
   onCancel,
   editLabel = 'Edit',
@@ -216,6 +267,26 @@ export function Sheet({
     </Button>
   ) : null;
 
+  // `[View details]` slots between `[Close]` and `[Edit]` in the read-mode
+  // primary group. Renders as `<a>` when `href` is provided (Button's native
+  // anchor mode), otherwise as a button bound to `onClick`. Suppressed in
+  // edit mode and when no viewDetailsAction is supplied.
+  const viewDetailsNode = mode === 'read' && viewDetailsAction ? (
+    viewDetailsAction.href ? (
+      <Button
+        variant="secondary"
+        href={viewDetailsAction.href}
+        onClick={viewDetailsAction.onClick}
+      >
+        {viewDetailsAction.label ?? 'View details'}
+      </Button>
+    ) : (
+      <Button variant="secondary" onClick={viewDetailsAction.onClick}>
+        {viewDetailsAction.label ?? 'View details'}
+      </Button>
+    )
+  ) : null;
+
   const primaryActionsNode = (() => {
     if (mode === 'edit' && onSave) {
       return (
@@ -234,15 +305,18 @@ export function Sheet({
         </>
       );
     }
-    if (mode === 'read' && onEdit) {
+    if (mode === 'read' && (onEdit || viewDetailsNode)) {
       return (
         <>
           <Button variant="ghost" onClick={onClose}>
             {closeLabel}
           </Button>
-          <Button variant="primary" onClick={onEdit} iconBefore={<Icon icon={Pen} />}>
-            {editLabel}
-          </Button>
+          {viewDetailsNode}
+          {onEdit && (
+            <Button variant="primary" onClick={onEdit} iconBefore={<Icon icon={Pen} />}>
+              {editLabel}
+            </Button>
+          )}
         </>
       );
     }
@@ -270,6 +344,8 @@ export function Sheet({
         role="dialog"
         aria-modal={!isFloating}
         style={widthStyle}
+        data-mode={mode}
+        data-edit-target={mode === 'read' ? editTarget : undefined}
       >
         {hasHeaderContent && (
           <div className={bdsClass('bds-sheet__header', tabs ? 'bds-sheet__header--has-tabs' : '')}>

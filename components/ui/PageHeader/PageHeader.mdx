@@ -33,6 +33,21 @@ Real-world usage: company detail pages and analytics dashboards.
 
 <Canvas of={Stories.Patterns} />
 
+## Read / edit mode
+
+`PageHeader` is bimodal — symmetric with [`Sheet`](?path=/docs/containers-sheet--docs). When `mode` is set and no explicit `actions` slot is provided, the header auto-renders mode-appropriate actions:
+
+- **`mode="read"`** with `onEdit` → `[Edit]` (primary, pen icon)
+- **`mode="edit"`** with `onSave` / `onCancel` → `[Cancel] [Save]` `ButtonGroup`
+
+Explicit `actions` always overrides mode-driven auto-actions (mirrors `Sheet`'s `footer` override). When `mode` is unset, behavior is unchanged — no breaking change.
+
+The canonical URL pattern for bimodal pages is `/{table}/[slug]` (read) and `/{table}/[slug]/edit` (edit) — see [Read-Mode Page](?path=/docs/containers-read-mode-page--docs).
+
+<Canvas of={Stories.ReadMode} />
+
+<Canvas of={Stories.EditMode} />
+
 ## Props
 
 <ArgTypes of={Stories} />
