@@ -1,0 +1,42 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './AnimatedIcon.stories';
+
+<Meta of={Stories} />
+
+# Animated icon
+
+<ComponentLinks slug="animated-icon" />
+
+Lottie-react wrapper for animated UI icon states. Consumers source Lottie JSON from [useanimations.com](https://useanimations.com), [lottiefiles.com](https://lottiefiles.com), or their own After Effects → Bodymovin exports and pass it via `animationData`.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+AnimatedIcon has no semantic-variant axis — every prop (`trigger`, `size`, `loop`, `label`) is a Control on the canvas above. Per [ADR-010 §components without a variant axis](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-010-storybook-axes-of-information.md), the `trigger` enum (`loop` / `hover` / `click` / `once`) lives in Controls rather than as separate stories because at-rest snapshots are visually identical across modes — trigger differences only manifest in motion.
+
+<Canvas of={Stories.Default} />
+
+- **`loop`** — continuous decorative motion
+- **`hover`** — discoverable interaction hint
+- **`click`** — feedback on activation
+- **`once`** — entrance moment on mount
+
+## Patterns
+
+The Setup walkthrough below is the canonical first read — Lottie sourcing isn't visible from the prop API alone, and consumers need to know the useanimations.com → `src/animations/` → `import` flow before they can use the component.
+
+<Canvas of={Stories.Setup} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — `lottie-react` respects `prefers-reduced-motion` when `autoplay` is `false`. AnimatedIcon sets `autoplay` only for the `loop` and `once` triggers; `hover` and `click` are user-initiated, so motion-sensitive users hit them deliberately.
+
+> **Note** — BDS does not ship a curated Lottie catalog. Each consumer brings its own animation JSON files. If you need a system-wide catalog (similar to the iconify-backed `Icons` reference), file a separate issue.
