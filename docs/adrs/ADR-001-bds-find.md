@@ -61,7 +61,7 @@ Single `dist/bds-manifest.json` file, extending the existing artifact `scripts/b
   "composition": ["TextInput", "TextArea", "Select", "Button", "Field"],
   "status": "stable",
   "introducedIn": "0.18.0",
-  "storybookUrl": "https://bds.brikdesigns.com/?path=/story/displays-form-form--playground",
+  "storybookUrl": "https://bds.brikdesigns.com/?path=/story/displays-form-form--default",
   "reuse": { "portal": true, "renew-pms": false, "brikdesigns": true }
 }
 ```
@@ -134,7 +134,7 @@ MATCH (0.92) — Form
   class: bds-form                 status: stable
   use-cases: contact form, feedback form
   composes: TextInput, TextArea, Select, Button
-  storybook: https://bds.brikdesigns.com/?path=/story/displays-form-form--playground
+  storybook: https://bds.brikdesigns.com/?path=/story/displays-form-form--default
   theme-via: colors, spacing, typography
   fixed:     validation-behavior, keyboard-nav
 

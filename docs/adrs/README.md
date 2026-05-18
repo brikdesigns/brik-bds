@@ -28,8 +28,9 @@ The "how do component pages look and behave" cluster.
 
 | ADR | Status | Decision |
 |---|---|---|
-| [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) | **Accepted** (2026-04-26, amended 2026-05-05) | Four content top-levels (Foundations / Components / Patterns / Theming), one alphabetical subcategory layer under Components, two-shape story files (Playground + one-story-per-state) |
-| [ADR-007](./ADR-007-storybook-page-recipe.md) | **Accepted** (2026-05-04) | Normative MDX page recipe — Carbon-style triple-link header (ComponentLinks), six required sections in a fixed order, lint-enforced via `scripts/lint-storybook-recipe.js` |
+| [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) | **Accepted** (2026-04-26; Part A amended 2026-05-16 → 6-bucket flat taxonomy; Part B amended 2026-05-18 → canonical first story renamed `Default`) | Six flat component top-levels (Components / Containers / Blocks / Layouts / Sections / Tools), no subcategory layer, two-shape story files (`Default` + one-story-per-state) |
+| [ADR-007](./ADR-007-storybook-page-recipe.md) | **Accepted** (2026-05-04, amended 2026-05-18 → first section renamed `## Default`) | Normative MDX page recipe — Carbon-style triple-link header (ComponentLinks), required sections in fixed order (`## Default` → `## Variants` → `## Props`), lint-enforced via `scripts/lint-storybook-recipe.js` |
+| [ADR-010](./ADR-010-storybook-axes-of-information.md) | **Accepted** (2026-05-13, amended 2026-05-14 + 2026-05-18) | Story-vs-control matrix — Q1 toolbar global / Q2 argTypes-only / Q3 dedicated story (Orientation \| Layout \| Semantic-variant) / Q4 irreducible render / Q5 play-only. Canonical first story is `Default` regardless of variant axis. |
 
 These compose: ADR-006 governs *story files* (where stories live, what shape); ADR-007 governs *MDX pages* (how the page is structured around those stories). When they conflicted (ADR-006 forbids `Variants` story exports, ADR-007's original recipe required them), ADR-007's amendment landed first to reconcile.
 

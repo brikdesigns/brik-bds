@@ -1,6 +1,6 @@
 # ADR-010 — Storybook axes of information: story vs. control vs. toolbar
 
-**Status:** Accepted (2026-05-13); Amended (2026-05-14 — Q3 axis clarification + Patterns/Forms relocation; 2026-05-14 §2 — input-component specialization rule, all driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618))
+**Status:** Accepted (2026-05-13); Amended (2026-05-14 — Q3 axis clarification + Patterns/Forms relocation; 2026-05-14 §2 — input-component specialization rule; 2026-05-18 §3 — canonical first-story name unified to `Default`, all driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618))
 **Date:** 2026-05-13
 **Supersedes:** Part of [ADR-006 §Part B](./ADR-006-storybook-taxonomy-and-story-shape.md) — operational decision about *which axis becomes a story* now lives here. ADR-006 retains the two-shape model.
 **Superseded by:** —
@@ -67,7 +67,7 @@ type PricingCardArgs = {
   cta: Args<typeof Button>;
 };
 
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     header: { plan: 'Pro', price: '$49' },
     features: { items: ['Unlimited', 'Priority support'] },
@@ -84,15 +84,15 @@ The Button story file is the named test case. **Before the audit: 22 exports.**
 
 | Today | ADR-010 disposition | Why |
 |---|---|---|
-| `Playground` | Keep | Canonical sandbox |
-| `Primary` `Secondary` `Outline` `Ghost` `Inverse` `OnColor` `Danger` `DangerOutline` `DangerGhost` `Destructive` `Positive` `Selected` | Keep (12) | Q3 — each is a semantic starting point an agent reaches for |
-| `Disabled` `Loading` | Collapse | Q2 — boolean state, becomes Control on every variant |
+| `Playground` | Rename → `Default` | Canonical sandbox; name unified to `Default` per §3 amendment below |
+| `Primary` `Secondary` `Outline` `Ghost` `Inverse` `OnColor` `Danger` `DangerOutline` `DangerGhost` `Destructive` `Positive` `Selected` | Collapse to `variant` Control | Per [PR #614](https://github.com/brikdesigns/brik-bds/pull/614) Button refactor — variants are pure hierarchy/color (no semantic role / icon / context differences), so the Q-tree collapses to Q2 Controls on `Default`. The disposition row above is what ADR-010 originally proposed before the Button refactor narrowed it further. |
+| `Disabled` `Loading` | Collapse | Q2 — boolean state, becomes Control |
 | `WithIconBefore` `WithIconAfter` | Collapse | Q2 — icon-slot prop, becomes Control |
 | `FullWidth` | Collapse | Q2 — boolean, becomes Control |
 | `Sizes` | Keep | ADR-006 axis-only-gallery exception (one axis, side-by-side comparison) |
 | `Tiny` `Small` `Medium` `Large` `ExtraLarge` | Collapse into `Sizes` | Q2 — covered by the axis gallery |
 
-**After: ~13 exports** (Playground + 12 semantic variants + 1 `Sizes` axis gallery). Same coverage, ~40% fewer exports, every state navigable via Controls on every story.
+**After: ~3 exports** (`Default` + `IconOnly` discriminated-union showcase + `Sizes` axis gallery). The 12 per-variant rows above were the initial proposal; the realized refactor collapsed further once it became clear Button variants don't carry semantic-role differences. Same coverage, ~85% fewer exports, every state navigable via Controls on `Default`.
 
 ### Applied — components without a variant axis
 
@@ -156,6 +156,39 @@ If the only differences from `TextInput` are **defaults** (icon convention, `typ
 Rationale: 5 specialized inputs that all wrap TextInput introduce drift risk (focus ring, error styling, sizing tokens diverging across siblings), maintenance overhead (every TextInput improvement propagated to N wrappers), and MCP discovery noise (agents disambiguating between TextInput and EmailInput when the only difference is a default). The bar for promotion has to be real behavior, not naming.
 
 The decision rule applies symmetrically to other primitive families — `Button` doesn't get `SaveButton` / `DeleteButton` wrappers because those are usage patterns of `variant` + `children`. The same logic applies here.
+
+### Canonical first-story name — `Default`
+
+> **Amendment 2026-05-18 §3** — unifies the canonical first-story name across
+> all components, regardless of whether a variant axis applies. Supersedes
+> earlier language in this ADR (and in ADR-006 §Part B / ADR-007's recipe)
+> that named `Playground` as the canonical sandbox.
+
+Every component story file exports exactly one canonical sandbox story named **`Default`**. Carbon's [Checkbox page](https://react.carbondesignsystem.com/?path=/story/components-checkbox--default) and [Button page](https://react.carbondesignsystem.com/?path=/story/components-button--default) both use this name; matching the named reference removes the "is this Carbon-aligned?" friction.
+
+```tsx
+/** @summary Interactive Button — text, icon, or link via Controls */
+export const Default: Story = {
+  args: { variant: 'primary', size: 'md', children: 'Button' },
+};
+```
+
+The story serves both roles the legacy `Playground` name implied:
+
+1. **Default render** — what the component looks like with sensible defaults, the artifact agents return from `get-documentation`.
+2. **Sandbox** — every prop is a Control, so a viewer exercises the component without leaving the story.
+
+The two roles always collapsed into the same story. Naming it `Default` makes that the obvious thing; `Playground` framed it as a side-feature and produced authoring drift (per-state stories added to compensate for the perceived sandbox-only purpose of `Playground`).
+
+| Surface | New canonical | Legacy (grandfathered) |
+|---|---|---|
+| Story export | `export const Default` | `export const Playground` accepted on untouched files |
+| MDX heading | `## Default` | `## Playground` accepted on untouched files |
+| Canvas reference | `<Canvas of={Stories.Default} />` | `<Canvas of={Stories.Playground} />` accepted |
+
+**Migration is forward-only**, matching ADR-006 §Migration. When any reason brings you into a file, rename the canonical story to `Default` and update the matching MDX section + Canvas reference in the same PR. Don't open retroactive sweep PRs whose only diff is the rename — they add review surface without changing behavior.
+
+[`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js) accepts either `## Default` or `## Playground` as the first required section during the transition. PR review enforces `Default` for net-new components.
 
 ### The five toolbar globals
 
