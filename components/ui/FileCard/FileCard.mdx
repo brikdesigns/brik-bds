@@ -1,0 +1,33 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './FileCard.stories';
+
+<Meta of={Stories} />
+
+# File card
+
+<ComponentLinks slug="file-card" />
+
+Populated state of a file upload — a card surface showing one uploaded asset with preview thumbnail, filename, optional metadata, optional open-in-new-tab link, and an action row with Replace / Delete buttons. Composes alongside `FileUploader` (which owns the empty/dropzone state).
+
+The `aspectRatio` slug consumes the `--aspect-*` token family so CMS uploaders can encode the target image shape once — the same slug feeds `<Frame ratio="…">` on the consumer side.
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+Preview modes (image, SVG, icon), aspect ratios (1:1 default, 16:9 hero), and action-row presence (Replace, Delete, both, neither, disabled).
+
+<Canvas of={Stories.Variants} />
+
+## Patterns
+
+Composition with `FileUploader` — render `FileUploader` while the slot is empty, then swap to `FileCard` once a file has been uploaded.
+
+<Canvas of={Stories.Patterns} />
+
+## Props
+
+<ArgTypes of={Stories} />

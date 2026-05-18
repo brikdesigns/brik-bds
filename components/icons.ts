@@ -13,6 +13,7 @@ export const CaretRight = 'ph:caret-right';
 export const MagnifyingGlass = 'ph:magnifying-glass';
 export const MapPin = 'ph:map-pin';
 export const CloudArrowUp = 'ph:cloud-arrow-up';
+export const ArrowSquareOut = 'ph:arrow-square-out';
 export const CheckCircle = 'ph:check-circle';
 export const Circle = 'ph:circle';
 export const WarningCircle = 'ph:warning-circle';

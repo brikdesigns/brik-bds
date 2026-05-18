@@ -340,7 +340,7 @@ const preview: Preview = {
           ],
           // 6-bucket flat taxonomy per ADR-006 Part A (2026-05-16) + #629
           'Components',
-          ['address-input', 'avatar', 'badge', 'badge-group', 'banner', 'button', 'button-group', 'checkbox', 'chip', 'completion-toggle', 'counter', 'divider', 'dot', 'empty-state', 'file-uploader', 'filter-bar', 'filter-button', 'filter-toggle', 'icons', 'marketing-illustration', 'meter', 'modal', 'multi-select', 'pagination', 'password-input', 'popover', 'progress-bar', 'progress-circle', 'radio', 'segmented-control', 'select', 'service-tag', 'skeleton', 'slider', 'spinner', 'stepper', 'switch', 'tag', 'tag-group', 'text-area', 'text-input', 'text-link', 'toast', 'tooltip', '*'],
+          ['address-input', 'avatar', 'badge', 'badge-group', 'banner', 'button', 'button-group', 'checkbox', 'chip', 'completion-toggle', 'counter', 'divider', 'dot', 'empty-state', 'file-card', 'file-uploader', 'filter-bar', 'filter-button', 'filter-toggle', 'icons', 'marketing-illustration', 'meter', 'modal', 'multi-select', 'pagination', 'password-input', 'popover', 'progress-bar', 'progress-circle', 'radio', 'segmented-control', 'select', 'service-tag', 'skeleton', 'slider', 'spinner', 'stepper', 'switch', 'tag', 'tag-group', 'text-area', 'text-input', 'text-link', 'toast', 'tooltip', '*'],
           'Containers',
           [
             'accordion',
