@@ -1,25 +1,19 @@
-import { type HTMLAttributes, useState } from 'react';
-import { bdsClass } from '../../utils';
-import './ServiceBadge.css';
+/**
+ * Shared service-tag domain config — types, constants, and helpers consumed
+ * by ServiceTag (canonical) and (formerly) ServiceBadge (removed in #572).
+ *
+ * Lives in the legacy `ServiceBadge/` directory for now; rename to
+ * `ServiceTag/` is tracked as a follow-up since it touches consumer imports.
+ */
 
 export type ServiceCategory = 'brand' | 'marketing' | 'information' | 'product' | 'service';
-export type ServiceBadgeSize = 'sm' | 'md' | 'lg';
-/** @deprecated `mode` is no longer used. ServiceBadge is icon-only. Use ServiceTag for text labels. */
-export type ServiceBadgeMode = 'badge' | 'label';
 
-export interface ServiceBadgeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
-  /** Service category */
-  category: ServiceCategory;
-  /**
-   * Display mode
-   * @deprecated This prop is ignored. ServiceBadge is icon-only going forward. Use `ServiceTag variant="icon"` for the same visual. Use `ServiceTag variant="text"` or `variant="icon-text"` for text labels.
-   */
-  mode?: ServiceBadgeMode;
-  /** Size variant */
-  size?: ServiceBadgeSize;
-  /** Optional service name — used to resolve the specific service icon SVG */
-  serviceName?: string;
-}
+/**
+ * Size scale shared with ServiceTag. Kept as `ServiceBadgeSize` for
+ * non-breaking package-API stability; structurally identical to a future
+ * `ServiceTagSize` if the dir is renamed.
+ */
+export type ServiceBadgeSize = 'sm' | 'md' | 'lg';
 
 export const categoryConfig: Record<ServiceCategory, { token: string; label: string }> = {
   brand: { token: 'yellow', label: 'Brand' },
@@ -90,67 +84,3 @@ export function getServiceIconPath(category: ServiceCategory, serviceName: strin
   }
   return `/icons/${category}/${category}-${normalized.replace(`${category}-`, '')}.svg`;
 }
-
-// bds-lint-ignore — Figma-driven badge dimensions
-const iconScaleMap: Record<ServiceBadgeSize, number> = { sm: 0.55, md: 0.6, lg: 0.6 };
-const boxSizeMap: Record<ServiceBadgeSize, number> = { sm: 20, md: 28, lg: 40 };
-
-/**
- * @deprecated Use `ServiceTag variant="icon"` instead. ServiceBadge has zero
- * external consumers (verified during 2026-Q2 component bloat audit) and is
- * slated for deletion in a future major version.
- *
- * Full deletion is blocked on extracting `categoryConfig` and
- * `getServiceIconPath` (currently exported from this file and consumed by
- * `ServiceTag`) into a shared utility module. Tracked as a follow-up task.
- *
- * ServiceBadge — icon-only colored square badge for a Brik service category.
- * The `mode="label"` prop is no longer supported; use `ServiceTag` for text labels.
- *
- * @example
- * // Migration: replace ServiceBadge with ServiceTag
- * // Old: <ServiceBadge category="brand" serviceName="Brand Identity Bundle" size="lg" />
- * // New: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
- *
- * @summary Brik service category icon (deprecated — use ServiceTag)
- */
-export function ServiceBadge({
-  category,
-  mode: _mode,
-  size = 'md',
-  serviceName,
-  className,
-  style,
-  ...props
-}: ServiceBadgeProps) {
-  const config = categoryConfig[category];
-  const [imageError, setImageError] = useState(false);
-  const iconSize = Math.round(boxSizeMap[size] * iconScaleMap[size]);
-
-  return (
-    <div
-      className={bdsClass(
-        'bds-service-badge',
-        `bds-service-badge--${size}`,
-        `bds-service-badge--${category}`,
-        className,
-      )}
-      style={style}
-      title={serviceName || config.label}
-      {...props}
-    >
-      {serviceName && !imageError && (
-        <img
-          src={getServiceIconPath(category, serviceName)}
-          alt=""
-          width={iconSize}
-          height={iconSize}
-          className="bds-service-badge__icon"
-          onError={() => setImageError(true)}
-        />
-      )}
-    </div>
-  );
-}
-
-export default ServiceBadge;

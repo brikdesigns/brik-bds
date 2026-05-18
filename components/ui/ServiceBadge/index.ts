@@ -1,12 +1,7 @@
-// ServiceTag is the primary component — use this for all new code
+// ServiceTag is the canonical component
 export { ServiceTag } from './ServiceTag';
 export type { ServiceTagProps, ServiceTagVariant } from './ServiceTag';
 
-// ServiceBadge is kept for backwards compatibility — use ServiceTag variant="icon" instead
-export { ServiceBadge, categoryConfig, serviceIconOverrides, normalizeServiceName, getServiceIconPath } from './ServiceBadge';
-export type {
-  ServiceBadgeProps,
-  ServiceCategory,
-  ServiceBadgeSize,
-  ServiceBadgeMode,
-} from './ServiceBadge';
+// Shared service-tag domain config — re-exported for consumer convenience
+export { categoryConfig, serviceIconOverrides, normalizeServiceName, getServiceIconPath } from './service-config';
+export type { ServiceCategory, ServiceBadgeSize } from './service-config';

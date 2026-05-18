@@ -5,7 +5,7 @@ import {
   getServiceIconPath,
   type ServiceCategory,
   type ServiceBadgeSize,
-} from './ServiceBadge';
+} from './service-config';
 import './ServiceTag.css';
 
 export type ServiceTagVariant = 'text' | 'icon-text' | 'icon';
@@ -50,6 +50,8 @@ const boxSizeMap: Record<ServiceBadgeSize, number> = { sm: 20, md: 28, lg: 40 };
  *
  * // Icon-only badge (square)
  * <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
+ *
+ * @summary Brik service category indicator — text, icon, or icon+text
  */
 export function ServiceTag({
   category,

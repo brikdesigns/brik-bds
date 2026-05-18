@@ -242,6 +242,13 @@ function buildComponents() {
     if (!/^[A-Z]/.test(entry)) continue; // PascalCase dirs only
 
     const pascalName = entry;
+    // Skip dirs without a matching `${PascalName}.tsx` — these are dirs that
+    // host a sibling canonical component under a different name (e.g.
+    // `ServiceBadge/` host's `ServiceTag.tsx` after the #572 deprecation
+    // removed the deprecated `ServiceBadge.tsx`). The sibling itself is
+    // listed via its own dir or via index.ts re-export — this dir would
+    // produce a vestigial manifest entry pointing at a deleted file.
+    if (!existsSync(join(dir, `${pascalName}.tsx`))) continue;
     const prefix = toClassPrefix(pascalName);
     const override = overrides.components?.[pascalName] ?? {};
 

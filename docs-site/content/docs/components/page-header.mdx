@@ -64,15 +64,15 @@ PageHeader has six optional regions plus a required title. From top to bottom:
 />
 ```
 
-### With service badge
+### With service tag
 
-[ServiceBadge](/docs/components/service-badge) renders to the left of the title for service-line pages.
+[ServiceTag](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview) renders to the left of the title for service-line pages.
 
 ```tsx
 <PageHeader
   title="Website Design"
   subtitle="Custom web development and design."
-  badge={<ServiceBadge category="marketing" serviceName="Custom Web Development" size="lg" />}
+  badge={<ServiceTag category="marketing" variant="icon" serviceName="Custom Web Development" size="lg" />}
   actions={<Button variant="primary">Edit Service</Button>}
 />
 ```
@@ -157,7 +157,7 @@ The canonical layout — breadcrumb + service badge + title + actions + metadata
       { label: 'Birdwell & Mutlak' },
     ]} />
   }
-  badge={<ServiceBadge category="dental" size="lg" />}
+  badge={<ServiceTag category="dental" variant="icon" size="lg" />}
   actions={<ButtonGroup>
     <Button variant="ghost">Archive</Button>
     <Button variant="primary">Edit</Button>
@@ -219,7 +219,7 @@ interface MetadataItem {
 
 - [Breadcrumb](/docs/components/breadcrumb) — common breadcrumbs prop content
 - [TabBar](/docs/components/tab-bar) — common tabs prop content
-- [ServiceBadge](/docs/components/service-badge) — common badge prop content
+- [ServiceTag](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview) — common badge prop content (variant="icon")
 - [DataSection](/docs/components/data-section) — for body sections below the header
 - [Sheet](/docs/components/sheet) — has its own header for in-Sheet contexts
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/sections-page-header--overview)**
