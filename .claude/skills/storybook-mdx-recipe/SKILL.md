@@ -46,7 +46,7 @@ brik-rag query "ADR-006 ADR-007 same words different layers" --workflow-type sto
 brik-rag query "MDX acceptance criteria lint storybook recipe" --workflow-type storybook-mdx-recipe --top-k 3
 ```
 
-Parse the JSON output, apply the relevant rules to the edit. If the query returns no results, the standard has not been ingested — run `brik-bds/scripts/ingest-storybook-mdx-recipe-standard.sh` once, then retry.
+Parse the JSON output, apply the relevant rules to the edit. If the query returns no results, the standard has not been ingested — run `brik-bds/scripts/run-standards-ingest.sh --all` once to bootstrap, then retry.
 
 ## Lint is the gate
 
@@ -58,4 +58,4 @@ The standard + the lint are canon. Existing MDX pages that violate them are lega
 
 ## How to update the standard itself
 
-Edit `brik-bds/.claude/standards/storybook-mdx-recipe.md`, bump `last-verified`, re-run `scripts/ingest-storybook-mdx-recipe-standard.sh`. The skill picks up the new content on the next retrieval — no skill file change needed. **If the change is material** (new required section, change in section order, change to acceptance criteria), also amend ADR-007 and update `scripts/lint-storybook-recipe.js`.
+Edit `brik-bds/.claude/standards/storybook-mdx-recipe.md`, bump `last-verified`, then commit — the pre-commit hook auto-ingests changed standards into brik-rag (brik-bds#744). The skill picks up the new content on the next retrieval; no skill file change needed. **If the change is material** (new required section, change in section order, change to acceptance criteria), also amend ADR-007 and update `scripts/lint-storybook-recipe.js`.
