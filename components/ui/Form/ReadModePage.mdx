@@ -22,9 +22,37 @@ This page pattern composes four BDS components:
 
 ---
 
-## Two edit conventions
+## Page-level read/edit split
 
-BDS supports two distinct conventions for moving from read to edit. **Neither is wrong — they solve different problems.** Pick one per feature with intent; don't mix them on the same page.
+When the read page itself is bimodal (the whole record toggles between view and edit, e.g. a catalog admin's full edit form), use the route-split pattern:
+
+- `/{table}/[slug]` — **read page**. `PageHeader` renders with `mode="read"` and `onEdit` → navigates to `/edit`.
+- `/{table}/[slug]/edit` — **edit page**. `PageHeader` renders with `mode="edit"` + `onSave` / `onCancel`. The same `Form` + `FieldGrid` + `Field` composition that drives sheet edits also drives the page form — only the surrounding chrome differs.
+
+```tsx
+// Read page: /settings/services/[slug]
+<PageHeader
+  title={service.name}
+  subtitle={service.shortDescription}
+  mode="read"
+  onEdit={() => router.push(`/settings/services/${slug}/edit`)}
+/>
+
+// Edit page: /settings/services/[slug]/edit
+<PageHeader
+  title={`Edit ${service.name}`}
+  mode="edit"
+  onSave={handleSave}
+  onCancel={() => router.push(`/settings/services/${slug}`)}
+  saveLoading={pending}
+/>
+```
+
+`PageHeader.mode` is symmetric with [`Sheet.mode`](?path=/docs/containers-sheet--docs) — see [`PageHeader`](?path=/docs/sections-page-header--docs) for the full API. Pair this with [Convention C of Read-Mode Sheet](?path=/docs/containers-read-mode-sheet--docs#convention-c--footer-driven-close-view-details-edit-table-row-sheet) (`Sheet.viewDetailsAction` + `editTarget="page"`) when a table row opens a snapshot sheet that links to the read/edit pages.
+
+## Two section-level edit conventions
+
+For per-section edits (one `DataSection` at a time, while the rest of the page stays in read mode), BDS supports two distinct conventions. **Neither is wrong — they solve different problems.** Pick one per feature with intent; don't mix them on the same page.
 
 ### Convention A — Sheet overlay
 

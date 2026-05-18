@@ -103,6 +103,56 @@ return (
 
 The page-side entry in this case is a single `<Button>` in the `DataSection.actions` slot, not a `<ButtonGroup>`.
 
+### Convention C — Footer-driven `[Close] [View details] [Edit]` (table-row sheet)
+
+The canonical pattern for **table-row sheets** in catalog admins (services, offerings, service_lines, industry_pages). The sheet opens in `mode="read"` from a `[View]` action in the table's Actions cell, surfaces a snapshot of core tabular fields, and offers two onward actions:
+
+- `[View details]` — navigates to the **read page** (`/{table}/[slug]`) for the full record (images, body copy, related records).
+- `[Edit]` — navigates to the **edit page** (`/{table}/[slug]/edit`) where the full content form lives.
+
+**Use when:**
+- The table row corresponds to a record with a meaningful full read page (services / offerings / service_lines / industry_pages).
+- The sheet snapshot answers most lookup questions, but editing happens at the page level (the form is too wide / too rich for a sheet).
+- Read-only catalog tables (`customer_stories`, `blog_posts`) — drop both `viewDetailsAction` and `onEdit`; the name cell navigates straight to the read page.
+
+**Shape:**
+
+```tsx
+import { Sheet, SheetSection, FieldGrid, Field } from '@brikdesigns/bds';
+import { useRouter } from 'next/navigation';
+
+const router = useRouter();
+
+return (
+  <Sheet
+    isOpen={open}
+    onClose={() => setOpen(false)}
+    subtitle="Service"
+    title={service.name}
+    description={`${service.category} · ${service.status}`}
+    mode="read"
+    editTarget="page"
+    viewDetailsAction={{
+      label: 'View details',
+      href: `/settings/services/${service.slug}`,
+    }}
+    onEdit={() => router.push(`/settings/services/${service.slug}/edit`)}
+  >
+    <SheetSection heading="Snapshot">
+      <FieldGrid columns={2}>
+        <Field label="Slug">{service.slug}</Field>
+        <Field label="Category">{service.category}</Field>
+        <Field label="Status">{service.status}</Field>
+      </FieldGrid>
+    </SheetSection>
+  </Sheet>
+);
+```
+
+Footer auto-renders `[Close]` (ghost) · `[View details]` (secondary) · `[Edit]` (primary, pen icon). Omit `viewDetailsAction` to render `[Close] [Edit]` only — the `plans` pattern, where the sheet has no corresponding page and `editTarget="inline"` flips in place.
+
+The `editTarget` prop is a semantic hint that documents which pattern is in play (`'page'` for navigate, `'inline'` for in-sheet mode flip). Tests and audits can read `data-edit-target` on the sheet root to assert consumer intent.
+
 ---
 
 ## Typography rules — what goes in a sheet
