@@ -4,7 +4,7 @@ import { PageHeader } from './PageHeader';
 import { Breadcrumb } from '../Breadcrumb';
 import { TabBar, type TabItem } from '../TabBar';
 import { Button } from '../Button';
-import { ServiceTag } from '../ServiceBadge';
+import { ServiceTag } from '../ServiceTag';
 import { CardSummary } from '../Card';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */

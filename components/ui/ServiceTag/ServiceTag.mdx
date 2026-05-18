@@ -1,9 +1,12 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './ServiceTag.stories';
 
 <Meta of={Stories} />
 
-# Service Tag
+# Service tag
+
+<ComponentLinks slug="service-tag" />
 
 Colored indicator identifying Brik service categories. Each category has a dedicated color palette used across the Brik ecosystem for consistent service identification.
 
@@ -11,8 +14,6 @@ Available in three variants:
 - **`text`** — colored pill with label text only
 - **`icon-text`** — colored pill with service icon + label text
 - **`icon`** — colored square with service icon only (the icon badge, previously `ServiceBadge`)
-
----
 
 ## Playground
 
@@ -50,38 +51,9 @@ Real-world usage: table cells, service lists, and color palette reference.
 
 <Canvas of={Stories.Patterns} />
 
----
-
 ## Props
 
 <ArgTypes of={Stories} />
-
----
-
-## Usage
-
-```tsx
-import { ServiceTag } from '@brik/bds';
-
-// Text pill — category label
-<ServiceTag category="marketing" />
-
-// Text pill — custom label
-<ServiceTag category="brand" label="Brand Identity Bundle" />
-
-// Icon + text pill
-<ServiceTag category="marketing" variant="icon-text" serviceName="Email Drip Campaign (Up to 6 Emails)" label="Email Campaign" />
-
-// Icon-only badge (square)
-<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" />
-<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
-
-// Sizes
-<ServiceTag category="product" size="sm" />
-<ServiceTag category="product" size="lg" />
-```
-
----
 
 ## Migration from ServiceBadge
 
@@ -95,8 +67,6 @@ import { ServiceTag } from '@brik/bds';
 <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
 ```
 
----
-
 ## Icon resolution
 
 The `serviceName` prop resolves to an SVG icon via two mechanisms:
@@ -104,4 +74,4 @@ The `serviceName` prop resolves to an SVG icon via two mechanisms:
 - **Explicit overrides** — common service names map directly to icon files (e.g., "Premium Logo Design" resolves to `brand-logo.svg`)
 - **Normalization** — service names are lowercased and hyphenated, then prefixed by category (e.g., "Brand Guidelines" resolves to `brand-guidelines.svg`)
 
-Icons are stored in `components/ui/ServiceBadge/icons/[category]/` and served from `.storybook/public/icons/` in Storybook.
+Icons are stored in `components/ui/ServiceTag/icons/[category]/` and served from `.storybook/public/icons/` in Storybook.

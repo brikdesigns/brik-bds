@@ -85,11 +85,6 @@ const EXEMPT_COMPONENTS = new Set([
 // for a single `<Name>.tsx`.
 const MULTI_EXPORT = {
   SheetTypography: ['SheetSectionTitle', 'SheetFieldLabel', 'SheetFieldValue', 'SheetHelperText'],
-  // ServiceBadge/ dir hosts the canonical ServiceTag.tsx plus the shared
-  // service-config.ts module (categoryConfig, getServiceIconPath, types).
-  // Post-#572 the legacy ServiceBadge.tsx was removed; dir rename to
-  // ServiceTag/ tracked as a follow-up.
-  ServiceBadge: ['ServiceTag'],
 };
 
 // Build the (file, exportName) scan tasks.
