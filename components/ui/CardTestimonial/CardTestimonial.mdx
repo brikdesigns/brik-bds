@@ -8,28 +8,22 @@ import * as Stories from './CardTestimonial.stories';
 
 <ComponentLinks slug="card-testimonial" />
 
-Customer testimonial card with quote, attribution, and optional star rating. Supports brand (colored background) and outlined variants.
+Customer testimonial card with quote, attribution, and optional star rating.
+
+> **Rename in progress** — This component will be renamed `Testimonial` in a future release (see [#702](https://github.com/brikdesigns/brik-bds/issues/702)). The export name and import path are unchanged until then.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Brand, outlined, without rating, and minimal attribution.
+### Outlined
 
-<Canvas of={Stories.Variants} />
+`variant="outlined"` swaps the brand-tinted surface for a neutral background with border. Use on light-background sections where the brand fill would compete with surrounding content.
 
-- **`brand`** — Colored background with inverse text (default)
-- **`outlined`** — Light background with border
-
-## Patterns
-
-Mixed variant testimonials in a grid layout.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Outlined} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-

@@ -10,23 +10,20 @@ import * as Stories from './CollapsibleCard.stories';
 
 Expandable content section with a clickable header. Use for FAQs, settings panels, and long-form content that benefits from progressive disclosure.
 
+> **Rename in progress** — This component will be renamed `Collapsible` in a future release (see [#701](https://github.com/brikdesigns/brik-bds/issues/701)). The export name and import path are unchanged until then.
+
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Collapsed, expanded, without section label, and with rich content.
+### Controlled mode
 
-<Canvas of={Stories.Variants} />
+Use `isOpen` + `onOpenChange` when parent state must drive the transition — for example, "expand all" / "collapse all" controls, wizard steps, or accordion groups. Uncontrolled (`defaultOpen`) is the default and covers most use cases.
 
-## Patterns
-
-Stacked proposal sections in an accordion-style layout.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Controlled} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-

@@ -8,35 +8,19 @@ import * as Stories from './CardControl.stories';
 
 <ComponentLinks slug="card-control" />
 
-Settings control card with badge, title, description, and an action slot. Used for toggles, configuration options, and status displays.
+> **Deprecated** — Use [`Card preset="control"`](?path=/docs/containers-card--docs) instead. `CardControl` is kept for the migration window and will be removed in a future release. See [#657](https://github.com/brikdesigns/brik-bds/issues/657).
+
+Settings control card with badge, title, description, and an action slot. Superseded by `Card preset="control"` (per ADR-004).
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Switch actions, button actions, status badges, and minimal layout.
+See [`Card preset="control"`](?path=/docs/containers-card--docs) for the full variant set — control alignment, badge status, and action types are all documented there.
 
-<Canvas of={Stories.Variants} />
-
-### Action alignment
-
-Use `actionAlign="top"` when the description wraps to multiple lines — the CTA anchors to the upper-right corner instead of drifting to the vertical center.
-
-<Canvas of={Stories.ActionAlignment} />
-
-## Patterns
-
-Settings panel with mixed action types.
-
-<Canvas of={Stories.Patterns} />
-
-### Toggle switch panel
-
-Multi-row notification panel using switches with top-aligned actions — a common settings-page layout.
-
-<Canvas of={Stories.ToggleSwitchPanel} />
+<Canvas of={Stories.Default} />
 
 ## Props
 

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, CardTitle, CardDescription, CardFooter } from './Card';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
+import { PricingCard } from '../PricingCard';
 
 const meta: Meta<typeof Card> = {
   title: 'Containers/card',
@@ -201,5 +202,40 @@ export const Display: Story = {
       </div>
     ),
   ],
+};
+
+/**
+ * `PricingCard` — web-only pricing tier with price block, feature checklist,
+ * and optional highlighted (recommended) state. Component lives in
+ * `components/ui/PricingCard/`; story lives here because PricingCard is part
+ * of the Card family and its `highlighted` prop is a Q3 semantic variant.
+ *
+ * @summary PricingCard — web-only pricing tier with feature list
+ */
+export const Pricing: Story = {
+  tags: ['surface-web'],
+  render: () => (
+    <div style={{ width: 320 }}>
+      <PricingCard
+        title="Professional"
+        price="$49"
+        period="/month"
+        description="Most popular choice for growing businesses."
+        features={[
+          'Unlimited projects',
+          'Priority support',
+          'Custom domain',
+          'Analytics dashboard',
+        ]}
+        badge={<Badge status="positive" size="sm">Most popular</Badge>}
+        action={
+          <Button variant="primary" style={{ width: '100%' }}>
+            Get started
+          </Button>
+        }
+        highlighted
+      />
+    </div>
+  ),
 };
 

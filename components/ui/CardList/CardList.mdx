@@ -8,43 +8,19 @@ import * as Stories from './CardList.stories';
 
 <ComponentLinks slug="card-list" />
 
-Layout primitive for arrays of `Card`. Locks orientation, gap, and width-distribution rules so consumers don't reach for raw `display: grid`.
+Layout wrapper for arrays of `Card`. Locks orientation, gap, and width-distribution rules so consumers don't reach for raw `display: flex`. A `Layouts/` primitive — no visual surface of its own.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-### Vertical
-
-Stacked layout — full-width cards in a column. Use for sidebars, news lists, and compact card stacks.
-
-<Canvas of={Stories.Vertical} />
-
-### Horizontal
-
-Equal-column layout — each card stretches to fill its share of the row. Use for service grids, feature lists, and testimonial rows.
-
-<Canvas of={Stories.Horizontal} />
-
-### Horizontal — fit content
-
-`fitContent` lets cards size to their own intrinsic width instead of stretching equally.
-
-<Canvas of={Stories.HorizontalFitContent} />
-
 ### Gap scale
 
-Four locked gap sizes — `sm`, `md`, `lg`, `xl`.
+Four spacing steps between cards — `sm`, `md`, `lg`, `xl`. Use `md` (default) for standard card stacks; `lg` or `xl` for marketing grids with more visual breathing room.
 
 <Canvas of={Stories.GapScale} />
-
-## Patterns
-
-Service grid and vertical news stack — recurring CardList compositions.
-
-<Canvas of={Stories.Patterns} />
 
 ## Props
 
