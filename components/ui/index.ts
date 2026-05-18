@@ -42,6 +42,7 @@ export * from './Dot';
 export * from './EmptyState';
 export * from './Field';
 export * from './FieldGrid';
+export * from './FileCard';
 export * from './FileUploader';
 export * from './FilterBar';
 export * from './FilterButton';
