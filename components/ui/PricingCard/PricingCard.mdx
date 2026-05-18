@@ -8,25 +8,22 @@ import * as Stories from './PricingCard.stories';
 
 <ComponentLinks slug="pricing-card" />
 
+> **Stories moved** — The canonical PricingCard stories now live on the [Card](?path=/docs/containers-card--docs) page under `## Variants > Pricing`. This page remains during the migration window.
+
 A pricing tier display card with title, price, features list, and call-to-action. Supports a highlighted state for the recommended plan.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Standard, highlighted with badge, and free tier configurations.
+### Highlighted
 
-<Canvas of={Stories.Variants} />
+`highlighted=true` marks this tier as the recommended plan with brand surface treatment.
 
-## Patterns
-
-Three-tier pricing grid — the typical side-by-side layout with the middle plan highlighted.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Highlighted} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
