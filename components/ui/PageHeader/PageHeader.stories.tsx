@@ -276,7 +276,71 @@ export const Patterns: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   4. TUNABLE SPACING — component-scoped CSS variables
+   4. READ / EDIT MODE — bimodal page state, symmetric with Sheet
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Read mode auto-renders `[Edit]` (primary, pen icon) in the `actions`
+ * slot. The `actions` prop, when supplied, always overrides mode-driven
+ * actions — mirrors `Sheet`'s `footer` override.
+ *
+ * @summary Read mode
+ */
+export const ReadMode: Story = {
+  render: () => (
+    <PageHeader
+      title="Brand Identity Bundle"
+      subtitle="Marketing · Active · Updated 2 days ago"
+      breadcrumbs={
+        <Breadcrumb items={[
+          { label: 'Settings', href: '#' },
+          { label: 'Services', href: '#' },
+          { label: 'Brand Identity Bundle' },
+        ]} />
+      }
+      mode="read"
+      onEdit={() => alert('Navigate to /settings/services/brand-identity-bundle/edit')}
+    />
+  ),
+};
+
+/**
+ * Edit mode auto-renders `[Cancel] [Save]` ButtonGroup in the `actions`
+ * slot. Pass `saveLoading` while the save promise is in flight and
+ * `saveDisabled` when the form is invalid.
+ *
+ * @summary Edit mode
+ */
+export const EditMode: Story = {
+  render: () => {
+    const [saving, setSaving] = useState(false);
+    const handleSave = () => {
+      setSaving(true);
+      setTimeout(() => setSaving(false), 900);
+    };
+    return (
+      <PageHeader
+        title="Edit Brand Identity Bundle"
+        subtitle="Update the service catalog entry."
+        breadcrumbs={
+          <Breadcrumb items={[
+            { label: 'Settings', href: '#' },
+            { label: 'Services', href: '#' },
+            { label: 'Brand Identity Bundle', href: '#' },
+            { label: 'Edit' },
+          ]} />
+        }
+        mode="edit"
+        onSave={handleSave}
+        onCancel={() => alert('Return to /settings/services/brand-identity-bundle')}
+        saveLoading={saving}
+      />
+    );
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   5. TUNABLE SPACING — component-scoped CSS variables
    ═══════════════════════════════════════════════════════════════ */
 
 /**

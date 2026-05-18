@@ -14,6 +14,7 @@ const meta: Meta<typeof Sheet> = {
     side: { control: 'select', options: ['right', 'left', 'bottom'] },
     variant: { control: 'select', options: ['default', 'floating'] },
     mode: { control: 'select', options: [undefined, 'read', 'edit'] },
+    editTarget: { control: 'select', options: ['inline', 'page'] },
     title: { control: 'text' },
     subtitle: { control: 'text' },
     description: { control: 'text' },
@@ -330,6 +331,46 @@ export const EditMode: Story = {
           saveLoading={saving}
         >
           <EditFormFields />
+        </Sheet>
+      </>
+    );
+  },
+};
+
+/* ─── Read + View details + Edit (sheet+page hybrid pattern) ───── */
+
+/**
+ * Sheet+page hybrid tables (services, offerings, service_lines,
+ * industry_pages) surface three actions in the read-mode footer:
+ * `[Close]` (ghost) · `[View details]` (secondary, navigates to the
+ * full read page) · `[Edit]` (primary, navigates to the edit page).
+ *
+ * `editTarget="page"` is the semantic hint that `onEdit` navigates
+ * to an edit page (vs. flipping the sheet to edit mode in place).
+ *
+ * @summary Read edit with view details
+ */
+export const ReadEditWithViewDetails: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>View service</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          subtitle="Service"
+          title="Brand Identity Bundle"
+          description="Marketing · Active · Updated 2 days ago"
+          mode="read"
+          editTarget="page"
+          viewDetailsAction={{
+            label: 'View details',
+            onClick: () => alert('Navigate to /settings/services/brand-identity-bundle'),
+          }}
+          onEdit={() => alert('Navigate to /settings/services/brand-identity-bundle/edit')}
+        >
+          <ReadOnlyFields />
         </Sheet>
       </>
     );
