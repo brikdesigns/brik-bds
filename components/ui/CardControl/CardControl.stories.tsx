@@ -11,7 +11,7 @@ import { Switch } from '../Switch';
  * CardControl is kept during the migration window (see #657).
  */
 const meta: Meta<typeof CardControl> = {
-  title: 'Containers/card-control',
+  title: 'Deprecated/card-control',
   component: CardControl,
   tags: ['surface-shared', '!manifest'],
   parameters: { layout: 'padded' },
