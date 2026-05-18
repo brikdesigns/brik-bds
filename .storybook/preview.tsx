@@ -23,6 +23,7 @@ import { FeedbackWidget } from './FeedbackWidget';
 // 6. Storybook overrides (Base mode spacing, UI fixes)
 import '../tokens/figma-tokens.css';
 import '../tokens/gap-fills.css';
+import '../tokens/ratios.css';
 import '../tokens/theme-brand-brik.css';
 import '../tokens/font-audit.css';
 import '../tokens/animations.css';
@@ -314,7 +315,7 @@ const preview: Preview = {
           'Foundation',
           [
             'Design Tokens',
-            ['Overview', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size', 'Motion'],
+            ['Overview', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size', 'Motion', 'Aspect Ratios'],
             'Atmospheres',
             'Navigation Archetypes',
             'Assets',
