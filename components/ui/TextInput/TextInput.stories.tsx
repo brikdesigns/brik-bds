@@ -73,6 +73,10 @@ const meta: Meta<DefaultArgs> = {
       action: 'changed',
       description: 'Native change handler.',
     },
+    hideBorder: {
+      control: 'boolean',
+      description: 'Remove the field border. Use on dark/inverse surfaces where the fill provides sufficient contrast.',
+    },
     showLeadingIcon: {
       control: 'boolean',
       description: 'Story-only — toggle a sample envelope icon as `iconBefore`.',
@@ -103,6 +107,7 @@ export const Default: Story = {
     type: 'text',
     size: 'md',
     fullWidth: true,
+    hideBorder: false,
     showLeadingIcon: false,
     showTrailingIcon: false,
   },
