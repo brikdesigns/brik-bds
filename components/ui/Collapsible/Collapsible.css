@@ -1,0 +1,102 @@
+@layer bds-components {
+/* Collapsible — expandable content section (progressive disclosure primitive) */
+
+/* ─── Root container ──────────────────────────────────── */
+
+.bds-collapsible {
+  background-color: var(--surface-primary);
+  padding: var(--padding-lg);
+  border-radius: var(--border-radius-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Trigger (header) ────────────────────────────────── */
+
+.bds-collapsible__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  cursor: pointer;
+  gap: var(--gap-lg);
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+}
+
+.bds-collapsible__header:focus-visible {
+  outline: 2px solid var(--border-brand-primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-collapsible__header-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-lg);
+  flex: 1;
+  min-width: 0;
+}
+
+.bds-collapsible__header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+/* ─── Section label ───────────────────────────────────── */
+
+.bds-collapsible__section-label {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight--semi-bold);
+  font-size: var(--heading-tiny);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+/* ─── Title ───────────────────────────────────────────── */
+
+.bds-collapsible__title {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight--bold);
+  font-size: var(--heading-sm);
+  color: var(--text-primary);
+  line-height: var(--font-line-height-tight);
+  margin: 0;
+}
+
+/* ─── Toggle icon ─────────────────────────────────────── */
+
+.bds-collapsible__toggle {
+  width: 40px; /* bds-lint-ignore — icon button touch target */
+  height: 40px; /* bds-lint-ignore */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  flex-shrink: 0;
+  color: var(--text-primary);
+  font-size: var(--body-lg); /* bds-lint-ignore — icon sizing */
+}
+
+.bds-collapsible__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bds-collapsible[data-state="open"] .bds-collapsible__icon--plus { display: none; }
+.bds-collapsible[data-state="closed"] .bds-collapsible__icon--minus { display: none; }
+
+/* ─── Content area ────────────────────────────────────── */
+
+.bds-collapsible__content {
+  margin-top: var(--padding-lg);
+}
+}

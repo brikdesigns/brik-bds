@@ -29,6 +29,7 @@ export * from './Checkbox';
 export * from './Checklist';
 export * from './Chip';
 export * from './Cluster';
+export * from './Collapsible';
 export * from './CollapsibleCard';
 export * from './CompletionToggle';
 export * from './Counter';
