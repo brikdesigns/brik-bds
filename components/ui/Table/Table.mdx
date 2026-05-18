@@ -8,7 +8,7 @@ import * as Stories from './Table.stories';
 
 <ComponentLinks slug="table" />
 
-Data table with composable sub-components. Supports sorting, selection, striped rows, size variants, and custom cell content.
+Data table with composable sub-components. Supports sorting, selection, striped rows, size variants, and custom cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
 
 ## Playground
 
@@ -28,6 +28,22 @@ Size variants, striped rows, sortable headers, and all cell types: icon left, to
 Full-featured composite table and striped comfortable layout.
 
 <Canvas of={Stories.Patterns} />
+
+## Actions cell + cell-level interactivity
+
+The trailing `[View][Edit][⋯]` cluster composes with `<TableActionsCell>` — owns alignment, shrink-to-content width, and the `--gap-sm` rhythm. Consumers stop hand-rolling `style={{ textAlign: 'right' }}` on `<TableCell>`.
+
+<Canvas of={Stories.WithActionsCell} />
+
+The canonical read/edit canon row has three click-target classes — **Name** (`<TextLink>` opening the read sheet), **Foreign-key cells** (`<TextLink>` opening the related entity's read sheet), and **Actions** (`<TableActionsCell>`). Read-only display cells (Status / Public / Featured) stay plain `<Badge>` or text.
+
+<Canvas of={Stories.CellLevelInteractivity} />
+
+### Forbidden — whole-row click
+
+`onClick` on `<TableRow>` violates table cell semantics, breaks screen-reader expectations, and conflicts with cell-level affordances. Use cell-level click targets instead — the row should never carry the handler.
+
+<Canvas of={Stories.RowClickAntiPattern} />
 
 ## Props
 
