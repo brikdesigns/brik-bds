@@ -212,7 +212,7 @@ These are common drift inventions. Listed here so an agent reading the canon see
 | `__quote` | use `CardTestimonial` component | Don't hand-roll blockquote markup |
 | `__quote-text` | use `CardTestimonial` | Same |
 | `__quote-cite` | use `CardTestimonial`'s `__cite` | Same |
-| `__callout` | use `Banner` or `AlertBanner` | Don't hand-roll callout markup |
+| `__callout` | use `Banner` | Don't hand-roll callout markup |
 | `__plan-name` | `__title` | Layout-specific noun for a generic role |
 | `__plan-description` | `__description` | Same |
 | `__support-title` | `__title` | Same |
