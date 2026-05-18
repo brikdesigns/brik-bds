@@ -1,6 +1,6 @@
 # ADR-006 — Storybook Taxonomy + Story Shape
 
-**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments); Part B amended 2026-05-18 (canonical first-story name → `Default`); Part A amended 2026-05-18 (card-list reassigned Containers → Layouts; CardControl moved to Deprecated/; NavigationArchetypes relocated to Foundation/ — see Amendments)
+**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments); Part B amended 2026-05-18 (canonical first-story name → `Default`); Part A amended 2026-05-18 (post-flatten audit corrections); Part A amended 2026-05-18 (table top-up for net-new members since 2026-05-16 — see Amendments)
 **Date:** 2026-04-26
 **Supersedes:** —
 **Superseded by:** —
@@ -37,11 +37,11 @@ The Storybook sidebar uses **six flat component top-levels** plus the unchanged 
 
 | Bucket | Role | Members |
 | --- | --- | --- |
-| **`Components/`** | Single atomic primitive | button, button-group, filter-button, filter-toggle, filter-bar, text-link, address-input, password-input, text-input, text-area, select, multi-select, checkbox, radio, completion-toggle, switch, segmented-control, stepper, file-uploader, pagination, badge, badge-group, chip, tag, tag-group, dot, counter, spinner, progress-bar, progress-circle, avatar, banner, empty-state, toast, tooltip, icons, marketing-illustration, divider, meter, service-tag, skeleton, modal, popover |
-| **`Containers/`** | Styled holder composing blocks into a bounded unit (own border/padding/elevation/radius) | card, collapsible-card, pricing-card, card-summary, card-testimonial, form, accordion, sheet, sheet-section, table, menu, notification-list, data-section, activity-timeline, calendar, task-console, board, addable-combo-list, addable-entry-list, addable-field-row-list, addable-text-list, catalog-picker |
+| **`Components/`** | Single atomic primitive | button, button-group, filter-button, filter-toggle, filter-bar, text-link, address-input, password-input, text-input, text-area, number-input, search-input, select, multi-select, checkbox, radio, completion-toggle, switch, segmented-control, slider, stepper, file-uploader, pagination, badge, badge-group, chip, tag, tag-group, dot, counter, spinner, progress-bar, progress-circle, avatar, banner, empty-state, toast, tooltip, icons, marketing-illustration, divider, meter, service-tag, skeleton, modal, popover, collapsible, testimonial, nav-item |
+| **`Containers/`** | Styled holder composing blocks into a bounded unit (own border/padding/elevation/radius) | card, collapsible-card, pricing-card, card-summary, card-testimonial, form, contact-form, feedback-form, login-form, search-form, sign-up-form, accordion, sheet, sheet-section, dialog, table, menu, notification-list, data-section, activity-timeline, calendar, task-console, board, addable-combo-list, addable-entry-list, addable-field-row-list, addable-tag-list, addable-text-list, catalog-picker |
 | **`Blocks/`** | Fixed slot shape filled with atoms — used standalone and inside Containers | field, field-grid, date-picker, time-picker, bullet-list, checklist, interactive-list-item |
 | **`Layouts/`** | Pure composition primitive — arrangement only, no styling beyond structure | stack, cluster, grid, frame, row, split, card-list |
-| **`Sections/`** | Full-page composed region | nav-bar, footer, sidebar-navigation, breadcrumb, progress-stepper, page-header, tab-bar |
+| **`Sections/`** | Full-page composed region | nav-bar, footer, sidebar-navigation, sub-navigation, breadcrumb, progress-stepper, page-header, tab-bar |
 | **`Tools/`** | Dev/internal utilities | brik-dev-bar, dev-feedback-widget |
 
 **Unchanged top-levels:**
@@ -169,6 +169,31 @@ The Components table in Part A is amended:
 - **`completion-toggle`** added to `Form` (was missing from the original table). Stays in `Form` as the atomic primitive paired with `checklist` as the labeled-row composition, mirroring the `Checkbox` / `Radio` pattern of atomic primitives staying in `Form`.
 
 These are table top-ups, not structural changes — no new subcategories, just member reassignment. Lands alongside the Storybook title moves in a follow-on PR.
+
+### 2026-05-18 — Part A: table top-up for net-new members
+
+A sidebar audit found 14 stories that shipped between the 2026-05-16 amendment and 2026-05-18 but were never added to Part A's member tables. They're listed here so the bucket tables reflect the realized sidebar instead of the spec snapshot.
+
+| Bucket | Added | PR / Source |
+|---|---|---|
+| `Components/` | `collapsible` | Split out from `collapsible-card` as a standalone primitive (no card surface) |
+| `Components/` | `nav-item` | Atom used by `nav-bar`, `sidebar-navigation`, `sub-navigation` |
+| `Components/` | `number-input` | [PR #704](https://github.com/brikdesigns/brik-bds/pull/704) — TextInput sibling with stepper buttons (closes [#623](https://github.com/brikdesigns/brik-bds/issues/623)) |
+| `Components/` | `search-input` | TextInput sibling with clear button + leading icon (closes [#624](https://github.com/brikdesigns/brik-bds/issues/624)) |
+| `Components/` | `slider` | Form input atom that was omitted from the 2026-05-16 spec table |
+| `Components/` | `testimonial` | [PR #709](https://github.com/brikdesigns/brik-bds/pull/709) — renamed from `card-testimonial`; new variant lives in Components/ with `surface-web` tag. `card-testimonial` (Containers) is retained as the bounded-surface variant. |
+| `Containers/` | `addable-tag-list` | New Addable family variant |
+| `Containers/` | `contact-form` | [PR #637](https://github.com/brikdesigns/brik-bds/pull/637) — Patterns/Forms population (closes [#618](https://github.com/brikdesigns/brik-bds/issues/618) Batch A) |
+| `Containers/` | `feedback-form` | [PR #637](https://github.com/brikdesigns/brik-bds/pull/637) |
+| `Containers/` | `login-form` | [PR #637](https://github.com/brikdesigns/brik-bds/pull/637) |
+| `Containers/` | `search-form` | [PR #637](https://github.com/brikdesigns/brik-bds/pull/637) / [PR #655](https://github.com/brikdesigns/brik-bds/pull/655) — Form gold-standard relocated |
+| `Containers/` | `sign-up-form` | [PR #637](https://github.com/brikdesigns/brik-bds/pull/637) |
+| `Containers/` | `dialog` | Relocated from `Components/` to `Containers/` (own border/padding/elevation surface) |
+| `Sections/` | `sub-navigation` | New section primitive |
+
+**Note on testimonial coexistence:** `Containers/card-testimonial` (bounded-surface variant) and `Components/testimonial` (`surface-web`-tagged primitive) both legitimately exist post-[#709](https://github.com/brikdesigns/brik-bds/pull/709) rename. Both are listed in their respective bucket rows; this is not a duplication.
+
+**Layouts aspirational members.** `Layouts/` lists `row` and `split` but the components don't ship yet. The 2026-05-16 amendment kept them on the spec as planned future-scope primitives; that posture is unchanged. File `feat(layout): row` / `feat(layout): split` issues when consumer demand surfaces (sibling shape to [#622](https://github.com/brikdesigns/brik-bds/issues/622) / [#623](https://github.com/brikdesigns/brik-bds/issues/623) / [#624](https://github.com/brikdesigns/brik-bds/issues/624)).
 
 ### 2026-05-18 — Part A: post-flatten audit corrections
 
