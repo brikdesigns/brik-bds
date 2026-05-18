@@ -190,7 +190,7 @@ When a design has a quoted testimonial, an inline alert, or a highlighted aside,
 | Design element | BDS component | What you'd be inventing if you skipped it |
 |---|---|---|
 | Pull-quote with attribution | `CardTestimonial` | `<aside><blockquote><cite>` with bespoke `__quote` / `__quote-cite` / `__quote-text` BEM |
-| Inline alert / status callout | `AlertBanner` | `__alert` / `__notice` BEM |
+| Inline alert / status callout | `Banner tone="warning\|error\|information"` | `__alert` / `__notice` BEM |
 | Decorative full-bleed callout | `Banner` | `__banner` / `__callout-strip` BEM |
 | Highlighted plan or pricing tile | `Card`, `PricingCard` | `__plan-callout` / `__pricing-aside` BEM |
 | Aspect-locked image | `Frame` (`customRatio` or preset) | hardcoded `aspect-ratio` in CSS + bare `<img>` |
@@ -324,7 +324,7 @@ Components with overlapping visual concerns share the same prop names and values
 | Axis | Values | Meaning | Components |
 |---|---|---|---|
 | `size` | `xs` · `sm` · `md` · `lg` (indicators); `tiny` · `sm` · `md` · `lg` · `xl` (buttons) | Physical dimensions on a shared scale. Values differ by surface — see coverage matrix. | Badge, Tag, Chip, Button, IconButton, ServiceTag, Field, Sheet, most form controls |
-| `status` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | Semantic value judgment — which system color tier applies. Indicator-only. | Badge, AlertBanner, Dot |
+| `status` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | Semantic value judgment — which system color tier applies. Indicator-only. | Badge, Banner, Dot |
 | `variant` | component-specific — see coverage matrix | Shared prop *name*; not a shared value set. For Chip it expresses hierarchy (`primary · secondary`); for Button it covers style intent (12 values); for ServiceTag it expresses layout (`text · icon-text · icon`). TypeScript is the gate — never pass a value the component's declared union doesn't include. | Chip, Button, IconButton, LinkButton, Card, ServiceTag |
 | `appearance` (fill) | `solid` · `subtle` · `outline` | How the shape is filled vs. bordered. Each component supports the subset that has a real visual meaning. Read-only/indicator components only. | Badge (`solid` / `subtle`), Tag (`solid` / `subtle`) |
 

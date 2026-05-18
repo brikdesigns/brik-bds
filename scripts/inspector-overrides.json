@@ -32,20 +32,6 @@
     "AddressInput": {
       "introduced_in": "0.1.3"
     },
-    "AlertBanner": {
-      "introduced_in": "0.1.3",
-      "category": "feedback",
-      "tags": ["alert", "banner", "notification", "warning", "error", "info"],
-      "use_cases": [
-        "inline warning, error, or informational notice",
-        "persistent top-of-page announcement",
-        "form validation summary"
-      ],
-      "theming_contract": {
-        "themeable": ["colors", "spacing", "typography", "radius"],
-        "fixed": ["variant-semantics"]
-      }
-    },
     "AnimatedIcon": {
       "introduced_in": "0.1.3"
     },
@@ -184,7 +170,7 @@
         "themeable": ["colors", "spacing", "typography"],
         "fixed": ["validation-behavior", "error-display", "keyboard-nav", "submit-flow"]
       },
-      "composes": ["TextInput", "TextArea", "Select", "Button", "AlertBanner"]
+      "composes": ["TextInput", "TextArea", "Select", "Button", "Banner"]
     },
     "Icons": {
       "introduced_in": "0.1.3"
