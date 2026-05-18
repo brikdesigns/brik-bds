@@ -1,0 +1,29 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Testimonial.stories';
+
+<Meta of={Stories} />
+
+# Testimonial
+
+<ComponentLinks slug="testimonial" />
+
+Customer quote block — `<figure>/<blockquote>/<figcaption>/<cite>` — with optional star rating. `surface-web` component: marketing pages and Webflow client sites only.
+
+## Playground
+
+Toggle `variant`, `rating`, `authorRole`, and quote text via Controls.
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Outlined
+
+Neutral surface with a border for light backgrounds where the brand fill would compete with surrounding content.
+
+<Canvas of={Stories.Outlined} />
+
+## Props
+
+<ArgTypes of={Stories} />

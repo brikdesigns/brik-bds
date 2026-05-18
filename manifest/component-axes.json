@@ -366,6 +366,12 @@
       "failed"
     ]
   },
+  "Testimonial": {
+    "variant": [
+      "brand",
+      "outlined"
+    ]
+  },
   "TextArea": {
     "size": [
       "sm",
