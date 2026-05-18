@@ -23,7 +23,7 @@ Reference implementation: [`brik-client-portal`](https://github.com/brikdesigns/
 
 ## 1. `src/lib/tokens.ts` — typed primitives
 
-Maps Figma style names to CSS-custom-property references. **One leaf = one `var()`.** These reference the property (not the resolved value), so they work correctly with theme + mode switches and Tier 2 brand overrides.
+Maps Figma style names to CSS-custom-property references. **One leaf = one `var()`.** These reference the property (not the resolved value), so they work correctly with [Mode](/docs/getting-started/cascade#modes--orthogonal-axes) switches and per-client Brand Kit overrides emitted into `@layer client-theme`.
 
 ```ts title="src/lib/tokens.ts"
 export const font = {

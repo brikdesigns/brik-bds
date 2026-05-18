@@ -13,33 +13,61 @@ This page covers tooling that sits **inside BDS** — what BDS builds, ships, an
 
 ## Style Dictionary build pipeline
 
-BDS owns the source-of-truth pipeline. Consumers never run these — they consume the compiled outputs via `@brikdesigns/bds`. Knowing the pipeline matters when a token is missing or a rename is in flight.
+BDS owns the source-of-truth pipeline. Consumers never run these — they consume the compiled outputs via `@brikdesigns/bds`. Knowing the pipeline matters when a token is missing, a rename is in flight, or a Library is being refreshed.
+
+### Two-Library composition
+
+BDS sources tokens from two logical [Libraries](/docs/getting-started/figma-library-architecture) — the **Foundations Library** (universal, agnostic) and the **Brik Brand Kit Library** (brand-specific values). Both are Figma files managed via Tokens Studio. The pipeline pulls each via the WebSocket relay (port `3055`), then Style Dictionary composes them into the shipped bundle:
 
 ```
-Figma Variables
-   │ (export via dev plugin + WebSocket relay :3055)
-   ▼
-design-tokens/tokens-studio.json
-   │ (Style Dictionary)
-   ▼
-tokens/figma-tokens.css        ← light mode CSS (consumed everywhere)
-tokens/figma-tokens-dark.css   ← dark mode CSS (scoped to [data-theme="dark"])
-build/figma/js/tokens.mjs      ← JS object form
-build/figma/swift/*.swift      ← iOS sync
+┌──────────────────────────┐         ┌────────────────────────────┐
+│  Foundations Library     │         │  Brik Brand Kit Library    │
+│  (Figma — Tokens Studio) │         │  (Figma — Tokens Studio)   │
+└────────────┬─────────────┘         └────────────────┬───────────┘
+             │ bun pull-variables.js <channel>        │ bun pull-variables.js <channel>
+             ▼                                        ▼
+   design-tokens/foundations.json       design-tokens/brand-kits/brik.json
+             │                                        │
+             └────────────────┬───────────────────────┘
+                              │ Style Dictionary
+                              ▼
+        tokens/figma-tokens.css         (Foundations primitives + base semantics — @layer bds-tokens)
+        tokens/figma-tokens-dark.css    (Foundations dark — scoped to [data-theme="dark"])
+        tokens/theme-brand-brik.css     (Brik Brand Kit — scoped to .theme-brand-brik)
+        build/figma/js/tokens.mjs       (JS object form)
+        build/figma/swift/*.swift       (iOS sync)
+                              │ scripts/build-dist-tokens.js
+                              ▼
+                       dist/tokens.css  (shipped to consumers via @brikdesigns/bds/tokens.css)
 ```
+
+<Callout type="warn">
+  **Current state vs target.** Today `design-tokens/tokens-studio.json` is a single pre-separation merged snapshot containing both Foundations and Brand Kit content. The per-Library JSON split (`foundations.json` + `brand-kits/{slug}.json`) is the target architecture. Until the multi-Library pull lands, manual care is required when refreshing the snapshot. Tracked in brik-bds#712.
+</Callout>
+
+### Commands
 
 | Command | Input | Output |
 | --- | --- | --- |
+| `./scripts/start-figma-relay.sh` | (none) | Starts the WebSocket relay on port 3055 (idempotent — no-op if running) |
+| `bun scripts/pull-variables.js <channel-id>` | Live Figma file via relay | JSON dump of all variables (stdout — pipe to a file under `design-tokens/`) |
+| `./scripts/figma-pull-tokens.sh [channel-id]` | (relay channel) | One-shot wrapper: pull + sync + build |
 | `npm run build:sd-figma` | `design-tokens/tokens-studio.json` | `tokens/figma-tokens.css`, JS, Swift |
 | `npm run build:sd-dark` | same JSON, `color=dark` mode | `tokens/figma-tokens-dark.css` |
-| `npm run build:all-tokens` | both | full rebuild (light + dark) |
-| `npm run build:lib` | full repo | publishable `dist/` |
+| `npm run build:modes` | same JSON | `tokens/modes-{collection}.css` per wired mode |
+| `npm run build:all-tokens` | all the above SD steps | Full rebuild (light + dark + modes) |
+| `npm run build:dist-tokens` | all `tokens/*.css` | `dist/tokens.css` (concatenation + bundle) |
+| `npm run build:lib` | full repo | Publishable `dist/` |
 
 <Callout type="warn">
-  **Never hand-edit `tokens/figma-tokens.css`.** It's regenerated on every build and your edit will silently disappear. Add the token in Figma → re-export tokens-studio.json → rerun `build:sd-figma`. The only manual token file is `tokens/gap-fills.css`, for tokens that are not yet in Figma.
+  **Never hand-edit `tokens/figma-tokens.css` or `tokens/figma-tokens-dark.css`.** They're regenerated on every build and your edit will silently disappear. Add the token to the appropriate **Library** in Figma → re-pull → rerun `build:sd-figma`. The only manual token files are `tokens/gap-fills.css` (tokens not yet in Figma — destined to migrate) and `tokens/theme-brand-brik.css` (Brik's own Brand Kit — pending automated emission from a Brand Kit pull).
 </Callout>
 
-See [Primitives → Color](/docs/primitives/color) for the canonical token registry, and [Theming → Atmospheres](/docs/theming/atmospheres) for the dark / atmosphere overlay contract.
+<Callout type="error">
+  **Never call the Figma Variables REST API.** It's Enterprise-tier and not on Brik's plan. The relay + Tokens Studio dev plugin is the only sanctioned path from Figma → JSON.
+</Callout>
+
+See [Token Anatomy](/docs/primitives/token-anatomy) for the four-tier abstraction this pipeline emits, [Library Architecture](/docs/getting-started/figma-library-architecture) for the per-Library detail, and [The Cascade](/docs/getting-started/cascade) for how the CSS output composes at runtime.
 
 ## `bds-find` — component discoverability CLI
 

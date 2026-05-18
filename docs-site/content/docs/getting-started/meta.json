@@ -1,4 +1,4 @@
 {
   "title": "Getting Started",
-  "pages": ["index", "installation", "cascade", "framework-guides", "react-composition", "documentation-system", "page-templates"]
+  "pages": ["index", "installation", "cascade", "figma-library-architecture", "framework-guides", "react-composition", "documentation-system", "page-templates"]
 }

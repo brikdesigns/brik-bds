@@ -1,0 +1,100 @@
+---
+title: Library Architecture
+description: BDS sources tokens from two logical libraries — the Foundations Library (universal, agnostic) and per-client Brand Kit Libraries — composed by Style Dictionary into the shipped CSS bundle.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+A **Library** is the authoritative source of token definitions for a scope. BDS uses two:
+
+- **Foundations Library** — universal, brand-agnostic. Owns math scales (typography / spacing / elevation / motion), grayscale primitives, system messaging primitives, and base semantic tokens that have a sensible default before any brand applies.
+- **[Client] Brand Kit Library** — one per client. Owns brand color primitives (poppy / tan / etc. for Brik; whatever palette the client has), brand semantic overrides (light + dark), and any client-specific mode picks.
+
+<Callout type="info">
+  "Library" is a logical concept, implementation-agnostic. Today both libraries are Figma files managed via the Tokens Studio plugin. If the storage layer changes (raw DTCG JSON, Penpot, etc.), the Library distinction still holds — it's a *role*, not a tool.
+</Callout>
+
+## What each Library owns
+
+| Library | Primitives | Semantic tokens | Modes |
+|---|---|---|---|
+| **Foundations** | `--color-grayscale-*`, `--color-system-*`, `--font-size-*`, `--space-*`, `--border-radius-*`, `--shadow-*`, motion primitives, annotation | Universal defaults (`--text-primary`, `--surface-primary`, `--background-positive`, etc.) | borderwidth, spacing, typography, elevation, breakpoint, radius, icon |
+| **Brand Kit** (per client) | Brand color family ramps (`--color-poppy-*`, `--color-tan-*`, etc.) | Brand overrides on the same canonical names (`--background-brand-primary`, `--text-brand-primary`, plus service-line semantics where applicable) | `color` (light / dark) per brand |
+
+<Callout type="warn">
+  **Foundations Library MUST NOT carry brand-specific values.** That's the failure pattern brik-bds#712 retired — the deleted `primitives/value.{brand, theme.brik, theme.blue}` groups were brand-specific tokens sitting in Foundations. If a token would change per client, it belongs in a Brand Kit, not in Foundations.
+</Callout>
+
+## How the libraries compose
+
+Both libraries flow through the same Style Dictionary pipeline, into the same `dist/tokens.css` bundle, scoped to different CSS [Layers](/docs/getting-started/cascade#css-layers):
+
+```
+┌──────────────────────────┐         ┌────────────────────────────┐
+│  Foundations Library     │         │  [Client] Brand Kit Library│
+│  (Figma — Tokens Studio) │         │  (Figma — Tokens Studio)   │
+└────────────┬─────────────┘         └────────────────┬───────────┘
+             │ pull-variables.js                      │ pull-variables.js
+             │ (channel id)                           │ (channel id)
+             ▼                                        ▼
+   design-tokens/foundations.json        design-tokens/brand-kits/{slug}.json
+             │                                        │
+             └────────────────┬───────────────────────┘
+                              │ Style Dictionary
+                              ▼
+              tokens/figma-tokens.css            (Foundations → @layer bds-tokens)
+              tokens/figma-tokens-dark.css       (Foundations dark mode)
+              tokens/theme-{client}.css          (Brand Kit → @layer client-theme)
+
+                              │ build-dist-tokens.js
+                              ▼
+                       dist/tokens.css           (shipped to consumers)
+```
+
+<Callout type="warn">
+  **Current state vs target state.** Today, `design-tokens/tokens-studio.json` is a pre-separation merged snapshot that combines Foundations + Brik Brand Kit content. The multi-library pull procedure (separate JSON per library, merged at build time) is the target architecture — not yet fully wired. Tracked under brik-bds#712. Until the pull is multi-library, manual care is required when refreshing the snapshot.
+</Callout>
+
+## Pull procedure
+
+Each library has its own channel ID in the WebSocket relay. The `start-figma-relay.sh` script runs the relay on port `3055`; the user / designer opens each Figma file with the Tokens Studio plugin and runs `pull-variables.js` per library.
+
+```bash
+# 1. Start the relay (idempotent — no-op if already running)
+./scripts/start-figma-relay.sh
+
+# 2. Pull each library separately (read-only)
+bun scripts/pull-variables.js <foundations-channel-id> > design-tokens/foundations.json
+bun scripts/pull-variables.js <brand-kit-channel-id>   > design-tokens/brand-kits/brik.json
+
+# 3. (Future: merge step lands here, replacing today's monolithic tokens-studio.json)
+
+# 4. Build CSS
+npm run build:all-tokens
+```
+
+<Callout type="info">
+  Channel IDs are short, single-use tokens emitted by the Tokens Studio plugin when a Figma file is opened. They expire when the Figma session closes. **Never commit a channel ID** — it's session-scoped, not configuration.
+</Callout>
+
+## When to add a Brand Kit
+
+| Scenario | Library decision |
+|---|---|
+| New client onboarding (Vale / Renew / Memphis / etc.) | Create a new Brand Kit Library in Figma. Set up brand color primitives + brand semantic overrides + dark mode. Emit `theme-{client}.css`. |
+| Brand refresh on an existing client | Update the client's Brand Kit Library only. Foundations doesn't change. Pull → rebuild → ship the regenerated `theme-{client}.css`. |
+| New universal token (math scale, system color, base semantic) | Add to **Foundations Library**. Affects every brand. Coordinate via PR + Chromatic. |
+| New brand-specific concept (service-line, audience-scoped color, custom dimension) | Add to the relevant **Brand Kit Library** as a brand-specific semantic token (e.g., `--background-service-marketing`). Foundations stays untouched. |
+
+## Drift signals — when a Library boundary is being violated
+
+- A new token name shaped `--brand-{tier}` or `--theme-{name}-*` shows up in `dist/tokens.css` → Library boundary violation. Move it to Brand Kit (or retire if redundant).
+- A consumer hand-overrides a primitive in their local `globals.css` instead of updating their Brand Kit Library → drift. The override belongs in the Brand Kit so it propagates to anyone consuming the same brand.
+- A "demo" or "structural" color sits in Foundations → boundary violation. Demo content belongs in a Brand Kit (or stories), never in canonical Foundations.
+
+## Related
+
+- [Token Anatomy](/docs/primitives/token-anatomy) — the four-tier abstraction stack the libraries feed into
+- [The Cascade](/docs/getting-started/cascade) — how Library output maps to CSS Layers at consumer runtime
+- [Style Dictionary build pipeline](/docs/react-reference/utilities#style-dictionary-build-pipeline) — commands + outputs per library
+- [Client Themes](/docs/theming/client-themes) — the consumer-side `theme-{client}.css` override matrix (the runtime shape Brand Kits emit into)
