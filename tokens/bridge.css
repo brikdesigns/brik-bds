@@ -65,15 +65,6 @@
   --color-page-brand: var(--page-brand-primary);
 
   /* ═══════════════════════════════════════════════
-     Color: Theme
-     ═══════════════════════════════════════════════ */
-  --color-theme-primary: var(--brand-primary);
-  --color-theme-secondary: var(--brand-secondary);
-  --color-theme-tertiary: var(--brand-tertiary);
-  --color-theme-accent: var(--brand-accent);
-  --color-theme-fourth: var(--brand-dark);
-
-  /* ═══════════════════════════════════════════════
      Typography: Font Family
      ═══════════════════════════════════════════════ */
   --typography-font-family-body: var(--font-family-body);
