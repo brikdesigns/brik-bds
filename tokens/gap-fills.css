@@ -90,10 +90,10 @@
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --surface-nav: var(--color-grayscale-white);
   --surface-navigation: var(--color-grayscale-white); /* canonical; --surface-nav kept for backward compat */
-  --surface-brand-secondary: var(--brand-accent);
+  --surface-brand-secondary: var(--color-yellow-light);
   --background-brand-secondary: var(--color-grayscale-white);
   --background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
-  --background-image-brand: var(--brand-primary);
+  --background-image-brand: var(--color-poppy-light);
   --box-shadow-none: 0px;
 
   /* ── Status Semantic Tokens ── (now in figma-tokens.css via Style Dictionary) */

@@ -65,12 +65,6 @@
   --border-input: var(--color-grayscale-light);
   --border-inverse: var(--color-grayscale-white);
   --border-on-color-dark: white;
-  /* Brand palette overrides (neutral intermediate layer) */
-  --brand-primary: var(--color-poppy-light);
-  --brand-secondary: #f1f0ec;
-  --brand-accent: #f4d364;
-  --brand-tertiary: #9ada6c;
-  --brand-dark: #8ebbcc;
   /* Typography */
   --font-family-body: Poppins, sans-serif;
   --font-family-label: Poppins, sans-serif;
