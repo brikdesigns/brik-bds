@@ -4,7 +4,7 @@
  * Called by: npm run build:lib (as the final step)
  *
  * Produces:
- *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.css + modes-*.css + gap-fills.css + animations.css concatenated
+ *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.css + modes-*.css + gap-fills.css + ratios.css + animations.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
  */
 const fs = require('fs');
@@ -68,12 +68,15 @@ for (const file of MODE_FILES) {
   }
 }
 
+// Aspect-ratio tokens — `--aspect-*` primitives + semantic aliases (BDS #486).
+const ratios = fs.readFileSync(path.join(TOKENS_DIR, 'ratios.css'), 'utf8');
+
 // Shared keyframe library — required for any component using bds-spin, bds-pulse, bds-pop, etc.
 const animations = fs.readFileSync(path.join(TOKENS_DIR, 'animations.css'), 'utf8');
 
 fs.writeFileSync(
   path.join(DIST_DIR, 'tokens.css'),
-  header + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + '\n\n' + animations,
+  header + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + '\n\n' + ratios + '\n\n' + animations,
 );
 console.log('  ✓ dist/tokens.css');
 

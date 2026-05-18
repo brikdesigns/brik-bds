@@ -8,13 +8,33 @@
   width: 100%;
 }
 
-/* ─── Named ratio presets ────────────────────────────────────── */
+/* ─── Ratio presets ───────────────────────────────────────────
+   Token-backed via --aspect-* (BDS #486). Single source of truth lives in
+   tokens/ratios.css; this file just attaches them to Frame's BEM modifier. */
 
-.bds-frame--ratio-square    { aspect-ratio: 1 / 1; }
-.bds-frame--ratio-portrait  { aspect-ratio: 3 / 4; }
-.bds-frame--ratio-landscape { aspect-ratio: 4 / 3; }
-.bds-frame--ratio-wide      { aspect-ratio: 16 / 9; }
-.bds-frame--ratio-ultrawide { aspect-ratio: 21 / 9; }
+/* Primitives */
+.bds-frame--ratio-1-1   { aspect-ratio: var(--aspect-1-1); }
+.bds-frame--ratio-3-2   { aspect-ratio: var(--aspect-3-2); }
+.bds-frame--ratio-2-3   { aspect-ratio: var(--aspect-2-3); }
+.bds-frame--ratio-4-3   { aspect-ratio: var(--aspect-4-3); }
+.bds-frame--ratio-3-4   { aspect-ratio: var(--aspect-3-4); }
+.bds-frame--ratio-16-9  { aspect-ratio: var(--aspect-16-9); }
+.bds-frame--ratio-9-16  { aspect-ratio: var(--aspect-9-16); }
+.bds-frame--ratio-21-9  { aspect-ratio: var(--aspect-21-9); }
+
+/* Semantic aliases */
+.bds-frame--ratio-square           { aspect-ratio: var(--aspect-square); }
+.bds-frame--ratio-photo-landscape  { aspect-ratio: var(--aspect-photo-landscape); }
+.bds-frame--ratio-photo-portrait   { aspect-ratio: var(--aspect-photo-portrait); }
+.bds-frame--ratio-cinema           { aspect-ratio: var(--aspect-cinema); }
+
+/* Deprecated mode-words — kept working for one minor version.
+   Migrate: portrait → 3-4, landscape → 4-3, wide → 16-9 or cinema,
+   ultrawide → 21-9. */
+.bds-frame--ratio-portrait   { aspect-ratio: var(--aspect-3-4); }
+.bds-frame--ratio-landscape  { aspect-ratio: var(--aspect-4-3); }
+.bds-frame--ratio-wide       { aspect-ratio: var(--aspect-16-9); }
+.bds-frame--ratio-ultrawide  { aspect-ratio: var(--aspect-21-9); }
 
 /* ─── Inner content fit ──────────────────────────────────────── */
 /* Applies to the first media descendant (img / video / svg). Authors who
