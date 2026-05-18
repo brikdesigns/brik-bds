@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.mdx, **/stories/**/*.mdx, **/content-system/**/*.mdx"
 retrieved-via: brik-rag query "storybook mdx recipe standard"
-last-verified: 2026-05-13
+last-verified: 2026-05-18
 ---
 
 # Storybook MDX recipe (BDS)
@@ -31,9 +31,9 @@ import * as Stories from './{Component}.stories';
 
 One- or two-sentence description. What it does, not when to use it.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
@@ -48,7 +48,9 @@ One- or two-sentence description. What it does, not when to use it.
 <ArgTypes of={Stories} />
 ```
 
-That's the **canonical shape**: Title → Links → Description → Playground → Variants → (Patterns) → Props. Three sections can sit between Props and end-of-file, each fixed in position when present:
+That's the **canonical shape**: Title → Links → Description → Default → Variants → (Patterns) → Props. Three sections can sit between Props and end-of-file, each fixed in position when present:
+
+> **Legacy `## Playground` accepted.** Files migrated before the 2026-05-18 amendment ship `## Playground` + `export const Playground` instead of `## Default` + `export const Default`. The lint accepts either as the first required section. New components MUST use `## Default`. See [ADR-010 §3 amendment](../../docs/adrs/ADR-010-storybook-axes-of-information.md).
 
 - `## Patterns` — **conditionally required**. Include IFF the matching `*.stories.tsx` ships any Q4 (irreducible composition) or Q5 (`play`-only interaction) story per ADR-010. If the component has only Q3 semantic-variant stories, omit the section entirely. When present, it sits between `## Variants` and `## Props` and must contain at least one `<Canvas>`. **Never invent a Q4 story to make this section non-empty** — see [story-shape standard §Don't contrive Q4 stories to satisfy lint](./storybook-story-shape.md).
 - `## CSS Override API` — table of component-scoped CSS variables, with one example. Required if the component exposes any.
@@ -123,14 +125,14 @@ This is the highest-friction collision in the system. ADR-006 bans `Variants` / 
 | `export const Variants` | n/a | **Banned** |
 | `export const Tones` | n/a | **Banned** |
 | `export const Patterns` | n/a | **Banned** |
-| `export const Playground` | Referenced via `<Canvas of={Stories.Playground} />` | **Required** |
+| `export const Default` | Referenced via `<Canvas of={Stories.Default} />` | **Required** (`Playground` accepted as legacy on grandfathered files) |
 | `export const Warning`, `Error`, etc. | Referenced via `<Canvas of={Stories.Warning} />` under `## Variants` | **Required** (one per meaningful state) |
 
 A new component written under both standards looks like this:
 
 ```tsx
 // {Component}.stories.tsx
-export const Playground = ...      // sandbox
+export const Default = ...         // canonical sandbox
 export const Warning = ...         // per-state, named after the state
 export const Error = ...
 export const OnboardingChecklist = ...   // irreducible composition
@@ -138,6 +140,9 @@ export const OnboardingChecklist = ...   // irreducible composition
 
 ```mdx
 {/* {Component}.mdx */}
+## Default
+<Canvas of={Stories.Default} />
+
 ## Variants
 ### Warning
 <Canvas of={Stories.Warning} />
@@ -226,7 +231,7 @@ A page conforms when:
 1. Imports `Meta`, `Canvas`, `ArgTypes` from `@storybook/addon-docs/blocks`, imports `* as Stories`, imports `ComponentLinks`, contains `<Meta of={Stories} />`.
 2. The first heading is one `# {Component name}`. Nothing above it except the imports and `<Meta>`.
 3. Immediately after H1: `<ComponentLinks slug="..." />` then a 1–2 sentence description paragraph.
-4. Required sections appear in this order, no omissions, no deviations from spelling: `## Playground` → `## Variants` → `## Props`. `## Patterns` is conditional — when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
+4. Required sections appear in this order, no omissions, no deviations from spelling: `## Default` → `## Variants` → `## Props`. The first section may alternatively be `## Playground` on files grandfathered by the [2026-05-18 amendment](../../docs/adrs/ADR-007-storybook-page-recipe.md#amendments) — lint accepts either. `## Patterns` is conditional — when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
 5. No `---` dividers anywhere in the file.
 6. No `## Usage`, `## When to use`, `## When NOT to use`, `## Source attribution`, `## Tokens`, or other narrative-bearing section.
 7. Every `<Canvas>` references a story exported from the matching `*.stories.tsx`.

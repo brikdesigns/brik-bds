@@ -31,12 +31,19 @@ const path = require('path');
 // Recipe (mirror of ADR-007, Acceptance Criteria 1-9)
 // ---------------------------------------------------------------------------
 
-const REQUIRED_SECTIONS = ['## Playground', '## Variants', '## Props'];
-
-// H2 sections that MUST contain at least one `<Canvas of=...>` somewhere in
-// their body (including H3 sub-sections). Props uses `<ArgTypes>` not
-// `<Canvas>` and is excluded.
-const SECTIONS_REQUIRING_CANVAS = ['## Playground', '## Variants'];
+// Required H2 sections in order. The first slot accepts either `## Default`
+// (canonical, 2026-05-18 amendment to ADR-007) OR `## Playground` (legacy,
+// grandfathered on files predating the amendment). See:
+//   - docs/adrs/ADR-007-storybook-page-recipe.md#amendments
+//   - docs/adrs/ADR-010-storybook-axes-of-information.md (§3 amendment)
+// All sections marked requiresCanvas:true must contain at least one `<Canvas>`
+// in their body (including H3 sub-sections). `## Props` uses `<ArgTypes>` not
+// `<Canvas>`; excluded from the canvas check.
+const REQUIRED_SECTION_SPECS = [
+  { names: ['## Default', '## Playground'], canonical: '## Default', requiresCanvas: true },
+  { names: ['## Variants'], canonical: '## Variants', requiresCanvas: true },
+  { names: ['## Props'], canonical: '## Props', requiresCanvas: false },
+];
 
 // `## Patterns` is conditionally required — present only when the component
 // has Q4 (irreducible composition) or Q5 (play-only) stories per ADR-010.
@@ -151,23 +158,37 @@ function lintFile(filePath) {
   const h2s = headings.filter((h) => h.level === 2);
   const h2Texts = h2s.map((h) => h.text);
 
-  for (const required of REQUIRED_SECTIONS) {
-    if (!h2Texts.includes(required)) {
+  // For each required spec, find which (if any) of its accepted names is present.
+  // matchedSections is parallel to REQUIRED_SECTION_SPECS — entries are either
+  // {spec, h2Index, h2Text} or null when no accepted name is present.
+  const matchedSections = REQUIRED_SECTION_SPECS.map((spec) => {
+    for (const name of spec.names) {
+      const idx = h2Texts.indexOf(name);
+      if (idx !== -1) return { spec, h2Index: idx, h2Text: name };
+    }
+    return null;
+  });
+
+  REQUIRED_SECTION_SPECS.forEach((spec, i) => {
+    if (matchedSections[i] === null) {
+      const label = spec.names.length === 1
+        ? `\`${spec.canonical}\``
+        : `\`${spec.canonical}\` (or legacy \`${spec.names.filter((n) => n !== spec.canonical).join('`, `')}\`)`;
       violations.push({
         rule: 'missing-required-section',
-        message: `Missing required section: \`${required}\``,
+        message: `Missing required section: ${label}`,
       });
     }
-  }
+  });
 
   // Required sections are in order (when all present)
-  const requiredPresent = REQUIRED_SECTIONS.filter((s) => h2Texts.includes(s));
-  const requiredIndices = requiredPresent.map((s) => h2Texts.indexOf(s));
-  const isOrdered = requiredIndices.every((idx, i) => i === 0 || idx > requiredIndices[i - 1]);
+  const presentIndices = matchedSections.filter((m) => m !== null).map((m) => m.h2Index);
+  const isOrdered = presentIndices.every((idx, i) => i === 0 || idx > presentIndices[i - 1]);
   if (!isOrdered) {
+    const expected = REQUIRED_SECTION_SPECS.map((s) => s.canonical).join(' → ');
     violations.push({
       rule: 'required-section-order',
-      message: `Required sections are out of order. Expected: ${REQUIRED_SECTIONS.join(' → ')}`,
+      message: `Required sections are out of order. Expected: ${expected}`,
     });
   }
 
@@ -246,14 +267,23 @@ function lintFile(filePath) {
     return lines.slice(startIdx, endIdxExclusive).join('\n');
   }
 
-  for (const required of [...SECTIONS_REQUIRING_CANVAS, ...CONDITIONAL_SECTIONS_WITH_CANVAS]) {
-    const h2 = h2s.find((h) => h.text === required);
+  // Canvas requirement: walk required specs (using whichever alias matched)
+  // plus the conditional Patterns section.
+  const canvasTargets = [
+    ...matchedSections
+      .filter((m) => m !== null && m.spec.requiresCanvas)
+      .map((m) => ({ text: m.h2Text, isRequired: true })),
+    ...CONDITIONAL_SECTIONS_WITH_CANVAS.map((name) => ({ text: name, isRequired: false })),
+  ];
+
+  for (const target of canvasTargets) {
+    const h2 = h2s.find((h) => h.text === target.text);
     if (!h2) continue; // required: already flagged by missing-required-section; conditional: absent is OK
     const body = bodyOfH2(h2.line);
     if (!/<Canvas\b/.test(body)) {
       violations.push({
         rule: 'missing-canvas',
-        message: `\`${required}\` has no \`<Canvas>\` block. ${SECTIONS_REQUIRING_CANVAS.includes(required) ? 'Required sections' : 'Sections present in the file'} must demo at least one story.`,
+        message: `\`${target.text}\` has no \`<Canvas>\` block. ${target.isRequired ? 'Required sections' : 'Sections present in the file'} must demo at least one story.`,
         line: h2.line,
       });
     }
