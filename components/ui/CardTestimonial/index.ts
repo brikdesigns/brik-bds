@@ -1,6 +1,8 @@
+// @deprecated — CardTestimonial has been renamed to Testimonial.
+// Import from '@brikdesigns/bds' as before; this bridge re-export will be
+// removed in a future major version after consumers migrate to Testimonial.
 export {
-  CardTestimonial,
-  type CardTestimonialProps,
-  type CardTestimonialVariant,
-} from './CardTestimonial';
-export { default } from './CardTestimonial';
+  Testimonial as CardTestimonial,
+  type TestimonialProps as CardTestimonialProps,
+  type TestimonialVariant as CardTestimonialVariant,
+} from '../Testimonial';

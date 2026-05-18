@@ -25,6 +25,7 @@ export * from './CardControl';
 export * from './CatalogPicker';
 export * from './CardList';
 export * from './CardTestimonial';
+export * from './Testimonial';
 export * from './Checkbox';
 export * from './Checklist';
 export * from './Chip';
