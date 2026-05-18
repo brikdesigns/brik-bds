@@ -1,6 +1,6 @@
 # ADR-006 — Storybook Taxonomy + Story Shape
 
-**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments)
+**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments); Part B amended 2026-05-18 (canonical first-story name → `Default`; see Amendments)
 **Date:** 2026-04-26
 **Supersedes:** —
 **Superseded by:** —
@@ -60,9 +60,11 @@ The Storybook sidebar uses **six flat component top-levels** plus the unchanged 
 
 ### Part B — Story shape: what's inside the file
 
+> **Amended 2026-05-18** — canonical first-story name renamed from `Playground` to `Default`. See the 2026-05-18 amendment entry and [ADR-010 §3 amendment](./ADR-010-storybook-axes-of-information.md). Legacy `Playground` exports are grandfathered; migration is forward-only.
+
 The story-shape decision lives here at the high level; the operational rules + the story-vs-control matrix are codified separately:
 
-- **Two story shapes per file** — `Playground` (args-driven sandbox) + one story per meaningful state, named directly (`Warning`, not `Variants > Warning`).
+- **Two story shapes per file** — `Default` (args-driven sandbox; canonical first story) + one story per meaningful state, named directly (`Warning`, not `Variants > Warning`).
 - **No `Variants` / `Tones` / `Patterns` gallery buckets** inside a component file. They duplicate the sidebar, break Controls, and merge axes that should split.
 - **Narrow exception:** single-axis comparison galleries (`Sizes`, `Densities`, `Placements`) earn one dedicated story when side-by-side comparison is the entire point AND the autodocs page can't make the same comparison clear AND it's one axis, not a mix.
 - **`render` is for irreducible cases only** — multi-component composition or hook-driven state machines args can't express. Not for documentation galleries.
@@ -92,7 +94,7 @@ Decision: ADR-007 wins on file content because it's already merged and lint-enfo
 
 - Title goes under `<Bucket>/<component>` using the flat bucket table in Part A (e.g. `Components/button`, `Containers/card`, `Blocks/field`).
 - No subcategory layer (`Components/Action/button` is the old style — superseded).
-- File contains `Playground` (args + controls) plus one args-driven story per meaningful state.
+- File contains `Default` (args + controls; canonical first story) plus one args-driven story per meaningful state.
 - No `Variants` / `Tones` / `Patterns` gallery buckets.
 - Deprecated components move to `Deprecated/<component>` with `tags: ['!manifest']`.
 - Axis-only galleries (`Sizes`, `Placements`) only when the narrow exception applies.
@@ -130,7 +132,7 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 - Chromatic catches per-state regressions instead of masking them in stacks
 - MCP discovery returns the actual states agents need to recommend in portal/renew-pms
-- Controls work on every story, not just `Playground`
+- Controls work on every story, not just the canonical `Default`
 - Each state has a permalink and an a11y check
 - Sidebar collapses from 3-5 inconsistent top-levels to 4 disciplined ones
 - Story files get shorter (`<Stack>` / `<SectionLabel>` helpers and `render` blocks drop out)
@@ -167,6 +169,14 @@ The Components table in Part A is amended:
 - **`completion-toggle`** added to `Form` (was missing from the original table). Stays in `Form` as the atomic primitive paired with `checklist` as the labeled-row composition, mirroring the `Checkbox` / `Radio` pattern of atomic primitives staying in `Form`.
 
 These are table top-ups, not structural changes — no new subcategories, just member reassignment. Lands alongside the Storybook title moves in a follow-on PR.
+
+### 2026-05-18 — Part B: canonical first-story name → `Default`
+
+The canonical first story per file is renamed from `Playground` to `Default`. Operational rule and migration posture live in [ADR-010 §3 amendment](./ADR-010-storybook-axes-of-information.md). Part B's prose now reads `Default (args-driven sandbox)`; legacy `Playground` exports are grandfathered until each file is touched anyway.
+
+**Decision driver:** The Button + TextInput gold-standard refactors ([PR #614](https://github.com/brikdesigns/brik-bds/pull/614), [PR #620](https://github.com/brikdesigns/brik-bds/pull/620), and the rest of the [#618](https://github.com/brikdesigns/brik-bds/issues/618) Batch A series) all landed `export const Default` while the ADRs and the recipe lint still named `Playground` as canonical. The name `Default` matches Carbon's named-reference shape and removes the friction between section heading (`## Playground`) and the actual story it embedded (`Stories.Default`) observed on the first 31 refactored files.
+
+The recipe lint accepts either name as the first required section during the transition. PR review enforces `Default` for net-new components.
 
 ### 2026-05-16 — Part A: 6-bucket flat taxonomy (#629)
 

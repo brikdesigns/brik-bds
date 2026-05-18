@@ -1,6 +1,6 @@
 # ADR-007 — Storybook component page recipe
 
-**Status:** Accepted (2026-05-04)
+**Status:** Accepted (2026-05-04); Amended 2026-05-18 (canonical first section renamed `## Playground` → `## Default`; see Amendments)
 **Date:** 2026-05-04
 **Supersedes:** —
 **Superseded by:** —
@@ -68,7 +68,9 @@ Carbon explicitly does **not** duplicate usage-guideline or accessibility conten
 
 Define a normative **component page recipe** and codify it as ADR-007. New component pages MUST conform; existing pages migrated in batches per the Implementation Plan below.
 
-The **operational recipe** — required imports, the canonical shape (`Title → ComponentLinks → Description → Playground → Variants → (Patterns) → Props`, with `## Patterns` conditionally required only when the component has Q4/Q5 stories per ADR-010), optional sections (`## CSS Override API`, `## Notes`), banned section list, callout vocabulary, foundation/dashboard page templates, stub pattern — lives in [`.claude/standards/storybook-mdx-recipe.md`](../../.claude/standards/storybook-mdx-recipe.md) and is auto-retrieved by the [`storybook-mdx-recipe`](../../.claude/skills/storybook-mdx-recipe/SKILL.md) skill at `*.mdx` edit time. The lint script [`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js) is the enforcement layer.
+The **operational recipe** — required imports, the canonical shape (`Title → ComponentLinks → Description → Default → Variants → (Patterns) → Props`, with `## Patterns` conditionally required only when the component has Q4/Q5 stories per ADR-010), optional sections (`## CSS Override API`, `## Notes`), banned section list, callout vocabulary, foundation/dashboard page templates, stub pattern — lives in [`.claude/standards/storybook-mdx-recipe.md`](../../.claude/standards/storybook-mdx-recipe.md) and is auto-retrieved by the [`storybook-mdx-recipe`](../../.claude/skills/storybook-mdx-recipe/SKILL.md) skill at `*.mdx` edit time. The lint script [`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js) is the enforcement layer.
+
+> **2026-05-18 amendment** — the canonical first section is now `## Default` (story export: `Default`). `## Playground` is grandfathered on existing files; the lint accepts either. See the Amendments section below and [ADR-010 §3 amendment](./ADR-010-storybook-axes-of-information.md).
 
 This ADR governs the **decisions** that produced the recipe; the standard governs the operational details.
 
@@ -80,7 +82,7 @@ The recipe is not Carbon's verbatim — it adopts the load-bearing parts (triple
 |---|---|---|
 | Triple-link header (`Source \| Usage \| Accessibility`) | `<ComponentLinks slug="..." />` block rendering the same three links, generated from one prop | One-line authoring; one place to change the URL pattern when docs-site routing changes |
 | `## Table of Contents` (doctoc-managed) | Storybook 10's auto-TOC (already enabled in `.storybook/preview.tsx`) | TOC is page chrome, not content. doctoc adds a commit-time dependency we don't need |
-| `## Overview` (prose + first Canvas) | Description (free text after `<ComponentLinks>`) → `## Playground` | "Playground" is the term Brik already uses; "Overview" duplicates the page title |
+| `## Overview` (prose + first Canvas) | Description (free text after `<ComponentLinks>`) → `## Default` | Matches Carbon's `--default` story slug and the canonical first-story name unified in [ADR-010 §3 amendment](./ADR-010-storybook-axes-of-information.md). Initially named `## Playground` (2026-05-04 acceptance); renamed in the 2026-05-18 amendment after the gold-standard refactors shipped `export const Default`. |
 | Variant H3s with optional prose, no second-level grouping | Two H2s — `## Variants` (visual/state variants) + `## Patterns` (real-world compositions) | Brik's existing implicit shape, kept. Carbon flattens to one tier; Brik's two-tier helps a reader skim "show me all states" vs "show me how this is actually used" |
 | `## Component API` | `## Props` | Shorter, matches what authors already write |
 | Per-prop H3 expansion under Component API (inconsistent in Carbon) | Not in the recipe. If specific props need narrative, write the narrative on docs-site, link from `## Notes` | Avoids the prop-page becoming a second usage doc |
@@ -203,14 +205,14 @@ The collision risk reads from the section names. ADR-006 explicitly bans these a
 | `export const Variants` | n/a | **Banned** |
 | `export const Tones` | n/a | **Banned** |
 | `export const Patterns` | n/a | **Banned** |
-| `export const Playground` | Referenced via `<Canvas of={Stories.Playground} />` | **Required** |
+| `export const Default` | Referenced via `<Canvas of={Stories.Default} />` | **Required** (`Playground` accepted as legacy on grandfathered files) |
 | `export const Warning`, `Error`, etc. | Referenced via `<Canvas of={Stories.Warning} />` under `## Variants` H3 sub-section | **Required** (one per meaningful state) |
 
 A new component written under both ADRs looks like this:
 
 ```tsx
 // {Component}.stories.tsx — ADR-006-conformant
-export const Playground = ...        // args-driven sandbox
+export const Default = ...           // canonical args-driven sandbox
 export const Warning = ...           // per-state, named after the state
 export const Error = ...
 export const Success = ...
@@ -219,6 +221,9 @@ export const OnboardingChecklist = ...   // composition (irreducible — args ca
 
 ```mdx
 {/* {Component}.mdx — ADR-007-conformant */}
+## Default
+<Canvas of={Stories.Default} />
+
 ## Variants
 ### Warning
 <Canvas of={Stories.Warning} />
@@ -254,7 +259,7 @@ A page **conforms to ADR-007** when:
 1. Top of file imports `Meta`, `Canvas`, `ArgTypes` from `@storybook/addon-docs/blocks`, imports `* as Stories`, imports `ComponentLinks`, contains `<Meta of={Stories} />`.
 2. The first heading is one `# {Component name}`. Nothing above it except the imports and `<Meta>`.
 3. Immediately after H1: `<ComponentLinks slug="..." />` then a 1–2 sentence description paragraph.
-4. Required sections appear in this order, no omissions, no deviations from spelling: `## Playground`, `## Variants`, `## Props`. `## Patterns` is conditionally required — present only when the component has Q4/Q5 stories per ADR-010; when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
+4. Required sections appear in this order, no omissions, no deviations from spelling: `## Default`, `## Variants`, `## Props`. The first section may alternatively be `## Playground` on files that have not yet migrated per the [2026-05-18 amendment](#amendments) — lint accepts either; PR review enforces `## Default` for net-new components. `## Patterns` is conditionally required — present only when the component has Q4/Q5 stories per ADR-010; when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
 5. No `---` dividers anywhere in the file.
 6. No `## Usage`, `## When to use`, `## When NOT to use`, `## Source attribution`, `## Tokens`, or other narrative-bearing section. (Stubs MAY appear in the description: "See usage at [design.brikdesigns.com/docs/components/{slug}](...).")
 7. Every `<Canvas>` references a story exported from the file's matching `*.stories.tsx`.
@@ -262,6 +267,23 @@ A page **conforms to ADR-007** when:
 9. The page passes a static lint check: `scripts/lint-storybook-recipe.js` (added in Phase 1) reports zero violations.
 
 A page violates ADR-007 if any of the above fails. Phase 3 closes when 100% of `components/ui/*/*.mdx` files conform.
+
+## Amendments
+
+### 2026-05-18 — Canonical first section renamed `## Playground` → `## Default`
+
+The first required H2 section is renamed from `## Playground` to `## Default`. The matching story export and Canvas reference rename in lockstep (`export const Default`, `<Canvas of={Stories.Default} />`).
+
+**Operational rule and migration posture** live in [ADR-010 §3 amendment](./ADR-010-storybook-axes-of-information.md). Summary:
+
+- **New canon:** `## Default` heading, `export const Default`, `<Canvas of={Stories.Default} />`
+- **Legacy accepted:** `## Playground` + `export const Playground` on files that have not yet been touched
+- **Migration:** forward-only — rename when a file is touched anyway; no retroactive sweep
+- **Lint:** [`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js) accepts either as the first required section during the transition
+
+**Decision driver:** The Button + TextInput + 29 other gold-standard refactors landed `export const Default` while the recipe still required `## Playground` as the heading. The two stayed compatible (the heading and the canvas-of reference don't have to share a name), but it produced exactly the cross-referencing friction this recipe was meant to remove — a reader sees `## Playground` over a Canvas that links to `Stories.Default` and has to reconcile. Renaming closes that gap.
+
+**Audit table above is not updated.** The "current state" table in [§Audit](#audit--current-state-of-six-representative-brik-component-pages) captures sections as named when the migration began. Those files still ship `## Playground`; the lint accepts them; they migrate to `## Default` opportunistically. Updating the table retroactively would erase the historical record this ADR is meant to preserve.
 
 ---
 
