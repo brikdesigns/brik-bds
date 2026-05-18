@@ -134,7 +134,7 @@ export const Pricing: Story = {
 
 **Wrong-layer check:** before classifying a component as `Containers/`, ask: does it carry its own visual surface (`border` / `background` / `padding` / `elevation`)? If not, it is a **`Layouts/`** component (pure arrangement, no surface). `CardList` (a `<ul>` spacing wrapper) is `Layouts/`, not `Containers/`.
 
-**Name-layer check:** "Card" in a component name implies Container-layer ancestry. If the component is actually an interaction primitive (`CollapsibleCard` — no `bds-card` class) or a semantic quotation block (`CardTestimonial` — `<figure>/<blockquote>`), the "Card" prefix is wrong. File a rename issue (#701, #702); do not propagate the misnomer in new story files.
+**Name-layer check:** "Card" in a component name implies Container-layer ancestry. If the component is actually an interaction primitive (`Collapsible` — renamed from `CollapsibleCard`, #701) or a semantic quotation block (`Testimonial` — renamed from `CardTestimonial`, #702), the "Card" prefix is wrong. Do not propagate the misnomer in new story files.
 
 ## `render` is for irreducible cases only
 
@@ -185,7 +185,7 @@ Under 60 characters per `@summary` — MCP truncates after that.
 
 | Tag | Use when |
 |---|---|
-| `surface-web` | Marketing / site surfaces — `brikdesigns.com`, Webflow client sites (`Footer`, `NavBar`, `PricingCard`, `CardTestimonial`, `ServiceBadge`) |
+| `surface-web` | Marketing / site surfaces — `brikdesigns.com`, Webflow client sites (`Footer`, `NavBar`, `PricingCard`, `Testimonial`, `ServiceBadge`) |
 | `surface-product` | Product app surfaces — portal / renew-pms / freedom (`AddableEntryList`, `FieldGrid`, `FilterBar`, `Sheet`, `SidebarNavigation`) |
 | `surface-shared` | Used in both contexts — **default for primitives** (`Button`, `Badge`, `Field`, `Modal`, `Toast`) |
 
