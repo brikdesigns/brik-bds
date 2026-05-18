@@ -25,6 +25,8 @@ export interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   iconBefore?: ReactNode;
   /** Optional icon after input */
   iconAfter?: ReactNode;
+  /** Hide the input border. Use on dark/inverse surfaces where the fill provides sufficient contrast. */
+  hideBorder?: boolean;
 }
 
 /**
@@ -154,6 +156,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       fullWidth = false,
       iconBefore,
       iconAfter,
+      hideBorder = false,
       className = '',
       id,
       style,
@@ -179,6 +182,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       ...sizeStyle.input,
       ...(iconBefore ? { paddingLeft: 'calc(var(--padding-xs) * 4)' } : {}),
       ...(iconAfter ? { paddingRight: 'calc(var(--padding-xs) * 4)' } : {}),
+      ...(hideBorder ? { border: 'none' } : {}),
       ...(hasError ? { borderColor: 'var(--border-negative)' } : {}),
     };
 
