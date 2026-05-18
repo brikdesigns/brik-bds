@@ -1,9 +1,7 @@
 /**
  * Shared service-tag domain config — types, constants, and helpers consumed
- * by ServiceTag (canonical) and (formerly) ServiceBadge (removed in #572).
- *
- * Lives in the legacy `ServiceBadge/` directory for now; rename to
- * `ServiceTag/` is tracked as a follow-up since it touches consumer imports.
+ * by ServiceTag. Previously also consumed by the deprecated ServiceBadge
+ * component (removed in #572; dir renamed in #731).
  */
 
 export type ServiceCategory = 'brand' | 'marketing' | 'information' | 'product' | 'service';

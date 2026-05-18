@@ -73,7 +73,7 @@ export * from './ProgressStepper';
 export * from './Radio';
 export * from './SegmentedControl';
 export * from './Select';
-export * from './ServiceBadge';
+export * from './ServiceTag';
 // Internal shared hooks (not part of the public package surface — barrel
 // export required by the component-completeness pre-commit check)
 export * from './shared';
