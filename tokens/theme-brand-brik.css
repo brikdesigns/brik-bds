@@ -28,7 +28,10 @@
   --text-secondary: var(--color-grayscale-dark);
   --text-muted: var(--color-grayscale-light);
   --text-inverse: var(--color-grayscale-white);
-  --text-brand-primary: var(--color-poppy-light);
+  /* AA fix: poppy-light text on white page = 3.80:1, fails AA Normal.
+     Shift to poppy-dark (8.5:1 on white). Dark-mode value stays poppy-light
+     below (5.52:1 on black) — poppy-dark on black = 3.48:1 would regress. */
+  --text-brand-primary: var(--color-poppy-dark);
   /* Surface */
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lightest);
