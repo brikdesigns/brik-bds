@@ -77,7 +77,7 @@ const interiorHeroSection: BlueprintProps['section'] = {
   ],
   audience: 'information',
   priceCard: {
-    imageUrl: 'https://placehold.co/640x480/eaf1fb/1f3d70?text=Deliverable',
+    imageUrl: 'https://placehold.co/600x600/eaf1fb/1f3d70?text=Deliverable',
     imageAlt: '',
     priceLabel: 'Starting at',
     price: '$249',
@@ -137,4 +137,26 @@ type Story = StoryObj<typeof HeroSplitImageCardOverlay>;
  */
 export const Playground: Story = {
   args: baseProps,
+};
+
+/**
+ * @summary Landscape photography variant — opt in via `imageRatio="landscape"`
+ * when the priceCard image is a 4:3 photo rather than a 1:1 illustration.
+ * The default is `square` because Brik's CMS service/plan illustrations are
+ * uploaded at 1:1; this variant documents how callers with landscape source
+ * assets opt out.
+ */
+export const LandscapePhotography: Story = {
+  args: {
+    ...baseProps,
+    imageRatio: 'landscape',
+    section: {
+      ...interiorHeroSection,
+      sectionKey: 'hero-img-card-landscape',
+      priceCard: {
+        ...interiorHeroSection.priceCard!,
+        imageUrl: 'https://placehold.co/640x480/eaf1fb/1f3d70?text=Landscape+Photo',
+      },
+    },
+  },
 };

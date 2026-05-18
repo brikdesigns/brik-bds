@@ -27,7 +27,7 @@ interface Props extends BlueprintProps {
   imageRatio?: FrameRatio;
 }
 
-export function HeroSplitImageCardOverlay({ section, imageRatio = 'landscape' }: Props) {
+export function HeroSplitImageCardOverlay({ section, imageRatio = 'square' }: Props) {
   const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
   const titleId = `${section.sectionKey}-title`;
   const eyebrow = section.subheading;
