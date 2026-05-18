@@ -188,11 +188,14 @@
   }
 
   // Live Storybook story index. Used to verify manifest-emitted story IDs
-  // actually resolve before we render an "Open in Storybook" link — the
-  // BDS manifest currently hardcodes `components-${slug}--primary`, which
-  // does not match the real story tree (stories live under deeper paths
-  // like `components-indicator-badge--overview`). Until the brik-bds
-  // manifest builder reads the live index, we validate client-side.
+  // actually resolve before we render an "Open in Storybook" link. The
+  // BDS manifest builder now derives bucket-aware slugs from each
+  // component's meta.title (e.g. `containers-card--overview`,
+  // `components-badge--overview`) per brik-bds#724. A consumer running
+  // against a stale `bds-manifest.json` (BDS bump pending) may still
+  // emit URLs that don't match the live story tree, so we keep the
+  // client-side validation as a safety net — broken URLs hide the
+  // "Open in Storybook" link instead of producing a 404 click.
   //   storybookIndex === null  → not yet loaded (or CORS/404 failure)
   //   storybookIndex instanceof Set → known-valid story IDs
   let storybookIndex = null;
