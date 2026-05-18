@@ -1,0 +1,95 @@
+---
+title: Interaction States
+description: Tokens for hover, press, focus, and disabled states. Composable across surfaces via overlay primitives + per-brand state-pair semantics.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Every interactive component (button, card, tag, chip, link) uses the same interaction-state vocabulary. Two layers compose:
+
+1. **Composable overlay primitives** — transparent overlays that work on *any* surface (brand, neutral, status, service-line) without needing a unique hover token per color.
+2. **Brand state pairs** — solid `-hover` / `-pressed` Semantic tokens on brand-colored surfaces (filled brand buttons) where an overlay would be visually weak.
+
+## Overlay primitives — composable hover/press
+
+| Token | Light mode | Dark mode | Purpose |
+|---|---|---|---|
+| `--state-hover-overlay` | `rgba(0, 0, 0, 0.04)` | `rgba(255, 255, 255, 0.06)` | Subtle hover overlay on any surface |
+| `--state-pressed-overlay` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | Stronger overlay for `:active` / press |
+| `--state-focus` | aliases `--border-brand-primary` | aliases `--border-brand-primary` | Keyboard focus ring color |
+| `--state-disabled-opacity` | `0.4` | `0.4` | Opacity for disabled elements |
+
+<Callout type="info">
+  **Why overlays?** A transparent overlay works on ANY background — brand, surface-secondary, status-positive, service-line — without needing a unique hover token per color. One token handles every context. Solid `-hover` tokens only exist where the brand-fill cases need them.
+</Callout>
+
+### Component usage pattern
+
+```css
+/* Hover — composable overlay on any background */
+.bds-component:hover {
+  box-shadow: inset 0 0 0 999px var(--state-hover-overlay);
+}
+
+/* Press — stronger overlay */
+.bds-component:active {
+  box-shadow: inset 0 0 0 999px var(--state-pressed-overlay);
+}
+
+/* Focus — reuses existing border-width token; offset is fixed at 2px for a11y */
+.bds-component:focus-visible {
+  outline: var(--border-width-lg) solid var(--state-focus);
+  outline-offset: 2px;
+}
+
+/* Brand button hover — solid primitive (not overlay) since fill needs a real shift */
+.bds-button--primary:hover {
+  background-color: var(--background-brand-primary-hover);
+}
+
+/* Disabled */
+.bds-component--disabled {
+  opacity: var(--state-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+```
+
+## Brand state pairs — solid `-hover` / `-pressed`
+
+For brand-colored surfaces (filled primary buttons, brand backgrounds), the overlay approach gets visually weak — the inset overlay against a vibrant brand color doesn't read as a strong-enough interaction signal. These surfaces use **solid state-pair Semantic tokens** that map to deeper / lighter primitives in the brand color ramp:
+
+| Token | Light mode source | Dark mode source |
+|---|---|---|
+| `--background-brand-primary-hover` | One step deeper in the brand ramp (e.g., `--color-poppy-darker`) | One step lighter (e.g., `--color-poppy-lighter`) |
+| `--background-brand-primary-pressed` | Two steps deeper (e.g., `--color-poppy-darkest`) | Two steps lighter (e.g., `--color-poppy-lightest`) |
+| `--surface-brand-primary-hover` | Same ramp pattern as background-hover | Same |
+| `--surface-brand-primary-pressed` | Same ramp pattern as background-pressed | Same |
+
+<Callout type="warn">
+  **State-pair siblings are required when a Brand Kit overrides `--background-brand-primary` or `--surface-brand-primary`.** Override the base color without pairing the `-hover` / `-pressed` siblings, and the canonical default leaks through on interaction. The cleanup in brik-bds#710 retired exactly this pattern of bug.
+</Callout>
+
+## Focus ring rules
+
+- **Width** uses `--border-width-lg` — no new dimension token. Mode picks (`data-mode-borderwidth`) propagate automatically.
+- **Offset** is hardcoded `2px` in CSS — accessibility fixed value, not themeable.
+- **Color** aliases `--border-brand-primary` so the focus ring picks up brand identity automatically when a Brand Kit applies.
+
+## Decision tree — overlay vs solid
+
+Walk this top-down when implementing a component's hover/press:
+
+1. **Is the resting background a brand color or status color** (filled buttons, brand badges)?
+   - Yes → use solid `-hover` / `-pressed` Semantic tokens (`--background-brand-primary-hover`, etc.).
+2. **Is the resting background a neutral surface** (cards, list items, ghost buttons, links on `--surface-primary`)?
+   - Yes → use overlay primitives (`--state-hover-overlay`, `--state-pressed-overlay`).
+3. **Is the component a link or text-button** (no fill, color shift only)?
+   - Use the overlay primitive OR shift the text color one tier deeper (e.g., `--text-brand-primary` → `--color-poppy-darker` on hover). Don't compose both.
+
+## Related
+
+- [Token Anatomy](/docs/primitives/token-anatomy) — the four-tier abstraction these state tokens sit at (Semantic Tier)
+- [The Cascade](/docs/getting-started/cascade) — how state tokens compose with [Modes](/docs/getting-started/cascade#modes--orthogonal-axes) and brand overrides
+- [Color](/docs/primitives/color) — the Primitive ramps the brand state pairs draw from
+- [Client Themes](/docs/theming/client-themes) — Brand Kit override matrix (state pairs are required when brand colors change)

@@ -1,0 +1,142 @@
+---
+title: Token Anatomy
+description: The six disambiguated concepts that describe every BDS token — Anatomy, Tier, Library, Layer, Mode, Tenet — and the four-tier abstraction stack every token belongs to.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Every BDS token answers six independent questions. Without distinct vocabulary for each, agents and humans invent parallel taxonomies and the system drifts (portal #512 / #553, retired `--theme-brik-*`, retired `--brand-{tier}`). This page locks the vocabulary so the discipline lives in the words themselves.
+
+## Six concepts, six words
+
+| Concept | Term | Question it answers | Values |
+|---|---|---|---|
+| Naming structure | **Anatomy** | How is it *named*? | `--{purpose}-{role}[-{state}]` |
+| Abstraction level | **Tier** | What *kind* of token is it? | Raw · Primitive · Semantic · Component |
+| Source of truth | **Library** | Where is it *defined*? | Foundations Library · [Client] Brand Kit Library |
+| CSS cascade origin | **Layer** | Which `@layer` *carries its value*? | `bds-tokens` · `bds-components` · `client-theme` · `client-overrides` |
+| Value axis | **Mode** | Which axis *varies its value*? | color light/dark · borderwidth thin/bold · spacing compact/spacious / etc. |
+| System pillar | **Tenet** | Which *system pillar* governs it? | Foundation · Theming · Motion · Content |
+
+**These are orthogonal.** A token has one answer for each. Mixing them — calling `--brand-tertiary` a "tier" because it sits at the top level — is the failure mode the cleanup retired.
+
+<Callout type="warn">
+  **Before referencing a token name, you should be able to answer all six.** If you can't, you're guessing — verify against the canonical registry (`dist/tokens.css`) first.
+</Callout>
+
+## Anatomy — the naming formula
+
+Every token name follows `--{purpose}-{role}[-{state}]`. Each segment is fixed vocabulary:
+
+| Segment | Allowed values | Example |
+|---|---|---|
+| `purpose` | `page`, `surface`, `background`, `text`, `border`, `color` (primitives only) | `--background-…` |
+| `role` | Closed list — see [Color foundations vocabulary](/docs/getting-started/cascade#color-foundations-vocabulary) | `--background-brand-primary` |
+| `state` (optional) | `hover`, `pressed`, `disabled` | `--background-brand-primary-hover` |
+
+Status, service-line, and presence semantic tokens follow the same anatomy with their own role vocabularies (`--background-positive`, `--background-service-marketing`, `--background-presence-online`).
+
+<Callout type="error">
+  **Token names without a `purpose` prefix are drift.** Examples retired by brik-bds#712: `--brand-primary` (missing purpose; legitimate form is `--{purpose}-brand-primary`), `--theme-brik-*` (entire namespace violates the anatomy). If you see something shaped `--brand-X` or `--theme-X-Y` in old code, it's drift and should not be referenced.
+</Callout>
+
+## Tier — the four-tier abstraction stack
+
+Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()`. Components only consume the upper tiers.
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  Tier 4 — Component    (TBD — placeholder)              │
+│  Component-scoped tokens, bound to a specific component │
+│  Example: --bds-button-primary-padding-x (not yet       │
+│  emitted as a tier; deliberately unspecified)           │
+└─────────────────────────────────────────────────────────┘
+                          ▲
+                          │ var()
+┌─────────────────────────────────────────────────────────┐
+│  Tier 3 — Semantic     (what components consume)        │
+│  --{purpose}-{role}: var(--color-{family}-{step})       │
+│  Example: --background-brand-primary:                   │
+│             var(--color-poppy-dark)                     │
+└─────────────────────────────────────────────────────────┘
+                          ▲
+                          │ var()
+┌─────────────────────────────────────────────────────────┐
+│  Tier 2 — Primitive    (named raw values)               │
+│  --color-{family}-{step}: #hex                          │
+│  Example: --color-poppy-dark: #b0351b                   │
+└─────────────────────────────────────────────────────────┘
+                          ▲
+                          │
+┌─────────────────────────────────────────────────────────┐
+│  Tier 1 — Raw          (literal hex / numeric value)    │
+│  Not a CSS variable — the literal value before naming.  │
+│  Example: #b0351b                                       │
+└─────────────────────────────────────────────────────────┘
+```
+
+### What lives at each Tier
+
+| Tier | Naming | Source | Components reference it? |
+|---|---|---|---|
+| **Raw** | Literal `#b0351b` | Figma swatch / hex chosen by design | **No** — never in component CSS |
+| **Primitive** | `--color-{family}-{step}` (color), `--font-size-{step}` (type), `--space-{step}` (spacing), etc. | Auto-generated from Figma Variables → Style Dictionary | **No** — never in component CSS (use Semantic) |
+| **Semantic** | `--{purpose}-{role}` — Color foundations vocabulary | Auto-generated; client themes override **values** with same **names** | **Yes** — this is the contract |
+| **Component** | TBD — deliberately unspecified | TBD | TBD |
+
+<Callout type="warn">
+  **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--background-brand-primary`, not `--color-poppy-dark`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
+</Callout>
+
+### About Tier 4 (Component)
+
+The system has not yet specified a Component tier. The pattern would be `--bds-{component}-{property}` — component-scoped tokens that bind a specific component to specific values. Today most components consume Semantic tokens directly, which is sufficient for current scale. **Do not invent Component-tier tokens** until the canonical pattern lands.
+
+## How the six concepts map to a real token
+
+Take `--background-brand-primary` (the hot path):
+
+| Concept | Answer |
+|---|---|
+| Anatomy | `--{purpose: background}-{role: brand-primary}` |
+| Tier | Semantic |
+| Library | Defined in **Foundations Library** as the canonical name; the *value* is overridden by each **Brand Kit Library** |
+| Layer | `bds-tokens` for the canonical default; `client-theme` for the per-client override |
+| Mode | Varies by `color` mode (light / dark) |
+| Tenet | Foundation (token canon) + Theming (brand override) |
+
+Every legitimate token answers all six. If a token doesn't fit any one of them, it's drift.
+
+## Drift patterns to recognize (and not extend)
+
+| Drift pattern | Why it's wrong | Retired in |
+|---|---|---|
+| `--theme-{name}-*` (`--theme-brik-green`, `--theme-blue-blue-light`) | Doesn't match Anatomy — no `purpose` prefix. Duplicate alias of a `--color-{family}-{step}` primitive. | brik-bds#712 / [#727](https://github.com/brikdesigns/brik-bds/pull/727) |
+| `--brand-{tier}` (`--brand-primary`, `--brand-tertiary`) | Brand-tier names without `purpose` prefix. Legitimate composed form is `--{purpose}-brand-{tier}`. | brik-bds#712 / [#727](https://github.com/brikdesigns/brik-bds/pull/727) |
+| `--surface-paper`, `--text-on-ink`, `--surface-soft`, `--surface-warm` | Invented modifiers or invented `role` values that aren't in the closed Color foundations vocabulary. Always parallel taxonomy. | portal [#512 / #553](https://github.com/brikdesigns/brik-client-portal/pull/553) (rolled back) |
+| Component CSS reading `--color-{family}-{step}` directly | Bypasses the Semantic tier. Locks the component to one brand. | Caught by `scripts/lint-tokens.js` |
+
+<Callout type="error">
+  **Inventing parallel taxonomy is the failure mode this vocabulary exists to prevent.** Three rollbacks (portal #512, portal #553, brik-bds#712 cleanup) trace to agents inventing names that *almost* fit. When in doubt, verify in `dist/tokens.css` — if the name isn't there, it isn't real.
+</Callout>
+
+## Verifying a token before referencing it
+
+```bash
+# Is this name in the canonical registry?
+rg '\-\-{token-name}' node_modules/@brikdesigns/bds/dist/tokens.css
+
+# Or run the consumer-side gate
+./scripts/token-audit.sh --canonical-only
+```
+
+If the gate is missing or the name isn't found, **stop**. Don't ship a `var()` call against a name that doesn't exist.
+
+## Related
+
+- [The Cascade](/docs/getting-started/cascade) — Layer ordering, modes, color foundations vocabulary
+- [Figma Library architecture](/docs/getting-started/figma-library-architecture) — Foundations Library vs Brand Kit Library
+- [Color](/docs/primitives/color) — full canonical color registry
+- [Color primitive tiers](/docs/content-system/vocabularies/color-primitive-tier) — the closed `tier` vocabulary used by the portal theme generator
+- [Naming Conventions](/docs/primitives/naming-conventions) — BEM slot vocabulary (different domain — component class names, not token names)
+- [Style Dictionary build pipeline](/docs/react-reference/utilities#style-dictionary-build-pipeline) — how Figma → Library → Layer → CSS happens
