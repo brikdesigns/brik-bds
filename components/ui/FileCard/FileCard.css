@@ -1,0 +1,181 @@
+@layer bds-components {
+/**
+ * BDS FileCard
+ *
+ * Token reference:
+ * - --surface-primary (card body)
+ * - --surface-muted (preview backdrop)
+ * - --surface-secondary-hover (action button hover)
+ * - --border-secondary (card border)
+ * - --border-radius-md
+ * - --padding-sm, --padding-md
+ * - --gap-tiny, --gap-xs, --gap-sm, --gap-md
+ * - --text-primary, --text-secondary
+ * - --text-brand-primary (open-in-new-tab link)
+ * - --aspect-* (preview thumbnail aspect-ratio)
+ */
+
+/* ─── Wrapper ─────────────────────────────────────────────────── */
+
+.bds-file-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+.bds-file-card--disabled {
+  opacity: 0.6;
+}
+
+/* ─── Card surface ────────────────────────────────────────────── */
+
+.bds-file-card__card {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--surface-primary);
+  border: var(--border-width-sm) solid var(--border-secondary);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Preview thumbnail ───────────────────────────────────────── */
+/* Preview box has a fixed width and an aspect-ratio modifier that drives
+   the height. Image/SVG previews fill the box via object-fit: cover; icon
+   previews center a Phosphor glyph. */
+
+.bds-file-card__preview-link {
+  display: block;
+  text-decoration: none;
+  flex: 0 0 auto;
+}
+
+.bds-file-card__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-1400);
+  background-color: var(--surface-muted);
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.bds-file-card__preview-img,
+.bds-file-card__preview-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bds-file-card__preview-icon {
+  font-size: var(--heading-sm);
+  color: var(--text-secondary);
+}
+
+/* Aspect-ratio modifiers — mirrors Frame's slug vocabulary. */
+.bds-file-card__preview--ratio-1-1   { aspect-ratio: var(--aspect-1-1); }
+.bds-file-card__preview--ratio-3-2   { aspect-ratio: var(--aspect-3-2); }
+.bds-file-card__preview--ratio-2-3   { aspect-ratio: var(--aspect-2-3); }
+.bds-file-card__preview--ratio-4-3   { aspect-ratio: var(--aspect-4-3); }
+.bds-file-card__preview--ratio-3-4   { aspect-ratio: var(--aspect-3-4); }
+.bds-file-card__preview--ratio-16-9  { aspect-ratio: var(--aspect-16-9); }
+.bds-file-card__preview--ratio-9-16  { aspect-ratio: var(--aspect-9-16); }
+.bds-file-card__preview--ratio-21-9  { aspect-ratio: var(--aspect-21-9); }
+.bds-file-card__preview--ratio-square           { aspect-ratio: var(--aspect-square); }
+.bds-file-card__preview--ratio-photo-landscape  { aspect-ratio: var(--aspect-photo-landscape); }
+.bds-file-card__preview--ratio-photo-portrait   { aspect-ratio: var(--aspect-photo-portrait); }
+.bds-file-card__preview--ratio-cinema           { aspect-ratio: var(--aspect-cinema); }
+
+/* ─── Card body — filename + meta + open link ─────────────────── */
+
+.bds-file-card__body {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+  padding: var(--padding-sm) var(--padding-md);
+  min-width: 0;
+}
+
+.bds-file-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-tiny);
+  min-width: 0;
+}
+
+.bds-file-card__name {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bds-file-card__metadata {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.bds-file-card__open {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: var(--label-md);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.bds-file-card__open:hover,
+.bds-file-card__open:focus-visible {
+  color: var(--text-brand-primary);
+}
+
+/* ─── Action row ──────────────────────────────────────────────── */
+
+.bds-file-card__actions {
+  display: flex;
+  gap: var(--gap-xs);
+}
+
+.bds-file-card__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-xs) var(--padding-sm);
+  background-color: var(--surface-primary);
+  border: var(--border-width-sm) solid var(--border-secondary);
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.bds-file-card__action:hover:not(:disabled),
+.bds-file-card__action:focus-visible:not(:disabled) {
+  background-color: var(--surface-secondary-hover);
+}
+
+.bds-file-card__action:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+}
