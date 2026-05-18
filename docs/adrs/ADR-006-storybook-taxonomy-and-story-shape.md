@@ -1,6 +1,6 @@
 # ADR-006 — Storybook Taxonomy + Story Shape
 
-**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments); Part B amended 2026-05-18 (canonical first-story name → `Default`; see Amendments)
+**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments); Part B amended 2026-05-18 (canonical first-story name → `Default`); Part A amended 2026-05-18 (card-list reassigned Containers → Layouts; CardControl moved to Deprecated/; NavigationArchetypes relocated to Foundation/ — see Amendments)
 **Date:** 2026-04-26
 **Supersedes:** —
 **Superseded by:** —
@@ -38,9 +38,9 @@ The Storybook sidebar uses **six flat component top-levels** plus the unchanged 
 | Bucket | Role | Members |
 | --- | --- | --- |
 | **`Components/`** | Single atomic primitive | button, button-group, filter-button, filter-toggle, filter-bar, text-link, address-input, password-input, text-input, text-area, select, multi-select, checkbox, radio, completion-toggle, switch, segmented-control, stepper, file-uploader, pagination, badge, badge-group, chip, tag, tag-group, dot, counter, spinner, progress-bar, progress-circle, avatar, banner, empty-state, toast, tooltip, icons, marketing-illustration, divider, meter, service-tag, skeleton, modal, popover |
-| **`Containers/`** | Styled holder composing blocks into a bounded unit (own border/padding/elevation/radius) | card, collapsible-card, pricing-card, card-summary, card-testimonial, card-list, form, accordion, sheet, sheet-section, table, menu, notification-list, data-section, activity-timeline, calendar, task-console, board, addable-combo-list, addable-entry-list, addable-field-row-list, addable-text-list, catalog-picker |
+| **`Containers/`** | Styled holder composing blocks into a bounded unit (own border/padding/elevation/radius) | card, collapsible-card, pricing-card, card-summary, card-testimonial, form, accordion, sheet, sheet-section, table, menu, notification-list, data-section, activity-timeline, calendar, task-console, board, addable-combo-list, addable-entry-list, addable-field-row-list, addable-text-list, catalog-picker |
 | **`Blocks/`** | Fixed slot shape filled with atoms — used standalone and inside Containers | field, field-grid, date-picker, time-picker, bullet-list, checklist, interactive-list-item |
-| **`Layouts/`** | Pure composition primitive — arrangement only, no styling beyond structure | stack, cluster, grid, frame, row, split |
+| **`Layouts/`** | Pure composition primitive — arrangement only, no styling beyond structure | stack, cluster, grid, frame, row, split, card-list |
 | **`Sections/`** | Full-page composed region | nav-bar, footer, sidebar-navigation, breadcrumb, progress-stepper, page-header, tab-bar |
 | **`Tools/`** | Dev/internal utilities | brik-dev-bar, dev-feedback-widget |
 
@@ -169,6 +169,20 @@ The Components table in Part A is amended:
 - **`completion-toggle`** added to `Form` (was missing from the original table). Stays in `Form` as the atomic primitive paired with `checklist` as the labeled-row composition, mirroring the `Checkbox` / `Radio` pattern of atomic primitives staying in `Form`.
 
 These are table top-ups, not structural changes — no new subcategories, just member reassignment. Lands alongside the Storybook title moves in a follow-on PR.
+
+### 2026-05-18 — Part A: post-flatten audit corrections
+
+A sidebar audit against the realized state of [#629](https://github.com/brikdesigns/brik-bds/issues/629) surfaced three member-assignment corrections to Part A's tables. All three are forward-only re-titles in [`.storybook/preview.tsx`](../../.storybook/preview.tsx) and the affected `*.stories.tsx` files; no component code changes.
+
+| Member | Was | Now | Reasoning |
+|---|---|---|---|
+| `card-list` | `Containers/` | **`Layouts/`** | [CardList.css](../../components/ui/CardList/CardList.css) has no border / padding / elevation / radius — just `display: flex` + `gap` + `orientation` props. Matches the Layouts definition ("Pure composition primitive — arrangement only, no styling beyond structure"). The 2026-05-16 amendment listed it under Containers but the component's actual shape is Layout. |
+| `card-control` | `Containers/` | **`Deprecated/`** | [CardControl.stories.tsx](../../components/ui/CardControl/CardControl.stories.tsx) is `!manifest`-tagged following [#657](https://github.com/brikdesigns/brik-bds/issues/657) / [PR #707](https://github.com/brikdesigns/brik-bds/pull/707) (deprecated; logic merged into `Card preset="control"` per [ADR-004](./ADR-004-component-bloat-guardrails.md)). Per Part A's `Deprecated/` rule, `!manifest`-tagged stories sort there. |
+| `navigation-archetypes` | `Sections/` (then briefly `Theming/` in the audit) | **`Foundation/`** | [PR #675](https://github.com/brikdesigns/brik-bds/pull/675) dissolved `Theming/` as a top-level. The sibling theme-exploration page [`Foundation/Atmospheres`](../../stories/theming/Atmospheres.stories.tsx) is the live destination shape for this kind of content. NavigationArchetypes is a theming exploration (navigation IA patterns by archetype), not a page-level Section. |
+
+Three docs-site Storybook URL refs were updated in the same change to point at the new slugs ([card-list.mdx:103](../../docs-site/content/docs/components/card-list.mdx#L103), [card.mdx:160–162](../../docs-site/content/docs/components/card.mdx#L160), [card-control.mdx:124](../../docs-site/content/docs/components/card-control.mdx#L124)) — the docs-site had already been authored against the corrected slugs in some places, so this fix restores consistency rather than introducing a new convention.
+
+`.storybook/preview.tsx` `storySort.order` re-sequenced to the spec order: Overview → Foundation → Motion → Content System → Components → Containers → Blocks → Layouts → Sections → Tools → \* → Deprecated. The dead `Displays/` slot (no story file targets it; `dist/components/ui/SheetTypography/` is build output) was removed. `sub-navigation` added to the Sections allowlist; `card-list` added to the Layouts allowlist; `Navigation Archetypes` added to the Foundation allowlist.
 
 ### 2026-05-18 — Part B: canonical first-story name → `Default`
 
