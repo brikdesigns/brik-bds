@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ServiceTag } from './ServiceTag';
-import { categoryConfig } from './ServiceBadge';
-import type { ServiceCategory } from './ServiceBadge';
+import { categoryConfig } from './service-config';
+import type { ServiceCategory } from './service-config';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 

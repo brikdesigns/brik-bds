@@ -271,13 +271,6 @@
       "lg"
     ]
   },
-  "ServiceBadge": {
-    "size": [
-      "sm",
-      "md",
-      "lg"
-    ]
-  },
   "ServiceTag": {
     "variant": [
       "text",

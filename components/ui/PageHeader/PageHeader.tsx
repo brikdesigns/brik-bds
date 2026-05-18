@@ -12,7 +12,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   /** Optional subtitle paragraph rendered under the title. */
   subtitle?: string;
-  /** Badge displayed to the left of the title (e.g. ServiceBadge) */
+  /** Badge displayed to the left of the title (e.g. `<ServiceTag variant="icon">`) */
   badge?: ReactNode;
   /** Breadcrumb element (typically a `Breadcrumb` component) rendered above the title row. */
   breadcrumbs?: ReactNode;
