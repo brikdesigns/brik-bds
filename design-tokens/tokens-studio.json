@@ -737,181 +737,6 @@
         }
       }
     },
-    "theme": {
-      "blue": {
-        "blue-dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#0e212a"
-        },
-        "blue-lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#79b0d9"
-        },
-        "blue-lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#edf2f6"
-        },
-        "green": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#79d799"
-        },
-        "blue-light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#4665f5"
-        }
-      },
-      "brik": {
-        "poppy-red": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#e35335"
-        },
-        "tan": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#f1f0ec"
-        },
-        "black": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#000000"
-        },
-        "yellow": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#f4d364"
-        },
-        "orange": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#e76134"
-        },
-        "green": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#bcff8c"
-        },
-        "blue": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#8ebbcc"
-        },
-        "purple": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "#9e8bc2"
-        }
-      }
-    },
-    "brand": {
-      "primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.light}",
-        "$description": "Brand primary accent — override per-theme to set the main brand color"
-      },
-      "secondary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.tan.lightest}",
-        "$description": "Brand secondary — supporting surface/accent color"
-      },
-      "tertiary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.green.dark}",
-        "$description": "Brand tertiary — subtle/lightest accent"
-      },
-      "accent": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.light}",
-        "$description": "Brand accent — contrasting highlight color"
-      },
-      "dark": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.blue.light}",
-        "$description": "Brand dark — deep/dark variant"
-      }
-    },
     "font-weight": {
       "bold": {
         "$extensions": {
@@ -2776,7 +2601,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "inverse": {
         "$extensions": {
@@ -2814,7 +2639,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "inverse": {
         "$extensions": {
@@ -2913,7 +2738,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-lighter}",
+        "$value": "{color.poppy.dark}",
         "$description": "Primary button hover background"
       },
       "brand-primary-pressed": {
@@ -2923,7 +2748,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-dark}",
+        "$value": "{color.poppy.darker}",
         "$description": "Primary button pressed background"
       },
       "disabled": {
@@ -3035,7 +2860,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "inverse": {
         "$extensions": {
@@ -3155,7 +2980,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-lighter}",
+        "$value": "{color.poppy.dark}",
         "$description": "Primary surface hover"
       },
       "brand-primary-pressed": {
@@ -3165,7 +2990,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}",
+        "$value": "{color.poppy.darker}",
         "$description": "Primary surface pressed"
       }
     },
@@ -3195,7 +3020,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "inverse": {
         "$extensions": {
@@ -3276,7 +3101,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "on-color-light": {
         "$extensions": {
@@ -3371,7 +3196,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -3502,7 +3327,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "inverse": {
         "$extensions": {
@@ -3540,7 +3365,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "inverse": {
         "$extensions": {
@@ -3639,7 +3464,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-dark}",
+        "$value": "{color.poppy.dark}",
         "$description": "Primary button hover background (dark mode)"
       },
       "brand-primary-pressed": {
@@ -3649,7 +3474,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}",
+        "$value": "{color.poppy.lighter}",
         "$description": "Primary button pressed background (dark mode)"
       },
       "disabled": {
@@ -3761,7 +3586,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "inverse": {
         "$extensions": {
@@ -3881,7 +3706,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-lighter}",
+        "$value": "{color.poppy.light}",
         "$description": "Primary surface hover (dark mode)"
       },
       "brand-primary-pressed": {
@@ -3891,7 +3716,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}",
+        "$value": "{color.poppy.darker}",
         "$description": "Primary surface pressed (dark mode)"
       }
     },
@@ -3921,7 +3746,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "inverse": {
         "$extensions": {
@@ -4002,7 +3827,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "on-color-light": {
         "$extensions": {
@@ -4097,7 +3922,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{theme.blue.blue-light}"
+        "$value": "{color.poppy.light}"
       },
       "on-color-dark": {
         "$extensions": {

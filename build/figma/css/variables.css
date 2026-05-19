@@ -79,19 +79,6 @@
   --color-annotation-annotation-light-pink: #f8e8fd;
   --color-annotation-annotation-light-purple: #e6dbff;
   --color-annotation-annotation-light-blue: #d1e5ff;
-  --theme-blue-blue-dark: #0e212a;
-  --theme-blue-blue-lighter: #79b0d9;
-  --theme-blue-blue-lightest: #edf2f6;
-  --theme-blue-green: #79d799;
-  --theme-blue-blue-light: #4665f5;
-  --theme-brik-poppy-red: #e35335;
-  --theme-brik-tan: #f1f0ec;
-  --theme-brik-black: #000000;
-  --theme-brik-yellow: #f4d364;
-  --theme-brik-orange: #e76134;
-  --theme-brik-green: #bcff8c;
-  --theme-brik-blue: #8ebbcc;
-  --theme-brik-purple: #9e8bc2;
   --font-weight-bold: 700;
   --font-weight-semi-bold: 600;
   --font-weight-medium: 500;
@@ -295,11 +282,6 @@
   --breakpoint-web: 1200px;
   --breakpoint-tablet: 768px;
   --breakpoint-mobile: 320px;
-  --brand-primary: var(--color-poppy-light); /** Brand primary accent — override per-theme to set the main brand color */
-  --brand-secondary: var(--color-tan-lightest); /** Brand secondary — supporting surface/accent color */
-  --brand-tertiary: var(--color-green-dark); /** Brand tertiary — subtle/lightest accent */
-  --brand-accent: var(--color-yellow-light); /** Brand accent — contrasting highlight color */
-  --brand-dark: var(--color-blue-light); /** Brand dark — deep/dark variant */
   --border-radius-lg: var(--border-radius-600);
   --border-radius-md: var(--border-radius-400);
   --border-radius-none: var(--border-radius-0);
@@ -312,11 +294,11 @@
   --border-width-none: var(--border-width-0);
   --page-primary: var(--color-grayscale-white);
   --page-secondary: var(--color-grayscale-lighter);
-  --page-brand-primary: var(--theme-blue-blue-light);
+  --page-brand-primary: var(--color-poppy-light);
   --page-inverse: var(--color-grayscale-black);
   --background-primary: var(--color-grayscale-white);
   --background-secondary: var(--color-grayscale-dark);
-  --background-brand-primary: var(--theme-blue-blue-light);
+  --background-brand-primary: var(--color-poppy-light);
   --background-inverse: var(--color-grayscale-black);
   --background-accent-yellow: var(--color-system-yellow);
   --background-accent-blue: var(--color-system-blue);
@@ -327,8 +309,8 @@
   --background-on-color-dark: var(--color-grayscale-white);
   --background-muted: var(--color-grayscale-lighter);
   --background-on-color-light: var(--color-grayscale-black);
-  --background-brand-primary-hover: var(--theme-blue-blue-lighter); /** Primary button hover background */
-  --background-brand-primary-pressed: var(--theme-blue-blue-dark); /** Primary button pressed background */
+  --background-brand-primary-hover: var(--color-poppy-dark); /** Primary button hover background */
+  --background-brand-primary-pressed: var(--color-poppy-darker); /** Primary button pressed background */
   --background-disabled: var(--color-grayscale-dark); /** Disabled button background (all variants) */
   --background-info: var(--color-system-neutral);
   --background-primary-hover: var(--color-grayscale-lightest);
@@ -340,7 +322,7 @@
   --background-warning: var(--color-system-yellow);
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lighter);
-  --surface-brand-primary: var(--theme-blue-blue-light);
+  --surface-brand-primary: var(--color-poppy-light);
   --surface-inverse: var(--color-grayscale-black);
   --surface-overlay: var(--color-grayscale-white);
   --surface-secondary-hover: var(--color-grayscale-light); /** Secondary button hover background */
@@ -353,11 +335,11 @@
   --surface-muted: var(--color-grayscale-lightest);
   --surface-primary-hover: var(--color-grayscale-lightest);
   --surface-primary-pressed: var(--color-grayscale-lighter);
-  --surface-brand-primary-hover: var(--theme-blue-blue-lighter); /** Primary surface hover */
-  --surface-brand-primary-pressed: var(--theme-blue-blue-light); /** Primary surface pressed */
+  --surface-brand-primary-hover: var(--color-poppy-dark); /** Primary surface hover */
+  --surface-brand-primary-pressed: var(--color-poppy-darker); /** Primary surface pressed */
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
-  --text-brand-primary: var(--theme-blue-blue-light);
+  --text-brand-primary: var(--color-poppy-light);
   --text-inverse: var(--color-grayscale-white);
   --text-accent-yellow: var(--color-system-yellow);
   --text-accent-blue: var(--color-system-blue);
@@ -366,7 +348,7 @@
   --text-accent-red: var(--color-system-red);
   --text-muted: var(--color-grayscale-light);
   --text-on-color-dark: var(--color-grayscale-white);
-  --text-text-link: var(--theme-blue-blue-light);
+  --text-text-link: var(--color-poppy-light);
   --text-on-color-light: var(--color-grayscale-black);
   --text-disabled: var(--color-grayscale-light); /** Disabled button text (all variants) */
   --text-info: var(--color-system-neutral);
@@ -376,7 +358,7 @@
   --text-secondary-inverse: var(--color-grayscale-light); /** Secondary text on inverse (theme-flipping) surfaces */
   --text-muted-inverse: var(--color-grayscale-dark); /** Muted text on inverse (theme-flipping) surfaces */
   --border-primary: var(--color-grayscale-lighter);
-  --border-brand-primary: var(--theme-blue-blue-light);
+  --border-brand-primary: var(--color-poppy-light);
   --border-on-color-dark: var(--color-grayscale-white);
   --border-secondary: var(--color-grayscale-dark);
   --border-muted: var(--color-grayscale-light);

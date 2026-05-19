@@ -340,91 +340,6 @@
       }
     }
   },
-  "theme": {
-    "blue": {
-      "blue-dark": {
-        "$value": "#0e212a",
-        "$type": "color"
-      },
-      "blue-lighter": {
-        "$value": "#79b0d9",
-        "$type": "color"
-      },
-      "blue-lightest": {
-        "$value": "#edf2f6",
-        "$type": "color"
-      },
-      "green": {
-        "$value": "#79d799",
-        "$type": "color"
-      },
-      "blue-light": {
-        "$value": "#4665f5",
-        "$type": "color"
-      }
-    },
-    "brik": {
-      "poppy-red": {
-        "$value": "#e35335",
-        "$type": "color"
-      },
-      "tan": {
-        "$value": "#f1f0ec",
-        "$type": "color"
-      },
-      "black": {
-        "$value": "#000000",
-        "$type": "color"
-      },
-      "yellow": {
-        "$value": "#f4d364",
-        "$type": "color"
-      },
-      "orange": {
-        "$value": "#e76134",
-        "$type": "color"
-      },
-      "green": {
-        "$value": "#bcff8c",
-        "$type": "color"
-      },
-      "blue": {
-        "$value": "#8ebbcc",
-        "$type": "color"
-      },
-      "purple": {
-        "$value": "#9e8bc2",
-        "$type": "color"
-      }
-    }
-  },
-  "brand": {
-    "primary": {
-      "$value": "{color.poppy.light}",
-      "$type": "color",
-      "$description": "Brand primary accent — override per-theme to set the main brand color"
-    },
-    "secondary": {
-      "$value": "{color.tan.lightest}",
-      "$type": "color",
-      "$description": "Brand secondary — supporting surface/accent color"
-    },
-    "tertiary": {
-      "$value": "{color.green.dark}",
-      "$type": "color",
-      "$description": "Brand tertiary — subtle/lightest accent"
-    },
-    "accent": {
-      "$value": "{color.yellow.light}",
-      "$type": "color",
-      "$description": "Brand accent — contrasting highlight color"
-    },
-    "dark": {
-      "$value": "{color.blue.light}",
-      "$type": "color",
-      "$description": "Brand dark — deep/dark variant"
-    }
-  },
   "font-weight": {
     "bold": {
       "$value": "700",
@@ -1311,7 +1226,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{color.poppy.light}",
       "$type": "color"
     },
     "inverse": {
@@ -1329,7 +1244,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{color.poppy.light}",
       "$type": "color"
     },
     "inverse": {
@@ -1373,12 +1288,12 @@
       "$type": "color"
     },
     "brand-primary-hover": {
-      "$value": "{theme.blue.blue-lighter}",
+      "$value": "{color.poppy.dark}",
       "$type": "color",
       "$description": "Primary button hover background"
     },
     "brand-primary-pressed": {
-      "$value": "{theme.blue.blue-dark}",
+      "$value": "{color.poppy.darker}",
       "$type": "color",
       "$description": "Primary button pressed background"
     },
@@ -1430,7 +1345,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{color.poppy.light}",
       "$type": "color"
     },
     "inverse": {
@@ -1485,12 +1400,12 @@
       "$type": "color"
     },
     "brand-primary-hover": {
-      "$value": "{theme.blue.blue-lighter}",
+      "$value": "{color.poppy.dark}",
       "$type": "color",
       "$description": "Primary surface hover"
     },
     "brand-primary-pressed": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{color.poppy.darker}",
       "$type": "color",
       "$description": "Primary surface pressed"
     }
@@ -1505,7 +1420,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{color.poppy.light}",
       "$type": "color"
     },
     "inverse": {
@@ -1541,7 +1456,7 @@
       "$type": "color"
     },
     "text-link": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{color.poppy.light}",
       "$type": "color"
     },
     "on-color-light": {
@@ -1586,7 +1501,7 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{theme.blue.blue-light}",
+      "$value": "{color.poppy.light}",
       "$type": "color"
     },
     "on-color-dark": {
