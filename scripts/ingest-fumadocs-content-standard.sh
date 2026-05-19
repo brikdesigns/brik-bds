@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# ingest-fumadocs-standard.sh — push the Fumadocs writing standard into brik-rag.
+# ingest-fumadocs-content-standard.sh — push the Fumadocs writing standard into brik-rag.
 #
-# Source of truth: .claude/standards/fumadocs-content-standard.md
+# Source of truth: .claude/standards/fumadocs-content.md
 # Destination: brik-rag memory corpus (type=reference, project=brik-bds)
 #
 # Re-runnable: each invocation re-ingests the latest content. Run after editing
@@ -14,7 +14,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-STANDARD_FILE="$REPO_ROOT/.claude/standards/fumadocs-content-standard.md"
+STANDARD_FILE="$REPO_ROOT/.claude/standards/fumadocs-content.md"
 
 if [[ ! -f "$STANDARD_FILE" ]]; then
   echo "error: standard markdown not found at $STANDARD_FILE" >&2
@@ -38,7 +38,7 @@ echo "▸ Ingesting fumadocs-writing-standard ($(echo "$BODY" | wc -l | tr -d ' 
 
 brik-rag remember \
   --name "fumadocs-writing-standard" \
-  --description "Canonical Fumadocs MDX writing standard for brik-bds docs-site — frontmatter shape, IA decision tree (page/section/callout/cross-link), heading depth cap, voice pointer, anti-patterns. Source: brik-bds/.claude/standards/fumadocs-content-standard.md" \
+  --description "Canonical Fumadocs MDX writing standard for brik-bds docs-site — frontmatter shape, IA decision tree (page/section/callout/cross-link), heading depth cap, voice pointer, anti-patterns. Source: brik-bds/.claude/standards/fumadocs-content.md" \
   --type reference \
   --project brik-bds \
   --human \

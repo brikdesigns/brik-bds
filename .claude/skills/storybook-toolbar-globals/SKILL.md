@@ -46,7 +46,7 @@ brik-rag query "client-sim font audit theme decorator" --workflow-type storybook
 brik-rag query "ADR-010 Q1 toolbar global never story export" --workflow-type storybook-toolbar-globals --top-k 3
 ```
 
-Parse the JSON output, apply the relevant rules to the edit. If the query returns no results, the standard has not been ingested — run `brik-bds/scripts/ingest-storybook-toolbar-globals-standard.sh` once, then retry.
+Parse the JSON output, apply the relevant rules to the edit. If the query returns no results, the standard has not been ingested — run `brik-bds/scripts/run-standards-ingest.sh --all` once to bootstrap, then retry.
 
 ## The first-yes rule
 
@@ -58,4 +58,4 @@ The standard is canon. If the wired globals in `.storybook/preview.tsx` and the 
 
 ## How to update the standard itself
 
-Edit `brik-bds/.claude/standards/storybook-toolbar-globals.md`, bump `last-verified`, re-run `scripts/ingest-storybook-toolbar-globals-standard.sh`. Add a row to the "Wired today" table when a new axis lands. **Update ADR-010 only if the rule itself changes** — adding a wired axis doesn't require an ADR amendment.
+Edit `brik-bds/.claude/standards/storybook-toolbar-globals.md`, bump `last-verified`, then commit — the pre-commit hook auto-ingests changed standards into brik-rag (brik-bds#744). Add a row to the "Wired today" table when a new axis lands. **Update ADR-010 only if the rule itself changes** — adding a wired axis doesn't require an ADR amendment.

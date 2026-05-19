@@ -472,8 +472,8 @@ Two minor releases is the Carbon-aligned default — long enough for downstream 
 ## When this standard updates
 
 1. Edit this file (the source of truth)
-2. Re-run `scripts/ingest-component-build-standard.sh` to push to brik-rag
-3. Bump `last-verified` in frontmatter
+2. Bump `last-verified` in frontmatter
+3. Stage + commit — the pre-commit hook auto-ingests changed standards into brik-rag and updates `scripts/.standards-hashes` (brik-bds#744). CI verifies the hash matches on every PR.
 4. Note the change in the PR description
 
 The skill auto-retrieves on `components/ui/**/*.{tsx,css}` edits — no other propagation needed.

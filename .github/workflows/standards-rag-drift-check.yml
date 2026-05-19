@@ -1,0 +1,59 @@
+name: Standards RAG Drift Check
+
+# Fails when a .claude/standards/*.md change in the PR diff is not accompanied
+# by a matching update to scripts/.standards-hashes. Catches edits that
+# bypassed the local auto-ingest hook (web UI commits, --no-verify, forks).
+#
+# CI does NOT re-ingest into brik-rag — that requires brik-rag CLI + secrets
+# the GitHub Action does not have. The hash file is the contract: locally the
+# pre-commit hook runs the paired ingest and stages the hash; CI verifies the
+# hash matches the standards content.
+#
+# Issue: brikdesigns/brik-bds#744
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.claude/standards/**'
+      - 'scripts/.standards-hashes'
+      - 'scripts/run-standards-ingest.sh'
+      - 'scripts/ingest-*-standard.sh'
+      - 'scripts/audit/standards-rag-drift.sh'
+  push:
+    branches:
+      - main
+    paths:
+      - '.claude/standards/**'
+      - 'scripts/.standards-hashes'
+
+concurrency:
+  group: standards-rag-drift-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  drift-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Resolve base + head SHAs
+        id: shas
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+            echo "head=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "base=${{ github.event.before }}" >> "$GITHUB_OUTPUT"
+            echo "head=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pairing audit (every standard has a paired ingest script)
+        run: scripts/run-standards-ingest.sh --check
+
+      - name: Drift check
+        run: scripts/audit/standards-rag-drift.sh --ci --base "${{ steps.shas.outputs.base }}" --head "${{ steps.shas.outputs.head }}"
