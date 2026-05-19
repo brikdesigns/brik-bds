@@ -227,4 +227,78 @@ export function TableCell({
   );
 }
 
+// ─── TableActionsCell (<td> for [View][Edit][⋯] action clusters) ──
+
+export type TableActionsCellAlign = 'right' | 'center';
+
+export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /** Action buttons — typically `IconButton` (or `Button icon={...}`) in `size="sm"`. */
+  children: ReactNode;
+  /**
+   * Horizontal alignment of the action cluster. Default `right` (canonical
+   * trailing-actions column). Use `center` for symmetric-action tables.
+   */
+  align?: TableActionsCellAlign;
+}
+
+/**
+ * TableActionsCell — right-aligned `<td>` hosting the `[View][Edit][⋯]`
+ * action cluster on a table row.
+ *
+ * Owns three things only — and nothing else:
+ * 1. Horizontal alignment (canonical `right`, or `center` for symmetric
+ *    tables) — applied via class, never inline style.
+ * 2. Width that shrinks to its content (`width: 1%`) so content columns
+ *    keep their natural sizing.
+ * 3. Consistent `--gap-sm` between buttons via an inner flex row.
+ *
+ * Carries `aria-label="Actions"` for screen-reader context. Pair with
+ * an `<TableHead>` carrying the same `align` so column headers line up
+ * with the cluster.
+ *
+ * **Don't bind click to `<TableRow>`** — see the no-row-click rule in
+ * the [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions)
+ * locked in portal#837. Cell-level affordances (`TextLink` for Name and
+ * FK cells, `TableActionsCell` for the right-aligned cluster) are the
+ * canonical click targets.
+ *
+ * @example
+ * ```tsx
+ * <TableRow>
+ *   <TableCell><TextLink size="small" onClick={openSheet}>{service.name}</TextLink></TableCell>
+ *   <TableCell><TextLink size="small" onClick={openFkSheet}>{service.serviceLine}</TextLink></TableCell>
+ *   <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
+ *   <TableActionsCell>
+ *     <Button variant="primary" size="sm" icon={<Eye />} label="View" onClick={openSheet} />
+ *     <Button variant="primary" size="sm" icon={<Pen />} label="Edit" onClick={navigateEdit} />
+ *   </TableActionsCell>
+ * </TableRow>
+ * ```
+ *
+ * @summary Right-aligned actions column hosting `[View][Edit][⋯]`
+ */
+export function TableActionsCell({
+  children,
+  align = 'right',
+  className,
+  style,
+  'aria-label': ariaLabel,
+  ...props
+}: TableActionsCellProps) {
+  return (
+    <td
+      className={bdsClass(
+        'bds-table-actions-cell',
+        `bds-table-actions-cell--${align}`,
+        className,
+      )}
+      style={style}
+      aria-label={ariaLabel ?? 'Actions'}
+      {...props}
+    >
+      <div className="bds-table-actions-cell__group">{children}</div>
+    </td>
+  );
+}
+
 export default Table;

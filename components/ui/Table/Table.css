@@ -100,4 +100,47 @@
 .bds-table[data-size="comfortable"] .bds-table-cell {
   padding: var(--padding-xl) var(--padding-md);
 }
+
+/* ─── Actions cell (right-aligned [View][Edit][⋯] cluster) ──── */
+
+.bds-table-actions-cell {
+  font-size: var(--body-md);
+  color: var(--text-primary);
+  vertical-align: middle;
+  /* Shrink-to-content so action column never competes with content cells */
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* Match TableCell padding rhythm */
+.bds-table[data-size="default"] .bds-table-actions-cell {
+  padding: var(--padding-sm) var(--padding-md);
+}
+
+.bds-table[data-size="comfortable"] .bds-table-actions-cell {
+  padding: var(--padding-xl) var(--padding-md);
+}
+
+/* Honor the table's flush mode like other cells */
+.bds-table[data-flush="true"] .bds-table-actions-cell:first-child {
+  padding-left: 0;
+}
+
+.bds-table[data-flush="true"] .bds-table-actions-cell:last-child {
+  padding-right: 0;
+}
+
+.bds-table-actions-cell__group {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: center;
+}
+
+.bds-table-actions-cell--right .bds-table-actions-cell__group {
+  justify-content: flex-end;
+}
+
+.bds-table-actions-cell--center .bds-table-actions-cell__group {
+  justify-content: center;
+}
 }

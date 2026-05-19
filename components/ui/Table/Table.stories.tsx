@@ -1,7 +1,7 @@
 import React, { type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './Table';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableActionsCell } from './Table';
 import { Badge } from '../Badge';
 import { Tag } from '../Tag';
 import { Button } from '../Button';
@@ -9,6 +9,7 @@ import { Checkbox } from '../Checkbox';
 import { TextInput } from '../TextInput';
 import { TextLink } from '../TextLink';
 import { Tooltip } from '../Tooltip';
+import { Eye, Pen, EllipsisVertical } from '../../icons';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
@@ -539,4 +540,162 @@ export const Patterns: Story = {
       </Stack>
     );
   },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   4. ACTIONS CELL — TableActionsCell canonical patterns
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Right-aligned `[View][Edit][⋯]` cluster using `<TableActionsCell>`.
+ * Owns alignment, shrink-to-content width, and the `--gap-sm` rhythm —
+ * consumers stop hand-rolling `style={{ textAlign: 'right' }}` on
+ * `<TableCell>`.
+ *
+ * @summary With actions cell
+ */
+export const WithActionsCell: Story = {
+  render: () => (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {users.map((user) => (
+          <TableRow key={user.email}>
+            <TableCell>{user.name}</TableCell>
+            <TableCell>{user.email}</TableCell>
+            <TableCell><Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
+            <TableActionsCell>
+              <Button variant="primary" size="sm" icon={<Icon icon={Eye} />} label="View" />
+              <Button variant="primary" size="sm" icon={<Icon icon={Pen} />} label="Edit" />
+              <Button variant="ghost" size="sm" icon={<Icon icon={EllipsisVertical} />} label="More" />
+            </TableActionsCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
+};
+
+/**
+ * The canonical read/edit canon table layout. **No row-level click.**
+ * Three cell classes carry interactivity:
+ * - **Name cell** — `<TextLink>` opening the read sheet for that row.
+ * - **Foreign-key cell** — `<TextLink>` opening the read sheet of the
+ *   referenced entity (Service Line, Company, etc.).
+ * - **Actions cell** — `<TableActionsCell>` hosting `[View][Edit]` icon
+ *   buttons (optional `[⋯]` overflow for tertiary actions).
+ *
+ * Read-only display cells (Status / Public / Featured) stay plain
+ * `<Badge>` or text — not interactive.
+ *
+ * @summary Cell-level interactivity
+ */
+export const CellLevelInteractivity: Story = {
+  render: () => {
+    const services = [
+      { name: 'Brand Identity Bundle', serviceLine: 'Brand', category: 'Brand', status: 'positive' as const },
+      { name: 'Website Design', serviceLine: 'Marketing', category: 'Marketing', status: 'positive' as const },
+      { name: 'SEO Audit', serviceLine: 'Marketing', category: 'Marketing', status: 'warning' as const },
+    ];
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Service line</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {services.map((service) => (
+            <TableRow key={service.name}>
+              <TableCell>
+                <TextLink href="#" size="small" onClick={(e) => { e.preventDefault(); alert(`Open ${service.name} read sheet`); }}>
+                  {service.name}
+                </TextLink>
+              </TableCell>
+              <TableCell>
+                <TextLink href="#" size="small" onClick={(e) => { e.preventDefault(); alert(`Open ${service.serviceLine} service line read sheet`); }}>
+                  {service.serviceLine}
+                </TextLink>
+              </TableCell>
+              <TableCell><Badge status={service.status} size="sm">{statusLabel(service.status)}</Badge></TableCell>
+              <TableActionsCell>
+                <Button variant="primary" size="sm" icon={<Icon icon={Eye} />} label="View" onClick={() => alert(`View ${service.name}`)} />
+                <Button variant="primary" size="sm" icon={<Icon icon={Pen} />} label="Edit" onClick={() => alert(`Edit ${service.name}`)} />
+              </TableActionsCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  },
+};
+
+/**
+ * **Anti-pattern — do not do this.** Whole-row `onClick` violates table
+ * cell semantics, breaks screen-reader expectations, and conflicts with
+ * cell-level affordances. The row appears clickable but the keyboard /
+ * AT user has no equivalent activation path, and any nested `<TextLink>`
+ * or `<Button>` fights the row handler for click events.
+ *
+ * The canonical pattern is shown in `CellLevelInteractivity` above —
+ * Name and FK cells are `<TextLink>`s, and a `<TableActionsCell>` hosts
+ * the trailing actions. Consumers migrating off `onRowClick` should
+ * delete the `<tr>` handler and add cell-level affordances.
+ *
+ * @summary Row click anti pattern
+ */
+export const RowClickAntiPattern: Story = {
+  render: () => (
+    <Stack>
+      <div
+        role="note"
+        style={{
+          padding: 'var(--padding-md)',
+          background: 'var(--surface-warning)',
+          color: 'var(--text-primary)',
+          borderRadius: 'var(--border-radius-md)',
+          border: 'var(--border-width-sm) solid var(--border-warning)',
+          fontFamily: 'var(--font-family-body)',
+          fontSize: 'var(--body-sm)',
+        }}
+      >
+        <strong>Anti-pattern.</strong> The row below has{' '}
+        <code>onClick</code> bound to the <code>&lt;tr&gt;</code>. Do not
+        ship this. See <code>CellLevelInteractivity</code> for the
+        canonical replacement.
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Role</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users.slice(0, 3).map((user) => (
+            <TableRow
+              key={user.email}
+              onClick={() => alert(`Don't do this. Row click on ${user.name}.`)}
+              style={{ cursor: 'pointer' }}
+            >
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>{user.role}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Stack>
+  ),
 };
