@@ -78,8 +78,11 @@ import '@brikdesigns/bds/styles.css';
 git clone https://github.com/brikdesigns/brik-bds.git
 cd brik-bds
 npm install
-npm run storybook    # http://localhost:6006
+./scripts/install-hooks.sh   # wires up gitleaks pre-commit (run once per clone)
+npm run storybook            # http://localhost:6006
 ```
+
+`install-hooks.sh` symlinks the gitleaks pre-commit scanner into `.git/hooks/pre-commit`. Requires `brew install gitleaks`. brik-bds is a public repo — GitHub's server-side push protection is also enabled, but the pre-commit hook catches issues before the push and is the first line of defense.
 
 ## Development workflows
 
