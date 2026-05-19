@@ -48,7 +48,7 @@ brik-rag query "Button IconButton sizing 4 point grid table cell" --workflow-typ
 brik-rag query "anti-patterns font-family role var() raw" --workflow-type component-build --top-k 3
 ```
 
-Parse the JSON output, apply the relevant rules to the edit. If the query returns no results, the standard has not been ingested — run `brik-bds/scripts/ingest-component-build-standard.sh` once, then retry.
+Parse the JSON output, apply the relevant rules to the edit. If the query returns no results, the standard has not been ingested — run `brik-bds/scripts/run-standards-ingest.sh --all` once to bootstrap, then retry.
 
 ## If you get a conflict between the standard and existing content
 
@@ -56,4 +56,4 @@ The standard is canon, and the canon-CSS sources it references ([SLOT-ALLOWLIST.
 
 ## How to update the standard itself
 
-Edit `brik-bds/.claude/standards/component-build.md`, bump `last-verified`, re-run `scripts/ingest-component-build-standard.sh`. The skill picks up the new content on the next retrieval — no skill file change needed.
+Edit `brik-bds/.claude/standards/component-build.md`, bump `last-verified`, then commit — the pre-commit hook auto-ingests changed standards into brik-rag (brik-bds#744). The skill picks up the new content on the next retrieval; no skill file change needed.

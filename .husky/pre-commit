@@ -111,6 +111,23 @@ fi
 # Typecheck always runs (fast, catches real errors)
 npm run typecheck
 
+# ── Standards auto-ingest (brik-bds#744) ──
+# When .claude/standards/*.md is staged, run the paired ingest-<name>-standard.sh
+# so brik-rag never falls behind a committed edit. The runner updates
+# scripts/.standards-hashes; we auto-stage it so the hash always travels with
+# the standard. CI uses scripts/audit/standards-rag-drift.sh --ci to catch
+# web-UI / --no-verify edits that bypassed this hook.
+STAGED_STANDARDS=$(git diff --cached --name-only --diff-filter=ACM -- '.claude/standards/*.md')
+if [ -n "$STAGED_STANDARDS" ]; then
+  echo "📚 Auto-ingesting changed standards into brik-rag..."
+  if ! scripts/run-standards-ingest.sh $STAGED_STANDARDS; then
+    echo ""
+    echo "   Standards ingest failed. Resolve the error above before committing."
+    exit 1
+  fi
+  git add scripts/.standards-hashes
+fi
+
 # ── Anti-slop CRITICAL check ──
 # Blocks commits that introduce silent bugs on staged files:
 #   - empty catch blocks

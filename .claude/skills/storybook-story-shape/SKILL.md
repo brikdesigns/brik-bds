@@ -49,7 +49,7 @@ brik-rag query "sidebar taxonomy components subcategory" --workflow-type storybo
 brik-rag query "storybook 9 imports framework package" --workflow-type storybook-story-shape --top-k 3
 ```
 
-Parse the JSON output, apply the relevant rules to the edit. If the query returns no results, the standard has not been ingested — run `brik-bds/scripts/ingest-storybook-story-shape-standard.sh` once, then retry.
+Parse the JSON output, apply the relevant rules to the edit. If the query returns no results, the standard has not been ingested — run `brik-bds/scripts/run-standards-ingest.sh --all` once to bootstrap, then retry.
 
 ## If you get a conflict between the standard and existing content
 
@@ -57,4 +57,4 @@ The standard is canon. Existing `*.stories.tsx` files that violate it are legacy
 
 ## How to update the standard itself
 
-Edit `brik-bds/.claude/standards/storybook-story-shape.md`, bump `last-verified`, re-run `scripts/ingest-storybook-story-shape-standard.sh`. The skill picks up the new content on the next retrieval — no skill file change needed.
+Edit `brik-bds/.claude/standards/storybook-story-shape.md`, bump `last-verified`, then commit — the pre-commit hook auto-ingests changed standards into brik-rag (brik-bds#744). The skill picks up the new content on the next retrieval; no skill file change needed.

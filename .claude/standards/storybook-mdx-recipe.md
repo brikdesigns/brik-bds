@@ -253,9 +253,9 @@ See [ADR-007 §Narrative MDX migration disposition](../../docs/adrs/ADR-007-stor
 ## When this standard updates
 
 1. Edit this file (the source of truth)
-2. Re-run `scripts/ingest-storybook-mdx-recipe-standard.sh` to push to brik-rag
-3. Bump `last-verified` in frontmatter
+2. Bump `last-verified` in frontmatter
+3. Stage + commit — the pre-commit hook auto-ingests changed standards into brik-rag and updates `scripts/.standards-hashes` (brik-bds#744). CI verifies the hash matches on every PR.
 4. **If the change is material** (new required section, change in section order, change to acceptance criteria): also amend [ADR-007](../../docs/adrs/ADR-007-storybook-page-recipe.md) and update `scripts/lint-storybook-recipe.js`
-5. **If the change is minor wording**: just this file + ingestion script
+5. **If the change is minor wording**: just this file
 
 The skill auto-retrieves on `*.mdx` edits — no other propagation needed.

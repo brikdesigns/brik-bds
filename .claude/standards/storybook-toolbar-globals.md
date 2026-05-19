@@ -121,14 +121,14 @@ Stories MAY read `context.globals.*` if they need to adapt their render to the c
 3. If a *third-party* addon is needed (not built into Storybook core), register it in `.storybook/main.ts` `addons` array
 4. Add a row to the "Wired today" table in this file
 5. Bump `last-verified` in frontmatter
-6. Re-run `scripts/ingest-storybook-toolbar-globals-standard.sh`
+6. Stage + commit — the pre-commit hook auto-ingests changed standards into brik-rag (brik-bds#744)
 7. Update ADR-010 only if the rule itself changes — adding a wired axis doesn't require an ADR amendment
 
 ## When this standard updates
 
 1. Edit this file (the source of truth)
-2. Re-run `scripts/ingest-storybook-toolbar-globals-standard.sh` to push to brik-rag
-3. Bump `last-verified` in frontmatter
+2. Bump `last-verified` in frontmatter
+3. Stage + commit — the pre-commit hook auto-ingests changed standards into brik-rag and updates `scripts/.standards-hashes` (brik-bds#744). CI verifies the hash matches on every PR.
 4. Note the change in the PR description
 
 The skill auto-retrieves on `.storybook/preview.tsx` and `.storybook/main.ts` edits — no other propagation needed.
