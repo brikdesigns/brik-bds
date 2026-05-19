@@ -91,29 +91,6 @@ export const colorAnnotationAnnotationBlue: string;
 export const colorAnnotationAnnotationLightPink: string;
 export const colorAnnotationAnnotationLightPurple: string;
 export const colorAnnotationAnnotationLightBlue: string;
-export const themeBlueBlueDark: string;
-export const themeBlueBlueLighter: string;
-export const themeBlueBlueLightest: string;
-export const themeBlueGreen: string;
-export const themeBlueBlueLight: string;
-export const themeBrikPoppyRed: string;
-export const themeBrikTan: string;
-export const themeBrikBlack: string;
-export const themeBrikYellow: string;
-export const themeBrikOrange: string;
-export const themeBrikGreen: string;
-export const themeBrikBlue: string;
-export const themeBrikPurple: string;
-/** Brand primary accent — override per-theme to set the main brand color */
-export const brandPrimary: string;
-/** Brand secondary — supporting surface/accent color */
-export const brandSecondary: string;
-/** Brand tertiary — subtle/lightest accent */
-export const brandTertiary: string;
-/** Brand accent — contrasting highlight color */
-export const brandAccent: string;
-/** Brand dark — deep/dark variant */
-export const brandDark: string;
 export const fontWeightBold: string;
 export const fontWeightSemiBold: string;
 export const fontWeightMedium: string;
