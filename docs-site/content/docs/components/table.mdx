@@ -5,7 +5,7 @@ description: Data table with composable subcomponents. Sorting, selection, strip
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Table is a composable data-display primitive. The container plus six subcomponents (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`) handle the structural HTML; the consumer composes cells with whatever content the row needs — text, badges, links, action buttons.
+Table is a composable data-display primitive. The container plus seven subcomponents (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableActionsCell`, `TableSubheader`) handle the structural HTML; the consumer composes cells with whatever content the row needs — text, badges, links, action buttons.
 
 ## Use it for
 
@@ -19,7 +19,15 @@ For card-like rows where each entry is its own self-contained block, use [CardLi
 ## Import
 
 ```tsx
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@brikdesigns/bds';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableActionsCell,
+} from '@brikdesigns/bds';
 ```
 
 ## Variants
@@ -67,47 +75,71 @@ Alternating row backgrounds for readability on dense tables.
 </TableRow>
 ```
 
-## Cell pattern standards
+## Cell-level interactivity (read/edit canon)
 
-These patterns recur often enough to standardize. Don't reach for raw `<a>` or `<button>` inside a TableCell — use the BDS components below.
+Tables host **three classes of click target — no others.** This is the
+canon locked in [portal#837 — Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
+Don't reach for raw `<a>` or `<button>` — use the BDS components below.
 
-### Action buttons
+| Cell class | Affordance | Pattern |
+| --- | --- | --- |
+| **Identifier (Name)** | `<TextLink size="small">` opening the **read sheet** for that row (or navigating to the read page when the table has no sheet, e.g. `customer_stories`, `blog_posts`) | Click target |
+| **Foreign-key reference** | `<TextLink size="small">` opening the **read sheet of the referenced entity** (Service Line in a Services row, Service in an Offerings row, Company in admin rows) | Click target |
+| **Status / Public / Featured (read-only)** | `<Badge>` or plain text | Not interactive |
+| **Actions** | `<TableActionsCell>` with `[View][Edit][⋯]` icon buttons in `size="sm"` | Click targets |
 
-Use **`size="sm"`** for all buttons inside cells.
+<Callout type="warn" title="Forbidden — whole-row click">
+  Never bind `onClick` to `<TableRow>`. It violates table cell semantics,
+  breaks screen-reader expectations, and conflicts with cell-level
+  affordances. Move the handler down to the appropriate cell — Name and
+  FK cells become `<TextLink>`s; trailing actions live in
+  `<TableActionsCell>`.
+</Callout>
+
+### TableActionsCell
+
+The right-aligned trailing actions column. Owns three things — and
+nothing else: alignment (canonical `right`, optional `center` for
+symmetric tables), shrink-to-content width, and the `--gap-sm` rhythm
+between buttons. Carries `aria-label="Actions"` automatically.
 
 ```tsx
-{/* Text button */}
-<Button variant="primary" size="sm">View</Button>
-
-{/* Icon buttons — always IconButton, never raw <button> */}
-<IconButton variant="primary" size="sm" icon={<EditIcon />} label="Edit" />
-<IconButton variant="danger" size="sm" icon={<TrashIcon />} label="Delete" />
+<TableActionsCell>
+  <Button variant="primary" size="sm" icon={<EyeIcon />} label="View" onClick={openSheet} />
+  <Button variant="primary" size="sm" icon={<PenIcon />} label="Edit" onClick={navigateEdit} />
+  {/* Optional overflow for tertiary actions (Duplicate, Archive, Delete) */}
+  <Button variant="ghost" size="sm" icon={<EllipsisIcon />} label="More" onClick={openMenu} />
+</TableActionsCell>
 ```
 
-Common icon-button variants for table actions:
+Common icon-button variants:
 
 | Variant | Use |
 |---|---|
-| `primary` | Primary action (edit, open) |
+| `primary` | Primary action (view, edit, open) |
 | `secondary` | Neutral (download, copy) |
 | `ghost` | Low emphasis (overflow menu) |
-| `danger` | Destructive (delete, remove) |
+| `destructive` | Destructive (delete, remove) — use sparingly in-row; prefer the overflow menu |
 
-### Text links
+### Text links (Name + FK cells)
 
-Use **`<TextLink size="small">`** for in-cell navigation. Never use raw `<a>` or full-size text links.
+Use **`<TextLink size="small">`** for the Name cell and any FK cell. Never use raw `<a>` or full-size text links.
 
 ```tsx
-<TextLink href="/profile/123" size="small">View profile</TextLink>
+{/* Name cell — opens the row's read sheet */}
+<TextLink size="small" onClick={() => openSheet(service.id)}>
+  {service.name}
+</TextLink>
 
-<TextLink href="#" size="small" iconAfter={<ExternalLinkIcon />}>
-  Open
+{/* FK cell — opens the related entity's read sheet */}
+<TextLink size="small" onClick={() => openSheet(service.serviceLineId, 'service-line')}>
+  {service.serviceLine}
 </TextLink>
 ```
 
 **Text link vs button:**
 
-- **TextLink** — navigation that takes you somewhere (View profile, Open document)
+- **TextLink** — navigation that takes you somewhere (open read sheet, navigate to profile)
 - **Button** — actions that change state (Approve, Assign, Archive)
 
 ### Tooltip indicators
@@ -165,38 +197,48 @@ Plus standard `<table>` HTML attributes.
 |---|---|---|
 | `TableHeader` | `<thead>` | — |
 | `TableBody` | `<tbody>` | — |
-| `TableRow` | `<tr>` | `selected: boolean` |
+| `TableRow` | `<tr>` | `selected: boolean` — **never `onClick`** ([see callout](#cell-level-interactivity-readedit-canon)) |
 | `TableHead` | `<th>` | `sortable: boolean`, `sortDirection: 'asc' \| 'desc'` |
 | `TableCell` | `<td>` | — |
+| `TableActionsCell` | `<td>` | `align: 'right' \| 'center'` — owns the trailing `[View][Edit][⋯]` cluster |
 
 All subcomponents accept their respective HTML attributes.
 
 ## Usage
 
 ```tsx
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@brikdesigns/bds';
-import { Badge, Button, IconButton, TextLink } from '@brikdesigns/bds';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead,
+  TableCell, TableActionsCell,
+} from '@brikdesigns/bds';
+import { Badge, Button, TextLink } from '@brikdesigns/bds';
 
 <Table striped size="comfortable">
   <TableHeader>
     <TableRow>
       <TableHead sortable sortDirection="asc">Name</TableHead>
-      <TableHead>Email</TableHead>
+      <TableHead>Service line</TableHead>
       <TableHead>Status</TableHead>
-      <TableHead>Profile</TableHead>
       <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
     </TableRow>
   </TableHeader>
   <TableBody>
     <TableRow>
-      <TableCell>Alice Chen</TableCell>
-      <TableCell>alice@example.com</TableCell>
-      <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
-      <TableCell><TextLink href="#" size="small">View profile</TextLink></TableCell>
-      <TableCell style={{ textAlign: 'right' }}>
-        <IconButton variant="primary" size="sm" icon={<EditIcon />} label="Edit" />
-        <IconButton variant="danger" size="sm" icon={<TrashIcon />} label="Delete" />
+      <TableCell>
+        <TextLink size="small" onClick={() => openSheet(service.id)}>
+          {service.name}
+        </TextLink>
       </TableCell>
+      <TableCell>
+        <TextLink size="small" onClick={() => openSheet(service.serviceLineId, 'service-line')}>
+          {service.serviceLine}
+        </TextLink>
+      </TableCell>
+      <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
+      <TableActionsCell>
+        <Button variant="primary" size="sm" icon={<EyeIcon />} label="View" onClick={() => openSheet(service.id)} />
+        <Button variant="primary" size="sm" icon={<PenIcon />} label="Edit" onClick={() => navigateEdit(service.id)} />
+      </TableActionsCell>
     </TableRow>
   </TableBody>
 </Table>
