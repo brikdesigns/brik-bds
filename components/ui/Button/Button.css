@@ -53,7 +53,7 @@
  */
 
 .bds-button--tiny {
-  height: 24px;
+  height: var(--size-600);
   padding-inline: var(--padding-tiny);
   font-size: var(--label-xs);
   gap: var(--gap-xs);
@@ -61,25 +61,25 @@
 }
 
 .bds-button--sm {
-  height: 32px;
+  height: var(--size-800);
   padding-inline: var(--padding-sm);
   font-size: var(--label-sm);
 }
 
 .bds-button--md {
-  height: 40px;
+  height: var(--size-1000);
   padding-inline: var(--padding-md);
   font-size: var(--label-md);
 }
 
 .bds-button--lg {
-  height: 48px;
+  height: var(--size-1200);
   padding-inline: var(--padding-md);
   font-size: var(--label-lg);
 }
 
 .bds-button--xl {
-  height: 56px;
+  height: var(--size-1400);
   padding-inline: var(--padding-lg);
   font-size: var(--label-xl);
 }
@@ -315,8 +315,8 @@
 
 .bds-button__spinner-icon {
   display: inline-block;
-  width: 16px;  /* md default — scaled per size below */
-  height: 16px;
+  width: var(--icon-sm);  /* md default (16px) — scaled per size below */
+  height: var(--icon-sm);
   border-radius: 50%;
   border-width: var(--border-width-lg);
   border-style: solid;
@@ -328,13 +328,13 @@
 
 /* Size-specific spinner scale — mirrors IconButton icon scale (tiny=12, sm=14, md=16, lg=20, xl=24) */
 .bds-button--tiny .bds-button__spinner-icon {
-  width: 12px;
-  height: 12px;
+  width: var(--size-300);   /* 12px */
+  height: var(--size-300);
 }
 
 .bds-button--sm .bds-button__spinner-icon {
-  width: 14px;
-  height: 14px;
+  width: var(--icon-xs);    /* 14px */
+  height: var(--icon-xs);
 }
 
 .bds-button--lg .bds-button__spinner-icon {
@@ -343,8 +343,8 @@
 }
 
 .bds-button--xl .bds-button__spinner-icon {
-  width: 24px;
-  height: 24px;
+  width: var(--size-600);   /* 24px */
+  height: var(--size-600);
 }
 
 /* Icon buttons: spinner scales with the button's font-size (matches icon 1em × 1em) */
@@ -366,34 +366,34 @@
 .bds-icon-button {
   padding: 0;
   gap: 0;
-  width: 40px;   /* md default */
-  height: 40px;
+  width: var(--size-1000);   /* md default (40px) */
+  height: var(--size-1000);
   flex-shrink: 0;
 }
 
 .bds-icon-button--tiny {
-  width: 24px;
-  height: 24px;
+  width: var(--size-600);    /* 24px */
+  height: var(--size-600);
 }
 
 .bds-icon-button--sm {
-  width: 32px;
-  height: 32px;
+  width: var(--size-800);    /* 32px */
+  height: var(--size-800);
 }
 
 .bds-icon-button--md {
-  width: 40px;
-  height: 40px;
+  width: var(--size-1000);   /* 40px */
+  height: var(--size-1000);
 }
 
 .bds-icon-button--lg {
-  width: 48px;
-  height: 48px;
+  width: var(--size-1200);   /* 48px */
+  height: var(--size-1200);
 }
 
 .bds-icon-button--xl {
-  width: 56px;
-  height: 56px;
+  width: var(--size-1400);   /* 56px */
+  height: var(--size-1400);
 }
 
 .bds-icon-button__icon {
@@ -402,15 +402,15 @@
   justify-content: center;
   width: 1em;
   height: 1em;
-  font-size: 16px;  /* md default */
+  font-size: var(--icon-sm);   /* md default (16px) */
 }
 
 .bds-icon-button--tiny .bds-icon-button__icon {
-  font-size: 12px;
+  font-size: var(--size-300);  /* 12px — no matching icon token at this size */
 }
 
 .bds-icon-button--sm .bds-icon-button__icon {
-  font-size: 16px;
+  font-size: var(--icon-sm);   /* 16px */
 }
 
 .bds-icon-button--lg .bds-icon-button__icon {
@@ -418,7 +418,7 @@
 }
 
 .bds-icon-button--xl .bds-icon-button__icon {
-  font-size: 24px;
+  font-size: var(--size-600);  /* 24px — no matching icon token at this size */
 }
 
 }
