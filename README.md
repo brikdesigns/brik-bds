@@ -77,12 +77,13 @@ import '@brikdesigns/bds/styles.css';
 ```bash
 git clone https://github.com/brikdesigns/brik-bds.git
 cd brik-bds
-npm install
-./scripts/install-hooks.sh   # wires up gitleaks pre-commit (run once per clone)
+npm install                  # auto-installs Husky hooks via 'prepare' script
 npm run storybook            # http://localhost:6006
 ```
 
-`install-hooks.sh` symlinks the gitleaks pre-commit scanner into `.git/hooks/pre-commit`. Requires `brew install gitleaks`. brik-bds is a public repo — GitHub's server-side push protection is also enabled, but the pre-commit hook catches issues before the push and is the first line of defense.
+Husky manages git hooks (`.husky/pre-commit` runs gitleaks against the staged diff using the Brik-extended ruleset in `.gitleaks.toml`). Setup is automatic — `npm install` invokes the `prepare` script which configures Husky. Requires `brew install gitleaks` on PATH (the hook gracefully skips if gitleaks isn't installed, but you'll want it for actual coverage).
+
+brik-bds is a public repo — GitHub's server-side push protection is also enabled, and CI runs gitleaks independently on every PR (`.github/workflows/gitleaks.yml`, blocks on findings). The local Husky hook is the first line of defense; CI is the airtight gate.
 
 ## Development workflows
 
