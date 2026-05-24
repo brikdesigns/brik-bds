@@ -1,11 +1,20 @@
 #!/usr/bin/env node
 /**
- * Sync Figma variables into tokens-studio.json.
+ * Sync Figma variables into a per-Library token file.
  *
  * Reads the JSON dump produced by `bun scripts/pull-variables.js <channel-id>`
  * (the dev plugin + WebSocket relay pipeline — the only reliable path on a
- * Pro plan) and patches `design-tokens/tokens-studio.json` so the next
+ * Pro plan) and patches the appropriate Library JSON so the next merge +
  * Style Dictionary build emits the new values.
+ *
+ * Target file is controlled by --library:
+ *   --library=foundations          → design-tokens/foundations.json
+ *   --library=brand-kit            → design-tokens/brand-kits/brik.json
+ *   --library=brand-kits/<slug>    → design-tokens/brand-kits/<slug>.json
+ *   (omitted)                      → design-tokens/tokens-studio.json (legacy)
+ *
+ * After patching a Library file, the merge step runs automatically to
+ * regenerate design-tokens/tokens-studio.json (unless --no-merge is passed).
  *
  * Two input shapes are accepted:
  *
@@ -22,8 +31,7 @@
  *
  * For shape 1 (the supported pipeline):
  *   - Each variable is routed into the `{collection}/{modeName}` top-level
- *     set in tokens-studio.json (e.g. `color/light`, `color/dark`,
- *     `border-radius/soft`, `primitives/value`).
+ *     set in the Library file (e.g. `color/light`, `border-radius/soft`).
  *   - Alias values are resolved via an id→name map built from the dump and
  *     written as Tokens Studio reference syntax: `{a.b.c}`.
  *   - Every mode in `valuesByMode` is written; we never collapse to modes[0].
@@ -32,11 +40,17 @@
  *     description, so we never wipe an existing one).
  *
  * Usage:
- *   node scripts/sync-figma-mcp.js <pull-output.json> [--dry-run] [--build]
+ *   node scripts/sync-figma-mcp.js <pull-output.json> [--library=<lib>] [--dry-run] [--build] [--no-merge]
  *
  * Flags:
- *   --dry-run   Show what would change without writing
- *   --build     Run `npm run build:all-tokens` after patching
+ *   --library=foundations       Target design-tokens/foundations.json
+ *   --library=brand-kit         Target design-tokens/brand-kits/brik.json
+ *   --library=brand-kits/<slug> Target design-tokens/brand-kits/<slug>.json
+ *   --dry-run                   Show what would change without writing
+ *   --build                     Run `npm run build:all-tokens` after patching
+ *   --no-merge                  Skip the auto-merge step (only useful when
+ *                               patching multiple libraries in sequence — the
+ *                               caller runs merge-tokens-studio.js itself)
  *
  * Zero dependencies — Node.js stdlib only.
  */
@@ -45,17 +59,38 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const TOKENS_FILE = path.join(__dirname, '../design-tokens/tokens-studio.json');
-
 // ─── Parse CLI args ──────────────────────────────────────────────
 
 const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
 const runBuild = args.includes('--build');
-const inputFile = args.find(a => !a.startsWith('--'));
+const noMerge = args.includes('--no-merge');
+const libraryArg = args.find((a) => a.startsWith('--library='));
+const inputFile = args.find((a) => !a.startsWith('--'));
+
+// Resolve target Library file from --library flag.
+function resolveLibraryFile(librarySpec) {
+  if (!librarySpec) return null;
+  const spec = librarySpec.replace(/^--library=/, '');
+  if (spec === 'foundations') {
+    return path.join(__dirname, '../design-tokens/foundations.json');
+  }
+  if (spec === 'brand-kit') {
+    return path.join(__dirname, '../design-tokens/brand-kits/brik.json');
+  }
+  if (spec.startsWith('brand-kits/')) {
+    return path.join(__dirname, `../design-tokens/${spec}.json`);
+  }
+  console.error(`ERROR: Unknown --library value "${spec}".`);
+  console.error('  Valid values: foundations | brand-kit | brand-kits/<slug>');
+  process.exit(1);
+}
+
+const TOKENS_FILE = resolveLibraryFile(libraryArg)
+  ?? path.join(__dirname, '../design-tokens/tokens-studio.json');
 
 if (!inputFile) {
-  console.error('Usage: node scripts/sync-figma-mcp.js <pull-output.json> [--dry-run] [--build]');
+  console.error('Usage: node scripts/sync-figma-mcp.js <pull-output.json> [--library=<lib>] [--dry-run] [--build]');
   console.error('  <pull-output.json>  JSON file produced by `bun scripts/pull-variables.js`');
   process.exit(1);
 }
@@ -471,7 +506,7 @@ if (changes.perSet.size > 0) {
 }
 
 if (changes.totalUpdated === 0 && changes.totalAdded === 0) {
-  console.log('No changes detected — tokens-studio.json is up to date.');
+  console.log('No changes detected — Library file is up to date.');
   if (changes.totalSkipped > 0) console.log(`(${changes.totalSkipped} value(s) skipped — see warnings above.)`);
   process.exit(0);
 }
@@ -483,6 +518,22 @@ if (dryRun) {
 } else {
   fs.writeFileSync(TOKENS_FILE, JSON.stringify(tokensStudio, null, 2) + '\n', 'utf8');
   console.log(`\n✅ Wrote ${TOKENS_FILE}`);
+
+  // After patching a Library file, regenerate the composed tokens-studio.json.
+  // Skip only when --no-merge is passed (caller manages the merge itself).
+  const isLibraryFile = libraryArg != null;
+  if (isLibraryFile && !noMerge) {
+    const mergeScript = path.join(__dirname, 'merge-tokens-studio.js');
+    try {
+      execSync(`node "${mergeScript}"`, {
+        cwd: path.join(__dirname, '..'),
+        stdio: 'inherit',
+      });
+    } catch (e) {
+      console.error('\n❌ merge-tokens-studio.js failed:', e.message);
+      process.exit(1);
+    }
+  }
 }
 
 // ─── Build ───────────────────────────────────────────────────────
