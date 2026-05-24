@@ -476,6 +476,45 @@ export const semanticSpace = {
   "input": "var(--space-200)"
 } as const;
 
+/**
+ * Breakpoint values for use in CSS @media queries.
+ * CSS custom properties (--breakpoint-*) cannot be used inside @media rules —
+ * use these TS constants instead.
+ *
+ * @example
+ * import { breakpoints } from '@bds-tokens';
+ * const isMobile = window.matchMedia(`(max-width: ${breakpoints.tablet})`).matches;
+ *
+ * @example (styled-components / emotion)
+ * const styles = css`
+ *   @media (min-width: ${breakpoints.desktop}) { ... }
+ * `;
+ */
+export const breakpoints = {
+  mobile:  '320px',
+  tablet:  '768px',
+  desktop: '1024px',
+  wide:    '1280px',
+  wider:   '1440px',
+} as const;
+
+export type Breakpoint = keyof typeof breakpoints;
+
+/**
+ * Content column max-widths.
+ * Use with `max-width` on container elements to constrain readable content width.
+ * Maps to the --content-width-* CSS custom properties in gap-fills.css.
+ */
+export const contentWidths = {
+  narrow:  '640px',
+  default: '800px',
+  wide:    '1024px',
+  xl:      '1280px',
+  full:    '100%',
+} as const;
+
+export type ContentWidth = keyof typeof contentWidths;
+
 // Theme registry — consumer entry point for adding client themes to the
 // Contrast Compliance audit (and future multi-theme probes). See
 // ./theme-registry for usage.

@@ -300,6 +300,24 @@
   --text-service-back-office-on-light: var(--color-orange-darkest);
   --text-service-back-office-on-dark: var(--color-orange-lightest);
 
+  /* ── Layout width tokens ──
+     Content column max-widths — use with `max-width` on container elements.
+     These are NOT screen breakpoints; they constrain content within a viewport.
+     For media queries, use the `breakpoints` constant from @bds-tokens (index.ts) —
+     CSS custom properties cannot be used inside @media rules. */
+  --content-width-narrow:   640px;  /* prose, reading columns, focused forms */
+  --content-width-default:  800px;  /* standard body sections */
+  --content-width-wide:    1024px;  /* feature sections, grids */
+  --content-width-xl:      1280px;  /* hero bands, wide layouts */
+  --content-width-full:     100%;   /* full-bleed (use sparingly — prefer explicit widths) */
+
+  /* Breakpoint reference values — supplement figma-tokens.css --breakpoint-mobile/tablet/web.
+     These CSS vars are for Figma/documentation reference only.
+     Use `breakpoints` TS export from @bds-tokens for actual @media query values. */
+  --breakpoint-desktop:    1024px;
+  --breakpoint-wide:       1280px;
+  --breakpoint-wider:      1440px;
+
   /* ── Border-width semantic aliases (mode-catalog names) ──
      The borderWidth mode catalog (websites/shared/MODE-ARCHITECTURE.md) names
      picks "thin / standard / bold". Without aliases at these names, client
