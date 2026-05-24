@@ -5,47 +5,81 @@ description: Dimensional constraints for containers, breakpoints, and elements.
 
 import { sizeScale } from '@bds-tokens';
 
-Size tokens define dimensional constraints — how big things can be, where the layout breaks, what hero heights to clamp.
+Size tokens define dimensional constraints — how big things can be, where the layout breaks, and how wide content columns sit within a viewport.
 
 ## Size scale (primitives)
 
 <SpacingScale scale={sizeScale} prefix="--size" />
 
-## Semantic size tokens
+## Content widths
 
-### Container sizes
+Max-width values for content containers. Apply to wrapper elements with `max-width` to prevent lines from growing too wide at large viewport sizes.
 
-Width constraints for content containers. Pair with `max-width` to bound page-level content.
+| Token | CSS Variable | Value | Use for |
+|---|---|---|---|
+| Narrow | `--content-width-narrow` | 640px | Prose, reading columns, focused forms |
+| Default | `--content-width-default` | 800px | Standard body sections |
+| Wide | `--content-width-wide` | 1024px | Feature sections, content grids |
+| XL | `--content-width-xl` | 1280px | Hero bands, wide layouts |
+| Full | `--content-width-full` | 100% | Full-bleed (use sparingly) |
 
-| Token | CSS Variable | Value |
+```css
+.content-section {
+  max-width: var(--content-width-default);
+  margin-inline: auto;
+}
+```
+
+## Screen breakpoints
+
+BDS defines five canonical breakpoints. The CSS custom properties (`--breakpoint-*`) are provided for Figma/documentation reference. **For CSS `@media` rules, import the `breakpoints` constant from `@bds-tokens`** — CSS custom properties cannot be used inside `@media()`.
+
+| Name | CSS Variable | Value |
 |---|---|---|
-| Full width | `--container-size-full-width` | 100% |
-| Three-quarter | `--container-size-three-quarter-width` | 75% |
-| Two-third | `--container-size-two-third-width` | 66% |
-| Half | `--container-size-half-width` | 50% |
-| One-third | `--container-size-one-third-width` | 33% |
-| Quarter | `--container-size-quarter-width` | 25% |
+| Mobile | `--breakpoint-mobile` | 320px |
+| Tablet | `--breakpoint-tablet` | 768px |
+| Desktop | `--breakpoint-desktop` | 1024px |
+| Wide | `--breakpoint-wide` | 1280px |
+| Wider | `--breakpoint-wider` | 1440px |
 
-### Screen breakpoints
+<Callout type="warn">
+`--breakpoint-web` (1200px) is a legacy Figma-sourced value kept for backward compatibility. Prefer the canonical names above in new work.
+</Callout>
 
-Used in CSS media queries and responsive container sizing.
+### Using breakpoints in CSS
 
-| Token | CSS Variable | Value |
-|---|---|---|
-| Wider | `--screen-size-wider` | 1440px |
-| Wide | `--screen-size-wide` | 1280px |
-| Desktop | `--screen-size-desktop` | 1080px |
-| Tablet | `--screen-size-tablet` | 768px |
-| Mobile | `--screen-size-mobile` | 320px |
+```tsx
+import { breakpoints } from '@bds-tokens';
 
-### Hero constraints
+// In a CSS-in-JS context
+const styles = {
+  [`@media (min-width: ${breakpoints.desktop})`]: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 2fr',
+  },
+};
+```
 
-| Token | CSS Variable | Value |
-|---|---|---|
-| Max hero height | `--container-size-max-hero-height` | 100vh |
-| Max hero width | `--container-size-max-hero-width` | 100vw |
+```css
+/* In plain CSS — hardcode the value, comment the token name */
+@media (min-width: 1024px) { /* --breakpoint-desktop */
+  .sidebar-layout {
+    display: grid;
+  }
+}
+```
 
-### Element sizes
+### Using breakpoints in JavaScript
+
+```ts
+import { breakpoints } from '@bds-tokens';
+
+const isDesktop = window.matchMedia(
+  `(min-width: ${breakpoints.desktop})`
+).matches;
+```
+
+## Element sizes
 
 Semantic size tokens follow the same tiny-to-huge scale as spacing — for icons, dots, indicators.
 
