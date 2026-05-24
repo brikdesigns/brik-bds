@@ -153,6 +153,8 @@
     "deploy:prod": "npm run build-storybook && npx netlify-cli deploy --prod --dir=storybook-static",
     "sync:figma-mcp": "node scripts/sync-figma-mcp.js",
     "sync:figma-mcp:build": "node scripts/sync-figma-mcp.js --build",
+    "merge:tokens-studio": "node scripts/merge-tokens-studio.js",
+    "split:tokens-studio": "node scripts/split-tokens-studio.js",
     "populate-notion": "node scripts/populate-notion-tokens.js",
     "extract:component-inventory": "node scripts/extract-component-inventory.mjs",
     "extract:component-inventory:dry": "node scripts/extract-component-inventory.mjs --dry-run",
