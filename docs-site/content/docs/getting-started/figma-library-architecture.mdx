@@ -39,7 +39,11 @@ Both libraries flow through the same Style Dictionary pipeline, into the same `d
              ▼                                        ▼
    design-tokens/foundations.json        design-tokens/brand-kits/{slug}.json
              │                                        │
-             └────────────────┬───────────────────────┘
+             └──────────── merge-tokens-studio.js ────┘
+                              │
+                              ▼
+              design-tokens/tokens-studio.json   (composed snapshot)
+                              │
                               │ Style Dictionary
                               ▼
               tokens/figma-tokens.css            (Foundations → @layer bds-tokens)
@@ -51,30 +55,39 @@ Both libraries flow through the same Style Dictionary pipeline, into the same `d
                        dist/tokens.css           (shipped to consumers)
 ```
 
-<Callout type="warn">
-  **Current state vs target state.** Today, `design-tokens/tokens-studio.json` is a pre-separation merged snapshot that combines Foundations + Brik Brand Kit content. The multi-library pull procedure (separate JSON per library, merged at build time) is the target architecture — not yet fully wired. Tracked under brik-bds#712. Until the pull is multi-library, manual care is required when refreshing the snapshot.
-</Callout>
-
 ## Pull procedure
 
-Each library has its own channel ID in the WebSocket relay. The `start-figma-relay.sh` script runs the relay on port `3055`; the user / designer opens each Figma file with the Tokens Studio plugin and runs `pull-variables.js` per library.
+Open the Foundations and Brand Kit Figma files, start the Claude MCP plugin in each, and run:
 
 ```bash
-# 1. Start the relay (idempotent — no-op if already running)
-./scripts/start-figma-relay.sh
+# One command — pulls both Libraries, merges, and rebuilds CSS
+./scripts/figma-pull-tokens.sh \
+  --foundations=<foundations-channel-id> \
+  --brand-kit=<brand-kit-channel-id>
+```
 
-# 2. Pull each library separately (read-only)
-bun scripts/pull-variables.js <foundations-channel-id> > design-tokens/foundations.json
-bun scripts/pull-variables.js <brand-kit-channel-id>   > design-tokens/brand-kits/brik.json
+Channel IDs are persisted to `~/.figma-channels` (JSON) so you only need to pass them once per Figma session. Subsequent runs read the saved IDs:
 
-# 3. (Future: merge step lands here, replacing today's monolithic tokens-studio.json)
+```bash
+./scripts/figma-pull-tokens.sh   # uses ~/.figma-channels
+```
 
-# 4. Build CSS
+To pull a single Library without touching the other:
+
+```bash
+./scripts/figma-pull-tokens.sh --foundations=<channel-id>
+./scripts/figma-pull-tokens.sh --brand-kit=<channel-id>
+```
+
+To merge without pulling (e.g., after manually editing a Library file):
+
+```bash
+npm run merge:tokens-studio
 npm run build:all-tokens
 ```
 
 <Callout type="info">
-  Channel IDs are short, single-use tokens emitted by the Tokens Studio plugin when a Figma file is opened. They expire when the Figma session closes. **Never commit a channel ID** — it's session-scoped, not configuration.
+  Channel IDs are short, single-use tokens emitted by the Claude MCP plugin when a Figma file is opened. They expire when the Figma session closes. **Never commit a channel ID** — it's session-scoped, not configuration.
 </Callout>
 
 ## When to add a Brand Kit
