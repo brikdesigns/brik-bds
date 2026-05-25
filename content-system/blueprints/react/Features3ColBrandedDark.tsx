@@ -42,7 +42,7 @@
  *
  * @summary Dark section, 3-col grid of brand-colored cards (per-audience scope binding).
  */
-import { Card, ServiceTag, Stack, type ServiceCategory } from '../../../components';
+import { Card, ServiceTag, Stack, type ServiceLine } from '../../../components';
 
 import type { BlueprintProps } from '../astro/types';
 import './Features3ColBrandedDark.css';
@@ -117,7 +117,7 @@ export function Features3ColBrandedDark({ section }: Props) {
                           aria-hidden="true"
                         >
                           <ServiceTag
-                            category={audience as ServiceCategory}
+                            category={audience as ServiceLine}
                             variant="icon"
                             size="lg"
                             serviceName={item.title}

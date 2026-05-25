@@ -77,7 +77,7 @@ export interface BlueprintSection {
      */
     readonly href?: string;
     readonly imageUrl?: string;
-    /** ServiceCategory slug — see `ServiceTag` props in `@brikdesigns/bds`. */
+    /** ServiceLine slug — see `ServiceTag` props in `@brikdesigns/bds`. */
     readonly category?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
     readonly hasOptions?: boolean;
     /**
