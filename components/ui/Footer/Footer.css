@@ -160,9 +160,16 @@
   font-family: var(--font-family-body);
   font-size: var(--body-xs);
   font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-tight);
   margin: 0;
 }
 
+/* font-size + line-height pinned on the UL itself so its line-box matches
+ * .bds-footer__copyright. Without this, the UL inherits body's 16px and
+ * gets a 24px line-box while its <li> children (--body-xs ≈ 11.54px) sit
+ * in a 17.31px box. align-items: center on the parent keeps the bounding
+ * boxes centered, but the asymmetric line-boxes drift the text baselines
+ * — copyright ends up visibly higher than the link row. */
 .bds-footer__bottom-links {
   list-style: none;
   display: flex;
@@ -171,12 +178,15 @@
   gap: var(--gap-sm);
   padding: 0;
   margin: 0;
+  font-size: var(--body-xs);
+  line-height: var(--font-line-height-tight);
 }
 
 .bds-footer__bottom-link {
   font-family: var(--font-family-body);
   font-size: var(--body-xs);
   font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-tight);
   text-decoration: none;
   transition: opacity var(--duration-fast) var(--ease-out);
 }
@@ -188,6 +198,7 @@
 .bds-footer__bottom-sep {
   font-family: var(--font-family-body);
   font-size: var(--body-xs);
+  line-height: var(--font-line-height-tight);
   user-select: none;
 }
 
