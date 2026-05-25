@@ -118,16 +118,16 @@
 
 /* Error state */
 .bds-select--error {
-  border-color: var(--text-negative);
+  border-color: var(--border-negative);
 }
 
 .bds-select--error:hover:not(:disabled) {
-  border-color: var(--text-negative);
+  border-color: var(--border-negative);
 }
 
 .bds-select--error:focus,
 .bds-select--error:focus-visible {
-  border-color: var(--text-negative);
+  border-color: var(--border-negative);
   box-shadow: 0 0 0 1px var(--text-negative);
 }
 

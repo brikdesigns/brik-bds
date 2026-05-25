@@ -125,7 +125,7 @@
 .bds-button--danger-outline {
   background-color: transparent;
   color: var(--text-accent-red);
-  border-color: var(--text-accent-red);
+  border-color: var(--border-negative);
 }
 
 .bds-button--danger-ghost {
@@ -276,12 +276,12 @@
 .bds-button--danger-outline:focus-visible,
 .bds-button--danger-ghost:focus-visible,
 .bds-button--destructive:focus-visible {
-  outline-color: var(--text-negative);
+  outline-color: var(--border-negative);
 }
 
 /* Positive: green focus ring */
 .bds-button--positive:focus-visible {
-  outline-color: var(--text-positive);
+  outline-color: var(--border-positive);
 }
 
 /* ─── Loading State ───────────────────────────────────────────── */
