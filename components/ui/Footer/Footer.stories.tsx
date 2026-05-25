@@ -140,6 +140,19 @@ export const Variants: Story = {
         />
       </div>
 
+      <div style={{ '--bds-footer-surface': 'var(--color-grayscale-darkest)' } as React.CSSProperties}>
+        <SectionLabel>
+          Inverse + `--bds-footer-surface` override (pinned to grayscale-darkest across themes)
+        </SectionLabel>
+        <Footer
+          logo={<LogoPlaceholder />}
+          tagline="Building better digital experiences for small businesses."
+          columns={sampleColumns}
+          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
+          variant="inverse"
+        />
+      </div>
+
       <div>
         <SectionLabel>With social links</SectionLabel>
         <Footer
