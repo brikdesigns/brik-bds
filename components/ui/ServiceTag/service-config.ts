@@ -7,13 +7,6 @@
 export type ServiceLine = 'brand' | 'marketing' | 'information' | 'product' | 'service';
 
 /**
- * @deprecated Use `ServiceLine` instead. Kept as a type alias for one
- * deprecation cycle so existing consumers continue to compile; remove after
- * portal + brikdesigns have migrated.
- */
-export type ServiceCategory = ServiceLine;
-
-/**
  * Size scale shared with ServiceTag. Kept as `ServiceBadgeSize` for
  * non-breaking package-API stability; structurally identical to a future
  * `ServiceTagSize` if the dir is renamed.
