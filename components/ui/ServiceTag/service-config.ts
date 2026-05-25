@@ -4,7 +4,14 @@
  * component (removed in #572; dir renamed in #731).
  */
 
-export type ServiceCategory = 'brand' | 'marketing' | 'information' | 'product' | 'service';
+export type ServiceLine = 'brand' | 'marketing' | 'information' | 'product' | 'service';
+
+/**
+ * @deprecated Use `ServiceLine` instead. Kept as a type alias for one
+ * deprecation cycle so existing consumers continue to compile; remove after
+ * portal + brikdesigns have migrated.
+ */
+export type ServiceCategory = ServiceLine;
 
 /**
  * Size scale shared with ServiceTag. Kept as `ServiceBadgeSize` for
@@ -13,7 +20,7 @@ export type ServiceCategory = 'brand' | 'marketing' | 'information' | 'product' 
  */
 export type ServiceBadgeSize = 'sm' | 'md' | 'lg';
 
-export const categoryConfig: Record<ServiceCategory, { token: string; label: string }> = {
+export const categoryConfig: Record<ServiceLine, { token: string; label: string }> = {
   brand: { token: 'yellow', label: 'Brand' },
   marketing: { token: 'green', label: 'Marketing' },
   information: { token: 'blue', label: 'Information' },
@@ -72,7 +79,7 @@ export function normalizeServiceName(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-export function getServiceIconPath(category: ServiceCategory, serviceName: string): string {
+export function getServiceIconPath(category: ServiceLine, serviceName: string): string {
   if (serviceIconOverrides[serviceName]) {
     return `/icons/${category}/${serviceIconOverrides[serviceName]}.svg`;
   }

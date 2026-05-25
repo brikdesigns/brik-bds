@@ -22,7 +22,7 @@ import {
   Frame,
   Grid,
   ServiceTag,
-  type ServiceCategory,
+  type ServiceLine,
 } from '../../../components';
 
 import type { BlueprintProps } from '../astro/types';
@@ -46,7 +46,7 @@ export function Services3ColCardGrid({ section }: Props) {
         style={{ listStyle: 'none', margin: 0, padding: 0 }}
       >
         {section.items.map((item, idx) => {
-          const category = (item.category ?? null) as ServiceCategory | null;
+          const category = (item.category ?? null) as ServiceLine | null;
           return (
             <li
               key={`${section.sectionKey}-${idx}`}
