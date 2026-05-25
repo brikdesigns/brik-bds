@@ -5,9 +5,16 @@
  * Token reference:
  * - --surface-primary (default bg)
  * - --surface-brand-primary (brand bg)
+ * - --surface-inverse (inverse bg — default value of --bds-footer-surface)
  * - --border-secondary (borders)
  * - --padding-xl, --padding-lg, --padding-md
  * - --gap-xl, --gap-lg, --gap-md, --gap-sm
+ *
+ * Component-local custom property (per BDS lint convention: --bds-* slots
+ * are component-owned, not canonical tokens):
+ * - --bds-footer-surface — bg for variant="inverse". Defaults to
+ *   var(--surface-inverse). Override from a parent (e.g. :root) to pin
+ *   the inverse footer to a fixed color across light + dark themes.
  */
 
 /* ─── Container ───────────────────────────────────────────────── */
@@ -40,8 +47,15 @@
   background-color: var(--surface-brand-primary);
 }
 
+/* The fallback chain `var(--bds-footer-surface, var(--surface-inverse))` is
+   deliberate — declaring `--bds-footer-surface: var(--surface-inverse)` on
+   `.bds-footer` would create a local re-declaration that blocks any
+   :root-level override from inheriting (the local default wins over the
+   inherited value). Using the fallback syntax means a consumer override
+   set on `:root` (or any parent) cascades into the footer cleanly, and
+   absent any override the existing inverse behavior is preserved. */
 .bds-footer--inverse {
-  background-color: var(--surface-inverse);
+  background-color: var(--bds-footer-surface, var(--surface-inverse));
 }
 
 /* ─── Top section: logo + columns ─────────────────────────────── */
