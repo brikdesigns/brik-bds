@@ -87,6 +87,12 @@
   --icon-xl:   var(--font-size-400);
   --icon-huge: var(--font-size-500);
 
+  /* ── Icon size extensions (gap-fill — not yet in Figma; see #758) ──
+     Button tiny/xl icon sizes sit at 12px and 24px, which are not in the
+     font-size scale. These bridge to the size scale until promoted to Figma. */
+  --icon-2xs: var(--size-300);   /* 12px — Button tiny icon; between icon-tiny (~11.5px) and icon-xs (14px) */
+  --icon-2xl: var(--size-600);   /* 24px — Button xl icon; between icon-xl (~22.5px) and icon-huge (~25.3px) */
+
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --surface-nav: var(--color-grayscale-white);
   --surface-navigation: var(--color-grayscale-white); /* canonical; --surface-nav kept for backward compat */

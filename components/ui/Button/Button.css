@@ -328,8 +328,8 @@
 
 /* Size-specific spinner scale — mirrors IconButton icon scale (tiny=12, sm=14, md=16, lg=20, xl=24) */
 .bds-button--tiny .bds-button__spinner-icon {
-  width: var(--size-300);   /* 12px */
-  height: var(--size-300);
+  width: var(--icon-2xs);   /* 12px */
+  height: var(--icon-2xs);
 }
 
 .bds-button--sm .bds-button__spinner-icon {
@@ -343,8 +343,8 @@
 }
 
 .bds-button--xl .bds-button__spinner-icon {
-  width: var(--size-600);   /* 24px */
-  height: var(--size-600);
+  width: var(--icon-2xl);   /* 24px */
+  height: var(--icon-2xl);
 }
 
 /* Icon buttons: spinner scales with the button's font-size (matches icon 1em × 1em) */
@@ -406,7 +406,7 @@
 }
 
 .bds-icon-button--tiny .bds-icon-button__icon {
-  font-size: var(--size-300);  /* 12px — no matching icon token at this size */
+  font-size: var(--icon-2xs);  /* 12px */
 }
 
 .bds-icon-button--sm .bds-icon-button__icon {
@@ -418,7 +418,7 @@
 }
 
 .bds-icon-button--xl .bds-icon-button__icon {
-  font-size: var(--size-600);  /* 24px — no matching icon token at this size */
+  font-size: var(--icon-2xl);  /* 24px */
 }
 
 }
