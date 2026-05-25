@@ -4,11 +4,14 @@
  * BDS Token Validation Linter
  *
  * Validates CSS variable usage in BDS components against Style Dictionary token outputs.
- * Catches four types of violations:
+ * Catches five types of violations:
  *   1. Primitive token usage (use semantic tokens instead)
  *   2. Hardcoded CSS values (use tokens)
  *   3. Unknown tokens (typos or non-existent variables)
  *   4. Spacing values not aligned to 4-point grid (see https://design.brikdesigns.com/docs/primitives/spacing)
+ *   5. Token-family pairing mismatch — a token used in a property whose family
+ *      it doesn't belong to (e.g. background-color: var(--text-*)). See
+ *      docs/TOKEN-PR-CHECKLIST.md for the property↔family table.
  *
  * Usage:
  *   node scripts/lint-tokens.js              # full report (errors + warnings)
@@ -168,6 +171,108 @@ const LINE_ALLOWLIST = [
   'background: \'transparent\'',
   'backgroundColor: \'transparent\'',
 ];
+
+// ---------------------------------------------------------------------------
+// Token-family pairing rules (Rule 5)
+// ---------------------------------------------------------------------------
+// Each CSS property is paired with the set of token-family prefixes whose
+// values are semantically appropriate. Wrong-family usage was the failure
+// mode behind portal #512 / #553 (rolled back) and brikdesigns #99 (caught
+// in browser review).
+//
+// Custom-property declarations (e.g. `--background-inverse: var(...)`)
+// inherit the rule of the LHS prefix family — see CUSTOM_PROP_TO_RULE.
+//
+// Documented at docs/TOKEN-PR-CHECKLIST.md.
+
+const TOKEN_FAMILY_RULES = {
+  'background-color': {
+    allowed: ['--background-', '--surface-'],
+    label: 'background',
+    suggestion: 'use a --background-* or --surface-* token',
+  },
+  'background': {
+    allowed: ['--background-', '--surface-'],
+    label: 'background',
+    suggestion: 'use a --background-* or --surface-* token',
+  },
+  'color': {
+    allowed: ['--text-', '--color-'],
+    label: 'text',
+    suggestion: 'use a --text-* token or a --color-* primitive',
+  },
+  'border-color': {
+    allowed: ['--border-', '--background-'],
+    label: 'border',
+    suggestion: 'use a --border-* token (or matching --background-* for fill-style borders)',
+  },
+  'border-top-color': {
+    allowed: ['--border-', '--background-'],
+    label: 'border',
+    suggestion: 'use a --border-* token',
+  },
+  'border-bottom-color': {
+    allowed: ['--border-', '--background-'],
+    label: 'border',
+    suggestion: 'use a --border-* token',
+  },
+  'border-left-color': {
+    allowed: ['--border-', '--background-'],
+    label: 'border',
+    suggestion: 'use a --border-* token',
+  },
+  'border-right-color': {
+    allowed: ['--border-', '--background-'],
+    label: 'border',
+    suggestion: 'use a --border-* token',
+  },
+  'outline-color': {
+    allowed: ['--border-'],
+    label: 'outline',
+    suggestion: 'use a --border-* token',
+  },
+};
+
+// TSX inline-style camelCase → kebab-case for properties in TOKEN_FAMILY_RULES.
+const TSX_STYLE_PROP_TO_CSS = {
+  backgroundColor: 'background-color',
+  background: 'background',
+  color: 'color',
+  borderColor: 'border-color',
+  borderTopColor: 'border-top-color',
+  borderBottomColor: 'border-bottom-color',
+  borderLeftColor: 'border-left-color',
+  borderRightColor: 'border-right-color',
+  outlineColor: 'outline-color',
+};
+
+// CSS custom-property declaration prefixes that inherit a TOKEN_FAMILY_RULES
+// allowlist. Lets the rule fire on `--background-foo: var(--text-bar)` too.
+const CUSTOM_PROP_TO_RULE = {
+  '--background-': 'background-color',
+  '--surface-': 'background-color',
+  '--text-': 'color',
+  '--border-': 'border-color',
+};
+
+// Token prefixes the family-pairing rule recognises. Values pointing to other
+// prefixes (e.g. --bds-*, --font-*, --space-*) are out of scope.
+const FAMILY_PREFIXES_FOR_VALUES = [
+  '--background-', '--surface-', '--text-', '--border-', '--color-',
+];
+
+function classifyTokenFamily(tokenName) {
+  for (const prefix of FAMILY_PREFIXES_FOR_VALUES) {
+    if (tokenName.startsWith(prefix)) return prefix;
+  }
+  return null;
+}
+
+function tokenFamilyMatchesAllowlist(tokenName, allowed) {
+  const family = classifyTokenFamily(tokenName);
+  if (family === null) return true; // unknown family — out of scope; Rule 3 handles unknown tokens
+  return allowed.includes(family);
+}
 
 // ---------------------------------------------------------------------------
 // Token parser — reads Webflow CSS and extracts all valid custom properties
@@ -560,6 +665,85 @@ function checkGridCompliance(line, lineNum, file) {
   return violations;
 }
 
+/**
+ * Rule 5: Token-family pairing
+ *
+ * Flags `var(--TOKEN)` uses where the token's family doesn't match the
+ * property's allowlist. Three usage shapes are checked:
+ *
+ *   • CSS property in a rule body:        background-color: var(--text-foo);
+ *   • CSS custom-property declaration:    --background-inverse: var(--text-foo);
+ *   • TSX inline-style object:            style={{ backgroundColor: 'var(--text-foo)' }}
+ *
+ * Skips lines with `bds-lint-ignore` (escape hatch for cross-family aliases
+ * that are intentional — e.g. hue-sharing across families).
+ */
+function checkTokenFamilyPairing(line, lineNum, file, isComponent) {
+  const violations = [];
+
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) {
+    return violations;
+  }
+  if (line.includes('bds-lint-ignore')) return violations;
+
+  const isTsx = /\.tsx?$/.test(file);
+  const isCss = /\.css$/.test(file);
+
+  function pushViolation(prop, tokenName, ruleKey, column) {
+    const rule = TOKEN_FAMILY_RULES[ruleKey];
+    if (!rule) return;
+    if (tokenFamilyMatchesAllowlist(tokenName, rule.allowed)) return;
+    violations.push({
+      rule: 'token-family',
+      severity: isComponent ? 'error' : 'warning',
+      file,
+      line: lineNum,
+      column: column + 1,
+      message: `"${prop}: var(${tokenName})" — ${classifyTokenFamily(tokenName)?.slice(2, -1) || 'unknown'}-family token in ${rule.label} slot`,
+      suggestion: rule.suggestion,
+    });
+  }
+
+  if (isCss) {
+    // Shape A: standard CSS property `<prop>: var(--token)`
+    // Must match an exact key in TOKEN_FAMILY_RULES (so `border-color`
+    // matches but `border` shorthand doesn't — shorthands bundle width/style
+    // and are out of scope).
+    const propRegex = /(^|[\s;{])(background-color|background|color|border-color|border-top-color|border-bottom-color|border-left-color|border-right-color|outline-color)\s*:\s*var\((--[\w-]+)(?:\s*,[^)]*)?\)/g;
+    let m;
+    while ((m = propRegex.exec(line)) !== null) {
+      pushViolation(m[2], m[3], m[2], m.index + m[1].length);
+    }
+
+    // Shape B: custom-property declaration `<--family-...>: var(--token)`
+    // Only LHS prefixes in CUSTOM_PROP_TO_RULE trigger the rule. Pure
+    // numeric-suffix or skipped prefixes (--bds-*, --font-*, etc.) are
+    // out of scope.
+    const declRegex = /(^|[\s;{])(--[\w-]+)\s*:\s*var\((--[\w-]+)(?:\s*,[^)]*)?\)/g;
+    while ((m = declRegex.exec(line)) !== null) {
+      const lhs = m[2];
+      if (lhs.startsWith('--bds-')) continue;
+      const ruleKey = Object.entries(CUSTOM_PROP_TO_RULE).find(([prefix]) => lhs.startsWith(prefix))?.[1];
+      if (!ruleKey) continue;
+      pushViolation(lhs, m[3], ruleKey, m.index + m[1].length);
+    }
+  }
+
+  if (isTsx) {
+    // Shape C: TSX inline-style object property `<camelProp>: 'var(--token)'`
+    const tsxRegex = /\b(backgroundColor|background|color|borderColor|borderTopColor|borderBottomColor|borderLeftColor|borderRightColor|outlineColor)\s*:\s*['"]var\((--[\w-]+)(?:\s*,[^)]*)?\)['"]/g;
+    let m;
+    while ((m = tsxRegex.exec(line)) !== null) {
+      const cssProp = TSX_STYLE_PROP_TO_CSS[m[1]];
+      if (!cssProp) continue;
+      pushViolation(m[1], m[2], cssProp, m.index);
+    }
+  }
+
+  return violations;
+}
+
 // ---------------------------------------------------------------------------
 // Reporter
 // ---------------------------------------------------------------------------
@@ -657,6 +841,7 @@ function main() {
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, isComponent));
       allViolations.push(...checkHardcodedValues(line, lineNum, file, isComponent));
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, isComponent));
+      allViolations.push(...checkTokenFamilyPairing(line, lineNum, file, isComponent));
 
       // Rule 4: grid compliance (opt-in via --check-grid)
       if (checkGrid) {
@@ -678,6 +863,8 @@ function main() {
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, true));
       // Rule 3: unknown token references in CSS (catches stale var() after renames)
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
+      // Rule 5: token-family pairing
+      allViolations.push(...checkTokenFamilyPairing(line, lineNum, file, true));
 
       if (checkGrid) {
         allViolations.push(...checkGridCompliance(line, lineNum, file));

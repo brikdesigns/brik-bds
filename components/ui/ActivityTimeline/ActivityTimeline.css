@@ -66,7 +66,7 @@
   width: 2px; /* bds-lint-ignore — hairline connector */
   flex: 1;
   min-height: 20px; /* bds-lint-ignore — minimum connector height */
-  background-color: var(--border-muted);
+  background-color: var(--border-muted); /* bds-lint-ignore token-family — hairline connector rendered as 1px background; see #777 */
 }
 
 /* ─── Content ────────────────────────────────────────────────── */
