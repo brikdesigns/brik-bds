@@ -93,6 +93,6 @@
   gap: var(--gap-md);
   font-size: var(--heading-lg);
   line-height: var(--font-line-height-snug);
-  color: var(--background-warning);
+  color: var(--text-warning);
 }
 }

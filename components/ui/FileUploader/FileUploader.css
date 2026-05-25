@@ -52,7 +52,7 @@
 }
 
 .bds-file-uploader__dropzone--error {
-  border-color: var(--text-negative);
+  border-color: var(--border-negative);
 }
 
 /* ─── Icon ────────────────────────────────────────────────────── */

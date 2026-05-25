@@ -67,11 +67,11 @@
 }
 
 .bds-time-picker__trigger--error {
-  border-color: var(--color-system-red);
+  border-color: var(--border-negative);
 }
 
 .bds-time-picker__trigger--error:hover:not(:disabled) {
-  border-color: var(--color-system-red);
+  border-color: var(--border-negative);
 }
 
 .bds-time-picker__trigger--disabled {

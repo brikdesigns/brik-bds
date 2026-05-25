@@ -21,11 +21,51 @@ Never combine theme changes + component fixes + submodule sync in a single PR. E
 
 | Check | What it catches |
 |-------|----------------|
-| `lint-tokens.js --errors-only` | Primitive tokens in component CSS, hardcoded values, unknown vars |
+| `lint-tokens.js --errors-only` | Primitive tokens in component CSS, hardcoded values, unknown vars, **wrong-family token in property slot (see table below)** |
 | `token-audit.sh` (consuming projects) | Raw hex, hardcoded px, raw `var()` strings in style props, wrong element types |
 | Tier 2 hex scan | Raw hex values in the semantic section of theme files |
 
 All three must pass before the PR is ready for review.
+
+---
+
+## Token-family ↔ property pairing
+
+Even when a token name resolves to the visually right hue, the **family** must match the property's slot. Mixing them up was the failure mode behind portal #512 / #553 (rolled back) and brikdesigns #99 — caught only in browser review. `lint-tokens.js` Rule 5 now enforces this as a hard gate.
+
+| Property | Allowed token families |
+|---|---|
+| `background-color`, `background` | `--background-*`, `--surface-*` |
+| `color` | `--text-*`, `--color-*` (primitives) |
+| `border-color`, `border-{side}-color` | `--border-*`, `--background-*` (fill-matching borders) |
+| `outline-color` | `--border-*` |
+
+Custom-property declarations inherit the allowlist of their LHS prefix family — e.g. `--background-inverse: var(--text-foo)` fails because `--background-*` declarations follow the `background-color` rule, which doesn't include the text family.
+
+**TSX inline styles follow the same rule** — `style={{ backgroundColor: 'var(--text-service-marketing)' }}` is the canonical failure case.
+
+**Escape hatch:** when a cross-family alias is intentional (e.g. a divider line rendered as a 1px `background-color` of `--border-muted`), add an inline `bds-lint-ignore token-family — <reason>` comment and link to a tracking issue. The comment must justify the design intent, not silently suppress the rule.
+
+### Examples
+
+```css
+/* ✅ Pass — same family */
+background-color: var(--background-primary);
+color: var(--text-primary);
+border-color: var(--border-negative);
+
+/* ✅ Pass — border allows fill-matching --background-* */
+border-color: var(--background-brand-primary);
+
+/* ❌ Fail — text family in background slot */
+background-color: var(--text-service-marketing);
+
+/* ❌ Fail — background family in text slot */
+color: var(--background-warning);
+
+/* ❌ Fail — text family in border slot (use --border-negative instead) */
+border-color: var(--text-negative);
+```
 
 ---
 

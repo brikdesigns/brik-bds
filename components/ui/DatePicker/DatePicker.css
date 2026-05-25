@@ -62,7 +62,7 @@
 }
 
 .bds-date-picker__trigger--error {
-  border-color: var(--color-system-red);
+  border-color: var(--border-negative);
 }
 
 .bds-date-picker__trigger--disabled {

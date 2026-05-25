@@ -205,7 +205,7 @@
 .bds-task-console .bds-task-console__icon--in-progress {
   width: var(--icon-lg);
   height: var(--icon-lg);
-  border-color: var(--surface-muted);
+  border-color: var(--surface-muted); /* bds-lint-ignore token-family — spinner track uses surface-muted hue; see #777 */
   border-top-color: var(--border-brand-primary);
 }
 
