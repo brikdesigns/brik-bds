@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ServiceTag } from './ServiceTag';
 import { categoryConfig } from './service-config';
-import type { ServiceCategory } from './service-config';
+import type { ServiceLine } from './service-config';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -56,10 +56,10 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 
 /* ─── Shared data ─────────────────────────────────────────────── */
 
-const categories = Object.keys(categoryConfig) as ServiceCategory[];
+const categories = Object.keys(categoryConfig) as ServiceLine[];
 
 // One representative service per category for icon-text and icon stories
-const categoryServices: Record<ServiceCategory, { serviceName: string; label: string }> = {
+const categoryServices: Record<ServiceLine, { serviceName: string; label: string }> = {
   brand:       { serviceName: 'Brand Identity Bundle',                         label: 'Brand Design' },
   marketing:   { serviceName: 'Custom Standard Web Development and Design',    label: 'Marketing Design' },
   information: { serviceName: 'Information Design',                            label: 'Information Design' },
@@ -68,7 +68,7 @@ const categoryServices: Record<ServiceCategory, { serviceName: string; label: st
 };
 
 // Full service list for catalog stories
-const allServices: Record<ServiceCategory, { serviceName: string; label: string }[]> = {
+const allServices: Record<ServiceLine, { serviceName: string; label: string }[]> = {
   brand: [
     { serviceName: 'Brand Business Card',                                    label: 'Business Card' },
     { serviceName: 'Brand Identity Bundle',                                  label: 'Brand Design' },

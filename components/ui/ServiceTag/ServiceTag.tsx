@@ -3,7 +3,7 @@ import { bdsClass } from '../../utils';
 import {
   categoryConfig,
   getServiceIconPath,
-  type ServiceCategory,
+  type ServiceLine,
   type ServiceBadgeSize,
 } from './service-config';
 import './ServiceTag.css';
@@ -11,8 +11,8 @@ import './ServiceTag.css';
 export type ServiceTagVariant = 'text' | 'icon-text' | 'icon';
 
 export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
-  /** Service category — determines color and default label */
-  category: ServiceCategory;
+  /** Service line — determines color and default label */
+  category: ServiceLine;
   /** Display variant. Default: 'text' */
   variant?: ServiceTagVariant;
   /** Size variant. Default: 'md' */

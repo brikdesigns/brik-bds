@@ -60,7 +60,7 @@ interface ServiceCardItem {
   href: string;                    // Learn more target
   description?: string;            // body, optional
   imageUrl?: string;               // top image, optional
-  badge?: ServiceCategory;         // resolves ServiceTag icon
+  badge?: ServiceLine;             // resolves ServiceTag icon
   hasOptions?: boolean;            // shows "Has Options" badge
 }
 
