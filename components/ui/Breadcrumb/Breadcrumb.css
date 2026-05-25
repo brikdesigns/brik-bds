@@ -41,4 +41,44 @@
   line-height: var(--font-line-height-tight);
   padding: 0 var(--padding-tiny);
 }
+
+/* ─── Audience cascade — service-line tinting ────────────────────
+ * Re-binds canonical --text-secondary / --text-muted inside each
+ * [data-audience='X'] subtree, scoped to .bds-breadcrumb only so
+ * other secondary text on the page is unaffected.
+ *
+ * `data-audience='service'` resolves to the back-office hue per the
+ * #563 token rename (audience attribute kept "service" for
+ * component-API compat; underlying tokens are *-back-office-*).
+ * Same mapping as HeroSplitImageCardOverlay.
+ *
+ * Pattern: rebind canonical generic tokens (--text-secondary,
+ * --text-muted) — never introduce scoped hierarchy modifiers like
+ * --text-service-X-muted (forbidden by BDS naming canon: scoped
+ * tokens carry context modifiers only, not hierarchy). */
+
+[data-audience='brand'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-brand);
+  --text-muted: var(--text-service-brand);
+}
+
+[data-audience='marketing'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-marketing);
+  --text-muted: var(--text-service-marketing);
+}
+
+[data-audience='information'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-information);
+  --text-muted: var(--text-service-information);
+}
+
+[data-audience='product'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-product);
+  --text-muted: var(--text-service-product);
+}
+
+[data-audience='service'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-back-office);
+  --text-muted: var(--text-service-back-office);
+}
 }

@@ -164,3 +164,41 @@ export const Patterns: Story = {
     </Stack>
   ),
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   4. AUDIENCE CASCADE — service-line tinting via [data-audience]
+   ═══════════════════════════════════════════════════════════════ */
+
+// The breadcrumb stays scope-blind — __current reads --text-secondary
+// and __separator reads --text-muted as always. When the breadcrumb
+// sits inside a [data-audience='X'] subtree, Breadcrumb.css rebinds
+// those two canonical tokens to --text-service-{name} so the current
+// page label + separators pick up the audience hue. The 'service'
+// audience maps to the back-office token set per the #563 rename.
+const AUDIENCES = [
+  { id: 'brand', label: 'Brand (yellow)' },
+  { id: 'marketing', label: 'Marketing (green)' },
+  { id: 'information', label: 'Information (blue)' },
+  { id: 'product', label: 'Product (purple)' },
+  { id: 'service', label: 'Service / back-office (orange)' },
+] as const;
+
+/** @summary Service-line tinting via [data-audience] cascade */
+export const AudienceCascade: Story = {
+  render: () => (
+    <Stack>
+      {AUDIENCES.map(({ id, label }) => (
+        <div key={id} data-audience={id}>
+          <SectionLabel>{`[data-audience='${id}'] — ${label}`}</SectionLabel>
+          <Breadcrumb
+            items={[
+              { label: 'Home', href: '#' },
+              { label: 'Services', href: '#' },
+              { label: 'Detail page' },
+            ]}
+          />
+        </div>
+      ))}
+    </Stack>
+  ),
+};

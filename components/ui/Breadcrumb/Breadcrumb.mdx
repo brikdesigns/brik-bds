@@ -29,6 +29,20 @@ Real-world usage: page headers and settings navigation.
 
 <Canvas of={Stories.Patterns} />
 
+## Audience cascade
+
+When a breadcrumb sits inside a `[data-audience='X']` subtree, the
+current page label and separators rebind canonical `--text-secondary`
+and `--text-muted` to the matching `--text-service-{name}` value
+(`brand`, `marketing`, `information`, `product`, and `service` → back-office).
+
+The component itself stays scope-blind — only the cascade block in
+`Breadcrumb.css` knows about audiences. Consumers set `data-audience`
+on any ancestor (page wrapper, hero card, sidebar column) and the
+breadcrumb inside picks up the hue.
+
+<Canvas of={Stories.AudienceCascade} />
+
 ## Props
 
 <ArgTypes of={Stories} />
