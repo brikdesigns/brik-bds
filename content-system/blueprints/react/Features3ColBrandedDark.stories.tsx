@@ -28,9 +28,8 @@ const audienceCascadeStyles = `
   --text-brand-primary: var(--theme-green-green-dark);
 }
 [data-audience='information'] {
-  --background-brand-primary: var(--theme-blue-blue-light);
-  --brand-primary: var(--theme-blue-blue-light);
-  --text-brand-primary: var(--theme-blue-blue-dark);
+  --background-brand-primary: var(--color-blue-light);
+  --text-brand-primary: var(--color-blue-dark);
 }
 [data-audience='product'] {
   --background-brand-primary: var(--theme-purple-purple-light);

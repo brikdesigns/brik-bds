@@ -123,7 +123,7 @@
 
   /* ── Forward-facing alias: hyperlink semantic ──
      Figma defines this as `text/text-link` (node 22846-1906), backed by
-     `theme/blue/blue-light` → resolved to --brand-primary. Style Dictionary
+     `color/poppy/light` → resolved to --brand-primary. Style Dictionary
      emits the path-joined name `--text-text-link` (prefix `text` + token
      `text-link` joined by `-`), which is awkward at consumer sites. This
      alias gives consumers a clean canonical name while preserving the alias
