@@ -63,27 +63,6 @@ const primitiveTokens = [
   { name: 'color-system-purple', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'color/system/purple', value: '#9b51e0' },
 
   // -------------------------------------------------------------------------
-  // COLOR PRIMITIVES - Brik Theme
-  // -------------------------------------------------------------------------
-  { name: 'theme-brik-poppy-red', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/brik/poppy-red', value: '#e35335' },
-  { name: 'theme-brik-black', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/brik/black', value: '#000000' },
-  { name: 'theme-brik-tan', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/brik/tan', value: '#f1f0ec' },
-  { name: 'theme-brik-yellow', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/brik/yellow', value: '#f4d364' },
-  { name: 'theme-brik-orange', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/brik/orange', value: '#e76134' },
-  { name: 'theme-brik-green', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/brik/green', value: '#bcff8c' },
-  { name: 'theme-brik-blue', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/brik/blue', value: '#8ebbcc' },
-  { name: 'theme-brik-purple', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/brik/purple', value: '#9e8bc2' },
-
-  // -------------------------------------------------------------------------
-  // COLOR PRIMITIVES - Blue Theme
-  // -------------------------------------------------------------------------
-  { name: 'theme-blue-dark', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/blue/blue-dark', value: '#0e212a' },
-  { name: 'theme-blue-light', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/blue/blue-light', value: '#4665f5' },
-  { name: 'theme-blue-lighter', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/blue/blue-lighter', value: '#79b0d9' },
-  { name: 'theme-blue-lightest', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/blue/blue-lightest', value: '#edf2f6' },
-  { name: 'theme-blue-green', type: 'primitive', foundation: 'color', collection: 'primitive', figmaVar: 'theme/blue/green', value: '#79d799' },
-
-  // -------------------------------------------------------------------------
   // FONT SIZE PRIMITIVES
   // -------------------------------------------------------------------------
   { name: 'font-size-5', type: 'primitive', foundation: 'font-size', collection: 'primitive', figmaVar: 'font-size/5', value: '5.69' },
@@ -310,7 +289,7 @@ const semanticTokens = [
   { name: 'text-primary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/primary', element: 'text', role: 'primary', value: '{color.grayscale.darkest}' },
   { name: 'text-secondary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/secondary', element: 'text', role: 'secondary', value: '{color.grayscale.dark}' },
   { name: 'text-muted', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/muted', element: 'text', role: 'muted', value: '{color.grayscale.light}' },
-  { name: 'text-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/brand', element: 'text', role: 'brand', value: '{theme.blue.blue-light}' },
+  { name: 'text-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/brand', element: 'text', role: 'brand', value: '{color.poppy.light}' },
   { name: 'text-inverse', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/inverse', element: 'text', role: 'inverse', value: '{color.grayscale.white}' },
   { name: 'text-on-color', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/on-color', element: 'text', role: 'on-color', value: '{color.grayscale.white}' },
   { name: 'text-accent-yellow', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/accent-yellow', element: 'text', role: 'accent', value: '{color.system.yellow}' },
@@ -325,7 +304,7 @@ const semanticTokens = [
   { name: 'border-primary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'border/primary', element: 'border', role: 'primary', value: '{color.grayscale.lighter}' },
   { name: 'border-secondary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'border/secondary', element: 'border', role: 'secondary', value: '{color.grayscale.dark}' },
   { name: 'border-muted', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'border/muted', element: 'border', role: 'muted', value: '{color.grayscale.light}' },
-  { name: 'border-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'border/brand', element: 'border', role: 'brand', value: '{theme.blue.blue-light}' },
+  { name: 'border-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'border/brand', element: 'border', role: 'brand', value: '{color.poppy.light}' },
   { name: 'border-on-color', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'border/on-color', element: 'border', role: 'on-color', value: '{color.grayscale.white}' },
   { name: 'border-inverse', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'border/inverse', element: 'border', role: 'inverse', value: '{color.grayscale.white}' },
 
@@ -335,7 +314,7 @@ const semanticTokens = [
   { name: 'background-primary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'background/primary', element: 'background', role: 'primary', value: '{color.grayscale.white}' },
   { name: 'background-secondary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'background/secondary', element: 'background', role: 'secondary', value: '{color.grayscale.dark}' },
   { name: 'background-muted', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'background/muted', element: 'background', role: 'muted', value: '{color.grayscale.light}' },
-  { name: 'background-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'background/brand', element: 'background', role: 'brand', value: '{theme.blue.blue-light}' },
+  { name: 'background-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'background/brand', element: 'background', role: 'brand', value: '{color.poppy.light}' },
   { name: 'background-inverse', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'background/inverse', element: 'background', role: 'inverse', value: '{color.grayscale.white}' },
   { name: 'background-on-color', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'background/on-color', element: 'background', role: 'on-color', value: '{color.grayscale.white}' },
   { name: 'background-input', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'background/input', element: 'background', role: 'input', value: '{color.grayscale.white}' },
@@ -350,7 +329,7 @@ const semanticTokens = [
   // -------------------------------------------------------------------------
   { name: 'surface-primary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'surface/primary', element: 'surface', role: 'primary', value: '{color.grayscale.white}' },
   { name: 'surface-secondary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'surface/secondary', element: 'surface', role: 'secondary', value: '{color.grayscale.lighter}' },
-  { name: 'surface-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'surface/brand', element: 'surface', role: 'brand', value: '{theme.blue.blue-light}' },
+  { name: 'surface-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'surface/brand', element: 'surface', role: 'brand', value: '{color.poppy.light}' },
   { name: 'surface-inverse', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'surface/inverse', element: 'surface', role: 'inverse', value: '{color.grayscale.black}' },
 
   // -------------------------------------------------------------------------
@@ -358,7 +337,7 @@ const semanticTokens = [
   // -------------------------------------------------------------------------
   { name: 'page-primary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'page/primary', element: 'page', role: 'primary', value: '{color.grayscale.white}' },
   { name: 'page-secondary', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'page/secondary', element: 'page', role: 'secondary', value: '{color.grayscale.lighter}' },
-  { name: 'page-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'page/brand', element: 'page', role: 'brand', value: '{theme.blue.blue-light}' },
+  { name: 'page-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'page/brand', element: 'page', role: 'brand', value: '{color.poppy.light}' },
   { name: 'page-inverse', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'page/inverse', element: 'page', role: 'inverse', value: '{color.grayscale.black}' },
 ];
 

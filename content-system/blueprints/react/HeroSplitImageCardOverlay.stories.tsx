@@ -21,8 +21,8 @@ const audienceCascadeStyles = `
   --text-brand-primary: var(--theme-green-green-dark);
 }
 [data-audience='information'] {
-  --page-brand-primary: var(--theme-blue-blue-light);
-  --text-brand-primary: var(--theme-blue-blue-dark);
+  --page-brand-primary: var(--color-blue-light);
+  --text-brand-primary: var(--color-blue-dark);
 }
 [data-audience='product'] {
   --page-brand-primary: var(--theme-purple-purple-light);
