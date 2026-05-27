@@ -199,42 +199,53 @@ const cta = section.cta;
     );
   }
 
-  /* Audience cascade — canonical --*-service-{audience} tokens.
+  /* Service-line cascade — canonical --*-service-{service-line} tokens.
+   *
+   * Background uses the `surface` family (not `background`) because the hero
+   * is a broad page-level container, not a small bounded component — per the
+   * service-token decision tree (`-surface-` for sections/heroes/cards;
+   * `-background-` for badges/tags/pills/buttons). This keeps the hero band
+   * the same shade as section-level surfaces below it on the same page.
+   *
+   * `--background-inverse` stays on the `background` family: it's the
+   * mode-aware companion fill consumed by the inverse `<Button>` variant
+   * inside the hero, which IS a small bounded component.
+   *
    * Note: the `data-audience='service'` attribute value still reads "service"
    * for component-API compat; the underlying tokens were renamed
-   * `service-service` → `service-back-office` in #563 (orange line — back office).
-   * `--background-service-X-secondary` → `--background-service-X-inverse`
-   * (mode-aware companion to the default service bg) from the same issue. */
+   * `service-service` → `service-back-office` in #563 (orange line — back
+   * office). API-level rename `data-audience` → `data-service-line` is a
+   * separate cross-repo follow-up. */
   .bp-hero-img-card[data-audience='brand'] {
-    background: var(--background-service-brand);
+    background: var(--surface-service-brand);
     --bp-hero-img-card-headline-color: var(--text-service-brand);
     --text-brand-primary: var(--text-service-brand);
     --background-inverse: var(--background-service-brand-inverse);
     --text-on-color-light: var(--color-grayscale-white);
   }
   .bp-hero-img-card[data-audience='marketing'] {
-    background: var(--background-service-marketing);
+    background: var(--surface-service-marketing);
     --bp-hero-img-card-headline-color: var(--text-service-marketing);
     --text-brand-primary: var(--text-service-marketing);
     --background-inverse: var(--background-service-marketing-inverse);
     --text-on-color-light: var(--color-grayscale-white);
   }
   .bp-hero-img-card[data-audience='information'] {
-    background: var(--background-service-information);
+    background: var(--surface-service-information);
     --bp-hero-img-card-headline-color: var(--text-service-information);
     --text-brand-primary: var(--text-service-information);
     --background-inverse: var(--background-service-information-inverse);
     --text-on-color-light: var(--color-grayscale-white);
   }
   .bp-hero-img-card[data-audience='product'] {
-    background: var(--background-service-product);
+    background: var(--surface-service-product);
     --bp-hero-img-card-headline-color: var(--text-service-product);
     --text-brand-primary: var(--text-service-product);
     --background-inverse: var(--background-service-product-inverse);
     --text-on-color-light: var(--color-grayscale-white);
   }
   .bp-hero-img-card[data-audience='service'] {
-    background: var(--background-service-back-office);
+    background: var(--surface-service-back-office);
     --bp-hero-img-card-headline-color: var(--text-service-back-office);
     --text-brand-primary: var(--text-service-back-office);
     --background-inverse: var(--background-service-back-office-inverse);
