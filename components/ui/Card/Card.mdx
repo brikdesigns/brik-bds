@@ -40,7 +40,7 @@ The `preset` prop selects the shape. Default (no `preset`) gives a flexible `chi
 
 ### Display-row preset
 
-`preset="display-row"` — horizontal sibling of `preset="display"`. Image on the left, content (tag, title, description, action) on the right. Use for single-card sections where a vertical layout wastes horizontal space: Related Customer Story, Recommended Add-On, featured plan, company-segment overview cards. Toggle `imageWidth` between `narrow` (25%), `standard` (35%, default), and `wide` (50%) — or pass a CSS length / percentage string for a custom column width. Collapses to a vertical stack at ≤ 640px so the card stays readable on narrow viewports.
+`preset="display-row"` — horizontal sibling of `preset="display"`. Image on the left, content (tag, title, description, optional `extras`, action) on the right. Use for single-card sections where a vertical layout wastes horizontal space: Related Customer Story, Recommended Add-On, featured plan, company-segment overview cards. Toggle `imageWidth` between `narrow` (25%), `standard` (35%, default), and `wide` (50%) — or pass a CSS length / percentage string for a custom column width. The `extras` slot accepts any ReactNode (bullet list, pill row, supporting meta) and renders between `description` and `action`; use it when the single-paragraph `description` is too narrow for the content shape. Collapses to a vertical stack at ≤ 640px so the card stays readable on narrow viewports.
 
 <Canvas of={Stories.DisplayRow} />
 
