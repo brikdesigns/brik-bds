@@ -1,0 +1,63 @@
+---
+title: Prop Axes
+description: The four shared prop names — size, status, variant, appearance — that any BDS component with overlapping visual concerns must use.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+A prop is an **axis** when more than one component exposes it. Axis names belong to the system, not any single component. When adding a new pill, chip, or indicator, reuse the axis names below — never invent `kind`, `style`, or `flavor`.
+
+## The four axes
+
+| Axis | Values | Meaning | Components |
+|---|---|---|---|
+| `size` | `xs` · `sm` · `md` · `lg` (indicators); `tiny` · `sm` · `md` · `lg` · `xl` (buttons) | Physical dimensions on a shared scale | Badge, Tag, Chip, Button, IconButton, ServiceTag, Field, Sheet, most form controls |
+| `status` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | Semantic value judgment — which system color tier applies | Badge, Banner, Dot |
+| `variant` | component-specific (see matrix) | Shared prop *name*; meaning varies by component | Chip, Button, IconButton, LinkButton, Card, ServiceTag |
+| `appearance` | `solid` · `subtle` · `outline` | How the shape is filled vs bordered | Badge (`solid` / `subtle`), Tag (`solid` / `subtle`) |
+
+## `variant` vs `appearance`
+
+> `appearance` describes **fill**. `variant` is the shared prop *name* — its meaning varies by component.
+
+- **Interactive components (Chip, Button)** use `variant` only. They have hierarchy to express.
+- **Read-only indicators (Badge, Tag)** use `appearance` only. Fill form is the only lever.
+
+Never cross this boundary.
+
+## Why `solid | subtle | outline` (not `dark | light`)
+
+`dark | light` was ambiguous with dark-mode theming. `solid | subtle | outline` names the fill form explicitly:
+
+- **`solid`** — filled background, typically saturated or neutral
+- **`subtle`** — tinted background, lower emphasis
+- **`outline`** — transparent background, visible border
+
+## Coverage matrix
+
+Source of truth: [`manifest/component-axes.json`](https://github.com/brikdesigns/brik-bds/blob/main/manifest/component-axes.json) — auto-generated via `npm run typegen:axes` ([ADR-009](../../../../docs/adrs/ADR-009-typegen-component-axes.md)). When the table and the manifest disagree, the manifest wins.
+
+| Component | `variant` | `appearance` | `size` | `status` |
+|---|---|---|---|---|
+| Button | `primary` · `outline` · `secondary` · `ghost` · `inverse` · `on-color` · `danger` · `danger-outline` · `danger-ghost` · `destructive` · `positive` · `selected` | — | `tiny` · `sm` · `md` · `lg` · `xl` | — |
+| LinkButton | shares `ButtonVariant` | — | shares `ButtonSize` | — |
+| IconButton | `primary` · `outline` · `secondary` · `ghost` · `inverse` · `danger` · `danger-outline` · `danger-ghost` · `destructive` · `positive` · `selected` | — | shares `ButtonSize` | — |
+| Chip | `primary` · `secondary` | — | `sm` · `md` · `lg` | — |
+| Card | `outlined` · `brand` · `elevated` | — | — | — |
+| ServiceTag | `text` · `icon-text` · `icon` | — | `sm` · `md` · `lg` | — |
+| Tag | — | `solid` · `subtle` | `xs` · `sm` · `md` · `lg` | — |
+| Badge | — | `solid` · `subtle` | `xs` · `sm` · `md` · `lg` | `positive` · `warning` · `error` · `info` · `progress` · `brand` |
+
+**Notes:**
+- Chip `appearance` removed in v0.66 — Chip is interactive; emphasis lives on `variant` only.
+- Card `variant` encodes border/elevation style — not a hierarchy or fill axis. `CardPreset` (`control` · `summary` · `display`) is orthogonal to `variant`.
+- Badge `outline` appearance excluded — low contrast for status indicators.
+
+<Callout type="info">
+  TypeScript is the authoritative gate. Pass only values the component's declared union includes — never invent values. The manifest shows which types are exported.
+</Callout>
+
+## Related
+
+- [Components](/docs/components) — each component implements the axes documented here
+- [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — slot names that pair with these axis props

@@ -1,0 +1,74 @@
+---
+title: HTML Semantics
+description: Which HTML element each BDS role renders as, when to use heading elements, stable ID rules, and the no-unclassed-wrappers requirement.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Element reference
+
+HTML element is the load-bearing fact. BEM class names the role; the element expresses semantic intent.
+
+| Element | Typical use | BEM role |
+|---|---|---|
+| `<h1>` | Page title — one per page | `.bds-page-header__title` |
+| `<h2>` | Section title on a page | `.bds-data-section__title` |
+| `<h3>` | Sheet section heading (uppercase label) | `.bds-sheet-section__heading` — different role and style |
+| `<p>` | Subtitle, description, body prose | `.bds-*__subtitle`, `.bds-*__description` |
+| `<span>` | Inline label — metadata pair, icon + label pair | `.bds-*__label` when inline |
+| `<label>` | Form-control label with `htmlFor` | `.bds-sheet-field-label` |
+| `<div>` | Slots, containers, wrappers | `__actions`, `__content`, `__header`, `__titles` |
+
+Screen readers walk `<h*>` elements to build the document outline. Every `<h*>` decision is an a11y decision.
+
+## Heading element selection
+
+The rule for `__title` slots:
+
+> Name the role `__title` in BEM. Scale its typography with `--heading-*` tokens. Pick the HTML element at the call site based on whether it is a document outline node.
+
+**Render as `<h2>` (or `<h3>` when nested)** when a title IS an outline node — `<DataSection title="Identity">` inside the Overview tab is an outline sibling of the page's `<h1>`. Screen readers walk these.
+
+**Render as `<div>` or `<p>`** when a title is NOT an outline node — decorative card in a grid of many cards, metric tile, repeating marker. It still uses `__title` BEM and heading-tier tokens.
+
+Never pick the HTML tag from the BEM name. `<div class="bds-card__title">` and `<h3 class="bds-card__title">` are both valid — choose by outline intent.
+
+## Stable IDs and `aria-labelledby`
+
+`id` values belong to the *role* of the element, not the layout that contains it. A title id baked with the layout name (`bp-about-story-split-default-h`) leaks layout into a11y plumbing and breaks when the layout is renamed.
+
+> Generate `id` from the BEM role plus a content-derived stable key — never the layout/blueprint name, never a shape-suffix like `-h`.
+
+```tsx
+// ✅
+<h2 id={`title-${section.sectionKey}`}>...</h2>
+<h2 id={useId()}>...</h2>
+
+// ❌
+<h2 id={`bp-about-story-split-${section.sectionKey}-h`}>...</h2>
+```
+
+## No unclassed wrappers
+
+Every element in a BDS component tree names its role.
+
+> Bare `<div>` with no class, no role, no reason to exist is drift — replace it with the correct BEM slot (`__content`, `__actions`, `__header`, etc.) or remove it.
+
+**Acceptable unclassed elements:**
+- Rendering helpers inside a Storybook story (they don't ship)
+- Consumer-passed children (`{children}`) — the consumer owns those names
+- Fragments (`<>...</>`) — no wrapper exists
+
+**Not acceptable:**
+- `<div>` wrapping a component's output because "it needs a flex container" — name the slot
+- `<span>` around an icon + label pair — use `__icon` / `__label`
+- `<div className={classes}>` where `classes` is empty or conditionally empty — ship the class or remove the wrapper
+
+<Callout type="info">
+  This is a discipline rule, not a build-time lint yet. If a wrapper's role is ambiguous, add a BEM class with the role name before adding CSS.
+</Callout>
+
+## Related
+
+- [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — what each slot name means
+- [Page Structure](/docs/build-standards/page-structure) — how these semantics apply at the page and section level

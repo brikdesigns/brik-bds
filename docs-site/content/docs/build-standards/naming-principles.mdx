@@ -1,0 +1,48 @@
+---
+title: Naming Principles
+description: Every name in BDS describes a role or slot — not a visual shape — and must come from the closed allowlist.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Intent, not shape
+
+Every word in BDS describes a **role** or a **slot**. It does not dictate visual shape and does not dictate the HTML element. The HTML element is chosen by semantic intent at the call site.
+
+This distinction is load-bearing for titles and headings — get it wrong and you ship outline-invisible content that looks correct visually. See [HTML Semantics](/docs/build-standards/html-semantics) for the element-selection rules.
+
+## Closed allowlist
+
+Per [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md), the system runs on a **closed allowlist** of slot names. The allowlist lives in [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md).
+
+> Every `bds-{block}__{slot}` class uses a slot name that appears in `SLOT-ALLOWLIST.md`. Anything else fails the lint.
+
+The old approach enumerated *banned* terms; agents invented new ones (`__lead`, `__quote-text`, `__plan-name`, `__hamburger-bar`) faster than the banlist grew. Closing the canon inverts the burden: the default is reject, new vocabulary requires a deliberate PR.
+
+### Adding a slot
+
+1. Identify the role the slot expresses; pick the most generic word that fits.
+2. Grep for existing allowlist slots that already cover the role — **reuse before invent**.
+3. If no existing slot fits, PR an entry into `SLOT-ALLOWLIST.md` with justification.
+4. Reviewer checks: would this slot work on more than one block? Is it generic (not layout-specific)? Is it structural (not visual)?
+
+## Blueprint naming rules
+
+Blueprints (`content-system/blueprints/*`) are page-level layouts — the Section layer of the [Composition Layers](/docs/build-standards/composition-layers) model. Their naming follows the same closed canon.
+
+1. **Single namespace.** Every class uses `bds-`. The `bp-` prefix is deprecated — no new `bp-*` classes after ADR-008.
+2. **One block per family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-support-plan`. Each family is one block with structural modifiers, not N separate blueprints.
+3. **Slots from the allowlist.** Every `bds-{block}__{slot}` must use an allowlisted name. Phase C lint fails on anything else.
+4. **Structural-only modifiers.** Modifier names describe structure (`--split-image`, `--two-column`) — never appearance (`--dark`, `--centered`) or theme (`--inverse`). A "dark centered" CTA themed light makes the name a lie.
+5. **Compose, don't reimplement.** A blueprint `.tsx` that imports nothing from `components/ui/*` is almost always drift.
+6. **Use `Frame` for aspect-locked images.** Never hardcode `aspect-ratio` in blueprint CSS.
+
+<Callout type="info">
+  The `bp-*` prefix is being migrated to `bds-*` across existing blueprints — Phase D, one family per PR. Until Phase F, both prefixes coexist.
+</Callout>
+
+## Related
+
+- [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — the contract; prose here is reference only
+- [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) — full reasoning and 2026-05-11 inventory data
+- [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — what each allowlisted slot means and when to use it

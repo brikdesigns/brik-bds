@@ -1,0 +1,12 @@
+{
+  "title": "Build Standards",
+  "pages": [
+    "index",
+    "naming-principles",
+    "slot-vocabulary",
+    "composition-layers",
+    "html-semantics",
+    "prop-axes",
+    "page-structure"
+  ]
+}

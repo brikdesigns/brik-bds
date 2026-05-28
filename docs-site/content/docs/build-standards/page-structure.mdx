@@ -1,0 +1,201 @@
+---
+title: Page Structure
+description: The HTML skeleton and BEM section pattern for Brik pages in Astro and Next.js — from page shell to inner slot anatomy.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Page skeleton
+
+Every Brik page follows this semantic shell. The landmark elements (`<header>`, `<main>`, `<footer>`) are fixed; the sections inside `<main>` are where blueprint families live.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>...</head>
+  <body>
+    <header><!-- site nav --></header>
+
+    <main>
+      <section class="bds-hero">...</section>
+      <section class="bds-features">...</section>
+      <section class="bds-cta">...</section>
+    </main>
+
+    <footer><!-- site footer --></footer>
+  </body>
+</html>
+```
+
+- `<header>` and `<footer>` are page-level landmarks — one of each per page.
+- `<main>` wraps all page sections — one per page.
+- Each thematic block inside `<main>` is a `<section>` with a BDS blueprint class.
+
+## Section pattern
+
+A section is a `<section>` element carrying a blueprint BEM block name. The valid block names are defined in [Naming Principles](/docs/build-standards/naming-principles#blueprint-naming-rules): `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-support-plan`.
+
+```html
+<section class="bds-features">
+  <div class="bds-features__header">
+    <h2 class="bds-features__title">Powerful Features</h2>
+    <p class="bds-features__subtitle">Everything your team needs.</p>
+  </div>
+
+  <div class="bds-features__content">
+    <!-- layout primitive or grid of blocks -->
+  </div>
+
+  <div class="bds-features__actions">
+    <!-- Button or ButtonGroup -->
+  </div>
+</section>
+```
+
+### Slot anatomy
+
+Every slot name comes from the [closed allowlist](/docs/build-standards/naming-principles#closed-allowlist). The common slots inside a section:
+
+| Slot | Element | Purpose |
+|---|---|---|
+| `__header` | `<div>` | Groups title + subtitle (+ optional badge/tag) |
+| `__title` | `<h2>` (or `<div>`/`<p>` — see below) | Primary text of the section |
+| `__subtitle` | `<p>` | Supporting line under the title |
+| `__content` | `<div>` | Main content area — grid, list, or layout primitive |
+| `__actions` | `<div>` | Holds `<Button>` or `<ButtonGroup>` |
+| `__media` | `<div>` | Image or video using `<Frame>` |
+
+<Callout type="info">
+  `__title` heading level follows outline position — `<h2>` when the section is a direct child of `<main>`. See [HTML Semantics — Heading element selection](/docs/build-standards/html-semantics#heading-element-selection).
+</Callout>
+
+### Structural modifiers
+
+Use `--` modifiers only for **structure**, never for appearance or theme:
+
+```html
+<!-- ✅ structural modifier -->
+<section class="bds-features bds-features--two-column">...</section>
+
+<!-- ❌ appearance modifier — theme via CSS custom properties, not class names -->
+<section class="bds-features bds-features--dark">...</section>
+<section class="bds-features bds-features--centered">...</section>
+```
+
+## Layout inside sections
+
+Use [Layout primitives](/docs/composition-layers#the-five-layers) — `Stack`, `Cluster`, `Grid`, `Split`, `Row` — to arrange blocks inside `__content`. Do not hand-roll flex/grid in section CSS when a layout primitive covers the case.
+
+```html
+<!-- Grid of feature cards -->
+<div class="bds-features__content">
+  <div class="bds-grid bds-grid--3col">
+    <div class="bds-card">...</div>
+    <div class="bds-card">...</div>
+    <div class="bds-card">...</div>
+  </div>
+</div>
+
+<!-- Split (image + text) -->
+<div class="bds-about__content">
+  <div class="bds-split">
+    <div class="bds-about__media"><img .../></div>
+    <div class="bds-about__body">...</div>
+  </div>
+</div>
+```
+
+## Container widths
+
+Sections span full viewport width. Content is constrained by an inner container slot — this is CSS, not a wrapper element with a `.container` class.
+
+```css
+.bds-features {
+  /* section fills viewport */
+}
+
+.bds-features__content {
+  max-width: var(--layout-content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+```
+
+Variants (narrow, wide, full-bleed) are expressed as structural modifiers on the section, not as a separate `.container--narrow` wrapper element.
+
+## Astro
+
+In Astro, sections map to `.astro` components with named slots.
+
+```astro
+---
+// components/sections/Features.astro
+const { title, subtitle } = Astro.props;
+---
+<section class="bds-features">
+  <div class="bds-features__header">
+    <h2 class="bds-features__title">{title}</h2>
+    {subtitle && <p class="bds-features__subtitle">{subtitle}</p>}
+  </div>
+  <div class="bds-features__content">
+    <slot />
+  </div>
+  {Astro.slots.has('actions') && (
+    <div class="bds-features__actions">
+      <slot name="actions" />
+    </div>
+  )}
+</section>
+```
+
+**File placement:** `src/components/sections/` for blueprint-level section components. `src/components/ui/` for atoms and blocks reused across sections.
+
+## Next.js
+
+In Next.js, sections are `.tsx` components. Prefer `children` for the content slot; use named render props or additional props only when the slot has non-trivial composition rules.
+
+```tsx
+// components/sections/Features.tsx
+interface FeaturesProps {
+  title: string;
+  subtitle?: string;
+  actions?: React.ReactNode;
+  children: React.ReactNode;
+}
+
+export function Features({ title, subtitle, actions, children }: FeaturesProps) {
+  return (
+    <section className="bds-features">
+      <div className="bds-features__header">
+        <h2 className="bds-features__title">{title}</h2>
+        {subtitle && <p className="bds-features__subtitle">{subtitle}</p>}
+      </div>
+      <div className="bds-features__content">{children}</div>
+      {actions && <div className="bds-features__actions">{actions}</div>}
+    </section>
+  );
+}
+```
+
+**File placement:** `components/sections/` for blueprint-level sections. `components/ui/` for atoms and blocks.
+
+## Element selection quick reference
+
+| Role | Element | Notes |
+|---|---|---|
+| Thematic page block | `<section>` | Every major page region |
+| Primary content wrapper | `<main>` | One per page |
+| Site header / footer | `<header>`, `<footer>` | Page-level landmarks |
+| Content constraint | CSS on `__content` | Not a `.container` wrapper element |
+| Section title | `<h2>` | Outline node in `<main>` |
+| Section subtitle | `<p>` | Never `<h3>` unless it's an outline node |
+| Inline label / badge | `<span>` | Sparingly — badges, icons, text fragments |
+| Lists | `<ul>` / `<ol>` | Prefer semantic list elements over `<div>` + `<span>` |
+| Images | `<Frame>` wrapping `<img>` | Aspect-locked; never hardcode `aspect-ratio` in CSS |
+
+## Related
+
+- [HTML Semantics](/docs/build-standards/html-semantics) — heading levels, no-unclassed-wrappers, stable IDs
+- [Composition Layers](/docs/build-standards/composition-layers) — Section / Layout / Container / Block / Component model
+- [Naming Principles](/docs/build-standards/naming-principles) — blueprint naming rules and closed allowlist
+- [Theming — Blueprints](/docs/theming/blueprints) — blueprint families (`bds-hero`, `bds-cta`, etc.)
