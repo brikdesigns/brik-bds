@@ -289,4 +289,90 @@
 .bds-card > .bds-badge {
   align-self: flex-start;
 }
+
+/* ─── Preset: display-row ─────────────────────────────────────── */
+/* Horizontal sibling of `preset="display"`. Image on the left, content
+ * (tag, title, description, action) on the right. Use for single-card
+ * sections where vertical layout wastes horizontal space — Related
+ * Customer Story, Recommended Add-On, featured plan.
+ *
+ * Image column width comes from a CSS variable that the consumer sets
+ * via the named size modifier classes (narrow/standard/wide) OR via
+ * inline style when a custom percentage/length is passed through props.
+ * Collapses to vertical stacking at ≤ 640px so the card stays readable
+ * on narrow viewports without forcing a layout shift higher up.
+ *
+ * Token pairs (paired family ↔ size only — never mix):
+ *   title       — --font-family-heading + --heading-md
+ *   description — --font-family-body + --body-md
+ *   tag         — own typography (component-internal)
+ */
+
+.bds-card--preset-display-row {
+  /* Default column width — overridden by named modifier class or inline
+   * style. `auto` fallback keeps the card sensible if neither is set. */
+  --bds-card-image-width: 35%;
+  display: grid;
+  grid-template-columns: var(--bds-card-image-width) 1fr;
+  gap: var(--gap-lg);
+  padding: var(--padding-lg);
+  background-color: var(--surface-primary);
+  border: var(--border-width-md) solid var(--border-secondary);
+  border-radius: var(--border-radius-md);
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bds-card--preset-display-row-narrow   { --bds-card-image-width: 25%; }
+.bds-card--preset-display-row-standard { --bds-card-image-width: 35%; }
+.bds-card--preset-display-row-wide     { --bds-card-image-width: 50%; }
+
+.bds-card__preset-display-row-media {
+  position: relative;
+  display: block;
+  /* Aspect ratio + object-fit owned by the consumer's <Frame> wrapper. */
+}
+
+.bds-card__preset-display-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+.bds-card__preset-display-row-tag {
+  /* Anchor at natural width; do NOT stretch in the column flex. */
+  display: inline-flex;
+  align-self: flex-start;
+}
+
+.bds-card__preset-display-row-title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bds-card__preset-display-row-description {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+}
+
+.bds-card__preset-display-row-action {
+  /* Anchor to bottom so the action sits at the card footer regardless of
+   * description length. */
+  margin-top: auto;
+}
+
+@media (max-width: 640px) {
+  .bds-card--preset-display-row {
+    grid-template-columns: 1fr;
+  }
+}
 }
