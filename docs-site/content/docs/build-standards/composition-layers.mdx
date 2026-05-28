@@ -1,0 +1,99 @@
+---
+title: Composition Layers
+description: Five conceptual layers — Section, Layout, Container, Block, Component — and the decision rules for assembling them.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+A page in BDS is composed in five layers. Each has a single responsibility, a single vocabulary, and only knows about the layer below it. This model is **pedagogical** — it explains how to think about a page — and is intentionally non-binding on the BEM canon ([ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md)).
+
+## The five layers
+
+| Layer | Responsibility | Vocabulary | Examples |
+|---|---|---|---|
+| **Section** | Page role with surrounding structure (vertical rhythm, container, background surface) | Page-level semantic | `Hero`, `Content`, `CTA` |
+| **Layout** | Pure composition primitive — arranges children. No styling beyond structure. | Composition | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
+| **Container** | Styled holder that composes blocks into a self-contained unit. Carries border / padding / elevation / radius. | Bounded unit | `Card`, `List`, `Form`, `Accordion`, `Tabs` |
+| **Block** | Composed content unit — fixed slot shape filled with atoms. | Slot + atoms | `ContentBlock`, `MediaBlock`, `ListItem`, `FormField`, `Stat` |
+| **Component** | Single primitive atom. | One primitive | `Button`, `Input`, `Image`, `Badge`, `Icon` |
+
+## Where each layer lives
+
+| Layer | Directory | Notes |
+|---|---|---|
+| Section | `content-system/blueprints/{react,astro}/` | Blueprint families per ADR-008 play the Section role |
+| Layout | `components/ui/` | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
+| Container | `components/ui/` | `Card`, `Accordion`, `List` |
+| Block | `components/ui/` | `Field`, `CardSummary` |
+| Component | `components/ui/` | Atomic primitives |
+
+## Block vs container — decision rule
+
+> If the thing is described primarily by **how its children are styled and bounded** (border, elevation, padding, max-width) → it's a **container**. If it's described by **what slots it offers and which atoms fill them** (heading, body, kicker, action) → it's a **block**.
+
+`Card` passes "styled and bounded" → container. `ContentBlock` passes "slots and atoms" → block.
+
+## Card is a styled container
+
+A Card encodes only its container styling (border, radius, padding, elevation). Orientation comes from the **layout primitive** inside it, not a Card variant.
+
+```tsx
+// ✅ Stacked card — Stack layout inside Card
+<Card>
+  <Stack>
+    <MediaBlock />
+    <ContentBlock />
+  </Stack>
+</Card>
+
+// ✅ Horizontal card — Split layout inside Card
+<Card>
+  <Split>
+    <MediaBlock />
+    <ContentBlock />
+  </Split>
+</Card>
+
+// ❌ Don't bake orientation into Card
+<Card variant="horizontal">...</Card>
+<Card layout="stacked">...</Card>
+```
+
+This keeps `CardImageLeft`, `CardStacked`, `CardHorizontal` from existing — they're all "Card + a layout child."
+
+## Stat is a block
+
+`Stat` (value + label, two slots, no border styling) is a **block**, not a container. The bordered "stat tile" look is a Card containing a Stat.
+
+```tsx
+// Bordered stat tile
+<Card>
+  <Stat value="75%" label="of website credibility comes from design" />
+</Card>
+
+// Card with content + metric
+<Card>
+  <ContentBlock title="First impressions" body="..." />
+  <Stat value="0.05s" label="to make a first impression" />
+</Card>
+```
+
+If you find yourself reaching for a `StatCard`, you're conflating block and container — write it as `Card` + `Stat` instead.
+
+## Container reference
+
+| Container | Purpose | When |
+|---|---|---|
+| `DataSection` | Titled block of read-mode data on a page | Overview / profile tabs, client-detail pages |
+| `SheetSection` | Titled block inside a sheet body (uppercase label heading) | Any grouping inside `<Sheet>` |
+| `Card` (and variants) | Bordered, self-contained content unit | Grids of comparable items, dashboards, marketing |
+| `Board` (`BoardColumn`, `BoardCard`) | Kanban-style container | Task boards |
+| `Dialog` / `Modal` / `Sheet` | Overlay containers | Focused interactions |
+
+Don't reach for a `Card` when a `DataSection` is right. Cards are self-contained units in a grid; `DataSection` is one region of a larger page.
+
+## Related
+
+- [Naming Principles](/docs/build-standards/naming-principles) — allowlist and blueprint naming rules
+- [Page Structure](/docs/build-standards/page-structure) — how sections are structured in HTML
+- [Theming — Blueprints](/docs/theming/blueprints) — blueprint families that play the Section role
