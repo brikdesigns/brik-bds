@@ -8,7 +8,7 @@ import './FileUploader.css';
  * FileUploader component props
  */
 export interface FileUploaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  /** Accepted file types (e.g., ".pdf,.jpg" or "image/*") */
+  /** Accepted file types (e.g., ".pdf,.svg" or "image/svg+xml" or "image/*") */
   accept?: string;
   /** Allow multiple files */
   multiple?: boolean;
@@ -26,20 +26,41 @@ export interface FileUploaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   onChange?: (files: File[]) => void;
 }
 
+// `accept` honors three forms per HTML spec: extension (`.svg`), MIME type
+// (`image/svg+xml`), and MIME wildcard (`image/*`). Browsers only enforce
+// `accept` in the file picker — drag-drop bypasses it — so we check here too.
+function fileMatchesAccept(file: File, accept: string): boolean {
+  const name = file.name.toLowerCase();
+  const type = (file.type || '').toLowerCase();
+  const patterns = accept
+    .split(',')
+    .map((p) => p.trim().toLowerCase())
+    .filter(Boolean);
+  if (patterns.length === 0) return true;
+  return patterns.some((p) => {
+    if (p.startsWith('.')) return name.endsWith(p);
+    if (p.endsWith('/*')) return type.startsWith(p.slice(0, -1));
+    return type === p;
+  });
+}
+
 /**
  * FileUploader - BDS drag-and-drop file upload zone
  *
  * A dropzone that accepts files via drag-and-drop or click-to-browse.
  * Supports file type filtering, size limits, and multiple files.
  *
+ * Validates `accept` and `maxSize` on both click-to-browse and drag-and-drop;
+ * mismatched files are rejected with an inline error.
+ *
  * @example
  * ```tsx
  * <FileUploader
- *   accept="image/*,.pdf"
+ *   accept="image/*,.pdf,.svg"
  *   multiple
  *   maxSize={5 * 1024 * 1024}
  *   label="Upload documents"
- *   helperText="PDF, JPG, PNG up to 5MB"
+ *   helperText="PDF, JPG, PNG, or SVG up to 5MB"
  *   onChange={(files) => console.log(files)}
  * />
  * ```
@@ -67,17 +88,34 @@ export function FileUploader({
 
   const validateFiles = useCallback(
     (files: File[]): File[] => {
-      if (!maxSize) return files;
-      const oversized = files.filter((f) => f.size > maxSize);
-      if (oversized.length > 0) {
-        const maxMB = (maxSize / (1024 * 1024)).toFixed(1);
-        setInternalError(`File(s) exceed ${maxMB}MB limit`);
-        return files.filter((f) => f.size <= maxSize);
+      const errors: string[] = [];
+
+      let valid = files;
+      if (accept && accept.trim()) {
+        const mismatched = valid.filter((f) => !fileMatchesAccept(f, accept));
+        if (mismatched.length > 0) {
+          errors.push(
+            mismatched.length === 1
+              ? `"${mismatched[0].name}" is not a supported file type`
+              : `${mismatched.length} files are not supported file types`,
+          );
+          valid = valid.filter((f) => fileMatchesAccept(f, accept));
+        }
       }
-      setInternalError('');
-      return files;
+
+      if (maxSize) {
+        const oversized = valid.filter((f) => f.size > maxSize);
+        if (oversized.length > 0) {
+          const maxMB = (maxSize / (1024 * 1024)).toFixed(1);
+          errors.push(`File(s) exceed ${maxMB}MB limit`);
+          valid = valid.filter((f) => f.size <= maxSize);
+        }
+      }
+
+      setInternalError(errors.join(' · '));
+      return valid;
     },
-    [maxSize],
+    [accept, maxSize],
   );
 
   const handleFiles = useCallback(

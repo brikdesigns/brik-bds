@@ -11,6 +11,7 @@ FileUploader is a drag-and-drop drop zone with click-to-browse fallback. Use any
 
 - Document upload (PDF, DOCX, CSV imports)
 - Image uploads (avatars, gallery, before/after photos)
+- SVG icon uploads (industry / category icons in CMS pages)
 - Multi-file batch uploads
 - Any field where the user supplies a file from their device
 
@@ -26,11 +27,29 @@ import { FileUploader } from '@brikdesigns/bds';
 
 ```tsx
 <FileUploader
-  accept=".pdf,.jpg,.png"
-  helperText="PDF, JPG, or PNG up to 10MB"
+  accept=".pdf,.jpg,.png,.svg"
+  helperText="PDF, JPG, PNG, or SVG up to 10MB"
   onChange={(files) => handleFiles(files)}
 />
 ```
+
+### SVG icon (single)
+
+For uploading a single SVG asset — for example, an industry or category icon in a CMS form. The `accept` value combines the extension and MIME type so the browser picker matches across OSes, and the dropzone validates the same patterns on drag-drop.
+
+```tsx
+<FileUploader
+  accept=".svg,image/svg+xml"
+  maxSize={100 * 1024}
+  label="Upload an SVG icon"
+  helperText="SVG up to 100KB"
+  onChange={(files) => setIcon(files[0])}
+/>
+```
+
+<Callout type="warn">
+  **SVGs can contain executable scripts.** FileUploader does not sanitize SVG content. Strip `<script>` tags, event-handler attributes (`onclick`, `onload`, …), and `xlink:href="javascript:..."` on the server before storing or serving the file.
+</Callout>
 
 ### Multiple files with size limit
 

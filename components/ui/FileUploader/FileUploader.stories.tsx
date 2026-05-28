@@ -43,8 +43,8 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
   args: {
     label: 'Drag and drop files here',
-    helperText: 'PDF, JPG, or PNG up to 10MB',
-    accept: '.pdf,.jpg,.png',
+    helperText: 'PDF, JPG, PNG, or SVG up to 10MB',
+    accept: '.pdf,.jpg,.png,.svg',
   },
 };
 
@@ -61,8 +61,18 @@ export const Variants: Story = {
         <SectionLabel>Default</SectionLabel>
         <FileUploader
           label="Drag and drop files here"
-          helperText="PDF, JPG, or PNG up to 10MB"
-          accept=".pdf,.jpg,.png"
+          helperText="PDF, JPG, PNG, or SVG up to 10MB"
+          accept=".pdf,.jpg,.png,.svg"
+        />
+      </div>
+
+      <div>
+        <SectionLabel>SVG icon (single)</SectionLabel>
+        <FileUploader
+          label="Upload an SVG icon"
+          helperText="SVG up to 100KB · for industry / category icons"
+          accept=".svg,image/svg+xml"
+          maxSize={100 * 1024}
         />
       </div>
 
