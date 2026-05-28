@@ -205,6 +205,66 @@ export const Display: Story = {
 };
 
 /**
+ * `preset="display-row"` — horizontal sibling of `preset="display"`. Image
+ * on the left, content (tag, title, description, action) on the right. Use
+ * for single-card sections where a vertical layout wastes horizontal space:
+ * Related Customer Story, Recommended Add-On, featured plan. Toggle
+ * `imageWidth` between `narrow` / `standard` / `wide` (or pass a custom CSS
+ * length / percentage) to size the media column. Collapses to vertical
+ * stacking at ≤ 640px.
+ *
+ * @summary preset="display-row" — horizontal content-grid card
+ */
+export const DisplayRow: Story = {
+  args: {
+    preset: 'display-row',
+    title: 'Web Design Retainer',
+    description:
+      'Ongoing design partnership for teams shipping a steady stream of marketing pages, lifecycle assets, and product UI.',
+    image: (
+      <div
+        style={{
+          aspectRatio: '3 / 2',
+          background: 'var(--surface-secondary)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'var(--text-muted)',
+          height: '100%',
+        }}
+      >
+        Image slot
+      </div>
+    ),
+    tag: <Badge>Marketing</Badge>,
+    action: (
+      <Button variant="primary" size="sm">
+        Learn more
+      </Button>
+    ),
+    imageWidth: 'standard',
+  },
+  argTypes: {
+    variant: { table: { disable: true } },
+    padding: { table: { disable: true } },
+    interactive: { table: { disable: true } },
+    imageWidth: {
+      control: 'select',
+      options: ['narrow', 'standard', 'wide'],
+      description:
+        'Image column width. Named: `narrow` 25%, `standard` 35%, `wide` 50%. Pass a CSS length / percentage string (e.g. `"40%"`) to override.',
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 720, display: 'flex' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
  * `PricingCard` — web-only pricing tier with price block, feature checklist,
  * and optional highlighted (recommended) state. Component lives in
  * `components/ui/PricingCard/`; story lives here because PricingCard is part

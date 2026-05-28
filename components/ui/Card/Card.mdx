@@ -38,6 +38,12 @@ The `preset` prop selects the shape. Default (no `preset`) gives a flexible `chi
 
 <Canvas of={Stories.Display} />
 
+### Display-row preset
+
+`preset="display-row"` — horizontal sibling of `preset="display"`. Image on the left, content (tag, title, description, action) on the right. Use for single-card sections where a vertical layout wastes horizontal space: Related Customer Story, Recommended Add-On, featured plan, company-segment overview cards. Toggle `imageWidth` between `narrow` (25%), `standard` (35%, default), and `wide` (50%) — or pass a CSS length / percentage string for a custom column width. Collapses to a vertical stack at ≤ 640px so the card stays readable on narrow viewports.
+
+<Canvas of={Stories.DisplayRow} />
+
 ### Pricing (web)
 
 `PricingCard` — pricing tier with title, price block, feature checklist, and call-to-action. The `highlighted` prop marks the recommended tier with brand surface treatment. Web surface only (`surface-web`).
