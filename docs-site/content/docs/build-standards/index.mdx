@@ -1,0 +1,24 @@
+---
+title: Build Standards
+description: Naming, structure, and HTML semantics rules that keep every Brik page and component consistent.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Rules for building pages and components that stay coherent as the system grows. Every standard here is load-bearing — it resolves a word, a slot, an element, or a layout decision before you write code.
+
+<Cards>
+  <Card title="Naming Principles" href="/docs/build-standards/naming-principles" description="Intent over shape. The closed allowlist that governs every slot name." />
+  <Card title="Slot Vocabulary" href="/docs/build-standards/slot-vocabulary" description="Full reference for title, subtitle, description, label family, actions, value, Tag, and Badge." />
+  <Card title="Composition Layers" href="/docs/build-standards/composition-layers" description="Five layers — Section, Layout, Container, Block, Component — and the decision rules." />
+  <Card title="HTML Semantics" href="/docs/build-standards/html-semantics" description="Which HTML element each role renders as, heading hierarchy, stable IDs, and no-unclassed-wrappers." />
+  <Card title="Prop Axes" href="/docs/build-standards/prop-axes" description="Shared prop names — size, status, variant, appearance — and the component coverage matrix." />
+  <Card title="Page Structure" href="/docs/build-standards/page-structure" description="The HTML skeleton and BEM section pattern for Astro and Next.js sites." />
+</Cards>
+
+## Related
+
+- [Token Anatomy](/docs/primitives/token-anatomy) — How token names are structured (primitive, intent, scoped intent).
+- [Theming — Blueprints](/docs/theming/blueprints) — Blueprint families and how they implement the Section layer.
+- [Components](/docs/components) — Every component implements the prop axes and slot vocabulary defined here.

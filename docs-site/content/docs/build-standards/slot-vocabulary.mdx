@@ -1,0 +1,129 @@
+---
+title: Slot Vocabulary
+description: The complete reference for every canonical BDS slot name — what it means, when to use it, and what to never use instead.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Every term here is allowlisted in [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) and enforced by lint. Reach for this list before naming anything. See [Naming Principles](/docs/build-standards/naming-principles) for the allowlist contract.
+
+## Title
+
+`__title` is the primary text slot in any component. It names the role; typography tokens and HTML element are chosen separately.
+
+| Layer | Word | Example |
+|---|---|---|
+| Typography tokens | `heading` | `--heading-md`, `--font-family-heading` |
+| BEM role | `title` | `.bds-page-header__title`, `.bds-card__title` |
+| HTML element | `h1`–`h3` or `div`/`p` | Chosen by outline position — see [HTML Semantics](/docs/build-standards/html-semantics) |
+
+### Banned aliases
+
+| Banned | Use instead |
+|---|---|
+| `__heading` | `__title` — `heading` is a token scale, not a BEM role |
+| `__headline` | `__title` |
+| `__header` (as text) | `__title` for text; `__header` is acceptable only as a container slot holding title + actions |
+| `__hero-title`, `__page-heading` | `__title` — the parent block already names the context |
+
+<Callout type="warn">
+  `.bds-sheet-section__heading` predates this rule and renders an uppercase label `h3` — a different visual role. Do not generalize from this exception. New names always use `__title`.
+</Callout>
+
+## Subtitle
+
+The secondary line paired with a title. Always `subtitle`. Never `eyebrow`.
+
+- BEM: `.bds-*__subtitle`
+- Rendered as: `<p>` by default
+- Used in: `PageHeader`, `Sheet`, `SheetSection`, `BoardCard`, `DataSection`
+
+`eyebrow`, `kicker`, `overline`, and `pre-title` are common marketing terms. They are not BDS terms. Translate to `subtitle` before writing code.
+
+## Description
+
+Explanatory prose under a title or subtitle — longer and more neutral than a subtitle.
+
+- BEM: `.bds-*__description`
+- Rendered as: `<p>`
+- Used in: `Form`, `Banner`, `SheetSection`
+
+### Never `__body`
+
+`body` is a **token scale** (`--body-md`, `--font-family-body`) — not a BEM role. Long prose under a title uses `__description`. Labeling a slot `__body` because the typography scale is `body-md` is the same category mistake as labeling a title slot `__heading` because the scale is `--heading-md`.
+
+## Pull-quotes, callouts, and banners
+
+When a design has a quoted testimonial, inline alert, or highlighted aside, **the slot is a component, not a new BEM name**. Reach for the existing primitive.
+
+| Design element | BDS component | What you'd invent if you skipped it |
+|---|---|---|
+| Pull-quote with attribution | `CardTestimonial` | `__quote` / `__quote-cite` / `__quote-text` |
+| Inline alert / status callout | `Banner tone="warning\|error\|information"` | `__alert` / `__notice` |
+| Decorative full-bleed callout | `Banner` | `__banner` / `__callout-strip` |
+| Highlighted plan or pricing tile | `Card`, `PricingCard` | `__plan-callout` / `__pricing-aside` |
+| Aspect-locked image | `Frame` | hardcoded `aspect-ratio` + bare `<img>` |
+
+There is no `Callout` component in BDS. If a design spec says "callout," map to one of the rows above.
+
+## Label family
+
+`label` is the umbrella suffix for **any text that names or identifies a discrete thing**.
+
+| Term | What it names | Implementation |
+|---|---|---|
+| `field-label` | The name on a data pair | `.bds-field__label`, `.bds-sheet-field-label` |
+| `card-summary__label` | Label on a metric or stat | `.bds-card-summary__label` |
+| `chip__label` | Text inside a Chip | `.bds-chip__label` |
+| `meter__label`, `progress-stepper__label` | Progress / measurement markers | existing BEM |
+| `button-label` | Text on a Button | passed as `children` — concept only |
+| `tab-label` | Text on a TabBar tab | `label: string` prop on Sheet tabs |
+| `paragraph-label` | Scoped label above a paragraph or list | use `<Field>` with a paragraph or `<BulletList>` as value |
+
+**Rules:**
+- New named text element → use a `-label` term before inventing one.
+- `button-label` and `tab-label` are concepts, not classes. `children` is fine.
+- `paragraph-label` describes a usage of `Field` (`label` + `ReactNode` value) — no `ParagraphField` or `ListField` needed.
+
+## Action vs button-label
+
+These are different layers.
+
+- **`action` / `actions`** — the **slot** that holds one or more buttons. `.bds-page-header__actions`, `.bds-data-section__actions`. It is a `<div>` that receives a `<Button>` or `<ButtonGroup>`.
+- **`button-label`** — the **text on each button** inside that slot. Passed as `children`.
+
+The slot is not the text. When documenting a section header with a `[View]` / `[Edit]` toggle:
+
+- The slot holding the toggle → `actions`
+- The component rendering two buttons → `ButtonGroup`
+- The text on each button → button-label
+
+## Value
+
+The datum paired with a label.
+
+- BEM: `.bds-*__value` (`.bds-field__value`, `.bds-card-summary__value`)
+- Rendered as: `<div>` (block-level content) or `<span>` (inline text)
+
+`Field` handles the inline vs block distinction internally — put any `ReactNode` as `children`. `CardSummary` renders values as heading-tier typography (stat tile, not a form field) — don't confuse the two.
+
+## Tag vs Badge
+
+The distinction is **what the element labels**, not how it looks.
+
+| Element | Token source | Purpose | Examples |
+|---|---|---|---|
+| **Tag** | Service-line / domain tokens | **Nouns** — categories, classifications | "Clinical", "Front Desk", "OSHA" |
+| **Badge** | Status tokens | **Verbs / states** — statuses, outcomes | "Active", "New", "Completed" |
+
+Grammatical test: answers *what kind is this?* → Tag. Answers *what state is this in?* → Badge.
+
+<Callout type="warn">
+  Don't mix token sources. A Tag using status tokens reads as a state. A Badge using service-line tokens reads as a category. Wrong combination obscures meaning even if colors look fine.
+</Callout>
+
+## Related
+
+- [Naming Principles](/docs/build-standards/naming-principles) — the allowlist system and how to add a slot
+- [HTML Semantics](/docs/build-standards/html-semantics) — which HTML element each slot renders as
+- [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — the contract
