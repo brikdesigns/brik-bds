@@ -4,9 +4,15 @@ import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
-export type CardPreset = 'control' | 'summary' | 'display';
+export type CardPreset = 'control' | 'summary' | 'display' | 'display-row';
 export type CardControlActionAlign = 'center' | 'top';
 export type CardSummaryType = 'numeric' | 'price';
+/**
+ * Image-column width for `preset="display-row"`. Named values resolve to
+ * fixed percentages (`narrow` 25%, `standard` 35%, `wide` 50%); pass a CSS
+ * length / percentage string to override (e.g. `"40%"`, `"320px"`).
+ */
+export type CardDisplayRowImageWidth = 'narrow' | 'standard' | 'wide' | (string & {});
 
 export interface CardSummaryTextLink {
   label: string;
@@ -132,11 +138,58 @@ interface CardDisplayPresetProps extends CardBaseProps {
   href?: string;
 }
 
+interface CardDisplayRowPresetProps extends CardBaseProps {
+  /**
+   * Display-row preset — horizontal sibling of `preset="display"`. Image on
+   * the left, content (tag, title, description, action) on the right. Use
+   * for single-card sections where vertical layout wastes horizontal space:
+   * Related Customer Story, Recommended Add-On, featured plan. Collapses
+   * to a vertical stack at ≤ 640px.
+   */
+  preset: 'display-row';
+  /** Card heading. Renders as `<h3>` with `--font-family-heading` + `--heading-md`. */
+  title: string;
+  /** Body copy under the title. Renders as `<p>` with `--font-family-body` + `--body-md`. */
+  description?: string;
+  /**
+   * Left media slot. Pass a `<Frame>`-wrapped image (or any ReactNode). The
+   * media column owns its own aspect ratio via `<Frame>`; the column width
+   * is controlled by `imageWidth`.
+   */
+  image?: ReactNode;
+  /**
+   * Inline category indicator rendered above the title. Pass a
+   * `<ServiceTag>` for services, a `<Tag>` for blog categories, a date
+   * pill for stories, etc. Justified `flex-start` (does not stretch).
+   */
+  tag?: ReactNode;
+  /**
+   * Trailing action — typically a `<LinkButton>` or `<Button>`. Anchored
+   * to the bottom of the body column via `margin-top: auto` so the title
+   * + description stay top-aligned while the action sits at the card
+   * footer.
+   */
+  action?: ReactNode;
+  /**
+   * Image column width. Named values: `narrow` (25%), `standard` (35%,
+   * default), `wide` (50%). Any other string passes through as the CSS
+   * column-width value (e.g. `"40%"`, `"320px"`).
+   */
+  imageWidth?: CardDisplayRowImageWidth;
+  /**
+   * Render the card itself as an `<a>` when set — turns the whole card
+   * into a single clickable target. Use when `action` is not set and the
+   * card itself is the navigation affordance.
+   */
+  href?: string;
+}
+
 export type CardProps =
   | CardDefaultProps
   | CardControlPresetProps
   | CardSummaryPresetProps
-  | CardDisplayPresetProps;
+  | CardDisplayPresetProps
+  | CardDisplayRowPresetProps;
 
 function formatSummaryValue(value: string | number, type: CardSummaryType): string {
   if (typeof value === 'string') return value;
@@ -203,8 +256,13 @@ export function Card(props: CardProps) {
   if (props.preset === 'display') {
     return renderDisplayPreset(props);
   }
+  if (props.preset === 'display-row') {
+    return renderDisplayRowPreset(props);
+  }
   return renderDefault(props);
 }
+
+const NAMED_IMAGE_WIDTHS: ReadonlySet<string> = new Set(['narrow', 'standard', 'wide']);
 
 function renderDefault({
   variant = 'outlined',
@@ -384,6 +442,76 @@ function renderDisplayPreset({
 
   return (
     <div className={classes} style={style} {...rest}>
+      {body}
+    </div>
+  );
+}
+
+function renderDisplayRowPreset({
+  title,
+  description,
+  image,
+  tag,
+  action,
+  imageWidth = 'standard',
+  href,
+  className,
+  style,
+  preset: _preset,
+  ...rest
+}: CardDisplayRowPresetProps) {
+  const isNamed = NAMED_IMAGE_WIDTHS.has(imageWidth);
+  const classes = bdsClass(
+    'bds-card',
+    'bds-card--preset-display-row',
+    isNamed && `bds-card--preset-display-row-${imageWidth}`,
+    href && 'bds-card--link',
+    className,
+  );
+
+  // Custom (non-named) imageWidth string drives the CSS variable directly;
+  // named widths are class-based so they compose cleanly with theming. The
+  // `as React.CSSProperties` cast accommodates the CSS-variable property
+  // name (TS doesn't model arbitrary `--*` keys on CSSProperties).
+  const inlineStyle = isNamed
+    ? style
+    : { ...(style ?? {}), ['--bds-card-image-width' as string]: imageWidth };
+
+  const body = (
+    <>
+      {image && (
+        <div className="bds-card__preset-display-row-media">{image}</div>
+      )}
+      <div className="bds-card__preset-display-row-body">
+        {tag && (
+          <span className="bds-card__preset-display-row-tag">{tag}</span>
+        )}
+        <h3 className="bds-card__preset-display-row-title">{title}</h3>
+        {description && (
+          <p className="bds-card__preset-display-row-description">{description}</p>
+        )}
+        {action && (
+          <div className="bds-card__preset-display-row-action">{action}</div>
+        )}
+      </div>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={classes}
+        style={inlineStyle as React.CSSProperties}
+        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {body}
+      </a>
+    );
+  }
+
+  return (
+    <div className={classes} style={inlineStyle as React.CSSProperties} {...rest}>
       {body}
     </div>
   );
