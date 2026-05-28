@@ -364,6 +364,16 @@
   color: var(--text-primary);
 }
 
+.bds-card__preset-display-row-extras {
+  /* Generic supporting-content slot rendered between description and
+   * action. The consumer owns the rendered markup (bullet list, pill
+   * row, gallery, etc.); this wrapper exists only to give the slot a
+   * stable position in the column flex and to preserve gap rhythm. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
 .bds-card__preset-display-row-action {
   /* Anchor to bottom so the action sits at the card footer regardless of
    * description length. */

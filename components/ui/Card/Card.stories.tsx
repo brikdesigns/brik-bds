@@ -206,12 +206,14 @@ export const Display: Story = {
 
 /**
  * `preset="display-row"` — horizontal sibling of `preset="display"`. Image
- * on the left, content (tag, title, description, action) on the right. Use
- * for single-card sections where a vertical layout wastes horizontal space:
- * Related Customer Story, Recommended Add-On, featured plan. Toggle
- * `imageWidth` between `narrow` / `standard` / `wide` (or pass a custom CSS
- * length / percentage) to size the media column. Collapses to vertical
- * stacking at ≤ 640px.
+ * on the left, content (tag, title, description, optional `extras`, action)
+ * on the right. Use for single-card sections where a vertical layout wastes
+ * horizontal space: Related Customer Story, Recommended Add-On, featured
+ * plan, company-segment overview. Toggle `imageWidth` between `narrow` /
+ * `standard` / `wide` (or pass a custom CSS length / percentage) to size
+ * the media column. The `extras` slot lets the consumer drop in any
+ * supporting content (bullet list, pill row, gallery) between description
+ * and action. Collapses to vertical stacking at ≤ 640px.
  *
  * @summary preset="display-row" — horizontal content-grid card
  */
@@ -237,6 +239,16 @@ export const DisplayRow: Story = {
       </div>
     ),
     tag: <Badge>Marketing</Badge>,
+    extras: (
+      <>
+        <p style={{ margin: 0, fontWeight: 600 }}>Great fit for:</p>
+        <ul style={{ margin: 0, paddingInlineStart: '1.25rem' }}>
+          <li>Marketing leads shipping multiple campaigns a month</li>
+          <li>Founders who need brand + landing pages in lockstep</li>
+          <li>Teams without a full-time designer</li>
+        </ul>
+      </>
+    ),
     action: (
       <Button variant="primary" size="sm">
         Learn more
