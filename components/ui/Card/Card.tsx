@@ -164,6 +164,15 @@ interface CardDisplayRowPresetProps extends CardBaseProps {
    */
   tag?: ReactNode;
   /**
+   * Optional content block rendered between `description` and `action`.
+   * Use for structured supporting content that doesn't fit the single-
+   * paragraph `description` slot — bullet lists ("Great fit for: …"),
+   * feature pills, supporting meta, or a small inline gallery. Receives
+   * no internal styling beyond a flex-column wrapper; the consumer owns
+   * the rendered markup.
+   */
+  extras?: ReactNode;
+  /**
    * Trailing action — typically a `<LinkButton>` or `<Button>`. Anchored
    * to the bottom of the body column via `margin-top: auto` so the title
    * + description stay top-aligned while the action sits at the card
@@ -452,6 +461,7 @@ function renderDisplayRowPreset({
   description,
   image,
   tag,
+  extras,
   action,
   imageWidth = 'standard',
   href,
@@ -489,6 +499,9 @@ function renderDisplayRowPreset({
         <h3 className="bds-card__preset-display-row-title">{title}</h3>
         {description && (
           <p className="bds-card__preset-display-row-description">{description}</p>
+        )}
+        {extras && (
+          <div className="bds-card__preset-display-row-extras">{extras}</div>
         )}
         {action && (
           <div className="bds-card__preset-display-row-action">{action}</div>
