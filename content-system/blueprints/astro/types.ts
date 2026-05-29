@@ -123,8 +123,10 @@ export interface BlueprintSection {
    * pattern, not the audience-specific values.
    *
    * Additive, optional — blueprints that don't read this are unaffected.
+   *
+   * `back-office` is canonical; `service` is a @deprecated alias (see #797).
    */
-  readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
+  readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
   /**
    * Optional eyebrow icon URL — manual override for decorative, non-
    * categorical images (campaign artwork, editorial illustrations).
