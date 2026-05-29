@@ -77,8 +77,9 @@ export interface BlueprintSection {
      */
     readonly href?: string;
     readonly imageUrl?: string;
-    /** ServiceLine slug — see `ServiceTag` props in `@brikdesigns/bds`. */
-    readonly category?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
+    /** ServiceLine slug — see `ServiceTag` props in `@brikdesigns/bds`.
+     * `back-office` is canonical; `service` is a @deprecated alias. */
+    readonly category?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
     readonly hasOptions?: boolean;
     /**
      * Audience slug for `data-audience` scope binding. Re-binds canonical
@@ -90,7 +91,7 @@ export interface BlueprintSection {
      * docs (`docs/theming/client-themes`); BDS ships the pattern, not the
      * audience-specific values.
      */
-    readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'service';
+    readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
     /** Alt text for `imageUrl`. Defaults to empty (decorative) when omitted. */
     readonly imageAlt?: string;
   }[];

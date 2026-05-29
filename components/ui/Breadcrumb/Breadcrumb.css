@@ -47,9 +47,9 @@
  * [data-audience='X'] subtree, scoped to .bds-breadcrumb only so
  * other secondary text on the page is unaffected.
  *
- * `data-audience='service'` resolves to the back-office hue per the
- * #563 token rename (audience attribute kept "service" for
- * component-API compat; underlying tokens are *-back-office-*).
+ * `data-audience='back-office'` is canonical; `data-audience='service'` is a
+ * @deprecated alias kept for compat during the cross-repo rename. Both resolve
+ * to the back-office hue (underlying tokens are *-back-office-*).
  * Same mapping as HeroSplitImageCardOverlay.
  *
  * Pattern: rebind canonical generic tokens (--text-secondary,
@@ -77,6 +77,13 @@
   --text-muted: var(--text-service-product);
 }
 
+[data-audience='back-office'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-back-office);
+  --text-muted: var(--text-service-back-office);
+}
+
+/* @deprecated alias of [data-audience='back-office'] — remove with the
+   `service` ServiceLine member in a future major. */
 [data-audience='service'] .bds-breadcrumb {
   --text-secondary: var(--text-service-back-office);
   --text-muted: var(--text-service-back-office);
