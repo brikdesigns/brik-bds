@@ -4,7 +4,14 @@
  * component (removed in #572; dir renamed in #731).
  */
 
-export type ServiceLine = 'brand' | 'marketing' | 'information' | 'product' | 'service';
+/**
+ * Service-line identifier. `back-office` is canonical; `service` is a
+ * **@deprecated** alias kept for non-breaking package-API compat during the
+ * cross-repo rename (the underlying color tokens already use `*-back-office`).
+ * Pass `back-office` in new code — `service` is slated for removal in a future
+ * major version.
+ */
+export type ServiceLine = 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
 
 /**
  * Size scale shared with ServiceTag. Kept as `ServiceBadgeSize` for
@@ -18,6 +25,8 @@ export const categoryConfig: Record<ServiceLine, { token: string; label: string 
   marketing: { token: 'green', label: 'Marketing' },
   information: { token: 'blue', label: 'Information' },
   product: { token: 'purple', label: 'Product' },
+  'back-office': { token: 'orange', label: 'Back Office' },
+  // @deprecated alias of 'back-office' — same orange tokens. Kept for API compat.
   service: { token: 'orange', label: 'Back Office' },
 };
 
@@ -72,13 +81,26 @@ export function normalizeServiceName(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
+/**
+ * On-disk icon directory for a service line. The back-office icon assets still
+ * live under `icons/service/` (the filenames are already `back-office-*`); the
+ * physical directory rename is a separate asset migration (tracked follow-up).
+ * Resolve both the canonical `back-office` and the deprecated `service` alias
+ * to that directory until the assets move. Every other line: dir === category.
+ */
+const iconDirOverrides: Partial<Record<ServiceLine, string>> = { 'back-office': 'service' };
+function iconDir(category: ServiceLine): string {
+  return iconDirOverrides[category] ?? category;
+}
+
 export function getServiceIconPath(category: ServiceLine, serviceName: string): string {
+  const dir = iconDir(category);
   if (serviceIconOverrides[serviceName]) {
-    return `/icons/${category}/${serviceIconOverrides[serviceName]}.svg`;
+    return `/icons/${dir}/${serviceIconOverrides[serviceName]}.svg`;
   }
   const normalized = normalizeServiceName(serviceName);
   if (category === 'information') {
-    return `/icons/${category}/info-${normalized.replace('information-', '')}.svg`;
+    return `/icons/${dir}/info-${normalized.replace('information-', '')}.svg`;
   }
-  return `/icons/${category}/${category}-${normalized.replace(`${category}-`, '')}.svg`;
+  return `/icons/${dir}/${category}-${normalized.replace(`${category}-`, '')}.svg`;
 }

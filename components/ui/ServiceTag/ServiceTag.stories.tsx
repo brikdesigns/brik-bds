@@ -15,7 +15,7 @@ const meta: Meta<typeof ServiceTag> = {
   argTypes: {
     category: {
       control: 'select',
-      options: ['brand', 'marketing', 'information', 'product', 'service'],
+      options: ['brand', 'marketing', 'information', 'product', 'back-office', 'service'],
     },
     variant: {
       control: 'select',
@@ -64,8 +64,28 @@ const categoryServices: Record<ServiceLine, { serviceName: string; label: string
   marketing:   { serviceName: 'Custom Standard Web Development and Design',    label: 'Marketing Design' },
   information: { serviceName: 'Information Design',                            label: 'Information Design' },
   product:     { serviceName: 'Product Design Systems',                        label: 'Product Design' },
+  'back-office': { serviceName: 'Digital File Organization',                   label: 'Back Office' },
+  // @deprecated alias of 'back-office'
   service:     { serviceName: 'Digital File Organization',                     label: 'Back Office' },
 };
+
+// Back-office catalog — shared by the canonical `back-office` key and its
+// @deprecated `service` alias below (avoids duplicating the list).
+const backOfficeServices: { serviceName: string; label: string }[] = [
+  { serviceName: 'Software and Subscription Audit',                        label: 'Audit' },
+  { serviceName: 'Software Automation Setup',                              label: 'Automated Workflow' },
+  { serviceName: 'Automated Workflow and AI Integration',                  label: 'Automation & AI' },
+  { serviceName: 'Standard Operating Procedures (SOP) Creation',          label: 'Business Solutions' },
+  { serviceName: 'Back Office Consulting',                                 label: 'Consulting' },
+  { serviceName: 'CRM Setup and Data Cleanup',                             label: 'CRM & Data' },
+  { serviceName: 'Back Office Customer Support',                           label: 'Customer Support' },
+  { serviceName: 'Back Office Design',                                     label: 'Design' },
+  { serviceName: 'Digital File Organization',                              label: 'File Organization' },
+  { serviceName: 'Customer Journey Mapping',                               label: 'Journey Mapping' },
+  { serviceName: 'Back Office Software Audit',                             label: 'Software Audit' },
+  { serviceName: 'Back Office SOP Creation',                               label: 'SOP Creation' },
+  { serviceName: 'Back Office Training Setup',                             label: 'Training Setup' },
+];
 
 // Full service list for catalog stories
 const allServices: Record<ServiceLine, { serviceName: string; label: string }[]> = {
@@ -108,21 +128,9 @@ const allServices: Record<ServiceLine, { serviceName: string; label: string }[]>
     { serviceName: 'Product Design',                                         label: 'Design' },
     { serviceName: 'Product Enterprise Design',                              label: 'Enterprise Design' },
   ],
-  service: [
-    { serviceName: 'Software and Subscription Audit',                        label: 'Audit' },
-    { serviceName: 'Software Automation Setup',                              label: 'Automated Workflow' },
-    { serviceName: 'Automated Workflow and AI Integration',                  label: 'Automation & AI' },
-    { serviceName: 'Standard Operating Procedures (SOP) Creation',          label: 'Business Solutions' },
-    { serviceName: 'Back Office Consulting',                                 label: 'Consulting' },
-    { serviceName: 'CRM Setup and Data Cleanup',                             label: 'CRM & Data' },
-    { serviceName: 'Back Office Customer Support',                           label: 'Customer Support' },
-    { serviceName: 'Back Office Design',                                     label: 'Design' },
-    { serviceName: 'Digital File Organization',                              label: 'File Organization' },
-    { serviceName: 'Customer Journey Mapping',                               label: 'Journey Mapping' },
-    { serviceName: 'Back Office Software Audit',                             label: 'Software Audit' },
-    { serviceName: 'Back Office SOP Creation',                               label: 'SOP Creation' },
-    { serviceName: 'Back Office Training Setup',                             label: 'Training Setup' },
-  ],
+  'back-office': backOfficeServices,
+  // @deprecated alias of 'back-office'
+  service: backOfficeServices,
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -331,7 +339,7 @@ export const Patterns: Story = {
           {[
             { category: 'marketing' as const, name: 'Website Design & Development',  label: 'Marketing Design' },
             { category: 'brand' as const,     name: 'Logo Design & Brand Guidelines', label: 'Brand' },
-            { category: 'service' as const,   name: 'CRM Setup & Data Cleanup',       label: 'Back Office' },
+            { category: 'back-office' as const,   name: 'CRM Setup & Data Cleanup',       label: 'Back Office' },
             { category: 'information' as const, name: 'Print Collateral',             label: 'Information Design' },
             { category: 'product' as const,   name: 'Design Systems & Libraries',     label: 'Product Design' },
           ].map(({ category, name, label }, i) => (
@@ -362,7 +370,7 @@ export const Patterns: Story = {
           {[
             { category: 'marketing' as const,   serviceName: 'Custom Standard Web Development and Design', label: 'Website Design & Development' },
             { category: 'brand' as const,        serviceName: 'Brand Identity Bundle',                     label: 'Brand Identity Bundle' },
-            { category: 'service' as const,      serviceName: 'CRM Setup and Data Cleanup',                label: 'CRM Setup & Data Cleanup' },
+            { category: 'back-office' as const,      serviceName: 'CRM Setup and Data Cleanup',                label: 'CRM Setup & Data Cleanup' },
             { category: 'information' as const,  serviceName: 'Print Design',                              label: 'Print Collateral' },
             { category: 'product' as const,      serviceName: 'Product Design Systems',                    label: 'Design Systems' },
           ].map(({ category, serviceName, label }, i) => (
@@ -390,7 +398,7 @@ export const Patterns: Story = {
           {[
             { category: 'marketing' as const, serviceName: 'Custom Standard Web Development and Design', label: 'Website Design & Development' },
             { category: 'brand' as const, serviceName: 'Brand Identity Bundle', label: 'Logo Design & Brand Guidelines' },
-            { category: 'service' as const, serviceName: 'CRM Setup and Data Cleanup', label: 'CRM Setup & Data Cleanup' },
+            { category: 'back-office' as const, serviceName: 'CRM Setup and Data Cleanup', label: 'CRM Setup & Data Cleanup' },
             { category: 'information' as const, serviceName: 'Print Design', label: 'Print Design & Collateral' },
             { category: 'product' as const, serviceName: 'Product Design Systems', label: 'Design Systems & Libraries' },
           ].map(({ category, serviceName, label }) => (

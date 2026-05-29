@@ -44,9 +44,10 @@
 .bds-service-tag--marketing   { background-color: var(--background-service-marketing);   color: var(--text-service-marketing); }
 .bds-service-tag--information { background-color: var(--background-service-information); color: var(--text-service-information); }
 .bds-service-tag--product     { background-color: var(--background-service-product);     color: var(--text-service-product); }
-/* `--service` class modifier refers to the back-office service line; tokens were
-   renamed `service-service` → `service-back-office` in #563. Class kept stable
-   for component prop-API compat; follow-up may rename the modifier separately. */
+.bds-service-tag--back-office { background-color: var(--background-service-back-office); color: var(--text-service-back-office); }
+/* `--service` is the @deprecated alias of `--back-office` (kept for prop-API
+   compat during the cross-repo rename). Same back-office tokens; remove with
+   the `service` ServiceLine member in a future major. */
 .bds-service-tag--service     { background-color: var(--background-service-back-office); color: var(--text-service-back-office); }
 
 /* ─── Icon ───────────────────────────────────────────────────── */

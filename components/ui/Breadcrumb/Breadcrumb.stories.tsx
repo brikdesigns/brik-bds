@@ -180,7 +180,8 @@ const AUDIENCES = [
   { id: 'marketing', label: 'Marketing (green)' },
   { id: 'information', label: 'Information (blue)' },
   { id: 'product', label: 'Product (purple)' },
-  { id: 'service', label: 'Service / back-office (orange)' },
+  { id: 'back-office', label: 'Back Office (orange)' },
+  { id: 'service', label: 'Service — @deprecated alias of back-office (orange)' },
 ] as const;
 
 /** @summary Service-line tinting via [data-audience] cascade */
