@@ -104,3 +104,24 @@ export function getServiceIconPath(category: ServiceLine, serviceName: string): 
   }
   return `/icons/${dir}/${category}-${normalized.replace(`${category}-`, '')}.svg`;
 }
+
+/**
+ * Service-line default icon basename — the line-level glyph used when an icon
+ * variant has no specific `serviceName` (e.g. a category tag with no service).
+ * Without this, `<ServiceTag variant="icon">` rendered an empty colored box.
+ * Files resolve to the consuming app's `/public/icons/{dir}/{name}.svg`.
+ */
+const serviceLineDefaultIcon: Record<ServiceLine, string> = {
+  brand: 'brand-design',
+  marketing: 'marketing-design',
+  information: 'information-design',
+  product: 'product-design',
+  'back-office': 'back-office-design',
+  // @deprecated alias of 'back-office' — same default icon.
+  service: 'back-office-design',
+};
+
+/** Line-level default icon path — fallback for icon variants lacking a serviceName. */
+export function getServiceLineIconPath(category: ServiceLine): string {
+  return `/icons/${iconDir(category)}/${serviceLineDefaultIcon[category]}.svg`;
+}
