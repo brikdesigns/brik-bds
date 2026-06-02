@@ -67,7 +67,7 @@
     '--padding-', '--space-', '--spacing-', '--gap-', '--margin-',
     '--font-family-', '--typography-', '--font-size-', '--font-weight-',
     '--body-', '--heading-', '--display-', '--label-',
-    '--line-height-', '--letter-spacing-',
+    '--font-line-height-', '--letter-spacing-',
     '--border-radius-', '--radius-',
     '--shadow-', '--elevation-',
     '--transition-', '--motion-', '--duration-', '--easing-',
