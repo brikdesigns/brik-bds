@@ -3,6 +3,7 @@ import { bdsClass } from '../../utils';
 import {
   categoryConfig,
   getServiceIconPath,
+  getServiceLineIconPath,
   type ServiceLine,
   type ServiceBadgeSize,
 } from './service-config';
@@ -19,7 +20,11 @@ export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
   size?: ServiceBadgeSize;
   /** Display label — defaults to the category name (e.g. "Back Office"). Pass a service name to label a specific service. */
   label?: string;
-  /** Service name for icon resolution — required for icon-text and icon variants to show an icon */
+  /**
+   * Service name for icon resolution. Required for `icon-text` to show a glyph.
+   * For `icon`, optional — when omitted the tag falls back to the service-line
+   * default glyph instead of rendering an empty box.
+   */
   serviceName?: string;
 }
 
@@ -70,7 +75,13 @@ export function ServiceTag({
   if (variant === 'icon') {
     const boxSize = boxSizeMap[size];
     const iconSize = Math.round(boxSize * iconScaleMap[size]);
-    const showIcon = !!serviceName && !imageError;
+    // Icon-only tags have no label, so an empty colored box reads as broken.
+    // Fall back to the service-line default glyph when no specific service is
+    // named, so a category tag still shows its line icon.
+    const iconSrc = serviceName
+      ? getServiceIconPath(category, serviceName)
+      : getServiceLineIconPath(category);
+    const showIcon = !imageError;
 
     return (
       <span
@@ -87,7 +98,7 @@ export function ServiceTag({
       >
         {showIcon && (
           <img
-            src={getServiceIconPath(category, serviceName!)}
+            src={iconSrc}
             alt=""
             width={iconSize}
             height={iconSize}
