@@ -1,0 +1,82 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Page.stories';
+
+<Meta of={Stories} />
+
+# Page
+
+<ComponentLinks slug="page" />
+
+The compound page shell — the connective tissue every product page shares. A `<Page.Header>` hands off to a `<Page.Content>` across a known vertical `gap`, inside one shared horizontal `padding` column. Replaces the per-app `main` + bare-`div` + inline-style stacks that drift across consumers.
+
+```tsx
+<Page padding="md" gap="xl">
+  <Page.Header title="Services" subtitle="…" actions={<Button>Add</Button>} />
+  <Page.Content>
+    <Grid columns="auto-fit" minColumnWidth="180px" gap="md">
+      <Card preset="summary" label="Total" value={49} />
+      <Card preset="summary" label="Public" value={33} />
+    </Grid>
+    <FilterBar total={49} filtered={49} label="services" />
+    <Table>…</Table>
+  </Page.Content>
+</Page>
+```
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+### Anatomy
+
+- **`Page`** owns the shared horizontal inset (`padding`) and the header→body `gap`. It always sets `flex: 1; min-height: 0` on itself.
+- **`Page.Header`** is the existing [`PageHeader`](/docs/components/page-header) (title · subtitle · actions · tabs), re-exported so call-sites migrate by import, not JSX shape.
+- **`Page.Content`** owns the body region: per-region inset override, the vertical rhythm between stacked sections, and (optionally) its own scroll.
+
+### Precondition — flex-column parent
+
+`<Page>` sets `flex: 1; min-height: 0` so fill-height bodies and internal scroll work. That only takes effect inside a **flex-column parent** (the app shell provides this). In a non-flex parent `flex: 1` no-ops and the page sizes to content — degraded, not broken. The Storybook `Shell` helper makes the precondition visible.
+
+## Variants
+
+### Stats in the body
+
+Summary stat cards are a **body** concern, not a header slot — they summarize the display below them. Render them in `<Page.Content>` as a `Grid` of `Card preset="summary"` above the `FilterBar` (brik-bds#404, 2026-06-03). The `PageHeader.stats` slot is deprecated.
+
+<Canvas of={Stories.StatsInBody} />
+
+### Tabs handoff
+
+When `<Page.Header tabs>` is set, the header's bottom divider is suppressed and the TabBar baseline becomes the handoff to the body.
+
+<Canvas of={Stories.WithTabs} />
+
+### Full-bleed body
+
+`<Page.Content padding="none">` breaks out of the page column for edge-to-edge boards and tables, while the header stays in the padded column.
+
+<Canvas of={Stories.FullBleedBody} />
+
+### Fill-height scroll
+
+`<Page.Content scroll>` owns the vertical scroll on fill-height pages, so the header stays put while the body scrolls internally.
+
+<Canvas of={Stories.FillHeightScroll} />
+
+### Headerless
+
+`<Page.Header>` is optional — a body-only page is valid, and `gap` becomes a no-op.
+
+<Canvas of={Stories.Headerless} />
+
+## Deferred (not in V1)
+
+- **Responsive `{ narrow, regular, wide }` props** for `padding` — the prop type widens to `Scalar | {…}` later without breaking existing call-sites.
+- **`Page.Pane` / `Page.Footer`** — namespace reserved for a future resizable rail + footer.
+- **Explicit `divider` prop** on regions — today the header divider is automatic (border, suppressed under tabs).
+- **DataDisplay family** (`TableView` / `ListView` / `BoardView` / `CalendarView` / `ProfileView`) — the loading/empty/error wrappers ship in a follow-up batch.
+
+## Props
+
+<ArgTypes of={Stories} />

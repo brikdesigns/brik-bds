@@ -61,6 +61,7 @@ export * from './MultiSelect';
 export * from './NavBar';
 export * from './NavItem';
 export * from './NotificationList';
+export * from './Page';
 export * from './PageHeader';
 export * from './Pagination';
 export * from './NumberInput';

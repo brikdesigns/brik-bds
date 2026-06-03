@@ -44,7 +44,15 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   tabs?: ReactNode;
   /** Key/value pairs rendered below the title row (e.g. Owner, Status, Updated). */
   metadata?: MetadataItem[];
-  /** Summary content (e.g. stat cards) rendered between metadata and tabs. */
+  /**
+   * Summary content (e.g. stat cards) rendered between metadata and tabs.
+   *
+   * @deprecated Summary stats belong in the page **body**, not the header
+   * (2026-06-03 decision, brik-bds#404). Render them in `<Page.Content>` as a
+   * `Grid` of `Card preset="summary"` above the `FilterBar` / display.
+   * Slated for removal after the standard deprecation window once the portal
+   * consumers migrate (brik-client-portal#927).
+   */
   stats?: ReactNode;
   /** Title scale. Default: 'lg' */
   size?: 'sm' | 'md' | 'lg';
