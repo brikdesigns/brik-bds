@@ -28,28 +28,28 @@ export interface PageContentProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Page.Content — the body region of a {@link Page}. Owns the horizontal inset,
+ * PageContent — the body region of a {@link Page}. Owns the horizontal inset,
  * the vertical rhythm between stacked sections, and (optionally) its own
- * scroll. Always rendered as `<Page.Content>`, a static member of `<Page>`.
+ * scroll. A sibling of `<PageHeader>` inside `<Page>`.
  *
- * Summary stats live here (not in `<Page.Header>`) as a `Grid` of
+ * Summary stats live here (not in `<PageHeader>`) as a `Grid` of
  * `Card preset="summary"`, above the `FilterBar` and display:
  *
  * @example
  * ```tsx
- * <Page.Content>
+ * <PageContent>
  *   <Grid columns="auto-fit" minColumnWidth="180px" gap="md">
  *     <Card preset="summary" label="Total" value={49} />
  *     <Card preset="summary" label="Public" value={33} />
  *   </Grid>
  *   <FilterBar total={49} filtered={49} label="services" />
  *   <Table>…</Table>
- * </Page.Content>
+ * </PageContent>
  *
  * // Full-bleed board page that owns its own scroll:
- * <Page.Content padding="none" scroll>
+ * <PageContent padding="none" scroll>
  *   <Board>…</Board>
- * </Page.Content>
+ * </PageContent>
  * ```
  *
  * @summary Page body region — inset, section rhythm, optional scroll.

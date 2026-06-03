@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Page } from './Page';
+import { PageHeader } from '../PageHeader';
+import { PageContent } from './PageContent';
 import { Grid } from '../Grid';
 import { Card } from '../Card';
 import { FilterBar } from '../FilterBar';
@@ -91,16 +93,16 @@ export const Playground: Story = {
   render: (args) => (
     <Shell>
       <Page {...args}>
-        <Page.Header
+        <PageHeader
           title="Services"
           subtitle="The middle-tier service catalog — what we offer under each service line."
           actions={<Button variant="primary" size="sm">Add Service</Button>}
         />
-        <Page.Content>
+        <PageContent>
           <StatRow />
           <ServicesFilterBar />
           <ServicesTable />
-        </Page.Content>
+        </PageContent>
       </Page>
     </Shell>
   ),
@@ -109,7 +111,7 @@ export const Playground: Story = {
 /* ─── 2. Stats in body ───────────────────────────────────────── */
 
 /**
- * The canonical index-page shape: summary stats live in `<Page.Content>` as a
+ * The canonical index-page shape: summary stats live in `<PageContent>` as a
  * `Grid` of `Card preset="summary"` above the `FilterBar` and display — not
  * in the header (brik-bds#404, 2026-06-03 decision).
  *
@@ -119,12 +121,12 @@ export const StatsInBody: Story = {
   render: () => (
     <Shell>
       <Page padding="md" gap="xl">
-        <Page.Header title="Services" subtitle="Edits sync to brikdesigns.com on save." />
-        <Page.Content>
+        <PageHeader title="Services" subtitle="Edits sync to brikdesigns.com on save." />
+        <PageContent>
           <StatRow />
           <ServicesFilterBar />
           <ServicesTable />
-        </Page.Content>
+        </PageContent>
       </Page>
     </Shell>
   ),
@@ -133,7 +135,7 @@ export const StatsInBody: Story = {
 /* ─── 3. Tabs handoff ────────────────────────────────────────── */
 
 /**
- * When `<Page.Header tabs>` is filled, the header's bottom divider is
+ * When `<PageHeader tabs>` is filled, the header's bottom divider is
  * suppressed and the TabBar baseline becomes the handoff to the body.
  *
  * @summary Header with tabs — the TabBar baseline replaces the divider
@@ -142,7 +144,7 @@ export const WithTabs: Story = {
   render: () => (
     <Shell>
       <Page padding="md" gap="xl">
-        <Page.Header
+        <PageHeader
           title="Billing"
           subtitle="Invoices and payment activity across all clients."
           tabs={
@@ -155,10 +157,10 @@ export const WithTabs: Story = {
             />
           }
         />
-        <Page.Content>
+        <PageContent>
           <StatRow />
           <ServicesTable />
-        </Page.Content>
+        </PageContent>
       </Page>
     </Shell>
   ),
@@ -167,7 +169,7 @@ export const WithTabs: Story = {
 /* ─── 4. Full-bleed body ─────────────────────────────────────── */
 
 /**
- * `<Page.Content padding="none">` breaks out of the page column to render a
+ * `<PageContent padding="none">` breaks out of the page column to render a
  * data display edge-to-edge — for full-width boards and tables.
  *
  * @summary Full-bleed body — table runs edge-to-edge
@@ -176,10 +178,10 @@ export const FullBleedBody: Story = {
   render: () => (
     <Shell>
       <Page padding="lg" gap="xl">
-        <Page.Header title="All Tasks" subtitle="Header stays in the padded column; the table goes full-bleed below." />
-        <Page.Content padding="none">
+        <PageHeader title="All Tasks" subtitle="Header stays in the padded column; the table goes full-bleed below." />
+        <PageContent padding="none">
           <ServicesTable rows={6} />
-        </Page.Content>
+        </PageContent>
       </Page>
     </Shell>
   ),
@@ -188,7 +190,7 @@ export const FullBleedBody: Story = {
 /* ─── 5. Fill-height scroll ──────────────────────────────────── */
 
 /**
- * `<Page.Content scroll>` owns the vertical scroll on fill-height pages so the
+ * `<PageContent scroll>` owns the vertical scroll on fill-height pages so the
  * header stays put while the body scrolls internally. Requires the flex-column
  * parent (the Shell here, the app shell in production).
  *
@@ -198,10 +200,10 @@ export const FillHeightScroll: Story = {
   render: () => (
     <Shell height={420}>
       <Page padding="md" gap="xl">
-        <Page.Header title="All Tasks" subtitle="The body scrolls; this header does not." />
-        <Page.Content scroll>
+        <PageHeader title="All Tasks" subtitle="The body scrolls; this header does not." />
+        <PageContent scroll>
           <ServicesTable rows={20} />
-        </Page.Content>
+        </PageContent>
       </Page>
     </Shell>
   ),
@@ -210,8 +212,8 @@ export const FillHeightScroll: Story = {
 /* ─── 6. Headerless ──────────────────────────────────────────── */
 
 /**
- * `<Page.Header>` is optional. A header-less page (e.g. an embedded or
- * outer-shell page) is just `<Page><Page.Content>…</Page.Content></Page>`; the
+ * `<PageHeader>` is optional. A header-less page (e.g. an embedded or
+ * outer-shell page) is just `<Page><PageContent>…</PageContent></Page>`; the
  * `gap` prop becomes a no-op with nothing to gap against.
  *
  * @summary Header is optional — body-only page
@@ -220,10 +222,10 @@ export const Headerless: Story = {
   render: () => (
     <Shell>
       <Page padding="md">
-        <Page.Content>
+        <PageContent>
           <StatRow />
           <ServicesTable />
-        </Page.Content>
+        </PageContent>
       </Page>
     </Shell>
   ),
