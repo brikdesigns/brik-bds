@@ -34,6 +34,7 @@ export * from './CollapsibleCard';
 export * from './CompletionToggle';
 export * from './Counter';
 export * from './DataSection';
+export * from './DataView';
 export * from './DatePicker';
 export * from './DevFeedbackWidget';
 export * from './Dialog';
