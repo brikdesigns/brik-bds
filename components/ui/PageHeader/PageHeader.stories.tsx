@@ -353,25 +353,25 @@ export const TunableSpacing: Story = {
       <Stack gap="var(--gap-huge)">
         {/* Defaults */}
         <div>
-          <SectionLabel>Defaults — gap-sm content gap, 0 divider padding</SectionLabel>
+          <SectionLabel>Defaults — gap-sm content gap, padding-md divider breathing room</SectionLabel>
           <PageHeader
             title="Default Header"
-            subtitle="Title↔subtitle gap = 6px (gap-sm). Subtitle sits flush above the divider."
+            subtitle="Title↔subtitle gap = gap-sm. Default padding-md breathing room before the divider."
             actions={<Button variant="primary" size="sm">Action</Button>}
           />
         </div>
 
         {/* Tuned for clinical density (renew-pms) */}
         <div>
-          <SectionLabel>Tuned — wider content gap + divider breathing room</SectionLabel>
+          <SectionLabel>Tuned — wider content gap + extra divider breathing room</SectionLabel>
           <PageHeader
             title="Tuned Header"
-            subtitle="Title↔subtitle gap bumped to 12px; 16px breathing room before the divider."
+            subtitle="Content gap widened to padding-sm; divider breathing room bumped past the default to padding-lg."
             actions={<Button variant="primary" size="sm">Action</Button>}
             style={{
               // bds-lint-ignore — component-scoped CSS variables, not design tokens
               ['--page-header-content-gap' as string]: 'var(--padding-sm)',
-              ['--page-header-padding-bottom' as string]: 'var(--padding-md)',
+              ['--page-header-padding-bottom' as string]: 'var(--padding-lg)',
             }}
           />
         </div>
