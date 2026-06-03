@@ -40,6 +40,53 @@ Status, service-line, and presence semantic tokens follow the same anatomy with 
   **Token names without a `purpose` prefix are drift.** Examples retired by brik-bds#712: `--brand-primary` (missing purpose; legitimate form is `--{purpose}-brand-primary`), `--theme-brik-*` (entire namespace violates the anatomy). If you see something shaped `--brand-X` or `--theme-X-Y` in old code, it's drift and should not be referenced.
 </Callout>
 
+## Color modifiers — context, contrast, tone
+
+Within the color `role`/`modifier` vocabulary, four concepts share light/dark wording but answer different questions. Pick the wrong one and it compiles — silently wrong.
+
+### `on-color` — neutral foreground role
+
+The legible foreground for content resting on a **colored, branded, or dark** surface. Grayscale, brand-agnostic, consumed by component variants (Button `on-color`, the Tab-bar `onColor` mode).
+
+```css
+--text-on-color-light   /* dark FG  — for a light colored fill */
+--text-on-color-dark    /* white FG — for a dark colored fill  */
+```
+
+`on-color` is the whole role; `light`/`dark` names the fill tone it targets. It never carries a hue.
+
+### `-on-light` / `-on-dark` — context modifier
+
+For a token whose hue is already named (a service line, a brand scope), pins the value for a **known, fixed backdrop tone**.
+
+```css
+--background-service-brand-on-light   /* brand fill, on a light surface */
+--text-service-brand-on-dark          /* brand text, on a dark surface  */
+```
+
+The `-color-` infix is dropped because the scope (`service-brand`) already implies color. The leading `on-` marks context — distinct from tone.
+
+<Callout type="info">
+  **Two `on` forms, on purpose.** `on-color-*` is a complete *neutral role*; `-on-light`/`-on-dark` is a *context modifier on a colored scope*. Same word, different slot in the formula — not an inconsistency, and not a rename candidate.
+</Callout>
+
+### `-inverse` — sharp theme-flip
+
+The hard reverse across light/dark mode (lightest ↔ darkest), mirroring the reverse of a `-primary` token. A theme-level concept — `--background-inverse`, `--text-inverse`. A service line adapts to a known backdrop through its `-on-light`/`-on-dark` context tokens, not a per-line inverse.
+
+### `-light` / `-dark` — tone
+
+The pastel or deep shade of a **surface** (`--surface-service-brand-light` = pastel). Tone shifts the shade; context targets the backdrop. Tone is why scoped context had to be spelled `-on-light`/`-on-dark` — `-light`/`-dark` was already taken.
+
+| You want… | Token |
+|---|---|
+| Legible text/icon on any colored or dark fill | `--{purpose}-on-color-{light\|dark}` |
+| A service hue tuned for a known backdrop | `--{purpose}-service-{line}-on-{light\|dark}` |
+| An element that hard-flips with the theme | `--{purpose}-inverse` |
+| A pastel/deep variant of a service surface | `--surface-service-{line}-{light\|dark}` |
+
+See [Color](/docs/primitives/color) for the full registry.
+
 ## Tier — the four-tier abstraction stack
 
 Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()`. Components only consume the upper tiers.
