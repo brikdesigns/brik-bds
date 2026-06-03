@@ -85,6 +85,7 @@ const EXEMPT_COMPONENTS = new Set([
 // for a single `<Name>.tsx`.
 const MULTI_EXPORT = {
   SheetTypography: ['SheetSectionTitle', 'SheetFieldLabel', 'SheetFieldValue', 'SheetHelperText'],
+  DataView: ['TableView', 'ListView', 'ProfileView'],
 };
 
 // Build the (file, exportName) scan tasks.

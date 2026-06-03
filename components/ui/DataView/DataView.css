@@ -1,0 +1,9 @@
+@layer bds-components {
+/* ─── DataView skeletons ─────────────────────────────────────────
+   The named views (TableView / ListView / ProfileView) are logic-only
+   shells; the only DOM they own is the default loading skeleton. */
+
+.bds-data-view__skeleton {
+  width: 100%;
+}
+}

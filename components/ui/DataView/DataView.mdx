@@ -1,0 +1,75 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './DataView.stories';
+
+<Meta of={Stories} />
+
+# DataView family
+
+<ComponentLinks slug="data-view" />
+
+Thin shells that own the three states every data display needs — **loading, empty, error** — so consumers stop rebuilding them per page. The display primitive (`Table`, `CardList`, a `DataSection` stack) is passed as `children`; the view swaps in a skeleton, an `EmptyState`, or an error `Banner` as needed.
+
+Five named views were specced (brik-bds#404); this batch ships the three the portal consumes:
+
+- **`TableView`** — around a `Table`
+- **`ListView`** — around a `CardList` / `InteractiveListItem` stack
+- **`ProfileView`** — around a read-mode `DataSection` + `FieldGrid` + `Field` stack
+
+`BoardView` / `CalendarView` are deferred until the renew-pms migration needs them (board/calendar surfaces don't exist in the portal).
+
+Named components — not a polymorphic `<DataDisplay variant>` — so each is discoverable and you import only what you render.
+
+```tsx
+<Page.Content>
+  <FilterBar … />
+  <TableView
+    loading={isLoading}
+    error={error?.message}
+    empty={rows.length === 0}
+    emptyState={{ title: 'No services yet', description: 'Add one to get started.' }}
+  >
+    <Table>…</Table>
+  </TableView>
+</Page.Content>
+```
+
+## State precedence
+
+A view renders exactly one state, in this order: **error → loading → empty → content**. `error` fails loud (an error `Banner`, `role="alert"`) — it is never silently swallowed. Override the default skeleton with the `skeleton` prop; pass `emptyState` as structured copy (`{ title, description?, buttonProps? }`) or any `ReactNode`.
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+### TableView — loading
+
+<Canvas of={Stories.Loading} />
+
+### TableView — empty
+
+<Canvas of={Stories.Empty} />
+
+### TableView — error
+
+<Canvas of={Stories.Error} />
+
+### ListView
+
+<Canvas of={Stories.List} />
+
+<Canvas of={Stories.ListLoading} />
+
+### ProfileView
+
+<Canvas of={Stories.Profile} />
+
+<Canvas of={Stories.ProfileLoading} />
+
+## Props
+
+The same surface on every view (`TableView` shown):
+
+<ArgTypes of={Stories} />
