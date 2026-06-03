@@ -86,6 +86,7 @@ const EXEMPT_COMPONENTS = new Set([
 const MULTI_EXPORT = {
   SheetTypography: ['SheetSectionTitle', 'SheetFieldLabel', 'SheetFieldValue', 'SheetHelperText'],
   DataView: ['TableView', 'ListView', 'ProfileView'],
+  Page: ['Page', 'PageContent'],
 };
 
 // Build the (file, exportName) scan tasks.

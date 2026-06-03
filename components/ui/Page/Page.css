@@ -12,7 +12,7 @@
   min-width: 0;
   /* Shared horizontal inset. Header + body sit inside this padded column so
      the header's bottom divider aligns with body content (the renew #224
-     model). Exposed as a custom property so Page.Content can break out of it. */
+     model). Exposed as a custom property so PageContent can break out of it. */
   padding-inline: var(--bds-page-padding-inline, 0); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
@@ -31,7 +31,7 @@
 .bds-page--gap-xl   { gap: var(--gap-xl); }
 .bds-page--gap-huge { gap: var(--gap-huge); }
 
-/* ─── Page.Content ──────────────────────────────────────────────── */
+/* ─── PageContent ──────────────────────────────────────────────── */
 
 .bds-page__content {
   display: flex;

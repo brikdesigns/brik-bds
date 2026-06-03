@@ -21,7 +21,7 @@ Five named views were specced (brik-bds#404); this batch ships the three the por
 Named components — not a polymorphic `<DataDisplay variant>` — so each is discoverable and you import only what you render.
 
 ```tsx
-<Page.Content>
+<PageContent>
   <FilterBar … />
   <TableView
     loading={isLoading}
@@ -31,7 +31,7 @@ Named components — not a polymorphic `<DataDisplay variant>` — so each is di
   >
     <Table>…</Table>
   </TableView>
-</Page.Content>
+</PageContent>
 ```
 
 ## State precedence
