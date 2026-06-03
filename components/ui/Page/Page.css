@@ -1,0 +1,73 @@
+@layer bds-components {
+/* ─── Page — compound page shell ─────────────────────────────── */
+
+.bds-page {
+  display: flex;
+  flex-direction: column;
+  /* Fill a flex-column parent (the app shell) so fill-height bodies work.
+     In a non-flex parent this no-ops and the page sizes to content — a
+     documented precondition, not an error. */
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  /* Shared horizontal inset. Header + body sit inside this padded column so
+     the header's bottom divider aligns with body content (the renew #224
+     model). Exposed as a custom property so Page.Content can break out of it. */
+  padding-inline: var(--bds-page-padding-inline, 0); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ─── Horizontal inset scale ─────────────────────────────────── */
+
+.bds-page--padding-none { --bds-page-padding-inline: 0; }
+.bds-page--padding-sm   { --bds-page-padding-inline: var(--padding-sm); }
+.bds-page--padding-md   { --bds-page-padding-inline: var(--padding-md); }
+.bds-page--padding-lg   { --bds-page-padding-inline: var(--padding-lg); }
+
+/* ─── Header → body gap (BDS --gap-* tokens) ─────────────────── */
+
+.bds-page--gap-sm   { gap: var(--gap-sm); }
+.bds-page--gap-md   { gap: var(--gap-md); }
+.bds-page--gap-lg   { gap: var(--gap-lg); }
+.bds-page--gap-xl   { gap: var(--gap-xl); }
+.bds-page--gap-huge { gap: var(--gap-huge); }
+
+/* ─── Page.Content ──────────────────────────────────────────────── */
+
+.bds-page__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Inter-section vertical rhythm — stat row / FilterBar / display. */
+.bds-page__content--gap-sm   { gap: var(--gap-sm); }
+.bds-page__content--gap-md   { gap: var(--gap-md); }
+.bds-page__content--gap-lg   { gap: var(--gap-lg); }
+.bds-page__content--gap-xl   { gap: var(--gap-xl); }
+.bds-page__content--gap-huge { gap: var(--gap-huge); }
+
+/* Per-region inset override. `none` breaks out of the page column to go
+   full-bleed; sm/md/lg break out then re-apply an explicit inset. */
+.bds-page__content--padding-none {
+  margin-inline: calc(-1 * var(--bds-page-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
+}
+.bds-page__content--padding-sm {
+  margin-inline: calc(-1 * var(--bds-page-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
+  padding-inline: var(--padding-sm);
+}
+.bds-page__content--padding-md {
+  margin-inline: calc(-1 * var(--bds-page-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
+  padding-inline: var(--padding-md);
+}
+.bds-page__content--padding-lg {
+  margin-inline: calc(-1 * var(--bds-page-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
+  padding-inline: var(--padding-lg);
+}
+
+/* Own the vertical scroll on fill-height pages (boards, calendars). */
+.bds-page__content--scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+}
