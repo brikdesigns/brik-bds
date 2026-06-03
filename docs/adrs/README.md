@@ -42,6 +42,7 @@ These compose: ADR-006 governs *story files* (where stories live, what shape); A
 | [ADR-002](./ADR-002-accessibility-overlays.md) | **Accepted** | Ban third-party accessibility overlay widgets — they harm the users they claim to help and increase ADA legal exposure |
 | [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) | **Accepted** (2026-05-11) | Naming canon flips from open banlist to closed allowlist — single `bds-` namespace, structural-only modifiers, slot vocabulary enumerated in `docs/SLOT-ALLOWLIST.md`. Stops the `__lead` / `__plan-name` drift mechanism at the source. |
 | [ADR-009](./ADR-009-typegen-component-axes.md) | **Accepted** (2026-05-13) | Typegen for component axis matrix — `scripts/generate-component-axes.mjs` derives `manifest/component-axes.json` from TypeScript exports; CI gate + re-introduced `invented-variant` lint rule. Fixes the ADR-008 equivalent for variant/size/appearance values. |
+| [ADR-011](./ADR-011-service-line-token-value-model.md) | **Accepted** (2026-06-02) | Service-line token value-model — Brand Kit Figma is SoT. No-suffix default = base hue (mode-invariant); tone/context variants mode-aware; no per-service `-inverse`. Reverses three #563 criteria; mandates a consumer migration (ServiceTag, HeroSplitImageCardOverlay, brikdesigns). |
 
 ## Status field — what each value means
 
