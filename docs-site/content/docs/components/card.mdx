@@ -9,7 +9,7 @@ Card is the canonical content-grouping container. Three rendering modes:
 
 - **Default** — flexible container, compose with `CardTitle` / `CardDescription` / `CardFooter` subcomponents.
 - **`preset="control"`** — locked-down settings/control layout (badge + title + description + action). Replaces the legacy `CardControl` component per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
-- **`preset="summary"`** — compact metric/stat layout (label + large value + optional link). Replaces the deprecated `CardSummary` component.
+- **`preset="summary"`** — compact metric/stat layout (label + large value + optional link).
 
 ## Use it for
 
@@ -103,10 +103,6 @@ Compose freely with the Title / Description / Footer subcomponents.
 - **`type="numeric"`** (default) — locale-formatted integer (`1,234`).
 - **`type="price"`** — USD currency (`$1,234.50`).
 - String values render verbatim regardless of `type`.
-
-<Callout type="warn">
-  **The standalone `CardSummary` component is `@deprecated`** and slated for deletion in a future major version. Migrate to `Card preset="summary"` — same prop names, same number formatting, same layout. See [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
-</Callout>
 
 ## When *not* to use
 
