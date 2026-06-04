@@ -9,12 +9,9 @@ export {
   type CardTitleProps,
   type CardDescriptionProps,
   type CardFooterProps,
-} from './Card';
-export { default } from './Card';
-
-export {
-  CardSummary,
-  type CardSummaryProps,
+  // Summary-preset prop types (the deprecated standalone CardSummary component
+  // was removed in 0.88.0 — these now live on Card's `preset="summary"` props).
   type CardSummaryType,
   type CardSummaryTextLink,
-} from './CardSummary';
+} from './Card';
+export { default } from './Card';
