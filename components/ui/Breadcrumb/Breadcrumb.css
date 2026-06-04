@@ -58,34 +58,34 @@
  * tokens carry context modifiers only, not hierarchy). */
 
 [data-audience='brand'] .bds-breadcrumb {
-  --text-secondary: var(--text-service-brand);
-  --text-muted: var(--text-service-brand);
+  --text-secondary: var(--text-service-brand-on-light);
+  --text-muted: var(--text-service-brand-on-light);
 }
 
 [data-audience='marketing'] .bds-breadcrumb {
-  --text-secondary: var(--text-service-marketing);
-  --text-muted: var(--text-service-marketing);
+  --text-secondary: var(--text-service-marketing-on-light);
+  --text-muted: var(--text-service-marketing-on-light);
 }
 
 [data-audience='information'] .bds-breadcrumb {
-  --text-secondary: var(--text-service-information);
-  --text-muted: var(--text-service-information);
+  --text-secondary: var(--text-service-information-on-light);
+  --text-muted: var(--text-service-information-on-light);
 }
 
 [data-audience='product'] .bds-breadcrumb {
-  --text-secondary: var(--text-service-product);
-  --text-muted: var(--text-service-product);
+  --text-secondary: var(--text-service-product-on-light);
+  --text-muted: var(--text-service-product-on-light);
 }
 
 [data-audience='back-office'] .bds-breadcrumb {
-  --text-secondary: var(--text-service-back-office);
-  --text-muted: var(--text-service-back-office);
+  --text-secondary: var(--text-service-back-office-on-light);
+  --text-muted: var(--text-service-back-office-on-light);
 }
 
 /* @deprecated alias of [data-audience='back-office'] — remove with the
    `service` ServiceLine member in a future major. */
 [data-audience='service'] .bds-breadcrumb {
-  --text-secondary: var(--text-service-back-office);
-  --text-muted: var(--text-service-back-office);
+  --text-secondary: var(--text-service-back-office-on-light);
+  --text-muted: var(--text-service-back-office-on-light);
 }
 }
