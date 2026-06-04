@@ -193,6 +193,55 @@ export function Features({ title, subtitle, actions, children }: FeaturesProps) 
 | Lists | `<ul>` / `<ol>` | Prefer semantic list elements over `<div>` + `<span>` |
 | Images | `<Frame>` wrapping `<img>` | Aspect-locked; never hardcode `aspect-ratio` in CSS |
 
+## Product app shell (Next.js portal)
+
+Product apps (like brik-client-portal) use a sidebar + main-content shell rather than marketing-style sections. The landmark rules still apply; the blueprint section pattern does not.
+
+```tsx
+// app/(auth)/dashboard/layout.tsx
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      {/* Skip-link must be the first focusable element — WCAG 2.4.1 */}
+      <a href="#main-content" className="skip-link">Skip to content</a>
+      <div style={{ display: 'flex', minHeight: '100vh' }}>
+        {/* BDS SidebarNavigation renders <aside> + <nav> — correct landmarks */}
+        <SidebarNavigation ... />
+        <main id="main-content" style={{ flex: 1 }}>
+          {children}
+        </main>
+      </div>
+    </>
+  );
+}
+```
+
+| Rule | Detail |
+|---|---|
+| Skip-link first | `<a href="#main-content" className="skip-link">` must be the first child of the layout — before the sidebar — so keyboard users can bypass nav (WCAG 2.4.1) |
+| `id="main-content"` on `<main>` | Required as the skip-link target. Every app layout that renders a sidebar must have this. |
+| `<aside>` + `<nav>` for sidebar | BDS `SidebarNavigation` provides this automatically. Never replace with a bare `<div>`. |
+| No `<header>` / `<footer>` | Product apps have no site header or footer landmark — the sidebar is the persistent nav landmark. |
+| No blueprint classes | `bds-hero`, `bds-features` etc. are for marketing sections. Content inside `<main>` uses BDS `Page` / `PageContent` layout primitives. |
+
+**Skip-link CSS** — add once to `globals.css`, using canonical BDS tokens:
+
+```css
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 0;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--background-brand-primary);
+  color: var(--text-inverse);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 0;
+}
+.skip-link:focus { top: 0; }
+```
+
 ## Related
 
 - [HTML Semantics](/docs/build-standards/html-semantics) — heading levels, no-unclassed-wrappers, stable IDs
