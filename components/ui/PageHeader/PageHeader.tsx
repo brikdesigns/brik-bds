@@ -44,16 +44,6 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   tabs?: ReactNode;
   /** Key/value pairs rendered below the title row (e.g. Owner, Status, Updated). */
   metadata?: MetadataItem[];
-  /**
-   * Summary content (e.g. stat cards) rendered between metadata and tabs.
-   *
-   * @deprecated Summary stats belong in the page **body**, not the header
-   * (2026-06-03 decision, brik-bds#404). Render them in `<PageContent>` as a
-   * `Grid` of `Card preset="summary"` above the `FilterBar` / display.
-   * Slated for removal after the standard deprecation window once the portal
-   * consumers migrate (brik-client-portal#927).
-   */
-  stats?: ReactNode;
   /** Title scale. Default: 'lg' */
   size?: 'sm' | 'md' | 'lg';
   /**
@@ -80,7 +70,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, stats, and tabs.
+ * PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, and tabs.
  *
  * ## Tunable spacing
  *
@@ -90,7 +80,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
  * the lean 0.57.0 shape:
  *
  * - `--page-header-section-gap` (default `var(--gap-xl)` = 24px) — between
- *   root sections (inner / metadata / stats / tabs).
+ *   root sections (inner / metadata / tabs).
  * - `--page-header-content-gap` (default `var(--gap-sm)` = 6px) — between
  *   the title-row and the subtitle.
  * - `--page-header-actions-gap` (default `var(--gap-sm)` = 6px) — between
@@ -109,7 +99,6 @@ export function PageHeader({
   actions,
   tabs,
   metadata,
-  stats,
   size = 'lg',
   mode,
   onEdit,
@@ -192,8 +181,6 @@ export function PageHeader({
           </div>
         </div>
       )}
-
-      {stats && <div className="bds-page-header__stats">{stats}</div>}
 
       {tabs && <div className="bds-page-header__tabs">{tabs}</div>}
     </div>

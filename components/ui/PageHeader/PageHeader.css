@@ -6,7 +6,7 @@
      Consumers can tune these via cascade (theme file, globals.css, or
      a per-instance style prop) to dial in the right rhythm without
      forking the component. Defaults preserve the lean 0.57.0 shape. */
-  --page-header-section-gap: var(--gap-xl);     /* between root sections (inner/metadata/stats/tabs) */
+  --page-header-section-gap: var(--gap-xl);     /* between root sections (inner/metadata/tabs) */
   --page-header-content-gap: var(--gap-sm);     /* between title-row and subtitle */
   --page-header-actions-gap: var(--gap-sm);     /* between content column and actions column */
   --page-header-padding-bottom: var(--padding-md); /* breathing room before the bottom divider */
@@ -144,12 +144,6 @@
   font-weight: var(--font-weight-regular);
   line-height: var(--font-line-height-normal);
   color: var(--text-primary);
-}
-
-/* ─── Stats ──────────────────────────────────────────────────── */
-
-.bds-page-header__stats {
-  width: 100%;
 }
 
 /* ─── Tabs ─────────────────────────────────────────────────────

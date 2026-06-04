@@ -1,6 +1,6 @@
 ---
 title: Page header
-description: Composable page-level header. Title + subtitle + breadcrumbs + actions + tabs + metadata + stats.
+description: Composable page-level header. Title + subtitle + breadcrumbs + actions + tabs + metadata.
 ---
 
 PageHeader is the standard page-top header — composes [Breadcrumb](/docs/components/breadcrumb), [Button](/docs/components/button), [TabBar](/docs/components/tab-bar), and a metadata grid into one component. Inherits background from parent context (no surface of its own), so it works on pages with any background.
@@ -9,7 +9,7 @@ PageHeader is the standard page-top header — composes [Breadcrumb](/docs/compo
 
 - Detail page headers (company / project / record pages)
 - Section headers that need breadcrumbs + page title + primary action
-- Dashboards with metadata + stat tiles + tab navigation
+- Dashboards with metadata + tab navigation
 - Any page where the top region groups identity + navigation + primary CTA
 
 For Sheet headers (inside a `<Sheet>`), the [Sheet](/docs/components/sheet) component composes its own — don't reach for PageHeader inside a Sheet body.
@@ -29,8 +29,7 @@ PageHeader has six optional regions plus a required title. From top to bottom:
 3. **`subtitle`** — supporting paragraph under the title
 4. **`actions`** — right-aligned action buttons (typically a [Button](/docs/components/button) or [ButtonGroup](/docs/components/button-group))
 5. **`metadata`** — built-in key/value grid (Owner, Status, Updated)
-6. **`stats`** — summary content (e.g. stat-tile [Card preset="summary"](/docs/components/card#summary-preset) grid)
-7. **`tabs`** — [TabBar](/docs/components/tab-bar) for in-page section nav
+6. **`tabs`** — [TabBar](/docs/components/tab-bar) for in-page section nav
 
 ## Variants
 
@@ -89,23 +88,6 @@ PageHeader has six optional regions plus a required title. From top to bottom:
     { label: 'Status', value: <Badge status="positive">Active</Badge> },
     { label: 'Updated', value: '2 days ago' },
   ]}
-/>
-```
-
-### With stats
-
-`stats` renders summary content between metadata and tabs — typically a row of stat tiles.
-
-```tsx
-<PageHeader
-  title="Q1 Performance"
-  stats={
-    <CardList orientation="horizontal" gap="md">
-      <Card preset="summary" label="Revenue" value={48250.75} type="price" />
-      <Card preset="summary" label="New clients" value={12} />
-      <Card preset="summary" label="Projects" value={34} />
-    </CardList>
-  }
 />
 ```
 
@@ -201,7 +183,6 @@ The canonical layout — breadcrumb + service badge + title + actions + metadata
 | `actions` | `ReactNode` | — |
 | `tabs` | `ReactNode` | — |
 | `metadata` | `MetadataItem[]` | — |
-| `stats` | `ReactNode` | — |
 | `showDivider` | `boolean` | `true` |
 | `flush` | `boolean` | `false` |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'lg'` |
