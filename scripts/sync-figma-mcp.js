@@ -38,6 +38,15 @@
  *   - Existing `$description` is preserved when the dump's description is
  *     empty (the dump returns `""` for any variable without a Figma
  *     description, so we never wipe an existing one).
+ *   - DELETIONS PROPAGATE (brik-bds#754): the pull dump is the COMPLETE set
+ *     of variables for every `{collection}/{modeName}` it covers, so any leaf
+ *     in a touched set that the dump did NOT produce was deleted in Figma and
+ *     is pruned from the Library file (empty parent groups are removed too).
+ *     This is what stops retired tokens — like the #712 `--theme-{brik,blue}-*`
+ *     orphans — from surviving every subsequent pull. Pruning runs ONLY for
+ *     the pull-shape dump (shape 1); the legacy flat-map (shape 2) is partial
+ *     by nature and never triggers deletion. `--dry-run` prints the delete set
+ *     before anything is written so reviewers can sanity-check it.
  *
  * Usage:
  *   node scripts/sync-figma-mcp.js <pull-output.json> [--library=<lib>] [--dry-run] [--build] [--no-merge]
@@ -46,7 +55,11 @@
  *   --library=foundations       Target design-tokens/foundations.json
  *   --library=brand-kit         Target design-tokens/brand-kits/brik.json
  *   --library=brand-kits/<slug> Target design-tokens/brand-kits/<slug>.json
- *   --dry-run                   Show what would change without writing
+ *   --target=<path>             Write to an explicit file instead of a --library
+ *                               (advanced / tests). Skips the auto-merge step.
+ *                               Takes precedence over --library.
+ *   --dry-run                   Show what would change (incl. deletions) without
+ *                               writing
  *   --build                     Run `npm run build:all-tokens` after patching
  *   --no-merge                  Skip the auto-merge step (only useful when
  *                               patching multiple libraries in sequence — the
@@ -66,6 +79,7 @@ const dryRun = args.includes('--dry-run');
 const runBuild = args.includes('--build');
 const noMerge = args.includes('--no-merge');
 const libraryArg = args.find((a) => a.startsWith('--library='));
+const targetArg = args.find((a) => a.startsWith('--target='));
 const inputFile = args.find((a) => !a.startsWith('--'));
 
 // Resolve target Library file from --library flag.
@@ -86,8 +100,10 @@ function resolveLibraryFile(librarySpec) {
   process.exit(1);
 }
 
-const TOKENS_FILE = resolveLibraryFile(libraryArg)
-  ?? path.join(__dirname, '../design-tokens/tokens-studio.json');
+const TOKENS_FILE = targetArg
+  ? path.resolve(targetArg.replace(/^--target=/, ''))
+  : (resolveLibraryFile(libraryArg)
+     ?? path.join(__dirname, '../design-tokens/tokens-studio.json'));
 
 if (!inputFile) {
   console.error('Usage: node scripts/sync-figma-mcp.js <pull-output.json> [--library=<lib>] [--dry-run] [--build]');
@@ -236,6 +252,44 @@ function toTokenRef(varName) {
   return `{${varName.replace(/\//g, '.')}}`;
 }
 
+// Collect every leaf path ("a/b/c") under a token-set node. A leaf is a node
+// carrying `$value`; `$`-prefixed keys ($value/$type/$extensions/…) are token
+// fields, not nested groups, so we never recurse into them.
+function collectLeafPaths(node, prefix, out) {
+  for (const [key, value] of Object.entries(node)) {
+    if (key.startsWith('$')) continue;
+    if (!value || typeof value !== 'object' || Array.isArray(value)) continue;
+    const childPath = prefix ? `${prefix}/${key}` : key;
+    if (value.$value !== undefined) {
+      out.push(childPath);
+    } else {
+      collectLeafPaths(value, childPath, out);
+    }
+  }
+}
+
+// Delete the leaf at `varName` within `set`, then remove any parent group that
+// became empty as a result (bottom-up).
+function deleteLeaf(set, varName) {
+  const parts = varName.split('/');
+  const chain = []; // [parentObj, key] from root down to the leaf's parent
+  let current = set;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!current[parts[i]] || typeof current[parts[i]] !== 'object') return;
+    chain.push([current, parts[i]]);
+    current = current[parts[i]];
+  }
+  delete current[parts[parts.length - 1]];
+  for (let i = chain.length - 1; i >= 0; i--) {
+    const [parent, key] = chain[i];
+    if (parent[key] && typeof parent[key] === 'object' && Object.keys(parent[key]).length === 0) {
+      delete parent[key];
+    } else {
+      break;
+    }
+  }
+}
+
 // Convert Figma's normalized RGBA (0-1 floats) into a CSS hex string.
 // Alpha is included only when < 1 (8-char hex); fully opaque colors stay 6-char.
 function rgbaToHex({ r, g, b, a }) {
@@ -288,20 +342,31 @@ function resolveValue(modeValue, idToName) {
 // ─── Patch routine ───────────────────────────────────────────────
 
 const changes = {
-  perSet: new Map(),         // setKey → { updated: [], added: [], skipped: [] }
+  perSet: new Map(),         // setKey → { updated: [], added: [], skipped: [], removed: [] }
   unknownSets: new Set(),    // setKeys missing from tokens-studio.json
   danglingAliases: [],       // { varName, mode, aliasId }
   groupCollisions: [],       // { setKey, varPath } — leaf path conflicts with a group
+  seenPaths: new Map(),      // setKey → Set<varName> the dump produced (prune protection)
   totalUpdated: 0,
   totalAdded: 0,
   totalSkipped: 0,
+  totalRemoved: 0,
 };
 
 function bucket(setKey) {
   if (!changes.perSet.has(setKey)) {
-    changes.perSet.set(setKey, { updated: [], added: [], skipped: [] });
+    changes.perSet.set(setKey, { updated: [], added: [], skipped: [], removed: [] });
   }
   return changes.perSet.get(setKey);
+}
+
+// Record that the dump produced `varName` for `setKey`, so the prune pass
+// leaves it in place. Called for every (setKey, varName) the dump references —
+// including unresolvable/dangling ones, which still exist in Figma and must
+// not be deleted just because we couldn't resolve their value this pull.
+function markSeen(setKey, varName) {
+  if (!changes.seenPaths.has(setKey)) changes.seenPaths.set(setKey, new Set());
+  changes.seenPaths.get(setKey).add(varName);
 }
 
 function applyToSet(setKey, varName, $value, $type, $description, $extensions) {
@@ -388,6 +453,9 @@ if (isPullShape) {
 
     for (const [modeName, modeValue] of Object.entries(v.valuesByMode || {})) {
       const setKey = `${v.collection}/${modeName}`;
+      // Protect from the prune pass before any skip/continue: the variable is
+      // present in Figma even if its value is unresolvable this pull.
+      markSeen(setKey, v.name);
       const $value = resolveValue(modeValue, idToName);
 
       if ($value === null) {
@@ -420,6 +488,29 @@ if (isPullShape) {
       continue;
     }
     applyToSet('primitives/value', varName, value, inferTypeFromPath(varName));
+  }
+}
+
+// ─── Prune routine (pull-shape only) ─────────────────────────────
+// The pull dump is the COMPLETE list of variables for every collection/mode
+// it covers, so a leaf present in a touched set but absent from the dump was
+// deleted in Figma — remove it so the deletion propagates (brik-bds#754).
+// Restricted to pull-shape: the legacy flat-map (shape 2) is a partial
+// paste-in and must never trigger deletion. Only sets the dump actually
+// referenced are considered; a set the dump never touched is left untouched
+// (protects partial pulls of unrelated collections).
+if (isPullShape) {
+  for (const [setKey, seen] of changes.seenPaths) {
+    const set = tokensStudio[setKey];
+    if (!set) continue; // unknown set — nothing to prune
+    const existingLeaves = [];
+    collectLeafPaths(set, '', existingLeaves);
+    for (const leafPath of existingLeaves) {
+      if (seen.has(leafPath)) continue;
+      deleteLeaf(set, leafPath);
+      bucket(setKey).removed.push({ path: leafPath });
+      changes.totalRemoved += 1;
+    }
   }
 }
 
@@ -469,9 +560,9 @@ if (changes.perSet.size > 0) {
   console.log('Per-set summary:');
   for (const setKey of setKeys) {
     const c = changes.perSet.get(setKey);
-    const u = c.updated.length, a = c.added.length, s = c.skipped.length;
-    if (u + a + s === 0) continue;
-    console.log(`  ${setKey.padEnd(28)}  ${u} updated  ${a} added  ${s} skipped`);
+    const u = c.updated.length, a = c.added.length, s = c.skipped.length, r = c.removed.length;
+    if (u + a + s + r === 0) continue;
+    console.log(`  ${setKey.padEnd(28)}  ${u} updated  ${a} added  ${r} removed  ${s} skipped`);
   }
 
   // Detail sections — capped to keep output scannable on a large diff.
@@ -503,9 +594,20 @@ if (changes.perSet.size > 0) {
     }
     if (changes.totalAdded > SAMPLE) console.log(`  …and ${changes.totalAdded - SAMPLE} more`);
   }
+
+  // Deletions are the irreversible operation — print the FULL set (uncapped)
+  // so a reviewer can sanity-check every token about to disappear (#754).
+  if (changes.totalRemoved > 0) {
+    console.log(`\n🗑️  Removed (${changes.totalRemoved}) — deleted in Figma, pruned here:`);
+    for (const setKey of setKeys) {
+      for (const c of changes.perSet.get(setKey).removed) {
+        console.log(`  [${setKey}] ${c.path}`);
+      }
+    }
+  }
 }
 
-if (changes.totalUpdated === 0 && changes.totalAdded === 0) {
+if (changes.totalUpdated === 0 && changes.totalAdded === 0 && changes.totalRemoved === 0) {
   console.log('No changes detected — Library file is up to date.');
   if (changes.totalSkipped > 0) console.log(`(${changes.totalSkipped} value(s) skipped — see warnings above.)`);
   process.exit(0);
