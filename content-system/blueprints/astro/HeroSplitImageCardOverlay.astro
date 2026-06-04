@@ -219,6 +219,8 @@ const cta = section.cta;
   .bp-hero-img-card[data-audience='brand'] {
     background: var(--surface-service-brand);
     --bp-hero-img-card-headline-color: var(--text-service-brand-on-light);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-brand-on-light);
+    --bp-hero-img-card-lead-color: var(--text-service-brand-on-light);
     --text-brand-primary: var(--text-service-brand-on-light);
     --background-inverse: var(--surface-service-brand-dark);
     --text-on-color-light: var(--color-grayscale-white);
@@ -226,6 +228,8 @@ const cta = section.cta;
   .bp-hero-img-card[data-audience='marketing'] {
     background: var(--surface-service-marketing);
     --bp-hero-img-card-headline-color: var(--text-service-marketing-on-light);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-marketing-on-light);
+    --bp-hero-img-card-lead-color: var(--text-service-marketing-on-light);
     --text-brand-primary: var(--text-service-marketing-on-light);
     --background-inverse: var(--surface-service-marketing-dark);
     --text-on-color-light: var(--color-grayscale-white);
@@ -233,6 +237,8 @@ const cta = section.cta;
   .bp-hero-img-card[data-audience='information'] {
     background: var(--surface-service-information);
     --bp-hero-img-card-headline-color: var(--text-service-information-on-light);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-information-on-light);
+    --bp-hero-img-card-lead-color: var(--text-service-information-on-light);
     --text-brand-primary: var(--text-service-information-on-light);
     --background-inverse: var(--surface-service-information-dark);
     --text-on-color-light: var(--color-grayscale-white);
@@ -240,6 +246,8 @@ const cta = section.cta;
   .bp-hero-img-card[data-audience='product'] {
     background: var(--surface-service-product);
     --bp-hero-img-card-headline-color: var(--text-service-product-on-light);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-product-on-light);
+    --bp-hero-img-card-lead-color: var(--text-service-product-on-light);
     --text-brand-primary: var(--text-service-product-on-light);
     --background-inverse: var(--surface-service-product-dark);
     --text-on-color-light: var(--color-grayscale-white);
@@ -247,6 +255,8 @@ const cta = section.cta;
   .bp-hero-img-card[data-audience='service'] {
     background: var(--surface-service-back-office);
     --bp-hero-img-card-headline-color: var(--text-service-back-office-on-light);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-back-office-on-light);
+    --bp-hero-img-card-lead-color: var(--text-service-back-office-on-light);
     --text-brand-primary: var(--text-service-back-office-on-light);
     --background-inverse: var(--surface-service-back-office-dark);
     --text-on-color-light: var(--color-grayscale-white);
@@ -311,7 +321,7 @@ const cta = section.cta;
     font-family: var(--font-family-body);
     font-size: var(--body-xl);
     line-height: var(--line-height-relaxed, 1.5);
-    color: var(--text-primary);
+    color: var(--bp-hero-img-card-lead-color, var(--text-primary));
     max-width: 55ch;
   }
 
