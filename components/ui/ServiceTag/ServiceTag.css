@@ -40,15 +40,15 @@
 
 /* ─── Category colors ────────────────────────────────────────── */
 
-.bds-service-tag--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand); }
-.bds-service-tag--marketing   { background-color: var(--background-service-marketing);   color: var(--text-service-marketing); }
-.bds-service-tag--information { background-color: var(--background-service-information); color: var(--text-service-information); }
-.bds-service-tag--product     { background-color: var(--background-service-product);     color: var(--text-service-product); }
-.bds-service-tag--back-office { background-color: var(--background-service-back-office); color: var(--text-service-back-office); }
+.bds-service-tag--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand-on-light); }
+.bds-service-tag--marketing   { background-color: var(--background-service-marketing);   color: var(--text-service-marketing-on-light); }
+.bds-service-tag--information { background-color: var(--background-service-information); color: var(--text-service-information-on-light); }
+.bds-service-tag--product     { background-color: var(--background-service-product);     color: var(--text-service-product-on-light); }
+.bds-service-tag--back-office { background-color: var(--background-service-back-office); color: var(--text-service-back-office-on-light); }
 /* `--service` is the @deprecated alias of `--back-office` (kept for prop-API
    compat during the cross-repo rename). Same back-office tokens; remove with
    the `service` ServiceLine member in a future major. */
-.bds-service-tag--service     { background-color: var(--background-service-back-office); color: var(--text-service-back-office); }
+.bds-service-tag--service     { background-color: var(--background-service-back-office); color: var(--text-service-back-office-on-light); }
 
 /* ─── Icon ───────────────────────────────────────────────────── */
 

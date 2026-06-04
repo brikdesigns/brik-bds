@@ -64,6 +64,10 @@
  *   --no-merge                  Skip the auto-merge step (only useful when
  *                               patching multiple libraries in sequence — the
  *                               caller runs merge-tokens-studio.js itself)
+ *   --no-prune                  Disable deletion-propagation. Use for an
+ *                               intentionally partial dump (e.g. emitting only
+ *                               the service-line subset of a collection) so the
+ *                               omitted siblings are NOT deleted.
  *
  * Zero dependencies — Node.js stdlib only.
  */
@@ -78,6 +82,7 @@ const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
 const runBuild = args.includes('--build');
 const noMerge = args.includes('--no-merge');
+const noPrune = args.includes('--no-prune');
 const libraryArg = args.find((a) => a.startsWith('--library='));
 const targetArg = args.find((a) => a.startsWith('--target='));
 const inputFile = args.find((a) => !a.startsWith('--'));
@@ -499,7 +504,12 @@ if (isPullShape) {
 // paste-in and must never trigger deletion. Only sets the dump actually
 // referenced are considered; a set the dump never touched is left untouched
 // (protects partial pulls of unrelated collections).
-if (isPullShape) {
+//
+// --no-prune disables this pass entirely. Use it for an INTENTIONALLY partial
+// dump — e.g. emitting only the service-line subset of a collection additively,
+// without deleting the sibling tokens the dump deliberately omits. The default
+// (prune on) assumes the dump is complete for every set it touches.
+if (isPullShape && !noPrune) {
   for (const [setKey, seen] of changes.seenPaths) {
     const set = tokensStudio[setKey];
     if (!set) continue; // unknown set — nothing to prune

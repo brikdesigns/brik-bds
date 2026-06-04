@@ -346,6 +346,11 @@
   --page-secondary: var(--color-grayscale-lighter);
   --page-brand-primary: var(--color-poppy-light);
   --page-inverse: var(--color-grayscale-black);
+  --page-service-brand: var(--color-yellow-light);
+  --page-service-marketing: var(--color-green-light);
+  --page-service-product: var(--color-purple-light);
+  --page-service-back-office: var(--color-orange-light);
+  --page-service-information: var(--color-blue-light);
   --background-primary: var(--color-grayscale-white);
   --background-secondary: var(--color-grayscale-dark);
   --background-brand-primary: var(--color-poppy-light);
@@ -370,6 +375,21 @@
   --background-positive: var(--color-system-green);
   --background-negative: var(--color-system-red);
   --background-warning: var(--color-system-yellow);
+  --background-service-brand: var(--color-yellow-light);
+  --background-service-brand-on-light: var(--color-yellow-darkest);
+  --background-service-marketing: var(--color-green-light);
+  --background-service-marketing-on-light: var(--color-green-darkest);
+  --background-service-back-office: var(--color-orange-light);
+  --background-service-back-office-on-light: var(--color-orange-darkest);
+  --background-service-product: var(--color-purple-light);
+  --background-service-product-on-light: var(--color-purple-darkest);
+  --background-service-information: var(--color-blue-light);
+  --background-service-information-on-light: var(--color-blue-darkest);
+  --background-service-brand-on-dark: var(--color-yellow-lightest);
+  --background-service-marketing-on-dark: var(--color-green-lightest);
+  --background-service-back-office-on-dark: var(--color-orange-lightest);
+  --background-service-product-on-dark: var(--color-purple-lightest);
+  --background-service-information-on-dark: var(--color-blue-lightest);
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lighter);
   --surface-brand-primary: var(--color-poppy-light);
@@ -387,6 +407,21 @@
   --surface-primary-pressed: var(--color-grayscale-lighter);
   --surface-brand-primary-hover: var(--color-poppy-dark); /** Primary surface hover */
   --surface-brand-primary-pressed: var(--color-poppy-darker); /** Primary surface pressed */
+  --surface-service-brand: var(--color-yellow-light);
+  --surface-service-marketing: var(--color-green-light);
+  --surface-service-product: var(--color-purple-light);
+  --surface-service-back-office: var(--color-orange-light);
+  --surface-service-information: var(--color-blue-light);
+  --surface-service-marketing-dark: var(--color-green-darkest);
+  --surface-service-back-office-light: var(--color-orange-lightest);
+  --surface-service-back-office-dark: var(--color-orange-darkest);
+  --surface-service-product-light: var(--color-purple-lightest);
+  --surface-service-product-dark: var(--color-purple-darkest);
+  --surface-service-information-light: var(--color-blue-lightest);
+  --surface-service-information-dark: var(--color-blue-darkest);
+  --surface-service-brand-light: var(--color-yellow-lightest);
+  --surface-service-brand-dark: var(--color-yellow-darkest);
+  --surface-service-marketing-light: var(--color-green-lightest);
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
   --text-brand-primary: var(--color-poppy-light);
@@ -407,6 +442,21 @@
   --text-warning: var(--color-system-yellow);
   --text-secondary-inverse: var(--color-grayscale-light); /** Secondary text on inverse (theme-flipping) surfaces */
   --text-muted-inverse: var(--color-grayscale-dark); /** Muted text on inverse (theme-flipping) surfaces */
+  --text-service-brand: var(--color-yellow-light);
+  --text-service-information: var(--color-blue-light);
+  --text-service-back-office: var(--color-orange-light);
+  --text-service-product: var(--color-purple-light);
+  --text-service-marketing: var(--color-green-light);
+  --text-service-marketing-on-light: var(--color-green-darkest);
+  --text-service-back-office-on-dark: var(--color-orange-lightest);
+  --text-service-back-office-on-light: var(--color-orange-darkest);
+  --text-service-product-on-dark: var(--color-purple-lightest);
+  --text-service-product-on-light: var(--color-purple-darkest);
+  --text-service-information-on-dark: var(--color-blue-lightest);
+  --text-service-information-on-light: var(--color-blue-darkest);
+  --text-service-brand-on-dark: var(--color-yellow-lightest);
+  --text-service-brand-on-light: var(--color-yellow-darkest);
+  --text-service-marketing-on-dark: var(--color-green-lightest);
   --border-primary: var(--color-grayscale-lighter);
   --border-brand-primary: var(--color-poppy-light);
   --border-on-color-dark: var(--color-grayscale-white);
@@ -420,4 +470,9 @@
   --border-positive: var(--color-system-green);
   --border-negative: var(--color-system-red);
   --border-warning: var(--color-system-yellow);
+  --border-service-brand: var(--color-yellow-light);
+  --border-service-information: var(--color-blue-light);
+  --border-service-back-office: var(--color-orange-light);
+  --border-service-product: var(--color-purple-light);
+  --border-service-marketing: var(--color-green-light);
 }

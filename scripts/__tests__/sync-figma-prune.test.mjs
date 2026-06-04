@@ -130,6 +130,29 @@ describe('sync-figma-mcp prune (brik-bds#754)', () => {
     expect(readFileSync(lib, 'utf8')).toBe(before);
   });
 
+  it('--no-prune adds/updates but never deletes (intentionally partial dump)', () => {
+    const lib = join(tmpDir, 'lib-noprune.json');
+    const dump = join(tmpDir, 'dump-noprune.json');
+    writeFileSync(lib, JSON.stringify(libraryFile({
+      'color/poppy/light': '#e35335',
+      'theme/brik/poppy-red': '#e35335', // omitted from the dump on purpose
+    })));
+    // Partial dump: only color/poppy/light + a new sibling. theme/brik/poppy-red
+    // is deliberately absent and must survive under --no-prune.
+    writeFileSync(dump, JSON.stringify(pullDump([
+      { name: 'color/poppy/light', value: '#000000' },
+      { name: 'color/poppy/dark', value: '#7a1c0c' },
+    ])));
+
+    const res = runSync([dump, `--target=${lib}`, '--no-prune'], tmpDir);
+    expect(res.status).toBe(0);
+
+    const out = JSON.parse(readFileSync(lib, 'utf8'))['primitives/value'];
+    expect(out.color.poppy.light.$value).toBe('#000000');      // updated
+    expect(out.color.poppy.dark.$value).toBe('#7a1c0c');       // added
+    expect(out.theme.brik['poppy-red'].$value).toBe('#e35335'); // NOT pruned
+  });
+
   it('never prunes for the legacy flat-map shape (shape 2)', () => {
     const lib = join(tmpDir, 'lib-legacy.json');
     const dump = join(tmpDir, 'dump-legacy.json');
