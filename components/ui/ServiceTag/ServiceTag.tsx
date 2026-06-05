@@ -97,14 +97,7 @@ export function ServiceTag({
         {...props}
       >
         {showIcon && (
-          <img
-            src={iconSrc}
-            alt=""
-            width={iconSize}
-            height={iconSize}
-            className="bds-service-tag__icon"
-            onError={() => setImageError(true)}
-          />
+          <ServiceTagIcon src={iconSrc} size={iconSize} onError={() => setImageError(true)} />
         )}
       </span>
     );
@@ -126,17 +119,39 @@ export function ServiceTag({
       {...props}
     >
       {showIcon && (
-        <img
+        <ServiceTagIcon
           src={getServiceIconPath(category, serviceName!)}
-          alt=""
-          width={iconSize}
-          height={iconSize}
-          className="bds-service-tag__icon"
+          size={iconSize}
           onError={() => setImageError(true)}
         />
       )}
       {displayLabel}
     </span>
+  );
+}
+
+/**
+ * ServiceTagIcon — the per-service glyph, rendered as a CSS `mask-image` so the
+ * fill is recolorable (the masked element takes `currentColor` from the tag's
+ * service text token). The custom service SVGs are "System 2" — loaded by URL
+ * from the consuming app's `/public/icons`, not Phosphor — so they keep the
+ * url() asset model; only the recolor mechanism changes (#574).
+ *
+ * A `<mask-image>` can't surface a load error, so a visually-hidden `<img>`
+ * probe preserves the prior graceful "hide on missing asset" fallback.
+ */
+function ServiceTagIcon({ src, size, onError }: { src: string; size: number; onError: () => void }) {
+  return (
+    <>
+      <span
+        aria-hidden
+        className="bds-service-tag__icon"
+        // Runtime values: dynamic glyph URL + Figma-driven px box. Static mask
+        // sizing/positioning + the currentColor fill live in ServiceTag.css.
+        style={{ width: size, height: size, maskImage: `url("${src}")`, WebkitMaskImage: `url("${src}")` }}
+      />
+      <img src={src} alt="" hidden onError={onError} />
+    </>
   );
 }
 

@@ -75,3 +75,7 @@ The `serviceName` prop resolves to an SVG icon via two mechanisms:
 - **Normalization** — service names are lowercased and hyphenated, then prefixed by category (e.g., "Brand Guidelines" resolves to `brand-guidelines.svg`)
 
 Icons are stored in `components/ui/ServiceTag/icons/[category]/` and served from `.storybook/public/icons/` in Storybook.
+
+### Coloring
+
+The glyph renders as a CSS `mask-image` painted with `currentColor`, so it inherits the tag's service text token (`--text-service-{name}`) and retones correctly in both `brik-light` and `brik-dark` — the icon always matches the label. To recolor an icon in a custom context, set `color` on the parent and the glyph follows. ([#574](https://github.com/brikdesigns/brik-bds/issues/574))
