@@ -100,7 +100,8 @@
     "variant": [
       "outlined",
       "brand",
-      "elevated"
+      "elevated",
+      "borderless"
     ]
   },
   "CardTestimonial": {

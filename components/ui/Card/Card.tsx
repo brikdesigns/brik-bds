@@ -2,7 +2,7 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import './Card.css';
 
-export type CardVariant = 'outlined' | 'brand' | 'elevated';
+export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'borderless';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 export type CardPreset = 'control' | 'summary' | 'display' | 'display-row';
 export type CardControlActionAlign = 'center' | 'top';
@@ -30,7 +30,7 @@ interface CardBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
 interface CardDefaultProps extends CardBaseProps {
   /** No preset — default flexible Card with `children` content slot. */
   preset?: undefined;
-  /** Visual variant — outlined / brand / elevated (default `outlined`). */
+  /** Visual variant — outlined / brand / elevated / borderless (default `outlined`). Use `borderless` for cards sitting on a colored surface, where the border ring reads as visual noise. */
   variant?: CardVariant;
   /** Padding scale (default `md`). */
   padding?: CardPadding;
@@ -215,7 +215,9 @@ function formatSummaryValue(value: string | number, type: CardSummaryType): stri
  *
  * - **Default** (no `preset`) — flexible content slot. Compose with
  *   `<CardTitle>`, `<CardDescription>`, `<CardFooter>` subcomponents.
- *   Visual variants: `outlined` (default) / `brand` / `elevated`.
+ *   Visual variants: `outlined` (default) / `brand` / `elevated` / `borderless`.
+ *   Use `borderless` (transparent, no border, no shadow) for cards placed on
+ *   a colored surface where the border ring would read as visual noise.
  * - **`preset="control"`** — settings/control card with locked-down
  *   badge + title + description + action layout. Replaces the legacy
  *   `CardControl` component.
