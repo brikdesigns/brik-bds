@@ -30,6 +30,15 @@
   box-shadow: var(--box-shadow-md);
 }
 
+/* Borderless — transparent, no border, no shadow. For cards on a colored
+ * surface (service-tier / brand-image background) where the outlined ring
+ * reads as visual noise; the card inherits the parent surface. */
+.bds-card--borderless {
+  background-color: transparent;
+  border: none;
+  box-shadow: var(--box-shadow-none);
+}
+
 /* ─── Padding ────────────────────────────────────────────────── */
 
 .bds-card--padding-none { padding: var(--padding-none); }
