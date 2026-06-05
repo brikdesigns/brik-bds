@@ -40,7 +40,7 @@
 .bds-slider-input::-moz-range-track {
   height: var(--bds-slider-track-height, 6px);
   border-radius: 999px;
-  background: var(--border-secondary); /* bds-lint-ignore token-family — slider track styled with border-family hue; see #777 */
+  background: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: track rail (thin neutral line, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
   border: none;
 }
 
@@ -90,12 +90,12 @@
 }
 
 .bds-slider-input:disabled::-webkit-slider-thumb {
-  background: var(--border-secondary); /* bds-lint-ignore token-family — disabled thumb shares border hue; see #777 */
+  background: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md */
   border-color: var(--border-secondary);
 }
 
 .bds-slider-input:disabled::-moz-range-thumb {
-  background: var(--border-secondary); /* bds-lint-ignore token-family — disabled thumb shares border hue; see #777 */
+  background: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md */
   border-color: var(--border-secondary);
 }
 }

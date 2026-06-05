@@ -154,7 +154,7 @@
 }
 
 .bds-progress-stepper__connector--incomplete {
-  background-color: var(--border-secondary); /* bds-lint-ignore token-family — connector line styled as 2px background; see #777 */
+  background-color: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: 2px connector line (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md */
 }
 
 /* ─── Dots variant ───────────────────────────────────────────── */
@@ -178,7 +178,7 @@
 }
 
 .bds-progress-stepper__dot--inactive {
-  background-color: var(--border-secondary); /* bds-lint-ignore token-family — inactive dot shares border-secondary hue; see #777 */
+  background-color: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: inactive dot (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
   opacity: 1;
 }
 

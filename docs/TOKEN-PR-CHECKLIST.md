@@ -67,6 +67,27 @@ color: var(--background-warning);
 border-color: var(--text-negative);
 ```
 
+### Registry of intentional cross-family aliases
+
+The aliases below are reviewed, design-approved exceptions — each is a `bds-lint-ignore token-family` site whose cross-family use is the correct call, not a deferred swap. Adding to this list requires the same justification bar as the escape hatch above. Tracked under [#777](https://github.com/brikdesigns/brik-bds/issues/777).
+
+**`--border-*` rendered as `background` — thin lines / hairline UI (border semantics, fill mechanics).**
+A 1–2px line or a thin neutral UI element has no content box to hang a `border` on, so it is painted as a `background` fill. The hue is the border-family neutral by intent — these *are* borders, mechanically expressed as fills.
+
+| Site | Token | Element |
+|---|---|---|
+| `ActivityTimeline.css` | `--border-muted` | hairline connector (2px) |
+| `Board.css` | `--border-muted`, `--border-secondary` | scrollbar thumb |
+| `ProgressStepper.css` | `--border-secondary` | connector line (2px) + inactive dot |
+| `Slider.css` | `--border-secondary` | track rail + disabled thumb |
+
+**`--surface-muted` rendered as `border-color` — `TaskConsole` in-progress spinner track.**
+The spinner ring's 3/4 track must stay *subtle on whatever surface it sits on* across themes. No border-family token does this: `--border-primary` resolves to `grayscale-darkest` (#1b1b1b) under `.theme-brand-brik` and reads dark on white; `--border-muted` is mid-grey (#828282) in `:root`. `--surface-muted` is the only token that tracks surface lightness per theme (#f2f2f2 light / #1b1b1b dark), keeping the track subtle in both modes while the leading quadrant carries `--border-brand-primary`. This is a surface-tracking fill in a border slot by design, not a hue mismatch.
+
+| Site | Token | Element |
+|---|---|---|
+| `TaskConsole.css` | `--surface-muted` | spinner track (`border-color`, 3/4 ring) |
+
 ---
 
 ## Author checklist
