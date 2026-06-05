@@ -52,10 +52,20 @@
 
 /* ─── Icon ───────────────────────────────────────────────────── */
 
+/* Per-service glyph rendered via mask so the fill is CSS-recolorable (#574).
+   The glyph SVG is the mask; `currentColor` paints it the tag's service text
+   token, so the icon always matches the label and retones per theme. The glyph
+   URL + box size are set inline (runtime values) on the element. */
 .bds-service-tag__icon {
-  object-fit: contain;
   display: block;
   flex-shrink: 0;
+  background-color: currentColor;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 }
 
 /* ─── Icon-only variant (square badge) ───────────────────────── */
