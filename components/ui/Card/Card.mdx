@@ -20,6 +20,14 @@ Flexible content container. A single primitive serves four shapes via the `prese
 
 The `preset` prop selects the shape. Default (no `preset`) gives a flexible `children` slot composable with `CardTitle`, `CardDescription`, and `CardFooter`. Each preset locks the layout in exchange for a typed API.
 
+The default shape also takes a `variant`: `outlined` (default, secondary border), `brand` (primary-color border), `elevated` (drop shadow, no border), and `borderless`.
+
+### Borderless variant
+
+`variant="borderless"` — transparent fill, no border, no shadow. Use for cards placed on a colored surface (service-tier or brand-image background) where the `outlined` border ring reads as visual noise. The card inherits the parent surface rather than forcing its own.
+
+<Canvas of={Stories.Borderless} />
+
 ### Control preset
 
 `preset="control"` — settings/control row. Leading badge + (title + description) on the left, action on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.

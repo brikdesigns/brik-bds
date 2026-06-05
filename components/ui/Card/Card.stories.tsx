@@ -12,9 +12,9 @@ const meta: Meta<typeof Card> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['outlined', 'brand', 'elevated'],
+      options: ['outlined', 'brand', 'elevated', 'borderless'],
       description:
-        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = drop shadow.',
+        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface).',
     },
     padding: {
       control: 'select',
@@ -67,6 +67,48 @@ export const Default: Story = {
   decorators: [
     (Story) => (
       <div style={{ width: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * `variant="borderless"` — transparent fill, no border, no shadow. For cards
+ * placed on a colored surface (service-tier / brand-image background) where
+ * the `outlined` ring reads as visual noise. The card inherits the parent
+ * surface; shown here on a brand-primary background.
+ *
+ * @summary variant="borderless" — for cards on a colored surface
+ */
+export const Borderless: Story = {
+  args: {
+    variant: 'borderless',
+    padding: 'md',
+    children: (
+      <>
+        <CardTitle>Card title</CardTitle>
+        <CardDescription>
+          Sits directly on the colored surface — no border ring, no shadow.
+        </CardDescription>
+        <CardFooter>
+          <Button variant="on-color" size="sm">
+            Action
+          </Button>
+        </CardFooter>
+      </>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          width: 320,
+          padding: 'var(--padding-xl)',
+          backgroundColor: 'var(--background-brand-primary)',
+          borderRadius: 'var(--border-radius-md)',
+        }}
+      >
         <Story />
       </div>
     ),
