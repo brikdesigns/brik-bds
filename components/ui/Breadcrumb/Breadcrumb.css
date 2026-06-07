@@ -25,7 +25,11 @@
 .bds-breadcrumb__current {
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
-  font-weight: var(--font-weight-semi-bold);
+  /* Regular weight (links are semi-bold) so the current page reads as the
+     recessive "you are here" — a weight-based hierarchy that holds on any
+     surface, including the [data-audience] tints below where --text-secondary
+     collapses onto the link colour and contrast can't carry the distinction. */
+  font-weight: var(--font-weight-regular);
   line-height: var(--font-line-height-tight);
   color: var(--text-secondary);
   text-transform: capitalize;
