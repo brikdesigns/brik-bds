@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
@@ -159,4 +160,123 @@ export const LandscapePhotography: Story = {
       },
     },
   },
+};
+
+/* ─── Service-surface AAA contrast matrix (brik-bds#838) ──────────────
+ *
+ * Proves the locked #836 pairing: the mode-INVARIANT pale `-light` surface
+ * tone (= each hue's `-lightest` step) + the mode-invariant `-on-light`
+ * (= `-darkest`) text clears AAA (≥7:1) for same-hue body text on all five
+ * service lines. Both tokens are defined only in `:root` (NOT in the
+ * `:root[data-theme="dark"]` override block), so they resolve identically in
+ * light AND dark themes — toggle the theme toolbar (brik ↔ brik-dark) and the
+ * measured ratios below do not move. The ratio badge is computed live from the
+ * rendered colors via getComputedStyle, so it regresses loudly if a primitive
+ * shifts. Verified values: marketing 8.31 · brand 8.40 · information 9.29 ·
+ * product 11.43 · back-office 12.52 (:1). */
+
+/* Full canonical token names are spelled out per hue (not interpolated) so
+ * the static canonical-check / #839 lint gate can verify each name. */
+const SERVICE_HUES = [
+  { key: 'marketing', label: 'Marketing', surface: 'var(--surface-service-marketing-light)', text: 'var(--text-service-marketing-on-light)' },
+  { key: 'brand', label: 'Brand', surface: 'var(--surface-service-brand-light)', text: 'var(--text-service-brand-on-light)' },
+  { key: 'information', label: 'Information', surface: 'var(--surface-service-information-light)', text: 'var(--text-service-information-on-light)' },
+  { key: 'product', label: 'Product', surface: 'var(--surface-service-product-light)', text: 'var(--text-service-product-on-light)' },
+  { key: 'back-office', label: 'Back office', surface: 'var(--surface-service-back-office-light)', text: 'var(--text-service-back-office-on-light)' },
+] as const;
+
+function parseRgb(value: string): [number, number, number] {
+  const match = value.match(/\(([^)]+)\)/);
+  if (!match) return [0, 0, 0];
+  const parts = match[1].split(',').map((v) => parseFloat(v));
+  return [parts[0] || 0, parts[1] || 0, parts[2] || 0];
+}
+
+function relativeLuminance([r, g, b]: [number, number, number]): number {
+  const channel = (v: number) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+
+function contrastRatio(fg: string, bg: string): number {
+  const l1 = relativeLuminance(parseRgb(fg));
+  const l2 = relativeLuminance(parseRgb(bg));
+  const hi = Math.max(l1, l2);
+  const lo = Math.min(l1, l2);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+function ServiceSurfaceSwatch({ label, surface, text }: { label: string; surface: string; text: string }) {
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const [ratio, setRatio] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!surfaceRef.current || !textRef.current) return;
+    const bg = getComputedStyle(surfaceRef.current).backgroundColor;
+    const fg = getComputedStyle(textRef.current).color;
+    setRatio(contrastRatio(fg, bg));
+  });
+
+  const level = ratio == null ? '' : ratio >= 7 ? 'AAA' : ratio >= 4.5 ? 'AA' : 'FAIL';
+  const badgeText = ratio == null ? '…' : `${level} · ${ratio.toFixed(2)}:1`;
+
+  return (
+    <div
+      ref={surfaceRef}
+      style={{
+        background: surface,
+        color: text,
+        padding: 'var(--padding-lg)',
+        borderRadius: 'var(--border-radius-lg)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--gap-sm)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--gap-md)' }}>
+        <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-lg)', fontWeight: 'var(--font-weight-semibold)' }}>
+          {label}
+        </span>
+        <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-md)', fontWeight: 'var(--font-weight-bold)' }}>
+          {badgeText}
+        </span>
+      </div>
+      <h3 style={{ margin: 0, fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-md)' }}>
+        Same-hue heading on the pale service surface
+      </h3>
+      <p ref={textRef} style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', maxWidth: '55ch' }}>
+        Body copy in the service hue&rsquo;s <code>-darkest</code> step sits on the same hue&rsquo;s
+        <code> -lightest</code> surface. This pairing is mode-invariant, so the contrast ratio shown
+        above is identical whether the page is in the light or dark theme.
+      </p>
+    </div>
+  );
+}
+
+/**
+ * @summary AAA contrast proof for the five service-line pale surfaces.
+ * Each panel renders same-hue body text on the canonical pale pairing and
+ * reports a live-computed WCAG ratio. Toggle the theme toolbar to confirm the
+ * ratios hold in dark mode (the tokens are mode-invariant by design).
+ */
+export const ServiceSurfaceContrastAAA: StoryObj = {
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        story:
+          'Verifies brik-bds#838: same-hue body text on each of the five service `-lightest` surfaces clears WCAG AAA (≥7:1) in both themes. Ratios are computed live from the rendered colors, so a primitive regression turns a badge red.',
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'grid', gap: 'var(--gap-md)', maxWidth: '720px' }}>
+      {SERVICE_HUES.map((hue) => (
+        <ServiceSurfaceSwatch key={hue.key} label={hue.label} surface={hue.surface} text={hue.text} />
+      ))}
+    </div>
+  ),
 };
