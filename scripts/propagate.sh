@@ -70,6 +70,30 @@ ok()    { echo -e "${GREEN}✓${NC} $1"; }
 warn()  { echo -e "${YELLOW}!${NC} $1"; }
 err()   { echo -e "${RED}✗${NC} $1"; }
 
+# ─── Headless-aware git ───────────────────────────────────────────
+# Signing is enforced globally on the operator's machines (commit.gpgsign=true,
+# gpg.format=ssh, key = the 1Password-held ed25519). On the headless mini
+# (brik-mini) the 1Password *desktop* SSH agent is unavailable, so any git op
+# that signs (commit, annotated tag) or rides SSH transport (pull/push/fetch to
+# an SSH-canonical remote such as brik-llm) dies — this was bds-propagate's
+# exit 128. git-sign-headless loads the signing key from 1Password into a
+# private, ephemeral ssh-agent (key never on disk) and runs one git command
+# against it. It is a safe passthrough for HTTPS remotes too (the gh credential
+# helper still handles HTTPS auth; the SSH command + signing config go unused).
+#
+# Route ONLY remote-touching + signing ops through it (commit, tag -a, pull,
+# push, fetch, submodule update). Local ops (checkout/add/status/branch/…) stay
+# on plain git so we don't spawn an agent for nothing. Off the mini, the desktop
+# agent works — call git directly.
+GIT_SIGN_HEADLESS="/Users/nickstanerson/Documents/GitHub/brik/brik-llm/operations/security/bin/git-sign-headless"
+git_signed() {
+  if [ "$(hostname -s 2>/dev/null)" = "brik-mini" ] && [ -x "$GIT_SIGN_HEADLESS" ]; then
+    "$GIT_SIGN_HEADLESS" -- "$@"
+  else
+    git "$@"
+  fi
+}
+
 # ─── Preflight ────────────────────────────────────────────────────
 info "Running preflight checks..."
 
@@ -93,6 +117,19 @@ if ! command -v jq &>/dev/null; then
   exit 1
 fi
 
+# Headless signing path must be live before we mutate anything (real run only).
+# Fails loud + early here instead of mid-propagation with a half-opened PR.
+if [ "$(hostname -s 2>/dev/null)" = "brik-mini" ] && [ "$DRY_RUN" = false ]; then
+  if [ ! -x "$GIT_SIGN_HEADLESS" ]; then
+    err "git-sign-headless not found/executable at $GIT_SIGN_HEADLESS (headless signing required on the mini)"
+    exit 1
+  fi
+  if ! "$GIT_SIGN_HEADLESS" --check &>/dev/null; then
+    err "git-sign-headless probe failed — cannot sign headless. Check op SA token + key access."
+    exit 1
+  fi
+fi
+
 cd "$BDS_DIR"
 CURRENT_BRANCH=$(git branch --show-current)
 if [ "$CURRENT_BRANCH" != "$BDS_BRANCH" ] && [ "$DRY_RUN" = false ]; then
@@ -109,7 +146,7 @@ if [ -n "$(git status --porcelain)" ] && [ "$DRY_RUN" = false ]; then
   exit 1
 fi
 
-git fetch "$BDS_REMOTE" "$BDS_BRANCH" --quiet
+git_signed fetch "$BDS_REMOTE" "$BDS_BRANCH" --quiet
 LOCAL_HEAD=$(git rev-parse HEAD)
 BDS_VERSION=$(jq -r '.version' "$BDS_DIR/package.json")
 
@@ -208,16 +245,16 @@ propagate_submodule() {
     stashed=true
   fi
   [ "$orig_branch" != "$base" ] && git checkout "$base" --quiet
-  git pull --quiet
+  git_signed pull --quiet
 
   local pr_branch="bds-update/${DATE_STAMP}-${SHORT_HASH}"
   git branch -D "$pr_branch" 2>/dev/null || true
   git checkout -b "$pr_branch" --quiet
 
   # Update submodule
-  git submodule update --init --remote --quiet -- "$subpath" 2>/dev/null || {
+  git_signed submodule update --init --remote --quiet -- "$subpath" 2>/dev/null || {
     info "Falling back to manual submodule update..."
-    (cd "$subpath" && git fetch origin main --quiet && git checkout --quiet "$LOCAL_HEAD")
+    (cd "$subpath" && git_signed fetch origin main --quiet && git checkout --quiet "$LOCAL_HEAD")
   }
   git add "$subpath"
 
@@ -230,8 +267,8 @@ propagate_submodule() {
     return
   fi
 
-  git commit -m "chore(bds): update submodule — $new_commits commits" --quiet
-  git push -u origin "$pr_branch" --quiet
+  git_signed commit -m "chore(bds): update submodule — $new_commits commits" --quiet
+  git_signed push -u origin "$pr_branch" --quiet
   ok "Pushed $pr_branch"
 
   local pr_body
@@ -284,7 +321,7 @@ propagate_npm() {
   fi
 
   # Fetch origin so the next step reads a fresh ref, not a cached stale one.
-  (cd "$path" && git fetch origin "$base" --quiet 2>/dev/null || true)
+  (cd "$path" && git_signed fetch origin "$base" --quiet 2>/dev/null || true)
 
   # Read current consumer version from origin/<base_branch> — the branch we'll PR against.
   # Reading local package.json would show whatever's on the current checkout
@@ -337,7 +374,7 @@ propagate_npm() {
     stashed=true
   fi
   [ "$orig_branch" != "$base" ] && git checkout "$base" --quiet
-  git pull --quiet
+  git_signed pull --quiet
 
   local pr_branch="bds-update/${DATE_STAMP}-v${BDS_VERSION}"
   git branch -D "$pr_branch" 2>/dev/null || true
@@ -363,8 +400,8 @@ propagate_npm() {
   fi
 
   git add package.json package-lock.json
-  git commit -m "chore(bds): bump $BDS_PACKAGE_NAME to $BDS_VERSION" --quiet
-  git push -u origin "$pr_branch" --quiet
+  git_signed commit -m "chore(bds): bump $BDS_PACKAGE_NAME to $BDS_VERSION" --quiet
+  git_signed push -u origin "$pr_branch" --quiet
   ok "Pushed $pr_branch"
 
   local pr_body
@@ -423,8 +460,8 @@ elif [ "$ANY_UPDATED" = true ]; then
     TAG="$BASE_TAG.$SUFFIX"
     SUFFIX=$((SUFFIX + 1))
   done
-  git tag -a "$TAG" -m "BDS release $TAG — propagated to consumers"
-  git push origin "$TAG" --quiet
+  git_signed tag -a "$TAG" -m "BDS release $TAG — propagated to consumers"
+  git_signed push origin "$TAG" --quiet
   ok "Tagged release: $TAG"
 fi
 
