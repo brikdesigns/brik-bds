@@ -34,13 +34,15 @@ BDS_PACKAGE_NAME="@brikdesigns/bds"
 # Submodule consumers: name|path|subpath|base_branch
 SUBMODULE_CONSUMERS=(
   "brik-llm|/Users/nickstanerson/Documents/GitHub/brik/brik-llm|foundations/brik-bds|main"
-  "brikdesigns|/Users/nickstanerson/Documents/GitHub/brik/brikdesigns|brik-bds|main"
 )
 
 # npm consumers: name|path|base_branch
+# brikdesigns migrated submodule → npm (@brikdesigns/bds in package.json; no
+# .gitmodules). It is pre-launch, so PRs target staging.
 NPM_CONSUMERS=(
   "brik-client-portal|/Users/nickstanerson/Documents/GitHub/product/brik-client-portal|staging"
   "renew-pms|/Users/nickstanerson/Documents/GitHub/product/renew-pms|staging"
+  "brikdesigns|/Users/nickstanerson/Documents/GitHub/brik/brikdesigns|staging"
 )
 
 # ─── Argument Parsing ─────────────────────────────────────────────
