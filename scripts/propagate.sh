@@ -96,6 +96,28 @@ git_signed() {
   fi
 }
 
+# ─── npm registry auth (GitHub Packages) ──────────────────────────
+# The consumer .npmrc files authenticate to npm.pkg.github.com via
+# ${PACKAGES_READ_TOKEN}. Interactive shells get it from the profile; the
+# launchd context that runs this agent starts from a bare env (PATH + HOME
+# only), so npm install fails E401 Unauthorized and the npm track is silently
+# skipped. Self-source the same env file the shell uses (the established
+# entrypoint pattern — cf. the notion wrapper sourcing notion.env). No value is
+# ever echoed; npm reads it from the exported env.
+PACKAGES_ENV="$HOME/.secrets/brik-packages.env"
+if [ -z "${PACKAGES_READ_TOKEN:-}" ] && [ -f "$PACKAGES_ENV" ]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "$PACKAGES_ENV"
+  set +a
+fi
+
+# Tracks whether any consumer failed in a way the daily digest should surface.
+# We finish every consumer + tag the release, then exit non-zero at the end so
+# launchd's exit-code check (morning-check launch_agents) flags it instead of
+# the failure being swallowed by a warn-and-return.
+DEGRADED=false
+
 # ─── Preflight ────────────────────────────────────────────────────
 info "Running preflight checks..."
 
@@ -385,7 +407,8 @@ propagate_npm() {
   # npm install the explicit new version
   info "Running npm install $BDS_PACKAGE_NAME@$BDS_VERSION..."
   if ! npm install --save "$BDS_PACKAGE_NAME@$BDS_VERSION" --silent 2>&1 | tail -5; then
-    err "npm install failed in $name — check registry auth"
+    err "npm install failed in $name — check registry auth (PACKAGES_READ_TOKEN)"
+    DEGRADED=true
     git checkout "$orig_branch" --quiet
     [ "$stashed" = true ] && git stash pop --quiet
     echo ""
@@ -468,4 +491,8 @@ elif [ "$ANY_UPDATED" = true ]; then
 fi
 
 echo ""
+if [ "$DEGRADED" = true ]; then
+  err "Completed with degraded consumers (see 'npm install failed' above) — exiting non-zero so the daily digest surfaces it."
+  exit 1
+fi
 echo -e "${GREEN}${BOLD}Done!${NC}"
