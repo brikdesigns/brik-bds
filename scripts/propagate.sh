@@ -260,20 +260,21 @@ propagate_submodule() {
     [[ $REPLY =~ ^[Nn]$ ]] && { warn "Skipped $name"; echo ""; return; }
   fi
 
-  # Stash + switch to base branch
-  local stashed=false orig_branch
-  cd "$path"
-  orig_branch=$(git branch --show-current)
-  if [ -n "$(git status --porcelain)" ]; then
-    git stash -u --quiet -m "bds-propagate: auto-stash"
-    stashed=true
-  fi
-  [ "$orig_branch" != "$base" ] && git checkout "$base" --quiet
-  git_signed pull --quiet
-
   local pr_branch="bds-update/${DATE_STAMP}-${SHORT_HASH}"
-  git branch -D "$pr_branch" 2>/dev/null || true
-  git checkout -b "$pr_branch" --quiet
+  local worktree_path="${path}-worktrees/bds-propagate-${DATE_STAMP}-${SHORT_HASH}"
+
+  # Fetch latest base so the worktree branches from a fresh ref
+  git_signed -C "$path" fetch origin "$base" --quiet 2>/dev/null || \
+    warn "$name: could not fetch origin/$base — worktree will branch from local ref"
+
+  # Clean up any leftover worktree/branch from a previous failed run
+  git -C "$path" worktree remove --force "$worktree_path" 2>/dev/null || true
+  git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
+
+  # Create an isolated worktree from origin/$base — primary checkout is never touched
+  git -C "$path" worktree add "$worktree_path" -b "$pr_branch" "origin/${base}"
+  info "Worktree: $worktree_path"
+  cd "$worktree_path"
 
   # Update submodule
   git_signed submodule update --init --remote --quiet -- "$subpath" 2>/dev/null || {
@@ -284,9 +285,9 @@ propagate_submodule() {
 
   if git diff --cached --quiet; then
     warn "$name submodule already at $LOCAL_HEAD — no change"
-    git checkout "$orig_branch" --quiet
-    git branch -D "$pr_branch" 2>/dev/null || true
-    [ "$stashed" = true ] && git stash pop --quiet
+    cd "$BDS_DIR"
+    git -C "$path" worktree remove "$worktree_path"
+    git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
     echo ""
     return
   fi
@@ -320,9 +321,10 @@ EOF
   ok "PR: $pr_url"
   ANY_UPDATED=true
 
-  # Restore
-  git checkout "$orig_branch" --quiet
-  [ "$stashed" = true ] && git stash pop --quiet
+  # Remove worktree + local branch — PR is on the remote; local ref no longer needed
+  cd "$BDS_DIR"
+  git -C "$path" worktree remove "$worktree_path"
+  git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
   echo ""
 }
 
@@ -389,37 +391,34 @@ propagate_npm() {
     [[ $REPLY =~ ^[Nn]$ ]] && { warn "Skipped $name"; echo ""; return; }
   fi
 
-  # Stash + switch to base branch
-  local stashed=false orig_branch
-  cd "$path"
-  orig_branch=$(git branch --show-current)
-  if [ -n "$(git status --porcelain)" ]; then
-    git stash -u --quiet -m "bds-propagate: auto-stash"
-    stashed=true
-  fi
-  [ "$orig_branch" != "$base" ] && git checkout "$base" --quiet
-  git_signed pull --quiet
-
   local pr_branch="bds-update/${DATE_STAMP}-v${BDS_VERSION}"
-  git branch -D "$pr_branch" 2>/dev/null || true
-  git checkout -b "$pr_branch" --quiet
+  local worktree_path="${path}-worktrees/bds-propagate-${DATE_STAMP}-v${BDS_VERSION}"
+
+  # Clean up any leftover worktree/branch from a previous failed run
+  git -C "$path" worktree remove --force "$worktree_path" 2>/dev/null || true
+  git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
+
+  # Create an isolated worktree from origin/$base — primary checkout is never touched
+  git -C "$path" worktree add "$worktree_path" -b "$pr_branch" "origin/${base}"
+  info "Worktree: $worktree_path"
+  cd "$worktree_path"
 
   # npm install the explicit new version
   info "Running npm install $BDS_PACKAGE_NAME@$BDS_VERSION..."
   if ! npm install --save "$BDS_PACKAGE_NAME@$BDS_VERSION" --silent 2>&1 | tail -5; then
     err "npm install failed in $name — check registry auth (PACKAGES_READ_TOKEN)"
+    err "Worktree left for diagnosis: $worktree_path"
     DEGRADED=true
-    git checkout "$orig_branch" --quiet
-    [ "$stashed" = true ] && git stash pop --quiet
+    cd "$BDS_DIR"
     echo ""
     return
   fi
 
   if git diff --quiet package.json package-lock.json; then
     warn "No changes after npm install — consumer may already satisfy the range"
-    git checkout "$orig_branch" --quiet
-    git branch -D "$pr_branch" 2>/dev/null || true
-    [ "$stashed" = true ] && git stash pop --quiet
+    cd "$BDS_DIR"
+    git -C "$path" worktree remove "$worktree_path"
+    git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
     echo ""
     return
   fi
@@ -454,9 +453,10 @@ EOF
   ok "PR: $pr_url"
   ANY_UPDATED=true
 
-  # Restore
-  git checkout "$orig_branch" --quiet
-  [ "$stashed" = true ] && git stash pop --quiet
+  # Remove worktree + local branch — PR is on the remote; local ref no longer needed
+  cd "$BDS_DIR"
+  git -C "$path" worktree remove "$worktree_path"
+  git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
   echo ""
 }
 
