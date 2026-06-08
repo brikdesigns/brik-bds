@@ -286,7 +286,7 @@ propagate_submodule() {
   if git diff --cached --quiet; then
     warn "$name submodule already at $LOCAL_HEAD — no change"
     cd "$BDS_DIR"
-    git -C "$path" worktree remove "$worktree_path"
+    git -C "$path" worktree remove --force "$worktree_path"
     git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
     echo ""
     return
@@ -323,7 +323,7 @@ EOF
 
   # Remove worktree + local branch — PR is on the remote; local ref no longer needed
   cd "$BDS_DIR"
-  git -C "$path" worktree remove "$worktree_path"
+  git -C "$path" worktree remove --force "$worktree_path"
   git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
   echo ""
 }
@@ -417,7 +417,7 @@ propagate_npm() {
   if git diff --quiet package.json package-lock.json; then
     warn "No changes after npm install — consumer may already satisfy the range"
     cd "$BDS_DIR"
-    git -C "$path" worktree remove "$worktree_path"
+    git -C "$path" worktree remove --force "$worktree_path"
     git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
     echo ""
     return
@@ -455,7 +455,7 @@ EOF
 
   # Remove worktree + local branch — PR is on the remote; local ref no longer needed
   cd "$BDS_DIR"
-  git -C "$path" worktree remove "$worktree_path"
+  git -C "$path" worktree remove --force "$worktree_path"
   git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
   echo ""
 }
