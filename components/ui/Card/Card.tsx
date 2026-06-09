@@ -99,6 +99,12 @@ interface CardDisplayPresetProps extends CardBaseProps {
    * `bds-card-grid` blueprint.
    */
   preset: 'display';
+  /**
+   * `borderless` — transparent fill, no border, no shadow. Use when the
+   * card grid sits on a colored surface (service-tier tint) where the
+   * default white fill + border ring reads as visual noise.
+   */
+  variant?: 'borderless';
   /** Card heading. Renders as `<h3>` with `--font-family-heading` + `--heading-md`. */
   title: string;
   /**
@@ -401,6 +407,7 @@ function renderDisplayPreset({
   badge,
   action,
   href,
+  variant,
   className,
   style,
   preset: _preset,
@@ -409,6 +416,7 @@ function renderDisplayPreset({
   const classes = bdsClass(
     'bds-card',
     'bds-card--preset-display',
+    variant && `bds-card--${variant}`,
     href && 'bds-card--link',
     className,
   );

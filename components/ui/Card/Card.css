@@ -227,6 +227,16 @@
  *   tag/badge   — own their own typography (component-internal)
  */
 
+/* Borderless override for display preset — same semantics as the default-shape
+ * .bds-card--borderless, but higher specificity is needed because
+ * .bds-card--preset-display declares its own background + border after
+ * .bds-card--borderless in source order. */
+.bds-card--preset-display.bds-card--borderless {
+  background-color: transparent;
+  border: none;
+  box-shadow: var(--box-shadow-none);
+}
+
 .bds-card--preset-display {
   background-color: var(--surface-primary);
   border: var(--border-width-md) solid var(--border-secondary);
