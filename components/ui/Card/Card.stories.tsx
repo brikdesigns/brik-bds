@@ -247,6 +247,52 @@ export const Display: Story = {
 };
 
 /**
+ * `preset="display"` + `variant="borderless"` — transparent fill, no border,
+ * no shadow. Use when the card grid sits on a service-tinted colored surface
+ * where the default white fill + border ring reads as visual noise. The card
+ * inherits the parent surface; shown here on a service-product (purple) tint.
+ *
+ * @summary preset="display" variant="borderless" — on a colored surface
+ */
+export const DisplayBorderless: Story = {
+  args: {
+    preset: 'display',
+    variant: 'borderless',
+    title: 'Brand strategy',
+    description:
+      'A two-line card description that sets the type rhythm without trying to tell the whole story.',
+    tag: <Badge>Marketing</Badge>,
+    action: (
+      <Button variant="on-color" size="sm">
+        Learn more
+      </Button>
+    ),
+  },
+  argTypes: {
+    padding: { table: { disable: true } },
+    interactive: { table: { disable: true } },
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 200px)',
+          gap: 'var(--gap-md)',
+          padding: 'var(--padding-xl)',
+          backgroundColor: 'var(--surface-service-product)',
+          borderRadius: 'var(--border-radius-md)',
+        }}
+      >
+        <Story />
+        <Story />
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
  * `preset="display-row"` — horizontal sibling of `preset="display"`. Image
  * on the left, content (tag, title, description, optional `extras`, action)
  * on the right. Use for single-card sections where a vertical layout wastes
