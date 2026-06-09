@@ -108,6 +108,23 @@
   --text-on-color-light: var(--color-grayscale-white);
 }
 
+/* ── Dark-mode: --text-inverse must track the softened service-dark surface.
+ * surface-service-{hue}-dark softens one tier in dark mode (darkest → darker,
+ * per ADR-011). Lighter darker-step surfaces (brand yellow, marketing green)
+ * can't sustain white text (2.87–4.36:1); darker ones can. Override
+ * --text-inverse per luminance group so all five lines pass AA in dark mode.
+ * Uses mode-invariant --text-on-color-light (black) / --text-on-color-dark (white). */
+:root[data-theme="dark"] .bp-hero-img-card[data-audience='brand'],
+:root[data-theme="dark"] .bp-hero-img-card[data-audience='marketing'] {
+  --text-inverse: var(--text-on-color-light); /* black on yellow/green-darker: 4.82–7.33:1 */
+}
+:root[data-theme="dark"] .bp-hero-img-card[data-audience='information'],
+:root[data-theme="dark"] .bp-hero-img-card[data-audience='product'],
+:root[data-theme="dark"] .bp-hero-img-card[data-audience='back-office'],
+:root[data-theme="dark"] .bp-hero-img-card[data-audience='service'] {
+  --text-inverse: var(--text-on-color-dark);  /* white on blue/purple/orange-darker: 5.48–9.48:1 */
+}
+
 .bp-hero-img-card__container {
   max-width: 1280px;
   margin-inline: auto;
