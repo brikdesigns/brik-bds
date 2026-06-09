@@ -17,16 +17,9 @@ const NOTION_VERSION = '2022-06-28';
 const BACKLOG_DATABASE_ID = '32097d34-ed28-8051-8225-eb6800c2e05a';
 const PRODUCT_NAME = 'BDS Storybook';
 
-const SCOPE_MAP = {
-  bug: 'Critical',
-  ui: 'Normal',
-  suggestion: 'Low',
-  question: 'Low',
-};
-
 const FEEDBACK_TYPE_MAP = {
   bug: 'Bug',
-  ui: 'UI Issue',
+  ui: 'Enhancement',
   suggestion: 'Suggestion',
   question: 'Question',
 };
@@ -101,11 +94,14 @@ export default function feedbackMiddleware(app) {
             Name: { title: [{ text: { content: title } }] },
             Description: { rich_text: [{ text: { content: description } }] },
             Submitter: { rich_text: [{ text: { content: 'BDS Storybook' } }] },
-            'Feedback Type': { select: { name: FEEDBACK_TYPE_MAP[type] ?? 'Bug' } },
+            // Post-OPE-29 Backlog schema: Type/Severity became relations (not
+            // writable by name), Triage → "Triage Status", and the old
+            // `Status` + `Scope` selects were removed. Intake writes the
+            // surviving select properties; triage assigns the relations.
+            'Type [legacy]': { select: { name: FEEDBACK_TYPE_MAP[type] ?? 'Bug' } },
             Product: { select: { name: PRODUCT_NAME } },
             Client: { select: { name: 'Brik Designs' } },
-            Status: { status: { name: 'Not Started' } },
-            Scope: { select: { name: SCOPE_MAP[type] ?? 'Normal' } },
+            'Triage Status': { select: { name: 'Not Triaged' } },
             URL: { url: `https://storybook.brikdesigns.com/?path=/story/${page_url ?? ''}` },
           },
         }),
