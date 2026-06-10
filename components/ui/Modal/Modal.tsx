@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
 import { X } from '../../icons';
@@ -14,6 +14,12 @@ interface ModalBaseProps {
   isOpen: boolean;
   onClose: () => void;
   title?: ReactNode;
+  /**
+   * Accessible name for the dialog. A titled modal is labelled by its
+   * `title` automatically (`aria-labelledby`); supply `aria-label` to name
+   * a titleless modal so `role="dialog"` always has an accessible name.
+   */
+  'aria-label'?: string;
   size?: ModalSize;
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
@@ -120,6 +126,7 @@ export function Modal(props: ModalProps) {
   } = props;
 
   const isConfirmPreset = props.preset === 'confirm';
+  const titleId = useId();
 
   useEffect(() => {
     if (!isOpen || !closeOnEscape) return;
@@ -144,8 +151,8 @@ export function Modal(props: ModalProps) {
   if (!isOpen) return null;
 
   const modal = isConfirmPreset
-    ? renderConfirmPreset(props as ModalConfirmPresetProps, onClose)
-    : renderDefault(props as ModalDefaultProps, onClose, size);
+    ? renderConfirmPreset(props as ModalConfirmPresetProps, onClose, titleId)
+    : renderDefault(props as ModalDefaultProps, onClose, size, titleId);
 
   return createPortal(
     <div className="bds-modal-backdrop" onClick={handleBackdropClick}>
@@ -156,19 +163,22 @@ export function Modal(props: ModalProps) {
 }
 
 function renderDefault(
-  { title, children, footer, showCloseButton = true }: ModalDefaultProps,
+  { title, children, footer, showCloseButton = true, 'aria-label': ariaLabel }: ModalDefaultProps,
   onClose: () => void,
   size: ModalSize,
+  titleId: string,
 ) {
   return (
     <div
       className={bdsClass('bds-modal', `bds-modal--${size}`)}
       role="dialog"
       aria-modal="true"
+      aria-labelledby={title ? titleId : undefined}
+      aria-label={title ? undefined : ariaLabel}
     >
       {(title || showCloseButton) && (
         <div className="bds-modal__header">
-          {title && <h2 className="bds-modal__title">{title}</h2>}
+          {title && <h2 id={titleId} className="bds-modal__title">{title}</h2>}
           {showCloseButton && (
             <button
               type="button"
@@ -199,11 +209,12 @@ function renderConfirmPreset(
     confirmVariant = 'primary',
     confirmDisabled,
     confirmLoading,
+    'aria-label': ariaLabel,
   }: ModalConfirmPresetProps,
   onClose: () => void,
+  titleId: string,
 ) {
-  const titleId = 'bds-modal-confirm-title';
-  const descId = description ? 'bds-modal-confirm-desc' : undefined;
+  const descId = description ? `${titleId}-desc` : undefined;
 
   const autoFooter = (
     <>
@@ -227,6 +238,7 @@ function renderConfirmPreset(
       role="alertdialog"
       aria-modal="true"
       aria-labelledby={title ? titleId : undefined}
+      aria-label={title ? undefined : ariaLabel}
       aria-describedby={descId}
     >
       {title && (
