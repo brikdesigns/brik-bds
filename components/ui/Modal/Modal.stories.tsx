@@ -75,6 +75,10 @@ export const Playground = {
     const dialog = within(document.body).getByRole('dialog');
     await expect(dialog).toBeVisible();
 
+    // role="dialog" must expose an accessible name (WCAG 4.1.2) — the
+    // title is wired to the dialog via aria-labelledby (#844).
+    await expect(dialog).toHaveAccessibleName('Title goes here');
+
     // Close via the close button
     const closeButton = within(dialog).getByLabelText('Close');
     await userEvent.click(closeButton);
