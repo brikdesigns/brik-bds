@@ -64,7 +64,11 @@ export const Single: Story = {
     const canvas = within(canvasElement);
     const radio = canvas.getByLabelText('Option A') as HTMLInputElement;
 
-    await expect(radio).toBeVisible();
+    // The native input is visually hidden by design (custom radio —
+    // position:absolute; opacity:0; width/height:0), so assert it renders
+    // and is accessible rather than visible; the visible label proves render.
+    await expect(radio).toBeInTheDocument();
+    await expect(canvas.getByText('Option A')).toBeVisible();
     await expect(radio).not.toBeChecked();
     // Radios don't toggle off on second click — exclusivity comes from
     // other radios sharing the same `name`. The play test verifies
