@@ -61,3 +61,16 @@ export {
   poetic,
   witty,
 } from './voices';
+export {
+  legalTemplates,
+  getLegalTemplate,
+  noticeOfPrivacyPractices,
+  privacyPolicy,
+  termsOfService,
+  type LegalTemplate,
+  type LegalTemplateField,
+  type LegalTemplateKey,
+  type LegalTemplateKeyAlias,
+  type LegalReviewStatus,
+  type LegalRegime,
+} from './legal-templates';
