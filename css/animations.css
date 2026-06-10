@@ -231,40 +231,6 @@
 }
 
 /* ==========================================================================
-   LOADING STATES
-   Progress and waiting indicators
-   ========================================================================== */
-
-/* Skeleton Shimmer */
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--colors--grayscale--lightest, #f3f4f6) 25%,
-    var(--colors--grayscale--lighter, #e5e7eb) 50%,
-    var(--colors--grayscale--lightest, #f3f4f6) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-/* Spinner */
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-.spinner {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--colors--grayscale--lighter, #e5e7eb);
-  border-top-color: var(--_color---theme--primary, #0066ff);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-/* ==========================================================================
    EXIT ANIMATIONS
    Elements leaving the page
    ========================================================================== */
