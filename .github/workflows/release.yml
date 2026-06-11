@@ -76,13 +76,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Validate (lint-tokens errors-only + jsdoc + blueprints + typecheck)
+      - name: Validate (lint-tokens errors-only + contrast gate + jsdoc + blueprints + typecheck)
         # Skip `build-storybook` from the full `validate` script — Chromatic
         # has its own workflow and rerunning it here adds ~3 min per release
         # for no gain. The `prepublishOnly` script (rm -rf dist + build:lib)
         # runs as part of `npm publish` and is the publish-blocking build.
         run: |
           node scripts/lint-tokens.js --errors-only
+          npm run contrast-gate
           npm run lint-jsdoc
           npm run validate:blueprints
           npm run typecheck

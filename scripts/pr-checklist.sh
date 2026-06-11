@@ -59,7 +59,19 @@ else
   ERRORS=$((ERRORS + 1))
 fi
 
-# 1b. Consuming project token audit (if token-audit.sh exists at project root)
+# 1b. BDS contrast pairing gate (canonical AA/AAA pairings — runs from brik-bds root)
+printf "  Checking BDS contrast pairings (contrast-gate)... "
+if node "$BDS_ROOT/scripts/validate-themes.js" > /tmp/bds-contrast-out.txt 2>&1; then
+  echo -e "$PASS"
+else
+  echo -e "$FAIL"
+  echo ""
+  cat /tmp/bds-contrast-out.txt | sed 's/^/    /'
+  echo ""
+  ERRORS=$((ERRORS + 1))
+fi
+
+# 1c. Consuming project token audit (if token-audit.sh exists at project root)
 if [ -f "$PROJECT_ROOT/scripts/token-audit.sh" ] && [ "$PROJECT_ROOT" != "$BDS_ROOT" ]; then
   printf "  Checking consuming project tokens (token-audit)... "
   if bash "$PROJECT_ROOT/scripts/token-audit.sh" > /tmp/project-audit-out.txt 2>&1; then
@@ -73,7 +85,7 @@ if [ -f "$PROJECT_ROOT/scripts/token-audit.sh" ] && [ "$PROJECT_ROOT" != "$BDS_R
   fi
 fi
 
-# 1c. Check theme files for raw hex in Tier 2 (semantic) section
+# 1d. Check theme files for raw hex in Tier 2 (semantic) section
 THEME_FILES=()
 while IFS= read -r -d '' f; do
   THEME_FILES+=("$f")

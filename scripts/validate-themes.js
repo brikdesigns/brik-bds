@@ -1,229 +1,217 @@
 #!/usr/bin/env node
 
 /**
- * BDS Theme Compliance Validator
+ * BDS Contrast Pairing Gate
  *
- * Static CSS parser that validates all 9 themes for:
- *   1. Token resolution — every semantic color token resolves to a value
- *   2. WCAG AA contrast — critical text/background pairs meet 4.5:1
- *   3. Font family assignments — heading/body/label are set per theme
+ * Static CSS validator for the canonical accessible color-pairing set
+ * (tokens/contrast-pairings.json). Resolves every pairing's foreground +
+ * background token in the Brik LIGHT and DARK default themes and checks it
+ * against its WCAG threshold (AAA 7:1 / AA 4.5:1 / AA-large 3:1).
+ *
+ *   - A real sub-threshold pairing FAILS the gate (exit 1).
+ *   - A pairing flagged `darkException` whose DARK result is sub-threshold is
+ *     REPORTED as a known, tracked exception (the systemic dark-mode service
+ *     gap, brik-bds#823) and does NOT fail the gate.
+ *
+ * Source of truth: tokens/contrast-pairings.json (also feeds the Storybook
+ * ContrastCompliance dashboard and the primitives/color-pairings.mdx matrix).
  *
  * Usage:
- *   node scripts/validate-themes.js         # human-readable report
- *   node scripts/validate-themes.js --json  # machine-readable JSON
+ *   node scripts/validate-themes.js               # human-readable report, exit 1 on failure
+ *   node scripts/validate-themes.js --json        # machine-readable JSON
+ *   node scripts/validate-themes.js --emit-matrix # Markdown matrix for the foundation doc
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const FIGMA_CSS = path.join(ROOT, 'tokens', 'figma-tokens.css');
-const THEMES_CSS = path.join(ROOT, 'tokens', 'website-themes.css');
+const FIGMA_LIGHT = path.join(ROOT, 'tokens', 'figma-tokens.css');
+const FIGMA_DARK = path.join(ROOT, 'tokens', 'figma-tokens-dark.css');
 const GAP_FILLS = path.join(ROOT, 'tokens', 'gap-fills.css');
+const BRAND_BRIK = path.join(ROOT, 'tokens', 'theme-brand-brik.css');
+
+const DATASET = require(path.join(ROOT, 'tokens', 'contrast-pairings.json'));
 
 const jsonMode = process.argv.includes('--json');
+const matrixMode = process.argv.includes('--emit-matrix');
 
-// ─── WCAG Contrast Helpers ──────────────────────────────────────────
+// ─── CSS parsing ────────────────────────────────────────────────────
 
-function hexToRgb(hex) {
-  hex = hex.replace(/^#/, '');
-  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
-  const n = parseInt(hex, 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
-
-function srgbToLinear(c) {
-  c = c / 255;
-  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-}
-
-function luminance([r, g, b]) {
-  return 0.2126 * srgbToLinear(r) + 0.7152 * srgbToLinear(g) + 0.0722 * srgbToLinear(b);
-}
-
-function contrastRatio(hex1, hex2) {
-  const l1 = luminance(hexToRgb(hex1));
-  const l2 = luminance(hexToRgb(hex2));
-  const lighter = Math.max(l1, l2);
-  const darker = Math.min(l1, l2);
-  return (lighter + 0.05) / (darker + 0.05);
-}
-
-// ─── CSS Parsing ────────────────────────────────────────────────────
-
-function parseVarsFromBlock(css) {
+function parseDecls(blockBody) {
   const vars = {};
-  const re = /^\s*(--[\w-]+)\s*:\s*(.+?)\s*;/gm;
+  const re = /(--[\w-]+)\s*:\s*([^;]+);/g;
   let m;
-  while ((m = re.exec(css)) !== null) {
-    vars[m[1]] = m[2].replace(/\/\*.*?\*\//g, '').trim();
+  while ((m = re.exec(blockBody)) !== null) {
+    vars[m[1]] = m[2].replace(/\/\*[\s\S]*?\*\//g, '').trim();
   }
   return vars;
 }
 
-function parseCssBlocks(cssPath) {
+/** Extract the flat declaration body of the first rule whose selector matches
+ *  `selectorRe` (a RegExp matching the selector text immediately before `{`). */
+function extractBlock(cssPath, selectorRe) {
   if (!fs.existsSync(cssPath)) return {};
   const css = fs.readFileSync(cssPath, 'utf8');
-
-  const blocks = {};
-
-  // Parse :root block
-  const rootMatch = css.match(/:root\s*\{([^}]+)\}/s);
-  if (rootMatch) {
-    blocks[':root'] = parseVarsFromBlock(rootMatch[1]);
-  }
-
-  // Parse .body.theme-N blocks
-  const themeRe = /\.body\.theme-([\w-]+)\s*\{([^}]+)\}/gs;
-  let m;
-  while ((m = themeRe.exec(css)) !== null) {
-    blocks[`theme-${m[1]}`] = parseVarsFromBlock(m[2]);
-  }
-
-  return blocks;
+  const src = new RegExp(selectorRe.source + '\\s*\\{', selectorRe.flags);
+  const m = src.exec(css);
+  if (!m) return {};
+  const start = m.index + m[0].length;
+  const end = css.indexOf('}', start);
+  if (end === -1) return {};
+  return parseDecls(css.slice(start, end));
 }
 
 function resolveVar(value, vars, depth = 0) {
-  if (depth > 10) return value;
-  const m = value.match(/^var\((--[\w-]+)(?:\s*,\s*(.+))?\)$/);
+  if (depth > 12 || typeof value !== 'string') return value;
+  const m = value.match(/^var\(\s*(--[\w-]+)\s*(?:,\s*([\s\S]+))?\)$/);
   if (!m) return value;
   const resolved = vars[m[1]];
-  if (!resolved) return m[2] ? resolveVar(m[2], vars, depth + 1) : value;
+  if (resolved === undefined) return m[2] ? resolveVar(m[2].trim(), vars, depth + 1) : value;
   return resolveVar(resolved, vars, depth + 1);
 }
 
-// ─── Theme Building ─────────────────────────────────────────────────
-
-function buildThemeVars(rootVars, themeOverrides) {
-  const merged = { ...rootVars, ...themeOverrides };
-  // Resolve all var() references
-  const resolved = {};
-  for (const [key, val] of Object.entries(merged)) {
-    resolved[key] = resolveVar(val, merged);
-  }
-  return resolved;
+function resolveAll(merged) {
+  const out = {};
+  for (const [k, v] of Object.entries(merged)) out[k] = resolveVar(v, merged);
+  return out;
 }
 
-// ─── Validation ─────────────────────────────────────────────────────
+// ─── Theme assembly (the real Brik default cascade) ─────────────────
+// light = figma :root + gap-fills :root + .theme-brand-brik
+// dark  = light + figma dark :root[data-theme=dark] + dark .theme-brand-brik
 
-const CONTRAST_PAIRS = [
-  { text: '--text-primary', bg: '--page-primary', label: 'Body text on page' },
-  { text: '--text-primary', bg: '--surface-primary', label: 'Body text on surface' },
-  { text: '--text-secondary', bg: '--page-primary', label: 'Secondary text on page' },
-  { text: '--text-inverse', bg: '--surface-brand-primary', label: 'Inverse text on brand' },
-  { text: '--text-primary', bg: '--background-primary', label: 'Body text on background' },
+const figmaLight = extractBlock(FIGMA_LIGHT, /:root/);
+const gapFills = extractBlock(GAP_FILLS, /:root/);
+const brandBrikLight = extractBlock(BRAND_BRIK, /(?:^|\})\s*\.theme-brand-brik/m);
+const figmaDark = extractBlock(FIGMA_DARK, /:root\[data-theme="dark"\]/);
+const brandBrikDark = extractBlock(BRAND_BRIK, /:root\[data-theme="dark"\]\s*\.theme-brand-brik/);
+
+const lightVars = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikLight });
+const darkVars = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikLight, ...figmaDark, ...brandBrikDark });
+
+const THEMES = [
+  { key: 'light', label: 'Brik · Light', vars: lightVars },
+  { key: 'dark', label: 'Brik · Dark', vars: darkVars },
 ];
 
-const FONT_TOKENS = ['--font-family-heading', '--font-family-body', '--font-family-label'];
+// ─── Evaluation ─────────────────────────────────────────────────────
 
-const SEMANTIC_COLORS = [
-  '--text-primary', '--text-secondary', '--text-muted', '--text-inverse', '--text-brand-primary',
-  '--background-primary', '--background-secondary', '--surface-primary', '--surface-secondary',
-  '--surface-brand-primary', '--border-primary', '--border-muted', '--page-primary',
-];
+async function main() {
+  const { contrastRatio, isHex } = await import('./lib/wcag.mjs');
+  const { thresholds } = DATASET;
 
-function isHex(value) {
-  return /^#[0-9a-fA-F]{3,8}$/.test(value);
-}
+  const round = (n) => Math.round(n * 100) / 100;
 
-function validateTheme(name, vars) {
-  const issues = [];
+  const results = []; // { pairing, theme, ratio, threshold, thresholdType, status }
+  let hardFailures = 0;
+  let exceptions = 0;
 
-  // 1. Token resolution — check semantic colors resolve to actual values
-  const unresolved = [];
-  for (const token of SEMANTIC_COLORS) {
-    const val = vars[token];
-    if (!val || val.startsWith('var(')) {
-      unresolved.push(token);
-    }
-  }
-  if (unresolved.length > 0) {
-    issues.push({ type: 'unresolved', tokens: unresolved });
-  }
+  let aaaWarnings = 0;
 
-  // 2. Contrast checks
-  const contrastIssues = [];
-  for (const pair of CONTRAST_PAIRS) {
-    const textVal = vars[pair.text];
-    const bgVal = vars[pair.bg];
-    if (!textVal || !bgVal || !isHex(textVal) || !isHex(bgVal)) continue;
-    const ratio = contrastRatio(textVal, bgVal);
-    if (ratio < 4.5) {
-      contrastIssues.push({ ...pair, ratio: Math.round(ratio * 100) / 100, pass: false });
-    } else {
-      contrastIssues.push({ ...pair, ratio: Math.round(ratio * 100) / 100, pass: true });
-    }
-  }
-  if (contrastIssues.some(c => !c.pass)) {
-    issues.push({ type: 'contrast', pairs: contrastIssues });
-  }
+  for (const pairing of DATASET.pairings) {
+    const target = thresholds[pairing.thresholdType];
+    // Hard floor = WCAG AA conformance: 3:1 for large/muted, 4.5:1 otherwise.
+    // AAA (7:1) is an aspiration for body text, not a blocking gate.
+    const floor = pairing.thresholdType === 'AA-large' ? thresholds['AA-large'] : thresholds['AA'];
+    for (const theme of THEMES) {
+      const fgVal = theme.vars[pairing.fg];
+      const bgVal = theme.vars[pairing.bg];
+      let status, ratio = null;
 
-  // 3. Font family assignments
-  const fonts = {};
-  for (const token of FONT_TOKENS) {
-    fonts[token] = vars[token] || 'unset';
-  }
-  issues.push({ type: 'fonts', fonts });
-
-  return { name, issues, contrastPairs: contrastIssues, fonts };
-}
-
-// ─── Main ───────────────────────────────────────────────────────────
-
-const figmaBlocks = parseCssBlocks(FIGMA_CSS);
-const themeBlocks = parseCssBlocks(THEMES_CSS);
-const gapBlocks = parseCssBlocks(GAP_FILLS);
-
-const rootVars = { ...(figmaBlocks[':root'] || {}), ...(gapBlocks[':root'] || {}), ...(themeBlocks[':root'] || {}) };
-
-// Determine theme names from CSS
-const themeNames = Object.keys(themeBlocks).filter(k => k.startsWith('theme-'));
-if (!themeNames.includes('theme-brand-brik')) themeNames.unshift('theme-brand-brik');
-
-const results = [];
-
-for (const themeName of themeNames) {
-  const overrides = themeBlocks[themeName] || {};
-  const vars = buildThemeVars(rootVars, overrides);
-  results.push(validateTheme(themeName, vars));
-}
-
-// Also validate base (no theme = :root only)
-const baseVars = buildThemeVars(rootVars, {});
-results.unshift(validateTheme('base (no theme)', baseVars));
-
-if (jsonMode) {
-  console.log(JSON.stringify({ themes: results }, null, 2));
-} else {
-  console.log('\n🎨 BDS Theme Compliance Report\n');
-  for (const theme of results) {
-    const hasFailures = theme.issues.some(i =>
-      i.type === 'unresolved' || (i.type === 'contrast' && i.pairs.some(p => !p.pass))
-    );
-    const icon = hasFailures ? '⚠️' : '✅';
-    console.log(`${icon} ${theme.name}`);
-
-    for (const issue of theme.issues) {
-      if (issue.type === 'unresolved') {
-        console.log(`   Unresolved tokens: ${issue.tokens.join(', ')}`);
-      }
-      if (issue.type === 'contrast') {
-        for (const pair of issue.pairs) {
-          const status = pair.pass ? '  ✓' : '  ✗';
-          console.log(`  ${status} ${pair.label}: ${pair.ratio}:1${pair.pass ? '' : ' (FAIL < 4.5:1)'}`);
-        }
-      }
-      if (issue.type === 'fonts') {
-        const distinct = new Set(Object.values(issue.fonts)).size;
-        if (distinct === 1 && Object.values(issue.fonts)[0] !== 'unset') {
-          console.log(`   Fonts: all same (${Object.values(issue.fonts)[0]})`);
+      if (!fgVal || !bgVal || !isHex(fgVal) || !isHex(bgVal)) {
+        status = 'unresolved';
+      } else {
+        ratio = round(contrastRatio(fgVal, bgVal));
+        if (ratio >= target) {
+          status = 'pass';
+        } else if (ratio >= floor) {
+          // Clears the AA floor but misses the AAA aspiration → warn, don't block.
+          status = 'warn';
+          aaaWarnings++;
+        } else if (theme.key === 'dark' && pairing.darkException) {
+          // Genuine sub-AA in dark on a known-fragile service pairing (brik-bds#823).
+          status = 'exception';
+          exceptions++;
         } else {
-          for (const [token, val] of Object.entries(issue.fonts)) {
-            console.log(`   ${token}: ${val}`);
-          }
+          status = 'fail';
+          hardFailures++;
         }
       }
+      results.push({
+        label: pairing.label,
+        group: pairing.group,
+        fg: pairing.fg,
+        bg: pairing.bg,
+        theme: theme.key,
+        themeLabel: theme.label,
+        thresholdType: pairing.thresholdType,
+        threshold: target,
+        ratio,
+        status,
+        exception: pairing.darkException || null,
+      });
     }
-    console.log('');
+  }
+
+  if (jsonMode) {
+    console.log(JSON.stringify({ themes: THEMES.map((t) => t.key), results, hardFailures, exceptions, aaaWarnings }, null, 2));
+  } else if (matrixMode) {
+    emitMatrix(results);
+  } else {
+    report(results, hardFailures, exceptions, aaaWarnings);
+  }
+
+  // Unresolved canonical tokens are a real problem (drift / typo) → fail.
+  const unresolved = results.filter((r) => r.status === 'unresolved').length;
+  process.exit(hardFailures > 0 || unresolved > 0 ? 1 : 0);
+}
+
+// ─── Output ─────────────────────────────────────────────────────────
+
+const ICON = { pass: '✓', warn: '·', fail: '✗', exception: '⚠', unresolved: '?' };
+
+function report(results, hardFailures, exceptions, aaaWarnings) {
+  console.log('\n🎨 BDS Contrast Pairing Gate\n');
+  let lastGroup = null;
+  for (const r of results) {
+    if (r.theme !== 'light') continue; // group rows by pairing; print both themes on one line
+    const dark = results.find((x) => x.label === r.label && x.theme === 'dark');
+    if (r.group !== lastGroup) {
+      console.log(`\n  ── ${r.group.toUpperCase()} ──`);
+      lastGroup = r.group;
+    }
+    const note = (x) =>
+      x.status === 'warn' ? ' (below AAA aim)' : x.status === 'exception' ? ` (exception #${x.exception.issue})` : '';
+    const fmt = (x) => (x.status === 'unresolved' ? 'n/a' : `${ICON[x.status]} ${x.ratio}:1${note(x)}`);
+    console.log(`  ${r.label}  [target ${r.thresholdType} ≥${r.threshold}]`);
+    console.log(`      light ${fmt(r)}    dark ${fmt(dark)}`);
+  }
+  console.log('\n  ─────────────────────────────');
+  console.log(`  ${hardFailures === 0 ? '✅ PASS (WCAG AA floor)' : `❌ FAIL — ${hardFailures} pairing(s) below the AA floor`}`);
+  if (aaaWarnings > 0) console.log(`  ·  ${aaaWarnings} pairing(s) clear AA but miss the AAA body aim (non-blocking)`);
+  if (exceptions > 0) console.log(`  ⚠  ${exceptions} dark-mode service pairing(s) below AA — tracked exception (brik-bds#823)`);
+  console.log('');
+}
+
+function emitMatrix(results) {
+  const verdict = (r) => {
+    if (r.status === 'unresolved') return 'n/a';
+    if (r.status === 'exception') return `${r.ratio}:1 ⚠ (#${r.exception.issue})`;
+    const tier = r.ratio >= 7 ? 'AAA' : r.ratio >= 4.5 ? 'AA' : r.ratio >= 3 ? 'AA-lg' : 'FAIL';
+    return `${r.ratio}:1 ${tier}`;
+  };
+  console.log('<!-- Generated by `node scripts/validate-themes.js --emit-matrix` — do not hand-edit. -->');
+  console.log('| Pairing | Target | Light | Dark |');
+  console.log('|---|---|---|---|');
+  for (const r of results) {
+    if (r.theme !== 'light') continue;
+    const dark = results.find((x) => x.label === r.label && x.theme === 'dark');
+    console.log(`| ${r.label} | ${r.thresholdType} ≥${r.threshold} | ${verdict(r)} | ${verdict(dark)} |`);
   }
 }
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

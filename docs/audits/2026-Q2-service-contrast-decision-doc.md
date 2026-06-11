@@ -1,7 +1,15 @@
 # Service-line contrast — decision doc (2026-Q2)
 
-**Status:** Open — awaiting design sign-off on three questions (see §4)
+**Status:** RESOLVED (2026-06-11) — the three §4 questions are answered (see below); the durable home for the pairing system is now [primitives/color-pairings](../../docs-site/content/docs/primitives/color-pairings.mdx) (documented + gated). This doc is retained as the decision record + measured-data archive.
 **Owner:** Nick Stanerson
+
+### Locked answers (2026-06-11, owner sign-off)
+
+- **§4.1 Surface intent** — Text-bearing service regions use the **pale `-lightest`** step (AAA in light); the mid-tone `-light` base is **decorative**, gated at AA only. Documented in `color-pairings.mdx` §3.
+- **§4.2 AAA scope** — **AAA for body/small where the surface affords it; WCAG AA is the enforced floor; AA-large (3:1) for large/heading + muted.** The gate fails below the AA floor; AAA-aim misses are reported, non-blocking.
+- **§4.3 Dark-mode gap** — **Accept + document as a tracked exception (#823).** The light-mode primitive darkening (#827, shipped 0.93.x) and the dark-mode `-darkest` pin (#865) closed the active gap for the *recommended* pairings; the residual non-recommended anti-pattern (white label on mid-tone service base fill in dark) is a `darkException` guard in the gate, not a hard fail. No Figma primitive edits required for this round.
+
+The pairing set is now data (`tokens/contrast-pairings.json`), gated in CI (`scripts/validate-themes.js` via `npm run contrast-gate`), and visualized live in the Contrast Compliance Storybook dashboard. #836 (pairing matrix) and #839 (contrast gate) are delivered by this work.
 **Consolidates:** [#836](https://github.com/brikdesigns/brik-bds/issues/836) (pairing matrix), [#850](https://github.com/brikdesigns/brik-bds/issues/850) (four-way audit + root cause), [#823](https://github.com/brikdesigns/brik-bds/issues/823) (dark-mode systemic gap), [#827](https://github.com/brikdesigns/brik-bds/issues/827) (live p1 WCAG fail), [ADR-011](../adrs/ADR-011-service-line-token-value-model.md) (value model)
 
 ## 1. Why this doc exists

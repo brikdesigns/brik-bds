@@ -29,6 +29,7 @@ This CLAUDE.md is `@import`-ed by every consumer of `@brikdesigns/bds` — the B
 - **Token system vocabulary** (the six locked concepts: Anatomy / Tier / Library / Layer / Mode / Tenet) → [Token Anatomy](docs-site/content/docs/primitives/token-anatomy.mdx) → published at design.brikdesigns.com/docs/primitives/token-anatomy. Read first before referencing any token.
 - **Library Architecture** (Foundations Library vs Brand Kit Library + multi-Library Style Dictionary pull) → [Figma Library Architecture](docs-site/content/docs/getting-started/figma-library-architecture.mdx)
 - **Token discipline** (semantic categories, service-token isolation, drift patterns) → `brik-rag query "token discipline"`
+- **Color pairings** (which `--text-*` is WCAG-safe on which surface — brand + service tiers, both themes; the source-of-truth dataset `tokens/contrast-pairings.json`; the `npm run contrast-gate` CI check) → [Color Pairings](docs-site/content/docs/primitives/color-pairings.mdx). Consult before pairing a foreground/background or fixing contrast — never hand-edit HEX at the consumer layer.
 - **Token PR checklist** → [`docs/TOKEN-PR-CHECKLIST.md`](docs/TOKEN-PR-CHECKLIST.md)
 - **Release procedure** → [`docs/RELEASE.md`](docs/RELEASE.md)
 - **Component build rules** → [`.claude/standards/component-build.md`](.claude/standards/component-build.md) — auto-retrieved by the [`component-build`](.claude/skills/component-build/SKILL.md) skill on `components/ui/**/*.{tsx,css}` edits

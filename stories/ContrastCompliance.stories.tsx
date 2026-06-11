@@ -3,12 +3,20 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DashboardFrame, DashboardSection } from './_components/DashboardFrame';
 import { contrastRatio } from './_components/wcag-contrast';
 import { getAllThemes } from '../tokens/theme-registry';
+import pairingData from '../tokens/contrast-pairings.json';
 
 // Themes under test come from the registry — BDS ships 3 built-ins, and
 // consumer Storybooks can extend the probe via `registerClientTheme()`
 // from `tokens/theme-registry`. No hand-editing this file per new client.
 
 // ─── Contrast pairs to evaluate ─────────────────────────────────────
+// Sourced from the canonical dataset (tokens/contrast-pairings.json) — the
+// SAME set the CI gate (scripts/validate-themes.js) and the foundation doc
+// use. The visual pass/fail bar is the WCAG AA floor (3:1 for large/muted,
+// 4.5:1 otherwise); AAA is the documented body-text aim shown in the note.
+
+const AA_FLOOR = pairingData.thresholds['AA'];
+const AA_LARGE = pairingData.thresholds['AA-large'];
 
 const CONTRAST_PAIRS: {
   label: string;
@@ -16,14 +24,20 @@ const CONTRAST_PAIRS: {
   bg: string;
   threshold: number;
   note?: string;
-}[] = [
-  { label: 'Body text on page',      text: '--text-primary',       bg: '--page-primary',           threshold: 4.5 },
-  { label: 'Body text on surface',   text: '--text-primary',       bg: '--surface-primary',        threshold: 4.5 },
-  { label: 'Secondary on page',      text: '--text-secondary',     bg: '--page-primary',           threshold: 4.5 },
-  { label: 'Muted on page',          text: '--text-muted',         bg: '--page-primary',           threshold: 3.0, note: 'AA large / UI component (3:1 minimum)' },
-  { label: 'Brand text on page',     text: '--text-brand-primary', bg: '--page-primary',           threshold: 4.5 },
-  { label: 'Inverse on brand fill',  text: '--text-inverse',       bg: '--background-brand-primary', threshold: 4.5, note: 'Primary button label' },
-];
+}[] = pairingData.pairings.map((p) => ({
+  label: p.label,
+  text: p.fg,
+  bg: p.bg,
+  threshold: p.thresholdType === 'AA-large' ? AA_LARGE : AA_FLOOR,
+  note:
+    p.thresholdType === 'AAA'
+      ? 'AAA body aim (7:1); AA floor enforced'
+      : p.thresholdType === 'AA-large'
+        ? 'AA large / UI component (3:1 minimum)'
+        : 'darkException' in p
+          ? 'service pairing — dark gap tracked in #823'
+          : undefined,
+}));
 
 const FONT_TOKENS = ['--font-family-heading', '--font-family-body', '--font-family-label'];
 

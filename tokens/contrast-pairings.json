@@ -1,0 +1,30 @@
+{
+  "_comment": "Canonical accessible foreground/background token pairings for BDS. SINGLE SOURCE OF TRUTH consumed by: scripts/validate-themes.js (the CI contrast gate), stories/ContrastCompliance.stories.tsx (the Storybook dashboard), and the published foundation doc primitives/color-pairings.mdx (its matrix is generated via `node scripts/validate-themes.js --emit-matrix`). Each pairing is evaluated in BOTH the Brik light and dark default themes. thresholdType assignment follows the locked policy below. A pairing with `darkException` whose DARK result falls below threshold is REPORTED (not failed) and linked to its tracking issue — the known systemic dark-mode service-tier gap. Add a pairing here; never hardcode a pair list in a consumer.",
+  "policy": "AAA (7:1) for primary body/small text where the surface affords it; AA (4.5:1) for colored brand/service text and on-color neutrals; AA-large (3:1) for large/heading and intentionally-muted/decorative text. Service text-bearing regions use the pale `-lightest` surface step (AAA in light); the mid-tone base step is decorative and gated at AA only.",
+  "thresholds": { "AAA": 7, "AA": 4.5, "AA-large": 3 },
+  "pairings": [
+    { "group": "neutral", "label": "Body text on page", "fg": "--text-primary", "bg": "--page-primary", "thresholdType": "AAA" },
+    { "group": "neutral", "label": "Body text on surface", "fg": "--text-primary", "bg": "--surface-primary", "thresholdType": "AAA" },
+    { "group": "neutral", "label": "Body text on background", "fg": "--text-primary", "bg": "--background-primary", "thresholdType": "AAA" },
+    { "group": "neutral", "label": "Secondary text on page", "fg": "--text-secondary", "bg": "--page-primary", "thresholdType": "AA" },
+    { "group": "neutral", "label": "Muted text on page", "fg": "--text-muted", "bg": "--page-primary", "thresholdType": "AA-large" },
+
+    { "group": "brand", "label": "Brand text on page", "fg": "--text-brand-primary", "bg": "--page-primary", "thresholdType": "AA" },
+    { "group": "brand", "label": "On-color label on brand fill", "fg": "--text-on-color-dark", "bg": "--background-brand-primary", "thresholdType": "AA" },
+
+    { "group": "service", "label": "Service brand — text on pale surface", "fg": "--text-service-brand-on-light", "bg": "--surface-service-brand-light", "thresholdType": "AAA", "darkException": { "issue": 823, "reason": "ADR-011 dark-mode softening lightens service context text one tier while the surface stays fixed-light, eroding contrast" } },
+    { "group": "service", "label": "Service brand — text on mid-tone surface", "fg": "--text-service-brand-on-light", "bg": "--surface-service-brand", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } },
+
+    { "group": "service", "label": "Service marketing — text on pale surface", "fg": "--text-service-marketing-on-light", "bg": "--surface-service-marketing-light", "thresholdType": "AAA", "darkException": { "issue": 823, "reason": "ADR-011 dark-mode softening erodes service context-text contrast on fixed-light surfaces" } },
+    { "group": "service", "label": "Service marketing — text on mid-tone surface", "fg": "--text-service-marketing-on-light", "bg": "--surface-service-marketing", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } },
+
+    { "group": "service", "label": "Service information — text on pale surface", "fg": "--text-service-information-on-light", "bg": "--surface-service-information-light", "thresholdType": "AAA", "darkException": { "issue": 823, "reason": "ADR-011 dark-mode softening erodes service context-text contrast on fixed-light surfaces" } },
+    { "group": "service", "label": "Service information — text on mid-tone surface", "fg": "--text-service-information-on-light", "bg": "--surface-service-information", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } },
+
+    { "group": "service", "label": "Service product — text on pale surface", "fg": "--text-service-product-on-light", "bg": "--surface-service-product-light", "thresholdType": "AAA", "darkException": { "issue": 823, "reason": "ADR-011 dark-mode softening erodes service context-text contrast on fixed-light surfaces" } },
+    { "group": "service", "label": "Service product — text on mid-tone surface", "fg": "--text-service-product-on-light", "bg": "--surface-service-product", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } },
+
+    { "group": "service", "label": "Service back-office — text on pale surface", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office-light", "thresholdType": "AAA", "darkException": { "issue": 823, "reason": "ADR-011 dark-mode softening erodes service context-text contrast on fixed-light surfaces" } },
+    { "group": "service", "label": "Service back-office — text on mid-tone surface", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } }
+  ]
+}
