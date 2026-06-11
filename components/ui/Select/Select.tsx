@@ -1,4 +1,4 @@
-import { forwardRef, useState, type SelectHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useId, useState, type SelectHTMLAttributes, type ReactNode } from 'react';
 import { Icon } from '@iconify/react';
 import { CaretDown } from '../../icons';
 import { bdsClass } from '../../utils';
@@ -75,7 +75,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     },
     ref
   ) => {
-    const inputId = id || (label ? `select-${Math.random().toString(36).substring(2, 11)}` : undefined);
+    const generatedId = useId();
+    const inputId = id || (label ? generatedId : undefined);
     const hasError = Boolean(error);
 
     const [isPlaceholder, setIsPlaceholder] = useState(
