@@ -269,7 +269,7 @@
             ]
           },
           "$type": "color",
-          "$value": "#4e1400"
+          "$value": "#3f1000"
         }
       },
       "yellow": {
@@ -493,7 +493,7 @@
             ]
           },
           "$type": "color",
-          "$value": "#362d48"
+          "$value": "#2b2440"
         }
       },
       "pink": {
