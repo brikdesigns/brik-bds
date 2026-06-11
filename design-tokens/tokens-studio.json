@@ -6714,7 +6714,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darker}"
+        "$value": "{color.yellow.darkest}"
       },
       "service-marketing": {
         "$extensions": {
@@ -6732,7 +6732,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darker}"
+        "$value": "{color.green.darkest}"
       },
       "service-back-office": {
         "$extensions": {
@@ -6750,7 +6750,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darker}"
+        "$value": "{color.orange.darkest}"
       },
       "service-product": {
         "$extensions": {
@@ -6768,7 +6768,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darker}"
+        "$value": "{color.purple.darkest}"
       },
       "service-information": {
         "$extensions": {
@@ -6786,7 +6786,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darker}"
+        "$value": "{color.blue.darkest}"
       },
       "service-brand-on-dark": {
         "$extensions": {
@@ -7045,7 +7045,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darker}"
+        "$value": "{color.green.darkest}"
       },
       "service-back-office-light": {
         "$extensions": {
@@ -7063,7 +7063,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darker}"
+        "$value": "{color.orange.darkest}"
       },
       "service-product-light": {
         "$extensions": {
@@ -7081,7 +7081,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darker}"
+        "$value": "{color.purple.darkest}"
       },
       "service-information-light": {
         "$extensions": {
@@ -7099,7 +7099,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darker}"
+        "$value": "{color.blue.darkest}"
       },
       "service-brand-light": {
         "$extensions": {
@@ -7117,7 +7117,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darker}"
+        "$value": "{color.yellow.darkest}"
       },
       "service-marketing-light": {
         "$extensions": {
@@ -7365,7 +7365,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darker}"
+        "$value": "{color.green.darkest}"
       },
       "service-back-office-on-dark": {
         "$extensions": {
@@ -7383,7 +7383,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darker}"
+        "$value": "{color.orange.darkest}"
       },
       "service-product-on-dark": {
         "$extensions": {
@@ -7401,7 +7401,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darker}"
+        "$value": "{color.purple.darkest}"
       },
       "service-information-on-dark": {
         "$extensions": {
@@ -7419,7 +7419,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darker}"
+        "$value": "{color.blue.darkest}"
       },
       "service-brand-on-dark": {
         "$extensions": {
@@ -7437,7 +7437,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darker}"
+        "$value": "{color.yellow.darkest}"
       },
       "service-marketing-on-dark": {
         "$extensions": {
