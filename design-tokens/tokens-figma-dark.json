@@ -121,7 +121,7 @@
         "$type": "color"
       },
       "darkest": {
-        "$value": "#4e1400",
+        "$value": "#3f1000",
         "$type": "color"
       }
     },
@@ -225,7 +225,7 @@
         "$type": "color"
       },
       "darkest": {
-        "$value": "#362d48",
+        "$value": "#2b2440",
         "$type": "color"
       }
     },
