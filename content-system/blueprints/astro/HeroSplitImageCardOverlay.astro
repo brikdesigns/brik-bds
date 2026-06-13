@@ -177,7 +177,7 @@ const cta = section.cta;
               <p class="bp-hero-img-card__price-value">{priceCard.price}</p>
             )}
             {priceCard.cta && (
-              <a href={priceCard.cta.url} class="bds-button bds-button--primary bds-button--sm">
+              <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--${priceCard.cta.size ?? 'sm'}`}>
                 <span class="bds-button__content">{priceCard.cta.label}</span>
               </a>
             )}

@@ -131,7 +131,11 @@ export function HeroSplitImageCardOverlay({
                   <p className="bp-hero-img-card__price-value">{priceCard.price}</p>
                 )}
                 {priceCard.cta && (
-                  <Button href={priceCard.cta.url} variant="primary" size="sm">
+                  <Button
+                    href={priceCard.cta.url}
+                    variant="primary"
+                    size={priceCard.cta.size ?? 'sm'}
+                  >
                     {priceCard.cta.label}
                   </Button>
                 )}

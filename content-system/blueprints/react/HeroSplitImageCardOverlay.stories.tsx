@@ -178,3 +178,22 @@ export const NoServiceTag: Story = {
     },
   },
 };
+
+/**
+ * @summary Medium price-card CTA — opt in via `priceCard.cta.size="md"`.
+ * The default is `sm` (see Playground); support-plan heroes that want a
+ * weightier price-card action pass `md`. brikdesigns.com #453.
+ */
+export const PriceCardCtaMd: Story = {
+  args: {
+    ...baseProps,
+    section: {
+      ...interiorHeroSection,
+      sectionKey: 'hero-img-card-cta-md',
+      priceCard: {
+        ...interiorHeroSection.priceCard!,
+        cta: { ...interiorHeroSection.priceCard!.cta!, size: 'md' },
+      },
+    },
+  },
+};
