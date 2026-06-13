@@ -58,7 +58,6 @@ const FEEDBACK_TYPES = [
 // ── DevBar integration types ────────────────────────────────────────────
 // Types live in BrikDevBar — imported here to avoid duplicate declarations.
 import type { DevBarSlotDef } from '../BrikDevBar';
-import { detectContext, type CapturedContext } from './detectContext';
 
 /**
  * Rendering variant.
@@ -86,6 +85,15 @@ export interface DevFeedbackWidgetProps {
   extraPayload?: Record<string, unknown>;
   /** Rendering variant — controls slot vs FAB explicitly. Defaults to `'auto'` (back-compat). */
   variant?: DevFeedbackVariant;
+  // Element context for the submission (feedback-contract 0.2.0). The widget is
+  // a pure submission form — element selection lives in the inspector (ADR-007),
+  // which emits `brik:inspect:report`. A host wires that event to these props.
+  /** Human page name (feedback-contract 0.2.0). Defaults to `document.title` when unset. */
+  page?: string;
+  /** Section label the picked element sits in (e.g. "hero"). From the inspector when wired. */
+  section?: string;
+  /** BDS component block class of the picked element (e.g. "bds-button"). From the inspector when wired. */
+  component?: string;
 }
 
 // ── Component ───────────────────────────────────────────────────────────
@@ -99,6 +107,9 @@ export function DevFeedbackWidget({
   fabPosition = { bottom: '16px', left: '72px' },
   extraPayload,
   variant = 'auto',
+  page,
+  section,
+  component,
 }: DevFeedbackWidgetProps = {}) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string>('bug');
@@ -111,13 +122,8 @@ export function DevFeedbackWidget({
   // we keep it false (no DevBar lookup runs). Auto seeds false and lets
   // runtime detection update it.
   const [devBarPresent, setDevBarPresent] = useState(variant === 'slot');
-  // Pick-element mode: when active, the next page click captures section/element
-  // context for the submission (brik-llm#979).
-  const [picking, setPicking] = useState(false);
-  const [captured, setCaptured] = useState<CapturedContext | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const fabRef = useRef<HTMLDivElement>(null);
-  const highlightRef = useRef<HTMLDivElement>(null);
 
   // Poppins (once per page; other Brik widgets inject it too but this is idempotent).
   useEffect(() => {
@@ -145,7 +151,6 @@ export function DevFeedbackWidget({
   useEffect(() => {
     if (!open) return;
     const onMouseDown = (e: MouseEvent) => {
-      if (picking) return; // pick-element mode owns page clicks
       const target = e.target as Node | null;
       if (!target) return;
       if (panelRef.current?.contains(target)) return;
@@ -160,7 +165,6 @@ export function DevFeedbackWidget({
       setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
-      if (picking) return; // Esc cancels picking, not the panel (handled below)
       if (e.key === 'Escape') setOpen(false);
     };
     document.addEventListener('mousedown', onMouseDown);
@@ -169,75 +173,7 @@ export function DevFeedbackWidget({
       document.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('keydown', onKey);
     };
-  }, [open, picking]);
-
-  // Reset capture + picking whenever the panel closes so nothing carries over.
-  useEffect(() => {
-    if (!open) {
-      setPicking(false);
-      setCaptured(null);
-    }
   }, [open]);
-
-  // Pick-element mode: highlight the hovered element and capture context on
-  // click. Page clicks are intercepted in the capture phase; widget chrome is
-  // ignored so the user can still interact with the panel. Esc cancels.
-  useEffect(() => {
-    if (!picking || typeof document === 'undefined') return;
-
-    const style = document.createElement('style');
-    style.textContent = '.bfb-picking, .bfb-picking * { cursor: crosshair !important; }';
-    document.head.appendChild(style);
-    document.documentElement.classList.add('bfb-picking');
-
-    const isWidgetChrome = (el: Element | null): boolean =>
-      !el ||
-      !!panelRef.current?.contains(el) ||
-      !!fabRef.current?.contains(el) ||
-      !!highlightRef.current?.contains(el) ||
-      !!el.closest?.('.bdb-bar');
-
-    const onMove = (e: MouseEvent) => {
-      const box = highlightRef.current;
-      if (!box) return;
-      const el = document.elementFromPoint(e.clientX, e.clientY);
-      if (isWidgetChrome(el)) {
-        box.style.display = 'none';
-        return;
-      }
-      const r = (el as Element).getBoundingClientRect();
-      box.style.display = 'block';
-      box.style.top = `${r.top}px`;
-      box.style.left = `${r.left}px`;
-      box.style.width = `${r.width}px`;
-      box.style.height = `${r.height}px`;
-    };
-    const onClick = (e: MouseEvent) => {
-      const el = document.elementFromPoint(e.clientX, e.clientY);
-      if (isWidgetChrome(el)) return; // let widget interactions through
-      e.preventDefault();
-      e.stopPropagation();
-      if (el) setCaptured(detectContext(el));
-      setPicking(false);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.stopPropagation();
-        setPicking(false);
-      }
-    };
-
-    document.addEventListener('mousemove', onMove, true);
-    document.addEventListener('click', onClick, true);
-    document.addEventListener('keydown', onKey, true);
-    return () => {
-      document.documentElement.classList.remove('bfb-picking');
-      style.remove();
-      document.removeEventListener('mousemove', onMove, true);
-      document.removeEventListener('click', onClick, true);
-      document.removeEventListener('keydown', onKey, true);
-    };
-  }, [picking]);
 
   // Detect DevBar so we can hide the standalone FAB. Only runs in 'auto'
   // mode — explicit variants short-circuit the polling.
@@ -325,13 +261,14 @@ export function DevFeedbackWidget({
           feedback_type: type,
           description: description.trim(),
           context: contextValue,
-          // Human page name is always known; section/component only when the
-          // user picked a target element (brik-llm#979).
+          // Element context (feedback-contract 0.2.0). Page name is always
+          // known; section/component arrive as props when a host wires the
+          // inspector's brik:inspect:report event (ADR-007).
           page:
-            captured?.page ??
+            page ??
             (typeof document !== 'undefined' ? document.title || undefined : undefined),
-          section: captured?.section,
-          component: captured?.component,
+          section,
+          component,
           ...extraPayload,
         }),
       });
@@ -342,7 +279,6 @@ export function DevFeedbackWidget({
           setSubmitted(false);
           setDescription('');
           setType('bug');
-          setCaptured(null);
         }, 1500);
         return;
       }
@@ -494,44 +430,6 @@ export function DevFeedbackWidget({
     padding: '20px 0',
   };
 
-  const pickBtnStyle: CSSProperties = {
-    padding: '7px 12px',
-    borderRadius: '999px',
-    border: `1px dashed ${picking ? BDS.poppy : BDS.grayLight}`,
-    backgroundColor: picking ? BDS.tanLightest : 'transparent',
-    color: picking ? BDS.poppy : BDS.grayDarker,
-    cursor: 'pointer',
-    fontFamily: BDS.fontFamily,
-    fontSize: '12px', // bds-lint-ignore — dev overlay renders fixed
-    fontWeight: 600, // bds-lint-ignore — dev overlay renders fixed
-    letterSpacing: '0.02em',
-    textAlign: 'center',
-  };
-
-  const capturedStyle: CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '2px', // bds-lint-ignore — dev overlay renders fixed
-    fontSize: '11px', // bds-lint-ignore — dev overlay renders fixed
-    color: BDS.grayDarker,
-    fontFamily: BDS.fontFamily,
-    backgroundColor: BDS.tanLightest,
-    borderRadius: '8px', // bds-lint-ignore — dev overlay renders fixed
-    padding: '8px 10px',
-  };
-
-  // Hover outline drawn over the page while picking. Direct-positioned via ref.
-  const highlightStyle: CSSProperties = {
-    position: 'fixed',
-    zIndex: 9997,
-    display: 'none',
-    pointerEvents: 'none',
-    border: `2px solid ${BDS.poppy}`,
-    backgroundColor: 'rgba(227,83,53,0.08)',
-    borderRadius: '2px', // bds-lint-ignore — dev overlay renders fixed
-    transition: 'all 0.04s linear',
-  };
-
   return (
     <>
       {!devBarPresent && (
@@ -595,40 +493,6 @@ export function DevFeedbackWidget({
                   autoFocus
                 />
 
-                <button
-                  type="button"
-                  style={pickBtnStyle}
-                  aria-pressed={picking}
-                  onClick={() => setPicking((v) => !v)}
-                >
-                  {picking
-                    ? 'Click an element… (Esc to cancel)'
-                    : captured
-                    ? '📍 Re-pick element'
-                    : '📍 Pick element'}
-                </button>
-
-                {captured &&
-                  (captured.section || captured.component || captured.element_tag) && (
-                    <div style={capturedStyle}>
-                      {captured.section && (
-                        <div>
-                          Section: <strong>{captured.section}</strong>
-                        </div>
-                      )}
-                      {captured.component && (
-                        <div>
-                          Component: <strong>{captured.component}</strong>
-                        </div>
-                      )}
-                      {!captured.component && captured.element_tag && (
-                        <div>
-                          Element: <strong>&lt;{captured.element_tag}&gt;</strong>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
                 <div style={contextStyle}>
                   {contextLabel}: {contextValue}
                 </div>
@@ -645,9 +509,6 @@ export function DevFeedbackWidget({
           </div>,
           document.body,
         )}
-      {picking &&
-        typeof document !== 'undefined' &&
-        createPortal(<div ref={highlightRef} style={highlightStyle} />, document.body)}
     </>
   );
 }
