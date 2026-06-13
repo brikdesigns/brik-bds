@@ -407,7 +407,7 @@
     }
 
     .bi-actions {
-      display: flex; gap: ${T.space200};
+      display: flex; gap: ${T.space200}; flex-wrap: wrap;
       padding: ${T.space300} ${T.space400};
     }
     .bi-action-btn {
@@ -651,6 +651,86 @@
       node = node.parentElement;
     }
     return null;
+  }
+
+  // ── Element-context detection (ADR-007) ─────────────────────────────────
+  //
+  // The inspector is the single element-selection + context detector; feedback
+  // surfaces consume what it emits rather than maintaining parallel pickers.
+  // Resolves { page, section, component, element_tag } for a selected element.
+  // Ported from the former DevFeedbackWidget/detectContext.ts (brik-bds#880);
+  // component reuses findBdsRoot above so there is one component detector.
+  //
+  // Two environments are covered in one pass:
+  //   - Astro client mockups use the BDS `section--{type}` class convention.
+  //   - Product apps resolve section from semantic landmarks (`<section>`,
+  //     `<main>`, `[role=region]`, `[data-section]`) + aria-label / nearest
+  //     heading / id fallback.
+  // Every field is best-effort and may be absent — consumers treat the result
+  // as optional context, never required.
+
+  function detectPage() {
+    const title = document.title?.trim();
+    if (title) return title;
+    if (typeof location !== 'undefined' && location.pathname) return location.pathname;
+    return undefined;
+  }
+
+  function firstText(...candidates) {
+    for (const c of candidates) {
+      const t = c?.trim();
+      if (t) return t;
+    }
+    return undefined;
+  }
+
+  function sectionLabel(section) {
+    // Mockup convention first: "section section--hero" → "hero".
+    const typeMatch = section.className.match(/section--([a-z0-9-]+)/i);
+    if (typeMatch) return typeMatch[1];
+
+    // Product-app fallbacks, most-explicit first.
+    const ariaLabel = section.getAttribute('aria-label');
+    const dataSection = section.getAttribute('data-section');
+    const labelledBy = section.getAttribute('aria-labelledby');
+    const labelledByText = labelledBy ? document.getElementById(labelledBy)?.textContent : undefined;
+    const heading = section.querySelector('h1, h2, h3, h4')?.textContent;
+    return firstText(ariaLabel, dataSection, labelledByText, heading, section.id || undefined);
+  }
+
+  function detectReportContext(el) {
+    const ctx = {};
+
+    const page = detectPage();
+    if (page) ctx.page = page;
+
+    const section =
+      el.closest('[class*="section--"]') ||
+      el.closest('section, article, main, [role="region"], [data-section]');
+    if (section) {
+      const label = sectionLabel(section);
+      if (label) ctx.section = label;
+    }
+
+    // Component detection the inspector already owns (block class, e.g. "bds-button").
+    const bds = findBdsRoot(el);
+    if (bds) ctx.component = bds.component;
+
+    const meaningful = el.closest(
+      'a, button, h1, h2, h3, h4, img, video, input, textarea, select, p, li, span',
+    );
+    if (meaningful) ctx.element_tag = meaningful.tagName.toLowerCase();
+
+    return ctx;
+  }
+
+  // Emit the selected element's context so a host page (e.g. the product app's
+  // feedback form) can pre-fill a submission. Returns the detail for callers
+  // that want to act locally too.
+  function emitReport(el) {
+    const detail = detectReportContext(el);
+    window.dispatchEvent(new CustomEvent('brik:inspect:report', { detail }));
+    return detail;
   }
 
   // ── Stylesheet rule index ───────────────────────────────────────────────
@@ -968,6 +1048,7 @@
         ${audits.map(renderAuditRow).join('')}
       </div>
       <div class="bi-actions">
+        <button class="bi-action-btn" type="button" data-action="report-feedback" title="Report feedback on this element">Feedback</button>
         <button class="bi-action-btn" type="button" data-action="copy-selector">Copy selector</button>
         <button class="bi-action-btn" type="button" data-action="copy-report">Copy report</button>
         <button class="bi-action-btn" type="button" data-action="scan-page">Scan page</button>
@@ -990,6 +1071,16 @@
     });
     panelEl.querySelector('[data-action="scan-page"]').addEventListener('click', () => {
       scanAndCopyReport();
+    });
+    // Emit element context for any feedback surface listening for
+    // `brik:inspect:report` (e.g. the product app's DevFeedbackWidget). Brief
+    // inline confirmation so the action reads as "fired" even when no host is
+    // wired (standalone mockup pages have no listener).
+    const reportBtn = panelEl.querySelector('[data-action="report-feedback"]');
+    reportBtn.addEventListener('click', () => {
+      emitReport(el);
+      reportBtn.textContent = 'Reported ✓';
+      setTimeout(() => { reportBtn.textContent = 'Feedback'; }, 1200);
     });
     panelEl.style.display = 'block';
   }
