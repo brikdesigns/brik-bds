@@ -293,6 +293,53 @@ export const DisplayBorderless: Story = {
 };
 
 /**
+ * `preset="display"` + `variant="elevated"` — surface-primary fill +
+ * `box-shadow-md`, no border. The restored-fill counterpart to `borderless`:
+ * use when a card grid on a service-tinted surface still needs a contained
+ * "card" read but the default border ring is unwanted. Shown here on a
+ * service-product (purple) tint.
+ *
+ * @summary preset="display" variant="elevated" — on a colored surface
+ */
+export const DisplayElevated: Story = {
+  args: {
+    preset: 'display',
+    variant: 'elevated',
+    title: 'Brand strategy',
+    description:
+      'A two-line card description that sets the type rhythm without trying to tell the whole story.',
+    tag: <Badge>Marketing</Badge>,
+    action: (
+      <Button variant="on-color" size="sm">
+        Learn more
+      </Button>
+    ),
+  },
+  argTypes: {
+    padding: { table: { disable: true } },
+    interactive: { table: { disable: true } },
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 200px)',
+          gap: 'var(--gap-md)',
+          padding: 'var(--padding-xl)',
+          backgroundColor: 'var(--surface-service-product)',
+          borderRadius: 'var(--border-radius-md)',
+        }}
+      >
+        <Story />
+        <Story />
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
  * `preset="display-row"` — horizontal sibling of `preset="display"`. Image
  * on the left, content (tag, title, description, optional `extras`, action)
  * on the right. Use for single-card sections where a vertical layout wastes

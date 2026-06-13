@@ -103,8 +103,13 @@ interface CardDisplayPresetProps extends CardBaseProps {
    * `borderless` — transparent fill, no border, no shadow. Use when the
    * card grid sits on a colored surface (service-tier tint) where the
    * default white fill + border ring reads as visual noise.
+   *
+   * `elevated` — surface-primary fill + `box-shadow-md`, no border. Use when
+   * a card grid on a colored surface still needs a contained "card" read but
+   * the border ring is unwanted (the restored-fill counterpart to
+   * `borderless`).
    */
-  variant?: 'borderless';
+  variant?: 'borderless' | 'elevated';
   /** Card heading. Renders as `<h3>` with `--font-family-heading` + `--heading-md`. */
   title: string;
   /**
