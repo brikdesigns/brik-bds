@@ -160,3 +160,21 @@ export const LandscapePhotography: Story = {
     },
   },
 };
+
+/**
+ * @summary Service-tag opt-out — `showServiceTag={false}` suppresses the
+ * eyebrow icon/ServiceTag slot while `audience` still drives the
+ * `data-audience` color theming (note the tint is unchanged from Playground).
+ * For support-plan heroes that want the audience tint without a service-line
+ * badge — brikdesigns.com #452.
+ */
+export const NoServiceTag: Story = {
+  args: {
+    ...baseProps,
+    showServiceTag: false,
+    section: {
+      ...interiorHeroSection,
+      sectionKey: 'hero-img-card-no-tag',
+    },
+  },
+};
