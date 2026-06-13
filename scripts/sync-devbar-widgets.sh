@@ -18,12 +18,16 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Resolve the BDS primary checkout regardless of whether we run from primary
 # or a worktree. --git-common-dir returns the primary's .git directory.
-COMMON_DIR="$(git -C "$SCRIPT_DIR" rev-parse --git-common-dir 2>/dev/null)"
-if [[ -z "$COMMON_DIR" ]]; then
-  echo "Error: not a git repo (run from inside brik-bds or a brik-bds worktree)" >&2
+# --path-format=absolute is required: the bare form returns a path relative to
+# the -C dir, which a later `cd` would resolve against the caller's CWD instead
+# of SCRIPT_DIR — that silently no-op'd the whole sync when run from any other
+# repo's root (e.g. brik-llm's sync-downstream.sh wrapper).
+COMMON_DIR="$(git -C "$SCRIPT_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+if [[ -z "$COMMON_DIR" || ! -d "$COMMON_DIR" ]]; then
+  echo "Error: could not resolve the brik-bds git dir from $SCRIPT_DIR" >&2
+  echo "       (run from inside brik-bds or a brik-bds worktree)" >&2
   exit 1
 fi
-COMMON_DIR="$(cd "$COMMON_DIR" && pwd)"
 BDS_PRIMARY="$(dirname "$COMMON_DIR")"
 
 # WIDGETS reads from the *current* worktree (so edits in this worktree
