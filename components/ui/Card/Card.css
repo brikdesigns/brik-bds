@@ -237,6 +237,16 @@
   box-shadow: var(--box-shadow-none);
 }
 
+/* Elevated override for display preset — same specificity rationale as the
+ * borderless override above: .bds-card--preset-display redeclares border after
+ * .bds-card--elevated in source order, so the ring needs explicit removal here.
+ * surface-primary fill + box-shadow-md, no border. */
+.bds-card--preset-display.bds-card--elevated {
+  background-color: var(--surface-primary);
+  border: none;
+  box-shadow: var(--box-shadow-md);
+}
+
 .bds-card--preset-display {
   background-color: var(--surface-primary);
   border: var(--border-width-md) solid var(--border-secondary);
