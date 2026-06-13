@@ -164,7 +164,18 @@ export interface BlueprintSection {
     readonly imageAlt?: string;
     readonly priceLabel?: string;
     readonly price?: string;
-    readonly cta?: { readonly label: string; readonly url: string };
+    readonly cta?: {
+      readonly label: string;
+      readonly url: string;
+      /**
+       * Optional CTA button size. Mirrors the `Button` `size` union
+       * (inlined so this contract stays framework-agnostic — see the
+       * `illustration` note below). Omitted → the blueprint's `sm`
+       * default is preserved (no visual change for existing
+       * consumers). brikdesigns.com #453 passes `md`. (#869)
+       */
+      readonly size?: 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
+    };
   };
   /**
    * Optional structured illustration data for blueprints that compose a
