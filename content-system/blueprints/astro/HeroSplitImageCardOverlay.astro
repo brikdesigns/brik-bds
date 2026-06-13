@@ -64,9 +64,15 @@ const RATIO_ASPECT: Record<FrameRatio, string> = {
 
 interface Props extends BlueprintProps {
   imageRatio?: FrameRatio;
+  /**
+   * When false, suppresses the eyebrow icon slot (raw `iconUrl` image or the
+   * audience-driven ServiceTag) while keeping `audience` driving the hero's
+   * `data-audience` theming. Default true. (brik-bds#871)
+   */
+  showServiceTag?: boolean;
 }
 
-const { section, imageRatio = 'square' } = Astro.props;
+const { section, imageRatio = 'square', showServiceTag = true } = Astro.props;
 
 const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
 const titleId = `${section.sectionKey}-title`;
@@ -115,8 +121,11 @@ const cta = section.cta;
              the same `bds-service-tag*` classes so dist/styles.css renders
              it identically)
           3. neither → no eyebrow
+
+        `showServiceTag={false}` suppresses this whole slot while leaving
+        `data-audience` theming intact (brik-bds#871).
       */}
-      {iconUrl ? (
+      {showServiceTag && (iconUrl ? (
         <img
           src={iconUrl}
           alt={iconAlt ?? ''}
@@ -130,7 +139,7 @@ const cta = section.cta;
           role="img"
           aria-label={`${audience} category`}
         />
-      ) : null}
+      ) : null)}
 
       {eyebrow && <p class="bp-hero-img-card__subtitle">{eyebrow}</p>}
 
