@@ -25,9 +25,20 @@ import './HeroSplitImageCardOverlay.css';
 
 interface Props extends BlueprintProps {
   imageRatio?: FrameRatio;
+  /**
+   * When false, suppresses the eyebrow icon slot (raw `iconUrl` image or the
+   * audience-driven `<ServiceTag>`) while keeping `audience` driving the
+   * hero's `data-audience` theming. Default true — the tag still renders when
+   * the prop is absent. (brik-bds#871)
+   */
+  showServiceTag?: boolean;
 }
 
-export function HeroSplitImageCardOverlay({ section, imageRatio = 'square' }: Props) {
+export function HeroSplitImageCardOverlay({
+  section,
+  imageRatio = 'square',
+  showServiceTag = true,
+}: Props) {
   const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
   const titleId = `${section.sectionKey}-title`;
   const eyebrow = section.subheading;
@@ -61,23 +72,27 @@ export function HeroSplitImageCardOverlay({ section, imageRatio = 'square' }: Pr
            *      blueprint resolves the icon via BDS's service-token system,
            *      keeping theme awareness intact.
            *   3. If neither is set, no eyebrow renders.
+           *
+           * `showServiceTag={false}` suppresses this whole slot while leaving
+           * `data-audience` theming intact (brik-bds#871).
            */}
-          {iconUrl ? (
-            <img
-              src={iconUrl}
-              alt={iconAlt ?? ''}
-              className="bp-hero-img-card__icon"
-              loading="eager"
-              decoding="async"
-            />
-          ) : audience ? (
-            <ServiceTag
-              category={audience}
-              variant="icon"
-              size="lg"
-              className="bp-hero-img-card__icon"
-            />
-          ) : null}
+          {showServiceTag &&
+            (iconUrl ? (
+              <img
+                src={iconUrl}
+                alt={iconAlt ?? ''}
+                className="bp-hero-img-card__icon"
+                loading="eager"
+                decoding="async"
+              />
+            ) : audience ? (
+              <ServiceTag
+                category={audience}
+                variant="icon"
+                size="lg"
+                className="bp-hero-img-card__icon"
+              />
+            ) : null)}
 
           {eyebrow && <p className="bp-hero-img-card__subtitle">{eyebrow}</p>}
 
