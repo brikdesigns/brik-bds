@@ -1073,14 +1073,15 @@
       scanAndCopyReport();
     });
     // Emit element context for any feedback surface listening for
-    // `brik:inspect:report` (e.g. the product app's DevFeedbackWidget). Brief
-    // inline confirmation so the action reads as "fired" even when no host is
-    // wired (standalone mockup pages have no listener).
+    // `brik:inspect:report` (e.g. the product app's DevFeedbackWidget), then
+    // hand off: exit inspect mode so the inspector stops intercepting page
+    // clicks (its capture-phase onClick preventDefaults every non-chrome click)
+    // and the user can interact with the feedback form that just opened. If no
+    // host is wired (standalone mockup pages), the event is simply unobserved.
     const reportBtn = panelEl.querySelector('[data-action="report-feedback"]');
     reportBtn.addEventListener('click', () => {
       emitReport(el);
-      reportBtn.textContent = 'Reported ✓';
-      setTimeout(() => { reportBtn.textContent = 'Feedback'; }, 1200);
+      if (active) toggleActive();
     });
     panelEl.style.display = 'block';
   }
