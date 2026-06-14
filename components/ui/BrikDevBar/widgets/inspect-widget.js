@@ -693,18 +693,44 @@
     return undefined;
   }
 
+  // The page's primary heading — the first <h1> (preferring one inside <main>).
+  // Used to stop the section detector from reporting the page title as a
+  // "section" (brik-bds#886).
+  function isPageHeading(heading) {
+    const pageH1 = document.querySelector('main h1') || document.querySelector('h1');
+    return !!pageH1 && heading === pageH1;
+  }
+
   function sectionLabel(section) {
     // Mockup convention first: "section section--hero" → "hero".
     const typeMatch = section.className.match(/section--([a-z0-9-]+)/i);
     if (typeMatch) return typeMatch[1];
 
-    // Product-app fallbacks, most-explicit first.
+    // Explicit, author-provided labels, most-explicit first. These deliberately
+    // name a region, so they're trusted even on <main>.
     const ariaLabel = section.getAttribute('aria-label');
     const dataSection = section.getAttribute('data-section');
     const labelledBy = section.getAttribute('aria-labelledby');
     const labelledByText = labelledBy ? document.getElementById(labelledBy)?.textContent : undefined;
-    const heading = section.querySelector('h1, h2, h3, h4')?.textContent;
-    return firstText(ariaLabel, dataSection, labelledByText, heading, section.id || undefined);
+    const explicit = firstText(ariaLabel, dataSection, labelledByText);
+    if (explicit) return explicit;
+
+    // <main> is the page-level landmark, not a section. Product-app pages
+    // typically have a single <main> whose first heading is the page H1 and
+    // whose id is a skip-link target ("main-content"); deriving a section name
+    // from either is misleading (brik-bds#886). Without an explicit label
+    // above, <main> names no section — let the caller omit it.
+    if (section.tagName === 'MAIN') return undefined;
+
+    // Non-landmark regions: nearest heading, then id. Never the page H1 — a
+    // <section> whose only heading is the document title is effectively
+    // page-level and would mislead a triager.
+    const heading = section.querySelector('h1, h2, h3, h4');
+    if (heading && !isPageHeading(heading)) {
+      const text = heading.textContent?.trim();
+      if (text) return text;
+    }
+    return firstText(section.id || undefined);
   }
 
   // Structured section metadata for the Astro mockup environment. Mockups
