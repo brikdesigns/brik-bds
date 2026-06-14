@@ -38,8 +38,25 @@ export default defineConfig({
           name: 'components',
           environment: 'node',
           include: ['components/**/*.test.ts'],
+          // Browser-only widget tests run under the `widgets` project below.
+          exclude: ['**/*.browser.test.ts'],
           deps: {
             inline: ['react', 'react-dom', '@testing-library/react'],
+          },
+        },
+      },
+      {
+        // Vanilla DevBar widgets (inspect/feedback) are browser-only IIFEs that
+        // attach to `window`; exercise them in a real DOM, not node/jsdom.
+        extends: true,
+        test: {
+          name: 'widgets',
+          include: ['components/ui/BrikDevBar/widgets/**/*.browser.test.ts'],
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright(),
+            instances: [{ browser: 'chromium' }],
           },
         },
       },
