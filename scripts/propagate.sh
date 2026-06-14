@@ -171,10 +171,26 @@ if [ -n "$(git status --porcelain)" ] && [ "$DRY_RUN" = false ]; then
 fi
 
 git_signed fetch "$BDS_REMOTE" "$BDS_BRANCH" --quiet
-LOCAL_HEAD=$(git rev-parse HEAD)
-BDS_VERSION=$(jq -r '.version' "$BDS_DIR/package.json")
 
-ok "Preflight passed — bds@$BDS_VERSION at $(echo "$LOCAL_HEAD" | cut -c1-7)"
+# The version + commit we propagate are sourced from origin/<branch>, NOT the
+# local working tree. The launchd agent that runs this (com.brikdesigns.bds-
+# propagate) never pulls brik-bds first, so a stale local checkout would read an
+# OLD package.json version and open *downgrade* PRs at every consumer — exactly
+# the 0.96.0 → 0.93.2 regression that landed on brikdesigns 2026-06-13/14.
+# Reading from origin/<branch> here (symmetric with how the npm track reads each
+# consumer's current version from origin/<base>) makes a stale local checkout
+# harmless. The per-consumer downgrade guard below is the second line of defence.
+LOCAL_HEAD=$(git rev-parse "$BDS_REMOTE/$BDS_BRANCH")
+BDS_VERSION=$(git show "$BDS_REMOTE/$BDS_BRANCH:package.json" | jq -r '.version')
+if [ -z "$BDS_VERSION" ] || [ "$BDS_VERSION" = "null" ]; then
+  err "Could not read .version from $BDS_REMOTE/$BDS_BRANCH:package.json"
+  exit 1
+fi
+if [ "$(git rev-parse HEAD)" != "$LOCAL_HEAD" ]; then
+  warn "Local checkout ($(git rev-parse --short HEAD)) differs from $BDS_REMOTE/$BDS_BRANCH ($(echo "$LOCAL_HEAD" | cut -c1-7)) — propagating origin's bds@$BDS_VERSION, not the local copy."
+fi
+
+ok "Preflight passed — bds@$BDS_VERSION at $(echo "$LOCAL_HEAD" | cut -c1-7) (source: $BDS_REMOTE/$BDS_BRANCH)"
 echo ""
 
 DATE_STAMP=$(date +%Y-%m-%d)
@@ -233,7 +249,7 @@ propagate_submodule() {
   fi
 
   local new_commits
-  new_commits=$(git -C "$BDS_DIR" log --oneline "${current_sha}..HEAD" 2>/dev/null | wc -l | tr -d ' ')
+  new_commits=$(git -C "$BDS_DIR" log --oneline "${current_sha}..${LOCAL_HEAD}" 2>/dev/null | wc -l | tr -d ' ')
 
   if [ "$new_commits" -eq 0 ]; then
     ok "$name already at $(echo "$current_sha" | cut -c1-7) — no update needed"
@@ -243,7 +259,7 @@ propagate_submodule() {
 
   info "$name is $new_commits commits behind"
   local changelog
-  changelog=$(generate_changelog "$current_sha" "HEAD")
+  changelog=$(generate_changelog "$current_sha" "$LOCAL_HEAD")
   echo -e "${DIM}─── Changelog ───${NC}"
   echo -e "$changelog"
   echo -e "${DIM}─────────────────${NC}"
@@ -369,6 +385,22 @@ propagate_npm() {
 
   if [ "$current_version" = "$BDS_VERSION" ]; then
     ok "$name already at $BDS_VERSION"
+    echo ""
+    return
+  fi
+
+  # Downgrade guard — second line of defence behind the origin-sourced version
+  # above. Refuse to propagate a version OLDER than the consumer already pins.
+  # `npm install bds@<older>` silently downgrades a working consumer, which the
+  # consumer's token gate / lint pass but `next build` does not — the failure
+  # mode behind brikdesigns #475/#476 (0.96.0 → 0.93.2). DEGRADED forces a
+  # non-zero exit so the daily digest surfaces it instead of swallowing it.
+  local newest
+  newest=$(printf '%s\n%s\n' "$current_version" "$BDS_VERSION" | sort -V | tail -n1)
+  if [ "$BDS_VERSION" != "$newest" ]; then
+    err "$name: refusing to propagate bds@$BDS_VERSION — it is OLDER than the consumer's current $current_version (downgrade)."
+    err "  This usually means the brik-bds checkout was stale at run time. The version is now sourced from $BDS_REMOTE/$BDS_BRANCH; re-run once the intended release is on origin."
+    DEGRADED=true
     echo ""
     return
   fi
