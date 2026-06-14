@@ -707,6 +707,52 @@
     return firstText(ariaLabel, dataSection, labelledByText, heading, section.id || undefined);
   }
 
+  // Structured section metadata for the Astro mockup environment. Mockups
+  // annotate sections with `section--{type}` / `layout--{name}` classes and a
+  // preceding `<!-- Source: home.md Section-XX -->` comment; the pin-drop
+  // feedback widget records these in Supabase design_feedback.section_context.
+  // Surfacing them here (all undefined in product apps, which have none of these
+  // conventions) lets the pin-drop widget consume this one detector instead of a
+  // parallel detectSectionContext() copy — brik-client-portal#1132 / ADR-007.
+  function detectSectionMeta(el) {
+    const meta = {};
+
+    const section = el.closest('section[class*="section--"], [class*="section--"]');
+    if (section) {
+      const typeMatch = section.className.match(/section--([a-z0-9-]+)/i);
+      if (typeMatch) meta.section_type = typeMatch[1];
+
+      const ariaLabel = section.getAttribute('aria-label');
+      if (ariaLabel) meta.section_label = ariaLabel;
+
+      if (section.id) meta.section_id = section.id;
+
+      // Walk back over text nodes to the nearest preceding comment / element.
+      let prev = section.previousSibling;
+      while (prev) {
+        if (prev.nodeType === 8) {
+          const m = prev.textContent.trim().match(/Source:\s*(.+)/);
+          if (m) { meta.content_source = m[1].trim(); break; }
+        }
+        if (prev.nodeType === 1) break;
+        prev = prev.previousSibling;
+      }
+
+      // 1-based position among all `section--` blocks in document order.
+      const all = document.querySelectorAll('section[class*="section--"]');
+      const idx = Array.from(all).indexOf(section);
+      if (idx >= 0) meta.section_number = idx + 1;
+    }
+
+    const layout = el.closest('[class*="layout--"]');
+    if (layout) {
+      const m = layout.className.match(/layout--([a-z0-9-]+)/i);
+      if (m) meta.layout = m[1];
+    }
+
+    return meta;
+  }
+
   function detectReportContext(el) {
     const ctx = {};
 
@@ -730,6 +776,9 @@
     );
     if (meaningful) ctx.element_tag = meaningful.tagName.toLowerCase();
 
+    // Mockup-environment structured fields (superset; undefined elsewhere).
+    Object.assign(ctx, detectSectionMeta(el));
+
     return ctx;
   }
 
@@ -740,6 +789,15 @@
     const detail = detectReportContext(el);
     window.dispatchEvent(new CustomEvent('brik:inspect:report', { detail }));
     return detail;
+  }
+
+  // Expose the shared detector for surfaces that resolve element context without
+  // entering inspect mode or listening for brik:inspect:report — the mockup
+  // pin-drop feedback widget calls this synchronously on click. ADR-007 makes
+  // this the single detector; consumers must not reimplement it (#1132).
+  if (typeof window !== 'undefined') {
+    window.BrikInspect = window.BrikInspect || {};
+    window.BrikInspect.detectContext = detectReportContext;
   }
 
   // ── Stylesheet rule index ───────────────────────────────────────────────
