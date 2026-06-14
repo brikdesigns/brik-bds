@@ -670,9 +670,18 @@
   // as optional context, never required.
 
   function detectPage() {
+    // The URL pathname is the canonical page identity and is preferred — product
+    // apps (portal, renew-pms) share one templated <title> across every route, so
+    // document.title is non-discriminating there (every page reported the same
+    // name; brik-llm#979). The slug ("admin", "settings/services") is what a
+    // triager needs. document.title is kept only as a fallback for the root path,
+    // where the slug is empty.
+    if (typeof location !== 'undefined' && location.pathname) {
+      const slug = location.pathname.replace(/^\/+|\/+$/g, '');
+      if (slug) return slug;
+    }
     const title = document.title?.trim();
     if (title) return title;
-    if (typeof location !== 'undefined' && location.pathname) return location.pathname;
     return undefined;
   }
 
