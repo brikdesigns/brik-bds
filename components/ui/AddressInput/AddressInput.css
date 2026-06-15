@@ -1,39 +1,185 @@
 @layer bds-components {
 /**
- * BDS AddressInput Interactive States
+ * BDS AddressInput
+ *
+ * Location input with a leading map-pin icon and an autocomplete dropdown.
+ * Border, radius, and background tokens match TextInput / SearchInput.
  *
  * Token reference:
- * - --border-input (default border)
- * - --border-primary (hover border — darker)
- * - --border-brand-primary (focus border — theme color)
- * - --text-muted (placeholder color)
+ * - --background-input (field fill)         - --border-input (default border)
+ * - --border-primary (hover/dropdown border) - --border-brand-primary (focus)
+ * - --surface-primary (dropdown panel)       - --text-primary / --text-muted
  */
 
-.bds-address-input-field::placeholder {
+/* Wrapper — vertical stack: label above field */
+.bds-address-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  width: auto;
+}
+
+.bds-address-input--full-width {
+  width: 100%;
+}
+
+/* Label */
+.bds-address-input__label {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.bds-address-input--sm .bds-address-input__label {
+  font-size: var(--label-sm);
+}
+
+.bds-address-input--md .bds-address-input__label {
+  font-size: var(--label-md);
+}
+
+/* Field region — positions icon + dropdown relative to the input */
+.bds-address-input__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Icon — shared base for the leading map-pin and the suggestion-row icon */
+.bds-address-input__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--text-muted);
 }
 
-.bds-address-input-field:hover:not(:disabled) {
+/* Leading map-pin icon, inset inside the field */
+.bds-address-input__field > .bds-address-input__icon {
+  position: absolute;
+  left: var(--padding-sm);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Input — base appearance (size-specific metrics below) */
+.bds-address-input__input {
+  width: 100%;
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+/* Size — heights match the Button scale (8px steps on the 4px grid).
+   Left padding clears the leading icon (icon inset + 24px glyph slot). */
+.bds-address-input--md .bds-address-input__input {
+  font-size: var(--body-md);
+  height: 40px;
+  padding-right: var(--padding-sm);
+  padding-left: calc(var(--padding-sm) + 24px);
+}
+
+.bds-address-input--sm .bds-address-input__input {
+  font-size: var(--body-sm);
+  height: 32px;
+  padding-right: var(--padding-xs);
+  padding-left: calc(var(--padding-xs) + 24px);
+}
+
+/* Interactive states */
+.bds-address-input__input::placeholder {
+  color: var(--text-muted);
+}
+
+.bds-address-input__input:hover:not(:disabled) {
   border-color: var(--border-primary);
 }
 
-.bds-address-input-field:focus {
+.bds-address-input__input:focus {
   border-color: var(--border-brand-primary);
   box-shadow: 0 0 0 1px var(--border-brand-primary);
 }
 
-.bds-address-input-field:focus-visible {
+.bds-address-input__input:focus-visible {
   border-color: var(--border-brand-primary);
   box-shadow: 0 0 0 1px var(--border-brand-primary);
   outline: none;
 }
 
-.bds-address-input-field:disabled {
+.bds-address-input__input:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.bds-address-input-suggestion:hover {
+/* Suggestions dropdown panel */
+.bds-address-input__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  margin-top: var(--gap-sm);
+  background-color: var(--surface-primary);
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width-lg) solid var(--border-primary);
+  padding: var(--padding-sm);
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12); /* bds-lint-ignore — shadow tokens resolve to zero */
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  max-height: 240px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Suggestion item */
+.bds-address-input__option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-md);
+  padding: var(--padding-xs);
+  background: none;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.bds-address-input__option:hover {
   background-color: var(--surface-secondary);
+}
+
+/* Suggestion-row leading icon */
+.bds-address-input__option > .bds-address-input__icon {
+  width: 20px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Suggestion text wrapper — stacks label over description */
+.bds-address-input__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bds-address-input__description {
+  font-size: var(--body-sm);
+  color: var(--text-muted);
 }
 }
