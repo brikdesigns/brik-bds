@@ -1,13 +1,31 @@
 @layer bds-components {
 /**
- * BDS TextInput Interactive States
+ * BDS TextInput
+ *
+ * `.bds-text-input-field` is a cross-component contract — SearchInput and
+ * NumberInput compose <TextInput> and target this class in their own CSS
+ * (search cancel-button, number spin-buttons). Do not rename it.
  *
  * Token reference:
- * - --border-input (default border)
- * - --border-primary (hover border — darker)
- * - --border-brand-primary (focus border — theme color)
- * - --text-muted (placeholder color)
+ * - --background-input (field fill)          - --border-input (default border)
+ * - --border-primary (hover border)          - --border-brand-primary (focus)
+ * - --border-negative (error border)         - --text-primary / --text-muted
+ * - --text-negative (error/helper-error text)
  */
+
+/* ─── Wrapper ────────────────────────────────────────────────── */
+
+.bds-text-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  color: var(--text-primary);
+  width: auto;
+}
+
+.bds-text-input--full-width {
+  width: 100%;
+}
 
 /* ─── Label ──────────────────────────────────────────────────── */
 
@@ -26,12 +44,44 @@
   color: var(--text-negative);
 }
 
+/* ─── Field region (positions icons relative to the input) ───── */
+
+.bds-text-input__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 /* ─── Input field ────────────────────────────────────────────── */
 
 .bds-text-input-field {
   /* ─── Component-scoped override surface ── */
   --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  width: 100%;
+  padding: 0 var(--padding-xs);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
 }
+
+/* Size — heights match the Button scale (8px steps on the 4px grid) */
+.bds-text-input--sm .bds-text-input-field { font-size: var(--body-sm); height: 32px; }
+.bds-text-input--md .bds-text-input-field { font-size: var(--body-md); height: 40px; }
+.bds-text-input--lg .bds-text-input-field { font-size: var(--body-lg); height: 48px; }
+
+/* Icon clearance — pad the side that carries an icon */
+.bds-text-input-field--has-icon-before { padding-left: calc(var(--padding-xs) * 4); }
+.bds-text-input-field--has-icon-after  { padding-right: calc(var(--padding-xs) * 4); }
+
+/* Borderless — for dark/inverse surfaces where the fill carries contrast */
+.bds-text-input-field--no-border { border: none; }
 
 .bds-text-input-field::placeholder {
   color: var(--text-muted);
@@ -55,6 +105,42 @@
 .bds-text-input-field:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Error border — wins over hover/focus, mirroring the previous inline-style
+   precedence (inline borderColor beat the stylesheet :hover/:focus rules). */
+.bds-text-input-field--error,
+.bds-text-input-field--error:hover:not(:disabled),
+.bds-text-input-field--error:focus,
+.bds-text-input-field--error:focus-visible {
+  border-color: var(--border-negative);
+}
+
+/* ─── Icons ──────────────────────────────────────────────────── */
+
+.bds-text-input__icon {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.bds-text-input__icon--before { left: var(--padding-xs); }
+.bds-text-input__icon--after  { right: var(--padding-xs); }
+
+/* ─── Helper / error text ────────────────────────────────────── */
+
+.bds-text-input__helper,
+.bds-text-input__error {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-text-input__error {
+  color: var(--text-negative);
 }
 
 }

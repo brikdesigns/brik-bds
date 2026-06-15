@@ -1,4 +1,4 @@
-import { forwardRef, useId, type InputHTMLAttributes, type ReactNode, type CSSProperties } from 'react';
+import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import './TextInput.css';
 
@@ -28,108 +28,6 @@ export interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   /** Hide the input border. Use on dark/inverse surfaces where the fill provides sufficient contrast. */
   hideBorder?: boolean;
 }
-
-/**
- * Wrapper styles — vertical stack with gap between label and field
- *
- * Token reference:
- * - --gap-md = 8px
- */
-const wrapperStyles: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'var(--gap-md)',
-  color: 'var(--text-primary)',
-};
-
-/**
- * Field wrapper styles — positions icons relative to input
- */
-const fieldWrapperStyles: CSSProperties = {
-  position: 'relative',
-  display: 'flex',
-  alignItems: 'center',
-};
-
-/**
- * Input field base styles using BDS semantic tokens
- *
- * Token reference:
- * - --background-input (field background — white per Figma)
- * - --border-input (field border — grayscale/light per Figma)
- * - --border-width-md = 1px (border thickness)
- * - --border-radius-md = 4px (field corners)
- * - --padding-xs = 10px (horizontal field padding)
- * - --font-family-body (field text font)
- * - --font-weight-regular = 400
- * - --font-line-height-normal = 150%
- */
-const inputBaseStyles: CSSProperties = {
-  width: '100%',
-  padding: '0 var(--padding-xs)',
-  fontFamily: 'var(--font-family-body)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
-  backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-md) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-md)',
-  outline: 'none',
-  transition: 'border-color 0.2s',
-  boxSizing: 'border-box',
-};
-
-/**
- * Icon positioning styles
- *
- * Token reference:
- * - --padding-xs = 10px (icon inset from edge)
- */
-const iconStyles: CSSProperties = {
-  position: 'absolute',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: 'var(--text-muted)',
-};
-
-/**
- * Helper/error text base styles
- *
- * Token reference:
- * - --font-family-body (helper font)
- * - --body-sm (small text size)
- * - --text-muted (helper text color)
- */
-const helperBaseStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-muted)',
-};
-
-/**
- * Size-specific styles (per Figma bds-text-input)
- *
- * Heights match Button scale (8px steps, 4px grid):
- *   sm=32  md=40  lg=48
- *
- * Typography:
- * - sm: label 14px, body 14px
- * - md: label 16px, body 16px
- * - lg: label 18px, body 18px
- */
-const sizeStyles: Record<TextInputSize, { input: CSSProperties }> = {
-  sm: {
-    input: { fontSize: 'var(--body-sm)', height: '32px' },
-  },
-  md: {
-    input: { fontSize: 'var(--body-md)', height: '40px' },
-  },
-  lg: {
-    input: { fontSize: 'var(--body-lg)', height: '48px' },
-  },
-};
 
 /**
  * TextInput - BDS themed text input component
@@ -167,7 +65,6 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const generatedId = useId();
     const inputId = id || `input-${generatedId}`;
     const hasError = Boolean(error);
-    const sizeStyle = sizeStyles[size];
 
     // Suppress 1Password / LastPass prompts on non-credential text fields.
     // A field is treated as credential-adjacent when its `type` signals
@@ -177,23 +74,15 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const isCredentialField =
       type === 'email' || type === 'password' || autoComplete !== undefined;
 
-    const inputStyles: CSSProperties = {
-      ...inputBaseStyles,
-      ...sizeStyle.input,
-      ...(iconBefore ? { paddingLeft: 'calc(var(--padding-xs) * 4)' } : {}),
-      ...(iconAfter ? { paddingRight: 'calc(var(--padding-xs) * 4)' } : {}),
-      ...(hideBorder ? { border: 'none' } : {}),
-      ...(hasError ? { borderColor: 'var(--border-negative)' } : {}),
-    };
-
     return (
       <div
-        className={bdsClass('bds-text-input', className)}
-        style={{
-          ...wrapperStyles,
-          width: fullWidth ? '100%' : 'auto',
-          ...style,
-        }}
+        className={bdsClass(
+          'bds-text-input',
+          `bds-text-input--${size}`,
+          fullWidth && 'bds-text-input--full-width',
+          className,
+        )}
+        style={style}
       >
         {label && (
           <label
@@ -208,9 +97,9 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           </label>
         )}
 
-        <div style={fieldWrapperStyles}>
+        <div className="bds-text-input__field">
           {iconBefore && (
-            <span style={{ ...iconStyles, left: 'var(--padding-xs)' }}>
+            <span className="bds-text-input__icon bds-text-input__icon--before">
               {iconBefore}
             </span>
           )}
@@ -220,8 +109,13 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             data-lpignore={isCredentialField ? undefined : 'true'}
             ref={ref}
             id={inputId}
-            className="bds-text-input-field"
-            style={inputStyles}
+            className={bdsClass(
+              'bds-text-input-field',
+              Boolean(iconBefore) && 'bds-text-input-field--has-icon-before',
+              Boolean(iconAfter) && 'bds-text-input-field--has-icon-after',
+              hideBorder && 'bds-text-input-field--no-border',
+              hasError && 'bds-text-input-field--error',
+            )}
             aria-invalid={hasError}
             aria-describedby={
               error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
@@ -230,24 +124,20 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           />
 
           {iconAfter && (
-            <span style={{ ...iconStyles, right: 'var(--padding-xs)' }}>
+            <span className="bds-text-input__icon bds-text-input__icon--after">
               {iconAfter}
             </span>
           )}
         </div>
 
         {error && (
-          <span
-            id={`${inputId}-error`}
-            style={{ ...helperBaseStyles, color: 'var(--text-negative)' }}
-            role="alert"
-          >
+          <span id={`${inputId}-error`} className="bds-text-input__error" role="alert">
             {error}
           </span>
         )}
 
         {helperText && !error && (
-          <span id={`${inputId}-helper`} style={helperBaseStyles}>
+          <span id={`${inputId}-helper`} className="bds-text-input__helper">
             {helperText}
           </span>
         )}
