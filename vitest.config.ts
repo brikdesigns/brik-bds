@@ -1,10 +1,43 @@
 import { defineConfig } from 'vitest/config';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Deps the storybook browser tests pull in transitively through stories but
+// that the @storybook/addon-vitest plugin does NOT pre-bundle (it only
+// optimizes its own runtime). Listing them in optimizeDeps.include makes the
+// browser server's first optimize pass complete; otherwise Vite discovers them
+// lazily as stories import mid-run, fires "optimized dependencies changed.
+// reloading", and the page reload destroys the running suite → "Vitest failed
+// to find the current suite". Warm local caches already hold these, so the
+// race only bites cold CI runners — which is why #891's gate had to exclude
+// this project until this fix landed. See #571.
+// @radix-ui/* is derived from package.json so adding a new primitive to a
+// component auto-extends the list — the common BDS change that would otherwise
+// silently reintroduce the flake.
+const pkg = JSON.parse(
+  fs.readFileSync(path.join(dirname, 'package.json'), 'utf8'),
+);
+const storybookOptimizeInclude = [
+  'react',
+  'react-dom',
+  'react-dom/client',
+  'react/jsx-runtime',
+  'react/jsx-dev-runtime',
+  '@iconify/react',
+  'lottie-react',
+  'storybook/test',
+  'storybook/theming',
+  '@storybook/addon-docs',
+  '@storybook/addon-docs/blocks',
+  ...Object.keys(pkg.dependencies ?? {}).filter((d) =>
+    d.startsWith('@radix-ui/'),
+  ),
+];
 
 export default defineConfig({
   test: {
@@ -14,6 +47,11 @@ export default defineConfig({
         plugins: [
           storybookTest({ configDir: path.join(dirname, '.storybook') }),
         ],
+        // See storybookOptimizeInclude above — pre-bundles story deps so the
+        // cold-cache optimizer reload (#571) can't destroy the suite mid-run.
+        optimizeDeps: {
+          include: storybookOptimizeInclude,
+        },
         test: {
           name: 'storybook',
           browser: {

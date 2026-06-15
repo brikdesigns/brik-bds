@@ -48,11 +48,10 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      # The `storybook` browser project is excluded for now: its story files
-      # fail nondeterministically with "Vitest failed to find the current
-      # suite" (a dep-optimizer/isolation race — see #571). Gating on a flaky
-      # project would red-flag every PR. The negated filter is fail-closed —
-      # any NEW project is gated by default; only `storybook` is opted out.
-      # Re-include it (drop the filter) once #571 makes the suite deterministic.
-      - name: Run Vitest suite (excludes flaky `storybook` project — see #571)
-        run: npm test -- --project='!storybook'
+      # Full suite, all projects. The `storybook` browser project was excluded
+      # while #571 (cold-cache dep-optimizer reload → "Vitest failed to find
+      # the current suite") was unfixed; vitest.config.ts now pre-bundles the
+      # story deps via optimizeDeps.include, so it runs deterministically and
+      # is back in the gate.
+      - name: Run Vitest suite
+        run: npm test
