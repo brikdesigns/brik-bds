@@ -42,5 +42,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Two vitest projects (`storybook`, `widgets`) run in browser mode via
+      # @vitest/browser-playwright → Chromium. Local runs reuse a cached
+      # browser; CI has none, so install it (with OS deps) before the suite.
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
       - name: Run Vitest suite
         run: npm test
