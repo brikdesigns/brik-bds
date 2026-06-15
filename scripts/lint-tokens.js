@@ -4,7 +4,7 @@
  * BDS Token Validation Linter
  *
  * Validates CSS variable usage in BDS components against Style Dictionary token outputs.
- * Catches five types of violations:
+ * Catches six types of violations:
  *   1. Primitive token usage (use semantic tokens instead)
  *   2. Hardcoded CSS values (use tokens)
  *   3. Unknown tokens (typos or non-existent variables)
@@ -12,6 +12,12 @@
  *   5. Token-family pairing mismatch — a token used in a property whose family
  *      it doesn't belong to (e.g. background-color: var(--text-*)). See
  *      docs/TOKEN-PR-CHECKLIST.md for the property↔family table.
+ *   6. Raw inline var(--…) in component TSX — styles belong in the component's
+ *      .css file (BEM under bds-), never a CSSProperties object. See the
+ *      component-build standard §"Styles live in CSS". Files in
+ *      INLINE_VAR_BASELINE are grandfathered to warnings (ratchet); clean
+ *      files error. Escape hatch: `bds-lint-ignore` for runtime-calculated
+ *      values that genuinely cannot live in CSS.
  *
  * Usage:
  *   node scripts/lint-tokens.js              # full report (errors + warnings)
@@ -33,7 +39,43 @@ const path = require('path');
 const SD_CSS_PATH = path.join(
   __dirname, '..', 'build', 'figma', 'css', 'variables.css'
 );
+const REPO_ROOT = path.join(__dirname, '..');
 const COMPONENTS_DIR = path.join(__dirname, '..', 'components', 'ui');
+
+// Repo-relative POSIX path, stable regardless of cwd or how the file was passed
+// (absolute from findFiles, or resolved from a relative --files arg).
+function repoRel(file) {
+  return path.relative(REPO_ROOT, file).split(path.sep).join('/');
+}
+
+// ---------------------------------------------------------------------------
+// Rule 6 baseline (inline-var ratchet) — brik-bds#892
+// ---------------------------------------------------------------------------
+// Component TSX files with KNOWN pre-existing inline var(--…) style objects.
+// These are grandfathered to `warning` so the repo-wide CI run (release.yml +
+// pr-checklist.sh both call `--errors-only`) stays green while the 157-violation
+// backlog is migrated to CSS over a series of per-component PRs.
+//
+// RATCHET: any component TSX NOT on this list errors on the first inline var().
+// New components therefore can never introduce inline-var debt. As each file is
+// migrated to .css (CSSProperties → bds- BEM classes), delete its entry here.
+// When the set is empty, delete it and the conditional in checkInlineVarTsx —
+// the rule then errors repo-wide for every component.
+//
+// AddressInput is intentionally absent: it was migrated in the same PR that
+// introduced this rule (#892, first cleanup batch).
+const INLINE_VAR_BASELINE = new Set([
+  'components/ui/TabBar/TabBar.tsx',
+  'components/ui/TextInput/TextInput.tsx',
+  'components/ui/TextArea/TextArea.tsx',
+  'components/ui/SegmentedControl/SegmentedControl.tsx',
+  'components/ui/Slider/Slider.tsx',
+  'components/ui/Stepper/Stepper.tsx',
+  'components/ui/PageHeader/PageHeader.tsx',
+  'components/ui/Switch/Switch.tsx',
+  'components/ui/ProgressStepper/ProgressStepper.tsx',
+  'components/ui/Board/BoardColumn.tsx',
+]);
 
 // Primitive token prefixes that should be replaced with semantic equivalents
 // Covers both Webflow (double-dash) and SD (single-dash) naming
@@ -744,6 +786,51 @@ function checkTokenFamilyPairing(line, lineNum, file, isComponent) {
   return violations;
 }
 
+/**
+ * Rule 6: Raw inline var(--…) in component TSX
+ *
+ * The component-build standard (§"Styles live in CSS") forbids CSSProperties
+ * objects in component .tsx — appearance belongs in the component's .css file
+ * as bds- BEM classes. A raw `var(--…)` string in a .tsx is the fingerprint of
+ * an inline style object, so this rule flags every such reference.
+ *
+ * Severity is ratcheted via INLINE_VAR_BASELINE: files with known pre-existing
+ * debt warn (so repo-wide --errors-only CI stays green during migration); every
+ * other component file errors, so no NEW inline-var debt can land.
+ *
+ * Only runs for component .tsx (callers exclude .stories.tsx / .test.tsx, where
+ * inline style is allowed for layout helpers). Skips comment lines and any line
+ * carrying `bds-lint-ignore` — the escape hatch for runtime-calculated values
+ * (percentages, positions) that genuinely cannot live in static CSS.
+ */
+function checkInlineVarTsx(line, lineNum, file) {
+  const violations = [];
+
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*') || trimmed.startsWith('`')) {
+    return violations;
+  }
+  if (line.includes('bds-lint-ignore')) return violations;
+
+  const severity = INLINE_VAR_BASELINE.has(repoRel(file)) ? 'warning' : 'error';
+
+  const regex = /var\((--[\w-]+)/g;
+  let match;
+  while ((match = regex.exec(line)) !== null) {
+    violations.push({
+      rule: 'inline-var',
+      severity,
+      file,
+      line: lineNum,
+      column: match.index + 1,
+      message: `Raw inline "var(${match[1]})" in component TSX — styles belong in the .css file`,
+      suggestion: `Move this declaration into the component's .css as a bds- BEM class (see component-build standard §"Styles live in CSS"). Runtime-calculated value? Append a bds-lint-ignore comment.`,
+    });
+  }
+
+  return violations;
+}
+
 // ---------------------------------------------------------------------------
 // Reporter
 // ---------------------------------------------------------------------------
@@ -832,6 +919,7 @@ function main() {
     const content = fs.readFileSync(file, 'utf8');
     const lines = content.split('\n');
     const isStory = /\.stories\.tsx$/.test(file);
+    const isTest = /\.test\.tsx$/.test(file);
     const isComponent = !isStory;
 
     for (let i = 0; i < lines.length; i++) {
@@ -842,6 +930,12 @@ function main() {
       allViolations.push(...checkHardcodedValues(line, lineNum, file, isComponent));
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, isComponent));
       allViolations.push(...checkTokenFamilyPairing(line, lineNum, file, isComponent));
+
+      // Rule 6: raw inline var() — component .tsx only (stories/tests may use
+      // inline style for layout helpers).
+      if (isComponent && !isTest) {
+        allViolations.push(...checkInlineVarTsx(line, lineNum, file));
+      }
 
       // Rule 4: grid compliance (opt-in via --check-grid)
       if (checkGrid) {
