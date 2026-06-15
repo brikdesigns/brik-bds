@@ -1,0 +1,46 @@
+name: Test Suite
+
+# Runs the Vitest suite on every PR and on every push to main.
+#
+# Why this is a CI gate (not just a local hook):
+#   - Pre-commit runs token + JSDoc + recipe + typecheck — NOT tests.
+#   - Pre-push runs `validate:full` (scripts/validate-all.js), which runs
+#     JSDoc Lint + Grid Audit + TypeScript — the test suite is absent.
+#   - `pr-task.sh` re-runs tests POST-merge, so a regression is only caught
+#     after it has already landed on main.
+#   - Cloud-agent commits and fork PRs bypass local hooks entirely.
+# This workflow is the pre-merge guarantee that component regressions can't
+# land green. Suite is ~17s + setup; cheap enough to run on every PR.
+#
+# Issue: brikdesigns/brik-bds#891
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Vitest suite
+        run: npm test
