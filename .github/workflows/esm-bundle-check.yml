@@ -1,0 +1,56 @@
+name: ESM Bundle Check
+
+# Asserts the published ESM entry (dist/index.esm.js) is import-clean — no
+# dynamic `require()` / `__require`. @brikdesigns/bds is consumed as ESM by
+# SSR/prerender builds (Next.js turbopack, Astro/Vite); a CJS/UMD dependency
+# inlined into the ESM entry carries a `require()` those builds reject with
+# "dynamic usage of require is not supported", breaking every downstream
+# consumer.
+#
+# Why this is a CI gate (not just prepublishOnly):
+#   - BDS never builds itself as an SSR app, so its own test/typecheck gates
+#     stay green even when the published bundle is broken for consumers.
+#   - v0.97.2 shipped this exact regression after a vite 6→8 Dependabot bump
+#     inlined lottie-web into the ESM entry (peerDependency missing from
+#     rollup `external`). Caught only when consumer bumps failed to build.
+# This workflow makes a bundler/externals regression fail PRE-MERGE, not at
+# release time. `prepublishOnly` is the publish-blocking backstop.
+#
+# Issue: brikdesigns/brik-bds#905
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: esm-bundle-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  esm-bundle-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Only the Vite lib build is needed to produce dist/index.esm.js — skip
+      # the rest of build:lib (types, content-system, tokens, inspector) which
+      # add time without affecting the ESM require() surface.
+      - name: Build library bundle (Vite ESM/CJS)
+        run: npx vite build --config vite.config.lib.ts
+
+      - name: ESM bundle require() gate
+        run: npm run check:esm
