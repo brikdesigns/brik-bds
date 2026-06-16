@@ -12,12 +12,18 @@ export default defineConfig({
       fileName: (format) => format === 'es' ? 'index.esm.js' : 'index.cjs.js',
     },
     rollupOptions: {
-      // Externalize peer dependencies — do NOT bundle React or Iconify
+      // Externalize peer dependencies — do NOT bundle React, Iconify, or Lottie.
+      // lottie-react/lottie-web is a UMD/CJS module; bundling it inlines a
+      // dynamic `require()` into the ESM entry, which breaks ESM-prerender
+      // consumers (turbopack / Astro). It is a declared peerDependency, so it
+      // must be external. See the ESM-no-require gate in scripts/check-esm-bundle.mjs.
       external: [
         'react',
         'react/jsx-runtime',
         'react-dom',
         '@iconify/react',
+        'lottie-react',
+        'lottie-web',
       ],
       output: {
         // Next.js App Router requires 'use client' directive for modules that
