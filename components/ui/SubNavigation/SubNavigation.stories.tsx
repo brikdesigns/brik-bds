@@ -102,6 +102,10 @@ const meta = {
       description: 'Accessible label for the nav landmark.',
       control: 'text',
     },
+    linkComponent: {
+      description: 'Render each nav item with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. See ADR-012.',
+      control: false,
+    },
     showHeader: {
       description: 'Story-only — toggles the `header` slot.',
       control: 'boolean',

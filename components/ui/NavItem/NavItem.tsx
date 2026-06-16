@@ -1,6 +1,20 @@
-import { type ReactNode, type MouseEvent } from 'react';
+import {
+  type ReactNode,
+  type MouseEvent,
+  type AnchorHTMLAttributes,
+  type ComponentType,
+} from 'react';
 import { bdsClass } from '../../utils';
 import './NavItem.css';
+
+/**
+ * Injectable link renderer for navigation components. Pass a router-aware
+ * component (Next.js `Link`, Remix `Link`) for client-side routing; defaults
+ * to a bare `<a>` when omitted. See ADR-012.
+ */
+export type BdsLinkComponent = ComponentType<
+  { href: string } & AnchorHTMLAttributes<HTMLAnchorElement>
+>;
 
 export interface NavItemProps {
   /** Visible label. Also used as `aria-label` when `iconOnly` is true. */
@@ -19,6 +33,12 @@ export interface NavItemProps {
   iconOnly?: boolean;
   /** Optional className passthrough for layout slot integration. */
   className?: string;
+  /**
+   * Render the link with a router-aware component (Next.js `Link`, Remix
+   * `Link`) for client-side routing instead of the default bare `<a>`.
+   * Ignored when `disabled` or when `href` is omitted. See ADR-012.
+   */
+  linkComponent?: BdsLinkComponent;
 }
 
 /**
@@ -38,6 +58,7 @@ export function NavItem({
   disabled = false,
   iconOnly = false,
   className,
+  linkComponent,
 }: NavItemProps) {
   const classes = bdsClass(
     'bds-nav-item',
@@ -47,24 +68,49 @@ export function NavItem({
     className,
   );
 
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (disabled) {
+      e.preventDefault();
+      return;
+    }
+    onClick?.(e);
+  };
+
+  const content = (
+    <>
+      {icon && <span className="bds-nav-item__icon">{icon}</span>}
+      {!iconOnly && <span className="bds-nav-item__label">{label}</span>}
+    </>
+  );
+
+  // A router `Link` requires `href` and must not navigate when disabled, so
+  // those cases always fall back to a bare `<a>`. See ADR-012.
+  if (href && !disabled && linkComponent) {
+    const LinkComponent = linkComponent;
+    return (
+      <LinkComponent
+        href={href}
+        onClick={handleClick}
+        className={classes}
+        aria-current={active ? 'page' : undefined}
+        aria-label={iconOnly ? label : undefined}
+      >
+        {content}
+      </LinkComponent>
+    );
+  }
+
   return (
     <a
       href={disabled ? undefined : href}
-      onClick={(e) => {
-        if (disabled) {
-          e.preventDefault();
-          return;
-        }
-        onClick?.(e);
-      }}
+      onClick={handleClick}
       className={classes}
       aria-current={active ? 'page' : undefined}
       aria-disabled={disabled || undefined}
       aria-label={iconOnly ? label : undefined}
       tabIndex={disabled ? -1 : undefined}
     >
-      {icon && <span className="bds-nav-item__icon">{icon}</span>}
-      {!iconOnly && <span className="bds-nav-item__label">{label}</span>}
+      {content}
     </a>
   );
 }

@@ -40,6 +40,10 @@ const meta: Meta<typeof NavItem> = {
       description: 'Optional className passthrough for layout slot integration.',
       control: false,
     },
+    linkComponent: {
+      description: 'Render the link with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. Ignored when `disabled` or `href` is omitted. See ADR-012.',
+      control: false,
+    },
   },
 };
 

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import { SidebarNavigation, type SidebarNavigationProps, type SidebarNavItem } from './SidebarNavigation';
+import { type BdsLinkComponent } from '../NavItem';
 import { Button } from '../Button';
 import * as Icons from '../../icons';
 
@@ -50,6 +51,16 @@ const profileBlock = (
       </div>
     </div>
   </div>
+);
+
+/**
+ * Stand-in for a router `Link` (Next.js `Link`, Remix `Link`). Renders an
+ * `<a>` tagged so the injected-component path is observable. See ADR-012.
+ */
+const MockLink: BdsLinkComponent = ({ href, children, ...props }) => (
+  <a href={href} data-link-component="mock" {...props}>
+    {children}
+  </a>
 );
 
 /* ─── Story wrapper with synthetic toggle controls ────────────── */
@@ -111,6 +122,10 @@ const meta = {
       description: 'Custom width (e.g. "240px"). Defaults to 260px expanded / 80px collapsed.',
       control: 'text',
     },
+    linkComponent: {
+      description: 'Render each nav item with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. See ADR-012.',
+      control: false,
+    },
     showProfile: {
       description: 'Story-only — toggles the `profile` slot.',
       control: 'boolean',
@@ -137,5 +152,15 @@ export const Default: Story = {
     collapsed: false,
     showProfile: true,
     showFooterActions: false,
+  },
+};
+
+/** @summary Nav items routed through an injected link component for client-side routing */
+export const WithLinkComponent: Story = {
+  args: {
+    logo: <BrikLogomark />,
+    navItems: defaultNavItems,
+    linkComponent: MockLink,
+    showProfile: true,
   },
 };

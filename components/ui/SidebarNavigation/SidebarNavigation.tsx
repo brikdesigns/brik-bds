@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { NavItem } from '../NavItem';
+import { NavItem, type BdsLinkComponent } from '../NavItem';
 import { bdsClass } from '../../utils';
 import './SidebarNavigation.css';
 
@@ -44,6 +44,12 @@ export interface SidebarNavigationProps {
   position?: SidebarPosition;
   /** Custom width (default: 260px expanded, 80px collapsed). */
   width?: string;
+  /**
+   * Render each nav item with a router-aware component (Next.js `Link`, Remix
+   * `Link`) for client-side routing instead of the default bare `<a>`.
+   * Forwarded to every `NavItem`. See ADR-012.
+   */
+  linkComponent?: BdsLinkComponent;
 }
 
 /**
@@ -64,6 +70,7 @@ export function SidebarNavigation({
   collapsed = false,
   position = 'fixed',
   width,
+  linkComponent,
 }: SidebarNavigationProps) {
   const resolvedWidth = width ?? (collapsed ? '80px' : '260px');
   const resolvedProfile = profile ?? userSection;
@@ -89,6 +96,7 @@ export function SidebarNavigation({
             active={item.active}
             disabled={item.disabled}
             iconOnly={collapsed}
+            linkComponent={linkComponent}
           />
         ))}
       </nav>
