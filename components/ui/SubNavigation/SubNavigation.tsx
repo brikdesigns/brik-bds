@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { NavItem } from '../NavItem';
+import { NavItem, type BdsLinkComponent } from '../NavItem';
 import './SubNavigation.css';
 
 export interface SubNavItem {
@@ -21,6 +21,12 @@ export interface SubNavigationProps {
   width?: string;
   /** Accessible label for the nav landmark. Required when multiple navs are on the page. */
   ariaLabel?: string;
+  /**
+   * Render each nav item with a router-aware component (Next.js `Link`, Remix
+   * `Link`) for client-side routing instead of the default bare `<a>`.
+   * Forwarded to every `NavItem`. See ADR-012.
+   */
+  linkComponent?: BdsLinkComponent;
 }
 
 /**
@@ -37,6 +43,7 @@ export function SubNavigation({
   footer,
   width = '194px',
   ariaLabel = 'Section navigation',
+  linkComponent,
 }: SubNavigationProps) {
   return (
     <aside className="bds-subnav" style={{ width }} aria-label={ariaLabel}>
@@ -51,6 +58,7 @@ export function SubNavigation({
             icon={item.icon}
             active={item.active}
             disabled={item.disabled}
+            linkComponent={linkComponent}
           />
         ))}
       </nav>

@@ -142,6 +142,19 @@ Skip this block if you don't use Tailwind.
 
 The lightweight tier (token-driven CSS animations) is automatically available. Product apps rarely escalate beyond it. See [Motion → Tiers](/docs/motion/tiers).
 
+### 7. Client-side routing (nav components)
+
+BDS navigation components (`SidebarNavigation`, `SubNavigation`, `NavItem`) render a bare `<a>` by default, which triggers a **full-page reload** on every click in Next.js. Pass `next/link` as `linkComponent` so nav items route client-side and prefetch:
+
+```tsx
+import Link from 'next/link';
+import { SidebarNavigation } from '@brikdesigns/bds';
+
+<SidebarNavigation linkComponent={Link} navItems={navItems} logo={logo} />;
+```
+
+`next/link` satisfies the `BdsLinkComponent` contract (`{ href: string }` + standard anchor props) with no wrapper. Items that are `disabled` or have no `href` fall back to `<a>` automatically. See [ADR-012](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-012-link-component-escape-hatch.md). (react-router's `to`-based `NavLink` needs a one-line `href`→`to` adapter.)
+
 ### Common Next.js gotchas
 
 <Callout type="warn">
