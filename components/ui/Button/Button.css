@@ -177,8 +177,10 @@
 }
 
 .bds-button--secondary:active:not(:disabled) {
-  background-color: var(--background-secondary-pressed);
-  color: var(--text-on-color-dark);
+  /* Hold the hover fill on press — text color stays put (no white flip).
+   * Press feedback is the translateY nudge; a distinct darker grayscale step
+   * fails AA against --text-primary, so we don't introduce one. */
+  background-color: var(--background-secondary-hover);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
@@ -188,9 +190,9 @@
 }
 
 .bds-button--outline:active:not(:disabled) {
-  background-color: var(--background-brand-primary-pressed);
-  color: var(--text-on-color-dark);
-  border-color: var(--background-brand-primary-pressed);
+  /* Hold the hover fill on press — keep the brand text + brand border from the
+   * base variant rather than flipping to a solid brand fill with white text. */
+  background-color: var(--background-primary-hover);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
