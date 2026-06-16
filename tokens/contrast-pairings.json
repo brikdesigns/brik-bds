@@ -11,6 +11,8 @@
 
     { "group": "brand", "label": "Brand text on page", "fg": "--text-brand-primary", "bg": "--page-primary", "thresholdType": "AA" },
     { "group": "brand", "label": "On-color label on brand fill", "fg": "--text-on-color-dark", "bg": "--background-brand-primary", "thresholdType": "AA" },
+    { "group": "brand", "label": "Secondary Button label on hover/press fill", "fg": "--text-primary", "bg": "--background-secondary-hover", "thresholdType": "AA" },
+    { "group": "brand", "label": "Outline Button label on hover/press fill", "fg": "--text-brand-primary", "bg": "--background-primary-hover", "thresholdType": "AA" },
 
     { "group": "service", "label": "Service brand — text on pale surface", "fg": "--text-service-brand-on-light", "bg": "--surface-service-brand-light", "thresholdType": "AAA", "darkException": { "issue": 823, "reason": "ADR-011 dark-mode softening lightens service context text one tier while the surface stays fixed-light, eroding contrast" } },
     { "group": "service", "label": "Service brand — text on mid-tone surface", "fg": "--text-service-brand-on-light", "bg": "--surface-service-brand", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } },

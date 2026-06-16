@@ -51,7 +51,8 @@
   --background-primary: var(--color-grayscale-white);
   --background-secondary: var(--color-grayscale-lightest);
   --background-secondary-hover: var(--color-grayscale-lighter);
-  /* Mirrors dark-mode value; Button :active hardcodes white text → needs ≥AA. */
+  /* Dark fill used by the inverse Button :hover (paired with white --text-inverse).
+   * No longer consumed by secondary :active — that holds the hover fill (#902). */
   --background-secondary-pressed: var(--color-grayscale-darker);
   --background-inverse: var(--color-grayscale-darkest);
   --background-input: var(--color-grayscale-white);
