@@ -1,6 +1,6 @@
 # ADR-011 — Service-line token value-model: Figma Brand Kit is the source of truth
 
-**Status:** Accepted (2026-06-02)
+**Status:** Accepted (2026-06-02) · Amended 2026-06-16 (#865 — dark-step variants are mode-invariant; see Amendment)
 **Date:** 2026-06-02
 **Supersedes:** Reverses three locked criteria in [#563](https://github.com/brikdesigns/brik-bds/issues/563) (see §Supersedes below)
 **Superseded by:** —
@@ -27,14 +27,14 @@ Per line, per purpose (light-mode → dark-mode primitive tier):
 |---|---|---|---|
 | `{purpose}-service-{line}` (no suffix) | surface, background, text, border, **page** | base → base | **Mode-invariant base hue** — "the service color" |
 | `surface-service-{line}-light` | surface | lightest → lighter | Tone, mode-aware (softens one tier in dark) |
-| `surface-service-{line}-dark` | surface | darkest → darker | Tone, mode-aware |
-| `{bg,text}-service-{line}-on-light` | background, text | darkest → darker | Context, mode-aware |
+| `surface-service-{line}-dark` | surface | darkest → **darkest** | Tone, **mode-invariant** — amended by #865 (see below) |
+| `{bg,text}-service-{line}-on-light` | background, text | darkest → **darkest** | Context, **mode-invariant** — amended by #865 (see below) |
 | `{bg,text}-service-{line}-on-dark` | background, text | lightest → lighter | Context, mode-aware |
 
 Three structural consequences vs the #563 canon:
 
 1. **No-suffix default = base hue, mode-invariant, identical across all purposes.** It is the swatch, not a ready-to-use foreground. Readable text/fills come from the `-on-light`/`-on-dark` context variants.
-2. **Context and tone variants are mode-AWARE** — they soften one tier toward mid-scale in dark mode (`darkest→darker`, `lightest→lighter`). The #563 canon pinned them mode-invariant.
+2. **Context and tone variants are mode-AWARE** — they soften one tier toward mid-scale in dark mode (`darkest→darker`, `lightest→lighter`). The #563 canon pinned them mode-invariant. **(Amended by #865 — see Amendment below: the dark-*step* variants `-on-light` / `surface-*-dark` are in fact mode-INVARIANT, because they pair with fixed-light service surfaces.)**
 3. **No per-service `-inverse`, and no `border-*-on-*`.** Theme-inversion is a brand/theme concern owned by the neutral `--background-inverse` / `--text-inverse`; service lines adapt to a backdrop via `-on-light`/`-on-dark` (see ADR rationale in token-anatomy #809). `page/service-*` is kept (Figma has it).
 
 ## Consequences
@@ -64,6 +64,15 @@ Sequencing (each a discrete PR; consumers are staging-targeted per repo):
 - No-suffix defaults as purpose-tuned mode-aware tiers → **base hue, mode-invariant**.
 
 The #563 naming decisions that still hold (drop `-color-` from scoped variants; `service-service` → `service-back-office`; eliminate `--services--*`) are unaffected.
+
+## Amendment (2026-06-16) — #865: dark-*step* context/tone variants are mode-INVARIANT
+
+The original Decision table marked **all** context and tone variants mode-aware (soften one tier in dark). That was wrong for the **dark-step** half of the set. [#827](https://github.com/brikdesigns/brik-bds/issues/827) (light) and [#865](https://github.com/brikdesigns/brik-bds/issues/865) (dark, fixed via [#866](https://github.com/brikdesigns/brik-bds/pull/866)) established:
+
+- `{bg,text}-service-{line}-on-light` and `surface-service-{line}-dark` pair with the service **surface tints, which are fixed-light in both themes** (the no-suffix base hue doesn't theme-flip). Softening their foreground/fill one step lighter in dark mode (`darkest → darker`) therefore lands a lighter mark on the *same* light surface → drops below WCAG AA.
+- Fix: pin these to **`darkest` in both modes** (mode-invariant). The **light-step** variants (`-on-dark`, `surface-*-light`) stay mode-aware (`lightest → lighter`) — they pair with dark backdrops, where softening is correct.
+
+**SoT reconciliation (this session, 2026-06-16):** #866 applied the pin to `brik.json` source only; the Figma `color/dark` collection still held the stale `darker` aliases, so a fresh Brand Kit pull would have silently reverted the fix (9 dark service pairings back below AA). The 15 dark-mode variables (`{background,text}/service-{line}-on-light` + `surface/service-{line}-dark`, 5 hues) were rebound `…/darker → …/darkest` directly in Figma; a verifying re-pull now shows **zero delta** against the repo. The Library SoT and the repo agree.
 
 ## Alternatives considered
 
