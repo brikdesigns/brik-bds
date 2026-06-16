@@ -12,6 +12,42 @@ Typography tokens control font families, sizes, weights, and line heights. Each 
   **Font family must match the element's semantic role.** Heading/title elements → `--font-family-heading`. Label/badge/tag/button/caption → `--font-family-label`. Body copy → `--font-family-body`. BDS defaults all three to the same family during development, so misuse only surfaces when a client theme assigns distinct typefaces — by which point the violation has shipped.
 </Callout>
 
+## Heading casing
+
+Headings and section titles use **title case**. This is the copy-side companion to the semantic role rule above: the role rule governs which font a heading uses, this governs how its words are capitalized. Apply it to every hardcoded heading and `Section` / `__title` string.
+
+**The rule**
+
+- Capitalize the **first and last word**, and every **major word** (nouns, verbs, adjectives, adverbs, pronouns).
+- Lowercase these **minor words** _unless_ they fall first or last:
+  - articles — `a`, `an`, `the`
+  - coordinating conjunctions — `and`, `but`, `or`, `nor`, `for`, `so`, `yet`
+  - prepositions of **three letters or fewer** — `of`, `in`, `to`, `on`, `at`, `by`
+- Capitalize **both parts** of a hyphenated compound — `Full-Time`, `Inside-Out`.
+- **Pronouns are always capitalized** — `We`, `Us`, `Our`, `Your`, `It`.
+
+Prepositions of four letters or more are treated as major words and stay capitalized (`With`, `From`, `Into`, `Over`).
+
+**Examples** (from the brikdesigns.com [#490](https://github.com/brikdesigns/brikdesigns/pull/490) sweep):
+
+| Sentence case | Title case |
+|---|---|
+| Our services | Our Services |
+| Get in touch | Get in Touch |
+| What we collect | What We Collect |
+| What we do with it | What We Do With It |
+| Your rights | Your Rights |
+| Monthly support services | Monthly Support Services |
+| Other customer stories | Other Customer Stories |
+| Share your details | Share Your Details |
+
+**Scope — what this does _not_ govern:**
+
+- **CMS-authored content** — service, story, and plan names are editor-owned; render them as authored. Don't auto-case at render time (lossy for acronyms and proper nouns, and the wrong ownership).
+- **Conversational status / confirmation microcopy** — "Message sent!", "Thanks! We'll be in touch." stay sentence case; they're voice, not headings.
+
+Enforcement lives in each consumer repo (e.g. a JSX heading lint gate in brikdesigns, [brikdesigns#491](https://github.com/brikdesigns/brikdesigns/issues/491)), not in BDS.
+
 ## Font families
 
 <FontFamilyShowcase
