@@ -1,6 +1,6 @@
 {
   "name": "@brikdesigns/bds",
-  "version": "0.97.2",
+  "version": "0.97.3",
   "description": "Brik Design System — React components, Figma-synced tokens, and Content System (BCS) vocabulary",
   "private": false,
   "main": "dist/index.cjs.js",
@@ -127,6 +127,7 @@
     "health": "node scripts/health.js",
     "health:json": "node scripts/health.js --json",
     "typecheck": "tsc --noEmit",
+    "check:esm": "node scripts/check-esm-bundle.mjs",
     "validate:blueprints": "node scripts/validate-blueprints.mjs",
     "contrast-gate": "node scripts/validate-themes.js",
     "validate": "node scripts/lint-tokens.js --errors-only && npm run contrast-gate && npm run lint-jsdoc && npm run validate:blueprints && npm run typecheck && npm run build-storybook",
@@ -164,7 +165,7 @@
     "propagate:dry": "bash scripts/propagate.sh --dry-run",
     "sync:devbar-widgets": "bash scripts/sync-devbar-widgets.sh",
     "prepare": "husky || true",
-    "prepublishOnly": "rm -rf dist && npm run build:lib",
+    "prepublishOnly": "rm -rf dist && npm run build:lib && npm run check:esm",
     "verify:blueprints-astro": "node scripts/verify-blueprints-astro-exports.mjs"
   },
   "keywords": [
