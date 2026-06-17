@@ -76,7 +76,12 @@ const segmentBase: CSSProperties = {
   background: 'none',
   border: 'none',
   borderRadius: 'var(--border-radius-sm)',
-  color: 'var(--text-secondary)',
+  // Inactive label sits on the --background-secondary track, which is a light-ish
+  // neutral surface in BOTH themes (grayscale-lightest light / grayscale-light dark).
+  // --text-secondary flips to grayscale-light in dark mode and collapses onto the
+  // track (same stop → ~1:1, invisible). --text-on-color-light is fixed dark in both
+  // themes → AA on the track either way. See contrast-pairings.json.
+  color: 'var(--text-on-color-light)',
   minWidth: 0,
   transition: 'background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease',
 };
