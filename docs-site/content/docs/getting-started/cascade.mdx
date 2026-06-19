@@ -150,6 +150,19 @@ Full registry at [Color](/docs/primitives/color). Canonical bundle: `dist/tokens
 
 Storybook's paintbrush toolbar sets `data-theme` automatically. React apps use `<ThemeProvider>`. Astro / Webflow / static consumers set attributes manually on `<html>`.
 
+## The adoption contract
+
+This page is the **canonical adoption contract**: every consumer (portal, renew-pms, brikdesigns, every client site) wires the cascade the same way, and [Installation](/docs/getting-started/installation) links here as the one setup path. A consumer is compliant when all four hold:
+
+1. **Declare the layer order** — `@layer bds-tokens, bds-components, client-theme, client-overrides;` before any imports ([CSS Layers](#css-layers--the-runtime-cascade)).
+2. **Set the mode switches on `<html>`** — `data-theme` and any `data-mode-*` the consumer opts into ([switchboard](#html-attribute-switchboard)); omit an attribute to take the default.
+3. **Import `@brikdesigns/bds/tokens.css`** — never the internal bundle files directly, never a hand-rolled copy of a scale.
+4. **Hold zero token redefinitions** — see the rule below.
+
+<Callout type="warn">
+  **Consumers consume tokens; they do not redefine them.** A consumer `:root` / theme / override block may **not** redefine a BDS-owned scale or semantic token — `--heading-*`, `--display-*`, `--font-size-*`, `--surface-*`, `--text-*`, `--border-*`, `--page-*`, `--background-*`. Redefining a *real* token (e.g. `--heading-lg: var(--font-size-700)`) is distinct from inventing one: it passes the "names not in the registry" check above yet still forks the system and drifts silently (the brikdesigns scaffold heading remap was load-bearing and invisible for ~3 months). **The one exception is brand-color override** via a Brand Kit `theme-{client}.css` in the `client-theme` Layer — that's the [client-theme](#what-lives-in-the-client-theme-layer) job. Need a value the scale doesn't have? Add it to a Library (Figma → Tokens Studio → Style Dictionary) or emit the [Mode](#modes--orthogonal-axes) that carries it — never redefine in the consumer. See [ADR-013](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-013-token-last-mile-enforce-contract-complete-emission.md).
+</Callout>
+
 ## Where the cascade is enforced
 
 | Gate | What it checks | Where it runs |
@@ -157,6 +170,7 @@ Storybook's paintbrush toolbar sets `data-theme` automatically. React apps use `
 | `scripts/lint-tokens.js` | Hex values in component CSS, nonexistent `var()` references, Primitives used outside their Semantic category | BDS pre-commit + CI (`npm run validate`) |
 | `scripts/canonical-check.mjs` | `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` names exist in `dist/tokens.css` | BDS pre-commit + CI |
 | `@brikdesigns/bds/canonical-check` (consumer dep) | Same engine published for consumer repos | Consumer pre-commit + CI via `token-audit.sh --canonical-only` |
+| consumer-redefinition + typography family↔size rule | The zero-redefinition clause above + font-family family matches font-size family within a rule | ⏳ [ADR-013 §2](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-013-token-last-mile-enforce-contract-complete-emission.md) — BDS-owned export, imported by consumer `lint-tokens` |
 
 Run BDS gates locally: `npm run validate`. Consumer gates: `./scripts/token-audit.sh --canonical-only`.
 
