@@ -27,8 +27,9 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 3. `theme-brand-brik.css` — Brik brand overrides (scoped to `.theme-brand-brik` class)
 4. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|bold"]`)
 5. `modes-spacing.css` — spacing density mode overrides (`[data-mode-spacing="compact|comfortable|spacious"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
-6. `gap-fills.css` — manual tokens not yet in Figma
-7. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
+6. `modes-typography.css` — typography density mode overrides (`[data-mode-typography="compact|comfortable|spacious"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
+7. `gap-fills.css` — manual tokens not yet in Figma
+8. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
 
 **Not bundled:** `bridge.css` (opt-in via separate export), `font-audit.css`
 (Storybook-only), `motion-classes.css` (opt-in utility classes — consumers import
@@ -55,7 +56,7 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 | `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `bold` | ✅ `modes-borderwidth.css` |
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ `modes-spacing.css` |
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ⏳ pending #340 |
-| `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious` | ⏳ pending #340 |
+| `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |
 | `elevation` | `data-mode-elevation` | `subtle` | `flat`, `lifted`, `dramatic` | ⏳ pending #340 |
 | `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ pending #340 |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ pending #340 |
