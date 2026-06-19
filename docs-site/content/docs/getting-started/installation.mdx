@@ -4,6 +4,11 @@ description: Add BDS to a Next.js, Astro, or Webflow consumer.
 ---
 
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="info">
+  **[The Cascade](/docs/getting-started/cascade) is the adoption contract of record.** This page is the quick setup path; the four binding requirements every consumer must satisfy — layer order, mode switches, importing `tokens.css`, and **zero token redefinitions** — live there. Read the [adoption contract](/docs/getting-started/cascade#the-adoption-contract) before wiring a new consumer.
+</Callout>
 
 ## Install the package
 
@@ -45,7 +50,7 @@ In your global stylesheet (`globals.css`, `app.css`, etc.) import in this order:
 @import '@brikdesigns/bds/styles.css';
 ```
 
-Why this order and what each file contains: [The Cascade](/docs/getting-started/cascade).
+Why this order, what each file contains, and the rule against redefining BDS tokens: [The Cascade](/docs/getting-started/cascade#the-adoption-contract).
 
 ## Theme + mode switches
 
