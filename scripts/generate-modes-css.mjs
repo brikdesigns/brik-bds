@@ -8,10 +8,11 @@
  * — same pattern the dark-color cascade uses, generalized.
  *
  * Currently wires:
- *   - spacing  → padding-* and gap-* tokens
+ *   - spacing     → padding-* and gap-* tokens
+ *   - typography  → display-* and heading-* type scales
  *
  * Easy to extend to:
- *   - border-radius / typography / border-width / elevation / breakpoint / icon
+ *   - border-radius / border-width / elevation / breakpoint / icon
  *
  * Run:
  *   node scripts/generate-modes-css.mjs              # all wired collections
@@ -53,11 +54,27 @@ const COLLECTIONS = {
     nonDefaultModes: ['compact', 'comfortable', 'spacious'],
     unitSuffix: 'px',
     tokenName: (group, name) => `--${group}-${name}`,
+    resolve: resolveSpaceRef,
     description:
       'Spacing density mode — modulates padding-* and gap-* tokens. ' +
       'Pairs with the layout primitives (Stack, Cluster, Grid) shipped ' +
       'in PR #482; each primitive\'s gap/padding props pick up the mode ' +
       'automatically once `[data-mode-spacing]` is set on :root.',
+  },
+  typography: {
+    groups: ['display', 'heading'],
+    defaultMode: 'default',
+    nonDefaultModes: ['compact', 'comfortable', 'spacious'],
+    unitSuffix: '',
+    tokenName: (group, name) => `--${group}-${name}`,
+    resolve: resolveFontSizeRef,
+    description:
+      'Typography density mode — modulates the display-* and heading-* type ' +
+      'scales. Emitted as var(--font-size-NNN) references (matching how ' +
+      'figma-tokens.css emits the default scale), so each mode reuses the ' +
+      'shared font-size primitives. Set `[data-mode-typography]` on :root to ' +
+      'opt a surface into a larger scale; display-* is mode-invariant in ' +
+      'Figma today so only heading-* emits overrides (see BDS #920).',
   },
 };
 
@@ -74,6 +91,15 @@ function resolveSpaceRef(value, primitives) {
   return primitives.space?.[m[1]]?.$value ?? value;
 }
 
+function resolveFontSizeRef(value) {
+  // {font-size.NNN} → var(--font-size-NNN) reference. Emitting the reference
+  // (not the resolved px) mirrors how figma-tokens.css emits the default type
+  // scale and reuses the shared primitive, avoiding float-precision noise.
+  const m = String(value).match(/^\{font-size\.(\w+)\}$/);
+  if (!m) return value;
+  return `var(--font-size-${m[1]})`;
+}
+
 function readModeTokens(data, collectionKey, modeName) {
   const sliceKey = `${collectionKey}/${modeName}`;
   const slice = data[sliceKey];
@@ -85,9 +111,10 @@ function readModeTokens(data, collectionKey, modeName) {
 
 // ─── Per-collection emit ────────────────────────────────────────────
 
-function emitSpacing(data, collectionKey) {
+function emitCollection(data, collectionKey) {
   const cfg = COLLECTIONS[collectionKey];
   const primitives = data['primitives/value'] ?? {};
+  const defaultSlice = readModeTokens(data, collectionKey, cfg.defaultMode);
 
   const lines = [];
   lines.push('/**');
@@ -109,28 +136,35 @@ function emitSpacing(data, collectionKey) {
 
   // Emit one selector block per non-default mode
   for (const modeName of cfg.nonDefaultModes) {
-    lines.push(`/* ─── ${modeName.charAt(0).toUpperCase() + modeName.slice(1)} ────────────────────────────────────────── */`);
-    lines.push(`[data-mode-${collectionKey}="${modeName}"] {`);
     const slice = readModeTokens(data, collectionKey, modeName);
 
+    // Buffer the override lines so empty groups/modes emit nothing — e.g.
+    // typography's display-* group is mode-invariant in Figma today, so it
+    // produces no overrides and shouldn't leave a dangling group comment.
+    const body = [];
     for (const groupName of cfg.groups) {
-      const groupTokens = slice[groupName] ?? {};
-      const entries = Object.entries(groupTokens).sort(([a], [b]) => a.localeCompare(b));
+      const entries = Object.entries(slice[groupName] ?? {}).sort(([a], [b]) => a.localeCompare(b));
       if (entries.length === 0) continue;
-      lines.push(`  /* ${groupName} */`);
-      for (const [tokenName, def] of entries) {
-        const resolved = resolveSpaceRef(def.$value, primitives);
-        // Skip emitting overrides equal to the default value — leaner CSS
-        const defaultSlice = readModeTokens(data, collectionKey, cfg.defaultMode);
-        const defaultDef = defaultSlice[groupName]?.[tokenName];
-        const defaultResolved = defaultDef ? resolveSpaceRef(defaultDef.$value, primitives) : null;
-        if (resolved === defaultResolved) continue;
 
-        const cssName = cfg.tokenName(groupName, tokenName);
-        lines.push(`  ${cssName}: ${resolved}${cfg.unitSuffix};`);
+      const groupLines = [];
+      for (const [tokenName, def] of entries) {
+        const resolved = cfg.resolve(def.$value, primitives);
+        // Skip emitting overrides equal to the default value — leaner CSS
+        const defaultDef = defaultSlice[groupName]?.[tokenName];
+        const defaultResolved = defaultDef ? cfg.resolve(defaultDef.$value, primitives) : null;
+        if (resolved === defaultResolved) continue;
+        groupLines.push(`  ${cfg.tokenName(groupName, tokenName)}: ${resolved}${cfg.unitSuffix};`);
       }
+
+      if (groupLines.length === 0) continue;
+      body.push(`  /* ${groupName} */`, ...groupLines);
     }
 
+    if (body.length === 0) continue; // mode identical to default — nothing to emit
+
+    lines.push(`/* ─── ${modeName.charAt(0).toUpperCase() + modeName.slice(1)} ────────────────────────────────────────── */`);
+    lines.push(`[data-mode-${collectionKey}="${modeName}"] {`);
+    lines.push(...body);
     lines.push('}');
     lines.push('');
   }
@@ -147,14 +181,10 @@ function generate(collectionKey) {
   }
   const data = loadTokensStudio();
 
-  let css;
-  switch (collectionKey) {
-    case 'spacing':
-      css = emitSpacing(data, collectionKey);
-      break;
-    default:
-      throw new Error(`No emitter for collection: ${collectionKey}`);
-  }
+  // One generic emitter drives every collection; per-collection behaviour
+  // (which groups, how a token ref resolves, unit suffix) lives in the
+  // COLLECTIONS registry above.
+  const css = emitCollection(data, collectionKey);
 
   const outFile = path.join(TOKENS_DIR, `modes-${collectionKey}.css`);
   fs.writeFileSync(outFile, css);

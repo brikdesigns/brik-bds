@@ -58,7 +58,7 @@ if (fs.existsSync(themeBrandBrikPath)) {
 // Non-color mode overrides — one block per wired collection (BDS #340).
 // Each block targets a distinct `[data-mode-{collection}]` attribute, so
 // concat order is cosmetic. Listed deterministically to keep dist diffs clean.
-const MODE_FILES = ['modes-borderwidth.css', 'modes-spacing.css'];
+const MODE_FILES = ['modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css'];
 let modeOverrides = '';
 for (const file of MODE_FILES) {
   const p = path.join(TOKENS_DIR, file);
