@@ -64,17 +64,19 @@ const COLLECTIONS = {
   typography: {
     groups: ['display', 'heading'],
     defaultMode: 'default',
-    nonDefaultModes: ['compact', 'comfortable', 'spacious'],
+    nonDefaultModes: ['compact', 'comfortable', 'spacious', 'expressive'],
     unitSuffix: '',
     tokenName: (group, name) => `--${group}-${name}`,
     resolve: resolveFontSizeRef,
     description:
-      'Typography density mode — modulates the display-* and heading-* type ' +
-      'scales. Emitted as var(--font-size-NNN) references (matching how ' +
-      'figma-tokens.css emits the default scale), so each mode reuses the ' +
-      'shared font-size primitives. Set `[data-mode-typography]` on :root to ' +
-      'opt a surface into a larger scale; display-* is mode-invariant in ' +
-      'Figma today so only heading-* emits overrides (see BDS #920).',
+      'Typography heading-scale variant — selects one named heading scale. ' +
+      'compact/comfortable/spacious are uniform density steps; expressive is a ' +
+      'steeper modular curve (smaller small end, larger large end) for editorial / ' +
+      'marketing surfaces. The variants are mutually exclusive — this axis owns ' +
+      '--heading-* alone (see ADR-013 amendment 2026-06-21, BDS #928). Emitted as ' +
+      'var(--font-size-NNN) references (matching how figma-tokens.css emits the ' +
+      'default scale), so each variant reuses the shared font-size primitives. ' +
+      'display-* is mode-invariant in Figma today so only heading-* emits overrides.',
   },
 };
 

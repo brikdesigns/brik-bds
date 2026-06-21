@@ -114,12 +114,14 @@ A Mode varies a token's *value* on a system-wide axis any consumer can toggle. M
 | `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `bold` | ✅ |
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ |
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ⏳ [#340](https://github.com/brikdesigns/brik-bds/issues/340) |
-| `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious` | ⏳ #340 |
+| `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only) |
 | `elevation` | `data-mode-elevation` | `subtle` | `flat`, `lifted`, `dramatic` | ⏳ #340 |
 | `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ #340 |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ #340 |
 
 Each wired mode emits a `tokens/modes-{collection}.css` file scoped via `[data-mode-{collection}="value"]`. Modes are **not** a substitute for Theming Dimensions (which compose subsystems per brand) or for Brand Kit overrides (which change *values*, not modes).
+
+The `typography` axis is **heading-scale-variant selection**, not strictly density: `compact`/`comfortable`/`spacious` are uniform density steps, while `expressive` is a steeper modular curve (smaller small end, larger large end) for editorial / marketing surfaces. The variants are mutually exclusive — this axis owns `--heading-*` alone, so a second axis varying the same tokens is not added (it would collide on cascade order rather than compose). See [ADR-013](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-013-token-last-mile-enforce-contract-complete-emission.md) amendment 2026-06-21.
 
 ## Color foundations vocabulary
 
