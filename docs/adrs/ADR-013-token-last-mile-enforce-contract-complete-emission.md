@@ -46,3 +46,20 @@ Treat the token "last mile" as one initiative with three mechanisms. We do **not
 - **Documentation-only (write/expand the contract, no gate).** Rejected: the contract already exists in cascade.mdx and was still violated for 3 months. Docs without enforcement is the status quo that produced this ADR.
 - **Per-consumer local scales (let each repo define its own).** Rejected: this *is* the parallel-taxonomy failure mode that rolled back portal #512/#553 and produced the brikdesigns remap. One root scale + modes + Brand Kit theming is the decision; local scales are the thing the gate exists to stop.
 - **Redesign the scale/mode model.** Rejected: the model is correct and ~80% built. The work is completeness and enforcement, not redesign.
+
+## Amendment — 2026-06-21 (the typography axis is scale-variant selection, not density)
+
+**Trigger:** [#928](https://github.com/brikdesigns/brik-bds/issues/928) measured the brikdesigns marketing heading scale against the emitted typography modes and falsified an assumption baked into §Decision-3 and the Consequences ("brikdesigns … adopts a mode (`comfortable`/`spacious`)").
+
+**The falsified premise.** §Decision assumed the marketing scale equals an existing *density* step. It does not. Density (compact/comfortable/spacious) shifts the whole heading ramp **uniformly** one direction. The marketing scale keeps a **steeper modular ratio** — smaller at the small end (`tiny` 20→16px), larger at the large end (`huge` 40.5→57.5px), crossing default at `md` (25.3px). Uniform-shift and steeper-ratio are different operations; no density step reproduces the marketing curve. (Compounding this, the three density slices in `tokens-studio.json` were byte-identical — all `default`+1 rung — so none was even a real density step; #928 also fixes that.)
+
+**The structural constraint.** `--heading-*` can be owned by exactly **one** mode axis. Two mode collections both writing `--heading-*` do not *compose* — they collide on cascade order, which is the opposite of the orthogonality modes promise (modes compose precisely because each targets distinct tokens). So a separate "expressiveness" axis alongside "density" is not viable: there is one axis on the heading scale.
+
+**The decision.** The `typography` mode axis is **heading-scale-variant selection** — "pick one named heading scale" — not strictly density. Its values are mutually-exclusive variants that may differ by density **or** by modular contrast:
+
+- `compact` / `comfortable` / `spacious` — uniform density steps (`compact ≤ default < comfortable < spacious`).
+- `expressive` — a steeper modular curve for editorial / marketing surfaces (the scale brikdesigns adopts to delete its `:root` remap). Named for its typographic *character*, not its consumer, per build-standards/naming-principles ("intent, not shape").
+
+This keeps "scale via modes" (the gate still forbids consumer scale *redefinition*; Brand Kit still varies color/font-family *values*, not the size scale) and leaves the cascade contract unchanged. brikdesigns' proof-of-loop (§Decision-3) stands — it adopts `data-mode-typography="expressive"` and deletes the remap — only the variant name changes from the assumed `comfortable`/`spacious` to `expressive`.
+
+**Out of this amendment:** the `display-*` scale stays mode-invariant; the brikdesigns home-hero `--display-sm` treatment is unaffected (locked under brikdesigns #534).
