@@ -32,25 +32,33 @@
  *     - section.visualNotes is null →
  *         same as unknown — falls back
  *
- * ## v0.1 registry (8 blueprints)
+ * ## Registry (12 blueprints)
  *
- * Every key listed here has a corresponding component file in this
- * folder and a re-export in index.ts. When PR #6 or later adds a new
- * component, update this registry in the same PR.
+ * Every key in BLUEPRINT_REGISTRY has a corresponding component file in
+ * this folder and a re-export in index.ts. The registry key set is
+ * mirrored as the runtime export `WIRED_BLUEPRINT_KEYS` in `./types`
+ * (the "is this blueprint implemented?" surface consumers import) —
+ * `scripts/validate-blueprints.mjs` fails the build if the two drift.
+ * When a new component ships, update BLUEPRINT_REGISTRY here AND
+ * `WIRED_BLUEPRINT_KEYS` in the same PR.
  *
  *   hero_split_60_40              → HeroSplit6040.astro
+ *   hero_split_image_card_overlay → HeroSplitImageCardOverlay.astro
  *   hero_interior_minimal         → HeroInteriorMinimal.astro
  *   stats_dark_bar                → StatsDarkBar.astro
  *   services_detail_two_column    → ServicesDetailTwoColumn.astro
+ *   services_3col_card_grid       → Services3ColCardGrid.astro
+ *   support_plan_callout_split    → SupportPlanCalloutSplit.astro
+ *   features_3col_branded_dark    → Features3ColBrandedDark.astro
  *   about_story_split             → AboutStorySplit.astro
  *   testimonials_featured_large   → TestimonialsFeaturedLarge.astro
  *   cta_split_contact             → CtaSplitContact.astro
  *   cta_dark_centered             → CtaDarkCentered.astro
  *
- * The 17 keys in blueprint-library.json without a component here
- * (hero_centered_gradient, hero_fullbleed_photo, etc.) fall through
- * to BlueprintFallback — expected during the incremental v0.1 → v1.0
- * ramp. Each new component PR removes one fallback case.
+ * The remaining active keys in blueprint-library.json without a
+ * component here (hero_centered_gradient, hero_fullbleed_photo, etc.)
+ * fall through to BlueprintFallback — expected during the incremental
+ * v0.1 → v1.0 ramp. Each new component PR removes one fallback case.
  */
 import type { BlueprintSection, ClientFacts, ResolvedTheme } from './types';
 

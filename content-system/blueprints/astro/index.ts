@@ -25,6 +25,7 @@
 // ── Contract types ──────────────────────────────────────────────
 export type {
   KnownBlueprintKey,
+  WiredBlueprintKey,
   BlueprintSection,
   ClientFacts,
   ResolvedThemeMode,
@@ -34,6 +35,12 @@ export type {
   ResolvedTheme,
   BlueprintProps,
 } from './types';
+
+// ── Implemented-set (runtime) ───────────────────────────────────
+// The keys with a shipped component in BLUEPRINT_REGISTRY. Greppable,
+// runtime-importable (also at the `/types` subpath) — consumers use it
+// to tell "renders" from "falls back to <BlueprintFallback>".
+export { WIRED_BLUEPRINT_KEYS } from './types';
 
 // ── Blueprint components ───────────────────────────────────────
 // Each blueprint key in `blueprints/blueprint-library.json` that has
