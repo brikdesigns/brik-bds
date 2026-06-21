@@ -49,6 +49,43 @@ export type KnownBlueprintKey =
   | 'content_legal_centered';
 
 /**
+ * Blueprint keys that have a shipped Astro component wired into the
+ * `BLUEPRINT_REGISTRY` in `BlueprintDispatcher.astro`. A key in
+ * `KnownBlueprintKey` but absent here renders via `<BlueprintFallback>`
+ * until its component ships — the expected v0.1 → v1.0 ramp.
+ *
+ * This is the SINGLE authoritative "is this blueprint implemented?" source.
+ * The portal generation preflight (#621) reads it to warn when a generated
+ * key is known-but-unwired (renders as fallback).
+ *
+ * Kept honest two ways, both on pre-push (`npm run validate`):
+ *   - `satisfies readonly KnownBlueprintKey[]` (tsc) — every wired key is a
+ *     real blueprint key.
+ *   - `scripts/validate-blueprints.mjs` — this list, the dispatcher's
+ *     `BLUEPRINT_REGISTRY` keys, and library.json's active keys must agree.
+ *
+ * When a blueprint component ships: add it to `BLUEPRINT_REGISTRY` AND append
+ * its key here in the same PR.
+ */
+export const WIRED_BLUEPRINT_KEYS = [
+  'hero_split_60_40',
+  'hero_split_image_card_overlay',
+  'hero_interior_minimal',
+  'stats_dark_bar',
+  'services_detail_two_column',
+  'services_3col_card_grid',
+  'support_plan_callout_split',
+  'features_3col_branded_dark',
+  'about_story_split',
+  'testimonials_featured_large',
+  'cta_split_contact',
+  'cta_dark_centered',
+] as const satisfies readonly KnownBlueprintKey[];
+
+/** A `KnownBlueprintKey` with a shipped component (∈ `WIRED_BLUEPRINT_KEYS`). */
+export type WiredBlueprintKey = (typeof WIRED_BLUEPRINT_KEYS)[number];
+
+/**
  * Resolved section content — what the portal's content generator emits
  * and the dispatcher consumes. Shape matches the typed section output
  * produced by `generate-content-page-worker` in the portal.
