@@ -80,6 +80,27 @@ The heading scale starts at 18px (`--heading-tiny`). 16px territory is body and 
   ]}
 />
 
+#### Heading scale variants (`data-mode-typography`)
+
+The heading scale is the one mode axis on `--heading-*` (see [Cascade → Modes](/docs/getting-started/cascade#modes--orthogonal-axes)). Default needs no attribute; set `data-mode-typography` on `:root` (or any subtree) to select a variant. `compact`/`comfortable`/`spacious` are uniform density steps; `expressive` is a steeper modular curve (smaller small end, larger large end) for editorial / marketing surfaces. Values are `--font-size-*` references (px shown):
+
+| token | `default` | `compact` | `comfortable` | `spacious` | `expressive` |
+|---|---|---|---|---|---|
+| `--heading-tiny` | 20 | 18 | 22.5 | 25.3 | 16 |
+| `--heading-sm` | 22.5 | 20 | 25.3 | 28.5 | 20 |
+| `--heading-md` | 25.3 | 22.5 | 28.5 | 32 | 25.3 |
+| `--heading-lg` | 28.5 | 25.3 | 32 | 36 | 32 |
+| `--heading-xl` | 32 | 28.5 | 36 | 40.5 | 40.5 |
+| `--heading-xxl` | 36 | 32 | 40.5 | 45.5 | 45.5 |
+| `--heading-huge` | 40.5 | 36 | 45.5 | 51 | 57.5 |
+
+```html
+<html data-mode-typography="expressive"> <!-- whole document -->
+<section data-mode-typography="compact">…</section> <!-- one subtree -->
+```
+
+`display-*` is mode-invariant — variants move `--heading-*` only.
+
 ### Body sizes
 
 <SemanticTypographyTable

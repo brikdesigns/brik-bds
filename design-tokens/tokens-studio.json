@@ -4325,7 +4325,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.700}"
+        "$value": "{font-size.500}"
       },
       "xl": {
         "$extensions": {
@@ -4334,7 +4334,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.800}"
+        "$value": "{font-size.600}"
       },
       "xxl": {
         "$extensions": {
@@ -4343,7 +4343,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.900}"
+        "$value": "{font-size.700}"
       },
       "md": {
         "$extensions": {
@@ -4352,7 +4352,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.600}"
+        "$value": "{font-size.400}"
       },
       "tiny": {
         "$extensions": {
@@ -4361,7 +4361,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.400}"
+        "$value": "{font-size.200}"
       },
       "sm": {
         "$extensions": {
@@ -4370,7 +4370,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.500}"
+        "$value": "{font-size.300}"
       },
       "huge": {
         "$extensions": {
@@ -4379,7 +4379,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.1000}"
+        "$value": "{font-size.800}"
       }
     },
     "icon": {
@@ -4965,7 +4965,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.700}"
+        "$value": "{font-size.800}"
       },
       "xl": {
         "$extensions": {
@@ -4974,7 +4974,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.800}"
+        "$value": "{font-size.900}"
       },
       "xxl": {
         "$extensions": {
@@ -4983,7 +4983,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.900}"
+        "$value": "{font-size.1000}"
       },
       "md": {
         "$extensions": {
@@ -4992,7 +4992,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.600}"
+        "$value": "{font-size.700}"
       },
       "tiny": {
         "$extensions": {
@@ -5001,7 +5001,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.400}"
+        "$value": "{font-size.500}"
       },
       "sm": {
         "$extensions": {
@@ -5010,7 +5010,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.500}"
+        "$value": "{font-size.600}"
       },
       "huge": {
         "$extensions": {
@@ -5019,7 +5019,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{font-size.1000}"
+        "$value": "{font-size.1100}"
       }
     },
     "icon": {
@@ -5170,6 +5170,326 @@
         },
         "$type": "number",
         "$value": "{font-size.500}"
+      }
+    }
+  },
+  "typography/expressive": {
+    "body": {
+      "xs": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.50}"
+      },
+      "tiny": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.25}"
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.100}"
+      },
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.75}"
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.200}"
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.300}"
+      },
+      "huge": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.500}"
+      }
+    },
+    "display": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.1400}"
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.1600}"
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.1500}"
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.1800}"
+      }
+    },
+    "heading": {
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.700}"
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.900}"
+      },
+      "xxl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.1000}"
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.500}"
+      },
+      "tiny": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.100}"
+      },
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.300}"
+      },
+      "huge": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.1200}"
+      }
+    },
+    "icon": {
+      "tiny": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.50}"
+      },
+      "xs": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.75}"
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.200}"
+      },
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.100}"
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.300}"
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.400}"
+      },
+      "huge": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.500}"
+      }
+    },
+    "label": {
+      "tiny": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.25}"
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.100}"
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.200}"
+      },
+      "xs": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.50}"
+      },
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.75}"
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.300}"
+      }
+    },
+    "subtitle": {
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.100}"
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.50}"
+      },
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-size.25}"
       }
     }
   },
@@ -7641,6 +7961,7 @@
       "typography/compact",
       "typography/comfortable",
       "typography/spacious",
+      "typography/expressive",
       "color/light",
       "color/dark"
     ]
