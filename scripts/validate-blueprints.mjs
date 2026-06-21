@@ -23,6 +23,9 @@ import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const libraryPath = resolve(__dirname, '..', 'blueprints', 'blueprint-library.json');
+const astroDir = resolve(__dirname, '..', 'content-system', 'blueprints', 'astro');
+const dispatcherPath = resolve(astroDir, 'BlueprintDispatcher.astro');
+const typesPath = resolve(astroDir, 'types.ts');
 
 const MOOD_VALUES = new Set([
   'bold', 'minimal', 'warm', 'corporate', 'playful', 'luxury',
@@ -157,6 +160,68 @@ function validateLibrary(library) {
   return issues;
 }
 
+/**
+ * Extract the BLUEPRINT_REGISTRY key set from BlueprintDispatcher.astro.
+ * The registry is a `const BLUEPRINT_REGISTRY = { key: Component, ... } as const`
+ * object; we read the `key:` identifiers from that block.
+ */
+function extractRegistryKeys(source) {
+  const block = source.match(/const BLUEPRINT_REGISTRY\s*=\s*\{([\s\S]*?)\}\s*as const/);
+  if (!block) return null;
+  return block[1]
+    .split('\n')
+    .map((line) => line.match(/^\s*([a-z][a-z0-9_]*)\s*:/))
+    .filter(Boolean)
+    .map((m) => m[1]);
+}
+
+/**
+ * Extract the WIRED_BLUEPRINT_KEYS array literal from types.ts.
+ */
+function extractWiredKeys(source) {
+  const block = source.match(/export const WIRED_BLUEPRINT_KEYS\s*=\s*\[([\s\S]*?)\]\s*as const/);
+  if (!block) return null;
+  return [...block[1].matchAll(/'([a-z][a-z0-9_]*)'/g)].map((m) => m[1]);
+}
+
+/**
+ * Gate: the dispatcher's wired registry, the exported WIRED_BLUEPRINT_KEYS
+ * list, and library.json's active keys must agree. Prevents the
+ * implemented-set from drifting across the three places it's encoded.
+ */
+function validateRegistrySync(library, dispatcherSrc, typesSrc) {
+  const issues = [];
+  const push = (field, message) => issues.push({ key: '<registry-sync>', field, message });
+
+  const registryKeys = extractRegistryKeys(dispatcherSrc);
+  const wiredKeys = extractWiredKeys(typesSrc);
+
+  if (!registryKeys) {
+    push('BLUEPRINT_REGISTRY', 'Could not parse BLUEPRINT_REGISTRY in BlueprintDispatcher.astro.');
+    return issues;
+  }
+  if (!wiredKeys) {
+    push('WIRED_BLUEPRINT_KEYS', 'Could not parse WIRED_BLUEPRINT_KEYS in astro/types.ts.');
+    return issues;
+  }
+
+  const registrySet = new Set(registryKeys);
+  const wiredSet = new Set(wiredKeys);
+  const activeSet = new Set(
+    (library.blueprints ?? []).filter((b) => b.is_active === true).map((b) => b.key),
+  );
+
+  for (const k of registrySet) {
+    if (!wiredSet.has(k)) push('WIRED_BLUEPRINT_KEYS', `Registry key "${k}" is missing from WIRED_BLUEPRINT_KEYS.`);
+  }
+  for (const k of wiredSet) {
+    if (!registrySet.has(k)) push('BLUEPRINT_REGISTRY', `WIRED_BLUEPRINT_KEYS key "${k}" has no registry entry.`);
+    if (!activeSet.has(k)) push('is_active', `Wired key "${k}" is not an active blueprint in library.json.`);
+  }
+
+  return issues;
+}
+
 const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
 const DIM = '\x1b[2m';
@@ -165,10 +230,16 @@ const NC = '\x1b[0m';
 try {
   const raw = await readFile(libraryPath, 'utf8');
   const library = JSON.parse(raw);
-  const issues = validateLibrary(library);
+  const dispatcherSrc = await readFile(dispatcherPath, 'utf8');
+  const typesSrc = await readFile(typesPath, 'utf8');
+  const issues = [
+    ...validateLibrary(library),
+    ...validateRegistrySync(library, dispatcherSrc, typesSrc),
+  ];
 
   if (issues.length === 0) {
-    console.log(`${GREEN}✓${NC} blueprint-library.json valid ${DIM}(${library.blueprints.length} blueprints, v${library.version})${NC}`);
+    const wiredCount = (extractWiredKeys(typesSrc) ?? []).length;
+    console.log(`${GREEN}✓${NC} blueprint-library.json valid ${DIM}(${library.blueprints.length} blueprints, ${wiredCount} wired, v${library.version})${NC}`);
     process.exit(0);
   }
 
