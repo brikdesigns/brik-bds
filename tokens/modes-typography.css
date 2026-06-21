@@ -5,9 +5,9 @@
  * design-tokens/tokens-studio.json. Do not hand-edit — re-run
  * the generator after any Figma mode update.
  *
- * Typography density mode — modulates the display-* and heading-* type scales. Emitted as var(--font-size-NNN) references (matching how figma-tokens.css emits the default scale), so each mode reuses the shared font-size primitives. Set `[data-mode-typography]` on :root to opt a surface into a larger scale; display-* is mode-invariant in Figma today so only heading-* emits overrides (see BDS #920).
+ * Typography heading-scale variant — selects one named heading scale. compact/comfortable/spacious are uniform density steps; expressive is a steeper modular curve (smaller small end, larger large end) for editorial / marketing surfaces. The variants are mutually exclusive — this axis owns --heading-* alone (see ADR-013 amendment 2026-06-21, BDS #928). Emitted as var(--font-size-NNN) references (matching how figma-tokens.css emits the default scale), so each variant reuses the shared font-size primitives. display-* is mode-invariant in Figma today so only heading-* emits overrides.
  *
- * Selector contract: `[data-mode-typography="compact|comfortable|spacious"]`
+ * Selector contract: `[data-mode-typography="compact|comfortable|spacious|expressive"]`
  * on :root (html). Default mode requires no attribute (uses figma-tokens.css base).
  *
  * Companion to figma-tokens-dark.css and modes-borderwidth.css per the cascade
@@ -17,13 +17,13 @@
 /* ─── Compact ────────────────────────────────────────── */
 [data-mode-typography="compact"] {
   /* heading */
-  --heading-huge: var(--font-size-1000);
-  --heading-lg: var(--font-size-700);
-  --heading-md: var(--font-size-600);
-  --heading-sm: var(--font-size-500);
-  --heading-tiny: var(--font-size-400);
-  --heading-xl: var(--font-size-800);
-  --heading-xxl: var(--font-size-900);
+  --heading-huge: var(--font-size-800);
+  --heading-lg: var(--font-size-500);
+  --heading-md: var(--font-size-400);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-200);
+  --heading-xl: var(--font-size-600);
+  --heading-xxl: var(--font-size-700);
 }
 
 /* ─── Comfortable ────────────────────────────────────────── */
@@ -41,11 +41,22 @@
 /* ─── Spacious ────────────────────────────────────────── */
 [data-mode-typography="spacious"] {
   /* heading */
-  --heading-huge: var(--font-size-1000);
+  --heading-huge: var(--font-size-1100);
+  --heading-lg: var(--font-size-800);
+  --heading-md: var(--font-size-700);
+  --heading-sm: var(--font-size-600);
+  --heading-tiny: var(--font-size-500);
+  --heading-xl: var(--font-size-900);
+  --heading-xxl: var(--font-size-1000);
+}
+
+/* ─── Expressive ────────────────────────────────────────── */
+[data-mode-typography="expressive"] {
+  /* heading */
+  --heading-huge: var(--font-size-1200);
   --heading-lg: var(--font-size-700);
-  --heading-md: var(--font-size-600);
-  --heading-sm: var(--font-size-500);
-  --heading-tiny: var(--font-size-400);
-  --heading-xl: var(--font-size-800);
-  --heading-xxl: var(--font-size-900);
+  --heading-sm: var(--font-size-300);
+  --heading-tiny: var(--font-size-100);
+  --heading-xl: var(--font-size-900);
+  --heading-xxl: var(--font-size-1000);
 }
