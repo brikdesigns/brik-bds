@@ -15,6 +15,7 @@
  *
  * @summary Interior-page split hero with image card + optional price overlay.
  */
+import type { MouseEvent } from 'react';
 import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
 import { Button } from '../../../components/ui/Button';
 import { Frame } from '../../../components/ui/Frame/Frame';
@@ -32,12 +33,22 @@ interface Props extends BlueprintProps {
    * the prop is absent. (brik-bds#871)
    */
   showServiceTag?: boolean;
+  /**
+   * Optional handler for the price-card CTA. When provided, the CTA's click is
+   * intercepted (`preventDefault` + handler invoked) so consumers can trigger
+   * an in-page action — e.g. open a modal — instead of navigating. The
+   * `priceCard.cta.url` stays as the rendered `href`, so it remains a working
+   * no-JS / SEO fallback (progressive enhancement). Astro-rendered blueprints
+   * never receive this prop and keep their plain-anchor behavior. (brik-bds#843)
+   */
+  onPriceCtaClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export function HeroSplitImageCardOverlay({
   section,
   imageRatio = 'square',
   showServiceTag = true,
+  onPriceCtaClick,
 }: Props) {
   const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
   const titleId = `${section.sectionKey}-title`;
@@ -135,6 +146,18 @@ export function HeroSplitImageCardOverlay({
                     href={priceCard.cta.url}
                     variant="primary"
                     size={priceCard.cta.size ?? 'sm'}
+                    onClick={
+                      onPriceCtaClick
+                        ? (event) => {
+                            // Progressive enhancement: with JS, suppress the
+                            // anchor navigation and hand off to the consumer's
+                            // handler (e.g. open a modal). Without JS, the
+                            // `href` still navigates. (brik-bds#843)
+                            event.preventDefault();
+                            onPriceCtaClick(event);
+                          }
+                        : undefined
+                    }
                   >
                     {priceCard.cta.label}
                   </Button>

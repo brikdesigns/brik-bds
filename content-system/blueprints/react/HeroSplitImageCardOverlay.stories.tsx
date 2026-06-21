@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 import type { BlueprintProps } from '../astro/types';
@@ -195,5 +196,40 @@ export const PriceCardCtaMd: Story = {
         cta: { ...interiorHeroSection.priceCard!.cta!, size: 'md' },
       },
     },
+  },
+};
+
+/**
+ * @summary Action CTA — pass `onPriceCtaClick` to intercept the price-card CTA
+ * and run an in-page handler (e.g. open a modal) instead of navigating. The
+ * `priceCard.cta.url` stays as the rendered `href`, so the link still works as
+ * a no-JS / SEO fallback (progressive enhancement). Click the CTA and watch the
+ * Actions panel: the handler fires and navigation is suppressed. Astro-rendered
+ * blueprints never receive this prop and keep the plain anchor. (brik-bds#843)
+ */
+export const PriceCtaAsAction: Story = {
+  args: {
+    ...baseProps,
+    onPriceCtaClick: fn(),
+    section: {
+      ...interiorHeroSection,
+      sectionKey: 'hero-img-card-cta-action',
+      priceCard: {
+        ...interiorHeroSection.priceCard!,
+        cta: { label: 'Get started', url: '/get-started' },
+      },
+    },
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const cta = canvas.getByRole('link', { name: 'Get started' });
+    await expect(cta).toBeVisible();
+    // `url` is preserved as the rendered href — the no-JS / SEO fallback.
+    await expect(cta).toHaveAttribute('href', '/get-started');
+    // Clicking hands off to the consumer handler and suppresses navigation
+    // (preventDefault): the spy fires once and the CTA stays mounted.
+    await userEvent.click(cta);
+    await expect(args.onPriceCtaClick).toHaveBeenCalledTimes(1);
+    await expect(cta).toBeInTheDocument();
   },
 };
