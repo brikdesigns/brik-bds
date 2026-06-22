@@ -510,13 +510,24 @@ if (isPullShape) {
 // without deleting the sibling tokens the dump deliberately omits. The default
 // (prune on) assumes the dump is complete for every set it touches.
 if (isPullShape && !noPrune) {
+  // A leaf still present under ANY collection in this dump was not deleted —
+  // at most it moved collections. The foundations Library aggregates primitives
+  // whose Figma home is a different collection than the set they land in:
+  // blur-radius/box-shadow live in `elevation`, breakpoints in `breakpoint`,
+  // yet all three sit under `primitives/value` here. Pruning per-set seen-paths
+  // alone false-flags those cross-collection primitives as deleted, so guard
+  // with presence anywhere in the dump (brik-bds#936).
+  const seenAnywhere = new Set();
+  for (const names of changes.seenPaths.values()) {
+    for (const name of names) seenAnywhere.add(name);
+  }
   for (const [setKey, seen] of changes.seenPaths) {
     const set = tokensStudio[setKey];
     if (!set) continue; // unknown set — nothing to prune
     const existingLeaves = [];
     collectLeafPaths(set, '', existingLeaves);
     for (const leafPath of existingLeaves) {
-      if (seen.has(leafPath)) continue;
+      if (seen.has(leafPath) || seenAnywhere.has(leafPath)) continue;
       deleteLeaf(set, leafPath);
       bucket(setKey).removed.push({ path: leafPath });
       changes.totalRemoved += 1;
