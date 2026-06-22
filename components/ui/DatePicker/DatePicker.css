@@ -25,7 +25,7 @@
 
 .bds-date-picker__label {
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   text-transform: capitalize;
 }
@@ -127,7 +127,7 @@
 .bds-date-picker__month-label {
   font-family: var(--font-family-label);
   font-size: var(--body-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
 }
 
@@ -202,12 +202,12 @@
 .bds-date-picker__day--selected {
   background-color: var(--surface-brand-primary);
   color: var(--text-inverse);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
 }
 
 .bds-date-picker__day--today:not(.bds-date-picker__day--selected) {
   border: var(--border-width-md) solid var(--border-brand-primary);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
 }
 
 .bds-date-picker__day:disabled {

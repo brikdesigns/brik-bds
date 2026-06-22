@@ -33,7 +33,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /* ─── Shared Styles ───────────────────────────────────────────── */
 
 const twoLinePrimary: CSSProperties = {
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
   fontSize: 'var(--body-md)',
   color: 'var(--text-primary)',
   lineHeight: 'var(--font-line-height-normal)',

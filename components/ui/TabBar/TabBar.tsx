@@ -68,7 +68,7 @@ const barVariantStyles: Record<TabBarVariant, CSSProperties> = {
 const tabBase: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontSize: 'var(--label-md)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
   lineHeight: 'var(--font-line-height-tight)',
   textAlign: 'center',
   whiteSpace: 'nowrap',

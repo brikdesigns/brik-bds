@@ -126,7 +126,7 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
             borderRadius: 'var(--border-radius-md)',
             fontFamily: 'var(--font-family-label)',
             fontSize: 'var(--body-md)',
-            fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+            fontWeight: 'var(--font-weight-semibold)' as unknown as number,
             cursor: 'pointer',
           }}
         >
@@ -141,7 +141,7 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
             borderRadius: 'var(--border-radius-md)',
             fontFamily: 'var(--font-family-label)',
             fontSize: 'var(--body-md)',
-            fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+            fontWeight: 'var(--font-weight-semibold)' as unknown as number,
             cursor: 'pointer',
           }}
         >
@@ -214,7 +214,7 @@ function ThemeCard({ label, value }: { label: string; value: string }) {
       <div
         style={{
           fontSize: 'var(--body-lg)',
-          fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+          fontWeight: 'var(--font-weight-semibold)' as unknown as number,
           fontFamily: 'var(--font-family-heading)',
         }}
       >
@@ -242,7 +242,7 @@ function ColorSwatch({ name, isText }: { name: string; isText?: boolean }) {
         }}
       >
         {isText && (
-          <span style={{ color: `var(${varName})`, fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, fontSize: 'var(--body-lg)' }}>
+          <span style={{ color: `var(${varName})`, fontWeight: 'var(--font-weight-semibold)' as unknown as number, fontSize: 'var(--body-lg)' }}>
             Aa
           </span>
         )}
@@ -276,14 +276,14 @@ function ThemePreview({ themeNum, isActive }: { themeNum: ThemeNumber; isActive:
         opacity: isActive ? 1 : 0.7,
       }}
     >
-      <div style={{ fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, marginBottom: 'var(--gap-xs)', fontSize: 'var(--body-md)' }}>
+      <div style={{ fontWeight: 'var(--font-weight-semibold)' as unknown as number, marginBottom: 'var(--gap-xs)', fontSize: 'var(--body-md)' }}>
         {themeNum}: {meta.name}
       </div>
       <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>
         {meta.isDark ? 'Dark' : 'Light'}
       </div>
       {isActive && (
-        <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-brand-primary)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, marginTop: 'var(--gap-xs)' }}>
+        <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-brand-primary)', fontWeight: 'var(--font-weight-semibold)' as unknown as number, marginTop: 'var(--gap-xs)' }}>
           Active
         </div>
       )}

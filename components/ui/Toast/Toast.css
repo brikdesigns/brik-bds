@@ -51,7 +51,7 @@
 .bds-toast__title {
   font-family: var(--font-family-label);
   font-size: var(--label-md);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
   margin: 0;

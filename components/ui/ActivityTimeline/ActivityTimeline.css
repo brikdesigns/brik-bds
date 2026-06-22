@@ -84,7 +84,7 @@
 .bds-activity-timeline__label {
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
   line-height: var(--font-line-height-tight);
 }

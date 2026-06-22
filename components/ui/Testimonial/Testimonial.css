@@ -64,7 +64,7 @@
 .bds-testimonial__name {
   font-family: var(--font-family-label);
   font-size: var(--label-md);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-snug);
   font-style: normal;
   margin: 0;

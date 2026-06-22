@@ -38,12 +38,12 @@ const profileBlock = (
       backgroundColor: 'var(--background-brand-primary)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       color: 'var(--text-inverse)',
-      fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+      fontWeight: 'var(--font-weight-semibold)' as unknown as number,
     }}>
       JD
     </div>
     <div>
-      <div style={{ fontSize: 'var(--body-sm)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-primary)' }}>
+      <div style={{ fontSize: 'var(--body-sm)', fontWeight: 'var(--font-weight-semibold)' as unknown as number, color: 'var(--text-primary)' }}>
         John Doe
       </div>
       <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>

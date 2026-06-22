@@ -112,7 +112,7 @@
 .bds-sheet__subtitle {
   font-family: var(--font-family-label);
   font-size: var(--label-xs);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-muted);
   text-transform: uppercase;
@@ -174,7 +174,7 @@
   padding: var(--padding-sm) 0;
   font-family: var(--font-family-label);
   font-size: var(--body-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-muted);
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;

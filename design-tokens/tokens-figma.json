@@ -345,10 +345,6 @@
       "$value": "700",
       "$type": "text"
     },
-    "semi bold": {
-      "$value": "600",
-      "$type": "text"
-    },
     "medium": {
       "$value": "500",
       "$type": "text"
@@ -359,10 +355,6 @@
     },
     "thin": {
       "$value": "300",
-      "$type": "text"
-    },
-    "extra bold": {
-      "$value": "800",
       "$type": "text"
     },
     "black": {

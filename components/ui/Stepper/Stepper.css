@@ -34,7 +34,7 @@
 
 .bds-stepper__value {
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
   text-align: center;

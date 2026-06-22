@@ -133,7 +133,7 @@
 .bds-page-header__metadata-label {
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
 }

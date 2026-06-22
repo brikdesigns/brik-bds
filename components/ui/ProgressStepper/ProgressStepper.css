@@ -52,7 +52,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   flex-shrink: 0;
   transition: all 0.15s ease;
 }
@@ -100,7 +100,7 @@
 }
 
 .bds-progress-stepper__label--active {
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
 }
 

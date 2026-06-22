@@ -24,7 +24,7 @@
 }
 
 .bds-nav-item--active {
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-inverse);
   background-color: var(--background-brand-primary);
 }
