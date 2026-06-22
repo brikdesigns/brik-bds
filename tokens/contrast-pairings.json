@@ -9,6 +9,7 @@
     { "group": "neutral", "label": "Secondary text on page", "fg": "--text-secondary", "bg": "--page-primary", "thresholdType": "AA" },
     { "group": "neutral", "label": "Muted text on page", "fg": "--text-muted", "bg": "--page-primary", "thresholdType": "AA-large" },
     { "group": "neutral", "label": "SegmentedControl inactive label on track", "fg": "--text-on-color-light", "bg": "--background-secondary", "thresholdType": "AA" },
+    { "group": "neutral", "label": "Solid Tag / MultiSelect chip label on fill", "fg": "--text-on-color-light", "bg": "--background-secondary", "thresholdType": "AA" },
 
     { "group": "brand", "label": "Brand text on page", "fg": "--text-brand-primary", "bg": "--page-primary", "thresholdType": "AA" },
     { "group": "brand", "label": "On-color label on brand fill", "fg": "--text-on-color-dark", "bg": "--background-brand-primary", "thresholdType": "AA" },
