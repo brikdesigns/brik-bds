@@ -14,7 +14,7 @@
 .bds-filter-bar__title {
   font-family: var(--font-family-heading);
   font-size: var(--heading-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-snug);
   color: var(--text-primary);
   margin: 0;

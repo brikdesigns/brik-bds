@@ -146,7 +146,7 @@ export const Patterns: Story = {
                 <div style={{
                   fontFamily: 'var(--font-family-body)',
                   fontSize: 'var(--body-md)', // bds-lint-ignore
-                  fontWeight: 'var(--font-weight-semi-bold)',
+                  fontWeight: 'var(--font-weight-semibold)',
                 }}>{title}</div>
                 <div style={{
                   fontFamily: 'var(--font-family-body)',

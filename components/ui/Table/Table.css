@@ -28,7 +28,7 @@
 .bds-table-head {
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-muted);
   text-align: left;
   border-bottom: var(--border-width-md) solid var(--border-muted);
@@ -58,7 +58,7 @@
   color: var(--text-muted);
   font-family: var(--font-family-subtitle);
   font-size: var(--subtitle-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: var(--padding-tiny) var(--padding-md);

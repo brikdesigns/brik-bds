@@ -62,7 +62,7 @@
 .bds-task-console__title {
   font-family: var(--font-family-label);
   font-size: var(--label-md);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
   white-space: nowrap;
@@ -155,14 +155,14 @@
 }
 
 .bds-task-console__item--in_progress .bds-task-console__item-label {
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
 }
 
 .bds-task-console__item-link {
   font-family: var(--font-family-body);
   font-size: var(--body-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-normal);
   color: var(--text-brand-primary);
   text-decoration: none;

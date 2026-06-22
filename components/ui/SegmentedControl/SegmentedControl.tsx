@@ -68,7 +68,7 @@ const sizeStyles: Record<SegmentedControlSize, CSSProperties> = {
 
 const segmentBase: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
   lineHeight: 'var(--font-line-height-tight)',
   textAlign: 'center',
   whiteSpace: 'nowrap',

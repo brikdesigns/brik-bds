@@ -5,7 +5,7 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically; shared with Badge + Tag */
   white-space: nowrap;
   text-transform: uppercase;

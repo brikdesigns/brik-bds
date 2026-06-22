@@ -63,7 +63,7 @@
 .bds-card-title {
   font-family: var(--font-family-heading);
   font-size: var(--heading-md);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   margin: 0;
   color: var(--text-primary);
 }
@@ -122,7 +122,7 @@
 .bds-card__preset-control-title {
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
   margin: 0;
@@ -199,7 +199,7 @@
 .bds-card__preset-summary-link {
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-brand-primary);
   line-height: var(--font-line-height-tight);
   text-decoration: none;
@@ -292,7 +292,7 @@
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: var(--heading-md);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
 }
@@ -380,7 +380,7 @@
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: var(--heading-md);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
 }

@@ -34,7 +34,7 @@ const TITLE_STYLE: CSSProperties = {
   margin: 0,
   fontFamily: 'var(--font-family-heading)',
   fontSize: 'var(--heading-md)',
-  fontWeight: 'var(--font-weight-semi-bold)',
+  fontWeight: 'var(--font-weight-semibold)',
   lineHeight: 'var(--font-line-height-tight)',
   color: 'var(--text-primary)',
 };

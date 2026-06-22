@@ -46,7 +46,7 @@
   /* ── Font Weight Aliases (Webflow double-dash → SD single-dash) ──
      Old components reference --font-weight--bold; SD uses --font-weight-bold. */
   --font-weight--bold:       var(--font-weight-bold);
-  --font-weight--semi-bold:  var(--font-weight-semi-bold);
+  --font-weight--semi-bold:  var(--font-weight-semibold);
   --font-weight--medium:     var(--font-weight-medium);
   --font-weight--regular:    var(--font-weight-regular);
   --font-weight--thin:       var(--font-weight-thin);

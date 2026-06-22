@@ -4,11 +4,9 @@
 import SwiftUI
 public enum BDSFontWeight {
     public static let fontWeightBold: CGFloat = 700
-    public static let fontWeightSemiBold: CGFloat = 600
     public static let fontWeightMedium: CGFloat = 500
     public static let fontWeightRegular: CGFloat = 400
     public static let fontWeightThin: CGFloat = 300
-    public static let fontWeightExtraBold: CGFloat = 800
     public static let fontWeightBlack: CGFloat = 900
     public static let fontWeightSemibold: CGFloat = 600
     public static let fontWeightExtrabold: CGFloat = 800

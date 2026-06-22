@@ -7,7 +7,7 @@
 
 .bds-addable-entry-list__label {
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
   text-transform: capitalize;
@@ -62,7 +62,7 @@
   display: block;
   font-family: var(--font-family-label);
   font-size: var(--label-md);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
   width: fit-content;
@@ -121,7 +121,7 @@
 .bds-addable-entry-list__item-primary {
   display: block;
   font-family: var(--font-family-body);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
   word-break: break-word;
 }

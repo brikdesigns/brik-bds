@@ -67,7 +67,7 @@
 .bds-file-uploader__label {
   font-family: var(--font-family-label);
   font-size: var(--label-md);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-snug);
   color: var(--text-primary);
   margin: 0;
@@ -98,7 +98,7 @@
 
 .bds-file-uploader__browse {
   color: var(--text-brand-primary);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   text-decoration: underline;
   cursor: pointer;
 }

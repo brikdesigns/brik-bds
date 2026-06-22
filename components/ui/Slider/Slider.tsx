@@ -87,7 +87,7 @@ const labelRowStyles: CSSProperties = {
 const labelStyles: CSSProperties = {
   fontFamily: 'var(--font-family-label)',
   fontSize: 'var(--label-sm)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
   lineHeight: 'var(--font-line-height-snug)',
   color: 'var(--text-primary)',
   margin: 0,

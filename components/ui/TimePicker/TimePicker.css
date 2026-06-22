@@ -25,7 +25,7 @@
 
 .bds-time-picker__label {
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   text-transform: capitalize;
 }
@@ -174,7 +174,7 @@
 .bds-time-picker__cell--selected {
   background-color: var(--surface-brand-primary);
   color: var(--text-inverse);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
 }
 
 } /* end @layer bds-components */

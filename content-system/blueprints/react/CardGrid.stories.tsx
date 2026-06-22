@@ -126,7 +126,7 @@ export const TwoColumnList: Story = {
         {['Web design', 'Brand identity', 'Content strategy', 'Customer journey maps'].map((item) => (
           <li key={item}>
             <Stack gap="sm">
-              <h3 style={{ margin: 0, fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-md)', fontWeight: 'var(--font-weight-semi-bold)', color: 'var(--text-primary)', lineHeight: 'var(--font-line-height-tight)' }}>
+              <h3 style={{ margin: 0, fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-md)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)', lineHeight: 'var(--font-line-height-tight)' }}>
                 {item}
               </h3>
               <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', lineHeight: 'var(--font-line-height-normal)', color: 'var(--text-primary)' }}>

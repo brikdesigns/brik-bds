@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from 'react';
 const titleStyle: CSSProperties = {
   fontFamily: 'var(--font-family-heading)',
   fontSize: 'var(--heading-xl)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
   color: 'var(--text-primary)',
   margin: 0,
   lineHeight: 1.2,
@@ -20,7 +20,7 @@ const subtitleStyle: CSSProperties = {
 const sectionTitleStyle: CSSProperties = {
   fontFamily: 'var(--font-family-heading)',
   fontSize: 'var(--heading-md)',
-  fontWeight: 'var(--font-weight-semi-bold)' as unknown as number,
+  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
   color: 'var(--text-primary)',
   margin: '0 0 var(--gap-md)',
   lineHeight: 1.3,

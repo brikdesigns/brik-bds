@@ -89,7 +89,7 @@
   .bds-interactive-list-item__title {
     font-family: var(--font-family-label);
     font-size: var(--label-md);
-    font-weight: var(--font-weight-semi-bold);
+    font-weight: var(--font-weight-semibold);
     line-height: var(--font-line-height-tight);
     color: var(--text-primary);
     /* Truncate single-line titles — but allow wrap if consumer needs it */
