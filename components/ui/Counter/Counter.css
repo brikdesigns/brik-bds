@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   border-radius: var(--border-radius-pill);
   white-space: nowrap;

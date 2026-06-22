@@ -74,7 +74,7 @@
 .bds-board-column__title {
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -127,13 +127,13 @@
  * Column header name — heading family, semibold.
  * Heading scale minimum is --heading-tiny (18px / font-size-200).
  * --font-size-100 (16px) is body/label territory; never use it for a heading.
- * --font-weight-extra-bold (800) is inappropriate on heading family;
+ * --font-weight-extrabold (800) is inappropriate on heading family;
  * semibold (600) is the standard heading weight.
  */
 .bds-board-header__name {
   font-family: var(--font-family-heading);
   font-size: var(--heading-tiny);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-on-color-dark);
   line-height: var(--font-line-height-tight);
   margin: 0;
@@ -225,7 +225,7 @@
 .bds-board-card__title {
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
   line-height: var(--font-line-height-tight);
   margin: 0;

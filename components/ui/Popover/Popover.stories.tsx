@@ -37,7 +37,7 @@ const sampleContent = (
     fontSize: 'var(--body-md)',
     color: 'var(--text-primary)',
   }}>
-    <strong style={{ fontWeight: 'var(--font-weight-semi-bold)' as unknown as number }}>
+    <strong style={{ fontWeight: 'var(--font-weight-semibold)' as unknown as number }}>
       Popover title
     </strong>
     <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
@@ -150,7 +150,7 @@ export const Patterns: Story = {
               fontFamily: 'var(--font-family-body)',
               minWidth: 240,
             }}>
-              <div style={{ fontSize: 'var(--label-md)', fontWeight: 'var(--font-weight-semi-bold)' as unknown as number, color: 'var(--text-primary)' }}>
+              <div style={{ fontSize: 'var(--label-md)', fontWeight: 'var(--font-weight-semibold)' as unknown as number, color: 'var(--text-primary)' }}>
                 Notification settings
               </div>
               <label style={{ fontSize: 'var(--body-sm)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)' }}>

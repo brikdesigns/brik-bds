@@ -58,7 +58,7 @@
 
 .bds-dialog__button {
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   font-size: var(--label-sm);
   line-height: var(--font-line-height-normal);
   padding: var(--padding-sm) var(--padding-lg);

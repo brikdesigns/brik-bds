@@ -21,7 +21,7 @@
   justify-content: center;
   gap: var(--gap-sm);
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-normal);
   border-radius: var(--border-radius-md);
   cursor: pointer;

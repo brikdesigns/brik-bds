@@ -10,7 +10,7 @@
   background-color: var(--background-brand-primary);
   color: var(--text-inverse);
   font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semibold);
   flex-shrink: 0;
   user-select: none;
 }

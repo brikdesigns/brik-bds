@@ -747,15 +747,6 @@
         "$type": "text",
         "$value": "700"
       },
-      "semi bold": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "text",
-        "$value": "600"
-      },
       "medium": {
         "$extensions": {
           "com.figma.scopes": [
@@ -782,15 +773,6 @@
         },
         "$type": "text",
         "$value": "300"
-      },
-      "extra bold": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "text",
-        "$value": "800"
       },
       "black": {
         "$extensions": {
