@@ -110,10 +110,12 @@
   pointer-events: none;
 }
 
-/* Placeholder color */
+/* Placeholder color. Use --text-secondary (~9:1 on white, WCAG AA) — not
+   --text-muted (#bdbdbd, 1.87:1), which fails AA as rendered select text.
+   Same root cause / fix as #765 (breadcrumb + pricing-card). brik-bds#942. */
 .bds-select:invalid,
 .bds-select--placeholder {
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* Error state */
@@ -164,7 +166,8 @@
   font-family: var(--font-family-body);
   font-size: var(--body-sm);
   line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  /* AA-compliant: --text-muted (#bdbdbd) fails as below-input helper text. #942 */
+  color: var(--text-secondary);
 }
 
 .bds-select-helper--error {
