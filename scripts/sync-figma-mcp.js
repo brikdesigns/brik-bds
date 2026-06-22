@@ -445,12 +445,22 @@ function applyToSet(setKey, varName, $value, $type, $description, $extensions) {
 
 const isPullShape = Array.isArray(rawData.variables) && Array.isArray(rawData.collections);
 
+// Figma marks the base/default shade of a ramp with a " [base]" suffix
+// (e.g. "color/poppy/light [base]"). It's an annotation, not part of the token
+// path — strip it so the synced name matches the alias consumers
+// ({color.poppy.light}) and re-syncs stay idempotent rather than churning the
+// base shade into a parallel "light [base]" orphan (brik-bds#945).
+function canonicalVarName(name) {
+  return name.replace(/\s*\[base\]\s*$/, '');
+}
+
 if (isPullShape) {
   // ─── Shape 1: pull-variables.js dump ─────────────────────────
-  const idToName = new Map(rawData.variables.map(v => [v.id, v.name]));
+  const idToName = new Map(rawData.variables.map(v => [v.id, canonicalVarName(v.name)]));
 
   for (const v of rawData.variables) {
-    const $type = inferTypeFromResolved(v.resolvedType, v.name);
+    const name = canonicalVarName(v.name);
+    const $type = inferTypeFromResolved(v.resolvedType, name);
     const $description = (v.description && v.description.length > 0) ? v.description : undefined;
     const $extensions = (Array.isArray(v.scopes) && v.scopes.length > 0)
       ? { 'com.figma.scopes': v.scopes.slice() }
@@ -460,19 +470,19 @@ if (isPullShape) {
       const setKey = `${v.collection}/${modeName}`;
       // Protect from the prune pass before any skip/continue: the variable is
       // present in Figma even if its value is unresolvable this pull.
-      markSeen(setKey, v.name);
+      markSeen(setKey, name);
       const $value = resolveValue(modeValue, idToName);
 
       if ($value === null) {
         if (modeValue && typeof modeValue === 'object' && typeof modeValue.alias === 'string') {
-          changes.danglingAliases.push({ varName: v.name, mode: modeName, aliasId: modeValue.alias });
+          changes.danglingAliases.push({ varName: name, mode: modeName, aliasId: modeValue.alias });
         }
-        bucket(setKey).skipped.push({ path: v.name, reason: 'unresolvable-value' });
+        bucket(setKey).skipped.push({ path: name, reason: 'unresolvable-value' });
         changes.totalSkipped += 1;
         continue;
       }
 
-      applyToSet(setKey, v.name, $value, $type, $description, $extensions);
+      applyToSet(setKey, name, $value, $type, $description, $extensions);
     }
   }
 } else {

@@ -11,54 +11,6 @@
   --color-grayscale-light: #828282; /** Secondary Borders / Muted UI */
   --color-grayscale-lighter: #e0e0e0; /** Borders / Disabled Text */
   --color-grayscale-lightest: #f2f2f2; /** Light Background / UI Elements */
-  --color-poppy-lightest: #ffefeb; /** Subtle tints / hover backgrounds */
-  --color-poppy-lighter: #ffa693; /** Light accent */
-  --color-poppy-light: #e35335; /** Brand primary base */
-  --color-poppy-dark: #b0351b; /** Hover state */
-  --color-poppy-darker: #7d1d09; /** Pressed state */
-  --color-poppy-darkest: #4a0d00; /** Deep accent */
-  --color-tan-lightest: #f1f0ec; /** Accent background */
-  --color-tan-lighter: #cfcdc5;
-  --color-tan-light: #adaaa0;
-  --color-tan-dark: #8b887d;
-  --color-tan-darker: #69665c;
-  --color-tan-darkest: #47453c;
-  --color-orange-lightest: #ffe8dc;
-  --color-orange-lighter: #ffad92;
-  --color-orange-light: #e76134;
-  --color-orange-dark: #b4411a;
-  --color-orange-darker: #812608;
-  --color-orange-darkest: #3f1000;
-  --color-yellow-lightest: #fffee1;
-  --color-yellow-lighter: #ffecac;
-  --color-yellow-light: #f4d364;
-  --color-yellow-dark: #c1a443;
-  --color-yellow-darker: #8e7729;
-  --color-yellow-darkest: #634716;
-  --color-green-lightest: #f8fff3;
-  --color-green-lighter: #daffc0;
-  --color-green-light: #bcff8c;
-  --color-green-dark: #9ada6c;
-  --color-green-darker: #71a74a;
-  --color-green-darkest: #2a5542;
-  --color-blue-lightest: #f8fdff;
-  --color-blue-lighter: #b2e3f5;
-  --color-blue-light: #8ebbcc;
-  --color-blue-dark: #6c95a3;
-  --color-blue-darker: #4d6e7b;
-  --color-blue-darkest: #314952;
-  --color-purple-lightest: #f2f0f7;
-  --color-purple-lighter: #c4b0eb;
-  --color-purple-light: #9e8bc2;
-  --color-purple-dark: #796999;
-  --color-purple-darker: #574a71;
-  --color-purple-darkest: #2b2440;
-  --color-pink-lightest: #ffe9f6;
-  --color-pink-lighter: #ffa8dd;
-  --color-pink-light: #ff67c3;
-  --color-pink-dark: #ff25aa;
-  --color-pink-darker: #d20080;
-  --color-pink-darkest: #8e0057;
   --color-system-red: #eb5757;
   --color-system-green: #27ae60;
   --color-system-yellow: #f2c94c;
@@ -79,6 +31,54 @@
   --color-annotation-annotation-light-pink: #f8e8fd;
   --color-annotation-annotation-light-purple: #e6dbff;
   --color-annotation-annotation-light-blue: #d1e5ff;
+  --color-blue-lightest: #f8fdff;
+  --color-blue-lighter: #b2e3f5;
+  --color-blue-light: #8ebbcc;
+  --color-blue-dark: #6c95a3;
+  --color-blue-darker: #4d6e7b;
+  --color-blue-darkest: #314952;
+  --color-green-lightest: #f8fff3;
+  --color-green-lighter: #daffc0;
+  --color-green-light: #bcff8c;
+  --color-green-dark: #9ada6c;
+  --color-green-darker: #71a74a;
+  --color-green-darkest: #2a5542;
+  --color-orange-lightest: #ffe8dc;
+  --color-orange-lighter: #ffad92;
+  --color-orange-light: #e76134;
+  --color-orange-dark: #b4411a;
+  --color-orange-darker: #812608;
+  --color-orange-darkest: #3f1000;
+  --color-pink-lightest: #ffe9f6;
+  --color-pink-lighter: #ffa8dd;
+  --color-pink-light: #ff67c3;
+  --color-pink-dark: #ff25aa;
+  --color-pink-darker: #d20080;
+  --color-pink-darkest: #8e0057;
+  --color-poppy-lightest: #ffefeb; /** Subtle tints / hover backgrounds */
+  --color-poppy-lighter: #ffa693; /** Light accent */
+  --color-poppy-light: #e35335; /** Brand primary base */
+  --color-poppy-dark: #b0351b; /** Hover state */
+  --color-poppy-darker: #7d1d09; /** Pressed state */
+  --color-poppy-darkest: #4a0d00; /** Deep accent */
+  --color-purple-lightest: #f2f0f7;
+  --color-purple-lighter: #c4b0eb;
+  --color-purple-light: #9e8bc2;
+  --color-purple-dark: #796999;
+  --color-purple-darker: #574a71;
+  --color-purple-darkest: #2b2440;
+  --color-tan-lightest: #f1f0ec; /** Accent background */
+  --color-tan-lighter: #cfcdc5;
+  --color-tan-light: #adaaa0;
+  --color-tan-dark: #8b887d;
+  --color-tan-darker: #69665c;
+  --color-tan-darkest: #47453c;
+  --color-yellow-lightest: #fffee1;
+  --color-yellow-lighter: #ffecac;
+  --color-yellow-light: #f4d364;
+  --color-yellow-dark: #c1a443;
+  --color-yellow-darker: #8e7729;
+  --color-yellow-darkest: #634716;
   --font-weight-bold: 700;
   --font-weight-medium: 500;
   --font-weight-regular: 400;
