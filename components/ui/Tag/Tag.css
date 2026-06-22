@@ -33,6 +33,12 @@
 
 .bds-tag--solid {
   background-color: var(--background-secondary);
+  /* On-color label. The base `--text-primary` pairs with the page, not this
+     fill: it holds in light (dark text on the light --background-secondary tint)
+     but fails WCAG AA in dark mode (3.43:1, light text on the mid-gray tint).
+     `--text-on-color-light` holds AA in both themes (18.76:1 / 5.46:1) — the
+     same pairing SegmentedControl uses for its `--background-secondary` track. */
+  color: var(--text-on-color-light);
 }
 
 .bds-tag--subtle {
