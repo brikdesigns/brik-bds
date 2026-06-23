@@ -233,3 +233,34 @@ export const PriceCtaAsAction: Story = {
     await expect(cta).toBeInTheDocument();
   },
 };
+
+/**
+ * @summary Native action CTA (#941) — when `priceCard.cta` carries an
+ * `onClick` (instead of a `url`), the blueprint renders a real `<button>`
+ * with button semantics — no href, no anchor. This is the first-class way
+ * to wire a CTA to client behavior (open a modal, etc.), distinct from the
+ * `onPriceCtaClick` link-intercept above (#843), which keeps a URL fallback.
+ * Use this when there is no meaningful no-JS destination.
+ */
+export const PriceCtaActionButton: Story = {
+  args: {
+    ...baseProps,
+    section: {
+      ...interiorHeroSection,
+      sectionKey: 'hero-img-card-cta-action-button',
+      priceCard: {
+        ...interiorHeroSection.priceCard!,
+        cta: { label: 'Open the form', onClick: fn() },
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // An action CTA is a <button>, not a <link> — verify the semantics.
+    const cta = canvas.getByRole('button', { name: 'Open the form' });
+    await expect(cta).toBeVisible();
+    await expect(canvas.queryByRole('link', { name: 'Open the form' })).toBeNull();
+    // Clicking fires the config's own handler.
+    await userEvent.click(cta);
+  },
+};

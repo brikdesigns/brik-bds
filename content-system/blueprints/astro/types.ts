@@ -86,6 +86,42 @@ export const WIRED_BLUEPRINT_KEYS = [
 export type WiredBlueprintKey = (typeof WIRED_BLUEPRINT_KEYS)[number];
 
 /**
+ * Optional CTA button size. Mirrors the `Button` `size` union (inlined so
+ * this contract stays framework-agnostic). Omitted → the blueprint's own
+ * default is preserved (no visual change for existing consumers).
+ * brikdesigns.com #453 passes `md`. (#869)
+ */
+export type CtaSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * A blueprint CTA. Two shapes, both back-compatible with the original
+ * `{ label, url }` link form (#941):
+ *
+ *   - **Link** (`url`): renders an `<a>`. The only form static Astro
+ *     blueprints can use — author from serializable content.
+ *   - **Action** (`onClick`): renders a `<button>` that fires client
+ *     behavior (open a modal/drawer, analytics, scroll-to-anchor). React
+ *     blueprints only — a function can't live in serializable Astro data.
+ *     Surfaced by brikdesigns#577/#579: the service hero CTA must open the
+ *     lead-capture modal, not navigate.
+ *
+ * The two are mutually exclusive (`url XOR onClick`); use `isActionCta()`
+ * to discriminate. A future `actionId` indirection (a serializable handle
+ * the consumer maps to a handler) is deliberately deferred — no consumer
+ * needs it yet, and static Astro action support is out of scope here.
+ */
+export type BlueprintCta =
+  | { readonly label: string; readonly url: string; readonly size?: CtaSize }
+  | { readonly label: string; readonly onClick: () => void; readonly size?: CtaSize };
+
+/** True when the CTA carries a client action (`onClick`) rather than a link. */
+export function isActionCta(
+  cta: BlueprintCta,
+): cta is Extract<BlueprintCta, { onClick: () => void }> {
+  return typeof (cta as { onClick?: unknown }).onClick === 'function';
+}
+
+/**
  * Resolved section content — what the portal's content generator emits
  * and the dispatcher consumes. Shape matches the typed section output
  * produced by `generate-content-page-worker` in the portal.
@@ -132,10 +168,7 @@ export interface BlueprintSection {
     /** Alt text for `imageUrl`. Defaults to empty (decorative) when omitted. */
     readonly imageAlt?: string;
   }[];
-  readonly cta: {
-    readonly label: string;
-    readonly url: string;
-  } | null;
+  readonly cta: BlueprintCta | null;
   /**
    * Optional ordered breadcrumb trail. Used by interior-page hero
    * blueprints (e.g. `hero_split_image_card_overlay`) where the hero
@@ -201,18 +234,7 @@ export interface BlueprintSection {
     readonly imageAlt?: string;
     readonly priceLabel?: string;
     readonly price?: string;
-    readonly cta?: {
-      readonly label: string;
-      readonly url: string;
-      /**
-       * Optional CTA button size. Mirrors the `Button` `size` union
-       * (inlined so this contract stays framework-agnostic — see the
-       * `illustration` note below). Omitted → the blueprint's `sm`
-       * default is preserved (no visual change for existing
-       * consumers). brikdesigns.com #453 passes `md`. (#869)
-       */
-      readonly size?: 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
-    };
+    readonly cta?: BlueprintCta;
   };
   /**
    * Optional structured illustration data for blueprints that compose a

@@ -50,7 +50,7 @@ const email = clientFacts.email;
       {section.body && (
         <p class="bp-cta-split-contact__description">{section.body}</p>
       )}
-      {section.cta && (
+      {section.cta && 'url' in section.cta && (
         <a href={section.cta.url} class="bds-button bds-button--primary bds-button--md"><span class="bds-button__content">{section.cta.label}</span></a>
       )}
     </div>

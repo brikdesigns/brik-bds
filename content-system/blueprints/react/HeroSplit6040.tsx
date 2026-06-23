@@ -11,6 +11,7 @@
  */
 import { Button } from '../../../components/ui/Button';
 import type { BlueprintProps } from '../astro/types';
+import { isActionCta } from '../astro/types';
 import './HeroSplit6040.css';
 
 interface Props extends BlueprintProps {}
@@ -39,7 +40,11 @@ export function HeroSplit6040({ section, clientFacts }: Props) {
           </h1>
           {lead && <p className="bp-hero-split-60-40__lead">{lead}</p>}
           {cta && (
-            <Button href={cta.url} variant="primary" size="md">
+            <Button
+              {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
+              variant="primary"
+              size="md"
+            >
               {cta.label}
             </Button>
           )}

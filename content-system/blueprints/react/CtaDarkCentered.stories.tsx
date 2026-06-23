@@ -65,3 +65,21 @@ export const NoBody: Story = {
     theme: baseTheme,
   },
 };
+
+/**
+ * @summary Action CTA (#941) — an `onClick` CTA (no `url`) renders a
+ * `<button>` instead of an `<a>`, so the blueprint can trigger in-page
+ * behavior (open a modal, fire analytics). Inspect the rendered element:
+ * it is a real button with button semantics, not a link.
+ */
+export const ActionCta: Story = {
+  args: {
+    section: {
+      ...section,
+      sectionKey: 'cta-dark-centered-action',
+      cta: { label: 'Open contact form', onClick: () => {} },
+    },
+    clientFacts: baseClientFacts,
+    theme: baseTheme,
+  },
+};

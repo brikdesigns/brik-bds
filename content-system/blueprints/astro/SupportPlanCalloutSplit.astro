@@ -163,7 +163,7 @@ const hasIllustration = illustration && tiles.length > 0;
           {plan.description && (
             <p class="bp-support-plan-callout__plan-description">{plan.description}</p>
           )}
-          {cta && (
+          {cta && 'url' in cta && (
             <a
               class="bds-button bds-button--primary bds-button--md bp-support-plan-callout__cta"
               href={cta.url}
