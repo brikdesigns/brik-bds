@@ -109,6 +109,43 @@ Phosphor provides six weights per icon. BDS primarily uses the regular and fill 
 <Icon icon="ph:star-bold" />     {/* heavier outline */}
 ```
 
+## Color / theming
+
+Iconify icons render with `fill="currentColor"`, so they inherit color from the CSS `color` of any ancestor — no per-icon fill prop needed. To recolor an icon, set `color` on it or a parent, ideally to a BDS text token rather than a raw hex:
+
+```tsx
+{/* inherits the surrounding text color */}
+<span style={{ color: 'var(--text-muted)' }}>
+  <Icon icon="ph:info" /> Quiet hint
+</span>
+
+{/* status icon */}
+<Icon icon="ph:check-circle-fill" style={{ color: 'var(--text-positive)' }} />
+```
+
+Text tokens commonly used for icon fill:
+
+| Token | Use |
+|---|---|
+| `--text-primary` | Default icon next to body text |
+| `--text-secondary` / `--text-muted` | Quiet / secondary icons |
+| `--text-link` | Icons inside links |
+| `--text-positive` / `--text-negative` / `--text-info` | Status icons |
+| `--text-inverse` | Icons on dark / inverted surfaces |
+
+BDS text tokens are mode-aware, so an icon colored with one retones automatically in `brik-dark` — prefer them over hardcoded colors.
+
+### Service-line glyphs (ServiceTag)
+
+[ServiceTag](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview)'s per-service glyphs are **not** Phosphor icons — they're custom SVG assets under `components/ui/ServiceTag/icons/`. They render via CSS `mask-image` with `background-color: currentColor` (not `<img src>`), so the fill is CSS-recolorable and inherits the tag's service text token:
+
+```css
+.bds-service-tag--marketing { color: var(--text-service-marketing-on-light); }
+.bds-service-tag__icon      { background-color: currentColor; /* masked glyph */ }
+```
+
+Each service line carries a mode-aware `--text-service-{line}-on-light` / `-on-dark` pair (`brand`, `marketing`, `information`, `product`, `back-office`), so the glyph retones per theme. Reach for `ServiceTag` rather than a raw `<img>` whenever you need a service-line glyph — Phosphor does not cover every icon need.
+
 ## Adding icons to BDS
 
 1. Find the icon name at [phosphoricons.com](https://phosphoricons.com/) — copy the kebab-case name.
