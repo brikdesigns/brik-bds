@@ -42,7 +42,7 @@ const titleId = `${section.sectionKey}-title`;
     {section.body && (
       <p class="bp-cta-dark-centered__description">{section.body}</p>
     )}
-    {section.cta && (
+    {section.cta && 'url' in section.cta && (
       <a href={section.cta.url} class="bds-button bds-button--primary bds-button--lg"><span class="bds-button__content">{section.cta.label}</span></a>
     )}
   </div>
