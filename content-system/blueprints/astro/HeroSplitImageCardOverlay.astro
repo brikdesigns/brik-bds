@@ -147,7 +147,7 @@ const cta = section.cta;
 
       {lead && <p class="bp-hero-img-card__lead">{lead}</p>}
 
-      {cta && (
+      {cta && 'url' in cta && (
         <a href={cta.url} class="bds-button bds-button--inverse bds-button--md">
           <span class="bds-button__content">{cta.label}</span>
         </a>
@@ -176,7 +176,7 @@ const cta = section.cta;
             {priceCard.price && (
               <p class="bp-hero-img-card__price-value">{priceCard.price}</p>
             )}
-            {priceCard.cta && (
+            {priceCard.cta && 'url' in priceCard.cta && (
               <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--${priceCard.cta.size ?? 'sm'}`}>
                 <span class="bds-button__content">{priceCard.cta.label}</span>
               </a>

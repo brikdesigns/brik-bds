@@ -45,7 +45,7 @@ const cta = section.cta;
     {eyebrow && <p class="bp-hero-interior-minimal__subtitle">{eyebrow}</p>}
     <h1 id={titleId} class="bp-hero-interior-minimal__title">{headline}</h1>
     {lead && <p class="bp-hero-interior-minimal__lead">{lead}</p>}
-    {cta && (
+    {cta && 'url' in cta && (
       <a href={cta.url} class="bds-button bds-button--primary bds-button--md"><span class="bds-button__content">{cta.label}</span></a>
     )}
   </div>

@@ -9,12 +9,14 @@
  */
 import { Button } from '../../../components/ui/Button';
 import type { BlueprintProps } from '../astro/types';
+import { isActionCta } from '../astro/types';
 import './CtaDarkCentered.css';
 
 interface Props extends BlueprintProps {}
 
 export function CtaDarkCentered({ section }: Props) {
   const titleId = `${section.sectionKey}-title`;
+  const cta = section.cta;
 
   return (
     <section
@@ -29,9 +31,13 @@ export function CtaDarkCentered({ section }: Props) {
         {section.body && (
           <p className="bp-cta-dark-centered__description">{section.body}</p>
         )}
-        {section.cta && (
-          <Button href={section.cta.url} variant="primary" size="lg">
-            {section.cta.label}
+        {cta && (
+          <Button
+            {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
+            variant="primary"
+            size="lg"
+          >
+            {cta.label}
           </Button>
         )}
       </div>

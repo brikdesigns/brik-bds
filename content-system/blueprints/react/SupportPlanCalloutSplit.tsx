@@ -41,6 +41,7 @@ import {
 } from '../../../components';
 
 import type { BlueprintProps } from '../astro/types';
+import { isActionCta } from '../astro/types';
 import './SupportPlanCalloutSplit.css';
 
 interface Props extends BlueprintProps {}
@@ -113,7 +114,7 @@ export function SupportPlanCalloutSplit({ section }: Props) {
                 )}
                 {cta && (
                   <Button
-                    href={cta.url}
+                    {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
                     variant="primary"
                     size="md"
                     className="bp-support-plan-callout__cta"
