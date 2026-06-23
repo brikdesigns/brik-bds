@@ -29,7 +29,9 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 5. `modes-spacing.css` — spacing density mode overrides (`[data-mode-spacing="compact|comfortable|spacious"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 6. `modes-typography.css` — typography heading-scale-variant overrides (`[data-mode-typography="compact|comfortable|spacious|expressive"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 7. `gap-fills.css` — manual tokens not yet in Figma
-8. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
+8. `ratios.css` — `--aspect-*` tokens (dimensionless `<ratio>`, can't be a Figma Variable; BDS #486)
+9. `fluid-type.css` — `--display-fluid-*` clamp() tier (viewport-fluid marketing display type; can't be a Figma Variable; brik-bds#959)
+10. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
 
 **Not bundled:** `bridge.css` (opt-in via separate export), `font-audit.css`
 (Storybook-only), `motion-classes.css` (opt-in utility classes — consumers import

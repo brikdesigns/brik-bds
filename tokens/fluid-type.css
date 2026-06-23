@@ -1,0 +1,52 @@
+/**
+ * BDS Fluid Display Type Tier — Manually Maintained
+ *
+ * Loaded by: bundled into dist/tokens.css (after ratios, before animations).
+ * Every consumer picks these up automatically via `@import '@brikdesigns/bds/tokens.css'`.
+ * See tokens/CASCADE.md for the full load-order + decision tree.
+ *
+ * Why these are here, not in figma-tokens.css:
+ *   `clamp()` is a CSS function, not a Figma Variable — Figma variables resolve
+ *   to a single static number, so a viewport-interpolating display size can
+ *   never round-trip through Tokens Studio / Style Dictionary. This tier is
+ *   the hand-authored counterpart to the static `--display-*` scale, in the
+ *   same spirit as `ratios.css` (dimensionless `<ratio>` values Figma can't
+ *   express). brik-bds#959 / umbrella brik-client-portal#1350.
+ *
+ * What it is:
+ *   A fluid MARKETING display tier — each step interpolates min → max across
+ *   the viewport via `clamp(min, <vw>, max)`. The max anchors to the existing
+ *   static `--display-*` token (so the top end stays on the Figma scale); the
+ *   min is a raw `--font-size-*` primitive a few steps down (so display type
+ *   shrinks gracefully on small viewports instead of overflowing). The `<vw>`
+ *   preferred term is the only literal — fluidity is inherently a length-vs-
+ *   viewport relationship, not a token.
+ *
+ * Distinct from the static product-UI scale:
+ *   The static `--display-*` / `--heading-*` / `--body-*` scale is unchanged —
+ *   app surfaces depend on its fixed sizing. These `--display-fluid-*` tokens
+ *   are an ADDITIVE, opt-in tier for viewport-responsive marketing display
+ *   type (heroes, editorial headers). Consume them where the static scale was
+ *   previously hand-clamped inline, e.g.
+ *     font-size: var(--display-fluid-lg);
+ *   instead of the ad-hoc `clamp(var(--heading-xl), 4vw, var(--display-sm))`
+ *   pattern blueprints compose today.
+ *
+ * Resolved range (max = static --display-* via --font-size-*):
+ *   sm  40.5px → 72.8px   (font-size-900  → display-sm/1400)
+ *   md  45.5px → 81.9px   (font-size-1000 → display-md/1500)
+ *   lg  51px   → 92.2px   (font-size-1100 → display-lg/1600)
+ *   xl  57.5px → 116.9px  (font-size-1200 → display-xl/1800)
+ *
+ * Type-scale MODE (data-mode-typography) and a width mode remain follow-ups —
+ * the type-scale mode already exists for `--heading-*` (modes-typography.css,
+ * ADR-013 amendment / #928, which keeps `--display-*` mode-invariant); making
+ * display participate and adding a width mode are deferred (see #959 thread).
+ */
+
+:root {
+  --display-fluid-sm: clamp(var(--font-size-900), 6vw, var(--display-sm));
+  --display-fluid-md: clamp(var(--font-size-1000), 6.5vw, var(--display-md));
+  --display-fluid-lg: clamp(var(--font-size-1100), 7vw, var(--display-lg));
+  --display-fluid-xl: clamp(var(--font-size-1200), 8vw, var(--display-xl));
+}
