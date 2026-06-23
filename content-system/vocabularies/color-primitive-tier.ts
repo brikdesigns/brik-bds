@@ -29,8 +29,10 @@
  *                  accents, `--text-link`.
  *   - secondary  — supporting brand color. Tag-only today; no automatic
  *                  mapping.
- *   - tertiary   — third-tier brand color. Tag-only today.
- *   - accent     — non-primary chromatic colors. Tag-only today.
+ *   - tertiary   — third-tier brand color. Tag-only by contract (ADR-012).
+ *   - accent     — non-primary chromatic color (Brik's tertiary brand
+ *                  colour; may be neutral OR chromatic by palette size).
+ *                  Tag-only by contract (ADR-012).
  *   - neutral    — gray ramp source. Drives gray-ramp neutral resolution.
  *   - brand-fill — AA-safe variant of primary used for filled brand
  *                  surfaces (`--background-brand-primary`) and brand-
@@ -46,6 +48,22 @@
  * from neutral primitives. To shift body neutrals brand-side, redefine
  * the brand's white/black primitive hex values; do not introduce
  * parallel tier vocabulary.
+ *
+ * Why no `--*-brand-tertiary` / `--*-brand-accent` slot (ADR-012, ratified
+ * 2026-06-23): `tertiary`/`accent` are tag-only by CONTRACT, not as a
+ * stopgap awaiting a slot. Adding one is the same speculative parallel-
+ * brand-tier shape #512/#553 rolled back, and a single slot cannot encode
+ * that the accent/tertiary tier is neutral OR chromatic by palette size.
+ * Resolution rule:
+ *   - CHROMATIC tertiary/accent → consumed as the raw `--color-{name}` /
+ *     `--color-{name}-{stop}` primitive (a canonical name already in
+ *     tokens.css). No brand slot; referenced ad hoc by generators/CSS.
+ *   - NEUTRAL tertiary/accent → resolves via the existing neutral path
+ *     (`neutral`-tier gray-ramp; in the mockup generator, the dark/light/
+ *     mid role assignment). Never gets a chromatic slot.
+ * `secondary` is unaffected — it keeps its canonical `--*-brand-secondary`
+ * slot. A future client genuinely needing a tertiary slot returns here for
+ * a definition step first.
  */
 export const COLOR_PRIMITIVE_TIERS = [
   'primary',
