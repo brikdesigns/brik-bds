@@ -30,11 +30,31 @@ export interface MenuItemData {
 }
 
 /**
+ * A labelled group of menu items. Mirrors `Select`'s `SelectOptionGroup` /
+ * `MultiSelect`'s `MultiSelectOptionGroup` — the menu renders one section per
+ * group with a non-interactive header (e.g. one group per service line).
+ */
+export interface MenuItemGroup {
+  /** Group header label. */
+  label: string;
+  /** Items belonging to this group. */
+  items: MenuItemData[];
+}
+
+function isItemGroup(entry: MenuItemData | MenuItemGroup): entry is MenuItemGroup {
+  return 'items' in entry;
+}
+
+/**
  * Menu component props
  */
 export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
-  /** Menu items to display */
-  items: MenuItemData[];
+  /**
+   * Menu items to display. Flat items or labelled groups — mix freely; entries
+   * with an `items` key render as a `role="group"` section with a header. The
+   * flat-only API stays back-compatible.
+   */
+  items: (MenuItemData | MenuItemGroup)[];
   /** Whether the menu is visible */
   isOpen: boolean;
   /** Close handler */
@@ -172,13 +192,25 @@ export function Menu({
           {header}
         </div>
       )}
-      {items.map((item) => (
-        <MenuItem
-          key={item.id}
-          item={item}
-          isActive={activeId === item.id}
-        />
-      ))}
+      {items.map((entry) =>
+        isItemGroup(entry) ? (
+          <div
+            key={entry.label}
+            className="bds-menu__group"
+            role="group"
+            aria-label={entry.label}
+          >
+            <div className="bds-menu__title" aria-hidden="true">
+              {entry.label}
+            </div>
+            {entry.items.map((item) => (
+              <MenuItem key={item.id} item={item} isActive={activeId === item.id} />
+            ))}
+          </div>
+        ) : (
+          <MenuItem key={entry.id} item={entry} isActive={activeId === entry.id} />
+        ),
+      )}
     </div>
   );
 }
