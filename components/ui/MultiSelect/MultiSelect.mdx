@@ -32,6 +32,12 @@ Pass `MultiSelectOptionGroup` entries (`{ label, options }`) to segment the drop
 
 <Canvas of={Stories.Grouped} />
 
+### Custom chips
+
+Set `chip` on an option to render a custom node — e.g. a line-colored [`ServiceTag`](/?path=/docs/components-service-tag--docs) — as the selected pill instead of the neutral default `Tag`. MultiSelect supplies its own remove control beside the node, so the node itself need not be removable. The native dropdown still shows the plain `label` (a native `<option>` can't render a node); use `icon` for a dropdown glyph.
+
+<Canvas of={Stories.CustomChips} />
+
 ## Props
 
 <ArgTypes of={Stories} />
