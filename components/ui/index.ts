@@ -70,6 +70,7 @@ export * from './PasswordInput';
 export * from './SearchInput';
 export * from './Popover';
 export * from './PricingCard';
+export * from './ProductSummaryCard';
 export * from './ProgressBar';
 export * from './ProgressCircle';
 export * from './ProgressStepper';
