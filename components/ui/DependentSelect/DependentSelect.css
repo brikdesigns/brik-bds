@@ -1,0 +1,10 @@
+@layer bds-components {
+/* DependentSelect — stacked parent/child cascading selects */
+
+.bds-dependent-select {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  width: 100%;
+}
+}

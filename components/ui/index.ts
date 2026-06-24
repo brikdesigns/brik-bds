@@ -36,6 +36,7 @@ export * from './Counter';
 export * from './DataSection';
 export * from './DataView';
 export * from './DatePicker';
+export * from './DependentSelect';
 export * from './DevFeedbackWidget';
 export * from './Dialog';
 export * from './Divider';

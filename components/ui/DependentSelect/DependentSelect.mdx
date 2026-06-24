@@ -1,0 +1,37 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './DependentSelect.stories';
+
+<Meta of={Stories} />
+
+# Dependent-select
+
+<ComponentLinks slug="dependent-select" />
+
+Two cascading selects: a parent (driving) [`Select`](/?path=/docs/components-select--docs) whose value filters a child select's visible options. The child can be single-select ([`Select`](/?path=/docs/components-select--docs)) or multi-select ([`MultiSelect`](/?path=/docs/components-multi-select--docs)). The child's committed selection is **cumulative** — changing the parent filters the visible options but never clears what's already chosen.
+
+Codifies the hand-wired "service line → services" cascade (two `Select`s + a `useMemo` filter) that consumer apps were copying.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+The child defaults to multi-select. Pass `child.multiple = true` for a `MultiSelect` child (Playground above) or omit it for a single `Select` child.
+
+### Single child
+
+<Canvas of={Stories.SingleChild} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Filtering** — DependentSelect filters the child's *visible* options by the parent's `value`. Pass the **full** child option set to `child.options`; each option carries its parent value under the field named by `child.parentKey` (e.g. `service_line_id`). When no parent is selected, every child option is shown.
+
+> **Cumulative selection** — the parent never clears the child. Options already selected under a previous parent stay committed and keep rendering their chip/label, even though they're hidden from the dropdown while a different parent is active.
+
+> **Keep the parent controlled** — filtering tracks `parent.value`, so pair it with `parent.onChange`. Both selects share the `size` and `disabled` props.
