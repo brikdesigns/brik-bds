@@ -1,7 +1,12 @@
 'use client';
 
 import { useState, useMemo, type CSSProperties, type ReactNode } from 'react';
-import { Select, type SelectOption, type SelectSize } from '../Select/Select';
+import {
+  Select,
+  type SelectOption,
+  type SelectOptionGroup,
+  type SelectSize,
+} from '../Select/Select';
 import { Tag } from '../Tag/Tag';
 import { bdsClass } from '../../utils';
 import './MultiSelect.css';
@@ -19,6 +24,24 @@ export interface MultiSelectOption {
 }
 
 /**
+ * Grouped options — section header + its options. Mirrors `Select`'s
+ * `SelectOptionGroup`; the dropdown renders one `<optgroup>` per group
+ * (e.g. one group per service line).
+ */
+export interface MultiSelectOptionGroup {
+  /** Group header label, rendered as the `<optgroup>` label. */
+  label: string;
+  /** Options belonging to this group. */
+  options: MultiSelectOption[];
+}
+
+function isOptionGroup(
+  opt: MultiSelectOption | MultiSelectOptionGroup,
+): opt is MultiSelectOptionGroup {
+  return 'options' in opt;
+}
+
+/**
  * MultiSelect size variants (matching Select/TextInput)
  */
 export type MultiSelectSize = SelectSize;
@@ -27,8 +50,12 @@ export type MultiSelectSize = SelectSize;
  * MultiSelect component props
  */
 export interface MultiSelectProps {
-  /** Available options to choose from */
-  options: MultiSelectOption[];
+  /**
+   * Available options to choose from. Flat options or grouped option groups —
+   * mix freely; entries with an `options` key render as a labelled `<optgroup>`
+   * in the dropdown. The flat-only API stays back-compatible.
+   */
+  options: (MultiSelectOption | MultiSelectOptionGroup)[];
   /** Currently selected values (controlled) */
   value?: string[];
   /** Default selected values (uncontrolled) */
@@ -108,22 +135,49 @@ export function MultiSelect({
 
   const resolvedTagSize = tagSize ?? size;
 
-  // Filter out already-selected options from the dropdown
-  const availableOptions: SelectOption[] = useMemo(() => {
+  // Flatten groups to a single option list for lookups + counts.
+  const flatOptions = useMemo(
+    () => options.flatMap((opt) => (isOptionGroup(opt) ? opt.options : [opt])),
+    [options],
+  );
+
+  // Filter out already-selected options from the dropdown, preserving group
+  // structure. Groups left with no remaining options are dropped entirely.
+  const availableOptions: (SelectOption | SelectOptionGroup)[] = useMemo(() => {
     const selectedSet = new Set(selectedValues);
-    return options
-      .filter((opt) => !selectedSet.has(opt.value))
-      .map((opt) => ({ label: opt.label, value: opt.value }));
+    const toSelectOption = (opt: MultiSelectOption): SelectOption => ({
+      label: opt.label,
+      value: opt.value,
+    });
+    const result: (SelectOption | SelectOptionGroup)[] = [];
+    for (const entry of options) {
+      if (isOptionGroup(entry)) {
+        const remaining = entry.options
+          .filter((opt) => !selectedSet.has(opt.value))
+          .map(toSelectOption);
+        if (remaining.length > 0) result.push({ label: entry.label, options: remaining });
+      } else if (!selectedSet.has(entry.value)) {
+        result.push(toSelectOption(entry));
+      }
+    }
+    return result;
   }, [options, selectedValues]);
+
+  // Count of selectable options left — drives the "all selected" empty state
+  // (availableOptions may hold group wrappers, so its length isn't the count).
+  const remainingCount = useMemo(() => {
+    const selectedSet = new Set(selectedValues);
+    return flatOptions.filter((opt) => !selectedSet.has(opt.value)).length;
+  }, [flatOptions, selectedValues]);
 
   // Build a lookup map for labels
   const optionMap = useMemo(() => {
     const map = new Map<string, MultiSelectOption>();
-    for (const opt of options) {
+    for (const opt of flatOptions) {
       map.set(opt.value, opt);
     }
     return map;
-  }, [options]);
+  }, [flatOptions]);
 
   function addValue(val: string) {
     if (!val || selectedValues.includes(val)) return;
@@ -149,7 +203,7 @@ export function MultiSelect({
     >
       <Select
         label={label}
-        placeholder={availableOptions.length === 0 ? 'All options selected' : placeholder}
+        placeholder={remainingCount === 0 ? 'All options selected' : placeholder}
         value=""
         onChange={(e) => {
           addValue(e.target.value);
@@ -160,7 +214,7 @@ export function MultiSelect({
         size={size}
         helperText={error ? undefined : helperText}
         error={error}
-        disabled={disabled || availableOptions.length === 0}
+        disabled={disabled || remainingCount === 0}
         fullWidth={fullWidth}
       />
 
