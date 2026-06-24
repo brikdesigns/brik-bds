@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
 import { Icon } from '@iconify/react';
-import { MultiSelect, type MultiSelectOption } from './MultiSelect';
+import {
+  MultiSelect,
+  type MultiSelectOption,
+  type MultiSelectOptionGroup,
+} from './MultiSelect';
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 
@@ -11,6 +15,31 @@ const serviceOptions: MultiSelectOption[] = [
   { label: 'Information Design', value: 'information', icon: <Icon icon="ph:info" /> },
   { label: 'Product Design', value: 'product', icon: <Icon icon="ph:cube" /> },
   { label: 'Service Design', value: 'service', icon: <Icon icon="ph:gear" /> },
+];
+
+// Offerings grouped under their service line — renders one <optgroup> per group.
+const groupedOfferings: MultiSelectOptionGroup[] = [
+  {
+    label: 'Brand',
+    options: [
+      { label: 'Logo & identity', value: 'logo', icon: <Icon icon="ph:paint-brush" /> },
+      { label: 'Brand guidelines', value: 'guidelines', icon: <Icon icon="ph:book-open" /> },
+    ],
+  },
+  {
+    label: 'Marketing',
+    options: [
+      { label: 'Campaign design', value: 'campaign', icon: <Icon icon="ph:megaphone" /> },
+      { label: 'Social templates', value: 'social', icon: <Icon icon="ph:share-network" /> },
+    ],
+  },
+  {
+    label: 'Product',
+    options: [
+      { label: 'UI design', value: 'ui', icon: <Icon icon="ph:cube" /> },
+      { label: 'Design system', value: 'design-system', icon: <Icon icon="ph:stack" /> },
+    ],
+  },
 ];
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -58,7 +87,7 @@ const meta: Meta<typeof MultiSelect> = {
     },
     options: {
       control: false,
-      description: 'Array of `MultiSelectOption` ({ label, value, icon? }). Set in code — Storybook Controls cannot render a complex array editor usefully.',
+      description: 'Array of `MultiSelectOption` ({ label, value, icon? }) or `MultiSelectOptionGroup` ({ label, options }) — entries with an `options` key render as a labelled `<optgroup>`. Mix freely. Set in code; Storybook Controls cannot render a complex array editor usefully.',
     },
     value: {
       control: false,
@@ -103,5 +132,29 @@ export const Default: Story = {
     // Pre-selected Tag chips render below the Select — check the first one is visible.
     await expect(canvas.getByText('Brand Design')).toBeVisible();
     await expect(canvas.getByText('Marketing')).toBeVisible();
+  },
+};
+
+/** Options segmented under service-line headers — the dropdown renders one
+ *  `<optgroup>` per group; selecting from any group adds a chip as usual.
+ *  @summary Grouped options under service-line headers */
+export const Grouped: Story = {
+  args: {
+    label: 'Offerings',
+    placeholder: 'Select offerings...',
+    helperText: 'Grouped by service line',
+    size: 'md',
+    fullWidth: true,
+    options: groupedOfferings,
+    defaultValue: ['logo'],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const select = canvas.getByRole('combobox');
+    await expect(select).toBeVisible();
+    // <optgroup> labels render as group elements within the native select.
+    await expect(canvas.getByRole('group', { name: 'Marketing' })).toBeInTheDocument();
+    // Pre-selected option renders as a chip below.
+    await expect(canvas.getByText('Logo & identity')).toBeVisible();
   },
 };
