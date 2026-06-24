@@ -26,6 +26,12 @@ MultiSelect has no semantic-variant axis — all variation (size, tagSize, error
 
 `tagSize` defaults to matching `size` but can be overridden independently.
 
+### Grouped options
+
+Pass `MultiSelectOptionGroup` entries (`{ label, options }`) to segment the dropdown under section headers — parity with [`Select`](/?path=/docs/components-select--docs)'s `SelectOptionGroup`. Each group renders as a labelled `<optgroup>`; flat and grouped entries can be mixed in the same `options` array, and the flat-only API stays back-compatible.
+
+<Canvas of={Stories.Grouped} />
+
 ## Props
 
 <ArgTypes of={Stories} />

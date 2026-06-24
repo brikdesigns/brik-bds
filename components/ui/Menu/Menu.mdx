@@ -20,6 +20,12 @@ With icons, text-only with disabled item, and active item highlight.
 
 <Canvas of={Stories.Variants} />
 
+### Grouped items
+
+Pass `MenuItemGroup` entries (`{ label, items }`) to segment the menu under section headers — parity with [`Select`](/?path=/docs/components-select--docs)'s `SelectOptionGroup` and [`MultiSelect`](/?path=/docs/components-multi-select--docs)'s `MultiSelectOptionGroup`. Each group renders as a `role="group"` section named by its label; flat items and groups can be mixed, and the flat-only API stays back-compatible.
+
+<Canvas of={Stories.Grouped} />
+
 ## Patterns
 
 Real-world usage: `FilterButton` trigger, `Button` trigger with action menu, and an "Add" menu where each item has a label + description (the 2-line `MenuItemData.description` variant).

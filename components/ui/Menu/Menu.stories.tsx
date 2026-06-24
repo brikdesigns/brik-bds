@@ -42,6 +42,24 @@ const filterOptions = sampleItems.map((item) => ({
   icon: item.icon,
 }));
 
+// Items segmented under section headers (e.g. one group per service line).
+const groupedItems = [
+  {
+    label: 'Design',
+    items: [
+      { id: 'brand', label: 'Brand design', icon: <Icon icon="ph:palette" />, onClick: () => {} },
+      { id: 'product', label: 'Product design', icon: <Icon icon="ph:package" />, onClick: () => {} },
+    ],
+  },
+  {
+    label: 'Growth',
+    items: [
+      { id: 'marketing', label: 'Marketing design', icon: <Icon icon="ph:megaphone" />, onClick: () => {} },
+      { id: 'info', label: 'Information design', icon: <Icon icon="ph:info" />, onClick: () => {} },
+    ],
+  },
+];
+
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta = {
@@ -69,6 +87,20 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
   args: {
     items: sampleItems,
+    isOpen: true,
+    onClose: () => {},
+    style: { position: 'relative' },
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   GROUPED — items segmented under section headers
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Items segmented under labelled group headers */
+export const Grouped: Story = {
+  args: {
+    items: groupedItems,
     isOpen: true,
     onClose: () => {},
     style: { position: 'relative' },
