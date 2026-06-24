@@ -1,0 +1,46 @@
+@layer bds-components {
+/* ─── ProductSummaryCard ─────────────────────────────────────── */
+
+.bds-product-summary-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-md);
+  padding: var(--padding-md);
+  background-color: var(--surface-secondary);
+  border-radius: var(--border-radius-md);
+  box-sizing: border-box;
+}
+
+/* Leading ServiceTag — fixed-size glyph, never compressed by the text block. */
+.bds-product-summary-card__icon {
+  flex-shrink: 0;
+}
+
+/* ─── Text block ─────────────────────────────────────────────── */
+
+.bds-product-summary-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+.bds-product-summary-card__label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  color: var(--text-secondary);
+}
+
+.bds-product-summary-card__value {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--heading-tiny);
+  color: var(--text-primary);
+}
+
+.bds-product-summary-card__description {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  color: var(--text-secondary);
+}
+}
