@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, type CSSProperties, type ReactNode } from 'react';
+import { Icon } from '@iconify/react';
 import {
   Select,
   type SelectOption,
@@ -8,6 +9,7 @@ import {
   type SelectSize,
 } from '../Select/Select';
 import { Tag } from '../Tag/Tag';
+import { X } from '../../icons';
 import { bdsClass } from '../../utils';
 import './MultiSelect.css';
 
@@ -21,6 +23,14 @@ export interface MultiSelectOption {
   value: string;
   /** Optional leading icon for selected tag */
   icon?: ReactNode;
+  /**
+   * Custom node rendered as the selected chip instead of the default neutral
+   * `Tag` — e.g. a line-colored `ServiceTag`. MultiSelect supplies its own
+   * remove control beside the node (the node itself need not be removable).
+   * The native dropdown still shows the plain `label` (a native `<option>`
+   * can't render a node); use the `icon` for a dropdown glyph.
+   */
+  chip?: ReactNode;
 }
 
 /**
@@ -223,6 +233,25 @@ export function MultiSelect({
           {selectedValues.map((val) => {
             const opt = optionMap.get(val);
             if (!opt) return null;
+            // Custom chip node (e.g. a line-colored ServiceTag): render it as the
+            // pill and supply our own remove control alongside.
+            if (opt.chip) {
+              return (
+                <span key={val} className="bds-multi-select__item">
+                  {opt.chip}
+                  {!disabled && (
+                    <button
+                      type="button"
+                      className="bds-multi-select__remove"
+                      aria-label={`Remove ${opt.label}`}
+                      onClick={() => removeValue(val)}
+                    >
+                      <Icon icon={X} />
+                    </button>
+                  )}
+                </span>
+              );
+            }
             return (
               <Tag
                 key={val}

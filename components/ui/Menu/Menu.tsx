@@ -23,6 +23,12 @@ export interface MenuItemData {
   description?: string;
   /** Optional icon before the label */
   icon?: ReactNode;
+  /**
+   * Custom node rendered as the item's content instead of the default
+   * icon + label + description — e.g. a line-colored `ServiceTag`. The item
+   * stays a `role="menuitem"` button; `label` is used as its accessible name.
+   */
+  content?: ReactNode;
   /** Disabled state */
   disabled?: boolean;
   /** Click handler */
@@ -84,13 +90,15 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
  * MenuItem - Single menu option (exported for direct use)
  */
 export function MenuItem({ item, isActive, className, style, ...props }: MenuItemProps) {
-  const hasDescription = !!item.description;
+  const hasContent = item.content != null;
+  const hasDescription = !hasContent && !!item.description;
   return (
     <button
       type="button"
       role="menuitem"
       disabled={item.disabled}
       onClick={item.onClick}
+      aria-label={hasContent ? item.label : undefined}
       className={bdsClass(
         'bds-menu__item',
         isActive && 'bds-menu__item--active',
@@ -101,13 +109,19 @@ export function MenuItem({ item, isActive, className, style, ...props }: MenuIte
       style={style}
       {...props}
     >
-      {item.icon && <span className="bds-menu__icon">{item.icon}</span>}
-      <span className="bds-menu__text">
-        <span className="bds-menu__label">{item.label}</span>
-        {hasDescription && (
-          <span className="bds-menu__description">{item.description}</span>
-        )}
-      </span>
+      {hasContent ? (
+        item.content
+      ) : (
+        <>
+          {item.icon && <span className="bds-menu__icon">{item.icon}</span>}
+          <span className="bds-menu__text">
+            <span className="bds-menu__label">{item.label}</span>
+            {hasDescription && (
+              <span className="bds-menu__description">{item.description}</span>
+            )}
+          </span>
+        </>
+      )}
     </button>
   );
 }

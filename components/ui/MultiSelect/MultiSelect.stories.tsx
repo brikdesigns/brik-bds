@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
 import { Icon } from '@iconify/react';
+import { ServiceTag } from '../ServiceTag/ServiceTag';
 import {
   MultiSelect,
   type MultiSelectOption,
@@ -41,6 +42,19 @@ const groupedOfferings: MultiSelectOptionGroup[] = [
     ],
   },
 ];
+
+// Options whose selected chip is a line-colored ServiceTag (not a neutral Tag).
+const serviceTagOptions: MultiSelectOption[] = [
+  { label: 'Brand identity', value: 'brand-id', category: 'brand' },
+  { label: 'Email campaign', value: 'email', category: 'marketing' },
+  { label: 'Design system', value: 'design-system', category: 'product' },
+].map((o) => ({
+  label: o.label,
+  value: o.value,
+  chip: (
+    <ServiceTag category={o.category as 'brand' | 'marketing' | 'product'} variant="icon-text" serviceName={o.label} label={o.label} size="sm" />
+  ),
+}));
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -87,7 +101,7 @@ const meta: Meta<typeof MultiSelect> = {
     },
     options: {
       control: false,
-      description: 'Array of `MultiSelectOption` ({ label, value, icon? }) or `MultiSelectOptionGroup` ({ label, options }) — entries with an `options` key render as a labelled `<optgroup>`. Mix freely. Set in code; Storybook Controls cannot render a complex array editor usefully.',
+      description: 'Array of `MultiSelectOption` ({ label, value, icon?, chip? }) or `MultiSelectOptionGroup` ({ label, options }). `chip` renders a custom node (e.g. a line-colored `ServiceTag`) as the selected pill; entries with an `options` key render as a labelled `<optgroup>`. Mix freely. Set in code; Storybook Controls cannot render a complex array editor usefully.',
     },
     value: {
       control: false,
@@ -156,5 +170,26 @@ export const Grouped: Story = {
     await expect(canvas.getByRole('group', { name: 'Marketing' })).toBeInTheDocument();
     // Pre-selected option renders as a chip below.
     await expect(canvas.getByText('Logo & identity')).toBeVisible();
+  },
+};
+
+/** Selected items render as line-colored `ServiceTag` chips (via `option.chip`)
+ *  instead of the neutral default `Tag`, each with an owned remove control.
+ *  @summary Custom ServiceTag chips for selections */
+export const CustomChips: Story = {
+  args: {
+    label: 'Services you’re interested in',
+    placeholder: 'Select services...',
+    size: 'md',
+    fullWidth: true,
+    options: serviceTagOptions,
+    defaultValue: ['brand-id', 'email'],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('combobox')).toBeVisible();
+    // Selected items render as ServiceTag pills (not neutral Tags) + a remove button.
+    await expect(canvas.getByRole('button', { name: 'Remove Brand identity' })).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Remove Email campaign' })).toBeVisible();
   },
 };

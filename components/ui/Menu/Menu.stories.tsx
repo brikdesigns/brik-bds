@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import { Menu } from './Menu';
 import { FilterButton } from '../FilterButton';
 import { Button } from '../Button';
+import { ServiceTag } from '../ServiceTag/ServiceTag';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
@@ -60,6 +61,13 @@ const groupedItems = [
   },
 ];
 
+// Items whose content is a line-colored ServiceTag node instead of icon+label.
+const serviceTagItems = [
+  { id: 'brand', label: 'Brand', content: <ServiceTag category="brand" variant="icon-text" label="Brand" />, onClick: () => {} },
+  { id: 'marketing', label: 'Marketing', content: <ServiceTag category="marketing" variant="icon-text" label="Marketing" />, onClick: () => {} },
+  { id: 'product', label: 'Product', content: <ServiceTag category="product" variant="icon-text" label="Product" />, onClick: () => {} },
+];
+
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta = {
@@ -101,6 +109,20 @@ export const Playground: Story = {
 export const Grouped: Story = {
   args: {
     items: groupedItems,
+    isOpen: true,
+    onClose: () => {},
+    style: { position: 'relative' },
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   CUSTOM CONTENT — line-colored ServiceTag as item content
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Custom node (ServiceTag) as item content */
+export const CustomContent: Story = {
+  args: {
+    items: serviceTagItems,
     isOpen: true,
     onClose: () => {},
     style: { position: 'relative' },

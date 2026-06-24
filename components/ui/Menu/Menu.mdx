@@ -26,6 +26,12 @@ Pass `MenuItemGroup` entries (`{ label, items }`) to segment the menu under sect
 
 <Canvas of={Stories.Grouped} />
 
+### Custom content
+
+Set `content` on a `MenuItemData` to render a custom node — e.g. a line-colored [`ServiceTag`](/?path=/docs/components-service-tag--docs) — as the item's content instead of the default icon + label + description. The item stays a `role="menuitem"` button; its `label` is used as the accessible name.
+
+<Canvas of={Stories.CustomContent} />
+
 ## Patterns
 
 Real-world usage: `FilterButton` trigger, `Button` trigger with action menu, and an "Add" menu where each item has a label + description (the 2-line `MenuItemData.description` variant).
