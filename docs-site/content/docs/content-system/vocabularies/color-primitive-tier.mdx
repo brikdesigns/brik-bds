@@ -15,14 +15,27 @@ This vocabulary is the **single source of truth** for tier values. It is exporte
 |---|---|---|
 | `primary` | Chromatic brand identity. Resolves into `--background-brand-primary`, `--surface-brand-primary`, `--text-brand-primary`, `--border-brand-primary`, `--text-link`. | Must be the brand identity color. Tag exactly one primitive. |
 | `secondary` | Supporting brand color. Drives `--background-brand-secondary`, `--surface-brand-secondary` when present. | Tag-only today; no automatic mapping beyond the brand-secondary slots. |
-| `tertiary` | Third-tier brand color. | Tag-only today. No automatic mapping. |
-| `accent` | Non-primary chromatic colors. | Tag-only today. No automatic mapping. |
+| `tertiary` | Third-tier brand color. | Tag-only **by contract** ([resolution rule below](#tertiary--accent-resolution)). No brand slot. |
+| `accent` | Non-primary chromatic color — Brik's tertiary brand colour; may be neutral *or* chromatic by palette size. | Tag-only **by contract** ([resolution rule below](#tertiary--accent-resolution)). No brand slot. |
 | `neutral` | Gray ramp source. Drives gray-ramp neutral resolution. | Tagged on the brand's gray primitive. **Never** the white or black primitive. |
 | `brand-fill` | AA-safe variant of `primary` used for filled brand surfaces and brand-colored text — `--background-brand-primary`, `--text-brand-primary`. | Specify when `primary` fails AA contrast against the paper/white surface. Pair with the underlying `primary` — `brand-fill` is the contrast-safe twin, not a replacement. |
 
 ### Why `brand-fill` exists
 
 When the brand identity color does not meet AA contrast on a white surface, the theme generator needs a darker variant for the slots that *must* be readable (filled brand backgrounds carrying text, brand-colored copy on a body surface). Vale Partners' olive `#698339` is 3.4:1 on white — fails AA. Their olive-deep `#3d4c23` is 9.0:1 — passes. Tagging the deep variant `brand-fill` lets the generator pick it for text/fill slots while `primary` continues to drive accents and decoration.
+
+### Tertiary / accent resolution
+
+`tertiary` and `accent` are **tag-only by contract, not as a stopgap awaiting a slot** (ratified 2026-06-23, brik-llm ADR-012 / portal [#1360](https://github.com/brikdesigns/brik-client-portal/issues/1360)). No `--*-brand-tertiary` or `--*-brand-accent` slot exists or will be added — that is the same speculative parallel-brand-tier shape rolled back in portal #512/#553, and a single slot cannot encode that the accent/tertiary tier is neutral *or* chromatic depending on palette size.
+
+How a brand's third-and-beyond colours resolve:
+
+| The tier value is… | Resolves via | Brand slot? |
+|---|---|---|
+| **chromatic** (a colour) | the raw `--color-{name}` / `--color-{name}-{stop}` primitive — a canonical name already emitted into [tokens.css](/docs/primitives/color). Referenced ad hoc by generators and CSS. | none |
+| **neutral** (a gray) | the existing neutral path — the `neutral`-tier gray ramp, and in the portal mockup generator the dark/light/mid role assignment. | none (a neutral accent never gets a chromatic slot) |
+
+Consuming raw `--color-{name}` is **not** inventing a parallel taxonomy — those are canonical primitive names. `secondary` is unaffected: it keeps its `--*-brand-secondary` slot, which both generators emit. A future client that genuinely needs a tertiary brand slot returns here for a definition step first.
 
 ## Anti-patterns
 
@@ -35,7 +48,7 @@ When the brand identity color does not meet AA contrast on a white surface, the 
 </Callout>
 
 <Callout type="error">
-  **Speculative tiers.** Adding a tier value because "the brand has 11 primitives and 3 already have tiers, so X needs one too." A tier exists only when its target token slot exists in canonical [tokens.css](/docs/primitives/color). If your brand has chromatic primitives that don't fit `primary` / `secondary` / `tertiary` / `accent` / `brand-fill`, leave them untagged — they emit as palette vars only.
+  **Speculative tiers.** Adding a tier value because "the brand has 11 primitives and 3 already have tiers, so X needs one too." A tier exists only when its target token slot exists in canonical [tokens.css](/docs/primitives/color). If your brand has chromatic primitives that don't fit `primary` / `secondary` / `tertiary` / `accent` / `brand-fill`, leave them untagged — they emit as palette vars only. Tagging `tertiary` / `accent` is allowed, but it adds **no slot** — those tiers resolve via raw `--color-{name}` ([rule above](#tertiary--accent-resolution)), so do not expect a `--*-brand-tertiary` to appear.
 </Callout>
 
 ## Decision tree
