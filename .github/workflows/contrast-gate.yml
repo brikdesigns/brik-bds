@@ -1,0 +1,57 @@
+name: Contrast Gate
+
+# Enforces the canonical WCAG AA contrast-pairing set on every PR and on every
+# push to main. Resolves every pairing in `tokens/contrast-pairings.json`
+# against its foreground + background token in the Brik LIGHT and DARK default
+# themes and fails the build if any real pairing drops below its WCAG threshold
+# (AAA 7:1 / AA 4.5:1 / AA-large 3:1). Tracked `darkException` pairings are
+# reported, not failed (see scripts/validate-themes.js).
+#
+# Why this is a CI gate (not just pre-push):
+#   - validate-themes.js already runs on local pre-push via `validate:full`
+#     (scripts/validate-all.js → "Theme Compliance") and at release
+#     (release.yml → contrast-gate). Neither stops a regression from *merging*.
+#   - Cloud-agent commits (OpenClaw, scheduled routines) bypass local hooks.
+#   - PRs from forks or fresh clones may not have husky installed.
+# This workflow is the cross-machine guarantee that no AA regression lands on
+# main between releases — closing the gap that let the #563 contrast regression
+# (10 service pairings, only 1 passing AA) merge and ship.
+#
+# Source of truth: tokens/contrast-pairings.json
+# Docs: https://design.brikdesigns.com/docs/primitives/color-pairings
+# Issue: brikdesigns/brik-bds#573 (parent #526 — WCAG AA contrast contract)
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: contrast-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contrast-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The gate reads committed source tokens (tokens/figma-tokens.css,
+      # tokens/figma-tokens-dark.css, tokens/gap-fills.css,
+      # tokens/theme-brand-brik.css) + tokens/contrast-pairings.json directly —
+      # no dist build required (unlike canonical-check, which parses dist/).
+      - name: Contrast pairing gate
+        run: npm run contrast-gate
