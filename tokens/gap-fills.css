@@ -247,3 +247,17 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* symmetric — looping, continuous */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
 }
+
+/* ── Dark-mode corrections for generated tokens ──
+   Re-pins generated (figma-tokens-dark.css) values that are wrong in dark mode.
+   Last in cascade + same specificity as the generated :root[data-theme="dark"]
+   block, so these win for ALL consumers (the brand theme also pins them, at
+   higher specificity, in theme-brand-brik.css).
+   RETIRE each entry once the Figma source is corrected and re-synced. */
+:root[data-theme="dark"] {
+  /* Context-pinned on-color border: stays white in dark mode like its
+     --text-on-color-dark / --background-on-color-dark siblings, so borders on
+     a fixed dark/colored surface stay visible. Figma source still emits black
+     here — correct it and drop this line. (#980) */
+  --border-on-color-dark: var(--color-grayscale-white);
+}
