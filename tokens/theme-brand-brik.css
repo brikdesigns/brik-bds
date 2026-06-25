@@ -129,7 +129,10 @@
   --border-brand-primary: var(--color-poppy-light);
   --border-input: var(--color-grayscale-dark);
   --border-inverse: var(--color-grayscale-black);
-  --border-on-color-dark: var(--color-grayscale-black);
+  /* Context-pinned: stays white in dark mode to match --text-on-color-dark /
+   * --background-on-color-dark. For borders on a fixed dark/colored surface
+   * (e.g. --surface-brand-primary), so they don't vanish in dark mode (#980). */
+  --border-on-color-dark: var(--color-grayscale-white);
   --border-disabled: var(--color-grayscale-darker);
 }
 
