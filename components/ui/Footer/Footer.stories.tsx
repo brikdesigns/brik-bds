@@ -79,6 +79,10 @@ const meta: Meta<typeof Footer> = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     variant: { control: 'select', options: ['default', 'brand', 'inverse'] },
+    columnHeadingLevel: {
+      control: 'select',
+      options: ['h2', 'h3', 'h4', 'h5', 'h6'],
+    },
   },
 } satisfies Meta<typeof Footer>;
 
