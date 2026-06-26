@@ -65,6 +65,15 @@
      Keep the two in lockstep, and move both together when promoted to Figma. */
   --background-tertiary: var(--color-grayscale-lighter);
 
+  /* Theme-responsive positive/success TEXT role (light value here, dark in the
+     :root[data-theme="dark"] block below). The generated --text-positive
+     (figma-tokens.css) is --color-system-green #27ae60 in BOTH themes = only
+     2.87:1 on white --surface-primary, failing AA. Re-pin to green-darkest on
+     light surfaces (8.5:1 AAA). Fill roles (--background/surface/border-positive)
+     stay mid-green — text role only. RETIRE once the Figma source emits these
+     theme-responsive values and re-syncs. (#913) */
+  --text-positive: var(--color-green-darkest);
+
   /* System color surface variants (used by TaskConsole status rows) */
   --color-system-red-surface:   var(--color-system-red-light);
   --color-system-green-surface: var(--color-system-green-light);
@@ -271,4 +280,13 @@
      No dark value previously existed → light #e0e0e0 fill + light #f2f2f2 text
      = ~1.1:1, invisible. (#916) */
   --background-tertiary: var(--color-grayscale-darkest);
+
+  /* Dark value for the --text-positive gap-fill (light value above, in :root).
+     On --surface-primary = black in dark mode, mid-green --color-system-green
+     #27ae60 clears AA (6.0:1) — consumer-validated in brikdesigns#455. So dark
+     mode keeps the generated mid-green; only the LIGHT value needed correcting.
+     Re-pinned explicitly here (rather than left to the generated layer) to keep
+     the light/dark pair in lockstep and self-documenting. Figma source still
+     emits mid-green for both — correct it and drop both lines. (#913) */
+  --text-positive: var(--color-system-green);
 }
