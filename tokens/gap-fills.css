@@ -61,6 +61,8 @@
   --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* TODO: promote to Figma */
 
   /* ── Missing Semantic Tokens ── */
+  /* Light value here; dark value in the :root[data-theme="dark"] block below.
+     Keep the two in lockstep, and move both together when promoted to Figma. */
   --background-tertiary: var(--color-grayscale-lighter);
 
   /* System color surface variants (used by TaskConsole status rows) */
@@ -260,4 +262,13 @@
      a fixed dark/colored surface stay visible. Figma source still emits black
      here — correct it and drop this line. (#980) */
   --border-on-color-dark: var(--color-grayscale-white);
+
+  /* Dark value for the --background-tertiary gap-fill (light value above, in
+     :root). It's a hover/preview fill (e.g. SegmentedControl inactive hover),
+     so in dark mode it must read as a step TOWARD the active surface
+     (--background-primary = black), not its light-mode inverse. Mirrors the
+     --background-primary-hover dark step so --text-primary clears AA on it.
+     No dark value previously existed → light #e0e0e0 fill + light #f2f2f2 text
+     = ~1.1:1, invisible. (#916) */
+  --background-tertiary: var(--color-grayscale-darkest);
 }
