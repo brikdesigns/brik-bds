@@ -159,7 +159,7 @@
     "typegen:axes": "node scripts/generate-component-axes.mjs",
     "typegen:axes:check": "node scripts/generate-component-axes.mjs --check",
     "typegen:axes:update": "node scripts/generate-component-axes.mjs && git add manifest/component-axes.json",
-    "chromatic": "op run --no-masking --env-file=.env.1p -- npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
+    "chromatic": "CHROMATIC_PROJECT_TOKEN='op://Development/golln4vuqvvf4gkzv5hmxfgvxm/credential' op run --no-masking -- npx chromatic",
     "deploy:staging": "npm run build-storybook && npx netlify-cli deploy --dir=storybook-static",
     "deploy:prod": "npm run build-storybook && npx netlify-cli deploy --prod --dir=storybook-static",
     "sync:figma-mcp": "node scripts/sync-figma-mcp.js",
