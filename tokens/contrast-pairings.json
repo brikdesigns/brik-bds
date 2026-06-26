@@ -30,6 +30,9 @@
     { "group": "service", "label": "Service product — text on mid-tone surface", "fg": "--text-service-product-on-light", "bg": "--surface-service-product", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } },
 
     { "group": "service", "label": "Service back-office — text on pale surface", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office-light", "thresholdType": "AAA", "darkException": { "issue": 823, "reason": "ADR-011 dark-mode softening erodes service context-text contrast on fixed-light surfaces" } },
-    { "group": "service", "label": "Service back-office — text on mid-tone surface", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } }
+    { "group": "service", "label": "Service back-office — text on mid-tone surface", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } },
+
+    { "group": "positive", "label": "Positive/success text on surface", "fg": "--text-positive", "bg": "--surface-primary", "thresholdType": "AA" },
+    { "group": "positive", "label": "Positive/success text on page", "fg": "--text-positive", "bg": "--page-primary", "thresholdType": "AA" }
   ]
 }
