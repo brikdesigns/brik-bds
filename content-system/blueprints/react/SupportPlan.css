@@ -1,0 +1,131 @@
+/*
+ * SupportPlan — `bds-support-plan` section primitive styles (Phase D,
+ * brik-bds#581). Renamed from the legacy `bp-support-plan-callout__*`
+ * slots to ADR-008 allowlist vocabulary; visual output is unchanged.
+ *
+ * Slot disambiguation: both the section header (h2) and the plan card
+ * (h3) use the canonical `__title` slot; the header lead and the plan
+ * body both use `__description`. They are addressed by their ancestor
+ * (`__header` vs `__main`) rather than by inventing layout-specific
+ * slot names — keeps the class set on the closed allowlist.
+ *
+ * The plan `Card` is composed as variant="outlined" padding="none"; the
+ * `__main` rules below repaint it as a filled callout panel (the visual
+ * the Webflow source ships). No invented --surface or --text overrides;
+ * theme-layer tokens only.
+ *
+ * CSS custom properties — variation API:
+ *   --bds-support-plan-bg          (default: var(--page-primary))
+ *   --bds-support-plan-card-bg     (default: var(--surface-secondary))
+ *   --bds-support-plan-card-radius (default: var(--border-radius-lg))
+ *   --bds-support-plan-gap         (default: var(--gap-xl))
+ *   --bds-support-plan-card-pad    (default: var(--padding-xl))
+ */
+
+.bds-support-plan {
+  background: var(--bds-support-plan-bg, var(--page-primary));
+  padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
+}
+
+.bds-support-plan__container {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--padding-lg);
+}
+
+/* ── Section header ────────────────────────────────────────────── */
+
+.bds-support-plan__header {
+  text-align: center;
+  max-width: 72ch;
+  margin-inline: auto;
+  margin-bottom: var(--padding-xl);
+}
+
+.bds-support-plan__subtitle {
+  margin: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-brand-primary);
+}
+
+.bds-support-plan__header .bds-support-plan__title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bds-support-plan__header .bds-support-plan__description {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--heading-sm);
+  line-height: var(--font-line-height-relaxed);
+  color: var(--text-primary);
+}
+
+/* ── Two-column split ──────────────────────────────────────────── */
+
+.bds-support-plan__columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--bds-support-plan-gap, var(--gap-xl));
+  align-items: center;
+}
+
+.bds-support-plan[data-has-media='false'] .bds-support-plan__columns {
+  grid-template-columns: 1fr;
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+@media (max-width: 991.98px) {
+  .bds-support-plan__columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Illustration first on mobile (matches Webflow source order). */
+.bds-support-plan__illustration {
+  order: 1;
+}
+.bds-support-plan__main {
+  order: 2;
+}
+
+/* ── Plan callout card ─────────────────────────────────────────── */
+
+.bds-support-plan__main {
+  /* Repaint the composed outlined Card as a filled callout panel —
+   * same visual the Webflow source ships. */
+  background: var(--bds-support-plan-card-bg, var(--surface-secondary));
+  border: none;
+  border-radius: var(--bds-support-plan-card-radius, var(--border-radius-lg));
+  padding: var(--bds-support-plan-card-pad, var(--padding-xl));
+}
+
+.bds-support-plan__main .bds-support-plan__title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bds-support-plan__main .bds-support-plan__description {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--body-xl);
+  line-height: var(--font-line-height-relaxed);
+  color: var(--text-primary);
+}
+
+.bds-support-plan__cta {
+  margin-top: var(--gap-md);
+}
