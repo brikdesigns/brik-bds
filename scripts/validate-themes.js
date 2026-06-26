@@ -79,16 +79,19 @@ function resolveAll(merged) {
 
 // ─── Theme assembly (the real Brik default cascade) ─────────────────
 // light = figma :root + gap-fills :root + .theme-brand-brik
-// dark  = light + figma dark :root[data-theme=dark] + dark .theme-brand-brik
+// dark  = light + figma dark :root[data-theme=dark] + gap-fills dark + dark .theme-brand-brik
+//   gap-fills dark sits after figma dark (equal specificity, loaded later in the
+//   import cascade) and before brandBrikDark (which pins at higher specificity).
 
 const figmaLight = extractBlock(FIGMA_LIGHT, /:root/);
 const gapFills = extractBlock(GAP_FILLS, /:root/);
+const gapFillsDark = extractBlock(GAP_FILLS, /:root\[data-theme="dark"\]/);
 const brandBrikLight = extractBlock(BRAND_BRIK, /(?:^|\})\s*\.theme-brand-brik/m);
 const figmaDark = extractBlock(FIGMA_DARK, /:root\[data-theme="dark"\]/);
 const brandBrikDark = extractBlock(BRAND_BRIK, /:root\[data-theme="dark"\]\s*\.theme-brand-brik/);
 
 const lightVars = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikLight });
-const darkVars = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikLight, ...figmaDark, ...brandBrikDark });
+const darkVars = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikLight, ...figmaDark, ...gapFillsDark, ...brandBrikDark });
 
 const THEMES = [
   { key: 'light', label: 'Brik · Light', vars: lightVars },
