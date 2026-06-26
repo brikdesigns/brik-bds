@@ -1,0 +1,89 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { MarketingIllustration } from '../../../components';
+import { SupportPlan } from './SupportPlan';
+
+const meta: Meta<typeof SupportPlan> = {
+  title: 'Sections/Blueprints/support_plan',
+  component: SupportPlan,
+  tags: ['surface-web', 'surface-shared'],
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component:
+          'The `bds-support-plan` section primitive (brik-bds#581). Section header (subtitle + title + lead) above a plan-callout card, with an optional `media` slot. The default shape is the simple single-column callout — eyebrow + heading + body + one CTA — which is the real consumer content shape (brik-bds#589); a decorative scene is optional composition via `media`. Plan card text uses `--text-primary` to clear AA on `--surface-secondary`; CTA uses `Button size="md"` to clear AA on the brand-poppy fill.',
+      },
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof SupportPlan>;
+
+/* ─── Stories ──────────────────────────────────────────────────── */
+
+/**
+ * @summary Default — simple single-column plan callout (no media).
+ *
+ * The real brikdesigns "Monthly Support CTA" content shape per
+ * brik-bds#589: eyebrow + heading + body + plan card + one CTA, no
+ * fabricated illustration. This is what the consumer actually renders.
+ */
+export const Playground: Story = {
+  args: {
+    sectionKey: 'support-plan-default',
+    title: 'Monthly support services',
+    subtitle: 'Ongoing partnership',
+    description:
+      'A short subheading that frames the support offering — what the visitor gets and why it matters to them.',
+    planTitle: 'Monthly Support Plan',
+    planDescription:
+      'A two- or three-sentence description of the plan offering — what the cadence covers, what the deliverables look like, and what the visitor walks away with after signing up.',
+    cta: { label: 'Learn more', url: '#' },
+  },
+};
+
+/**
+ * @summary With media — composed illustration beside the card.
+ *
+ * Distinct meaningful state from `Playground`: passing a `media` node
+ * flips the layout from single-column to a two-column split. Exercises
+ * the optional composition path the `SupportPlanCalloutSplit` adapter
+ * uses for AI-generated pages that carry a persona-cluster scene.
+ */
+export const WithMedia: Story = {
+  args: {
+    ...Playground.args,
+    sectionKey: 'support-plan-with-media',
+    media: (
+      <MarketingIllustration
+        variant="persona-cluster"
+        ratio="square"
+        tiles={[
+          {
+            kind: 'avatar',
+            src: 'https://placehold.co/240x240/eaf1fb/1f3d70?text=Persona+A',
+            alt: 'Persona A',
+          },
+          {
+            kind: 'chat-bubble',
+            content: 'How can I help today?',
+            accent: 'brand-primary',
+          },
+          { kind: 'message', accent: 'positive' },
+          {
+            kind: 'photo',
+            src: 'https://placehold.co/220x220/ffe1cc/663300?text=Persona+B',
+            alt: 'Persona B',
+          },
+          {
+            kind: 'chat-bubble',
+            content: 'We need an email campaign',
+            accent: 'neutral',
+          },
+        ]}
+      />
+    ),
+  },
+};

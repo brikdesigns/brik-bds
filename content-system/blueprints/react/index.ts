@@ -41,6 +41,14 @@ export type {
 export { CardGrid } from './CardGrid';
 export type { CardGridProps } from './CardGrid';
 
+// `<SupportPlan>` — the `bds-support-plan` section primitive
+// (post-brik-bds#581 consolidation). Props-based: section header + a
+// plan-callout card, with an optional `media` slot. New consumers
+// compose this directly; the `support_plan_callout_split` blueprint key
+// dispatches through the `SupportPlanCalloutSplit` adapter below.
+export { SupportPlan } from './SupportPlan';
+export type { SupportPlanProps } from './SupportPlan';
+
 // Legacy section-data adapters — preserve `BlueprintDispatcher` +
 // AI-render path compatibility. Internally compose `<CardGrid>` +
 // `<Card preset="display">`. Direct consumers should reach for those

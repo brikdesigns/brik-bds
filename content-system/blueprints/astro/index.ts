@@ -51,6 +51,7 @@ export { WIRED_BLUEPRINT_KEYS } from './types';
 // Direct Astro consumers should reach for `<CardGrid>` with composed
 // slot content; the legacy adapters retire in Phase E.
 export { default as CardGrid }                  from './CardGrid.astro';
+export { default as SupportPlan }               from './SupportPlan.astro';
 
 export { default as HeroSplit6040 }             from './HeroSplit6040.astro';
 export { default as HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay.astro';
