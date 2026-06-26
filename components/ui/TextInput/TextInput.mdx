@@ -35,10 +35,29 @@ Component-scoped CSS variables exposed on `.bds-text-input-field`. Set on a wrap
 | Variable | Default | Controls |
 |---|---|---|
 | `--text-input-focus-ring-width` | `1px` | Width of the focus ring shadow spread |
+| `--text-input-bg` | `var(--background-input)` | Field fill. Override when a single field sits on a surface that doesn't convert with the theme |
 
 ```css
 /* Example: thicker focus ring in a high-contrast context */
 .my-form {
   --text-input-focus-ring-width: 2px;
+}
+```
+
+### Fields on a fixed-light surface
+
+`--background-input` is theme-responsive — white in light, black in dark. On a
+**fixed-light surface** (e.g. the `--surface-service-*-light` service tints, which
+stay pale in both themes by design — ADR-011), that flip puts a black field on a
+pale surface in dark mode.
+
+- **One field** — set `--text-input-bg` on a wrapping element to pin its fill light.
+- **A whole region** (a form on a service surface) — re-pin the `--background-input`
+  token in that scope; every field inside inherits it, no per-component override:
+
+```css
+/* Keep field fills light inside a fixed-light service section, both themes */
+[data-theme="dark"] .service-surface {
+  --background-input: var(--color-grayscale-white);
 }
 ```
