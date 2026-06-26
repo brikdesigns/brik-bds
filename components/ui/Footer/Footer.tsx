@@ -37,6 +37,11 @@ export interface FooterBottomLink {
 }
 
 /**
+ * Render level for footer column headings
+ */
+export type FooterColumnHeadingLevel = 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
+/**
  * Footer component props
  */
 export interface FooterProps extends HTMLAttributes<HTMLElement> {
@@ -50,6 +55,13 @@ export interface FooterProps extends HTMLAttributes<HTMLElement> {
   brandExtra?: ReactNode;
   /** Link columns */
   columns?: FooterColumn[];
+  /**
+   * Render level for column headings. Defaults to `h4` so a page whose last
+   * in-page heading is `h2` or `h3` keeps `heading-order` (axe) intact —
+   * the footer is a universal layout component, and a hardcoded `h6` skips
+   * levels on most pages. Opt down (`h5` / `h6`) on pages with deeper trees.
+   */
+  columnHeadingLevel?: FooterColumnHeadingLevel;
   /** Copyright text */
   copyright?: string;
   /** Optional inline links rendered next to the copyright, separated by a
@@ -118,6 +130,7 @@ export function Footer({
   tagline,
   brandExtra,
   columns = [],
+  columnHeadingLevel = 'h4',
   copyright,
   bottomLinks,
   socialLinks,
@@ -131,6 +144,7 @@ export function Footer({
     copyright || (bottomLinks && bottomLinks.length > 0) || socialLinks;
   const hasBottomLeft =
     copyright || (bottomLinks && bottomLinks.length > 0);
+  const HeadingTag = columnHeadingLevel;
 
   return (
     <footer
@@ -156,7 +170,7 @@ export function Footer({
           <div className="bds-footer__columns">
             {columns.map((col) => (
               <div key={col.heading} className="bds-footer__column">
-                <h6 className="bds-footer__heading">{col.heading}</h6>
+                <HeadingTag className="bds-footer__heading">{col.heading}</HeadingTag>
                 {col.links.map((link) => (
                   <a
                     key={link.href + link.label}
