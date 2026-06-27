@@ -182,7 +182,23 @@ EOF
 
 # ── Create PR ──
 echo -e "${YELLOW}~ Creating PR targeting ${BASE_BRANCH}...${NC}"
-PR_URL=$(gh pr create --base "${BASE_BRANCH}" --title "$PR_TITLE" --body "$PR_BODY" 2>&1)
+# `set -e` does NOT abort on a failed command substitution inside an assignment,
+# so guard explicitly — otherwise a `gh pr create` failure is swallowed and the
+# success banner below prints with the error text as the "PR URL". See #808.
+if ! PR_URL=$(gh pr create --base "${BASE_BRANCH}" --title "$PR_TITLE" --body "$PR_BODY" 2>&1); then
+  echo ""
+  echo -e "${RED}=========================================${NC}"
+  echo -e "${RED}  PR creation failed${NC}"
+  echo -e "${RED}=========================================${NC}"
+  echo ""
+  printf '%s\n' "$PR_URL" | sed 's/^/  /'
+  echo ""
+  echo -e "  ${YELLOW}Branch '${BRANCH}' was pushed${NC} — fix the error above, then re-run"
+  echo "  ./scripts/pr-task.sh, or open the PR manually:"
+  echo "    gh pr create --base ${BASE_BRANCH} --title \"<title>\""
+  echo ""
+  exit 1
+fi
 
 echo ""
 echo -e "${GREEN}=========================================${NC}"
