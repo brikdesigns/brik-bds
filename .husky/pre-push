@@ -1,2 +1,18 @@
+# ── Dependency guard (#812) ──
+# validate:full runs tsc / build-storybook / canonical-check, all of which need
+# node_modules. A missing or stale install (the secondary-machine drift that
+# blocked the v0.83.0 tag push) otherwise fails with opaque MODULE_NOT_FOUND /
+# "tsc not found". Fail fast with an actionable message instead.
+if [ ! -d node_modules ] || [ ! -f node_modules/.package-lock.json ]; then
+  echo "✗ node_modules is missing or incomplete — pre-push gates will fail with MODULE_NOT_FOUND."
+  echo "  Fix: run \`npm ci\` from $(pwd), then push again."
+  exit 1
+fi
+if [ package-lock.json -nt node_modules/.package-lock.json ]; then
+  echo "✗ node_modules is stale (package-lock.json is newer than the last install)."
+  echo "  Fix: run \`npm ci\` from $(pwd), then push again."
+  exit 1
+fi
+
 echo "Running full validation suite before push..."
 npm run validate:full
