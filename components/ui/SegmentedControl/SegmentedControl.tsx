@@ -1,4 +1,4 @@
-import { type HTMLAttributes, type CSSProperties } from 'react';
+import { type HTMLAttributes, type CSSProperties, type KeyboardEvent, useRef } from 'react';
 import { bdsClass } from '../../utils';
 import './SegmentedControl.css';
 
@@ -73,7 +73,10 @@ const segmentBase: CSSProperties = {
   textAlign: 'center',
   whiteSpace: 'nowrap',
   cursor: 'pointer',
-  background: 'none',
+  // backgroundColor (not the `background` shorthand) so base and active set the
+  // SAME property — mixing shorthand + non-shorthand triggers React's
+  // "conflicting style property" rerender warning. See #993.
+  backgroundColor: 'transparent',
   border: 'none',
   borderRadius: 'var(--border-radius-sm)',
   // Inactive label sits on the --background-secondary track, which is a light-ish
@@ -132,14 +135,66 @@ export function SegmentedControl({
     ...style,
   };
 
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Indices of segments that can receive focus (enabled).
+  const enabledIndices = items.reduce<number[]>((acc, item, index) => {
+    if (!(disabled || item.disabled)) acc.push(index);
+    return acc;
+  }, []);
+
+  // Roving tab stop: the selected enabled segment, else the first enabled one.
+  // The radiogroup exposes a single Tab stop; arrow keys move within it.
+  const selectedIndex = items.findIndex(
+    (item) => (item.value ?? item.label) === value && !(disabled || item.disabled),
+  );
+  const tabStopIndex = selectedIndex >= 0 ? selectedIndex : (enabledIndices[0] ?? -1);
+
+  const focusAndSelect = (index: number) => {
+    const item = items[index];
+    if (!item) return;
+    itemRefs.current[index]?.focus();
+    onChange?.(item.value ?? item.label);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (enabledIndices.length === 0) return;
+    const focusedIndex = itemRefs.current.findIndex((el) => el === document.activeElement);
+    const fromPos = enabledIndices.indexOf(focusedIndex >= 0 ? focusedIndex : tabStopIndex);
+    if (fromPos === -1) return;
+
+    let nextPos = fromPos;
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        nextPos = (fromPos + 1) % enabledIndices.length;
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        nextPos = (fromPos - 1 + enabledIndices.length) % enabledIndices.length;
+        break;
+      case 'Home':
+        nextPos = 0;
+        break;
+      case 'End':
+        nextPos = enabledIndices.length - 1;
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+    focusAndSelect(enabledIndices[nextPos]);
+  };
+
   return (
     <div
       className={bdsClass('bds-segmented-control', className)}
       style={containerStyles}
       role="radiogroup"
       {...props}
+      onKeyDown={handleKeyDown}
     >
-      {items.map((item) => {
+      {items.map((item, index) => {
         const itemValue = item.value ?? item.label;
         const isActive = itemValue === value;
         const isDisabled = disabled || item.disabled;
@@ -154,10 +209,14 @@ export function SegmentedControl({
         return (
           <button
             key={itemValue}
+            ref={(el) => {
+              itemRefs.current[index] = el;
+            }}
             type="button"
             role="radio"
             aria-checked={isActive}
             disabled={isDisabled}
+            tabIndex={index === tabStopIndex ? 0 : -1}
             className={bdsClass(
               'bds-segmented-control-item',
               isActive ? 'bds-segmented-control-item--active' : '',

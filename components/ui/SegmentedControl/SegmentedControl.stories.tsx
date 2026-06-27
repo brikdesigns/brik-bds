@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { SegmentedControl } from './SegmentedControl';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -81,6 +82,50 @@ export const Playground: Story = {
     ],
     value: 'grid',
     size: 'md',
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   KEYBOARD NAVIGATION — roving tabindex contract (#993)
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Arrow/Home/End move selection within a single tab stop */
+export const KeyboardNavigation: Story = {
+  render: () => (
+    <InteractiveSegmentedControl
+      items={[
+        { label: 'Active', value: 'active' },
+        { label: 'Archived', value: 'archived' },
+        { label: 'All', value: 'all' },
+      ]}
+      defaultValue="active"
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const active = canvas.getByRole('radio', { name: 'Active' });
+    const archived = canvas.getByRole('radio', { name: 'Archived' });
+    const all = canvas.getByRole('radio', { name: 'All' });
+
+    // Roving tabindex: only the selected radio is in the tab order.
+    await expect(active).toHaveAttribute('tabindex', '0');
+    await expect(archived).toHaveAttribute('tabindex', '-1');
+
+    // ArrowRight moves selection + focus to the next radio.
+    active.focus();
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(archived).toHaveAttribute('aria-checked', 'true');
+    await expect(archived).toHaveFocus();
+
+    // End jumps to the last radio; Home back to the first.
+    await userEvent.keyboard('{End}');
+    await expect(all).toHaveAttribute('aria-checked', 'true');
+    await userEvent.keyboard('{Home}');
+    await expect(active).toHaveAttribute('aria-checked', 'true');
+
+    // ArrowLeft wraps from the first radio to the last.
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(all).toHaveAttribute('aria-checked', 'true');
   },
 };
 
