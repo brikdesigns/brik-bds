@@ -29,7 +29,9 @@ export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
 }
 
 // bds-lint-ignore — icon pixel sizes are Figma-driven
-const tagIconSizeMap: Record<ServiceBadgeSize, number> = { sm: 12, md: 16, lg: 20 };
+// sm bumped 12→16: the 12px glyph read as teensy in icon-text pills (#R7).
+// NOTE: diverges from the current Figma spec until the component is updated to match.
+const tagIconSizeMap: Record<ServiceBadgeSize, number> = { sm: 16, md: 16, lg: 20 };
 
 // bds-lint-ignore — Figma-driven badge dimensions
 const iconScaleMap: Record<ServiceBadgeSize, number> = { sm: 0.55, md: 0.6, lg: 0.6 };
