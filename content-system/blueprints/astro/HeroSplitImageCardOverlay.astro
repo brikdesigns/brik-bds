@@ -317,7 +317,11 @@ const cta = section.cta;
     margin-bottom: var(--gap-sm);
   }
 
-  .bp-hero-img-card__icon {
+  /* Scoped to `img` only: this slot also carries the ServiceTag icon variant
+     (a `<span class="bds-service-tag--icon …">`), whose inline-flex centering
+     must survive. The span self-sizes via `bds-service-tag--icon-lg` (40px =
+     2.5rem). See brik-bds#873. */
+  img.bp-hero-img-card__icon {
     display: block;
     width: var(--bp-hero-img-card-icon-size, 2.5rem);
     height: var(--bp-hero-img-card-icon-size, 2.5rem);

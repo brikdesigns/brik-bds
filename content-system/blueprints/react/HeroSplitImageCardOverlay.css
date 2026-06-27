@@ -153,7 +153,11 @@
   margin-bottom: var(--gap-sm);
 }
 
-.bp-hero-img-card__icon {
+/* Scoped to `img` only: this slot also carries `<ServiceTag variant="icon">`,
+   whose `.bds-service-tag--icon` centering (inline-flex) must not be clobbered
+   by `display: block`. The ServiceTag self-sizes via `.bds-service-tag--icon-lg`
+   (40px = 2.5rem). See brik-bds#873. */
+img.bp-hero-img-card__icon {
   display: block;
   width: var(--bp-hero-img-card-icon-size, 2.5rem);
   height: var(--bp-hero-img-card-icon-size, 2.5rem);
