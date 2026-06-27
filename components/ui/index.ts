@@ -53,6 +53,7 @@ export * from './Frame';
 export * from './Footer';
 export * from './Form';
 export * from './Grid';
+export * from './Icon';
 export * from './Icons';
 export * from './InteractiveListItem';
 export * from './MarketingIllustration';
