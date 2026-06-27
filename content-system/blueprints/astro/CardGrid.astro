@@ -15,7 +15,7 @@
  *
  * Token pairs — paired family ↔ size only:
  *   subtitle    : --font-family-subtitle + --subtitle-lg + --text-transform-subtitle
- *   title (h2)  : --font-family-heading  + clamp(--heading-lg, ..., --heading-huge)
+ *   title (h2)  : --font-family-heading  + clamp(--heading-lg, ..., --heading-xl)
  *   description : --font-family-body     + --body-md
  */
 export interface Props {
@@ -88,7 +88,7 @@ const titleId = `${sectionKey}-title`;
   .bds-card-grid__title {
     margin: 0;
     font-family: var(--font-family-heading);
-    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
+    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
     font-weight: var(--font-weight-semi-bold);
     line-height: var(--font-line-height-tight);
     color: var(--text-primary);
