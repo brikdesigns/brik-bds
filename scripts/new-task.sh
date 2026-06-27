@@ -202,6 +202,15 @@ cd "${WORKTREE_BASE}/${TASK_NAME}"
 echo -e "${YELLOW}▸ Installing dependencies (npm ci --prefer-offline)...${NC}"
 npm ci --prefer-offline 2>&1 | tail -1
 
+# ── Install the Playwright browser the Storybook gate needs ──
+# vitest --project=storybook drives `chromium` (vitest.config.ts), and the
+# visual-verification path screenshots stories with it. npm ci does NOT fetch
+# browser binaries, so a fresh worktree fails with "Executable doesn't exist …
+# run npx playwright install" until this runs (#812). Each Playwright version
+# wants its own build, so pin to the version this worktree just installed.
+echo -e "${YELLOW}▸ Installing Playwright chromium (Storybook visual gate)...${NC}"
+npx playwright install chromium chromium-headless-shell 2>&1 | tail -1
+
 # ── Summary ──
 echo ""
 echo -e "${GREEN}═══════════════════════════════════════${NC}"
