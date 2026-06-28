@@ -46,11 +46,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Only the Vite lib build is needed to produce dist/index.esm.js — skip
-      # the rest of build:lib (types, content-system, tokens, inspector) which
-      # add time without affecting the ESM require() surface.
+      # The gate now resolves every ESM export subpath under Node-ESM, so it
+      # needs the Vite root bundle (dist/index.esm.mjs) AND the content-system
+      # emit (dist/content-system/*.mjs). Skip only tokens/inspector, which
+      # don't affect the ESM export surface.
       - name: Build library bundle (Vite ESM/CJS)
         run: npx vite build --config vite.config.lib.ts
 
-      - name: ESM bundle require() gate
+      - name: Build content-system ESM emit
+        run: npm run build:content-system
+
+      - name: ESM export gate (require()-free + Node-ESM subpath resolution)
         run: npm run check:esm
