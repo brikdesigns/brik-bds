@@ -267,3 +267,119 @@ export const Patterns = () => {
       </Stack>
     );
 };
+
+/* ─── Two-column form (xl) ───────────────────────────────────── */
+
+const fieldInput = {
+  padding: 'var(--padding-md)',
+  border: 'var(--border-width-md) solid var(--border-input)',
+  borderRadius: 'var(--border-radius-50)',
+  fontFamily: 'var(--font-family-body)',
+  fontSize: 'var(--body-md)',
+} as const;
+
+const Field = ({ label: text, children }: { label: string; children: React.ReactNode }) => (
+  // Label wraps the control so it's implicitly associated (accessible name +
+  // `getByLabelText` in the play test) without threading ids through.
+  <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)', flex: '1 1 0', minWidth: 0 }}>
+    <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-md)' }}>{text}</span>
+    {children}
+  </label>
+);
+
+/**
+ * @summary xl modal hosting a two-column showcase panel + lead form.
+ *
+ * The `xl` size is reachable as a Control on `Playground`, but that only
+ * widens an empty body. This story exists because the production composition
+ * it unlocks — a showcase panel beside a multi-field form (brikdesigns
+ * lead-capture modal, #599) — is irreducible to a prop toggle (ADR-010 Q4):
+ * the side-by-side layout needs `xl`'s width to read as two columns rather
+ * than wrap. The panel mirrors the in-app `LeadModalLayout` (surface-primary
+ * card, border-muted edge, stacked label → value → price · frequency); email
+ * and phone share a row to keep the form compact.
+ */
+export const TwoColumnForm = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>Get started</Button>
+        <Modal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          title="Get started"
+          size="xl"
+          footer={
+            <>
+              <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+              <Button variant="primary" onClick={() => setIsOpen(false)}>Submit</Button>
+            </>
+          }
+        >
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-xl)', alignItems: 'stretch' }}>
+            <aside
+              style={{
+                flex: '1 1 260px',
+                maxWidth: 360,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--gap-md)',
+                padding: 'var(--padding-md)',
+                backgroundColor: 'var(--surface-primary)',
+                border: 'var(--border-width-sm) solid var(--border-muted)',
+                borderRadius: 'var(--border-radius-lg)',
+                boxSizing: 'border-box',
+              }}
+            >
+              <div
+                style={{
+                  aspectRatio: '3 / 2',
+                  backgroundColor: 'var(--surface-secondary)',
+                  borderRadius: 'var(--border-radius-md)',
+                }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xs)' }}>
+                <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-secondary)' }}>Interested in</span>
+                <span style={{ fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-sm)', color: 'var(--text-primary)' }}>Brand Identity System</span>
+                <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-secondary)' }}>$650 · one-time</span>
+              </div>
+            </aside>
+
+            <div style={{ flex: '1.6 1 340px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+              <Field label="Name">
+                <input type="text" placeholder="Your name" style={fieldInput} />
+              </Field>
+              <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap' }}>
+                <Field label="Email">
+                  <input type="email" placeholder="your@email.com" style={fieldInput} />
+                </Field>
+                <Field label="Phone">
+                  <input type="tel" placeholder="(555) 555-5555" style={fieldInput} />
+                </Field>
+              </div>
+              <Field label="Message">
+                <textarea rows={4} placeholder="Tell us about your project" style={{ ...fieldInput, resize: 'vertical' }} />
+              </Field>
+            </div>
+          </div>
+        </Modal>
+      </>
+    );
+};
+
+TwoColumnForm.play = async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByRole('button', { name: 'Get started' }));
+
+  // Modal portals to document.body — query the dialog there (#599 gotcha).
+  const dialog = within(document.body).getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAccessibleName('Get started');
+
+  // Both columns render: the showcase panel (left) + the form (right).
+  await expect(within(dialog).getByText('Interested in')).toBeVisible();
+  await expect(within(dialog).getByLabelText('Email')).toBeVisible();
+  await expect(within(dialog).getByLabelText('Phone')).toBeVisible();
+
+  await userEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }));
+};
