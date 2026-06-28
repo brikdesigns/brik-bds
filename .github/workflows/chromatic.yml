@@ -9,6 +9,9 @@ on:
       - 'tokens/**'
       - 'design-tokens/**'
       - 'updates/**'
+  # Manual trigger — lets you fire a build on demand (e.g. to test the Slack
+  # notifier after wiring SLACK_CHROMATIC_WEBHOOK_URL) without a push to main.
+  workflow_dispatch:
 
 concurrency:
   group: chromatic-${{ github.ref }}
