@@ -67,31 +67,10 @@
 
 /* ─── Close button ───────────────────────────────────────────── */
 
+/* Layout only — visual contract lives in CloseButton. Negative margin pulls the
+ * padded hit-target so the glyph sits flush with the header's trailing edge. */
 .bds-modal__close {
-  background: none;
-  border: none;
-  font-size: var(--icon-md);
-  line-height: var(--font-line-height-tight);
-  cursor: pointer;
-  padding: var(--padding-md);
-  margin-right: calc(-1 * var(--padding-md));
-  color: var(--text-primary);
-  opacity: 0.6;
-  transition: opacity 0.2s;
-  border-radius: var(--border-radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bds-modal__close:hover {
-  opacity: 1;
-}
-
-.bds-modal__close:focus-visible {
-  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
-  outline-offset: 2px;
-  opacity: 1;
+  margin-right: calc(-1 * var(--padding-xs));
 }
 
 /* ─── Body ───────────────────────────────────────────────────── */

@@ -1,0 +1,42 @@
+/* CloseButton — canonical icon-only dismiss affordance.
+ *
+ * Glyph-dominant by design: a 20px (--icon-lg) bold "X" inside ~4px padding
+ * fills its box, fixing the "small icon in a big container" drift. Overlays
+ * own only positioning (e.g. negative margin to sit flush); the visual contract
+ * lives here.
+ *
+ * `color: inherit` keeps the glyph surface-adaptive — it picks up
+ * `--text-primary` on neutral overlays (Modal / Sheet / Toast) and the
+ * on-color text of a tinted surface (Banner announcement tone). */
+
+.bds-close-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: var(--padding-xs);
+  background-color: transparent;
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: inherit;
+  font-size: var(--icon-lg);
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.bds-close-button:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.bds-close-button:focus-visible {
+  outline: var(--border-width-lg) solid var(--state-focus);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+.bds-close-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

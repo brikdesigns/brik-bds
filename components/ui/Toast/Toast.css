@@ -68,21 +68,6 @@
   margin: 0;
 }
 
-/* ─── Close button ───────────────────────────────────────────── */
-
-.bds-toast__close {
-  background: none;
-  border: none;
-  font-size: var(--icon-md);
-  line-height: var(--font-line-height-tight);
-  cursor: pointer;
-  padding: var(--padding-md);
-  color: var(--text-primary);
-  opacity: 0.6;
-  flex-shrink: 0;
-}
-
-.bds-toast__close:hover {
-  opacity: 1;
-}
+/* Close button — visual contract lives in CloseButton; Toast aligns it to the
+ * top via the container's `align-items: flex-start`. No overrides needed. */
 }
