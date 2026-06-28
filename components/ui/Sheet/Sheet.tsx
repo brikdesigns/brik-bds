@@ -1,8 +1,9 @@
 import { type ReactNode, type CSSProperties, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
-import { XBold, ArrowLeftBold, Pen } from '../../icons';
+import { ArrowLeftBold, Pen } from '../../icons';
 import { Button } from '../Button';
+import { CloseButton } from '../CloseButton';
 import { bdsClass } from '../../utils';
 import './Sheet.css';
 
@@ -368,14 +369,7 @@ export function Sheet({
                 </div>
               </div>
               {showCloseButton && (
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="bds-sheet__close"
-                  aria-label="Close"
-                >
-                  <Icon icon={XBold} />
-                </button>
+                <CloseButton className="bds-sheet__close" onClick={onClose} />
               )}
             </div>
             {tabs && (

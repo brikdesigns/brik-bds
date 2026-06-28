@@ -1,8 +1,7 @@
 import { type ReactNode, useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
-import { Icon } from '@iconify/react';
-import { X } from '../../icons';
 import { Button } from '../Button';
+import { CloseButton } from '../CloseButton';
 import { bdsClass } from '../../utils';
 import './Modal.css';
 
@@ -180,14 +179,7 @@ function renderDefault(
         <div className="bds-modal__header">
           {title && <h2 id={titleId} className="bds-modal__title">{title}</h2>}
           {showCloseButton && (
-            <button
-              type="button"
-              className="bds-modal__close"
-              onClick={onClose}
-              aria-label="Close"
-            >
-              <Icon icon={X} />
-            </button>
+            <CloseButton className="bds-modal__close" onClick={onClose} />
           )}
         </div>
       )}

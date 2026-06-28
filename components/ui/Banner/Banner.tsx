@@ -1,8 +1,9 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
 import { Icon } from '@iconify/react';
-import { Warning, Info, XBold } from '../../icons';
+import { Warning, Info } from '../../icons';
 import { Badge } from '../Badge';
 import { bdsClass } from '../../utils';
+import { CloseButton } from '../CloseButton';
 import './Banner.css';
 
 export type BannerTone = 'announcement' | 'warning' | 'error' | 'information';
@@ -92,14 +93,7 @@ export function Banner({
         <div className="bds-banner__actions">
           {action}
           {onDismiss && (
-            <button
-              type="button"
-              onClick={onDismiss}
-              aria-label="Dismiss banner"
-              className="bds-banner__close"
-            >
-              <Icon icon={XBold} />
-            </button>
+            <CloseButton label="Dismiss banner" onClick={onDismiss} />
           )}
         </div>
       )}
