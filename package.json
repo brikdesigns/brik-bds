@@ -1,15 +1,15 @@
 {
   "name": "@brikdesigns/bds",
-  "version": "0.107.0",
+  "version": "0.107.1",
   "description": "Brik Design System — React components, Figma-synced tokens, and Content System (BCS) vocabulary",
   "private": false,
   "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.esm.mjs",
   "types": "dist/lib-entry.d.ts",
   "exports": {
     ".": {
       "types": "./dist/lib-entry.d.ts",
-      "import": "./dist/index.esm.js",
+      "import": "./dist/index.esm.mjs",
       "require": "./dist/index.cjs.js"
     },
     "./content-system": {
@@ -23,7 +23,8 @@
     },
     "./blueprints-astro/types": {
       "types": "./dist/content-system/blueprints/astro/types.d.ts",
-      "import": "./dist/content-system/blueprints/astro/types.js"
+      "import": "./dist/content-system/blueprints/astro/types.mjs",
+      "require": "./dist/content-system/blueprints/astro/types.js"
     },
     "./blueprints-astro/*.astro": "./content-system/blueprints/astro/*.astro",
     "./blueprints": "./blueprints/blueprint-library.json",
@@ -146,7 +147,7 @@
     "build:modes": "node scripts/generate-modes-css.mjs",
     "build:all-tokens": "npm run build:sd-figma && npm run build:sd-dark && npm run build:modes",
     "build:lib": "vite build --config vite.config.lib.ts && npm run build:types && npm run build:content-system && npm run build:dist-tokens && npm run build:inspector-manifest",
-    "build:content-system": "tsc --project tsconfig.content-system.json && esbuild content-system/index.ts --bundle --format=esm --platform=neutral --outfile=dist/content-system/index.mjs",
+    "build:content-system": "tsc --project tsconfig.content-system.json && esbuild content-system/index.ts --bundle --format=esm --platform=neutral --outfile=dist/content-system/index.mjs && esbuild content-system/blueprints/astro/types.ts --bundle --format=esm --platform=neutral --outfile=dist/content-system/blueprints/astro/types.mjs",
     "build:inspector-manifest": "node scripts/build-inspector-manifest.mjs",
     "bds:find": "node scripts/bds-find.mjs",
     "bcs-vocab-check": "node scripts/bcs-vocab-check.mjs",
