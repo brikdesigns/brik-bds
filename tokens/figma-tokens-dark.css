@@ -83,6 +83,11 @@
   --surface-service-brand-light: var(--color-yellow-lighter);
   --surface-service-brand-dark: var(--color-yellow-darkest);
   --surface-service-marketing-light: var(--color-green-lighter);
+  --surface-service-marketing-inverse: var(--color-green-darkest);
+  --surface-service-product-inverse: var(--color-purple-darkest);
+  --surface-service-back-office-inverse: var(--color-orange-darkest);
+  --surface-service-information-inverse: var(--color-blue-darkest);
+  --surface-service-brand-inverse: var(--color-yellow-darkest);
   --text-primary: var(--color-grayscale-lightest);
   --text-secondary: var(--color-grayscale-light);
   --text-brand-primary: var(--color-poppy-light);
