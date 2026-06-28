@@ -43,6 +43,17 @@
     { "group": "service", "label": "Service back-office — inverse card text (light)", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office-inverse", "thresholdType": "AA", "appliesTo": ["light"] },
     { "group": "service", "label": "Service back-office — inverse card text (dark)", "fg": "--text-service-back-office-on-dark", "bg": "--surface-service-back-office-inverse", "thresholdType": "AA", "appliesTo": ["dark"] },
 
+    { "group": "service", "label": "Service brand — inverse card fill (light)", "fg": "--background-service-brand-on-light", "bg": "--surface-service-brand-inverse", "thresholdType": "AA-large", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service brand — inverse card fill (dark)", "fg": "--background-service-brand-on-dark", "bg": "--surface-service-brand-inverse", "thresholdType": "AA-large", "appliesTo": ["dark"] },
+    { "group": "service", "label": "Service marketing — inverse card fill (light)", "fg": "--background-service-marketing-on-light", "bg": "--surface-service-marketing-inverse", "thresholdType": "AA-large", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service marketing — inverse card fill (dark)", "fg": "--background-service-marketing-on-dark", "bg": "--surface-service-marketing-inverse", "thresholdType": "AA-large", "appliesTo": ["dark"] },
+    { "group": "service", "label": "Service information — inverse card fill (light)", "fg": "--background-service-information-on-light", "bg": "--surface-service-information-inverse", "thresholdType": "AA-large", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service information — inverse card fill (dark)", "fg": "--background-service-information-on-dark", "bg": "--surface-service-information-inverse", "thresholdType": "AA-large", "appliesTo": ["dark"] },
+    { "group": "service", "label": "Service product — inverse card fill (light)", "fg": "--background-service-product-on-light", "bg": "--surface-service-product-inverse", "thresholdType": "AA-large", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service product — inverse card fill (dark)", "fg": "--background-service-product-on-dark", "bg": "--surface-service-product-inverse", "thresholdType": "AA-large", "appliesTo": ["dark"] },
+    { "group": "service", "label": "Service back-office — inverse card fill (light)", "fg": "--background-service-back-office-on-light", "bg": "--surface-service-back-office-inverse", "thresholdType": "AA-large", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service back-office — inverse card fill (dark)", "fg": "--background-service-back-office-on-dark", "bg": "--surface-service-back-office-inverse", "thresholdType": "AA-large", "appliesTo": ["dark"] },
+
     { "group": "positive", "label": "Positive/success text on surface", "fg": "--text-positive", "bg": "--surface-primary", "thresholdType": "AA" },
     { "group": "positive", "label": "Positive/success text on page", "fg": "--text-positive", "bg": "--page-primary", "thresholdType": "AA" }
   ]
