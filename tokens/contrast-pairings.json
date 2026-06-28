@@ -32,6 +32,17 @@
     { "group": "service", "label": "Service back-office — text on pale surface", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office-light", "thresholdType": "AAA", "darkException": { "issue": 823, "reason": "ADR-011 dark-mode softening erodes service context-text contrast on fixed-light surfaces" } },
     { "group": "service", "label": "Service back-office — text on mid-tone surface", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office", "thresholdType": "AA", "darkException": { "issue": 823, "reason": "mid-tone base service surface is decorative; dark-mode softening erodes contrast" } },
 
+    { "group": "service", "label": "Service brand — inverse card text (light)", "fg": "--text-service-brand-on-light", "bg": "--surface-service-brand-inverse", "thresholdType": "AA", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service brand — inverse card text (dark)", "fg": "--text-service-brand-on-dark", "bg": "--surface-service-brand-inverse", "thresholdType": "AA", "appliesTo": ["dark"] },
+    { "group": "service", "label": "Service marketing — inverse card text (light)", "fg": "--text-service-marketing-on-light", "bg": "--surface-service-marketing-inverse", "thresholdType": "AA", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service marketing — inverse card text (dark)", "fg": "--text-service-marketing-on-dark", "bg": "--surface-service-marketing-inverse", "thresholdType": "AA", "appliesTo": ["dark"] },
+    { "group": "service", "label": "Service information — inverse card text (light)", "fg": "--text-service-information-on-light", "bg": "--surface-service-information-inverse", "thresholdType": "AA", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service information — inverse card text (dark)", "fg": "--text-service-information-on-dark", "bg": "--surface-service-information-inverse", "thresholdType": "AA", "appliesTo": ["dark"] },
+    { "group": "service", "label": "Service product — inverse card text (light)", "fg": "--text-service-product-on-light", "bg": "--surface-service-product-inverse", "thresholdType": "AA", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service product — inverse card text (dark)", "fg": "--text-service-product-on-dark", "bg": "--surface-service-product-inverse", "thresholdType": "AA", "appliesTo": ["dark"] },
+    { "group": "service", "label": "Service back-office — inverse card text (light)", "fg": "--text-service-back-office-on-light", "bg": "--surface-service-back-office-inverse", "thresholdType": "AA", "appliesTo": ["light"] },
+    { "group": "service", "label": "Service back-office — inverse card text (dark)", "fg": "--text-service-back-office-on-dark", "bg": "--surface-service-back-office-inverse", "thresholdType": "AA", "appliesTo": ["dark"] },
+
     { "group": "positive", "label": "Positive/success text on surface", "fg": "--text-positive", "bg": "--surface-primary", "thresholdType": "AA" },
     { "group": "positive", "label": "Positive/success text on page", "fg": "--text-positive", "bg": "--page-primary", "thresholdType": "AA" }
   ]
