@@ -1770,6 +1770,26 @@
     "service-marketing-light": {
       "$value": "{color.green.lightest}",
       "$type": "color"
+    },
+    "service-marketing-inverse": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "service-product-inverse": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "service-back-office-inverse": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "service-information-inverse": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "service-brand-inverse": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
     }
   },
   "text": {
