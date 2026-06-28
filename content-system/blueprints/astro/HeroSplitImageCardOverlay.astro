@@ -213,8 +213,10 @@ const cta = section.cta;
    * Background uses the `surface` family (not `background`) because the hero
    * is a broad page-level container, not a small bounded component — per the
    * service-token decision tree (`-surface-` for sections/heroes/cards;
-   * `-background-` for badges/tags/pills/buttons). This keeps the hero band
-   * the same shade as section-level surfaces below it on the same page.
+   * `-background-` for badges/tags/pills/buttons). It uses the `-inverse` step
+   * (ADR-012): the card reads as neutral chrome — white — in light mode, then
+   * carries the line's deep {hue}-darkest tint in dark mode. The companion text
+   * flip lives in the dark-mode block below (brik-bds#1017).
    *
    * `--background-inverse` stays on the `background` family: it's the
    * mode-aware companion fill consumed by the inverse `<Button>` variant
@@ -226,7 +228,7 @@ const cta = section.cta;
    * office). API-level rename `data-audience` → `data-service-line` is a
    * separate cross-repo follow-up. */
   .bp-hero-img-card[data-audience='brand'] {
-    background: var(--surface-service-brand);
+    background: var(--surface-service-brand-inverse);
     --bp-hero-img-card-headline-color: var(--text-service-brand-on-light);
     --bp-hero-img-card-eyebrow-color: var(--text-service-brand-on-light);
     --bp-hero-img-card-lead-color: var(--text-service-brand-on-light);
@@ -235,7 +237,7 @@ const cta = section.cta;
     --text-on-color-light: var(--color-grayscale-white);
   }
   .bp-hero-img-card[data-audience='marketing'] {
-    background: var(--surface-service-marketing);
+    background: var(--surface-service-marketing-inverse);
     --bp-hero-img-card-headline-color: var(--text-service-marketing-on-light);
     --bp-hero-img-card-eyebrow-color: var(--text-service-marketing-on-light);
     --bp-hero-img-card-lead-color: var(--text-service-marketing-on-light);
@@ -244,7 +246,7 @@ const cta = section.cta;
     --text-on-color-light: var(--color-grayscale-white);
   }
   .bp-hero-img-card[data-audience='information'] {
-    background: var(--surface-service-information);
+    background: var(--surface-service-information-inverse);
     --bp-hero-img-card-headline-color: var(--text-service-information-on-light);
     --bp-hero-img-card-eyebrow-color: var(--text-service-information-on-light);
     --bp-hero-img-card-lead-color: var(--text-service-information-on-light);
@@ -253,7 +255,7 @@ const cta = section.cta;
     --text-on-color-light: var(--color-grayscale-white);
   }
   .bp-hero-img-card[data-audience='product'] {
-    background: var(--surface-service-product);
+    background: var(--surface-service-product-inverse);
     --bp-hero-img-card-headline-color: var(--text-service-product-on-light);
     --bp-hero-img-card-eyebrow-color: var(--text-service-product-on-light);
     --bp-hero-img-card-lead-color: var(--text-service-product-on-light);
@@ -263,7 +265,7 @@ const cta = section.cta;
   }
   .bp-hero-img-card[data-audience='back-office'],
   .bp-hero-img-card[data-audience='service'] {
-    background: var(--surface-service-back-office);
+    background: var(--surface-service-back-office-inverse);
     --bp-hero-img-card-headline-color: var(--text-service-back-office-on-light);
     --bp-hero-img-card-eyebrow-color: var(--text-service-back-office-on-light);
     --bp-hero-img-card-lead-color: var(--text-service-back-office-on-light);
@@ -287,6 +289,46 @@ const cta = section.cta;
   :root[data-theme="dark"] .bp-hero-img-card[data-audience='back-office'],
   :root[data-theme="dark"] .bp-hero-img-card[data-audience='service'] {
     --text-inverse: var(--text-on-color-dark);  /* white on blue/purple/orange-darker: 5.48–9.48:1 */
+  }
+
+  /* ── Dark-mode: the inverse surface flips white → {hue}-darkest, so the card's
+   * own headline/eyebrow/lead (and the breadcrumb/link --text-brand-primary that
+   * cascade on the same surface) must flip from --text-service-{line}-on-light
+   * ({hue}-darkest — invisible on the dark surface) to the light-on-dark
+   * companion --text-service-{line}-on-dark ({hue}-lighter). AA-verified per line
+   * (6.89–9.06:1) via contrast-gate (brik-bds#1017). The inner inverse <Button>
+   * is unaffected: its label/fill ride --text-inverse / --background-inverse
+   * (surface-service-{line}-dark), handled above. */
+  :root[data-theme="dark"] .bp-hero-img-card[data-audience='brand'] {
+    --bp-hero-img-card-headline-color: var(--text-service-brand-on-dark);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-brand-on-dark);
+    --bp-hero-img-card-lead-color: var(--text-service-brand-on-dark);
+    --text-brand-primary: var(--text-service-brand-on-dark);
+  }
+  :root[data-theme="dark"] .bp-hero-img-card[data-audience='marketing'] {
+    --bp-hero-img-card-headline-color: var(--text-service-marketing-on-dark);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-marketing-on-dark);
+    --bp-hero-img-card-lead-color: var(--text-service-marketing-on-dark);
+    --text-brand-primary: var(--text-service-marketing-on-dark);
+  }
+  :root[data-theme="dark"] .bp-hero-img-card[data-audience='information'] {
+    --bp-hero-img-card-headline-color: var(--text-service-information-on-dark);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-information-on-dark);
+    --bp-hero-img-card-lead-color: var(--text-service-information-on-dark);
+    --text-brand-primary: var(--text-service-information-on-dark);
+  }
+  :root[data-theme="dark"] .bp-hero-img-card[data-audience='product'] {
+    --bp-hero-img-card-headline-color: var(--text-service-product-on-dark);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-product-on-dark);
+    --bp-hero-img-card-lead-color: var(--text-service-product-on-dark);
+    --text-brand-primary: var(--text-service-product-on-dark);
+  }
+  :root[data-theme="dark"] .bp-hero-img-card[data-audience='back-office'],
+  :root[data-theme="dark"] .bp-hero-img-card[data-audience='service'] {
+    --bp-hero-img-card-headline-color: var(--text-service-back-office-on-dark);
+    --bp-hero-img-card-eyebrow-color: var(--text-service-back-office-on-dark);
+    --bp-hero-img-card-lead-color: var(--text-service-back-office-on-dark);
+    --text-brand-primary: var(--text-service-back-office-on-dark);
   }
 
   .bp-hero-img-card__container {

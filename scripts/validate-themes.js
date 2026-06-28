@@ -12,6 +12,11 @@
  *   - A pairing flagged `darkException` whose DARK result is sub-threshold is
  *     REPORTED as a known, tracked exception (the systemic dark-mode service
  *     gap, brik-bds#823) and does NOT fail the gate.
+ *   - A pairing flagged `appliesTo: ["light"|"dark"]` is evaluated ONLY in the
+ *     listed theme(s); in any other theme it is marked n/a (mode-scoped). Use
+ *     this for components that swap fg AND bg by theme (e.g. the inverse-surface
+ *     hero card, brik-bds#1017), where the off-theme token combination never
+ *     paints and scoring it would be meaningless.
  *
  * Source of truth: tokens/contrast-pairings.json (also feeds the Storybook
  * ContrastCompliance dashboard and the primitives/color-pairings.mdx matrix).
@@ -122,7 +127,12 @@ async function main() {
       const bgVal = theme.vars[pairing.bg];
       let status, ratio = null;
 
-      if (!fgVal || !bgVal || !isHex(fgVal) || !isHex(bgVal)) {
+      if (pairing.appliesTo && !pairing.appliesTo.includes(theme.key)) {
+        // Pairing is mode-scoped: it only renders in the listed theme(s). The
+        // CSS swaps fg (or bg) by theme, so evaluating it in the off-theme
+        // would score a combination that never paints. Skip — not a failure.
+        status = 'na';
+      } else if (!fgVal || !bgVal || !isHex(fgVal) || !isHex(bgVal)) {
         status = 'unresolved';
       } else {
         ratio = round(contrastRatio(fgVal, bgVal));
@@ -186,7 +196,8 @@ function report(results, hardFailures, exceptions, aaaWarnings) {
     }
     const note = (x) =>
       x.status === 'warn' ? ' (below AAA aim)' : x.status === 'exception' ? ` (exception #${x.exception.issue})` : '';
-    const fmt = (x) => (x.status === 'unresolved' ? 'n/a' : `${ICON[x.status]} ${x.ratio}:1${note(x)}`);
+    const fmt = (x) =>
+      x.status === 'unresolved' ? 'n/a' : x.status === 'na' ? 'n/a (mode-scoped)' : `${ICON[x.status]} ${x.ratio}:1${note(x)}`;
     console.log(`  ${r.label}  [target ${r.thresholdType} ≥${r.threshold}]`);
     console.log(`      light ${fmt(r)}    dark ${fmt(dark)}`);
   }
@@ -200,6 +211,7 @@ function report(results, hardFailures, exceptions, aaaWarnings) {
 function emitMatrix(results) {
   const verdict = (r) => {
     if (r.status === 'unresolved') return 'n/a';
+    if (r.status === 'na') return '—';
     if (r.status === 'exception') return `${r.ratio}:1 ⚠ (#${r.exception.issue})`;
     const tier = r.ratio >= 7 ? 'AAA' : r.ratio >= 4.5 ? 'AA' : r.ratio >= 3 ? 'AA-lg' : 'FAIL';
     return `${r.ratio}:1 ${tier}`;
