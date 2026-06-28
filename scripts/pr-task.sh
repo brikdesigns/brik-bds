@@ -148,10 +148,18 @@ fi
 if [ $# -ge 1 ]; then
   PR_TITLE="$1"
 else
-  # Auto-generate: task/bds-button-variants → bds: button variants
-  SCOPE=$(echo "$BRANCH" | sed 's|task/||' | cut -d'-' -f1)
-  DESC=$(echo "$BRANCH" | sed 's|task/[a-z]*-||' | tr '-' ' ')
-  PR_TITLE="${SCOPE}: ${DESC}"
+  # Prefer the latest NON-MERGE commit subject — a conventional-commit line
+  # (`fix(build): …`). `--no-merges` skips the `Merge origin/main …` commit a
+  # base-sync creates, so an advanced base never turns the PR title into the
+  # merge-commit subject or the branch slug (brik-bds#1018; same root cause as
+  # the portal fix in brik-client-portal#1444).
+  PR_TITLE=$(git log --no-merges --format=%s -1 "${BASE_BRANCH}..HEAD")
+  if [ -z "$PR_TITLE" ]; then
+    # Fallback: task/bds-button-variants → bds: button variants
+    SCOPE=$(echo "$BRANCH" | sed 's|task/||' | cut -d'-' -f1)
+    DESC=$(echo "$BRANCH" | sed 's|task/[a-z]*-||' | tr '-' ' ')
+    PR_TITLE="${SCOPE}: ${DESC}"
+  fi
 fi
 
 # ── Build PR body from commit log ──
