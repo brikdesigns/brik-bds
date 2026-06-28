@@ -9,7 +9,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'lib-entry.ts'),
       name: 'BrikBDS',
       formats: ['es', 'cjs'],
-      fileName: (format) => format === 'es' ? 'index.esm.js' : 'index.cjs.js',
+      fileName: (format) => format === 'es' ? 'index.esm.mjs' : 'index.cjs.js',
     },
     rollupOptions: {
       // Externalize peer dependencies — do NOT bundle React, Iconify, or Lottie.
