@@ -1,8 +1,9 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
 import { Icon } from '@iconify/react';
-import { CheckCircle, WarningCircle, Warning, Info, X } from '../../icons';
+import { CheckCircle, WarningCircle, Warning, Info } from '../../icons';
 import { bdsClass } from '../../utils';
 import { Badge } from '../Badge';
+import { CloseButton } from '../CloseButton';
 import './Toast.css';
 
 export type ToastVariant = 'default' | 'success' | 'error' | 'warning' | 'info';
@@ -60,14 +61,7 @@ export function Toast({
         </div>
       </div>
       {onDismiss && (
-        <button
-          type="button"
-          onClick={onDismiss}
-          aria-label="Dismiss notification"
-          className="bds-toast__close"
-        >
-          <Icon icon={X} />
-        </button>
+        <CloseButton label="Dismiss notification" onClick={onDismiss} />
       )}
     </div>
   );

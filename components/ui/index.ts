@@ -28,6 +28,7 @@ export * from './Testimonial';
 export * from './Checkbox';
 export * from './Checklist';
 export * from './Chip';
+export * from './CloseButton';
 export * from './Cluster';
 export * from './Collapsible';
 export * from './CollapsibleCard';

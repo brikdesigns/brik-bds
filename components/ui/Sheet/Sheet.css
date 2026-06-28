@@ -129,34 +129,11 @@
   margin: 0;
 }
 
-/* ─── Close button (matches Modal) ──────────────────────────── */
-
+/* ─── Close button ──────────────────────────────────────────── */
+/* Layout only — visual contract lives in CloseButton. Negative margin pulls the
+ * padded hit-target so the glyph sits flush with the header edges. */
 .bds-sheet__close {
-  background: none;
-  border: none;
-  font-size: var(--icon-md);
-  line-height: 1;
-  cursor: pointer;
-  padding: var(--padding-xs);
   margin: calc(-1 * var(--padding-xs));
-  color: var(--text-primary);
-  opacity: 0.6;
-  transition: opacity 0.2s;
-  border-radius: var(--border-radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.bds-sheet__close:hover {
-  opacity: 1;
-}
-
-.bds-sheet__close:focus-visible {
-  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
-  outline-offset: 2px;
-  opacity: 1;
 }
 
 /* ─── Tabs (optional, renders below title row) ──────────────── */
