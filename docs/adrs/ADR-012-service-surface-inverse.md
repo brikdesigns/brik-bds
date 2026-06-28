@@ -1,6 +1,6 @@
 # ADR-012 — Service-line surface `-inverse`: a neutral-light / service-deep theme-flip surface
 
-**Status:** Proposed
+**Status:** Accepted (shipped in v0.107.0)
 **Date:** 2026-06-28
 **Supersedes:** Partially reverses [ADR-011](./ADR-011-service-line-token-value-model.md) §Decision pt-3 ("No per-service `-inverse`") — for the **surface** purpose only.
 **Superseded by:** —
