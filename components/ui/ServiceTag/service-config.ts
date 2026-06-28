@@ -14,11 +14,16 @@
 export type ServiceLine = 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
 
 /**
- * Size scale shared with ServiceTag. Kept as `ServiceBadgeSize` for
- * non-breaking package-API stability; structurally identical to a future
- * `ServiceTagSize` if the dir is renamed.
+ * Size scale shared with ServiceTag.
  */
-export type ServiceBadgeSize = 'sm' | 'md' | 'lg';
+export type ServiceTagSize = 'sm' | 'md' | 'lg';
+
+/**
+ * @deprecated Renamed to `ServiceTagSize` after the Badge → ServiceTag rename
+ * (dir renamed in #731). Kept for one release as a non-breaking package-API
+ * hatch; removable in the next major version.
+ */
+export type ServiceBadgeSize = ServiceTagSize;
 
 export const categoryConfig: Record<ServiceLine, { token: string; label: string }> = {
   brand: { token: 'yellow', label: 'Brand' },

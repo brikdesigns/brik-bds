@@ -5,7 +5,7 @@ import {
   getServiceIconPath,
   getServiceLineIconPath,
   type ServiceLine,
-  type ServiceBadgeSize,
+  type ServiceTagSize,
 } from './service-config';
 import './ServiceTag.css';
 
@@ -17,7 +17,7 @@ export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
   /** Display variant. Default: 'text' */
   variant?: ServiceTagVariant;
   /** Size variant. Default: 'md' */
-  size?: ServiceBadgeSize;
+  size?: ServiceTagSize;
   /** Display label — defaults to the category name (e.g. "Back Office"). Pass a service name to label a specific service. */
   label?: string;
   /**
@@ -32,11 +32,11 @@ export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
 // of truth for components; Figma is a visual reference only (and uses Font
 // Awesome glyphs, not our Iconify set), so these are not Figma-driven.
 // sm bumped 12→16: the 12px glyph read as teensy in icon-text pills.
-const tagIconSizeMap: Record<ServiceBadgeSize, number> = { sm: 16, md: 16, lg: 20 };
+const tagIconSizeMap: Record<ServiceTagSize, number> = { sm: 16, md: 16, lg: 20 };
 
 // bds-lint-ignore — component-level badge dimensions (code is SoT; see above).
-const iconScaleMap: Record<ServiceBadgeSize, number> = { sm: 0.55, md: 0.6, lg: 0.6 };
-const boxSizeMap: Record<ServiceBadgeSize, number> = { sm: 20, md: 28, lg: 40 };
+const iconScaleMap: Record<ServiceTagSize, number> = { sm: 0.55, md: 0.6, lg: 0.6 };
+const boxSizeMap: Record<ServiceTagSize, number> = { sm: 20, md: 28, lg: 40 };
 
 /**
  * ServiceTag — text label or icon badge for a Brik service category or individual service.
