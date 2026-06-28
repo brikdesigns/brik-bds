@@ -124,7 +124,12 @@
   --background-secondary-pressed: var(--color-grayscale-darker);
   /* Border */
   --border-primary: var(--color-grayscale-darker);
-  --border-secondary: var(--color-grayscale-light);
+  /* One step darker than the generated dark value (--color-grayscale-light
+   * #828282) so secondary dividers/outlines read as quieter chrome against the
+   * near-black dark surfaces instead of bright gray hairlines. --border-input
+   * deliberately stays at -dark (#5a5a5a) to preserve the 3:1 field-boundary
+   * contrast (WCAG 1.4.11) on the black --background-input dark fill. */
+  --border-secondary: var(--color-grayscale-dark);
   --border-muted: var(--color-grayscale-dark);
   --border-brand-primary: var(--color-poppy-light);
   --border-input: var(--color-grayscale-dark);
