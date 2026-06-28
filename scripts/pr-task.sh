@@ -53,7 +53,10 @@ if [[ ! "$BRANCH" =~ ^task/ ]]; then
 fi
 
 # ── Check for commits ahead of base ──
-COMMITS_AHEAD=$(git rev-list --count "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "0")
+# Existence guard only; --no-merges so a base-sync merge commit from a prior run
+# can't masquerade as branch work. The displayed count is recomputed against the
+# freshly-fetched origin baseline below (#1001).
+COMMITS_AHEAD=$(git rev-list --count --no-merges "${BASE_BRANCH}..HEAD" 2>/dev/null || echo "0")
 if [ "$COMMITS_AHEAD" -eq 0 ]; then
   echo -e "${RED}Error: No commits ahead of ${BASE_BRANCH}. Nothing to PR.${NC}"
   exit 1
@@ -163,8 +166,14 @@ else
 fi
 
 # ── Build PR body from commit log ──
-COMMIT_LOG=$(git log --oneline "${BASE_BRANCH}..HEAD" --reverse)
+# Baseline against origin/${BASE_BRANCH} (fetched above), not local ${BASE_BRANCH}:
+# the sync step's `git merge origin/${BASE_BRANCH}` at :115 makes every commit that
+# merge introduced reachable from HEAD but not from the lagging local ref, so a
+# local-base log/count would list them all (plus the merge commit) as if they were
+# this PR's work. --no-merges also drops the merge commit itself. See #1001.
+COMMIT_LOG=$(git log --oneline --no-merges "origin/${BASE_BRANCH}..HEAD" --reverse)
 COMMIT_BULLETS=$(echo "$COMMIT_LOG" | sed 's/^[a-f0-9]* /- /')
+COMMITS_AHEAD=$(git rev-list --count --no-merges "origin/${BASE_BRANCH}..HEAD")
 
 PR_BODY=$(cat <<EOF
 ## Summary
