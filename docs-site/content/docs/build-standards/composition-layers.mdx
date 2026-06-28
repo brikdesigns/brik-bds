@@ -92,6 +92,18 @@ If you find yourself reaching for a `StatCard`, you're conflating block and cont
 
 Don't reach for a `Card` when a `DataSection` is right. Cards are self-contained units in a grid; `DataSection` is one region of a larger page.
 
+## Identify the layer before you target it
+
+When a change names an element ("the card", "the section", "the button"), find the target by its **layer**, reading the DOM top-down (Section → Layout → Container → Block → Component) — **never by selector-name resemblance.**
+
+A BEM **block name** identifies the blueprint family; it does **not** define the element's layer. A block whose name contains "card" can still be a **Section**. The Card is whichever nested element plays the **Container** role.
+
+<Callout type="warn">
+  `bp-hero-img-card` is a **Section** (`<section>`). The **Card** is its nested Container, `aside.bp-hero-img-card__media-card`. They own different surfaces: the **Section** carries the page-role/band surface; the **Container (Card)** carries its own bounded surface (its `--bp-hero-img-card-card-bg` hook). A surface meant for a service-identified card — e.g. ADR-012's `--surface-service-{line}-inverse` — is a **Container** surface; applying it to the Section repaints the whole band, not the card. (Regression caught in brikdesigns#637.)
+</Callout>
+
+The block-vs-container decision rule above answers "what layer is this?"; apply it to the element you're about to change, not to the name that looks closest.
+
 ## Related
 
 - [Naming Principles](/docs/build-standards/naming-principles) — allowlist and blueprint naming rules
