@@ -9,6 +9,9 @@ on:
       - 'tokens/**'
       - 'design-tokens/**'
       - 'updates/**'
+  # Manual trigger — lets you fire a build on demand (e.g. to test the Slack
+  # notifier after wiring SLACK_CHROMATIC_WEBHOOK_URL) without a push to main.
+  workflow_dispatch:
 
 concurrency:
   group: chromatic-${{ github.ref }}
@@ -33,7 +36,65 @@ jobs:
         run: npm ci
 
       - name: Run Chromatic
+        id: chromatic
         uses: chromaui/action@07791f8243f4cb2698bf4d00426baf4b2d1cb7e0  # v13.3.5
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
+
+      # Post build result + snapshot usage to Slack. No-ops until the
+      # SLACK_CHROMATIC_WEBHOOK_URL secret is set, so it's safe to merge first.
+      # continue-on-error: a Slack outage must never fail the Chromatic job.
+      - name: Notify Slack
+        if: ${{ always() && env.SLACK_WEBHOOK_URL != '' }}
+        continue-on-error: true
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CHROMATIC_WEBHOOK_URL }}
+          CODE: ${{ steps.chromatic.outputs.code }}
+          CHANGES: ${{ steps.chromatic.outputs.changeCount }}
+          CAPTURED: ${{ steps.chromatic.outputs.actualCaptureCount }}
+          SPECS: ${{ steps.chromatic.outputs.specCount }}
+          COMPONENTS: ${{ steps.chromatic.outputs.componentCount }}
+          STORYBOOK_URL: ${{ steps.chromatic.outputs.storybookUrl }}
+          BUILD_URL: ${{ steps.chromatic.outputs.buildUrl }}
+          COMMIT_SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          if [ "${CODE:-1}" = "0" ]; then
+            status_emoji="✅"; status_text="passed"
+          else
+            status_emoji="❌"; status_text="failed"
+          fi
+
+          changes="${CHANGES:-0}"
+          if [ "${changes}" != "0" ]; then
+            change_line="🔍 *${changes}* visual change(s) need review"
+          else
+            change_line="No visual changes"
+          fi
+
+          captured="${CAPTURED:-0}"
+          usage_line="📸 Snapshots this build: *${captured}* (${COMPONENTS:-?} components / ${SPECS:-?} stories)"
+
+          # Heuristic: stories exist but nothing was captured on a passing build
+          # → likely snapshot quota exhausted (or a no-op / TurboSnap build).
+          quota_note=""
+          if [ "${captured}" = "0" ] && [ "${SPECS:-0}" != "0" ] && [ "${CODE:-1}" = "0" ]; then
+            quota_note=$'\n⚠️ 0 snapshots captured with stories present — possible snapshot quota exhaustion. Check Chromatic billing/usage.'
+          fi
+
+          # Link line — omit any URL the action didn't emit.
+          links="<${RUN_URL}|CI run>"
+          [ -n "${STORYBOOK_URL:-}" ] && links="<${STORYBOOK_URL}|Storybook> · ${links}"
+          [ -n "${BUILD_URL:-}" ] && links="<${BUILD_URL}|Build> · ${links}"
+
+          short_sha="${COMMIT_SHA:0:7}"
+          text="${status_emoji} *Chromatic build ${status_text}* on \`main\` (\`${short_sha}\`)
+          ${change_line}
+          ${usage_line}${quota_note}
+          ${links}"
+
+          payload=$(jq -n --arg t "$text" '{text: $t}')
+          curl -sf -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
