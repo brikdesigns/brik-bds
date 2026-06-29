@@ -241,7 +241,7 @@ const titleId = `${section.sectionKey}-title`;
   /* ── Media (top illustration area) ──────────────────────────── */
 
   .bp-features-branded-dark__media {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: var(--aspect-1-1);
     padding: var(--bp-features-branded-dark-image-pad, var(--padding-xl));
     display: flex;
     align-items: center;
@@ -258,7 +258,7 @@ const titleId = `${section.sectionKey}-title`;
 
   .bp-features-branded-dark__image-fallback {
     width: 60%;
-    aspect-ratio: 1;
+    aspect-ratio: var(--aspect-1-1);
     border-radius: 50%;
     background: var(--text-on-color-dark);
     opacity: 0.15;

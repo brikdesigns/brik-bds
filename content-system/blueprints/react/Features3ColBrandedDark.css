@@ -127,7 +127,7 @@
 /* ── Media (top illustration area) ─────────────────────────────── */
 
 .bp-features-branded-dark__media {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: var(--aspect-1-1);
   padding: var(--bp-features-branded-dark-image-pad, var(--padding-xl));
   display: flex;
   align-items: center;
@@ -153,7 +153,7 @@
 
 .bp-features-branded-dark__image-fallback--blank {
   width: 60%;
-  aspect-ratio: 1;
+  aspect-ratio: var(--aspect-1-1);
   border-radius: 50%;
   background: var(--text-on-color-dark);
   opacity: 0.15;
@@ -162,7 +162,7 @@
 
 /* ── Card body ─────────────────────────────────────────────────── */
 
-.bp-features-branded-dark__description {
+.bp-features-branded-dark__content {
   padding: var(--padding-lg);
   display: flex;
   flex-direction: column;
