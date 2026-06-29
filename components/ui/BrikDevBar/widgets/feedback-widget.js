@@ -1,35 +1,27 @@
 /**
- * Brik Design Review — Feedback Widget
+ * Brik Design Review — Feedback Widget (pin mode)
  *
- * Two modes (opt-in via `data-mode`):
+ * Click-anywhere pin-drop overlay for external clients reviewing pre-launch
+ * mockups. Anonymous via review-token. Pins POST to portal.brikdesigns.com.
+ * Served from Supabase Storage and injected at serve time
+ * (src/lib/design/feedback-widget-inject.ts); also used by static
+ * vale-partners-mockups via inject-widgets.sh.
  *
- *   1. PIN MODE (default — `data-mode="pin"` or omitted)
- *      Click-anywhere pin-drop overlay for external clients reviewing pre-launch
- *      mockups. Anonymous via review-token. Pins POST to portal.brikdesigns.com.
- *      Used by vale-partners-mockups via inject-widgets.sh.
+ * The structured-tag vocabulary (change_type / disposition) is single-sourced
+ * from @brikdesigns/feedback-contract via the `widget-constants.global.js`
+ * asset the inject path serves alongside this script (#1385).
  *
- *   2. FORM MODE (`data-mode="form"`, since brik-bds#467)
- *      Type-button + textarea panel, mirrors BDS DevFeedbackWidget.tsx visually.
- *      Authenticated via host-page session (cookies). Submissions POST to a
- *      caller-provided endpoint. Integrates with `window.BrikDevBar` if present;
- *      falls back to a standalone FAB. Target: brikdesigns staging admin QA
- *      (Phase 3 of brikdesigns/brik-llm#352).
+ * A dev-feedback FORM mode (brik-bds#467) once lived here too; it was removed in
+ * #1385 once brikdesigns DevTools migrated to the React DevFeedbackWidget
+ * (brikdesigns#479) — no live consumer remained.
  *
  * Configuration via data attributes on the script tag:
  *
- *   PIN MODE:
  *   <script src="feedback-widget.js"
  *     data-review-token="abc123"
  *     data-api-url="https://portal.brikdesigns.com"
- *     data-variant-key="a">
- *   </script>
- *
- *   FORM MODE (user-auth):
- *   <script src="feedback-widget.js"
- *     data-mode="form"
- *     data-auth="user"
- *     data-endpoint="/api/feedback"
- *     data-context-label="Page">
+ *     data-variant-key="a"
+ *     data-directory-url="https://portal.brikdesigns.com/review/abc123">
  *   </script>
  */
 
@@ -38,21 +30,35 @@
 
   // ── Config ──────────────────────────────────────────────────────────────
   const script = document.currentScript;
-  const MODE = script?.getAttribute('data-mode') || 'pin';
-  const AUTH = script?.getAttribute('data-auth') || 'review-token';
   const REVIEW_TOKEN = script?.getAttribute('data-review-token') || '';
   const API_URL = script?.getAttribute('data-api-url') || 'https://portal.brikdesigns.com';
   const VARIANT_KEY = script?.getAttribute('data-variant-key') || '';
-  const ENDPOINT = script?.getAttribute('data-endpoint') || '';
-  const CONTEXT_LABEL = script?.getAttribute('data-context-label') || 'Page';
+  // Where the "All styles" button returns to. The portal serve-time inject
+  // (feedback-widget-inject.ts) passes the absolute review-directory URL; legacy
+  // static Netlify deploys omit it and fall back to the sibling index.html page.
+  const DIRECTORY_URL = script?.getAttribute('data-directory-url') || 'index.html';
 
-  // ── Form mode (brik-bds#467) ────────────────────────────────────────────
-  // Self-contained: own UI, own submit. Returns when done so the rest of the
-  // IIFE (pin-mode setup) doesn't run.
-  if (MODE === 'form') {
-    initFormMode();
-    return;
-  }
+  // ── Chrome palette (#1305) ────────────────────────────────────────────────
+  // The feedback widget is a Brik tool overlaid on client work, so its chrome
+  // wears Brik's own brand (poppy) — NOT the client's brand token. Pin mode
+  // previously pulled `var(--background-brand-primary, …)` (the client's colour)
+  // and fell back to a stray blue (#4665f5) on any mockup that didn't define it.
+  // Values are canonical BDS poppy/neutral hexes (inlined because the widget
+  // ships raw to Storage and runs inside self-contained mockups where the BDS
+  // token sheet isn't present).
+  const C = {
+    brand: '#e35335', // poppy-light — primary actions, pins, focus
+    brandDark: '#b0351b', // poppy-dark — hover
+    brandTintBg: '#ffefeb', // poppy-lightest — context / dropzone tint
+    brandTintBorder: '#ffa693', // poppy-lighter — tint border
+    danger: '#ef4444', // destructive — cancel-active, remove
+    dangerDark: '#dc2626',
+    pending: '#f59e0b', // amber — pending pin
+    ink: '#1b1b1b', // toasts, tooltips, headings
+    white: '#ffffff',
+    border: '#dddddd', // neutral field borders
+    fontLabel: "'Poppins', system-ui, sans-serif",
+  };
 
   // ── Pin mode (existing path — review-token required) ────────────────────
   if (!REVIEW_TOKEN) {
@@ -68,9 +74,20 @@
   let authorEmail = localStorage.getItem('brik-feedback-email') || '';
   let screenshotBase64 = null;
 
-  // ── Styles ──────────────────────────────────────────────────────────────
-  const ACCENT = '#4665f5'; // fallback if BDS tokens unavailable
+  // Structured revision tags (#1381) — set per pin, required before submit.
+  // change_type drives the targeted-revision task; disposition says keep vs change.
+  // Single-sourced from @brikdesigns/feedback-contract via the widget-constants
+  // global the portal inject path serves alongside this script (#1385). The
+  // inline arrays are the fallback for static Netlify mockups that don't load
+  // the constants asset — they MUST match the contract (gated by the portal
+  // feedback-widget-constants test).
+  const FBC = (typeof window !== 'undefined' && window.BRIK_FEEDBACK_CONSTANTS) || {};
+  const CHANGE_TYPES = FBC.REVIEW_CHANGE_TYPES || ['layout', 'color', 'copy', 'spacing', 'imagery', 'other'];
+  const DISPOSITIONS = FBC.REVIEW_DISPOSITIONS || ['keep', 'change'];
+  let pendingChangeType = null;
+  let pendingDisposition = null;
 
+  // ── Styles ──────────────────────────────────────────────────────────────
   const css = `
     .bfb-toolbar {
       position: fixed;
@@ -82,7 +99,7 @@
       align-items: center;
     }
     .bfb-btn {
-      background: var(--background-brand-primary, ${ACCENT});
+      background: ${C.brand};
       color: #fff;
       border: none;
       border-radius: var(--radius-button, 100px);
@@ -113,14 +130,14 @@
       flex-shrink: 0;
     }
     .bfb-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    .bfb-btn--active { background: #ef4444; }
-    .bfb-btn--active:hover { background: #dc2626; }
+    .bfb-btn--active { background: ${C.danger}; }
+    .bfb-btn--active:hover { background: ${C.dangerDark}; }
 
     .bfb-pin {
       position: absolute;
       width: 28px;
       height: 28px;
-      background: var(--background-brand-primary, ${ACCENT});
+      background: ${C.brand};
       border: 2px solid #fff;
       border-radius: 50%;
       transform: translate(-50%, -50%);
@@ -137,7 +154,7 @@
       transition: transform 0.15s;
     }
     .bfb-pin:hover { transform: translate(-50%, -50%) scale(1.15); }
-    .bfb-pin--pending { background: #f59e0b; animation: bfb-pulse 1.5s infinite; }
+    .bfb-pin--pending { background: ${C.pending}; animation: bfb-pulse 1.5s infinite; }
 
     @keyframes bfb-pulse {
       0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
@@ -158,11 +175,11 @@
       margin: 0 0 14px;
       font-size: 15px;
       font-weight: 600;
-      color: #1b1b1b;
+      color: ${C.ink};
     }
     .bfb-form input, .bfb-form textarea {
       width: 100%;
-      border: 1px solid #ddd;
+      border: 1px solid ${C.border};
       border-radius: 8px;
       padding: 10px 12px;
       font-size: 14px;
@@ -173,9 +190,39 @@
     }
     .bfb-form input:focus, .bfb-form textarea:focus {
       outline: none;
-      border-color: var(--border-brand-primary, ${ACCENT});
+      border-color: ${C.brand};
     }
     .bfb-form textarea { resize: vertical; min-height: 80px; }
+    .bfb-tag-group { margin-bottom: 10px; }
+    .bfb-tag-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #888;
+      margin-bottom: 6px;
+    }
+    .bfb-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .bfb-tag {
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #444;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      line-height: 1;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+    .bfb-tag:hover { border-color: var(--border-brand-primary, ${C.brand}); }
+    .bfb-tag--active {
+      background: var(--background-brand-primary, ${C.brand});
+      border-color: var(--background-brand-primary, ${C.brand});
+      color: #fff;
+    }
     .bfb-form-actions {
       display: flex;
       gap: 8px;
@@ -190,15 +237,15 @@
       cursor: pointer;
       font-family: inherit;
     }
-    .bfb-submit { background: var(--background-brand-primary, ${ACCENT}); color: #fff; }
-    .bfb-submit:hover { background: #3550d4; }
+    .bfb-submit { background: ${C.brand}; color: #fff; }
+    .bfb-submit:hover { background: ${C.brandDark}; }
     .bfb-submit:disabled { opacity: 0.5; cursor: not-allowed; }
     .bfb-cancel { background: #f3f3f3; color: #666; }
     .bfb-cancel:hover { background: #e8e8e8; }
 
     .bfb-context {
-      background: #f0f2ff;
-      border: 1px solid #dde1fc;
+      background: ${C.brandTintBg};
+      border: 1px solid ${C.brandTintBorder};
       border-radius: 6px;
       padding: 8px 10px;
       margin-bottom: 10px;
@@ -207,7 +254,7 @@
       line-height: 1.4;
     }
     .bfb-context strong {
-      color: var(--text-brand-primary, ${ACCENT});
+      color: ${C.brand};
       font-weight: 600;
     }
     .bfb-context-row {
@@ -224,7 +271,7 @@
       bottom: 80px;
       right: 24px;
       z-index: 100001;
-      background: #1b1b1b;
+      background: ${C.ink};
       color: #fff;
       padding: 12px 20px;
       border-radius: 8px;
@@ -239,7 +286,7 @@
     }
 
     .bfb-screenshot-zone {
-      border: 2px dashed #ddd;
+      border: 2px dashed ${C.border};
       border-radius: 8px;
       padding: 10px;
       margin-bottom: 10px;
@@ -252,8 +299,8 @@
     }
     .bfb-screenshot-zone:hover,
     .bfb-screenshot-zone--dragover {
-      border-color: var(--border-brand-primary, ${ACCENT});
-      background: #f0f2ff;
+      border-color: ${C.brand};
+      background: ${C.brandTintBg};
     }
     .bfb-screenshot-zone input[type="file"] {
       position: absolute;
@@ -270,7 +317,7 @@
       max-width: 100%;
       max-height: 120px;
       border-radius: 6px;
-      border: 1px solid #ddd;
+      border: 1px solid ${C.border};
       display: block;
     }
     .bfb-screenshot-remove {
@@ -279,7 +326,7 @@
       right: -6px;
       width: 20px;
       height: 20px;
-      background: #ef4444;
+      background: ${C.danger};
       color: #fff;
       border: 2px solid #fff;
       border-radius: 50%;
@@ -289,14 +336,14 @@
       cursor: pointer;
       box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
-    .bfb-screenshot-remove:hover { background: #dc2626; }
+    .bfb-screenshot-remove:hover { background: ${C.dangerDark}; }
 
     .bfb-crosshair { cursor: crosshair !important; }
     .bfb-crosshair * { cursor: crosshair !important; }
 
     .bfb-pin-tooltip {
       position: absolute;
-      background: #1b1b1b;
+      background: ${C.ink};
       color: #fff;
       padding: 8px 12px;
       border-radius: 6px;
@@ -315,7 +362,7 @@
       left: 14px;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-bottom: 6px solid #1b1b1b;
+      border-bottom: 6px solid ${C.ink};
     }
   `;
 
@@ -416,7 +463,7 @@
 
   const backBtn = document.createElement('a');
   backBtn.className = 'bfb-btn';
-  backBtn.href = 'index.html';
+  backBtn.href = DIRECTORY_URL;
   backBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> All styles';
 
   toolbar.appendChild(backBtn);
@@ -491,6 +538,10 @@
   function showForm(pinX, pinY, screenX, screenY) {
     removeForm();
 
+    // Reset structured tags for this pin (#1381).
+    pendingChangeType = null;
+    pendingDisposition = null;
+
     formEl = document.createElement('div');
     formEl.className = 'bfb-form';
 
@@ -530,6 +581,18 @@
       <input type="text" class="bfb-name" placeholder="Your name" value="${esc(authorName)}" autocomplete="off" data-1p-ignore />
       <input type="text" class="bfb-email" placeholder="Email (optional)" value="${esc(authorEmail)}" autocomplete="off" data-1p-ignore />
       <textarea class="bfb-comment" placeholder="What are your thoughts?" data-1p-ignore></textarea>
+      <div class="bfb-tag-group">
+        <span class="bfb-tag-label">What kind of change?</span>
+        <div class="bfb-tags bfb-tags--change-type">
+          ${CHANGE_TYPES.map((t) => `<button type="button" class="bfb-tag" data-change-type="${t}">${t}</button>`).join('')}
+        </div>
+      </div>
+      <div class="bfb-tag-group">
+        <span class="bfb-tag-label">Keep or change?</span>
+        <div class="bfb-tags bfb-tags--disposition">
+          ${DISPOSITIONS.map((d) => `<button type="button" class="bfb-tag" data-disposition="${d}">${d}</button>`).join('')}
+        </div>
+      </div>
       <div class="bfb-screenshot-zone">
         \uD83D\uDCCE Paste, drag, or <u>upload</u> a screenshot
         <input type="file" accept="image/*" />
@@ -558,6 +621,24 @@
       ssZone.classList.remove('bfb-screenshot-zone--dragover');
       const file = e.dataTransfer?.files[0];
       if (file) processImageFile(file);
+    });
+
+    // Structured tag selection (#1381) — single-select per group.
+    formEl.querySelectorAll('.bfb-tags--change-type .bfb-tag').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        pendingChangeType = btn.getAttribute('data-change-type');
+        formEl.querySelectorAll('.bfb-tags--change-type .bfb-tag').forEach((b) => {
+          b.classList.toggle('bfb-tag--active', b === btn);
+        });
+      });
+    });
+    formEl.querySelectorAll('.bfb-tags--disposition .bfb-tag').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        pendingDisposition = btn.getAttribute('data-disposition');
+        formEl.querySelectorAll('.bfb-tags--disposition .bfb-tag').forEach((b) => {
+          b.classList.toggle('bfb-tag--active', b === btn);
+        });
+      });
     });
 
     formEl.querySelector('.bfb-cancel').addEventListener('click', () => {
@@ -598,6 +679,10 @@
       toast('Please enter your name and a comment');
       return;
     }
+    if (!pendingChangeType || !pendingDisposition) {
+      toast('Please tag the change type and keep/change');
+      return;
+    }
 
     const submitBtn = formEl.querySelector('.bfb-submit');
     submitBtn.disabled = true;
@@ -624,6 +709,8 @@
           page_url: window.location.href,
           section_context: Object.keys(currentSectionContext || {}).length > 0 ? currentSectionContext : undefined,
           screenshot_base64: screenshotBase64 || undefined,
+          change_type: pendingChangeType,
+          disposition: pendingDisposition,
         }),
       });
 
@@ -795,362 +882,4 @@
     loadExistingPins();
   }
 
-  // ── Form mode implementation (brik-bds#467) ─────────────────────────────
-  // Self-contained: separate CSS scope (.bff-*), separate DOM, separate auth.
-  // Mirrors components/ui/DevFeedbackWidget/DevFeedbackWidget.tsx visually
-  // (Poppy/Poppins/inlined hex — dev overlay must render even when host CSS
-  // hasn't loaded). Hoisted so it can be invoked at the top of the IIFE.
-  function initFormMode() {
-    // Validate config based on auth model.
-    if (AUTH === 'user' && !ENDPOINT) {
-      console.warn('[Brik Feedback] data-mode="form" data-auth="user" requires data-endpoint. Widget disabled.');
-      return;
-    }
-    if (AUTH !== 'user') {
-      // form + review-token deferred — no Phase 3 consumer asks for it.
-      console.warn('[Brik Feedback] data-mode="form" currently supports data-auth="user" only. Widget disabled.');
-      return;
-    }
-
-    const FORM_TYPES = [
-      { label: 'Bug', value: 'bug' },
-      { label: 'UI', value: 'ui' },
-      { label: 'Suggestion', value: 'suggestion' },
-      { label: 'Question', value: 'question' },
-    ];
-
-    // Inlined brand tokens — dev overlay stability (matches React widget).
-    const T = {
-      poppy: '#e35335',
-      poppyDark: '#b0351b',
-      white: '#ffffff',
-      grayLighter: '#e0e0e0',
-      grayLight: '#bdbdbd',
-      grayDark: '#828282',
-      grayDarkest: '#333333',
-      fontFamily: "'Poppins', system-ui, sans-serif",
-    };
-
-    // Poppins font (idempotent — sibling widgets inject it too).
-    if (!document.querySelector('link[href*="Poppins"]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap';
-      document.head.appendChild(link);
-    }
-
-    const formCss = `
-      .bff-fab {
-        position: fixed;
-        bottom: 16px;
-        left: 72px;
-        z-index: 9998;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: ${T.poppy};
-        color: ${T.white};
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-family: ${T.fontFamily};
-        box-shadow: 0 4px 20px rgba(0,0,0,0.22);
-        transition: background-color 0.15s ease, transform 0.15s ease;
-      }
-      .bff-fab:hover { background-color: ${T.poppyDark}; transform: translateY(-1px); }
-      .bff-fab.bff-fab--hidden { display: none; }
-      .bff-panel {
-        position: fixed;
-        z-index: 9998;
-        width: 320px;
-        background-color: ${T.white};
-        border-radius: 12px;
-        border: 1px solid ${T.grayLighter};
-        box-shadow: 0 12px 48px rgba(0,0,0,0.18);
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        font-family: ${T.fontFamily};
-        color: ${T.grayDarkest};
-      }
-      .bff-header {
-        font-size: 11px;
-        font-weight: 700;
-        color: ${T.grayDark};
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
-      .bff-types {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-      .bff-type {
-        padding: 8px 12px;
-        border-radius: 999px;
-        border: 1px solid ${T.grayLighter};
-        background-color: transparent;
-        color: ${T.grayDarkest};
-        font-family: ${T.fontFamily};
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        cursor: pointer;
-        line-height: 1;
-        transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
-      }
-      .bff-type[aria-checked="true"] {
-        background-color: ${T.poppy};
-        border-color: ${T.poppy};
-        color: ${T.white};
-      }
-      .bff-textarea {
-        width: 100%;
-        min-height: 80px;
-        padding: 10px 12px;
-        border-radius: 8px;
-        border: 1px solid ${T.grayLighter};
-        background-color: ${T.white};
-        color: ${T.grayDarkest};
-        font-size: 13px;
-        font-family: ${T.fontFamily};
-        resize: vertical;
-        outline: none;
-        box-sizing: border-box;
-      }
-      .bff-context {
-        font-size: 10px;
-        color: ${T.grayDark};
-        font-family: ${T.fontFamily};
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .bff-submit {
-        padding: 10px 16px;
-        border-radius: 999px;
-        border: none;
-        background-color: ${T.poppy};
-        color: ${T.white};
-        cursor: pointer;
-        font-size: 13px;
-        font-family: ${T.fontFamily};
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        transition: background-color 0.12s ease;
-      }
-      .bff-submit:disabled {
-        background-color: ${T.grayLighter};
-        color: ${T.grayDark};
-        cursor: not-allowed;
-      }
-      .bff-success {
-        text-align: center;
-        color: ${T.poppy};
-        font-size: 13px;
-        font-family: ${T.fontFamily};
-        font-weight: 600;
-        padding: 20px 0;
-      }
-    `;
-    const styleEl = document.createElement('style');
-    styleEl.textContent = formCss;
-    document.head.appendChild(styleEl);
-
-    // ── State ───────────────────────────────────────────────────────────
-    let open = false;
-    let type = 'bug';
-    let description = '';
-    let submitting = false;
-    let submitted = false;
-    let devBarPresent = false;
-    let panelEl = null;
-
-    // ── FAB (shown while DevBar is absent) ──────────────────────────────
-    const fab = document.createElement('button');
-    fab.type = 'button';
-    fab.className = 'bff-fab';
-    fab.setAttribute('aria-label', 'Open feedback');
-    fab.innerHTML = '💬';
-    fab.addEventListener('click', () => setOpen(!open));
-    document.body.appendChild(fab);
-
-    // ── DevBar slot registration (matches React widget pattern) ─────────
-    const slotDef = {
-      id: 'feedback',
-      label: 'Feedback',
-      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
-      order: 10,
-      onActivate: () => setOpen(true),
-      onDeactivate: () => setOpen(false),
-    };
-    const tryRegister = () => {
-      if (window.BrikDevBar) {
-        window.BrikDevBar.register(slotDef);
-        devBarPresent = true;
-        fab.classList.add('bff-fab--hidden');
-        return true;
-      }
-      return false;
-    };
-    if (!tryRegister()) {
-      window.BrikDevBarQueue = window.BrikDevBarQueue || [];
-      window.BrikDevBarQueue.push(slotDef);
-      const iv = setInterval(() => {
-        if (tryRegister()) clearInterval(iv);
-      }, 100);
-      setTimeout(() => clearInterval(iv), 2000);
-    }
-
-    // ── Panel ───────────────────────────────────────────────────────────
-    function setOpen(next) {
-      open = next;
-      if (open) renderPanel();
-      else removePanel();
-      window.BrikDevBar?.setActive('feedback', open);
-    }
-
-    function renderPanel() {
-      if (panelEl) return;
-      const ctx = window.location.pathname || '';
-      panelEl = document.createElement('div');
-      panelEl.className = 'bff-panel';
-      panelEl.setAttribute('role', 'dialog');
-      panelEl.setAttribute('aria-label', 'Submit feedback');
-      // Anchor to FAB position when DevBar absent; centered above DevBar otherwise.
-      if (devBarPresent) {
-        panelEl.style.bottom = '72px';
-        panelEl.style.left = '50%';
-        panelEl.style.transform = 'translateX(-50%)';
-      } else {
-        panelEl.style.bottom = '64px';
-        panelEl.style.left = '72px';
-      }
-      panelEl.innerHTML = renderPanelInner(ctx);
-      document.body.appendChild(panelEl);
-      wirePanelEvents(ctx);
-      const ta = panelEl.querySelector('.bff-textarea');
-      ta?.focus();
-    }
-
-    function renderPanelInner(ctx) {
-      if (submitted) {
-        return `
-          <div class="bff-header">Submit Feedback</div>
-          <div class="bff-success">Submitted — thank you!</div>
-        `;
-      }
-      const types = FORM_TYPES.map((ft) => {
-        const checked = type === ft.value ? 'true' : 'false';
-        return `<button type="button" role="radio" aria-checked="${checked}" class="bff-type" data-type="${ft.value}">${ft.label}</button>`;
-      }).join('');
-      const submitDisabled = submitting || !description.trim() ? 'disabled' : '';
-      const submitLabel = submitting ? 'Submitting…' : 'Submit Feedback';
-      return `
-        <div class="bff-header">Submit Feedback</div>
-        <form class="bff-form">
-          <div class="bff-types" role="radiogroup" aria-label="Feedback type">${types}</div>
-          <textarea class="bff-textarea" placeholder="Describe what you found..."></textarea>
-          <div class="bff-context">${escapeHtml(CONTEXT_LABEL)}: ${escapeHtml(ctx)}</div>
-          <button type="submit" class="bff-submit" ${submitDisabled}>${submitLabel}</button>
-        </form>
-      `;
-    }
-
-    function wirePanelEvents(ctx) {
-      const form = panelEl.querySelector('.bff-form');
-      if (!form) return; // success view, no form to wire
-      const ta = panelEl.querySelector('.bff-textarea');
-      ta.value = description;
-      ta.addEventListener('input', () => {
-        description = ta.value;
-        const submit = panelEl.querySelector('.bff-submit');
-        if (submit) submit.toggleAttribute('disabled', submitting || !description.trim());
-      });
-      panelEl.querySelectorAll('.bff-type').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          type = btn.getAttribute('data-type') || 'bug';
-          panelEl.querySelectorAll('.bff-type').forEach((b) => {
-            b.setAttribute('aria-checked', b === btn ? 'true' : 'false');
-          });
-        });
-      });
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        submitForm(ctx);
-      });
-    }
-
-    function removePanel() {
-      panelEl?.remove();
-      panelEl = null;
-    }
-
-    async function submitForm(ctx) {
-      if (!description.trim() || submitting) return;
-      submitting = true;
-      const submit = panelEl?.querySelector('.bff-submit');
-      if (submit) {
-        submit.textContent = 'Submitting…';
-        submit.setAttribute('disabled', '');
-      }
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            page_url: window.location.pathname,
-            feedback_type: type,
-            description: description.trim(),
-            context: ctx,
-          }),
-        });
-        if (res.ok) {
-          submitted = true;
-          if (panelEl) panelEl.innerHTML = renderPanelInner(ctx);
-          setTimeout(() => {
-            submitted = false;
-            description = '';
-            type = 'bug';
-            setOpen(false);
-          }, 1500);
-          return;
-        }
-        const data = await res.json().catch(() => ({}));
-        console.error('[Brik Feedback] submission failed:', data);
-        window.alert('Feedback failed — see console for details.');
-      } catch (err) {
-        console.error('[Brik Feedback] submission error:', err);
-        window.alert('Feedback failed — see console for details.');
-      } finally {
-        submitting = false;
-        if (submit) {
-          submit.textContent = 'Submit Feedback';
-          submit.toggleAttribute('disabled', !description.trim());
-        }
-      }
-    }
-
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    }
-
-    // ── Click-outside + Esc ─────────────────────────────────────────────
-    document.addEventListener('mousedown', (e) => {
-      if (!open) return;
-      const target = e.target;
-      if (panelEl?.contains(target)) return;
-      if (fab.contains(target)) return;
-      if (target.closest?.('.bdb-bar')) return; // DevBar slot toggles via its own handler
-      setOpen(false);
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && open) setOpen(false);
-    });
-  }
 })();
