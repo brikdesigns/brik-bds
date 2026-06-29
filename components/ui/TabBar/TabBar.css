@@ -29,6 +29,16 @@
   pointer-events: none;
 }
 
+/* ── Indicator dot ──
+   Items carrying a `dot` lay out label + Dot inline. Scoped to dotted items
+   so the default (text-only) item layout is untouched. */
+
+.bds-tab-bar-item--has-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
 /* ── Text variant ── */
 
 .bds-tab-bar--text .bds-tab-bar-item:hover:not(:disabled) {
