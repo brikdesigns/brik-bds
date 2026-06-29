@@ -131,7 +131,7 @@ export function Features3ColBrandedDark({ section }: Props) {
                       )}
                     </div>
 
-                    <div className="bp-features-branded-dark__description">
+                    <div className="bp-features-branded-dark__content">
                       <h3 className="bp-features-branded-dark__title">
                         {item.title}
                       </h3>
