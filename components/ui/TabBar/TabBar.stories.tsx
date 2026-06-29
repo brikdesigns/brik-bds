@@ -172,6 +172,20 @@ export const Variants: Story = {
         />
       </div>
 
+      {/* Status dot — color the cue by DotStatus */}
+      <div>
+        <SectionLabel>Status dot — "Feedback" has open items (warning)</SectionLabel>
+        <TabBar
+          variant="tab"
+          items={[
+            { label: 'Overview', active: true },
+            { label: 'Feedback', dot: 'warning' },
+            { label: 'Files', dot: 'positive' },
+            { label: 'Activity' },
+          ]}
+        />
+      </div>
+
       {/* Disabled tabs */}
       <div>
         <SectionLabel>Disabled — "Marketing" and "Other"</SectionLabel>
