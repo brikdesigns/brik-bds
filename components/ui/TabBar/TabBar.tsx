@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
 import { bdsClass } from '../../utils';
-import { Dot } from '../Dot';
+import { Dot, type DotStatus } from '../Dot';
 import './TabBar.css';
 
 /**
@@ -16,11 +16,14 @@ export interface TabItem {
   /** Click handler */
   onClick?: () => void;
   /**
-   * Show a small brand-color indicator dot after the label — a decorative
-   * attention cue (e.g. the tab's section needs action). Rendered
-   * `aria-hidden`, so the tab's accessible name stays the label alone.
+   * Show a small indicator dot after the label — a decorative attention cue
+   * (e.g. the tab's section needs action). Rendered `aria-hidden`, so the
+   * tab's accessible name stays the label alone.
+   *
+   * `true` renders the brand-default dot; pass a {@link DotStatus}
+   * (`'warning'`, `'positive'`, `'error'`, …) to color the cue by status.
    */
-  dot?: boolean;
+  dot?: boolean | DotStatus;
 }
 
 /** Visual variant matching Figma spec */
@@ -247,7 +250,9 @@ export function TabBar({
           onClick={tab.onClick}
         >
           {tab.label}
-          {tab.dot && <Dot status="default" size="sm" aria-hidden="true" />}
+          {tab.dot && (
+            <Dot status={tab.dot === true ? 'default' : tab.dot} size="sm" aria-hidden="true" />
+          )}
         </button>
       ))}
     </div>
