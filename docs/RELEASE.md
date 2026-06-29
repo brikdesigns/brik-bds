@@ -43,6 +43,10 @@ fresh.
    - Validates that `package.json` version matches the tag.
    - Runs `lint-tokens --errors-only`, `lint-jsdoc`, `validate:blueprints`, `typecheck`.
    - Runs `npm publish` (which triggers `prepublishOnly` → `rm -rf dist && npm run build:lib`).
+   - Creates a [GitHub Release](https://github.com/brikdesigns/brik-bds/releases) for
+     the tag with auto-generated notes (PRs/commits since the previous tag) plus the
+     consumer install command. No manual note-cutting — the tag push is the record
+     gesture. Idempotent: re-runs skip an already-created Release.
 
 5. **Bump consumers.** Each consumer needs `npm install @brikdesigns/bds@0.46.0`
    in a follow-up PR. The release workflow's job summary surfaces the exact
@@ -68,3 +72,6 @@ publish — fix the underlying issue, push a new commit, re-tag.
   the maintainer assumed merging the PR also published.
 - **2026-04-28:** introduced this workflow (`task/infra-release-workflow`).
   The tag is now the explicit publish gesture — no-tag means no-publish.
+- **2026-06-29:** the workflow now also creates a GitHub Release on tag push
+  (#919). The Releases page had nothing newer than v0.68.1 while v0.97.x shipped
+  with only a git tag; the tag is now the record gesture too, not just publish.

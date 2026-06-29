@@ -38,7 +38,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # create the GitHub Release on tag push
       packages: write
     steps:
       - name: Checkout code
@@ -101,3 +101,45 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           echo "npm install @brikdesigns/bds@${{ steps.version.outputs.pkg }}" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      # Make the tag push also the *record* gesture: create a GitHub Release so
+      # the Releases page stays current without a manual "did we cut notes?"
+      # step. Runs after publish — a failure here never un-publishes the package.
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="v${{ steps.version.outputs.tag }}"
+          fi
+
+          # Idempotent: a re-run (workflow_dispatch, or a retried job) must not
+          # crash on an already-created Release.
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists — skipping."
+            exit 0
+          fi
+
+          # Auto-generate notes from PRs/commits since the previous tag, then
+          # append the consumer-adopt install command (mirrors the job summary).
+          NOTES=$(gh api --method POST \
+            "repos/${{ github.repository }}/releases/generate-notes" \
+            -f tag_name="$TAG" --jq '.body' 2>/dev/null || true)
+          BODY=$(printf '%s\n\n## Install\n\n```\nnpm install @brikdesigns/bds@%s\n```\n' \
+            "$NOTES" "${{ steps.version.outputs.pkg }}")
+
+          # A semver prerelease tag (e.g. v1.0.0-rc.1) must not become "Latest".
+          if [[ "$TAG" == *-* ]]; then
+            LATEST_FLAGS=(--prerelease --latest=false)
+          else
+            LATEST_FLAGS=(--latest)
+          fi
+
+          gh release create "$TAG" \
+            --verify-tag \
+            "${LATEST_FLAGS[@]}" \
+            --title "$TAG" \
+            --notes "$BODY"
