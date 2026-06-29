@@ -87,13 +87,13 @@ export function normalizeServiceName(name: string): string {
 }
 
 /**
- * On-disk icon directory for a service line. The back-office icon assets still
- * live under `icons/service/` (the filenames are already `back-office-*`); the
- * physical directory rename is a separate asset migration (tracked follow-up).
- * Resolve both the canonical `back-office` and the deprecated `service` alias
- * to that directory until the assets move. Every other line: dir === category.
+ * On-disk icon directory for a service line. Assets live under
+ * `icons/back-office/` (dir === category) since the #800 rename. The only
+ * override left is the **@deprecated** `service` alias, mapped to the canonical
+ * `back-office` dir so the compat path keeps resolving until its removal.
+ * Every other line: dir === category.
  */
-const iconDirOverrides: Partial<Record<ServiceLine, string>> = { 'back-office': 'service' };
+const iconDirOverrides: Partial<Record<ServiceLine, string>> = { service: 'back-office' };
 function iconDir(category: ServiceLine): string {
   return iconDirOverrides[category] ?? category;
 }
