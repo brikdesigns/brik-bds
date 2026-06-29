@@ -11,6 +11,7 @@ import './Frame.css';
  * - `2-3`  — 2/3   (DSLR portrait)
  * - `4-3`  — 4/3   (legacy landscape, product shots)
  * - `3-4`  — 3/4   (legacy portrait)
+ * - `4-5`  — 4/5   (portrait — hero media, marketing/social imagery)
  * - `16-9` — 16/9  (video, hero banners)
  * - `9-16` — 9/16  (vertical video, mobile portrait)
  * - `21-9` — 21/9  (cinematic, full-bleed)
@@ -35,6 +36,7 @@ export type FrameRatio =
   | '2-3'
   | '4-3'
   | '3-4'
+  | '4-5'
   | '16-9'
   | '9-16'
   | '21-9'

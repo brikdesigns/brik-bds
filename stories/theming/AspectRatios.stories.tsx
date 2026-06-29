@@ -28,6 +28,7 @@ const PRIMITIVES = [
   { slug: '2-3',  value: '2 / 3',  note: 'DSLR portrait — vertical photography' },
   { slug: '4-3',  value: '4 / 3',  note: 'Legacy landscape (Frame default)' },
   { slug: '3-4',  value: '3 / 4',  note: 'Legacy portrait — profile cards, editorial' },
+  { slug: '4-5',  value: '4 / 5',  note: 'Portrait — hero media, marketing/social imagery' },
   { slug: '16-9', value: '16 / 9', note: 'Video, hero banners, OG images' },
   { slug: '9-16', value: '9 / 16', note: 'Vertical video, mobile portrait' },
   { slug: '21-9', value: '21 / 9', note: 'Cinematic, full-bleed backgrounds' },

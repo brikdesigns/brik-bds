@@ -86,7 +86,7 @@
 }
 
 .bp-hero-split-60-40__media {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--aspect-4-5);
   overflow: hidden;
   border-radius: var(--bp-hero-split-image-radius, var(--border-radius-lg));
 }
@@ -100,7 +100,7 @@
 
 /* Non-hallucinatable content stub — CI grep on data-content-needed. */
 .bp-hero-split-60-40__missing {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--aspect-4-5);
   display: flex;
   align-items: center;
   justify-content: center;
