@@ -1,5 +1,6 @@
 import { type HTMLAttributes, type CSSProperties } from 'react';
 import { bdsClass } from '../../utils';
+import { Dot } from '../Dot';
 import './TabBar.css';
 
 /**
@@ -14,6 +15,12 @@ export interface TabItem {
   disabled?: boolean;
   /** Click handler */
   onClick?: () => void;
+  /**
+   * Show a small brand-color indicator dot after the label — a decorative
+   * attention cue (e.g. the tab's section needs action). Rendered
+   * `aria-hidden`, so the tab's accessible name stays the label alone.
+   */
+  dot?: boolean;
 }
 
 /** Visual variant matching Figma spec */
@@ -235,11 +242,12 @@ export function TabBar({
           role="tab"
           aria-selected={tab.active || false}
           disabled={tab.disabled || false}
-          className="bds-tab-bar-item"
+          className={bdsClass('bds-tab-bar-item', tab.dot && 'bds-tab-bar-item--has-dot')}
           style={getStyles(tab.active || false, onColor)}
           onClick={tab.onClick}
         >
           {tab.label}
+          {tab.dot && <Dot status="default" size="sm" aria-hidden="true" />}
         </button>
       ))}
     </div>

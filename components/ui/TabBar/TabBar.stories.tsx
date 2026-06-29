@@ -84,7 +84,7 @@ export const Playground: Story = {
     variant: 'tab',
     items: [
       { label: 'Overview', active: true, onClick: tabClickHandler },
-      { label: 'Billing', onClick: tabClickHandler },
+      { label: 'Billing', dot: true, onClick: tabClickHandler },
       { label: 'Security', onClick: tabClickHandler },
     ],
   },
@@ -156,6 +156,20 @@ export const Variants: Story = {
       }}>
         <SectionLabel>Tab — on color</SectionLabel>
         <InteractiveTabBar variant="tab" onColor />
+      </div>
+
+      {/* Indicator dot — attention cue on a tab */}
+      <div>
+        <SectionLabel>Indicator dot — "Billing" needs attention</SectionLabel>
+        <TabBar
+          variant="tab"
+          items={[
+            { label: 'Overview', active: true },
+            { label: 'Billing', dot: true },
+            { label: 'Reporting', dot: true },
+            { label: 'Security' },
+          ]}
+        />
       </div>
 
       {/* Disabled tabs */}
