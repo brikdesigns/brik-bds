@@ -28,25 +28,27 @@
   --text-secondary: var(--color-grayscale-dark);
   --text-muted: var(--color-grayscale-light);
   --text-inverse: var(--color-grayscale-white);
-  /* AA fix: poppy-light text on white page = 3.80:1, fails AA Normal.
-     Shift to poppy-dark (8.5:1 on white). Dark-mode value stays poppy-light
-     below (5.52:1 on black) — poppy-dark on black = 3.48:1 would regress. */
-  --text-brand-primary: var(--color-poppy-dark);
+  /* Brand canon (brand-kit brik.json): brand-primary text is vibrant poppy-light
+     (#e35335). On white = 3.80:1 — clears AA-large (3:1), the bar for the
+     heading/accent role this token serves; small body copy uses --text-primary
+     (usage rule tracked in BDS-18). Restored from the poppy-dark AA divergence (BDS-22). */
+  --text-brand-primary: var(--color-poppy-light);
   /* Surface */
   --surface-primary: var(--color-grayscale-white);
   --surface-secondary: var(--color-grayscale-lightest);
-  /* AA fix: white-on-poppy-light = 3.78:1 fails AA on the primary button surface.
-     Shift base to poppy-dark (6.23:1) and the state pair one step deeper to keep
-     interaction feedback. Mirrors the call brikdesigns shipped locally in #219. */
-  --surface-brand-primary: var(--color-poppy-dark);
-  --surface-brand-primary-hover: var(--color-poppy-darker);
-  --surface-brand-primary-pressed: var(--color-poppy-darkest);
+  /* Brand canon (brand-kit brik.json): vibrant poppy-light base, darkening on
+     interaction. White label on poppy-light = 3.78:1 — clears AA-large (3:1),
+     the correct bar for a UI-component fill + CTA label (gated as such in
+     contrast-pairings.json). Restored from the poppy-dark AA divergence (BDS-22). */
+  --surface-brand-primary: var(--color-poppy-light);
+  --surface-brand-primary-hover: var(--color-poppy-dark);
+  --surface-brand-primary-pressed: var(--color-poppy-darker);
   --surface-brand-secondary: #f1f0ec;
   --surface-nav: var(--color-grayscale-white);
-  /* Background */
-  --background-brand-primary: var(--color-poppy-dark);
-  --background-brand-primary-hover: var(--color-poppy-darker);
-  --background-brand-primary-pressed: var(--color-poppy-darkest);
+  /* Background — vibrant poppy-light base per brand canon; darkens on interaction (BDS-22) */
+  --background-brand-primary: var(--color-poppy-light);
+  --background-brand-primary-hover: var(--color-poppy-dark);
+  --background-brand-primary-pressed: var(--color-poppy-darker);
   --background-brand-secondary: #f1f0ec;
   --background-primary: var(--color-grayscale-white);
   --background-secondary: var(--color-grayscale-lightest);
@@ -95,18 +97,18 @@
   /* Surface */
   --surface-primary: var(--color-grayscale-black);
   --surface-secondary: var(--color-grayscale-darker);
-  /* AA fix: base matches light mode (poppy-dark, 6.23:1 white-on-surface).
-     Dark-mode state pair brightens on interaction — matches the existing
-     --background-brand-primary-hover/-pressed pattern below. */
-  --surface-brand-primary: var(--color-poppy-dark);
+  /* Brand canon: vibrant poppy-light base in dark mode too; state pair brightens
+     on interaction (matches --background-brand-primary-hover/-pressed below).
+     Restored from the poppy-dark AA divergence (BDS-22). */
+  --surface-brand-primary: var(--color-poppy-light);
   --surface-brand-primary-hover: var(--color-poppy-lighter);
   --surface-brand-primary-pressed: var(--color-poppy-lightest);
   --surface-brand-secondary: var(--color-grayscale-darkest);
   --surface-nav: var(--color-grayscale-black);
   --surface-muted: var(--color-grayscale-darkest);
   --surface-overlay: var(--color-grayscale-black);
-  /* Background */
-  --background-brand-primary: var(--color-poppy-dark);
+  /* Background — vibrant poppy-light base per brand canon (BDS-22) */
+  --background-brand-primary: var(--color-poppy-light);
   --background-brand-secondary: var(--color-grayscale-darkest);
   --background-primary: var(--color-grayscale-black);
   --background-secondary: var(--color-grayscale-light);
