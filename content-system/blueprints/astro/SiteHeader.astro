@@ -195,15 +195,15 @@ function isCurrent(href: string): boolean {
 
   .bp-site-header {
     /* Per-client tuning */
-    --bp-site-header-bg: var(--surface-navigation, transparent);
-    --bp-site-header-text-color: var(--text-primary);
-    --bp-site-header-cta-bg: var(--background-brand-primary);
-    --bp-site-header-cta-color: var(--text-on-color-dark, var(--text-inverse));
+    --bds-site-header-bg: var(--surface-navigation, transparent);
+    --bds-site-header-text-color: var(--text-primary);
+    --bds-site-header-cta-bg: var(--background-brand-primary);
+    --bds-site-header-cta-color: var(--text-on-color-dark, var(--text-inverse));
 
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--bp-site-header-bg);
+    background: var(--bds-site-header-bg);
     padding-block: var(--space-md);
   }
 
@@ -218,7 +218,7 @@ function isCurrent(href: string): boolean {
   }
 
   .bp-site-header__brand {
-    color: var(--bp-site-header-text-color);
+    color: var(--bds-site-header-text-color);
     text-decoration: none;
     font-family: var(--font-family-heading);
     font-size: var(--heading-md);
@@ -257,7 +257,7 @@ function isCurrent(href: string): boolean {
   }
 
   .bp-site-header__nav-link {
-    color: var(--bp-site-header-text-color);
+    color: var(--bds-site-header-text-color);
     text-decoration: none;
     font-family: var(--font-family-label);
     font-size: var(--label-xl);
@@ -290,7 +290,7 @@ function isCurrent(href: string): boolean {
   }
 
   .bp-site-header__phone {
-    color: var(--bp-site-header-text-color);
+    color: var(--bds-site-header-text-color);
     text-decoration: none;
     font-family: var(--font-family-label);
     font-size: var(--label-xl);
@@ -308,8 +308,8 @@ function isCurrent(href: string): boolean {
 
   .bp-site-header__cta {
     padding: var(--space-sm) var(--space-md);
-    background: var(--bp-site-header-cta-bg);
-    color: var(--bp-site-header-cta-color);
+    background: var(--bds-site-header-cta-bg);
+    color: var(--bds-site-header-cta-color);
     font-family: var(--font-family-label);
     font-size: var(--label-xl);
     font-weight: var(--font-weight-semibold);
@@ -356,7 +356,7 @@ function isCurrent(href: string): boolean {
     display: block;
     width: 24px;
     height: 2px;
-    background: var(--bp-site-header-text-color);
+    background: var(--bds-site-header-text-color);
     margin-inline: auto;
   }
 
@@ -368,7 +368,7 @@ function isCurrent(href: string): boolean {
   .bp-site-header__drawer {
     position: fixed;
     inset: 0;
-    background: var(--bp-site-header-bg);
+    background: var(--bds-site-header-bg);
     padding: var(--space-2xl);
     display: none;
   }
@@ -389,7 +389,7 @@ function isCurrent(href: string): boolean {
   .bp-site-header__drawer-link,
   .bp-site-header__drawer-phone,
   .bp-site-header__drawer-cta {
-    color: var(--bp-site-header-text-color);
+    color: var(--bds-site-header-text-color);
     text-decoration: none;
     font-family: var(--font-family-heading);
     font-size: var(--heading-lg);

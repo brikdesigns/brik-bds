@@ -14,9 +14,9 @@
  */
 
 .bp-hero-split-60-40 {
-  background: var(--bp-hero-split-bg, var(--page-primary));
+  background: var(--bds-hero-split-bg, var(--page-primary));
   padding-block: var(
-    --bp-hero-split-padding-y,
+    --bds-hero-split-padding-y,
     clamp(var(--padding-xl), 8vw, var(--padding-huge))
   );
 }
@@ -52,7 +52,7 @@
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bp-hero-split-eyebrow-color, var(--text-brand-primary));
+  color: var(--bds-hero-split-eyebrow-color, var(--text-brand-primary));
 }
 
 .bp-hero-split-60-40__title {
@@ -61,7 +61,7 @@
   font-size: clamp(var(--heading-xxl), 5vw, var(--display-sm));
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
-  color: var(--bp-hero-split-headline-color, var(--text-primary));
+  color: var(--bds-hero-split-headline-color, var(--text-primary));
   position: relative;
 }
 
@@ -72,7 +72,7 @@
     width: 3rem;
     height: 2px;
     margin-top: var(--gap-lg);
-    background: var(--bp-hero-split-accent-line, var(--border-brand-primary));
+    background: var(--bds-hero-split-accent-line, var(--border-brand-primary));
   }
 }
 
@@ -81,14 +81,14 @@
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);
   line-height: var(--font-line-height-relaxed);
-  color: var(--bp-hero-split-lead-color, var(--text-primary));
+  color: var(--bds-hero-split-lead-color, var(--text-primary));
   max-width: 55ch;
 }
 
 .bp-hero-split-60-40__media {
   aspect-ratio: var(--aspect-4-5);
   overflow: hidden;
-  border-radius: var(--bp-hero-split-image-radius, var(--border-radius-lg));
+  border-radius: var(--bds-hero-split-image-radius, var(--border-radius-lg));
 }
 
 .bp-hero-split-60-40__image {
@@ -107,7 +107,7 @@
   padding: var(--padding-xl);
   background: var(--surface-secondary);
   border: 2px dashed var(--border-secondary);
-  border-radius: var(--bp-hero-split-image-radius, var(--border-radius-lg));
+  border-radius: var(--bds-hero-split-image-radius, var(--border-radius-lg));
 }
 
 .bp-hero-split-60-40__missing-label {

@@ -41,6 +41,7 @@ const SD_CSS_PATH = path.join(
 );
 const REPO_ROOT = path.join(__dirname, '..');
 const COMPONENTS_DIR = path.join(__dirname, '..', 'components', 'ui');
+const BLUEPRINTS_DIR = path.join(__dirname, '..', 'content-system', 'blueprints');
 
 // Repo-relative POSIX path, stable regardless of cwd or how the file was passed
 // (absolute from findFiles, or resolved from a relative --files arg).
@@ -74,6 +75,49 @@ const INLINE_VAR_BASELINE = new Set([
   'components/ui/Switch/Switch.tsx',
   'components/ui/ProgressStepper/ProgressStepper.tsx',
   'components/ui/Board/BoardColumn.tsx',
+]);
+
+// ---------------------------------------------------------------------------
+// Tier 4 fallback-literal baseline (ratchet) — brik-bds#1043 / ADR-014
+// ---------------------------------------------------------------------------
+// A Tier 4 knob's var() fallback must resolve to a Semantic token, never a raw
+// Tier-1 value (`var(--bds-toast-shadow, var(--shadow-md))`, never
+// `var(--bds-toast-shadow, 0 4px 12px …)`). The fallback-literal rule flags raw
+// design values inside var() fallbacks.
+//
+// These tokens carry a LOAD-BEARING literal fallback today because no registry
+// token backs them yet — grandfathered to `warning` (Category B, deferred per
+// #1043). Dropping the literal would break rendering; the proper fix is to mint
+// a real token. Tracked in the follow-up issue filed by #1043. New literal
+// fallbacks error. As each gets a real token, delete its entry.
+const FALLBACK_LITERAL_BASELINE = new Set([
+  '--size-container-xl',   // no container-width token in the registry yet
+  '--size-container-md',
+  '--line-height-tight',   // .astro refs a name that doesn't exist (.css uses --font-line-height-*)
+  '--line-height-relaxed',
+  '--bds-hero-img-card-icon-size',        // numeric knob, no backing size token
+  '--bds-features-branded-dark-hover-scale', // numeric knob, no backing scale token
+]);
+
+// `--theme-*` is a retired drift namespace (token-anatomy Drift table; #712).
+// Its literal fallbacks in blueprint CSS are grandfathered here and remediated
+// under the #712 retirement, not #1043.
+const FALLBACK_LITERAL_BASELINE_PREFIXES = ['--theme-'];
+
+// Component .css files with KNOWN pre-existing literal fallbacks that predate
+// this rule and sit OUTSIDE #1043's scope (blueprints + #41 hooks). Grandfathered
+// to `warning` so the gate ships without forcing a library-wide cleanup; new
+// literal fallbacks in any file NOT listed here error. Burn down under the #1043
+// follow-up (repo-wide component literal-fallback cleanup). RATCHET: delete an
+// entry once its file is clean.
+const FALLBACK_LITERAL_BASELINE_FILES = new Set([
+  'components/ui/Checklist/Checklist.css',
+  'components/ui/Chip/Chip.css',
+  'components/ui/CompletionToggle/CompletionToggle.css',
+  'components/ui/Grid/Grid.css',
+  'components/ui/InteractiveListItem/InteractiveListItem.css',
+  'components/ui/Sheet/Sheet.css',
+  'components/ui/Slider/Slider.css',
 ]);
 
 // Primitive token prefixes that should be replaced with semantic equivalents
@@ -612,8 +656,14 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
     // Check against valid token set
     if (tokens.allTokens.has(tokenName)) continue;
 
-    // --bds-* tokens are component-local custom properties (e.g. --bds-slider-percent).
-    // They are set by the component's JS/TSX and are not global BDS tokens — skip.
+    // --bds-{component}-{property} is the sanctioned Tier 4 component-token
+    // namespace (ADR-014): component-local custom properties — either an
+    // override knob or a runtime binding set by the component's JS/TSX. It is
+    // recognized BY RULE here, not as a blind spot; its var() fallback is
+    // separately policed by checkFallbackLiterals (must resolve to a Semantic
+    // token, never a raw value). The retired --bp-* and bare --{component}-*
+    // shapes are NOT skipped — they fall through to unknown-token / the
+    // --bp- regression gate.
     if (tokenName.startsWith('--bds-')) continue;
 
     // Some component-specific CSS properties (e.g. in Storybook theme wrappers)
@@ -631,6 +681,106 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
     });
   }
 
+  return violations;
+}
+
+/**
+ * Rule 7: Fallback-literal — brik-bds#1043 / ADR-014
+ *
+ * A Tier 4 knob's var() fallback must resolve to a Semantic token, never a raw
+ * Tier-1 value. A raw literal inside `var(--token, <literal>)` reintroduces an
+ * off-token value that ships silently if the token fails to resolve, and the
+ * linter's unknown-token rule can't see it (it reads only the canonical name).
+ *
+ * Flags a fallback that is a raw DESIGN VALUE — contains a digit, a #hex, or a
+ * color/easing function. A nested token fallback (`var(--x, var(--y))`) is the
+ * correct shape and passes. CSS keywords (transparent, currentColor, uppercase,
+ * inherit, …) are not Tier-1 values and are permitted.
+ *
+ * BlueprintFallback.* is exempt — it is a deliberate loud-stub renderer whose
+ * literal defaults are intentional (mirrors scripts/lint-blueprint-naming.mjs).
+ * Tokens in FALLBACK_LITERAL_BASELINE / -PREFIXES are grandfathered to warning.
+ */
+function checkFallbackLiterals(line, lineNum, file, isComponent) {
+  const violations = [];
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return violations;
+  if (line.includes('bds-lint-ignore')) return violations;
+  if (/BlueprintFallback\.(astro|css|tsx)$/.test(file)) return violations;
+
+  // Walk every `var(` and balance-parse its argument list so nested parens
+  // (rgba(), cubic-bezier(), nested var()) split correctly on the top-level comma.
+  for (let i = 0; i + 4 <= line.length; i++) {
+    if (line.slice(i, i + 4) !== 'var(') continue;
+    let depth = 0;
+    let commaIdx = -1;
+    let j = i + 3;
+    for (; j < line.length; j++) {
+      const c = line[j];
+      if (c === '(') depth++;
+      else if (c === ')') { depth--; if (depth === 0) break; }
+      else if (c === ',' && depth === 1 && commaIdx === -1) commaIdx = j;
+    }
+    if (depth !== 0 || j >= line.length) continue; // unbalanced (line-wrapped) — skip
+    if (commaIdx === -1) continue;                 // no fallback
+    const token = line.slice(i + 4, commaIdx).trim();
+    if (!/^--[\w-]+$/.test(token)) continue;       // not a simple var() reference
+    const fallback = line.slice(commaIdx + 1, j).trim();
+    if (fallback.startsWith('var(')) continue;     // nested token fallback — correct shape
+
+    const isRawValue = /[#\d]/.test(fallback) || /\b(rgb|rgba|hsl|hsla|cubic-bezier)\s*\(/i.test(fallback);
+    if (!isRawValue) continue;                     // CSS keyword fallback — permitted
+
+    const grandfathered =
+      FALLBACK_LITERAL_BASELINE.has(token) ||
+      FALLBACK_LITERAL_BASELINE_PREFIXES.some(p => token.startsWith(p)) ||
+      FALLBACK_LITERAL_BASELINE_FILES.has(repoRel(file));
+
+    violations.push({
+      rule: 'fallback-literal',
+      severity: grandfathered ? 'warning' : 'error',
+      file,
+      line: lineNum,
+      column: i + 1,
+      message: `Raw literal "${fallback}" in var(${token}, …) fallback — Tier 4 must resolve to a Semantic token, never a raw value`,
+      suggestion: grandfathered
+        ? `Grandfathered (FALLBACK_LITERAL_BASELINE) pending a real backing token. Do NOT add new literal fallbacks. See ADR-014 / #1043.`
+        : `Point the fallback at a Semantic token: var(${token}, var(--<semantic>)) — or drop the fallback if ${token} already resolves. See ADR-014.`,
+    });
+  }
+  return violations;
+}
+
+/**
+ * Rule 8: Retired --bp-* namespace gate — brik-bds#1043 / ADR-014
+ *
+ * `--bp-{blueprint}-{slot}-{prop}` is a retired Tier 4 namespace. The sanctioned
+ * shape is `--bds-{component}-{property}`. Flags both definitions (`--bp-…:`) and
+ * references (`var(--bp-…)`) so a re-introduction fails CI instead of accreting.
+ */
+function checkRetiredBpNamespace(line, lineNum, file) {
+  const violations = [];
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return violations;
+  if (line.includes('bds-lint-ignore')) return violations;
+
+  const regex = /(--bp-[\w-]+)/g;
+  let match;
+  const seen = new Set();
+  while ((match = regex.exec(line)) !== null) {
+    const name = match[1];
+    if (seen.has(name + match.index)) continue;
+    seen.add(name + match.index);
+    violations.push({
+      rule: 'retired-bp-namespace',
+      severity: 'error',
+      file,
+      line: lineNum,
+      column: match.index + 1,
+      message: `Retired Tier 4 namespace "${name}" — use --bds-${name.slice('--bp-'.length)} instead`,
+      suggestion: `Rename to the sanctioned --bds-{component}-{property} shape (ADR-014 / #1043).`,
+    });
+  }
   return violations;
 }
 
@@ -888,20 +1038,46 @@ function main() {
   }
 
   // 2. Find files — use explicit list if provided, otherwise scan all
-  const tsxFiles = explicitFiles
-    ? explicitFiles.filter(f => /\.tsx$/.test(f)).map(f => path.resolve(f))
-    : findFiles(COMPONENTS_DIR, /\.tsx$/);
+  // Match both absolute (from findFiles) and relative (staged paths from the
+  // pre-commit hook) forms — hence no leading-slash anchor.
+  const isBlueprint = (f) => f.split(path.sep).join('/').includes('content-system/blueprints/');
 
   // CSS files: explicit list (from pre-commit hook) or full scan
   const cssFilesIdx = args.indexOf('--css-files');
   const explicitCssFiles = cssFilesIdx !== -1
     ? args.slice(cssFilesIdx + 1).filter(f => !f.startsWith('--'))
     : null;
-  const cssFiles = explicitCssFiles
-    ? explicitCssFiles.filter(f => /\.css$/.test(f)).map(f => path.resolve(f))
-    : findFiles(COMPONENTS_DIR, /\.css$/);
 
-  const totalFiles = tsxFiles.length + cssFiles.length;
+  // Explicit mode: when EITHER list is passed, only the listed files are scanned
+  // — the other list defaults to empty rather than a full repo scan. (Lets the
+  // pre-commit hook lint staged blueprints via --files alone without dragging in
+  // every component .css.) The pre-#1043 hook always passed both, so this is a
+  // no-op for it.
+  const anyExplicit = explicitFiles !== null || explicitCssFiles !== null;
+
+  const tsxFiles = (explicitFiles
+    ? explicitFiles.filter(f => /\.tsx$/.test(f)).map(f => path.resolve(f))
+    : (anyExplicit ? [] : findFiles(COMPONENTS_DIR, /\.tsx$/))
+  ).filter(f => !isBlueprint(f));
+
+  const cssFiles = (explicitCssFiles
+    ? explicitCssFiles.filter(f => /\.css$/.test(f)).map(f => path.resolve(f))
+    : (anyExplicit ? [] : findFiles(COMPONENTS_DIR, /\.css$/))
+  ).filter(f => !isBlueprint(f));
+
+  // Blueprint files (.css / .astro / .tsx under content-system/blueprints) get
+  // the Tier 4 rule subset ONLY (fallback-literal + retired-bp namespace) —
+  // brik-bds#1043. The full token suite (unknown-token, primitive, family) is
+  // intentionally NOT run here: blueprints carry pre-existing --theme-* drift
+  // (#712) and other debt out of #1043's scope. From explicit args, take any
+  // staged blueprint paths (deduped across both lists); otherwise scan the whole
+  // tree (the CI validate run).
+  const explicitAll = [...(explicitFiles || []), ...(explicitCssFiles || [])];
+  const blueprintFiles = anyExplicit
+    ? [...new Set(explicitAll.filter(f => isBlueprint(f) && /\.(css|astro|tsx)$/.test(f)).map(f => path.resolve(f)))]
+    : findFiles(BLUEPRINTS_DIR, /\.(css|astro|tsx)$/);
+
+  const totalFiles = tsxFiles.length + cssFiles.length + blueprintFiles.length;
   if (totalFiles === 0) {
     if (!jsonMode) console.log('  No files to scan — skipping.\n');
     if (jsonMode) {
@@ -909,7 +1085,7 @@ function main() {
     }
     process.exit(0);
   }
-  if (!jsonMode) console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css files...\n`);
+  if (!jsonMode) console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css + ${blueprintFiles.length} blueprint files...\n`);
 
   // 3. Scan components for token usage violations
   const allViolations = [];
@@ -936,6 +1112,10 @@ function main() {
         allViolations.push(...checkInlineVarTsx(line, lineNum, file));
       }
 
+      // Rule 7 + 8: Tier 4 hook discipline (#1043) — apply to component source too.
+      allViolations.push(...checkFallbackLiterals(line, lineNum, file, isComponent));
+      allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
+
       // Rule 4: grid compliance (opt-in via --check-grid)
       if (checkGrid) {
         allViolations.push(...checkGridCompliance(line, lineNum, file));
@@ -958,10 +1138,28 @@ function main() {
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
       // Rule 5: token-family pairing
       allViolations.push(...checkTokenFamilyPairing(line, lineNum, file, true));
+      // Rule 7 + 8: Tier 4 hook discipline (#1043)
+      allViolations.push(...checkFallbackLiterals(line, lineNum, file, true));
+      allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
 
       if (checkGrid) {
         allViolations.push(...checkGridCompliance(line, lineNum, file));
       }
+    }
+  }
+
+  // Blueprint files: Tier 4 rule subset only (#1043 / ADR-014) — fallback-literal
+  // + retired-bp namespace. NOT the full token suite (see discovery note above).
+  for (const file of blueprintFiles) {
+    const content = fs.readFileSync(file, 'utf8');
+    const lines = content.split('\n');
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const lineNum = i + 1;
+
+      allViolations.push(...checkFallbackLiterals(line, lineNum, file, true));
+      allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
     }
   }
 

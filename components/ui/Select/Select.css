@@ -41,8 +41,8 @@
 
 .bds-select {
   /* ─── Component-scoped override surface ── */
-  --select-chevron-color: var(--text-muted);
-  --select-icon-color: var(--text-muted);
+  --bds-select-chevron-color: var(--text-muted);
+  --bds-select-icon-color: var(--text-muted);
 
   display: inline-block;
   width: 100%;
@@ -141,7 +141,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--select-chevron-color); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  color: var(--bds-select-chevron-color);
   pointer-events: none;
   z-index: 1;
   font-size: 0.75em; /* bds-lint-ignore — relative to input font size */
@@ -155,7 +155,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--select-icon-color); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  color: var(--bds-select-icon-color);
   pointer-events: none;
   z-index: 1;
 }
