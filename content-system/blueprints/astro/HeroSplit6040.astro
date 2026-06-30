@@ -28,13 +28,13 @@
  * Expose the tunable surfaces as properties on this component. Client
  * overrides live ONLY in `src/styles/client-overrides.css` with the
  * required `BDS-ISSUE:` comment per spec §6.3.
- *   --bp-hero-split-padding-y         (default: clamp block)
- *   --bp-hero-split-bg                (default: var(--page-primary))
- *   --bp-hero-split-headline-color    (default: var(--text-primary))
- *   --bp-hero-split-eyebrow-color     (default: var(--text-brand-primary))
- *   --bp-hero-split-lead-color        (default: var(--text-secondary))
- *   --bp-hero-split-accent-line       (default: var(--border-brand-primary))
- *   --bp-hero-split-image-radius      (default: var(--border-radius-lg))
+ *   --bds-hero-split-padding-y         (default: clamp block)
+ *   --bds-hero-split-bg                (default: var(--page-primary))
+ *   --bds-hero-split-headline-color    (default: var(--text-primary))
+ *   --bds-hero-split-eyebrow-color     (default: var(--text-brand-primary))
+ *   --bds-hero-split-lead-color        (default: var(--text-secondary))
+ *   --bds-hero-split-accent-line       (default: var(--border-brand-primary))
+ *   --bds-hero-split-image-radius      (default: var(--border-radius-lg))
  *
  * ── a11y (WCAG 2.1 AA) ───────────────────────────────────────────
  * - Heading is h1 (hero blueprints own the page's singular h1).
@@ -116,9 +116,9 @@ const imageAlt = '';
   .bp-hero-split-60-40 {
     /* Tokens + CSS custom properties — per-client override surface.
      * Never reference raw hex/px here. Always resolve through tokens. */
-    background: var(--bp-hero-split-bg, var(--page-primary));
+    background: var(--bds-hero-split-bg, var(--page-primary));
     padding-block: var(
-      --bp-hero-split-padding-y,
+      --bds-hero-split-padding-y,
       clamp(var(--space-3xl), 8vw, var(--space-5xl))
     );
   }
@@ -157,7 +157,7 @@ const imageAlt = '';
     font-weight: var(--font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--bp-hero-split-eyebrow-color, var(--text-brand-primary));
+    color: var(--bds-hero-split-eyebrow-color, var(--text-brand-primary));
   }
 
   .bp-hero-split-60-40__title {
@@ -170,7 +170,7 @@ const imageAlt = '';
     );
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bp-hero-split-headline-color, var(--text-primary));
+    color: var(--bds-hero-split-headline-color, var(--text-primary));
 
     /* Gold accent underline — the "subtle gold accent line" from the
      * canonical layout_spec. Scoped so it only shows on desktop +
@@ -185,7 +185,7 @@ const imageAlt = '';
       width: 3rem;
       height: 2px;
       margin-top: var(--space-lg);
-      background: var(--bp-hero-split-accent-line, var(--border-brand-primary));
+      background: var(--bds-hero-split-accent-line, var(--border-brand-primary));
     }
   }
 
@@ -194,7 +194,7 @@ const imageAlt = '';
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
-    color: var(--bp-hero-split-lead-color, var(--text-secondary));
+    color: var(--bds-hero-split-lead-color, var(--text-secondary));
     max-width: 55ch;
   }
 
@@ -230,7 +230,7 @@ const imageAlt = '';
   .bp-hero-split-60-40__media {
     aspect-ratio: var(--aspect-4-5);
     overflow: hidden;
-    border-radius: var(--bp-hero-split-image-radius, var(--border-radius-lg));
+    border-radius: var(--bds-hero-split-image-radius, var(--border-radius-lg));
   }
 
   .bp-hero-split-60-40__image {
@@ -252,7 +252,7 @@ const imageAlt = '';
     padding: var(--space-xl);
     background: var(--surface-secondary, var(--color-grayscale-lightest));
     border: 2px dashed var(--border-secondary, var(--color-grayscale-lighter));
-    border-radius: var(--bp-hero-split-image-radius, var(--border-radius-lg));
+    border-radius: var(--bds-hero-split-image-radius, var(--border-radius-lg));
   }
 
   .bp-hero-split-60-40__missing-label {

@@ -12,7 +12,7 @@
  */
 
 .bp-features-branded-dark {
-  background: var(--bp-features-branded-dark-bg, var(--page-inverse));
+  background: var(--bds-features-branded-dark-bg, var(--page-inverse));
   padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
   color: var(--text-on-color-dark);
 }
@@ -70,7 +70,7 @@
   padding: 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--bp-features-branded-dark-gap, var(--gap-lg));
+  gap: var(--bds-features-branded-dark-gap, var(--gap-lg));
 }
 
 @media (min-width: 768px) {
@@ -98,16 +98,16 @@
    * re-bound per-card by the consumer's [data-audience='X'] cascade. */
   background: var(--background-brand-primary);
   border: none;
-  border-radius: var(--bp-features-branded-dark-card-radius, var(--border-radius-lg));
+  border-radius: var(--bds-features-branded-dark-card-radius, var(--border-radius-lg));
   overflow: hidden;
   transform: translateY(0) scale(1);
   transition:
-    transform 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1)),
-    box-shadow 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    transform 200ms var(--easing-ease-out),
+    box-shadow 200ms var(--easing-ease-out);
 }
 
 .bp-features-branded-dark__card:hover {
-  transform: scale(var(--bp-features-branded-dark-hover-scale, 1.02));
+  transform: scale(var(--bds-features-branded-dark-hover-scale, 1.02));
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
 }
 
@@ -128,7 +128,7 @@
 
 .bp-features-branded-dark__media {
   aspect-ratio: var(--aspect-1-1);
-  padding: var(--bp-features-branded-dark-image-pad, var(--padding-xl));
+  padding: var(--bds-features-branded-dark-image-pad, var(--padding-xl));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,7 +203,7 @@
 
 .bp-features-branded-dark__cta-arrow {
   display: inline-block;
-  transition: transform 200ms var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  transition: transform 200ms var(--easing-ease-out);
 }
 
 .bp-features-branded-dark__card-link:hover .bp-features-branded-dark__cta-arrow,

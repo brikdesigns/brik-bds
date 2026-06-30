@@ -4,9 +4,9 @@
  */
 
 .bp-about-story-split {
-  background: var(--bp-about-story-split-bg, var(--page-primary));
+  background: var(--bds-about-story-split-bg, var(--page-primary));
   padding-block: var(
-    --bp-about-story-split-padding-y,
+    --bds-about-story-split-padding-y,
     clamp(var(--padding-xl), 7vw, var(--padding-huge))
   );
 }
@@ -50,7 +50,7 @@
   font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
-  color: var(--bp-about-story-split-heading-color, var(--text-primary));
+  color: var(--bds-about-story-split-heading-color, var(--text-primary));
 }
 
 .bp-about-story-split__description {
@@ -58,14 +58,14 @@
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);
   line-height: var(--font-line-height-relaxed);
-  color: var(--bp-about-story-split-body-color, var(--text-primary));
+  color: var(--bds-about-story-split-body-color, var(--text-primary));
   max-width: 65ch;
 }
 
 .bp-about-story-split__callout {
   padding: var(--padding-lg);
   border-left: 2px solid
-    var(--bp-about-story-split-quote-accent, var(--border-brand-primary));
+    var(--bds-about-story-split-quote-accent, var(--border-brand-primary));
   background: var(--surface-secondary);
 }
 

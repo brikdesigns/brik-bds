@@ -106,6 +106,12 @@ STAGED_BLUEPRINTS=$(git diff --cached --name-only --diff-filter=ACM -- 'content-
 if [ -n "$STAGED_BLUEPRINTS" ]; then
   echo "Linting staged blueprint naming..."
   node scripts/lint-blueprint-naming.mjs --errors-only --files $STAGED_BLUEPRINTS
+
+  # Tier 4 hook discipline (#1043 / ADR-014): fallback-literal + retired --bp-
+  # namespace. Catches staged .astro too (the CI validate run full-scans; this
+  # is the fast local mirror).
+  echo "Linting staged blueprint Tier 4 hooks (lint-tokens)..."
+  node scripts/lint-tokens.js --errors-only --files $STAGED_BLUEPRINTS
 fi
 
 # Typecheck always runs (fast, catches real errors)

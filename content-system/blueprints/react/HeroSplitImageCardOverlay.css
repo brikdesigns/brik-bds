@@ -22,9 +22,9 @@
  */
 
 .bp-hero-img-card {
-  background: var(--bp-hero-img-card-bg, var(--page-secondary));
+  background: var(--bds-hero-img-card-bg, var(--page-secondary));
   padding-block: var(
-    --bp-hero-img-card-padding-y,
+    --bds-hero-img-card-padding-y,
     clamp(var(--padding-xl), 6vw, var(--padding-huge))
   );
 }
@@ -51,9 +51,9 @@
 
 .bp-hero-img-card[data-audience='brand'] {
   background: var(--surface-service-brand-inverse);
-  --bp-hero-img-card-headline-color: var(--text-service-brand-on-light);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-brand-on-light);
-  --bp-hero-img-card-lead-color: var(--text-service-brand-on-light);
+  --bds-hero-img-card-headline-color: var(--text-service-brand-on-light);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-brand-on-light);
+  --bds-hero-img-card-lead-color: var(--text-service-brand-on-light);
   --text-brand-primary: var(--text-service-brand-on-light);
   --background-inverse: var(--surface-service-brand-dark);
   --text-on-color-light: var(--color-grayscale-white);
@@ -61,9 +61,9 @@
 
 .bp-hero-img-card[data-audience='marketing'] {
   background: var(--surface-service-marketing-inverse);
-  --bp-hero-img-card-headline-color: var(--text-service-marketing-on-light);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-marketing-on-light);
-  --bp-hero-img-card-lead-color: var(--text-service-marketing-on-light);
+  --bds-hero-img-card-headline-color: var(--text-service-marketing-on-light);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-marketing-on-light);
+  --bds-hero-img-card-lead-color: var(--text-service-marketing-on-light);
   --text-brand-primary: var(--text-service-marketing-on-light);
   --background-inverse: var(--surface-service-marketing-dark);
   --text-on-color-light: var(--color-grayscale-white);
@@ -71,9 +71,9 @@
 
 .bp-hero-img-card[data-audience='information'] {
   background: var(--surface-service-information-inverse);
-  --bp-hero-img-card-headline-color: var(--text-service-information-on-light);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-information-on-light);
-  --bp-hero-img-card-lead-color: var(--text-service-information-on-light);
+  --bds-hero-img-card-headline-color: var(--text-service-information-on-light);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-information-on-light);
+  --bds-hero-img-card-lead-color: var(--text-service-information-on-light);
   --text-brand-primary: var(--text-service-information-on-light);
   --background-inverse: var(--surface-service-information-dark);
   --text-on-color-light: var(--color-grayscale-white);
@@ -81,9 +81,9 @@
 
 .bp-hero-img-card[data-audience='product'] {
   background: var(--surface-service-product-inverse);
-  --bp-hero-img-card-headline-color: var(--text-service-product-on-light);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-product-on-light);
-  --bp-hero-img-card-lead-color: var(--text-service-product-on-light);
+  --bds-hero-img-card-headline-color: var(--text-service-product-on-light);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-product-on-light);
+  --bds-hero-img-card-lead-color: var(--text-service-product-on-light);
   --text-brand-primary: var(--text-service-product-on-light);
   --background-inverse: var(--surface-service-product-dark);
   --text-on-color-light: var(--color-grayscale-white);
@@ -91,9 +91,9 @@
 
 .bp-hero-img-card[data-audience='back-office'] {
   background: var(--surface-service-back-office-inverse);
-  --bp-hero-img-card-headline-color: var(--text-service-back-office-on-light);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-back-office-on-light);
-  --bp-hero-img-card-lead-color: var(--text-service-back-office-on-light);
+  --bds-hero-img-card-headline-color: var(--text-service-back-office-on-light);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-back-office-on-light);
+  --bds-hero-img-card-lead-color: var(--text-service-back-office-on-light);
   --text-brand-primary: var(--text-service-back-office-on-light);
   --background-inverse: var(--surface-service-back-office-dark);
   --text-on-color-light: var(--color-grayscale-white);
@@ -102,9 +102,9 @@
 /* @deprecated alias of [data-audience='back-office']. */
 .bp-hero-img-card[data-audience='service'] {
   background: var(--surface-service-back-office-inverse);
-  --bp-hero-img-card-headline-color: var(--text-service-back-office-on-light);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-back-office-on-light);
-  --bp-hero-img-card-lead-color: var(--text-service-back-office-on-light);
+  --bds-hero-img-card-headline-color: var(--text-service-back-office-on-light);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-back-office-on-light);
+  --bds-hero-img-card-lead-color: var(--text-service-back-office-on-light);
   --text-brand-primary: var(--text-service-back-office-on-light);
   --background-inverse: var(--surface-service-back-office-dark);
   --text-on-color-light: var(--color-grayscale-white);
@@ -136,34 +136,34 @@
  * is unaffected: its label/fill ride --text-inverse / --background-inverse
  * (surface-service-{line}-dark), handled above. */
 :root[data-theme="dark"] .bp-hero-img-card[data-audience='brand'] {
-  --bp-hero-img-card-headline-color: var(--text-service-brand-on-dark);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-brand-on-dark);
-  --bp-hero-img-card-lead-color: var(--text-service-brand-on-dark);
+  --bds-hero-img-card-headline-color: var(--text-service-brand-on-dark);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-brand-on-dark);
+  --bds-hero-img-card-lead-color: var(--text-service-brand-on-dark);
   --text-brand-primary: var(--text-service-brand-on-dark);
 }
 :root[data-theme="dark"] .bp-hero-img-card[data-audience='marketing'] {
-  --bp-hero-img-card-headline-color: var(--text-service-marketing-on-dark);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-marketing-on-dark);
-  --bp-hero-img-card-lead-color: var(--text-service-marketing-on-dark);
+  --bds-hero-img-card-headline-color: var(--text-service-marketing-on-dark);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-marketing-on-dark);
+  --bds-hero-img-card-lead-color: var(--text-service-marketing-on-dark);
   --text-brand-primary: var(--text-service-marketing-on-dark);
 }
 :root[data-theme="dark"] .bp-hero-img-card[data-audience='information'] {
-  --bp-hero-img-card-headline-color: var(--text-service-information-on-dark);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-information-on-dark);
-  --bp-hero-img-card-lead-color: var(--text-service-information-on-dark);
+  --bds-hero-img-card-headline-color: var(--text-service-information-on-dark);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-information-on-dark);
+  --bds-hero-img-card-lead-color: var(--text-service-information-on-dark);
   --text-brand-primary: var(--text-service-information-on-dark);
 }
 :root[data-theme="dark"] .bp-hero-img-card[data-audience='product'] {
-  --bp-hero-img-card-headline-color: var(--text-service-product-on-dark);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-product-on-dark);
-  --bp-hero-img-card-lead-color: var(--text-service-product-on-dark);
+  --bds-hero-img-card-headline-color: var(--text-service-product-on-dark);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-product-on-dark);
+  --bds-hero-img-card-lead-color: var(--text-service-product-on-dark);
   --text-brand-primary: var(--text-service-product-on-dark);
 }
 :root[data-theme="dark"] .bp-hero-img-card[data-audience='back-office'],
 :root[data-theme="dark"] .bp-hero-img-card[data-audience='service'] {
-  --bp-hero-img-card-headline-color: var(--text-service-back-office-on-dark);
-  --bp-hero-img-card-eyebrow-color: var(--text-service-back-office-on-dark);
-  --bp-hero-img-card-lead-color: var(--text-service-back-office-on-dark);
+  --bds-hero-img-card-headline-color: var(--text-service-back-office-on-dark);
+  --bds-hero-img-card-eyebrow-color: var(--text-service-back-office-on-dark);
+  --bds-hero-img-card-lead-color: var(--text-service-back-office-on-dark);
   --text-brand-primary: var(--text-service-back-office-on-dark);
 }
 
@@ -201,8 +201,8 @@
    (40px = 2.5rem). See brik-bds#873. */
 img.bp-hero-img-card__icon {
   display: block;
-  width: var(--bp-hero-img-card-icon-size, 2.5rem);
-  height: var(--bp-hero-img-card-icon-size, 2.5rem);
+  width: var(--bds-hero-img-card-icon-size, 2.5rem);
+  height: var(--bds-hero-img-card-icon-size, 2.5rem);
   object-fit: contain;
 }
 
@@ -213,7 +213,7 @@ img.bp-hero-img-card__icon {
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bp-hero-img-card-eyebrow-color, var(--text-primary));
+  color: var(--bds-hero-img-card-eyebrow-color, var(--text-primary));
 }
 
 .bp-hero-img-card__title {
@@ -221,24 +221,24 @@ img.bp-hero-img-card__icon {
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));
   font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-tight, 1.05);
-  color: var(--bp-hero-img-card-headline-color, var(--text-primary));
+  line-height: var(--font-line-height-tight);
+  color: var(--bds-hero-img-card-headline-color, var(--text-primary));
 }
 
 .bp-hero-img-card__lead {
   margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--body-xl);
-  line-height: var(--font-line-height-relaxed, 1.5);
-  color: var(--bp-hero-img-card-lead-color, var(--text-primary));
+  line-height: var(--font-line-height-relaxed);
+  color: var(--bds-hero-img-card-lead-color, var(--text-primary));
   max-width: 55ch;
 }
 
 .bp-hero-img-card__media-card {
-  background: var(--bp-hero-img-card-card-bg, var(--surface-primary));
-  border-radius: var(--bp-hero-img-card-radius, var(--border-radius-lg));
+  background: var(--bds-hero-img-card-media-bg, var(--surface-primary));
+  border-radius: var(--bds-hero-img-card-radius, var(--border-radius-lg));
   padding: var(--padding-md);
-  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
@@ -291,7 +291,7 @@ img.bp-hero-img-card__icon {
   padding: var(--padding-xl);
   background: var(--surface-secondary);
   border: 2px dashed var(--border-secondary);
-  border-radius: var(--bp-hero-img-card-radius, var(--border-radius-lg));
+  border-radius: var(--bds-hero-img-card-radius, var(--border-radius-lg));
 }
 
 .bp-hero-img-card__missing-label {

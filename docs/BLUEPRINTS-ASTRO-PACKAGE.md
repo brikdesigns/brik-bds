@@ -479,7 +479,7 @@ Blueprint components. Layout primitives. Nav markup. Footer markup. Animation pa
 
 If a client genuinely needs a visual tweak that tokens + atmosphere cannot express, `src/styles/client-overrides.css` is the ONE file for it. Every rule MUST:
 
-1. Reference a CSS custom property exposed by a blueprint (e.g., `--bp-hero-split-eyebrow-color`). Blueprints expose a documented, versioned set of these variables in their Storybook story.
+1. Reference a CSS custom property exposed by a blueprint (e.g., `--bds-hero-split-eyebrow-color`). Blueprints expose a documented, versioned set of these variables in their Storybook story.
 2. Carry a comment on the preceding line: `/* BDS-ISSUE: <github-issue-url> */`.
 3. CI grep check in each client repo: any rule in `client-overrides.css` without a preceding BDS-ISSUE comment fails the build.
 

@@ -15,11 +15,11 @@
  * required_facts: []. Section-driven.
  *
  * CSS custom properties:
- *   --bp-testimonials-featured-padding-y
- *   --bp-testimonials-featured-bg         (default: var(--surface-primary))
- *   --bp-testimonials-featured-quote-color (default: var(--text-primary))
- *   --bp-testimonials-featured-cite-color  (default: var(--text-secondary))
- *   --bp-testimonials-featured-mark-color  (default: var(--text-brand-primary))
+ *   --bds-testimonials-featured-padding-y
+ *   --bds-testimonials-featured-bg         (default: var(--surface-primary))
+ *   --bds-testimonials-featured-quote-color (default: var(--text-primary))
+ *   --bds-testimonials-featured-cite-color  (default: var(--text-secondary))
+ *   --bds-testimonials-featured-mark-color  (default: var(--text-brand-primary))
  *
  * a11y: h2 + aria-labelledby, semantic blockquote + cite. Decorative
  * quote mark uses aria-hidden so AT doesn't announce it.
@@ -55,9 +55,9 @@ const featured = section.items[0];
 
 <style>
   .bp-testimonials-featured {
-    background: var(--bp-testimonials-featured-bg, var(--surface-primary));
+    background: var(--bds-testimonials-featured-bg, var(--surface-primary));
     padding-block: var(
-      --bp-testimonials-featured-padding-y,
+      --bds-testimonials-featured-padding-y,
       clamp(var(--space-3xl), 7vw, var(--space-5xl))
     );
   }
@@ -93,7 +93,7 @@ const featured = section.items[0];
     font-family: var(--font-family-display, var(--font-family-heading));
     font-size: clamp(var(--display-sm), 8vw, var(--display-md));
     line-height: 1;
-    color: var(--bp-testimonials-featured-mark-color, var(--text-brand-primary));
+    color: var(--bds-testimonials-featured-mark-color, var(--text-brand-primary));
   }
 
   .bp-testimonials-featured__quote-text {
@@ -102,7 +102,7 @@ const featured = section.items[0];
     font-size: clamp(var(--heading-md), 2.5vw, var(--heading-xl));
     font-weight: var(--font-weight-medium);
     line-height: var(--line-height-relaxed);
-    color: var(--bp-testimonials-featured-quote-color, var(--text-primary));
+    color: var(--bds-testimonials-featured-quote-color, var(--text-primary));
     max-width: 60ch;
   }
 
@@ -112,6 +112,6 @@ const featured = section.items[0];
     font-style: normal;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--bp-testimonials-featured-cite-color, var(--text-secondary));
+    color: var(--bds-testimonials-featured-cite-color, var(--text-secondary));
   }
 </style>

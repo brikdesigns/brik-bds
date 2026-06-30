@@ -19,12 +19,12 @@
  * on `dist/` blocks publish.
  *
  * CSS custom properties:
- *   --bp-cta-split-contact-padding-y
- *   --bp-cta-split-contact-bg              (default: var(--surface-primary))
- *   --bp-cta-split-contact-heading-color   (default: var(--text-primary))
- *   --bp-cta-split-contact-body-color      (default: var(--text-secondary))
- *   --bp-cta-split-contact-method-color    (default: var(--text-primary))
- *   --bp-cta-split-contact-divider         (default: var(--border-secondary))
+ *   --bds-cta-split-contact-padding-y
+ *   --bds-cta-split-contact-bg              (default: var(--surface-primary))
+ *   --bds-cta-split-contact-heading-color   (default: var(--text-primary))
+ *   --bds-cta-split-contact-body-color      (default: var(--text-secondary))
+ *   --bds-cta-split-contact-method-color    (default: var(--text-primary))
+ *   --bds-cta-split-contact-divider         (default: var(--border-secondary))
  *
  * a11y: h2 + aria-labelledby. Contact methods use semantic tel:/mailto:
  * anchors. Focus-visible ring on every interactive surface.
@@ -85,9 +85,9 @@ const email = clientFacts.email;
 
 <style>
   .bp-cta-split-contact {
-    background: var(--bp-cta-split-contact-bg, var(--surface-primary));
+    background: var(--bds-cta-split-contact-bg, var(--surface-primary));
     padding-block: var(
-      --bp-cta-split-contact-padding-y,
+      --bds-cta-split-contact-padding-y,
       clamp(var(--space-3xl), 7vw, var(--space-5xl))
     );
   }
@@ -121,7 +121,7 @@ const email = clientFacts.email;
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bp-cta-split-contact-heading-color, var(--text-primary));
+    color: var(--bds-cta-split-contact-heading-color, var(--text-primary));
   }
 
   .bp-cta-split-contact__description {
@@ -129,7 +129,7 @@ const email = clientFacts.email;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
-    color: var(--bp-cta-split-contact-body-color, var(--text-secondary));
+    color: var(--bds-cta-split-contact-body-color, var(--text-secondary));
     max-width: 55ch;
   }
 
@@ -163,14 +163,14 @@ const email = clientFacts.email;
     flex-direction: column;
     gap: var(--space-md);
     padding-inline-start: 0;
-    border-left: 1px solid var(--bp-cta-split-contact-divider, var(--border-secondary));
+    border-left: 1px solid var(--bds-cta-split-contact-divider, var(--border-secondary));
     padding-inline-start: var(--space-lg);
   }
 
   @media (max-width: 767px) {
     .bp-cta-split-contact__methods {
       border-left: none;
-      border-top: 1px solid var(--bp-cta-split-contact-divider, var(--border-secondary));
+      border-top: 1px solid var(--bds-cta-split-contact-divider, var(--border-secondary));
       padding-top: var(--space-lg);
       padding-inline-start: 0;
     }
@@ -180,7 +180,7 @@ const email = clientFacts.email;
     display: flex;
     flex-direction: column;
     gap: var(--space-2xs);
-    color: var(--bp-cta-split-contact-method-color, var(--text-primary));
+    color: var(--bds-cta-split-contact-method-color, var(--text-primary));
     text-decoration: none;
     transition: color 120ms ease-out;
   }

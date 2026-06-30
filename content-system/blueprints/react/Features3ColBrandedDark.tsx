@@ -27,11 +27,11 @@
  * Storybook demonstrates the pattern via a stories-only cascade block.
  *
  * CSS custom properties — variation API:
- *   --bp-features-branded-dark-bg          (default: var(--page-inverse))
- *   --bp-features-branded-dark-card-radius (default: var(--border-radius-lg))
- *   --bp-features-branded-dark-gap         (default: var(--gap-lg))
- *   --bp-features-branded-dark-image-pad   (default: var(--padding-xl))
- *   --bp-features-branded-dark-hover-scale (default: 1.02 — set to 1 to disable)
+ *   --bds-features-branded-dark-bg          (default: var(--page-inverse))
+ *   --bds-features-branded-dark-card-radius (default: var(--border-radius-lg))
+ *   --bds-features-branded-dark-gap         (default: var(--gap-lg))
+ *   --bds-features-branded-dark-image-pad   (default: var(--padding-xl))
+ *   --bds-features-branded-dark-hover-scale (default: 1.02 — set to 1 to disable)
  *
  * a11y: section uses h2 + aria-labelledby; cards are an unordered
  * list with role="list"; card title is h3. Card title uses

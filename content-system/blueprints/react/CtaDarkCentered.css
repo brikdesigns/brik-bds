@@ -8,9 +8,9 @@
  */
 
 .bp-cta-dark-centered {
-  background: var(--bp-cta-dark-centered-bg, var(--surface-inverse));
+  background: var(--bds-cta-dark-centered-bg, var(--surface-inverse));
   padding-block: var(
-    --bp-cta-dark-centered-padding-y,
+    --bds-cta-dark-centered-padding-y,
     clamp(var(--padding-xl), 8vw, var(--padding-huge))
   );
 }
@@ -32,7 +32,7 @@
   font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
-  color: var(--bp-cta-dark-centered-heading-color, var(--text-on-color-dark));
+  color: var(--bds-cta-dark-centered-heading-color, var(--text-on-color-dark));
 }
 
 .bp-cta-dark-centered__description {
@@ -40,7 +40,7 @@
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);
   line-height: var(--font-line-height-relaxed);
-  color: var(--bp-cta-dark-centered-body-color, var(--text-on-color-dark));
+  color: var(--bds-cta-dark-centered-body-color, var(--text-on-color-dark));
   opacity: 0.85;
   max-width: 55ch;
 }

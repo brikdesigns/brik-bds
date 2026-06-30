@@ -17,11 +17,11 @@
  * required_facts: []. Section-driven.
  *
  * CSS custom properties:
- *   --bp-stats-dark-bar-padding-y
- *   --bp-stats-dark-bar-bg        (default: var(--surface-inverse))
- *   --bp-stats-dark-bar-value-color   (default: var(--text-inverse))
- *   --bp-stats-dark-bar-label-color   (default: var(--text-secondary-inverse))
- *   --bp-stats-dark-bar-divider       (default: var(--border-secondary))
+ *   --bds-stats-dark-bar-padding-y
+ *   --bds-stats-dark-bar-bg        (default: var(--surface-inverse))
+ *   --bds-stats-dark-bar-value-color   (default: var(--text-inverse))
+ *   --bds-stats-dark-bar-label-color   (default: var(--text-secondary-inverse))
+ *   --bds-stats-dark-bar-divider       (default: var(--border-secondary))
  *
  * a11y: semantic list (ul/li). If section.heading present, wired via
  * aria-labelledby; if absent, aria-label fallback. Numbers are
@@ -61,9 +61,9 @@ const items = section.items;
 
 <style>
   .bp-stats-dark-bar {
-    background: var(--bp-stats-dark-bar-bg, var(--surface-inverse, var(--color-grayscale-black)));
+    background: var(--bds-stats-dark-bar-bg, var(--surface-inverse, var(--color-grayscale-black)));
     padding-block: var(
-      --bp-stats-dark-bar-padding-y,
+      --bds-stats-dark-bar-padding-y,
       clamp(var(--space-xl), 5vw, var(--space-3xl))
     );
   }
@@ -106,14 +106,14 @@ const items = section.items;
     flex-direction: column;
     gap: var(--space-2xs);
     padding-block: var(--space-sm);
-    border-left: 1px solid var(--bp-stats-dark-bar-divider, var(--border-secondary));
+    border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
     padding-left: var(--space-md);
   }
 
   @media (max-width: 639px) {
     .bp-stats-dark-bar__item {
       border-left: none;
-      border-top: 1px solid var(--bp-stats-dark-bar-divider, var(--border-secondary));
+      border-top: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
       padding-top: var(--space-md);
       padding-left: 0;
     }
@@ -128,7 +128,7 @@ const items = section.items;
     font-size: clamp(var(--heading-xl), 4vw, var(--heading-huge));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bp-stats-dark-bar-value-color, var(--text-inverse, var(--color-grayscale-white)));
+    color: var(--bds-stats-dark-bar-value-color, var(--text-inverse, var(--color-grayscale-white)));
   }
 
   .bp-stats-dark-bar__label {
@@ -136,6 +136,6 @@ const items = section.items;
     font-size: var(--label-lg);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--bp-stats-dark-bar-label-color, var(--text-secondary-inverse, var(--color-grayscale-lightest)));
+    color: var(--bds-stats-dark-bar-label-color, var(--text-secondary-inverse, var(--color-grayscale-lightest)));
   }
 </style>

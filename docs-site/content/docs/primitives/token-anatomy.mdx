@@ -94,10 +94,9 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  Tier 4 — Component    (TBD — placeholder)              │
-│  Component-scoped tokens, bound to a specific component │
-│  Example: --bds-button-primary-padding-x (not yet       │
-│  emitted as a tier; deliberately unspecified)           │
+│  Tier 4 — Component    (component-scoped knobs)         │
+│  --bds-{component}-{property}: var(<Semantic>)          │
+│  Example: --bds-toast-shadow: var(--shadow-md)          │
 └─────────────────────────────────────────────────────────┘
                           ▲
                           │ var()
@@ -130,7 +129,7 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 | **Raw** | Literal `#b0351b` | Figma swatch / hex chosen by design | **No** — never in component CSS |
 | **Primitive** | `--color-{family}-{step}` (color), `--font-size-{step}` (type), `--space-{step}` (spacing), etc. | Auto-generated from Figma Variables → Style Dictionary | **No** — never in component CSS (use Semantic) |
 | **Semantic** | `--{purpose}-{role}` — Color foundations vocabulary | Auto-generated; client themes override **values** with same **names** | **Yes** — this is the contract |
-| **Component** | TBD — deliberately unspecified | TBD | TBD |
+| **Component** | `--bds-{component}-{property}` | Authored in component / blueprint CSS; runtime values set by the component's JS/TSX | **Yes** — but only as a *knob*: it must resolve to a Semantic token (see below) |
 
 <Callout type="warn">
   **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--background-brand-primary`, not `--color-poppy-dark`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
@@ -138,7 +137,26 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 
 ### About Tier 4 (Component)
 
-The system has not yet specified a Component tier. The pattern would be `--bds-{component}-{property}` — component-scoped tokens that bind a specific component to specific values. Today most components consume Semantic tokens directly, which is sufficient for current scale. **Do not invent Component-tier tokens** until the canonical pattern lands.
+The Component tier is **`--bds-{component}-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier and `{property}` is the styled aspect. Examples: `--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-img-card-bg`. This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
+
+A Tier 4 token serves one of two roles, both under the same name:
+
+1. **Override knob** — a hook a component reads so a consumer can re-skin one instance without forking the CSS. It **must resolve to a Semantic token**, never a raw value:
+
+   ```css
+   /* ✅ knob resolves to a Semantic token */
+   box-shadow: var(--bds-toast-shadow, var(--shadow-md));
+
+   /* ❌ raw literal in the fallback — reintroduces an off-token value
+      that ships silently if the token fails to resolve, and lint can't see it */
+   box-shadow: var(--bds-toast-shadow, 0 4px 12px rgba(0, 0, 0, 0.08));
+   ```
+
+2. **Runtime binding** — a value the component's JS/TSX sets at render (e.g. `--bds-slider-percent`), read by the CSS to position or size an element.
+
+<Callout type="warn">
+  **Tier 4 never terminates at a raw value.** A knob's fallback is a Semantic token; a runtime binding is computed from one. A literal inside a `var()` fallback on a tokenized property is Tier-1 leakage and is flagged by `scripts/lint-tokens.js`. The `--bds-` prefix is mandatory — `--bp-*` and bare `--{component}-*` are retired (see Drift patterns below).
+</Callout>
 
 ## How the six concepts map to a real token
 
@@ -163,6 +181,9 @@ Every legitimate token answers all six. If a token doesn't fit any one of them, 
 | `--brand-{tier}` (`--brand-primary`, `--brand-tertiary`) | Brand-tier names without `purpose` prefix. Legitimate composed form is `--{purpose}-brand-{tier}`. | brik-bds#712 / [#727](https://github.com/brikdesigns/brik-bds/pull/727) |
 | `--surface-paper`, `--text-on-ink`, `--surface-soft`, `--surface-warm` | Invented modifiers or invented `role` values that aren't in the closed Color foundations vocabulary. Always parallel taxonomy. | portal [#512 / #553](https://github.com/brikdesigns/brik-client-portal/pull/553) (rolled back) |
 | Component CSS reading `--color-{family}-{step}` directly | Bypasses the Semantic tier. Locks the component to one brand. | Caught by `scripts/lint-tokens.js` |
+| `--bp-{blueprint}-{slot}-{prop}` (`--bp-hero-img-card-bg`) | Parallel Component-tier namespace that shipped ahead of canon. Invisible to lint because it's an undefined reference, not a real token. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
+| `--{component}-{prop}` (`--toast-shadow`, `--select-chevron-color`) | Component knob without the `--bds-` prefix. Collides with the global namespace and isn't lint-recognized. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
+| Raw literal inside a `var()` fallback on a tokenized property (`var(--shadow-md, 0 4px 12px …)`) | Reintroduces a Tier-1 value that ships silently if the token fails to resolve; lint sees only the canonical name and passes. | Caught by `scripts/lint-tokens.js` (fallback-literal rule, [#1043](https://github.com/brikdesigns/brik-bds/issues/1043)) |
 
 <Callout type="error">
   **Inventing parallel taxonomy is the failure mode this vocabulary exists to prevent.** Three rollbacks (portal #512, portal #553, brik-bds#712 cleanup) trace to agents inventing names that *almost* fit. When in doubt, verify in `dist/tokens.css` — if the name isn't there, it isn't real.
