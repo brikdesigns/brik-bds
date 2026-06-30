@@ -13,12 +13,12 @@
  * required_facts: []. Section-driven.
  *
  * CSS custom properties:
- *   --bp-cta-dark-centered-padding-y
- *   --bp-cta-dark-centered-bg              (default: var(--surface-inverse))
- *   --bp-cta-dark-centered-heading-color   (default: var(--text-inverse))
- *   --bp-cta-dark-centered-body-color      (default: var(--text-secondary-inverse))
- *   --bp-cta-dark-centered-cta-bg          (default: var(--background-brand-primary))
- *   --bp-cta-dark-centered-cta-color       (default: var(--text-on-color-dark))
+ *   --bds-cta-dark-centered-padding-y
+ *   --bds-cta-dark-centered-bg              (default: var(--surface-inverse))
+ *   --bds-cta-dark-centered-heading-color   (default: var(--text-inverse))
+ *   --bds-cta-dark-centered-body-color      (default: var(--text-secondary-inverse))
+ *   --bds-cta-dark-centered-cta-bg          (default: var(--background-brand-primary))
+ *   --bds-cta-dark-centered-cta-color       (default: var(--text-on-color-dark))
  *
  * a11y: h2 + aria-labelledby. Center-aligned but reading order is
  * natural (heading → body → CTA). CTA uses :focus-visible ring with
@@ -50,9 +50,9 @@ const titleId = `${section.sectionKey}-title`;
 
 <style>
   .bp-cta-dark-centered {
-    background: var(--bp-cta-dark-centered-bg, var(--surface-inverse, var(--color-grayscale-black)));
+    background: var(--bds-cta-dark-centered-bg, var(--surface-inverse, var(--color-grayscale-black)));
     padding-block: var(
-      --bp-cta-dark-centered-padding-y,
+      --bds-cta-dark-centered-padding-y,
       clamp(var(--space-3xl), 8vw, var(--space-5xl))
     );
   }
@@ -74,7 +74,7 @@ const titleId = `${section.sectionKey}-title`;
     font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bp-cta-dark-centered-heading-color, var(--text-inverse, var(--color-grayscale-white)));
+    color: var(--bds-cta-dark-centered-heading-color, var(--text-inverse, var(--color-grayscale-white)));
   }
 
   .bp-cta-dark-centered__description {
@@ -82,7 +82,7 @@ const titleId = `${section.sectionKey}-title`;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
-    color: var(--bp-cta-dark-centered-body-color, var(--text-secondary-inverse, var(--color-grayscale-lightest)));
+    color: var(--bds-cta-dark-centered-body-color, var(--text-secondary-inverse, var(--color-grayscale-lightest)));
     max-width: 55ch;
   }
 
@@ -91,8 +91,8 @@ const titleId = `${section.sectionKey}-title`;
     align-items: center;
     margin-top: var(--space-md);
     padding: var(--space-sm) var(--space-xl);
-    background: var(--bp-cta-dark-centered-cta-bg, var(--background-brand-primary));
-    color: var(--bp-cta-dark-centered-cta-color, var(--text-on-color-dark, var(--text-inverse)));
+    background: var(--bds-cta-dark-centered-cta-bg, var(--background-brand-primary));
+    color: var(--bds-cta-dark-centered-cta-color, var(--text-on-color-dark, var(--text-inverse)));
     font-family: var(--font-family-label);
     font-size: var(--label-xl);
     font-weight: var(--font-weight-semibold);

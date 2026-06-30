@@ -14,11 +14,11 @@
  * required_facts: []. Renders entirely from section content.
  *
  * CSS custom properties:
- *   --bp-hero-interior-padding-y     (default: clamp block)
- *   --bp-hero-interior-bg            (default: var(--page-primary))
- *   --bp-hero-interior-headline-color  (default: var(--text-primary))
- *   --bp-hero-interior-eyebrow-color   (default: var(--text-brand-primary))
- *   --bp-hero-interior-lead-color      (default: var(--text-secondary))
+ *   --bds-hero-interior-padding-y     (default: clamp block)
+ *   --bds-hero-interior-bg            (default: var(--page-primary))
+ *   --bds-hero-interior-headline-color  (default: var(--text-primary))
+ *   --bds-hero-interior-eyebrow-color   (default: var(--text-brand-primary))
+ *   --bds-hero-interior-lead-color      (default: var(--text-secondary))
  *
  * a11y: h1 + aria-labelledby. Decorative-default posture. Static layout,
  * no motion; prefers-reduced-motion is irrelevant here.
@@ -53,9 +53,9 @@ const cta = section.cta;
 
 <style>
   .bp-hero-interior-minimal {
-    background: var(--bp-hero-interior-bg, var(--page-primary));
+    background: var(--bds-hero-interior-bg, var(--page-primary));
     padding-block: var(
-      --bp-hero-interior-padding-y,
+      --bds-hero-interior-padding-y,
       clamp(var(--space-2xl), 6vw, var(--space-4xl))
     );
   }
@@ -77,7 +77,7 @@ const cta = section.cta;
     font-weight: var(--font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--bp-hero-interior-eyebrow-color, var(--text-brand-primary));
+    color: var(--bds-hero-interior-eyebrow-color, var(--text-brand-primary));
   }
 
   .bp-hero-interior-minimal__title {
@@ -86,7 +86,7 @@ const cta = section.cta;
     font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bp-hero-interior-headline-color, var(--text-primary));
+    color: var(--bds-hero-interior-headline-color, var(--text-primary));
   }
 
   .bp-hero-interior-minimal__lead {
@@ -94,7 +94,7 @@ const cta = section.cta;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
-    color: var(--bp-hero-interior-lead-color, var(--text-secondary));
+    color: var(--bds-hero-interior-lead-color, var(--text-secondary));
   }
 
   .bp-hero-interior-minimal__cta {
