@@ -55,7 +55,13 @@
       "types": "./scripts/cascade-contract-check.d.ts",
       "import": "./scripts/cascade-contract-check.mjs",
       "default": "./scripts/cascade-contract-check.mjs"
-    }
+    },
+    "./check-widget-drift": {
+      "types": "./scripts/check-widget-drift.d.ts",
+      "import": "./scripts/check-widget-drift.mjs",
+      "default": "./scripts/check-widget-drift.mjs"
+    },
+    "./widgets/*": "./components/ui/BrikDevBar/widgets/*"
   },
   "files": [
     "dist",
@@ -70,7 +76,10 @@
     "scripts/canonical-class-check.mjs",
     "scripts/canonical-class-check.d.ts",
     "scripts/cascade-contract-check.mjs",
-    "scripts/cascade-contract-check.d.ts"
+    "scripts/cascade-contract-check.d.ts",
+    "scripts/check-widget-drift.mjs",
+    "scripts/check-widget-drift.d.ts",
+    "components/ui/BrikDevBar/widgets/*.js"
   ],
   "bin": {
     "bds-find": "scripts/bds-find.mjs",
