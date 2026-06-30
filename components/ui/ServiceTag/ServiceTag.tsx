@@ -31,11 +31,13 @@ export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
 // bds-lint-ignore — component-level icon px sizes. Code/Storybook is the source
 // of truth for components; Figma is a visual reference only (and uses Font
 // Awesome glyphs, not our Iconify set), so these are not Figma-driven.
-// sm bumped 12→16: the 12px glyph read as teensy in icon-text pills.
-const tagIconSizeMap: Record<ServiceTagSize, number> = { sm: 16, md: 16, lg: 20 };
+// Glyphs are filled 20×20 SVGs with ~30% built-in inset, so the visible mark is
+// only ~70% of the box — sizes are set generously vs tag height (28/32/40) to
+// read clearly at small scale. sm==md previously, so md never looked larger.
+const tagIconSizeMap: Record<ServiceTagSize, number> = { sm: 18, md: 22, lg: 24 };
 
 // bds-lint-ignore — component-level badge dimensions (code is SoT; see above).
-const iconScaleMap: Record<ServiceTagSize, number> = { sm: 0.55, md: 0.6, lg: 0.6 };
+const iconScaleMap: Record<ServiceTagSize, number> = { sm: 0.65, md: 0.7, lg: 0.7 };
 const boxSizeMap: Record<ServiceTagSize, number> = { sm: 20, md: 28, lg: 40 };
 
 /**
