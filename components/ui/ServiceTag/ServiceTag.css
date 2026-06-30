@@ -38,6 +38,14 @@
   font-size: var(--label-md);
 }
 
+/* lg is the only size with extra inline padding (--padding-md vs --padding-sm).
+   With an icon present that reads as too much lead-in space before the glyph,
+   so icon-text lg drops back to the sm/md inline padding. Two-class selector
+   outranks the single-class --lg rule, so order is irrelevant. */
+.bds-service-tag--lg.bds-service-tag--has-icon {
+  padding-inline: var(--padding-sm);
+}
+
 /* ─── Category colors ────────────────────────────────────────── */
 
 .bds-service-tag--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand-on-light); }
