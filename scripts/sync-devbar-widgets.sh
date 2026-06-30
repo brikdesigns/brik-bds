@@ -73,10 +73,13 @@ sync_one "$WIDGETS/inspect-widget.js" "$RENEW_PUBLIC/brik-inspect.js"       "ren
 sync_one "$WIDGETS/events-widget.js"  "$RENEW_PUBLIC/brik-events-widget.js" "renew-pms public/ brik-events-widget.js"
 
 # brikdesigns public/ (browser-served, staging dev-tools)
-BRIKDESIGNS_PUBLIC="$GH_ROOT/web/brikdesigns/public"
+# brikdesigns is Brik's own Next.js marketing-site repo under brik/, NOT web/
+# (web/brikdesigns was a stale build husk — no repo, no public/). #1047
+# No feedback-widget.js here: brikdesigns DevTools uses the React
+# DevFeedbackWidget from BDS, not the vanilla widget (brikdesigns#479 / #644).
+BRIKDESIGNS_PUBLIC="$GH_ROOT/brik/brikdesigns/public"
 sync_one "$WIDGETS/devbar.js"          "$BRIKDESIGNS_PUBLIC/brik-devbar.js"           "brikdesigns public/ brik-devbar.js"
 sync_one "$WIDGETS/inspect-widget.js"  "$BRIKDESIGNS_PUBLIC/brik-inspect.js"          "brikdesigns public/ brik-inspect.js"
-sync_one "$WIDGETS/feedback-widget.js" "$BRIKDESIGNS_PUBLIC/brik-feedback-widget.js"  "brikdesigns public/ brik-feedback-widget.js"
 
 # BDS Storybook preview iframe — write to the *current* checkout (worktree or
 # primary) so commits from a task worktree capture these files. Previously this
