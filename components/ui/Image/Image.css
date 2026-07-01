@@ -1,0 +1,24 @@
+@layer bds-components {
+/* ─── Image — SEO- and CLS-aware media wrapper ───────────────── */
+
+.bds-image {
+  display: block;
+  margin: 0; /* reset the default UA <figure> margin */
+}
+
+/* Bare image (no ratio) — responsive natural shape. When a ratio is set the
+   image is a Frame child and Frame's `--fit-* > img` rules take over
+   (higher specificity), sizing it to fill the locked aspect box. */
+.bds-image__image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.bds-image__caption {
+  margin-top: var(--gap-sm);
+  font-family: var(--font-family-label);
+  font-size: var(--body-sm);
+  color: var(--text-secondary);
+}
+}

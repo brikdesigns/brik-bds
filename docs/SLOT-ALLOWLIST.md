@@ -37,6 +37,7 @@ __error
 __strict-hint
 __hint
 __cite              # source attribution on quotes / testimonials
+__caption           # <figcaption> text on figure-based media (Image); generic to any captioned figure
 ```
 
 ## Layout + container slots
