@@ -26,8 +26,8 @@
  *
  * Run after `build:lib`, before publish (wired into `prepublishOnly`).
  */
-import { readFileSync, existsSync } from 'node:fs';
-import { resolve, dirname, extname } from 'node:path';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { resolve, dirname, extname, join, relative } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -95,28 +95,44 @@ for (const [label, rel] of importTargets) {
   }
 }
 
-/* ── require()-free scan on the ESM root entry ────────────────────────────
- * Catches CJS/UMD deps inlined into the bundle (the lottie-web class). */
-const esmEntry = resolve(pkgRoot, 'dist', 'index.esm.mjs');
-if (!existsSync(esmEntry)) {
-  fail(`❌ ESM bundle check — ${esmEntry} not found. Run \`npm run build:lib\` first.`);
+/* ── require()-free scan on every emitted ESM module ──────────────────────
+ * Catches CJS/UMD deps inlined into the output (the lottie-web class). The lib
+ * build emits per-module output (#1060), so a CJS dep could be inlined into any
+ * `.mjs`, not just the root entry — scan them all. */
+const RE = /(?:^|[^A-Za-z0-9_$])(__require|require)\s*\(/;
+const distDir = resolve(pkgRoot, 'dist');
+const collectMjs = (dir) => {
+  const out = [];
+  for (const ent of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, ent.name);
+    if (ent.isDirectory()) out.push(...collectMjs(full));
+    else if (ent.name.endsWith('.mjs')) out.push(full);
+  }
+  return out;
+};
+if (!existsSync(distDir)) {
+  fail(`❌ ESM bundle check — ${distDir} not found. Run \`npm run build:lib\` first.`);
 } else {
-  const RE = /(?:^|[^A-Za-z0-9_$])(__require|require)\s*\(/;
-  const hits = [];
-  readFileSync(esmEntry, 'utf8')
-    .split('\n')
-    .forEach((line, i) => {
-      if (RE.test(line)) hits.push({ n: i + 1, text: line.trim().slice(0, 120) });
-    });
-  if (hits.length > 0) {
-    fail('❌ ESM bundle check FAILED — dist/index.esm.mjs contains require():');
+  const mjsFiles = collectMjs(distDir);
+  const offenders = [];
+  for (const file of mjsFiles) {
+    readFileSync(file, 'utf8')
+      .split('\n')
+      .forEach((line, i) => {
+        if (RE.test(line)) {
+          offenders.push({ file: relative(pkgRoot, file), n: i + 1, text: line.trim().slice(0, 120) });
+        }
+      });
+  }
+  if (offenders.length > 0) {
+    fail(`❌ ESM bundle check FAILED — ${offenders.length} require() call(s) in emitted .mjs:`);
     console.error('   ESM-prerender consumers (turbopack / Astro) reject dynamic require.');
-    console.error('   A CJS/UMD dependency is being inlined into the ESM entry.');
+    console.error('   A CJS/UMD dependency is being inlined into an ESM module.');
     console.error('   Fix: add the offending dependency to `external` in vite.config.lib.ts.');
-    hits.slice(0, 10).forEach((h) => console.error(`   L${h.n}: ${h.text}`));
-    if (hits.length > 10) console.error(`   …and ${hits.length - 10} more.`);
+    offenders.slice(0, 10).forEach((h) => console.error(`   ${h.file}:${h.n}: ${h.text}`));
+    if (offenders.length > 10) console.error(`   …and ${offenders.length - 10} more.`);
   } else {
-    console.log('✅ ESM bundle check: dist/index.esm.mjs is require()-free.');
+    console.log(`✅ ESM bundle check: all ${mjsFiles.length} emitted .mjs modules are require()-free.`);
   }
 }
 
