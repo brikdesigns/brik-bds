@@ -97,12 +97,14 @@
   /* Surface */
   --surface-primary: var(--color-grayscale-black);
   --surface-secondary: var(--color-grayscale-darker);
-  /* Brand canon: vibrant poppy-light base in dark mode too; state pair brightens
-     on interaction (matches --background-brand-primary-hover/-pressed below).
-     Restored from the poppy-dark AA divergence (BDS-22). */
+  /* Brand canon: vibrant poppy-light base in dark mode too; state pair DARKENS
+     on interaction (matches light mode + --background-brand-primary-hover/-pressed
+     below). Brightening to poppy-lighter/-lightest made the white --text-on-color-dark
+     label illegible (1.89:1 hover / 1.12:1 pressed); poppy-dark/-darker keep it
+     ≥6:1 (#1055). Restored from the poppy-dark AA divergence (BDS-22). */
   --surface-brand-primary: var(--color-poppy-light);
-  --surface-brand-primary-hover: var(--color-poppy-lighter);
-  --surface-brand-primary-pressed: var(--color-poppy-lightest);
+  --surface-brand-primary-hover: var(--color-poppy-dark);
+  --surface-brand-primary-pressed: var(--color-poppy-darker);
   --surface-brand-secondary: var(--color-grayscale-darkest);
   --surface-nav: var(--color-grayscale-black);
   --surface-muted: var(--color-grayscale-darkest);
@@ -117,8 +119,10 @@
   --background-muted: var(--color-grayscale-darker);
   --background-image: #000000cc;
   --background-image-brand: var(--color-poppy-light);
-  --background-brand-primary-hover: var(--color-poppy-lighter);
-  --background-brand-primary-pressed: var(--color-poppy-lightest);
+  /* Darkens on interaction (mirrors light mode) so the white on-color label stays
+     legible — poppy-lighter/-lightest failed AA-large (1.89:1 / 1.12:1) (#1055). */
+  --background-brand-primary-hover: var(--color-poppy-dark);
+  --background-brand-primary-pressed: var(--color-poppy-darker);
   --background-disabled: var(--color-grayscale-darker);
   --background-primary-hover: var(--color-grayscale-darkest);
   --background-primary-pressed: var(--color-grayscale-darker);
