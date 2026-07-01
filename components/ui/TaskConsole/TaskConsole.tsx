@@ -1,7 +1,7 @@
 import { type ReactNode, type HTMLAttributes, useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
-import { CaretDown, CaretUp, X, CheckCircle, Circle, WarningCircle } from '../../icons';
+import { CaretDownBold, CaretUpBold, X, CheckCircle, Circle, WarningCircle } from '../../icons';
 import { bdsClass } from '../../utils';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
@@ -138,7 +138,7 @@ export function TaskConsole({
           <Button
             variant="ghost"
             size="sm"
-            icon={<Icon icon={collapsed ? CaretUp : CaretDown} />}
+            icon={<Icon icon={collapsed ? CaretUpBold : CaretDownBold} />}
             label={collapsed ? 'Expand' : 'Collapse'}
             onClick={toggleCollapse}
           />
