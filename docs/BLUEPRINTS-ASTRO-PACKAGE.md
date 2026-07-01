@@ -199,7 +199,7 @@ Current package.json shape ([package.json:8-32](../package.json)):
   "types": "./dist/lib-entry.d.ts",
   "files": ["dist", "blueprints/blueprint-library.json", "content-system/compliance/*.md", "content-system/atmospheres/*.css"],
   "exports": {
-    ".": { "types": "./dist/lib-entry.d.ts", "import": "./dist/index.esm.mjs", "require": "./dist/index.cjs.js" },
+    ".": { "types": "./dist/lib-entry.d.ts", "import": "./dist/lib-entry.mjs", "require": "./dist/lib-entry.cjs" },
     "./content-system": { "types": "./dist/content-system/index.d.ts", "import": "./dist/content-system/index.mjs" },
     // ... per-atmosphere CSS entries ...
   }
