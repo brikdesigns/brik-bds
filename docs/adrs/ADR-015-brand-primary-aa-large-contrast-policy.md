@@ -1,6 +1,6 @@
 # ADR-015 — Brand-primary holds the vibrant brand color; its fills + accent text are gated AA-large (3:1)
 
-**Status:** Proposed (2026-06-30) — pending BDS-22 PR review
+**Status:** Accepted (2026-06-30; amended 2026-07-01) — shipped via BDS-22 ([#1053](https://github.com/brikdesigns/brik-bds/pull/1053)); see § Amendment (2026-07-01)
 **Date:** 2026-06-30
 **Related:** BDS-22 (Brand Color Update), BDS-18 (Color Pairings), BDS-20 (Expand Color Scale), [#710](https://github.com/brikdesigns/brik-bds/pull/710) + [#719](https://github.com/brikdesigns/brik-bds/pull/719) (the AA darkening this reverses), [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma Brand Kit is SoT), [Color Pairings](../../docs-site/content/docs/primitives/color-pairings.mdx), `tokens/contrast-pairings.json` (rule in force)
 **Owner:** Nick Stanerson
@@ -58,3 +58,26 @@ The published doc matrix in `color-pairings.mdx` is a curated subset that has dr
 - **Keep the darkened `#b0351b`.** Rejected: it is not the brand color, contradicts the brand-kit SoT (ADR-011), and is the symptom BDS-22 exists to fix.
 - **Restore vibrant fills only; keep `--text-brand-primary` on `poppy-dark`.** A hybrid that keeps small brand text AA-safe without a usage rule. Rejected as the end state — it diverges from the brand-kit for one token and reintroduces a hand-tuned value, the exact pattern this reverses. Viable as a fallback if the advisory usage rule proves insufficient and enforcement (BDS-18) slips.
 - **Add a large-only vibrant text variant** (a separate token that is vibrant and a darker token for small text). Rejected for now: more tokens + a naming decision, deferred to BDS-18 where the usage matrix is designed. The 11-step scale (BDS-20) may make an AA-passing near-Poppy step available, reopening this.
+
+## Amendment (2026-07-01) — the on-color CTA label is accepted debt, not an AA-large pass
+
+Shipping BDS-22 to `staging` (brikdesigns [#649](https://github.com/brikdesigns/brikdesigns/pull/649), brik-client-portal [#1627](https://github.com/brikdesigns/brik-client-portal/pull/1627)) surfaced a factual error in the § Decision rationale that this amendment corrects. The **decision itself stands** — brand-primary holds vibrant `poppy-light`, and the fill pairings are gated AA-large in `contrast-pairings.json`. What was wrong is the *justification* offered for the white CTA-label pairing, and correcting it reclassifies that specific pairing from "compliant under AA-large" to **knowingly-accepted debt.**
+
+### What was wrong
+
+§ Decision item 2, bullet 1 justified *On-color label on brand fill* as "a UI-component fill with a **large/bold label** (1.4.11 + **1.4.3** basis)." The **1.4.3 (large-text) leg of that basis is invalid.** BDS primary-button labels are **semibold (600), not bold (700)** ([`components/ui/Button/Button.css`](../../components/ui/Button/Button.css) L24 → `--font-weight-semibold` = `600`), and the default `md` size renders at **16px** (`--label-md` → `--font-size-100` = `16px`; `dist/tokens.css`). Across the full size scale (xs 11.54 / sm 14 / md 16 / lg 18 / xl 20px) **no standard button size + semibold weight qualifies as WCAG large text**, which requires ≥24px at normal weight **or** ≥18.66px at bold **700**. axe therefore measures these labels as **normal text**, whose AA floor is **4.5:1** — not the 3:1 the label pairing was implicitly claiming.
+
+The original § "three judgment calls" #2 already stated the correct facts for the *outline*-button label ("semibold (600) at ~14–16px … WCAG large-text strictly wants ≥18.66px bold (700)") — the error was failing to carry that same reasoning to the *primary fill* label in § Decision.
+
+### Corrected basis
+
+The AA-large gate classification for the on-color fill pairing rests on the **1.4.11 (non-text / UI-component contrast, 3:1) reading of the fill boundary only.** The **white label text rendered on that fill is normal-category text and genuinely fails WCAG AA at 3.78:1 < 4.5:1** at every standard button size. The `AA-large` tier in `contrast-pairings.json` is the mechanism by which the gate is allowed to pass; it is **not** a claim that the rendered label meets a WCAG success criterion for text contrast.
+
+### Owner-accepted debt decision
+
+The owner (Nick Stanerson) **knowingly accepts** the white-on-vibrant-Poppy CTA-label failure as tracked debt, prioritizing brand fidelity over the 3.78:1 label contrast, consistent with the white-on-red CTA precedent set by Grubhub / DoorDash / Netflix / Pinterest. This is debt with a burn-down, not a permanent stance:
+
+- **Tracked by [#479](https://github.com/brikdesigns/brik-bds/issues/479)** (this ADR's parent). The durable fixes remain on the table there — a **dark label on the fill** (5.55:1, passes every gate at normal-text AA), a **true-AA-large label** (bold 700 at ≥18.66px), or an **intermediate AA-passing near-Poppy step** from the BDS-20 11-step scale.
+- The advisory usage rule ("small body copy never uses `--text-brand-primary`") and its deferred enforcement (**BDS-18**) are unchanged by this amendment.
+
+This amendment adds no code change; it corrects the record so the accepted debt is visible rather than mislabeled as compliant.
