@@ -1,0 +1,43 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Image.stories';
+
+<Meta of={Stories} />
+
+# Image
+
+<ComponentLinks slug="image" />
+
+SEO- and CLS-aware `<img>` wrapper. Renders a semantic `<figure>` + `<img>` (+ optional `<figcaption>`), lazy loads and async-decodes by default, and locks the shape to the `--aspect-*` token family when `ratio` is set.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+The semantic axes Image varies on are `ratio` (shape) and `fit` (fill behavior); `eager` and `caption` are Controls on every story.
+
+### Ratios
+
+<Canvas of={Stories.Ratios} />
+
+### Fit modes
+
+<Canvas of={Stories.FitModes} />
+
+### With caption
+
+<Canvas of={Stories.WithCaption} />
+
+### Eager (LCP)
+
+<Canvas of={Stories.Eager} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — `alt` is required; pass `alt=""` for decorative images. Supply `ratio` (or `width` + `height`) to reserve layout space and prevent CLS. This component does not resize or reformat images — pair it with `next/image` / `@astrojs/image` or a CDN. Full SEO guidance lives on the [docs-site page](https://design.brikdesigns.com/docs/components/image).
