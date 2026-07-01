@@ -1,0 +1,130 @@
+---
+title: Image
+description: SEO- and CLS-aware img wrapper with aspect-ratio enforcement, lazy loading, and responsive srcset.
+---
+
+Image renders a semantic `<figure>` + `<img>` (+ optional `<figcaption>`). It lazy loads and async-decodes by default, locks the shape to the `--aspect-*` token family when `ratio` is set, and passes `srcset` / `sizes` through for responsive breakpoints.
+
+It owns the design-system constraints — shape, fit, and semantics. It is **not** an image-optimization layer: pair it with `next/image`, `@astrojs/image`, or a CDN for resizing and format negotiation.
+
+## Use it for
+
+- Content and editorial images that must hold a fixed shape ([Frame](/docs/components/frame) is the bare aspect-ratio box; Image adds SEO + `<figure>` semantics)
+- Above-the-fold hero images that need eager, high-priority loading
+- Captioned figures (`<figcaption>`)
+- Responsive images with `srcset` / `sizes`
+
+For avatars use [Avatar](/docs/components/avatar); for illustration scenes use [Marketing Illustration](/docs/components/marketing-illustration); for a raw aspect box with no `<img>` semantics use [Frame](/docs/components/frame).
+
+## Import
+
+```tsx
+import { Image } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Aspect ratio
+
+`ratio` maps to a slug in the `--aspect-*` token family and wraps the image in a [Frame](/docs/components/frame). The frame reserves layout space before the image loads — the primary defense against cumulative layout shift (CLS).
+
+```tsx
+<Image src="/hero.jpg" alt="Team at work" ratio="16-9" />
+<Image src="/portrait.jpg" alt="Dr. Alice Chen" ratio="3-4" />
+```
+
+Omit `ratio` to render at the image's natural shape. See [Frame](/docs/components/frame) for the full slug vocabulary (`1-1`, `3-2`, `4-3`, `16-9`, `square`, `cinema`, …).
+
+### Fit
+
+When a `ratio` is set, `fit` controls how the image fills the frame (`object-fit`). `position` sets `object-position` for cropped fits.
+
+```tsx
+<Image src="/wide.jpg" alt="" ratio="1-1" fit="cover" position="top" />
+```
+
+| `fit` | Behavior |
+|---|---|
+| `cover` (default) | Fills the frame, cropping overflow |
+| `contain` | Fits inside the frame, letterboxing |
+| `fill` | Stretches to the frame, ignoring the source ratio |
+| `none` | No resizing |
+
+### Caption
+
+`caption` renders a `<figcaption>` below the image, inside the same `<figure>`.
+
+```tsx
+<Image
+  src="/portrait.jpg"
+  alt="Dr. Alice Chen"
+  ratio="3-4"
+  caption="Dr. Alice Chen, Lead Orthodontist"
+/>
+```
+
+### Eager (LCP)
+
+By default Image is `loading="lazy"` + `decoding="async"`. For the above-the-fold [Largest Contentful Paint](https://web.dev/articles/lcp) image, set `eager` — it switches to `loading="eager"` and hints `fetchpriority="high"`. Use it for one image per page at most.
+
+```tsx
+<Image src="/hero.jpg" alt="Homepage hero" ratio="21-9" eager />
+```
+
+## Responsive images
+
+`srcSet` and `sizes` pass through to the underlying `<img>`. Supply a `ratio` (or explicit `width` + `height`) so the browser reserves space regardless of which candidate it picks.
+
+```tsx
+<Image
+  src="/photo-800.jpg"
+  srcSet="/photo-400.jpg 400w, /photo-800.jpg 800w, /photo-1200.jpg 1200w"
+  sizes="(max-width: 600px) 100vw, 600px"
+  alt="Product photo"
+  ratio="3-2"
+/>
+```
+
+For automatic candidate generation and format negotiation (WebP/AVIF), let `next/image` or `@astrojs/image` emit the `<img>` and wrap layout concerns with Image's `ratio` at the [Frame](/docs/components/frame) level.
+
+## SEO checklist
+
+| Tactic | How Image supports it |
+|---|---|
+| **CLS prevention** | `ratio` (or `width` + `height`) reserves layout space before load |
+| **LCP** | `eager` sets `loading="eager"` + `fetchpriority="high"` for the hero image |
+| **Alt text** | `alt` is required — no silent empty default; pass `alt=""` deliberately for decorative images |
+| **Responsive delivery** | `srcSet` + `sizes` pass-through for consumer-defined breakpoints |
+| **Structured data** | `<figure>` + `<figcaption>` markup supports `ImageObject` schema at the consumer level |
+
+## Accessibility
+
+- `alt` is a required prop. For decorative images, pass `alt=""` so assistive tech skips them — omitting it is not allowed.
+- Renders semantic `<figure>` / `<figcaption>`; the caption is associated with the image through the shared `<figure>`.
+- Never encode meaning in the image alone — captions and surrounding copy carry the same information for non-visual users.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `src` | `string` (required) | — |
+| `alt` | `string` (required) | — |
+| `ratio` | `FrameRatio` slug | — |
+| `fit` | `'cover' \| 'contain' \| 'fill' \| 'none'` | `'cover'` |
+| `position` | `string` (`object-position`) | — |
+| `eager` | `boolean` | `false` |
+| `srcSet` | `string` | — |
+| `sizes` | `string` | — |
+| `width` | `number \| string` | — |
+| `height` | `number \| string` | — |
+| `caption` | `ReactNode` | — |
+
+Plus standard `<figure>` HTML attributes.
+
+## Related
+
+- [Frame](/docs/components/frame) — the bare aspect-ratio box Image wraps; use it directly for non-`<img>` media
+- [Avatar](/docs/components/avatar) — person identity with initials fallback
+- [Marketing Illustration](/docs/components/marketing-illustration) — composed illustration scenes
+- [Color pairings](/docs/primitives/color-pairings) — for captions and overlays on images
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-image--docs)**
