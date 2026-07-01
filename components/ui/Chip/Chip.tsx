@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { Icon } from '@iconify/react';
-import { CaretDown, X } from '../../icons';
+import { CaretDownBold, X } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Chip.css';
 
@@ -113,7 +113,7 @@ export function Chip({
       )}
       {showDropdown && (
         <span className="bds-chip__icon">
-          <Icon icon={CaretDown} />
+          <Icon icon={CaretDownBold} />
         </span>
       )}
     </div>

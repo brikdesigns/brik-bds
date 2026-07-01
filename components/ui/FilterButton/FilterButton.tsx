@@ -7,7 +7,7 @@ import {
   useCallback,
 } from 'react';
 import { Icon } from '@iconify/react';
-import { CaretDown } from '../../icons';
+import { CaretDownBold } from '../../icons';
 import { bdsClass } from '../../utils';
 import './FilterButton.css';
 
@@ -158,7 +158,7 @@ export function FilterButton({
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <span>{selectedOption?.label ?? label}</span>
-        <Icon icon={CaretDown} className="bds-filter-button__caret" />
+        <Icon icon={CaretDownBold} className="bds-filter-button__caret" />
       </button>
 
       {isOpen && (

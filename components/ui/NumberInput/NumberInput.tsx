@@ -5,7 +5,7 @@ import {
   useRef,
 } from 'react';
 import { Icon } from '@iconify/react';
-import { CaretUp, CaretDown } from '../../icons';
+import { CaretUpBold, CaretDownBold } from '../../icons';
 import { TextInput, type TextInputProps } from '../TextInput/TextInput';
 import './NumberInput.css';
 
@@ -87,7 +87,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           tabIndex={-1}
           onClick={() => handleStep(1)}
         >
-          <Icon icon={CaretUp} />
+          <Icon icon={CaretUpBold} />
         </button>
         <button
           type="button"
@@ -96,7 +96,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           tabIndex={-1}
           onClick={() => handleStep(-1)}
         >
-          <Icon icon={CaretDown} />
+          <Icon icon={CaretDownBold} />
         </button>
       </div>
     );
