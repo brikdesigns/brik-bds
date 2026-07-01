@@ -3,14 +3,17 @@
   "version": "0.114.0",
   "description": "Brik Design System — React components, Figma-synced tokens, and Content System (BCS) vocabulary",
   "private": false,
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.mjs",
+  "main": "dist/lib-entry.cjs",
+  "module": "dist/lib-entry.mjs",
   "types": "dist/lib-entry.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/lib-entry.d.ts",
-      "import": "./dist/index.esm.mjs",
-      "require": "./dist/index.cjs.js"
+      "import": "./dist/lib-entry.mjs",
+      "require": "./dist/lib-entry.cjs"
     },
     "./content-system": {
       "types": "./dist/content-system/index.d.ts",
