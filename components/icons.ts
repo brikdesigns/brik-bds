@@ -10,6 +10,11 @@ export const CaretDown = 'ph:caret-down';
 export const CaretUp = 'ph:caret-up';
 export const CaretLeft = 'ph:caret-left';
 export const CaretRight = 'ph:caret-right';
+// Bold carets — form-control chevrons (dropdown triggers, steppers, disclosure).
+// Phosphor regular reads as a hairline at small UI sizes; bold is the BDS-canon
+// weight for glyphs at sm size. See rag:components-icons "Phosphor weights".
+export const CaretDownBold = 'ph:caret-down-bold';
+export const CaretUpBold = 'ph:caret-up-bold';
 export const MagnifyingGlass = 'ph:magnifying-glass';
 export const MapPin = 'ph:map-pin';
 export const CloudArrowUp = 'ph:cloud-arrow-up';

@@ -1,6 +1,6 @@
 import { forwardRef, useId, useState, type SelectHTMLAttributes, type ReactNode } from 'react';
 import { Icon } from '@iconify/react';
-import { CaretDown } from '../../icons';
+import { CaretDownBold } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Select.css';
 
@@ -148,7 +148,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             )}
           </select>
           <span className="bds-select-chevron" aria-hidden="true">
-            <Icon icon={CaretDown} />
+            <Icon icon={CaretDownBold} />
           </span>
         </div>
         {error && (
