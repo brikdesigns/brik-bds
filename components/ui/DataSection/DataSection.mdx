@@ -10,23 +10,15 @@ import * as Stories from './DataSection.stories';
 
 Page-side wrapper for a titled block of read-mode data. Pairs a heading-tier title with an optional subtitle and an actions slot, then yields the body to whatever composes inside — usually a `<FieldGrid>` of `<Field>`s. The page analog to `<SheetSection>`.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
+
+Header composition is Controls-driven: edit `title` / `subtitle`, toggle `spacing`, and switch `titleAs` between `h2` and `h3`. Omitting the title, subtitle, or actions collapses the header accordingly.
 
 ## Variants
 
-Title only, title + subtitle, no actions, and a single-button actions slot.
-
-<Canvas of={Stories.Variants} />
-
-### Anatomy
-
-<Canvas of={Stories.AnatomyVocabulary} />
-
-## Patterns
-
-The canonical Read-Mode Page composition — several `DataSection`s stacked on a page, each with a `[View]`/`[Edit]` `ButtonGroup` in the actions slot.
+The canonical read-mode page — several `DataSection`s stacked on a page, each with a `[View]`/`[Edit]` `ButtonGroup` in the actions slot and mixed body content (FieldGrid, prose, BulletList). Irreducible because the value is the multi-section page rhythm, which a single section can't show.
 
 <Canvas of={Stories.ReadModePage} />
 
