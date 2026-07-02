@@ -3,16 +3,37 @@
 
 .bds-table {
   width: 100%;
-  border-collapse: collapse;
+  /* `separate` (not `collapse`) so border-radius on the table renders —
+     under `collapse` every browser drops the corner radius. Row dividers
+     move onto the cells (below) because `tr` borders don't paint here. */
+  border-collapse: separate;
+  border-spacing: 0;
   font-family: var(--font-family-body);
   color: var(--text-primary);
 }
 
-/* ─── Row ────────────────────────────────────────────────────── */
+/* ─── Rounded outer corners + boundary ───────────────────────── */
 
-.bds-table-row {
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+/* A visible outer border makes the rounded corners read; only drawn when
+   at least one edge is rounded. `overflow: hidden` clips the header
+   background and corner cells to the radius. */
+.bds-table[data-rounded-top="true"],
+.bds-table[data-rounded-bottom="true"] {
+  border: var(--border-width-sm) solid var(--border-muted);
+  overflow: hidden;
 }
+
+.bds-table[data-rounded-top="true"] {
+  border-top-left-radius: var(--border-radius-md);
+  border-top-right-radius: var(--border-radius-md);
+}
+
+.bds-table[data-rounded-bottom="true"] {
+  border-bottom-left-radius: var(--border-radius-md);
+  border-bottom-right-radius: var(--border-radius-md);
+}
+
+/* ─── Row ────────────────────────────────────────────────────── */
 
 .bds-table-row--selected {
   background-color: var(--background-secondary);
@@ -31,9 +52,21 @@
   font-weight: var(--font-weight-semibold);
   color: var(--text-muted);
   text-align: left;
-  border-bottom: var(--border-width-md) solid var(--border-muted);
-  background-color: var(--background-secondary);
   white-space: nowrap;
+}
+
+/* Header background — default `secondary`, opt into `primary` to match body. */
+.bds-table[data-header-bg="secondary"] .bds-table-head {
+  background-color: var(--background-secondary);
+}
+
+.bds-table[data-header-bg="primary"] .bds-table-head {
+  background-color: var(--background-primary);
+}
+
+/* Header bottom border — opt-in (off by default). */
+.bds-table[data-header-border="true"] .bds-table-head {
+  border-bottom: var(--border-width-md) solid var(--border-muted);
 }
 
 /* Size: default */
@@ -89,6 +122,9 @@
   color: var(--text-primary);
   vertical-align: middle;
   overflow-wrap: anywhere;
+  /* Row divider lives on the cell — `tr` borders don't paint under
+     `border-collapse: separate`. */
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
 }
 
 /* Size: default */
@@ -110,6 +146,18 @@
   /* Shrink-to-content so action column never competes with content cells */
   width: 1%;
   white-space: nowrap;
+  /* Match the body-cell row divider (borders don't paint on `tr`). */
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+}
+
+/* When an outer border is present (any rounded edge), the last body row
+   drops its divider so the boundary isn't doubled. Without rounding there
+   is no outer border, so the trailing divider stays (matches legacy look). */
+.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-cell,
+.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-actions-cell,
+.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-cell,
+.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-actions-cell {
+  border-bottom: none;
 }
 
 /* Match TableCell padding rhythm */

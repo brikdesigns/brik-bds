@@ -13,6 +13,8 @@ import './Table.css';
 
 export type TableSize = 'default' | 'comfortable';
 
+export type TableHeaderBackground = 'primary' | 'secondary';
+
 export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   /** Apply alternating row backgrounds for readability on dense tables. Default `false`. */
   striped?: boolean;
@@ -20,6 +22,14 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   size?: TableSize;
   /** Remove left padding on first cell, right padding on last cell */
   flush?: boolean;
+  /** Show a bottom border under the header row. Default `false`. */
+  headerBorder?: boolean;
+  /** Round the top-left / top-right outer corners (and draw a subtle outer border). Default `true`. */
+  roundedTop?: boolean;
+  /** Round the bottom-left / bottom-right outer corners (and draw a subtle outer border). Default `true`. */
+  roundedBottom?: boolean;
+  /** Header row background fill. Default `secondary`. */
+  headerBackground?: TableHeaderBackground;
   /** Table content — typically `TableHead` and `TableBody` from this same module. */
   children: ReactNode;
 }
@@ -27,9 +37,10 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
 /**
  * Table — themed data table with striped and size variants.
  *
- * Size is propagated via `data-size` attribute on the table element.
- * CSS uses `[data-size]` selectors for cell padding, eliminating the
- * need for React context.
+ * Layout config is propagated via `data-*` attributes on the table element
+ * (`data-size`, `data-striped`, `data-flush`, `data-header-border`,
+ * `data-rounded-top`, `data-rounded-bottom`, `data-header-bg`). CSS reads
+ * those selectors, eliminating the need for React context.
  *
  * @summary Themed data table with striped + size variants
  */
@@ -37,6 +48,10 @@ export function Table({
   striped = false,
   size = 'default',
   flush = false,
+  headerBorder = false,
+  roundedTop = true,
+  roundedBottom = true,
+  headerBackground = 'secondary',
   children,
   className,
   style,
@@ -49,6 +64,10 @@ export function Table({
       data-striped={striped || undefined}
       data-size={size}
       data-flush={flush || undefined}
+      data-header-border={headerBorder || undefined}
+      data-rounded-top={roundedTop || undefined}
+      data-rounded-bottom={roundedBottom || undefined}
+      data-header-bg={headerBackground}
       {...props}
     >
       {children}
