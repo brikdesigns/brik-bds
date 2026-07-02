@@ -23,9 +23,40 @@ const SAMPLE_NOTIFICATIONS: NotificationItemData[] = [
   { id: '5', title: 'New Request: Leaking Faucet', body: 'Facilities maintenance requested for Room 3', time: '3d ago', isRead: true },
 ];
 
-/* ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   1. DEFAULT — canonical list; unread + read items via the data
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Item */
+/** @summary Canonical notification list. Edit `notifications` via Controls; the sample mixes unread and read (`isRead`) items so both row states render. */
+export const Default: Story = {
+  args: {
+    notifications: SAMPLE_NOTIFICATIONS,
+  },
+  render: (args) => (
+    <div style={{ width: 360 }}>
+      <NotificationList {...args} onItemClick={(n) => console.log('Clicked:', n.id)} />
+    </div>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   2. EMPTY — zero-notification state
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Empty state — the list with no notifications. */
+export const Empty: Story = {
+  render: () => (
+    <div style={{ width: 360 }}>
+      <NotificationList notifications={[]} />
+    </div>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3. ITEM — the NotificationItem block in isolation
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Single `NotificationItem` block, reusable standalone outside the list. */
 export const Item: Story = {
   render: () => (
     <div style={{ width: 360 }}>
@@ -37,40 +68,11 @@ export const Item: Story = {
   ),
 };
 
-/** @summary Item read */
-export const ItemRead: Story = {
-  render: () => (
-    <div style={{ width: 360 }}>
-      <NotificationItem
-        notification={SAMPLE_NOTIFICATIONS[2]}
-        onClick={(n) => console.log('Clicked:', n.id)}
-      />
-    </div>
-  ),
-};
+/* ═══════════════════════════════════════════════════════════════
+   4. POPOVER — Q5 interactive: bell trigger + unread badge + mark-all
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary List */
-export const List: Story = {
-  render: () => (
-    <div style={{ width: 360 }}>
-      <NotificationList
-        notifications={SAMPLE_NOTIFICATIONS}
-        onItemClick={(n) => console.log('Clicked:', n.id)}
-      />
-    </div>
-  ),
-};
-
-/** @summary List empty */
-export const ListEmpty: Story = {
-  render: () => (
-    <div style={{ width: 360 }}>
-      <NotificationList notifications={[]} />
-    </div>
-  ),
-};
-
-/** @summary Popover */
+/** @summary Interactive `NotificationPopover` — bell trigger, unread badge, click-to-read, and mark-all-read. Clear all items to see the empty popover. */
 export const Popover: Story = {
   render: () => {
     const [notifications, setNotifications] = useState(SAMPLE_NOTIFICATIONS);
@@ -92,17 +94,8 @@ export const Popover: Story = {
         onItemClick={handleClick}
         onMarkAllRead={handleMarkAllRead}
         showMarkAllRead={unreadCount > 0}
+        emptyMessage="You're all caught up!"
       />
     );
   },
-};
-
-/** @summary Popover empty */
-export const PopoverEmpty: Story = {
-  render: () => (
-    <NotificationPopover
-      notifications={[]}
-      emptyMessage="You're all caught up!"
-    />
-  ),
 };
