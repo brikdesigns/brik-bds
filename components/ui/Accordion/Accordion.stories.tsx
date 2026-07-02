@@ -1,25 +1,5 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Accordion } from './Accordion';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
 
 /* ─── Sample Data ─────────────────────────────────────────────── */
 
@@ -41,6 +21,7 @@ const meta: Meta<typeof Accordion> = {
   parameters: { layout: 'padded' },
   argTypes: {
     allowMultiple: { control: 'boolean', description: 'Allow multiple items open simultaneously' },
+    defaultOpenItems: { control: 'object', description: 'IDs of items expanded on mount' },
   },
 };
 
@@ -48,99 +29,53 @@ export default meta;
 type Story = StoryObj<typeof Accordion>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   1. DEFAULT — canonical instance; behavior modes are Controls
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Canonical accordion. Toggle `allowMultiple` and set `defaultOpenItems` via Controls to explore single-open, multi-open, and pre-opened behavior. */
+export const Default: Story = {
   args: {
     items: faqItems,
     allowMultiple: false,
+    defaultOpenItems: [],
   },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Behavior modes, pre-opened, and rich content
+   2. WITH RICH CONTENT — Q4 irreducible: `content` is a ReactNode
+      (lists, multi-paragraph) that can't be authored via Controls
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      <div>
-        <SectionLabel>Single open (default)</SectionLabel>
-        <Accordion items={faqItems.slice(0, 3)} defaultOpenItems={['1']} />
-      </div>
-
-      <div>
-        <SectionLabel>Multiple open</SectionLabel>
-        <Accordion items={faqItems.slice(0, 4)} allowMultiple defaultOpenItems={['1', '3']} />
-      </div>
-
-      <div>
-        <SectionLabel>Rich content</SectionLabel>
-        <Accordion
-          items={[
-            {
-              id: 'rich-1',
-              title: 'Getting started',
-              content: (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-                  <p style={{ margin: 0 }}>Follow these steps to get started with our platform:</p>
-                  <ol style={{ margin: 0, paddingLeft: 'var(--padding-xl)' }}>
-                    <li>Create your account</li>
-                    <li>Complete the onboarding questionnaire</li>
-                    <li>Schedule your kickoff call</li>
-                    <li>Review and approve the project brief</li>
-                  </ol>
-                </div>
-              ),
-            },
-            {
-              id: 'rich-2',
-              title: 'Billing and payments',
-              content: (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-                  <p style={{ margin: 0 }}>We accept all major credit cards, ACH transfers, and invoicing for enterprise clients.</p>
-                  <p style={{ margin: 0 }}>Payments are due within 15 days of invoice date.</p>
-                </div>
-              ),
-            },
-          ]}
-          defaultOpenItems={['rich-1']}
-        />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      {/* FAQ section */}
-      <div style={{ maxWidth: '640px' }}>
-        <SectionLabel>FAQ section</SectionLabel>
-        <Accordion items={faqItems} />
-      </div>
-
-      {/* Settings panel */}
-      <div style={{ maxWidth: '600px' }}>
-        <SectionLabel>Settings panel</SectionLabel>
-        <Accordion
-          allowMultiple
-          defaultOpenItems={['s2']}
-          items={[
-            { id: 's1', title: 'Account settings', content: 'Manage your account name, email, and password.' },
-            { id: 's2', title: 'Notification preferences', content: 'Choose which notifications you receive and how they are delivered.' },
-            { id: 's3', title: 'Privacy & security', content: 'Two-factor authentication, session management, and data export options.' },
-          ]}
-        />
-      </div>
-    </Stack>
-  ),
+/** @summary Item `content` accepts any ReactNode — ordered lists, multi-paragraph blocks — which the Controls panel can't author. */
+export const WithRichContent: Story = {
+  args: {
+    defaultOpenItems: ['rich-1'],
+    items: [
+      {
+        id: 'rich-1',
+        title: 'Getting started',
+        content: (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+            <p style={{ margin: 0 }}>Follow these steps to get started with our platform:</p>
+            <ol style={{ margin: 0, paddingLeft: 'var(--padding-xl)' }}>
+              <li>Create your account</li>
+              <li>Complete the onboarding questionnaire</li>
+              <li>Schedule your kickoff call</li>
+              <li>Review and approve the project brief</li>
+            </ol>
+          </div>
+        ),
+      },
+      {
+        id: 'rich-2',
+        title: 'Billing and payments',
+        content: (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+            <p style={{ margin: 0 }}>We accept all major credit cards, ACH transfers, and invoicing for enterprise clients.</p>
+            <p style={{ margin: 0 }}>Payments are due within 15 days of invoice date.</p>
+          </div>
+        ),
+      },
+    ],
+  },
 };
