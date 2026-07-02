@@ -235,6 +235,20 @@ Icons inside form controls and action buttons must be on the 4px grid. Use `font
 
 **Avoid `--icon-xs` (≈14px) and `--icon-md` (18px)** — both are off the 4px grid. Use 12, 16, or 20 instead.
 
+### Icon containers — padding composes to the 4-point grid
+
+An icon container is any square affordance wrapping a single glyph — a dismiss button, an IconButton, a badge's leading-icon slot. Size the glyph with `font-size` (never `width`/`height` — see above), then reach the 4-point grid (24 / 32 / 40 / 48 / 56) with symmetric `--padding-*`. Don't hardcode the container's `width`/`height` — let padding + font-size resolve it.
+
+Base padding primitives: `--padding-tiny` 8px · `--padding-xs` 10px · `--padding-sm` 12px. Verified on-grid recipes:
+
+| Container | Glyph (`font-size`) | Padding each side | Sum |
+| --- | --- | --- | --- |
+| 32px (`sm`) | 16px `--icon-sm` | 8px `--padding-tiny` | 8 + 16 + 8 = 32 ✓ |
+| 40px (`md`) | 20px `--icon-lg` | 10px `--padding-xs` | 10 + 20 + 10 = 40 ✓ |
+| 40px (`md`) | 16px `--icon-sm` | 12px `--padding-sm` | 12 + 16 + 12 = 40 ✓ |
+
+**Reference implementations:** `CloseButton` uses the 10 + 20 + 10 = 40 recipe; `IconButton` follows the `tiny/sm/md/lg/xl` grid in "Button & IconButton sizing" below. Match those before hand-rolling padding — the off-grid glyph sizes above are the usual cause of a container that misses the grid.
+
 ## Props — canonical shape
 
 ```
