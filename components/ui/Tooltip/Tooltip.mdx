@@ -10,21 +10,17 @@ import * as Stories from './Tooltip.stories';
 
 Contextual information revealed on hover or focus. Four placements with arrow indicator.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
+
+Edit `content` and switch `placement` via Controls; the trigger is whatever you pass as `children`.
 
 ## Variants
 
-All four placements (`top`, `bottom`, `left`, `right`) plus a keyboard-shortcut example.
+All four placements (`top`, `bottom`, `left`, `right`) around the trigger — side-by-side because the Controls panel shows only one at a time.
 
-<Canvas of={Stories.Variants} />
-
-## Patterns
-
-Real-world usage: icon-button toolbar and form help text.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Placements} />
 
 ## Props
 
