@@ -11,42 +11,24 @@ const meta: Meta<typeof Sheet> = {
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
-    side: { control: 'select', options: ['right', 'left', 'bottom'] },
-    variant: { control: 'select', options: ['default', 'floating'] },
-    mode: { control: 'select', options: [undefined, 'read', 'edit'] },
-    editTarget: { control: 'select', options: ['inline', 'page'] },
-    title: { control: 'text' },
-    subtitle: { control: 'text' },
-    description: { control: 'text' },
-    width: { control: 'text' },
-    closeOnBackdrop: { control: 'boolean' },
-    closeOnEscape: { control: 'boolean' },
-    showCloseButton: { control: 'boolean' },
+    side: { control: 'select', options: ['right', 'left', 'bottom'], description: 'Screen edge the sheet anchors to.' },
+    variant: { control: 'select', options: ['default', 'floating'], description: '`floating` drops the backdrop and elevates + rounds the panel.' },
+    mode: { control: 'select', options: [undefined, 'read', 'edit'], description: 'Drives the auto-footer — `read` → `[Close] [Edit]`, `edit` → `[Cancel] [Save]`.' },
+    editTarget: { control: 'select', options: ['inline', 'page'], description: 'Semantic hint — `page` means `onEdit` navigates rather than flipping in place.' },
+    title: { control: 'text', description: 'Header title.' },
+    subtitle: { control: 'text', description: 'Eyebrow above the title.' },
+    description: { control: 'text', description: 'Secondary line below the title.' },
+    width: { control: 'text', description: 'Panel width (e.g. `400px`). Ignored for `side="bottom"`.' },
+    closeOnBackdrop: { control: 'boolean', description: 'Dismiss on backdrop click.' },
+    closeOnEscape: { control: 'boolean', description: 'Dismiss on Escape.' },
+    showCloseButton: { control: 'boolean', description: 'Render the header close (×) button.' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* ─── Layout helpers ─────────────────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-    {children}
-  </span>
-);
-
-const Stack = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%' }}>
-    {children}
-  </div>
-);
-
-const Row = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap' }}>
-    {children}
-  </div>
-);
+/* ─── Story content helpers ──────────────────────────────────── */
 
 const SampleContent = () => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-primary)', lineHeight: 'var(--font-line-height-normal)' }}>
@@ -54,8 +36,6 @@ const SampleContent = () => (
     <p style={{ margin: 0, color: 'var(--text-secondary)' }}>The sheet slides in from the edge of the screen and overlays the main content with a backdrop.</p>
   </div>
 );
-
-/* ─── Read-only detail view (faux) ───────────────────────────── */
 
 const ReadOnlyFields = () => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
@@ -75,10 +55,19 @@ const EditFormFields = ({ onChange }: { onChange?: (k: string, v: string) => voi
   </div>
 );
 
-/* ─── Playground ─────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   DEFAULT — args-driven sandbox
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Canonical sheet behind a trigger button. Edit `title` / `description`,
+ * switch `side` / `variant` / `mode`, and toggle the `closeOn*` /
+ * `showCloseButton` behaviors via Controls. The `mode` Control drives the
+ * auto-footer — see the mode stories for realistic read/edit content.
+ *
+ * @summary Sliding edge panel — side / variant / mode are Controls
+ */
+export const Default: Story = {
   render: (args) => {
     const [open, setOpen] = useState(false);
     return (
@@ -101,161 +90,16 @@ export const Playground: Story = {
   },
 };
 
-/* ─── Variants ───────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   VARIANTS — mode + variant semantic templates
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => {
-    const [openId, setOpenId] = useState<string | null>(null);
-    const open = (id: string) => setOpenId(id);
-    const close = () => setOpenId(null);
-
-    return (
-      <Stack>
-        <SectionLabel>Right (default)</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('right')}>Open right</Button>
-            <Sheet isOpen={openId === 'right'} onClose={close} title="Details" side="right">
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>Left</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('left')}>Open left</Button>
-            <Sheet isOpen={openId === 'left'} onClose={close} title="Navigation" side="left" width="320px">
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>Bottom</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('bottom')}>Open bottom</Button>
-            <Sheet isOpen={openId === 'bottom'} onClose={close} title="Actions" side="bottom">
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>Wide (600px)</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('wide')}>Open wide</Button>
-            <Sheet isOpen={openId === 'wide'} onClose={close} title="Report Details" width="600px">
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>No title</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('notitle')}>Open minimal</Button>
-            <Sheet isOpen={openId === 'notitle'} onClose={close} showCloseButton>
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-      </Stack>
-    );
-  },
-};
-
-/* ─── Header (title, subtitle, back button) ──────────────────── */
-
-/** @summary Header */
-export const Header: Story = {
-  render: () => {
-    const [openId, setOpenId] = useState<string | null>(null);
-    const open = (id: string) => setOpenId(id);
-    const close = () => setOpenId(null);
-
-    return (
-      <Stack>
-        <SectionLabel>Title only</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('title')}>Open</Button>
-            <Sheet isOpen={openId === 'title'} onClose={close} title="Company details">
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>Title + description</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('description')}>Open</Button>
-            <Sheet
-              isOpen={openId === 'description'}
-              onClose={close}
-              title="Company details"
-              description="Metadata for this company record"
-            >
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>Title + subtitle (eyebrow)</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('subtitle')}>Open</Button>
-            <Sheet
-              isOpen={openId === 'subtitle'}
-              onClose={close}
-              subtitle="Company"
-              title="Brik Designs"
-            >
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>Subtitle + Title + description</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('full')}>Open</Button>
-            <Sheet
-              isOpen={openId === 'full'}
-              onClose={close}
-              subtitle="Company"
-              title="Brik Designs"
-              description="Active · Updated 2 days ago"
-            >
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>With back button (nested flow)</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('back')}>Open nested</Button>
-            <Sheet
-              isOpen={openId === 'back'}
-              onClose={close}
-              title="Contact"
-              description="Opened from Company details"
-              onBack={close}
-            >
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-      </Stack>
-    );
-  },
-};
-
-/* ─── Read mode — footer renders [Close] [Edit] ──────────────── */
-
-/** @summary Read mode */
+/**
+ * Read mode displays data with an auto-footer. When `onEdit` is supplied
+ * the footer renders `[Close] [Edit]`.
+ *
+ * @summary Read mode — auto footer [Close] [Edit]
+ */
 export const ReadMode: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -278,35 +122,13 @@ export const ReadMode: Story = {
   },
 };
 
-/* ─── Read mode floating — no backdrop, rounded, elevated ────── */
-
-/** @summary Read mode floating */
-export const ReadModeFloating: Story = {
-  render: () => {
-    const [open, setOpen] = useState(false);
-    return (
-      <>
-        <Button onClick={() => setOpen(true)}>View company</Button>
-        <Sheet
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          variant="floating"
-          subtitle="Company"
-          title="Brik Designs"
-          description="Active · Updated 2 days ago"
-          mode="read"
-          onEdit={() => alert('Switch to edit mode')}
-        >
-          <ReadOnlyFields />
-        </Sheet>
-      </>
-    );
-  },
-};
-
-/* ─── Edit mode — footer renders [Cancel] [Save] ─────────────── */
-
-/** @summary Edit mode */
+/**
+ * Edit mode is the active form state. The footer auto-renders
+ * `[Cancel] [Save]`; pass `saveLoading` while the save promise is in
+ * flight and `saveDisabled` when the form is invalid.
+ *
+ * @summary Edit mode — auto footer [Cancel] [Save]
+ */
 export const EditMode: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -337,38 +159,29 @@ export const EditMode: Story = {
   },
 };
 
-/* ─── Read + View details + Edit (sheet+page hybrid pattern) ───── */
-
 /**
- * Sheet+page hybrid tables (services, offerings, service_lines,
- * industry_pages) surface three actions in the read-mode footer:
- * `[Close]` (ghost) · `[View details]` (secondary, navigates to the
- * full read page) · `[Edit]` (primary, navigates to the edit page).
+ * `variant="floating"` — the panel sits on the page without a backdrop,
+ * rounded and elevated. Use for inline drill-in from a table row or a
+ * read-only popover. Shown here in read mode; omit `mode` for a
+ * footer-less info popover.
  *
- * `editTarget="page"` is the semantic hint that `onEdit` navigates
- * to an edit page (vs. flipping the sheet to edit mode in place).
- *
- * @summary Read edit with view details
+ * @summary Floating variant — no backdrop, elevated
  */
-export const ReadEditWithViewDetails: Story = {
+export const Floating: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
     return (
       <>
-        <Button onClick={() => setOpen(true)}>View service</Button>
+        <Button onClick={() => setOpen(true)}>View company</Button>
         <Sheet
           isOpen={open}
           onClose={() => setOpen(false)}
-          subtitle="Service"
-          title="Brand Identity Bundle"
-          description="Marketing · Active · Updated 2 days ago"
+          variant="floating"
+          subtitle="Company"
+          title="Brik Designs"
+          description="Active · Updated 2 days ago"
           mode="read"
-          editTarget="page"
-          viewDetailsAction={{
-            label: 'View details',
-            onClick: () => alert('Navigate to /settings/services/brand-identity-bundle'),
-          }}
-          onEdit={() => alert('Navigate to /settings/services/brand-identity-bundle/edit')}
+          onEdit={() => alert('Switch to edit mode')}
         >
           <ReadOnlyFields />
         </Sheet>
@@ -377,9 +190,17 @@ export const ReadEditWithViewDetails: Story = {
   },
 };
 
-/* ─── Read ↔ Edit toggle — the canonical pattern ─────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   PATTERNS — hook-driven + footer-composition canon
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Read edit toggle */
+/**
+ * The canonical pattern: open in `read`, click Edit to switch to `edit`,
+ * Save / Cancel returns to `read`. Irreducible — the mode is a
+ * hook-driven state machine args can't express.
+ *
+ * @summary Read ↔ edit toggle (canonical)
+ */
 export const ReadEditToggle: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
@@ -420,33 +241,91 @@ export const ReadEditToggle: Story = {
   },
 };
 
-/* ─── Read-only floating (popover, no footer) ────────────────── */
-
-/** @summary Read only floating */
-export const ReadOnlyFloating: Story = {
+/**
+ * Sheet+page hybrid tables (services, offerings, service_lines,
+ * industry_pages) surface three actions in the read-mode footer:
+ * `[Close]` (ghost) · `[View details]` (secondary, navigates to the
+ * full read page) · `[Edit]` (primary, navigates to the edit page).
+ *
+ * `editTarget="page"` is the semantic hint that `onEdit` navigates
+ * to an edit page (vs. flipping the sheet to edit mode in place).
+ *
+ * @summary Read footer with [View details]
+ */
+export const WithViewDetails: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
     return (
       <>
-        <Button onClick={() => setOpen(true)}>Show info</Button>
+        <Button onClick={() => setOpen(true)}>View service</Button>
         <Sheet
           isOpen={open}
           onClose={() => setOpen(false)}
-          title="Quick info"
-          description="Read-only — no CTA needed"
-          variant="floating"
+          subtitle="Service"
+          title="Brand Identity Bundle"
+          description="Marketing · Active · Updated 2 days ago"
+          mode="read"
+          editTarget="page"
+          viewDetailsAction={{
+            label: 'View details',
+            onClick: () => alert('Navigate to /settings/services/brand-identity-bundle'),
+          }}
+          onEdit={() => alert('Navigate to /settings/services/brand-identity-bundle/edit')}
         >
-          <SampleContent />
+          <ReadOnlyFields />
         </Sheet>
       </>
     );
   },
 };
 
-/* ─── Tabs (Details / Sources) ───────────────────────────────── */
+/**
+ * For ancillary actions next to the primary Edit / Save — e.g. *Refresh*,
+ * *Re-generate* — pass `secondaryAction` instead of composing a custom
+ * `footer`. Renders left-aligned; mode-driven primary actions stay on the
+ * right. Suppressed in edit mode.
+ *
+ * @summary Read footer with secondary action
+ */
+export const WithSecondaryAction: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+    const handleRefresh = () => {
+      setRefreshing(true);
+      setTimeout(() => setRefreshing(false), 900);
+    };
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>View with secondary action</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Strategic Brief"
+          description="Last refreshed 2 days ago"
+          mode="read"
+          onEdit={() => alert('Switch to edit mode')}
+          secondaryAction={{
+            label: refreshing ? 'Refreshing…' : 'Refresh Brief',
+            onClick: handleRefresh,
+            loading: refreshing,
+          }}
+        >
+          <ReadOnlyFields />
+        </Sheet>
+      </>
+    );
+  },
+};
 
-/** @summary Tabs */
-export const Tabs: Story = {
+/**
+ * Tabs render below the header. Each tab supplies its own body content —
+ * `children` is ignored when `tabs` is supplied. Irreducible — `tabs` is
+ * an array of `{ id, label, content }` objects a Control can't express.
+ *
+ * @summary Tabbed sheet body
+ */
+export const WithTabs: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('details');
@@ -485,146 +364,35 @@ export const Tabs: Story = {
   },
 };
 
-/* ─── Secondary action (e.g. "Refresh Brief") ────────────────── */
-
-/** @summary Secondary action */
-export const SecondaryAction: Story = {
+/**
+ * The `footer` slot fully overrides the mode-driven auto-footer — use it
+ * for bespoke action sets (e.g. a destructive `Archive` alongside
+ * `Cancel` / `Save`) that the `read` / `edit` footers don't cover.
+ *
+ * @summary Custom footer override
+ */
+export const CustomFooter: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
-    const handleRefresh = () => {
-      setRefreshing(true);
-      setTimeout(() => setRefreshing(false), 900);
-    };
+    const close = () => setOpen(false);
     return (
       <>
-        <Button onClick={() => setOpen(true)}>View with secondary action</Button>
+        <Button onClick={() => setOpen(true)}>View details</Button>
         <Sheet
           isOpen={open}
-          onClose={() => setOpen(false)}
-          title="Strategic Brief"
-          description="Last refreshed 2 days ago"
-          mode="read"
-          onEdit={() => alert('Switch to edit mode')}
-          secondaryAction={{
-            label: refreshing ? 'Refreshing…' : 'Refresh Brief',
-            onClick: handleRefresh,
-            loading: refreshing,
-          }}
+          onClose={close}
+          title="Company details"
+          footer={(
+            <>
+              <Button variant="danger-ghost" onClick={close}>Archive</Button>
+              <Button variant="ghost" onClick={close}>Cancel</Button>
+              <Button variant="primary" onClick={close}>Save</Button>
+            </>
+          )}
         >
-          <ReadOnlyFields />
+          <SampleContent />
         </Sheet>
       </>
-    );
-  },
-};
-
-/* ─── Tabs + Secondary action + Read/Edit toggle ─────────────── */
-
-/** @summary Tabs with secondary action */
-export const TabsWithSecondaryAction: Story = {
-  render: () => {
-    const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState<'read' | 'edit'>('read');
-    const [saving, setSaving] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
-    const [activeTab, setActiveTab] = useState('details');
-
-    const handleOpen = () => { setMode('read'); setActiveTab('details'); setOpen(true); };
-    const handleSave = () => {
-      setSaving(true);
-      setTimeout(() => { setSaving(false); setMode('read'); }, 700);
-    };
-    const handleRefresh = () => {
-      setRefreshing(true);
-      setTimeout(() => setRefreshing(false), 900);
-    };
-
-    return (
-      <>
-        <Button onClick={handleOpen}>Open full sheet</Button>
-        <Sheet
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          title="Strategic Brief"
-          description={mode === 'read' ? 'Active · Updated 2 days ago' : 'Editing brief'}
-          mode={mode}
-          onEdit={() => setMode('edit')}
-          onSave={handleSave}
-          onCancel={() => setMode('read')}
-          saveLoading={saving}
-          secondaryAction={{
-            label: refreshing ? 'Refreshing…' : 'Refresh Brief',
-            onClick: handleRefresh,
-            loading: refreshing,
-          }}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          tabs={mode === 'read' ? [
-            { id: 'details', label: 'Details', content: <ReadOnlyFields /> },
-            {
-              id: 'sources',
-              label: 'Sources',
-              content: (
-                <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
-                  Provenance timeline + linked records drill-in.
-                </p>
-              ),
-            },
-          ] : undefined}
-        >
-          {mode === 'edit' ? <EditFormFields /> : null}
-        </Sheet>
-      </>
-    );
-  },
-};
-
-/* ─── Patterns ───────────────────────────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => {
-    const [openId, setOpenId] = useState<string | null>(null);
-    const open = (id: string) => setOpenId(id);
-    const close = () => setOpenId(null);
-
-    return (
-      <Stack>
-        <SectionLabel>Custom footer (overrides mode)</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('custom')}>View details</Button>
-            <Sheet
-              isOpen={openId === 'custom'}
-              onClose={close}
-              title="Company details"
-              footer={(
-                <>
-                  <Button variant="danger-ghost" onClick={close}>Archive</Button>
-                  <Button variant="ghost" onClick={close}>Cancel</Button>
-                  <Button variant="primary" onClick={close}>Save</Button>
-                </>
-              )}
-            >
-              <SampleContent />
-            </Sheet>
-          </div>
-        </Row>
-
-        <SectionLabel>Mobile bottom sheet</SectionLabel>
-        <Row>
-          <div>
-            <Button onClick={() => open('mobile')}>Show filters</Button>
-            <Sheet isOpen={openId === 'mobile'} onClose={close} title="Filters" side="bottom">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-                <SampleContent />
-                <Button variant="primary" onClick={close}>Apply filters</Button>
-              </div>
-            </Sheet>
-          </div>
-        </Row>
-      </Stack>
     );
   },
 };
