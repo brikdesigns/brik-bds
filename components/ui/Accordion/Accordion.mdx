@@ -12,24 +12,19 @@ Collapsible content sections for FAQs, settings panels, and grouped information.
 
 ## Playground
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Behavior modes, pre-opened items, and rich content.
+Accordion has no visual-variant axis — behavior modes are Controls on the Playground:
 
-<Canvas of={Stories.Variants} />
+- **Single open** — only one item open at a time (default)
+- **Multiple open** — toggle `allowMultiple` for simultaneous open items
+- **Default open** — set `defaultOpenItems` to pre-expand items on mount
 
-- **Single open** — Only one item open at a time (default)
-- **Multiple open** — `allowMultiple` allows simultaneous open items
-- **Default open** — `defaultOpenItems` sets initially expanded items
-- **Rich content** — Content supports any React node
+Item `content` accepts any React node — ordered lists, multi-paragraph blocks — as shown below.
 
-## Patterns
-
-Real-world usage: FAQ sections and settings panels.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithRichContent} />
 
 ## Props
 
