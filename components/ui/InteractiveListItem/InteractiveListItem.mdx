@@ -14,26 +14,18 @@ Use when a list row drills into something — clicking a member opens their prof
 
 **Distinct from `CardControl`.** `CardControl` is a settings card whose **trailing action** (Switch / Button / link) is the click target — the card itself is *not* interactive. `InteractiveListItem` is the inverse — the **whole row** is interactive, the trailing slot is decorative (a Tag, Badge, progress block, or caret indicator). If you need both — a row that drills in AND a switch in the trailing — you have a UX conflict; pick one click target.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
+
+Slot presence (`leading` / `subtitle` / `trailing`), `size`, and `disabled` are all Controls on this story — toggle them in the Controls panel rather than reaching for a dedicated story.
 
 ## Variants
 
-<Canvas of={Stories.Variants} />
+The `subtitle` slot accepts a `ReactNode`, so a row can carry multi-line metadata — a text line above a row of inline `<Badge>`s — with a caret in the trailing slot. This activity-feed composition is the irreducible case Controls can't express.
 
-- **Title only** — minimal row, just leading + title
-- **Title + subtitle** — adds a single-line subtitle (string or simple ReactNode)
-- **Full row** — leading + title + subtitle + trailing
-- **Disabled** — muted styling, no interaction, no hover/active
-
-## Patterns
-
-<Canvas of={Stories.Patterns} />
-
-An activity feed inside a sheet. Each row drills into the related request. The subtitle slot here is a `ReactNode` carrying multi-line metadata: the first line is text (submitter · timestamp), the second line is a row of inline `<Badge>`s. The trailing slot shows a caret indicator.
+<Canvas of={Stories.ActivityFeed} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-

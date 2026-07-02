@@ -3,24 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { InteractiveListItem } from './InteractiveListItem';
 import { Avatar } from '../Avatar';
 import { Badge } from '../Badge';
-import { Tag } from '../Tag';
 
-/* ─── Layout helpers (story-only) ────────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div
-    style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.05em',
-      marginBottom: 'var(--gap-md)',
-      color: 'var(--text-muted)',
-    }}
-  >
-    {children}
-  </div>
-);
+/* ─── Layout helper (story-only) ─────────────────────────────────── */
 
 const Stack = ({
   children,
@@ -38,9 +22,17 @@ const meta: Meta<typeof InteractiveListItem> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
-    title: { control: 'text' },
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    disabled: { control: 'boolean' },
+    title: { control: 'text', description: 'Primary title text.' },
+    subtitle: {
+      control: 'text',
+      description: 'Optional secondary line. Also accepts multi-line ReactNode (see Variants).',
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      description: 'Row size — `md` for full sheets/panels, `sm` for narrow slots (DevBar, popovers).',
+    },
+    disabled: { control: 'boolean', description: 'Mutes styling and blocks the click.' },
   },
 };
 
@@ -48,14 +40,21 @@ export default meta;
 type Story = StoryObj<typeof InteractiveListItem>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND
+   DEFAULT — args-driven sandbox
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Canonical row. Toggle `size` / `disabled` and edit `title` / `subtitle`
+ * via Controls. The `leading` (Avatar) and `trailing` (Badge) slots are
+ * fixed here to show the full three-slot layout.
+ *
+ * @summary Clickable row — leading + title + subtitle + trailing
+ */
+export const Default: Story = {
   args: {
     title: 'Emily Rivera',
     subtitle: 'Hygienist · 2 years',
+    size: 'md',
     disabled: false,
   },
   render: (args) => (
@@ -64,112 +63,28 @@ export const Playground: Story = {
         {...args}
         leading={<Avatar name="Emily Rivera" size="md" />}
         trailing={<Badge status="info">New hire</Badge>}
-        onClick={() => console.log('clicked')}
+        onClick={() => {}}
       />
     </div>
   ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS
+   VARIANTS — irreducible composition (subtitle as rich ReactNode)
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Slot combinations side by side */
-export const Variants: Story = {
-  render: () => (
-    <div style={{ minWidth: 480 }}>
-      <Stack>
-        <InteractiveListItem
-          leading={<Avatar name="Emily Rivera" size="md" />}
-          title="Title only"
-          onClick={() => {}}
-        />
-        <InteractiveListItem
-          leading={<Avatar name="Emily Rivera" size="md" />}
-          title="Title + subtitle"
-          subtitle="Single-line metadata"
-          onClick={() => {}}
-        />
-        <InteractiveListItem
-          leading={<Avatar name="Emily Rivera" size="md" />}
-          title="Full row"
-          subtitle="Hygienist · 2 years"
-          trailing={<Badge status="info">New hire</Badge>}
-          onClick={() => {}}
-        />
-        <InteractiveListItem
-          leading={<Avatar name="Tyler Nguyen" size="md" />}
-          title="Disabled"
-          subtitle="No interaction"
-          trailing={<Tag size="sm">Inactive</Tag>}
-          disabled
-          onClick={() => {}}
-        />
-      </Stack>
-    </div>
-  ),
-};
-
-/** @summary Size variants — `md` (default) and `sm` (narrow panels) */
-export const Sizes: Story = {
-  render: () => (
-    <Stack gap="var(--gap-lg)">
-      <div>
-        <SectionLabel>md (default) — full sheets and panels</SectionLabel>
-        <div style={{ width: 480 }}>
-          <InteractiveListItem
-            leading={<Avatar name="Emily Rivera" size="md" />}
-            title="Emily Rivera"
-            subtitle="Hygienist · 2 years"
-            trailing={<Badge status="info">New hire</Badge>}
-            onClick={() => {}}
-          />
-        </div>
-      </div>
-      <div>
-        <SectionLabel>sm — narrow panels (DevBar slot, popovers)</SectionLabel>
-        <div style={{ width: 280 }}>
-          <Stack gap="0">
-            <InteractiveListItem
-              size="sm"
-              leading={<Avatar name="Brik Admin" size="sm" />}
-              title="brik_admin"
-              subtitle="platform · admin"
-              trailing={<Badge status="info" size="xs">PLATFORM</Badge>}
-              onClick={() => {}}
-            />
-            <InteractiveListItem
-              size="sm"
-              leading={<Avatar name="Jordan Tran" size="sm" />}
-              title="manager · proficient"
-              subtitle="Practice manager"
-              trailing={<Badge size="xs">MANAGER</Badge>}
-              onClick={() => {}}
-            />
-            <InteractiveListItem
-              size="sm"
-              leading={<Avatar name="Rachel Foster" size="sm" />}
-              title="Rachel Foster"
-              subtitle="staff · proficient · frontdesk"
-              trailing={<Badge size="xs">STAFF</Badge>}
-              onClick={() => {}}
-            />
-          </Stack>
-        </div>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Real-world: an activity feed inside a sheet (request rows) */
-export const Patterns: Story = {
+/**
+ * Activity feed inside a sheet — each row drills into the related request.
+ * The `subtitle` slot carries a multi-line ReactNode: a text line
+ * (submitter · timestamp) above a row of inline `<Badge>`s; the `trailing`
+ * slot shows a caret. Irreducible because the value is the multi-row feed
+ * and the composed subtitle, which Controls can't express.
+ *
+ * @summary Activity feed with rich multi-line subtitle rows
+ */
+export const ActivityFeed: Story = {
   render: () => (
     <div style={{ minWidth: 520 }}>
-      <SectionLabel>Activity feed (drill-down rows)</SectionLabel>
       <Stack gap="0">
         <InteractiveListItem
           leading={

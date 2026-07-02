@@ -12,10 +12,18 @@ const meta: Meta<typeof DataSection> = {
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
   argTypes: {
-    title: { control: 'text' },
-    subtitle: { control: 'text' },
-    spacing: { control: 'select', options: ['md', 'lg'] },
-    titleAs: { control: 'select', options: ['h2', 'h3'] },
+    title: { control: 'text', description: 'Section title — renders as a heading (default `<h2>`).' },
+    subtitle: { control: 'text', description: 'Optional secondary line below the title.' },
+    spacing: {
+      control: 'select',
+      options: ['md', 'lg'],
+      description: 'Vertical rhythm between this section and the next.',
+    },
+    titleAs: {
+      control: 'select',
+      options: ['h2', 'h3'],
+      description: 'Heading element for the title. `h3` only when nested under an existing `<h2>`.',
+    },
   },
 };
 
@@ -37,10 +45,18 @@ const ViewEditToggle = () => (
   </ButtonGroup>
 );
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   DEFAULT — args-driven sandbox
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Canonical section. Edit `title` / `subtitle` and toggle `spacing` /
+ * `titleAs` via Controls; the `actions` slot holds a `[View]`/`[Edit]`
+ * `ButtonGroup` and the body a `<FieldGrid>` of `<Field>`s.
+ *
+ * @summary Page-side wrapper for read-mode data sections
+ */
+export const Default: Story = {
   args: {
     title: 'Identity',
     subtitle: undefined,
@@ -61,52 +77,20 @@ export const Playground: Story = {
   ),
 };
 
-/* ─── 2. Variants ────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   VARIANTS — irreducible composition (stacked read-mode page)
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Frame>
-      <DataSection title="Title only" actions={<ViewEditToggle />}>
-        <FieldGrid columns={2}>
-          <Field label="Business Name">Vale Partners</Field>
-          <Field label="Industry">Professional Services</Field>
-        </FieldGrid>
-      </DataSection>
-
-      <DataSection
-        title="Title + subtitle"
-        subtitle="Public-facing name and core identifiers."
-        actions={<ViewEditToggle />}
-      >
-        <FieldGrid columns={2}>
-          <Field label="Business Name">Vale Partners</Field>
-          <Field label="Industry">Professional Services</Field>
-        </FieldGrid>
-      </DataSection>
-
-      <DataSection title="No actions">
-        <FieldGrid columns={2}>
-          <Field label="Business Name">Vale Partners</Field>
-          <Field label="Industry">Professional Services</Field>
-        </FieldGrid>
-      </DataSection>
-
-      <DataSection title="Single button in actions" actions={<Button size="sm" variant="secondary">Edit</Button>}>
-        <FieldGrid columns={2}>
-          <Field label="Business Name">Vale Partners</Field>
-          <Field label="Industry">Professional Services</Field>
-        </FieldGrid>
-      </DataSection>
-    </Frame>
-  ),
-};
-
-/* ─── 3. Patterns ────────────────────────────────────────────── */
-
-/** @summary Read mode page */
+/**
+ * The canonical read-mode page composition — several `DataSection`s stacked
+ * on a page, each with a `[View]`/`[Edit]` `ButtonGroup` in the actions slot
+ * and mixed body content (FieldGrid, prose, BulletList). Irreducible because
+ * the value is the multi-section page rhythm, which a single section can't show.
+ *
+ * @summary Read-mode page — several stacked DataSections
+ */
 export const ReadModePage: Story = {
-  name: 'Pattern — Read-Mode Page',
+  name: 'Read-Mode Page',
   render: () => (
     <Frame>
       <DataSection title="Identity" actions={<ViewEditToggle />}>
@@ -150,33 +134,6 @@ export const ReadModePage: Story = {
           />
         </Field>
       </DataSection>
-    </Frame>
-  ),
-};
-
-/* ─── 4. Vocabulary demo — what the parts are called ───────── */
-
-/** @summary Anatomy vocabulary */
-export const AnatomyVocabulary: Story = {
-  name: 'Anatomy — vocabulary',
-  render: () => (
-    <Frame>
-      <DataSection
-        title="Identity"
-        subtitle="Public-facing name and core identifiers."
-        actions={<ViewEditToggle />}
-      >
-        <FieldGrid columns={2}>
-          <Field label="Business Name">Vale Partners</Field>
-          <Field label="Industry">Professional Services</Field>
-        </FieldGrid>
-      </DataSection>
-      <div style={{ marginTop: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-        <p style={{ margin: 0 }}><strong>title</strong> — &quot;Identity&quot; renders as <code>&lt;h2&gt;</code>, class <code>.bds-data-section__title</code>.</p>
-        <p style={{ margin: 0 }}><strong>subtitle</strong> — secondary line below title, class <code>.bds-data-section__subtitle</code>. Not an eyebrow.</p>
-        <p style={{ margin: 0 }}><strong>actions</strong> — slot holding buttons. The text on each button is a <em>button-label</em>; the slot is not itself a label.</p>
-        <p style={{ margin: 0 }}><strong>field-label / field-value</strong> — one <code>&lt;Field&gt;</code> pair. Stacked by default.</p>
-      </div>
     </Frame>
   ),
 };

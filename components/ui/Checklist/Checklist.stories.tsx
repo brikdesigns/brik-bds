@@ -18,9 +18,15 @@ const meta: Meta<typeof Checklist> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
-    label: { control: 'text' },
-    checked: { control: 'boolean' },
-    disabled: { control: 'boolean' },
+    label: { control: 'text', description: 'Item label rendered next to the toggle.' },
+    checked: {
+      control: 'boolean',
+      description: 'Completion state. Checked adds line-through + a subtle row background.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the toggle and mutes styling — use during async save or on read-only items.',
+    },
   },
 };
 
@@ -28,11 +34,17 @@ export default meta;
 type Story = StoryObj<typeof Checklist>;
 
 /* ═══════════════════════════════════════════════════════════════
-   PLAYGROUND
+   DEFAULT — args-driven sandbox
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Canonical checklist row. Toggle `checked` / `disabled` via Controls to
+ * see every state — empty circle, brand-primary fill with strikethrough,
+ * and the muted locked treatment.
+ *
+ * @summary Completion-state row with circular toggle + label
+ */
+export const Default: Story = {
   args: {
     label: 'Restock surgical gloves',
     checked: false,
@@ -49,39 +61,15 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   VARIANTS — one story per state
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Unchecked — empty circle, primary label color */
-export const Unchecked: Story = {
-  args: { label: 'Restock surgical gloves', checked: false, onCheckedChange: () => {} },
-};
-
-/** @summary Checked — brand-primary fill, line-through label, subtle row bg */
-export const Checked: Story = {
-  args: { label: 'Restock surgical gloves', checked: true, onCheckedChange: () => {} },
-};
-
-/** @summary Disabled — locked + muted styling, useful during async save */
-export const Disabled: Story = {
-  args: { label: 'Restock surgical gloves', checked: false, onCheckedChange: () => {}, disabled: true },
-};
-
-/** @summary Disabled checked — completion state on a read-only item */
-export const DisabledChecked: Story = {
-  args: { label: 'Restock surgical gloves', checked: true, onCheckedChange: () => {}, disabled: true },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   PATTERNS — irreducible (hook usage)
+   VARIANTS — irreducible composition (inter-row completion state)
    ═══════════════════════════════════════════════════════════════ */
 
 /**
  * A daily-maintenance checklist inside a task sheet — the canonical use
- * case in a clinical PMS. The completion bg + strikethrough makes done vs.
- * not-done glanceable at the row level; the running `n of N completed`
- * counter sits above the list. Render-mode is required because the
- * checklist's value comes from the *interaction* between rows.
+ * case in a clinical PMS. The completion background + strikethrough makes
+ * done vs. not-done glanceable at the row level; the running `n of N
+ * completed` counter sits above the list. Irreducible because the value
+ * comes from the *interaction between rows*, which Controls can't express.
  *
  * @summary Daily-maintenance checklist with running completion counter
  */
