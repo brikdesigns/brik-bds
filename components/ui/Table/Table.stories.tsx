@@ -11,26 +11,13 @@ import { TextLink } from '../TextLink';
 import { Tooltip } from '../Tooltip';
 import { Eye, Pen, EllipsisVertical } from '../../icons';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
+/* ─── Layout helper (story-only) ──────────────────────────────── */
 
 const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
-/* ─── Shared Styles ───────────────────────────────────────────── */
+/* ─── Shared cell styles + helpers (story-only) ───────────────── */
 
 const twoLinePrimary: CSSProperties = {
   fontWeight: 'var(--font-weight-semibold)' as unknown as number,
@@ -45,8 +32,6 @@ const twoLineSecondary: CSSProperties = {
   lineHeight: 'var(--font-line-height-normal)',
 };
 
-/* ─── Reusable Cell Patterns (story-only) ─────────────────────── */
-
 /** Standard icon-left cell layout: 24px icon + text, vertically centered */
 const IconLeftCell = ({ icon, children }: { icon: string; children: React.ReactNode }) => (
   <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
@@ -57,7 +42,7 @@ const IconLeftCell = ({ icon, children }: { icon: string; children: React.ReactN
   </span>
 );
 
-/* ─── Sample Data ─────────────────────────────────────────────── */
+/* ─── Sample data ─────────────────────────────────────────────── */
 
 const users = [
   { name: 'Alice Chen', email: 'alice@example.com', role: 'Admin', status: 'positive' as const },
@@ -78,8 +63,12 @@ const meta: Meta<typeof Table> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    striped: { control: 'boolean' },
-    size: { control: 'select', options: ['default', 'comfortable'] },
+    striped: { control: 'boolean', description: 'Zebra-stripe alternate body rows.' },
+    size: {
+      control: 'select',
+      options: ['default', 'comfortable'],
+      description: 'Row density — `default` (compact) or `comfortable` (72px cell height).',
+    },
   },
 };
 
@@ -87,11 +76,16 @@ export default meta;
 type Story = StoryObj<typeof Table>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Canonical table. Toggle `striped` and `size` via Controls. Cells accept
+ * any content — see the Variants stories for the composition catalog.
+ *
+ * @summary Themed data table — striped + size are Controls
+ */
+export const Default: Story = {
   args: { striped: false, size: 'default' },
   render: (args) => (
     <Table {...args}>
@@ -120,430 +114,107 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, striped, sortable, cell types
+   VARIANTS — irreducible compositions (sub-component props)
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
+/**
+ * Sortable headers (`sortable` + `sortDirection` on `<TableHead>`) plus
+ * checkbox row selection (`selected` on `<TableRow>` + a `<Checkbox>` cell).
+ * Irreducible — the interactivity lives on the sub-components, not on
+ * `Table` args, so Controls can't express it.
+ *
+ * @summary Sortable headers + checkbox row selection
+ */
+export const SortableWithSelection: Story = {
+  render: () => (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead style={{ width: 40 }}><Checkbox name="select-all" label="" value="all" /></TableHead>
+          <TableHead sortable sortDirection="asc">Name</TableHead>
+          <TableHead sortable sortDirection="none">Email</TableHead>
+          <TableHead>Role</TableHead>
+          <TableHead>Status</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {users.map((u, i) => (
+          <TableRow key={u.email} selected={i === 0}>
+            <TableCell><Checkbox name="select" label="" value={u.email} defaultChecked={i === 0} /></TableCell>
+            <TableCell>{u.name}</TableCell>
+            <TableCell>{u.email}</TableCell>
+            <TableCell>{u.role}</TableCell>
+            <TableCell><Badge status={u.status} size="sm">{statusLabel(u.status)}</Badge></TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
+};
+
+/**
+ * A `<TableCell>` accepts any content. This realistic table exercises the
+ * cell-composition catalog in one place: icon-left name, a two-line
+ * owner cell, a `<Tag>`, a status `<Badge>`, an inline `<TextInput>`, a
+ * `<Tooltip>` header indicator, and a `<TextLink>`. Irreducible because
+ * the cell variety is composition, not a prop.
+ *
+ * @summary Cell-content catalog — icons, tags, badges, inputs, links
+ */
+export const CellTypes: Story = {
   render: () => {
-    const services = [
-      { name: 'Design', icon: 'ph:palette' },
-      { name: 'Development', icon: 'ph:code' },
-      { name: 'Marketing', icon: 'ph:megaphone' },
-      { name: 'Analytics', icon: 'ph:chart-line' },
-      { name: 'Operations', icon: 'ph:gear' },
+    const rows = [
+      { service: 'Brand Identity', icon: 'ph:palette', owner: 'Alice Chen', email: 'alice@example.com', category: 'Design', status: 'positive' as const },
+      { service: 'API Migration', icon: 'ph:code', owner: 'Bob Smith', email: 'bob@example.com', category: 'Development', status: 'positive' as const },
+      { service: 'Q1 Campaign', icon: 'ph:megaphone', owner: 'Carol Davis', email: 'carol@example.com', category: 'Marketing', status: 'warning' as const },
     ];
-    const categories = ['Design', 'Development', 'Marketing', 'Strategy', 'Operations'];
-
     return (
-      <Stack gap="var(--gap-huge)">
-        {/* Size variants */}
-        <div>
-          <SectionLabel>Default size</SectionLabel>
-          <Table size="default">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.slice(0, 3).map((u) => (
-                <TableRow key={u.email}>
-                  <TableCell>{u.name}</TableCell>
-                  <TableCell>{u.email}</TableCell>
-                  <TableCell>{u.role}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        <div>
-          <SectionLabel>Comfortable size</SectionLabel>
-          <Table size="comfortable">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.slice(0, 3).map((u) => (
-                <TableRow key={u.email}>
-                  <TableCell>{u.name}</TableCell>
-                  <TableCell>{u.email}</TableCell>
-                  <TableCell>{u.role}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Striped */}
-        <div>
-          <SectionLabel>Striped</SectionLabel>
-          <Table striped>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((u) => (
-                <TableRow key={u.email}>
-                  <TableCell>{u.name}</TableCell>
-                  <TableCell>{u.email}</TableCell>
-                  <TableCell><Badge status={u.status} size="sm">{statusLabel(u.status)}</Badge></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Sortable headers + checkbox selection */}
-        <div>
-          <SectionLabel>Sortable headers + checkbox</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead style={{ width: 40 }}><Checkbox name="select-all" label="" value="all" /></TableHead>
-                <TableHead sortable sortDirection="asc">Name</TableHead>
-                <TableHead sortable sortDirection="none">Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((u, i) => (
-                <TableRow key={u.email} selected={i === 0}>
-                  <TableCell><Checkbox name="select" label="" value={u.email} defaultChecked={i === 0} /></TableCell>
-                  <TableCell>{u.name}</TableCell>
-                  <TableCell>{u.email}</TableCell>
-                  <TableCell>{u.role}</TableCell>
-                  <TableCell><Badge status={u.status} size="sm">{statusLabel(u.status)}</Badge></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Cell types: icon left, tooltip indicator, tags, badges, actions, button, text link */}
-        <div>
-          <SectionLabel>Icon left cell</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Service</TableHead>
-                <TableHead>Owner</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {services.map((s, i) => (
-                <TableRow key={s.name}>
-                  <TableCell>
-                    <IconLeftCell icon={s.icon}>{s.name}</IconLeftCell>
-                  </TableCell>
-                  <TableCell>{users[i].name}</TableCell>
-                  <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        <div>
-          <SectionLabel>Tooltip indicator cell</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Field</TableHead>
-                <TableHead>Value</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[
-                { label: 'Email', value: 'alice@example.com', hint: 'Primary contact email' },
-                { label: 'Phone', value: '+1 (555) 123-4567', hint: 'Direct line — business hours only' },
-                { label: 'Address', value: '123 Main St, Suite 100', hint: 'Billing address on file' },
-              ].map((f) => (
-                <TableRow key={f.label}>
-                  <TableCell>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
-                      {f.label}
-                      <Tooltip content={f.hint} placement="top">
-                        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, fontSize: 'var(--label-md)', color: 'var(--text-muted)', cursor: 'help' }}>
-                          <Icon icon="ph:info" />
-                        </span>
-                      </Tooltip>
-                    </span>
-                  </TableCell>
-                  <TableCell>{f.value}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        <div>
-          <SectionLabel>Tags + brand badge + actions</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead style={{ width: 60 }}>Badge</TableHead>
-                <TableHead>Project</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {['Brand Refresh', 'API Migration', 'Q1 Campaign', 'Roadmap 2026', 'Vendor Audit'].map((project, i) => (
-                <TableRow key={project}>
-                  <TableCell>
-                    <Badge size="xs" status="brand" icon={<Icon icon={services[i].icon} />} />
-                  </TableCell>
-                  <TableCell>{project}</TableCell>
-                  <TableCell><Tag size="sm">{categories[i]}</Tag></TableCell>
-                  <TableCell><Button variant="primary" size="sm">View</Button></TableCell>
-                  <TableCell style={{ textAlign: 'right' }}>
-                    <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
-                      <Button variant="primary" size="sm" icon={<Icon icon="ph:pencil-simple" />} label="Edit" />
-                      <Button variant="danger" size="sm" icon={<Icon icon="ph:trash" />} label="Delete" />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        <div>
-          <SectionLabel>Text link cell — standard</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Link</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.slice(0, 3).map((u) => (
-                <TableRow key={u.email}>
-                  <TableCell>{u.name}</TableCell>
-                  <TableCell>{u.email}</TableCell>
-                  <TableCell>{u.role}</TableCell>
-                  <TableCell><TextLink href="#" size="small">View profile</TextLink></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        <div>
-          <SectionLabel>Text link cell — with icon</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Document</TableHead>
-                <TableHead>Updated</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[
-                { name: 'Q1 Report.pdf', date: 'Apr 10, 2026' },
-                { name: 'Brand Guidelines.pdf', date: 'Mar 28, 2026' },
-                { name: 'Invoice #1042.pdf', date: 'Apr 1, 2026' },
-              ].map((doc) => (
-                <TableRow key={doc.name}>
-                  <TableCell>{doc.name}</TableCell>
-                  <TableCell>{doc.date}</TableCell>
-                  <TableCell>
-                    <TextLink href="#" size="small" iconAfter={<Icon icon="ph:arrow-square-out" />}>
-                      Open
-                    </TextLink>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        <div>
-          <SectionLabel>Data input + text link</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Field</TableHead>
-                <TableHead>Value</TableHead>
-                <TableHead>Link</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[
-                { field: 'First name', placeholder: 'Enter first name' },
-                { field: 'Last name', placeholder: 'Enter last name' },
-                { field: 'Email', placeholder: 'Enter email' },
-              ].map((row) => (
-                <TableRow key={row.field}>
-                  <TableCell>{row.field}</TableCell>
-                  <TableCell><TextInput size="sm" placeholder={row.placeholder} /></TableCell>
-                  <TableCell><TextLink href="#" size="small">Edit</TextLink></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* 2-line variants */}
-        <div>
-          <SectionLabel>Two-line cells</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Service</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[
-                { name: 'Alice Chen', email: 'alice@example.com', service: 'Design', desc: 'Brand & visual identity', icon: 'ph:palette', status: 'positive' as const, since: 'Since Jan 2024' },
-                { name: 'Bob Smith', email: 'bob@example.com', service: 'Development', desc: 'Frontend engineering', icon: 'ph:code', status: 'positive' as const, since: 'Since Mar 2024' },
-                { name: 'Carol Davis', email: 'carol@example.com', service: 'Marketing', desc: 'Content & campaigns', icon: 'ph:megaphone', status: 'warning' as const, since: 'Since Jun 2024' },
-              ].map((row) => (
-                <TableRow key={row.email}>
-                  <TableCell>
-                    <div>
-                      <div style={twoLinePrimary}>{row.name}</div>
-                      <div style={twoLineSecondary}>{row.email}</div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--gap-xs)' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--label-lg)', color: 'var(--text-primary)', flexShrink: 0, marginTop: 2 }}>
-                        <Icon icon={row.icon} />
-                      </span>
-                      <div>
-                        <div style={twoLinePrimary}>{row.service}</div>
-                        <div style={twoLineSecondary}>{row.desc}</div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <Badge status={row.status} size="sm">{statusLabel(row.status)}</Badge>
-                      <div style={{ ...twoLineSecondary, marginTop: 'var(--gap-xs)' }}>{row.since}</div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </Stack>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Service</TableHead>
+            <TableHead>Owner</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
+                Status
+                <Tooltip content="Lifecycle state — synced nightly" placement="top">
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, fontSize: 'var(--label-md)', color: 'var(--text-muted)', cursor: 'help' }}>
+                    <Icon icon="ph:info" />
+                  </span>
+                </Tooltip>
+              </span>
+            </TableHead>
+            <TableHead>Rename</TableHead>
+            <TableHead>Link</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.service}>
+              <TableCell><IconLeftCell icon={row.icon}>{row.service}</IconLeftCell></TableCell>
+              <TableCell>
+                <div>
+                  <div style={twoLinePrimary}>{row.owner}</div>
+                  <div style={twoLineSecondary}>{row.email}</div>
+                </div>
+              </TableCell>
+              <TableCell><Tag size="sm">{row.category}</Tag></TableCell>
+              <TableCell><Badge status={row.status} size="sm">{statusLabel(row.status)}</Badge></TableCell>
+              <TableCell><TextInput size="sm" placeholder={row.service} /></TableCell>
+              <TableCell>
+                <TextLink href="#" size="small" iconAfter={<Icon icon="ph:arrow-square-out" />}>Open</TextLink>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     );
   },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Full-featured composite table
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => {
-    const categories = ['Design', 'Development', 'Marketing', 'Strategy', 'Operations'];
-    const icons = ['ph:palette', 'ph:code', 'ph:megaphone', 'ph:chart-line', 'ph:gear'];
-
-    return (
-      <Stack gap="var(--gap-huge)">
-        {/* Full composite table */}
-        <div>
-          <SectionLabel>Full-featured team table</SectionLabel>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead style={{ width: 40 }}><Checkbox name="select-all" label="" value="all" /></TableHead>
-                <TableHead sortable sortDirection="asc">Name</TableHead>
-                <TableHead style={{ width: 60 }}>Badge</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user, i) => (
-                <TableRow key={user.email} selected={i === 1}>
-                  <TableCell><Checkbox name="select" label="" value={user.email} defaultChecked={i === 1} /></TableCell>
-                  <TableCell>
-                    <div>
-                      <div style={twoLinePrimary}>{user.name}</div>
-                      <div style={twoLineSecondary}>{user.email}</div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge size="xs" status="brand" icon={<Icon icon={icons[i]} />} />
-                  </TableCell>
-                  <TableCell><Tag size="sm">{categories[i]}</Tag></TableCell>
-                  <TableCell>
-                    <Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge>
-                  </TableCell>
-                  <TableCell><Button variant="primary" size="sm">View</Button></TableCell>
-                  <TableCell style={{ textAlign: 'right' }}>
-                    <div style={{ display: 'inline-flex', gap: 'var(--gap-sm)' }}>
-                      <Button variant="primary" size="sm" icon={<Icon icon="ph:pencil-simple" />} label="Edit" />
-                      <Button variant="secondary" size="sm" icon={<Icon icon="ph:download-simple" />} label="Download" />
-                      <Button variant="ghost" size="sm" icon={<Icon icon="ph:dots-three-vertical" />} label="More options" />
-                      <Button variant="danger" size="sm" icon={<Icon icon="ph:trash" />} label="Delete" />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Striped comfortable table */}
-        <div>
-          <SectionLabel>Striped comfortable table</SectionLabel>
-          <Table striped size="comfortable">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Profile</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.email}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role}</TableCell>
-                  <TableCell><TextLink href="#" size="small">View profile</TextLink></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </Stack>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. ACTIONS CELL — TableActionsCell canonical patterns
+   PATTERNS — actions cell + cell-level interactivity canon
    ═══════════════════════════════════════════════════════════════ */
 
 /**

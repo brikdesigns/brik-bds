@@ -8,34 +8,31 @@ import * as Stories from './Table.stories';
 
 <ComponentLinks slug="table" />
 
-Data table with composable sub-components. Supports sorting, selection, striped rows, size variants, and custom cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
+Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableActionsCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
+
+`striped` and `size` (`default` / `comfortable`, 72px cell height) are Controls on this story.
 
 ## Variants
 
-Size variants, striped rows, sortable headers, and all cell types: icon left, tooltip indicator, badge, tag, checkbox, data input, brand badge, actions, text link, and two-line layouts.
+Sortable headers (`sortable` + `sortDirection` on `<TableHead>`) and checkbox row selection (`selected` on `<TableRow>`) — both are sub-component props, so they live in a dedicated story rather than Controls.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.SortableWithSelection} />
 
-- **`default`** — Compact padding for dense data
-- **`comfortable`** — Generous padding (72px cell height)
+A `<TableCell>` accepts any content. This table exercises the composition catalog in one place — icon-left name, two-line owner, `<Tag>`, status `<Badge>`, inline `<TextInput>`, a `<Tooltip>` header indicator, and a `<TextLink>`.
+
+<Canvas of={Stories.CellTypes} />
 
 ## Patterns
 
-Full-featured composite table and striped comfortable layout.
-
-<Canvas of={Stories.Patterns} />
-
-## Actions cell + cell-level interactivity
-
-The trailing `[View][Edit][⋯]` cluster composes with `<TableActionsCell>` — owns alignment, shrink-to-content width, and the `--gap-sm` rhythm. Consumers stop hand-rolling `style={{ textAlign: 'right' }}` on `<TableCell>`.
+The trailing `[View][Edit][⋯]` cluster composes with `<TableActionsCell>` — it owns alignment, shrink-to-content width, and the `--gap-sm` rhythm, so consumers stop hand-rolling `style={{ textAlign: 'right' }}` on `<TableCell>`.
 
 <Canvas of={Stories.WithActionsCell} />
 
-The canonical read/edit canon row has three click-target classes — **Name** (`<TextLink>` opening the read sheet), **Foreign-key cells** (`<TextLink>` opening the related entity's read sheet), and **Actions** (`<TableActionsCell>`). Read-only display cells (Status / Public / Featured) stay plain `<Badge>` or text.
+The canonical read/edit row has three click-target classes — **Name** (`<TextLink>` opening the read sheet), **foreign-key cells** (`<TextLink>` opening the related entity's read sheet), and **Actions** (`<TableActionsCell>`). Read-only display cells (Status / Public / Featured) stay plain `<Badge>` or text.
 
 <Canvas of={Stories.CellLevelInteractivity} />
 
