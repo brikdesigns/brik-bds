@@ -10,37 +10,35 @@ import * as Stories from './Menu.stories';
 
 Floating dropdown panel for navigation and action menus. Contains selectable items with optional icons. Closes on outside click or Escape key.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
+
+Items carry an icon + label. Pass `activeId` to highlight one, `header` for a non-interactive label row, and `item.disabled` to lock a row.
 
 ## Variants
 
-With icons, text-only with disabled item, and active item highlight.
-
-<Canvas of={Stories.Variants} />
-
 ### Grouped items
 
-Pass `MenuItemGroup` entries (`{ label, items }`) to segment the menu under section headers — parity with [`Select`](/?path=/docs/components-select--docs)'s `SelectOptionGroup` and [`MultiSelect`](/?path=/docs/components-multi-select--docs)'s `MultiSelectOptionGroup`. Each group renders as a `role="group"` section named by its label; flat items and groups can be mixed, and the flat-only API stays back-compatible.
+Pass `MenuItemGroup` entries (`{ label, items }`) to segment the menu under section headers — parity with [`Select`](/?path=/docs/components-select--docs)'s `SelectOptionGroup`. Each group renders as a `role="group"` section named by its label; flat items and groups can be mixed, and the flat-only API stays back-compatible.
 
 <Canvas of={Stories.Grouped} />
 
 ### Custom content
 
-Set `content` on a `MenuItemData` to render a custom node — e.g. a line-colored [`ServiceTag`](/?path=/docs/components-service-tag--docs) — as the item's content instead of the default icon + label + description. The item stays a `role="menuitem"` button; its `label` is used as the accessible name.
+Set `content` on a `MenuItemData` to render a custom node — e.g. a line-colored [`ServiceTag`](/?path=/docs/components-service-tag--docs) — as the item's content instead of the default icon + label. The item stays a `role="menuitem"` button; its `label` is used as the accessible name.
 
 <Canvas of={Stories.CustomContent} />
 
 ## Patterns
 
-Real-world usage: `FilterButton` trigger, `Button` trigger with action menu, and an "Add" menu where each item has a label + description (the 2-line `MenuItemData.description` variant).
+A Menu needs a trigger and open state. The canonical integrations: a `FilterButton` trigger, a `Button` trigger with an action menu, and an "Add" menu whose items carry a `description`.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithTrigger} />
 
 ### Header slot
 
-Pass `header?: ReactNode` to render a non-interactive label above the items inside the menu panel — practice name, user identity block, filter group label, etc. The header sits inside Menu's outside-click ref so pressing it does not close the menu.
+Pass `header?: ReactNode` to render a non-interactive label above the items inside the menu panel — practice name, user identity block, filter group label. The header sits inside Menu's outside-click ref so pressing it does not close the menu.
 
 ```tsx
 <Menu
@@ -54,11 +52,9 @@ Pass `header?: ReactNode` to render a non-interactive label above the items insi
 />
 ```
 
-Default styling (`bds-menu__header` class) is uppercase label-style on `--text-secondary` with a subtle bottom border. Pass any `ReactNode` (multiple lines, mixed typography) to fully override the visual treatment.
-
 ### Items with description
 
-Pass `description?: string` on a `MenuItemData` to render a second-line description below the label. Used for "what does this option do?" affordance — common in "Add new ___" menus where each option is a different kind of thing (e.g. *Checklist — Recurring to-do lists*, *Procedure — Step-by-step workflows*).
+Pass `description?: string` on a `MenuItemData` to render a second-line description below the label — common in "Add new ___" menus where each option is a different kind of thing.
 
 ```tsx
 <Menu
@@ -71,9 +67,6 @@ Pass `description?: string` on a `MenuItemData` to render a second-line descript
 />
 ```
 
-When `description` is absent, the item renders as a single-line label (existing behavior, unchanged).
-
 ## Props
 
 <ArgTypes of={Stories} />
-
