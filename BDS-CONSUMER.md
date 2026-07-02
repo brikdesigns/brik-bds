@@ -105,7 +105,7 @@ style={text.body}
 
 ## Token Rename History
 
-Figma occasionally reorganizes variable groups, renaming the emitted CSS variables. Full audit log lives in [`docs/TOKEN-RENAMES.md`](docs/TOKEN-RENAMES.md) — check before writing CSS that targets old names.
+Figma occasionally reorganizes variable groups, renaming the emitted CSS variables. Full audit log lives in brik-rag — `brik-rag query "bds token rename history"` — check before writing CSS that targets old names.
 
 ---
 

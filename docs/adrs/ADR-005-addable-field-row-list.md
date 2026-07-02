@@ -8,7 +8,7 @@
 
 ## Context
 
-The 2026-Q2 portal addable-pattern survey ([audit doc](../audits/2026-Q2-portal-addable-survey.md), PR #251) catalogued five distinct shapes for "user manages a list of items" across `brik-client-portal`. Four shapes are covered by existing BDS components (MultiSelect, AddableTextList, AddableComboList, AddableEntryList). The fifth shape — **multi-field row** — has no BDS abstraction and is hand-rolled in three onboarding sheets:
+The 2026-Q2 portal addable-pattern survey (PR #251; full survey archived to brik-rag — `brik-rag query "2026-q2 portal addable survey"`) catalogued five distinct shapes for "user manages a list of items" across `brik-client-portal`. Four shapes are covered by existing BDS components (MultiSelect, AddableTextList, AddableComboList, AddableEntryList). The fifth shape — **multi-field row** — has no BDS abstraction and is hand-rolled in three onboarding sheets:
 
 1. `onboarding-software-sheet.tsx` — Phone System / Other Tools rows (Name TextInput + Purpose TextInput + Category Select + remove)
 2. `onboarding-listing-sheet.tsx` — holiday hours rows (open + close + closed Checkbox + remove, with cross-field disabling)
