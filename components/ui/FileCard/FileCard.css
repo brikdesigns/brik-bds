@@ -42,9 +42,11 @@
 }
 
 /* ─── Preview thumbnail ───────────────────────────────────────── */
-/* Preview box has a fixed width and an aspect-ratio modifier that drives
-   the height. Image/SVG previews fill the box via object-fit: cover; icon
-   previews center a Phosphor glyph. */
+/* Preview box has a fixed height and an aspect-ratio modifier that drives
+   the width. Image/SVG previews fill the box via object-fit: cover; icon
+   previews center a Phosphor glyph. Fixed-height keeps the vertical rhythm
+   constant across ratios so wide slugs (16-9, 21-9) stay tall enough to read
+   instead of collapsing to a thin band. */
 
 .bds-file-card__preview-link {
   display: block;
@@ -56,7 +58,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--size-1400);
+  height: var(--size-1400);
   background-color: var(--surface-muted);
   flex: 0 0 auto;
   overflow: hidden;
