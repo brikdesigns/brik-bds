@@ -8,6 +8,21 @@ export type CardPreset = 'control' | 'summary' | 'display' | 'display-row';
 export type CardControlActionAlign = 'center' | 'top';
 export type CardSummaryType = 'numeric' | 'price';
 /**
+ * Connection-status state for the `preset="control"` integration card.
+ * Maps to canonical semantic token pairs:
+ * - `not-configured` → `--text-muted` / `--background-status-neutral` (neutral/unconfigured)
+ * - `connected`      → `--text-positive` / `--background-positive`
+ * - `syncing`        → `--text-status-info` / `--background-status-info` (blue/in-progress)
+ * - `synced`         → `--text-positive` / `--background-positive`
+ * - `error`          → `--text-negative` / `--background-negative`
+ */
+export type CardControlConnectionStatus =
+  | 'not-configured'
+  | 'connected'
+  | 'syncing'
+  | 'synced'
+  | 'error';
+/**
  * Image-column width for `preset="display-row"`. Named values resolve to
  * fixed percentages (`narrow` 25%, `standard` 35%, `wide` 50%); pass a CSS
  * length / percentage string to override (e.g. `"40%"`, `"320px"`).
@@ -46,8 +61,8 @@ interface CardControlPresetProps extends CardBaseProps {
   /**
    * Control preset — locked-down settings/control card layout. Replaces the
    * legacy `CardControl` component (per ADR-004 §"Resolve the existing
-   * instances"). Renders: badge + (title + description) on the left,
-   * action on the right.
+   * instances"). Renders: logo + badge + (title + description) on the left,
+   * (connection-status + action) on the right.
    */
   preset: 'control';
   /** Bold control label */
@@ -56,6 +71,13 @@ interface CardControlPresetProps extends CardBaseProps {
   description?: string;
   /** Optional leading badge (e.g. status icon, ServiceTag) */
   badge?: ReactNode;
+  /**
+   * Optional leading logo / avatar slot — for integration logomarks or brand
+   * icons. Renders before the `badge` in the content row. Pass any ReactNode
+   * (e.g. `<Avatar>`, `<img>`, or an `<Icon>`). The slot does not apply its
+   * own size; the consumer controls the image dimensions.
+   */
+  logo?: ReactNode;
   /** Optional trailing action element (Button, Switch, Link) */
   action?: ReactNode;
   /**
@@ -63,6 +85,25 @@ interface CardControlPresetProps extends CardBaseProps {
    * upper-right corner; `center` (default) aligns to the vertical midline.
    */
   actionAlign?: CardControlActionAlign;
+  /**
+   * Connection-status state for integration / third-party service cards.
+   * Renders a labelled status indicator in the trailing block, coexisting
+   * with the `action` slot.
+   *
+   * - `not-configured` — not yet set up (muted/gray)
+   * - `connected`      — OAuth/API key accepted, not yet synced
+   * - `syncing`        — sync in progress (blue/info)
+   * - `synced`         — last sync completed successfully (green)
+   * - `error`          — last sync failed (red)
+   */
+  connectionStatus?: CardControlConnectionStatus;
+  /**
+   * Human-readable "last synced" timestamp or label rendered below the
+   * connection-status indicator. Only displayed when `connectionStatus` is
+   * provided and has a value other than `not-configured`. Example:
+   * `"Last synced 3 min ago"`.
+   */
+  lastSynced?: string;
 }
 
 interface CardSummaryPresetProps extends CardBaseProps {
@@ -255,6 +296,19 @@ function formatSummaryValue(value: string | number, type: CardSummaryType): stri
  * />
  * ```
  *
+ * @example Control preset — integration card with logo + connection status
+ * ```tsx
+ * <Card
+ *   preset="control"
+ *   title="Google Analytics"
+ *   description="Pull session and conversion data into your dashboard."
+ *   logo={<Avatar src="/logos/google-analytics.png" alt="Google Analytics" size="sm" />}
+ *   connectionStatus="synced"
+ *   lastSynced="Last synced 3 min ago"
+ *   action={<Button variant="outline" size="sm">Configure</Button>}
+ * />
+ * ```
+ *
  * @example Summary preset
  * ```tsx
  * <Card
@@ -321,17 +375,29 @@ function renderDefault({
   );
 }
 
+const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
+  'not-configured': 'Not configured',
+  connected:        'Connected',
+  syncing:          'Syncing',
+  synced:           'Synced',
+  error:            'Error',
+};
+
 function renderControlPreset({
   title,
   description,
   badge,
+  logo,
   action,
   actionAlign = 'center',
+  connectionStatus,
+  lastSynced,
   className,
   style,
   preset: _preset,
   ...rest
 }: CardControlPresetProps) {
+  const hasTrailing = action || connectionStatus;
   return (
     <div
       className={bdsClass(
@@ -344,13 +410,36 @@ function renderControlPreset({
       {...rest}
     >
       <div className="bds-card__preset-control-content">
+        {logo && <div className="bds-card__preset-control-logo">{logo}</div>}
         {badge}
         <div className="bds-card__preset-control-text">
           <p className="bds-card__preset-control-title">{title}</p>
           {description && <p className="bds-card__preset-control-description">{description}</p>}
         </div>
       </div>
-      {action && <div className="bds-card__preset-control-action">{action}</div>}
+      {hasTrailing && (
+        <div className="bds-card__preset-control-trailing">
+          {connectionStatus && (
+            <div
+              className={bdsClass(
+                'bds-card__preset-control-status',
+                `bds-card__preset-control-status--${connectionStatus}`,
+              )}
+              role="status"
+              aria-label={`Connection status: ${CONNECTION_STATUS_LABELS[connectionStatus]}`}
+            >
+              <span className="bds-card__preset-control-status-dot" aria-hidden="true" />
+              <span className="bds-card__preset-control-status-label">
+                {CONNECTION_STATUS_LABELS[connectionStatus]}
+              </span>
+              {lastSynced && connectionStatus !== 'not-configured' && (
+                <span className="bds-card__preset-control-status-synced">{lastSynced}</span>
+              )}
+            </div>
+          )}
+          {action && <div className="bds-card__preset-control-action">{action}</div>}
+        </div>
+      )}
     </div>
   );
 }

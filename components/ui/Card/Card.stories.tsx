@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, CardTitle, CardDescription, CardFooter } from './Card';
+import { Avatar } from '../Avatar';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
 import { PricingCard } from '../PricingCard';
@@ -148,6 +149,22 @@ export const Control: Story = {
       description:
         'Vertical alignment of the action slot. `top` anchors the action to the upper-right corner; `center` (default) aligns to the vertical midline.',
     },
+    logo: {
+      control: false,
+      description:
+        'Optional leading logo / avatar slot — for integration logomarks or brand icons. Renders before `badge` in the content row.',
+    },
+    connectionStatus: {
+      control: 'select',
+      options: ['not-configured', 'connected', 'syncing', 'synced', 'error'],
+      description:
+        'Connection-status state. Renders a dot + label in the trailing block alongside the `action` slot.',
+    },
+    lastSynced: {
+      control: 'text',
+      description:
+        'Human-readable "last synced" label displayed below the status indicator. Only shown when `connectionStatus` is set and is not `not-configured`.',
+    },
   },
   decorators: [
     (Story) => (
@@ -156,6 +173,128 @@ export const Control: Story = {
       </div>
     ),
   ],
+};
+
+/**
+ * `preset="control"` with the `logo` slot — an `<Avatar>` logomark leading
+ * the content row. The logo renders before the `badge` and is sized by the
+ * consumer element (Avatar `size` prop). Use for integration / third-party
+ * service cards where a visual brand identifier anchors the row.
+ *
+ * @summary preset="control" with avatar logo slot
+ */
+export const ControlWithLogo: Story = {
+  args: {
+    preset: 'control',
+    title: 'Google Analytics',
+    description: 'Pull session and conversion data into your dashboard.',
+    logo: <Avatar name="GA" size="sm" />,
+    action: (
+      <Button variant="outline" size="sm">
+        Configure
+      </Button>
+    ),
+    actionAlign: 'center',
+  },
+  argTypes: {
+    variant: { table: { disable: true } },
+    padding: { table: { disable: true } },
+    interactive: { table: { disable: true } },
+    href: { table: { disable: true } },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 560 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * `preset="control"` with `connectionStatus="synced"` and `lastSynced` — the
+ * full integration card shape. The trailing block stacks the status indicator
+ * above the action. All five status states (`not-configured`, `connected`,
+ * `syncing`, `synced`, `error`) are exercised in `ControlConnectionStatuses`.
+ *
+ * @summary preset="control" — integration card with status + action
+ */
+export const ControlWithConnectionStatus: Story = {
+  args: {
+    preset: 'control',
+    title: 'Google Analytics',
+    description: 'Pull session and conversion data into your dashboard.',
+    logo: <Avatar name="GA" size="sm" />,
+    connectionStatus: 'synced',
+    lastSynced: 'Last synced 3 min ago',
+    action: (
+      <Button variant="outline" size="sm">
+        Configure
+      </Button>
+    ),
+    actionAlign: 'top',
+  },
+  argTypes: {
+    variant: { table: { disable: true } },
+    padding: { table: { disable: true } },
+    interactive: { table: { disable: true } },
+    href: { table: { disable: true } },
+    connectionStatus: {
+      control: 'select',
+      options: ['not-configured', 'connected', 'syncing', 'synced', 'error'],
+      description: 'Connection-status state.',
+    },
+    lastSynced: {
+      control: 'text',
+      description: 'Last-synced timestamp label.',
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 560 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * All five `connectionStatus` states side-by-side — `not-configured`,
+ * `connected`, `syncing`, `synced`, `error`. Each row carries the same logo
+ * and action slot so the only variable is the status indicator.
+ *
+ * @summary connectionStatus — all five states (axis gallery)
+ */
+export const ControlConnectionStatuses: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)', width: 600 }}>
+      {(
+        [
+          { status: 'not-configured', lastSynced: undefined } ,
+          { status: 'connected',      lastSynced: undefined } ,
+          { status: 'syncing',        lastSynced: undefined } ,
+          { status: 'synced',         lastSynced: 'Last synced 3 min ago' } ,
+          { status: 'error',          lastSynced: 'Failed 12 min ago' } ,
+        ] as const
+      ).map(({ status, lastSynced }) => (
+        <Card
+          key={status}
+          preset="control"
+          title="Google Analytics"
+          description="Pull session and conversion data into your dashboard."
+          logo={<Avatar name="GA" size="sm" />}
+          connectionStatus={status}
+          lastSynced={lastSynced}
+          actionAlign="top"
+          action={
+            <Button variant="outline" size="sm">
+              Configure
+            </Button>
+          }
+        />
+      ))}
+    </div>
+  ),
 };
 
 /**
