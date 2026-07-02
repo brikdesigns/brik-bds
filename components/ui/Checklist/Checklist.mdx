@@ -16,35 +16,15 @@ When checked, the label gets `text-decoration: line-through` and a muted color, 
 
 For card chrome where the toggle stands alone (the rest of the card is a different click target), use `CompletionToggle` instead — `Checklist` is specifically the row composition.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
+
+Every row state — empty, completed, locked, locked-and-completed — is reachable by toggling the `checked` and `disabled` Controls on this story.
 
 ## Variants
 
-Each row state — empty / completed / locked / locked-and-completed — gets its own story so the autodocs page, sidebar deep-links, and Chromatic snapshots can each address one state at a time.
-
-### Unchecked
-
-<Canvas of={Stories.Unchecked} />
-
-### Checked
-
-<Canvas of={Stories.Checked} />
-
-### Disabled
-
-<Canvas of={Stories.Disabled} />
-
-### Disabled checked
-
-<Canvas of={Stories.DisabledChecked} />
-
-## Patterns
-
-### Daily-maintenance checklist
-
-A canonical clinical-PMS pattern — interactive list with running `n of N completed` counter. Render-mode demo because the checklist's value is the inter-row interaction.
+The completion value of a checklist comes from the interaction *between* rows, not any single row. The canonical clinical-PMS composition — an interactive list with a running `n of N completed` counter — is the irreducible case Controls can't express.
 
 <Canvas of={Stories.DailyMaintenanceChecklist} />
 
