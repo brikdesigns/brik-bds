@@ -30,9 +30,23 @@ The default shape also takes a `variant`: `outlined` (default, secondary border)
 
 ### Control preset
 
-`preset="control"` — settings/control row. Leading badge + (title + description) on the left, action on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
+`preset="control"` — settings/control row. Leading `logo` + `badge` + (title + description) on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
+
+The `logo` slot accepts any ReactNode (typically an `<Avatar>` or `<img>`) and renders as a leading logomark before the `badge` — use it for integration or third-party service cards where a visual brand anchor makes the row scannable. The `connectionStatus` prop accepts `not-configured | connected | syncing | synced | error` and renders a dot + label in the trailing block, coexisting with the `action` slot. Pass `lastSynced` to display a timestamp beneath the status indicator.
 
 <Canvas of={Stories.Control} />
+
+#### With logo
+
+<Canvas of={Stories.ControlWithLogo} />
+
+#### With connection status
+
+<Canvas of={Stories.ControlWithConnectionStatus} />
+
+#### All connection-status states
+
+<Canvas of={Stories.ControlConnectionStatuses} />
 
 ### Summary preset
 

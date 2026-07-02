@@ -102,6 +102,13 @@
       "brand",
       "elevated",
       "borderless"
+    ],
+    "status": [
+      "not-configured",
+      "connected",
+      "syncing",
+      "synced",
+      "error"
     ]
   },
   "CardTestimonial": {
