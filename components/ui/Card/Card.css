@@ -140,6 +140,123 @@
   flex-shrink: 0;
 }
 
+/* ─── Preset control — logo slot ─────────────────────────────── */
+/* Leading avatar / logomark slot for integration cards.
+ * Renders before any `badge` in the content row.
+ * The slot applies no intrinsic size — the consumer controls
+ * image dimensions via the Avatar or img element inside. */
+
+.bds-card__preset-control-logo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+/* ─── Preset control — trailing block ────────────────────────────
+ * Wraps `connectionStatus` indicator + `action` as a flex column
+ * so both can coexist. When only `action` is set (no status),
+ * the trailing block collapses to a single-item column and
+ * preserves the original action-only alignment behaviour. */
+
+.bds-card__preset-control-trailing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--gap-sm);
+  flex-shrink: 0;
+}
+
+/* ─── Preset control — connection-status indicator ─────────────
+ * A compact dot + label status affordance.
+ * Composed from canonical semantic tokens — no invented names.
+ *
+ * State → token mapping:
+ *   not-configured → --background-status-neutral / --text-muted (label)
+ *   connected      → --background-positive / --text-positive
+ *   syncing        → --background-status-info / --text-status-info
+ *   synced         → --background-positive / --text-positive
+ *   error          → --background-negative / --text-negative
+ */
+
+.bds-card__preset-control-status {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* Dot circle */
+.bds-card__preset-control-status-dot {
+  /* bds-lint-ignore — Figma-driven dot dimensions */
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Label text */
+.bds-card__preset-control-status-label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-line-height-tight);
+}
+
+/* Last-synced line — drops below the dot+label row */
+.bds-card__preset-control-status-synced {
+  width: 100%;
+  text-align: right;
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+/* ── Per-state colors (dot + label) ── */
+
+.bds-card__preset-control-status--not-configured .bds-card__preset-control-status-dot {
+  background-color: var(--background-status-neutral);
+}
+
+.bds-card__preset-control-status--not-configured .bds-card__preset-control-status-label {
+  color: var(--text-muted);
+}
+
+.bds-card__preset-control-status--connected .bds-card__preset-control-status-dot {
+  background-color: var(--background-positive);
+}
+
+.bds-card__preset-control-status--connected .bds-card__preset-control-status-label {
+  color: var(--text-positive);
+}
+
+.bds-card__preset-control-status--syncing .bds-card__preset-control-status-dot {
+  background-color: var(--background-status-info);
+}
+
+.bds-card__preset-control-status--syncing .bds-card__preset-control-status-label {
+  color: var(--text-status-info);
+}
+
+.bds-card__preset-control-status--synced .bds-card__preset-control-status-dot {
+  background-color: var(--background-positive);
+}
+
+.bds-card__preset-control-status--synced .bds-card__preset-control-status-label {
+  color: var(--text-positive);
+}
+
+.bds-card__preset-control-status--error .bds-card__preset-control-status-dot {
+  background-color: var(--background-negative);
+}
+
+.bds-card__preset-control-status--error .bds-card__preset-control-status-label {
+  color: var(--text-negative);
+}
+
 /* ─── Preset: summary ─────────────────────────────────────────── */
 /* Compact metric/stat card layout — replaces the legacy CardSummary
  * component. Label (top) + large value (bottom) + optional secondary
