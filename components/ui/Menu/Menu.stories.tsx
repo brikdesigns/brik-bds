@@ -7,7 +7,7 @@ import { FilterButton } from '../FilterButton';
 import { Button } from '../Button';
 import { ServiceTag } from '../ServiceTag/ServiceTag';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/* ─── Layout helpers (story-only) ─────────────────────────────── */
 
 const SectionLabel = ({ children }: { children: string }) => (
   <div style={{
@@ -26,7 +26,7 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
-/* ─── Shared Data ─────────────────────────────────────── */
+/* ─── Shared data ─────────────────────────────────────── */
 
 const sampleItems = [
   { id: '1', label: 'Brand design', icon: <Icon icon="ph:palette" />, onClick: () => {} },
@@ -88,11 +88,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Static open menu for Controls panel
+   DEFAULT — static open menu for the Controls panel
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Canonical menu, rendered open. Items carry an icon + label; pass
+ * `activeId` to highlight one, `header` for a non-interactive label row,
+ * and `item.disabled` to lock a row.
+ *
+ * @summary Floating dropdown of selectable items
+ */
+export const Default: Story = {
   args: {
     items: sampleItems,
     isOpen: true,
@@ -102,10 +108,17 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   GROUPED — items segmented under section headers
+   VARIANTS — item-structure compositions
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Items segmented under labelled group headers */
+/**
+ * Pass `MenuItemGroup` entries (`{ label, items }`) to segment the menu
+ * under section headers. Each group renders as a `role="group"` named by
+ * its label; flat items and groups can be mixed. Irreducible — the group
+ * structure lives in the `items` array.
+ *
+ * @summary Items segmented under labelled group headers
+ */
 export const Grouped: Story = {
   args: {
     items: groupedItems,
@@ -115,11 +128,13 @@ export const Grouped: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   CUSTOM CONTENT — line-colored ServiceTag as item content
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Custom node (ServiceTag) as item content */
+/**
+ * Set `content` on a `MenuItemData` to render a custom node — e.g. a
+ * line-colored `ServiceTag` — instead of the default icon + label. The
+ * item stays a `role="menuitem"`; its `label` is the accessible name.
+ *
+ * @summary Custom node (ServiceTag) as item content
+ */
 export const CustomContent: Story = {
   args: {
     items: serviceTagItems,
@@ -130,100 +145,21 @@ export const CustomContent: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — With icons, text-only, active item, disabled
+   PATTERNS — trigger + open-state compositions
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  args: { items: sampleItems, isOpen: true, onClose: () => {} },
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>With icons</SectionLabel>
-        <Menu
-          isOpen
-          onClose={() => {}}
-          items={sampleItems}
-          style={{ position: 'relative' }}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Text-only with disabled item</SectionLabel>
-        <Menu
-          isOpen
-          onClose={() => {}}
-          items={[
-            { id: '1', label: 'Edit', onClick: () => {} },
-            { id: '2', label: 'Duplicate', onClick: () => {} },
-            { id: '3', label: 'Archive', onClick: () => {} },
-            { id: '4', label: 'Delete', disabled: true },
-          ]}
-          style={{ position: 'relative' }}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With active item</SectionLabel>
-        <Menu
-          isOpen
-          onClose={() => {}}
-          items={sampleItems}
-          activeId="2"
-          style={{ position: 'relative' }}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With header (string)</SectionLabel>
-        <Menu
-          isOpen
-          onClose={() => {}}
-          header="Northstar Dental"
-          items={[
-            { id: '1', label: 'Account settings', icon: <Icon icon="ph:gear" />, onClick: () => {} },
-            { id: '2', label: 'Switch practice', icon: <Icon icon="ph:swap" />, onClick: () => {} },
-            { id: '3', label: 'Sign out', icon: <Icon icon="ph:sign-out" />, onClick: () => {} },
-          ]}
-          style={{ position: 'relative' }}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With header (custom node)</SectionLabel>
-        <Menu
-          isOpen
-          onClose={() => {}}
-          header={
-            <>
-              <span style={{ fontFamily: 'var(--font-family-heading)', fontSize: 'var(--body-md)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)', textTransform: 'none', letterSpacing: 0 }}>
-                Dr. Sara Patel
-              </span>
-              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-xs)', fontWeight: 'var(--font-weight-regular)', color: 'var(--text-secondary)', textTransform: 'none', letterSpacing: 0 }}>
-                sara@northstardental.com
-              </span>
-            </>
-          }
-          items={[
-            { id: '1', label: 'Profile', icon: <Icon icon="ph:user" />, onClick: () => {} },
-            { id: '2', label: 'Sign out', icon: <Icon icon="ph:sign-out" />, onClick: () => {} },
-          ]}
-          style={{ position: 'relative' }}
-        />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — FilterButton trigger + Button trigger
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
+/**
+ * A Menu needs a trigger and open state. These are the canonical
+ * integrations: a `FilterButton` trigger, a `Button` trigger with an
+ * action menu, and an "Add" menu whose items carry a `description`.
+ * Irreducible — each wires `isOpen` / `onClose` through a hook.
+ *
+ * @summary Trigger integrations (FilterButton / Button / Add menu)
+ */
+export const WithTrigger: Story = {
   args: { items: sampleItems, isOpen: true, onClose: () => {} },
   render: () => {
-    function MenuPatterns() {
+    function MenuTriggers() {
       const [filterValue, setFilterValue] = useState<string | undefined>();
       const [actionOpen, setActionOpen] = useState(false);
       const [addOpen, setAddOpen] = useState(false);
@@ -281,6 +217,6 @@ export const Patterns: Story = {
         </Stack>
       );
     }
-    return <MenuPatterns />;
+    return <MenuTriggers />;
   },
 };

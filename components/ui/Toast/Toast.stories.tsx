@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
 import { Toast } from './Toast';
-import { Button } from '../Button';
 
 const meta: Meta<typeof Toast> = {
   title: 'Components/toast',
@@ -9,33 +7,30 @@ const meta: Meta<typeof Toast> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
-    title: { control: 'text' },
-    description: { control: 'text' },
-    variant: { control: 'select', options: ['default', 'success', 'error', 'warning', 'info'] },
+    title: { control: 'text', description: 'Primary message line.' },
+    description: { control: 'text', description: 'Optional secondary line; omit for a title-only toast.' },
+    variant: {
+      control: 'select',
+      options: ['default', 'success', 'error', 'warning', 'info'],
+      description: 'Status tone — selects the colored `Badge` icon. The surface stays white.',
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Toast>;
 
-/* ─── Layout helpers ─────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   DEFAULT — args-driven sandbox
+   ═══════════════════════════════════════════════════════════════ */
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-    {children}
-  </span>
-);
-
-const Stack = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: '100%', maxWidth: '500px' }}>
-    {children}
-  </div>
-);
-
-/* ─── Playground ─────────────────────────────────────────────── */
-
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Neutral toast — no badge. Edit `title` / `description`, switch `variant`,
+ * and omit `onDismiss` for a non-dismissible toast via Controls.
+ *
+ * @summary White-surface notification with optional status badge
+ */
+export const Default: Story = {
   args: {
     title: 'Title goes here',
     description: 'Description goes here',
@@ -44,72 +39,26 @@ export const Playground: Story = {
   },
 };
 
-/* ─── Variants ───────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   VARIANTS — one story per status tone
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <SectionLabel>Default</SectionLabel>
-      <Toast title="Default toast" description="No status badge — neutral notification" onDismiss={() => {}} />
-
-      <SectionLabel>Success</SectionLabel>
-      <Toast title="Changes saved" description="Your settings have been updated successfully." variant="success" onDismiss={() => {}} />
-
-      <SectionLabel>Error</SectionLabel>
-      <Toast title="Something went wrong" description="Please try again or contact support." variant="error" onDismiss={() => {}} />
-
-      <SectionLabel>Warning</SectionLabel>
-      <Toast title="Session expiring" description="Your session will expire in 5 minutes." variant="warning" onDismiss={() => {}} />
-
-      <SectionLabel>Info</SectionLabel>
-      <Toast title="New update available" description="Version 2.1 is ready to install." variant="info" onDismiss={() => {}} />
-
-      <SectionLabel>Title only</SectionLabel>
-      <Toast title="Changes saved successfully" variant="success" onDismiss={() => {}} />
-
-      <SectionLabel>Non-dismissible</SectionLabel>
-      <Toast title="Processing" description="Please wait while we complete your request" variant="info" />
-    </Stack>
-  ),
+/** @summary Success — positive badge, circle-check icon */
+export const Success: Story = {
+  args: { title: 'Changes saved', description: 'Your settings have been updated successfully.', variant: 'success', onDismiss: () => {} },
 };
 
-/* ─── Patterns ───────────────────────────────────────────────── */
+/** @summary Error — error badge, circle-exclamation icon */
+export const Error: Story = {
+  args: { title: 'Something went wrong', description: 'Please try again or contact support.', variant: 'error', onDismiss: () => {} },
+};
 
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Patterns',
-  render: () => {
-    const [visible, setVisible] = useState(false);
+/** @summary Warning — warning badge, triangle-exclamation icon */
+export const Warning: Story = {
+  args: { title: 'Session expiring', description: 'Your session will expire in 5 minutes.', variant: 'warning', onDismiss: () => {} },
+};
 
-    return (
-      <Stack>
-        <SectionLabel>Interactive toggle</SectionLabel>
-        <Button variant="primary" size="sm" onClick={() => setVisible(true)}>Show toast</Button>
-        {visible && (
-          <Toast
-            title="Action completed"
-            description="Your changes have been saved"
-            variant="success"
-            onDismiss={() => setVisible(false)}
-          />
-        )}
-
-        <SectionLabel>Error with context</SectionLabel>
-        <Toast
-          title="Upload failed"
-          description="The file exceeds the maximum size of 10MB. Please compress and try again."
-          variant="error"
-          onDismiss={() => {}}
-        />
-
-        <SectionLabel>Informational</SectionLabel>
-        <Toast
-          title="Syncing in progress"
-          description="Your data is being synchronized across devices. This may take a moment."
-          variant="info"
-        />
-      </Stack>
-    );
-  },
+/** @summary Info — info badge, circle-info icon */
+export const Info: Story = {
+  args: { title: 'New update available', description: 'Version 2.1 is ready to install.', variant: 'info', onDismiss: () => {} },
 };
