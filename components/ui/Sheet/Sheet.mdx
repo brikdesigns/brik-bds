@@ -10,85 +10,63 @@ import * as Stories from './Sheet.stories';
 
 Sliding panel overlay anchored to a screen edge. Use for detail views, forms, and secondary content. Two modes — `read` (view) and `edit` (form) — drive the auto-footer (`[Close] [View details] [Edit]` vs `[Cancel] [Save]`). `[View details]` is conditional on `viewDetailsAction`; omit it when the sheet has no corresponding read page (e.g. `plans`).
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
+
+`side` (right / left / bottom), `variant`, `width`, `title` / `subtitle` / `description`, and the `closeOn*` / `showCloseButton` behaviors are all Controls on this story.
 
 ## Variants
 
-Right, left, bottom, wide, and no-title configurations.
-
-<Canvas of={Stories.Variants} />
-
-- **`right`** — Default, slides from right edge
-- **`left`** — Navigation or sidebar panels
-- **`bottom`** — Mobile-friendly bottom sheet
-
-### Header
-
-The header composes an optional `subtitle` eyebrow, the `title`, an optional `description`, and an optional `onBack` button for nested flows.
-
-<Canvas of={Stories.Header} />
-
 ### Read mode
 
-Read mode displays data. When `onEdit` is supplied, the footer auto-renders `[Close] [Edit]`. Add `viewDetailsAction` to insert a `[View details]` button between them — the canonical pattern for sheet+page hybrid tables that navigate to a full read page.
+Read mode displays data. When `onEdit` is supplied, the footer auto-renders `[Close] [Edit]`.
 
 <Canvas of={Stories.ReadMode} />
 
-### Read mode + View details + Edit (sheet+page hybrid)
-
-Sheet+page hybrid tables (services, offerings, service_lines, industry_pages) surface three actions in the read-mode footer: `[Close]` · `[View details]` (navigates to the read page) · `[Edit]` (navigates to the edit page). Use `editTarget="page"` to signal that `onEdit` performs navigation rather than flipping to in-place edit mode.
-
-<Canvas of={Stories.ReadEditWithViewDetails} />
-
 ### Edit mode
 
-Edit mode is the active form state. The footer auto-renders `[Cancel] [Save]`. Pass `saveLoading` while the save promise is in flight and `saveDisabled` when the form is invalid.
+Edit mode is the active form state — footer auto-renders `[Cancel] [Save]`. Pass `saveLoading` while the save promise is in flight and `saveDisabled` when the form is invalid.
 
 <Canvas of={Stories.EditMode} />
 
-### Read ↔ Edit toggle
+### Floating
+
+`variant="floating"` — the panel sits on the page without a backdrop, rounded and elevated. Use for inline drill-in from a table row or a read-only popover. Omit `mode` for a footer-less info popover.
+
+<Canvas of={Stories.Floating} />
+
+## Patterns
+
+### Read ↔ edit toggle
 
 The canonical pattern: open in `read`, click Edit to switch to `edit`, Save / Cancel returns to `read`.
 
 <Canvas of={Stories.ReadEditToggle} />
 
-### Tabs
+### Read footer with View details
 
-Tabs render below the header. Each tab renders its own body content — `children` is ignored when `tabs` is supplied.
+Sheet+page hybrid tables (services, offerings, service_lines, industry_pages) surface three read-mode actions: `[Close]` · `[View details]` (navigates to the read page) · `[Edit]` (navigates to the edit page). Use `editTarget="page"` to signal that `onEdit` navigates rather than flipping to in-place edit mode.
 
-<Canvas of={Stories.Tabs} />
+<Canvas of={Stories.WithViewDetails} />
 
 ### Secondary action
 
 For ancillary actions next to the primary Edit / Save — e.g. *Refresh*, *Re-generate* — pass `secondaryAction` instead of composing a custom `footer`. Renders left-aligned; mode-driven primary actions stay on the right. Suppressed in edit mode.
 
-<Canvas of={Stories.SecondaryAction} />
+<Canvas of={Stories.WithSecondaryAction} />
 
-## Patterns
+### Tabs
 
-Custom footer (overrides mode) and mobile bottom sheet.
+Tabs render below the header. Each tab renders its own body content — `children` is ignored when `tabs` is supplied.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithTabs} />
 
-### Read-only floating
+### Custom footer
 
-Pure read content with no action — `variant="floating"`, no backdrop, no footer.
+The `footer` slot fully overrides the mode-driven auto-footer — use it for bespoke action sets (e.g. a destructive `Archive` alongside `Cancel` / `Save`) that the `read` / `edit` footers don't cover.
 
-<Canvas of={Stories.ReadOnlyFloating} />
-
-### Read mode floating
-
-Read mode with `variant="floating"` — sheet sits on the page without a backdrop, footer still renders `[Close] [Edit]`. Use for inline drill-in from a table row.
-
-<Canvas of={Stories.ReadModeFloating} />
-
-### Tabs + Secondary action + Read/Edit
-
-The full sheet: tabs in the header, secondary action in the footer, and read-edit toggling. Tabs are typically suppressed in edit mode so the form gets the full body.
-
-<Canvas of={Stories.TabsWithSecondaryAction} />
+<Canvas of={Stories.CustomFooter} />
 
 ## Props
 
