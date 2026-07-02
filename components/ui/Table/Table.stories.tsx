@@ -69,6 +69,23 @@ const meta: Meta<typeof Table> = {
       options: ['default', 'comfortable'],
       description: 'Row density — `default` (compact) or `comfortable` (72px cell height).',
     },
+    headerBorder: {
+      control: 'boolean',
+      description: 'Show a bottom border under the header row. Off by default.',
+    },
+    roundedTop: {
+      control: 'boolean',
+      description: 'Round the top-left / top-right outer corners (draws a subtle outer border). On by default.',
+    },
+    roundedBottom: {
+      control: 'boolean',
+      description: 'Round the bottom-left / bottom-right outer corners (draws a subtle outer border). On by default.',
+    },
+    headerBackground: {
+      control: 'select',
+      options: ['secondary', 'primary'],
+      description: 'Header row background fill — `secondary` (default) or `primary` to match the body.',
+    },
   },
 };
 
@@ -80,13 +97,21 @@ type Story = StoryObj<typeof Table>;
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * Canonical table. Toggle `striped` and `size` via Controls. Cells accept
- * any content — see the Variants stories for the composition catalog.
+ * Canonical table. Toggle `striped`, `size`, `headerBorder`, `roundedTop`,
+ * `roundedBottom`, and `headerBackground` via Controls. Cells accept any
+ * content — see the Variants stories for the composition catalog.
  *
  * @summary Themed data table — striped + size are Controls
  */
 export const Default: Story = {
-  args: { striped: false, size: 'default' },
+  args: {
+    striped: false,
+    size: 'default',
+    headerBorder: false,
+    roundedTop: true,
+    roundedBottom: true,
+    headerBackground: 'secondary',
+  },
   render: (args) => (
     <Table {...args}>
       <TableHeader>
