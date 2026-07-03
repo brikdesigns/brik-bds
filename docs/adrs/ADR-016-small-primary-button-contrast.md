@@ -1,6 +1,6 @@
 # ADR-016 — White labels on the vibrant Poppy fill fail AA at every button size: choosing the small-primary-button remedy
 
-**Status:** Proposed (2026-07-02) — **decision pending owner ratification.** This ADR frames the options; the choice in § Decision is deliberately unmade.
+**Status:** Accepted (2026-07-03) — **Option C** (durable near-Poppy AA step) ratified by the owner. Supersedes the "pending" framing below.
 **Date:** 2026-07-02
 **Related:** [#479](https://github.com/brikdesigns/brik-bds/issues/479) (this decision) · sub-issue of [#526](https://github.com/brikdesigns/brik-bds/issues/526) (WCAG AA contrast contract) · [ADR-015](./ADR-015-brand-primary-aa-large-contrast-policy.md) (brand-primary holds vibrant Poppy, fills gated AA-large — the decision this extends) · [#1064](https://github.com/brikdesigns/brik-bds/issues/1064) / BDS-18 (safe-pairing docs + brand-text usage lint) · [#1065](https://github.com/brikdesigns/brik-bds/issues/1065) / BDS-20 (11-step scale — supplies the token Option C needs) · [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma Brand Kit is SoT) · `tokens/contrast-pairings.json` (rule in force) · brikdesigns#75 (axe baseline)
 **Owner:** Nick Stanerson
@@ -27,7 +27,11 @@ The gate does not catch this: `scripts/validate-themes.js` scores token *pairing
 
 ## Decision
 
-**PENDING — owner ratification required.** One of Options A–D below (or a combination). Because Option C reopens ADR-015's vibrant-at-rest decision and Options A/B change button typography contracts, this is a brand-vs-accessibility policy call, not an implementation detail — candidate for an `azimuth` pre-commitment pass before ratifying.
+**Option C — mint an AA-passing near-Poppy step and point on-color button-label fills at it.** Ratified by the owner (Nick Stanerson) 2026-07-03.
+
+Rationale: Option C is the only remedy that makes *every* primary-button label clear true AA (≥4.5:1 on white) regardless of size or weight, with no button-typography change and while keeping a Poppy-family fill. The alternatives were rejected as the whole answer: A (bold+large) only rescues `lg`/`xl` and fragments "primary" by size; B/D leave `md`+ on the contestable 1.4.11 basis (residual ADA exposure); "do nothing" ships a known 1.4.3 violation on every primary button (§ Alternatives).
+
+**This makes [#1065](https://github.com/brikdesigns/brik-bds/issues/1065) (BDS-20, the 11-step ramp) a hard blocker of #479's durable fix** — it supplies the intermediate Poppy step (between `poppy-light` 3.78:1 and `poppy-dark` ~6.2:1) that clears ≥4.5:1 on white. Sequencing: **#1065 (mint + generate the step) → #479 (repoint button on-color fills + update `contrast-pairings.json` + remove the brikdesigns#75 axe entries)**. Until #1065 lands, the vibrant fill remains an owner-accepted AA-large / 1.4.11 risk on primary buttons (the interim posture is *not* changed to a size-floor — Option B was not chosen).
 
 ## Options
 
