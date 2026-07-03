@@ -249,7 +249,9 @@
 .bds-table-avatar-cell__subtitle {
   font-family: var(--font-family-body);
   font-size: var(--body-xs);
-  color: var(--text-muted);
+  /* --text-secondary (6.9:1 on white), not --text-muted (3.84:1 — fails WCAG AA
+     at this size). See #526 contrast contract. */
+  color: var(--text-secondary);
 }
 
 /* ─── Image cell (square 1:1 logo / product thumbnail) ───────── */
