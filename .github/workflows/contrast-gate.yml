@@ -60,3 +60,9 @@ jobs:
       # generator (measured ratios included) so it can't drift as tokens change.
       - name: Contrast matrix drift check
         run: npm run contrast-matrix:check
+
+      # ADR-015 brand-text rule: --text-brand-primary (3.78:1) never on small
+      # body copy. Advisory in the pairing gate (scores pairings, not sizes) —
+      # asserted here (#1064 AC1).
+      - name: Brand-text usage lint
+        run: npm run lint-brand-text

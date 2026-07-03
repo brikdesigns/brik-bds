@@ -152,6 +152,7 @@
     "validate:blueprints": "node scripts/validate-blueprints.mjs",
     "contrast-gate": "node scripts/validate-themes.js",
     "contrast-matrix:check": "node scripts/validate-themes.js --check-matrix",
+    "lint-brand-text": "node scripts/lint-brand-text-size.js",
     "validate": "node scripts/lint-tokens.js --errors-only && npm run contrast-gate && npm run lint-jsdoc && npm run validate:blueprints && npm run typecheck && npm run build-storybook",
     "validate:full": "node scripts/validate-all.js",
     "precommit": "npm run validate",

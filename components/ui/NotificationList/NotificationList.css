@@ -131,7 +131,7 @@
   font-family: var(--font-family-label);
   font-size: var(--body-xs);
   font-weight: var(--font-weight-medium);
-  color: var(--text-brand-primary);
+  color: var(--text-brand-primary); /* bds-lint-ignore — small brand affordance at body-xs; tracked #1103, resolved by #1065 near-Poppy AA step */
   padding: 0;
   transition: opacity 0.15s;
 }
