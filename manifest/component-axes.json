@@ -336,8 +336,8 @@
   },
   "Table": {
     "size": [
-      "default",
-      "comfortable"
+      "sm",
+      "md"
     ]
   },
   "Tag": {

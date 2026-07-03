@@ -8,7 +8,7 @@ import * as Stories from './Table.stories';
 
 <ComponentLinks slug="table" />
 
-Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableActionsCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
+Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableActionsCell`, plus the typed media cells `TableAvatarCell` / `TableImageCell` / `TableServiceTagCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
 
 ## Default
 
@@ -41,6 +41,20 @@ The canonical read/edit row has three click-target classes — **Name** (`<TextL
 `onClick` on `<TableRow>` violates table cell semantics, breaks screen-reader expectations, and conflicts with cell-level affordances. Use cell-level click targets instead — the row should never carry the handler.
 
 <Canvas of={Stories.RowClickAntiPattern} />
+
+### Media cells
+
+`<TableAvatarCell>` pairs an `Avatar` with a name and an optional secondary line (email / role). Initials render when no `src` is set; pass `primary` as a `<TextLink>` when the name should navigate.
+
+<Canvas of={Stories.WithAvatarCell} />
+
+`<TableImageCell>` renders a fixed square (1:1) thumbnail for a logo or product image — `fit="contain"` for logos (no crop), `fit="cover"` for product photos. Upload / edit wiring is consumer-side.
+
+<Canvas of={Stories.WithImageCell} />
+
+`<TableServiceTagCell>` hosts one or more `ServiceTag`s — `variant="icon"` for icon-only classification, `variant="icon-text"` for a labeled tag.
+
+<Canvas of={Stories.WithServiceTagCell} />
 
 ## Props
 

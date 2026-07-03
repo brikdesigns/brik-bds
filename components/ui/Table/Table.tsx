@@ -7,6 +7,8 @@ import {
   type ReactNode,
 } from 'react';
 import { bdsClass } from '../../utils';
+import { Avatar, type AvatarStatus } from '../Avatar';
+import { Image } from '../Image';
 import './Table.css';
 
 // ─── Table (wrapper) ───────────────────────────────────────────
@@ -323,6 +325,160 @@ export function TableActionsCell({
       {...props}
     >
       <div className="bds-table-actions-cell__group">{children}</div>
+    </td>
+  );
+}
+
+// ─── Shared media-cell size (avatar + image thumbnails) ────────
+
+export type TableMediaCellSize = 'sm' | 'md';
+
+// ─── TableAvatarCell (<td> for avatar + identity) ──────────────
+
+export interface TableAvatarCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /** Avatar image URL. Falls back to initials from `name` when absent. */
+  src?: string;
+  /** Accessible alt text for the avatar image. */
+  alt?: string;
+  /** Name used for the initials fallback and, unless `primary` is set, the primary line. */
+  name?: string;
+  /** Avatar size within the row — `sm` (32px) for dense tables, `md` (40px) for standard. Default `sm`. */
+  size?: TableMediaCellSize;
+  /** Presence indicator on the avatar. */
+  status?: AvatarStatus;
+  /** Primary line — usually the name (may be a `TextLink`). Defaults to `name`. */
+  primary?: ReactNode;
+  /** Secondary line — email, role, or other metadata. */
+  secondary?: ReactNode;
+}
+
+/**
+ * TableAvatarCell — identity cell pairing an `Avatar` with a name and an
+ * optional secondary line (email / role), vertically centered.
+ *
+ * Composes the `Avatar` primitive; owns only the media-left / text-stack
+ * layout and its gap. Pass `primary` as a `TextLink` when the name should
+ * navigate (per the table name-column convention).
+ *
+ * @example
+ * ```tsx
+ * <TableAvatarCell src={u.avatar} name={u.name} secondary={u.email} />
+ * ```
+ *
+ * @summary Avatar + identity (name / email) table cell
+ */
+export function TableAvatarCell({
+  src,
+  alt,
+  name,
+  size = 'sm',
+  status,
+  primary,
+  secondary,
+  className,
+  style,
+  ...props
+}: TableAvatarCellProps) {
+  return (
+    <td className={bdsClass('bds-table-avatar-cell', className)} style={style} {...props}>
+      <div className="bds-table-avatar-cell__group">
+        <Avatar src={src} alt={alt} name={name} size={size} status={status} />
+        <div className="bds-table-avatar-cell__content">
+          <span className="bds-table-avatar-cell__name">{primary ?? name}</span>
+          {secondary != null && (
+            <span className="bds-table-avatar-cell__subtitle">{secondary}</span>
+          )}
+        </div>
+      </div>
+    </td>
+  );
+}
+
+// ─── TableImageCell (<td> for a square 1:1 logo / product image) ──
+
+export type TableImageFit = 'contain' | 'cover';
+
+export interface TableImageCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /** Image URL. */
+  src: string;
+  /** Accessible alt text — required. */
+  alt: string;
+  /** Thumbnail size — `sm` (32px) or `md` (40px) square. Default `sm`. */
+  size?: TableMediaCellSize;
+  /** Fit inside the square — `contain` for logos (no crop), `cover` for product photos. Default `contain`. */
+  fit?: TableImageFit;
+}
+
+/**
+ * TableImageCell — fixed square (1:1) thumbnail for a logo or product image,
+ * shrink-to-content width so it never competes with content columns.
+ *
+ * Composes the `Image` primitive at `ratio="1-1"`. Use `fit="contain"` for
+ * logos (no crop) and `fit="cover"` for product photos. Upload / edit wiring
+ * is consumer-side — this cell renders only.
+ *
+ * @example
+ * ```tsx
+ * <TableImageCell src={org.logo} alt={`${org.name} logo`} fit="contain" />
+ * ```
+ *
+ * @summary Square 1:1 logo / product thumbnail table cell
+ */
+export function TableImageCell({
+  src,
+  alt,
+  size = 'sm',
+  fit = 'contain',
+  className,
+  style,
+  ...props
+}: TableImageCellProps) {
+  return (
+    <td
+      className={bdsClass('bds-table-image-cell', `bds-table-image-cell--${size}`, className)}
+      style={style}
+      {...props}
+    >
+      <div className="bds-table-image-cell__media">
+        <Image src={src} alt={alt} ratio="1-1" fit={fit} />
+      </div>
+    </td>
+  );
+}
+
+// ─── TableServiceTagCell (<td> for one or more ServiceTags) ────
+
+export interface TableServiceTagCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /** One or more `ServiceTag` elements — any variant (`icon`, `icon-text`, `text`). */
+  children: ReactNode;
+}
+
+/**
+ * TableServiceTagCell — hosts one or more `ServiceTag`s on a row, wrapping
+ * with a consistent gap and vertical centering.
+ *
+ * Composes `ServiceTag` (supply `variant="icon"` for icon-only or
+ * `variant="icon-text"` for labeled). Owns only alignment / wrap / gap.
+ *
+ * @example
+ * ```tsx
+ * <TableServiceTagCell>
+ *   <ServiceTag category="brand" variant="icon" serviceName="brand-strategy" />
+ *   <ServiceTag category="marketing" variant="icon-text" serviceName="seo" />
+ * </TableServiceTagCell>
+ * ```
+ *
+ * @summary Table cell hosting one or more ServiceTags
+ */
+export function TableServiceTagCell({
+  children,
+  className,
+  style,
+  ...props
+}: TableServiceTagCellProps) {
+  return (
+    <td className={bdsClass('bds-table-service-tag-cell', className)} style={style} {...props}>
+      <div className="bds-table-service-tag-cell__group">{children}</div>
     </td>
   );
 }
