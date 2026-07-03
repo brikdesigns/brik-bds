@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
+import { type BdsLinkComponent } from '../NavItem';
 import { bdsClass } from '../../utils';
 import './NavBar.css';
 
@@ -26,6 +27,43 @@ export interface NavBarProps extends HTMLAttributes<HTMLElement> {
   actions?: ReactNode;
   /** Sticky positioning */
   sticky?: boolean;
+  /**
+   * Render each nav link with a router-aware component (Next.js `Link`, Remix
+   * `Link`) for client-side routing instead of the default bare `<a>`. See
+   * ADR-012.
+   */
+  linkComponent?: BdsLinkComponent;
+}
+
+/**
+ * Renders a nav link via the injected `linkComponent` (client-side routing) or
+ * a bare `<a>` when none is provided. See ADR-012.
+ */
+function NavBarLinkItem({
+  linkComponent: LinkComponent,
+  href,
+  className,
+  ariaCurrent,
+  children,
+}: {
+  linkComponent?: BdsLinkComponent;
+  href: string;
+  className: string;
+  ariaCurrent?: 'page';
+  children: ReactNode;
+}) {
+  if (LinkComponent) {
+    return (
+      <LinkComponent href={href} className={className} aria-current={ariaCurrent}>
+        {children}
+      </LinkComponent>
+    );
+  }
+  return (
+    <a href={href} className={className} aria-current={ariaCurrent}>
+      {children}
+    </a>
+  );
 }
 
 /**
@@ -54,6 +92,7 @@ export function NavBar({
   links = [],
   actions,
   sticky = false,
+  linkComponent,
   className = '',
   style,
   ...props
@@ -73,17 +112,18 @@ export function NavBar({
         {links.length > 0 && (
           <div className="bds-nav-bar__links">
             {links.map((link) => (
-              <a
+              <NavBarLinkItem
                 key={link.href}
+                linkComponent={linkComponent}
                 href={link.href}
                 className={bdsClass(
                   'bds-nav-bar__link',
                   link.active ? 'bds-nav-bar__link--active' : undefined,
                 )}
-                aria-current={link.active ? 'page' : undefined}
+                ariaCurrent={link.active ? 'page' : undefined}
               >
                 {link.label}
-              </a>
+              </NavBarLinkItem>
             ))}
           </div>
         )}
