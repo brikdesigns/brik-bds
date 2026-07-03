@@ -2,6 +2,15 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NavBar } from './NavBar';
 import { Button } from '../Button';
+import { type BdsLinkComponent } from '../NavItem';
+
+/* Story-only stand-in for a router `Link` (Next.js / Remix). Tags the rendered
+ * anchor so the injected-routing path is visible in the DOM. */
+const MockLink: BdsLinkComponent = ({ href, children, ...props }) => (
+  <a href={href} data-link-component="mock" {...props}>
+    {children}
+  </a>
+);
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
@@ -50,6 +59,13 @@ const meta: Meta<typeof NavBar> = {
   component: NavBar,
   tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },
+  argTypes: {
+    linkComponent: {
+      description:
+        'Render each nav link with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. See ADR-012.',
+      control: false,
+    },
+  },
 } satisfies Meta<typeof NavBar>;
 
 export default meta;
@@ -65,6 +81,16 @@ export const Playground: Story = {
     logo: <LogoPlaceholder />,
     links: sampleLinks,
     actions: <Button size="sm">Get Started</Button>,
+  },
+};
+
+/** @summary Nav links routed through an injected link component for client-side routing */
+export const WithLinkComponent: Story = {
+  args: {
+    logo: <LogoPlaceholder />,
+    links: sampleLinks,
+    actions: <Button size="sm">Get Started</Button>,
+    linkComponent: MockLink,
   },
 };
 
