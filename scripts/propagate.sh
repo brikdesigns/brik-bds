@@ -141,6 +141,16 @@ if ! command -v jq &>/dev/null; then
   exit 1
 fi
 
+# node powers the closing-keyword neutralizer the submodule track pipes its
+# changelog through (see scripts/lib/neutralize-closing-keywords.mjs). Without
+# it, a pasted `closes #N` would auto-close the wrong consumer issue on merge
+# (brik-llm#1240 / the #729 collision) — so fail loud rather than ship a raw
+# changelog. The npm track already needs node for `npm install`.
+if ! command -v node &>/dev/null; then
+  err "node not found — required to neutralize closing-keywords in PR bodies (brik-llm#1240)."
+  exit 1
+fi
+
 # Headless signing path must be live before we mutate anything (real run only).
 # Fails loud + early here instead of mid-propagation with a half-opened PR.
 if [ "$(hostname -s 2>/dev/null)" = "brik-mini" ] && [ "$DRY_RUN" = false ]; then
@@ -258,8 +268,14 @@ propagate_submodule() {
   fi
 
   info "$name is $new_commits commits behind"
+  # Neutralize closing-keywords BEFORE the changelog is shown or embedded: the
+  # BDS commit subjects carry `closes #N` for BDS issues, but pasted into the
+  # consumer PR body GitHub resolves them against the consumer's tracker and
+  # auto-closes the wrong issue on merge (brik-llm#1240 / the #729 collision).
+  # pipefail (set -euo) aborts the run if node fails — never ship a raw body.
   local changelog
-  changelog=$(generate_changelog "$current_sha" "$LOCAL_HEAD")
+  changelog=$(generate_changelog "$current_sha" "$LOCAL_HEAD" \
+    | node "$BDS_DIR/scripts/lib/neutralize-closing-keywords.mjs")
   echo -e "${DIM}─── Changelog ───${NC}"
   echo -e "$changelog"
   echo -e "${DIM}─────────────────${NC}"
