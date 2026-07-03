@@ -21,7 +21,7 @@ This CLAUDE.md is `@import`-ed by every consumer of `@brikdesigns/bds` — the B
 - **Pre-implementation** — DESIGN composite / new components in Paper before writing code. SKIP for simple variants of existing components or clear Figma specs.
 - **Pre-PR** — RUN `./scripts/pr-checklist.sh` before any PR touching tokens, themes, or component CSS. ONE concern per PR.
 - **Publish** — `git tag v0.X.Y && git push origin v0.X.Y` triggers [`Release` workflow](.github/workflows/release.yml). After publish, UPDATE the brik-llm submodule pointer.
-- **Chromatic** — RUN `npm run chromatic` after any component CSS or story change; local Storybook is not reachable from consumer-repo agents.
+- **Chromatic** — RUN `npm run chromatic` after any component CSS or story change; local Storybook is not reachable from consumer-repo agents. The script authenticates the Chromatic token via `op run --env-file=.env.op` (the inline `op://`-ref form does not resolve in headless/detached agent sessions — see #1058); requires the 1Password CLI signed in.
 
 ## Where deeper context lives
 

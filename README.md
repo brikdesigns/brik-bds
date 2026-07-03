@@ -96,7 +96,7 @@ brik-bds is a public repo — GitHub's server-side push protection is also enabl
 | Full validation | `npm run validate:full` (pre-push gate) |
 | Build library | `npm run build:lib` |
 | Build content-system | `npm run build:content-system` |
-| Visual review | `npm run chromatic` |
+| Visual review | `npm run chromatic` (resolves the Chromatic token via `op run --env-file=.env.op`; needs the 1Password CLI signed in) |
 
 ## Versioning
 
