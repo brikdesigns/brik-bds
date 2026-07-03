@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type ReactNode, Fragment } from 'react';
+import { type BdsLinkComponent } from '../NavItem';
 import { bdsClass } from '../../utils';
 import './Footer.css';
 
@@ -75,12 +76,50 @@ export interface FooterProps extends HTMLAttributes<HTMLElement> {
   aboveTop?: ReactNode;
   /** Footer variant */
   variant?: FooterVariant;
+  /**
+   * Render column + bottom-bar links with a router-aware component (Next.js
+   * `Link`, Remix `Link`) for client-side routing instead of the default bare
+   * `<a>`. Applies to every `columns[].links[]` and `bottomLinks[]` entry. See
+   * ADR-012.
+   */
+  linkComponent?: BdsLinkComponent;
 }
 
 /**
  * Footer variant
  */
 export type FooterVariant = 'default' | 'brand' | 'inverse';
+
+/**
+ * Renders a footer link with the injected `linkComponent` (client-side routing)
+ * or a bare `<a>` when none is provided. Footer links always carry an `href`
+ * and have no disabled state, so the dispatch is a straight fallback. See
+ * ADR-012.
+ */
+function FooterLink({
+  linkComponent: LinkComponent,
+  href,
+  className,
+  children,
+}: {
+  linkComponent?: BdsLinkComponent;
+  href: string;
+  className: string;
+  children: ReactNode;
+}) {
+  if (LinkComponent) {
+    return (
+      <LinkComponent href={href} className={className}>
+        {children}
+      </LinkComponent>
+    );
+  }
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  );
+}
 
 /**
  * Footer - BDS page footer with link columns
@@ -136,6 +175,7 @@ export function Footer({
   socialLinks,
   aboveTop,
   variant = 'default',
+  linkComponent,
   className = '',
   style,
   ...props
@@ -172,8 +212,9 @@ export function Footer({
               <div key={col.heading} className="bds-footer__column">
                 <HeadingTag className="bds-footer__heading">{col.heading}</HeadingTag>
                 {col.links.map((link) => (
-                  <a
+                  <FooterLink
                     key={link.href + link.label}
+                    linkComponent={linkComponent}
                     href={link.href}
                     className="bds-footer__link"
                   >
@@ -183,7 +224,7 @@ export function Footer({
                       </span>
                     )}
                     {link.label}
-                  </a>
+                  </FooterLink>
                 ))}
               </div>
             ))}
@@ -212,12 +253,13 @@ export function Footer({
                         </li>
                       )}
                       <li>
-                        <a
+                        <FooterLink
+                          linkComponent={linkComponent}
                           href={link.href}
                           className="bds-footer__bottom-link"
                         >
                           {link.label}
-                        </a>
+                        </FooterLink>
                       </li>
                     </Fragment>
                   ))}

@@ -1,6 +1,15 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Footer } from './Footer';
+import { type BdsLinkComponent } from '../NavItem';
+
+/* Story-only stand-in for a router `Link` (Next.js / Remix). Tags the rendered
+ * anchor so the injected-routing path is visible in the DOM. */
+const MockLink: BdsLinkComponent = ({ href, children, ...props }) => (
+  <a href={href} data-link-component="mock" {...props}>
+    {children}
+  </a>
+);
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
@@ -83,6 +92,11 @@ const meta: Meta<typeof Footer> = {
       control: 'select',
       options: ['h2', 'h3', 'h4', 'h5', 'h6'],
     },
+    linkComponent: {
+      description:
+        'Render column + bottom-bar links with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. See ADR-012.',
+      control: false,
+    },
   },
 } satisfies Meta<typeof Footer>;
 
@@ -101,6 +115,20 @@ export const Playground: Story = {
     columns: sampleColumns,
     copyright: '\u00A9 2026 Brik Designs. All rights reserved.',
     variant: 'default',
+  },
+};
+
+/** @summary Column + bottom-bar links routed through an injected link component for client-side routing */
+export const WithLinkComponent: Story = {
+  args: {
+    logo: <LogoPlaceholder />,
+    columns: sampleColumns,
+    copyright: '\u00A9 2026 Brik Designs. All rights reserved.',
+    bottomLinks: [
+      { label: 'Terms', href: '/terms' },
+      { label: 'Privacy', href: '/privacy' },
+    ],
+    linkComponent: MockLink,
   },
 };
 
