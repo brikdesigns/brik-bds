@@ -91,10 +91,26 @@ if [[ "${SKIP_STORY_CHECK:-}" != "1" ]]; then
     echo -e "${YELLOW}   Project rule: component changes must be verified in Storybook (npm run storybook)${NC}"
     echo -e "${YELLOW}   before opening a PR. Typecheck alone is not sufficient.${NC}"
     echo ""
-    echo -n "   Verified in Storybook? [y/N] (or set SKIP_STORY_CHECK=1 for non-visual diffs): "
-    read -r STORY_CONFIRM
-    if [[ ! "$STORY_CONFIRM" =~ ^[Yy]$ ]]; then
-      echo -e "${RED}✗ PR creation blocked. Verify the change in Storybook, then re-run.${NC}"
+    if [ -t 0 ]; then
+      # Interactive TTY — confirm at the prompt (unchanged behavior).
+      echo -n "   Verified in Storybook? [y/N] (or set SKIP_STORY_CHECK=1 for non-visual diffs): "
+      read -r STORY_CONFIRM
+      if [[ ! "$STORY_CONFIRM" =~ ^[Yy]$ ]]; then
+        echo -e "${RED}✗ PR creation blocked. Verify the change in Storybook, then re-run.${NC}"
+        exit 1
+      fi
+    elif [ "${STORY_VERIFIED:-}" = "1" ]; then
+      # Non-interactive (agent / headless): the prompt can't be answered. Accept
+      # an explicit assertion that the change was verified (e.g. via a headless
+      # `npm run chromatic` — now possible, #1058) rather than silently
+      # auto-confirming, which would rubber-stamp an unverified visual change.
+      echo -e "${YELLOW}   → STORY_VERIFIED=1 — proceeding (non-interactive).${NC}"
+    else
+      # Non-interactive with no assertion → fail closed with an actionable path,
+      # never a silent EOF-block or a hang on an input-less stdin (#1110).
+      echo -e "${RED}✗ Component diff in a non-interactive session — the Storybook gate can't be answered here.${NC}"
+      echo -e "${YELLOW}   Verify the change (headless: npm run chromatic), then re-run with STORY_VERIFIED=1.${NC}"
+      echo -e "${YELLOW}   For a genuinely non-visual diff, use SKIP_STORY_CHECK=1 instead.${NC}"
       exit 1
     fi
   fi
