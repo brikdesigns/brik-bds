@@ -31,8 +31,8 @@
   --background-info: var(--color-system-neutral);
   --background-primary-hover: var(--color-grayscale-darkest);
   --background-primary-pressed: var(--color-grayscale-darker);
-  --background-secondary-hover: var(--color-grayscale-dark);
-  --background-secondary-pressed: var(--color-grayscale-darker);
+  --background-secondary-hover: var(--color-grayscale-darker);
+  --background-secondary-pressed: var(--color-grayscale-darkest);
   --background-positive: var(--color-system-green);
   --background-negative: var(--color-system-red);
   --background-warning: var(--color-system-yellow);

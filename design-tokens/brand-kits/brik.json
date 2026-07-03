@@ -1255,7 +1255,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}"
+        "$value": "{color.grayscale.darker}"
       },
       "brand-primary": {
         "$extensions": {
@@ -1327,7 +1327,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}"
+        "$value": "{color.grayscale.dark}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -1985,7 +1985,7 @@
       },
       "secondary-hover": {
         "$type": "color",
-        "$value": "{color.grayscale.dark}",
+        "$value": "{color.grayscale.darker}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -1994,7 +1994,7 @@
       },
       "secondary-pressed": {
         "$type": "color",
-        "$value": "{color.grayscale.darker}",
+        "$value": "{color.grayscale.darkest}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"

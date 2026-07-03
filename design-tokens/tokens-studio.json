@@ -37,7 +37,7 @@
             }
           },
           "$type": "color",
-          "$value": "#1b1b1b",
+          "$value": "#333333",
           "$description": "Primary Text on Light Backgrounds"
         },
         "darker": {
@@ -50,7 +50,7 @@
             }
           },
           "$type": "color",
-          "$value": "#333333",
+          "$value": "#4f4f4f",
           "$description": "Secondary Text / Icons"
         },
         "dark": {
@@ -60,7 +60,7 @@
             ]
           },
           "$type": "color",
-          "$value": "#5a5a5a",
+          "$value": "#828282",
           "$description": "Placeholder Text / Tertiary Content"
         },
         "light": {
@@ -73,7 +73,7 @@
             }
           },
           "$type": "color",
-          "$value": "#828282",
+          "$value": "#bdbdbd",
           "$description": "Secondary Borders / Muted UI"
         },
         "lighter": {
@@ -6272,7 +6272,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}"
+        "$value": "{color.grayscale.darker}"
       },
       "brand-primary": {
         "$extensions": {
@@ -6344,7 +6344,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}"
+        "$value": "{color.grayscale.dark}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -7002,7 +7002,7 @@
       },
       "secondary-hover": {
         "$type": "color",
-        "$value": "{color.grayscale.dark}",
+        "$value": "{color.grayscale.darker}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -7011,7 +7011,7 @@
       },
       "secondary-pressed": {
         "$type": "color",
-        "$value": "{color.grayscale.darker}",
+        "$value": "{color.grayscale.darkest}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
