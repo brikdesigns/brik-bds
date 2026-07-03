@@ -5,7 +5,7 @@ description: Data table with composable subcomponents. Sorting, selection, strip
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Table is a composable data-display primitive. The container plus seven subcomponents (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableActionsCell`, `TableSubheader`) handle the structural HTML; the consumer composes cells with whatever content the row needs — text, badges, links, action buttons.
+Table is a composable data-display primitive. The container plus its subcomponents (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableActionsCell`, `TableSubheader`) handle the structural HTML; the consumer composes cells with whatever content the row needs — text, badges, links, action buttons. Three typed media cells (`TableAvatarCell`, `TableImageCell`, `TableServiceTagCell`) package the common identity / logo / classification layouts so consumers stop hand-rolling them.
 
 ## Use it for
 
@@ -165,6 +165,36 @@ Pair a 24px icon with text using `gap: var(--gap-xs)`.
 </span>
 ```
 
+### Media cells
+
+Three typed cells package the recurring media layouts. Each composes an existing primitive and owns only its own layout (alignment, gap, fixed sizing) — reach for these instead of hand-rolling flex wrappers inside a plain `<TableCell>`.
+
+**`TableAvatarCell`** — an [Avatar](/docs/components/avatar) paired with a name and an optional secondary line (email / role). Initials render when `src` is omitted; pass `primary` as a `<TextLink>` when the name should open a read sheet.
+
+```tsx
+<TableAvatarCell
+  src={user.avatarUrl}
+  name={user.name}
+  secondary={user.email}
+  status="online"
+/>
+```
+
+**`TableImageCell`** — a fixed square (1:1) thumbnail for a logo or product image, via the [Image](/docs/components/image) primitive at `ratio="1-1"`. Use `fit="contain"` for logos (no crop) and `fit="cover"` for product photos. The cell renders only — the upload / edit interaction is consumer-side (e.g. a file uploader in the edit sheet).
+
+```tsx
+<TableImageCell src={org.logoUrl} alt={`${org.name} logo`} fit="contain" size="sm" />
+```
+
+**`TableServiceTagCell`** — hosts one or more [ServiceTag](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview)s, wrapping with a consistent gap. Supply `variant="icon"` for icon-only classification or `variant="icon-text"` for a labeled tag.
+
+```tsx
+<TableServiceTagCell>
+  <ServiceTag category="brand" variant="icon" />
+  <ServiceTag category="marketing" variant="icon-text" serviceName="Custom Standard Web Development and Design" />
+</TableServiceTagCell>
+```
+
 ## When *not* to use
 
 - **Don't use Table for self-contained card grids.** Cards belong in [CardList](/docs/components/card-list).
@@ -201,6 +231,9 @@ Plus standard `<table>` HTML attributes.
 | `TableHead` | `<th>` | `sortable: boolean`, `sortDirection: 'asc' \| 'desc'` |
 | `TableCell` | `<td>` | — |
 | `TableActionsCell` | `<td>` | `align: 'right' \| 'center'` — owns the trailing `[View][Edit][⋯]` cluster |
+| `TableAvatarCell` | `<td>` | `src`, `name`, `primary`, `secondary`, `size: 'sm' \| 'md'`, `status` — Avatar + identity |
+| `TableImageCell` | `<td>` | `src` *(req)*, `alt` *(req)*, `size: 'sm' \| 'md'`, `fit: 'contain' \| 'cover'` — square 1:1 thumbnail |
+| `TableServiceTagCell` | `<td>` | `children` — one or more `ServiceTag`s |
 
 All subcomponents accept their respective HTML attributes.
 
