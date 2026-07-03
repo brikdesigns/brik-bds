@@ -175,7 +175,7 @@
     "gen:icons": "node scripts/gen-icon-collection.mjs",
     "gen:icons:check": "node scripts/gen-icon-collection.mjs --check",
     "gen:icons:update": "node scripts/gen-icon-collection.mjs && git add components/icons.generated.json",
-    "chromatic": "CHROMATIC_PROJECT_TOKEN='op://Development/golln4vuqvvf4gkzv5hmxfgvxm/credential' op run --no-masking -- npx chromatic",
+    "chromatic": "op run --no-masking --env-file=.env.op -- npx chromatic",
     "deploy:staging": "npm run build-storybook && npx netlify-cli deploy --dir=storybook-static",
     "deploy:prod": "npm run build-storybook && npx netlify-cli deploy --prod --dir=storybook-static",
     "sync:figma-mcp": "node scripts/sync-figma-mcp.js",
