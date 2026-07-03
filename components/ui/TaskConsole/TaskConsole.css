@@ -164,7 +164,7 @@
   font-size: var(--body-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-normal);
-  color: var(--text-brand-primary); /* bds-lint-ignore — small brand affordance at body-sm; tracked #1103, resolved by #1065 near-Poppy AA step */
+  color: var(--text-primary); /* AA-safe on white at body-sm (#1103); brand affordance returns via the #1065 near-Poppy AA step */
   text-decoration: none;
   cursor: pointer;
 }
