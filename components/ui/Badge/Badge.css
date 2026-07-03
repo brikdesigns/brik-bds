@@ -56,6 +56,21 @@
   height: 40px;
 }
 
+/* ─── Density (compact — tighter horizontal padding for dense rows) ── */
+/* Mirrors Tag so a compact Badge and compact Tag stay aligned side by
+   side. `density="compact"` shifts horizontal padding one token-step
+   down per size (sm→xs, md/lg→sm); height and vertical padding are
+   unchanged. xs is icon-only and is unaffected. */
+
+.bds-badge--compact.bds-badge--sm {
+  padding-inline: var(--padding-xs);
+}
+
+.bds-badge--compact.bds-badge--md,
+.bds-badge--compact.bds-badge--lg {
+  padding-inline: var(--padding-sm);
+}
+
 /* ─── Icon Wrapper (shared sizing with Tag) ──────────────────── */
 
 .bds-badge__icon {

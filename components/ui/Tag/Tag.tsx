@@ -8,6 +8,14 @@ import './Tag.css';
 export type TagSize = 'xs' | 'sm' | 'md' | 'lg';
 
 /**
+ * Tag density — orthogonal to `size`, shared axis with BulletList / Table.
+ * - `comfortable` (default) — current spacing.
+ * - `compact` — tighter horizontal padding (one token-step down per size)
+ *   so more Tags fit inline in a dense table row. Height is unchanged.
+ */
+export type TagDensity = 'comfortable' | 'compact';
+
+/**
  * Tag fill appearance — shared axis with Badge (`solid | subtle`) and
  * Chip (`solid | outline`). Tag supports the two pastel-capable values.
  * - `solid`  — neutral filled background (current default styling).
@@ -23,6 +31,8 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   size?: TagSize;
   /** Fill appearance — solid (neutral fill) or subtle (transparent + border). */
   appearance?: TagAppearance;
+  /** Density — `compact` tightens horizontal padding for dense rows. Default `comfortable`. */
+  density?: TagDensity;
   /** Optional leading icon (left) — required for xs size */
   icon?: ReactNode;
   /** Optional trailing icon (right) */
@@ -64,6 +74,7 @@ export function Tag({
   children,
   size = 'md',
   appearance = 'solid',
+  density = 'comfortable',
   icon,
   trailingIcon,
   onRemove,
@@ -78,6 +89,7 @@ export function Tag({
     'bds-tag',
     `bds-tag--${size}`,
     `bds-tag--${appearance}`,
+    density === 'compact' && 'bds-tag--compact',
     disabled && 'bds-tag--disabled',
     className
   );
