@@ -5,10 +5,10 @@ import SwiftUI
 public enum BDSColor {
     public static let colorGrayscaleWhite = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
     public static let colorGrayscaleBlack = Color(red: 0.0000, green: 0.0000, blue: 0.0000)
-    public static let colorGrayscaleDarkest = Color(red: 0.1059, green: 0.1059, blue: 0.1059) /// Primary Text on Light Backgrounds
-    public static let colorGrayscaleDarker = Color(red: 0.2000, green: 0.2000, blue: 0.2000) /// Secondary Text / Icons
-    public static let colorGrayscaleDark = Color(red: 0.3529, green: 0.3529, blue: 0.3529) /// Placeholder Text / Tertiary Content
-    public static let colorGrayscaleLight = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Secondary Borders / Muted UI
+    public static let colorGrayscaleDarkest = Color(red: 0.2000, green: 0.2000, blue: 0.2000) /// Primary Text on Light Backgrounds
+    public static let colorGrayscaleDarker = Color(red: 0.3098, green: 0.3098, blue: 0.3098) /// Secondary Text / Icons
+    public static let colorGrayscaleDark = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Placeholder Text / Tertiary Content
+    public static let colorGrayscaleLight = Color(red: 0.7412, green: 0.7412, blue: 0.7412) /// Secondary Borders / Muted UI
     public static let colorGrayscaleLighter = Color(red: 0.8784, green: 0.8784, blue: 0.8784) /// Borders / Disabled Text
     public static let colorGrayscaleLightest = Color(red: 0.9490, green: 0.9490, blue: 0.9490) /// Light Background / UI Elements
     public static let colorSystemRed = Color(red: 0.9216, green: 0.3412, blue: 0.3412)

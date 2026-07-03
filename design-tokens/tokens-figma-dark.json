@@ -10,22 +10,22 @@
         "$type": "color"
       },
       "darkest": {
-        "$value": "#1b1b1b",
+        "$value": "#333333",
         "$type": "color",
         "$description": "Primary Text on Light Backgrounds"
       },
       "darker": {
-        "$value": "#333333",
+        "$value": "#4f4f4f",
         "$type": "color",
         "$description": "Secondary Text / Icons"
       },
       "dark": {
-        "$value": "#5a5a5a",
+        "$value": "#828282",
         "$type": "color",
         "$description": "Placeholder Text / Tertiary Content"
       },
       "light": {
-        "$value": "#828282",
+        "$value": "#bdbdbd",
         "$type": "color",
         "$description": "Secondary Borders / Muted UI"
       },
@@ -1557,11 +1557,11 @@
       "$type": "color"
     },
     "secondary-hover": {
-      "$value": "{color.grayscale.dark}",
+      "$value": "{color.grayscale.darker}",
       "$type": "color"
     },
     "secondary-pressed": {
-      "$value": "{color.grayscale.darker}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
     "positive": {

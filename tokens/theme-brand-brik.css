@@ -25,8 +25,8 @@
   --page-brand-primary: var(--color-poppy-light);
   /* Text */
   --text-primary: var(--color-grayscale-darkest);
-  --text-secondary: var(--color-grayscale-dark);
-  --text-muted: var(--color-grayscale-light);
+  --text-secondary: var(--color-grayscale-darker);
+  --text-muted: var(--color-grayscale-dark);
   --text-inverse: var(--color-grayscale-white);
   /* Brand canon (brand-kit brik.json): brand-primary text is vibrant poppy-light
      (#e35335). On white = 3.80:1 — clears AA-large (3:1), the bar for the
@@ -126,14 +126,14 @@
   --background-disabled: var(--color-grayscale-darker);
   --background-primary-hover: var(--color-grayscale-darkest);
   --background-primary-pressed: var(--color-grayscale-darker);
-  --background-secondary-hover: var(--color-grayscale-dark);
-  --background-secondary-pressed: var(--color-grayscale-darker);
+  --background-secondary-hover: var(--color-grayscale-darker);
+  --background-secondary-pressed: var(--color-grayscale-darkest);
   /* Border */
   --border-primary: var(--color-grayscale-darker);
   /* One step darker than the generated dark value (--color-grayscale-light
-   * #828282) so secondary dividers/outlines read as quieter chrome against the
+   * #bdbdbd) so secondary dividers/outlines read as quieter chrome against the
    * near-black dark surfaces instead of bright gray hairlines. --border-input
-   * deliberately stays at -dark (#5a5a5a) to preserve the 3:1 field-boundary
+   * deliberately stays at -dark (#828282) to preserve the 3:1 field-boundary
    * contrast (WCAG 1.4.11) on the black --background-input dark fill. */
   --border-secondary: var(--color-grayscale-dark);
   --border-muted: var(--color-grayscale-dark);
