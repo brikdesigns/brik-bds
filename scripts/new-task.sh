@@ -32,6 +32,13 @@ NC='\033[0m'
 # ── Config ──
 BASE_BRANCH="main"
 
+# Auto-proceed past interactive warnings when there's no TTY (agent / headless
+# session), or when explicitly opted in via --yes / NEW_TASK_YES=1. Without
+# this, the warning prompts below `read -r` from a closed stdin and the script
+# hangs or reads EOF unpredictably (#1099). Interactive TTY behavior is
+# unchanged — prompts still appear and wait.
+AUTO_YES="${NEW_TASK_YES:-0}"
+
 # ── Resolve repo root ──
 PROJECT_ROOT="$(git rev-parse --show-toplevel)"
 WORKTREE_BASE="$(dirname "$PROJECT_ROOT")/brik-bds-worktrees"
@@ -77,6 +84,10 @@ while [[ $# -gt 0 ]]; do
       BASE_BRANCH="$2"
       shift 2
       ;;
+    --yes|-y)
+      AUTO_YES=1
+      shift
+      ;;
     -*)
       echo -e "${RED}Unknown flag: $1${NC}"
       exit 1
@@ -86,6 +97,22 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+# No interactive stdin (agent / piped / CI) → treat as opt-in to proceed.
+if [ ! -t 0 ]; then
+  AUTO_YES=1
+fi
+
+# confirm — gate a warning on operator acknowledgement. In an interactive TTY
+# it waits for Enter (Ctrl+C to abort); non-interactively it prints a note and
+# proceeds so the script never blocks on a closed stdin (#1099).
+confirm() {
+  if [ "$AUTO_YES" = "1" ]; then
+    echo -e "${YELLOW}   → non-interactive: proceeding automatically.${NC}"
+  else
+    read -r
+  fi
+}
 
 # ── Validate input ──
 if [ $# -lt 1 ]; then
@@ -142,7 +169,7 @@ if command -v gh &>/dev/null; then
     echo -e "${YELLOW}   Reusing names makes PR history confusing.${NC}"
     echo -e "${YELLOW}   Consider: task/${TASK_NAME}-v2 or a more specific name.${NC}"
     echo -e "${YELLOW}   Press Enter to continue anyway, Ctrl+C to abort.${NC}"
-    read -r
+    confirm
   fi
 fi
 
@@ -155,7 +182,7 @@ if [ -n "$SIMILAR_BRANCHES" ]; then
   echo ""
   echo -e "${YELLOW}   Verify these don't overlap before proceeding.${NC}"
   echo -e "${YELLOW}   Press Enter to continue, Ctrl+C to abort.${NC}"
-  read -r
+  confirm
 fi
 
 # ── Check open PRs for file-level overlap ──
@@ -182,7 +209,7 @@ if command -v gh &>/dev/null; then
       echo -e "${YELLOW}     3) Proceed (accept the rebase cost)${NC}"
       echo ""
       echo -e "${YELLOW}   Press Enter to proceed, Ctrl+C to abort.${NC}"
-      read -r
+      confirm
     fi
   fi
 fi
