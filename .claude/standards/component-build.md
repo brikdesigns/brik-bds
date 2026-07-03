@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.{tsx,css}"
 retrieved-via: brik-rag query "component build standard"
-last-verified: 2026-05-14
+last-verified: 2026-07-03
 ---
 
 # Component build standard (BDS)
@@ -14,26 +14,15 @@ Rules for `brik-bds/components/ui/**/*.{tsx,css}`. Source of truth lives in this
 
 **Out of scope:** story file shape (see [storybook-story-shape](./storybook-story-shape.md)); MDX page recipe (see [storybook-mdx-recipe](./storybook-mdx-recipe.md)); toolbar globals (see [storybook-toolbar-globals](./storybook-toolbar-globals.md)).
 
-## Pre-implementation — design in Paper for composite or novel work
+## Pre-implementation — build directly in Storybook
 
-Use Paper (Claude Code's HTML canvas) to iterate visually before writing `.tsx` and `.css` for:
+BDS components are designed by building them in `.tsx` + `.css` and iterating in **Storybook** — Storybook + the coded component are the component source of truth. There is no separate mockup gate.
 
-- New composite components (data tables, date pickers, kanban, calendars)
-- Complex interaction states (multi-step forms, nested menus, drag-and-drop)
-- First-time patterns with no existing BDS analog
-- Any case where the right visual solution isn't obvious from a Figma spec alone
+- **Figma** is the *token* source of truth (and an optional visual reference that may legitimately differ from code) — not a component-layout gate.
+- **Paper is for website / client builds, NEVER BDS components.** Do not mock BDS components in Paper.
+- Prefer **nesting existing token-sized primitives** (they fit any container — card, list row, table cell) over authoring new components. Reach for a new component only when the purpose test below justifies it.
 
-**Skip Paper for:** simple variants of existing components, icon swaps, copy changes, components with a clear unambiguous Figma spec.
-
-**Discipline:** Paper HTML uses BDS token CSS variables exclusively — never raw hex / hardcoded sizes. The Paper → CSS translation maps 1:1.
-
-```html
-<!-- Right -->
-<div style="padding: var(--padding-lg); color: var(--text-primary); border: var(--border-width-md) solid var(--border-secondary);">
-
-<!-- Wrong -->
-<div style="padding: 24px; color: #1a1a1a; border: 1px solid #e0e0e0;">
-```
+**Discipline:** all values come from BDS token CSS variables — never raw hex / hardcoded sizes (see § Tokens only). Validate component CSS across themes in Storybook, especially the ★ Client Sim theme (it assigns distinct typefaces per family to expose mismatches).
 
 ## Component vs variant vs control — decide this first
 
