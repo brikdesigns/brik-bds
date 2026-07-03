@@ -5,10 +5,10 @@
 :root {
   --color-grayscale-white: #ffffff;
   --color-grayscale-black: #000000;
-  --color-grayscale-darkest: #1b1b1b; /** Primary Text on Light Backgrounds */
-  --color-grayscale-darker: #333333; /** Secondary Text / Icons */
-  --color-grayscale-dark: #5a5a5a; /** Placeholder Text / Tertiary Content */
-  --color-grayscale-light: #828282; /** Secondary Borders / Muted UI */
+  --color-grayscale-darkest: #333333; /** Primary Text on Light Backgrounds */
+  --color-grayscale-darker: #4f4f4f; /** Secondary Text / Icons */
+  --color-grayscale-dark: #828282; /** Placeholder Text / Tertiary Content */
+  --color-grayscale-light: #bdbdbd; /** Secondary Borders / Muted UI */
   --color-grayscale-lighter: #e0e0e0; /** Borders / Disabled Text */
   --color-grayscale-lightest: #f2f2f2; /** Light Background / UI Elements */
   --color-system-red: #eb5757;
@@ -426,7 +426,7 @@
   --surface-service-information-inverse: var(--color-grayscale-white);
   --surface-service-brand-inverse: var(--color-grayscale-white);
   --text-primary: var(--color-grayscale-darkest);
-  --text-secondary: var(--color-grayscale-dark);
+  --text-secondary: var(--color-grayscale-darker);
   --text-brand-primary: var(--color-poppy-light);
   --text-inverse: var(--color-grayscale-white);
   --text-accent-yellow: var(--color-system-yellow);
@@ -434,7 +434,7 @@
   --text-accent-green: var(--color-system-green);
   --text-accent-purple: var(--color-system-purple);
   --text-accent-red: var(--color-system-red);
-  --text-muted: var(--color-grayscale-light);
+  --text-muted: var(--color-grayscale-dark);
   --text-on-color-dark: var(--color-grayscale-white);
   --text-text-link: var(--color-poppy-light);
   --text-on-color-light: var(--color-grayscale-black);
