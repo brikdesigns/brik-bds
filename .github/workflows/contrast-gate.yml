@@ -55,3 +55,8 @@ jobs:
       # no dist build required (unlike canonical-check, which parses dist/).
       - name: Contrast pairing gate
         run: npm run contrast-gate
+
+      # The published matrix in primitives/color-pairings.mdx must match the
+      # generator (measured ratios included) so it can't drift as tokens change.
+      - name: Contrast matrix drift check
+        run: npm run contrast-matrix:check
