@@ -73,6 +73,12 @@ const meta: Meta<typeof Table> = {
       control: 'boolean',
       description: 'Show a bottom border under the header row. Off by default.',
     },
+    headerBorderWeight: {
+      control: 'select',
+      options: ['md', 'sm'],
+      description:
+        'Weight of the header bottom border when `headerBorder` is on — `md` (default) or `sm` to match the data-row divider. No effect when `headerBorder` is off.',
+    },
     roundedTop: {
       control: 'boolean',
       description: 'Round the top-left / top-right outer corners (draws a subtle outer border). On by default.',
@@ -97,9 +103,10 @@ type Story = StoryObj<typeof Table>;
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * Canonical table. Toggle `striped`, `size`, `headerBorder`, `roundedTop`,
- * `roundedBottom`, and `headerBackground` via Controls. Cells accept any
- * content — see the Variants stories for the composition catalog.
+ * Canonical table. Toggle `striped`, `size`, `headerBorder`,
+ * `headerBorderWeight`, `roundedTop`, `roundedBottom`, and `headerBackground`
+ * via Controls. Cells accept any content — see the Variants stories for the
+ * composition catalog.
  *
  * @summary Themed data table — striped + size are Controls
  */
@@ -108,6 +115,7 @@ export const Default: Story = {
     striped: false,
     size: 'default',
     headerBorder: false,
+    headerBorderWeight: 'md',
     roundedTop: true,
     roundedBottom: true,
     headerBackground: 'secondary',
