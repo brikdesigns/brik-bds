@@ -160,8 +160,14 @@
    is no outer border, so the trailing divider stays (matches legacy look). */
 .bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-cell,
 .bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-actions-cell,
+.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-avatar-cell,
+.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-image-cell,
+.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-service-tag-cell,
 .bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-cell,
-.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-actions-cell {
+.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-actions-cell,
+.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-avatar-cell,
+.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-image-cell,
+.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-service-tag-cell {
   border-bottom: none;
 }
 
@@ -195,5 +201,125 @@
 
 .bds-table-actions-cell--center .bds-table-actions-cell__group {
   justify-content: center;
+}
+
+/* ─── Avatar cell (avatar + identity: name / email) ──────────── */
+
+.bds-table-avatar-cell {
+  vertical-align: middle;
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+}
+
+.bds-table[data-size="default"] .bds-table-avatar-cell {
+  padding: var(--padding-sm) var(--padding-md);
+}
+
+.bds-table[data-size="comfortable"] .bds-table-avatar-cell {
+  padding: var(--padding-xl) var(--padding-md);
+}
+
+.bds-table[data-flush="true"] .bds-table-avatar-cell:first-child {
+  padding-left: 0;
+}
+
+.bds-table[data-flush="true"] .bds-table-avatar-cell:last-child {
+  padding-right: 0;
+}
+
+.bds-table-avatar-cell__group {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.bds-table-avatar-cell__content {
+  display: flex;
+  flex-direction: column;
+  /* allow long names / emails to truncate within the cell */
+  min-width: 0;
+}
+
+.bds-table-avatar-cell__name {
+  font-family: var(--font-family-heading);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.bds-table-avatar-cell__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-xs);
+  color: var(--text-muted);
+}
+
+/* ─── Image cell (square 1:1 logo / product thumbnail) ───────── */
+
+.bds-table-image-cell {
+  vertical-align: middle;
+  /* Shrink-to-content so the thumbnail column never competes with content cells */
+  width: 1%;
+  white-space: nowrap;
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+}
+
+.bds-table[data-size="default"] .bds-table-image-cell {
+  padding: var(--padding-sm) var(--padding-md);
+}
+
+.bds-table[data-size="comfortable"] .bds-table-image-cell {
+  padding: var(--padding-xl) var(--padding-md);
+}
+
+.bds-table[data-flush="true"] .bds-table-image-cell:first-child {
+  padding-left: 0;
+}
+
+.bds-table[data-flush="true"] .bds-table-image-cell:last-child {
+  padding-right: 0;
+}
+
+.bds-table-image-cell__media {
+  overflow: hidden;
+  border-radius: var(--border-radius-sm);
+}
+
+/* bds-lint-ignore — Figma-driven thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
+.bds-table-image-cell--sm .bds-table-image-cell__media {
+  width: 32px;
+}
+
+/* bds-lint-ignore — Figma-driven thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
+.bds-table-image-cell--md .bds-table-image-cell__media {
+  width: 40px;
+}
+
+/* ─── Service-tag cell (one or more ServiceTags) ─────────────── */
+
+.bds-table-service-tag-cell {
+  vertical-align: middle;
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
+}
+
+.bds-table[data-size="default"] .bds-table-service-tag-cell {
+  padding: var(--padding-sm) var(--padding-md);
+}
+
+.bds-table[data-size="comfortable"] .bds-table-service-tag-cell {
+  padding: var(--padding-xl) var(--padding-md);
+}
+
+.bds-table[data-flush="true"] .bds-table-service-tag-cell:first-child {
+  padding-left: 0;
+}
+
+.bds-table[data-flush="true"] .bds-table-service-tag-cell:last-child {
+  padding-right: 0;
+}
+
+.bds-table-service-tag-cell__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-xs);
 }
 }

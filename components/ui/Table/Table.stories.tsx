@@ -1,7 +1,18 @@
 import React, { type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableActionsCell } from './Table';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableActionsCell,
+  TableAvatarCell,
+  TableImageCell,
+  TableServiceTagCell,
+} from './Table';
 import { Badge } from '../Badge';
 import { Tag } from '../Tag';
 import { Button } from '../Button';
@@ -9,6 +20,7 @@ import { Checkbox } from '../Checkbox';
 import { TextInput } from '../TextInput';
 import { TextLink } from '../TextLink';
 import { Tooltip } from '../Tooltip';
+import { ServiceTag, type ServiceLine } from '../ServiceTag';
 import { Eye, Pen, EllipsisVertical } from '../../icons';
 
 /* ─── Layout helper (story-only) ──────────────────────────────── */
@@ -402,4 +414,154 @@ export const RowClickAntiPattern: Story = {
       </Table>
     </Stack>
   ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   MEDIA CELLS — avatar / image / service-tag typed cells (#1096)
+   ═══════════════════════════════════════════════════════════════ */
+
+/** Map a Badge status onto an Avatar presence dot (story-only). */
+const presence = (s: string): 'online' | 'away' | 'busy' | 'offline' =>
+  s === 'positive' ? 'online' : s === 'warning' ? 'away' : s === 'error' ? 'busy' : 'offline';
+
+/**
+ * `<TableAvatarCell>` pairs an `Avatar` with a name and an optional secondary
+ * line (email / role). Initials render when no `src` is set; pass `primary` as
+ * a `<TextLink>` when the name should navigate. Irreducible — the cell is
+ * composition, not a `Table` arg.
+ *
+ * @summary Avatar identity cells (name + email)
+ */
+export const WithAvatarCell: Story = {
+  render: () => (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>User</TableHead>
+          <TableHead>Role</TableHead>
+          <TableHead>Status</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {users.map((u, i) => (
+          <TableRow key={u.email}>
+            <TableAvatarCell
+              name={u.name}
+              secondary={u.email}
+              status={presence(u.status)}
+              primary={
+                i === 0 ? (
+                  <TextLink href="#" size="small" onClick={(e) => e.preventDefault()}>
+                    {u.name}
+                  </TextLink>
+                ) : undefined
+              }
+            />
+            <TableCell>{u.role}</TableCell>
+            <TableCell>
+              <Badge status={u.status} size="sm">{statusLabel(u.status)}</Badge>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
+};
+
+/**
+ * `<TableImageCell>` renders a fixed square (1:1) thumbnail for a logo or
+ * product image, shrink-to-content width. `fit="contain"` keeps a logo
+ * uncropped; `fit="cover"` fills the square for product photos. Upload / edit
+ * wiring is consumer-side.
+ *
+ * @summary Square logo / product thumbnail cells
+ */
+export const WithImageCell: Story = {
+  render: () => {
+    const orgs = [
+      { name: 'Brik Designs', plan: 'Enterprise', status: 'positive' as const },
+      { name: 'Vantage Partners', plan: 'Growth', status: 'positive' as const },
+      { name: 'Renew PMS', plan: 'Starter', status: 'warning' as const },
+    ];
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Logo</TableHead>
+            <TableHead>Organization</TableHead>
+            <TableHead>Plan</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {orgs.map((o) => (
+            <TableRow key={o.name}>
+              <TableImageCell src="/brik-logo.svg" alt={`${o.name} logo`} fit="contain" />
+              <TableCell>{o.name}</TableCell>
+              <TableCell>{o.plan}</TableCell>
+              <TableCell>
+                <Badge status={o.status} size="sm">{statusLabel(o.status)}</Badge>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  },
+};
+
+/**
+ * `<TableServiceTagCell>` hosts one or more `ServiceTag`s on a row, wrapping
+ * with a consistent gap. Supply `variant="icon"` for icon-only classification
+ * or `variant="icon-text"` for a labeled tag. Irreducible composition.
+ *
+ * @summary Service-tag cells (icon-only + labeled)
+ */
+export const WithServiceTagCell: Story = {
+  render: () => {
+    // serviceNames proven against ServiceTag's own stories so glyphs resolve.
+    const labeled: Record<ServiceLine, string> = {
+      brand: 'Brand Identity Bundle',
+      marketing: 'Custom Standard Web Development and Design',
+      information: 'Information Design',
+      product: 'Product Design Systems',
+      'back-office': 'Digital File Organization',
+      service: 'Digital File Organization',
+    };
+    const rows: { name: string; lines: ServiceLine[] }[] = [
+      { name: 'Brand Identity Bundle', lines: ['brand', 'marketing'] },
+      { name: 'Website Design', lines: ['marketing'] },
+      { name: 'Ops Automation', lines: ['back-office', 'product', 'information'] },
+    ];
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Service</TableHead>
+            <TableHead>Lines (icon-only)</TableHead>
+            <TableHead>Primary line (labeled)</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell>{row.name}</TableCell>
+              <TableServiceTagCell>
+                {row.lines.map((line) => (
+                  <ServiceTag key={line} category={line} variant="icon" />
+                ))}
+              </TableServiceTagCell>
+              <TableServiceTagCell>
+                <ServiceTag
+                  category={row.lines[0]}
+                  variant="icon-text"
+                  serviceName={labeled[row.lines[0]]}
+                />
+              </TableServiceTagCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  },
 };
