@@ -1,4 +1,5 @@
-import { type HTMLAttributes } from 'react';
+import { type HTMLAttributes, type ReactNode } from 'react';
+import { type BdsLinkComponent } from '../NavItem';
 import { bdsClass } from '../../utils';
 import './Breadcrumb.css';
 
@@ -14,12 +15,45 @@ export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
   items: BreadcrumbItem[];
   /** Visual separator between crumbs. Default `slash` (`/`); `chevron` renders `›`. */
   separator?: BreadcrumbSeparator;
+  /**
+   * Render each linked crumb with a router-aware component (Next.js `Link`,
+   * Remix `Link`) for client-side routing instead of the default bare `<a>`.
+   * The current (last) crumb is always plain text. See ADR-012.
+   */
+  linkComponent?: BdsLinkComponent;
 }
 
 const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
   slash: '/',
   chevron: '›',
 };
+
+/**
+ * Renders a linked crumb via the injected `linkComponent` (client-side routing)
+ * or a bare `<a>` when none is provided. See ADR-012.
+ */
+function BreadcrumbLink({
+  linkComponent: LinkComponent,
+  href,
+  children,
+}: {
+  linkComponent?: BdsLinkComponent;
+  href: string;
+  children: ReactNode;
+}) {
+  if (LinkComponent) {
+    return (
+      <LinkComponent href={href} className="bds-breadcrumb__link">
+        {children}
+      </LinkComponent>
+    );
+  }
+  return (
+    <a href={href} className="bds-breadcrumb__link">
+      {children}
+    </a>
+  );
+}
 
 /**
  * Breadcrumb — navigation breadcrumb trail with separator variants.
@@ -29,6 +63,7 @@ const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
 export function Breadcrumb({
   items,
   separator = 'slash',
+  linkComponent,
   className,
   style,
   ...props
@@ -59,9 +94,9 @@ export function Breadcrumb({
                 {item.label}
               </span>
             ) : (
-              <a href={item.href} className="bds-breadcrumb__link">
+              <BreadcrumbLink linkComponent={linkComponent} href={item.href}>
                 {item.label}
-              </a>
+              </BreadcrumbLink>
             )}
           </span>
         );
