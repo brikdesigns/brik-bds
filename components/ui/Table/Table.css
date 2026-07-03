@@ -64,9 +64,14 @@
   background-color: var(--background-primary);
 }
 
-/* Header bottom border — opt-in (off by default). */
+/* Header bottom border — opt-in (off by default). Default weight `md`. */
 .bds-table[data-header-border="true"] .bds-table-head {
   border-bottom: var(--border-width-md) solid var(--border-muted);
+}
+
+/* Opt into `sm` weight to match the data-row divider (uniform border weight). */
+.bds-table[data-header-border="true"][data-header-border-weight="sm"] .bds-table-head {
+  border-bottom-width: var(--border-width-sm);
 }
 
 /* Size: default */

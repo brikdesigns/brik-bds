@@ -15,6 +15,8 @@ export type TableSize = 'default' | 'comfortable';
 
 export type TableHeaderBackground = 'primary' | 'secondary';
 
+export type TableHeaderBorderWeight = 'sm' | 'md';
+
 export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   /** Apply alternating row backgrounds for readability on dense tables. Default `false`. */
   striped?: boolean;
@@ -24,6 +26,8 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   flush?: boolean;
   /** Show a bottom border under the header row. Default `false`. */
   headerBorder?: boolean;
+  /** Weight of the header bottom border when `headerBorder` is on — `md` (default) or `sm` to match the data-row divider weight. No effect when `headerBorder` is off. */
+  headerBorderWeight?: TableHeaderBorderWeight;
   /** Round the top-left / top-right outer corners (and draw a subtle outer border). Default `true`. */
   roundedTop?: boolean;
   /** Round the bottom-left / bottom-right outer corners (and draw a subtle outer border). Default `true`. */
@@ -39,8 +43,9 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
  *
  * Layout config is propagated via `data-*` attributes on the table element
  * (`data-size`, `data-striped`, `data-flush`, `data-header-border`,
- * `data-rounded-top`, `data-rounded-bottom`, `data-header-bg`). CSS reads
- * those selectors, eliminating the need for React context.
+ * `data-header-border-weight`, `data-rounded-top`, `data-rounded-bottom`,
+ * `data-header-bg`). CSS reads those selectors, eliminating the need for
+ * React context.
  *
  * @summary Themed data table with striped + size variants
  */
@@ -49,6 +54,7 @@ export function Table({
   size = 'default',
   flush = false,
   headerBorder = false,
+  headerBorderWeight = 'md',
   roundedTop = true,
   roundedBottom = true,
   headerBackground = 'secondary',
@@ -65,6 +71,7 @@ export function Table({
       data-size={size}
       data-flush={flush || undefined}
       data-header-border={headerBorder || undefined}
+      data-header-border-weight={headerBorder ? headerBorderWeight : undefined}
       data-rounded-top={roundedTop || undefined}
       data-rounded-bottom={roundedBottom || undefined}
       data-header-bg={headerBackground}
