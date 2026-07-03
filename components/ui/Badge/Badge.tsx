@@ -9,6 +9,14 @@ export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress'
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 
 /**
+ * Badge density — orthogonal to `size`, shared axis with Tag / BulletList / Table.
+ * - `comfortable` (default) — current spacing.
+ * - `compact` — tighter horizontal padding (one token-step down per size),
+ *   kept in sync with Tag so both align in dense rows. Height is unchanged.
+ */
+export type BadgeDensity = 'comfortable' | 'compact';
+
+/**
  * Badge fill appearance — shared axis with Chip (`solid | outline`) and
  * Tag (`solid | subtle`). Badge supports the two pastel-capable values.
  * - `solid`  — saturated status-color background, high emphasis.
@@ -24,6 +32,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   size?: BadgeSize;
   /** Fill appearance — solid (saturated bg) or subtle (pastel bg). */
   appearance?: BadgeAppearance;
+  /** Density — `compact` tightens horizontal padding for dense rows. Default `comfortable`. */
+  density?: BadgeDensity;
   /** Children content (optional for xs/icon-only size) */
   children?: ReactNode;
   /** Optional icon before text (required for xs size) */
@@ -56,6 +66,7 @@ export function Badge({
   status = 'info',
   size = 'md',
   appearance = 'solid',
+  density = 'comfortable',
   children,
   icon,
   className,
@@ -69,6 +80,7 @@ export function Badge({
     `bds-badge--${status}`,
     `bds-badge--${size}`,
     `bds-badge--${appearance}`,
+    density === 'compact' && 'bds-badge--compact',
     className
   );
 

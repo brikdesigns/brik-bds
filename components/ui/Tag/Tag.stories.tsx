@@ -21,6 +21,10 @@ const meta: Meta<typeof Tag> = {
       control: 'select',
       options: ['solid', 'subtle'],
     },
+    density: {
+      control: 'select',
+      options: ['comfortable', 'compact'],
+    },
     disabled: { control: 'boolean' },
     onRemove: { action: 'removed' },
   },
@@ -86,6 +90,16 @@ export const Variants: Story = {
           <Tag appearance="solid" icon={<Icon icon="ph:tag" />}>Solid + icon</Tag>
           <Tag appearance="subtle" icon={<Icon icon="ph:tag" />}>Subtle + icon</Tag>
         </Row>
+      </div>
+      <div>
+        <SectionLabel>Density (comfortable vs compact)</SectionLabel>
+        {(['sm', 'md', 'lg'] as const).map((size) => (
+          <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center', marginBottom: 'var(--gap-md)' }}>
+            <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
+            <Tag size={size} density="comfortable">Comfortable</Tag>
+            <Tag size={size} density="compact">Compact</Tag>
+          </div>
+        ))}
       </div>
       <div>
         <SectionLabel>With icons</SectionLabel>

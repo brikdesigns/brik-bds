@@ -25,6 +25,10 @@ const meta: Meta<typeof Badge> = {
       control: 'select',
       options: ['solid', 'subtle'],
     },
+    density: {
+      control: 'select',
+      options: ['comfortable', 'compact'],
+    },
   },
 };
 
@@ -125,6 +129,28 @@ export const Sizes: Story = {
       <Badge size="md" status="positive">Medium</Badge>
       <Badge size="lg" status="positive">Large</Badge>
     </Row>
+  ),
+};
+
+/**
+ * Density axis — `comfortable` (default) vs `compact` at each text size.
+ * Compact tightens horizontal padding one token-step down so more badges
+ * fit inline in a dense table row; height is unchanged. `xs` is icon-only
+ * and unaffected, so it's omitted here.
+ *
+ * @summary Comfortable vs compact density across sizes
+ */
+export const Density: Story = {
+  render: () => (
+    <Stack gap="var(--gap-lg)">
+      {(['sm', 'md', 'lg'] as const).map((size) => (
+        <Row key={size}>
+          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
+          <Badge size={size} status="positive" density="comfortable">Comfortable</Badge>
+          <Badge size={size} status="positive" density="compact">Compact</Badge>
+        </Row>
+      ))}
+    </Stack>
   ),
 };
 

@@ -82,6 +82,22 @@
   border-radius: var(--border-radius-md);
 }
 
+/* ─── Density (compact — tighter horizontal padding for dense rows) ── */
+/* `density="compact"` shifts horizontal padding one token-step down at
+   each text size (sm→xs, md/lg→sm) so more Tags fit inline in a dense
+   table row. Height and vertical padding are unchanged, preserving
+   side-by-side row alignment with Badge. xs is icon-only (no horizontal
+   padding) and is unaffected. */
+
+.bds-tag--compact.bds-tag--sm {
+  padding-inline: var(--padding-xs);
+}
+
+.bds-tag--compact.bds-tag--md,
+.bds-tag--compact.bds-tag--lg {
+  padding-inline: var(--padding-sm);
+}
+
 /* ─── Disabled ────────────────────────────────────────────────── */
 
 .bds-tag--disabled {
