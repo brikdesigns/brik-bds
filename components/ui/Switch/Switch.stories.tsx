@@ -32,6 +32,7 @@ const meta: Meta<typeof Switch> = {
   argTypes: {
     label: { control: 'text' },
     size: { control: 'radio', options: ['lg', 'md', 'sm'] },
+    variant: { control: 'radio', options: ['default', 'accent-knob'] },
     checked: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },
@@ -124,6 +125,36 @@ export const Variants: Story = {
           <Switch label="Disabled" disabled />
           <Switch label="Disabled checked" disabled defaultChecked />
           <Switch defaultChecked />
+        </Stack>
+      </div>
+    </Stack>
+  ),
+};
+
+/**
+ * Accent-knob variant — the track stays a neutral gray in both states and the
+ * knob carries state (brand-fill when on, muted-gray when off). Used where a
+ * subtler track reads better, e.g. an inline theme toggle.
+ * @summary Accent-knob variant across sizes and states
+ */
+export const AccentKnob: Story = {
+  render: () => (
+    <Stack gap="var(--gap-huge)">
+      <div>
+        <SectionLabel>Accent knob — unchecked</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          <Switch variant="accent-knob" size="lg" label="Large" />
+          <Switch variant="accent-knob" size="md" label="Medium" />
+          <Switch variant="accent-knob" size="sm" label="Small" />
+        </Stack>
+      </div>
+
+      <div>
+        <SectionLabel>Accent knob — checked</SectionLabel>
+        <Stack gap="var(--gap-lg)">
+          <Switch variant="accent-knob" size="lg" label="Large" defaultChecked />
+          <Switch variant="accent-knob" size="md" label="Medium" defaultChecked />
+          <Switch variant="accent-knob" size="sm" label="Small" defaultChecked />
         </Stack>
       </div>
     </Stack>

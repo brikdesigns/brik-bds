@@ -10,10 +10,20 @@ import './Switch.css';
 
 export type SwitchSize = 'lg' | 'md' | 'sm';
 
+export type SwitchVariant = 'default' | 'accent-knob';
+
 export interface SwitchProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   label?: ReactNode;
   size?: SwitchSize;
+  /**
+   * Visual variant. `default` carries state on the track (brand-fill when on,
+   * neutral when off) with a surface knob. `accent-knob` keeps the track a
+   * neutral gray in both states and carries state on the knob instead
+   * (brand-fill when on, muted-gray when off) — used where a subtler track
+   * reads better, e.g. an inline theme toggle. Default: `default`.
+   */
+  variant?: SwitchVariant;
   checked?: boolean;
   defaultChecked?: boolean;
   disabled?: boolean;
@@ -40,6 +50,7 @@ const sizes = {
 export function Switch({
   label,
   size = 'lg',
+  variant = 'default',
   checked,
   defaultChecked = false,
   disabled = false,
@@ -63,28 +74,44 @@ export function Switch({
   );
 
   const s = sizes[size];
+  const isAccentKnob = variant === 'accent-knob';
 
-  // Runtime-calculated track dimensions
+  // Runtime-calculated track dimensions.
+  // default: track carries state (brand-fill on / neutral off).
+  // accent-knob: track stays neutral in both states; the knob carries state.
   const trackStyle: CSSProperties = {
     width: `${s.trackW}px`, // bds-lint-ignore — Figma-driven switch dimensions
     height: `${s.trackH}px`, // bds-lint-ignore
-    backgroundColor: isChecked
-      ? 'var(--background-brand-primary)'
-      : 'var(--border-muted)', // bds-lint-ignore — no semantic switch-track-inactive token
+    backgroundColor:
+      isAccentKnob || !isChecked
+        ? 'var(--border-muted)' // bds-lint-ignore — no semantic switch-track-inactive token
+        : 'var(--background-brand-primary)',
   };
 
-  // Runtime-calculated knob dimensions + position
+  // Runtime-calculated knob dimensions + position. For accent-knob the knob
+  // carries state (brand-fill on / muted-gray off); default leaves the fill to
+  // Switch.css (--surface-primary).
   const knobStyle: CSSProperties = {
     top: `${s.pad}px`, // bds-lint-ignore
     left: `${s.pad}px`, // bds-lint-ignore
     width: `${s.knob}px`, // bds-lint-ignore
     height: `${s.knob}px`, // bds-lint-ignore
     transform: isChecked ? `translateX(${s.travel}px)` : 'translateX(0)',
+    ...(isAccentKnob && {
+      backgroundColor: isChecked
+        ? 'var(--background-brand-primary)'
+        : 'var(--text-secondary)',
+    }),
   };
 
   return (
     <label
-      className={bdsClass('bds-switch', disabled && 'bds-switch--disabled', className)}
+      className={bdsClass(
+        'bds-switch',
+        isAccentKnob && 'bds-switch--accent-knob',
+        disabled && 'bds-switch--disabled',
+        className,
+      )}
       style={style}
     >
       <input
