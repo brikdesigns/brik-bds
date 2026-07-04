@@ -326,20 +326,20 @@ export const TunableSpacing: Story = {
       <Stack gap="var(--gap-huge)">
         {/* Defaults */}
         <div>
-          <SectionLabel>Defaults — gap-sm content gap, padding-md divider breathing room</SectionLabel>
+          <SectionLabel>Defaults — gap-sm content gap, no default divider (padding-bottom 0)</SectionLabel>
           <PageHeader
             title="Default Header"
-            subtitle="Title↔subtitle gap = gap-sm. Default padding-md breathing room before the divider."
+            subtitle="Title↔subtitle gap = gap-sm. No default divider — a header with no tabs ends flush (padding-bottom 0)."
             actions={<Button variant="primary" size="sm">Action</Button>}
           />
         </div>
 
         {/* Tuned for clinical density (renew-pms) */}
         <div>
-          <SectionLabel>Tuned — wider content gap + extra divider breathing room</SectionLabel>
+          <SectionLabel>Tuned — wider content gap + restored bottom padding</SectionLabel>
           <PageHeader
             title="Tuned Header"
-            subtitle="Content gap widened to padding-sm; divider breathing room bumped past the default to padding-lg."
+            subtitle="Content gap widened to padding-sm; padding-bottom restored to padding-lg (e.g. when a consumer adds a manual divider)."
             actions={<Button variant="primary" size="sm">Action</Button>}
             style={{
               // bds-lint-ignore — component-scoped CSS variables, not design tokens
