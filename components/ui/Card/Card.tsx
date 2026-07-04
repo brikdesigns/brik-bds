@@ -1,5 +1,7 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
+import { Avatar, type AvatarSize, type AvatarStatus } from '../Avatar';
+import { Image } from '../Image';
 import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'borderless';
@@ -29,6 +31,49 @@ export type CardControlConnectionStatus =
  */
 export type CardDisplayRowImageWidth = 'narrow' | 'standard' | 'wide' | (string & {});
 
+/**
+ * Size for the default Card's leading `media` slot — a square keyed to the
+ * `Avatar` size scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so an
+ * avatar and a 1:1 image read at the same footprint. Default `md`.
+ */
+export type CardMediaSize = AvatarSize;
+export type CardMediaImageFit = 'contain' | 'cover';
+
+/** Avatar shape for the default Card's leading `media` slot. Mirrors `Avatar`. */
+export interface CardAvatarMedia {
+  /** Avatar image URL. Falls back to initials from `name` when absent. */
+  src?: string;
+  /** Accessible alt text for the avatar image. */
+  alt?: string;
+  /** Name used for the initials fallback when no image loads. */
+  name?: string;
+  /** Square size on the `Avatar` scale (default `md`). */
+  size?: CardMediaSize;
+  /** Presence indicator on the avatar. */
+  status?: AvatarStatus;
+}
+
+/** 1:1 image shape for the default Card's leading `media` slot. Mirrors `Image`. */
+export interface CardImageMedia {
+  /** Image URL. */
+  src: string;
+  /** Accessible alt text — required. */
+  alt: string;
+  /** Square size on the `Avatar` scale (default `md`). */
+  size?: CardMediaSize;
+  /** Fit inside the square — `contain` for logos (no crop), `cover` for photos. Default `contain`. */
+  fit?: CardMediaImageFit;
+}
+
+/**
+ * Leading media for the default Card — an `Avatar` OR a square 1:1 `Image` on
+ * the left, with `children` stacked to the right. Provide exactly one of
+ * `avatar` / `image`.
+ */
+export type CardMedia =
+  | { avatar: CardAvatarMedia; image?: never }
+  | { image: CardImageMedia; avatar?: never };
+
 export interface CardSummaryTextLink {
   label: string;
   href?: string;
@@ -53,6 +98,13 @@ interface CardDefaultProps extends CardBaseProps {
   interactive?: boolean;
   /** Render as `<a>` instead of `<div>`. */
   href?: string;
+  /**
+   * Optional leading media — an `Avatar` or a square 1:1 `Image` on the left,
+   * with `children` stacked to the right (the "media object" layout). Compose
+   * `<CardTitle>` / `<CardDescription>` / `<CardFooter>` in `children` as
+   * usual; they render in the content column. Omit for a plain vertical card.
+   */
+  media?: CardMedia;
   /** Card content — composes `<CardTitle>`, `<CardDescription>`, `<CardFooter>`, etc. */
   children: ReactNode;
 }
@@ -286,6 +338,19 @@ function formatSummaryValue(value: string | number, type: CardSummaryType): stri
  * </Card>
  * ```
  *
+ * @example Default with leading media (avatar / 1:1 image on the left)
+ * ```tsx
+ * <Card media={{ avatar: { src: u.avatar, name: u.name, status: 'online' } }}>
+ *   <CardTitle as="h4">{u.name}</CardTitle>
+ *   <CardDescription>{u.email}</CardDescription>
+ * </Card>
+ *
+ * <Card media={{ image: { src: org.logo, alt: `${org.name} logo`, fit: 'contain' } }}>
+ *   <CardTitle as="h4">{org.name}</CardTitle>
+ *   <CardDescription>{org.plan}</CardDescription>
+ * </Card>
+ * ```
+ *
  * @example Control preset
  * ```tsx
  * <Card
@@ -340,9 +405,33 @@ export function Card(props: CardProps) {
 
 const NAMED_IMAGE_WIDTHS: ReadonlySet<string> = new Set(['narrow', 'standard', 'wide']);
 
+/**
+ * Render the default Card's leading media slot — an `Avatar` or a square 1:1
+ * `Image`, keyed to the shared media-size scale. The card owns only the
+ * fixed-square wrapper (for images) and shrink-to-content sizing; the visual
+ * itself comes from the composed primitive.
+ */
+function renderCardMedia(media: CardMedia) {
+  if (media.avatar) {
+    const { src, alt, name, size = 'md', status } = media.avatar;
+    return (
+      <div className="bds-card__media">
+        <Avatar src={src} alt={alt} name={name} size={size} status={status} />
+      </div>
+    );
+  }
+  const { src, alt, size = 'md', fit = 'contain' } = media.image;
+  return (
+    <div className={bdsClass('bds-card__media', `bds-card__media--${size}`)}>
+      <Image src={src} alt={alt} ratio="1-1" fit={fit} />
+    </div>
+  );
+}
+
 function renderDefault({
   variant = 'outlined',
   children,
+  media,
   interactive = false,
   href,
   padding = 'md',
@@ -355,22 +444,35 @@ function renderDefault({
     'bds-card',
     `bds-card--${variant}`,
     `bds-card--padding-${padding}`,
+    media && 'bds-card--media',
     interactive && 'bds-card--interactive',
     href && 'bds-card--link',
     className,
   );
 
+  // With media, split into a leading media wrapper + a content column so
+  // children keep their vertical rhythm beside the avatar / image. Without
+  // media, render children directly — unchanged from the original layout.
+  const content = media ? (
+    <>
+      {renderCardMedia(media)}
+      <div className="bds-card__content">{children}</div>
+    </>
+  ) : (
+    children
+  );
+
   if (href) {
     return (
       <a href={href} className={classes} style={style} {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
-        {children}
+        {content}
       </a>
     );
   }
 
   return (
     <div className={classes} style={style} {...rest}>
-      {children}
+      {content}
     </div>
   );
 }

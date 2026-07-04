@@ -58,6 +58,51 @@
   color: inherit;
 }
 
+/* ─── Media (leading avatar / 1:1 image — "media object" layout) ── */
+/* Optional leading media on the default Card: an Avatar or a square 1:1 Image
+ * on the left, with content (children) stacked to the right. The card owns
+ * only the row layout + gap and the fixed-square image wrapper; the visual
+ * itself comes from the composed Avatar / Image primitive. Mirrors the
+ * TableAvatarCell / TableImageCell media cells. */
+
+.bds-card--media {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.bds-card__media {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.bds-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Fixed square wrapper for the 1:1 image variant, keyed to the Avatar size
+ * scale so an avatar and an image read at the same footprint. Avatars size
+ * themselves, so these modifiers apply only to image media. */
+.bds-card__media--sm,
+.bds-card__media--md,
+.bds-card__media--lg,
+.bds-card__media--xl {
+  overflow: hidden;
+  border-radius: var(--border-radius-sm);
+}
+
+/* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
+.bds-card__media--sm { width: 32px; }
+/* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
+.bds-card__media--md { width: 40px; }
+/* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
+.bds-card__media--lg { width: 48px; }
+/* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
+.bds-card__media--xl { width: 64px; }
+
 /* ─── Subcomponents ──────────────────────────────────────────── */
 
 .bds-card-title {
