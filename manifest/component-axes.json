@@ -324,6 +324,10 @@
       "lg",
       "md",
       "sm"
+    ],
+    "variant": [
+      "default",
+      "accent-knob"
     ]
   },
   "TabBar": {
