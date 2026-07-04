@@ -96,7 +96,10 @@
   --text-disabled: var(--color-grayscale-dark);
   /* Surface */
   --surface-primary: var(--color-grayscale-black);
-  --surface-secondary: var(--color-grayscale-darker);
+  /* darkest (#333) not darker (#4f4f4f): keeps --text-secondary (#bdbdbd) at
+     AA (~6.7:1) on this band. The #1106 grayscale-ramp sync lightened darker
+     to #4f4f4f, dropping the pair to 4.35:1. See brik-bds#1136. */
+  --surface-secondary: var(--color-grayscale-darkest);
   /* Brand canon: vibrant poppy-light base in dark mode too; state pair DARKENS
      on interaction (matches light mode + --background-brand-primary-hover/-pressed
      below). Brightening to poppy-lighter/-lightest made the white --text-on-color-dark

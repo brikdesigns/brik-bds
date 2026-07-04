@@ -7,6 +7,7 @@
     { "group": "neutral", "label": "Body text on surface", "fg": "--text-primary", "bg": "--surface-primary", "thresholdType": "AAA" },
     { "group": "neutral", "label": "Body text on background", "fg": "--text-primary", "bg": "--background-primary", "thresholdType": "AAA" },
     { "group": "neutral", "label": "Secondary text on page", "fg": "--text-secondary", "bg": "--page-primary", "thresholdType": "AA" },
+    { "group": "neutral", "label": "Secondary text on secondary surface", "fg": "--text-secondary", "bg": "--surface-secondary", "thresholdType": "AA" },
     { "group": "neutral", "label": "Muted text on page", "fg": "--text-muted", "bg": "--page-primary", "thresholdType": "AA-large" },
     { "group": "neutral", "label": "SegmentedControl inactive label on track", "fg": "--text-on-color-light", "bg": "--background-secondary", "thresholdType": "AA" },
     { "group": "neutral", "label": "Solid Tag / MultiSelect chip label on fill", "fg": "--text-on-color-light", "bg": "--background-secondary", "thresholdType": "AA" },

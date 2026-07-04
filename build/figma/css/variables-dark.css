@@ -52,7 +52,7 @@
   --background-service-product-on-dark: var(--color-purple-lighter);
   --background-service-information-on-dark: var(--color-blue-lighter);
   --surface-primary: var(--color-grayscale-black);
-  --surface-secondary: var(--color-grayscale-darker);
+  --surface-secondary: var(--color-grayscale-darkest);
   --surface-brand-primary: var(--color-poppy-light);
   --surface-inverse: var(--color-grayscale-white);
   --surface-overlay: var(--color-grayscale-black);
