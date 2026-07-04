@@ -1,0 +1,73 @@
+@layer bds-components {
+  /* ─── BlockQuote ─────────────────────────────────────────────────
+     Inline styled block-quote for narrative body content. Distinct
+     from Testimonial (a discrete card) — this flows within a longer
+     piece and optionally accents to a service line's color.
+  ───────────────────────────────────────────────────────────────── */
+
+  .bds-block-quote {
+    margin: 0;
+    padding: var(--padding-md) var(--padding-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    border-left: var(--border-width-xl) solid var(--border-primary);
+    border-radius: var(--border-radius-md);
+    background-color: var(--surface-secondary);
+  }
+
+  .bds-block-quote__body {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--heading-sm);
+    font-style: italic;
+    font-weight: var(--font-weight-regular);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
+  }
+
+  .bds-block-quote__attribution {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .bds-block-quote__cite {
+    font-family: var(--font-family-label);
+    font-size: var(--label-md);
+    font-weight: var(--font-weight-semibold);
+    font-style: normal;
+    line-height: var(--font-line-height-snug);
+    color: var(--text-muted);
+  }
+
+  /* ─── Service-line accents ───────────────────────────────────────
+     Left-border + soft tint from the per-line service tokens. */
+
+  .bds-block-quote--brand {
+    border-left-color: var(--border-service-brand);
+    background-color: var(--surface-service-brand-light);
+  }
+
+  .bds-block-quote--marketing {
+    border-left-color: var(--border-service-marketing);
+    background-color: var(--surface-service-marketing-light);
+  }
+
+  .bds-block-quote--information {
+    border-left-color: var(--border-service-information);
+    background-color: var(--surface-service-information-light);
+  }
+
+  .bds-block-quote--product {
+    border-left-color: var(--border-service-product);
+    background-color: var(--surface-service-product-light);
+  }
+
+  /* `service` is the deprecated alias of `back-office` — same orange tokens. */
+  .bds-block-quote--back-office,
+  .bds-block-quote--service {
+    border-left-color: var(--border-service-back-office);
+    background-color: var(--surface-service-back-office-light);
+  }
+}

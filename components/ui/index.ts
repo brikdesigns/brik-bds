@@ -13,6 +13,7 @@ export * from './Badge';
 export * from './BadgeGroup';
 export * from './Board';
 export * from './Banner';
+export * from './BlockQuote';
 export * from './BrikDevBar';
 export * from './Breadcrumb';
 export * from './BulletList';
