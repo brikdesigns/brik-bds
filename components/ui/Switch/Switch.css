@@ -7,8 +7,6 @@
   gap: var(--gap-md);
   cursor: pointer;
   user-select: none;
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
   color: var(--text-primary);
   text-transform: capitalize;
 }
@@ -17,6 +15,18 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ─── Label ──────────────────────────────────────────────────── */
+/* Label-family + per-size scale, matching the form-input family
+   (TextInput / Select / TextArea labels). */
+
+.bds-switch__label {
+  font-family: var(--font-family-label);
+}
+
+.bds-switch__label--sm { font-size: var(--label-sm); }
+.bds-switch__label--md { font-size: var(--label-md); }
+.bds-switch__label--lg { font-size: var(--label-lg); }
 
 /* ─── Hidden input ───────────────────────────────────────────── */
 
