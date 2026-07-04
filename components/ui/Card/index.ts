@@ -15,5 +15,11 @@ export {
   type CardSummaryTextLink,
   // Control-preset prop types for integration/connection-status cards.
   type CardControlConnectionStatus,
+  // Default-Card leading-media (avatar / 1:1 image) types.
+  type CardMedia,
+  type CardAvatarMedia,
+  type CardImageMedia,
+  type CardMediaSize,
+  type CardMediaImageFit,
 } from './Card';
 export { default } from './Card';

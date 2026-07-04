@@ -56,6 +56,10 @@ __grid
 __top
 __bottom
 __media             # any aspect-locked media frame; pairs with Frame primitive
+__media--sm         # square leading-media size on the Avatar scale (Card media slot)
+__media--md         # square leading-media size on the Avatar scale (Card media slot)
+__media--lg         # square leading-media size on the Avatar scale (Card media slot)
+__media--xl         # square leading-media size on the Avatar scale (Card media slot)
 __media-column      # column-shaped media region
 __sidebar
 __main

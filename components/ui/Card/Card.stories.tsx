@@ -32,6 +32,11 @@ const meta: Meta<typeof Card> = {
       description:
         'When set, renders the card as `<a>` instead of `<div>`. The whole card becomes the navigation target.',
     },
+    media: {
+      control: false,
+      description:
+        'Leading media (Default shape only) — `{ avatar: {…} }` or `{ image: {…} }`. Renders an `Avatar` or a square 1:1 `Image` on the left, with `children` stacked to the right. See `WithAvatar` / `WithImage`.',
+    },
   },
 };
 
@@ -110,6 +115,65 @@ export const Borderless: Story = {
           borderRadius: 'var(--border-radius-md)',
         }}
       >
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * Default Card with a leading `Avatar` — the "media object" layout. Pass
+ * `media={{ avatar: {…} }}`; the avatar renders on the left and `children`
+ * (`<CardTitle>` / `<CardDescription>`) stack to the right. The avatar falls
+ * back to initials from `name` when no `src` loads, and can carry a presence
+ * `status` dot. Size keys to the Avatar scale (`sm`/`md`/`lg`/`xl`).
+ *
+ * @summary media avatar — identity card (name + detail)
+ */
+export const WithAvatar: Story = {
+  args: {
+    variant: 'outlined',
+    padding: 'md',
+    media: { avatar: { name: 'Jordan Lee', status: 'online', size: 'lg' } },
+    children: (
+      <>
+        <CardTitle as="h4">Jordan Lee</CardTitle>
+        <CardDescription>jordan.lee@brikdesigns.com</CardDescription>
+      </>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 360 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * Default Card with a leading square 1:1 `Image` — the logo / thumbnail
+ * counterpart to `WithAvatar`. Pass `media={{ image: {…} }}` with `fit`
+ * (`contain` for logos, `cover` for photos). Size keys to the same scale as
+ * the avatar so the two read at an identical footprint.
+ *
+ * @summary media image — logo / thumbnail card
+ */
+export const WithImage: Story = {
+  args: {
+    variant: 'outlined',
+    padding: 'md',
+    media: { image: { src: '/brik-logo.svg', alt: 'Brik Designs logo', fit: 'contain', size: 'lg' } },
+    children: (
+      <>
+        <CardTitle as="h4">Brik Designs</CardTitle>
+        <CardDescription>Design system · Enterprise plan</CardDescription>
+      </>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 360 }}>
         <Story />
       </div>
     ),
