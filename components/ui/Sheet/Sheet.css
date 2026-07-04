@@ -266,7 +266,7 @@
   align-items: center;
   justify-content: center;
   color: var(--text-primary);
-  font-size: var(--icon-md);
+  font-size: var(--icon-lg);
   line-height: 1;
   border-radius: var(--border-radius-md);
   opacity: 0.6;
