@@ -206,6 +206,19 @@ img.bp-hero-img-card__icon {
   object-fit: contain;
 }
 
+/* Decorative icon slot (brik-bds#849) — sizes a passed SVG/Image node to the
+   same footprint as the img path; the node itself carries no img/alt semantics. */
+.bp-hero-img-card__icon-slot {
+  display: block;
+  width: var(--bds-hero-img-card-icon-size, 2.5rem);
+  height: var(--bds-hero-img-card-icon-size, 2.5rem);
+}
+
+.bp-hero-img-card__icon-slot > * {
+  width: 100%;
+  height: 100%;
+}
+
 .bp-hero-img-card__subtitle {
   margin: 0;
   font-family: var(--font-family-label);

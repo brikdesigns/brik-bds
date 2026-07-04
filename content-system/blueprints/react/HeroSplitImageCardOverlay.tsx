@@ -15,7 +15,7 @@
  *
  * @summary Interior-page split hero with image card + optional price overlay.
  */
-import type { MouseEvent } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
 import { Button } from '../../../components/ui/Button';
 import { Frame } from '../../../components/ui/Frame/Frame';
@@ -35,6 +35,14 @@ interface Props extends BlueprintProps {
    */
   showServiceTag?: boolean;
   /**
+   * Decorative eyebrow icon as a rendered node — pass an SVG component or a
+   * pre-configured `<Image>`. Takes precedence over `iconUrl` and the
+   * `audience` `<ServiceTag>`. Rendered inside an `aria-hidden` wrapper so
+   * purely-decorative art carries no `img`/`alt` semantics (brik-bds#849).
+   * React-only, like `onPriceCtaClick` — Astro blueprints can't pass a node.
+   */
+  icon?: ReactNode;
+  /**
    * Optional handler for the price-card CTA. When provided, the CTA's click is
    * intercepted (`preventDefault` + handler invoked) so consumers can trigger
    * an in-page action — e.g. open a modal — instead of navigating. The
@@ -49,6 +57,7 @@ export function HeroSplitImageCardOverlay({
   section,
   imageRatio = 'square',
   showServiceTag = true,
+  icon,
   onPriceCtaClick,
 }: Props) {
   const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
@@ -75,21 +84,28 @@ export function HeroSplitImageCardOverlay({
           )}
 
           {/*
-           * Eyebrow icon precedence (brik-bds#546):
-           *   1. If `iconUrl` is provided, render the raw `<img>` (legacy /
-           *      decorative-image escape hatch).
-           *   2. Otherwise, if `audience` is set, render the canonical
+           * Eyebrow icon precedence:
+           *   1. If `icon` (a rendered node) is provided, render it inside an
+           *      `aria-hidden` wrapper — decorative SVG/Image, no img/alt
+           *      semantics (brik-bds#849). React-only.
+           *   2. Else if `iconUrl` is provided, render the raw `<img>` (legacy /
+           *      decorative-image escape hatch, brik-bds#546).
+           *   3. Otherwise, if `audience` is set, render the canonical
            *      `<ServiceTag>` for that audience — the design-system path.
            *      Consumers stop supplying `iconUrl` for category badges; the
            *      blueprint resolves the icon via BDS's service-token system,
            *      keeping theme awareness intact.
-           *   3. If neither is set, no eyebrow renders.
+           *   4. If none is set, no eyebrow renders.
            *
            * `showServiceTag={false}` suppresses this whole slot while leaving
            * `data-audience` theming intact (brik-bds#871).
            */}
           {showServiceTag &&
-            (iconUrl ? (
+            (icon ? (
+              <span className="bp-hero-img-card__icon-slot" aria-hidden="true">
+                {icon}
+              </span>
+            ) : iconUrl ? (
               <img
                 src={iconUrl}
                 alt={iconAlt ?? ''}
