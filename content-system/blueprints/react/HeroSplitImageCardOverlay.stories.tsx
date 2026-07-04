@@ -181,6 +181,38 @@ export const NoServiceTag: Story = {
 };
 
 /**
+ * @summary Decorative icon slot (#849) — pass `icon` (a rendered SVG/Image node)
+ * to render a purely-decorative eyebrow with no `img`/`alt` semantics. The
+ * blueprint wraps it in an `aria-hidden` span, so screen readers skip it. Takes
+ * precedence over `iconUrl` and the `audience` ServiceTag; `iconUrl` still works
+ * unchanged for callers that pass a URL.
+ */
+export const DecorativeIconSlot: Story = {
+  args: {
+    ...baseProps,
+    icon: (
+      <svg viewBox="0 0 40 40" role="presentation">
+        <circle cx="20" cy="20" r="18" fill="currentColor" />
+      </svg>
+    ),
+    section: {
+      ...interiorHeroSection,
+      sectionKey: 'hero-img-card-icon-slot',
+    },
+  },
+  play: async ({ canvasElement }) => {
+    // The decorative slot renders and is hidden from the a11y tree...
+    const slot = canvasElement.querySelector('.bp-hero-img-card__icon-slot');
+    await expect(slot).not.toBeNull();
+    await expect(slot).toHaveAttribute('aria-hidden', 'true');
+    // ...and the legacy raw-<img> eyebrow path is not used.
+    await expect(
+      canvasElement.querySelector('img.bp-hero-img-card__icon'),
+    ).toBeNull();
+  },
+};
+
+/**
  * @summary Medium price-card CTA — opt in via `priceCard.cta.size="md"`.
  * The default is `sm` (see Playground); support-plan heroes that want a
  * weightier price-card action pass `md`. brikdesigns.com #453.
