@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import { Footer } from './Footer';
 import { type BdsLinkComponent } from '../NavItem';
 
@@ -129,6 +130,37 @@ export const WithLinkComponent: Story = {
       { label: 'Privacy', href: '/privacy' },
     ],
     linkComponent: MockLink,
+  },
+};
+
+/** @summary External column links open in a new tab with `rel="noopener noreferrer"` and bypass the router linkComponent */
+export const ExternalLinks: Story = {
+  args: {
+    logo: <LogoPlaceholder />,
+    columns: [
+      {
+        heading: 'Follow',
+        links: [
+          { label: 'Home', href: '/home' },
+          { label: 'LinkedIn', href: 'https://linkedin.com/company/brik', external: true },
+        ],
+      },
+    ],
+    copyright: '© 2026 Brik Designs.',
+    linkComponent: MockLink,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // External link → bare <a target=_blank rel=noopener noreferrer>, NOT routed.
+    const external = canvas.getByRole('link', { name: 'LinkedIn' });
+    await expect(external).toHaveAttribute('target', '_blank');
+    await expect(external).toHaveAttribute('rel', 'noopener noreferrer');
+    await expect(external).not.toHaveAttribute('data-link-component');
+    // Internal link in the same footer still routes through the linkComponent.
+    await expect(canvas.getByRole('link', { name: 'Home' })).toHaveAttribute(
+      'data-link-component',
+      'mock',
+    );
   },
 };
 

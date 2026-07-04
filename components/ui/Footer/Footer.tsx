@@ -14,6 +14,13 @@ export interface FooterColumnLink {
   /** Optional inline content rendered before the label — typically a colored
    * badge dot, icon, or other small adornment that signals link category */
   adornment?: ReactNode;
+  /**
+   * Open in a new tab with `rel="noopener noreferrer"` — for off-site links
+   * (social profiles, external resources). Renders a bare `<a>` even when a
+   * `linkComponent` is set, since client-side routing doesn't apply to
+   * external URLs. Default false.
+   */
+  external?: boolean;
 }
 
 /**
@@ -99,14 +106,25 @@ export type FooterVariant = 'default' | 'brand' | 'inverse';
 function FooterLink({
   linkComponent: LinkComponent,
   href,
+  external = false,
   className,
   children,
 }: {
   linkComponent?: BdsLinkComponent;
   href: string;
+  external?: boolean;
   className: string;
   children: ReactNode;
 }) {
+  // External links open in a new tab and bypass the router `linkComponent` —
+  // client-side routing doesn't apply to off-site URLs.
+  if (external) {
+    return (
+      <a href={href} className={className} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
+  }
   if (LinkComponent) {
     return (
       <LinkComponent href={href} className={className}>
@@ -216,6 +234,7 @@ export function Footer({
                     key={link.href + link.label}
                     linkComponent={linkComponent}
                     href={link.href}
+                    external={link.external}
                     className="bds-footer__link"
                   >
                     {link.adornment && (
