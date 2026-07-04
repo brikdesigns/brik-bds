@@ -1,0 +1,35 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './BlockQuote.stories';
+
+<Meta of={Stories} />
+
+# BlockQuote
+
+<ComponentLinks slug="block-quote" />
+
+Inline styled block-quote — `<figure>/<blockquote>/<figcaption>/<cite>` — for narrative body content like customer stories and blog posts. Optionally accents to a service line's color. Distinct from `Testimonial`, which is a discrete card with avatar / rating slots; BlockQuote flows within a longer piece.
+
+## Playground
+
+Toggle `quote`, `attribution`, and `serviceLine` via Controls.
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+### Neutral
+
+Omit `serviceLine` for the neutral treatment — default surface with a `--border-primary` left rule.
+
+<Canvas of={Stories.Neutral} />
+
+### Service-line accents
+
+Pass `serviceLine` to accent the left border + soft tint from that line's `--border-service-*` / `--surface-service-*-light` tokens.
+
+<Canvas of={Stories.ServiceLineAccents} />
+
+## Props
+
+<ArgTypes of={Stories} />
