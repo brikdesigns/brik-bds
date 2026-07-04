@@ -60,15 +60,15 @@
 }
 
 /* ── Tab variant ──
-   Bar baseline + per-tab indicator both live here (not inline) so that:
-   1. PageHeader can suppress its own root border when tabs are present via
-      `:has(.bds-page-header__tabs)` without inline-style specificity fights.
-   2. Width is consistent at `--border-width-sm` (1px) — chrome divider scale,
-      not the chunky xl scale this used to render at.
+   Bar baseline + per-tab indicator both live here (not inline) so that the
+   baseline is a real element border (not an inline style), keeping specificity
+   predictable when a tab bar is dropped into a PageHeader `tabs` slot.
+   Baseline width is `--border-width-md` (2px) — the brik structural default, so
+   the tab bar divider matches cards/inputs/nav rather than a 1px hairline.
 */
 
 .bds-tab-bar--tab {
-  border-bottom: var(--border-width-sm) solid var(--border-secondary);
+  border-bottom: var(--border-width-md) solid var(--border-secondary);
 }
 
 /* Items reserve the active-indicator's width (--border-width-lg = 4px) as a

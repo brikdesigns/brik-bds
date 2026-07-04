@@ -85,9 +85,11 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
  *   the title-row and the subtitle.
  * - `--page-header-actions-gap` (default `var(--gap-sm)` = 6px) — between
  *   the content column (title + subtitle) and the actions column.
- * - `--page-header-padding-bottom` (default `var(--padding-md)`) — breathing
- *   room between the subtitle and the bottom divider. Auto-zeroed when the
- *   `tabs` slot is filled (TabBar owns its own baseline + rhythm).
+ * - `--page-header-padding-bottom` (default `0`) — bottom padding below the
+ *   header. The header draws no default divider (a header with no `tabs` ends
+ *   flush against the body; a `tabs` slot renders TabBar's own 2px baseline),
+ *   so this is `0` unless a consumer restores a manual divider and wants
+ *   breathing room above it.
  *
  * @summary Page-level header — title, breadcrumbs, actions, tabs
  */
