@@ -12,7 +12,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="theme-brand-brik" suppressHydrationWarning>
       <body>
-        <RootProvider theme={{ attribute: ['class', 'data-theme'] }}>
+        {/* search type 'static' pairs with staticGET in app/api/search/route.ts:
+            the client downloads the prebuilt index once and searches in-browser,
+            avoiding the serverless cold start that made as-you-type search feel
+            broken on first use. */}
+        <RootProvider
+          theme={{ attribute: ['class', 'data-theme'] }}
+          search={{ options: { type: 'static' } }}
+        >
           {children}
         </RootProvider>
       </body>
