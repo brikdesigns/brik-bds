@@ -9,7 +9,7 @@
   --page-header-section-gap: var(--gap-xl);     /* between root sections (inner/metadata/tabs) */
   --page-header-content-gap: var(--gap-sm);     /* between title-row and subtitle */
   --page-header-actions-gap: var(--gap-sm);     /* between content column and actions column */
-  --page-header-padding-bottom: var(--padding-md); /* breathing room before the bottom divider */
+  --page-header-padding-bottom: 0; /* set to a padding token if a consumer restores a manual divider */
 
   display: flex;
   flex-direction: column;
@@ -18,18 +18,9 @@
   justify-content: center;
   width: 100%;
   padding-bottom: var(--page-header-padding-bottom); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  /* Single 1px divider hands the page header off to the body. When the `tabs`
-     slot is filled, TabBar's own baseline takes over (suppressed below) so we
-     don't stack two borders. */
-  border-bottom: var(--border-width-sm) solid var(--border-secondary);
-}
-
-/* Suppress root divider + bottom padding when tabs are present — TabBar provides
-   its own baseline and rhythm, so the breathing-room padding (which exists to
-   space the subtitle off the divider) would otherwise just push the tabs down. */
-.bds-page-header:has(.bds-page-header__tabs) {
-  border-bottom: none;
-  padding-bottom: 0; /* bds-lint-ignore — zeroing the component-scoped override */
+  /* No default divider. The header only draws a baseline when a `tabs` slot is
+     filled — TabBar renders its own 2px baseline. A header with no tabs ends
+     flush against the body (brik-bds#… / PORTAL-72). */
 }
 
 /* ─── Title row ──────────────────────────────────────────────── */
