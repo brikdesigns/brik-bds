@@ -28,6 +28,14 @@ The default shape also takes a `variant`: `outlined` (default, secondary border)
 
 <Canvas of={Stories.Borderless} />
 
+### Leading media (avatar / image)
+
+The default shape takes an optional `media` prop that turns the card into a horizontal "media object" — an `Avatar` or a square 1:1 `Image` on the left, with `children` stacked to the right. Pass exactly one of `media={{ avatar: {…} }}` or `media={{ image: {…} }}`. Both size to the shared Avatar scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so an avatar and an image read at the same footprint. The avatar falls back to initials from `name` and can carry a presence `status`; the image takes `fit` (`contain` for logos, `cover` for photos). Mirrors the `TableAvatarCell` / `TableImageCell` media cells.
+
+<Canvas of={Stories.WithAvatar} />
+
+<Canvas of={Stories.WithImage} />
+
 ### Control preset
 
 `preset="control"` — settings/control row. Leading `logo` + `badge` + (title + description) on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.

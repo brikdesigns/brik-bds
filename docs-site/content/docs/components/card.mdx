@@ -64,6 +64,22 @@ Compose freely with the Title / Description / Footer subcomponents.
 </Card>
 ```
 
+### Leading media (avatar / image)
+
+The `media` prop turns the default card into a horizontal "media object" — an `Avatar` or a square 1:1 `Image` on the left, with `children` stacked to the right. Pass exactly one of `avatar` / `image`. Both size to the shared Avatar scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px). The avatar falls back to initials from `name` and can carry a presence `status`; the image takes `fit` (`contain` for logos, `cover` for photos).
+
+```tsx
+<Card media={{ avatar: { name: 'Jordan Lee', status: 'online', size: 'lg' } }}>
+  <CardTitle as="h4">Jordan Lee</CardTitle>
+  <CardDescription>jordan.lee@brikdesigns.com</CardDescription>
+</Card>
+
+<Card media={{ image: { src: '/brik-logo.svg', alt: 'Brik Designs logo', fit: 'contain', size: 'lg' } }}>
+  <CardTitle as="h4">Brik Designs</CardTitle>
+  <CardDescription>Design system · Enterprise plan</CardDescription>
+</Card>
+```
+
 ## Control preset
 
 `preset="control"` is the canonical settings-row card. Locked layout: leading badge + (title + description) on the left, action slot on the right.
@@ -126,6 +142,7 @@ Compose freely with the Title / Description / Footer subcomponents.
 | `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
 | `interactive` | `boolean` | `false` |
 | `href` | `string` | — |
+| `media` | `{ avatar: CardAvatarMedia } \| { image: CardImageMedia }` | — |
 | `children` | `ReactNode` *(required)* | — |
 
 ### Control preset
