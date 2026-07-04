@@ -211,6 +211,20 @@
   margin-left: auto;
 }
 
+/* ─── Density (compact — tighter vertical padding for dense sheets) ── */
+/* `density="compact"` tightens the vertical padding one step on the
+   scrolling body (padding-block xl→lg) and the footer (lg→md) for
+   data-dense surfaces that need more content per viewport. Horizontal
+   padding is unchanged, so the body/footer stay aligned with the header. */
+
+.bds-sheet--compact .bds-sheet__body {
+  padding-block: var(--padding-lg);
+}
+
+.bds-sheet--compact .bds-sheet__footer {
+  padding-block: var(--padding-md);
+}
+
 /* ─── Stack frame transitions ──────────────────────────────────── */
 
 .bds-sheet-stack__frame {

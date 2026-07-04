@@ -19,6 +19,16 @@ export type SheetVariant = 'default' | 'floating';
 export type SheetMode = 'read' | 'edit';
 
 /**
+ * Sheet density — orthogonal to `variant`, shared axis with Tag / Badge /
+ * BulletList / Table.
+ * - `comfortable` (default) — current spacing.
+ * - `compact` — tighter vertical padding on the body and footer (body
+ *   `padding-block` xl→lg, footer lg→md) for data-dense sheets that need
+ *   more content per viewport. Horizontal padding is unchanged.
+ */
+export type SheetDensity = 'comfortable' | 'compact';
+
+/**
  * Where the `[Edit]` button in the read-mode footer takes the user.
  *
  * - `inline` (default) — flips this sheet to `mode='edit'`; consumer
@@ -99,6 +109,8 @@ export interface SheetProps {
    * - `floating` — rounded floating panel with elevation, no backdrop (read-only detail views)
    */
   variant?: SheetVariant;
+  /** Density — `compact` tightens body + footer vertical padding for data-dense sheets. Default `comfortable`. */
+  density?: SheetDensity;
   /** Close when the backdrop is clicked. Default `true`. Has no effect when `variant="floating"` (no backdrop). */
   closeOnBackdrop?: boolean;
   /** Close on `Escape` keypress. Default `true`. */
@@ -186,6 +198,7 @@ export function Sheet({
   description,
   width = '400px',
   variant = 'default',
+  density = 'comfortable',
   closeOnBackdrop = true,
   closeOnEscape = true,
   showCloseButton = true,
@@ -341,7 +354,7 @@ export function Sheet({
     <>
       {!isFloating && <div className="bds-sheet-backdrop" onClick={handleBackdropClick} />}
       <div
-        className={bdsClass('bds-sheet', `bds-sheet--${side}`, isFloating ? 'bds-sheet--floating' : '')}
+        className={bdsClass('bds-sheet', `bds-sheet--${side}`, isFloating ? 'bds-sheet--floating' : '', density === 'compact' ? 'bds-sheet--compact' : '')}
         role="dialog"
         aria-modal={!isFloating}
         style={widthStyle}

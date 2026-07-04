@@ -13,6 +13,7 @@ const meta: Meta<typeof Sheet> = {
   argTypes: {
     side: { control: 'select', options: ['right', 'left', 'bottom'], description: 'Screen edge the sheet anchors to.' },
     variant: { control: 'select', options: ['default', 'floating'], description: '`floating` drops the backdrop and elevates + rounds the panel.' },
+    density: { control: 'select', options: ['comfortable', 'compact'], description: '`compact` tightens body + footer vertical padding for data-dense sheets.' },
     mode: { control: 'select', options: [undefined, 'read', 'edit'], description: 'Drives the auto-footer — `read` → `[Close] [Edit]`, `edit` → `[Cancel] [Save]`.' },
     editTarget: { control: 'select', options: ['inline', 'page'], description: 'Semantic hint — `page` means `onEdit` navigates rather than flipping in place.' },
     title: { control: 'text', description: 'Header title.' },
@@ -177,6 +178,36 @@ export const Floating: Story = {
           isOpen={open}
           onClose={() => setOpen(false)}
           variant="floating"
+          subtitle="Company"
+          title="Brik Designs"
+          description="Active · Updated 2 days ago"
+          mode="read"
+          onEdit={() => alert('Switch to edit mode')}
+        >
+          <ReadOnlyFields />
+        </Sheet>
+      </>
+    );
+  },
+};
+
+/**
+ * Compact density tightens the body and footer vertical padding one step
+ * (body `padding-block` xl→lg, footer lg→md) for data-dense sheets that
+ * need more content per viewport. Horizontal padding is unchanged.
+ *
+ * @summary Compact density — tighter body + footer padding
+ */
+export const Compact: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>View company (compact)</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          density="compact"
           subtitle="Company"
           title="Brik Designs"
           description="Active · Updated 2 days ago"
