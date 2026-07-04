@@ -1,9 +1,11 @@
 # BDS Slot Allowlist
 
-**Status:** Canon source of truth — ADR-008
-**Format:** Each `## Category` heading owns a fenced `slots` code block. The lint reads these blocks; one slot per line, comments start with `#`. Anything in a `slots` code block is *allowed*. Anything not in any `slots` block is *banned* and fails the lint.
+**Status:** Governing reference — ADR-008
+**Format:** Each `## Category` heading owns a fenced `slots` code block; one slot per line, comments start with `#`. Slots listed here are the sanctioned BEM `__suffix` set; a slot not listed is off-pattern and should be justified in review.
 
-This file is the only allowlist. Don't enumerate slots elsewhere. To add a slot, edit this file, justify in the PR description, get review.
+> **Advisory only — not CI-asserted.** No lint currently parses these blocks. This file governs by review, not by an enforced gate. Making the claim true requires first reconciling the allowlist against the in-use slots not yet listed (155 of 221 as of 2026-07-04), then wiring the lint — tracked in [#1137](https://github.com/brikdesigns/brik-bds/issues/1137).
+
+This file is the intended single allowlist. Don't enumerate slots elsewhere. To add a slot, edit this file, justify in the PR description, get review.
 
 ## How to read this file
 
