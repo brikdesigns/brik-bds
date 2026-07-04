@@ -244,6 +244,16 @@
   margin: 0;
 }
 
+/* Compact density — tighter card for multi-card-per-column boards.
+   Title drops one step; subtitle reads as label-family metadata. */
+.bds-board-card--compact .bds-board-card__title {
+  font-size: var(--label-md);
+}
+.bds-board-card--compact .bds-board-card__subtitle {
+  font-family: var(--font-family-label);
+  text-transform: var(--text-transform-label);
+}
+
 /* Circular completion toggle styling lives in CompletionToggle.css —
    BoardCard delegates to <CompletionToggle> internally. The
    .bds-board-card__check class on the toggle is retained as a

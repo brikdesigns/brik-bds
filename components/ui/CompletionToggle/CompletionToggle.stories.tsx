@@ -19,6 +19,11 @@ const meta: Meta<typeof CompletionToggle> = {
       control: 'boolean',
       description: 'Locks the toggle — non-interactive, muted appearance.',
     },
+    accent: {
+      control: 'radio',
+      options: ['neutral', 'brand'],
+      description: 'Hover affordance on the incomplete state. `brand` tints the hover with a brand-primary border + brand-secondary fill.',
+    },
     onCheckedChange: {
       action: 'checked-changed',
       description: 'Called with the new boolean state when the toggle is clicked.',
@@ -41,6 +46,7 @@ export const Single: Story = {
   args: {
     checked: false,
     disabled: false,
+    accent: 'neutral',
   },
   render: (args) => {
     const [checked, setChecked] = useState(args.checked);

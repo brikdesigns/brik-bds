@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect } from 'storybook/test';
 import { Board } from './Board';
 import { BoardColumn } from './BoardColumn';
 import { BoardHeader } from './BoardHeader';
@@ -211,6 +212,71 @@ export const CardAccentColors: Story = {
       </BoardColumn>
     </Board>
   ),
+};
+
+/** @summary Card density — default vs compact */
+export const CardDensity: Story = {
+  name: 'Card — Density',
+  render: () => (
+    <Board style={{ height: '440px' }}>
+      <BoardColumn title="Default density" count={2}>
+        <BoardCard
+          title="Check and refill hand sanitizer stations"
+          subtitle="Due today"
+          accentColor="var(--background-accent-blue)"
+          checked={false}
+          onCheckedChange={() => {}}
+          tags={<Tag size="sm">Engineering</Tag>}
+          trailingTag={<Badge status="error" size="sm">Critical</Badge>}
+        />
+        <BoardCard
+          title="Clean countertops and surfaces"
+          subtitle="Due today"
+          accentColor="var(--background-accent-blue)"
+          tags={<Tag size="sm">Cleaning</Tag>}
+        />
+      </BoardColumn>
+      <BoardColumn title="Compact density" count={2}>
+        <BoardCard
+          density="compact"
+          checkAccent="brand"
+          title="Check and refill hand sanitizer stations"
+          subtitle="Due today"
+          accentColor="var(--background-accent-blue)"
+          checked={false}
+          onCheckedChange={() => {}}
+          tags={<Tag size="sm">Engineering</Tag>}
+          trailingTag={<Badge status="error" size="sm">Critical</Badge>}
+        />
+        <BoardCard
+          density="compact"
+          checkAccent="brand"
+          title="Clean countertops and surfaces"
+          subtitle="Due today"
+          accentColor="var(--background-accent-blue)"
+          tags={<Tag size="sm">Cleaning</Tag>}
+        />
+      </BoardColumn>
+    </Board>
+  ),
+  // Computed-style regression guard for the density typography contract —
+  // #412. Chromatic snapshot deferred (quota #771).
+  play: async ({ canvasElement }) => {
+    const defaultTitle = canvasElement.querySelector(
+      '.bds-board-card:not(.bds-board-card--compact) .bds-board-card__title',
+    ) as HTMLElement;
+    const compactTitle = canvasElement.querySelector(
+      '.bds-board-card--compact .bds-board-card__title',
+    ) as HTMLElement;
+    const compactSubtitle = canvasElement.querySelector(
+      '.bds-board-card--compact .bds-board-card__subtitle',
+    ) as HTMLElement;
+
+    await expect(getComputedStyle(defaultTitle).fontSize).toBe('18px'); // --label-lg
+    await expect(getComputedStyle(compactTitle).fontSize).toBe('16px'); // --label-md
+    // Compact subtitle reads as label-family metadata (capitalize).
+    await expect(getComputedStyle(compactSubtitle).textTransform).toBe('capitalize');
+  },
 };
 
 // ─── Full board (headers + cards) ────────────────────────────────────────────
