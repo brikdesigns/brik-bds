@@ -243,6 +243,12 @@ export const Actions: Story = {
           { icon: Icons.Sort, label: 'Sort' },
         ]} />
       </div>
+      <div>
+        {/* Canonical CRUD + integration-lifecycle set (#1127) — semantic name → glyph.
+            Public via `import { ACTION_ICONS } from '@brikdesigns/bds'`. */}
+        <SectionLabel>Lifecycle actions (ACTION_ICONS)</SectionLabel>
+        <IconGrid icons={Object.entries(Icons.ACTION_ICONS).map(([name, icon]) => ({ icon, label: name }))} />
+      </div>
     </Stack>
   ),
 };
