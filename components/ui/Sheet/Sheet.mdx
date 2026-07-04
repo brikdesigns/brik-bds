@@ -36,6 +36,12 @@ Edit mode is the active form state — footer auto-renders `[Cancel] [Save]`. Pa
 
 <Canvas of={Stories.Floating} />
 
+### Compact density
+
+`density="compact"` (orthogonal to `variant`; shared axis with Tag, Badge, BulletList, Table) tightens the body and footer vertical padding one step — body `padding-block` xl→lg, footer lg→md — for data-dense sheets. Default `comfortable` is unchanged. Horizontal padding stays put, so the body/footer keep alignment with the header.
+
+<Canvas of={Stories.Compact} />
+
 ## Patterns
 
 ### Read ↔ edit toggle
