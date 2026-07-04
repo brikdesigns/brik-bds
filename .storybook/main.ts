@@ -43,6 +43,25 @@ const config: StorybookConfig = {
   docs: {
     defaultName: 'Overview',
   },
+  async viteFinal(config) {
+    const { mergeConfig } = await import('vite');
+    // Pre-bundle every third-party runtime dep our components import. Storybook
+    // lazy-loads story modules, so a dep first seen when navigating to a story
+    // (e.g. lottie-react via AnimatedIcon) triggers a mid-session dep re-optimize
+    // + full reload — which 404s any module the browser is mid-fetching and
+    // surfaces as "Failed to fetch dynamically imported module". Declaring them
+    // up front means the optimizer bundles them once at startup and never churns.
+    return mergeConfig(config, {
+      optimizeDeps: {
+        include: [
+          '@iconify/react',
+          '@radix-ui/react-collapsible',
+          '@radix-ui/react-popover',
+          'lottie-react',
+        ],
+      },
+    });
+  },
 };
 
 export default config;
