@@ -30,6 +30,13 @@
     border-color: var(--border-primary);
   }
 
+  /* Brand-accent hover — tints only the incomplete (unchecked) state so a
+     checked toggle keeps its stable brand-primary fill on hover. */
+  .bds-completion-toggle--accent-brand:not(.bds-completion-toggle--checked):hover {
+    border-color: var(--border-brand-primary);
+    background-color: var(--background-brand-secondary);
+  }
+
   .bds-completion-toggle:focus-visible {
     outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
     outline-offset: 2px;
