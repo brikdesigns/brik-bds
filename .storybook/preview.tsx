@@ -13,6 +13,7 @@ addCollection(phData as Parameters<typeof addCollection>[0]);
 
 // Feedback widget — floating FAB in preview iframe
 import { FeedbackWidget } from './FeedbackWidget';
+import isChromatic from 'chromatic/isChromatic';
 
 // Import token CSS in cascade order:
 // 1. Figma tokens (SD output — primitives + semantic defaults)
@@ -279,7 +280,11 @@ const preview: Preview = {
     devWidgets: {
       name: 'Dev Widgets',
       description: 'Show the Brik DevBar + Feedback widget in the preview',
-      defaultValue: 'off',
+      // Default 'on' so the feedback widget collects design-system feedback
+      // from every visitor without requiring the toolbar toggle. Flip to 'off'
+      // via the wrench toolbar when a story needs a clean canvas (e.g. visual
+      // regression snapshots).
+      defaultValue: 'on',
       toolbar: {
         icon: 'wrench',
         items: [
@@ -292,12 +297,16 @@ const preview: Preview = {
   },
   decorators: [
     withTheme,
-    // Feedback widget — opt-in via the Dev Widgets toolbar toggle so it
-    // doesn't register into the DevBar on every story by default.
+    // Feedback widget — on by default (devWidgets global) so every visitor to
+    // storybook.brikdesigns.com can submit design-system feedback. Suppressed
+    // under Chromatic so the FAB never appears in visual-regression snapshots;
+    // toggle off via the wrench toolbar for a clean canvas locally.
     (Story, context) => (
       <>
         <Story />
-        {context.globals.devWidgets === 'on' && <FeedbackWidget />}
+        {context.globals.devWidgets === 'on' && !isChromatic() && (
+          <FeedbackWidget />
+        )}
       </>
     ),
   ],
