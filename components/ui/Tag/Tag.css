@@ -116,13 +116,13 @@
 
 /* Icon font-size matches container so the glyph fills the box */
 .bds-tag--xs .bds-tag__icon {
-  font-size: var(--icon-xs);
+  font-size: var(--icon-sm);
 }
 
 .bds-tag--sm .bds-tag__icon {
-  width: 14px;
-  height: 14px;
-  font-size: var(--icon-xs);
+  width: 16px;
+  height: 16px;
+  font-size: var(--icon-sm);
 }
 
 .bds-tag--md .bds-tag__icon {
