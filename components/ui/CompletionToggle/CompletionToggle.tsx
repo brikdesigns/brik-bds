@@ -10,6 +10,12 @@ export interface CompletionToggleProps
   onCheckedChange: (checked: boolean) => void;
   /** Disabled — locks the toggle and applies muted styling. */
   disabled?: boolean;
+  /**
+   * Hover affordance for the incomplete (unchecked) state. `neutral`
+   * (default) borders in `--border-primary`; `brand` tints the hover with a
+   * brand-primary border + brand-secondary fill, reading as "interactive".
+   */
+  accent?: 'neutral' | 'brand';
 }
 
 /**
@@ -41,6 +47,7 @@ export const CompletionToggle = forwardRef<HTMLButtonElement, CompletionTogglePr
       checked,
       onCheckedChange,
       disabled = false,
+      accent = 'neutral',
       className,
       'aria-label': ariaLabel,
       onClick,
@@ -56,6 +63,7 @@ export const CompletionToggle = forwardRef<HTMLButtonElement, CompletionTogglePr
           'bds-completion-toggle',
           checked && 'bds-completion-toggle--checked',
           disabled && 'bds-completion-toggle--disabled',
+          accent === 'brand' && 'bds-completion-toggle--accent-brand',
           className,
         )}
         disabled={disabled}

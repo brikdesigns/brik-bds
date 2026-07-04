@@ -41,6 +41,17 @@ export interface BoardCardProps extends HTMLAttributes<HTMLDivElement> {
   tags?: ReactNode;
   /** Tag rendered in the bottom-right (priority) */
   trailingTag?: ReactNode;
+  /**
+   * Density. `default` uses the standard title/subtitle scale; `compact`
+   * drops the title one step (label-md) and renders the subtitle in
+   * label-family metadata style — for dense, multi-card-per-column boards.
+   */
+  density?: 'default' | 'compact';
+  /**
+   * Hover affordance on the completion toggle. Forwarded to
+   * `<CompletionToggle accent>` — `brand` reads as "interactive". Default `neutral`.
+   */
+  checkAccent?: 'neutral' | 'brand';
 }
 
 export function BoardCard({
@@ -51,6 +62,8 @@ export function BoardCard({
   onCheckedChange,
   tags,
   trailingTag,
+  density = 'default',
+  checkAccent = 'neutral',
   className,
   style,
   ...props
@@ -60,6 +73,7 @@ export function BoardCard({
       className={bdsClass(
         'bds-board-card',
         checked && 'bds-board-card--checked',
+        density === 'compact' && 'bds-board-card--compact',
         className
       )}
       style={{
@@ -79,6 +93,7 @@ export function BoardCard({
             className="bds-board-card__check"
             checked={checked}
             onCheckedChange={onCheckedChange}
+            accent={checkAccent}
           />
         )}
       </div>
