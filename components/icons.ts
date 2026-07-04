@@ -79,3 +79,42 @@ export const Briefcase = 'ph:briefcase';
 export const GraduationCap = 'ph:graduation-cap';
 export const Stethoscope = 'ph:stethoscope';
 export const Rotate = 'ph:arrows-clockwise';
+// Integration lifecycle — connect / disconnect glyphs (brikdesigns/brik-bds#1127)
+export const PlugsConnected = 'ph:plugs-connected';
+export const LinkBreak = 'ph:link-break';
+
+// ── Canonical CRUD + integration-lifecycle action set ──────────────────────
+// Single source of truth for action-button glyphs across CRUD forms and
+// integration/source cards, so the same action can't drift to different glyphs
+// per surface (brikdesigns/brik-bds#1127). Every glyph here is a `ph:*` literal
+// under `components/`, so `npm run gen:icons` bundles it into the offline subset
+// — these resolve with no runtime CDN fetch.
+//
+// Consume as an icon-only Button inside a ButtonGroup — never the deprecated
+// IconButton:
+//   import { ACTION_ICONS, Icon, Button, ButtonGroup } from '@brikdesigns/bds';
+//   <ButtonGroup>
+//     <Button icon={<Icon icon={ACTION_ICONS.sync} />} label="Sync" />
+//     <Button icon={<Icon icon={ACTION_ICONS.disconnect} />} label="Disconnect" variant="destructive" />
+//   </ButtonGroup>
+export const ACTION_ICONS = {
+  /** Read / inspect a record. */
+  view: Eye,
+  /** Open in an external system (new tab). */
+  openExternal: ArrowSquareOut,
+  /** Manual sync / refresh from a source. */
+  sync: Rotate,
+  /** Set up / connect an integration (the not-configured affordance). */
+  connect: PlugsConnected,
+  /** Disconnect / unlink an integration. */
+  disconnect: LinkBreak,
+  /** Edit an existing record. */
+  edit: Pen,
+  /** Delete a record (destructive). */
+  delete: Trash,
+  /** Add / create a new record. */
+  add: Plus,
+} as const;
+
+/** Semantic action names in {@link ACTION_ICONS}. */
+export type ActionIconName = keyof typeof ACTION_ICONS;
