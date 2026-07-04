@@ -59,6 +59,12 @@ export const Playground: Story = {
     // passes on it. getByRole('switch') itself asserts it's in the DOM.
     const toggle = canvas.getByRole('switch');
 
+    // Label typography scales with size + uses label-family, matching the
+    // form-input family (TextInput / Select / TextArea) — #409. Default lg → label-lg (18px).
+    const label = canvas.getByText('Enable feature');
+    await expect(label).toHaveClass('bds-switch__label--lg');
+    await expect(getComputedStyle(label).fontSize).toBe('18px');
+
     await expect(toggle).not.toBeChecked();
     await userEvent.click(toggle);
     await waitFor(() => expect(args.onChange).toHaveBeenCalledTimes(1));

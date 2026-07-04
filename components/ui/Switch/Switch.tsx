@@ -100,7 +100,11 @@ export function Switch({
       <span className="bds-switch__track" style={trackStyle}>
         <span className="bds-switch__knob" style={knobStyle} />
       </span>
-      {label && <span>{label}</span>}
+      {label && (
+        <span className={bdsClass('bds-switch__label', `bds-switch__label--${size}`)}>
+          {label}
+        </span>
+      )}
     </label>
   );
 }
