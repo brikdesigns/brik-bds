@@ -204,11 +204,13 @@ interface CardSummaryPresetProps extends CardBaseProps {
 
 interface CardDisplayPresetProps extends CardBaseProps {
   /**
-   * Display preset — generic content card for any item rendered in a
-   * card grid (service, blog post, customer story, property listing,
-   * team bio, support plan). All affordances are optional + prop-toggled
-   * so a single primitive serves every content type. Used by the
-   * `bds-card-grid` blueprint.
+   * Display preset — the **cell of a `CardGrid`**, not a standalone card. Per
+   * [ADR-018](../../../docs/adrs/ADR-018-card-preset-boundary.md) a display card
+   * only exists inside a `CardGrid` Section (which owns the columns); this
+   * preset is the malleable, content-agnostic cell it repeats. All affordances
+   * are optional + prop-toggled so one cell serves any content type — service,
+   * blog post, customer story, property listing, team bio, support plan.
+   * Compose `<CardGrid>` + `<Card preset="display">`.
    */
   preset: 'display';
   /**
@@ -263,11 +265,12 @@ interface CardDisplayPresetProps extends CardBaseProps {
 
 interface CardDisplayRowPresetProps extends CardBaseProps {
   /**
-   * Display-row preset — horizontal sibling of `preset="display"`. Image on
-   * the left, content (tag, title, description, action) on the right. Use
-   * for single-card sections where vertical layout wastes horizontal space:
-   * Related Customer Story, Recommended Add-On, featured plan. Collapses
-   * to a vertical stack at ≤ 640px.
+   * Display-row preset — the horizontal `CardGrid` cell / section row (per
+   * [ADR-018](../../../docs/adrs/ADR-018-card-preset-boundary.md)), not a
+   * standalone card. Image on the left, content (tag, title, description,
+   * action) on the right. Use for single-row sections where a vertical layout
+   * wastes horizontal space: Related Customer Story, Recommended Add-On,
+   * featured plan. Collapses to a vertical stack at ≤ 640px.
    */
   preset: 'display-row';
   /** Card heading. Renders as `<h3>` with `--font-family-heading` + `--heading-md`. */

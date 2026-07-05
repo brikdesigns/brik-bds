@@ -1,9 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, CardTitle, CardDescription, CardFooter } from './Card';
-import { Avatar } from '../Avatar';
+import { Logo } from '../Logo';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
 import { PricingCard } from '../PricingCard';
+
+/* Story-only 1:1 product thumbnail (data URI, no network) — a schematic
+   iPhone standing in for a real product photo in the media-image demo. */
+const iphoneThumb =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' +
+      '<rect width="200" height="200" fill="#eef1f4"/>' +
+      '<rect x="72" y="24" width="56" height="152" rx="15" fill="#1c1c1e"/>' +
+      '<rect x="77" y="32" width="46" height="136" rx="8" fill="#3a7bd5"/>' +
+      '<rect x="90" y="28" width="20" height="5" rx="2.5" fill="#0d0d0f"/>' +
+      '<rect x="88" y="170" width="24" height="3" rx="1.5" fill="#48484a"/>' +
+      '</svg>',
+  );
 
 const meta: Meta<typeof Card> = {
   title: 'Containers/card',
@@ -35,7 +49,7 @@ const meta: Meta<typeof Card> = {
     media: {
       control: false,
       description:
-        'Leading media (Default shape only) — `{ avatar: {…} }` or `{ image: {…} }`. Renders an `Avatar` or a square 1:1 `Image` on the left, with `children` stacked to the right. See `WithAvatar` / `WithImage`.',
+        'Leading 1:1 media (Default shape only) — `{ avatar: {…} }`, `{ image: {…} }`, or `{ logo: { set, name } }`. Renders an `Avatar`, a square `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. See `WithAvatar` / `WithImage` / `WithLogo`.',
     },
   },
 };
@@ -152,22 +166,23 @@ export const WithAvatar: Story = {
 };
 
 /**
- * Default Card with a leading square 1:1 `Image` — the logo / thumbnail
+ * Default Card with a leading square 1:1 `Image` — an arbitrary thumbnail
  * counterpart to `WithAvatar`. Pass `media={{ image: {…} }}` with `fit`
- * (`contain` for logos, `cover` for photos). Size keys to the same scale as
- * the avatar so the two read at an identical footprint.
+ * (`cover` for photos, `contain` for artwork). Size keys to the same scale as
+ * the avatar so the two read at an identical footprint. For a bundled brand
+ * mark, prefer `media={{ logo }}` (see `WithLogo`) over a raw image `src`.
  *
- * @summary media image — logo / thumbnail card
+ * @summary media image — square 1:1 thumbnail card
  */
 export const WithImage: Story = {
   args: {
     variant: 'outlined',
     padding: 'md',
-    media: { image: { src: '/brik-logo.svg', alt: 'Brik Designs logo', fit: 'contain', size: 'lg' } },
+    media: { image: { src: iphoneThumb, alt: 'iPhone 15 Pro', fit: 'cover', size: 'lg' } },
     children: (
       <>
-        <CardTitle as="h4">Brik Designs</CardTitle>
-        <CardDescription>Design system · Enterprise plan</CardDescription>
+        <CardTitle as="h4">iPhone 15 Pro</CardTitle>
+        <CardDescription>Device · In stock</CardDescription>
       </>
     ),
   },
@@ -181,114 +196,53 @@ export const WithImage: Story = {
 };
 
 /**
- * `preset="control"` — locked-down settings/control card layout. Replaces
- * the legacy `CardControl` component (ADR-004). Renders a leading badge +
- * (title + description) on the left, action slot on the right. Toggle
- * `actionAlign` to anchor the action to the upper-right corner instead of
- * the vertical midline.
+ * Default Card with a leading square 1:1 bundled `Logo` — the third-party /
+ * integration counterpart to `WithAvatar`. Pass `media={{ logo: { set, name } }}`;
+ * the full-color brand mark renders contained in the square at the shared media
+ * scale. Use this for integration and payment rows instead of a raw image `src`.
  *
- * @summary preset="control" — settings/control card
+ * @summary media logo — integration / brand card
+ */
+export const WithLogo: Story = {
+  args: {
+    variant: 'outlined',
+    padding: 'md',
+    media: { logo: { set: 'integration', name: 'notion', size: 'lg' } },
+    children: (
+      <>
+        <CardTitle as="h4">Notion</CardTitle>
+        <CardDescription>Meetings database · Connected</CardDescription>
+      </>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 360 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * `preset="control"` — locked-down settings / integration-row layout (replaces
+ * the legacy `CardControl` component, ADR-004). A leading `logo` + `badge` +
+ * (title + description) on the left; a trailing `connectionStatus` indicator +
+ * `action` on the right. Shown here as the canonical integration card.
+ *
+ * `connectionStatus`, `lastSynced`, and `actionAlign` are **Controls** — the
+ * status is a *state of one card*, not a set of card variants, so cycle it in
+ * the Controls panel (`not-configured` → `connected` → `syncing` → `synced` →
+ * `error`) rather than reaching for separate stories.
+ *
+ * @summary preset="control" — integration card (status = Control)
  */
 export const Control: Story = {
   args: {
     preset: 'control',
-    title: 'Email notifications',
-    description: 'Send a weekly digest to your inbox.',
-    badge: <Badge status="positive">On</Badge>,
-    action: (
-      <Button variant="outline" size="sm">
-        Configure
-      </Button>
-    ),
-    actionAlign: 'center',
-  },
-  argTypes: {
-    variant: { table: { disable: true } },
-    padding: { table: { disable: true } },
-    interactive: { table: { disable: true } },
-    href: { table: { disable: true } },
-    actionAlign: {
-      control: 'radio',
-      options: ['center', 'top'],
-      description:
-        'Vertical alignment of the action slot. `top` anchors the action to the upper-right corner; `center` (default) aligns to the vertical midline.',
-    },
-    logo: {
-      control: false,
-      description:
-        'Optional leading logo / avatar slot — for integration logomarks or brand icons. Renders before `badge` in the content row.',
-    },
-    connectionStatus: {
-      control: 'select',
-      options: ['not-configured', 'connected', 'syncing', 'synced', 'error'],
-      description:
-        'Connection-status state. Renders a dot + label in the trailing block alongside the `action` slot.',
-    },
-    lastSynced: {
-      control: 'text',
-      description:
-        'Human-readable "last synced" label displayed below the status indicator. Only shown when `connectionStatus` is set and is not `not-configured`.',
-    },
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 560 }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * `preset="control"` with the `logo` slot — an `<Avatar>` logomark leading
- * the content row. The logo renders before the `badge` and is sized by the
- * consumer element (Avatar `size` prop). Use for integration / third-party
- * service cards where a visual brand identifier anchors the row.
- *
- * @summary preset="control" with avatar logo slot
- */
-export const ControlWithLogo: Story = {
-  args: {
-    preset: 'control',
-    title: 'Google Analytics',
-    description: 'Pull session and conversion data into your dashboard.',
-    logo: <Avatar name="GA" size="sm" />,
-    action: (
-      <Button variant="outline" size="sm">
-        Configure
-      </Button>
-    ),
-    actionAlign: 'center',
-  },
-  argTypes: {
-    variant: { table: { disable: true } },
-    padding: { table: { disable: true } },
-    interactive: { table: { disable: true } },
-    href: { table: { disable: true } },
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 560 }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * `preset="control"` with `connectionStatus="synced"` and `lastSynced` — the
- * full integration card shape. The trailing block stacks the status indicator
- * above the action. All five status states (`not-configured`, `connected`,
- * `syncing`, `synced`, `error`) are exercised in `ControlConnectionStatuses`.
- *
- * @summary preset="control" — integration card with status + action
- */
-export const ControlWithConnectionStatus: Story = {
-  args: {
-    preset: 'control',
-    title: 'Google Analytics',
-    description: 'Pull session and conversion data into your dashboard.',
-    logo: <Avatar name="GA" size="sm" />,
+    logo: <Logo set="integration" name="notion" size="sm" />,
+    title: 'Notion Meetings Database',
+    description: 'Discovery-call meeting notes for proposal generation.',
     connectionStatus: 'synced',
     lastSynced: 'Last synced 3 min ago',
     action: (
@@ -303,14 +257,27 @@ export const ControlWithConnectionStatus: Story = {
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
     href: { table: { disable: true } },
+    actionAlign: {
+      control: 'radio',
+      options: ['center', 'top'],
+      description:
+        'Vertical alignment of the trailing block. `top` anchors it to the upper-right corner; `center` aligns to the vertical midline.',
+    },
+    logo: {
+      control: false,
+      description:
+        'Leading logo slot — a `<Logo>` for an integration / third-party service, or an `<Avatar>` for an account. Renders before `badge` in the content row.',
+    },
     connectionStatus: {
       control: 'select',
       options: ['not-configured', 'connected', 'syncing', 'synced', 'error'],
-      description: 'Connection-status state.',
+      description:
+        'Connection-status state (a state of this one card, not a variant). Renders a status indicator in the trailing block alongside the `action`.',
     },
     lastSynced: {
       control: 'text',
-      description: 'Last-synced timestamp label.',
+      description:
+        'Human-readable "last synced" label below the status indicator. Shown only when `connectionStatus` is set and is not `not-configured`.',
     },
   },
   decorators: [
@@ -320,45 +287,6 @@ export const ControlWithConnectionStatus: Story = {
       </div>
     ),
   ],
-};
-
-/**
- * All five `connectionStatus` states side-by-side — `not-configured`,
- * `connected`, `syncing`, `synced`, `error`. Each row carries the same logo
- * and action slot so the only variable is the status indicator.
- *
- * @summary connectionStatus — all five states (axis gallery)
- */
-export const ControlConnectionStatuses: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)', width: 600 }}>
-      {(
-        [
-          { status: 'not-configured', lastSynced: undefined } ,
-          { status: 'connected',      lastSynced: undefined } ,
-          { status: 'syncing',        lastSynced: undefined } ,
-          { status: 'synced',         lastSynced: 'Last synced 3 min ago' } ,
-          { status: 'error',          lastSynced: 'Failed 12 min ago' } ,
-        ] as const
-      ).map(({ status, lastSynced }) => (
-        <Card
-          key={status}
-          preset="control"
-          title="Google Analytics"
-          description="Pull session and conversion data into your dashboard."
-          logo={<Avatar name="GA" size="sm" />}
-          connectionStatus={status}
-          lastSynced={lastSynced}
-          actionAlign="top"
-          action={
-            <Button variant="outline" size="sm">
-              Configure
-            </Button>
-          }
-        />
-      ))}
-    </div>
-  ),
 };
 
 /**
@@ -399,13 +327,16 @@ export const Summary: Story = {
 };
 
 /**
- * `preset="display"` — generic content card for `bds-card-grid`. Optional
- * slot props (`image`, `tag`, `badge`, `action`, `href`) so a single
- * primitive serves any content type — service, blog post, customer story,
- * property listing, team bio, support plan. Toggle each slot via Controls
- * to see the minimal and clickable variants.
+ * `preset="display"` — the **cell of a `CardGrid`**, not a standalone card
+ * (see [ADR-018](../../../docs/adrs/ADR-018-card-preset-boundary.md)): a display
+ * card only exists inside a `CardGrid` Section, which owns the columns. One
+ * malleable cell serves any content type — service, blog post, customer story,
+ * property listing, team bio, support plan — via optional slot props (`image`,
+ * `tag`, `badge`, `action`, `href`). The `variant` Control switches the surface
+ * treatment for cells on a colored (service-tinted) grid: `borderless`
+ * (transparent) or `elevated` (fill + shadow).
  *
- * @summary preset="display" — content-grid card
+ * @summary preset="display" — CardGrid cell
  */
 export const Display: Story = {
   args: {
@@ -436,7 +367,13 @@ export const Display: Story = {
     ),
   },
   argTypes: {
-    variant: { table: { disable: true } },
+    variant: {
+      control: 'inline-radio',
+      options: ['default', 'borderless', 'elevated'],
+      mapping: { default: undefined, borderless: 'borderless', elevated: 'elevated' },
+      description:
+        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill + shadow, no border. Default = outlined white fill.',
+    },
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
   },
@@ -450,110 +387,18 @@ export const Display: Story = {
 };
 
 /**
- * `preset="display"` + `variant="borderless"` — transparent fill, no border,
- * no shadow. Use when the card grid sits on a service-tinted colored surface
- * where the default white fill + border ring reads as visual noise. The card
- * inherits the parent surface; shown here on a service-product (purple) tint.
+ * `preset="display-row"` — the **horizontal `CardGrid` cell / section row**
+ * (see [ADR-018](../../../docs/adrs/ADR-018-card-preset-boundary.md)), not a
+ * standalone card. Image on the left, content (tag, title, description,
+ * optional `extras`, action) on the right. Use for single-row sections where a
+ * vertical layout wastes horizontal space: Related Customer Story, Recommended
+ * Add-On, featured plan, company-segment overview. Toggle `imageWidth` between
+ * `narrow` / `standard` / `wide` (or pass a custom CSS length / percentage) to
+ * size the media column. The `extras` slot drops in any supporting content
+ * (bullet list, pill row, gallery) between description and action. Collapses to
+ * vertical stacking at ≤ 640px.
  *
- * @summary preset="display" variant="borderless" — on a colored surface
- */
-export const DisplayBorderless: Story = {
-  args: {
-    preset: 'display',
-    variant: 'borderless',
-    title: 'Brand strategy',
-    description:
-      'A two-line card description that sets the type rhythm without trying to tell the whole story.',
-    tag: <Badge>Marketing</Badge>,
-    action: (
-      <Button variant="on-color" size="sm">
-        Learn more
-      </Button>
-    ),
-  },
-  argTypes: {
-    padding: { table: { disable: true } },
-    interactive: { table: { disable: true } },
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 200px)',
-          gap: 'var(--gap-md)',
-          padding: 'var(--padding-xl)',
-          backgroundColor: 'var(--surface-service-product)',
-          borderRadius: 'var(--border-radius-md)',
-        }}
-      >
-        <Story />
-        <Story />
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * `preset="display"` + `variant="elevated"` — surface-primary fill +
- * `box-shadow-md`, no border. The restored-fill counterpart to `borderless`:
- * use when a card grid on a service-tinted surface still needs a contained
- * "card" read but the default border ring is unwanted. Shown here on a
- * service-product (purple) tint.
- *
- * @summary preset="display" variant="elevated" — on a colored surface
- */
-export const DisplayElevated: Story = {
-  args: {
-    preset: 'display',
-    variant: 'elevated',
-    title: 'Brand strategy',
-    description:
-      'A two-line card description that sets the type rhythm without trying to tell the whole story.',
-    tag: <Badge>Marketing</Badge>,
-    action: (
-      <Button variant="on-color" size="sm">
-        Learn more
-      </Button>
-    ),
-  },
-  argTypes: {
-    padding: { table: { disable: true } },
-    interactive: { table: { disable: true } },
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 200px)',
-          gap: 'var(--gap-md)',
-          padding: 'var(--padding-xl)',
-          backgroundColor: 'var(--surface-service-product)',
-          borderRadius: 'var(--border-radius-md)',
-        }}
-      >
-        <Story />
-        <Story />
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * `preset="display-row"` — horizontal sibling of `preset="display"`. Image
- * on the left, content (tag, title, description, optional `extras`, action)
- * on the right. Use for single-card sections where a vertical layout wastes
- * horizontal space: Related Customer Story, Recommended Add-On, featured
- * plan, company-segment overview. Toggle `imageWidth` between `narrow` /
- * `standard` / `wide` (or pass a custom CSS length / percentage) to size
- * the media column. The `extras` slot lets the consumer drop in any
- * supporting content (bullet list, pill row, gallery) between description
- * and action. Collapses to vertical stacking at ≤ 640px.
- *
- * @summary preset="display-row" — horizontal content-grid card
+ * @summary preset="display-row" — horizontal CardGrid cell
  */
 export const DisplayRow: Story = {
   args: {
