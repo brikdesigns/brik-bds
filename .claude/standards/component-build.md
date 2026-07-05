@@ -57,6 +57,14 @@ Before writing any code, place the thing you are building in one of three tiers.
 
 See [ADR-004 §Amendment 2026-05-17](../../docs/adrs/ADR-004-component-bloat-guardrails.md) for the full purpose-test rationale and the corrected input taxonomy.
 
+### Preset boundary — the far edge of a `preset` (ADR-018)
+
+ADR-004 routes *new shape → component or preset* (prefer a preset for a same-surface layout variant). [ADR-018](../../docs/adrs/ADR-018-card-preset-boundary.md) adds the boundary on the **other** side:
+
+> A **`preset`** on a container is justified only when it renders the **same bounded surface in a different _generic, content-agnostic_ arrangement**. The moment a candidate preset (a) prescribes a **content-typed** layout (a "service card", a "pricing tier"), (b) exists to be **arranged by a parent** (a grid cell, a carousel slide), or (c) **hardcodes structure that blocks composition** (a fixed heading level, no `children` slot, an embedded responsive breakpoint) — it is a **Block**, a **Section/Layout element**, or a **standalone Component**, never a container preset.
+
+Diagnostic: if you're about to add `preset="{content-type}"` (`preset="testimonial"`, `preset="pricing"`) or a preset whose entire job is to be repeated by a layout, stop — that's a Block/Section/Component. `Card preset="display"` is grandfathered as the documented `CardGrid` cell; do not propagate the pattern to new content types.
+
 ## File structure
 
 ```
