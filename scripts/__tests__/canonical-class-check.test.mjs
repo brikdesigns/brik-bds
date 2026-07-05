@@ -45,6 +45,10 @@ const STYLES_CSS_FIXTURE = `
 .bds-card { padding: 16px; }
 .bds-card__header { padding-bottom: 8px; }
 
+.bds-cta { padding-block: 48px; }
+.bds-cta--split { display: grid; }
+.bds-cta__actions { display: flex; }
+
 .bds-accordion-item { border-top: 1px solid var(--border-primary); }
 .bds-accordion-item__icon { transition: transform 0.2s; }
 
@@ -270,6 +274,21 @@ describe('classifyClass', () => {
   it('still flags `card` when exemptPatterns is overridden to empty', () => {
     const opts = { ...setup(), exemptPatterns: [] };
     expect(classifyClass('card', opts).kind).toBe('shadow-root');
+  });
+
+  it('exempts the `cta` root (data-property false positive — brik-bds#582)', () => {
+    const opts = setup();
+    // `.cta` matched by the source scanner is almost always `section.cta`
+    // property access, not a `.cta` class selector shadowing `bds-cta`.
+    expect(classifyClass('cta', opts).kind).toBe('ok');
+    expect(classifyClass('cta--split', opts).kind).toBe('ok');
+  });
+
+  it('still flags `cta` when exemptPatterns is overridden to empty', () => {
+    const opts = { ...setup(), exemptPatterns: [] };
+    const v = classifyClass('cta', opts);
+    expect(v.kind).toBe('shadow-root');
+    expect(v.canonical).toBe('bds-cta');
   });
 });
 
