@@ -75,7 +75,7 @@
 .bds-dialog__button--cancel {
   background-color: var(--surface-secondary);
   color: var(--text-primary);
-  border: var(--border-width-sm) solid var(--border-secondary);
+  border: var(--border-width-md) solid var(--border-secondary);
 }
 
 .bds-dialog__button--confirm {
