@@ -9,6 +9,7 @@ import {
 import { bdsClass } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
+import { Logo, type LogoProps } from '../Logo';
 import './Table.css';
 
 // ─── Table (wrapper) ───────────────────────────────────────────
@@ -441,6 +442,63 @@ export function TableImageCell({
     >
       <div className="bds-table-image-cell__media">
         <Image src={src} alt={alt} ratio="1-1" fit={fit} />
+      </div>
+    </td>
+  );
+}
+
+// ─── TableLogoCell (<td> for a bundled brand logo) ─────────────
+
+export interface TableLogoCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /**
+   * Bundled brand mark to render — referenced by set + name (a credit-card /
+   * integration / client logo). `set` constrains the allowed `name`. For a
+   * per-tenant uploaded client logo, use `TableImageCell` with a `src` instead.
+   */
+  logo: Pick<LogoProps, 'set' | 'name'>;
+  /** Thumbnail size — `sm` (32px) or `md` (40px) square. Default `sm`. */
+  size?: TableMediaCellSize;
+  /** Accessible name override — defaults to the brand name. */
+  label?: string;
+  /** Render decoratively (`aria-hidden`) when an adjacent cell already names the brand. */
+  decorative?: boolean;
+}
+
+/**
+ * TableLogoCell — fixed square (1:1) cell for a bundled brand `Logo`, the
+ * name-referenced counterpart to `TableImageCell` (which takes a `src` URL).
+ *
+ * Composes the `Logo` primitive and reuses the square-media-cell chrome
+ * (`bds-table-image-cell` — padding, flush, rounded-corner handling) since a
+ * logo occupies the same 1:1 thumbnail footprint. Full-color, never recolored.
+ *
+ * @example
+ * ```tsx
+ * <TableLogoCell logo={{ set: 'integration', name: 'notion' }} />
+ * <TableLogoCell logo={{ set: 'credit-card', name: 'visa' }} size="md" />
+ * ```
+ *
+ * @summary Square 1:1 brand-logo table cell (bundled registry)
+ */
+export function TableLogoCell({
+  logo,
+  size = 'sm',
+  label,
+  decorative,
+  className,
+  style,
+  ...props
+}: TableLogoCellProps) {
+  return (
+    <td
+      className={bdsClass('bds-table-image-cell', `bds-table-image-cell--${size}`, className)}
+      style={style}
+      {...props}
+    >
+      <div className="bds-table-image-cell__media">
+        {/* Cast the correlated `set`/`name` union to LogoProps — a spread
+            decorrelates it. Sound: the `logo` prop constrains valid pairs. */}
+        <Logo {...(logo as LogoProps)} size={size} label={label} decorative={decorative} />
       </div>
     </td>
   );

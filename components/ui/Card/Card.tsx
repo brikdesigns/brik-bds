@@ -2,6 +2,7 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import { Avatar, type AvatarSize, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
+import { Logo, type LogoProps } from '../Logo';
 import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'borderless';
@@ -66,13 +67,30 @@ export interface CardImageMedia {
 }
 
 /**
- * Leading media for the default Card — an `Avatar` OR a square 1:1 `Image` on
- * the left, with `children` stacked to the right. Provide exactly one of
- * `avatar` / `image`.
+ * Bundled brand-logo shape for the default Card's leading `media` slot — a
+ * `Logo` referenced by set + name (a credit-card / integration / client mark),
+ * rendered full-color and contained in the square. Use for integration cards
+ * and payment rows; for a per-tenant uploaded client logo, use `image` with a
+ * `src` instead. `set` constrains the allowed `name`. Mirrors `Logo`.
+ */
+export type CardLogoMedia = Pick<LogoProps, 'set' | 'name'> & {
+  /** Square size on the `Avatar` scale (default `md`). */
+  size?: CardMediaSize;
+  /** Accessible name override — defaults to the brand name. */
+  label?: string;
+  /** Render decoratively (`aria-hidden`) when adjacent text already names the brand. */
+  decorative?: boolean;
+};
+
+/**
+ * Leading media for the default Card — an `Avatar`, a square 1:1 `Image`, or a
+ * bundled `Logo` on the left, with `children` stacked to the right. Provide
+ * exactly one of `avatar` / `image` / `logo`.
  */
 export type CardMedia =
-  | { avatar: CardAvatarMedia; image?: never }
-  | { image: CardImageMedia; avatar?: never };
+  | { avatar: CardAvatarMedia; image?: never; logo?: never }
+  | { image: CardImageMedia; avatar?: never; logo?: never }
+  | { logo: CardLogoMedia; avatar?: never; image?: never };
 
 export interface CardSummaryTextLink {
   label: string;
@@ -349,6 +367,11 @@ function formatSummaryValue(value: string | number, type: CardSummaryType): stri
  *   <CardTitle as="h4">{org.name}</CardTitle>
  *   <CardDescription>{org.plan}</CardDescription>
  * </Card>
+ *
+ * <Card media={{ logo: { set: 'integration', name: 'notion' } }}>
+ *   <CardTitle as="h4">Notion</CardTitle>
+ *   <CardDescription>Connected</CardDescription>
+ * </Card>
  * ```
  *
  * @example Control preset
@@ -417,6 +440,17 @@ function renderCardMedia(media: CardMedia) {
     return (
       <div className="bds-card__media">
         <Avatar src={src} alt={alt} name={name} size={size} status={status} />
+      </div>
+    );
+  }
+  if (media.logo) {
+    // `media.logo` is a correlated `set`/`name` union; a spread decorrelates
+    // it, so cast the whole config to LogoProps (sound — CardLogoMedia already
+    // constrains the caller to valid pairs).
+    const size = media.logo.size ?? 'md';
+    return (
+      <div className={bdsClass('bds-card__media', `bds-card__media--${size}`)}>
+        <Logo {...(media.logo as LogoProps)} size={size} />
       </div>
     );
   }
