@@ -151,7 +151,9 @@
 
 .bds-card__preset-control-content {
   display: flex;
-  align-items: center;
+  /* Top-align the logo + badge with the title (not the vertical midline of the
+     whole text block), so the leading mark reads against the first line. */
+  align-items: flex-start;
   gap: var(--padding-lg);
   flex: 1;
   min-width: 0;
@@ -232,15 +234,8 @@
   gap: var(--gap-sm);
 }
 
-/* Dot circle */
-.bds-card__preset-control-status-dot {
-  /* bds-lint-ignore — Figma-driven dot dimensions */
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  display: inline-block;
-}
+/* The status dot is the shared `<Dot>` primitive (owns its size + per-status
+   semantic-token color); this preset only positions the label beside it. */
 
 /* Label text */
 .bds-card__preset-control-status-label {
@@ -260,42 +255,22 @@
   color: var(--text-muted);
 }
 
-/* ── Per-state colors (dot + label) ── */
-
-.bds-card__preset-control-status--not-configured .bds-card__preset-control-status-dot {
-  background-color: var(--background-status-neutral);
-}
+/* ── Per-state label color (the dot's color comes from `<Dot status>`) ── */
 
 .bds-card__preset-control-status--not-configured .bds-card__preset-control-status-label {
   color: var(--text-muted);
-}
-
-.bds-card__preset-control-status--connected .bds-card__preset-control-status-dot {
-  background-color: var(--background-positive);
 }
 
 .bds-card__preset-control-status--connected .bds-card__preset-control-status-label {
   color: var(--text-positive);
 }
 
-.bds-card__preset-control-status--syncing .bds-card__preset-control-status-dot {
-  background-color: var(--background-status-info);
-}
-
 .bds-card__preset-control-status--syncing .bds-card__preset-control-status-label {
   color: var(--text-status-info);
 }
 
-.bds-card__preset-control-status--synced .bds-card__preset-control-status-dot {
-  background-color: var(--background-positive);
-}
-
 .bds-card__preset-control-status--synced .bds-card__preset-control-status-label {
   color: var(--text-positive);
-}
-
-.bds-card__preset-control-status--error .bds-card__preset-control-status-dot {
-  background-color: var(--background-negative);
 }
 
 .bds-card__preset-control-status--error .bds-card__preset-control-status-label {
