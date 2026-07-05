@@ -3,6 +3,7 @@ import { bdsClass } from '../../utils';
 import { Avatar, type AvatarSize, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
+import { Dot, type DotStatus } from '../Dot';
 import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'borderless';
@@ -519,6 +520,19 @@ const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
   error:            'Error',
 };
 
+/**
+ * Connection-status → `Dot` status. Composes the shared `<Dot>` primitive
+ * (which owns the dot's size + semantic-token color per status) instead of a
+ * bespoke dot — `not-configured` maps to Dot's `neutral`, which `Badge` lacks.
+ */
+const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotStatus> = {
+  'not-configured': 'neutral',
+  connected:        'positive',
+  syncing:          'info',
+  synced:           'positive',
+  error:            'error',
+};
+
 function renderControlPreset({
   title,
   description,
@@ -564,7 +578,9 @@ function renderControlPreset({
               role="status"
               aria-label={`Connection status: ${CONNECTION_STATUS_LABELS[connectionStatus]}`}
             >
-              <span className="bds-card__preset-control-status-dot" aria-hidden="true" />
+              {/* Decorative — the wrapper's role="status" + aria-label is the
+                  single announcement; Dot is the visual mark only. */}
+              <Dot status={CONNECTION_STATUS_DOT[connectionStatus]} aria-hidden />
               <span className="bds-card__preset-control-status-label">
                 {CONNECTION_STATUS_LABELS[connectionStatus]}
               </span>
