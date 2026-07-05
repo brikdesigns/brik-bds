@@ -14,7 +14,7 @@
 .bds-data-section + .bds-data-section {
   margin-top: var(--padding-lg);
   padding-top: var(--padding-lg);
-  border-top: var(--border-width-sm) solid var(--border-muted);
+  border-top: var(--border-width-md) solid var(--border-muted);
 }
 
 .bds-data-section--spacing-lg + .bds-data-section {

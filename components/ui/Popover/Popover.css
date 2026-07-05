@@ -19,7 +19,7 @@
   background-color: var(--background-primary);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
-  border: var(--border-width-sm) solid var(--border-secondary);
+  border: var(--border-width-md) solid var(--border-secondary);
   padding: var(--padding-md);
   z-index: 100;
   box-sizing: border-box;

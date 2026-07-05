@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   background-color: var(--surface-primary);
-  border: var(--border-width-sm) solid var(--border-primary);
+  border: var(--border-width-md) solid var(--border-primary);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-xl);
   overflow: hidden;
@@ -116,7 +116,7 @@
   justify-content: space-between;
   padding: var(--padding-md) var(--padding-lg);
   gap: var(--gap-md);
-  border-bottom: var(--border-width-sm) solid var(--border-primary);
+  border-bottom: var(--border-width-md) solid var(--border-primary);
   transition: background-color var(--duration-fast) var(--ease-out);
 }
 

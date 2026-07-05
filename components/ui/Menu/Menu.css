@@ -35,7 +35,7 @@
   display: flex;
   flex-direction: column;
   padding: var(--padding-tiny) var(--padding-tiny) var(--padding-md);
-  border-bottom: 1px solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
   margin-bottom: var(--gap-tiny);
   font-family: var(--font-family-label);
   font-size: var(--body-xs);
