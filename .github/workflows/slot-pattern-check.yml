@@ -1,0 +1,51 @@
+name: Slot Pattern Check
+
+# Enforces the BDS BEM slot grammar (ADR-008 §4) on every PR and push to main:
+#
+#   bds-<block>__<slot>--<modifier>   — each segment kebab-case
+#
+# This is the "pattern gate" that supersedes the closed SLOT-ALLOWLIST.md
+# enumeration (ADR-008 §2, never enforced — Phase C never shipped, #1080/#1137).
+# It governs slot names by *shape*, not by an enumerated list: no reconciliation
+# debt, and no flood on the 77 intentionally-generic slots (`__title` ×22,
+# `__label` ×21) that a cross-block-reuse ban would have wrongly flagged.
+#
+# What it catches: camelCase (`__myTitle`), single underscores (`__title_text`),
+# stray uppercase (`__Title`), empty/malformed segments.
+#
+# Sibling of canonical-class-check.yml — that gate checks dist/styles.css
+# membership (parallel-taxonomy collisions); this one checks authored shape.
+# Unlike that gate, this one needs NO build: it's a pure source scan, so there
+# is no `npm run build:lib` step.
+#
+# Why a CI gate (not just pre-commit):
+#   - Pre-commit runs staged-only; CI full-scans the tree.
+#   - Cloud-agent commits (scheduled routines) bypass local hooks.
+#   - PRs from forks / fresh clones may not have husky installed.
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: slot-pattern-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  slot-pattern-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Slot pattern check
+        run: node scripts/slot-pattern-check.mjs --format md components content-system/blueprints

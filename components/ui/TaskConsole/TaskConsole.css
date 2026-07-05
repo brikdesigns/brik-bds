@@ -154,7 +154,7 @@
   color: var(--text-muted);
 }
 
-.bds-task-console__item--in_progress .bds-task-console__item-label {
+.bds-task-console__item--in-progress .bds-task-console__item-label {
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
 }

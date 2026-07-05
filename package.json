@@ -169,6 +169,8 @@
     "canonical-check:report": "node scripts/canonical-check.mjs --allowlist dist/tokens.css --format md components content-system stories || true",
     "canonical-class-check": "node scripts/canonical-class-check.mjs --allowlist dist/styles.css content-system/blueprints",
     "canonical-class-check:report": "node scripts/canonical-class-check.mjs --allowlist dist/styles.css --format md content-system/blueprints stories || true",
+    "slot-pattern-check": "node scripts/slot-pattern-check.mjs components content-system/blueprints",
+    "slot-pattern-check:report": "node scripts/slot-pattern-check.mjs --format md components content-system/blueprints stories || true",
     "build:types": "tsc --project tsconfig.build.json",
     "build:dist-tokens": "node scripts/build-dist-tokens.js",
     "typegen:axes": "node scripts/generate-component-axes.mjs",

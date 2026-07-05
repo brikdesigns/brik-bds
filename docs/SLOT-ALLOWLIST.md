@@ -1,212 +1,61 @@
-# BDS Slot Allowlist
+# BDS Slot Pattern
 
-**Status:** Governing reference — ADR-008
-**Format:** Each `## Category` heading owns a fenced `slots` code block; one slot per line, comments start with `#`. Slots listed here are the sanctioned BEM `__suffix` set; a slot not listed is off-pattern and should be justified in review.
+**Status:** Governing reference — ADR-008 §4 + [ADR-017](adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md)
+**Enforced by:** `scripts/slot-pattern-check.mjs` (pre-commit staged + CI full-tree)
 
-> **Advisory only — not CI-asserted.** No lint currently parses these blocks. This file governs by review, not by an enforced gate. Making the claim true requires first reconciling the allowlist against the in-use slots not yet listed (155 of 221 as of 2026-07-04), then wiring the lint — tracked in [#1137](https://github.com/brikdesigns/brik-bds/issues/1137).
+> **This file used to be a closed enumerated allowlist** (ADR-008 §2). That model was superseded by [ADR-017](adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) on 2026-07-05: the enforcing lint (Phase C) never shipped, and by 2026-07 only 101 of the 396 slots in use were listed, so enumeration was unpayable. Slots are now governed by **shape**, not by a list. The filename is kept to preserve inbound links — treat it as *SLOT-PATTERN*.
 
-This file is the intended single allowlist. Don't enumerate slots elsewhere. To add a slot, edit this file, justify in the PR description, get review.
+BDS slot names are governed by a **structural pattern**, enforced automatically. There is no list to maintain and no PR needed to introduce a new well-formed slot — a slot is canonical if and only if it matches the grammar below.
 
-## How to read this file
+## The grammar (ADR-008 §4)
 
-Each slot below is the BEM `__suffix` part — what appears after `__` in a class like `bds-card__title`. The block name (`bds-card`) is allowed; the slot (`__title`) is what's governed here.
+A `bds-*` class is one of:
 
-A slot may have **modifiers** declared inline as `--mod` suffixes (e.g. `__label--error`). The modifier suffix is part of the allowlist entry; `__label--error` ≠ `__label`. If a slot supports modifiers, list each modifier separately.
-
-For *blueprint* blocks (`bds-hero`, `bds-cta`, …), the BEM modifier syntax governs *layout variants* (`bds-hero--split-image`). Layout modifiers are not slots and are not governed by this file — they're governed by the structural-only modifier rule in ADR-008.
-
-## Text + content slots
-
-```slots
-__title
-__subtitle
-__description
-__label
-__label--error
-__label--sm
-__label--md
-__label--lg
-__value
-__text
-__heading           # legacy — Sheet section only; new code uses __title
-__body              # legacy — being phased out per PR #552; new code uses __description
-__name
-__inner
-__content
-__helper
-__helper--error
-__error
-__strict-hint
-__hint
-__cite              # source attribution on quotes / testimonials
-__caption           # <figcaption> text on figure-based media (Image); generic to any captioned figure
+```text
+bds-<block>
+bds-<block>--<modifier>
+bds-<block>__<slot>
+bds-<block>__<slot>--<modifier>
 ```
 
-## Layout + container slots
+where each segment is **kebab-case**:
 
-```slots
-__container
-__header
-__footer
-__content           # also appears under text/content for distinct roles — same word, different role
-__inner
-__row
-__rows
-__column
-__columns
-__grid
-__top
-__bottom
-__media             # any aspect-locked media frame; pairs with Frame primitive
-__media--sm         # square leading-media size on the Avatar scale (Card media slot)
-__media--md         # square leading-media size on the Avatar scale (Card media slot)
-__media--lg         # square leading-media size on the Avatar scale (Card media slot)
-__media--xl         # square leading-media size on the Avatar scale (Card media slot)
-__media-column      # column-shaped media region
-__sidebar
-__main
-```
+- `<block>`: `[a-z][a-z0-9]*(-[a-z0-9]+)*` — starts with a letter (`card`, `accordion-item`, `task-console`)
+- `<slot>` / `<modifier>`: `[a-z0-9]+(-[a-z0-9]+)*` (`title`, `item-label`, `in-progress`, `md`)
 
-## Interaction slots
+Rules that fall out of the grammar:
 
-```slots
-__actions
-__action
-__cta
-__button
-__close
-__toggle
-__remove
-__trigger
-__trigger--open
-__trigger--error
-__trigger--disabled
-__caret
-__dropdown
-__option
-__option--active
-__placeholder
-__link
-```
+- `__` separates a block from its slot; `--` separates a modifier. **No single underscores** (`__title_text` ✗ → `__title-text` ✓).
+- No other separators, no doubled `__`/`--`, no uppercase (`__myTitle` ✗, `__Title` ✗).
+- No layout name baked into a slot — the parent block already carries it (`bds-hero__title`, never `bds-hero__hero-title`). This is a *shape*-adjacent rule enforced semantically by the banned-slot list below, not by the pattern regex.
 
-## Visual + icon slots
+### Passes / fails
 
-```slots
-__icon
-__avatar
-__image
-__image-fallback
-__photo
-__illustration
-__badge
-__dot
-__track
-__fill
-__indicator
-__indicator--active
-__shape
-__tile
-__progress
-__progress--error
-__status
-__spinner
-__logo
-__brand             # logo + brand-text grouping
-```
+| Class | Verdict |
+|---|---|
+| `bds-card`, `bds-card--primary`, `bds-card__title`, `bds-card__title--error` | ✓ |
+| `bds-accordion-item__icon`, `bds-task-console__item--in-progress` | ✓ |
+| `` `bds-badge--${tone}` `` (dynamic) | ✓ — interpolation is not judged |
+| `bds-card__myTitle` | ✗ uppercase |
+| `bds-card__title_text` | ✗ single underscore |
+| `bds-Card__title` | ✗ uppercase block |
+| `bds-card__title__extra` | ✗ doubled `__` |
 
-## List + item slots
+New vocabulary is free: `bds-card__preset-display-row-tag` passes because it is well-formed. Reuse a generic slot when one fits (see below), but you never edit this file to add a slot.
 
-```slots
-__list
-__item
-__items
-__item--active
-__item--disabled
-__item--pending
-__item--in-progress
-__item--completed
-__item--failed
-__item-content      # legacy compound — flag for review (should be __item__content?)
-__item-label        # legacy compound — flag for review
-__input-row
-```
+## Two gates, two jobs
 
-## Form slots
+The pattern gate is about *shape*. It does **not** judge whether a well-shaped name is a *good* name — that is a separate, semantic concern:
 
-```slots
-__input
-__field
-__fieldset
-__legend
-__group
-__checkbox
-__radio
-__switch
-```
+| Concern | Gate | Example it owns |
+|---|---|---|
+| Structural shape (kebab-case, `__`/`--` grammar) | `scripts/slot-pattern-check.mjs` (this file) | `__myTitle`, `__title_text` |
+| Banned semantic slots (marketing/layout terms) | `scripts/lint-blueprint-naming.mjs` (§3 banlist) | `__eyebrow`, `__hero-title` |
+| Parallel-taxonomy class collisions vs `dist/styles.css` | `scripts/canonical-class-check.mjs` | `.button--primary` shadowing `bds-button` |
 
-## Navigation slots
+## Banned slots (semantic — enforced by lint-blueprint-naming, not the pattern gate)
 
-```slots
-__nav
-__nav-link
-__breadcrumb
-__hamburger
-__menu
-__menu-item
-__menu-item--active
-__menu-item--disabled
-```
-
-## Modal + popover + tooltip slots
-
-```slots
-__modal
-__dialog
-__sheet
-__popover
-__bubble
-__bubble--top
-__bubble--right
-__bubble--bottom
-__bubble--left
-__bubble--visible
-__bubble--portal
-__arrow
-__arrow--top
-__arrow--right
-__arrow--bottom
-__arrow--left
-```
-
-## Drawer / mobile-nav slots
-
-```slots
-__drawer
-__drawer-nav
-__drawer-list
-__drawer-item
-__drawer-link
-__drawer-actions
-__drawer-phone
-__drawer-cta
-```
-
-## Specialized slots
-
-These are domain-specific slots that belong to one block but are too useful to forbid outright. Each entry must reference the block that owns it.
-
-```slots
-__category-pill         # filter chip / category indicator (FilterBar, CardList)
-__category-row          # row of category chips
-__cell                  # cell in TimePicker / Calendar tables
-__cell--selected
-__not-found             # empty state / 404 illustration
-__has-options           # combo-list state class
-```
-
-## Banned slots (explicit — for clarity, fail the lint)
-
-These are common drift inventions. Listed here so an agent reading the canon sees the wrong word *and* the right one in the same place.
+These are well-*shaped* but wrong-*meaning*. Listed so an agent sees the wrong word and the right one together. Owned by `lint-blueprint-naming.mjs` per ADR-008 §3.
 
 | Banned | Use instead | Reason |
 |---|---|---|
@@ -234,22 +83,11 @@ These are common drift inventions. Listed here so an agent reading the canon see
 | `__hero-title`, `__page-heading` | `__title` | The parent block already says "hero" or "page" |
 | `__hero-cta`, `__page-actions` | `__cta` / `__actions` | Same |
 
-## How to add a slot
+## Naming a new slot
+
+No canon edit needed — just a well-formed, sensible name:
 
 1. Identify the **role** the slot expresses (text content? container? interaction? icon?). Pick the most generic word that fits.
-2. Grep the codebase to see whether an existing allowlist slot already covers the role. **Reuse before invent.**
-3. If no existing slot fits, open a PR that:
-   - Adds the new slot to the relevant `## Category` block above
-   - Justifies in the PR description why no existing slot worked
-   - References the block(s) that will use the new slot
-4. Reviewer checks that the new slot is generic (would work on more than one block), not layout-specific (`__hero-image` no, `__image` yes), not visual-descriptive (`__dark-cta` no, `__cta` yes).
-
-## How to remove a slot
-
-Three conditions must hold:
-
-1. Zero current uses across BDS + every consumer repo (grep verified)
-2. PR description explains why the slot is no longer needed
-3. Removal lands in the same PR (or just before) the last code that used it
-
-Removing a slot from the allowlist immediately fails the lint on any consumer code still using it — so the removal PR must coordinate with consumer-repo migrations.
+2. Grep the codebase — reuse an existing generic slot (`__title`, `__label`, `__icon`, `__content`) before inventing. These are intentionally cross-block: `__title` appears on 22 blocks by design.
+3. Keep it generic, not layout-specific (`__image` ✓, `__hero-image` ✗) and not visual-descriptive (`__cta` ✓, `__dark-cta` ✗) — those fail the semantic banlist even though they pass the shape gate.
+4. If the name is well-shaped and generic, it just works. There is no allowlist to update.

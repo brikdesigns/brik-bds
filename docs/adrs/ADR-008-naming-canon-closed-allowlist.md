@@ -3,7 +3,7 @@
 **Status:** Accepted (2026-05-11)
 **Date:** 2026-05-11
 **Supersedes:** parts of [naming-conventions.mdx](../../docs-site/content/docs/primitives/naming-conventions.mdx) before this date
-**Superseded by:** —
+**Superseded by:** [ADR-017](./ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) — §2 only (closed allowlist → structural pattern gate, 2026-07-05). §1, §3, §4 stand.
 **Owner:** Nick Stanerson
 **Related:** ADR-004 (component bloat), PR #550 (canon doc patches), PR #552 (blueprint BEM rename), PR #554 (Chip appearance removal)
 
@@ -33,6 +33,8 @@ Four interlocking changes to the canon. Each was decided with explicit user dire
 **Rationale:** the namespace split added no value but cost two parallel vocabularies that drifted. Single namespace = single source of truth for what a class name means.
 
 ### 2. Closed allowlist for slot names
+
+> **Superseded by [ADR-017](./ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) (2026-07-05).** Phase C (the enforcing lint) never shipped; by 2026-07 the allowlist enumerated 101 slot bases against 396 in use, so a naive allowlist lint would have flooded on shipped code. Slots are now governed by the §4 grammar as a **structural pattern gate** (`scripts/slot-pattern-check.mjs`), not by enumeration. The three sub-points below are retained as the historical decision. §1, §3, §4 stand unchanged.
 
 - Canon enumerates **every** allowed slot name (the BEM `__suffix`). Anything not on the allowlist fails the lint.
 - The allowlist lives in `docs/SLOT-ALLOWLIST.md` — single file, machine-readable, the lint's source of truth.
@@ -85,7 +87,7 @@ This decision implies that blueprint *components* also consolidate — 4 hero bl
 |---|---|---|
 | A | ADR-008 + canon update + allowlist file | **this PR** |
 | B | Inventory of consumer-repo slot usage (BDS already inventoried) | next session |
-| C | Lint flipped to allowlist mode | follows B |
+| C | Lint flipped to allowlist mode | **Superseded — [ADR-017](./ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md).** Shipped as a structural *pattern* gate, not an allowlist lint (#1137) |
 | D | Blueprint family consolidation, one family per PR (hero → cta → services → features → about → support-plan). Each PR: collapse N blueprints into 1 parameterized, rename classes to allowlist vocabulary, drop `bp-` prefix. | multi-session |
 | E | Consumer-repo CSS rename (any `bp-*` or non-allowlist slot used in consumer code) | coordinated with D |
 | F | Deprecation cleanup — drop the `bp-` prefix support after all consumers migrated | last |
