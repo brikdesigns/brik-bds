@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -12,7 +12,10 @@ import {
   sourceScan,
   runtimeScan,
   assertCanonicalCss,
+  buildSarif,
   DEFAULT_EXEMPT_PATTERNS,
+  SARIF_VERSION,
+  SARIF_RULE_ID,
 } from '../canonical-check.mjs';
 
 // A miniature canonical registry — covers each prefix the scanner cares about
@@ -352,5 +355,91 @@ describe('parseAllowlistFromFile', () => {
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
+  });
+});
+
+describe('buildSarif', () => {
+  function withTempDir(fn) {
+    const dir = mkdtempSync(join(tmpdir(), 'canonical-check-sarif-'));
+    try {
+      return fn(dir);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  const allowlist = parseAllowlist(TOKENS_CSS_FIXTURE);
+
+  it('emits a well-formed 2.1.0 log with the canonical-check driver', () => {
+    withTempDir((dir) => {
+      writeFileSync(join(dir, 'a.css'), '.foo { color: var(--surface-paper); }');
+      const result = sourceScan({ paths: [dir], allowlist });
+      const sarif = buildSarif({ result, mode: 'source', cwd: dir });
+
+      expect(sarif.version).toBe(SARIF_VERSION);
+      expect(sarif.$schema).toMatch(/sarif-schema-2\.1\.0\.json$/);
+      const run = sarif.runs[0];
+      expect(run.tool.driver.name).toBe('canonical-check');
+      expect(run.tool.driver.rules[0].id).toBe(SARIF_RULE_ID);
+    });
+  });
+
+  it('emits exactly one result per violation, each with a file+startLine location', () => {
+    withTempDir((dir) => {
+      writeFileSync(
+        join(dir, 'drift.css'),
+        ['.a {', '  color: var(--surface-paper);', '  background: var(--text-on-brand);', '}'].join('\n'),
+      );
+      const result = sourceScan({ paths: [dir], allowlist });
+      const sarif = buildSarif({ result, mode: 'source', cwd: dir });
+      const results = sarif.runs[0].results;
+
+      expect(results.length).toBe(result.violations.length);
+      const paper = results.find((r) => r.message.text.includes('--surface-paper'));
+      expect(paper.ruleId).toBe(SARIF_RULE_ID);
+      expect(paper.level).toBe('error');
+      const loc = paper.locations[0].physicalLocation;
+      expect(loc.artifactLocation.uri).toBe('drift.css'); // relative to cwd
+      expect(loc.region.startLine).toBe(2);
+      expect(loc.region.startColumn).toBeGreaterThan(0);
+      expect(paper.partialFingerprints.tokenName).toBe('--surface-paper');
+    });
+  });
+
+  it('records every occurrence of a token as a separate location', () => {
+    withTempDir((dir) => {
+      writeFileSync(
+        join(dir, 'x.css'),
+        ['.a { color: var(--surface-paper); }', '.b { background: var(--surface-paper); }'].join('\n'),
+      );
+      const result = sourceScan({ paths: [dir], allowlist });
+      const sarif = buildSarif({ result, mode: 'source', cwd: dir });
+      const paper = sarif.runs[0].results.find((r) => r.message.text.includes('--surface-paper'));
+      expect(paper.locations.map((l) => l.physicalLocation.region.startLine)).toEqual([1, 2]);
+    });
+  });
+
+  it('produces an empty results array for a clean scan', () => {
+    withTempDir((dir) => {
+      writeFileSync(join(dir, 'ok.css'), '.foo { color: var(--text-primary); }');
+      const result = sourceScan({ paths: [dir], allowlist });
+      const sarif = buildSarif({ result, mode: 'source', cwd: dir });
+      expect(sarif.runs[0].results).toEqual([]);
+    });
+  });
+
+  it('locates violations in runtime (--css) mode against the scanned file', () => {
+    withTempDir((dir) => {
+      const cssFile = join(dir, 'theme.css');
+      writeFileSync(cssFile, [':root {', '  --surface-paper: #faf7f2;', '}'].join('\n'));
+      const css = readFileSync(cssFile, 'utf8');
+      const result = runtimeScan({ css, allowlist });
+      const sarif = buildSarif({ result, mode: 'runtime', cssFile, cwd: dir });
+
+      expect(sarif.runs[0].results.length).toBe(result.violations.length);
+      const r = sarif.runs[0].results[0];
+      expect(r.locations[0].physicalLocation.artifactLocation.uri).toBe('theme.css');
+      expect(r.locations[0].physicalLocation.region.startLine).toBe(2);
+    });
   });
 });
