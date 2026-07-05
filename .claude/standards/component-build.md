@@ -100,13 +100,13 @@ Inline `style` is acceptable only for:
 .bds-{component}__{slot}--{modifier}   slot modifier
 ```
 
-**The `__slot` suffix is not free-form.** It must come from the closed allowlist in [`docs/SLOT-ALLOWLIST.md`](../../docs/SLOT-ALLOWLIST.md). Inventing a new slot name fails the lint. See [ADR-008](../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) for the rationale.
+**The `__slot` suffix is governed by shape, not a list.** Any kebab-case slot matching the grammar `bds-<block>__<slot>--<modifier>` passes — a well-formed new slot needs no canon edit. Malformed shapes (camelCase, single underscores, uppercase) fail `slot-pattern-check`. Marketing/layout *terms* (`__eyebrow`, `__hero-title`) are well-shaped but banned semantically by `lint-blueprint-naming`. See [ADR-017](../../docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) (which superseded ADR-008 §2's closed allowlist) and [`docs/SLOT-ALLOWLIST.md`](../../docs/SLOT-ALLOWLIST.md) for the pattern spec.
 
 | What | Canon source |
 | --- | --- |
 | BEM rules, `bds-` namespace, structural-only modifier rule, id generation | [Naming Conventions](../../docs-site/content/docs/primitives/naming-conventions.mdx) |
-| Closed allowlist of every `__slot` name | [`docs/SLOT-ALLOWLIST.md`](../../docs/SLOT-ALLOWLIST.md) |
-| Why the system runs on a closed allowlist instead of a banlist | [ADR-008](../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) |
+| Slot pattern spec + banned semantic slots | [`docs/SLOT-ALLOWLIST.md`](../../docs/SLOT-ALLOWLIST.md) |
+| Why the system governs by pattern, not an enumerated allowlist | [ADR-017](../../docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) (supersedes [ADR-008](../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) §2) |
 
 When this standard and the canon disagree, the canon wins. Open a PR to align this file.
 
@@ -466,7 +466,7 @@ Two minor releases is the Carbon-aligned default — long enough for downstream 
 - [ ] Move styles to `.css` — remove all `CSSProperties` objects and `as unknown as number` casts
 - [ ] Use `bdsClass` for class composition — pass through `className` and `style`
 - [ ] Verify every token reference is semantic — run `npm run lint-tokens`
-- [ ] Verify every `__slot` is in `docs/SLOT-ALLOWLIST.md`
+- [ ] Verify every `__slot` matches the kebab-case grammar — run `npm run slot-pattern-check`
 - [ ] Add danger variants if the component triggers destructive actions
 - [ ] Split into sub-components if it renders different HTML elements
 - [ ] Migrate stories to the [storybook-story-shape](./storybook-story-shape.md) two-shape model
