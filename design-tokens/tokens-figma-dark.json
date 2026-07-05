@@ -1643,7 +1643,7 @@
       "$type": "color"
     },
     "secondary": {
-      "$value": "{color.grayscale.darker}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
     "brand-primary": {
