@@ -26,6 +26,10 @@
  *                                       skip (e.g. '^--border-(radius|width)')
  *   canonical-check --format md|json    Output format (default: md for TTY,
  *                                       json otherwise)
+ *   canonical-check --report [file]     Also write a SARIF 2.1.0 report for
+ *                                       GitHub code-scanning (default file:
+ *                                       canonical-check.sarif). md/json still
+ *                                       print to stdout.
  *   canonical-check --help              Show this message
  *
  * ── Library ────────────────────────────────────────────────────────────────
@@ -43,7 +47,7 @@
  *   2  Bad invocation (missing args, unreadable allowlist, etc.)
  */
 
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { resolve, join, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -357,6 +361,136 @@ export function assertCanonicalCss(css, opts = {}) {
   }
 }
 
+// ── SARIF report ───────────────────────────────────────────────────────────
+
+export const SARIF_VERSION = '2.1.0';
+export const SARIF_SCHEMA =
+  'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json';
+export const SARIF_RULE_ID = 'non-canonical-token-name';
+export const DEFAULT_SARIF_FILE = 'canonical-check.sarif';
+
+const INFO_URI = 'https://design.brikdesigns.com/docs/primitives/color';
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Locate every *whole-token* occurrence of `token` in `text`, 1-based.
+ * The negative lookahead prevents `--surface` matching inside
+ * `--surface-primary`. Lines that are pure `//` comments or carry a
+ * `bds-lint-ignore` directive are skipped, mirroring `extractTokenReferences`,
+ * so the region we point at is a line the scanner actually counted.
+ */
+function locateTokenInText(text, token) {
+  const re = new RegExp(escapeRegExp(token) + '(?![a-z0-9-])', 'g');
+  const out = [];
+  const lines = text.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^[ \t]*\/\//.test(line) || line.includes('bds-lint-ignore')) continue;
+    re.lastIndex = 0;
+    let m;
+    while ((m = re.exec(line)) !== null) {
+      out.push({ line: i + 1, startColumn: m.index + 1, endColumn: m.index + 1 + token.length });
+    }
+  }
+  return out;
+}
+
+/**
+ * Build a SARIF 2.1.0 log from a scan result. Opt-in via `--report`; does not
+ * touch the md/json output paths. The scan itself is location-free (Sets, for
+ * speed), so this re-reads the offending files to derive line/column regions.
+ *
+ * Emits exactly one SARIF `result` per violation (per non-canonical token),
+ * whose `locations[]` lists every occurrence — so `results.length` equals the
+ * violation count while every offending line still surfaces as an annotation.
+ * A token whose only occurrences sit on skipped lines yields a location-less
+ * result (still valid SARIF; GitHub attaches it to the run rather than a line).
+ *
+ * @param {{ result: object, mode: 'source'|'runtime', cssFile?: string, cwd?: string }} args
+ * @returns {object} SARIF 2.1.0 log
+ */
+export function buildSarif({ result, mode, cssFile, cwd = process.cwd() }) {
+  const base = resolve(cwd) + sep;
+  const relUri = (p) => {
+    const abs = resolve(cwd, p);
+    return (abs.startsWith(base) ? abs.slice(base.length) : p).split(sep).join('/');
+  };
+
+  const locationsFor = (file, token) => {
+    let text;
+    try {
+      text = readFileSync(file, 'utf8');
+    } catch (err) {
+      // The scan already read this file, so a failure here is unexpected (race,
+      // permissions). Warn and emit a location-less result rather than crash the
+      // whole report — the violation is still recorded, just without a line.
+      process.stderr.write(`canonical-check: could not re-read ${file} for SARIF location — ${err.message}\n`);
+      return [];
+    }
+    return locateTokenInText(text, token).map((pos) => ({
+      physicalLocation: {
+        artifactLocation: { uri: relUri(file) },
+        region: { startLine: pos.line, startColumn: pos.startColumn, endColumn: pos.endColumn },
+      },
+    }));
+  };
+
+  const makeResult = (token, locations) => {
+    const r = {
+      ruleId: SARIF_RULE_ID,
+      level: 'error',
+      message: {
+        text:
+          `Non-canonical token name "${token}" — not defined in BDS dist/tokens.css. ` +
+          `Add it to the canonical registry first; inline aliases are not accepted. ` +
+          `Source of truth: ${INFO_URI}`,
+      },
+      partialFingerprints: { tokenName: token },
+    };
+    if (locations.length > 0) r.locations = locations;
+    return r;
+  };
+
+  const results =
+    mode === 'source'
+      ? result.violations.map(({ token, files }) =>
+          makeResult(token, files.flatMap((f) => locationsFor(f, token))),
+        )
+      : result.violations.map((token) =>
+          makeResult(token, cssFile ? locationsFor(cssFile, token) : []),
+        );
+
+  return {
+    version: SARIF_VERSION,
+    $schema: SARIF_SCHEMA,
+    runs: [
+      {
+        tool: {
+          driver: {
+            name: 'canonical-check',
+            informationUri: INFO_URI,
+            rules: [
+              {
+                id: SARIF_RULE_ID,
+                name: 'NonCanonicalTokenName',
+                shortDescription: {
+                  text: 'Token name is not in the canonical BDS registry (dist/tokens.css).',
+                },
+                helpUri: INFO_URI,
+                defaultConfiguration: { level: 'error' },
+              },
+            ],
+          },
+        },
+        results,
+      },
+    ],
+  };
+}
+
 // ── CLI ──────────────────────────────────────────────────────────────────
 
 const USAGE = `canonical-check — Canonical token-name enforcement for @brikdesigns/bds
@@ -371,6 +505,8 @@ Usage:
                                       (default: text,surface,background,border,color)
   canonical-check --exempt <patterns> Comma-separated regex of tokens to skip
   canonical-check --format md|json    Output format (default: md for TTY, json otherwise)
+  canonical-check --report [file]     Also write a SARIF 2.1.0 report for GitHub
+                                      code-scanning (default: canonical-check.sarif)
   canonical-check --help              Show this message
 
 Exit codes:
@@ -389,6 +525,7 @@ function parseCliArgs(argv) {
     prefixes: null,
     exemptPatterns: null,
     format: null,
+    reportPath: null,
     help: false,
   };
   for (let i = 0; i < argv.length; i++) {
@@ -400,6 +537,14 @@ function parseCliArgs(argv) {
     else if (a === '--exempt') opts.exemptPatterns = argv[++i].split(',').map((s) => new RegExp(s));
     else if (a.startsWith('--format=')) opts.format = a.slice('--format='.length);
     else if (a === '--format') opts.format = argv[++i];
+    else if (a.startsWith('--report=')) opts.reportPath = a.slice('--report='.length);
+    else if (a === '--report') {
+      // Optional path. Only consume the next token when it looks like a report
+      // file (`.sarif`/`.json`) — otherwise it's a scan path, so default the name.
+      const next = argv[i + 1];
+      if (next && !next.startsWith('-') && /\.(sarif|json)$/.test(next)) opts.reportPath = argv[++i];
+      else opts.reportPath = DEFAULT_SARIF_FILE;
+    }
     else if (a.startsWith('-')) {
       process.stderr.write(`canonical-check: unknown flag ${a}\n`);
       process.exit(2);
@@ -439,6 +584,11 @@ function renderJson(result, mode) {
   return JSON.stringify({ mode, ...result }, null, 2) + '\n';
 }
 
+function writeSarifReport(path, sarif) {
+  writeFileSync(path, JSON.stringify(sarif, null, 2) + '\n', 'utf8');
+  process.stderr.write(`canonical-check: SARIF report written to ${path}\n`);
+}
+
 function main() {
   const opts = parseCliArgs(process.argv.slice(2));
 
@@ -475,6 +625,7 @@ function main() {
     const css = readFileSync(opts.cssFile, 'utf8');
     const result = runtimeScan({ css, allowlist, prefixes, exemptTokens });
     process.stdout.write(opts.format === 'json' ? renderJson(result, 'runtime') : renderMarkdown(result, 'runtime'));
+    if (opts.reportPath) writeSarifReport(opts.reportPath, buildSarif({ result, mode: 'runtime', cssFile: opts.cssFile }));
     process.exit(result.violations.length > 0 ? 1 : 0);
   }
 
@@ -485,6 +636,7 @@ function main() {
 
   const result = sourceScan({ paths: opts.paths, allowlist, prefixes, exemptTokens });
   process.stdout.write(opts.format === 'json' ? renderJson(result, 'source') : renderMarkdown(result, 'source'));
+  if (opts.reportPath) writeSarifReport(opts.reportPath, buildSarif({ result, mode: 'source' }));
   process.exit(result.violations.length > 0 ? 1 : 0);
 }
 
