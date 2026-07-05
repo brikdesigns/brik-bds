@@ -1,47 +1,32 @@
 /**
- * CtaDarkCentered — React renderer. Twin of
- * `../astro/CtaDarkCentered.astro`. Closing CTA on a dark surface,
- * centered layout — heading + optional body + single primary action.
+ * CtaDarkCentered — Phase D adapter (deprecated direct path).
  *
- * Contract: BlueprintProps. `section.cta` is REQUIRED.
+ * After brik-bds#582 the canonical primitive is `<Cta>` (the `bds-cta`
+ * section block, default single-column layout). This file remains as an
+ * adapter so the legacy `cta_dark_centered` blueprint key keeps dispatching
+ * through `BlueprintDispatcher` with the same section-data contract that
+ * AI-generated pages expect — it maps `section.*` → `<Cta>` props.
  *
- * @summary Closing CTA on dark surface, centered.
+ * New consumers should compose `<Cta>` directly. This adapter retires
+ * alongside Phase E.
+ *
+ * @deprecated Use `<Cta>` directly.
+ * @summary Legacy adapter — maps section data onto `<Cta>` (default layout).
  */
-import { Button } from '../../../components/ui/Button';
 import type { BlueprintProps } from '../astro/types';
-import { isActionCta } from '../astro/types';
-import './CtaDarkCentered.css';
+import { Cta } from './Cta';
 
 interface Props extends BlueprintProps {}
 
 export function CtaDarkCentered({ section }: Props) {
-  const titleId = `${section.sectionKey}-title`;
-  const cta = section.cta;
-
   return (
-    <section
-      className="bp-cta-dark-centered"
-      aria-labelledby={titleId}
+    <Cta
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      body={section.body ?? undefined}
+      primaryCta={section.cta ?? undefined}
       data-blueprint-key="cta_dark_centered"
-    >
-      <div className="bp-cta-dark-centered__container">
-        <h2 id={titleId} className="bp-cta-dark-centered__title">
-          {section.heading}
-        </h2>
-        {section.body && (
-          <p className="bp-cta-dark-centered__description">{section.body}</p>
-        )}
-        {cta && (
-          <Button
-            {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
-            variant="primary"
-            size="lg"
-          >
-            {cta.label}
-          </Button>
-        )}
-      </div>
-    </section>
+    />
   );
 }
 

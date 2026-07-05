@@ -58,6 +58,7 @@ import { HeroInteriorMinimal } from './HeroInteriorMinimal';
 import { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
 import { AboutStorySplit } from './AboutStorySplit';
 import { CtaDarkCentered } from './CtaDarkCentered';
+import { CtaSplitContact } from './CtaSplitContact';
 import { BlueprintFallback } from './BlueprintFallback';
 
 const BLUEPRINT_REGISTRY: Partial<
@@ -72,6 +73,7 @@ const BLUEPRINT_REGISTRY: Partial<
   features_3col_branded_dark: Features3ColBrandedDark,
   about_story_split: AboutStorySplit,
   cta_dark_centered: CtaDarkCentered,
+  cta_split_contact: CtaSplitContact,
 };
 
 interface Props {
