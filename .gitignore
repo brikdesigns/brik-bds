@@ -11,6 +11,7 @@ dist/
 build/
 storybook-static/
 build-storybook.log
+canonical-check.sarif
 .netlify/
 .storybook/public/health-data.json
 

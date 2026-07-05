@@ -31,6 +31,9 @@ concurrency:
 jobs:
   canonical-check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # upload-sarif → code-scanning annotations
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -53,4 +56,17 @@ jobs:
         run: npm run build:dist-tokens
 
       - name: Canonical token check
-        run: npm run canonical-check
+        run: npm run canonical-check -- --report canonical-check.sarif
+
+      # Surface violations as code-scanning annotations anchored to file+line.
+      # Runs even when the check above failed — that's exactly when there are
+      # annotations to show. Non-blocking: the check step is the gate, so a
+      # failed upload (e.g. fork PRs lacking security-events write) must never
+      # flip an otherwise-green run red.
+      - name: Upload SARIF report
+        if: always()
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: canonical-check.sarif
+          category: canonical-check

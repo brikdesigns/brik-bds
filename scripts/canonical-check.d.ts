@@ -90,3 +90,43 @@ export function runtimeScan(opts: RuntimeScanOptions): RuntimeScanResult;
 
 /** Vitest-friendly: throw on the first non-canonical definition in `css`. */
 export function assertCanonicalCss(css: string, opts?: AssertCanonicalCssOptions): void;
+
+export const SARIF_VERSION: '2.1.0';
+export const SARIF_SCHEMA: string;
+export const SARIF_RULE_ID: 'non-canonical-token-name';
+export const DEFAULT_SARIF_FILE: string;
+
+export interface BuildSarifOptions {
+  /** Output of `sourceScan` (mode 'source') or `runtimeScan` (mode 'runtime'). */
+  result: SourceScanResult | RuntimeScanResult;
+  /** Which scan produced `result`. Selects how violations are read. */
+  mode: 'source' | 'runtime';
+  /** The scanned CSS file — required to locate lines in runtime mode. */
+  cssFile?: string;
+  /** Base directory for relative SARIF artifact URIs. Default: process.cwd(). */
+  cwd?: string;
+}
+
+/** SARIF 2.1.0 log — a minimal shape covering what `buildSarif` emits. */
+export interface SarifLog {
+  version: '2.1.0';
+  $schema: string;
+  runs: Array<{
+    tool: { driver: { name: string; informationUri: string; rules: unknown[] } };
+    results: Array<{
+      ruleId: string;
+      level: string;
+      message: { text: string };
+      partialFingerprints: { tokenName: string };
+      locations?: Array<{
+        physicalLocation: {
+          artifactLocation: { uri: string };
+          region: { startLine: number; startColumn: number; endColumn: number };
+        };
+      }>;
+    }>;
+  }>;
+}
+
+/** Build a SARIF 2.1.0 log from a scan result. One result per violation. */
+export function buildSarif(opts: BuildSarifOptions): SarifLog;
