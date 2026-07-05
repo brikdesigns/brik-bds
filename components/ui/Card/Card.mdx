@@ -8,7 +8,7 @@ import * as Stories from './Card.stories';
 
 <ComponentLinks slug="card" />
 
-Flexible content container. A single primitive serves four shapes via the `preset` discriminator: a default flexible content slot (no `preset`), and three locked-down layouts — `control`, `summary`, and `display` — that subsume the legacy `CardControl` and `CardSummary` components (per ADR-004). The web-only `PricingCard` component is documented alongside these presets as part of the Card family.
+Flexible content container. A default flexible content slot (no `preset`), plus preset layouts via the `preset` discriminator: `control` (settings / integration row) and `summary` (metric) subsume the legacy `CardControl` / `CardSummary` components (per ADR-004); `display` and `display-row` are the **cells of a `CardGrid`**, not standalone cards ([ADR-018](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-018-card-preset-boundary.md)). The web-only `PricingCard` component is documented alongside these presets as part of the Card family.
 
 > **Note** — Multi-card compositions (service grids, feature grids, blog rolls) live in the [`Card Grid`](?path=/docs/theming-blueprints-card-grid--docs) blueprint, not on this page. This page documents the Card primitive itself.
 
@@ -28,33 +28,23 @@ The default shape also takes a `variant`: `outlined` (default, secondary border)
 
 <Canvas of={Stories.Borderless} />
 
-### Leading media (avatar / image)
+### Leading media (avatar / image / logo)
 
-The default shape takes an optional `media` prop that turns the card into a horizontal "media object" — an `Avatar` or a square 1:1 `Image` on the left, with `children` stacked to the right. Pass exactly one of `media={{ avatar: {…} }}` or `media={{ image: {…} }}`. Both size to the shared Avatar scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so an avatar and an image read at the same footprint. The avatar falls back to initials from `name` and can carry a presence `status`; the image takes `fit` (`contain` for logos, `cover` for photos). Mirrors the `TableAvatarCell` / `TableImageCell` media cells.
+The default shape takes an optional `media` prop that turns the card into a horizontal "media object" — an `Avatar`, a square 1:1 `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. Pass exactly one of `media={{ avatar: {…} }}`, `media={{ image: {…} }}`, or `media={{ logo: { set, name } }}`. All size to the shared Avatar scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so they read at the same footprint. The avatar falls back to initials from `name` and can carry a presence `status`; the image takes `fit` (`contain` for artwork, `cover` for photos); the logo renders a full-color third-party / client brand mark. Mirrors the `TableAvatarCell` / `TableImageCell` / `TableLogoCell` media cells.
 
 <Canvas of={Stories.WithAvatar} />
 
 <Canvas of={Stories.WithImage} />
 
+<Canvas of={Stories.WithLogo} />
+
 ### Control preset
 
 `preset="control"` — settings/control row. Leading `logo` + `badge` + (title + description) on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
 
-The `logo` slot accepts any ReactNode (typically an `<Avatar>` or `<img>`) and renders as a leading logomark before the `badge` — use it for integration or third-party service cards where a visual brand anchor makes the row scannable. The `connectionStatus` prop accepts `not-configured | connected | syncing | synced | error` and renders a dot + label in the trailing block, coexisting with the `action` slot. Pass `lastSynced` to display a timestamp beneath the status indicator.
+The `logo` slot accepts any ReactNode — a `<Logo>` for an integration / third-party service card, or an `<Avatar>` for an account — and renders as a leading logomark before the `badge`. The `connectionStatus` prop accepts `not-configured | connected | syncing | synced | error` and renders a status indicator in the trailing block, coexisting with the `action` slot; pass `lastSynced` for a timestamp beneath it. `connectionStatus` is a **state of one card, not a set of variants** — cycle it in the Controls panel on the story below rather than reaching for separate stories.
 
 <Canvas of={Stories.Control} />
-
-#### With logo
-
-<Canvas of={Stories.ControlWithLogo} />
-
-#### With connection status
-
-<Canvas of={Stories.ControlWithConnectionStatus} />
-
-#### All connection-status states
-
-<Canvas of={Stories.ControlConnectionStatuses} />
 
 ### Summary preset
 
