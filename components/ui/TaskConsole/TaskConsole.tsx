@@ -174,7 +174,9 @@ export function TaskConsole({
               key={item.id}
               className={bdsClass(
                 'bds-task-console__item',
-                `bds-task-console__item--${item.status}`,
+                // Emit a kebab-case BEM modifier (ADR-008 §4) — the `status`
+                // prop stays snake_case (`in_progress`) for API stability.
+                `bds-task-console__item--${item.status.replace(/_/g, '-')}`,
               )}
             >
               <div className="bds-task-console__item-content">
