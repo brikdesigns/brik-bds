@@ -87,9 +87,18 @@ export const DEFAULT_CLASS_ALIASES = Object.freeze({
  * Distinguishing requires more context than a regex can provide; we rely
  * on review for `card` and only enforce the pure-`btn`/`button` collision
  * + invented `bds-*` cases by default. Consumers can drop the exemption.
+ *
+ * `cta` is exempted for the same reason once the `bds-cta` block exists
+ * (brik-bds#582): the source scanner's `.<name>` class regex also matches
+ * property access, and `section.cta` is a load-bearing field of the
+ * `BlueprintProps` data contract used across every blueprint renderer
+ * (`const cta = section.cta`, `priceCard.cta.url`, …). Those are data reads,
+ * not `.cta` class selectors, so the collision with the new `bds-cta`
+ * canonical root is a false positive a regex can't tell apart.
  */
 export const DEFAULT_CLASS_EXEMPT_PATTERNS = Object.freeze([
   /^card$/,
+  /^cta$/,
 ]);
 
 export const DEFAULT_SCAN_EXTENSIONS = Object.freeze([

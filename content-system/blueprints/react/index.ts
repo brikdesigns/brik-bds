@@ -49,6 +49,16 @@ export type { CardGridProps } from './CardGrid';
 export { SupportPlan } from './SupportPlan';
 export type { SupportPlanProps } from './SupportPlan';
 
+// `<Cta>` — the `bds-cta` closing-CTA section primitive
+// (post-brik-bds#582 consolidation). Props-based: heading + optional body +
+// a primary and optional secondary action (brik-bds#590), in a single-column
+// default or two-column `--split` layout. Replaces the ADR-008-banned
+// `bp-cta-dark-centered`. New consumers compose this directly; the
+// `cta_dark_centered` and `cta_split_contact` keys dispatch through the
+// adapters below.
+export { Cta } from './Cta';
+export type { CtaProps, CtaLayout } from './Cta';
+
 // Legacy section-data adapters — preserve `BlueprintDispatcher` +
 // AI-render path compatibility. Internally compose `<CardGrid>` +
 // `<Card preset="display">`. Direct consumers should reach for those
@@ -62,6 +72,7 @@ export { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
 export { Features3ColBrandedDark } from './Features3ColBrandedDark';
 export { AboutStorySplit } from './AboutStorySplit';
 export { CtaDarkCentered } from './CtaDarkCentered';
+export { CtaSplitContact } from './CtaSplitContact';
 
 // ── Dispatch surface ────────────────────────────────────────────
 export { BlueprintDispatcher } from './BlueprintDispatcher';

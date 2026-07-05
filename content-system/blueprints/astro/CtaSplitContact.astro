@@ -1,9 +1,10 @@
 ---
 /**
- * cta_split_contact — closing CTA with a split layout: messaging on the
- * left, contact methods on the right. Phone + email are rendered as
- * tel:/mailto: links. The right column is the conversion surface when
- * the visitor prefers direct contact over a web form.
+ * cta_split_contact — Phase D Astro renderer for the `bds-cta` family,
+ * `--split` layout (brik-bds#582). Twin of the React `<Cta layout="split">`
+ * adapter. Messaging on the left, contact methods on the right; phone +
+ * email render as tel:/mailto: links. The right column is the conversion
+ * surface when the visitor prefers direct contact over a web form.
  *
  * Contract: BlueprintProps.
  *   - section.heading    — CTA headline (h2 for page hierarchy)
@@ -18,13 +19,12 @@
  * `data-content-needed` stub in place of the missing method — CI grep
  * on `dist/` blocks publish.
  *
- * CSS custom properties:
- *   --bds-cta-split-contact-padding-y
- *   --bds-cta-split-contact-bg              (default: var(--surface-primary))
- *   --bds-cta-split-contact-heading-color   (default: var(--text-primary))
- *   --bds-cta-split-contact-body-color      (default: var(--text-secondary))
- *   --bds-cta-split-contact-method-color    (default: var(--text-primary))
- *   --bds-cta-split-contact-divider         (default: var(--border-secondary))
+ * CSS custom properties (Tier-4 hooks — shared with the family default):
+ *   --bds-cta-bg              (--split default: var(--surface-primary))
+ *   --bds-cta-heading-color   (default: var(--text-primary))
+ *   --bds-cta-body-color      (default: var(--text-secondary))
+ *   --bds-cta-method-color    (default: var(--text-primary))
+ *   --bds-cta-divider         (default: var(--border-secondary))
  *
  * a11y: h2 + aria-labelledby. Contact methods use semantic tel:/mailto:
  * anchors. Focus-visible ring on every interactive surface.
@@ -40,43 +40,45 @@ const email = clientFacts.email;
 ---
 
 <section
-  class="bp-cta-split-contact"
+  class="bds-cta bds-cta--split"
   aria-labelledby={titleId}
   data-blueprint-key="cta_split_contact"
 >
-  <div class="bp-cta-split-contact__container">
-    <div class="bp-cta-split-contact__message">
-      <h2 id={titleId} class="bp-cta-split-contact__title">{section.heading}</h2>
+  <div class="bds-cta__container">
+    <div class="bds-cta__message">
+      <h2 id={titleId} class="bds-cta__title">{section.heading}</h2>
       {section.body && (
-        <p class="bp-cta-split-contact__description">{section.body}</p>
+        <p class="bds-cta__description">{section.body}</p>
       )}
       {section.cta && 'url' in section.cta && (
-        <a href={section.cta.url} class="bds-button bds-button--primary bds-button--md"><span class="bds-button__content">{section.cta.label}</span></a>
+        <div class="bds-cta__actions">
+          <a href={section.cta.url} class="bds-button bds-button--primary bds-button--md"><span class="bds-button__content">{section.cta.label}</span></a>
+        </div>
       )}
     </div>
 
-    <div class="bp-cta-split-contact__methods">
+    <div class="bds-cta__aside">
       {phone ? (
-        <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} class="bp-cta-split-contact__method">
-          <span class="bp-cta-split-contact__method-label">Call</span>
-          <span class="bp-cta-split-contact__method-value">{phone}</span>
+        <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} class="bds-cta__method">
+          <span class="bds-cta__method-label">Call</span>
+          <span class="bds-cta__method-value">{phone}</span>
         </a>
       ) : (
-        <div class="bp-cta-split-contact__method" data-content-needed="phone" role="presentation">
-          <span class="bp-cta-split-contact__method-label">Call</span>
-          <span class="bp-cta-split-contact__method-value">Phone missing</span>
+        <div class="bds-cta__method" data-content-needed="phone" role="presentation">
+          <span class="bds-cta__method-label">Call</span>
+          <span class="bds-cta__method-value">Phone missing</span>
         </div>
       )}
 
       {email ? (
-        <a href={`mailto:${email}`} class="bp-cta-split-contact__method">
-          <span class="bp-cta-split-contact__method-label">Email</span>
-          <span class="bp-cta-split-contact__method-value">{email}</span>
+        <a href={`mailto:${email}`} class="bds-cta__method">
+          <span class="bds-cta__method-label">Email</span>
+          <span class="bds-cta__method-value">{email}</span>
         </a>
       ) : (
-        <div class="bp-cta-split-contact__method" data-content-needed="email" role="presentation">
-          <span class="bp-cta-split-contact__method-label">Email</span>
-          <span class="bp-cta-split-contact__method-value">Email missing</span>
+        <div class="bds-cta__method" data-content-needed="email" role="presentation">
+          <span class="bds-cta__method-label">Email</span>
+          <span class="bds-cta__method-value">Email missing</span>
         </div>
       )}
     </div>
@@ -84,15 +86,12 @@ const email = clientFacts.email;
 </section>
 
 <style>
-  .bp-cta-split-contact {
-    background: var(--bds-cta-split-contact-bg, var(--surface-primary));
-    padding-block: var(
-      --bds-cta-split-contact-padding-y,
-      clamp(var(--space-3xl), 7vw, var(--space-5xl))
-    );
+  .bds-cta {
+    background: var(--bds-cta-bg, var(--surface-primary));
+    padding-block: clamp(var(--space-3xl), 7vw, var(--space-5xl));
   }
 
-  .bp-cta-split-contact__container {
+  .bds-cta__container {
     max-width: var(--size-container-xl, 1280px);
     margin-inline: auto;
     padding-inline: var(--space-xl);
@@ -103,98 +102,80 @@ const email = clientFacts.email;
   }
 
   @media (min-width: 768px) {
-    .bp-cta-split-contact__container {
+    .bds-cta__container {
       grid-template-columns: 3fr 2fr;
       gap: var(--space-3xl);
     }
   }
 
-  .bp-cta-split-contact__message {
+  .bds-cta__message {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
   }
 
-  .bp-cta-split-contact__title {
+  .bds-cta__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bds-cta-split-contact-heading-color, var(--text-primary));
+    color: var(--bds-cta-heading-color, var(--text-primary));
   }
 
-  .bp-cta-split-contact__description {
+  .bds-cta__description {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
-    color: var(--bds-cta-split-contact-body-color, var(--text-secondary));
+    color: var(--bds-cta-body-color, var(--text-secondary));
     max-width: 55ch;
   }
 
-  .bp-cta-split-contact__cta {
-    display: inline-flex;
+  .bds-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    margin-top: var(--space-md);
-    padding: var(--space-sm) var(--space-lg);
-    background: var(--background-brand-primary);
-    color: var(--text-on-color-dark, var(--text-inverse));
-    font-family: var(--font-family-label);
-    font-size: var(--label-xl);
-    font-weight: var(--font-weight-semibold);
-    text-decoration: none;
-    border-radius: var(--border-radius-md);
-    align-self: flex-start;
-    transition: background 120ms ease-out;
+    gap: var(--space-md);
+    margin-top: var(--space-sm);
   }
 
-  .bp-cta-split-contact__cta:hover {
-    background: var(--background-brand-primary-hover, var(--background-brand-primary));
-  }
-
-  .bp-cta-split-contact__cta:focus-visible {
-    outline: 2px solid var(--border-focus, var(--background-brand-primary));
-    outline-offset: 2px;
-  }
-
-  .bp-cta-split-contact__methods {
+  .bds-cta__aside {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
-    padding-inline-start: 0;
-    border-left: 1px solid var(--bds-cta-split-contact-divider, var(--border-secondary));
+    border-left: 1px solid var(--bds-cta-divider, var(--border-secondary));
     padding-inline-start: var(--space-lg);
   }
 
   @media (max-width: 767px) {
-    .bp-cta-split-contact__methods {
+    .bds-cta__aside {
       border-left: none;
-      border-top: 1px solid var(--bds-cta-split-contact-divider, var(--border-secondary));
+      border-top: 1px solid var(--bds-cta-divider, var(--border-secondary));
       padding-top: var(--space-lg);
       padding-inline-start: 0;
     }
   }
 
-  .bp-cta-split-contact__method {
+  .bds-cta__method {
     display: flex;
     flex-direction: column;
     gap: var(--space-2xs);
-    color: var(--bds-cta-split-contact-method-color, var(--text-primary));
+    color: var(--bds-cta-method-color, var(--text-primary));
     text-decoration: none;
     transition: color 120ms ease-out;
   }
 
-  a.bp-cta-split-contact__method:hover {
+  a.bds-cta__method:hover {
     color: var(--text-brand-primary);
   }
 
-  a.bp-cta-split-contact__method:focus-visible {
+  a.bds-cta__method:focus-visible {
     outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 2px;
   }
 
-  .bp-cta-split-contact__method-label {
+  .bds-cta__method-label {
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
     letter-spacing: 0.08em;
@@ -202,9 +183,8 @@ const email = clientFacts.email;
     color: var(--text-secondary);
   }
 
-  .bp-cta-split-contact__method-value {
-    font-family: var(--font-family-heading);
-    font-size: var(--heading-md);
-    font-weight: var(--font-weight-semibold);
+  .bds-cta__method-value {
+    font-family: var(--font-family-body);
+    font-size: var(--heading-sm);
   }
 </style>
