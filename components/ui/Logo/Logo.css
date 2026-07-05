@@ -1,0 +1,28 @@
+.bds-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  line-height: 0;
+}
+
+/* Contain the mark within the square box: wide payment cards letterbox to
+   width, square product marks fill. The generator strips the SVG's intrinsic
+   width/height so these constraints govern. */
+.bds-logo svg {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+/* bds-lint-ignore — component-level media-box sizing. Code/Storybook is the
+   source of truth for components (Figma is a visual reference only). The square
+   is keyed to the shared Avatar / Card-media scale (32/40/48/64) so <Logo>
+   drops into Card media + table cells at the same footprint as <Avatar> and a
+   1:1 <Image>. */
+.bds-logo--sm { width: 32px; height: 32px; }
+.bds-logo--md { width: 40px; height: 40px; }
+.bds-logo--lg { width: 48px; height: 48px; }
+.bds-logo--xl { width: 64px; height: 64px; }

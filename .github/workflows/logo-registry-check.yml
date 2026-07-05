@@ -1,0 +1,52 @@
+name: Logo Registry Check
+
+# Ensures components/ui/Logo/logos.generated.ts stays in sync with the source
+# marks in assets/logo-*.svg. Fails the build if a source SVG was added, removed,
+# or edited without regenerating the committed registry (`npm run gen:logos`) —
+# so a logo can't silently go missing or stale in the bundled offline set.
+#
+# Why this is a CI gate (not just pre-push):
+#   - Cloud-agent commits bypass local hooks entirely.
+#   - PRs from fresh clones may not have husky installed.
+#   - The offline-logo guarantee is only as good as the committed registry.
+#
+# Source: scripts/gen-logos.mjs
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'assets/logo-*.svg'
+      - 'components/ui/Logo/logos.generated.ts'
+      - 'scripts/gen-logos.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - 'assets/logo-*.svg'
+      - 'components/ui/Logo/logos.generated.ts'
+      - 'scripts/gen-logos.mjs'
+
+concurrency:
+  group: logo-registry-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  logo-registry-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check bundled logo registry is in sync
+        run: npm run gen:logos:check

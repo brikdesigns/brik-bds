@@ -1,0 +1,47 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Logo.stories';
+
+<Meta of={Stories} />
+
+# Logo
+
+<ComponentLinks slug="logo" />
+
+Full-color third-party / client brand mark from a bundled registry. Resolves offline like `<Icon>`, but renders multi-fill brand art exactly as authored — never recolored, since brand guidelines own the color. `set` (`credit-card` / `integration` / `client`) constrains the allowed `name`.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+Logo varies on `set` (which family) and `name` (which mark); `size`, `label`, and `decorative` are Controls on every story. The galleries below show each set at once — `name` is a Control, so the sidebar can't.
+
+### Credit-card
+
+<Canvas of={Stories.CreditCard} />
+
+### Integration
+
+<Canvas of={Stories.Integration} />
+
+### Sizes
+
+<Canvas of={Stories.Sizes} />
+
+## Patterns
+
+<Canvas of={Stories.InContainers} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Never recolored** — a `<Logo>` renders the mark as authored. For a monochrome, `currentColor`-recolorable glyph use [`Icon`](?path=/docs/components-icon--docs); for a Brik service-line badge use [`ServiceTag`](?path=/docs/indicators-servicetag--docs).
+
+> **Client logos** — the `client` set holds only marks bundled into BDS for internal reference. A per-tenant client logo uploaded at runtime is not a registry entry: pass it as a `src` URL through [`Image`](?path=/docs/components-image--docs) / [`Avatar`](?path=/docs/components-avatar--docs) or the Card `image` media slot.
+
+> **Adding a mark** — drop `logo-{cc|third-party|client}-{name}.svg` into `assets/`, run `npm run gen:logos`, and commit the regenerated `logos.generated.ts`. The `Logo Registry Check` CI gate fails if the registry drifts from the source SVGs.
