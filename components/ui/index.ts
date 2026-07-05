@@ -59,6 +59,7 @@ export * from './Icon';
 export * from './Icons';
 export * from './Image';
 export * from './InteractiveListItem';
+export * from './Logo';
 export * from './MarketingIllustration';
 export * from './Menu';
 export * from './Meter';
