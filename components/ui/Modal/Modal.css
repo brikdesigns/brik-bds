@@ -47,7 +47,7 @@
 
 .bds-modal__header {
   padding: var(--padding-lg);
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
   display: flex;
   align-items: center;
   justify-content: space-between;

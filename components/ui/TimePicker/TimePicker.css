@@ -147,7 +147,7 @@
 
 /* Column dividers (not on the last column) */
 .bds-time-picker__column:not(:last-child) {
-  border-right: var(--border-width-sm) solid var(--border-muted);
+  border-right: var(--border-width-md) solid var(--border-muted);
 }
 
 /* ─── Cell ───────────────────────────────────────────────────── */

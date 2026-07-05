@@ -62,7 +62,7 @@
   align-items: flex-start;
   justify-content: space-between;
   padding: var(--padding-lg);
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
   flex-shrink: 0;
 }
 
@@ -189,7 +189,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   flex-shrink: 0;
-  border-top: var(--border-width-sm) solid var(--border-muted);
+  border-top: var(--border-width-md) solid var(--border-muted);
 }
 
 .bds-sheet__footer-secondary {

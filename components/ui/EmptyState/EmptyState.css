@@ -9,7 +9,7 @@
   gap: var(--gap-xl);
   padding: var(--padding-xl);
   background-color: var(--surface-secondary);
-  border: var(--border-width-sm) solid var(--border-secondary);
+  border: var(--border-width-md) solid var(--border-secondary);
   border-radius: var(--border-radius-lg);
   overflow: hidden;
   width: 100%;

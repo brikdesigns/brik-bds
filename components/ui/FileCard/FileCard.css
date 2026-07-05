@@ -34,7 +34,7 @@
   display: flex;
   align-items: stretch;
   background-color: var(--surface-primary);
-  border: var(--border-width-sm) solid var(--border-secondary);
+  border: var(--border-width-md) solid var(--border-secondary);
   border-radius: var(--border-radius-md);
   overflow: hidden;
   width: 100%;
@@ -160,7 +160,7 @@
   gap: var(--gap-xs);
   padding: var(--padding-xs) var(--padding-sm);
   background-color: var(--surface-primary);
-  border: var(--border-width-sm) solid var(--border-secondary);
+  border: var(--border-width-md) solid var(--border-secondary);
   border-radius: var(--border-radius-sm);
   font-family: var(--font-family-label);
   font-size: var(--label-sm);

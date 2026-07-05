@@ -33,7 +33,7 @@
 .bds-footer__above-top {
   width: 100%;
   padding-bottom: var(--padding-lg);
-  border-bottom: var(--border-width-sm) solid var(--border-secondary);
+  border-bottom: var(--border-width-md) solid var(--border-secondary);
 }
 
 /* ─── Variants ────────────────────────────────────────────────── */
@@ -146,7 +146,7 @@
   align-items: center;
   gap: var(--gap-lg);
   padding-top: var(--padding-md);
-  border-top: var(--border-width-sm) solid var(--border-secondary);
+  border-top: var(--border-width-md) solid var(--border-secondary);
 }
 
 .bds-footer__bottom-left {

@@ -19,7 +19,7 @@
    background and corner cells to the radius. */
 .bds-table[data-rounded-top="true"],
 .bds-table[data-rounded-bottom="true"] {
-  border: var(--border-width-sm) solid var(--border-muted);
+  border: var(--border-width-md) solid var(--border-muted);
   overflow: hidden;
 }
 
@@ -100,7 +100,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: var(--padding-tiny) var(--padding-md);
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
 }
 
 /* Suppress striped background on subheader rows */
@@ -129,7 +129,7 @@
   overflow-wrap: anywhere;
   /* Row divider lives on the cell — `tr` borders don't paint under
      `border-collapse: separate`. */
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
 }
 
 /* Size: default */
@@ -152,7 +152,7 @@
   width: 1%;
   white-space: nowrap;
   /* Match the body-cell row divider (borders don't paint on `tr`). */
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
 }
 
 /* When an outer border is present (any rounded edge), the last body row
@@ -207,7 +207,7 @@
 
 .bds-table-avatar-cell {
   vertical-align: middle;
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
 }
 
 .bds-table[data-size="default"] .bds-table-avatar-cell {
@@ -261,7 +261,7 @@
   /* Shrink-to-content so the thumbnail column never competes with content cells */
   width: 1%;
   white-space: nowrap;
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
 }
 
 .bds-table[data-size="default"] .bds-table-image-cell {
@@ -299,7 +299,7 @@
 
 .bds-table-service-tag-cell {
   vertical-align: middle;
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  border-bottom: var(--border-width-md) solid var(--border-muted);
 }
 
 .bds-table[data-size="default"] .bds-table-service-tag-cell {
