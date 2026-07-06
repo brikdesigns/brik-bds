@@ -1,21 +1,32 @@
 /**
- * HeroSplitImageCardOverlay — React renderer. Twin of
- * `../astro/HeroSplitImageCardOverlay.astro`. Interior-page hero
- * with a 58/42 split: content trail on the left
- * (breadcrumb + eyebrow + h1 + optional body + CTA), white image
- * card on the right with optional price overlay.
+ * HeroSplitImageCardOverlay — Phase D adapter (deprecated direct path).
  *
- * Drives `/services/{cat}/{slug}` style pages.
+ * After brik-bds#1165 the canonical primitive is `<Hero>` (the `bds-hero`
+ * section block, `with-pricing-card` layout). This file remains as an adapter
+ * so the legacy `hero_split_image_card_overlay` blueprint key keeps
+ * dispatching through `BlueprintDispatcher` with the same section-data
+ * contract — and so the two brikdesigns.com consumers
+ * (`ServiceHeroModal` / `PlanHeroModal`) that import it via
+ * `ComponentProps<typeof HeroSplitImageCardOverlay>` keep working unchanged.
  *
- * Composes BDS primitives per .claude/standards/component-build.md
- * §"Compose primitives — never reimplement them":
- *   - Breadcrumb trail → `<Breadcrumb items={...} />`
- *   - Left CTA → `<Button variant="inverse">`
- *   - Price-card CTA → `<Button variant="primary">`
+ * It maps `section.*` → `<Hero layout="with-pricing-card">` props, composing:
+ *   - the breadcrumb trail   → `<Breadcrumb>` (the `breadcrumb` slot)
+ *   - the eyebrow icon       → decorative node / raw <img> / `<ServiceTag>`
+ *                              (the `eyebrow` slot, precedence per #849/#546)
+ *   - the media column       → the `aside` price card (<Frame> image + optional
+ *                              price overlay + price CTA), or a
+ *                              `data-content-needed` stub when `priceCard` is
+ *                              absent (CI grep on `dist/` blocks publish).
+ * `data-audience` is forwarded to `<Hero>` to drive the service-token cascade.
  *
- * @summary Interior-page split hero with image card + optional price overlay.
+ * New consumers should compose `<Hero layout="with-pricing-card" …>` directly.
+ * This adapter retires alongside Phase E.
+ *
+ * @deprecated Use `<Hero layout="with-pricing-card">` directly.
+ * @summary Legacy adapter — section + priceCard → `<Hero layout="with-pricing-card">`.
  */
 import type { MouseEvent, ReactNode } from 'react';
+
 import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
 import { Button } from '../../../components/ui/Button';
 import { Frame } from '../../../components/ui/Frame/Frame';
@@ -23,7 +34,7 @@ import type { FrameRatio } from '../../../components/ui/Frame/Frame';
 import { ServiceTag } from '../../../components/ui/ServiceTag/ServiceTag';
 import type { BlueprintProps } from '../astro/types';
 import { isActionCta } from '../astro/types';
-import './HeroSplitImageCardOverlay.css';
+import { Hero } from './Hero';
 
 interface Props extends BlueprintProps {
   imageRatio?: FrameRatio;
@@ -61,157 +72,137 @@ export function HeroSplitImageCardOverlay({
   onPriceCtaClick,
 }: Props) {
   const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
-  const titleId = `${section.sectionKey}-title`;
-  const eyebrow = section.subheading;
-  const headline = section.heading ?? '';
-  const lead = section.body;
-  const cta = section.cta;
 
-  return (
-    <section
-      className="bp-hero-img-card"
-      aria-labelledby={titleId}
-      data-blueprint-key="hero_split_image_card_overlay"
-      data-audience={audience}
-    >
-      <div className="bp-hero-img-card__container">
-        <div className="bp-hero-img-card__content">
-          {breadcrumb.length > 0 && (
-            <Breadcrumb
-              className="bp-hero-img-card__breadcrumb"
-              items={breadcrumb.map((item) => ({ label: item.label, href: item.href }))}
+  const breadcrumbNode =
+    breadcrumb.length > 0 ? (
+      <Breadcrumb
+        className="bds-hero__breadcrumb"
+        items={breadcrumb.map((item) => ({ label: item.label, href: item.href }))}
+      />
+    ) : undefined;
+
+  /*
+   * Eyebrow icon precedence:
+   *   1. `icon` (a rendered node) → render inside an `aria-hidden` wrapper —
+   *      decorative SVG/Image, no img/alt semantics (brik-bds#849). React-only.
+   *   2. `iconUrl` → raw `<img>` (legacy / decorative-image escape hatch, #546).
+   *   3. `audience` set → canonical `<ServiceTag>` — the design-system path.
+   *   4. none → no eyebrow.
+   * `showServiceTag={false}` suppresses the whole slot while leaving
+   * `data-audience` theming intact (brik-bds#871).
+   */
+  const eyebrowNode = showServiceTag
+    ? icon
+      ? (
+          <span className="bds-hero__icon-slot" aria-hidden="true">
+            {icon}
+          </span>
+        )
+      : iconUrl
+        ? (
+            <img
+              src={iconUrl}
+              alt={iconAlt ?? ''}
+              className="bds-hero__icon"
+              loading="eager"
+              decoding="async"
             />
-          )}
-
-          {/*
-           * Eyebrow icon precedence:
-           *   1. If `icon` (a rendered node) is provided, render it inside an
-           *      `aria-hidden` wrapper — decorative SVG/Image, no img/alt
-           *      semantics (brik-bds#849). React-only.
-           *   2. Else if `iconUrl` is provided, render the raw `<img>` (legacy /
-           *      decorative-image escape hatch, brik-bds#546).
-           *   3. Otherwise, if `audience` is set, render the canonical
-           *      `<ServiceTag>` for that audience — the design-system path.
-           *      Consumers stop supplying `iconUrl` for category badges; the
-           *      blueprint resolves the icon via BDS's service-token system,
-           *      keeping theme awareness intact.
-           *   4. If none is set, no eyebrow renders.
-           *
-           * `showServiceTag={false}` suppresses this whole slot while leaving
-           * `data-audience` theming intact (brik-bds#871).
-           */}
-          {showServiceTag &&
-            (icon ? (
-              <span className="bp-hero-img-card__icon-slot" aria-hidden="true">
-                {icon}
-              </span>
-            ) : iconUrl ? (
-              <img
-                src={iconUrl}
-                alt={iconAlt ?? ''}
-                className="bp-hero-img-card__icon"
-                loading="eager"
-                decoding="async"
-              />
-            ) : audience ? (
+          )
+        : audience
+          ? (
               <ServiceTag
                 category={audience}
                 variant="icon"
                 size="lg"
-                className="bp-hero-img-card__icon"
+                className="bds-hero__icon"
               />
-            ) : null)}
+            )
+          : undefined
+    : undefined;
 
-          {eyebrow && <p className="bp-hero-img-card__subtitle">{eyebrow}</p>}
-
-          <h1 id={titleId} className="bp-hero-img-card__title">
-            {headline}
-          </h1>
-
-          {lead && <p className="bp-hero-img-card__lead">{lead}</p>}
-
-          {cta && (
-            <Button
-              {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
-              variant="inverse"
-              size="md"
-            >
-              {cta.label}
-            </Button>
+  const media = priceCard ? (
+    <aside className="bds-hero__media-card">
+      <Frame ratio={imageRatio} className="bds-hero__image-frame">
+        <img
+          src={priceCard.imageUrl}
+          alt={priceCard.imageAlt ?? ''}
+          loading="eager"
+          decoding="async"
+          className="bds-hero__image"
+        />
+      </Frame>
+      {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
+        <div className="bds-hero__price">
+          {priceCard.priceLabel && priceCard.price && (
+            <p className="bds-hero__price-label">{priceCard.priceLabel}</p>
           )}
-        </div>
-
-        {priceCard ? (
-          <aside className="bp-hero-img-card__media-card">
-            <Frame ratio={imageRatio} className="bp-hero-img-card__image-frame">
-              <img
-                src={priceCard.imageUrl}
-                alt={priceCard.imageAlt ?? ''}
-                loading="eager"
-                decoding="async"
-                className="bp-hero-img-card__image"
-              />
-            </Frame>
-            {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
-              <div className="bp-hero-img-card__price">
-                {priceCard.priceLabel && priceCard.price && (
-                  <p className="bp-hero-img-card__price-label">
-                    {priceCard.priceLabel}
-                  </p>
-                )}
-                {priceCard.price && (
-                  <p className="bp-hero-img-card__price-value">{priceCard.price}</p>
-                )}
-                {priceCard.cta &&
-                  (isActionCta(priceCard.cta) ? (
-                    // Action CTA (#941): the config carries its own handler, so
-                    // render a real <button> — no href, no fallback navigation.
-                    <Button
-                      onClick={priceCard.cta.onClick}
-                      variant="primary"
-                      size={priceCard.cta.size ?? 'sm'}
-                    >
-                      {priceCard.cta.label}
-                    </Button>
-                  ) : (
-                    <Button
-                      href={priceCard.cta.url}
-                      variant="primary"
-                      size={priceCard.cta.size ?? 'sm'}
-                      onClick={
-                        onPriceCtaClick
-                          ? (event) => {
-                              // Progressive enhancement: with JS, suppress the
-                              // anchor navigation and hand off to the consumer's
-                              // handler (e.g. open a modal). Without JS, the
-                              // `href` still navigates. (brik-bds#843)
-                              event.preventDefault();
-                              onPriceCtaClick(event);
-                            }
-                          : undefined
+          {priceCard.price && (
+            <p className="bds-hero__price-value">{priceCard.price}</p>
+          )}
+          {priceCard.cta &&
+            (isActionCta(priceCard.cta) ? (
+              // Action CTA (#941): the config carries its own handler, so
+              // render a real <button> — no href, no fallback navigation.
+              <Button
+                onClick={priceCard.cta.onClick}
+                variant="primary"
+                size={priceCard.cta.size ?? 'sm'}
+              >
+                {priceCard.cta.label}
+              </Button>
+            ) : (
+              <Button
+                href={priceCard.cta.url}
+                variant="primary"
+                size={priceCard.cta.size ?? 'sm'}
+                onClick={
+                  onPriceCtaClick
+                    ? (event) => {
+                        // Progressive enhancement: with JS, suppress the
+                        // anchor navigation and hand off to the consumer's
+                        // handler (e.g. open a modal). Without JS, the
+                        // `href` still navigates. (brik-bds#843)
+                        event.preventDefault();
+                        onPriceCtaClick(event);
                       }
-                    >
-                      {priceCard.cta.label}
-                    </Button>
-                  ))}
-              </div>
-            )}
-          </aside>
-        ) : (
-          <Frame
-            ratio={imageRatio}
-            as="aside"
-            className="bp-hero-img-card__missing"
-            data-content-needed="hero_image_url"
-            role="presentation"
-          >
-            <p className="bp-hero-img-card__missing-label">
-              Hero image card missing for this page.
-            </p>
-          </Frame>
-        )}
-      </div>
-    </section>
+                    : undefined
+                }
+              >
+                {priceCard.cta.label}
+              </Button>
+            ))}
+        </div>
+      )}
+    </aside>
+  ) : (
+    <Frame
+      ratio={imageRatio}
+      as="aside"
+      className="bds-hero__missing"
+      data-content-needed="hero_image_url"
+      role="presentation"
+    >
+      <p className="bds-hero__missing-label">
+        Hero image card missing for this page.
+      </p>
+    </Frame>
+  );
+
+  return (
+    <Hero
+      layout="with-pricing-card"
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      lead={section.body ?? undefined}
+      cta={section.cta ?? undefined}
+      ctaVariant="inverse"
+      breadcrumb={breadcrumbNode}
+      eyebrow={eyebrowNode}
+      media={media}
+      data-audience={audience}
+      data-blueprint-key="hero_split_image_card_overlay"
+    />
   );
 }
 

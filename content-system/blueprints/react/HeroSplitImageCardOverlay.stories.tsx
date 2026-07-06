@@ -202,12 +202,12 @@ export const DecorativeIconSlot: Story = {
   },
   play: async ({ canvasElement }) => {
     // The decorative slot renders and is hidden from the a11y tree...
-    const slot = canvasElement.querySelector('.bp-hero-img-card__icon-slot');
+    const slot = canvasElement.querySelector('.bds-hero__icon-slot');
     await expect(slot).not.toBeNull();
     await expect(slot).toHaveAttribute('aria-hidden', 'true');
     // ...and the legacy raw-<img> eyebrow path is not used.
     await expect(
-      canvasElement.querySelector('img.bp-hero-img-card__icon'),
+      canvasElement.querySelector('img.bds-hero__icon'),
     ).toBeNull();
   },
 };
