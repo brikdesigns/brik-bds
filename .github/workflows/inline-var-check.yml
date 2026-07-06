@@ -1,0 +1,47 @@
+name: Inline var() Check
+
+# Fails when a component TSX file introduces raw inline `var(--…)` token
+# consumption outside the baseline (brik-bds#892). CLAUDE.md + the component-build
+# standard mandate CSS-over-inline; inline style objects must not consume tokens.
+# Defining a `--bds-*` custom property inline (runtime binding) is allowed.
+#
+# Existing offenders are baselined in scripts/lint-inline-var.mjs and burned down
+# in per-component follow-up PRs; this gate blocks NEW violations and flags a
+# baseline entry that has become clean (so it can be removed).
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'components/**/*.tsx'
+      - 'scripts/lint-inline-var.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - 'components/**/*.tsx'
+      - 'scripts/lint-inline-var.mjs'
+
+concurrency:
+  group: inline-var-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  inline-var-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Inline var() check
+        run: npm run lint-inline-var
