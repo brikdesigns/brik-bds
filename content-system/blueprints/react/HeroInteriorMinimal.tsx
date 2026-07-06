@@ -1,60 +1,34 @@
 /**
- * HeroInteriorMinimal — React renderer. Twin of
- * `../astro/HeroInteriorMinimal.astro`. Text-only interior page hero —
- * eyebrow + headline + optional lead, no image. Owns the h1 for the
- * page.
+ * HeroInteriorMinimal — Phase D adapter (deprecated direct path).
  *
- * Contract: BlueprintProps (section + clientFacts + theme).
+ * After brik-bds#583 the canonical primitive is `<Hero>` (the `bds-hero`
+ * section block, `interior-minimal` layout). This file remains as an adapter
+ * so the legacy `hero_interior_minimal` blueprint key keeps dispatching
+ * through `BlueprintDispatcher` with the same section-data contract that
+ * AI-generated pages expect — it maps `section.*` → `<Hero>` props.
  *
- * Token-name note: the Astro source uses several token names that
- * silently fall back to browser defaults today (e.g. `--space-xl`,
- * `--line-height-tight`). The React port consumes canonical names
- * that resolve in `dist/tokens.css` (`--padding-lg`, `--font-line-
- * height-tight`). Visual output is closer to designer intent than the
- * Astro version currently produces; the gap-fills fix is tracked
- * separately.
+ * New consumers should compose `<Hero layout="interior-minimal">` directly.
+ * This adapter retires alongside Phase E.
  *
- * @summary Interior page hero — eyebrow + h1 + optional lead, no image.
+ * @deprecated Use `<Hero layout="interior-minimal">` directly.
+ * @summary Legacy adapter — section data → `<Hero layout="interior-minimal">`.
  */
-import { Button } from '../../../components/ui/Button';
 import type { BlueprintProps } from '../astro/types';
-import { isActionCta } from '../astro/types';
-import './HeroInteriorMinimal.css';
+import { Hero } from './Hero';
 
 interface Props extends BlueprintProps {}
 
 export function HeroInteriorMinimal({ section }: Props) {
-  const titleId = `${section.sectionKey}-title`;
-  const eyebrow = section.subheading;
-  const headline = section.heading ?? '';
-  const lead = section.body;
-  const cta = section.cta;
-
   return (
-    <section
-      className="bp-hero-interior-minimal"
-      aria-labelledby={titleId}
+    <Hero
+      layout="interior-minimal"
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      lead={section.body ?? undefined}
+      cta={section.cta ?? undefined}
       data-blueprint-key="hero_interior_minimal"
-    >
-      <div className="bp-hero-interior-minimal__container">
-        {eyebrow && (
-          <p className="bp-hero-interior-minimal__subtitle">{eyebrow}</p>
-        )}
-        <h1 id={titleId} className="bp-hero-interior-minimal__title">
-          {headline}
-        </h1>
-        {lead && <p className="bp-hero-interior-minimal__lead">{lead}</p>}
-        {cta && (
-          <Button
-            {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
-            variant="primary"
-            size="md"
-          >
-            {cta.label}
-          </Button>
-        )}
-      </div>
-    </section>
+    />
   );
 }
 
