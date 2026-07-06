@@ -45,6 +45,8 @@ The standard + skill pairing pattern lives at Tier 3b. brik-bds is the live prec
 
 Ask in order. First YES wins.
 
+{/* cascade-vocab-ok:start — the CLAUDE.md documentation-tier model (Tier 0–5), a different domain from the token cascade */}
+
 | Question | YES → |
 | --- | --- |
 | Is it safety-critical (data loss, broken prod, wrong MCP)? | Tier 0 — cross-repo CLAUDE.md |
@@ -71,6 +73,8 @@ Most knowledge starts as a note in a session or a comment on a PR. It earns a mo
 4. **Skill or standard** (Tier 3 / 3b) — when an agent should consult this knowledge automatically on a specific trigger (file edit, command, user phrase), promote it to a skill, optionally paired with a standard if there's a ruleset.
 5. **CLAUDE.md** (Tier 0–2) — only if the rule is a safety invariant the agent must never miss. One-line imperative or pointer, never long-form.
 6. **Fumadocs page** (this site) — when stakeholders need to read it without a Claude session.
+
+{/* cascade-vocab-ok:end */}
 
 Promotion goes UP. Demotion goes DOWN. Duplication is a bug — when you promote content, the lower-tier copy should become a pointer or get deleted.
 

@@ -26,6 +26,7 @@ const steps = [
   { name: 'Theme Compliance', cmd: 'node scripts/validate-themes.js' },
   { name: 'Blueprint Library', cmd: 'node scripts/validate-blueprints.mjs' },
   { name: 'BCS Vocab',        cmd: 'node scripts/bcs-vocab-check.mjs' },
+  { name: 'Cascade Vocab',    cmd: 'node scripts/token-cascade-vocab-check.mjs' },
   // Canonical-check requires dist/tokens.css. Ensure it's built before scanning.
   // The build is fast (~1s) and idempotent, so re-running has near-zero cost.
   { name: 'Canonical Tokens', cmd: 'npm run build:dist-tokens >/dev/null && npm run canonical-check' },

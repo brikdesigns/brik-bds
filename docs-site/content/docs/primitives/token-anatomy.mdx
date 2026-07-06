@@ -135,6 +135,8 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
   **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--background-brand-primary`, not `--color-poppy-dark`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
 </Callout>
 
+{/* cascade-vocab-ok:start — the abstraction Tier stack (Raw · Primitive · Semantic · Component), not the CSS cascade */}
+
 ### About Tier 4 (Component)
 
 The Component tier is **`--bds-{component}-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier and `{property}` is the styled aspect. Examples: `--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-img-card-bg`. This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
@@ -157,6 +159,8 @@ A Tier 4 token serves one of two roles, both under the same name:
 <Callout type="warn">
   **Tier 4 never terminates at a raw value.** A knob's fallback is a Semantic token; a runtime binding is computed from one. A literal inside a `var()` fallback on a tokenized property is Tier-1 leakage and is flagged by `scripts/lint-tokens.js`. The `--bds-` prefix is mandatory — `--bp-*` and bare `--{component}-*` are retired (see Drift patterns below).
 </Callout>
+
+{/* cascade-vocab-ok:end */}
 
 ## How the six concepts map to a real token
 
