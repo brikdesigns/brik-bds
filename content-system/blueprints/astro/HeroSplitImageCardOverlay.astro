@@ -1,11 +1,12 @@
 ---
 /**
- * hero_split_image_card_overlay — interior-page hero with a split
- * 58/42 layout. Left column carries the page's content trail
- * (breadcrumb, eyebrow, h1, optional body, single CTA) on a soft
- * audience-tinted background. Right column shows a white card with
- * the page image and an optional price overlay (price label + price
- * value + secondary CTA).
+ * hero_split_image_card_overlay — Phase D Astro renderer for the `bds-hero`
+ * family, `--with-pricing-card` layout (brik-bds#1165). Twin of the React
+ * `<Hero layout="with-pricing-card">` adapter. Interior-page hero with a split
+ * 58/42 layout. Left column carries the page's content trail (breadcrumb,
+ * eyebrow, h1, optional body, single inverse CTA) on a soft audience-tinted
+ * background. Right column shows a white card with the page image and an
+ * optional price overlay (price label + price value + secondary CTA).
  *
  * Drives `/services/{cat}/{slug}` style pages.
  *
@@ -17,7 +18,9 @@
  *
  * The Astro twin can't import the React Breadcrumb / LinkButton
  * components directly, but it MUST emit the same canonical class
- * structure so `dist/styles.css` styles the markup identically.
+ * structure so `dist/styles.css` styles the markup identically. The scoped
+ * `<style>` below mirrors the `.bds-hero--with-pricing-card` rules shipped in
+ * the React `Hero.css`, keeping Astro consumers self-contained.
  *
  * ── Contract ─────────────────────────────────────────────────────
  * Props: BlueprintProps (universal across every blueprint).
@@ -35,12 +38,13 @@
  * column renders the non-hallucinatable `data-content-needed` stub.
  *
  * ── CSS custom properties (per-client override surface) ──────────
- *   --bds-hero-img-card-bg          (default: var(--page-brand-primary, var(--page-secondary)))
- *   --bds-hero-img-card-padding-y   (default: clamp block)
- *   --bds-hero-img-card-headline-color (default: var(--text-primary))
- *   --bds-hero-img-card-eyebrow-color  (default: var(--text-primary))
- *   --bds-hero-img-card-media-bg     (default: var(--surface-primary))
- *   --bds-hero-img-card-radius      (default: var(--border-radius-lg))
+ *   --bds-hero-bg              (default: var(--page-secondary))
+ *   --bds-hero-padding-y       (default: clamp block)
+ *   --bds-hero-headline-color  (default: var(--text-primary))
+ *   --bds-hero-eyebrow-color   (default: var(--text-primary))
+ *   --bds-hero-lead-color      (default: var(--text-primary))
+ *   --bds-hero-media-bg        (default: var(--surface-primary))
+ *   --bds-hero-radius          (default: var(--border-radius-lg))
  *
  * ── a11y (WCAG 2.1 AA) ───────────────────────────────────────────
  * - Heading is h1 (hero blueprints own the page's singular h1).
@@ -106,15 +110,15 @@ const cta = section.cta;
 ---
 
 <section
-  class="bp-hero-img-card"
+  class="bds-hero bds-hero--with-pricing-card"
   aria-labelledby={titleId}
   data-blueprint-key="hero_split_image_card_overlay"
   data-audience={audience}
 >
-  <div class="bp-hero-img-card__container">
-    <div class="bp-hero-img-card__content">
+  <div class="bds-hero__container">
+    <div class="bds-hero__content">
       {breadcrumb.length > 0 && (
-        <nav class="bds-breadcrumb bp-hero-img-card__breadcrumb" aria-label="Breadcrumb">
+        <nav class="bds-breadcrumb bds-hero__breadcrumb" aria-label="Breadcrumb">
           {breadcrumb.map((item, idx) => {
             const isLast = idx === breadcrumb.length - 1;
             return (
@@ -152,23 +156,23 @@ const cta = section.cta;
         <img
           src={iconUrl}
           alt={iconAlt ?? ''}
-          class="bp-hero-img-card__icon"
+          class="bds-hero__icon"
           loading="eager"
           decoding="async"
         />
       ) : audience ? (
         <span
-          class={`bds-service-tag bds-service-tag--icon bds-service-tag--icon-lg bds-service-tag--${audience} bp-hero-img-card__icon`}
+          class={`bds-service-tag bds-service-tag--icon bds-service-tag--icon-lg bds-service-tag--${audience} bds-hero__icon`}
           role="img"
           aria-label={`${audience} category`}
         />
       ) : null)}
 
-      {eyebrow && <p class="bp-hero-img-card__subtitle">{eyebrow}</p>}
+      {eyebrow && <p class="bds-hero__subtitle">{eyebrow}</p>}
 
-      <h1 id={titleId} class="bp-hero-img-card__title">{headline}</h1>
+      <h1 id={titleId} class="bds-hero__title">{headline}</h1>
 
-      {lead && <p class="bp-hero-img-card__lead">{lead}</p>}
+      {lead && <p class="bds-hero__lead">{lead}</p>}
 
       {cta && 'url' in cta && (
         <a href={cta.url} class="bds-button bds-button--inverse bds-button--md">
@@ -178,26 +182,26 @@ const cta = section.cta;
     </div>
 
     {priceCard ? (
-      <aside class="bp-hero-img-card__media-card">
+      <aside class="bds-hero__media-card">
         <div
-          class="bp-hero-img-card__image-frame"
-          style={imageRatio !== 'square' ? `--_bp-image-ratio: ${aspectToken(imageRatio)}` : undefined}
+          class="bds-hero__image-frame"
+          style={imageRatio !== 'square' ? `--_bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
         >
           <img
             src={priceCard.imageUrl}
             alt={priceCard.imageAlt ?? ''}
             loading="eager"
             decoding="async"
-            class="bp-hero-img-card__image"
+            class="bds-hero__image"
           />
         </div>
         {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
-          <div class="bp-hero-img-card__price">
+          <div class="bds-hero__price">
             {priceCard.priceLabel && priceCard.price && (
-              <p class="bp-hero-img-card__price-label">{priceCard.priceLabel}</p>
+              <p class="bds-hero__price-label">{priceCard.priceLabel}</p>
             )}
             {priceCard.price && (
-              <p class="bp-hero-img-card__price-value">{priceCard.price}</p>
+              <p class="bds-hero__price-value">{priceCard.price}</p>
             )}
             {priceCard.cta && 'url' in priceCard.cta && (
               <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--${priceCard.cta.size ?? 'sm'}`}>
@@ -209,12 +213,12 @@ const cta = section.cta;
       </aside>
     ) : (
       <aside
-        class="bp-hero-img-card__missing"
+        class="bds-hero__missing"
         data-content-needed="hero_image_url"
         role="presentation"
-        style={imageRatio !== 'square' ? `--_bp-image-ratio: ${aspectToken(imageRatio)}` : undefined}
+        style={imageRatio !== 'square' ? `--_bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
       >
-        <p class="bp-hero-img-card__missing-label">
+        <p class="bds-hero__missing-label">
           Hero image card missing for this page.
         </p>
       </aside>
@@ -223,10 +227,10 @@ const cta = section.cta;
 </section>
 
 <style>
-  .bp-hero-img-card {
-    background: var(--bds-hero-img-card-bg, var(--page-secondary));
+  .bds-hero--with-pricing-card {
+    background: var(--bds-hero-bg, var(--page-secondary));
     padding-block: var(
-      --bds-hero-img-card-padding-y,
+      --bds-hero-padding-y,
       clamp(var(--padding-xl), 6vw, var(--padding-huge))
     );
   }
@@ -250,48 +254,48 @@ const cta = section.cta;
    * `service-service` → `service-back-office` in #563 (orange line — back
    * office). API-level rename `data-audience` → `data-service-line` is a
    * separate cross-repo follow-up. */
-  .bp-hero-img-card[data-audience='brand'] {
+  .bds-hero--with-pricing-card[data-audience='brand'] {
     background: var(--surface-service-brand-inverse);
-    --bds-hero-img-card-headline-color: var(--text-service-brand-on-light);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-brand-on-light);
-    --bds-hero-img-card-lead-color: var(--text-service-brand-on-light);
+    --bds-hero-headline-color: var(--text-service-brand-on-light);
+    --bds-hero-eyebrow-color: var(--text-service-brand-on-light);
+    --bds-hero-lead-color: var(--text-service-brand-on-light);
     --text-brand-primary: var(--text-service-brand-on-light);
     --background-inverse: var(--surface-service-brand-dark);
     --text-on-color-light: var(--color-grayscale-white);
   }
-  .bp-hero-img-card[data-audience='marketing'] {
+  .bds-hero--with-pricing-card[data-audience='marketing'] {
     background: var(--surface-service-marketing-inverse);
-    --bds-hero-img-card-headline-color: var(--text-service-marketing-on-light);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-marketing-on-light);
-    --bds-hero-img-card-lead-color: var(--text-service-marketing-on-light);
+    --bds-hero-headline-color: var(--text-service-marketing-on-light);
+    --bds-hero-eyebrow-color: var(--text-service-marketing-on-light);
+    --bds-hero-lead-color: var(--text-service-marketing-on-light);
     --text-brand-primary: var(--text-service-marketing-on-light);
     --background-inverse: var(--surface-service-marketing-dark);
     --text-on-color-light: var(--color-grayscale-white);
   }
-  .bp-hero-img-card[data-audience='information'] {
+  .bds-hero--with-pricing-card[data-audience='information'] {
     background: var(--surface-service-information-inverse);
-    --bds-hero-img-card-headline-color: var(--text-service-information-on-light);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-information-on-light);
-    --bds-hero-img-card-lead-color: var(--text-service-information-on-light);
+    --bds-hero-headline-color: var(--text-service-information-on-light);
+    --bds-hero-eyebrow-color: var(--text-service-information-on-light);
+    --bds-hero-lead-color: var(--text-service-information-on-light);
     --text-brand-primary: var(--text-service-information-on-light);
     --background-inverse: var(--surface-service-information-dark);
     --text-on-color-light: var(--color-grayscale-white);
   }
-  .bp-hero-img-card[data-audience='product'] {
+  .bds-hero--with-pricing-card[data-audience='product'] {
     background: var(--surface-service-product-inverse);
-    --bds-hero-img-card-headline-color: var(--text-service-product-on-light);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-product-on-light);
-    --bds-hero-img-card-lead-color: var(--text-service-product-on-light);
+    --bds-hero-headline-color: var(--text-service-product-on-light);
+    --bds-hero-eyebrow-color: var(--text-service-product-on-light);
+    --bds-hero-lead-color: var(--text-service-product-on-light);
     --text-brand-primary: var(--text-service-product-on-light);
     --background-inverse: var(--surface-service-product-dark);
     --text-on-color-light: var(--color-grayscale-white);
   }
-  .bp-hero-img-card[data-audience='back-office'],
-  .bp-hero-img-card[data-audience='service'] {
+  .bds-hero--with-pricing-card[data-audience='back-office'],
+  .bds-hero--with-pricing-card[data-audience='service'] {
     background: var(--surface-service-back-office-inverse);
-    --bds-hero-img-card-headline-color: var(--text-service-back-office-on-light);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-back-office-on-light);
-    --bds-hero-img-card-lead-color: var(--text-service-back-office-on-light);
+    --bds-hero-headline-color: var(--text-service-back-office-on-light);
+    --bds-hero-eyebrow-color: var(--text-service-back-office-on-light);
+    --bds-hero-lead-color: var(--text-service-back-office-on-light);
     --text-brand-primary: var(--text-service-back-office-on-light);
     --background-inverse: var(--surface-service-back-office-dark);
     --text-on-color-light: var(--color-grayscale-white);
@@ -303,14 +307,14 @@ const cta = section.cta;
    * can't sustain white text (2.87–4.36:1); darker ones can. Override
    * --text-inverse per luminance group so all five lines pass AA in dark mode.
    * Uses mode-invariant --text-on-color-light (black) / --text-on-color-dark (white). */
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='brand'],
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='marketing'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'],
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] {
     --text-inverse: var(--text-on-color-light); /* black on yellow/green-darker: 4.82–7.33:1 */
   }
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='information'],
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='product'],
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='back-office'],
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='service'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'],
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'],
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'],
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] {
     --text-inverse: var(--text-on-color-dark);  /* white on blue/purple/orange-darker: 5.48–9.48:1 */
   }
 
@@ -322,39 +326,39 @@ const cta = section.cta;
    * (6.89–9.06:1) via contrast-gate (brik-bds#1017). The inner inverse <Button>
    * is unaffected: its label/fill ride --text-inverse / --background-inverse
    * (surface-service-{line}-dark), handled above. */
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='brand'] {
-    --bds-hero-img-card-headline-color: var(--text-service-brand-on-dark);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-brand-on-dark);
-    --bds-hero-img-card-lead-color: var(--text-service-brand-on-dark);
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'] {
+    --bds-hero-headline-color: var(--text-service-brand-on-dark);
+    --bds-hero-eyebrow-color: var(--text-service-brand-on-dark);
+    --bds-hero-lead-color: var(--text-service-brand-on-dark);
     --text-brand-primary: var(--text-service-brand-on-dark);
   }
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='marketing'] {
-    --bds-hero-img-card-headline-color: var(--text-service-marketing-on-dark);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-marketing-on-dark);
-    --bds-hero-img-card-lead-color: var(--text-service-marketing-on-dark);
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] {
+    --bds-hero-headline-color: var(--text-service-marketing-on-dark);
+    --bds-hero-eyebrow-color: var(--text-service-marketing-on-dark);
+    --bds-hero-lead-color: var(--text-service-marketing-on-dark);
     --text-brand-primary: var(--text-service-marketing-on-dark);
   }
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='information'] {
-    --bds-hero-img-card-headline-color: var(--text-service-information-on-dark);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-information-on-dark);
-    --bds-hero-img-card-lead-color: var(--text-service-information-on-dark);
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'] {
+    --bds-hero-headline-color: var(--text-service-information-on-dark);
+    --bds-hero-eyebrow-color: var(--text-service-information-on-dark);
+    --bds-hero-lead-color: var(--text-service-information-on-dark);
     --text-brand-primary: var(--text-service-information-on-dark);
   }
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='product'] {
-    --bds-hero-img-card-headline-color: var(--text-service-product-on-dark);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-product-on-dark);
-    --bds-hero-img-card-lead-color: var(--text-service-product-on-dark);
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'] {
+    --bds-hero-headline-color: var(--text-service-product-on-dark);
+    --bds-hero-eyebrow-color: var(--text-service-product-on-dark);
+    --bds-hero-lead-color: var(--text-service-product-on-dark);
     --text-brand-primary: var(--text-service-product-on-dark);
   }
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='back-office'],
-  :root[data-theme="dark"] .bp-hero-img-card[data-audience='service'] {
-    --bds-hero-img-card-headline-color: var(--text-service-back-office-on-dark);
-    --bds-hero-img-card-eyebrow-color: var(--text-service-back-office-on-dark);
-    --bds-hero-img-card-lead-color: var(--text-service-back-office-on-dark);
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'],
+  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] {
+    --bds-hero-headline-color: var(--text-service-back-office-on-dark);
+    --bds-hero-eyebrow-color: var(--text-service-back-office-on-dark);
+    --bds-hero-lead-color: var(--text-service-back-office-on-dark);
     --text-brand-primary: var(--text-service-back-office-on-dark);
   }
 
-  .bp-hero-img-card__container {
+  .bds-hero__container {
     max-width: var(--size-container-xl, 1280px);
     margin-inline: auto;
     padding-inline: var(--padding-lg);
@@ -365,20 +369,20 @@ const cta = section.cta;
   }
 
   @media (min-width: 768px) {
-    .bp-hero-img-card__container {
+    .bds-hero__container {
       grid-template-columns: 58fr 42fr;
       gap: var(--gap-huge);
     }
   }
 
-  .bp-hero-img-card__content {
+  .bds-hero__content {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
     align-items: flex-start;
   }
 
-  .bp-hero-img-card__breadcrumb {
+  .bds-hero__breadcrumb {
     margin-bottom: var(--gap-sm);
   }
 
@@ -386,44 +390,44 @@ const cta = section.cta;
      (a `<span class="bds-service-tag--icon …">`), whose inline-flex centering
      must survive. The span self-sizes via `bds-service-tag--icon-lg` (40px =
      2.5rem). See brik-bds#873. */
-  img.bp-hero-img-card__icon {
+  img.bds-hero__icon {
     display: block;
-    width: var(--bds-hero-img-card-icon-size, 2.5rem);
-    height: var(--bds-hero-img-card-icon-size, 2.5rem);
+    width: var(--bds-hero-icon-size, var(--size-1000));
+    height: var(--bds-hero-icon-size, var(--size-1000));
     object-fit: contain;
   }
 
-  .bp-hero-img-card__subtitle {
+  .bds-hero__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--bds-hero-img-card-eyebrow-color, var(--text-primary));
+    color: var(--bds-hero-eyebrow-color, var(--text-primary));
   }
 
-  .bp-hero-img-card__title {
+  .bds-hero__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight, 1.05);
-    color: var(--bds-hero-img-card-headline-color, var(--text-primary));
+    color: var(--bds-hero-headline-color, var(--text-primary));
   }
 
-  .bp-hero-img-card__lead {
+  .bds-hero__lead {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--body-xl);
     line-height: var(--line-height-relaxed, 1.5);
-    color: var(--bds-hero-img-card-lead-color, var(--text-primary));
+    color: var(--bds-hero-lead-color, var(--text-primary));
     max-width: 55ch;
   }
 
-  .bp-hero-img-card__media-card {
-    background: var(--bds-hero-img-card-media-bg, var(--surface-primary));
-    border-radius: var(--bds-hero-img-card-radius, var(--border-radius-lg));
+  .bds-hero__media-card {
+    background: var(--bds-hero-media-bg, var(--surface-primary));
+    border-radius: var(--bds-hero-radius, var(--border-radius-lg));
     padding: var(--padding-md);
     box-shadow: var(--shadow-md);
     display: flex;
@@ -431,21 +435,21 @@ const cta = section.cta;
     gap: var(--gap-md);
   }
 
-  .bp-hero-img-card__image-frame {
-    aspect-ratio: var(--_bp-image-ratio, var(--aspect-1-1));
+  .bds-hero__image-frame {
+    aspect-ratio: var(--_bds-hero-image-ratio, var(--aspect-1-1));
     overflow: hidden;
     border-radius: var(--border-radius-md);
     background: var(--surface-secondary);
   }
 
-  .bp-hero-img-card__image {
+  .bds-hero__image {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .bp-hero-img-card__price {
+  .bds-hero__price {
     display: flex;
     flex-direction: column;
     gap: var(--gap-xs);
@@ -453,7 +457,7 @@ const cta = section.cta;
     align-items: flex-start;
   }
 
-  .bp-hero-img-card__price-label {
+  .bds-hero__price-label {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -461,7 +465,7 @@ const cta = section.cta;
     color: var(--text-primary);
   }
 
-  .bp-hero-img-card__price-value {
+  .bds-hero__price-value {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: var(--heading-lg);
@@ -470,18 +474,18 @@ const cta = section.cta;
     line-height: 1;
   }
 
-  .bp-hero-img-card__missing {
-    aspect-ratio: var(--_bp-image-ratio, var(--aspect-1-1));
+  .bds-hero__missing {
+    aspect-ratio: var(--_bds-hero-image-ratio, var(--aspect-1-1));
     display: flex;
     align-items: center;
     justify-content: center;
     padding: var(--padding-xl);
     background: var(--surface-secondary);
     border: 2px dashed var(--border-secondary);
-    border-radius: var(--bds-hero-img-card-radius, var(--border-radius-lg));
+    border-radius: var(--bds-hero-radius, var(--border-radius-lg));
   }
 
-  .bp-hero-img-card__missing-label {
+  .bds-hero__missing-label {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--body-xl);

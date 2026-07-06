@@ -11,7 +11,7 @@ const meta: Meta<typeof Hero> = {
     docs: {
       description: {
         component:
-          'The `bds-hero` page-hero section primitive (brik-bds#583). One block, a shared content column (eyebrow → h1 → lead → primary CTA), and structural-modifier layouts per ADR-008 §3: `bds-hero--interior-minimal` (content only) and `bds-hero--split` (content + a composed `media` column). Replaces the per-blueprint `bp-hero-*` classes. The `--with-pricing-card` variant folds in via #1165. Hero blueprints own the page `h1`.',
+          'The `bds-hero` page-hero section primitive (brik-bds#583). One block, a shared content column (breadcrumb → eyebrow → h1 → lead → CTA), and structural-modifier layouts per ADR-008 §3: `bds-hero--interior-minimal` (content only), `bds-hero--split` (content + a composed `media` column), and `bds-hero--with-pricing-card` (interior split with a breadcrumb trail + an `aside` image/price card, brik-bds#1165). Replaces the per-blueprint `bp-hero-*` classes. Hero blueprints own the page `h1`.',
       },
     },
   },
