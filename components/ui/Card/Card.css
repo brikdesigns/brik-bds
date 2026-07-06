@@ -384,6 +384,34 @@
   box-shadow: var(--box-shadow-md);
 }
 
+/* Service-line surface tint — a pale wash keyed to a service line, shared by
+ * both display presets. Sets only the surface (border / shadow unchanged), so
+ * it composes with the default outlined shape. Two-class selectors clear the
+ * single-class base fill regardless of source order. Uses the canonical
+ * `--surface-service-{line}-light` pastel step; dark mode is handled by the
+ * token cascade. Not for combining with `borderless` (transparent by design).
+ */
+.bds-card--preset-display.bds-card--tint-brand,
+.bds-card--preset-display-row.bds-card--tint-brand {
+  background-color: var(--surface-service-brand-light);
+}
+.bds-card--preset-display.bds-card--tint-marketing,
+.bds-card--preset-display-row.bds-card--tint-marketing {
+  background-color: var(--surface-service-marketing-light);
+}
+.bds-card--preset-display.bds-card--tint-information,
+.bds-card--preset-display-row.bds-card--tint-information {
+  background-color: var(--surface-service-information-light);
+}
+.bds-card--preset-display.bds-card--tint-product,
+.bds-card--preset-display-row.bds-card--tint-product {
+  background-color: var(--surface-service-product-light);
+}
+.bds-card--preset-display.bds-card--tint-back-office,
+.bds-card--preset-display-row.bds-card--tint-back-office {
+  background-color: var(--surface-service-back-office-light);
+}
+
 .bds-card--preset-display {
   background-color: var(--surface-primary);
   border: var(--border-width-md) solid var(--border-secondary);
