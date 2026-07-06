@@ -59,6 +59,15 @@ export type { SupportPlanProps } from './SupportPlan';
 export { Cta } from './Cta';
 export type { CtaProps, CtaLayout } from './Cta';
 
+// `<Hero>` — the `bds-hero` page-hero section primitive
+// (post-brik-bds#583 consolidation). Props-based: a shared content column
+// (eyebrow → h1 → lead → CTA) with an `--interior-minimal` (no media) or
+// `--split` (content + composed `media` column) layout. Replaces the
+// per-blueprint `bp-hero-*` classes. The `--with-pricing-card` variant folds
+// in via #1165. The `hero_*` keys dispatch through the adapters below.
+export { Hero } from './Hero';
+export type { HeroProps, HeroLayout } from './Hero';
+
 // Legacy section-data adapters — preserve `BlueprintDispatcher` +
 // AI-render path compatibility. Internally compose `<CardGrid>` +
 // `<Card preset="display">`. Direct consumers should reach for those

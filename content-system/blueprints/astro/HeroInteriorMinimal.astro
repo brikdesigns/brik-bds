@@ -1,9 +1,9 @@
 ---
 /**
- * hero_interior_minimal — text-only interior page hero. Eyebrow +
- * headline + optional lead, no image. Owns the h1 for the page.
- *
- * See blueprints/blueprint-library.json for canonical metadata.
+ * hero_interior_minimal — Phase D Astro renderer for the `bds-hero` family,
+ * `--interior-minimal` layout (brik-bds#583). Twin of the React
+ * `<Hero layout="interior-minimal">` adapter. Text-only interior page hero:
+ * eyebrow + headline + optional lead, no image. Owns the page's `h1`.
  *
  * Contract: BlueprintProps (section + clientFacts + theme).
  *   - section.heading    — h1 (REQUIRED by content gen)
@@ -13,15 +13,13 @@
  *
  * required_facts: []. Renders entirely from section content.
  *
- * CSS custom properties:
- *   --bds-hero-interior-padding-y     (default: clamp block)
- *   --bds-hero-interior-bg            (default: var(--page-primary))
- *   --bds-hero-interior-headline-color  (default: var(--text-primary))
- *   --bds-hero-interior-eyebrow-color   (default: var(--text-brand-primary))
- *   --bds-hero-interior-lead-color      (default: var(--text-secondary))
+ * CSS custom properties (Tier-4 hooks — shared with the family):
+ *   --bds-hero-bg              (default: var(--page-primary))
+ *   --bds-hero-headline-color  (default: var(--text-primary))
+ *   --bds-hero-eyebrow-color   (default: var(--text-brand-primary))
+ *   --bds-hero-lead-color      (default: var(--text-secondary))
  *
- * a11y: h1 + aria-labelledby. Decorative-default posture. Static layout,
- * no motion; prefers-reduced-motion is irrelevant here.
+ * a11y: h1 + aria-labelledby. Eyebrow is prose, not a heading. Static layout.
  */
 import type { BlueprintProps } from './types';
 
@@ -37,88 +35,68 @@ const cta = section.cta;
 ---
 
 <section
-  class="bp-hero-interior-minimal"
+  class="bds-hero bds-hero--interior-minimal"
   aria-labelledby={titleId}
   data-blueprint-key="hero_interior_minimal"
 >
-  <div class="bp-hero-interior-minimal__container">
-    {eyebrow && <p class="bp-hero-interior-minimal__subtitle">{eyebrow}</p>}
-    <h1 id={titleId} class="bp-hero-interior-minimal__title">{headline}</h1>
-    {lead && <p class="bp-hero-interior-minimal__lead">{lead}</p>}
-    {cta && 'url' in cta && (
-      <a href={cta.url} class="bds-button bds-button--primary bds-button--md"><span class="bds-button__content">{cta.label}</span></a>
-    )}
+  <div class="bds-hero__container">
+    <div class="bds-hero__content">
+      {eyebrow && <p class="bds-hero__subtitle">{eyebrow}</p>}
+      <h1 id={titleId} class="bds-hero__title">{headline}</h1>
+      {lead && <p class="bds-hero__lead">{lead}</p>}
+      {cta && 'url' in cta && (
+        <a href={cta.url} class="bds-button bds-button--primary bds-button--md"><span class="bds-button__content">{cta.label}</span></a>
+      )}
+    </div>
   </div>
 </section>
 
 <style>
-  .bp-hero-interior-minimal {
-    background: var(--bds-hero-interior-bg, var(--page-primary));
-    padding-block: var(
-      --bds-hero-interior-padding-y,
-      clamp(var(--space-2xl), 6vw, var(--space-4xl))
-    );
+  .bds-hero {
+    background: var(--bds-hero-bg, var(--page-primary));
+    padding-block: clamp(var(--space-2xl), 6vw, var(--space-4xl));
   }
 
-  .bp-hero-interior-minimal__container {
-    max-width: var(--size-container-xl, 1280px);
+  .bds-hero__container {
+    max-width: 72ch;
     margin-inline: auto;
     padding-inline: var(--space-xl);
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
-    max-width: 72ch;
   }
 
-  .bp-hero-interior-minimal__subtitle {
+  .bds-hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: flex-start;
+  }
+
+  .bds-hero__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
     font-weight: var(--font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--bds-hero-interior-eyebrow-color, var(--text-brand-primary));
+    color: var(--bds-hero-eyebrow-color, var(--text-brand-primary));
   }
 
-  .bp-hero-interior-minimal__title {
+  .bds-hero__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
-    color: var(--bds-hero-interior-headline-color, var(--text-primary));
+    color: var(--bds-hero-headline-color, var(--text-primary));
   }
 
-  .bp-hero-interior-minimal__lead {
+  .bds-hero__lead {
     margin: var(--space-sm) 0 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
-    color: var(--bds-hero-interior-lead-color, var(--text-secondary));
-  }
-
-  .bp-hero-interior-minimal__cta {
-    display: inline-flex;
-    align-items: center;
-    margin-top: var(--space-md);
-    padding: var(--space-sm) var(--space-lg);
-    background: var(--background-brand-primary);
-    color: var(--text-on-color-dark, var(--text-inverse));
-    font-family: var(--font-family-label);
-    font-size: var(--label-xl);
-    font-weight: var(--font-weight-semibold);
-    text-decoration: none;
-    border-radius: var(--border-radius-md);
-    align-self: flex-start;
-    transition: background 120ms ease-out;
-  }
-
-  .bp-hero-interior-minimal__cta:hover {
-    background: var(--background-brand-primary-hover, var(--background-brand-primary));
-  }
-
-  .bp-hero-interior-minimal__cta:focus-visible {
-    outline: 2px solid var(--border-focus, var(--background-brand-primary));
-    outline-offset: 2px;
+    color: var(--bds-hero-lead-color, var(--text-secondary));
   }
 </style>
