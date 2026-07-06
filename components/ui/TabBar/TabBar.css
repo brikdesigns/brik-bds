@@ -136,4 +136,131 @@
 .bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.5;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   Base values — migrated from inline CSSProperties builders (brik-bds#892).
+   Keyed on the variant class, [aria-selected], and the --on-color modifier so
+   they express the same active / on-color matrix the JS builders did, while
+   letting external rules override via normal cascade. Pseudo-state rules above
+   (hover/active/disabled) keep their higher specificity and are unaffected.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Bar container ── */
+.bds-tab-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+/* `--text-underline` below is the BEM variant modifier, not a `--text-*` token —
+   bds-lint-ignore on each such selector line keeps canonical-check from reading
+   the class name as a token reference. */
+.bds-tab-bar--text,
+.bds-tab-bar--text-underline, /* bds-lint-ignore */
+.bds-tab-bar--tab {
+  gap: var(--gap-xl);
+}
+
+.bds-tab-bar--box {
+  gap: var(--gap-md);
+}
+
+/* `tab` aligns items to the bar's content-box bottom so the active indicator's
+   negative-margin overlap caps the baseline (see the tab-variant note above). */
+.bds-tab-bar--tab {
+  align-items: flex-end;
+}
+
+/* ── Shared item typography + reset ── */
+.bds-tab-bar-item {
+  font-family: var(--font-family-label);
+  font-size: var(--label-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+  min-width: 0;
+}
+
+/* ── text ── */
+.bds-tab-bar--text .bds-tab-bar-item {
+  color: var(--text-secondary);
+}
+.bds-tab-bar--text .bds-tab-bar-item[aria-selected="true"] {
+  color: var(--text-brand-primary);
+}
+.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item {
+  color: var(--text-on-color-dark);
+  opacity: 0.6;
+}
+.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+  opacity: 1;
+}
+
+/* ── text-underline ── */
+.bds-tab-bar--text-underline .bds-tab-bar-item { /* bds-lint-ignore */
+  color: var(--text-secondary);
+  border-bottom: var(--border-width-md) solid transparent;
+  padding-bottom: var(--padding-sm);
+}
+.bds-tab-bar--text-underline .bds-tab-bar-item[aria-selected="true"] { /* bds-lint-ignore */
+  color: var(--text-brand-primary);
+  border-bottom-color: var(--border-brand-primary);
+}
+.bds-tab-bar--text-underline.bds-tab-bar--on-color .bds-tab-bar-item { /* bds-lint-ignore */
+  color: var(--text-on-color-dark);
+  opacity: 0.6;
+  border-bottom-color: transparent;
+}
+.bds-tab-bar--text-underline.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] { /* bds-lint-ignore */
+  opacity: 1;
+  border-bottom-color: var(--border-on-color-dark);
+}
+
+/* ── tab (border-bottom + overlap live in the tab-variant section above) ── */
+.bds-tab-bar--tab .bds-tab-bar-item {
+  color: var(--text-secondary);
+  background-color: transparent;
+  padding: 0;
+  padding-bottom: var(--padding-sm);
+}
+.bds-tab-bar--tab .bds-tab-bar-item[aria-selected="true"] {
+  color: var(--text-brand-primary);
+}
+.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item {
+  color: var(--text-on-color-dark);
+  opacity: 0.6;
+}
+.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+  opacity: 1;
+}
+
+/* ── box ── */
+.bds-tab-bar--box .bds-tab-bar-item {
+  color: var(--text-secondary);
+  background-color: var(--background-primary);
+  padding: var(--padding-lg);
+  border: var(--border-width-md) solid var(--border-primary);
+}
+.bds-tab-bar--box .bds-tab-bar-item[aria-selected="true"] {
+  color: var(--text-inverse);
+  background-color: var(--background-brand-primary);
+  border-color: transparent;
+}
+.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item {
+  color: var(--text-on-color-dark);
+  border-color: var(--border-on-color-dark);
+  opacity: 0.6;
+}
+.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+  color: var(--text-inverse);
+  background-color: var(--background-brand-primary);
+  border-color: transparent;
+  opacity: 1;
+}
 }
