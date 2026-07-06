@@ -137,18 +137,19 @@ All values come from **semantic** tokens. The canonical registry is `dist/tokens
 .bds-card { padding: var(--space--700); font-size: var(--font-size--400); }
 ```
 
-**Tokens in TS/TSX** — import from `@/lib/tokens` and `@/lib/styles`. Never write raw `var(--...)` strings inline (this is a brik-bds CLAUDE.md non-negotiable).
+**Tokens in TS/TSX** — never write raw `var(--...)` strings in an inline `style={{…}}` object. In a BDS component the fix is **CSS-over-inline**: move the token into the component's CSS file, keyed on state via class / `[data-*]` / `[aria-*]` (see [§ Styles live in CSS](#styles-live-in-css--never-inline)). Enforced by `scripts/lint-inline-var.mjs` (brik-bds#892) — the gate fails the build on a new inline token consumer.
+
+The **one** inline use that is allowed: *defining* a `--bds-*` custom property as a runtime binding — a value the component computes at render and the CSS reads back. This is the sanctioned Component-tier pattern in [token-anatomy](../../docs-site/content/docs/primitives/token-anatomy.mdx), not a token *consumer*.
 
 ```tsx
-/* Right */
-import { color, font } from '@/lib/tokens';
-import { text } from '@/lib/styles';
-style={{ color: color.text.primary, fontSize: font.size.body.md }}
-style={text.body}  // family + size + lineHeight as one preset
-
-/* Wrong — raw var() string defeats the token import discipline */
+/* Wrong — consuming a token in an inline style value → move it to the component CSS */
 style={{ color: 'var(--text-primary)', fontSize: '16px' }}
+
+/* Right — defining a --bds-* custom property inline is a runtime binding, not consumption */
+style={{ '--bds-slider-percent': `${pct}%` }}  // CSS reads var(--bds-slider-percent)
 ```
+
+> **Not `@/lib/tokens`.** Consumer apps (portal / renew / freedom) have a typed token layer imported from `@/lib/tokens` + `@/lib/styles` for their *app* code — that alias does **not** exist in brik-bds itself. Here, a component's tokens live in its CSS file.
 
 Validate every token reference against `dist/tokens.css` before using it — the [`validate-token-names`](../../) skill auto-invokes on relevant edits.
 
