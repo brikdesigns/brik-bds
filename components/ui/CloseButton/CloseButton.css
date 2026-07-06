@@ -1,3 +1,4 @@
+@layer bds-components {
 /* CloseButton — canonical icon-only dismiss affordance.
  *
  * Glyph-dominant by design: a 20px (--icon-lg) bold "X" inside ~4px padding
@@ -39,4 +40,5 @@
 .bds-close-button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
 }

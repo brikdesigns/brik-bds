@@ -1,3 +1,4 @@
+@layer bds-components {
 .bds-logo {
   display: inline-flex;
   align-items: center;
@@ -26,3 +27,4 @@
 .bds-logo--md { width: 40px; height: 40px; }
 .bds-logo--lg { width: 48px; height: 48px; }
 .bds-logo--xl { width: 64px; height: 64px; }
+}
