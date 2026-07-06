@@ -374,6 +374,19 @@ export const Display: Story = {
       description:
         'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill + shadow, no border. Default = outlined white fill.',
     },
+    tint: {
+      control: 'select',
+      options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
+      mapping: { none: undefined },
+      description:
+        'Service-line surface tint — a pale wash keyed to a service line, mapping to the canonical service-line pastel surface token. Sets only the surface; border/size unchanged. Default = no tint.',
+    },
+    titleAs: {
+      control: 'inline-radio',
+      options: ['h2', 'h3', 'h4'],
+      description:
+        'Heading element for the title (default `h3`). Set to keep the document outline correct for the card context; visual size is token-driven and does not change.',
+    },
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
   },
@@ -448,6 +461,19 @@ export const DisplayRow: Story = {
       options: ['narrow', 'standard', 'wide'],
       description:
         'Image column width. Named: `narrow` 25%, `standard` 35%, `wide` 50%. Pass a CSS length / percentage string (e.g. `"40%"`) to override.',
+    },
+    tint: {
+      control: 'select',
+      options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
+      mapping: { none: undefined },
+      description:
+        'Service-line surface tint — a pale wash keyed to a service line, mapping to the canonical service-line pastel surface token. Sets only the surface; border/size unchanged. Default = no tint.',
+    },
+    titleAs: {
+      control: 'inline-radio',
+      options: ['h2', 'h3', 'h4'],
+      description:
+        'Heading element for the title (default `h3`). Set to keep the document outline correct for the card context; visual size is token-driven and does not change.',
     },
   },
   decorators: [
