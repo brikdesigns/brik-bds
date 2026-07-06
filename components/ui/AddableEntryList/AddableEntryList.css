@@ -1,3 +1,4 @@
+@layer bds-components {
 .bds-addable-entry-list {
   display: flex;
   flex-direction: column;
@@ -240,4 +241,5 @@
   font-family: var(--font-family-body);
   font-size: var(--body-sm);
   color: var(--text-muted);
+}
 }

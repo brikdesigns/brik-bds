@@ -1,3 +1,4 @@
+@layer bds-components {
 .bds-addable-text-list {
   display: flex;
   flex-direction: column;
@@ -43,4 +44,5 @@
   font-size: var(--body-sm);
   line-height: var(--font-line-height-normal);
   color: var(--text-muted);
+}
 }
