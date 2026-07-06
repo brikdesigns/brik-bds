@@ -73,6 +73,13 @@ if [ -n "$STAGED_TSX" ] || [ -n "$STAGED_CSS" ]; then
     ${STAGED_TSX:+--files $STAGED_TSX} \
     ${STAGED_CSS:+--css-files $STAGED_CSS}
 
+  # Ban NEW raw inline var(--…) token consumption in staged TSX (brik-bds#892).
+  # Baselined offenders burn down in follow-up PRs; this blocks regressions.
+  if [ -n "$STAGED_TSX" ]; then
+    echo "Checking staged TSX for inline token consumption..."
+    node scripts/lint-inline-var.mjs --staged
+  fi
+
   # JSDoc / story-metadata gate. Whole-repo scan (fast) — fires only when a
   # component or story TSX is staged so we don't pay the cost on token-only
   # commits. Enforces @summary on every component + story export and a
