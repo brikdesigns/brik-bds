@@ -7,7 +7,9 @@
  *
  * Safe to re-run — skips files that already contain `@layer bds-components`.
  *
- * Usage: node scripts/wrap-component-layers.mjs
+ * Usage:
+ *   node scripts/wrap-component-layers.mjs           # wrap any unlayered files
+ *   node scripts/wrap-component-layers.mjs --check   # CI guard: exit 1 if any unlayered (no writes)
  */
 
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
@@ -40,16 +42,27 @@ function collectCssFiles(dir) {
 
 const cssFiles = collectCssFiles(componentsDir);
 
+// --check: report-only. Exits non-zero if any component CSS is unlayered, so CI
+// can gate it (without mutating files). This is the guard for the #1808 bug —
+// unlayered component CSS loses the cascade in consumers that layer BDS.
+const CHECK = process.argv.includes('--check');
+
 let wrapped = 0;
 let skipped = 0;
+const unwrapped = [];
 
 for (const filePath of cssFiles) {
   const rel = relative(rootDir, filePath);
   const content = readFileSync(filePath, 'utf8');
 
   if (content.includes('@layer bds-components')) {
-    console.log(`  skip   ${rel}`);
+    if (!CHECK) console.log(`  skip   ${rel}`);
     skipped++;
+    continue;
+  }
+
+  if (CHECK) {
+    unwrapped.push(rel);
     continue;
   }
 
@@ -57,6 +70,22 @@ for (const filePath of cssFiles) {
   writeFileSync(filePath, wrapped_content, 'utf8');
   console.log(`  wrap   ${rel}`);
   wrapped++;
+}
+
+if (CHECK) {
+  if (unwrapped.length > 0) {
+    console.error(
+      `\n✗ ${unwrapped.length} component CSS file(s) are NOT wrapped in @layer bds-components:\n` +
+        unwrapped.map((f) => `    ${f}`).join('\n') +
+        `\n\nUnlayered component CSS loses the cascade in consumers that layer BDS (e.g. the\n` +
+        `portal's \`[class*="bds-"] { all: revert-layer }\` bridge), so the component renders\n` +
+        `unstyled — the #1808 invisible-Logo bug. Run \`node scripts/wrap-component-layers.mjs\`\n` +
+        `and commit.`,
+    );
+    process.exit(1);
+  }
+  console.log(`✓ All ${skipped} component CSS files are layered.`);
+  process.exit(0);
 }
 
 console.log(`\nDone. Wrapped: ${wrapped}  Skipped (already layered): ${skipped}  Total: ${cssFiles.length}`);

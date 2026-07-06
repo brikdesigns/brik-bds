@@ -1,0 +1,42 @@
+name: Layer Wrap Check
+
+# Enforces that every component CSS file (components/ui/**/*.css) is wrapped in
+# `@layer bds-components`. An unlayered component stylesheet loses the cascade
+# in consumers that layer BDS (e.g. the portal's
+# `[class*="bds-"] { all: revert-layer }` bridge), so the component renders
+# unstyled while looking fine in Storybook — the invisible-Logo bug in
+# brik-client-portal#1808. The wrap step (scripts/wrap-component-layers.mjs)
+# mutates sources and must be re-run when a component lands; this gate catches
+# the case where it wasn't.
+#
+# Cheap by design: the guard is a plain Node script over source files — no
+# `npm ci`, no build.
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: layer-wrap-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  layer-wrap-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Check component CSS is layered
+        run: node scripts/wrap-component-layers.mjs --check
