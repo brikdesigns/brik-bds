@@ -4,11 +4,21 @@ import { Avatar, type AvatarSize, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
 import { Dot, type DotStatus } from '../Dot';
+import type { ServiceLine } from '../ServiceTag/service-config';
 import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'borderless';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 export type CardPreset = 'control' | 'summary' | 'display' | 'display-row';
+/** Heading level for a card's title — decouples document outline from the token-driven visual size. */
+export type CardHeadingLevel = 'h2' | 'h3' | 'h4';
+/**
+ * Service-line surface tint for the display presets. Maps to the canonical
+ * `--surface-service-{line}-light` pastel surface token — never an invented
+ * name. Excludes the deprecated `service` alias of `ServiceLine`; pass
+ * `back-office`.
+ */
+export type CardTint = Exclude<ServiceLine, 'service'>;
 export type CardControlActionAlign = 'center' | 'top';
 export type CardSummaryType = 'numeric' | 'price';
 /**
@@ -224,8 +234,23 @@ interface CardDisplayPresetProps extends CardBaseProps {
    * `borderless`).
    */
   variant?: 'borderless' | 'elevated';
-  /** Card heading. Renders as `<h3>` with `--font-family-heading` + `--heading-md`. */
+  /**
+   * Optional service-line surface tint — a pale wash keyed to a service line
+   * (`--surface-service-{line}-light`). Use for a service-identified cell in a
+   * `CardGrid`. The visual size / border are unchanged; this only sets the
+   * surface. Orthogonal to `variant` (don't combine with `borderless`, which is
+   * transparent by design).
+   */
+  tint?: CardTint;
+  /** Card heading. Renders with `--font-family-heading` + `--heading-md`; the element is `titleAs` (default `h3`). */
   title: string;
+  /**
+   * Heading element for `title` — `h2` / `h3` / `h4`. Default `h3`. Set to keep
+   * the document outline correct for the card's context (e.g. `h3` under an
+   * `<h2>` grid-section heading). Visual size is token-driven and does not
+   * change with the level.
+   */
+  titleAs?: CardHeadingLevel;
   /**
    * Body copy under the title. Renders as `<p>` with `--font-family-body` +
    * `--body-md` (matched pair — never reach across families for size).
@@ -273,8 +298,20 @@ interface CardDisplayRowPresetProps extends CardBaseProps {
    * featured plan. Collapses to a vertical stack at ≤ 640px.
    */
   preset: 'display-row';
-  /** Card heading. Renders as `<h3>` with `--font-family-heading` + `--heading-md`. */
+  /** Card heading. Renders with `--font-family-heading` + `--heading-md`; the element is `titleAs` (default `h3`). */
   title: string;
+  /**
+   * Heading element for `title` — `h2` / `h3` / `h4`. Default `h3`. Set to keep
+   * the document outline correct for the card's context. Visual size is
+   * token-driven and does not change with the level.
+   */
+  titleAs?: CardHeadingLevel;
+  /**
+   * Optional service-line surface tint — a pale wash keyed to a service line
+   * (`--surface-service-{line}-light`). The visual size / border are unchanged;
+   * this only sets the surface. Orthogonal to layout props.
+   */
+  tint?: CardTint;
   /** Body copy under the title. Renders as `<p>` with `--font-family-body` + `--body-md`. */
   description?: string;
   /**
@@ -650,6 +687,7 @@ function renderSummaryPreset({
 
 function renderDisplayPreset({
   title,
+  titleAs: Heading = 'h3',
   description,
   image,
   tag,
@@ -657,6 +695,7 @@ function renderDisplayPreset({
   action,
   href,
   variant,
+  tint,
   className,
   style,
   preset: _preset,
@@ -666,6 +705,7 @@ function renderDisplayPreset({
     'bds-card',
     'bds-card--preset-display',
     variant && `bds-card--${variant}`,
+    tint && `bds-card--tint-${tint}`,
     href && 'bds-card--link',
     className,
   );
@@ -684,7 +724,7 @@ function renderDisplayPreset({
         {tag && (
           <span className="bds-card__preset-display-tag">{tag}</span>
         )}
-        <h3 className="bds-card__preset-display-title">{title}</h3>
+        <Heading className="bds-card__preset-display-title">{title}</Heading>
         {description && (
           <p className="bds-card__preset-display-description">{description}</p>
         )}
@@ -717,6 +757,7 @@ function renderDisplayPreset({
 
 function renderDisplayRowPreset({
   title,
+  titleAs: Heading = 'h3',
   description,
   image,
   tag,
@@ -724,6 +765,7 @@ function renderDisplayRowPreset({
   action,
   imageWidth = 'standard',
   href,
+  tint,
   className,
   style,
   preset: _preset,
@@ -734,6 +776,7 @@ function renderDisplayRowPreset({
     'bds-card',
     'bds-card--preset-display-row',
     isNamed && `bds-card--preset-display-row-${imageWidth}`,
+    tint && `bds-card--tint-${tint}`,
     href && 'bds-card--link',
     className,
   );
@@ -755,7 +798,7 @@ function renderDisplayRowPreset({
         {tag && (
           <span className="bds-card__preset-display-row-tag">{tag}</span>
         )}
-        <h3 className="bds-card__preset-display-row-title">{title}</h3>
+        <Heading className="bds-card__preset-display-row-title">{title}</Heading>
         {description && (
           <p className="bds-card__preset-display-row-description">{description}</p>
         )}
@@ -793,7 +836,7 @@ function renderDisplayRowPreset({
 
 export interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {
   children: ReactNode;
-  as?: 'h2' | 'h3' | 'h4';
+  as?: CardHeadingLevel;
 }
 
 export function CardTitle({ children, as: Tag = 'h3', className, style, ...props }: CardTitleProps) {
