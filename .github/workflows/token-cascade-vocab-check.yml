@@ -1,0 +1,51 @@
+name: Token Cascade Vocab Check
+
+# Fails when retired token-cascade layering terms reappear in docs-site MDX prose.
+# PR #736 locked the six-concept token vocabulary (Anatomy / Tier / Library /
+# Layer / Mode / Tenet) and swept the retired terms — "Tier 1/2/3/4" (CSS-cascade
+# sense), "Layer 1-4", "four layers", "Tier/Layer N brand overrides" — out of
+# content/docs/**.mdx. This gate prevents them drifting back in.
+#
+# Sister of #534 (BCS Vocabulary Check): same canonical-name-drift class of bug on
+# a different vocabulary. Legitimate numbered-Tier usage (the Raw/Primitive/
+# Semantic/Component abstraction stack, and the CLAUDE.md doc-tier model) is
+# exempted via an inline `cascade-vocab-ok` allow-anchor, not by banning the word.
+#
+# Issue: brikdesigns/brik-bds#748
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs-site/content/docs/**'
+      - 'scripts/token-cascade-vocab-check.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs-site/content/docs/**'
+      - 'scripts/token-cascade-vocab-check.mjs'
+
+concurrency:
+  group: token-cascade-vocab-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  token-cascade-vocab-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Token cascade vocabulary check
+        run: npm run token-cascade-vocab-check
