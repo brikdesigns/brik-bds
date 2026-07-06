@@ -103,9 +103,11 @@
   object-fit: cover;
 }
 
-/* Non-hallucinatable content stub — CI grep on data-content-needed. */
+/* Non-hallucinatable content stub — CI grep on data-content-needed. The
+ * aspect-ratio is --split-scoped: the --with-pricing-card variant wraps this
+ * slot in a <Frame> (its own `.bds-frame--ratio-*` class provides the ratio),
+ * so the block must not impose 4-5 there. */
 .bds-hero__missing {
-  aspect-ratio: var(--aspect-4-5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -115,10 +117,265 @@
   border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
 }
 
+.bds-hero--split .bds-hero__missing {
+  aspect-ratio: var(--aspect-4-5);
+}
+
 .bds-hero__missing-label {
   margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--body-xl);
   color: var(--text-secondary);
   text-align: center;
+}
+
+/* ── --with-pricing-card: interior split (content trail + image/price card) ──
+ *
+ * Consolidates the former bp-hero-img-card blueprint (brik-bds#1165). Left
+ * column: breadcrumb + eyebrow icon + eyebrow text + h1 + lead + inverse CTA on
+ * a soft audience-tinted surface. Right column: an `aside` white card with the
+ * page image (Frame) + optional price overlay + price CTA.
+ *
+ * The service-line cascade below is ported verbatim from bp-hero-img-card
+ * (brik-bds#1017, AA-verified via contrast-gate): only the block selector and
+ * the local --bds-hero-*-color hook names changed; every --text-service-* /
+ * --surface-service-* / --background-inverse / --text-inverse token reference
+ * is byte-identical, so the audited contrast pairings are preserved. */
+
+.bds-hero--with-pricing-card {
+  background: var(--bds-hero-bg, var(--page-secondary));
+  padding-block: var(
+    --bds-hero-padding-y,
+    clamp(var(--padding-xl), 6vw, var(--padding-huge))
+  );
+}
+
+/* Service-line cascade — canonical --*-service-{service-line} tokens.
+ *
+ * Background uses the `surface` family (not `background`) because the hero
+ * is a broad page-level container, not a small bounded component — per the
+ * service-token decision tree (`-surface-` for sections/heroes/cards;
+ * `-background-` for badges/tags/pills/buttons). It uses the `-inverse` step
+ * (ADR-012): the card reads as neutral chrome — white — in light mode, then
+ * carries the line's deep {hue}-darkest tint in dark mode. The companion text
+ * flip lives in the dark-mode block below (brik-bds#1017).
+ *
+ * `--background-inverse` stays on the `background` family: it's the
+ * mode-aware companion fill consumed by the inverse `<Button>` variant
+ * inside the hero, which IS a small bounded component.
+ *
+ * `data-audience='back-office'` is canonical; `data-audience='service'` is a
+ * @deprecated alias kept for component-API compat during the cross-repo
+ * rename. Both bind the orange back-office tokens (`service-back-office`,
+ * renamed from the bug-named `service-service` in #563). API-level rename
+ * `data-audience` → `data-service-line` is a separate cross-repo follow-up. */
+.bds-hero--with-pricing-card[data-audience='brand'] {
+  background: var(--surface-service-brand-inverse);
+  --bds-hero-headline-color: var(--text-service-brand-on-light);
+  --bds-hero-eyebrow-color: var(--text-service-brand-on-light);
+  --bds-hero-lead-color: var(--text-service-brand-on-light);
+  --text-brand-primary: var(--text-service-brand-on-light);
+  --background-inverse: var(--surface-service-brand-dark);
+  --text-on-color-light: var(--color-grayscale-white);
+}
+
+.bds-hero--with-pricing-card[data-audience='marketing'] {
+  background: var(--surface-service-marketing-inverse);
+  --bds-hero-headline-color: var(--text-service-marketing-on-light);
+  --bds-hero-eyebrow-color: var(--text-service-marketing-on-light);
+  --bds-hero-lead-color: var(--text-service-marketing-on-light);
+  --text-brand-primary: var(--text-service-marketing-on-light);
+  --background-inverse: var(--surface-service-marketing-dark);
+  --text-on-color-light: var(--color-grayscale-white);
+}
+
+.bds-hero--with-pricing-card[data-audience='information'] {
+  background: var(--surface-service-information-inverse);
+  --bds-hero-headline-color: var(--text-service-information-on-light);
+  --bds-hero-eyebrow-color: var(--text-service-information-on-light);
+  --bds-hero-lead-color: var(--text-service-information-on-light);
+  --text-brand-primary: var(--text-service-information-on-light);
+  --background-inverse: var(--surface-service-information-dark);
+  --text-on-color-light: var(--color-grayscale-white);
+}
+
+.bds-hero--with-pricing-card[data-audience='product'] {
+  background: var(--surface-service-product-inverse);
+  --bds-hero-headline-color: var(--text-service-product-on-light);
+  --bds-hero-eyebrow-color: var(--text-service-product-on-light);
+  --bds-hero-lead-color: var(--text-service-product-on-light);
+  --text-brand-primary: var(--text-service-product-on-light);
+  --background-inverse: var(--surface-service-product-dark);
+  --text-on-color-light: var(--color-grayscale-white);
+}
+
+.bds-hero--with-pricing-card[data-audience='back-office'],
+.bds-hero--with-pricing-card[data-audience='service'] {
+  background: var(--surface-service-back-office-inverse);
+  --bds-hero-headline-color: var(--text-service-back-office-on-light);
+  --bds-hero-eyebrow-color: var(--text-service-back-office-on-light);
+  --bds-hero-lead-color: var(--text-service-back-office-on-light);
+  --text-brand-primary: var(--text-service-back-office-on-light);
+  --background-inverse: var(--surface-service-back-office-dark);
+  --text-on-color-light: var(--color-grayscale-white);
+}
+
+/* ── Dark-mode: --text-inverse must track the softened service-dark surface.
+ * surface-service-{hue}-dark softens one tier in dark mode (darkest → darker,
+ * per ADR-011). Lighter darker-step surfaces (brand yellow, marketing green)
+ * can't sustain white text (2.87–4.36:1); darker ones can. Override
+ * --text-inverse per luminance group so all five lines pass AA in dark mode.
+ * Uses mode-invariant --text-on-color-light (black) / --text-on-color-dark (white). */
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'],
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] {
+  --text-inverse: var(--text-on-color-light); /* black on yellow/green-darker: 4.82–7.33:1 */
+}
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'],
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'],
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'],
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] {
+  --text-inverse: var(--text-on-color-dark);  /* white on blue/purple/orange-darker: 5.48–9.48:1 */
+}
+
+/* ── Dark-mode: the inverse surface flips white → {hue}-darkest, so the card's
+ * own headline/eyebrow/lead (and the breadcrumb/link --text-brand-primary that
+ * cascade on the same surface) must flip from --text-service-{line}-on-light
+ * ({hue}-darkest — invisible on the dark surface) to the light-on-dark
+ * companion --text-service-{line}-on-dark ({hue}-lighter). AA-verified per line
+ * (6.89–9.06:1) via contrast-gate (brik-bds#1017). The inner inverse <Button>
+ * is unaffected: its label/fill ride --text-inverse / --background-inverse
+ * (surface-service-{line}-dark), handled above. */
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'] {
+  --bds-hero-headline-color: var(--text-service-brand-on-dark);
+  --bds-hero-eyebrow-color: var(--text-service-brand-on-dark);
+  --bds-hero-lead-color: var(--text-service-brand-on-dark);
+  --text-brand-primary: var(--text-service-brand-on-dark);
+}
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] {
+  --bds-hero-headline-color: var(--text-service-marketing-on-dark);
+  --bds-hero-eyebrow-color: var(--text-service-marketing-on-dark);
+  --bds-hero-lead-color: var(--text-service-marketing-on-dark);
+  --text-brand-primary: var(--text-service-marketing-on-dark);
+}
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'] {
+  --bds-hero-headline-color: var(--text-service-information-on-dark);
+  --bds-hero-eyebrow-color: var(--text-service-information-on-dark);
+  --bds-hero-lead-color: var(--text-service-information-on-dark);
+  --text-brand-primary: var(--text-service-information-on-dark);
+}
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'] {
+  --bds-hero-headline-color: var(--text-service-product-on-dark);
+  --bds-hero-eyebrow-color: var(--text-service-product-on-dark);
+  --bds-hero-lead-color: var(--text-service-product-on-dark);
+  --text-brand-primary: var(--text-service-product-on-dark);
+}
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'],
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] {
+  --bds-hero-headline-color: var(--text-service-back-office-on-dark);
+  --bds-hero-eyebrow-color: var(--text-service-back-office-on-dark);
+  --bds-hero-lead-color: var(--text-service-back-office-on-dark);
+  --text-brand-primary: var(--text-service-back-office-on-dark);
+}
+
+.bds-hero--with-pricing-card .bds-hero__container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap-xl);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .bds-hero--with-pricing-card .bds-hero__container {
+    grid-template-columns: 58fr 42fr;
+    gap: var(--gap-huge);
+  }
+}
+
+.bds-hero__breadcrumb {
+  margin-bottom: var(--gap-sm);
+}
+
+/* Scoped to `img` only: this slot also carries `<ServiceTag variant="icon">`,
+   whose `.bds-service-tag--icon` centering (inline-flex) must not be clobbered
+   by `display: block`. The ServiceTag self-sizes via `.bds-service-tag--icon-lg`
+   (40px = 2.5rem). See brik-bds#873. */
+img.bds-hero__icon {
+  display: block;
+  width: var(--bds-hero-icon-size, var(--size-1000));
+  height: var(--bds-hero-icon-size, var(--size-1000));
+  object-fit: contain;
+}
+
+/* Decorative icon slot (brik-bds#849) — sizes a passed SVG/Image node to the
+   same footprint as the img path; the node itself carries no img/alt semantics. */
+.bds-hero__icon-slot {
+  display: block;
+  width: var(--bds-hero-icon-size, var(--size-1000));
+  height: var(--bds-hero-icon-size, var(--size-1000));
+}
+
+.bds-hero__icon-slot > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* Pricing-card content column: bolder headline + service-token-driven color
+   hooks (default to --text-primary when no audience cascade is active). */
+.bds-hero--with-pricing-card .bds-hero__subtitle {
+  font-weight: var(--font-weight-semibold);
+  color: var(--bds-hero-eyebrow-color, var(--text-primary));
+}
+
+.bds-hero--with-pricing-card .bds-hero__title {
+  font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));
+  font-weight: var(--font-weight-bold);
+  color: var(--bds-hero-headline-color, var(--text-primary));
+}
+
+.bds-hero--with-pricing-card .bds-hero__lead {
+  margin: 0;
+  font-size: var(--body-xl);
+  color: var(--bds-hero-lead-color, var(--text-primary));
+}
+
+.bds-hero__media-card {
+  background: var(--bds-hero-media-bg, var(--surface-primary));
+  border-radius: var(--bds-hero-radius, var(--border-radius-lg));
+  padding: var(--padding-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-hero__image-frame {
+  /* aspect-ratio handled by the <Frame ratio="…"> wrapper */
+  overflow: hidden;
+  border-radius: var(--border-radius-md);
+  background: var(--surface-secondary);
+}
+
+.bds-hero__price {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  padding-inline: var(--padding-sm);
+  align-items: flex-start;
+}
+
+.bds-hero__price-label {
+  margin: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.bds-hero__price-value {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  line-height: 1;
 }

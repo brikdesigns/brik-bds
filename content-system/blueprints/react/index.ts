@@ -61,10 +61,11 @@ export type { CtaProps, CtaLayout } from './Cta';
 
 // `<Hero>` — the `bds-hero` page-hero section primitive
 // (post-brik-bds#583 consolidation). Props-based: a shared content column
-// (eyebrow → h1 → lead → CTA) with an `--interior-minimal` (no media) or
-// `--split` (content + composed `media` column) layout. Replaces the
-// per-blueprint `bp-hero-*` classes. The `--with-pricing-card` variant folds
-// in via #1165. The `hero_*` keys dispatch through the adapters below.
+// (breadcrumb → eyebrow → h1 → lead → CTA) with an `--interior-minimal`
+// (no media), `--split` (content + composed `media` column), or
+// `--with-pricing-card` (interior split + image/price card, brik-bds#1165)
+// layout. Replaces the per-blueprint `bp-hero-*` classes. The `hero_*` keys
+// dispatch through the adapters below.
 export { Hero } from './Hero';
 export type { HeroProps, HeroLayout } from './Hero';
 
