@@ -1,14 +1,86 @@
 @layer bds-components {
-/* SegmentedControl — pseudo-state styles (hover, pressed, disabled)
-   Inline CSSProperties can't handle :hover/:active/:disabled,
-   so these live in CSS. */
+/**
+ * BDS SegmentedControl
+ *
+ * Pill-shaped container with mutually-exclusive segments. All styling lives
+ * here; size and full-width are container BEM modifiers, active is an item
+ * modifier, disabled is the native :disabled state.
+ *
+ * Token reference:
+ * - --background-secondary (track fill)    - --background-primary (active pill)
+ * - --background-tertiary (hover/press)    - --text-on-color-light (inactive label)
+ * - --text-primary (active/hover label)    - --border-brand-primary (focus ring)
+ */
 
-/* ── Shared transition ── */
+/* ── Container / track ── */
+
+.bds-segmented-control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--border-width-lg);
+  padding: var(--border-width-lg);
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  box-sizing: border-box;
+}
+
+.bds-segmented-control--full-width {
+  display: flex;
+  width: 100%;
+}
+
+/* ── Segment ── */
 
 .bds-segmented-control-item {
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  /* backgroundColor (not the `background` shorthand) so base and active set the
+     SAME property — mixing shorthand + non-shorthand triggered React's
+     "conflicting style property" warning when these were inline. See #993. */
+  background-color: transparent;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  /* Inactive label sits on the --background-secondary track, a light-ish neutral
+     surface in BOTH themes. --text-on-color-light is fixed dark in both themes →
+     AA on the track either way. See contrast-pairings.json. */
+  color: var(--text-on-color-light);
+  min-width: 0;
   transition: background-color var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out),
     box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.bds-segmented-control--full-width .bds-segmented-control-item {
+  flex: 1;
+}
+
+/* ── Size ── */
+
+.bds-segmented-control--sm .bds-segmented-control-item {
+  padding: var(--gap-xs) var(--padding-md);
+  font-size: var(--label-sm);
+}
+
+.bds-segmented-control--md .bds-segmented-control-item {
+  padding: var(--gap-sm) var(--padding-lg);
+  font-size: var(--label-md);
+}
+
+.bds-segmented-control--lg .bds-segmented-control-item {
+  padding: var(--gap-md) var(--padding-xl);
+  font-size: var(--label-md);
+}
+
+/* ── Active ── */
+
+.bds-segmented-control-item--active {
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — subtle elevation for active pill */
 }
 
 /* ── Disabled ── */
