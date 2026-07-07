@@ -51,10 +51,11 @@ const CIRCLE_SIZE: Record<ProgressStepperSize, number> = {
   md: 32,
 };
 
-// bds-lint-ignore — Figma-driven dot sizes for the 'dots' variant
-const DOTS_CONFIG: Record<ProgressStepperSize, { dotSize: number; activeDotWidth: number; gap: string }> = {
-  sm: { dotSize: 6, activeDotWidth: 18, gap: 'var(--gap-sm)' },
-  md: { dotSize: 8, activeDotWidth: 24, gap: 'var(--gap-md)' },
+// bds-lint-ignore — Figma-driven dot sizes for the 'dots' variant.
+// Container gap is size-scoped in ProgressStepper.css (variant-dots + --{size}).
+const DOTS_CONFIG: Record<ProgressStepperSize, { dotSize: number; activeDotWidth: number }> = {
+  sm: { dotSize: 6, activeDotWidth: 18 },
+  md: { dotSize: 8, activeDotWidth: 24 },
 };
 
 function getStepStatus(index: number, activeStep: number): StepStatus {
@@ -248,9 +249,10 @@ function DotsRender({
       className={bdsClass(
         'bds-progress-stepper',
         'bds-progress-stepper--variant-dots',
+        `bds-progress-stepper--${size}`,
         className,
       )}
-      style={{ gap: config.gap, ...style }}
+      style={style}
       role="tablist"
       aria-label="Progress"
       {...props}

@@ -48,7 +48,6 @@ const BDS_ROOT = resolve(__dirname, '..');
 // Paths are repo-relative, POSIX separators. Remove an entry once its component
 // is fully migrated to CSS (the gate then guards it against regression).
 const BASELINE = new Set([
-  'components/ui/ProgressStepper/ProgressStepper.tsx',
   'components/ui/Board/BoardColumn.tsx',
 ]);
 
