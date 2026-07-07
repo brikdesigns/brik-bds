@@ -92,4 +92,45 @@
   --text-secondary: var(--text-service-back-office-on-light);
   --text-muted: var(--text-service-back-office-on-light);
 }
+
+/* ─── Dark mode: flip the audience cascade to the on-dark companions ──────
+ * In dark mode the [data-audience] band surface flips to the {hue}-darkest
+ * companion, so the *-on-light tokens the cascade above binds (a dark hue)
+ * collapse onto it — the current crumb, which rides --text-secondary, renders
+ * the SAME colour as the band and vanishes (1:1; brikdesigns#688). The link is
+ * unaffected: it rides --text-brand-primary, flipped by HeroSplitImageCardOverlay's
+ * own dark audience cascade. Rebind --text-secondary / --text-muted to the
+ * *-on-dark companion so the current crumb clears AA on the dark band (6.89–9.06:1,
+ * the same pairings the hero uses), staying recessive via the regular weight above.
+ * Mirrors Hero.css's dark audience cascade. */
+:root[data-theme="dark"] [data-audience='brand'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-brand-on-dark);
+  --text-muted: var(--text-service-brand-on-dark);
+}
+
+:root[data-theme="dark"] [data-audience='marketing'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-marketing-on-dark);
+  --text-muted: var(--text-service-marketing-on-dark);
+}
+
+:root[data-theme="dark"] [data-audience='information'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-information-on-dark);
+  --text-muted: var(--text-service-information-on-dark);
+}
+
+:root[data-theme="dark"] [data-audience='product'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-product-on-dark);
+  --text-muted: var(--text-service-product-on-dark);
+}
+
+:root[data-theme="dark"] [data-audience='back-office'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-back-office-on-dark);
+  --text-muted: var(--text-service-back-office-on-dark);
+}
+
+/* @deprecated alias of [data-audience='back-office'] — see above. */
+:root[data-theme="dark"] [data-audience='service'] .bds-breadcrumb {
+  --text-secondary: var(--text-service-back-office-on-dark);
+  --text-muted: var(--text-service-back-office-on-dark);
+}
 }
