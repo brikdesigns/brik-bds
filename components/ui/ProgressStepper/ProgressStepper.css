@@ -25,6 +25,9 @@
   align-items: center;
 }
 
+.bds-progress-stepper--variant-dots.bds-progress-stepper--sm { gap: var(--gap-sm); }
+.bds-progress-stepper--variant-dots.bds-progress-stepper--md { gap: var(--gap-md); }
+
 /* ─── Step row ───────────────────────────────────────────────── */
 
 .bds-progress-stepper__step-row {
