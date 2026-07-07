@@ -44,9 +44,20 @@
   position: relative;
   display: inline-block;
   border-radius: var(--border-radius-pill);
+  /* default variant carries state on the track: neutral off, brand on */
+  background-color: var(--border-muted); /* bds-lint-ignore token-family — no semantic switch-track-inactive token; neutral track rail */
   transition: background-color var(--duration-normal) var(--ease-out);
   flex-shrink: 0;
   cursor: inherit;
+}
+
+.bds-switch__input:checked ~ .bds-switch__track {
+  background-color: var(--background-brand-primary);
+}
+
+/* accent-knob keeps the track neutral in both states — state moves to the knob */
+.bds-switch--accent-knob .bds-switch__input:checked ~ .bds-switch__track {
+  background-color: var(--border-muted); /* bds-lint-ignore token-family — accent-knob track stays neutral */
 }
 
 /* ─── Knob ───────────────────────────────────────────────────── */
@@ -57,5 +68,14 @@
   border-radius: 50%;
   transition: transform var(--duration-normal) var(--ease-out);
   box-shadow: var(--shadow-sm);
+}
+
+/* accent-knob variant carries state on the knob: muted off, brand on */
+.bds-switch--accent-knob .bds-switch__knob {
+  background-color: var(--text-secondary); /* bds-lint-ignore token-family — muted-gray knob fill; no semantic switch-knob-off token */
+}
+
+.bds-switch--accent-knob .bds-switch__input:checked ~ .bds-switch__track .bds-switch__knob {
+  background-color: var(--background-brand-primary);
 }
 }

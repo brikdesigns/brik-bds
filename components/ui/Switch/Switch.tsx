@@ -76,32 +76,20 @@ export function Switch({
   const s = sizes[size];
   const isAccentKnob = variant === 'accent-knob';
 
-  // Runtime-calculated track dimensions.
-  // default: track carries state (brand-fill on / neutral off).
-  // accent-knob: track stays neutral in both states; the knob carries state.
+  // Size-dependent, Figma-driven dimensions stay inline (runtime-calculated).
+  // State colors (track brand/neutral, accent-knob fill) live in Switch.css,
+  // driven by :checked + the .bds-switch--accent-knob modifier.
   const trackStyle: CSSProperties = {
-    width: `${s.trackW}px`, // bds-lint-ignore — Figma-driven switch dimensions
-    height: `${s.trackH}px`, // bds-lint-ignore
-    backgroundColor:
-      isAccentKnob || !isChecked
-        ? 'var(--border-muted)' // bds-lint-ignore — no semantic switch-track-inactive token
-        : 'var(--background-brand-primary)',
+    width: `${s.trackW}px`,
+    height: `${s.trackH}px`,
   };
 
-  // Runtime-calculated knob dimensions + position. For accent-knob the knob
-  // carries state (brand-fill on / muted-gray off); default leaves the fill to
-  // Switch.css (--surface-primary).
   const knobStyle: CSSProperties = {
-    top: `${s.pad}px`, // bds-lint-ignore
-    left: `${s.pad}px`, // bds-lint-ignore
-    width: `${s.knob}px`, // bds-lint-ignore
-    height: `${s.knob}px`, // bds-lint-ignore
+    top: `${s.pad}px`,
+    left: `${s.pad}px`,
+    width: `${s.knob}px`,
+    height: `${s.knob}px`,
     transform: isChecked ? `translateX(${s.travel}px)` : 'translateX(0)',
-    ...(isAccentKnob && {
-      backgroundColor: isChecked
-        ? 'var(--background-brand-primary)'
-        : 'var(--text-secondary)',
-    }),
   };
 
   return (
