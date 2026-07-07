@@ -57,6 +57,19 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
+# vite-inject-mocker-entry.js (emitted by @storybook/addon-vitest) is a
+# STABLE-named module entry that `import`s a content-hashed chunk
+# (assets/preload-helper-*.js). It's referenced by iframe.html by its fixed
+# name, so unlike the hashed chunks it isn't self-invalidating. If a browser
+# serves a stale copy after a deploy, it points at a preload-helper hash that
+# no longer exists → a 404 that a client-side reload cannot heal (the stale
+# entry keeps resolving to the dead hash). Revalidate it on every load so a
+# reload always pulls the entry that matches the current deploy's chunks.
+[[headers]]
+  for = "/vite-inject-mocker-entry.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 [[headers]]
   for = "/assets/*"
   [headers.values]
