@@ -79,11 +79,11 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
  * cascade level (theme file, `globals.css`, `style` prop). Defaults preserve
  * the lean 0.57.0 shape:
  *
- * - `--page-header-section-gap` (default `var(--gap-xl)` = 24px) — between
+ * - `--page-header-section-gap` (default `--gap-xl`, 24px) — between
  *   root sections (inner / metadata / tabs).
- * - `--page-header-content-gap` (default `var(--gap-sm)` = 6px) — between
+ * - `--page-header-content-gap` (default `--gap-sm`, 6px) — between
  *   the title-row and the subtitle.
- * - `--page-header-actions-gap` (default `var(--gap-sm)` = 6px) — between
+ * - `--page-header-actions-gap` (default `--gap-sm`, 6px) — between
  *   the content column (title + subtitle) and the actions column.
  * - `--page-header-padding-bottom` (default `0`) — bottom padding below the
  *   header. The header draws no default divider (a header with no `tabs` ends
