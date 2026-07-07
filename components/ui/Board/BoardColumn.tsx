@@ -41,7 +41,7 @@ export function BoardColumn({
     >
       {(title || headerAction) && (
         <div className="bds-board-column__header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
+          <div className="bds-board-column__title-group">
             {title && <h3 className="bds-board-column__title">{title}</h3>}
             {count !== undefined && (
               <span className="bds-board-column__count">{count}</span>
