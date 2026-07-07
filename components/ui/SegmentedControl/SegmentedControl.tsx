@@ -1,4 +1,4 @@
-import { type HTMLAttributes, type CSSProperties, type KeyboardEvent, useRef } from 'react';
+import { type HTMLAttributes, type KeyboardEvent, useRef } from 'react';
 import { bdsClass } from '../../utils';
 import './SegmentedControl.css';
 
@@ -35,66 +35,6 @@ export interface SegmentedControlProps extends Omit<HTMLAttributes<HTMLDivElemen
   disabled?: boolean;
 }
 
-/* ── Container styles ── */
-
-const containerBase: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  backgroundColor: 'var(--background-secondary)',
-  borderRadius: 'var(--border-radius-md)',
-  padding: 'var(--border-width-lg)',
-  boxSizing: 'border-box',
-  gap: 'var(--border-width-lg)',
-};
-
-/* ── Size-specific segment styles ── */
-
-const sizeStyles: Record<SegmentedControlSize, CSSProperties> = {
-  sm: {
-    padding: 'var(--gap-xs) var(--padding-md)',
-    fontSize: 'var(--label-sm)',
-  },
-  md: {
-    padding: 'var(--gap-sm) var(--padding-lg)',
-    fontSize: 'var(--label-md)',
-  },
-  lg: {
-    padding: 'var(--gap-md) var(--padding-xl)',
-    fontSize: 'var(--label-md)',
-  },
-};
-
-/* ── Segment base ── */
-
-const segmentBase: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-tight)',
-  textAlign: 'center',
-  whiteSpace: 'nowrap',
-  cursor: 'pointer',
-  // backgroundColor (not the `background` shorthand) so base and active set the
-  // SAME property — mixing shorthand + non-shorthand triggers React's
-  // "conflicting style property" rerender warning. See #993.
-  backgroundColor: 'transparent',
-  border: 'none',
-  borderRadius: 'var(--border-radius-sm)',
-  // Inactive label sits on the --background-secondary track, which is a light-ish
-  // neutral surface in BOTH themes (grayscale-lightest light / grayscale-light dark).
-  // --text-secondary flips to grayscale-light in dark mode and collapses onto the
-  // track (same stop → ~1:1, invisible). --text-on-color-light is fixed dark in both
-  // themes → AA on the track either way. See contrast-pairings.json.
-  color: 'var(--text-on-color-light)',
-  minWidth: 0,
-  transition: 'background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease',
-};
-
-const activeSegmentStyles: CSSProperties = {
-  backgroundColor: 'var(--background-primary)',
-  color: 'var(--text-primary)',
-  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)', // bds-lint-ignore — subtle elevation for active pill
-};
-
 /**
  * SegmentedControl — BDS toggle control for switching between views or modes
  *
@@ -129,12 +69,6 @@ export function SegmentedControl({
   style,
   ...props
 }: SegmentedControlProps) {
-  const containerStyles: CSSProperties = {
-    ...containerBase,
-    ...(fullWidth ? { display: 'flex', width: '100%' } : {}),
-    ...style,
-  };
-
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Indices of segments that can receive focus (enabled).
@@ -188,8 +122,13 @@ export function SegmentedControl({
 
   return (
     <div
-      className={bdsClass('bds-segmented-control', className)}
-      style={containerStyles}
+      className={bdsClass(
+        'bds-segmented-control',
+        `bds-segmented-control--${size}`,
+        fullWidth && 'bds-segmented-control--full-width',
+        className,
+      )}
+      style={style}
       role="radiogroup"
       {...props}
       onKeyDown={handleKeyDown}
@@ -198,13 +137,6 @@ export function SegmentedControl({
         const itemValue = item.value ?? item.label;
         const isActive = itemValue === value;
         const isDisabled = disabled || item.disabled;
-
-        const segmentStyles: CSSProperties = {
-          ...segmentBase,
-          ...sizeStyles[size],
-          ...(isActive ? activeSegmentStyles : {}),
-          ...(fullWidth ? { flex: 1 } : {}),
-        };
 
         return (
           <button
@@ -219,9 +151,8 @@ export function SegmentedControl({
             tabIndex={index === tabStopIndex ? 0 : -1}
             className={bdsClass(
               'bds-segmented-control-item',
-              isActive ? 'bds-segmented-control-item--active' : '',
+              isActive && 'bds-segmented-control-item--active',
             )}
-            style={segmentStyles}
             onClick={() => onChange?.(itemValue)}
           >
             {item.label}
