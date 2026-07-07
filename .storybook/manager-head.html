@@ -185,11 +185,16 @@
   imported module" errors caused by deploys that replace the hashed
   chunk filenames a previously-loaded HTML page references. Mirrors
   the listener in preview-head.html so both iframes self-heal.
+
+  Frame-specific cooldown key ('manager') so this frame's reload never
+  suppresses a needed preview reload within the window (both frames
+  share sessionStorage — same origin). preventDefault() keeps the
+  recovery a clean refresh instead of an error flash.
 -->
 <script>
   (function () {
     var COOLDOWN_MS = 10000;
-    var STORAGE_KEY = 'sb-chunk-reload-at';
+    var STORAGE_KEY = 'sb-chunk-reload-at:manager';
 
     function shouldReload() {
       try {
@@ -209,14 +214,18 @@
           || /Failed to load module script/.test(msg);
     }
 
-    window.addEventListener('vite:preloadError', function () {
-      if (shouldReload()) window.location.reload();
+    window.addEventListener('vite:preloadError', function (event) {
+      if (shouldReload()) {
+        if (event && event.preventDefault) event.preventDefault();
+        window.location.reload();
+      }
     });
 
     window.addEventListener('unhandledrejection', function (event) {
       var reason = event && event.reason;
       var msg = (reason && reason.message) || (typeof reason === 'string' ? reason : '');
       if (isChunkLoadError(msg) && shouldReload()) {
+        if (event && event.preventDefault) event.preventDefault();
         window.location.reload();
       }
     });
