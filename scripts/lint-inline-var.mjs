@@ -17,17 +17,16 @@
  *               the sanctioned Component-tier pattern in token-anatomy.mdx):
  *                 style={{ '--bds-slider-percent': `${pct}%` }}
  *
- * ── Baseline ────────────────────────────────────────────────────────────────
+ * ── Enforcement ──────────────────────────────────────────────────────────────
  *
- * Existing offenders are listed in BASELINE and do not fail the gate — they're
- * burned down in per-component follow-up PRs (#892). A file NOT in the baseline
- * that introduces a consuming inline var() fails the build. As each component is
- * cleaned, delete its entry from BASELINE so it can never regress.
+ * The #892 burn-down is complete: every component is clean, so the gate enforces
+ * repo-wide — any consuming inline var() in component TSX fails the build.
+ * (History: offenders were once grandfathered in a BASELINE set and removed
+ * per-component as they migrated to CSS; the set emptied when #892 closed.)
  *
  * ── Exit codes ───────────────────────────────────────────────────────────────
- *   0  Clean — no un-baselined inline token consumption
- *   1  Violations found (new offender, or a baselined file that's now clean —
- *      remove it from BASELINE)
+ *   0  Clean — no inline token consumption
+ *   1  Violations found
  *   2  Bad invocation
  *
  * ── CLI ──────────────────────────────────────────────────────────────────────
@@ -43,12 +42,6 @@ import { execSync } from 'node:child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BDS_ROOT = resolve(__dirname, '..');
-
-// ── Baseline — known offenders, burned down per-component in #892 ────────────
-// Paths are repo-relative, POSIX separators. Remove an entry once its component
-// is fully migrated to CSS (the gate then guards it against regression).
-const BASELINE = new Set([
-]);
 
 // A line that DEFINES a `--bds-*` custom property (runtime binding) — allowed.
 const BDS_DEFINE_RE = /['"]--bds-[\w-]+['"]\s*:/;
@@ -78,8 +71,6 @@ function relPosix(abs) {
 
 function scanFile(filePath) {
   const rel = relPosix(filePath);
-  if (BASELINE.has(rel)) return { violations: [], baselinedButClean: false, rel };
-
   const lines = readFileSync(filePath, 'utf8').split('\n');
   const violations = [];
   for (let i = 0; i < lines.length; i++) {
@@ -91,39 +82,22 @@ function scanFile(filePath) {
   return { violations, rel };
 }
 
-// A baselined file that is now clean should be removed from the baseline.
-function baselinedFileStillDirty(rel) {
-  const abs = resolve(BDS_ROOT, rel);
-  if (!existsSync(abs)) return false;
-  const lines = readFileSync(abs, 'utf8').split('\n');
-  return lines.some((l) => VAR_CONSUME_RE.test(l) && !BDS_DEFINE_RE.test(l));
-}
-
 const GUIDANCE =
   'Move the token into the component CSS (BEM under `bds-`, keyed on state via ' +
   'class / [data-*] / [aria-*]); inline style objects must not consume tokens. ' +
   'Defining a `--bds-*` custom property inline (runtime binding) is allowed. ' +
   'See .claude/standards/component-build.md and brik-bds#892.';
 
-function render(allViolations, staleBaseline, scanned) {
-  const out = [];
-  if (allViolations.length === 0 && staleBaseline.length === 0) {
-    return `lint-inline-var: clean — ${scanned} TSX file(s) scanned, 0 un-baselined inline token consumers\n`;
+function render(allViolations, scanned) {
+  if (allViolations.length === 0) {
+    return `lint-inline-var: clean — ${scanned} TSX file(s) scanned, 0 inline token consumers\n`;
   }
-  if (allViolations.length > 0) {
-    out.push(`lint-inline-var: ${allViolations.length} inline token consumer(s) outside the baseline`);
-    out.push('');
-    for (const v of allViolations) {
-      out.push(`  ${v.file}:${v.line}  ${v.text}`);
-    }
-    out.push('');
-    out.push(`  ↳ ${GUIDANCE}`);
+  const out = [`lint-inline-var: ${allViolations.length} inline token consumer(s) in component TSX`, ''];
+  for (const v of allViolations) {
+    out.push(`  ${v.file}:${v.line}  ${v.text}`);
   }
-  if (staleBaseline.length > 0) {
-    out.push('');
-    out.push(`lint-inline-var: ${staleBaseline.length} baseline entr(y/ies) now clean — remove from BASELINE in scripts/lint-inline-var.mjs:`);
-    for (const rel of staleBaseline) out.push(`  ${rel}`);
-  }
+  out.push('');
+  out.push(`  ↳ ${GUIDANCE}`);
   return out.join('\n') + '\n';
 }
 
@@ -157,13 +131,8 @@ function main() {
     allViolations.push(...scanFile(file).violations);
   }
 
-  // Only surface stale-baseline hints on a full scan (not --staged).
-  const staleBaseline = args.includes('--staged')
-    ? []
-    : [...BASELINE].filter((rel) => !baselinedFileStillDirty(rel));
-
-  process.stdout.write(render(allViolations, staleBaseline, files.length));
-  process.exit(allViolations.length > 0 || staleBaseline.length > 0 ? 1 : 0);
+  process.stdout.write(render(allViolations, files.length));
+  process.exit(allViolations.length > 0 ? 1 : 0);
 }
 
 main();

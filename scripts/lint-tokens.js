@@ -14,10 +14,9 @@
  *      docs/TOKEN-PR-CHECKLIST.md for the property↔family table.
  *   6. Raw inline var(--…) in component TSX — styles belong in the component's
  *      .css file (BEM under bds-), never a CSSProperties object. See the
- *      component-build standard §"Styles live in CSS". Files in
- *      INLINE_VAR_BASELINE are grandfathered to warnings (ratchet); clean
- *      files error. Escape hatch: `bds-lint-ignore` for runtime-calculated
- *      values that genuinely cannot live in CSS.
+ *      component-build standard §"Styles live in CSS". Errors repo-wide (the
+ *      #892 burn-down is complete). Escape hatch: `bds-lint-ignore` for
+ *      runtime-calculated values that genuinely cannot live in CSS.
  *
  * Usage:
  *   node scripts/lint-tokens.js              # full report (errors + warnings)
@@ -48,26 +47,6 @@ const BLUEPRINTS_DIR = path.join(__dirname, '..', 'content-system', 'blueprints'
 function repoRel(file) {
   return path.relative(REPO_ROOT, file).split(path.sep).join('/');
 }
-
-// ---------------------------------------------------------------------------
-// Rule 6 baseline (inline-var ratchet) — brik-bds#892
-// ---------------------------------------------------------------------------
-// Component TSX files with KNOWN pre-existing inline var(--…) style objects.
-// These are grandfathered to `warning` so the repo-wide CI run (release.yml +
-// pr-checklist.sh both call `--errors-only`) stays green while the 157-violation
-// backlog is migrated to CSS over a series of per-component PRs.
-//
-// RATCHET: any component TSX NOT on this list errors on the first inline var().
-// New components therefore can never introduce inline-var debt. As each file is
-// migrated to .css (CSSProperties → bds- BEM classes), delete its entry here.
-// When the set is empty, delete it and the conditional in checkInlineVarTsx —
-// the rule then errors repo-wide for every component.
-//
-// AddressInput is intentionally absent: it was migrated in the same PR that
-// introduced this rule (#892, first cleanup batch).
-const INLINE_VAR_BASELINE = new Set([
-  'components/ui/TabBar/TabBar.tsx',
-]);
 
 // ---------------------------------------------------------------------------
 // Tier 4 fallback-literal baseline (ratchet) — brik-bds#1043 / ADR-014
@@ -935,9 +914,8 @@ function checkTokenFamilyPairing(line, lineNum, file, isComponent) {
  * as bds- BEM classes. A raw `var(--…)` string in a .tsx is the fingerprint of
  * an inline style object, so this rule flags every such reference.
  *
- * Severity is ratcheted via INLINE_VAR_BASELINE: files with known pre-existing
- * debt warn (so repo-wide --errors-only CI stays green during migration); every
- * other component file errors, so no NEW inline-var debt can land.
+ * Every consuming inline var() in a component .tsx is an error — the #892
+ * burn-down is complete, so there is no longer a grandfathered baseline.
  *
  * Only runs for component .tsx (callers exclude .stories.tsx / .test.tsx, where
  * inline style is allowed for layout helpers). Skips comment lines and any line
@@ -953,7 +931,7 @@ function checkInlineVarTsx(line, lineNum, file) {
   }
   if (line.includes('bds-lint-ignore')) return violations;
 
-  const severity = INLINE_VAR_BASELINE.has(repoRel(file)) ? 'warning' : 'error';
+  const severity = 'error';
 
   const regex = /var\((--[\w-]+)/g;
   let match;
