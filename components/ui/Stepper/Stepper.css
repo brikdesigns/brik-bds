@@ -9,6 +9,35 @@
   box-sizing: border-box;
 }
 
+/* ─── Size ────────────────────────────────────────────── */
+
+.bds-stepper--sm { gap: var(--gap-sm); }
+.bds-stepper--md { gap: var(--gap-md); }
+.bds-stepper--lg { gap: var(--gap-md); }
+
+.bds-stepper--sm .bds-stepper__button {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--border-radius-sm);
+  font-size: 10px;
+}
+.bds-stepper--md .bds-stepper__button {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-md);
+  font-size: 12px;
+}
+.bds-stepper--lg .bds-stepper__button {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+}
+
+.bds-stepper--sm .bds-stepper__value { font-size: var(--label-sm); min-width: 28px; }
+.bds-stepper--md .bds-stepper__value { font-size: var(--label-md); min-width: 36px; }
+.bds-stepper--lg .bds-stepper__value { font-size: var(--label-lg); min-width: 44px; }
+
 /* ─── Buttons ─────────────────────────────────────────── */
 
 .bds-stepper__button {
