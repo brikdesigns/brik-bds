@@ -57,60 +57,6 @@ const thumbSizes: Record<SliderSize, number> = {
 };
 
 /**
- * Wrapper styles
- *
- * Token reference:
- * - --gap-md = 8px
- */
-const wrapperStyles: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'var(--gap-md)',
-  width: '100%',
-};
-
-/**
- * Label row styles
- *
- * Token reference:
- * - --font-family-label
- * - --label-sm = 14px
- * - --font-weight-semi-bold = 600
- * - --text-primary
- */
-const labelRowStyles: CSSProperties = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-};
-
-const labelStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-sm)',
-  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
-  lineHeight: 'var(--font-line-height-snug)',
-  color: 'var(--text-primary)',
-  margin: 0,
-  textTransform: 'capitalize' as const,
-};
-
-/**
- * Value display styles
- *
- * Token reference:
- * - --font-family-label
- * - --label-sm = 14px
- * - --font-weight-regular = 400
- * - --text-secondary
- */
-const valueStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-label)',
-  fontSize: 'var(--label-sm)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  color: 'var(--text-secondary)',
-};
-
-/**
  * Slider - BDS range input control
  *
  * A styled range slider with configurable min/max/step, size variants,
@@ -163,28 +109,21 @@ export function Slider({
 
   const percent = max !== min ? ((currentValue - min) / (max - min)) * 100 : 0;
 
-  const inputStyles: CSSProperties = {
-    width: '100%',
-    height: trackHeights[size],
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.5 : 1,
-    // CSS custom properties for the CSS file to consume
-    ...({
-      '--bds-slider-percent': `${percent}%`,
-      '--bds-slider-track-height': `${trackHeights[size]}px`,
-      '--bds-slider-thumb-size': `${thumbSizes[size]}px`,
-    } as React.CSSProperties),
-  };
+  // Runtime bindings the CSS consumes (percent from value; track/thumb from size).
+  // Defining --bds-* custom properties inline is the sanctioned runtime escape
+  // hatch; all static token consumption lives in Slider.css.
+  const inputStyles = {
+    '--bds-slider-percent': `${percent}%`,
+    '--bds-slider-track-height': `${trackHeights[size]}px`,
+    '--bds-slider-thumb-size': `${thumbSizes[size]}px`,
+  } as CSSProperties;
 
   return (
-    <div
-      className={bdsClass('bds-slider', className)}
-      style={{ ...wrapperStyles, ...style }}
-    >
+    <div className={bdsClass('bds-slider', className)} style={style}>
       {(label || showValue) && (
-        <div style={labelRowStyles}>
-          {label && <span style={labelStyles}>{label}</span>}
-          {showValue && <span style={valueStyles}>{currentValue}</span>}
+        <div className="bds-slider__label-row">
+          {label && <span className="bds-slider__label">{label}</span>}
+          {showValue && <span className="bds-slider__value">{currentValue}</span>}
         </div>
       )}
       <input
