@@ -12,16 +12,47 @@
  * value ships as a Figma token.
  */
 
-/* ─── Component-scoped override surface ── */
+/* ─── Wrapper (also the component-scoped override surface) ── */
 .bds-slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  width: 100%;
   --bds-slider-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* bds-lint-ignore — lighter than --shadow-sm; promote to Figma */
+}
+
+/* ─── Label row ── */
+.bds-slider__label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bds-slider__label {
+  margin: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.bds-slider__value {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-secondary);
 }
 
 .bds-slider-input {
   -webkit-appearance: none;
   appearance: none;
+  width: 100%;
+  height: var(--bds-slider-track-height, 6px);
   background: transparent;
   margin: 0;
+  cursor: pointer;
 }
 
 /* Track */
@@ -86,6 +117,8 @@
 
 /* Disabled */
 .bds-slider-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
   pointer-events: none;
 }
 
