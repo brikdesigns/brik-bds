@@ -67,7 +67,6 @@ function repoRel(file) {
 // introduced this rule (#892, first cleanup batch).
 const INLINE_VAR_BASELINE = new Set([
   'components/ui/TabBar/TabBar.tsx',
-  'components/ui/Stepper/Stepper.tsx',
   'components/ui/PageHeader/PageHeader.tsx',
   'components/ui/Switch/Switch.tsx',
   'components/ui/ProgressStepper/ProgressStepper.tsx',

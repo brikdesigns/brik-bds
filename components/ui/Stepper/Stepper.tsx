@@ -1,4 +1,4 @@
-import { type CSSProperties, type HTMLAttributes } from 'react';
+import { type HTMLAttributes } from 'react';
 import { Icon } from '@iconify/react';
 import { Minus, Plus } from '../../icons';
 import { bdsClass } from '../../utils';
@@ -23,36 +23,6 @@ export interface StepperProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCh
   disabled?: boolean;
 }
 
-const sizeConfig: Record<StepperSize, {
-  buttonSize: number;
-  iconSize: number;
-  fontSize: string;
-  gap: string;
-  borderRadius: string;
-}> = {
-  sm: {
-    buttonSize: 28,
-    iconSize: 10,
-    fontSize: 'var(--label-sm)',
-    gap: 'var(--gap-sm)',
-    borderRadius: 'var(--border-radius-sm)',
-  },
-  md: {
-    buttonSize: 36,
-    iconSize: 12,
-    fontSize: 'var(--label-md)',
-    gap: 'var(--gap-md)',
-    borderRadius: 'var(--border-radius-md)',
-  },
-  lg: {
-    buttonSize: 44,
-    iconSize: 14,
-    fontSize: 'var(--label-lg)',
-    gap: 'var(--gap-md)',
-    borderRadius: 'var(--border-radius-md)',
-  },
-};
-
 /**
  * Stepper — numeric input with increment/decrement buttons.
  *
@@ -74,8 +44,6 @@ export function Stepper({
   style,
   ...props
 }: StepperProps) {
-  const config = sizeConfig[size];
-
   const canDecrement = !disabled && value - step >= min;
   const canIncrement = !disabled && value + step <= max;
 
@@ -87,23 +55,10 @@ export function Stepper({
     if (canIncrement) onChange(value + step);
   };
 
-  // Runtime-calculated dimensions per size — must stay inline
-  const buttonStyle = (): CSSProperties => ({
-    width: config.buttonSize,
-    height: config.buttonSize,
-    borderRadius: config.borderRadius,
-    fontSize: config.iconSize,
-  });
-
-  const valueStyle: CSSProperties = {
-    fontSize: config.fontSize,
-    minWidth: config.buttonSize,
-  };
-
   return (
     <div
-      className={bdsClass('bds-stepper', className)}
-      style={{ gap: config.gap, ...style }}
+      className={bdsClass('bds-stepper', `bds-stepper--${size}`, className)}
+      style={style}
       role="group"
       aria-label="Stepper"
       {...props}
@@ -113,14 +68,12 @@ export function Stepper({
         onClick={handleDecrement}
         disabled={!canDecrement}
         className={bdsClass('bds-stepper__button', !canDecrement && 'bds-stepper__button--disabled')}
-        style={buttonStyle()}
         aria-label="Decrease"
       >
         <Icon icon={Minus} />
       </button>
       <span
         className={bdsClass('bds-stepper__value', disabled && 'bds-stepper__value--disabled')}
-        style={valueStyle}
         aria-live="polite"
       >
         {value}
@@ -130,7 +83,6 @@ export function Stepper({
         onClick={handleIncrement}
         disabled={!canIncrement}
         className={bdsClass('bds-stepper__button', !canIncrement && 'bds-stepper__button--disabled')}
-        style={buttonStyle()}
         aria-label="Increase"
       >
         <Icon icon={Plus} />
