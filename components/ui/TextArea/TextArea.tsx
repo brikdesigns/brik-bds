@@ -1,4 +1,4 @@
-import { useId, type TextareaHTMLAttributes, type CSSProperties } from 'react';
+import { useId, type TextareaHTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
 import './TextArea.css';
 
@@ -38,98 +38,12 @@ export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 }
 
 /**
- * Wrapper styles — vertical stack matching TextInput pattern
- *
- * Token reference:
- * - --gap-md = 8px
- */
-const wrapperStyles: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'var(--gap-md)',
-  color: 'var(--text-primary)',
-};
-
-/**
- * Size-variant styles — matches TextInput exactly
- *
- * Figma specs:
- * - sm: label 14px, body 14px
- * - md: label 16px, body 16px
- * - lg: label 18px, body 18px
- *
- * Label typography is driven by `.bds-text-area__label--{size}` in TextArea.css.
- */
-const sizeStyles: Record<TextAreaSize, { textarea: CSSProperties }> = {
-  sm: {
-    textarea: { fontSize: 'var(--body-sm)' },
-  },
-  md: {
-    textarea: { fontSize: 'var(--body-md)' },
-  },
-  lg: {
-    textarea: { fontSize: 'var(--body-lg)' },
-  },
-};
-
-/**
- * Helper/error text base styles
- *
- * Token reference:
- * - --font-family-body
- * - --body-sm (14px)
- * - --text-muted
- */
-const helperBaseStyles: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-muted)',
-};
-
-/**
- * TextArea styles — matches TextInput, SearchInput, AddressInput
- *
- * Token reference:
- * - --background-input (field background)
- * - --border-input (field border)
- * - --border-width-md = 1px (border thickness)
- * - --border-radius-md = 4px (corners)
- * - --padding-xs = 10px (padding)
- * - --font-family-body
- * - --body-md = 16px
- * - --font-weight-regular = 400
- * - --font-line-height-normal
- */
-const textareaStyles: CSSProperties = {
-  display: 'block',
-  width: '100%',
-  minWidth: 200,
-  padding: 'var(--padding-xs)',
-  fontFamily: 'var(--font-family-body)',
-  fontWeight: 'var(--font-weight-regular)' as unknown as number,
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
-  backgroundColor: 'var(--background-input)',
-  border: 'var(--border-width-md) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-md)',
-  outline: 'none',
-  transition: 'border-color 0.2s',
-  resize: 'vertical',
-  boxSizing: 'border-box',
-};
-
-const textareaDisabledStyles: CSSProperties = {
-  opacity: 0.5,
-  cursor: 'not-allowed',
-  resize: 'none',
-};
-
-/**
  * TextArea - BDS themed multi-line text input component
  *
  * Uses identical border, radius, background, and typography tokens as
  * TextInput, SearchInput, and AddressInput for consistent form styling.
+ * All styling lives in TextArea.css; size, resize, error, and full-width are
+ * driven by BEM modifier classes.
  *
  * @example
  * ```tsx
@@ -161,24 +75,10 @@ export function TextArea({
   const generatedId = useId();
   const inputId = id || (label ? `textarea-${generatedId}` : undefined);
   const hasError = Boolean(error);
-  const sizeStyle = sizeStyles[size];
-
-  const combinedStyles: CSSProperties = {
-    ...textareaStyles,
-    ...sizeStyle.textarea,
-    resize,
-    ...(disabled ? textareaDisabledStyles : {}),
-    ...(hasError ? { borderColor: 'var(--border-negative)' } : {}),
-    ...style,
-  };
 
   return (
     <div
-      className="bds-text-area"
-      style={{
-        ...wrapperStyles,
-        width: fullWidth ? '100%' : 'auto',
-      }}
+      className={bdsClass('bds-text-area', fullWidth && 'bds-text-area--full-width')}
     >
       {label && (
         <label
@@ -202,8 +102,14 @@ export function TextArea({
         value={value}
         defaultValue={defaultValue}
         onChange={onChange}
-        className={bdsClass('bds-text-area-field', className)}
-        style={combinedStyles}
+        className={bdsClass(
+          'bds-text-area-field',
+          `bds-text-area-field--${size}`,
+          `bds-text-area-field--resize-${resize}`,
+          hasError && 'bds-text-area-field--error',
+          className,
+        )}
+        style={style}
         aria-invalid={hasError}
         aria-describedby={
           error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
@@ -213,14 +119,17 @@ export function TextArea({
       {error && (
         <span
           id={inputId ? `${inputId}-error` : undefined}
-          style={{ ...helperBaseStyles, color: 'var(--text-negative)' }}
+          className="bds-text-area__error"
           role="alert"
         >
           {error}
         </span>
       )}
       {helperText && !error && (
-        <span id={inputId ? `${inputId}-helper` : undefined} style={helperBaseStyles}>
+        <span
+          id={inputId ? `${inputId}-helper` : undefined}
+          className="bds-text-area__helper"
+        >
           {helperText}
         </span>
       )}
