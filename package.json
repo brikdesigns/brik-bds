@@ -137,7 +137,7 @@
     "dev": "bash scripts/start-figma-relay.sh && npm run storybook",
     "prestorybook": "node scripts/build-health-data.js",
     "storybook": "storybook dev -p 6006",
-    "prebuild-storybook": "node scripts/build-health-data.js",
+    "prebuild-storybook": "node scripts/build-health-data.js && node scripts/write-skew-protection.mjs",
     "build-storybook": "storybook build",
     "lint-tokens": "node scripts/lint-tokens.js",
     "lint-tokens:grid": "node scripts/lint-tokens.js --check-grid",
