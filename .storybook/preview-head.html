@@ -33,12 +33,18 @@
 
   Reload-loop guard: only reload if the previous reload was more
   than 10 seconds ago. A real network issue won't be masked into
-  a refresh loop.
+  a refresh loop. The cooldown key is frame-specific ('preview') so a
+  manager reload never suppresses a needed preview reload within the
+  window — the two frames share sessionStorage (same origin).
+
+  preventDefault() on the events stops Storybook from painting its
+  error overlay (and Vite from rethrowing) before the reload navigates,
+  so recovery is a clean refresh instead of an error flash.
 -->
 <script>
   (function () {
     var COOLDOWN_MS = 10000;
-    var STORAGE_KEY = 'sb-chunk-reload-at';
+    var STORAGE_KEY = 'sb-chunk-reload-at:preview';
 
     function shouldReload() {
       try {
@@ -59,14 +65,18 @@
           || /Failed to load module script/.test(msg);
     }
 
-    window.addEventListener('vite:preloadError', function () {
-      if (shouldReload()) window.location.reload();
+    window.addEventListener('vite:preloadError', function (event) {
+      if (shouldReload()) {
+        if (event && event.preventDefault) event.preventDefault();
+        window.location.reload();
+      }
     });
 
     window.addEventListener('unhandledrejection', function (event) {
       var reason = event && event.reason;
       var msg = (reason && reason.message) || (typeof reason === 'string' ? reason : '');
       if (isChunkLoadError(msg) && shouldReload()) {
+        if (event && event.preventDefault) event.preventDefault();
         window.location.reload();
       }
     });
