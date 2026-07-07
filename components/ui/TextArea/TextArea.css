@@ -1,13 +1,29 @@
 @layer bds-components {
 /**
- * BDS TextArea Interactive States
+ * BDS TextArea
+ *
+ * Multi-line text input. Border, radius, background, and typography tokens
+ * match TextInput / SearchInput / AddressInput for consistent form styling.
  *
  * Token reference:
- * - --border-input (default border)
- * - --border-primary (hover border — darker)
- * - --border-brand-primary (focus border — theme color)
- * - --text-muted (placeholder color)
+ * - --background-input (field fill)         - --border-input (default border)
+ * - --border-primary (hover border)         - --border-brand-primary (focus)
+ * - --border-negative (error border)        - --text-primary / --text-muted
+ * - --text-negative (error text)
  */
+
+/* Wrapper — vertical stack: label above field */
+.bds-text-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  width: auto;
+  color: var(--text-primary);
+}
+
+.bds-text-area--full-width {
+  width: 100%;
+}
 
 /* ─── Label ──────────────────────────────────────────────────── */
 
@@ -27,6 +43,37 @@
 }
 
 /* ─── Textarea field ─────────────────────────────────────────── */
+
+.bds-text-area-field {
+  display: block;
+  width: 100%;
+  min-width: 200px;
+  padding: var(--padding-xs);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--background-input);
+  border: var(--border-width-md) solid var(--border-input);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.bds-text-area-field--sm { font-size: var(--body-sm); }
+.bds-text-area-field--md { font-size: var(--body-md); }
+.bds-text-area-field--lg { font-size: var(--body-lg); }
+
+/* Resize — driven by the `resize` prop; `:disabled` forces none (below) */
+.bds-text-area-field--resize-none { resize: none; }
+.bds-text-area-field--resize-both { resize: both; }
+.bds-text-area-field--resize-horizontal { resize: horizontal; }
+.bds-text-area-field--resize-vertical { resize: vertical; }
+
+.bds-text-area-field--error {
+  border-color: var(--border-negative);
+}
 
 .bds-text-area-field::placeholder {
   color: var(--text-muted);
@@ -50,5 +97,20 @@
 .bds-text-area-field:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  resize: none;
+}
+
+/* ─── Helper / error text ────────────────────────────────────── */
+
+.bds-text-area__helper,
+.bds-text-area__error {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-muted);
+}
+
+.bds-text-area__error {
+  color: var(--text-negative);
 }
 }
