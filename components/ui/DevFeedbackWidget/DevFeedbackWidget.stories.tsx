@@ -137,3 +137,24 @@ export const FabPinnedRight: Story = {
     </Frame>
   ),
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   6. SCREENSHOT CAPTURE — paste / drag / upload (brik-client-portal#1912)
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Open the panel, then attach a screenshot by paste (Cmd/Ctrl+V), drag-drop, or click-to-upload. */
+export const ScreenshotCapture: Story = {
+  render: () => (
+    <Frame>
+      <p>
+        Open the FAB panel to reveal the <strong>attach a screenshot</strong> zone under the
+        message box. It accepts a clipboard <strong>paste</strong> (Cmd/Ctrl+V while the panel is
+        open), a <strong>drag-drop</strong>, or a <strong>click-to-upload</strong>. The image is
+        downscaled to 1200px and JPEG-compressed client-side before it is added to the payload as
+        <code>screenshot_base64</code>; a thumbnail preview with a remove control confirms the
+        attachment. Submitting without one still works.
+      </p>
+      <DevFeedbackWidget variant="fab" endpoint="/api/feedback" contextLabel="Page" />
+    </Frame>
+  ),
+};
