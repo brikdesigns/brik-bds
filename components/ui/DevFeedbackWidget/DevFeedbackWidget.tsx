@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -54,6 +55,48 @@ const FEEDBACK_TYPES = [
   { label: 'Suggestion', value: 'suggestion' },
   { label: 'Question', value: 'question' },
 ] as const;
+
+// ── Screenshot capture (parity with the vanilla feedback-widget.js) ─────────
+// Client-side downscale + JPEG compress before encoding so the base64 payload
+// stays small (the portal caps stored screenshots at 2 MB — brik-client-portal
+// src/lib/data/review.ts). brik-client-portal#1912.
+const MAX_IMG_WIDTH = 1200;
+const JPEG_QUALITY = 0.75;
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => resolve(String(e.target?.result ?? ''));
+    reader.onerror = () => reject(new Error('screenshot read failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
+/** Downscale to MAX_IMG_WIDTH and re-encode as a JPEG data URL. */
+function resizeImage(dataUrl: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > MAX_IMG_WIDTH) {
+        height = Math.round(height * (MAX_IMG_WIDTH / width));
+        width = MAX_IMG_WIDTH;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('no 2d context'));
+        return;
+      }
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', JPEG_QUALITY));
+    };
+    img.onerror = () => reject(new Error('screenshot decode failed'));
+    img.src = dataUrl;
+  });
+}
 
 // ── DevBar integration types ────────────────────────────────────────────
 // Types live in BrikDevBar — imported here to avoid duplicate declarations.
@@ -117,6 +160,9 @@ export function DevFeedbackWidget({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [contextValue, setContextValue] = useState('');
+  const [screenshot, setScreenshot] = useState<string | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   // For variant='slot' we treat the DevBar as present from the start so
   // the FAB never flashes while the bar is registering. For variant='fab'
   // we keep it false (no DevBar lookup runs). Auto seeds false and lets
@@ -247,6 +293,33 @@ export function DevFeedbackWidget({
     window.BrikDevBar?.setActive('feedback', open);
   }, [open]);
 
+  // Downscale + compress an attached image, then stash it as a JPEG data URL.
+  const processImageFile = useCallback(async (file: File | null | undefined) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    try {
+      const resized = await resizeImage(await fileToDataUrl(file));
+      setScreenshot(resized);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[DevFeedbackWidget] screenshot processing failed:', err);
+    }
+  }, []);
+
+  // Clipboard paste (Cmd/Ctrl+V) while the panel is open — parity with the
+  // vanilla widget. Scoped to the open panel so it never hijacks paste elsewhere.
+  useEffect(() => {
+    if (!open) return;
+    const onPaste = (e: ClipboardEvent) => {
+      const item = Array.from(e.clipboardData?.items ?? []).find((i) =>
+        i.type.startsWith('image/'),
+      );
+      const file = item?.getAsFile();
+      if (file) processImageFile(file);
+    };
+    document.addEventListener('paste', onPaste);
+    return () => document.removeEventListener('paste', onPaste);
+  }, [open, processImageFile]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!description.trim()) return;
@@ -269,6 +342,9 @@ export function DevFeedbackWidget({
             (typeof document !== 'undefined' ? document.title || undefined : undefined),
           section,
           component,
+          // Optional screenshot (feedback-contract 0.7.0, brik-client-portal#1912).
+          // Downscaled + JPEG-compressed data URL; omitted when none attached.
+          screenshot_base64: screenshot ?? undefined,
           ...extraPayload,
         }),
       });
@@ -279,6 +355,7 @@ export function DevFeedbackWidget({
           setSubmitted(false);
           setDescription('');
           setType('bug');
+          setScreenshot(null);
         }, 1500);
         return;
       }
@@ -430,6 +507,55 @@ export function DevFeedbackWidget({
     padding: '20px 0',
   };
 
+  const screenshotZoneStyle = (active: boolean): CSSProperties => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '6px', // bds-lint-ignore — dev overlay renders fixed
+    padding: '12px', // bds-lint-ignore — dev overlay renders fixed
+    borderRadius: '8px', // bds-lint-ignore — dev overlay renders fixed
+    border: `1px dashed ${active ? BDS.poppy : BDS.grayLight}`,
+    backgroundColor: active ? BDS.tanLightest : 'transparent',
+    color: BDS.grayDark,
+    fontSize: '12px', // bds-lint-ignore — dev overlay renders fixed
+    fontFamily: BDS.fontFamily,
+    cursor: 'pointer',
+    textAlign: 'center',
+    transition: 'border-color 0.12s ease, background-color 0.12s ease',
+  });
+
+  const screenshotPreviewStyle: CSSProperties = {
+    position: 'relative',
+    borderRadius: '8px', // bds-lint-ignore — dev overlay renders fixed
+    overflow: 'hidden',
+    border: `1px solid ${BDS.grayLighter}`,
+  };
+
+  const screenshotThumbStyle: CSSProperties = {
+    display: 'block',
+    width: '100%',
+    maxHeight: '140px',
+    objectFit: 'cover',
+  };
+
+  const screenshotRemoveStyle: CSSProperties = {
+    position: 'absolute',
+    top: '6px',
+    right: '6px',
+    width: '22px',
+    height: '22px',
+    borderRadius: '50%',
+    border: 'none',
+    backgroundColor: BDS.poppy,
+    color: BDS.white,
+    fontSize: '12px', // bds-lint-ignore — dev overlay renders fixed
+    lineHeight: 1, // bds-lint-ignore — dev overlay renders fixed
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
   return (
     <>
       {!devBarPresent && (
@@ -492,6 +618,52 @@ export function DevFeedbackWidget({
                   onChange={(e) => setDescription(e.target.value)}
                   autoFocus
                 />
+
+                {screenshot ? (
+                  <div style={screenshotPreviewStyle}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={screenshot} alt="Attached screenshot" style={screenshotThumbStyle} />
+                    <button
+                      type="button"
+                      style={screenshotRemoveStyle}
+                      aria-label="Remove screenshot"
+                      title="Remove screenshot"
+                      onClick={() => setScreenshot(null)}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    style={screenshotZoneStyle(dragActive)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Attach a screenshot"
+                    onClick={() => fileInputRef.current?.click()}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click();
+                    }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setDragActive(true);
+                    }}
+                    onDragLeave={() => setDragActive(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setDragActive(false);
+                      processImageFile(e.dataTransfer.files?.[0]);
+                    }}
+                  >
+                    📎 Paste, drag, or upload a screenshot
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={(e) => processImageFile(e.target.files?.[0])}
+                    />
+                  </div>
+                )}
 
                 <div style={contextStyle}>
                   {contextLabel}: {contextValue}
