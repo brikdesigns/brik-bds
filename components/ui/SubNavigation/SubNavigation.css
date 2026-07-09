@@ -14,7 +14,7 @@
 /* ─── Header ─────────────────────────────────────────────────── */
 
 .bds-subnav__header {
-  padding: 24px 16px 16px; /* bds-lint-ignore — Figma sub-nav header spec */
+  padding: var(--padding-lg) var(--padding-md) var(--padding-md);
   border-bottom: var(--border-width-md) solid var(--border-secondary);
 }
 
@@ -22,7 +22,7 @@
 
 .bds-subnav__nav {
   flex: 1;
-  padding: 16px 8px; /* bds-lint-ignore — Figma sub-nav padding */
+  padding: var(--padding-md) var(--padding-tiny);
   display: flex;
   flex-direction: column;
   gap: var(--gap-xs);
@@ -31,7 +31,7 @@
 /* ─── Footer ─────────────────────────────────────────────────── */
 
 .bds-subnav__footer {
-  padding: 16px; /* bds-lint-ignore — Figma sub-nav footer spec */
+  padding: var(--padding-md);
   border-top: var(--border-width-md) solid var(--border-secondary);
 }
 }
