@@ -131,12 +131,39 @@ export interface DevFeedbackWidgetProps {
   // Element context for the submission (feedback-contract 0.2.0). The widget is
   // a pure submission form — element selection lives in the inspector (ADR-007),
   // which emits `brik:inspect:report`. A host wires that event to these props.
-  /** Human page name (feedback-contract 0.2.0). Defaults to `document.title` when unset. */
+  /**
+   * Human page name (feedback-contract 0.2.0). When unset, derived from the
+   * URL pathname slug — `document.title` is only the last-resort fallback for
+   * the root path (brik-bds#890). Product apps share one templated `<title>`
+   * across routes, so the slug is what a triager needs.
+   */
   page?: string;
   /** Section label the picked element sits in (e.g. "hero"). From the inspector when wired. */
   section?: string;
   /** BDS component block class of the picked element (e.g. "bds-button"). From the inspector when wired. */
   component?: string;
+}
+
+// ── Helpers ─────────────────────────────────────────────────────────────
+/**
+ * Page identity for the no-selection submission path. Mirrors `detectPage()`
+ * in `BrikDevBar/widgets/inspect-widget.js` (the inspector/selection path,
+ * brik-bds#885): the URL pathname slug is canonical and preferred, because
+ * product apps (portal, renew-pms) share one templated `<title>` across every
+ * route — so `document.title` is non-discriminating there (brik-bds#890 /
+ * brik-llm#979). `document.title` is kept only as a fallback for the root path,
+ * where the slug is empty.
+ */
+export function detectPageSlug(): string | undefined {
+  if (typeof window !== 'undefined' && window.location.pathname) {
+    const slug = window.location.pathname.replace(/^\/+|\/+$/g, '');
+    if (slug) return slug;
+  }
+  if (typeof document !== 'undefined') {
+    const title = document.title?.trim();
+    if (title) return title;
+  }
+  return undefined;
 }
 
 // ── Component ───────────────────────────────────────────────────────────
@@ -337,9 +364,7 @@ export function DevFeedbackWidget({
           // Element context (feedback-contract 0.2.0). Page name is always
           // known; section/component arrive as props when a host wires the
           // inspector's brik:inspect:report event (ADR-007).
-          page:
-            page ??
-            (typeof document !== 'undefined' ? document.title || undefined : undefined),
+          page: page ?? detectPageSlug(),
           section,
           component,
           // Optional screenshot (feedback-contract 0.7.0, brik-client-portal#1912).
