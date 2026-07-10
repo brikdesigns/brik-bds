@@ -142,6 +142,10 @@ export interface DevFeedbackWidgetProps {
   section?: string;
   /** BDS component block class of the picked element (e.g. "bds-button"). From the inspector when wired. */
   component?: string;
+  /** Nearest BDS section title of the picked element (e.g. "Integrations"). From the inspector when wired (brik-client-portal#1760). */
+  componentTitle?: string;
+  /** Stable structural DOM path to the picked element. From the inspector when wired (brik-client-portal#1760). */
+  domPath?: string;
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────
@@ -180,6 +184,8 @@ export function DevFeedbackWidget({
   page,
   section,
   component,
+  componentTitle,
+  domPath,
 }: DevFeedbackWidgetProps = {}) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string>('bug');
@@ -367,6 +373,12 @@ export function DevFeedbackWidget({
           page: page ?? detectPageSlug(),
           section,
           component,
+          // Element-identity fields (brik-client-portal#1760): the nearest BDS
+          // section title + a stable structural DOM path, so a ticket on a
+          // repeated-label field uniquely identifies the element. Wired from the
+          // inspector's brik:inspect:report event alongside section/component.
+          component_title: componentTitle,
+          dom_path: domPath,
           // Optional screenshot (feedback-contract 0.7.0, brik-client-portal#1912).
           // Downscaled + JPEG-compressed data URL; omitted when none attached.
           screenshot_base64: screenshot ?? undefined,
