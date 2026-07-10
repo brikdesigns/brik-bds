@@ -14,7 +14,15 @@
 /* ─── Header ─────────────────────────────────────────────────── */
 
 .bds-subnav__header {
-  padding: var(--padding-lg) var(--padding-md) var(--padding-md);
+  /* Fixed 80px header bar (brik-bds#1146 / BACKLOG-485). Content is vertically
+     centered within the bar; horizontal padding is retained, vertical padding
+     is governed by the fixed height. box-sizing keeps the border-bottom inside
+     the 80px. */
+  height: var(--size-1800);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--padding-md);
   border-bottom: var(--border-width-md) solid var(--border-secondary);
 }
 
