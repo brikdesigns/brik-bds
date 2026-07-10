@@ -27,7 +27,9 @@
 .bds-card--elevated {
   background-color: var(--surface-primary);
   border: none;
-  box-shadow: var(--box-shadow-md);
+  /* Drop shadow removed (brik-bds#1146 / BACKLOG-493) — elevation now reads via
+     the surface-primary fill, not a cast shadow. */
+  box-shadow: var(--box-shadow-none);
 }
 
 /* Borderless — transparent, no border, no shadow. For cards on a colored
@@ -129,7 +131,7 @@
 /* ─── Preset: control ─────────────────────────────────────────── */
 /* Settings/control card layout — replaces the legacy CardControl
  * component. Badge + (title + description) on the left, action on the
- * right. Surface uses primary background + muted border + small shadow
+ * right. Surface uses primary background + muted border (no shadow)
  * regardless of `variant` (variant is ignored for this preset). */
 
 .bds-card--preset-control {
@@ -140,7 +142,9 @@
   background-color: var(--surface-primary);
   border: var(--border-width-md) solid var(--border-muted);
   border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-sm);
+  /* Drop shadow removed (brik-bds#1146 / BACKLOG-493) — control cards read flat
+     against the page; the muted border carries the boundary. */
+  box-shadow: var(--box-shadow-none);
   width: 100%;
   box-sizing: border-box;
   flex-wrap: wrap;
@@ -377,11 +381,13 @@
 /* Elevated override for display preset — same specificity rationale as the
  * borderless override above: .bds-card--preset-display redeclares border after
  * .bds-card--elevated in source order, so the ring needs explicit removal here.
- * surface-primary fill + box-shadow-md, no border. */
+ * surface-primary fill, no border, no shadow. */
 .bds-card--preset-display.bds-card--elevated {
   background-color: var(--surface-primary);
   border: none;
-  box-shadow: var(--box-shadow-md);
+  /* Drop shadow removed (brik-bds#1146 / BACKLOG-493) — matches the base
+     --elevated variant, which no longer casts a shadow. */
+  box-shadow: var(--box-shadow-none);
 }
 
 /* Service-line surface tint — a pale wash keyed to a service line, shared by

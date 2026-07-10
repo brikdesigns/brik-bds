@@ -228,7 +228,7 @@ interface CardDisplayPresetProps extends CardBaseProps {
    * card grid sits on a colored surface (service-tier tint) where the
    * default white fill + border ring reads as visual noise.
    *
-   * `elevated` — surface-primary fill + `box-shadow-md`, no border. Use when
+   * `elevated` — surface-primary fill, no border, no shadow. Use when
    * a card grid on a colored surface still needs a contained "card" read but
    * the border ring is unwanted (the restored-fill counterpart to
    * `borderless`).
