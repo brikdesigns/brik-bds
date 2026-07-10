@@ -161,6 +161,42 @@
       50% { box-shadow: 0 0 0 8px rgba(245,158,11,0); }
     }
 
+    /* Client-completed pins fade back; the comment is "done" for the reviewer. */
+    .bfb-pin--done { opacity: 0.4; }
+
+    /* Per-pin completion control — a vanilla replica of the BDS CompletionToggle
+       visual (circle; brand fill + white checkmark when checked). Anchored to
+       the top-right of its pin. Can't import the React component into an
+       injected widget, so the look is reproduced by hand. */
+    .bfb-pin-done {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 2px solid ${C.border};
+      background: ${C.white};
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      cursor: pointer;
+      padding: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate(calc(-50% + 14px), calc(-50% - 14px));
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .bfb-pin-done:hover { border-color: ${C.brand}; }
+    .bfb-pin-done--checked { background: ${C.brand}; border-color: ${C.brand}; }
+    .bfb-pin-done__icon {
+      display: block;
+      width: 8px;
+      height: 5px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+
     .bfb-form {
       position: fixed;
       z-index: 100000;
@@ -391,6 +427,7 @@
           comment: f.comment,
           author: f.author_name,
           number: i + 1,
+          clientCompleted: f.client_completed_at != null,
         });
       });
 
@@ -402,11 +439,11 @@
 
   // ── Render pins on page ─────────────────────────────────────────────────
   function renderPins() {
-    document.querySelectorAll('.bfb-pin:not(.bfb-pin--pending)').forEach((el) => el.remove());
+    document.querySelectorAll('.bfb-pin:not(.bfb-pin--pending), .bfb-pin-done').forEach((el) => el.remove());
 
     pins.forEach((pin) => {
       const el = document.createElement('div');
-      el.className = 'bfb-pin';
+      el.className = pin.clientCompleted ? 'bfb-pin bfb-pin--done' : 'bfb-pin';
       el.textContent = String(pin.number);
       el.style.left = pin.x + '%';
       el.style.top = pin.y + 'px';
@@ -415,7 +452,50 @@
       el.addEventListener('mouseleave', hideTooltip);
 
       document.body.appendChild(el);
+
+      // Completion toggle — only for persisted pins (need a feedback id to PATCH).
+      if (pin.id) {
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = pin.clientCompleted ? 'bfb-pin-done bfb-pin-done--checked' : 'bfb-pin-done';
+        toggle.style.left = pin.x + '%';
+        toggle.style.top = pin.y + 'px';
+        toggle.setAttribute('aria-pressed', String(!!pin.clientCompleted));
+        toggle.setAttribute('aria-label', pin.clientCompleted ? 'Mark comment not done' : 'Mark comment done');
+        if (pin.clientCompleted) {
+          const icon = document.createElement('span');
+          icon.className = 'bfb-pin-done__icon';
+          icon.setAttribute('aria-hidden', 'true');
+          toggle.appendChild(icon);
+        }
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          markPinCompletion(pin, !pin.clientCompleted);
+        });
+        document.body.appendChild(toggle);
+      }
     });
+  }
+
+  // ── Client-side completion ───────────────────────────────────────────────
+  async function markPinCompletion(pin, completed) {
+    try {
+      const res = await fetch(`${API_URL}/api/review/${REVIEW_TOKEN}/feedback/${pin.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ client_completed: completed }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Failed to update');
+      }
+      pin.clientCompleted = completed;
+      renderPins();
+      toast(completed ? 'Marked as done' : 'Marked as not done');
+    } catch (e) {
+      console.warn('[Brik Feedback] Could not update completion:', e);
+      toast('Could not update — please try again');
+    }
   }
 
   // ── Tooltip ─────────────────────────────────────────────────────────────
@@ -719,9 +799,12 @@
         throw new Error(err.error || 'Failed to submit');
       }
 
+      // Capture the new feedback id so its completion toggle works without a reload.
+      const created = await res.json().catch(() => ({}));
+
       // Convert pending pin to permanent
       const pinNumber = pins.length + 1;
-      pins.push({ x: pinX, y: pinY, comment, author: name, number: pinNumber });
+      pins.push({ id: created?.feedback?.id, x: pinX, y: pinY, comment, author: name, number: pinNumber, clientCompleted: false });
 
       screenshotBase64 = null;
       removePendingPin();
