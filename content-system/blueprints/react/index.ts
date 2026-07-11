@@ -79,6 +79,16 @@ export type { HeroProps, HeroLayout } from './Hero';
 export { About } from './About';
 export type { AboutProps, AboutTestimonial } from './About';
 
+// `<Features>` — the `bds-features` feature-grid section primitive
+// (post-brik-bds#1197 consolidation). Props-based: an optional header above a
+// responsive grid of brand-colored, audience-scoped feature cards on a dark
+// default surface. Replaces the ADR-008-banned `bp-features-branded-dark`
+// (`--dark` = theme, `--branded` = appearance, `3col` = count). New consumers
+// compose this directly; the `features_3col_branded_dark` key dispatches
+// through the adapter below.
+export { Features } from './Features';
+export type { FeaturesProps, FeatureItem } from './Features';
+
 // Legacy section-data adapters — preserve `BlueprintDispatcher` +
 // AI-render path compatibility. Internally compose `<CardGrid>` +
 // `<Card preset="display">`. Direct consumers should reach for those
