@@ -1,25 +1,29 @@
 // compose.mjs — Brik illustration composition engine.
 //
-// Assembles a hero illustration by code: load humaaans/scenery part SVGs,
-// recolor them to a BDS service-line palette, place them on a canvas with
-// code-drawn props (blob backdrop, speech bubble, sparkles), emit one SVG.
+// Renders a hero illustration from a CONCEPT (engine/concepts.mjs): load the
+// vetted part SVGs + code-drawn props each layer names, recolor parts to the
+// concept's service-line palette, place everything back → front, emit one SVG.
 //
-// People are real illustrator assets (humaaans, CC0) — never AI-generated —
-// so faces/anatomy are always right. See illustration-system/README.md.
+// The engine holds no scene logic — a concept is data (which is what lets the
+// topic→concept decision tree, or a CMS feature, produce one). People are real
+// illustrator assets (humaaans, CC0), never AI-generated, so anatomy is right.
+// See illustration-system/README.md.
 //
 // Usage:
-//   node engine/compose.mjs <scene> [serviceLine] > out.svg
-//   node engine/compose.mjs marketing-convo marketing > examples/marketing.svg
-//
-// Scenes are defined in SCENES below; serviceLine overrides the scene default.
+//   node engine/compose.mjs <conceptKey> > out.svg
+//   node engine/compose.mjs ai-readiness > examples/ai-readiness.svg
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { recolorMap, SERVICE_PALETTES } from './palettes.mjs';
+import { PROPS, runningBond, SEATED_HAIR } from './props.mjs';
+import { CONCEPTS } from './concepts.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PARTS = resolve(HERE, '..', 'parts');
+
+const round = (n) => Math.round(n * 100) / 100;
 
 // ---- part loading + recolor -------------------------------------------------
 
@@ -61,98 +65,79 @@ function parseSvg(svg) {
   return { w, h, viewBox, inner };
 }
 
-// Place a recolored part as a nested <svg>, scaled to `scale`, optionally
-// mirrored on X (so characters can face inward).
-function placePart(rel, { x, y, scale = 1, flipX = false }, map) {
+// Place a recolored part as a nested <svg>, scaled, optionally mirrored on X
+// (so characters can face inward). `overlayLocal` is extra markup drawn in the
+// part's own coordinate space (e.g. a hair cap), so it scales/mirrors with it.
+function placePart(rel, { x, y, scale = 1, flipX = false, overlayLocal = '' }, map) {
   const { w, h, viewBox, inner } = parseSvg(recolor(loadPart(rel), map));
   const W = w * scale;
   const H = h * scale;
-  const nested = `<svg x="0" y="0" width="${round(W)}" height="${round(H)}" viewBox="${viewBox}" overflow="visible">${inner}</svg>`;
+  const nested = `<svg x="0" y="0" width="${round(W)}" height="${round(H)}" viewBox="${viewBox}" overflow="visible">${inner}${overlayLocal}</svg>`;
   if (flipX) {
     return `<g transform="translate(${round(x + W)},${round(y)}) scale(-1,1)">${nested}</g>`;
   }
   return `<g transform="translate(${round(x)},${round(y)})">${nested}</g>`;
 }
 
-const round = (n) => Math.round(n * 100) / 100;
-
-// ---- code-drawn props -------------------------------------------------------
-
-function speechBubble(x, y, { ink, dot }) {
-  const dots = [0, 1, 2]
-    .map((i) => `<circle cx="${x + 40 + i * 40}" cy="${y + 62}" r="9" fill="${dot}"/>`)
-    .join('');
-  return (
-    `<rect x="${x}" y="${y}" width="200" height="120" rx="30" fill="${ink}"/>` +
-    `<path d="M ${x + 40} ${y + 116} L ${x + 86} ${y + 116} L ${x + 50} ${y + 156} Z" fill="${ink}"/>` +
-    dots
-  );
+// Place the organic blob backdrop, optionally with the faint running-bond
+// brick motif (the brand foundation mark) clipped to the blob's own shape.
+function placeBlob({ x, y, scale = 1, bricks = false }, map, pal) {
+  const { w, h, viewBox, inner } = parseSvg(recolor(loadPart('scenery/blob-1.svg'), map));
+  const W = w * scale;
+  const H = h * scale;
+  let motif = '';
+  if (bricks) {
+    const d = inner.match(/\sd="([^"]+)"/);
+    if (d) {
+      const id = `blob${Math.round(x)}-${Math.round(y)}`;
+      const lines = runningBond({ w, h, brickW: 74, brickH: 30, gap: 4 }, pal.sceneryMid, 'stroke');
+      // Brand motif, not a brick wall: barely-there mortar lines. The house
+      // style calls for *subtle* bricks — an image model once drew a solid wall
+      // here and it was rejected, so keep opacity low and the stroke hairline.
+      motif =
+        `<clipPath id="${id}"><path d="${d[1]}"/></clipPath>` +
+        `<g clip-path="url(#${id})" opacity="0.09">${lines}</g>`;
+    }
+  }
+  const nested = `<svg x="0" y="0" width="${round(W)}" height="${round(H)}" viewBox="${viewBox}" overflow="visible">${inner}${motif}</svg>`;
+  return `<g transform="translate(${round(x)},${round(y)})">${nested}</g>`;
 }
-
-function sparkle(cx, cy, r, color) {
-  const k = r * 0.34;
-  return (
-    `<path d="M ${cx} ${cy - r} C ${cx + k} ${cy - k} ${cx + k} ${cy - k} ${cx + r} ${cy} ` +
-    `C ${cx + k} ${cy + k} ${cx + k} ${cy + k} ${cx} ${cy + r} ` +
-    `C ${cx - k} ${cy + k} ${cx - k} ${cy + k} ${cx - r} ${cy} ` +
-    `C ${cx - k} ${cy - k} ${cx - k} ${cy - k} ${cx} ${cy - r} Z" fill="${color}"/>`
-  );
-}
-
-// ---- scenes -----------------------------------------------------------------
-// Each scene is a function (palette) -> array of SVG layer strings, back→front.
-
-const CANVAS = { w: 1600, h: 900 };
-
-const SCENES = {
-  // Two people in conversation — for marketing / brand editorial heroes.
-  'two-person-convo': (pal, map) => [
-    placePart('scenery/blob-1.svg', { x: 350, y: 130, scale: 2.9 }, map),
-    placePart('scenery/plant-right.svg', { x: 120, y: 560, scale: 0.8 }, map),
-    placePart('characters/standing-a.svg', { x: 360, y: 300, scale: 1.25 }, map),
-    placePart('characters/standing-b.svg', { x: 980, y: 320, scale: 1.7, flipX: true }, map),
-    speechBubble(690, 170, { ink: pal.ink, dot: pal.garmentLight }),
-    sparkle(640, 170, 22, pal.garmentAccent),
-    sparkle(920, 450, 16, pal.garmentAccent),
-    sparkle(560, 480, 14, pal.garmentAccent),
-  ],
-
-  // Single person at work, blob backdrop + plant — for topical/solo heroes.
-  'person-at-work': (pal, map) => [
-    placePart('scenery/blob-1.svg', { x: 430, y: 150, scale: 2.7 }, map),
-    placePart('scenery/plant-left.svg', { x: 150, y: 430, scale: 0.85 }, map),
-    placePart('characters/standing-a.svg', { x: 640, y: 300, scale: 1.3 }, map),
-    speechBubble(900, 200, { ink: pal.ink, dot: pal.garmentLight }),
-    sparkle(560, 250, 20, pal.garmentAccent),
-    sparkle(1180, 360, 15, pal.garmentAccent),
-  ],
-
-  // Seated person working on a laptop under a pendant lamp — the workspace
-  // hero (blog/newsletter). The seated figure is the vetted "pavan" pose.
-  'person-at-laptop': (pal, map) => [
-    placePart('scenery/blob-1.svg', { x: 470, y: 150, scale: 2.6 }, map),
-    placePart('scenery/pendant-lamp.svg', { x: 1080, y: 60, scale: 1.3 }, map),
-    placePart('scenery/plant-right.svg', { x: 150, y: 500, scale: 0.9 }, map),
-    placePart('characters/seated-laptop.svg', { x: 640, y: 350, scale: 1.75 }, map),
-    speechBubble(900, 210, { ink: pal.ink, dot: pal.garmentLight }),
-    sparkle(560, 300, 20, pal.garmentAccent),
-    sparkle(1180, 430, 15, pal.garmentAccent),
-  ],
-};
 
 // ---- render -----------------------------------------------------------------
 
-export function compose(scene, serviceLine) {
-  const build = SCENES[scene];
-  if (!build) {
-    throw new Error(`Unknown scene "${scene}". Known: ${Object.keys(SCENES).join(', ')}`);
+const CANVAS = { w: 1600, h: 900 };
+
+function renderLayer(layer, map, pal) {
+  switch (layer.kind) {
+    case 'blob':
+      return placeBlob(layer, map, pal);
+    case 'part': {
+      const overlayLocal = layer.hair === 'seated' ? SEATED_HAIR() : '';
+      return placePart(layer.src, { ...layer, overlayLocal }, map);
+    }
+    case 'prop': {
+      const prop = PROPS[layer.name];
+      if (!prop) {
+        throw new Error(`Unknown prop "${layer.name}". Known: ${Object.keys(PROPS).join(', ')}`);
+      }
+      return prop(layer.args ?? {}, pal);
+    }
+    default:
+      throw new Error(`Unknown layer kind "${layer.kind}"`);
   }
-  const pal = SERVICE_PALETTES[serviceLine];
+}
+
+export function compose(conceptKey) {
+  const concept = CONCEPTS[conceptKey];
+  if (!concept) {
+    throw new Error(`Unknown concept "${conceptKey}". Known: ${Object.keys(CONCEPTS).join(', ')}`);
+  }
+  const pal = SERVICE_PALETTES[concept.serviceLine];
   if (!pal) {
-    throw new Error(`Unknown service line "${serviceLine}". Known: ${Object.keys(SERVICE_PALETTES).join(', ')}`);
+    throw new Error(`Concept "${conceptKey}" uses unknown service line "${concept.serviceLine}".`);
   }
-  const map = recolorMap(serviceLine);
-  const layers = build(pal, map).join('\n  ');
+  const map = recolorMap(concept.serviceLine);
+  const layers = concept.layers.map((l) => renderLayer(l, map, pal)).join('\n  ');
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" width="${CANVAS.w}" height="${CANVAS.h}" ` +
     `viewBox="0 0 ${CANVAS.w} ${CANVAS.h}">\n` +
@@ -162,14 +147,12 @@ export function compose(scene, serviceLine) {
 
 // CLI
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const [scene, serviceLine] = process.argv.slice(2);
-  if (!scene) {
+  const [conceptKey] = process.argv.slice(2);
+  if (!conceptKey) {
     process.stderr.write(
-      `usage: node compose.mjs <scene> [serviceLine]\n` +
-        `  scenes: ${Object.keys(SCENES).join(', ')}\n` +
-        `  service lines: ${Object.keys(SERVICE_PALETTES).join(', ')}\n`,
+      `usage: node compose.mjs <conceptKey>\n  concepts: ${Object.keys(CONCEPTS).join(', ')}\n`,
     );
     process.exit(1);
   }
-  process.stdout.write(compose(scene, serviceLine || 'marketing'));
+  process.stdout.write(compose(conceptKey));
 }
