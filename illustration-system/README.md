@@ -10,7 +10,7 @@ assets keep faces right; code keeps the palette and composition on-brand.
 
 ## How it works
 
-```
+```text
 humaaans / scenery part SVGs  →  recolor to a BDS service palette  →  compose on a canvas  →  scene SVG
      (parts/)                        (engine/palettes.mjs)              (engine/compose.mjs)
 ```
@@ -42,7 +42,7 @@ node engine/compose.mjs person-at-work back-office > examples/backoffice-work.sv
 rsvg-convert -w 1600 examples/marketing-convo.svg -o marketing-convo.png
 ```
 
-Scenes: `two-person-convo`, `person-at-work`.
+Scenes: `two-person-convo`, `person-at-work`, `person-at-laptop`.
 Service lines: `marketing` (green), `back-office` (orange).
 
 ## Extending
@@ -59,11 +59,11 @@ Service lines: `marketing` (green), `back-office` (orange).
 
 ## Layout
 
-```
+```text
 illustration-system/
   parts/
     characters/   humaaans figures (CC0)
-    scenery/      plants, blobs
+    scenery/      plants, blobs, lamp
   engine/
     palettes.mjs  BDS service ramps + recolor model
     compose.mjs   part loading, recolor, composition, CLI
@@ -73,10 +73,10 @@ illustration-system/
 ## Status & roadmap
 
 Proven: part export, code recolor to BDS palettes, code composition, per-service
-palette swap, character mirroring. Ahead:
+palette swap, character mirroring, standing + seated (at-laptop) poses. Ahead:
 
-- More humaaans poses (sitting, at-laptop, gesturing) — current parts are standing
-- More scenery/props (armchair, side table, window, laptop, mug)
+- More humaaans poses (gesturing, standing-presenting) and multi-figure seated scenes
+- More scenery/props (armchair, side table, window, mug, desk)
 - A Storybook brand-standards page documenting the system
 - Recompose the two live blog heroes via the engine → CMS `featured_image_url`
 - (Future) CMS "generate illustration" feature calling this engine
