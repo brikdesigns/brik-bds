@@ -1,31 +1,33 @@
 /*
- * Features3ColBrandedDark — React renderer styles.
+ * Features — `bds-features` section styles (Phase D, brik-bds#1197).
+ * Consolidates the former bp-features-branded-dark. The `--branded-dark`
+ * class descriptor is gone (ADR-008 §3 — theme + appearance are not names);
+ * the dark surface is now the `--bds-features-bg` default, and the column
+ * count lives here as a responsive grid, never in a class name.
  *
- * Mirrors the Astro twin's visual exactly. Card backgrounds resolve
- * via `--background-brand-primary`, which is re-bound by the consumer
- * site's `[data-audience='X']` cascade rules. BDS ships the pattern;
- * the consumer (brikdesigns.com) ships the audience-specific values.
- *
- * Bold + 18px title, 16px regular description — the AA-clearing
- * posture for white-on-saturated-brand backgrounds (BDS contrast
- * burndown #40).
+ * Bold + 18px card title, 16px regular description — the AA-clearing posture
+ * for white-on-saturated-brand backgrounds (BDS contrast burndown #40). Card
+ * backgrounds resolve via `--background-brand-primary`, re-bound per-card by
+ * the consumer's `[data-audience='X']` cascade. BDS ships the pattern; the
+ * consumer ships the audience-specific values. Tier-4 `--bds-features-*` hooks
+ * let a consumer retheme without forking the block.
  */
 
-.bp-features-branded-dark {
-  background: var(--bds-features-branded-dark-bg, var(--page-inverse));
+.bds-features {
+  background: var(--bds-features-bg, var(--page-inverse));
   padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
   color: var(--text-on-color-dark);
 }
 
-.bp-features-branded-dark__container {
-  max-width: 1280px;
+.bds-features__container {
+  max-width: var(--size-container-xl, 1280px);
   margin-inline: auto;
   padding-inline: var(--padding-lg);
 }
 
 /* ── Section header ────────────────────────────────────────────── */
 
-.bp-features-branded-dark__header {
+.bds-features__header {
   text-align: center;
   max-width: 72ch;
   margin-inline: auto;
@@ -33,7 +35,7 @@
   align-items: center;
 }
 
-.bp-features-branded-dark__subtitle {
+.bds-features__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -44,7 +46,7 @@
   opacity: 0.85;
 }
 
-.bp-features-branded-dark__title {
+.bds-features__header .bds-features__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
@@ -53,7 +55,7 @@
   color: var(--text-on-color-dark);
 }
 
-.bp-features-branded-dark__lead {
+.bds-features__lead {
   margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);
@@ -64,41 +66,41 @@
 
 /* ── Card grid ─────────────────────────────────────────────────── */
 
-.bp-features-branded-dark__grid {
+.bds-features__grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--bds-features-branded-dark-gap, var(--gap-lg));
+  gap: var(--bds-features-gap, var(--gap-lg));
 }
 
 @media (min-width: 768px) {
-  .bp-features-branded-dark__grid {
+  .bds-features__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 992px) {
-  .bp-features-branded-dark__grid {
+  .bds-features__grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.bp-features-branded-dark__item {
+.bds-features__item {
   display: flex;
 }
 
 /* ── Card ──────────────────────────────────────────────────────── */
 
-.bp-features-branded-dark__card {
+.bds-features__card {
   width: 100%;
   /* Override the BDS Card outlined variant — branded cards read as
    * filled panels. Background resolves via --background-brand-primary,
    * re-bound per-card by the consumer's [data-audience='X'] cascade. */
   background: var(--background-brand-primary);
   border: none;
-  border-radius: var(--bds-features-branded-dark-card-radius, var(--border-radius-lg));
+  border-radius: var(--bds-features-card-radius, var(--border-radius-lg));
   overflow: hidden;
   transform: translateY(0) scale(1);
   transition:
@@ -106,12 +108,12 @@
     box-shadow 200ms var(--easing-ease-out);
 }
 
-.bp-features-branded-dark__card:hover {
-  transform: scale(var(--bds-features-branded-dark-hover-scale, 1.02));
+.bds-features__card:hover {
+  transform: scale(1.02);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
 }
 
-.bp-features-branded-dark__card-link {
+.bds-features__card-link {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -119,30 +121,30 @@
   color: inherit;
 }
 
-.bp-features-branded-dark__card-link:focus-visible {
+.bds-features__card-link:focus-visible {
   outline: 3px solid var(--text-on-color-dark);
   outline-offset: -3px;
 }
 
 /* ── Media (top illustration area) ─────────────────────────────── */
 
-.bp-features-branded-dark__media {
+.bds-features__media {
   aspect-ratio: var(--aspect-1-1);
-  padding: var(--bds-features-branded-dark-image-pad, var(--padding-xl));
+  padding: var(--bds-features-image-pad, var(--padding-xl));
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-.bp-features-branded-dark__image {
+.bds-features__image {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   display: block;
 }
 
-.bp-features-branded-dark__image-fallback {
+.bds-features__image-fallback {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -151,7 +153,7 @@
   transform-origin: center;
 }
 
-.bp-features-branded-dark__image-fallback--blank {
+.bds-features__image-fallback--blank {
   width: 60%;
   aspect-ratio: var(--aspect-1-1);
   border-radius: 50%;
@@ -162,7 +164,7 @@
 
 /* ── Card body ─────────────────────────────────────────────────── */
 
-.bp-features-branded-dark__content {
+.bds-features__content {
   padding: var(--padding-lg);
   display: flex;
   flex-direction: column;
@@ -171,7 +173,7 @@
 }
 
 /* Bold + 18px — AA-clearing posture for white-on-saturated-brand. */
-.bp-features-branded-dark__title {
+.bds-features__card .bds-features__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: var(--heading-md);
@@ -181,7 +183,7 @@
 }
 
 /* 16px regular — clears 3:1 at the large-text threshold. */
-.bp-features-branded-dark__description {
+.bds-features__description {
   margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);
@@ -189,7 +191,7 @@
   color: var(--text-on-color-dark);
 }
 
-.bp-features-branded-dark__cta {
+.bds-features__cta {
   margin-top: auto;
   display: inline-flex;
   align-items: center;
@@ -201,12 +203,12 @@
   line-height: 1.4;
 }
 
-.bp-features-branded-dark__cta-arrow {
+.bds-features__cta-arrow {
   display: inline-block;
   transition: transform 200ms var(--easing-ease-out);
 }
 
-.bp-features-branded-dark__card-link:hover .bp-features-branded-dark__cta-arrow,
-.bp-features-branded-dark__card-link:focus-visible .bp-features-branded-dark__cta-arrow {
+.bds-features__card-link:hover .bds-features__cta-arrow,
+.bds-features__card-link:focus-visible .bds-features__cta-arrow {
   transform: translateX(4px);
 }
