@@ -17,15 +17,27 @@ export const SOURCE_ROLE = {
   '191847': 'garmentDark',
   '323337': 'garmentDark',
   '2f3676': 'garmentAccent',
+  // seated figure (pavan) navy garments
+  '092330': 'garmentDark',
+  '0c2c40': 'garmentDark',
+  '1f252a': 'garmentDark',
   // scenery (plants / blob backdrop)
   '69a1ac': 'sceneryMid',
   '89c5cc': 'sceneryLight',
   c1dee2: 'sceneryLightest',
   f1f0ec: 'backdrop',
+  bcff8c: 'sceneryLight', // pendant-lamp shade (green-authored source)
 };
 
-// Preserved across all service lines: skin tones, hair, warm accent prop.
-export const PRESERVE = new Set(['b28b67', '613a25', '784931', 'f4d364']);
+// Preserved across all service lines: skin tones, hair, warm accent props,
+// and neutral devices (laptop grey). Kept literal so characters stay human
+// and accents stay warm in every service hue.
+export const PRESERVE = new Set([
+  'b28b67', '613a25', '784931', // standing figures: skin + hair
+  'f4be9a', 'fcc9a7', 'f7ebe7', 'fff7f3', // seated figure: skin tones + highlight
+  'f4d364', 'c1a443', 'ffecac', // warm yellow accent (sweater)
+  'b2b2b2', // laptop / device grey
+]);
 
 // service line -> role -> hex. Stops chosen per family for equivalent
 // lightness/contrast (the BDS green and orange ramps are distributed

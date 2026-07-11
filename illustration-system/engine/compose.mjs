@@ -126,6 +126,18 @@ const SCENES = {
     sparkle(560, 250, 20, pal.garmentAccent),
     sparkle(1180, 360, 15, pal.garmentAccent),
   ],
+
+  // Seated person working on a laptop under a pendant lamp — the workspace
+  // hero (blog/newsletter). The seated figure is the vetted "pavan" pose.
+  'person-at-laptop': (pal, map) => [
+    placePart('scenery/blob-1.svg', { x: 470, y: 150, scale: 2.6 }, map),
+    placePart('scenery/pendant-lamp.svg', { x: 1080, y: 60, scale: 1.3 }, map),
+    placePart('scenery/plant-right.svg', { x: 150, y: 500, scale: 0.9 }, map),
+    placePart('characters/seated-laptop.svg', { x: 640, y: 350, scale: 1.75 }, map),
+    speechBubble(900, 210, { ink: pal.ink, dot: pal.garmentLight }),
+    sparkle(560, 300, 20, pal.garmentAccent),
+    sparkle(1180, 430, 15, pal.garmentAccent),
+  ],
 };
 
 // ---- render -----------------------------------------------------------------
