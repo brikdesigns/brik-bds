@@ -69,6 +69,16 @@ export type { CtaProps, CtaLayout } from './Cta';
 export { Hero } from './Hero';
 export type { HeroProps, HeroLayout } from './Hero';
 
+// `<About>` — the `bds-about` narrative section primitive
+// (post-brik-bds#1198 consolidation, the last Phase D family). Props-based:
+// eyebrow + `h2` + lead, with an optional `testimonial` pull-quote composed
+// as a `<CardTestimonial>` aside. Single-member family → no layout modifier;
+// the split is a `:has()`-driven state, not a named modifier. Replaces the
+// ADR-008-banned `bp-about-story-split`. New consumers compose this directly;
+// the `about_story_split` key dispatches through the adapter below.
+export { About } from './About';
+export type { AboutProps, AboutTestimonial } from './About';
+
 // Legacy section-data adapters — preserve `BlueprintDispatcher` +
 // AI-render path compatibility. Internally compose `<CardGrid>` +
 // `<Card preset="display">`. Direct consumers should reach for those
