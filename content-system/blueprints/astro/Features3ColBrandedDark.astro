@@ -1,9 +1,14 @@
 ---
 /**
- * features_3col_branded_dark — dark section, 3-column grid of cards
- * filled with per-card brand colors. Each card sets `data-audience` to
- * re-bind `--brand-primary` for that subtree. Drives brikdesigns.com's
- * "Other Service Lines" cross-sell module.
+ * features_3col_branded_dark — Phase D Astro renderer for the `bds-features`
+ * family (brik-bds#1197). Twin of the React `<Features>` primitive. The former
+ * `bp-features-branded-dark` class is retired for the structural `bds-features`
+ * block; `--branded-dark` is banned by ADR-008 §3 (theme + appearance), and the
+ * `3col` count lives in the responsive grid CSS, not the name. The dark surface
+ * is the `--bds-features-bg` default, not a class. Dark section, grid of cards
+ * filled with per-card brand colors — each card sets `data-audience` to re-bind
+ * `--brand-primary` for that subtree. Drives brikdesigns.com's "Other Service
+ * Lines" cross-sell module.
  *
  * Spec: PR #477 (design proposal archived to brik-rag: blueprint-proposal-features-3col-branded-dark).
  *
@@ -24,37 +29,34 @@
  * ## Audience scope binding (consumer responsibility)
  *
  * Each card emits `data-audience={item.audience}`. Inside that subtree,
- * `--brand-primary` and `--background-brand-primary` resolve to the
- * audience's color — but ONLY if the consumer site defines the
- * `[data-audience='X']` cascade rules per
+ * `--brand-primary` and `--background-brand-primary` resolve to the audience's
+ * color — but ONLY if the consumer site defines the `[data-audience='X']`
+ * cascade rules per
  * `docs/theming/client-themes#per-audience-or-service-line-scope-binding`.
  * Without those rules, every card resolves to the global brand color
- * (visually broken — three identical cards).
- *
- * BDS ships the pattern, not the values. brikdesigns.com defines its
- * five service-line bindings (`brand` → yellow, `marketing` → green,
- * `information` → blue, `product` → purple, `service` → orange) in its
- * own globals.css.
+ * (visually broken — three identical cards). BDS ships the pattern, not the
+ * values.
  *
  * ## Renderer parity note
  *
- * Astro renderer uses HTML+CSS+tokens (matches existing blueprint
- * pattern). React renderer composes BDS primitives. Both emit the same
- * `data-audience` attributes so the consumer's cascade works in both
- * contexts.
+ * Astro renderer uses HTML+CSS+tokens (matches the existing blueprint
+ * pattern); React renderer composes BDS primitives (`<Card>`/`<ServiceTag>`).
+ * Both emit the same `data-audience` attributes and `bds-features__*` slots so
+ * the consumer's cascade works in both contexts. The one divergence: the React
+ * path shows a `<ServiceTag>` icon fallback when an image is absent; the Astro
+ * path shows the neutral blank brand block (no React primitive available).
  *
  * CSS custom properties — variation API:
- *   --bds-features-branded-dark-bg          (default: var(--page-inverse))
- *   --bds-features-branded-dark-card-radius (default: var(--border-radius-lg))
- *   --bds-features-branded-dark-gap         (default: var(--gap-lg))
- *   --bds-features-branded-dark-image-pad   (default: var(--padding-xl))
- *   --bds-features-branded-dark-hover-scale (default: 1.02 — set to 1 to disable)
+ *   --bds-features-bg          (default: var(--page-inverse))
+ *   --bds-features-card-radius (default: var(--border-radius-lg))
+ *   --bds-features-gap         (default: var(--gap-lg))
+ *   --bds-features-image-pad   (default: var(--padding-xl))
  *
- * a11y: section uses h2 + aria-labelledby; cards are <ul role="list">
- * of <li>; card title is h3 nested under section h2. Card title uses
- * --font-weight-bold and 18px to clear AA on saturated brand backgrounds
- * (white-on-poppy is 3.78:1 at 14px regular per BDS contrast burndown
- * #40 — bold weight + size promotion gets it into compliant range).
+ * a11y: section uses h2 + aria-labelledby; cards are <ul role="list"> of <li>;
+ * card title is h3 nested under section h2. Card title uses --font-weight-bold
+ * and 18px to clear AA on saturated brand backgrounds (white-on-poppy is
+ * 3.78:1 at 14px regular per BDS contrast burndown #40 — bold weight + size
+ * promotion gets it into compliant range).
  */
 import type { BlueprintProps } from './types';
 
@@ -65,57 +67,57 @@ const titleId = `${section.sectionKey}-title`;
 ---
 
 <section
-  class="bp-features-branded-dark"
+  class="bds-features"
   data-blueprint-key="features_3col_branded_dark"
   aria-labelledby={section.heading ? titleId : undefined}
 >
-  <div class="bp-features-branded-dark__container">
+  <div class="bds-features__container">
     {(section.heading || section.subheading || section.body) && (
-      <header class="bp-features-branded-dark__header">
+      <header class="bds-features__header">
         {section.subheading && (
-          <p class="bp-features-branded-dark__subtitle">{section.subheading}</p>
+          <p class="bds-features__subtitle">{section.subheading}</p>
         )}
         {section.heading && (
-          <h2 id={titleId} class="bp-features-branded-dark__title">
+          <h2 id={titleId} class="bds-features__title">
             {section.heading}
           </h2>
         )}
         {section.body && (
-          <p class="bp-features-branded-dark__lead">{section.body}</p>
+          <p class="bds-features__lead">{section.body}</p>
         )}
       </header>
     )}
 
-    <ul class="bp-features-branded-dark__grid" role="list">
+    <ul class="bds-features__grid" role="list">
       {section.items.map((item) => (
-        <li class="bp-features-branded-dark__item">
+        <li class="bds-features__item">
           <article
-            class="bp-features-branded-dark__card"
+            class="bds-features__card"
             data-audience={item.audience ?? undefined}
           >
-            <a class="bp-features-branded-dark__card-link" href={item.href ?? '#'}>
-              <div class="bp-features-branded-dark__media">
+            <a class="bds-features__card-link" href={item.href ?? '#'}>
+              <div class="bds-features__media">
                 {item.imageUrl ? (
                   <img
                     src={item.imageUrl}
                     alt={item.imageAlt ?? ''}
-                    class="bp-features-branded-dark__image"
+                    class="bds-features__image"
                     loading="lazy"
                     decoding="async"
                   />
                 ) : (
-                  <span class="bp-features-branded-dark__image-fallback" aria-hidden="true" />
+                  <span class="bds-features__image-fallback" aria-hidden="true" />
                 )}
               </div>
 
-              <div class="bp-features-branded-dark__content">
-                <h3 class="bp-features-branded-dark__title">{item.title}</h3>
+              <div class="bds-features__content">
+                <h3 class="bds-features__title">{item.title}</h3>
                 {item.description && (
-                  <p class="bp-features-branded-dark__description">{item.description}</p>
+                  <p class="bds-features__description">{item.description}</p>
                 )}
-                <span class="bp-features-branded-dark__cta">
+                <span class="bds-features__cta">
                   Learn more
-                  <span aria-hidden="true" class="bp-features-branded-dark__cta-arrow">→</span>
+                  <span aria-hidden="true" class="bds-features__cta-arrow">→</span>
                 </span>
               </div>
             </a>
@@ -127,21 +129,21 @@ const titleId = `${section.sectionKey}-title`;
 </section>
 
 <style>
-  .bp-features-branded-dark {
-    background: var(--bds-features-branded-dark-bg, var(--page-inverse));
+  .bds-features {
+    background: var(--bds-features-bg, var(--page-inverse));
     padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
     color: var(--text-on-color-dark);
   }
 
-  .bp-features-branded-dark__container {
-    max-width: 1280px;
+  .bds-features__container {
+    max-width: var(--size-container-xl, 1280px);
     margin-inline: auto;
     padding-inline: var(--padding-lg);
   }
 
   /* ── Section header ─────────────────────────────────────────── */
 
-  .bp-features-branded-dark__header {
+  .bds-features__header {
     text-align: center;
     max-width: 72ch;
     margin-inline: auto;
@@ -151,7 +153,7 @@ const titleId = `${section.sectionKey}-title`;
     gap: var(--gap-md);
   }
 
-  .bp-features-branded-dark__subtitle {
+  .bds-features__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
@@ -162,7 +164,7 @@ const titleId = `${section.sectionKey}-title`;
     opacity: 0.85;
   }
 
-  .bp-features-branded-dark__header .bp-features-branded-dark__title {
+  .bds-features__header .bds-features__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
@@ -171,7 +173,7 @@ const titleId = `${section.sectionKey}-title`;
     color: var(--text-on-color-dark);
   }
 
-  .bp-features-branded-dark__lead {
+  .bds-features__lead {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
@@ -182,37 +184,37 @@ const titleId = `${section.sectionKey}-title`;
 
   /* ── Card grid ──────────────────────────────────────────────── */
 
-  .bp-features-branded-dark__grid {
+  .bds-features__grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--bds-features-branded-dark-gap, var(--gap-lg));
+    gap: var(--bds-features-gap, var(--gap-lg));
   }
 
   @media (min-width: 768px) {
-    .bp-features-branded-dark__grid {
+    .bds-features__grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (min-width: 992px) {
-    .bp-features-branded-dark__grid {
+    .bds-features__grid {
       grid-template-columns: repeat(3, 1fr);
     }
   }
 
-  .bp-features-branded-dark__item {
+  .bds-features__item {
     display: flex;
   }
 
   /* ── Card ───────────────────────────────────────────────────── */
 
-  .bp-features-branded-dark__card {
+  .bds-features__card {
     width: 100%;
     background: var(--background-brand-primary);
-    border-radius: var(--bds-features-branded-dark-card-radius, var(--border-radius-lg));
+    border-radius: var(--bds-features-card-radius, var(--border-radius-lg));
     overflow: hidden;
     transform: translateY(0) scale(1);
     transition:
@@ -220,12 +222,12 @@ const titleId = `${section.sectionKey}-title`;
       box-shadow 200ms var(--easing-ease-out);
   }
 
-  .bp-features-branded-dark__card:hover {
-    transform: scale(var(--bds-features-branded-dark-hover-scale, 1.02));
+  .bds-features__card:hover {
+    transform: scale(1.02);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
   }
 
-  .bp-features-branded-dark__card-link {
+  .bds-features__card-link {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -233,30 +235,30 @@ const titleId = `${section.sectionKey}-title`;
     color: inherit;
   }
 
-  .bp-features-branded-dark__card-link:focus-visible {
+  .bds-features__card-link:focus-visible {
     outline: 3px solid var(--text-on-color-dark);
     outline-offset: -3px;
   }
 
   /* ── Media (top illustration area) ──────────────────────────── */
 
-  .bp-features-branded-dark__media {
+  .bds-features__media {
     aspect-ratio: var(--aspect-1-1);
-    padding: var(--bds-features-branded-dark-image-pad, var(--padding-xl));
+    padding: var(--bds-features-image-pad, var(--padding-xl));
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
   }
 
-  .bp-features-branded-dark__image {
+  .bds-features__image {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
     display: block;
   }
 
-  .bp-features-branded-dark__image-fallback {
+  .bds-features__image-fallback {
     width: 60%;
     aspect-ratio: var(--aspect-1-1);
     border-radius: 50%;
@@ -266,7 +268,7 @@ const titleId = `${section.sectionKey}-title`;
 
   /* ── Card body ──────────────────────────────────────────────── */
 
-  .bp-features-branded-dark__content {
+  .bds-features__content {
     padding: var(--padding-lg);
     display: flex;
     flex-direction: column;
@@ -276,7 +278,7 @@ const titleId = `${section.sectionKey}-title`;
 
   /* Bold weight + 18px size on title — the AA-clearing posture for
    * white-on-poppy and similar saturated brand backgrounds. */
-  .bp-features-branded-dark__card .bp-features-branded-dark__title {
+  .bds-features__card .bds-features__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: var(--heading-md);
@@ -288,7 +290,7 @@ const titleId = `${section.sectionKey}-title`;
   /* 16px regular description — clears 3:1 at large-text threshold.
    * If consumer atmospheres tighten the contrast budget below this, the
    * fix is on the brand-color side, not here. */
-  .bp-features-branded-dark__description {
+  .bds-features__description {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
@@ -296,7 +298,7 @@ const titleId = `${section.sectionKey}-title`;
     color: var(--text-on-color-dark);
   }
 
-  .bp-features-branded-dark__cta {
+  .bds-features__cta {
     margin-top: auto;
     display: inline-flex;
     align-items: center;
@@ -308,13 +310,13 @@ const titleId = `${section.sectionKey}-title`;
     line-height: 1.4;
   }
 
-  .bp-features-branded-dark__cta-arrow {
+  .bds-features__cta-arrow {
     display: inline-block;
     transition: transform 200ms var(--easing-ease-out);
   }
 
-  .bp-features-branded-dark__card-link:hover .bp-features-branded-dark__cta-arrow,
-  .bp-features-branded-dark__card-link:focus-visible .bp-features-branded-dark__cta-arrow {
+  .bds-features__card-link:hover .bds-features__cta-arrow,
+  .bds-features__card-link:focus-visible .bds-features__cta-arrow {
     transform: translateX(4px);
   }
 </style>
