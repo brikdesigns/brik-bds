@@ -1,9 +1,20 @@
 ---
 /**
- * about_story_split — 2-column narrative section. Label + heading +
- * body on the left; a single pull-quote or supporting callout on the
- * right. The story blueprint for "who we are" moments on home pages
- * and about pages.
+ * about_story_split — Phase D Astro renderer for the `bds-about` family
+ * (brik-bds#1198). Twin of the React `<About>` primitive. The former
+ * `bp-about-story-split` class is retired for the structural `bds-about`
+ * block; `about` is a single-member family so there is no layout modifier
+ * (ADR-008 §3). Label + heading + narrative, with an optional pull-quote.
+ *
+ * The pull-quote is a blueprint-owned `bds-about__callout` figure styled to
+ * mirror the React path's outlined `<CardTestimonial>`. Astro has no
+ * CardTestimonial twin, and the blueprint naming gate forbids a blueprint
+ * carrying a component's internal `__body` slot — so the Astro path
+ * reproduces the outlined-card look under the single published
+ * `bds-about__callout` slot, styling its children with element selectors
+ * (the self-contained-scoped-style pattern every Astro blueprint uses).
+ * React and Astro reach visual parity via separate code, as the family
+ * always has.
  *
  * Contract: BlueprintProps.
  *   - section.heading    — section heading (h2)
@@ -15,16 +26,15 @@
  *
  * required_facts: []. Section-driven.
  *
- * CSS custom properties:
- *   --bds-about-story-split-padding-y
- *   --bds-about-story-split-bg             (default: var(--page-primary))
- *   --bds-about-story-split-heading-color  (default: var(--text-primary))
- *   --bds-about-story-split-body-color     (default: var(--text-secondary))
- *   --bds-about-story-split-quote-accent   (default: var(--border-brand-primary))
+ * CSS custom properties (Tier-4 hooks):
+ *   --bds-about-bg              (default: var(--page-primary))
+ *   --bds-about-heading-color   (default: var(--text-primary))
+ *   --bds-about-body-color      (default: var(--text-secondary))
+ *   --bds-about-eyebrow-color   (default: var(--text-brand-primary))
  *
- * a11y: h2 + aria-labelledby. Pull-quote uses semantic blockquote +
- * cite. Reading order: narrative first (left column), supporting
- * callout second (right) — matches DOM order on every viewport.
+ * a11y: h2 + aria-labelledby. Pull-quote uses semantic blockquote + cite.
+ * Reading order: narrative first (left column), supporting callout second
+ * (right) — matches DOM order on every viewport.
  */
 import type { BlueprintProps } from './types';
 
@@ -36,120 +46,139 @@ const callout = section.items[0];
 ---
 
 <section
-  class="bp-about-story-split"
+  class="bds-about"
   aria-labelledby={titleId}
   data-blueprint-key="about_story_split"
 >
-  <div class="bp-about-story-split__container">
-    <div class="bp-about-story-split__narrative">
+  <div class="bds-about__container">
+    <div class="bds-about__narrative">
       {section.subheading && (
-        <p class="bp-about-story-split__subtitle">{section.subheading}</p>
+        <p class="bds-about__subtitle">{section.subheading}</p>
       )}
-      <h2 id={titleId} class="bp-about-story-split__title">{section.heading}</h2>
+      <h2 id={titleId} class="bds-about__title">{section.heading}</h2>
       {section.body && (
-        <p class="bp-about-story-split__description">{section.body}</p>
+        <p class="bds-about__lead">{section.body}</p>
       )}
     </div>
 
     {callout && (
-      <aside class="bp-about-story-split__callout">
-        <blockquote class="bp-about-story-split__quote">
-          <p class="bp-about-story-split__quote-text">{callout.description}</p>
-          <cite class="bp-about-story-split__quote-cite">{callout.title}</cite>
-        </blockquote>
-      </aside>
+      <figure class="bds-about__callout">
+        <blockquote>{callout.description}</blockquote>
+        <figcaption>
+          <cite>{callout.title}</cite>
+        </figcaption>
+      </figure>
     )}
   </div>
 </section>
 
 <style>
-  .bp-about-story-split {
-    background: var(--bds-about-story-split-bg, var(--page-primary));
-    padding-block: var(
-      --bds-about-story-split-padding-y,
-      clamp(var(--space-3xl), 7vw, var(--space-5xl))
-    );
+  .bds-about {
+    background: var(--bds-about-bg, var(--page-primary));
+    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
   }
 
-  .bp-about-story-split__container {
+  .bds-about__container {
     max-width: var(--size-container-xl, 1280px);
     margin-inline: auto;
-    padding-inline: var(--space-xl);
+    padding-inline: var(--padding-lg);
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-2xl);
+    gap: var(--gap-xl);
   }
 
   @media (min-width: 768px) {
-    .bp-about-story-split__container {
+    .bds-about__container:has(.bds-about__callout) {
       grid-template-columns: 3fr 2fr;
-      gap: var(--space-3xl);
+      gap: var(--gap-huge);
       align-items: start;
     }
   }
 
-  .bp-about-story-split__narrative {
+  .bds-about__narrative {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--gap-md);
   }
 
-  .bp-about-story-split__subtitle {
+  .bds-about__subtitle {
     margin: 0;
     font-family: var(--font-family-label);
     font-size: var(--label-lg);
     font-weight: var(--font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--text-brand-primary);
+    color: var(--bds-about-eyebrow-color, var(--text-brand-primary));
   }
 
-  .bp-about-story-split__title {
+  .bds-about__title {
     margin: 0;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
     font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    color: var(--bds-about-story-split-heading-color, var(--text-primary));
+    line-height: var(--font-line-height-tight);
+    color: var(--bds-about-heading-color, var(--text-primary));
   }
 
-  .bp-about-story-split__description {
+  .bds-about__lead {
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
-    line-height: var(--line-height-relaxed);
-    color: var(--bds-about-story-split-body-color, var(--text-secondary));
+    line-height: var(--font-line-height-relaxed);
+    color: var(--bds-about-body-color, var(--text-secondary));
     max-width: 65ch;
   }
 
-  .bp-about-story-split__callout {
-    padding: var(--space-lg);
-    border-left: 2px solid var(--bds-about-story-split-quote-accent, var(--border-brand-primary));
-    background: var(--surface-secondary);
-  }
-
-  .bp-about-story-split__quote {
-    margin: 0;
+  /* Pull-quote — mirrors the React path's outlined <CardTestimonial>
+     (components/ui/CardTestimonial), kept in visual sync via shared tokens.
+     Astro has no CardTestimonial twin, and the blueprint gates forbid both a
+     component's internal `__body` slot (banned-suffix) and Astro-only `bds-*`
+     slots absent from the published allowlist (canonical-class-check). So the
+     only bds- class is the published `__callout`; its children are styled by
+     element selectors, and the quote mark is a decorative `::before`. */
+  .bds-about__callout {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--gap-lg);
+    margin: 0;
+    padding: var(--padding-lg);
+    border-radius: var(--border-radius-md);
+    background-color: var(--surface-primary);
+    border: var(--border-width-md) solid var(--border-secondary);
   }
 
-  .bp-about-story-split__quote-text {
+  .bds-about__callout::before {
+    content: '“';
+    font-family: var(--font-family-display);
+    font-size: var(--heading-huge);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-brand-primary);
+    user-select: none;
+  }
+
+  .bds-about__callout blockquote {
     margin: 0;
-    font-family: var(--font-family-heading);
-    font-size: var(--heading-md);
-    font-style: normal;
-    line-height: var(--line-height-relaxed);
+    font-family: var(--font-family-body);
+    font-size: var(--body-md);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--font-line-height-normal);
     color: var(--text-primary);
   }
 
-  .bp-about-story-split__quote-cite {
+  .bds-about__callout figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .bds-about__callout cite {
+    margin: 0;
     font-family: var(--font-family-label);
-    font-size: var(--label-lg);
+    font-size: var(--label-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-snug);
     font-style: normal;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
+    color: var(--text-primary);
   }
 </style>

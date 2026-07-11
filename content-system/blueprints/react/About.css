@@ -1,0 +1,70 @@
+/*
+ * About — `bds-about` section styles (Phase D, brik-bds#1198). Consolidates
+ * the former bp-about-story-split. Single-member family → no layout modifier;
+ * the narrative-plus-callout split is a *state* driven by the presence of the
+ * `__callout` slot via `:has()`, not a named modifier.
+ *
+ * This file owns ONLY layout + non-component narrative text. The pull-quote's
+ * surface/border/typography live in `.bds-card-testimonial` (the
+ * <CardTestimonial> primitive). Tier-4 `--bds-about-*` hooks let a consumer
+ * retheme without forking the block; each falls back to a Semantic token per
+ * ADR-014. Responsive padding uses a direct clamp() (no hook) per ADR-014 — a
+ * Tier-4 fallback must resolve to a Semantic token, never a raw clamp() literal.
+ */
+
+.bds-about {
+  background: var(--bds-about-bg, var(--page-primary));
+  padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
+}
+
+.bds-about__container {
+  max-width: var(--size-container-xl, 1280px);
+  margin-inline: auto;
+  padding-inline: var(--padding-lg);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap-xl);
+}
+
+/* Two-column narrative + callout only when a pull-quote is present. */
+@media (min-width: 768px) {
+  .bds-about__container:has(.bds-about__callout) {
+    grid-template-columns: 3fr 2fr;
+    gap: var(--gap-huge);
+    align-items: start;
+  }
+}
+
+.bds-about__narrative {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-about__subtitle {
+  margin: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bds-about-eyebrow-color, var(--text-brand-primary));
+}
+
+.bds-about__title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--bds-about-heading-color, var(--text-primary));
+}
+
+.bds-about__lead {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--heading-sm);
+  line-height: var(--font-line-height-relaxed);
+  color: var(--bds-about-body-color, var(--text-secondary));
+  max-width: 65ch;
+}

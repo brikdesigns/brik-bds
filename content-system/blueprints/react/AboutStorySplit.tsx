@@ -1,57 +1,41 @@
 /**
- * AboutStorySplit — React renderer. Twin of
- * `../astro/AboutStorySplit.astro`. 2-column narrative with optional
- * pull-quote callout on the right.
+ * AboutStorySplit — Phase D adapter (deprecated direct path).
  *
- * Contract: BlueprintProps. `section.items[0]` is the optional
- * pull-quote: `{ title: attribution, description: quote }`.
+ * After brik-bds#1198 the canonical primitive is `<About>` (the `bds-about`
+ * narrative section block). This file remains as an adapter so the legacy
+ * `about_story_split` blueprint key keeps dispatching through
+ * `BlueprintDispatcher` with the same section-data contract that AI-generated
+ * pages expect — it maps `section.*` → `<About>` props. The optional
+ * `section.items[0]` pull-quote (`{ title: attribution, description: quote }`)
+ * maps to the `testimonial` prop.
  *
- * @summary Narrative + pull-quote — about-page section blueprint.
+ * New consumers should compose `<About>` directly. This adapter retires
+ * alongside Phase E.
+ *
+ * @deprecated Use `<About>` directly.
+ * @summary Legacy adapter — maps section data onto `<About>`.
  */
 import type { BlueprintProps } from '../astro/types';
-import './AboutStorySplit.css';
+import { About } from './About';
 
 interface Props extends BlueprintProps {}
 
 export function AboutStorySplit({ section }: Props) {
-  const titleId = `${section.sectionKey}-title`;
   const callout = section.items[0];
 
   return (
-    <section
-      className="bp-about-story-split"
-      aria-labelledby={titleId}
+    <About
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      body={section.body ?? undefined}
+      testimonial={
+        callout
+          ? { quote: callout.description, author: callout.title }
+          : undefined
+      }
       data-blueprint-key="about_story_split"
-    >
-      <div className="bp-about-story-split__container">
-        <div className="bp-about-story-split__narrative">
-          {section.subheading && (
-            <p className="bp-about-story-split__subtitle">
-              {section.subheading}
-            </p>
-          )}
-          <h2 id={titleId} className="bp-about-story-split__title">
-            {section.heading}
-          </h2>
-          {section.body && (
-            <p className="bp-about-story-split__description">{section.body}</p>
-          )}
-        </div>
-
-        {callout && (
-          <aside className="bp-about-story-split__callout">
-            <blockquote className="bp-about-story-split__quote">
-              <p className="bp-about-story-split__quote-text">
-                {callout.description}
-              </p>
-              <cite className="bp-about-story-split__quote-cite">
-                {callout.title}
-              </cite>
-            </blockquote>
-          </aside>
-        )}
-      </div>
-    </section>
+    />
   );
 }
 
