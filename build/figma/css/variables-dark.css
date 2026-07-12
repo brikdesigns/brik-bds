@@ -21,6 +21,7 @@
   --background-accent-green: var(--color-system-green);
   --background-accent-purple: var(--color-system-purple);
   --background-accent-red: var(--color-system-red);
+  --background-accent-orange: var(--color-system-orange);
   --background-input: var(--color-grayscale-black);
   --background-on-color-dark: var(--color-grayscale-white);
   --background-muted: var(--color-grayscale-darker);
@@ -97,6 +98,7 @@
   --text-accent-green: var(--color-system-green);
   --text-accent-purple: var(--color-system-purple);
   --text-accent-red: var(--color-system-red);
+  --text-accent-orange: var(--color-system-orange);
   --text-muted: var(--color-grayscale-dark);
   --text-on-color-dark: var(--color-grayscale-white);
   --text-text-link: var(--color-poppy-light);

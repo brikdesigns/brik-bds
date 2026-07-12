@@ -5641,6 +5641,15 @@
         "$type": "color",
         "$value": "{color.system.red}"
       },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
+      },
       "input": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6337,6 +6346,15 @@
         "$type": "color",
         "$value": "{color.system.red}"
       },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
+      },
       "muted": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6906,6 +6924,15 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
       },
       "input": {
         "$extensions": {
@@ -7602,6 +7629,15 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
       },
       "muted": {
         "$extensions": {
