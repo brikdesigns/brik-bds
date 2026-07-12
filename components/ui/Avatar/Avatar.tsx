@@ -4,6 +4,7 @@ import './Avatar.css';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarStatus = 'online' | 'offline' | 'busy' | 'away';
+export type AvatarColor = 'green' | 'purple' | 'blue' | 'orange' | 'yellow' | 'red';
 
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   /** Image source URL */
@@ -16,6 +17,13 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   size?: AvatarSize;
   /** Status indicator */
   status?: AvatarStatus;
+  /**
+   * Accent color for the initials fallback (no effect when an image loads).
+   * Backs the initials fill with `--background-accent-{color}` and an
+   * AA-safe on-color foreground. Consumers typically hash a stable key
+   * (e.g. contact id) to one of these six. Omit for the default brand fill.
+   */
+  color?: AvatarColor;
 }
 
 function getInitials(name: string): string {
@@ -43,6 +51,7 @@ export function Avatar({
   name = '',
   size = 'md',
   status,
+  color,
   className,
   style,
   ...props
@@ -54,7 +63,14 @@ export function Avatar({
 
   return (
     <div
-      className={bdsClass('bds-avatar', `bds-avatar--${size}`, className)}
+      className={bdsClass(
+        'bds-avatar',
+        `bds-avatar--${size}`,
+        // Color only styles the initials fill; when an image loads it covers
+        // the background, so applying the class unconditionally is harmless.
+        color && !showImage ? `bds-avatar--accent-${color}` : undefined,
+        className,
+      )}
       style={style}
       {...props}
     >

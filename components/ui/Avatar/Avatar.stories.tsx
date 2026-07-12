@@ -19,6 +19,10 @@ const meta: Meta<typeof Avatar> = {
       control: 'select',
       options: [undefined, 'online', 'offline', 'busy', 'away'],
     },
+    color: {
+      control: 'select',
+      options: [undefined, 'green', 'purple', 'blue', 'orange', 'yellow', 'red'],
+    },
   },
 };
 
@@ -87,6 +91,17 @@ export const Variants: Story = {
           <Avatar name="Dwight Schrute" size="md" />
           <Avatar name="Jim Halpert" size="lg" />
           <Avatar name="Pam Beesly" size="xl" />
+        </Row>
+      </div>
+      <div>
+        <SectionLabel>Colors (initials)</SectionLabel>
+        <Row>
+          <Avatar name="Green Ivy" color="green" size="lg" />
+          <Avatar name="Purple Rain" color="purple" size="lg" />
+          <Avatar name="Blue Sky" color="blue" size="lg" />
+          <Avatar name="Orange Peel" color="orange" size="lg" />
+          <Avatar name="Yellow Sun" color="yellow" size="lg" />
+          <Avatar name="Red Rose" color="red" size="lg" />
         </Row>
       </div>
       <div>

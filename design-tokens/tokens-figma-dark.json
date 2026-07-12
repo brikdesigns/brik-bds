@@ -1513,6 +1513,10 @@
       "$value": "{color.system.red}",
       "$type": "color"
     },
+    "accent-orange": {
+      "$value": "{color.system.orange}",
+      "$type": "color"
+    },
     "input": {
       "$value": "{color.grayscale.black}",
       "$type": "color"
@@ -1827,6 +1831,10 @@
     },
     "accent-red": {
       "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "accent-orange": {
+      "$value": "{color.system.orange}",
       "$type": "color"
     },
     "muted": {

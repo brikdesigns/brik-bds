@@ -15,6 +15,20 @@
   user-select: none;
 }
 
+/* ─── Accent colors (initials fallback) ──────────────────────── */
+/* Categorical fills for initials avatars — consumers hash a stable key to
+   one of six accent hues. Foreground is `--text-on-color-light` (black),
+   the documented AA-safe pairing on colored fills (same as Tag's solid
+   appearance); black holds AA across all six mid-saturated system hues,
+   where `--text-inverse` (white) would fail on yellow/orange. */
+
+.bds-avatar--accent-green  { background-color: var(--background-accent-green);  color: var(--text-on-color-light); }
+.bds-avatar--accent-purple { background-color: var(--background-accent-purple); color: var(--text-on-color-light); }
+.bds-avatar--accent-blue   { background-color: var(--background-accent-blue);   color: var(--text-on-color-light); }
+.bds-avatar--accent-orange { background-color: var(--background-accent-orange); color: var(--text-on-color-light); }
+.bds-avatar--accent-yellow { background-color: var(--background-accent-yellow); color: var(--text-on-color-light); }
+.bds-avatar--accent-red    { background-color: var(--background-accent-red);    color: var(--text-on-color-light); }
+
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — Figma-driven avatar dimensions, no semantic size token */
 
