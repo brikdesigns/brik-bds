@@ -8,7 +8,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
 A token name tells you a color's *role*, not whether it's *legible* on a given background. Picking a foreground and a background independently is how contrast regressions ship — and how they get patched at the consumer layer with hand-edited HEX instead of fixed at the root. This page is the contract that ends that: for every background family, **the foreground that is WCAG-safe on it is fixed, documented, and gated.**
 
 <Callout type="info">
-  The pairing set is data — [`tokens/contrast-pairings.json`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/contrast-pairings.json). One source of truth feeds three surfaces: the CI gate (`scripts/validate-themes.js`), the [Contrast Compliance](https://storybook.brikdesigns.com/?path=/docs/overview-health-contrast-compliance--docs) Storybook dashboard, and the matrix on this page. Add a pairing there; never hardcode a pair list in a component or a consumer.
+  The pairing set is data — [`tokens/contrast-pairings.json`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/contrast-pairings.json). One source of truth feeds three surfaces: the CI gate (`scripts/validate-themes.js`), the [Contrast Compliance](https://storybook.brikdesigns.com/?path=/story/overview-health-contrast-compliance--default) Storybook dashboard, and the matrix on this page. Add a pairing there; never hardcode a pair list in a component or a consumer.
 </Callout>
 
 ## The pairing question
@@ -136,7 +136,7 @@ What remains is the **non-recommended anti-pattern**: a white label on a mid-ton
 
 Pairing safety is **relationship-based, not per-HEX**. A client theme ([`theme-{client}.css`](/docs/theming/client-themes), `[data-audience]`/`[data-service]` scope binding, `registerClientTheme()`) that fills its ramp per the documented step-roles — pale `-lightest` for text-bearing surfaces, `-darkest` for context text, `on-color` neutrals for solid fills — inherits AA-safety without anyone hand-tuning a hex to pass a checker.
 
-Validation comes from the same source: the [Contrast Compliance](https://storybook.brikdesigns.com/?path=/docs/overview-health-contrast-compliance--docs) dashboard probes **every registered theme** — including client themes — against this exact pairing set via `getComputedStyle`. A new client ramp is audited against the full matrix the moment it's registered.
+Validation comes from the same source: the [Contrast Compliance](https://storybook.brikdesigns.com/?path=/story/overview-health-contrast-compliance--default) dashboard probes **every registered theme** — including client themes — against this exact pairing set via `getComputedStyle`. A new client ramp is audited against the full matrix the moment it's registered.
 
 ## Enforcing it
 
