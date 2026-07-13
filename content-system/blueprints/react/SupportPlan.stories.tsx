@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { MarketingIllustration } from '../../../components';
+import { Image } from '../../../components';
 import { SupportPlan } from './SupportPlan';
 
 const meta: Meta<typeof SupportPlan> = {
@@ -45,44 +45,21 @@ export const Playground: Story = {
 };
 
 /**
- * @summary With media — composed illustration beside the card.
+ * @summary With media — image beside the card.
  *
  * Distinct meaningful state from `Playground`: passing a `media` node
- * flips the layout from single-column to a two-column split. Exercises
- * the optional composition path the `SupportPlanCalloutSplit` adapter
- * uses for AI-generated pages that carry a persona-cluster scene.
+ * flips the layout from single-column to a two-column split. The `media`
+ * slot accepts any node — here a square `<Image>`.
  */
 export const WithMedia: Story = {
   args: {
     ...Playground.args,
     sectionKey: 'support-plan-with-media',
     media: (
-      <MarketingIllustration
-        variant="persona-cluster"
+      <Image
+        src="https://placehold.co/480x480/eaf1fb/1f3d70?text=Media"
+        alt="Support plan media"
         ratio="square"
-        tiles={[
-          {
-            kind: 'avatar',
-            src: 'https://placehold.co/240x240/eaf1fb/1f3d70?text=Persona+A',
-            alt: 'Persona A',
-          },
-          {
-            kind: 'chat-bubble',
-            content: 'How can I help today?',
-            accent: 'brand-primary',
-          },
-          { kind: 'message', accent: 'positive' },
-          {
-            kind: 'photo',
-            src: 'https://placehold.co/220x220/ffe1cc/663300?text=Persona+B',
-            alt: 'Persona B',
-          },
-          {
-            kind: 'chat-bubble',
-            content: 'We need an email campaign',
-            accent: 'neutral',
-          },
-        ]}
       />
     ),
   },

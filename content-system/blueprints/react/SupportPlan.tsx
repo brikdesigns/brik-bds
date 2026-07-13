@@ -5,11 +5,10 @@
  * the card.
  *
  * Per brik-bds#589, the real consumer content shape is just
- * eyebrow + heading + body + a single plan CTA — the persona-cluster
- * illustration is NOT part of the data contract. So the default shape
+ * eyebrow + heading + body + a single plan CTA. So the default shape
  * here is the simple single-column callout; the media slot is optional
- * composition (the legacy `SupportPlanCalloutSplit` adapter fills it
- * with a `MarketingIllustration`).
+ * composition — pass any node (e.g. an `<Image>`) to flip to a
+ * two-column split.
  *
  * This is the props-based primitive (mirrors the `<CardGrid>` precedent
  * from brik-bds#585). New consumers compose it directly; the
@@ -60,9 +59,9 @@ export interface SupportPlanProps extends HTMLAttributes<HTMLElement> {
   /** Plan CTA — link (`url`) or action (`onClick`). */
   cta?: BlueprintCta;
   /**
-   * Optional media region rendered beside the callout card (e.g. a
-   * `<MarketingIllustration>`). When present the section becomes a
-   * two-column split; when omitted the card centers single-column.
+   * Optional media region rendered beside the callout card (e.g. an
+   * `<Image>`). When present the section becomes a two-column split;
+   * when omitted the card centers single-column.
    */
   media?: ReactNode;
 }
