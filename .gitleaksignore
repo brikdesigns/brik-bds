@@ -1,0 +1,13 @@
+# .gitleaksignore — acknowledged gitleaks findings.
+# Format: <commit>:<file>:<rule>:<startline>  (see brik-llm secret-scan-triage.sh).
+#
+# Accepted per brikdesigns/brik-llm#1354 (structural fix only, no rotation).
+# A Webflow v1 API token was committed once (commit ee0e964f) in a Webflow
+# site-export bundle + publish scripts. Those files are now gitignored and
+# untracked (removed from HEAD) — the value survives only in this PRIVATE repo's
+# git history, a structural-fix trigger, not an external-exposure or rotation
+# trigger (operations/security/when-to-rotate.md). HEAD is clean.
+ee0e964f46a00ad45df1673605b0eb30a7d9a184:js/publish-webflow-test.js:webflow-v1-api-token:3
+ee0e964f46a00ad45df1673605b0eb30a7d9a184:js/publish-webflow.js:webflow-v1-api-token:4
+ee0e964f46a00ad45df1673605b0eb30a7d9a184:updates/brik-bds.webflow-main/publish-webflow.js:webflow-v1-api-token:4
+ee0e964f46a00ad45df1673605b0eb30a7d9a184:updates/brik-bds.webflow-main/publish-webflow-test.js:webflow-v1-api-token:3
