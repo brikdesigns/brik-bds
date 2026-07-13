@@ -102,6 +102,10 @@ const meta = {
       description: 'Accessible label for the nav landmark.',
       control: 'text',
     },
+    bordered: {
+      description: 'Draw the right-side panel/content divider. Default `true`; set `false` when the shell supplies its own separation.',
+      control: 'boolean',
+    },
     linkComponent: {
       description: 'Render each nav item with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. See ADR-012.',
       control: false,
@@ -130,6 +134,15 @@ export const Default: Story = {
     items: itemsWithIcons,
     showHeader: false,
     showFooter: false,
+  },
+};
+
+/** @summary No right border (`bordered={false}`) — for shells that supply their own panel/content separation */
+export const NoBorder: Story = {
+  args: {
+    items: itemsWithIcons,
+    bordered: false,
+    showHeader: true,
   },
 };
 
