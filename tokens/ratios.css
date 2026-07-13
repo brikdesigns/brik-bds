@@ -16,7 +16,6 @@
  *
  * Consumed by:
  *   - `Frame` `ratio` prop — slug suffix maps to the token name
- *   - `MarketingIllustration` ratio classes
  *   - Any consumer needing an `aspect-ratio: var(--aspect-*)` rule
  *
  * Filed: #486. Umbrella: #681 (Media category).

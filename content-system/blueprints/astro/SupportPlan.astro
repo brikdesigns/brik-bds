@@ -7,9 +7,8 @@
  *
  * Per brik-bds#589 the default shape is the simple single-column callout
  * (eyebrow + heading + body + one CTA); fill the `media` slot only when a
- * decorative scene exists. The `support_plan_callout_split` blueprint key
- * dispatches through `SupportPlanCalloutSplit.astro`, which fills the
- * `media` slot with a `MarketingIllustration` scene.
+ * decorative node is supplied. The `support_plan_callout_split` blueprint
+ * key dispatches through `SupportPlanCalloutSplit.astro`.
  *
  * Slots used (all on docs/SLOT-ALLOWLIST.md):
  *   bds-support-plan, __container, __header, __subtitle, __title,
