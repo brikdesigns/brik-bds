@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EmptyState } from './EmptyState';
+import { Image } from '../Image';
 
 const meta: Meta<typeof EmptyState> = {
   title: 'Components/empty-state',
@@ -49,6 +50,23 @@ export const NoAction: Story = {
 export const TitleOnly: Story = {
   args: {
     title: 'No data available',
+  },
+};
+
+/** @summary With media — a composed `<Image>` illustration above the text, plus an `md` action */
+export const WithMedia: Story = {
+  args: {
+    media: (
+      <Image
+        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMTYwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjE2MCIgZmlsbD0iI2RmZTNlOCIvPjwvc3ZnPg=="
+        alt=""
+        ratio="3-2"
+        width={240}
+      />
+    ),
+    title: 'No projects yet',
+    description: 'Create your first project to get started.',
+    buttonProps: { children: 'Create Project' },
   },
 };
 
