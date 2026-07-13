@@ -34,6 +34,9 @@ const steps = [
   { name: 'Component Axes',  cmd: 'npm run typegen:axes:check' },
   { name: 'TypeScript', cmd: 'npm run typecheck' },
   { name: 'Storybook Build', cmd: 'npm run build-storybook' },
+  // Must run AFTER the Storybook build — it validates docs cross-links + story
+  // IDs against storybook-static/index.json (the build's own output).
+  { name: 'Doc Links', cmd: 'node scripts/lint-doc-links.js' },
 ];
 
 console.log('\n═══════════════════════════════════════════');
