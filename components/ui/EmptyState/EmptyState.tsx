@@ -12,7 +12,14 @@ export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 't
   title: string;
   /** Optional description below the title */
   description?: string;
-  /** Optional button props — renders a primary Button when provided */
+  /**
+   * Optional illustration/media rendered above the text. Compose a BDS
+   * primitive — canonically an `<Image ratio="…" src="…" />` (or, once the
+   * illustration kit ships runtime assets, an illustration node). Omit to
+   * hide; presence is the show/hide control.
+   */
+  media?: ReactNode;
+  /** Optional button props — renders a primary `md` Button when provided */
   buttonProps?: {
     children: ReactNode;
     onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -26,14 +33,17 @@ export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 't
 /**
  * EmptyState — feedback component for empty content areas
  *
- * Displays a centered title, optional description, and optional
- * action button within a bordered surface container.
+ * Displays an optional centered illustration/media, a title, an optional
+ * description, and an optional `md` action button within a bordered surface
+ * container. The `media` slot is composed (canonically an `<Image>`); its
+ * presence is the show/hide control.
  *
- * @summary Empty/zero-state messaging with optional action
+ * @summary Empty/zero-state messaging with optional media + action
  */
 export function EmptyState({
   title,
   description,
+  media,
   buttonProps,
   children,
   className,
@@ -42,12 +52,13 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className={bdsClass('bds-empty-state', className)} style={style} {...props}>
+      {media && <div className="bds-empty-state__media">{media}</div>}
       <div className="bds-empty-state__text">
         <h2 className="bds-empty-state__title">{title}</h2>
         {description && <p className="bds-empty-state__description">{description}</p>}
       </div>
       {buttonProps && !children && (
-        <Button variant="primary" size="sm" {...buttonProps} />
+        <Button variant="primary" size="md" {...buttonProps} />
       )}
       {children}
     </div>

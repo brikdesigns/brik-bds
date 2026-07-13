@@ -17,6 +17,21 @@
   min-height: 240px; /* bds-lint-ignore — design constraint */
 }
 
+/* ─── Media (optional illustration above the text) ───────────── */
+
+.bds-empty-state__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
+
+/* Keep composed media (e.g. an <Image>) from overflowing the container. */
+.bds-empty-state__media :where(img, svg) {
+  max-width: 100%;
+  height: auto;
+}
+
 /* ─── Text wrapper ───────────────────────────────────────────── */
 
 .bds-empty-state__text {
