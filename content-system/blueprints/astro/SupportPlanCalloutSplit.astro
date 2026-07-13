@@ -6,14 +6,7 @@
  * `bds-support-plan` section block). This file remains as the adapter
  * the `BlueprintDispatcher` dispatches to for the
  * `support_plan_callout_split` key: it maps `section.*` → `<SupportPlan>`
- * props and, when `section.illustration` is present, emits the
- * `MarketingIllustration` scene into the primitive's `media` slot.
- *
- * The illustration markup mirrors the `bds-marketing-illustration__*`
- * classes the React `<MarketingIllustration>` primitive produces, so any
- * site importing `@brikdesigns/bds/styles.css` gets identical tile slot
- * positions, accent fills, and container-query sizing — no CSS
- * duplication, no Astro island.
+ * props.
  *
  * New consumers should compose `<SupportPlan>` directly. Retires in Phase E.
  *
@@ -23,7 +16,6 @@
  *   - section.body         — optional one-line lead under heading
  *   - section.items[0]     — { title: plan name, description: plan description }
  *   - section.cta          — { label, url } for the plan CTA
- *   - section.illustration — optional scene; omitted → card centers single-column
  */
 import type { BlueprintProps } from './types';
 import SupportPlan from './SupportPlan.astro';
@@ -32,15 +24,6 @@ interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
 const plan = section.items?.[0];
-const illustration = section.illustration;
-const ratio = illustration?.ratio ?? 'square';
-const variant = illustration?.variant ?? 'persona-cluster';
-const tiles = illustration?.tiles ?? [];
-const ariaLabel = tiles
-  .map((t: any) => ('alt' in t ? t.alt : 'content' in t ? t.content : ''))
-  .filter(Boolean)
-  .join(', ');
-const hasIllustration = illustration && tiles.length > 0;
 ---
 
 <SupportPlan
@@ -51,62 +34,4 @@ const hasIllustration = illustration && tiles.length > 0;
   planTitle={plan?.title ?? ''}
   planDescription={plan?.description ?? undefined}
   cta={section.cta ?? undefined}
->
-  {hasIllustration && (
-    <div
-      slot="media"
-      class={`bds-marketing-illustration bds-marketing-illustration--${variant} bds-marketing-illustration--ratio-${ratio}`}
-      role="img"
-      aria-label={ariaLabel || undefined}
-    >
-      {tiles.map((tile: any, i: number) => {
-        const slotIndex = Math.min(i, 4);
-        const accentClass = tile.accent
-          ? ` bds-marketing-illustration__tile--accent-${tile.accent}`
-          : '';
-        const tileClass =
-          `bds-marketing-illustration__tile ` +
-          `bds-marketing-illustration__tile--${tile.kind} ` +
-          `bds-marketing-illustration__slot-${slotIndex}` +
-          accentClass;
-
-        if (tile.kind === 'avatar' || tile.kind === 'photo') {
-          return (
-            <div class={tileClass}>
-              <img
-                src={tile.src}
-                alt={tile.alt}
-                class="bds-marketing-illustration__photo"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          );
-        }
-        if (tile.kind === 'chat-bubble') {
-          return (
-            <div class={tileClass}>
-              <div class="bds-marketing-illustration__chat-bubble">
-                {tile.content}
-              </div>
-            </div>
-          );
-        }
-        if (tile.kind === 'message') {
-          return (
-            <div class={tileClass}>
-              <div class="bds-marketing-illustration__message">
-                {tile.content && <span>{tile.content}</span>}
-              </div>
-            </div>
-          );
-        }
-        return (
-          <div class={tileClass}>
-            <div class="bds-marketing-illustration__shape" aria-hidden="true" />
-          </div>
-        );
-      })}
-    </div>
-  )}
-</SupportPlan>
+/>

@@ -236,27 +236,6 @@ export interface BlueprintSection {
     readonly price?: string;
     readonly cta?: BlueprintCta;
   };
-  /**
-   * Optional structured illustration data for blueprints that compose a
-   * decorative scene (e.g. `support_plan_callout_split`). Mirrors the
-   * `MarketingIllustration` primitive's prop contract — duplicated here so
-   * `BlueprintSection` stays framework-agnostic and the contract type
-   * doesn't import from `components/`.
-   *
-   * Additive, optional — existing blueprints that don't compose scenes
-   * are unaffected.
-   */
-  readonly illustration?: {
-    readonly variant?: 'persona-cluster';
-    readonly ratio?: 'square' | 'portrait' | 'landscape';
-    readonly tiles: ReadonlyArray<
-      | { readonly kind: 'avatar'; readonly src: string; readonly alt: string; readonly name?: string }
-      | { readonly kind: 'photo'; readonly src: string; readonly alt: string }
-      | { readonly kind: 'chat-bubble'; readonly content: string; readonly accent?: 'brand-primary' | 'positive' | 'neutral' | 'inverse' }
-      | { readonly kind: 'message'; readonly content?: string; readonly accent?: 'brand-primary' | 'positive' | 'neutral' | 'inverse' }
-      | { readonly kind: 'shape'; readonly accent?: 'brand-primary' | 'positive' | 'neutral' | 'inverse' }
-    >;
-  };
   readonly visualNotes: {
     readonly blueprintKey: KnownBlueprintKey | null;
     readonly moodKeywords: readonly string[];
