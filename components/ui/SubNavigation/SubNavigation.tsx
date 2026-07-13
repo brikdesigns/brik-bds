@@ -19,6 +19,13 @@ export interface SubNavigationProps {
   footer?: ReactNode;
   /** Custom width (default: 194px). */
   width?: string;
+  /**
+   * Draw the right-side border (the divider between the sub-nav panel and the
+   * content column). Default `true`. Set `false` for shells that supply their
+   * own separation (e.g. a content-side border or a background step). Only the
+   * right border is affected — the header/footer dividers are unchanged.
+   */
+  bordered?: boolean;
   /** Accessible label for the nav landmark. Required when multiple navs are on the page. */
   ariaLabel?: string;
   /**
@@ -43,10 +50,16 @@ export function SubNavigation({
   footer,
   width = '194px',
   ariaLabel = 'Section navigation',
+  bordered = true,
   linkComponent,
 }: SubNavigationProps) {
   return (
-    <aside className="bds-subnav" style={{ width }} aria-label={ariaLabel}>
+    <aside
+      className="bds-subnav"
+      style={{ width }}
+      aria-label={ariaLabel}
+      data-bordered={bordered ? undefined : 'false'}
+    >
       {header && <div className="bds-subnav__header">{header}</div>}
 
       <nav className="bds-subnav__nav">
