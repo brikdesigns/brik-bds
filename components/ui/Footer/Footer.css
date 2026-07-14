@@ -58,6 +58,28 @@
   background-color: var(--bds-footer-surface, var(--surface-inverse));
 }
 
+/* ─── Content-width constraint ────────────────────────────────────
+   Center the footer's inner content at a canonical `--content-width-*`
+   while the background stays full-bleed. The `max()` keeps the existing
+   `--padding-lg` gutter at narrow viewports and switches to auto-centering
+   once the viewport exceeds the target width. Vertical padding from the
+   `.bds-footer` shorthand is untouched — only `padding-inline` is overridden. */
+.bds-footer--constrain-narrow {
+  padding-inline: max(var(--padding-lg), calc((100% - var(--content-width-narrow)) / 2));
+}
+
+.bds-footer--constrain-default {
+  padding-inline: max(var(--padding-lg), calc((100% - var(--content-width-default)) / 2));
+}
+
+.bds-footer--constrain-wide {
+  padding-inline: max(var(--padding-lg), calc((100% - var(--content-width-wide)) / 2));
+}
+
+.bds-footer--constrain-xl {
+  padding-inline: max(var(--padding-lg), calc((100% - var(--content-width-xl)) / 2));
+}
+
 /* ─── Top section: logo + columns ─────────────────────────────── */
 
 .bds-footer__top {
