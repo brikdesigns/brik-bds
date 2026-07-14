@@ -1,0 +1,54 @@
+name: Service Icon Registry Check
+
+# Ensures components/ui/ServiceTag/service-icons.generated.ts stays in sync with
+# the source marks in components/ui/ServiceTag/icons/*/*.svg. Fails the build if
+# a source glyph was added, removed, or edited without regenerating the committed
+# registry (`npm run gen:service-icons`) — so a service glyph can't silently go
+# missing or stale in the bundled offline set, and the no-404 guarantee (#1242)
+# stays true.
+#
+# Why this is a CI gate (not just the husky pre-commit mirror):
+#   - Cloud-agent commits bypass local hooks entirely.
+#   - PRs from fresh clones may not have husky installed.
+#   - The offline-glyph guarantee is only as good as the committed registry.
+#
+# Source: scripts/gen-service-icons.mjs
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'components/ui/ServiceTag/icons/**/*.svg'
+      - 'components/ui/ServiceTag/service-icons.generated.ts'
+      - 'scripts/gen-service-icons.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - 'components/ui/ServiceTag/icons/**/*.svg'
+      - 'components/ui/ServiceTag/service-icons.generated.ts'
+      - 'scripts/gen-service-icons.mjs'
+
+concurrency:
+  group: service-icons-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  service-icons-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check bundled service-icon registry is in sync
+        run: npm run gen:service-icons:check
