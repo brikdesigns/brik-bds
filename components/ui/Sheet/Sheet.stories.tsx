@@ -23,6 +23,11 @@ const meta: Meta<typeof Sheet> = {
     closeOnBackdrop: { control: 'boolean', description: 'Dismiss on backdrop click.' },
     closeOnEscape: { control: 'boolean', description: 'Dismiss on Escape.' },
     showCloseButton: { control: 'boolean', description: 'Render the header close (×) button.' },
+    loading: {
+      control: 'boolean',
+      description:
+        'Render header + body as Skeleton placeholders. Footer stays unchanged; secondaryAction and tabs are suppressed.',
+    },
   },
 };
 
@@ -213,6 +218,37 @@ export const Compact: Story = {
           description="Active · Updated 2 days ago"
           mode="read"
           onEdit={() => alert('Switch to edit mode')}
+        >
+          <ReadOnlyFields />
+        </Sheet>
+      </>
+    );
+  },
+};
+
+/**
+ * `loading` swaps the header (title / subtitle / description) and body for
+ * `Skeleton` placeholders — 3 `SheetSection`-shaped blocks, each a heading
+ * line + 4 field rows. The footer renders unchanged (still closable);
+ * `secondaryAction` and `tabs` are suppressed while loading.
+ *
+ * @summary Loading state — skeleton header + body
+ */
+export const Loading: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>View company (loading)</Button>
+        <Sheet
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          subtitle="Company"
+          title="Brik Designs"
+          description="Active · Updated 2 days ago"
+          mode="read"
+          onEdit={() => alert('Switch to edit mode')}
+          loading
         >
           <ReadOnlyFields />
         </Sheet>

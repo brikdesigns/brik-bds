@@ -8,6 +8,7 @@ import {
   TableRow,
   TableHead,
   TableCell,
+  TableSkeletonRow,
   TableActionsCell,
   TableAvatarCell,
   TableImageCell,
@@ -256,6 +257,40 @@ export const CellTypes: Story = {
       </Table>
     );
   },
+};
+
+/**
+ * `<TableSkeletonRow>` fills a loading `<TableBody>` — pass `columns` to
+ * match the header, and `cellWidths` to hint per-cell placeholder width
+ * (cycles if shorter than `columns`). Composes `TableRow` + `TableCell`,
+ * so it automatically inherits the parent `Table`'s `size` row height.
+ * Irreducible — the value is the exported subcomponent itself, not a
+ * `Table` arg.
+ *
+ * @summary Skeleton rows filling a loading Table body
+ */
+export const Loading: Story = {
+  render: () => (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>Role</TableHead>
+          <TableHead>Status</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <TableSkeletonRow
+            key={i}
+            columns={4}
+            cellWidths={['long', 'medium', 'short', 'short']}
+          />
+        ))}
+      </TableBody>
+    </Table>
+  ),
 };
 
 /* ═══════════════════════════════════════════════════════════════

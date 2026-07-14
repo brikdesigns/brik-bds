@@ -284,6 +284,20 @@
   opacity: 1;
 }
 
+/* ─── Loading skeleton (Sheet.loading) ───────────────────────── */
+
+.bds-sheet__skeleton-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+.bds-sheet__skeleton-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
 /* ─── Nav link (clickable entity reference inside sheets) ──────── */
 
 .bds-sheet__nav-link {

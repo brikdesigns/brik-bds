@@ -24,6 +24,11 @@ const meta: Meta<typeof DataSection> = {
       options: ['h2', 'h3'],
       description: 'Heading element for the title. `h3` only when nested under an existing `<h2>`.',
     },
+    loading: {
+      control: 'boolean',
+      description:
+        'Render the body as Skeleton field rows matching the FieldGrid shape of `children`. Title renders unchanged; `actions` is suppressed.',
+    },
   },
 };
 
@@ -80,6 +85,42 @@ export const Default: Story = {
 /* ═══════════════════════════════════════════════════════════════
    VARIANTS — irreducible composition (stacked read-mode page)
    ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * `loading` swaps the body for Skeleton field rows matching the shape
+ * `children` would have produced — reads `columns` and cell count off a
+ * `<FieldGrid>` child. Title stays real; `actions` is suppressed. Shown
+ * against a 2-column and a 3-column section to prove the shape adapts —
+ * irreducible, since a single boolean Control on one hardcoded FieldGrid
+ * can't demonstrate the match.
+ *
+ * @summary Loading state — skeleton shape matches FieldGrid columns
+ */
+export const Loading: Story = {
+  render: () => (
+    <Frame>
+      <DataSection title="Identity" actions={<ViewEditToggle />} loading>
+        <FieldGrid columns={2}>
+          <Field label="Business Name">Vale Partners</Field>
+          <Field label="Legal Name">Vale Partners, LLC</Field>
+          <Field label="DBA">Vale</Field>
+          <Field label="Year Founded">2019</Field>
+        </FieldGrid>
+      </DataSection>
+
+      <DataSection title="Location" actions={<ViewEditToggle />} loading>
+        <FieldGrid columns={3}>
+          <Field label="Address">123 Main St</Field>
+          <Field label="City">Denver</Field>
+          <Field label="State">CO</Field>
+          <Field label="Postal Code">80202</Field>
+          <Field label="Country">United States</Field>
+          <Field label="Timezone">America/Denver</Field>
+        </FieldGrid>
+      </DataSection>
+    </Frame>
+  ),
+};
 
 /**
  * The canonical read-mode page composition — several `DataSection`s stacked
