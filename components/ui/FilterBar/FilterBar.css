@@ -30,4 +30,17 @@
   flex-wrap: wrap;
   align-items: center;
 }
+
+/* ─── Collapsed controls (narrow own-width → Filters popover, ADR-019) ── */
+
+.bds-filter-bar__collapse {
+  margin-left: auto;
+}
+
+.bds-filter-bar__collapse-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 200px;
+}
 }

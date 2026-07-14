@@ -159,3 +159,73 @@ export const Default: Story = {
     );
   },
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   COLLAPSED — narrow own-width. Below ~600px of its OWN width (via
+   ResizeObserver, ADR-019) the controls collapse into a `Filters (N)`
+   popover so they never wrap. The 420px container forces the collapse;
+   the component reacts to its own box, not the viewport. `activeFilterCount`
+   drives the count on the trigger.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Narrow own-width collapses controls into a Filters popover */
+export const Collapsed: Story = {
+  args: {
+    title: 'Engagements',
+    label: 'engagements',
+    clearLabel: 'Clear filters',
+    activeStatus: 'brand',
+    onClear: fn(),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 420, minHeight: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => {
+    const [industry, setIndustry] = useState<string | undefined>('saas');
+    const [activeOnly, setActiveOnly] = useState(true);
+
+    const filteredRows = useMemo(
+      () =>
+        rows.filter((r) => {
+          if (industry && r.industry !== industry) return false;
+          if (activeOnly && r.status !== 'active') return false;
+          return true;
+        }),
+      [industry, activeOnly],
+    );
+
+    const activeFilterCount = (industry ? 1 : 0) + (activeOnly ? 1 : 0);
+
+    const handleClear = () => {
+      setIndustry(undefined);
+      setActiveOnly(false);
+      args.onClear?.();
+    };
+
+    return (
+      <FilterBar
+        {...args}
+        total={rows.length}
+        filtered={filteredRows.length}
+        activeFilterCount={activeFilterCount}
+        onClear={handleClear}
+      >
+        <FilterButton
+          label="Industry"
+          options={industryOptions}
+          value={industry}
+          onChange={setIndustry}
+        />
+        <FilterToggle
+          label="Active only"
+          active={activeOnly}
+          onToggle={() => setActiveOnly((prev) => !prev)}
+        />
+      </FilterBar>
+    );
+  },
+};
