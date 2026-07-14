@@ -4,3 +4,4 @@
 // The barrel export satisfies the component-completeness pre-commit check.
 export { useSuggestionFilter } from './useSuggestionFilter';
 export type { UseSuggestionFilterOptions, UseSuggestionFilterReturn } from './useSuggestionFilter';
+export { useElementWidth } from './useElementWidth';
