@@ -4,8 +4,36 @@ import { Icon } from '@iconify/react';
 import { ArrowLeftBold, Pen } from '../../icons';
 import { Button } from '../Button';
 import { CloseButton } from '../CloseButton';
+import { Skeleton } from '../Skeleton';
+import { SheetSection } from '../SheetSection';
 import { bdsClass } from '../../utils';
 import './Sheet.css';
+
+/** Number of `SheetSection` skeletons rendered in the loading body. */
+const SHEET_LOADING_SECTION_COUNT = 3;
+/** Number of field-row skeletons rendered per loading section. */
+const SHEET_LOADING_FIELD_COUNT = 4;
+
+/**
+ * SheetSkeletonSection — one `SheetSection` holding a heading-line
+ * skeleton plus `SHEET_LOADING_FIELD_COUNT` field-row skeletons (label +
+ * value). Internal to `Sheet.loading` — not exported.
+ */
+function SheetSkeletonSection() {
+  return (
+    <SheetSection aria-hidden="true">
+      <Skeleton variant="text" width="35%" height={20} />
+      <div className="bds-sheet__skeleton-fields">
+        {Array.from({ length: SHEET_LOADING_FIELD_COUNT }).map((_, i) => (
+          <div key={i} className="bds-sheet__skeleton-field">
+            <Skeleton variant="text" width="30%" height={12} />
+            <Skeleton variant="text" width="75%" />
+          </div>
+        ))}
+      </div>
+    </SheetSection>
+  );
+}
 
 export type SheetSide = 'right' | 'left' | 'bottom';
 
@@ -176,6 +204,13 @@ export interface SheetProps {
   activeTab?: string;
   /** Called when a tab is selected */
   onTabChange?: (tabId: string) => void;
+  /**
+   * When `true`, renders the header (title / subtitle / description) and
+   * body as `Skeleton` placeholders instead of the real content. The
+   * footer renders unchanged (the sheet stays closable) — `secondaryAction`
+   * and `tabs` are suppressed. Default `false`.
+   */
+  loading?: boolean;
 }
 
 /**
@@ -220,6 +255,7 @@ export function Sheet({
   tabs,
   activeTab: controlledTab,
   onTabChange,
+  loading = false,
 }: SheetProps) {
   const isFloating = variant === 'floating';
   const [internalTab, setInternalTab] = useState(tabs?.[0]?.id ?? '');
@@ -268,8 +304,8 @@ export function Sheet({
   const activeTabContent = tabs?.find((t) => t.id === activeTab)?.content;
 
   // Secondary action renders on the left side of the footer in read mode only.
-  // Hidden during edit to keep Save's commit surface unambiguous.
-  const secondaryActionNode = secondaryAction && mode !== 'edit' ? (
+  // Hidden during edit (Save's commit surface) and while loading.
+  const secondaryActionNode = !loading && secondaryAction && mode !== 'edit' ? (
     <Button
       variant="secondary"
       onClick={secondaryAction.onClick}
@@ -348,7 +384,10 @@ export function Sheet({
     );
   })();
 
-  const hasHeaderContent = title || subtitle || description || onBack || showCloseButton;
+  const hasHeaderContent = loading || title || subtitle || description || onBack || showCloseButton;
+  // Tabs are suppressed while loading — the body renders section skeletons
+  // instead of any tab's content.
+  const showTabs = !loading && tabs;
 
   const sheet = (
     <>
@@ -357,12 +396,13 @@ export function Sheet({
         className={bdsClass('bds-sheet', `bds-sheet--${side}`, isFloating ? 'bds-sheet--floating' : '', density === 'compact' ? 'bds-sheet--compact' : '')}
         role="dialog"
         aria-modal={!isFloating}
+        aria-busy={loading || undefined}
         style={widthStyle}
         data-mode={mode}
         data-edit-target={mode === 'read' ? editTarget : undefined}
       >
         {hasHeaderContent && (
-          <div className={bdsClass('bds-sheet__header', tabs ? 'bds-sheet__header--has-tabs' : '')}>
+          <div className={bdsClass('bds-sheet__header', showTabs ? 'bds-sheet__header--has-tabs' : '')}>
             <div className="bds-sheet__header-top">
               <div className="bds-sheet__header-lead">
                 {onBack && (
@@ -376,16 +416,25 @@ export function Sheet({
                   </button>
                 )}
                 <div className="bds-sheet__titles">
-                  {subtitle && <span className="bds-sheet__subtitle">{subtitle}</span>}
-                  {title && <h2 className="bds-sheet__title">{title}</h2>}
-                  {description && <p className="bds-sheet__description">{description}</p>}
+                  {loading ? (
+                    <>
+                      <Skeleton variant="text" width="30%" height={14} />
+                      <Skeleton variant="text" width="55%" height={24} />
+                    </>
+                  ) : (
+                    <>
+                      {subtitle && <span className="bds-sheet__subtitle">{subtitle}</span>}
+                      {title && <h2 className="bds-sheet__title">{title}</h2>}
+                      {description && <p className="bds-sheet__description">{description}</p>}
+                    </>
+                  )}
                 </div>
               </div>
               {showCloseButton && (
                 <CloseButton className="bds-sheet__close" onClick={onClose} />
               )}
             </div>
-            {tabs && (
+            {showTabs && (
               <div className="bds-sheet__tabs" role="tablist">
                 {tabs.map((tab) => (
                   <button
@@ -407,7 +456,13 @@ export function Sheet({
           </div>
         )}
         <div className="bds-sheet__body">
-          {tabs ? activeTabContent : children}
+          {loading
+            ? Array.from({ length: SHEET_LOADING_SECTION_COUNT }).map((_, i) => (
+                <SheetSkeletonSection key={i} />
+              ))
+            : tabs
+              ? activeTabContent
+              : children}
         </div>
         {resolvedFooter && <div className="bds-sheet__footer">{resolvedFooter}</div>}
       </div>

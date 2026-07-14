@@ -8,7 +8,7 @@ import * as Stories from './Table.stories';
 
 <ComponentLinks slug="table" />
 
-Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableActionsCell`, plus the typed media cells `TableAvatarCell` / `TableImageCell` / `TableServiceTagCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
+Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableActionsCell` / `TableSkeletonRow`, plus the typed media cells `TableAvatarCell` / `TableImageCell` / `TableServiceTagCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
 
 ## Default
 
@@ -25,6 +25,10 @@ Sortable headers (`sortable` + `sortDirection` on `<TableHead>`) and checkbox ro
 A `<TableCell>` accepts any content. This table exercises the composition catalog in one place — icon-left name, two-line owner, `<Tag>`, status `<Badge>`, inline `<TextInput>`, a `<Tooltip>` header indicator, and a `<TextLink>`.
 
 <Canvas of={Stories.CellTypes} />
+
+`<TableSkeletonRow>` fills a loading `<TableBody>` — pass `columns` to match the header and `cellWidths` (`'short' | 'medium' | 'long'`, cycles if shorter than `columns`) to hint per-cell placeholder width. It composes `TableRow` + `TableCell`, so it automatically inherits the parent `Table`'s `size` row height.
+
+<Canvas of={Stories.Loading} />
 
 ## Patterns
 

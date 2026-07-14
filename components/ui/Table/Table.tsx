@@ -10,6 +10,7 @@ import { bdsClass } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
+import { Skeleton } from '../Skeleton';
 import './Table.css';
 
 // ─── Table (wrapper) ───────────────────────────────────────────
@@ -253,6 +254,64 @@ export function TableCell({
     <td className={bdsClass('bds-table-cell', className)} style={style} {...props}>
       {children}
     </td>
+  );
+}
+
+// ─── TableSkeletonRow (<tr> of Skeleton-filled TableCells) ─────
+
+export type TableSkeletonCellWidth = 'short' | 'medium' | 'long';
+
+const tableSkeletonCellWidth: Record<TableSkeletonCellWidth, string> = {
+  short: '40%',
+  medium: '65%',
+  long: '90%',
+};
+
+export interface TableSkeletonRowProps extends HTMLAttributes<HTMLTableRowElement> {
+  /** Count of `<TableCell>` placeholders to render. */
+  columns: number;
+  /** Per-cell width hint — cycles if shorter than `columns`. Default `['medium']`. */
+  cellWidths?: TableSkeletonCellWidth[];
+}
+
+/**
+ * TableSkeletonRow — a `<TableRow>` of `<TableCell>`s, each holding a
+ * `<Skeleton variant="text">` placeholder, for a loading `<TableBody>`.
+ *
+ * Composes `TableRow` + `TableCell` so it automatically inherits the
+ * parent `Table`'s `size` (default vs comfortable) row height and
+ * striping — no separate sizing logic of its own.
+ *
+ * @example
+ * ```tsx
+ * <TableBody>
+ *   {loading
+ *     ? Array.from({ length: 10 }).map((_, i) => (
+ *         <TableSkeletonRow key={i} columns={5} cellWidths={['long', 'medium', 'short']} />
+ *       ))
+ *     : rows.map(...)}
+ * </TableBody>
+ * ```
+ *
+ * @summary Skeleton-filled row for a loading Table body
+ */
+export function TableSkeletonRow({
+  columns,
+  cellWidths = ['medium'],
+  className,
+  ...props
+}: TableSkeletonRowProps) {
+  return (
+    <TableRow className={className} aria-hidden="true" {...props}>
+      {Array.from({ length: columns }).map((_, i) => (
+        <TableCell key={i}>
+          <Skeleton
+            variant="text"
+            width={tableSkeletonCellWidth[cellWidths[i % cellWidths.length]]}
+          />
+        </TableCell>
+      ))}
+    </TableRow>
   );
 }
 

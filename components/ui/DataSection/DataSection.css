@@ -75,4 +75,12 @@
 .bds-data-section__header + .bds-data-section__content {
   margin-top: var(--gap-sm);
 }
+
+/* ─── Loading skeleton (DataSection.loading) ──────────────────── */
+
+.bds-data-section__skeleton-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
 }
