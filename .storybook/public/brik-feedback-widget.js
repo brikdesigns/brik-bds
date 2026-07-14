@@ -289,6 +289,10 @@
       box-shadow: 0 8px 40px rgba(0,0,0,0.25);
       padding: 20px;
       width: 320px;
+      max-width: calc(100vw - 24px);
+      max-height: calc(100vh - 24px);
+      overflow-y: auto;
+      box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     }
     .bfb-form h3 {
@@ -338,6 +342,10 @@
       transition: background 0.12s, border-color 0.12s, color 0.12s;
     }
     .bfb-tag:hover { border-color: var(--border-brand-primary, ${C.brand}); }
+    .bfb-tag:focus-visible {
+      outline: 2px solid var(--border-brand-primary, ${C.brand});
+      outline-offset: 2px;
+    }
     .bfb-tag--active {
       background: var(--background-brand-primary, ${C.brand});
       border-color: var(--background-brand-primary, ${C.brand});
@@ -851,6 +859,69 @@
   // ── Comment form ────────────────────────────────────────────────────────
   let formEl = null;
 
+  // Keyboard-navigable single-select tag group (#1235). Roving tabindex so the
+  // whole group is one Tab stop; Arrow/Home/End move focus; Space/Enter (and
+  // click) toggle selection. Selection is optional — re-activating the current
+  // tag clears it — so `onSelect(null)` is a valid state.
+  function wireTagGroup(group, attr, onSelect) {
+    if (!group) return;
+    const tags = Array.from(group.querySelectorAll('.bfb-tag'));
+    const clear = () => tags.forEach((b) => {
+      b.classList.remove('bfb-tag--active');
+      b.setAttribute('aria-checked', 'false');
+    });
+    const toggle = (btn) => {
+      const wasActive = btn.classList.contains('bfb-tag--active');
+      clear();
+      if (wasActive) { onSelect(null); return; }
+      btn.classList.add('bfb-tag--active');
+      btn.setAttribute('aria-checked', 'true');
+      onSelect(btn.getAttribute(attr));
+    };
+    const focusAt = (i) => {
+      const n = ((i % tags.length) + tags.length) % tags.length;
+      tags.forEach((b, j) => b.setAttribute('tabindex', j === n ? '0' : '-1'));
+      tags[n].focus();
+    };
+    tags.forEach((btn, i) => {
+      btn.addEventListener('click', () => toggle(btn));
+      btn.addEventListener('keydown', (e) => {
+        switch (e.key) {
+          case 'ArrowRight': case 'ArrowDown': e.preventDefault(); focusAt(i + 1); break;
+          case 'ArrowLeft': case 'ArrowUp': e.preventDefault(); focusAt(i - 1); break;
+          case 'Home': e.preventDefault(); focusAt(0); break;
+          case 'End': e.preventDefault(); focusAt(tags.length - 1); break;
+          case ' ': case 'Enter': e.preventDefault(); toggle(btn); break;
+          default: break;
+        }
+      });
+    });
+  }
+
+  // Collision-aware placement. Anchors the popover to the pin (viewport coords),
+  // preferring right-of / below the anchor, flipping to the left / above side
+  // when it would overflow, and clamping within the viewport as a final guard so
+  // the popover — and its Submit button — is never rendered off-screen.
+  function positionForm(el, anchorX, anchorY) {
+    const gap = 16;    // space between the pin and the popover
+    const margin = 12; // min gap from the viewport edge
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const { width: w, height: h } = el.getBoundingClientRect();
+
+    let left = anchorX + gap;
+    if (left + w > vw - margin) left = anchorX - gap - w; // flip to the left
+    if (left < margin) left = Math.max(margin, vw - w - margin);
+
+    let top = anchorY + gap;
+    if (top + h > vh - margin) top = anchorY - gap - h;   // flip above
+    if (top < margin) top = Math.max(margin, vh - h - margin);
+
+    el.style.left = Math.round(left) + 'px';
+    el.style.top = Math.round(top) + 'px';
+    el.style.visibility = '';
+  }
+
   function showForm(pinX, pinY, screenX, screenY) {
     removeForm();
 
@@ -860,23 +931,9 @@
 
     formEl = document.createElement('div');
     formEl.className = 'bfb-form';
-
-    // Position form near click but keep on screen
-    const formWidth = 320;
-    const formHeight = 280;
-    let left = screenX + 20;
-    let top = screenY - 20;
-
-    if (left + formWidth > window.innerWidth - 20) {
-      left = screenX - formWidth - 20;
-    }
-    if (top + formHeight > window.innerHeight - 20) {
-      top = window.innerHeight - formHeight - 20;
-    }
-    if (top < 20) top = 20;
-
-    formEl.style.left = left + 'px';
-    formEl.style.top = top + 'px';
+    // Hidden until measured — positionForm() places it collision-aware after
+    // the content is in the DOM (its height varies with context/tags).
+    formEl.style.visibility = 'hidden';
 
     // Build context display
     const ctx = currentSectionContext || {};
@@ -899,14 +956,14 @@
       <textarea class="bfb-comment" placeholder="What are your thoughts?" data-1p-ignore></textarea>
       <div class="bfb-tag-group">
         <span class="bfb-tag-label">What kind of change?</span>
-        <div class="bfb-tags bfb-tags--change-type">
-          ${CHANGE_TYPES.map((t) => `<button type="button" class="bfb-tag" data-change-type="${t}">${t}</button>`).join('')}
+        <div class="bfb-tags bfb-tags--change-type" role="radiogroup" aria-label="What kind of change?">
+          ${CHANGE_TYPES.map((t, i) => `<button type="button" class="bfb-tag" role="radio" aria-checked="false" tabindex="${i === 0 ? '0' : '-1'}" data-change-type="${t}">${t}</button>`).join('')}
         </div>
       </div>
       <div class="bfb-tag-group">
         <span class="bfb-tag-label">Keep or change?</span>
-        <div class="bfb-tags bfb-tags--disposition">
-          ${DISPOSITIONS.map((d) => `<button type="button" class="bfb-tag" data-disposition="${d}">${d}</button>`).join('')}
+        <div class="bfb-tags bfb-tags--disposition" role="radiogroup" aria-label="Keep or change?">
+          ${DISPOSITIONS.map((d, i) => `<button type="button" class="bfb-tag" role="radio" aria-checked="false" tabindex="${i === 0 ? '0' : '-1'}" data-disposition="${d}">${d}</button>`).join('')}
         </div>
       </div>
       <div class="bfb-screenshot-zone">
@@ -939,23 +996,10 @@
       if (file) processImageFile(file);
     });
 
-    // Structured tag selection (#1381) — single-select per group.
-    formEl.querySelectorAll('.bfb-tags--change-type .bfb-tag').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        pendingChangeType = btn.getAttribute('data-change-type');
-        formEl.querySelectorAll('.bfb-tags--change-type .bfb-tag').forEach((b) => {
-          b.classList.toggle('bfb-tag--active', b === btn);
-        });
-      });
-    });
-    formEl.querySelectorAll('.bfb-tags--disposition .bfb-tag').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        pendingDisposition = btn.getAttribute('data-disposition');
-        formEl.querySelectorAll('.bfb-tags--disposition .bfb-tag').forEach((b) => {
-          b.classList.toggle('bfb-tag--active', b === btn);
-        });
-      });
-    });
+    // Structured tag selection (#1381) — single-select per group, optional
+    // (#1235): keyboard-navigable radiogroups; re-activating a tag clears it.
+    wireTagGroup(formEl.querySelector('.bfb-tags--change-type'), 'data-change-type', (v) => { pendingChangeType = v; });
+    wireTagGroup(formEl.querySelector('.bfb-tags--disposition'), 'data-disposition', (v) => { pendingDisposition = v; });
 
     formEl.querySelector('.bfb-cancel').addEventListener('click', () => {
       screenshotBase64 = null;
@@ -976,6 +1020,9 @@
 
     document.body.appendChild(formEl);
 
+    // Place collision-aware now that the popover is measurable.
+    positionForm(formEl, screenX, screenY);
+
     // Focus the right field
     if (!authorName) {
       formEl.querySelector('.bfb-name').focus();
@@ -995,10 +1042,7 @@
       toast('Please enter your name and a comment');
       return;
     }
-    if (!pendingChangeType || !pendingDisposition) {
-      toast('Please tag the change type and keep/change');
-      return;
-    }
+    // Revision tags are optional (#1235) — omit when unset rather than block submit.
 
     const submitBtn = formEl.querySelector('.bfb-submit');
     submitBtn.disabled = true;
@@ -1025,8 +1069,8 @@
           page_url: window.location.href,
           section_context: Object.keys(currentSectionContext || {}).length > 0 ? currentSectionContext : undefined,
           screenshot_base64: screenshotBase64 || undefined,
-          change_type: pendingChangeType,
-          disposition: pendingDisposition,
+          change_type: pendingChangeType || undefined,
+          disposition: pendingDisposition || undefined,
         }),
       });
 
@@ -1201,6 +1245,17 @@
         processImageFile(item.getAsFile());
         return;
       }
+    }
+  });
+
+  // Escape closes the open comment popover (cancel), mirroring the Cancel
+  // button and matching form-mode behavior (#1235).
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && formEl) {
+      e.preventDefault();
+      screenshotBase64 = null;
+      removePendingPin();
+      removeForm();
     }
   });
 
