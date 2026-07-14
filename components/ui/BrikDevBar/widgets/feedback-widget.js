@@ -197,6 +197,90 @@
       transform: rotate(-45deg) translate(1px, -1px);
     }
 
+    /* Flash a pin when its list row is clicked. */
+    .bfb-pin--flash { animation: bfb-flash 1.2s ease; }
+    @keyframes bfb-flash {
+      0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+      30% { box-shadow: 0 0 0 6px ${C.brand}80; }
+    }
+
+    /* Feedback list panel (#1236). */
+    .bfb-list {
+      position: fixed;
+      bottom: var(--space-lg, 24px);
+      left: var(--space-lg, 24px);
+      z-index: 100000;
+      width: 320px;
+      max-width: calc(100vw - 24px);
+      max-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      background: ${C.white};
+      border-radius: 12px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+    }
+    .bfb-list__header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-bottom: 1px solid ${C.border};
+    }
+    .bfb-list__title { font-size: 13px; font-weight: 700; color: #1b1b1b; }
+    .bfb-list__toggle {
+      margin-left: auto;
+      font-size: 12px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .bfb-list__toggle input:disabled { cursor: not-allowed; }
+    .bfb-list__close {
+      background: none;
+      border: none;
+      font-size: 18px;
+      line-height: 1;
+      color: #888;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .bfb-list__close:hover { color: #1b1b1b; }
+    .bfb-list__items { list-style: none; margin: 0; padding: 6px; overflow-y: auto; }
+    .bfb-list__item {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      align-items: flex-start;
+    }
+    .bfb-list__item:hover { background: #f4f6ff; }
+    .bfb-list__item--done { opacity: 0.55; }
+    .bfb-list__item--done .bfb-list__comment { text-decoration: line-through; }
+    .bfb-list__num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: ${C.brand};
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bfb-list__item--done .bfb-list__num { background: #9aa0a6; }
+    .bfb-list__body { min-width: 0; }
+    .bfb-list__meta { font-size: 11px; color: #888; margin-bottom: 2px; }
+    .bfb-list__comment { font-size: 13px; color: #333; line-height: 1.35; overflow-wrap: anywhere; }
+    .bfb-list__empty { padding: 24px 12px; text-align: center; color: #888; font-size: 13px; }
+
     .bfb-form {
       position: fixed;
       z-index: 100000;
@@ -428,6 +512,7 @@
           author: f.author_name,
           number: i + 1,
           clientCompleted: f.client_completed_at != null,
+          section: f.section || f.section_context?.section_label || f.section_context?.section_type || null,
         });
       });
 
@@ -441,7 +526,7 @@
   function renderPins() {
     document.querySelectorAll('.bfb-pin:not(.bfb-pin--pending), .bfb-pin-done').forEach((el) => el.remove());
 
-    pins.forEach((pin) => {
+    visiblePins().forEach((pin) => {
       const el = document.createElement('div');
       el.className = pin.clientCompleted ? 'bfb-pin bfb-pin--done' : 'bfb-pin';
       el.textContent = String(pin.number);
@@ -491,6 +576,7 @@
       }
       pin.clientCompleted = completed;
       renderPins();
+      refreshListPanel();
       toast(completed ? 'Marked as done' : 'Marked as not done');
     } catch (e) {
       console.warn('[Brik Feedback] Could not update completion:', e);
@@ -529,9 +615,13 @@
   const ICON_COMMENT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
   const ICON_CANCEL = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
   const ICON_BACK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>';
+  const ICON_LIST = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>';
 
   let toolbar = null;      // standalone fallback container (only if no DevBar)
   let feedbackBtn = null;  // standalone fallback toggle button
+  let listBtn = null;      // standalone fallback "Comments" button
+  let listPanelEl = null;  // feedback list panel (#1236)
+  let hideCompleted = false;
 
   // Reflect feedback-mode state on whichever control surface is present.
   function syncFeedbackControls() {
@@ -569,6 +659,9 @@
       { id: 'feedback', label: 'Leave feedback', icon: ICON_COMMENT, order: 10,
         onActivate: () => setFeedbackMode(true),
         onDeactivate: () => setFeedbackMode(false) },
+      { id: 'feedback-list', label: 'Comments', icon: ICON_LIST, order: 15,
+        onActivate: () => openListPanel(),
+        onDeactivate: () => closeListPanel() },
     ];
     if (window.BrikDevBar) {
       slots.forEach((s) => window.BrikDevBar.register(s));
@@ -595,9 +688,106 @@
     feedbackBtn.innerHTML = `${ICON_COMMENT} Leave feedback`;
     feedbackBtn.addEventListener('click', () => setFeedbackMode(!feedbackMode));
 
+    listBtn = document.createElement('button');
+    listBtn.className = 'bfb-btn';
+    listBtn.innerHTML = `${ICON_LIST} Comments`;
+    listBtn.addEventListener('click', () => toggleListPanel());
+
     toolbar.appendChild(backBtn);      // All styles first
     toolbar.appendChild(feedbackBtn);  // then Leave feedback
+    toolbar.appendChild(listBtn);      // then Comments
     document.body.appendChild(toolbar);
+  }
+
+  // ── Feedback list panel (#1236) ──────────────────────────────────────────
+  // Lists all loaded feedback with a "hide completed" toggle. Completion state
+  // is the existing client_completed_at signal (pin.clientCompleted); no new
+  // backend. Hiding completed also drops those pins from the page.
+  function visiblePins() {
+    return hideCompleted ? pins.filter((p) => !p.clientCompleted) : pins.slice();
+  }
+
+  function openListPanel() { if (!listPanelEl) renderListPanel(); syncListControls(); }
+  function closeListPanel() { removeListPanel(); syncListControls(); }
+  function toggleListPanel() { if (listPanelEl) closeListPanel(); else openListPanel(); }
+
+  function removeListPanel() {
+    listPanelEl?.remove();
+    listPanelEl = null;
+  }
+
+  function syncListControls() {
+    const open = !!listPanelEl;
+    if (listBtn) listBtn.classList.toggle('bfb-btn--active', open);
+    if (window.BrikDevBar?.isRegistered?.('feedback-list')) {
+      window.BrikDevBar.setActive('feedback-list', open);
+    }
+  }
+
+  function listPanelInner() {
+    const items = visiblePins();
+    const total = pins.length;
+    const doneCount = pins.filter((p) => p.clientCompleted).length;
+    const rows = items.length
+      ? items.map((p) => `
+          <li class="bfb-list__item${p.clientCompleted ? ' bfb-list__item--done' : ''}" data-pin="${p.number}">
+            <span class="bfb-list__num">${p.number}</span>
+            <div class="bfb-list__body">
+              <div class="bfb-list__meta">${esc(p.author || 'Anonymous')}${p.section ? ` · ${esc(p.section)}` : ''}</div>
+              <div class="bfb-list__comment">${esc(p.comment || '')}</div>
+            </div>
+          </li>`).join('')
+      : `<li class="bfb-list__empty">${total === 0 ? 'No feedback yet.' : 'No open comments — all done. 🎉'}</li>`;
+    return `
+      <div class="bfb-list__header">
+        <span class="bfb-list__title">Feedback (${total})</span>
+        <label class="bfb-list__toggle">
+          <input type="checkbox" class="bfb-list__hide" ${hideCompleted ? 'checked' : ''} ${doneCount === 0 ? 'disabled' : ''} />
+          Hide completed${doneCount ? ` (${doneCount})` : ''}
+        </label>
+        <button type="button" class="bfb-list__close" aria-label="Close feedback list">×</button>
+      </div>
+      <ul class="bfb-list__items">${rows}</ul>
+    `;
+  }
+
+  function renderListPanel() {
+    removeListPanel();
+    listPanelEl = document.createElement('div');
+    listPanelEl.className = 'bfb-list';
+    listPanelEl.setAttribute('role', 'dialog');
+    listPanelEl.setAttribute('aria-label', 'All feedback');
+    listPanelEl.innerHTML = listPanelInner();
+
+    listPanelEl.querySelector('.bfb-list__close').addEventListener('click', closeListPanel);
+    listPanelEl.querySelector('.bfb-list__hide').addEventListener('change', (e) => {
+      hideCompleted = e.target.checked;
+      renderPins();       // drop/restore completed pins on the page too
+      renderListPanel();  // re-render the list with the new filter
+    });
+    listPanelEl.querySelectorAll('.bfb-list__item').forEach((li) => {
+      li.addEventListener('click', () => focusPin(Number(li.getAttribute('data-pin'))));
+    });
+
+    document.body.appendChild(listPanelEl);
+  }
+
+  // Refresh the open list panel when the underlying pins change.
+  function refreshListPanel() {
+    if (listPanelEl) renderListPanel();
+  }
+
+  // Scroll a pin into view and pulse it.
+  function focusPin(number) {
+    const pin = pins.find((p) => p.number === number);
+    if (!pin) return;
+    window.scrollTo({ top: Math.max(0, pin.y - window.innerHeight / 2), behavior: 'smooth' });
+    const el = Array.from(document.querySelectorAll('.bfb-pin:not(.bfb-pin--pending)'))
+      .find((e) => e.textContent === String(number));
+    if (el) {
+      el.classList.add('bfb-pin--flash');
+      setTimeout(() => el.classList.remove('bfb-pin--flash'), 1200);
+    }
   }
 
   registerFeedbackSlots();
@@ -850,12 +1040,22 @@
 
       // Convert pending pin to permanent
       const pinNumber = pins.length + 1;
-      pins.push({ id: created?.feedback?.id, x: pinX, y: pinY, comment, author: name, number: pinNumber, clientCompleted: false });
+      pins.push({
+        id: created?.feedback?.id,
+        x: pinX,
+        y: pinY,
+        comment,
+        author: name,
+        number: pinNumber,
+        clientCompleted: false,
+        section: currentSectionContext?.section_label || currentSectionContext?.section_type || null,
+      });
 
       screenshotBase64 = null;
       removePendingPin();
       removeForm();
       renderPins();
+      refreshListPanel();
       deactivate();
       toast('Feedback sent — thank you!');
     } catch (err) {
