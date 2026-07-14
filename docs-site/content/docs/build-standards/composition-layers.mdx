@@ -99,7 +99,7 @@ When a change names an element ("the card", "the section", "the button"), find t
 A BEM **block name** identifies the blueprint family; it does **not** define the element's layer. A block whose name contains "card" can still be a **Section**. The Card is whichever nested element plays the **Container** role.
 
 <Callout type="warn">
-  `bp-hero-img-card` is a **Section** (`<section>`). The **Card** is its nested Container, `aside.bp-hero-img-card__media-card`. They own different surfaces: the **Section** carries the page-role/band surface; the **Container (Card)** carries its own bounded surface (its `--bds-hero-img-card-media-bg` hook). A surface meant for a service-identified card — e.g. ADR-012's `--surface-service-{line}-inverse` — is a **Container** surface; applying it to the Section repaints the whole band, not the card. (Regression caught in brikdesigns#637.)
+  `bp-hero-img-card` is a **Section** (`<section>`). The **Card** is its nested Container, `aside.bp-hero-img-card__media-card`. They own different surfaces: the **Section** carries the page-role/band surface; the **Container (Card)** carries its own bounded surface (its `--bds-hero-img-card-media-bg` hook). A surface meant for a service-identified card — e.g. ADR-020's `--surface-service-{line}-inverse` — is a **Container** surface; applying it to the Section repaints the whole band, not the card. (Regression caught in brikdesigns#637.)
 </Callout>
 
 The block-vs-container decision rule above answers "what layer is this?"; apply it to the element you're about to change, not to the name that looks closest.

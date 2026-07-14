@@ -1,4 +1,4 @@
-# ADR-012 — Service-line surface `-inverse`: a neutral-light / service-deep theme-flip surface
+# ADR-020 — Service-line surface `-inverse`: a neutral-light / service-deep theme-flip surface
 
 **Status:** Accepted (shipped in v0.107.0)
 **Date:** 2026-06-28
