@@ -205,6 +205,10 @@
       box-shadow: 0 8px 40px rgba(0,0,0,0.25);
       padding: 20px;
       width: 320px;
+      max-width: calc(100vw - 24px);
+      max-height: calc(100vh - 24px);
+      overflow-y: auto;
+      box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     }
     .bfb-form h3 {
@@ -615,6 +619,30 @@
   // ── Comment form ────────────────────────────────────────────────────────
   let formEl = null;
 
+  // Collision-aware placement. Anchors the popover to the pin (viewport coords),
+  // preferring right-of / below the anchor, flipping to the left / above side
+  // when it would overflow, and clamping within the viewport as a final guard so
+  // the popover — and its Submit button — is never rendered off-screen.
+  function positionForm(el, anchorX, anchorY) {
+    const gap = 16;    // space between the pin and the popover
+    const margin = 12; // min gap from the viewport edge
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const { width: w, height: h } = el.getBoundingClientRect();
+
+    let left = anchorX + gap;
+    if (left + w > vw - margin) left = anchorX - gap - w; // flip to the left
+    if (left < margin) left = Math.max(margin, vw - w - margin);
+
+    let top = anchorY + gap;
+    if (top + h > vh - margin) top = anchorY - gap - h;   // flip above
+    if (top < margin) top = Math.max(margin, vh - h - margin);
+
+    el.style.left = Math.round(left) + 'px';
+    el.style.top = Math.round(top) + 'px';
+    el.style.visibility = '';
+  }
+
   function showForm(pinX, pinY, screenX, screenY) {
     removeForm();
 
@@ -624,23 +652,9 @@
 
     formEl = document.createElement('div');
     formEl.className = 'bfb-form';
-
-    // Position form near click but keep on screen
-    const formWidth = 320;
-    const formHeight = 280;
-    let left = screenX + 20;
-    let top = screenY - 20;
-
-    if (left + formWidth > window.innerWidth - 20) {
-      left = screenX - formWidth - 20;
-    }
-    if (top + formHeight > window.innerHeight - 20) {
-      top = window.innerHeight - formHeight - 20;
-    }
-    if (top < 20) top = 20;
-
-    formEl.style.left = left + 'px';
-    formEl.style.top = top + 'px';
+    // Hidden until measured — positionForm() places it collision-aware after
+    // the content is in the DOM (its height varies with context/tags).
+    formEl.style.visibility = 'hidden';
 
     // Build context display
     const ctx = currentSectionContext || {};
@@ -739,6 +753,9 @@
     });
 
     document.body.appendChild(formEl);
+
+    // Place collision-aware now that the popover is measurable.
+    positionForm(formEl, screenX, screenY);
 
     // Focus the right field
     if (!authorName) {
