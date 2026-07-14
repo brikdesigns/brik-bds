@@ -132,6 +132,19 @@ if [ -n "$STAGED_SLOT_FILES" ]; then
   node scripts/slot-pattern-check.mjs --format md --files $STAGED_SLOT_FILES
 fi
 
+# ── Service-icon registry drift (#1242) ──
+# Keeps components/ui/ServiceTag/service-icons.generated.ts in sync with the
+# source glyphs so the bundled offline set (and the no-404 guarantee) can't go
+# stale. Local mirror of `npm run gen:service-icons:check`.
+# NOTE: this lives in husky (not a CI workflow like logo-registry-check.yml)
+# only until the gh token regains the `workflow` scope needed to push
+# .github/workflows/* — tracked in #1243. Restore the CI gate there.
+STAGED_SERVICE_ICONS=$(git diff --cached --name-only --diff-filter=ACMD -- 'components/ui/ServiceTag/icons/**/*.svg' 'components/ui/ServiceTag/service-icons.generated.ts' 'scripts/gen-service-icons.mjs')
+if [ -n "$STAGED_SERVICE_ICONS" ]; then
+  echo "Checking bundled service-icon registry is in sync (#1242)..."
+  npm run --silent gen:service-icons:check
+fi
+
 # Typecheck always runs (fast, catches real errors)
 npm run typecheck
 

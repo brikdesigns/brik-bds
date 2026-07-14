@@ -60,26 +60,13 @@
 
 /* ─── Icon ───────────────────────────────────────────────────── */
 
-/* Per-service glyph rendered via mask so the fill is CSS-recolorable (#574).
-   The glyph SVG is the mask; `currentColor` paints it the tag's service text
-   token, so the icon always matches the label and retones per theme. The glyph
-   URL + box size are set inline (runtime values) on the element.
-
-   The System-2 glyphs are 20×20 SVGs with a ~30% built-in transparent inset,
-   so `mask-size: contain` left the visible mark at only ~70% of the box and it
-   read too small in tags/badges (a prior px bump didn't fix the root). Scaling
-   the mask to 140% consumes the symmetric inset — the visible glyph now fills
-   ~100% of the box, centered, without clipping actual glyph content. */
+/* Per-service glyph — an inline SVG bundled by BDS (#1242), recolored to the
+   tag's service text token via `fill="currentColor"` (replacing the old
+   mask-image recolor; #574). Box size and the inset-cropping `viewBox` are set
+   on the element in ServiceTag.tsx. */
 .bds-service-tag__icon {
   display: block;
   flex-shrink: 0;
-  background-color: currentColor;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: 140%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: 140%;
 }
 
 /* ─── Icon-only variant (square badge) ───────────────────────── */

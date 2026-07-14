@@ -1,12 +1,7 @@
-import { type HTMLAttributes, useState } from 'react';
+import { type HTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
-import {
-  categoryConfig,
-  getServiceIconPath,
-  getServiceLineIconPath,
-  type ServiceLine,
-  type ServiceTagSize,
-} from './service-config';
+import { categoryConfig, resolveServiceIcon, type ServiceLine, type ServiceTagSize } from './service-config';
+import { SERVICE_ICON_SVGS } from './service-icons.generated';
 import './ServiceTag.css';
 
 export type ServiceTagVariant = 'text' | 'icon-text' | 'icon';
@@ -75,19 +70,14 @@ export function ServiceTag({
 }: ServiceTagProps) {
   const config = categoryConfig[category];
   const displayLabel = label ?? config.label;
-  const [imageError, setImageError] = useState(false);
 
   if (variant === 'icon') {
     const boxSize = boxSizeMap[size];
     const iconSize = Math.round(boxSize * iconScaleMap[size]);
-    // Icon-only tags have no label, so an empty colored box reads as broken.
-    // Fall back to the service-line default glyph when no specific service is
-    // named, so a category tag still shows its line icon.
-    const iconSrc = serviceName
-      ? getServiceIconPath(category, serviceName)
-      : getServiceLineIconPath(category);
-    const showIcon = !imageError;
-
+    // Icon-only tags have no label, so an empty box reads as broken. Resolution
+    // always yields a bundled glyph (service glyph, else the service-line
+    // default), so a category tag with no service still shows its line icon —
+    // and it can never 404.
     return (
       <span
         className={bdsClass(
@@ -101,15 +91,13 @@ export function ServiceTag({
         title={serviceName || config.label}
         {...props}
       >
-        {showIcon && (
-          <ServiceTagIcon src={iconSrc} size={iconSize} onError={() => setImageError(true)} />
-        )}
+        <ServiceTagIcon glyph={resolveServiceIcon(category, serviceName)} size={iconSize} />
       </span>
     );
   }
 
   const iconSize = tagIconSizeMap[size];
-  const showIcon = variant === 'icon-text' && !!serviceName && !imageError;
+  const showIcon = variant === 'icon-text' && !!serviceName;
 
   return (
     <span
@@ -123,40 +111,39 @@ export function ServiceTag({
       style={style}
       {...props}
     >
-      {showIcon && (
-        <ServiceTagIcon
-          src={getServiceIconPath(category, serviceName!)}
-          size={iconSize}
-          onError={() => setImageError(true)}
-        />
-      )}
+      {showIcon && <ServiceTagIcon glyph={resolveServiceIcon(category, serviceName)} size={iconSize} />}
       {displayLabel}
     </span>
   );
 }
 
 /**
- * ServiceTagIcon — the per-service glyph, rendered as a CSS `mask-image` so the
- * fill is recolorable (the masked element takes `currentColor` from the tag's
- * service text token). The custom service SVGs are "System 2" — loaded by URL
- * from the consuming app's `/public/icons`, not Phosphor — so they keep the
- * url() asset model; only the recolor mechanism changes (#574).
+ * ServiceTagIcon — the per-service glyph, rendered as an inline SVG bundled by
+ * BDS (#1242). The glyph markup ships in `service-icons.generated.ts`, so it
+ * paints on first render with no fetch and no possible 404 — resolution always
+ * yields a bundled key. `fill="currentColor"` recolors the mark to the tag's
+ * service text token (replacing the old mask-image recolor; #574).
  *
- * A `<mask-image>` can't surface a load error, so a visually-hidden `<img>`
- * probe preserves the prior graceful "hide on missing asset" fallback.
+ * The source marks are 20×20 with a ~30% symmetric transparent inset; the
+ * `3 3 14 14` viewBox crops that padding so the visible glyph fills the box
+ * (the SVG-native equivalent of the prior `mask-size: 140%`).
  */
-function ServiceTagIcon({ src, size, onError }: { src: string; size: number; onError: () => void }) {
+function ServiceTagIcon({ glyph, size }: { glyph: string; size: number }) {
+  const svg = SERVICE_ICON_SVGS[glyph];
+  if (!svg) return null;
   return (
-    <>
-      <span
-        aria-hidden
-        className="bds-service-tag__icon"
-        // Runtime values: dynamic glyph URL + Figma-driven px box. Static mask
-        // sizing/positioning + the currentColor fill live in ServiceTag.css.
-        style={{ width: size, height: size, maskImage: `url("${src}")`, WebkitMaskImage: `url("${src}")` }}
-      />
-      <img src={src} alt="" hidden onError={onError} />
-    </>
+    <svg
+      aria-hidden
+      focusable={false}
+      className="bds-service-tag__icon"
+      width={size}
+      height={size}
+      viewBox="3 3 14 14"
+      fill="currentColor"
+      // Trusted, build-time-bundled markup from ServiceTag/icons/*/*.svg — never
+      // user input. Inlined (not a URL) so the glyph paints with no network.
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
   );
 }
 

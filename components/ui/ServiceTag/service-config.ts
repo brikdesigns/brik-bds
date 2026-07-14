@@ -4,6 +4,8 @@
  * component (removed in #572; dir renamed in #731).
  */
 
+import { SERVICE_ICON_SVGS } from './service-icons.generated';
+
 /**
  * Service-line identifier. `back-office` is canonical; `service` is a
  * **@deprecated** alias kept for non-breaking package-API compat during the
@@ -98,23 +100,58 @@ function iconDir(category: ServiceLine): string {
   return iconDirOverrides[category] ?? category;
 }
 
-export function getServiceIconPath(category: ServiceLine, serviceName: string): string {
-  const dir = iconDir(category);
+/**
+ * Derive the glyph key (file basename, no dir/extension) for a service name —
+ * override map first, then the per-line naming convention. Pure string logic;
+ * the returned key may or may not exist in the bundled set (callers that need a
+ * guaranteed-present key use {@link resolveServiceIcon}, which falls back).
+ */
+function deriveIconName(category: ServiceLine, serviceName: string): string {
   if (serviceIconOverrides[serviceName]) {
-    return `/icons/${dir}/${serviceIconOverrides[serviceName]}.svg`;
+    return serviceIconOverrides[serviceName];
   }
   const normalized = normalizeServiceName(serviceName);
   if (category === 'information') {
-    return `/icons/${dir}/info-${normalized.replace('information-', '')}.svg`;
+    return `info-${normalized.replace('information-', '')}`;
   }
-  return `/icons/${dir}/${category}-${normalized.replace(`${category}-`, '')}.svg`;
+  return `${category}-${normalized.replace(`${category}-`, '')}`;
 }
 
 /**
- * Service-line default icon basename — the line-level glyph used when an icon
- * variant has no specific `serviceName` (e.g. a category tag with no service).
- * Without this, `<ServiceTag variant="icon">` rendered an empty colored box.
- * Files resolve to the consuming app's `/public/icons/{dir}/{name}.svg`.
+ * @deprecated ServiceTag now renders glyphs from the BDS-bundled inline set
+ * (#1242) — it no longer fetches a URL from the consumer's `/public/icons/`, so
+ * this path is unused internally. Kept one release for API compat; consumers on
+ * the old URL model can migrate off their `/public/icons/` service assets. Use
+ * {@link resolveServiceIcon} to get a guaranteed-bundled glyph key instead.
+ */
+export function getServiceIconPath(category: ServiceLine, serviceName: string): string {
+  return `/icons/${iconDir(category)}/${deriveIconName(category, serviceName)}.svg`;
+}
+
+/**
+ * Resolve a service to a glyph key **guaranteed present** in the bundled set.
+ * Order: the derived per-service key if bundled, else the service-line default
+ * (always bundled). Because the result is always a real bundled key, ServiceTag
+ * can never emit a missing glyph — the durable fix for the 54/73 icon 404s that
+ * the old consumer-shipped-file model produced (#1242).
+ *
+ * @param serviceName Omit for a line-level tag — resolves straight to the
+ *   service-line default glyph.
+ */
+export function resolveServiceIcon(category: ServiceLine, serviceName?: string): string {
+  if (serviceName) {
+    const derived = deriveIconName(category, serviceName);
+    if (SERVICE_ICON_SVGS[derived]) return derived;
+  }
+  return serviceLineDefaultIcon[category];
+}
+
+/**
+ * Service-line default glyph key — the line-level glyph used when an icon
+ * variant has no specific `serviceName` (e.g. a category tag with no service),
+ * and the guaranteed fallback in {@link resolveServiceIcon}. Every value here
+ * MUST be a bundled glyph key (see service-icons.generated.ts); the drift gate
+ * `npm run gen:service-icons:check` keeps the source set in sync.
  */
 const serviceLineDefaultIcon: Record<ServiceLine, string> = {
   brand: 'brand-design',
@@ -126,7 +163,11 @@ const serviceLineDefaultIcon: Record<ServiceLine, string> = {
   service: 'back-office-design',
 };
 
-/** Line-level default icon path — fallback for icon variants lacking a serviceName. */
+/**
+ * @deprecated Superseded by {@link resolveServiceIcon} (glyphs render from the
+ * BDS-bundled inline set, not a consumer URL — #1242). Kept one release for API
+ * compat.
+ */
 export function getServiceLineIconPath(category: ServiceLine): string {
   return `/icons/${iconDir(category)}/${serviceLineDefaultIcon[category]}.svg`;
 }
