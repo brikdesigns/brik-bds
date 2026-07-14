@@ -42,6 +42,12 @@ Edit mode is the active form state — footer auto-renders `[Cancel] [Save]`. Pa
 
 <Canvas of={Stories.Compact} />
 
+### Loading
+
+`loading` swaps the header (title / subtitle / description) and body for `Skeleton` placeholders — 3 `SheetSection`-shaped blocks, each a heading line plus 4 field rows. The footer renders unchanged (the sheet stays closable); `secondaryAction` and `tabs` are suppressed while loading.
+
+<Canvas of={Stories.Loading} />
+
 ## Patterns
 
 ### Read ↔ edit toggle

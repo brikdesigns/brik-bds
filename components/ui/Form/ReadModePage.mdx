@@ -22,6 +22,27 @@ This page pattern composes four BDS components:
 
 ---
 
+## Loading state
+
+Before data resolves — first navigation to a detail page, SSR still in flight — pass `loading` to each `DataSection` instead of inventing a page-local skeleton. It swaps the body for `Skeleton` field rows shaped to match the `FieldGrid` the section would otherwise render (same `columns`, same cell count), keeps the section `title` real, and suppresses `actions`.
+
+<Canvas of={DataSectionStories.Loading} />
+
+```tsx
+<DataSection title="Identity" actions={<ViewEditToggle />} loading={isLoading}>
+  <FieldGrid columns={2}>
+    <Field label="Business Name">{client.name}</Field>
+    <Field label="Legal Name">{client.legalName}</Field>
+    <Field label="DBA">{client.dba}</Field>
+    <Field label="Year Founded">{client.yearFounded}</Field>
+  </FieldGrid>
+</DataSection>
+```
+
+`children` stays the same `FieldGrid` + `Field` composition consumers already write — `loading` only changes what renders, not what's passed in. No separate skeleton component to keep in sync with the real shape.
+
+---
+
 ## Page-level read/edit split
 
 When the read page itself is bimodal (the whole record toggles between view and edit, e.g. a catalog admin's full edit form), use the route-split pattern:
