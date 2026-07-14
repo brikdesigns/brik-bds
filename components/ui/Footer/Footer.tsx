@@ -90,12 +90,27 @@ export interface FooterProps extends HTMLAttributes<HTMLElement> {
    * ADR-012.
    */
   linkComponent?: BdsLinkComponent;
+  /**
+   * Constrain the footer's inner content to a canonical content width while
+   * the background stays full-bleed. Backed by the `--content-width-*` token
+   * family (see design.brikdesigns.com/docs/primitives/size) — content centers
+   * with a `--padding-lg` gutter fallback at narrow viewports. Omit for the
+   * default full-width behavior.
+   */
+  containerMaxWidth?: FooterContainerWidth;
 }
 
 /**
  * Footer variant
  */
 export type FooterVariant = 'default' | 'brand' | 'inverse';
+
+/**
+ * Footer content-width constraint. Maps to the `--content-width-*` token
+ * family. `full` is intentionally omitted — it is equivalent to the default
+ * unconstrained footer.
+ */
+export type FooterContainerWidth = 'narrow' | 'default' | 'wide' | 'xl';
 
 /**
  * Renders a footer link with the injected `linkComponent` (client-side routing)
@@ -193,6 +208,7 @@ export function Footer({
   socialLinks,
   aboveTop,
   variant = 'default',
+  containerMaxWidth,
   linkComponent,
   className = '',
   style,
@@ -206,7 +222,12 @@ export function Footer({
 
   return (
     <footer
-      className={bdsClass('bds-footer', `bds-footer--${variant}`, className)}
+      className={bdsClass(
+        'bds-footer',
+        `bds-footer--${variant}`,
+        containerMaxWidth && `bds-footer--constrain-${containerMaxWidth}`,
+        className,
+      )}
       style={style}
       {...props}
     >
