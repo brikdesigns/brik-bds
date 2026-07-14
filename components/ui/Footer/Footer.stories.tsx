@@ -89,6 +89,12 @@ const meta: Meta<typeof Footer> = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     variant: { control: 'select', options: ['default', 'brand', 'inverse'] },
+    containerMaxWidth: {
+      control: 'select',
+      options: [undefined, 'narrow', 'default', 'wide', 'xl'],
+      description:
+        'Constrain inner content to a `--content-width-*` while the background stays full-bleed. Omit for full-width.',
+    },
     columnHeadingLevel: {
       control: 'select',
       options: ['h2', 'h3', 'h4', 'h5', 'h6'],
@@ -116,6 +122,18 @@ export const Playground: Story = {
     columns: sampleColumns,
     copyright: '\u00A9 2026 Brik Designs. All rights reserved.',
     variant: 'default',
+  },
+};
+
+/** @summary Inner content constrained to a content width while the background spans full-bleed */
+export const Constrained: Story = {
+  args: {
+    logo: <LogoPlaceholder />,
+    tagline: 'Building better digital experiences for small businesses.',
+    columns: sampleColumns,
+    copyright: '© 2026 Brik Designs. All rights reserved.',
+    variant: 'default',
+    containerMaxWidth: 'xl',
   },
 };
 
