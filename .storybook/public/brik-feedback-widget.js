@@ -521,43 +521,89 @@
     }
   }
 
-  // ── Toolbar ─────────────────────────────────────────────────────────────
-  const toolbar = document.createElement('div');
-  toolbar.className = 'bfb-toolbar';
+  // ── Controls (#1234) ──────────────────────────────────────────────────────
+  // Register into the shared DevBar so the review controls render as one ordered
+  // group: All styles (0) → Leave feedback (10) → Inspect (20, self-registered
+  // by inspect-widget). Falls back to a standalone bottom-right toolbar when no
+  // DevBar is present on the page (mirrors inspect-widget's fallback).
+  const ICON_COMMENT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+  const ICON_CANCEL = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+  const ICON_BACK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>';
 
-  const feedbackBtn = document.createElement('button');
-  feedbackBtn.className = 'bfb-btn';
-  feedbackBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Leave feedback';
+  let toolbar = null;      // standalone fallback container (only if no DevBar)
+  let feedbackBtn = null;  // standalone fallback toggle button
 
-  feedbackBtn.addEventListener('click', () => {
-    feedbackMode = !feedbackMode;
-    if (feedbackMode) {
-      feedbackBtn.className = 'bfb-btn bfb-btn--active';
-      feedbackBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> Cancel';
+  // Reflect feedback-mode state on whichever control surface is present.
+  function syncFeedbackControls() {
+    if (feedbackBtn) {
+      feedbackBtn.className = feedbackMode ? 'bfb-btn bfb-btn--active' : 'bfb-btn';
+      feedbackBtn.innerHTML = feedbackMode ? `${ICON_CANCEL} Cancel` : `${ICON_COMMENT} Leave feedback`;
+    }
+    if (window.BrikDevBar?.isRegistered?.('feedback')) {
+      window.BrikDevBar.setActive('feedback', feedbackMode);
+    }
+  }
+
+  function setFeedbackMode(on) {
+    feedbackMode = on;
+    if (on) {
       document.documentElement.classList.add('bfb-crosshair');
       toast('Click anywhere on the page to drop a pin');
     } else {
-      deactivate();
+      document.documentElement.classList.remove('bfb-crosshair');
+      removePendingPin();
+      removeForm();
     }
-  });
-
-  const backBtn = document.createElement('a');
-  backBtn.className = 'bfb-btn';
-  backBtn.href = DIRECTORY_URL;
-  backBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> All styles';
-
-  toolbar.appendChild(backBtn);
-  toolbar.appendChild(feedbackBtn);
-  document.body.appendChild(toolbar);
-
-  function deactivate() {
-    feedbackMode = false;
-    feedbackBtn.className = 'bfb-btn';
-    feedbackBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Leave feedback';
-    document.documentElement.classList.remove('bfb-crosshair');
-    removePendingPin();
-    removeForm();
+    syncFeedbackControls();
   }
+
+  // Kept for existing callers (e.g. after a successful submit).
+  function deactivate() {
+    setFeedbackMode(false);
+  }
+
+  function registerFeedbackSlots() {
+    const slots = [
+      { id: 'all-styles', label: 'All styles', icon: ICON_BACK, order: 0,
+        onActivate: () => { window.location.href = DIRECTORY_URL; } },
+      { id: 'feedback', label: 'Leave feedback', icon: ICON_COMMENT, order: 10,
+        onActivate: () => setFeedbackMode(true),
+        onDeactivate: () => setFeedbackMode(false) },
+    ];
+    if (window.BrikDevBar) {
+      slots.forEach((s) => window.BrikDevBar.register(s));
+      return true;
+    }
+    // Queue for devbar.js if it loads after us.
+    window.BrikDevBarQueue = window.BrikDevBarQueue || [];
+    slots.forEach((s) => window.BrikDevBarQueue.push(s));
+    return false;
+  }
+
+  function buildStandaloneToolbar() {
+    if (toolbar) return;
+    toolbar = document.createElement('div');
+    toolbar.className = 'bfb-toolbar';
+
+    const backBtn = document.createElement('a');
+    backBtn.className = 'bfb-btn';
+    backBtn.href = DIRECTORY_URL;
+    backBtn.innerHTML = `${ICON_BACK} All styles`;
+
+    feedbackBtn = document.createElement('button');
+    feedbackBtn.className = 'bfb-btn';
+    feedbackBtn.innerHTML = `${ICON_COMMENT} Leave feedback`;
+    feedbackBtn.addEventListener('click', () => setFeedbackMode(!feedbackMode));
+
+    toolbar.appendChild(backBtn);      // All styles first
+    toolbar.appendChild(feedbackBtn);  // then Leave feedback
+    document.body.appendChild(toolbar);
+  }
+
+  registerFeedbackSlots();
+  setTimeout(() => {
+    if (!window.BrikDevBar) buildStandaloneToolbar();
+  }, 80);
 
   // ── Section detection (delegates to the shared inspector detector) ────────
   // ADR-007 makes the inspector the single element-context detector. On mockup
@@ -588,7 +634,7 @@
 
   document.addEventListener('click', (e) => {
     if (!feedbackMode) return;
-    if (e.target.closest('.bfb-toolbar, .bfb-form, .bfb-pin')) return;
+    if (e.target.closest('.bfb-toolbar, .bdb-bar, .bfb-form, .bfb-pin')) return;
 
     e.preventDefault();
     e.stopPropagation();
