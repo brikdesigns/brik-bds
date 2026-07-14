@@ -3,7 +3,7 @@
 **Status:** Accepted (2026-06-02) · Amended 2026-06-16 (#865 — dark-step variants are mode-invariant; see Amendment)
 **Date:** 2026-06-02
 **Supersedes:** Reverses three locked criteria in [#563](https://github.com/brikdesigns/brik-bds/issues/563) (see §Supersedes below)
-**Superseded by:** — (§Decision pt-3 "no per-service `-inverse`" partially narrowed by [ADR-012](./ADR-012-service-surface-inverse.md) for the surface purpose only)
+**Superseded by:** — (§Decision pt-3 "no per-service `-inverse`" partially narrowed by [ADR-020](./ADR-020-service-surface-inverse.md) for the surface purpose only)
 **Related:** [#563](https://github.com/brikdesigns/brik-bds/issues/563) (service-token reconciliation), [#564](https://github.com/brikdesigns/brik-bds/issues/564) (token-name anatomy — naming formula now in [token-anatomy](../../docs-site/content/docs/primitives/token-anatomy.mdx) via [#809](https://github.com/brikdesigns/brik-bds/pull/809)), [#761](https://github.com/brikdesigns/brik-bds/issues/761) (Brand Kit semantic audit), [Figma Library Architecture](../../docs-site/content/docs/getting-started/figma-library-architecture.mdx)
 **Owner:** Nick Stanerson
 

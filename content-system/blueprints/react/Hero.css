@@ -156,7 +156,7 @@
  * is a broad page-level container, not a small bounded component — per the
  * service-token decision tree (`-surface-` for sections/heroes/cards;
  * `-background-` for badges/tags/pills/buttons). It uses the `-inverse` step
- * (ADR-012): the card reads as neutral chrome — white — in light mode, then
+ * (ADR-020): the card reads as neutral chrome — white — in light mode, then
  * carries the line's deep {hue}-darkest tint in dark mode. The companion text
  * flip lives in the dark-mode block below (brik-bds#1017).
  *
