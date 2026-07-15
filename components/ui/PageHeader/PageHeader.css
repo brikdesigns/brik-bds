@@ -107,8 +107,13 @@
   display: flex;
   gap: var(--gap-sm);
   align-items: flex-start;
-  padding-top: var(--padding-xl);
   width: 100%;
+  /* No extra top padding: the root `--page-header-section-gap` (--gap-xl)
+     already separates the metadata section from the title row, symmetric with
+     the gap below it to the tabs. The old `padding-top: var(--padding-xl)` was
+     spacing that accompanied the internal divider removed in brik-bds#400 —
+     leaving it double-stacked the gap, which only showed when the `metadata`
+     slot was populated (headers without metadata looked fine). */
 }
 
 .bds-page-header__metadata-item {
