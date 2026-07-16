@@ -47,6 +47,31 @@ The canonical URL pattern for bimodal pages is `/{table}/[slug]` (read) and `/{t
 
 <Canvas of={Stories.EditMode} />
 
+## Structured actions
+
+`actions` accepts any `ReactNode`, but a bare flex row lets each surface pick its own ordering and mix button sizes. `PageHeaderActions` fixes the hierarchy once:
+
+- **Ordering** — `destructive` (far left) · `secondary` · `primary` (far right). The primary lands at the reading-end; the destructive is held away from it.
+- **Spacing + alignment** — composed on `ButtonGroup` (`align="end"`), the canonical action-row treatment.
+- **Size** — a single `size` (default `md`) is injected into every slotted button that doesn't set its own, so a group can't render a `sm` next to an `lg`.
+
+Slots accept rendered elements — a raw `<Button>` or a consumer wrapper (`<DeleteCompanyButton>`) — so it fits both catalog buttons and app-specific action components. Non-breaking: pass a `PageHeaderActions` into `actions` only when you want the enforced hierarchy; existing raw-`ReactNode` usage is unchanged.
+
+```tsx
+<PageHeader
+  title="Acme Corp"
+  actions={
+    <PageHeaderActions
+      destructive={<Button variant="destructive">Delete</Button>}
+      secondary={<Button variant="outline">Edit</Button>}
+      primary={<Button variant="primary">New Proposal</Button>}
+    />
+  }
+/>
+```
+
+<Canvas of={Stories.StructuredActions} />
+
 ## Props
 
 <ArgTypes of={Stories} />
