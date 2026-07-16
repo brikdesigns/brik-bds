@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PageHeader } from './PageHeader';
+import { PageHeaderActions } from './PageHeaderActions';
 import { Breadcrumb } from '../Breadcrumb';
 import { TabBar, type TabItem } from '../TabBar';
-import { Button } from '../Button';
+import { Button, type ButtonSize } from '../Button';
 import { ServiceTag } from '../ServiceTag';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
@@ -313,7 +314,83 @@ export const EditMode: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   5. TUNABLE SPACING — component-scoped CSS variables
+   5. STRUCTURED ACTIONS — PageHeaderActions hierarchy
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * `PageHeaderActions` replaces the hand-composed flex div consumers used to
+ * pass into `actions`. It fixes the hierarchy — `destructive` (far left) ·
+ * `secondary` · `primary` (far right) — and injects a single shared `size`
+ * (default `md`) into every slotted button, so a group can't render
+ * mismatched sizes side by side (BACKLOG-638). Shown here at `sm` / `md` /
+ * `lg`; each row stays internally size-consistent regardless of what the
+ * individual buttons declare.
+ *
+ * @summary Structured action hierarchy at sm / md / lg
+ */
+export const StructuredActions: Story = {
+  render: () => {
+    const sizes: ButtonSize[] = ['sm', 'md', 'lg'];
+    return (
+      <Stack gap="var(--gap-huge)">
+        {sizes.map((size) => (
+          <div key={size}>
+            <SectionLabel>{`Hierarchy — size="${size}"`}</SectionLabel>
+            <PageHeader
+              title="Acme Corp"
+              subtitle="Enterprise client since 2024"
+              breadcrumbs={
+                <Breadcrumb items={[
+                  { label: 'Admin', href: '#' },
+                  { label: 'Companies', href: '#' },
+                  { label: 'Acme Corp' },
+                ]} />
+              }
+              actions={
+                <PageHeaderActions
+                  size={size}
+                  destructive={<Button variant="destructive">Delete</Button>}
+                  secondary={<Button variant="outline">Edit</Button>}
+                  primary={<Button variant="primary">New Proposal</Button>}
+                />
+              }
+              metadata={[
+                { label: 'Status', value: 'Active' },
+                { label: 'Plan', value: 'Enterprise' },
+              ]}
+            />
+          </div>
+        ))}
+
+        <div>
+          <SectionLabel>Primary only</SectionLabel>
+          <PageHeader
+            title="Website Design"
+            subtitle="Custom web development and design service."
+            actions={<PageHeaderActions primary={<Button variant="primary">Edit Service</Button>} />}
+          />
+        </div>
+
+        <div>
+          <SectionLabel>Secondary + primary (no destructive)</SectionLabel>
+          <PageHeader
+            title="Analytics"
+            subtitle="Monitor key performance metrics."
+            actions={
+              <PageHeaderActions
+                secondary={<Button variant="outline">Export</Button>}
+                primary={<Button variant="primary">Share</Button>}
+              />
+            }
+          />
+        </div>
+      </Stack>
+    );
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   6. TUNABLE SPACING — component-scoped CSS variables
    ═══════════════════════════════════════════════════════════════ */
 
 /**
