@@ -8,7 +8,7 @@
   --text-warning: var(--color-system-yellow);
   --text-accent-red: var(--color-system-red);
   --text-primary: var(--color-grayscale-lightest);
-  --text-secondary: var(--color-grayscale-light);
+  --text-secondary: var(--color-grayscale-lighter);
   --text-brand-primary: var(--color-poppy-light);
   --text-inverse: var(--color-grayscale-black);
   --text-accent-yellow: var(--color-system-yellow);
@@ -19,11 +19,8 @@
   --text-muted: var(--color-grayscale-dark);
   --text-on-color-dark: var(--color-grayscale-white);
   --text-text-link: var(--color-poppy-light);
-  --text-on-color-light: var(--color-grayscale-black);
+  --text-on-color-light: var(--color-grayscale-darkest);
   --text-disabled: var(--color-grayscale-dark); /** Disabled text (dark mode) */
-  --text-info: var(--color-system-neutral);
-  --text-secondary-inverse: var(--color-grayscale-dark); /** Secondary text on inverse surface (dark mode) */
-  --text-muted-inverse: var(--color-grayscale-light); /** Muted text on inverse surface (dark mode) */
   --text-service-brand: var(--color-yellow-light);
   --text-service-information: var(--color-blue-light);
   --text-service-back-office: var(--color-orange-light);
@@ -39,24 +36,25 @@
   --text-service-brand-on-dark: var(--color-yellow-lighter);
   --text-service-brand-on-light: var(--color-yellow-darkest);
   --text-service-marketing-on-dark: var(--color-green-lighter);
+  --text-accent: var(--color-tan-light);
   --border-negative: var(--color-system-red);
   --border-positive: var(--color-system-green);
   --border-warning: var(--color-system-yellow);
   --border-input: var(--color-grayscale-dark);
   --border-primary: var(--color-grayscale-darker);
   --border-brand-primary: var(--color-poppy-light);
-  --border-on-color-dark: var(--color-grayscale-black);
-  --border-secondary: var(--color-grayscale-light);
-  --border-muted: var(--color-grayscale-dark);
-  --border-inverse: var(--color-grayscale-black);
-  --border-on-color-light: var(--color-grayscale-white);
-  --border-disabled: var(--color-grayscale-darker); /** Disabled border (dark mode) */
-  --border-info: var(--color-system-neutral);
+  --border-on-color-dark: var(--color-grayscale-white);
+  --border-secondary: var(--color-grayscale-darker);
+  --border-muted: var(--color-grayscale-darker);
+  --border-inverse: var(--color-grayscale-darkest);
+  --border-on-color-light: var(--color-grayscale-darkest);
+  --border-disabled: var(--color-grayscale-dark); /** Disabled border (dark mode) */
   --border-service-brand: var(--color-yellow-light);
   --border-service-information: var(--color-blue-light);
   --border-service-back-office: var(--color-orange-light);
   --border-service-product: var(--color-purple-light);
   --border-service-marketing: var(--color-green-light);
+  --border-accent: var(--color-grayscale-light);
   --background-negative: var(--color-system-red);
   --background-positive: var(--color-system-green);
   --background-warning: var(--color-system-yellow);
@@ -67,21 +65,19 @@
   --background-accent-purple: var(--color-system-purple);
   --background-accent-blue: var(--color-system-blue);
   --background-accent-green: var(--color-system-green);
-  --background-primary: var(--color-grayscale-black);
-  --background-secondary: var(--color-grayscale-light);
+  --background-primary: var(--color-grayscale-darkest);
+  --background-secondary: var(--color-grayscale-black);
   --background-brand-primary: var(--color-poppy-light);
-  --background-inverse: var(--color-grayscale-white);
+  --background-inverse: var(--color-grayscale-lightest);
   --background-accent-yellow: var(--color-system-yellow);
   --background-accent-orange: var(--color-system-orange);
   --background-input: var(--color-grayscale-black);
   --background-on-color-dark: var(--color-grayscale-white);
   --background-muted: var(--color-grayscale-darker);
-  --background-on-color-light: var(--color-grayscale-black);
+  --background-on-color-light: var(--color-grayscale-darkest);
   --background-brand-primary-hover: var(--color-poppy-dark); /** Primary button hover background (dark mode) */
-  --background-brand-primary-pressed: var(--color-poppy-lighter); /** Primary button pressed background (dark mode) */
-  --background-disabled: var(--color-grayscale-darker); /** Disabled background (dark mode) */
-  --background-info: var(--color-system-neutral);
-  --background-primary-pressed: var(--color-grayscale-darker);
+  --background-brand-primary-pressed: var(--color-poppy-darker); /** Primary button pressed background (dark mode) */
+  --background-disabled: var(--color-grayscale-dark); /** Disabled background (dark mode) */
   --background-service-brand: var(--color-yellow-light);
   --background-service-brand-on-light: var(--color-yellow-darkest);
   --background-service-marketing: var(--color-green-light);
@@ -97,23 +93,19 @@
   --background-service-back-office-on-dark: var(--color-orange-lighter);
   --background-service-product-on-dark: var(--color-purple-lighter);
   --background-service-information-on-dark: var(--color-blue-lighter);
+  --background-accent: var(--color-tan-light);
   --surface-positive: var(--color-system-green-light);
   --surface-negative: var(--color-system-red-light);
   --surface-warning: var(--color-system-yellow-light);
   --surface-secondary-hover: var(--color-grayscale-dark); /** Secondary button hover (dark mode) */
   --surface-muted: var(--color-grayscale-darkest);
   --surface-overlay: var(--color-grayscale-black);
-  --surface-primary: var(--color-grayscale-black);
+  --surface-primary: var(--color-grayscale-darkest);
   --surface-secondary: var(--color-grayscale-darkest);
-  --surface-brand-primary: var(--color-poppy-light);
-  --surface-inverse: var(--color-grayscale-white);
-  --surface-secondary-pressed: var(--color-grayscale-darker); /** Secondary button pressed (dark mode) */
-  --surface-subtle-hover: var(--color-grayscale-darkest); /** Ghost and outline hover (dark mode) */
-  --surface-info: var(--color-system-neutral-light);
-  --surface-primary-hover: var(--color-grayscale-darkest);
-  --surface-primary-pressed: var(--color-grayscale-darker);
-  --surface-brand-primary-hover: var(--color-poppy-light); /** Primary surface hover (dark mode) */
-  --surface-brand-primary-pressed: var(--color-poppy-darker); /** Primary surface pressed (dark mode) */
+  --surface-brand-primary: var(--color-grayscale-darkest);
+  --surface-inverse: var(--color-grayscale-darkest);
+  --surface-brand-primary-hover: var(--color-grayscale-darker); /** Primary surface hover (dark mode) */
+  --surface-brand-primary-pressed: var(--color-grayscale-dark); /** Primary surface pressed (dark mode) */
   --surface-service-brand: var(--color-yellow-light);
   --surface-service-marketing: var(--color-green-light);
   --surface-service-product: var(--color-purple-light);
@@ -134,13 +126,15 @@
   --surface-service-back-office-inverse: var(--color-orange-darkest);
   --surface-service-information-inverse: var(--color-blue-darkest);
   --surface-service-brand-inverse: var(--color-yellow-darkest);
+  --surface-accent: var(--color-grayscale-darkest);
   --page-primary: var(--color-grayscale-black);
-  --page-secondary: var(--color-grayscale-darker);
+  --page-secondary: var(--color-grayscale-black);
   --page-brand-primary: var(--color-poppy-light);
-  --page-inverse: var(--color-grayscale-white);
+  --page-inverse: var(--color-grayscale-lightest);
   --page-service-brand: var(--color-yellow-light);
   --page-service-marketing: var(--color-green-light);
   --page-service-product: var(--color-purple-light);
   --page-service-back-office: var(--color-orange-light);
   --page-service-information: var(--color-blue-light);
+  --page-accent: var(--color-tan-darkest);
 }

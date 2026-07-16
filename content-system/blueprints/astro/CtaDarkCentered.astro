@@ -18,7 +18,7 @@
  * CSS custom properties (Tier-4 hooks):
  *   --bds-cta-bg              (default: var(--surface-inverse))
  *   --bds-cta-heading-color   (default: var(--text-inverse))
- *   --bds-cta-body-color      (default: var(--text-secondary-inverse))
+ *   --bds-cta-body-color      (default: var(--text-inverse))
  *
  * a11y: h2 + aria-labelledby. Center-aligned but reading order is
  * natural (heading → body → CTA). CTA uses :focus-visible ring with
@@ -90,7 +90,7 @@ const titleId = `${section.sectionKey}-title`;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
     line-height: var(--line-height-relaxed);
-    color: var(--bds-cta-body-color, var(--text-secondary-inverse, var(--color-grayscale-lightest)));
+    color: var(--bds-cta-body-color, var(--text-inverse, var(--color-grayscale-lightest)));
     max-width: 55ch;
   }
 
