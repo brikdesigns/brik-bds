@@ -10,22 +10,22 @@
         "$type": "color"
       },
       "darkest": {
-        "$value": "#333333",
+        "$value": "#1b1b1b",
         "$type": "color",
         "$description": "Primary Text on Light Backgrounds"
       },
       "darker": {
-        "$value": "#4f4f4f",
+        "$value": "#333333",
         "$type": "color",
         "$description": "Secondary Text / Icons"
       },
       "dark": {
-        "$value": "#828282",
+        "$value": "#5a5a5a",
         "$type": "color",
         "$description": "Placeholder Text / Tertiary Content"
       },
       "light": {
-        "$value": "#bdbdbd",
+        "$value": "#828282",
         "$type": "color",
         "$description": "Secondary Borders / Muted UI"
       },
@@ -373,19 +373,19 @@
   "font-family": {
     "display": {
       "$value": "Poppins",
-      "$type": "text"
+      "$type": "fontFamily"
     },
     "heading": {
       "$value": "Poppins",
-      "$type": "text"
+      "$type": "fontFamily"
     },
     "label": {
       "$value": "Poppins",
-      "$type": "text"
+      "$type": "fontFamily"
     },
     "body": {
       "$value": "Poppins",
-      "$type": "text"
+      "$type": "fontFamily"
     },
     "subtitle": {
       "$value": "Poppins",
@@ -1460,7 +1460,7 @@
       "$type": "color"
     },
     "secondary": {
-      "$value": "{color.grayscale.light}",
+      "$value": "{color.grayscale.lighter}",
       "$type": "color"
     },
     "brand-primary": {
@@ -1504,27 +1504,13 @@
       "$type": "color"
     },
     "on-color-light": {
-      "$value": "{color.grayscale.black}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
     "disabled": {
       "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Disabled text (dark mode)"
-    },
-    "info": {
-      "$value": "{color.system.neutral}",
-      "$type": "color"
-    },
-    "secondary-inverse": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color",
-      "$description": "Secondary text on inverse surface (dark mode)"
-    },
-    "muted-inverse": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color",
-      "$description": "Muted text on inverse surface (dark mode)"
     },
     "service-brand": {
       "$value": "{color.yellow.light}",
@@ -1585,6 +1571,10 @@
     "service-marketing-on-dark": {
       "$value": "{color.green.lighter}",
       "$type": "color"
+    },
+    "accent": {
+      "$value": "{color.tan.light}",
+      "$type": "color"
     }
   },
   "border": {
@@ -1613,33 +1603,29 @@
       "$type": "color"
     },
     "on-color-dark": {
-      "$value": "{color.grayscale.black}",
-      "$type": "color"
-    },
-    "secondary": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color"
-    },
-    "muted": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color"
-    },
-    "inverse": {
-      "$value": "{color.grayscale.black}",
-      "$type": "color"
-    },
-    "on-color-light": {
       "$value": "{color.grayscale.white}",
       "$type": "color"
     },
-    "disabled": {
+    "secondary": {
       "$value": "{color.grayscale.darker}",
+      "$type": "color"
+    },
+    "muted": {
+      "$value": "{color.grayscale.darker}",
+      "$type": "color"
+    },
+    "inverse": {
+      "$value": "{color.grayscale.darkest}",
+      "$type": "color"
+    },
+    "on-color-light": {
+      "$value": "{color.grayscale.darkest}",
+      "$type": "color"
+    },
+    "disabled": {
+      "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Disabled border (dark mode)"
-    },
-    "info": {
-      "$value": "{color.system.neutral}",
-      "$type": "color"
     },
     "service-brand": {
       "$value": "{color.yellow.light}",
@@ -1659,6 +1645,10 @@
     },
     "service-marketing": {
       "$value": "{color.green.light}",
+      "$type": "color"
+    },
+    "accent": {
+      "$value": "{color.grayscale.light}",
       "$type": "color"
     }
   },
@@ -1704,11 +1694,11 @@
       "$type": "color"
     },
     "primary": {
-      "$value": "{color.grayscale.black}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
     "secondary": {
-      "$value": "{color.grayscale.light}",
+      "$value": "{color.grayscale.black}",
       "$type": "color"
     },
     "brand-primary": {
@@ -1716,7 +1706,7 @@
       "$type": "color"
     },
     "inverse": {
-      "$value": "{color.grayscale.white}",
+      "$value": "{color.grayscale.lightest}",
       "$type": "color"
     },
     "accent-yellow": {
@@ -1740,7 +1730,7 @@
       "$type": "color"
     },
     "on-color-light": {
-      "$value": "{color.grayscale.black}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
     "brand-primary-hover": {
@@ -1749,22 +1739,14 @@
       "$description": "Primary button hover background (dark mode)"
     },
     "brand-primary-pressed": {
-      "$value": "{color.poppy.lighter}",
+      "$value": "{color.poppy.darker}",
       "$type": "color",
       "$description": "Primary button pressed background (dark mode)"
     },
     "disabled": {
-      "$value": "{color.grayscale.darker}",
+      "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Disabled background (dark mode)"
-    },
-    "info": {
-      "$value": "{color.system.neutral}",
-      "$type": "color"
-    },
-    "primary-pressed": {
-      "$value": "{color.grayscale.darker}",
-      "$type": "color"
     },
     "service-brand": {
       "$value": "{color.yellow.light}",
@@ -1825,6 +1807,10 @@
     "service-information-on-dark": {
       "$value": "{color.blue.lighter}",
       "$type": "color"
+    },
+    "accent": {
+      "$value": "{color.tan.light}",
+      "$type": "color"
     }
   },
   "surface": {
@@ -1854,7 +1840,7 @@
       "$type": "color"
     },
     "primary": {
-      "$value": "{color.grayscale.black}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
     "secondary": {
@@ -1862,42 +1848,20 @@
       "$type": "color"
     },
     "brand-primary": {
-      "$value": "{color.poppy.light}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
     "inverse": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "secondary-pressed": {
-      "$value": "{color.grayscale.darker}",
-      "$type": "color",
-      "$description": "Secondary button pressed (dark mode)"
-    },
-    "subtle-hover": {
       "$value": "{color.grayscale.darkest}",
-      "$type": "color",
-      "$description": "Ghost and outline hover (dark mode)"
-    },
-    "info": {
-      "$value": "{color.system.neutral-light}",
-      "$type": "color"
-    },
-    "primary-hover": {
-      "$value": "{color.grayscale.darkest}",
-      "$type": "color"
-    },
-    "primary-pressed": {
-      "$value": "{color.grayscale.darker}",
       "$type": "color"
     },
     "brand-primary-hover": {
-      "$value": "{color.poppy.light}",
+      "$value": "{color.grayscale.darker}",
       "$type": "color",
       "$description": "Primary surface hover (dark mode)"
     },
     "brand-primary-pressed": {
-      "$value": "{color.poppy.darker}",
+      "$value": "{color.grayscale.dark}",
       "$type": "color",
       "$description": "Primary surface pressed (dark mode)"
     },
@@ -1980,6 +1944,10 @@
     "service-brand-inverse": {
       "$value": "{color.yellow.darkest}",
       "$type": "color"
+    },
+    "accent": {
+      "$value": "{color.grayscale.darkest}",
+      "$type": "color"
     }
   },
   "page": {
@@ -1988,7 +1956,7 @@
       "$type": "color"
     },
     "secondary": {
-      "$value": "{color.grayscale.darker}",
+      "$value": "{color.grayscale.black}",
       "$type": "color"
     },
     "brand-primary": {
@@ -1996,7 +1964,7 @@
       "$type": "color"
     },
     "inverse": {
-      "$value": "{color.grayscale.white}",
+      "$value": "{color.grayscale.lightest}",
       "$type": "color"
     },
     "service-brand": {
@@ -2017,6 +1985,10 @@
     },
     "service-information": {
       "$value": "{color.blue.light}",
+      "$type": "color"
+    },
+    "accent": {
+      "$value": "{color.tan.darkest}",
       "$type": "color"
     }
   }

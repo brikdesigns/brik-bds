@@ -87,7 +87,7 @@
   --page-brand-primary: var(--color-poppy-light);
   /* Text */
   --text-primary: var(--color-grayscale-lightest);
-  --text-secondary: var(--color-grayscale-light);
+  --text-secondary: var(--color-grayscale-lighter);
   --text-muted: var(--color-grayscale-dark);
   --text-inverse: var(--color-grayscale-black);
   --text-brand-primary: var(--color-poppy-light);
