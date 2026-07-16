@@ -1438,13 +1438,29 @@
       "$type": "number"
     }
   },
-  "page": {
+  "text": {
+    "negative": {
+      "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "positive": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow}",
+      "$type": "color"
+    },
+    "accent-red": {
+      "$value": "{color.system.red}",
+      "$type": "color"
+    },
     "primary": {
-      "$value": "{color.grayscale.white}",
+      "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
     "secondary": {
-      "$value": "{color.grayscale.lighter}",
+      "$value": "{color.grayscale.darker}",
       "$type": "color"
     },
     "brand-primary": {
@@ -1452,45 +1468,7 @@
       "$type": "color"
     },
     "inverse": {
-      "$value": "{color.grayscale.black}",
-      "$type": "color"
-    },
-    "service-brand": {
-      "$value": "{color.yellow.light}",
-      "$type": "color"
-    },
-    "service-marketing": {
-      "$value": "{color.green.light}",
-      "$type": "color"
-    },
-    "service-product": {
-      "$value": "{color.purple.light}",
-      "$type": "color"
-    },
-    "service-back-office": {
-      "$value": "{color.orange.light}",
-      "$type": "color"
-    },
-    "service-information": {
-      "$value": "{color.blue.light}",
-      "$type": "color"
-    }
-  },
-  "background": {
-    "primary": {
       "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "secondary": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color"
-    },
-    "brand-primary": {
-      "$value": "{color.poppy.light}",
-      "$type": "color"
-    },
-    "inverse": {
-      "$value": "{color.grayscale.black}",
       "$type": "color"
     },
     "accent-yellow": {
@@ -1509,8 +1487,240 @@
       "$value": "{color.system.purple}",
       "$type": "color"
     },
+    "accent-orange": {
+      "$value": "{color.system.orange}",
+      "$type": "color"
+    },
+    "muted": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color"
+    },
+    "on-color-dark": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "text-link": {
+      "$value": "{color.poppy.light}",
+      "$type": "color"
+    },
+    "on-color-light": {
+      "$value": "{color.grayscale.black}",
+      "$type": "color"
+    },
+    "disabled": {
+      "$value": "{color.grayscale.light}",
+      "$type": "color",
+      "$description": "Disabled button text (all variants)"
+    },
+    "info": {
+      "$value": "{color.system.neutral}",
+      "$type": "color"
+    },
+    "secondary-inverse": {
+      "$value": "{color.grayscale.light}",
+      "$type": "color",
+      "$description": "Secondary text on inverse (theme-flipping) surfaces"
+    },
+    "muted-inverse": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color",
+      "$description": "Muted text on inverse (theme-flipping) surfaces"
+    },
+    "service-brand": {
+      "$value": "{color.yellow.light}",
+      "$type": "color"
+    },
+    "service-information": {
+      "$value": "{color.blue.light}",
+      "$type": "color"
+    },
+    "service-back-office": {
+      "$value": "{color.orange.light}",
+      "$type": "color"
+    },
+    "service-product": {
+      "$value": "{color.purple.light}",
+      "$type": "color"
+    },
+    "service-marketing": {
+      "$value": "{color.green.light}",
+      "$type": "color"
+    },
+    "service-marketing-on-light": {
+      "$value": "{color.green.darkest}",
+      "$type": "color"
+    },
+    "service-back-office-on-dark": {
+      "$value": "{color.orange.lightest}",
+      "$type": "color"
+    },
+    "service-back-office-on-light": {
+      "$value": "{color.orange.darkest}",
+      "$type": "color"
+    },
+    "service-product-on-dark": {
+      "$value": "{color.purple.lightest}",
+      "$type": "color"
+    },
+    "service-product-on-light": {
+      "$value": "{color.purple.darkest}",
+      "$type": "color"
+    },
+    "service-information-on-dark": {
+      "$value": "{color.blue.lightest}",
+      "$type": "color"
+    },
+    "service-information-on-light": {
+      "$value": "{color.blue.darkest}",
+      "$type": "color"
+    },
+    "service-brand-on-dark": {
+      "$value": "{color.yellow.lightest}",
+      "$type": "color"
+    },
+    "service-brand-on-light": {
+      "$value": "{color.yellow.darkest}",
+      "$type": "color"
+    },
+    "service-marketing-on-dark": {
+      "$value": "{color.green.lightest}",
+      "$type": "color"
+    }
+  },
+  "border": {
+    "negative": {
+      "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "positive": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow}",
+      "$type": "color"
+    },
+    "input": {
+      "$value": "{color.grayscale.light}",
+      "$type": "color"
+    },
+    "primary": {
+      "$value": "{color.grayscale.lighter}",
+      "$type": "color"
+    },
+    "brand-primary": {
+      "$value": "{color.poppy.light}",
+      "$type": "color"
+    },
+    "on-color-dark": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "secondary": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color"
+    },
+    "muted": {
+      "$value": "{color.grayscale.light}",
+      "$type": "color"
+    },
+    "inverse": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "on-color-light": {
+      "$value": "{color.grayscale.black}",
+      "$type": "color"
+    },
+    "disabled": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color",
+      "$description": "Disabled button border (all variants)"
+    },
+    "info": {
+      "$value": "{color.system.neutral}",
+      "$type": "color"
+    },
+    "service-brand": {
+      "$value": "{color.yellow.light}",
+      "$type": "color"
+    },
+    "service-information": {
+      "$value": "{color.blue.light}",
+      "$type": "color"
+    },
+    "service-back-office": {
+      "$value": "{color.orange.light}",
+      "$type": "color"
+    },
+    "service-product": {
+      "$value": "{color.purple.light}",
+      "$type": "color"
+    },
+    "service-marketing": {
+      "$value": "{color.green.light}",
+      "$type": "color"
+    }
+  },
+  "background": {
+    "negative": {
+      "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "positive": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow}",
+      "$type": "color"
+    },
+    "primary-hover": {
+      "$value": "{color.grayscale.lightest}",
+      "$type": "color"
+    },
+    "secondary-hover": {
+      "$value": "{color.grayscale.darker}",
+      "$type": "color"
+    },
+    "secondary-pressed": {
+      "$value": "{color.grayscale.darkest}",
+      "$type": "color"
+    },
     "accent-red": {
       "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "accent-purple": {
+      "$value": "{color.system.purple}",
+      "$type": "color"
+    },
+    "accent-blue": {
+      "$value": "{color.system.blue}",
+      "$type": "color"
+    },
+    "accent-green": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "primary": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
+    "secondary": {
+      "$value": "{color.grayscale.dark}",
+      "$type": "color"
+    },
+    "brand-primary": {
+      "$value": "{color.poppy.light}",
+      "$type": "color"
+    },
+    "inverse": {
+      "$value": "{color.grayscale.black}",
+      "$type": "color"
+    },
+    "accent-yellow": {
+      "$value": "{color.system.yellow}",
       "$type": "color"
     },
     "accent-orange": {
@@ -1552,32 +1762,8 @@
       "$value": "{color.system.neutral}",
       "$type": "color"
     },
-    "primary-hover": {
-      "$value": "{color.grayscale.lightest}",
-      "$type": "color"
-    },
     "primary-pressed": {
       "$value": "{color.grayscale.lighter}",
-      "$type": "color"
-    },
-    "secondary-hover": {
-      "$value": "{color.grayscale.darker}",
-      "$type": "color"
-    },
-    "secondary-pressed": {
-      "$value": "{color.grayscale.darkest}",
-      "$type": "color"
-    },
-    "positive": {
-      "$value": "{color.system.green}",
-      "$type": "color"
-    },
-    "negative": {
-      "$value": "{color.system.red}",
-      "$type": "color"
-    },
-    "warning": {
-      "$value": "{color.system.yellow}",
       "$type": "color"
     },
     "service-brand": {
@@ -1642,6 +1828,31 @@
     }
   },
   "surface": {
+    "positive": {
+      "$value": "{color.system.green-light}",
+      "$type": "color"
+    },
+    "negative": {
+      "$value": "{color.system.red-light}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow-light}",
+      "$type": "color"
+    },
+    "secondary-hover": {
+      "$value": "{color.grayscale.light}",
+      "$type": "color",
+      "$description": "Secondary button hover background"
+    },
+    "muted": {
+      "$value": "{color.grayscale.lightest}",
+      "$type": "color"
+    },
+    "overlay": {
+      "$value": "{color.grayscale.white}",
+      "$type": "color"
+    },
     "primary": {
       "$value": "{color.grayscale.white}",
       "$type": "color"
@@ -1658,15 +1869,6 @@
       "$value": "{color.grayscale.black}",
       "$type": "color"
     },
-    "overlay": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "secondary-hover": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color",
-      "$description": "Secondary button hover background"
-    },
     "secondary-pressed": {
       "$value": "{color.grayscale.dark}",
       "$type": "color",
@@ -1679,22 +1881,6 @@
     },
     "info": {
       "$value": "{color.system.neutral-light}",
-      "$type": "color"
-    },
-    "positive": {
-      "$value": "{color.system.green-light}",
-      "$type": "color"
-    },
-    "negative": {
-      "$value": "{color.system.red-light}",
-      "$type": "color"
-    },
-    "warning": {
-      "$value": "{color.system.yellow-light}",
-      "$type": "color"
-    },
-    "muted": {
-      "$value": "{color.grayscale.lightest}",
       "$type": "color"
     },
     "primary-hover": {
@@ -1796,157 +1982,12 @@
       "$type": "color"
     }
   },
-  "text": {
+  "page": {
     "primary": {
-      "$value": "{color.grayscale.darkest}",
+      "$value": "{color.grayscale.white}",
       "$type": "color"
     },
     "secondary": {
-      "$value": "{color.grayscale.darker}",
-      "$type": "color"
-    },
-    "brand-primary": {
-      "$value": "{color.poppy.light}",
-      "$type": "color"
-    },
-    "inverse": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "accent-yellow": {
-      "$value": "{color.system.yellow}",
-      "$type": "color"
-    },
-    "accent-blue": {
-      "$value": "{color.system.blue}",
-      "$type": "color"
-    },
-    "accent-green": {
-      "$value": "{color.system.green}",
-      "$type": "color"
-    },
-    "accent-purple": {
-      "$value": "{color.system.purple}",
-      "$type": "color"
-    },
-    "accent-red": {
-      "$value": "{color.system.red}",
-      "$type": "color"
-    },
-    "accent-orange": {
-      "$value": "{color.system.orange}",
-      "$type": "color"
-    },
-    "muted": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color"
-    },
-    "on-color-dark": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "text-link": {
-      "$value": "{color.poppy.light}",
-      "$type": "color"
-    },
-    "on-color-light": {
-      "$value": "{color.grayscale.black}",
-      "$type": "color"
-    },
-    "disabled": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color",
-      "$description": "Disabled button text (all variants)"
-    },
-    "info": {
-      "$value": "{color.system.neutral}",
-      "$type": "color"
-    },
-    "positive": {
-      "$value": "{color.system.green}",
-      "$type": "color"
-    },
-    "negative": {
-      "$value": "{color.system.red}",
-      "$type": "color"
-    },
-    "warning": {
-      "$value": "{color.system.yellow}",
-      "$type": "color"
-    },
-    "secondary-inverse": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color",
-      "$description": "Secondary text on inverse (theme-flipping) surfaces"
-    },
-    "muted-inverse": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color",
-      "$description": "Muted text on inverse (theme-flipping) surfaces"
-    },
-    "service-brand": {
-      "$value": "{color.yellow.light}",
-      "$type": "color"
-    },
-    "service-information": {
-      "$value": "{color.blue.light}",
-      "$type": "color"
-    },
-    "service-back-office": {
-      "$value": "{color.orange.light}",
-      "$type": "color"
-    },
-    "service-product": {
-      "$value": "{color.purple.light}",
-      "$type": "color"
-    },
-    "service-marketing": {
-      "$value": "{color.green.light}",
-      "$type": "color"
-    },
-    "service-marketing-on-light": {
-      "$value": "{color.green.darkest}",
-      "$type": "color"
-    },
-    "service-back-office-on-dark": {
-      "$value": "{color.orange.lightest}",
-      "$type": "color"
-    },
-    "service-back-office-on-light": {
-      "$value": "{color.orange.darkest}",
-      "$type": "color"
-    },
-    "service-product-on-dark": {
-      "$value": "{color.purple.lightest}",
-      "$type": "color"
-    },
-    "service-product-on-light": {
-      "$value": "{color.purple.darkest}",
-      "$type": "color"
-    },
-    "service-information-on-dark": {
-      "$value": "{color.blue.lightest}",
-      "$type": "color"
-    },
-    "service-information-on-light": {
-      "$value": "{color.blue.darkest}",
-      "$type": "color"
-    },
-    "service-brand-on-dark": {
-      "$value": "{color.yellow.lightest}",
-      "$type": "color"
-    },
-    "service-brand-on-light": {
-      "$value": "{color.yellow.darkest}",
-      "$type": "color"
-    },
-    "service-marketing-on-dark": {
-      "$value": "{color.green.lightest}",
-      "$type": "color"
-    }
-  },
-  "border": {
-    "primary": {
       "$value": "{color.grayscale.lighter}",
       "$type": "color"
     },
@@ -1954,69 +1995,28 @@
       "$value": "{color.poppy.light}",
       "$type": "color"
     },
-    "on-color-dark": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "secondary": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color"
-    },
-    "muted": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color"
-    },
     "inverse": {
-      "$value": "{color.grayscale.white}",
-      "$type": "color"
-    },
-    "on-color-light": {
       "$value": "{color.grayscale.black}",
-      "$type": "color"
-    },
-    "input": {
-      "$value": "{color.grayscale.light}",
-      "$type": "color"
-    },
-    "disabled": {
-      "$value": "{color.grayscale.dark}",
-      "$type": "color",
-      "$description": "Disabled button border (all variants)"
-    },
-    "info": {
-      "$value": "{color.system.neutral}",
-      "$type": "color"
-    },
-    "positive": {
-      "$value": "{color.system.green}",
-      "$type": "color"
-    },
-    "negative": {
-      "$value": "{color.system.red}",
-      "$type": "color"
-    },
-    "warning": {
-      "$value": "{color.system.yellow}",
       "$type": "color"
     },
     "service-brand": {
       "$value": "{color.yellow.light}",
       "$type": "color"
     },
-    "service-information": {
-      "$value": "{color.blue.light}",
-      "$type": "color"
-    },
-    "service-back-office": {
-      "$value": "{color.orange.light}",
+    "service-marketing": {
+      "$value": "{color.green.light}",
       "$type": "color"
     },
     "service-product": {
       "$value": "{color.purple.light}",
       "$type": "color"
     },
-    "service-marketing": {
-      "$value": "{color.green.light}",
+    "service-back-office": {
+      "$value": "{color.orange.light}",
+      "$type": "color"
+    },
+    "service-information": {
+      "$value": "{color.blue.light}",
       "$type": "color"
     }
   }
