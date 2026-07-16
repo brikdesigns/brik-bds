@@ -1,0 +1,12 @@
+@layer bds-components {
+/* ─── PageHeaderActions ──────────────────────────────────────────
+   A ButtonGroup specialization for the PageHeader `actions` slot.
+   Header actions read as a single right-aligned row and must not wrap
+   under the title (ButtonGroup's default `flex-wrap: wrap` would drop a
+   button to a second line when the header is tight). */
+
+.bds-page-header-actions {
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+}
