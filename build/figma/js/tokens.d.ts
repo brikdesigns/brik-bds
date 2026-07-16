@@ -371,11 +371,6 @@ export const textTextLink: string;
 export const textOnColorLight: string;
 /** Disabled button text (all variants) */
 export const textDisabled: string;
-export const textInfo: string;
-/** Secondary text on inverse (theme-flipping) surfaces */
-export const textSecondaryInverse: string;
-/** Muted text on inverse (theme-flipping) surfaces */
-export const textMutedInverse: string;
 export const textServiceBrand: string;
 export const textServiceInformation: string;
 export const textServiceBackOffice: string;
@@ -391,6 +386,7 @@ export const textServiceInformationOnLight: string;
 export const textServiceBrandOnDark: string;
 export const textServiceBrandOnLight: string;
 export const textServiceMarketingOnDark: string;
+export const textAccent: string;
 export const borderNegative: string;
 export const borderPositive: string;
 export const borderWarning: string;
@@ -404,12 +400,12 @@ export const borderInverse: string;
 export const borderOnColorLight: string;
 /** Disabled button border (all variants) */
 export const borderDisabled: string;
-export const borderInfo: string;
 export const borderServiceBrand: string;
 export const borderServiceInformation: string;
 export const borderServiceBackOffice: string;
 export const borderServiceProduct: string;
 export const borderServiceMarketing: string;
+export const borderAccent: string;
 export const backgroundNegative: string;
 export const backgroundPositive: string;
 export const backgroundWarning: string;
@@ -436,8 +432,6 @@ export const backgroundBrandPrimaryHover: string;
 export const backgroundBrandPrimaryPressed: string;
 /** Disabled button background (all variants) */
 export const backgroundDisabled: string;
-export const backgroundInfo: string;
-export const backgroundPrimaryPressed: string;
 export const backgroundServiceBrand: string;
 export const backgroundServiceBrandOnLight: string;
 export const backgroundServiceMarketing: string;
@@ -453,6 +447,7 @@ export const backgroundServiceMarketingOnDark: string;
 export const backgroundServiceBackOfficeOnDark: string;
 export const backgroundServiceProductOnDark: string;
 export const backgroundServiceInformationOnDark: string;
+export const backgroundAccent: string;
 export const surfacePositive: string;
 export const surfaceNegative: string;
 export const surfaceWarning: string;
@@ -464,13 +459,6 @@ export const surfacePrimary: string;
 export const surfaceSecondary: string;
 export const surfaceBrandPrimary: string;
 export const surfaceInverse: string;
-/** Secondary button pressed background */
-export const surfaceSecondaryPressed: string;
-/** Ghost and outline button hover background */
-export const surfaceSubtleHover: string;
-export const surfaceInfo: string;
-export const surfacePrimaryHover: string;
-export const surfacePrimaryPressed: string;
 /** Primary surface hover */
 export const surfaceBrandPrimaryHover: string;
 /** Primary surface pressed */
@@ -495,6 +483,7 @@ export const surfaceServiceProductInverse: string;
 export const surfaceServiceBackOfficeInverse: string;
 export const surfaceServiceInformationInverse: string;
 export const surfaceServiceBrandInverse: string;
+export const surfaceAccent: string;
 export const pagePrimary: string;
 export const pageSecondary: string;
 export const pageBrandPrimary: string;
@@ -504,3 +493,4 @@ export const pageServiceMarketing: string;
 export const pageServiceProduct: string;
 export const pageServiceBackOffice: string;
 export const pageServiceInformation: string;
+export const pageAccent: string;

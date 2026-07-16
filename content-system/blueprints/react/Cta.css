@@ -48,7 +48,7 @@
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);
   line-height: var(--line-height-relaxed);
-  color: var(--bds-cta-body-color, var(--text-secondary-inverse));
+  color: var(--bds-cta-body-color, var(--text-inverse));
   max-width: 55ch;
 }
 
