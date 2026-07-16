@@ -43,13 +43,13 @@
   --surface-brand-primary: var(--color-poppy-light);
   --surface-brand-primary-hover: var(--color-poppy-dark);
   --surface-brand-primary-pressed: var(--color-poppy-darker);
-  --surface-brand-secondary: #f1f0ec;
+  --surface-brand-secondary: var(--color-tan-lightest);
   --surface-nav: var(--color-grayscale-white);
   /* Background — vibrant poppy-light base per brand canon; darkens on interaction (BDS-22) */
   --background-brand-primary: var(--color-poppy-light);
   --background-brand-primary-hover: var(--color-poppy-dark);
   --background-brand-primary-pressed: var(--color-poppy-darker);
-  --background-brand-secondary: #f1f0ec;
+  --background-brand-secondary: var(--color-tan-lightest);
   --background-primary: var(--color-grayscale-white);
   --background-secondary: var(--color-grayscale-lightest);
   --background-secondary-hover: var(--color-grayscale-lighter);
