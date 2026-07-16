@@ -129,6 +129,30 @@ Canonical Figma tokens for positive, negative, and warning states. Background va
   columns={4}
 />
 
+## Accent
+
+The **scope-stable accent** — one brand highlight that stays fixed regardless of `[data-audience]` scope (brik fills it from `tan`; each Brand Kit fills its own). Use it for audience-independent affordances such as an active carousel dot or an eyebrow rule.
+
+It is distinct from two neighbours it is easy to confuse:
+
+- **`--*-brand-primary`** re-tints per audience scope (Vale: land → gold, healthcare → olive). The accent must *not* shift, so it is its own role — not a brand-tier token.
+- **The per-color status accents** (`--background-accent-blue`, `--text-accent-green`, …) encode state/category, not the brand highlight.
+
+<ColorGrid
+  colors={[
+    { name: 'page-accent', cssVar: '--page-accent' },
+    { name: 'surface-accent', cssVar: '--surface-accent' },
+    { name: 'background-accent', cssVar: '--background-accent' },
+    { name: 'text-accent', cssVar: '--text-accent', isText: true },
+    { name: 'border-accent', cssVar: '--border-accent' },
+  ]}
+  columns={4}
+/>
+
+<Callout type="info">
+  Brand Kits fill `--*-accent` per client (brik → `tan`, Vale Partners → gold). Because the audience scopes re-bind only the brand-primary tier, the accent stays constant across every `[data-audience]` — that scope-stability is the whole point of the role.
+</Callout>
+
 ## Presence
 
 Online/offline indicator tokens used by Avatar and Dot components.
