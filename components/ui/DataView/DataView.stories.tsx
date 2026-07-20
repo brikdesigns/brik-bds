@@ -2,12 +2,14 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TableView } from './TableView';
 import { ListView } from './ListView';
 import { ProfileView } from './ProfileView';
+import { BoardView } from './BoardView';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../Table';
 import { Card } from '../Card';
 import { CardList } from '../CardList';
 import { DataSection } from '../DataSection';
 import { Field } from '../Field';
 import { FieldGrid } from '../FieldGrid';
+import { Board, BoardColumn, BoardCard } from '../Board';
 
 const meta: Meta<typeof TableView> = {
   title: 'Displays/data-view',
@@ -70,6 +72,21 @@ const DemoProfile = () => (
       <Field label="MRR">$12,400</Field>
     </FieldGrid>
   </DataSection>
+);
+
+const DemoBoard = () => (
+  <Board>
+    <BoardColumn title="To do" count={2}>
+      <BoardCard title="Draft brand brief" subtitle="Due today" />
+      <BoardCard title="Collect logo assets" subtitle="Due Fri" />
+    </BoardColumn>
+    <BoardColumn title="In progress" count={1}>
+      <BoardCard title="Homepage wireframe" subtitle="Alex" />
+    </BoardColumn>
+    <BoardColumn title="Done" count={1}>
+      <BoardCard title="Kickoff call" subtitle="Complete" />
+    </BoardColumn>
+  </Board>
 );
 
 const tableEmpty = { title: 'No services yet', description: 'Add a service to get started.' };
@@ -167,6 +184,30 @@ export const ProfileLoading: Story = {
       <ProfileView loading emptyState={{ title: 'No profile data' }}>
         <DemoProfile />
       </ProfileView>
+    </Frame>
+  ),
+};
+
+/* ─── 5. BoardView ───────────────────────────────────────────── */
+
+/** @summary BoardView — content and its default board skeleton */
+export const BoardState: Story = {
+  render: () => (
+    <Frame>
+      <BoardView emptyState={{ title: 'No lanes yet' }}>
+        <DemoBoard />
+      </BoardView>
+    </Frame>
+  ),
+};
+
+/** @summary BoardView loading — column-shaped skeleton stands in for the board */
+export const BoardLoading: Story = {
+  render: () => (
+    <Frame>
+      <BoardView loading emptyState={{ title: 'No lanes yet' }}>
+        <DemoBoard />
+      </BoardView>
     </Frame>
   ),
 };

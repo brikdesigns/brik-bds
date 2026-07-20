@@ -6,4 +6,10 @@
 .bds-data-view__skeleton {
   width: 100%;
 }
+
+/* Board loading skeleton — columns flex equally, mirroring `.bds-board-column`. */
+.bds-data-view__skeleton-column {
+  flex: 1 0 0;
+  min-width: 240px;
+}
 }
