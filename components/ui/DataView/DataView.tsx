@@ -126,6 +126,22 @@ export function ProfileSkeleton() {
   );
 }
 
+export function BoardSkeleton() {
+  return (
+    <Stack direction="horizontal" gap="md" align="start" className="bds-data-view__skeleton" aria-hidden="true">
+      {Array.from({ length: 3 }).map((_, col) => (
+        <Stack key={col} gap="sm" className="bds-data-view__skeleton-column">
+          <Skeleton variant="text" width="45%" height={18} />
+          {Array.from({ length: 3 }).map((_, card) => (
+            <Skeleton key={card} variant="rectangular" height={72} />
+          ))}
+        </Stack>
+      ))}
+    </Stack>
+  );
+}
+
 /* The named views live in their own files (`TableView.tsx`, `ListView.tsx`,
-   `ProfileView.tsx`) — distinct components, not one polymorphic `variant` —
-   each a thin shell over `DataViewShell` with its display-shaped skeleton. */
+   `ProfileView.tsx`, `BoardView.tsx`) — distinct components, not one polymorphic
+   `variant` — each a thin shell over `DataViewShell` with its display-shaped
+   skeleton. */
