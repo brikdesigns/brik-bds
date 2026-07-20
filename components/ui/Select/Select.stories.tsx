@@ -32,6 +32,10 @@ const meta: Meta<typeof Select> = {
       control: 'text',
       description: 'Empty-value option text shown when no selection has been made.',
     },
+    allOption: {
+      control: 'text',
+      description: 'Renders a selectable "no filter" entry (e.g. "All") with an empty value — a real, non-greyed choice, unlike `placeholder`. Mutually exclusive with `placeholder`.',
+    },
     helperText: {
       control: 'text',
       description: 'Hint text under the select. Hidden when `error` is present.',
@@ -90,6 +94,29 @@ export const Default: Story = {
     await expect(select).toBeVisible();
     await userEvent.selectOptions(select, 'second');
     await expect(select).toHaveValue('second');
+    await expect(args.onChange).toHaveBeenCalled();
+  },
+};
+
+/** @summary With a selectable "All" (no-filter) entry instead of a placeholder */
+export const WithAllOption: Story = {
+  args: {
+    label: 'Service line',
+    allOption: 'All service lines',
+    size: 'md',
+    fullWidth: true,
+    options: flatOptions,
+    onChange: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const select = canvas.getByRole('combobox');
+
+    // The "All" entry is a real, selectable empty-value option.
+    await userEvent.selectOptions(select, 'first');
+    await expect(select).toHaveValue('first');
+    await userEvent.selectOptions(select, 'All service lines');
+    await expect(select).toHaveValue('');
     await expect(args.onChange).toHaveBeenCalled();
   },
 };

@@ -45,6 +45,10 @@ const meta: Meta<typeof FilterButton> = {
       control: 'boolean',
       description: 'Locks the trigger, blocks dropdown open, applies muted styling.',
     },
+    allLabel: {
+      control: 'text',
+      description: 'When set, renders an explicit clear entry (e.g. "All") atop the dropdown that resets the selection to `undefined`. Shown selected while no option is active.',
+    },
     onChange: {
       action: 'changed',
       description: 'Called with the new id when a selection is made, or `undefined` when the user clicks the active option to clear.',
@@ -74,6 +78,30 @@ export const Default: Story = {
   },
   render: (args) => {
     const [value, setValue] = useState<string | undefined>(undefined);
+    return (
+      <FilterButton
+        {...args}
+        value={value}
+        onChange={(v) => {
+          setValue(v);
+          args.onChange?.(v);
+        }}
+      />
+    );
+  },
+};
+
+/** @summary With an explicit "All" clear entry atop the dropdown */
+export const WithAllOption: Story = {
+  args: {
+    label: 'Category',
+    options: categoryOptions,
+    allLabel: 'All categories',
+    size: 'md',
+    onChange: fn(),
+  },
+  render: (args) => {
+    const [value, setValue] = useState<string | undefined>('marketing');
     return (
       <FilterButton
         {...args}

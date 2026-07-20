@@ -32,6 +32,12 @@ States exposed via Controls:
 - **Error** — red border + ring (set `error` Control)
 - **Disabled** — 50% opacity, non-interactive
 
+### "All" / no-filter entry
+
+Set `allOption` for a selectable empty-value entry (e.g. "All service lines") — a real, non-greyed choice, unlike the `placeholder` prompt. The two are mutually exclusive; `allOption` wins if both are set. Use it for filter selects where "show everything" is an explicit option.
+
+<Canvas of={Stories.WithAllOption} />
+
 ## Props
 
 <ArgTypes of={Stories} />
