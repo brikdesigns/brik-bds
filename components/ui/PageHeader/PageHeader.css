@@ -32,6 +32,18 @@
   width: 100%;
 }
 
+/* ─── Sticky ─────────────────────────────────────────────────
+   Opt-in via the `sticky` prop. Pins to the top of the nearest scroll
+   container; the opaque surface keeps body content from showing through.
+   z-index sits above page content but below NavBar (100) and overlays
+   (Sheet 900 / Modal 1000). */
+.bds-page-header--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 20; /* bds-lint-ignore — raw stacking value, matches NavBar/Sheet/Modal convention */
+  background-color: var(--surface-primary);
+}
+
 /* ─── Content (title + subtitle) ─────────────────────────────── */
 
 .bds-page-header__content {
