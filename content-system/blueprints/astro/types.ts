@@ -155,14 +155,20 @@ export interface BlueprintSection {
     readonly category?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
     readonly hasOptions?: boolean;
     /**
-     * Audience slug for `data-audience` scope binding. Re-binds canonical
-     * brand tokens (`--brand-primary`, `--background-brand-primary`,
+     * Service-line slug for `data-service-line` scope binding. Re-binds
+     * canonical brand tokens (`--brand-primary`, `--background-brand-primary`,
      * `--text-brand-primary`, `--border-brand-primary`) within the rendered
      * card so each card can carry its own service-line color. Used by
      * `features_3col_branded_dark`. The consumer site MUST define the
-     * `[data-audience='X'] { … }` cascade rules per the BDS scope-binding
+     * `[data-service-line='X'] { … }` cascade rules per the BDS scope-binding
      * docs (`docs/theming/client-themes`); BDS ships the pattern, not the
-     * audience-specific values.
+     * service-line-specific values.
+     */
+    readonly serviceLine?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
+    /**
+     * @deprecated Use `serviceLine`. Retained as a working alias — blueprints
+     * read `serviceLine ?? audience` and emit both `data-service-line` and
+     * `data-audience`. Removed with the `audience` API in a future major (#788).
      */
     readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
     /** Alt text for `imageUrl`. Defaults to empty (decorative) when omitted. */
@@ -184,17 +190,23 @@ export interface BlueprintSection {
     readonly href?: string;
   }>;
   /**
-   * Audience slug for `data-audience` scope binding at the SECTION
-   * level (cf. `items[].audience`, which scopes per-card). Re-binds
+   * Service-line slug for `data-service-line` scope binding at the SECTION
+   * level (cf. `items[].serviceLine`, which scopes per-card). Re-binds
    * canonical brand tokens within the rendered section so the hero,
    * background, and accents pick up the service-line color palette.
    * Used by `hero_split_image_card_overlay`. Consumer site MUST define
-   * the `[data-audience='X'] { … }` cascade rules — BDS ships the
-   * pattern, not the audience-specific values.
+   * the `[data-service-line='X'] { … }` cascade rules — BDS ships the
+   * pattern, not the service-line-specific values.
    *
    * Additive, optional — blueprints that don't read this are unaffected.
    *
    * `back-office` is canonical; `service` is a @deprecated alias (see #797).
+   */
+  readonly serviceLine?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
+  /**
+   * @deprecated Use `serviceLine`. Retained as a working alias — blueprints
+   * read `serviceLine ?? audience` and emit both `data-service-line` and
+   * `data-audience`. Removed with the `audience` API in a future major (#788).
    */
   readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
   /**
@@ -204,14 +216,14 @@ export interface BlueprintSection {
    * **Precedence (brik-bds#546):**
    *   1. If `iconUrl` is set, render a raw `<img>` (this slot's legacy
    *      contract — still respected for non-category eyebrows).
-   *   2. Otherwise, if `audience` is set, the blueprint renders a canonical
-   *      `<ServiceTag category={audience} variant="icon">` for the eyebrow
-   *      — the design-system path. Theme-aware, no consumer-side URL
-   *      computation needed.
+   *   2. Otherwise, if `serviceLine` (or the deprecated `audience`) is set, the
+   *      blueprint renders a canonical `<ServiceTag category={serviceLine}
+   *      variant="icon">` for the eyebrow — the design-system path. Theme-aware,
+   *      no consumer-side URL computation needed.
    *   3. Otherwise no eyebrow renders.
    *
    * Most service-detail pages can stop passing `iconUrl` entirely once
-   * `audience` is set. Keep `iconUrl` for cases where the visual is NOT a
+   * `serviceLine` is set. Keep `iconUrl` for cases where the visual is NOT a
    * category indicator (e.g., a holiday campaign hero with a snowflake).
    *
    * Pair with `iconAlt` for an informational alt; default empty (decorative).

@@ -169,7 +169,7 @@
  * rename. Both bind the orange back-office tokens (`service-back-office`,
  * renamed from the bug-named `service-service` in #563). API-level rename
  * `data-audience` → `data-service-line` is a separate cross-repo follow-up. */
-.bds-hero--with-pricing-card[data-audience='brand'] {
+.bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']) {
   background: var(--surface-service-brand-inverse);
   --bds-hero-headline-color: var(--text-service-brand-on-light);
   --bds-hero-eyebrow-color: var(--text-service-brand-on-light);
@@ -179,7 +179,7 @@
   --text-on-color-light: var(--color-grayscale-white);
 }
 
-.bds-hero--with-pricing-card[data-audience='marketing'] {
+.bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) {
   background: var(--surface-service-marketing-inverse);
   --bds-hero-headline-color: var(--text-service-marketing-on-light);
   --bds-hero-eyebrow-color: var(--text-service-marketing-on-light);
@@ -189,7 +189,7 @@
   --text-on-color-light: var(--color-grayscale-white);
 }
 
-.bds-hero--with-pricing-card[data-audience='information'] {
+.bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']) {
   background: var(--surface-service-information-inverse);
   --bds-hero-headline-color: var(--text-service-information-on-light);
   --bds-hero-eyebrow-color: var(--text-service-information-on-light);
@@ -199,7 +199,7 @@
   --text-on-color-light: var(--color-grayscale-white);
 }
 
-.bds-hero--with-pricing-card[data-audience='product'] {
+.bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']) {
   background: var(--surface-service-product-inverse);
   --bds-hero-headline-color: var(--text-service-product-on-light);
   --bds-hero-eyebrow-color: var(--text-service-product-on-light);
@@ -209,8 +209,8 @@
   --text-on-color-light: var(--color-grayscale-white);
 }
 
-.bds-hero--with-pricing-card[data-audience='back-office'],
-.bds-hero--with-pricing-card[data-audience='service'] {
+.bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']),
+.bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) {
   background: var(--surface-service-back-office-inverse);
   --bds-hero-headline-color: var(--text-service-back-office-on-light);
   --bds-hero-eyebrow-color: var(--text-service-back-office-on-light);
@@ -226,14 +226,14 @@
  * can't sustain white text (2.87–4.36:1); darker ones can. Override
  * --text-inverse per luminance group so all five lines pass AA in dark mode.
  * Uses mode-invariant --text-on-color-light (black) / --text-on-color-dark (white). */
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']),
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) {
   --text-inverse: var(--text-on-color-light); /* black on yellow/green-darker: 4.82–7.33:1 */
 }
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']),
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']),
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']),
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) {
   --text-inverse: var(--text-on-color-dark);  /* white on blue/purple/orange-darker: 5.48–9.48:1 */
 }
 
@@ -245,32 +245,32 @@
  * (6.89–9.06:1) via contrast-gate (brik-bds#1017). The inner inverse <Button>
  * is unaffected: its label/fill ride --text-inverse / --background-inverse
  * (surface-service-{line}-dark), handled above. */
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'] {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']) {
   --bds-hero-headline-color: var(--text-service-brand-on-dark);
   --bds-hero-eyebrow-color: var(--text-service-brand-on-dark);
   --bds-hero-lead-color: var(--text-service-brand-on-dark);
   --text-brand-primary: var(--text-service-brand-on-dark);
 }
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) {
   --bds-hero-headline-color: var(--text-service-marketing-on-dark);
   --bds-hero-eyebrow-color: var(--text-service-marketing-on-dark);
   --bds-hero-lead-color: var(--text-service-marketing-on-dark);
   --text-brand-primary: var(--text-service-marketing-on-dark);
 }
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'] {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']) {
   --bds-hero-headline-color: var(--text-service-information-on-dark);
   --bds-hero-eyebrow-color: var(--text-service-information-on-dark);
   --bds-hero-lead-color: var(--text-service-information-on-dark);
   --text-brand-primary: var(--text-service-information-on-dark);
 }
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'] {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']) {
   --bds-hero-headline-color: var(--text-service-product-on-dark);
   --bds-hero-eyebrow-color: var(--text-service-product-on-dark);
   --bds-hero-lead-color: var(--text-service-product-on-dark);
   --text-brand-primary: var(--text-service-product-on-dark);
 }
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']),
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) {
   --bds-hero-headline-color: var(--text-service-back-office-on-dark);
   --bds-hero-eyebrow-color: var(--text-service-back-office-on-dark);
   --bds-hero-lead-color: var(--text-service-back-office-on-dark);
