@@ -47,6 +47,14 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Title scale. Default: 'lg' */
   size?: 'sm' | 'md' | 'lg';
   /**
+   * Pin the header to the top of its scroll container on scroll
+   * (`position: sticky`). Renders an opaque `--surface-primary` background so
+   * body content scrolls cleanly beneath it. Default `false` — non-sticky
+   * consumers are unaffected. The header sticks within the nearest scrolling
+   * ancestor; ensure that container, not the window, owns the scroll.
+   */
+  sticky?: boolean;
+  /**
    * Bimodal page state. Drives auto-rendered `actions` when no explicit
    * `actions` slot is provided. See {@link PageHeaderMode}.
    */
@@ -102,6 +110,7 @@ export function PageHeader({
   tabs,
   metadata,
   size = 'lg',
+  sticky = false,
   mode,
   onEdit,
   onSave,
@@ -153,7 +162,12 @@ export function PageHeader({
 
   return (
     <div
-      className={bdsClass('bds-page-header', size !== 'lg' && `bds-page-header--${size}`, className)}
+      className={bdsClass(
+        'bds-page-header',
+        size !== 'lg' && `bds-page-header--${size}`,
+        sticky && 'bds-page-header--sticky',
+        className,
+      )}
       style={style}
       data-mode={mode}
       {...props}

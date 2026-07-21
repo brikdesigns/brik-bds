@@ -8,7 +8,7 @@ import * as Stories from './PageHeader.stories';
 
 <ComponentLinks slug="page-header" />
 
-Composable page-level header that brings together BDS components: `Breadcrumb`, `Button`, and `TabBar`. No background — inherits from parent context.
+Composable page-level header that brings together BDS components: `Breadcrumb`, `Button`, and `TabBar`. No background by default — inherits from parent context; the opt-in `sticky` prop adds an opaque surface so it can pin on scroll.
 
 ## Playground
 
@@ -71,6 +71,12 @@ Slots accept rendered elements — a raw `<Button>` or a consumer wrapper (`<Del
 ```
 
 <Canvas of={Stories.StructuredActions} />
+
+## Sticky
+
+Set `sticky` to pin the header to the top of its scroll container as the body scrolls. It renders an opaque `--surface-primary` background (so content passes cleanly beneath) and stacks above page content but below `NavBar` and overlays. Non-sticky remains the default — existing consumers are unaffected. The header sticks within the nearest scrolling ancestor, so that container — not the window — must own the scroll.
+
+<Canvas of={Stories.Sticky} />
 
 ## Props
 
