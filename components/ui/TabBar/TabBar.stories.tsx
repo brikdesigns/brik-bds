@@ -1,60 +1,7 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
 import { TabBar } from './TabBar';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Shared Data ─────────────────────────────────────────────── */
-
-const tabLabels = ['Active', 'Latest', 'Product', 'Design System', 'Marketing', 'Other'];
-const fewLabels = ['All', 'Active', 'Archived'];
-
-/** Interactive wrapper — clicking a tab makes it active */
-function InteractiveTabBar({
-  variant,
-  onColor,
-  labels = tabLabels,
-  disabledIndices = [],
-}: {
-  variant?: 'text' | 'text-underline' | 'tab' | 'box';
-  onColor?: boolean;
-  labels?: string[];
-  disabledIndices?: number[];
-}) {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  return (
-    <TabBar
-      variant={variant}
-      onColor={onColor}
-      items={labels.map((label, i) => ({
-        label,
-        active: i === activeIndex,
-        disabled: disabledIndices.includes(i),
-        onClick: () => setActiveIndex(i),
-      }))}
-    />
-  );
-}
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -64,8 +11,24 @@ const meta: Meta<typeof TabBar> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    variant: { control: 'select', options: ['text', 'text-underline', 'tab', 'box'] },
-    onColor: { control: 'boolean' },
+    items: {
+      control: false,
+      description:
+        'Tab items — each renders as a `button[role="tab"]`. Set `active`, `disabled`, `onClick`, ' +
+        'and optionally `dot` (boolean or `DotStatus`) for an attention-cue indicator.',
+    },
+    variant: {
+      control: 'select',
+      options: ['text', 'text-underline', 'tab', 'box'],
+      description:
+        '`text` (default) = plain labels, no indicator. `text-underline` = text + brand-color underline ' +
+        'below the active tab. `tab` = bottom-border bar with brand-color underline. `box` = filled ' +
+        'background for active, bordered for inactive.',
+    },
+    onColor: {
+      control: 'boolean',
+      description: 'On-color mode — switches text/border to on-color-dark tokens for brand/dark backgrounds.',
+    },
   },
 };
 
@@ -73,148 +36,89 @@ export default meta;
 type Story = StoryObj<typeof TabBar>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox
    ═══════════════════════════════════════════════════════════════ */
 
-const tabClickHandler = fn();
-
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     variant: 'tab',
     items: [
-      { label: 'Overview', active: true, onClick: tabClickHandler },
-      { label: 'Billing', dot: true, onClick: tabClickHandler },
-      { label: 'Security', onClick: tabClickHandler },
+      { label: 'Overview', active: true },
+      { label: 'Billing', dot: true },
+      { label: 'Security' },
     ],
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const tabs = canvas.getAllByRole('tab');
+};
 
-    await expect(tabs).toHaveLength(3);
-    await expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
+/* ═══════════════════════════════════════════════════════════════
+   VARIANTS — one story per style (Q3 semantic starting points)
+   ═══════════════════════════════════════════════════════════════ */
 
-    // Click second tab
-    await userEvent.click(tabs[1]);
-    await expect(tabClickHandler).toHaveBeenCalled();
+/** @summary Plain labels with brand color for the active tab; no indicator */
+export const Text: Story = {
+  args: {
+    variant: 'text',
+    items: [
+      { label: 'All', active: true },
+      { label: 'Active' },
+      { label: 'Archived' },
+    ],
+  },
+};
+
+/** @summary Text color behavior plus a brand-color underline below the active tab */
+export const TextUnderline: Story = {
+  args: {
+    variant: 'text-underline',
+    items: [
+      { label: 'All', active: true },
+      { label: 'Active' },
+      { label: 'Archived' },
+    ],
+  },
+};
+
+/** @summary Bottom-border bar with a brand-color underline over the baseline */
+export const Tab: Story = {
+  args: {
+    variant: 'tab',
+    items: [
+      { label: 'Overview', active: true },
+      { label: 'Billing', dot: true },
+      { label: 'Feedback', dot: 'warning' },
+      { label: 'Security' },
+    ],
+  },
+};
+
+/** @summary Filled background for the active tab, bordered for inactive */
+export const Box: Story = {
+  args: {
+    variant: 'box',
+    items: [
+      { label: 'All', active: true },
+      { label: 'Active' },
+      { label: 'Draft' },
+      { label: 'Archived' },
+    ],
   },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — All variants, on-color, disabled, few tabs
+   WITH CONTROLLED TABS — Q4 irreducible: clicking a tab updates
+   which tab is active, which args alone can't express
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      {/* All four variants */}
-      <div>
-        <SectionLabel>Text</SectionLabel>
-        <InteractiveTabBar variant="text" />
-      </div>
-
-      <div>
-        <SectionLabel>Text — underline</SectionLabel>
-        <InteractiveTabBar variant="text-underline" />
-      </div>
-
-      <div>
-        <SectionLabel>Tab</SectionLabel>
-        <InteractiveTabBar variant="tab" />
-      </div>
-
-      <div>
-        <SectionLabel>Box</SectionLabel>
-        <InteractiveTabBar variant="box" />
-      </div>
-
-      {/* On color */}
-      <div style={{
-        backgroundColor: 'var(--background-brand-primary)',
-        padding: 'var(--padding-xl)',
-        borderRadius: 'var(--border-radius-md)',
-      }}>
-        <SectionLabel>Text — on color</SectionLabel>
-        <InteractiveTabBar variant="text" onColor />
-      </div>
-
-      <div style={{
-        backgroundColor: 'var(--background-brand-primary)',
-        padding: 'var(--padding-xl)',
-        borderRadius: 'var(--border-radius-md)',
-      }}>
-        <SectionLabel>Text underline — on color</SectionLabel>
-        <InteractiveTabBar variant="text-underline" onColor />
-      </div>
-
-      <div style={{
-        backgroundColor: 'var(--background-brand-primary)',
-        padding: 'var(--padding-xl)',
-        borderRadius: 'var(--border-radius-md)',
-      }}>
-        <SectionLabel>Tab — on color</SectionLabel>
-        <InteractiveTabBar variant="tab" onColor />
-      </div>
-
-      {/* Indicator dot — attention cue on a tab */}
-      <div>
-        <SectionLabel>Indicator dot — "Billing" needs attention</SectionLabel>
-        <TabBar
-          variant="tab"
-          items={[
-            { label: 'Overview', active: true },
-            { label: 'Billing', dot: true },
-            { label: 'Reporting', dot: true },
-            { label: 'Security' },
-          ]}
-        />
-      </div>
-
-      {/* Status dot — color the cue by DotStatus */}
-      <div>
-        <SectionLabel>Status dot — "Feedback" has open items (warning)</SectionLabel>
-        <TabBar
-          variant="tab"
-          items={[
-            { label: 'Overview', active: true },
-            { label: 'Feedback', dot: 'warning' },
-            { label: 'Files', dot: 'positive' },
-            { label: 'Activity' },
-          ]}
-        />
-      </div>
-
-      {/* Disabled tabs */}
-      <div>
-        <SectionLabel>Disabled — "Marketing" and "Other"</SectionLabel>
-        <InteractiveTabBar variant="tab" disabledIndices={[4, 5]} />
-      </div>
-
-      {/* Few tabs */}
-      <div>
-        <SectionLabel>Few tabs</SectionLabel>
-        <InteractiveTabBar variant="text" labels={fewLabels} />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Page header with tab navigation
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
+/** @summary Clicking a tab updates the active tab and its content */
+export const WithControlledTabs: Story = {
   render: () => {
     function SettingsPage() {
       const [activeIndex, setActiveIndex] = useState(0);
-      const tabs = ['General', 'Billing', 'Team', 'Integrations', 'Security'];
+      const tabs = ['General', 'Billing', 'Team', 'Security'];
 
       return (
         <div>
-          <SectionLabel>Settings page navigation</SectionLabel>
           <div style={{ borderBottom: 'var(--border-width-md) solid var(--border-secondary)' }}>
             <TabBar
               variant="tab"
@@ -237,30 +141,35 @@ export const Patterns: Story = {
       );
     }
 
-    function FilterTabs() {
-      const [activeIndex, setActiveIndex] = useState(0);
-      const filters = ['All', 'Active', 'Draft', 'Archived'];
+    return <SettingsPage />;
+  },
+};
 
-      return (
-        <div>
-          <SectionLabel>Content filter</SectionLabel>
-          <TabBar
-            variant="box"
-            items={filters.map((label, i) => ({
-              label,
-              active: i === activeIndex,
-              onClick: () => setActiveIndex(i),
-            }))}
-          />
-        </div>
-      );
-    }
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TEST — Q5 play-only, hidden from MCP discovery
+   ═══════════════════════════════════════════════════════════════ */
 
-    return (
-      <Stack>
-        <SettingsPage />
-        <FilterTabs />
-      </Stack>
-    );
+const tabClickHandler = fn();
+
+/** @summary Verifies clicking a tab fires its onClick handler */
+export const InteractionTest: Story = {
+  tags: ['!manifest'],
+  args: {
+    variant: 'tab',
+    items: [
+      { label: 'Overview', active: true, onClick: tabClickHandler },
+      { label: 'Billing', onClick: tabClickHandler },
+      { label: 'Security', onClick: tabClickHandler },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const tabs = canvas.getAllByRole('tab');
+
+    await expect(tabs).toHaveLength(3);
+    await expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
+
+    await userEvent.click(tabs[1]);
+    await expect(tabClickHandler).toHaveBeenCalled();
   },
 };

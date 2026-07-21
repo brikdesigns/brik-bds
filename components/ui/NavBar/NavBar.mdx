@@ -10,23 +10,23 @@ import * as Stories from './NavBar.stories';
 
 Top-level navigation bar with logo, links, and action buttons. Supports sticky positioning for scroll-persistent navigation.
 
-Pass `linkComponent` (e.g. `next/link`) so nav links route client-side instead of triggering a full-page reload. See [framework guides → client-side routing](/docs/getting-started/framework-guides).
+## Default
 
-## Playground
+Toggle `sticky`, edit `links`, or swap the `actions` slot in Controls to explore layouts (links-only, multiple actions, minimal logo + action).
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Full nav, links only, multiple actions, and minimal configurations.
+### Default
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
-## Patterns
+### With Link Component
 
-Real-world usage: sticky nav bar with scrollable page content.
+Pass `linkComponent` (e.g. `next/link`) so nav links route client-side instead of triggering a full-page reload. See [framework guides → client-side routing](/docs/getting-started/framework-guides).
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithLinkComponent} />
 
 ## Props
 

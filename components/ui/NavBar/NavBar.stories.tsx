@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NavBar } from './NavBar';
 import { Button } from '../Button';
@@ -10,25 +9,6 @@ const MockLink: BdsLinkComponent = ({ href, children, ...props }) => (
   <a href={href} data-link-component="mock" {...props}>
     {children}
   </a>
-);
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
 /* ─── Shared Data ─────────────────────────────────────────────── */
@@ -60,6 +40,22 @@ const meta: Meta<typeof NavBar> = {
   tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
+    logo: {
+      control: false,
+      description: 'Logo element (image, SVG, or text) rendered at the left edge.',
+    },
+    links: {
+      control: 'object',
+      description: 'Navigation links. Each entry sets `active` for the current page.',
+    },
+    actions: {
+      control: false,
+      description: 'Right-side actions slot (buttons, dropdowns). ReactNode.',
+    },
+    sticky: {
+      control: 'boolean',
+      description: 'Pins the nav bar to the viewport top while scrolling.',
+    },
     linkComponent: {
       description:
         'Render each nav link with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. See ADR-012.',
@@ -72,11 +68,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox. Toggle `sticky`, edit `links`, or
+   swap the `actions` slot in Controls to explore layouts.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     logo: <LogoPlaceholder />,
     links: sampleLinks,
@@ -92,75 +89,4 @@ export const WithLinkComponent: Story = {
     actions: <Button size="sm">Get Started</Button>,
     linkComponent: MockLink,
   },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Links only, multiple actions, minimal, sticky
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Full nav bar</SectionLabel>
-        <NavBar
-          logo={<LogoPlaceholder />}
-          links={sampleLinks}
-          actions={<Button size="sm">Get Started</Button>}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Links only</SectionLabel>
-        <NavBar logo={<LogoPlaceholder />} links={sampleLinks} />
-      </div>
-
-      <div>
-        <SectionLabel>Multiple actions</SectionLabel>
-        <NavBar
-          logo={<LogoPlaceholder />}
-          links={sampleLinks.slice(0, 3)}
-          actions={
-            <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
-              <Button variant="ghost" size="sm">Log In</Button>
-              <Button size="sm">Sign Up</Button>
-            </div>
-          }
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Minimal (logo + action)</SectionLabel>
-        <NavBar logo={<LogoPlaceholder />} actions={<Button size="sm">Contact</Button>} />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Sticky nav with scrollable content
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <div>
-      <NavBar
-        logo={<LogoPlaceholder />}
-        links={sampleLinks}
-        actions={<Button size="sm">Get Started</Button>}
-        sticky
-      />
-      <div style={{
-        height: 2000,
-        padding: 'var(--padding-xl)',
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-md)',
-        color: 'var(--text-secondary)',
-      }}>
-        <p>Scroll down to see the sticky navbar behavior.</p>
-      </div>
-    </div>
-  ),
 };

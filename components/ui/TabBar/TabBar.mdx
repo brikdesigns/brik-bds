@@ -8,28 +8,40 @@ import * as Stories from './TabBar.stories';
 
 <ComponentLinks slug="tab-bar" />
 
-Horizontal tab navigation with four style variants: text, text-underline, tab (bordered bar), and box (filled). Supports on-color backgrounds and disabled tabs.
+Horizontal tab navigation with four style variants: text, text-underline, tab (bordered bar), and box (filled). Supports on-color backgrounds and disabled tabs via Controls.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
-
-All four variants, on-color backgrounds, disabled tabs, and compact tab bars.
 
 - **`text`** — plain labels with brand color for active tab; no indicator
 - **`text-underline`** — `text` color behavior + per-tab brand-color underline below the active tab. Use for app-level page headers that want both the brand-active text emphasis and an underline indicator
 - **`tab`** — bottom-border bar with neutral-color active text and a brand-color underline that sits over the bar's baseline border
 - **`box`** — filled background for active, bordered for inactive
 
-<Canvas of={Stories.Variants} />
+### Text
+
+<Canvas of={Stories.Text} />
+
+### Text underline
+
+<Canvas of={Stories.TextUnderline} />
+
+### Tab
+
+<Canvas of={Stories.Tab} />
+
+### Box
+
+<Canvas of={Stories.Box} />
 
 ## Patterns
 
-Real-world usage: settings page navigation and content filter tabs.
+Real-world usage: settings page navigation where clicking a tab switches the active tab and its content.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithControlledTabs} />
 
 ## Props
 

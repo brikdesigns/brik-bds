@@ -8,30 +8,50 @@ import * as Stories from './Footer.stories';
 
 <ComponentLinks slug="footer" />
 
-Site-wide footer with logo, navigation columns, social links, and copyright. Supports default and brand color variants.
+Site-wide footer with logo, navigation columns, social links, and copyright. Toggle `variant` (`default` / `brand` / `inverse`) via Controls on Default.
 
 Pass `linkComponent` (e.g. `next/link`) so column and bottom-bar links route client-side instead of triggering a full-page reload. See [framework guides → client-side routing](/docs/getting-started/framework-guides).
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Default, brand, social links, and minimal configurations.
+### Default
 
-- **`default`** — primary background with border-top
-- **`brand`** — brand-colored background with inverse text
+<Canvas of={Stories.Default} />
 
-<Canvas of={Stories.Variants} />
+### Constrained
 
-## Patterns
+Constrain inner content to a `--content-width-*` while the background stays full-bleed.
 
-Real-world usage: full marketing site footer with services, resources, legal columns, and social links.
+<Canvas of={Stories.Constrained} />
 
-<Canvas of={Stories.Patterns} />
+### With link component
+
+<Canvas of={Stories.WithLinkComponent} />
+
+### External links
+
+External column links (`external: true`) open in a new tab with `rel="noopener noreferrer"` and bypass the router `linkComponent`.
+
+<Canvas of={Stories.ExternalLinks} />
+
+### Marketing composition
+
+Full marketing-site shape: newsletter (`aboveTop`), contact block (`brandExtra`), badged service columns, bottom links, and social icons.
+
+<Canvas of={Stories.Marketing} />
 
 ## Props
 
 <ArgTypes of={Stories} />
 
+## CSS Override API
+
+| Variable | Default | Use |
+| --- | --- | --- |
+| `--bds-footer-surface` | `var(--surface-inverse)` | Background for `variant="inverse"`. Override on an ancestor (e.g. `:root`) to pin the inverse footer to a fixed color across light + dark themes. |
+
+<Canvas of={Stories.SurfaceOverride} />
