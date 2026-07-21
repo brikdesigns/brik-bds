@@ -10,49 +10,35 @@ import * as Stories from './Meter.stories';
 
 Bounded-value indicator for completion counters, scores, and capacity displays. Pass `value` and `max`; the `status` prop drives color tokens (`positive`, `warning`, `error`, `neutral`).
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
+### Status
+
 All status colors at standard size.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Pass} />
 
-### Sizes
+<Canvas of={Stories.Fair} />
 
-`size="sm"` and `size="lg"` for compact toolbars or hero metrics.
+<Canvas of={Stories.Fail} />
 
-<Canvas of={Stories.Small} />
+<Canvas of={Stories.Neutral} />
 
-<Canvas of={Stories.Large} />
+### No suffix
 
-### Label position
-
-`labelPosition` controls where the label sits relative to the bar.
-
-<Canvas of={Stories.LabelPositionComparison} />
-
-### Suffix
-
-By default the meter renders `value/max`. Override via `suffix` for percentages or unit labels; pass `suffix={false}` to drop it entirely.
+By default the meter renders `value/max Score`. Pass `valueSuffix=""` for plain `value/max` — the completion-counter pattern.
 
 <Canvas of={Stories.NoSuffix} />
 
-<Canvas of={Stories.CustomSuffix} />
+### Custom fill color
 
-### Custom formatter
+`fillColor` overrides the status-driven color — use for per-category or per-department palettes.
 
-`format` overrides the value-rendering function for unusual displays.
-
-<Canvas of={Stories.CustomFormatter} />
-
-## Patterns
-
-Onboarding completion checklist alongside a system-health dashboard — the recurring multi-meter compositions.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.CustomFillColor} />
 
 ## Props
 

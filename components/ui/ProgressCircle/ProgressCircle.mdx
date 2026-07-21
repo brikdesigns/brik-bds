@@ -10,47 +10,27 @@ import * as Stories from './ProgressCircle.stories';
 
 Circular progress indicator. Use for compact dashboards, completion meters, and any single-value progress display where a circle reads better than a bar.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-### Sizes
-
-Three diameter presets — `sm` 64px, `md` 96px, `lg` 128px. All snap to the 4-point grid.
-
-<Canvas of={Stories.Sizes} />
-
-### Statuses
+### Status
 
 The `status` prop maps to canonical Brik status tokens — `default` brand fill, `positive`, `warning`, `negative`.
 
-<Canvas of={Stories.Statuses} />
+<Canvas of={Stories.Positive} />
 
-### Matrix
+<Canvas of={Stories.Warning} />
 
-Every `size × status` combination.
-
-<Canvas of={Stories.Matrix} />
+<Canvas of={Stories.Negative} />
 
 ### Custom center
 
-The `showValue` prop accepts a `ReactNode` for arbitrary centered content — pair a percentage with a sub-label, or render a streak counter.
+`showValue` accepts a `ReactNode` for arbitrary centered content — pair a percentage with a sub-label instead of the plain default.
 
 <Canvas of={Stories.CustomCenter} />
-
-### Indeterminate
-
-Set `indeterminate` for continuous spin when progress is unknown. Honors `prefers-reduced-motion`.
-
-<Canvas of={Stories.Indeterminate} />
-
-## Patterns
-
-Animated determinate fill plus a dashboard widget composing the percentage with a sub-label.
-
-<Canvas of={Stories.Patterns} />
 
 ## Props
 
