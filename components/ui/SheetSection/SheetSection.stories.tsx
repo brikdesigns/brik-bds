@@ -7,9 +7,15 @@ const meta: Meta<typeof SheetSection> = {
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
   argTypes: {
-    heading: { control: 'text' },
-    description: { control: 'text' },
-    spacing: { control: 'select', options: ['md', 'lg'] },
+    heading: { control: 'text', description: 'Omit for intro / description-only sections.' },
+    headingLevel: {
+      control: 'select',
+      options: ['h2', 'h3', 'h4'],
+      description: 'Render level for the heading element. Defaults to `h3` to keep the Sheet’s own `<h2>` title as the outline root.',
+    },
+    description: { control: 'text', description: 'Optional lead paragraph rendered under the heading.' },
+    spacing: { control: 'select', options: ['md', 'lg'], description: 'Vertical rhythm between this section and the next.' },
+    children: { control: false, description: 'Section content — Field, FieldGrid, Card, CardList, Table, TagGroup, BulletList, etc.' },
   },
 };
 
@@ -31,10 +37,22 @@ const Frame = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   DEFAULT — SheetSection has no semantic-variant axis (ADR-010
+   §components without a variant axis): heading-only, heading +
+   description, description-only (lead), and empty shells are all
+   presence/absence of the same two optional props, not distinct
+   ARIA roles or contextual semantics. All variation is Controls.
+   ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Toggle `heading`, `description`, `headingLevel`, and `spacing` via
+ * Controls — clear `heading` for a description-only lead section, or
+ * clear `description` for a heading-only section.
+ *
+ * @summary Named block wrapper for content inside a Sheet body
+ */
+export const Default: Story = {
   args: {
     heading: 'Color Primitives',
     description: undefined,
@@ -44,70 +62,6 @@ export const Playground: Story = {
     <Frame>
       <SheetSection {...args}>
         <p style={bodyText}>Section content renders here.</p>
-      </SheetSection>
-    </Frame>
-  ),
-};
-
-/* ─── 2. Variants ────────────────────────────────────────────── */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Frame>
-      <SheetSection heading="Positioning">
-        <p style={bodyText}>A heading with content, no description.</p>
-      </SheetSection>
-
-      <SheetSection
-        heading="Brand Identity"
-        description="Birdwell & Mutlak Dentistry presents a bold, editorial identity anchored in a warm gold palette paired with neutral grays."
-      >
-        <p style={bodyText}>A heading with both description and content.</p>
-      </SheetSection>
-
-      <SheetSection description="An intro paragraph with no heading — use for sheet-level lead copy.">
-        <p style={bodyText}>Sections without a heading skip the uppercase label entirely.</p>
-      </SheetSection>
-
-      <SheetSection heading="Standalone heading" />
-    </Frame>
-  ),
-};
-
-/* ─── 3. Patterns ────────────────────────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Frame>
-      <SheetSection description="This sheet documents the foundational brand identity, typography, and mode preferences.">
-        {null}
-      </SheetSection>
-
-      <SheetSection heading="Color Primitives">
-        <div style={{ display: 'flex', gap: 'var(--gap-lg)' }}>
-          {['#c49a2f', '#b0b0b0', '#ffffff', '#000000'].map((hex) => (
-            <div
-              key={hex}
-              style={{
-                width: 40,
-                height: 40,
-                background: hex,
-                borderRadius: 'var(--border-radius-circle)',
-                border: '1px solid var(--border-secondary)',
-              }}
-            />
-          ))}
-        </div>
-      </SheetSection>
-
-      <SheetSection heading="Typography">
-        <p style={bodyText}>Typography table renders here.</p>
-      </SheetSection>
-
-      <SheetSection heading="Mode Recommendations">
-        <p style={bodyText}>Mode recommendations render here.</p>
       </SheetSection>
     </Frame>
   ),

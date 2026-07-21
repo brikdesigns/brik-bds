@@ -8,30 +8,21 @@ import * as Stories from './Breadcrumb.stories';
 
 <ComponentLinks slug="breadcrumb" />
 
-Navigation breadcrumb trail showing the current page location within a hierarchy. Supports slash and chevron separators.
+Navigation breadcrumb trail showing the current page location within a hierarchy. Toggle `separator` (`slash` / `chevron`) via Controls on Default.
 
 Pass `linkComponent` (e.g. `next/link`) so linked crumbs route client-side instead of triggering a full-page reload. See [framework guides → client-side routing](/docs/getting-started/framework-guides).
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Separator styles, nesting depths, and dark background usage.
+### With link component
 
-- **`slash`** — `/` default separator
-- **`chevron`** — `>` alternative visual style
-
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.WithLinkComponent} />
 
 ## Patterns
-
-Real-world usage: page headers and settings navigation.
-
-<Canvas of={Stories.Patterns} />
-
-## Service-line cascade
 
 When a breadcrumb sits inside a `[data-service-line='X']` subtree, the
 current page label and separators rebind canonical `--text-secondary`
@@ -49,4 +40,3 @@ still resolves during the deprecation window (#788).
 ## Props
 
 <ArgTypes of={Stories} />
-

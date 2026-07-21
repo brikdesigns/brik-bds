@@ -1,41 +1,12 @@
-import React, { useState } from 'react';
+import type { CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
 import { PageHeader } from './PageHeader';
 import { PageHeaderActions } from './PageHeaderActions';
 import { Breadcrumb } from '../Breadcrumb';
-import { TabBar, type TabItem } from '../TabBar';
-import { Button, type ButtonSize } from '../Button';
+import { TabBar } from '../TabBar';
+import { Button } from '../Button';
 import { ServiceTag } from '../ServiceTag';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-/* ─── Helpers ─────────────────────────────────────────────────── */
-
-function useInteractiveTabs(labels: string[]): TabItem[] {
-  const [activeIndex, setActiveIndex] = useState(0);
-  return labels.map((label, i) => ({
-    label,
-    active: i === activeIndex,
-    onClick: () => setActiveIndex(i),
-  }));
-}
 
 const sampleBreadcrumbs = [
   { label: 'Show All', href: '#' },
@@ -53,10 +24,65 @@ const meta: Meta<typeof PageHeader> = {
   argTypes: {
     title: { control: 'text' },
     subtitle: { control: 'text' },
+    badge: {
+      control: false,
+      description: 'Badge displayed left of the title, e.g. `<ServiceTag variant="icon">`.',
+    },
+    breadcrumbs: {
+      control: false,
+      description: 'Breadcrumb element (typically a `Breadcrumb` component) rendered above the title row.',
+    },
+    actions: {
+      control: false,
+      description:
+        'Right-aligned action element(s) (primary Button, dropdown menu, etc.). Overrides any mode-driven auto-actions when set.',
+    },
+    tabs: {
+      control: false,
+      description: 'Optional `TabBar` (or equivalent) rendered at the bottom of the header — page-level navigation.',
+    },
+    metadata: {
+      control: false,
+      description: 'Key/value pairs rendered below the title row (e.g. Owner, Status, Updated).',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Title scale. Default `lg`.',
+    },
     sticky: {
       control: 'boolean',
-      description: 'Pin the header to the top of its scroll container on scroll. Renders an opaque surface so content scrolls beneath it. Default `false`.',
+      description:
+        'Pin the header to the top of its scroll container on scroll. Renders an opaque surface so content scrolls beneath it. Default `false`.',
     },
+    mode: {
+      control: 'select',
+      options: ['read', 'edit'],
+      description: 'Bimodal page state — drives auto-rendered actions. See the Read mode / Edit mode variants.',
+    },
+    onEdit: {
+      control: false,
+      description: 'Navigation handler in read mode. Wires the auto-rendered `[Edit]` button.',
+    },
+    onSave: {
+      control: false,
+      description: 'Submit handler in edit mode. Wires the auto-rendered `[Save]` button.',
+    },
+    onCancel: {
+      control: false,
+      description: 'Discard handler in edit mode. Wires the auto-rendered `[Cancel]` button.',
+    },
+    saveLoading: {
+      control: 'boolean',
+      description: 'Show loading state on the auto-rendered `[Save]` button.',
+    },
+    saveDisabled: {
+      control: 'boolean',
+      description: 'Disable the auto-rendered `[Save]` button (e.g. while the form is invalid).',
+    },
+    editLabel: { control: 'text', description: 'Label for the auto-rendered `[Edit]` button. Default `"Edit"`.' },
+    saveLabel: { control: 'text', description: 'Label for the auto-rendered `[Save]` button. Default `"Save"`.' },
+    cancelLabel: { control: 'text', description: 'Label for the auto-rendered `[Cancel]` button. Default `"Cancel"`.' },
   },
 };
 
@@ -64,14 +90,15 @@ export default meta;
 type Story = StoryObj<typeof PageHeader>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   1. DEFAULT — args-driven sandbox. Controls work.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     title: 'My Account',
     subtitle: 'Manage your membership plan.',
+    badge: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />,
     breadcrumbs: <Breadcrumb items={sampleBreadcrumbs} />,
     actions: (
       <>
@@ -79,182 +106,16 @@ export const Playground: Story = {
         <Button variant="secondary">Secondary Button</Button>
       </>
     ),
+    metadata: [
+      { label: 'Category', value: 'Brand' },
+      { label: 'Billing', value: 'One-time' },
+      { label: 'Stripe Product', value: 'brand-design' },
+    ],
   },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Different slot combinations
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => {
-    const tabs = useInteractiveTabs(['Active', 'Latest', 'Product', 'Design System', 'Marketing']);
-    const filterTabs = useInteractiveTabs(['All', 'Active', 'Archived']);
-
-    return (
-      <Stack gap="var(--gap-huge)">
-        <div>
-          <SectionLabel>Title only</SectionLabel>
-          <PageHeader title="Dashboard" />
-        </div>
-
-        <div>
-          <SectionLabel>Title + subtitle</SectionLabel>
-          <PageHeader title="Team Members" subtitle="Manage your team and their permissions." />
-        </div>
-
-        <div>
-          <SectionLabel>With breadcrumbs</SectionLabel>
-          <PageHeader
-            title="Design System"
-            subtitle="Components, tokens, and documentation."
-            breadcrumbs={
-              <Breadcrumb items={[
-                { label: 'Home', href: '#' },
-                { label: 'Products', href: '#' },
-                { label: 'Design System' },
-              ]} />
-            }
-          />
-        </div>
-
-        <div>
-          <SectionLabel>With actions</SectionLabel>
-          <PageHeader
-            title="Settings"
-            subtitle="Configure your account preferences."
-            actions={
-              <>
-                <Button variant="primary">Save Changes</Button>
-                <Button variant="secondary">Cancel</Button>
-              </>
-            }
-          />
-        </div>
-
-        <div>
-          <SectionLabel>With tabs</SectionLabel>
-          <PageHeader
-            title="Projects"
-            subtitle="Browse and manage all projects."
-            tabs={<TabBar variant="tab" items={filterTabs} />}
-          />
-        </div>
-
-        <div>
-          <SectionLabel>With badge + metadata</SectionLabel>
-          <PageHeader
-            title="Brand Design"
-            subtitle="Service details and billing info."
-            badge={<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />}
-            breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
-            actions={
-              <>
-                <Button variant="primary" size="sm">Primary Button</Button>
-                <Button variant="secondary" size="sm">Secondary Button</Button>
-              </>
-            }
-            metadata={[
-              { label: 'Category', value: 'Brand' },
-              { label: 'Billing', value: 'One-time' },
-              { label: 'Stripe Product', value: 'brand-design' },
-            ]}
-          />
-        </div>
-
-        <div>
-          <SectionLabel>Full composition</SectionLabel>
-          <PageHeader
-            title="My Account"
-            subtitle="Manage your membership plan."
-            breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
-            actions={
-              <>
-                <Button variant="primary">Primary Button</Button>
-                <Button variant="secondary">Secondary Button</Button>
-              </>
-            }
-            tabs={<TabBar variant="tab" items={tabs} />}
-          />
-        </div>
-      </Stack>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => {
-    const reportTabs = useInteractiveTabs(['Overview', 'Revenue', 'Engagement', 'Retention']);
-
-    return (
-      <Stack gap="var(--gap-huge)">
-        {/* Service detail page */}
-        <div>
-          <SectionLabel>Service detail page</SectionLabel>
-          <PageHeader
-            title="Website Design"
-            subtitle="Custom web development and design service."
-            badge={<ServiceTag category="marketing" variant="icon" serviceName="Custom Standard Web Development and Design" size="lg" />}
-            breadcrumbs={
-              <Breadcrumb items={[
-                { label: 'Admin', href: '#' },
-                { label: 'Services', href: '#' },
-                { label: 'Website Design' },
-              ]} />
-            }
-            actions={<Button variant="primary" size="sm">Edit Service</Button>}
-            metadata={[
-              { label: 'Category', value: 'Marketing' },
-              { label: 'Billing', value: 'Monthly' },
-              { label: 'Status', value: 'Active' },
-            ]}
-          />
-        </div>
-
-        {/* Company detail page */}
-        <div>
-          <SectionLabel>Company detail page</SectionLabel>
-          <PageHeader
-            title="Acme Corp"
-            subtitle="Enterprise client since 2024"
-            breadcrumbs={
-              <Breadcrumb items={[
-                { label: 'Admin', href: '#' },
-                { label: 'Companies', href: '#' },
-                { label: 'Acme Corp' },
-              ]} />
-            }
-            actions={<Button variant="primary" size="sm">Edit Company</Button>}
-            metadata={[
-              { label: 'Status', value: 'Active' },
-              { label: 'Plan', value: 'Enterprise' },
-              { label: 'MRR', value: '$12,400' },
-            ]}
-          />
-        </div>
-
-        {/* Analytics dashboard */}
-        <div>
-          <SectionLabel>Analytics dashboard</SectionLabel>
-          <PageHeader
-            title="Analytics"
-            subtitle="Monitor key performance metrics."
-            tabs={<TabBar variant="tab" items={reportTabs} />}
-          />
-        </div>
-      </Stack>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. READ / EDIT MODE — bimodal page state, symmetric with Sheet
+   2. VARIANTS — Q3 semantic starting points
    ═══════════════════════════════════════════════════════════════ */
 
 /**
@@ -262,201 +123,86 @@ export const Patterns: Story = {
  * slot. The `actions` prop, when supplied, always overrides mode-driven
  * actions — mirrors `Sheet`'s `footer` override.
  *
- * @summary Read mode
+ * @summary Read mode — auto-renders [Edit]
  */
 export const ReadMode: Story = {
-  render: () => (
-    <PageHeader
-      title="Brand Identity Bundle"
-      subtitle="Marketing · Active · Updated 2 days ago"
-      breadcrumbs={
-        <Breadcrumb items={[
-          { label: 'Settings', href: '#' },
-          { label: 'Services', href: '#' },
-          { label: 'Brand Identity Bundle' },
-        ]} />
-      }
-      mode="read"
-      onEdit={() => alert('Navigate to /settings/services/brand-identity-bundle/edit')}
-    />
-  ),
+  args: {
+    title: 'Brand Identity Bundle',
+    subtitle: 'Marketing · Active · Updated 2 days ago',
+    breadcrumbs: (
+      <Breadcrumb items={[
+        { label: 'Settings', href: '#' },
+        { label: 'Services', href: '#' },
+        { label: 'Brand Identity Bundle' },
+      ]} />
+    ),
+    mode: 'read',
+    onEdit: fn(),
+  },
 };
 
 /**
  * Edit mode auto-renders `[Cancel] [Save]` ButtonGroup in the `actions`
- * slot. Pass `saveLoading` while the save promise is in flight and
- * `saveDisabled` when the form is invalid.
+ * slot. Toggle `saveLoading` / `saveDisabled` via Controls to see the
+ * auto-rendered `[Save]` button's loading / disabled state.
  *
- * @summary Edit mode
+ * @summary Edit mode — auto-renders [Cancel] [Save]
  */
 export const EditMode: Story = {
-  render: () => {
-    const [saving, setSaving] = useState(false);
-    const handleSave = () => {
-      setSaving(true);
-      setTimeout(() => setSaving(false), 900);
-    };
-    return (
-      <PageHeader
-        title="Edit Brand Identity Bundle"
-        subtitle="Update the service catalog entry."
-        breadcrumbs={
-          <Breadcrumb items={[
-            { label: 'Settings', href: '#' },
-            { label: 'Services', href: '#' },
-            { label: 'Brand Identity Bundle', href: '#' },
-            { label: 'Edit' },
-          ]} />
-        }
-        mode="edit"
-        onSave={handleSave}
-        onCancel={() => alert('Return to /settings/services/brand-identity-bundle')}
-        saveLoading={saving}
-      />
-    );
+  args: {
+    title: 'Edit Brand Identity Bundle',
+    subtitle: 'Update the service catalog entry.',
+    breadcrumbs: (
+      <Breadcrumb items={[
+        { label: 'Settings', href: '#' },
+        { label: 'Services', href: '#' },
+        { label: 'Brand Identity Bundle', href: '#' },
+        { label: 'Edit' },
+      ]} />
+    ),
+    mode: 'edit',
+    onSave: fn(),
+    onCancel: fn(),
   },
 };
-
-/* ═══════════════════════════════════════════════════════════════
-   5. STRUCTURED ACTIONS — PageHeaderActions hierarchy
-   ═══════════════════════════════════════════════════════════════ */
 
 /**
  * `PageHeaderActions` replaces the hand-composed flex div consumers used to
  * pass into `actions`. It fixes the hierarchy — `destructive` (far left) ·
  * `secondary` · `primary` (far right) — and injects a single shared `size`
  * (default `md`) into every slotted button, so a group can't render
- * mismatched sizes side by side (BACKLOG-638). Shown here at `sm` / `md` /
- * `lg`; each row stays internally size-consistent regardless of what the
- * individual buttons declare.
+ * mismatched sizes side by side (BACKLOG-638).
  *
- * @summary Structured action hierarchy at sm / md / lg
+ * @summary Structured destructive / secondary / primary action hierarchy
  */
 export const StructuredActions: Story = {
-  render: () => {
-    const sizes: ButtonSize[] = ['sm', 'md', 'lg'];
-    return (
-      <Stack gap="var(--gap-huge)">
-        {sizes.map((size) => (
-          <div key={size}>
-            <SectionLabel>{`Hierarchy — size="${size}"`}</SectionLabel>
-            <PageHeader
-              title="Acme Corp"
-              subtitle="Enterprise client since 2024"
-              breadcrumbs={
-                <Breadcrumb items={[
-                  { label: 'Admin', href: '#' },
-                  { label: 'Companies', href: '#' },
-                  { label: 'Acme Corp' },
-                ]} />
-              }
-              actions={
-                <PageHeaderActions
-                  size={size}
-                  destructive={<Button variant="destructive">Delete</Button>}
-                  secondary={<Button variant="outline">Edit</Button>}
-                  primary={<Button variant="primary">New Proposal</Button>}
-                />
-              }
-              metadata={[
-                { label: 'Status', value: 'Active' },
-                { label: 'Plan', value: 'Enterprise' },
-              ]}
-            />
-          </div>
-        ))}
-
-        <div>
-          <SectionLabel>Primary only</SectionLabel>
-          <PageHeader
-            title="Website Design"
-            subtitle="Custom web development and design service."
-            actions={<PageHeaderActions primary={<Button variant="primary">Edit Service</Button>} />}
-          />
-        </div>
-
-        <div>
-          <SectionLabel>Secondary + primary (no destructive)</SectionLabel>
-          <PageHeader
-            title="Analytics"
-            subtitle="Monitor key performance metrics."
-            actions={
-              <PageHeaderActions
-                secondary={<Button variant="outline">Export</Button>}
-                primary={<Button variant="primary">Share</Button>}
-              />
-            }
-          />
-        </div>
-      </Stack>
-    );
+  args: {
+    title: 'Acme Corp',
+    subtitle: 'Enterprise client since 2024',
+    breadcrumbs: (
+      <Breadcrumb items={[
+        { label: 'Admin', href: '#' },
+        { label: 'Companies', href: '#' },
+        { label: 'Acme Corp' },
+      ]} />
+    ),
+    actions: (
+      <PageHeaderActions
+        destructive={<Button variant="destructive">Delete</Button>}
+        secondary={<Button variant="outline">Edit</Button>}
+        primary={<Button variant="primary">New Proposal</Button>}
+      />
+    ),
+    metadata: [
+      { label: 'Status', value: 'Active' },
+      { label: 'Plan', value: 'Enterprise' },
+    ],
   },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   6. TUNABLE SPACING — component-scoped CSS variables
-   ═══════════════════════════════════════════════════════════════ */
-
-/**
- * @summary Demonstrates the four CSS variables that tune internal rhythm —
- * defaults vs a roomier override (matching renew-pms's tuning).
- */
-export const TunableSpacing: Story = {
-  render: () => {
-    return (
-      <Stack gap="var(--gap-huge)">
-        {/* Defaults */}
-        <div>
-          <SectionLabel>Defaults — gap-sm content gap, no default divider (padding-bottom 0)</SectionLabel>
-          <PageHeader
-            title="Default Header"
-            subtitle="Title↔subtitle gap = gap-sm. No default divider — a header with no tabs ends flush (padding-bottom 0)."
-            actions={<Button variant="primary" size="sm">Action</Button>}
-          />
-        </div>
-
-        {/* Tuned for clinical density (renew-pms) */}
-        <div>
-          <SectionLabel>Tuned — wider content gap + restored bottom padding</SectionLabel>
-          <PageHeader
-            title="Tuned Header"
-            subtitle="Content gap widened to padding-sm; padding-bottom restored to padding-lg (e.g. when a consumer adds a manual divider)."
-            actions={<Button variant="primary" size="sm">Action</Button>}
-            style={{
-              // bds-lint-ignore — component-scoped CSS variables, not design tokens
-              ['--page-header-content-gap' as string]: 'var(--padding-sm)',
-              ['--page-header-padding-bottom' as string]: 'var(--padding-lg)',
-            }}
-          />
-        </div>
-
-        {/* Even roomier — shows the full knob set */}
-        <div>
-          <SectionLabel>Roomy — all four knobs at the higher end</SectionLabel>
-          <PageHeader
-            title="Roomy Header"
-            subtitle="Each gap stepped up one tier — useful for marketing-shaped pages with breathing room."
-            tabs={<TabBar variant="tab" items={[
-              { label: 'Overview', active: true, onClick: () => {} },
-              { label: 'Settings', active: false, onClick: () => {} },
-            ]} />}
-            actions={<Button variant="primary" size="sm">Action</Button>}
-            style={{
-              // bds-lint-ignore — component-scoped CSS variables, not design tokens
-              ['--page-header-section-gap' as string]: 'var(--gap-xl)',
-              ['--page-header-content-gap' as string]: 'var(--gap-md)',
-              ['--page-header-actions-gap' as string]: 'var(--gap-md)',
-              ['--page-header-padding-bottom' as string]: 'var(--padding-md)',
-            }}
-          />
-        </div>
-      </Stack>
-    );
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   Sticky — pins to the top of a scroll container on scroll
+   3. PATTERNS — Q4 irreducible: needs a scrollable ancestor container,
+      not just a prop value, to demonstrate `sticky`.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Sticky header pinned to the top of a scroll container */
@@ -477,15 +223,47 @@ export const Sticky: Story = {
         actions={<Button variant="primary" size="sm">Action</Button>}
       />
       <div style={{ padding: 'var(--padding-lg)' }}>
-        <Stack gap="var(--gap-md)">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
           {Array.from({ length: 12 }).map((_, i) => (
             <p key={i}>
               Row {i + 1} — body content scrolls beneath the pinned header, which keeps
               its opaque surface so nothing shows through.
             </p>
           ))}
-        </Stack>
+        </div>
       </div>
     </div>
   ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   4. CSS OVERRIDE API — tunable spacing demo
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Demonstrates the four CSS variables that tune internal rhythm — every
+ * knob stepped up one tier from its default. Useful for marketing-shaped
+ * pages that want more breathing room than the lean default rhythm.
+ *
+ * @summary Component-scoped CSS variables that tune internal rhythm
+ */
+export const TunableSpacing: Story = {
+  args: {
+    title: 'Roomy Header',
+    subtitle: 'Each gap stepped up one tier — useful for marketing-shaped pages with breathing room.',
+    tabs: (
+      <TabBar variant="tab" items={[
+        { label: 'Overview', active: true, onClick: () => {} },
+        { label: 'Settings', active: false, onClick: () => {} },
+      ]} />
+    ),
+    actions: <Button variant="primary" size="sm">Action</Button>,
+    style: {
+      // bds-lint-ignore — component-scoped CSS variables, not design tokens
+      ['--page-header-section-gap' as string]: 'var(--gap-xl)',
+      ['--page-header-content-gap' as string]: 'var(--gap-md)',
+      ['--page-header-actions-gap' as string]: 'var(--gap-md)',
+      ['--page-header-padding-bottom' as string]: 'var(--padding-md)',
+    } as CSSProperties,
+  },
 };
