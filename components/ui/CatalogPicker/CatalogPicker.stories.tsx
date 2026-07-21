@@ -63,31 +63,6 @@ const REAL_ESTATE_AMENITIES_CATALOG: readonly CatalogEntry[] = [
   { slug: 'dog-park', displayName: 'Dog Park' },
 ];
 
-// ── Shared layout helpers (per BDS story convention) ─────────────────────────
-
-const Stack = ({
-  children,
-  gap = 'var(--gap-xl)',
-}: {
-  children: React.ReactNode;
-  gap?: string;
-}) => <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>;
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div
-    style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--label-xs)',
-      textTransform: 'uppercase',
-      letterSpacing: '0.05em',
-      marginBottom: 'var(--gap-md)',
-      color: 'var(--text-muted)',
-    }}
-  >
-    {children}
-  </div>
-);
-
 // ── Storybook meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof CatalogPicker> = {
@@ -96,10 +71,23 @@ const meta: Meta<typeof CatalogPicker> = {
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
+    catalog: {
+      control: false,
+      description: 'Reference catalog entries: `{ slug, displayName, aliases? }[]`. Set in code.',
+    },
+    value: {
+      control: false,
+      description: 'Currently picked entries: `{ slug, displayName, description?, source }[]`. Set in code.',
+    },
+    onChange: {
+      control: false,
+      description: 'Called with the next picked list on add/remove.',
+    },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     label: { control: 'text' },
     helperText: { control: 'text' },
     addLabel: { control: 'text' },
+    removeLabel: { control: 'text' },
     searchPlaceholder: { control: 'text' },
     descriptionPlaceholder: { control: 'text' },
     emptyLabel: { control: 'text' },
@@ -108,6 +96,10 @@ const meta: Meta<typeof CatalogPicker> = {
     strict: { control: 'boolean' },
     maxItems: { control: 'number' },
     descriptionRows: { control: 'number' },
+    className: {
+      control: false,
+      description: 'Optional className passthrough on the root.',
+    },
   },
 };
 
@@ -141,7 +133,7 @@ const Controlled = (args: React.ComponentProps<typeof CatalogPicker>) => {
  *
  * @summary Interactive playground for prop tweaking
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     label: 'Services Offered',
     catalog: DENTAL_SERVICES_CATALOG,
@@ -178,7 +170,7 @@ export const Playground: Story = {
  */
 export const Empty: Story = {
   args: {
-    ...Playground.args,
+    ...Default.args,
     value: [],
   },
   render: (args) => <Controlled {...args} />,
@@ -194,7 +186,7 @@ export const Empty: Story = {
 export const MixedSources: Story = {
   name: 'Mixed Catalog + Custom',
   args: {
-    ...Playground.args,
+    ...Default.args,
     value: [
       {
         slug: 'invisalign',
@@ -224,7 +216,7 @@ export const MixedSources: Story = {
 export const StrictCatalogOnly: Story = {
   name: 'Strict (No Custom)',
   args: {
-    ...Playground.args,
+    ...Default.args,
     label: 'Insurance Plans',
     catalog: [
       { slug: 'in-network-ppo', displayName: 'In-Network PPO' },
@@ -252,7 +244,7 @@ export const StrictCatalogOnly: Story = {
 export const DifferentIndustry: Story = {
   name: 'Real-Estate Amenities',
   args: {
-    ...Playground.args,
+    ...Default.args,
     label: 'Community Amenities',
     catalog: REAL_ESTATE_AMENITIES_CATALOG,
     value: [
@@ -272,89 +264,15 @@ export const DifferentIndustry: Story = {
 };
 
 /**
- * Size variants — tiny, medium, and large controls. Verifies that every
- * tier of the size scale renders coherently. Same catalog + same picks
- * across all three so the visual delta is pure typography/spacing.
- *
- * @summary All variants side by side
- */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Size: sm</SectionLabel>
-        <div style={{ width: 520 }}>
-          <CatalogPicker
-            label="Services Offered"
-            catalog={DENTAL_SERVICES_CATALOG}
-            value={[
-              { slug: 'dental-implants', displayName: 'Dental Implants', source: 'catalog' },
-            ]}
-            onChange={fn()}
-            size="sm"
-            addLabel="Add Service"
-          />
-        </div>
-      </div>
-
-      <div>
-        <SectionLabel>Size: md (default)</SectionLabel>
-        <div style={{ width: 520 }}>
-          <CatalogPicker
-            label="Services Offered"
-            catalog={DENTAL_SERVICES_CATALOG}
-            value={[
-              { slug: 'dental-implants', displayName: 'Dental Implants', source: 'catalog' },
-            ]}
-            onChange={fn()}
-            size="md"
-            addLabel="Add Service"
-          />
-        </div>
-      </div>
-
-      <div>
-        <SectionLabel>Size: lg</SectionLabel>
-        <div style={{ width: 520 }}>
-          <CatalogPicker
-            label="Services Offered"
-            catalog={DENTAL_SERVICES_CATALOG}
-            value={[
-              { slug: 'dental-implants', displayName: 'Dental Implants', source: 'catalog' },
-            ]}
-            onChange={fn()}
-            size="lg"
-            addLabel="Add Service"
-          />
-        </div>
-      </div>
-    </Stack>
-  ),
-};
-
-/**
- * Disabled — read-only render. Remove buttons and the Add button are
- * hidden. Used in the portal when a non-admin views intel sheets.
- *
- * @summary Disabled state
- */
-export const Disabled: Story = {
-  args: {
-    ...Playground.args,
-    disabled: true,
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * Interaction — picks a catalog entry by typing an alias, types a
+ * Interaction test — picks a catalog entry by typing an alias, types a
  * description, commits. Verifies the alias-match path (`source: 'catalog'`)
  * and that the commit clears the form for rapid entry.
  *
  * @summary Alias match commits as catalog
  */
-export const AliasMatchCommitsAsCatalog: Story = {
+export const InteractionTestAliasMatchCommitsAsCatalog: Story = {
   name: 'Alias Match → source=catalog',
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     catalog: DENTAL_SERVICES_CATALOG,
@@ -384,13 +302,14 @@ export const AliasMatchCommitsAsCatalog: Story = {
 };
 
 /**
- * Interaction — types a free-text name that doesn't match any catalog
+ * Interaction test — types a free-text name that doesn't match any catalog
  * entry. Commits as `source: 'custom'` with a derived slug.
  *
  * @summary Free text commits as custom
  */
-export const FreeTextCommitsAsCustom: Story = {
+export const InteractionTestFreeTextCommitsAsCustom: Story = {
   name: 'Free Text → source=custom',
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     catalog: DENTAL_SERVICES_CATALOG,
@@ -416,53 +335,4 @@ export const FreeTextCommitsAsCustom: Story = {
       }),
     ]);
   },
-};
-
-/**
- * Patterns — how the picker reads inside a portal-style intel sheet.
- * Demonstrates the consumer pattern: wrap in a sheet section with a
- * field label outside the component, let the picker own its own dropdown.
- *
- * @summary Common usage patterns
- */
-export const Patterns: Story = {
-  render: () => (
-    <div style={{ width: 520 }}>
-      <Stack>
-        <div>
-          <SectionLabel>Services & Billing</SectionLabel>
-          <CatalogPicker
-            label="Services Offered"
-            helperText="Picks from the industry catalog are tagged automatically. Custom additions are preserved with a derived slug."
-            catalog={DENTAL_SERVICES_CATALOG}
-            value={[
-              {
-                slug: 'dental-implants',
-                displayName: 'Dental Implants',
-                description: 'Permanent tooth replacement with crown or bridge attachment.',
-                source: 'catalog',
-              },
-              {
-                slug: 'invisalign',
-                displayName: 'Invisalign / Clear Aligners',
-                description: 'Diamond-tier certified provider (top 1%).',
-                source: 'catalog',
-              },
-              {
-                slug: 'airflow-polish',
-                displayName: 'AirFlow Polish',
-                description: 'Premium plaque removal using pressurized micro-particles.',
-                source: 'custom',
-              },
-            ]}
-            onChange={fn()}
-            addLabel="Add Service"
-            searchPlaceholder="Search or add a service…"
-            descriptionPlaceholder="What makes this service unique here?"
-            emptyDescriptionLabel="No description set"
-          />
-        </div>
-      </Stack>
-    </div>
-  ),
 };

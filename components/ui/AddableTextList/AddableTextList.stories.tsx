@@ -3,45 +3,39 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { AddableTextList } from './AddableTextList';
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div
-    style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.05em',
-      marginBottom: 'var(--gap-md)',
-      color: 'var(--text-muted)',
-    }}
-  >
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
+/**
+ * @deprecated Use `<AddableTagList />` instead (ADR-003).
+ * Kept for existing consumers during the migration window — see
+ * AddableTagList.stories.tsx for the canonical replacement.
+ */
 const meta: Meta<typeof AddableTextList> = {
   title: 'Containers/addable-text-list',
   component: AddableTextList,
-  tags: ['surface-product'],
+  tags: ['surface-product', '!manifest'],
   parameters: { layout: 'centered' },
   argTypes: {
+    values: { control: false, description: 'Current list of plain-text values (rendered as Tag chips).' },
+    onChange: { control: false, description: 'Called with the next values on add / remove.' },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     label: { control: 'text' },
     addLabel: { control: 'text' },
     placeholder: { control: 'text' },
     helperText: { control: 'text' },
     emptyLabel: { control: 'text' },
-    disabled: { control: 'boolean' },
+    disabled: {
+      control: 'boolean',
+      description: 'Read-only chip rendering — see the `ReadMode` story.',
+    },
     allowDuplicates: { control: 'boolean' },
     maxItems: { control: 'number' },
+    className: { control: false },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof AddableTextList>;
+
+// ── Controlled wrapper — hook-driven state machine args can't express (Q4) ────
 
 const Controlled = (args: React.ComponentProps<typeof AddableTextList>) => {
   const [values, setValues] = useState<string[]>(args.values ?? []);
@@ -59,8 +53,10 @@ const Controlled = (args: React.ComponentProps<typeof AddableTextList>) => {
   );
 };
 
+// ── Stories ───────────────────────────────────────────────────────────────────
+
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     label: 'Services Offered',
     placeholder: 'e.g. Dental cleaning',
@@ -72,7 +68,7 @@ export const Playground: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
-/** @summary Empty state */
+/** @summary Empty starting state before any values are added */
 export const Empty: Story = {
   args: {
     label: 'Back-Office Tools',
@@ -85,9 +81,66 @@ export const Empty: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
-/** @summary Add an entry */
-export const AddAnEntry: Story = {
-  name: 'Interaction — add an entry',
+/**
+ * Read mode (`disabled`) — tags render without a remove control and the
+ * reveal input is hidden.
+ * @summary Read-only chip rendering
+ */
+export const ReadMode: Story = {
+  args: {
+    label: 'Services Offered',
+    disabled: true,
+    values: ['Cleaning', 'Whitening'],
+    onChange: fn(),
+  },
+  render: (args) => <Controlled {...args} />,
+};
+
+/**
+ * `maxItems` reached — the Add button hides once the cap is hit.
+ * @summary List at capacity — Add button hides
+ */
+export const MaxItemsCap: Story = {
+  args: {
+    label: 'Compliance-required disclaimers',
+    placeholder: 'Add a disclaimer',
+    maxItems: 3,
+    values: ['Results may vary'],
+    helperText: 'Capped at 3 — Add hides when full.',
+    onChange: fn(),
+  },
+  render: (args) => <Controlled {...args} />,
+};
+
+/**
+ * Do not do this. When values contain title + description pairs (separators
+ * `—`, `:`, newlines), each row collapses into a single unreadable tag. Open
+ * the browser console — the component warns on any value matching the
+ * structured-content pattern and points at `AddableEntryList`. This story
+ * exists to make the wrong choice visible, not to endorse it.
+ *
+ * @summary Anti-pattern — structured content collapses into one tag
+ */
+export const StructuredContentWarning: Story = {
+  args: {
+    label: 'Services (WRONG — use AddableEntryList)',
+    values: [
+      'Molar endodontics — explicitly phased out, do not feature',
+      'Cancellation policy: 24-hour window',
+    ],
+    onChange: fn(),
+  },
+  render: (args) => <Controlled {...args} />,
+};
+
+// ── Interaction tests — play-only, hidden from MCP discovery (Q5) ─────────────
+
+/**
+ * Typing a value and clicking Add appends it to the list.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestAddEntry: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Payment Types',
     placeholder: 'e.g. Aetna',
@@ -111,9 +164,12 @@ export const AddAnEntry: Story = {
   },
 };
 
-/** @summary Remove an entry */
-export const RemoveAnEntry: Story = {
-  name: 'Interaction — remove an entry',
+/**
+ * Clicking a tag's remove control updates onChange with the remaining values.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestRemoveEntry: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     values: ['Cleaning', 'Whitening', 'Braces'],
@@ -128,9 +184,12 @@ export const RemoveAnEntry: Story = {
   },
 };
 
-/** @summary Duplicate blocked */
-export const DuplicateBlocked: Story = {
-  name: 'Interaction — duplicates blocked (case-insensitive)',
+/**
+ * A duplicate (case-insensitive) entry is rejected and never reaches onChange.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestDuplicateBlocked: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     values: ['Cleaning'],
@@ -144,135 +203,4 @@ export const DuplicateBlocked: Story = {
     await userEvent.type(input, 'cleaning{Enter}');
     await expect(args.onChange).not.toHaveBeenCalled();
   },
-};
-
-/** @summary Anti pattern structured content */
-export const AntiPatternStructuredContent: Story = {
-  name: 'Anti-pattern — structured content in tags',
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Do not do this. When values contain title + description pairs (separators `—`, `:`, newlines), each row collapses into a single unreadable tag. ' +
-          'Open the browser console — the component warns on any value matching the structured-content pattern and points at AddableEntryList. ' +
-          'This story exists to make the wrong choice visible, not to endorse it.',
-      },
-    },
-  },
-  args: {
-    label: 'Services (WRONG — use AddableEntryList)',
-    values: [
-      'Molar endodontics — explicitly phased out, do not feature',
-      'Cancellation policy: 24-hour window',
-    ],
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => {
-    return (
-      <div style={{ width: 480 }}>
-        <Stack>
-          <Controlled
-            label="Anti-messages"
-            helperText="Phrases the brand will never use. Press Enter to add."
-            placeholder="e.g. price-first positioning"
-            values={[
-              'No price-first positioning',
-              'No corporate-clinic language',
-              'No fear-based messaging',
-            ]}
-            onChange={() => {}}
-          />
-          <Controlled
-            label="Approved CTAs"
-            helperText="Sanctioned button copy across the marketing site."
-            placeholder="e.g. Book a consultation"
-            values={['Book a consultation', 'Schedule a visit', 'Get started']}
-            onChange={() => {}}
-          />
-          <Controlled
-            label="Compliance-required disclaimers"
-            placeholder="Add a disclaimer"
-            maxItems={3}
-            values={['Results may vary']}
-            onChange={() => {}}
-            helperText="Capped at 3 — Add hides when full."
-          />
-        </Stack>
-      </div>
-    );
-  },
-};
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <div style={{ width: 480 }}>
-      <Stack>
-        <div>
-          <SectionLabel>Sizes</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <Controlled
-              label="Small"
-              size="sm"
-              placeholder="Enter service"
-              values={['Cleaning']}
-              onChange={() => {}}
-            />
-            <Controlled
-              label="Medium (default)"
-              size="md"
-              placeholder="Enter service"
-              values={['Cleaning', 'Whitening']}
-              onChange={() => {}}
-            />
-            <Controlled
-              label="Large"
-              size="lg"
-              placeholder="Enter service"
-              values={['Cleaning']}
-              onChange={() => {}}
-            />
-          </Stack>
-        </div>
-
-        <div>
-          <SectionLabel>States</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <Controlled
-              label="Empty"
-              emptyLabel="No services added yet."
-              placeholder="Enter service"
-              values={[]}
-              onChange={() => {}}
-            />
-            <Controlled
-              label="With helper text"
-              helperText="Press Enter to add; Escape to cancel."
-              placeholder="Enter service"
-              values={['Cleaning']}
-              onChange={() => {}}
-            />
-            <Controlled
-              label="Disabled"
-              disabled
-              values={['Cleaning', 'Whitening']}
-              onChange={() => {}}
-            />
-            <Controlled
-              label="Max 3 items"
-              maxItems={3}
-              values={['A', 'B', 'C']}
-              onChange={() => {}}
-              helperText="Add button hides when limit is reached."
-            />
-          </Stack>
-        </div>
-      </Stack>
-    </div>
-  ),
 };

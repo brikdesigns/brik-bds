@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressStepper, type ProgressStep } from './ProgressStepper';
 
 const meta: Meta<typeof ProgressStepper> = {
@@ -9,16 +9,42 @@ const meta: Meta<typeof ProgressStepper> = {
   parameters: {
     layout: 'padded',
   },
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['steps', 'dots'],
+      description: '`steps` (default) — vertical labeled list with numbered circles. `dots` — compact horizontal dot row.',
+    },
+    steps: {
+      control: false,
+      description: 'Step definitions (`label` + optional `description`) — `steps` variant only.',
+    },
+    count: {
+      control: { type: 'number', min: 1 },
+      description: 'Total number of dots — `dots` variant only.',
+    },
+    activeStep: {
+      control: { type: 'number', min: 0 },
+      description: 'Zero-indexed active step',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md'],
+      description: 'Size variant',
+    },
+    linear: {
+      control: 'boolean',
+      description: 'When true, only completed steps are clickable — upcoming steps are muted and non-interactive.',
+    },
+    onStepClick: {
+      action: 'stepClicked',
+      description: 'Callback when a step is clicked',
+    },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof ProgressStepper>;
-
-const proposalSteps: ProgressStep[] = [
-  { label: 'Scope of project' },
-  { label: 'Project timeline' },
-  { label: 'Fee summary' },
-];
 
 const onboardingSteps: ProgressStep[] = [
   { label: 'Account setup', description: 'Create your account and set a password' },
@@ -27,175 +53,93 @@ const onboardingSteps: ProgressStep[] = [
   { label: 'Review & confirm', description: 'Review your selections' },
 ];
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
-  args: {
-    steps: proposalSteps,
-    activeStep: 1,
-  },
-};
+/* ─── Default ─────────────────────────────────────────────────── */
 
-/** @summary With descriptions */
-export const WithDescriptions: Story = {
+/** @summary Interactive labeled stepper — steps/activeStep via Controls */
+export const Default: Story = {
   args: {
     steps: onboardingSteps,
     activeStep: 1,
   },
 };
 
-/** @summary First step */
-export const FirstStep: Story = {
-  args: {
-    steps: proposalSteps,
-    activeStep: 0,
-  },
-};
-
-/** @summary Last step */
-export const LastStep: Story = {
-  args: {
-    steps: proposalSteps,
-    activeStep: 2,
-  },
-};
-
-/** @summary All complete */
-export const AllComplete: Story = {
-  args: {
-    steps: proposalSteps,
-    activeStep: 3,
-  },
-};
-
-/** @summary Small size */
-export const SmallSize: Story = {
-  args: {
-    steps: proposalSteps,
-    activeStep: 1,
-    size: 'sm',
-  },
-};
+/* ─── Variants — one story per distinct semantic variant (Q3) ────── */
 
 /**
- * Linear mode prevents skipping ahead. Only completed steps are clickable.
- * The user must advance via a primary CTA (Next button).
- */
-export const LinearMode = () => {
-  const [active, setActive] = useState(1);
-
-  return (
-    <div style={{ display: 'flex', gap: 'var(--space-1000)' }}>{/* bds-lint-ignore — 40px, no gap token */}
-      <ProgressStepper
-        steps={onboardingSteps}
-        activeStep={active}
-        linear
-        onStepClick={setActive}
-        style={{ width: '260px' }}
-      />
-      <div style={{ flex: 1 }}>
-        <h2 style={{ margin: '0 0 var(--gap-md)' }}>{onboardingSteps[active]?.label ?? 'Complete'}</h2>
-        <p style={{ color: 'var(--text-secondary)', margin: '0 0 var(--gap-xs)' }}>
-          {active < onboardingSteps.length
-            ? onboardingSteps[active].description
-            : 'All steps completed!'}
-        </p>
-        <p style={{ color: 'var(--text-muted)', fontSize: 'var(--body-sm)', margin: '0 0 var(--gap-xl)' }}>
-          Try clicking an upcoming step — only completed steps are navigable.
-        </p>
-        <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
-          <button
-            onClick={() => setActive(Math.max(0, active - 1))}
-            disabled={active === 0}
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => setActive(Math.min(onboardingSteps.length, active + 1))}
-            disabled={active >= onboardingSteps.length}
-            style={{ backgroundColor: 'var(--background-brand-primary)', color: 'var(--text-inverse)', border: 'none', padding: 'var(--padding-tiny) var(--padding-md)', borderRadius: 'var(--border-radius-md)', cursor: 'pointer' }}
-          >
-            Next
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/**
- * Compact horizontal dot indicator. Use on mobile, in carousels, or as a
- * minimal alternative when label text is redundant with the page heading.
+ * `variant="dots"` swaps the labeled circles for a compact horizontal dot
+ * row — no labels, `role="tablist"` instead of `role="list"`. Use for
+ * mobile carousels and minimal flows.
  *
- * @summary Dots variant
+ * @summary Dots variant — compact horizontal dot row
  */
-export const DotsVariant: Story = {
+export const Dots: Story = {
   args: {
     variant: 'dots',
     count: 5,
     activeStep: 2,
   },
+  argTypes: {
+    steps: { table: { disable: true } },
+  },
 };
 
-/**
- * Dots variant honors the same `linear` mode as the steps variant —
- * only completed dots are clickable.
- */
-export const DotsLinear = () => {
-  const [active, setActive] = useState(2);
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)', alignItems: 'center' }}>
-      <ProgressStepper
-        variant="dots"
-        count={5}
-        activeStep={active}
-        linear
-        onStepClick={setActive}
-      />
-      <p style={{ fontSize: 'var(--body-sm)', color: 'var(--text-muted)', margin: 0 }}>
-        Step {active + 1} of 5 — only completed dots are clickable.
-      </p>
-    </div>
-  );
-};
+/* ─── Irreducible composition (Q4) ────────────────────────────── */
 
 /**
- * @summary Common usage patterns
+ * `onStepClick` + component-owned `activeStep` state — the only way to show
+ * real click-to-navigate behavior. Toggle `linear` via Controls to compare
+ * free navigation against completed-steps-only navigation.
  *
- * Non-linear mode (default) allows free navigation to any step.
+ * @summary Controlled step navigation with Next/Previous
  */
-export const Patterns = () => {
-  const [active, setActive] = useState(0);
+export const WithStepNavigation: Story = {
+  args: {
+    steps: onboardingSteps,
+    linear: true,
+  },
+  argTypes: {
+    activeStep: { table: { disable: true } },
+    variant: { table: { disable: true } },
+    count: { table: { disable: true } },
+  },
+  render: (args) => {
+    const steps = onboardingSteps;
+    const [active, setActive] = useState(0);
 
-  return (
-    <div style={{ display: 'flex', gap: 'var(--space-1000)' }}>{/* bds-lint-ignore — 40px, no gap token */}
-      <ProgressStepper
-        steps={onboardingSteps}
-        activeStep={active}
-        onStepClick={setActive}
-        style={{ width: '260px' }}
-      />
-      <div style={{ flex: 1 }}>
-        <h2 style={{ margin: '0 0 var(--gap-md)' }}>{onboardingSteps[active]?.label ?? 'Complete'}</h2>
-        <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
-          {active < onboardingSteps.length
-            ? onboardingSteps[active].description
-            : 'All steps completed!'}
-        </p>
-        <div style={{ marginTop: 'var(--padding-lg)', display: 'flex', gap: 'var(--gap-md)' }}>
-          <button
-            onClick={() => setActive(Math.max(0, active - 1))}
-            disabled={active === 0}
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => setActive(Math.min(onboardingSteps.length, active + 1))}
-            disabled={active >= onboardingSteps.length}
-          >
-            Next
-          </button>
+    return (
+      <div style={{ display: 'flex', gap: 'var(--space-1000)' }}>{/* bds-lint-ignore — 40px, no gap token */}
+        <ProgressStepper
+          steps={steps}
+          size={args.size}
+          linear={args.linear}
+          activeStep={active}
+          onStepClick={setActive}
+          style={{ width: '260px' }}
+        />
+        <div style={{ flex: 1 }}>
+          <h2 style={{ margin: '0 0 var(--gap-md)' }}>{steps[active]?.label ?? 'Complete'}</h2>
+          <p style={{ color: 'var(--text-secondary)', margin: '0 0 var(--gap-xl)' }}>
+            {active < steps.length
+              ? steps[active].description
+              : 'All steps completed!'}
+          </p>
+          <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
+            <button
+              onClick={() => setActive(Math.max(0, active - 1))}
+              disabled={active === 0}
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => setActive(Math.min(steps.length, active + 1))}
+              disabled={active >= steps.length}
+              style={{ backgroundColor: 'var(--background-brand-primary)', color: 'var(--text-inverse)', border: 'none', padding: 'var(--padding-tiny) var(--padding-md)', borderRadius: 'var(--border-radius-md)', cursor: 'pointer' }}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  },
 };

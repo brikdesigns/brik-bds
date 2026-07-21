@@ -11,14 +11,35 @@ const meta: Meta<typeof AddableFieldRowList> = {
   component: AddableFieldRowList,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
+  argTypes: {
+    values: { control: false, description: 'Current list of rows.' },
+    onChange: { control: false, description: 'Called with the next rows on add / update / remove.' },
+    newRow: { control: false, description: 'Factory for a new empty row, called once per "Add" click.' },
+    children: {
+      control: false,
+      description: 'Render-prop for the row field markup — receives `{ row, index, update }`.',
+    },
+    columns: {
+      control: 'text',
+      description: 'CSS `grid-template-columns` for the row fields; the primitive appends an `auto` track for the remove button.',
+    },
+    label: { control: 'text' },
+    helperText: { control: 'text' },
+    emptyLabel: { control: 'text' },
+    addLabel: { control: 'text' },
+    removeLabel: { control: 'text' },
+    maxItems: { control: 'number' },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* ─── Playground: simple two-text-field row ───────────────────
- * Minimal shape — 2 text columns, no Select, no cross-field logic.
- * Used as the "kick the tires" entry point on the docs page.
+/* ─── Default: simple two-text-field row ───────────────────────
+ * Minimal shape — 2 text columns, no Select, no cross-field logic. The
+ * render-prop `children` and generic row shape are hook-driven and can't
+ * be expressed as args (Q4) — every story here wires its own local state.
  */
 
 interface Item {
@@ -26,8 +47,8 @@ interface Item {
   value: string;
 }
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Minimal two-field row — the "kick the tires" entry point */
+export const Default: Story = {
   render: () => {
     const [items, setItems] = useState<Item[]>([
       { label: 'Phone', value: '(615) 555-0100' },
@@ -68,7 +89,7 @@ export const Playground: Story = {
   },
 };
 
-/* ─── Patterns: phone-system-style 3-field row ────────────────
+/* ─── SoftwareInventory: phone-system-style 3-field row ────────
  * Mirrors onboarding-software-sheet.tsx — Name + Purpose + Category Select.
  * The canonical multi-field row pattern across the portal.
  */
@@ -85,9 +106,8 @@ const CATEGORY_OPTIONS = [
   { value: 'other', label: 'Other Tools' },
 ];
 
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Phone System (3 fields)',
+/** @summary Three-field row — text + text + Select */
+export const SoftwareInventory: Story = {
   render: () => {
     const [tools, setTools] = useState<Tool[]>([
       { name: 'HubSpot', purpose: 'CRM and pipeline tracking', category: 'crm' },
@@ -133,7 +153,7 @@ export const Patterns: Story = {
   },
 };
 
-/* ─── Story 2: Holiday hours (cross-field disabling) ──────────
+/* ─── HolidayHours: cross-field disabling ──────────────────────
  * Mirrors onboarding-listing-sheet.tsx — open + close TextInput
  * (disabled when closed) + Closed Checkbox. Demonstrates that the
  * render-prop API supports cross-field interactions naturally.
@@ -145,9 +165,8 @@ interface Holiday {
   closed: boolean;
 }
 
-/** @summary Holiday hours */
+/** @summary Cross-field disabling — Closed checkbox disables open/close */
 export const HolidayHours: Story = {
-  name: 'Holiday hours (cross-field disabling)',
   render: () => {
     const [holidays, setHolidays] = useState<Holiday[]>([
       { open: '09:00', close: '17:00', closed: false },
@@ -196,7 +215,7 @@ export const HolidayHours: Story = {
   },
 };
 
-/* ─── Story 3: Competitive Positioning (3 TextAreas) ──────────
+/* ─── CompetitiveFrames: three TextAreas ────────────────────────
  * Mirrors onboarding-competitors-sheet.tsx — Competitor + Gap +
  * Copy implication. Demonstrates wider rows with TextArea fields
  * and the same 3-column grid working for taller content.
@@ -208,9 +227,8 @@ interface CompetitiveFrame {
   copyImplication: string;
 }
 
-/** @summary Competitive frames */
+/** @summary Three-textarea row for wider composed content */
 export const CompetitiveFrames: Story = {
-  name: 'Competitive Positioning (3 textareas)',
   render: () => {
     const [frames, setFrames] = useState<CompetitiveFrame[]>([
       {
@@ -263,7 +281,7 @@ export const CompetitiveFrames: Story = {
   },
 };
 
-/* ─── Story 4: Empty state + maxItems gating ──────────────────
+/* ─── MaxItemsCap: empty state + maxItems gating ────────────────
  * Demonstrates the empty state and maxItems behavior — Add button
  * disappears once the cap is reached.
  */
@@ -272,9 +290,8 @@ interface SimpleNote {
   text: string;
 }
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  name: 'Empty state + maxItems',
+/** @summary Empty starting state, capped at maxItems */
+export const MaxItemsCap: Story = {
   render: () => {
     const [notes, setNotes] = useState<SimpleNote[]>([]);
 

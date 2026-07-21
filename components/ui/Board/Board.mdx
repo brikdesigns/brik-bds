@@ -10,53 +10,37 @@ import * as Stories from './Board.stories';
 
 Kanban-style board container with columns, headers, and task cards. Composes from `BoardColumn`, `BoardHeader`, and `BoardCard`. Use for assignment views, queue dashboards, and any horizontally-grouped task layout.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-### Single column
+### Density
 
-The simplest shape — one column with a header and cards.
+`BoardCard` renders at `default` or `compact` density — shown side by side since the comparison is the point.
 
-<Canvas of={Stories.SingleColumn} />
-
-### With avatars
-
-Headers can include an avatar for owner attribution.
-
-<Canvas of={Stories.WithAvatars} />
-
-### Empty column
-
-Empty-state messaging when a column has no cards.
-
-<Canvas of={Stories.EmptyColumn} />
-
-### Task cards
-
-Cards support titles, subtitles, tags, and accent colors.
-
-<Canvas of={Stories.TaskCards} />
-
-### Card accent colors
-
-Use accent colors to communicate priority, category, or owner.
-
-<Canvas of={Stories.CardAccentColors} />
+<Canvas of={Stories.Density} />
 
 ## Patterns
 
-Full multi-column board with headers and assigned task cards.
+Composition and hook-driven state that a single args-driven story can't express.
 
-<Canvas of={Stories.Patterns} />
+### With empty column
 
-### Interactive full board
+<Canvas of={Stories.WithEmptyColumn} />
 
-State-driven board where columns and cards respond to user actions.
+### With task cards
 
-<Canvas of={Stories.FullBoardView} />
+Controlled checkbox state on `BoardCard`.
+
+<Canvas of={Stories.WithTaskCards} />
+
+### Full board view
+
+Interactive, token-driven, multi-column board with headers, cards, and live progress.
+
+<Canvas of={Stories.WithFullBoard} />
 
 ## Props
 

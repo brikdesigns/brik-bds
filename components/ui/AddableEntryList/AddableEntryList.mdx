@@ -8,47 +8,33 @@ import * as Stories from './AddableEntryList.stories';
 
 <ComponentLinks slug="addable-entry-list" />
 
-User-managed list of `{ primary, description }` entries. The primary field type (`text` or `url`) controls value rendering — text shows raw, URL renders as a link in read mode.
+User-managed list of `{ primary, secondary }` entries. The primary field type (`text` or `url`) controls value rendering — text shows raw, URL renders as a link in read mode. Providing `primarySuggestions` switches the primary field to a combobox.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-All-modes view — read mode and edit mode side by side, with both URL-primary and text-primary configurations.
+### Read mode
 
-<Canvas of={Stories.Variants} />
+`disabled` renders token-backed typography with no inputs or remove controls. Flip `primaryInputType` via Controls to compare the URL-anchor and plain-text renderings.
 
-### Read mode (URL primary)
+<Canvas of={Stories.ReadMode} />
 
-URL primary renders each entry's URL as an anchor in read mode.
+### With suggestions
 
-<Canvas of={Stories.ReadModeUrl} />
+Preserves the reveal-form flow — existing entries render as read-only cards; Add opens a staging form with a combobox-backed primary. `primaryStrict` (Controls) rejects free-form entries.
 
-### Read mode (text primary)
+<Canvas of={Stories.WithSuggestions} />
 
-Text primary shows the value as plain text.
-
-<Canvas of={Stories.ReadModeText} />
-
-### Inline edit (text primary)
-
-Edit mode with inline text inputs for each row.
-
-<Canvas of={Stories.InlineEditText} />
-
-### Empty state
-
-The list renders an empty-state row when no entries exist.
+### Empty
 
 <Canvas of={Stories.Empty} />
 
-## Patterns
+### Max items reached
 
-Catalog-backed services list — primary field tied to an industry catalog with suggestions, free-text fallback, and full edit-flow.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.MaxItemsCap} />
 
 ## Props
 

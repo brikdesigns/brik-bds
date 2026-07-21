@@ -1,0 +1,33 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './AddableTagList.stories';
+
+<Meta of={Stories} />
+
+# AddableTagList
+
+<ComponentLinks slug="addable-tag-list" />
+
+Reveal-on-click list of removable text tags. Without `suggestions`, it's a plain text input where Enter commits. With `suggestions`, it's a combobox — typing filters the list, and free-form entries are still accepted unless `strict` is set. Replaces `AddableTextList` and `AddableComboList` (ADR-003).
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### With suggestions
+
+<Canvas of={Stories.WithSuggestions} />
+
+### Strict mode
+
+<Canvas of={Stories.StrictMode} />
+
+### Read mode
+
+<Canvas of={Stories.ReadMode} />
+
+## Props
+
+<ArgTypes of={Stories} />

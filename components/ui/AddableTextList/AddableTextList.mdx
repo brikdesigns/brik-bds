@@ -10,27 +10,31 @@ import * as Stories from './AddableTextList.stories';
 
 User-managed list of plain-text values rendered as `<Tag>` chips. Type, press Enter to add; click the × to remove. For values that need richer structure (title + description), use `AddableEntryList`.
 
-## Playground
+> **Note** — Deprecated. Use `<AddableTagList />` instead (ADR-003).
 
-<Canvas of={Stories.Playground} />
+## Default
+
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes, helper text, disabled, empty, and max-items states.
-
-<Canvas of={Stories.Variants} />
-
-### Empty state
+### Empty
 
 The list renders an inline empty-state message when `values` is empty.
 
 <Canvas of={Stories.Empty} />
 
-## Patterns
+### Read mode
 
-Anti-messages, approved CTAs, and compliance disclaimers — recurring text-list usage in onboarding sheets.
+<Canvas of={Stories.ReadMode} />
 
-<Canvas of={Stories.Patterns} />
+### Max items reached
+
+<Canvas of={Stories.MaxItemsCap} />
+
+### Structured content warning
+
+<Canvas of={Stories.StructuredContentWarning} />
 
 ## Props
 

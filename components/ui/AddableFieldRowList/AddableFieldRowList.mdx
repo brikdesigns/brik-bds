@@ -10,21 +10,23 @@ import * as Stories from './AddableFieldRowList.stories';
 
 User-managed list of multi-field rows. Render-prop API: consumer supplies the per-row inputs, the list locks the add/remove affordance, grid layout, and empty/max-items behavior. Replaces hand-rolled `display: grid` row tables across the portal.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Empty state and max-items state stacked.
+`AddableFieldRowList` has no semantic-variant axis — the generic `<T>` row shape and render-prop `children` are hook-driven and can't be authored via Controls. Every real usage is a distinct row composition; see [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md).
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
 ## Patterns
 
-Three real-world row shapes — phone-system 3-field, holiday hours with cross-field disabling, and competitive frames with three textareas.
+Real row shapes from the portal onboarding survey (ADR-005) — three-field with a Select, cross-field disabling, three-textarea composition, and the empty/max-items cap.
 
-<Canvas of={Stories.Patterns} />
+### Software inventory (3 fields)
+
+<Canvas of={Stories.SoftwareInventory} />
 
 ### Holiday hours (cross-field disabling)
 
@@ -32,11 +34,15 @@ Open / close TextInputs disable when the Closed checkbox is set. Demonstrates th
 
 <Canvas of={Stories.HolidayHours} />
 
-### Competitive frames (3 TextAreas)
+### Competitive frames (3 textareas)
 
 Wider rows that compose three TextAreas — "competitor / gap / copy implication" — used in onboarding strategy sheets.
 
 <Canvas of={Stories.CompetitiveFrames} />
+
+### Max items reached
+
+<Canvas of={Stories.MaxItemsCap} />
 
 ## Props
 
