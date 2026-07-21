@@ -146,6 +146,7 @@ const COMPONENT_LINKS = /<ComponentLinks\b[^>]*\bslug="([^"]+)"/g;
 // issue #1229). Self-cleaning: if a listed slug gains a docs page, the
 // gate fails until it is removed from this set — so the debt can only shrink.
 const COMPONENT_LINKS_WITHOUT_DOCS_PAGE = new Set([
+  'addable-tag-list',
   'animated-icon',
   'block-quote',
   'checklist',
