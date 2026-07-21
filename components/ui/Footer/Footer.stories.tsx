@@ -1,4 +1,4 @@
-import React from 'react';
+import type { CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
 import { Footer } from './Footer';
@@ -10,25 +10,6 @@ const MockLink: BdsLinkComponent = ({ href, children, ...props }) => (
   <a href={href} data-link-component="mock" {...props}>
     {children}
   </a>
-);
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
 /* ─── Shared Data ─────────────────────────────────────────────── */
@@ -71,15 +52,6 @@ const LogoPlaceholder = () => (
   </div>
 );
 
-const socialLinks = (
-  <>
-    <a href="#" style={{ color: 'inherit', textDecoration: 'none', fontSize: 'var(--body-md)' }}>FB</a>
-    <a href="#" style={{ color: 'inherit', textDecoration: 'none', fontSize: 'var(--body-md)' }}>IG</a>
-    <a href="#" style={{ color: 'inherit', textDecoration: 'none', fontSize: 'var(--body-md)' }}>LI</a>
-    <a href="#" style={{ color: 'inherit', textDecoration: 'none', fontSize: 'var(--body-md)' }}>X</a>
-  </>
-);
-
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Footer> = {
@@ -88,16 +60,45 @@ const meta: Meta<typeof Footer> = {
   tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
-    variant: { control: 'select', options: ['default', 'brand', 'inverse'] },
+    logo: { control: false, description: 'Logo element rendered in the top-left brand area.' },
+    tagline: { control: 'text', description: 'Optional tagline or description below the logo.' },
+    brandExtra: {
+      control: false,
+      description:
+        'Optional content rendered inside the logo area, below the tagline — typically a contact block (phone / email / address).',
+    },
+    columns: { control: false, description: 'Link columns — each a `{ heading, links }` group.' },
+    columnHeadingLevel: {
+      control: 'select',
+      options: ['h2', 'h3', 'h4', 'h5', 'h6'],
+      description:
+        'Render level for column headings. Default `h4` so a page whose last in-page heading is h2/h3 keeps `heading-order` intact.',
+    },
+    copyright: { control: 'text' },
+    bottomLinks: {
+      control: false,
+      description: 'Inline links next to the copyright, separated by a bullet — typically Terms / Privacy.',
+    },
+    socialLinks: {
+      control: false,
+      description: 'Right-aligned content in the bottom bar — typically social icons or a small tagline.',
+    },
+    aboveTop: {
+      control: false,
+      description:
+        'Content rendered above the standard top section, full-width — typical use: newsletter signup, announcement banner, secondary CTA.',
+    },
+    variant: {
+      control: 'select',
+      options: ['default', 'brand', 'inverse'],
+      description:
+        'Background surface. Pure color/text swap — no semantic or ARIA difference between values. `inverse` meets WCAG AA on `body-sm`.',
+    },
     containerMaxWidth: {
       control: 'select',
       options: [undefined, 'narrow', 'default', 'wide', 'xl'],
       description:
         'Constrain inner content to a `--content-width-*` while the background stays full-bleed. Omit for full-width.',
-    },
-    columnHeadingLevel: {
-      control: 'select',
-      options: ['h2', 'h3', 'h4', 'h5', 'h6'],
     },
     linkComponent: {
       description:
@@ -111,19 +112,23 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   1. DEFAULT — args-driven sandbox. Controls work.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     logo: <LogoPlaceholder />,
     tagline: 'Building better digital experiences for small businesses.',
     columns: sampleColumns,
-    copyright: '\u00A9 2026 Brik Designs. All rights reserved.',
+    copyright: '© 2026 Brik Designs. All rights reserved.',
     variant: 'default',
   },
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Q3 semantic starting points
+   ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Inner content constrained to a content width while the background spans full-bleed */
 export const Constrained: Story = {
@@ -142,7 +147,7 @@ export const WithLinkComponent: Story = {
   args: {
     logo: <LogoPlaceholder />,
     columns: sampleColumns,
-    copyright: '\u00A9 2026 Brik Designs. All rights reserved.',
+    copyright: '© 2026 Brik Designs. All rights reserved.',
     bottomLinks: [
       { label: 'Terms', href: '/terms' },
       { label: 'Privacy', href: '/privacy' },
@@ -182,82 +187,7 @@ export const ExternalLinks: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Default, brand, with social, minimal
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Default</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          tagline="Building better digital experiences for small businesses."
-          columns={sampleColumns}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Brand</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          tagline="Building better digital experiences for small businesses."
-          columns={sampleColumns}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-          variant="brand"
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Inverse (dark surface \u2014 meets WCAG AA on body-sm)</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          tagline="Building better digital experiences for small businesses."
-          columns={sampleColumns}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-          variant="inverse"
-        />
-      </div>
-
-      <div style={{ '--bds-footer-surface': 'var(--color-grayscale-darkest)' } as React.CSSProperties}>
-        <SectionLabel>
-          Inverse + `--bds-footer-surface` override (pinned to grayscale-darkest across themes)
-        </SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          tagline="Building better digital experiences for small businesses."
-          columns={sampleColumns}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-          variant="inverse"
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With social links</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          columns={sampleColumns}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-          socialLinks={socialLinks}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Minimal (copyright only)</SectionLabel>
-        <Footer copyright={'\u00A9 2026 Brik Designs. All rights reserved.'} />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Full marketing page footer
-   ═══════════════════════════════════════════════════════════════ */
-
-/* \u2500\u2500\u2500 Marketing-pattern helpers \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
+/* ─── Marketing-pattern helpers ──────────────────────────────── */
 
 const NewsletterSection = () => (
   <div style={{
@@ -304,7 +234,7 @@ const NewsletterSection = () => (
 const ContactBlock = () => (
   <>
     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)', fontSize: 'var(--body-sm)' }}>
-      <span style={{ opacity: 0.6 }}>{'\u260E'}</span>
+      <span style={{ opacity: 0.6 }}>{'☎'}</span>
       <span>(555) 123-4567</span>
     </div>
     <a
@@ -318,7 +248,7 @@ const ContactBlock = () => (
         textDecoration: 'none',
       }}
     >
-      <span style={{ opacity: 0.6 }}>{'\u2709'}</span>
+      <span style={{ opacity: 0.6 }}>{'✉'}</span>
       <span>hello@example.com</span>
     </a>
   </>
@@ -337,89 +267,65 @@ const ServiceDot = ({ color }: { color: string }) => (
   />
 );
 
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Minimal marketing footer (legacy shape \u2014 no marketing slots)</SectionLabel>
-        <Footer
-          logo={<LogoPlaceholder />}
-          tagline="Modern websites and digital systems for growing businesses."
-          columns={[
-            {
-              heading: 'Services',
-              links: [
-                { label: 'Web Design', href: '#' },
-                { label: 'Development', href: '#' },
-                { label: 'SEO', href: '#' },
-                { label: 'Consulting', href: '#' },
-              ],
-            },
-            {
-              heading: 'Resources',
-              links: [
-                { label: 'Blog', href: '#' },
-                { label: 'Case Studies', href: '#' },
-                { label: 'Documentation', href: '#' },
-              ],
-            },
-            {
-              heading: 'Legal',
-              links: [
-                { label: 'Privacy Policy', href: '#' },
-                { label: 'Terms of Service', href: '#' },
-              ],
-            },
-          ]}
-          copyright={'\u00A9 2026 Brik Designs LLC. All rights reserved.'}
-          socialLinks={socialLinks}
-        />
-      </div>
+/** @summary Full marketing-site footer — newsletter, contact block, badged service columns, bottom links, and social */
+export const Marketing: Story = {
+  args: {
+    aboveTop: <NewsletterSection />,
+    logo: <LogoPlaceholder />,
+    tagline: "We're a digital marketing and design agency.",
+    brandExtra: <ContactBlock />,
+    columns: [
+      {
+        heading: 'Services',
+        links: [
+          { label: 'Brand Design', href: '#', adornment: <ServiceDot color="var(--surface-service-brand)" /> },
+          { label: 'Marketing Design', href: '#', adornment: <ServiceDot color="var(--surface-service-marketing)" /> },
+          { label: 'Information Design', href: '#', adornment: <ServiceDot color="var(--surface-service-information)" /> },
+          { label: 'Product Design', href: '#', adornment: <ServiceDot color="var(--surface-service-product)" /> },
+          { label: 'Back Office Design', href: '#', adornment: <ServiceDot color="var(--surface-service-back-office)" /> },
+        ],
+      },
+      {
+        heading: 'About',
+        links: [
+          { label: 'Who We Are', href: '#' },
+          { label: 'What We Do', href: '#' },
+          { label: 'Customer Stories', href: '#' },
+        ],
+      },
+      {
+        heading: 'Follow Us',
+        links: [
+          { label: 'LinkedIn', href: '#' },
+          { label: 'Instagram', href: '#' },
+          { label: 'Facebook', href: '#' },
+        ],
+      },
+    ],
+    copyright: '© 2026 Brik Designs. All rights reserved.',
+    bottomLinks: [
+      { label: 'Terms', href: '#' },
+      { label: 'Privacy policy', href: '#' },
+    ],
+    socialLinks: <span>Made with {'❤️'} in Palm Beach, FL</span>,
+  },
+};
 
-      <div>
-        <SectionLabel>Full marketing footer \u2014 newsletter + contact + badged columns + bottom links</SectionLabel>
-        <Footer
-          aboveTop={<NewsletterSection />}
-          logo={<LogoPlaceholder />}
-          tagline="We're a digital marketing and design agency."
-          brandExtra={<ContactBlock />}
-          columns={[
-            {
-              heading: 'Services',
-              links: [
-                { label: 'Brand Design', href: '#', adornment: <ServiceDot color="var(--surface-service-brand)" /> },
-                { label: 'Marketing Design', href: '#', adornment: <ServiceDot color="var(--surface-service-marketing)" /> },
-                { label: 'Information Design', href: '#', adornment: <ServiceDot color="var(--surface-service-information)" /> },
-                { label: 'Product Design', href: '#', adornment: <ServiceDot color="var(--surface-service-product)" /> },
-                { label: 'Back Office Design', href: '#', adornment: <ServiceDot color="var(--surface-service-back-office)" /> },
-              ],
-            },
-            {
-              heading: 'About',
-              links: [
-                { label: 'Who We Are', href: '#' },
-                { label: 'What We Do', href: '#' },
-                { label: 'Customer Stories', href: '#' },
-              ],
-            },
-            {
-              heading: 'Follow Us',
-              links: [
-                { label: 'LinkedIn', href: '#' },
-                { label: 'Instagram', href: '#' },
-                { label: 'Facebook', href: '#' },
-              ],
-            },
-          ]}
-          copyright={'\u00A9 2026 Brik Designs. All rights reserved.'}
-          bottomLinks={[
-            { label: 'Terms', href: '#' },
-            { label: 'Privacy policy', href: '#' },
-          ]}
-          socialLinks={<span>Made with {'\u2764\uFE0F'} in Palm Beach, FL</span>}
-        />
-      </div>
-    </Stack>
-  ),
+/* ═══════════════════════════════════════════════════════════════
+   3. CSS OVERRIDE API — `--bds-footer-surface` demo
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary `--bds-footer-surface` pinned via inline style override so the inverse variant holds a fixed color across light + dark themes */
+export const SurfaceOverride: Story = {
+  args: {
+    logo: <LogoPlaceholder />,
+    tagline: 'Building better digital experiences for small businesses.',
+    columns: sampleColumns,
+    copyright: '© 2026 Brik Designs. All rights reserved.',
+    variant: 'inverse',
+    style: {
+      // bds-lint-ignore — component-scoped CSS variable override, not a design token
+      ['--bds-footer-surface' as string]: 'var(--color-grayscale-darkest)',
+    } as CSSProperties,
+  },
 };

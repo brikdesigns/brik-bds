@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumb } from './Breadcrumb';
 import { type BdsLinkComponent } from '../NavItem';
@@ -11,25 +10,6 @@ const MockLink: BdsLinkComponent = ({ href, children, ...props }) => (
   </a>
 );
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Breadcrumb> = {
@@ -38,7 +18,16 @@ const meta: Meta<typeof Breadcrumb> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    separator: { control: 'select', options: ['slash', 'chevron'] },
+    items: {
+      control: 'object',
+      description:
+        'Crumb trail in order. The last item renders as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set.',
+    },
+    separator: {
+      control: 'select',
+      options: ['slash', 'chevron'],
+      description: 'Visual separator between crumbs. Default `slash` (`/`); `chevron` renders `›`.',
+    },
     linkComponent: {
       description:
         'Render each linked crumb with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. See ADR-012.',
@@ -51,11 +40,11 @@ export default meta;
 type Story = StoryObj<typeof Breadcrumb>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   1. DEFAULT — args-driven sandbox. Controls work.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     items: [
       { label: 'Home', href: '#' },
@@ -65,6 +54,10 @@ export const Playground: Story = {
     separator: 'slash',
   },
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Q3 semantic starting points
+   ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Linked crumbs routed through an injected link component for client-side routing */
 export const WithLinkComponent: Story = {
@@ -79,120 +72,8 @@ export const WithLinkComponent: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Separator styles, depths, single item
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Slash separator (default)</SectionLabel>
-        <Breadcrumb
-          items={[
-            { label: 'Home', href: '#' },
-            { label: 'Products', href: '#' },
-            { label: 'Design System' },
-          ]}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Chevron separator</SectionLabel>
-        <Breadcrumb
-          separator="chevron"
-          items={[
-            { label: 'Home', href: '#' },
-            { label: 'Products', href: '#' },
-            { label: 'Design System' },
-          ]}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Deep nesting</SectionLabel>
-        <Breadcrumb
-          items={[
-            { label: 'Home', href: '#' },
-            { label: 'Products', href: '#' },
-            { label: 'Design System', href: '#' },
-            { label: 'Components', href: '#' },
-            { label: 'Breadcrumb' },
-          ]}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Single item</SectionLabel>
-        <Breadcrumb items={[{ label: 'Dashboard' }]} />
-      </div>
-
-      <div>
-        <SectionLabel>On dark background</SectionLabel>
-        <div style={{ backgroundColor: 'var(--background-brand-primary)', padding: 'var(--padding-xl)', borderRadius: 'var(--border-radius-md)' }}>
-          <Breadcrumb
-            items={[
-              { label: 'Show All', href: '#' },
-              { label: 'Product', href: '#' },
-              { label: 'Design System' },
-            ]}
-          />
-        </div>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      {/* Page header breadcrumb */}
-      <div>
-        <SectionLabel>Page header context</SectionLabel>
-        <div style={{
-          padding: 'var(--padding-xl)',
-          borderBottom: 'var(--border-width-md) solid var(--border-secondary)',
-        }}>
-          <Breadcrumb
-            separator="chevron"
-            items={[
-              { label: 'Admin', href: '#' },
-              { label: 'Companies', href: '#' },
-              { label: 'Acme Corp' },
-            ]}
-          />
-          <h1 style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-lg)',
-            marginTop: 'var(--gap-lg)',
-          }}>
-            Acme Corp
-          </h1>
-        </div>
-      </div>
-
-      {/* Settings path */}
-      <div>
-        <SectionLabel>Settings navigation</SectionLabel>
-        <Breadcrumb
-          items={[
-            { label: 'Settings', href: '#' },
-            { label: 'Integrations', href: '#' },
-            { label: 'Webflow API' },
-          ]}
-        />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. SERVICE-LINE CASCADE — tinting via [data-service-line]
+   3. PATTERNS — Q4 irreducible: driven by an ancestor DOM attribute
+      ([data-service-line]), not a component prop. Args can't express it.
    ═══════════════════════════════════════════════════════════════ */
 
 // The breadcrumb stays scope-blind — __current reads --text-secondary
@@ -214,10 +95,21 @@ const SERVICE_LINES = [
 /** @summary Service-line tinting via [data-service-line] cascade */
 export const ServiceLineCascade: Story = {
   render: () => (
-    <Stack>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
       {SERVICE_LINES.map(({ id, label }) => (
         <div key={id} data-service-line={id}>
-          <SectionLabel>{`[data-service-line='${id}'] — ${label}`}</SectionLabel>
+          <p
+            style={{
+              fontFamily: 'var(--font-family-label)',
+              fontSize: 'var(--body-xs)', // bds-lint-ignore
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.05em',
+              marginBottom: 'var(--gap-md)',
+              color: 'var(--text-muted)',
+            }}
+          >
+            {`[data-service-line='${id}'] — ${label}`}
+          </p>
           <Breadcrumb
             items={[
               { label: 'Home', href: '#' },
@@ -227,6 +119,6 @@ export const ServiceLineCascade: Story = {
           />
         </div>
       ))}
-    </Stack>
+    </div>
   ),
 };

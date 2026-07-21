@@ -10,21 +10,21 @@ import * as Stories from './Pagination.stories';
 
 Page navigation controls with previous/next arrows, page numbers, and ellipsis for large page counts. Supports left, center, and right alignment.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Alignment positions (left, center, right), few pages, and single page.
+Pagination has no semantic-variant axis — alignment (`position`), page count, and sibling count are all exposed via Controls on the canvas above.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
 ## Patterns
 
-Real-world usage: table pagination with result count.
+Real-world usage: table pagination paired with a derived "Showing X–Y of Z results" label.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithResultCount} />
 
 ## Props
 

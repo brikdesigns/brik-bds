@@ -10,44 +10,29 @@ import * as Stories from './PageHeader.stories';
 
 Composable page-level header that brings together BDS components: `Breadcrumb`, `Button`, and `TabBar`. No background by default — inherits from parent context; the opt-in `sticky` prop adds an opaque surface so it can pin on scroll.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-All slot combinations: title only, subtitle, breadcrumbs, actions, tabs, metadata, and full composition.
-
-- **`badge`** — `ServiceTag variant="icon"` icon badge left of title (service pages)
-- **`breadcrumbs`** — `Breadcrumb` navigation trail above title
-- **`actions`** — `Button` action buttons aligned right
-- **`metadata`** — built-in key-value grid with border-top
-- **`tabs`** — `TabBar` tab navigation below the title block
-
-<Canvas of={Stories.Variants} />
-
-## Patterns
-
-Real-world usage: company detail pages and analytics dashboards.
-
-<Canvas of={Stories.Patterns} />
-
-## Read / edit mode
-
-`PageHeader` is bimodal — symmetric with [`Sheet`](?path=/docs/containers-sheet--docs). When `mode` is set and no explicit `actions` slot is provided, the header auto-renders mode-appropriate actions:
-
-- **`mode="read"`** with `onEdit` → `[Edit]` (primary, pen icon)
-- **`mode="edit"`** with `onSave` / `onCancel` → `[Cancel] [Save]` `ButtonGroup`
-
-Explicit `actions` always overrides mode-driven auto-actions (mirrors `Sheet`'s `footer` override). When `mode` is unset, behavior is unchanged — no breaking change.
+`PageHeader` is bimodal — symmetric with [`Sheet`](?path=/docs/containers-sheet--docs). When `mode` is set and no explicit `actions` slot is provided, the header auto-renders mode-appropriate actions. Explicit `actions` always overrides mode-driven auto-actions (mirrors `Sheet`'s `footer` override). When `mode` is unset, behavior is unchanged — no breaking change.
 
 The canonical URL pattern for bimodal pages is `/{table}/[slug]` (read) and `/{table}/[slug]/edit` (edit) — see [Read-Mode Page](?path=/docs/containers-read-mode-page--docs).
 
+### Read mode
+
+`mode="read"` with `onEdit` → `[Edit]` (primary, pen icon).
+
 <Canvas of={Stories.ReadMode} />
+
+### Edit mode
+
+`mode="edit"` with `onSave` / `onCancel` → `[Cancel] [Save]` `ButtonGroup`. Toggle `saveLoading` / `saveDisabled` via Controls.
 
 <Canvas of={Stories.EditMode} />
 
-## Structured actions
+### Structured actions
 
 `actions` accepts any `ReactNode`, but a bare flex row lets each surface pick its own ordering and mix button sizes. `PageHeaderActions` fixes the hierarchy once:
 
@@ -72,7 +57,9 @@ Slots accept rendered elements — a raw `<Button>` or a consumer wrapper (`<Del
 
 <Canvas of={Stories.StructuredActions} />
 
-## Sticky
+## Patterns
+
+### Sticky
 
 Set `sticky` to pin the header to the top of its scroll container as the body scrolls. It renders an opaque `--surface-primary` background (so content passes cleanly beneath) and stacks above page content but below `NavBar` and overlays. Non-sticky remains the default — existing consumers are unaffected. The header sticks within the nearest scrolling ancestor, so that container — not the window — must own the scroll.
 
@@ -82,3 +69,15 @@ Set `sticky` to pin the header to the top of its scroll container as the body sc
 
 <ArgTypes of={Stories} />
 
+## CSS Override API
+
+Four component-scoped CSS variables on `.bds-page-header` tune the internal rhythm without forking the component. Override at any cascade level (theme file, `globals.css`, `style` prop). Defaults preserve the lean 0.57.0 shape.
+
+| Variable | Default | Controls |
+| --- | --- | --- |
+| `--page-header-section-gap` | `--gap-xl` (24px) | Gap between root sections (inner / metadata / tabs) |
+| `--page-header-content-gap` | `--gap-sm` (6px) | Gap between the title-row and the subtitle |
+| `--page-header-actions-gap` | `--gap-sm` (6px) | Gap between the content column (title + subtitle) and the actions column |
+| `--page-header-padding-bottom` | `0` | Bottom padding below the header |
+
+<Canvas of={Stories.TunableSpacing} />

@@ -1,26 +1,6 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from './Pagination';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
 
 /* ─── Meta ────────────────────────────────────────────── */
 
@@ -30,18 +10,26 @@ const meta = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    position: {
-      control: 'select',
-      options: ['left', 'center', 'right'],
-    },
     currentPage: {
       control: { type: 'number', min: 1, max: 100 },
+      description: 'Current active page (1-indexed).',
     },
     totalPages: {
       control: { type: 'number', min: 1, max: 100 },
+      description: 'Total number of pages. Fewer than `siblingCount * 2 + 5` renders with no ellipsis.',
+    },
+    position: {
+      control: 'select',
+      options: ['left', 'center', 'right'],
+      description: 'Alignment of the pagination controls.',
+    },
+    onChange: {
+      control: false,
+      description: 'Callback fired with the new page number when a page or arrow control is clicked.',
     },
     siblingCount: {
       control: { type: 'number', min: 0, max: 3 },
+      description: 'Number of sibling pages to show around the current page.',
     },
   },
 } satisfies Meta<typeof Pagination>;
@@ -50,11 +38,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox. `render` wraps the controlled
+   `currentPage`/`onChange` pair in local state (Q4 — Controls alone
+   can't drive click-through paging), so clicking pages/arrows works.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   render: (args) => {
     const [page, setPage] = useState(args.currentPage);
     return <Pagination {...args} currentPage={page} onChange={setPage} />;
@@ -68,54 +58,12 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Positions, few pages, single page
+   WITH RESULT COUNT — Q4 irreducible: the "Showing X–Y of Z"
+   label is derived from controlled page state that args can't express
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  args: { currentPage: 5, totalPages: 20, onChange: () => {} },
-  render: () => {
-    function PaginationVariants() {
-      const [left, setLeft] = useState(5);
-      const [center, setCenter] = useState(10);
-      const [right, setRight] = useState(15);
-      const [few, setFew] = useState(3);
-
-      return (
-        <Stack>
-          <div>
-            <SectionLabel>Left aligned</SectionLabel>
-            <Pagination currentPage={left} totalPages={20} position="left" onChange={setLeft} />
-          </div>
-          <div>
-            <SectionLabel>Center aligned</SectionLabel>
-            <Pagination currentPage={center} totalPages={20} position="center" onChange={setCenter} />
-          </div>
-          <div>
-            <SectionLabel>Right aligned</SectionLabel>
-            <Pagination currentPage={right} totalPages={20} position="right" onChange={setRight} />
-          </div>
-          <div>
-            <SectionLabel>Few pages (no ellipsis)</SectionLabel>
-            <Pagination currentPage={few} totalPages={5} position="center" onChange={setFew} />
-          </div>
-          <div>
-            <SectionLabel>Single page</SectionLabel>
-            <Pagination currentPage={1} totalPages={1} position="center" onChange={() => {}} />
-          </div>
-        </Stack>
-      );
-    }
-    return <PaginationVariants />;
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Table pagination
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
+/** @summary Paired with a derived "Showing X–Y of Z results" label */
+export const WithResultCount: Story = {
   args: { currentPage: 1, totalPages: 12, onChange: () => {} },
   render: () => {
     function TablePagination() {
@@ -125,7 +73,6 @@ export const Patterns: Story = {
 
       return (
         <div>
-          <SectionLabel>Table pagination</SectionLabel>
           <div style={{
             fontFamily: 'var(--font-family-body)',
             fontSize: 'var(--body-sm)',

@@ -3,26 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Popover } from './Popover';
 import { Button } from '../Button';
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
+/* ─── Layout helper (story-only) ──────────────────────────────── */
 
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
-const Row = ({ children, gap = 'var(--gap-lg)' }: { children: React.ReactNode; gap?: string }) => (
+const Row = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
   <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'flex-start' }}>{children}</div>
 );
 
@@ -61,6 +44,8 @@ const meta: Meta<typeof Popover> = {
     ),
   ],
   argTypes: {
+    content: { control: false, description: 'Popover panel content.' },
+    children: { control: false, description: 'The trigger element.' },
     placement: {
       control: 'select',
       options: ['top', 'bottom', 'left', 'right'],
@@ -69,6 +54,8 @@ const meta: Meta<typeof Popover> = {
       control: 'select',
       options: ['click', 'hover'],
     },
+    isOpen: { table: { disable: true } },
+    onOpenChange: { table: { disable: true } },
   },
 } satisfies Meta<typeof Popover>;
 
@@ -76,11 +63,18 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox. Popover manages its own open
+   state internally when `isOpen` is left unset, so args alone
+   drive the trigger interaction — no render/hook wiring needed.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Click the trigger to reveal the panel. Switch `placement` and `trigger`
+ * via Controls.
+ *
+ * @summary Floating content panel anchored to a trigger
+ */
+export const Default: Story = {
   args: {
     content: sampleContent,
     placement: 'bottom',
@@ -90,84 +84,32 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Placements, trigger modes
+   PLACEMENTS — narrow axis-only-gallery exception (ADR-006): side
+   by side is the entire point, and the Controls panel can only
+   show one placement at a time. Mirrors the sibling Tooltip file.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
+/**
+ * All four placements around the trigger. Side-by-side is the point —
+ * the Controls panel can only show one placement at a time.
+ *
+ * @summary All four placements side by side
+ */
+export const Placements: Story = {
   render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Placements</SectionLabel>
-        <Row gap="var(--gap-xl)">
-          <Popover content={sampleContent} placement="top">
-            <Button variant="outline" size="sm">Top</Button>
-          </Popover>
-          <Popover content={sampleContent} placement="bottom">
-            <Button variant="outline" size="sm">Bottom</Button>
-          </Popover>
-          <Popover content={sampleContent} placement="left">
-            <Button variant="outline" size="sm">Left</Button>
-          </Popover>
-          <Popover content={sampleContent} placement="right">
-            <Button variant="outline" size="sm">Right</Button>
-          </Popover>
-        </Row>
-      </div>
-
-      <div>
-        <SectionLabel>Trigger modes</SectionLabel>
-        <Row>
-          <Popover content={sampleContent} trigger="click">
-            <Button variant="outline" size="sm">Click trigger</Button>
-          </Popover>
-          <Popover content={sampleContent} trigger="hover">
-            <Button variant="ghost" size="sm">Hover trigger</Button>
-          </Popover>
-        </Row>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Rich content popover
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Notification settings</SectionLabel>
-        <Popover
-          placement="bottom"
-          content={
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--gap-md)',
-              fontFamily: 'var(--font-family-body)',
-              minWidth: 240,
-            }}>
-              <div style={{ fontSize: 'var(--label-md)', fontWeight: 'var(--font-weight-semibold)' as unknown as number, color: 'var(--text-primary)' }}>
-                Notification settings
-              </div>
-              <label style={{ fontSize: 'var(--body-sm)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)' }}>
-                <input type="checkbox" defaultChecked /> Push notifications
-              </label>
-              <label style={{ fontSize: 'var(--body-sm)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)' }}>
-                <input type="checkbox" /> Email digest
-              </label>
-              <label style={{ fontSize: 'var(--body-sm)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)' }}>
-                <input type="checkbox" defaultChecked /> Sound alerts
-              </label>
-            </div>
-          }
-        >
-          <Button>Settings</Button>
-        </Popover>
-      </div>
-    </Stack>
+    <Row>
+      <Popover content={sampleContent} placement="top">
+        <Button variant="outline" size="sm">Top</Button>
+      </Popover>
+      <Popover content={sampleContent} placement="bottom">
+        <Button variant="outline" size="sm">Bottom</Button>
+      </Popover>
+      <Popover content={sampleContent} placement="left">
+        <Button variant="outline" size="sm">Left</Button>
+      </Popover>
+      <Popover content={sampleContent} placement="right">
+        <Button variant="outline" size="sm">Right</Button>
+      </Popover>
+    </Row>
   ),
 };

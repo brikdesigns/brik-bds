@@ -10,33 +10,29 @@ import * as Stories from './Modal.stories';
 
 Portal-rendered dialog overlay with backdrop, escape key, and scroll lock. Use for focused tasks, confirmations, and forms.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
+
+Size (`sm` · `md` · `lg` · `xl` · `full`), `closeOnBackdrop`, `closeOnEscape`, and `showCloseButton` are all Controls on the canvas above.
 
 ## Variants
 
-Size variants, scrolling content, and no close button.
-
-<Canvas of={Stories.Variants} />
-
-- **`sm`** — Compact, simple messages
-- **`md`** — Default, standard dialogs
-- **`lg`** — Extended, complex content
-- **`xl`** — Extra large, data-heavy views
-- **`full`** — Full screen
-
 ### Confirm preset
 
-`preset="confirm"` collapses the legacy `Dialog` shape into Modal as a compact `alertdialog` with auto-rendered Cancel/Confirm buttons. Use `confirmVariant="destructive"` for delete-type actions.
+`preset="confirm"` collapses the legacy `Dialog` shape into Modal as a compact `alertdialog` with an auto-rendered Cancel/Confirm footer.
 
-<Canvas of={Stories.ConfirmPreset} />
+<Canvas of={Stories.Confirm} />
+
+### Destructive confirm
+
+`confirmVariant="destructive"` — the starting template for delete-type confirmations.
+
+<Canvas of={Stories.ConfirmDestructive} />
 
 ## Patterns
 
-Confirm delete and form in modal.
-
-<Canvas of={Stories.Patterns} />
+Composition the matrix can't express as args.
 
 ### Two-column form (xl)
 
