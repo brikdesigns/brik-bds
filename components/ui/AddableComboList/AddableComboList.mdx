@@ -10,45 +10,29 @@ import * as Stories from './AddableComboList.stories';
 
 Catalog-backed multi-pick input. Renders a list of suggestions in a typeahead dropdown; allows free-form entries by default, or restrict to catalog values via `strict`. Picked values render as `<Tag>` chips.
 
-## Playground
+> **Note** — Deprecated. Use `<AddableTagList suggestions={...} />` instead (ADR-003); `maxEntries` renames to `maxItems`.
 
-<Canvas of={Stories.Playground} />
+## Default
+
+<Canvas of={Stories.Default} />
 
 ## Variants
 
 ### Pre-populated
 
-Some values already selected. The picker hides them from the dropdown.
-
 <Canvas of={Stories.PrePopulated} />
 
 ### Strict mode
 
-`strict` rejects free-form entries — picks must match a catalog value.
-
 <Canvas of={Stories.StrictMode} />
 
-### With helper text
+### Read mode
 
-`helperText` appears below the input.
+<Canvas of={Stories.ReadMode} />
 
-<Canvas of={Stories.WithHelperText} />
+### Max entries reached
 
-### Disabled
-
-<Canvas of={Stories.Disabled} />
-
-### Max entries hit
-
-`maxEntries` caps the number of picks; the Add button hides at the limit.
-
-<Canvas of={Stories.MaxEntriesHit} />
-
-## Patterns
-
-Three intake fields stacked — services (mixed catalog + custom), payment types (pre-populated), and a strict insurance-network picker.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.MaxEntriesCap} />
 
 ## Props
 

@@ -10,51 +10,21 @@ import * as Stories from './ProgressStepper.stories';
 
 Multi-step progress indicator. Shows the current position in a wizard, onboarding flow, or checkout sequence. Two variants — labeled `steps` and unlabeled `dots` — plus optional linear-mode constraint.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-### With descriptions
+### Dots
 
-Steps can include descriptions for richer context.
-
-<Canvas of={Stories.WithDescriptions} />
-
-### Step positions
-
-First, middle, and last-step states render distinct connector treatments.
-
-<Canvas of={Stories.FirstStep} />
-
-<Canvas of={Stories.LastStep} />
-
-<Canvas of={Stories.AllComplete} />
-
-### Sizes
-
-`size="sm"` for compact toolbars and constrained layouts.
-
-<Canvas of={Stories.SmallSize} />
-
-### Dots variant
-
-`variant="dots"` swaps the labeled circles for dots — use for mobile carousels and minimal flows.
-
-<Canvas of={Stories.DotsVariant} />
-
-### Linear mode
-
-`linear` constrains navigation to forward-only progression.
-
-<Canvas of={Stories.LinearMode} />
+<Canvas of={Stories.Dots} />
 
 ## Patterns
 
-Interactive multi-step flow with state-driven navigation.
+Component-owned `activeStep` state driving click-to-navigate — the only way to demonstrate real navigation. Toggle `linear` via Controls to compare free navigation against completed-steps-only navigation.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithStepNavigation} />
 
 ## Props
 

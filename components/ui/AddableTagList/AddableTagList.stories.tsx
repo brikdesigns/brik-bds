@@ -52,23 +52,37 @@ const meta: Meta<typeof AddableTagList> = {
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
+    values: { control: false, description: 'Current list of tag values.' },
+    onChange: { control: false, description: 'Called with the updated values on add / remove.' },
+    suggestions: {
+      control: 'object',
+      description: 'Optional suggestion set — switches to combobox mode. See `WithSuggestions`.',
+    },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     label: { control: 'text' },
     addLabel: { control: 'text' },
+    removeLabel: { control: 'text' },
     placeholder: { control: 'text' },
     helperText: { control: 'text' },
     emptyLabel: { control: 'text' },
-    disabled: { control: 'boolean' },
-    strict: { control: 'boolean' },
+    disabled: {
+      control: 'boolean',
+      description: 'Read-only chip rendering — see the `ReadMode` story.',
+    },
+    strict: {
+      control: 'boolean',
+      description: 'Only meaningful with `suggestions` — rejects free-form entries.',
+    },
     allowDuplicates: { control: 'boolean' },
     maxItems: { control: 'number' },
+    className: { control: false },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof AddableTagList>;
 
-// ── Controlled wrapper ────────────────────────────────────────────────────────
+// ── Controlled wrapper — hook-driven state machine args can't express (Q4) ────
 
 const Controlled = (args: React.ComponentProps<typeof AddableTagList>) => {
   const [values, setValues] = useState<string[]>(args.values ?? []);
@@ -89,8 +103,7 @@ const Controlled = (args: React.ComponentProps<typeof AddableTagList>) => {
 // ── Stories ───────────────────────────────────────────────────────────────────
 
 /** @summary Plain mode — no suggestions, free-form text entry */
-export const Plain: Story = {
-  name: 'Default (plain)',
+export const Default: Story = {
   args: {
     label: 'Anti-messages',
     values: [],
@@ -102,9 +115,12 @@ export const Plain: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
-/** @summary Combobox mode — suggestion-backed, free-form fallback */
+/**
+ * Combobox mode — typing filters `suggestions`; free-form entries still
+ * commit unless `strict` is set.
+ * @summary Suggestion-backed combobox with free-form fallback
+ */
 export const WithSuggestions: Story = {
-  name: 'With Suggestions',
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -117,9 +133,11 @@ export const WithSuggestions: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
-/** @summary Strict mode — only listed suggestions accepted */
+/**
+ * `strict` rejects free-form entries — picks must match a suggestion.
+ * @summary Catalog-only picks, no free-form entries
+ */
 export const StrictMode: Story = {
-  name: 'Strict Mode',
   args: {
     label: 'Insurance Providers',
     suggestions: DENTAL_INSURANCE,
@@ -132,8 +150,11 @@ export const StrictMode: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
-/** @summary Disabled — read-only chip display */
-export const Disabled: Story = {
+/**
+ * Read mode (`disabled`) — read-only chip display, no input or remove.
+ * @summary Read-only chip rendering
+ */
+export const ReadMode: Story = {
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -144,49 +165,14 @@ export const Disabled: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+// ── Interaction tests — play-only, hidden from MCP discovery (Q5) ─────────────
+
 /**
- * Patterns — plain mode alongside suggestion-backed mode.
- * @summary Common usage patterns
+ * Plain mode — typing a value and pressing Enter commits it.
+ * @summary Play-function interaction test
  */
-export const Patterns: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: 480 }}>
-      <Controlled
-        label="Anti-messages"
-        values={['No price-first positioning']}
-        placeholder="e.g. No price-first positioning"
-        addLabel="Add"
-        helperText="Things the brand should never say."
-        onChange={() => {}}
-      />
-      <Controlled
-        label="Services Offered"
-        suggestions={DENTAL_SERVICES}
-        values={['Preventive Care / Cleaning', 'Crowns']}
-        placeholder="Search or add a service…"
-        addLabel="Add Service"
-        helperText="Pick from the catalog or add a custom service."
-        onChange={() => {}}
-      />
-      <Controlled
-        label="Insurance Networks"
-        suggestions={DENTAL_INSURANCE}
-        values={['Delta Dental', 'Blue Cross Blue Shield']}
-        strict
-        placeholder="Pick from the network list…"
-        addLabel="Add Network"
-        helperText="Strict — only accepted carriers from the catalog."
-        onChange={() => {}}
-      />
-    </div>
-  ),
-};
-
-// ── Interaction stories ───────────────────────────────────────────────────────
-
-/** @summary Plain mode — Enter commits */
-export const PlainEnterCommits: Story = {
-  name: 'Interaction — plain Enter commits',
+export const InteractionTestPlainEnterCommits: Story = {
+  tags: ['!manifest'],
   args: { label: 'Tags', values: [], addLabel: 'Add', onChange: fn() },
   render: (args) => <Controlled {...args} />,
   play: async ({ canvasElement, args }) => {
@@ -198,9 +184,12 @@ export const PlainEnterCommits: Story = {
   },
 };
 
-/** @summary Combobox — select from dropdown */
-export const SelectFromDropdown: Story = {
-  name: 'Interaction — select from dropdown',
+/**
+ * Combobox mode — selecting an option from the dropdown commits it.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestSelectFromDropdown: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services', suggestions: DENTAL_SERVICES, values: [],
     placeholder: 'Search…', addLabel: 'Add Service', onChange: fn(),
@@ -217,9 +206,12 @@ export const SelectFromDropdown: Story = {
   },
 };
 
-/** @summary Strict rejects free form */
-export const StrictRejectsFreeForm: Story = {
-  name: 'Interaction — strict rejects free-form',
+/**
+ * Strict mode rejects a free-form entry that doesn't match a suggestion.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestStrictRejectsFreeForm: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Insurance', suggestions: DENTAL_INSURANCE, values: [],
     strict: true, placeholder: 'Search…', addLabel: 'Add', onChange: fn(),

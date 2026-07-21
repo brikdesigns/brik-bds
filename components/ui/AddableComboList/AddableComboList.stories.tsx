@@ -80,28 +80,41 @@ const DENTAL_INSURANCE = [
 
 // ── Storybook meta ────────────────────────────────────────────────────────────
 
+/**
+ * @deprecated Use `<AddableTagList suggestions={...} />` instead (ADR-003).
+ * Kept for existing consumers during the migration window — see
+ * AddableTagList.stories.tsx for the canonical replacement.
+ */
 const meta: Meta<typeof AddableComboList> = {
   title: 'Containers/addable-combo-list',
   component: AddableComboList,
-  tags: ['surface-product'],
+  tags: ['surface-product', '!manifest'],
   parameters: { layout: 'centered' },
   argTypes: {
+    values: { control: false, description: 'Current selected values (rendered as Tag chips).' },
+    onChange: { control: false, description: 'Called with the next values on add / remove.' },
+    suggestions: { control: 'object', description: 'Suggestion set filtered by the typed query.' },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     label: { control: 'text' },
     addLabel: { control: 'text' },
+    removeLabel: { control: 'text' },
     placeholder: { control: 'text' },
     helperText: { control: 'text' },
     emptyLabel: { control: 'text' },
-    disabled: { control: 'boolean' },
+    disabled: {
+      control: 'boolean',
+      description: 'Read-only chip rendering — see the `ReadMode` story.',
+    },
     strict: { control: 'boolean' },
     maxEntries: { control: 'number' },
+    className: { control: false },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof AddableComboList>;
 
-// ── Controlled wrapper ────────────────────────────────────────────────────────
+// ── Controlled wrapper — hook-driven state machine args can't express (Q4) ────
 
 const Controlled = (args: React.ComponentProps<typeof AddableComboList>) => {
   const [values, setValues] = useState<string[]>(args.values ?? []);
@@ -127,8 +140,7 @@ const Controlled = (args: React.ComponentProps<typeof AddableComboList>) => {
  *
  * @summary Interactive playground for prop tweaking
  */
-export const Playground: Story = {
-  name: 'Default',
+export const Default: Story = {
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -145,10 +157,9 @@ export const Playground: Story = {
  * Pre-populated — dental payment types with some values already selected.
  * Already-selected options are hidden from the dropdown.
  *
- * @summary Pre populated
+ * @summary Starting template with existing selections
  */
 export const PrePopulated: Story = {
-  name: 'Pre-Populated',
   args: {
     label: 'Payment Types Accepted',
     suggestions: DENTAL_PAYMENT_TYPES,
@@ -164,10 +175,9 @@ export const PrePopulated: Story = {
  * Strict mode — insurance providers only.
  * Free-form entries are rejected; only listed providers can be added.
  *
- * @summary Strict mode
+ * @summary Catalog-only picks, no free-form entries
  */
 export const StrictMode: Story = {
-  name: 'Strict Mode',
   args: {
     label: 'Insurance Providers Accepted',
     suggestions: DENTAL_INSURANCE,
@@ -181,32 +191,12 @@ export const StrictMode: Story = {
 };
 
 /**
- * With helper text — shows the optional line beneath the list.
- *
- * @summary With helper text
- */
-export const WithHelperText: Story = {
-  name: 'With Helper Text',
-  args: {
-    label: 'Services Offered',
-    suggestions: DENTAL_SERVICES,
-    values: ['Crowns', 'Teeth Whitening'],
-    placeholder: 'Search or add a service…',
-    addLabel: 'Add Service',
-    helperText: 'Cleaning, implants, orthodontics, cosmetic…',
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * Disabled — read-only chip rendering for view-mode sheets.
+ * Read mode (`disabled`) — read-only chip rendering for view-mode sheets.
  * No input or remove controls are rendered.
  *
- * @summary Disabled state
+ * @summary Read-only chip rendering
  */
-export const Disabled: Story = {
-  name: 'Disabled',
+export const ReadMode: Story = {
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -218,12 +208,10 @@ export const Disabled: Story = {
 };
 
 /**
- * MaxEntries hit — values at the cap; input is hidden.
- *
- * @summary Max entries hit
+ * `maxEntries` reached — the input hides once the cap is hit.
+ * @summary List at capacity — input hides
  */
-export const MaxEntriesHit: Story = {
-  name: 'Max Entries Hit',
+export const MaxEntriesCap: Story = {
   args: {
     label: 'Top Services',
     suggestions: DENTAL_SERVICES,
@@ -235,54 +223,14 @@ export const MaxEntriesHit: Story = {
   render: (args) => <Controlled {...args} />,
 };
 
+// ── Interaction tests — play-only, hidden from MCP discovery (Q5) ─────────────
+
 /**
- * Patterns — three real intake fields stacked: services with a controlled
- * vocabulary plus free-form fallback, payment types pre-populated, and
- * a strict insurance picker that rejects free-form entries.
- *
- * @summary Common usage patterns
+ * Selecting an option from the dropdown commits it.
+ * @summary Play-function interaction test
  */
-export const Patterns: Story = {
-  render: () => {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', width: 480 }}>
-        <Controlled
-          label="Services Offered"
-          suggestions={DENTAL_SERVICES}
-          values={['Preventive Care / Cleaning', 'Crowns']}
-          placeholder="Search or add a service…"
-          addLabel="Add Service"
-          helperText="Pick from the catalog or add a custom service."
-          onChange={() => {}}
-        />
-        <Controlled
-          label="Payment Types Accepted"
-          suggestions={DENTAL_PAYMENT_TYPES}
-          values={['CareCredit', 'Visa / Mastercard / Discover', 'Cash']}
-          placeholder="Search payment types…"
-          addLabel="Add Payment Type"
-          onChange={() => {}}
-        />
-        <Controlled
-          label="Insurance Networks"
-          suggestions={DENTAL_INSURANCE}
-          values={['Delta Dental', 'Blue Cross Blue Shield']}
-          strict
-          placeholder="Pick from the network list…"
-          addLabel="Add Network"
-          helperText="Strict — only accepted carriers from the catalog."
-          onChange={() => {}}
-        />
-      </div>
-    );
-  },
-};
-
-// ── Interaction stories ───────────────────────────────────────────────────────
-
-/** @summary Select from dropdown */
-export const SelectFromDropdown: Story = {
-  name: 'Interaction — select from dropdown',
+export const InteractionTestSelectFromDropdown: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -311,9 +259,13 @@ export const SelectFromDropdown: Story = {
   },
 };
 
-/** @summary Free form entry */
-export const FreeFormEntry: Story = {
-  name: 'Interaction — free-form entry',
+/**
+ * Typing a value with no matching suggestion and pressing Enter commits it
+ * as a free-form entry.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestFreeFormEntry: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -335,9 +287,12 @@ export const FreeFormEntry: Story = {
   },
 };
 
-/** @summary Keyboard navigation */
-export const KeyboardNavigation: Story = {
-  name: 'Interaction — keyboard navigation',
+/**
+ * Arrow + Enter highlights and commits a suggestion.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestKeyboardNavigation: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -366,9 +321,12 @@ export const KeyboardNavigation: Story = {
   },
 };
 
-/** @summary Escape closes dropdown */
-export const EscapeClosesDropdown: Story = {
-  name: 'Interaction — Escape closes dropdown',
+/**
+ * Escape closes the dropdown without committing.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestEscapeClosesDropdown: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -397,9 +355,12 @@ export const EscapeClosesDropdown: Story = {
   },
 };
 
-/** @summary Backspace removes last tag */
-export const BackspaceRemovesLastTag: Story = {
-  name: 'Interaction — Backspace on empty removes last tag',
+/**
+ * Backspace on an empty input removes the last committed tag.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestBackspaceRemovesLastTag: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -423,9 +384,12 @@ export const BackspaceRemovesLastTag: Story = {
   },
 };
 
-/** @summary Strict rejects free form */
-export const StrictRejectsFreeForm: Story = {
-  name: 'Interaction — strict mode rejects free-form',
+/**
+ * Strict mode rejects a free-form entry that doesn't match a suggestion.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestStrictRejectsFreeForm: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Insurance Providers',
     suggestions: DENTAL_INSURANCE,
@@ -449,9 +413,12 @@ export const StrictRejectsFreeForm: Story = {
   },
 };
 
-/** @summary Duplicate flash */
-export const DuplicateFlash: Story = {
-  name: 'Interaction — duplicate rejected',
+/**
+ * A duplicate (case-insensitive) entry is rejected and never reaches onChange.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestDuplicateRejected: Story = {
+  tags: ['!manifest'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,

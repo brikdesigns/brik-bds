@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { Board } from './Board';
 import { BoardColumn } from './BoardColumn';
@@ -53,8 +53,14 @@ const MOCK_HEADERS = [
   },
 ];
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/**
+ * Default — four columns of BoardHeader entries (name + subtitle + progress).
+ * Composition of Board > BoardColumn > BoardHeader, args can't express the
+ * nested-children shape so this is the canonical render-mode sandbox.
+ *
+ * @summary Multi-column board of headers
+ */
+export const Default: Story = {
   render: () => (
     <Board style={{ height: '500px' }}>
       {MOCK_HEADERS.map((col) => (
@@ -73,48 +79,14 @@ export const Playground: Story = {
   ),
 };
 
-/** @summary Single column */
-export const SingleColumn: Story = {
-  render: () => (
-    <Board style={{ height: '400px', maxWidth: '400px' }}>
-      <BoardColumn title="In Progress" count={2}>
-        <BoardHeader name="Cassidy Moore" subtitle="Dental Hygienist" progress={37} />
-        <BoardHeader name="Alex Rivera" subtitle="Receptionist" progress={85} />
-      </BoardColumn>
-    </Board>
-  ),
-};
-
-/** @summary With avatars */
-export const WithAvatars: Story = {
-  render: () => (
-    <Board style={{ height: '400px' }}>
-      <BoardColumn title="Team" count={3}>
-        <BoardHeader
-          name="Cassidy Moore"
-          subtitle="Dental Hygienist"
-          avatarSrc="https://i.pravatar.cc/96?u=cassidy"
-          progress={37}
-        />
-        <BoardHeader
-          name="Jordan Lee"
-          subtitle="Dental Assistant"
-          avatarSrc="https://i.pravatar.cc/96?u=jordan"
-          progress={85}
-        />
-        <BoardHeader
-          name="Riley Kim"
-          subtitle="Receptionist"
-          avatarSrc="https://i.pravatar.cc/96?u=riley"
-          progress={100}
-        />
-      </BoardColumn>
-    </Board>
-  ),
-};
-
-/** @summary Empty column */
-export const EmptyColumn: Story = {
+/**
+ * A column with no children renders its header row only — no placeholder or
+ * empty-state message inside the item area. Verifies columns with zero and
+ * nonzero counts sit correctly side by side.
+ *
+ * @summary Board with an empty column alongside a populated one
+ */
+export const WithEmptyColumn: Story = {
   render: () => (
     <Board style={{ height: '300px' }}>
       <BoardColumn title="Backlog" count={0}>
@@ -169,54 +141,27 @@ function InteractiveCards() {
   );
 }
 
-/** @summary Task cards */
-export const TaskCards: Story = {
+/**
+ * Controlled checkbox state on BoardCard — a hook-driven interaction args
+ * can't express. Toggling a task's completion updates its checked state
+ * and CompletionToggle visual without a page reload.
+ *
+ * @summary Board column with controlled task-card checkboxes
+ */
+export const WithTaskCards: Story = {
   render: () => <InteractiveCards />,
 };
 
-/** @summary Card accent colors */
-export const CardAccentColors: Story = {
-  name: 'Card — Accent Colors',
-  render: () => (
-    <Board style={{ height: '400px' }}>
-      <BoardColumn title="By Department">
-        <BoardCard
-          title="Sterilize instruments"
-          subtitle="Due 9:00 AM"
-          accentColor="var(--background-accent-blue)"
-          tags={<Tag size="sm">Clinical</Tag>}
-          trailingTag={<Badge status="warning" size="sm">Medium</Badge>}
-        />
-        <BoardCard
-          title="Restock PPE supplies"
-          subtitle="Due 10:00 AM"
-          accentColor="var(--background-accent-red)"
-          tags={<Tag size="sm">Front Desk</Tag>}
-          trailingTag={<Badge status="error" size="sm">High</Badge>}
-        />
-        <BoardCard
-          title="Update patient records"
-          subtitle="Due 2:00 PM"
-          accentColor="var(--background-accent-purple)"
-          tags={<Tag size="sm">Admin</Tag>}
-          trailingTag={<Badge status="info" size="sm">Low</Badge>}
-        />
-        <BoardCard
-          title="Equipment maintenance check"
-          subtitle="Due 4:00 PM"
-          accentColor="var(--background-accent-green)"
-          tags={<Tag size="sm">Engineering</Tag>}
-          trailingTag={<Badge status="positive" size="sm">Done</Badge>}
-          checked
-        />
-      </BoardColumn>
-    </Board>
-  ),
-};
-
-/** @summary Card density — default vs compact */
-export const CardDensity: Story = {
-  name: 'Card — Density',
+/**
+ * `density="compact"` drops the title one type step and renders the
+ * subtitle as label-family metadata — for dense, multi-card-per-column
+ * boards. Shown side by side with default density since the comparison
+ * is the entire point and there's no other surface (no Board-level
+ * Control) to see the two together.
+ *
+ * @summary Default vs compact BoardCard density, side by side
+ */
+export const Density: Story = {
   render: () => (
     <Board style={{ height: '440px' }}>
       <BoardColumn title="Default density" count={2}>
@@ -279,82 +224,13 @@ export const CardDensity: Story = {
   },
 };
 
-// ─── Full board (headers + cards) ────────────────────────────────────────────
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Full Board — Headers + Cards',
-  render: () => (
-    <Board style={{ height: '700px' }}>
-      <BoardColumn>
-        <BoardHeader
-          name="Rebecca"
-          subtitle="Maintenance"
-          avatarSrc="https://i.pravatar.cc/96?u=rebecca"
-          progress={37}
-        />
-        <BoardCard
-          title="Check hand sanitizer stations"
-          subtitle="Due today"
-          accentColor="var(--background-brand-primary)"
-          tags={<><Tag size="sm">Engineering</Tag><Tag size="sm">Daily</Tag></>}
-          trailingTag={<Badge status="error" size="sm">Critical</Badge>}
-        />
-        <BoardCard
-          title="Clean countertops"
-          subtitle="Due today"
-          accentColor="var(--background-brand-primary)"
-          tags={<><Tag size="sm">Engineering</Tag><Tag size="sm">Daily</Tag></>}
-          trailingTag={<Badge status="error" size="sm">Critical</Badge>}
-        />
-      </BoardColumn>
-      <BoardColumn>
-        <BoardHeader
-          name="John"
-          subtitle="Maintenance"
-          avatarSrc="https://i.pravatar.cc/96?u=john"
-          progress={20}
-        />
-        <BoardCard
-          title="Empty trash bins and replace liners"
-          subtitle="Due today"
-          accentColor="var(--background-accent-red)"
-          tags={<><Tag size="sm">Cleaning</Tag><Tag size="sm">Daily</Tag></>}
-          trailingTag={<Badge status="warning" size="sm">Medium</Badge>}
-        />
-      </BoardColumn>
-      <BoardColumn>
-        <BoardHeader
-          name="Sarah"
-          subtitle="Clinician"
-          avatarSrc="https://i.pravatar.cc/96?u=sarah"
-          progress={85}
-        />
-        <BoardCard
-          title="Sterilize instruments"
-          subtitle="Due 9:00 AM"
-          accentColor="var(--background-accent-purple)"
-          checked
-          tags={<Tag size="sm">Clinical</Tag>}
-          trailingTag={<Badge status="positive" size="sm">Done</Badge>}
-        />
-        <BoardCard
-          title="Patient room prep"
-          subtitle="Due 10:00 AM"
-          accentColor="var(--background-accent-purple)"
-          tags={<Tag size="sm">Clinical</Tag>}
-        />
-      </BoardColumn>
-    </Board>
-  ),
-};
-
 // ─── Full board view (token-driven — responds to Storybook theme) ────────────
 
 /**
- * Complete board view using only BDS tokens. Switch themes in the
- * Storybook toolbar to see the board adapt. Product-level color
- * overrides (per-user column colors) belong in the consuming app
+ * Complete board view using only BDS tokens — headers, cards, controlled
+ * checkbox state, and a per-column progress calculation together. Switch
+ * themes in the Storybook toolbar to see the board adapt. Product-level
+ * color overrides (per-user column colors) belong in the consuming app
  * (e.g. Renew PMS), not here.
  */
 
@@ -478,8 +354,14 @@ function FullBoardViewExample() {
   );
 }
 
-/** @summary Full board view */
-export const FullBoardView: Story = {
+/**
+ * Multi-column state machine — 4 columns, each with header + cards, checkbox
+ * toggling recomputes that column's progress bar live. The composition and
+ * hook-driven state genuinely can't be expressed as args.
+ *
+ * @summary Full interactive board — headers, cards, and progress
+ */
+export const WithFullBoard: Story = {
   name: 'Full Board View',
   render: () => <FullBoardViewExample />,
 };
