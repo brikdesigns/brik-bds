@@ -12,21 +12,25 @@ Populated state of a file upload — a card surface showing one uploaded asset w
 
 The `aspectRatio` slug consumes the `--aspect-*` token family so CMS uploaders can encode the target image shape once — the same slug feeds `<Frame ratio="…">` on the consumer side.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Preview modes (image, SVG, icon), aspect ratios (1:1 default, 16:9 hero), and action-row presence (Replace, Delete, both, neither, disabled).
+### Svg
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Svg} />
+
+### Icon
+
+<Canvas of={Stories.Icon} />
 
 ## Patterns
 
 Composition with `FileUploader` — render `FileUploader` while the slot is empty, then swap to `FileCard` once a file has been uploaded.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.UploadFlow} />
 
 ## Props
 

@@ -11,46 +11,38 @@ const meta: Meta<typeof Avatar> = {
     layout: 'centered',
   },
   argTypes: {
+    name: {
+      control: 'text',
+      description: 'Name used to generate initials when no image loads.',
+    },
+    src: {
+      control: 'text',
+      description: 'Image source URL. Falls back to initials when omitted or on load error.',
+    },
+    alt: {
+      control: 'text',
+      description: 'Alt text for the image.',
+    },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg', 'xl'],
+      description: 'Size token. Default `md`.',
     },
     status: {
       control: 'select',
       options: [undefined, 'online', 'offline', 'busy', 'away'],
+      description: 'Presence status dot. Omit for none.',
     },
     color: {
       control: 'select',
       options: [undefined, 'green', 'purple', 'blue', 'orange', 'yellow', 'red'],
+      description: 'Accent color for the initials fallback. No effect when an image loads.',
     },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Avatar>;
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Row = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
 
 /* ─── Character headshots (The Office) ────────────────────────── */
 
@@ -59,16 +51,15 @@ const headshots = {
   dwight:  'https://randomuser.me/api/portraits/men/44.jpg',
   jim:     'https://randomuser.me/api/portraits/men/75.jpg',
   pam:     'https://randomuser.me/api/portraits/women/68.jpg',
-  creed:   'https://randomuser.me/api/portraits/men/85.jpg',
-  oscar:   'https://randomuser.me/api/portraits/men/52.jpg',
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox, photo-backed avatar. Size,
+   status, and color are Controls (ADR-010 Q2).
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Interactive Avatar — photo-backed, size/status/color via Controls */
+export const Default: Story = {
   args: {
     name: 'Michael Scott',
     src: headshots.michael,
@@ -77,125 +68,44 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, content types, statuses
+   INITIALS — Q3 starting template: initials-only fallback, no
+   image source. A distinct content-type an agent reaches for
+   directly (e.g. a contact with no photo on file).
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Sizes (initials)</SectionLabel>
-        <Row>
-          <Avatar name="Michael Scott" size="sm" />
-          <Avatar name="Dwight Schrute" size="md" />
-          <Avatar name="Jim Halpert" size="lg" />
-          <Avatar name="Pam Beesly" size="xl" />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Colors (initials)</SectionLabel>
-        <Row>
-          <Avatar name="Green Ivy" color="green" size="lg" />
-          <Avatar name="Purple Rain" color="purple" size="lg" />
-          <Avatar name="Blue Sky" color="blue" size="lg" />
-          <Avatar name="Orange Peel" color="orange" size="lg" />
-          <Avatar name="Yellow Sun" color="yellow" size="lg" />
-          <Avatar name="Red Rose" color="red" size="lg" />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>With image</SectionLabel>
-        <Row>
-          <Avatar src={headshots.michael} alt="Michael Scott" name="Michael Scott" size="sm" />
-          <Avatar src={headshots.dwight} alt="Dwight Schrute" name="Dwight Schrute" size="md" />
-          <Avatar src={headshots.jim} alt="Jim Halpert" name="Jim Halpert" size="lg" />
-          <Avatar src={headshots.pam} alt="Pam Beesly" name="Pam Beesly" size="xl" />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Status indicators</SectionLabel>
-        <Row>
-          <Avatar src={headshots.michael} alt="Michael Scott" name="Michael Scott" status="online" />
-          <Avatar src={headshots.dwight} alt="Dwight Schrute" name="Dwight Schrute" status="offline" />
-          <Avatar src={headshots.jim} alt="Jim Halpert" name="Jim Halpert" status="busy" />
-          <Avatar src={headshots.pam} alt="Pam Beesly" name="Pam Beesly" status="away" />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Image + status (large)</SectionLabel>
-        <Row>
-          <Avatar src={headshots.creed} alt="Creed Bratton" name="Creed Bratton" status="online" size="lg" />
-          <Avatar src={headshots.oscar} alt="Oscar Martinez" name="Oscar Martinez" status="busy" size="lg" />
-          <Avatar src={headshots.michael} alt="Michael Scott" name="Michael Scott" status="away" size="lg" />
-        </Row>
-      </div>
-    </Stack>
-  ),
+/** @summary Initials-only fallback — no image source */
+export const Initials: Story = {
+  args: {
+    name: 'Dwight Schrute',
+    size: 'lg',
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world usage
+   AVATARGROUP — Q4 irreducible composition: overlapping avatar
+   stack. Negative-margin + border overlap across multiple
+   instances can't be expressed by a single Avatar's args.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Patterns',
+/** @summary Overlapping stacked-avatar group composition */
+export const AvatarGroup: Story = {
   render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>User list</SectionLabel>
-        <Stack gap="var(--gap-md)">
-          {([
-            { name: 'Michael Scott', src: headshots.michael, status: 'online' as const },
-            { name: 'Dwight Schrute', src: headshots.dwight, status: 'online' as const },
-            { name: 'Jim Halpert', src: headshots.jim, status: 'away' as const },
-            { name: 'Pam Beesly', src: headshots.pam, status: 'online' as const },
-            { name: 'Creed Bratton', src: headshots.creed, status: 'offline' as const },
-            { name: 'Oscar Martinez', src: headshots.oscar, status: 'busy' as const },
-          ]).map((user) => (
-            <div key={user.name} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)' }}>
-              <Avatar name={user.name} src={user.src} status={user.status} />
-              <div>
-                <div style={{
-                  fontFamily: 'var(--font-family-label)',
-                  fontSize: 'var(--label-md)', // bds-lint-ignore
-                  fontWeight: 'var(--font-weight-semibold)',
-                }}>
-                  {user.name}
-                </div>
-                <div style={{
-                  fontFamily: 'var(--font-family-body)',
-                  fontSize: 'var(--body-sm)', // bds-lint-ignore
-                  color: 'var(--text-secondary)',
-                }}>
-                  {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-                </div>
-              </div>
-            </div>
-          ))}
-        </Stack>
-      </div>
-      <div>
-        <SectionLabel>Avatar group (stacked)</SectionLabel>
-        <div style={{ display: 'flex', marginLeft: 'var(--padding-sm)' }}>
-          {([
-            { name: 'Michael Scott', src: headshots.michael },
-            { name: 'Dwight Schrute', src: headshots.dwight },
-            { name: 'Jim Halpert', src: headshots.jim },
-            { name: 'Pam Beesly', src: headshots.pam },
-            { name: '+2', src: undefined },
-          ]).map((user) => (
-            <Avatar
-              key={user.name}
-              name={user.name}
-              src={user.src}
-              size="md"
-              style={{ marginLeft: '-12px', border: '2px solid var(--background-input)' }}
-            />
-          ))}
-        </div>
-      </div>
-    </Stack>
+    <div style={{ display: 'flex', marginLeft: 'var(--padding-sm)' }}>
+      {([
+        { name: 'Michael Scott', src: headshots.michael },
+        { name: 'Dwight Schrute', src: headshots.dwight },
+        { name: 'Jim Halpert', src: headshots.jim },
+        { name: 'Pam Beesly', src: headshots.pam },
+        { name: '+2', src: undefined },
+      ]).map((user) => (
+        <Avatar
+          key={user.name}
+          name={user.name}
+          src={user.src}
+          size="md"
+          style={{ marginLeft: '-12px', border: '2px solid var(--background-input)' }}
+        />
+      ))}
+    </div>
   ),
 };

@@ -1,26 +1,6 @@
-import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileUploader } from './FileUploader';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -30,17 +10,51 @@ const meta: Meta<typeof FileUploader> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   decorators: [(Story) => <div style={{ width: 400 }}><Story /></div>],
-} satisfies Meta<typeof FileUploader>;
+  argTypes: {
+    accept: {
+      control: 'text',
+      description: 'Accepted file types — extension (`.svg`), MIME type (`image/svg+xml`), or wildcard (`image/*`).',
+    },
+    multiple: {
+      control: 'boolean',
+      description: 'Allow selecting more than one file at a time.',
+    },
+    maxSize: {
+      control: 'number',
+      description: 'Maximum file size in bytes. Oversized files are rejected with an inline error.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Locks the dropzone — non-interactive, muted appearance.',
+    },
+    label: {
+      control: 'text',
+      description: 'Label text shown inside the dropzone.',
+    },
+    helperText: {
+      control: 'text',
+      description: 'Hint text below the label. Hidden when `error` is present.',
+    },
+    error: {
+      control: 'text',
+      description: 'Error message. Replaces `helperText` and applies the error style.',
+    },
+    onChange: {
+      action: 'changed',
+      description: 'Called with the accepted `File[]` after validation.',
+    },
+  },
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox, all variation via Controls
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     label: 'Drag and drop files here',
     helperText: 'PDF, JPG, PNG, or SVG up to 10MB',
@@ -49,100 +63,37 @@ export const Playground: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — States: default, size limit, error, disabled
+   Q4 — irreducible: live selected-file list, args can't express
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
-  decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Default</SectionLabel>
-        <FileUploader
-          label="Drag and drop files here"
-          helperText="PDF, JPG, PNG, or SVG up to 10MB"
-          accept=".pdf,.jpg,.png,.svg"
-        />
-      </div>
-
-      <div>
-        <SectionLabel>SVG icon (single)</SectionLabel>
-        <FileUploader
-          label="Upload an SVG icon"
-          helperText="SVG up to 100KB · for industry / category icons"
-          accept=".svg,image/svg+xml"
-          maxSize={100 * 1024}
-        />
-      </div>
-
-      <div>
-        <SectionLabel>With size limit</SectionLabel>
-        <FileUploader
-          label="Upload document"
-          helperText="Max 2MB"
-          maxSize={2 * 1024 * 1024}
-          accept=".pdf"
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Error state</SectionLabel>
-        <FileUploader
-          label="Upload files"
-          error="File type not supported"
-        />
-      </div>
-
-      <div>
-        <SectionLabel>Disabled</SectionLabel>
-        <FileUploader
-          label="Upload files"
-          helperText="Uploads are currently disabled"
-          disabled
-        />
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Interactive with file list
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
+/** @summary Multi-file selection with a live selected-file list */
+export const WithFileList: Story = {
   render: () => {
     function UploadWithFileList() {
       const [files, setFiles] = useState<File[]>([]);
       return (
-        <div>
-          <SectionLabel>Upload with file list</SectionLabel>
-          <Stack gap="var(--gap-md)">
-            <FileUploader
-              label="Upload images"
-              accept="image/*"
-              multiple
-              helperText="Select one or more images"
-              onChange={setFiles}
-            />
-            {files.length > 0 && (
-              <div style={{
-                fontFamily: 'var(--font-family-body)',
-                fontSize: 'var(--body-sm)',
-                color: 'var(--text-secondary)',
-              }}>
-                {files.map((f) => (
-                  <div key={f.name}>{f.name} ({(f.size / 1024).toFixed(1)} KB)</div>
-                ))}
-              </div>
-            )}
-          </Stack>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+          <FileUploader
+            label="Upload images"
+            accept="image/*"
+            multiple
+            helperText="Select one or more images"
+            onChange={setFiles}
+          />
+          {files.length > 0 && (
+            <div style={{
+              fontFamily: 'var(--font-family-body)',
+              fontSize: 'var(--body-sm)',
+              color: 'var(--text-secondary)',
+            }}>
+              {files.map((f) => (
+                <div key={f.name}>{f.name} ({(f.size / 1024).toFixed(1)} KB)</div>
+              ))}
+            </div>
+          )}
         </div>
       );
     }
-
     return <UploadWithFileList />;
   },
 };

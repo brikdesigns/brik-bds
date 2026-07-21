@@ -10,15 +10,15 @@ import * as Stories from './Avatar.stories';
 
 User profile images with automatic fallback to initials. Supports multiple sizes and optional status indicators for presence states.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes, content types (initials vs image), and status indicators.
+Initials-only fallback vs photo-backed avatar — the two content-type starting points. Size, status, and color are Controls on both.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Initials} />
 
 - **`sm`** — 32px, compact lists and inline mentions
 - **`md`** — 40px, default for cards and comments
@@ -27,11 +27,10 @@ Sizes, content types (initials vs image), and status indicators.
 
 ## Patterns
 
-Real-world compositions: user lists and stacked avatar groups.
+Overlapping avatar stack — a composition whose negative-margin/border overlap can't be expressed by a single Avatar's args.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.AvatarGroup} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-

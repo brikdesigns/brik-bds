@@ -10,15 +10,15 @@ import * as Stories from './Counter.stories';
 
 Numeric count indicator with status colors. Pill-shaped badge for notification counts, item quantities, and step indicators.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-All statuses across all sizes, plus max overflow behavior.
+Status and size are pure color/dimension axes with no semantic difference between values — both are Controls on the Default sandbox above, not standalone stories.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
 - **`success`** -- Completed items, positive counts.
 - **`error`** -- Error counts, alerts.
@@ -27,13 +27,6 @@ All statuses across all sizes, plus max overflow behavior.
 - **`progress`** -- In-progress items.
 - **`brand`** -- General counts, notifications.
 
-## Patterns
-
-Real-world notification count compositions.
-
-<Canvas of={Stories.Patterns} />
-
 ## Props
 
 <ArgTypes of={Stories} />
-
