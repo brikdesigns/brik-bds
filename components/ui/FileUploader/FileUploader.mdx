@@ -10,23 +10,22 @@ import * as Stories from './FileUploader.stories';
 
 Drag-and-drop file upload zone with click-to-browse fallback. Supports file type filtering, size limits, multiple files, and error states.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Default, size limit, error, and disabled states.
+All variation — file type restrictions, size limits, error, and disabled — is exposed via Controls above.
 
-<Canvas of={Stories.Variants} />
+<Canvas of={Stories.Default} />
 
 ## Patterns
 
-Real-world usage: interactive uploader with file list display.
+Multi-file selection with a live list of selected files.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithFileList} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
