@@ -22,6 +22,13 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
   options: (SelectOption | SelectOptionGroup)[];
   /** Empty-value option text shown when no selection has been made. Renders as a placeholder-styled first option. */
   placeholder?: string;
+  /**
+   * Renders a selectable "no filter" entry (e.g. `"All"`) as the first option
+   * with an empty value — distinct from `placeholder` in that it is a real,
+   * non-greyed choice, not a pre-selection prompt. Mutually exclusive with
+   * `placeholder`; when both are set, `allOption` wins. Use for filter selects.
+   */
+  allOption?: string;
   /** Controlled selection. Pair with `onChange` — uncontrolled callers use `defaultValue`. */
   value?: string;
   /** Initial selection for uncontrolled use. */
@@ -58,6 +65,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     {
       options,
       placeholder,
+      allOption,
       value,
       defaultValue,
       disabled = false,
@@ -79,12 +87,14 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const inputId = id || (label ? generatedId : undefined);
     const hasError = Boolean(error);
 
+    // `allOption` is a real (non-greyed) choice, so it never triggers
+    // placeholder styling even though it shares the empty value.
     const [isPlaceholder, setIsPlaceholder] = useState(
-      !value && !defaultValue && Boolean(placeholder)
+      !value && !defaultValue && Boolean(placeholder) && !allOption
     );
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setIsPlaceholder(e.target.value === '');
+      setIsPlaceholder(e.target.value === '' && Boolean(placeholder) && !allOption);
       onChange?.(e);
     };
 
@@ -130,7 +140,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             }
             {...props}
           >
-            {placeholder && <option value="">{placeholder}</option>}
+            {allOption ? (
+              <option value="">{allOption}</option>
+            ) : (
+              placeholder && <option value="">{placeholder}</option>
+            )}
             {options.map((opt) =>
               isOptionGroup(opt) ? (
                 <optgroup key={opt.label} label={opt.label}>

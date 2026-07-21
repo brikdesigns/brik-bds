@@ -24,6 +24,12 @@ FilterButton has no semantic-variant axis — all variation (size, label, active
 - **`md`** — 40px height, 16px body (default)
 - **`lg`** — 48px height, 18px body
 
+### "All" clear entry
+
+Set `allLabel` to render an explicit clear entry atop the dropdown that resets the selection to `undefined` — shown as selected while no option is active. Without it, clearing is only possible by re-clicking the active option.
+
+<Canvas of={Stories.WithAllOption} />
+
 ## Props
 
 <ArgTypes of={Stories} />

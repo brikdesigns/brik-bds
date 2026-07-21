@@ -112,6 +112,13 @@
   background-color: var(--background-secondary);
 }
 
+/* "All" / clear entry — separated from concrete options by a hairline. */
+.bds-filter-button__option--all {
+  margin-bottom: var(--gap-tiny);
+  border-bottom: 1px solid var(--border-muted);
+  border-radius: 0;
+}
+
 /* ─── Icon wrapper ────────────────────────────────────── */
 
 .bds-filter-button__icon {

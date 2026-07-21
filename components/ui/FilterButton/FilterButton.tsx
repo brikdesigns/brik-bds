@@ -40,6 +40,13 @@ export interface FilterButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   value?: string;
   /** Callback when selection changes (undefined = cleared) */
   onChange?: (value: string | undefined) => void;
+  /**
+   * When set, renders an explicit "clear" entry at the top of the dropdown
+   * (e.g. `"All"`) that resets the selection to `undefined`. Shown as selected
+   * while no option is active. Omit to keep the current clear-on-reclick-only
+   * behavior.
+   */
+  allLabel?: string;
   /** Size of the trigger button (default: 'md') */
   size?: FilterButtonSize;
   /** Disabled — locks the trigger, blocks dropdown open, applies muted styling. */
@@ -76,6 +83,7 @@ export function FilterButton({
   options,
   value,
   onChange,
+  allLabel,
   size = 'md',
   disabled = false,
   className = '',
@@ -137,6 +145,11 @@ export function FilterButton({
     setIsOpen(false);
   };
 
+  const handleClear = () => {
+    onChange?.(undefined);
+    setIsOpen(false);
+  };
+
   return (
     <div
       ref={wrapperRef}
@@ -163,6 +176,21 @@ export function FilterButton({
 
       {isOpen && (
         <div ref={dropdownRef} className="bds-filter-button__dropdown" role="listbox">
+          {allLabel && (
+            <button
+              type="button"
+              className={bdsClass(
+                'bds-filter-button__option',
+                'bds-filter-button__option--all',
+                !value && 'bds-filter-button__option--selected',
+              )}
+              role="option"
+              aria-selected={!value}
+              onClick={handleClear}
+            >
+              <span>{allLabel}</span>
+            </button>
+          )}
           {options.map((option) => (
             <button
               key={option.id}
