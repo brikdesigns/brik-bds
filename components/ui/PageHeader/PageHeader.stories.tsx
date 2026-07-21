@@ -53,6 +53,10 @@ const meta: Meta<typeof PageHeader> = {
   argTypes: {
     title: { control: 'text' },
     subtitle: { control: 'text' },
+    sticky: {
+      control: 'boolean',
+      description: 'Pin the header to the top of its scroll container on scroll. Renders an opaque surface so content scrolls beneath it. Default `false`.',
+    },
   },
 };
 
@@ -449,4 +453,39 @@ export const TunableSpacing: Story = {
       </Stack>
     );
   },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   Sticky — pins to the top of a scroll container on scroll
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Sticky header pinned to the top of a scroll container */
+export const Sticky: Story = {
+  render: () => (
+    <div
+      style={{
+        height: 320,
+        overflowY: 'auto',
+        border: '1px solid var(--border-muted)',
+        background: 'var(--surface-primary)',
+      }}
+    >
+      <PageHeader
+        title="Project detail"
+        subtitle="Scroll this container — the header stays pinned to the top."
+        sticky
+        actions={<Button variant="primary" size="sm">Action</Button>}
+      />
+      <div style={{ padding: 'var(--padding-lg)' }}>
+        <Stack gap="var(--gap-md)">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <p key={i}>
+              Row {i + 1} — body content scrolls beneath the pinned header, which keeps
+              its opaque surface so nothing shows through.
+            </p>
+          ))}
+        </Stack>
+      </div>
+    </div>
+  ),
 };
