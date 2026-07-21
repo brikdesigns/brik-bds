@@ -12,117 +12,64 @@ const meta: Meta<typeof Chip> = {
     layout: 'centered',
   },
   argTypes: {
+    label: {
+      control: 'text',
+      description: 'Chip label text.',
+    },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
+      description: 'Size token. Default `md`.',
     },
     variant: {
       control: 'select',
       options: ['primary', 'secondary'],
+      description:
+        'Hierarchy — `secondary` (default, neutral) or `primary` (emphasized/selected). ' +
+        'Pure color axis, no semantic difference between values.',
     },
-    showDropdown: { control: 'boolean' },
-    disabled: { control: 'boolean' },
+    icon: {
+      control: false,
+      description: 'Optional leading icon element.',
+    },
+    avatar: {
+      control: false,
+      description: 'Optional avatar element rendered before the label.',
+    },
+    showDropdown: {
+      control: 'boolean',
+      description: 'Show trailing dropdown caret.',
+    },
+    onRemove: {
+      action: 'removed',
+      description: 'Removable chip — pass a handler to show the trailing remove button.',
+    },
+    onChipClick: {
+      action: 'clicked',
+      description: 'Click handler for the chip body.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Disabled state — blocks click/remove and mutes appearance.',
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Chip>;
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Row = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox. Hierarchy (variant), size,
+   dropdown/remove affordances, and disabled state are pure
+   axes with no semantic difference between values — Controls
+   (ADR-010 Q2), not standalone stories.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Interactive Chip — hierarchy, size, affordances via Controls */
+export const Default: Story = {
   args: {
     label: 'Chip',
     icon: <Icon icon="ph:funnel" />,
     showDropdown: true,
   },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — All combinations in one view
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Variants</SectionLabel>
-        <Row>
-          <Chip label="Secondary" variant="secondary" icon={<Icon icon="ph:funnel" />} showDropdown />
-          <Chip label="Primary" variant="primary" icon={<Icon icon="ph:funnel" />} showDropdown />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Sizes</SectionLabel>
-        <Row>
-          <Chip label="Small" size="sm" icon={<Icon icon="ph:funnel" />} showDropdown />
-          <Chip label="Medium" size="md" icon={<Icon icon="ph:funnel" />} showDropdown />
-          <Chip label="Large" size="lg" icon={<Icon icon="ph:funnel" />} showDropdown />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>States</SectionLabel>
-        <Row>
-          <Chip label="Default" icon={<Icon icon="ph:funnel" />} showDropdown />
-          <Chip label="Removable" icon={<Icon icon="ph:tag" />} onRemove={() => {}} />
-          <Chip label="Disabled" icon={<Icon icon="ph:funnel" />} showDropdown disabled />
-        </Row>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world usage
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Patterns',
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Active filters</SectionLabel>
-        <Row>
-          <Chip label="Status: Active" variant="primary" onRemove={() => {}} />
-          <Chip label="Category: Design" onRemove={() => {}} />
-          <Chip label="Date: This week" onRemove={() => {}} />
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Filter dropdown</SectionLabel>
-        <Row>
-          <Chip label="All statuses" icon={<Icon icon="ph:funnel" />} showDropdown onChipClick={() => {}} />
-          <Chip label="Category" icon={<Icon icon="ph:funnel" />} showDropdown onChipClick={() => {}} />
-        </Row>
-      </div>
-    </Stack>
-  ),
 };
