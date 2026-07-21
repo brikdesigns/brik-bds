@@ -1,26 +1,6 @@
-import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within, fn } from 'storybook/test';
 import { Switch } from './Switch';
-
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -31,8 +11,17 @@ const meta: Meta<typeof Switch> = {
   parameters: { layout: 'padded' },
   argTypes: {
     label: { control: 'text' },
-    size: { control: 'radio', options: ['lg', 'md', 'sm'] },
-    variant: { control: 'radio', options: ['default', 'accent-knob'] },
+    size: {
+      control: 'radio',
+      options: ['lg', 'md', 'sm'],
+      description: '`lg` — 56x32 (feature toggles). `md` — 32x18 (forms). `sm` — 28x16 (compact panels).',
+    },
+    variant: {
+      control: 'radio',
+      options: ['default', 'accent-knob'],
+      description:
+        '`default` — track carries the on/off state. `accent-knob` — track stays neutral gray; the knob carries state instead.',
+    },
     checked: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },
@@ -42,17 +31,50 @@ export default meta;
 type Story = StoryObj<typeof Switch>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   1. DEFAULT — args-driven sandbox. Controls work.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
-  parameters: { chromatic: { disableSnapshot: true } },
+export const Default: Story = {
   args: {
     label: 'Enable feature',
     size: 'lg',
     onChange: fn(),
   },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   2. VARIANTS — Q3 semantic starting points
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Accent-knob variant — the track stays a neutral gray in both states and the
+ * knob carries state (brand-fill when on, muted-gray when off). Used where a
+ * subtler track reads better, e.g. an inline theme toggle.
+ * @summary Neutral track; the knob carries on/off state
+ */
+export const AccentKnob: Story = {
+  args: {
+    label: 'Dark mode',
+    variant: 'accent-knob',
+    size: 'lg',
+    checked: true,
+    onChange: fn(),
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3. INTERACTION TESTS — play-only, hidden from MCP discovery
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Label typography scales with size + uses label-family, matching the
+ * form-input family (TextInput / Select / TextArea) — #409. Default lg → label-lg (18px).
+ * @summary Verifies label typography + click fires onChange
+ */
+export const InteractionTestLabelTypography: Story = {
+  tags: ['!manifest'],
+  args: { label: 'Enable feature', size: 'lg', onChange: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     // The Switch's input is visually hidden (opacity:0/width:0 — standard a11y
@@ -60,8 +82,6 @@ export const Playground: Story = {
     // passes on it. getByRole('switch') itself asserts it's in the DOM.
     const toggle = canvas.getByRole('switch');
 
-    // Label typography scales with size + uses label-family, matching the
-    // form-input family (TextInput / Select / TextArea) — #409. Default lg → label-lg (18px).
     const label = canvas.getByText('Enable feature');
     await expect(label).toHaveClass('bds-switch__label--lg');
     await expect(getComputedStyle(label).fontSize).toBe('18px');
@@ -74,10 +94,10 @@ export const Playground: Story = {
 
 /**
  * Interaction test: disabled switch blocks toggle
- * @summary Play-function interaction test
+ * @summary Verifies a disabled switch blocks clicks
  */
-export const InteractionTest: Story = {
-  parameters: { chromatic: { disableSnapshot: true } },
+export const InteractionTestDisabledBlocksToggle: Story = {
+  tags: ['!manifest'],
   args: { label: 'Locked setting', size: 'lg', disabled: true, onChange: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -88,136 +108,5 @@ export const InteractionTest: Story = {
     // Event handlers can fire on a micro-tick; wait a frame before asserting negative.
     await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     await expect(args.onChange).not.toHaveBeenCalled();
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, states, and controlled behavior
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All variants side by side */
-export const Variants: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      <div>
-        <SectionLabel>Sizes — unchecked</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Switch size="lg" label="Large (56x32)" />
-          <Switch size="md" label="Medium (32x18)" />
-          <Switch size="sm" label="Small (28x16)" />
-        </Stack>
-      </div>
-
-      <div>
-        <SectionLabel>Sizes — checked</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Switch size="lg" label="Large" defaultChecked />
-          <Switch size="md" label="Medium" defaultChecked />
-          <Switch size="sm" label="Small" defaultChecked />
-        </Stack>
-      </div>
-
-      <div>
-        <SectionLabel>States</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Switch label="Default" />
-          <Switch label="Checked" defaultChecked />
-          <Switch label="Disabled" disabled />
-          <Switch label="Disabled checked" disabled defaultChecked />
-          <Switch defaultChecked />
-        </Stack>
-      </div>
-    </Stack>
-  ),
-};
-
-/**
- * Accent-knob variant — the track stays a neutral gray in both states and the
- * knob carries state (brand-fill when on, muted-gray when off). Used where a
- * subtler track reads better, e.g. an inline theme toggle.
- * @summary Accent-knob variant across sizes and states
- */
-export const AccentKnob: Story = {
-  render: () => (
-    <Stack gap="var(--gap-huge)">
-      <div>
-        <SectionLabel>Accent knob — unchecked</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Switch variant="accent-knob" size="lg" label="Large" />
-          <Switch variant="accent-knob" size="md" label="Medium" />
-          <Switch variant="accent-knob" size="sm" label="Small" />
-        </Stack>
-      </div>
-
-      <div>
-        <SectionLabel>Accent knob — checked</SectionLabel>
-        <Stack gap="var(--gap-lg)">
-          <Switch variant="accent-knob" size="lg" label="Large" defaultChecked />
-          <Switch variant="accent-knob" size="md" label="Medium" defaultChecked />
-          <Switch variant="accent-knob" size="sm" label="Small" defaultChecked />
-        </Stack>
-      </div>
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => {
-    const [notifications, setNotifications] = useState(true);
-    const [darkMode, setDarkMode] = useState(false);
-    const [analytics, setAnalytics] = useState(true);
-
-    return (
-      <Stack gap="var(--gap-huge)">
-        {/* Settings panel */}
-        <div style={{
-          width: '320px',
-          padding: 'var(--padding-lg)',
-          backgroundColor: 'var(--background-primary)',
-          border: 'var(--border-width-md) solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-lg)',
-        }}>
-          <SectionLabel>Preferences</SectionLabel>
-          <Stack gap="var(--gap-lg)">
-            <Switch
-              label="Email notifications"
-              checked={notifications}
-              onChange={(e) => setNotifications(e.target.checked)}
-            />
-            <Switch
-              label="Dark mode"
-              checked={darkMode}
-              onChange={(e) => setDarkMode(e.target.checked)}
-            />
-            <Switch
-              label="Analytics tracking"
-              checked={analytics}
-              onChange={(e) => setAnalytics(e.target.checked)}
-            />
-          </Stack>
-        </div>
-
-        {/* Compact editor settings */}
-        <div style={{
-          width: '240px',
-          padding: 'var(--padding-md)',
-          backgroundColor: 'var(--background-primary)',
-          border: 'var(--border-width-md) solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-lg)',
-        }}>
-          <SectionLabel>Editor settings</SectionLabel>
-          <Stack gap="var(--gap-md)">
-            <Switch size="sm" label="Auto-save" />
-            <Switch size="sm" label="Spell check" defaultChecked />
-            <Switch size="sm" label="Line numbers" defaultChecked />
-          </Stack>
-        </div>
-      </Stack>
-    );
   },
 };

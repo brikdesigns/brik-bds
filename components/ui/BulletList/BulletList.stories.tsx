@@ -22,10 +22,10 @@ const Frame = ({ width = '360px', children }: { width?: string; children: React.
   </div>
 );
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
+/* ─── 1. Default ──────────────────────────────────────────────── */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     items: [
       'No price-first positioning',
@@ -42,9 +42,9 @@ export const Playground: Story = {
   ),
 };
 
-/* ─── 2. Markers ─────────────────────────────────────────────── */
+/* ─── 2. Markers (axis-only gallery) ─────────────────────────── */
 
-/** @summary Marker style variations */
+/** @summary Marker styles side by side */
 export const Markers: Story = {
   render: () => (
     <Frame>
@@ -66,29 +66,9 @@ export const Markers: Story = {
   ),
 };
 
-/* ─── 3. Density ─────────────────────────────────────────────── */
+/* ─── 3. Inside a Field ──────────────────────────────────────── */
 
-/** @summary Density variations */
-export const Density: Story = {
-  render: () => (
-    <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
-        <BulletList
-          density="compact"
-          items={['Compact row A', 'Compact row B', 'Compact row C', 'Compact row D']}
-        />
-        <BulletList
-          density="comfortable"
-          items={['Comfortable row A', 'Comfortable row B', 'Comfortable row C', 'Comfortable row D']}
-        />
-      </div>
-    </Frame>
-  ),
-};
-
-/* ─── 4. Inside a Field ──────────────────────────────────────── */
-
-/** @summary Inside field */
+/** @summary BulletList nested inside a Field value */
 export const InsideField: Story = {
   render: () => (
     <Frame>
@@ -101,34 +81,6 @@ export const InsideField: Story = {
           ]}
         />
       </Field>
-    </Frame>
-  ),
-};
-
-/* ─── 5. Patterns ────────────────────────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-        <Field label="Approved CTAs">
-          <BulletList
-            items={['Book a consult', 'See the experience', 'Meet the doctors']}
-          />
-        </Field>
-
-        <Field label="Proof points">
-          <BulletList
-            marker="decimal"
-            items={[
-              'Over 20 years combined clinical experience',
-              '96% patient retention year-over-year',
-              'Dual-doctor practice with seamless handoffs',
-            ]}
-          />
-        </Field>
-      </div>
     </Frame>
   ),
 };

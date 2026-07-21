@@ -10,31 +10,34 @@ import * as Stories from './Tag.stories';
 
 Categorization labels for classifying records — industry, segment, owner, size. Available in three sizes (`sm`, `md`, `lg`) plus `xs` icon-only.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes, appearances, icon positions, and states in one view.
-
-<Canvas of={Stories.Variants} />
-
-**Appearance** (shared axis with Badge and Chip — see [Vocabulary › Axes](https://design.brikdesigns.com/docs/primitives/naming-conventions)):
+**Appearance** (shared axis with Badge and Chip — see [Vocabulary › Axes](https://design.brikdesigns.com/docs/primitives/naming-conventions)) and icon slots are exposed via Controls on Default:
 
 - **`solid`** (default) — Neutral filled background. Matches existing Tag styling.
 - **`subtle`** — Transparent background with a hairline border. Lower visual weight when Tags sit on a colored surface.
 
-**Density** (orthogonal to `size`; shared axis with Badge, BulletList, Table):
+Below: sizes, density, and Badge alignment — axes where a side-by-side comparison is clearer than toggling Controls.
 
-- **`comfortable`** (default) — Current spacing.
-- **`compact`** — Tighter horizontal padding (one token-step down per size) so more Tags fit inline in a dense table row. Height is unchanged.
+### Sizes
 
-## Patterns
+<Canvas of={Stories.Sizes} />
 
-Real-world compositions for categorization and filtering.
+### Density
 
-<Canvas of={Stories.Patterns} />
+`comfortable` (default) vs `compact` — compact tightens horizontal padding one token-step down per size so more Tags fit inline in a dense table row. Height is unchanged (shared axis with Badge, BulletList, Table).
+
+<Canvas of={Stories.Density} />
+
+### Badge + Tag alignment
+
+Badge and Tag share the same height at every size tier — useful when mixing them inline.
+
+<Canvas of={Stories.BadgeTagAlignment} />
 
 ## Props
 

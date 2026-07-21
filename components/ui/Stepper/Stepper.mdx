@@ -10,21 +10,29 @@ import * as Stories from './Stepper.stories';
 
 Numeric input with increment and decrement buttons. Use for quantity selectors, pagination controls, and any setting that adjusts a number in discrete steps.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-Sizes (sm, md, lg), bounds, and disabled state.
+### Sizes
 
-<Canvas of={Stories.Variants} />
+`sm`, `md`, `lg` side by side. Bounds and `disabled` are available via Controls on Default.
+
+<Canvas of={Stories.Sizes} />
 
 ## Patterns
 
-Real-world usage: quantity selector and budget control with custom step.
+Real-world usage: a quantity selector and a budget control with a custom step.
 
-<Canvas of={Stories.Patterns} />
+### Quantity selector
+
+<Canvas of={Stories.QuantitySelector} />
+
+### Budget control
+
+<Canvas of={Stories.BudgetControl} />
 
 ## Props
 

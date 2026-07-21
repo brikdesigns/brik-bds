@@ -15,17 +15,17 @@ Available in three variants:
 - **`icon-text`** — colored pill with service icon + label text
 - **`icon`** — colored square with service icon only (the icon badge, previously `ServiceBadge`)
 
-## Playground
+## Default
 
-Use the Controls panel to explore all props interactively.
+Use the Controls panel to switch `category`, `variant`, and `size`.
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-All three display variants across categories and sizes.
-
-<Canvas of={Stories.Variants} />
+ServiceTag has no dedicated per-category or per-variant stories — `category`,
+`variant`, and `size` are all fully explorable via Controls on Default. Each
+category maps to a dedicated color:
 
 - **Brand** — Yellow
 - **Marketing** — Green
@@ -33,23 +33,7 @@ All three display variants across categories and sizes.
 - **Product** — Purple
 - **Back Office** — Orange
 
-## All services (icon-text)
-
-Complete catalog of all services with icon + text, organized by category.
-
-<Canvas of={Stories.AllServices} />
-
-## All services (icon)
-
-Complete catalog of all service icon badges, organized by category.
-
-<Canvas of={Stories.AllServicesIcon} />
-
-## Patterns
-
-Real-world usage: table cells, service lists, and color palette reference.
-
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.Default} />
 
 ## Props
 

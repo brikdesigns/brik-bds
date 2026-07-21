@@ -10,25 +10,25 @@ import * as Stories from './SegmentedControl.stories';
 
 Pill-shaped toggle for switching between mutually exclusive views or modes. Unlike `TabBar` (page navigation), `SegmentedControl` switches content in-place.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
-
-Sizes, full-width, disabled states, and many segments.
-
-<Canvas of={Stories.Variants} />
 
 - **`sm`** — Compact toolbars, dense UI
 - **`md`** — Default for forms and panels
 - **`lg`** — Prominent page-level toggles
 
+Toggle `fullWidth`, `disabled`, and item-level `disabled` via Controls on Default.
+
+<Canvas of={Stories.Default} />
+
 ## Patterns
 
-Real-world usage: view switcher, pricing toggle, and date range selector.
+Real-world usage: clicking a segment updates the selected view.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.WithControlledSelection} />
 
 ## Props
 

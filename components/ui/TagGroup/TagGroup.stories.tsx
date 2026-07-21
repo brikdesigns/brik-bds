@@ -9,8 +9,15 @@ const meta: Meta<typeof TagGroup> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    gap: { control: 'select', options: ['xs', 'sm', 'md'] },
-    wrap: { control: 'boolean' },
+    gap: {
+      control: 'select',
+      options: ['xs', 'sm', 'md'],
+      description: 'Gap between tags. Default `xs` (matches tight tag clusters).',
+    },
+    wrap: {
+      control: 'boolean',
+      description: 'When true, tags wrap to additional rows. Default true.',
+    },
   },
 };
 
@@ -23,10 +30,10 @@ const Frame = ({ width = '360px', children }: { width?: string; children: React.
   </div>
 );
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
+/* ─── 1. Default ──────────────────────────────────────────────── */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     gap: 'xs',
     wrap: true,
@@ -87,41 +94,6 @@ export const InsideField: Story = {
           <Tag size="sm">Whitening</Tag>
         </TagGroup>
       </Field>
-    </Frame>
-  ),
-};
-
-/* ─── 4. Patterns ────────────────────────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-        <Field label="Industries">
-          <TagGroup>
-            <Tag size="sm">Dental</Tag>
-            <Tag size="sm">Medical</Tag>
-            <Tag size="sm">Legal</Tag>
-          </TagGroup>
-        </Field>
-
-        <Field label="Voice traits">
-          <TagGroup>
-            <Tag size="sm">Warm</Tag>
-            <Tag size="sm">Authoritative</Tag>
-            <Tag size="sm">Clear</Tag>
-          </TagGroup>
-        </Field>
-
-        <Field label="Brand personality">
-          <TagGroup>
-            <Tag size="sm">Sophisticated</Tag>
-            <Tag size="sm">Approachable</Tag>
-            <Tag size="sm">Trustworthy</Tag>
-          </TagGroup>
-        </Field>
-      </div>
     </Frame>
   ),
 };
