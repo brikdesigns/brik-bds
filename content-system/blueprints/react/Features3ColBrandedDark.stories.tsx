@@ -4,7 +4,7 @@ import { Features3ColBrandedDark } from './Features3ColBrandedDark';
 import type { BlueprintProps } from '../astro/types';
 import { baseTheme, baseClientFacts } from './_fixtures';
 
-/* ─── Demo data-audience cascade ────────────────────────────────────
+/* ─── Demo data-service-line cascade ────────────────────────────────────
  *
  * BDS ships the scope-binding pattern but not audience-specific values
  * — those live in each consumer's globals.css. Storybook needs the
@@ -14,29 +14,29 @@ import { baseTheme, baseClientFacts } from './_fixtures';
  *
  * Per the cascade rules (`docs/theming/client-themes`), we re-bind
  * `--background-brand-primary` and the related brand-* tokens inside
- * the `[data-audience='X']` subtree. Components stay scope-blind.
+ * the `[data-service-line='X']` subtree. Components stay scope-blind.
  */
-const audienceCascadeStyles = `
-[data-audience='brand'] {
+const serviceLineCascadeStyles = `
+[data-service-line='brand'] {
   --background-brand-primary: var(--theme-yellow-yellow-light);
   --brand-primary: var(--theme-yellow-yellow-light);
   --text-brand-primary: var(--theme-yellow-yellow-dark);
 }
-[data-audience='marketing'] {
+[data-service-line='marketing'] {
   --background-brand-primary: var(--theme-green-green-light);
   --brand-primary: var(--theme-green-green-light);
   --text-brand-primary: var(--theme-green-green-dark);
 }
-[data-audience='information'] {
+[data-service-line='information'] {
   --background-brand-primary: var(--color-blue-light);
   --text-brand-primary: var(--color-blue-dark);
 }
-[data-audience='product'] {
+[data-service-line='product'] {
   --background-brand-primary: var(--theme-purple-purple-light);
   --brand-primary: var(--theme-purple-purple-light);
   --text-brand-primary: var(--theme-purple-purple-dark);
 }
-[data-audience='service'] {
+[data-service-line='service'] {
   --background-brand-primary: var(--theme-orange-orange-light);
   --brand-primary: var(--theme-orange-orange-light);
   --text-brand-primary: var(--theme-orange-orange-dark);
@@ -73,19 +73,19 @@ const featuresSection: BlueprintProps['section'] = {
       title: 'Capability one',
       description: 'A two-line card description that sets the type rhythm without competing with the title.',
       href: '#',
-      audience: 'brand',
+      serviceLine: 'brand',
     },
     {
       title: 'Capability two',
       description: 'A two-line card description that sets the type rhythm without competing with the title.',
       href: '#',
-      audience: 'marketing',
+      serviceLine: 'marketing',
     },
     {
       title: 'Capability three',
       description: 'A two-line card description that sets the type rhythm without competing with the title.',
       href: '#',
-      audience: 'service',
+      serviceLine: 'service',
     },
   ],
 };
@@ -100,7 +100,7 @@ const baseProps: BlueprintProps = {
 
 const withAudienceCascade = (Story: () => JSX.Element) => (
   <>
-    <style dangerouslySetInnerHTML={{ __html: audienceCascadeStyles }} />
+    <style dangerouslySetInnerHTML={{ __html: serviceLineCascadeStyles }} />
     <Story />
   </>
 );
@@ -117,7 +117,7 @@ const meta: Meta<typeof Features3ColBrandedDark> = {
     docs: {
       description: {
         component:
-          'Dark section with a 3-column grid of brand-colored cards. Each card emits `data-audience` to re-bind `--background-brand-primary` for that subtree per the BDS scope-binding pattern (`docs/theming/client-themes`). Stories include a representative cascade block showing how a consumer site would declare per-audience bindings. Card title uses bold weight + 18px, description 16px regular — the AA-clearing posture for white-on-saturated-brand backgrounds (BDS contrast burndown #40).',
+          'Dark section with a 3-column grid of brand-colored cards. Each card emits `data-service-line` to re-bind `--background-brand-primary` for that subtree per the BDS scope-binding pattern (`docs/theming/client-themes`). Stories include a representative cascade block showing how a consumer site would declare per-audience bindings. Card title uses bold weight + 18px, description 16px regular — the AA-clearing posture for white-on-saturated-brand backgrounds (BDS contrast burndown #40).',
       },
     },
   },
@@ -156,7 +156,7 @@ export const Wrapped: Story = {
           title: 'Capability four',
           description: 'A two-line card description that sets the type rhythm without competing with the title.',
           href: '#',
-          audience: 'information',
+          serviceLine: 'information',
         },
       ],
     },

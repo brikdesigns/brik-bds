@@ -61,34 +61,34 @@
  * --text-service-X-muted (forbidden by BDS naming canon: scoped
  * tokens carry context modifiers only, not hierarchy). */
 
-[data-audience='brand'] .bds-breadcrumb {
+:is([data-audience='brand'], [data-service-line='brand']) .bds-breadcrumb {
   --text-secondary: var(--text-service-brand-on-light);
   --text-muted: var(--text-service-brand-on-light);
 }
 
-[data-audience='marketing'] .bds-breadcrumb {
+:is([data-audience='marketing'], [data-service-line='marketing']) .bds-breadcrumb {
   --text-secondary: var(--text-service-marketing-on-light);
   --text-muted: var(--text-service-marketing-on-light);
 }
 
-[data-audience='information'] .bds-breadcrumb {
+:is([data-audience='information'], [data-service-line='information']) .bds-breadcrumb {
   --text-secondary: var(--text-service-information-on-light);
   --text-muted: var(--text-service-information-on-light);
 }
 
-[data-audience='product'] .bds-breadcrumb {
+:is([data-audience='product'], [data-service-line='product']) .bds-breadcrumb {
   --text-secondary: var(--text-service-product-on-light);
   --text-muted: var(--text-service-product-on-light);
 }
 
-[data-audience='back-office'] .bds-breadcrumb {
+:is([data-audience='back-office'], [data-service-line='back-office']) .bds-breadcrumb {
   --text-secondary: var(--text-service-back-office-on-light);
   --text-muted: var(--text-service-back-office-on-light);
 }
 
 /* @deprecated alias of [data-audience='back-office'] — remove with the
    `service` ServiceLine member in a future major. */
-[data-audience='service'] .bds-breadcrumb {
+:is([data-audience='service'], [data-service-line='service']) .bds-breadcrumb {
   --text-secondary: var(--text-service-back-office-on-light);
   --text-muted: var(--text-service-back-office-on-light);
 }
@@ -104,33 +104,33 @@
  * HeroSplitImageCardOverlay flips the headline/link cascade — so the current crumb
  * clears AA on the dark band (6.89–9.06:1) WITHOUT inverting the light-tint pages.
  * A bare [data-audience] flip regressed /services/brand to 1:1 (0.122.2). */
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'] .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']) .bds-breadcrumb {
   --text-secondary: var(--text-service-brand-on-dark);
   --text-muted: var(--text-service-brand-on-dark);
 }
 
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) .bds-breadcrumb {
   --text-secondary: var(--text-service-marketing-on-dark);
   --text-muted: var(--text-service-marketing-on-dark);
 }
 
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'] .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']) .bds-breadcrumb {
   --text-secondary: var(--text-service-information-on-dark);
   --text-muted: var(--text-service-information-on-dark);
 }
 
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'] .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']) .bds-breadcrumb {
   --text-secondary: var(--text-service-product-on-dark);
   --text-muted: var(--text-service-product-on-dark);
 }
 
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'] .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']) .bds-breadcrumb {
   --text-secondary: var(--text-service-back-office-on-dark);
   --text-muted: var(--text-service-back-office-on-dark);
 }
 
 /* @deprecated alias of [data-audience='back-office'] — see above. */
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) .bds-breadcrumb {
   --text-secondary: var(--text-service-back-office-on-dark);
   --text-muted: var(--text-service-back-office-on-dark);
 }

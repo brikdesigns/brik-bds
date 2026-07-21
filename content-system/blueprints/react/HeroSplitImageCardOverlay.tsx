@@ -71,7 +71,9 @@ export function HeroSplitImageCardOverlay({
   icon,
   onPriceCtaClick,
 }: Props) {
-  const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
+  const { breadcrumb = [], serviceLine, audience, iconUrl, iconAlt, priceCard } = section;
+  // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
+  const resolvedServiceLine = serviceLine ?? audience;
 
   const breadcrumbNode =
     breadcrumb.length > 0 ? (
@@ -108,10 +110,10 @@ export function HeroSplitImageCardOverlay({
               decoding="async"
             />
           )
-        : audience
+        : resolvedServiceLine
           ? (
               <ServiceTag
-                category={audience}
+                category={resolvedServiceLine}
                 variant="icon"
                 size="lg"
                 className="bds-hero__icon"
@@ -200,7 +202,8 @@ export function HeroSplitImageCardOverlay({
       breadcrumb={breadcrumbNode}
       eyebrow={eyebrowNode}
       media={media}
-      data-audience={audience}
+      data-service-line={resolvedServiceLine}
+      data-audience={resolvedServiceLine}
       data-blueprint-key="hero_split_image_card_overlay"
     />
   );

@@ -26,7 +26,9 @@ export function Features3ColBrandedDark({ section }: Props) {
     href: item.href ?? undefined,
     imageUrl: item.imageUrl ?? undefined,
     imageAlt: item.imageAlt ?? undefined,
-    audience: (item.audience ?? undefined) as ServiceLine | undefined,
+    // `serviceLine` canonical; `audience` deprecated alias (#788). Pass both
+    // through so `Features` can resolve `serviceLine ?? audience`.
+    serviceLine: (item.serviceLine ?? item.audience ?? undefined) as ServiceLine | undefined,
   }));
 
   return (

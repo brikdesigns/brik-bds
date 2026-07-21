@@ -61,8 +61,14 @@ export interface FeatureItem {
   /** Alt text for `imageUrl`. Empty (decorative) when omitted. */
   imageAlt?: string;
   /**
-   * Audience slug emitted as `data-audience` for per-card brand-color scope
-   * binding, and used for the `ServiceTag` icon fallback when no `imageUrl`.
+   * Service-line slug emitted as `data-service-line` for per-card brand-color
+   * scope binding, and used for the `ServiceTag` icon fallback when no `imageUrl`.
+   */
+  serviceLine?: ServiceLine;
+  /**
+   * @deprecated Use `serviceLine`. Working alias — resolved as
+   * `serviceLine ?? audience`; the card emits both `data-service-line` and
+   * `data-audience` during the deprecation window (#788).
    */
   audience?: ServiceLine;
 }
@@ -117,14 +123,16 @@ export function Features({
 
         <ul className="bds-features__grid" role="list">
           {items.map((item, idx) => {
-            const audience = item.audience ?? null;
+            // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
+            const serviceLine = item.serviceLine ?? item.audience ?? null;
             return (
               <li key={`${sectionKey}-${idx}`} className="bds-features__item">
                 <Card
                   variant="outlined"
                   padding="none"
                   className="bds-features__card"
-                  data-audience={audience ?? undefined}
+                  data-service-line={serviceLine ?? undefined}
+                  data-audience={serviceLine ?? undefined}
                 >
                   <a
                     className="bds-features__card-link"
@@ -139,13 +147,13 @@ export function Features({
                           loading="lazy"
                           decoding="async"
                         />
-                      ) : audience ? (
+                      ) : serviceLine ? (
                         <span
                           className="bds-features__image-fallback"
                           aria-hidden="true"
                         >
                           <ServiceTag
-                            category={audience}
+                            category={serviceLine}
                             variant="icon"
                             size="lg"
                             serviceName={item.title}

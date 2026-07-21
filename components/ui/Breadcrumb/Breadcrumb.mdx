@@ -31,19 +31,20 @@ Real-world usage: page headers and settings navigation.
 
 <Canvas of={Stories.Patterns} />
 
-## Audience cascade
+## Service-line cascade
 
-When a breadcrumb sits inside a `[data-audience='X']` subtree, the
+When a breadcrumb sits inside a `[data-service-line='X']` subtree, the
 current page label and separators rebind canonical `--text-secondary`
 and `--text-muted` to the matching `--text-service-{name}` value
 (`brand`, `marketing`, `information`, `product`, and `service` → back-office).
 
 The component itself stays scope-blind — only the cascade block in
-`Breadcrumb.css` knows about audiences. Consumers set `data-audience`
+`Breadcrumb.css` knows about service lines. Consumers set `data-service-line`
 on any ancestor (page wrapper, hero card, sidebar column) and the
-breadcrumb inside picks up the hue.
+breadcrumb inside picks up the hue. The legacy `data-audience` attribute
+still resolves during the deprecation window (#788).
 
-<Canvas of={Stories.AudienceCascade} />
+<Canvas of={Stories.ServiceLineCascade} />
 
 ## Props
 
