@@ -4,7 +4,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 import type { BlueprintProps } from '../astro/types';
 
-/* ─── Demo data-audience cascade ────────────────────────────────────
+/* ─── Demo data-service-line cascade ────────────────────────────────────
  *
  * BDS ships the scope-binding pattern; consumer sites declare the
  * audience-specific values. This <style> block mirrors what
@@ -12,24 +12,24 @@ import type { BlueprintProps } from '../astro/types';
  * the canonical "Information" hero renders against the same blue
  * tint as the live site.
  */
-const audienceCascadeStyles = `
-[data-audience='brand'] {
+const serviceLineCascadeStyles = `
+[data-service-line='brand'] {
   --page-brand-primary: var(--theme-yellow-yellow-light);
   --text-brand-primary: var(--theme-yellow-yellow-dark);
 }
-[data-audience='marketing'] {
+[data-service-line='marketing'] {
   --page-brand-primary: var(--theme-green-green-light);
   --text-brand-primary: var(--theme-green-green-dark);
 }
-[data-audience='information'] {
+[data-service-line='information'] {
   --page-brand-primary: var(--color-blue-light);
   --text-brand-primary: var(--color-blue-dark);
 }
-[data-audience='product'] {
+[data-service-line='product'] {
   --page-brand-primary: var(--theme-purple-purple-light);
   --text-brand-primary: var(--theme-purple-purple-dark);
 }
-[data-audience='service'] {
+[data-service-line='service'] {
   --page-brand-primary: var(--theme-orange-orange-light);
   --text-brand-primary: var(--theme-orange-orange-dark);
 }
@@ -76,7 +76,7 @@ const interiorHeroSection: BlueprintProps['section'] = {
     { label: 'Category', href: '#' },
     { label: 'Service detail' },
   ],
-  audience: 'information',
+  serviceLine: 'information',
   priceCard: {
     imageUrl: 'https://placehold.co/600x600/eaf1fb/1f3d70?text=Deliverable',
     imageAlt: '',
@@ -105,7 +105,7 @@ const baseProps: BlueprintProps = {
 
 const withAudienceCascade = (Story: () => JSX.Element) => (
   <>
-    <style dangerouslySetInnerHTML={{ __html: audienceCascadeStyles }} />
+    <style dangerouslySetInnerHTML={{ __html: serviceLineCascadeStyles }} />
     <Story />
   </>
 );
@@ -122,7 +122,7 @@ const meta: Meta<typeof HeroSplitImageCardOverlay> = {
     docs: {
       description: {
         component:
-          'Interior-page hero blueprint. 58/42 split: left column carries the page trail (breadcrumb, eyebrow, h1, optional body, single dark CTA) on a soft audience-tinted background; right column shows a white image card with optional price overlay. Drives `/services/{cat}/{slug}` style pages — the failure zone where agents previously improvised layouts because no canonical block covered the shape. Audience tinting is a `data-audience` cascade: BDS ships the pattern, consumer sites declare the per-audience color values. The Playground fixture mirrors `brikdesigns.com/service/layout-design`.',
+          'Interior-page hero blueprint. 58/42 split: left column carries the page trail (breadcrumb, eyebrow, h1, optional body, single dark CTA) on a soft audience-tinted background; right column shows a white image card with optional price overlay. Drives `/services/{cat}/{slug}` style pages — the failure zone where agents previously improvised layouts because no canonical block covered the shape. Service-line tinting is a `data-service-line` cascade: BDS ships the pattern, consumer sites declare the per-audience color values. The Playground fixture mirrors `brikdesigns.com/service/layout-design`.',
       },
     },
   },
@@ -164,9 +164,9 @@ export const LandscapePhotography: Story = {
 
 /**
  * @summary Service-tag opt-out — `showServiceTag={false}` suppresses the
- * eyebrow icon/ServiceTag slot while `audience` still drives the
- * `data-audience` color theming (note the tint is unchanged from Playground).
- * For support-plan heroes that want the audience tint without a service-line
+ * eyebrow icon/ServiceTag slot while `serviceLine` still drives the
+ * `data-service-line` color theming (note the tint is unchanged from Playground).
+ * For support-plan heroes that want the service-line tint without a service-line
  * badge — brikdesigns.com #452.
  */
 export const NoServiceTag: Story = {

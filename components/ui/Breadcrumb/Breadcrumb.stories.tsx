@@ -192,16 +192,17 @@ export const Patterns: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   4. AUDIENCE CASCADE — service-line tinting via [data-audience]
+   4. SERVICE-LINE CASCADE — tinting via [data-service-line]
    ═══════════════════════════════════════════════════════════════ */
 
 // The breadcrumb stays scope-blind — __current reads --text-secondary
 // and __separator reads --text-muted as always. When the breadcrumb
-// sits inside a [data-audience='X'] subtree, Breadcrumb.css rebinds
+// sits inside a [data-service-line='X'] subtree, Breadcrumb.css rebinds
 // those two canonical tokens to --text-service-{name} so the current
-// page label + separators pick up the audience hue. The 'service'
-// audience maps to the back-office token set per the #563 rename.
-const AUDIENCES = [
+// page label + separators pick up the service-line hue. The 'service'
+// slug maps to the back-office token set per the #563 rename.
+// (The deprecated `[data-audience='X']` attribute still resolves — #788.)
+const SERVICE_LINES = [
   { id: 'brand', label: 'Brand (yellow)' },
   { id: 'marketing', label: 'Marketing (green)' },
   { id: 'information', label: 'Information (blue)' },
@@ -210,13 +211,13 @@ const AUDIENCES = [
   { id: 'service', label: 'Service — @deprecated alias of back-office (orange)' },
 ] as const;
 
-/** @summary Service-line tinting via [data-audience] cascade */
-export const AudienceCascade: Story = {
+/** @summary Service-line tinting via [data-service-line] cascade */
+export const ServiceLineCascade: Story = {
   render: () => (
     <Stack>
-      {AUDIENCES.map(({ id, label }) => (
-        <div key={id} data-audience={id}>
-          <SectionLabel>{`[data-audience='${id}'] — ${label}`}</SectionLabel>
+      {SERVICE_LINES.map(({ id, label }) => (
+        <div key={id} data-service-line={id}>
+          <SectionLabel>{`[data-service-line='${id}'] — ${label}`}</SectionLabel>
           <Breadcrumb
             items={[
               { label: 'Home', href: '#' },
