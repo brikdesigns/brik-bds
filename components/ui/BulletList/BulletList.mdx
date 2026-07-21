@@ -10,35 +10,23 @@ import * as Stories from './BulletList.stories';
 
 Structured list of short text items — anti-messages, proof points, approved CTAs, brand rules. Pass `marker="decimal"` for numbered lists; the element switches to `<ol>` automatically.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
 ### Markers
 
-Three marker styles — `disc` (default), `decimal`, `none`.
+Three marker styles — `disc` (default), `decimal`, `none`. Use the Controls panel on Default to try `density` (`compact` / `comfortable`).
 
 <Canvas of={Stories.Markers} />
 
-### Density
-
-`compact` for tight stat-like lists, `comfortable` (default) for content lists.
-
-<Canvas of={Stories.Density} />
-
-### Inside a Field
-
-The canonical use: a `Field` value expressed as a short bullet list.
-
-<Canvas of={Stories.InsideField} />
-
 ## Patterns
 
-Brand rules and proof-points across a sheet body.
+The canonical composition: a `Field` value expressed as a short bullet list.
 
-<Canvas of={Stories.Patterns} />
+<Canvas of={Stories.InsideField} />
 
 ## Props
 

@@ -20,10 +20,12 @@ const meta: Meta<typeof Tag> = {
     appearance: {
       control: 'select',
       options: ['solid', 'subtle'],
+      description: 'Fill: `solid` (neutral filled background, default) or `subtle` (transparent + hairline border).',
     },
     density: {
       control: 'select',
       options: ['comfortable', 'compact'],
+      description: '`compact` tightens horizontal padding one token-step down for dense rows. Default `comfortable`.',
     },
     disabled: { control: 'boolean' },
     onRemove: { action: 'removed' },
@@ -57,88 +59,72 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 );
 
 /* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — Args-based, use Controls panel to explore
+   DEFAULT — args-driven sandbox. Controls work.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: { children: 'Tag', size: 'md' },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Sizes, icons, states in one view
+   SIZES — axis-only gallery (four size tokens, side by side)
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
+/**
+ * Sizes axis — the four size tokens (xs / sm / md / lg). `xs` is icon-only
+ * by design — it's too small for legible text.
+ *
+ * @summary All four sizes side-by-side
+ */
+export const Sizes: Story = {
   render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Sizes</SectionLabel>
-        <Row>
-          <Tag size="xs" icon={<Icon icon="ph:tag" />} />
-          <Tag size="sm">Small</Tag>
-          <Tag size="md">Medium</Tag>
-          <Tag size="lg">Large</Tag>
+    <Row>
+      <Tag size="xs" icon={<Icon icon="ph:tag" />} />
+      <Tag size="sm">Small</Tag>
+      <Tag size="md">Medium</Tag>
+      <Tag size="lg">Large</Tag>
+    </Row>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   DENSITY — axis-only gallery (comfortable vs compact, per size)
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Density axis — `comfortable` (default) vs `compact` at each text size.
+ * Compact tightens horizontal padding one token-step down so more Tags fit
+ * inline in a dense table row; height is unchanged.
+ *
+ * @summary Comfortable vs compact density across sizes
+ */
+export const Density: Story = {
+  render: () => (
+    <Stack gap="var(--gap-lg)">
+      {(['sm', 'md', 'lg'] as const).map((size) => (
+        <Row key={size}>
+          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
+          <Tag size={size} density="comfortable">Comfortable</Tag>
+          <Tag size={size} density="compact">Compact</Tag>
         </Row>
-      </div>
-      <div>
-        <SectionLabel>Appearance</SectionLabel>
-        <Row>
-          <Tag appearance="solid">Solid (default)</Tag>
-          <Tag appearance="subtle">Subtle</Tag>
-          <Tag appearance="solid" icon={<Icon icon="ph:tag" />}>Solid + icon</Tag>
-          <Tag appearance="subtle" icon={<Icon icon="ph:tag" />}>Subtle + icon</Tag>
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Density (comfortable vs compact)</SectionLabel>
-        {(['sm', 'md', 'lg'] as const).map((size) => (
-          <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center', marginBottom: 'var(--gap-md)' }}>
-            <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
-            <Tag size={size} density="comfortable">Comfortable</Tag>
-            <Tag size={size} density="compact">Compact</Tag>
-          </div>
-        ))}
-      </div>
-      <div>
-        <SectionLabel>With icons</SectionLabel>
-        <Row>
-          <Tag size="lg" icon={<Icon icon="ph:certificate" />}>Left icon</Tag>
-          <Tag size="lg" trailingIcon={<Icon icon="ph:x-circle" />}>Right icon</Tag>
-          <Tag size="lg" icon={<Icon icon="ph:certificate" />} trailingIcon={<Icon icon="ph:x-circle" />}>Both</Tag>
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Icons across sizes</SectionLabel>
-        {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-          <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center', marginBottom: 'var(--gap-md)' }}>
-            {size === 'xs' ? (
-              <Tag size={size} icon={<Icon icon="ph:certificate" />} />
-            ) : (
-              <Tag size={size} icon={<Icon icon="ph:certificate" />} trailingIcon={<Icon icon="ph:x-circle" />}>Tag</Tag>
-            )}
-          </div>
-        ))}
-      </div>
-      <div>
-        <SectionLabel>States</SectionLabel>
-        <Row>
-          <Tag>Default</Tag>
-          <Tag onRemove={() => {}}>Removable</Tag>
-          <Tag disabled>Disabled</Tag>
-        </Row>
-      </div>
+      ))}
     </Stack>
   ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. ALIGNMENT — Side-by-side with Badge at every size
+   BADGE + TAG ALIGNMENT — Q4 irreducible: cross-component demo,
+   args can't render two different components in one story.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Alignment options */
-export const Alignment: Story = {
+/**
+ * Badge and Tag share the same height at every size tier — useful when
+ * mixing them inline.
+ *
+ * @summary Badge + Tag pixel-aligned at every size
+ */
+export const BadgeTagAlignment: Story = {
   name: 'Badge + Tag alignment',
   render: () => (
     <Stack>
@@ -159,36 +145,6 @@ export const Alignment: Story = {
           )}
         </Row>
       ))}
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. PATTERNS — Real-world usage
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  name: 'Patterns',
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>Category labels</SectionLabel>
-        <Row>
-          <Tag icon={<Icon icon="ph:tag" />}>Development</Tag>
-          <Tag icon={<Icon icon="ph:circle" />}>Marketing</Tag>
-          <Tag icon={<Icon icon="ph:star" />}>Featured</Tag>
-          <Tag trailingIcon={<Icon icon="ph:arrow-square-out" />}>External</Tag>
-        </Row>
-      </div>
-      <div>
-        <SectionLabel>Filter chips</SectionLabel>
-        <Row>
-          <Tag onRemove={() => {}}>Design</Tag>
-          <Tag onRemove={() => {}}>React</Tag>
-          <Tag onRemove={() => {}}>Webflow</Tag>
-        </Row>
-      </div>
     </Stack>
   ),
 };
