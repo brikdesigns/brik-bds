@@ -99,6 +99,15 @@ if [ -n "$STAGED_MDX" ]; then
   node scripts/lint-storybook-recipe.js --enforce
 fi
 
+# ── Storybook story-shape (ADR-006) ──
+# Whole-repo scan; fires only when a story file is staged. Bans render-mode
+# gallery exports (Variants/Tones/Patterns/Examples/*And*). See #569.
+STAGED_STORIES=$(git diff --cached --name-only --diff-filter=ACM -- '*.stories.tsx')
+if [ -n "$STAGED_STORIES" ]; then
+  echo "Linting Storybook story shape (ADR-006)..."
+  node scripts/lint-story-shape.js --enforce
+fi
+
 # ── Blueprint naming lint ──
 # Scans staged blueprint files for banned BEM slot suffixes (__eyebrow,
 # __headline, __heading, __body), invented `variant` axis values,

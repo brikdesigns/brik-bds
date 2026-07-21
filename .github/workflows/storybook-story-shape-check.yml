@@ -1,0 +1,50 @@
+name: Storybook Story-Shape Check
+
+# Enforces ADR-006 Part B (two-shape model) on every PR and on every push to
+# main. Fails the build if any `*.stories.tsx` file exports a banned render-mode
+# gallery name (Variants / Tones / Patterns / Examples) or an `*And*` axis-merge
+# compound (e.g. SizesAndVariants).
+#
+# Why this is a CI gate (not just pre-commit):
+#   - Pre-commit only runs when a story file is staged. CI catches regressions
+#     introduced by surrounding edits (a story export renamed into a banned name
+#     by a refactor) that wouldn't trip the staged-file filter.
+#   - Cloud-agent commits (scheduled routines) bypass local hooks.
+#   - PRs from forks or fresh clones may not have husky installed.
+#
+# No grandfather allowlist: the Phase 3 sweep (#1278, #1279) emptied the set
+# repo-wide before this gate shipped. See #569.
+#
+# Source of truth: docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md
+# Lint script: scripts/lint-story-shape.js
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: storybook-story-shape-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  storybook-story-shape-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Storybook story-shape check
+        run: node scripts/lint-story-shape.js --enforce
