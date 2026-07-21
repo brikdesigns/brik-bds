@@ -9,8 +9,15 @@ const meta: Meta<typeof BadgeGroup> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
-    gap: { control: 'select', options: ['xs', 'sm', 'md'] },
-    wrap: { control: 'boolean' },
+    gap: {
+      control: 'select',
+      options: ['xs', 'sm', 'md'],
+      description: 'Gap between badges. Default `xs` (matches tight badge clusters).',
+    },
+    wrap: {
+      control: 'boolean',
+      description: 'When true, badges wrap to additional rows. Default true.',
+    },
   },
 };
 
@@ -23,10 +30,10 @@ const Frame = ({ width = '360px', children }: { width?: string; children: React.
   </div>
 );
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
+/* ─── 1. Default ──────────────────────────────────────────────── */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     gap: 'xs',
     wrap: true,
@@ -90,10 +97,15 @@ export const InsideField: Story = {
   ),
 };
 
-/* ─── 4. Variants — appearance mix ───────────────────────────── */
+/* ─── 4. Appearance — axis-only gallery (solid vs subtle) ────── */
 
-/** @summary All variants side by side */
-export const Variants: Story = {
+/**
+ * `solid` and `subtle` appearance values from Badge composed in the same
+ * group — a single axis, side by side.
+ *
+ * @summary Solid vs subtle appearance, composed in a group
+ */
+export const Appearance: Story = {
   name: 'Appearance mix',
   render: () => (
     <Frame width="480px">
@@ -113,42 +125,6 @@ export const Variants: Story = {
             <Badge status="warning" size="sm" appearance="subtle">Overdue</Badge>
             <Badge status="error" size="sm" appearance="subtle">Failed</Badge>
             <Badge status="info" size="sm" appearance="subtle">Scheduled</Badge>
-          </BadgeGroup>
-        </Field>
-      </div>
-    </Frame>
-  ),
-};
-
-/* ─── 5. Patterns ────────────────────────────────────────────── */
-
-/** @summary Common usage patterns */
-export const Patterns: Story = {
-  render: () => (
-    <Frame width="480px">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-        <Field label="Account status">
-          <BadgeGroup gap="sm">
-            <Badge status="positive" size="sm" appearance="subtle">Active</Badge>
-            <Badge status="info" size="sm" appearance="subtle">Verified</Badge>
-            <Badge status="warning" size="sm" appearance="subtle">Trial</Badge>
-          </BadgeGroup>
-        </Field>
-
-        <Field label="Notifications">
-          <BadgeGroup gap="xs">
-            <Badge status="error" size="sm">3 alerts</Badge>
-            <Badge status="warning" size="sm">5 pending</Badge>
-            <Badge status="info" size="sm">12 messages</Badge>
-          </BadgeGroup>
-        </Field>
-
-        <Field label="Tags">
-          <BadgeGroup gap="sm" wrap>
-            <Badge status="brand" size="sm" appearance="subtle">Engineering</Badge>
-            <Badge status="brand" size="sm" appearance="subtle">Design</Badge>
-            <Badge status="brand" size="sm" appearance="subtle">Product</Badge>
-            <Badge status="brand" size="sm" appearance="subtle">Marketing</Badge>
           </BadgeGroup>
         </Field>
       </div>
