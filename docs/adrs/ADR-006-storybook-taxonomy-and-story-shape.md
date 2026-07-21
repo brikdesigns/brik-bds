@@ -154,7 +154,7 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 - [ADR-010](./ADR-010-storybook-axes-of-information.md) carries the story-vs-control matrix referenced by Part B above.
 - BDS `CLAUDE.md` "Storybook" section carries a one-line pointer to this ADR and to ADR-010.
 - New component story files reviewed against the two-shape model + matrix in PR review.
-- **Lint enforcement is page-recipe-scoped today** ([`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js), gated on pre-commit + CI per ADR-007). A complementary lint for the story-shape rule (no `Variants`/`Tones`/`Patterns` gallery exports) is tracked in [#569](https://github.com/brikdesigns/brik-bds/issues/569) and not yet wired.
+- **Story-shape lint is wired** ([`scripts/lint-story-shape.js`](../../scripts/lint-story-shape.js), gated on pre-commit + CI via [`.github/workflows/storybook-story-shape-check.yml`](../../.github/workflows/storybook-story-shape-check.yml)) — rejects banned render-mode gallery exports (`Variants` / `Tones` / `Patterns` / `Examples`) and `*And*` axis-merge compounds in any `*.stories.tsx`. The Phase 3 sweep ([#1278](https://github.com/brikdesigns/brik-bds/issues/1278), [#1279](https://github.com/brikdesigns/brik-bds/issues/1279)) emptied the set repo-wide first, so **no grandfather allowlist is needed** — every file is expected to pass from day one ([#569](https://github.com/brikdesigns/brik-bds/issues/569)). The complementary page-recipe lint ([`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js)) covers `*.mdx` per ADR-007; the two operate at different layers (see §Reconciliation with ADR-007).
 - Existing files are not retroactively swept. See Migration above for why.
 
 ## Amendments
