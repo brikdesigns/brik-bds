@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressStepper, type ProgressStep } from './ProgressStepper';
 
 const meta: Meta<typeof ProgressStepper> = {
-  title: 'Sections/progress-stepper',
+  title: 'Components/progress-stepper',
   component: ProgressStepper,
   tags: ['surface-product'],
   parameters: {

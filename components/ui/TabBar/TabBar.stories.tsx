@@ -6,7 +6,7 @@ import { TabBar } from './TabBar';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof TabBar> = {
-  title: 'Sections/tab-bar',
+  title: 'Navigation/tab-bar',
   component: TabBar,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
