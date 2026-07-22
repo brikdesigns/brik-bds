@@ -53,6 +53,8 @@
     brandTintBorder: '#ffa693', // poppy-lighter — tint border
     danger: '#ef4444', // destructive — cancel-active, remove
     dangerDark: '#dc2626',
+    active: '#1b1b1b', // grayscale-darkest — active/toggled toolbar button
+    activeDark: '#333333', // grayscale-darker — active button hover
     pending: '#f59e0b', // amber — pending pin
     ink: '#1b1b1b', // toasts, tooltips, headings
     white: '#ffffff',
@@ -130,8 +132,8 @@
       flex-shrink: 0;
     }
     .bfb-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    .bfb-btn--active { background: ${C.danger}; }
-    .bfb-btn--active:hover { background: ${C.dangerDark}; }
+    .bfb-btn--active { background: ${C.active}; }
+    .bfb-btn--active:hover { background: ${C.activeDark}; }
 
     .bfb-pin {
       position: absolute;
@@ -629,7 +631,7 @@
   let feedbackBtn = null;  // standalone fallback toggle button
   let listBtn = null;      // standalone fallback "Comments" button
   let listPanelEl = null;  // feedback list panel (#1236)
-  let hideCompleted = false;
+  let hideCompleted = true; // default-on: completed comments hidden until the reviewer opts in (#global)
 
   // Reflect feedback-mode state on whichever control surface is present.
   function syncFeedbackControls() {
