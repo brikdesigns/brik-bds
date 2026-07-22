@@ -16,19 +16,9 @@ Circular progress indicator. Use for compact dashboards, completion meters, and 
 
 ## Variants
 
-### Status
-
-The `status` prop maps to canonical Brik status tokens — `default` brand fill, `positive`, `warning`, `negative`.
-
-<Canvas of={Stories.Positive} />
-
-<Canvas of={Stories.Warning} />
-
-<Canvas of={Stories.Negative} />
-
 ### Custom center
 
-`showValue` accepts a `ReactNode` for arbitrary centered content — pair a percentage with a sub-label instead of the plain default.
+`status` maps to canonical Brik status tokens (`default` brand fill, `positive`, `warning`, `negative`) — toggle it (and `size`, `value`, `indeterminate`) in Controls. `showValue` accepts a `ReactNode` for arbitrary centered content — pair a percentage with a sub-label instead of the plain default.
 
 <Canvas of={Stories.CustomCenter} />
 
