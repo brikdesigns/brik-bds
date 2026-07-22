@@ -5,7 +5,7 @@ Brik Design System — React component library + canonical token registry.
 Hosts:
 
 - React components (`src/components/`) published as `@brikdesigns/bds` and consumed by 6 downstream repos
-- Canonical token registry — `dist/tokens.css` is the live allowlist for every `--text-*` / `--surface-*` / `--background-*` / `--border-*` name in any Brik repo
+- Canonical token registry — `dist/tokens.css` is the live allowlist for every `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` (primitives) name in any Brik repo
 - Style Dictionary build pipeline — Figma → `tokens-studio.json` → per-platform outputs
 - Brik Content System (`content-system/`) — vocabulary peer to the token system, published as `@brikdesigns/bds/content-system`
 - Storybook + Chromatic — `localhost:6006` for in-repo dev, hosted Chromatic MCP for consumer-repo agents
@@ -21,7 +21,7 @@ This CLAUDE.md is `@import`-ed by every consumer of `@brikdesigns/bds` — the B
 - **Pre-implementation** — BUILD new / composite components directly in Storybook + code with tokens; Storybook + the coded component are the component source of truth. Figma is the *token* source of truth, NOT a component-layout gate. Paper is for website / client builds, NEVER BDS components. BDS is modular by design: prefer nesting existing primitives (token-sized to fit any container — card, list row, table cell) over new components.
 - **Pre-PR** — RUN `./scripts/pr-checklist.sh` before any PR touching tokens, themes, or component CSS. ONE concern per PR.
 - **Publish** — `git tag v0.X.Y && git push origin v0.X.Y` triggers [`Release` workflow](.github/workflows/release.yml). After publish, UPDATE the brik-llm submodule pointer.
-- **Chromatic** — RUN `npm run chromatic` after any component CSS or story change; local Storybook is not reachable from consumer-repo agents. The script resolves the token via `op run --env-file=.env.op` (a committed `op://`-ref file). On the **brik-mini** agent host this authenticates non-interactively — the `op` shim JIT-injects the `brik-claude-agent-rw` service-account token per call — so the gate runs **headless, with no 1Password sign-in** (#1058 resolved; verify with `op run --env-file=.env.op -- true`). Snapshot quota is the only remaining constraint (#771). On the laptop, the 1Password desktop app owns `op` identity instead (the shim is brik-mini-only).
+- **Chromatic** — RUN `npm run chromatic` after any component CSS or story change; local Storybook is not reachable from consumer-repo agents. The script resolves the token via `op run --env-file=.env.op` (a committed `op://`-ref file). On the **brik-mini** agent host this authenticates non-interactively — the `op` shim JIT-injects the `brik-claude-agent-rw` service-account token per call — so the gate runs **headless, with no 1Password sign-in** (#1058 resolved; verify with `op run --env-file=.env.op -- true`). Snapshot quota is the only remaining constraint (#771). On the laptop, the 1Password desktop app owns `op` identity instead (the shim is brik-mini-only). URLs + App ID: [`.claude/references/chromatic.md`](.claude/references/chromatic.md).
 
 ## Where deeper context lives
 
