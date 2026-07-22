@@ -1,0 +1,31 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './SelectableMediaTile.stories';
+
+<Meta of={Stories} />
+
+# SelectableMediaTile
+
+<ComponentLinks slug="selectable-media-tile" />
+
+A vertical, image-first toggle: a full-bleed image on top, a caption below, and a persistent selected state. The whole tile is the click target — a single `<button>` for native a11y (focus ring, `Space` / `Enter` activation, `disabled`), with `aria-pressed` reflecting the selection.
+
+Use for image / avatar grids where each cell toggles on and off — a hero-photo picker, a gallery multi-select, an avatar chooser.
+
+**Distinct from `InteractiveListItem`.** This is its vertical, media-first sibling — same selected semantics (brand ring + `aria-pressed`), different shape. Reach for `InteractiveListItem` (with its `selected` prop) when the row is horizontal text + slots; reach for `SelectableMediaTile` when the image _is_ the content.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+`selected`, `disabled`, `caption`, and `aspectRatio` are all Controls on this story — toggle them in the Controls panel.
+
+## Variants
+
+The irreducible composition is a single-select image grid — one tile pinned at a time, clicking the pinned tile clears it. Selection shows a brand ring, a check overlay on the image, and an emphasised caption, which Controls can't express.
+
+<Canvas of={Stories.Picker} />
+
+## Props
+
+<ArgTypes of={Stories} />
