@@ -1,6 +1,6 @@
 @layer bds-components {
 /**
- * BDS NavBar
+ * BDS TopNavigation
  *
  * Token reference:
  * - --surface-nav (navbar background)
@@ -11,7 +11,7 @@
 
 /* ─── Container ───────────────────────────────────────────────── */
 
-.bds-nav-bar {
+.bds-top-navigation {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,14 +22,14 @@
   z-index: 100;
 }
 
-.bds-nav-bar--sticky {
+.bds-top-navigation--sticky {
   position: sticky;
   top: 0;
 }
 
 /* ─── Left section: logo + links ──────────────────────────────── */
 
-.bds-nav-bar__left {
+.bds-top-navigation__left {
   display: flex;
   align-items: center;
   gap: var(--gap-xl);
@@ -37,11 +37,11 @@
   min-width: 0;
 }
 
-.bds-nav-bar__logo {
+.bds-top-navigation__logo {
   flex-shrink: 0;
 }
 
-.bds-nav-bar__links {
+.bds-top-navigation__links {
   display: flex;
   align-items: center;
   gap: var(--gap-lg);
@@ -50,7 +50,7 @@
 
 /* ─── Link styles ─────────────────────────────────────────────── */
 
-.bds-nav-bar__link {
+.bds-top-navigation__link {
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
   font-weight: var(--font-weight-regular);
@@ -61,18 +61,18 @@
   cursor: pointer;
 }
 
-.bds-nav-bar__link:hover {
+.bds-top-navigation__link:hover {
   color: var(--text-primary);
 }
 
-.bds-nav-bar__link--active {
+.bds-top-navigation__link--active {
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
 }
 
 /* ─── Actions ─────────────────────────────────────────────────── */
 
-.bds-nav-bar__actions {
+.bds-top-navigation__actions {
   display: flex;
   align-items: center;
   gap: var(--gap-md);

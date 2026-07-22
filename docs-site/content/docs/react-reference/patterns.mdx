@@ -91,7 +91,7 @@ Three templates cover roughly 95% of the product surface. Treat them as a starti
 | **Settings Shell** | Multi-section settings, profile, company config | `<SidebarNavigation>` + `<Sheet>` for sub-edits |
 | **Dashboard Shell** | Landing pages, overview screens | `<Card>` grid + `<EmptyState>` per cell when data missing |
 
-**Layout chrome lives once, at app root** — `<NavBar>` + `<SidebarNavigation>` + `<BrikDevBar>` (dev only). Templates render *inside* that chrome via Next.js layout files. Don't re-mount the chrome inside a route.
+**Layout chrome lives once, at app root** — `<TopNavigation>` + `<SidebarNavigation>` + `<BrikDevBar>` (dev only). Templates render *inside* that chrome via Next.js layout files. Don't re-mount the chrome inside a route.
 
 ## Navigation
 
@@ -99,7 +99,7 @@ Three navigation surfaces, three components — keep them straight. They are not
 
 | Surface | Component | When |
 | --- | --- | --- |
-| **Top app bar** | `<NavBar>` | Global brand + primary destinations + user menu |
+| **Top app bar** | `<TopNavigation>` | Global brand + primary destinations + user menu |
 | **Section sidebar** | `<SidebarNavigation>` | Within an app section (Settings, Admin) — collapsible groups |
 | **Within-page** | `<Breadcrumb>` + `<Pagination>` | Position + page-by-page traversal |
 

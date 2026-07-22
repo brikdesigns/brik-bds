@@ -1,9 +1,9 @@
 ---
-title: Nav bar
+title: Top navigation
 description: Top-level navigation bar with logo, links, and action buttons. Optional sticky positioning.
 ---
 
-NavBar is the canonical top-bar navigation for marketing sites and product landing pages. Logo on the left, links in the middle, action buttons on the right. Optional `sticky` for scroll-persistent nav.
+TopNavigation is the canonical top-bar navigation for marketing sites and product landing pages. Logo on the left, links in the middle, action buttons on the right. Optional `sticky` for scroll-persistent nav.
 
 For app shell navigation with many items, use [SidebarNavigation](/docs/components/sidebar-navigation). For section navigation within a page, use [TabBar](/docs/components/tab-bar).
 
@@ -17,7 +17,7 @@ For app shell navigation with many items, use [SidebarNavigation](/docs/componen
 ## Import
 
 ```tsx
-import { NavBar } from '@brikdesigns/bds';
+import { TopNavigation } from '@brikdesigns/bds';
 ```
 
 ## Variants
@@ -25,7 +25,7 @@ import { NavBar } from '@brikdesigns/bds';
 ### Default
 
 ```tsx
-<NavBar
+<TopNavigation
   logo={<img src="/logo.svg" alt="Acme" />}
   links={[
     { label: 'Features', href: '/features', active: true },
@@ -41,7 +41,7 @@ import { NavBar } from '@brikdesigns/bds';
 `sticky` keeps the nav at the top of the viewport as the user scrolls.
 
 ```tsx
-<NavBar
+<TopNavigation
   logo={<Logo />}
   links={links}
   actions={<Button>Sign in</Button>}
@@ -54,7 +54,7 @@ import { NavBar } from '@brikdesigns/bds';
 Both `links` and `actions` are optional. Logo-only is valid for very minimal layouts.
 
 ```tsx
-<NavBar logo={<Logo />} />
+<TopNavigation logo={<Logo />} />
 ```
 
 ### Multiple actions
@@ -62,7 +62,7 @@ Both `links` and `actions` are optional. Logo-only is valid for very minimal lay
 `actions` is a ReactNode — pass a fragment for multiple CTAs.
 
 ```tsx
-<NavBar
+<TopNavigation
   logo={<Logo />}
   links={links}
   actions={
@@ -76,9 +76,9 @@ Both `links` and `actions` are optional. Logo-only is valid for very minimal lay
 
 ## When *not* to use
 
-- **Don't use NavBar for app chrome.** App shells with many sections should use [SidebarNavigation](/docs/components/sidebar-navigation) — top-bar nav with 8+ items wraps awkwardly.
-- **Don't use NavBar for in-page section nav.** Use [TabBar](/docs/components/tab-bar).
-- **Don't pair NavBar + SidebarNavigation as primary nav.** Pick one. Combining them makes "primary" ambiguous.
+- **Don't use TopNavigation for app chrome.** App shells with many sections should use [SidebarNavigation](/docs/components/sidebar-navigation) — top-bar nav with 8+ items wraps awkwardly.
+- **Don't use TopNavigation for in-page section nav.** Use [TabBar](/docs/components/tab-bar).
+- **Don't pair TopNavigation + SidebarNavigation as primary nav.** Pick one. Combining them makes "primary" ambiguous.
 
 ## Accessibility
 
@@ -92,16 +92,16 @@ Both `links` and `actions` are optional. Logo-only is valid for very minimal lay
 | Prop | Type | Default |
 |---|---|---|
 | `logo` | `ReactNode` *(required)* | — |
-| `links` | `NavBarLink[]` | — |
+| `links` | `TopNavigationLink[]` | — |
 | `actions` | `ReactNode` | — |
 | `sticky` | `boolean` | `false` |
 
 Plus standard `<header>` / `<nav>` HTML attributes.
 
-### NavBarLink
+### TopNavigationLink
 
 ```ts
-interface NavBarLink {
+interface TopNavigationLink {
   label: ReactNode;
   href: string;
   active?: boolean;
@@ -113,4 +113,4 @@ interface NavBarLink {
 - [SidebarNavigation](/docs/components/sidebar-navigation) — vertical app-shell alternative
 - [TabBar](/docs/components/tab-bar) — section nav within the main content area
 - [Breadcrumb](/docs/components/breadcrumb) — hierarchical position
-- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-nav-bar--overview)**
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-top-navigation--overview)**

@@ -187,7 +187,7 @@
     "MultiSelect": {
       "introduced_in": "0.1.3"
     },
-    "NavBar": {
+    "TopNavigation": {
       "introduced_in": "0.1.3"
     },
     "NotificationList": {
