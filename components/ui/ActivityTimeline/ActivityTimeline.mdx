@@ -1,0 +1,35 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './ActivityTimeline.stories';
+
+<Meta of={Stories} />
+
+# ActivityTimeline
+
+<ComponentLinks slug="activity-timeline" />
+
+Vertical, chronological list of events — each row a leading icon node, label, optional detail, and timestamp, connected top-to-bottom. Pass the whole sequence as the `events` array; the first entry marks the origin.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+The component renders whatever `events` sequence it's given — these show representative shapes: a single origin event, a full task lifecycle, and a resolved request flow.
+
+### Single event
+
+<Canvas of={Stories.SingleEvent} />
+
+### Task lifecycle
+
+<Canvas of={Stories.TaskLifecycle} />
+
+### Resolved
+
+<Canvas of={Stories.Resolved} />
+
+## Props
+
+<ArgTypes of={Stories} />
