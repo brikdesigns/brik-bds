@@ -77,60 +77,10 @@ export const Default: Story = {
   },
 };
 
-/* ─── Variants — one story per status (Q3 semantic starting points) ─── */
-
-/** @summary Positive status — passing score */
-export const Pass: Story = {
-  args: {
-    value: 6,
-    max: 7,
-    status: 'positive',
-    label: 'Pass',
-  },
-};
-
-/** @summary Warning status — borderline score */
-export const Fair: Story = {
-  args: {
-    value: 4,
-    max: 10,
-    status: 'warning',
-    label: 'Fair',
-  },
-};
-
-/** @summary Error status — failing score */
-export const Fail: Story = {
-  args: {
-    value: 1,
-    max: 5,
-    status: 'error',
-    label: 'Fail',
-  },
-};
-
-/** @summary Neutral status — pending or not-yet-scored */
-export const Neutral: Story = {
-  args: {
-    value: 0,
-    max: 7,
-    status: 'neutral',
-    label: 'Pending',
-  },
-};
-
-/* ─── Documented usage patterns (Q3 — named in component JSDoc) ─── */
-
-/** @summary Plain "value/max" with no suffix — completion counters */
-export const NoSuffix: Story = {
-  args: {
-    value: 4,
-    max: 10,
-    status: 'warning',
-    label: 'Modules complete',
-    valueSuffix: '',
-  },
-};
+/* ─── Documented capability — fillColor escape hatch (Q3) ────────
+   `status` (semantic color), `size`, `valueSuffix`, `label` are all
+   Controls on Default — no per-status color-swap stories (ADR-010 Q2,
+   matches Dot). Only the fillColor override earns its own story. */
 
 /** @summary Custom fill color — category/department palette override */
 export const CustomFillColor: Story = {
@@ -139,6 +89,6 @@ export const CustomFillColor: Story = {
     max: 8,
     label: 'Department A',
     valueSuffix: '',
-    fillColor: '#7c5cff',
+    fillColor: 'var(--color-purple-light)',
   },
 };
