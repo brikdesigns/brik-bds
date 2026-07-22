@@ -35,6 +35,14 @@ export interface InteractiveListItemProps
   size?: InteractiveListItemSize;
   /** Disable the row. Applies muted styling and blocks click. */
   disabled?: boolean;
+  /**
+   * Persistent selected state — a modifier layered on top of the row,
+   * mirroring the `selected` prop on `Button` / `SegmentedControl`. Use
+   * for a row that toggles on/off (a picker option, a multi-select list).
+   * When provided, the row also exposes `aria-pressed`, giving it toggle
+   * semantics; leave it `undefined` for a plain drill-in row.
+   */
+  selected?: boolean;
 }
 
 /**
@@ -75,6 +83,7 @@ export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveList
       trailing,
       size = 'md',
       disabled = false,
+      selected,
       className,
       onClick,
       ...props
@@ -88,10 +97,12 @@ export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveList
         className={bdsClass(
           'bds-interactive-list-item',
           `bds-interactive-list-item--${size}`,
+          selected && 'bds-interactive-list-item--selected',
           disabled && 'bds-interactive-list-item--disabled',
           className,
         )}
         disabled={disabled}
+        aria-pressed={selected}
         onClick={onClick}
         {...props}
       >
