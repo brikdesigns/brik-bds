@@ -1,0 +1,80 @@
+---
+title: Stack
+description: One-axis layout primitive with a consistent gap. Use for vertical content flow and simple horizontal rows.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Stack lays out children along a single axis with a consistent `gap` from the spacing scale. Vertical by default — the workhorse for card bodies, form sections, and page content flow. Set `direction="horizontal"` for a row.
+
+## Use it for
+
+- Vertical content flow — card bodies, form sections, stacked list content
+- Simple horizontal rows where items don't need to wrap
+- Anywhere you'd otherwise write `display: flex; flex-direction; gap` by hand
+
+## Import
+
+```tsx
+import { Stack } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Direction
+
+`vertical` (default) or `horizontal`. For a horizontal row that *wraps*, use [Cluster](/docs/components/cluster) instead.
+
+```tsx
+<Stack gap="sm">…</Stack>
+<Stack direction="horizontal" gap="md">…</Stack>
+```
+
+### Gap
+
+The full spacing scale — `tiny` through `huge` (default `md`). Use `none` to remove the gap without changing the layout.
+
+```tsx
+<Stack gap="lg">…</Stack>
+```
+
+### Alignment
+
+`align` sets cross-axis alignment; `justify` distributes along the main axis.
+
+```tsx
+<Stack align="center">…</Stack>
+<Stack direction="horizontal" justify="between">…</Stack>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **A wrapping row is a Cluster, not a horizontal Stack.** Stack keeps items on one line; when items should wrap to new rows with a shared gap, reach for [Cluster](/docs/components/cluster).
+</Callout>
+
+- For a two-dimensional grid of peers, use [Grid](/docs/components/grid).
+
+## Accessibility
+
+- Renders a plain element (`<div>` by default, override with `as`) with `display: flex`. It adds no semantics; children keep their own roles.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `direction` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `gap` | `'none' \| 'tiny' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| 'huge'` | `'md'` |
+| `align` | `'start' \| 'center' \| 'end' \| 'stretch' \| 'baseline'` | — |
+| `justify` | `'start' \| 'center' \| 'end' \| 'between' \| 'around' \| 'evenly'` | — |
+| `wrap` | `boolean` | — |
+| `as` | element type | `'div'` |
+| `children` | `ReactNode` | — |
+
+Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Cluster](/docs/components/cluster) — wrapping horizontal row
+- [Grid](/docs/components/grid) — two-axis layout
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/layouts-stack--playground)**

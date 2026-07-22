@@ -1,0 +1,43 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Cluster.stories';
+
+<Meta of={Stories} />
+
+# Cluster
+
+<ComponentLinks slug="cluster" />
+
+Cluster lays out children in a horizontal row that wraps to multiple lines with a consistent `gap`. `justify` aligns the row (`start` … `end`) and `align` sets cross-axis alignment.
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+The behaviors Cluster varies on: wrapping to new rows under constrained width, and the `gap` scale between items.
+
+### Wrapping
+
+<Canvas of={Stories.Wrapping} />
+
+### Gap scale
+
+<Canvas of={Stories.GapScale} />
+
+## Patterns
+
+Real-world compositions Cluster's args can't express on their own — a wrapping tag list and a right-justified action row.
+
+### Tag list
+
+<Canvas of={Stories.TagList} />
+
+### Action row
+
+<Canvas of={Stories.ActionRow} />
+
+## Props
+
+<ArgTypes of={Stories} />

@@ -1,0 +1,39 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Grid.stories';
+
+<Meta of={Stories} />
+
+# Grid
+
+<ComponentLinks slug="grid" />
+
+Grid arranges children in a CSS grid. Set a fixed `columns` count (1–6), or `auto-fit` / `auto-fill` (default `auto-fit`) to reflow items to fill the available width; `gap` uses the spacing scale.
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+The `columns` axis — a fixed count, auto-reflow, or the responsive collapse fixed counts fall back to on narrow viewports.
+
+### Three column
+
+<Canvas of={Stories.ThreeColumn} />
+
+### Auto fit
+
+<Canvas of={Stories.AutoFit} />
+
+### Column counts
+
+<Canvas of={Stories.ColumnCounts} />
+
+### Responsive collapse
+
+<Canvas of={Stories.ResponsiveCollapse} />
+
+## Props
+
+<ArgTypes of={Stories} />

@@ -1,0 +1,72 @@
+---
+title: Grid
+description: CSS-grid layout primitive. Use for card grids and equal-width tile rows that reflow with the viewport.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Grid arranges children in a CSS grid. Set a fixed `columns` count for a predictable layout, or `auto-fit` / `auto-fill` to let items reflow to fill the available width. `gap` uses the spacing scale.
+
+## Use it for
+
+- Card grids — the most common Brik use, usually a fixed `3`-column layout
+- Tile rows that should reflow as the viewport narrows (`auto-fit`)
+- Any equal-width, multi-column layout where the cells are peers
+
+For side-by-side [Field](/docs/components/field) rows inside a sheet, reach for [FieldGrid](/docs/components/field-grid) instead — it locks the column set to the field-layout cases.
+
+## Import
+
+```tsx
+import { Grid } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Fixed columns
+
+`columns={1…6}` pins the count. Fixed grids collapse responsively on narrow viewports so they never overflow.
+
+```tsx
+<Grid columns={3} gap="lg">…</Grid>
+```
+
+### Auto reflow
+
+`auto-fit` (default) grows items to fill each row; `auto-fill` keeps empty tracks. `minColumnWidth` (default `240px`) sets the reflow threshold.
+
+```tsx
+<Grid columns="auto-fit" minColumnWidth="200px">…</Grid>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Grid is for equal-weight peers.** Variable-width columns or a header/rows structure is a [Table](/docs/components/table), not a Grid.
+</Callout>
+
+- For a single-axis line of items that wraps (tags, buttons), use [Cluster](/docs/components/cluster).
+- For one-dimensional vertical or horizontal spacing, use [Stack](/docs/components/stack).
+
+## Accessibility
+
+- Renders a plain element (`<div>` by default, override with `as`) with `display: grid`. It adds no semantics; children keep their own roles.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `columns` | `1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 'auto-fit' \| 'auto-fill'` | `'auto-fit'` |
+| `minColumnWidth` | `string` | `'240px'` |
+| `gap` | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'lg'` |
+| `as` | element type | `'div'` |
+| `children` | `ReactNode` | — |
+
+Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Stack](/docs/components/stack) — one-axis layout
+- [Cluster](/docs/components/cluster) — wrapping row of items
+- [Field grid](/docs/components/field-grid) — the field-layout-specific grid
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/layouts-grid--playground)**
