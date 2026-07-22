@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta = {
   title: 'Deprecated/spacing-modes',
-  tags: ['surface-shared'],
+  tags: ['surface-shared', '!manifest'], // deprecated — hide from MCP discovery
   parameters: {
     layout: 'fullscreen',
     docs: {

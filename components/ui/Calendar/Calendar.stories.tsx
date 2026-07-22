@@ -14,7 +14,7 @@ const CalendarPlaceholder = () => (
 const meta: Meta<typeof CalendarPlaceholder> = {
   title: 'Containers/calendar',
   component: CalendarPlaceholder,
-  tags: ['wip', 'surface-shared'],
+  tags: ['wip', 'surface-shared', '!manifest'], // placeholder — hide from MCP discovery until shipped
 };
 
 export default meta;

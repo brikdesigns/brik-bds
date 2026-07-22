@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardTestimonial } from './CardTestimonial';
 
 const meta: Meta<typeof CardTestimonial> = {
-  title: 'Containers/card-testimonial',
+  title: 'Deprecated/card-testimonial',
   component: CardTestimonial,
-  tags: ['surface-web'],
+  tags: ['surface-web', '!manifest'], // deprecated — renamed Testimonial (#702), hide from MCP discovery
   parameters: { layout: 'centered' },
   argTypes: {
     variant: { control: 'select', options: ['brand', 'outlined'] },
