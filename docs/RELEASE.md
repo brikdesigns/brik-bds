@@ -27,6 +27,15 @@ fresh.
    - **patch** (0.45.0 → 0.45.1) — bug fix, no API change
    - **minor** (0.45.0 → 0.46.0) — new component or new prop on existing component
    - **major** (0.45.0 → 1.0.0) — breaking change to a component API or token name
+
+   **Pre-1.0 exception (current policy).** While the version is `0.x`, breaking
+   changes ride the **minor** slot (e.g. 0.130.1 → 0.131.0), not a `1.0.0` bump.
+   npm 0.x caret ranges (`^0.130.0` resolves `>=0.130.0 <0.131.0`) don't
+   auto-upgrade across a 0.x minor, so existing consumers stay pinned until they
+   explicitly bump — a breaking change is safe in the minor slot. Reserve `1.0.0`
+   for an explicit GA/API-stability decision, not a routine breaking change. Mark
+   breaking commits `type(scope)!:`. Precedent: v0.131.0 (NavBar → TopNavigation
+   rename, [#1335](https://github.com/brikdesigns/brik-bds/issues/1335)).
 3. **Tag and push.** From the tip of `main`:
    ```bash
    git pull --ff-only
