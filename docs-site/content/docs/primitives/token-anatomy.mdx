@@ -26,19 +26,43 @@ Every BDS token answers six independent questions. Without distinct vocabulary f
 
 ## Anatomy — the naming formula
 
-Every token name follows `--{purpose}-{role}[-{state}]`. Each segment is fixed vocabulary:
+Token names follow one of two parallel formulas — an **intent** form and a **scoped-intent** form:
+
+```
+Intent:         --{purpose}-{role}[-{modifier}][-{state}]
+Scoped intent:  --{purpose}-{scope}-{scope-value}[-{modifier}][-{state}]
+```
+
+Each segment is fixed vocabulary:
 
 | Segment | Allowed values | Example |
 |---|---|---|
 | `purpose` | `page`, `surface`, `background`, `text`, `border`, `color` (primitives only) | `--background-…` |
 | `role` | Closed list — see [Color foundations vocabulary](/docs/getting-started/cascade#color-foundations-vocabulary) | `--background-brand-primary` |
+| `scope` / `scope-value` | A named context that carries its own hue — `service-{line}`, `presence-{state}` | `--background-service-marketing` |
+| `modifier` (optional) | Context / tone / hierarchy — see [Color modifiers](#color-modifiers--context-contrast-tone) | `--background-service-brand-on-light` |
 | `state` (optional) | `hover`, `pressed`, `disabled` | `--background-brand-primary-hover` |
 
-Status, service-line, and presence semantic tokens follow the same anatomy with their own role vocabularies (`--background-positive`, `--background-service-marketing`, `--background-presence-online`).
+Status, service-line, and presence semantic tokens use the **scoped-intent** form — the scope (`service-marketing`, `presence-online`) already names the hue, so they never also take a `-brand`/`-primary` role segment. Everything else uses the plain **intent** form.
 
 <Callout type="error">
   **Token names without a `purpose` prefix are drift.** Examples retired by brik-bds#712: `--brand-primary` (missing purpose; legitimate form is `--{purpose}-brand-primary`), `--theme-brik-*` (entire namespace violates the anatomy). If you see something shaped `--brand-X` or `--theme-X-Y` in old code, it's drift and should not be referenced.
 </Callout>
+
+### When to add `-primary` / `-secondary`
+
+Never preemptively. A role starts as a **single-level token set** — one token, no hierarchy modifier (`--text-service-marketing`, which ships with no `-primary` / `-secondary` sibling). Add a `-primary` / `-secondary` pair **only** when the design carries a genuine second emphasis level *within that role*, distinct from the generic `--text-secondary` / `--text-muted` that already exist for de-emphasis.
+
+```css
+/* ✅ single-level — one emphasis, no hierarchy modifier (real token) */
+--text-service-marketing
+
+/* ❌ preemptive — no --text-service-marketing-secondary exists to pair it,
+   so the -primary suffix is just a longer name for the single-level token */
+--text-service-marketing-primary
+```
+
+The pair earns its place only when a second emphasis tier actually ships alongside the first; until then, `--text-secondary` / `--text-muted` already cover generic de-emphasis. Scoped tokens never stack a hierarchy modifier under a context modifier either — the (text, surface) pairing carries emphasis implicitly, so `--text-service-brand-on-dark` is complete without a `-primary`.
 
 ## Color modifiers — context, contrast, tone
 
@@ -208,6 +232,8 @@ If the gate is missing or the name isn't found, **stop**. Don't ship a `var()` c
 ## Related
 
 - [The Cascade](/docs/getting-started/cascade) — Layer ordering, modes, color foundations vocabulary
+- [Theming](/docs/theming) — how a client brand overrides these Semantic tokens per the four Theming Dimensions; the "How Content feeds Theming" section separates theming layers from content vocabularies
+- [Composition Layers](/docs/build-standards/composition-layers) — the pedagogical Section → Layout → Container → Block → Component model that composes tokenized primitives
 - [Figma Library architecture](/docs/getting-started/figma-library-architecture) — Foundations Library vs Brand Kit Library
 - [Color](/docs/primitives/color) — full canonical color registry
 - [Color Pairings](/docs/primitives/color-pairings) — the accessible foreground/background pairing system the `on-color` and `-on-light`/`-on-dark` modifiers feed into, with the contrast matrix and CI gate
