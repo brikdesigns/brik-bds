@@ -4,79 +4,34 @@ import * as Stories from './DataView.stories';
 
 <Meta of={Stories} />
 
-# DataView family
+# DataView
 
 <ComponentLinks slug="data-view" />
 
-Thin shells that own the three states every data display needs — **loading, empty, error** — so consumers stop rebuilding them per page. The display primitive (`Table`, `CardList`, a `DataSection` stack) is passed as `children`; the view swaps in a skeleton, an `EmptyState`, or an error `Banner` as needed.
+A family of four thin shells — `TableView`, `ListView`, `ProfileView`, `BoardView` — that own the loading, empty, and error states every data display needs, so consumers stop rebuilding them per page. Pass the display primitive (`Table`, `CardList`, a `DataSection` stack, a `Board`) as `children`; the view renders exactly one state in precedence order — error → loading → empty → content.
 
-Five named views were specced (brik-bds#404); four now ship:
+## Default
 
-- **`TableView`** — around a `Table`
-- **`ListView`** — around a `CardList` / `InteractiveListItem` stack
-- **`ProfileView`** — around a read-mode `DataSection` + `FieldGrid` + `Field` stack
-- **`BoardView`** — around a `Board` of `BoardColumn`s
-
-`CalendarView` stays deferred until a `Calendar` base component exists to wrap (brik-bds#1249).
-
-Named components — not a polymorphic `<DataDisplay variant>` — so each is discoverable and you import only what you render.
-
-```tsx
-<PageContent>
-  <FilterBar … />
-  <TableView
-    loading={isLoading}
-    error={error?.message}
-    empty={rows.length === 0}
-    emptyState={{ title: 'No services yet', description: 'Add one to get started.' }}
-  >
-    <Table>…</Table>
-  </TableView>
-</PageContent>
-```
-
-## State precedence
-
-A view renders exactly one state, in this order: **error → loading → empty → content**. `error` fails loud (an error `Banner`, `role="alert"`) — it is never silently swallowed. Override the default skeleton with the `skeleton` prop; pass `emptyState` as structured copy (`{ title, description?, buttonProps? }`) or any `ReactNode`.
-
-## Playground
-
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-### TableView — loading
-
-<Canvas of={Stories.Loading} />
-
-### TableView — empty
-
-<Canvas of={Stories.Empty} />
-
-### TableView — error
-
-<Canvas of={Stories.Error} />
+Each named view wraps a different display primitive with the same state surface. Toggle `loading` / `empty` / `error` in Controls to see any state.
 
 ### ListView
 
 <Canvas of={Stories.List} />
 
-<Canvas of={Stories.ListLoading} />
-
 ### ProfileView
 
 <Canvas of={Stories.Profile} />
 
-<Canvas of={Stories.ProfileLoading} />
-
 ### BoardView
 
-<Canvas of={Stories.BoardState} />
-
-<Canvas of={Stories.BoardLoading} />
+<Canvas of={Stories.Board} />
 
 ## Props
 
-The same surface on every view (`TableView` shown):
+The same surface on every view.
 
 <ArgTypes of={Stories} />

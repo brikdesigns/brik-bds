@@ -9,17 +9,57 @@ import { CardList } from '../CardList';
 import { DataSection } from '../DataSection';
 import { Field } from '../Field';
 import { FieldGrid } from '../FieldGrid';
-import { Board, BoardColumn, BoardCard } from '../Board';
+import { Board as BoardLayout, BoardColumn, BoardCard } from '../Board';
 
+/*
+ * DataView is a *family* of four sibling views (TableView / ListView /
+ * ProfileView / BoardView) that share one prop surface (`DataViewProps`).
+ * Documented family exception (story-shape standard): one stories file, one
+ * meta. `component` binds TableView for arg typing; the explicit argTypes below
+ * describe the shared surface, so the ArgTypes table is correct for every view.
+ * Each view gets one Q3 story; `loading` / `empty` / `error` are Controls
+ * threaded through `args`, never per-state stories.
+ */
+
+/**
+ * DataView family — loading/empty/error shells for data displays.
+ * @summary Loading/empty/error shells for data displays
+ */
 const meta: Meta<typeof TableView> = {
   title: 'Containers/data-view',
   component: TableView,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
   argTypes: {
-    loading: { control: 'boolean' },
-    empty: { control: 'boolean' },
-    error: { control: 'text' },
+    loading: {
+      control: 'boolean',
+      description: 'Render the display-shaped loading skeleton instead of `children`.',
+    },
+    error: {
+      control: 'text',
+      description:
+        'Non-empty string renders an error `Banner` (`tone="error"`). Highest precedence — error → loading → empty → content.',
+    },
+    errorTitle: {
+      control: 'text',
+      description: 'Title for the error banner. Default `"Couldn\'t load"`.',
+    },
+    empty: {
+      control: 'boolean',
+      description: 'When true (and not loading/error), render the empty state.',
+    },
+    emptyState: {
+      control: false,
+      description: 'Empty-state copy — an object renders `<EmptyState>`; a `ReactNode` renders as-is.',
+    },
+    skeleton: {
+      control: false,
+      description: 'Override the default loading skeleton for this view.',
+    },
+    children: {
+      control: false,
+      description: 'The data display — `Table`, `CardList`, a `DataSection` stack, a `Board`, etc.',
+    },
   },
 };
 
@@ -75,7 +115,7 @@ const DemoProfile = () => (
 );
 
 const DemoBoard = () => (
-  <Board>
+  <BoardLayout>
     <BoardColumn title="To do" count={2}>
       <BoardCard title="Draft brand brief" subtitle="Due today" />
       <BoardCard title="Collect logo assets" subtitle="Due Fri" />
@@ -86,126 +126,64 @@ const DemoBoard = () => (
     <BoardColumn title="Done" count={1}>
       <BoardCard title="Kickoff call" subtitle="Complete" />
     </BoardColumn>
-  </Board>
+  </BoardLayout>
 );
 
-const tableEmpty = { title: 'No services yet', description: 'Add a service to get started.' };
+/* ─── Default — TableView sandbox (state props are Controls) ──── */
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
-
-/** @summary TableView — toggle loading / empty / error to see state precedence */
-export const Playground: Story = {
-  args: { loading: false, empty: false, error: '' },
+/** @summary TableView — table with loading / empty / error states */
+export const Default: Story = {
+  args: {
+    loading: false,
+    empty: false,
+    error: '',
+    emptyState: {
+      title: 'No services yet',
+      description: 'Add a service to get started.',
+      buttonProps: { children: 'Add Service' },
+    },
+  },
   render: (args) => (
     <Frame>
-      <TableView {...args} emptyState={tableEmpty}>
+      <TableView {...args}>
         <DemoTable />
       </TableView>
     </Frame>
   ),
 };
 
-/* ─── 2. TableView states ────────────────────────────────────── */
+/* ─── Sibling views — one Q3 story each (states via Controls) ── */
 
-/** @summary TableView loading — default skeleton stands in for the table */
-export const Loading: Story = {
-  render: () => (
-    <Frame>
-      <TableView loading emptyState={tableEmpty}>
-        <DemoTable />
-      </TableView>
-    </Frame>
-  ),
-};
-
-/** @summary TableView empty — structured EmptyState copy */
-export const Empty: Story = {
-  render: () => (
-    <Frame>
-      <TableView empty emptyState={{ ...tableEmpty, buttonProps: { children: 'Add Service' } }}>
-        <DemoTable />
-      </TableView>
-    </Frame>
-  ),
-};
-
-/** @summary TableView error — fails loud with an error Banner */
-export const Error: Story = {
-  render: () => (
-    <Frame>
-      <TableView error="The request timed out. Try again." emptyState={tableEmpty}>
-        <DemoTable />
-      </TableView>
-    </Frame>
-  ),
-};
-
-/* ─── 3. ListView ────────────────────────────────────────────── */
-
-/** @summary ListView — content and its default list skeleton */
+/** @summary ListView — card list with shared state handling */
 export const List: Story = {
-  render: () => (
+  args: { loading: false, empty: false, error: '', emptyState: { title: 'No items' } },
+  render: (args) => (
     <Frame>
-      <ListView emptyState={{ title: 'No items' }}>
+      <ListView {...args}>
         <DemoList />
       </ListView>
     </Frame>
   ),
 };
 
-/** @summary ListView loading skeleton */
-export const ListLoading: Story = {
-  render: () => (
-    <Frame>
-      <ListView loading emptyState={{ title: 'No items' }}>
-        <DemoList />
-      </ListView>
-    </Frame>
-  ),
-};
-
-/* ─── 4. ProfileView ─────────────────────────────────────────── */
-
-/** @summary ProfileView — read-mode DataSection content */
+/** @summary ProfileView — read-mode field stack with states */
 export const Profile: Story = {
-  render: () => (
+  args: { loading: false, empty: false, error: '', emptyState: { title: 'No profile data' } },
+  render: (args) => (
     <Frame>
-      <ProfileView emptyState={{ title: 'No profile data' }}>
+      <ProfileView {...args}>
         <DemoProfile />
       </ProfileView>
     </Frame>
   ),
 };
 
-/** @summary ProfileView loading skeleton */
-export const ProfileLoading: Story = {
-  render: () => (
+/** @summary BoardView — kanban board with shared state handling */
+export const Board: Story = {
+  args: { loading: false, empty: false, error: '', emptyState: { title: 'No lanes yet' } },
+  render: (args) => (
     <Frame>
-      <ProfileView loading emptyState={{ title: 'No profile data' }}>
-        <DemoProfile />
-      </ProfileView>
-    </Frame>
-  ),
-};
-
-/* ─── 5. BoardView ───────────────────────────────────────────── */
-
-/** @summary BoardView — content and its default board skeleton */
-export const BoardState: Story = {
-  render: () => (
-    <Frame>
-      <BoardView emptyState={{ title: 'No lanes yet' }}>
-        <DemoBoard />
-      </BoardView>
-    </Frame>
-  ),
-};
-
-/** @summary BoardView loading — column-shaped skeleton stands in for the board */
-export const BoardLoading: Story = {
-  render: () => (
-    <Frame>
-      <BoardView loading emptyState={{ title: 'No lanes yet' }}>
+      <BoardView {...args}>
         <DemoBoard />
       </BoardView>
     </Frame>
