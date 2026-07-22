@@ -3,7 +3,7 @@ import { bdsClass } from '../../utils';
 import './SelectableMediaTile.css';
 
 export interface SelectableMediaTileProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'title'> {
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Image source URL. */
   src: string;
   /** Image alt text. Required — the tile is a real control, not decoration. */
