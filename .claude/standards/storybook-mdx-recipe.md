@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.mdx, **/stories/**/*.mdx, **/content-system/**/*.mdx"
 retrieved-via: brik-rag query "storybook mdx recipe standard"
-last-verified: 2026-05-18
+last-verified: 2026-07-22
 ---
 
 # Storybook MDX recipe (BDS)
@@ -35,11 +35,7 @@ One- or two-sentence description. What it does, not when to use it.
 
 <Canvas of={Stories.Default} />
 
-## Variants
-
-{Optional 1–3 sentences framing what varies.}
-
-<Canvas of={Stories.Variants} />
+{/* `## Variants` — conditionally required, see below */}
 
 {/* `## Patterns` — conditionally required, see below */}
 
@@ -48,10 +44,11 @@ One- or two-sentence description. What it does, not when to use it.
 <ArgTypes of={Stories} />
 ```
 
-That's the **canonical shape**: Title → Links → Description → Default → Variants → (Patterns) → Props. Three sections can sit between Props and end-of-file, each fixed in position when present:
+That's the **canonical shape**: Title → Links → Description → Default → (Variants) → (Patterns) → Props. Only `## Default` and `## Props` are unconditional; `## Variants` and `## Patterns` are each conditional on the component shipping the matching story class. Three optional sections can sit between Props and end-of-file, each fixed in position when present:
 
 > **Legacy `## Playground` accepted.** Files migrated before the 2026-05-18 amendment ship `## Playground` + `export const Playground` instead of `## Default` + `export const Default`. The lint accepts either as the first required section. New components MUST use `## Default`. See [ADR-010 §3 amendment](../../docs/adrs/ADR-010-storybook-axes-of-information.md).
 
+- `## Variants` — **conditionally required**. Include IFF the matching `*.stories.tsx` ships ≥1 Q3 semantic-variant story (one per meaningful visual/behavioral state). A **single-appearance component** — a fixed-glyph or single-visual-state affordance whose only story is the `Default`/`Playground` sandbox (state is Controls-only) — has no Q3 story, so it omits the section entirely. `CloseButton` is the reference omit case (a fixed "X" dismiss glyph; `label` + `disabled` are Controls, not variants). When present, `## Variants` sits between `## Default` and `## Props` and must contain at least one `<Canvas>`. **Never contrive a variant story to fill the section** — see [story-shape standard §Don't contrive Q4 stories to satisfy lint](./storybook-story-shape.md) (the same rule applies to Q3 variants).
 - `## Patterns` — **conditionally required**. Include IFF the matching `*.stories.tsx` ships any Q4 (irreducible composition) or Q5 (`play`-only interaction) story per ADR-010. If the component has only Q3 semantic-variant stories, omit the section entirely. When present, it sits between `## Variants` and `## Props` and must contain at least one `<Canvas>`. **Never invent a Q4 story to make this section non-empty** — see [story-shape standard §Don't contrive Q4 stories to satisfy lint](./storybook-story-shape.md).
 - `## CSS Override API` — table of component-scoped CSS variables, with one example. Required if the component exposes any.
 - `## Notes` — short call-outs (deprecations, browser caveats, peer-component pointers). Three or fewer items per page.
@@ -100,6 +97,8 @@ The split:
 
 Carbon does the same split — `react.carbondesignsystem.com` (Storybook) vs `carbondesignsystem.com/components/{name}` (design docs). The triple-link header is the load-bearing connector that keeps both surfaces consistent.
 
+> **Two surfaces, one gate.** A `<ComponentLinks slug="{slug}" />` block **requires** a matching docs-site page at `docs-site/content/docs/components/{slug}.mdx` — its "Usage guidelines" / "Accessibility" links resolve there. [`scripts/lint-doc-links.js`](../../scripts/lint-doc-links.js) hard-fails any Storybook MDX whose `slug` has no docs-site page. **Authoring a component's Storybook MDX therefore always includes authoring (or reusing) its docs-site page** — it's a two-surface deliverable, not one. To point at a page whose filename differs from the component directory, set `slug` to the existing page and use the `name=` prop for the source-code link (e.g. `Icon` → `<ComponentLinks slug="icons" name="Icon" />`, resolving `icons.mdx`). Components with a known-missing docs page live on the acknowledged-debt allowlist in `lint-doc-links.js` (tracked in [#1229](https://github.com/brikdesigns/brik-bds/issues/1229)); that list can only shrink.
+
 ## Banned patterns — rejected by lint or PR review
 
 | Pattern | Why banned |
@@ -116,11 +115,11 @@ Carbon does the same split — `react.carbondesignsystem.com` (Storybook) vs `ca
 
 ## H2 section names vs story export names — same words, different layers
 
-This is the highest-friction collision in the system. ADR-006 bans `Variants` / `Tones` / `Patterns` as **story export names**. ADR-007 (this recipe) **requires** `## Variants` as an **MDX H2 section** and treats `## Patterns` as **conditionally required** (present only when the component has Q4/Q5 stories).
+This is the highest-friction collision in the system. ADR-006 bans `Variants` / `Tones` / `Patterns` as **story export names**. ADR-007 (this recipe) treats both `## Variants` and `## Patterns` as **conditionally required** MDX H2 sections — present only when the component ships the matching story class.
 
 | Layer | This recipe (`*.mdx`) | [story-shape standard](./storybook-story-shape.md) (`*.stories.tsx`) |
 |---|---|---|
-| `## Variants` H2 | **Required** section heading | n/a |
+| `## Variants` H2 | **Conditional** — include only when ≥1 Q3 variant story exists (omit for single-appearance components) | n/a |
 | `## Patterns` H2 | **Conditional** — include only when Q4/Q5 stories exist | n/a |
 | `export const Variants` | n/a | **Banned** |
 | `export const Tones` | n/a | **Banned** |
@@ -231,7 +230,7 @@ A page conforms when:
 1. Imports `Meta`, `Canvas`, `ArgTypes` from `@storybook/addon-docs/blocks`, imports `* as Stories`, imports `ComponentLinks`, contains `<Meta of={Stories} />`.
 2. The first heading is one `# {Component name}`. Nothing above it except the imports and `<Meta>`.
 3. Immediately after H1: `<ComponentLinks slug="..." />` then a 1–2 sentence description paragraph.
-4. Required sections appear in this order, no omissions, no deviations from spelling: `## Default` → `## Variants` → `## Props`. The first section may alternatively be `## Playground` on files grandfathered by the [2026-05-18 amendment](../../docs/adrs/ADR-007-storybook-page-recipe.md#amendments) — lint accepts either. `## Patterns` is conditional — when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
+4. Unconditional required sections appear in this order, no omissions, no deviations from spelling: `## Default` → `## Props`. The first section may alternatively be `## Playground` on files grandfathered by the [2026-05-18 amendment](../../docs/adrs/ADR-007-storybook-page-recipe.md#amendments) — lint accepts either. `## Variants` is conditional (present iff ≥1 Q3 variant story exists; omitted for single-appearance components) — when present it sits between the first section and `## Props` and must contain a `<Canvas>`. `## Patterns` is conditional — when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
 5. No `---` dividers anywhere in the file.
 6. No `## Usage`, `## When to use`, `## When NOT to use`, `## Source attribution`, `## Tokens`, or other narrative-bearing section.
 7. Every `<Canvas>` references a story exported from the matching `*.stories.tsx`.

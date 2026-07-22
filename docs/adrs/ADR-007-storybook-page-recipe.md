@@ -1,6 +1,6 @@
 # ADR-007 — Storybook component page recipe
 
-**Status:** Accepted (2026-05-04); Amended 2026-05-18 (canonical first section renamed `## Playground` → `## Default`; see Amendments)
+**Status:** Accepted (2026-05-04); Amended 2026-05-18 (canonical first section renamed `## Playground` → `## Default`); Amended 2026-07-22 (`## Variants` made conditional for single-appearance components); see Amendments
 **Date:** 2026-05-04
 **Supersedes:** —
 **Superseded by:** —
@@ -68,7 +68,7 @@ Carbon explicitly does **not** duplicate usage-guideline or accessibility conten
 
 Define a normative **component page recipe** and codify it as ADR-007. New component pages MUST conform; existing pages migrated in batches per the Implementation Plan below.
 
-The **operational recipe** — required imports, the canonical shape (`Title → ComponentLinks → Description → Default → Variants → (Patterns) → Props`, with `## Patterns` conditionally required only when the component has Q4/Q5 stories per ADR-010), optional sections (`## CSS Override API`, `## Notes`), banned section list, callout vocabulary, foundation/dashboard page templates, stub pattern — lives in [`.claude/standards/storybook-mdx-recipe.md`](../../.claude/standards/storybook-mdx-recipe.md) and is auto-retrieved by the [`storybook-mdx-recipe`](../../.claude/skills/storybook-mdx-recipe/SKILL.md) skill at `*.mdx` edit time. The lint script [`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js) is the enforcement layer.
+The **operational recipe** — required imports, the canonical shape (`Title → ComponentLinks → Description → Default → (Variants) → (Patterns) → Props`, with `## Variants` conditionally required only when ≥1 Q3 variant story exists and `## Patterns` conditionally required only when the component has Q4/Q5 stories per ADR-010), optional sections (`## CSS Override API`, `## Notes`), banned section list, callout vocabulary, foundation/dashboard page templates, stub pattern — lives in [`.claude/standards/storybook-mdx-recipe.md`](../../.claude/standards/storybook-mdx-recipe.md) and is auto-retrieved by the [`storybook-mdx-recipe`](../../.claude/skills/storybook-mdx-recipe/SKILL.md) skill at `*.mdx` edit time. The lint script [`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js) is the enforcement layer.
 
 > **2026-05-18 amendment** — the canonical first section is now `## Default` (story export: `Default`). `## Playground` is grandfathered on existing files; the lint accepts either. See the Amendments section below and [ADR-010 §3 amendment](./ADR-010-storybook-axes-of-information.md).
 
@@ -196,11 +196,11 @@ ADR-006 (sidebar taxonomy + story shape, accepted 2026-04-26) was authored on a 
 - **ADR-006** governs `*.stories.tsx` — what stories a component file exports and where it sits in the sidebar.
 - **ADR-007** governs `*.mdx` — the section structure of the docs page that renders alongside the stories.
 
-The collision risk reads from the section names. ADR-006 explicitly bans these as **story export names**: `Variants`, `Tones`, `Patterns`. ADR-007 requires `## Variants` as an **MDX H2 section** and treats `## Patterns` as **conditionally required** (include only when the component has Q4/Q5 stories per ADR-010 — see [#608](https://github.com/brikdesigns/brik-bds/issues/608) for the matrix-vs-recipe reconciliation). Same words, different layers. Read carefully:
+The collision risk reads from the section names. ADR-006 explicitly bans these as **story export names**: `Variants`, `Tones`, `Patterns`. ADR-007 treats `## Variants` and `## Patterns` as **conditionally required MDX H2 sections** — present only when the component ships the matching story class (`## Variants` ← ≥1 Q3 variant story; `## Patterns` ← a Q4/Q5 story per ADR-010). See [#608](https://github.com/brikdesigns/brik-bds/issues/608) (Patterns) and [#1328](https://github.com/brikdesigns/brik-bds/issues/1328) (Variants) for the matrix-vs-recipe reconciliation. Same words, different layers. Read carefully:
 
 | Layer | ADR-007 (MDX) | ADR-006 (stories.tsx) |
 |---|---|---|
-| `## Variants` H2 | **Required** section heading | n/a |
+| `## Variants` H2 | **Conditional** — include only when ≥1 Q3 variant story exists (omit for single-appearance components) | n/a |
 | `## Patterns` H2 | **Conditional** — include only when Q4/Q5 stories exist | n/a |
 | `export const Variants` | n/a | **Banned** |
 | `export const Tones` | n/a | **Banned** |
@@ -259,7 +259,7 @@ A page **conforms to ADR-007** when:
 1. Top of file imports `Meta`, `Canvas`, `ArgTypes` from `@storybook/addon-docs/blocks`, imports `* as Stories`, imports `ComponentLinks`, contains `<Meta of={Stories} />`.
 2. The first heading is one `# {Component name}`. Nothing above it except the imports and `<Meta>`.
 3. Immediately after H1: `<ComponentLinks slug="..." />` then a 1–2 sentence description paragraph.
-4. Required sections appear in this order, no omissions, no deviations from spelling: `## Default`, `## Variants`, `## Props`. The first section may alternatively be `## Playground` on files that have not yet migrated per the [2026-05-18 amendment](#amendments) — lint accepts either; PR review enforces `## Default` for net-new components. `## Patterns` is conditionally required — present only when the component has Q4/Q5 stories per ADR-010; when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
+4. Unconditional required sections appear in this order, no omissions, no deviations from spelling: `## Default`, `## Props`. The first section may alternatively be `## Playground` on files that have not yet migrated per the [2026-05-18 amendment](#amendments) — lint accepts either; PR review enforces `## Default` for net-new components. `## Variants` is conditionally required — present only when the component ships ≥1 Q3 variant story per ADR-010, omitted for single-appearance components (see the [2026-07-22 amendment](#amendments)); when present it sits between the first section and `## Props` and must contain a `<Canvas>`. `## Patterns` is conditionally required — present only when the component has Q4/Q5 stories per ADR-010; when present it sits between `## Variants` and `## Props` and must contain a `<Canvas>`. `## CSS Override API` and `## Notes` are optional and follow `## Props` in that order.
 5. No `---` dividers anywhere in the file.
 6. No `## Usage`, `## When to use`, `## When NOT to use`, `## Source attribution`, `## Tokens`, or other narrative-bearing section. (Stubs MAY appear in the description: "See usage at [design.brikdesigns.com/docs/components/{slug}](...).")
 7. Every `<Canvas>` references a story exported from the file's matching `*.stories.tsx`.
@@ -269,6 +269,17 @@ A page **conforms to ADR-007** when:
 A page violates ADR-007 if any of the above fails. Phase 3 closes when 100% of `components/ui/*/*.mdx` files conform.
 
 ## Amendments
+
+### 2026-07-22 — `## Variants` made conditional for single-appearance components
+
+`## Variants` moves from **unconditionally required** to **conditionally required**, paralleling the treatment `## Patterns` already received in [#608](https://github.com/brikdesigns/brik-bds/issues/608).
+
+- **New rule:** include `## Variants` IFF the matching `*.stories.tsx` ships ≥1 Q3 semantic-variant story (one per meaningful visual/behavioral state). A **single-appearance component** — a fixed-glyph or single-visual-state affordance whose only story is the `Default`/`Playground` sandbox (state is Controls-only) — omits the section entirely.
+- **Reference omit case:** `CloseButton` — a fixed bold "X" dismiss glyph; `label` + `disabled` are Controls, not variants. It has no Q3 story, so a recipe-conformant page (`## Playground` → `## Props`, no `## Variants`) is now authorable without contriving a variant (banned by [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) / the story-shape standard).
+- **Order preserved:** when present, `## Variants` still sits between the first section (`## Default` / `## Playground`) and `## Props`; a `## Variants` present-but-empty (no `<Canvas>`) still fails lint.
+- **Lint:** [`scripts/lint-storybook-recipe.js`](../../scripts/lint-storybook-recipe.js) moves `## Variants` from `REQUIRED_SECTION_SPECS` to `CONDITIONAL_SECTIONS_WITH_CANVAS`.
+
+**Decision driver:** `CloseButton` (surfaced documenting the [#893](https://github.com/brikdesigns/brik-bds/issues/893) tail) had no recipe-conformant page — the only ways to satisfy the old hard `## Variants` requirement were to contrive a variant story (banned) or leave the component undocumented. Making the section conditional resolves the contradiction the same way `## Patterns` was resolved.
 
 ### 2026-05-18 — Canonical first section renamed `## Playground` → `## Default`
 
