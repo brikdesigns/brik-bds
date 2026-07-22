@@ -5,7 +5,7 @@ import { Hero } from './Hero';
 const meta: Meta<typeof Hero> = {
   title: 'Sections/Blueprints/hero',
   component: Hero,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web'],
   parameters: {
     layout: 'fullscreen',
     docs: {

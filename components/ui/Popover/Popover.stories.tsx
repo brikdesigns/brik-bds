@@ -54,8 +54,14 @@ const meta: Meta<typeof Popover> = {
       control: 'select',
       options: ['click', 'hover'],
     },
-    isOpen: { table: { disable: true } },
-    onOpenChange: { table: { disable: true } },
+    isOpen: {
+      control: false,
+      description: 'Controlled open state. Leave unset for uncontrolled mode (Popover manages its own state).',
+    },
+    onOpenChange: {
+      control: false,
+      description: 'Controlled change handler — fires with the next open state on trigger interaction.',
+    },
   },
 } satisfies Meta<typeof Popover>;
 

@@ -72,7 +72,7 @@ const withAudienceCascade = (Story: () => JSX.Element) => (
 const meta: Meta<typeof Features> = {
   title: 'Sections/Blueprints/features',
   component: Features,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web'],
   decorators: [withAudienceCascade],
   parameters: {
     layout: 'fullscreen',
