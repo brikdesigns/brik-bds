@@ -1,0 +1,191 @@
+name: merge-reconcile
+
+# Anti-staleness gate: the recurring failure mode (2026-07-21 audit — 21 of 106
+# open issues misrepresented their state) is that issue metadata lags merged
+# PRs. A PR ships against an issue using a bare `#N` mention or `Refs #N`
+# (instead of `Closes #N`), GitHub never auto-closes it, and the body/labels
+# drift out of sync with shipped code.
+#
+# This flags the drift at its source. When a PR MERGES, for every issue the PR
+# *referenced* (title + body + commit messages) but did NOT close, if that
+# issue is still open it gets the `needs:reconcile` label + one marker-guarded
+# comment prompting a close-or-rescope. A weekly `schedule` backstop re-scans
+# recently-merged PRs so a missed `pull_request` event doesn't let one slip.
+#
+# It does NOT hard-fail (PRs already merged; issues have no merge gate). The
+# output is filterable: `is:open label:needs:reconcile`. The flag self-clears
+# when the issue is closed or edited (the reconcile action).
+#
+# Exemptions (same as issue-size-gate): sub-issues (parent owns the lifecycle),
+# `meta:project` parents (closed via their rollup), `icebox` (parked).
+#
+# Rollout to other repos: copy this single file — it is self-contained (creates
+# its own `needs:reconcile` label on first run) and has no repo-specific paths.
+
+on:
+  pull_request:
+    types: [closed]
+  issues:
+    types: [closed, edited]
+  schedule:
+    # Weekly backstop — Mondays 08:00 UTC. Re-scans merged PRs from the last 30
+    # days in case a pull_request event was missed.
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: merge-reconcile-${{ github.event.pull_request.number || github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+permissions:
+  issues: write
+  pull-requests: read
+  contents: read
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reconcile issues against merged PRs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const NEEDS = 'needs:reconcile';
+            const MARKER = '<!-- merge-reconcile -->';
+            const LOOKBACK_DAYS = 30;
+
+            // ── Self-clear path: issue closed or edited → drop the flag ──
+            if (context.eventName === 'issues') {
+              const issue = context.payload.issue;
+              const labels = (issue.labels || []).map(l => (typeof l === 'string' ? l : l.name));
+              if (labels.includes(NEEDS)) {
+                await github.rest.issues.removeLabel({
+                  owner, repo, issue_number: issue.number, name: NEEDS,
+                }).catch(e => { if (e.status !== 404) throw e; });
+                core.info(`Cleared ${NEEDS} on #${issue.number} (issue ${context.payload.action})`);
+              }
+              return;
+            }
+
+            // Ensure the flag label exists (create once, like issue-size-gate).
+            async function ensureLabel() {
+              await github.rest.issues.getLabel({ owner, repo, name: NEEDS }).catch(async (e) => {
+                if (e.status !== 404) throw e;
+                await github.rest.issues.createLabel({
+                  owner, repo, name: NEEDS, color: 'd93f0b',
+                  description: 'Auto-applied by merge-reconcile: a merged PR referenced this issue without closing it. Close or re-scope, then the flag clears.',
+                });
+                core.info(`Created label ${NEEDS}`);
+              });
+            }
+
+            // GraphQL: issues this PR formally closes + its parent (exemption).
+            async function prClosingRefs(number) {
+              const q = `query($owner:String!,$repo:String!,$num:Int!){
+                repository(owner:$owner,name:$repo){ pullRequest(number:$num){
+                  closingIssuesReferences(first:50){ nodes { number } } } } }`;
+              const res = await github.graphql(q, { owner, repo, num: number });
+              return new Set(res.repository.pullRequest.closingIssuesReferences.nodes.map(n => n.number));
+            }
+
+            async function issueMeta(number) {
+              const q = `query($owner:String!,$repo:String!,$num:Int!){
+                repository(owner:$owner,name:$repo){ issue(number:$num){
+                  state
+                  parent { number }
+                  labels(first:50){ nodes { name } } } } }`;
+              const res = await github.graphql(q, { owner, repo, num: number });
+              const issue = res.repository.issue;
+              if (!issue) return null;
+              const labels = issue.labels.nodes.map(n => n.name);
+              return {
+                open: issue.state === 'OPEN',
+                exempt: !!issue.parent || labels.includes('meta:project') || labels.includes('icebox'),
+              };
+            }
+
+            // Bare same-repo #N mentions in free text (title/body/commits).
+            // Cross-repo `owner/repo#N` is deliberately not matched.
+            function mentions(text) {
+              const out = new Set();
+              if (!text) return out;
+              const re = /(?<![\w/-])#(\d+)\b/g;
+              let m;
+              while ((m = re.exec(text)) !== null) out.add(parseInt(m[1], 10));
+              return out;
+            }
+
+            // Reconcile a single merged PR.
+            async function reconcilePR(pr) {
+              const closing = await prClosingRefs(pr.number);
+
+              const commits = await github.paginate(github.rest.pulls.listCommits, {
+                owner, repo, pull_number: pr.number, per_page: 100,
+              }).catch(() => []);
+              const commitText = commits.map(c => c.commit.message).join('\n');
+
+              const referenced = new Set([
+                ...mentions(pr.title),
+                ...mentions(pr.body),
+                ...mentions(commitText),
+              ]);
+
+              const candidates = [...referenced].filter(n => n !== pr.number && !closing.has(n));
+              if (candidates.length === 0) {
+                core.info(`PR #${pr.number}: no referenced-not-closed issues`);
+                return;
+              }
+
+              for (const n of candidates) {
+                const meta = await issueMeta(n);
+                if (!meta || !meta.open || meta.exempt) continue;
+
+                await ensureLabel();
+                await github.rest.issues.addLabels({
+                  owner, repo, issue_number: n, labels: [NEEDS],
+                }).catch(e => { if (e.status !== 404) throw e; });
+
+                const comments = await github.paginate(github.rest.issues.listComments, {
+                  owner, repo, issue_number: n, per_page: 100,
+                });
+                // One flag per PR — the marker encodes the PR number so a later
+                // PR can flag the same issue again without duplicate spam.
+                const perPrMarker = `${MARKER} pr=${pr.number}`;
+                if (comments.some(c => c.body && c.body.includes(perPrMarker))) {
+                  core.info(`#${n} already flagged for PR #${pr.number} — skipping`);
+                  continue;
+                }
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: n,
+                  body: `${perPrMarker}\n**PR #${pr.number} merged referencing this issue but did not close it.** Reconcile now so the backlog stays honest:\n\n- **Fully shipped?** Close it (or add \`Closes #${n}\` to a follow-up PR).\n- **Partially shipped?** Edit the body/ACs to strike what shipped and re-scope the remainder; adjust the \`size:*\` label.\n\nReference PR #${pr.number} in the update. Editing or closing the issue clears the \`${NEEDS}\` flag automatically.`,
+                });
+                core.info(`Flagged #${n} with ${NEEDS} (PR #${pr.number})`);
+              }
+            }
+
+            // ── PR-merged path ──
+            if (context.eventName === 'pull_request') {
+              const pr = context.payload.pull_request;
+              if (!pr.merged) {
+                core.info(`PR #${pr.number} closed without merge — nothing to reconcile`);
+                return;
+              }
+              await reconcilePR(pr);
+              return;
+            }
+
+            // ── Weekly / manual backstop: re-scan recent merged PRs ──
+            const since = new Date(Date.now() - LOOKBACK_DAYS * 864e5).toISOString().slice(0, 10);
+            const found = await github.paginate(github.rest.search.issuesAndPullRequests, {
+              q: `repo:${owner}/${repo} is:pr is:merged merged:>=${since}`,
+              per_page: 100,
+            });
+            core.info(`Backstop: scanning ${found.length} PRs merged since ${since}`);
+            for (const hit of found) {
+              // search returns issue-shaped objects; fetch full PR for body/title.
+              const { data: pr } = await github.rest.pulls.get({
+                owner, repo, pull_number: hit.number,
+              });
+              await reconcilePR(pr);
+            }
