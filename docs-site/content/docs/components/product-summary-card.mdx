@@ -1,0 +1,69 @@
+---
+title: Product summary card
+description: Compact summary of a selected product or service. Echoes back the offering a visitor chose, with a service-line tag and price.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+ProductSummaryCard is a compact read-only summary of a chosen offering — a leading [ServiceTag](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview) coloured by `serviceLine`, a caption `label`, the offering `value`, and an optional `price • frequency` line. Use it to confirm back to a visitor what they selected.
+
+## Use it for
+
+- "Interested in" / "Selected plan" confirmations in a lead or checkout flow
+- The offering echo inside a "Get Started" or contact modal
+- Any place that restates a single selected product/service with its price
+
+For a full comparison grid of offerings a visitor picks *from*, use [pricing cards](/docs/components/pricing-card) — ProductSummaryCard shows the one already chosen.
+
+## Import
+
+```tsx
+import { ProductSummaryCard } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Service line
+
+`serviceLine` recolours the leading ServiceTag and resolves its glyph — `brand`, `marketing`, `information`, `product`, `back-office`, `service`.
+
+```tsx
+<ProductSummaryCard serviceLine="marketing" label="Selected plan" value="Growth Marketing Plan" price="$1,200" frequency="monthly" />
+```
+
+### Price and frequency
+
+`price` and `frequency` are optional and join with a `•`. Omit both for a name-only summary; the card collapses gracefully.
+
+```tsx
+<ProductSummaryCard serviceLine="brand" label="Interested in" value="Standard Logo Design" price="$650" frequency="one time" />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **It's a summary, not a selector.** ProductSummaryCard is read-only confirmation of an already-chosen offering. To let a visitor *choose*, use [pricing cards](/docs/components/pricing-card) or a [card control](/docs/components/card-control).
+</Callout>
+
+## Accessibility
+
+- Renders a `<div>`; the ServiceTag, label, value, and price are plain text content with no interactive semantics. Wrap it in a link or button only if the whole card is meant to be actionable.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `serviceLine` | `'brand' \| 'marketing' \| 'information' \| 'product' \| 'back-office' \| 'service'` | — (required) |
+| `serviceName` | `string` | — |
+| `label` | `string` | — (required) |
+| `value` | `string` | — (required) |
+| `price` | `string` | — |
+| `frequency` | `string` | — |
+
+Plus all standard `<div>` HTML attributes.
+
+## Related
+
+- [Pricing card](/docs/components/pricing-card) — the selectable offering grid
+- [Card control](/docs/components/card-control) — a selectable card
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-product-summary-card--default)**
