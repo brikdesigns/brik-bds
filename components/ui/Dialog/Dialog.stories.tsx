@@ -19,10 +19,22 @@ const meta: Meta<typeof Dialog> = {
       description: '`destructive` is the starting template for delete-type confirmations.',
     },
     closeOnBackdrop: { control: 'boolean' },
-    isOpen: { table: { disable: true } },
-    onClose: { table: { disable: true } },
-    onConfirm: { table: { disable: true } },
-    children: { table: { disable: true } },
+    isOpen: {
+      control: false,
+      description: 'Whether the dialog is rendered. Returns `null` when false. Controlled by the caller.',
+    },
+    onClose: {
+      control: false,
+      description: 'Called on backdrop click, Escape key, or the Cancel button. Caller must set `isOpen` to false.',
+    },
+    onConfirm: {
+      control: false,
+      description: 'Called when the primary action is clicked. Caller is responsible for closing the dialog.',
+    },
+    children: {
+      control: false,
+      description: 'Custom body content. Replaces `description` when provided.',
+    },
   },
 };
 

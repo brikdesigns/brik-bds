@@ -52,7 +52,7 @@ const section: BlueprintProps['section'] = {
 const meta: Meta<typeof ServicesDetailTwoColumn> = {
   title: 'Sections/Blueprints/services_detail_two_column',
   component: ServicesDetailTwoColumn,
-  tags: ['surface-web', 'surface-shared', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   parameters: { layout: 'fullscreen' },
 };
 

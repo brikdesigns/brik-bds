@@ -35,7 +35,12 @@ const meta: Meta<typeof Modal> = {
     },
     confirmDisabled: { control: 'boolean', description: 'Confirm-preset only.' },
     confirmLoading: { control: 'boolean', description: 'Confirm-preset only.' },
-    preset: { table: { disable: true } },
+    preset: {
+      control: false,
+      options: ['confirm'],
+      description:
+        'Discriminated-union entry point. Omit for the flexible default (header / body / footer slots); `"confirm"` renders the compact `alertdialog` preset and unlocks the `confirm*`/`cancelLabel` props.',
+    },
     isOpen: { table: { disable: true } },
     onClose: { table: { disable: true } },
     onConfirm: { table: { disable: true } },
