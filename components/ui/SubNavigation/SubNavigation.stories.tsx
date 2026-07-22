@@ -85,7 +85,7 @@ function SubNavigationStory({
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta = {
-  title: 'Sections/sub-navigation',
+  title: 'Navigation/sub-navigation',
   component: SubNavigationStory,
   tags: ['surface-product', 'surface-shared'],
   parameters: { layout: 'fullscreen' },

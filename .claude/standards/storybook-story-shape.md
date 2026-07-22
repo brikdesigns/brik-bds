@@ -132,7 +132,7 @@ export const Pricing: Story = {
 | `Display` | Content card for `bds-card-grid` | `Card preset="display"` |
 | `Pricing` | Web-only pricing tier with feature list | `PricingCard` (story consolidated; component file stays for `surface-web` CSS isolation) |
 
-**Wrong-layer check:** before classifying a component as `Containers/`, ask: does it carry its own visual surface (`border` / `background` / `padding` / `elevation`)? If not, it is a **`Layouts/`** component (pure arrangement, no surface). `CardList` (a `<ul>` spacing wrapper) is `Layouts/`, not `Containers/`.
+**Wrong-layer check:** before classifying a component as `Containers/`, ask: does it carry its own visual surface (`border` / `background` / `padding` / `elevation`)? If not, it is a **`Layouts/`** component (pure arrangement, no surface) — a bare `<ul>` spacing wrapper belongs in `Layouts/`, not `Containers/`. **Card-family exception:** the `Cards/` bucket groups every card-named primitive by family, so `card-list` sits in `Cards/` alongside `card` even though it is arrangement-only — name-family wins over layer for the card set (ADR-006 amendment 2026-07-22).
 
 **Name-layer check:** "Card" in a component name implies Container-layer ancestry. If the component is actually an interaction primitive (`Collapsible` — renamed from `CollapsibleCard`, #701) or a semantic quotation block (`Testimonial` — renamed from `CardTestimonial`, #702), the "Card" prefix is wrong. Do not propagate the misnomer in new story files.
 
@@ -218,7 +218,7 @@ Never combine two prop axes in one story. Write `Sizes` and `Variants` as separa
 
 ## Sidebar taxonomy
 
-**[ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) (amended 2026-05-16, [#629](https://github.com/brikdesigns/brik-bds/issues/629)) defines a 6-bucket flat taxonomy.** The rename sweep PRs that make `preview.tsx` match are gated on [#618](https://github.com/brikdesigns/brik-bds/issues/618) wrapping.
+**[ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) (last amended 2026-07-22, [#1330](https://github.com/brikdesigns/brik-bds/issues/1330)) defines the flat sidebar taxonomy.** Current component top-levels: `Components/`, `Cards/`, `Containers/`, `Blocks/`, `Layouts/`, `Navigation/`, `Blueprints/`, `Tools/` — plus the structural top-levels below. [`.storybook/preview.tsx`](../../.storybook/preview.tsx) `storySort.order` is the live source of truth and matches this table.
 
 **Migration window rule:** existing stories keep their current `title:` strings until the rename sweep touches their file. New stories use the flat bucket path from 2026-05-16 forward.
 
@@ -235,40 +235,44 @@ Components → Containers → Blocks → Layouts → Sections → Tools → * (c
 
 | Bucket | Role | Example members |
 | --- | --- | --- |
-| `Components/` | Single atomic primitive | button, badge, checkbox, banner, text-input |
-| `Containers/` | Bounded holder with own border/padding/elevation | card, form, accordion, sheet, table |
+| `Components/` | Single atomic primitive | button, badge, checkbox, banner, text-input, progress-stepper |
+| `Cards/` | Card-family holder — bounded surface with the "card" affordance | card, card-testimonial, collapsible-card, pricing-card, product-summary-card, card-list |
+| `Containers/` | Bounded holder with own border/padding/elevation (non-card) | form, accordion, sheet, table, data-view |
 | `Blocks/` | Fixed slot shape filled with atoms | field, field-grid, date-picker |
-| `Layouts/` | Pure arrangement — no styling beyond structure | stack, cluster, grid, frame, row, split |
-| `Sections/` | Full-page composed region | nav-bar, footer, sidebar-navigation |
+| `Layouts/` | Pure arrangement — no styling beyond structure | stack, cluster, grid, frame, page |
+| `Navigation/` | Navigation + page-level chrome region | nav-bar, breadcrumb, sidebar-navigation, sub-navigation, tab-bar, page-header |
+| `Blueprints/` | Full-page composed section template | hero, cta, features, footer |
 | `Tools/` | Dev/internal utilities | brik-dev-bar |
 
-**Unchanged top-levels:** `Overview/`, `Foundation/`, `Theming/`, `Motion/`, `Content System/`, `Patterns/`, `Deprecated/`.
+**Unchanged top-levels:** `Overview/`, `Foundation/` (icon-family + logo + avatar + image live under `Foundation/Assets/`), `Motion/`, `Content System/`, `Deprecated/`.
 
 **Canonical prefixes:**
 
 | Folder / file | Title prefix |
 | --- | --- |
 | `components/ui/<Component>` (atomic primitive) | `Components/<component>` (e.g. `Components/button`) |
-| `components/ui/<Component>` (bounded holder) | `Containers/<component>` (e.g. `Containers/card`) |
+| `components/ui/<Component>` (card-family holder) | `Cards/<component>` (e.g. `Cards/card`) |
+| `components/ui/<Component>` (bounded holder, non-card) | `Containers/<component>` (e.g. `Containers/form`) |
 | `components/ui/<Component>` (slot + atoms) | `Blocks/<component>` (e.g. `Blocks/field`) |
 | `components/ui/<Component>` (arrangement only) | `Layouts/<component>` (e.g. `Layouts/stack`) |
-| `components/ui/<Component>` (page-level region) | `Sections/<component>` (e.g. `Sections/nav-bar`) |
+| `components/ui/<Component>` (navigation / page chrome) | `Navigation/<component>` (e.g. `Navigation/nav-bar`) |
+| `components/ui/{Icon,Icons,AnimatedIcon,Logo,Avatar,Image}` | `Foundation/Assets/<component>` (e.g. `Foundation/Assets/icon`) |
 | `stories/dev-tools/<Tool>` | `Tools/<tool>` |
-| `content-system/blueprints/react/<Blueprint>` | `Theming/Blueprints/<blueprint_key>` |
-| `stories/patterns/<Pattern>` | `Patterns/<Pattern>` |
+| `content-system/blueprints/react/<Blueprint>` | `Blueprints/<blueprint_key>` |
 
 ```tsx
 /* Right — flat bucket path, no subcategory layer */
 title: 'Components/button'
-title: 'Containers/card'
+title: 'Cards/card'
 title: 'Blocks/field'
-title: 'Sections/nav-bar'
-title: 'Theming/Blueprints/hero_split_image_card_overlay'
+title: 'Navigation/nav-bar'
+title: 'Blueprints/hero_split_image_card_overlay'
+title: 'Foundation/Assets/icon'
 
-/* Wrong — old subcategory style (superseded by ADR-006 amendment 2026-05-16) */
+/* Wrong — old subcategory / superseded top-levels (Sections, Displays, Theming/Blueprints) */
 title: 'Components/Action/button'
 title: 'Displays/Sheet/field'
-title: 'Navigation/Primary/nav-bar'
+title: 'Sections/nav-bar'
 ```
 
 **Do not freelance a new top-level.** Adding one requires updating `storySort.order` in `preview.tsx` and amending [ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) — not just a `title:` string.

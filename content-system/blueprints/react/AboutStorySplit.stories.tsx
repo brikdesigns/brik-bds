@@ -49,7 +49,7 @@ const section: BlueprintProps['section'] = {
 };
 
 const meta: Meta<typeof AboutStorySplit> = {
-  title: 'Sections/Blueprints/about_story_split',
+  title: 'Blueprints/about_story_split',
   component: AboutStorySplit,
   tags: ['surface-web', 'surface-shared'],
   parameters: { layout: 'fullscreen' },

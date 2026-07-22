@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Hero } from './Hero';
 
 const meta: Meta<typeof Hero> = {
-  title: 'Sections/Blueprints/hero',
+  title: 'Blueprints/hero',
   component: Hero,
   tags: ['surface-web', 'surface-shared'],
   parameters: {

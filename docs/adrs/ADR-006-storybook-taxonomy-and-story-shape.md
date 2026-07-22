@@ -1,6 +1,6 @@
 # ADR-006 — Storybook Taxonomy + Story Shape
 
-**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments); Part B amended 2026-05-18 (canonical first-story name → `Default`); Part A amended 2026-05-18 (post-flatten audit corrections); Part A amended 2026-05-18 (table top-up for net-new members since 2026-05-16 — see Amendments)
+**Status:** Accepted (2026-04-26); Part A amended 2026-05-16 (6-bucket flat taxonomy — see Amendments); Part B amended 2026-05-18 (canonical first-story name → `Default`); Part A amended 2026-05-18 (post-flatten audit corrections); Part A amended 2026-05-18 (table top-up for net-new members since 2026-05-16 — see Amendments); Part A amended 2026-07-22 (Cards top-level, Sections→Navigation, Blueprints promoted, Foundation/Assets populated, Displays dissolved — see Amendments)
 **Date:** 2026-04-26
 **Supersedes:** —
 **Superseded by:** —
@@ -158,6 +158,29 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 - Existing files are not retroactively swept. See Migration above for why.
 
 ## Amendments
+
+### 2026-07-22 — Part A: Cards top-level, Navigation rename, Blueprints promoted, Foundation/Assets, Displays dissolved (#1330)
+
+A sidebar-cleanup pass introduced three structural changes and two consolidations. All are forward-only `title:` re-titles plus a `storySort.order` rewrite in [`.storybook/preview.tsx`](../../.storybook/preview.tsx); no component code changes (the `NavBar → TopNavigation` component rename is a **separate breaking PR**, tracked apart from this taxonomy pass).
+
+**New / renamed top-levels:**
+
+| Bucket | Change | Members |
+|---|---|---|
+| `Cards/` | **New top-level.** Groups the card-named family by name, pulled out of `Containers/` + `Layouts/`. | card, card-testimonial, collapsible-card, pricing-card, product-summary-card, card-list |
+| `Navigation/` | **Renamed from `Sections/`.** | breadcrumb, nav-bar (→ top-navigation in the follow-up rename PR), sidebar-navigation, sub-navigation, tab-bar, page-header |
+| `Blueprints/` | **Promoted to top-level** (was the `Sections/Blueprints/` subfolder). | the 16 content-system section templates + footer |
+
+**`Sections/` fully dissolved** — its members redistributed: nav items + `page-header` → `Navigation/`; `footer` → `Blueprints/` (page-region template); `progress-stepper` → `Components/` (it is a stepper primitive, not a page region).
+
+**Consolidations:**
+
+- **`Foundation/Assets/` populated** — `icon`, `icons`, `animated-icon`, `logo`, `avatar`, `image` moved out of `Components/` into the previously-empty `Foundation/Assets/` slot. Resolves the "multiple icon categories" scatter; assets are foundational, not atomic UI primitives.
+- **`Displays/` dissolved** — its lone drifted member `data-view` → `Containers/` (it is a bounded data holder). The 2026-05-16 amendment already eliminated `Displays/`; this cleans up the straggler.
+
+**Card-family-wins-over-layer exception.** The [2026-05-18 post-flatten correction](#2026-05-18--part-a-post-flatten-audit-corrections) placed `card-list` in `Layouts/` because it is arrangement-only (no surface). The new `Cards/` bucket overrides that for the card set: name-family grouping wins over composition-role for card-named primitives, so `card-list` lives in `Cards/` alongside `card`. This is a deliberate departure from the pure composition-role principle, accepted for sidebar discoverability given the size of the card family.
+
+**Decision driver:** the realized sidebar had drifted (a standalone `Displays/data-view`, a `Sections/` bucket mixing navigation with non-navigation regions, six asset primitives scattered through `Components/`, blueprints buried one level deep). This pass trades a strict composition-role taxonomy for fewer, more atomic top-levels — the card family and the navigation family each read as one thing.
 
 ### 2026-05-05 — Taxonomy table top-up
 

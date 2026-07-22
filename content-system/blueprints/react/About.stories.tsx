@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { About } from './About';
 
 const meta: Meta<typeof About> = {
-  title: 'Sections/Blueprints/about',
+  title: 'Blueprints/about',
   component: About,
   tags: ['surface-web', 'surface-shared'],
   parameters: {

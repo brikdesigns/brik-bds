@@ -43,7 +43,7 @@ const interiorSection: BlueprintProps['section'] = {
 };
 
 const meta: Meta<typeof HeroInteriorMinimal> = {
-  title: 'Sections/Blueprints/hero_interior_minimal',
+  title: 'Blueprints/hero_interior_minimal',
   component: HeroInteriorMinimal,
   tags: ['surface-web', 'surface-shared'],
   parameters: { layout: 'fullscreen' },

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CollapsibleCard } from './CollapsibleCard';
 
 const meta: Meta<typeof CollapsibleCard> = {
-  title: 'Containers/collapsible-card',
+  title: 'Cards/collapsible-card',
   component: CollapsibleCard,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
