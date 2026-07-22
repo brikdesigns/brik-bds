@@ -26,6 +26,14 @@ The `subtitle` slot accepts a `ReactNode`, so a row can carry multi-line metadat
 
 <Canvas of={Stories.ActivityFeed} />
 
+## Selectable
+
+Pass `selected` to turn the row into a toggle: a brand tint plus an inset brand ring, with `aria-pressed` reflecting the state. Use it for picker options and multi-select lists — a leading icon that swaps to a filled check pairs well with it. The ring is drawn with `box-shadow`, not `border`, so toggling a row never shifts its neighbours. Leave `selected` `undefined` for a plain drill-in row (no `aria-pressed`).
+
+<Canvas of={Stories.Selectable} />
+
+For a vertical image-first selectable (a photo grid, an avatar picker), reach for `SelectableMediaTile` instead — same selected semantics, media-tile shape.
+
 ## Props
 
 <ArgTypes of={Stories} />

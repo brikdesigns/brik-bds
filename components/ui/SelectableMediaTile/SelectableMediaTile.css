@@ -1,0 +1,115 @@
+@layer bds-components {
+  /* ─── SelectableMediaTile ───────────────────────────────────────
+     Vertical image-first toggle: full-bleed image + caption, whole
+     tile is a <button>. The vertical, media-first sibling of
+     InteractiveListItem — same selected semantics (brand ring +
+     aria-pressed), different shape.
+
+     The selected ring is drawn with box-shadow (not border) so
+     toggling a tile shifts nothing in the grid around it.
+  ───────────────────────────────────────────────────────────────── */
+
+  .bds-selectable-media-tile {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+    box-shadow: inset 0 0 0 var(--border-width-md) var(--border-muted);
+    transition:
+      box-shadow var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .bds-selectable-media-tile:hover:not(:disabled) {
+    box-shadow: inset 0 0 0 var(--border-width-md) var(--border-brand-primary);
+  }
+
+  .bds-selectable-media-tile:active:not(:disabled) {
+    transform: scale(0.99);
+  }
+
+  .bds-selectable-media-tile:focus-visible {
+    outline: var(--border-width-lg) solid var(--state-focus);
+    outline-offset: 2px;
+  }
+
+  /* ─── Media box ─────────────────────────────────────────────────
+     aspect-ratio comes inline from the `aspectRatio` prop (default
+     4 / 3); the box reserves space and clips the image. */
+
+  .bds-selectable-media-tile__media {
+    position: relative;
+    display: block;
+    width: 100%;
+    background-color: var(--surface-secondary);
+  }
+
+  .bds-selectable-media-tile__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ─── Selected check overlay ────────────────────────────────────
+     Brand-filled circle, top-right of the image, only when selected. */
+
+  .bds-selectable-media-tile__check {
+    position: absolute;
+    top: var(--padding-tiny);
+    right: var(--padding-tiny);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-md);
+    height: var(--icon-md);
+    border-radius: var(--border-radius-circle);
+    background-color: var(--background-brand-primary);
+    color: var(--text-on-color-dark);
+  }
+
+  /* ─── Caption ───────────────────────────────────────────────────
+     ReactNode — default is a single-line label, truncated. */
+
+  .bds-selectable-media-tile__caption {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-tiny);
+    padding: var(--padding-tiny) var(--padding-sm);
+    font-family: var(--font-family-label);
+    font-size: var(--label-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ─── Selected state ────────────────────────────────────────────
+     Brand ring + emphasised caption. box-shadow keeps layout stable. */
+
+  .bds-selectable-media-tile--selected {
+    box-shadow: inset 0 0 0 var(--border-width-md) var(--border-brand-primary);
+  }
+
+  .bds-selectable-media-tile--selected .bds-selectable-media-tile__caption {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-brand-primary);
+  }
+
+  /* ─── Disabled ──────────────────────────────────────────────────── */
+
+  .bds-selectable-media-tile--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

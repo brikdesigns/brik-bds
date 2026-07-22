@@ -1,8 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { InteractiveListItem } from './InteractiveListItem';
 import { Avatar } from '../Avatar';
 import { Badge } from '../Badge';
+import { Icon } from '../Icon';
 
 /* ─── Layout helper (story-only) ─────────────────────────────────── */
 
@@ -33,6 +35,11 @@ const meta: Meta<typeof InteractiveListItem> = {
       description: 'Row size — `md` for full sheets/panels, `sm` for narrow slots (DevBar, popovers).',
     },
     disabled: { control: 'boolean', description: 'Mutes styling and blocks the click.' },
+    selected: {
+      control: 'boolean',
+      description:
+        'Persistent toggle state — brand tint + inset ring, and sets `aria-pressed`. Leave undefined for a plain drill-in row.',
+    },
   },
 };
 
@@ -150,4 +157,69 @@ export const ActivityFeed: Story = {
       </Stack>
     </div>
   ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   SELECTABLE — persistent toggle state (aria-pressed)
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * A single-select picker. Passing `selected` turns each row into a
+ * toggle: brand tint + inset ring, `aria-pressed` reflecting state, and
+ * a leading icon that swaps to a filled check on the active row. The
+ * ring is drawn with `box-shadow` (not `border`), so selecting a row
+ * shifts nothing around it.
+ *
+ * @summary Single-select picker — selected rows carry aria-pressed
+ */
+export const Selectable: Story = {
+  render: () => {
+    const options = [
+      { id: 'kickoff', title: 'Kickoff call', subtitle: 'Edited 2d ago' },
+      { id: 'discovery', title: 'Discovery workshop', subtitle: 'Edited 5d ago' },
+      { id: 'review', title: 'Design review', subtitle: 'Edited 1w ago' },
+    ];
+    const [selectedId, setSelectedId] = React.useState<string>('discovery');
+    return (
+      <div style={{ minWidth: 360 }}>
+        <Stack gap="var(--gap-sm)">
+          {options.map((opt) => {
+            const isSelected = selectedId === opt.id;
+            return (
+              <InteractiveListItem
+                key={opt.id}
+                selected={isSelected}
+                leading={
+                  <Icon
+                    icon={isSelected ? 'ph:check-circle-fill' : 'ph:file-text'}
+                    style={{
+                      fontSize: 'var(--icon-md)',
+                      color: isSelected ? 'var(--text-brand-primary)' : 'var(--text-muted)',
+                    }}
+                  />
+                }
+                title={opt.title}
+                subtitle={opt.subtitle}
+                onClick={() => setSelectedId(opt.id)}
+              />
+            );
+          })}
+        </Stack>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const discovery = canvas.getByRole('button', { name: /Discovery workshop/ });
+    const kickoff = canvas.getByRole('button', { name: /Kickoff call/ });
+
+    // Initial state: Discovery is selected, others are not.
+    await expect(discovery).toHaveAttribute('aria-pressed', 'true');
+    await expect(kickoff).toHaveAttribute('aria-pressed', 'false');
+
+    // Selecting Kickoff moves the pressed state.
+    await userEvent.click(kickoff);
+    await expect(kickoff).toHaveAttribute('aria-pressed', 'true');
+    await expect(discovery).toHaveAttribute('aria-pressed', 'false');
+  },
 };

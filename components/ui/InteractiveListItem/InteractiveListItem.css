@@ -61,6 +61,21 @@
     outline-offset: 2px;
   }
 
+  /* ─── Selected state ───────────────────────────────────────────
+     Persistent toggle state (aria-pressed). Brand tint + an inset
+     brand ring drawn with box-shadow so the border adds no layout
+     box — plain (unselected) rows in the same list keep their exact
+     metrics, no shift on toggle. Mirrors `Button --selected`. */
+
+  .bds-interactive-list-item--selected {
+    background-color: var(--surface-brand-secondary);
+    box-shadow: inset 0 0 0 var(--border-width-md) var(--border-brand-primary);
+  }
+
+  .bds-interactive-list-item--selected:hover:not(:disabled) {
+    background-color: var(--surface-brand-secondary);
+  }
+
   .bds-interactive-list-item--disabled {
     opacity: 0.5;
     cursor: not-allowed;

@@ -162,6 +162,7 @@ const COMPONENT_LINKS_WITHOUT_DOCS_PAGE = new Set([
   'page',
   'progress-circle',
   'search-input',
+  'selectable-media-tile',
   'service-tag',
   'sub-navigation',
   'testimonial',
