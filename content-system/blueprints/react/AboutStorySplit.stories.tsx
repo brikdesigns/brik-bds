@@ -51,7 +51,7 @@ const section: BlueprintProps['section'] = {
 const meta: Meta<typeof AboutStorySplit> = {
   title: 'Sections/Blueprints/about_story_split',
   component: AboutStorySplit,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web', 'surface-shared', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   parameters: { layout: 'fullscreen' },
 };
 

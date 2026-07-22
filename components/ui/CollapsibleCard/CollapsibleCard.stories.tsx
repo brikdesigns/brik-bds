@@ -3,9 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CollapsibleCard } from './CollapsibleCard';
 
 const meta: Meta<typeof CollapsibleCard> = {
-  title: 'Containers/collapsible-card',
+  title: 'Deprecated/collapsible-card',
   component: CollapsibleCard,
-  tags: ['surface-shared'],
+  tags: ['surface-shared', '!manifest'], // deprecated — renamed Collapsible (#701), hide from MCP discovery
   parameters: { layout: 'padded' },
   decorators: [(Story) => <div style={{ maxWidth: 640 }}><Story /></div>],
   argTypes: {

@@ -110,7 +110,7 @@ const withAudienceCascade = (Story: () => JSX.Element) => (
 const meta: Meta<typeof Features3ColBrandedDark> = {
   title: 'Sections/Blueprints/features_3col_branded_dark',
   component: Features3ColBrandedDark,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web', 'surface-shared', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   decorators: [withAudienceCascade],
   parameters: {
     layout: 'fullscreen',
