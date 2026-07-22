@@ -266,12 +266,6 @@
    higher specificity, in theme-brand-brik.css).
    RETIRE each entry once the Figma source is corrected and re-synced. */
 :root[data-theme="dark"] {
-  /* Context-pinned on-color border: stays white in dark mode like its
-     --text-on-color-dark / --background-on-color-dark siblings, so borders on
-     a fixed dark/colored surface stay visible. Figma source still emits black
-     here — correct it and drop this line. (#980) */
-  --border-on-color-dark: var(--color-grayscale-white);
-
   /* Dark value for the --background-tertiary gap-fill (light value above, in
      :root). It's a hover/preview fill (e.g. SegmentedControl inactive hover),
      so in dark mode it must read as a step TOWARD the active surface
