@@ -14,24 +14,24 @@ import type { BlueprintProps } from '../astro/types';
  */
 const serviceLineCascadeStyles = `
 [data-service-line='brand'] {
-  --page-brand-primary: var(--theme-yellow-yellow-light);
-  --text-brand-primary: var(--theme-yellow-yellow-dark);
+  --page-brand-primary: var(--color-yellow-light);
+  --text-brand-primary: var(--color-yellow-dark);
 }
 [data-service-line='marketing'] {
-  --page-brand-primary: var(--theme-green-green-light);
-  --text-brand-primary: var(--theme-green-green-dark);
+  --page-brand-primary: var(--color-green-light);
+  --text-brand-primary: var(--color-green-dark);
 }
 [data-service-line='information'] {
   --page-brand-primary: var(--color-blue-light);
   --text-brand-primary: var(--color-blue-dark);
 }
 [data-service-line='product'] {
-  --page-brand-primary: var(--theme-purple-purple-light);
-  --text-brand-primary: var(--theme-purple-purple-dark);
+  --page-brand-primary: var(--color-purple-light);
+  --text-brand-primary: var(--color-purple-dark);
 }
 [data-service-line='service'] {
-  --page-brand-primary: var(--theme-orange-orange-light);
-  --text-brand-primary: var(--theme-orange-orange-dark);
+  --page-brand-primary: var(--color-orange-light);
+  --text-brand-primary: var(--color-orange-dark);
 }
 `;
 
