@@ -16,27 +16,9 @@ Bounded-value indicator for completion counters, scores, and capacity displays. 
 
 ## Variants
 
-### Status
-
-All status colors at standard size.
-
-<Canvas of={Stories.Pass} />
-
-<Canvas of={Stories.Fair} />
-
-<Canvas of={Stories.Fail} />
-
-<Canvas of={Stories.Neutral} />
-
-### No suffix
-
-By default the meter renders `value/max Score`. Pass `valueSuffix=""` for plain `value/max` — the completion-counter pattern.
-
-<Canvas of={Stories.NoSuffix} />
-
 ### Custom fill color
 
-`fillColor` overrides the status-driven color — use for per-category or per-department palettes.
+`status` drives the fill color through system tokens — toggle it (and `size`, `valueSuffix`, `label`) in Controls. `fillColor` is the escape hatch that overrides the status color for per-category or per-department palettes.
 
 <Canvas of={Stories.CustomFillColor} />
 

@@ -57,39 +57,10 @@ export const Default: Story = {
   },
 };
 
-/* ─── Variants — one story per status (Q3 semantic starting points) ─── */
-
-/** @summary Positive status — complete or on-track */
-export const Positive: Story = {
-  args: {
-    value: 100,
-    status: 'positive',
-    showValue: true,
-    label: 'Complete',
-  },
-};
-
-/** @summary Warning status — at-risk progress */
-export const Warning: Story = {
-  args: {
-    value: 45,
-    status: 'warning',
-    showValue: true,
-    label: 'At risk',
-  },
-};
-
-/** @summary Negative status — failing progress */
-export const Negative: Story = {
-  args: {
-    value: 15,
-    status: 'negative',
-    showValue: true,
-    label: 'Failing',
-  },
-};
-
-/* ─── Documented capability — arbitrary centered content (Q3) ────── */
+/* ─── Documented capability — arbitrary centered content (Q4) ─────
+   `status` (semantic stroke color), `size`, `value`, `indeterminate` are
+   Controls on Default — no per-status color-swap stories (ADR-010 Q2,
+   matches Dot). Only the ReactNode centered-slot capability earns a story. */
 
 /**
  * `showValue` accepts a ReactNode for arbitrary centered content — pair a
