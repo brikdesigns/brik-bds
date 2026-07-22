@@ -5,6 +5,7 @@
     "---Action---",
     "button",
     "button-group",
+    "close-button",
     "filter-bar",
     "filter-button",
     "filter-toggle",
