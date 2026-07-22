@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NavBar } from './NavBar';
+import { TopNavigation } from './TopNavigation';
 import { Button } from '../Button';
 import { type BdsLinkComponent } from '../NavItem';
 
@@ -34,9 +34,9 @@ const LogoPlaceholder = () => (
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof NavBar> = {
-  title: 'Navigation/nav-bar',
-  component: NavBar,
+const meta: Meta<typeof TopNavigation> = {
+  title: 'Navigation/top-navigation',
+  component: TopNavigation,
   tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
@@ -62,7 +62,7 @@ const meta: Meta<typeof NavBar> = {
       control: false,
     },
   },
-} satisfies Meta<typeof NavBar>;
+} satisfies Meta<typeof TopNavigation>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
