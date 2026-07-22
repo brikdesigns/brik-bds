@@ -10,13 +10,13 @@ import * as Stories from './Badge.stories';
 
 Status indicators and labels for displaying contextual information. Badges use semantic system colors to communicate status at a glance, with `solid` (saturated bg) and `subtle` (pastel bg) appearance values.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-The component varies on **status** (the semantic axis — five values), **appearance** (saturation tier), **size** (four tokens), and **content composition** (text-only, with-icon, icon-only).
+The semantic axis is **status** — five tones an agent picks as a starting template. `appearance`, `size`, and `density` are Controls on any story; the size gallery below shows the size axis side-by-side.
 
 ### Positive
 
@@ -38,31 +38,13 @@ The component varies on **status** (the semantic axis — five values), **appear
 
 <Canvas of={Stories.Progress} />
 
-### Subtle appearance
-
-The lower-contrast appearance shown across all five statuses (axis-only gallery).
-
-<Canvas of={Stories.Subtle} />
-
 ### Sizes
 
 Four size tokens at a single status. `xs` is icon-only by design — text doesn't fit legibly.
 
 <Canvas of={Stories.Sizes} />
 
-### Density
-
-`comfortable` (default) vs `compact` — compact tightens horizontal padding one token-step down for dense rows. Mirrors Tag so the two align side by side.
-
-<Canvas of={Stories.Density} />
-
-### With icon
-
-<Canvas of={Stories.WithIcon} />
-
-### Icon only
-
-<Canvas of={Stories.IconOnly} />
+## Patterns
 
 ### Badge + Tag alignment
 
@@ -70,17 +52,11 @@ Badge and Tag share the same height at every size tier — useful when mixing th
 
 <Canvas of={Stories.BadgeTagAlignment} />
 
-## Patterns
+### Content status
 
-Real-world compositions — the canonical content-lifecycle status sequence in two appearances.
-
-### Content status (solid)
+The canonical content-lifecycle status sequence in a settings list.
 
 <Canvas of={Stories.ContentStatusSolid} />
-
-### Content status (subtle)
-
-<Canvas of={Stories.ContentStatusSubtle} />
 
 ## Props
 
