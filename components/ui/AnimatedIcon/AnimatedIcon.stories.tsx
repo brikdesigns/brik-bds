@@ -5,7 +5,7 @@ import fadeSquare from './_examples/fade-square.json';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof AnimatedIcon> = {
-  title: 'Components/animated-icon',
+  title: 'Foundation/Assets/animated-icon',
   component: AnimatedIcon,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

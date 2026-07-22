@@ -55,7 +55,7 @@ const LogoPlaceholder = () => (
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Footer> = {
-  title: 'Sections/footer',
+  title: 'Blueprints/footer',
   component: Footer,
   tags: ['surface-web'],
   parameters: { layout: 'fullscreen' },

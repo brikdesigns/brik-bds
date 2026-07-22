@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Cta } from './Cta';
 
 const meta: Meta<typeof Cta> = {
-  title: 'Sections/Blueprints/cta',
+  title: 'Blueprints/cta',
   component: Cta,
   tags: ['surface-web'],
   parameters: {

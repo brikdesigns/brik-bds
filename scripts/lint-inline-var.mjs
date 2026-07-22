@@ -115,7 +115,16 @@ function main() {
     const out = execSync('git diff --cached --name-only --diff-filter=ACM', { cwd: BDS_ROOT })
       .toString()
       .split('\n')
-      .filter((f) => f.endsWith('.tsx') && !f.endsWith('.stories.tsx') && !f.endsWith('.test.tsx'));
+      // Scope to component TSX only — matches the whole-repo default (components/ui)
+      // and the linter's stated purpose. Storybook config (.storybook/**) and other
+      // non-component TSX are out of scope; #892 was a component-tier burn-down.
+      .filter(
+        (f) =>
+          f.startsWith('components/') &&
+          f.endsWith('.tsx') &&
+          !f.endsWith('.stories.tsx') &&
+          !f.endsWith('.test.tsx'),
+      );
     files = out.map((f) => resolve(BDS_ROOT, f)).filter(existsSync);
   } else {
     const dir = args.find((a) => !a.startsWith('--')) ?? resolve(BDS_ROOT, 'components', 'ui');

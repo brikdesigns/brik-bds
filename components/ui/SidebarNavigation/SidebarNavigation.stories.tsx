@@ -96,7 +96,7 @@ function SidebarNavigationStory({
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta = {
-  title: 'Sections/sidebar-navigation',
+  title: 'Navigation/sidebar-navigation',
   component: SidebarNavigationStory,
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },

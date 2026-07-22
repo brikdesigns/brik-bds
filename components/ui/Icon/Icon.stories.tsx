@@ -5,7 +5,7 @@ import phSubset from '../../icons.generated.json';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Icon> = {
-  title: 'Components/icon',
+  title: 'Foundation/Assets/icon',
   component: Icon,
   tags: ['surface-shared'],
   parameters: {

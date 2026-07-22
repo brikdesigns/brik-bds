@@ -28,7 +28,7 @@ The "how do component pages look and behave" cluster.
 
 | ADR | Status | Decision |
 |---|---|---|
-| [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) | **Accepted** (2026-04-26; Part A amended 2026-05-16 → 6-bucket flat taxonomy; Part B amended 2026-05-18 → canonical first story renamed `Default`) | Six flat component top-levels (Components / Containers / Blocks / Layouts / Sections / Tools), no subcategory layer, two-shape story files (`Default` + one-story-per-state) |
+| [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) | **Accepted** (2026-04-26; Part A amended 2026-05-16 → flat taxonomy; 2026-07-22 → Cards / Navigation / Blueprints / Foundation-Assets; Part B amended 2026-05-18 → canonical first story renamed `Default`) | Flat component top-levels (Components / Cards / Containers / Blocks / Layouts / Navigation / Blueprints / Tools), no subcategory layer, two-shape story files (`Default` + one-story-per-state) |
 | [ADR-007](./ADR-007-storybook-page-recipe.md) | **Accepted** (2026-05-04, amended 2026-05-18 → first section renamed `## Default`) | Normative MDX page recipe — Carbon-style triple-link header (ComponentLinks), required sections in fixed order (`## Default` → `## Variants` → `## Props`), lint-enforced via `scripts/lint-storybook-recipe.js` |
 | [ADR-010](./ADR-010-storybook-axes-of-information.md) | **Accepted** (2026-05-13, amended 2026-05-14 + 2026-05-18) | Story-vs-control matrix — Q1 toolbar global / Q2 argTypes-only / Q3 dedicated story (Orientation \| Layout \| Semantic-variant) / Q4 irreducible render / Q5 play-only. Canonical first story is `Default` regardless of variant axis. |
 
