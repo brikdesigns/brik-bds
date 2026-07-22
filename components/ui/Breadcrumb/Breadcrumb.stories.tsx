@@ -13,7 +13,7 @@ const MockLink: BdsLinkComponent = ({ href, children, ...props }) => (
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Breadcrumb> = {
-  title: 'Sections/breadcrumb',
+  title: 'Navigation/breadcrumb',
   component: Breadcrumb,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

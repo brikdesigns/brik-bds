@@ -12,7 +12,7 @@ import { FieldGrid } from '../FieldGrid';
 import { Board, BoardColumn, BoardCard } from '../Board';
 
 const meta: Meta<typeof TableView> = {
-  title: 'Displays/data-view',
+  title: 'Containers/data-view',
   component: TableView,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },

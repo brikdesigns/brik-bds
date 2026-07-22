@@ -4,7 +4,7 @@ import { Image } from '../../../components';
 import { SupportPlan } from './SupportPlan';
 
 const meta: Meta<typeof SupportPlan> = {
-  title: 'Sections/Blueprints/support_plan',
+  title: 'Blueprints/support_plan',
   component: SupportPlan,
   tags: ['surface-web'],
   parameters: {
