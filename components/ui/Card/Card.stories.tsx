@@ -20,7 +20,7 @@ const iphoneThumb =
   );
 
 const meta: Meta<typeof Card> = {
-  title: 'Containers/card',
+  title: 'Cards/card',
   component: Card,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
