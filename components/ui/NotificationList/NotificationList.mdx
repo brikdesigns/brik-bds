@@ -1,0 +1,39 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './NotificationList.stories';
+
+<Meta of={Stories} />
+
+# NotificationList
+
+<ComponentLinks slug="notification-list" />
+
+Vertical list of notification rows, each a `NotificationItem` with a title, body, timestamp, and read/unread state. Pass the `notifications` array; unread rows render with emphasis, read rows recede.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Empty
+
+The zero-notification state.
+
+<Canvas of={Stories.Empty} />
+
+### Item
+
+A single `NotificationItem` row, reusable standalone outside the list.
+
+<Canvas of={Stories.Item} />
+
+## Patterns
+
+`NotificationPopover` — the interactive composition: a bell trigger with an unread badge, click-to-read, and mark-all-read. Stateful behavior the list's args can't express on their own.
+
+<Canvas of={Stories.Popover} />
+
+## Props
+
+<ArgTypes of={Stories} />
