@@ -92,7 +92,7 @@ const baseProps: BlueprintProps = {
 const meta: Meta<typeof Services3ColCardGrid> = {
   title: 'Sections/Blueprints/services_3col_card_grid',
   component: Services3ColCardGrid,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web', 'surface-shared', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   parameters: {
     layout: 'fullscreen',
     docs: {

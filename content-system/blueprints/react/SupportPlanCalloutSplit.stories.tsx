@@ -49,7 +49,7 @@ const baseProps: BlueprintProps = {
 const meta: Meta<typeof SupportPlanCalloutSplit> = {
   title: 'Sections/Blueprints/support_plan_callout_split',
   component: SupportPlanCalloutSplit,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web', 'surface-shared', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   parameters: {
     layout: 'fullscreen',
     docs: {

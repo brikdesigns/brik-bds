@@ -21,6 +21,8 @@ export interface CardTestimonialProps extends HTMLAttributes<HTMLElement> {
 /**
  * CardTestimonial — customer testimonial card with quote, attribution, and stars.
  *
+ * @deprecated Use `<Testimonial>` directly (#702) — the renamed successor with the same props. Import path unchanged until removal.
+ *
  * @summary Customer testimonial card with quote and stars
  */
 export function CardTestimonial({
