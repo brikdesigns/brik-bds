@@ -5,7 +5,7 @@ description: Sliding panel anchored to a screen edge. Read / edit modes, tabs, s
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Sheet is the canonical detail-view panel — slides in from a screen edge for record views, edit workflows, and secondary content that shouldn't replace the current page. Mode-driven footer (Read / Edit) auto-renders the right action set; pass tabs for provenance/history surfaces; pair with [SheetSection](/docs/components/sheet-section) and the [Sheet typography primitives](/docs/components/sheet-typography) for a locked-down body composition.
+Sheet is the canonical detail-view panel — slides in from a screen edge for record views, edit workflows, and secondary content that shouldn't replace the current page. Mode-driven footer (Read / Edit) auto-renders the right action set; pass tabs for provenance/history surfaces; pair with [SheetSection](/docs/components/sheet-section) and [Field](/docs/components/field) for a locked-down body composition.
 
 ## Use it for
 
@@ -180,7 +180,7 @@ Inside a Sheet body, reach for the **sheet primitive set** first. Don't invent a
 | [Accordion](/docs/components/accordion) | Collapsible groups when a section has many rows. |
 | [EmptyState](/docs/components/empty-state) | Whole-section "no data" treatment. |
 
-Don't reach for raw `<h3>` / `<table>` / `<ul>` inside a Sheet body — each has a primitive that locks the type scale and spacing. Use the [Sheet typography primitives](/docs/components/sheet-typography) for inline labels and values.
+Don't reach for raw `<h3>` / `<table>` / `<ul>` inside a Sheet body — each has a primitive that locks the type scale and spacing. Use [SheetSection](/docs/components/sheet-section) for section headings and [Field](/docs/components/field) for inline labels and values.
 
 ## When to use which treatment
 
@@ -238,7 +238,7 @@ Don't reach for raw `<h3>` / `<table>` / `<ul>` inside a Sheet body — each has
 ## Related
 
 - [SheetSection](/docs/components/sheet-section) — body section wrapper
-- [Sheet typography](/docs/components/sheet-typography) — locked text primitives for sheet bodies
+- [Field](/docs/components/field) — locked label/value primitive for sheet bodies (folded in the former Sheet typography primitives)
 - [Modal](/docs/components/modal) — interrupting-overlay alternative
 - [Popover](/docs/components/popover) — anchored-floating alternative
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-sheet--overview)**
