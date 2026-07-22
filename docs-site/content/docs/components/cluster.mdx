@@ -1,0 +1,68 @@
+---
+title: Cluster
+description: Wrapping horizontal row with a consistent gap. Use for tag lists, action rows, and chip groups.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Cluster lays out children in a horizontal row that wraps to multiple lines with a consistent `gap`. Its reason to exist is the wrap — items flow to new rows without losing the shared spacing. `justify` aligns the row.
+
+## Use it for
+
+- Tag / chip lists — the most common case, where the set can overflow to new rows
+- Action button rows, usually with `justify="end"`
+- Any horizontal group of peers that should wrap rather than overflow
+
+## Import
+
+```tsx
+import { Cluster } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Gap
+
+The spacing scale — `tiny` through `xl` (default `sm`). The gap applies both between items and between wrapped rows.
+
+```tsx
+<Cluster gap="xs">…</Cluster>
+```
+
+### Justify
+
+`justify` aligns items along the row — `start` (default behavior), `center`, `end`, or `between`.
+
+```tsx
+<Cluster justify="end">…</Cluster>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **A row that must stay on one line is a horizontal [Stack](/docs/components/stack), not a Cluster.** Cluster's defining behavior is wrapping — use Stack when items should never wrap.
+</Callout>
+
+- For a two-dimensional grid of equal-width cells, use [Grid](/docs/components/grid).
+
+## Accessibility
+
+- Renders a plain element (`<div>` by default, override with `as`) with `display: flex; flex-wrap: wrap`. It adds no semantics; children keep their own roles.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `gap` | `'none' \| 'tiny' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'sm'` |
+| `align` | `'start' \| 'center' \| 'end' \| 'baseline'` | `'center'` |
+| `justify` | `'start' \| 'center' \| 'end' \| 'between'` | — |
+| `as` | element type | `'div'` |
+| `children` | `ReactNode` | — |
+
+Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Stack](/docs/components/stack) — one-axis layout that doesn't wrap
+- [Grid](/docs/components/grid) — two-axis layout
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/layouts-cluster--playground)**
