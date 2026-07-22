@@ -1,0 +1,27 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './ProductSummaryCard.stories';
+
+<Meta of={Stories} />
+
+# ProductSummaryCard
+
+<ComponentLinks slug="product-summary-card" />
+
+Compact summary of a selected product or service — a leading `ServiceTag` (coloured per `serviceLine`), a `label` caption, the offering `value`, and an optional `price • frequency` line. Used to echo back the offering a visitor selected.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+The card renders whatever offering it's given; `serviceLine` recolours the tag and `frequency` switches the price line between one-time and recurring.
+
+### Plan
+
+<Canvas of={Stories.Plan} />
+
+## Props
+
+<ArgTypes of={Stories} />
