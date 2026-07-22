@@ -1,0 +1,41 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Frame.stories';
+
+<Meta of={Stories} />
+
+# Frame
+
+<ComponentLinks slug="frame" />
+
+Frame locks a child to a fixed aspect ratio. `ratio` picks a named preset (`4-3` default, `square`, `wide`, …) or `customRatio` takes any CSS `aspect-ratio` string; `fit` controls how the child fills the box — `cover` crops, `contain` letterboxes.
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+The two axes Frame varies on: the aspect ratio (named preset or custom) and how the child fills it.
+
+### Ratio presets
+
+<Canvas of={Stories.RatioPresets} />
+
+### Custom ratio
+
+<Canvas of={Stories.CustomRatio} />
+
+### Fit modes
+
+<Canvas of={Stories.FitModes} />
+
+## Patterns
+
+Card image area — Frame composed inside a Card container, a composition whose surrounding chrome a single Frame's args can't express.
+
+<Canvas of={Stories.CardImageArea} />
+
+## Props
+
+<ArgTypes of={Stories} />
