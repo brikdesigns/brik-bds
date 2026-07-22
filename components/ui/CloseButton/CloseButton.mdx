@@ -1,0 +1,19 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './CloseButton.stories';
+
+<Meta of={Stories} />
+
+# Close button
+
+<ComponentLinks slug="close-button" />
+
+The canonical icon-only dismiss affordance for overlays — Modal, Sheet, Toast, Banner, and any panel that can be closed. A fixed bold "X" glyph in a compact ghost box; the mark is always the dominant element, never a small icon floating in empty space.
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Props
+
+<ArgTypes of={Stories} />

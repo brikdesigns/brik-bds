@@ -1,0 +1,56 @@
+---
+title: Close button
+description: The canonical icon-only dismiss affordance for overlays and panels.
+---
+
+CloseButton is the single dismiss control for anything that can be closed — Modal, Sheet, Toast, Banner, and any panel with an exit. It renders a fixed bold "X" glyph in a compact ghost box, so the mark reads as the dominant element of its container rather than a small icon lost in empty space. Centralizing the close glyph here means weight, size, and state tweaks land once and every overlay absorbs them.
+
+It has one appearance — no visual variants. `label` and `disabled` are the only knobs, and both are behavior, not style.
+
+## Use it for
+
+- The dismiss control in a [Modal](/docs/components/modal), [Sheet](/docs/components/sheet), or [Toast](/docs/components/toast) header
+- Dismissing a [Banner](/docs/components/banner) announcement
+- Any closable panel where "X" is the expected exit affordance
+
+Reach for a [Button](/docs/components/button) with a text label when the action needs words ("Cancel", "Done") — CloseButton is glyph-only by contract.
+
+## Import
+
+```tsx
+import { CloseButton } from '@brikdesigns/bds';
+```
+
+## Default
+
+<ComponentPreview code={`<CloseButton onClick={onClose} />`}>
+  <BDS.CloseButton />
+</ComponentPreview>
+
+Wire `onClick` to the host overlay's close callback. The glyph is `color: inherit`, so it adapts to its surface — `--text-primary` on neutral overlays, the on-color text of a tinted Banner.
+
+## Disabled
+
+<ComponentPreview code={`<CloseButton disabled />`}>
+  <BDS.CloseButton disabled />
+</ComponentPreview>
+
+## Accessibility
+
+- Icon-only, so `label` is always applied as `aria-label` (defaults to `"Close"`). Override it for context, e.g. `label="Dismiss notification"`.
+- Renders a native `<button type="button">` — full keyboard operation and focus-visible ring come for free.
+- The "X" glyph is `aria-hidden`; the accessible name comes entirely from `label`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `string` | `'Close'` |
+| `disabled` | `boolean` | `false` |
+
+Inherits all native `<button>` attributes (`onClick`, `type`, `data-*`, …) except `children` — the glyph is fixed.
+
+## Related
+
+- [Modal](/docs/components/modal), [Sheet](/docs/components/sheet), [Toast](/docs/components/toast), [Banner](/docs/components/banner) — the overlays that host it
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-close-button--overview)**

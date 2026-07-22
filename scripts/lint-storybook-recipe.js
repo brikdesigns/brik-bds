@@ -41,16 +41,22 @@ const path = require('path');
 // `<Canvas>`; excluded from the canvas check.
 const REQUIRED_SECTION_SPECS = [
   { names: ['## Default', '## Playground'], canonical: '## Default', requiresCanvas: true },
-  { names: ['## Variants'], canonical: '## Variants', requiresCanvas: true },
   { names: ['## Props'], canonical: '## Props', requiresCanvas: false },
 ];
 
-// `## Patterns` is conditionally required — present only when the component
-// has Q4 (irreducible composition) or Q5 (play-only) stories per ADR-010.
-// When present it must contain a `<Canvas>`; when absent it produces no
-// violation. The position rule still applies (between Variants and Props).
-// See #608 for the matrix-vs-recipe reconciliation.
-const CONDITIONAL_SECTIONS_WITH_CANVAS = ['## Patterns'];
+// `## Variants` and `## Patterns` are conditionally required — present only
+// when the component ships the matching story class:
+//   - `## Variants` — present iff ≥1 Q3 semantic-variant story exists. A
+//     single-appearance component (fixed glyph, one visual state — e.g.
+//     CloseButton) omits it entirely; never contrive a variant to fill it.
+//   - `## Patterns` — present iff a Q4 (irreducible composition) or Q5
+//     (play-only) story exists per ADR-010.
+// When present each must contain a `<Canvas>`; when absent it produces no
+// violation. The canonical order (Default → Variants → Patterns → Props) is
+// still enforced for whichever conditional sections are present.
+// See #608 (Patterns) and #1328 (Variants) for the matrix-vs-recipe
+// reconciliation.
+const CONDITIONAL_SECTIONS_WITH_CANVAS = ['## Variants', '## Patterns'];
 
 // Optional sections must, if present, follow `## Props` in this order.
 const OPTIONAL_SECTIONS_AFTER_PROPS = ['## CSS Override API', '## Notes'];
@@ -192,10 +198,37 @@ function lintFile(filePath) {
     });
   }
 
+  // Index of the first required section (`## Default`, or legacy `## Playground`),
+  // used to position the conditional `## Variants` section.
+  const firstSectionIdx = ['## Default', '## Playground']
+    .map((name) => h2Texts.indexOf(name))
+    .find((idx) => idx !== -1) ?? -1;
+
+  // Rule: `## Variants`, if present, sits between the first section and Props.
+  // Variants is conditional (#1328) — a single-appearance component omits it —
+  // but when authored it keeps its canonical slot.
+  const variantsIdx = h2Texts.indexOf('## Variants');
+  const propsIdxForConditional = h2Texts.indexOf('## Props');
+  if (variantsIdx !== -1) {
+    if (firstSectionIdx !== -1 && variantsIdx < firstSectionIdx) {
+      violations.push({
+        rule: 'variants-section-order',
+        message: '`## Variants` must appear after `## Default`',
+        line: h2s[variantsIdx].line,
+      });
+    }
+    if (propsIdxForConditional !== -1 && variantsIdx > propsIdxForConditional) {
+      violations.push({
+        rule: 'variants-section-order',
+        message: '`## Variants` must appear before `## Props`',
+        line: h2s[variantsIdx].line,
+      });
+    }
+  }
+
   // Rule: `## Patterns`, if present, sits between Variants and Props
   const patternsIdx = h2Texts.indexOf('## Patterns');
-  const variantsIdx = h2Texts.indexOf('## Variants');
-  const propsIdxForPatterns = h2Texts.indexOf('## Props');
+  const propsIdxForPatterns = propsIdxForConditional;
   if (patternsIdx !== -1) {
     if (variantsIdx !== -1 && patternsIdx < variantsIdx) {
       violations.push({
