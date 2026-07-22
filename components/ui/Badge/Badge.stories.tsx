@@ -5,6 +5,10 @@ import { Tag } from '../Tag/Tag';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
+/**
+ * Badge — status indicator with semantic tones and sizes.
+ * @summary Status indicator with semantic tones and sizes
+ */
 const meta: Meta<typeof Badge> = {
   title: 'Components/badge',
   component: Badge,
@@ -16,18 +20,27 @@ const meta: Meta<typeof Badge> = {
     status: {
       control: 'select',
       options: ['positive', 'warning', 'error', 'info', 'progress'],
+      description: 'Semantic status tone — drives the badge color.',
     },
     size: {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg'],
+      description:
+        'Size token (shared scale with Tag). `xs` is icon-only — text is suppressed, so pass `icon` and omit children.',
     },
     appearance: {
       control: 'select',
       options: ['solid', 'subtle'],
+      description: 'Fill appearance — `solid` (saturated bg) or `subtle` (pastel bg, saturated text).',
     },
     density: {
       control: 'select',
       options: ['comfortable', 'compact'],
+      description: '`compact` tightens horizontal padding one token-step for dense rows; height is unchanged.',
+    },
+    icon: {
+      control: false,
+      description: 'Optional leading icon (ReactNode). Required for `xs` size, which is icon-only.',
     },
   },
 };
@@ -54,30 +67,26 @@ const StatusRow = ({ children, label }: { children: React.ReactNode; label: stri
   </div>
 );
 
-/* ═══════════════════════════════════════════════════════════════
-   PLAYGROUND
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Default ─────────────────────────────────────────────────── */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Canonical badge — tweak props via Controls */
+export const Default: Story = {
   args: { children: 'New', status: 'info', size: 'md', appearance: 'solid' },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   VARIANTS — one story per status (solid appearance, md size)
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Status variants (Q3 — one per semantic tone) ────────────── */
 
-/** @summary Positive — confirmation status, e.g. published, approved, complete */
+/** @summary Positive status — published, approved, complete */
 export const Positive: Story = {
   args: { status: 'positive', children: 'Done' },
 };
 
-/** @summary Warning — caution status, e.g. draft, needs attention */
+/** @summary Warning status — draft, needs attention */
 export const Warning: Story = {
   args: { status: 'warning', children: 'Draft' },
 };
 
-/** @summary Error — failure status, e.g. failed, archived, blocked */
+/** @summary Error status — failed, archived, blocked */
 export const Error: Story = {
   args: { status: 'error', children: 'Failed' },
 };
@@ -87,37 +96,16 @@ export const Info: Story = {
   args: { status: 'info', children: 'New' },
 };
 
-/** @summary Progress — in-flight status, often paired with a spinner icon */
+/** @summary Progress — in-flight status, often with a spinner */
 export const Progress: Story = {
   args: { status: 'progress', children: 'In Progress' },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   VARIANTS — appearance + size axes (axis-only galleries)
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Size axis (the one args-lean axis gallery) ──────────────── */
 
 /**
- * Subtle appearance — softer surface, lower contrast. ADR-006 axis exception:
- * one component, the appearance axis varied across all five statuses.
- *
- * @summary Subtle appearance across all statuses
- */
-export const Subtle: Story = {
-  render: () => (
-    <Row>
-      <Badge status="positive" appearance="subtle">Done</Badge>
-      <Badge status="warning" appearance="subtle">Draft</Badge>
-      <Badge status="error" appearance="subtle">Failed</Badge>
-      <Badge status="info" appearance="subtle">New</Badge>
-      <Badge status="progress" appearance="subtle">In Progress</Badge>
-    </Row>
-  ),
-};
-
-/**
- * Sizes axis — the four size tokens (xs / sm / md / lg) on a single status.
- * `xs` is icon-only by design — it's too small for legible text. Other sizes
- * accept text or icon-prefixed text.
+ * Size axis — the four size tokens (xs / sm / md / lg) side-by-side.
+ * `xs` is icon-only (no text fits); the other sizes take text or icon + text.
  *
  * @summary All four sizes side-by-side
  */
@@ -132,58 +120,7 @@ export const Sizes: Story = {
   ),
 };
 
-/**
- * Density axis — `comfortable` (default) vs `compact` at each text size.
- * Compact tightens horizontal padding one token-step down so more badges
- * fit inline in a dense table row; height is unchanged. `xs` is icon-only
- * and unaffected, so it's omitted here.
- *
- * @summary Comfortable vs compact density across sizes
- */
-export const Density: Story = {
-  render: () => (
-    <Stack gap="var(--gap-lg)">
-      {(['sm', 'md', 'lg'] as const).map((size) => (
-        <Row key={size}>
-          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
-          <Badge size={size} status="positive" density="comfortable">Comfortable</Badge>
-          <Badge size={size} status="positive" density="compact">Compact</Badge>
-        </Row>
-      ))}
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   VARIANTS — composition (icons)
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Badge with a leading icon — tightens the semantic association */
-export const WithIcon: Story = {
-  args: {
-    status: 'positive',
-    children: 'Done',
-    icon: <Icon icon="ph:check" />,
-  },
-};
-
-/**
- * Icon-only badge at `xs` — the only legible icon-only size. Useful in
- * tight-packed lists where the icon alone communicates status.
- *
- * @summary Icon-only badge at xs size
- */
-export const IconOnly: Story = {
-  args: {
-    size: 'xs',
-    status: 'positive',
-    icon: <Icon icon="ph:check" />,
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   IRREDUCIBLE — sibling-component alignment showcase
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Patterns (Q4 irreducible + real-world composition) ──────── */
 
 /**
  * Badge and Tag share the same height at every size tier. Render-mode is
@@ -198,7 +135,7 @@ export const BadgeTagAlignment: Story = {
     <Stack>
       {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
         <Row key={size}>
-          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
+          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: 'var(--size-600)' }}>{size}</span>
           {size === 'xs' ? (
             <>
               <Badge size="xs" status="positive" icon={<Icon icon="ph:star" />} />
@@ -216,11 +153,7 @@ export const BadgeTagAlignment: Story = {
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   PATTERNS — real-world compositions
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Content lifecycle (solid) — published / in review / draft / archived */
+/** @summary Content lifecycle statuses in a settings list */
 export const ContentStatusSolid: Story = {
   render: () => (
     <Stack gap="var(--gap-lg)">
@@ -235,26 +168,6 @@ export const ContentStatusSolid: Story = {
       </StatusRow>
       <StatusRow label="Has been removed">
         <Badge status="error">Archived</Badge>
-      </StatusRow>
-    </Stack>
-  ),
-};
-
-/** @summary Content lifecycle (subtle) — same shape, lower-contrast appearance */
-export const ContentStatusSubtle: Story = {
-  render: () => (
-    <Stack gap="var(--gap-lg)">
-      <StatusRow label="Article is live and visible">
-        <Badge status="positive" appearance="subtle">Published</Badge>
-      </StatusRow>
-      <StatusRow label="Being reviewed by editor">
-        <Badge status="progress" appearance="subtle">In Review</Badge>
-      </StatusRow>
-      <StatusRow label="Saved but not published">
-        <Badge status="warning" appearance="subtle">Draft</Badge>
-      </StatusRow>
-      <StatusRow label="Has been removed">
-        <Badge status="error" appearance="subtle">Archived</Badge>
       </StatusRow>
     </Stack>
   ),
