@@ -5,7 +5,7 @@ import { About } from './About';
 const meta: Meta<typeof About> = {
   title: 'Blueprints/about',
   component: About,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web'],
   parameters: {
     layout: 'fullscreen',
     docs: {

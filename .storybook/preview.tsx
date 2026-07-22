@@ -383,7 +383,7 @@ const preview: Preview = {
             '*',
           ],
           'Cards',
-          ['card', 'card-list', 'card-testimonial', 'collapsible-card', 'pricing-card', 'product-summary-card', '*'],
+          ['card', 'card-list', 'pricing-card', 'product-summary-card', '*'],
           'Blocks',
           ['bullet-list', 'checklist', 'date-picker', 'field', 'field-grid', 'interactive-list-item', 'selectable-media-tile', 'time-picker', '*'],
           'Layouts',

@@ -40,6 +40,8 @@ export interface CollapsibleCardProps extends HTMLAttributes<HTMLDivElement> {
  *
  * Composes: Card surface + icon button + collapse state
  *
+ * @deprecated Use `<Collapsible>` directly (#701) — the Radix-backed successor. Same props; import path unchanged until removal.
+ *
  * @example
  * ```tsx
  * <CollapsibleCard

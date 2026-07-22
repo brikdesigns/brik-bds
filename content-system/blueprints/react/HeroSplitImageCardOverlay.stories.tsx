@@ -115,7 +115,7 @@ const withAudienceCascade = (Story: () => JSX.Element) => (
 const meta: Meta<typeof HeroSplitImageCardOverlay> = {
   title: 'Blueprints/hero_split_image_card_overlay',
   component: HeroSplitImageCardOverlay,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   decorators: [withAudienceCascade],
   parameters: {
     layout: 'fullscreen',

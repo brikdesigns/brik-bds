@@ -5,7 +5,7 @@ import { Cta } from './Cta';
 const meta: Meta<typeof Cta> = {
   title: 'Blueprints/cta',
   component: Cta,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web'],
   parameters: {
     layout: 'fullscreen',
     docs: {

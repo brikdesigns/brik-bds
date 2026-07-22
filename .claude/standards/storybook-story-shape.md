@@ -236,7 +236,7 @@ Components → Containers → Blocks → Layouts → Sections → Tools → * (c
 | Bucket | Role | Example members |
 | --- | --- | --- |
 | `Components/` | Single atomic primitive | button, badge, checkbox, banner, text-input, progress-stepper |
-| `Cards/` | Card-family holder — bounded surface with the "card" affordance | card, card-testimonial, collapsible-card, pricing-card, product-summary-card, card-list |
+| `Cards/` | Card-family holder — bounded surface with the "card" affordance | card, card-list, pricing-card, product-summary-card |
 | `Containers/` | Bounded holder with own border/padding/elevation (non-card) | form, accordion, sheet, table, data-view |
 | `Blocks/` | Fixed slot shape filled with atoms | field, field-grid, date-picker |
 | `Layouts/` | Pure arrangement — no styling beyond structure | stack, cluster, grid, frame, page |

@@ -6,7 +6,7 @@ import { SupportPlan } from './SupportPlan';
 const meta: Meta<typeof SupportPlan> = {
   title: 'Blueprints/support_plan',
   component: SupportPlan,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web'],
   parameters: {
     layout: 'fullscreen',
     docs: {

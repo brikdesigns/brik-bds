@@ -167,7 +167,7 @@ A sidebar-cleanup pass introduced three structural changes and two consolidation
 
 | Bucket | Change | Members |
 |---|---|---|
-| `Cards/` | **New top-level.** Groups the card-named family by name, pulled out of `Containers/` + `Layouts/`. | card, card-testimonial, collapsible-card, pricing-card, product-summary-card, card-list |
+| `Cards/` | **New top-level.** Groups the card-named family by name, pulled out of `Containers/` + `Layouts/`. | card, card-list, pricing-card, product-summary-card |
 | `Navigation/` | **Renamed from `Sections/`.** | breadcrumb, nav-bar (→ top-navigation in the follow-up rename PR), sidebar-navigation, sub-navigation, tab-bar, page-header |
 | `Blueprints/` | **Promoted to top-level** (was the `Sections/Blueprints/` subfolder). | the 16 content-system section templates + footer |
 

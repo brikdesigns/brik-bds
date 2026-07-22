@@ -6,7 +6,7 @@ import { CardGrid } from './CardGrid';
 const meta: Meta<typeof CardGrid> = {
   title: 'Blueprints/card_grid',
   component: CardGrid,
-  tags: ['surface-web', 'surface-shared'],
+  tags: ['surface-web'],
   parameters: {
     layout: 'fullscreen',
     docs: {
