@@ -1,0 +1,41 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Stack.stories';
+
+<Meta of={Stories} />
+
+# Stack
+
+<ComponentLinks slug="stack" />
+
+Stack lays out children along one axis with a consistent `gap`. Vertical by default; set `direction="horizontal"` for a row. `align` controls cross-axis alignment.
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+The axes Stack varies on: `direction`, the `gap` scale, and cross-axis `align`.
+
+### Directions
+
+<Canvas of={Stories.Directions} />
+
+### Gap scale
+
+<Canvas of={Stories.GapScale} />
+
+### Alignment
+
+<Canvas of={Stories.Alignment} />
+
+## Patterns
+
+Card body — a vertical Stack composing heading, body, and action content, a composition beyond a single Stack's args.
+
+<Canvas of={Stories.CardBody} />
+
+## Props
+
+<ArgTypes of={Stories} />

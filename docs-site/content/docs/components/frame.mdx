@@ -1,0 +1,78 @@
+---
+title: Frame
+description: Aspect-ratio box that locks a child to a fixed ratio. Use for image and media areas that must not shift as content loads.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Frame locks its child to a fixed aspect ratio so the layout reserves the space before the content paints — no shift when an image loads. `ratio` picks a named preset; `customRatio` takes any CSS `aspect-ratio`; `fit` controls how the child fills the box.
+
+## Use it for
+
+- Card and hero image areas that must hold their shape while the image loads
+- Video / embed wrappers that need a stable `16-9` or `cinema` box
+- Any media slot where a late-loading asset would otherwise cause layout shift
+
+For content that should size to its own intrinsic height, don't wrap it in a Frame — Frame exists to *impose* a ratio, not follow one.
+
+## Import
+
+```tsx
+import { Frame } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Ratio presets
+
+Named ratios cover the common cases — `1-1` / `square`, `4-3` (default), `3-2`, `16-9` / `cinema`, `photo-landscape`, `photo-portrait`. Prefer a named preset over `customRatio` when one fits.
+
+```tsx
+<Frame ratio="square">…</Frame>
+<Frame ratio="cinema">…</Frame>
+```
+
+### Custom ratio
+
+When no preset fits, `customRatio` accepts any CSS `aspect-ratio` string.
+
+```tsx
+<Frame customRatio="5 / 2">…</Frame>
+```
+
+### Fit
+
+`fit` maps to `object-fit`. `cover` (default) crops to fill; `contain` letterboxes to show the whole asset.
+
+```tsx
+<Frame ratio="4-3" fit="contain">…</Frame>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Frame imposes a ratio — it doesn't read one.** If you want an element to keep its natural height, don't wrap it. Frame is for slots whose height must be reserved ahead of content.
+</Callout>
+
+- Deprecated mode-words (`portrait`, `landscape`, `wide`, `ultrawide`) still resolve but should not be used in new code — reach for the numeric or semantic alias (`3-4`, `4-3`, `16-9`, `21-9`).
+
+## Accessibility
+
+- Renders a plain element (`<div>` by default, override with `as`) with `aspect-ratio`. It adds no semantics of its own; the child keeps its own role and alt text.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `ratio` | `'1-1' \| '3-2' \| '2-3' \| '4-3' \| '3-4' \| '4-5' \| '16-9' \| '9-16' \| '21-9' \| 'square' \| 'photo-landscape' \| 'photo-portrait' \| 'cinema'` | `'4-3'` |
+| `customRatio` | `string` (CSS `aspect-ratio`) | — |
+| `fit` | `'cover' \| 'contain' \| 'fill' \| 'none'` | `'cover'` |
+| `as` | element type | `'div'` |
+| `children` | `ReactNode` | — |
+
+Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Grid](/docs/components/grid) — arrange multiple framed cells in a grid
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/layouts-frame--playground)**
