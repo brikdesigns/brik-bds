@@ -9,7 +9,7 @@
 
 ## Context
 
-BDS components that own their anchor rendering (`NavItem` and its containers `SidebarNavigation` / `SubNavigation`, plus `Footer`, `Breadcrumb`, `TabBar`, `NavBar`, `Menu`, `Pagination`) emit a bare `<a href>`. In a Next.js / Remix consumer this triggers a **full-page reload on every nav click** instead of client-side routing, and loses automatic prefetch. brik-client-portal is in production with this regression today (#379); brikdesigns.com hit it on the Footer migration (#462).
+BDS components that own their anchor rendering (`NavItem` and its containers `SidebarNavigation` / `SubNavigation`, plus `Footer`, `Breadcrumb`, `TabBar`, `TopNavigation`, `Menu`, `Pagination`) emit a bare `<a href>`. In a Next.js / Remix consumer this triggers a **full-page reload on every nav click** instead of client-side routing, and loses automatic prefetch. brik-client-portal is in production with this regression today (#379); brikdesigns.com hit it on the Footer migration (#462).
 
 The fix is not per-component styling — it is one **API contract** every link-emitting component adopts: an injectable component to render in place of the default `<a>`. Deciding it once keeps the surface area consistent and lets the remaining components migrate one PR at a time without re-litigating the shape each time.
 
@@ -45,7 +45,7 @@ Rules:
 ## Consequences
 
 - **Non-breaking, opt-in.** Existing call sites are unchanged; the prop is additive with an `<a>` default.
-- **Establishes the pattern for the umbrella.** #379 (NavItem + SidebarNavigation + SubNavigation) ships first. Footer, Breadcrumb, TabBar, NavBar, Menu, and Pagination each migrate in their own PR referencing this ADR — same prop name, same type, same dispatch rule.
+- **Establishes the pattern for the umbrella.** #379 (NavItem + SidebarNavigation + SubNavigation) ships first. Footer, Breadcrumb, TabBar, TopNavigation, Menu, and Pagination each migrate in their own PR referencing this ADR — same prop name, same type, same dispatch rule.
 - **Consumer migration is a swap, not a rewrite.** brik-client-portal drops its `aside nav a { cursor }` workaround and passes `linkComponent={Link}`. renew-pms can retire the routing-control reasons it rolls its own `AppSidebar`.
 - **The `BdsLinkComponent` type is exported** from the package so consumers and future BDS components share one definition.
 

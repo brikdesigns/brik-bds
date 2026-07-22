@@ -64,7 +64,7 @@ export * from './Menu';
 export * from './Meter';
 export * from './Modal';
 export * from './MultiSelect';
-export * from './NavBar';
+export * from './TopNavigation';
 export * from './NavItem';
 export * from './NotificationList';
 export * from './Page';

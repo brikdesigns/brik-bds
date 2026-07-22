@@ -1,12 +1,12 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { type BdsLinkComponent } from '../NavItem';
 import { bdsClass } from '../../utils';
-import './NavBar.css';
+import './TopNavigation.css';
 
 /**
  * Navigation link item
  */
-export interface NavBarLink {
+export interface TopNavigationLink {
   /** Display label */
   label: string;
   /** Link URL */
@@ -16,13 +16,13 @@ export interface NavBarLink {
 }
 
 /**
- * NavBar component props
+ * TopNavigation component props
  */
-export interface NavBarProps extends HTMLAttributes<HTMLElement> {
+export interface TopNavigationProps extends HTMLAttributes<HTMLElement> {
   /** Logo element (image, SVG, or text) */
   logo: ReactNode;
   /** Navigation links */
-  links?: NavBarLink[];
+  links?: TopNavigationLink[];
   /** Right-side actions (buttons, dropdowns) */
   actions?: ReactNode;
   /** Sticky positioning */
@@ -39,7 +39,7 @@ export interface NavBarProps extends HTMLAttributes<HTMLElement> {
  * Renders a nav link via the injected `linkComponent` (client-side routing) or
  * a bare `<a>` when none is provided. See ADR-012.
  */
-function NavBarLinkItem({
+function TopNavigationLinkItem({
   linkComponent: LinkComponent,
   href,
   className,
@@ -67,14 +67,14 @@ function NavBarLinkItem({
 }
 
 /**
- * NavBar - BDS horizontal top navigation bar
+ * TopNavigation - BDS horizontal top navigation bar
  *
  * A responsive navigation bar with logo, links, and optional action area.
  * Matches the Webflow .navbar component structure.
  *
  * @example
  * ```tsx
- * <NavBar
+ * <TopNavigation
  *   logo={<img src="/logo.svg" alt="Logo" height={32} />}
  *   links={[
  *     { label: 'Home', href: '/', active: true },
@@ -87,7 +87,7 @@ function NavBarLinkItem({
  *
  * @summary Horizontal top navigation bar with brand and links
  */
-export function NavBar({
+export function TopNavigation({
   logo,
   links = [],
   actions,
@@ -96,41 +96,41 @@ export function NavBar({
   className = '',
   style,
   ...props
-}: NavBarProps) {
+}: TopNavigationProps) {
   return (
     <nav
       className={bdsClass(
-        'bds-nav-bar',
-        sticky ? 'bds-nav-bar--sticky' : undefined,
+        'bds-top-navigation',
+        sticky ? 'bds-top-navigation--sticky' : undefined,
         className,
       )}
       style={style}
       {...props}
     >
-      <div className="bds-nav-bar__left">
-        <div className="bds-nav-bar__logo">{logo}</div>
+      <div className="bds-top-navigation__left">
+        <div className="bds-top-navigation__logo">{logo}</div>
         {links.length > 0 && (
-          <div className="bds-nav-bar__links">
+          <div className="bds-top-navigation__links">
             {links.map((link) => (
-              <NavBarLinkItem
+              <TopNavigationLinkItem
                 key={link.href}
                 linkComponent={linkComponent}
                 href={link.href}
                 className={bdsClass(
-                  'bds-nav-bar__link',
-                  link.active ? 'bds-nav-bar__link--active' : undefined,
+                  'bds-top-navigation__link',
+                  link.active ? 'bds-top-navigation__link--active' : undefined,
                 )}
                 ariaCurrent={link.active ? 'page' : undefined}
               >
                 {link.label}
-              </NavBarLinkItem>
+              </TopNavigationLinkItem>
             ))}
           </div>
         )}
       </div>
-      {actions && <div className="bds-nav-bar__actions">{actions}</div>}
+      {actions && <div className="bds-top-navigation__actions">{actions}</div>}
     </nav>
   );
 }
 
-export default NavBar;
+export default TopNavigation;

@@ -49,7 +49,7 @@ const CONSUMERS = [
 // Excluded from adoption tracking to avoid false negatives.
 const WEBSITE_ONLY = new Set([
   'Footer',
-  'NavBar',
+  'TopNavigation',
   'PricingCard',
   'CardFeature',
   'CardTestimonial',

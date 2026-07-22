@@ -389,7 +389,7 @@ const preview: Preview = {
           'Layouts',
           ['cluster', 'frame', 'grid', 'page', 'stack', '*'],
           'Navigation',
-          ['breadcrumb', 'nav-bar', 'page-header', 'sidebar-navigation', 'sub-navigation', 'tab-bar', '*'],
+          ['breadcrumb', 'top-navigation', 'page-header', 'sidebar-navigation', 'sub-navigation', 'tab-bar', '*'],
           'Blueprints',
           ['*'],
           'Tools',

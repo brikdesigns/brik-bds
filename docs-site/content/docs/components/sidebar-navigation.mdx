@@ -7,14 +7,14 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 SidebarNavigation is the canonical app shell sidebar. Fixed position, vertical layout, four labeled regions (logo, nav items, footer actions, user section). Use for apps with persistent navigation that benefits from being always-visible.
 
-For top-bar navigation in marketing sites, use [NavBar](/docs/components/nav-bar). For tab-style section navigation within a page, use [TabBar](/docs/components/tab-bar).
+For top-bar navigation in marketing sites, use [TopNavigation](/docs/components/top-navigation). For tab-style section navigation within a page, use [TabBar](/docs/components/tab-bar).
 
 ## Use it for
 
 - Application chrome where navigation should always be visible
 - Settings shells with many sections
 - Dashboards with primary + secondary + utility sections
-- Any layout where ≥5 nav items would overflow a horizontal NavBar
+- Any layout where ≥5 nav items would overflow a horizontal TopNavigation
 
 ## Import
 
@@ -91,11 +91,11 @@ Default is `260px`. Override for compact (icon-only) or wide layouts.
 ## When *not* to use
 
 <Callout type="warn">
-  **Don't use SidebarNavigation for marketing sites.** Use [NavBar](/docs/components/nav-bar) — top-bar nav matches what visitors expect on a website. Sidebars are for apps where users spend extended time.
+  **Don't use SidebarNavigation for marketing sites.** Use [TopNavigation](/docs/components/top-navigation) — top-bar nav matches what visitors expect on a website. Sidebars are for apps where users spend extended time.
 </Callout>
 
-- **Don't use SidebarNavigation for ≤3 nav items.** Use [NavBar](/docs/components/nav-bar) — a tall sidebar with 2 items reads as wasted space.
-- **Don't pair SidebarNavigation with NavBar in the same layout.** Pick one primary nav surface; secondary nav goes inside the main content area as TabBar / Breadcrumb.
+- **Don't use SidebarNavigation for ≤3 nav items.** Use [TopNavigation](/docs/components/top-navigation) — a tall sidebar with 2 items reads as wasted space.
+- **Don't pair SidebarNavigation with TopNavigation in the same layout.** Pick one primary nav surface; secondary nav goes inside the main content area as TabBar / Breadcrumb.
 
 ## Accessibility
 
@@ -129,7 +129,7 @@ interface SidebarNavItem {
 
 ## Related
 
-- [NavBar](/docs/components/nav-bar) — top-bar alternative for marketing sites
+- [TopNavigation](/docs/components/top-navigation) — top-bar alternative for marketing sites
 - [TabBar](/docs/components/tab-bar) — secondary section navigation inside the main content area
 - [Breadcrumb](/docs/components/breadcrumb) — hierarchical position within a section
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-sidebar-navigation--overview)**

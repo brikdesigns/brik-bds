@@ -5,7 +5,7 @@ description: Navigation trail showing current page location within a hierarchy.
 
 Breadcrumb shows where the user is in a hierarchical structure — Home → Products → Design System → Button. Each crumb (except the last) is a link back up the tree; the last is plain text marked as the current page.
 
-For sibling navigation between sections, use [TabBar](/docs/components/tab-bar). For flat top-level nav, use [NavBar](/docs/components/nav-bar) or [SidebarNavigation](/docs/components/sidebar-navigation).
+For sibling navigation between sections, use [TabBar](/docs/components/tab-bar). For flat top-level nav, use [TopNavigation](/docs/components/top-navigation) or [SidebarNavigation](/docs/components/sidebar-navigation).
 
 ## Use it for
 
@@ -66,7 +66,7 @@ For 5+ level hierarchies, consider truncating with an ellipsis or root-only fall
 ## When *not* to use
 
 - **Don't use Breadcrumb when there's no hierarchy.** Single-level apps don't benefit — drop the trail entirely.
-- **Don't use Breadcrumb as primary navigation.** It's a contextual aid, not a nav bar. Use [NavBar](/docs/components/nav-bar) / [SidebarNavigation](/docs/components/sidebar-navigation) for primary nav.
+- **Don't use Breadcrumb as primary navigation.** It's a contextual aid, not a nav bar. Use [TopNavigation](/docs/components/top-navigation) / [SidebarNavigation](/docs/components/sidebar-navigation) for primary nav.
 - **Don't make the last item a link.** It represents the current page; clicking it would reload to itself.
 
 ## Accessibility
@@ -97,6 +97,6 @@ interface BreadcrumbItem {
 ## Related
 
 - [TabBar](/docs/components/tab-bar) — sibling-section navigation
-- [NavBar](/docs/components/nav-bar) — top-level primary nav
+- [TopNavigation](/docs/components/top-navigation) — top-level primary nav
 - [SidebarNavigation](/docs/components/sidebar-navigation) — vertical primary nav
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-breadcrumb--overview)**
