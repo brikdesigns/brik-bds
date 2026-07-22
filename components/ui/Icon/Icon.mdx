@@ -1,0 +1,27 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Icon.stories';
+
+<Meta of={Stories} />
+
+# Icon
+
+<ComponentLinks slug="icons" name="Icon" />
+
+Offline-first Iconify wrapper. Phosphor (`ph:*`) icons render from a subset bundled into the BDS package, so first paint never waits on — or silently fails against — the Iconify CDN. Drop-in replacement for `@iconify/react`'s `Icon`.
+
+## Playground
+
+<Canvas of={Stories.Playground} />
+
+## Variants
+
+### Bundled set
+
+Every icon in the offline subset — each renders with the network blocked. The subset is generated from the `ph:*` icons used across shipped BDS source (`npm run gen:icons`, CI-gated).
+
+<Canvas of={Stories.BundledSet} />
+
+## Props
+
+<ArgTypes of={Stories} />
