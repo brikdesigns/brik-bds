@@ -296,3 +296,33 @@ export const PriceCtaActionButton: Story = {
     await userEvent.click(cta);
   },
 };
+
+/**
+ * @summary Price-suppressed card (#500) — omit `priceCard.price`/`priceLabel`
+ * to render the deliverable image + CTA with no price overlay text. The
+ * blueprint guards both the label (`priceLabel && price`) and the value
+ * (`price`), so a priceCard carrying only an image and a CTA renders an
+ * image-and-action card — the shape for services with no fixed/published price.
+ */
+export const NoPrice: Story = {
+  args: {
+    ...baseProps,
+    section: {
+      ...interiorHeroSection,
+      sectionKey: 'hero-img-card-no-price',
+      priceCard: {
+        imageUrl: 'https://placehold.co/600x600/eaf1fb/1f3d70?text=Deliverable',
+        imageAlt: '',
+        cta: { label: 'Request a quote', url: '#contact' },
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Price text is suppressed — neither the label nor the value renders...
+    await expect(canvasElement.querySelector('.bds-hero__price-label')).toBeNull();
+    await expect(canvasElement.querySelector('.bds-hero__price-value')).toBeNull();
+    // ...while the image card and its CTA still render.
+    await expect(canvas.getByRole('link', { name: 'Request a quote' })).toBeVisible();
+  },
+};
