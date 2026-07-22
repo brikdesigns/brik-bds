@@ -23,16 +23,16 @@ import { CloseButton } from '@brikdesigns/bds';
 
 ## Default
 
-<ComponentPreview code={`<BDS.CloseButton onClick={() => {}} />`}>
-  <BDS.CloseButton onClick={() => {}} />
+<ComponentPreview code={`<CloseButton onClick={onClose} />`}>
+  <BDS.CloseButton />
 </ComponentPreview>
 
-The glyph is `color: inherit`, so it adapts to its surface — `--text-primary` on neutral overlays, the on-color text of a tinted Banner.
+Wire `onClick` to the host overlay's close callback. The glyph is `color: inherit`, so it adapts to its surface — `--text-primary` on neutral overlays, the on-color text of a tinted Banner.
 
 ## Disabled
 
-<ComponentPreview code={`<BDS.CloseButton disabled onClick={() => {}} />`}>
-  <BDS.CloseButton disabled onClick={() => {}} />
+<ComponentPreview code={`<CloseButton disabled />`}>
+  <BDS.CloseButton disabled />
 </ComponentPreview>
 
 ## Accessibility
