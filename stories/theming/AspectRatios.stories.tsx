@@ -133,7 +133,7 @@ const Card = ({
     >
       <code
         style={{
-          fontFamily: 'var(--font-family-code, ui-monospace, monospace)',
+          fontFamily: 'ui-monospace, monospace',
           fontSize: 'var(--body-xs)', // bds-lint-ignore
           color: 'var(--text-primary)',
         }}
@@ -241,7 +241,7 @@ export const FrameSlugs: Story = {
             />
             <code
               style={{
-                fontFamily: 'var(--font-family-code, ui-monospace, monospace)',
+                fontFamily: 'ui-monospace, monospace',
                 fontSize: 'var(--body-xs)', // bds-lint-ignore
                 color: 'var(--text-primary)',
               }}
