@@ -13,28 +13,24 @@ import { Features } from './Features';
  */
 const serviceLineCascadeStyles = `
 [data-service-line='brand'] {
-  --background-brand-primary: var(--theme-yellow-yellow-light);
-  --brand-primary: var(--theme-yellow-yellow-light);
-  --text-brand-primary: var(--theme-yellow-yellow-dark);
+  --background-brand-primary: var(--color-yellow-light);
+  --text-brand-primary: var(--color-yellow-dark);
 }
 [data-service-line='marketing'] {
-  --background-brand-primary: var(--theme-green-green-light);
-  --brand-primary: var(--theme-green-green-light);
-  --text-brand-primary: var(--theme-green-green-dark);
+  --background-brand-primary: var(--color-green-light);
+  --text-brand-primary: var(--color-green-dark);
 }
 [data-service-line='information'] {
   --background-brand-primary: var(--color-blue-light);
   --text-brand-primary: var(--color-blue-dark);
 }
 [data-service-line='product'] {
-  --background-brand-primary: var(--theme-purple-purple-light);
-  --brand-primary: var(--theme-purple-purple-light);
-  --text-brand-primary: var(--theme-purple-purple-dark);
+  --background-brand-primary: var(--color-purple-light);
+  --text-brand-primary: var(--color-purple-dark);
 }
 [data-service-line='service'] {
-  --background-brand-primary: var(--theme-orange-orange-light);
-  --brand-primary: var(--theme-orange-orange-light);
-  --text-brand-primary: var(--theme-orange-orange-dark);
+  --background-brand-primary: var(--color-orange-light);
+  --text-brand-primary: var(--color-orange-dark);
 }
 `;
 
@@ -55,6 +51,20 @@ const items = [
   },
   {
     title: 'Capability three',
+    description:
+      'A two-line card description that sets the type rhythm without competing with the title.',
+    href: '#',
+    serviceLine: 'information' as const,
+  },
+  {
+    title: 'Capability four',
+    description:
+      'A two-line card description that sets the type rhythm without competing with the title.',
+    href: '#',
+    serviceLine: 'product' as const,
+  },
+  {
+    title: 'Capability five',
     description:
       'A two-line card description that sets the type rhythm without competing with the title.',
     href: '#',
@@ -91,7 +101,7 @@ type Story = StoryObj<typeof Features>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Playground — three audience-distinct cards, the canonical fixture.
+ * @summary Playground — five audience-distinct cards, one per service-line.
  */
 export const Playground: Story = {
   args: {
@@ -103,7 +113,7 @@ export const Playground: Story = {
 };
 
 /**
- * @summary Wrapped — four+ cards force the grid to a second row.
+ * @summary Wrapped — six cards force the grid to a second row.
  *
  * Distinct meaningful state from `Playground`: the row-wrap behavior at the
  * desktop breakpoint is the layout property worth verifying. Per-card content
@@ -118,11 +128,11 @@ export const Wrapped: Story = {
     items: [
       ...items,
       {
-        title: 'Capability four',
+        title: 'Capability six',
         description:
           'A two-line card description that sets the type rhythm without competing with the title.',
         href: '#',
-        serviceLine: 'information' as const,
+        serviceLine: 'brand' as const,
       },
     ],
   },

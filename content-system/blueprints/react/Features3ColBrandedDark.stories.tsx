@@ -18,28 +18,24 @@ import { baseTheme, baseClientFacts } from './_fixtures';
  */
 const serviceLineCascadeStyles = `
 [data-service-line='brand'] {
-  --background-brand-primary: var(--theme-yellow-yellow-light);
-  --brand-primary: var(--theme-yellow-yellow-light);
-  --text-brand-primary: var(--theme-yellow-yellow-dark);
+  --background-brand-primary: var(--color-yellow-light);
+  --text-brand-primary: var(--color-yellow-dark);
 }
 [data-service-line='marketing'] {
-  --background-brand-primary: var(--theme-green-green-light);
-  --brand-primary: var(--theme-green-green-light);
-  --text-brand-primary: var(--theme-green-green-dark);
+  --background-brand-primary: var(--color-green-light);
+  --text-brand-primary: var(--color-green-dark);
 }
 [data-service-line='information'] {
   --background-brand-primary: var(--color-blue-light);
   --text-brand-primary: var(--color-blue-dark);
 }
 [data-service-line='product'] {
-  --background-brand-primary: var(--theme-purple-purple-light);
-  --brand-primary: var(--theme-purple-purple-light);
-  --text-brand-primary: var(--theme-purple-purple-dark);
+  --background-brand-primary: var(--color-purple-light);
+  --text-brand-primary: var(--color-purple-dark);
 }
 [data-service-line='service'] {
-  --background-brand-primary: var(--theme-orange-orange-light);
-  --brand-primary: var(--theme-orange-orange-light);
-  --text-brand-primary: var(--theme-orange-orange-dark);
+  --background-brand-primary: var(--color-orange-light);
+  --text-brand-primary: var(--color-orange-dark);
 }
 `;
 
