@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { JSX } from 'react';
 
 import { Features3ColBrandedDark } from './Features3ColBrandedDark';
 import type { BlueprintProps } from '../astro/types';
@@ -108,6 +109,11 @@ const meta: Meta<typeof Features3ColBrandedDark> = {
   component: Features3ColBrandedDark,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   decorators: [withAudienceCascade],
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -127,18 +133,18 @@ type Story = StoryObj<typeof Features3ColBrandedDark>;
 /**
  * @summary Three cards — the canonical 3-column features fixture.
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: baseProps,
 };
 
 /**
- * @summary Wrapped — four+ cards force the grid to a second row.
- *
- * Distinct meaningful state from `Playground` because the row-wrap
+ * Distinct meaningful state from `Default` because the row-wrap
  * behavior at the desktop breakpoint is the layout property worth
  * verifying. Per-card content variants (missing image, audience
  * accent) are exercised by the leaf component stories, not duplicated
  * here.
+ *
+ * @summary Four+ cards force the grid to a second row
  */
 export const Wrapped: Story = {
   args: {

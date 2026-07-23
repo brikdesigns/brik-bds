@@ -46,6 +46,11 @@ const meta: Meta<typeof HeroSplit6040> = {
   title: 'Blueprints/hero_split_60_40',
   component: HeroSplit6040,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+  },
   parameters: { layout: 'fullscreen' },
 };
 
@@ -61,7 +66,7 @@ export const Default: Story = {
   },
 };
 
-/** @summary Missing image — shows the data-content-needed stub for CI grep. */
+/** @summary Missing image — data-content-needed stub for CI grep */
 export const MissingHeroImage: Story = {
   args: {
     section,

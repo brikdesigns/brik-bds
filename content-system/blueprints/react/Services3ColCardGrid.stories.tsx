@@ -93,6 +93,11 @@ const meta: Meta<typeof Services3ColCardGrid> = {
   title: 'Blueprints/services_3col_card_grid',
   component: Services3ColCardGrid,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -112,7 +117,7 @@ type Story = StoryObj<typeof Services3ColCardGrid>;
 /**
  * @summary Six service cards — the canonical fixture.
  *
- * Single Playground story per ADR-006: shape-only blueprint stories
+ * Single Default story per ADR-006: shape-only blueprint stories
  * carry one canonical state, not a fan-out of content variations.
  * Per-card affordances (`hasOptions`, missing `imageUrl`, accent
  * `category`) are exercised by the leaf component stories
@@ -120,6 +125,6 @@ type Story = StoryObj<typeof Services3ColCardGrid>;
  * Theme (light/dark/client-sim) is switched via the Theme Switcher
  * toolbar; atmosphere variants are not encoded as separate stories.
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: baseProps,
 };
