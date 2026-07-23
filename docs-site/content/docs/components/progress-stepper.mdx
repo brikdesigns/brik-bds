@@ -100,9 +100,9 @@ Restrict navigation to sequential steps — clicking a future step beyond `activ
 
 ## Accessibility
 
-- Renders an `<ol>` with `aria-label` describing the flow.
-- Active step carries `aria-current="step"`.
-- `onStepClick` makes each step a real `<button>` — keyboard navigation, focus ring all work.
+- The steps variant renders a `<nav role="list" aria-label="Progress">`; the dots variant renders a `<nav role="tablist">`.
+- Active step carries `aria-current="step"` (steps variant); the dots variant marks it `aria-selected`.
+- With `onStepClick`, each step becomes keyboard-operable — the steps variant uses a `role="button"` element with `tabindex` + `Enter` / `Space` handling and a focus ring; the dots variant uses a real `<button>`.
 - `linear` mode disables future steps via `aria-disabled` so assistive tech announces the constraint.
 
 ## API

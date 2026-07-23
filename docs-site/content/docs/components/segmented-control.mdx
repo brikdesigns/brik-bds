@@ -115,10 +115,9 @@ SegmentedControl tolerates up to ~5 segments before the labels feel cramped. Bey
 
 ## Accessibility
 
-- Renders a `<div role="tablist">` with each segment as `<button role="tab">`.
-- The selected segment carries `aria-selected="true"`; unselected carry `false`.
-- Keyboard arrows move selection between segments.
-- Items can carry their own `aria-label` for icon-only segments.
+- Renders a `<div role="radiogroup">` with each segment as `<button role="radio">` — the correct pattern for a single-select, mutually-exclusive control.
+- The selected segment carries `aria-checked="true"`; unselected carry `false`.
+- Keyboard arrows move selection between segments, with `Home` / `End` and roving `tabindex` so only the active segment is in the tab order.
 
 ## API
 

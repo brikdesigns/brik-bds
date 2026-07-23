@@ -64,10 +64,9 @@ const [count, setCount] = useState(1);
 
 ## Accessibility
 
-- Renders a `<div>` containing an `<input type="number">` plus two `<button>`s.
-- The buttons carry `aria-label="Decrement"` / `aria-label="Increment"`.
-- Keyboard arrows on the input itself increment/decrement (native number-input behavior).
-- `min` and `max` map to `aria-valuemin` / `aria-valuemax`.
+- Renders a `<div role="group">` containing two `<button>`s and a value `<span>` (with `aria-live="polite"` so the value is announced on change). There is no `<input>` element.
+- The buttons carry `aria-label="Decrease"` / `aria-label="Increase"`.
+- Keyboard: `Tab` to each button, `Enter` / `Space` to activate. Arrow-key increment and `spinbutton` value semantics (`aria-valuenow` / `-valuemin` / `-valuemax`) are not yet implemented — tracked as source work.
 
 ## API
 
