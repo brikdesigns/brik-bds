@@ -114,8 +114,8 @@ Set `disabled: true` on individual items.
 
 - Renders a `<div role="tablist">` with each tab as `<button role="tab">`.
 - Active tab carries `aria-selected="true"`.
-- Keyboard arrow keys move focus between tabs (left/right or up/down per orientation).
-- Disabled tabs use `aria-disabled` and skip in keyboard nav.
+- Tabs are reachable with `Tab`; `Enter` / `Space` activate. Arrow-key roving between tabs is not yet implemented — tracked as source work.
+- Disabled tabs use the native `disabled` attribute, which removes them from the tab order.
 
 ## API
 
