@@ -25,7 +25,7 @@ const meta: Meta<typeof Avatar> = {
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg', 'xl'],
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
       description: 'Size token. Default `md`.',
     },
     status: {

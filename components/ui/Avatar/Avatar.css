@@ -32,6 +32,7 @@
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — Figma-driven avatar dimensions, no semantic size token */
 
+.bds-avatar--xs { width: 24px; height: 24px; font-size: var(--body-xs); }
 .bds-avatar--sm { width: 32px; height: 32px; font-size: var(--body-xs); }
 .bds-avatar--md { width: 40px; height: 40px; font-size: var(--body-sm); }
 .bds-avatar--lg { width: 48px; height: 48px; font-size: var(--body-md); }
@@ -57,6 +58,7 @@
   border: var(--border-width-lg) solid var(--background-input);
 }
 
+.bds-avatar--xs .bds-avatar__status,
 .bds-avatar--sm .bds-avatar__status { width: 8px; height: 8px; }
 .bds-avatar--md .bds-avatar__status { width: 10px; height: 10px; }
 .bds-avatar--lg .bds-avatar__status,
