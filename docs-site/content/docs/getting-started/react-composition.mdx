@@ -27,27 +27,27 @@ Maps Figma style names to CSS-custom-property references. **One leaf = one `var(
 
 ```ts title="src/lib/tokens.ts"
 export const font = {
-  family: { body: 'var(--_typography---font-family--body)', /* ... */ },
+  family: { body: 'var(--font-family-body)', heading: 'var(--font-family-heading)', label: 'var(--font-family-label)' /* ... */ },
   size: {
-    body: { xs: 'var(--_typography---body--xs)', sm: 'var(--_typography---body--sm)', md: 'var(--_typography---body--md-base)' /* ... */ },
-    label: { sm: 'var(--_typography---label--sm)', md: 'var(--_typography---label--md-base)' /* ... */ },
-    heading: { small: 'var(--_typography---heading--small)', medium: 'var(--_typography---heading--medium)' /* ... */ },
+    body: { xs: 'var(--body-xs)', sm: 'var(--body-sm)', md: 'var(--body-md)', lg: 'var(--body-lg)' /* ... */ },
+    label: { sm: 'var(--label-sm)', md: 'var(--label-md)' /* ... */ },
+    heading: { small: 'var(--heading-sm)', medium: 'var(--heading-md)' /* ... */ },
   },
-  lineHeight: { tight: 'var(--font-line-height--100)', normal: 'var(--font-line-height--150)' /* ... */ },
+  lineHeight: { tight: 'var(--font-line-height-tight)', normal: 'var(--font-line-height-normal)' /* ... */ },
   weight: { light: 300, regular: 400, medium: 500, semibold: 600, bold: 700 },
 } as const;
 
 export const color = {
-  text: { primary: 'var(--_color---text--primary)', secondary: 'var(--_color---text--secondary)', muted: 'var(--_color---text--muted)' /* ... */ },
-  surface: { primary: 'var(--_color---surface--primary)' /* ... */ },
-  border: { default: 'var(--_color---border--default)', muted: 'var(--_color---border--muted)' /* ... */ },
+  text: { primary: 'var(--text-primary)', secondary: 'var(--text-secondary)', muted: 'var(--text-muted)' /* ... */ },
+  surface: { primary: 'var(--surface-primary)' /* ... */ },
+  border: { primary: 'var(--border-primary)', muted: 'var(--border-muted)' /* ... */ },
 } as const;
 
-export const space = { none: 'var(--_space---none)', xs: 'var(--_space---xs)', sm: 'var(--_space---sm)', md: 'var(--_space---md)', lg: 'var(--_space---lg)' /* ... */ } as const;
-export const gap = { none: 'var(--_space---gap--none)', xs: 'var(--_space---gap--xs)', sm: 'var(--_space---gap--sm)', md: 'var(--_space---gap--md)' /* ... */ } as const;
+export const space = { none: 'var(--padding-none)', xs: 'var(--padding-xs)', sm: 'var(--padding-sm)', md: 'var(--padding-md)', lg: 'var(--padding-lg)' /* ... */ } as const;
+export const gap = { none: 'var(--gap-none)', xs: 'var(--gap-xs)', sm: 'var(--gap-sm)', md: 'var(--gap-md)' /* ... */ } as const;
 export const border = {
-  width: { sm: 'var(--_border-width---sm)' /* ... */ },
-  radius: { sm: 'var(--_border-radius---sm)' /* ... */ },
+  width: { sm: 'var(--border-width-sm)' /* ... */ },
+  radius: { sm: 'var(--border-radius-sm)' /* ... */ },
 } as const;
 ```
 
@@ -93,7 +93,7 @@ Single ReactMarkdown configuration for any markdown content in the app. Built fr
 'use client';
 import ReactMarkdown from 'react-markdown';
 import { text, heading, list } from '@/lib/styles';
-import { font, color, space, gap } from '@/lib/tokens';
+import { font, color, space, gap, border } from '@/lib/tokens';
 
 export function Prose({ content }: { content: string }) {
   return (
@@ -106,7 +106,7 @@ export function Prose({ content }: { content: string }) {
         ol: ({ children }) => <ol style={{ ...list.ul, listStyleType: 'decimal' }}>{children}</ol>,
         li: ({ children }) => <li style={list.li}>{children}</li>,
         strong: ({ children }) => <strong style={{ fontWeight: font.weight.semibold }}>{children}</strong>,
-        hr: () => <hr style={{ border: 'none', borderTop: `var(--_border-width---sm) solid ${color.border.muted}`, margin: `${space.lg} 0` }} />,
+        hr: () => <hr style={{ border: 'none', borderTop: `${border.width.sm} solid ${color.border.muted}`, margin: `${space.lg} 0` }} />,
       }}>{content}</ReactMarkdown>
     </div>
   );
