@@ -355,7 +355,8 @@
     ],
     "appearance": [
       "solid",
-      "subtle"
+      "subtle",
+      "muted"
     ]
   },
   "TaskConsole": {

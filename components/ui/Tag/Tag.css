@@ -46,6 +46,15 @@
   border: var(--border-width-md) solid var(--border-secondary);
 }
 
+/* Quiet neutral fill — low-emphasis category label. Same AA-cleared
+   pairing as Badge `info` (`--background-status-neutral` +
+   `--text-status-neutral`) — do NOT use `--text-muted` here, it fails
+   WCAG AA (1.87:1, see Select.css). */
+.bds-tag--muted {
+  background-color: var(--background-status-neutral);
+  color: var(--text-status-neutral);
+}
+
 /* ─── Sizes (shared scale with Badge) ────────────────────────── */
 
 .bds-tag--xs {
