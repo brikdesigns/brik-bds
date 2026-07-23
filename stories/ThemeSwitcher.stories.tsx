@@ -291,9 +291,14 @@ function ThemePreview({ themeNum, isActive }: { themeNum: ThemeNumber; isActive:
   );
 }
 
+/**
+ * Live theme demo — reads the active theme from the toolbar global.
+ * @summary Theme system demo driven by the toolbar
+ */
 const meta: Meta<typeof ThemeDemo> = {
   title: 'Overview/Theme Switcher',
   component: ThemeDemo,
+  tags: ['surface-shared'],
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -311,16 +316,10 @@ const meta: Meta<typeof ThemeDemo> = {
 export default meta;
 type Story = StoryObj<typeof ThemeDemo>;
 
+/**
+ * Switch themes with the toolbar `theme` global — per-theme story exports would
+ * duplicate that Q1 axis (ADR-010 anti-pattern), so this is the only story.
+ *
+ * @summary Theme demo — switch via the toolbar global
+ */
 export const Default: Story = {};
-
-export const BrikBrand: Story = {
-  globals: { themeNumber: 'brik' },
-};
-
-export const BrikDark: Story = {
-  globals: { themeNumber: 'brik-dark' },
-};
-
-export const ClientSim: Story = {
-  globals: { themeNumber: 'client-sim' },
-};

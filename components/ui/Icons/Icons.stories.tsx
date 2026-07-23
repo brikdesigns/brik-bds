@@ -60,9 +60,11 @@ const IconsReference = () => <div />;
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof IconsReference> = {
-  title: 'Foundation/Assets/icons',
+  title: 'Tools/icons',
   component: IconsReference,
-  tags: ['surface-shared'],
+  // Browsable icon catalog, not a component — hidden from MCP discovery so
+  // consumer-repo agents don't pick it as a primitive (#1314).
+  tags: ['surface-shared', '!manifest'],
   parameters: {
     layout: 'padded',
     docs: { toc: true },

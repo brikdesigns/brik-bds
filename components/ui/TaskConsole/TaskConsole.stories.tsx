@@ -3,15 +3,24 @@ import { useState, useEffect, useCallback } from 'react';
 import { TaskConsole, type TaskConsoleItem } from './TaskConsole';
 import { Button } from '../Button';
 
+/**
+ * Floating task console — progress checklist for long-running background work.
+ * @summary Floating progress console for long-running tasks
+ */
 const meta: Meta<typeof TaskConsole> = {
   title: 'Containers/task-console',
   component: TaskConsole,
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
-    position: { control: 'select', options: ['bottom-right', 'bottom-left'] },
-    defaultCollapsed: { control: 'boolean' },
-    autoDismissDelay: { control: 'number' },
+    title: { control: 'text', description: 'Console header title (e.g. "Generating 14 pages").' },
+    subtitle: { control: 'text', description: 'Optional subtitle (e.g. "Less than a minute left").' },
+    items: { control: false, description: 'Task items to display, each with `id` / `label` / `status` / optional `detail`.' },
+    isOpen: { control: 'boolean', description: 'Whether the console is visible.' },
+    position: { control: 'select', options: ['bottom-right', 'bottom-left'], description: 'Screen corner the console anchors to.' },
+    defaultCollapsed: { control: 'boolean', description: 'Start collapsed (header only, items hidden).' },
+    autoDismissDelay: { control: 'number', description: 'Auto-dismiss delay (ms) after all items complete. `0` = no auto-dismiss.' },
+    onDismiss: { control: false, description: 'Called when the close button is clicked.' },
   },
 };
 
@@ -32,8 +41,6 @@ const Page = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-/* ─── Static examples ────────────────────────────────────────── */
-
 const contentPages: TaskConsoleItem[] = [
   { id: '1', label: 'About', status: 'completed' },
   { id: '2', label: 'Healthcare Real Estate', status: 'completed' },
@@ -45,21 +52,12 @@ const contentPages: TaskConsoleItem[] = [
   { id: '8', label: 'Veterinary Practice Real Estate', status: 'pending' },
   { id: '9', label: 'Optometry Practice Real Estate', status: 'pending' },
   { id: '10', label: 'Office Leasing', status: 'pending' },
-  { id: '11', label: 'Retail Properties', status: 'pending' },
-  { id: '12', label: 'Investment Properties', status: 'pending' },
-  { id: '13', label: 'Development Services', status: 'pending' },
-  { id: '14', label: 'Land Sales', status: 'pending' },
 ];
 
-const fileUploads: TaskConsoleItem[] = [
-  { id: 'a', label: 'British Food.pdf', status: 'in_progress' },
-  { id: 'b', label: '1st Cond - Guess my sentence.doc', status: 'completed' },
-];
+/* ─── Default — status/items/collapsed are Controls ──────────── */
 
-/* ─── Playground ─────────────────────────────────────────────── */
-
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Canonical console — items / position via Controls */
+export const Default: Story = {
   args: {
     title: 'Generating 14 pages',
     subtitle: 'Less than a minute left',
@@ -70,104 +68,14 @@ export const Playground: Story = {
   },
 };
 
-/* ─── States ─────────────────────────────────────────────────── */
+/* ─── Live simulation — Q4 hook-driven progression ───────────── */
 
-/** @summary Component state variants */
-export const States: Story = {
-  name: 'States',
-  render: () => (
-    <Page>
-      <SectionLabel>In progress (content generation)</SectionLabel>
-      <TaskConsole
-        title="Generating 14 pages"
-        subtitle="Less than a minute left"
-        items={contentPages}
-        position="bottom-right"
-        onDismiss={() => {}}
-      />
-    </Page>
-  ),
-};
-
-/** @summary All completed */
-export const AllCompleted: Story = {
-  name: 'All completed',
-  render: () => (
-    <Page>
-      <SectionLabel>All items completed</SectionLabel>
-      <TaskConsole
-        title="14 pages generated"
-        items={contentPages.map((i) => ({ ...i, status: 'completed' as const }))}
-        position="bottom-right"
-        onDismiss={() => {}}
-      />
-    </Page>
-  ),
-};
-
-/** @summary With errors */
-export const WithErrors: Story = {
-  name: 'With errors',
-  render: () => (
-    <Page>
-      <SectionLabel>Some items failed</SectionLabel>
-      <TaskConsole
-        title="Generating 14 pages"
-        subtitle="2 failed"
-        items={contentPages.map((i, idx) => ({
-          ...i,
-          status: idx < 3 ? 'completed' as const
-            : idx === 3 ? 'failed' as const
-            : idx === 4 ? 'failed' as const
-            : idx === 5 ? 'in_progress' as const
-            : 'pending' as const,
-          detail: idx === 3 ? 'API rate limit exceeded' : idx === 4 ? 'Notion write failed' : i.detail,
-        }))}
-        position="bottom-right"
-        onDismiss={() => {}}
-      />
-    </Page>
-  ),
-};
-
-/** @summary File upload style */
-export const FileUploadStyle: Story = {
-  name: 'File upload style',
-  render: () => (
-    <Page>
-      <SectionLabel>Google Drive-style upload</SectionLabel>
-      <TaskConsole
-        title="Uploading 2 items"
-        subtitle="Less than a minute left"
-        items={fileUploads}
-        position="bottom-right"
-        onDismiss={() => {}}
-      />
-    </Page>
-  ),
-};
-
-/** @summary Collapsed */
-export const Collapsed: Story = {
-  name: 'Collapsed',
-  render: () => (
-    <Page>
-      <SectionLabel>Starts collapsed</SectionLabel>
-      <TaskConsole
-        title="Generating 14 pages"
-        subtitle="4 of 14 completed"
-        items={contentPages}
-        defaultCollapsed
-        position="bottom-right"
-        onDismiss={() => {}}
-      />
-    </Page>
-  ),
-};
-
-/* ─── Interactive demo ───────────────────────────────────────── */
-
-/** @summary Live simulation */
+/**
+ * Hook-driven run that advances items pending → in-progress → completed on
+ * timers. Irreducible: the progression is state args can't express.
+ *
+ * @summary Live simulated content-generation run
+ */
 export const LiveSimulation: Story = {
   name: 'Live simulation',
   render: () => {
@@ -188,7 +96,6 @@ export const LiveSimulation: Story = {
       })));
     }, []);
 
-    // Simulate progress
     useEffect(() => {
       if (!isOpen || items.length === 0) return;
 
@@ -198,7 +105,6 @@ export const LiveSimulation: Story = {
       const current = items[currentIdx];
 
       if (current.status === 'pending') {
-        // Start this item
         const timer = setTimeout(() => {
           setItems((prev) => prev.map((item, idx) =>
             idx === currentIdx
@@ -210,7 +116,6 @@ export const LiveSimulation: Story = {
       }
 
       if (current.status === 'in_progress') {
-        // Complete this item after a delay
         const timer = setTimeout(() => {
           setItems((prev) => prev.map((item, idx) =>
             idx === currentIdx ? { ...item, status: 'completed', detail: undefined } : item,
