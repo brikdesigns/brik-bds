@@ -14,7 +14,7 @@ Table is a composable data-display primitive. The container plus its subcomponen
 - Comparison tables on settings or pricing pages
 - Any "rows of structured data" where columns share semantics across rows
 
-For card-like rows where each entry is its own self-contained block, use [CardList](/docs/components/card-list). For settings panels with action-per-row, use [CardControl](/docs/components/card-control).
+For card-like rows where each entry is its own self-contained block, use [CardList](/docs/components/card-list). For settings panels with action-per-row, use [Card `preset="control"`](/docs/components/card#control-preset).
 
 ## Import
 
@@ -198,7 +198,7 @@ Three typed cells package the recurring media layouts. Each composes an existing
 ## When *not* to use
 
 - **Don't use Table for self-contained card grids.** Cards belong in [CardList](/docs/components/card-list).
-- **Don't use Table for settings rows.** Use [CardControl](/docs/components/card-control) — locked layout for badge + title + description + action.
+- **Don't use Table for settings rows.** Use [Card `preset="control"`](/docs/components/card#control-preset) — locked layout for badge + title + description + action.
 - **Don't use Table for narrow mobile views.** Tables don't gracefully wrap; consider a card-list layout for mobile-first data.
 
 ## Accessibility
@@ -280,7 +280,7 @@ import { Badge, Button, TextLink } from '@brikdesigns/bds';
 ## Related
 
 - [CardList](/docs/components/card-list) — card grid alternative
-- [CardControl](/docs/components/card-control) — settings-row pattern
+- [Card `preset="control"`](/docs/components/card#control-preset) — settings-row pattern (replaces the deprecated `CardControl`)
 - [Pagination](/docs/components/pagination) — pair below large tables
 - [Badge](/docs/components/badge) / [Tag](/docs/components/tag) — common cell content
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-table--overview)**

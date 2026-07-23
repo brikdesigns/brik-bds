@@ -1,7 +1,45 @@
 ---
 title: Card testimonial
-description: Customer testimonial card — quote, attribution, optional star rating. Brand or outlined variant.
+description: DEPRECATED — use Testimonial instead.
 ---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  **CardTestimonial is deprecated.** Migrate to [`Testimonial`](https://storybook.brikdesigns.com/?path=/docs/components-testimonial--overview) ([#702](https://github.com/brikdesigns/brik-bds/issues/702)) — the renamed successor with identical props. The import path is unchanged until removal in a future major version.
+</Callout>
+
+## Migration
+
+Same props, same defaults, same markup — the component was renamed. Swap the name (and the import); nothing else changes.
+
+```tsx
+// Before
+import { CardTestimonial } from '@brikdesigns/bds';
+
+<CardTestimonial
+  quote="Amazing service and results."
+  authorName="Sarah Chen"
+  authorRole="Owner, Bloom Cafe"
+  rating={5}
+/>
+
+// After
+import { Testimonial } from '@brikdesigns/bds';
+
+<Testimonial
+  quote="Amazing service and results."
+  authorName="Sarah Chen"
+  authorRole="Owner, Bloom Cafe"
+  rating={5}
+/>
+```
+
+Every prop (`quote`, `authorName`, `authorRole`, `rating`, `variant`) carries over unchanged. See the [Testimonial Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-testimonial--overview) for the current component.
+
+---
+
+The reference below documents the frozen CardTestimonial API for migration. New code should use [Testimonial](https://storybook.brikdesigns.com/?path=/docs/components-testimonial--overview).
 
 CardTestimonial renders a customer quote in a card layout. Brand variant for marketing surfaces (colored background), outlined variant for in-app contexts (neutral surface with border).
 

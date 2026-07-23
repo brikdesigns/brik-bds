@@ -170,45 +170,57 @@ The `loading` prop replaces button content with a spinner while preserving butto
 
 ## LinkButton
 
+<Callout type="warn">
+  **LinkButton is deprecated.** Prefer `<Button href="...">` directly — the unified Button API renders as an `<a>` whenever `href` is set. LinkButton is retained as a thin wrapper for backward compatibility and will be removed in a future major version.
+</Callout>
+
 An `<a>` element styled as a button. Use when the action navigates to a URL. The `href` prop is required.
 
 ```tsx
-import { LinkButton } from '@brikdesigns/bds';
-
-<LinkButton href="/docs" variant="outline">
+// Preferred — unified Button API
+<Button href="/docs" variant="outline">
   Read docs
-</LinkButton>
+</Button>
 
-<LinkButton
+<Button
   href="https://github.com/brikdesigns/brik-bds"
   target="_blank"
   rel="noopener"
   iconAfter={<ExternalLinkIcon />}
 >
   GitHub
-</LinkButton>
+</Button>
+
+// Deprecated — thin wrapper, same result
+<LinkButton href="/docs" variant="outline">Read docs</LinkButton>
 ```
 
 ## IconButton
 
+<Callout type="warn">
+  **IconButton is deprecated.** Prefer `<Button icon={...} label="...">` directly — the unified Button API renders icon-only whenever `icon` is set with no children. IconButton is retained as a thin wrapper for backward compatibility and will be removed in a future major version.
+</Callout>
+
 An icon-only button with a **required** `label` prop for accessibility. The label becomes the button's `aria-label`.
 
 ```tsx
-import { IconButton } from '@brikdesigns/bds';
+// Preferred — unified Button API
+<Button icon={<CloseIcon />} label="Close dialog" variant="ghost" />
+<Button icon={<TrashIcon />} label="Delete item" variant="danger-ghost" />
 
+// Deprecated — thin wrapper, same result
 <IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />
-<IconButton icon={<TrashIcon />} label="Delete item" variant="danger-ghost" />
 ```
 
 <Callout type="warn">
-  **Don't downgrade emphasis when converting Button → IconButton.** A primary action stays a primary action. The 2026-04 IconButton-ghost regression came from agents converting `<Button variant="primary">` into `<IconButton variant="ghost">`. Match the emphasis level, always.
+  **Don't downgrade emphasis when converting Button → icon-only.** A primary action stays a primary action. The 2026-04 IconButton-ghost regression came from agents converting `<Button variant="primary">` into `<IconButton variant="ghost">`. Match the emphasis level, always.
 </Callout>
 
 ## When *not* to use
 
 - **Don't use `ghost` for the only action on a page.** Ghost is the lowest emphasis tier — it should appear alongside a higher-emphasis sibling.
 - **Don't stack two `primary` buttons next to each other.** Only one primary action per surface.
-- **Don't use Button for navigation.** If clicking takes the user to a new URL, use LinkButton so right-click + keyboard navigation work correctly.
+- **Don't use a plain Button for navigation.** If clicking takes the user to a new URL, pass `href` so Button renders as an `<a>` and right-click + keyboard navigation work correctly.
 
 ## Accessibility
 
