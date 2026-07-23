@@ -17,11 +17,14 @@ export type TagDensity = 'comfortable' | 'compact';
 
 /**
  * Tag fill appearance — shared axis with Badge (`solid | subtle`) and
- * Chip (`solid | outline`). Tag supports the two pastel-capable values.
+ * Chip (`solid | outline`). Tag supports the two pastel-capable values,
+ * plus a quiet neutral fill.
  * - `solid`  — neutral filled background (current default styling).
  * - `subtle` — transparent background with a hairline border.
+ * - `muted`  — quiet neutral fill — low-emphasis category label. For
+ *   semantic status (positive/warning/error/etc.) use `Badge` instead.
  */
-export type TagAppearance = 'solid' | 'subtle';
+export type TagAppearance = 'solid' | 'subtle' | 'muted';
 
 /** Tag component props */
 export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
@@ -29,7 +32,10 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   children?: ReactNode;
   /** Size variant — xs is icon-only (no text) */
   size?: TagSize;
-  /** Fill appearance — solid (neutral fill) or subtle (transparent + border). */
+  /**
+   * Fill appearance — `solid` (neutral fill), `subtle` (transparent +
+   * border), or `muted` (quiet neutral fill — low-emphasis category label).
+   */
   appearance?: TagAppearance;
   /** Density — `compact` tightens horizontal padding for dense rows. Default `comfortable`. */
   density?: TagDensity;

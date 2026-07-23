@@ -19,8 +19,8 @@ const meta: Meta<typeof Tag> = {
     },
     appearance: {
       control: 'select',
-      options: ['solid', 'subtle'],
-      description: 'Fill: `solid` (neutral filled background, default) or `subtle` (transparent + hairline border).',
+      options: ['solid', 'subtle', 'muted'],
+      description: 'Fill: `solid` (neutral filled background, default), `subtle` (transparent + hairline border), or `muted` (quiet neutral fill — low-emphasis category label).',
     },
     density: {
       control: 'select',
@@ -65,6 +65,28 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
 /** @summary Interactive playground for prop tweaking */
 export const Default: Story = {
   args: { children: 'Tag', size: 'md' },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   APPEARANCE — axis-only gallery (solid / subtle / muted, side by side)
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Appearance axis — `solid` (neutral filled background, default), `subtle`
+ * (transparent + hairline border), and `muted` (quiet neutral fill for a
+ * low-emphasis category label). `muted` is a Tag-only value — for semantic
+ * status (positive/warning/error) use `Badge` instead.
+ *
+ * @summary Solid, subtle, and muted appearances side-by-side
+ */
+export const Appearance: Story = {
+  render: () => (
+    <Row>
+      <Tag appearance="solid">Solid</Tag>
+      <Tag appearance="subtle">Subtle</Tag>
+      <Tag appearance="muted">Muted</Tag>
+    </Row>
+  ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
