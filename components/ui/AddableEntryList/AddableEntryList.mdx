@@ -16,25 +16,13 @@ User-managed list of `{ primary, secondary }` entries. The primary field type (`
 
 ## Variants
 
-### Read mode
-
-`disabled` renders token-backed typography with no inputs or remove controls. Flip `primaryInputType` via Controls to compare the URL-anchor and plain-text renderings.
-
-<Canvas of={Stories.ReadMode} />
+`disabled` (read-only typography, URL primaries as anchors), `maxItems`, and the empty state are all Controls on any story. This shows the suggestion-backed primary, which the reveal-form flow can't express through args alone.
 
 ### With suggestions
 
 Preserves the reveal-form flow — existing entries render as read-only cards; Add opens a staging form with a combobox-backed primary. `primaryStrict` (Controls) rejects free-form entries.
 
 <Canvas of={Stories.WithSuggestions} />
-
-### Empty
-
-<Canvas of={Stories.Empty} />
-
-### Max items reached
-
-<Canvas of={Stories.MaxItemsCap} />
 
 ## Props
 

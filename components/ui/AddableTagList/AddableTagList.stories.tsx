@@ -67,7 +67,7 @@ const meta: Meta<typeof AddableTagList> = {
     emptyLabel: { control: 'text' },
     disabled: {
       control: 'boolean',
-      description: 'Read-only chip rendering — see the `ReadMode` story.',
+      description: 'Read-only chip rendering — no input or remove controls.',
     },
     strict: {
       control: 'boolean',
@@ -128,38 +128,6 @@ export const WithSuggestions: Story = {
     placeholder: 'Search or add a service…',
     addLabel: 'Add Service',
     emptyLabel: 'No services added yet.',
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * `strict` rejects free-form entries — picks must match a suggestion.
- * @summary Catalog-only picks, no free-form entries
- */
-export const StrictMode: Story = {
-  args: {
-    label: 'Insurance Providers',
-    suggestions: DENTAL_INSURANCE,
-    values: ['Delta Dental'],
-    placeholder: 'Search providers…',
-    addLabel: 'Add Provider',
-    strict: true,
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * Read mode (`disabled`) — read-only chip display, no input or remove.
- * @summary Read-only chip rendering
- */
-export const ReadMode: Story = {
-  args: {
-    label: 'Services Offered',
-    suggestions: DENTAL_SERVICES,
-    values: ['Dental Implants', 'Invisalign / Clear Aligners', 'Preventive Care / Cleaning'],
-    disabled: true,
     onChange: fn(),
   },
   render: (args) => <Controlled {...args} />,

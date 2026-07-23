@@ -24,7 +24,7 @@ const meta: Meta<typeof AddableTextList> = {
     emptyLabel: { control: 'text' },
     disabled: {
       control: 'boolean',
-      description: 'Read-only chip rendering — see the `ReadMode` story.',
+      description: 'Read-only chip rendering — no remove controls, reveal input hidden.',
     },
     allowDuplicates: { control: 'boolean' },
     maxItems: { control: 'number' },
@@ -63,50 +63,6 @@ export const Default: Story = {
     addLabel: 'Add Service',
     values: ['Dental cleaning', 'Whitening'],
     size: 'md',
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/** @summary Empty starting state before any values are added */
-export const Empty: Story = {
-  args: {
-    label: 'Back-Office Tools',
-    placeholder: 'e.g. QuickBooks',
-    addLabel: 'Add Tool',
-    emptyLabel: 'No tools added yet.',
-    values: [],
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * Read mode (`disabled`) — tags render without a remove control and the
- * reveal input is hidden.
- * @summary Read-only chip rendering
- */
-export const ReadMode: Story = {
-  args: {
-    label: 'Services Offered',
-    disabled: true,
-    values: ['Cleaning', 'Whitening'],
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * `maxItems` reached — the Add button hides once the cap is hit.
- * @summary List at capacity — Add button hides
- */
-export const MaxItemsCap: Story = {
-  args: {
-    label: 'Compliance-required disclaimers',
-    placeholder: 'Add a disclaimer',
-    maxItems: 3,
-    values: ['Results may vary'],
-    helperText: 'Capped at 3 — Add hides when full.',
     onChange: fn(),
   },
   render: (args) => <Controlled {...args} />,
