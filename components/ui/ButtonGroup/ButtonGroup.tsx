@@ -13,10 +13,13 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Horizontal alignment of the group's children when not `fullWidth`.
    * Replaces the prior manual `justify-content` patterns for action rows.
+   * In normal flow the group spans its container (block-level flex), so
+   * alignment is visible; as a flex item (e.g. a PageHeader actions slot)
+   * it shrink-wraps and the parent controls placement.
    * - `start` (default) — left-aligned
    * - `center` — centered
    * - `end` — right-aligned (canonical for modal / sheet action rows: primary far right, secondary to its left)
-   * - `between` — first child left, last child right (`justify-content: space-between`)
+   * - `between` — first child left, last child right (`justify-content: space-between`; always full-row)
    */
   align?: ButtonGroupAlign;
   /** When true, buttons stretch to fill the container equally */

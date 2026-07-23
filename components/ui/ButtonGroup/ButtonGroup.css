@@ -8,8 +8,13 @@
  * SegmentedControl instead — that's its canonical home.
  */
 
+/* Block-level flex, not inline-flex: in normal flow the group spans its
+   container, so the `align` variants actually align (inline-flex shrink-
+   wrapped, making align-end/center no-ops). As a flex ITEM (PageHeader
+   actions, DataSection actions) flex-basis stays `auto`, so it shrink-wraps
+   exactly as before. #1344 */
 .bds-button-group {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--gap-md);
@@ -37,6 +42,8 @@
   justify-content: flex-end;
 }
 
+/* `between` keeps width:100% for flex-item contexts (a between row is
+   full-row by definition, even when the parent is itself a flex row). */
 .bds-button-group--align-between {
   justify-content: space-between;
   width: 100%;
@@ -46,5 +53,12 @@
 
 .bds-button-group--full-width {
   width: 100%;
+}
+
+/* Buttons stretch to fill the container equally (documented contract).
+   `> *` also covers link-wrapped buttons; min-width lets labels shrink. #1344 */
+.bds-button-group--full-width > * {
+  flex: 1 1 0;
+  min-width: 0;
 }
 }
