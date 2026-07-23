@@ -1,15 +1,17 @@
 ---
 title: Card
-description: Flexible content container with composable subcomponents and two locked-down presets (control + summary).
+description: Flexible content container with composable subcomponents and four locked-down presets (control, summary, display, display-row).
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Card is the canonical content-grouping container. Three rendering modes:
+Card is the canonical content-grouping container. Five rendering modes:
 
 - **Default** — flexible container, compose with `CardTitle` / `CardDescription` / `CardFooter` subcomponents.
 - **`preset="control"`** — locked-down settings/control layout (badge + title + description + action). Replaces the legacy `CardControl` component per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
 - **`preset="summary"`** — compact metric/stat layout (label + large value + optional link).
+- **`preset="display"`** — the malleable vertical cell of a card-grid Section, per [ADR-018](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-018-card-preset-boundary.md).
+- **`preset="display-row"`** — the horizontal card-grid cell / section row (image left, content right).
 
 ## Use it for
 
@@ -45,6 +47,7 @@ Compose freely with the Title / Description / Footer subcomponents.
 - **`outlined`** (default) — Subtle secondary border.
 - **`brand`** — Primary-color border for emphasis.
 - **`elevated`** — Shadow for visual prominence.
+- **`borderless`** — Transparent fill, no border, no shadow. Use for cards sitting on a colored surface, where the border ring reads as visual noise.
 
 ### Padding
 
@@ -97,7 +100,7 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 `actionAlign` controls vertical alignment of the action slot — `center` (default) or `top` (anchors to the upper-right when descriptions are tall).
 
 <Callout type="info">
-  **Both `<Card preset="control">` and standalone `<CardControl>` ship as first-class APIs in v0.39.0+.** The 2026-Q2 audit recommended folding CardControl into Card; the user reversed that decision 2026-04-24 to preserve optionality at the call site. Pick whichever reads cleaner in context.
+  **`preset="control"` replaces the standalone `<CardControl>` component**, which is deprecated per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)). New code should use the preset; see the [CardControl migration guide](/docs/components/card-control#migration).
 </Callout>
 
 ## Summary preset
@@ -120,6 +123,42 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 - **`type="price"`** — USD currency (`$1,234.50`).
 - String values render verbatim regardless of `type`.
 
+## Display preset
+
+`preset="display"` is the malleable **cell of a card-grid Section**, not a standalone card — per [ADR-018](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-018-card-preset-boundary.md), a display card only exists inside a grid that owns the columns. Every affordance is optional and prop-toggled so one cell serves any content type — service, blog post, customer story, property listing, team bio, support plan.
+
+```tsx
+<Card
+  preset="display"
+  tag={<ServiceTag line="brand" />}
+  image={<Frame ratio="16-9"><img src="/service.jpg" alt="" /></Frame>}
+  badge={<Badge>Featured</Badge>}
+  title="Brand identity"
+  description="Logo, type, and color systems built to scale."
+  action={<Button href="/services/branding" variant="outline" size="sm">Learn more</Button>}
+/>
+```
+
+`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent) or `variant="elevated"` (fill + shadow) swaps the surface treatment, and `tint` applies a pale service-line wash. `badge` renders only when `image` is also set.
+
+## Display-row preset
+
+`preset="display-row"` is the **horizontal** card-grid cell / section row — image on the left, content (tag, title, description, action) on the right. Use for single-row sections where a vertical layout wastes horizontal space (Related Customer Story, Recommended Add-On, featured plan). Collapses to a vertical stack at ≤ 640px.
+
+```tsx
+<Card
+  preset="display-row"
+  tag={<Tag>Case study</Tag>}
+  image={<Frame ratio="4-3"><img src="/story.jpg" alt="" /></Frame>}
+  imageWidth="standard"
+  title="How Northwind tripled conversions"
+  description="A ground-up rebrand and site rebuild."
+  action={<Button href="/stories/northwind" variant="outline" size="sm">Read the story</Button>}
+/>
+```
+
+`imageWidth` sets the left column: `narrow` (25%), `standard` (35%, default), or `wide` (50%) — or pass any CSS length/percentage string (`"40%"`, `"320px"`). The optional `extras` slot renders structured content (bullet lists, feature pills) between `description` and `action`.
+
 ## When *not* to use
 
 - **Don't use Card for inline content blocks.** Cards imply discrete grouping; for paragraphs and section dividers, use prose + [Divider](/docs/components/divider).
@@ -138,7 +177,7 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 
 | Prop | Type | Default |
 |---|---|---|
-| `variant` | `'outlined' \| 'brand' \| 'elevated'` | `'outlined'` |
+| `variant` | `'outlined' \| 'brand' \| 'elevated' \| 'borderless'` | `'outlined'` |
 | `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
 | `interactive` | `boolean` | `false` |
 | `href` | `string` | — |
@@ -165,6 +204,38 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 | `value` | `string \| number` *(required)* | — |
 | `type` | `'numeric' \| 'price'` | `'numeric'` |
 | `textLink` | `{ label: string; href: string }` | — |
+
+### Display preset
+
+| Prop | Type | Default |
+|---|---|---|
+| `preset` | `'display'` *(required)* | — |
+| `title` | `string` *(required)* | — |
+| `titleAs` | `'h2' \| 'h3' \| 'h4'` | `'h3'` |
+| `description` | `string` | — |
+| `variant` | `'borderless' \| 'elevated'` | — |
+| `tint` | `CardTint` (service line) | — |
+| `image` | `ReactNode` | — |
+| `tag` | `ReactNode` | — |
+| `badge` | `ReactNode` (needs `image`) | — |
+| `action` | `ReactNode` | — |
+| `href` | `string` | — |
+
+### Display-row preset
+
+| Prop | Type | Default |
+|---|---|---|
+| `preset` | `'display-row'` *(required)* | — |
+| `title` | `string` *(required)* | — |
+| `titleAs` | `'h2' \| 'h3' \| 'h4'` | `'h3'` |
+| `description` | `string` | — |
+| `tint` | `CardTint` (service line) | — |
+| `image` | `ReactNode` | — |
+| `imageWidth` | `'narrow' \| 'standard' \| 'wide' \| string` | `'standard'` |
+| `tag` | `ReactNode` | — |
+| `extras` | `ReactNode` | — |
+| `action` | `ReactNode` | — |
+| `href` | `string` | — |
 
 All modes accept standard `<div>` HTML attributes (excluding `title`, which is repurposed in the control preset).
 
