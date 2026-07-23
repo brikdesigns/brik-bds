@@ -29,18 +29,16 @@ import { ActivityTimeline } from '@brikdesigns/bds';
 
 const events = [
   {
-    id: '1',
+    icon: <Icon icon="ph:pencil" />,
+    label: 'Sarah Chen updated Brand Identity',
+    detail: '2 minutes ago',
     timestamp: '2 minutes ago',
-    actor: 'Sarah Chen',
-    action: 'updated',
-    target: 'Brand Identity',
   },
   {
-    id: '2',
+    icon: <Icon icon="ph:chat-circle" />,
+    label: 'Marcus Lee commented on Project Brief',
+    detail: null,
     timestamp: '1 hour ago',
-    actor: 'Marcus Lee',
-    action: 'commented on',
-    target: 'Project Brief',
   },
   // ...
 ];
@@ -48,15 +46,15 @@ const events = [
 <ActivityTimeline events={events} />
 ```
 
-### Custom event content
+### Event shape
 
-The exact fields and rendering of each event are determined by the `TimelineEvent` shape. Pass any structure your data layer provides.
+Each event is a fixed `TimelineEvent`: an `icon` in the dot, a `label`, an optional `detail` line, and a pre-formatted `timestamp`. The first event (or any with `isOrigin`) gets the brand-colored dot; the rest use a muted dot. ActivityTimeline is a pure display component — format timestamps and compose labels in your data layer before passing them in.
 
 ## When *not* to use
 
 - **Don't use ActivityTimeline for short lists** (≤3 events) — a plain list reads more cleanly without the timeline marker.
 - **Don't use ActivityTimeline for unstructured comments.** A comment thread with replies and reactions is its own pattern; timeline is for atomic events.
-- **Don't use ActivityTimeline as a feed of unrelated content.** Each event should share an actor + action + target shape.
+- **Don't use ActivityTimeline as a feed of unrelated content.** Each event should read as one atomic icon + label + timestamp moment in a shared chronology.
 
 ## Accessibility
 
@@ -70,7 +68,17 @@ The exact fields and rendering of each event are determined by the `TimelineEven
 | `events` | `TimelineEvent[]` *(required)* | — |
 | `className` | `string` | — |
 
-The `TimelineEvent` shape is defined alongside the component — typically `{ id, timestamp, actor, action, target }` with optional metadata fields.
+### TimelineEvent
+
+```ts
+interface TimelineEvent {
+  icon: ReactNode;          // rendered inside the event dot
+  label: string;            // primary line, e.g. "Request submitted"
+  detail?: string | null;   // secondary line, e.g. "by Emily Rivera"
+  timestamp: string;        // pre-formatted by the consumer
+  isOrigin?: boolean;       // brand-colored dot; defaults to the first event
+}
+```
 
 ## Related
 

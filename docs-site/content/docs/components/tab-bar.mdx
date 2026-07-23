@@ -45,11 +45,13 @@ import { TabBar } from '@brikdesigns/bds';
 
 ## Variants
 
-### `tab` — underline (default for app navigation)
+### `text` — minimal (default)
+
+Plain text links with brand color for the active tab; no indicator. Use in tight headers where an underline would crowd.
 
 ```tsx
 <TabBar
-  variant="tab"
+  variant="text"
   items={[
     { label: 'Overview', active: true, onClick: () => setTab('overview') },
     { label: 'Billing', onClick: () => setTab('billing') },
@@ -58,12 +60,20 @@ import { TabBar } from '@brikdesigns/bds';
 />
 ```
 
-### `text` — minimal
+### `text-underline` — text + active underline
 
-Plain labels with brand color for active tab. Use in tight headers where the underline would crowd.
+The `text` variant plus a per-tab brand-color underline below the active tab. Use when the active tab needs a clearer marker than color alone.
 
 ```tsx
-<TabBar variant="text" items={items} />
+<TabBar variant="text-underline" items={items} />
+```
+
+### `tab` — bottom-border bar
+
+Bottom-border bar with a neutral active color and a brand-color underline. The classic app-navigation tab strip.
+
+```tsx
+<TabBar variant="tab" items={items} />
 ```
 
 ### `box` — filled
@@ -112,7 +122,7 @@ Set `disabled: true` on individual items.
 | Prop | Type | Default |
 |---|---|---|
 | `items` | `TabItem[]` *(required)* | — |
-| `variant` | `'text' \| 'tab' \| 'box'` | `'tab'` |
+| `variant` | `'text' \| 'text-underline' \| 'tab' \| 'box'` | `'text'` |
 | `onColor` | `boolean` | `false` |
 
 Plus standard `<div>` HTML attributes.
@@ -121,10 +131,12 @@ Plus standard `<div>` HTML attributes.
 
 ```ts
 interface TabItem {
-  label: ReactNode;
+  label: string;
   active?: boolean;
   disabled?: boolean;
   onClick?: () => void;
+  /** Decorative indicator dot after the label — `true` for the brand dot, or a DotStatus to color it. */
+  dot?: boolean | DotStatus;
 }
 ```
 

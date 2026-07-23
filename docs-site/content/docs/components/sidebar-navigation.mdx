@@ -61,7 +61,7 @@ Each nav item accepts an `icon` rendered before the label.
 />
 ```
 
-### With footer actions and user section
+### With footer actions and profile
 
 ```tsx
 <SidebarNavigation
@@ -70,7 +70,7 @@ Each nav item accepts an `icon` rendered before the label.
   footerActions={
     <Button variant="primary" size="sm" fullWidth>New project</Button>
   }
-  userSection={
+  profile={
     <div>
       <Avatar src={user.avatarUrl} />
       <span>{user.email}</span>
@@ -111,19 +111,23 @@ Default is `260px`. Override for compact (icon-only) or wide layouts.
 |---|---|---|
 | `logo` | `ReactNode` *(required)* | — |
 | `navItems` | `SidebarNavItem[]` *(required)* | — |
+| `profile` | `ReactNode` | — |
 | `footerActions` | `ReactNode` | — |
-| `userSection` | `ReactNode` | — |
-| `width` | `string` (CSS length) | `'260px'` |
+| `collapsed` | `boolean` | `false` |
+| `position` | `'fixed' \| 'sticky'` | `'fixed'` |
+| `width` | `string` (CSS length) | `'260px'` expanded / `'80px'` collapsed |
+| `linkComponent` | `BdsLinkComponent` | — |
+| `userSection` | `ReactNode` | *deprecated — use `profile`; if both are passed, `profile` wins* |
 
 ### SidebarNavItem
 
 ```ts
 interface SidebarNavItem {
-  label: ReactNode;
-  href?: string;
-  icon?: ReactNode;
+  label: string;
+  href: string;
   active?: boolean;
-  onClick?: () => void;
+  icon?: ReactNode;
+  disabled?: boolean;
 }
 ```
 
