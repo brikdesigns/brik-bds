@@ -81,17 +81,19 @@ const isDesktop = window.matchMedia(
 
 ## Element sizes
 
-Semantic size tokens follow the same tiny-to-huge scale as spacing — for icons, dots, indicators.
+Fixed element dimensions — icons, dots, indicators — use the numeric `--size-*` scale (the same primitive scale spacing draws from). Values step in 4px increments above 8px.
 
 | Token | Value |
 |---|---|
-| `--size-tiny` | 2px |
-| `--size-sm` | 4px |
-| `--size-md` | 8px |
-| `--size-lg` | 16px |
-| `--size-xl` | 24px |
-| `--size-xxl` | 32px |
-| `--size-huge` | 40px |
+| `--size-50` | 2px |
+| `--size-100` | 4px |
+| `--size-200` | 8px |
+| `--size-400` | 16px |
+| `--size-600` | 24px |
+| `--size-800` | 32px |
+| `--size-1000` | 40px |
+
+The scale runs `--size-0` (0) through `--size-2200` (100px).
 
 ## Related
 
