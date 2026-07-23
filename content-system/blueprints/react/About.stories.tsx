@@ -6,6 +6,13 @@ const meta: Meta<typeof About> = {
   title: 'Blueprints/about',
   component: About,
   tags: ['surface-web'],
+  argTypes: {
+    sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
+    subtitle: { control: 'text', description: 'Eyebrow above the heading.' },
+    title: { control: 'text', description: 'Section heading (the narrative h2).' },
+    body: { control: 'text', description: 'Narrative body copy.' },
+    testimonial: { control: false, description: 'Optional pull-quote `{ quote, author, authorRole }` — renders a composed CardTestimonial aside and flips to two columns.' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -23,12 +30,12 @@ type Story = StoryObj<typeof About>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Playground — narrative column + pull-quote callout aside.
- *
  * The full about section: eyebrow + heading + narrative alongside a
  * `CardTestimonial` pull-quote. Replaces the legacy `about_story_split`.
+ *
+ * @summary Narrative column + pull-quote callout aside
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     sectionKey: 'about-story',
     subtitle: 'Who we are',

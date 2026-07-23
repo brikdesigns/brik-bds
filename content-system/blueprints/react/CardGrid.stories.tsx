@@ -7,6 +7,13 @@ const meta: Meta<typeof CardGrid> = {
   title: 'Blueprints/card_grid',
   component: CardGrid,
   tags: ['surface-web'],
+  argTypes: {
+    sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
+    subtitle: { control: 'text', description: 'Eyebrow above the title.' },
+    title: { control: 'text', description: 'Section heading.' },
+    description: { control: 'text', description: 'One-line section subheading.' },
+    children: { control: false, description: 'Slotted grid content — any composition (Grid of Cards, list rows, header-only).' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -36,12 +43,12 @@ const blogItems = [
 ];
 
 /**
- * @summary Services — 3-col card grid using `Card preset="display"`.
- *
  * The canonical "service grid" composition. Validates the brikdesigns#100
  * consumer shape: image + ServiceTag + title + description + primary CTA.
+ *
+ * @summary Services — 3-col card grid of Card preset="display"
  */
-export const ServicesGrid: Story = {
+export const Default: Story = {
   args: {
     sectionKey: 'services-grid',
     title: 'Featured services',

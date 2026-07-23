@@ -84,6 +84,12 @@ const meta: Meta<typeof Features> = {
   component: Features,
   tags: ['surface-web'],
   decorators: [withAudienceCascade],
+  argTypes: {
+    sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
+    title: { control: 'text', description: 'Section heading.' },
+    body: { control: 'text', description: 'One-line section subheading.' },
+    items: { control: false, description: 'Feature cards `{ title, description, href, serviceLine }[]`; each emits `data-service-line` for brand-color re-binding.' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -101,9 +107,9 @@ type Story = StoryObj<typeof Features>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Playground — five audience-distinct cards, one per service-line.
+ * @summary Five audience-distinct cards, one per service-line
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     sectionKey: 'features-default',
     title: 'Featured capabilities',
@@ -113,12 +119,12 @@ export const Playground: Story = {
 };
 
 /**
- * @summary Wrapped — six cards force the grid to a second row.
- *
- * Distinct meaningful state from `Playground`: the row-wrap behavior at the
+ * Distinct meaningful state from `Default`: the row-wrap behavior at the
  * desktop breakpoint is the layout property worth verifying. Per-card content
  * variants (missing image, audience accent) are exercised by the leaf `Card`
  * / `ServiceTag` stories, not duplicated here.
+ *
+ * @summary Six cards force the grid to a second row
  */
 export const Wrapped: Story = {
   args: {

@@ -7,6 +7,16 @@ const meta: Meta<typeof SupportPlan> = {
   title: 'Blueprints/support_plan',
   component: SupportPlan,
   tags: ['surface-web'],
+  argTypes: {
+    sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
+    subtitle: { control: 'text', description: 'Eyebrow above the title.' },
+    title: { control: 'text', description: 'Section heading.' },
+    description: { control: 'text', description: 'Section subheading copy.' },
+    planTitle: { control: 'text', description: 'Plan callout card title.' },
+    planDescription: { control: 'text', description: 'Plan callout card body.' },
+    cta: { control: false, description: 'Plan CTA `{ label, url }`.' },
+    media: { control: false, description: 'Optional media node — flips the callout to a two-column split.' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -24,13 +34,13 @@ type Story = StoryObj<typeof SupportPlan>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Default — simple single-column plan callout (no media).
- *
  * The real brikdesigns "Monthly Support CTA" content shape per
  * brik-bds#589: eyebrow + heading + body + plan card + one CTA, no
  * fabricated illustration. This is what the consumer actually renders.
+ *
+ * @summary Simple single-column plan callout (no media)
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     sectionKey: 'support-plan-default',
     title: 'Monthly support services',
@@ -53,7 +63,7 @@ export const Playground: Story = {
  */
 export const WithMedia: Story = {
   args: {
-    ...Playground.args,
+    ...Default.args,
     sectionKey: 'support-plan-with-media',
     media: (
       <Image

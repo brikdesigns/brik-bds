@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent } from 'storybook/test';
 
 import { CtaDarkCentered } from './CtaDarkCentered';
 import type { BlueprintProps } from '../astro/types';
+
+const ctaDarkActionClick = fn();
 
 const baseTheme: BlueprintProps['theme'] = {
   themeMode: 'dark',
@@ -46,6 +49,11 @@ const meta: Meta<typeof CtaDarkCentered> = {
   title: 'Blueprints/cta_dark_centered',
   component: CtaDarkCentered,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+  },
   parameters: { layout: 'fullscreen' },
 };
 
@@ -77,9 +85,15 @@ export const ActionCta: Story = {
     section: {
       ...section,
       sectionKey: 'cta-dark-centered-action',
-      cta: { label: 'Open contact form', onClick: () => {} },
+      cta: { label: 'Open contact form', onClick: ctaDarkActionClick },
     },
     clientFacts: baseClientFacts,
     theme: baseTheme,
+  },
+  play: async ({ canvas }) => {
+    // An action CTA renders a real <button>, not an <a>.
+    const cta = canvas.getByRole('button', { name: 'Open contact form' });
+    await userEvent.click(cta);
+    await expect(ctaDarkActionClick).toHaveBeenCalled();
   },
 };

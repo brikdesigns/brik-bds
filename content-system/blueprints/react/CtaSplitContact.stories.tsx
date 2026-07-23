@@ -46,6 +46,11 @@ const meta: Meta<typeof CtaSplitContact> = {
   title: 'Blueprints/cta_split_contact',
   component: CtaSplitContact,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -60,8 +65,8 @@ const meta: Meta<typeof CtaSplitContact> = {
 export default meta;
 type Story = StoryObj<typeof CtaSplitContact>;
 
-/** @summary Default — message left, phone + email contact methods right. */
-export const Playground: Story = {
+/** @summary Message left, phone + email contact methods right */
+export const Default: Story = {
   args: { section, clientFacts: baseClientFacts, theme: baseTheme },
 };
 

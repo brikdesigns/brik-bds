@@ -6,6 +6,15 @@ const meta: Meta<typeof Hero> = {
   title: 'Blueprints/hero',
   component: Hero,
   tags: ['surface-web'],
+  argTypes: {
+    sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
+    layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card'], description: 'Structural layout modifier per ADR-008 §3.' },
+    subtitle: { control: 'text', description: 'Eyebrow above the h1.' },
+    title: { control: 'text', description: 'Page h1 — Hero blueprints own the page heading.' },
+    lead: { control: 'text', description: 'Supporting lead paragraph.' },
+    cta: { control: false, description: 'Primary action `{ label, url }`.' },
+    media: { control: false, description: 'Composed media column node for `layout="split"`.' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -35,12 +44,12 @@ const demoImage = (
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Split — content column + media column (the 60/40 flagship hero).
- *
  * `layout="split"` renders the two-column grid with a composed `media` node.
  * Replaces the legacy `hero_split_60_40`.
+ *
+ * @summary Split — content + media column (60/40 flagship)
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     sectionKey: 'hero-split',
     layout: 'split',
@@ -71,14 +80,14 @@ export const InteriorMinimal: Story = {
 };
 
 /**
- * @summary Missing image — split layout with the `data-content-needed` stub.
- *
  * When a client has no hero image the adapter passes a stub node as `media`
  * instead of an `<img>`; CI grep on `data-content-needed` blocks publish.
+ *
+ * @summary Split layout with the data-content-needed stub
  */
 export const MissingImage: Story = {
   args: {
-    ...Playground.args,
+    ...Default.args,
     sectionKey: 'hero-split-missing',
     media: (
       <div className="bds-hero__missing" data-content-needed="hero_image_url" role="presentation">

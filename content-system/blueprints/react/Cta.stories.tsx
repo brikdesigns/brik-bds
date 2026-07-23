@@ -1,11 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent } from 'storybook/test';
 
 import { Cta } from './Cta';
+
+const actionCtaClick = fn();
 
 const meta: Meta<typeof Cta> = {
   title: 'Blueprints/cta',
   component: Cta,
   tags: ['surface-web'],
+  argTypes: {
+    sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
+    title: { control: 'text', description: 'Closing-CTA heading.' },
+    body: { control: 'text', description: 'Supporting prompt copy.' },
+    layout: { control: 'inline-radio', options: ['default', 'split'], description: '`default` single-column inverse surface; `split` two-column copy + aside.' },
+    primaryCta: { control: false, description: 'Primary action `{ label, url }` or `{ label, onClick }` (onClick renders a button).' },
+    secondaryCta: { control: false, description: 'Optional lower-emphasis secondary action.' },
+    aside: { control: false, description: 'Aside node for `layout="split"` (e.g. contact methods).' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -23,12 +35,12 @@ type Story = StoryObj<typeof Cta>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Default — single-column closing CTA on the inverse surface.
- *
  * The workhorse shape: heading + body + one primary action, centered.
  * Replaces the legacy `cta_dark_centered`.
+ *
+ * @summary Single-column closing CTA on the inverse surface
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     sectionKey: 'cta-default',
     title: 'Ready to get started?',
@@ -46,7 +58,7 @@ export const Playground: Story = {
  */
 export const WithSecondaryAction: Story = {
   args: {
-    ...Playground.args,
+    ...Default.args,
     sectionKey: 'cta-two-actions',
     primaryCta: { label: 'Get started', url: '#start' },
     secondaryCta: { label: "Let's talk", url: '#contact' },
@@ -83,16 +95,22 @@ export const Split: Story = {
 };
 
 /**
- * @summary Action CTA — an `onClick` CTA renders a `<button>`, not an `<a>`.
- *
  * Exercises the `BlueprintCta` action shape (brik-bds#941): the primitive
  * emits real button semantics so the CTA can open a modal or fire analytics
  * instead of navigating. Inspect the element — it is a button, not a link.
+ *
+ * @summary Action CTA renders a button, not a link
  */
 export const ActionCta: Story = {
   args: {
-    ...Playground.args,
+    ...Default.args,
     sectionKey: 'cta-action',
-    primaryCta: { label: 'Open contact form', onClick: () => {} },
+    primaryCta: { label: 'Open contact form', onClick: actionCtaClick },
+  },
+  play: async ({ canvas }) => {
+    // An action CTA renders a real <button>, not an <a>.
+    const cta = canvas.getByRole('button', { name: 'Open contact form' });
+    await userEvent.click(cta);
+    await expect(actionCtaClick).toHaveBeenCalled();
   },
 };
