@@ -40,10 +40,17 @@ When `src` is omitted (or fails to load), Avatar generates initials from `name`.
 <Avatar name="Maria Lopez Garcia" />  {/* ML */}
 ```
 
+`color` sets the accent fill behind the initials (`green` · `purple` · `blue` · `orange` · `yellow` · `red`, each with an AA-safe foreground) — no effect once an image loads. Consumers typically hash a stable key (e.g. contact id) to one of the six; omit for the default brand fill.
+
+```tsx
+<Avatar name="Alice Chen" color="purple" />
+```
+
 ### Sizes
 
 | Size | Diameter | Use |
 |---|---|---|
+| `xs` | 24px | Dense inline affordances, table cells, chips |
 | `sm` | 32px | Compact lists, inline mentions |
 | `md` (default) | 40px | Cards, comments |
 | `lg` | 48px | Profile headers, featured users, [Board](/docs/components/board) |
@@ -105,8 +112,9 @@ Negative-margin stack for "10 people commented" indicators.
 | `src` | `string` | — |
 | `alt` | `string` | — |
 | `name` | `string` | — |
-| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
+| `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
 | `status` | `'online' \| 'offline' \| 'busy' \| 'away'` | — |
+| `color` | `'green' \| 'purple' \| 'blue' \| 'orange' \| 'yellow' \| 'red'` | — |
 
 Plus standard `<div>` HTML attributes.
 
