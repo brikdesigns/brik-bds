@@ -31,6 +31,11 @@ const meta: Meta<typeof Icon> = {
   argTypes: {
     icon: { control: 'text' },
     width: { control: 'number' },
+    weight: {
+      control: 'select',
+      options: ['thin', 'light', 'regular', 'bold', 'fill', 'duotone'],
+      description: 'Phosphor stroke weight for `ph:*` icons. Default `bold`.',
+    },
   },
 };
 
@@ -54,7 +59,11 @@ export const BundledSet: Story = {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))', gap: 'var(--gap-md)' }}>
           {names.map((name) => (
             <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-2xs)', textAlign: 'center' }}>
-              <Icon icon={`ph:${name}`} width={28} />
+              {/* weight="regular" so each entry renders at its own bundled
+                  weight — a `*-bold` name still reads bold, a plain name reads
+                  regular — rather than the component's bold default rewriting
+                  every plain name. */}
+              <Icon icon={`ph:${name}`} width={28} weight="regular" />
               <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{name}</span>
             </div>
           ))}

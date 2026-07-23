@@ -71,6 +71,28 @@ function collectReferences() {
   return [...names].sort();
 }
 
+// ── Expand regular references to include their `-bold` twin ────────────────
+// BDS <Icon> defaults to `weight="bold"`, so a source reference `ph:foo`
+// renders as `ph:foo-bold` at runtime. Bundle that twin (when Phosphor ships
+// it) so the default weight resolves offline. The regular name stays in the set
+// too — `weight="regular"` opts back to it. Names that already carry a weight
+// suffix (`-bold`/`-fill`/…) are left alone.
+const PH_WEIGHT_SUFFIXES = ['thin', 'light', 'bold', 'fill', 'duotone'];
+
+function isWeighted(name) {
+  return PH_WEIGHT_SUFFIXES.some((w) => name.endsWith(`-${w}`));
+}
+
+function withBoldTwins(names) {
+  const expanded = new Set(names);
+  for (const name of names) {
+    if (isWeighted(name)) continue;
+    const bold = `${name}-bold`;
+    if (phData.icons[bold] || phData.aliases?.[bold]) expanded.add(bold);
+  }
+  return [...expanded].sort();
+}
+
 // ── Resolve requested names → trimmed IconifyJSON collection ───────────────
 // Copies each icon's data verbatim. If a name is an alias, the alias entry is
 // kept and its parent chain pulled into `icons` so the collection is closed.
@@ -114,7 +136,7 @@ function buildCollection(names) {
 
 // ── Generate ───────────────────────────────────────────────────────────────
 
-const referenced = collectReferences();
+const referenced = withBoldTwins(collectReferences());
 const { collection, missing } = buildCollection(referenced);
 const output = JSON.stringify(collection, null, 2) + '\n';
 const iconCount = Object.keys(collection.icons).length;

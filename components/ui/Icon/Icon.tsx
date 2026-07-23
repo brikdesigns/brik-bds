@@ -11,6 +11,47 @@ addCollection(phSubset as IconifyJSON);
 export type { IconProps };
 
 /**
+ * Phosphor stroke weight. Phosphor encodes weight in the icon *name* —
+ * `ph:{name}` (regular), `ph:{name}-bold`, `ph:{name}-fill`, etc. BDS exposes it
+ * as a prop and defaults to `bold` (§ Icon weight below).
+ */
+export type IconWeight = 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone';
+
+// Non-regular Phosphor weights carry a name suffix; regular carries none. An
+// icon whose name already ends in one of these is explicitly weighted and left
+// untouched by the `weight` prop.
+const PH_WEIGHT_SUFFIXES: readonly Exclude<IconWeight, 'regular'>[] = [
+  'thin',
+  'light',
+  'bold',
+  'fill',
+  'duotone',
+];
+
+/**
+ * Apply the requested Phosphor `weight` to a `ph:*` icon name by rewriting the
+ * suffix. Non-`ph:*` names, non-string icons (IconifyJSON objects), and names
+ * that already carry an explicit weight suffix pass through unchanged.
+ */
+function applyWeight(icon: IconProps['icon'], weight: IconWeight): IconProps['icon'] {
+  if (typeof icon !== 'string' || !icon.startsWith('ph:')) return icon;
+  const name = icon.slice('ph:'.length);
+  if (PH_WEIGHT_SUFFIXES.some((w) => name.endsWith(`-${w}`))) return icon;
+  if (weight === 'regular') return icon;
+  return `ph:${name}-${weight}`;
+}
+
+export interface BdsIconProps extends IconProps {
+  /**
+   * Phosphor stroke weight for `ph:*` icons. Defaults to `'bold'` — BDS's
+   * standard line density. Icons that already name a weight (e.g.
+   * `ph:{name}-fill`) keep it; pass `weight="regular"` to opt back to Phosphor's
+   * thin default weight, and non-`ph:*` icons ignore this entirely.
+   */
+  weight?: IconWeight;
+}
+
+/**
  * BDS `<Icon>` — offline-first Iconify wrapper.
  *
  * @summary Phosphor icons from a bundled subset — no runtime CDN fetch
@@ -27,11 +68,19 @@ export type { IconProps };
  * icons offline with {@link addBrikIcons}; a `ph:*` icon used in BDS source is
  * picked up automatically on the next `npm run gen:icons`.
  *
+ * ## Icon weight
+ *
+ * `ph:*` icons render at `bold` weight by default — BDS's standard line density.
+ * Pass `weight` to change it (`regular` for Phosphor's default thin stroke,
+ * `fill`/`duotone`/`thin`/`light` for the other Phosphor weights). An icon whose
+ * name already encodes a weight (`ph:{name}-fill`) is left as-is.
+ *
  * @example
- * <Icon icon="ph:rocket" width={24} />
+ * <Icon icon="ph:rocket" width={24} />            // bold (default)
+ * <Icon icon="ph:rocket" weight="regular" />       // Phosphor regular
  */
-export function Icon(props: IconProps) {
-  return <IconifyIcon {...props} />;
+export function Icon({ weight = 'bold', ...props }: BdsIconProps) {
+  return <IconifyIcon {...props} icon={applyWeight(props.icon, weight)} />;
 }
 
 /**
