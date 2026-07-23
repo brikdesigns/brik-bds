@@ -55,14 +55,6 @@ const DENTAL_SERVICES_CATALOG: readonly CatalogEntry[] = [
   },
 ];
 
-const REAL_ESTATE_AMENITIES_CATALOG: readonly CatalogEntry[] = [
-  { slug: 'pool', displayName: 'Swimming Pool', aliases: ['pool'] },
-  { slug: 'clubhouse', displayName: 'Clubhouse', aliases: ['community room'] },
-  { slug: 'laundry', displayName: 'On-Site Laundry', aliases: ['laundromat'] },
-  { slug: 'wifi', displayName: 'Community Wi-Fi', aliases: ['wi-fi', 'wifi'] },
-  { slug: 'dog-park', displayName: 'Dog Park' },
-];
-
 // ── Storybook meta ───────────────────────────────────────────────────────────
 
 const meta: Meta<typeof CatalogPicker> = {
@@ -163,20 +155,6 @@ export const Default: Story = {
 };
 
 /**
- * Empty state — no picked entries, form closed. User sees the Add button
- * and the empty label. First interaction target for new client onboarding.
- *
- * @summary Empty state
- */
-export const Empty: Story = {
-  args: {
-    ...Default.args,
-    value: [],
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
  * Mixed sources — catalog picks rendered alongside a user-added custom
  * service. Demonstrates that source attribution is automatic and that
  * custom entries get a derived slug (no collision with catalog slugs).
@@ -206,64 +184,6 @@ export const MixedSources: Story = {
 };
 
 /**
- * Strict mode — only catalog entries accepted. Attempting to commit a
- * free-text name that doesn't match any catalog displayName or alias is
- * silently rejected. Use for locked vocabularies (insurance plans,
- * financing products) where custom entries aren't valid.
- *
- * @summary Strict catalog only
- */
-export const StrictCatalogOnly: Story = {
-  name: 'Strict (No Custom)',
-  args: {
-    ...Default.args,
-    label: 'Insurance Plans',
-    catalog: [
-      { slug: 'in-network-ppo', displayName: 'In-Network PPO' },
-      { slug: 'out-of-network-ppo', displayName: 'Out-of-Network PPO' },
-      { slug: 'medicaid', displayName: 'Medicaid' },
-      { slug: 'hmo', displayName: 'HMO / DMO' },
-      { slug: 'discount-plan', displayName: 'Discount Membership' },
-    ],
-    value: [],
-    strict: true,
-    addLabel: 'Add Plan',
-    searchPlaceholder: 'Search plans…',
-    descriptionPlaceholder: '(not used in strict mode)',
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * Alternate catalog — real-estate amenities. Same component, different
- * vocabulary. Demonstrates that the picker is vocabulary-agnostic as long
- * as the catalog conforms to CatalogEntry shape.
- *
- * @summary Different industry
- */
-export const DifferentIndustry: Story = {
-  name: 'Real-Estate Amenities',
-  args: {
-    ...Default.args,
-    label: 'Community Amenities',
-    catalog: REAL_ESTATE_AMENITIES_CATALOG,
-    value: [
-      {
-        slug: 'clubhouse',
-        displayName: 'Clubhouse',
-        description: 'Resident-only space with lounge and kitchen.',
-        source: 'catalog',
-      },
-    ],
-    addLabel: 'Add Amenity',
-    searchPlaceholder: 'Search or add an amenity…',
-    descriptionPlaceholder: 'What makes this amenity worth mentioning?',
-    removeLabel: 'Remove amenity',
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
  * Interaction test — picks a catalog entry by typing an alias, types a
  * description, commits. Verifies the alias-match path (`source: 'catalog'`)
  * and that the commit clears the form for rapid entry.
@@ -271,7 +191,6 @@ export const DifferentIndustry: Story = {
  * @summary Alias match commits as catalog
  */
 export const InteractionTestAliasMatchCommitsAsCatalog: Story = {
-  name: 'Alias Match → source=catalog',
   tags: ['!manifest'],
   args: {
     label: 'Services Offered',
@@ -308,7 +227,6 @@ export const InteractionTestAliasMatchCommitsAsCatalog: Story = {
  * @summary Free text commits as custom
  */
 export const InteractionTestFreeTextCommitsAsCustom: Story = {
-  name: 'Free Text → source=custom',
   tags: ['!manifest'],
   args: {
     label: 'Services Offered',

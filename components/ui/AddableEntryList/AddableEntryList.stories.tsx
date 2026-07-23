@@ -37,6 +37,11 @@ const DENTAL_SERVICES = [
 
 // ── Storybook meta ────────────────────────────────────────────────────────────
 
+/**
+ * Inline-editable list of `{ primary, secondary }` entries with optional
+ * suggestion-backed primary.
+ * @summary Inline-editable list of primary/secondary entries
+ */
 const meta: Meta<typeof AddableEntryList> = {
   title: 'Containers/addable-entry-list',
   component: AddableEntryList,
@@ -62,7 +67,7 @@ const meta: Meta<typeof AddableEntryList> = {
     },
     disabled: {
       control: 'boolean',
-      description: 'Read-only rendering — see the `ReadMode` story for the token-backed typography treatment.',
+      description: 'Read-only rendering — token-backed typography, no inputs or remove; URL primaries render as anchors.',
     },
     allowDuplicates: { control: 'boolean' },
     maxItems: { control: 'number' },
@@ -133,28 +138,6 @@ export const Default: Story = {
 };
 
 /**
- * Read mode (`disabled`) — token-backed typography, no inputs, no remove.
- * `primaryInputType="url"` renders the primary as a clickable anchor; flip
- * to `text` via Controls to see the plain-text rendering.
- *
- * @summary Read-only rendering — flip primaryInputType for URL vs text
- */
-export const ReadMode: Story = {
-  args: {
-    label: 'Competitors',
-    primaryInputType: 'url',
-    disabled: true,
-    entries: [
-      { primary: 'https://carr.us', secondary: "Healthcare-specific but less boutique — clients don't work directly with leadership" },
-      { primary: 'https://hbre.com', secondary: 'Nashville-based, healthcare-focused, well-respected firm — Brandon (new team member) came from there' },
-      { primary: 'https://www.sagemontre.com', secondary: 'Boutique-ish firm with medical office building listings, good healthy competition — used as photography style reference (sagemontre.com/team)' },
-    ],
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
  * Suggestion mode (`primarySuggestions`) — preserves the reveal-form flow:
  * existing entries render as read-only cards; Add opens a staging form with
  * a combobox-backed primary. Type "cr" to see "Crowns" appear. Enter commits
@@ -175,45 +158,6 @@ export const WithSuggestions: Story = {
     primarySuggestions: DENTAL_SERVICES,
     entries: [
       { primary: 'Dental Implants', secondary: 'Permanent tooth replacement with a natural look and feel.' },
-    ],
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/** @summary Empty starting state before any entries are added */
-export const Empty: Story = {
-  args: {
-    label: 'Reference Sites',
-    primaryInputType: 'url',
-    primaryLabel: 'URL',
-    primaryPlaceholder: 'https://example.com',
-    secondaryLabel: 'Notes',
-    secondaryPlaceholder: 'Why this site is a reference',
-    addLabel: 'Add Reference',
-    removeLabel: 'Remove reference',
-    emptyLabel: 'No reference sites added yet.',
-    entries: [],
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * `maxItems` reached — the Add button hides once the cap is hit.
- * @summary List at capacity — Add button hides
- */
-export const MaxItemsCap: Story = {
-  args: {
-    label: 'Top Reference Sites',
-    maxItems: 3,
-    addLabel: 'Add Reference',
-    removeLabel: 'Remove reference',
-    helperText: 'Add button hides when the limit is reached.',
-    entries: [
-      { primary: 'First reference', secondary: 'First' },
-      { primary: 'Second reference', secondary: 'Second' },
-      { primary: 'Third reference', secondary: 'Third' },
     ],
     onChange: fn(),
   },

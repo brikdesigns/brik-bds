@@ -16,27 +16,13 @@ Industry-aware multi-pick input. Renders a reference catalog as suggestion-backe
 
 ## Variants
 
-### Empty state
-
-<Canvas of={Stories.Empty} />
+Empty state, `strict` (catalog-only), and swapping the `catalog` for another industry are all Controls / code props on any story. This shows source attribution — the one behavior the output array makes visible.
 
 ### Mixed sources
 
 Each entry is tagged by origin — catalog picks and custom additions live together in the same output array.
 
 <Canvas of={Stories.MixedSources} />
-
-### Strict (catalog-only)
-
-`strict` rejects free-text names that don't match any catalog `displayName` or alias. Use for locked vocabularies.
-
-<Canvas of={Stories.StrictCatalogOnly} />
-
-### Different industry
-
-Same component, different catalog. The picker is vocabulary-agnostic.
-
-<Canvas of={Stories.DifferentIndustry} />
 
 ## Props
 
