@@ -1,6 +1,6 @@
 ---
 title: Naming Principles
-description: Every name in BDS describes a role or slot — not a visual shape — and must come from the closed allowlist.
+description: Every name in BDS describes a role or slot — not a visual shape — and must match the canonical BEM pattern.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -11,28 +11,37 @@ Every word in BDS describes a **role** or a **slot**. It does not dictate visual
 
 This distinction is load-bearing for titles and headings — get it wrong and you ship outline-invisible content that looks correct visually. See [HTML Semantics](/docs/build-standards/html-semantics) for the element-selection rules.
 
-## Closed allowlist
+## Slot pattern
 
-Per [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md), the system runs on a **closed allowlist** of slot names. The allowlist lives in [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md).
+Per [ADR-017](../../../../docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md), slot names are governed by a **structural pattern**, not an enumerated list. A `bds-*` class is canonical if and only if it matches the ADR-008 §4 BEM grammar:
 
-> Every `bds-{block}__{slot}` class uses a slot name that appears in `SLOT-ALLOWLIST.md`. Anything else fails the lint.
+```text
+bds-<block>
+bds-<block>--<modifier>
+bds-<block>__<slot>
+bds-<block>__<slot>--<modifier>
+```
 
-The old approach enumerated *banned* terms; agents invented new ones (`__lead`, `__quote-text`, `__plan-name`, `__hamburger-bar`) faster than the banlist grew. Closing the canon inverts the burden: the default is reject, new vocabulary requires a deliberate PR.
+Every segment is **kebab-case** (`__item-label`, never `__itemLabel` or `__item_label`). `__` separates a slot; `--` separates a modifier. No single underscores, no other separators, no doubled `__`/`--`, no uppercase.
 
-### Adding a slot
+> A well-formed slot is canonical *because it is well-formed* — there is no registry to maintain and no PR needed to introduce a new one. Only malformed shapes fail.
+
+The gate is [`scripts/slot-pattern-check.mjs`](../../../../scripts/slot-pattern-check.mjs) — a pure source scan wired into `.husky/pre-commit` (staged) and CI (full-tree, via `.github/workflows/slot-pattern-check.yml`). It supersedes the closed enumerated allowlist, whose enforcing lint (ADR-008 Phase C) **never shipped**: by 2026-07 only 101 of the 396 slots in use were listed, so enumeration was unpayable. [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) is repurposed from a list into the pattern spec (grammar + examples); the filename is kept to preserve inbound links.
+
+### Naming a new slot
 
 1. Identify the role the slot expresses; pick the most generic word that fits.
-2. Grep for existing allowlist slots that already cover the role — **reuse before invent**.
-3. If no existing slot fits, PR an entry into `SLOT-ALLOWLIST.md` with justification.
-4. Reviewer checks: would this slot work on more than one block? Is it generic (not layout-specific)? Is it structural (not visual)?
+2. Grep [Slot Vocabulary](/docs/build-standards/slot-vocabulary) for an existing slot that already covers the role — **reuse before invent**.
+3. Write it kebab-case. A well-formed name passes the gate automatically — no canon edit required.
+4. Keep it structural, not layout-specific (`bds-hero__title`, never `bds-hero__hero-title`) and not visual. Cross-block-generic slots (`__title`, `__label`, `__icon`) are expected and fine.
 
 ## Blueprint naming rules
 
-Blueprints (`content-system/blueprints/*`) are page-level layouts — the Section layer of the [Composition Layers](/docs/build-standards/composition-layers) model. Their naming follows the same closed canon.
+Blueprints (`content-system/blueprints/*`) are page-level layouts — the Section layer of the [Composition Layers](/docs/build-standards/composition-layers) model. Their naming follows the same pattern canon.
 
 1. **Single namespace.** Every class uses `bds-`. The `bp-` prefix is deprecated — no new `bp-*` classes after ADR-008.
 2. **One block per family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-support-plan`. Each family is one block with structural modifiers, not N separate blueprints.
-3. **Slots from the allowlist.** Every `bds-{block}__{slot}` must use an allowlisted name. Phase C lint fails on anything else.
+3. **Well-formed slots.** Every `bds-{block}__{slot}` must match the kebab-case BEM pattern above. The slot-pattern gate fails on malformed shapes, not on new well-formed words.
 4. **Structural-only modifiers.** Modifier names describe structure (`--split-image`, `--two-column`) — never appearance (`--dark`, `--centered`) or theme (`--inverse`). A "dark centered" CTA themed light makes the name a lie.
 5. **Compose, don't reimplement.** A blueprint `.tsx` that imports nothing from `components/ui/*` is almost always drift.
 6. **Use `Frame` for aspect-locked images.** Never hardcode `aspect-ratio` in blueprint CSS.
@@ -43,6 +52,7 @@ Blueprints (`content-system/blueprints/*`) are page-level layouts — the Sectio
 
 ## Related
 
-- [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — the contract; prose here is reference only
-- [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) — full reasoning and 2026-05-11 inventory data
-- [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — what each allowlisted slot means and when to use it
+- [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — the pattern spec (grammar + examples); enforced by `scripts/slot-pattern-check.mjs`
+- [ADR-017](../../../../docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) — why the pattern gate superseded the closed allowlist
+- [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) — the naming canon (§1 namespace, §3 structural-only modifiers, §4 grammar); §2's closed allowlist is superseded by ADR-017
+- [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — what each canonical slot means and when to use it

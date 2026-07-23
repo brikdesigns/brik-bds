@@ -5,7 +5,7 @@ description: The complete reference for every canonical BDS slot name — what i
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Every term here is allowlisted in [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) and enforced by lint. Reach for this list before naming anything. See [Naming Principles](/docs/build-standards/naming-principles) for the allowlist contract.
+Every term here matches the canonical BEM pattern enforced by `scripts/slot-pattern-check.mjs`. It is a curated reference of the roles the system already names — reach for it before coining a new slot, and reuse an existing role rather than invent a synonym. See [Naming Principles](/docs/build-standards/naming-principles) for the pattern rule.
 
 ## Title
 
@@ -62,7 +62,7 @@ When a design has a quoted testimonial, inline alert, or highlighted aside, **th
 
 | Design element | BDS component | What you'd invent if you skipped it |
 |---|---|---|
-| Pull-quote with attribution | `CardTestimonial` | `__quote` / `__quote-cite` / `__quote-text` |
+| Pull-quote with attribution | `Testimonial` | `__quote` / `__quote-cite` / `__quote-text` |
 | Inline alert / status callout | `Banner tone="warning\|error\|information"` | `__alert` / `__notice` |
 | Decorative full-bleed callout | `Banner` | `__banner` / `__callout-strip` |
 | Highlighted plan or pricing tile | `Card`, `PricingCard` | `__plan-callout` / `__pricing-aside` |
@@ -128,6 +128,6 @@ Grammatical test: answers *what kind is this?* → Tag. Answers *what state is t
 
 ## Related
 
-- [Naming Principles](/docs/build-standards/naming-principles) — the allowlist system and how to add a slot
+- [Naming Principles](/docs/build-standards/naming-principles) — the slot pattern and how to name a new slot
 - [HTML Semantics](/docs/build-standards/html-semantics) — which HTML element each slot renders as
-- [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — the contract
+- [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — the pattern spec (grammar + examples)

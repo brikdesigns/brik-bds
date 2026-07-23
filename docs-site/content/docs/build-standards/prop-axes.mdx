@@ -12,7 +12,7 @@ A prop is an **axis** when more than one component exposes it. Axis names belong
 | Axis | Values | Meaning | Components |
 |---|---|---|---|
 | `size` | `xs` · `sm` · `md` · `lg` (indicators); `tiny` · `sm` · `md` · `lg` · `xl` (buttons) | Physical dimensions on a shared scale | Badge, Tag, Chip, Button, IconButton, ServiceTag, Field, Sheet, most form controls |
-| `status` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | Semantic value judgment — which system color tier applies | Badge, Banner, Dot |
+| `status` | `positive` · `warning` · `error` · `info` · `progress` · `brand` | Semantic value judgment — which system color tier applies | Badge, Dot |
 | `variant` | component-specific (see matrix) | Shared prop *name*; meaning varies by component | Chip, Button, IconButton, LinkButton, Card, ServiceTag |
 | `appearance` | `solid` · `subtle` · `outline` | How the shape is filled vs bordered | Badge (`solid` / `subtle`), Tag (`solid` / `subtle`) |
 
@@ -39,19 +39,21 @@ Source of truth: [`manifest/component-axes.json`](https://github.com/brikdesigns
 
 | Component | `variant` | `appearance` | `size` | `status` |
 |---|---|---|---|---|
-| Button | `primary` · `outline` · `secondary` · `ghost` · `inverse` · `on-color` · `danger` · `danger-outline` · `danger-ghost` · `destructive` · `positive` · `selected` | — | `tiny` · `sm` · `md` · `lg` · `xl` | — |
+| Button | `primary` · `outline` · `secondary` · `ghost` · `inverse` · `on-color` · `destructive` · `positive` · `danger` · `danger-outline` · `danger-ghost` | — | `tiny` · `sm` · `md` · `lg` · `xl` | — |
 | LinkButton | shares `ButtonVariant` | — | shares `ButtonSize` | — |
-| IconButton | `primary` · `outline` · `secondary` · `ghost` · `inverse` · `danger` · `danger-outline` · `danger-ghost` · `destructive` · `positive` · `selected` | — | shares `ButtonSize` | — |
+| IconButton | shares `ButtonVariant` | — | shares `ButtonSize` | — |
 | Chip | `primary` · `secondary` | — | `sm` · `md` · `lg` | — |
-| Card | `outlined` · `brand` · `elevated` | — | — | — |
+| Card | `outlined` · `brand` · `elevated` · `borderless` | — | — | — |
 | ServiceTag | `text` · `icon-text` · `icon` | — | `sm` · `md` · `lg` | — |
 | Tag | — | `solid` · `subtle` | `xs` · `sm` · `md` · `lg` | — |
 | Badge | — | `solid` · `subtle` | `xs` · `sm` · `md` · `lg` | `positive` · `warning` · `error` · `info` · `progress` · `brand` |
 
 **Notes:**
+- `selected` is **not** a variant — it is a boolean state prop on Button / IconButton (`selected={true}`), applied as a modifier on top of any variant. Never list it in the variant union.
 - Chip `appearance` removed in v0.66 — Chip is interactive; emphasis lives on `variant` only.
-- Card `variant` encodes border/elevation style — not a hierarchy or fill axis. `CardPreset` (`control` · `summary` · `display`) is orthogonal to `variant`.
+- Card `variant` encodes border/elevation style — not a hierarchy or fill axis. `CardPreset` (`control` · `summary` · `display` · `display-row`) is orthogonal to `variant`.
 - Badge `outline` appearance excluded — low contrast for status indicators.
+- **Banner is not on the `status` axis** — it expresses the same semantics through its own `tone` axis (`announcement` · `warning` · `error` · `information`). Dot uses `status` with its own union (`default` · `positive` · `warning` · `error` · `info` · `neutral`); the value sets are per-component (TypeScript is the gate).
 
 <Callout type="info">
   TypeScript is the authoritative gate. Pass only values the component's declared union includes — never invent values. The manifest shows which types are exported.
