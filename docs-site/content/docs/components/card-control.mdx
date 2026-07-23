@@ -1,15 +1,56 @@
 ---
 title: Card control
-description: Settings control card — badge + title + description + action. Standalone alternative to Card preset="control".
+description: DEPRECATED — use Card preset="control" instead.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-CardControl is a locked-down settings-row card. Leading badge or icon, title + description in the middle, action (Switch / Button / link) on the right. Use for notification toggles, feature flags, and any settings panel where each row's affordance matters.
-
-<Callout type="info">
-  **Both `<CardControl>` and `<Card preset="control">` ship as first-class APIs in v0.39.0+.** The 2026-Q2 audit recommended folding CardControl into Card; the user reversed that decision 2026-04-24 to preserve optionality at the call site. Pick whichever reads cleaner — same shape, same Badge slot, same action alignment behavior. See [Card](/docs/components/card) for the preset version.
+<Callout type="warn">
+  **CardControl is deprecated.** Migrate to [`Card preset="control"`](/docs/components/card#control-preset) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)) — the preset carries the same layout, Badge slot, and action-alignment behavior. Per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md), CardControl is kept during the migration window and removed in a future major version once the last consumer migrates.
 </Callout>
+
+## Migration
+
+Same props, same defaults — move them onto `Card` and add `preset="control"`.
+
+```tsx
+// Before
+import { CardControl } from '@brikdesigns/bds';
+
+<CardControl
+  title="Email notifications"
+  description="Receive a weekly digest"
+  badge={<Badge status="positive">On</Badge>}
+  action={<Switch checked={enabled} onChange={handleChange} />}
+/>
+
+// After
+import { Card } from '@brikdesigns/bds';
+
+<Card
+  preset="control"
+  title="Email notifications"
+  description="Receive a weekly digest"
+  badge={<Badge status="positive">On</Badge>}
+  action={<Switch checked={enabled} onChange={handleChange} />}
+/>
+```
+
+| CardControl prop | `Card preset="control"` prop |
+|---|---|
+| `title` | `title` |
+| `description` | `description` |
+| `badge` | `badge` |
+| `action` | `action` |
+| `actionAlign` | `actionAlign` |
+
+The preset adds slots CardControl never had — `logo` (integration logomark), `connectionStatus`, and `lastSynced` for third-party service cards. See [Card → Control preset](/docs/components/card#control-preset).
+
+---
+
+The reference below documents the frozen CardControl API for migration. New code should use [Card preset="control"](/docs/components/card#control-preset).
+
+CardControl is a locked-down settings-row card. Leading badge or icon, title + description in the middle, action (Switch / Button / link) on the right. Use for notification toggles, feature flags, and any settings panel where each row's affordance matters.
 
 ## Use it for
 
