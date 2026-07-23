@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { JSX } from 'react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 import type { BlueprintProps } from '../astro/types';
+import { baseTheme, baseClientFacts } from './_fixtures';
 
 /* ─── Demo data-service-line cascade ────────────────────────────────────
  *
@@ -36,27 +38,6 @@ const serviceLineCascadeStyles = `
 `;
 
 /* ─── Fixtures ─────────────────────────────────────────────────── */
-
-const baseTheme: BlueprintProps['theme'] = {
-  themeMode: 'light',
-  atmosphere: 'none',
-  navigationArchetype: 'utility-first',
-  footerArchetype: 'four_col_directory',
-};
-
-const baseClientFacts: BlueprintProps['clientFacts'] = {
-  brandName: 'Acme',
-  tagline: null,
-  valueProposition: null,
-  services: [],
-  phone: null,
-  email: null,
-  address: null,
-  hours: [],
-  heroImageUrl: null,
-  logoUrl: null,
-  logoVariants: {},
-};
 
 /**
  * Canonical interior-hero fixture — service-detail page shape with
@@ -117,12 +98,21 @@ const meta: Meta<typeof HeroSplitImageCardOverlay> = {
   component: HeroSplitImageCardOverlay,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   decorators: [withAudienceCascade],
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, breadcrumb, priceCard, serviceLine. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+    imageRatio: { control: 'inline-radio', options: ['square', 'landscape'], description: 'Price-card image aspect. Default `square` (1:1 CMS illustrations); `landscape` for 4:3 photos.' },
+    showServiceTag: { control: 'boolean', description: 'Show the eyebrow ServiceTag slot. `false` keeps the `serviceLine` tint without the badge.' },
+    icon: { control: false, description: 'Decorative eyebrow node (aria-hidden). Takes precedence over the ServiceTag.' },
+    onPriceCtaClick: { control: false, description: 'Intercept the price-card CTA to run an in-page handler; the `url` stays as the no-JS/SEO href.' },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
-          'Interior-page hero blueprint. 58/42 split: left column carries the page trail (breadcrumb, eyebrow, h1, optional body, single dark CTA) on a soft audience-tinted background; right column shows a white image card with optional price overlay. Drives `/services/{cat}/{slug}` style pages — the failure zone where agents previously improvised layouts because no canonical block covered the shape. Service-line tinting is a `data-service-line` cascade: BDS ships the pattern, consumer sites declare the per-audience color values. The Playground fixture mirrors `brikdesigns.com/service/layout-design`.',
+          'Interior-page hero blueprint. 58/42 split: left column carries the page trail (breadcrumb, eyebrow, h1, optional body, single dark CTA) on a soft audience-tinted background; right column shows a white image card with optional price overlay. Drives `/services/{cat}/{slug}` style pages — the failure zone where agents previously improvised layouts because no canonical block covered the shape. Service-line tinting is a `data-service-line` cascade: BDS ships the pattern, consumer sites declare the per-audience color values. The Default fixture mirrors `brikdesigns.com/service/layout-design`.',
       },
     },
   },
@@ -134,60 +124,26 @@ type Story = StoryObj<typeof HeroSplitImageCardOverlay>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Canonical interior service-page hero.
+ * The canonical interior service-page hero. `imageRatio`, `showServiceTag`,
+ * `icon`/`iconUrl`, and `onPriceCtaClick` are Controls/argTypes on this story.
+ *
+ * @summary Canonical interior service-page hero
  */
-export const Playground: Story = {
+export const Default: Story = {
   args: baseProps,
 };
 
-/**
- * @summary Landscape photography variant — opt in via `imageRatio="landscape"`
- * when the priceCard image is a 4:3 photo rather than a 1:1 illustration.
- * The default is `square` because Brik's CMS service/plan illustrations are
- * uploaded at 1:1; this variant documents how callers with landscape source
- * assets opt out.
- */
-export const LandscapePhotography: Story = {
-  args: {
-    ...baseProps,
-    imageRatio: 'landscape',
-    section: {
-      ...interiorHeroSection,
-      sectionKey: 'hero-img-card-landscape',
-      priceCard: {
-        ...interiorHeroSection.priceCard!,
-        imageUrl: 'https://placehold.co/640x480/eaf1fb/1f3d70?text=Landscape+Photo',
-      },
-    },
-  },
-};
+/* ─── Interaction tests — play-only, hidden from MCP discovery (Q5) ─── */
 
 /**
- * @summary Service-tag opt-out — `showServiceTag={false}` suppresses the
- * eyebrow icon/ServiceTag slot while `serviceLine` still drives the
- * `data-service-line` color theming (note the tint is unchanged from Playground).
- * For support-plan heroes that want the service-line tint without a service-line
- * badge — brikdesigns.com #452.
+ * Pass `icon` (a rendered SVG/Image node) to render a purely-decorative
+ * eyebrow with no `img`/`alt` semantics — the blueprint wraps it in an
+ * `aria-hidden` span. Takes precedence over `iconUrl` and the ServiceTag.
+ *
+ * @summary Decorative icon slot is aria-hidden
  */
-export const NoServiceTag: Story = {
-  args: {
-    ...baseProps,
-    showServiceTag: false,
-    section: {
-      ...interiorHeroSection,
-      sectionKey: 'hero-img-card-no-tag',
-    },
-  },
-};
-
-/**
- * @summary Decorative icon slot (#849) — pass `icon` (a rendered SVG/Image node)
- * to render a purely-decorative eyebrow with no `img`/`alt` semantics. The
- * blueprint wraps it in an `aria-hidden` span, so screen readers skip it. Takes
- * precedence over `iconUrl` and the `audience` ServiceTag; `iconUrl` still works
- * unchanged for callers that pass a URL.
- */
-export const DecorativeIconSlot: Story = {
+export const InteractionTestDecorativeIconSlot: Story = {
+  tags: ['!manifest'],
   args: {
     ...baseProps,
     icon: (
@@ -213,33 +169,15 @@ export const DecorativeIconSlot: Story = {
 };
 
 /**
- * @summary Medium price-card CTA — opt in via `priceCard.cta.size="md"`.
- * The default is `sm` (see Playground); support-plan heroes that want a
- * weightier price-card action pass `md`. brikdesigns.com #453.
+ * Pass `onPriceCtaClick` to intercept the price-card CTA and run an in-page
+ * handler instead of navigating. The `priceCard.cta.url` stays as the rendered
+ * `href` (no-JS / SEO fallback). Astro-rendered blueprints never receive this
+ * prop and keep the plain anchor. (brik-bds#843)
+ *
+ * @summary Price-CTA link intercept fires the handler
  */
-export const PriceCardCtaMd: Story = {
-  args: {
-    ...baseProps,
-    section: {
-      ...interiorHeroSection,
-      sectionKey: 'hero-img-card-cta-md',
-      priceCard: {
-        ...interiorHeroSection.priceCard!,
-        cta: { ...interiorHeroSection.priceCard!.cta!, size: 'md' },
-      },
-    },
-  },
-};
-
-/**
- * @summary Action CTA — pass `onPriceCtaClick` to intercept the price-card CTA
- * and run an in-page handler (e.g. open a modal) instead of navigating. The
- * `priceCard.cta.url` stays as the rendered `href`, so the link still works as
- * a no-JS / SEO fallback (progressive enhancement). Click the CTA and watch the
- * Actions panel: the handler fires and navigation is suppressed. Astro-rendered
- * blueprints never receive this prop and keep the plain anchor. (brik-bds#843)
- */
-export const PriceCtaAsAction: Story = {
+export const InteractionTestPriceCtaAsAction: Story = {
+  tags: ['!manifest'],
   args: {
     ...baseProps,
     onPriceCtaClick: fn(),
@@ -267,14 +205,15 @@ export const PriceCtaAsAction: Story = {
 };
 
 /**
- * @summary Native action CTA (#941) — when `priceCard.cta` carries an
- * `onClick` (instead of a `url`), the blueprint renders a real `<button>`
- * with button semantics — no href, no anchor. This is the first-class way
- * to wire a CTA to client behavior (open a modal, etc.), distinct from the
- * `onPriceCtaClick` link-intercept above (#843), which keeps a URL fallback.
- * Use this when there is no meaningful no-JS destination.
+ * When `priceCard.cta` carries an `onClick` (instead of a `url`), the blueprint
+ * renders a real `<button>` with button semantics — no href, no anchor. The
+ * first-class way to wire a CTA to client behavior, distinct from the
+ * `onPriceCtaClick` link-intercept above (#843). (#941)
+ *
+ * @summary onClick price-CTA renders a button
  */
-export const PriceCtaActionButton: Story = {
+export const InteractionTestPriceCtaActionButton: Story = {
+  tags: ['!manifest'],
   args: {
     ...baseProps,
     section: {
@@ -298,13 +237,15 @@ export const PriceCtaActionButton: Story = {
 };
 
 /**
- * @summary Price-suppressed card (#500) — omit `priceCard.price`/`priceLabel`
- * to render the deliverable image + CTA with no price overlay text. The
- * blueprint guards both the label (`priceLabel && price`) and the value
- * (`price`), so a priceCard carrying only an image and a CTA renders an
- * image-and-action card — the shape for services with no fixed/published price.
+ * Omit `priceCard.price`/`priceLabel` to render the deliverable image + CTA
+ * with no price overlay text. The blueprint guards both the label
+ * (`priceLabel && price`) and the value (`price`) — the shape for services
+ * with no fixed/published price. (#500)
+ *
+ * @summary Price-suppressed card renders image + CTA
  */
-export const NoPrice: Story = {
+export const InteractionTestNoPrice: Story = {
+  tags: ['!manifest'],
   args: {
     ...baseProps,
     section: {

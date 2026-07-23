@@ -52,6 +52,11 @@ const meta: Meta<typeof AboutStorySplit> = {
   title: 'Blueprints/about_story_split',
   component: AboutStorySplit,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+  },
   parameters: { layout: 'fullscreen' },
 };
 

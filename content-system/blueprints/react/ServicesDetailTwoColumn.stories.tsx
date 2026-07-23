@@ -53,6 +53,11 @@ const meta: Meta<typeof ServicesDetailTwoColumn> = {
   title: 'Blueprints/services_detail_two_column',
   component: ServicesDetailTwoColumn,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+  },
   parameters: { layout: 'fullscreen' },
 };
 
@@ -64,15 +69,5 @@ export const Default: Story = {
   args: { section, clientFacts: baseClientFacts, theme: baseTheme },
 };
 
-/** @summary Three services — minimum useful row count. */
-export const ThreeItems: Story = {
-  args: {
-    section: {
-      ...section,
-      sectionKey: 'services-two-col-3-items',
-      items: section.items.slice(0, 3),
-    },
-    clientFacts: baseClientFacts,
-    theme: baseTheme,
-  },
-};
+// Item count is a content variation through `section.items` (Q2) — not a
+// separate story. Default carries the canonical six-service shape.

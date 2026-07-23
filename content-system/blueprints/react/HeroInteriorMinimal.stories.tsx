@@ -46,6 +46,11 @@ const meta: Meta<typeof HeroInteriorMinimal> = {
   title: 'Blueprints/hero_interior_minimal',
   component: HeroInteriorMinimal,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  argTypes: {
+    section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
+    clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
+    theme: { control: false, description: 'Theme + archetype config — mode, atmosphere, nav/footer archetype. Set in code.' },
+  },
   parameters: { layout: 'fullscreen' },
 };
 
@@ -57,29 +62,6 @@ export const Default: Story = {
   args: { section: interiorSection, clientFacts: baseClientFacts, theme: baseTheme },
 };
 
-/** @summary With CTA — interior page with a primary action. */
-export const WithCta: Story = {
-  args: {
-    section: {
-      ...interiorSection,
-      sectionKey: 'hero-interior-with-cta',
-      cta: { label: 'See examples', url: '#' },
-    },
-    clientFacts: baseClientFacts,
-    theme: baseTheme,
-  },
-};
-
-/** @summary Headline-only — no eyebrow, no lead, no CTA. */
-export const HeadlineOnly: Story = {
-  args: {
-    section: {
-      ...interiorSection,
-      sectionKey: 'hero-interior-headline-only',
-      subheading: null,
-      body: null,
-    },
-    clientFacts: baseClientFacts,
-    theme: baseTheme,
-  },
-};
+// `cta` presence and eyebrow/lead omission are content variations expressed
+// through `section` (Q2) — not separate stories. Default carries the canonical
+// interior-hero shape.
