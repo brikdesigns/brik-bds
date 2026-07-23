@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BrikDevBar } from '../BrikDevBar';
 import { DevFeedbackWidget } from './DevFeedbackWidget';
 
-/* ─── Layout helpers (story-only) ─────────────────────── */
+/* ─── Layout helper (story-only) ──────────────────────── */
 
 const Frame = ({ children }: { children: React.ReactNode }) => (
   <div
@@ -18,8 +18,10 @@ const Frame = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-/* ─── Meta ────────────────────────────────────────────── */
-
+/**
+ * Feedback widget — floating button (FAB) or a slot in the BrikDevBar shell.
+ * @summary Dev/product feedback widget — FAB or DevBar slot
+ */
 const meta: Meta<typeof DevFeedbackWidget> = {
   title: 'Tools/dev-feedback-widget',
   component: DevFeedbackWidget,
@@ -29,21 +31,28 @@ const meta: Meta<typeof DevFeedbackWidget> = {
     variant: {
       control: { type: 'inline-radio' },
       options: ['auto', 'slot', 'fab'],
+      description: '`fab` renders a standalone floating button; `slot` registers with the DevBar shell; `auto` runtime-detects (default).',
     },
-    endpoint: { control: 'text' },
-    contextLabel: { control: 'text' },
+    endpoint: { control: 'text', description: 'POST endpoint for feedback submissions.' },
+    contextLabel: { control: 'text', description: 'Label shown before the context value (e.g. "Page", "Story").' },
+    getContextValue: { control: false, description: 'Returns the current context string (e.g. pathname or story name).' },
+    fabPosition: { control: false, description: 'Standalone FAB position `{ bottom?, left?, right? }` when no DevBar is present.' },
+    extraPayload: { control: false, description: 'Additional payload fields sent with every submission.' },
+    page: { control: 'text', description: 'Human page name; falls back to the URL slug when unset.' },
+    section: { control: 'text', description: 'Section label of the picked element (from the inspector).' },
+    component: { control: 'text', description: 'BDS block class of the picked element (e.g. "bds-button").' },
+    componentTitle: { control: 'text', description: 'Nearest BDS section title of the picked element.' },
+    domPath: { control: 'text', description: 'Stable structural DOM path to the picked element.' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof DevFeedbackWidget>;
 
-/* ═══════════════════════════════════════════════════════════════
-   1. PLAYGROUND — explore all three variants via Controls panel
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Default — standalone FAB; toggle `variant` in Controls ─── */
 
-/** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+/** @summary Feedback widget — toggle variant / endpoint via Controls */
+export const Default: Story = {
   args: {
     variant: 'fab',
     endpoint: '/api/feedback',
@@ -52,109 +61,36 @@ export const Playground: Story = {
   render: (args) => (
     <Frame>
       <p style={{ marginBottom: 'var(--gap-md)' }}>
-        Toggle the <code>variant</code> control: <strong>fab</strong> renders the floating
-        button standalone; <strong>slot</strong> registers with the DevBar shell (and warns
-        if the shell never appears); <strong>auto</strong> runtime-detects.
+        No DevBar present. <code>fab</code> renders the floating button; <code>auto</code> falls back to
+        the FAB after its detection window.
       </p>
       <DevFeedbackWidget {...args} />
     </Frame>
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. FAB — standalone, no DevBar shell
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── With DevBar — Q4 composition (registers into the shell) ── */
 
-/** @summary Standalone floating button — explicit `variant="fab"` skips the DevBar lookup */
-export const FabStandalone: Story = {
-  render: () => (
+/**
+ * Composed alongside `<BrikDevBar>`. `slot` seeds the shell immediately;
+ * `auto` polls and settles into slot mode. The DevBar composition is what
+ * args can't express — toggle `variant` to compare slot vs auto.
+ *
+ * @summary Feedback widget registered into the BrikDevBar shell
+ */
+export const WithDevBar: Story = {
+  args: {
+    variant: 'slot',
+    endpoint: '/api/feedback',
+    contextLabel: 'Story',
+  },
+  render: (args) => (
     <Frame>
-      <p>Standalone FAB, no DevBar present. Use this in product apps that ship customer feedback collection without the dev shell.</p>
-      <DevFeedbackWidget variant="fab" endpoint="/api/feedback" contextLabel="Page" />
-    </Frame>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. SLOT — explicit slot mode (no FAB flicker)
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Slot-only — registers with BrikDevBar; never renders the FAB even pre-load */
-export const SlotWithDevBar: Story = {
-  render: () => (
-    <Frame>
-      <p>Explicit <code>variant=&quot;slot&quot;</code>. The widget seeds <code>devBarPresent=true</code> from the start so the FAB never flashes during the bar&apos;s load. Logs a warning if no DevBar appears within 2s.</p>
-      <BrikDevBar />
-      <DevFeedbackWidget variant="slot" endpoint="/api/feedback" contextLabel="Story" />
-    </Frame>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. AUTO — runtime detect (current default behavior)
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Auto detect with DevBar present — registers slot; FAB is hidden once detected */
-export const AutoWithDevBar: Story = {
-  render: () => (
-    <Frame>
-      <p>Default <code>variant=&quot;auto&quot;</code>. Polls <code>window.BrikDevBar</code> every 100ms for 2s. With the shell mounted, the widget settles into slot mode.</p>
-      <BrikDevBar />
-      <DevFeedbackWidget endpoint="/api/feedback" contextLabel="Story" />
-    </Frame>
-  ),
-};
-
-/** @summary Auto detect without DevBar — falls back to FAB after the 2s detection window */
-export const AutoWithoutDevBar: Story = {
-  render: () => (
-    <Frame>
-      <p>Default <code>variant=&quot;auto&quot;</code> with no DevBar shell. After the 2s lookup window, falls back to FAB rendering. Note: until detection times out, you may briefly see no widget — the trade-off the explicit <code>fab</code>/<code>slot</code> variants resolve.</p>
-      <DevFeedbackWidget endpoint="/api/feedback" contextLabel="Page" />
-    </Frame>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   5. RIGHT-ANCHORED — FAB pinned bottom-right; panel tracks
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary FAB pinned bottom-right — open the panel and confirm it anchors to the right edge alongside the FAB. brik-bds#415. */
-export const FabPinnedRight: Story = {
-  render: () => (
-    <Frame>
-      <p>
-        FAB pinned to <code>bottom-right</code> via <code>fabPosition={'{ bottom: \'16px\', right: \'16px\' }'}</code>.
-        On click, the panel opens at the same right edge as the FAB so the menu visually grows out of the trigger.
-        Earlier behavior anchored the panel to <code>left: 16px</code> regardless of <code>fabPosition</code> — opposite edge of the FAB.
+      <p style={{ marginBottom: 'var(--gap-md)' }}>
+        With the DevBar shell mounted, the widget registers as a slot instead of a FAB.
       </p>
-      <DevFeedbackWidget
-        variant="fab"
-        endpoint="/api/feedback"
-        contextLabel="Page"
-        fabPosition={{ bottom: '16px', right: '16px' }}
-      />
-    </Frame>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   6. SCREENSHOT CAPTURE — paste / drag / upload (brik-client-portal#1912)
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Open the panel, then attach a screenshot by paste (Cmd/Ctrl+V), drag-drop, or click-to-upload. */
-export const ScreenshotCapture: Story = {
-  render: () => (
-    <Frame>
-      <p>
-        Open the FAB panel to reveal the <strong>attach a screenshot</strong> zone under the
-        message box. It accepts a clipboard <strong>paste</strong> (Cmd/Ctrl+V while the panel is
-        open), a <strong>drag-drop</strong>, or a <strong>click-to-upload</strong>. The image is
-        downscaled to 1200px and JPEG-compressed client-side before it is added to the payload as
-        <code>screenshot_base64</code>; a thumbnail preview with a remove control confirms the
-        attachment. Submitting without one still works.
-      </p>
-      <DevFeedbackWidget variant="fab" endpoint="/api/feedback" contextLabel="Page" />
+      <BrikDevBar />
+      <DevFeedbackWidget {...args} />
     </Frame>
   ),
 };

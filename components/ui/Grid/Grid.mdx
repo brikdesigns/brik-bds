@@ -10,29 +10,17 @@ import * as Stories from './Grid.stories';
 
 Grid arranges children in a CSS grid. Set a fixed `columns` count (1–6), or `auto-fit` / `auto-fill` (default `auto-fit`) to reflow items to fill the available width; `gap` uses the spacing scale.
 
-## Playground
+## Default
 
-<Canvas of={Stories.Playground} />
+<Canvas of={Stories.Default} />
 
 ## Variants
 
-The `columns` axis — a fixed count, auto-reflow, or the responsive collapse fixed counts fall back to on narrow viewports.
-
-### Three column
-
-<Canvas of={Stories.ThreeColumn} />
-
-### Auto fit
-
-<Canvas of={Stories.AutoFit} />
+`columns`, `gap`, and `minColumnWidth` are Controls on any story. This gallery shows the `columns` axis side-by-side — the one comparison the autodocs order can't make clear.
 
 ### Column counts
 
 <Canvas of={Stories.ColumnCounts} />
-
-### Responsive collapse
-
-<Canvas of={Stories.ResponsiveCollapse} />
 
 ## Props
 
