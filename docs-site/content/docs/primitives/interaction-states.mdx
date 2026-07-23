@@ -12,12 +12,18 @@ Every interactive component (button, card, tag, chip, link) uses the same intera
 
 ## Overlay primitives — composable hover/press
 
-| Token | Light mode | Dark mode | Purpose |
-|---|---|---|---|
-| `--state-hover-overlay` | `rgba(0, 0, 0, 0.04)` | `rgba(255, 255, 255, 0.06)` | Subtle hover overlay on any surface |
-| `--state-pressed-overlay` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | Stronger overlay for `:active` / press |
-| `--state-focus` | aliases `--border-brand-primary` | aliases `--border-brand-primary` | Keyboard focus ring color |
-| `--state-disabled-opacity` | `0.4` | `0.4` | Opacity for disabled elements |
+These four tokens are mode-invariant — they resolve to the same value in light and dark.
+
+| Token | Value | Purpose |
+|---|---|---|
+| `--state-hover-overlay` | `rgba(0, 0, 0, 0.04)` | Subtle hover overlay on any surface |
+| `--state-pressed-overlay` | `rgba(0, 0, 0, 0.08)` | Stronger overlay for `:active` / press |
+| `--state-focus` | `currentColor` | Keyboard focus ring color — resolves to the element's own text color at use-site |
+| `--state-disabled-opacity` | `0.4` | Opacity for disabled elements |
+
+<Callout type="warn">
+  The overlays are a fixed black `rgba` in **both** modes — there is no white-overlay override for dark surfaces today, so a hover/press overlay reads faintly on very dark backgrounds. Wire a dark-mode override if a dark surface needs a stronger cue.
+</Callout>
 
 <Callout type="info">
   **Why overlays?** A transparent overlay works on ANY background — brand, surface-secondary, status-positive, service-line — without needing a unique hover token per color. One token handles every context. Solid `-hover` tokens only exist where the brand-fill cases need them.
@@ -74,7 +80,7 @@ For brand-colored surfaces (filled primary buttons, brand backgrounds), the over
 
 - **Width** uses `--border-width-lg` — no new dimension token. Mode picks (`data-mode-borderwidth`) propagate automatically.
 - **Offset** is hardcoded `2px` in CSS — accessibility fixed value, not themeable.
-- **Color** aliases `--border-brand-primary` so the focus ring picks up brand identity automatically when a Brand Kit applies.
+- **Color** is `--state-focus`, which resolves to `currentColor` — the ring inherits the element's own text color at use-site rather than a fixed brand token.
 
 ## Decision tree — overlay vs solid
 
