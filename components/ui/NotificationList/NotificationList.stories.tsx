@@ -1,13 +1,23 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NotificationItem, NotificationList, NotificationPopover } from './NotificationList';
+import { fn } from 'storybook/test';
+import { NotificationList, NotificationPopover } from './NotificationList';
 import type { NotificationItemData } from './NotificationList';
 
+/**
+ * Vertical list of notification rows with read/unread states.
+ * @summary Notification list with read/unread rows
+ */
 const meta: Meta<typeof NotificationList> = {
   title: 'Containers/notification-list',
   component: NotificationList,
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
+  argTypes: {
+    notifications: { control: false, description: 'Notification rows to render, each with `id` / `title` / `body` / `time` / optional `isRead`.' },
+    onItemClick: { control: false, description: 'Called with the notification when a row is clicked.' },
+    emptyMessage: { control: 'text', description: 'Message shown when `notifications` is empty.' },
+  },
 };
 
 export default meta;
@@ -23,56 +33,36 @@ const SAMPLE_NOTIFICATIONS: NotificationItemData[] = [
   { id: '5', title: 'New Request: Leaking Faucet', body: 'Facilities maintenance requested for Room 3', time: '3d ago', isRead: true },
 ];
 
-/* ═══════════════════════════════════════════════════════════════
-   1. DEFAULT — canonical list; unread + read items via the data
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Default — clear `notifications` in Controls for the empty state ── */
 
-/** @summary Canonical notification list. Edit `notifications` via Controls; the sample mixes unread and read (`isRead`) items so both row states render. */
+/** @summary Canonical list — sample mixes unread and read rows */
 export const Default: Story = {
   args: {
     notifications: SAMPLE_NOTIFICATIONS,
+    onItemClick: fn(),
   },
   render: (args) => (
     <div style={{ width: 360 }}>
-      <NotificationList {...args} onItemClick={(n) => console.log('Clicked:', n.id)} />
+      <NotificationList {...args} />
     </div>
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. EMPTY — zero-notification state
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Empty state — the list with no notifications. */
+/** @summary Empty state — no notifications */
 export const Empty: Story = {
-  render: () => (
+  args: {
+    notifications: [],
+  },
+  render: (args) => (
     <div style={{ width: 360 }}>
-      <NotificationList notifications={[]} />
+      <NotificationList {...args} />
     </div>
   ),
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   3. ITEM — the NotificationItem block in isolation
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Popover — Q4 interactive composition ───────────────────── */
 
-/** @summary Single `NotificationItem` block, reusable standalone outside the list. */
-export const Item: Story = {
-  render: () => (
-    <div style={{ width: 360 }}>
-      <NotificationItem
-        notification={SAMPLE_NOTIFICATIONS[0]}
-        onClick={(n) => console.log('Clicked:', n.id)}
-      />
-    </div>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. POPOVER — Q5 interactive: bell trigger + unread badge + mark-all
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Interactive `NotificationPopover` — bell trigger, unread badge, click-to-read, and mark-all-read. Clear all items to see the empty popover. */
+/** @summary Interactive popover — bell, unread badge, mark-all */
 export const Popover: Story = {
   render: () => {
     const [notifications, setNotifications] = useState(SAMPLE_NOTIFICATIONS);
