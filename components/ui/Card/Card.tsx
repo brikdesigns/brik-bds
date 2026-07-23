@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
-import { Avatar, type AvatarSize, type AvatarStatus } from '../Avatar';
+import { Avatar, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
 import { Dot, type DotStatus } from '../Dot';
@@ -44,11 +44,16 @@ export type CardControlConnectionStatus =
 export type CardDisplayRowImageWidth = 'narrow' | 'standard' | 'wide' | (string & {});
 
 /**
- * Size for the default Card's leading `media` slot — a square keyed to the
- * `Avatar` size scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so an
- * avatar and a 1:1 image read at the same footprint. Default `md`.
+ * Size for the default Card's leading `media` slot — a square on the shared
+ * media scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so an avatar, a 1:1
+ * image, and a bundled `Logo` all read at the same footprint. Default `md`.
+ *
+ * Its own union rather than `AvatarSize`: the media slot is shared with `Logo`
+ * (`LogoSize`, no `xs`), and `Avatar`'s `xs` (24px) is for dense inline
+ * affordances outside cards. Keeping this at `sm`–`xl` preserves the shared
+ * footprint and avoids leaking `xs` into the `Logo` path.
  */
-export type CardMediaSize = AvatarSize;
+export type CardMediaSize = 'sm' | 'md' | 'lg' | 'xl';
 export type CardMediaImageFit = 'contain' | 'cover';
 
 /** Avatar shape for the default Card's leading `media` slot. Mirrors `Avatar`. */

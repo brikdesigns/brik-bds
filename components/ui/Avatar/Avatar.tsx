@@ -2,7 +2,7 @@ import { type HTMLAttributes, useState } from 'react';
 import { bdsClass } from '../../utils';
 import './Avatar.css';
 
-export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
+export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarStatus = 'online' | 'offline' | 'busy' | 'away';
 export type AvatarColor = 'green' | 'purple' | 'blue' | 'orange' | 'yellow' | 'red';
 
