@@ -1,20 +1,15 @@
 ---
 title: Icons
-description: Iconify + Phosphor icon reference. Inline SVGs via @iconify/react, no CDN calls.
+description: The BDS Icon wrapper — Phosphor icons from a bundled offline subset, bold by default.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-BDS uses [Phosphor](https://phosphoricons.com/) icons via [`@iconify/react`](https://iconify.design/docs/icon-components/react/). Icons render as inline SVGs — no CDN, no flash-of-unstyled-icon, no bundle bloat from importing all icons.
+BDS ships its own `Icon` component — an offline-first wrapper around [`@iconify/react`](https://iconify.design/docs/icon-components/react/) that renders [Phosphor](https://phosphoricons.com/) (`ph:*`) icons from a bundled subset. Icons render as inline SVGs with no runtime CDN fetch, no flash-of-unstyled-icon, and no bundle bloat from importing the full set. It is API-compatible with `@iconify/react`'s `<Icon>`, and defaults `ph:*` icons to `bold` weight (BDS's standard line density).
 
 ## Setup
 
-| Package | Purpose |
-|---|---|
-| `@iconify/react` | Renders any Iconify icon as a React `<Icon>` component |
-| `@iconify-json/ph` | Phosphor icon data (bundled for offline / SSR) |
-
-BDS registers the Phosphor collection at startup in `.storybook/preview.tsx` via `addCollection()`. No CDN calls needed.
+No consumer setup is required — importing `Icon` from `@brikdesigns/bds` auto-registers the bundled Phosphor subset (`components/icons.generated.json`) into Iconify's global store on module load, so `ph:*` icons resolve synchronously with no network call. A `ph:*` icon not yet in the subset falls through to Iconify's default behavior (a runtime CDN fetch). To bring your own icon collections offline, call `addBrikIcons(collection)` once at app start.
 
 ## Use it for
 
@@ -28,16 +23,10 @@ For larger illustrations and brand marks, use a static SVG asset directly. For n
 ## Import
 
 ```tsx
-import { Icon } from '@iconify/react';
+import { Icon } from '@brikdesigns/bds';
 ```
 
-For BDS-internal usage, prefer the named constants in `components/icons.ts`:
-
-```tsx
-import { Star } from '@brikdesigns/bds/icons';
-
-<Icon icon={Star} />
-```
+`addBrikIcons` is also exported from `@brikdesigns/bds` for registering extra offline collections.
 
 ## Usage
 
@@ -53,19 +42,17 @@ The `icon` prop accepts a `collection:name` string. Phosphor icons use the `ph:`
 
 Find available icons at [phosphoricons.com](https://phosphoricons.com/).
 
-### BDS icon constants
+### BDS icon constants (internal)
 
-For commonly-used icons in BDS components, prefer the named constants — protects against typos and centralizes the icon vocabulary.
+Inside the BDS repo, component authors prefer the named constants in `components/icons.ts` — they protect against typos and centralize the icon vocabulary. These are **not** part of the public package export; they're imported by relative path from within `components/`:
 
 ```tsx
-import { Star, Check, XCircle } from '@brikdesigns/bds/icons';
+import { Star, Check, XCircle } from '../../icons';
 
 <Icon icon={Star} />
-<Icon icon={Check} />
-<Icon icon={XCircle} />
 ```
 
-Constants follow the pattern `export const Name = 'ph:icon-name'`.
+Constants follow the pattern `export const Name = 'ph:icon-name'`. Consumers of `@brikdesigns/bds` use the `ph:*` string reference directly (above).
 
 ### Sizing
 
@@ -90,24 +77,26 @@ For inline icons inside text, use `1em` sizing so the icon scales with the surro
 </button>
 ```
 
-## Phosphor weights
+## Icon weight
 
-Phosphor provides six weights per icon. BDS primarily uses the regular and fill variants.
-
-| Weight | Suffix | Use |
-|---|---|---|
-| Regular | `ph:name` | Default. Most contexts. |
-| Bold | `ph:name-bold` | Emphasis, IconButton labels at sm size |
-| Fill | `ph:name-fill` | Active/selected states, status badges |
-| Light | `ph:name-light` | Decorative or quiet contexts |
-| Thin | `ph:name-thin` | Rare; very specific design intent |
-| Duotone | `ph:name-duotone` | Empty states, illustrations |
+BDS renders `ph:*` icons at **`bold`** weight by default — BDS's standard line density (Phosphor's own regular weight reads as a hairline at small UI sizes). Set the `weight` prop to change it. An icon whose name already encodes a weight (`ph:star-fill`) keeps it; the `weight` prop only rewrites otherwise-unweighted `ph:*` names, and non-`ph:*` icons ignore it.
 
 ```tsx
-<Icon icon="ph:star" />          {/* outline, default weight */}
-<Icon icon="ph:star-fill" />     {/* solid */}
-<Icon icon="ph:star-bold" />     {/* heavier outline */}
+<Icon icon="ph:star" />                    {/* bold (default) */}
+<Icon icon="ph:star" weight="regular" />   {/* Phosphor's thin default stroke */}
+<Icon icon="ph:star-fill" />               {/* solid — explicit weight, left as-is */}
 ```
+
+`weight` accepts the six Phosphor weights:
+
+| `weight` | Renders | Use |
+|---|---|---|
+| `bold` | `ph:name-bold` | Default. Most contexts. |
+| `regular` | `ph:name` | Phosphor's thin default stroke |
+| `fill` | `ph:name-fill` | Active/selected states, status badges |
+| `light` | `ph:name-light` | Decorative or quiet contexts |
+| `thin` | `ph:name-thin` | Rare; very specific design intent |
+| `duotone` | `ph:name-duotone` | Empty states, illustrations |
 
 ## Color / theming
 

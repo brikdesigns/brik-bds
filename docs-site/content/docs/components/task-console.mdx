@@ -87,7 +87,7 @@ async function generatePages(slugs: string[]) {
     setConsoleState((prev) => ({
       ...prev,
       items: prev.items.map((i) =>
-        i.id === slug ? { ...i, status: 'in-progress' } : i
+        i.id === slug ? { ...i, status: 'in_progress' } : i
       ),
     }));
 
@@ -96,7 +96,7 @@ async function generatePages(slugs: string[]) {
     setConsoleState((prev) => ({
       ...prev,
       items: prev.items.map((i) =>
-        i.id === slug ? { ...i, status: 'complete' } : i
+        i.id === slug ? { ...i, status: 'completed' } : i
       ),
     }));
   }
@@ -120,7 +120,7 @@ async function generatePages(slugs: string[]) {
 ## Accessibility
 
 - Renders a `<div role="status" aria-live="polite">` so screen readers announce progress without interrupting current speech.
-- Per-item state changes are announced as items move from pending → in-progress → complete.
+- Per-item state changes are announced as items move from pending → in_progress → completed.
 - The collapse / dismiss buttons carry `aria-label`s.
 
 ## API
@@ -136,7 +136,7 @@ async function generatePages(slugs: string[]) {
 | `autoDismissDelay` | `number` (ms) | `0` (no auto-dismiss) |
 | `subtitle` | `ReactNode` | — |
 
-The `TaskConsoleItem` shape is defined alongside the component — typically `{ id, label, status: 'pending' \| 'in-progress' \| 'complete' \| 'error' }`.
+The `TaskConsoleItem` shape is defined alongside the component: `{ id, label, status: 'pending' \| 'in_progress' \| 'completed' \| 'failed', detail?, href? }`. The `status` string stays snake_case for API stability; only the CSS BEM modifier kebab-cases it (`in_progress` → `--in-progress`).
 
 ## Related
 

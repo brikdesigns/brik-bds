@@ -117,12 +117,19 @@ PageHeader has six optional regions plus a required title. From top to bottom:
 <PageHeader title="Hero detail page" size="lg" />
 ```
 
-### Flush layout
+### Read / edit mode
 
-`flush` removes horizontal padding for layouts that provide their own.
+PageHeader can drive a page-level read↔edit toggle. In `mode="read"` it renders an Edit button wired to `onEdit`; in `mode="edit"` it swaps to Save / Cancel wired to `onSave` / `onCancel`, with `saveLoading` / `saveDisabled` for in-flight commits. Labels are overridable via `editLabel` / `saveLabel` / `cancelLabel`. Omit `mode` for a static header. (An explicit `actions` prop overrides these mode-driven buttons.)
 
 ```tsx
-<PageHeader title="..." flush />
+<PageHeader
+  title="Acme Corporation"
+  mode={mode}
+  onEdit={() => setMode('edit')}
+  onSave={handleSave}
+  onCancel={() => setMode('read')}
+  saveLoading={saving}
+/>
 ```
 
 ## Pattern: full company detail page
@@ -183,9 +190,17 @@ The canonical layout — breadcrumb + service badge + title + actions + metadata
 | `actions` | `ReactNode` | — |
 | `tabs` | `ReactNode` | — |
 | `metadata` | `MetadataItem[]` | — |
-| `showDivider` | `boolean` | `true` |
-| `flush` | `boolean` | `false` |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'lg'` |
+| `sticky` | `boolean` | `false` |
+| `mode` | `'read' \| 'edit'` | — |
+| `onEdit` | `() => void` | — |
+| `onSave` | `() => void` | — |
+| `onCancel` | `() => void` | — |
+| `saveLoading` | `boolean` | — |
+| `saveDisabled` | `boolean` | — |
+| `editLabel` | `string` | `'Edit'` |
+| `saveLabel` | `string` | `'Save'` |
+| `cancelLabel` | `string` | `'Cancel'` |
 
 ### MetadataItem
 

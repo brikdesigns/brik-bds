@@ -31,8 +31,8 @@ import { Switch } from '@brikdesigns/bds';
 ```
 
 - **`sm`** — 28×16. Compact settings panels, dense rows.
-- **`md`** — 32×18. Default for most form controls.
-- **`lg`** — 56×32. Primary settings, feature toggles, prominent placements.
+- **`md`** — 32×18. Tighter form controls.
+- **`lg`** — 56×32. Default. Primary settings, feature toggles, prominent placements.
 
 ### Uncontrolled
 
@@ -85,7 +85,8 @@ For label-on-the-side patterns where the surrounding row carries the name.
 | Prop | Type | Default |
 |---|---|---|
 | `label` | `ReactNode` | — |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `size` | `'lg' \| 'md' \| 'sm'` | `'lg'` |
+| `variant` | `'default' \| 'accent-knob'` | `'default'` |
 | `checked` / `defaultChecked` | `boolean` | — |
 | `disabled` | `boolean` | `false` |
 | `onChange` | `(e: ChangeEvent<HTMLInputElement>) => void` | — |
