@@ -1,18 +1,18 @@
 ---
 title: Scroll Reveals
-description: Clip-path reveals, fade and slide entrances, stagger patterns, parallax. CSS + IntersectionObserver — Lightweight tier.
+description: Fade, slide, and stagger entrances (Lightweight) and clip-path reveals (Premium), triggered by IntersectionObserver. Parallax requires GSAP.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-<TierBadge tier="lightweight" /> All scroll reveal effects are in `css/animations.css` and triggered by toggling `.is-visible` on the element when it enters the viewport. The trigger mechanism is a plain IntersectionObserver — no library required.
+Scroll reveals span tiers. **Fade / slide entrances and stagger** are Lightweight (`css/animations.css`). **Clip-path reveals** are Premium (`css/premium-effects.css`). **Parallax** has no shipped BDS driver — drive it with GSAP (see below). Reveals are triggered by toggling `.is-visible` when the element enters the viewport — a plain IntersectionObserver, no library required for the trigger itself.
 
-See [Lightweight tier](/docs/motion/tiers/lightweight) for the observer snippet and full import order.
+See [Lightweight tier](/docs/motion/tiers/lightweight) for the observer snippet and import order.
 
-## Clip-path reveals
+## Clip-path reveals <TierBadge tier="premium" />
 
-Cinematic unveils for images and section containers. Each class defines a `clip-path` starting state and transitions to `clip-path: none` when `.is-visible` is applied.
+Cinematic unveils for images and section containers, defined in `css/premium-effects.css`. Each class sets a `clip-path` starting state and transitions to the revealed state when `.is-visible` is applied. They need no JS library — load `premium-effects.css` and the same observer snippet.
 
 | Class | Effect |
 |---|---|
@@ -64,9 +64,9 @@ Cinematic unveils for images and section containers. Each class defines a `clip-
 </div>
 ```
 
-## Fade and slide reveals
+## Fade and slide reveals <TierBadge tier="lightweight" />
 
-Standard scroll entrance classes for text, cards, and content blocks.
+Standard scroll entrance classes for text, cards, and content blocks — in `css/animations.css`.
 
 | Class | Effect |
 |---|---|
@@ -81,28 +81,31 @@ Standard scroll entrance classes for text, cards, and content blocks.
 <img class="animate-fade-left" data-reveal src="photo.jpg" alt="...">
 ```
 
-## Stagger pattern
+## Stagger pattern <TierBadge tier="lightweight" />
 
-Apply `data-reveal-stagger` to a parent and the observer script applies staggered delays to direct children.
+Pair each child with a `.bds-stagger-1` through `.bds-stagger-6` class (from `tokens/motion-classes.css`) to offset its reveal. Combine with an entrance class and `data-reveal`.
 
 ```html
-<div data-reveal-stagger>
-  <div class="card">Card 1</div>
-  <div class="card">Card 2</div>
-  <div class="card">Card 3</div>
-</div>
+<div class="bds-enter-fade bds-stagger-1" data-reveal>Card 1</div>
+<div class="bds-enter-fade bds-stagger-2" data-reveal>Card 2</div>
+<div class="bds-enter-fade bds-stagger-3" data-reveal>Card 3</div>
 ```
 
 For dynamic stagger (item count unknown at build time), use GSAP `ScrollTrigger.batch()`. See [GSAP tier](/docs/motion/tiers/gsap).
 
-## Parallax
+## Parallax <TierBadge tier="gsap" />
 
-Apply `.parallax-element` to an element with a `data-parallax-speed` attribute (range `0.05–0.25`, lower is subtler). The parallax helper in `css/animations.css` translates the element proportionally to scroll position on the next animation frame.
+<Callout type="warn">
+  **No standalone BDS parallax driver ships today.** The `.parallax-container` / `.parallax-element` CSS scaffolding exists in `css/animations.css`, but no BDS JavaScript reads `data-parallax-speed` — the classes alone do not move anything. Drive parallax with GSAP `ScrollTrigger` (the GSAP tier) until a helper ships.
+</Callout>
 
-```html
-<div class="parallax-element" data-parallax-speed="0.1">
-  <img src="background.jpg" alt="...">
-</div>
+```js
+// Parallax via GSAP ScrollTrigger — bring the scaffolding classes, drive with GSAP
+gsap.to('.parallax-element', {
+  yPercent: -20,
+  ease: 'none',
+  scrollTrigger: { trigger: '.parallax-container', scrub: true },
+});
 ```
 
 ## Related

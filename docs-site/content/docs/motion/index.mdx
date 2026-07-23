@@ -30,10 +30,11 @@ Load files in this order. Each layer depends on the one before it.
 
 | File | Layer | Required for |
 |---|---|---|
-| `tokens/animations.css` | Token | All tiers — defines `--duration-*`, `--ease-*`, `--stagger-*` custom properties and named keyframes (`bds-fade-in`, `bds-slide-up`, etc.) |
+| `tokens/gap-fills.css` | Token | All tiers — the semantic motion tokens `--duration-*`, `--ease-*`, `--stagger-*` (part of the `bds-tokens` bundle) |
+| `tokens/animations.css` | Token | All tiers — named keyframes (`bds-fade-in`, `bds-slide-up`, etc.) |
 | `tokens/motion-classes.css` | Token | All tiers — composable utility classes (`.bds-enter-fade`, `.bds-anim-pulse`, `.bds-stagger-1` through `.bds-stagger-6`) built from the token layer |
-| `css/animations.css` | Lightweight | Scroll reveal classes (`.animate-fade-up`, clip-path reveals), hover effects, parallax helpers, section theming, typography effects |
-| `css/premium-effects.css` | Premium (CSS) | Grain overlays, glassmorphism, video backgrounds, advanced typography, magnetic cursor styles |
+| `css/animations.css` | Lightweight | Scroll reveal classes (`.animate-fade-up`), hover effects, entrance + stagger utilities |
+| `css/premium-effects.css` | Premium (CSS) | Grain overlays, glassmorphism, video backgrounds, clip-path reveals, section theming, typography effects, magnetic cursor + spotlight styles |
 | `js/premium-scroll.js` | Premium (JS) | IntersectionObserver orchestration + GSAP glue: hero sequences, background morphs, counters, scroll-scrubbed video, scroll-activated tabs |
 
 **iOS consumers:** `build/figma/swift/BDSMotion.swift` exports the duration and easing tokens as Swift constants for UIKit / SwiftUI animation use.
