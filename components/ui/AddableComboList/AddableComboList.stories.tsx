@@ -103,7 +103,7 @@ const meta: Meta<typeof AddableComboList> = {
     emptyLabel: { control: 'text' },
     disabled: {
       control: 'boolean',
-      description: 'Read-only chip rendering — see the `ReadMode` story.',
+      description: 'Read-only chip rendering — no input or remove controls.',
     },
     strict: { control: 'boolean' },
     maxEntries: { control: 'number' },
@@ -185,39 +185,6 @@ export const StrictMode: Story = {
     placeholder: 'Search providers…',
     addLabel: 'Add Provider',
     strict: true,
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * Read mode (`disabled`) — read-only chip rendering for view-mode sheets.
- * No input or remove controls are rendered.
- *
- * @summary Read-only chip rendering
- */
-export const ReadMode: Story = {
-  args: {
-    label: 'Services Offered',
-    suggestions: DENTAL_SERVICES,
-    values: ['Dental Implants', 'Invisalign / Clear Aligners', 'Preventive Care / Cleaning'],
-    disabled: true,
-    onChange: fn(),
-  },
-  render: (args) => <Controlled {...args} />,
-};
-
-/**
- * `maxEntries` reached — the input hides once the cap is hit.
- * @summary List at capacity — input hides
- */
-export const MaxEntriesCap: Story = {
-  args: {
-    label: 'Top Services',
-    suggestions: DENTAL_SERVICES,
-    values: ['Crowns', 'Implants'],
-    maxEntries: 2,
-    helperText: 'Maximum 2 entries reached.',
     onChange: fn(),
   },
   render: (args) => <Controlled {...args} />,
