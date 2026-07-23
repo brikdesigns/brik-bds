@@ -11,7 +11,7 @@ Three tiers, each additive. A tier decision is made once per engagement at desig
 
 | Tier | Files required | Use when | Load cost |
 |---|---|---|---|
-| **Lightweight** | `tokens/animations.css` + `tokens/motion-classes.css` + `css/animations.css` + a scroll observer snippet | Default for every mockup. Fade / slide reveals, hover micro-interactions, stagger. | ~8 KB CSS, no JS library |
+| **Lightweight** | `tokens/gap-fills.css` + `tokens/animations.css` + `tokens/motion-classes.css` + `css/animations.css` + a scroll observer snippet | Default for every mockup. Fade / slide reveals, hover micro-interactions, stagger. | ~8 KB CSS, no JS library |
 | **GSAP** | Above + GSAP CDN (`gsap` + `ScrollTrigger` + optionally `SplitText`) | Design calls for scroll pinning, scrubbing, horizontal scroll panels, text splitting. | ~120 KB JS (CDN-cached) |
 | **Premium** | Above + `css/premium-effects.css` + `js/premium-scroll.js` | Design calls for atmosphere: hero sequences, background morphs, grain, glass, magnetic buttons, video scrub. | ~140 KB JS + ~25 KB CSS |
 
@@ -42,7 +42,7 @@ Each tier's page shows the exact files to load, the CSS / JS patterns specific t
 
 ## Tier ambiguity
 
-**Clip-path reveals** (circle, curtain, wipe, rise, diagonal, diamond) are implemented in `css/animations.css` and triggered with `.is-visible` via IntersectionObserver — making them Lightweight in file dependency. However, they produce a cinematic effect more commonly associated with Premium-feeling sites. They are classified here as **Lightweight** because they carry no JS library dependency. If the design audit calls for them on a GSAP or Premium site, they compose cleanly with both.
+**Clip-path reveals** (circle, curtain, wipe, rise, diagonal, diamond) are implemented in `css/premium-effects.css` and triggered with `.is-visible` via IntersectionObserver. They carry **no JS library dependency** — the observer is the same minimal snippet the Lightweight tier uses — which makes them the lightest effect in the **Premium (CSS)** tier. They are classified Premium because using them requires loading `premium-effects.css`, not because they need GSAP. If the design audit calls for them on a Lightweight-leaning site, load `premium-effects.css` for the clip-path classes and skip `premium-scroll.js`.
 
 **Stagger patterns** are Lightweight when driven by `animation-delay` via `.bds-stagger-*` classes. They become GSAP when driven by `gsap.from()` with a `stagger` parameter — the latter allows dynamic stagger values, reversed sequences, and from/to ranges that CSS delay cannot express. Pick based on whether you need runtime control, not visual outcome.
 

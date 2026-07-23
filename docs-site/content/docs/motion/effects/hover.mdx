@@ -1,12 +1,12 @@
 ---
 title: Hover Effects
-description: Micro-interactions for buttons, cards, and links. CSS hover classes are Lightweight. Magnetic cursor and cursor trail require Premium JS.
+description: Micro-interactions for buttons, cards, and links. CSS hover classes are Lightweight. Magnetic cursor and cursor spotlight require Premium JS.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-Micro-interactions for buttons, cards, and links. CSS-only effects are in `css/animations.css` — no JS. Magnetic cursor and cursor trail effects require the [Premium tier](/docs/motion/tiers/premium).
+Micro-interactions for buttons, cards, and links. CSS-only effects are in `css/animations.css` — no JS. Magnetic cursor and cursor spotlight effects require the [Premium tier](/docs/motion/tiers/premium).
 
 ## CSS hover classes <TierBadge tier="lightweight" />
 
@@ -67,18 +67,19 @@ Buttons attract the cursor within a defined radius, creating a tactile feel. Req
   Magnetic effects are best on **isolated primary CTAs** — do not apply to every button on the page. The effect draws attention to the element; overuse neutralizes it.
 </Callout>
 
-## Cursor trail <TierBadge tier="premium" />
+## Cursor spotlight <TierBadge tier="premium" />
 
-A custom cursor dot that trails the mouse with a spring feel. Enabled globally by the `cursor-trail` class on the body.
+A section that reveals a soft radial gradient following the cursor — effective on dark hero and feature sections. Add the `.cursor-spotlight` class (styles in `css/premium-effects.css`) plus the `data-premium-spotlight` attribute so `premium-scroll.js` wires up the pointer tracking, then call `BrikPremium.init()`.
 
 ```html
-<!-- Enable on body or a scoped container -->
-<body class="cursor-trail">
-  ...
-</body>
+<section class="cursor-spotlight" data-premium-spotlight>
+  Dark content — spotlight follows the pointer
+</section>
+
+<script>BrikPremium.init();</script>
 ```
 
-Exclude specific elements from the trail with `data-cursor-default` — useful for text inputs and selects where the system cursor should display normally.
+Tune the gradient color with the `--spotlight-color` custom property. The effect is skipped automatically on touch devices.
 
 ## Related
 

@@ -6,7 +6,7 @@ description: Gradient fill, stroke, glow, animated highlight. Heading-level only
 import { Callout } from 'fumadocs-ui/components/callout';
 import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
-<TierBadge tier="lightweight" /> CSS text decoration classes in `css/animations.css`. These apply to heading elements only — paired with `--font-family-heading` and heading-scale sizes. Never apply to body copy or labels.
+<TierBadge tier="premium" /> CSS text decoration classes in `css/premium-effects.css`. These apply to heading elements only — paired with `--font-family-heading` and heading-scale sizes. Never apply to body copy or labels. They need no JS library (`.text-highlight` uses the same IntersectionObserver snippet as the reveals), but require loading `premium-effects.css`.
 
 <EffectGrid columns={2}>
   <TextEffectDemo className="text-gradient" label="Gradient Text" />

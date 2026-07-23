@@ -11,15 +11,22 @@ import { TierBadge } from '@/components/mdx/motion/tier-badge';
 ## Files to load
 
 ```html
-<!-- 1. Token layer — durations, easings, keyframes -->
+<!-- 1. Semantic motion tokens — --duration-*, --ease-*, --stagger-* -->
+<link rel="stylesheet" href="tokens/gap-fills.css">
+
+<!-- 2. Keyframe library — bds-fade-in, bds-slide-up, etc. -->
 <link rel="stylesheet" href="tokens/animations.css">
 
-<!-- 2. Motion utility classes — .bds-enter-*, .bds-anim-*, .bds-stagger-* -->
+<!-- 3. Motion utility classes — .bds-enter-*, .bds-anim-*, .bds-stagger-* -->
 <link rel="stylesheet" href="tokens/motion-classes.css">
 
-<!-- 3. Scroll reveal classes, hover effects, section theming, typography -->
+<!-- 4. Scroll reveal + hover classes -->
 <link rel="stylesheet" href="css/animations.css">
 ```
+
+<Callout type="info">
+  If you already load the `bds-tokens` bundle, `gap-fills.css` and `animations.css` are included — link the individual files only when consuming motion standalone.
+</Callout>
 
 ## Scroll observer — minimal snippet
 
@@ -46,7 +53,7 @@ Mark elements with `data-reveal`:
 
 ```html
 <div class="animate-fade-up" data-reveal>Content enters here</div>
-<div class="clip-rise-reveal" data-reveal>
+<div class="animate-fade-left" data-reveal>
   <img src="photo.jpg" alt="...">
 </div>
 ```
@@ -84,34 +91,7 @@ Combine entrance classes with stagger helpers for sequential list reveals.
 </ul>
 ```
 
-Six stagger delays available: `.bds-stagger-1` through `.bds-stagger-6`. Values come from `--stagger-1` through `--stagger-6` tokens in `animations.css`. For dynamic stagger (unknown item count, reversed sequences), see the [GSAP tier](/docs/motion/tiers/gsap).
-
-## Clip-path reveals
-
-Cinematic image and section unveils. Implemented in CSS — no library dependency.
-
-```html
-<div class="clip-circle-reveal" data-reveal>
-  <img src="photo.jpg" alt="...">
-</div>
-
-<div class="clip-curtain-reveal" data-reveal>
-  <img src="hero.jpg" alt="...">
-</div>
-```
-
-Six variants: `clip-circle-reveal`, `clip-curtain-reveal`, `clip-wipe-reveal`, `clip-rise-reveal`, `clip-diagonal-reveal`, `clip-diamond-reveal`.
-
-<EffectGrid columns={3}>
-  <ClipRevealDemo type="circle" />
-  <ClipRevealDemo type="curtain" />
-  <ClipRevealDemo type="wipe" />
-  <ClipRevealDemo type="rise" />
-  <ClipRevealDemo type="diagonal" />
-  <ClipRevealDemo type="diamond" />
-</EffectGrid>
-
-See [Scroll Reveals](/docs/motion/effects/scroll-reveals) for the full effect reference.
+Six stagger delays available: `.bds-stagger-1` through `.bds-stagger-6`. Values come from `--stagger-1` through `--stagger-6` tokens in `gap-fills.css`. For dynamic stagger (unknown item count, reversed sequences), see the [GSAP tier](/docs/motion/tiers/gsap).
 
 ## Hover effects
 
@@ -135,25 +115,7 @@ CSS-only micro-interactions. No JS required.
   <HoverDemo className="hover-lift click-press" label=".hover-lift.click-press" />
 </EffectGrid>
 
-See [Hover Effects](/docs/motion/effects/hover) for magnetic and cursor-trail variants (those require Premium JS).
-
-## Section theming
-
-Section color presets. Combine with grain, glass, and dividers.
-
-| Class | Background |
-|---|---|
-| `.section-dark` | Dark background |
-| `.section-light` | Light background |
-| `.section-warm` | Warm / cream background |
-| `.section-brand` | Brand primary background |
-
-<EffectGrid columns={2}>
-  <SectionThemeDemo className="section-dark" label="Dark background" />
-  <SectionThemeDemo className="section-light" label="Light background" />
-  <SectionThemeDemo className="section-warm" label="Warm/cream background" />
-  <SectionThemeDemo className="section-brand" label="Brand primary background" />
-</EffectGrid>
+See [Hover Effects](/docs/motion/effects/hover) for magnetic and cursor-spotlight variants (those require Premium).
 
 ## Attention animations
 
