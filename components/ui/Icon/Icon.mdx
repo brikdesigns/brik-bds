@@ -10,6 +10,8 @@ import * as Stories from './Icon.stories';
 
 Offline-first Iconify wrapper. Phosphor (`ph:*`) icons render from a subset bundled into the BDS package, so first paint never waits on — or silently fails against — the Iconify CDN. Drop-in replacement for `@iconify/react`'s `Icon`.
 
+`ph:*` icons render at **`bold`** weight by default — BDS's standard line density. Set the `weight` prop (`regular` for Phosphor's thin default, or `thin`/`light`/`fill`/`duotone`) to change it; a name that already encodes a weight is left as-is.
+
 ## Playground
 
 <Canvas of={Stories.Playground} />
