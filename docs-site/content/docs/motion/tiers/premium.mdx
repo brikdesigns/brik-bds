@@ -61,6 +61,24 @@ See [Overlays](/docs/motion/effects/overlays) for the full grain and glass refer
 <div class="glass-card">Card with 16px blur + border-radius</div>
 ```
 
+## Section theming
+
+Section-level color presets, defined in `css/premium-effects.css`. Combine with grain, glass, and dividers to build atmosphere.
+
+<EffectGrid columns={2}>
+  <SectionThemeDemo className="section-dark" label="Dark background" />
+  <SectionThemeDemo className="section-light" label="Light background" />
+  <SectionThemeDemo className="section-warm" label="Warm/cream background" />
+  <SectionThemeDemo className="section-brand" label="Brand primary background" />
+</EffectGrid>
+
+| Class | Background |
+|---|---|
+| `.section-dark` | Dark background |
+| `.section-light` | Light background |
+| `.section-warm` | Warm / cream background |
+| `.section-brand` | Brand primary background |
+
 ## Hero entrance sequence
 
 Orchestrated page-load animation. Elements stagger in order: badge, headline, body, CTA, media. Driven by `premium-scroll.js` — call `BrikPremium.init()` after the DOM loads.
@@ -155,7 +173,7 @@ Pinned section that switches content as the user scrolls through it.
 
 ## Dream site recipes
 
-Signature compositions mapped to design references. See `ANIMATION-REFERENCE.md` in the repo root for the full per-recipe breakdown.
+Signature compositions mapped to design references, built from the effects documented across the Motion pages.
 
 | Recipe | Key techniques |
 |---|---|
