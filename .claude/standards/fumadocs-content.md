@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/docs-site/content/docs/**/*.mdx"
 retrieved-via: brik-rag query "fumadocs writing standard"
-last-verified: 2026-05-13
+last-verified: 2026-07-23
 ---
 
 # Fumadocs content standard
@@ -64,6 +64,19 @@ A common failure mode is moving the file but leaving cross-page references broke
 `#` is reserved for the page title (rendered from frontmatter `title`). Use `##` for sections, `###` for subsections. Do not use `####` or deeper — Fumadocs nav UI does not surface them and readers lose orientation.
 
 If you need a fourth level, split into a new page.
+
+## Heading and title copy — scannable labels
+
+Headings (`##`/`###`) and page titles are scannable labels, not sentences. The **hard rule** (a heading lint enforces it): no **em dashes, backticks, parentheticals, slashes, or arrows** in a heading — the qualifier that used to trail an em dash moves to the section's first sentence. As **guidance**, aim for **≤35 characters, sentence case**, and a label rather than a full sentence.
+
+- **Page titles** follow the same rule and never restate the parent section — `Commercial Brokerage`, not `Real Estate — Commercial Brokerage`.
+- **API-reference headings** may use the bare identifier as the label — `## useTheme`, `## bds-find` — with the one-line summary in the first sentence below.
+- **Component-variant headings** drop the parenthetical too — `### Horizontal` with "Horizontal is the default." as the first line, not `### Horizontal (default)`.
+- **One trailing inline badge component is allowed** — a status/tier tag such as `## Parallax <TierBadge tier="gsap" />` is functional metadata, not clutter. Prose-as-JSX and code in the heading text are not.
+
+Sentence case here means capitalize the first word and proper nouns only. This is the docs-site convention and is deliberately *not* the product/consumer-UI title-case rule at [Typography → Heading casing](/docs/primitives/typography#heading-casing) — that rule governs rendered UI heading copy (`Section` / `__title` strings), enforced in consumer repos, not docs prose.
+
+Renaming a heading changes its anchor slug. Before renaming, grep for inbound `#fragment` links (`grep -rn "#<old-slug>" docs-site/`) and update them in the same PR — `lint-doc-links` fails on a broken anchor.
 
 ## Section length cap — soft 400 words, hard 800
 

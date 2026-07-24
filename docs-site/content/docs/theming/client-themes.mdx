@@ -102,7 +102,7 @@ Create a `theme-{client}.css` file in the consuming project and add it as the fi
 
 No `.body.theme-{name}` class needed — the `:root` block wins via cascade order.
 
-## Per-audience (or service-line) scope binding
+## Per-audience scope binding
 
 Some client sites carry **multiple brand colors at once** — Vale Partners has three audience verticals (Healthcare, Land, Commercial), each with its own brand hue; brikdesigns.com has service lines (Marketing, Back-Office, Product) that each need a different accent. The pattern below binds canonical brand tokens once per scope so components keep referencing the same canonical names while the page expresses N brand colors simultaneously.
 
@@ -166,7 +166,7 @@ Re-bind `--background-brand-primary`, `--text-brand-primary`, `--border-brand-pr
 }
 ```
 
-### Why the same page can show all three audiences at once
+### One page, three audiences
 
 CSS custom properties scope to the element they're set on and cascade into every descendant. Three audience blocks side-by-side on a homepage are three independent subtrees — each resolves `--background-brand-primary` to its own value:
 

@@ -19,7 +19,7 @@ Read [Installation](/docs/getting-started/installation) first for the bare-minim
 
 ---
 
-## Next.js (App Router)
+## Next.js
 
 Recommended for product apps that authenticate users, write to Supabase, and live behind a sign-in. Reference: [`brik-client-portal`](https://github.com/brikdesigns/brik-client-portal).
 
@@ -29,7 +29,7 @@ Recommended for product apps that authenticate users, write to Supabase, and liv
 npm install @brikdesigns/bds
 ```
 
-### 2. Fonts via `next/font`
+### 2. Fonts via next/font
 
 BDS does not ship fonts. Load them in `src/lib/fonts.ts` and expose CSS variables that the BDS `--font-family-*` tokens can consume:
 
@@ -45,7 +45,7 @@ export const poppins = Poppins({
 });
 ```
 
-### 3. Token cascade in `globals.css`
+### 3. Token cascade in globals.css
 
 ```css
 /* src/app/globals.css */
@@ -125,7 +125,7 @@ export function BDSProvider({ children }: { children: React.ReactNode }) {
 
 `applyToBody={false}` prevents `ThemeProvider` from setting a `theme-X` class on `<body>` — your app uses your own brand tokens, not the eight numbered web-store themes.
 
-### 5. Tailwind v3 bridge (only if Tailwind is installed)
+### 5. Tailwind v3 bridge
 
 Tailwind v3's preflight outputs unlayered resets that beat BDS's `@layer bds-components` rules. If you use Tailwind, add this once in `globals.css`:
 
@@ -142,7 +142,7 @@ Skip this block if you don't use Tailwind.
 
 The lightweight tier (token-driven CSS animations) is automatically available. Product apps rarely escalate beyond it. See [Motion → Tiers](/docs/motion/tiers).
 
-### 7. Client-side routing (nav components)
+### 7. Client-side routing
 
 BDS navigation components (`SidebarNavigation`, `SubNavigation`, `NavItem`) render a bare `<a>` by default, which triggers a **full-page reload** on every click in Next.js. Pass `next/link` as `linkComponent` so nav items route client-side and prefetch:
 
@@ -193,7 +193,7 @@ export default defineConfig({
 });
 ```
 
-### 3. Fonts via `<link>`
+### 3. Fonts via a link tag
 
 Astro has no `next/font` analog. Load fonts with a preconnect + stylesheet `<link>` in your base layout's `<head>`. BDS `--font-family-*` tokens read from whatever family you load — pick the family in your `theme-client.css`.
 
@@ -206,7 +206,7 @@ Astro has no `next/font` analog. Load fonts with a preconnect + stylesheet `<lin
 />
 ```
 
-### 4. Base layout — token cascade as ESM imports
+### 4. Base layout
 
 Vite (Astro's bundler) lets you `import` CSS files. Order them so BDS canon loads first, then your client layer overrides:
 
@@ -247,7 +247,7 @@ const { title, description } = Astro.props;
 </html>
 ```
 
-### 5. Theme + mode switches on `<html>`
+### 5. Theme and mode switches
 
 Astro is HTML — there's no `ThemeProvider`. Set switches as attributes on the `<html>` element directly. Full attribute table in [The Cascade → Switches](/docs/getting-started/cascade#switches--html-attributes).
 
@@ -257,7 +257,7 @@ Astro is HTML — there's no `ThemeProvider`. Set switches as attributes on the 
 
 For runtime theme toggles (user preference), add a small inline `<script>` in `<head>` that mirrors the Next.js anti-FOUC pattern.
 
-### 6. Multi-brand sites — `data-audience` scope binding
+### 6. Multi-brand sites
 
 Some clients carry multiple brand colors at once (Vale Partners has three audience verticals — healthcare, land, commercial). Re-bind the canonical brand tokens inside `[data-audience=X]` scopes; components stay scope-blind.
 
@@ -280,9 +280,9 @@ const { pageAudience } = Astro.props;  // "healthcare" | "land" | "commercial"
 }
 ```
 
-Full pattern: [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-or-service-line-scope-binding).
+Full pattern: [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-scope-binding).
 
-### 7. Atmospheres + Blueprints
+### 7. Atmospheres and blueprints
 
 Astro is the primary consumer for the heavier theming layers:
 
@@ -325,7 +325,7 @@ Astro sites typically use the lightweight tier (CSS-only) plus Lenis for smooth 
 
 ---
 
-## Webflow (legacy)
+## Webflow legacy
 
 For clients still on Webflow only. New work goes Next.js or Astro.
 

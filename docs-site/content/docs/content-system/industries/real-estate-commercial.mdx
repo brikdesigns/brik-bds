@@ -1,5 +1,5 @@
 ---
-title: Real Estate — Commercial Brokerage
+title: Commercial Brokerage
 description: Boutique commercial real-estate brokerage with three co-equal audience verticals — Healthcare, Land, and Commercial. Reference client is Vale Partners (Middle Tennessee).
 ---
 
@@ -24,7 +24,7 @@ Structured data lives in [`content-system/industries/real-estate-commercial.ts`]
 
 ---
 
-## 1. Industry Overview
+## 1. Industry overview
 
 A boutique commercial real-estate brokerage solves a structural problem the national full-service firms can't: when the broker is the principal, the principal is the broker. There is no junior-associate handoff, no team-rotation between LOI and lease execution, no client-as-account-number. For a healthcare professional making a 5–10 year lease commitment, knowing the same person will be there for build-out and renewal is a measurably different experience than the institutional alternatives.
 
@@ -32,7 +32,7 @@ This pack graduated from `small-business` because boutique commercial brokerages
 
 The pack's job is to support that segmentation through every touchpoint: separate audience-pathway pages, segment-specific vocabulary, segment-specific CTAs, and per-column visual accents in the mega-menu so prospects sort themselves before they land.
 
-## 2. Default Affinities
+## 2. Default affinities
 
 When a client hasn't yet picked traits in the portal, these are the pack's starting affinities. Clients always override.
 
@@ -44,11 +44,13 @@ When a client hasn't yet picked traits in the portal, these are the pack's start
 
 The defaults aim at the boutique-but-credentialed median — Refined and Authoritative are stronger here than in any other pack. A residential agent crossing into commercial would skew Approachable + Modern; a national firm would skew Bold + Authoritative. The boutique's positioning pulls toward the gravitas end without veering corporate.
 
-## 3. Customer Pain Points
+## 3. Customer pain points
 
 Pain points are segmented across the three audiences. Each entry carries a `summary` (one-line bullet) and a `detail` paragraph the resolver can expand for strategy briefs.
 
-### Healthcare professionals (dental, veterinary, optometry)
+### Healthcare professionals
+
+Dental, veterinary, and optometry practices.
 
 <ul>
   {realEstateCommercial.customerPainPoints
@@ -61,7 +63,9 @@ Pain points are segmented across the three audiences. Each entry carries a `summ
     ))}
 </ul>
 
-### Land buyers (Middle Tennessee)
+### Land buyers
+
+Middle Tennessee land buyers.
 
 <ul>
   {realEstateCommercial.customerPainPoints
@@ -74,7 +78,9 @@ Pain points are segmented across the three audiences. Each entry carries a `summ
     ))}
 </ul>
 
-### Commercial businesses (retail, food service, professional services, fitness)
+### Commercial businesses
+
+Retail, food service, professional services, and fitness.
 
 <ul>
   {realEstateCommercial.customerPainPoints
@@ -100,7 +106,7 @@ The single highest-stakes moment in this pack is the **first practice location d
 
 High-intent in 3 of 4 quarters. The Q1 dip is real but predictable — the planning-mode quarter that produces Q2-Q3 closings.
 
-## 5. Competitive Landscape
+## 5. Competitive landscape
 
 Five recurring competitor types. The boutique-vs-big-box framing is the strategic spine — most of the moat / weakness language is calibrated against what national + regional firms can't match.
 
@@ -126,7 +132,7 @@ Two structural patterns to lean on:
 
 The boutique's defensibility is being the **single broker** across asset classes for clients whose lives don't fit one specialization.
 
-## 6. Listings Requirements
+## 6. Listings requirements
 
 **Required**: Google Business Profile, Bing Places, Apple Business Connect, **LinkedIn Company Page** (CRE-specific — broker credibility is professional-network-driven, not consumer-platform-driven).
 
@@ -156,7 +162,7 @@ CoStar + LoopNet are the dominant CRE inventory directories — investor + tenan
 
 LandWatch, Lands of America, and Land And Farm are the Top-3 for land listings — recreational + agricultural buyers move through these aggregators consistently.
 
-## 7. Regulatory Summary
+## 7. Regulatory summary
 
 Five regulatory areas — lighter than dental or rv-mhc because brokerage transactions are governed primarily by state license law + advertising rules rather than industry-specific compliance regimes.
 
@@ -168,7 +174,7 @@ Five regulatory areas — lighter than dental or rv-mhc because brokerage transa
 | **Agricultural / Farmland Disclosures** | State | Listing copy for agricultural + hunting land must accurately represent tillable acreage, hunting access, water rights, easement burdens. Flood plain status disclosed or disclaimed. |
 | **ADA Accessibility (Web)** | Federal | WCAG 2.1 AA on the brokerage website. Listing images need alt text. Listing filters keyboard-navigable. |
 
-## 8. Vocabulary — Avoid
+## 8. Vocabulary to avoid
 
 The boutique positioning makes the avoid list smaller and more pointed than other packs — most entries are about *what undermines the boutique posture* rather than what creates regulatory risk.
 
@@ -186,7 +192,7 @@ The boutique positioning makes the avoid list smaller and more pointed than othe
   </tbody>
 </table>
 
-## 9. CTA Defaults
+## 9. CTA defaults
 
 Approved (mockup generators pick from these unless a client override exists):
 
@@ -204,7 +210,7 @@ Rejected (never auto-generated):
   **`Get a Free Quote` is REJECTED in this pack** — even though small-business approves it. The reason is positioning: a boutique CRE broker isn't quoting; they're advising. "Schedule a Discovery Call" or "Talk to an Advisor" carries the right professional posture. Same logic rejects `Call Us Today` (transactional urgency) — the deals here aren't urgency-driven.
 </Callout>
 
-## 10. Page Compositions
+## 10. Page compositions
 
 Each page archetype maps to a specific blueprint sequence. The audience-pathway pages (Healthcare, Land, Commercial) carry the most weight — they're where the broker proves segment-specific competence. Several blueprints (`services_numbered_accordion`, `process_grid_4step_numbered`) currently fall back to `<BlueprintFallback>` until their Astro components ship post-v0.1.
 
@@ -240,7 +246,7 @@ Default site-header shape — the audience-pathway mega-menu is the structural d
 
 The 3-column audience-pathway mega-menu is the **graduation trigger** that moved this pack out of `small-business`. Each column is one audience; per-column color accents and icons map back to that audience's section pages so the visual language is consistent from nav to landing page.
 
-## 12. Brik Strategic POV
+## 12. Brik strategic POV
 
 This pack ships with three named `strategicConsiderations` rendered live from pack data — they're the load-bearing perspective Brik brings to a boutique CRE engagement.
 
@@ -260,7 +266,7 @@ This pack ships with three named `strategicConsiderations` rendered live from pa
 
 The first two are positioning levers — boutique principal continuity and clinical literacy. The third is the structural opportunity: a healthcare professional who also owns land or runs a commercial business benefits from a single broker across asset classes. That's the long-term retention story for the boutique relative to specialist-only competitors.
 
-## Site audit extractors — pending
+## Site audit extractors
 
 This pack does not yet declare `siteAudit` extractors. Verticals that benefit from structured field capture (CRE listings inventory + lease type + segment classification, healthcare specialty taxonomy + practice-size ranges, land tract metadata + flood-plain / road-frontage details) are good extractor candidates. Adding extractors here is on the roadmap once the portal-side schemas land.
 

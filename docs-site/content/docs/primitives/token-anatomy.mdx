@@ -24,7 +24,7 @@ Every BDS token answers six independent questions. Without distinct vocabulary f
   **Before referencing a token name, you should be able to answer all six.** If you can't, you're guessing — verify against the canonical registry (`dist/tokens.css`) first.
 </Callout>
 
-## Anatomy — the naming formula
+## Anatomy
 
 Token names follow one of two parallel formulas — an **intent** form and a **scoped-intent** form:
 
@@ -40,7 +40,7 @@ Each segment is fixed vocabulary:
 | `purpose` | `page`, `surface`, `background`, `text`, `border`, `color` (primitives only) | `--background-…` |
 | `role` | Closed list — see [Color foundations vocabulary](/docs/getting-started/cascade#color-foundations-vocabulary) | `--background-brand-primary` |
 | `scope` / `scope-value` | A named context that carries its own hue — `service-{line}`, `presence-{state}` | `--background-service-marketing` |
-| `modifier` (optional) | Context / tone / hierarchy — see [Color modifiers](#color-modifiers--context-contrast-tone) | `--background-service-brand-on-light` |
+| `modifier` (optional) | Context / tone / hierarchy — see [Color modifiers](#color-modifiers) | `--background-service-brand-on-light` |
 | `state` (optional) | `hover`, `pressed`, `disabled` | `--background-brand-primary-hover` |
 
 Status, service-line, and presence semantic tokens use the **scoped-intent** form — the scope (`service-marketing`, `presence-online`) already names the hue, so they never also take a `-brand`/`-primary` role segment. Everything else uses the plain **intent** form.
@@ -49,7 +49,7 @@ Status, service-line, and presence semantic tokens use the **scoped-intent** for
   **Token names without a `purpose` prefix are drift.** Examples retired by brik-bds#712: `--brand-primary` (missing purpose; legitimate form is `--{purpose}-brand-primary`), `--theme-brik-*` (entire namespace violates the anatomy). If you see something shaped `--brand-X` or `--theme-X-Y` in old code, it's drift and should not be referenced.
 </Callout>
 
-### When to add `-primary` / `-secondary`
+### When to add a hierarchy modifier
 
 Never preemptively. A role starts as a **single-level token set** — one token, no hierarchy modifier (`--text-service-marketing`, which ships with no `-primary` / `-secondary` sibling). Add a `-primary` / `-secondary` pair **only** when the design carries a genuine second emphasis level *within that role*, distinct from the generic `--text-secondary` / `--text-muted` that already exist for de-emphasis.
 
@@ -64,11 +64,11 @@ Never preemptively. A role starts as a **single-level token set** — one token,
 
 The pair earns its place only when a second emphasis tier actually ships alongside the first; until then, `--text-secondary` / `--text-muted` already cover generic de-emphasis. Scoped tokens never stack a hierarchy modifier under a context modifier either — the (text, surface) pairing carries emphasis implicitly, so `--text-service-brand-on-dark` is complete without a `-primary`.
 
-## Color modifiers — context, contrast, tone
+## Color modifiers
 
 Within the color `role`/`modifier` vocabulary, four concepts share light/dark wording but answer different questions. Pick the wrong one and it compiles — silently wrong.
 
-### `on-color` — neutral foreground role
+### on-color
 
 The legible foreground for content resting on a **colored, branded, or dark** surface. Grayscale, brand-agnostic, consumed by component variants (Button `on-color`, the Tab-bar `onColor` mode).
 
@@ -79,7 +79,7 @@ The legible foreground for content resting on a **colored, branded, or dark** su
 
 `on-color` is the whole role; `light`/`dark` names the fill tone it targets. It never carries a hue.
 
-### `-on-light` / `-on-dark` — context modifier
+### -on-light and -on-dark
 
 For a token whose hue is already named (a service line, a brand scope), pins the value for a **known, fixed backdrop tone**.
 
@@ -94,11 +94,11 @@ The `-color-` infix is dropped because the scope (`service-brand`) already impli
   **Two `on` forms, on purpose.** `on-color-*` is a complete *neutral role*; `-on-light`/`-on-dark` is a *context modifier on a colored scope*. Same word, different slot in the formula — not an inconsistency, and not a rename candidate.
 </Callout>
 
-### `-inverse` — sharp theme-flip
+### -inverse
 
 The hard reverse across light/dark mode (lightest ↔ darkest), mirroring the reverse of a `-primary` token. A theme-level concept — `--background-inverse`, `--text-inverse`. A service line normally adapts to a known backdrop through its `-on-light`/`-on-dark` context tokens, not a per-line inverse — **with one carve-out:** `--surface-service-{line}-inverse` (surface purpose only) flips white in light → `{hue}-darkest` in dark, for service-identified cards that must read as neutral chrome in light mode but carry the line's deep tint in dark. See [ADR-020](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-020-service-surface-inverse.md). No per-line inverse exists on `background`/`text`/`border`.
 
-### `-light` / `-dark` — tone
+### -light and -dark
 
 The pastel or deep shade of a **surface** (`--surface-service-brand-light` = pastel). Tone shifts the shade; context targets the backdrop. Tone is why scoped context had to be spelled `-on-light`/`-on-dark` — `-light`/`-dark` was already taken.
 
@@ -112,7 +112,7 @@ The pastel or deep shade of a **surface** (`--surface-service-brand-light` = pas
 
 See [Color](/docs/primitives/color) for the full registry.
 
-## Tier — the four-tier abstraction stack
+## Tier
 
 Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()`. Components only consume the upper tiers.
 
@@ -161,7 +161,7 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 
 {/* cascade-vocab-ok:start — the abstraction Tier stack (Raw · Primitive · Semantic · Component), not the CSS cascade */}
 
-### About Tier 4 (Component)
+### About Tier 4
 
 The Component tier is **`--bds-{component}-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier and `{property}` is the styled aspect. Examples: `--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-img-card-bg`. This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
 
@@ -201,7 +201,7 @@ Take `--background-brand-primary` (the hot path):
 
 Every legitimate token answers all six. If a token doesn't fit any one of them, it's drift.
 
-## Drift patterns to recognize (and not extend)
+## Drift patterns to avoid
 
 | Drift pattern | Why it's wrong | Retired in |
 |---|---|---|

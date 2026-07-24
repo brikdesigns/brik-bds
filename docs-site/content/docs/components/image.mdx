@@ -63,7 +63,7 @@ When a `ratio` is set, `fit` controls how the image fills the frame (`object-fit
 />
 ```
 
-### Eager (LCP)
+### Eager
 
 By default Image is `loading="lazy"` + `decoding="async"`. For the above-the-fold [Largest Contentful Paint](https://web.dev/articles/lcp) image, set `eager` — it switches to `loading="eager"` and hints `fetchpriority="high"`. Use it for one image per page at most.
 

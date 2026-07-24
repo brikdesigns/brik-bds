@@ -33,7 +33,7 @@ The rule for `__title` slots:
 
 Never pick the HTML tag from the BEM name. `<div class="bds-card__title">` and `<h3 class="bds-card__title">` are both valid — choose by outline intent.
 
-## Stable IDs and `aria-labelledby`
+## Stable IDs and aria-labelledby
 
 `id` values belong to the *role* of the element, not the layout that contains it. A title id baked with the layout name (`bp-about-story-split-default-h`) leaks layout into a11y plumbing and breaks when the layout is renamed.
 

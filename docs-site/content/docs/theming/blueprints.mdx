@@ -13,7 +13,7 @@ See [`blueprints/ARCHITECTURE.md`](https://github.com/brikdesigns/brik-bds/blob/
 
 Authors hand-write match tags (`moods`, `industries`). Client-axis projections (`personality`, `visual_style`, `industry_slugs`) are derived at load time via the bridges — never stored in source JSON, never authored by hand.
 
-### Mood → Personality
+### Mood to personality
 
 Derived by `MOOD_TO_PERSONALITY` in `content-system/blueprints/bridges.ts` — never hand-authored on blueprints.
 
@@ -31,7 +31,7 @@ Derived by `MOOD_TO_PERSONALITY` in `content-system/blueprints/bridges.ts` — n
 | `modern` | Modern |
 | `approachable` | Approachable |
 
-### Mood → Visual Style
+### Mood to visual style
 
 Derived by `MOOD_TO_VISUAL_STYLE` in `content-system/blueprints/bridges.ts`. Moods with no visual correlate (`warm`, `trustworthy`, `professional`, `approachable`) project to an empty set — explicit, not a gap.
 
@@ -49,7 +49,7 @@ Derived by `MOOD_TO_VISUAL_STYLE` in `content-system/blueprints/bridges.ts`. Moo
 | `modern` | Modern |
 | `approachable` | — |
 
-### Industry tag → Industry pack slug
+### Industry tag to pack slug
 
 | Tag | Pack slug |
 |---|---|
@@ -65,7 +65,7 @@ The full enumerated library — every blueprint with moods, industries, layout s
 
 <BlueprintLibrary />
 
-## Implementation — `@brikdesigns/bds/blueprints-astro`
+## Implementation
 
 The Astro render surface the Theming tenet has always pointed at. Each blueprint key with a shipped Astro component is exported from this package; consumer Astro sites import the components directly or dispatch by key via `<BlueprintDispatcher>`.
 
@@ -102,7 +102,7 @@ import type { BlueprintSection, KnownBlueprintKey }
   from '@brikdesigns/bds/blueprints-astro/types';
 ```
 
-### Dispatch surface (v0.1)
+### Dispatch surface
 
 | Component | Purpose | Props shape |
 |---|---|---|
@@ -110,7 +110,7 @@ import type { BlueprintSection, KnownBlueprintKey }
 | `<BlueprintFallback>` | Loud visible stub for unknown blueprint keys. Emits `data-blueprint-unknown-key` — CI greps client-repo builds for this attribute. | `BlueprintProps` |
 | `<SiteHeader>` | Site-shell nav. Dispatches on the navigation archetype prop. v0.1 fully implements `editorial-transparent`; other archetypes render with a `data-unimplemented-archetype` attribute. | `{ archetype, brandName, navItems, phone?, primaryCta?, currentPath? }` |
 
-### Shipped blueprints (v0.1)
+### Shipped blueprints
 
 Eight components — the set needed for Vale's first scaffold run via the small-business pack. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`).
 
