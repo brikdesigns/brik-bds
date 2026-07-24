@@ -40,6 +40,11 @@ const meta: Meta<typeof InteractiveListItem> = {
       description:
         'Persistent toggle state — brand tint + inset ring, and sets `aria-pressed`. Leave undefined for a plain drill-in row.',
     },
+    interactive: {
+      control: 'boolean',
+      description:
+        'Default `true` (clickable `<button>`). Set `false` for a display-only row — renders a non-interactive `<div>` with the same slots, no click target or hover/active/focus affordances.',
+    },
   },
 };
 
@@ -221,5 +226,49 @@ export const Selectable: Story = {
     await userEvent.click(kickoff);
     await expect(kickoff).toHaveAttribute('aria-pressed', 'true');
     await expect(discovery).toHaveAttribute('aria-pressed', 'false');
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   READ-ONLY — display-only rows (interactive={false})
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * A display-only status list — `interactive={false}` renders each row as a
+ * non-interactive `<div>` with the same three-slot layout, no click target,
+ * and no hover / active / focus affordances. Use it for status lists and
+ * per-page composition lists where the row shows data rather than drilling in.
+ * The trailing `Badge` (including the muted `neutral` tone) carries the state.
+ *
+ * @summary Read-only status list — display rows with no click target
+ */
+export const ReadOnly: Story = {
+  render: () => {
+    const rows = [
+      { title: 'Discovery', subtitle: 'Completed 2d ago', badge: <Badge status="positive" size="sm">Done</Badge> },
+      { title: 'Design', subtitle: 'In progress', badge: <Badge status="progress" size="sm">Active</Badge> },
+      { title: 'Content', subtitle: 'Not started', badge: <Badge status="neutral" size="sm">Skipped</Badge> },
+    ];
+    return (
+      <div style={{ minWidth: 360 }}>
+        <Stack gap="var(--gap-tiny)">
+          {rows.map((row) => (
+            <InteractiveListItem
+              key={row.title}
+              interactive={false}
+              title={row.title}
+              subtitle={row.subtitle}
+              trailing={row.badge}
+            />
+          ))}
+        </Stack>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Read-only rows are not buttons — no click target is exposed.
+    await expect(canvas.queryByRole('button')).toBeNull();
+    await expect(canvas.getByText('Discovery')).toBeInTheDocument();
   },
 };

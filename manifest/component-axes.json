@@ -62,7 +62,8 @@
       "error",
       "info",
       "progress",
-      "brand"
+      "brand",
+      "neutral"
     ],
     "size": [
       "xs",

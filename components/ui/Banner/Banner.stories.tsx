@@ -27,10 +27,11 @@ const meta: Meta<typeof Banner> = {
     },
     tone: {
       control: 'select',
-      options: ['announcement', 'warning', 'error', 'information'],
+      options: ['announcement', 'warning', 'error', 'information', 'success'],
       description:
         '`announcement` (default) = brand-primary surface, `role="banner"`. ' +
-        '`warning` / `error` / `information` = secondary surface with leading status Badge, `role="alert"`.',
+        '`warning` / `error` / `information` = secondary surface with leading status Badge, `role="alert"`. ' +
+        '`success` = secondary surface with a leading positive Badge, `role="status"`.',
     },
     action: {
       control: false,
@@ -101,6 +102,15 @@ export const Error: Story = {
     title: 'Sync failed',
     description: "We couldn't reach the server. Check your connection and try again.",
     action: <Button size="sm" variant="secondary">Retry</Button>,
+  },
+};
+
+/** @summary Success tone — positive confirmation with leading Badge and `role="status"` */
+export const Success: Story = {
+  args: {
+    tone: 'success',
+    title: 'Changes published',
+    description: 'Your updates are live and visible to clients.',
   },
 };
 
