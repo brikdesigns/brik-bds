@@ -19,8 +19,9 @@ const meta: Meta<typeof Badge> = {
   argTypes: {
     status: {
       control: 'select',
-      options: ['positive', 'warning', 'error', 'info', 'progress'],
-      description: 'Semantic status tone — drives the badge color.',
+      options: ['positive', 'warning', 'error', 'info', 'progress', 'neutral'],
+      description:
+        'Semantic status tone — drives the badge color. `neutral` is a muted-gray, low-emphasis tone for inert states.',
     },
     size: {
       control: 'select',
@@ -99,6 +100,11 @@ export const Info: Story = {
 /** @summary Progress — in-flight status, often with a spinner */
 export const Progress: Story = {
   args: { status: 'progress', children: 'In Progress' },
+};
+
+/** @summary Neutral — muted-gray, low-emphasis inert status (skipped, not linked) */
+export const Neutral: Story = {
+  args: { status: 'neutral', children: 'Not linked' },
 };
 
 /* ─── Size axis (the one args-lean axis gallery) ──────────────── */

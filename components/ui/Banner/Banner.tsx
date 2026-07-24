@@ -1,12 +1,12 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
 import { Icon } from '@iconify/react';
-import { Warning, Info } from '../../icons';
+import { Warning, Info, CheckCircle } from '../../icons';
 import { Badge } from '../Badge';
 import { bdsClass } from '../../utils';
 import { CloseButton } from '../CloseButton';
 import './Banner.css';
 
-export type BannerTone = 'announcement' | 'warning' | 'error' | 'information';
+export type BannerTone = 'announcement' | 'warning' | 'error' | 'information' | 'success';
 
 export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Bold title text */
@@ -19,6 +19,8 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
    * - `warning` / `error` / `information` — secondary surface with leading
    *   status Badge icon. Switches `role` to `alert` for assistive tech.
    *   Replaces the legacy `AlertBanner` component.
+   * - `success` — secondary surface with a leading positive Badge (check
+   *   icon). Renders `role="status"` (polite) — it confirms rather than alerts.
    */
   tone?: BannerTone;
   /** Action element (e.g. Button) aligned to the right */
@@ -31,12 +33,17 @@ const STATUS_ICON: Record<Exclude<BannerTone, 'announcement'>, string> = {
   warning: Warning,
   error: Warning,
   information: Info,
+  success: CheckCircle,
 };
 
-const STATUS_BADGE: Record<Exclude<BannerTone, 'announcement'>, 'warning' | 'error' | 'info'> = {
+const STATUS_BADGE: Record<
+  Exclude<BannerTone, 'announcement'>,
+  'warning' | 'error' | 'info' | 'positive'
+> = {
   warning: 'warning',
   error: 'error',
   information: 'info',
+  success: 'positive',
 };
 
 /**
@@ -51,6 +58,8 @@ const STATUS_BADGE: Record<Exclude<BannerTone, 'announcement'>, 'warning' | 'err
  *   leading status Badge icon and primary text. Renders with `role="alert"`.
  *   Replaces the legacy `AlertBanner` component (per ADR-004 §3 — same
  *   shape, different presets = one component with a tone prop).
+ * - **`success`** — secondary surface with a leading positive Badge (check
+ *   icon). Renders with `role="status"` (polite) — a confirmation, not an alert.
  *
  * @summary Full-width banner — announcement or status tones
  */
@@ -65,7 +74,9 @@ export function Banner({
   ...props
 }: BannerProps) {
   const isStatus = tone !== 'announcement';
-  const role = isStatus ? 'alert' : 'banner';
+  // success is a polite confirmation (role="status"); other status tones are
+  // assertive (role="alert"); announcement is a plain landmark (role="banner").
+  const role = !isStatus ? 'banner' : tone === 'success' ? 'status' : 'alert';
 
   const badge = isStatus ? (
     <Badge

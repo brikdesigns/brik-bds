@@ -8,7 +8,7 @@ import * as Stories from './Banner.stories';
 
 <ComponentLinks slug="banner" />
 
-Full-width contextual banner. `tone="announcement"` (default) renders a brand-primary surface for marketing notices; `tone="warning" | "error" | "information"` renders a secondary surface with a leading status Badge and `role="alert"`.
+Full-width contextual banner. `tone="announcement"` (default) renders a brand-primary surface for marketing notices; `tone="warning" | "error" | "information"` renders a secondary surface with a leading status Badge and `role="alert"`; `tone="success"` renders a positive-Badge confirmation with `role="status"`.
 
 ## Playground
 
@@ -33,6 +33,12 @@ One story per `tone` — the semantic axis Banner varies on. Other props (`descr
 ### Error
 
 <Canvas of={Stories.Error} />
+
+### Success
+
+Positive confirmation — a leading `positive` Badge with a check icon on the secondary surface. Renders `role="status"` (polite) rather than `alert`, since it confirms an action rather than warning about one.
+
+<Canvas of={Stories.Success} />
 
 ## Props
 
