@@ -135,6 +135,13 @@
   color: var(--text-on-color-dark);
 }
 
+/* Neutral — muted-gray for inert states. Uses the pure grayscale ramp
+   (not system-neutral) so it reads lower-emphasis than `info`. */
+.bds-badge--solid.bds-badge--neutral {
+  background-color: var(--background-muted);
+  color: var(--text-secondary);
+}
+
 /* ─── Status × Subtle (pastel bg, saturated text) ────────────── */
 
 .bds-badge--subtle.bds-badge--positive {
@@ -165,6 +172,12 @@
 .bds-badge--subtle.bds-badge--brand {
   background-color: var(--background-brand-secondary);
   color: var(--text-brand-primary);
+}
+
+/* Neutral subtle — lightest grayscale surface, one emphasis step below solid. */
+.bds-badge--subtle.bds-badge--neutral {
+  background-color: var(--surface-muted);
+  color: var(--text-secondary);
 }
 
 /* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */

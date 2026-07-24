@@ -48,12 +48,23 @@
     font-size: var(--label-sm);
   }
 
-  .bds-interactive-list-item:hover:not(:disabled) {
+  .bds-interactive-list-item:not(.bds-interactive-list-item--readonly):hover:not(:disabled) {
     background-color: var(--surface-secondary);
   }
 
-  .bds-interactive-list-item:active:not(:disabled) {
+  .bds-interactive-list-item:not(.bds-interactive-list-item--readonly):active:not(:disabled) {
     transform: scale(0.99);
+  }
+
+  /* ─── Read-only variant (interactive={false}) ──────────────────
+     Display-only rows (status lists, per-page composition lists).
+     Renders a <div> — no click target, so drop the interactive
+     affordances. Slot layout + typography are inherited unchanged;
+     hover / active are excluded above via :not(--readonly), and the
+     <div> is not focusable so the focus ring never applies. */
+
+  .bds-interactive-list-item--readonly {
+    cursor: default;
   }
 
   .bds-interactive-list-item:focus-visible {

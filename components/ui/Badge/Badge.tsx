@@ -3,7 +3,7 @@ import { bdsClass } from '../../utils';
 import './Badge.css';
 
 /** Badge status variants */
-export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress' | 'brand';
+export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress' | 'brand' | 'neutral';
 
 /** Badge size variants — shared scale with Tag */
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
@@ -26,7 +26,11 @@ export type BadgeAppearance = 'solid' | 'subtle';
 
 /** Badge component props */
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  /** Status variant */
+  /**
+   * Status variant. `neutral` is a low-emphasis muted-gray tone for
+   * inert states (skipped, not-started, not-linked) — distinct from
+   * `info`, which carries the informational system-neutral tone.
+   */
   status?: BadgeStatus;
   /** Size variant — xs is icon-only (no text) */
   size?: BadgeSize;
