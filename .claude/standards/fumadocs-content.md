@@ -67,7 +67,7 @@ If you need a fourth level, split into a new page.
 
 ## Heading and title copy — scannable labels
 
-Headings (`##`/`###`) and page titles are scannable labels, not sentences. The **hard rule** (a heading lint enforces it): no **em dashes, backticks, parentheticals, slashes, or arrows** in a heading — the qualifier that used to trail an em dash moves to the section's first sentence. As **guidance**, aim for **≤35 characters, sentence case**, and a label rather than a full sentence.
+Headings (`##`/`###`) and page titles are scannable labels, not sentences. The **hard rule** (enforced by `scripts/lint-mdx-headings.mjs`, CI: MDX Heading Check): no **em dashes, backticks, parentheticals, slashes, or arrows** in a heading — the qualifier that used to trail an em dash moves to the section's first sentence. As **guidance**, aim for **≤35 characters, sentence case**, and a label rather than a full sentence.
 
 - **Page titles** follow the same rule and never restate the parent section — `Commercial Brokerage`, not `Real Estate — Commercial Brokerage`.
 - **API-reference headings** may use the bare identifier as the label — `## useTheme`, `## bds-find` — with the one-line summary in the first sentence below.

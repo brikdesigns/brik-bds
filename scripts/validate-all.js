@@ -41,6 +41,10 @@ const steps = [
   // canonical registry. Self-builds dist/tokens.css if absent (already built
   // above by Canonical Tokens), so ordering here is not load-bearing.
   { name: 'MDX Tokens', cmd: 'node scripts/lint-mdx-tokens.mjs' },
+  // Enforces the heading hard rule (no em dash / backtick / parenthetical /
+  // slash / arrow in an ##/### heading or frontmatter title) over content/docs.
+  // Pure MDX text read — no build, ordering not load-bearing.
+  { name: 'MDX Headings', cmd: 'node scripts/lint-mdx-headings.mjs' },
   // Verifies hand-curated component prop tables (docs-site) against the TS
   // source for any table carrying a {/* props-check: … */} marker. Opt-in, so
   // ordering is not load-bearing.
