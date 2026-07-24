@@ -1,9 +1,13 @@
 ---
 title: Addable text list
-description: Reveal-on-click input for capturing a list of single-line, unstructured text values.
+description: DEPRECATED — use AddableTagList instead.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  **AddableTextList is deprecated.** Migrate to [`AddableTagList`](https://storybook.brikdesigns.com/?path=/story/containers-addable-tag-list--default) per [ADR-003](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-003-addable-list-family.md) — one API covers plain text lists and suggestion-backed combobox lists. `<AddableTextList values={v} onChange={o} />` becomes `<AddableTagList values={v} onChange={o} />`. Kept during the migration window, removed in a future major version.
+</Callout>
 
 AddableTextList is the lightest primitive in the addable family. Each row is one short string — services offered, tags, back-office tools. The input is hidden until the user clicks **Add New**, then **Enter** commits and re-focuses for rapid entry, **Escape** cancels.
 

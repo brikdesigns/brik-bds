@@ -1,0 +1,65 @@
+name: MDX Deprecation Check
+
+# Runs scripts/lint-mdx-deprecations.mjs on every PR (and push to main) that
+# touches component source or the component docs corpus. A component deprecated
+# at the component level in source (@deprecated on its export, or a
+# `Deprecated/` Storybook title) must carry a deprecation callout on its docs
+# page — so a retired component can't keep being documented as first-class.
+#
+# Why this is a CI gate (not just pre-push):
+#   - Pre-push runs `validate:full` (scripts/validate-all.js → "MDX Deprecations")
+#     locally, but that never runs in CI.
+#   - Cloud-agent commits (OpenClaw, scheduled routines) bypass local hooks.
+#   - Fork / fresh-clone PRs may not have husky installed.
+# The audit (#1358, Theme 3) found deprecated components documented as current;
+# Wave 1 fixed them by hand. This gate keeps the next deprecation honest.
+#
+# No build step: the checker reads component .tsx + MDX text directly.
+# Path-filtered, so most PRs skip the job entirely.
+#
+# Issue: brikdesigns/brik-bds#1362
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'components/ui/**'
+      - 'docs-site/content/docs/components/**'
+      - 'scripts/lint-mdx-deprecations.mjs'
+      - 'package.json'
+      - '.github/workflows/mdx-deprecation-check.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'components/ui/**'
+      - 'docs-site/content/docs/components/**'
+      - 'scripts/lint-mdx-deprecations.mjs'
+      - 'package.json'
+      - '.github/workflows/mdx-deprecation-check.yml'
+
+concurrency:
+  group: mdx-deprecation-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mdx-deprecation-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check deprecation callouts
+        run: node scripts/lint-mdx-deprecations.mjs

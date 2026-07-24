@@ -1,9 +1,13 @@
 ---
 title: Addable combo list
-description: Suggestion-driven combobox for tag-style multi-select with free-form fallback.
+description: DEPRECATED — use AddableTagList instead.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  **AddableComboList is deprecated.** Migrate to [`AddableTagList`](https://storybook.brikdesigns.com/?path=/story/containers-addable-tag-list--default) per [ADR-003](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-003-addable-list-family.md) — one API covers plain text lists and suggestion-backed combobox lists. `<AddableComboList values={v} onChange={o} suggestions={s} />` becomes `<AddableTagList values={v} onChange={o} suggestions={s} />`; `maxEntries` is renamed `maxItems`. Kept during the migration window, removed in a future major version.
+</Callout>
 
 AddableComboList is the vocabulary-backed sibling of [AddableTextList](/docs/components/addable-text-list). Typing filters a known suggestion list (case-insensitive contains match); users can pick from suggestions via keyboard/click, or type a free-form value and press **Enter** (unless `strict`).
 
