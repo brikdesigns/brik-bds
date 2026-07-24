@@ -10,12 +10,18 @@
  * (×2) — docs-site pages that never existed, only Storybook stories did — and
  * nothing caught it.
  *
- * Two link classes are validated:
+ * Three link classes are validated:
  *
  *   1. Internal doc cross-links (`/docs/...`) → a matching page must exist in
  *      the docs-site content tree (`docs-site/content/docs/<path>.mdx` or
- *      `<path>/index.mdx`). Fragments (`#heading`) are stripped before
- *      resolving the page.
+ *      `<path>/index.mdx`). When the link carries a `#fragment`, the fragment
+ *      is also validated against the target page's heading anchors — the same
+ *      github-slugger slugs Fumadocs generates at build time (see the anchor
+ *      section below). In-page `#fragment` links inside a docs-site page are
+ *      validated against that page's own headings too. This is the gate for
+ *      the second rot class: a page exists but the `#anchor` does not, so the
+ *      link silently lands at the top of the page. `lint-doc-links` used to
+ *      strip the fragment and never check it.
  *
  *   2. Storybook links (`storybook.brikdesigns.com/?path=/story/<id>` and
  *      `/?path=/docs/<id>`) → `<id>` must exist in the Storybook index
@@ -112,15 +118,20 @@ if (fs.existsSync(INDEX_PATH)) {
 }
 
 // ── Resolvers ─────────────────────────────────────────────────────────────────
-const docPageCache = new Map();
-function docPageExists(docPath) {
+const docFileCache = new Map();
+function docFileFor(docPath) {
   // docPath is the path after `/docs/`, e.g. "components/card" or "" (root).
-  if (docPageCache.has(docPath)) return docPageCache.get(docPath);
+  // Returns the resolving .mdx path, or null if no page exists.
+  if (docFileCache.has(docPath)) return docFileCache.get(docPath);
   const base = docPath ? path.join(DOCS_ROOT, docPath) : DOCS_ROOT;
-  const exists =
-    fs.existsSync(`${base}.mdx`) || fs.existsSync(path.join(base, 'index.mdx'));
-  docPageCache.set(docPath, exists);
-  return exists;
+  const flat = `${base}.mdx`;
+  const index = path.join(base, 'index.mdx');
+  const resolved = fs.existsSync(flat) ? flat : fs.existsSync(index) ? index : null;
+  docFileCache.set(docPath, resolved);
+  return resolved;
+}
+function docPageExists(docPath) {
+  return docFileFor(docPath) !== null;
 }
 
 function storyIdFromPath(pathParam) {
@@ -128,6 +139,72 @@ function storyIdFromPath(pathParam) {
   // "/docs/components-image--overview". Return the trailing ID.
   const m = pathParam.match(/\/(?:story|docs)\/([^/?&#]+)/);
   return m ? m[1] : null;
+}
+
+// ── Anchor slugs ──────────────────────────────────────────────────────────────
+// Reproduce the heading ids Fumadocs emits so `#fragment` links can be checked.
+// Fumadocs' remark-heading does `slugger.slug(flattenNode(heading))` with a
+// per-file github-slugger (fumadocs-core/dist/mdx-plugins/remark-heading.js).
+// We pin the same `github-slugger` package (see package.json) so the slug
+// algorithm is identical rather than reimplemented — the load-bearing detail is
+// that github-slugger does NOT collapse whitespace, so `Modes — orthogonal`
+// slugs to `modes--orthogonal` (the em-dash is dropped, both surrounding spaces
+// each become a hyphen) and a trailing `<TierBadge />` leaves a trailing hyphen.
+// This module is CommonJS; github-slugger v2 is ESM-only, so the class is loaded
+// via dynamic import in the async resolve phase and stored here.
+let SluggerClass = null;
+
+function stripFrontmatter(src) {
+  return src.replace(/^﻿?---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
+}
+// ATX headings only (`## Title`), with the optional CommonMark closing sequence
+// (`## Title ##`) stripped. The docs-site corpus uses ATX exclusively — no
+// setext (`Title\n===`) headings exist — so this covers every heading that
+// actually ships; the slug output is verified byte-for-byte against the real
+// Fumadocs pipeline across the full corpus by the ground-truth check.
+const HEADING = /^#{1,6}[ \t]+(.*?)(?:[ \t]+#+)?[ \t]*$/;
+const FENCE = /^\s*(`{3,}|~{3,})/;
+const CUSTOM_ID = /\s*\[#([^\]]+?)]\s*$/; // `## Heading [#custom-id]`
+
+// Reduce a raw ATX heading to the text Fumadocs' flattenNode yields: markdown
+// links collapse to their text, images and JSX tags contribute nothing (their
+// tags are removed, surrounding whitespace preserved). Everything else — inline
+// code backticks, emphasis markers, punctuation — is left for github-slugger,
+// which strips it identically. Matches flattenNode for every heading shape in
+// the corpus (plain text, inline code, trailing self-closing JSX like
+// `<TierBadge />`); a `>` inside a JSX attribute string is not handled, but no
+// heading carries such props.
+function headingToText(raw) {
+  return raw
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '') // images
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links → text
+    .replace(/<\/?[A-Za-z][^>]*>/g, ''); // JSX / HTML tags
+}
+
+const slugCache = new Map(); // absolute mdx path -> Set<slug>
+function anchorsFor(file) {
+  if (slugCache.has(file)) return slugCache.get(file);
+  const slugger = new SluggerClass();
+  const slugs = new Set();
+  const lines = stripFrontmatter(fs.readFileSync(file, 'utf8')).split('\n');
+  let inFence = false;
+  let fence = null;
+  for (const line of lines) {
+    const fm = line.match(FENCE);
+    if (fm) {
+      const marker = fm[1][0];
+      if (!inFence) { inFence = true; fence = marker; }
+      else if (fence === marker) { inFence = false; fence = null; }
+      continue;
+    }
+    if (inFence) continue;
+    const h = line.match(HEADING);
+    if (!h) continue;
+    const cid = CUSTOM_ID.exec(h[1]);
+    slugs.add(cid ? cid[1] : slugger.slug(headingToText(h[1])));
+  }
+  slugCache.set(file, slugs);
+  return slugs;
 }
 
 // ── Scan ─────────────────────────────────────────────────────────────────────
@@ -170,9 +247,14 @@ const COMPONENT_LINKS_WITHOUT_DOCS_PAGE = new Set([
 const acknowledgedSeen = new Set();
 
 const dead = []; // { file, line, kind, target, reason }
+// Anchor checks are deferred: resolving them needs github-slugger (ESM-only),
+// loaded via dynamic import after the synchronous scan. Each entry:
+// { file, line, target, targetFile, fragment }.
+const anchorChecks = [];
 let checkedDoc = 0;
 let checkedStory = 0;
 let checkedSlug = 0;
+let checkedAnchor = 0;
 let missingIndex = false;
 
 for (const file of mdxFiles) {
@@ -191,10 +273,11 @@ for (const file of mdxFiles) {
 
       // (1) Internal doc cross-links
       if (target.startsWith('/docs/') || target === '/docs') {
-        const withoutHash = target.split('#')[0];
+        const [withoutHash, fragment] = target.split('#');
         const docPath = withoutHash.replace(/^\/docs\/?/, '').replace(/\/$/, '');
         checkedDoc++;
-        if (!docPageExists(docPath)) {
+        const targetFile = docFileFor(docPath);
+        if (!targetFile) {
           dead.push({
             file: rel,
             line: i + 1,
@@ -202,6 +285,27 @@ for (const file of mdxFiles) {
             target,
             reason: `no docs-site page (looked for docs/${docPath}.mdx and docs/${docPath}/index.mdx)`,
           });
+        } else if (fragment) {
+          // Page resolves — defer the `#anchor` check to the slug phase.
+          anchorChecks.push({
+            file: rel,
+            line: i + 1,
+            target,
+            targetFile,
+            fragment: fragment.split('?')[0],
+          });
+        }
+        continue;
+      }
+
+      // (1b) In-page anchors (`[x](#anchor)`) inside a docs-site page — the
+      // same rot class, validated against the current page's own headings.
+      // Restricted to docs-site pages; Storybook MDX under components/ui uses a
+      // different anchor scheme and is not a Fumadocs page.
+      if (target.startsWith('#') && file.startsWith(DOCS_ROOT + path.sep)) {
+        const fragment = target.slice(1).split('?')[0];
+        if (fragment) {
+          anchorChecks.push({ file: rel, line: i + 1, target, targetFile: file, fragment });
         }
         continue;
       }
@@ -280,48 +384,81 @@ if (!explicitFiles) {
   }
 }
 
-// ── Report ───────────────────────────────────────────────────────────────────
-if (missingIndex) {
-  console.error(
-    `\n${RED}✗ Storybook index not found at ${path.relative(REPO_ROOT, INDEX_PATH)}${NC}`
+// ── Resolve anchors + report ─────────────────────────────────────────────────
+// Wrapped in an async IIFE: github-slugger v2 is ESM-only, so it is pulled via
+// dynamic import here rather than `require`d at the top of this CommonJS file.
+(async () => {
+  if (anchorChecks.length) {
+    try {
+      SluggerClass = (await import('github-slugger')).default;
+    } catch (err) {
+      console.error(
+        `\n${RED}✗ Failed to load github-slugger (needed for #anchor validation): ${err.message}${NC}`
+      );
+      console.error(`  Run ${DIM}npm ci${NC} — it is a devDependency of this package.\n`);
+      process.exit(1);
+    }
+    for (const c of anchorChecks) {
+      checkedAnchor++;
+      const slugs = anchorsFor(c.targetFile);
+      if (!slugs.has(c.fragment)) {
+        const where =
+          path.resolve(c.targetFile) === path.resolve(REPO_ROOT, c.file)
+            ? 'this page'
+            : path.relative(REPO_ROOT, c.targetFile);
+        dead.push({
+          file: c.file,
+          line: c.line,
+          kind: 'anchor',
+          target: c.target,
+          reason: `no heading anchor "#${c.fragment}" in ${where}`,
+        });
+      }
+    }
+  }
+
+  if (missingIndex) {
+    console.error(
+      `\n${RED}✗ Storybook index not found at ${path.relative(REPO_ROOT, INDEX_PATH)}${NC}`
+    );
+    console.error(
+      `  Storybook links cannot be validated without it. Run ${DIM}npm run build-storybook${NC} first`
+    );
+    console.error(
+      `  (the pre-push suite and CI do this automatically before this check).\n`
+    );
+    process.exit(1);
+  }
+
+  console.log('\n═══════════════════════════════════════════');
+  console.log('  BDS Doc Link Checker');
+  console.log('═══════════════════════════════════════════');
+  console.log(
+    `  ${DIM}${mdxFiles.length} MDX files · ${checkedDoc} doc links · ${checkedAnchor} anchors · ${checkedStory} storybook links · ${checkedSlug} ComponentLinks${NC}\n`
   );
-  console.error(
-    `  Storybook links cannot be validated without it. Run ${DIM}npm run build-storybook${NC} first`
-  );
-  console.error(
-    `  (the pre-push suite and CI do this automatically before this check).\n`
+
+  if (dead.length === 0) {
+    console.log(`  ${GREEN}✓ All doc + anchor + storybook links resolve${NC}\n`);
+    process.exit(0);
+  }
+
+  const byFile = new Map();
+  for (const d of dead) {
+    if (!byFile.has(d.file)) byFile.set(d.file, []);
+    byFile.get(d.file).push(d);
+  }
+
+  for (const [file, items] of byFile) {
+    console.log(`  ${RED}${file}${NC}`);
+    for (const d of items) {
+      console.log(`    ${DIM}L${d.line}${NC} ${d.target}`);
+      console.log(`        ${YELLOW}${d.reason}${NC}`);
+    }
+    console.log('');
+  }
+
+  console.log(
+    `  ${RED}✗ ${dead.length} dead link${dead.length === 1 ? '' : 's'} across ${byFile.size} file${byFile.size === 1 ? '' : 's'}${NC}\n`
   );
   process.exit(1);
-}
-
-console.log('\n═══════════════════════════════════════════');
-console.log('  BDS Doc Link Checker');
-console.log('═══════════════════════════════════════════');
-console.log(
-  `  ${DIM}${mdxFiles.length} MDX files · ${checkedDoc} doc links · ${checkedStory} storybook links · ${checkedSlug} ComponentLinks${NC}\n`
-);
-
-if (dead.length === 0) {
-  console.log(`  ${GREEN}✓ All doc + storybook links resolve${NC}\n`);
-  process.exit(0);
-}
-
-const byFile = new Map();
-for (const d of dead) {
-  if (!byFile.has(d.file)) byFile.set(d.file, []);
-  byFile.get(d.file).push(d);
-}
-
-for (const [file, items] of byFile) {
-  console.log(`  ${RED}${file}${NC}`);
-  for (const d of items) {
-    console.log(`    ${DIM}L${d.line}${NC} ${d.target}`);
-    console.log(`        ${YELLOW}${d.reason}${NC}`);
-  }
-  console.log('');
-}
-
-console.log(
-  `  ${RED}✗ ${dead.length} dead link${dead.length === 1 ? '' : 's'} across ${byFile.size} file${byFile.size === 1 ? '' : 's'}${NC}\n`
-);
-process.exit(1);
+})();

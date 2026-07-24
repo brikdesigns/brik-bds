@@ -1,0 +1,73 @@
+name: Doc Links Check
+
+# Runs scripts/lint-doc-links.js on every PR (and push to main) that touches the
+# MDX corpus, its link targets, or the checker itself. Validates four classes:
+# internal /docs cross-links, #anchor fragments (heading slugs, github-slugger),
+# storybook.brikdesigns.com story links, and <ComponentLinks> slugs.
+#
+# Why this is a CI gate (not just pre-push):
+#   - Pre-push runs `validate:full` (scripts/validate-all.js → "Doc Links")
+#     locally, but that never runs in CI.
+#   - Cloud-agent commits (OpenClaw, scheduled routines) bypass local hooks.
+#   - Fork / fresh-clone PRs may not have husky installed.
+# Before this workflow, a broken #anchor (the checker ignored fragments until
+# Wave 4 of #1358) or a dead cross-link could land on main green.
+#
+# Path-filtered: the storybook-link class needs the Storybook build, so this
+# job builds it. Most PRs don't touch the corpus and skip the job entirely.
+#
+# Issue: brikdesigns/brik-bds#1362
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs-site/content/docs/**'
+      - 'components/ui/**'
+      - '.storybook/**'
+      - 'scripts/lint-doc-links.js'
+      - 'package.json'
+      - '.github/workflows/doc-links-check.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs-site/content/docs/**'
+      - 'components/ui/**'
+      - '.storybook/**'
+      - 'scripts/lint-doc-links.js'
+      - 'package.json'
+      - '.github/workflows/doc-links-check.yml'
+
+concurrency:
+  group: doc-links-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  doc-links-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The storybook-link class validates story IDs against the build's own
+      # index (storybook-static/index.json) — the authoritative ID set, so no
+      # reimplementation of Storybook's toId derivation. The other three classes
+      # (doc pages, anchors, ComponentLinks) do not need it.
+      - name: Build Storybook (story-ID index)
+        run: npm run build-storybook
+
+      - name: Check doc links + anchors
+        run: node scripts/lint-doc-links.js
