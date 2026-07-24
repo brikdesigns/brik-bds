@@ -37,6 +37,10 @@ const steps = [
   // Must run AFTER the Storybook build — it validates docs cross-links + story
   // IDs against storybook-static/index.json (the build's own output).
   { name: 'Doc Links', cmd: 'node scripts/lint-doc-links.js' },
+  // Validates token NAMES documented in MDX code blocks + tables against the
+  // canonical registry. Self-builds dist/tokens.css if absent (already built
+  // above by Canonical Tokens), so ordering here is not load-bearing.
+  { name: 'MDX Tokens', cmd: 'node scripts/lint-mdx-tokens.mjs' },
 ];
 
 console.log('\n═══════════════════════════════════════════');

@@ -53,6 +53,8 @@ Status, service-line, and presence semantic tokens use the **scoped-intent** for
 
 Never preemptively. A role starts as a **single-level token set** — one token, no hierarchy modifier (`--text-service-marketing`, which ships with no `-primary` / `-secondary` sibling). Add a `-primary` / `-secondary` pair **only** when the design carries a genuine second emphasis level *within that role*, distinct from the generic `--text-secondary` / `--text-muted` that already exist for de-emphasis.
 
+{/* lint-mdx-tokens-ignore-start — the ❌ half is a deliberate counter-example (no such token exists) */}
+
 ```css
 /* ✅ single-level — one emphasis, no hierarchy modifier (real token) */
 --text-service-marketing
@@ -61,6 +63,8 @@ Never preemptively. A role starts as a **single-level token set** — one token,
    so the -primary suffix is just a longer name for the single-level token */
 --text-service-marketing-primary
 ```
+
+{/* lint-mdx-tokens-ignore-end */}
 
 The pair earns its place only when a second emphasis tier actually ships alongside the first; until then, `--text-secondary` / `--text-muted` already cover generic de-emphasis. Scoped tokens never stack a hierarchy modifier under a context modifier either — the (text, surface) pairing carries emphasis implicitly, so `--text-service-brand-on-dark` is complete without a `-primary`.
 
@@ -203,6 +207,8 @@ Every legitimate token answers all six. If a token doesn't fit any one of them, 
 
 ## Drift patterns to avoid
 
+{/* lint-mdx-tokens-ignore-start — every token name in this table is a retired/invented counter-example */}
+
 | Drift pattern | Why it's wrong | Retired in |
 |---|---|---|
 | `--theme-{name}-*` (`--theme-brik-green`, `--theme-blue-blue-light`) | Doesn't match Anatomy — no `purpose` prefix. Duplicate alias of a `--color-{family}-{step}` primitive. | brik-bds#712 / [#727](https://github.com/brikdesigns/brik-bds/pull/727) |
@@ -212,6 +218,8 @@ Every legitimate token answers all six. If a token doesn't fit any one of them, 
 | `--bp-{blueprint}-{slot}-{prop}` (`--bp-hero-img-card-bg`) | Parallel Component-tier namespace that shipped ahead of canon. Invisible to lint because it's an undefined reference, not a real token. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
 | `--{component}-{prop}` (`--toast-shadow`, `--select-chevron-color`) | Component knob without the `--bds-` prefix. Collides with the global namespace and isn't lint-recognized. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
 | Raw literal inside a `var()` fallback on a tokenized property (`var(--shadow-md, 0 4px 12px …)`) | Reintroduces a Tier-1 value that ships silently if the token fails to resolve; lint sees only the canonical name and passes. | Caught by `scripts/lint-tokens.js` (fallback-literal rule, [#1043](https://github.com/brikdesigns/brik-bds/issues/1043)) |
+
+{/* lint-mdx-tokens-ignore-end */}
 
 <Callout type="error">
   **Inventing parallel taxonomy is the failure mode this vocabulary exists to prevent.** Three rollbacks (portal #512, portal #553, brik-bds#712 cleanup) trace to agents inventing names that *almost* fit. When in doubt, verify in `dist/tokens.css` — if the name isn't there, it isn't real.
