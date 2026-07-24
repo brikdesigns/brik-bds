@@ -34,6 +34,14 @@ Pass `selected` to turn the row into a toggle: a brand tint plus an inset brand 
 
 For a vertical image-first selectable (a photo grid, an avatar picker), reach for `SelectableMediaTile` instead — same selected semantics, media-tile shape.
 
+## Read-only
+
+Pass `interactive={false}` for a **display-only row** — a status list, a per-page composition list, any row that shows data without drilling in. It renders a non-interactive `<div>` with the same leading / title / subtitle / trailing slots, and drops every interactive affordance: no click target, no hover, no active scale, no focus ring. The button-only props (`onClick`, `disabled`, `selected`) are ignored.
+
+**When to use which.** Default (`interactive`) when clicking the row *does* something — drills into a profile, opens a task, switches a persona. `interactive={false}` when the row is purely informational and the state lives in the trailing slot (a `Badge`, a `Tag`). If a read-only row grows a click target later, drop `interactive={false}` rather than wrapping it.
+
+<Canvas of={Stories.ReadOnly} />
+
 ## Props
 
 <ArgTypes of={Stories} />

@@ -77,7 +77,8 @@
 
 .bds-banner--tone-warning,
 .bds-banner--tone-error,
-.bds-banner--tone-information {
+.bds-banner--tone-information,
+.bds-banner--tone-success {
   background-color: var(--surface-secondary);
   color: var(--text-primary);
   padding: var(--padding-lg);
@@ -87,13 +88,15 @@
 
 .bds-banner--tone-warning .bds-banner__inner,
 .bds-banner--tone-error .bds-banner__inner,
-.bds-banner--tone-information .bds-banner__inner {
+.bds-banner--tone-information .bds-banner__inner,
+.bds-banner--tone-success .bds-banner__inner {
   align-items: flex-start;
 }
 
 .bds-banner--tone-warning .bds-banner__content,
 .bds-banner--tone-error .bds-banner__content,
-.bds-banner--tone-information .bds-banner__content {
+.bds-banner--tone-information .bds-banner__content,
+.bds-banner--tone-success .bds-banner__content {
   gap: var(--gap-sm);
 }
 }
