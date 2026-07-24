@@ -17,7 +17,7 @@ A token name tells you a color's *role*, not whether it's *legible* on a given b
 
 Answered per background family — three patterns cover the system:
 
-### 1. Neutral surfaces → neutral text
+### 1. Neutral surfaces, neutral text
 
 On `--page-*`, `--surface-*`, and `--background-*` (the achromatic surfaces), pair the neutral text roles:
 
@@ -25,7 +25,7 @@ On `--page-*`, `--surface-*`, and `--background-*` (the achromatic surfaces), pa
 - `--text-secondary` for supporting copy (AA).
 - `--text-muted` for placeholder / disabled / decorative UI (AA-large, ≥3:1 — never for body).
 
-### 2. Saturated / branded fills → the `on-color` neutral
+### 2. Branded fills, on-color text
 
 On a *solid colored or branded fill* (`--background-brand-primary`, and any service base hue used as a button fill), the safe foreground is the brand-agnostic **on-color neutral**, not a tinted text token:
 
@@ -34,7 +34,7 @@ On a *solid colored or branded fill* (`--background-brand-primary`, and any serv
 
 These are mode-invariant by design and are what `Button`/`TabBar` `on-color` variants consume. See [Token Anatomy → color modifiers](/docs/primitives/token-anatomy) for why `on-color` is a complete neutral role distinct from the `-on-light`/`-on-dark` context modifiers.
 
-### 3. Service-tinted surfaces → context text on the *pale* step
+### 3. Service-tinted surfaces
 
 Service lines (`brand`/`marketing`/`information`/`product`/`back-office` → yellow/green/blue/purple/orange) are governed by [ADR-011](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-011-service-line-token-value-model.md): the no-suffix token is a mode-invariant *base hue* (a swatch, not a foreground); readable color comes from the `-on-light`/`-on-dark` **context** variants.
 

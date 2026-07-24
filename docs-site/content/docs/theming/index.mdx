@@ -52,9 +52,9 @@ Not every token is meant to vary per brand. The rule of thumb: **tokens that car
 
 Full override matrix and the minimal `theme-{client}.css` template: [Client Themes](/docs/theming/client-themes).
 
-### Multi-brand within one client (scope-based binding)
+### Multi-brand within one client
 
-Some clients carry multiple brand colors at once — Vale Partners has three audience verticals, brikdesigns.com has service lines. Instead of inventing role-specific canonical tokens (`--background-land-primary`, etc.), the system re-binds the same canonical tokens inside `[data-audience=X]` / `[data-service=X]` scopes. Components stay scope-blind — they keep referencing `--background-brand-primary` — while the page expresses N brand colors simultaneously. Adding an audience is one CSS block; canonical never grows. Full pattern: [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-or-service-line-scope-binding).
+Some clients carry multiple brand colors at once — Vale Partners has three audience verticals, brikdesigns.com has service lines. Instead of inventing role-specific canonical tokens (`--background-land-primary`, etc.), the system re-binds the same canonical tokens inside `[data-audience=X]` / `[data-service=X]` scopes. Components stay scope-blind — they keep referencing `--background-brand-primary` — while the page expresses N brand colors simultaneously. Adding an audience is one CSS block; canonical never grows. Full pattern: [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-scope-binding).
 
 ## Atmospheres Dimension
 
@@ -102,7 +102,7 @@ industry pack (BCS) ──▶ atmosphere default      ──▶ client override?
 
 This is why Content and Theming are peer tenets that intentionally cross-link at this one seam: the content vocabulary selects which variants of each theming layer best fit the client's industry *before* the client brand even ships, and the client-specific theme only adjusts what genuinely needs to change.
 
-## Validation — prove a theme before shipping
+## Validation
 
 Before a client brand goes live, test it in Storybook. Three checks:
 

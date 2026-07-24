@@ -16,7 +16,7 @@ A prop is an **axis** when more than one component exposes it. Axis names belong
 | `variant` | component-specific (see matrix) | Shared prop *name*; meaning varies by component | Chip, Button, IconButton, LinkButton, Card, ServiceTag |
 | `appearance` | `solid` · `subtle` · `outline` | How the shape is filled vs bordered | Badge (`solid` / `subtle`), Tag (`solid` / `subtle`) |
 
-## `variant` vs `appearance`
+## variant vs appearance
 
 > `appearance` describes **fill**. `variant` is the shared prop *name* — its meaning varies by component.
 
@@ -25,7 +25,7 @@ A prop is an **axis** when more than one component exposes it. Axis names belong
 
 Never cross this boundary.
 
-## Why `solid | subtle | outline` (not `dark | light`)
+## Why solid, subtle, outline
 
 `dark | light` was ambiguous with dark-mode theming. `solid | subtle | outline` names the fill form explicitly:
 

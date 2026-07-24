@@ -1,5 +1,5 @@
 ---
-title: Real Estate — RV Parks & MHC
+title: RV Parks and MHC
 description: RV parks (transient + extended-stay guests) and Manufactured Housing Communities (long-term residents). Two segments under one operator, with FHA-heavy regulatory exposure.
 ---
 
@@ -20,7 +20,7 @@ Structured data lives in [`content-system/industries/real-estate-rv-mhc.ts`](htt
 
 ---
 
-## 1. Industry Overview
+## 1. Industry overview
 
 RV parks and MHCs sit at opposite ends of the same real-estate spectrum: short-stay leisure on one end, long-term affordable housing on the other. The same physical site can host both — and frequently does. Operators run them as two distinct lines of business with shared overhead (clubhouse, maintenance, on-site management) and divergent customer journeys.
 
@@ -28,7 +28,7 @@ RV parks and MHCs sit at opposite ends of the same real-estate spectrum: short-s
 
 The website typically has to serve both audiences without confusing either. This is why the pack's navigation defaults to a Communities mega-menu that splits **RV Parks · MHC · Vacation Rentals** at the top — the segment fork happens before the prospect lands on a detail page.
 
-## 2. Default Affinities
+## 2. Default affinities
 
 When a client hasn't yet picked traits in the portal, these are the pack's starting affinities. Clients always override.
 
@@ -40,11 +40,13 @@ When a client hasn't yet picked traits in the portal, these are the pack's start
 
 The defaults aim at the median family-friendly RV resort + community-MHC operator — confident enough to feel competent, warm enough to feel welcoming, modern enough to look current without veering luxury. Pure-luxury RV resorts (Sun Outdoors / Bluewater positioning) skew Bold and Modern more strongly; senior-oriented 55+ MHCs skew Approachable and Classic; budget-tier parks tilt toward Direct + Conversational.
 
-## 3. Common Customer Pain Points
+## 3. Common customer pain points
 
 Pain points are explicitly segmented in the pack data — what worries an RV traveler at 8pm trying to find a site is not what worries an MHC resident reading a lot-lease before signing. The site has to address both without conflating them.
 
-### RV transient (browse → reserve)
+### RV transient
+
+Browse-to-reserve decision.
 
 <ul>
   {realEstateRvMhc.customerPainPoints
@@ -52,7 +54,9 @@ Pain points are explicitly segmented in the pack data — what worries an RV tra
     .map((p, i) => <li key={i}>{p.summary}</li>)}
 </ul>
 
-### MHC resident (multi-year housing decision)
+### MHC resident
+
+Multi-year housing decision.
 
 <ul>
   {realEstateRvMhc.customerPainPoints
@@ -60,7 +64,9 @@ Pain points are explicitly segmented in the pack data — what worries an RV tra
     .map((p, i) => <li key={i}>{p.summary}</li>)}
 </ul>
 
-### Shared (both segments)
+### Shared
+
+Applies to both segments.
 
 <ul>
   {realEstateRvMhc.customerPainPoints
@@ -81,7 +87,7 @@ The single highest-leverage page on most RV-park sites is **Sites & Availability
 
 The pack runs **high intent for three of four quarters** — the median small-business pack is high in two. Operators planning content cadence should treat off-season as the rate-planning + amenity-photo refresh window rather than a marketing pause.
 
-## 5. Competitive Landscape
+## 5. Competitive landscape
 
 Seven recurring competitor types, with the moats and weaknesses Brik clients can lean on or against.
 
@@ -102,7 +108,7 @@ Seven recurring competitor types, with the moats and weaknesses Brik clients can
 
 Independent operators of both RV parks and MHCs share the same defensibility story against the national REITs (Sun Communities, ELS / Encore RV Resorts, RHP, YES! Communities, Inspire): **relationship, character, local responsiveness**. The corporate landlord + commoditized resort criticisms are real and consistent — Brik clients should lean on them when positioning against scaled competitors.
 
-## 6. Listings Requirements
+## 6. Listings requirements
 
 **Required** (every operator): Google Business Profile, Bing Places, Apple Business Connect, Facebook Business Page.
 
@@ -130,7 +136,7 @@ MHVillage is the dominant MHC-specific marketplace; Datacomp / JLT Reports drive
   **NAP consistency is non-negotiable** — and matters more in this vertical than most. Citation parity feeds the map pack; mismatched NAP across 10+ aggregators creates a long tail of phone-routing confusion + lost reservations.
 </Callout>
 
-## 7. Regulatory Summary
+## 7. Regulatory summary
 
 10 regulatory areas. Of any pack in the system, this one carries the heaviest *advertising-copy* regulatory burden — FHA familial-status rules + HOPA 55+ exemption + state mobile-home park acts + chattel-loan disclosures all directly constrain language on the public site.
 
@@ -147,7 +153,7 @@ MHVillage is the dominant MHC-specific marketplace; Datacomp / JLT Reports drive
 | **Transient Occupancy Tax (TOT)** | Local | Applies to short-stay RV guests. Rate communications + booking confirmations must include applicable TOT disclosures. |
 | **ADA Accessibility** | Federal | Site-level accessibility (ADA-compliant sites, accessible bathhouse / clubhouse) should be surfaced. WCAG 2.1 AA non-negotiable for the website itself. |
 
-## 8. Vocabulary — Avoid
+## 8. Vocabulary to avoid
 
 The most loaded vocabulary list in any pack. Many of these aren't taste calls — they're FHA-actionable language.
 
@@ -169,7 +175,7 @@ The most loaded vocabulary list in any pack. Many of these aren't taste calls �
   **HOPA 55+ messaging requires legal review.** The pack flags `senior`, `adult community`, `no children`, `private community`, and `exclusive community` as risk terms specifically because they're FHA familial-status flashpoints unless HOPA compliance is documented. Default to avoiding these without legal sign-off — they're not worth the discrimination-claim exposure even when factually accurate.
 </Callout>
 
-## 9. CTA Defaults
+## 9. CTA defaults
 
 Approved (mockup generators pick from these unless a client override exists):
 
@@ -185,7 +191,7 @@ Rejected (never auto-generated):
 
 `Book Now` is rejected here even though it works in many verticals — for RV parks it implies an instant transaction that frequently doesn't apply (rig-size verification, reservation hold, deposit handling). `Reserve Your Site` and `Check Availability` carry the right expectation about the next step.
 
-## 10. Page Compositions
+## 10. Page compositions
 
 Each page archetype maps to a specific sequence of section blueprints. RV-park / MHC sites are **task-heavy** (browse → filter → reserve), so compositions prioritize gallery + utility patterns. Several blueprints (`gallery_masonry_3col`, `features_alternating_split`, `content_legal_centered`, `faq_accordion_grouped`) currently fall back to `<BlueprintFallback>` until their Astro components ship post-v0.1.
 
@@ -219,25 +225,25 @@ Default site-header shape — chosen for the dual-audience operator.
 
 The `utility-first` archetype is the right pick when prospects are filtering before they choose, which is true for both RV transient + MHC. `editorial-transparent` (the dental + small-business default) would let hero photography breathe but at the cost of putting reservation friction one click further away.
 
-## 12. Brik Strategic POV
+## 12. Brik strategic POV
 
 <Callout type="info">
   **POV in progress.** This pack's `strategicConsiderations` section is intentionally absent — the pack notes "add `strategicConsiderations` once Brik has a defensible perspective backed by client outcomes." Until then, this section captures the operational consensus from the pack data without claiming a Brik-specific POV.
 </Callout>
 
-### Reservation friction is the single biggest lever for RV parks
+### Reservation friction
 
 Of every page on an RV-park site, **Sites & Availability + Reservations** are the conversion floor. Direct online booking via Campspot / Newbook / RMS converts notably better than phone-only. A redesign that doesn't address reservation friction (clear hookup specs, rig-size limits, online booking) leaves measurable revenue on the table.
 
-### Rent transparency is the equivalent for MHCs
+### Rent transparency
 
 Long-cycle housing decisions hinge on reducing surprise-cost anxiety. MHC sites that publish lot-rent ranges, utility pass-through structure, and lease terms on the public site reliably outperform "call for pricing" sites at moving prospects from inquiry to application — and they reduce the wasted-call ratio for staff.
 
-### FHA exposure is design-time, not just compliance review
+### FHA exposure
 
 The vocabulary `avoid` list in this pack is **load-bearing**. "Senior community," "adult community," and "no children" are tempting marketing shortcuts that look fine in copy review and become FHA familial-status claims. Treat compliance scope as a design-time constraint, not a copy-edit pass.
 
-### Future POV topics — roadmap
+### Future POV topics
 
 Topics on the roadmap for `strategicConsiderations` once Brik has client outcomes to back them with:
 
@@ -246,7 +252,7 @@ Topics on the roadmap for `strategicConsiderations` once Brik has client outcome
 - **Reputation recovery after natural disaster** — playbook for parks hit by hurricane / flood / wildfire and the public-facing communication arc
 - **MHC-to-manufactured-home-sales funnel** — capturing the resident-to-homeowner upgrade path on-site, where lot rent converts into home equity
 
-## Site audit extractors — pending
+## Site audit extractors
 
 This pack does not yet declare `siteAudit` extractors. Verticals that benefit from structured field capture (RV-park rate cards + amenity inventory + reservation-system integration; MHC lot-rent ranges + lease-terms + listings inventory) are good extractor candidates. Adding extractors here is on the roadmap once the portal-side schemas land.
 

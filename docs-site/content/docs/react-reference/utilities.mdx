@@ -69,7 +69,7 @@ BDS sources tokens from two logical [Libraries](/docs/getting-started/figma-libr
 
 See [Token Anatomy](/docs/primitives/token-anatomy) for the four-tier abstraction this pipeline emits, [Library Architecture](/docs/getting-started/figma-library-architecture) for the per-Library detail, and [The Cascade](/docs/getting-started/cascade) for how the CSS output composes at runtime.
 
-## `bds-find` — component discoverability CLI
+## bds-find
 
 A CLI that queries the BDS component manifest (`dist/bds-manifest.json`) to answer the question every product agent should ask before building UI: **does BDS already have a component for this?**
 
@@ -87,7 +87,7 @@ bds-find --exact AddableTagList
 bds-find --list
 ```
 
-### Adopt / Extend / Graduate
+### Adopt, extend, graduate
 
 `bds-find`'s exit codes map to the cascade product agents follow when they hit a UI gap:
 

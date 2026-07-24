@@ -23,7 +23,7 @@ import {
   **Hooks belong in the consumer's component tree, not in MDX or server components.** Wrap the relevant subtree in `<ThemeProvider>` or `<SheetStackProvider>` (or both — they're independent) and call the hooks from React components below.
 </Callout>
 
-## `useTheme` — read + set the active theme
+## useTheme
 
 Returns the active theme number, label, dark-mode flag, and a setter that updates the body class + `<html data-theme>` attribute. Persists the choice in `localStorage` under the `bds-theme` key.
 
@@ -54,7 +54,7 @@ function ThemeSwitcher() {
 }
 ```
 
-## `useSheetStack` — read + control the sheet navigation stack
+## useSheetStack
 
 Returns the current sheet stack, open/exit state, and methods to push, pop, open fresh, and close all. Stack semantics let related sheets drill into one another (open `client-detail` → push `notes-list` → push `note-edit`) and animate back/forward together.
 
@@ -85,7 +85,7 @@ const { pushSheet, back } = useSheetStack();
 <button onClick={back}>Back</button>
 ```
 
-## `useConfigureSheet` — register a headless sheet config
+## useConfigureSheet
 
 Returns a setter that registers a `SheetConfig` for the current sheet view. Sheet view components call this on mount to declare their title, subtitle, actions, and tabs without rendering chrome themselves — the parent `<Sheet>` reads the config and renders the chrome.
 
@@ -109,7 +109,7 @@ function ClientDetailSheet({ clientId }) {
 }
 ```
 
-## `useSheetConfig` — read the current sheet's headless config
+## useSheetConfig
 
 Reads back what `useConfigureSheet` wrote. Used by the `<Sheet>` shell internally; rarely needed in view code.
 
@@ -117,7 +117,7 @@ Reads back what `useConfigureSheet` wrote. Used by the `<Sheet>` shell internall
 function useSheetConfig(): SheetConfig;
 ```
 
-## `useSuggestionFilter` — combobox / typeahead filter behavior
+## useSuggestionFilter
 
 Encapsulates the filter logic shared across `AddableTagList`, `AddableComboList`, `AddableEntryList`, and any custom typeahead. Handles input state, suggestion filtering, keyboard navigation, strict-mode rejection, duplicate detection, primary-vs-secondary commit semantics, and backspace-on-empty deletion.
 
@@ -139,7 +139,7 @@ function useSuggestionFilter(options: {
 
 The full prop / return shape is documented in source — see [`components/ui/shared/useSuggestionFilter.ts`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/shared/useSuggestionFilter.ts).
 
-## `useDevBarSlot` — register a slot in the BrikDevBar
+## useDevBarSlot
 
 Lets a feature flag, env switch, or debug widget mount itself into the dev toolbar without owning the toolbar layout. The dev bar reads registered slots and renders them in declared order.
 
@@ -149,7 +149,7 @@ function useDevBarSlot(def: DevBarSlotDef | null): void;
 
 **When to use:** product apps wiring `BrikDevBar` for development. Each slot calls this once on mount with its definition; passing `null` unregisters.
 
-## `useDevBarApi` — read the BrikDevBar API
+## useDevBarApi
 
 Returns the dev bar's API (or `null` if no `<BrikDevBar>` is mounted) — used by slots that need to programmatically open the bar, focus a slot, or query other registered slots.
 

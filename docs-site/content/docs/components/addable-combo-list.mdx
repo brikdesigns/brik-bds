@@ -47,7 +47,9 @@ import { getIndustryServices } from '@brikdesigns/bds/content-system';
 
 ## Variants
 
-### Default — vocabulary-backed
+### Default
+
+Free-form entry backed by suggestions.
 
 ```tsx
 import { useState } from 'react';
@@ -63,7 +65,7 @@ const services = getIndustryServices(company.industry_slug);
 />
 ```
 
-### Strict mode — vocabulary-only
+### Strict mode
 
 When `strict` is true, only suggestions can be added. Free-form `Enter` is blocked and a hint shows while the typed value doesn't match any suggestion.
 

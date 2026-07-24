@@ -21,7 +21,7 @@ Foundations Library      →    Raw → Primitive  →  @layer bds-tokens    × 
 
 Different concepts, different words. Mixing them produces parallel-taxonomy drift (the failure mode that retired `--theme-brik-*` and `--brand-{tier}` in brik-bds#712).
 
-## CSS Layers — the runtime cascade
+## CSS layers
 
 Every consumer's `globals.css` declares this `@layer` order **before any imports**:
 
@@ -46,7 +46,7 @@ The four Layers, in cascade order (last wins):
   **Layer order is the contract.** `bds-tokens` must declare before `client-theme`, and `client-theme` before `client-overrides`. Out-of-order `@layer` declarations break the Brand Kit's ability to override.
 </Callout>
 
-### What's in the BDS bundle (`bds-tokens` + `bds-components`)
+### What's in the BDS bundle
 
 `dist/tokens.css` (shipped via `@brikdesigns/bds/tokens.css`) concatenates, in order:
 
@@ -55,7 +55,7 @@ The four Layers, in cascade order (last wins):
 | `figma-tokens.css` | `bds-tokens` | Foundations Library output — primitives + universal semantic defaults (light mode) |
 | `figma-tokens-dark.css` | `bds-tokens` | Foundations Library — dark mode (scoped to `:root[data-theme="dark"]`) |
 | `theme-brand-brik.css` | `bds-tokens` | Brik's own Brand Kit baked into BDS (scoped to `.theme-brand-brik`) — present because Brik is BDS's first-party brand |
-| `modes-borderwidth.css`, `modes-spacing.css` | `bds-tokens` | Mode mode overrides (see [Modes](#modes--orthogonal-axes) below) |
+| `modes-borderwidth.css`, `modes-spacing.css` | `bds-tokens` | Mode mode overrides (see [Modes](#modes) below) |
 | `gap-fills.css` | `bds-tokens` | Hand-authored bridge for tokens not yet in Figma — destined to migrate into Foundations Library |
 | `animations.css` | `bds-tokens` | Shared keyframes (`bds-spin`, `bds-pulse`, etc.) |
 
@@ -65,7 +65,7 @@ The four Layers, in cascade order (last wins):
   - `react-tokens.css`, `webflow-tokens.css`, `website-themes.css` — superseded / surface-specific
 </Callout>
 
-### What lives in the `client-theme` Layer
+### What lives in the client-theme layer
 
 A consumer's `theme-{client}.css` overrides Brand Kit-controlled semantic tokens. Full matrix in [Client Themes](/docs/theming/client-themes). Short version:
 
@@ -78,7 +78,7 @@ A consumer's `theme-{client}.css` overrides Brand Kit-controlled semantic tokens
 | Status (`--background-positive` / `-negative` / `-warning`, etc.) | **Yes** if brand red/green/yellow clashes |
 | Extended status / presence / shadows | **No** — system invariants |
 
-## Theming Dimensions — composable per client
+## Theming dimensions
 
 CSS Layers handle the **values** cascade. But Theming as a whole composes across four independent **Theming Dimensions** (each a separate decision a client makes):
 
@@ -95,7 +95,7 @@ A client picks values for each Dimension independently. Three different Dimensio
   **Atmospheres decorate; tokens decide values.** Atmosphere CSS files MUST NOT override `--page-*`, `--surface-*`, `--background-*`, `--text-*`, or `--border-*` — those are Tokens-Dimension concerns. Atmosphere is for decorative-only properties (filters, masks, pseudo-element graphics, etc.).
 </Callout>
 
-## Sibling Tenets — Motion and Content
+## Sibling tenets
 
 The Theming Tenet handles per-client visual variation. Two peer Tenets handle the rest of what makes a client experience:
 
@@ -104,7 +104,7 @@ The Theming Tenet handles per-client visual variation. Two peer Tenets handle th
 
 Foundation, Theming, Motion, Content are the four **Tenets** of BDS. Tokens span Foundation (universal canon) and Theming (brand variation), but they're values inside the larger system, not the system itself.
 
-## Modes — orthogonal axes
+## Modes
 
 A Mode varies a token's *value* on a system-wide axis any consumer can toggle. Modes are **orthogonal** to Library, Layer, and Tier — every semantic token can have per-mode values without changing its name.
 
@@ -145,14 +145,14 @@ Full registry at [Color](/docs/primitives/color). Canonical bundle: `dist/tokens
   **Names not in the registry are not real.** Inventing a `--surface-paper`, `--text-on-ink`, `-soft` / `-warm` modifier, or a `--theme-brik-*` / `--brand-{tier}` namespace creates parallel taxonomy drift. If you need a new token, add it to a Library first via Figma → Tokens Studio → Style Dictionary. See [Token Anatomy](/docs/primitives/token-anatomy) for the closed forms.
 </Callout>
 
-## `<html>` attribute switchboard
+## HTML attribute switchboard
 
 | Attribute | Values | Effect |
 |---|---|---|
 | `data-theme` | `light` (default) / `dark` | Color mode |
 | `data-mode-borderwidth` | `default` (omit) / `thin` / `bold` | Borderwidth mode |
 | `data-mode-spacing` | `default` (omit) / `compact` / `comfortable` / `spacious` | Spacing density mode |
-| `data-audience` / `data-service` / `data-department` | Per-site convention | Re-binds canonical brand tokens within a subtree (multi-brand pattern — see [Client Themes → scope binding](/docs/theming/client-themes#per-audience-or-service-line-scope-binding)) |
+| `data-audience` / `data-service` / `data-department` | Per-site convention | Re-binds canonical brand tokens within a subtree (multi-brand pattern — see [Client Themes → scope binding](/docs/theming/client-themes#per-audience-scope-binding)) |
 
 Storybook's paintbrush toolbar sets `data-theme` automatically. React apps use `<ThemeProvider>`. Astro / Webflow / static consumers set attributes manually on `<html>`.
 
@@ -160,13 +160,13 @@ Storybook's paintbrush toolbar sets `data-theme` automatically. React apps use `
 
 This page is the **canonical adoption contract**: every consumer (portal, renew-pms, brikdesigns, every client site) wires the cascade the same way, and [Installation](/docs/getting-started/installation) links here as the one setup path. A consumer is compliant when all four hold:
 
-1. **Declare the layer order** — `@layer bds-tokens, bds-components, client-theme, client-overrides;` before any imports ([CSS Layers](#css-layers--the-runtime-cascade)).
+1. **Declare the layer order** — `@layer bds-tokens, bds-components, client-theme, client-overrides;` before any imports ([CSS layers](#css-layers)).
 2. **Set the mode switches on `<html>`** — `data-theme` and any `data-mode-*` the consumer opts into ([switchboard](#html-attribute-switchboard)); omit an attribute to take the default.
 3. **Import `@brikdesigns/bds/tokens.css`** — never the internal bundle files directly, never a hand-rolled copy of a scale.
 4. **Hold zero token redefinitions** — see the rule below.
 
 <Callout type="warn">
-  **Consumers consume tokens; they do not redefine them.** A consumer `:root` / theme / override block may **not** redefine a BDS-owned scale or semantic token — `--heading-*`, `--display-*`, `--font-size-*`, `--surface-*`, `--text-*`, `--border-*`, `--page-*`, `--background-*`. Redefining a *real* token (e.g. `--heading-lg: var(--font-size-700)`) is distinct from inventing one: it passes the "names not in the registry" check above yet still forks the system and drifts silently (the brikdesigns scaffold heading remap was load-bearing and invisible for ~3 months). **The one exception is brand-color override** via a Brand Kit `theme-{client}.css` in the `client-theme` Layer — that's the [client-theme](#what-lives-in-the-client-theme-layer) job. Need a value the scale doesn't have? Add it to a Library (Figma → Tokens Studio → Style Dictionary) or emit the [Mode](#modes--orthogonal-axes) that carries it — never redefine in the consumer. See [ADR-013](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-013-token-last-mile-enforce-contract-complete-emission.md).
+  **Consumers consume tokens; they do not redefine them.** A consumer `:root` / theme / override block may **not** redefine a BDS-owned scale or semantic token — `--heading-*`, `--display-*`, `--font-size-*`, `--surface-*`, `--text-*`, `--border-*`, `--page-*`, `--background-*`. Redefining a *real* token (e.g. `--heading-lg: var(--font-size-700)`) is distinct from inventing one: it passes the "names not in the registry" check above yet still forks the system and drifts silently (the brikdesigns scaffold heading remap was load-bearing and invisible for ~3 months). **The one exception is brand-color override** via a Brand Kit `theme-{client}.css` in the `client-theme` Layer — that's the [client-theme](#what-lives-in-the-client-theme-layer) job. Need a value the scale doesn't have? Add it to a Library (Figma → Tokens Studio → Style Dictionary) or emit the [Mode](#modes) that carries it — never redefine in the consumer. See [ADR-013](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-013-token-last-mile-enforce-contract-complete-emission.md).
 </Callout>
 
 ## Where the cascade is enforced

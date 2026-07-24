@@ -75,7 +75,7 @@ Alternating row backgrounds for readability on dense tables.
 </TableRow>
 ```
 
-## Cell-level interactivity (read/edit canon)
+## Cell-level interactivity
 
 Tables host **three classes of click target — no others.** This is the
 canon locked in [portal#837 — Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
@@ -121,7 +121,7 @@ Common icon-button variants:
 | `ghost` | Low emphasis (overflow menu) |
 | `destructive` | Destructive (delete, remove) — use sparingly in-row; prefer the overflow menu |
 
-### Text links (Name + FK cells)
+### Text links
 
 Use **`<TextLink size="small">`** for the Name cell and any FK cell. Never use raw `<a>` or full-size text links.
 
@@ -227,7 +227,7 @@ Plus standard `<table>` HTML attributes.
 |---|---|---|
 | `TableHeader` | `<thead>` | — |
 | `TableBody` | `<tbody>` | — |
-| `TableRow` | `<tr>` | `selected: boolean` — **never `onClick`** ([see callout](#cell-level-interactivity-readedit-canon)) |
+| `TableRow` | `<tr>` | `selected: boolean` — **never `onClick`** ([see callout](#cell-level-interactivity)) |
 | `TableHead` | `<th>` | `sortable: boolean`, `sortDirection: 'asc' \| 'desc'` |
 | `TableCell` | `<td>` | — |
 | `TableActionsCell` | `<td>` | `align: 'right' \| 'center'` — owns the trailing `[View][Edit][⋯]` cluster |

@@ -21,9 +21,9 @@ src/components/prose.tsx — single ReactMarkdown configuration
 
 Reference implementation: [`brik-client-portal`](https://github.com/brikdesigns/brik-client-portal) — copy these three files when starting a new app project, then point your `globals.css` at the [installation](/docs/getting-started/installation) cascade.
 
-## 1. `src/lib/tokens.ts` — typed primitives
+## 1. Typed primitives
 
-Maps Figma style names to CSS-custom-property references. **One leaf = one `var()`.** These reference the property (not the resolved value), so they work correctly with [Mode](/docs/getting-started/cascade#modes--orthogonal-axes) switches and per-client Brand Kit overrides emitted into `@layer client-theme`.
+Maps Figma style names to CSS-custom-property references. **One leaf = one `var()`.** These reference the property (not the resolved value), so they work correctly with [Mode](/docs/getting-started/cascade#modes) switches and per-client Brand Kit overrides emitted into `@layer client-theme`.
 
 ```ts title="src/lib/tokens.ts"
 export const font = {
@@ -51,7 +51,7 @@ export const border = {
 } as const;
 ```
 
-## 2. `src/lib/styles.ts` — composed presets
+## 2. Composed presets
 
 Multi-property `CSSProperties` objects built from tokens. These map **1:1 to Figma text styles** so a designer's spec translates directly.
 
@@ -85,7 +85,7 @@ export const list = {
 } as const;
 ```
 
-## 3. `src/components/prose.tsx` — shared markdown renderer
+## 3. Shared markdown renderer
 
 Single ReactMarkdown configuration for any markdown content in the app. Built from the style presets.
 
@@ -113,7 +113,7 @@ export function Prose({ content }: { content: string }) {
 }
 ```
 
-## Pre-commit hook — token compliance gate
+## Pre-commit hook
 
 Block hardcoded pixel sizes and line-heights from landing in `.tsx` / `.ts` files. Add to `.husky/pre-commit` after lint:
 
@@ -161,7 +161,7 @@ import { Prose } from '@/components/prose';
 <Prose content={markdownString} />
 ```
 
-## Figma style → code mapping
+## Figma style to code mapping
 
 | Figma style | Import | Usage |
 |---|---|---|

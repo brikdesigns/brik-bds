@@ -11,7 +11,7 @@ Every page in this site follows one of three templates depending on what it docu
   **Don't invent new page shapes.** If your page doesn't fit a template here, propose a template change in `docs-site/content/docs/getting-started/page-templates.mdx` and update *every* page using that template in the same PR. The cost of two ad-hoc structures is a lot more than the cost of one rigid one.
 </Callout>
 
-## Frontmatter (required on every page)
+## Frontmatter
 
 ```yaml
 ---
@@ -217,7 +217,7 @@ Always full URLs, never short paths. They survive Fumadocs path renames.
 ✗  Some shortened or relative path
 ```
 
-### Tabs (for multi-step or platform-specific content)
+### Tabs
 
 Always blank lines around code blocks inside `<Tab>` — MDX needs the whitespace to parse correctly. (When showing nested code fences in your own page, wrap the outer fence in **four** backticks; otherwise the inner three-backtick fence closes the outer prematurely.)
 

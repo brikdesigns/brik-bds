@@ -10,7 +10,7 @@ Every interactive component (button, card, tag, chip, link) uses the same intera
 1. **Composable overlay primitives** — transparent overlays that work on *any* surface (brand, neutral, status, service-line) without needing a unique hover token per color.
 2. **Brand state pairs** — solid `-hover` / `-pressed` Semantic tokens on brand-colored surfaces (filled brand buttons) where an overlay would be visually weak.
 
-## Overlay primitives — composable hover/press
+## Overlay primitives
 
 These four tokens are mode-invariant — they resolve to the same value in light and dark.
 
@@ -61,7 +61,7 @@ These four tokens are mode-invariant — they resolve to the same value in light
 }
 ```
 
-## Brand state pairs — solid `-hover` / `-pressed`
+## Brand state pairs
 
 For brand-colored surfaces (filled primary buttons, brand backgrounds), the overlay approach gets visually weak — the inset overlay against a vibrant brand color doesn't read as a strong-enough interaction signal. These surfaces use **solid state-pair Semantic tokens** that map to deeper / lighter primitives in the brand color ramp:
 
@@ -82,7 +82,7 @@ For brand-colored surfaces (filled primary buttons, brand backgrounds), the over
 - **Offset** is hardcoded `2px` in CSS — accessibility fixed value, not themeable.
 - **Color** is `--state-focus`, which resolves to `currentColor` — the ring inherits the element's own text color at use-site rather than a fixed brand token.
 
-## Decision tree — overlay vs solid
+## Overlay vs solid
 
 Walk this top-down when implementing a component's hover/press:
 
@@ -96,6 +96,6 @@ Walk this top-down when implementing a component's hover/press:
 ## Related
 
 - [Token Anatomy](/docs/primitives/token-anatomy) — the four-tier abstraction these state tokens sit at (Semantic Tier)
-- [The Cascade](/docs/getting-started/cascade) — how state tokens compose with [Modes](/docs/getting-started/cascade#modes--orthogonal-axes) and brand overrides
+- [The Cascade](/docs/getting-started/cascade) — how state tokens compose with [Modes](/docs/getting-started/cascade#modes) and brand overrides
 - [Color](/docs/primitives/color) — the Primitive ramps the brand state pairs draw from
 - [Client Themes](/docs/theming/client-themes) — Brand Kit override matrix (state pairs are required when brand colors change)
