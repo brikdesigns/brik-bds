@@ -1,0 +1,65 @@
+name: Component Props Check
+
+# Runs scripts/lint-component-props.mjs on every PR (and push to main) that
+# touches component source or the docs-site component pages. Verifies that each
+# hand-curated prop table carrying a {/* props-check: <Type> @ <file.tsx> */}
+# marker still matches the component's TypeScript source — prop exists, type
+# matches, literal default matches.
+#
+# Why this is a CI gate (not just pre-push):
+#   - Pre-push runs `validate:full` (validate-all.js → "Component Props")
+#     locally, but that never runs in CI.
+#   - Cloud-agent commits bypass local hooks; fork PRs may lack husky.
+# The audit (#1358) found 23/36 prop-table mismatches; #1370 hand-fixed them.
+# This gate stops a source change (renamed prop, changed default/type) from
+# silently drifting the docs back out of sync. Wave 4, #1362.
+#
+# Path-filtered: needs only `npm ci` (for the TypeScript compiler API) — no
+# Storybook or token build. Most PRs skip the job entirely.
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'components/ui/**'
+      - 'docs-site/content/docs/components/**'
+      - 'scripts/lint-component-props.mjs'
+      - 'tsconfig.json'
+      - 'package.json'
+      - '.github/workflows/component-props-check.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'components/ui/**'
+      - 'docs-site/content/docs/components/**'
+      - 'scripts/lint-component-props.mjs'
+      - 'tsconfig.json'
+      - 'package.json'
+      - '.github/workflows/component-props-check.yml'
+
+concurrency:
+  group: component-props-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  component-props-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check component prop tables
+        run: node scripts/lint-component-props.mjs

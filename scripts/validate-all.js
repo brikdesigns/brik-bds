@@ -41,6 +41,10 @@ const steps = [
   // canonical registry. Self-builds dist/tokens.css if absent (already built
   // above by Canonical Tokens), so ordering here is not load-bearing.
   { name: 'MDX Tokens', cmd: 'node scripts/lint-mdx-tokens.mjs' },
+  // Verifies hand-curated component prop tables (docs-site) against the TS
+  // source for any table carrying a {/* props-check: … */} marker. Opt-in, so
+  // ordering is not load-bearing.
+  { name: 'Component Props', cmd: 'node scripts/lint-component-props.mjs' },
 ];
 
 console.log('\n═══════════════════════════════════════════');
