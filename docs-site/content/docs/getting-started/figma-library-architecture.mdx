@@ -99,7 +99,7 @@ npm run build:all-tokens
 | New universal token (math scale, system color, base semantic) | Add to **Foundations Library**. Affects every brand. Coordinate via PR + Chromatic. |
 | New brand-specific concept (service-line, audience-scoped color, custom dimension) | Add to the relevant **Brand Kit Library** as a brand-specific semantic token (e.g., `--background-service-marketing`). Foundations stays untouched. |
 
-## Drift signals — when a Library boundary is being violated
+## Drift signals
 
 - A new token name shaped `--brand-{tier}` or `--theme-{name}-*` shows up in `dist/tokens.css` → Library boundary violation. Move it to Brand Kit (or retire if redundant).
 - A consumer hand-overrides a primitive in their local `globals.css` instead of updating their Brand Kit Library → drift. The override belongs in the Brand Kit so it propagates to anyone consuming the same brand.

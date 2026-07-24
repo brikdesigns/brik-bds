@@ -117,7 +117,7 @@ PageHeader has six optional regions plus a required title. From top to bottom:
 <PageHeader title="Hero detail page" size="lg" />
 ```
 
-### Read / edit mode
+### Read and edit mode
 
 PageHeader can drive a page-level read↔edit toggle. In `mode="read"` it renders an Edit button wired to `onEdit`; in `mode="edit"` it swaps to Save / Cancel wired to `onSave` / `onCancel`, with `saveLoading` / `saveDisabled` for in-flight commits. Labels are overridable via `editLabel` / `saveLabel` / `cancelLabel`. Omit `mode` for a static header. (An explicit `actions` prop overrides these mode-driven buttons.)
 

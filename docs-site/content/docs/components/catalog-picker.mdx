@@ -41,7 +41,7 @@ const catalog = getIndustryServicesCatalog(company.industry_slug);
 />
 ```
 
-### Strict (catalog-only)
+### Strict
 
 `strict` rejects free-text names that don't match a catalog `displayName` or alias. Use for locked vocabularies that still benefit from the catalog's metadata + description-per-entry shape.
 
@@ -132,7 +132,7 @@ Consumers persist the full array as a single JSONB column (e.g. `company_profile
 | `descriptionRows` | `number` | `2` |
 | `className` | `string` | — |
 
-### CatalogEntry / PickedCatalogEntry shapes
+### Entry shapes
 
 ```ts
 interface CatalogEntry {

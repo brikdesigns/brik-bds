@@ -42,7 +42,7 @@ The `icon` prop accepts a `collection:name` string. Phosphor icons use the `ph:`
 
 Find available icons at [phosphoricons.com](https://phosphoricons.com/).
 
-### BDS icon constants (internal)
+### BDS icon constants
 
 Inside the BDS repo, component authors prefer the named constants in `components/icons.ts` — they protect against typos and centralize the icon vocabulary. These are **not** part of the public package export; they're imported by relative path from within `components/`:
 
@@ -98,7 +98,7 @@ BDS renders `ph:*` icons at **`bold`** weight by default — BDS's standard line
 | `thin` | `ph:name-thin` | Rare; very specific design intent |
 | `duotone` | `ph:name-duotone` | Empty states, illustrations |
 
-## Color / theming
+## Color and theming
 
 Iconify icons render with `fill="currentColor"`, so they inherit color from the CSS `color` of any ancestor — no per-icon fill prop needed. To recolor an icon, set `color` on it or a parent, ideally to a BDS text token rather than a raw hex:
 
@@ -124,7 +124,7 @@ Text tokens commonly used for icon fill:
 
 BDS text tokens are mode-aware, so an icon colored with one retones automatically in `brik-dark` — prefer them over hardcoded colors.
 
-### Service-line glyphs (ServiceTag)
+### Service-line glyphs
 
 [ServiceTag](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview)'s per-service glyphs are **not** Phosphor icons — they're custom SVG assets under `components/ui/ServiceTag/icons/`. They render via CSS `mask-image` with `background-color: currentColor` (not `<img src>`), so the fill is CSS-recolorable and inherits the tag's service text token:
 
