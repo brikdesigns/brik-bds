@@ -45,6 +45,10 @@ const steps = [
   // slash / arrow in an ##/### heading or frontmatter title) over content/docs.
   // Pure MDX text read — no build, ordering not load-bearing.
   { name: 'MDX Headings', cmd: 'node scripts/lint-mdx-headings.mjs' },
+  // A component deprecated at the component level (@deprecated on its export, or
+  // a Deprecated/ Storybook title) must carry a deprecation callout on its docs
+  // page. Reads component .tsx + MDX; no build, ordering not load-bearing.
+  { name: 'MDX Deprecations', cmd: 'node scripts/lint-mdx-deprecations.mjs' },
   // Verifies hand-curated component prop tables (docs-site) against the TS
   // source for any table carrying a {/* props-check: … */} marker. Opt-in, so
   // ordering is not load-bearing.
