@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/docs-site/content/docs/**/*.mdx"
 retrieved-via: brik-rag query "fumadocs writing standard"
-last-verified: 2026-07-23
+last-verified: 2026-07-24
 ---
 
 # Fumadocs content standard
@@ -100,6 +100,12 @@ Concrete shorthand: terse, opinionated, knowledge-dense. "Patterns are recipes, 
 
 Never bare triple-backticks. Tags in use: `tsx`, `ts`, `js`, `bash`, `css`, `json`, `yaml`, `mdx`, `tree` (for ascii dir layouts).
 
+## Token names in code blocks and tables
+
+Every Semantic-tier token name (`--text-*`, `--surface-*`, `--background-*`, `--border-*`, `--color-*`, `--padding-*`, `--gap-*`, `--size-*`, typography families) written in a fenced code block or a markdown table must resolve to a real token in `dist/tokens.css` (or a component-scoped CSS-Override-API knob). A documented-but-nonexistent name is the #512 / #553 phantom-token failure — it silently misleads every consumer who copies it. Enforced by `scripts/lint-mdx-tokens.mjs` (CI: MDX Token Check). Grep `dist/tokens.css` for the correct name rather than guessing.
+
+Naming-pattern placeholders (`--surface-{role}`, `--text-*`, `--size-0…2200`) are not flagged. For a deliberate counter-example — a retired or invented name shown to teach what's wrong — wrap it in `{/* lint-mdx-tokens-ignore-start */}` … `{/* lint-mdx-tokens-ignore-end */}`, or add `lint-mdx-tokens-ignore` on the line.
+
 ## Cross-link pattern
 
 Internal links use absolute docs paths: `[Foundation](/docs/primitives)`. Never `./` or `../`. Storybook lives at `https://storybook.brikdesigns.com` — link out explicitly when referencing visual playground.
@@ -122,6 +128,7 @@ Adding a new Fumadocs UI component (tabs, accordions, custom MDX components) is 
 - `####`+ heading depth
 - Inline restatement of brand voice rules (point to corpus instead)
 - Inline restatement of token names / component props (link to canon page)
+- Phantom token names in code blocks / tables — every Semantic-tier token name must resolve in `dist/tokens.css`; mark deliberate counter-examples with `lint-mdx-tokens-ignore` (see "Token names in code blocks and tables")
 - "TODO", "WIP", or "Coming soon" callouts as page-body content — use `<Callout type="warn">Status: roadmap.</Callout>` at the top of the page, then write content as if it exists
 - Bare triple-backtick code blocks
 - Mixing tenets on one page (Foundation / Theming / Motion / Content stay separate per the `index.mdx` four-tenets split)
